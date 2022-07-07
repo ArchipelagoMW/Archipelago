@@ -111,64 +111,84 @@ class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    options: Dict[str, Option[Any]] = {}  # link your Options mapping
-    game: str  # name the game
-    topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
+    options: Dict[str, Option[Any]] = {}
+    """ link your Options mapping """
 
-    # gets automatically populated with all item and item group names
+    game: str
+    """ name the game """
+
+    topology_present: bool = False
+    """ indicate if world type has any meaningful layout/pathing """
+
     all_item_and_group_names: FrozenSet[str] = frozenset()
+    """ gets automatically populated with all item and item group names """
 
-    # map names to their IDs
     item_name_to_id: Dict[str, int] = {}
+    """ map item names to their IDs """
+
     location_name_to_id: Dict[str, int] = {}
+    """ map location names to their IDs """
 
-    # maps item group names to sets of items. Example: "Weapons" -> {"Sword", "Bow"}
     item_name_groups: Dict[str, Set[str]] = {}
+    """ maps item group names to sets of items. Example: "Weapons" -> {"Sword", "Bow"} """
 
-    # increment this every time something in your world's names/id mappings changes.
-    # While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
-    # retrieved by clients on every connection.
     data_version: int = 1
+    """increment this every time something in your world's names/id mappings changes.
+    While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
+    retrieved by clients on every connection.
+    """
 
-    # override this if changes to a world break forward-compatibility of the client
-    # The base version of (0, 1, 6) is provided for backwards compatibility and does *not* need to be updated in the
-    # future. Protocol level compatibility check moved to MultiServer.min_client_version.
     required_client_version: Tuple[int, int, int] = (0, 1, 6)
+    """ override this if changes to a world break forward-compatibility of the client
+    The base version of (0, 1, 6) is provided for backwards compatibility and does *not* need to be updated in the
+    future. Protocol level compatibility check moved to MultiServer.min_client_version.
+    """
 
-    # update this if the resulting multidata breaks forward-compatibility of the server
     required_server_version: Tuple[int, int, int] = (0, 2, 4)
+    """ update this if the resulting multidata breaks forward-compatibility of the server """
 
-    hint_blacklist: FrozenSet[str] = frozenset()  # any names that should not be hintable
+    hint_blacklist: FrozenSet[str] = frozenset()
+    """ any names that should not be hintable """
 
-    # NOTE: remote_items and remote_start_inventory are now available in the network protocol for the client to set.
-    # These values will be removed.
-    # if a world is set to remote_items, then it just needs to send location checks to the server and the server
-    # sends back the items
-    # if a world is set to remote_items = False, then the server never sends an item where receiver == finder,
-    # the client finds its own items in its own world.
     remote_items: bool = True
+    """ NOTE: remote_items and remote_start_inventory are now available in the network protocol for the client to set.
+    These values will be removed.
+    if a world is set to remote_items, then it just needs to send location checks to the server and the server
+    sends back the items
+    if a world is set to remote_items = False, then the server never sends an item where receiver == finder,
+    the client finds its own items in its own world.
+    """
 
-    # If remote_start_inventory is true, the start_inventory/world.precollected_items is sent on connection,
-    # otherwise the world implementation is in charge of writing the items to their output data.
     remote_start_inventory: bool = True
+    """ If remote_start_inventory is true, the start_inventory/world.precollected_items is sent on connection,
+    otherwise the world implementation is in charge of writing the items to their output data. 
+    """
 
-    # For games where after a victory it is impossible to go back in and get additional/remaining Locations checked.
-    # this forces forfeit:  auto for those games.
     forced_auto_forfeit: bool = False
+    """ For games where after a victory it is impossible to go back in and get additional/remaining Locations checked.
+    this forces forfeit:  auto for those games.
+    """
 
-    # Hide World Type from various views. Does not remove functionality.
     hidden: bool = False
+    """ Hide World Type from various views. Does not remove functionality. """
 
-    # autoset on creation:
     world: MultiWorld
+    """ autoset on creation """
+
     player: int
+    """ autoset on creation """
 
-    # automatically generated
     item_id_to_name: Dict[int, str]
-    location_id_to_name: Dict[int, str]
+    """ automatically generated inverse of item_name_to_id """
 
-    item_names: Set[str]  # set of all potential item names
-    location_names: Set[str]  # set of all potential location names
+    location_id_to_name: Dict[int, str]
+    """ automatically generated inverse of location_name_to_id """
+
+    item_names: Set[str]
+    """ set of all potential item names """
+
+    location_names: Set[str]
+    """ set of all potential location names """
 
     web: WebWorld = WebWorld()
 
@@ -271,8 +291,8 @@ class World(metaclass=AutoWorldRegister):
             return item.name
         return None
 
-    # called to create all_state, return Items that are created during pre_fill
     def get_pre_fill_items(self) -> List[Item]:
+        """ called to create all_state, return Items that are created during pre_fill """
         return []
 
     # following methods should not need to be overridden.
