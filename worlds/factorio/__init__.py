@@ -231,7 +231,8 @@ class Factorio(World):
         """Generate a recipe from pool with time and cost similar to original * factor"""
         new_ingredients = {}
         # have to first sort for determinism, while filtering out non-stacking items
-        pool: typing.List[str] = sorted(pool & stacking_items)
+        pool_fluids = pool & fluids
+        pool: typing.List[str] = sorted((pool & stacking_items) | pool_fluids)
         # then sort with random data to shuffle
         self.world.random.shuffle(pool)
         target_raw = int(sum((count for ingredient, count in original.base_cost.items())) * factor)
