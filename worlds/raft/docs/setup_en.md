@@ -8,7 +8,7 @@
 
 ## Installation Procedures
 
-1. Install Raft. The currently-supported Raft version is Update 13: The Renovation Update. If you plan on playing Raft mainly with Archipelago, it's recommended to disable Raft auto-updating through Steam, as there is no beta channel to get old builds.
+1. Install Raft. The currently-supported Raft version is Version 1.0: The Final Chapter. If you plan on playing Raft mainly with Archipelago, it's recommended to disable Raft auto-updating through Steam, as there is no beta channel to get old builds.
 
 2. Install RML.
 
