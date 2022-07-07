@@ -21,6 +21,7 @@
 *.archipelago
 *.apsave
 
+docs/sphinx/_build/
 build
 bundle/components.wxs
 dist
