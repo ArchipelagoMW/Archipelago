@@ -8,7 +8,7 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies, \
-    fluids, stacking_items
+    fluids, stacking_items, valid_ingredients
 from .Shapes import get_shapes
 from .Mod import generate_mod
 from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal
@@ -231,8 +231,7 @@ class Factorio(World):
         """Generate a recipe from pool with time and cost similar to original * factor"""
         new_ingredients = {}
         # have to first sort for determinism, while filtering out non-stacking items
-        pool_fluids = pool & fluids
-        pool: typing.List[str] = sorted((pool & stacking_items) | pool_fluids)
+        pool: typing.List[str] = sorted(pool & valid_ingredients)
         # then sort with random data to shuffle
         self.world.random.shuffle(pool)
         target_raw = int(sum((count for ingredient, count in original.base_cost.items())) * factor)
