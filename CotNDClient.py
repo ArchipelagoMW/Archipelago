@@ -1,8 +1,7 @@
 import asyncio
 import json
 import logging
-import os
-import socket
+import os, platform
 import time
 from asyncio import StreamReader, StreamWriter
 
@@ -16,9 +15,41 @@ from worlds.cotnd.Items import item_table, bad_items, always_available_items
 UDP_IP = "127.0.0.1"
 UDP_PORT = 8980
 UDP_TARGET = (UDP_IP, UDP_PORT)
-logfile = 'Synchrony.log'
 
 cotnd_loc_name_to_id = network_data_package["games"]["Crypt of the Necrodancer Synchrony"]["location_name_to_id"]
+
+data_path = ''
+system = platform.system()
+if system == 'Windows':
+    data_path = os.path.expandvars('%LOCALAPPDATA%\\NecroDancer')
+elif system == 'Darwin' or system == 'Linux':
+    system = os.path.expanduser('~/.local/share/NecroDancer')
+else:
+    logger.error(f'Unrecognized operating system {system}, please report.')
+
+
+def get_data_file_path(is_outfile: bool):
+    """in.log sends data into the game. out.log gets data out from the game."""
+    if not os.path.exists(data_path):
+        logger.error(f'No local data found for NecroDancer at {data_path}.')
+        return None
+
+    ap_path = os.path.join(data_path, 'archipelago')
+    if not os.path.isdir(ap_path):
+        os.mkdir(ap_path)
+
+    if is_outfile:
+        file_name = 'out.log'
+    else:
+        file_name = 'in.log'
+
+    data_file = os.path.join(ap_path, file_name)
+    if not os.path.isfile(data_file):
+        # create if necessary
+        open(data_file, 'a').close()
+
+    return data_file
+
 
 def reverse_readline(filename, buf_size=8192):
     """A generator that returns the lines of a file in reverse order.
@@ -139,6 +170,10 @@ class CotNDContext(CommonContext):
     # Send information to the game over a UDP connection
     async def send_game_info(self):
 
+        data_file = get_data_file_path(is_outfile=False)
+        if not data_file:
+            return
+
         # Which items to spawn
         item_state = {}
         item_names_received = always_available_items | set(map(lambda item: self.item_names[item.item], self.items_received))
@@ -193,33 +228,29 @@ class CotNDContext(CommonContext):
         if previous_deathlink_state:
             self.deathlink_pending = False
 
-        # Only send if necessary to prevent spamming IPC connection
+        # Only rewrite if necessary
         if data != self.last_msg:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock.sendto(f"archipelago:{json.dumps(data)}".encode(), UDP_TARGET)
+            with open(data_file, 'w') as f:
+                f.write(json.dumps(data))
             self.last_msg = data
 
     # Retrieve information from the game's log files
     async def read_log_file(self):
 
-        synchrony_dir = Utils.get_options()['cotnd_options']['synchrony']
+        data_file = get_data_file_path(is_outfile=True)
+        if not data_file:
+            return
+
         new_last = ''
         new_items = []
-        try:
-            reader = reverse_readline(os.path.join(synchrony_dir, logfile))
-        except FileNotFoundError:
-            logger.error('Synchrony logfile not found. Make sure the path in host.yaml points to your Synchrony folder.')
-            return
+        reader = reverse_readline(data_file)
 
         for line in reader:
             if new_last == '':
                 new_last = line # set the new last_log_msg
             if line == self.last_log_msg: # we found a message we already read, so break
                 break
-            if '[Archipelago]' not in line:
-                continue
-            info = line.split('[info] ')[-1]
-            token, msg_type, char, floor = info.split(' ')
+            _, token, msg_type, char, floor = line.split(' ')
 
             if token != self.nonce:
                 # This message originated when the client sent a different nonce value to the game,
