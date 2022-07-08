@@ -64,7 +64,6 @@ Sent to clients when they connect to an Archipelago server.
 | hint_cost | int | The amount of points it costs to receive a hint from the server. |
 | location_check_points | int | The amount of hint points you receive per item/location check completed. ||
 | games | list\[str\] | List of games present in this multiworld. |
-| datapackage_version | int | Sum of individual games' datapackage version. Deprecated. Use `datapackage_versions` instead. |
 | datapackage_versions | dict\[str, int\] | Data versions of the individual games' data packages the server will send. Used to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents). |
 | seed_name | str | uniquely identifying name of this generation |
 | time | float | Unix time stamp of "now". Send for time synchronization if wanted for things like the DeathLink Bounce. |

@@ -635,7 +635,6 @@ async def on_client_connected(ctx: Context, client: Client):
         'permissions': get_permissions(ctx),
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
-        'datapackage_version': network_data_package["version"],
         'datapackage_versions': {game: game_data["version"] for game, game_data
                                  in network_data_package["games"].items()},
         'seed_name': ctx.seed_name,
