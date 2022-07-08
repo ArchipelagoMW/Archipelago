@@ -501,6 +501,7 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
 item_stack_sizes: Dict[str, int] = items_future.result()
 non_stacking_items: Set[str] = {item for item, stack in item_stack_sizes.items() if stack == 1}
 stacking_items: Set[str] = set(item_stack_sizes) - non_stacking_items
+valid_ingredients: Set[str] = stacking_items | fluids
 
 # cleanup async helpers
 pool.shutdown()
