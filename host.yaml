@@ -127,6 +127,3 @@ smz3_options:
   # True for operating system default program
   # Alternatively, a path to a program to open the .sfc file with
   rom_start: true
-cotnd_options:
-  # Set this to your Synchrony folder location
-  synchrony: "Synchrony"
