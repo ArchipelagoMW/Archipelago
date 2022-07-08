@@ -11,11 +11,10 @@ class ItemPool(Choice):
 
 class Goal(Choice):
     """Goal to complete.
-    Drive: Repair the Aurora's Drive Core
-    Infected: Reach maximum infection level.
-    Free: Disable quarantine.
     Launch: Leave the planet.
-    """
+    Free: Disable quarantine.
+    Infected: Reach maximum infection level.
+    Drive: Repair the Aurora's Drive Core"""
     auto_display_name = True
     display_name = "Goal"
     option_launch = 0
