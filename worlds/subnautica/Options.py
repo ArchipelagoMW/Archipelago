@@ -17,9 +17,16 @@ class Goal(Choice):
     """
     auto_display_name = True
     display_name = "Goal"
-    option_infected = 0
+    option_launch = 0
     option_free = 1
-    option_launch = 2
+    option_infected = 2
+
+    def get_event_name(self) -> str:
+        return {
+            self.option_launch: "Neptune Launch",
+            self.option_infected: "Full Infection",
+            self.option_free: "Disable Quarantine",
+        }[self.value]
 
 
 options = {

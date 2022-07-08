@@ -234,17 +234,23 @@ def set_rules(world, player):
     for loc in location_table:
         set_location_rule(world, player, loc)
 
-    # Victory location
-    set_rule(world.get_location("Neptune Launch", player), lambda state: \
-        get_max_depth(state, player) >= 1444 and \
-        has_mobile_vehicle_bay(state, player) and \
-        state.has('Neptune Launch Platform', player) and \
-        state.has('Neptune Gantry', player) and \
-        state.has('Neptune Boosters', player) and \
-        state.has('Neptune Fuel Reserve', player) and \
-        state.has('Neptune Cockpit', player) and \
-        state.has('Ion Power Cell', player) and \
-        state.has('Ion Battery', player) and \
+    # Victory locations
+    set_rule(world.get_location("Neptune Launch", player), lambda state:
+        get_max_depth(state, player) >= 1444 and
+        has_mobile_vehicle_bay(state, player) and
+        state.has('Neptune Launch Platform', player) and
+        state.has('Neptune Gantry', player) and
+        state.has('Neptune Boosters', player) and
+        state.has('Neptune Fuel Reserve', player) and
+        state.has('Neptune Cockpit', player) and
+        state.has('Ion Power Cell', player) and
+        state.has('Ion Battery', player) and
         has_cyclops_shield(state, player))
+
+    set_rule(world.get_location("Disable Quarantine", player), lambda state:
+        get_max_depth(state, player) >= 1444)
+
+    set_rule(world.get_location("Full Infection", player), lambda state:
+        get_max_depth(state, player) >= 900)
 
     world.completion_condition[player] = lambda state: state.has('Victory', player)

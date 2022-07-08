@@ -2,7 +2,7 @@ import logging
 
 logger = logging.getLogger("Subnautica")
 
-from .Locations import lookup_name_to_id as locations_lookup_name_to_id
+from .Locations import events, lookup_name_to_id as locations_lookup_name_to_id
 from .Items import item_table, lookup_name_to_item, advancement_item_names
 from .Items import lookup_name_to_id as items_lookup_name_to_id
 
@@ -14,6 +14,11 @@ from BaseClasses import Region, Entrance, Location, MultiWorld, Item, Tutorial, 
 from ..AutoWorld import World, WebWorld
 
 
+goal_to_event = {
+    Options.Goal.option_launch: "Neptune Launch",
+
+}
+
 class SubnaticaWeb(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -23,7 +28,6 @@ class SubnaticaWeb(WebWorld):
         "setup/en",
         ["Berserker"]
     )]
-
 
 class SubnauticaWorld(World):
     """
@@ -72,8 +76,11 @@ class SubnauticaWorld(World):
         # Victory item
         self.world.get_location("Aurora - Captain Data Terminal", self.player).place_locked_item(
             neptune_launch_platform)
-        self.world.get_location("Neptune Launch", self.player).place_locked_item(
-            SubnauticaItem("Victory", ItemClassification.progression, None, player=self.player))
+        for event in events:
+            self.world.get_location(event, self.player).place_locked_item(
+                SubnauticaItem(event, ItemClassification.progression, None, player=self.player))
+        # make the goal event the victory "item"
+        self.world.get_location(self.world.goal[self.player].get_event_name(), self.player).item.name = "Victory"
 
     def set_rules(self):
         set_rules(self.world, self.player)
@@ -98,7 +105,7 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
     ret.world = world
     if locations:
         for location in locations:
-            loc_id = locations_lookup_name_to_id.get(location, 0)
+            loc_id = locations_lookup_name_to_id.get(location, None)
             location = SubnauticaLocation(player, location, loc_id, ret)
             ret.locations.append(location)
     if exits:
