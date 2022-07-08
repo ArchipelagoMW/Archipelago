@@ -78,12 +78,18 @@ ROM_START = 0x000000
 WRAM_START = 0xF50000
 WRAM_SIZE = 0x20000
 SRAM_START = 0xE00000
+
+SAVEDATA_START = WRAM_START + 0xF000
+SAVEDATA_SIZE = 0x500
+
 DKC3_ROMNAME_START = 0x00FFC0
 DKC3_ROMHASH_START = 0x7FC0
 ROMNAME_SIZE = 0x15
 ROMHASH_SIZE = 0x15
-DKC3_RECV_PROGRESS_ADDR = WRAM_START
-DEATH_LINK_ACTIVE_ADDR = DKC3_ROMNAME_START + 0x15       # DKC3_TODO: Find a permanent home for this
+
+DKC3_RECV_PROGRESS_ADDR = WRAM_START + 0x632     # DKC3_TODO: Find a permanent home for this
+DKC3_FILE_NAME_ADDR = WRAM_START + 0x5D9
+DEATH_LINK_ACTIVE_ADDR = DKC3_ROMNAME_START + 0x15     # DKC3_TODO: Find a permanent home for this
 
 
 async def game_watcher(ctx: DKC3Context):
@@ -106,7 +112,7 @@ async def game_watcher(ctx: DKC3Context):
                 ctx.game = GAME_DKC3
                 print("GAME: ", ctx.game)
                 ctx.items_handling = 0b111  # remote items
-                
+
             rom = await snes_read(ctx, DKC3_ROMHASH_START, ROMHASH_SIZE)
             if rom is None or rom == bytes([0] * ROMHASH_SIZE):
                 continue
@@ -118,11 +124,11 @@ async def game_watcher(ctx: DKC3Context):
             #if death_link:
             #    ctx.allow_collect = bool(death_link[0] & 0b100)
             #    await ctx.update_death_link(bool(death_link[0] & 0b1))
-            #if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
-            #    ctx.locations_checked = set()
-            #    ctx.locations_scouted = set()
-            #    ctx.locations_info = {}
-            #ctx.prev_rom = ctx.rom
+            if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
+                ctx.locations_checked = set()
+                ctx.locations_scouted = set()
+                ctx.locations_info = {}
+            ctx.prev_rom = ctx.rom
 
             if ctx.awaiting_rom:
                 await ctx.server_auth(False)
@@ -135,12 +141,16 @@ async def game_watcher(ctx: DKC3Context):
         if ctx.game == GAME_DKC3:
             # DKC3_TODO: Handle Progress and Deathlink
             
-            # DKC3_TODO: Early Out Here based on being in-game (loaded save)
+            save_file_name = await snes_read(ctx, DKC3_FILE_NAME_ADDR, 0x5)
 
-            from worlds.dkc3.Rom import location_rom_data
+            if save_file_name is None or save_file_name[0] == 0x00:
+                # We haven't loaded a save file
+                continue
+
+            from worlds.dkc3.Rom import location_rom_data, item_rom_data
             for loc_id, loc_data in location_rom_data.items():
                 if loc_id not in ctx.locations_checked:
-                    data = await snes_read(ctx, DKC3_RECV_PROGRESS_ADDR + loc_data[0], 1)
+                    data = await snes_read(ctx, WRAM_START + loc_data[0], 1)
                     masked_data = data[0] & (1 << loc_data[1])
                     bit_set = (masked_data != 0)
                     invert_bit = ((len(loc_data) >= 3) and loc_data[2])
@@ -152,6 +162,89 @@ async def game_watcher(ctx: DKC3Context):
                         snes_logger.info(
                             f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [loc_id]}])
+
+            # DKC3_TODO: Make this actually visually display new things received (ASM Hook required)
+            recv_count = await snes_read(ctx, DKC3_RECV_PROGRESS_ADDR, 1)
+            recv_index = recv_count[0]
+            #print("Game Index: ", recv_count, " | ctx Index: ", ctx.items_received)
+            if recv_index < len(ctx.items_received):
+                item = ctx.items_received[recv_index]
+                recv_index += 1
+                logging.info('Received %s from %s (%s) (%d/%d in list)' % (
+                    color(ctx.item_names[item.item], 'red', 'bold'),
+                    color(ctx.player_names[item.player], 'yellow'),
+                    ctx.location_names[item.location], recv_index, len(ctx.items_received)))
+
+                snes_buffered_write(ctx, DKC3_RECV_PROGRESS_ADDR, bytes([recv_index]))
+                if item.item in item_rom_data:
+                    item_count = await snes_read(ctx, WRAM_START + item_rom_data[item.item][0], 0x1)
+                    new_item_count = item_count[0] + 1
+                    for address in item_rom_data[item.item]:
+                        snes_buffered_write(ctx, WRAM_START + address, bytes([new_item_count]))
+
+                    # Handle Coin Displays
+                    current_level = await snes_read(ctx, WRAM_START + 0x5E3, 0x5)
+                    if item.item == 0xDC3002 and (current_level[0] == 0x0A and current_level[2] == 0x00 and current_level[4] == 0x03):
+                        # Bazaar and Barter
+                        item_count = await snes_read(ctx, WRAM_START + 0xB02, 0x1)
+                        new_item_count = item_count[0] + 1
+                        snes_buffered_write(ctx, WRAM_START + 0xB02, bytes([new_item_count]))
+                    elif item.item == 0xDC3002 and current_level[0] == 0x04:
+                        # Swanky
+                        item_count = await snes_read(ctx, WRAM_START + 0xA26, 0x1)
+                        new_item_count = item_count[0] + 1
+                        snes_buffered_write(ctx, WRAM_START + 0xA26, bytes([new_item_count]))
+                    elif item.item == 0xDC3003 and (current_level[0] == 0x0A and current_level[2] == 0x08 and current_level[4] == 0x01):
+                        # Boomer
+                        item_count = await snes_read(ctx, WRAM_START + 0xB02, 0x1)
+                        new_item_count = item_count[0] + 1
+                        snes_buffered_write(ctx, WRAM_START + 0xB02, bytes([new_item_count]))
+                else:
+                    # Handle Patch and Skis
+                    if item.item == 0xDC3007:
+                        num_upgrades = 1
+                        inventory = await snes_read(ctx, WRAM_START + 0x605, 0xF)
+
+                        if (inventory[0] & 0x02):
+                            num_upgrades = 3
+                        elif (inventory[13] & 0x08) or (inventory[0] & 0x01):
+                            num_upgrades = 2
+
+                        if num_upgrades == 1:
+                            snes_buffered_write(ctx, WRAM_START + 0x605, bytes([inventory[0] | 0x01]))
+                            if inventory[4] == 0:
+                                snes_buffered_write(ctx, WRAM_START + 0x609, bytes([0x01]))
+                            elif inventory[6] == 0:
+                                snes_buffered_write(ctx, WRAM_START + 0x60B, bytes([0x01]))
+                            elif inventory[8] == 0:
+                                snes_buffered_write(ctx, WRAM_START + 0x60D, bytes([0x01]))
+                            elif inventory[10] == 0:
+                                snes_buffered_write(ctx, WRAM_START + 0x60F, bytes([0x01]))
+
+                            cove_mekanos_progress = await snes_read(ctx, WRAM_START + 0x691, 0x2)
+                            snes_buffered_write(ctx, WRAM_START + 0x691, bytes([cove_mekanos_progress[0] | 0x01]))
+                            snes_buffered_write(ctx, WRAM_START + 0x692, bytes([cove_mekanos_progress[1] | 0x01]))
+                        elif num_upgrades == 2:
+                            snes_buffered_write(ctx, WRAM_START + 0x605, bytes([inventory[0] | 0x02]))
+                            if inventory[4] == 0:
+                                snes_buffered_write(ctx, WRAM_START + 0x609, bytes([0x02]))
+                            elif inventory[6] == 0:
+                                snes_buffered_write(ctx, WRAM_START + 0x60B, bytes([0x02]))
+                            elif inventory[8] == 0:
+                                snes_buffered_write(ctx, WRAM_START + 0x60D, bytes([0x02]))
+                            elif inventory[10] == 0:
+                                snes_buffered_write(ctx, WRAM_START + 0x60F, bytes([0x02]))
+                        elif num_upgrades == 3:
+                            snes_buffered_write(ctx, WRAM_START + 0x606, bytes([inventory[1] | 0x20]))
+
+                            k3_ridge_progress = await snes_read(ctx, WRAM_START + 0x693, 0x2)
+                            snes_buffered_write(ctx, WRAM_START + 0x693, bytes([k3_ridge_progress[0] | 0x01]))
+                            snes_buffered_write(ctx, WRAM_START + 0x694, bytes([k3_ridge_progress[1] | 0x01]))
+                    else:
+                        print("Item Not Recognized: ", item.item)
+                    pass
+
+                await snes_flush_writes(ctx)
 
 
 

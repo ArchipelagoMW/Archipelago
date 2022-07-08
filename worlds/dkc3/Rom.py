@@ -236,7 +236,7 @@ location_rom_data = {
     0xDC30B4: [0x64D, 1],
     0xDC30B5: [0x64E, 1],
 
-    0xDC30B6: [0x615, 7], # DKC3_TODO: 
+    0xDC30B6: [0x615, 7], # DKC3_TODO: Banana Bird Mother
 
     0xDC30B7: [0x615, 2, True],
     0xDC30B8: [0x615, 3, True],
@@ -248,6 +248,15 @@ location_rom_data = {
     0xDC30BE: [0x625, 4, True],
 }
 
+
+item_rom_data = {
+    0xDC3001: [0x5D5], # 1-Up Balloon
+    0xDC3002: [0x5C9], # Bear Coin
+    0xDC3003: [0x5CB], # Bonus Coin
+    0xDC3004: [0x5CF], # DK Coin
+    0xDC3005: [0x5CD], # Banana Bird
+    0xDC3006: [0x5D1, 0x603], # Cog
+}
 
 class LocalRom(object):
 
@@ -296,11 +305,15 @@ def patch_rom(world, rom, player, active_level_list):
 
     # Boomer Costs
     bonus_coin_cost = world.krematoa_bonus_coin_cost[player]
-    rom.write_byte(0x3498B9, bonus_coin_cost)
-    rom.write_byte(0x3498BA, bonus_coin_cost)
-    rom.write_byte(0x3498BB, bonus_coin_cost)
-    rom.write_byte(0x3498BC, bonus_coin_cost)
-    rom.write_byte(0x3498BD, bonus_coin_cost)
+    inverted_bonus_coin_cost = 0x100 - bonus_coin_cost
+    rom.write_byte(0x3498B9, inverted_bonus_coin_cost)
+    rom.write_byte(0x3498BA, inverted_bonus_coin_cost)
+    rom.write_byte(0x3498BB, inverted_bonus_coin_cost)
+    rom.write_byte(0x3498BC, inverted_bonus_coin_cost)
+    rom.write_byte(0x3498BD, inverted_bonus_coin_cost)
+
+    rom.write_byte(0x349857, bonus_coin_cost)
+    rom.write_byte(0x349862, bonus_coin_cost)
 
     # Gyrocopter Costs
     dk_coin_cost = world.dk_coins_for_gyrocopter[player]
@@ -371,12 +384,47 @@ def patch_rom(world, rom, player, active_level_list):
         rom.write_byte(0x34BC65, (0x32 + level_dict[active_level_list[30]].levelID))
         rom.write_byte(0x34BC6E, (0x32 + level_dict[active_level_list[35]].levelID))
 
+    if world.goal[player] == "knautilus":
+        # Swap Kastle KAOS and Knautilus
+        rom.write_byte(0x34D4E1, 0xC2)
+        rom.write_byte(0x34D4E2, 0x24)
+        rom.write_byte(0x34D551, 0xBA)
+        rom.write_byte(0x34D552, 0x23)
+
+        rom.write_byte(0x32F339, 0x55)
+
 
     from Main import __version__
     rom.name = bytearray(f'BM{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
 
+    # DKC3_TODO: This is a hack, reconsider
+    # Don't grant (DK, Bonus, Bear) Coins
+    rom.write_byte(0x3BD454, 0xEA)
+    rom.write_byte(0x3BD455, 0xEA)
+
+    # Don't grant Cogs
+    rom.write_byte(0x3BD574, 0xEA)
+    rom.write_byte(0x3BD575, 0xEA)
+    rom.write_byte(0x3BD576, 0xEA)
+
+    # Don't grant Banana Birds at their caves
+    rom.write_byte(0x32DD62, 0xEA)
+    rom.write_byte(0x32DD63, 0xEA)
+    rom.write_byte(0x32DD64, 0xEA)
+
+    # Don't grant Patch and Skis from their bosses
+    rom.write_byte(0x3F3762, 0x00)
+    rom.write_byte(0x3F377B, 0x00)
+    rom.write_byte(0x3F3797, 0x00)
+
+    # Always allow Start+Select
+    rom.write_byte(0x8BAB, 0x01)
+
+    # Handle Alt Palettes in Krematoa
+    rom.write_byte(0x3B97E9, 0x80)
+    rom.write_byte(0x3B97EA, 0xEA)
 
 
 

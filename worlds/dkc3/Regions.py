@@ -733,9 +733,11 @@ def connect_regions(world, player, level_list):
         LocationName.arichs_hoard_region,
     ]
 
-    for i in range(0, len(kremwood_forest_levels)):
+    for i in range(0, len(kremwood_forest_levels) - 1):
         connect(world, player, names, LocationName.kremwood_forest_region, kremwood_forest_levels[i])
-        # Final Connect here needs a "can_reach riverside_race_flag"
+
+    connect(world, player, names, LocationName.kremwood_forest_region, kremwood_forest_levels[-1],
+            lambda state: (state.can_reach(LocationName.riverside_race_flag, "Location", player)))
 
     # Cotton-Top Cove Connections
     cotton_top_cove_levels = [
@@ -769,7 +771,8 @@ def connect_regions(world, player, level_list):
         connect(world, player, names, LocationName.mekanos_region, LocationName.sky_high_secret_region,
                 lambda state: (state.has(ItemName.bowling_ball, player, 1)))
     else:
-        connect(world, player, names, LocationName.mekanos_region, LocationName.sky_high_secret_region)
+        connect(world, player, names, LocationName.mekanos_region, LocationName.sky_high_secret_region,
+                lambda state: (state.can_reach(LocationName.bleaks_house, "Location", player)))
 
     # K3 Connections
     k3_levels = [

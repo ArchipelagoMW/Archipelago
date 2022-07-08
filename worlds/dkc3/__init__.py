@@ -79,11 +79,11 @@ class DKC3World(World):
         # Levels
         total_required_locations = 161
 
-        number_of_banana_birds = 15
+        number_of_banana_birds = 0
         number_of_cogs = 5
         number_of_bosses = 8
         if self.world.goal[self.player] == "knautilus":
-            self.world.get_location(LocationName.knautilus, self.player).place_locked_item(self.create_item(ItemName.victory))
+            self.world.get_location(LocationName.kastle_kaos, self.player).place_locked_item(self.create_item(ItemName.victory))
             self.world.get_location(LocationName.rocket_rush_flag, self.player).place_locked_item(self.create_item(ItemName.krematoa_cog))
             number_of_cogs = 4
             number_of_bosses = 7
@@ -112,7 +112,7 @@ class DKC3World(World):
 
         total_junk_count = total_required_locations - len(itempool)
 
-        itempool += [self.create_item(ItemName.one_up_balloon)] * total_junk_count
+        itempool += [self.create_item(ItemName.bear_coin)] * total_junk_count
 
         self.active_level_list = level_list.copy()
 
