@@ -27,7 +27,7 @@ class CotNDWebWorld(WebWorld):
 
 
 class CotNDWorld(World):
-    game: str                           = "Crypt of the Necrodancer Synchrony"
+    game: str                           = "Crypt of the NecroDancer"
     options: Dict[str, Option[Any]]     = cotnd_options
     item_name_to_id: Dict[str, int]     = {name: (id_offset + index) for index, name in enumerate(item_table)}
     location_name_to_id: Dict[str, int] = {name: (id_offset + index) for index, name in enumerate(

@@ -16,7 +16,7 @@ UDP_IP = "127.0.0.1"
 UDP_PORT = 8980
 UDP_TARGET = (UDP_IP, UDP_PORT)
 
-cotnd_loc_name_to_id = network_data_package["games"]["Crypt of the Necrodancer Synchrony"]["location_name_to_id"]
+cotnd_loc_name_to_id = network_data_package["games"]["Crypt of the NecroDancer"]["location_name_to_id"]
 
 data_path = ''
 system = platform.system()
@@ -100,7 +100,7 @@ class CotNDContext(CommonContext):
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
-        self.game = 'Crypt of the Necrodancer Synchrony'
+        self.game = 'Crypt of the NecroDancer'
         self.last_log_msg = ""
         self.game_watcher = asyncio.create_task(self.game_writer(), name="Game Watcher")
         self.game_reader = asyncio.create_task(self.game_reader(), name="Game Reader")
@@ -125,7 +125,7 @@ class CotNDContext(CommonContext):
             logging_pairs = [
                 ("Client", "Archipelago")
             ]
-            base_title = "Crypt of the NecroDancer: Synchrony - Archipelago Client"
+            base_title = "Crypt of the NecroDancer - Archipelago Client"
 
         self.ui = CotNDManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
