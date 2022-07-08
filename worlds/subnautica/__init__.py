@@ -8,7 +8,7 @@ from .Items import lookup_name_to_id as items_lookup_name_to_id
 
 from .Regions import create_regions
 from .Rules import set_rules
-from .Options import options
+from . import Options
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, Tutorial, ItemClassification, RegionType
 from ..AutoWorld import World, WebWorld
@@ -36,10 +36,10 @@ class SubnauticaWorld(World):
 
     item_name_to_id = items_lookup_name_to_id
     location_name_to_id = locations_lookup_name_to_id
-    options = options
+    options = Options.options
 
     data_version = 2
-    required_client_version = (0, 1, 9)
+    required_client_version = (0, 3, 3)
 
     def generate_basic(self):
         # Link regions
@@ -82,7 +82,8 @@ class SubnauticaWorld(World):
         create_regions(self.world, self.player)
 
     def fill_slot_data(self):
-        slot_data = {}
+        goal: Options.Goal = self.world.goal[self.player]
+        slot_data = {"goal": goal.current_key}
         return slot_data
 
     def create_item(self, name: str) -> Item:

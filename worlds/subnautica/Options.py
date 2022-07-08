@@ -9,6 +9,20 @@ class ItemPool(Choice):
     option_valuable = 1
 
 
+class Goal(Choice):
+    """Goal to complete.
+    Infected: Reach maximum infection level.
+    Free: Disable quarantine.
+    Launch: Leave the planet.
+    """
+    auto_display_name = True
+    display_name = "Goal"
+    option_infected = 0
+    option_free = 1
+    option_launch = 2
+
+
 options = {
-    "item_pool": ItemPool
+    "item_pool": ItemPool,
+    "goal": Goal,
 }
