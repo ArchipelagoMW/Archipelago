@@ -29,7 +29,7 @@ import websockets
 
 from NetUtils import ClientStatus, color
 from worlds.alttp import Regions, Shops
-from worlds.alttp.Rom import ROM_PLAYER_LIMIT
+from worlds.alttp.Rom import ROM_PLAYER_LIMIT, hint_addresses
 from worlds.sm.Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
 from worlds.smz3.Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
 import Utils
@@ -1083,6 +1083,135 @@ async def game_watcher(ctx: Context):
 
         if ctx.game == GAME_ALTTP:
             gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
+
+            # scout hints for visible shop items and items that might not be reachable
+            def create_hint(loc):
+                asyncio.create_task(ctx.send_msgs([{"cmd": "LocationScouts", "locations": [loc], "create_as_hint": 2}]))
+            def create_hint_player(loc, player):
+                asyncio.create_task(ctx.send_msgs([{"cmd": "LocationScouts", "locations": [loc], "create_as_hint": 2,
+                                                    "player": player}]))
+
+
+            pos = await snes_read(ctx, WRAM_START + 0x20, 4)
+            (x, y) = (pos[3] * 256 + pos[2], pos[1] * 256 + pos[0])
+            if gamemode[0] == 0x09:  # Overworld
+                ow_screen = await snes_read(ctx, WRAM_START + 0x8A, 1)
+                ow_screen = ow_screen[0]
+                if ow_screen < 0x40:  # Light world
+                    if 0x0F04 > y > 0x0E34 and x < 0x00E4:  # Desert
+                        create_hint(1573187)
+                    if 0x0894 > x > 0x07A4 and 0x01C4 > y > 0x00F4:  # Spectacle Rock
+                        create_hint(1573184)
+                    if 0x0D64 > x > 0x0C70 and y < 0x0094:  # East Death Mountain Floating Island
+                        create_hint(1573185)
+                    if 0x0C04 > x > 0x0B34 and 0x0D94 > y > 0x0CC4:  # Lake Hylia Island
+                        create_hint(1573188)
+                    if 0x0BA8 > y > 0x0AC4 and x < 0x00F4:  # Maze Race
+                        create_hint(1573186)
+                else:  # Dark World
+                    if 0x5D4 > x > 0x0504 and 0x02E4 > y > 0x214:  # Bumper Cave Ledge
+                        create_hint(1573190)
+            elif gamemode[0] == 0x0B:  # Special Overworld
+                ow_screen = await snes_read(ctx, WRAM_START + 0x8A, 1)
+                ow_screen = ow_screen[0]
+                if ow_screen == 0x81:  # Zora
+                    if 0x0330 < x < 0x042F and 0x02DC > y > 0x01FD:  # Zora's Ledge
+                        create_hint(1573193)
+            elif gamemode[0] == 0x07:  # Dungeon
+                dungeon_room = await snes_read(ctx, WRAM_START + 0xA0, 2)
+                dungeon_room = dungeon_room[1] * 256 + dungeon_room[0]
+                if dungeon_room in (0x00FF, 0x0109, 0x010F, 0x0110, 0x0112, 0x0115, 0x011F):
+                    if not ((dungeon_room == 0x00FF and (x > 0x1F00 or y > 0x0F00))  # Light World Death Mountain Shop
+                            or (dungeon_room == 0x011F and x < 0x1F00)  # Kakariko Shop
+                            or (dungeon_room == 0x0112 and x < 0x0500)):  # Cave Shop
+                        shop = await snes_read(ctx, WRAM_START + 0x1506C, 1)
+                        shop = shop[0]
+                        for shop_name, shop_data in shop_table.items():
+                            if shop_data.room == dungeon_room and shop_data.sram_offset == shop:
+                                for loc_id, loc_name in shop_table_by_location_id.items():
+                                    if loc_name.startswith(shop_name):
+                                        create_hint(loc_id)
+                else:
+                    has_boots = await snes_read(ctx, WRAM_START + 0xF355, 1)
+                    has_boots = has_boots[0]
+                    if not has_boots:
+                        if dungeon_room == 0x0073 and 0x0800 > x > 0x0700 and 0x0F00 > y > 0x1000:  # Desert Torch
+                            create_hint(1573216)
+                        elif dungeon_room == 0x0107 and x < 0x0F00:  # Library
+                            create_hint(1572882)
+                        elif dungeon_room == 0x008C and 0x1800 > x > 0x1700 and 0x1000 > y > 0x1100:  # GT Bob's Torch
+                            create_hint(1573217)
+                    if dungeon_room == 0xEA and y < 0x1D28:  # Spectacle Rock cave
+                        create_hint(1572866)
+                    if dungeon_room == 0xE2 :  # Lumberjack Tree
+                        create_hint(1572865)
+            elif gamemode[0] == 0x0E:
+                submodule = await snes_read(ctx, WRAM_START + 0x11, 1)
+                if submodule[0] == 0x02:  # text box
+                    return_module = await snes_read(ctx, WRAM_START + 0x010C, 1)
+                    if return_module[0] in (0x09, 0x0B):  # overworld
+                        vendor_hints = await snes_read(ctx, ROM_START + 0xe6280, 1)
+                        equipped_item = await snes_read(ctx, WRAM_START + 0x303, 1)
+                        mystery_variable = await snes_read(ctx, WRAM_START + 0x50, 1)  # related to ability to change
+                        # directions, but for some reason 0 instead of 1 when using book to read text
+                        if vendor_hints[0] & 1 and return_module[0] == 0x09 and 0x0779 > y > 0x0747 and \
+                                0x0195 > x > 0x016F:  # bottle merchant
+                            create_hint(191256)
+                        elif vendor_hints[0] & 2 and return_module[0] == 0x0B and y < 0x007F and x > 0x0578:  # King Zora
+                            create_hint(975299)
+                        elif return_module[0] == 0x0B and equipped_item[0] == 0x0C and mystery_variable[0] == 0x00 \
+                                and 0xA8 > y > 0x90 and 0x7C > x > 0x64:  # master sword pedestal
+                            create_hint(166320)
+
+                    elif return_module[0] == 0x07:  # dungeon
+                        dungeon_room = await snes_read(ctx, WRAM_START + 0xA0, 2)
+                        dungeon_room = dungeon_room[1] * 256 + dungeon_room[0]
+                        if dungeon_room == 0xA8 and 0x1181 > x > 0x1170 and 0x146A > y:  # Eastern Palace hint tile
+                            hint_tile = "telepathic_tile_eastern_palace"
+                        elif dungeon_room == 0x77 and 0x0F00 > x > 0xEF0 and 0xEEA > y > 0xEE7:
+                            hint_tile = "telepathic_tile_tower_of_hera_entrance"
+                        elif dungeon_room == 0x27 and 0x0F00 > x > 0xEF0 and y == 0x0508:
+                            hint_tile = "telepathic_tile_tower_of_hera_floor_4"
+                        elif dungeon_room == 0x3E and 0x1D81 > x > 0x1D70 and 0x0632 > y:
+                            hint_tile = "telepathic_tile_ice_stalfos_knights_room"
+                        elif dungeon_room == 0x7E and 0x1D81 > x > 0x1D70 and 0x0e32 > y:
+                            hint_tile = "telepathic_tile_ice_large_room"
+                        elif dungeon_room == 0x0E and 0x1D81 > x > 0x1D70 and 0x1e32 > y:
+                            hint_tile = "telepathic_tile_ice_entrance"
+                        elif dungeon_room == 0x28 and 0x1139 > x > 0x1128 and 0x04D2 > y > 0x04EF:
+                            hint_tile = "telepathic_tile_swamp_entrance"
+                        elif dungeon_room == 0x4B and 0x1781 > x > 0x1770 and 0x0832 > y:
+                            hint_tile = "telepathic_tile_palace_of_darkness"
+                        elif dungeon_room == 0xB0 and 0x0149 > x > 0x0138 and 0x1632 > y:
+                            hint_tile = "telepathic_tile_castle_tower"
+                        elif dungeon_room == 0xEA and 0x14B9 > x > 0x14A8 and 0x1CA2 > y > 0x1C9F:
+                            hint_tile = "telepathic_tile_spectacle_rock"
+                        elif dungeon_room == 0x73 and 0x0781 > x > 0x0770 and 0x0E32 > y:
+                            hint_tile = "telepathic_tile_desert_bonk_torch_room"
+                        elif dungeon_room == 0xD6 and 0x0D39 > x > 0x0D28 and 0x1B92 > y > 0xD1B8F:
+                            hint_tile = "telepathic_tile_turtle_rock"
+                        elif dungeon_room == 0x97 and 0x0F39 > x > 0x0F28 and 0x12AA > y:
+                            hint_tile = "telepathic_tile_misery_mire"
+                        elif dungeon_room == 0x64 and 0x0859 > x > 0x0848 and 0x0D32 > y:
+                            hint_tile = "telepathic_tile_thieves_town_upstairs"
+                        elif dungeon_room == 0x011A and 0x1595 > x > 0x16B and 0x2381 > y > 0x234F:
+                            hint_tile = "dark_palace_tree_dude"
+                        elif dungeon_room == 0x0125 and 0x0B81 > x > 0x0B70 and 0x2532 > y:
+                            hint_tile = "telepathic_tile_south_east_darkworld_cave"
+                        else:
+                            hint_tile = "no hint"
+                        if hint_tile in hint_addresses:
+                            address = hint_addresses[hint_tile]
+                            hint_data = await snes_read(ctx, ROM_START + address, 32)
+                            loc_1 = int.from_bytes(hint_data[:8], "little")
+                            player_1 = int.from_bytes(hint_data[8:16], "little")
+                            loc_2 = int.from_bytes(hint_data[16:24], "little")
+                            player_2 = int.from_bytes(hint_data[24:32], "little")
+                            if loc_1 != 0xFFFFFFFFFFFFFFFF:
+                                create_hint_player(loc_1, player_1)
+                            if loc_2 != 0xFFFFFFFFFFFFFFFF:
+                                create_hint_player(loc_2, player_2)
+
             if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
                 currently_dead = gamemode[0] in DEATH_MODES
                 await ctx.handle_deathlink_state(currently_dead)
@@ -1151,58 +1280,6 @@ async def game_watcher(ctx: Context):
                 ctx.locations_scouted.add(scout_location)
                 await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [scout_location]}])
             await track_locations(ctx, roomid, roomdata)
-
-            def create_hint(loc):
-                asyncio.create_task(ctx.send_msgs([{"cmd": "LocationScouts", "locations": [loc], "create_as_hint": 3}]))
-
-            # scout hints for visible shop items and items that might not be reachable
-            pos = await snes_read(ctx, WRAM_START + 0x20, 4)
-            (x, y) = (pos[3] * 256 + pos[2], pos[1] * 256 + pos[0])
-            ow_screen = await snes_read(ctx, WRAM_START + 0x8A, 1)
-            ow_screen = ow_screen[0]
-            dungeon_room = await snes_read(ctx, WRAM_START + 0xA0, 2)
-            dungeon_room = dungeon_room[1] * 256 + dungeon_room[0]
-            shop = await snes_read(ctx, WRAM_START + 0x1506C, 1)
-            shop = shop[0]
-            has_boots = await snes_read(ctx, WRAM_START + 0xF355, 1)
-            has_boots = has_boots[0]
-            if gamemode[0] == 0x09:  # Overworld
-                if ow_screen < 0x40:  # Light world
-                    if 0x0F04 > y > 0x0E34 and x < 0x00E4:  # Desert
-                        create_hint(1573187)
-                    if 0x0894 > x > 0x07A4 and 0x01C4 > y > 0x00F4:  # Spectacle Rock
-                        create_hint(1573184)
-                    if 0x0D64 > x > 0x0C70 and y < 0x0094:  # East Death Mountain Floating Island
-                        create_hint(1573185)
-                    if 0x0C04 > x > 0x0B34 and 0x0CC4 > y > 0x0D94:  # Lake Hylia Island
-                        create_hint(1573188)
-                    if 0x0AC4 < y < 0x0BA8 and x < 0x0010:  # Maze Race
-                        create_hint(1573186)
-                else:  # Dark World
-                    if x > 0x04F8 and y < 0x02E4:  # Bumper Cave Ledge
-                        create_hint(1573190)
-            elif gamemode[0] == 0x0B:  # Special Overworld
-                if ow_screen == 0x81:  # Zora
-                    if 0x0330 < x < 0x042F and 0x02DC > y > 0x01FD:  # Zora's Ledge
-                        create_hint(1573193)
-            elif gamemode[0] == 0x07:  # Dungeon
-                if dungeon_room in (0x00FF, 0x0109, 0x010F, 0x0110, 0x0112, 0x0115, 0x011F):
-                    if not ((dungeon_room == 0x00FF and (x > 0x1F00 or y > 0x1F00))  # Light World Death Mountain Shop
-                            or (dungeon_room == 0x011F and x < 0x1F00)  # Kakariko Shop
-                            or (dungeon_room == 0x0112 and x < 0x1F00)):  # Cave Shop
-                        for shop_name, shop_data in shop_table.items():
-                            if shop_data.room == dungeon_room and shop_data.sram_offset == shop:
-                                for loc_id, loc_name in shop_table_by_location_id.items():
-                                    if shop_name in loc_name:
-                                        create_hint(loc_id)
-                elif not has_boots:
-                    if dungeon_room == 0x0073 and x < 0x1F00 and y < 0x1F00:  # Desert Torch
-                        create_hint(1573216)
-                    elif dungeon_room == 0x0107 and x < 0x1F00:  # Library
-                        create_hint(1572882)
-                    elif dungeon_room == 0x08C and x < 0x1F00 and y < 0x1F00:  # GT Bob's Torch
-                        create_hint(1573217)
-
 
         elif ctx.game == GAME_SM:
             gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)

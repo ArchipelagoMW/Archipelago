@@ -34,7 +34,7 @@ from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts
     DeathMountain_texts, \
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen
+from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, int64_as_bytes, snes_to_pc, is_frozen
 from worlds.alttp.Items import ItemFactory, item_table, item_name_groups, progression_items
 from worlds.alttp.EntranceShuffle import door_addresses
 from worlds.alttp.Options import smallkey_shuffle
@@ -162,6 +162,9 @@ class LocalRom(object):
 
     def write_int32(self, address: int, value: int):
         self.write_bytes(address, int32_as_bytes(value))
+
+    def write_int64(self, address: int, value: int):
+        self.write_bytes(address, int64_as_bytes(value))
 
     def write_int16s(self, startaddress: int, values):
         for i, value in enumerate(values):
@@ -2090,6 +2093,15 @@ def write_string_to_rom(rom, target, string):
     rom.write_bytes(address, MultiByteTextMapper.convert(string, maxbytes))
 
 
+def write_hint_data(rom, hint_loc, locations):
+    address = hint_addresses[hint_loc]
+    if hint_loc in hint_addresses:
+        for location in locations:
+            rom.write_int64(address, location.address)
+            rom.write_int64(address + 8, location.player)
+            address += 16
+
+
 def write_strings(rom, world, player):
     local_random = world.slot_seeds[player]
 
@@ -2120,16 +2132,21 @@ def write_strings(rom, world, player):
                 hint += f" for {world.player_name[dest.player]}"
         return hint
 
+    hint_byte = 0x00
     if world.scams[player].gives_king_zora_hint:
         # Zora hint
         zora_location = world.get_location("King Zora", player)
         tt['zora_tells_cost'] = f"You got 500 rupees to buy {hint_text(zora_location.item)}" \
                                 f"\n  ≥ Duh\n    Oh carp\n{{CHOICE}}"
+        hint_byte |= 0x01
     if world.scams[player].gives_bottle_merchant_hint:
         # Bottle Vendor hint
         vendor_location = world.get_location("Bottle Merchant", player)
         tt['bottle_vendor_choice'] = f"I gots {hint_text(vendor_location.item)}\nYous gots 100 rupees?" \
                                      f"\n  ≥ I want\n    no way!\n{{CHOICE}}"
+        hint_byte |= 0x02
+
+    rom.write_byte(0xe6280, hint_byte)
 
     # First we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
     if world.hints[player]:
@@ -2226,54 +2243,79 @@ def write_strings(rom, world, player):
                                                             'dungeonscrossed'] else 5
             for location in locations_to_hint[:hint_count]:
                 if location == 'Swamp Left':
+                    loc_1 = world.get_location('Swamp Palace - West Chest', player)
+                    loc_2 = world.get_location('Swamp Palace - Big Key Chest', player)
                     if local_random.randint(0, 1):
-                        first_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
-                        second_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
+                        first_item = hint_text(loc_1.item)
+                        second_item = hint_text(loc_2.item)
                     else:
-                        second_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
-                        first_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
+                        second_item = hint_text(loc_1.item)
+                        first_item = hint_text(loc_2.item)
                     this_hint = ('The westmost chests in Swamp Palace contain ' + first_item + ' and ' + second_item + '.')
-                    tt[hint_locations.pop(0)] = this_hint
+                    hint_loc = hint_locations.pop(0)
+                    tt[hint_loc] = this_hint
+                    write_hint_data(rom, hint_loc, [loc_1, loc_2])
                 elif location == 'Mire Left':
+                    loc_1 = world.get_location('Misery Mire - Compass Chest', player)
+                    loc_2 = world.get_location('Misery Mire - Big Key Chest', player)
                     if local_random.randint(0, 1):
-                        first_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
-                        second_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
+                        first_item = hint_text(loc_1.item)
+                        second_item = hint_text(loc_2.item)
                     else:
-                        second_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
-                        first_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
+                        second_item = hint_text(loc_1.item)
+                        first_item = hint_text(loc_2.item)
                     this_hint = ('The westmost chests in Misery Mire contain ' + first_item + ' and ' + second_item + '.')
-                    tt[hint_locations.pop(0)] = this_hint
+                    hint_loc = hint_locations.pop(0)
+                    tt[hint_loc] = this_hint
+                    write_hint_data(rom, hint_loc, [loc_1, loc_2])
                 elif location == 'Tower of Hera - Big Key Chest':
-                    this_hint = 'Waiting in the Tower of Hera basement leads to ' + hint_text(
-                        world.get_location(location, player).item) + '.'
-                    tt[hint_locations.pop(0)] = this_hint
+                    loc = world.get_location(location, player)
+                    this_hint = 'Waiting in the Tower of Hera basement leads to ' + hint_text(loc.item) + '.'
+                    hint_loc = hint_locations.pop(0)
+                    tt[hint_loc] = this_hint
+                    write_hint_data(rom, hint_loc, [loc])
                 elif location == 'Ganons Tower - Big Chest':
-                    this_hint = 'The big chest in Ganon\'s Tower contains ' + hint_text(
-                        world.get_location(location, player).item) + '.'
-                    tt[hint_locations.pop(0)] = this_hint
+                    loc = world.get_location(location, player)
+                    this_hint = 'The big chest in Ganon\'s Tower contains ' + hint_text(loc.item) + '.'
+                    hint_loc = hint_locations.pop(0)
+                    tt[hint_loc] = this_hint
+                    write_hint_data(rom, hint_loc, [loc])
                 elif location == 'Thieves\' Town - Big Chest':
-                    this_hint = 'The big chest in Thieves\' Town contains ' + hint_text(
-                        world.get_location(location, player).item) + '.'
-                    tt[hint_locations.pop(0)] = this_hint
+                    loc = world.get_location(location, player)
+                    this_hint = 'The big chest in Thieves\' Town contains ' + hint_text(loc.item) + '.'
+                    hint_loc = hint_locations.pop(0)
+                    tt[hint_loc] = this_hint
+                    write_hint_data(rom, hint_loc, [loc])
                 elif location == 'Ice Palace - Big Chest':
-                    this_hint = 'The big chest in Ice Palace contains ' + hint_text(
-                        world.get_location(location, player).item) + '.'
-                    tt[hint_locations.pop(0)] = this_hint
+                    loc = world.get_location(location, player)
+                    this_hint = 'The big chest in Ice Palace contains ' + hint_text(loc.item) + '.'
+                    hint_loc = hint_locations.pop(0)
+                    tt[hint_loc] = this_hint
+                    write_hint_data(rom, hint_loc, [loc])
                 elif location == 'Eastern Palace - Big Key Chest':
-                    this_hint = 'The antifairy guarded chest in Eastern Palace contains ' + hint_text(
-                        world.get_location(location, player).item) + '.'
-                    tt[hint_locations.pop(0)] = this_hint
+                    loc = world.get_location(location, player)
+                    this_hint = 'The antifairy guarded chest in Eastern Palace contains ' + hint_text(loc.item) + '.'
+                    hint_loc = hint_locations.pop(0)
+                    tt[hint_loc] = this_hint
+                    write_hint_data(rom, hint_loc, [loc])
                 elif location == 'Sahasrahla':
-                    this_hint = 'Sahasrahla seeks a green pendant for ' + hint_text(
-                        world.get_location(location, player).item) + '.'
-                    tt[hint_locations.pop(0)] = this_hint
+                    loc = world.get_location(location, player)
+                    this_hint = 'Sahasrahla seeks a green pendant for ' + hint_text(loc.item) + '.'
+                    hint_loc = hint_locations.pop(0)
+                    tt[hint_loc] = this_hint
+                    write_hint_data(rom, hint_loc, [loc])
                 elif location == 'Graveyard Cave':
-                    this_hint = 'The cave north of the graveyard contains ' + hint_text(
-                        world.get_location(location, player).item) + '.'
-                    tt[hint_locations.pop(0)] = this_hint
+                    loc = world.get_location(location, player)
+                    this_hint = 'The cave north of the graveyard contains ' + hint_text(loc.item) + '.'
+                    hint_loc = hint_locations.pop(0)
+                    tt[hint_loc] = this_hint
+                    write_hint_data(rom, hint_loc, [loc])
                 else:
-                    this_hint = location + ' contains ' + hint_text(world.get_location(location, player).item) + '.'
-                    tt[hint_locations.pop(0)] = this_hint
+                    loc = world.get_location(location, player)
+                    this_hint = location + ' contains ' + hint_text(loc.item) + '.'
+                    hint_loc = hint_locations.pop(0)
+                    tt[hint_loc] = this_hint
+                    write_hint_data(rom, hint_loc, [loc])
 
             # Lastly we write hints to show where certain interesting items are.
             items_to_hint = RelevantItems.copy()
@@ -2861,6 +2903,12 @@ HintLocations = ['telepathic_tile_eastern_palace',
                  'dark_sanctuary_hint_1',
                  'dark_sanctuary_yes',
                  'dark_sanctuary_hint_2']
+
+hint_address = 0xE6000
+hint_addresses = {}
+for hint in HintLocations:
+    hint_addresses[hint] = hint_address
+    hint_address += 32
 
 InconvenientLocations = ['Spike Cave',
                          'Sahasrahla',

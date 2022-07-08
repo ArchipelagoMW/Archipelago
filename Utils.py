@@ -56,6 +56,12 @@ def int32_as_bytes(value: int) -> typing.List[int]:
     return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF]
 
 
+def int64_as_bytes(value: int) -> typing.List[int]:
+    value = value & 0xFFFFFFFFFFFFFFFF
+    return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF, (value >> 32) & 0xFF,
+            (value >> 40) & 0xFF, (value >> 48) & 0xFF, (value >> 56) & 0xFF]
+
+
 def pc_to_snes(value: int) -> int:
     return ((value << 1) & 0x7F0000) | (value & 0x7FFF) | 0x8000
 

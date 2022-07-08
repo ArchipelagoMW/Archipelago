@@ -1543,6 +1543,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         elif cmd == 'LocationScouts':
             locs = []
             create_as_hint: int = int(args.get("create_as_hint", 0))
+            slot: int = int(args.get("player", client.slot))
             hints = []
             for location in args["locations"]:
                 if type(location) is not int or location not in lookup_any_location_id_to_name:
@@ -1551,9 +1552,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                           "original_cmd": cmd}])
                     return
 
-                target_item, target_player, flags = ctx.locations[client.slot][location]
+                target_item, target_player, flags = ctx.locations[slot][location]
                 if create_as_hint:
-                    hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location))
+                    hints.extend(collect_hint_location_id(ctx, client.team, slot, location))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
             notify_hints(ctx, client.team, hints, only_new=create_as_hint == 2)
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
