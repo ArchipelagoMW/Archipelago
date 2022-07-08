@@ -84,9 +84,6 @@ class SMWorld(World):
     location_name_to_id = locations_lookup_name_to_id
     web = SMWeb()
 
-    remote_items: bool = False
-    remote_start_inventory: bool = False
-
     # changes to client DeathLink handling for 0.2.1
     # changes to client Remote Item handling for 0.2.6
     required_client_version = (0, 2, 6)

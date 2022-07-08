@@ -144,8 +144,6 @@ class Context:
         self.player_name_lookup: typing.Dict[str, team_slot] = {}
         self.connect_names = {}  # names of slots clients can connect to
         self.allow_forfeits = {}
-        self.remote_items = set()
-        self.remote_start_inventory = set()
         #                          player          location_id     item_id  target_player_id
         self.locations = {}
         self.host = host
@@ -318,8 +316,6 @@ class Context:
         self.seed_name = decoded_obj["seed_name"]
         self.random.seed(self.seed_name)
         self.connect_names = decoded_obj['connect_names']
-        self.remote_items = decoded_obj['remote_items']
-        self.remote_start_inventory = decoded_obj.get('remote_start_inventory', decoded_obj['remote_items'])
         self.locations = decoded_obj['locations']
         self.slot_data = decoded_obj['slot_data']
         self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
@@ -488,7 +484,7 @@ class Context:
 
         if "stored_data" in savedata:
             self.stored_data = savedata["stored_data"]
-        # count items and slots from lists for item_handling = remote
+        # count items and slots from lists for items_handling = remote
         logging.info(
             f'Loaded save file with {sum([len(v) for k, v in self.received_items.items() if k[2]])} received items '
             f'for {sum(k[2] for k in self.received_items)} players')
@@ -631,10 +627,7 @@ async def on_client_connected(ctx: Context, client: Client):
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
-        # TODO remove around 0.4
-        'players': players,
-        # TODO convert to list of games present in 0.4
-        'games': [ctx.games[x] for x in range(1, len(ctx.games) + 1)],
+        'games': {ctx.games[x] for x in range(1, len(ctx.games) + 1)},
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
@@ -1408,27 +1401,16 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             team, slot = ctx.connect_names[args['name']]
             game = ctx.games[slot]
-            ignore_game = "IgnoreGame" in args["tags"] or (  # IgnoreGame is deprecated. TODO: remove after 0.3.3?
-                          ("TextOnly" in args["tags"] or "Tracker" in args["tags"]) and not args.get("game"))
+            ignore_game = ("TextOnly" in args["tags"] or "Tracker" in args["tags"]) and not args.get("game")
             if not ignore_game and args['game'] != game:
                 errors.add('InvalidGame')
             minver = min_client_version if ignore_game else ctx.minimum_client_versions[slot]
             if minver > args['version']:
                 errors.add('IncompatibleVersion')
-            if args.get('items_handling', None) is None:
-                # fall back to load from multidata
-                client.no_items = False
-                client.remote_items = slot in ctx.remote_items
-                client.remote_start_inventory = slot in ctx.remote_start_inventory
-                await ctx.send_msgs(client, [{
-                    "cmd": "Print", "text":
-                        "Warning: Client is not sending items_handling flags, "
-                        "which will not be supported in the future."}])
-            else:
-                try:
-                    client.items_handling = args['items_handling']
-                except (ValueError, TypeError):
-                    errors.add('InvalidItemsHandling')
+            try:
+                client.items_handling = args['items_handling']
+            except (ValueError, TypeError):
+                errors.add('InvalidItemsHandling')
 
         # only exact version match allowed
         if ctx.compatibility == 0 and args['version'] != version_tuple:

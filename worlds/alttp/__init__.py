@@ -119,8 +119,6 @@ class ALTTPWorld(World):
     location_name_to_id = lookup_name_to_id
 
     data_version = 8
-    remote_items: bool = False
-    remote_start_inventory: bool = False
     required_client_version = (0, 3, 2)
     web = ALTTPWeb()
 

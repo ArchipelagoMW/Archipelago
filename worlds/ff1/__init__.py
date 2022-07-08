@@ -30,9 +30,7 @@ class FF1World(World):
     options = ff1_options
     game = "Final Fantasy"
     topology_present = False
-    remote_items = True
     data_version = 1
-    remote_start_inventory = True
 
     ff1_items = FF1Items()
     ff1_locations = FF1Locations()

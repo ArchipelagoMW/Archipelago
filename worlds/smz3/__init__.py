@@ -61,9 +61,6 @@ class SMZ3World(World):
     location_name_to_id: Dict[str, int] = {key : locations_start_id + value.Id for key, value in TotalSMZ3World(Config({}), "", 0, "").locationLookup.items()}
     web = SMZ3Web()
 
-    remote_items: bool = False
-    remote_start_inventory: bool = False
-
     # first added for 0.2.6
     required_client_version = (0, 2, 6)
 

@@ -1042,7 +1042,7 @@ async def game_watcher(ctx: Context):
                 # versions lower than 0.3.0 dont have item handling flag nor remote item support
                 romVersion = int(game_name[2:5].decode('UTF-8'))
                 if romVersion < 30:
-                    ctx.items_handling = 0b001 # full local 
+                    ctx.items_handling = 0b001  # full local
                 else:
                     item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
                     ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
