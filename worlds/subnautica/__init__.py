@@ -13,11 +13,11 @@ from . import Options
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, Tutorial, ItemClassification, RegionType
 from ..AutoWorld import World, WebWorld
 
-
 goal_to_event = {
     Options.Goal.option_launch: "Neptune Launch",
 
 }
+
 
 class SubnaticaWeb(WebWorld):
     tutorials = [Tutorial(
@@ -28,6 +28,7 @@ class SubnaticaWeb(WebWorld):
         "setup/en",
         ["Berserker"]
     )]
+
 
 class SubnauticaWorld(World):
     """

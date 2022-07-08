@@ -1,6 +1,5 @@
 from ..generic.Rules import set_rule
 from .Locations import location_table
-import logging
 import math
 
 
@@ -198,31 +197,31 @@ def get_max_depth(state, player):
 
 
 def can_access_location(state, player, loc):
-    pos_x = loc.get("position").get("x")
-    pos_y = loc.get("position").get("y")
-    pos_z = loc.get("position").get("z")
-    depth = -pos_y  # y-up
-    map_center_dist = math.sqrt(pos_x ** 2 + pos_z ** 2)
-    aurora_dist = math.sqrt((pos_x - 1038.0) ** 2 + (pos_y - -3.4) ** 2 + (pos_z - -163.1) ** 2)
-
-    need_radiation_suit = aurora_dist < 950
     need_laser_cutter = loc.get("need_laser_cutter", False)
-    need_propulsion_cannon = loc.get("need_propulsion_cannon", False)
-
     if need_laser_cutter and not has_laser_cutter(state, player):
         return False
 
-    if need_radiation_suit and not state.has("Radiation Suit", player):
+    need_propulsion_cannon = loc.get("need_propulsion_cannon", False)
+    if need_propulsion_cannon and not has_propulsion_cannon(state, player):
         return False
 
-    if need_propulsion_cannon and not has_propulsion_cannon(state, player):
+    pos = loc["position"]
+    pos_x = pos["x"]
+    pos_y = pos["y"]
+    pos_z = pos["z"]
+
+    aurora_dist = math.sqrt((pos_x - 1038.0) ** 2 + (pos_y - -3.4) ** 2 + (pos_z - -163.1) ** 2)
+    need_radiation_suit = aurora_dist < 950
+    if need_radiation_suit and not state.has("Radiation Suit", player):
         return False
 
     # Seaglide doesn't unlock anything specific, but just allows for faster movement. 
     # Otherwise the game is painfully slow.
+    map_center_dist = math.sqrt(pos_x ** 2 + pos_z ** 2)
     if (map_center_dist > 800 or pos_y < -200) and not has_seaglide(state, player):
         return False
 
+    depth = -pos_y  # y-up
     return get_max_depth(state, player) >= depth
 
 
@@ -252,5 +251,8 @@ def set_rules(world, player):
 
     set_rule(world.get_location("Full Infection", player), lambda state:
         get_max_depth(state, player) >= 900)
+
+    room = world.get_location("Aurora Drive Room - Upgrade Console", player)
+    set_rule(world.get_location("Repair Aurora Drive", player), lambda state: room.can_reach(state))
 
     world.completion_condition[player] = lambda state: state.has('Victory', player)
