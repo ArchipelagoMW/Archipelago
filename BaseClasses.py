@@ -1191,19 +1191,19 @@ class Item:
 
     @property
     def advancement(self) -> bool:
-        return bool(self.classification & ItemClassification.progression)
+        return ItemClassification.progression in self.classification
 
     @property
     def skip_in_prog_balancing(self) -> bool:
-        return self.classification == ItemClassification.progression_skip_balancing
+        return ItemClassification.progression_skip_balancing in self.classification
 
     @property
     def useful(self) -> bool:
-        return bool(self.classification & ItemClassification.useful)
+        return ItemClassification.useful in self.classification
 
     @property
     def trap(self) -> bool:
-        return bool(self.classification & ItemClassification.trap)
+        return ItemClassification.trap in self.classification
 
     @property
     def flags(self) -> int:
@@ -1516,7 +1516,7 @@ class Tutorial(NamedTuple):
     language: str
     file_name: str
     link: str
-    author: List[str]
+    authors: List[str]
 
 
 seeddigits = 20

@@ -1,5 +1,4 @@
 import logging
-import typing
 
 logger = logging.getLogger("Subnautica")
 
@@ -65,7 +64,7 @@ class SubnauticaWorld(World):
         for item_name in self.world.random.choices(sorted(advancement_item_names - {"Neptune Launch Platform"}),
                                                    k=extras):
             item = self.create_item(item_name)
-            item.advancement = False  # as it's an extra, just fast-fill it somewhere
+            item.classification = ItemClassification.filler  # as it's an extra, just fast-fill it somewhere
             pool.append(item)
 
         self.world.itempool += pool

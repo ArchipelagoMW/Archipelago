@@ -568,6 +568,9 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
 
 
 def messagebox(title: str, text: str, error: bool = False) -> None:
+    def run(*args: str):
+        return subprocess.run(args, capture_output=True, text=True).stdout.split('\n', 1)[0] or None
+
     def is_kivy_running():
         if 'kivy' in sys.modules:
             from kivy.app import App
@@ -578,6 +581,15 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         from kvui import MessageBox
         MessageBox(title, text, error).open()
         return
+
+    if is_linux and not 'tkinter' in sys.modules:
+        # prefer native dialog
+        kdialog = shutil.which('kdialog')
+        if kdialog:
+            return run(kdialog, f'--title={title}', '--error' if error else '--msgbox', text)
+        zenity = shutil.which('zenity')
+        if zenity:
+            return run(zenity, f'--title={title}', f'--text={text}', '--error' if error else '--info')
 
     # fall back to tk
     try:
