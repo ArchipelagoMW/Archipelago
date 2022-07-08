@@ -266,6 +266,8 @@ class HKWorld(World):
                 if location_name in multi_locations:  # Create shop locations later.
                     return
                 location = self.create_location(location_name)
+                from ..generic.Rules import add_item_rule
+                add_item_rule(location, lambda i, x=item.name: i.name != x)
                 unfilled_locations += 1
             if excluded:
                 location.progress_type = LocationProgressType.EXCLUDED
