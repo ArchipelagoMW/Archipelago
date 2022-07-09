@@ -10,6 +10,7 @@ from .Rules import set_rules
 
 logger = logging.getLogger("Subnautica")
 
+
 class SubnaticaWeb(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -51,7 +52,7 @@ class SubnauticaWorld(World):
                 subnautica_item = self.create_item(item["name"])
                 if item["name"] == "Neptune Launch Platform":
                     neptune_launch_platform = subnautica_item
-                elif valuable and not ItemClassification.progression in item["classification"]:
+                elif valuable and ItemClassification.filler == item["classification"]:
                     self.world.push_precollected(subnautica_item)
                     extras += 1
                 else:
