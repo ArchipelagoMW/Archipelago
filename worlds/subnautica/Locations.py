@@ -145,7 +145,7 @@ location_table: Dict[int, LocationDict] = {
     33031: {'can_slip_through': False,
             'name': 'Kelp Forest Wreck - Databox',
             'need_laser_cutter': False,
-            'position': {'x': -317.1, 'y': -79.0, 'z': 248.5}},
+            'position': {'x': -317.6, 'y': -78.8, 'z': 247.4}},
     33032: {'can_slip_through': False,
             'name': 'Kelp Forest Wreck - PDA',
             'need_laser_cutter': False,
