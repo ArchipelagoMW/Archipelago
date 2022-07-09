@@ -530,8 +530,6 @@ def distribute_planned(world: MultiWorld) -> None:
             block['player'] = player
             if 'force' not in block:
                 block['force'] = 'silent'
-            if 'from_pool' not in block:
-                block['from_pool'] = True
             if 'world' not in block:
                 block['world'] = False
             items: block_value = []
@@ -609,7 +607,6 @@ def distribute_planned(world: MultiWorld) -> None:
             locations = placement['locations']
             items = placement['items']
             maxcount = placement['count']['target']
-            from_pool = placement['from_pool']
             if target_world is False or world.players == 1:  # target own world
                 worlds: typing.Set[int] = {player}
             elif target_world is True:  # target any worlds besides own
@@ -673,17 +670,15 @@ def distribute_planned(world: MultiWorld) -> None:
                     f"Plando block failed to place {m - count} of {m} item(s) for {world.player_name[player]}, error(s): {' '.join(err)}",
                     placement['force'])
             for (item, location) in successful_pairs:
+                try:
+                    world.itempool.remove(item)
+                except ValueError:
+                    failed(f"Plando item failed to place {item} for {world.player_name[player]} as it does not exist in the item pool", placement['force'])
+                    continue
                 world.push_item(location, item, collect=False)
                 location.event = True  # flag location to be checked during fill
                 location.locked = True
                 logging.debug(f"Plando placed {item} at {location}")
-                if from_pool:
-                    try:
-                        world.itempool.remove(item)
-                    except ValueError:
-                        warn(
-                            f"Could not remove {item} from pool for {world.player_name[player]} as it's already missing from it.",
-                            placement['force'])
 
         except Exception as e:
             raise Exception(
