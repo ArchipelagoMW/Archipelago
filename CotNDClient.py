@@ -262,16 +262,7 @@ class CotNDContext(CommonContext):
             if msg_type == 'Item': # get the first matching location
                 search_pieces = [char, floor]
             elif msg_type == 'Clear':
-                if floor == '5-3' and char == 'Dove':
-                    search_pieces = ['Dove', 'Clear']
-                elif floor == '1-4' and char == 'Aria':
-                    search_pieces = ['Aria', 'Clear']
-                elif floor == '5-5' and char == 'Cadence':
-                    search_pieces = ['Cadence', 'Clear']
-                elif floor == '5-5' and char == 'Nocturna':
-                    search_pieces = ['Nocturna', 'Clear']
-                elif floor == '5-4' and char not in {'Aria', 'Cadence', 'Nocturna'}:
-                    search_pieces = [char, 'Clear']
+                search_pieces = [char, 'Clear']
             elif msg_type == 'Death':
                 if self.deathlink:
                     await self.send_death()

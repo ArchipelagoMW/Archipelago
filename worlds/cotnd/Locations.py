@@ -17,11 +17,10 @@ def get_char_locations(char: str, instance: int, flawless: bool) -> List[str]:
         flawless = False
 
     if char == 'Melody':
-        # Melody doesn't have flawless rewards on 5-4
-        # in original ND this is 5-5, but Synchrony reports them as 5-4.
+        # Melody doesn't have flawless rewards for ND2
         chests = [f"{name} - Chest {depth}-{floor}" for depth in range(1, 6) for floor in range(1, (5 if flawless else 4)) if not (depth == 5 and floor == 4)]
     elif char == 'Aria':
-        # Aria has zone reversal, so she does not have flawless rewards on 1-4.
+        # Aria has zone reversal, so she does not have flawless rewards for GL
         chests = [f"{name} - Chest {6-depth}-{floor}" for depth in range(1, 6) for floor in range(1, (5 if flawless else 4)) if not (depth == 5 and floor == 4)]
     else:
         # All other chars have flawless chests on 5-4
