@@ -1,4 +1,4 @@
-from ..generic.Rules import set_rule
+from worlds.generic.Rules import set_rule
 from .Locations import location_table, LocationDict
 import math
 
