@@ -99,7 +99,7 @@ Si quieres validar que tu fichero YAML para asegurarte que funciona correctament
 
 Cuando te unes a una partida multiworld, debes proveer tu fichero YAML a quien sea el creador de la partida. Una vez
 este hecho, el creador te devolverá un enlace para descargar el parche o un fichero zip conteniendo todos los ficheros
-de parche de la partida Tu fichero de parche debe tener la extensión `.bmbp`.
+de parche de la partida Tu fichero de parche debe tener la extensión `.aplttp`.
 
 Pon tu fichero de parche en el escritorio o en algún sitio conveniente, y haz doble click. Esto debería ejecutar
 automáticamente el cliente, y ademas creara la rom en el mismo directorio donde este el fichero de parche.
@@ -144,7 +144,8 @@ Sólo hay que segiur estos pasos una vez.
 2. Ve a Ajustes --> Interfaz de usario. Configura "Mostrar ajustes avanzados" en ON.
 3. Ve a Ajustes --> Red. Configura "Comandos de red" en ON. (Se encuentra bajo Request Device 16.) Deja en 55355 (el
    default) el Puerto de comandos de red.
-![Captura de pantalla del ajuste Comandos de red](/static/assets/tutorial/retroarch-network-commands-en.png)
+
+![Captura de pantalla del ajuste Comandos de red](/static/generated/docs/A%20Link%20to%20the%20Past/retroarch-network-commands-en.png)
 4. Ve a Menú principal --> Actualizador en línea --> Descargador de núcleos. Desplázate y selecciona "Nintendo - SNES /
    SFC (bsnes-mercury Performance)".
 

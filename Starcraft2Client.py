@@ -36,7 +36,7 @@ nest_asyncio.apply()
 
 
 class StarcraftClientProcessor(ClientCommandProcessor):
-    ctx: Context
+    ctx: SC2Context
 
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
@@ -74,7 +74,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         return True
 
 
-class Context(CommonContext):
+class SC2Context(CommonContext):
     command_processor = StarcraftClientProcessor
     game = "Starcraft 2 Wings of Liberty"
     items_handling = 0b111
@@ -89,14 +89,13 @@ class Context(CommonContext):
     announcement_pos = 0
     sc2_run_task: typing.Optional[asyncio.Task] = None
     missions_unlocked = False
+    current_tooltip = None
+    last_loc_list = None
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
-            await super(Context, self).server_auth(password_requested)
-        if not self.auth:
-            logger.info('Enter slot name:')
-            self.auth = await self.console_input()
-
+            await super(SC2Context, self).server_auth(password_requested)
+        await self.get_username()
         await self.send_connect()
 
     def on_package(self, cmd: str, args: dict):
@@ -105,32 +104,69 @@ class Context(CommonContext):
             self.all_in_choice = args["slot_data"]["all_in_map"]
             slot_req_table = args["slot_data"]["mission_req"]
             self.mission_req_table = {}
+            # Compatibility for 0.3.2 server data.
+            if "category" not in next(iter(slot_req_table)):
+                for i, mission_data in enumerate(slot_req_table.values()):
+                    mission_data["category"] = wol_default_categories[i]
             for mission in slot_req_table:
                 self.mission_req_table[mission] = MissionInfo(**slot_req_table[mission])
 
         if cmd in {"PrintJSON"}:
-            noted = False
             if "receiving" in args:
-                if args["receiving"] == self.slot:
+                if self.slot_concerns_self(args["receiving"]):
                     self.announcements.append(args["data"])
-                    noted = True
-            if not noted and "item" in args:
-                if args["item"].player == self.slot:
+                    return
+            if "item" in args:
+                if self.slot_concerns_self(args["item"].player):
                     self.announcements.append(args["data"])
 
     def run_gui(self):
-        from kvui import GameManager
-        from kivy.base import Clock
+        from kvui import GameManager, HoverBehavior, ServerToolTip, fade_in_animation
+        from kivy.app import App
+        from kivy.clock import Clock
         from kivy.uix.tabbedpanel import TabbedPanelItem
         from kivy.uix.gridlayout import GridLayout
         from kivy.lang import Builder
         from kivy.uix.label import Label
         from kivy.uix.button import Button
+        from kivy.uix.floatlayout import FloatLayout
+        from kivy.properties import StringProperty
 
         import Utils
 
-        class MissionButton(Button):
+        class HoverableButton(HoverBehavior, Button):
             pass
+
+        class MissionButton(HoverableButton):
+            tooltip_text = StringProperty("Test")
+
+            def __init__(self, *args, **kwargs):
+                super(HoverableButton, self).__init__(*args, **kwargs)
+                self.layout = FloatLayout()
+                self.popuplabel = ServerToolTip(text=self.text)
+                self.layout.add_widget(self.popuplabel)
+
+            def on_enter(self):
+                self.popuplabel.text = self.tooltip_text
+
+                if self.ctx.current_tooltip:
+                    App.get_running_app().root.remove_widget(self.ctx.current_tooltip)
+
+                if self.tooltip_text == "":
+                    self.ctx.current_tooltip = None
+                else:
+                    App.get_running_app().root.add_widget(self.layout)
+                    self.ctx.current_tooltip = self.layout
+
+            def on_leave(self):
+                if self.ctx.current_tooltip:
+                    App.get_running_app().root.remove_widget(self.ctx.current_tooltip)
+
+                self.ctx.current_tooltip = None
+
+            @property
+            def ctx(self) -> CommonContext:
+                return App.get_running_app().ctx
 
         class MissionLayout(GridLayout):
             pass
@@ -148,6 +184,9 @@ class Context(CommonContext):
             mission_panel = None
             last_checked_locations = {}
             mission_id_to_button = {}
+            launching = False
+            refresh_from_launching = True
+            first_check = True
 
             def __init__(self, ctx):
                 super().__init__(ctx)
@@ -165,49 +204,87 @@ class Context(CommonContext):
                 return container
 
             def build_mission_table(self, dt):
-                self.mission_panel.clear_widgets()
+                if (not self.launching and (not self.last_checked_locations == self.ctx.checked_locations or
+                                           not self.refresh_from_launching)) or self.first_check:
+                    self.refresh_from_launching = True
 
-                if self.ctx.mission_req_table:
-                    self.mission_id_to_button = {}
-                    categories = {}
-                    available_missions = []
-                    unfinished_missions = calc_unfinished_missions(self.ctx.checked_locations, self.ctx.mission_req_table,
-                                                                   self.ctx, available_missions=available_missions)
+                    self.mission_panel.clear_widgets()
 
-                    self.last_checked_locations = self.ctx.checked_locations
+                    if self.ctx.mission_req_table:
+                        self.last_checked_locations = self.ctx.checked_locations.copy()
+                        self.first_check = False
 
-                    # separate missions into categories
-                    for mission in self.ctx.mission_req_table:
-                        if not self.ctx.mission_req_table[mission].category in categories:
-                            categories[self.ctx.mission_req_table[mission].category] = []
+                        self.mission_id_to_button = {}
+                        categories = {}
+                        available_missions = []
+                        unfinished_locations = initialize_blank_mission_dict(self.ctx.mission_req_table)
+                        unfinished_missions = calc_unfinished_missions(self.ctx.checked_locations,
+                                                                       self.ctx.mission_req_table,
+                                                                       self.ctx, available_missions=available_missions,
+                                                                       unfinished_locations=unfinished_locations)
 
-                        categories[self.ctx.mission_req_table[mission].category].append(mission)
+                        # separate missions into categories
+                        for mission in self.ctx.mission_req_table:
+                            if not self.ctx.mission_req_table[mission].category in categories:
+                                categories[self.ctx.mission_req_table[mission].category] = []
 
-                    for category in categories:
-                        category_panel = MissionCategory()
-                        category_panel.add_widget(Label(text=category, size_hint_y=None, height=50, outline_width=1))
+                            categories[self.ctx.mission_req_table[mission].category].append(mission)
 
-                        for mission in categories[category]:
-                            text = mission
+                        for category in categories:
+                            category_panel = MissionCategory()
+                            category_panel.add_widget(Label(text=category, size_hint_y=None, height=50, outline_width=1))
 
-                            if mission in unfinished_missions:
-                                text = f"[color=6495ED]{text}[/color]"
-                            elif mission in available_missions:
-                                text = f"[color=FFFFFF]{text}[/color]"
-                            else:
-                                text = f"[color=a9a9a9]{text}[/color]"
+                            # Map is completed
+                            for mission in categories[category]:
+                                text = mission
+                                tooltip = ""
 
-                            mission_button = MissionButton(text=text, size_hint_y=None, height=50)
-                            mission_button.bind(on_press=self.mission_callback)
-                            self.mission_id_to_button[self.ctx.mission_req_table[mission].id] = mission_button
-                            category_panel.add_widget(mission_button)
+                                # Map has uncollected locations
+                                if mission in unfinished_missions:
+                                    text = f"[color=6495ED]{text}[/color]"
 
-                        category_panel.add_widget(Label(text=""))
-                        self.mission_panel.add_widget(category_panel)
+                                    tooltip = f"Uncollected locations:\n"
+                                    tooltip += "\n".join(location for location in unfinished_locations[mission])
+                                elif mission in available_missions:
+                                    text = f"[color=FFFFFF]{text}[/color]"
+                                # Map requirements not met
+                                else:
+                                    text = f"[color=a9a9a9]{text}[/color]"
+                                    tooltip = f"Requires: "
+                                    if len(self.ctx.mission_req_table[mission].required_world) > 0:
+                                        tooltip += ", ".join(list(self.ctx.mission_req_table)[req_mission-1] for
+                                                             req_mission in
+                                                             self.ctx.mission_req_table[mission].required_world)
+
+                                        if self.ctx.mission_req_table[mission].number > 0:
+                                            tooltip += " and "
+                                    if self.ctx.mission_req_table[mission].number > 0:
+                                        tooltip += f"{self.ctx.mission_req_table[mission].number} missions completed"
+
+                                mission_button = MissionButton(text=text, size_hint_y=None, height=50)
+                                mission_button.tooltip_text = tooltip
+                                mission_button.bind(on_press=self.mission_callback)
+                                self.mission_id_to_button[self.ctx.mission_req_table[mission].id] = mission_button
+                                category_panel.add_widget(mission_button)
+
+                            category_panel.add_widget(Label(text=""))
+                            self.mission_panel.add_widget(category_panel)
+
+                elif self.launching:
+                    self.refresh_from_launching = False
+
+                    self.mission_panel.clear_widgets()
+                    self.mission_panel.add_widget(Label(text="Launching Mission"))
 
             def mission_callback(self, button):
-                self.ctx.play_mission(list(self.mission_id_to_button.keys())
-                                      [list(self.mission_id_to_button.values()).index(button)])
+                if not self.launching:
+                    self.ctx.play_mission(list(self.mission_id_to_button.keys())
+                                          [list(self.mission_id_to_button.values()).index(button)])
+                    self.launching = True
+                    Clock.schedule_once(self.finish_launching, 10)
+
+            def finish_launching(self, dt):
+                self.launching = False
 
         self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
@@ -215,7 +292,7 @@ class Context(CommonContext):
         Builder.load_file(Utils.local_path(os.path.dirname(SC2WoLWorld.__file__), "Starcraft2.kv"))
 
     async def shutdown(self):
-        await super(Context, self).shutdown()
+        await super(SC2Context, self).shutdown()
         if self.sc2_run_task:
             self.sc2_run_task.cancel()
 
@@ -243,7 +320,7 @@ async def main():
     parser.add_argument('--name', default=None, help="Slot Name to connect as.")
     args = parser.parse_args()
 
-    ctx = Context(args.connect, args.password)
+    ctx = SC2Context(args.connect, args.password)
     ctx.auth = args.name
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
@@ -267,6 +344,13 @@ maps_table = [
     "ap_tvalerian01", "ap_tvalerian02a", "ap_tvalerian02b", "ap_tvalerian03"
 ]
 
+wol_default_categories = [
+    "Mar Sara", "Mar Sara", "Mar Sara", "Colonist", "Colonist", "Colonist", "Colonist",
+    "Artifact", "Artifact", "Artifact", "Artifact", "Artifact", "Covert", "Covert", "Covert", "Covert",
+    "Rebellion", "Rebellion", "Rebellion", "Rebellion", "Rebellion", "Prophecy", "Prophecy", "Prophecy", "Prophecy",
+    "Char", "Char", "Char", "Char"
+]
+
 
 def calculate_items(items):
     unit_unlocks = 0
@@ -279,6 +363,7 @@ def calculate_items(items):
     protoss_unlock = 0
     minerals = 0
     vespene = 0
+    supply = 0
 
     for item in items:
         data = lookup_id_to_name[item.item]
@@ -303,9 +388,11 @@ def calculate_items(items):
             minerals += item_table[data].number
         elif item_table[data].type == "Vespene":
             vespene += item_table[data].number
+        elif item_table[data].type == "Supply":
+            supply += item_table[data].number
 
     return [unit_unlocks, upgrade_unlocks, armory1_unlocks, armory2_unlocks, building_unlocks, merc_unlocks,
-            lab_unlocks, protoss_unlock, minerals, vespene]
+            lab_unlocks, protoss_unlock, minerals, vespene, supply]
 
 
 def calc_difficulty(difficulty):
@@ -321,7 +408,7 @@ def calc_difficulty(difficulty):
     return 'X'
 
 
-async def starcraft_launch(ctx: Context, mission_id):
+async def starcraft_launch(ctx: SC2Context, mission_id):
     ctx.rec_announce_pos = len(ctx.items_rec_to_announce)
     ctx.sent_announce_pos = len(ctx.items_sent_to_announce)
     ctx.announcements_pos = len(ctx.announcements)
@@ -343,14 +430,14 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     sixth_bonus = False
     seventh_bonus = False
     eight_bonus = False
-    ctx: Context = None
+    ctx: SC2Context = None
     mission_id = 0
 
     can_read_game = False
 
     last_received_update = 0
 
-    def __init__(self, ctx: Context, mission_id):
+    def __init__(self, ctx: SC2Context, mission_id):
         self.ctx = ctx
         self.mission_id = mission_id
 
@@ -361,11 +448,11 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
         if iteration == 0:
             start_items = calculate_items(self.ctx.items_received)
             difficulty = calc_difficulty(self.ctx.difficulty)
-            await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {}".format(
+            await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
                 start_items[5], start_items[6], start_items[7], start_items[8], start_items[9],
-                self.ctx.all_in_choice))
+                self.ctx.all_in_choice, start_items[10]))
             self.last_received_update = len(self.ctx.items_received)
 
         else:
@@ -502,8 +589,8 @@ def calc_objectives_completed(mission, missions_info, locations_done, unfinished
             if (missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i) in locations_done:
                 objectives_complete += 1
             else:
-                unfinished_locations[mission].append(ctx.location_name_getter(
-                    missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i))
+                unfinished_locations[mission].append(ctx.location_names[
+                    missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i])
 
         return objectives_complete
 

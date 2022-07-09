@@ -3,7 +3,7 @@
 ## Required Software
 
 - Minecraft Java Edition from
-  the [Minecraft Java Edition Store Page](https://www.minecraft.net/en-us/store/minecraft-java-edition) (update 1.17.1)
+  the [Minecraft Java Edition Store Page](https://www.minecraft.net/en-us/store/minecraft-java-edition)
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
     - (select `Minecraft Client` during installation.)
 
@@ -33,12 +33,13 @@ leave this window open as this is your server console.
 
 ### Connect to the MultiServer
 
-Using minecraft 1.17.1 connect to the server `localhost`.
+Using Minecraft 1.18.2 connect to the server `localhost`.
 
-Once you are in game type `/connect <AP-Address> (Port) (Password)` where `<AP-Address>` is the address of the
-Archipelago server. `(Port)` is only required if the Archipelago server is not using the default port of
+If you are using the website to host the game then it should auto-connect to the AP server without the need to `/connect`
 
-38281. `(Password)` is only required if the Archipelago server you are using has a password set.
+otherwise once you are in game type `/connect <AP-Address> (Port) (Password)` where `<AP-Address>` is the address of the
+Archipelago server. `(Port)` is only required if the Archipelago server is not using the default port of 38281.
+`(Password)` is only required if the Archipelago server you are using has a password set.
 
 ### Play the game
 
@@ -46,16 +47,29 @@ When the console tells you that you have joined the room, you're all set. Congra
 multiworld game! At this point any additional minecraft players may connect to your forge server. To start the game once
 everyone is ready use the command `/start`.
 
-## Manual Installation
+## Non-Windows Installation
+
+The Minecraft Client will install forge and the mod for other operating systems but Java has to be provided by the
+user. Head to [minecraft_versions.json on the MC AP GitHub](https://raw.githubusercontent.com/KonoTyran/Minecraft_AP_Randomizer/master/versions/minecraft_versions.json)
+to see which java version is required. New installations will default to the topmost "release" version.
+- Install the matching Amazon Corretto JDK
+    - see [Manual Installation Software Links](#manual-installation-software-links)
+    - or package manager provided by your OS / distribution
+- Open your `host.yaml` and add the path to your Java below the `minecraft_options` key
+    - `  java: "path/to/java-xx-amazon-corretto/bin/java"`
+- Run the Minecraft Client and select your .apmc file
+
+## Full Manual Installation
 
 It is highly recommended to ues the Archipelago installer to handle the installation of the forge server for you.
-support will not be given for those wishing to manually install forge. For those of you who know how, and wish to do so,
+Support will not be given for those wishing to manually install forge. For those of you who know how, and wish to do so,
 the following links are the versions of the software we use.
 
-### Manual install Software links
+### Manual Installation Software Links
 
-- [Minecraft Forge Download Page](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.17.1.html)
+- [Minecraft Forge Download Page](https://files.minecraftforge.net/net/minecraftforge/forge/)
 - [Minecraft Archipelago Randomizer Mod Releases Page](https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases)
     - **DO NOT INSTALL THIS ON YOUR CLIENT**
-- [Java 16 Download Page](https://docs.aws.amazon.com/corretto/latest/corretto-16-ug/downloads-list.html)
+- [Amazon Corretto](https://docs.aws.amazon.com/corretto/)
+    - pick the matching version and select "Downloads" on the left
 

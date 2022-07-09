@@ -24,6 +24,7 @@ from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_con
 
 lttp_logger = logging.getLogger("A Link to the Past")
 
+extras_list = sum(difficulties['normal'].extras[0:5], [])
 
 class ALTTPWeb(WebWorld):
     setup_en = Tutorial(
@@ -76,7 +77,7 @@ class ALTTPWeb(WebWorld):
         msu.description,
         "Español",
         "msu1_es.md",
-        "msu1/en",
+        "msu1/es",
         ["Edos"]
     )
 
@@ -154,7 +155,7 @@ class ALTTPWorld(World):
                 self.er_seed = "vanilla"
             elif seed.startswith("group-") or world.is_race:
                 self.er_seed = get_same_seed(world, (
-                    shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
+                    shuffle, seed, world.retro_caves[player], world.mode[player], world.logic[player]))
             else:  # not a race or group seed, use set seed as is.
                 self.er_seed = seed
         elif world.shuffle[player] == "vanilla":
@@ -471,19 +472,21 @@ class ALTTPWorld(World):
                 while gtower_locations and gt_item_pool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
                     item_to_place = gt_item_pool.pop()
-                    if item_to_place in localrest:
-                        localrest.remove(item_to_place)
-                    else:
-                        restitempool.remove(item_to_place)
-                    world.push_item(spot_to_fill, item_to_place, False)
-                    fill_locations.remove(spot_to_fill)  # very slow, unfortunately
-                    trash_count -= 1
+                    if spot_to_fill.item_rule(item_to_place):
+                        if item_to_place in localrest:
+                            localrest.remove(item_to_place)
+                        else:
+                            restitempool.remove(item_to_place)
+                        world.push_item(spot_to_fill, item_to_place, False)
+                        fill_locations.remove(spot_to_fill)  # very slow, unfortunately
+                        trash_count -= 1
+
 
     def get_filler_item_name(self) -> str:
         if self.world.goal[self.player] == "icerodhunt":
             item = "Nothing"
         else:
-            item = self.world.random.choice(chain(difficulties[self.world.difficulty[self.player]].extras[0:5]))
+            item = self.world.random.choice(extras_list)
         return GetBeemizerItem(self.world, self.player, item)
 
     def get_pre_fill_items(self):

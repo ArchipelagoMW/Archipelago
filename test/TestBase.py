@@ -6,7 +6,7 @@ import Utils
 file_path = pathlib.Path(__file__).parent.parent
 Utils.local_path.cached_path = file_path
 
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import MultiWorld, CollectionState, ItemClassification
 from worlds.alttp.Items import ItemFactory
 
 
@@ -19,7 +19,7 @@ class TestBase(unittest.TestCase):
             return self._state_cache[self.world, tuple(items)]
         state = CollectionState(self.world)
         for item in items:
-            item.advancement = True
+            item.classification = ItemClassification.progression
             state.collect(item)
         state.sweep_for_events()
         self._state_cache[self.world, tuple(items)] = state
