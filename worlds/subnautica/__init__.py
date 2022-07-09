@@ -1,4 +1,5 @@
 import logging
+from typing import List, Dict, Any
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, RegionType
 from worlds.AutoWorld import World, WebWorld
@@ -53,7 +54,6 @@ class SubnauticaWorld(World):
                 if item["name"] == "Neptune Launch Platform":
                     neptune_launch_platform = subnautica_item
                 elif valuable and ItemClassification.filler == item["classification"]:
-                    self.world.push_precollected(subnautica_item)
                     extras += 1
                 else:
                     pool.append(subnautica_item)
@@ -85,13 +85,24 @@ class SubnauticaWorld(World):
                                Locations.events + [location["name"] for location in Locations.location_table.values()])
         ]
 
-    def fill_slot_data(self):
+    def fill_slot_data(self) -> Dict[str, Any]:
         goal: Options.Goal = self.world.goal[self.player]
-        slot_data = {"goal": goal.current_key}
+        item_pool: Options.ItemPool = self.world.item_pool[self.player]
+        vanilla_tech: List[str] = []
+        if item_pool == Options.ItemPool.option_valuable:
+            for item in Items.item_table.values():
+                if item["classification"] == ItemClassification.filler:
+                    vanilla_tech.append(item["tech_type"])
+
+        slot_data: Dict[str, Any] = {
+            "goal": goal.current_key,
+            "vanilla_tech": vanilla_tech,
+        }
+
         return slot_data
 
     def create_item(self, name: str) -> Item:
-        item_id = self.item_name_to_id[name]
+        item_id: int = self.item_name_to_id[name]
 
         return SubnauticaItem(name,
                               item_table[item_id]["classification"],
