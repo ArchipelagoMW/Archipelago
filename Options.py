@@ -701,7 +701,7 @@ class DeathLink(Toggle):
 
 
 class CustomItemPool(OptionDict):
-    """Customize your item pool. Use with care"""
+    """Customize your item pool. You can modify and set item counts or replace all of a given item with another item."""
     display_name = "Custom Item Pool"
 
 
