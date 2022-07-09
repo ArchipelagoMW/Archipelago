@@ -1,5 +1,5 @@
 from ..generic.Rules import set_rule
-from .Locations import location_table
+from .Locations import location_table, LocationDict
 import math
 
 
@@ -196,7 +196,7 @@ def get_max_depth(state, player):
                get_prawn_max_depth(state, player))
 
 
-def can_access_location(state, player, loc):
+def can_access_location(state, player: int, loc: LocationDict):
     need_laser_cutter = loc.get("need_laser_cutter", False)
     if need_laser_cutter and not has_laser_cutter(state, player):
         return False
@@ -230,7 +230,7 @@ def set_location_rule(world, player, loc):
 
 
 def set_rules(world, player):
-    for loc in location_table:
+    for loc in location_table.values():
         set_location_rule(world, player, loc)
 
     # Victory locations
