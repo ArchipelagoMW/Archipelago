@@ -39,6 +39,24 @@ class SubnauticaWorld(World):
     data_version = 2
     required_client_version = (0, 3, 3)
 
+    prefill_items: List[Item]
+
+    def generate_early(self) -> None:
+        self.prefill_items = [
+            self.create_item("Seaglide Fragment"),
+            self.create_item("Seaglide Fragment")
+        ]
+
+    def create_regions(self):
+        self.world.regions += [
+            self.create_region('Menu', None, ['Lifepod 5']),
+            self.create_region('Planet 4546B',
+                               Locations.events + [location["name"] for location in Locations.location_table.values()])
+        ]
+
+    def set_rules(self):
+        set_rules(self.world, self.player)
+
     def generate_basic(self):
         # Link regions
         self.world.get_entrance('Lifepod 5', self.player).connect(self.world.get_region('Planet 4546B', self.player))
@@ -75,16 +93,6 @@ class SubnauticaWorld(World):
         # make the goal event the victory "item"
         self.world.get_location(self.world.goal[self.player].get_event_name(), self.player).item.name = "Victory"
 
-    def set_rules(self):
-        set_rules(self.world, self.player)
-
-    def create_regions(self):
-        self.world.regions += [
-            self.create_region('Menu', None, ['Lifepod 5']),
-            self.create_region('Planet 4546B',
-                               Locations.events + [location["name"] for location in Locations.location_table.values()])
-        ]
-
     def fill_slot_data(self) -> Dict[str, Any]:
         goal: Options.Goal = self.world.goal[self.player]
         item_pool: Options.ItemPool = self.world.item_pool[self.player]
@@ -117,9 +125,19 @@ class SubnauticaWorld(World):
                 location = SubnauticaLocation(self.player, location, loc_id, ret)
                 ret.locations.append(location)
         if exits:
-            for exit in exits:
-                ret.exits.append(Entrance(self.player, exit, ret))
+            for region_exit in exits:
+                ret.exits.append(Entrance(self.player, region_exit, ret))
         return ret
+
+    def get_pre_fill_items(self) -> List[Item]:
+        return self.prefill_items
+
+    def pre_fill(self) -> None:
+        reachable = self.world.get_reachable_locations(player=self.player)
+        self.world.random.shuffle(reachable)
+        items = self.prefill_items.copy()
+        for item in items:
+            reachable.pop().place_locked_item(item)
 
 
 class SubnauticaLocation(Location):
