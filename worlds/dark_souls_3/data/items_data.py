@@ -326,7 +326,7 @@ spells_table = {
 
 }
 
-key_items_table = {
+misc_items_table = {
     "Cell Key": 0x400007DA,
     "Small Lothric Banner": 0x40000836,
     "Mortician's Ashes": 0x4000083B,
@@ -374,31 +374,6 @@ key_items_table = {
     "Wolf's Blood Swordgrass": 0x4000016E,
 }
 
-heals_table = {
-    "Ashen Estus Flask": 0x400000BF,
-    "Estus Flask Shard #1": 0x4000085D,
-    "Estus Flask Shard #2": 0x4000085D,
-    "Estus Flask Shard #3": 0x4000085D,
-    "Estus Flask Shard #4": 0x4000085D,
-    "Estus Flask Shard #5": 0x4000085D,
-    "Estus Flask Shard #6": 0x4000085D,
-    "Estus Flask Shard #7": 0x4000085D,
-    "Estus Flask Shard #8": 0x4000085D,
-    "Estus Flask Shard #9": 0x4000085D,
-    "Estus Flask Shard #10": 0x4000085D,
-    "Estus Flask Shard #11": 0x4000085D,
-    "Estus Flask Shard #12": 0x4000085D,
-    "Undead Bone Shard #1": 0x4000085F,
-    "Undead Bone Shard #2": 0x4000085F,
-    "Undead Bone Shard #3": 0x4000085F,
-    "Undead Bone Shard #4": 0x4000085F,
-    "Undead Bone Shard #5": 0x4000085F,
-    "Undead Bone Shard #6": 0x4000085F,
-    "Undead Bone Shard #7": 0x4000085F,
-    "Undead Bone Shard #8": 0x4000085F,
-    "Undead Bone Shard #9": 0x4000085F,
-}
-
 key_items_list = {
     "Small Lothric Banner",
     "Basin of Vows",
@@ -413,4 +388,4 @@ key_items_list = {
     "Mortician's Ashes"
 }
 
-item_dictionary_table = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table, **armor_table, **rings_table, **spells_table, **key_items_table, **goods_table}
+item_dictionary_table = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table, **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table}

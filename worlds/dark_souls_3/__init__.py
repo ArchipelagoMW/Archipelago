@@ -12,14 +12,29 @@ from .data.locations_data import dictionary_table, cemetery_of_ash_table, fire_l
     undead_settlement_table, road_of_sacrifice_table, consumed_king_garden_table, cathedral_of_the_deep_table, \
     farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table, \
     irithyll_dungeon_table, profaned_capital_table, anor_londo_table, lothric_castle_table, grand_archives_table, \
-    untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table, main_path_location_list
-from ..AutoWorld import World
-from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance
+    untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table
+from ..AutoWorld import World, WebWorld
+from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial
 from ..generic.Rules import set_rule
 
 
+class DarkSouls3Web(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Tutorial",
+        "A guide to setting up the Archipelago Dark Souls 3 randomizer on your computer.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Marech"]
+    )]
+
+
 class DarkSouls3World(World):
-    """Insert description of the world/game here."""
+    """
+    Dark souls 3 is an Action role-playing game and is part of the Souls series developed by FromSoftware.
+    Played in a third-person perspective, players have access to various weapons, armour, magic, and consumables that
+    they can use to fight their enemies.
+    """
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -35,7 +50,6 @@ class DarkSouls3World(World):
         menu_region = Region("Menu", RegionType.Generic, "Menu", self.player)
         self.world.regions.append(menu_region)
 
-        self.main_path_locations = main_path_location_list
         cemetery_of_ash_region = self.create_region("Cemetery Of Ash", cemetery_of_ash_table)
         firelink_shrine_region = self.create_region("Firelink Shrine", fire_link_shrine_table)
         firelink_shrine_bell_tower_region = self.create_region("Firelink Shrine Bell Tower", firelink_shrine_bell_tower_table)
@@ -106,7 +120,7 @@ class DarkSouls3World(World):
         new_region = Region(name, RegionType.Generic, name, self.player)
         if location_table is not None:
             for name, address in self.location_name_to_id.items():
-                if location_table.get(name): # and name in self.main_path_locations:
+                if location_table.get(name):
                     location = Location(self.player, name, address, new_region)
                     new_region.locations.append(location)
         self.world.regions.append(new_region)
@@ -118,8 +132,7 @@ class DarkSouls3World(World):
                 self.world.itempool += [self.create_item(name)]
 
     def generate_early(self):
-        if self.world.priority_locations_preset[self.player]:
-            self.world.priority_locations[self.player].value.update(main_path_location_list)
+        pass
 
     def set_rules(self) -> None:
         set_rule(self.world.get_entrance("Goto Bell Tower", self.player),
