@@ -320,6 +320,22 @@ class MultiWorld():
     def get_regions(self, player=None):
         return self.regions if player is None else self._region_cache[player].values()
 
+    def create_region(self, name: str, player: int, region_type: RegionType = None, locations: Dict[str, int] = None,
+                      exits: Dict[str, Optional[Callable]] = None, hint: str = None) -> Region:
+        region = Region(name, region_type, hint, player, self)
+        if locations:
+            for loc in locations:
+                current_loc = self.worlds[player].create_location(loc, player, locations[loc])
+                current_loc.parent_region = region
+                region.locations.append(current_loc)
+        if exits:
+            for ex in exits:
+                region_exit = Entrance(player, ex, region)
+                region_exit.access_rule = exits[ex]
+                region.exits.append(region_exit)
+
+        return region
+
     def get_region(self, regionname: str, player: int) -> Region:
         try:
             return self._region_cache[player][regionname]
@@ -333,6 +349,9 @@ class MultiWorld():
         except KeyError:
             self._recache()
             return self._entrance_cache[entrance, player]
+
+    def create_location(self, name: str, address: int, player: int) -> Location:
+        return Location(player, name, address)
 
     def get_location(self, location: str, player: int) -> Location:
         try:
