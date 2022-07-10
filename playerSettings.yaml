@@ -169,15 +169,21 @@ A Link to the Past:
     standard: 0 # Begin the game by rescuing Zelda from her cell and escorting her to the Sanctuary
     open: 50 # Begin the game from your choice of Link's House or the Sanctuary
     inverted: 0 # Begin in the Dark World. The Moon Pearl is required to avoid bunny-state in Light World, and the Light World game map is altered
-  retro:
-    on: 0 # you must buy a quiver to use the bow, take-any caves and an old-man cave are added to the world. You may need to find your sword from the old man's cave
+  retro_bow: #Zelda-1 like mode. You have to purchase a quiver to shoot arrows using rupees.
+    on: 0 
     off: 50
-  hints: # Vendors: King Zora and Bottle Merchant say what they're selling.
-  #    On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints.
+  retro_caves: #Zelda-1 like mode. There are randomly placed take-any caves that contain one Sword and choices of Heart Container/Blue Potion.
+    on: 0
+    off: 50
+  hints: #On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints.
     'on': 50
-    vendors: 0
     'off': 0
     full: 0
+  scams: #If on, these Merchants will no longer tell you what they're selling.
+    'off': 50
+    'king_zora': 0
+    'bottle_merchant': 0
+    'all': 0
   swordless:
     on: 0 # Your swords are replaced by rupees. Gameplay changes have been made to accommodate this change
     off: 1
@@ -270,6 +276,7 @@ A Link to the Past:
     p: 0 # Randomize the prices of the items in shop inventories
     u: 0 # Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
     w: 0 # Consider witch's hut like any other shop and shuffle/randomize it too
+    P: 0 # Prices of the items in shop inventories cost hearts, arrow, or bombs instead of rupees
     ip: 0 # Shuffle inventories and randomize prices
     fpu: 0 # Generate new inventories, randomize prices and shuffle capacity upgrades into item pool
     uip: 0 # Shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
