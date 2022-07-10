@@ -21,11 +21,8 @@
         you can simply refresh this page and the server will be started again.<br>
         {% if room.last_port %}
             You can connect to this room by using <span class="interactive"
-            data-tooltip="This means address/ip is {{ config['PATCH_TARGET'] }} and port is {{ room.last_port }}.
-            Clicking here opens the Text Client, if installed properly.">
-            <a href="archipelago://{{ config['PATCH_TARGET'] }}:{{ room.last_port }}">
-                '/connect {{ config['PATCH_TARGET'] }}:{{ room.last_port }}'
-            </a>
+            data-tooltip="This means address/ip is {{ config['PATCH_TARGET'] }} and port is {{ room.last_port }}.">
+            '/connect {{ config['PATCH_TARGET'] }}:{{ room.last_port }}'
             </span>
             in the <a href="{{ url_for("tutorial_landing")}}">client</a>.<br>{% endif %}
         {{ macros.list_patches_room(room) }}

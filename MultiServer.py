@@ -23,6 +23,11 @@ ModuleUpdate.update()
 
 import websockets
 import colorama
+try:
+    # ponyorm is a requirement for webhost, not default server, so may not be importable
+    from pony.orm.dbapiprovider import OperationalError
+except ImportError:
+    OperationalError = ConnectionError
 
 import NetUtils
 from worlds.AutoWorld import AutoWorldRegister
@@ -404,12 +409,16 @@ class Context:
             def save_regularly():
                 import time
                 while not self.exit_event.is_set():
-                    time.sleep(self.auto_save_interval)
-                    if self.save_dirty:
-                        logging.debug("Saving via thread.")
+                    try:
+                        time.sleep(self.auto_save_interval)
+                        if self.save_dirty:
+                            logging.debug("Saving via thread.")
+                            self._save()
+                    except OperationalError as e:
+                        logging.exception(e)
+                        logging.info(f"Saving failed. Retry in {self.auto_save_interval} seconds.")
+                    else:
                         self.save_dirty = False
-                        self._save()
-
             self.auto_saver_thread = threading.Thread(target=save_regularly, daemon=True)
             self.auto_saver_thread.start()
 
@@ -446,22 +455,9 @@ class Context:
     def set_save(self, savedata: dict):
         if self.connect_names != savedata["connect_names"]:
             raise Exception("This savegame does not appear to match the loaded multiworld.")
-        if "version" not in savedata:
-            # upgrade from version 1
-            # this is not perfect but good enough for old games to continue
-            for old, items in savedata["received_items"].items():
-                self.received_items[(*old, True)] = items
-                self.received_items[(*old, False)] = items.copy()
-            for (team, slot, remote) in self.received_items:
-                # remove start inventory from items, since this is separate now
-                start_inventory = get_start_inventory(self, slot, slot in self.remote_start_inventory)
-                if start_inventory:
-                    del self.received_items[team, slot, remote][:len(start_inventory)]
-            logging.info("Upgraded save data")
-        elif savedata["version"] > self.save_version:
+        if savedata["version"] > self.save_version:
             raise Exception("This savegame is newer than the server.")
-        else:
-            self.received_items = savedata["received_items"]
+        self.received_items = savedata["received_items"]
         self.hints_used.update(savedata["hints_used"])
         self.hints.update(savedata["hints"])
 
@@ -1276,7 +1272,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 elif not for_location and hint_name in world.item_name_groups:  # item group name
                     hints = []
                     for item in world.item_name_groups[hint_name]:
-                        hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item))
+                        if item in world.item_name_to_id:  # ensure item has an ID
+                            hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item))
                 elif not for_location and hint_name in world.item_names:  # item name
                     hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_name)
                 else:  # location name
@@ -1777,7 +1774,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 if item in world.item_name_groups:
                     hints = []
                     for item in world.item_name_groups[item]:
-                        hints.extend(collect_hints(self.ctx, team, slot, item))
+                        if item in world.item_name_to_id:  # ensure item has an ID
+                            hints.extend(collect_hints(self.ctx, team, slot, item))
                 else:  # item name
                     hints = collect_hints(self.ctx, team, slot, item)
 
@@ -1956,18 +1954,8 @@ async def main(args: argparse.Namespace):
 
     try:
         if not data_filename:
-            try:
-                import tkinter
-                import tkinter.filedialog
-            except Exception as e:
-                logging.error("Could not load tkinter, which is likely not installed. "
-                              "This attempt was made because no .archipelago file was provided as argument. "
-                              "Either provide a file or ensure the tkinter package is installed.")
-                raise e
-            else:
-                root = tkinter.Tk()
-                root.withdraw()
-                data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.archipelago *.zip"),))
+            filetypes = (("Multiworld data", (".archipelago", ".zip")),)
+            data_filename = Utils.open_filename("Select multiworld data", filetypes)
 
         ctx.load(data_filename, args.use_embedded_options)
 
