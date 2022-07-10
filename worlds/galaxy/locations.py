@@ -67,13 +67,21 @@ locBB_table = {
     "BB: Beachcombing for Purple Coins": 170000035,
     "BB: Wall Jumping Water Falls": 170000036,
 }
+locG_table = {
+    "G: Luigi and the Haunted Mansion": 170000037,
+    "G: A Very Spooky Spirit": 170000038,
+    "G: Beware of Bouldergeist": 170000039,
+    "G: Bouldergeist's Daredevil Run": 170000040,
+    "G: Purple Coins in the Bone Pen": 170000041,
+    "G: Matter Splatter Mansion": 170000042,
+}
 locGG_table = {
-    "GG: Luigi and the Haunted Mansion": 170000037,
-    "GG: A Very Spooky Spirit": 170000038,
-    "GG: Beware of Bouldergeist": 170000039,
-    "GG: Bouldergeist's Daredevil Run": 170000040,
-    "GG: Purple Coins in the Bone Pen": 170000041,
-    "GG: Matter Splatter Mansion": 170000042,
+    "GG: Bunnies in the Wind": 170000108,
+    "GG: The Dirty Tricks of Major Burrows", 170000109,
+    "GG: Gusty Garden's Gravity Scramble": 170000110,
+    "GG: Major Burrow's Daredevil Run": 170000111,
+    "GG: Purple Coins on the Puzzle Cube" 170000112,
+    "GG: The Golden Chomp": 170000113,
 }
 locFF_table = {
     "FF: The Frozen Peak of Baron Brr": 170000095,
