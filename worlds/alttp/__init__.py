@@ -128,8 +128,6 @@ class ALTTPWorld(World):
 
     create_items = generate_itempool
 
-    open_pyramid: bool = False
-
     def __init__(self, *args, **kwargs):
         self.dungeon_local_item_names = set()
         self.dungeon_specific_item_names = set()
@@ -178,8 +176,6 @@ class ALTTPWorld(World):
     def create_regions(self):
         player = self.player
         world = self.world
-        from .Options import OpenPyramid
-        self.open_pyramid = OpenPyramid.to_bool
 
         world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player],
                                                       world.triforce_pieces_required[player])
