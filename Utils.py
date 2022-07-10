@@ -125,6 +125,7 @@ def home_path(*path: str) -> str:
 
 def user_path(*path: str) -> str:
     """Returns either local_path or home_path based on write permissions."""
+    return os.path.join("C:\\src\\Archipelago\\", *path)
     if hasattr(user_path, 'cached_path'):
         pass
     elif os.access(local_path(), os.W_OK):
@@ -427,7 +428,7 @@ def get_text_between(text: str, start: str, end: str) -> str:
     return text[text.index(start) + len(start): text.rindex(end)]
 
 
-loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}
+loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.INFO}
 
 
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
