@@ -65,8 +65,8 @@ Sent to clients when they connect to an Archipelago server.
 | location_check_points | int | The amount of hint points you receive per item/location check completed. ||
 | players | list\[[NetworkPlayer](#NetworkPlayer)\] | Sent only if the client is properly authenticated (see [Archipelago Connection Handshake](#Archipelago-Connection-Handshake)). Information on the players currently connected to the server. |
 | games | list\[str\] | sorted list of game names for the players, so first player's game will be games\[0\]. Matches game names in datapackage. |
-| datapackage_version | int | Data version of the [data package](#Data-Package-Contents) the server will send. Used to update the client's (optional) local cache. |
-| datapackage_versions | dict\[str, int\] | Data versions of the individual games' data packages the server will send. |
+| datapackage_version | int | Sum of individual games' datapackage version. Deprecated. Use `datapackage_versions` instead. |
+| datapackage_versions | dict\[str, int\] | Data versions of the individual games' data packages the server will send. Used to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents). |
 | seed_name | str | uniquely identifying name of this generation |
 | time | float | Unix time stamp of "now". Send for time synchronization if wanted for things like the DeathLink Bounce. |
 

@@ -208,7 +208,6 @@ class OOTWorld(World):
         # Not implemented for now, but needed to placate the generator. Remove as they are implemented
         self.mq_dungeons_random = False  # this will be a deprecated option later
         self.ocarina_songs = False  # just need to pull in the OcarinaSongs module
-        self.big_poe_count = 1  # disabled due to client-side issues for now
         self.mix_entrance_pools = False
         self.decouple_entrances = False
 
@@ -567,7 +566,7 @@ class OOTWorld(World):
             self.fake_items.extend(item for item in self.itempool if item.index and self.is_major_item(item))
         if self.ice_trap_appearance in ['junk_only', 'anything']:
             self.fake_items.extend(item for item in self.itempool if
-                                   item.index and not self.is_major_item(item) and item.name != 'Ice Trap')
+                                   item.index and not item.type == 'Shop' and not self.is_major_item(item) and item.name != 'Ice Trap')
 
         # Kill unreachable events that can't be gotten even with all items
         # Make sure to only kill actual internal events, not in-game "events"
@@ -803,8 +802,8 @@ class OOTWorld(World):
             self.hint_data_available.wait()
 
         with i_o_limiter:
-            # Make ice traps appear as other random items
-            ice_traps = [loc.item for loc in self.get_locations() if loc.item.name == 'Ice Trap']
+            # Make traps appear as other random items
+            ice_traps = [loc.item for loc in self.get_locations() if loc.item.trap]
             for trap in ice_traps:
                 trap.looks_like_item = self.create_item(self.world.slot_seeds[self.player].choice(self.fake_items).name)
 
@@ -832,7 +831,7 @@ class OOTWorld(World):
                     else:
                         entrance = loadzone.reverse
                     if entrance.reverse is not None:
-                        self.world.spoiler.set_entrance(entrance, entrance.replaces, 'both', self.player)
+                        self.world.spoiler.set_entrance(entrance, entrance.replaces.reverse, 'both', self.player)
                     else:
                         self.world.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
             else:
@@ -942,13 +941,13 @@ class OOTWorld(World):
             return None
 
         # Remove undesired items from start_inventory
+        # This is because we don't want them to show up in the autotracker,
+        # they just don't exist in-game.
         for item_name in self.remove_from_start_inventory:
             item_id = self.item_name_to_id.get(item_name, None)
-            try:
-                multidata["precollected_items"][self.player].remove(item_id)
-            except ValueError as e:
-                logger.warning(
-                    f"Attempted to remove nonexistent item id {item_id} from OoT precollected items ({item_name})")
+            if item_id is None:
+                continue
+            multidata["precollected_items"][self.player].remove(item_id)
 
         # Add ER hint data
         if self.shuffle_interior_entrances != 'off' or self.shuffle_dungeon_entrances or self.shuffle_grotto_entrances:
