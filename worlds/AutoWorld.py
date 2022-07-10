@@ -294,7 +294,8 @@ class World(metaclass=AutoWorldRegister):
 
     def create_filler(self) -> Item:
         item = self.create_item(self.get_filler_item_name())
-        item.classification = ItemClassification.filler
+        if item.classification != ItemClassification.trap:
+            item.classification = ItemClassification.filler
         return item
 
 

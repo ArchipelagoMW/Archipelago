@@ -144,22 +144,22 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     # temporary home for custom item pool and item links, should be moved out of Main
     pool_size_groups = {}
-    player_item_pool = {}
+     # count up everyone's items
+    player_item_pool = dict([(player, {}) for player in world.player_ids])
+    for item in world.itempool:
+        player_item_pool[item.player][item.name] = player_item_pool[item.player].get(item.name, 0) + 1
+
     custom_item_pool = {}
     for player in world.player_ids:
-        player_item_pool[player] = {}
-        # count up everyone's items
-        for item in world.itempool:
-            if item.player == player:
-                player_item_pool[player][item.name] = player_item_pool[player].get(item.name, 0) + 1
         if world.custom_item_pool[player]:
             pool_size_groups.setdefault(world.custom_item_pool[player].value.get('pool_size_link', None), [])
             pool_size_groups[world.custom_item_pool[player].value.get('pool_size_link', None)].append(player)
             custom_item_pool[player] = {}
-            if world.custom_item_pool[player].value.get('use_defaults', True):
-                # if use_defaults is not set to False, copy the items we counted earlier.
-                # otherwise, these numbers are discarded
-                custom_item_pool[player] = player_item_pool[player].copy()
+            custom_item_pool[player] = player_item_pool[player].copy()
+            if not world.custom_item_pool[player].value.get('use_defaults', True):
+                # if use_defaults is set to False, discard the counted item counts
+                for item in custom_item_pool[player]:
+                    custom_item_pool[player][item] = 0
             for item_name, count in world.custom_item_pool[player].value.get('set', {}).items():
                 custom_item_pool[player][item_name] = count
             for item_name, modify in world.custom_item_pool[player].value.get('modify', {}).items():
@@ -219,7 +219,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         if diff > 0:  # pool is oversized, we need to remove some filler items.
             removed_items = 0
             for item in world.itempool:
-                if item.player in link_group and item.classification == ItemClassification.filler:
+                if item.player in link_group and item.classification in (ItemClassification.filler,
+                                                                         ItemClassification.trap):
                     world.itempool.remove(item)
                     removed_items += 1
                     if removed_items == diff:
