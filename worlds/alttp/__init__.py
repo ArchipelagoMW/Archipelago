@@ -128,6 +128,8 @@ class ALTTPWorld(World):
 
     create_items = generate_itempool
 
+    open_pyramid: bool = False
+
     def __init__(self, *args, **kwargs):
         self.dungeon_local_item_names = set()
         self.dungeon_specific_item_names = set()
@@ -176,17 +178,8 @@ class ALTTPWorld(World):
     def create_regions(self):
         player = self.player
         world = self.world
-        if world.open_pyramid[player] == 'goal':
-            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
-                                                                'localganontriforcehunt', 'ganonpedestal'}
-        elif world.open_pyramid[player] == 'auto':
-            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
-                                                                'localganontriforcehunt', 'ganonpedestal'} and \
-                                         (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull',
-                                                                    'dungeonscrossed'} or not world.shuffle_ganon)
-        else:
-            world.open_pyramid[player] = {'on': True, 'off': False, 'yes': True, 'no': False}.get(
-                world.open_pyramid[player], 'auto')
+        from .Options import OpenPyramid
+        self.open_pyramid = OpenPyramid.to_bool
 
         world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player],
                                                       world.triforce_pieces_required[player])

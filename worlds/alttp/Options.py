@@ -1,5 +1,6 @@
 import typing
 
+from BaseClasses import MultiWorld
 from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink
 
 
@@ -25,6 +26,29 @@ class Goal(Choice):
     option_kill_ganon = 0
     option_kill_ganon_and_gt_agahnim = 1
     option_hand_in = 2
+
+
+class OpenPyramid(Choice):
+    """Determines whether the hole at the top of pyramid is open.
+    Goal will open the pyramid if the goal requires you to kill Ganon, without needing to kill Agahnim 2
+    Auto is the same as goal except if Ganon's hole is in another location will be closed"""
+    display_name = "Open Pyramid Hole"
+    option_goal = 0
+    option_auto = 1
+    option_yes = 2
+    option_no = 3
+
+    def to_bool(self, world: MultiWorld, player: int) -> bool:
+        if self.value == self.option_goal:
+            return world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
+        elif self.value == self.option_auto:
+            return world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'} \
+            and (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'} or not
+                 world.shuffle_ganon)
+        elif self.value == self.option_yes:
+            return True
+        else:
+            return False
 
 
 class DungeonItem(Choice):
