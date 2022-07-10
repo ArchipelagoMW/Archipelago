@@ -65,6 +65,9 @@ class FF6WCWorld(World):
     def create_item(self, name: str):
         return FF6WCItem(name, True, self.item_name_to_id[name], self.player)
 
+    def create_filler_item(self, name: str):
+        return FF6WCItem(name, False, self.item_name_to_id[name], self.player)
+
     def create_event(self, event: str):
         return FF6WCItem(event, True, None, self.player)
 
@@ -124,7 +127,7 @@ class FF6WCWorld(World):
         for item in map(self.create_item, self.item_name_to_id):
             if item.name in self.starting_characters:
                 self.world.push_precollected(item)
-            else:
+            elif item.name in Rom.characters or item.name in Rom.espers:
                 self.world.itempool.append(item)
 
     def set_rules(self):
@@ -243,7 +246,6 @@ class FF6WCWorld(World):
         filler_pool = []
         for item in Items.filler_items:
             filler_pool.append(item)
-        print(filler_pool)
         self.world.itempool += [self.create_item(random.choice(filler_pool)) for i in range(0, filler_count)]
 
     def generate_output(self, output_directory: str):

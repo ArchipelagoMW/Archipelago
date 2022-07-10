@@ -1,3 +1,5 @@
+# Based (read: copied almost wholesale and edited) off the FF1 Client.
+
 import asyncio
 import json
 import logging

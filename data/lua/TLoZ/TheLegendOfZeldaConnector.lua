@@ -1,3 +1,5 @@
+--Shamelessly based off the FF1 lua
+
 local socket = require("socket")
 local json = require('json')
 local math = require('math')
@@ -618,7 +620,7 @@ function main()
                 gui.drawEllipse(248, 9, 6, 6, "Black", "Yellow")
 
                 drawText(5, 8, "Waiting for client", 0xFFFF0000)
-                drawText(5, 32, "Please start FF1Client.exe", 0xFFFF0000)
+                drawText(5, 32, "Please start TheLegendOfZeldaClient.exe", 0xFFFF0000)
 
                 -- Advance so the messages are drawn
                 emu.frameadvance()
