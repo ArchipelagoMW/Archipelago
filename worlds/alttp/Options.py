@@ -30,13 +30,14 @@ class Goal(Choice):
 
 class OpenPyramid(Choice):
     """Determines whether the hole at the top of pyramid is open.
-    Goal will open the pyramid if the goal requires you to kill Ganon, without needing to kill Agahnim 2
-    Auto is the same as goal except if Ganon's hole is in another location will be closed"""
+    Goal will open the pyramid if the goal requires you to kill Ganon, without needing to kill Agahnim 2.
+    Auto is the same as goal except if Ganon's dropdown is in another location, the hole will be closed."""
     display_name = "Open Pyramid Hole"
-    option_goal = 0
-    option_auto = 1
-    option_yes = 2
-    option_no = 3
+    option_no = 0
+    option_yes = 1
+    option_goal = 3
+    option_auto = 4
+    default = option_auto
 
     def to_bool(self, world: MultiWorld, player: int) -> bool:
         if self.value == self.option_goal:
