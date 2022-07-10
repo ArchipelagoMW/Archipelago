@@ -41,12 +41,12 @@ def create_regions(world MultiWorld, player int):
     reg = Region("Beach Bowl", RegionType.Generic, "Beach Bowl", player, world)
     locBB_names = [name for name, id in locBB_table.items()]
     regBB.locations += [SMGLocation(player, loc_name, location_table[loc_name,] regBB) for loc_name in locBB_names]
-    # defines the Gusty Gardens galaxy 
-    reg = Region("Gusty Gardens", RegionType.Generic, "Gusty Gardens", player, world)
-    locGG_names = [name for name, id in locGG_table.items()]
-    regGG.locations += [SMGLocation(player, loc_name, location_table[loc_name, ] regGG) for loc_name in locGG_names]
     # define Ghostly galaxy
     reg = Region("Ghostly", RegionType.Generic, "Ghostly", player, world)
+    locGG_names = [name for name, id in locGG_table.items()]
+    regGG.locations += [SMGLocation(player, loc_name, location_table[loc_name, ] regGG) for loc_name in locGG_names]
+    # defines the Gusty Gardens galaxy 
+    reg = Region("Gusty Gardens", RegionType.Generic, "Gusty Gardens", player, world)
     locGG_names = [name for name, id in locGG_table.items()]
     regGG.locations += [SMGLocation(player, loc_name, location_table[loc_name, ] regGG) for loc_name in locGG_names]
     # defines Freezeflame galaxy
@@ -73,4 +73,12 @@ def create_regions(world MultiWorld, player int):
     reg = Region("Melty Molten", RegionType.Generic, "Melty Molten", player, world)
     locMM_names = [name for name, id in locMM_table.items()]
     regMM_names += [SMGLocation (player, loc_name, location_table[loc_name, ] regMM) for loc_name in locMM_names]
+def connect_regions(world: MultiWorld, player: int, source: str, target: str, rule):
+    sourceRegion = world.get_region(source, player)
+    targetRegion = world.get_region(target, player)
 
+    connection = Entrance(player,'', sourceRegion)
+    connection.access_rule = rule
+
+    sourceRegion.exits.append(connection)
+    connection.connect(targetRegion) 
