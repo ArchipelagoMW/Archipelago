@@ -28,8 +28,12 @@ class AssembleOptions(abc.ABCMeta):
         options.update(new_options)
 
         # apply aliases, without name_lookup
-        options.update({name[6:].lower(): option_id for name, option_id in attrs.items() if
-                        name.startswith("alias_")})
+        aliases = {name[6:].lower(): option_id for name, option_id in attrs.items() if
+                   name.startswith("alias_")}
+
+        assert "random" not in aliases, "Choice option 'random' cannot be manually assigned."
+
+        options.update(aliases)
 
         # auto-validate schema on __init__
         if "schema" in attrs.keys():
@@ -379,35 +383,7 @@ class Range(NumericOption):
     def from_text(cls, text: str) -> Range:
         text = text.lower()
         if text.startswith("random"):
-            if text == "random-low":
-                return cls(int(round(random.triangular(cls.range_start, cls.range_end, cls.range_start), 0)))
-            elif text == "random-high":
-                return cls(int(round(random.triangular(cls.range_start, cls.range_end, cls.range_end), 0)))
-            elif text == "random-middle":
-                return cls(int(round(random.triangular(cls.range_start, cls.range_end), 0)))
-            elif text.startswith("random-range-"):
-                textsplit = text.split("-")
-                try:
-                    random_range = [int(textsplit[len(textsplit) - 2]), int(textsplit[len(textsplit) - 1])]
-                except ValueError:
-                    raise ValueError(f"Invalid random range {text} for option {cls.__name__}")
-                random_range.sort()
-                if random_range[0] < cls.range_start or random_range[1] > cls.range_end:
-                    raise Exception(
-                        f"{random_range[0]}-{random_range[1]} is outside allowed range "
-                        f"{cls.range_start}-{cls.range_end} for option {cls.__name__}")
-                if text.startswith("random-range-low"):
-                    return cls(int(round(random.triangular(random_range[0], random_range[1], random_range[0]))))
-                elif text.startswith("random-range-middle"):
-                    return cls(int(round(random.triangular(random_range[0], random_range[1]))))
-                elif text.startswith("random-range-high"):
-                    return cls(int(round(random.triangular(random_range[0], random_range[1], random_range[1]))))
-                else:
-                    return cls(int(round(random.randint(random_range[0], random_range[1]))))
-            elif text == "random":
-                return cls(random.randint(cls.range_start, cls.range_end))
-            else:
-                raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. Acceptable values are: random, random-high, random-middle, random-low, random-range-low-<min>-<max>, random-range-middle-<min>-<max>, random-range-high-<min>-<max>, or random-range-<min>-<max>.")
+            return cls.weighted_range(text)
         elif text == "default" and hasattr(cls, "default"):
             return cls(cls.default)
         elif text == "high":
@@ -426,6 +402,45 @@ class Range(NumericOption):
         return cls(int(text))
 
     @classmethod
+    def weighted_range(cls, text) -> Range:
+        if text == "random-low":
+            return cls(cls.triangular(cls.range_start, cls.range_end, cls.range_start))
+        elif text == "random-high":
+            return cls(cls.triangular(cls.range_start, cls.range_end, cls.range_end))
+        elif text == "random-middle":
+            return cls(cls.triangular(cls.range_start, cls.range_end))
+        elif text.startswith("random-range-"):
+            return cls.custom_range(text)
+        elif text == "random":
+            return cls(random.randint(cls.range_start, cls.range_end))
+        else:
+            raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
+                            f"Acceptable values are: random, random-high, random-middle, random-low, "
+                            f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
+                            f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
+
+    @classmethod
+    def custom_range(cls, text) -> Range:
+        textsplit = text.split("-")
+        try:
+            random_range = [int(textsplit[len(textsplit) - 2]), int(textsplit[len(textsplit) - 1])]
+        except ValueError:
+            raise ValueError(f"Invalid random range {text} for option {cls.__name__}")
+        random_range.sort()
+        if random_range[0] < cls.range_start or random_range[1] > cls.range_end:
+            raise Exception(
+                f"{random_range[0]}-{random_range[1]} is outside allowed range "
+                f"{cls.range_start}-{cls.range_end} for option {cls.__name__}")
+        if text.startswith("random-range-low"):
+            return cls(cls.triangular(random_range[0], random_range[1], random_range[0]))
+        elif text.startswith("random-range-middle"):
+            return cls(cls.triangular(random_range[0], random_range[1]))
+        elif text.startswith("random-range-high"):
+            return cls(cls.triangular(random_range[0], random_range[1], random_range[1]))
+        else:
+            return cls(random.randint(random_range[0], random_range[1]))
+
+    @classmethod
     def from_any(cls, data: typing.Any) -> Range:
         if type(data) == int:
             return cls(data)
@@ -437,6 +452,41 @@ class Range(NumericOption):
 
     def __str__(self) -> str:
         return str(self.value)
+
+    @staticmethod
+    def triangular(lower: int, end: int, tri: typing.Optional[int] = None) -> int:
+        return int(round(random.triangular(lower, end, tri), 0))
+
+
+class SpecialRange(Range):
+    special_range_cutoff = 0
+    special_range_names: typing.Dict[str, int] = {}
+    """Special Range names have to be all lowercase as matching is done with text.lower()"""
+
+    @classmethod
+    def from_text(cls, text: str) -> Range:
+        text = text.lower()
+        if text in cls.special_range_names:
+            return cls(cls.special_range_names[text])
+        return super().from_text(text)
+
+    @classmethod
+    def weighted_range(cls, text) -> Range:
+        if text == "random-low":
+            return cls(cls.triangular(cls.special_range_cutoff, cls.range_end, cls.special_range_cutoff))
+        elif text == "random-high":
+            return cls(cls.triangular(cls.special_range_cutoff, cls.range_end, cls.range_end))
+        elif text == "random-middle":
+            return cls(cls.triangular(cls.special_range_cutoff, cls.range_end))
+        elif text.startswith("random-range-"):
+            return cls.custom_range(text)
+        elif text == "random":
+            return cls(random.randint(cls.special_range_cutoff, cls.range_end))
+        else:
+            raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
+                            f"Acceptable values are: random, random-high, random-middle, random-low, "
+                            f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
+                            f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
 
 
 class VerifyKeys:
@@ -581,13 +631,18 @@ class Accessibility(Choice):
     default = 1
 
 
-class ProgressionBalancing(Range):
+class ProgressionBalancing(SpecialRange):
     """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
     [0-99, default 50] A lower setting means more getting stuck. A higher setting means less getting stuck."""
     default = 50
     range_start = 0
     range_end = 99
     display_name = "Progression Balancing"
+    special_range_names = {
+        "disabled": 0,
+        "normal": 50,
+        "extreme": 99,
+    }
 
 
 common_options = {
@@ -703,8 +758,6 @@ class ItemLinks(OptionList):
             intersection = local_items.intersection(non_local_items)
             if intersection:
                 raise Exception(f"item_link {link['name']} has {intersection} items in both its local_items and non_local_items pool.")
-
-
 
 
 per_game_common_options = {

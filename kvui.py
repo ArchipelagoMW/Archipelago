@@ -8,6 +8,10 @@ os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
 os.environ["KIVY_LOG_ENABLE"] = "0"
 
+import Utils
+if Utils.is_frozen():
+    os.environ["KIVY_DATA_DIR"] = Utils.local_path("data")
+
 from kivy.config import Config
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
@@ -42,7 +46,7 @@ from kivy.uix.popup import Popup
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-import Utils
+
 from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
 
 if typing.TYPE_CHECKING:
@@ -330,8 +334,8 @@ class GameManager(App):
         # top part
         server_label = ServerLabel()
         self.connect_layout.add_widget(server_label)
-        self.server_connect_bar = ConnectBarTextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False,
-                                                      write_tab=False)
+        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.server_address or "archipelago.gg", size_hint_y=None,
+                                                      height=30, multiline=False, write_tab=False)
         self.server_connect_bar.bind(on_text_validate=self.connect_button_action)
         self.connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
@@ -408,6 +412,7 @@ class GameManager(App):
     def connect_button_action(self, button):
         if self.ctx.server:
             self.ctx.server_address = None
+            self.ctx.username = None
             asyncio.create_task(self.ctx.disconnect())
         else:
             asyncio.create_task(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
@@ -441,6 +446,12 @@ class GameManager(App):
         self.log_panels["Archipelago"].on_message_markup(text)
         self.log_panels["All"].on_message_markup(text)
 
+    def update_address_bar(self, text: str):
+        if hasattr(self, "server_connect_bar"):
+            self.server_connect_bar.text = text
+        else:
+            logging.getLogger("Client").info("Could not update address bar as the GUI is not yet initialized.")
+
     def enable_energy_link(self):
         if not hasattr(self, "energy_link_label"):
             self.energy_link_label = Label(text="Energy Link: Standby",
@@ -450,13 +461,6 @@ class GameManager(App):
     def set_new_energy_link_value(self):
         if hasattr(self, "energy_link_label"):
             self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
-
-
-class ChecksFinderManager(GameManager):
-    logging_pairs = [
-        ("Client", "Archipelago")
-    ]
-    base_title = "Archipelago ChecksFinder Client"
 
 
 class LogtoUI(logging.Handler):
@@ -518,7 +522,7 @@ class KivyJSONtoTextParser(JSONtoTextParser):
         flags = node.get("flags", 0)
         if flags & 0b001:  # advancement
             itemtype = "progression"
-        elif flags & 0b010:  # never_exclude
+        elif flags & 0b010:  # useful
             itemtype = "useful"
         elif flags & 0b100:  # trap
             itemtype = "trap"

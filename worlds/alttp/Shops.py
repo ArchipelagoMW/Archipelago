@@ -249,7 +249,7 @@ def ShopSlotFill(world):
                     if location.item.game != "A Link to the Past":
                         if location.item.advancement:
                             price = world.random.randrange(8, 56)
-                        elif location.item.never_exclude:
+                        elif location.item.useful:
                             price = world.random.randrange(4, 28)
                         else:
                             price = world.random.randrange(2, 14)
@@ -460,10 +460,11 @@ def shuffle_shops(world, items, player: int):
                     f"Not all upgrades put into Player{player}' item pool. Putting remaining items in Capacity Upgrade shop instead.")
                 bombupgrades = sum(1 for item in new_items if 'Bomb Upgrade' in item)
                 arrowupgrades = sum(1 for item in new_items if 'Arrow Upgrade' in item)
+                slots = iter(range(2))
                 if bombupgrades:
-                    capacityshop.add_inventory(1, 'Bomb Upgrade (+5)', 100, bombupgrades)
+                    capacityshop.add_inventory(next(slots), 'Bomb Upgrade (+5)', 100, bombupgrades)
                 if arrowupgrades:
-                    capacityshop.add_inventory(1, 'Arrow Upgrade (+5)', 100, arrowupgrades)
+                    capacityshop.add_inventory(next(slots), 'Arrow Upgrade (+5)', 100, arrowupgrades)
         else:
             for item in new_items:
                 world.push_precollected(ItemFactory(item, player))
