@@ -317,7 +317,14 @@ class MultiWorld():
             for r_location in region.locations:
                 self._location_cache[r_location.name, player] = r_location
 
-    def get_regions(self, player=None):
+    def create_region(self, name: str, player: int, locations: Dict[str, int],
+                      type: RegionType = None, hint: str = None) -> Region:
+        region = Region(name, player, self.worlds[player], type, hint)
+        for location, address in locations.items():
+            region.locations.append(self.create_location(location, player, address, region))
+        return region
+
+    def get_regions(self, player=None) -> List[Region]:
         return self.regions if player is None else self._region_cache[player].values()
 
     def get_region(self, regionname: str, player: int) -> Region:
@@ -333,6 +340,9 @@ class MultiWorld():
         except KeyError:
             self._recache()
             return self._entrance_cache[entrance, player]
+
+    def create_location(self, name: str, player: int, address: int = None, parent: Region = None) -> Location:
+        return Location(name, player, address, parent)
 
     def get_location(self, location: str, player: int) -> Location:
         try:
@@ -365,6 +375,20 @@ class MultiWorld():
         if use_cache:
             self._all_state = ret
         return ret
+
+    def get_options(self, player) -> Dict[str, Options.Option[Any]]:
+        options = {}
+        for option_name in self.worlds[player].options:
+            options[option_name] = self.worlds[player].world.option_name[player].value
+        return options
+
+    def get_item(self, name: str) -> Item:
+        if not (self.get_filled_locations() or self.itempool):
+            raise RuntimeError('No items currently exist to get.')
+        for item in [loc.item for loc in self.get_filled_locations()] + self.itempool:
+            if item.name == name:
+                return item
+        raise RuntimeError(f'Item {name} does not exist!')
 
     def get_items(self) -> List[Item]:
         return [loc.item for loc in self.get_filled_locations()] + self.itempool
@@ -721,170 +745,7 @@ class CollectionState():
             found += self.prog_items[item_name, player]
         return found
 
-    def can_buy_unlimited(self, item: str, player: int) -> bool:
-        return any(shop.region.player == player and shop.has_unlimited(item) and shop.region.can_reach(self) for
-                   shop in self.world.shops)
-
-    def can_buy(self, item: str, player: int) -> bool:
-        return any(shop.region.player == player and shop.has(item) and shop.region.can_reach(self) for
-                   shop in self.world.shops)
-
-    def item_count(self, item: str, player: int) -> int:
-        return self.prog_items[item, player]
-
-    def has_triforce_pieces(self, count: int, player: int) -> bool:
-        return self.item_count('Triforce Piece', player) + self.item_count('Power Star', player) >= count
-
-    def has_crystals(self, count: int, player: int) -> bool:
-        found: int = 0
-        for crystalnumber in range(1, 8):
-            found += self.prog_items[f"Crystal {crystalnumber}", player]
-            if found >= count:
-                return True
-        return False
-
-    def can_lift_rocks(self, player: int):
-        return self.has('Power Glove', player) or self.has('Titans Mitts', player)
-
-    def bottle_count(self, player: int) -> int:
-        return min(self.world.difficulty_requirements[player].progressive_bottle_limit,
-                   self.count_group("Bottles", player))
-
-    def has_hearts(self, player: int, count: int) -> int:
-        # Warning: This only considers items that are marked as advancement items
-        return self.heart_count(player) >= count
-
-    def heart_count(self, player: int) -> int:
-        # Warning: This only considers items that are marked as advancement items
-        diff = self.world.difficulty_requirements[player]
-        return min(self.item_count('Boss Heart Container', player), diff.boss_heart_container_limit) \
-               + self.item_count('Sanctuary Heart Container', player) \
-               + min(self.item_count('Piece of Heart', player), diff.heart_piece_limit) // 4 \
-               + 3  # starting hearts
-
-    def can_lift_heavy_rocks(self, player: int) -> bool:
-        return self.has('Titans Mitts', player)
-
-    def can_extend_magic(self, player: int, smallmagic: int = 16,
-                         fullrefill: bool = False):  # This reflects the total magic Link has, not the total extra he has.
-        basemagic = 8
-        if self.has('Magic Upgrade (1/4)', player):
-            basemagic = 32
-        elif self.has('Magic Upgrade (1/2)', player):
-            basemagic = 16
-        if self.can_buy_unlimited('Green Potion', player) or self.can_buy_unlimited('Blue Potion', player):
-            if self.world.item_functionality[player] == 'hard' and not fullrefill:
-                basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count(player))
-            elif self.world.item_functionality[player] == 'expert' and not fullrefill:
-                basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count(player))
-            else:
-                basemagic = basemagic + basemagic * self.bottle_count(player)
-        return basemagic >= smallmagic
-
-    def can_kill_most_things(self, player: int, enemies: int = 5) -> bool:
-        return (self.has_melee_weapon(player)
-                or self.has('Cane of Somaria', player)
-                or (self.has('Cane of Byrna', player) and (enemies < 6 or self.can_extend_magic(player)))
-                or self.can_shoot_arrows(player)
-                or self.has('Fire Rod', player)
-                or (self.has('Bombs (10)', player) and enemies < 6))
-
-    def can_shoot_arrows(self, player: int) -> bool:
-        if self.world.retro_bow[player]:
-            return (self.has('Bow', player) or self.has('Silver Bow', player)) and self.can_buy('Single Arrow', player)
-        return self.has('Bow', player) or self.has('Silver Bow', player)
-
-    def can_get_good_bee(self, player: int) -> bool:
-        cave = self.world.get_region('Good Bee Cave', player)
-        return (
-                self.has_group("Bottles", player) and
-                self.has('Bug Catching Net', player) and
-                (self.has('Pegasus Boots', player) or (self.has_sword(player) and self.has('Quake', player))) and
-                cave.can_reach(self) and
-                self.is_not_bunny(cave, player)
-        )
-
-    def can_retrieve_tablet(self, player: int) -> bool:
-        return self.has('Book of Mudora', player) and (self.has_beam_sword(player) or
-                                                       (self.world.swordless[player] and
-                                                        self.has("Hammer", player)))
-
-    def has_sword(self, player: int) -> bool:
-        return self.has('Fighter Sword', player) \
-               or self.has('Master Sword', player) \
-               or self.has('Tempered Sword', player) \
-               or self.has('Golden Sword', player)
-
-    def has_beam_sword(self, player: int) -> bool:
-        return self.has('Master Sword', player) or self.has('Tempered Sword', player) or self.has('Golden Sword',
-                                                                                                  player)
-
-    def has_melee_weapon(self, player: int) -> bool:
-        return self.has_sword(player) or self.has('Hammer', player)
-
-    def has_fire_source(self, player: int) -> bool:
-        return self.has('Fire Rod', player) or self.has('Lamp', player)
-
-    def can_melt_things(self, player: int) -> bool:
-        return self.has('Fire Rod', player) or \
-               (self.has('Bombos', player) and
-                (self.world.swordless[player] or
-                 self.has_sword(player)))
-
-    def can_avoid_lasers(self, player: int) -> bool:
-        return self.has('Mirror Shield', player) or self.has('Cane of Byrna', player) or self.has('Cape', player)
-
-    def is_not_bunny(self, region: Region, player: int) -> bool:
-        if self.has('Moon Pearl', player):
-            return True
-
-        return region.is_light_world if self.world.mode[player] != 'inverted' else region.is_dark_world
-
-    def can_reach_light_world(self, player: int) -> bool:
-        if True in [i.is_light_world for i in self.reachable_regions[player]]:
-            return True
-        return False
-
-    def can_reach_dark_world(self, player: int) -> bool:
-        if True in [i.is_dark_world for i in self.reachable_regions[player]]:
-            return True
-        return False
-
-    def has_misery_mire_medallion(self, player: int) -> bool:
-        return self.has(self.world.required_medallions[player][0], player)
-
-    def has_turtle_rock_medallion(self, player: int) -> bool:
-        return self.has(self.world.required_medallions[player][1], player)
-
-    def can_boots_clip_lw(self, player: int) -> bool:
-        if self.world.mode[player] == 'inverted':
-            return self.has('Pegasus Boots', player) and self.has('Moon Pearl', player)
-        return self.has('Pegasus Boots', player)
-
-    def can_boots_clip_dw(self, player: int) -> bool:
-        if self.world.mode[player] != 'inverted':
-            return self.has('Pegasus Boots', player) and self.has('Moon Pearl', player)
-        return self.has('Pegasus Boots', player)
-
-    def can_get_glitched_speed_lw(self, player: int) -> bool:
-        rules = [self.has('Pegasus Boots', player), any([self.has('Hookshot', player), self.has_sword(player)])]
-        if self.world.mode[player] == 'inverted':
-            rules.append(self.has('Moon Pearl', player))
-        return all(rules)
-
-    def can_superbunny_mirror_with_sword(self, player: int) -> bool:
-        return self.has('Magic Mirror', player) and self.has_sword(player)
-
-    def can_get_glitched_speed_dw(self, player: int) -> bool:
-        rules = [self.has('Pegasus Boots', player), any([self.has('Hookshot', player), self.has_sword(player)])]
-        if self.world.mode[player] != 'inverted':
-            rules.append(self.has('Moon Pearl', player))
-        return all(rules)
-
-    def can_bomb_clip(self, region: Region, player: int) -> bool:
-        return self.is_not_bunny(region, player) and self.has('Pegasus Boots', player)
-
-    def collect(self, item: Item, event: bool = False, location: Optional[Location] = None) -> bool:
+    def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:
         if location:
             self.locations_checked.add(location)
 
@@ -927,7 +788,7 @@ class RegionType(IntEnum):
 class Region:
     name: str
     type: RegionType
-    hint_text: str
+    hint: str
     player: int
     world: Optional[MultiWorld]
     entrances: List[Entrance]
@@ -936,20 +797,22 @@ class Region:
     dungeon: Optional[Dungeon] = None
     shop: Optional = None
 
-    # LttP specific. TODO: move to a LttPRegion
-    # will be set after making connections.
-    is_light_world: bool = False
-    is_dark_world: bool = False
-
-    def __init__(self, name: str, type_: RegionType, hint: str, player: int, world: Optional[MultiWorld] = None):
+    def __init__(self, name: str, player: int, world: Optional[MultiWorld] = None, type_: RegionType = None, hint: str = None):
         self.name = name
         self.type = type_
+        self.world = world
+        if hint:
+            self.hint = hint
+        self.player = player
         self.entrances = []
         self.exits = []
         self.locations = []
-        self.world = world
-        self.hint_text = hint
-        self.player = player
+
+    @property
+    def hint_text(self) -> str:
+        if self.hint:
+            return self.hint
+        return self.name
 
     def can_reach(self, state: CollectionState) -> bool:
         if state.stale[self.player]:
@@ -1009,17 +872,37 @@ class Entrance:
         return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
 
 
+class Boss():
+    name: str
+    defeat_rule: Optional[Callable]
+    player: int
+
+    def __init__(self, name: str, player: int, defeat_rule: Optional[Callable] = True):
+        self.name = name
+        self.player = player
+        self.defeat_rule = defeat_rule
+
+    def can_defeat(self, state: CollectionState) -> bool:
+        return self.defeat_rule(state, self.player)
+
+    def __repr__(self):
+        return f"Boss({self.name})"
+
+
 class Dungeon(object):
-    def __init__(self, name: str, regions: List[Region], big_key: Item, small_keys: List[Item],
-                 dungeon_items: List[Item], player: int):
+    name: str
+    regions: List[Region]
+    dungeon_items: List[Item]
+    player: int
+    world: MultiWorld = None
+    bosses: Dict
+
+    def __init__(self, name: str, player: int, regions: List[Any], dungeon_items: List[Item]):
         self.name = name
         self.regions = regions
-        self.big_key = big_key
-        self.small_keys = small_keys
         self.dungeon_items = dungeon_items
-        self.bosses = dict()
         self.player = player
-        self.world = None
+        self.bosses = {}
 
     @property
     def boss(self) -> Optional[Boss]:
@@ -1052,20 +935,6 @@ class Dungeon(object):
         return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
 
 
-class Boss():
-    def __init__(self, name: str, enemizer_name: str, defeat_rule: Callable, player: int):
-        self.name = name
-        self.enemizer_name = enemizer_name
-        self.defeat_rule = defeat_rule
-        self.player = player
-
-    def can_defeat(self, state) -> bool:
-        return self.defeat_rule(state, self.player)
-
-    def __repr__(self):
-        return f"Boss({self.name})"
-
-
 class LocationProgressType(IntEnum):
     DEFAULT = 1
     PRIORITY = 2
@@ -1088,7 +957,7 @@ class Location:
     item: Optional[Item] = None
     parent_region: Optional[Region]
 
-    def __init__(self, player: int, name: str = '', address: int = None, parent=None):
+    def __init__(self, name: str, player: int, address: int = None, parent: Region = None):
         self.name: str = name
         self.address: Optional[int] = address
         self.parent_region = parent
@@ -1162,32 +1031,19 @@ class Item:
     type: str = None
     classification: ItemClassification
 
-    # need to find a decent place for these to live and to allow other games to register texts if they want.
-    pedestal_credit_text: str = "and the Unknown Item"
-    sickkid_credit_text: Optional[str] = None
-    magicshop_credit_text: Optional[str] = None
-    zora_credit_text: Optional[str] = None
-    fluteboy_credit_text: Optional[str] = None
-
-    # hopefully temporary attributes to satisfy legacy LttP code, proper implementation in subclass ALttPItem
-    smallkey: bool = False
-    bigkey: bool = False
-    map: bool = False
-    compass: bool = False
-
-    def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int):
+    def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int, hint: str = None):
         self.name = name
         self.classification = classification
         self.player = player
         self.code = code
+        if hint:
+            self.hint_text = hint
 
     @property
     def hint_text(self):
-        return getattr(self, "_hint_text", self.name.replace("_", " ").replace("-", " "))
-
-    @property
-    def pedestal_hint_text(self):
-        return getattr(self, "_pedestal_hint_text", self.name.replace("_", " ").replace("-", " "))
+        if self.hint_text:
+            return getattr(self, "hint_text", self.name.replace("_", " ").replace("-", " "))
+        return getattr(self, "name", self.name.replace("_", " ").replace("-", " "))
 
     @property
     def advancement(self) -> bool:

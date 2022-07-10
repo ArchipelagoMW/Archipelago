@@ -5,7 +5,7 @@ import logging
 
 from worlds.alttp.SubClasses import ALttPLocation
 from worlds.alttp.EntranceShuffle import door_addresses
-from worlds.alttp.Items import item_name_groups, item_table, ItemFactory, trap_replaceable, GetBeemizerItem
+from worlds.alttp.Items import item_name_groups, item_table, trap_replaceable, get_beemizer_item
 from worlds.alttp.Options import smallkey_shuffle
 from Utils import int16_as_bytes
 
@@ -163,7 +163,7 @@ def FillDisabledShopSlots(world):
     for location in shop_slots:
         location.shop_slot_disabled = True
         shop: Shop = location.parent_region.shop
-        location.item = ItemFactory(shop.inventory[location.shop_slot]['item'], location.player)
+        location.item = world.create_item(shop.inventory[location.shop_slot]['item'])
         location.item_rule = lambda item: item.name == location.item.name and item.player == location.player
 
 
@@ -271,7 +271,7 @@ def ShopSlotFill(world):
 
 
 def create_shops(world, player: int):
-    option = world.shop_shuffle[player]
+    option = world.shop_shuffle
 
     player_shop_table = shop_table.copy()
     if "w" in option:
@@ -280,7 +280,7 @@ def create_shops(world, player: int):
     else:
         dynamic_shop_slots = total_dynamic_shop_slots
 
-    num_slots = min(dynamic_shop_slots, world.shop_item_slots[player])
+    num_slots = min(dynamic_shop_slots, world.world.shop_item_slots[player])
     single_purchase_slots: List[bool] = [True] * num_slots + [False] * (dynamic_shop_slots - num_slots)
     world.random.shuffle(single_purchase_slots)
 
@@ -301,14 +301,14 @@ def create_shops(world, player: int):
                         new_items = new_dark_shop
                 keeper = world.random.choice([0xA0, 0xC1, 0xFF])
                 player_shop_table[name] = ShopData(typ, shop_id, keeper, custom, locked, new_items, sram_offset)
-    if world.mode[player] == "inverted":
+    if world.mode == "inverted":
         # make sure that blue potion is available in inverted, special case locked = None; lock when done.
         player_shop_table["Dark Lake Hylia Shop"] = \
             player_shop_table["Dark Lake Hylia Shop"]._replace(items=_inverted_hylia_shop_defaults, locked=None)
     chance_100 = int(world.retro_bow[player]) * 0.25 + int(
         world.smallkey_shuffle[player] == smallkey_shuffle.option_universal) * 0.5
     for region_name, (room_id, type, shopkeeper, custom, locked, inventory, sram_offset) in player_shop_table.items():
-        region = world.get_region(region_name, player)
+        region = world.world.get_region(region_name, player)
         shop: Shop = shop_class_mapping[type](region, room_id, shopkeeper, custom, locked, sram_offset)
         # special case: allow shop slots, but do not allow overwriting of base inventory behind them
         if locked is None:
@@ -324,20 +324,20 @@ def create_shops(world, player: int):
                 loc.shop_slot = index
                 loc.locked = True
                 if single_purchase_slots.pop():
-                    if world.goal[player] != 'icerodhunt':
+                    if world.goal != 'icerodhunt':
                         if world.random.random() < chance_100:
-                            additional_item = 'Rupees (100)'
+                            additional_item = world.create_item('Rupees (100)')
                         else:
-                            additional_item = 'Rupees (50)'
+                            additional_item = world.create_item('Rupees (50)')
                     else:
-                        additional_item = GetBeemizerItem(world, player, 'Nothing')
-                    loc.item = ItemFactory(additional_item, player)
+                        additional_item = get_beemizer_item(world, world.create_item('Nothing'))
+                    loc.item = additional_item
                 else:
-                    loc.item = ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player)
+                    loc.item = get_beemizer_item(world, world.create_item('Nothing'))
                     loc.shop_slot_disabled = True
                 loc.item.world = world
                 shop.region.locations.append(loc)
-                world.clear_location_cache()
+                world.world.clear_location_cache()
 
 
 class ShopData(NamedTuple):
@@ -402,12 +402,13 @@ shop_generation_types = {
 def set_up_shops(world, player: int):
     # TODO: move hard+ mode changes for shields here, utilizing the new shops
 
+    world = world.world
     if world.retro_bow[player]:
         rss = world.get_region('Red Shield Shop', player).shop
         replacement_items = [['Red Potion', 150], ['Green Potion', 75], ['Blue Potion', 200], ['Bombs (10)', 50],
                              ['Blue Shield', 50], ['Small Heart',
                                                    10]]  # Can't just replace the single arrow with 10 arrows as retro doesn't need them.
-        if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+        if world.smallkey_shuffle == smallkey_shuffle.option_universal:
             replacement_items.append(['Small Key (Universal)', 100])
         replacement_item = world.random.choice(replacement_items)
         rss.add_inventory(2, 'Single Arrow', 80, 1, replacement_item[0], replacement_item[1])
@@ -421,16 +422,16 @@ def set_up_shops(world, player: int):
             slots = [0, 1, 2]
             world.random.shuffle(slots)
             slots = iter(slots)
-            if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+            if world.smallkey_shuffle == smallkey_shuffle.option_universal:
                 shop.add_inventory(next(slots), 'Small Key (Universal)', 100)
             if world.retro_bow[player]:
                 shop.push_inventory(next(slots), 'Single Arrow', 80)
 
 
 def shuffle_shops(world, items, player: int):
-    option = world.shop_shuffle[player]
+    option = world.shop_shuffle
     if 'u' in option:
-        progressive = world.progressive[player]
+        progressive = world.progressive
         progressive = world.random.choice([True, False]) if progressive == 'grouped_random' else progressive == 'on'
         progressive &= world.goal == 'icerodhunt'
         new_items = ["Bomb Upgrade (+5)"] * 6
@@ -449,10 +450,10 @@ def shuffle_shops(world, items, player: int):
                 shop.clear_inventory()
                 capacityshop = shop
 
-        if world.goal[player] != 'icerodhunt':
+        if world.goal != 'icerodhunt':
             for i, item in enumerate(items):
                 if item.name in trap_replaceable:
-                    items[i] = ItemFactory(new_items.pop(), player)
+                    items[i] = world.create_item(new_items.pop())
                     if not new_items:
                         break
             else:
@@ -467,7 +468,7 @@ def shuffle_shops(world, items, player: int):
                     capacityshop.add_inventory(next(slots), 'Arrow Upgrade (+5)', 100, arrowupgrades)
         else:
             for item in new_items:
-                world.push_precollected(ItemFactory(item, player))
+                world.push_precollected(world.create_item(item))
 
     if any(setting in option for setting in 'ipP'):
         shops = []
@@ -576,7 +577,7 @@ def price_to_funny_price(world, item: dict, player: int):
             ShopPriceType.Bombs,
         ]
         # don't pay in universal keys to get access to universal keys
-        if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal \
+        if world.smallkey_shuffle == smallkey_shuffle.option_universal \
                 and not "Small Key (Universal)" == item['replacement']:
             price_types.append(ShopPriceType.Keys)
         if not world.retro_bow[player]:

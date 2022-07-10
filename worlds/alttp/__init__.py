@@ -2,13 +2,12 @@ import random
 import logging
 import os
 import threading
-import typing
+from typing import Dict, List
 
 from BaseClasses import Item, CollectionState, Tutorial
-from .SubClasses import ALttPItem
-from ..AutoWorld import World, WebWorld, LogicMixin
+from ..AutoWorld import World, WebWorld
 from .Options import alttp_options, smallkey_shuffle
-from .Items import as_dict_item_table, item_name_groups, item_table, GetBeemizerItem
+from .Items import item_name_groups, item_table, ALttPItem, get_beemizer_item
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
 from .Rules import set_rules
 from .ItemPool import generate_itempool, difficulties
@@ -115,25 +114,28 @@ class ALTTPWorld(World):
     item_name_groups = item_name_groups
     hint_blacklist = {"Triforce"}
 
-    item_name_to_id = {name: data.item_code for name, data in item_table.items() if type(data.item_code) == int}
+    item_name_to_id = {name: data.item_id for name, data in item_table.items() if data.item_id}
     location_name_to_id = lookup_name_to_id
 
-    data_version = 8
+    data_version = 9
     remote_items: bool = False
     remote_start_inventory: bool = False
     required_client_version = (0, 3, 2)
     web = ALTTPWeb()
 
+    # reassign some world functions
     set_rules = set_rules
-
     create_items = generate_itempool
 
-    def __init__(self, *args, **kwargs):
-        self.dungeon_local_item_names = set()
-        self.dungeon_specific_item_names = set()
-        self.rom_name_available_event = threading.Event()
-        self.has_progressive_bows = False
-        super(ALTTPWorld, self).__init__(*args, **kwargs)
+    # typing and initialization for world specific variables
+    dungeon_local_item_names = set()
+    dungeon_specific_item_names = set()
+    rom_name_available_event = threading.Event()
+    itempool: List[ALttPItem]
+    random: random.Random
+
+    # options
+    options: Dict
 
     @classmethod
     def stage_assert_generate(cls, world):
@@ -142,6 +144,8 @@ class ALTTPWorld(World):
             raise FileNotFoundError(rom_file)
 
     def generate_early(self):
+        self.options = self.world.get_options(self.player)
+
         player = self.player
         world = self.world
 
@@ -176,14 +180,14 @@ class ALTTPWorld(World):
     def create_regions(self):
         player = self.player
         world = self.world
-        if world.open_pyramid[player] == 'goal':
-            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
-                                                                'localganontriforcehunt', 'ganonpedestal'}
-        elif world.open_pyramid[player] == 'auto':
-            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
+        if self.open_pyramid == 'goal':
+            self.open_pyramid = str(self.goal in {'crystals', 'ganontriforcehunt',
+                                                                'localganontriforcehunt', 'ganonpedestal'})
+        elif self.open_pyramid == 'auto':
+            self.open_pyramid = str(self.goal in {'crystals', 'ganontriforcehunt',
                                                                 'localganontriforcehunt', 'ganonpedestal'} and \
-                                         (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull',
-                                                                    'dungeonscrossed'} or not world.shuffle_ganon)
+                                         (self.entrance_shuffle in {'vanilla', 'dungeonssimple', 'dungeonsfull',
+                                                                    'dungeonscrossed'} or not world.shuffle_ganon))
         else:
             world.open_pyramid[player] = {'on': True, 'off': False, 'yes': True, 'no': False}.get(
                 world.open_pyramid[player], 'auto')
@@ -195,8 +199,8 @@ class ALTTPWorld(World):
             create_regions(world, player)
         else:
             create_inverted_regions(world, player)
-        create_shops(world, player)
-        create_dungeons(world, player)
+        create_shops(self, player)
+        create_dungeons(self, player)
 
         if world.logic[player] not in ["noglitches", "minorglitches"] and world.shuffle[player] in \
                 {"vanilla", "dungeonssimple", "dungeonsfull", "simple", "restricted", "full"}:
@@ -411,7 +415,7 @@ class ALTTPWorld(World):
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
     def create_item(self, name: str) -> Item:
-        return ALttPItem(name, self.player, **as_dict_item_table[name])
+        return ALttPItem(name, self.player, item_table[name])
 
     @classmethod
     def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
@@ -472,22 +476,21 @@ class ALTTPWorld(World):
                 while gtower_locations and gt_item_pool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
                     item_to_place = gt_item_pool.pop()
-                    if spot_to_fill.item_rule(item_to_place):
-                        if item_to_place in localrest:
-                            localrest.remove(item_to_place)
-                        else:
-                            restitempool.remove(item_to_place)
-                        world.push_item(spot_to_fill, item_to_place, False)
-                        fill_locations.remove(spot_to_fill)  # very slow, unfortunately
-                        trash_count -= 1
+                    if item_to_place in localrest:
+                        localrest.remove(item_to_place)
+                    else:
+                        restitempool.remove(item_to_place)
+                    world.push_item(spot_to_fill, item_to_place, False)
+                    fill_locations.remove(spot_to_fill)  # very slow, unfortunately
+                    trash_count -= 1
 
 
     def get_filler_item_name(self) -> str:
         if self.world.goal[self.player] == "icerodhunt":
             item = "Nothing"
         else:
-            item = self.world.random.choice(extras_list)
-        return GetBeemizerItem(self.world, self.player, item)
+            item = self.world.random.choice(chain(difficulties[self.world.difficulty[self.player]].extras[0:5]))
+        return get_beemizer_item(self.world, self.player, item)
 
     def get_pre_fill_items(self):
         res = []
@@ -501,18 +504,9 @@ class ALTTPWorld(World):
 
 
 def get_same_seed(world, seed_def: tuple) -> str:
-    seeds: typing.Dict[tuple, str] = getattr(world, "__named_seeds", {})
+    seeds: Dict[tuple, str] = getattr(world, "__named_seeds", {})
     if seed_def in seeds:
         return seeds[seed_def]
     seeds[seed_def] = str(world.random.randint(0, 2 ** 64))
     world.__named_seeds = seeds
     return seeds[seed_def]
-
-
-class ALttPLogic(LogicMixin):
-    def _lttp_has_key(self, item, player, count: int = 1):
-        if self.world.logic[player] == 'nologic':
-            return True
-        if self.world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
-            return self.can_buy_unlimited('Small Key (Universal)', player)
-        return self.prog_items[item, player] >= count
