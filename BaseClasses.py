@@ -351,7 +351,9 @@ class MultiWorld():
             return self._entrance_cache[entrance, player]
 
     def create_location(self, name: str, address: int, player: int) -> Location:
-        return Location(player, name, address)
+        loc = Location(player, name, address)
+        loc.game = self.worlds[player].game
+        return loc
 
     def get_location(self, location: str, player: int) -> Location:
         try:
