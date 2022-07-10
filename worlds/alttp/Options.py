@@ -35,8 +35,8 @@ class OpenPyramid(Choice):
     display_name = "Open Pyramid Hole"
     option_closed = 0
     option_open = 1
-    option_goal = 3
-    option_auto = 4
+    option_goal = 2
+    option_auto = 3
     default = option_goal
 
     alias_true = option_open
