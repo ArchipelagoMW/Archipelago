@@ -233,15 +233,18 @@ Door - 0x2769B (Boat Staircase) - 0x17CA6
 
 Quarry Boathouse Behind Staircase (Quarry Boathouse) - Boat - 0x17CA6:
 
-Quarry Boathouse Upper Front (Quarry Boathouse) - Quarry Boathouse Upper Back - 0x03858:
+Quarry Boathouse Upper Front (Quarry Boathouse) - Quarry Boathouse Upper Middle - 0x17C50:
 158149 - 0x021B3 (Eraser and Shapers 1) - True - Shapers & Eraser
 158150 - 0x021B4 (Eraser and Shapers 2) - 0x021B3 - Shapers & Eraser
 158151 - 0x021B0 (Eraser and Shapers 3) - 0x021B4 - Shapers & Eraser
 158152 - 0x021AF (Eraser and Shapers 4) - 0x021B0 - Shapers & Eraser
 158153 - 0x021AE (Eraser and Shapers 5) - 0x021AF - Shapers & Eraser & Broken Shapers
-158154 - 0x03858 (Ramp Horizontal Control) - 0x021AE - Shapers & Eraser
+Door - 0x17C50 (Boathouse Barrier 1) - 0x021AE
 
-Quarry Boathouse Upper Back (Quarry Boathouse) - Quarry Boathouse Upper Front - 0x3865F:
+Quarry Boathouse Upper Middle (Quarry Boathouse) - Quarry Boathouse Upper Back - 0x03858:
+158154 - 0x03858 (Ramp Horizontal Control) - True - Shapers & Eraser
+
+Quarry Boathouse Upper Back (Quarry Boathouse) - Quarry Boathouse Upper Middle - 0x3865F:
 158155 - 0x38663 (Shortcut Door Panel) - True - True
 Door - 0x3865F (Shortcut Door) - 0x38663
 158156 - 0x021B5 (Stars and Colored Eraser 1) - True - Stars & Stars + Same Colored Symbol & Eraser
@@ -305,17 +308,17 @@ Door - 0x01BEC (Pressure Plates 1 Exit Door) - 0x033EA
 
 Keep 2nd Maze (Keep) - Keep - 0x018CE - Keep 3rd Maze - 0x019D8:
 Door - 0x018CE (Hedge Maze 2 Shortcut) - 0x00139
-158194 - 0x019DC (Hedge Maze 2) - 0x00139 - Environment
+158194 - 0x019DC (Hedge Maze 2) - True - Environment
 Door - 0x019D8 (Hedge Maze 2 Exit Door) - 0x019DC
 
 Keep 3rd Maze (Keep) - Keep - 0x019B5 - Keep 4th Maze - 0x019E6:
 Door - 0x019B5 (Hedge Maze 3 Shortcut) - 0x019DC
-158195 - 0x019E7 (Hedge Maze 3) - 0x019DC - Environment & Sound
+158195 - 0x019E7 (Hedge Maze 3) - True - Environment & Sound
 Door - 0x019E6 (Hedge Maze 3 Exit Door) - 0x019E7
 
 Keep 4th Maze (Keep) - Keep - 0x0199A - Keep Tower - 0x01A0E:
 Door - 0x0199A (Hedge Maze 4 Shortcut) - 0x019E7
-158196 - 0x01A0F (Hedge Maze 4) - 0x019E7 - Environment
+158196 - 0x01A0F (Hedge Maze 4) - True - Environment
 Door - 0x01A0E (Hedge Maze 4 Exit Door) - 0x01A0F
 
 Keep 2nd Pressure Plate (Keep) - Keep 3rd Pressure Plate - 0x01BEA:
@@ -425,7 +428,7 @@ RGB Room (Town):
 
 Town Tower (Town Tower) - Town - True - Town Tower Top - 0x27798 & 0x27799 & 0x2779A & 0x2779C:
 Door - 0x27798 (Blue Panels Door) - 0x28ACC
-Door - 0x27799 (Square Avoid Door) - 0x28A69
+Door - 0x27799 (Church Lattice Door) - 0x28A69
 Door - 0x2779A (Environmental Set Door) - 0x28B39
 Door - 0x2779C (Eraser Set Door) - 0x28AD9
 
@@ -463,7 +466,8 @@ Jungle (Jungle) - Main Island - True - Outside Jungle River - 0x3873B - Boat - 0
 158257 - 0x0087D (Waves 6) - 0x0070F - Sound & Sound Waves
 158258 - 0x002C7 (Waves 7) - 0x0087D - Sound & Sound Waves
 158259 - 0x17CAB (Popup Wall Control) - 0x002C7 - True
-158260 - 0x0026D (Popup Wall 1) - 0x17CAB - Sound & Sound Dots
+Door - 0x1475B (Popup Wall) - 0x17CAB
+158260 - 0x0026D (Popup Wall 1) - 0x1475B - Sound & Sound Dots
 158261 - 0x0026E (Popup Wall 2) - 0x0026D - Sound & Sound Dots
 158262 - 0x0026F (Popup Wall 3) - 0x0026E - Sound & Sound Dots
 158263 - 0x00C3F (Popup Wall 4) - 0x0026F - Sound & Sound Dots
@@ -557,7 +561,7 @@ Swamp Cyan Underwater (Swamp):
 158309 - 0x00005 (Cyan Underwater Negative Shapers 3) - 0x00004 - Shapers & Negative Shapers
 158310 - 0x013E6 (Cyan Underwater Negative Shapers 4) - 0x00005 - Shapers & Negative Shapers
 158311 - 0x00596 (Cyan Underwater Negative Shapers 5) - 0x013E6 - Shapers & Negative Shapers
-158312 - 0x18488 (Cyan Underwater Sliding Bridge Control) - 0x00006 - Shapers
+158312 - 0x18488 (Cyan Underwater Sliding Bridge Control) - True - Shapers
 
 Swamp Broken Shapers (Swamp) - Swamp Rotated Shapers - 0x18507:
 158303 - 0x00999 (Broken Shapers 1) - 0x00990 - Shapers & Broken Shapers
@@ -694,7 +698,7 @@ Treehouse Left Orange Bridge (Treehouse) - Treehouse Laser Room - 0x0C323:
 158389 - 0x17DB0 (Left Orange Bridge 14) - 0x17DAE - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
 158390 - 0x17DDB (Left Orange Bridge 15) - 0x17DB0 - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
 158611 - 0x17FA0 (Burnt House Discard) - 0x17DDB - Triangles
-Door - 0x0C323 (Door to Laser House) - 0x17DDB & 0x17DA2
+Door - 0x0C323 (Door to Laser House) - 0x17DDB & 0x17DA2 & 0x2700B
 
 Treehouse Green Bridge (Treehouse):
 158369 - 0x17E3C (Green Bridge 1) - True - Stars & Shapers
@@ -718,9 +722,9 @@ Mountaintop (Mountaintop) - Main Island - True - Inside Mountain Top Layer - 0x1
 158612 - 0x17C42 (Discard) - True - Triangles
 158665 - 0x002A6 (Vault) - True - Symmetry & Colored Dots & Squares & Black/White Squares & Dots
 158666 - 0x03542 (Vault Box) - 0x002A6 - True
+158800 - 0xFFF00 (Box Long) - 7 Lasers & 11 Lasers & 0x17C34 - True
 
 Inside Mountain Top Layer (Inside Mountain) - Inside Mountain Top Layer Bridge - 0x09E39:
-158800 - 0xFFF00 (Box Long) - 11 Lasers & 0x17C34 - True
 158408 - 0x09E39 (Light Bridge Controller) - True - Squares & Black/White Squares & Colored Squares & Eraser & Colored Eraser
 
 Inside Mountain Top Layer Bridge (Inside Mountain) - Inside Mountain Second Layer - 0x09E54:

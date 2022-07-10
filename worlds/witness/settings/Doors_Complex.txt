@@ -17,6 +17,7 @@ Quarry Mill Ground Floor Shortcut Door
 Quarry Mill Door to Outside Quarry Stairs
 Quarry Mill Stairs
 Quarry Boathouse Boat Staircase
+Quarry Boathouse Barrier 1
 Quarry Boathouse Shortcut Door
 Shadows Timed Door
 Shadows Laser Room Right Door
@@ -47,13 +48,14 @@ Town Maze Staircase
 Town Windmill Door
 Town RGB House Staircase
 Town Tower Blue Panels Door
-Town Tower Square Avoid Door
+Town Tower Lattice Door
 Town Tower Environmental Set Door
 Town Tower Eraser Set Door
 Windmill Door to Front of Theater
 Theater Door to Cargo Box Left
 Theater Door to Cargo Box Right
 Jungle Shortcut to River
+Jungle Popup Wall
 River Shortcut to Monastery Garden
 Bunker Bunker Entry Door
 Bunker Door to Bunker Proper
@@ -76,10 +78,11 @@ Treehouse Drawbridge
 Treehouse Door to Laser House
 Inside Mountain Door to Second Layer
 Inside Mountain Staircase Near
+Inside Mountain Light Bridge Controller 2
+Inside Mountain Light Bridge Controller 3
 Inside Mountain Door to Elevator
 Inside Mountain Staircase Far
-Inside Mountain Left Glass Door
-Inside Mountain Right Glass Door
+Inside Mountain Glass Door
 Inside Mountain Door to Final Room
 Inside Mountain Bottom Layer Rock Open
 Inside Mountain Door to Secret Area
@@ -111,6 +114,8 @@ Quarry Mill Ground Floor Shortcut Door Panel
 Quarry Mill Door to Outside Quarry Stairs Panel
 Quarry Mill Stair Control
 Quarry Boathouse Shortcut Door Panel
+Shadows Door Timer Inside
+Shadows Door Timer Outside
 Shadows Environmental Avoid 8
 Shadows Follow 5
 Shadows Lower Avoid 3
@@ -144,6 +149,7 @@ Windmill Door to Front of Theater Panel
 Theater Door to Cargo Box Left Panel
 Theater Door to Cargo Box Right Panel
 Jungle Shortcut to River Panel
+Jungle Popup Wall Control
 River Rhombic Avoid to Monastery Garden
 Bunker Bunker Entry Panel
 Bunker Door to Bunker Proper Panel
@@ -165,6 +171,8 @@ Treehouse Beyond Yellow Bridge Door Panel
 Treehouse Bridge Control
 Treehouse Left Orange Bridge 15
 Treehouse Right Orange Bridge 12
+Treehouse Laser House Door Timer Outside Control
+Treehouse Laser House Door Timer Inside Control
 Inside Mountain Moving Background 7
 Inside Mountain Obscured Vision 5
 Inside Mountain Physically Obstructed 3
@@ -176,6 +184,8 @@ Inside Mountain Same Solution 6
 Inside Mountain Giant Puzzle
 Inside Mountain Door to Final Room Left
 Inside Mountain Door to Final Room Right
+Inside Mountain Bottom Layer Discard
+Inside Mountain Rock Control
 Inside Mountain Secret Area Entry Panel
 Inside Mountain Caves Lone Pillar
 Inside Mountain Caves Shortcut to Mountain Panel

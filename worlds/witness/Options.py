@@ -12,14 +12,14 @@ from Options import Toggle, DefaultOnToggle, Option, Range, Choice
 #    display_name = "Unlock Symbols"
 
 class DisableNonRandomizedPuzzles(DefaultOnToggle):
-    """Disable puzzles that cannot be randomized.
-    Non randomized puzzles are Shadows, Monastery, and Greenhouse.
+    """Disables puzzles that cannot be randomized.
+    This includes many puzzles that heavily involve the environment, such as Shadows, Monastery or Orchard.
     The lasers for those areas will be activated as you solve optional puzzles throughout the island."""
     display_name = "Disable non randomized puzzles"
 
 
 class EarlySecretArea(Toggle):
-    """The Mountainside shortcut to the Mountain Secret Area is open from the start.
+    """Opens the Mountainside shortcut to the Mountain Secret Area from the start.
     (Otherwise known as "UTM", "Caves" or the "Challenge Area")"""
     display_name = "Early Secret Area"
 
@@ -30,8 +30,9 @@ class ShuffleSymbols(DefaultOnToggle):
 
 
 class ShuffleDoors(Choice):
-    """Opening doors will require "keys". In panels, those keys will unlock the panels on doors.
-    In doors_simple and doors_complex, the doors will magically open by themselves upon receiving the key."""
+    """Opening doors will require their respective "keys".
+    If set to "panels", those keys will unlock the panels on doors.
+    In "doors_simple" and "doors_complex", the doors will magically open by themselves upon receiving the key."""
     display_name = "Shuffle Doors"
     option_none = 0
     option_panels = 1
@@ -40,8 +41,8 @@ class ShuffleDoors(Choice):
 
 
 class ShuffleDiscardedPanels(Toggle):
-    """Discarded Panels will have items on them.
-    Solving certain Discarded Panels may still be necessary even if off!"""
+    """Add Discarded Panels into the location pool.
+    Solving certain Discarded Panels may still be necessary to beat the game, even if this is off."""
     display_name = "Shuffle Discarded Panels"
 
 

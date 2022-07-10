@@ -78,6 +78,7 @@ Doors:
 1645 - Quarry Mill Door to Outside Quarry Stairs - 0x17CE8
 1648 - Quarry Mill Stairs - 0x0368A
 1651 - Quarry Boathouse Boat Staircase - 0x2769B
+1653 - Quarry Boathouse Barrier 1 - 0x17C50
 1654 - Quarry Boathouse Shortcut Door - 0x3865F
 1656 - Shadows Timed Door - 0x19B24
 1657 - Shadows Laser Room Right Door - 0x194B2
@@ -115,6 +116,7 @@ Doors:
 1753 - Theater Door to Cargo Box Left - 0x0A16D
 1756 - Theater Door to Cargo Box Right - 0x3CCDF
 1759 - Jungle Shortcut to River - 0x3873B
+1760 - Jungle Popup Wall - 0x1475B
 1762 - River Shortcut to Monastery Garden - 0x0CF2A
 1765 - Bunker Bunker Entry Door - 0x0C2A4
 1768 - Bunker Door to Bunker Proper - 0x17C79

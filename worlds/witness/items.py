@@ -95,6 +95,8 @@ class WitnessPlayerItems:
         self.ITEM_ID_TO_DOOR_HEX = dict()
         self.DOORS = set()
 
+        self.SYMBOLS_NOT_IN_THE_GAME = set()
+
         self.EXTRA_AMOUNTS = {
             "Functioning Brain": 1,
             "Puzzle Skip": get_option_value(world, player, "puzzle_skip_amount")
@@ -103,6 +105,8 @@ class WitnessPlayerItems:
         for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS.union(StaticWitnessLogic.ALL_DOOR_ITEMS):
             if item[0] not in player_logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME:
                 del self.ITEM_TABLE[item[0]]
+                if item in StaticWitnessLogic.ALL_SYMBOL_ITEMS:
+                    self.SYMBOLS_NOT_IN_THE_GAME.add(StaticWitnessItems.ALL_ITEM_TABLE[item[0]].code)
             else:
                 self.PROGRESSION_TABLE[item[0]] = self.ITEM_TABLE[item[0]]
 
