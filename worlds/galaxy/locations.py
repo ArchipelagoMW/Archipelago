@@ -20,7 +20,7 @@ locspecialstages_table ={
     "FS: Painting the Planet Yellow": 170000013,
     "RG: Rolling in the Clouds": 170000028,
     "HS: Shrinking Satellite": 170000029,
-    "BB: Through the Poison Swamp": 170000043,
+    "BUB: Through the Poison Swamp": 170000043,
     "BB: The Floating Fortress": 170000044,
     "BB: The Secret of Buoy Base": 170000045,
     "GG: Grand Star Rescue": 170000047,
@@ -120,7 +120,7 @@ locMM_table = {
 locHL_table = {
     "SS: Rocky Road": 170000088,
     "SP: A Very Sticky Situation": 170000089,
-    "DD: Giant Eel Breakout": 170000090,
+    "DDR: Giant Eel Breakout": 170000090,
     "BM: Bigmouth's Gold Bait": 170000091,
     "SS: Choosing a Favorite Snack": 170000092,
     "BB: Racing the Spooky Speedster": 170000093,
