@@ -132,6 +132,8 @@ class StaticWitnessLocations:
         "Mountaintop Discard",
         "Mountaintop Vault Box",
 
+        "Mountaintop Trap Door Triple Exit",
+
         "Inside Mountain Obscured Vision 5",
         "Inside Mountain Moving Background 7",
         "Inside Mountain Physically Obstructed 3",
