@@ -39,6 +39,7 @@ class DKC3World(World):
     options = dkc3_options
     topology_present = False
     data_version = 0
+    #hint_blacklist = {LocationName.rocket_rush_flag}
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations

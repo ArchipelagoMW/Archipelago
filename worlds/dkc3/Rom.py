@@ -37,6 +37,7 @@ location_rom_data = {
     0xDC3012: [0x65C, 3],
     0xDC3013: [0x65C, 5],
 
+
     0xDC3014: [0x662, 1],
     0xDC3015: [0x662, 2],
     0xDC3016: [0x662, 3],
@@ -62,6 +63,7 @@ location_rom_data = {
     0xDC3026: [0x666, 3],
     0xDC3027: [0x666, 5],
 
+
     0xDC3028: [0x667, 1],
     0xDC3029: [0x667, 2],
     0xDC302A: [0x667, 3],
@@ -77,15 +79,16 @@ location_rom_data = {
     0xDC3032: [0x658, 3],
     0xDC3033: [0x658, 5],
 
-    0xDC3034: [0x658, 1],
-    0xDC3035: [0x658, 2],
-    0xDC3036: [0x658, 3],
-    0xDC3037: [0x658, 5],
+    0xDC3034: [0x66B, 1],
+    0xDC3035: [0x66B, 2],
+    0xDC3036: [0x66B, 3],
+    0xDC3037: [0x66B, 5],
 
     0xDC3038: [0x668, 1],
     0xDC3039: [0x668, 2],
     0xDC303A: [0x668, 3],
     0xDC303B: [0x668, 5],
+
 
     0xDC303C: [0x66D, 1],
     0xDC303D: [0x66D, 2],
@@ -112,6 +115,7 @@ location_rom_data = {
     0xDC304E: [0x670, 3],
     0xDC304F: [0x670, 5],
 
+
     0xDC3050: [0x673, 1],
     0xDC3051: [0x673, 2],
     0xDC3052: [0x673, 3],
@@ -136,6 +140,7 @@ location_rom_data = {
     0xDC3061: [0x65E, 2],
     0xDC3062: [0x65E, 3],
     0xDC3063: [0x65E, 5],
+
 
     0xDC3064: [0x676, 1],
     0xDC3065: [0x676, 2],
@@ -162,10 +167,11 @@ location_rom_data = {
     0xDC3076: [0x675, 3],
     0xDC3077: [0x675, 5],
 
-    0xDC3078: [0x657, 1],
-    0xDC3079: [0x657, 2],
-    0xDC307A: [0x657, 3],
-    0xDC307B: [0x657, 5],
+
+    0xDC3078: [0x67A, 1],
+    0xDC3079: [0x67A, 2],
+    0xDC307A: [0x67A, 3],
+    0xDC307B: [0x67A, 5],
 
     0xDC307C: [0x678, 1],
     0xDC307D: [0x678, 2],
@@ -186,6 +192,7 @@ location_rom_data = {
     0xDC3089: [0x671, 2],
     0xDC308A: [0x671, 3],
     0xDC308B: [0x671, 5],
+
 
     0xDC308C: [0x67B, 1],
     0xDC308D: [0x67B, 2],
@@ -369,12 +376,19 @@ def patch_rom(world, rom, player, active_level_list):
         rom.write_byte(0x3B96A9, 0x70)
         rom.write_byte(0x3B96A8, 0x3C)
 
+    # Starting Lives
+    rom.write_byte(0x9130, world.starting_life_count[player].value)
+    rom.write_byte(0x913B, world.starting_life_count[player].value)
+
+
+
     # Handle Level Shuffle Here
     if world.level_shuffle[player]:
         for i in range(len(active_level_list)):
             rom.write_byte(level_dict[level_list[i]].nameIDAddress, level_dict[active_level_list[i]].nameID)
             rom.write_byte(level_dict[level_list[i]].levelIDAddress, level_dict[active_level_list[i]].levelID)
 
+        # First levels of each world
         rom.write_byte(0x34BC3E, (0x32 + level_dict[active_level_list[0]].levelID))
         rom.write_byte(0x34BC47, (0x32 + level_dict[active_level_list[5]].levelID))
         rom.write_byte(0x34BC4A, (0x32 + level_dict[active_level_list[10]].levelID))
@@ -383,6 +397,13 @@ def patch_rom(world, rom, player, active_level_list):
         rom.write_byte(0x34BC5C, (0x32 + level_dict[active_level_list[25]].levelID))
         rom.write_byte(0x34BC65, (0x32 + level_dict[active_level_list[30]].levelID))
         rom.write_byte(0x34BC6E, (0x32 + level_dict[active_level_list[35]].levelID))
+
+        # Cotton-Top Cove Boss Unlock
+        rom.write_byte(0x34C029, (0x32 + level_dict[active_level_list[14]].levelID))
+
+        # Kong-Fused Cliffs Unlock
+        rom.write_byte(0x34C213, (0x32 + level_dict[active_level_list[25]].levelID))
+        rom.write_byte(0x34C21B, (0x32 + level_dict[active_level_list[26]].levelID))
 
     if world.goal[player] == "knautilus":
         # Swap Kastle KAOS and Knautilus

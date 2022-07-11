@@ -240,6 +240,11 @@ async def game_watcher(ctx: DKC3Context):
                             k3_ridge_progress = await snes_read(ctx, WRAM_START + 0x693, 0x2)
                             snes_buffered_write(ctx, WRAM_START + 0x693, bytes([k3_ridge_progress[0] | 0x01]))
                             snes_buffered_write(ctx, WRAM_START + 0x694, bytes([k3_ridge_progress[1] | 0x01]))
+                    elif item.item == 0xDC3000:
+                        # Handle Victory
+                        if not ctx.finished_game:
+                            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                            ctx.finished_game = True
                     else:
                         print("Item Not Recognized: ", item.item)
                     pass

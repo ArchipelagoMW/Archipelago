@@ -18,4 +18,4 @@ flower           = "Flupperius Petallus Pongus"
 wrench           = "No. 6 Wrench"
 
 # Other Definitions
-victory = "Victory"
+victory = "Donkey Kong"

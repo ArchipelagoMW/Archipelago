@@ -93,15 +93,26 @@ class KongPaletteSwap(Choice):
     default = 0
 
 
+class StartingLifeCount(Range):
+    """
+    How many extra lives to start the game with
+    """
+    display_name = "Starting Life Count"
+    range_start = 1
+    range_end = 99
+    default = 5
+
+
 dkc3_options: typing.Dict[str, type(Option)] = {
-    "death_link": DeathLink,
+    #"death_link": DeathLink,                                 # Disabled
     "goal": Goal,
-    "include_trade_sequence": IncludeTradeSequence,
+    #"include_trade_sequence": IncludeTradeSequence,          # Disabled
     "dk_coins_for_gyrocopter": DKCoinsForGyrocopter,
     "krematoa_bonus_coin_cost": KrematoaBonusCoinCost,
     "number_of_banana_birds": NumberOfBananaBirds,
     "percentage_of_banana_birds": PercentageOfBananaBirds,
     "level_shuffle": LevelShuffle,
-    "music_shuffle": MusicShuffle,
+    #"music_shuffle": MusicShuffle,                           # Disabled
     "kong_palette_swap": KongPaletteSwap,
+    "starting_life_count": StartingLifeCount,
 }
