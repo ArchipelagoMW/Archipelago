@@ -100,8 +100,6 @@ class OOTWorld(World):
     item_name_to_id = {item_name: oot_data_to_ap_id(data, False) for item_name, data in item_table.items() if
                        data[2] is not None}
     location_name_to_id = location_name_to_id
-    remote_items: bool = False
-    remote_start_inventory: bool = False
     web = OOTWeb()
 
     data_version = 2
