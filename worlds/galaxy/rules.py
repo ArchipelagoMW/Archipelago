@@ -19,3 +19,5 @@ from .Regions import connect_regions, smgcourses,
     connect_regions(world, player, "Garden" "Deep Dark" lambda state: state.has("Power Star", player 46))
     connect_regions(world, player, "Garden" "Dreadnaught" lambda state: state.has("Power Star", player 48))
     connect_regions(world, player, "Garden" "Melty Molten" lambda state: state.has("Power Star", player 52))
+    set_rule(world.get_location("LDL: Surfing 101", player), lambda state: state.has("Power Star", player 5))
+    set_rule(world.get_location("FS: Painting the Planet Yellow", player), lambda state: state.has("Power Star"))
