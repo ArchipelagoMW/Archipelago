@@ -329,6 +329,8 @@ class WitnessPlayerLogic:
             "0x2FAF6": "Tutorial Gate Secret Solution Knowledge",
             "0x079DF": "Town Hexagonal Reflection Turns On",
             "0x17DA2": "Right Orange Bridge Fully Extended",
+            "0x19B24": "Shadows Lower Avoid Patterns Visible",
+            "0x2700B": "Open Door to Treehouse Laser House"
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {

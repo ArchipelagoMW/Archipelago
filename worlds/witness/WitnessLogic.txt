@@ -287,7 +287,7 @@ Shadows Ledge (Shadows) - Shadows - 0x1855B - Quarry - 0x19865 & 0x0A2DF:
 158187 - 0x334DC (Door Timer Inside) - True - True
 158188 - 0x198B5 (Lower Avoid 1) - True - Shadows Avoid
 158189 - 0x198BD (Lower Avoid 2) - 0x198B5 - Shadows Avoid
-158190 - 0x198BF (Lower Avoid 3) - 0x198BD & 0x334DC - Shadows Avoid
+158190 - 0x198BF (Lower Avoid 3) - 0x198BD & 0x334DC & 0x19B24 - Shadows Avoid
 Door - 0x19865 (Barrier to Quarry) - 0x198BF
 Door - 0x0A2DF (Barrier to Quarry 2) - 0x198BF
 158191 - 0x19771 (Lower Avoid 4) - 0x198BF - Shadows Avoid
