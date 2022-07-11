@@ -89,10 +89,18 @@ def parse_lambda(lambda_string):
     return lambda_set
 
 
-@cache_argsless
-def get_disable_unrandomized_list():
-    adjustment_file = "Disable_Unrandomized.txt"
+def get_adjustment_file(adjustment_file):
     path = os.path.join(os.path.dirname(__file__), adjustment_file)
 
     with open(path) as f:
         return [line.strip() for line in f.readlines()]
+
+
+@cache_argsless
+def get_disable_unrandomized_list():
+    return get_adjustment_file("Disable_Unrandomized.txt")
+
+
+@cache_argsless
+def get_early_utm_list():
+    return get_adjustment_file("Early_UTM.txt")

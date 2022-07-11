@@ -49,6 +49,12 @@ If you are ready to start randomizing games, or want to start playing your favor
 our discord server at the [Archipelago Discord](https://discord.gg/archipelago). There are always people ready to answer
 any questions you might have.
 
+## What are some common terms I should know?
+
+As randomizers and multiworld randomizers have been around for a while now there are quite a lot of common terms
+and jargon that is used in conjunction by the communities surrounding them. For a lot of the terms that are more common
+to Archipelago and its specific systems please see the [Glossary](/glossary/en).
+
 ## I want to add a game to the Archipelago randomizer. How do I do that?
 
 The best way to get started is to take a look at our code on GitHub
