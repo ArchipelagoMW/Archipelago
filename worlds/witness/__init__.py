@@ -93,7 +93,8 @@ class WitnessWorld(World):
             less_junk = 1
 
         for item in self.player_logic.STARTING_INVENTORY:
-            self.world.precollected_items[self.player].append(items_by_name[item])
+            self.world.push_precollected(items_by_name[item])
+            pool.remove(items_by_name[item])
 
         for item in self.items.EXTRA_AMOUNTS:
             witness_item = self.create_item(item)
