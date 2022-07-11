@@ -1,6 +1,48 @@
 {% from "macros.lua" import dict_to_recipe %}
 -- this file gets written automatically by the Archipelago Randomizer and is in its raw form a Jinja2 Template
 require('lib')
+data.raw["rocket-silo"]["rocket-silo"].fluid_boxes = {
+    {
+        production_type = "input",
+        pipe_picture = assembler2pipepictures(),
+        pipe_covers = pipecoverspictures(),
+        base_area = 10,
+        base_level = -1,
+        pipe_connections = {
+            { type = "input", position = { 0, 5 } },
+            { type = "input", position = { 0, -5 } },
+            { type = "input", position = { 5, 0 } },
+            { type = "input", position = { -5, 0 } }
+        }
+    },
+    {
+        production_type = "input",
+        pipe_picture = assembler2pipepictures(),
+        pipe_covers = pipecoverspictures(),
+        base_area = 10,
+        base_level = -1,
+        pipe_connections = {
+            { type = "input", position = { -3, 5 } },
+            { type = "input", position = { -3, -5 } },
+            { type = "input", position = { 5, -3 } },
+            { type = "input", position = { -5, -3 } }
+        }
+    },
+    {
+        production_type = "input",
+        pipe_picture = assembler2pipepictures(),
+        pipe_covers = pipecoverspictures(),
+        base_area = 10,
+        base_level = -1,
+        pipe_connections = {
+            { type = "input", position = { 3, 5 } },
+            { type = "input", position = { 3, -5 } },
+            { type = "input", position = { 5, 3 } },
+            { type = "input", position = { -5, 3 } }
+        }
+    },
+    off_when_no_fluid_recipe = true
+}
 
 {%- for recipe_name, recipe in custom_recipes.items() %}
 data.raw["recipe"]["{{recipe_name}}"].category = "{{recipe.category}}"
