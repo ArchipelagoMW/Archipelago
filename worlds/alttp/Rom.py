@@ -1808,6 +1808,9 @@ def apply_oof_sfx(rom, oof: str):
     rom.write_bytes(0x12803A, oof_bytes)
     rom.write_bytes(0x12803A + len(oof_bytes), [0xEB, 0xEB])
 
+    #Enemizer patch: prevent Enemizer from overwriting $3188 in SPC memory with an unused sound effect ("WHAT")
+    rom.write_bytes(0x13000D, [0x00, 0x00, 0x00, 0x08])
+
 def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, sprite: str, oof: str, palettes_options,
                        world=None, player=1, allow_random_on_event=False, reduceflashing=False,
                        triforcehud: str = None, deathlink: bool = False, allowcollect: bool = False):
