@@ -1,29 +1,29 @@
 Items:
-Outside Tutorial Optional Door 1
-Outside Tutorial Door to Outpost
-Outside Tutorial Exit Door from Outpost
+Outside Tutorial Optional Door
+Outside Tutorial Outpost Entry Door
+Outside Tutorial Outpost Exit Door
 Glass Factory Entry Door
 Glass Factory Back Wall
-Symmetry Island Door to Symmetry Island Lower
-Symmetry Island Door to Symmetry Island Upper
-Desert Door to Desert Flood Light Room
+Symmetry Island Lower Door
+Symmetry Island Upper Door
+Desert Door to Flood Light Room
 Desert Door to Pond Room
 Desert Door to Water Levels Room
 Desert Door to Elevator Room
-Quarry Door to Quarry 1
-Quarry Door to Quarry 2
+Quarry Main Entry 1
+Quarry Main Entry 2
 Quarry Door to Mill
-Quarry Mill Ground Floor Shortcut Door
-Quarry Mill Door to Outside Quarry Stairs
+Quarry Mill Side Door
+Quarry Mill Rooftop Shortcut
 Quarry Mill Stairs
 Quarry Boathouse Boat Staircase
-Quarry Boathouse Barrier 1
-Quarry Boathouse Shortcut Door
+Quarry Boathouse First Barrier
+Quarry Boathouse Shortcut
 Shadows Timed Door
 Shadows Laser Room Right Door
 Shadows Laser Room Left Door
 Shadows Barrier to Quarry
-Shadows Barrier to Shadows
+Shadows Barrier to Ledge
 Keep Hedge Maze 1 Exit Door
 Keep Pressure Plates 1 Exit Door
 Keep Hedge Maze 2 Shortcut
@@ -36,10 +36,10 @@ Keep Pressure Plates 2 Exit Door
 Keep Pressure Plates 3 Exit Door
 Keep Pressure Plates 4 Exit Door
 Keep Shortcut to Shadows
-Keep Tower Shortcut to Keep
+Keep Tower Shortcut
 Monastery Shortcut
-Monastery Left Door
-Monastery Right Door
+Monastery Inner Door
+Monastery Outer Door
 Monastery Door to Garden
 Town Wooden Roof Staircase
 Town Tinted Door to RGB House
@@ -50,15 +50,15 @@ Town RGB House Staircase
 Town Tower Blue Panels Door
 Town Tower Lattice Door
 Town Tower Environmental Set Door
-Town Tower Eraser Set Door
-Windmill Door to Front of Theater
+Town Tower Wooden Roof Set Door
+Windmill Interior Door to Theater
 Theater Door to Cargo Box Left
 Theater Door to Cargo Box Right
-Jungle Shortcut to River
+Jungle Bamboo Shortcut to River
 Jungle Popup Wall
 River Shortcut to Monastery Garden
 Bunker Bunker Entry Door
-Bunker Door to Bunker Proper
+Bunker Tinted Glass Door
 Bunker Door to Ultraviolet Room
 Bunker Door to Elevator
 Swamp Entry Door
@@ -75,21 +75,19 @@ Treehouse First Door
 Treehouse Second Door
 Treehouse Beyond Yellow Bridge Door
 Treehouse Drawbridge
-Treehouse Door to Laser House
-Inside Mountain Door to Second Layer
-Inside Mountain Staircase Near
-Inside Mountain Light Bridge Controller 2
-Inside Mountain Light Bridge Controller 3
-Inside Mountain Door to Elevator
-Inside Mountain Staircase Far
-Inside Mountain Glass Door
+Treehouse Timed Door to Laser House
+Inside Mountain First Layer Exit Door
+Inside Mountain Second Layer Staircase Near
+Inside Mountain Second Layer Exit Door
+Inside Mountain Second Layer Staircase Far
+Inside Mountain Giant Puzzle Exit Door
 Inside Mountain Door to Final Room
-Inside Mountain Bottom Layer Rock Open
+Inside Mountain Bottom Layer Rock
 Inside Mountain Door to Secret Area
-Inside Mountain Caves Secret Black Door to Challenge
-Inside Mountain Caves Shortcut to Mountain Door
-Inside Mountain Caves Shortcut to Swamp Door
-Inside Mountain Caves Challenge Entry Door
+Caves Pillar Door
+Caves-Mountain Shortcut
+Caves-Swamp Shortcut
+Challenge Entry Door
 Challenge Door to Theater Walkway
 Theater Walkway Door to Back of Theater
 Theater Walkway Door to Desert Elevator Room

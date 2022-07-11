@@ -60,31 +60,31 @@ Doors:
 
 1400 - Caves-Mountain Shortcut - 0x2D73F
 
-1600 - Outside Tutorial Optional Door 1 - 0x03BA2
-1603 - Outside Tutorial Door to Outpost - 0x0A170
-1606 - Outside Tutorial Exit Door from Outpost - 0x04CA3
+1600 - Outside Tutorial Optional Door - 0x03BA2
+1603 - Outside Tutorial Outpost Entry Door - 0x0A170
+1606 - Outside Tutorial Outpost Exit Door - 0x04CA3
 1609 - Glass Factory Entry Door - 0x01A29
 1612 - Glass Factory Back Wall - 0x0D7ED
-1615 - Symmetry Island Door to Symmetry Island Lower - 0x17F3E
-1618 - Symmetry Island Door to Symmetry Island Upper - 0x18269
-1621 - Desert Door to Desert Flood Light Room - 0x09FEE
+1615 - Symmetry Island Lower Door - 0x17F3E
+1618 - Symmetry Island Upper Door - 0x18269
+1621 - Desert Door to Flood Light Room - 0x09FEE
 1624 - Desert Door to Pond Room - 0x0C2C3
 1627 - Desert Door to Water Levels Room - 0x0A24B
 1630 - Desert Door to Elevator Room - 0x0C316
-1633 - Quarry Door to Quarry 1 - 0x09D6F
-1636 - Quarry Door to Quarry 2 - 0x17C07
+1633 - Quarry Main Entry 1 - 0x09D6F
+1636 - Quarry Main Entry 2 - 0x17C07
 1639 - Quarry Door to Mill - 0x02010
-1642 - Quarry Mill Ground Floor Shortcut Door - 0x275FF
-1645 - Quarry Mill Door to Outside Quarry Stairs - 0x17CE8
+1642 - Quarry Mill Side Door - 0x275FF
+1645 - Quarry Mill Rooftop Shortcut - 0x17CE8
 1648 - Quarry Mill Stairs - 0x0368A
 1651 - Quarry Boathouse Boat Staircase - 0x2769B
-1653 - Quarry Boathouse Barrier 1 - 0x17C50
-1654 - Quarry Boathouse Shortcut Door - 0x3865F
+1653 - Quarry Boathouse First Barrier - 0x17C50
+1654 - Quarry Boathouse Shortcut - 0x3865F
 1656 - Shadows Timed Door - 0x19B24
 1657 - Shadows Laser Room Right Door - 0x194B2
 1660 - Shadows Laser Room Left Door - 0x19665
 1663 - Shadows Barrier to Quarry - 0x19865,0x0A2DF
-1666 - Shadows Barrier to Shadows - 0x1855B,0x19ADE
+1666 - Shadows Barrier to Ledge - 0x1855B,0x19ADE
 1669 - Keep Hedge Maze 1 Exit Door - 0x01954
 1672 - Keep Pressure Plates 1 Exit Door - 0x01BEC
 1675 - Keep Hedge Maze 2 Shortcut - 0x018CE
@@ -97,10 +97,10 @@ Doors:
 1696 - Keep Pressure Plates 3 Exit Door - 0x01CD5
 1699 - Keep Pressure Plates 4 Exit Door - 0x01D40
 1702 - Keep Shortcut to Shadows - 0x09E3D
-1705 - Keep Tower Shortcut to Keep - 0x04F8F
+1705 - Keep Tower Shortcut - 0x04F8F
 1708 - Monastery Shortcut - 0x0364E
-1711 - Monastery Left Door - 0x0C128
-1714 - Monastery Right Door - 0x0C153
+1711 - Monastery Inner Door - 0x0C128
+1714 - Monastery Outer Door - 0x0C153
 1717 - Monastery Door to Garden - 0x03750
 1720 - Town Wooden Roof Staircase - 0x034F5
 1723 - Town Tinted Door to RGB House - 0x28A61
@@ -111,15 +111,15 @@ Doors:
 1738 - Town Tower Blue Panels Door - 0x27798
 1741 - Town Tower Lattice Door - 0x27799
 1744 - Town Tower Environmental Set Door - 0x2779A
-1747 - Town Tower Eraser Set Door - 0x2779C
-1750 - Windmill Door to Front of Theater - 0x17F88
+1747 - Town Tower Wooden Roof Set Door - 0x2779C
+1750 - Windmill Interior Door to Theater - 0x17F88
 1753 - Theater Door to Cargo Box Left - 0x0A16D
 1756 - Theater Door to Cargo Box Right - 0x3CCDF
-1759 - Jungle Shortcut to River - 0x3873B
+1759 - Jungle Bamboo Shortcut to River - 0x3873B
 1760 - Jungle Popup Wall - 0x1475B
 1762 - River Shortcut to Monastery Garden - 0x0CF2A
 1765 - Bunker Bunker Entry Door - 0x0C2A4
-1768 - Bunker Door to Bunker Proper - 0x17C79
+1768 - Bunker Tinted Glass Door - 0x17C79
 1771 - Bunker Door to Ultraviolet Room - 0x0C2A3
 1774 - Bunker Door to Elevator - 0x0A08D
 1777 - Swamp Entry Door - 0x00C1C
@@ -136,19 +136,18 @@ Doors:
 1810 - Treehouse Second Door - 0x0C310
 1813 - Treehouse Beyond Yellow Bridge Door - 0x0A181
 1816 - Treehouse Drawbridge - 0x0C32D
-1819 - Treehouse Door to Laser House - 0x0C323
-1822 - Inside Mountain Door to Second Layer - 0x09E54
-1825 - Inside Mountain Staircase Near - 0x09FFB
-1828 - Inside Mountain Door to Elevator - 0x09EDD
-1831 - Inside Mountain Staircase Far - 0x09E07
-1834 - Inside Mountain Glass Door - 0x09F89
+1819 - Treehouse Timed Door to Laser House - 0x0C323
+1822 - Inside Mountain First Layer Exit Door - 0x09E54
+1825 - Inside Mountain Second Layer Staircase Near - 0x09FFB
+1828 - Inside Mountain Second Layer Exit Door - 0x09EDD
+1831 - Inside Mountain Second Layer Staircase Far - 0x09E07
+1834 - Inside Mountain Giant Puzzle Exit Door - 0x09F89
 1840 - Inside Mountain Door to Final Room - 0x0C141
-1843 - Inside Mountain Bottom Layer Rock Open - 0x17F33
+1843 - Inside Mountain Bottom Layer Rock - 0x17F33
 1846 - Inside Mountain Door to Secret Area - 0x2D77D
-1849 - Inside Mountain Caves Secret Black Door to Challenge - 0x019A5
-1852 - Inside Mountain Caves Shortcut to Mountain Door - 0x2D73F
-1855 - Inside Mountain Caves Shortcut to Swamp Door - 0x2D859
-1858 - Inside Mountain Caves Challenge Entry Door - 0x0A19A
+1849 - Caves Pillar Door - 0x019A5
+1855 - Caves-Swamp Shortcut - 0x2D859
+1858 - Challenge Entry Door - 0x0A19A
 1861 - Challenge Door to Theater Walkway - 0x0348A
 1864 - Theater Walkway Door to Back of Theater - 0x27739
 1867 - Theater Walkway Door to Desert Elevator Room - 0x27263
