@@ -59,6 +59,47 @@ If everything worked out, you will see a textbox informing you the connection ha
 To play offline, first generate a seed on the game's settings page.
 Create a room and download the `.apsm64ex` file, and start the game with the `--sm64ap_file "path/to/FileName"` launch argument.
 
+## Using Batch Files to play offline and MultiWorld games
+
+As an alternative to launching the game with sm64pclauncher, it is also possible to launch the completed build with the use of Windows batch files. This has the added benefit of streamlining the join process so that manual editing of connection info is not needed for each new game. However, you'll need to be somewhat comfortable with creating and using batch files.
+
+IMPORTANT NOTE: The remainder of this section uses copy-and-paste code that assumes you're using the US version. If you instead use the Japanese version, you'll need to edit the EXE name accordingly by changing "sm64.us.f3dex2e.exe" to "sm64.jn.f3dex2e.exe".
+
+# Making an offline.bat for launching offline patch files
+
+Open Notepad. Paste in the following text: `start sm64.us.f3dex2e.exe --sm64ap_file %1 --skip-intro`
+Go to File > Save As...
+Navigate to the folder you selected for your SM64 build when you followed the Build guide for SM64PCLauncher earlier. Once there, navigate further into `build` and then `us_pc`. This folder should be the same folder that `sm64.us.f3dex2e.exe` resides in. 
+For "File name:" name it as: `"offline.bat"` . THE QUOTE MARKS ARE IMPORTANT! Otherwise it will create a text file instead ("offline.bat.txt") which won't work as a batch file until you alter the extension properly.
+Now you should have a "offline.bat" file with a gear icon in the same folder as your "sm64.us.f3dex2e.exe". (If the icon is instead a notepad, you saved it as a TXT file instead and need to change the extension to BAT). Right click that offline.bat file and choose Send To > Desktop (Create Shortcut).
+The batch file you just created and made a shortcut for is set up to accept patch files dragged into it. Start an offline singleplayer game if you haven't already, download the `.apsm64ex` patch file that was prepared by the seed generation, and drag-n-drop that onto the batch file to open the game and start playing.
+NOTE: When playing offline patch files, a `.save` file is created in the same directory as your patch file, which contains your save data for that seed. Don't delete it until you're done with that seed.
+
+# Making an online.bat for launching online Multiworld games
+
+The steps here are very similar, as you will be making a batch file in the same location as the offline one. However, the text you put into the batch file is different, and you won't be dragging patch files onto it.
+
+Use the same steps as before to open Notepad and paste in the following:
+
+`set /p port="Enter port number of room - "
+set /p slot="Enter slot name - "
+start sm64.us.f3dex2e.exe --sm64ap_name "%slot%" --sm64ap_ip archipelago.gg:%port% --skip-intro`
+
+Save and shortcut the same as before. Unlike the offline batch file, you'll open this one simply by double-clicking it. The window that opens will ask you for the port of the room you wish to join - this five-digit number will be provided by the seed page the game host will share with all players post-generation. Then it will ask you for your slot name - this name is set up in your YAML, and also will be shown on the same seed page previously mentioned, if you need to double-check it.
+
+Once you provide those two bits of information, the game will open. If the info is correct, upon starting the game you should see "Connected to Archipelago" on the bottom of your screen, and be able to enter the castle. If you don't see this text and crash upon entering the castle, try again and ensure you're typing the port and slot name correctly - even a single typo will cause your connection to fail.
+
+# Addendum - Deleting old saves
+
+Loading an old Mario save alongside a new seed is a bad idea, as it can cause locked doors and castle secret stars to already be unlocked / obtained. You should avoid opening a save that says "Stars x 0" as opposed to one that simply says "New".
+
+You can manually delete these old saves ingame before starting a new game, but this can become tedious to do every time. With a small edit to the previous batch files, you can have these old saves deleted automatically, by adding this line to the batch file before the start command. As an example, here it's added to the offline bat:
+
+`del %AppData%\sm64ex\*.bin
+start sm64.us.f3dex2e.exe --sm64ap_file %1 --skip-intro`
+
+This extra line deletes any previous save data before opening the game. Don't worry about lost stars or checks - the AP server (or in the case of offline, the patch's `.save` file) keeps track of your star count, unlocked keys/caps/cannons, and which locations have already been checked, so you won't have to redo them. At worst you'll have to rewatch the door unlocking animations, and catch rabbit Mips twice for his first star again if you haven't yet collected the second one.
+
 ## Installation Troubleshooting
 
 Start the game from the command line to view helpful messages regarding SM64EX.
