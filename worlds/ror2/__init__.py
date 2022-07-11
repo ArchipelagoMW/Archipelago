@@ -110,7 +110,8 @@ class RiskOfRainWorld(World):
             "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for i in range(16)),
             "totalLocations": self.world.total_locations[self.player].value,
             "totalRevivals": self.world.total_revivals[self.player].value,
-            "startWithDio": self.world.start_with_revive[self.player].value
+            "startWithDio": self.world.start_with_revive[self.player].value,
+            "FinalStageDeath": self.world.final_stage_death[self.player].value
         }
 
     def create_item(self, name: str) -> Item:

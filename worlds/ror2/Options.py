@@ -36,6 +36,10 @@ class AllowLunarItems(DefaultOnToggle):
 class StartWithRevive(DefaultOnToggle):
     """Start the game with a `Dio's Best Friend` item."""
     display_name = "Start with a Revive"
+    
+class FinalStageDeath(DefaultOnToggle):
+    """Death on the final boss stage counts as a win."""
+    display_name = "Final Stage Death is Win"
 
 
 class GreenScrap(Range):
@@ -161,6 +165,7 @@ ror2_options: typing.Dict[str, type(Option)] = {
     "total_locations":      TotalLocations,
     "total_revivals":       TotalRevivals,
     "start_with_revive":    StartWithRevive,
+    "final_stage_death":    FinalStageDeath,
     "item_pickup_step":     ItemPickupStep,
     "enable_lunar":         AllowLunarItems,
     "item_weights":         ItemWeights,
