@@ -144,7 +144,7 @@ class DarkSouls3World(World):
     def create_items(self):
         for name, address in self.item_name_to_id.items():
             # Specific items will be included in the item pool under certain conditions. See generate_basic
-            if name != "Basin of Vows" and name != "Path of the Dragon Gesture":
+            if name != "Basin of Vows":
                 self.world.itempool += [self.create_item(name)]
 
     def generate_early(self):
