@@ -59,7 +59,7 @@ class DKC3World(World):
 
     def _get_slot_data(self):
         return {
-            "death_link": self.world.death_link[self.player].value,
+            #"death_link": self.world.death_link[self.player].value,
         }
 
     def _create_items(self, name: str):
@@ -75,6 +75,7 @@ class DKC3World(World):
         return slot_data
 
     def generate_basic(self):
+        self.topology_present = self.world.level_shuffle[self.player].value
         itempool: typing.List[DKC3Item] = []
 
         # Levels
@@ -102,7 +103,7 @@ class DKC3World(World):
         total_required_locations += 13
 
         ## Brothers Bear
-        if self.world.include_trade_sequence[self.player]:
+        if False:#self.world.include_trade_sequence[self.player]:
             total_required_locations += 8
 
         itempool += [self.create_item(ItemName.bonus_coin)] * 85
@@ -131,6 +132,8 @@ class DKC3World(World):
 
             rom = LocalRom(get_base_rom_path())
             patch_rom(self.world, rom, self.player, self.active_level_list)
+
+            self.active_level_list.append(LocationName.rocket_rush_region)
         
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
@@ -148,7 +151,6 @@ class DKC3World(World):
 
     def modify_multidata(self, multidata: dict):
         import base64
-        print("DKC3 modify_multidata")
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()
         rom_name = getattr(self, "rom_name", None)
@@ -156,6 +158,25 @@ class DKC3World(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
+
+        if self.topology_present:
+            world_names = [
+            LocationName.lake_orangatanga_region,
+            LocationName.kremwood_forest_region,
+            LocationName.cotton_top_cove_region,
+            LocationName.mekanos_region,
+            LocationName.k3_region,
+            LocationName.razor_ridge_region,
+            LocationName.kaos_kore_region,
+            LocationName.krematoa_region,
+            ]
+            er_hint_data = {}
+            for world_index in range(len(world_names)):
+                for level_index in range(5):
+                    level_region = self.world.get_region(self.active_level_list[world_index * 5 + level_index], self.player)
+                    for location in level_region.locations:
+                        er_hint_data[location.address] = world_names[world_index]
+            multidata['er_hint_data'][self.player] = er_hint_data
 
     def create_regions(self):
         location_table = setup_locations(self.world, self.player)

@@ -612,7 +612,7 @@ def create_regions(world, player: int, active_locations):
     blue_region_locations = {}
     blizzard_region_locations = {}
 
-    if world.include_trade_sequence[player]:
+    if False:#world.include_trade_sequence[player]:
         bazaar_region_locations.update({
             LocationName.bazaars_general_store_1: [0x615, 2, True],
             LocationName.bazaars_general_store_2: [0x615, 3, True],
@@ -767,7 +767,7 @@ def connect_regions(world, player, level_list):
     for i in range(0, len(mekanos_levels)):
         connect(world, player, names, LocationName.mekanos_region, mekanos_levels[i])
         
-    if world.include_trade_sequence[player]:
+    if False:#world.include_trade_sequence[player]:
         connect(world, player, names, LocationName.mekanos_region, LocationName.sky_high_secret_region,
                 lambda state: (state.has(ItemName.bowling_ball, player, 1)))
     else:
@@ -802,7 +802,7 @@ def connect_regions(world, player, level_list):
     for i in range(0, len(razor_ridge_levels)):
         connect(world, player, names, LocationName.razor_ridge_region, razor_ridge_levels[i])
         
-    if world.include_trade_sequence[player]:
+    if False:#world.include_trade_sequence[player]:
         connect(world, player, names, LocationName.razor_ridge_region, LocationName.cifftop_cache_region,
                 lambda state: (state.has(ItemName.wrench, player, 1)))
     else:

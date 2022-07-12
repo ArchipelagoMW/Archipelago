@@ -243,7 +243,7 @@ location_rom_data = {
     0xDC30B4: [0x64D, 1],
     0xDC30B5: [0x64E, 1],
 
-    0xDC30B6: [0x615, 7], # DKC3_TODO: Banana Bird Mother
+    0xDC30B6: [0x5FD, 4],
 
     0xDC30B7: [0x615, 2, True],
     0xDC30B8: [0x615, 3, True],
@@ -379,7 +379,6 @@ def patch_rom(world, rom, player, active_level_list):
     # Starting Lives
     rom.write_byte(0x9130, world.starting_life_count[player].value)
     rom.write_byte(0x913B, world.starting_life_count[player].value)
-
 
 
     # Handle Level Shuffle Here

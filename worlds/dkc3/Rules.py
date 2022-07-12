@@ -8,7 +8,7 @@ from ..generic.Rules import add_rule, set_rule
 
 def set_rules(world: MultiWorld, player: int):
 
-    if world.include_trade_sequence[player]:
+    if False:#world.include_trade_sequence[player]:
         add_rule(world.get_location(LocationName.barnacles_island, player),
                     lambda state: state.has(ItemName.shell, player))
 
