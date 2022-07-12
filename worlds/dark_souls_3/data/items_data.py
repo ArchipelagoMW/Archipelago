@@ -1,6 +1,9 @@
-# Regular expression to parse the Python list https://regex101.com/r/XdtiLR/2
-# List of location https://darksouls3.wiki.fextralife.com/Locations
-
+"""
+Tools used to create this list :
+List of all items https://docs.google.com/spreadsheets/d/1nK2g7g6XJ-qphFAk1tjP3jZtlXWDQY-ItKLa_sniawo/edit#gid=1551945791
+Regular expression parser https://regex101.com/r/XdtiLR/2
+List of locations https://darksouls3.wiki.fextralife.com/Locations
+"""
 
 weapons_upgrade_5_table = {
     "Irithyll Straight Sword": 0x0020A760,
