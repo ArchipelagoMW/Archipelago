@@ -1,5 +1,11 @@
 from ..generic.Rules import add_rule
 from .Regions import connect_regions, smgcourses,
+    def smg_gate_open(self, player: int):
+        return self.has('Grand Star Engine Room', player) 
+    def smg_can_finish(self, player: int):
+        return self.has('Power Star 70') and self.has('Grand Star Bedroom')  
+    def smg_purple_coins(self, player: int):
+        return return self.has('Power Star 70') and self.has('Grand Star Bedroom') and self.has('Grand Star Engine Room', player) 
     
     connect_regions(world, player, "Menu", "Good Egg", lambda state: True)
     connect_regions(world, player, "Menu", "Honeyhive", lambda state: state.has("Power Star", player, 3))
@@ -39,3 +45,9 @@ from .Regions import connect_regions, smgcourses,
     set_rule(world.get_location("SS: Choosing a Favorite Snack") lambda state: state.has("Grand Star Bedroom", player) and state.has("Power Star", player, 36) and state.has("Grand Star Fountain"))
     set_rule(world.get_location("BB: Racing the Spooky Speedster") lambda state: state.has("Grand Star Engine Room", player) and state.has("Grand Star Kitchen", player))
     set_rule(world.get_location("SC: Star Bunnies in the Snow") lambda state: state.has("Grand Star Engine Room", player) and state.has("Power Star", player, 52))
+    add_rule(world.get_location("GE: Dino Piranha Speed Run") lambda state: state.has("Power Star", player, 13))
+    add_rule(world.get_location("GE: Purple Coin Omelet") lambda state: state.smg_gate_open and smg_can_finish)
+    add_rule(world.get_location("HH: Honeyhive Cosmic Mario Race") lambda state: state.has("Power Star", player, 16))
+    add_rule(world.get_location("HH: Honeyhive's Purple Coins") lambda state: state.smg_can_finish and smg_gate_open)
+    add_rule(world.get_location("SJ: Pull Star Path Speed Run") lambda state: state.has("Power Star", player, 23))
+    add_rule(world.get_location("Purple Coin Spacewalk") lambda state: state.smg_purple_coins)
