@@ -106,12 +106,18 @@ Symmetry Island Upper (Symmetry Island):
 158700 - 0x0360D (Laser Panel) - 0x00A68 - True
 Laser - 0x00509 (Laser) - 0x0360D - True
 
-Orchard (Orchard) - Main Island - True:
+Orchard (Orchard) - Main Island - True - Orchard Beyond First Gate - 0x03307:
 158071 - 0x00143 (Apple Tree 1) - True - Environment
 158072 - 0x0003B (Apple Tree 2) - 0x00143 - Environment
 158073 - 0x00055 (Apple Tree 3) - 0x0003B - Environment
+Door - 0x03307 (Mid Gate) - 0x00055
+
+Orchard Beyond First Gate (Orchard) - Orchard End - 0x03313:
 158074 - 0x032F7 (Apple Tree 4) - 0x00055 - Environment
 158075 - 0x032FF (Apple Tree 5) - 0x032F7 - Environment
+Door - 0x03313 (Final Gate) - 0x032FF
+
+Orchard End (Orchard):
 
 Desert Outside (Desert) - Main Island - True - Desert Floodlight Room - 0x09FEE:
 158652 - 0x0CC7B (Vault) - True - Dots & Shapers & Rotated Shapers & Negative Shapers
@@ -374,10 +380,10 @@ Inside Monastery (Monastery):
 
 Monastery Garden (Monastery):
 
-Town (Town) - Main Island - True - Boat - 0x0A054 - Town Maze Rooftop - 0x28AA2 - Town Church - True - Town Wooden Rooftop - 0x034F5 - RGB House - 0x28A61 - Windmill Interior - 0x1845B:
+Town (Town) - Main Island - True - Boat - 0x0A054 - Town Maze Rooftop - 0x28AA2 - Town Church - True - Town Wooden Rooftop - 0x034F5 - RGB House - 0x28A61 - Windmill Interior - 0x1845B - Town Inside Cargo Box - 0x0A0C9:
 158218 - 0x0A054 (Boat Spawn) - 0x17CA6 | 0x17CDF | 0x09DB8 | 0x17C95 - Boat
-158219 - 0x0A0C8 (Cargo Box) - True - Squares & Black/White Squares & Shapers
-158606 - 0x17D01 (Cargo Box Discard) - 0x0A0C8 - Triangles
+158219 - 0x0A0C8 (Cargo Box Panel) - True - Squares & Black/White Squares & Shapers
+Door - 0x0A0C9 (Cargo Box Door) - 0x0A0C8
 158707 - 0x09F98 (Desert Laser Redirect) - True - True
 158220 - 0x18590 (Tree Outlines) - True - Symmetry & Environment
 158221 - 0x28AE3 (Vines Shadows Follow) - 0x18590 - Shadows Follow & Environment
@@ -397,6 +403,9 @@ Door - 0x03BB0 (Door to Church) - 0x28A0D
 Door - 0x28AA2 (Maze Staircase) - 0x28A79
 158241 - 0x17F5F (Windmill Door Panel) - True - Dots
 Door - 0x1845B (Windmill Door) - 0x17F5F
+
+Town Inside Cargo Box (Town):
+158606 - 0x17D01 (Cargo Box Discard) - True - Triangles
 
 Town Maze Rooftop (Town) - Town Red Rooftop - 0x2896A:
 158229 - 0x2896A (Maze Rooftop Bridge Control) - True - Shapers
@@ -893,14 +902,14 @@ Door - 0x27263 (Door to Desert Elevator Room) - 0x2773D
 Door - 0x09E87 (Door to Town) - 0x09E85
 
 Final Room (Inside Mountain Final Room) - Elevator - 0x339BB & 0x33961:
-158522 - 0x0383A (Stars Pillar) - True - Stars & Pillar
-158523 - 0x09E56 (Stars and Dots Pillar) - 0x0383A - Stars & Dots & Pillar
-158524 - 0x09E5A (Dot Grid Pillar) - 0x09E56 - Dots & Pillar
-158525 - 0x33961 (Sparse Dots Pillar) - 0x09E5A - Dots & Symmetry & Pillar
-158526 - 0x0383D (Dot Maze Pillar) - True - Dots & Pillar
-158527 - 0x0383F (Squares Pillar) - 0x0383D - Squares & Black/White Squares & Pillar
-158528 - 0x03859 (Shapers Pillar) - 0x0383F - Shapers & Pillar
-158529 - 0x339BB (Squares and Stars) - 0x03859 - Squares & Black/White Squares & Stars & Symmetry & Pillar
+158522 - 0x0383A (Right Pillar 1) - True - Stars & Pillar
+158523 - 0x09E56 (Right Pillar 2) - 0x0383A - Stars & Dots & Pillar
+158524 - 0x09E5A (Right Pillar 3) - 0x09E56 - Dots & Pillar
+158525 - 0x33961 (Right Pillar 4) - 0x09E5A - Dots & Symmetry & Pillar
+158526 - 0x0383D (Left Pillar 1) - True - Dots & Pillar
+158527 - 0x0383F (Left Pillar 2) - 0x0383D - Squares & Black/White Squares & Pillar
+158528 - 0x03859 (Left Pillar 3) - 0x0383F - Shapers & Pillar
+158529 - 0x339BB (Left Pillar 4) - 0x03859 - Squares & Black/White Squares & Stars & Symmetry & Pillar
 
 Elevator (Inside Mountain Final Room):
 158530 - 0x3D9A6 (Elevator Door Closer Left) - True - True

@@ -58,7 +58,7 @@ Doors:
 1197 - Swamp Maze Control (Panel) - 0x17C0A
 1310 - Boat - 0x17CDF,0x17CC8,0x17CA6,0x09DB8,0x17C95,0x0A054
 
-1400 - Caves-Mountain Shortcut - 0x2D73F
+1400 - Caves Mountain Shortcut - 0x2D73F
 
 1600 - Outside Tutorial Optional Door - 0x03BA2
 1603 - Outside Tutorial Outpost Entry Door - 0x0A170
@@ -67,6 +67,8 @@ Doors:
 1612 - Glass Factory Back Wall - 0x0D7ED
 1615 - Symmetry Island Lower Door - 0x17F3E
 1618 - Symmetry Island Upper Door - 0x18269
+1619 - Orchard Middle Gate - 0x03307
+1620 - Orchard Final Gate - 0x03313
 1621 - Desert Door to Flood Light Room - 0x09FEE
 1624 - Desert Door to Pond Room - 0x0C2C3
 1627 - Desert Door to Water Levels Room - 0x0A24B
@@ -102,6 +104,7 @@ Doors:
 1711 - Monastery Inner Door - 0x0C128
 1714 - Monastery Outer Door - 0x0C153
 1717 - Monastery Door to Garden - 0x03750
+1718 - Town Cargo Box Door - 0x0A0C9
 1720 - Town Wooden Roof Staircase - 0x034F5
 1723 - Town Tinted Door to RGB House - 0x28A61
 1726 - Town Door to Church - 0x03BB0
@@ -146,7 +149,7 @@ Doors:
 1843 - Inside Mountain Bottom Layer Rock - 0x17F33
 1846 - Inside Mountain Door to Secret Area - 0x2D77D
 1849 - Caves Pillar Door - 0x019A5
-1855 - Caves-Swamp Shortcut - 0x2D859
+1855 - Caves Swamp Shortcut - 0x2D859
 1858 - Challenge Entry Door - 0x0A19A
 1861 - Challenge Door to Theater Walkway - 0x0348A
 1864 - Theater Walkway Door to Back of Theater - 0x27739

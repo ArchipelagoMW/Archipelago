@@ -142,6 +142,9 @@ class StaticWitnessLocations:
         "Inside Mountain Same Solution 6",
         "Inside Mountain Elevator Discard",
         "Inside Mountain Giant Puzzle",
+
+        "Inside Mountain Final Room Left Pillar 4",
+        "Inside Mountain Final Room Right Pillar 4",
     }
 
     UNCOMMON_LOCATIONS = {

@@ -6,6 +6,8 @@ Glass Factory Entry Door
 Glass Factory Back Wall
 Symmetry Island Lower Door
 Symmetry Island Upper Door
+Orchard Middle Gate
+Orchard Final Gate
 Desert Door to Flood Light Room
 Desert Door to Pond Room
 Desert Door to Water Levels Room
@@ -41,6 +43,7 @@ Monastery Shortcut
 Monastery Inner Door
 Monastery Outer Door
 Monastery Door to Garden
+Town Cargo Box Door
 Town Wooden Roof Staircase
 Town Tinted Door to RGB House
 Town Door to Church
@@ -85,8 +88,8 @@ Inside Mountain Door to Final Room
 Inside Mountain Bottom Layer Rock
 Inside Mountain Door to Secret Area
 Caves Pillar Door
-Caves-Mountain Shortcut
-Caves-Swamp Shortcut
+Caves Mountain Shortcut
+Caves Swamp Shortcut
 Challenge Entry Door
 Challenge Door to Theater Walkway
 Theater Walkway Door to Back of Theater
@@ -100,6 +103,8 @@ Glass Factory Entry Door Panel
 Glass Factory Vertical Symmetry 5
 Symmetry Island Door to Symmetry Island Lower Panel
 Symmetry Island Door to Symmetry Island Upper Panel
+Orchard Apple Tree 3
+Orchard Apple Tree 5
 Desert Door to Desert Flood Light Room Panel
 Desert Artificial Light Reflection 3
 Desert Door to Water Levels Room Panel
@@ -132,6 +137,7 @@ Monastery Shortcut Door Panel
 Monastery Door Open Left
 Monastery Door Open Right
 Monastery Rhombic Avoid 3
+Town Cargo Box Panel
 Town Full Dot Grid Shapers 5
 Town Tinted Door Panel
 Town Door to Church Stars Panel
