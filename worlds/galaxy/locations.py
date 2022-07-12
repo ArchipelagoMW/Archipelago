@@ -40,7 +40,7 @@ locbosses_table = {
     "B: The Firery Stronghold": 170000030,
     "BJ: Sinking the Airships": 170000045,
     "BJ: King Kaliente's Spicy Return": 170000067
-    "B: The Fate of the Universe": 170000095,
+    "B:  Darkness on the Horizon": 170000095,
 }
 
 locSJ_table = {
@@ -79,6 +79,8 @@ locGG_table = {
     "GG: Bunnies in the Wind": 170000108,
     "GG: The Dirty Tricks of Major Burrows", 170000109,
     "GG: Gusty Garden's Gravity Scramble": 170000110,
+    "GG: Major Burrows's Daredevil Run": 170000111,
+    "GG: Purple Coins on the Puzzle Cube": 170000112,
     "GG: The Golden Chomp": 170000113,
 }
 locFF_table = {
@@ -119,7 +121,7 @@ locTT_table = {
     "TT: Mario (or Luigi) Meets Mario": 170000062,
     "TT: Bouncing Down Cake Lane": 170000063,
     "TT: The Flipswitch Chain": 170000064,
-    "TT: The Flipswitch Chain": 170000112,
+    "TT: Fast Foes of Toy Time": 170000067,
     "TT: Luigi's Purple Coins": 170000065, 
 }
 locDD_table = {
