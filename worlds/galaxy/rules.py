@@ -1,5 +1,6 @@
 from ..generic.Rules import add_rule
 from .Regions import connect_regions, smgcourses,
+def set_rules(world, player: int, area_connections):
     def smg_gate_open(self, player: int):
         return self.has('Grand Star Engine Room', player) 
     def smg_can_finish(self, player: int):
