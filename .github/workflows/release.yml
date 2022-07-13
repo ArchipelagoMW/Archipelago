@@ -55,7 +55,7 @@ jobs:
           tar xf sni-*.tar.xz
           rm sni-*.tar.xz
           mv sni-* SNI
-          wget -nv https://github.com/Ijwu/Enemizer/releases/download/7.0/ubuntu.16.04-x64.7z
+          wget -nv https://github.com/Ijwu/Enemizer/releases/download/7.0.1/ubuntu.16.04-x64.7z
           7za x -oEnemizerCLI/ ubuntu.16.04-x64.7z
       - name: Build
         run: |
