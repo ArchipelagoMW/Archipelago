@@ -494,7 +494,7 @@ Door - 0x0CF2A (Shortcut to Monastery Garden) - 0x17CAA
 158664 - 0x03702 (Vault Box) - 0x15ADD - True
 
 Outside Bunker (Bunker) - Main Island - True - Inside Bunker - 0x0C2A4:
-158268 - 0x17C2E (Bunker Entry Panel) - True - Squares & Black/White Squares
+158268 - 0x17C2E (Bunker Entry Panel) - True - Squares & Black/White Squares & Colored Squares
 Door - 0x0C2A4 (Bunker Entry Door) - 0x17C2E
 
 Inside Bunker (Bunker) - Inside Bunker Glass Room - 0x17C79:
