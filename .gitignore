@@ -153,14 +153,21 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-#minecraft server stuff
+# minecraft server stuff
 jdk*/
 minecraft*/
 minecraft_versions.json
 
-#pyenv
+# pyenv
 .python-version
 
 #undertale stuff
 Undertale/data.win
 Undertale/base.win
+
+# OS General Files
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+[Dd]esktop.ini

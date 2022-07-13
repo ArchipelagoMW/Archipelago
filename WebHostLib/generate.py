@@ -114,7 +114,7 @@ def gen_game(gen_options, meta: TypeOptional[Dict[str, object]] = None, owner=No
 
         erargs = parse_arguments(['--multi', str(playercount)])
         erargs.seed = seed
-        erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwrittin in mystery
+        erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
         erargs.spoiler = 0 if race else 2
         erargs.race = race
         erargs.outputname = seedname
