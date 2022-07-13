@@ -35,7 +35,7 @@ class WitnessWorld(World):
     """
     game = "The Witness"
     topology_present = False
-    data_version = 4
+    data_version = 5
 
     static_logic = StaticWitnessLogic()
     static_locat = StaticWitnessLocations()
