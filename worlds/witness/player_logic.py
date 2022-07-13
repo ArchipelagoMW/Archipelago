@@ -19,7 +19,8 @@ import copy
 from BaseClasses import MultiWorld
 from .static_logic import StaticWitnessLogic
 from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda, get_early_utm_list, \
-    get_symbol_shuffle_list, get_door_panel_shuffle_list, get_doors_complex_list
+    get_symbol_shuffle_list, get_door_panel_shuffle_list, get_doors_complex_list, get_doors_max_list, \
+    get_doors_simple_list, get_laser_shuffle
 from .Options import is_option_enabled, get_option_value, the_witness_options
 
 
@@ -100,9 +101,13 @@ class WitnessPlayerLogic:
         return frozenset(all_options)
 
     def make_single_adjustment(self, adj_type, line):
+        from . import StaticWitnessItems
         """Makes a single logic adjustment based on additional logic file"""
 
         if adj_type == "Items":
+            if line not in StaticWitnessItems.ALL_ITEM_TABLE:
+                raise RuntimeError("Item \"" + line + "\" does not exit.")
+
             self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(line)
 
             if line in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
@@ -206,8 +211,17 @@ class WitnessPlayerLogic:
         if get_option_value(world, player, "shuffle_doors") == 1:
             adjustment_linesets_in_order.append(get_door_panel_shuffle_list())
 
+        if get_option_value(world, player, "shuffle_doors") == 2:
+            adjustment_linesets_in_order.append(get_doors_simple_list())
+
         if get_option_value(world, player, "shuffle_doors") == 3:
             adjustment_linesets_in_order.append(get_doors_complex_list())
+
+        if get_option_value(world, player, "shuffle_doors") == 4:
+            adjustment_linesets_in_order.append(get_doors_max_list())
+
+        if is_option_enabled(world, player, "shuffle_lasers"):
+            adjustment_linesets_in_order.append(get_laser_shuffle())
 
         for adjustment_lineset in adjustment_linesets_in_order:
             current_adjustment_type = None

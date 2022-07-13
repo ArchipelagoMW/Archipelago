@@ -2,7 +2,7 @@
 Defines constants for different types of locations in the game
 """
 
-from .Options import is_option_enabled
+from .Options import is_option_enabled, get_option_value
 from .player_logic import StaticWitnessLogic, WitnessPlayerLogic
 
 
@@ -131,20 +131,6 @@ class StaticWitnessLocations:
 
         "Mountaintop Discard",
         "Mountaintop Vault Box",
-
-        "Mountaintop Trap Door Triple Exit",
-
-        "Inside Mountain Obscured Vision 5",
-        "Inside Mountain Moving Background 7",
-        "Inside Mountain Physically Obstructed 3",
-        "Inside Mountain Angled Inside Trash 2",
-        "Inside Mountain Color Cycle 5",
-        "Inside Mountain Same Solution 6",
-        "Inside Mountain Elevator Discard",
-        "Inside Mountain Giant Puzzle",
-
-        "Inside Mountain Final Room Left Pillar 4",
-        "Inside Mountain Final Room Right Pillar 4",
     }
 
     UNCOMMON_LOCATIONS = {
@@ -161,7 +147,7 @@ class StaticWitnessLocations:
         "Swamp Underwater Back Optional",
     }
 
-    HARD_LOCATIONS = {
+    CAVES_LOCATIONS = {
         "Inside Mountain Caves Dot Grid Triangles 4",
         "Inside Mountain Caves Symmetry Triangles",
         "Inside Mountain Caves Stars & Squares and Triangles 2",
@@ -184,10 +170,28 @@ class StaticWitnessLocations:
         "Inside Mountain Caves Upstairs Dot Grid Negative Shapers",
         "Inside Mountain Caves Upstairs Dot Grid Rotated Shapers",
 
-        "Challenge Vault Box",
         "Theater Walkway Vault Box",
         "Inside Mountain Bottom Layer Discard",
         "Theater Challenge Video",
+    }
+
+    MOUNTAIN_UNREACHABLE_FROM_BEHIND = {
+        "Mountaintop Trap Door Triple Exit",
+
+        "Inside Mountain Obscured Vision 5",
+        "Inside Mountain Moving Background 7",
+        "Inside Mountain Physically Obstructed 3",
+        "Inside Mountain Angled Inside Trash 2",
+        "Inside Mountain Color Cycle 5",
+        "Inside Mountain Same Solution 6",
+    }
+
+    MOUNTAIN_REACHABLE_FROM_BEHIND = {
+        "Inside Mountain Elevator Discard",
+        "Inside Mountain Giant Puzzle",
+
+        "Inside Mountain Final Room Left Pillar 4",
+        "Inside Mountain Final Room Right Pillar 4",
     }
 
     ALL_LOCATIONS_TO_ID = dict()
@@ -230,12 +234,34 @@ class WitnessPlayerLocations:
     """
 
     def __init__(self, world, player, player_logic: WitnessPlayerLogic):
+        """Defines locations AFTER logic changes due to options"""
+
         self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}
         self.CHECK_LOCATIONS = (
             StaticWitnessLocations.GENERAL_LOCATIONS
         )
 
-        """Defines locations AFTER logic changes due to options"""
+        doors = get_option_value(world, player, "shuffle_doors")
+        earlyutm = is_option_enabled(world, player, "early_secret_area")
+        victory = get_option_value(world, player, "victory_condition")
+        lasers = get_option_value(world, player, "challenge_lasers")
+        laser_shuffle = get_option_value(world, player, "shuffle_lasers")
+
+        postgame = set()
+        postgame = postgame | StaticWitnessLocations.CAVES_LOCATIONS
+        postgame = postgame | StaticWitnessLocations.MOUNTAIN_REACHABLE_FROM_BEHIND
+        postgame = postgame | StaticWitnessLocations.MOUNTAIN_UNREACHABLE_FROM_BEHIND
+
+        self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | postgame
+
+        if earlyutm or doors >= 2 or (victory == 1 and (lasers <= 11 or laser_shuffle)):
+            postgame -= StaticWitnessLocations.CAVES_LOCATIONS
+
+        if doors >= 2:
+            postgame -= StaticWitnessLocations.MOUNTAIN_REACHABLE_FROM_BEHIND
+
+        if victory != 2:
+            postgame -= StaticWitnessLocations.MOUNTAIN_UNREACHABLE_FROM_BEHIND
 
         if is_option_enabled(world, player, "shuffle_discarded_panels"):
             self.PANEL_TYPES_TO_SHUFFLE.add("Discard")
@@ -246,17 +272,10 @@ class WitnessPlayerLocations:
         if is_option_enabled(world, player, "shuffle_uncommon"):
             self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | StaticWitnessLocations.UNCOMMON_LOCATIONS
 
-        if is_option_enabled(world, player, "shuffle_hard"):
-            self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | StaticWitnessLocations.HARD_LOCATIONS
-
-        if is_option_enabled(world, player, "shuffle_symbols") and is_option_enabled(world, player, "shuffle_doors"):
-            if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
-                # This particular combination of logic settings leads to logic so restrictive that generation can fail
-                # Hence, we add some extra sphere 0 locations
-
-                self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | StaticWitnessLocations.EXTRA_LOCATIONS
-
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | player_logic.ADDED_CHECKS
+
+        if not is_option_enabled(world, player, "shuffle_postgame"):
+            self.CHECK_LOCATIONS -= postgame
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS - {
             StaticWitnessLogic.CHECKS_BY_HEX[check_hex]["checkName"]

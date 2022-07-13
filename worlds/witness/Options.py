@@ -29,8 +29,15 @@ class ShuffleSymbols(DefaultOnToggle):
     display_name = "Shuffle Symbols"
 
 
+class ShuffleLasers(Toggle):
+    """If on, the 11 lasers are turned into items and will activate on their own upon receiving them.
+    Note: There is a visual bug that can occur with the Desert Laser. It does not affect gameplay - The Laser can still
+    be redirected as normal, for both applications of redirection."""
+    display_name = "Shuffle Lasers"
+
+
 class ShuffleDoors(Choice):
-    """Opening doors will require their respective "keys".
+    """If on, opening doors will require their respective "keys".
     If set to "panels", those keys will unlock the panels on doors.
     In "doors_simple" and "doors_complex", the doors will magically open by themselves upon receiving the key."""
     display_name = "Shuffle Doors"
@@ -38,6 +45,7 @@ class ShuffleDoors(Choice):
     option_panels = 1
     option_doors_simple = 2
     option_doors_complex = 3
+    option_max = 4
 
 
 class ShuffleDiscardedPanels(Toggle):
@@ -58,9 +66,10 @@ class ShuffleUncommonLocations(Toggle):
     display_name = "Shuffle Uncommon Locations"
 
 
-class ShuffleHardLocations(Toggle):
-    """Adds some harder locations into the game, e.g. Mountain Secret Area panels"""
-    display_name = "Shuffle Hard Locations"
+class ShufflePostgame(Toggle):
+    """Adds locations into the pool that are guaranteed to be locked behind your goal. Use this if you don't play with
+    forfeit on victory."""
+    display_name = "Shuffle Postgame"
 
 
 class VictoryCondition(Choice):
@@ -113,7 +122,7 @@ the_witness_options: Dict[str, type] = {
     "shuffle_discarded_panels": ShuffleDiscardedPanels,
     "shuffle_vault_boxes": ShuffleVaultBoxes,
     "shuffle_uncommon": ShuffleUncommonLocations,
-    "shuffle_hard": ShuffleHardLocations,
+    "shuffle_postgame": ShufflePostgame,
     "victory_condition": VictoryCondition,
     "trap_percentage": TrapPercentage,
     "early_secret_area": EarlySecretArea,
@@ -122,6 +131,7 @@ the_witness_options: Dict[str, type] = {
     "mountain_lasers": MountainLasers,
     "challenge_lasers": ChallengeLasers,
     "puzzle_skip_amount": PuzzleSkipAmount,
+    "shuffle_lasers": ShuffleLasers,
 }
 
 

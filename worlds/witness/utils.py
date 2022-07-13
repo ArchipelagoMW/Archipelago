@@ -117,5 +117,20 @@ def get_door_panel_shuffle_list():
 
 
 @cache_argsless
+def get_doors_simple_list():
+    return get_adjustment_file("settings/Doors_Simple.txt")
+
+
+@cache_argsless
 def get_doors_complex_list():
     return get_adjustment_file("settings/Doors_Complex.txt")
+
+
+@cache_argsless
+def get_doors_max_list():
+    return get_adjustment_file("settings/Doors_Max.txt")
+
+
+@cache_argsless
+def get_laser_shuffle():
+    return get_adjustment_file("settings/Laser_Shuffle.txt")

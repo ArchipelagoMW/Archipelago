@@ -124,7 +124,7 @@ class WitnessPlayerItems:
         if "shuffle_symbols" not in the_witness_options.keys():
             symbols = True
 
-        doors = is_option_enabled(world, player, "shuffle_doors")
+        doors = get_option_value(world, player, "shuffle_doors")
 
         if doors and symbols:
             self.GOOD_ITEMS = [

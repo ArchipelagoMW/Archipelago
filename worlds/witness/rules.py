@@ -22,6 +22,21 @@ class WitnessLogic(LogicMixin):
     def _witness_has_lasers(self, world, player: int, amount: int) -> bool:
         lasers = 0
 
+        if is_option_enabled(world, player, "shuffle_lasers"):
+            lasers += int(self.has("Symmetry Laser", player))
+            lasers += int(self.has("Desert Laser", player)
+                          and self.has("Desert Laser Redirection", player))
+            lasers += int(self.has("Town Laser", player))
+            lasers += int(self.has("Monastery Laser", player))
+            lasers += int(self.has("Keep Laser", player))
+            lasers += int(self.has("Quarry Laser", player))
+            lasers += int(self.has("Treehouse Laser", player))
+            lasers += int(self.has("Jungle Laser", player))
+            lasers += int(self.has("Bunker Laser", player))
+            lasers += int(self.has("Swamp Laser", player))
+            lasers += int(self.has("Shadows Laser", player))
+            return lasers >= amount
+
         lasers += int(self.has("Symmetry Laser Activation", player))
         lasers += int(self.has("Desert Laser Activation", player)
                       and self.has("Desert Laser Redirection", player))

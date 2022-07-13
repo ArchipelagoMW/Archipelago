@@ -96,6 +96,17 @@ Theater Walkway Door to Back of Theater
 Theater Walkway Door to Desert Elevator Room
 Theater Walkway Door to Town
 
+Desert Flood Room Flood Controls (Panel)
+Quarry Mill Ramp Controls (Panel)
+Quarry Mill Elevator Controls (Panel)
+Quarry Boathouse Ramp Height Control (Panel)
+Quarry Boathouse Ramp Horizontal Control (Panel)
+Bunker Elevator Control (Panel)
+Swamp Sliding Bridge (Panel)
+Swamp Rotating Bridge (Panel)
+Swamp Maze Control (Panel)
+Boat
+
 Added Locations:
 Outside Tutorial Door to Outpost Panel
 Outside Tutorial Exit Door from Outpost Panel
