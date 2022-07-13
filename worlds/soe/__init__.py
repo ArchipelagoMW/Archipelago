@@ -63,7 +63,7 @@ _id_offset: typing.Dict[int, int] = {
     pyevermizer.CHECK_GOURD: _id_base + 100,  # gourds 64100..64399
     pyevermizer.CHECK_NPC: _id_base + 400,  # npc 64400..64499
     # TODO: sniff 64500..64799
-    pyevermizer.CHECK_TRAP: _id_base + 900,  # npc 64900..64999
+    pyevermizer.CHECK_TRAP: _id_base + 900,  # trap 64900..64999
 }
 
 # cache native evermizer items and locations
@@ -136,7 +136,8 @@ class SoEWebWorld(WebWorld):
     theme = 'jungle'
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to playing Secret of Evermore randomizer. This guide covers single-player, multiworld and related software.",
+        "A guide to playing Secret of Evermore randomizer. This guide covers single-player, multiworld and related"
+        " software.",
         "English",
         "multiworld_en.md",
         "multiworld/en",
