@@ -33,7 +33,8 @@ class SecondFloorStarDoorCost(Range):
 
 class StarsToFinish(Range):
     """How many stars are required at the infinite stairs"""
-    range_start = 50
+    display_name = "Endless Stairs Stars"
+    range_start = 0
     range_end = 100
     default = 70
 
