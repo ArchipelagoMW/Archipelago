@@ -47,6 +47,12 @@ class NoEquips(Toggle):
     default = 0
 
 
+class RandomizeLove(Toggle):
+    """Adds LOVE to the pool. GENOCIDE ONLY!"""
+    display_name = "Randomize LOVE"
+    default = 0
+
+
 undertale_options: typing.Dict[str, type(Option)] = {
     "route_required":                           RouteRequired,
     "temy_include":                             IncludeTemy,
@@ -54,5 +60,6 @@ undertale_options: typing.Dict[str, type(Option)] = {
     "only_flakes":                              OnlyFlakes,
     "soul_hunt":                                SoulHunt,
     "soul_pieces":                              SoulPieces,
-    "prog_plot":                              ProgressivePlot,
+    "prog_plot":                                ProgressivePlot,
+    "rando_love":                                RandomizeLove,
 }

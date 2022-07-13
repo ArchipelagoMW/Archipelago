@@ -83,6 +83,7 @@ item_table = {
     "Bridge Tools": ItemData(77785, True),
     "Mettaton Plush": ItemData(77786, True),
     "Determination": ItemData(77787, True),
+    "LOVE": ItemData(77788, True),
     "Soul Piece": ItemData(77000, True),
 }
 
@@ -135,6 +136,7 @@ key_items = {
     "Mettaton Plush": 1,
     "Punch Card": 3,
     "Hot Dog...?": 1,
+    "LOVE": 19,
 }
 
 junk_weights = {

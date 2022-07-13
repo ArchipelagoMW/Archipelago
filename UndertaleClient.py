@@ -269,6 +269,26 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                     f.close()
 
 
+async def multi_watcher(ctx: UndertaleContext):
+    while not ctx.exit_event.is_set():
+        path = os.path.expandvars(r"%localappdata%/UNDERTALE")
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                if file.find("spots.mine") > -1 and "online" in ctx.tags:
+                    with open(root + "/" + file) as mine:
+                        this_x = mine.readline()
+                        this_y = mine.readline()
+                        this_room = mine.readline()
+                        this_sprite = mine.readline()
+                        this_frame = mine.readline()
+                        mine.close()
+                    message = [{"cmd": 'Bounce', "tags": ['online'], "games": ["Undertale"],
+                                "data": {"player": ctx.slot, "x": this_x, "y": this_y, "room": this_room,
+                                         "spr": this_sprite, "frm": this_frame}}]
+                    await ctx.send_msgs(message)
+        await asyncio.sleep(0.02)
+
+
 async def game_watcher(ctx: UndertaleContext):
     while not ctx.exit_event.is_set():
         await ctx.update_death_link(ctx.deathlink_status)
@@ -299,16 +319,6 @@ async def game_watcher(ctx: UndertaleContext):
                     st = st.split(".spot", -1)[0]
                     sending = sending+[(int(st))+12000]
                     message = [{"cmd": 'LocationChecks', "locations": sending}]
-                    await ctx.send_msgs(message)
-                if file.find("spots.mine") > -1:
-                    with open(root+"/"+file) as mine:
-                        this_x = mine.readline()
-                        this_y = mine.readline()
-                        this_room = mine.readline()
-                        this_sprite = mine.readline()
-                        this_frame = mine.readline()
-                        mine.close()
-                    message = [{"cmd": 'Bounce', "tags": ['online'], "games": ["Undertale"], "data": {"player": ctx.slot, "x": this_x, "y": this_y, "room": this_room, "spr": this_sprite, "frm": this_frame}}]
                     await ctx.send_msgs(message)
                 if file.find("victory") > -1 and file.find(str(ctx.route)) > -1:
                     victory = True
@@ -354,12 +364,17 @@ if __name__ == '__main__':
         progression_watcher = asyncio.create_task(
             game_watcher(ctx), name="UndertaleProgressionWatcher")
 
+        multiplayer_watcher = asyncio.create_task(
+            multi_watcher(ctx), name="UndertaleMultiplayerWatcher")
+
         await ctx.exit_event.wait()
         ctx.server_address = None
 
         await ctx.shutdown()
 
         await progression_watcher
+
+        await multiplayer_watcher
 
     import colorama
 

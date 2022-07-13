@@ -48,7 +48,8 @@ class UndertaleWorld(World):
             'no_equips': bool(self.world.no_equips[self.player].value),
             'soul_hunt': bool(self.world.soul_hunt[self.player].value),
             'soul_pieces': self.world.soul_pieces[self.player].value,
-            'prog_plot': bool(self.world.prog_plot[self.player].value)
+            'prog_plot': bool(self.world.prog_plot[self.player].value),
+            'rando_love': bool(self.world.rando_love[self.player].value)
         }
 
     def generate_basic(self):
@@ -59,16 +60,16 @@ class UndertaleWorld(World):
         # Add all required progression items
         for (name, num) in key_items.items():
             itempool += [name] * num
-        if self.world.only_flakes[self.player] == False:
+        if not self.world.only_flakes[self.player]:
             for (name, num) in non_key_items.items():
                 itempool += [name] * num
-        if self.world.no_equips[self.player] == False:
+        if not self.world.no_equips[self.player]:
             for (name, num) in required_armor.items():
                 itempool += [name] * num
         if self.world.route_required[self.player].current_key == "genocide":
-            if self.world.only_flakes[self.player] == False:
+            if not self.world.only_flakes[self.player]:
                 itempool += ["Instant Noodles"]
-            if self.world.no_equips[self.player] == False:
+            if not self.world.no_equips[self.player]:
                 itempool = ["Real Knife" if item == "Worn Dagger" else "The Locket" if item == "Heart Locket" else item for item in itempool]
         if self.world.route_required[self.player].current_key == "pacifist":
             itempool += ["Undyne Letter EX"]
@@ -76,24 +77,29 @@ class UndertaleWorld(World):
             itempool.remove("Complete Skeleton")
             itempool.remove("Fish")
             itempool.remove("DT Extractor")
-        if self.world.temy_include[self.player] == True:
+        if self.world.temy_include[self.player]:
             itempool += ["temy armor"]
-        if self.world.soul_hunt[self.player] == True:
+        if self.world.soul_hunt[self.player]:
             itempool += ["Soul Piece"] * self.world.soul_pieces[self.player].value
         else:
             itempool += ["Determination"]
-        itempool = [item if item not in plot_items else "Progressive Plot" for item in itempool]
+        if not self.world.rando_love[self.player]:
+            itempool = [item for item in itempool if not item == "LOVE"]
+        if self.world.prog_plot[self.player]:
+            itempool = [item if item not in plot_items else "Progressive Plot" for item in itempool]
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
         exclusion_pool.update(exclusion_table[self.world.route_required[self.player].current_key])
+        if not self.world.rando_love[self.player]:
+            exclusion_pool.update(exclusion_table["NoLove"])
 
         # Choose locations to automatically exclude based on settings
         exclusion_checks = set()
-        exclusion_checks.update({"Card Reward", "Hush Trade"})
+        exclusion_checks.update(["Card Reward", "Hush Trade"])
         exclusion_rules(self.world, self.player, exclusion_checks)
 
         # Fill remaining items with randomly generated junk or Temmie Flakes
-        if self.world.only_flakes[self.player] == False:
+        if not self.world.only_flakes[self.player]:
             itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names)-len(itempool)-len(exclusion_pool))
         else:
             itempool += ["Temmie Flakes"] * (len(self.location_names) - len(itempool) - len(exclusion_pool))
