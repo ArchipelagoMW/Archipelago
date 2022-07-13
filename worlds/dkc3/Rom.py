@@ -265,6 +265,81 @@ item_rom_data = {
     0xDC3006: [0x5D1, 0x603], # Cog
 }
 
+music_rom_data = [
+    0x3D06B1,
+    0x3D0753,
+    0x3D071D,
+    0x3D07FA,
+    0x3D07C4,
+    0x3D05E0,
+
+    0x3D08FE,
+    0x3D096C,
+    0x3D078E,
+    0x3D08CD,
+    0x3D09DD,
+    0x3D0601,
+
+    0x3D0A0E,
+    0x3D0AB3,
+    0x3D06E7,
+    0x3D0AE4,
+    0x3D0A45,
+    0x3D0618,
+
+    0x3D0B46,
+    0x3D0C40,
+    0x3D0897,
+    0x3D0B77,
+    0x3D0BD9,
+    0x3D062F,
+
+    0x3D0C71,
+    0x3D0866,
+    0x3D0B15,
+    0x3D0BA8,
+    0x3D0830,
+    0x3D064B,
+
+    0x3D0D04,
+    0x3D0CA2,
+    0x3D0A7C,
+    0x3D0D35,
+    0x3D0CD3,
+    0x3D0662,
+
+    0x3D0DC8,
+    0x3D0D66,
+    0x3D09AC,
+    0x3D0D97,
+    0x3D0C0F,
+    0x3D067E,
+
+    0x3D0DF9,
+    0x3D0E31,
+    0x3D0E62,
+    0x3D0934,
+    0x3D0E9A,
+    0x3D069A,
+]
+
+level_music_ids = [
+    0x06,
+    0x07,
+    0x08,
+    0x0A,
+    0x0B,
+    0x0E,
+    0x0F,
+    0x10,
+    0x17,
+    0x19,
+    0x1C,
+    0x1D,
+    0x1E,
+    0x21,
+]
+
 class LocalRom(object):
 
     def __init__(self, file, patch=True, vanillaRom=None, name=None, hash=None):
@@ -376,6 +451,11 @@ def patch_rom(world, rom, player, active_level_list):
         rom.write_byte(0x3B96A9, 0x70)
         rom.write_byte(0x3B96A8, 0x3C)
 
+    if world.music_shuffle[player]:
+        for address in music_rom_data:
+            rand_song = local_random.choice(level_music_ids)
+            rom.write_byte(address, rand_song)
+
     # Starting Lives
     rom.write_byte(0x9130, world.starting_life_count[player].value)
     rom.write_byte(0x913B, world.starting_life_count[player].value)
@@ -398,7 +478,7 @@ def patch_rom(world, rom, player, active_level_list):
         rom.write_byte(0x34BC6E, (0x32 + level_dict[active_level_list[35]].levelID))
 
         # Cotton-Top Cove Boss Unlock
-        rom.write_byte(0x34C029, (0x32 + level_dict[active_level_list[14]].levelID))
+        rom.write_byte(0x34C02A, (0x32 + level_dict[active_level_list[14]].levelID))
 
         # Kong-Fused Cliffs Unlock
         rom.write_byte(0x34C213, (0x32 + level_dict[active_level_list[25]].levelID))

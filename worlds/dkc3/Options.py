@@ -112,7 +112,7 @@ dkc3_options: typing.Dict[str, type(Option)] = {
     "number_of_banana_birds": NumberOfBananaBirds,
     "percentage_of_banana_birds": PercentageOfBananaBirds,
     "level_shuffle": LevelShuffle,
-    #"music_shuffle": MusicShuffle,                           # Disabled
+    "music_shuffle": MusicShuffle,
     "kong_palette_swap": KongPaletteSwap,
     "starting_life_count": StartingLifeCount,
 }
