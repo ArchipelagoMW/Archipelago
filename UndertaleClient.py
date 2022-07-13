@@ -93,6 +93,8 @@ class UndertaleContext(CommonContext):
                     os.remove(root+"/"+file)
                 elif file.find(".youDied") > -1:
                     os.remove(root+"/"+file)
+                elif file.find(".LV") > -1:
+                    os.remove(root+"/"+file)
 
     async def shutdown(self):
         await super().shutdown()
@@ -112,6 +114,8 @@ class UndertaleContext(CommonContext):
                 elif file.find(".mad") > -1:
                     os.remove(root+"/"+file)
                 elif file.find(".youDied") > -1:
+                    os.remove(root+"/"+file)
+                elif file.find(".LV") > -1:
                     os.remove(root+"/"+file)
 
     def update_online_mode(self, online):
@@ -207,6 +211,10 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         ctx.pieces_needed = args["slot_data"]['soul_pieces']
         if not args["slot_data"]['soul_hunt']:
             ctx.pieces_needed = 0
+        if args["slot_data"]['rando_love']:
+            filename = f"LOVErando.LV"
+            with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
+                f.close()
         filename = f"{ctx.route}.route"
         with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
             f.close()
