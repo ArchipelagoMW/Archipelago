@@ -236,6 +236,7 @@ Quarry Boathouse (Quarry Boathouse) - Quarry - True - Quarry Boathouse Upper Fro
 158148 - 0x03852 (Ramp Height Control) - 0x034D4 & 0x021D5 - Rotated Shapers
 158166 - 0x17CA6 (Boat Spawn) - True - Boat
 Door - 0x2769B (Boat Staircase) - 0x17CA6
+Door - 0x27163 (Boat Staircase Invis Barrier) - 0x17CA6
 
 Quarry Boathouse Behind Staircase (Quarry Boathouse) - Boat - 0x17CA6:
 

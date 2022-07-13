@@ -71,7 +71,7 @@ Doors:
 1507 - Jungle Laser - 0x00274
 1508 - Bunker Laser - 0x0C2B2
 1509 - Swamp Laser - 0x00BF6
-1510 - Treehouse Laser - 0x2700B
+1510 - Treehouse Laser - 0x028A4
 
 1600 - Outside Tutorial Optional Door - 0x03BA2
 1603 - Outside Tutorial Outpost Entry Door - 0x0A170
@@ -92,7 +92,7 @@ Doors:
 1642 - Quarry Mill Side Door - 0x275FF
 1645 - Quarry Mill Rooftop Shortcut - 0x17CE8
 1648 - Quarry Mill Stairs - 0x0368A
-1651 - Quarry Boathouse Boat Staircase - 0x2769B
+1651 - Quarry Boathouse Boat Staircase - 0x2769B,0x27163
 1653 - Quarry Boathouse First Barrier - 0x17C50
 1654 - Quarry Boathouse Shortcut - 0x3865F
 1656 - Shadows Timed Door - 0x19B24

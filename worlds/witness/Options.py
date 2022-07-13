@@ -7,10 +7,6 @@ from Options import Toggle, DefaultOnToggle, Option, Range, Choice
 #    "Play the randomizer in hardmode"
 #    display_name = "Hard Mode"
 
-# class UnlockSymbols(DefaultOnToggle):
-#    "All Puzzle symbols of a specific panel need to be unlocked before the panel can be used"
-#    display_name = "Unlock Symbols"
-
 class DisableNonRandomizedPuzzles(DefaultOnToggle):
     """Disables puzzles that cannot be randomized.
     This includes many puzzles that heavily involve the environment, such as Shadows, Monastery or Orchard.
@@ -25,7 +21,8 @@ class EarlySecretArea(Toggle):
 
 
 class ShuffleSymbols(DefaultOnToggle):
-    """You will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols."""
+    """You will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols.
+    If you turn this off, there will be no progression items in the game unless you turn on door shuffle."""
     display_name = "Shuffle Symbols"
 
 
@@ -118,6 +115,9 @@ class PuzzleSkipAmount(Range):
 
 the_witness_options: Dict[str, type] = {
     # "hard_mode": HardMode,
+    "shuffle_symbols": ShuffleSymbols,
+    "shuffle_doors": ShuffleDoors,
+    "shuffle_lasers": ShuffleLasers,
     "disable_non_randomized_puzzles": DisableNonRandomizedPuzzles,
     "shuffle_discarded_panels": ShuffleDiscardedPanels,
     "shuffle_vault_boxes": ShuffleVaultBoxes,
@@ -126,12 +126,9 @@ the_witness_options: Dict[str, type] = {
     "victory_condition": VictoryCondition,
     "trap_percentage": TrapPercentage,
     "early_secret_area": EarlySecretArea,
-    "shuffle_symbols": ShuffleSymbols,
-    "shuffle_doors": ShuffleDoors,
     "mountain_lasers": MountainLasers,
     "challenge_lasers": ChallengeLasers,
     "puzzle_skip_amount": PuzzleSkipAmount,
-    "shuffle_lasers": ShuffleLasers,
 }
 
 
