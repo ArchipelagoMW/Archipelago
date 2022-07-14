@@ -2,7 +2,6 @@
 import json
 import os
 
-from random import randint
 from .Options import dark_souls_options  # the options we defined earlier
 from .data.items_data import weapons_upgrade_5_table, weapons_upgrade_10_table, item_dictionary_table, key_items_list
 from .data.locations_data import location_dictionary_table, cemetery_of_ash_table, fire_link_shrine_table, \
@@ -42,9 +41,15 @@ class DarkSouls3World(World):
 
     def create_item(self, name: str) -> Item:
         data = self.item_name_to_id[name]
+
+        item_classification = ItemClassification.filler
+        if name in key_items_list:
+            item_classification = ItemClassification.progression
+        elif name in weapons_upgrade_5_table or name in weapons_upgrade_10_table:
+            item_classification = ItemClassification.useful
+
         return Item(
-            name, ItemClassification.progression if name in key_items_list else
-            ItemClassification.useful, data, self.player)
+            name, item_classification, data, self.player)
 
     def create_regions(self):
         menu_region = Region("Menu", RegionType.Generic, "Menu", self.player)
@@ -129,13 +134,12 @@ class DarkSouls3World(World):
         self.world.get_entrance("Goto Untended Graves", self.player).connect(untended_graves_region)
 
     # For each region, add the associated locations retrieved from the corresponding location_table
-    def create_region(self, name, location_table) -> Region:
-        new_region = Region(name, RegionType.Generic, name, self.player)
-        if location_table is not None:
-            for name, address in self.location_name_to_id.items():
-                if location_table.get(name):
-                    location = Location(self.player, name, address, new_region)
-                    new_region.locations.append(location)
+    def create_region(self, region_name, location_table) -> Region:
+        new_region = Region(region_name, RegionType.Generic, region_name, self.player)
+        if location_table:
+            for name, address in location_table.items():
+                location = Location(self.player, name, address, new_region)
+                new_region.locations.append(location)
         self.world.regions.append(new_region)
         return new_region
 
@@ -208,13 +212,13 @@ class DarkSouls3World(World):
         if self.world.randomize_weapons_level[self.player]:
             # Randomize some weapons upgrades
             for name in weapons_upgrade_5_table.keys():
-                if randint(0, 100) < 33:
-                    value = randint(1, 5)
+                if self.world.random.randint(0, 100) < 33:
+                    value = self.world.random.randint(1, 5)
                     item_dictionary[name] += value
 
             for name in weapons_upgrade_10_table.keys():
-                if randint(0, 100) < 33:
-                    value = randint(1, 10)
+                if self.world.random.randint(0, 100) < 33:
+                    value = self.world.random.randint(1, 10)
                     item_dictionary[name] += value
 
         # Create the mandatory lists to generate the player's output file
@@ -238,9 +242,9 @@ class DarkSouls3World(World):
 
         data = {
             "options": {
-                "auto_equip": (True if self.world.auto_equip[self.player] else False),
-                "lock_equip": (True if self.world.lock_equip[self.player] else False),
-                "no_weapon_requirements": (True if self.world.no_weapon_requirements[self.player] else False),
+                "auto_equip": self.world.auto_equip[self.player].value,
+                "lock_equip": self.world.lock_equip[self.player].value,
+                "no_weapon_requirements": self.world.no_weapon_requirements[self.player].value,
             },
             "seed": self.world.seed_name,  # to verify the server's multiworld
             "slot": self.world.player_name[self.player],  # to connect to server
@@ -266,7 +270,7 @@ class DarkSouls3World(World):
     # data_version is used to signal that items, locations or their names
     # changed. Set this to 0 during development so other games' clients do not
     # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 0
+    data_version = 1
 
     # ID of first item and location, could be hard-coded but code may be easier
     # to read with this as a property.
