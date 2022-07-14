@@ -88,7 +88,9 @@ The steps here are very similar, as you will be making a batch file in the same 
 Use the same steps as before to open Notepad and paste in the following:
 
 `set /p port="Enter port number of room - "
+
 set /p slot="Enter slot name - "
+
 start sm64.us.f3dex2e.exe --sm64ap_name "%slot%" --sm64ap_ip archipelago.gg:%port% --skip-intro`
 
 Save and shortcut the same as before. Unlike the offline batch file, you'll open this one simply by double-clicking it. The window that opens will ask you for the port of the room you wish to join - this five-digit number will be provided by the seed page the game host will share with all players post-generation. Then it will ask you for your slot name - this name is set up in your YAML, and also will be shown on the same seed page previously mentioned, if you need to double-check it.
@@ -102,6 +104,7 @@ Loading an old Mario save alongside a new seed is a bad idea, as it can cause lo
 You can manually delete these old saves ingame before starting a new game, but this can become tedious to do every time. With a small edit to the previous batch files, you can have these old saves deleted automatically, by adding this line to the batch file before the start command. As an example, here it's added to the offline bat:
 
 `del %AppData%\sm64ex\*.bin
+
 start sm64.us.f3dex2e.exe --sm64ap_file %1 --skip-intro`
 
 This extra line deletes any previous save data before opening the game. Don't worry about lost stars or checks - the AP server (or in the case of offline, the patch's `.save` file) keeps track of your star count, unlocked keys/caps/cannons, and which locations have already been checked, so you won't have to redo them. At worst you'll have to rewatch the door unlocking animations, and catch rabbit Mips twice for his first star again if you haven't yet collected the second one.
