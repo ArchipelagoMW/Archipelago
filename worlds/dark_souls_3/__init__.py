@@ -33,6 +33,8 @@ class DarkSouls3World(World):
     they can use to fight their enemies.
     """
 
+    web = DarkSouls3Web()
+
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.locked_items = []
