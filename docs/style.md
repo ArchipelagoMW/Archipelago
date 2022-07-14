@@ -26,3 +26,24 @@
 * 120 characters per line.
 * One space between bullet/number and text.
 * No lazy numbering.
+
+
+## HTML
+
+* Indent with 2 spaces for new code.
+* kebab-case for ids and classes.
+
+
+## CSS
+
+* Indent with 2 spaces for new code.
+* `{` on the same line as the selector.
+* No space between selector and `{`.
+
+
+## JS
+
+* Indent with 2 spaces.
+* Indent `case` inside `switch ` with 2 spaces.
+* Use single quotes.
+* Semicolons are required after every statement.
