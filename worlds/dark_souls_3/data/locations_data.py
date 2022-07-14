@@ -176,10 +176,6 @@ cathedral_of_the_deep_table = {
     "CD: Archdeacon Skirt": 0x13EF2038,
 
     "CD: Arbalest": 0x00D662D0,
-    "CD: Helm of Thorns": 0x15B8D800,
-    "CD: Armor of Thorns": 0x15B8DBE8,
-    "CD: Gauntlets of Thorns": 0x15B8DFD0,
-    "CD: Leggings of Thorns": 0x15B8E3B8,
     "CD: Small Doll": 0x400007D5,
     "CD: Soul of the Deacons of the Deep": 0x400002D9,
 }
