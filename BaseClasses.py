@@ -126,7 +126,6 @@ class MultiWorld():
             set_player_attr('beemizer_total_chance', 0)
             set_player_attr('beemizer_trap_chance', 0)
             set_player_attr('escape_assist', [])
-            set_player_attr('open_pyramid', False)
             set_player_attr('treasure_hunt_icon', 'Triforce Piece')
             set_player_attr('treasure_hunt_count', 0)
             set_player_attr('clock_mode', False)
@@ -1431,8 +1430,6 @@ class Spoiler():
                     outfile.write('Entrance Shuffle:                %s\n' % self.world.shuffle[player])
                     if self.world.shuffle[player] != "vanilla":
                         outfile.write('Entrance Shuffle Seed            %s\n' % self.world.worlds[player].er_seed)
-                    outfile.write('Pyramid hole pre-opened:         %s\n' % (
-                        'Yes' if self.world.open_pyramid[player] else 'No'))
                     outfile.write('Shop inventory shuffle:          %s\n' %
                                   bool_to_text("i" in self.world.shop_shuffle[player]))
                     outfile.write('Shop price shuffle:              %s\n' %
