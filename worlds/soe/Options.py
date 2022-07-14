@@ -37,6 +37,32 @@ class Difficulty(EvermizerFlags, Choice):
     flags = ['e', 'n', 'h', 'x']
 
 
+class EnergyCore(EvermizerFlags, Choice):
+    """How to obtain the Energy Core"""
+    display_name = "Energy Core"
+    option_vanilla = 0
+    option_shuffle = 1
+    option_fragments = 2
+    default = 1
+    flags = ['z', '', 'Z']
+
+
+class RequiredFragments(Range):
+    """Required fragment count for Energy Core = Fragments"""
+    display_name = "Required Fragments"
+    range_start = 1
+    range_end = 99
+    default = 10
+
+
+class AvailableFragments(Range):
+    """Placed fragment count for Energy Core = Fragments"""
+    display_name = "Available Fragments"
+    range_start = 1
+    range_end = 99
+    default = 11
+
+
 class MoneyModifier(Range):
     """Money multiplier in %"""
     display_name = "Money Modifier"
@@ -192,6 +218,9 @@ class SoEProgressionBalancing(ProgressionBalancing):
 
 soe_options: typing.Dict[str, type(Option)] = {
     "difficulty":            Difficulty,
+    "energy_core":           EnergyCore,
+    "required_fragments":    RequiredFragments,
+    "available_fragments":   AvailableFragments,
     "money_modifier":        MoneyModifier,
     "exp_modifier":          ExpModifier,
     "fix_sequence":          FixSequence,
