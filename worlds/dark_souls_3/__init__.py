@@ -42,11 +42,12 @@ class DarkSouls3World(World):
     def create_item(self, name: str) -> Item:
         data = self.item_name_to_id[name]
 
-        item_classification = ItemClassification.filler
         if name in key_items_list:
             item_classification = ItemClassification.progression
         elif name in weapons_upgrade_5_table or name in weapons_upgrade_10_table:
             item_classification = ItemClassification.useful
+        else:
+            item_classification = ItemClassification.filler
 
         return Item(
             name, item_classification, data, self.player)
