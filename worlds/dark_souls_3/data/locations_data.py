@@ -39,6 +39,7 @@ high_wall_of_lothric = {
     "HWL: Basin of Vows": 0x40000845,
     "HWL: Soul of Boreal Valley Vordt": 0x400002CF,
     "HWL: Soul of the Dancer": 0x400002CA,
+    "HWL: Way of Blue Covenant": 0x2000274C,
 }
 
 undead_settlement_table = {
@@ -84,6 +85,8 @@ undead_settlement_table = {
     "US: Hand Axe": 0x006ACFC0,
     "US: Great Scythe": 0x00989680,
     "US: Soul of the Rotted Greatwood": 0x400002D7,
+    "US: Hawk Ring": 0x20004F92,
+    "US: Warrior of Sunlight Covenant": 0x20002738,
 }
 
 road_of_sacrifice_table = {
@@ -178,6 +181,7 @@ cathedral_of_the_deep_table = {
     "CD: Arbalest": 0x00D662D0,
     "CD: Small Doll": 0x400007D5,
     "CD: Soul of the Deacons of the Deep": 0x400002D9,
+    "CD: Rosaria's Fingers Covenant": 0x20002760,
 }
 
 farron_keep_table = {
@@ -216,13 +220,13 @@ farron_keep_table = {
     "FK: Cinders of a Lord - Abyss Watcher": 0x4000084B,
     "FK: Soul of the Blood of the Wolf": 0x400002CD,
     "FK: Soul of a Stray Demon": 0x400002E7,
+    "FK: Watchdogs of Farron Covenant": 0x20002724,
 }
 
 catacombs_of_carthus_table = {
     "CC: Carthus Pyromancy Tome": 0x40000850,
     "CC: Carthus Milkring": 0x20004FE2,
     "CC: Grave Warden's Ashes": 0x4000083E,
-    "CC: Knight Slayer's Ring": 0x20005000,
     "CC: Carthus Bloodring": 0x200050FA,
     "CC: Grave Warden Pyromancy Tome": 0x40000853,
     "CC: Old Sage's Blindfold": 0x11945BA0,
@@ -282,6 +286,7 @@ irithyll_of_the_boreal_valley_table = {
     "IBV: Ring of Favor": 0x20004E3E,
     "IBV: Golden Ritual Spear": 0x00C83200,
     "IBV: Soul of Pontiff Sulyvahn": 0x400002D4,
+    "IBV: Aldrich Faithful Covenant": 0x2000272E,
 }
 
 irithyll_dungeon_table = {
@@ -374,7 +379,6 @@ grand_archives_table = {
     "GA: Fleshbite Ring": 0x20004EA2,
     "GA: Crystal Chime": 0x00CA2DD0,
     "GA: Golden Wing Crest Shield": 0x0143CAA0,
-    "GA: Sage's Crystal Staff": 0x00C8CE40,
     "GA: Onikiri and Ubadachi": 0x00F58390,
     "GA: Hunter's Ring": 0x20004FF6,
     "GA: Divine Pillars of Light": 0x4038C340,

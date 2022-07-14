@@ -21,7 +21,6 @@ weapons_upgrade_5_table = {
     "Eleonora": 0x006CCB90,
     "Witch's Locks": 0x00B7B740,
     "Crystal Chime": 0x00CA2DD0,
-    "Sage's Crystal Staff": 0x00C8CE40,
     "Black Knight Glaive": 0x009AE070,
     "Dragonslayer Spear": 0x008CAFA0,
     "Caitha's Chime": 0x00CA06C0,
@@ -87,7 +86,6 @@ weapons_upgrade_10_table = {
     "Saint-tree Bellvine": 0x00C9DFB0,
     "Saint Bident": 0x008C1360,
     "Drang Hammers": 0x00F61FD0,
-    "Barbed Straight Sword": 0x0021B8D0,
     "Arbalest": 0x00D662D0,
     "Sunlight Talisman": 0x00CA54E0,
     "Greatsword": 0x005C50D0,
@@ -123,7 +121,6 @@ shields_table = {
     "Spider Shield": 0x01435570,
     "Crest Shield": 0x01430750,
     "Curse Ward Greatshield": 0x01518640,
-    "Spiked Shield": 0x01426B10,
     "Stone Parma": 0x01443FD0,
     "Dragon Crest Shield": 0x01432E60,
     "Shield of Want": 0x0144B500,
@@ -138,9 +135,6 @@ shields_table = {
 }
 
 goods_table = {
-    "Fire Keeper Soul": 0x40000186,
-    "Binoculars": 0x40000173,
-    "Loretta's Bone": 0x40000846,
     "Soul of an Intrepid Hero": 0x4000019D,
     "Soul of the Nameless King": 0x400002D2,
     "Soul of Champion Gundyr": 0x400002C8,
@@ -172,9 +166,6 @@ armor_table = {
     "Northern Armor": 0x116E39E8,
     "Northern Gloves": 0x116E3DD0,
     "Northern Trousers": 0x116E41B8,
-    "Mirrah Chain Mail": 0x14B575A8,
-    "Mirrah Chain Gloves": 0x14B57990,
-    "Mirrah Chain Leggings": 0x14B57D78,
     "Loincloth": 0x148F57D8,
 
     "Brigand Hood": 0x148009E0,
@@ -213,10 +204,6 @@ armor_table = {
     "Archdeacon White Crown": 0x13EF1480,
     "Archdeacon Holy Garb": 0x13EF1868,
     "Archdeacon Skirt": 0x13EF2038,
-    "Helm of Thorns": 0x15B8D800,
-    "Armor of Thorns": 0x15B8DBE8,
-    "Gauntlets of Thorns": 0x15B8DFD0,
-    "Leggings of Thorns": 0x15B8E3B8,
     "Antiquated Dress": 0x15D76068,
     "Antiquated Gloves": 0x15D76450,
     "Antiquated Skirt": 0x15D76838,
@@ -276,7 +263,6 @@ rings_table = {
     "Lingering Dragoncrest Ring": 0x20004F2E,
     "Carthus Milkring": 0x20004FE2,
     "Witch's Ring": 0x20004F11,
-    "Knight Slayer's Ring": 0x20005000,
     "Carthus Bloodring": 0x200050FA,
 
     "Speckled Stoneplate Ring": 0x20004E7A,
@@ -354,7 +340,6 @@ misc_items_table = {
     "Grave Warden Pyromancy Tome": 0x40000853,
     "Quelana Pyromancy Tome": 0x40000852,
     "Izalith Pyromancy Tome": 0x40000851,
-    "Roster of Knights": 0x4000006C,
     "Greirat's Ashes": 0x4000083F,
     "Excrement-covered Ashes": 0x40000862,
     "Easterner's Ashes": 0x40000868,
@@ -369,12 +354,10 @@ misc_items_table = {
     "Logan's Scroll": 0x40000855,
     "Storm Ruler": 0x006132D0,
     "Giant's Coal": 0x40000839,
-    "Eyes of a Fire Keeper": 0x4000085A,
     "Coiled Sword Fragment": 0x4000015F,
     "Dragon Chaser's Ashes": 0x40000867,
     "Twinkling Dragon Torso Stone": 0x40000184,
     "Braille Divine Tome of Lothric": 0x40000848,
-    "Wolf's Blood Swordgrass": 0x4000016E,
 }
 
 key_items_list = {
