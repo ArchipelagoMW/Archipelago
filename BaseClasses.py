@@ -317,6 +317,13 @@ class MultiWorld():
             for r_location in region.locations:
                 self._location_cache[r_location.name, player] = r_location
 
+    def get_option_results(self, player: int) -> Dict[str, Union[int, str]]:
+        """Returns dictionary of supplied world option dict names to their values as determined from settings parsing."""
+        options = {}
+        for option_name, option in self.worlds[player].options.items():
+            options[option_name] = option.value
+        return options
+
     def get_regions(self, player=None):
         return self.regions if player is None else self._region_cache[player].values()
 
