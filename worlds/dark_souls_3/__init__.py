@@ -200,12 +200,6 @@ class DarkSouls3World(World):
         else:
             self.world.itempool += [item]
 
-        # Fill item pool with additional items
-        item_pool_len = self.item_name_to_id.__len__()
-        total_required_locations = self.location_name_to_id.__len__()
-        for i in range(item_pool_len, total_required_locations):
-            self.world.itempool += [self.create_item("Soul of an Intrepid Hero")]
-
     def generate_output(self, output_directory: str):
         # Depending on the specified option, modify items hexadecimal value to add an upgrade level
         item_dictionary = item_dictionary_table.copy()
