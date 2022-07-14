@@ -16,7 +16,7 @@ except ImportError:
     from . import pyevermizer  # as part of the source tree
 
 from . import Logic  # load logic mixin
-from .Options import soe_options
+from .Options import soe_options, EnergyCore, RequiredFragments, AvailableFragments
 from .Patch import SoEDeltaPatch, get_base_rom_path
 
 """
@@ -227,7 +227,7 @@ class SoEWorld(World):
     def create_items(self):
         # add regular items to the pool
         exclusions = []
-        if self.energy_core == Options.EnergyCore.option_fragments:
+        if self.energy_core == EnergyCore.option_fragments:
             exclusions.append("Energy Core")
         items = list(map(lambda item: self.create_item(item), (item for item in _items if item.name not in exclusions)))
 
@@ -239,7 +239,7 @@ class SoEWorld(World):
 
         # add energy core fragments to the pool
         ingredients = [n for n, item in enumerate(items) if is_ingredient(item)]
-        if self.energy_core == Options.EnergyCore.option_fragments:
+        if self.energy_core == EnergyCore.option_fragments:
             items.append(self.create_item("Energy Core Fragment"))  # replaces the vanilla energy core
             for _ in range(self.available_fragments - 1):
                 if len(ingredients) < 1:
@@ -309,7 +309,7 @@ class SoEWorld(World):
         wings_item = self.create_item('Wings')
         self.world.get_location(wings_location, self.player).place_locked_item(wings_item)
         self.world.itempool.remove(wings_item)
-        if self.energy_core == Options.EnergyCore.option_vanilla:
+        if self.energy_core == EnergyCore.option_vanilla:
             energy_core = self.create_item('Energy Core')
             self.world.get_location('Energy Core #285', self.player).place_locked_item(energy_core)
             self.world.itempool.remove(energy_core)
@@ -330,7 +330,7 @@ class SoEWorld(World):
             switches = []
             if self.world.death_link[self.player].value:
                 switches.append("--death-link")
-            if self.energy_core == Options.EnergyCore.option_fragments:
+            if self.energy_core == EnergyCore.option_fragments:
                 switches.append('--available-fragments')
                 switches.append(str(self.available_fragments))
                 switches.append('--required-fragments')
