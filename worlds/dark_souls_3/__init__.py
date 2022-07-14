@@ -141,7 +141,7 @@ class DarkSouls3World(World):
         new_region = Region(region_name, RegionType.Generic, region_name, self.player)
         if location_table:
             for name, address in location_table.items():
-                location = Location(self.player, name, address, new_region)
+                location = Location(self.player, name, self.location_name_to_id[name], new_region)
                 new_region.locations.append(location)
         self.world.regions.append(new_region)
         return new_region
