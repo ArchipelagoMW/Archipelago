@@ -1,6 +1,12 @@
 import typing
-from Options import Option
+from Options import Choice, Option, Toggle, DefaultOnToggle, Range, OptionList, DefaultOffToggle
 
 
-Galaxy_options: typing.Dict[str, type(Option)] = {
+class EnablePurpleCoinStars(DefaultOffToggle):
+    """tuning this on we allow purple coin stars to count as checks do note all purple coin stars are postgame only."""
+    display_name = "Enable Purple Coin Stars"
+
+smg_options: typing.Dict[str, type(Option)] = {
+    "EnablePurpleCoinStars": EnablePurpleCoinStars,
 }
+
