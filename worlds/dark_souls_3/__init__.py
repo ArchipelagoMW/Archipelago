@@ -4,10 +4,8 @@ import os
 
 from random import randint
 from .Options import dark_souls_options  # the options we defined earlier
-from .Items import DarkSouls3Item  # data used below to add items to the World
-from .Locations import DarkSouls3Location  # same as above
 from .data.items_data import weapons_upgrade_5_table, weapons_upgrade_10_table, item_dictionary_table, key_items_list
-from .data.locations_data import dictionary_table, cemetery_of_ash_table, fire_link_shrine_table, \
+from .data.locations_data import location_dictionary_table, cemetery_of_ash_table, fire_link_shrine_table, \
     high_wall_of_lothric, \
     undead_settlement_table, road_of_sacrifice_table, consumed_king_garden_table, cathedral_of_the_deep_table, \
     farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table, \
@@ -44,7 +42,7 @@ class DarkSouls3World(World):
 
     def create_item(self, name: str) -> Item:
         data = self.item_name_to_id[name]
-        return DarkSouls3Item(
+        return Item(
             name, ItemClassification.progression if name in key_items_list else
             ItemClassification.useful, data, self.player)
 
@@ -231,7 +229,7 @@ class DarkSouls3World(World):
                 items_address.append(item_dictionary[location.item.name])
 
             if location.player == self.player:
-                locations_address.append(dictionary_table[location.name])
+                locations_address.append(location_dictionary_table[location.name])
                 locations_id.append(location.address)
                 if location.item.player == self.player:
                     locations_target.append(item_dictionary[location.item.name])
@@ -277,5 +275,5 @@ class DarkSouls3World(World):
     # The following two dicts are required for the generation to know which
     # items exist. They could be generated from json or something else. They can
     # include events, but don't have to since events will be placed manually.
-    item_name_to_id = {name: id for id, name in enumerate(DarkSouls3Item.get_item_name_to_id(), base_id)}
-    location_name_to_id = {name: id for id, name in enumerate(DarkSouls3Location.get_location_name_to_id(), base_id)}
+    item_name_to_id = {name: id for id, name in enumerate(item_dictionary_table, base_id)}
+    location_name_to_id = {name: id for id, name in enumerate(location_dictionary_table, base_id)}

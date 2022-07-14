@@ -417,7 +417,7 @@ archdragon_peak_table = {
     "AP: Soul of the Nameless King": 0x400002D2,
 }
 
-dictionary_table = {**cemetery_of_ash_table, **fire_link_shrine_table, **firelink_shrine_bell_tower_table, **high_wall_of_lothric, **undead_settlement_table, **road_of_sacrifice_table,
-                    **cathedral_of_the_deep_table, **farron_keep_table, **catacombs_of_carthus_table, **smouldering_lake_table, **irithyll_of_the_boreal_valley_table,
-                    **irithyll_dungeon_table, **profaned_capital_table, **anor_londo_table, **lothric_castle_table, **consumed_king_garden_table,
-                    **grand_archives_table, **untended_graves_table, **archdragon_peak_table}
+location_dictionary_table = {**cemetery_of_ash_table, **fire_link_shrine_table, **firelink_shrine_bell_tower_table, **high_wall_of_lothric, **undead_settlement_table, **road_of_sacrifice_table,
+                             **cathedral_of_the_deep_table, **farron_keep_table, **catacombs_of_carthus_table, **smouldering_lake_table, **irithyll_of_the_boreal_valley_table,
+                             **irithyll_dungeon_table, **profaned_capital_table, **anor_londo_table, **lothric_castle_table, **consumed_king_garden_table,
+                             **grand_archives_table, **untended_graves_table, **archdragon_peak_table}
