@@ -9,9 +9,6 @@ from .Regions import create_regions, sm64courses
 from BaseClasses import Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
 
-client_version = 1
-
-
 class SM64Web(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -38,6 +35,8 @@ class SM64World(World):
     location_name_to_id = location_table
 
     data_version = 6
+    client_version = 2
+    
     forced_auto_forfeit = False
 
     area_connections: typing.Dict[int, int]
