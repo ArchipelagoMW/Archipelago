@@ -185,7 +185,6 @@ class SoEWorld(World):
         if self.required_fragments > self.world.available_fragments[self.player].value:
             self.world.available_fragments[self.player].value = self.required_fragments
         self.available_fragments = self.world.available_fragments[self.player].value
-        print(f"{self.required_fragments}/{self.available_fragments} fragments required")
 
     def create_event(self, event: str) -> Item:
         return SoEItem(event, ItemClassification.progression, None, self.player)
