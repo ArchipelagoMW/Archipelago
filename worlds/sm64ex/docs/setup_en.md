@@ -65,7 +65,7 @@ As an alternative to launching the game with sm64pclauncher, it is also possible
 
 IMPORTANT NOTE: The remainder of this section uses copy-and-paste code that assumes you're using the US version. If you instead use the Japanese version, you'll need to edit the EXE name accordingly by changing "sm64.us.f3dex2e.exe" to "sm64.jn.f3dex2e.exe".
 
-## Making an offline.bat for launching offline patch files
+### Making an offline.bat for launching offline patch files
 
 Open Notepad. Paste in the following text: `start sm64.us.f3dex2e.exe --sm64ap_file %1 --skip-intro`
 
@@ -81,7 +81,7 @@ The batch file you just created and made a shortcut for is set up to accept patc
 
 NOTE: When playing offline patch files, a `.save` file is created in the same directory as your patch file, which contains your save data for that seed. Don't delete it until you're done with that seed.
 
-## Making an online.bat for launching online Multiworld games
+### Making an online.bat for launching online Multiworld games
 
 The steps here are very similar, as you will be making a batch file in the same location as the offline one. However, the text you put into the batch file is different, and you won't be dragging patch files onto it.
 
@@ -97,7 +97,7 @@ Save and shortcut the same as before. Unlike the offline batch file, you'll open
 
 Once you provide those two bits of information, the game will open. If the info is correct, upon starting the game you should see "Connected to Archipelago" on the bottom of your screen, and be able to enter the castle. If you don't see this text and crash upon entering the castle, try again and ensure you're typing the port and slot name correctly - even a single typo will cause your connection to fail.
 
-## Addendum - Deleting old saves
+### Addendum - Deleting old saves
 
 Loading an old Mario save alongside a new seed is a bad idea, as it can cause locked doors and castle secret stars to already be unlocked / obtained. You should avoid opening a save that says "Stars x 0" as opposed to one that simply says "New".
 
