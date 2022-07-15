@@ -105,12 +105,13 @@ class RiskOfRainWorld(World):
         create_events(self.world, self.player, int(self.world.total_locations[self.player]))
 
     def fill_slot_data(self):
+        option_results = self.world.get_option_results(self.player)
         return {
-            "itemPickupStep": self.world.item_pickup_step[self.player].value,
+            "itemPickupStep": option_results["item_pickup_step"],
             "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for i in range(16)),
-            "totalLocations": self.world.total_locations[self.player].value,
-            "totalRevivals": self.world.total_revivals[self.player].value,
-            "startWithDio": self.world.start_with_revive[self.player].value
+            "totalLocations": option_results["total_locations"],
+            "totalRevivals": option_results["total_revivals"],
+            "startWithDio": option_results["start_with_revive"]
         }
 
     def create_item(self, name: str) -> Item:
