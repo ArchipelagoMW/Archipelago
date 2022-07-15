@@ -33,7 +33,27 @@ class DarkSouls3World(World):
     they can use to fight their enemies.
     """
 
+    game: str = "Dark Souls III"  # name of the game/world
+    options = dark_souls_options  # options the player can set
+    topology_present: bool = True  # show path to required location checks in spoiler
+    remote_items: bool = False  # True if all items come from the server
+    remote_start_inventory: bool = False  # True if start inventory comes from the server
     web = DarkSouls3Web()
+
+    # data_version is used to signal that items, locations or their names
+    # changed. Set this to 0 during development so other games' clients do not
+    # cache any texts, then increase by 1 for each release that makes changes.
+    data_version = 1
+
+    # ID of first item and location, could be hard-coded but code may be easier
+    # to read with this as a property.
+    base_id = 100000
+
+    # The following two dicts are required for the generation to know which
+    # items exist. They could be generated from json or something else. They can
+    # include events, but don't have to since events will be placed manually.
+    item_name_to_id = {name: id for id, name in enumerate(item_dictionary_table, base_id)}
+    location_name_to_id = {name: id for id, name in enumerate(location_dictionary_table, base_id)}
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -51,8 +71,7 @@ class DarkSouls3World(World):
         else:
             item_classification = ItemClassification.filler
 
-        return Item(
-            name, item_classification, data, self.player)
+        return Item(name, item_classification, data, self.player)
 
     def create_regions(self):
         menu_region = Region("Menu", RegionType.Generic, "Menu", self.player)
@@ -158,36 +177,27 @@ class DarkSouls3World(World):
     def set_rules(self) -> None:
 
         # Define the access rules to the entrances
-        set_rule(
-            self.world.get_entrance("Goto Bell Tower", self.player),
-            lambda state: state.has("Mortician's Ashes", self.player))
-        set_rule(
-            self.world.get_entrance("Goto Undead Settlement", self.player),
-            lambda state: state.has("Small Lothric Banner", self.player))
-        set_rule(
-            self.world.get_entrance("Goto Lothric Castle", self.player),
-            lambda state: state.has("Basin of Vows", self.player))
-        set_rule(
-            self.world.get_location("HWL: Soul of the Dancer", self.player),
-            lambda state: state.has("Basin of Vows", self.player))
-        set_rule(
-            self.world.get_entrance("Goto Irithyll of the boreal", self.player),
-            lambda state: state.has("Small Doll", self.player))
-        set_rule(
-            self.world.get_entrance("Goto Archdragon peak", self.player),
-            lambda state: state.has("Path of the Dragon Gesture", self.player))
-        set_rule(
-            self.world.get_entrance("Goto Profaned capital", self.player),
-            lambda state: state.has("Storm Ruler", self.player))
-        set_rule(
-            self.world.get_entrance("Goto Grand Archives", self.player),
-            lambda state: state.has("Grand Archives Key", self.player))
-        set_rule(
-            self.world.get_entrance("Goto Kiln Of The First Flame", self.player), lambda state:
-            state.has("Cinders of a Lord - Abyss Watcher", self.player) and
-            state.has("Cinders of a Lord - Yhorm the Giant", self.player) and
-            state.has("Cinders of a Lord - Aldrich", self.player) and
-            state.has("Cinders of a Lord - Lothric Prince", self.player))
+        set_rule(self.world.get_entrance("Goto Bell Tower", self.player),
+                 lambda state: state.has("Mortician's Ashes", self.player))
+        set_rule(self.world.get_entrance("Goto Undead Settlement", self.player),
+                 lambda state: state.has("Small Lothric Banner", self.player))
+        set_rule(self.world.get_entrance("Goto Lothric Castle", self.player),
+                 lambda state: state.has("Basin of Vows", self.player))
+        set_rule(self.world.get_location("HWL: Soul of the Dancer", self.player),
+                 lambda state: state.has("Basin of Vows", self.player))
+        set_rule(self.world.get_entrance("Goto Irithyll of the boreal", self.player),
+                 lambda state: state.has("Small Doll", self.player))
+        set_rule(self.world.get_entrance("Goto Archdragon peak", self.player),
+                 lambda state: state.has("Path of the Dragon Gesture", self.player))
+        set_rule(self.world.get_entrance("Goto Profaned capital", self.player),
+                 lambda state: state.has("Storm Ruler", self.player))
+        set_rule(self.world.get_entrance("Goto Grand Archives", self.player),
+                 lambda state: state.has("Grand Archives Key", self.player))
+        set_rule(self.world.get_entrance("Goto Kiln Of The First Flame", self.player),
+                 lambda state: state.has("Cinders of a Lord - Abyss Watcher", self.player) and
+                 state.has("Cinders of a Lord - Yhorm the Giant", self.player) and
+                 state.has("Cinders of a Lord - Aldrich", self.player) and
+                 state.has("Cinders of a Lord - Lothric Prince", self.player))
 
         self.world.completion_condition[self.player] = lambda state: \
             state.has("Cinders of a Lord - Abyss Watcher", self.player) and \
@@ -224,18 +234,17 @@ class DarkSouls3World(World):
         locations_id = []
         locations_address = []
         locations_target = []
-        for location in self.world.get_filled_locations():
+        for location in self.world.get_filled_locations(self.player):
             if location.item.player == self.player:
                 items_id.append(location.item.code)
                 items_address.append(item_dictionary[location.item.name])
 
-            if location.player == self.player:
-                locations_address.append(location_dictionary_table[location.name])
-                locations_id.append(location.address)
-                if location.item.player == self.player:
-                    locations_target.append(item_dictionary[location.item.name])
-                else:
-                    locations_target.append(0)
+            locations_address.append(location_dictionary_table[location.name])
+            locations_id.append(location.address)
+            if location.item.player == self.player:
+                locations_target.append(item_dictionary[location.item.name])
+            else:
+                locations_target.append(0)
 
         data = {
             "options": {
@@ -257,24 +266,3 @@ class DarkSouls3World(World):
         filename = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}.json"
         with open(os.path.join(output_directory, filename), 'w') as outfile:
             json.dump(data, outfile)
-
-    game: str = "Dark Souls III"  # name of the game/world
-    options = dark_souls_options  # options the player can set
-    topology_present: bool = True  # show path to required location checks in spoiler
-    remote_items: bool = False  # True if all items come from the server
-    remote_start_inventory: bool = False  # True if start inventory comes from the server
-
-    # data_version is used to signal that items, locations or their names
-    # changed. Set this to 0 during development so other games' clients do not
-    # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 1
-
-    # ID of first item and location, could be hard-coded but code may be easier
-    # to read with this as a property.
-    base_id = 100000
-
-    # The following two dicts are required for the generation to know which
-    # items exist. They could be generated from json or something else. They can
-    # include events, but don't have to since events will be placed manually.
-    item_name_to_id = {name: id for id, name in enumerate(item_dictionary_table, base_id)}
-    location_name_to_id = {name: id for id, name in enumerate(location_dictionary_table, base_id)}
