@@ -5,7 +5,7 @@ from .Items import item_table, cannon_item_table, SM64Item
 from .Locations import location_table, SM64Location
 from .Options import sm64_options
 from .Rules import set_rules
-from .Regions import create_regions, sm64courses
+from .Regions import create_regions, sm64courses, sm64paintings
 from BaseClasses import Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
 
@@ -35,7 +35,7 @@ class SM64World(World):
     location_name_to_id = location_table
 
     data_version = 6
-    client_version = 2
+    required_client_version = (0,3,0)
     
     forced_auto_forfeit = False
 
@@ -54,10 +54,10 @@ class SM64World(World):
         set_rules(self.world, self.player, self.area_connections)
         if self.topology_present:
             # Write area_connections to spoiler log
-            for painting_id, course_id in self.area_connections.items():
+            for painting_id, destination in self.area_connections.items():
                 self.world.spoiler.set_entrance(
-                    sm64courses[painting_id] + " Painting",
-                    sm64courses[course_id],
+                    sm64paintings[painting_id] + " Painting",
+                    sm64courses[destination // 10],
                     'entrance', self.player)
 
     def create_item(self, name: str) -> Item:
@@ -145,8 +145,8 @@ class SM64World(World):
     def modify_multidata(self, multidata):
         if self.topology_present:
             er_hint_data = {}
-            for painting_id, course_id in self.area_connections.items():
-                region = self.world.get_region(sm64courses[course_id], self.player)
+            for painting_id, destination in self.area_connections.items():
+                region = self.world.get_region(sm64courses[destination // 10], self.player)
                 for location in region.locations:
-                    er_hint_data[location.address] = sm64courses[painting_id]
+                    er_hint_data[location.address] = sm64paintings[painting_id]
             multidata['er_hint_data'][self.player] = er_hint_data
