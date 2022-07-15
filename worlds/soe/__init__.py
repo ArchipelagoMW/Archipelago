@@ -223,10 +223,13 @@ class SoEWorld(World):
 
     def create_items(self):
         # add regular items to the pool
-        exclusions = []
-        if self.energy_core == EnergyCore.option_fragments:
-            exclusions.append("Energy Core")
+        exclusions: typing.List[str] = []
+        if self.energy_core != EnergyCore.option_shuffle:
+            exclusions.append("Energy Core")  # will be placed in generate_basic or replaced by a fragment below
         items = list(map(lambda item: self.create_item(item), (item for item in _items if item.name not in exclusions)))
+
+        # remove one pair of wings that will be placed in generate_basic
+        items.remove(self.create_item("Wings"))
 
         def is_ingredient(item):
             for ingredient in _ingredients:
@@ -305,11 +308,10 @@ class SoEWorld(World):
         wings_location = self.world.random.choice(self._halls_ne_chest_names)
         wings_item = self.create_item('Wings')
         self.world.get_location(wings_location, self.player).place_locked_item(wings_item)
-        self.world.itempool.remove(wings_item)
+        # place energy core at vanilla location for vanilla mode
         if self.energy_core == EnergyCore.option_vanilla:
             energy_core = self.create_item('Energy Core')
             self.world.get_location('Energy Core #285', self.player).place_locked_item(energy_core)
-            self.world.itempool.remove(energy_core)
         # generate stuff for later
         self.evermizer_seed = self.world.random.randint(0, 2 ** 16 - 1)  # TODO: make this an option for "full" plando?
 
