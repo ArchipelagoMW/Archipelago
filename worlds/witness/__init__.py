@@ -59,6 +59,12 @@ class WitnessWorld(World):
         }
 
     def generate_early(self):
+        if not (is_option_enabled(self.world, self.player, "shuffle_symbols")
+                or get_option_value(self.world, self.player, "shuffle_doors")
+                or is_option_enabled(self.world, self.player, "shuffle_lasers")):
+            raise Exception("This Witness world doesn't have any progression items. Please turn on Symbol Shuffle, Door"
+                            " Shuffle or Laser Shuffle")
+
         self.player_logic = WitnessPlayerLogic(self.world, self.player)
         self.locat = WitnessPlayerLocations(self.world, self.player, self.player_logic)
         self.items = WitnessPlayerItems(self.locat, self.world, self.player, self.player_logic)
