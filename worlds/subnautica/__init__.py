@@ -49,17 +49,17 @@ class SubnauticaWorld(World):
 
     def create_regions(self):
         self.world.regions += [
-            self.create_region('Menu', None, ['Lifepod 5']),
-            self.create_region('Planet 4546B',
+            self.create_region("Menu", None, ["Lifepod 5"]),
+            self.create_region("Planet 4546B",
                                Locations.events + [location["name"] for location in Locations.location_table.values()])
         ]
 
-    def set_rules(self):
-        set_rules(self.world, self.player)
+    # refer to Rules.py
+    set_rules = set_rules
 
     def generate_basic(self):
         # Link regions
-        self.world.get_entrance('Lifepod 5', self.player).connect(self.world.get_region('Planet 4546B', self.player))
+        self.world.get_entrance("Lifepod 5", self.player).connect(self.world.get_region("Planet 4546B", self.player))
 
         # Generate item pool
         pool = []

@@ -229,7 +229,10 @@ def set_location_rule(world, player, loc):
     set_rule(world.get_location(loc["name"], player), lambda state: can_access_location(state, player, loc))
 
 
-def set_rules(world, player):
+def set_rules(subnautica_world):
+    player = subnautica_world.player
+    world = subnautica_world.world
+
     for loc in location_table.values():
         set_location_rule(world, player, loc)
 
@@ -237,13 +240,13 @@ def set_rules(world, player):
     set_rule(world.get_location("Neptune Launch", player), lambda state:
         get_max_depth(state, player) >= 1444 and
         has_mobile_vehicle_bay(state, player) and
-        state.has('Neptune Launch Platform', player) and
-        state.has('Neptune Gantry', player) and
-        state.has('Neptune Boosters', player) and
-        state.has('Neptune Fuel Reserve', player) and
-        state.has('Neptune Cockpit', player) and
-        state.has('Ion Power Cell', player) and
-        state.has('Ion Battery', player) and
+        state.has("Neptune Launch Platform", player) and
+        state.has("Neptune Gantry", player) and
+        state.has("Neptune Boosters", player) and
+        state.has("Neptune Fuel Reserve", player) and
+        state.has("Neptune Cockpit", player) and
+        state.has("Ion Power Cell", player) and
+        state.has("Ion Battery", player) and
         has_cyclops_shield(state, player))
 
     set_rule(world.get_location("Disable Quarantine", player), lambda state:
@@ -255,4 +258,4 @@ def set_rules(world, player):
     room = world.get_location("Aurora Drive Room - Upgrade Console", player)
     set_rule(world.get_location("Repair Aurora Drive", player), lambda state: room.can_reach(state))
 
-    world.completion_condition[player] = lambda state: state.has('Victory', player)
+    world.completion_condition[player] = lambda state: state.has("Victory", player)
