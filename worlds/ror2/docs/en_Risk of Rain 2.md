@@ -61,7 +61,7 @@ the new equipment_ will take it's place. (If you want the old one back, pick it 
 
 Since a Risk of Rain 2 run can go on indefinitely, you have to configure how many collectible items (also known as
 "checks") the game has for purposes of Archipelago when you set up a multiworld. You can configure anywhere from **10
-to 500** items. The number of items will be randomized between all players, so you may want to adjust the number and
+to 250** items. The number of items will be randomized between all players, so you may want to adjust the number and
 item pickup step based on how many items the other players in the multiworld have. (Around 100 seems to be a good
 ballpark if you want to have a similar number of items to most other games.)
 
