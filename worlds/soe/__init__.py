@@ -326,14 +326,12 @@ class SoEWorld(World):
         try:
             money = self.world.money_modifier[self.player].value
             exp = self.world.exp_modifier[self.player].value
-            switches = []
+            switches: typing.List[str] = []
             if self.world.death_link[self.player].value:
                 switches.append("--death-link")
             if self.energy_core == EnergyCore.option_fragments:
-                switches.append('--available-fragments')
-                switches.append(str(self.available_fragments))
-                switches.append('--required-fragments')
-                switches.append(str(self.required_fragments))
+                switches.extend(('--available-fragments', str(self.available_fragments),
+                                 '--required-fragments', str(self.required_fragments)))
             rom_file = get_base_rom_path()
             out_base = output_path(output_directory, f'AP_{self.world.seed_name}_P{self.player}_'
                                                      f'{self.world.get_file_safe_player_name(self.player)}')
