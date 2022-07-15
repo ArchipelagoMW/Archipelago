@@ -6,7 +6,7 @@ class TotalLocations(Range):
     """Number of location checks which are added to the Risk of Rain playthrough."""
     display_name = "Total Locations"
     range_start = 10
-    range_end = 500
+    range_end = 250
     default = 20
 
 
@@ -122,6 +122,7 @@ class ItemPoolPresetToggle(DefaultOnToggle):
     """Will use the item weight presets when set to true, otherwise will use the custom set item pool weights."""
     display_name = "Item Weight Presets"
 
+
 class ItemWeights(Choice):
     """Preset choices for determining the weights of the item pool.<br>
     New is a test for a potential adjustment to the default weights.<br>
@@ -143,7 +144,8 @@ class ItemWeights(Choice):
     option_even = 7
     option_scraps_only = 8
 
-#define a dictionary for the weights of the generated item pool.
+
+# define a dictionary for the weights of the generated item pool.
 ror2_weights: typing.Dict[str, type(Option)] = {
     "green_scrap":          GreenScrap,
     "red_scrap":            RedScrap,
