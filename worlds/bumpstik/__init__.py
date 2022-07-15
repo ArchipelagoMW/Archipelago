@@ -59,6 +59,9 @@ class BumpStikWorld(World):
     def get_filler_item_name(self) -> str:
         return "Starting Paint Can"
 
+    def create_regions(self):
+        create_regions(self.world, self.player)
+
     def create_items(self):
         frequencies = [3, 3, 2, 1, 3, 5, 3]
         item_pool = []
