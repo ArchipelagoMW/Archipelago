@@ -80,5 +80,5 @@ class BumpStikWorld(World):
                     self.player), "Hazard Bumper", self.player)
 
     def generate_basic(self):
-        self.world.completion_condition = lambda state: state.has("Booster Bumper", self.player, 5) and state.has_all(
-            "Board Size", self.player) and state.has_all("Color", self.player)
+        self.world.completion_condition[self.player] = lambda state: state.has("Booster Bumper", self.player,
+            5) and state.has_all("Board Size", self.player) and state.has_all("Color", self.player)
