@@ -126,7 +126,6 @@ class MultiWorld():
             set_player_attr('beemizer_total_chance', 0)
             set_player_attr('beemizer_trap_chance', 0)
             set_player_attr('escape_assist', [])
-            set_player_attr('open_pyramid', False)
             set_player_attr('treasure_hunt_icon', 'Triforce Piece')
             set_player_attr('treasure_hunt_count', 0)
             set_player_attr('clock_mode', False)
@@ -390,20 +389,14 @@ class MultiWorld():
         self.state.collect(item, True)
 
     def push_item(self, location: Location, item: Item, collect: bool = True):
-        if not isinstance(location, Location):
-            raise RuntimeError(
-                'Cannot assign item %s to invalid location %s (player %d).' % (item, location, item.player))
+        assert location.can_fill(self.state, item, False), f"Cannot place {item} into {location}."
+        location.item = item
+        item.location = location
+        item.world = self  # try to not have this here anymore and create it with item?
+        if collect:
+            self.state.collect(item, location.event, location)
 
-        if location.can_fill(self.state, item, False):
-            location.item = item
-            item.location = location
-            item.world = self  # try to not have this here anymore
-            if collect:
-                self.state.collect(item, location.event, location)
-
-            logging.debug('Placed %s at %s', item, location)
-        else:
-            raise RuntimeError('Cannot assign item %s to location %s.' % (item, location))
+        logging.debug('Placed %s at %s', item, location)
 
     def get_entrances(self) -> List[Entrance]:
         if self._cached_entrances is None:
@@ -1431,8 +1424,6 @@ class Spoiler():
                     outfile.write('Entrance Shuffle:                %s\n' % self.world.shuffle[player])
                     if self.world.shuffle[player] != "vanilla":
                         outfile.write('Entrance Shuffle Seed            %s\n' % self.world.worlds[player].er_seed)
-                    outfile.write('Pyramid hole pre-opened:         %s\n' % (
-                        'Yes' if self.world.open_pyramid[player] else 'No'))
                     outfile.write('Shop inventory shuffle:          %s\n' %
                                   bool_to_text("i" in self.world.shop_shuffle[player]))
                     outfile.write('Shop price shuffle:              %s\n' %

@@ -583,9 +583,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     ret.goal = goals[goal]
 
-    # TODO consider moving open_pyramid to an automatic variable in the core roller, set to True when
-    # fast ganon + ganon at hole
-    ret.open_pyramid = get_choice_legacy('open_pyramid', weights, 'goal')
 
     extra_pieces = get_choice_legacy('triforce_pieces_mode', weights, 'available')
 

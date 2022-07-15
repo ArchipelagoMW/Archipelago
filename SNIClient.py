@@ -62,7 +62,7 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
     def _cmd_snes(self, snes_options: str = "") -> bool:
         """Connect to a snes. Optionally include network address of a snes to connect to,
         otherwise show available devices; and a SNES device number if more than one SNES is detected.
-        Examples: "/snes", "/snes 1", "/snes localhost:8080 1" """
+        Examples: "/snes", "/snes 1", "/snes localhost:23074 1" """
 
         snes_address = self.ctx.snes_address
         snes_device_number = -1
@@ -1296,7 +1296,7 @@ async def main():
     parser = get_base_parser()
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a Archipelago Binary Patch file')
-    parser.add_argument('--snes', default='localhost:8080', help='Address of the SNI server.')
+    parser.add_argument('--snes', default='localhost:23074', help='Address of the SNI server.')
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
     args = parser.parse_args()
 

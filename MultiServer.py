@@ -720,16 +720,16 @@ def get_players_string(ctx: Context):
     return f'{len(auth_clients)} players of {total} connected ' + text[:-1]
 
 
-def get_status_string(ctx: Context, team: int):
-    text = "Player Status on your team:"
+def get_status_string(ctx: Context, team: int, tag: str):
+    text = f"Player Status on team {team}:"
     for slot in ctx.locations:
         connected = len(ctx.clients[team][slot])
-        death_link = len([client for client in ctx.clients[team][slot] if "DeathLink" in client.tags])
+        tagged = len([client for client in ctx.clients[team][slot] if tag in client.tags])
         completion_text = f"({len(ctx.location_checks[team, slot])}/{len(ctx.locations[slot])})"
-        death_text = f" {death_link} of which are death link" if connected else ""
+        tag_text = f" {tagged} of which are tagged {tag}" if connected and tag else ""
         goal_text = " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else "."
         text += f"\n{ctx.get_aliased_name(team, slot)} has {connected} connection{'' if connected == 1 else 's'}" \
-                f"{death_text}{goal_text} {completion_text}"
+                f"{tag_text}{goal_text} {completion_text}"
     return text
 
 
@@ -1113,9 +1113,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output(get_players_string(self.ctx))
         return True
 
-    def _cmd_status(self) -> bool:
-        """Get status information about your team."""
-        self.output(get_status_string(self.ctx, self.client.team))
+    def _cmd_status(self, tag:str="") -> bool:
+        """Get status information about your team.
+        Optionally mention a Tag name and get information on who has that Tag.
+        For example: DeathLink or EnergyLink."""
+        self.output(get_status_string(self.ctx, self.client.team, tag))
         return True
 
     def _cmd_release(self) -> bool:
@@ -1655,6 +1657,14 @@ class ServerCommandProcessor(CommonCommandProcessor):
     def _cmd_players(self) -> bool:
         """Get information about connected players"""
         self.output(get_players_string(self.ctx))
+        return True
+
+    def _cmd_status(self, tag: str = "") -> bool:
+        """Get status information about teams.
+        Optionally mention a Tag name and get information on who has that Tag.
+        For example: DeathLink or EnergyLink."""
+        for team in self.ctx.clients:
+            self.output(get_status_string(self.ctx, team, tag))
         return True
 
     def _cmd_exit(self) -> bool:
