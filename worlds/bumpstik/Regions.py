@@ -48,6 +48,6 @@ def create_regions(world: MultiWorld, player: int):
         world.regions += [region]
 
     for entrance in entrance_map:
-        connection = world.get_entrance(entrance, player)
+        connection = world.get_entrance(f"To {entrance}", player)
         connection.access_rule = entrance_map[entrance]
-        connection.connect(world.get_region(f"To {entrance}", player))
+        connection.connect(world.get_region(entrance, player))
