@@ -25,7 +25,7 @@ Then you need to add the two following files at the root folder of your game
 ## Joining a MultiWorld Game
 
 1. Run DarkSoulsIII.exe or run the game through Steam
-2. Type in /connect {SERVER_IP}:{SERVER_PORT}
+2. Type in /connect {SERVER_IP}:{SERVER_PORT} in the "Windows Command Prompt" that opened
 3. Once connected, create a new game, choose a class and wait for the others before starting
 4. You can quit and launch at anytime during a game
 

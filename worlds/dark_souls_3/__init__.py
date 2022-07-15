@@ -2,7 +2,7 @@
 import json
 import os
 
-from .Options import dark_souls_options  # the options we defined earlier
+from .Options import dark_souls_options
 from .data.items_data import weapons_upgrade_5_table, weapons_upgrade_10_table, item_dictionary_table, key_items_list
 from .data.locations_data import location_dictionary_table, cemetery_of_ash_table, fire_link_shrine_table, \
     high_wall_of_lothric, \
@@ -33,25 +33,14 @@ class DarkSouls3World(World):
     they can use to fight their enemies.
     """
 
-    game: str = "Dark Souls III"  # name of the game/world
-    options = dark_souls_options  # options the player can set
-    topology_present: bool = True  # show path to required location checks in spoiler
-    remote_items: bool = False  # True if all items come from the server
-    remote_start_inventory: bool = False  # True if start inventory comes from the server
+    game: str = "Dark Souls III"
+    options = dark_souls_options
+    topology_present: bool = True
+    remote_items: bool = False
+    remote_start_inventory: bool = False
     web = DarkSouls3Web()
-
-    # data_version is used to signal that items, locations or their names
-    # changed. Set this to 0 during development so other games' clients do not
-    # cache any texts, then increase by 1 for each release that makes changes.
     data_version = 1
-
-    # ID of first item and location, could be hard-coded but code may be easier
-    # to read with this as a property.
     base_id = 100000
-
-    # The following two dicts are required for the generation to know which
-    # items exist. They could be generated from json or something else. They can
-    # include events, but don't have to since events will be placed manually.
     item_name_to_id = {name: id for id, name in enumerate(item_dictionary_table, base_id)}
     location_name_to_id = {name: id for id, name in enumerate(location_dictionary_table, base_id)}
 
