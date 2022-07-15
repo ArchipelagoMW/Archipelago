@@ -52,7 +52,6 @@ Item grouping currently supports
 * Ingredients - Matches all ingredient drops
 * Alchemy - Matches all alchemy formulas
 * Weapons - Matches all weapons but Bazooka, Bone Crusher, Neutron Blade
-* Bazooka - Matches all bazookas (currently only one)
 * Traps - Matches all traps
 """
 
@@ -129,7 +128,6 @@ def _get_item_grouping() -> typing.Dict[str, typing.Set[str]]:
     groups['Alchemy'] = set(item.name for item in _items if item.type == pyevermizer.CHECK_ALCHEMY)
     groups['Weapons'] = {'Spider Claw', 'Horn Spear', 'Gladiator Sword', 'Bronze Axe', 'Bronze Spear', 'Crusader Sword',
                          'Lance (Weapon)', 'Knight Basher', 'Atom Smasher', 'Laser Lance'}
-    groups['Bazooka'] = {'Bazooka'}
     groups['Traps'] = {trap.name for trap in _traps}
     return groups
 
