@@ -43,7 +43,7 @@ class FinalStageDeath(DefaultOnToggle):
 
 
 class GreenScrap(Range):
-    """Weight of Green Scraps in the item pool."""
+    """Weight of Green Scraps in the item pool. (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Green Scraps"
     range_start = 0
     range_end = 100
@@ -51,7 +51,7 @@ class GreenScrap(Range):
 
 
 class RedScrap(Range):
-    """Weight of Red Scraps in the item pool."""
+    """Weight of Red Scraps in the item pool. (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Red Scraps"
     range_start = 0
     range_end = 100
@@ -59,7 +59,7 @@ class RedScrap(Range):
 
 
 class YellowScrap(Range):
-    """Weight of yellow scraps in the item pool."""
+    """Weight of yellow scraps in the item pool. (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Yellow Scraps"
     range_start = 0
     range_end = 100
@@ -67,7 +67,7 @@ class YellowScrap(Range):
 
 
 class WhiteScrap(Range):
-    """Weight of white scraps in the item pool."""
+    """Weight of white scraps in the item pool. (Ignored unless Item Weight Presets is 'No')"""
     display_name = "White Scraps"
     range_start = 0
     range_end = 100
@@ -75,7 +75,7 @@ class WhiteScrap(Range):
 
 
 class CommonItem(Range):
-    """Weight of common items in the item pool."""
+    """Weight of common items in the item pool. (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Common Items"
     range_start = 0
     range_end = 100
@@ -83,7 +83,7 @@ class CommonItem(Range):
 
 
 class UncommonItem(Range):
-    """Weight of uncommon items in the item pool."""
+    """Weight of uncommon items in the item pool. (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Uncommon Items"
     range_start = 0
     range_end = 100
@@ -91,7 +91,7 @@ class UncommonItem(Range):
 
 
 class LegendaryItem(Range):
-    """Weight of legendary items in the item pool."""
+    """Weight of legendary items in the item pool. (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Legendary Items"
     range_start = 0
     range_end = 100
@@ -99,7 +99,7 @@ class LegendaryItem(Range):
 
 
 class BossItem(Range):
-    """Weight of boss items in the item pool."""
+    """Weight of boss items in the item pool. (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Boss Items"
     range_start = 0
     range_end = 100
@@ -107,7 +107,7 @@ class BossItem(Range):
 
 
 class LunarItem(Range):
-    """Weight of lunar items in the item pool."""
+    """Weight of lunar items in the item pool. (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Lunar Items"
     range_start = 0
     range_end = 100
@@ -115,7 +115,7 @@ class LunarItem(Range):
 
 
 class Equipment(Range):
-    """Weight of equipment items in the item pool."""
+    """Weight of equipment items in the item pool. (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Equipment"
     range_start = 0
     range_end = 100
@@ -128,14 +128,14 @@ class ItemPoolPresetToggle(DefaultOnToggle):
 
 
 class ItemWeights(Choice):
-    """Preset choices for determining the weights of the item pool.<br>
-    New is a test for a potential adjustment to the default weights.<br>
-    Uncommon puts a large number of uncommon items in the pool.<br>
-    Legendary puts a large number of legendary items in the pool.<br>
-    Lunartic makes everything a lunar item.<br>
-    Chaos generates the pool completely at random with rarer items having a slight cap to prevent this option being too easy.<br>
-    No Scraps removes all scrap items from the item pool.<br>
-    Even generates the item pool with every item having an even weight.<br>
+    """Preset choices for determining the weights of the item pool.
+    New is a test for a potential adjustment to the default weights.
+    Uncommon puts a large number of uncommon items in the pool.
+    Legendary puts a large number of legendary items in the pool.
+    Lunartic makes everything a lunar item.
+    Chaos generates the pool completely at random with rarer items having a slight cap to prevent this option being too easy.
+    No Scraps removes all scrap items from the item pool.
+    Even generates the item pool with every item having an even weight.
     Scraps Only will be only scrap items in the item pool."""
     display_name = "Item Weights"
     option_default = 0
