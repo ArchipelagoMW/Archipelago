@@ -215,8 +215,8 @@ Quarry Mill Middle Floor (Quarry Mill) - Quarry Mill Ground Floor - 0x03675 - Qu
 158131 - 0x03679 (Lower Lift Control) - 0x014E8 - Dots & Eraser
 
 Quarry Mill Upper Floor (Quarry Mill) - Quarry Mill Middle Floor - 0x03676 & 0x03679 - Quarry Mill Ground Floor - 0x0368A:
-158132 - 0x03675 (Upper Ramp Control) - True - Dots & Eraser
-158133 - 0x03676 (Upper Lift Control) - True - Dots & Eraser
+158132 - 0x03676 (Upper Ramp Control) - True - Dots & Eraser
+158133 - 0x03675 (Upper Lift Control) - True - Dots & Eraser
 158134 - 0x00557 (Eraser and Squares 1) - True - Squares & Colored Squares & Eraser
 158135 - 0x005F1 (Eraser and Squares 2) - 0x00557 - Squares & Colored Squares & Eraser
 158136 - 0x00620 (Eraser and Squares 3) - 0x005F1 - Squares & Colored Squares & Eraser
@@ -893,7 +893,7 @@ Challenge (Challenge) - Theater Walkway - 0x0348A:
 158518 - 0x039B4 (Door to Theater Walkway Panel) - True - Triangles
 Door - 0x0348A (Door to Theater Walkway) - 0x039B4
 
-Theater Walkway (Theater Walkway) - Theater - 0x27739 - Desert Lowest Level Inbetween Shortcuts - 0x2773D - Town - 0x09E87:
+Theater Walkway (Theater Walkway) - Theater - 0x27739 - Desert Lowest Level Inbetween Shortcuts - 0x27263 - Town - 0x09E87:
 158668 - 0x2FAF6 (Vault Box) - True - True
 158519 - 0x27732 (Theater Shortcut Panel) - True - True
 Door - 0x27739 (Door to Back of Theater) - 0x27732

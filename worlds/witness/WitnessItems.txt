@@ -34,8 +34,8 @@ Doors:
 1110 - Door to Desert Flood Light Room (Panel) - 0x0C339
 1111 - Desert Flood Room Flood Controls (Panel) - 0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B
 1119 - Quarry Door to Mill (Panel) - 0x01E5A,0x01E59
-1120 - Quarry Mill Ramp Controls (Panel) - 0x03678,0x03675
-1122 - Quarry Mill Elevator Controls (Panel) - 0x03679,0x03676
+1120 - Quarry Mill Ramp Controls (Panel) - 0x03678,0x03676
+1122 - Quarry Mill Elevator Controls (Panel) - 0x03679,0x03675
 1125 - Quarry Boathouse Ramp Height Control (Panel) - 0x03852
 1127 - Quarry Boathouse Ramp Horizontal Control (Panel) - 0x03858
 1131 - Shadows Door Timer (Panel) - 0x334DB,0x334DC
