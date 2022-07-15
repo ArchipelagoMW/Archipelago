@@ -201,10 +201,7 @@ class SMWorld(World):
         create_locations(self, self.player)
         create_regions(self, self.world, self.player)
 
-    def getWord(self, w):
-        return (w & 0x00FF, (w & 0xFF00) >> 8)
-    
-    def getWordArray(self, w):
+    def getWordArray(self, w): # little-endian convert a 16-bit number to an array of numbers <= 255 each
         return [w & 0x00FF, (w & 0xFF00) >> 8]
 
     # used for remote location Credits Spoiler of local items
@@ -269,12 +266,24 @@ class SMWorld(World):
         itemName = "___" + itemName + "___"
 
         for char in itemName:
-            (w0, w1) = self.getWord(charMap.get(char, 0x3C4E))
+            [w0, w1] = self.getWordArray(charMap.get(char, 0x3C4E))
             data.append(w0)
             data.append(w1)
         return data
 
     def APPatchRom(self, romPatcher):
+        # first apply the sm multiworld code patch named 'basepatch' (also has empty tables that we'll overwrite),
+        #  + apply some patches from varia that we want to be always-on.
+        # basepatch and variapatches are both generated from https://github.com/lordlou/SMBasepatch
+        romPatcher.applyIPSPatch(
+            Utils.local_path("lib", "worlds", "sm", "data", "SMBasepatch_prebuilt", "multiworld-basepatch.ips") if
+            Utils.is_frozen() else
+            Utils.local_path(       "worlds", "sm", "data", "SMBasepatch_prebuilt", "multiworld-basepatch.ips"))
+        romPatcher.applyIPSPatch(
+            Utils.local_path("lib", "worlds", "sm", "data", "SMBasepatch_prebuilt", "variapatches.ips") if
+            Utils.is_frozen() else
+            Utils.local_path(       "worlds", "sm", "data", "SMBasepatch_prebuilt", "variapatches.ips"))
+
         multiWorldLocations = {}
         multiWorldItems = {}
         idx = 0
@@ -294,10 +303,10 @@ class SMWorld(World):
                     playerIDCount += 1
                     self.playerIDMap[romPlayerID] = playerIDCount
 
-                (w0, w1) = self.getWord(0 if itemLoc.item.player == self.player else 1)
-                (w2, w3) = self.getWord(itemId)
-                (w4, w5) = self.getWord(romPlayerID)
-                (w6, w7) = self.getWord(0 if itemLoc.item.advancement else 1)
+                [w0, w1] = self.getWordArray(0 if itemLoc.item.player == self.player else 1)
+                [w2, w3] = self.getWordArray(itemId)
+                [w4, w5] = self.getWordArray(romPlayerID)
+                [w6, w7] = self.getWordArray(0 if itemLoc.item.advancement else 1)
                 multiWorldLocations[0x1C6000 + locationsDict[itemLoc.name].Id*8] = [w0, w1, w2, w3, w4, w5, w6, w7]
 
             if itemLoc.item.player == self.player:
@@ -311,7 +320,7 @@ class SMWorld(World):
         for fileName in itemSprites:
             with open(Utils.local_path("lib", "worlds", "sm", "data", "custom_sprite", fileName) if Utils.is_frozen() else Utils.local_path("worlds", "sm", "data", "custom_sprite", fileName), 'rb') as stream:
                 buffer = bytearray(stream.read())
-                offworldSprites[0x027882 + 10*(21 + idx) + 2] = buffer[0:8]
+                offworldSprites[0x02787c + 10*(idx) + 2] = buffer[0:8]
                 offworldSprites[0x049100 + idx*256] = buffer[8:264]
                 idx += 1
             
@@ -319,6 +328,7 @@ class SMWorld(World):
 
         deathLink = {0x277f04: [self.world.death_link[self.player].value]}
         remoteItem = {0x277f06: self.getWordArray(0b001 + (0b010 if self.remote_items else 0b000))}
+        ownPlayerId = {0x277f08: self.getWordArray(self.player)}
 
         playerNames = {}
         playerNameIDMap = {}
@@ -334,6 +344,7 @@ class SMWorld(World):
                         'openTourianGreyDoors': openTourianGreyDoors,
                         'deathLink': deathLink,
                         'remoteItem': remoteItem,
+                        'ownPlayerId': ownPlayerId,
                         'PlayerName':  playerNames,
                         'PlayerNameIDMap':  playerNameIDMap}
         romPatcher.applyIPSPatchDict(patchDict)
@@ -348,30 +359,33 @@ class SMWorld(World):
         romPatcher.applyIPSPatch('ROMName', { 'ROMName':  {0x1C4F00 : self.romName, 0x007FC0 : self.romName} })
 
 
-        startItemROMAddressBase = 0x2FD8B9
+        startItemROMAddressBase = 0x1C4800
 
-        # current, base value or bitmask, max, base value or bitmask
-        startItemROMDict = {'ETank': [0x8, 0x64, 0xA, 0x64],
-                            'Missile': [0xC, 0x5, 0xE, 0x5],
-                            'Super': [0x10, 0x5, 0x12, 0x5],
-                            'PowerBomb': [0x14, 0x5, 0x16, 0x5],
-                            'Reserve': [0x1A, 0x64, 0x18, 0x64],
-                            'Morph': [0x2, 0x4, 0x0, 0x4],
-                            'Bomb': [0x3, 0x10, 0x1, 0x10],
-                            'SpringBall': [0x2, 0x2, 0x0, 0x2],
-                            'HiJump': [0x3, 0x1, 0x1, 0x1],
-                            'Varia': [0x2, 0x1, 0x0, 0x1],
-                            'Gravity': [0x2, 0x20, 0x0, 0x20],
-                            'SpeedBooster': [0x3, 0x20, 0x1, 0x20],
-                            'SpaceJump': [0x3, 0x2, 0x1, 0x2],
-                            'ScrewAttack': [0x2, 0x8, 0x0, 0x8],
-                            'Charge': [0x7, 0x10, 0x5, 0x10],
-                            'Ice': [0x6, 0x2, 0x4, 0x2], 
-                            'Wave': [0x6, 0x1, 0x4, 0x1],
-                            'Spazer': [0x6, 0x4, 0x4, 0x4], 
-                            'Plasma': [0x6, 0x8, 0x4, 0x8],
-                            'Grapple': [0x3, 0x40, 0x1, 0x40],
-                            'XRayScope': [0x3, 0x80, 0x1, 0x80]
+        # array for each item:
+        #  offset within ROM table 'start_item_data_major' of this item's info (starting status)
+        #  item bitmask or amount per pickup,
+        #  offset within ROM table 'start_item_data_major' of this item's info (starting maximum/starting collected items)
+        startItemROMDict = {'ETank': [0x8, 0x64, 0xA],
+                            'Missile': [0xC, 0x5, 0xE],
+                            'Super': [0x10, 0x5, 0x12],
+                            'PowerBomb': [0x14, 0x5, 0x16],
+                            'Reserve': [0x1A, 0x64, 0x18],
+                            'Morph': [0x2, 0x4, 0x0],
+                            'Bomb': [0x3, 0x10, 0x1],
+                            'SpringBall': [0x2, 0x2, 0x0],
+                            'HiJump': [0x3, 0x1, 0x1],
+                            'Varia': [0x2, 0x1, 0x0],
+                            'Gravity': [0x2, 0x20, 0x0],
+                            'SpeedBooster': [0x3, 0x20, 0x1],
+                            'SpaceJump': [0x3, 0x2, 0x1],
+                            'ScrewAttack': [0x2, 0x8, 0x0],
+                            'Charge': [0x7, 0x10, 0x5],
+                            'Ice': [0x6, 0x2, 0x4],
+                            'Wave': [0x6, 0x1, 0x4],
+                            'Spazer': [0x6, 0x4, 0x4],
+                            'Plasma': [0x6, 0x8, 0x4],
+                            'Grapple': [0x3, 0x40, 0x1],
+                            'XRayScope': [0x3, 0x80, 0x1]
                             }
         mergedData = {}
         hasETank = False
@@ -383,36 +397,39 @@ class SMWorld(World):
             if item == 'Spazer': hasSpazer = True
             if item == 'Plasma': hasPlasma = True
             if (item in ['ETank', 'Missile', 'Super', 'PowerBomb', 'Reserve']):
-                (currentValue, currentBase, maxValue, maxBase) = startItemROMDict[item]
+                (currentValue, amountPerItem, maxValue) = startItemROMDict[item]
                 if (startItemROMAddressBase + currentValue) in mergedData:
-                    mergedData[startItemROMAddressBase + currentValue] += currentBase
-                    mergedData[startItemROMAddressBase + maxValue] += maxBase
+                    mergedData[startItemROMAddressBase + currentValue] += amountPerItem
+                    mergedData[startItemROMAddressBase + maxValue] += amountPerItem
                 else:
-                    mergedData[startItemROMAddressBase + currentValue] = currentBase
-                    mergedData[startItemROMAddressBase + maxValue] = maxBase
+                    mergedData[startItemROMAddressBase + currentValue] = amountPerItem
+                    mergedData[startItemROMAddressBase + maxValue] = amountPerItem
             else:
-                (collected, currentBitmask, equipped, maxBitmask) = startItemROMDict[item]
+                (collected, bitmask, equipped) = startItemROMDict[item]
                 if (startItemROMAddressBase + collected) in mergedData:
-                    mergedData[startItemROMAddressBase + collected] |= currentBitmask
-                    mergedData[startItemROMAddressBase + equipped] |= maxBitmask
+                    mergedData[startItemROMAddressBase + collected] |= bitmask
+                    mergedData[startItemROMAddressBase + equipped] |= bitmask
                 else:
-                    mergedData[startItemROMAddressBase + collected] = currentBitmask
-                    mergedData[startItemROMAddressBase + equipped] = maxBitmask
+                    mergedData[startItemROMAddressBase + collected] = bitmask
+                    mergedData[startItemROMAddressBase + equipped] = bitmask
 
         if hasETank:
+            # we are overwriting the starting energy, so add up the E from 99 (normal starting energy) rather than from 0
             mergedData[startItemROMAddressBase + 0x8] += 99
             mergedData[startItemROMAddressBase + 0xA] += 99
 
         if hasSpazer and hasPlasma:
+            # de-equip spazer.
+            # otherwise, firing the unintended spazer+plasma combo would cause massive game glitches and crashes
             mergedData[startItemROMAddressBase + 0x4] &= ~0x4
 
         for key, value in mergedData.items():
             if (key - startItemROMAddressBase > 7):
-                (w0, w1) = self.getWord(value)
+                [w0, w1] = self.getWordArray(value)
                 mergedData[key] = [w0, w1]
             else:
                 mergedData[key] = [value]
-            
+
 
         startItemPatch = { 'startItemPatch':  mergedData }
         romPatcher.applyIPSPatch('startItemPatch', startItemPatch)
