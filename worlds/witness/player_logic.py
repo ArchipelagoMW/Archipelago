@@ -117,6 +117,15 @@ class WitnessPlayerLogic:
 
             return
 
+        if adj_type == "Remove Items":
+            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.discard(line)
+
+            if line in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
+                panel_hexes = StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[line][2]
+                for panel_hex in panel_hexes:
+                    if panel_hex in self.DOOR_ITEMS_BY_ID:
+                        self.DOOR_ITEMS_BY_ID[panel_hex].discard(line)
+
         if adj_type == "Starting Inventory":
             self.STARTING_INVENTORY.add(line)
 
@@ -205,9 +214,6 @@ class WitnessPlayerLogic:
         if is_option_enabled(world, player, "shuffle_symbols") or "shuffle_symbols" not in the_witness_options.keys():
             adjustment_linesets_in_order.append(get_symbol_shuffle_list())
 
-        if is_option_enabled(world, player, "early_secret_area"):
-            adjustment_linesets_in_order.append(get_early_utm_list())
-
         if get_option_value(world, player, "shuffle_doors") == 1:
             adjustment_linesets_in_order.append(get_door_panel_shuffle_list())
 
@@ -219,6 +225,9 @@ class WitnessPlayerLogic:
 
         if get_option_value(world, player, "shuffle_doors") == 4:
             adjustment_linesets_in_order.append(get_doors_max_list())
+
+        if is_option_enabled(world, player, "early_secret_area"):
+            adjustment_linesets_in_order.append(get_early_utm_list())
 
         if is_option_enabled(world, player, "shuffle_lasers"):
             adjustment_linesets_in_order.append(get_laser_shuffle())
