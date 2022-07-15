@@ -54,8 +54,7 @@ class BumpStikItem(Item):
             self.fluteboy_credit_text = lttp.fluteboy
 
 
-# TODO: pick an offset
-offset = 0
+offset = 595_000
 
 item_table = {
     "Board Width": offset + 0,

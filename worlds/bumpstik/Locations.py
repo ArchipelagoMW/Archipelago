@@ -10,8 +10,7 @@ class BumpStikLocation(Location):
     game = "Bumper Stickers"
 
 
-# TODO: pick an offset
-offset = 0
+offset = 595_000
 
 location_table = {
     **{f"{(i + 1) * 500} Points": offset + i for i in range(0, 8)},
