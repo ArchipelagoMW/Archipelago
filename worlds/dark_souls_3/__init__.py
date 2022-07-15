@@ -234,17 +234,18 @@ class DarkSouls3World(World):
         locations_id = []
         locations_address = []
         locations_target = []
-        for location in self.world.get_filled_locations(self.player):
+        for location in self.world.get_filled_locations():
             if location.item.player == self.player:
                 items_id.append(location.item.code)
                 items_address.append(item_dictionary[location.item.name])
 
-            locations_address.append(location_dictionary_table[location.name])
-            locations_id.append(location.address)
-            if location.item.player == self.player:
-                locations_target.append(item_dictionary[location.item.name])
-            else:
-                locations_target.append(0)
+            if location.player == self.player:
+                locations_address.append(location_dictionary_table[location.name])
+                locations_id.append(location.address)
+                if location.item.player == self.player:
+                    locations_target.append(item_dictionary[location.item.name])
+                else:
+                    locations_target.append(0)
 
         data = {
             "options": {
