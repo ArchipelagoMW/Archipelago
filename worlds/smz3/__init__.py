@@ -110,6 +110,7 @@ class SMZ3World(World):
         niceItems = TotalSMZ3Item.Item.CreateNicePool(self.smz3World)
         junkItems = TotalSMZ3Item.Item.CreateJunkPool(self.smz3World)
         allJunkItems = niceItems + junkItems
+        self.junkItemsNames = [item.Type.name for item in junkItems]
 
         if (self.smz3World.Config.Keysanity):
             progressionItems = self.progression + self.dungeon + self.keyCardsItems
@@ -369,6 +370,9 @@ class SMZ3World(World):
             return self.smz3DungeonItems
         else:
             return []
+
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choice(self.junkItemsNames)
 
     def write_spoiler(self, spoiler_handle: TextIO):
             self.world.spoiler.unreachables.update(self.unreachable)
