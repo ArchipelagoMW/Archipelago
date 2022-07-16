@@ -526,8 +526,6 @@ def distribute_planned(world: MultiWorld) -> None:
         else:
             warn(warning, force)
 
-    # TODO: remove. Preferably by implementing key drop
-    from worlds.alttp.Regions import key_drop_data
     world_name_lookup = world.world_name_lookup
 
     block_value = typing.Union[typing.List[str], typing.Dict[str, typing.Any], str]
@@ -656,10 +654,6 @@ def distribute_planned(world: MultiWorld) -> None:
             for item_name in items:
                 item = world.worlds[player].create_item(item_name)
                 for location in reversed(candidates):
-                    if location in key_drop_data:
-                        warn(
-                            f"Can't place '{item_name}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
-                        continue
                     if not location.item:
                         if location.item_rule(item):
                             if location.can_fill(world.state, item, False):

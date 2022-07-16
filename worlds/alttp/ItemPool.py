@@ -10,6 +10,7 @@ from worlds.alttp.EntranceShuffle import connect_entrance
 from Fill import FillError
 from worlds.alttp.Items import ItemFactory, GetBeemizerItem
 from worlds.alttp.Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle
+from worlds.alttp.Regions import key_drop_data
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 # Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -370,12 +371,38 @@ def generate_itempool(world):
 
     dungeon_items = [item for item in get_dungeon_item_pool_player(world, player)
                      if item.name not in world.worlds[player].dungeon_local_item_names]
-    dungeon_item_replacements = difficulties[world.difficulty[player]].extras[0]\
-                                + difficulties[world.difficulty[player]].extras[1]\
-                                + difficulties[world.difficulty[player]].extras[2]\
-                                + difficulties[world.difficulty[player]].extras[3]\
-                                + difficulties[world.difficulty[player]].extras[4]
-    world.random.shuffle(dungeon_item_replacements)
+
+    for key_loc in key_drop_data:
+        key_data = key_drop_data[key_loc]
+        drop_item = ItemFactory(key_data[3], player)
+        if world.goal[player] == 'icerodhunt' or not world.key_drop_shuffle[player]:
+            if drop_item in dungeon_items:
+                dungeon_items.remove(drop_item)
+            else:
+                dungeon = (drop_item.name.split("(")[1].split(")")[0], player)
+                if world.mode[player] == 'inverted':
+                    if dungeon[0] == "Agahnims Tower":
+                        dungeon = ("Inverted Agahnims Tower", player)
+                    if dungeon[0] == "Ganons Tower":
+                        dungeon = ("Inverted Ganons Tower", player)
+                if drop_item in world.dungeons[dungeon].small_keys:
+                    world.dungeons[dungeon].small_keys.remove(drop_item)
+                elif world.dungeons[dungeon].big_key is not None and world.dungeons[dungeon].big_key == drop_item:
+                    world.dungeons[dungeon].big_key = None
+        if not world.key_drop_shuffle[player]:
+            # key drop item was removed from the pool because key drop shuffle is off
+            # and it will now place the removed key into its original location
+            loc = world.get_location(key_loc, player)
+            loc.place_locked_item(drop_item)
+            loc.address = None
+        elif world.goal[player] == 'icerodhunt':
+            # key drop item removed because of icerodhunt
+            world.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
+            world.push_precollected(drop_item)
+        elif "Small" in key_data[3] and world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+            # key drop shuffle and universal keys are on. Add universal keys in place of key drop keys.
+            world.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Small Key (Universal)'), player))
+
     if world.goal[player] == 'icerodhunt':
         for item in dungeon_items:
             world.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
@@ -389,7 +416,7 @@ def generate_itempool(world):
                     or (world.map_shuffle[player] == map_shuffle.option_start_with and item.type == 'Map')):
                 dungeon_items.remove(item)
                 world.push_precollected(item)
-                world.itempool.append(ItemFactory(dungeon_item_replacements.pop(), player))
+                world.itempool.append(ItemFactory(world.worlds[player].get_filler_item_name(), player))
         world.itempool.extend([item for item in dungeon_items])
     # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
@@ -660,6 +687,8 @@ def get_pool_core(world, player: int):
             place_item(key_location, item_to_place)
         else:
             pool.extend([item_to_place])
+        if world.key_drop_shuffle[player]:
+            pass # pool.extend([item_to_place] * (len(key_drop_data) - 1))
 
     return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
             additional_pieces_to_place)
@@ -812,7 +841,9 @@ def make_custom_item_pool(world, player):
         pool.extend(['Moon Pearl'] * customitemarray[28])
 
     if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
-        itemtotal = itemtotal - 28  # Corrects for small keys not being in item pool in universal mode
+        itemtotal = itemtotal - 28  # Corrects for small keys not being in item pool in Retro Mode
+        if world.key_drop_shuffle[player]:
+            itemtotal = itemtotal - (len(key_drop_data) - 1)
     if itemtotal < total_items_to_place:
         pool.extend(['Nothing'] * (total_items_to_place - itemtotal))
         logging.warning(f"Pool was filled up with {total_items_to_place - itemtotal} Nothing's for player {player}")

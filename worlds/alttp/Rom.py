@@ -24,7 +24,7 @@ from typing import Optional, List
 from BaseClasses import CollectionState, Region, Location
 from worlds.alttp.Shops import ShopType, ShopPriceType
 from worlds.alttp.Dungeons import dungeon_music_addresses
-from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
+from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address, key_drop_data
 from worlds.alttp.Text import MultiByteTextMapper, text_addresses, Credits, TextTable
 from worlds.alttp.Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, \
     Blind_texts, \
@@ -422,6 +422,18 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
     if world.get_dungeon("Thieves Town", player).boss.enemizer_name == "Blind":
         rom.write_byte(0x04DE81, 6)
         rom.write_byte(0x1B0101, 0)  # Do not close boss room door on entry.
+
+    # Moblins attached to "key drop" locations crash the game when dropping their item when Key Drop Shuffle is on.
+    # Replace them with a Slime enemy if they are placed.
+    if world.key_drop_shuffle[player]:
+        key_drop_enemies = {
+            0x4DA20, 0x4DA5C, 0x4DB7F, 0x4DD73, 0x4DDC3, 0x4DE07, 0x4E201,
+            0x4E20A, 0x4E326, 0x4E4F7, 0x4E686, 0x4E70C, 0x4E7C8, 0x4E7FA
+        }
+        for enemy in key_drop_enemies:
+            if rom.read_byte(enemy) == 0x12:
+                logging.debug(f"Moblin found and replaced at {enemy} in world {player}")
+                rom.write_byte(enemy, 0x8F)
 
     for used in (randopatch_path, options_path):
         try:
@@ -880,6 +892,25 @@ def patch_rom(world, rom, player, enemized):
         credits_total += 30 if 'w' in world.shop_shuffle[player] else 27
 
     rom.write_byte(0x187010, credits_total)  # dynamic credits
+
+    if world.key_drop_shuffle[player]:
+        rom.write_byte(0x140000, 1)  # enable key drop shuffle
+        credits_total += len(key_drop_data)
+        # update dungeon counters
+        rom.write_byte(0x187001, 12)  # Hyrule Castle
+        rom.write_byte(0x187002, 8)  # Eastern Palace
+        rom.write_byte(0x187003, 9)  # Desert Palace
+        rom.write_byte(0x187004, 4)  # Agahnims Tower
+        rom.write_byte(0x187005, 15)  # Swamp Palace
+        rom.write_byte(0x187007, 11)  # Misery Mire
+        rom.write_byte(0x187008, 10)  # Skull Woods
+        rom.write_byte(0x187009, 12)  # Ice Palace
+        rom.write_byte(0x18700B, 10)  # Thieves Town
+        rom.write_byte(0x18700C, 14)  # Turtle Rock
+        rom.write_byte(0x18700D, 31)  # Ganons Tower
+
+
+
     # collection rate address: 238C37
     first_top, first_bot = credits_digit((credits_total / 100) % 10)
     mid_top, mid_bot = credits_digit((credits_total / 10) % 10)
