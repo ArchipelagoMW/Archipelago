@@ -13,9 +13,15 @@ These steps should be followed in order to establish a gameplay connection with 
 
 In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
 
-There are libraries available that implement this network protocol in [Python](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py), [Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java), [.Net](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net) and [C++](https://github.com/black-sliver/apclientpp)
+There are also a number of community-supported libraries available that implement this network protocol to make integrating with Archipelago easier.
 
-For Super Nintendo games there are clients available in either [Node](https://github.com/ArchipelagoMW/SuperNintendoClient) or [Python](https://github.com/ArchipelagoMW/Archipelago/blob/main/SNIClient.py), There are also game specific clients available for [The Legend of Zelda: Ocarina of Time](https://github.com/ArchipelagoMW/Z5Client) or [Final Fantasy 1](https://github.com/ArchipelagoMW/Archipelago/blob/main/FF1Client.py)
+| Language / Framework        |                                                                                                                                                                                                                                            Project |
+|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| Python                      | [CommonClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py)<br/><br/>__For Super Nintendo__<br/>[SNIClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/SNIClient.py) + [SNI](https://github.com/alttpo/sni) |
+| Java / Kotlin               |                                                                                                                                                      [Archipelago.MultiClient.Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java) |
+| C# / .Net                   |                                                                                                                                                        [Archipelago.MultiClient.Net](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net) |
+| C++                         |                                                                                                                                             [apclientpp](https://github.com/black-sliver/apclientpp) / [APCpp](https://github.com/N00byKing/APCpp) |
+| JavaScript (Browser + Node) |                                                                                                                                                                                        [archipelago.js](https://github.com/ThePhar/archipelago.js) |
 
 ## Synchronizing Items
 When the client receives a [ReceivedItems](#ReceivedItems) packet, if the `index` argument does not match the next index that the client expects then it is expected that the client will re-sync items with the server. This can be accomplished by sending the server a [Sync](#Sync) packet and then a [LocationChecks](#LocationChecks) packet.
