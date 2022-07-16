@@ -1,4 +1,5 @@
-from Options import Choice
+from Options import Choice, Range
+from .Creatures import all_creatures
 
 
 class ItemPool(Choice):
@@ -31,7 +32,15 @@ class Goal(Choice):
         }[self.value]
 
 
+class CreatureScans(Range):
+    """Place items on specific creature scans.
+    Warning: Includes aggressive Leviathans."""
+    display_name = "Creature Scans"
+    range_end = len(all_creatures)
+
+
 options = {
     "item_pool": ItemPool,
     "goal": Goal,
+    "creature_scans": CreatureScans
 }
