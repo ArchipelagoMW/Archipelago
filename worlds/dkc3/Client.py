@@ -251,6 +251,23 @@ async def game_watcher(ctx: DKC3Context):
 
                 await snes_flush_writes(ctx)
 
+            # Calculate Boomer Cost Text
+            boomer_cost_text = await snes_read(ctx, 0xF5AAFD, 2)
+            if boomer_cost_text[0] == 0x31 and boomer_cost_text[1] == 0x35:
+                boomer_cost = await snes_read(ctx, ROM_START + 0xB49857, 1)
+                boomer_cost_tens = int(boomer_cost[0]) // 10
+                boomer_cost_ones = int(boomer_cost[0]) % 10
+                snes_buffered_write(ctx, 0xF5AAFD, bytes([0x30 + boomer_cost_tens, 0x30 + boomer_cost_ones]))
+                await snes_flush_writes(ctx)
+
+            boomer_final_cost_text = await snes_read(ctx, 0xF5AB9B, 2)
+            if boomer_final_cost_text[0] == 0x32 and boomer_final_cost_text[1] == 0x35:
+                boomer_cost = await snes_read(ctx, ROM_START + 0xB49857, 1)
+                boomer_cost_tens = boomer_cost[0] // 10
+                boomer_cost_ones = boomer_cost[0] % 10
+                snes_buffered_write(ctx, 0xF5AB9B, bytes([0x30 + boomer_cost_tens, 0x30 + boomer_cost_ones]))
+                await snes_flush_writes(ctx)
+
 
 
 async def run_game(romfile):
