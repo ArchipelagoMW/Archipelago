@@ -1308,6 +1308,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
                             can_pay = 1000
 
                         self.ctx.random.shuffle(not_found_hints)
+                        # By popular vote, make hints prefer non-local placements
+                        not_found_hints.sort(key=lambda hint: int(hint.receiving_player != hint.finding_player))
 
                         hints = found_hints
                         while can_pay > 0:
