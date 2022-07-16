@@ -165,7 +165,7 @@ Doors:
 1855 - Caves Swamp Shortcut - 0x2D859
 1858 - Challenge Entry Door - 0x0A19A
 1861 - Challenge Door to Theater Walkway - 0x0348A
-1864 - Theater Walkway Door to Back of Theater - 0x27739
+1864 - Theater Walkway Door to Windmill Interior - 0x27739
 1867 - Theater Walkway Door to Desert Elevator Room - 0x27263
 1870 - Theater Walkway Door to Town - 0x09E87
 

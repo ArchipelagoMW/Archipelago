@@ -893,10 +893,10 @@ Challenge (Challenge) - Theater Walkway - 0x0348A:
 158518 - 0x039B4 (Door to Theater Walkway Panel) - True - Triangles
 Door - 0x0348A (Door to Theater Walkway) - 0x039B4
 
-Theater Walkway (Theater Walkway) - Theater - 0x27739 - Desert Lowest Level Inbetween Shortcuts - 0x27263 - Town - 0x09E87:
+Theater Walkway (Theater Walkway) - Windmill Interior - 0x27739 - Desert Lowest Level Inbetween Shortcuts - 0x27263 - Town - 0x09E87:
 158668 - 0x2FAF6 (Vault Box) - True - True
 158519 - 0x27732 (Theater Shortcut Panel) - True - True
-Door - 0x27739 (Door to Back of Theater) - 0x27732
+Door - 0x27739 (Door to Windmill Interior) - 0x27732
 158520 - 0x2773D (Desert Shortcut Panel) - True - True
 Door - 0x27263 (Door to Desert Elevator Room) - 0x2773D
 158521 - 0x09E85 (Town Shortcut Panel) - True - Triangles

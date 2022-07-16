@@ -92,7 +92,7 @@ Caves Mountain Shortcut
 Caves Swamp Shortcut
 Challenge Entry Door
 Challenge Door to Theater Walkway
-Theater Walkway Door to Back of Theater
+Theater Walkway Door to Windmill Interior
 Theater Walkway Door to Desert Elevator Room
 Theater Walkway Door to Town
 
