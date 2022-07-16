@@ -251,6 +251,25 @@ async def game_watcher(ctx: DKC3Context):
 
                 await snes_flush_writes(ctx)
 
+            # DKC3_TODO: This method of collect should work, however it does not unlock the next level correctly when previous is flagged
+            # Handle Collected Locations
+            #for loc_id in ctx.checked_locations:
+            #    if loc_id not in ctx.locations_checked:
+            #        loc_data = location_rom_data[loc_id]
+            #        data = await snes_read(ctx, WRAM_START + loc_data[0], 1)
+            #        invert_bit = ((len(loc_data) >= 3) and loc_data[2])
+            #        if not invert_bit:
+            #            masked_data = data[0] | (1 << loc_data[1])
+            #            print("Collected Location: ", hex(loc_data[0]), " | ", loc_data[1])
+            #            snes_buffered_write(ctx, WRAM_START + loc_data[0], bytes([masked_data]))
+            #            await snes_flush_writes(ctx)
+            #        else:
+            #            masked_data = data[0] & ~(1 << loc_data[1])
+            #            print("Collected Inverted Location: ", hex(loc_data[0]), " | ", loc_data[1])
+            #            snes_buffered_write(ctx, WRAM_START + loc_data[0], bytes([masked_data]))
+            #            await snes_flush_writes(ctx)
+            #        ctx.locations_checked.add(loc_id)
+
             # Calculate Boomer Cost Text
             boomer_cost_text = await snes_read(ctx, 0xF5AAFD, 2)
             if boomer_cost_text[0] == 0x31 and boomer_cost_text[1] == 0x35:
