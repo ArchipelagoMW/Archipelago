@@ -25,9 +25,12 @@ class IncludeTradeSequence(Toggle):
 class DKCoinsForGyrocopter(Range):
     """
     How many DK Coins are needed to unlock the Gyrocopter
+    Note: Achieving this number before unlocking the Turbo Ski will cause the game to grant you a
+    one-time upgrade to the next non-unlocked boat, until you return to Funky. Logic does not assume
+    that you will use this.
     """
     display_name = "DK Coins for Gyrocopter"
-    range_start = 0
+    range_start = 10
     range_end = 41
     default = 30
 
