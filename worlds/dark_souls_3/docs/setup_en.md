@@ -20,7 +20,7 @@ Get the dinput8.dll from the [Dark Souls 3 AP Client](https://github.com/Marecha
 Then you need to add the two following files at the root folder of your game 
 ( e.g. "SteamLibrary\steamapps\common\DARK SOULS III\Game" ):  
 - **dinput8.dll**
-- **AP.json** renamed from the generated file AP-{SEED_NUMBER}-{PLAYER_NUMBER}-{PLAYER_NAME}.json
+- **AP.json** (renamed from the generated file AP-{ROOM_ID}.json)
 
 ## Joining a MultiWorld Game
 
