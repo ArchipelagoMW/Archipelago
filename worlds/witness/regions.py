@@ -33,6 +33,10 @@ class WitnessRegions:
         source_region = world.get_region(source, player)
         target_region = world.get_region(target, player)
 
+        #print(source_region)
+        #print(target_region)
+        #print("---")
+
         connection = Entrance(
             player,
             source + " to " + target + " via " + str(panel_hex_to_solve_set),
@@ -76,10 +80,17 @@ class WitnessRegions:
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
                 if connection[0] == "Entry":
                     continue
-                self.connect(world, player, region_name,
-                             connection[0], player_logic, connection[1])
-                self.connect(world, player, connection[0],
-                             region_name, player_logic, connection[1])
+
+                if connection[1] == frozenset({frozenset(["TrueOneWay"])}):
+                    self.connect(world, player, region_name, connection[0], player_logic, frozenset({frozenset()}))
+                    continue
+
+                for subset in connection[1]:
+                    if all({panel in player_logic.DOOR_ITEMS_BY_ID for panel in subset}):
+                        if all({StaticWitnessLogic.CHECKS_BY_HEX[panel]["id"] is None for panel in subset}):
+                            self.connect(world, player, connection[0], region_name, player_logic, frozenset({subset}))
+
+                self.connect(world, player, region_name, connection[0], player_logic, connection[1])
 
         world.get_entrance("The Splashscreen?", player).connect(
             world.get_region('First Hallway', player)
