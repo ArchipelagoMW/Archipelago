@@ -1,5 +1,5 @@
 import typing
-from Options import Option, DefaultOnToggle, Range, Toggle, DeathLink
+from Options import Option, DefaultOnToggle, Range, Toggle, DeathLink, Choice
 
 class EnableCoinStars(DefaultOnToggle):
     """Disable to Ignore 100 Coin Stars. You can still collect them, but they don't do anything"""
@@ -44,9 +44,13 @@ class ExtraStars(Range):
     range_end = 50
     default = 50
 
-class AreaRandomizer(Toggle):
-    """Randomize Entrances to Courses"""
-    display_name = "Course Randomizer"
+class AreaRandomizer(Choice):
+    """Randomize Entrances"""
+    display_name = "Entrance Randomizer"
+    alias_false = 0
+    option_Off = 0
+    option_Courses_Only = 1
+    option_Courses_and_Secrets = 2
 
 class BuddyChecks(Toggle):
     """Bob-omb Buddies are checks, Cannon Unlocks are items"""
