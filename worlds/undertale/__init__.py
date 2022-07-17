@@ -77,20 +77,23 @@ class UndertaleWorld(World):
             itempool.remove("Complete Skeleton")
             itempool.remove("Fish")
             itempool.remove("DT Extractor")
+        if self.world.route_required[self.player].current_key == "genocide":
+            itempool.remove("Cooking Set")
+            itempool.remove("Microphone")
         if self.world.temy_include[self.player]:
             itempool += ["temy armor"]
         if self.world.soul_hunt[self.player]:
             itempool += ["Soul Piece"] * self.world.soul_pieces[self.player].value
         else:
             itempool += ["Determination"]
-        if not self.world.rando_love[self.player]:
+        if not self.world.rando_love[self.player] or self.world.route_required[self.player].current_key != "genocide":
             itempool = [item for item in itempool if not item == "LOVE"]
         if self.world.prog_plot[self.player]:
             itempool = [item if item not in plot_items else "Progressive Plot" for item in itempool]
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
         exclusion_pool.update(exclusion_table[self.world.route_required[self.player].current_key])
-        if not self.world.rando_love[self.player]:
+        if not self.world.rando_love[self.player] or self.world.route_required[self.player].current_key != "genocide":
             exclusion_pool.update(exclusion_table["NoLove"])
 
         # Choose locations to automatically exclude based on settings
@@ -119,7 +122,7 @@ class UndertaleWorld(World):
             ret = Region(region_name, None, region_name, self.player, self.world)
             ret.locations = [UndertaleAdvancement(self.player, loc_name, loc_data.id, ret)
                 for loc_name, loc_data in advancement_table.items()
-                if loc_data.region == region_name and not loc_name in exclusion_table[self.world.route_required[self.player].current_key]]
+                if loc_data.region == region_name and (not loc_name in exclusion_table["NoLove"] or (self.world.rando_love[self.player] and self.world.route_required[self.player].current_key == "genocide")) and not loc_name in exclusion_table[self.world.route_required[self.player].current_key]]
             for exit in exits:
                 ret.exits.append(Entrance(self.player, exit, ret))
             return ret
@@ -131,6 +134,8 @@ class UndertaleWorld(World):
         slot_data = self._get_undertale_data()
         for option_name in undertale_options:
             option = getattr(self.world, option_name)[self.player]
+            if option_name == "rando_love" and self.world.route_required[self.player].current_key != "genocide":
+                option.value = False
             if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
         return slot_data

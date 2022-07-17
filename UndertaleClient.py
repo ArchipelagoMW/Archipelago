@@ -239,6 +239,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
             while os.path.isfile(os.path.expandvars(r"%localappdata%/UNDERTALE/"+f"{str(counter)}PLR-1.item")):
                 os.remove(os.path.expandvars(r"%localappdata%/UNDERTALE/"+f"{str(counter)}PLR-1.item"))
                 counter -= 1
+            placedPlot = 0
             for item in args['items']:
                 id = NetworkItem(*item).location
                 while NetworkItem(*item).location < 0 and \
@@ -246,14 +247,70 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                     id -= 1
                 filename = f"{str(id)}PLR{str(NetworkItem(*item).player)}.item"
                 with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
-                    f.write(str(NetworkItem(*item).item-11000))
+                    if NetworkItem(*item).item == 77700:
+                        if placedPlot == 0:
+                            f.write(str(77777-11000))
+                        elif placedPlot == 1:
+                            if str(ctx.route) == "pacifist":
+                                f.write(str(77779-11000))
+                            else:
+                                f.write(str(77778-11000))
+                        elif placedPlot == 2:
+                            if str(ctx.route) == "pacifist":
+                                f.write(str(77778-11000))
+                            else:
+                                f.write(str(77781-11000))
+                        elif placedPlot == 3:
+                            if str(ctx.route) == "pacifist":
+                                f.write(str(77780-11000))
+                            elif str(ctx.route) == "genocide":
+                                f.write(str(77785-11000))
+                            else:
+                                f.write(str(77783-11000))
+                        elif placedPlot == 4:
+                            if str(ctx.route) == "pacifist":
+                                f.write(str(77781-11000))
+                            elif str(ctx.route) == "genocide":
+                                f.write(str(77786-11000))
+                            else:
+                                f.write(str(77784-11000))
+                        elif placedPlot == 5:
+                            if str(ctx.route) == "pacifist":
+                                f.write(str(77783-11000))
+                            elif str(ctx.route) == "genocide":
+                                f.write(str(77786-11000))
+                            else:
+                                f.write(str(77785-11000))
+                        elif placedPlot == 6:
+                            if str(ctx.route) == "pacifist":
+                                f.write(str(77784-11000))
+                            else:
+                                f.write(str(77786-11000))
+                        elif placedPlot == 7:
+                            if str(ctx.route) == "pacifist":
+                                f.write(str(77785-11000))
+                            else:
+                                f.write(str(77786-11000))
+                        elif placedPlot == 8:
+                            if str(ctx.route) == "pacifist":
+                                f.write(str(77786-11000))
+                            else:
+                                f.write(str(77786-11000))
+                        else:
+                            if str(ctx.route) == "pacifist":
+                                f.write(str(77782-11000))
+                            else:
+                                f.write(str(77786-11000))
+                        placedPlot += 1
+                    else:
+                        f.write(str(NetworkItem(*item).item-11000))
                     f.close()
-                if [item.item for item in ctx.items_received].count(77000) >= ctx.pieces_needed and ctx.pieces_needed > 0:
+                ctx.items_received.append(NetworkItem(*item))
+                if [item.item for item in ctx.items_received].count(77000) >= ctx.pieces_needed > 0:
                     filename = f"{str(-99999)}PLR{str(0)}.item"
                     with open(os.path.expandvars(r"%localappdata%/UNDERTALE/" + filename), 'w') as f:
                         f.write(str(77787 - 11000))
                         f.close()
-                ctx.items_received.append(NetworkItem(*item))
         ctx.watcher_event.set()
 
     elif cmd == "RoomUpdate":

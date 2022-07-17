@@ -85,12 +85,18 @@ item_table = {
     "Determination": ItemData(77787, True),
     "LOVE": ItemData(77788, True),
     "Soul Piece": ItemData(77000, True),
+    "100G": ItemData(77999, False),
+    "1000G": ItemData(77998, False),
+    "10000G": ItemData(77997, False),
 }
 
 non_key_items = {
     "Butterscotch Pie": 1,
     "Mystery Key": 1,
     "Sea Tea": 1,
+    "100G": 5,
+    "1000G": 3,
+    "10000G": 1,
 }
 
 required_armor = {
