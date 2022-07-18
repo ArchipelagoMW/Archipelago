@@ -45,6 +45,16 @@ class KrematoaBonusCoinCost(Range):
     default = 15
 
 
+class PercentageOfExtraBonusCoins(Range):
+    """
+    What Percentage of unneeded Bonus Coins are included in the item pool
+    """
+    display_name = "Percentage of ExtraBonusCoins"
+    range_start = 0
+    range_end = 100
+    default = 100
+
+
 class NumberOfBananaBirds(Range):
     """
     How many Banana Birds are put into the item pool
@@ -112,6 +122,7 @@ dkc3_options: typing.Dict[str, type(Option)] = {
     #"include_trade_sequence": IncludeTradeSequence,          # Disabled
     "dk_coins_for_gyrocopter": DKCoinsForGyrocopter,
     "krematoa_bonus_coin_cost": KrematoaBonusCoinCost,
+    "percentage_of_extra_bonus_coins": PercentageOfExtraBonusCoins,
     "number_of_banana_birds": NumberOfBananaBirds,
     "percentage_of_banana_birds": PercentageOfBananaBirds,
     "level_shuffle": LevelShuffle,

@@ -60,6 +60,7 @@ class DKC3World(World):
     def _get_slot_data(self):
         return {
             #"death_link": self.world.death_link[self.player].value,
+            "active_levels": self.active_level_list,
         }
 
     def _create_items(self, name: str):
@@ -106,7 +107,10 @@ class DKC3World(World):
         if False:#self.world.include_trade_sequence[self.player]:
             total_required_locations += 8
 
-        itempool += [self.create_item(ItemName.bonus_coin)] * 85
+        number_of_bonus_coins = (self.world.krematoa_bonus_coin_cost[self.player] * 5)
+        number_of_bonus_coins += math.ceil((85 - number_of_bonus_coins) * self.world.percentage_of_extra_bonus_coins[self.player] / 100)
+
+        itempool += [self.create_item(ItemName.bonus_coin)] * number_of_bonus_coins
         itempool += [self.create_item(ItemName.dk_coin)] * 41
         itempool += [self.create_item(ItemName.banana_bird)] * number_of_banana_birds
         itempool += [self.create_item(ItemName.krematoa_cog)] * number_of_cogs

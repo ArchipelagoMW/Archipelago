@@ -1,0 +1,2 @@
+﻿[asyncio at 2022-07-18 03:32:43,404]: Task was destroyed but it is pending!
+task: <Task pending name='server auto reconnect' coro=<server_autoreconnect() running at C:\Users\Andrew\Documents\RandoDev\Pory_Archipelago\DKC3\Pory_Archipelago\CommonClient.py:511> wait_for=<Future pending cb=[<TaskWakeupMethWrapper object at 0x000001E886628E50>()]>>
