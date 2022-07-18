@@ -1,6 +1,8 @@
 from __future__ import annotations
 import os
+import sys
 import asyncio
+import shutil
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -36,11 +38,16 @@ class ChecksFinderContext(CommonContext):
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%/ChecksFinder")
         else:
-            # not windows. game is an exe so maybe the user wants to use wine? using custom wine dir or default
+            # not windows. game is an exe so let's see if wine might be around to run it
             if "WINEPREFIX" in os.environ:
                 wineprefix = os.environ["WINEPREFIX"]
+            elif shutil.which("wine") or shutil.which("wine-stable"):
+                wineprefix = os.path.expanduser("~/.wine") # default root of wine system data, deep in which is app data
             else:
-                wineprefix = os.path.expanduser("~/.wine")
+                msg = "ChecksFinderClient couldn't detect system type. Unable to infer required game_communication_path"
+                logger.error("Error: " + msg)
+                Utils.messagebox("Error", msg, error=True)
+                sys.exit(1)
             self.game_communication_path = os.path.join(
                 wineprefix,
                 "drive_c",
