@@ -251,53 +251,53 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                         if placedPlot == 0:
                             f.write(str(77777-11000))
                         elif placedPlot == 1:
-                            if str(ctx.route) == "pacifist":
+                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
                                 f.write(str(77779-11000))
                             else:
                                 f.write(str(77778-11000))
                         elif placedPlot == 2:
-                            if str(ctx.route) == "pacifist":
+                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
                                 f.write(str(77778-11000))
                             else:
                                 f.write(str(77781-11000))
                         elif placedPlot == 3:
-                            if str(ctx.route) == "pacifist":
+                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
                                 f.write(str(77780-11000))
                             elif str(ctx.route) == "genocide":
                                 f.write(str(77785-11000))
                             else:
                                 f.write(str(77783-11000))
                         elif placedPlot == 4:
-                            if str(ctx.route) == "pacifist":
+                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
                                 f.write(str(77781-11000))
                             elif str(ctx.route) == "genocide":
                                 f.write(str(77786-11000))
                             else:
                                 f.write(str(77784-11000))
                         elif placedPlot == 5:
-                            if str(ctx.route) == "pacifist":
+                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
                                 f.write(str(77783-11000))
                             elif str(ctx.route) == "genocide":
                                 f.write(str(77786-11000))
                             else:
                                 f.write(str(77785-11000))
                         elif placedPlot == 6:
-                            if str(ctx.route) == "pacifist":
+                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
                                 f.write(str(77784-11000))
                             else:
                                 f.write(str(77786-11000))
                         elif placedPlot == 7:
-                            if str(ctx.route) == "pacifist":
+                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
                                 f.write(str(77785-11000))
                             else:
                                 f.write(str(77786-11000))
                         elif placedPlot == 8:
-                            if str(ctx.route) == "pacifist":
+                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
                                 f.write(str(77786-11000))
                             else:
                                 f.write(str(77786-11000))
                         else:
-                            if str(ctx.route) == "pacifist":
+                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
                                 f.write(str(77782-11000))
                             else:
                                 f.write(str(77786-11000))
@@ -374,6 +374,7 @@ async def game_watcher(ctx: UndertaleContext):
                 f.close()
         sending = []
         victory = False
+        found_routes = 0
         for root, dirs, files in os.walk(path):
             for file in files:
                 if file.find("DontBeMad.mad") > -1 and "DeathLink" in ctx.tags:
@@ -387,6 +388,10 @@ async def game_watcher(ctx: UndertaleContext):
                     await ctx.send_msgs(message)
                 if file.find("victory") > -1 and file.find(str(ctx.route)) > -1:
                     victory = True
+                if file.find("victory") > -1:
+                    found_routes += 1
+        if str(ctx.route) == "all_routes" and found_routes >= 3:
+            victory = True
         ctx.locations_checked = sending
         if not ctx.finished_game and victory:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])

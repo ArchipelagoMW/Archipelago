@@ -8,6 +8,7 @@ class RouteRequired(Choice):
     option_neutral = 0
     option_pacifist = 1
     option_genocide = 2
+    option_all_routes = 3
     default = 0
 
 

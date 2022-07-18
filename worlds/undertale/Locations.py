@@ -194,6 +194,8 @@ exclusion_table = {
         "LOVE 18",
         "LOVE 19",
         "LOVE 20",
+    },
+    "all_routes": {
     }
 }
 

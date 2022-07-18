@@ -5,11 +5,15 @@ from ..AutoWorld import LogicMixin
 
 class UndertaleLogic(LogicMixin):
     def _is_route(self, world: MultiWorld, player: int, route: int):
-        if route == 0:
+        if route == 3:
+            return (world.route_required[player].current_key == "all_routes")
+        elif world.route_required[player].current_key == "all_routes":
+            return True
+        elif route == 0:
             return (world.route_required[player].current_key == "neutral")
-        if route == 1:
+        elif route == 1:
             return (world.route_required[player].current_key == "pacifist")
-        if route == 2:
+        elif route == 2:
             return (world.route_required[player].current_key == "genocide")
         return False
 
@@ -85,7 +89,7 @@ def set_rules(world: MultiWorld, player: int):
         set_rule(world.get_location(("Dog Sale 4"), player), lambda state: state._reach_cooking_show(player, world))
         set_rule(world.get_location(("Hush Trade"), player), lambda state: state._reach_news_show(player, world) and state.has('Hot Dog...?', player, 1))
         set_rule(world.get_location(("Letter Quest"), player), lambda state: state._reach_sans(player, world))
-    if not world.state._is_route(world, player,2):
+    if not world.state._is_route(world, player,2) or world.state._is_route(world,player,3):
         set_rule(world.get_location(("Card Reward"), player), lambda state: state.has('Punch Card', player, 3) and state._reach_waterfall(player, world))
         set_rule(world.get_location(("Nicecream Snowdin"), player), lambda state: state._reach_snowdin(player, world))
         set_rule(world.get_location(("Nicecream Waterfall"), player), lambda state: state._reach_waterfall(player, world))
