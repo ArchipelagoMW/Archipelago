@@ -36,9 +36,14 @@ class ChecksFinderContext(CommonContext):
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%/ChecksFinder")
         else:
-            # not windows. game is an exe so maybe the user wants to use wine?
+            # not windows. game is an exe so maybe the user wants to use wine? using custom wine dir or default
+            if "WINEPREFIX" in os.environ:
+                wineprefix = os.environ["WINEPREFIX"]
+            else:
+                wineprefix = os.path.expanduser("~/.wine")
             self.game_communication_path = os.path.join(
-                os.path.expanduser("~/.wine/drive_c"),
+                wineprefix,
+                "drive_c",
                 os.path.expandvars("users/$USER/Local Settings/Application Data/ChecksFinder"))
 
     async def server_auth(self, password_requested: bool = False):
