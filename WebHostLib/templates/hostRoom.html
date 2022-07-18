@@ -16,7 +16,7 @@
             This room has a <a href="{{ url_for("getTracker", tracker=room.tracker) }}">Multiworld Tracker</a> enabled.
             <br />
         {% endif %}
-        The server for this room will be closed after {{ room.timeout//60//60 }} hours of inactivity.
+        The server for this room will be paused after {{ room.timeout//60//60 }} hours of inactivity.
         Should you wish to continue later,
         anyone can simply refresh this page and the server will resume.<br>
         {% if room.last_port %}
