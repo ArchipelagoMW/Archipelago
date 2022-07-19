@@ -6,6 +6,7 @@ def set_rules(world: MultiWorld, player: int):
     total_locations = world.total_locations[player].value  # total locations for current player
     event_location_step = 25  # set an event location at these locations for "spheres"
     divisions = total_locations // event_location_step
+    total_revivals = world.worlds[player].total_revivals
 
     if divisions:
         for i in range(1, divisions):  # since divisions is the floor of total_locations / 25
@@ -18,17 +19,15 @@ def set_rules(world: MultiWorld, player: int):
                              lambda state, event_item=event_loc.item.name: state.has(event_item, player))
                 else:
                     set_rule(world.get_location(f"ItemPickup{n}", player),
-                             lambda state, n=n: state.can_reach(f"ItemPickup{n - 1}", 'Location', player))
+                             lambda state, n=n: state.can_reach(f"ItemPickup{n - 1}", "Location", player))
         for i in range(divisions * event_location_step, total_locations+1):
             set_rule(world.get_location(f"ItemPickup{i}", player),
                      lambda state, i=i: state.can_reach(f"ItemPickup{i - 1}", "Location", player))
-
     set_rule(world.get_location("Victory", player),
              lambda state: state.can_reach(f"ItemPickup{total_locations}", "Location", player))
-    if world.total_revivals[player].value or world.start_with_revive[player].value:
-        total_revivals = world.total_revivals[player].value * world.total_locations[player].value // 100
+    if total_revivals or world.start_with_revive[player].value:
         add_rule(world.get_location("Victory", player),
                  lambda state: state.has("Dio's Best Friend", player,
-                                         total_revivals + world.start_with_revive[player].value))
+                                         total_revivals + world.start_with_revive[player]))
 
     world.completion_condition[player] = lambda state: state.has("Victory", player)
