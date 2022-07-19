@@ -612,34 +612,34 @@ def create_regions(world, player: int, active_locations):
     blue_region_locations = {}
     blizzard_region_locations = {}
 
-    if world.include_trade_sequence[player]:
+    if False:#world.include_trade_sequence[player]:
         bazaar_region_locations.update({
             LocationName.bazaars_general_store_1: [0x615, 2, True],
             LocationName.bazaars_general_store_2: [0x615, 3, True],
         })
 
         bramble_region_locations.update({
-            LocationName.brambles_bungalow: [0x615, 3, True],
+            LocationName.brambles_bungalow: [0x619, 2],
         })
 
-        flower_spot_region_locations.update({
-            LocationName.flower_spot: [0x615, 3, True],
-        })
+        #flower_spot_region_locations.update({
+        #    LocationName.flower_spot: [0x615, 3, True],
+        #})
 
         barter_region_locations.update({
-            LocationName.barters_swap_shop: [0x615, 3, True],
+            LocationName.barters_swap_shop: [0x61B, 3],
         })
 
         barnacle_region_locations.update({
-            LocationName.barnacles_island: [0x61D, 3, True],
+            LocationName.barnacles_island: [0x61D, 2],
         })
 
         blue_region_locations.update({
-            LocationName.blues_beach_hut: [0x615, 3, True],
+            LocationName.blues_beach_hut: [0x621, 4],
         })
 
         blizzard_region_locations.update({
-            LocationName.blizzards_basecamp: [0x615, 3, True],
+            LocationName.blizzards_basecamp: [0x625, 4, True],
         })
 
     bazaar_region = create_region(world, player, active_locations, LocationName.bazaar_region,
@@ -681,7 +681,8 @@ def connect_regions(world, player, level_list):
             lambda state: (state.has(ItemName.dk_coin, player, world.dk_coins_for_gyrocopter[player].value)))
 
     connect(world, player, names, LocationName.overworld_1_region, LocationName.overworld_4_region,
-            lambda state: (state.has(ItemName.dk_coin, player, world.dk_coins_for_gyrocopter[player].value)))
+            lambda state: (state.has(ItemName.dk_coin, player, world.dk_coins_for_gyrocopter[player].value) and
+                           state.has(ItemName.progressive_boat, player, 3)))
 
     # World Connections
     connect(world, player, names, LocationName.overworld_1_region, LocationName.lake_orangatanga_region)
@@ -733,9 +734,11 @@ def connect_regions(world, player, level_list):
         LocationName.arichs_hoard_region,
     ]
 
-    for i in range(0, len(kremwood_forest_levels)):
+    for i in range(0, len(kremwood_forest_levels) - 1):
         connect(world, player, names, LocationName.kremwood_forest_region, kremwood_forest_levels[i])
-        # Final Connect here needs a "can_reach riverside_race_flag"
+
+    connect(world, player, names, LocationName.kremwood_forest_region, kremwood_forest_levels[-1],
+            lambda state: (state.can_reach(LocationName.riverside_race_flag, "Location", player)))
 
     # Cotton-Top Cove Connections
     cotton_top_cove_levels = [
@@ -765,11 +768,12 @@ def connect_regions(world, player, level_list):
     for i in range(0, len(mekanos_levels)):
         connect(world, player, names, LocationName.mekanos_region, mekanos_levels[i])
         
-    if world.include_trade_sequence[player]:
+    if False:#world.include_trade_sequence[player]:
         connect(world, player, names, LocationName.mekanos_region, LocationName.sky_high_secret_region,
                 lambda state: (state.has(ItemName.bowling_ball, player, 1)))
     else:
-        connect(world, player, names, LocationName.mekanos_region, LocationName.sky_high_secret_region)
+        connect(world, player, names, LocationName.mekanos_region, LocationName.sky_high_secret_region,
+                lambda state: (state.can_reach(LocationName.bleaks_house, "Location", player)))
 
     # K3 Connections
     k3_levels = [
@@ -799,7 +803,7 @@ def connect_regions(world, player, level_list):
     for i in range(0, len(razor_ridge_levels)):
         connect(world, player, names, LocationName.razor_ridge_region, razor_ridge_levels[i])
         
-    if world.include_trade_sequence[player]:
+    if False:#world.include_trade_sequence[player]:
         connect(world, player, names, LocationName.razor_ridge_region, LocationName.cifftop_cache_region,
                 lambda state: (state.has(ItemName.wrench, player, 1)))
     else:

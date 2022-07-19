@@ -25,9 +25,12 @@ class IncludeTradeSequence(Toggle):
 class DKCoinsForGyrocopter(Range):
     """
     How many DK Coins are needed to unlock the Gyrocopter
+    Note: Achieving this number before unlocking the Turbo Ski will cause the game to grant you a
+    one-time upgrade to the next non-unlocked boat, until you return to Funky. Logic does not assume
+    that you will use this.
     """
     display_name = "DK Coins for Gyrocopter"
-    range_start = 0
+    range_start = 10
     range_end = 41
     default = 30
 
@@ -40,6 +43,16 @@ class KrematoaBonusCoinCost(Range):
     range_start = 1
     range_end = 17
     default = 15
+
+
+class PercentageOfExtraBonusCoins(Range):
+    """
+    What Percentage of unneeded Bonus Coins are included in the item pool
+    """
+    display_name = "Percentage of ExtraBonusCoins"
+    range_start = 0
+    range_end = 100
+    default = 100
 
 
 class NumberOfBananaBirds(Range):
@@ -93,15 +106,27 @@ class KongPaletteSwap(Choice):
     default = 0
 
 
+class StartingLifeCount(Range):
+    """
+    How many extra lives to start the game with
+    """
+    display_name = "Starting Life Count"
+    range_start = 1
+    range_end = 99
+    default = 5
+
+
 dkc3_options: typing.Dict[str, type(Option)] = {
-    "death_link": DeathLink,
+    #"death_link": DeathLink,                                 # Disabled
     "goal": Goal,
-    "include_trade_sequence": IncludeTradeSequence,
+    #"include_trade_sequence": IncludeTradeSequence,          # Disabled
     "dk_coins_for_gyrocopter": DKCoinsForGyrocopter,
     "krematoa_bonus_coin_cost": KrematoaBonusCoinCost,
+    "percentage_of_extra_bonus_coins": PercentageOfExtraBonusCoins,
     "number_of_banana_birds": NumberOfBananaBirds,
     "percentage_of_banana_birds": PercentageOfBananaBirds,
     "level_shuffle": LevelShuffle,
     "music_shuffle": MusicShuffle,
     "kong_palette_swap": KongPaletteSwap,
+    "starting_life_count": StartingLifeCount,
 }

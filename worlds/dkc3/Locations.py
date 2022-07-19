@@ -274,7 +274,7 @@ location_table = {}
 def setup_locations(world, player: int):
     location_table = {**level_location_table, **boss_location_table, **secret_cave_location_table}
 
-    if world.include_trade_sequence[player].value:
+    if False:#world.include_trade_sequence[player].value:
         location_table.update({**brothers_bear_location_table})
 
     return location_table
