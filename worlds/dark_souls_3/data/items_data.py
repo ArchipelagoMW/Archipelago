@@ -303,7 +303,6 @@ spells_table = {
     "Toxic Mist": 0x4024F108,
     "Sacred Flame": 0x40284880,
     "Dorhys' Gnawing": 0x40363EB8,
-    "Chameleon": 0x4014ACF8,
     "Great Heal": 0x40356FB0,
     "Lightning Blade": 0x4036C770,
     "Profaned Flame": 0x402575D8,

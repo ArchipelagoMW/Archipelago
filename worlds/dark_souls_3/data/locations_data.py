@@ -259,7 +259,6 @@ irithyll_of_the_boreal_valley_table = {
     "IBV: Magic Clutch Ring": 0x2000500A,
     "IBV: Ring of the Sun's First Born": 0x20004F1B,
     "IBV: Roster of Knights": 0x4000006C,
-    "IBV: Chameleon": 0x4014ACF8,
     "IBV: Pontiff's Right Eye": 0x2000510E,
 
     "IBV: Yorshka's Spear": 0x008C3A70,
@@ -310,7 +309,6 @@ irithyll_dungeon_table = {
     "ID: Jailer's Key Ring": 0x400007D8,
     "ID: Dusk Crown Ring": 0x20004F4C,
     "ID: Dark Clutch Ring": 0x20005028,
-    "ID: Path of the Dragon Gesture": 0x40002346,
 }
 
 profaned_capital_table = {
@@ -368,6 +366,7 @@ consumed_king_garden_table = {
     "CKG: Shadow Leggings": 0x14D401F8,
     "CKG: Claw": 0x00A7D8C0,
     "CKG: Soul of Consumed Oceiros": 0x400002CE,
+    "CKG: Path of the Dragon Gesture": 0x40002346,
 }
 
 grand_archives_table = {
