@@ -250,9 +250,6 @@ class World(metaclass=AutoWorldRegister):
 
     # end of ordered Main.py calls
 
-    def create_location(self, name: str, address: int, player: int) -> Location:
-        return self.world.create_location(name, address, player)
-
     def create_item(self, name: str) -> Item:
         """Create an item for this world type and player.
         Warning: this may be called with self.world = None, for example by MultiServer"""

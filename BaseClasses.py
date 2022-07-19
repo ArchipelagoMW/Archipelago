@@ -350,11 +350,6 @@ class MultiWorld():
             self._recache()
             return self._entrance_cache[entrance, player]
 
-    def create_location(self, name: str, address: int, player: int) -> Location:
-        loc = Location(player, name, address)
-        loc.game = self.worlds[player].game
-        return loc
-
     def get_location(self, location: str, player: int) -> Location:
         try:
             return self._location_cache[location, player]
