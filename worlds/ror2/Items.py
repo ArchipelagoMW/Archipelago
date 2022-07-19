@@ -1,8 +1,10 @@
+from typing import Dict
 from BaseClasses import Item
-import typing
+
 
 class RiskOfRainItem(Item):
     game: str = "Risk of Rain 2"
+
 
 # 37000 - 38000
 item_table = {
@@ -16,13 +18,7 @@ item_table = {
     "Item Scrap, White": 37008,
     "Item Scrap, Green": 37009,
     "Item Scrap, Red": 37010,
-    "Item Scrap, Yellow": 37011,
-    "Victory": None,
-    "Beat Level One": None,
-    "Beat Level Two": None,
-    "Beat Level Three": None,
-    "Beat Level Four": None,
-    "Beat Level Five": None,
+    "Item Scrap, Yellow": 37011
 }
 
 default_weights = {
@@ -129,7 +125,7 @@ scraps_only = {
     "Equipment": 0
 }
 
-item_pool_weights: typing.Dict[int, typing.Dict[str, int]] = {
+item_pool_weights: Dict[int, Dict[str, int]] = {
     0: default_weights,
     1: new_weights,
     2: uncommon_weights,
@@ -140,4 +136,4 @@ item_pool_weights: typing.Dict[int, typing.Dict[str, int]] = {
     8: scraps_only
 }
 
-lookup_id_to_name: typing.Dict[int, str] = {id: name for name, id in item_table.items() if id}
+lookup_id_to_name: Dict[int, str] = {id: name for name, id in item_table.items()}
