@@ -7,13 +7,13 @@ class UndertaleLogic(LogicMixin):
     def _is_route(self, world: MultiWorld, player: int, route: int):
         if route == 3:
             return (world.route_required[player].current_key == "all_routes")
-        elif world.route_required[player].current_key == "all_routes":
+        if world.route_required[player].current_key == "all_routes":
             return True
-        elif route == 0:
+        if route == 0:
             return (world.route_required[player].current_key == "neutral")
-        elif route == 1:
+        if route == 1:
             return (world.route_required[player].current_key == "pacifist")
-        elif route == 2:
+        if route == 2:
             return (world.route_required[player].current_key == "genocide")
         return False
 
@@ -40,19 +40,19 @@ class UndertaleLogic(LogicMixin):
                                                           (self.has("Progressive Plot",player,5) and self._is_route(world,player,1))))
 
     def _reach_cooking_show(self, player: int, world: MultiWorld):
-        return (self._reach_hotland(player, world) and (self.has("Cooking Set", player) or
+        return (self._reach_hotland(player, world) and ((self.has("Cooking Set", player) or self._is_route(world,player,2)) or
                                                         (self.has("Progressive Plot",player,3) and self._is_route(world,player,2)) or
                                                         (self.has("Progressive Plot",player,4) and self._is_route(world,player,0)) or
                                                         (self.has("Progressive Plot",player,6) and self._is_route(world,player,1))))
 
     def _reach_news_show(self, player: int, world: MultiWorld):
-        return (self._reach_cooking_show(player, world) and (self.has("Microphone", player) or
+        return (self._reach_cooking_show(player, world) and ((self.has("Microphone", player) or self._is_route(world,player,2)) or
                                                              (self.has("Progressive Plot",player,3) and self._is_route(world,player,2)) or
                                                              (self.has("Progressive Plot",player,5) and self._is_route(world,player,0)) or
                                                              (self.has("Progressive Plot",player,7) and self._is_route(world,player,1))))
 
     def _reach_core(self, player: int, world: MultiWorld):
-        return (self._reach_news_show(player, world) and (self.has("Bridge Tools", player) or
+        return (self._reach_news_show(player, world) and ((self.has("Bridge Tools", player)) or
                                                           (self.has("Progressive Plot",player,4) and self._is_route(world,player,2)) or
                                                           (self.has("Progressive Plot",player,6) and self._is_route(world,player,0)) or
                                                           (self.has("Progressive Plot",player,8) and self._is_route(world,player,1))))
@@ -89,7 +89,7 @@ def set_rules(world: MultiWorld, player: int):
         set_rule(world.get_location(("Dog Sale 4"), player), lambda state: state._reach_cooking_show(player, world))
         set_rule(world.get_location(("Hush Trade"), player), lambda state: state._reach_news_show(player, world) and state.has('Hot Dog...?', player, 1))
         set_rule(world.get_location(("Letter Quest"), player), lambda state: state._reach_sans(player, world))
-    if not world.state._is_route(world, player,2) or world.state._is_route(world,player,3):
+    if (not world.state._is_route(world, player,2)) or world.state._is_route(world,player,3):
         set_rule(world.get_location(("Card Reward"), player), lambda state: state.has('Punch Card', player, 3) and state._reach_waterfall(player, world))
         set_rule(world.get_location(("Nicecream Snowdin"), player), lambda state: state._reach_snowdin(player, world))
         set_rule(world.get_location(("Nicecream Waterfall"), player), lambda state: state._reach_waterfall(player, world))
