@@ -1,19 +1,53 @@
-If you just want to play and there is a [compiled version](https://github.com/Berserker66/MultiWorld-Utilities/releases) available, use that version. These steps are for developers or platforms without compiled releases available.
+# Running From Source
 
-# General
+If you just want to play and there is a compiled version available on the
+[Archipelago releases page](https://github.com/ArchipelagoMW/Archipelago/releases),
+use that version. These steps are for developers or platforms without compiled releases available.
+
+## General
+
 What you'll need:
- * Python 3.8+
+ * Python 3.8.7 or newer
    * with pip, which depending on platform may have to be installed separately
  * A C compiler
+   * possibly optional, read OS-specific sections
 
-Then run any of the starting points, like Generate and the included ModuleUpdater should prompt to install or update the required modules and after pressing enter proceed to install everything automatically. After this, you should be able to run the programs.
+Then run any of the starting points, like Generate and the included ModuleUpdater should prompt to install or update the
+required modules and after pressing enter proceed to install everything automatically.
+After this, you should be able to run the programs.
+
 
 ## Windows
-Recommended steps
- * Download and install [Python](https://www.python.org/ftp/python/3.9.10/python-3.9.10-amd64.exe), make sure to install it with pip included
- * Download and install [Visual Studio Build Tools](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019)
-   * Or go to [unoffical python packages](https://www.lfd.uci.edu/~gohlke/pythonlibs/) to download and install a precompiled bsdiff4 for your python.
- * run Generate.py which will prompt installation of missing modules, press enter to confirm
 
-## Optional A Link to the Past Enemizer
-At https://github.com/Ijwu/Enemizer/releases you can get the latest Enemizer release, it should be dropped as "EnemizerCLI" into the root folder of the project. Alternatively, you can point the Enemizer setting in host.yaml at your Enemizer.
+Recommended steps
+ * Download and install a "Windows installer (64-bit)" from the [Python download page](https://www.python.org/downloads)
+ * Download and install full Visual Studio from
+   [Visual Studio Downloads](https://visualstudio.microsoft.com/downloads/)
+   or an older "Build Tools for Visual Studio" from
+   [Visual Studio Older Downloads](https://visualstudio.microsoft.com/vs/older-downloads/).
+
+   * Refer to [Windows Compilers on the python wiki](https://wiki.python.org/moin/WindowsCompilers) for details
+   * This step is optional. Pre-compiled modules are pinned on
+     [Discord in #archipelago-dev](https://discord.com/channels/731205301247803413/731214280439103580/905154456377757808)
+
+ * It is recommended to use [PyCharm IDE](https://www.jetbrains.com/pycharm/)
+ * Run Generate.py which will prompt installation of missing modules, press enter to confirm
+
+
+## macOS
+
+Refer to [Guide to Run Archipelago from Source Code on macOS](../worlds/generic/docs/mac_en.md).
+
+
+## Optional: A Link to the Past Enemizer
+
+You can get the latest Enemizer release at [Enemizer Github releases](https://github.com/Ijwu/Enemizer/releases).
+It should be dropped as "EnemizerCLI" into the root folder of the project. Alternatively, you can point the Enemizer
+setting in host.yaml at your Enemizer folder.
+
+
+## Optional: SNI
+
+You can get the latest SNI release at [SNI Github releases](https://github.com/alttpo/sni/releases).
+It should be dropped as "SNI" into the root folder of the project. Alternatively, you can point the sni setting in
+host.yaml at your SNI folder.
