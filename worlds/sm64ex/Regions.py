@@ -11,6 +11,8 @@ sm64courses = ["Bob-omb Battlefield", "Whomp's Fortress", "Jolly Roger Bay", "Co
                "Wet-Dry World",
                "Tall, Tall Mountain", "Tiny-Huge Island", "Tick Tock Clock", "Rainbow Ride"]
 
+# sm64paintings is list of strings for quick reference for Painting IDs (NOT warp node IDs!)
+sm64paintings = ["BOB", "WF", "JRB", "CCM", "BBH", "HMC", "LLL", "SSL", "DDD", "SL", "WDW", "TTM", "THI Tiny", "THI Huge", "TTC", "RR"]
 
 def create_regions(world: MultiWorld, player: int):
     regSS = Region("Menu", RegionType.Generic, "Castle Area", player, world)
