@@ -76,9 +76,10 @@ class SM64World(World):
         staritem = self.create_item("Power Star")
         starcount = self.world.AmountOfStars[self.player].value
         if (not self.world.EnableCoinStars[self.player].value):
-            starcount = max(50,self.world.AmountOfStars[self.player].value-15)
+            starcount = max(35,self.world.AmountOfStars[self.player].value-15)
         starcount = max(starcount, self.world.FirstBowserStarDoorCost[self.player].value, 
-                        self.world.BasementStarDoorCost[self.player].value, self.world.SecondFloorStarDoorCost[self.player].value, 
+                        self.world.BasementStarDoorCost[self.player].value, self.world.SecondFloorStarDoorCost[self.player].value,
+                        self.world.MIPS1Cost[self.player].value, self.world.MIPS2Cost[self.player].value,
                         self.world.StarsToFinish[self.player].value)
         self.world.itempool += [staritem for i in range(0,starcount)]
         mushroomitem = self.create_item("1Up Mushroom") 
@@ -120,6 +121,8 @@ class SM64World(World):
             "FirstBowserDoorCost": self.world.FirstBowserStarDoorCost[self.player].value,
             "BasementDoorCost": self.world.BasementStarDoorCost[self.player].value,
             "SecondFloorCost": self.world.SecondFloorStarDoorCost[self.player].value,
+            "MIPS1Cost": self.world.MIPS1Cost[self.player].value,
+            "MIPS2Cost": self.world.MIPS2Cost[self.player].value,
             "StarsToFinish": self.world.StarsToFinish[self.player].value,
             "DeathLink": self.world.death_link[self.player].value,
         }

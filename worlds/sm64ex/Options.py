@@ -31,6 +31,18 @@ class SecondFloorStarDoorCost(Range):
     range_end = 90
     default = 50
 
+class MIPS1Cost(Range):
+    """How many stars are required to spawn MIPS the first time"""
+    range_start = 0
+    range_end = 40
+    default = 15
+
+class MIPS2Cost(Range):
+    """How many stars are required to spawn MIPS the secound time. Must be bigger or equal MIPS1Cost"""
+    range_start = 0
+    range_end = 80
+    default = 50
+
 class StarsToFinish(Range):
     """How many stars are required at the infinite stairs"""
     display_name = "Endless Stairs Stars"
@@ -39,8 +51,8 @@ class StarsToFinish(Range):
     default = 70
 
 class AmountOfStars(Range):
-    """How many stars exist. Disabling 100 Coin Stars removes 15 from the Pool. At least max of any Door Cost set"""
-    range_start = 50
+    """How many stars exist. Disabling 100 Coin Stars removes 15 from the Pool. At least max of any Cost set"""
+    range_start = 35
     range_end = 120
     default = 120
 
@@ -70,6 +82,8 @@ sm64_options: typing.Dict[str,type(Option)] = {
     "FirstBowserStarDoorCost": FirstBowserStarDoorCost,
     "BasementStarDoorCost": BasementStarDoorCost,
     "SecondFloorStarDoorCost": SecondFloorStarDoorCost,
+    "MIPS1Cost": MIPS1Cost,
+    "MIPS2Cost": MIPS2Cost,
     "StarsToFinish": StarsToFinish,
     "death_link": DeathLink,
     "BuddyChecks": BuddyChecks,
