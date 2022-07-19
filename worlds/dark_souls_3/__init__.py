@@ -18,7 +18,7 @@ from ..generic.Rules import set_rule
 class DarkSouls3Web(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Tutorial",
-        "A guide to setting up the Archipelago Dark Souls 3 randomizer on your computer.",
+        "A guide to setting up the Archipelago Dark Souls III randomizer on your computer.",
         "English",
         "setup_en.md",
         "setup/en",
@@ -28,7 +28,7 @@ class DarkSouls3Web(WebWorld):
 
 class DarkSouls3World(World):
     """
-    Dark souls 3 is an Action role-playing game and is part of the Souls series developed by FromSoftware.
+    Dark souls III is an Action role-playing game and is part of the Souls series developed by FromSoftware.
     Played in a third-person perspective, players have access to various weapons, armour, magic, and consumables that
     they can use to fight their enemies.
     """
@@ -66,7 +66,7 @@ class DarkSouls3World(World):
         menu_region = Region("Menu", RegionType.Generic, "Menu", self.player)
         self.world.regions.append(menu_region)
 
-        # Create all Vanilla regions of Dark Souls 3
+        # Create all Vanilla regions of Dark Souls III
         cemetery_of_ash_region = self.create_region("Cemetery Of Ash", cemetery_of_ash_table)
         firelink_shrine_region = self.create_region("Firelink Shrine", fire_link_shrine_table)
         firelink_shrine_bell_tower_region = self.create_region("Firelink Shrine Bell Tower",
