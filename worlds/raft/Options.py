@@ -37,6 +37,20 @@ class IslandFrequencyLocations(Choice):
     option_anywhere = 3
     default = 1
 
+class IslandGenerationDistance(Choice):
+    """Sets how far away islands spawn from you when you input their coordinates into the Receiver."""
+    display_name = "Island distance"
+    option_quarter = 2
+    option_half = 4
+    option_vanilla = 8
+    option_double = 16
+    option_quadrouple = 32
+    default = 8
+
+class ExpensiveResearch(Toggle):
+    """Makes unlocking items in the Crafting Table consume the researched items."""
+    display_name = "Expensive research"
+
 class ProgressiveItems(DefaultOnToggle):
     """Makes some items, like the Bow and Arrow, progressive rather than raw unlocks."""
     display_name = "Progressive items"
@@ -55,6 +69,8 @@ raft_options = {
     "maximum_resource_pack_amount": MaximumResourcePackAmount,
     "duplicate_items": DuplicateItems,
     "island_frequency_locations": IslandFrequencyLocations,
+    "island_generation_distance": IslandGenerationDistance,
+    "expensive_research": ExpensiveResearch,
     "progressive_items": ProgressiveItems,
     "big_island_early_crafting": BigIslandEarlyCrafting,
     "paddleboard_mode": PaddleboardMode

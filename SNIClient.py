@@ -18,7 +18,7 @@ from json import loads, dumps
 import ModuleUpdate
 ModuleUpdate.update()
 
-from Utils import init_logging
+from Utils import init_logging, messagebox
 
 if __name__ == "__main__":
     init_logging("SNIClient", exception_logger="Client")
@@ -62,7 +62,7 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
     def _cmd_snes(self, snes_options: str = "") -> bool:
         """Connect to a snes. Optionally include network address of a snes to connect to,
         otherwise show available devices; and a SNES device number if more than one SNES is detected.
-        Examples: "/snes", "/snes 1", "/snes localhost:8080 1" """
+        Examples: "/snes", "/snes 1", "/snes localhost:23074 1" """
 
         snes_address = self.ctx.snes_address
         snes_device_number = -1
@@ -1319,14 +1319,18 @@ async def main():
     parser = get_base_parser()
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a Archipelago Binary Patch file')
-    parser.add_argument('--snes', default='localhost:8080', help='Address of the SNI server.')
+    parser.add_argument('--snes', default='localhost:23074', help='Address of the SNI server.')
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
     args = parser.parse_args()
 
     if args.diff_file:
         import Patch
         logging.info("Patch file was supplied. Creating sfc rom..")
-        meta, romfile = Patch.create_rom_file(args.diff_file)
+        try:
+            meta, romfile = Patch.create_rom_file(args.diff_file)
+        except Exception as e:
+            messagebox('Error', str(e), True)
+            raise
         if "server" in meta:
             args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
@@ -1389,8 +1393,13 @@ def get_alttp_settings(romfile: str):
 
             if gui_enabled:
 
-                from tkinter import Tk, PhotoImage, Label, LabelFrame, Frame, Button
-                applyPromptWindow = Tk()
+                try:
+                    from tkinter import Tk, PhotoImage, Label, LabelFrame, Frame, Button
+                    applyPromptWindow = Tk()
+                except Exception as e:
+                    logging.error('Could not load tkinter, which is likely not installed.')
+                    return '', False
+
                 applyPromptWindow.resizable(False, False)
                 applyPromptWindow.protocol('WM_DELETE_WINDOW', lambda: onButtonClick())
                 logo = PhotoImage(file=Utils.local_path('data', 'icon.png'))

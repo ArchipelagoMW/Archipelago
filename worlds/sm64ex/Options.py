@@ -13,9 +13,28 @@ class StrictCannonRequirements(DefaultOnToggle):
     """If disabled, Stars that expect cannons may have to be acquired without them. Only makes a difference if Buddy Checks are enabled"""
     display_name = "Strict Cannon Requirements"
 
+class FirstBowserStarDoorCost(Range):
+    """How many stars are required at the Star Door to Bowser in the Dark World"""
+    range_start = 0
+    range_end = 20
+    default = 8
+
+class BasementStarDoorCost(Range):
+    """How many stars are required at the Star Door in the Basement"""
+    range_start = 0
+    range_end = 50
+    default = 30
+
+class SecondFloorStarDoorCost(Range):
+    """How many stars are required to access the third floor"""
+    range_start = 0
+    range_end = 50
+    default = 50
+
 class StarsToFinish(Range):
     """How many stars are required at the infinite stairs"""
-    range_start = 50
+    display_name = "Endless Stairs Stars"
+    range_start = 0
     range_end = 100
     default = 70
 
@@ -43,6 +62,9 @@ sm64_options: typing.Dict[str,type(Option)] = {
     "EnableCoinStars": EnableCoinStars,
     "StrictCapRequirements": StrictCapRequirements,
     "StrictCannonRequirements": StrictCannonRequirements,
+    "FirstBowserStarDoorCost": FirstBowserStarDoorCost,
+    "BasementStarDoorCost": BasementStarDoorCost,
+    "SecondFloorStarDoorCost": SecondFloorStarDoorCost,
     "StarsToFinish": StarsToFinish,
     "ExtraStars": ExtraStars,
     "death_link": DeathLink,

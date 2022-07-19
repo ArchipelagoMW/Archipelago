@@ -180,14 +180,14 @@ preferred_endings = {
 
 def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: str = GAME_ALTTP) -> bytes:
     if game == GAME_ALTTP:
-        from worlds.alttp.Rom import JAP10HASH as HASH
+        from worlds.alttp.Rom import LTTPJPN10HASH as HASH
     elif game == GAME_SM:
-        from worlds.sm.Rom import JAP10HASH as HASH
+        from worlds.sm.Rom import SMJUHASH as HASH
     elif game == GAME_SOE:
         from worlds.soe.Patch import USHASH as HASH
     elif game == GAME_SMZ3:
-        from worlds.alttp.Rom import JAP10HASH as ALTTPHASH
-        from worlds.sm.Rom import JAP10HASH as SMHASH
+        from worlds.alttp.Rom import LTTPJPN10HASH as ALTTPHASH
+        from worlds.sm.Rom import SMJUHASH as SMHASH
         HASH = ALTTPHASH + SMHASH
     elif game == GAME_DKC3:
         from worlds.dkc3.Rom import USHASH as HASH

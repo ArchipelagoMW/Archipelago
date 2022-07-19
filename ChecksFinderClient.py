@@ -36,10 +36,7 @@ class ChecksFinderContext(CommonContext):
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(ChecksFinderContext, self).server_auth(password_requested)
-        if not self.auth:  # TODO: Replace this if block with await self.getusername() once that PR is merged in.
-            logger.info('Enter slot name:')
-            self.auth = await self.console_input()
-
+        await self.get_username()
         await self.send_connect()
 
     async def connection_closed(self):
