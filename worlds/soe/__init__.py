@@ -16,7 +16,7 @@ except ImportError:
     from . import pyevermizer  # as part of the source tree
 
 from . import Logic  # load logic mixin
-from .Options import soe_options
+from .Options import soe_options, EnergyCore, RequiredFragments, AvailableFragments
 from .Patch import SoEDeltaPatch, get_base_rom_path
 
 """
@@ -52,7 +52,6 @@ Item grouping currently supports
 * Ingredients - Matches all ingredient drops
 * Alchemy - Matches all alchemy formulas
 * Weapons - Matches all weapons but Bazooka, Bone Crusher, Neutron Blade
-* Bazooka - Matches all bazookas (currently only one)
 * Traps - Matches all traps
 """
 
@@ -63,12 +62,14 @@ _id_offset: typing.Dict[int, int] = {
     pyevermizer.CHECK_GOURD: _id_base + 100,  # gourds 64100..64399
     pyevermizer.CHECK_NPC: _id_base + 400,  # npc 64400..64499
     # TODO: sniff 64500..64799
-    pyevermizer.CHECK_TRAP: _id_base + 900,  # npc 64900..64999
+    pyevermizer.CHECK_EXTRA: _id_base + 800,  # extra items 64800..64899
+    pyevermizer.CHECK_TRAP: _id_base + 900,  # trap 64900..64999
 }
 
 # cache native evermizer items and locations
 _items = pyevermizer.get_items()
 _traps = pyevermizer.get_traps()
+_extras = pyevermizer.get_extra_items()  # items that are not placed by default
 _locations = pyevermizer.get_locations()
 # fix up texts for AP
 for _loc in _locations:
@@ -104,7 +105,7 @@ def _get_location_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[i
 def _get_item_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[int, pyevermizer.Item]]:
     name_to_id = {}
     id_to_raw = {}
-    for item in itertools.chain(_items, _traps):
+    for item in itertools.chain(_items, _extras, _traps):
         if item.name in name_to_id:
             continue
         ap_id = _id_offset[item.type] + item.index
@@ -127,7 +128,6 @@ def _get_item_grouping() -> typing.Dict[str, typing.Set[str]]:
     groups['Alchemy'] = set(item.name for item in _items if item.type == pyevermizer.CHECK_ALCHEMY)
     groups['Weapons'] = {'Spider Claw', 'Horn Spear', 'Gladiator Sword', 'Bronze Axe', 'Bronze Spear', 'Crusader Sword',
                          'Lance (Weapon)', 'Knight Basher', 'Atom Smasher', 'Laser Lance'}
-    groups['Bazooka'] = {'Bazooka+Shells / Shining Armor / 5k Gold'}
     groups['Traps'] = {trap.name for trap in _traps}
     return groups
 
@@ -136,7 +136,8 @@ class SoEWebWorld(WebWorld):
     theme = 'jungle'
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to playing Secret of Evermore randomizer. This guide covers single-player, multiworld and related software.",
+        "A guide to playing Secret of Evermore randomizer. This guide covers single-player, multiworld and related"
+        " software.",
         "English",
         "multiworld_en.md",
         "multiworld/en",
@@ -153,9 +154,9 @@ class SoEWorld(World):
     options = soe_options
     topology_present = False
     remote_items = False
-    data_version = 2
+    data_version = 3
     web = SoEWebWorld()
-    required_client_version = (0, 2, 6)
+    required_client_version = (0, 3, 3)
 
     item_name_to_id, item_id_to_raw = _get_item_mapping()
     location_name_to_id, location_id_to_raw = _get_location_mapping()
@@ -165,12 +166,23 @@ class SoEWorld(World):
 
     evermizer_seed: int
     connect_name: str
+    energy_core: int
+    available_fragments: int
+    required_fragments: int
 
     _halls_ne_chest_names: typing.List[str] = [loc.name for loc in _locations if 'Halls NE' in loc.name]
 
     def __init__(self, *args, **kwargs):
         self.connect_name_available_event = threading.Event()
         super(SoEWorld, self).__init__(*args, **kwargs)
+
+    def generate_early(self) -> None:
+        # store option values that change logic
+        self.energy_core = self.world.energy_core[self.player].value
+        self.required_fragments = self.world.required_fragments[self.player].value
+        if self.required_fragments > self.world.available_fragments[self.player].value:
+            self.world.available_fragments[self.player].value = self.required_fragments
+        self.available_fragments = self.world.available_fragments[self.player].value
 
     def create_event(self, event: str) -> Item:
         return SoEItem(event, ItemClassification.progression, None, self.player)
@@ -182,6 +194,8 @@ class SoEWorld(World):
             classification = ItemClassification.trap
         elif item.progression:
             classification = ItemClassification.progression
+        elif item.useful:
+            classification = ItemClassification.useful
         else:
             classification = ItemClassification.filler
 
@@ -208,9 +222,33 @@ class SoEWorld(World):
         self.world.get_entrance('New Game', self.player).connect(self.world.get_region('Ingame', self.player))
 
     def create_items(self):
-        # add items to the pool
-        items = list(map(lambda item: self.create_item(item), _items))
+        # add regular items to the pool
+        exclusions: typing.List[str] = []
+        if self.energy_core != EnergyCore.option_shuffle:
+            exclusions.append("Energy Core")  # will be placed in generate_basic or replaced by a fragment below
+        items = list(map(lambda item: self.create_item(item), (item for item in _items if item.name not in exclusions)))
 
+        # remove one pair of wings that will be placed in generate_basic
+        items.remove(self.create_item("Wings"))
+
+        def is_ingredient(item):
+            for ingredient in _ingredients:
+                if _match_item_name(item, ingredient):
+                    return True
+            return False
+
+        # add energy core fragments to the pool
+        ingredients = [n for n, item in enumerate(items) if is_ingredient(item)]
+        if self.energy_core == EnergyCore.option_fragments:
+            items.append(self.create_item("Energy Core Fragment"))  # replaces the vanilla energy core
+            for _ in range(self.available_fragments - 1):
+                if len(ingredients) < 1:
+                    break  # out of ingredients to replace
+                r = self.world.random.choice(ingredients)
+                ingredients.remove(r)
+                items[r] = self.create_item("Energy Core Fragment")
+
+        # add traps to the pool
         trap_count = self.world.trap_count[self.player].value
         trap_chances = {}
         trap_names = {}
@@ -232,13 +270,12 @@ class SoEWorld(World):
                     return self.create_item(trap_names[t])
                 v -= c
 
-        while trap_count > 0:
-            r = self.world.random.randrange(len(items))
-            for ingredient in _ingredients:
-                if _match_item_name(items[r], ingredient):
-                    items[r] = create_trap()
-                    trap_count -= 1
-                    break
+        for _ in range(trap_count):
+            if len(ingredients) < 1:
+                break  # out of ingredients to replace
+            r = self.world.random.choice(ingredients)
+            ingredients.remove(r)
+            items[r] = create_trap()
 
         self.world.itempool += items
 
@@ -271,7 +308,10 @@ class SoEWorld(World):
         wings_location = self.world.random.choice(self._halls_ne_chest_names)
         wings_item = self.create_item('Wings')
         self.world.get_location(wings_location, self.player).place_locked_item(wings_item)
-        self.world.itempool.remove(wings_item)
+        # place energy core at vanilla location for vanilla mode
+        if self.energy_core == EnergyCore.option_vanilla:
+            energy_core = self.create_item('Energy Core')
+            self.world.get_location('Energy Core #285', self.player).place_locked_item(energy_core)
         # generate stuff for later
         self.evermizer_seed = self.world.random.randint(0, 2 ** 16 - 1)  # TODO: make this an option for "full" plando?
 
@@ -286,9 +326,12 @@ class SoEWorld(World):
         try:
             money = self.world.money_modifier[self.player].value
             exp = self.world.exp_modifier[self.player].value
-            switches = []
+            switches: typing.List[str] = []
             if self.world.death_link[self.player].value:
                 switches.append("--death-link")
+            if self.energy_core == EnergyCore.option_fragments:
+                switches.extend(('--available-fragments', str(self.available_fragments),
+                                 '--required-fragments', str(self.required_fragments)))
             rom_file = get_base_rom_path()
             out_base = output_path(output_directory, f'AP_{self.world.seed_name}_P{self.player}_'
                                                      f'{self.world.get_file_safe_player_name(self.player)}')

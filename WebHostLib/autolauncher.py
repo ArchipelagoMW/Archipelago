@@ -154,8 +154,10 @@ def autogen(config: dict):
                     while 1:
                         time.sleep(0.1)
                         with db_session:
+                            # for update locks the database row(s) during transaction, preventing writes from elsewhere
                             to_start = select(
-                                generation for generation in Generation if generation.state == STATE_QUEUED)
+                                generation for generation in Generation
+                                if generation.state == STATE_QUEUED).for_update()
                             for generation in to_start:
                                 launch_generator(generator_pool, generation)
         except AlreadyRunningException:
