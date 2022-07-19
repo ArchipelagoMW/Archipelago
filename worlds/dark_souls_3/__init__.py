@@ -60,7 +60,7 @@ class DarkSouls3World(World):
         else:
             item_classification = ItemClassification.filler
 
-        return Item(name, item_classification, data, self.player)
+        return DarkSouls3Item(name, item_classification, data, self.player)
 
     def create_regions(self):
         menu_region = Region("Menu", RegionType.Generic, "Menu", self.player)
@@ -149,7 +149,7 @@ class DarkSouls3World(World):
         new_region = Region(region_name, RegionType.Generic, region_name, self.player)
         if location_table:
             for name, address in location_table.items():
-                location = Location(self.player, name, self.location_name_to_id[name], new_region)
+                location = DarkSouls3Location(self.player, name, self.location_name_to_id[name], new_region)
                 new_region.locations.append(location)
         self.world.regions.append(new_region)
         return new_region
@@ -256,3 +256,11 @@ class DarkSouls3World(World):
         filename = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}.json"
         with open(os.path.join(output_directory, filename), 'w') as outfile:
             json.dump(data, outfile)
+
+
+class DarkSouls3Location(Location):
+    game: str = "Dark Souls III"
+
+
+class DarkSouls3Item(Item):
+    game: str = "Dark Souls III"
