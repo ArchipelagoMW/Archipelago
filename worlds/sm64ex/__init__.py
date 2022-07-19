@@ -74,9 +74,12 @@ class SM64World(World):
 
     def generate_basic(self):
         staritem = self.create_item("Power Star")
-        starcount = min(self.world.StarsToFinish[self.player].value + self.world.ExtraStars[self.player].value,120)
+        starcount = self.world.AmountOfStars[self.player].value
         if (not self.world.EnableCoinStars[self.player].value):
-            starcount = max(starcount - 15,self.world.StarsToFinish[self.player].value)
+            starcount = max(50,self.world.AmountOfStars[self.player].value-15)
+        starcount = max(starcount, self.world.FirstBowserStarDoorCost[self.player].value, 
+                        self.world.BasementStarDoorCost[self.player].value, self.world.SecondFloorStarDoorCost[self.player].value, 
+                        self.world.StarsToFinish[self.player].value)
         self.world.itempool += [staritem for i in range(0,starcount)]
         mushroomitem = self.create_item("1Up Mushroom") 
         self.world.itempool += [mushroomitem for i in range(starcount,120 - (15 if not self.world.EnableCoinStars[self.player].value else 0))]

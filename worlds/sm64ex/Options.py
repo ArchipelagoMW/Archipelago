@@ -16,19 +16,19 @@ class StrictCannonRequirements(DefaultOnToggle):
 class FirstBowserStarDoorCost(Range):
     """How many stars are required at the Star Door to Bowser in the Dark World"""
     range_start = 0
-    range_end = 20
+    range_end = 50
     default = 8
 
 class BasementStarDoorCost(Range):
     """How many stars are required at the Star Door in the Basement"""
     range_start = 0
-    range_end = 50
+    range_end = 70
     default = 30
 
 class SecondFloorStarDoorCost(Range):
     """How many stars are required to access the third floor"""
     range_start = 0
-    range_end = 50
+    range_end = 90
     default = 50
 
 class StarsToFinish(Range):
@@ -38,11 +38,11 @@ class StarsToFinish(Range):
     range_end = 100
     default = 70
 
-class ExtraStars(Range):
-    """How many stars exist beyond those set for StarsToFinish"""
-    range_start = 0
-    range_end = 50
-    default = 50
+class AmountOfStars(Range):
+    """How many stars exist. Disabling 100 Coin Stars removes 15 from the Pool. At least max of any Door Cost set"""
+    range_start = 50
+    range_end = 120
+    default = 120
 
 class AreaRandomizer(Choice):
     """Randomize Entrances"""
@@ -64,13 +64,13 @@ sm64_options: typing.Dict[str,type(Option)] = {
     "AreaRandomizer": AreaRandomizer,
     "ProgressiveKeys": ProgressiveKeys,
     "EnableCoinStars": EnableCoinStars,
+    "AmountOfStars": AmountOfStars,
     "StrictCapRequirements": StrictCapRequirements,
     "StrictCannonRequirements": StrictCannonRequirements,
     "FirstBowserStarDoorCost": FirstBowserStarDoorCost,
     "BasementStarDoorCost": BasementStarDoorCost,
     "SecondFloorStarDoorCost": SecondFloorStarDoorCost,
     "StarsToFinish": StarsToFinish,
-    "ExtraStars": ExtraStars,
     "death_link": DeathLink,
     "BuddyChecks": BuddyChecks,
 } 
