@@ -46,4 +46,14 @@ def get_datapackge_versions():
     return version_package
 
 
+@api_endpoints.route('/datapackage_checksum')
+@cache.cached()
+def get_datapackage_checksums():
+    from worlds import network_data_package
+    version_package = {
+        game: game_data["checksum"] for game, game_data in network_data_package["games"].items()
+    }
+    return version_package
+
+
 from . import generate, user  # trigger registration

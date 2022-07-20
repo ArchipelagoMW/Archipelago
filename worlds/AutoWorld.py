@@ -128,7 +128,10 @@ class World(metaclass=AutoWorldRegister):
     # increment this every time something in your world's names/id mappings changes.
     # While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
     # retrieved by clients on every connection.
-    data_version: int = 1
+    #
+    # Deprecated. This is only used by older clients. Newer clients should be checking the checksum in DataPackage
+    # instead.
+    data_version: int = 0
 
     # override this if changes to a world break forward-compatibility of the client
     # The base version of (0, 1, 6) is provided for backwards compatibility and does *not* need to be updated in the
