@@ -49,7 +49,7 @@ class PercentageOfExtraBonusCoins(Range):
     """
     What Percentage of unneeded Bonus Coins are included in the item pool
     """
-    display_name = "Percentage of ExtraBonusCoins"
+    display_name = "Percentage of Extra Bonus Coins"
     range_start = 0
     range_end = 100
     default = 100
