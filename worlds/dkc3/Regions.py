@@ -717,7 +717,7 @@ def connect_regions(world, player, level_list):
         level_list[4],
         LocationName.belchas_barn_region,
         LocationName.barnacle_region,
-        LocationName.belchas_burrow_region,
+        LocationName.smugglers_cove_region,
     ]
 
     for i in range(0, len(lake_orangatanga_levels)):
