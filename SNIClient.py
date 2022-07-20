@@ -1293,7 +1293,7 @@ async def game_watcher(ctx: Context):
 
 async def run_game(romfile):
     auto_start = Utils.get_options()["lttp_options"].get("rom_start", True)
-    if auto_start is True:)
+    if auto_start is True:
         import webbrowser
         webbrowser.open(romfile)
     elif os.path.isfile(auto_start):
