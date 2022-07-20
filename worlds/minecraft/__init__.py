@@ -177,6 +177,18 @@ class MinecraftWorld(World):
 
         return item
 
+    @staticmethod
+    def decode_bounce_packet(args: dict) -> str:
+        if "ctx" not in args or "tags" not in args or "data" not in args:
+            return ""
+        ctx = args["ctx"]
+        tags = args["tags"]
+        data = args["data"]
+        if "MC35" not in tags:
+            return ""
+        return f"Living entity {data['enemy']} was defeated by {ctx.player_names[data['source']]}"
+
+
 def mc_update_output(raw_data, server, port):
     data = json.loads(b64decode(raw_data))
     data['server'] = server
