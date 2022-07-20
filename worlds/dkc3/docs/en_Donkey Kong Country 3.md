@@ -6,25 +6,30 @@ The [player settings page for this game](../player-settings) contains all the op
 
 ## What does randomization do to this game?
 
-The randomizer shuffles emblems and upgrade items into the AP item pool. The story mode is disabled, but stage select is available from the start. Levels can be locked behind gates requiring a certain number of emblems to unlock. Cannons Core will be locked behind a percentage of all available emblems, and completing Cannons Core will unlock the Biolizard boss. Progress towards unlocking Cannons Core and the next stage gate will be displayed on the Stage Select screen.
+Items which the player would normally acquire throughout the game have been moved around. Logic remains, so the game is
+always able to be completed, but because of the item shuffle the player may need to access certain areas before they
+would in the vanilla game.
 
-## What is the goal of Sonic Adventure 2: Battle when randomized?
+## What is the goal of Donkey Kong Country 3 when randomized?
 
-The goal is to unlock and complete Cannons Core Mission 1, then complete the Biolizard boss fight.
+There are two goals which can be chosen:
+- `Knautilus`: Collect Bonus Coins and Krematoa Cogs to reach K. Rool's submarine in Krematoa
+- `Banana Bird Hunt`: Collect Banana Birds to free the Banana Bird Mother
 
 ## What items and locations get shuffled?
 
-All 30 story stages leading up to Cannons Core will be shuffled and can be optionally placed behind emblem requirement gates. All emblems from the selected mission range and all 28 character upgrade items get shuffled.
+All Bonus Coins, DK Coins, and Banana Birds (if on a `Banana Bird Hunt` goal) are randomized. Additionally, level clears award a location check.
+The Patch and two Skis for upgrading the boat are included. Bear Coins are provided if additional items are needed for the item pool.
+Four of the Five Krematoa Cogs are randomized, but the final one is always in its vanilla location at the Flag of Rocket Rush in Krematoa
 
 ## Which items can be in another player's world?
 
 Any shuffled item can be in other players' worlds.
 
-## What does another world's item look like in Sonic Adventure 2: Battle
+## What does another world's item look like in Donkey Kong Country 3
 
-Emblems have no visualization in the randomizer and items all retain their original appearance. You won't know if an item belongs to another player until you collect.
+Items pickups all retain their original appearance. You won't know if an item belongs to another player until you collect.
 
-## When the player receives an emblem or item, what happens?
+## When the player receives an item, what happens?
 
-When the player collects an emblem or item, text will appear on screen to indicate who the item was for and what the item was. When collecting items in a level, the orignal item collection text will display and will likely not be correct.
-
+Currently, the items are silently added to the player's inventory, which can be seen when saving the game.

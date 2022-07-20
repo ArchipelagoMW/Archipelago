@@ -38,7 +38,7 @@ class DKC3World(World):
     game: str = "Donkey Kong Country 3"
     options = dkc3_options
     topology_present = False
-    data_version = 0
+    data_version = 1
     #hint_blacklist = {LocationName.rocket_rush_flag}
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
