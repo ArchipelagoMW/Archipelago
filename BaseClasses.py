@@ -531,7 +531,7 @@ class MultiWorld():
 
         beatable_fulfilled = False
 
-        def location_conditition(location: Location):
+        def location_condition(location: Location):
             """Determine if this location has to be accessible, location is already filtered by location_relevant"""
             if location.player in players["minimal"]:
                 return False
@@ -548,7 +548,7 @@ class MultiWorld():
         def all_done():
             """Check if all access rules are fulfilled"""
             if beatable_fulfilled:
-                if any(location_conditition(location) for location in locations):
+                if any(location_condition(location) for location in locations):
                     return False  # still locations required to be collected
                 return True
 
