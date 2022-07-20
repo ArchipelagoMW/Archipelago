@@ -1293,13 +1293,9 @@ async def game_watcher(ctx: Context):
 
 async def run_game(romfile):
     auto_start = Utils.get_options()["lttp_options"].get("rom_start", True)
-    if auto_start is True:
-        # DKC3_TODO: Fix this hack
-        dirname = os.path.dirname(__file__)
-        new_dirname = os.path.join(dirname, "")
-        os.startfile(os.path.join(new_dirname, romfile))
-        #import webbrowser
-        #webbrowser.open(romfile)
+    if auto_start is True:)
+        import webbrowser
+        webbrowser.open(romfile)
     elif os.path.isfile(auto_start):
         subprocess.Popen([auto_start, romfile],
                          stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
