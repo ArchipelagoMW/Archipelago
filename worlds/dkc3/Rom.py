@@ -394,6 +394,12 @@ def patch_rom(world, rom, player, active_level_list):
     dk_coin_cost = world.dk_coins_for_gyrocopter[player]
     rom.write_byte(0x3484A6, dk_coin_cost)
     rom.write_byte(0x3484D5, dk_coin_cost)
+    rom.write_byte(0x3484D7, 0x90)
+    rom.write_byte(0x3484DC, 0xEA)
+    rom.write_byte(0x3484DD, 0xEA)
+    rom.write_byte(0x3484DE, 0xEA)
+    rom.write_byte(0x348528, 0x80) # Prevent Single-Ski Lock
+
 
     # Make Swanky free
     rom.write_byte(0x348C48, 0x00)
