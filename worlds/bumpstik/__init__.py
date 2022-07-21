@@ -80,9 +80,10 @@ class BumpStikWorld(World):
     def set_rules(self):
         forbid_item(self.world.get_location("Booster Bumper 5", self.player),
                     "Booster Bumper", self.player)
-        # forbid_item(self.world.get_location("Cleared All Hazards",
-        #             self.player), "Hazard Bumper", self.player)
 
     def generate_basic(self):
+        self.world.get_location("Cleared All Hazards", self.player).place_locked_item(
+            self.create_item(self.get_filler_item_name()))
+
         self.world.completion_condition[self.player] = lambda state: state.has("Booster Bumper", self.player,
             5) and state.has_group("Board Size", self.player, 6) and state.has_group("Color", self.player, 4)
