@@ -17,7 +17,46 @@ class BumpStikLttPText(typing.NamedTuple):
 
 
 LttPCreditsText = {
-
+    "Board Width": BumpStikLttPText("widening",
+                                    "Bumper Kid embiggens options",
+                                    "Try this shroom for size",
+                                    "Extension for sale",
+                                    "Next one's a long one"),
+    "Board Height": BumpStikLttPText("lengthening",
+                                     "Bumper Kid embiggens options",
+                                     "Try this shroom for size",
+                                     "Extension for sale",
+                                     "Telling a tall tale"),
+    "Starting Colors Up": BumpStikLttPText("tiny prism",
+                                           "Crayola kid colors again",
+                                           "The colors Duke! The colors",
+                                           "Colorless dot for sale",
+                                           "Tasteless language ahead"),
+    "Maximum Colors Up": BumpStikLttPText("large prism",
+                                          "Crayola kid colors again",
+                                          "The colors Duke! The colors",
+                                          "Colorful dot for sale",
+                                          "Colorful language ahead"),
+    "Starting Paint Can": BumpStikLttPText("paint bucket",
+                                           "Artsy kid paints again",
+                                           "Your rainbow destiny",
+                                           "Rainbow for sale",
+                                           "Let me paint a picture"),
+    "Booster Bumper": BumpStikLttPText("multiplier",
+                                       "Math kid multiplies again",
+                                       "Growing shrooms",
+                                       "Investment opportunity",
+                                       "In harmony with themself"),
+    "Hazard Bumper": BumpStikLttPText("dull stone",
+                                      "...I got better",
+                                      "Mischief Maker",
+                                      "Whoops for sale",
+                                      "Stuck in a moment"),
+    "Treasure Bumper": BumpStikLttPText("odd treasure box",
+                                        "Interdimensional treasure",
+                                        "Shrooms for ???",
+                                        "Who knows what this is",
+                                        "No hinges no key no lid")
 }
 
 
@@ -37,7 +76,7 @@ class BumpStikItem(Item):
             self.type = "Board Size"
             self.classification = ItemClassification.progression
         elif "Color" in name:
-            self.type = "Board Size"
+            self.type = "Color"
             self.classification = ItemClassification.progression
         elif "Booster" in name:
             self.type = "Booster"
@@ -63,7 +102,8 @@ item_table = {
     "Maximum Colors Up": offset + 3,
     "Starting Paint Can": offset + 4,
     "Booster Bumper": offset + 5,
-    "Hazard Bumper": offset + 6
+    "Hazard Bumper": offset + 6,
+    "Treasure Bumper": offset + 7
 }
 
 item_groups = {
