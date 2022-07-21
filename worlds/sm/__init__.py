@@ -275,28 +275,22 @@ class SMWorld(World):
         # first apply the sm multiworld code patch named 'basepatch' (also has empty tables that we'll overwrite),
         #  + apply some patches from varia that we want to be always-on.
         # basepatch and variapatches are both generated from https://github.com/lordlou/SMBasepatch
-        romPatcher.applyIPSPatch(
-            Utils.local_path("lib", "worlds", "sm", "data", "SMBasepatch_prebuilt", "multiworld-basepatch.ips") if
-            Utils.is_frozen() else
-            Utils.local_path(       "worlds", "sm", "data", "SMBasepatch_prebuilt", "multiworld-basepatch.ips"))
-        romPatcher.applyIPSPatch(
-            Utils.local_path("lib", "worlds", "sm", "data", "SMBasepatch_prebuilt", "variapatches.ips") if
-            Utils.is_frozen() else
-            Utils.local_path(       "worlds", "sm", "data", "SMBasepatch_prebuilt", "variapatches.ips"))
-
-        symbols = get_sm_symbols(
-            Utils.local_path("lib", "worlds", "sm", "data", "SMBasepatch_prebuilt", "sm-basepatch-symbols.json") if
-            Utils.is_frozen() else
-            Utils.local_path(       "worlds", "sm", "data", "SMBasepatch_prebuilt", "sm-basepatch-symbols.json"))
+        romPatcher.applyIPSPatch(os.path.join(os.path.dirname(__file__),
+                                              "data", "SMBasepatch_prebuilt", "multiworld-basepatch.ips"))
+        romPatcher.applyIPSPatch(os.path.join(os.path.dirname(__file__),
+                                              "data", "SMBasepatch_prebuilt", "variapatches.ips"))
+        symbols = get_sm_symbols(os.path.join(os.path.dirname(__file__), 
+                                              "data", "SMBasepatch_prebuilt", "sm-basepatch-symbols.json"))
         multiWorldLocations = []
         multiWorldItems = []
         idx = 0
         self.playerIDMap = {}
-        playerIDCount = 0 # 0 is for "Archipelago" server
+        playerIDCount = 0 # 0 is for "Archipelago" server; highest possible = 200 (201 entries)
         vanillaItemTypesCount = 21
         for itemLoc in self.world.get_locations():
-            romPlayerID = itemLoc.item.player if itemLoc.item.player <= ROM_PLAYER_LIMIT else 0
             if itemLoc.player == self.player and locationsDict[itemLoc.name].Id != None:
+                # this SM world can find this item: write full item data to tables and assign player data for writing
+                romPlayerID = itemLoc.item.player if itemLoc.item.player <= ROM_PLAYER_LIMIT else 0
                 if itemLoc.item.type in ItemManager.Items:
                     itemId = ItemManager.Items[itemLoc.item.type].Id 
                 else:
@@ -318,7 +312,11 @@ class SMWorld(World):
                                             "offset": locationsDict[itemLoc.name].Id*8,
                                             "values": [w0, w1, w2, w3, w4, w5, w6, w7]})
 
-            if itemLoc.item.player == self.player:
+            elif itemLoc.item.player == self.player:
+                # this SM world owns the item: so in case the sending player might not have anything placed in this
+                # world to receive from it, assign them space in playerIDMap so that the ROM can display their name
+                # (SM item name not needed, as SM item type id will be in the message they send to this world live)
+                romPlayerID = itemLoc.player if itemLoc.player <= ROM_PLAYER_LIMIT else 0
                 if (romPlayerID > 0 and romPlayerID not in self.playerIDMap.keys()):
                     playerIDCount += 1
                     self.playerIDMap[romPlayerID] = playerIDCount
@@ -333,15 +331,13 @@ class SMWorld(World):
         idx = 0
         offworldSprites = []
         for itemSprite in itemSprites:
-            with open(Utils.local_path("lib", "worlds", "sm", "data", "custom_sprite", itemSprite["fileName"]) if
-                      Utils.is_frozen() else
-                      Utils.local_path(       "worlds", "sm", "data", "custom_sprite", itemSprite["fileName"]), "rb") as stream:
+            with open(os.path.join(os.path.dirname(__file__), "data", "custom_sprite", itemSprite["fileName"]), 'rb') as stream:
                 buffer = bytearray(stream.read())
                 offworldSprites.append({"sym": symbols[itemSprite["paletteSymbolName"]],
                                         "offset": 0,
                                         "values": buffer[0:8]})
                 offworldSprites.append({"sym": symbols[itemSprite["dataSymbolName"]],
-                                        "offset": idx*256,
+                                        "offset": 0,
                                         "values": buffer[8:264]})
                 idx += 1
 
