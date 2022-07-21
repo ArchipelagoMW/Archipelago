@@ -14,9 +14,6 @@ class ItemData(typing.NamedTuple):
 class DKC3Item(Item):
     game: str = "Donkey Kong Country 3"
 
-    def __init__(self, name, classification: ItemClassification, code: int = None, player: int = None):
-        super(DKC3Item, self).__init__(name, classification, code, player)
-
 
 # Separate tables for each type of item.
 junk_table = {
