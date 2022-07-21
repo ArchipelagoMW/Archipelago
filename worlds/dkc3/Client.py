@@ -216,5 +216,5 @@ async def dkc3_game_watcher(ctx: Context):
             boomer_cost = await snes_read(ctx, ROM_START + 0xB49857, 1)
             boomer_cost_tens = boomer_cost[0] // 10
             boomer_cost_ones = boomer_cost[0] % 10
-            snes_buffered_write(ctx, WRAM_START 0xAB9B, bytes([0x30 + boomer_cost_tens, 0x30 + boomer_cost_ones]))
+            snes_buffered_write(ctx, WRAM_START + 0xAB9B, bytes([0x30 + boomer_cost_tens, 0x30 + boomer_cost_ones]))
             await snes_flush_writes(ctx)
