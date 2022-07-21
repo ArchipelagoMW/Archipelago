@@ -5,7 +5,7 @@ from .Rules import set_rules
 
 from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from .Options import ror2_options
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 
 client_version = 1
 
