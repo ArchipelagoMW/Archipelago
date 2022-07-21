@@ -65,6 +65,7 @@ async def dkc3_game_watcher(ctx: Context):
             # We haven't loaded a save file
             return
 
+        new_checks = []
         from worlds.dkc3.Rom import location_rom_data, item_rom_data
         for loc_id, loc_data in location_rom_data.items():
             if loc_id not in ctx.locations_checked:
@@ -74,11 +75,25 @@ async def dkc3_game_watcher(ctx: Context):
                 invert_bit = ((len(loc_data) >= 3) and loc_data[2])
                 if bit_set != invert_bit:
                     # DKC3_TODO: Handle non-included checks
-                    ctx.locations_checked.add(loc_id)
-                    location = ctx.location_names[loc_id]
-                    snes_logger.info(
-                        f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
-                    await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [loc_id]}])
+                    new_checks.append(loc_id)
+
+        save_file_name = await snes_read(ctx, DKC3_FILE_NAME_ADDR, 0x5)
+        if save_file_name is None or save_file_name[0] == 0x00:
+            # We have somehow exited the save file
+            return
+
+        rom = await snes_read(ctx, DKC3_ROMHASH_START, ROMHASH_SIZE)
+        if rom != ctx.rom:
+            ctx.rom = None
+            # We have somehow loaded a different ROM
+            return
+
+        for new_check_id in new_checks:
+            ctx.locations_checked.add(new_check_id)
+            location = ctx.location_names[new_check_id]
+            snes_logger.info(
+                f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+            await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
 
         # DKC3_TODO: Make this actually visually display new things received (ASM Hook required)
         recv_count = await snes_read(ctx, DKC3_RECV_PROGRESS_ADDR, 1)
