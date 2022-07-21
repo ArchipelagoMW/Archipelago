@@ -115,7 +115,7 @@ item_table: Dict[int, ItemDict] = {
             'name': 'Light Stick Fragment',
             'tech_type': 'TechlightFragment'},
     35026: {'classification': ItemClassification.progression,
-            'count': 3,
+            'count': 4,
             'name': 'Mobile Vehicle Bay Fragment',
             'tech_type': 'ConstructorFragment'},
     35027: {'classification': ItemClassification.progression,

@@ -41,7 +41,7 @@ class SubnauticaWorld(World):
     location_name_to_id = all_locations
     options = Options.options
 
-    data_version = 3
+    data_version = 4
     required_client_version = (0, 3, 3)
 
     prefill_items: List[Item]
@@ -115,7 +115,8 @@ class SubnauticaWorld(World):
         slot_data: Dict[str, Any] = {
             "goal": goal.current_key,
             "vanilla_tech": vanilla_tech,
-            "creatures_to_scan": self.creatures_to_scan
+            "creatures_to_scan": self.creatures_to_scan,
+            "death_link": self.world.death_link[self.player].value,
         }
 
         return slot_data
