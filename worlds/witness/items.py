@@ -2,7 +2,7 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-from typing import Dict, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional, Set
 
 from BaseClasses import Item, MultiWorld
 from . import StaticWitnessLogic, WitnessPlayerLocations, WitnessPlayerLogic
@@ -35,6 +35,8 @@ class StaticWitnessItems:
 
     ALL_ITEM_TABLE: Dict[str, ItemData] = {}
 
+    ITEM_NAME_GROUPS: Dict[str, Set[str]] = dict()
+
     # These should always add up to 1!!!
     BONUS_WEIGHTS = {
         "Speed Boost": Fraction(1, 1),
@@ -57,8 +59,16 @@ class StaticWitnessItems:
 
             item_tab[item[0]] = ItemData(158000 + item[1], True, False)
 
+            self.ITEM_NAME_GROUPS.setdefault("Symbols", set()).add(item[0])
+
         for item in StaticWitnessLogic.ALL_DOOR_ITEMS:
             item_tab[item[0]] = ItemData(158000 + item[1], True, False)
+
+            if item[1] in range(1500, 1512):
+                self.ITEM_NAME_GROUPS.setdefault("Lasers", set()).add(item[0])
+                continue
+
+            self.ITEM_NAME_GROUPS.setdefault("Doors", set()).add(item[0])
 
         for item in StaticWitnessLogic.ALL_TRAPS:
             item_tab[item[0]] = ItemData(
