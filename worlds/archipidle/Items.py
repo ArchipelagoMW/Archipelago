@@ -299,5 +299,5 @@ item_table = (
     'A Shrubbery',
     'Roomba with a Knife',
     'Wet Cat',
-    'Frostwares',
+    'The Missing Moderator, Frostwares',
 )
