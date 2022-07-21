@@ -115,7 +115,8 @@ class SubnauticaWorld(World):
         slot_data: Dict[str, Any] = {
             "goal": goal.current_key,
             "vanilla_tech": vanilla_tech,
-            "creatures_to_scan": self.creatures_to_scan
+            "creatures_to_scan": self.creatures_to_scan,
+            "death_link": self.world.death_link[self.player].value,
         }
 
         return slot_data
