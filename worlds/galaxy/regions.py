@@ -1,6 +1,7 @@
 import typing
 from BaseClasses import MultiWorld, Region, Location
-from .locations import SMGLocation, location_table, locHH_table, locGE_table, \
+from .locations import SMGLocation, location_table 
+locHH_table, locGE_table, \
 locSJ_table, locBR_table, locBB_table, \
 locGG_table, locFF_table, locDD_table, locDDune, \
 locspecialstages_table, locbosses_table, \

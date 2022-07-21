@@ -39,7 +39,7 @@ locbosses_table = {
     "BJ: Megaleg's Moon": 170000014,
     "B: The Firery Stronghold": 170000030,
     "BJ: Sinking the Airships": 170000045,
-    "BJ: King Kaliente's Spicy Return": 170000067
+    "BJ: King Kaliente's Spicy Return": 170000067,
     "B:  Darkness on the Horizon": 170000095,
 }
 
@@ -56,8 +56,8 @@ locBR_table = {
     "BR: Breaking into the Battlerock": 170000022,
     "BR: Topmaniac's Garbage dump": 170000023,
     "BR: Topmanic's Dardevil Run": 170000025,
-    "BR: Purple Coins on the Battlerock" 170000026,
-    "BR: Luigi under the Saucer" 170000027,
+    "BR: Purple Coins on the Battlerock": 170000026,
+    "BR: Luigi under the Saucer": 170000027,
 }
 locBB_table = {
     "BB: Sunken Treasure": 170000031,
@@ -77,7 +77,7 @@ locG_table = {
 }
 locGG_table = {
     "GG: Bunnies in the Wind": 170000108,
-    "GG: The Dirty Tricks of Major Burrows", 170000109,
+    "GG: The Dirty Tricks of Major Burrows": 170000109,
     "GG: Gusty Garden's Gravity Scramble": 170000110,
     "GG: Major Burrows's Daredevil Run": 170000111,
     "GG: Purple Coins on the Puzzle Cube": 170000112,
@@ -87,9 +87,9 @@ locFF_table = {
     "FF: The Frozen Peak of Baron Brr": 170000095,
     "FF: Freezeflame's Blistering Coore": 170000096,
     "FF: Hot and Cold Collide": 170000097,
-    "FF: Conquring the Summit" 170000100,
-    "FF: Frosty Cosmic Mario race" 170000098,
-    "FF: Purple Coins on the Summit" 170000099,
+    "FF: Conquring the Summit": 170000100,
+    "FF: Frosty Cosmic Mario race": 170000098,
+    "FF: Purple Coins on the Summit": 170000099,
 }
 locDDune = {
     "DDune: Soaring on the Desert Winds": 170000101,
@@ -157,10 +157,10 @@ locHL_table = {
     "BB: Racing the Spooky Speedster": 170000093,
     "SC: Star Bunnies in the Snow": 170000094,
 }
-location_table{**locGE_table,**locHH_table, \
+location_table = { **locGE_table,**locHH_table, \
                **locSJ_table,**locBR_table,**locBB_table, \
                **locGG_table,**locFF_table,**locDDune_table, \
                **locGL_table,**locSS_table,**locTT_table, \
                **locDD_table,**locDN_table,**locMM_table, \
                **locHL_table,**locspecialstages_table,**locbosses_table, \
-} 
+}
