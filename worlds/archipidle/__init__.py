@@ -25,7 +25,7 @@ class ArchipIDLEWorld(World):
     """
     game = "ArchipIDLE"
     topology_present = False
-    data_version = 3
+    data_version = 4
     hidden = (datetime.now().month != 4)  # ArchipIDLE is only visible during April
     web = ArchipIDLEWebWorld()
 
