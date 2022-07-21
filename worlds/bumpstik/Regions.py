@@ -13,16 +13,17 @@ def _generate_entrances(player: int, entrance_list: [str], parent: Region):
 
 def create_regions(world: MultiWorld, player: int):
     region_map = {
-        "Menu": ["500 Points", "1000 Points", "Booster Bumper 1"],
-        "Level 1": ["1500 Points", "2000 Points", "Combo Clear 4", "Chain x2", "Booster Bumper 2"],
-        "Level 2": ["2500 Points", "3000 Points", "Combo Clear 5", "Chain x3", "Booster Bumper 3"],
-        "Level 3": ["3500 Points", "4000 Points", "Combo Clear 6", "Booster Bumper 4"],
-        "Level 4": ["All Clear", "Cleared All Hazards", "Booster Bumper 5"]
+        "Menu": ["250 Points", "500 Points", "750 Points", "1000 Points", "Booster Bumper 1", "Booster Bumper 2"],
+        "Level 1": ["1250 Points", "1500 Points", "1750 Points", "2000 Points", "Combo Clear 4", "Chain x2", "Booster Bumper 3"],
+        "Level 2": ["2250 Points", "2500 Points", "2750 Points", "3000 Points", "Combo Clear 5", "All Clear", "Booster Bumper 4"],
+        "Level 3": ["3250 Points", "3500 Points", "3750 Points", "4000 Points", "Combo Clear 6", "Chain x3", "Booster Bumper 5"],
+        "Level 4": ["Cleared All Hazards"]
     }
 
     entrance_map = {
         "Level 1": lambda state:
-            state.has_group("Board Size", player, 2) and state.has("Booster Bumper", player, 1),
+            state.has_group("Board Size", player, 2) and state.has(
+                "Booster Bumper", player, 1),
         "Level 2": lambda state:
             state.has_group("Board Size", player, 3) and state.has_group("Color", player, 1) and state.has(
                 "Booster Bumper", player, 2),
@@ -30,8 +31,8 @@ def create_regions(world: MultiWorld, player: int):
             state.has_group("Board Size", player, 4) and state.has_group("Color", player, 2) and state.has(
                 "Booster Bumper", player, 3),
         "Level 4": lambda state:
-            state.has_group("Board Size", player, 6) and state.has_group("Color", player, 3) and state.has(
-                "Booster Bumper", player, 4)
+            state.has_group("Board Size", player, 5) and state.has_group("Color", player, 3) and state.has(
+                "Booster Bumper", player, 4) and state.has("Hazard Bumper", player, 3)
     }
 
     for x, region_name in enumerate(region_map):
