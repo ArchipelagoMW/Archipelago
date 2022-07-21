@@ -552,8 +552,10 @@ class Context:
             collect_player(self, client.team, client.slot)
 
 
-def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False):
-    """Send and remember hints."""
+def register_hints(ctx: Context, team: int,
+                   hints: typing.List[NetUtils.Hint],
+                   only_new: bool = False, notify: bool = True):
+    """Remember and optionally send hints."""
     if only_new:
         hints = [hint for hint in hints if hint not in ctx.hints[team, hint.finding_player]]
     if not hints:
@@ -576,13 +578,14 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], onl
 
         logging.info("Notice (Team #%d): %s" % (team + 1, format_hint(ctx, team, hint)))
 
-    for slot, hint_data in concerns.items():
-        clients = ctx.clients[team].get(slot)
-        if not clients:
-            continue
-        client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
-        for client in clients:
-            asyncio.create_task(ctx.send_msgs(client, client_hints))
+    if notify:
+        for slot, hint_data in concerns.items():
+            clients = ctx.clients[team].get(slot)
+            if not clients:
+                continue
+            client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
+            for client in clients:
+                asyncio.create_task(ctx.send_msgs(client, client_hints))
 
 
 def update_aliases(ctx: Context, team: int):
@@ -1266,7 +1269,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
             self.ctx.hints[self.client.team, self.client.slot] = hints
-            notify_hints(self.ctx, self.client.team, list(hints))
+            register_hints(self.ctx, self.client.team, list(hints))
             self.output(f"A hint costs {self.ctx.get_hint_cost(self.client.slot)} points. "
                         f"You have {points_available} points.")
             return True
@@ -1293,7 +1296,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     new_hints = set(hints) - self.ctx.hints[self.client.team, self.client.slot]
                     old_hints = set(hints) - new_hints
                     if old_hints:
-                        notify_hints(self.ctx, self.client.team, list(old_hints))
+                        register_hints(self.ctx, self.client.team, list(old_hints))
                         if not new_hints:
                             self.output("Hint was previously used, no points deducted.")
                     if new_hints:
@@ -1334,7 +1337,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                                 self.output(f"You can't afford the hint. "
                                             f"You have {points_available} points and need at least "
                                             f"{self.ctx.get_hint_cost(self.client.slot)}.")
-                        notify_hints(self.ctx, self.client.team, hints)
+                        register_hints(self.ctx, self.client.team, hints)
                         self.ctx.save()
                         return True
 
@@ -1559,7 +1562,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 if create_as_hint:
                     hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
-            notify_hints(ctx, client.team, hints, only_new=create_as_hint == 2)
+            register_hints(ctx, client.team, hints, only_new=create_as_hint >= 2, notify=create_as_hint != 3)
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
 
         elif cmd == 'StatusUpdate':
@@ -1805,7 +1808,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                     hints = collect_hints(self.ctx, team, slot, item)
 
                 if hints:
-                    notify_hints(self.ctx, team, hints)
+                    register_hints(self.ctx, team, hints)
 
                 else:
                     self.output("No hints found.")
@@ -1829,7 +1832,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
             if usable:
                 hints = collect_hint_location_name(self.ctx, team, slot, item)
                 if hints:
-                    notify_hints(self.ctx, team, hints)
+                    register_hints(self.ctx, team, hints)
                 else:
                     self.output("No hints found.")
                 return True
