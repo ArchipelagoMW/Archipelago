@@ -57,13 +57,13 @@ class BumpStikWorld(World):
         return [self.create_item(name) for _ in range(0, qty)]
 
     def get_filler_item_name(self) -> str:
-        return "Starting Paint Can"
+        return "Treasure Bumper"
 
     def create_regions(self):
         create_regions(self.world, self.player)
 
     def create_items(self):
-        frequencies = [3, 3, 2, 1, 3, 5, 3]
+        frequencies = [3, 3, 3, 1, 2, 5, 3]
         item_pool = []
 
         for i, name in enumerate(item_table):
@@ -71,14 +71,18 @@ class BumpStikWorld(World):
                 item_pool += self._create_item_in_quantities(
                     name, frequencies[i])
 
+        item_delta = len(location_table) - len(item_pool)
+        if item_delta > 0:
+            item_pool += self._create_item_in_quantities(self.get_filler_item_name(), item_delta)
+
         self.world.itempool += item_pool
 
     def set_rules(self):
         forbid_item(self.world.get_location("Booster Bumper 5", self.player),
                     "Booster Bumper", self.player)
-        forbid_item(self.world.get_location("Cleared All Hazards",
-                    self.player), "Hazard Bumper", self.player)
+        # forbid_item(self.world.get_location("Cleared All Hazards",
+        #             self.player), "Hazard Bumper", self.player)
 
     def generate_basic(self):
         self.world.completion_condition[self.player] = lambda state: state.has("Booster Bumper", self.player,
-            5) and state.has_all("Board Size", self.player) and state.has_all("Color", self.player)
+            5) and state.has_group("Board Size", self.player, 6) and state.has_group("Color", self.player, 4)
