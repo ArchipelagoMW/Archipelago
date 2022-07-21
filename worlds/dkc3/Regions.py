@@ -678,9 +678,6 @@ def connect_regions(world, player, level_list):
     connect(world, player, names, LocationName.overworld_2_region, LocationName.overworld_3_region,
             lambda state: (state.has(ItemName.progressive_boat, player, 3)))
     connect(world, player, names, LocationName.overworld_1_region, LocationName.overworld_4_region,
-            lambda state: (state.has(ItemName.dk_coin, player, world.dk_coins_for_gyrocopter[player].value)))
-
-    connect(world, player, names, LocationName.overworld_1_region, LocationName.overworld_4_region,
             lambda state: (state.has(ItemName.dk_coin, player, world.dk_coins_for_gyrocopter[player].value) and
                            state.has(ItemName.progressive_boat, player, 3)))
 
