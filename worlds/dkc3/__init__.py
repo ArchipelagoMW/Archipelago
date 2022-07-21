@@ -83,16 +83,14 @@ class DKC3World(World):
         total_required_locations = 161
 
         number_of_banana_birds = 0
-        number_of_cogs = 5
+        # Rocket Rush Cog
+        total_required_locations -= 1
+        number_of_cogs = 4
+        self.world.get_location(LocationName.rocket_rush_flag, self.player).place_locked_item(self.create_item(ItemName.krematoa_cog))
         number_of_bosses = 8
         if self.world.goal[self.player] == "knautilus":
             self.world.get_location(LocationName.kastle_kaos, self.player).place_locked_item(self.create_item(ItemName.victory))
-            self.world.get_location(LocationName.rocket_rush_flag, self.player).place_locked_item(self.create_item(ItemName.krematoa_cog))
-            number_of_cogs = 4
             number_of_bosses = 7
-
-            # Rocket Rush Cog
-            total_required_locations -= 1
         else:
             self.world.get_location(LocationName.banana_bird_mother, self.player).place_locked_item(self.create_item(ItemName.victory))
             number_of_banana_birds = self.world.number_of_banana_birds[self.player]
