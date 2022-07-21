@@ -34,6 +34,8 @@ class DKC3Web(WebWorld):
 class DKC3World(World):
     """
     Donkey Kong Country 3 is an action platforming game.
+    Play as Dixie Kong and her baby cousin Kiddy as they try to solve the
+    mystery of why Donkey Kong and Diddy disappeared while on vacation.
     """
     game: str = "Donkey Kong Country 3"
     options = dkc3_options
