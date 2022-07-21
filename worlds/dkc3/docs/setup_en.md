@@ -10,7 +10,7 @@
         - snes9x Multitroid
           from: [snes9x Multitroid Download](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
         - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html)
-        - RetroArch 1.10.1 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
+        - RetroArch 1.10.3 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
     - An SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
       compatible hardware
 - Your legally obtained Donkey Kong Country 3 ROM file, probably named `Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc`
@@ -102,9 +102,9 @@ the lua you are using in your file explorer and copy the `socket.dll` to the bas
     - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
       emulator is 64-bit or 32-bit. Please note the most recent versions of BizHawk are 64-bit only.
 
-##### RetroArch 1.10.1 or newer
+##### RetroArch 1.10.3 or newer
 
-You only have to do these steps once. Note, RetroArch 1.9.x will not work as it is older than 1.10.1.
+You only have to do these steps once. Note, RetroArch 1.9.x will not work as it is older than 1.10.3.
 
 1. Enter the RetroArch main menu screen.
 2. Go to Settings --> User Interface. Set "Show Advanced Settings" to ON.
