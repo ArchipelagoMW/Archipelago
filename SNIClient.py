@@ -33,7 +33,7 @@ from worlds.sm.Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
 from worlds.smz3.Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
 import Utils
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
-from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3
+from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3, GAME_DKC3
 
 snes_logger = logging.getLogger("SNES")
 
@@ -251,6 +251,9 @@ async def deathlink_kill_player(ctx: Context):
             if not gamemode or gamemode[0] in SM_DEATH_MODES or (
                     ctx.death_link_allow_survive and health is not None and health > 0):
                 ctx.death_state = DeathState.dead
+        elif ctx.game == GAME_DKC3:
+            from worlds.dkc3.Client import deathlink_kill_player as dkc3_deathlink_kill_player
+            await dkc3_deathlink_kill_player(ctx)
         ctx.last_death_link = time.time()
 
 
@@ -1034,44 +1037,48 @@ async def game_watcher(ctx: Context):
         if not ctx.rom:
             ctx.finished_game = False
             ctx.death_link_allow_survive = False
-            game_name = await snes_read(ctx, SM_ROMNAME_START, 5)
-            if game_name is None:
-                continue
-            elif game_name[:2] == b"SM":
-                ctx.game = GAME_SM
-                # versions lower than 0.3.0 dont have item handling flag nor remote item support
-                romVersion = int(game_name[2:5].decode('UTF-8'))
-                if romVersion < 30:
-                    ctx.items_handling = 0b001 # full local 
-                else:
-                    item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
-                    ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
-            else:
-                game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
-                if game_name == b"ZSM":
-                    ctx.game = GAME_SMZ3
-                    ctx.items_handling = 0b101  # local items and remote start inventory
-                else:
-                    ctx.game = GAME_ALTTP
-                    ctx.items_handling = 0b001  # full local
 
-            rom = await snes_read(ctx, SM_ROMNAME_START if ctx.game == GAME_SM else SMZ3_ROMNAME_START if ctx.game == GAME_SMZ3 else ROMNAME_START, ROMNAME_SIZE)
-            if rom is None or rom == bytes([0] * ROMNAME_SIZE):
-                continue
+            from worlds.dkc3.Client import dkc3_rom_init
+            init_handled = await dkc3_rom_init(ctx)
+            if not init_handled:
+                game_name = await snes_read(ctx, SM_ROMNAME_START, 5)
+                if game_name is None:
+                    continue
+                elif game_name[:2] == b"SM":
+                    ctx.game = GAME_SM
+                    # versions lower than 0.3.0 dont have item handling flag nor remote item support
+                    romVersion = int(game_name[2:5].decode('UTF-8'))
+                    if romVersion < 30:
+                        ctx.items_handling = 0b001 # full local
+                    else:
+                        item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
+                        ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
+                else:
+                    game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
+                    if game_name == b"ZSM":
+                        ctx.game = GAME_SMZ3
+                        ctx.items_handling = 0b101  # local items and remote start inventory
+                    else:
+                        ctx.game = GAME_ALTTP
+                        ctx.items_handling = 0b001  # full local
 
-            ctx.rom = rom
-            if ctx.game != GAME_SMZ3:
-                death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
-                                             SM_DEATH_LINK_ACTIVE_ADDR, 1)
-                if death_link:
-                    ctx.allow_collect = bool(death_link[0] & 0b100)
-                    ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
-                    await ctx.update_death_link(bool(death_link[0] & 0b1))
-            if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
-                ctx.locations_checked = set()
-                ctx.locations_scouted = set()
-                ctx.locations_info = {}
-            ctx.prev_rom = ctx.rom
+                rom = await snes_read(ctx, SM_ROMNAME_START if ctx.game == GAME_SM else SMZ3_ROMNAME_START if ctx.game == GAME_SMZ3 else ROMNAME_START, ROMNAME_SIZE)
+                if rom is None or rom == bytes([0] * ROMNAME_SIZE):
+                    continue
+
+                ctx.rom = rom
+                if ctx.game != GAME_SMZ3:
+                    death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
+                                                 SM_DEATH_LINK_ACTIVE_ADDR, 1)
+                    if death_link:
+                        ctx.allow_collect = bool(death_link[0] & 0b100)
+                        ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
+                        await ctx.update_death_link(bool(death_link[0] & 0b1))
+                if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
+                    ctx.locations_checked = set()
+                    ctx.locations_scouted = set()
+                    ctx.locations_info = {}
+                ctx.prev_rom = ctx.rom
 
             if ctx.awaiting_rom:
                 await ctx.server_auth(False)
@@ -1279,6 +1286,9 @@ async def game_watcher(ctx: Context):
                     color(ctx.item_names[item.item], 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
                     ctx.location_names[item.location], itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
+        elif ctx.game == GAME_DKC3:
+            from worlds.dkc3.Client import dkc3_game_watcher
+            await dkc3_game_watcher(ctx)
 
 
 async def run_game(romfile):
