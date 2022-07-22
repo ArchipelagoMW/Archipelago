@@ -408,9 +408,9 @@ begin
   if Length(smrom) = 0 then
     SMRomFilePage:= AddRomPage('Super Metroid (JU).sfc');
 
-  dkc3rom := CheckRom("Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc", '120abf304f0c40fe059f6a192ed4f947');
+  dkc3rom := CheckRom('Donkey Kong Country 3 - Dixie Kong''s Double Trouble! (USA) (En,Fr).sfc', '120abf304f0c40fe059f6a192ed4f947');
   if Length(dkc3rom) = 0 then
-    DKC3RomFilePage:= AddRomPage("Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc");
+    DKC3RomFilePage:= AddRomPage('Donkey Kong Country 3 - Dixie Kong''s Double Trouble! (USA) (En,Fr).sfc');
 
   soerom := CheckRom('Secret of Evermore (USA).sfc', '6e9c94511d04fac6e0a1e582c170be3a');
   if Length(soerom) = 0 then
