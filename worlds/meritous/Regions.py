@@ -3,7 +3,7 @@
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
-from BaseClasses import MultiWorld, Region, Entrance, RegionType
+from BaseClasses import MultiWorld, Region, Entrance
 from .Locations import MeritousLocation, location_table
 
 meritous_regions = ["Meridian", "Ataraxia", "Merodach", "Endgame"]
@@ -23,7 +23,7 @@ def create_regions(world: MultiWorld, player: int):
         if x == 0:
             insidename = "Menu"
 
-        region = Region(insidename, RegionType.Generic, fullname, player, world)
+        region = Region(insidename, fullname, player, world)
         for store in ["Alpha Cache", "Beta Cache", "Gamma Cache", "Reward Chest"]:
             for y in range(1, 7):
                 loc_name = f"{store} {(x * 6) + y}"

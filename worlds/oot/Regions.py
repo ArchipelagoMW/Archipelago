@@ -31,8 +31,8 @@ class TimeOfDay(object):
 class OOTRegion(Region):
     game: str = "Ocarina of Time"
 
-    def __init__(self, name: str, type, hint, player: int): 
-        super(OOTRegion, self).__init__(name, type, hint, player)
+    def __init__(self, name: str, hint, player: int):
+        super(OOTRegion, self).__init__(name, hint, player)
         self.price = None
         self.time_passes = False
         self.provides_time = TimeOfDay.NONE

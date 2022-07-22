@@ -3,7 +3,7 @@ from .Items import RiskOfRainItem, item_table, item_pool_weights
 from .Locations import location_table, RiskOfRainLocation, base_location_table
 from .Rules import set_rules
 
-from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
+from BaseClasses import Region, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from .Options import ror2_options
 from ..AutoWorld import World, WebWorld
 
@@ -150,7 +150,7 @@ def create_regions(world, player: int):
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, RegionType.Generic, name, player)
+    ret = Region(name, name, player)
     ret.world = world
     if locations:
         for location in locations:

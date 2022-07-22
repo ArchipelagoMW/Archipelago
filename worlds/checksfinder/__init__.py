@@ -69,7 +69,7 @@ class ChecksFinderWorld(World):
 
     def create_regions(self):
         def ChecksFinderRegion(region_name: str, exits=[]):
-            ret = Region(region_name, RegionType.Generic, region_name, self.player, self.world)
+            ret = Region(region_name, region_name, self.player, self.world)
             ret.locations = [ChecksFinderAdvancement(self.player, loc_name, loc_data.id, ret)
                 for loc_name, loc_data in advancement_table.items()
                 if loc_data.region == region_name]

@@ -5,7 +5,7 @@ import random
 import threading
 from typing import Dict, Set, TextIO
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, RegionType, CollectionState, \
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, \
     Tutorial
 from worlds.generic.Rules import set_rule
 import worlds.smz3.TotalSMZ3.Item as TotalSMZ3Item
@@ -435,7 +435,7 @@ class SMZ3World(World):
             self.smz3World.locationLookup[name].APLocation = newLoc
 
     def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
-        ret = Region(name, RegionType.LightWorld, name, player)
+        ret = Region(name, name, player)
         ret.world = world
         if locations:
             for loc in locations:

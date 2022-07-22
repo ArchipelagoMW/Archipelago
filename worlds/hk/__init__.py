@@ -17,7 +17,7 @@ from .ExtractedData import locations, starts, multi_locations, location_to_regio
     event_names, item_effects, connectors, one_ways, vanilla_shop_costs, vanilla_location_costs
 from .Charms import names as charm_names
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, LocationProgressType, Tutorial, ItemClassification
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, LocationProgressType, Tutorial, ItemClassification
 from ..AutoWorld import World, LogicMixin, WebWorld
 
 path_of_pain_locations = {
@@ -578,7 +578,7 @@ class HKWorld(World):
 
 
 def create_region(world: MultiWorld, player: int, name: str, location_names=None, exits=None) -> Region:
-    ret = Region(name, RegionType.Generic, name, player)
+    ret = Region(name, name, player)
     ret.world = world
     if location_names:
         for location in location_names:

@@ -9,7 +9,7 @@ from .Regions import create_regions, getConnectionName
 from .Rules import set_rules
 from .Options import raft_options
 
-from BaseClasses import Region, RegionType, Entrance, Location, MultiWorld, Item, ItemClassification, Tutorial
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, Tutorial
 from ..AutoWorld import World, WebWorld
 
 
@@ -170,7 +170,7 @@ class RaftWorld(World):
         }
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, RegionType.Generic, name, player)
+    ret = Region(name, name, player)
     ret.world = world
     if locations:
         for location in locations:

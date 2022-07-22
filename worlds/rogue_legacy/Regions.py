@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import MultiWorld, Region, RegionType, Entrance, ItemClassification
+from BaseClasses import MultiWorld, Region, Entrance, ItemClassification
 from .Items import LegacyItem
 from .Locations import LegacyLocation, diary_location_table, location_table, base_location_table
 from .Names import LocationName, ItemName
@@ -58,7 +58,7 @@ def create_regions(world, player: int):
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     # Shamelessly stolen from the ROR2 definition, lol
-    ret = Region(name, RegionType.Generic, name, player)
+    ret = Region(name, name, player)
     ret.world = world
     if locations:
         for location in locations:

@@ -19,7 +19,7 @@ from .Options import sm_options
 from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT, SMDeltaPatch
 import Utils
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, RegionType, CollectionState, Tutorial
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, Tutorial
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
 
 from logic.smboolmanager import SMBoolManager
@@ -631,8 +631,7 @@ def create_locations(self, player: int):
 
 
 def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, RegionType.LightWorld, name, player)
-    ret.world = world
+    ret = Region(name, name, player, world)
     if locations:
         for loc in locations:
             location = self.locations[loc]

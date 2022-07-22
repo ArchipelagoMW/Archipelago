@@ -27,7 +27,7 @@ from .HintList import getRequiredHints
 from .SaveContext import SaveContext
 
 from Utils import get_options, output_path
-from BaseClasses import MultiWorld, CollectionState, RegionType, Tutorial
+from BaseClasses import MultiWorld, CollectionState, Tutorial
 from Options import Range, Toggle, OptionList
 from Fill import fill_restrictive, FillError
 from worlds.generic.Rules import exclusion_rules
@@ -301,7 +301,7 @@ class OOTWorld(World):
         region_json = read_json(file_path)
 
         for region in region_json:
-            new_region = OOTRegion(region['region_name'], RegionType.Generic, None, self.player)
+            new_region = OOTRegion(region['region_name'], None, self.player)
             new_region.world = self.world
             if 'pretty_name' in region:
                 new_region.pretty_name = region['pretty_name']

@@ -3,7 +3,7 @@ import typing
 
 from ..AutoWorld import World, WebWorld
 
-from BaseClasses import Region, Entrance, Location, Item, RegionType, Tutorial, ItemClassification
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
     all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
@@ -100,10 +100,10 @@ class Factorio(World):
 
     def create_regions(self):
         player = self.player
-        menu = Region("Menu", RegionType.Generic, "Menu", player, self.world)
+        menu = Region("Menu", "Menu", player, self.world)
         crash = Entrance(player, "Crash Land", menu)
         menu.exits.append(crash)
-        nauvis = Region("Nauvis", RegionType.Generic, "Nauvis", player, self.world)
+        nauvis = Region("Nauvis", "Nauvis", player, self.world)
 
         skip_silo = self.world.silo[self.player].value == Silo.option_spawn
         for tech_name, tech_id in base_tech_table.items():

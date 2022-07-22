@@ -4,7 +4,7 @@ Archipelago init file for The Witness
 
 import typing
 
-from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance, Tutorial, ItemClassification
+from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
 from .player_logic import StaticWitnessLogic, WitnessPlayerLogic
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
@@ -189,7 +189,7 @@ def create_region(world: MultiWorld, player: int, name: str,
     Create an Archipelago Region for The Witness
     """
 
-    ret = Region(name, RegionType.Generic, name, player)
+    ret = Region(name, name, player)
     ret.world = world
     if region_locations:
         for location in region_locations:

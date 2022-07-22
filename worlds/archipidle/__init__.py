@@ -79,8 +79,7 @@ class ArchipIDLEWorld(World):
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    region = Region(name, RegionType.Generic, name, player)
-    region.world = world
+    region = Region(name, name, player, world)
     if locations:
         for location_name in locations.keys():
             location = ArchipIDLELocation(player, location_name, locations[location_name], region)

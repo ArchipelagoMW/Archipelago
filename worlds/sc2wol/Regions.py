@@ -1,5 +1,5 @@
 from typing import List, Set, Dict, Tuple, Optional, Callable, NamedTuple
-from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
+from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
 from .Options import get_option_value
 from worlds.sc2wol.MissionTables import MissionInfo, vanilla_shuffle_order, vanilla_mission_req_table, \
@@ -239,7 +239,7 @@ def create_location(player: int, location_data: LocationData, region: Region,
 
 def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]],
                   location_cache: List[Location], name: str) -> Region:
-    region = Region(name, RegionType.Generic, name, player)
+    region = Region(name, name, player)
     region.world = world
 
     if name in locations_per_region:

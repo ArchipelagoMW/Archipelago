@@ -1,6 +1,6 @@
 from ..AutoWorld import World, WebWorld
 from ..generic.Rules import set_rule
-from BaseClasses import Region, Location, Entrance, Item, RegionType, Tutorial, ItemClassification
+from BaseClasses import Region, Location, Entrance, Item, Tutorial, ItemClassification
 from Utils import output_path
 import typing
 import os
@@ -209,11 +209,11 @@ class SoEWorld(World):
 
     def create_regions(self):
         # TODO: generate *some* regions from locations' requirements?
-        r = Region('Menu', RegionType.Generic, 'Menu', self.player, self.world)
+        r = Region('Menu', 'Menu', self.player, self.world)
         r.exits = [Entrance(self.player, 'New Game', r)]
         self.world.regions += [r]
 
-        r = Region('Ingame', RegionType.Generic, 'Ingame', self.player, self.world)
+        r = Region('Ingame', 'Ingame', self.player, self.world)
         r.locations = [SoELocation(self.player, loc.name, self.location_name_to_id[loc.name], r)
                        for loc in _locations]
         r.locations.append(SoELocation(self.player, 'Done', None, r))
