@@ -143,15 +143,15 @@ class BossRandomization(Toggle):
     display_name = "Boss Randomization"
 
 class FunCombat(Toggle):
-    """Forces removal of Plasma Beam and Screw Attack if the preset and settings allow it. In addition, can randomly remove Spazer and Wave Beam from the Combat set. If used, might force 'items' accessibility."""
+    """Forces removal of Plasma Beam and Screw Attack if the preset and settings allow it. In addition, can randomly remove Spazer and Wave Beam from the Combat set. If used, might force 'minimal' accessibility."""
     display_name = "Fun Combat"
 
 class FunMovement(Toggle):
-    """Forces removal of Space Jump if the preset allows it. In addition, can randomly remove High Jump, Grappling Beam, Spring Ball, Speed Booster, and Bombs from the Movement set. If used, might force 'items' accessibility."""
+    """Forces removal of Space Jump if the preset allows it. In addition, can randomly remove High Jump, Grappling Beam, Spring Ball, Speed Booster, and Bombs from the Movement set. If used, might force 'minimal' accessibility."""
     display_name = "Fun Movement"
 
 class FunSuits(Toggle):
-    """If the preset and seed layout allow it, will force removal of at least one of Varia Suit and/or Gravity Suit. If used, might force 'items' accessibility."""
+    """If the preset and seed layout allow it, will force removal of at least one of Varia Suit and/or Gravity Suit. If used, might force 'minimal' accessibility."""
     display_name = "Fun Suits"
 
 class LayoutPatches(DefaultOnToggle):
@@ -181,6 +181,10 @@ class ElevatorsDoorsSpeed(DefaultOnToggle):
 class SpinJumpRestart(Toggle):
     """Allows Samus to start spinning in mid air after jumping or falling."""
     display_name = "Spin Jump Restart"
+
+class SpeedKeep(Toggle):
+    """Let Samus keeps her momentum when landing from a fall or from jumping."""
+    display_name = "Momentum conservation (a.k.a. Speedkeep)"
 
 class InfiniteSpaceJump(Toggle):
     """Space jumps can be done quicker and at any time in air, water or lava, even after falling long distances."""
@@ -266,7 +270,7 @@ sm_options: typing.Dict[str, type(Option)] = {
     #"item_sounds": "on",
     "elevators_doors_speed": ElevatorsDoorsSpeed,
     "spin_jump_restart": SpinJumpRestart,
-    #"rando_speed": "off",
+    "rando_speed": SpeedKeep,
     "infinite_space_jump": InfiniteSpaceJump,
     "refill_before_save": RefillBeforeSave,
     "hud": Hud,
