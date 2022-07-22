@@ -19,8 +19,6 @@ missions. When you receive items, they will immediately become available, even d
 notified via a text box in the top-right corner of the game screen. (The text client for StarCraft 2 also records all
 items in all worlds.)
 
-You can also choose to shuffle the mission order, and which variant of 'All In' you must complete.
-
 Missions are launched only through the text client. The Hyperion is never visited. Aditionally, credits are not used.
 
 ## What is the goal of this game when randomized?
@@ -35,6 +33,6 @@ The goal is to beat the final mission: 'All In'. The config file determines whic
 
 ## Which of my items can be in another player's world?
 
-By default, any of StarCraft 2's items can be in another player's world. See the
+By default, any of StarCraft 2's items (specified above) can be in another player's world. See the
 [Advanced YAML Guide](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en)
 for more information on how to change this.
