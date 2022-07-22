@@ -903,23 +903,8 @@ class CollectionState():
             self.stale[item.player] = True
 
 
-@unique
-class RegionType(IntEnum):
-    Generic = 0
-    LightWorld = 1
-    DarkWorld = 2
-    Cave = 3  # Also includes Houses
-    Dungeon = 4
-
-    @property
-    def is_indoors(self) -> bool:
-        """Shorthand for checking if Cave or Dungeon"""
-        return self in (RegionType.Cave, RegionType.Dungeon)
-
-
 class Region:
     name: str
-    type: RegionType
     hint_text: str
     player: int
     world: Optional[MultiWorld]
@@ -934,9 +919,8 @@ class Region:
     is_light_world: bool = False
     is_dark_world: bool = False
 
-    def __init__(self, name: str, type_: RegionType, hint: str, player: int, world: Optional[MultiWorld] = None):
+    def __init__(self, name: str, hint: str, player: int, world: Optional[MultiWorld] = None):
         self.name = name
-        self.type = type_
         self.entrances = []
         self.exits = []
         self.locations = []

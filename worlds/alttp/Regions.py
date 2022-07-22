@@ -1,7 +1,28 @@
 import collections
 import typing
+from enum import IntEnum
+from BaseClasses import Region, Entrance
 
-from BaseClasses import Region, Entrance, RegionType
+
+class LTTPRegionType(IntEnum):
+    Generic = 0
+    LightWorld = 1
+    DarkWorld = 2
+    Cave = 3  # also houses
+    Dungeon = 4
+
+    @property
+    def is_indoors(self) -> bool:
+        """Shorthand for checking if Cave or Dungeon"""
+        return self in (LTTPRegionType.Cave, LTTPRegionType.Dungeon)
+
+
+class LTTPRegion(Region):
+    type: LTTPRegionType
+
+    def __init__(self, name: str, type_: LTTPRegionType, hint: str, player: int):
+        super().__init__(name, hint, player)
+        self.type = type_
 
 
 def create_regions(world, player):
@@ -306,22 +327,22 @@ def create_regions(world, player):
 
 
 def create_lw_region(player: int, name: str, locations=None, exits=None):
-    return _create_region(player, name, RegionType.LightWorld, 'Light World', locations, exits)
+    return _create_region(player, name, LTTPRegionType.LightWorld, 'Light World', locations, exits)
 
 
 def create_dw_region(player: int, name: str, locations=None, exits=None):
-    return _create_region(player, name, RegionType.DarkWorld, 'Dark World', locations, exits)
+    return _create_region(player, name, LTTPRegionType.DarkWorld, 'Dark World', locations, exits)
 
 
 def create_cave_region(player: int, name: str, hint: str, locations=None, exits=None):
-    return _create_region(player, name, RegionType.Cave, hint, locations, exits)
+    return _create_region(player, name, LTTPRegionType.Cave, hint, locations, exits)
 
 
 def create_dungeon_region(player: int, name: str, hint: str, locations=None, exits=None):
-    return _create_region(player, name, RegionType.Dungeon, hint, locations, exits)
+    return _create_region(player, name, LTTPRegionType.Dungeon, hint, locations, exits)
 
 
-def _create_region(player: int, name: str, type: RegionType, hint: str, locations=None, exits=None):
+def _create_region(player: int, name: str, type: LTTPRegionType, hint: str, locations=None, exits=None):
     from worlds.alttp.SubClasses import ALttPLocation
     ret = Region(name, type, hint, player)
     if locations is None:
@@ -340,26 +361,26 @@ def _create_region(player: int, name: str, type: RegionType, hint: str, location
 def mark_light_world_regions(world, player: int):
     # cross world caves may have some sections marked as both in_light_world, and in_dark_work.
     # That is ok. the bunny logic will check for this case and incorporate special rules.
-    queue = collections.deque(region for region in world.get_regions(player) if region.type == RegionType.LightWorld)
+    queue = collections.deque(region for region in world.get_regions(player) if region.type == LTTPRegionType.LightWorld)
     seen = set(queue)
     while queue:
         current = queue.popleft()
         current.is_light_world = True
         for exit in current.exits:
-            if exit.connected_region.type == RegionType.DarkWorld:
+            if exit.connected_region.type == LTTPRegionType.DarkWorld:
                 # Don't venture into the dark world
                 continue
             if exit.connected_region not in seen:
                 seen.add(exit.connected_region)
                 queue.append(exit.connected_region)
 
-    queue = collections.deque(region for region in world.get_regions(player) if region.type == RegionType.DarkWorld)
+    queue = collections.deque(region for region in world.get_regions(player) if region.type == LTTPRegionType.DarkWorld)
     seen = set(queue)
     while queue:
         current = queue.popleft()
         current.is_dark_world = True
         for exit in current.exits:
-            if exit.connected_region.type == RegionType.LightWorld:
+            if exit.connected_region.type == LTTPRegionType.LightWorld:
                 # Don't venture into the light world
                 continue
             if exit.connected_region not in seen:
