@@ -125,8 +125,8 @@ class SMWorld(World):
         self.remote_items = self.world.remote_items[self.player]
 
         if (len(self.variaRando.randoExec.setup.restrictedLocs) > 0):
-            self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("items")
-            logger.warning(f"accessibility forced to 'items' for player {self.world.get_player_name(self.player)} because of 'fun' settings")
+            self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("minimal")
+            logger.warning(f"accessibility forced to 'minimal' for player {self.world.get_player_name(self.player)} because of 'fun' settings")
     
     def generate_basic(self):
         itemPool = self.variaRando.container.itemPool
