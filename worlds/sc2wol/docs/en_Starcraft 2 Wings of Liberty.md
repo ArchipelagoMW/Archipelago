@@ -12,10 +12,12 @@ The following unlocks are randomized as items:
 3. All armory upgrades
 4. All laboratory upgrades
 5. All mercenaries
+6. Small boosts to your starting mineral and vespene gas totals on each mission
 
 You find items by making progress in bonus objectives (like by rescuing allies in 'Zero Hour') and by completing
 missions. When you receive items, they will immediately become available, even during a mission, and you will be
-notified via a text box in the top-right corner of the screen. (The text client for StarCraft 2 also records all items.)
+notified via a text box in the top-right corner of the game screen. (The text client for StarCraft 2 also records all
+items in all worlds.)
 
 You can also choose to shuffle the mission order, and which variant of 'All In' you must complete.
 
@@ -33,5 +35,6 @@ The goal is to beat the final mission: 'All In'. The config file determines whic
 
 ## Which of my items can be in another player's world?
 
-Any of StarCraft 2's items can be in another player's world. It is possible to limit certain items to your own
-world.
+By default, any of StarCraft 2's items can be in another player's world. See the
+[Advanced YAML Guide](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en)
+for more information on how to change this.

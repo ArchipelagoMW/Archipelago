@@ -35,35 +35,21 @@ Check out [Creating a YAML](https://archipelago.gg/tutorial/Archipelago/setup/en
 1. Run ArchipelagoStarcraft2Client.exe.
 2. Type `/connect [server ip]`.
 3. Type your slot name and the server's password when prompted.
-4. Once connected, use `/unfinished` to find which missions you can play and their ids, and use `/play [mission id]` to
-   launch a mission. By default, the first mission you can play is `Liberation Day[1]`, and you can play it
-   using the command `/play 1`.
+4. Once connected, switch to the 'StarCraft 2 Launcher' tab in the client. There, you can see every mission. By default,
+   only 'Liberation Day' will be available at the beginning. Just click on a mission to start it!
 
-## The game isn't launching when I type /play.
+## The game isn't launching when I try to start a mission.
 
-First, check the log file for issues (stored at `[Archipelago Directory]/logs/SC2Client.txt`). If none of the below
-fixes work for you, check out our [Discord's](https://discord.com/invite/8Z65BR2) tech-support channel for help.
+First, check the log file for issues (stored at `[Archipelago Directory]/logs/SC2Client.txt`). If the below fix doesn't
+work for you, and you can't figure out the log file, visit our [Discord's](https://discord.com/invite/8Z65BR2)
+tech-support channel for help. Please include a specific description of what's going wrong and attach your log file to
+your message.
 
 ### Check your installation
 
 Make sure you've followed the installation instructions completely. Specifically, make sure that you've placed the Maps
 and Mods folders directly inside the StarCraft II installation folder. They should be in the same location as the
 SC2Data, Support, Support64, and Versions folders.
-
-### Windows: Documents folder mixup
-
-Sometimes, on Windows devices, the client cannot find StarCraft 2. Typically, this is because the Documents folder is
-not in the default location. The following directions may work around this:
-
-1. Navigate to '%userprofile%'.  (The easiest way to do this is to hit Windows key+R, type in `%userprofile%`, and click
-   "OK".)
-2. A File Explorer window will appear. If you don't see a folder here named 'Documents', create a new folder with that
-   name.
-3. Locate the original 'Documents' folder on your PC.  (Navigate to 'My PC' or 'This PC' on the left side of File
-   Explorer. There should be a link to a folder there named 'Documents'.)
-4. Inside the original 'Documents' folder, find a folder named 'StarCraft II' and copy it.
-5. Go back to the 'Documents' folder you created or found in step 2. Paste the StarCraft II folder there.
-6. Try to type /play again.
 
 ## Running in Linux
 
