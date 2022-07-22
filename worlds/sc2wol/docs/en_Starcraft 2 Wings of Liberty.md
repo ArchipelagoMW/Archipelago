@@ -1,9 +1,5 @@
 # Starcraft 2 Wings of Liberty
 
-## Where is the settings page?
-
-Follow [this link](../player-settings) to reach the player settings page for this game.
-
 ## What does randomization do to this game?
 
 The following unlocks are randomized as items:
