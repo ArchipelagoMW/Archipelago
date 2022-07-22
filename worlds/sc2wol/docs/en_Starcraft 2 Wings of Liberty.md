@@ -2,36 +2,36 @@
 
 ## Where is the settings page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
-config file.
+Follow [this link](../player-settings) to reach the player settings page for this game.
 
 ## What does randomization do to this game?
 
-Items which the player would normally acquire throughout the game have been moved around. Logic remains, so the game is
-always able to be completed.  Options exist to also shuffle around the mission order of the campaign.
+The following unlocks are randomized as items:
+1. Your ability to build any non-worker unit (including Marines!).
+2. Your ability to upgrade infantry weapons, infantry armor, vehicle weapons, etc.
+3. All armory upgrades
+4. All laboratory upgrades
+5. All mercenaries
 
-## What is the goal of Starcraft 2 when randomized?
+You find items by making progress in bonus objectives (like by rescuing allies in 'Zero Hour') and by completing
+missions. When you receive items, they will immediately become available, even during a mission, and you will be
+notified via a text box in the top-right corner of the screen. (The text client for StarCraft 2 also records all items.)
 
-The goal remains unchanged. Beat the final mission All In.
+You can also choose to shuffle the mission order, and which variant of 'All In' you must complete.
 
-## What items and locations get shuffled?
+Missions are launched only through the text client. The Hyperion is never visited. Aditionally, credits are not used.
 
-Unit unlocks, upgrade unlocks, armory upgrades, laboratory researches, and mercenary unlocks can be shuffled, and all
-bonus objectives, side missions, mission completions are now locations that can contain these items.
+## What is the goal of this game when randomized?
 
-## What has been changed from vanilla Starcraft 2?
+The goal is to beat the final mission: 'All In'. The config file determines which variant you must complete.
 
-Some missions have been given more vespene gas available to mine to allow for a wider variety of unit compositions on 
-those missions.  Starports no longer require Factories in order to be built.  In 'A Sinister Turn' and 'Echoes 
-of the Future', you can research protoss air armor and weapon upgrades.
+## What non-randomized changes are there from vanilla Starcraft 2?
 
-## Which items can be in another player's world?
+1. Some missions have more vespene geysers available to allow a wider variety of units.
+2. Starports no longer require Factories in order to be built.
+3. In 'A Sinister Turn' and 'Echoes of the Future', you can research Protoss air weapon/armor upgrades.
 
-Any of the items which can be shuffled may also be placed into another player's world. It is possible to choose to limit
-certain items to your own world.
+## Which of my items can be in another player's world?
 
-## When the player receives an item, what happens?
-
-When the player receives an item, they will receive a message through their text client and in game if currently playing
- a mission.  They will immediately be able to use that unlock/upgrade.
-
+Any of StarCraft 2's items can be in another player's world. It is possible to limit certain items to your own
+world.
