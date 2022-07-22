@@ -68,6 +68,7 @@ Name: "client/oot";       Description: "Ocarina of Time"; Types: full playing
 Name: "client/ff1";       Description: "Final Fantasy 1"; Types: full playing
 Name: "client/cf";        Description: "ChecksFinder"; Types: full playing
 Name: "client/sc2";       Description: "Starcraft 2"; Types: full playing
+Name: "client/ut";        Description: "Undertale"; Types: full playing
 Name: "client/text";      Description: "Text, to !command and chat"; Types: full playing
 
 [Dirs]
@@ -94,6 +95,7 @@ Source: "{#source_path}\ArchipelagoOoTAdjuster.exe"; DestDir: "{app}"; Flags: ig
 Source: "{#source_path}\ArchipelagoFF1Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/ff1
 Source: "{#source_path}\ArchipelagoChecksFinderClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/cf
 Source: "{#source_path}\ArchipelagoStarcraft2Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sc2
+Source: "{#source_path}\ArchipelagoUndertaleClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/ut
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
 [Icons]
@@ -107,6 +109,7 @@ Name: "{group}\{#MyAppName} Ocarina of Time Client"; Filename: "{app}\Archipelag
 Name: "{group}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Components: client/ff1
 Name: "{group}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Components: client/cf
 Name: "{group}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Components: client/sc2
+Name: "{group}\{#MyAppName} Undertale Client"; Filename: "{app}\ArchipelagoUndertaleClient.exe"; Components: client/ut
 
 Name: "{commondesktop}\{#MyAppName} Folder"; Filename: "{app}"; Tasks: desktopicon
 Name: "{commondesktop}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; Components: server
@@ -117,12 +120,14 @@ Name: "{commondesktop}\{#MyAppName} Ocarina of Time Client"; Filename: "{app}\Ar
 Name: "{commondesktop}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Tasks: desktopicon; Components: client/ff1
 Name: "{commondesktop}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Tasks: desktopicon; Components: client/cf
 Name: "{commondesktop}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Tasks: desktopicon; Components: client/sc2
+Name: "{commondesktop}\{#MyAppName} Undertale Client"; Filename: "{app}\ArchipelagoUndertaleClient.exe"; Tasks: desktopicon; Components: client/ut
 
 [Run]
 
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: IsVCRedist64BitNeeded; StatusMsg: "Installing VC++ redistributable..."
 Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Components: client/sni/lttp or generator/lttp
 Filename: "{app}\ArchipelagoMinecraftClient.exe"; Parameters: "--install"; StatusMsg: "Installing Forge Server..."; Components: client/minecraft
+Filename: "{app}\ArchipelagoUndertaleClient.exe"; Parameters: "--install ""{code:GetUndertalePath}"""; StatusMsg: "Patching Undertale..."; Components: client/ut
 
 [UninstallDelete]
 Type: dirifempty; Name: "{app}"
@@ -211,6 +216,8 @@ var SoERomFilePage: TInputFileWizardPage;
 
 var ootrom: string;
 var OoTROMFilePage: TInputFileWizardPage;
+
+var utpath: string;
 
 function GetSNESMD5OfFile(const rom: string): string;
 var data: AnsiString;
@@ -365,6 +372,33 @@ begin
     end
   else
     Result := '';
+end;
+
+function GetUndertalePath(Param: string): string;
+begin
+  { Detected path is cached, as this gets called multiple times }
+  if utpath = '' then
+  begin
+    if RegQueryStringValue(
+         HKLM64, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 391540',
+         'InstallLocation', utpath) then
+    begin
+      Log('Detected Steam installation: ' + utpath);
+    end
+      else
+    if RegQueryStringValue(
+         HKLM32, 'SOFTWARE\GOG.com\Games\1456487183',
+         'path', utpath) then
+    begin
+      Log('Detected GOG installation: ' + utpath);
+    end
+      else
+    begin
+      utpath := 'C:\Program Files (x86)\Steam\steamapps\common\Undertale';
+      Log('No installation detected, using the default path: ' + utpath);
+    end;
+  end;
+  Result := utpath;
 end;
 
 procedure InitializeWizard();

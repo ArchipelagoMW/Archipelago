@@ -21,6 +21,7 @@
 *.archipelago
 *.apsave
 
+setups
 build
 bundle/components.wxs
 dist
@@ -159,6 +160,10 @@ minecraft_versions.json
 
 # pyenv
 .python-version
+
+#undertale stuff
+Undertale/data.win
+Undertale/base.win
 
 # OS General Files
 .DS_Store
