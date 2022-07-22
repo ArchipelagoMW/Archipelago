@@ -12,7 +12,7 @@ What you'll need:
  * A C compiler
    * possibly optional, read OS-specific sections
 
-Then run any of the starting points, like Generate and the included ModuleUpdater should prompt to install or update the
+Then run any of the starting point scripts, like Generate.py, and the included ModuleUpdater should prompt to install or update the
 required modules and after pressing enter proceed to install everything automatically.
 After this, you should be able to run the programs.
 
@@ -41,12 +41,17 @@ Refer to [Guide to Run Archipelago from Source Code on macOS](../worlds/generic/
 
 ## Optional: A Link to the Past Enemizer
 
+Only required to generate seeds that include A Link to the Past with certain options enabled. You will receive an
+error if it is required.
+
 You can get the latest Enemizer release at [Enemizer Github releases](https://github.com/Ijwu/Enemizer/releases).
 It should be dropped as "EnemizerCLI" into the root folder of the project. Alternatively, you can point the Enemizer
-setting in host.yaml at your Enemizer folder.
+setting in host.yaml at your Enemizer executable.
 
 
 ## Optional: SNI
+
+SNI is required to use SNIClient. If not integrated into the project, it has to be started manually.
 
 You can get the latest SNI release at [SNI Github releases](https://github.com/alttpo/sni/releases).
 It should be dropped as "SNI" into the root folder of the project. Alternatively, you can point the sni setting in
