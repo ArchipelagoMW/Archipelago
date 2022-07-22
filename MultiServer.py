@@ -685,17 +685,20 @@ async def on_client_left(ctx: Context, client: Client):
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
-async def countdown(ctx: Context, timer):
-    ctx.notify_all(f'[Server]: Starting countdown of {timer}s')
+async def countdown(ctx: Context, timer: int):
+    ctx.broadcast_all([{"cmd": "PrintJSON", "type": "Countdown", "countdown": timer, 
+        "data": [{ "text": f"[Server]: Starting countdown of {timer}s" }]}])
     if ctx.countdown_timer:
         ctx.countdown_timer = timer  # timer is already running, set it to a different time
     else:
         ctx.countdown_timer = timer
         while ctx.countdown_timer > 0:
-            ctx.notify_all(f'[Server]: {ctx.countdown_timer}')
+            ctx.broadcast_all([{"cmd": "PrintJSON", "type": "Countdown", "countdown": ctx.countdown_timer, 
+                "data": [{ "text": f"[Server]: {ctx.countdown_timer}" }]}])
             ctx.countdown_timer -= 1
             await asyncio.sleep(1)
-        ctx.notify_all(f'[Server]: GO')
+        ctx.broadcast_all([{"cmd": "PrintJSON", "type": "Countdown", "countdown": 0, 
+            "data": [{ "text": "[Server]: GO" }]}])
         ctx.countdown_timer = 0
 
 
