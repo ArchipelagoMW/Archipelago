@@ -41,7 +41,7 @@ class SubnauticaWorld(World):
     location_name_to_id = all_locations
     options = Options.options
 
-    data_version = 4
+    data_version = 5
     required_client_version = (0, 3, 3)
 
     prefill_items: List[Item]
