@@ -32,7 +32,7 @@ def create_regions(world: MultiWorld, player: int):
                 "Booster Bumper", player, 3),
         "Level 4": lambda state:
             state.has_group("Board Size", player, 5) and state.has_group("Color", player, 3) and state.has(
-                "Booster Bumper", player, 4) and state.has("Hazard Bumper", player, 3)
+                "Booster Bumper", player, 4)
     }
 
     for x, region_name in enumerate(region_map):
