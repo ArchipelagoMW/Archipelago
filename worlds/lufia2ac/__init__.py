@@ -20,10 +20,27 @@ from .basepatch import apply_basepatch
 CHESTS_PER_SPHERE: int = 5
 
 
+class L2ACWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up Lufia II Ancient Cave for MultiWorld.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["word_fcuk"]
+    )]
+    theme = "dirt"
+
 
 class L2ACWorld(World):
-    # general World properties
+    """
+    The Ancient Cave is a roguelike dungeon crawling game built into
+    the RGP Lufia II. Face 99 floors of ever harder to beat monsters,
+    random items and find new companions on the way to face the Royal
+    Jelly in the end. Can you beat it?
+    """
     game: str = "Lufia II Ancient Cave"
+    web = L2ACWeb()
 
     option_definitions: Dict[str, Option[Any]] = l2ac_option_definitions
     item_name_to_id: Dict[str, int] = l2ac_item_name_to_id
