@@ -1233,7 +1233,7 @@ class Spoiler():
                 [('player', player), ('entrance', entrance), ('exit', exit_), ('direction', direction)])
 
     def parse_data(self):
-        from worlds.alttp.Regions import LTTPRegionType
+        from worlds.alttp.SubClasses import LTTPRegionType
         self.medallions = OrderedDict()
         for player in self.world.get_game_players("A Link to the Past"):
             self.medallions[f'Misery Mire ({self.world.get_player_name(player)})'] = \
