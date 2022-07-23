@@ -53,7 +53,7 @@ class FF1World(World):
     def create_regions(self):
         locations = get_options(self.world, 'locations', self.player)
         rules = get_options(self.world, 'rules', self.player)
-        menu_region = self.ff1_locations.create_menu_region(self.player, locations, rules)
+        menu_region = self.ff1_locations.create_menu_region(self.player, locations, rules, self.world)
         terminated_event = Location(self.player, CHAOS_TERMINATED_EVENT, EventId, menu_region)
         terminated_item = Item(CHAOS_TERMINATED_EVENT, ItemClassification.progression, EventId, self.player)
         terminated_event.place_locked_item(terminated_item)

@@ -27,7 +27,7 @@ from .HintList import getRequiredHints
 from .SaveContext import SaveContext
 
 from Utils import get_options, output_path
-from BaseClasses import MultiWorld, CollectionState, RegionType, Tutorial
+from BaseClasses import MultiWorld, CollectionState, Tutorial
 from Options import Range, Toggle, OptionList
 from Fill import fill_restrictive, FillError
 from worlds.generic.Rules import exclusion_rules
@@ -301,8 +301,7 @@ class OOTWorld(World):
         region_json = read_json(file_path)
 
         for region in region_json:
-            new_region = OOTRegion(region['region_name'], RegionType.Generic, None, self.player)
-            new_region.world = self.world
+            new_region = OOTRegion(region['region_name'], self.player, self.world)
             if 'pretty_name' in region:
                 new_region.pretty_name = region['pretty_name']
             if 'font_color' in region:
@@ -466,7 +465,7 @@ class OOTWorld(World):
         else:
             world_type = 'Glitched World'
         overworld_data_path = data_path(world_type, 'Overworld.json')
-        menu = OOTRegion('Menu', None, None, self.player)
+        menu = OOTRegion('Menu', self.player, self.world)
         start = OOTEntrance(self.player, self.world, 'New Game', menu)
         menu.exits.append(start)
         self.world.regions.append(menu)

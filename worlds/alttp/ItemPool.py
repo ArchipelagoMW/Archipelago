@@ -1,8 +1,8 @@
 from collections import namedtuple
 import logging
 
-from BaseClasses import Region, RegionType, ItemClassification
-from worlds.alttp.SubClasses import ALttPLocation
+from BaseClasses import ItemClassification
+from worlds.alttp.SubClasses import ALttPLocation, LTTPRegion, LTTPRegionType
 from worlds.alttp.Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops
 from worlds.alttp.Bosses import place_bosses
 from worlds.alttp.Dungeons import get_dungeon_item_pool_player
@@ -470,7 +470,7 @@ def set_up_take_anys(world, player):
 
     regions = world.random.sample(take_any_locs, 5)
 
-    old_man_take_any = Region("Old Man Sword Cave", RegionType.Cave, 'the sword cave', player)
+    old_man_take_any = LTTPRegion("Old Man Sword Cave", LTTPRegionType.Cave, 'the sword cave', player)
     world.regions.append(old_man_take_any)
 
     reg = regions.pop()
@@ -490,7 +490,7 @@ def set_up_take_anys(world, player):
         old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0)
 
     for num in range(4):
-        take_any = Region("Take-Any #{}".format(num+1), RegionType.Cave, 'a cave of choice', player)
+        take_any = LTTPRegion("Take-Any #{}".format(num+1), LTTPRegionType.Cave, 'a cave of choice', player)
         world.regions.append(take_any)
 
         target, room_id = world.random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])

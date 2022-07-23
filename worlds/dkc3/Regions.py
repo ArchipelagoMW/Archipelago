@@ -839,8 +839,7 @@ def connect_regions(world, player, level_list):
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):
     # Shamelessly stolen from the ROR2 definition
-    ret = Region(name, None, name, player)
-    ret.world = world
+    ret = Region(name, player, world)
     if locations:
         for locationName, locationData in locations.items():
             loc_id = active_locations.get(locationName, 0)
@@ -851,9 +850,6 @@ def create_region(world: MultiWorld, player: int, active_locations, name: str, l
 
                 location = DKC3Location(player, locationName, loc_id, ret, loc_byte, loc_bit, loc_invert)
                 ret.locations.append(location)
-    if exits:
-        for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
 
     return ret
 
