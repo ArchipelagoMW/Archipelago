@@ -556,10 +556,19 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             if args['password']:
                 logger.info('Password required')
             ctx.update_permissions(args.get("permissions", {}))
+            hint_point_text_list = []
+            if args['location_check_points'] > 0:
+                hint_point_text_list.append(f"{args['location_check_points']} for each location checked")
+            if args['minutes_to_hint'] > 0:
+                hint_point_text_list.append(f"one hint's worth of points every {args['minutes_to_hint']} minutes")
+            if hint_point_text_list:
+                hint_point_text = "You get " + (" and ".join(hint_point_text_list)) + ".\r\n"
+            else:
+                hint_point_text = ""
             logger.info(
-                f"A !hint costs {args['hint_cost']}% of your total location count as points"
-                f" and you get {args['location_check_points']}"
-                f" for each location checked. Use !hint for more information.")
+                f"A !hint costs {args['hint_cost']}% of your total location count as points.\r\n"
+                f"{hint_point_text}"
+                f"Use !hint for more information.")
             ctx.hint_cost = int(args['hint_cost'])
             ctx.check_points = int(args['location_check_points'])
             players = args.get("players", [])

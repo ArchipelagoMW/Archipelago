@@ -19,6 +19,8 @@ server_options:
   # Client hint system
   # Points given to a player for each acquired item in their world
   location_check_points: 1
+  # Number of minutes passed to gain enough hint points for a hint. 0 to disable
+  minutes_to_hint: 0
   # Relative point cost to receive a hint via !hint for players
   # so for example hint_cost: 20 would mean that for every 20% of available checks, you get the ability to hint, for a total of 5
   hint_cost: 10 # Set to 0 if you want free hints
