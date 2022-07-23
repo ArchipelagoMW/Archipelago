@@ -1,7 +1,7 @@
 import string
 from .Items import item_table, SMGItem
 from .Locations import location_table, SM64Location
-from .Options import sm64_options
+from .Options import smg_options
 from .Rules import set_rules
 from .Regions import create_regions
 from BaseClasses import Region, RegionType, Entrance, Item, MultiWorld
