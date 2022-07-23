@@ -29,6 +29,8 @@ class ArchipIDLEWorld(World):
     hidden = (datetime.now().month != 4)  # ArchipIDLE is only visible during April
     web = ArchipIDLEWebWorld()
 
+    prog_items: set
+
     item_name_to_id = {}
     start_id = 9000
     for item in item_table:
@@ -38,14 +40,14 @@ class ArchipIDLEWorld(World):
     location_name_to_id = {}
     start_id = 9000
     for i in range(1, 101):
-        location_name_to_id[f"IDLE for at least {int(i / 2)} minutes {30 if (i % 2) > 0 else 0} seconds"] = start_id
+        location_name_to_id[f"IDLE for at least {int(i / 2)} minutes {30 if (i % 2) else 0} seconds"] = start_id
         start_id += 1
 
     def generate_basic(self):
         item_table_copy = list(item_table)
         self.world.random.shuffle(item_table_copy)
+        self.prog_items = set()
 
-        item_pool = []
         for i in range(100):
             item = Item(
                 item_table_copy[i],
@@ -53,10 +55,10 @@ class ArchipIDLEWorld(World):
                 self.item_name_to_id[item_table_copy[i]],
                 self.player
             )
+            if i < 20:
+                self.prog_items.add(item_table_copy[i])
             item.game = 'ArchipIDLE'
-            item_pool.append(item)
-
-        self.world.itempool += item_pool
+            self.world.itempool.append(item)
 
     def set_rules(self):
         set_rules(self.world, self.player)
@@ -65,22 +67,22 @@ class ArchipIDLEWorld(World):
         return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
 
     def create_regions(self):
-        menu_region = create_region(self.world, self.player, 'Menu')
+        menu = create_region(self.world, self.player, 'Menu')
+        entrance = Entrance(self.player, 'Entrance to IDLE Zone', menu)
+        menu.exits.append(entrance)
         idle_zone = create_region(self.world, self.player, 'IDLE Zone', self.location_name_to_id)
+        entrance.connect(idle_zone)
 
-        connection = Entrance(self.player, 'Entrance to IDLE Zone', menu_region)
-        connection.connect(idle_zone)
-
-        self.world.regions += [menu_region, idle_zone]
+        self.world.regions += [menu, idle_zone]
 
     def get_filler_item_name(self) -> str:
         return self.world.random.choice(item_table)
 
 
-def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
+def create_region(world: MultiWorld, player: int, name: str, locations=None):
     region = Region(name, player, world)
     if locations:
-        for location_name in locations.keys():
+        for location_name in locations:
             location = ArchipIDLELocation(player, location_name, locations[location_name], region)
             region.locations.append(location)
 
@@ -89,6 +91,3 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
 
 class ArchipIDLELocation(Location):
     game: str = "ArchipIDLE"
-
-    def __init__(self, player: int, name: str, address=None, parent=None):
-        super(ArchipIDLELocation, self).__init__(player, name, address, parent)
