@@ -2,7 +2,7 @@ from typing import List, Iterable
 import unittest
 from worlds.AutoWorld import World
 from Fill import FillError, balance_multiworld_progression, fill_restrictive, distribute_items_restrictive
-from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, RegionType, Item, Location, \
+from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, Item, Location, \
     ItemClassification
 from worlds.generic.Rules import CollectionRule, locality_rules, set_rule
 
@@ -16,8 +16,7 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
         multi_world.game[player_id] = world
         multi_world.worlds[player_id] = world
         multi_world.player_name[player_id] = "Test Player " + str(player_id)
-        region = Region("Menu", RegionType.Generic,
-                        "Menu Region Hint", player_id, multi_world)
+        region = Region("Menu", "Menu Region Hint", player_id, multi_world)
         multi_world.regions.append(region)
 
     multi_world.set_seed(0)
@@ -47,8 +46,7 @@ class PlayerDefinition(object):
     def generate_region(self, parent: Region, size: int, access_rule: CollectionRule = lambda state: True) -> Region:
         region_tag = "_region" + str(len(self.regions))
         region_name = "player" + str(self.id) + region_tag
-        region = Region("player" + str(self.id) + region_tag, RegionType.Generic,
-                        "Region Hint", self.id, self.world)
+        region = Region("player" + str(self.id) + region_tag, "Region Hint", self.id, self.world)
         self.locations += generate_locations(size,
                                              self.id, None, region, region_tag)
 
