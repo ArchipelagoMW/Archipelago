@@ -1,7 +1,8 @@
 """Module extending BaseClasses.py for aLttP"""
 from typing import Optional
+from enum import IntEnum
 
-from BaseClasses import Location, Item, ItemClassification
+from BaseClasses import Location, Item, ItemClassification, Region
 
 
 class ALttPLocation(Location):
@@ -61,3 +62,24 @@ class ALttPItem(Item):
     @property
     def locked_dungeon_item(self):
         return self.location.locked and self.dungeon_item
+
+
+class LTTPRegionType(IntEnum):
+    Generic = 0
+    LightWorld = 1
+    DarkWorld = 2
+    Cave = 3  # also houses
+    Dungeon = 4
+
+    @property
+    def is_indoors(self) -> bool:
+        """Shorthand for checking if Cave or Dungeon"""
+        return self in (LTTPRegionType.Cave, LTTPRegionType.Dungeon)
+
+
+class LTTPRegion(Region):
+    type: LTTPRegionType
+
+    def __init__(self, name: str, type_: LTTPRegionType, hint: str, player: int):
+        super().__init__(name, hint, player)
+        self.type = type_

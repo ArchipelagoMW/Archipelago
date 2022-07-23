@@ -1,6 +1,6 @@
 import collections
-from BaseClasses import RegionType
 from worlds.alttp.Regions import create_lw_region, create_dw_region, create_cave_region, create_dungeon_region
+from worlds.alttp.SubClasses import LTTPRegionType
 
 
 def create_inverted_regions(world, player):
@@ -316,26 +316,26 @@ def create_inverted_regions(world, player):
 def mark_dark_world_regions(world, player):
     # cross world caves may have some sections marked as both in_light_world, and in_dark_work.
     # That is ok. the bunny logic will check for this case and incorporate special rules.
-    queue = collections.deque(region for region in world.get_regions(player) if region.type == RegionType.DarkWorld)
+    queue = collections.deque(region for region in world.get_regions(player) if region.type == LTTPRegionType.DarkWorld)
     seen = set(queue)
     while queue:
         current = queue.popleft()
         current.is_dark_world = True
         for exit in current.exits:
-            if exit.connected_region.type == RegionType.LightWorld:
+            if exit.connected_region.type == LTTPRegionType.LightWorld:
                 # Don't venture into the dark world
                 continue
             if exit.connected_region not in seen:
                 seen.add(exit.connected_region)
                 queue.append(exit.connected_region)
 
-    queue = collections.deque(region for region in world.get_regions(player) if region.type == RegionType.LightWorld)
+    queue = collections.deque(region for region in world.get_regions(player) if region.type == LTTPRegionType.LightWorld)
     seen = set(queue)
     while queue:
         current = queue.popleft()
         current.is_light_world = True
         for exit in current.exits:
-            if exit.connected_region.type == RegionType.DarkWorld:
+            if exit.connected_region.type == LTTPRegionType.DarkWorld:
                 # Don't venture into the light world
                 continue
             if exit.connected_region not in seen:

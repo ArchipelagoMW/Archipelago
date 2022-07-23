@@ -1,29 +1,8 @@
 import collections
 import typing
-from enum import IntEnum
+
 from BaseClasses import Region, Entrance
-
-
-class LTTPRegionType(IntEnum):
-    Generic = 0
-    LightWorld = 1
-    DarkWorld = 2
-    Cave = 3  # also houses
-    Dungeon = 4
-
-    @property
-    def is_indoors(self) -> bool:
-        """Shorthand for checking if Cave or Dungeon"""
-        return self in (LTTPRegionType.Cave, LTTPRegionType.Dungeon)
-
-
-class LTTPRegion(Region):
-    type: LTTPRegionType
-
-    def __init__(self, name: str, type_: LTTPRegionType, hint: str, player: int):
-        super().__init__(name, hint, player)
-        self.type = type_
-
+from .SubClasses import LTTPRegion, LTTPRegionType
 
 def create_regions(world, player):
 
@@ -344,17 +323,14 @@ def create_dungeon_region(player: int, name: str, hint: str, locations=None, exi
 
 def _create_region(player: int, name: str, type: LTTPRegionType, hint: str, locations=None, exits=None):
     from worlds.alttp.SubClasses import ALttPLocation
-    ret = Region(name, type, hint, player)
-    if locations is None:
-        locations = []
-    if exits is None:
-        exits = []
-
-    for exit in exits:
-        ret.exits.append(Entrance(player, exit, ret))
-    for location in locations:
-        address, player_address, crystal, hint_text = location_table[location]
-        ret.locations.append(ALttPLocation(player, location, address, crystal, hint_text, ret, player_address))
+    ret = LTTPRegion(name, type, hint, player)
+    if exits:
+        for exit in exits:
+            ret.exits.append(Entrance(player, exit, ret))
+    if locations:
+        for location in locations:
+            address, player_address, crystal, hint_text = location_table[location]
+            ret.locations.append(ALttPLocation(player, location, address, crystal, hint_text, ret, player_address))
     return ret
 
 
