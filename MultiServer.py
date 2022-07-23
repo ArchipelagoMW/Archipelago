@@ -685,18 +685,33 @@ async def on_client_left(ctx: Context, client: Client):
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
-async def countdown(ctx: Context, timer):
-    ctx.notify_all(f'[Server]: Starting countdown of {timer}s')
+async def countdown(ctx: Context, timer: int):
+    broadcast_countdown(ctx, timer, f"[Server]: Starting countdown of {timer}s")
     if ctx.countdown_timer:
         ctx.countdown_timer = timer  # timer is already running, set it to a different time
     else:
         ctx.countdown_timer = timer
         while ctx.countdown_timer > 0:
-            ctx.notify_all(f'[Server]: {ctx.countdown_timer}')
+            broadcast_countdown(ctx, ctx.countdown_timer, f"[Server]: {ctx.countdown_timer}")
             ctx.countdown_timer -= 1
             await asyncio.sleep(1)
-        ctx.notify_all(f'[Server]: GO')
+        broadcast_countdown(ctx, 0, f"[Server]: GO")
         ctx.countdown_timer = 0
+
+
+def broadcast_countdown(ctx: Context, timer: int, message: str):
+    compatabilityThreshold = Version(0, 3, 5)
+
+    oldClients, newClients = [], []
+
+    for teams in ctx.clients.values():
+        for clients in teams.values():
+            for client in clients:
+                newClients.append(client) if client.version >= compatabilityThreshold else oldClients.append(client)
+
+    ctx.broadcast(oldClients, [{"cmd": "Print", "text": message }])
+    ctx.broadcast(newClients, [{"cmd": "PrintJSON", "type": "Countdown", "countdown": timer, 
+        "data": [{ "text": message }]}])
 
 
 def get_players_string(ctx: Context):
