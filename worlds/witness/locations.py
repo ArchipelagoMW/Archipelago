@@ -30,16 +30,16 @@ class StaticWitnessLocations:
 
         "Outside Tutorial Vault Box",
         "Outside Tutorial Discard",
-        "Outside Tutorial Dots Introduction 5",
-        "Outside Tutorial Squares Introduction 9",
+        "Outside Tutorial Shed Row 5",
+        "Outside Tutorial Tree Row 9",
 
         "Glass Factory Discard",
-        "Glass Factory Vertical Symmetry 5",
-        "Glass Factory Rotational Symmetry 3",
+        "Glass Factory Back Wall 5",
+        "Glass Factory Front 3",
         "Glass Factory Melting 3",
 
-        "Symmetry Island Black Dots 5",
-        "Symmetry Island Colored Dots 6",
+        "Symmetry Island Right 5",
+        "Symmetry Island Back 6",
         "Symmetry Island Fading Lines 7",
         "Symmetry Island Scenery Outlines 5",
         "Symmetry Island Laser Panel",

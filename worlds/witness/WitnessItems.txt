@@ -28,8 +28,8 @@ Traps:
 610 - Power Surge
 
 Doors:
-1100 - Glass Factory Entry Door (Panel) - 0x01A54
-1105 - Door to Symmetry Island Lower (Panel) - 0x000B0
+1100 - Glass Factory Entry (Panel) - 0x01A54
+1105 - Symmetry Island Lower (Panel) - 0x000B0
 1107 - Door to Symmetry Island Upper (Panel) - 0x1C349
 1110 - Door to Desert Flood Light Room (Panel) - 0x0C339
 1111 - Desert Flood Room Flood Controls (Panel) - 0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B
@@ -73,15 +73,15 @@ Doors:
 1509 - Swamp Laser - 0x00BF6
 1510 - Treehouse Laser - 0x028A4
 
-1600 - Outside Tutorial Optional Door - 0x03BA2
+1600 - Outside Tutorial Outpost Path - 0x03BA2
 1603 - Outside Tutorial Outpost Entry Door - 0x0A170
 1606 - Outside Tutorial Outpost Exit Door - 0x04CA3
-1609 - Glass Factory Entry Door - 0x01A29
+1609 - Glass Factory Entry - 0x01A29
 1612 - Glass Factory Back Wall - 0x0D7ED
 1615 - Symmetry Island Lower Door - 0x17F3E
 1618 - Symmetry Island Upper Door - 0x18269
 1619 - Orchard Middle Gate - 0x03307
-1620 - Orchard Final Gate - 0x03313
+1620 - Orchard Second Gate - 0x03313
 1621 - Desert Door to Flood Light Room - 0x09FEE
 1624 - Desert Door to Pond Room - 0x0C2C3
 1627 - Desert Door to Water Levels Room - 0x0A24B

@@ -1,6 +1,6 @@
 Items:
-Glass Factory Entry Door (Panel)
-Door to Symmetry Island Lower (Panel)
+Glass Factory Entry (Panel)
+Symmetry Island Lower (Panel)
 Door to Symmetry Island Upper (Panel)
 Door to Desert Flood Light Room (Panel)
 Desert Flood Room Flood Controls (Panel)

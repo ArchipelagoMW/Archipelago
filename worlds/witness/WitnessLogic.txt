@@ -16,47 +16,47 @@ Tutorial (Tutorial) - Outside Tutorial - 0x03629:
 Outside Tutorial (Outside Tutorial) - Outside Tutorial Path To Outpost - 0x03BA2:
 158650 - 0x033D4 (Vault) - True - Dots & Squares & Black/White Squares
 158651 - 0x03481 (Vault Box) - 0x033D4 - True
-158013 - 0x0005D (Dots Introduction 1) - True - Dots
-158014 - 0x0005E (Dots Introduction 2) - 0x0005D - Dots
-158015 - 0x0005F (Dots Introduction 3) - 0x0005E - Dots
-158016 - 0x00060 (Dots Introduction 4) - 0x0005F - Dots
-158017 - 0x00061 (Dots Introduction 5) - 0x00060 - Dots
-158018 - 0x018AF (Squares Introduction 1) - True - Squares & Black/White Squares
-158019 - 0x0001B (Squares Introduction 2) - 0x018AF - Squares & Black/White Squares
-158020 - 0x012C9 (Squares Introduction 3) - 0x0001B - Squares & Black/White Squares
-158021 - 0x0001C (Squares Introduction 4) - 0x012C9 - Squares & Black/White Squares
-158022 - 0x0001D (Squares Introduction 5) - 0x0001C - Squares & Black/White Squares
-158023 - 0x0001E (Squares Introduction 6) - 0x0001D - Squares & Black/White Squares
-158024 - 0x0001F (Squares Introduction 7) - 0x0001E - Squares & Black/White Squares
-158025 - 0x00020 (Squares Introduction 8) - 0x0001F - Squares & Black/White Squares
-158026 - 0x00021 (Squares Introduction 9) - 0x00020 - Squares & Black/White Squares
-Door - 0x03BA2 (Optional Door 1) - 0x0A3B5
+158013 - 0x0005D (Shed Row 1) - True - Dots
+158014 - 0x0005E (Shed Row 2) - 0x0005D - Dots
+158015 - 0x0005F (Shed Row 3) - 0x0005E - Dots
+158016 - 0x00060 (Shed Row 4) - 0x0005F - Dots
+158017 - 0x00061 (Shed Row 5) - 0x00060 - Dots
+158018 - 0x018AF (Tree Row 1) - True - Squares & Black/White Squares
+158019 - 0x0001B (Tree Row 2) - 0x018AF - Squares & Black/White Squares
+158020 - 0x012C9 (Tree Row 3) - 0x0001B - Squares & Black/White Squares
+158021 - 0x0001C (Tree Row 4) - 0x012C9 - Squares & Black/White Squares
+158022 - 0x0001D (Tree Row 5) - 0x0001C - Squares & Black/White Squares
+158023 - 0x0001E (Tree Row 6) - 0x0001D - Squares & Black/White Squares
+158024 - 0x0001F (Tree Row 7) - 0x0001E - Squares & Black/White Squares
+158025 - 0x00020 (Tree Row 8) - 0x0001F - Squares & Black/White Squares
+158026 - 0x00021 (Tree Row 9) - 0x00020 - Squares & Black/White Squares
+Door - 0x03BA2 (Outpost Path) - 0x0A3B5
 
 Outside Tutorial Path To Outpost (Outside Tutorial) - Outside Tutorial Outpost - 0x0A170:
-158011 - 0x0A171 (Door to Outpost Panel) - True - Dots
-Door - 0x0A170 (Door to Outpost) - 0x0A171
+158011 - 0x0A171 (Outpost Entry Panel) - True - Dots
+Door - 0x0A170 (Outpost Entry) - 0x0A171
 
 Outside Tutorial Outpost (Outside Tutorial) - Outside Tutorial - 0x04CA3:
-158012 - 0x04CA4 (Exit Door from Outpost Panel) - True - Dots & Squares & Black/White Squares
-Door - 0x04CA3 (Exit Door from Outpost) - 0x04CA4
+158012 - 0x04CA4 (Outpost Exit Panel) - True - Dots & Squares & Black/White Squares
+Door - 0x04CA3 (Outpost Exit) - 0x04CA4
 158600 - 0x17CFB (Discard) - True - Triangles
 
 Main Island () - Outside Tutorial - True:
 
 Outside Glass Factory (Glass Factory) - Main Island - True - Inside Glass Factory - 0x01A29:
-158027 - 0x01A54 (Entry Door Panel) - True - Symmetry
-Door - 0x01A29 (Entry Door) - 0x01A54
+158027 - 0x01A54 (Entry Panel) - True - Symmetry
+Door - 0x01A29 (Entry) - 0x01A54
 158601 - 0x3C12B (Discard) - True - Triangles
 
 Inside Glass Factory (Glass Factory) - Inside Glass Factory Behind Back Wall - 0x0D7ED:
-158028 - 0x00086 (Vertical Symmetry 1) - True - Symmetry
-158029 - 0x00087 (Vertical Symmetry 2) - 0x00086 - Symmetry
-158030 - 0x00059 (Vertical Symmetry 3) - 0x00087 - Symmetry
-158031 - 0x00062 (Vertical Symmetry 4) - 0x00059 - Symmetry
-158032 - 0x0005C (Vertical Symmetry 5) - 0x00062 - Symmetry
-158033 - 0x0008D (Rotational Symmetry 1) - 0x0005C - Symmetry
-158034 - 0x00081 (Rotational Symmetry 2) - 0x0008D - Symmetry
-158035 - 0x00083 (Rotational Symmetry 3) - 0x00081 - Symmetry
+158028 - 0x00086 (Back Wall 1) - True - Symmetry
+158029 - 0x00087 (Back Wall 2) - 0x00086 - Symmetry
+158030 - 0x00059 (Back Wall 3) - 0x00087 - Symmetry
+158031 - 0x00062 (Back Wall 4) - 0x00059 - Symmetry
+158032 - 0x0005C (Back Wall 5) - 0x00062 - Symmetry
+158033 - 0x0008D (Front 1) - 0x0005C - Symmetry
+158034 - 0x00081 (Front 2) - 0x0008D - Symmetry
+158035 - 0x00083 (Front 3) - 0x00081 - Symmetry
 158036 - 0x00084 (Melting 1) - 0x00083 - Symmetry
 158037 - 0x00082 (Melting 2) - 0x00084 - Symmetry
 158038 - 0x0343A (Melting 3) - 0x00082 - Symmetry
@@ -66,21 +66,21 @@ Inside Glass Factory Behind Back Wall (Glass Factory) - Boat - 0x17CC8:
 158039 - 0x17CC8 (Boat Spawn) - 0x17CA6 | 0x17CDF | 0x09DB8 | 0x17C95 - Boat
 
 Outside Symmetry Island (Symmetry Island) - Main Island - True - Symmetry Island Lower - 0x17F3E:
-158040 - 0x000B0 (Door to Symmetry Island Lower Panel) - 0x0343A - Dots
-Door - 0x17F3E (Door to Symmetry Island Lower) - 0x000B0
+158040 - 0x000B0 (Symmetry Island Lower Panel) - 0x0343A - Dots
+Door - 0x17F3E (Symmetry Island Lower) - 0x000B0
 
 Symmetry Island Lower (Symmetry Island) - Symmetry Island Upper - 0x18269:
-158041 - 0x00022 (Black Dots 1) - True - Symmetry & Dots
-158042 - 0x00023 (Black Dots 2) - 0x00022 - Symmetry & Dots
-158043 - 0x00024 (Black Dots 3) - 0x00023 - Symmetry & Dots
-158044 - 0x00025 (Black Dots 4) - 0x00024 - Symmetry & Dots
-158045 - 0x00026 (Black Dots 5) - 0x00025 - Symmetry & Dots
-158046 - 0x0007C (Colored Dots 1) - 0x00026 - Symmetry & Colored Dots
-158047 - 0x0007E (Colored Dots 2) - 0x0007C - Symmetry & Colored Dots
-158048 - 0x00075 (Colored Dots 3) - 0x0007E - Symmetry & Colored Dots
-158049 - 0x00073 (Colored Dots 4) - 0x00075 - Symmetry & Colored Dots
-158050 - 0x00077 (Colored Dots 5) - 0x00073 - Symmetry & Colored Dots
-158051 - 0x00079 (Colored Dots 6) - 0x00077 - Symmetry & Colored Dots
+158041 - 0x00022 (Right 1) - True - Symmetry & Dots
+158042 - 0x00023 (Right 2) - 0x00022 - Symmetry & Dots
+158043 - 0x00024 (Right 3) - 0x00023 - Symmetry & Dots
+158044 - 0x00025 (Right 4) - 0x00024 - Symmetry & Dots
+158045 - 0x00026 (Right 5) - 0x00025 - Symmetry & Dots
+158046 - 0x0007C (Back 1) - 0x00026 - Symmetry & Colored Dots
+158047 - 0x0007E (Back 2) - 0x0007C - Symmetry & Colored Dots
+158048 - 0x00075 (Back 3) - 0x0007E - Symmetry & Colored Dots
+158049 - 0x00073 (Back 4) - 0x00075 - Symmetry & Colored Dots
+158050 - 0x00077 (Back 5) - 0x00073 - Symmetry & Colored Dots
+158051 - 0x00079 (Back 6) - 0x00077 - Symmetry & Colored Dots
 158052 - 0x00065 (Fading Lines 1) - 0x00079 - Symmetry & Colored Dots
 158053 - 0x0006D (Fading Lines 2) - 0x00065 - Symmetry & Colored Dots
 158054 - 0x00072 (Fading Lines 3) - 0x0006D - Symmetry & Colored Dots
@@ -110,12 +110,12 @@ Orchard (Orchard) - Main Island - True - Orchard Beyond First Gate - 0x03307:
 158071 - 0x00143 (Apple Tree 1) - True - Environment
 158072 - 0x0003B (Apple Tree 2) - 0x00143 - Environment
 158073 - 0x00055 (Apple Tree 3) - 0x0003B - Environment
-Door - 0x03307 (Mid Gate) - 0x00055
+Door - 0x03307 (First Gate) - 0x00055
 
 Orchard Beyond First Gate (Orchard) - Orchard End - 0x03313:
 158074 - 0x032F7 (Apple Tree 4) - 0x00055 - Environment
 158075 - 0x032FF (Apple Tree 5) - 0x032F7 - Environment
-Door - 0x03313 (Final Gate) - 0x032FF
+Door - 0x03313 (Second Gate) - 0x032FF
 
 Orchard End (Orchard):
 

@@ -2,7 +2,7 @@ Items:
 Glass Factory Back Wall
 Quarry Boathouse Boat Staircase
 Outside Tutorial Outpost Doors
-Glass Factory Entry Door
+Glass Factory Entry
 Symmetry Island Doors
 Orchard Gates
 Desert Doors
@@ -42,11 +42,11 @@ Challenge Door to Theater Walkway
 Theater Walkway Doors
 
 Added Locations:
-Outside Tutorial Door to Outpost Panel
-Outside Tutorial Exit Door from Outpost Panel
-Glass Factory Entry Door Panel
-Glass Factory Vertical Symmetry 5
-Symmetry Island Door to Symmetry Island Lower Panel
+Outside Tutorial Outpost Entry Panel
+Outside Tutorial Outpost Exit Panel
+Glass Factory Entry Panel
+Glass Factory Back Wall 5
+Symmetry Island Symmetry Island Lower Panel
 Symmetry Island Door to Symmetry Island Upper Panel
 Orchard Apple Tree 3
 Orchard Apple Tree 5

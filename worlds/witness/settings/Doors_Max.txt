@@ -1,13 +1,13 @@
 Items:
-Outside Tutorial Optional Door
+Outside Tutorial Outpost Path
 Outside Tutorial Outpost Entry Door
 Outside Tutorial Outpost Exit Door
-Glass Factory Entry Door
+Glass Factory Entry
 Glass Factory Back Wall
 Symmetry Island Lower Door
 Symmetry Island Upper Door
 Orchard Middle Gate
-Orchard Final Gate
+Orchard Second Gate
 Desert Door to Flood Light Room
 Desert Door to Pond Room
 Desert Door to Water Levels Room
@@ -108,11 +108,11 @@ Swamp Maze Control (Panel)
 Boat
 
 Added Locations:
-Outside Tutorial Door to Outpost Panel
-Outside Tutorial Exit Door from Outpost Panel
-Glass Factory Entry Door Panel
-Glass Factory Vertical Symmetry 5
-Symmetry Island Door to Symmetry Island Lower Panel
+Outside Tutorial Outpost Entry Panel
+Outside Tutorial Outpost Exit Panel
+Glass Factory Entry Panel
+Glass Factory Back Wall 5
+Symmetry Island Symmetry Island Lower Panel
 Symmetry Island Door to Symmetry Island Upper Panel
 Orchard Apple Tree 3
 Orchard Apple Tree 5
