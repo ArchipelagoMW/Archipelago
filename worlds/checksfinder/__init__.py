@@ -1,4 +1,4 @@
-from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification, RegionType
+from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification
 from .Items import ChecksFinderItem, item_table, required_items
 from .Locations import ChecksFinderAdvancement, advancement_table, exclusion_table
 from .Options import checksfinder_options

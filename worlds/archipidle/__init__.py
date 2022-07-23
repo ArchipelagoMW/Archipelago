@@ -1,4 +1,4 @@
-from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification, RegionType
+from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification
 from .Items import item_table
 from .Rules import set_rules
 from ..AutoWorld import World, WebWorld

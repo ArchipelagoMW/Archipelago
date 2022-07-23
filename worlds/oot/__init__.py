@@ -466,7 +466,7 @@ class OOTWorld(World):
         else:
             world_type = 'Glitched World'
         overworld_data_path = data_path(world_type, 'Overworld.json')
-        menu = OOTRegion('Menu', None, None, self.player)
+        menu = OOTRegion('Menu', None, self.player)
         start = OOTEntrance(self.player, self.world, 'New Game', menu)
         menu.exits.append(start)
         self.world.regions.append(menu)
