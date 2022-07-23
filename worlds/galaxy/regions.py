@@ -13,7 +13,7 @@ smgcourses = ["Good Egg", "Honeyhive", "Loopdeeloop", "Flipswitch", "Bowser Jr. 
               "Gusty gardens", "Freezeflame", "Dusty Dune", "Honeyclimb", "Bowser's Dark Matter Planet",
               "Gold Leaf", "Sea Slide", "Toy Time", "Bonefin", "Bowser Jr.'s Lava Reactor",
               "Gateway", "Deep Dark", "Dreadnaught", "Melty Molton", "Matter Splatter"]
-def create_regions(world MultiWorld, player int):
+def create_regions(world, MultiWorld, player, int):
     regSS = Region("Menu", RegionType.Generic, "Comment Obserbatory", player, world)
     locspecialstages_names = [name for name, id in locSS_table.items()]
     locspecialstages_names += [name for name, id in locKey_table.items()]
@@ -33,47 +33,47 @@ def create_regions(world MultiWorld, player int):
     # defines the Space Junk galaxy region
     reg = Region("Space Junk", RegionType.Generic, "Space Junk", player, world)
     locSJ_names = [name for name, id in locSJ_table.items()]
-    regSJ.locations += [SMGLocation(player, loc_name, location_table[loc_name,] regSJ) for loc_name in locSJ_names]
+    regSJ.locations += [SMGLocation(player, loc_name, location_table[loc_name], regSJ) for loc_name in locSJ_names]
     # defines the Battlerock galaxy
     reg = Region("Battlerock", RegionType.Generic, "Battlerock", player, world)
     locBR_names = [name for name, id in locBR_table.items()]
-    regBR.locations += [SMGLocation(player, loc_name, location_table[loc_name,] regBR) for loc_name in locBR_names]
+    regBR.locations += [SMGLocation(player, loc_name, location_table[loc_name], regBR) for loc_name in locBR_names]
     # defines the Beach Bowl galaxy
     reg = Region("Beach Bowl", RegionType.Generic, "Beach Bowl", player, world)
     locBB_names = [name for name, id in locBB_table.items()]
-    regBB.locations += [SMGLocation(player, loc_name, location_table[loc_name,] regBB) for loc_name in locBB_names]
+    regBB.locations += [SMGLocation(player, loc_name, location_table[loc_name], regBB) for loc_name in locBB_names]
     # define Ghostly galaxy
     reg = Region("Ghostly", RegionType.Generic, "Ghostly", player, world)
     locGG_names = [name for name, id in locGG_table.items()]
-    regGG.locations += [SMGLocation(player, loc_name, location_table[loc_name, ] regGG) for loc_name in locGG_names]
+    regGG.locations += [SMGLocation(player, loc_name, location_table[loc_name], regGG) for loc_name in locGG_names]
     # defines the Gusty Gardens galaxy 
     reg = Region("Gusty Gardens", RegionType.Generic, "Gusty Gardens", player, world)
     locGG_names = [name for name, id in locGG_table.items()]
-    regGG.locations += [SMGLocation(player, loc_name, location_table[loc_name, ] regGG) for loc_name in locGG_names]
+    regGG.locations += [SMGLocation(player, loc_name, location_table[loc_name], regGG) for loc_name in locGG_names]
     # defines Freezeflame galaxy
     reg = Region("Freezeflame", RegionType.Generic, "Freezeflame", player, world)
     locFF_names = [name for name, id in locFF_table.items()]
-    regFF_names += [SMGLocation(player, loc_name, location_table[loc_name, ] regFF) for loc_name in locFF_names]
+    regFF_names += [SMGLocation(player, loc_name, location_table[loc_name], regFF) for loc_name in locFF_names]
     # defines golden leaf galaxy
     reg = Region("Gold Leaf", RegionType.Generic, "Gold Leaf", player, world)
     locGL_names = [name for name, id in locGL_table.items()]
-    regGL.locations += [SMGLocation(player, loc_name, location_table[loc_name, ] regGL) for loc_name in locGL_names]
+    regGL.locations += [SMGLocation(player, loc_name, location_table[loc_name], regGL) for loc_name in locGL_names]
     # defines toy time galaxy 
     reg = Region ("Toy Time", RegionType.Generic, "Toy Time", player, world)
     locTT_names = [name for name, id in locTT_table.items()]
-    regTT_names += [SMGLocation(player, loc_name, location_table[loc_name, ] regTT) for loc_name in locTT_names]
+    regTT_names += [SMGLocation(player, loc_name, location_table[loc_name], regTT) for loc_name in locTT_names]
     # defines deep dark galaxy
     reg = Region("Deep Dark", RegionType.Generic, "Deep Dark", player, world)
     locDD_names = [name for name, id in locDD_table.items()]
-    regDD_names += [SMGLocation(player, loc_name, location_table[loc_name, ] regDD) for loc_name in locDD_names]
+    regDD_names += [SMGLocation(player, loc_name, location_table[loc_name], regDD) for loc_name in locDD_names]
     # defines Dreadnought galaxy
     reg = Region("Dreadnought", RegionType.Generic, "Dreadnought", player, world)
     locDN_names = [name for name, id in locDN_table.items()]
-    regDN_names += [SMGLocation (player, loc_name, location_table[loc_name, ] regDN) for loc_name in locDN_names]
+    regDN_names += [SMGLocation (player, loc_name, location_table[loc_name], regDN) for loc_name in locDN_names]
     # defines Melty Molten galaxy
     reg = Region("Melty Molten", RegionType.Generic, "Melty Molten", player, world)
     locMM_names = [name for name, id in locMM_table.items()]
-    regMM_names += [SMGLocation (player, loc_name, location_table[loc_name, ] regMM) for loc_name in locMM_names]
+    regMM_names += [SMGLocation (player, loc_name, location_table[loc_name], regMM) for loc_name in locMM_names]
 def connect_regions(world: MultiWorld, player: int, source: str, target: str, rule):
     sourceRegion = world.get_region(source, player)
     targetRegion = world.get_region(target, player)

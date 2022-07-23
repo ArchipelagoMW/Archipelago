@@ -91,7 +91,7 @@ locFF_table = {
     "FF: Frosty Cosmic Mario race": 170000098,
     "FF: Purple Coins on the Summit": 170000099,
 }
-locDDune = {
+locDDune_table = {
     "DDune: Soaring on the Desert Winds": 170000101,
     "DDune: Blasting through the Sand": 170000102,
     "DDune: Sunbaked Sand Castle": 170000103,
