@@ -919,13 +919,13 @@ class Region:
     is_light_world: bool = False
     is_dark_world: bool = False
 
-    def __init__(self, name: str, hint: str, player: int, world: Optional[MultiWorld] = None):
+    def __init__(self, name: str, player: int, world: MultiWorld, hint: str = None):
         self.name = name
         self.entrances = []
         self.exits = []
         self.locations = []
         self.world = world
-        self.hint_text = hint
+        self.hint_text = self.generate_hint_text(hint)
         self.player = player
 
     def can_reach(self, state: CollectionState) -> bool:
@@ -940,6 +940,11 @@ class Region:
                     state.path[self] = (self.name, state.path.get(entrance, None))
                 return True
         return False
+
+    def generate_hint_text(self, hint: str) -> str:
+        if isinstance(hint, str):
+            return hint
+        return self.name
 
     @property
     def get_entrance(self) -> Entrance:
