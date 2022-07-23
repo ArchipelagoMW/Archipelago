@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Set
 
 # 0 = filler
 # 1 = progression
@@ -51,7 +51,7 @@ item_table = {
     'Crown of Teleportation':(2,'Head',  'HeadCrownOfTeleportation',True),
     'Circlet of Telepathy': (2, 'Head',     'HeadCircletTelepathy', True),
     'Miner\'s Cap':         (2, 'Head',     'HeadMinersCap',        True),
-    'Monocle':              (1, 'Head',     'HeadMonocle',          True),
+    'Monocle':              (2, 'Head',     'HeadMonocle',          True),
     'Helm':                 (2, 'Head',     'HeadHelm',             False),
     'Glass Jaw':            (2, 'Head',     'HeadGlassJaw',         False),
     'Blast Helm':           (2, 'Head',     'HeadBlastHelm',        False),
@@ -167,12 +167,12 @@ item_table = {
     'Transmute Tome':       (2, 'Tome',     'TomeTransmute',        False),
 
     # Food
-    'Apple':                (1, 'Food',     ['Food1', 'FoodMagic1'],             True),
-    'Cheese':               (1, 'Food',     ['Food2', 'FoodMagic2'],             False),
-    'Drumstick':            (1, 'Food',     ['Food3', 'FoodMagic3'],             False),
-    'Ham':                  (1, 'Food',     ['Food4', 'FoodMagic4'],             False),
-    'Carrot':               (1, 'Food',     ['FoodCarrot', 'FoodMagicCarrot'],   False),
-    'Cookies':              (1, 'Food',     ['FoodCookies', 'FoodMagicCookies'], False),
+    'Apple':                (2, 'Food',     ['Food1', 'FoodMagic1'],             True),
+    'Cheese':               (2, 'Food',     ['Food2', 'FoodMagic2'],             False),
+    'Drumstick':            (2, 'Food',     ['Food3', 'FoodMagic3'],             False),
+    'Ham':                  (2, 'Food',     ['Food4', 'FoodMagic4'],             False),
+    'Carrot':               (2, 'Food',     ['FoodCarrot', 'FoodMagicCarrot'],   False),
+    'Cookies':              (2, 'Food',     ['FoodCookies', 'FoodMagicCookies'], False),
 
     # Charms
     'Bomb Charm':           (2, 'Charm',    'CharmBomb',            True),
@@ -185,9 +185,9 @@ item_table = {
     'Strength Charm':       (2, 'Charm',    'CharmStrength',        True),
 
     # Hearts
-    'Heart Container':        (1, 'Heart',  ['MiscHeartContainer', 'MiscHeartContainer2'], True),
-    'Cursed Heart Container': (1, 'Heart',  ['MiscHeartContainerCursed', 'MiscHeartContainerCursed2'], True),
-    'Empty Heart Container':  (1, 'Heart',  ['MiscHeartContainerEmpty', 'MiscHeartContainerEmpty2'], True),
+    'Heart Container':        (2, 'Heart',  ['MiscHeartContainer', 'MiscHeartContainer2'], True),
+    'Cursed Heart Container': (2, 'Heart',  ['MiscHeartContainerCursed', 'MiscHeartContainerCursed2'], True),
+    'Empty Heart Container':  (2, 'Heart',  ['MiscHeartContainerEmpty', 'MiscHeartContainerEmpty2'], True),
 
     # Misc
     'Cursed Potion':        (2, 'Misc',     'CursedPotion',         False),
@@ -222,15 +222,14 @@ item_table = {
 }
 
 # These items are always available at start.
-always_available_items = {
+always_available_items: Set[str] = {
     'Apple',
     'Heart Container',
     'Cursed Heart Container',
     'Empty Heart Container',
 }
 
-junk_items = [k for k, v in item_table.items() if v[1] == 'Junk']
-trap_items = [k for k, v in item_table.items() if v[1] == 'Trap']
+item_types: Set[str] = {v[1] for v in item_table.values()}
 
 bad_items = [
     'Karate Gi',

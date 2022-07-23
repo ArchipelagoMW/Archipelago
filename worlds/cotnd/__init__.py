@@ -5,13 +5,13 @@
 # Increment data version
 
 import logging
-from typing import Dict, List, Any
+from typing import Dict, List, Set, Any
 
 from BaseClasses import Region, RegionType, Entrance, Item, Tutorial, ItemClassification
 from Options import Option
 from ..AutoWorld import World, WebWorld
 from .Characters import all_chars
-from .Items import item_table, always_available_items, junk_items, trap_items, get_normal_items
+from .Items import item_table, always_available_items, item_types, get_normal_items
 from .Locations import get_char_locations, CryptLocation
 from .Options import cotnd_options
 
@@ -34,7 +34,9 @@ class CotNDWorld(World):
         [loc for char in all_chars for instance in range(1, 10) for loc in get_char_locations(char, instance, True)])}
     data_version: int                   = 0
 
-    items: List[str]                    = []
+    item_name_groups: Dict[str, Set[str]] = {t: {k for k, v in item_table.items() if v[1] == t} for t in item_types}
+    junk_items: List[str] = list(item_name_groups['Junk'])
+    trap_items: List[str] = list(item_name_groups['Trap'])
 
     ### Autoworld Methods ###
 
@@ -45,8 +47,17 @@ class CotNDWorld(World):
         self.chars = sorted(list(set(self.world.available_characters[self.player].value) | 
             {self.world.starting_character[self.player].current_key.capitalize()}))
         self.items: List[str] = get_normal_items(self.chars, self.world.reduce_starting_items[self.player].value)
-        self.give_starting_character()
-        self.remove_start_items_from_pool()
+
+        # give starting character
+        starting_char = f"Unlock {self.world.starting_character[self.player].current_key.capitalize()}"
+        self.world.push_precollected(self.create_item(starting_char))
+        self.items.remove(starting_char)
+
+        # remove items that we started with
+        start_inventory = self.world.start_inventory[self.player].value
+        for item, count in start_inventory.items():
+            if count > 0 and item in self.items:
+                self.items.remove(item)
 
     # create required regions
     # make enough locations for all the items
@@ -87,7 +98,8 @@ class CotNDWorld(World):
 
         # Victory condition: clear all characters
         clears = list(filter(lambda s: 'Clear' in s, locations))
-        self.world.completion_condition[self.player] = lambda state: all(state.can_reach(loc, 'Location', self.player) for loc in clears)
+        self.world.completion_condition[self.player] = lambda state: all(state.can_reach(loc, 'Location', self.player)
+            for loc in clears)
 
     # make junk items to fill up locations
     # turn item list into real items
@@ -121,22 +133,6 @@ class CotNDWorld(World):
 
     def get_filler_item_name(self) -> str:
         if self.world.random.random()*100 < self.world.trap_percentage[self.player]:
-            return self.world.random.choice(trap_items)
+            return self.world.random.choice(self.trap_items)
         else:
-            return self.world.random.choice(junk_items)
-
-    ### End Autoworld Methods ###
-
-    # give starting char to player
-    def give_starting_character(self) -> None:
-        starting_char = f"Unlock {self.world.starting_character[self.player].current_key.capitalize()}"
-        self.world.push_precollected(self.create_item(starting_char))
-        self.items.remove(starting_char)
-
-    # remove items that we start with from the item list
-    def remove_start_items_from_pool(self) -> None:
-        start_inventory = self.world.start_inventory[self.player].value
-        for item, count in start_inventory.items():
-            if count > 0 and item in self.items:
-                self.items.remove(item)
-
+            return self.world.random.choice(self.junk_items)

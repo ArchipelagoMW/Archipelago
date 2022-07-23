@@ -1,8 +1,10 @@
 
 from typing import List
+from functools import partial
 from BaseClasses import Location
 from worlds.generic.Rules import add_rule
-from .Characters import all_chars
+from ..AutoWorld import LogicMixin
+from .Characters import all_chars, weaponlocked, ohko, ohko_armor
 
 
 def get_char_locations(char: str, instance: int, flawless: bool) -> List[str]:
@@ -29,10 +31,51 @@ def get_char_locations(char: str, instance: int, flawless: bool) -> List[str]:
     return chests + [f'{name} - Clear']
 
 
+def reach_crypt_location(location, state):
+    player = location.player
+    char_name = location.name.split()[0]
+    if not state.has(f'Unlock {char_name}', player):
+        return False
+
+    floor_name = location.name.split()[-1]
+    if floor_name == 'Clear':
+        zone = 5
+    else:
+        zone = int(floor_name.split('-')[0])
+
+    # Aria zone reversal for logic
+    if char_name == 'Aria':
+        zone = 6 - zone
+
+    if zone > 1:
+        if char_name not in weaponlocked and not state.has_group('Weapon', player, 3):
+            return False
+    if zone > 2:
+        if char_name not in ohko:
+            if not state.has_group('Armor', player, 3):
+                return False
+        else:
+            if not state.has_any(ohko_armor, player):
+                return False
+    if zone > 3:
+        if state.count_group('Ring', player) + state.count_group('Spell', player) < 4:
+            return False
+    return True
+
+
 class CryptLocation(Location):
+    game: str = 'Crypt of the NecroDancer'
 
     def __init__(self, player: int, name: str = '', address: int = None, parent=None):
         super().__init__(player, name, address, parent)
-        char_name = name.split()[0]
-        self.access_rule = lambda state: state.has(f"Unlock {char_name}", player)
+        self.access_rule = partial(reach_crypt_location, self)
+        # char_name = name.split()[0]
+        # self.access_rule = lambda state: state.has(f"Unlock {char_name}", player)
 
+'''
+Things:
+- weapons (at least 3 choices, 0 if weaponlocked, special set for diamond)
+- armor (at least 3 choices, 1 if ohko, 0 if dorian)
+- rings (at least 3 choices)
+- spells (at least 2 choices, 0 for diamond)
+'''
