@@ -2,7 +2,6 @@ from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification
 from .Items import ChecksFinderItem, item_table, required_items
 from .Locations import ChecksFinderAdvancement, advancement_table, exclusion_table
 from .Options import checksfinder_options
-from .Regions import checksfinder_regions, link_checksfinder_structures
 from .Rules import set_rules, set_completion_rules
 from ..AutoWorld import World, WebWorld
 
@@ -68,17 +67,12 @@ class ChecksFinderWorld(World):
         set_completion_rules(self.world, self.player)
 
     def create_regions(self):
-        def ChecksFinderRegion(region_name: str, exits=[]):
-            ret = Region(region_name, region_name, self.player, self.world)
-            ret.locations = [ChecksFinderAdvancement(self.player, loc_name, loc_data.id, ret)
-                for loc_name, loc_data in advancement_table.items()
-                if loc_data.region == region_name]
-            for exit in exits:
-                ret.exits.append(Entrance(self.player, exit, ret))
-            return ret
+        menu = Region("Menu", self.player, self.world)
+        board = Region("Board", self.player, self.world)
 
-        self.world.regions += [ChecksFinderRegion(*r) for r in checksfinder_regions]
-        link_checksfinder_structures(self.world, self.player)
+        connection = Entrance(self.player, "New Board", menu)
+        connection.connect(board)
+        self.world.regions += [menu, board]
 
     def fill_slot_data(self):
         slot_data = self._get_checksfinder_data()
