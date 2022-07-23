@@ -66,9 +66,8 @@ class StaticWitnessItems:
 
             if item[1] in range(1500, 1512):
                 self.ITEM_NAME_GROUPS.setdefault("Lasers", set()).add(item[0])
-                continue
-
-            self.ITEM_NAME_GROUPS.setdefault("Doors", set()).add(item[0])
+            else:
+                self.ITEM_NAME_GROUPS.setdefault("Doors", set()).add(item[0])
 
         for item in StaticWitnessLogic.ALL_TRAPS:
             item_tab[item[0]] = ItemData(
