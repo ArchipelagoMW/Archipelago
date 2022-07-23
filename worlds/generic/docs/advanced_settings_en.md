@@ -272,7 +272,7 @@ Super Mario 64:
   StrictCapRequirements: true
   StrictCannonRequirements: true
   StarsToFinish: 70
-  ExtraStars: 30
+  AmountOfStars: 70
   DeathLink: true
   BuddyChecks: true
   AreaRandomizer: true

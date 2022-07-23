@@ -182,9 +182,33 @@ loc100Coin_table = {
         "RR: 100 Coins": 3626104
 }
 
+locPSS_table = {
+    "The Princess's Secret Slide Block": 3626126,
+    "The Princess's Secret Slide Fast": 3626127,
+}
+
+locSA_table = {
+    "The Secret Aquarium": 3626161
+}
+
 locBitDW_table = {
     "Bowser in the Dark World Red Coins": 3626105,
     "Bowser in the Dark World Key": 3626178
+}
+
+locTotWC_table = {
+    "Tower of the Wing Cap Switch": 3626181,
+    "Tower of the Wing Cap Red Coins": 3626140
+}
+
+locCotMC_table = {
+    "Cavern of the Metal Cap Switch": 3626182,
+    "Cavern of the Metal Cap Red Coins": 3626133
+}
+
+locVCutM_table = {
+    "Vanish Cap Under the Moat Switch": 3626183,
+    "Vanish Cap Under the Moat Red Coins": 3626147
 }
 
 locBitFS_table = {
@@ -192,16 +216,16 @@ locBitFS_table = {
     "Bowser in the Fire Sea Key": 3626179
 }
 
-#Secret Stars and Stages
+locWMotR_table = {
+    "Wing Mario Over the Rainbow": 3626154
+}
+
+locBitS_table = {
+    "Bowser in the Sky Red Coins": 3626119
+}
+
+#Secret Stars found inside the Castle
 locSS_table = {
-    "Bowser in the Sky Red Coins": 3626119,
-    "The Princess's Secret Slide Block": 3626126,
-    "The Princess's Secret Slide Fast": 3626127,
-    "Cavern of the Metal Cap Red Coins": 3626133,
-    "Tower of the Wing Cap Red Coins": 3626140,
-    "Vanish Cap Under the Moat Red Coins": 3626147,
-    "Wing Mario Over the Rainbow": 3626154,
-    "The Secret Aquarium": 3626161,
     "Toad (Basement)": 3626168,
     "Toad (Second Floor)": 3626169,
     "Toad (Third Floor)": 3626170,
@@ -209,15 +233,10 @@ locSS_table = {
     "MIPS 2": 3626172
 }
 
-#Caps
-locCap_table = {
-    "Tower of the Wing Cap Switch": 3626181,
-    "Cavern of the Metal Cap Switch": 3626182,
-    "Vanish Cap Under the Moat Switch": 3626183
-}
-
 # Correspond to 3626000 + course index * 7 + star index, then secret stars, then keys, then 100 Coin Stars
 location_table = {**locBoB_table,**locWhomp_table,**locJRB_table,**locCCM_table,**locBBH_table, \
                   **locHMC_table,**locLLL_table,**locSSL_table,**locDDD_table,**locSL_table, \
                   **locWDW_table,**locTTM_table,**locTHI_table,**locTTC_table,**locRR_table, \
-                  **loc100Coin_table,**locBitDW_table,**locBitFS_table,**locSS_table,**locCap_table}
+                  **loc100Coin_table,**locPSS_table,**locSA_table,**locBitDW_table,**locTotWC_table, \
+                  **locCotMC_table, **locVCutM_table, **locBitFS_table, **locWMotR_table, **locBitS_table, \
+                  **locSS_table}
