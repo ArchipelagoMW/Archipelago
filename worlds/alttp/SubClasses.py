@@ -2,7 +2,7 @@
 from typing import Optional
 from enum import IntEnum
 
-from BaseClasses import Location, Item, ItemClassification, Region
+from BaseClasses import Location, Item, ItemClassification, Region, MultiWorld
 
 
 class ALttPLocation(Location):
@@ -79,8 +79,8 @@ class LTTPRegionType(IntEnum):
 class LTTPRegion(Region):
     type: LTTPRegionType
 
-    def __init__(self, name: str, type_: LTTPRegionType, hint: str, player: int):
-        super().__init__(name, hint, player)
+    def __init__(self, name: str, type_: LTTPRegionType, hint: str, player: int, world: MultiWorld):
+        super().__init__(name, player, world, hint)
         self.type = type_
 
     @property
