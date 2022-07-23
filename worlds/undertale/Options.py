@@ -33,7 +33,7 @@ class SoulHunt(Toggle):
 class ProgressivePlot(Toggle):
     """Makes the plot items progressive."""
     display_name = "Progressive Plot"
-    default = 0
+    default = 1
 
 
 class OnlyFlakes(Toggle):
@@ -54,6 +54,12 @@ class RandomizeLove(Toggle):
     default = 0
 
 
+class RandomizeAreas(Toggle):
+    """Randomizes the order each major area of the game."""
+    display_name = "Randomize Area Order"
+    default = 0
+
+
 undertale_options: typing.Dict[str, type(Option)] = {
     "route_required":                           RouteRequired,
     "temy_include":                             IncludeTemy,
@@ -63,4 +69,5 @@ undertale_options: typing.Dict[str, type(Option)] = {
     "soul_pieces":                              SoulPieces,
     "prog_plot":                                ProgressivePlot,
     "rando_love":                                RandomizeLove,
+    "rando_area":                                RandomizeAreas,
 }

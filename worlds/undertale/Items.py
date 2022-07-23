@@ -92,11 +92,16 @@ item_table = {
 
 non_key_items = {
     "Butterscotch Pie": 1,
-    "Mystery Key": 1,
-    "Sea Tea": 1,
-    "100G": 5,
+    "100G": 4,
     "1000G": 3,
     "10000G": 1,
+    "Face Steak": 1,
+    "Snowman Piece": 1,
+    "Instant Noodles": 1,
+    "Astronaut Food": 2,
+    "Hot Cat": 1,
+    "Abandoned Quiche": 1,
+    "Monster Candy": 4,
 }
 
 required_armor = {
@@ -145,29 +150,71 @@ key_items = {
     "LOVE": 19,
 }
 
-junk_weights = {
-    "Face Steak": 7,
-    "Hush Puppy": 7,
-    "Snowman Piece": 9,
-    "Bisicle": 10,
-    "Abandoned Quiche": 8,
-    "Instant Noodles": 8,
-    "Hot Cat": 7,
-    "Legendary Hero": 10,
+junk_weights_all = {
+    "Bisicle": 12,
+    "Legendary Hero": 8,
     "Glamburger": 10,
-    "Crab Apple": 10,
-    "Sea Tea": 10,
+    "Crab Apple": 12,
+    "Sea Tea": 12,
     "Nice Cream": 10,
     "Spider Donut": 10,
-    "Monster Candy": 10,
-    "Popato Chisps": 8,
-    "Junk Food": 10,
+    "Popato Chisps": 12,
+    "Junk Food": 12,
     "Temmie Flakes": 10,
-    "Spider Cider": 10,
+    "Spider Cider": 8,
     "Hot Dog...?": 10,
     "Cinnamon Bun": 10,
-    "Astronaut Food": 9,
-    "Starfait": 8,
+    "Starfait": 12,
+    "Punch Card": 8,
+}
+
+junk_weights_neutral = {
+    "Bisicle": 12,
+    "Legendary Hero": 8,
+    "Glamburger": 10,
+    "Crab Apple": 12,
+    "Sea Tea": 12,
+    "Nice Cream": 10,
+    "Spider Donut": 10,
+    "Junk Food": 12,
+    "Temmie Flakes": 10,
+    "Spider Cider": 8,
+    "Cinnamon Bun": 10,
+    "Starfait": 12,
+    "Punch Card": 8,
+}
+
+junk_weights_pacifist = {
+    "Bisicle": 12,
+    "Legendary Hero": 8,
+    "Glamburger": 10,
+    "Crab Apple": 12,
+    "Sea Tea": 12,
+    "Nice Cream": 10,
+    "Spider Donut": 10,
+    "Popato Chisps": 12,
+    "Junk Food": 12,
+    "Temmie Flakes": 10,
+    "Spider Cider": 8,
+    "Hot Dog...?": 10,
+    "Cinnamon Bun": 10,
+    "Starfait": 12,
+    "Punch Card": 8,
+}
+
+junk_weights_genocide = {
+    "Bisicle": 12,
+    "Legendary Hero": 8,
+    "Glamburger": 10,
+    "Crab Apple": 12,
+    "Sea Tea": 12,
+    "Nice Cream": 10,
+    "Spider Donut": 10,
+    "Junk Food": 12,
+    "Temmie Flakes": 10,
+    "Spider Cider": 8,
+    "Cinnamon Bun": 10,
+    "Starfait": 12,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}

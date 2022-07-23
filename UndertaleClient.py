@@ -203,6 +203,25 @@ async def server_loop(ctx: CommonContext, address=None):
         ctx.current_reconnect_delay *= 2
 
 
+def to_room_name(place_name: str):
+    if place_name == "Old Home Exit":
+        return "room_ruinsexit"
+    elif place_name == "Snowdin Forest":
+        return "room_tundra1"
+    elif place_name == "Snowdin Town Exit":
+        return "room_fogroom"
+    elif place_name == "Waterfall":
+        return "room_water1"
+    elif place_name == "Waterfall Exit":
+        return "room_fire2"
+    elif place_name == "Hotland":
+        return "room_fire_prelab"
+    elif place_name == "Hotland Exit":
+        return "room_fire_precore"
+    elif place_name == "Core":
+        return "room_fire_core1"
+
+
 async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
     if cmd == 'Connected':
         if not os.path.exists(os.path.expandvars(r"%localappdata%/UNDERTALE")):
@@ -222,6 +241,38 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
             filename = f"check {ss-12000}.spot"
             with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
                 f.close()
+        filename = f"area0"
+        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
+            f.write(to_room_name(args["slot_data"]["Old Home Exit"]))
+            f.close()
+        filename = f"area1"
+        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
+            f.write(to_room_name(args["slot_data"]["Snowdin Town Exit"]))
+            f.close()
+        filename = f"area2"
+        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
+            f.write(to_room_name(args["slot_data"]["Waterfall Exit"]))
+            f.close()
+        filename = f"area3"
+        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
+            f.write(to_room_name(args["slot_data"]["Hotland Exit"]))
+            f.close()
+        filename = f"area0.back"
+        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
+            f.write(to_room_name(args["slot_data"]["Snowdin Forest"]))
+            f.close()
+        filename = f"area1.back"
+        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
+            f.write(to_room_name(args["slot_data"]["Waterfall"]))
+            f.close()
+        filename = f"area2.back"
+        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
+            f.write(to_room_name(args["slot_data"]["Hotland"]))
+            f.close()
+        filename = f"area3.back"
+        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
+            f.write(to_room_name(args["slot_data"]["Core"]))
+            f.close()
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
@@ -236,8 +287,9 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
             await ctx.send_msgs(sync_msg)
         if start_index == len(ctx.items_received):
             counter = -1
-            while os.path.isfile(os.path.expandvars(r"%localappdata%/UNDERTALE/"+f"{str(counter)}PLR-1.item")):
-                os.remove(os.path.expandvars(r"%localappdata%/UNDERTALE/"+f"{str(counter)}PLR-1.item"))
+            while counter > -99:
+                if os.path.exists(os.path.expandvars(r"%localappdata%/UNDERTALE/"+f"{str(counter)}PLR0.item")):
+                    os.remove(os.path.expandvars(r"%localappdata%/UNDERTALE/"+f"{str(counter)}PLR0.item"))
                 counter -= 1
             placedPlot = 0
             for item in args['items']:
@@ -305,7 +357,8 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                     else:
                         f.write(str(NetworkItem(*item).item-11000))
                     f.close()
-                ctx.items_received.append(NetworkItem(*item))
+                if id > -1:
+                    ctx.items_received.append(NetworkItem(*item))
                 if [item.item for item in ctx.items_received].count(77000) >= ctx.pieces_needed > 0:
                     filename = f"{str(-99999)}PLR{str(0)}.item"
                     with open(os.path.expandvars(r"%localappdata%/UNDERTALE/" + filename), 'w') as f:
