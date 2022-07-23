@@ -1239,23 +1239,31 @@ class Spoiler():
 
         self.locations = OrderedDict()
         listed_locations = set()
+        lw_locations = []
+        dw_locations = []
+        cave_locations = []
+        for loc in self.world.get_locations():
+            if loc.game == "A Link to the Past":
+                if loc not in listed_locations and loc.parent_region and \
+                        loc.parent_region.type == LTTPRegionType.LightWorld and loc.show_in_spoiler:
+                    lw_locations.append(loc)
+                elif loc not in listed_locations and loc.parent_region and \
+                    loc.parent_region.type == LTTPRegionType.DarkWorld and loc.show_in_spoiler:
+                    dw_locations.append(loc)
+                elif loc not in listed_locations and loc.parent_region and \
+                        loc.parent_region.type == LTTPRegionType.Cave and loc.show_in_spoiler:
+                    cave_locations.append(loc)
 
-        lw_locations = [loc for loc in self.world.get_locations() if
-                        loc not in listed_locations and loc.parent_region and loc.parent_region.type == LTTPRegionType.LightWorld and loc.show_in_spoiler]
         self.locations['Light World'] = OrderedDict(
             [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
              lw_locations])
         listed_locations.update(lw_locations)
 
-        dw_locations = [loc for loc in self.world.get_locations() if
-                        loc not in listed_locations and loc.parent_region and loc.parent_region.type == LTTPRegionType.DarkWorld and loc.show_in_spoiler]
         self.locations['Dark World'] = OrderedDict(
             [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
              dw_locations])
         listed_locations.update(dw_locations)
 
-        cave_locations = [loc for loc in self.world.get_locations() if
-                          loc not in listed_locations and loc.parent_region and loc.parent_region.type == LTTPRegionType.Cave and loc.show_in_spoiler]
         self.locations['Caves'] = OrderedDict(
             [(str(location), str(location.item) if location.item is not None else 'Nothing') for location in
              cave_locations])
