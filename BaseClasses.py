@@ -941,6 +941,10 @@ class Region:
                 return True
         return False
 
+    @property
+    def get_entrance(self) -> Entrance:
+        return self.entrances[0]
+
     def __repr__(self):
         return self.__str__()
 

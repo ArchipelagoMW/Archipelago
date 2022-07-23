@@ -254,20 +254,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     output_file_futures.append(
                         pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
 
-            def lttp_get_entrance_to_region(region: LTTPRegion) -> Entrance:
-                for entrance in region.entrances:
-                    if entrance.parent_region.type in (LTTPRegionType.DarkWorld, LTTPRegionType.LightWorld, LTTPRegionType.Generic):
-                        return entrance
-                for entrance in region.entrances:
-                    return lttp_get_entrance_to_region(entrance.parent_region)
-
             # collect ER hint info
             er_hint_data = {player: {} for player in world.get_game_players("A Link to the Past") if
                             world.shuffle[player] != "vanilla" or world.retro_caves[player]}
 
             for region in world.regions:
                 if region.player in er_hint_data and region.locations:
-                    main_entrance = lttp_get_entrance_to_region(region)
+                    main_entrance = region.get_entrance
                     for location in region.locations:
                         if type(location.address) == int:  # skips events and crystals
                             if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
@@ -281,10 +274,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
             for location in world.get_filled_locations():
                 if type(location.address) is int:
-                    if location.game == "A Link to the Past":
-                        main_entrance = lttp_get_entrance_to_region(location.parent_region)
+                    main_entrance = location.parent_region.get_entrance
                     if location.game != "A Link to the Past":
-                        main_entrance = location.parent_region.entrances[0]
                         checks_in_area[location.player]["Light World"].append(location.address)
                     elif location.parent_region.dungeon:
                         dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
@@ -312,7 +303,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     player = region.player
                     location_id = SHOP_ID_START + total_shop_slots + index
 
-                    main_entrance = lttp_get_entrance_to_region(region)
+                    main_entrance = region.get_entrance
                     if main_entrance.parent_region.type == LTTPRegionType.LightWorld:
                         checks_in_area[player]["Light World"].append(location_id)
                     else:

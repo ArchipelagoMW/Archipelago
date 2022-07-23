@@ -65,7 +65,6 @@ class ALttPItem(Item):
 
 
 class LTTPRegionType(IntEnum):
-    Generic = 0
     LightWorld = 1
     DarkWorld = 2
     Cave = 3  # also houses
@@ -83,3 +82,11 @@ class LTTPRegion(Region):
     def __init__(self, name: str, type_: LTTPRegionType, hint: str, player: int):
         super().__init__(name, hint, player)
         self.type = type_
+
+    @property
+    def get_entrance(self):
+        for entrance in self.entrances:
+            if entrance.parent_region.type in (LTTPRegionType.DarkWorld, LTTPRegionType.LightWorld):
+                return entrance
+        for entrance in self.entrances:
+            return entrance.parent_region.get_entrance()
