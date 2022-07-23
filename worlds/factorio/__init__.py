@@ -100,10 +100,10 @@ class Factorio(World):
 
     def create_regions(self):
         player = self.player
-        menu = Region("Menu", "Menu", player, self.world)
+        menu = Region("Menu", player, self.world)
         crash = Entrance(player, "Crash Land", menu)
         menu.exits.append(crash)
-        nauvis = Region("Nauvis", "Nauvis", player, self.world)
+        nauvis = Region("Nauvis", player, self.world)
 
         skip_silo = self.world.silo[self.player].value == Silo.option_spawn
         for tech_name, tech_id in base_tech_table.items():

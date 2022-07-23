@@ -209,11 +209,11 @@ class SoEWorld(World):
 
     def create_regions(self):
         # TODO: generate *some* regions from locations' requirements?
-        r = Region('Menu', 'Menu', self.player, self.world)
+        r = Region('Menu', self.player, self.world)
         r.exits = [Entrance(self.player, 'New Game', r)]
         self.world.regions += [r]
 
-        r = Region('Ingame', 'Ingame', self.player, self.world)
+        r = Region('Ingame', self.player, self.world)
         r.locations = [SoELocation(self.player, loc.name, self.location_name_to_id[loc.name], r)
                        for loc in _locations]
         r.locations.append(SoELocation(self.player, 'Done', None, r))

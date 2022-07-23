@@ -631,7 +631,7 @@ def create_locations(self, player: int):
 
 
 def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, name, player, world)
+    ret = Region(name, player, world)
     if locations:
         for loc in locations:
             location = self.locations[loc]

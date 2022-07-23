@@ -69,6 +69,8 @@ class ChecksFinderWorld(World):
     def create_regions(self):
         menu = Region("Menu", self.player, self.world)
         board = Region("Board", self.player, self.world)
+        board.locations = [ChecksFinderAdvancement(self.player, loc_name, loc_data.id, board)
+                           for loc_name, loc_data in advancement_table.items() if loc_data.region == board.name]
 
         connection = Entrance(self.player, "New Board", menu)
         connection.connect(board)

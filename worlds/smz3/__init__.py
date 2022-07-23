@@ -435,8 +435,7 @@ class SMZ3World(World):
             self.smz3World.locationLookup[name].APLocation = newLoc
 
     def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
-        ret = Region(name, name, player)
-        ret.world = world
+        ret = Region(name, player, world)
         if locations:
             for loc in locations:
                 location = self.locations[loc]

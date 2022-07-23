@@ -689,16 +689,13 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):
     # Shamelessly stolen from the ROR2 definition
-    ret = Region(name, name, player, world)
+    ret = Region(name, player, world)
     if locations:
         for location in locations:
             loc_id = active_locations.get(location, 0)
             if loc_id:
                 location = SA2BLocation(player, location, loc_id, ret)
                 ret.locations.append(location)
-    if exits:
-        for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
 
     return ret
 

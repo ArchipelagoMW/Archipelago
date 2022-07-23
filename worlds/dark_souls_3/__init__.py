@@ -63,7 +63,7 @@ class DarkSouls3World(World):
         return DarkSouls3Item(name, item_classification, data, self.player)
 
     def create_regions(self):
-        menu_region = Region("Menu", "Menu", self.player)
+        menu_region = Region("Menu", self.player, self.world)
         self.world.regions.append(menu_region)
 
         # Create all Vanilla regions of Dark Souls III
@@ -146,7 +146,7 @@ class DarkSouls3World(World):
 
     # For each region, add the associated locations retrieved from the corresponding location_table
     def create_region(self, region_name, location_table) -> Region:
-        new_region = Region(region_name, region_name, self.player)
+        new_region = Region(region_name, self.player, self.world)
         if location_table:
             for name, address in location_table.items():
                 location = DarkSouls3Location(self.player, name, self.location_name_to_id[name], new_region)

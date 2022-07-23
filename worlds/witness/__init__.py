@@ -189,8 +189,7 @@ def create_region(world: MultiWorld, player: int, name: str,
     Create an Archipelago Region for The Witness
     """
 
-    ret = Region(name, name, player)
-    ret.world = world
+    ret = Region(name, player, world)
     if region_locations:
         for location in region_locations:
             loc_id = locat.CHECK_LOCATION_TABLE[location]

@@ -577,17 +577,13 @@ class HKWorld(World):
         return self.world.random.choice(self.cached_filler_items[self.player])
 
 
-def create_region(world: MultiWorld, player: int, name: str, location_names=None, exits=None) -> Region:
-    ret = Region(name, name, player)
-    ret.world = world
+def create_region(world: MultiWorld, player: int, name: str, location_names=None) -> Region:
+    ret = Region(name, player, world)
     if location_names:
         for location in location_names:
             loc_id = HKWorld.location_name_to_id.get(location, None)
             location = HKLocation(player, location, loc_id, ret)
             ret.locations.append(location)
-    if exits:
-        for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
     return ret
 
 

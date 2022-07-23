@@ -16,7 +16,7 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
         multi_world.game[player_id] = world
         multi_world.worlds[player_id] = world
         multi_world.player_name[player_id] = "Test Player " + str(player_id)
-        region = Region("Menu", "Menu Region Hint", player_id, multi_world)
+        region = Region("Menu", player_id, multi_world, "Menu Region Hint")
         multi_world.regions.append(region)
 
     multi_world.set_seed(0)
@@ -46,7 +46,7 @@ class PlayerDefinition(object):
     def generate_region(self, parent: Region, size: int, access_rule: CollectionRule = lambda state: True) -> Region:
         region_tag = "_region" + str(len(self.regions))
         region_name = "player" + str(self.id) + region_tag
-        region = Region("player" + str(self.id) + region_tag, "Region Hint", self.id, self.world)
+        region = Region("player" + str(self.id) + region_tag, self.id, self.world)
         self.locations += generate_locations(size,
                                              self.id, None, region, region_tag)
 

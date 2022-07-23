@@ -31,7 +31,7 @@ class OriBlindForest(World):
     set_rules = set_rules
 
     def create_region(self, name: str):
-        return Region(name, name, self.player, self.world)
+        return Region(name, self.player, self.world)
 
     def create_regions(self):
         world = self.world

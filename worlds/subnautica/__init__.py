@@ -129,8 +129,7 @@ class SubnauticaWorld(World):
                               item_id, player=self.player)
 
     def create_region(self, name: str, locations=None, exits=None):
-        ret = Region(name, name, self.player)
-        ret.world = self.world
+        ret = Region(name, self.player, self.world)
         if locations:
             for location in locations:
                 loc_id = self.location_name_to_id.get(location, None)

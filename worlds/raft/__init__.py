@@ -170,8 +170,7 @@ class RaftWorld(World):
         }
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, name, player)
-    ret.world = world
+    ret = Region(name, player, world)
     if locations:
         for location in locations:
             loc_id = locations_lookup_name_to_id.get(location, 0)
@@ -180,7 +179,6 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
     if exits:
         for exit in exits:
             ret.exits.append(Entrance(player, getConnectionName(name, exit), ret))
-
     return ret
 
 class RaftLocation(Location):
