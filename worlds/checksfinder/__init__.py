@@ -73,6 +73,7 @@ class ChecksFinderWorld(World):
                            for loc_name, loc_data in advancement_table.items() if loc_data.region == board.name]
 
         connection = Entrance(self.player, "New Board", menu)
+        menu.exits.append(connection)
         connection.connect(board)
         self.world.regions += [menu, board]
 
