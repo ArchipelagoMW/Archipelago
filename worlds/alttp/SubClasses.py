@@ -89,4 +89,4 @@ class LTTPRegion(Region):
             if entrance.parent_region.type in (LTTPRegionType.DarkWorld, LTTPRegionType.LightWorld):
                 return entrance
         for entrance in self.entrances:
-            return entrance.parent_region.get_entrance()
+            return entrance.parent_region.get_entrance
