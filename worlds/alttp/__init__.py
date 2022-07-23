@@ -99,7 +99,16 @@ class ALTTPWeb(WebWorld):
         ["Berserker"]
     )
 
-    tutorials = [setup_en, setup_de, setup_es, setup_fr, msu, msu_es, msu_fr, plando]
+    oof_sound = Tutorial(
+        "'OOF' Sound Replacement",
+        "A guide to customizing Link's 'oof' sound",
+        "English",
+        "oof_sound_en.md",
+        "oof_sound/en",
+        ["Nyx Edelstein"]
+    )
+
+    tutorials = [setup_en, setup_de, setup_es, setup_fr, msu, msu_es, msu_fr, plando, oof_sound]
 
 
 class ALTTPWorld(World):
@@ -367,6 +376,7 @@ class ALTTPWorld(World):
                                world.menuspeed[player].current_key,
                                world.music[player],
                                world.sprite[player],
+                               world.oof[player],
                                palettes_options, world, player, True,
                                reduceflashing=world.reduceflashing[player] or world.is_race,
                                triforcehud=world.triforcehud[player].current_key,
