@@ -1,27 +1,35 @@
 # Archipelago Setup Guide
 
-This guide is intended to provide an overview of how to install, set up, and run the Archipelago multiworld software.
+This guide provides an overview of how to install, set up, and run the Archipelago multiworld software.
 This guide should take about 5 minutes to read.
 
 ## Installing the Archipelago software
 
-The most recent public release of Archipelago can be found on the GitHub Releases page. GitHub Releases
-page: [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases).
+The most recent public release of Archipelago can be found on the
+[GitHub releases page](https://github.com/ArchipelagoMW/Archipelago/releases).
 
-Run the exe file, and after accepting the license agreement you will be prompted on which components you would like to
-install.
+Run the .exe file. After accepting the license agreement, you will be asked which components you would like to install.
 
-The generator allows you to generate multiworld games on your computer. The ROM setups are required if anyone in the
-game that you generate wants to play any of those games as they are needed to generate the relevant patch files.
+The first component is the `Generator`. It is not needed to play games with Archipelago -- our website also has a
+generator that does not need to be installed. If you install the generator, it allows you to create a multiworld using
+only your own computer. (Note: if you want to create a multiworld using certain games, you will need to enable their
+"ROM Setup" options now, and you will need a legally-obtained ROM for each of those games.)
 
-The server will allow you to host the multiworld on your machine. Hosting on your machine requires forwarding the port
-you are hosting on. The default port for Archipelago is `38281`. If you are unsure how to do this there are plenty of
-other guides on the internet that will be more suited to your hardware.
+The second component is the `Server`. It is also not needed to play games with Archipelago -- our website can host
+multiworlds using its own server. If you install the server, it allows you to host multiworlds on your own computer.
+(Note: hosting on your own computer requires forwarding the port you are hosting on. We do not provide a guide for how
+to do this. The default port for Archipelago is `38281`.)
 
-The `Clients` are what are used to connect your game to the multiworld. If the game/games you plan to play are available
-here go ahead and install these as well. If the game you choose to play is supported by Archipelago but not listed in
-the installation check the setup guide for that game. Installing a client for a ROM based game requires you to have a
-legally obtained ROM for that game as well.
+The last components are the `Clients`. They __are__ needed to play games with Archipelago. If you see a game that you
+don't intend to play with Archipelago, you may uncheck it now. You will need a legally-obtained ROM for each game that
+uses ROMS.
+
+If you change your mind and would like to install more components later, simply run the .exe again and check the boxes
+for each new component.
+
+Once the installer finishes, you're done installing the basics for Archipelago! However, each individual game needs
+additional setup to work properly. Check out the [Supported Games](https://archipelago.gg/games) page to see what each
+randomizer is like and how to set them up.
 
 ## Generating a game
 
