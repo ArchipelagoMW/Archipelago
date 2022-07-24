@@ -111,6 +111,11 @@ class WorldState(Choice):
 
 
 class Bosses(TextChoice):
+    """Shuffles bosses around to different locations.
+    Basic will shuffle all bosses except Ganon and Agahnim anywhere they can be placed.
+    Full chooses 3 bosses at random to be placed twice instead of Lanmolas, Moldorm, and Helmasaur.
+    Chaos allows any boss to appear any number of times.
+    Singularity places a single boss in as many places as possible, and a second boss in any remaining locations."""
     display_name = "Boss Shuffle"
     option_none = 0
     option_basic = 1
