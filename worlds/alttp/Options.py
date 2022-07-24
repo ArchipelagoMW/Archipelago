@@ -115,7 +115,8 @@ class Bosses(TextChoice):
     Basic will shuffle all bosses except Ganon and Agahnim anywhere they can be placed.
     Full chooses 3 bosses at random to be placed twice instead of Lanmolas, Moldorm, and Helmasaur.
     Chaos allows any boss to appear any number of times.
-    Singularity places a single boss in as many places as possible, and a second boss in any remaining locations."""
+    Singularity places a single boss in as many places as possible, and a second boss in any remaining locations.
+    Supports plando placement. Formatting here: https://archipelago.gg/tutorial/A%20Link%20to%20the%20Past/plando/en"""
     display_name = "Boss Shuffle"
     option_none = 0
     option_basic = 1
