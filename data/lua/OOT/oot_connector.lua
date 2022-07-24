@@ -1723,6 +1723,11 @@ function get_death_state()
 end
 
 function kill_link()
+    -- market entrance: 27/28/29
+    -- outside ToT: 35/36/37.
+    -- if killed on these scenes the game crashes, so we wait until not on this screen.
+    local scene = global_context:rawget('cur_scene'):rawget()
+    if scene == 27 or scene == 28 or scene == 29 or scene == 35 or scene == 36 or scene == 37 then return end
     mainmemory.write_u16_be(0x11A600, 0)
 end
 
