@@ -32,7 +32,6 @@ class MultiWorld():
     player_name: Dict[int, str]
     _region_cache: Dict[int, Dict[str, Region]]
     difficulty_requirements: dict
-    required_medallions: dict
     dark_room_logic: Dict[int, str]
     restrict_dungeon_item_on_boss: Dict[int, bool]
     plando_texts: List[Dict[str, str]]
@@ -109,7 +108,6 @@ class MultiWorld():
             set_player_attr('item_functionality', 'normal')
             set_player_attr('timer', False)
             set_player_attr('goal', 'ganon')
-            set_player_attr('required_medallions', ['Ether', 'Quake'])
             set_player_attr('swamp_patch_required', False)
             set_player_attr('powder_patch_required', False)
             set_player_attr('ganon_at_pyramid', True)
@@ -134,12 +132,8 @@ class MultiWorld():
             set_player_attr('blue_clock_time', 2)
             set_player_attr('green_clock_time', 4)
             set_player_attr('can_take_damage', True)
-            set_player_attr('triforce_pieces_available', 30)
-            set_player_attr('triforce_pieces_required', 20)
             set_player_attr('shop_shuffle', 'off')
-            set_player_attr('shuffle_prizes', "g")
             set_player_attr('sprite_pool', [])
-            set_player_attr('dark_room_logic', "lamp")
             set_player_attr('plando_items', [])
             set_player_attr('plando_texts', {})
             set_player_attr('plando_connections', [])
@@ -844,10 +838,10 @@ class CollectionState():
         return False
 
     def has_misery_mire_medallion(self, player: int) -> bool:
-        return self.has(self.world.required_medallions[player][0], player)
+        return self.has(self.world.misery_mire_medallion[player].current_key.title(), player)
 
     def has_turtle_rock_medallion(self, player: int) -> bool:
-        return self.has(self.world.required_medallions[player][1], player)
+        return self.has(self.world.turtle_rock_medallion[player].current_key.title(), player)
 
     def can_boots_clip_lw(self, player: int) -> bool:
         if self.world.mode[player] == 'inverted':
@@ -1245,13 +1239,6 @@ class Spoiler():
                 [('player', player), ('entrance', entrance), ('exit', exit_), ('direction', direction)])
 
     def parse_data(self):
-        self.medallions = OrderedDict()
-        for player in self.world.get_game_players("A Link to the Past"):
-            self.medallions[f'Misery Mire ({self.world.get_player_name(player)})'] = \
-                self.world.required_medallions[player][0]
-            self.medallions[f'Turtle Rock ({self.world.get_player_name(player)})'] = \
-                self.world.required_medallions[player][1]
-
         self.locations = OrderedDict()
         listed_locations = set()
 

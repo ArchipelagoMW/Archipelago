@@ -891,22 +891,26 @@ def patch_rom(world, rom, player, enemized):
     rom.write_bytes(0x118C64, [first_bot, mid_bot, last_bot])
 
     # patch medallion requirements
-    if world.required_medallions[player][0] == 'Bombos':
+    required_medallions = [
+        world.misery_mire_medallion[player].current_key.title(),
+        world.turtle_rock_medallion[player].current_key.title()
+    ]
+    if required_medallions[0] == 'Bombos':
         rom.write_byte(0x180022, 0x00)  # requirement
         rom.write_byte(0x4FF2, 0x31)  # sprite
         rom.write_byte(0x50D1, 0x80)
         rom.write_byte(0x51B0, 0x00)
-    elif world.required_medallions[player][0] == 'Quake':
+    elif required_medallions[0] == 'Quake':
         rom.write_byte(0x180022, 0x02)  # requirement
         rom.write_byte(0x4FF2, 0x31)  # sprite
         rom.write_byte(0x50D1, 0x88)
         rom.write_byte(0x51B0, 0x00)
-    if world.required_medallions[player][1] == 'Bombos':
+    if required_medallions[1] == 'Bombos':
         rom.write_byte(0x180023, 0x00)  # requirement
         rom.write_byte(0x5020, 0x31)  # sprite
         rom.write_byte(0x50FF, 0x90)
         rom.write_byte(0x51DE, 0x00)
-    elif world.required_medallions[player][1] == 'Ether':
+    elif required_medallions[1] == 'Ether':
         rom.write_byte(0x180023, 0x01)  # requirement
         rom.write_byte(0x5020, 0x31)  # sprite
         rom.write_byte(0x50FF, 0x98)
