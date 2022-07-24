@@ -118,19 +118,21 @@ class Bosses(TextChoice):
     option_chaos = 3
     option_singularity = 4
 
-    requires_plando = True
-
-    def verify(self, plando_options):
+    def verify(self, world, plando_options):
         if isinstance(self.value, int):
             return
         from Generate import PlandoSettings
+        options = self.value.split(";")
+        if "random" in options:
+            import random
+            options[options.index("random")] = Bosses.name_lookup[random.choice(list(self.name_lookup))]
+            self.value = ";".join(options)
         if not(PlandoSettings.bosses & plando_options):
-            options = self.value.split(";")
             for option in options:
                 if option in self.options:
                     self.value = Bosses.options[option]
                     return
-            raise ValueError(f"Boss plando is disabled and {self.value} is not a valid option.")
+        raise ValueError(f"Boss plando is disabled and {self.value} is not a valid option.")
 
 
 class Enemies(Choice):

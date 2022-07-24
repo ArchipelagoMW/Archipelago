@@ -432,10 +432,7 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
             raise Exception(f"Error generating option {option_key} in {ret.game}") from e
         else:
             if hasattr(player_option, "verify"):
-                if player_option.requires_plando:
-                    player_option.verify(plando_options)
-                else:
-                    player_option.verify(AutoWorldRegister.world_types[ret.game])
+                player_option.verify(AutoWorldRegister.world_types[ret.game], plando_options)
     else:
         setattr(ret, option_key, option(option.default))
 

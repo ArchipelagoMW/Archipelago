@@ -77,9 +77,6 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     # can be weighted between selections
     supports_weighting = True
 
-    # can define a required plando module to use the option in certain ways
-    requires_plando: bool = False
-
     # filled by AssembleOptions:
     name_lookup: typing.Dict[int, str]
     options: typing.Dict[str, int]
@@ -117,10 +114,9 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
 
 
 class FreeText(Option):
-    """Text option that allows users to enter strings. Needs to be validated by the world"""
+    """Text option that allows users to enter strings.
+    Needs to be validated by the world and is set to all lower case."""
     auto_display_name = False
-    free_text_names: set[str]
-    """set of valid prepopulated names"""
 
     def __init__(self, value: str):
         assert isinstance(value, str), "value of FreeText must be a string"
@@ -133,8 +129,6 @@ class FreeText(Option):
     @classmethod
     def from_text(cls, text: str) -> FreeText:
         text.lower()
-        if text == "random":
-            return cls(random.choice(list(cls.free_text_names)))
         return cls(text)
 
     @classmethod
@@ -405,12 +399,9 @@ class TextChoice(FreeText, Choice):
     """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string"""
 
     def __init__(self, value: typing.Union[str, int]):
-        if isinstance(value, str):
-            self.value: str = value
-        elif isinstance(value, int):
-            self.value: int = value
-        else:
-            raise TypeError(f"{value} is not a valid option for {self.__class__.__name__}")
+        assert isinstance(value, str) or isinstance(value, int), \
+            f"{value} is not a valid option for {self.__class__.__name__}"
+        self.value = value
 
     @property
     def current_key(self) -> str:
@@ -582,7 +573,7 @@ class VerifyKeys:
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
                                 f"Allowed keys: {cls.valid_keys}.")
 
-    def verify(self, world):
+    def verify(self, world, plando_options):
         if self.convert_name_groups and self.verify_item_name:
             new_value = type(self.value)()  # empty container of whatever value is
             for item_name in self.value:
@@ -807,8 +798,8 @@ class ItemLinks(OptionList):
                 pool |= {item_name}
         return pool
 
-    def verify(self, world):
-        super(ItemLinks, self).verify(world)
+    def verify(self, world, plando_options):
+        super(ItemLinks, self).verify(world, plando_options)
         existing_links = set()
         for link in self.value:
             if link["name"] in existing_links:
