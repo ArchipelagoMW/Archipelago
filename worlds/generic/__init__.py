@@ -11,7 +11,7 @@ class GenericWeb(WebWorld):
     advanced_settings = Tutorial('Advanced YAML Guide',
                                  'A guide to reading YAML files and editing them to fully customize your game.',
                                  'English', 'advanced_settings_en.md', 'advanced_settings/en',
-                                 ['alwaysintreble', 'Alchav'])
+                                 ['alwaysintreble', 'Alchav', 'Ijwu'])
     commands = Tutorial('Archipelago Server and Client Commands',
                         'A guide detailing the commands available to the user when participating in an Archipelago session.',
                         'English', 'commands_en.md', 'commands/en', ['jat2980', 'Ijwu'])
@@ -56,7 +56,6 @@ class PlandoItem(NamedTuple):
     item: str
     location: str
     world: Union[bool, str] = False  # False -> own world, True -> not own world
-    from_pool: bool = True  # if item should be removed from item pool
     force: str = 'silent'  # false -> warns if item not successfully placed. true -> errors out on failure to place item.
 
     def warn(self, warning: str):

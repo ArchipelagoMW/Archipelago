@@ -700,6 +700,11 @@ class DeathLink(Toggle):
     display_name = "Death Link"
 
 
+class CustomItemPool(OptionDict):
+    """Customize your item pool. You can modify and set item counts or replace all of a given item with another item."""
+    display_name = "Custom Item Pool"
+
+
 class ItemLinks(OptionList):
     """Share part of your item pool with other players."""
     default = []
@@ -769,6 +774,7 @@ per_game_common_options = {
     "start_location_hints": StartLocationHints,
     "exclude_locations": ExcludeLocations,
     "priority_locations": PriorityLocations,
+    "custom_item_pool": CustomItemPool,
     "item_links": ItemLinks
 }
 

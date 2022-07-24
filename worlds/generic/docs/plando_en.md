@@ -31,10 +31,8 @@ enabled (opt-in).
 Item plando allows a player to place an item in a specific location or specific locations, place multiple items into a
 list of specific locations both in their own game or in another player's game.
 
-* The options for item plando are `from_pool`, `world`, `percentage`, `force`, `count`, and either item and location, or items
+* The options for item plando are `world`, `percentage`, `force`, `count`, and either item and location, or items
   and locations.
-    * `from_pool` determines if the item should be taken *from* the item pool or *added* to it. This can be true or
-      false and defaults to true if omitted.
     * `world` is the target world to place the item in.
         * It gets ignored if only one world is generated.
         * Can be a number, name, true, false, null, or a list. False is the default.
@@ -77,7 +75,6 @@ plando_items:
       Empire Orb: 1
       Radiant Orb: 1
     location: Starter Chest 1
-    from_pool: true
     world: true
     percentage: 50
 

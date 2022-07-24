@@ -125,6 +125,7 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 
 * `exclude_locations` lets you define any locations that you don't want to do and during generation will force a "junk"
   item which isn't necessary for progression to go in these locations.
+* `custom_item_pool` allows players to fully customize the items that are generated for their game.
 * `item_links` allows players to link their items into a group with the same item link name and game. The items declared in `item_pool` get combined and when an item is found for the group, all players in the group receive it. Item links can also have local and non local items, forcing the items to either be placed within the worlds of the group or in worlds outside the group. If players have a varying amount of a specific item in the link, the lowest amount from the players will be the amount put into the group.
 ### Random numbers
 
@@ -139,6 +140,28 @@ Options taking a choice of a number can also use a variety of `random` options t
   will choose a number between 40 and 60
 * `random-range-low-#-#`, `random-range-middle-#-#`, and `random-range-high-#-#` will choose a number at random from the
   specified numbers, but with the specified weights
+
+### Custom Item Pool
+
+`custom_item_pool` allows you to have complete control over the items generated for your game. Sub-options are:
+
+* `modify`: Allows you to increase or decrease the number of any given items by a given amount.
+* `set`: Set the total number of any given items.
+* `replace`: Replace all of a given item with another item.
+* `use_defaults`: `True` or `False`. Defaults to `True` if not specified. If `False`, the entire item pool will be
+discarded in favor of the items you set here in `custom_item_pool`.
+* `pool_size_link`: After making modifications to your item pool, if the size of your item pool has changed, corrections
+will be made by removing or adding random filler items. However, you can use `pool_size_link` to link multiple game
+worlds together by providing the same `pool_size_link` parameter, and these game worlds will have their pool sizes
+looked at and adjusted collectively. In this way, you can decrease the size of some game's item pools and increase the
+size of others. Default is `null` which results in no linking.
+
+Some special item names can be used in certain cases:
+
+* `start_inventory`: can only be used in `replace`. Allows you to replace all items in the item pool that are in your
+`start_inventory` option. Can also be specified as the "replacement" item to move items out of the item pool and into
+your `start_inventory`.
+* `null`: can be used in place of item names to create filler items (will do nothing if you try to remove `null` items).
 
 ### Example
 
@@ -178,6 +201,11 @@ A Link to the Past:
     - Link's House
   exclude_locations:
     - Cave 45
+  custom_item_pool:
+    replace:
+      start_inventory: null
+    modify:
+      Moon Pearl: 1
   item_links:
     - name: rods
       item_pool:
@@ -239,6 +267,11 @@ Timespinner:
   multiworld that can be used for no cost.
 * `priority_locations` forces a progression item to be placed on the `Link's House` location.
 * `exclude_locations` forces a not important item to be placed on the `Cave 45` location.
+* `custom_item_pool`
+  * `start_inventory: null` will remove the items specified in `start_inventory` from the item pool, and replace them
+with junk items.
+  * `modify` is used to add an extra moon pearl to the item pool. Since `item_pool_correction` is not turned off, it
+will remove a junk item to make room for it automatically.
 * `item_links` 
   * For `A Link to the Past` all players in the `rods` item link group will share their fire and ice rods and the player
     items will be replaced with single rupees.
@@ -279,7 +312,11 @@ Super Mario 64:
   ProgressiveKeys:
     true: 1
     false: 1
-
+  custom_item_pool:
+    modify:
+      1up Mushroom: -20
+    pool_size_link: bobsgames
+    
 ---
 
 description: Example of generating multiple worlds. World 2 of 3
@@ -304,7 +341,12 @@ Minecraft:
     ender_dragon: 1
     wither: 0
     both: 0
-
+  custom_item_pool:
+    modify:
+      4 Diamond Ore: 10
+      16 Iron Ore: 10
+    pool_size_link: bobsgames
+      
 ---
 
 description: Example of generating multiple worlds. World 3 of 3
@@ -317,5 +359,7 @@ ChecksFinder:
 ```
 
 The above example will generate 3 worlds - one Super Mario 64, one Minecraft, and one ChecksFinder.
- 
+
+All 20 1up Mushrooms will be removed from Super Mario 64 and replaced with Diamond Ore and Iron Ore in Minecraft.
+Because of the `pool_size_link`, no corrections will be made automatically to these games' item pools.
 

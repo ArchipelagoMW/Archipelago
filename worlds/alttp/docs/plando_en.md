@@ -52,12 +52,10 @@ boss_shuffle:
 ### Items
 
 - This module is disabled by default.
-- Has the options from_pool, world, percentage, force and either item and location or items and locations
+- Has the options world, percentage, force and either item and location or items and locations
 - All of these options support subweights
 - percentage is the percentage chance for this block to trigger
     - is a number in the range [0, 100], can be omitted entirely for 100%
-- from_pool denotes if the item should be taken from the item pool, or be an additional item entirely.
-    - can be true or false, defaults to true when omitted
 - world is the target world to place the item
     - ignored if only one world is generated
     - can be a number, to target that slot in the multiworld
@@ -91,7 +89,6 @@ plando_items:
       Lamp: 1
       Fire Rod: 1
     location: Link's House
-    from_pool: true
     world: true
     percentage: 50
   - items: # 2
@@ -118,7 +115,6 @@ plando_items:
       - Desert Palace - Prize
       - Eastern Palace - Prize
       - Tower of Hera - Prize
-    from_pool: true
 ```
 
 1. has a 50% chance to occur, which if it does places either the Lamp or Fire Rod in one's own Link's House and removes
