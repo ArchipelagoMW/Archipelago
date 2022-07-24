@@ -2,8 +2,8 @@ local socket = require("socket")
 local json = require('json')
 local math = require('math')
 
-local last_modified_date = '2022-05-25' -- Should be the last modified date
-local script_version = 1
+local last_modified_date = '2022-07-24' -- Should be the last modified date
+local script_version = 2
 
 --------------------------------------------------
 -- Heavily modified form of RiptideSage's tracker
@@ -1824,13 +1824,15 @@ function main()
         elseif (curstate == STATE_UNINITIALIZED) then
             if  (frame % 60 == 0) then
                 server:settimeout(2)
-                print("Attempting to connect")
                 local client, timeout = server:accept()
                 if timeout == nil then
                     print('Initial Connection Made')
                     curstate = STATE_INITIAL_CONNECTION_MADE
                     ootSocket = client
                     ootSocket:settimeout(0)
+                else
+                    print('Connection failed, ensure OoTClient is running and rerun oot_connector.lua')
+                    return
                 end
             end
         end
