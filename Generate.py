@@ -557,16 +557,6 @@ def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings
 
 
 def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
-    if "dungeon_items" in weights and get_choice_legacy('dungeon_items', weights, "none") != "none":
-        raise Exception(f"dungeon_items key in A Link to the Past was removed, but is present in these weights as {get_choice_legacy('dungeon_items', weights, False)}.")
-    glitches_required = get_choice_legacy('glitches_required', weights)
-    if glitches_required not in [None, 'none', 'no_logic', 'overworld_glitches', 'hybrid_major_glitches', 'minor_glitches']:
-        logging.warning("Only NMG, OWG, HMG and No Logic supported")
-        glitches_required = 'none'
-    ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches',
-                 'minor_glitches': 'minorglitches', 'hybrid_major_glitches': 'hybridglitches'}[
-        glitches_required]
-
     entrance_shuffle = get_choice_legacy('entrance_shuffle', weights, 'vanilla')
     if entrance_shuffle.startswith('none-'):
         ret.shuffle = 'vanilla'
@@ -576,7 +566,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     goal = get_choice_legacy('goals', weights, 'ganon')
 
     ret.goal = goals[goal]
-
 
     extra_pieces = get_choice_legacy('triforce_pieces_mode', weights, 'available')
 

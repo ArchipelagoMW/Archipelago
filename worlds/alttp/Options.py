@@ -382,6 +382,7 @@ class AllowCollect(Toggle):
 
 
 alttp_options: typing.Dict[str, type(Option)] = {
+    "glitches_required": Logic,
     "dark_room_logic": DarkRoomLogic,
     "glitch_boots": GlitchBoots,
     "crystals_needed_for_gt": CrystalsTower,
