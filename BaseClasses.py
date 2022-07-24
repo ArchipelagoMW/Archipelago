@@ -1411,7 +1411,6 @@ class Spoiler():
                     outfile.write('%s%s\n' % ('Hash: ', self.hashes[player]))
 
                     outfile.write('Logic:                           %s\n' % self.world.logic[player])
-                    outfile.write('Dark Room Logic:                 %s\n' % self.world.dark_room_logic[player])
                     outfile.write('Mode:                            %s\n' % self.world.mode[player])
                     outfile.write('Goal:                            %s\n' % self.world.goal[player])
                     if "triforce" in self.world.goal[player]:  # triforce hunt

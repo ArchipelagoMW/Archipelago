@@ -5,6 +5,8 @@ from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink
 
 
 class Logic(Choice):
+    """Determine the logic used to reach locations."""
+    display_name = "Glitch Logic"
     option_no_glitches = 0
     option_minor_glitches = 1
     option_overworld_glitches = 2
@@ -14,12 +16,17 @@ class Logic(Choice):
     alias_hmg = 3
 
 
-class Objective(Choice):
-    option_crystals = 0
-    # option_pendants = 1
-    option_triforce_pieces = 2
-    option_pedestal = 3
-    option_bingo = 4
+class DarkRoomLogic(Choice):
+    """Requirement to traverse unlit dark rooms."""
+    display_name = "Dark Room Logic"
+    option_lamp = 0
+    option_torches = 1
+    option_none = 2
+
+
+class GlitchBoots(DefaultOnToggle):
+    """Start with Pegasus Boots if any glitches that use them are available."""
+    display_name = "Glitched Starting Boots"
 
 
 class Goal(Choice):
@@ -79,26 +86,26 @@ class DungeonItem(Choice):
 
 
 class bigkey_shuffle(DungeonItem):
-    """Big Key Placement"""
+    """How Big Keys will be placed."""
     item_name_group = "Big Keys"
     display_name = "Big Key Shuffle"
 
 
 class smallkey_shuffle(DungeonItem):
-    """Small Key Placement"""
+    """How Small Keys will be placed."""
     option_universal = 5
     item_name_group = "Small Keys"
     display_name = "Small Key Shuffle"
 
 
 class compass_shuffle(DungeonItem):
-    """Compass Placement"""
+    """How Compasses will be placed."""
     item_name_group = "Compasses"
     display_name = "Compass Shuffle"
 
 
 class map_shuffle(DungeonItem):
-    """Map Placement"""
+    """How maps will be placed."""
     item_name_group = "Maps"
     display_name = "Map Shuffle"
 
@@ -106,35 +113,49 @@ class map_shuffle(DungeonItem):
 class Crystals(Range):
     range_start = 0
     range_end = 7
+    default = 7
 
 
 class CrystalsTower(Crystals):
-    default = 7
+    """Number of Crystals needed to enter Ganon's Tower."""
+    display_name = "Crystals for Ganon's Tower"
 
 
 class CrystalsGanon(Crystals):
-    default = 7
+    """Number of Crystals needed to damage Ganon."""
+    display_name = "Crystals for Ganon"
 
 
 class TriforcePieces(Range):
+    """Number of Triforce pieces required to complete a triforce piece related goal."""
+    display_name = "Required Triforce Pieces"
     default = 30
     range_start = 1
     range_end = 90
 
 
 class ShopItemSlots(Range):
+    """Number of shop slots that can contain items from the multiworld."""
+    display_name = "Shop Item Slots"
     range_start = 0
     range_end = 30
 
 
 class ShopPriceModifier(Range):
     """Percentage modifier for shuffled item prices in shops"""
+    display_name = "Shop Item Price"
     range_start = 0
     default = 100
     range_end = 400
 
 
 class WorldState(Choice):
+    """Starting world state for the game.
+    Standard starts with the rain sequence and uncle will have a guaranteed weapon including bombs.
+    Open starts at Link's House in Light World with the player free to go anywhere.
+    Inverted begins at Link's House in the Dark World, requiring Moon Pearl for Light World access as well as other
+    changes."""
+    display_name = "World State"
     option_standard = 1
     option_open = 0
     option_inverted = 2
@@ -361,6 +382,8 @@ class AllowCollect(Toggle):
 
 
 alttp_options: typing.Dict[str, type(Option)] = {
+    "dark_room_logic": DarkRoomLogic,
+    "glitch_boots": GlitchBoots,
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
     "open_pyramid": OpenPyramid,
@@ -395,7 +418,6 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "music": Music,
     "reduceflashing": ReduceFlashing,
     "triforcehud": TriforceHud,
-    "glitch_boots": DefaultOnToggle,
     "beemizer_total_chance": BeemizerTotalChance,
     "beemizer_trap_chance": BeemizerTrapChance,
     "death_link": DeathLink,

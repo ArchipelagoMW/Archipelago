@@ -300,8 +300,10 @@ def get_choice_legacy(option, root, value=None) -> Any:
 def get_choice(option, root, value=None) -> Any:
     if option not in root:
         return value
-    if type(root[option]) is list:
-        return random.choices(root[option])[0]
+    if isinstance(root[option], list):
+        if len(root[option]) > 0:
+            return random.choices(root[option])[0]
+        return value
     if type(root[option]) is not dict:
         return root[option]
     if not root[option]:
@@ -564,14 +566,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches',
                  'minor_glitches': 'minorglitches', 'hybrid_major_glitches': 'hybridglitches'}[
         glitches_required]
-
-    ret.dark_room_logic = get_choice_legacy("dark_room_logic", weights, "lamp")
-    if not ret.dark_room_logic:  # None/False
-        ret.dark_room_logic = "none"
-    if ret.dark_room_logic == "sconces":
-        ret.dark_room_logic = "torches"
-    if ret.dark_room_logic not in {"lamp", "torches", "none"}:
-        raise ValueError(f"Unknown Dark Room Logic: \"{ret.dark_room_logic}\"")
 
     entrance_shuffle = get_choice_legacy('entrance_shuffle', weights, 'vanilla')
     if entrance_shuffle.startswith('none-'):
