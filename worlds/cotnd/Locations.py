@@ -66,16 +66,9 @@ def reach_crypt_location(location, state):
 class CryptLocation(Location):
     game: str = 'Crypt of the NecroDancer'
 
-    def __init__(self, player: int, name: str = '', address: int = None, parent=None):
+    def __init__(self, player: int, name: str = '', address: int = None, parent=None, reduce_logic=False):
         super().__init__(player, name, address, parent)
-        self.access_rule = partial(reach_crypt_location, self)
-        # char_name = name.split()[0]
-        # self.access_rule = lambda state: state.has(f"Unlock {char_name}", player)
-
-'''
-Things:
-- weapons (at least 3 choices, 0 if weaponlocked, special set for diamond)
-- armor (at least 3 choices, 1 if ohko, 0 if dorian)
-- rings (at least 3 choices)
-- spells (at least 2 choices, 0 for diamond)
-'''
+        if reduce_logic:
+            self.access_rule = lambda state: state.has(f'Unlock {name.split()[0]}', player)
+        else:
+            self.access_rule = partial(reach_crypt_location, self)

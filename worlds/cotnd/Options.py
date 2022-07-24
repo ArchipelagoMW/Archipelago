@@ -39,6 +39,11 @@ class ReduceStartingItems(Toggle):
     display_name = "Reduce Starting Available Items"
 
 
+class ReduceLogic(Toggle):
+    """If this is turned on, the randomizer will not guarantee weapons, armor, rings, and spells for later zones, and may expect low-equipment clears."""
+    display_name = "Reduce Logical Requirements"
+
+
 class RandomizeFlawless(Toggle):
     """Flawless boss chests will additionally contain AP sendable items. Flawlessing bosses can be difficult, though!"""
     display_name = "Randomize Boss Flawless Chests"
@@ -65,9 +70,10 @@ class TrapPercentage(Range):
 cotnd_options = {
     'available_characters':     Characters,
     'starting_character':       StartingChar,
+    'randomize_flawless':       RandomizeFlawless,
     'keep_inventory_on_death':  KeepInventory,
     'reduce_starting_items':    ReduceStartingItems,
-    'randomize_flawless':       RandomizeFlawless,
+    'reduce_logic':             ReduceLogic,
     'free_samples':             FreeSamples,
     'prevent_bad_samples':      PreventBadSamples,
     'trap_percentage':          TrapPercentage,

@@ -1,7 +1,7 @@
 
 # TODO:
-# add more logic
 # Write tutorial
+# Add world description
 # Increment data version
 
 import logging
@@ -81,6 +81,7 @@ class CotNDWorld(World):
 
         # Initial locations
         flawless = self.world.randomize_flawless[self.player].value
+        reduce_logic = self.world.reduce_logic[self.player].value
         # Add starting char if necessary, purge duplicates and ordering
         locations = [loc for char in self.chars for loc in get_char_locations(char, 1, flawless)]
         self.char_counts = {char: 1 for char in self.chars}
@@ -93,7 +94,7 @@ class CotNDWorld(World):
             self.char_counts[char] += 1
 
         for name in locations:
-            loc = CryptLocation(self.player, name, self.location_name_to_id[name], crypt)
+            loc = CryptLocation(self.player, name, self.location_name_to_id[name], crypt, reduce_logic)
             crypt.locations.append(loc)
 
         # Victory condition: clear all characters
