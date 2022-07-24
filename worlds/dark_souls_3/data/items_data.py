@@ -315,6 +315,8 @@ spells_table = {
 }
 
 misc_items_table = {
+    "Tower Key": 0x400007DF,
+    "Grave Key": 0x400007D9,
     "Cell Key": 0x400007DA,
     "Small Lothric Banner": 0x40000836,
     "Mortician's Ashes": 0x4000083B,
@@ -349,7 +351,6 @@ misc_items_table = {
     "Xanthous Ashes": 0x40000864,
     "Old Cell Key": 0x400007DC,
     "Jailer's Key Ring": 0x400007D8,
-    "Path of the Dragon Gesture": 0x40002346,
     "Logan's Scroll": 0x40000855,
     "Storm Ruler": 0x006132D0,
     "Giant's Coal": 0x40000839,
@@ -363,14 +364,15 @@ key_items_list = {
     "Small Lothric Banner",
     "Basin of Vows",
     "Small Doll",
-    "Path of the Dragon Gesture",
     "Storm Ruler",
     "Grand Archives Key",
     "Cinders of a Lord - Abyss Watcher",
     "Cinders of a Lord - Yhorm the Giant",
     "Cinders of a Lord - Aldrich",
     "Cinders of a Lord - Lothric Prince",
-    "Mortician's Ashes"
+    "Mortician's Ashes",
+    "Cell Key",
+    "Tower Key",
 }
 
 item_dictionary_table = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table, **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table}
