@@ -42,8 +42,16 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
         has_beaten_game = world.has_beaten_game(maximum_exploration_state)
 
-        for item_to_place in items_to_place:
+        while items_to_place:
+            # if we have run out of locations to fill,break out of this loop
+            if not locations:
+                unplaced_items += items_to_place
+                break
+            item_to_place = items_to_place.pop(0)
+
             spot_to_fill: typing.Optional[Location] = None
+
+            # if minimal accessibility, only check whether location is reachable if game not beatable
             if world.accessibility[item_to_place.player] == 'minimal':
                 perform_access_check = not world.has_beaten_game(maximum_exploration_state,
                                                                  item_to_place.player) \
@@ -54,7 +62,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             for i, location in enumerate(locations):
                 if (not single_player_placement or location.player == item_to_place.player) \
                         and location.can_fill(maximum_exploration_state, item_to_place, perform_access_check):
-                    # poping by index is faster than removing by content,
+                    # popping by index is faster than removing by content,
                     spot_to_fill = locations.pop(i)
                     # skipping a scan for the element
                     break

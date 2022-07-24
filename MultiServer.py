@@ -720,16 +720,16 @@ def get_players_string(ctx: Context):
     return f'{len(auth_clients)} players of {total} connected ' + text[:-1]
 
 
-def get_status_string(ctx: Context, team: int):
-    text = "Player Status on your team:"
+def get_status_string(ctx: Context, team: int, tag: str):
+    text = f"Player Status on team {team}:"
     for slot in ctx.locations:
         connected = len(ctx.clients[team][slot])
-        death_link = len([client for client in ctx.clients[team][slot] if "DeathLink" in client.tags])
+        tagged = len([client for client in ctx.clients[team][slot] if tag in client.tags])
         completion_text = f"({len(ctx.location_checks[team, slot])}/{len(ctx.locations[slot])})"
-        death_text = f" {death_link} of which are death link" if connected else ""
+        tag_text = f" {tagged} of which are tagged {tag}" if connected and tag else ""
         goal_text = " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else "."
         text += f"\n{ctx.get_aliased_name(team, slot)} has {connected} connection{'' if connected == 1 else 's'}" \
-                f"{death_text}{goal_text} {completion_text}"
+                f"{tag_text}{goal_text} {completion_text}"
     return text
 
 
@@ -766,7 +766,7 @@ def update_checked_locations(ctx: Context, team: int, slot: int):
 def forfeit_player(ctx: Context, team: int, slot: int):
     """register any locations that are in the multidata"""
     all_locations = set(ctx.locations[slot])
-    ctx.notify_all("%s (Team #%d) has forfeited" % (ctx.player_names[(team, slot)], team + 1))
+    ctx.notify_all("%s (Team #%d) has released all remaining items from their world." % (ctx.player_names[(team, slot)], team + 1))
     register_location_checks(ctx, team, slot, all_locations)
     update_checked_locations(ctx, team, slot)
 
@@ -779,7 +779,7 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
             if values[1] == slot:
                 all_locations[source_slot].add(location_id)
 
-    ctx.notify_all("%s (Team #%d) has collected" % (ctx.player_names[(team, slot)], team + 1))
+    ctx.notify_all("%s (Team #%d) has collected their items from other worlds." % (ctx.player_names[(team, slot)], team + 1))
     for source_player, location_ids in all_locations.items():
         register_location_checks(ctx, team, source_player, location_ids, count_activity=False)
         update_checked_locations(ctx, team, source_player)
@@ -1106,20 +1106,26 @@ class ClientMessageProcessor(CommonCommandProcessor):
         return self.ctx.commandprocessor(command)
 
     def _cmd_players(self) -> bool:
-        """Get information about connected and missing players"""
+        """Get information about connected and missing players."""
         if len(self.ctx.player_names) < 10:
             self.ctx.notify_all(get_players_string(self.ctx))
         else:
             self.output(get_players_string(self.ctx))
         return True
 
-    def _cmd_status(self) -> bool:
-        """Get status information about your team."""
-        self.output(get_status_string(self.ctx, self.client.team))
+    def _cmd_status(self, tag:str="") -> bool:
+        """Get status information about your team.
+        Optionally mention a Tag name and get information on who has that Tag.
+        For example: DeathLink or EnergyLink."""
+        self.output(get_status_string(self.ctx, self.client.team, tag))
         return True
 
+    def _cmd_release(self) -> bool:
+        """Sends remaining items in your world to their recipients."""
+        return self._cmd_forfeit()
+
     def _cmd_forfeit(self) -> bool:
-        """Surrender and send your remaining items out to their recipients"""
+        """Surrender and send your remaining items out to their recipients. Use release in the future."""
         if self.ctx.allow_forfeits.get((self.client.team, self.client.slot), False):
             forfeit_player(self.ctx, self.client.team, self.client.slot)
             return True
@@ -1128,7 +1134,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return True
         elif "disabled" in self.ctx.forfeit_mode:
             self.output(
-                "Sorry, client forfeiting has been disabled on this server. You can ask the server admin for a /forfeit")
+                "Sorry, client item releasing has been disabled on this server. You can ask the server admin for a /release")
             return False
         else:  # is auto or goal
             if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
@@ -1136,8 +1142,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 return True
             else:
                 self.output(
-                    "Sorry, client forfeiting requires you to have beaten the game on this server."
-                    " You can ask the server admin for a /forfeit")
+                    "Sorry, client item releasing requires you to have beaten the game on this server."
+                    " You can ask the server admin for a /release")
                 return False
 
     def _cmd_collect(self) -> bool:
@@ -1302,6 +1308,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
                             can_pay = 1000
 
                         self.ctx.random.shuffle(not_found_hints)
+                        # By popular vote, make hints prefer non-local placements
+                        not_found_hints.sort(key=lambda hint: int(hint.receiving_player != hint.finding_player))
 
                         hints = found_hints
                         while can_pay > 0:
@@ -1653,6 +1661,14 @@ class ServerCommandProcessor(CommonCommandProcessor):
         self.output(get_players_string(self.ctx))
         return True
 
+    def _cmd_status(self, tag: str = "") -> bool:
+        """Get status information about teams.
+        Optionally mention a Tag name and get information on who has that Tag.
+        For example: DeathLink or EnergyLink."""
+        for team in self.ctx.clients:
+            self.output(get_status_string(self.ctx, team, tag))
+        return True
+
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
         asyncio.create_task(self.ctx.server.ws_server._close())
@@ -1699,42 +1715,47 @@ class ServerCommandProcessor(CommonCommandProcessor):
         return False
 
     @mark_raw
+    def _cmd_release(self, player_name: str) -> bool:
+        """Send out the remaining items from a player to their intended recipients."""
+        return self._cmd_forfeit(player_name)
+
+    @mark_raw
     def _cmd_forfeit(self, player_name: str) -> bool:
-        """Send out the remaining items from a player to their intended recipients"""
+        """Send out the remaining items from a player to their intended recipients."""
         seeked_player = player_name.lower()
         for (team, slot), name in self.ctx.player_names.items():
             if name.lower() == seeked_player:
                 forfeit_player(self.ctx, team, slot)
                 return True
 
-        self.output(f"Could not find player {player_name} to forfeit")
+        self.output(f"Could not find player {player_name} to release")
         return False
 
     @mark_raw
     def _cmd_allow_forfeit(self, player_name: str) -> bool:
-        """Allow the specified player to use the !forfeit command"""
+        """Allow the specified player to use the !release command."""
         seeked_player = player_name.lower()
         for (team, slot), name in self.ctx.player_names.items():
             if name.lower() == seeked_player:
                 self.ctx.allow_forfeits[(team, slot)] = True
-                self.output(f"Player {player_name} is now allowed to use the !forfeit command at any time.")
+                self.output(f"Player {player_name} is now allowed to use the !release command at any time.")
                 return True
 
-        self.output(f"Could not find player {player_name} to allow the !forfeit command for.")
+        self.output(f"Could not find player {player_name} to allow the !release command for.")
         return False
 
     @mark_raw
     def _cmd_forbid_forfeit(self, player_name: str) -> bool:
-        """"Disallow the specified player from using the !forfeit command"""
+        """"Disallow the specified player from using the !release command."""
         seeked_player = player_name.lower()
         for (team, slot), name in self.ctx.player_names.items():
             if name.lower() == seeked_player:
                 self.ctx.allow_forfeits[(team, slot)] = False
                 self.output(
-                    f"Player {player_name} has to follow the server restrictions on use of the !forfeit command.")
+                    f"Player {player_name} has to follow the server restrictions on use of the !release command.")
                 return True
 
-        self.output(f"Could not find player {player_name} to forbid the !forfeit command for.")
+        self.output(f"Could not find player {player_name} to forbid the !release command for.")
         return False
 
     def _cmd_send_multiple(self, amount: typing.Union[int, str], player_name: str, *item_name: str) -> bool:

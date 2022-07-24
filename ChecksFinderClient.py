@@ -1,6 +1,8 @@
 from __future__ import annotations
 import os
+import sys
 import asyncio
+import shutil
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -32,20 +34,34 @@ class ChecksFinderContext(CommonContext):
         self.send_index: int = 0
         self.syncing = False
         self.awaiting_bridge = False
+        # self.game_communication_path: files go in this path to pass data between us and the actual game
+        if "localappdata" in os.environ:
+            self.game_communication_path = os.path.expandvars(r"%localappdata%/ChecksFinder")
+        else:
+            # not windows. game is an exe so let's see if wine might be around to run it
+            if "WINEPREFIX" in os.environ:
+                wineprefix = os.environ["WINEPREFIX"]
+            elif shutil.which("wine") or shutil.which("wine-stable"):
+                wineprefix = os.path.expanduser("~/.wine") # default root of wine system data, deep in which is app data
+            else:
+                msg = "ChecksFinderClient couldn't detect system type. Unable to infer required game_communication_path"
+                logger.error("Error: " + msg)
+                Utils.messagebox("Error", msg, error=True)
+                sys.exit(1)
+            self.game_communication_path = os.path.join(
+                wineprefix,
+                "drive_c",
+                os.path.expandvars("users/$USER/Local Settings/Application Data/ChecksFinder"))
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(ChecksFinderContext, self).server_auth(password_requested)
-        if not self.auth:  # TODO: Replace this if block with await self.getusername() once that PR is merged in.
-            logger.info('Enter slot name:')
-            self.auth = await self.console_input()
-
+        await self.get_username()
         await self.send_connect()
 
     async def connection_closed(self):
         await super(ChecksFinderContext, self).connection_closed()
-        path = os.path.expandvars(r"%localappdata%/ChecksFinder")
-        for root, dirs, files in os.walk(path):
+        for root, dirs, files in os.walk(self.game_communication_path):
             for file in files:
                 if file.find("obtain") <= -1:
                     os.remove(root + "/" + file)
@@ -59,26 +75,25 @@ class ChecksFinderContext(CommonContext):
 
     async def shutdown(self):
         await super(ChecksFinderContext, self).shutdown()
-        path = os.path.expandvars(r"%localappdata%/ChecksFinder")
-        for root, dirs, files in os.walk(path):
+        for root, dirs, files in os.walk(self.game_communication_path):
             for file in files:
                 if file.find("obtain") <= -1:
                     os.remove(root+"/"+file)
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
-            if not os.path.exists(os.path.expandvars(r"%localappdata%/ChecksFinder")):
-                os.mkdir(os.path.expandvars(r"%localappdata%/ChecksFinder"))
+            if not os.path.exists(self.game_communication_path):
+                os.makedirs(self.game_communication_path)
             for ss in self.checked_locations:
                 filename = f"send{ss}"
-                with open(os.path.expandvars(r"%localappdata%/ChecksFinder/" + filename), 'w') as f:
+                with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
             if start_index != len(self.items_received):
                 for item in args['items']:
                     filename = f"AP_{str(NetworkItem(*item).location)}PLR{str(NetworkItem(*item).player)}.item"
-                    with open(os.path.expandvars(r"%localappdata%/ChecksFinder/" + filename), 'w') as f:
+                    with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                         f.write(str(NetworkItem(*item).item))
                         f.close()
 
@@ -86,7 +101,7 @@ class ChecksFinderContext(CommonContext):
             if "checked_locations" in args:
                 for ss in self.checked_locations:
                     filename = f"send{ss}"
-                    with open(os.path.expandvars(r"%localappdata%/ChecksFinder/" + filename), 'w') as f:
+                    with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                         f.close()
 
     def run_gui(self):
@@ -112,10 +127,9 @@ async def game_watcher(ctx: ChecksFinderContext):
                 sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
             await ctx.send_msgs(sync_msg)
             ctx.syncing = False
-        path = os.path.expandvars(r"%localappdata%/ChecksFinder")
         sending = []
         victory = False
-        for root, dirs, files in os.walk(path):
+        for root, dirs, files in os.walk(ctx.game_communication_path):
             for file in files:
                 if file.find("send") > -1:
                     st = file.split("send", -1)[1]

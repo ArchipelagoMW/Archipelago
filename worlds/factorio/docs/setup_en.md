@@ -88,8 +88,9 @@ Factorio product code. This will allow you to download the game directly from th
 
 It is recommended to download the standalone version of Factorio for use as a dedicated server. Doing so prevents any
 potential conflicts with your currently-installed version of Factorio. Download the file by clicking on the button
-appropriate to your operating system, and extract the folder to a convenient location (we recommend `C:\Factorio` or
-similar).
+appropriate to your operating system, and extract the folder to a convenient location. The best place to do this for 
+Archipelago is to place the extracted game folder into the `Archipelago` directory and rename it to just be "Factorio".
+
 
 ![Factorio Download Options](/static/generated/docs/Factorio/factorio-download.png)
 
@@ -99,12 +100,13 @@ have logged in, you may close the game.
 
 #### Configure your Archipelago Installation
 
-You must modify your `host.yaml` file inside your Archipelago installation directory so that it points to your
-standalone Factorio executable. Here is an example of the appropriate setup, note the double `\\` are required:
+If you did not place the Factorio standalone in your Archipelago installation, you must modify your `host.yaml` file 
+inside your Archipelago installation directory so that it points to your standalone Factorio executable. Here is an 
+example of the appropriate setup, note the double `\\` are required:
 
 ```yaml
 factorio_options:
-  executable: C:\\factorio\\bin\\x64\\factorio"
+  executable: C:\\path\\to\\factorio\\bin\\x64\\factorio"
 ```
 
 This allows you to host your own Factorio game.
@@ -144,6 +146,13 @@ you can also issue the `!help` command to learn about additional commands like `
 In case any problems should occur, the Archipelago Client will create a file `FactorioClient.txt` in the `/logs`. The
 contents of this file may help you troubleshoot an issue on your own and is vital for requesting help from other people
 in Archipelago.
+
+## Commands in game
+
+Once you have connected to the server successfully using the Archipelago Factorio Client you should see a message
+stating you can get help using Archipelago commands by typing `!help`. Commands cannot currently be sent from within
+the Factorio session, but you can send them from the Archipelago Factorio Client. For more information about the commands
+you can use see the [commands guide](/tutorial/Archipelago/commands/en).
 
 ## Additional Resources
 

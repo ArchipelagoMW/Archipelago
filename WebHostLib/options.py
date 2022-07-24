@@ -60,7 +60,7 @@ def create():
 
     for game_name, world in AutoWorldRegister.world_types.items():
 
-        all_options = {**world.options, **Options.per_game_common_options}
+        all_options = {**Options.per_game_common_options, **world.options}
         res = Template(open(os.path.join("WebHostLib", "templates", "options.yaml")).read()).render(
             options=all_options,
             __version__=__version__, game=game_name, yaml_dump=yaml.dump,

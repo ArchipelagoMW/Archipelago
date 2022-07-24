@@ -5,7 +5,7 @@
 - [Timespinner (Steam)](https://store.steampowered.com/app/368620/Timespinner/)
   , [Timespinner (Humble)](https://www.humblebundle.com/store/timespinner)
   or [Timespinner (GOG)](https://www.gog.com/game/timespinner) (other versions are not supported)
-- [Timespinner Randomizer](https://github.com/JarnoWesthof/TsRandomizer)
+- [Timespinner Randomizer](https://github.com/Jarno458/TsRandomizer)
 
 ## General Concept
 
@@ -14,11 +14,11 @@ randomization of the items
 
 ## Installation Procedures
 
-Download latest release on [Timespinner Randomizer Releases](https://github.com/JarnoWesthof/TsRandomizer/releases) you
+Download latest release on [Timespinner Randomizer Releases](https://github.com/Jarno458/TsRandomizer/releases) you
 can find the .zip files on the releases page. Download the zip for your current platform. Then extract the zip to the
 folder where your Timespinner game is installed. Then just run TsRandomizer.exe (on Windows) or
 TsRandomizer.bin.x86_64 (on Linux) or TsRandomizer.bin.osx (on Mac) instead of Timespinner.exe to start the game in
-randomized mode. For more info see the [ReadMe](https://github.com/JarnoWesthof/TsRandomizer)
+randomized mode. For more info see the [ReadMe](https://github.com/Jarno458/TsRandomizer)
 
 ## Joining a MultiWorld Game
 
