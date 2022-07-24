@@ -124,21 +124,41 @@ class Bosses(TextChoice):
     option_chaos = 3
     option_singularity = 4
 
-    def verify(self, world, plando_options):
+    remaining_mode: int = option_none
+
+    def __init__(self, value: typing.Union[str, int]):
+        assert isinstance(value, str) or isinstance(value, int), \
+            f"{value} is not a valid option for {self.__clas__.__name__}"
+        if isinstance(value, str):
+            # since the option is being passed as a string it doesn't exist in the defined options
+            options = value.split(";")
+            # choose a random option then replace "random"
+            if "random" in options:
+                import random
+                remaining_mode = self.name_lookup[random.choice(list(self.name_lookup))]
+                options.remove("random")
+                self.value = ";".join(options)
+                self.remaining_mode = self.options[remaining_mode]
+            else:
+                for option in options:
+                    if option in self.options:
+                        self.remaining_mode = self.options[option]
+                        options.remove(option)
+                        self.value = ";".join(options)
+                else:
+                    if len(options) == 1:
+                        self.remaining_mode = self.option_singularity
+                    self.value = value
+        else:
+            self.value = value
+
+    def verify(self, world, plando_options, player_name: str):
         if isinstance(self.value, int):
             return
         from Generate import PlandoSettings
-        options = self.value.split(";")
-        if "random" in options:
-            import random
-            options[options.index("random")] = Bosses.name_lookup[random.choice(list(self.name_lookup))]
-            self.value = ";".join(options)
         if not(PlandoSettings.bosses & plando_options):
-            for option in options:
-                if option in self.options:
-                    self.value = Bosses.options[option]
-                    return
-        raise ValueError(f"Boss plando is disabled and {self.value} is not a valid option.")
+            Warning(f"The plando bosses module is turned off so {self.name_lookup[self.remaining_mode].title()} "
+                    f"boss shuffle will be used for player {player_name}.")
 
 
 class Enemies(Choice):

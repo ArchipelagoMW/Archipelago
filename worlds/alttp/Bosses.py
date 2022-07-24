@@ -165,18 +165,15 @@ boss_location_table = [
     ]
 
 
-def get_plando_bosses(boss_shuffle: str) -> Tuple[List[str], int]:
+def get_plando_bosses(boss_shuffle: str) -> List[str]:
     options = boss_shuffle.lower().split(";")
-    remainder_shuffle = Bosses.option_none  # vanilla
     bosses = []
     available_boss_names: set[str] = {boss.lower() for boss in boss_table if
                                       boss not in {'Agahnim', 'Agahnim2', 'Ganon'}}
     available_boss_locations: set[str] = {f"{loc.lower()}{f' {level}' if level else ''}" for loc, level in
                                           boss_location_table}
     for boss in options:
-        if boss in Bosses.options:
-            remainder_shuffle = Bosses.options[boss]
-        elif "-" in boss:
+        if "-" in boss:
             loc, boss_name = boss.split("-")
             if boss_name not in available_boss_names:
                 raise ValueError(f"Unknown Boss name {boss_name}")
@@ -196,9 +193,7 @@ def get_plando_bosses(boss_shuffle: str) -> Tuple[List[str], int]:
             raise ValueError(f"Unknown Boss name or Boss shuffle option {boss}.")
         else:
             bosses.append(boss)
-    if len(bosses) == 1 and not "-" in bosses[0]:
-        remainder_shuffle = Bosses.option_singularity
-    return bosses, remainder_shuffle
+    return bosses
 
 
 def place_plando_bosses(bosses: List[str], world, player: int):
@@ -229,7 +224,7 @@ def place_plando_bosses(bosses: List[str], world, player: int):
             boss = boss.title()
             boss_locations, already_placed_bosses = place_where_possible(world, player, boss, boss_locations)
 
-    return already_placed_bosses
+    return already_placed_bosses, boss_locations
 
 
 def can_place_boss(boss: str, dungeon_name: str, level: Optional[str] = None) -> bool:
@@ -266,6 +261,7 @@ def place_boss(world, player: int, boss: str, location: str, level: Optional[str
     if location == 'Ganons Tower' and world.mode[player] == 'inverted':
         location = 'Inverted Ganons Tower'
     logging.debug('Placing boss %s at %s', boss, location + (' (' + level + ')' if level else ''))
+    boss_location = world.get_dungeon(location, player).bosses[level]
     world.get_dungeon(location, player).bosses[level] = BossFactory(boss, player)
 
 
@@ -275,17 +271,20 @@ def format_boss_location(location, level):
 
 def place_bosses(world, player: int):
     boss_shuffle = world.boss_shuffle[player].value
-    bosses = []
     already_placed_bosses = []
     # handle plando
     if isinstance(boss_shuffle, str):
-        bosses, boss_shuffle = get_plando_bosses(boss_shuffle)
-        already_placed_bosses = place_plando_bosses(bosses, world, player)
+        bosses = get_plando_bosses(boss_shuffle)
+        already_placed_bosses, remaining_locations = place_plando_bosses(bosses, world, player)
+        boss_shuffle = world.boss_shuffle[player].remaining_mode
     if boss_shuffle == Bosses.option_none:
         return
 
     # Most to least restrictive order
-    boss_locations = boss_location_table.copy()
+    if remaining_locations:
+        boss_locations = remaining_locations
+    else:
+        boss_locations = boss_location_table.copy()
     world.random.shuffle(boss_locations)
     boss_locations.sort(key= lambda location: -int(restrictive_boss_locations[location]))
 
