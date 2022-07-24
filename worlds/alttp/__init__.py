@@ -7,7 +7,7 @@ import typing
 from BaseClasses import Item, CollectionState, Tutorial
 from .SubClasses import ALttPItem
 from ..AutoWorld import World, WebWorld, LogicMixin
-from .Options import alttp_options, smallkey_shuffle
+from .Options import alttp_options, smallkey_shuffle, TriforceMode
 from .Items import as_dict_item_table, item_name_groups, item_table, GetBeemizerItem
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
 from .Rules import set_rules
@@ -25,6 +25,7 @@ from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_con
 lttp_logger = logging.getLogger("A Link to the Past")
 
 extras_list = sum(difficulties['normal'].extras[0:5], [])
+
 
 class ALTTPWeb(WebWorld):
     setup_en = Tutorial(
@@ -128,6 +129,8 @@ class ALTTPWorld(World):
 
     create_items = generate_itempool
 
+    triforce_pieces_available: int
+
     def __init__(self, *args, **kwargs):
         self.dungeon_local_item_names = set()
         self.dungeon_specific_item_names = set()
@@ -144,6 +147,18 @@ class ALTTPWorld(World):
     def generate_early(self):
         player = self.player
         world = self.world
+
+        # determine number of triforce pieces we should have available
+        extra_pieces_mode = world.triforce_pieces_mode[player].value
+        pieces_required = world.triforce_pieces_required[player].value
+        if extra_pieces_mode == TriforceMode.option_percentage:
+            percentage = max(100, float(world.triforce_pieces_percentage[player].value)) / 100
+            self.triforce_pieces_available = int(round(pieces_required * percentage, 0))
+        elif extra_pieces_mode == TriforceMode.option_extra:
+            extra = max(0, world.triforce_pieces_extra[player].value)
+            self.triforce_pieces_available = pieces_required + extra
+        else:
+            self.triforce_pieces_available = min(world.triforce_pieces_available[player], pieces_required)
 
         # system for sharing ER layouts
         self.er_seed = str(world.random.randint(0, 2 ** 64))

@@ -127,11 +127,46 @@ class CrystalsGanon(Crystals):
 
 
 class TriforcePieces(Range):
-    """Number of Triforce pieces required to complete a triforce piece related goal."""
-    display_name = "Required Triforce Pieces"
     default = 30
     range_start = 1
     range_end = 90
+
+
+class TriforceMode(Choice):
+    """Determines how extra available triforce pieces are calculated. Up to 90 can be available.
+    Extra makes available pieces = extra + required.
+    Percentage makes available pieces = percentage * required.
+    Available makes available pieces = available value."""
+    display_name = "Triforce Pieces Mode"
+    option_extra = 0
+    option_percentage = 1
+    option_available = 2
+    default = option_available
+
+
+class TriforceExtra(TriforcePieces):
+    """How many extra Triforce pieces are available."""
+    display_name = "Extra Triforce Pieces"
+    default = 10
+
+
+class TriforcePercentage(Range):
+    """Percentage of required Triforce pieces that will be available."""
+    range_start = 100
+    range_end = 200
+    default = 150
+
+
+class TriforceAvailable(TriforcePieces):
+    """Total number of available Triforce pieces."""
+    display_name = "Triforce Pieces Available"
+    default = 30
+
+
+class TriforceRequired(TriforcePieces):
+    """Number of Triforce pieces required to complete the goal."""
+    display_name = "Triforce Pieces Required"
+    default = 20
 
 
 class ShopItemSlots(Range):
@@ -425,6 +460,11 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
     "open_pyramid": OpenPyramid,
+    "triforce_pieces_mode": TriforceMode,
+    "triforce_pieces_extra": TriforceExtra,
+    "triforce_pieces_percentage": TriforcePercentage,
+    "triforce_pieces_available": TriforceAvailable,
+    "triforce_pieces_required": TriforceRequired,
     "bigkey_shuffle": bigkey_shuffle,
     "smallkey_shuffle": smallkey_shuffle,
     "compass_shuffle": compass_shuffle,

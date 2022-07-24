@@ -626,8 +626,8 @@ def get_pool_core(world, player: int):
         clock_mode = 'countdown-ohko'
     additional_pieces_to_place = 0
     if 'triforcehunt' in goal:
-        pieces_in_core = min(extraitems, world.triforce_pieces_available[player])
-        additional_pieces_to_place = world.triforce_pieces_available[player] - pieces_in_core
+        pieces_in_core = min(extraitems, world.worlds[player].triforce_pieces_available)
+        additional_pieces_to_place = world.worlds[player].triforce_pieces_available - pieces_in_core
         pool.extend(["Triforce Piece"] * pieces_in_core)
         extraitems -= pieces_in_core
         treasure_hunt_count = world.triforce_pieces_required[player]

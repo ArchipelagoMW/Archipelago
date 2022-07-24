@@ -55,8 +55,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.blue_clock_time = args.blue_clock_time.copy()
     world.green_clock_time = args.green_clock_time.copy()
     world.dungeon_counters = args.dungeon_counters.copy()
-    world.triforce_pieces_available = args.triforce_pieces_available.copy()
-    world.triforce_pieces_required = args.triforce_pieces_required.copy()
     world.shop_shuffle = args.shop_shuffle.copy()
     world.sprite_pool = args.sprite_pool.copy()
     world.plando_items = args.plando_items.copy()

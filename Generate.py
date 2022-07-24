@@ -567,26 +567,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     ret.goal = goals[goal]
 
-    extra_pieces = get_choice_legacy('triforce_pieces_mode', weights, 'available')
-
-    ret.triforce_pieces_required = LttPOptions.TriforcePieces.from_any(get_choice_legacy('triforce_pieces_required', weights, 20))
-
-    # sum a percentage to required
-    if extra_pieces == 'percentage':
-        percentage = max(100, float(get_choice_legacy('triforce_pieces_percentage', weights, 150))) / 100
-        ret.triforce_pieces_available = int(round(ret.triforce_pieces_required * percentage, 0))
-    # vanilla mode (specify how many pieces are)
-    elif extra_pieces == 'available':
-        ret.triforce_pieces_available = LttPOptions.TriforcePieces.from_any(
-            get_choice_legacy('triforce_pieces_available', weights, 30))
-    # required pieces + fixed extra
-    elif extra_pieces == 'extra':
-        extra_pieces = max(0, int(get_choice_legacy('triforce_pieces_extra', weights, 10)))
-        ret.triforce_pieces_available = ret.triforce_pieces_required + extra_pieces
-
-    # change minimum to required pieces to avoid problems
-    ret.triforce_pieces_available = min(max(ret.triforce_pieces_required, int(ret.triforce_pieces_available)), 90)
-
     ret.shop_shuffle = get_choice_legacy('shop_shuffle', weights, '')
     if not ret.shop_shuffle:
         ret.shop_shuffle = ''
