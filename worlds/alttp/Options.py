@@ -128,29 +128,37 @@ class Bosses(TextChoice):
 
     def __init__(self, value: typing.Union[str, int]):
         assert isinstance(value, str) or isinstance(value, int), \
-            f"{value} is not a valid option for {self.__clas__.__name__}"
-        if isinstance(value, str):
-            # since the option is being passed as a string it doesn't exist in the defined options
-            options = value.split(";")
-            # choose a random option then replace "random"
-            if "random" in options:
-                import random
-                remaining_mode = self.name_lookup[random.choice(list(self.name_lookup))]
-                options.remove("random")
-                self.value = ";".join(options)
-                self.remaining_mode = self.options[remaining_mode]
-            else:
-                for option in options:
-                    if option in self.options:
-                        self.remaining_mode = self.options[option]
-                        options.remove(option)
-                        self.value = ";".join(options)
-                else:
-                    if len(options) == 1:
-                        self.remaining_mode = self.option_singularity
-                    self.value = value
+            f"{value} is not a valid option for {self.__class__.__name__}"
+        self.value = value
+
+    @classmethod
+    def from_text(cls, text: str):
+        import random
+        text.lower()
+        if text == "random":
+            return cls(random.choice(list(cls.name_lookup)))
+        for option_name, value in cls.options.items():
+            if option_name == text:
+                return cls(value)
+        options = text.split(";")
+        if "random" in options:
+            shuffle = random.choice(list(cls.name_lookup))
+            options.remove("random")
+            boss_class = cls(";".join(options))
+            boss_class.remaining_mode = shuffle
         else:
-            self.value = value
+            for option in options:
+                if option in cls.options:
+                    options.remove(option)
+                    boss_class = cls(";".join(options))
+                    boss_class.remaining_mode = cls.options[option]
+            else:
+                if len(options) == 1:
+                    boss_class = cls(options[0])
+                    boss_class.remaining_mode = cls.option_singularity
+                else:
+                    boss_class = cls(";".join(options))
+        return boss_class
 
     def verify(self, world, plando_options, player_name: str):
         if isinstance(self.value, int):
