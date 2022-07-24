@@ -101,6 +101,7 @@ class CotNDContext(CommonContext):
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
         self.game = 'Crypt of the NecroDancer'
+        self.game_complete = False
         self.last_log_msg = ""
         self.game_watcher = asyncio.create_task(self.game_writer(), name="Game Watcher")
         self.game_reader = asyncio.create_task(self.game_reader(), name="Game Reader")
@@ -138,6 +139,7 @@ class CotNDContext(CommonContext):
             self.free_samples = slot_data['free_samples']
             self.prevent_bad_samples = slot_data['prevent_bad_samples']
             self.char_counts = slot_data['char_counts']
+            self.keep_inventory = slot_data['keep_inventory']
             self.nonce = str(int(time.time()))
 
     def item_data(self, networkitem):
@@ -222,6 +224,7 @@ class CotNDContext(CommonContext):
             'consumables': pending_items,
             'replace_chests': list(replace_chests),
             'flawless': self.randomize_flawless,
+            'keep_inventory': self.keep_inventory,
             'deathlink_enabled': self.deathlink,
             'deathlink_pending': previous_deathlink_state,
         }
@@ -282,11 +285,12 @@ class CotNDContext(CommonContext):
 
         # The game is completed once all locations of type Clear are reached.
         clear_locs = list(filter(lambda loc: 'Clear' in self.location_names[loc], self.missing_locations))
-        if not clear_locs:
+        if not self.game_complete and not clear_locs:
             await self.send_msgs([{
                 "cmd": "StatusUpdate",
                 "status": 30
             }])
+            self.game_complete = True
 
 
 if __name__ == '__main__':

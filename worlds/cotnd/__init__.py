@@ -118,6 +118,7 @@ class CotNDWorld(World):
             'free_samples': self.world.free_samples[self.player].value,
             'prevent_bad_samples': self.world.prevent_bad_samples[self.player].value,
             'char_counts': self.char_counts,
+            'keep_inventory': self.world.keep_inventory_on_death[self.player].value,
         }
 
     def create_item(self, name: str) -> Item:

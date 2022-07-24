@@ -29,6 +29,11 @@ class StartingChar(Choice):
     option_tempo = 13
 
 
+class KeepInventory(Toggle):
+    """Keeps your previous items when you die in a run. Makes the game significantly easier."""
+    display_name = "Keep Inventory on Death"
+
+
 class ReduceStartingItems(Toggle):
     """Normally, all diamond-unlocked items are restricted. If this is turned on, almost all item types are initially restricted."""
     display_name = "Reduce Starting Available Items"
@@ -60,6 +65,7 @@ class TrapPercentage(Range):
 cotnd_options = {
     'available_characters':     Characters,
     'starting_character':       StartingChar,
+    'keep_inventory_on_death':  KeepInventory,
     'reduce_starting_items':    ReduceStartingItems,
     'randomize_flawless':       RandomizeFlawless,
     'free_samples':             FreeSamples,
