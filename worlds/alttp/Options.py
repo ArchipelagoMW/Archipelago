@@ -209,6 +209,23 @@ class WorldState(Choice):
     option_inverted = 2
 
 
+class Medallions(Choice):
+    option_ether = 0
+    option_bombos = 1
+    option_quake = 2
+    default = "random"
+
+
+class MireMedallion(Medallions):
+    """Required medallion to open Misery Mire entrance."""
+    display_name = "Misery Mire Medallion"
+
+
+class TurtleMedallion(Medallions):
+    """Required medallion to open Turtle Rock entrance."""
+    display_name = "Turtle Rock Medallion"
+
+
 class Bosses(Choice):
     option_vanilla = 0
     option_simple = 1
@@ -477,6 +494,8 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "scams": Scams,
     "restrict_dungeon_item_on_boss": RestrictBossItem,
     "pot_shuffle": PotShuffle,
+    "misery_mire_medallion": MireMedallion,
+    "turtle_rock_medallion": TurtleMedallion,
     "enemy_shuffle": EnemyShuffle,
     "enemy_damage": EnemyDamage,
     "enemy_health": EnemyHealth,

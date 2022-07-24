@@ -60,7 +60,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.plando_items = args.plando_items.copy()
     world.plando_texts = args.plando_texts.copy()
     world.plando_connections = args.plando_connections.copy()
-    world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
     world.player_name = args.name.copy()
     world.enemizer = args.enemizercli

@@ -596,15 +596,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     ret.dungeon_counters = get_choice_legacy('dungeon_counters', weights, 'default')
 
-    ret.required_medallions = [get_choice_legacy("misery_mire_medallion", weights, "random"),
-                               get_choice_legacy("turtle_rock_medallion", weights, "random")]
-
-    for index, medallion in enumerate(ret.required_medallions):
-        ret.required_medallions[index] = {"ether": "Ether", "quake": "Quake", "bombos": "Bombos", "random": "random"} \
-            .get(medallion.lower(), None)
-        if not ret.required_medallions[index]:
-            raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
-
     ret.plando_texts = {}
     if PlandoSettings.texts in plando_options:
         tt = TextTable()
