@@ -392,6 +392,7 @@ class SMZ3World(World):
                     for i in range(0, poolLength):
                         if not self.world.itempool[i].advancement:
                             itemFromPool = self.world.itempool.pop(i)
+                            break
                 self.world.push_item(loc, itemFromPool, False)
                 loc.event = itemFromPool.advancement
 
