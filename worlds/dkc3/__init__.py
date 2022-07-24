@@ -82,7 +82,7 @@ class DKC3World(World):
         itempool: typing.List[DKC3Item] = []
 
         # Levels
-        total_required_locations = 161
+        total_required_locations = 159
 
         number_of_banana_birds = 0
         # Rocket Rush Cog
@@ -105,7 +105,7 @@ class DKC3World(World):
 
         ## Brothers Bear
         if False:#self.world.include_trade_sequence[self.player]:
-            total_required_locations += 8
+            total_required_locations += 10
 
         number_of_bonus_coins = (self.world.krematoa_bonus_coin_cost[self.player] * 5)
         number_of_bonus_coins += math.ceil((85 - number_of_bonus_coins) * self.world.percentage_of_extra_bonus_coins[self.player] / 100)

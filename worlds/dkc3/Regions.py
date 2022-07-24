@@ -501,9 +501,11 @@ def create_regions(world, player: int, active_locations):
     bounty_bay_region = create_region(world, player, active_locations, LocationName.bounty_bay_region,
                                       bounty_bay_region_locations, None)
 
-    sky_high_secret_region_locations = {
-        LocationName.sky_high_secret: [0x64B, 1],
-    }
+    sky_high_secret_region_locations = {}
+    if False:#world.include_trade_sequence[player]:
+        sky_high_secret_region_locations.update({
+            LocationName.sky_high_secret: [0x64B, 1],
+        })
     sky_high_secret_region = create_region(world, player, active_locations, LocationName.sky_high_secret_region,
                                            sky_high_secret_region_locations, None)
 
@@ -513,9 +515,11 @@ def create_regions(world, player: int, active_locations):
     glacial_grotto_region = create_region(world, player, active_locations, LocationName.glacial_grotto_region,
                                           glacial_grotto_region_locations, None)
 
-    cifftop_cache_region_locations = {
-        LocationName.cifftop_cache: [0x64D, 1],
-    }
+    cifftop_cache_region_locations = {}
+    if False:#world.include_trade_sequence[player]:
+        cifftop_cache_region_locations.update({
+            LocationName.cifftop_cache: [0x64D, 1],
+        })
     cifftop_cache_region = create_region(world, player, active_locations, LocationName.cifftop_cache_region,
                                          cifftop_cache_region_locations, None)
 
