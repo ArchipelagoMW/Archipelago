@@ -1410,7 +1410,6 @@ class Spoiler():
                 if player in self.world.get_game_players("A Link to the Past"):
                     outfile.write('%s%s\n' % ('Hash: ', self.hashes[player]))
 
-                    outfile.write('Logic:                           %s\n' % self.world.logic[player])
                     outfile.write('Mode:                            %s\n' % self.world.mode[player])
                     outfile.write('Goal:                            %s\n' % self.world.goal[player])
                     if "triforce" in self.world.goal[player]:  # triforce hunt
@@ -1435,8 +1434,6 @@ class Spoiler():
                     outfile.write('Custom Potion Shop:              %s\n' %
                                   bool_to_text("w" in self.world.shop_shuffle[player]))
                     outfile.write('Boss shuffle:                    %s\n' % self.world.boss_shuffle[player])
-                    outfile.write('Enemy health:                    %s\n' % self.world.enemy_health[player])
-                    outfile.write('Enemy damage:                    %s\n' % self.world.enemy_damage[player])
                     outfile.write('Prize shuffle                    %s\n' %
                                   self.world.shuffle_prizes[player])
             if self.entrances:
