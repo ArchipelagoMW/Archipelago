@@ -149,6 +149,19 @@ class ShopPriceModifier(Range):
     range_end = 400
 
 
+class PrizeShuffle(Choice):
+    """Affects how prize packs that enemies drop get shuffled around."""
+    display_name = "Prize Pack Shuffle"
+    option_none = 0
+    option_general = 1
+    option_bonk = 2
+    option_both = 3
+    alias_g = 1
+    alias_b = 2
+    alias_bg = 3
+    default = option_general
+
+
 class WorldState(Choice):
     """Starting world state for the game.
     Standard starts with the rain sequence and uncle will have a guaranteed weapon including bombs.
@@ -431,6 +444,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "bush_shuffle": BushShuffle,
     "shop_item_slots": ShopItemSlots,
     "shop_price_modifier": ShopPriceModifier,
+    "shuffle_prizes": PrizeShuffle,
     "tile_shuffle": TileShuffle,
     "ow_palettes": OWPalette,
     "uw_palettes": UWPalette,

@@ -616,8 +616,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     ret.dungeon_counters = get_choice_legacy('dungeon_counters', weights, 'default')
 
-    ret.shuffle_prizes = get_choice_legacy('shuffle_prizes', weights, "g")
-
     ret.required_medallions = [get_choice_legacy("misery_mire_medallion", weights, "random"),
                                get_choice_legacy("turtle_rock_medallion", weights, "random")]
 

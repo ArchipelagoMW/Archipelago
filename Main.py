@@ -58,7 +58,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.triforce_pieces_available = args.triforce_pieces_available.copy()
     world.triforce_pieces_required = args.triforce_pieces_required.copy()
     world.shop_shuffle = args.shop_shuffle.copy()
-    world.shuffle_prizes = args.shuffle_prizes.copy()
     world.sprite_pool = args.sprite_pool.copy()
     world.plando_items = args.plando_items.copy()
     world.plando_texts = args.plando_texts.copy()

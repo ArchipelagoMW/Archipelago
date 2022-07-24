@@ -1434,8 +1434,6 @@ class Spoiler():
                     outfile.write('Custom Potion Shop:              %s\n' %
                                   bool_to_text("w" in self.world.shop_shuffle[player]))
                     outfile.write('Boss shuffle:                    %s\n' % self.world.boss_shuffle[player])
-                    outfile.write('Prize shuffle                    %s\n' %
-                                  self.world.shuffle_prizes[player])
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
                 outfile.write('\n'.join(['%s%s %s %s' % (f'{self.world.get_player_name(entry["player"])}: '

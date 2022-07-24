@@ -37,7 +37,7 @@ from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts
 from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen
 from worlds.alttp.Items import ItemFactory, item_table, item_name_groups, progression_items
 from worlds.alttp.EntranceShuffle import door_addresses
-from worlds.alttp.Options import smallkey_shuffle
+from worlds.alttp.Options import smallkey_shuffle, PrizeShuffle
 import Patch
 
 try:
@@ -1043,7 +1043,7 @@ def patch_rom(world, rom, player, enemized):
         prize_replacements[0xE1] = 0xDA  # 5 Arrows -> Blue Rupee
         prize_replacements[0xE2] = 0xDB  # 10 Arrows -> Red Rupee
 
-    if "g" in world.shuffle_prizes[player]:
+    if world.shuffle_prizes[player].value in (PrizeShuffle.option_general, PrizeShuffle.option_both):
         # shuffle prize packs
         prizes = [0xD8, 0xD8, 0xD8, 0xD8, 0xD9, 0xD8, 0xD8, 0xD9, 0xDA, 0xD9, 0xDA, 0xDB, 0xDA, 0xD9, 0xDA, 0xDA, 0xE0,
                   0xDF, 0xDF, 0xDA, 0xE0, 0xDF, 0xD8, 0xDF,
@@ -1105,7 +1105,7 @@ def patch_rom(world, rom, player, enemized):
             byte = int(rom.read_byte(address))
             rom.write_byte(address, prize_replacements.get(byte, byte))
 
-    if "b" in world.shuffle_prizes[player]:
+    if world.shuffle_prizes[player].value in (PrizeShuffle.option_bonk, PrizeShuffle.option_both):
         # set bonk prizes
         bonk_prizes = [0x79, 0xE3, 0x79, 0xAC, 0xAC, 0xE0, 0xDC, 0xAC, 0xE3, 0xE3, 0xDA, 0xE3, 0xDA, 0xD8, 0xAC,
                        0xAC, 0xE3, 0xD8, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xDC, 0xDB, 0xE3, 0xDA, 0x79, 0x79,
