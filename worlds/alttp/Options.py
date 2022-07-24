@@ -251,6 +251,30 @@ class EnemyShuffle(Toggle):
     display_name = "Enemy Shuffle"
 
 
+class EnemyDamage(Choice):
+    """Randomizes the amount of damage enemies deal.
+    Shuffled causes enemies to deal from 0-4 hearts and armor upgrades always help.
+    Chaos causes enemies to deal from 0-8 hearts and armor reshuffles the damage."""
+    display_name = "Enemy Damage"
+    option_default = 0
+    option_shuffled = 1
+    option_chaos = 2
+    alias_none = 0
+
+
+class EnemyHealth(Choice):
+    """Modifies amount of health that enemies have.
+    Easy reduces their health, hard increases it, and expert greatly increases it."""
+    display_name = "Enemy Health"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    option_expert = 3
+
+    alias_default = option_normal
+    default = option_normal
+
+
 class KillableThieves(Toggle):
     """Makes Thieves killable."""
     display_name = "Killable Thieves"
@@ -401,6 +425,8 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "restrict_dungeon_item_on_boss": RestrictBossItem,
     "pot_shuffle": PotShuffle,
     "enemy_shuffle": EnemyShuffle,
+    "enemy_damage": EnemyDamage,
+    "enemy_health": EnemyHealth,
     "killable_thieves": KillableThieves,
     "bush_shuffle": BushShuffle,
     "shop_item_slots": ShopItemSlots,

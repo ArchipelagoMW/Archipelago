@@ -47,8 +47,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.timer = args.timer.copy()
     world.goal = args.goal.copy()
     world.boss_shuffle = args.shufflebosses.copy()
-    world.enemy_health = args.enemy_health.copy()
-    world.enemy_damage = args.enemy_damage.copy()
     world.beemizer_total_chance = args.beemizer_total_chance.copy()
     world.beemizer_trap_chance = args.beemizer_trap_chance.copy()
     world.timer = args.timer.copy()
