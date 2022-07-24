@@ -12,6 +12,9 @@ fire_link_shrine_table = {
     # "FS: Coiled Sword": 0x40000859, You can still light the Firelink Shrine fire whether you have it or not, useless
     "FS: Broken Straight Sword": 0x001EF9B0,
     "FS: East-West Shield": 0x0142B930,
+    "FS: Uchigatana": 0x004C4B40,
+    "FS: Master's Attire": 0x148F5008,
+    "FS: Master's Gloves": 0x148F53F0,
 }
 
 firelink_shrine_bell_tower_table = {
@@ -253,6 +256,7 @@ smouldering_lake_table = {
     "SL: Fume Ultra Greatsword": 0x0060E4B0,
     "SL: Black Iron Greatshield": 0x0150EA00,
     "SL: Soul of the Old Demon King": 0x400002D0,
+    "SL: Knight Slayer's Ring": 0x20005000,
 }
 
 irithyll_of_the_boreal_valley_table = {
@@ -287,6 +291,7 @@ irithyll_of_the_boreal_valley_table = {
     "IBV: Golden Ritual Spear": 0x00C83200,
     "IBV: Soul of Pontiff Sulyvahn": 0x400002D4,
     "IBV: Aldrich Faithful Covenant": 0x2000272E,
+    "IBV: Drang Twinspears": 0x00F5AAA0,
 }
 
 irithyll_dungeon_table = {
@@ -387,6 +392,7 @@ grand_archives_table = {
     "GA: Divine Pillars of Light": 0x4038C340,
     "GA: Cinders of a Lord - Lothric Prince": 0x4000084E,
     "GA: Soul of the Twin Princes": 0x400002DB,
+    "GA: Sage's Crystal Staff": 0x00C8CE40,
 }
 
 untended_graves_table = {
@@ -418,6 +424,8 @@ archdragon_peak_table = {
     "AP: Dragonslayer Leggings": 0x158B1CF8,
     "AP: Ricard's Rapier": 0x002E3BF0,
     "AP: Soul of the Nameless King": 0x400002D2,
+    "AP: Dragon Tooth": 0x007E09A0,
+    "AP: Havel's Greatshield": 0x013376F0,
 }
 
 location_dictionary_table = {**cemetery_of_ash_table, **fire_link_shrine_table, **firelink_shrine_bell_tower_table, **high_wall_of_lothric, **undead_settlement_table, **road_of_sacrifice_table,

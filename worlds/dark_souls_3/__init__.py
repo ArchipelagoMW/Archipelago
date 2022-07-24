@@ -39,7 +39,7 @@ class DarkSouls3World(World):
     remote_items: bool = False
     remote_start_inventory: bool = False
     web = DarkSouls3Web()
-    data_version = 1
+    data_version = 2
     base_id = 100000
     item_name_to_id = {name: id for id, name in enumerate(item_dictionary_table, base_id)}
     location_name_to_id = {name: id for id, name in enumerate(location_dictionary_table, base_id)}
@@ -216,6 +216,12 @@ class DarkSouls3World(World):
             self.world.get_location("IBV: Soul of Pontiff Sulyvahn", self.player).place_locked_item(item)
         else:
             self.world.itempool += [item]
+
+        # Fill item pool with additional items
+        item_pool_len = self.item_name_to_id.__len__()
+        total_required_locations = self.location_name_to_id.__len__()
+        for i in range(item_pool_len, total_required_locations):
+            self.world.itempool += [self.create_item("Soul of an Intrepid Hero")]
 
     def generate_output(self, output_directory: str):
         # Depending on the specified option, modify items hexadecimal value to add an upgrade level

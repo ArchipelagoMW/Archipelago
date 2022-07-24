@@ -51,7 +51,7 @@ weapons_upgrade_5_table = {
     "Twin Princes' Greatsword": 0x005FAC30,
     "Storm Curved Sword": 0x003E4180,
     "Dragonslayer Swordspear": 0x008BC540,
-
+    "Sage's Crystal Staff": 0x00C8CE40,
 }
 
 weapons_upgrade_10_table = {
@@ -105,6 +105,7 @@ weapons_upgrade_10_table = {
     "Sniper Crossbow": 0x00D83790,
 
     "Claw": 0x00A7D8C0,
+    "Drang Twinspears": 0x00F5AAA0,
 }
 
 shields_table = {
@@ -125,7 +126,6 @@ shields_table = {
     "Dragon Crest Shield": 0x01432E60,
     "Shield of Want": 0x0144B500,
     "Black Iron Greatshield": 0x0150EA00,
-    "Great Magic Shield": 0x40144F38,
     "Greatshield of Glory": 0x01515F30,
     "Sacred Bloom Shield": 0x013572C0,
     "Golden Wing Crest Shield": 0x0143CAA0,
@@ -291,6 +291,7 @@ rings_table = {
     "Knight's Ring": 0x20004FEC,
     "Red Tearstone Ring": 0x20004ECA,
     "Dragonscale Ring": 0x2000515E,
+    "Knight Slayer's Ring": 0x20005000,
 }
 
 spells_table = {
@@ -311,7 +312,7 @@ spells_table = {
     "Soul Stream": 0x4018B820,
     "Divine Pillars of Light": 0x4038C340,
     "Great Magic Barrier": 0x40365628,
-
+    "Great Magic Shield": 0x40144F38,
 }
 
 misc_items_table = {
