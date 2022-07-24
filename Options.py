@@ -433,6 +433,21 @@ class TextChoice(FreeText, Choice):
         else:
             return cls.name_lookup[value]
 
+    def __eq__(self, other: typing.Any):
+        if isinstance(other, self.__class__):
+            return other.value == self.value
+        elif isinstance(other, str):
+            if other in self.options:
+                return other == self.current_key
+            return other == self.value
+        elif isinstance(other, int):
+            assert other in self.name_lookup, f"compared against an int that could never be equal. {self} == {other}"
+            return other == self.value
+        elif isinstance(other, bool):
+            return other == bool(self.value)
+        else:
+            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
+
 
 class Range(NumericOption):
     range_start = 0
