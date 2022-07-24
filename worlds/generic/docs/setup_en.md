@@ -19,8 +19,9 @@ only your own computer.
 
 2. The second component is the `Server`. It is also not needed to play games with Archipelago -- our website can host
 multiworlds using its own server. If you install the server, it allows you to host multiworlds on your own computer.
-   - Hosting on your own computer requires forwarding the port you are hosting on. We do not provide a guide for
-     how to do this. The default port for Archipelago is `38281`.
+   - Unless you will be the only player, hosting on your own computer is for advanced users only. It requires forwarding
+     the port you are hosting on. We do not provide a guide for how to do this. The default port for Archipelago is
+     `38281`.
 
 
 3. The last components are the `Clients`. They __are__ needed to play games with Archipelago. If you see a game that you
@@ -40,8 +41,8 @@ randomizer is like and how to set them up.
 
 Archipelago needs to know which worlds it's working with, and what those worlds' rules are, before it can start 
 shuffling items around. Once the players have decided which games they want to play, they need to spend some time
-creating config files for their own games. Then, once they have those config files, __one person__ collects all of them in
-a .zip file and plugs that into a generator (either on the website or their own computer).
+creating config files for their own games. Then, once they have those config files, __one person__ collects all of them
+and plugs them into a generator (either on the website or their own computer).
 
 The generator figures out how many items there are and shuffles them between all of the worlds. It spits out a new .zip
 file that contains everything Archipelago needs to work (where each item is, and any patch file or Minecraft server that
@@ -99,7 +100,7 @@ the multiworld now that it's been generated.
 
 ### Overview
 
-Games are not built to communicate with other games by default. We sidestep that issue by having those games
+Games do not know how to communicate with other games by default. We sidestep that issue by having those games
 communicate with a "server", which is designed to keep track of what's going on in the multiworld and tell
 every game what's up at all times. So whenever someone wants to play a game through Archipelago, they always
 need a server running, even if they're playing alone.
@@ -130,8 +131,10 @@ set.
 If you generated your multiworld locally, you might also want to host a server locally. Just run `ArchipelagoServer.exe`
 and select the .zip file you generated in your `output` folder when it prompts you to. The server will start running.
 Just like when working with the website, follow your game's guide on joining a multiworld to start playing.
-- Some players might still need additional files to play. These files can be found inside the .zip you generated. Simply
-  extract the files and distribute them to the players that need them.
+- Some players might still need additional files to play. Sometimes, these files can be found inside the .zip you
+  generated. Simply extract the files and distribute them to the players that need them.
 - Many games need you to type in an IP address and a port number in the format `ip.address:#####`. Those are properties
   of the server. For servers hosted locally, read the first few lines of text in your server carefully. The line
   that says `Hosting game at` contains both the IP address and the port number for your server.
+  - Exception: if you are playing a game on the same computer that hosts your server, you may type `localhost` instead
+    of the server's IP address.
