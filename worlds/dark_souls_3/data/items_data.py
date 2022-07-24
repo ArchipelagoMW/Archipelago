@@ -374,6 +374,10 @@ key_items_list = {
     "Mortician's Ashes",
     "Cell Key",
     "Tower Key",
+    "Jailbreaker's Key",
+    "Prisoner Chief's Ashes",
+    "Old Cell Key",
+    "Jailer's Key Ring",
 }
 
 item_dictionary_table = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table, **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table}
