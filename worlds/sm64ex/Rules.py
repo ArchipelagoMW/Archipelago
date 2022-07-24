@@ -1,40 +1,50 @@
 from ..generic.Rules import add_rule
-from .Regions import connect_regions, sm64courses
+from .Regions import connect_regions, sm64courses, sm64paintings
 
 
 def set_rules(world, player: int, area_connections):
-    courseshuffle = list(range(len(sm64courses)))
+    entrance_ids = list(range(len(sm64paintings)))
+    destination_courses = list(range(13)) + [12,13,14] # Two instances of Destination Course THI
     if world.AreaRandomizer[player]:
-        world.random.shuffle(courseshuffle)
-    area_connections.update({index: value for index, value in enumerate(courseshuffle)})
+        world.random.shuffle(entrance_ids)
+    temp_assign = dict(zip(entrance_ids,destination_courses)) # Used for Rules only
 
-    connect_regions(world, player, "Menu", sm64courses[area_connections[0]])
-    connect_regions(world, player, "Menu", sm64courses[area_connections[1]], lambda state: state.has("Power Star", player, 1))
-    connect_regions(world, player, "Menu", sm64courses[area_connections[2]], lambda state: state.has("Power Star", player, 3))
-    connect_regions(world, player, "Menu", sm64courses[area_connections[3]], lambda state: state.has("Power Star", player, 3))
-    connect_regions(world, player, "Menu", "Bowser in the Dark World", lambda state: state.has("Power Star", player, 8))
-    connect_regions(world, player, "Menu", sm64courses[area_connections[4]], lambda state: state.has("Power Star", player, 12))
+    # Destination Format: LVL | AREA with LVL = Course ID, 0-indexed, AREA = Area as used in sm64 code
+    area_connections.update({entrance: (destination_course*10 + 1) for entrance, destination_course in temp_assign.items()})
+    for i in range(len(area_connections)):
+        if (int(area_connections[i]/10) == 12):
+            # Change first occurence of course 12 (THI) to Area 2 (THI Tiny)
+            area_connections[i] = 12*10 + 2
+            break
+
+    connect_regions(world, player, "Menu", sm64courses[temp_assign[0]])
+    connect_regions(world, player, "Menu", sm64courses[temp_assign[1]], lambda state: state.has("Power Star", player, 1))
+    connect_regions(world, player, "Menu", sm64courses[temp_assign[2]], lambda state: state.has("Power Star", player, 3))
+    connect_regions(world, player, "Menu", sm64courses[temp_assign[3]], lambda state: state.has("Power Star", player, 3))
+    connect_regions(world, player, "Menu", "Bowser in the Dark World", lambda state: state.has("Power Star", player, world.FirstBowserStarDoorCost[player].value))
+    connect_regions(world, player, "Menu", sm64courses[temp_assign[4]], lambda state: state.has("Power Star", player, 12))
 
     connect_regions(world, player, "Menu", "Basement", lambda state: state.has("Basement Key", player) or state.has("Progressive Key", player, 1))
 
-    connect_regions(world, player, "Basement", sm64courses[area_connections[5]])
-    connect_regions(world, player, "Basement", sm64courses[area_connections[6]])
-    connect_regions(world, player, "Basement", sm64courses[area_connections[7]])
-    connect_regions(world, player, "Basement", sm64courses[area_connections[8]], lambda state: state.has("Power Star", player, 30))
-    connect_regions(world, player, "Basement", "Bowser in the Fire Sea", lambda state: state.has("Power Star", player, 30) and
+    connect_regions(world, player, "Basement", sm64courses[temp_assign[5]])
+    connect_regions(world, player, "Basement", sm64courses[temp_assign[6]])
+    connect_regions(world, player, "Basement", sm64courses[temp_assign[7]])
+    connect_regions(world, player, "Basement", sm64courses[temp_assign[8]], lambda state: state.has("Power Star", player, world.BasementStarDoorCost[player].value))
+    connect_regions(world, player, "Basement", "Bowser in the Fire Sea", lambda state: state.has("Power Star", player, world.BasementStarDoorCost[player].value) and
                                                                                        state.can_reach("DDD: Board Bowser's Sub", 'Location', player))
 
     connect_regions(world, player, "Menu", "Second Floor", lambda state: state.has("Second Floor Key", player) or state.has("Progressive Key", player, 2))
 
-    connect_regions(world, player, "Second Floor", sm64courses[area_connections[9]])
-    connect_regions(world, player, "Second Floor", sm64courses[area_connections[10]])
-    connect_regions(world, player, "Second Floor", sm64courses[area_connections[11]])
-    connect_regions(world, player, "Second Floor", sm64courses[area_connections[12]])
+    connect_regions(world, player, "Second Floor", sm64courses[temp_assign[9]])
+    connect_regions(world, player, "Second Floor", sm64courses[temp_assign[10]])
+    connect_regions(world, player, "Second Floor", sm64courses[temp_assign[11]])
+    connect_regions(world, player, "Second Floor", sm64courses[temp_assign[12]]) # THI Tiny
+    connect_regions(world, player, "Second Floor", sm64courses[temp_assign[13]]) # THI Huge
 
-    connect_regions(world, player, "Second Floor", "Third Floor", lambda state: state.has("Power Star", player, 50))
+    connect_regions(world, player, "Second Floor", "Third Floor", lambda state: state.has("Power Star", player, world.SecondFloorStarDoorCost[player].value))
 
-    connect_regions(world, player, "Third Floor", sm64courses[area_connections[13]])
-    connect_regions(world, player, "Third Floor", sm64courses[area_connections[14]])
+    connect_regions(world, player, "Third Floor", sm64courses[temp_assign[14]])
+    connect_regions(world, player, "Third Floor", sm64courses[temp_assign[15]])
 
     #Special Rules for some Locations
     add_rule(world.get_location("Tower of the Wing Cap Switch", player), lambda state: state.has("Power Star", player, 10))
