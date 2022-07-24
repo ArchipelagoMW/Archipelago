@@ -116,7 +116,6 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
 class FreeText(Option):
     """Text option that allows users to enter strings.
     Needs to be validated by the world and is set to all lower case."""
-    auto_display_name = False
 
     def __init__(self, value: str):
         assert isinstance(value, str), "value of FreeText must be a string"
