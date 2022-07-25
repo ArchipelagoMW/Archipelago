@@ -26,6 +26,8 @@ Currently, the following games are supported:
 * The Witness
 * Sonic Adventure 2: Battle
 * Starcraft 2: Wings of Liberty
+* Donkey Kong Country 3
+* Dark Souls 3
 * Undertale
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
