@@ -1,14 +1,13 @@
 import imp
 import typing
 from BaseClasses import MultiWorld, Region, Location, RegionType
-from .locations import SMGLocation, location_table 
-from .regions import regspecialstages 
-locHH_table, locGE_table, \
+from .locations import SMGLocation, location_table, locHH_table, locGE_table, \
 locSJ_table, locBR_table, locBB_table, \
 locGG_table, locFF_table, locDD_table, locDDune, \
 locspecialstages_table, locbosses_table, \
 locGL_table, locSS_table, locTT_table, \
-locDN_table, locMM_table, locHL_table, \
+locDN_table, locMM_table, locHL_table \
+
 smgcourses = ["Good Egg", "Honeyhive", "Loopdeeloop", "Flipswitch", "Bowser Jr. Robot Reactor", 
               "Space Junk", "Battlerock", "Rolling Green", "Hurry-Scurry", "Bowser's Star Reactor", 
               "Beach Bowl", "Ghostly", "Bubble Breeze", "Buoy Base", "Bowser Jr.'s Ariship Armada",

@@ -1,9 +1,9 @@
 import string
-from .Items import item_table, SMGItem
-from .Locations import location_table, SM64Location
+from .items import item_table, SMGItem
+from .locations import location_table, SMGLocation
 from .Options import smg_options
-from .Rules import set_rules
-from .Regions import create_regions
+from .rules import set_rules
+from .regions import smgcourses, create_regions
 from BaseClasses import Region, RegionType, Entrance, Item, MultiWorld
 from ..AutoWorld import World
 
