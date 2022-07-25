@@ -42,7 +42,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     world.shuffle = args.shuffle.copy()
     world.difficulty = args.difficulty.copy()
-    world.item_functionality = args.item_functionality.copy()
     world.timer = args.timer.copy()
     world.goal = args.goal.copy()
     world.boss_shuffle = args.shufflebosses.copy()

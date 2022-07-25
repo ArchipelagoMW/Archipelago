@@ -104,7 +104,6 @@ class MultiWorld():
             set_player_attr('shuffle', "vanilla")
             set_player_attr('logic', "noglitches")
             set_player_attr('difficulty', 'normal')
-            set_player_attr('item_functionality', 'normal')
             set_player_attr('timer', False)
             set_player_attr('goal', 'ganon')
             set_player_attr('swamp_patch_required', False)
@@ -759,9 +758,9 @@ class CollectionState():
         elif self.has('Magic Upgrade (1/2)', player):
             basemagic = 16
         if self.can_buy_unlimited('Green Potion', player) or self.can_buy_unlimited('Blue Potion', player):
-            if self.world.item_functionality[player] == 'hard' and not fullrefill:
+            if self.world.item_functionality[player] == 2 and not fullrefill:
                 basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count(player))
-            elif self.world.item_functionality[player] == 'expert' and not fullrefill:
+            elif self.world.item_functionality[player] == 3 and not fullrefill:
                 basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count(player))
             else:
                 basemagic = basemagic + basemagic * self.bottle_count(player)
@@ -1396,7 +1395,6 @@ class Spoiler():
 
                     outfile.write('Goal:                            %s\n' % self.world.goal[player])
                     outfile.write('Difficulty:                      %s\n' % self.world.difficulty[player])
-                    outfile.write('Item Functionality:              %s\n' % self.world.item_functionality[player])
                     outfile.write('Entrance Shuffle:                %s\n' % self.world.shuffle[player])
                     if self.world.shuffle[player] != "vanilla":
                         outfile.write('Entrance Shuffle Seed            %s\n' % self.world.worlds[player].er_seed)

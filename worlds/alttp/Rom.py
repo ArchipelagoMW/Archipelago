@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import Utils
 from Patch import read_rom
-from .Options import Counters, WorldState
+from .Options import Counters, WorldState, ItemFunc
 
 LTTPJPN10HASH = '03a63945398191337e896e5771f77173'
 RANDOMIZERBASEHASH = '9952c2a3ec1b421e408df0d20c8f0c7f'
@@ -952,7 +952,7 @@ def patch_rom(world, rom, player, enemized):
     rom.write_byte(0x18004F, 0x01)  # Byrna Invulnerability: on
 
     # handle item_functionality
-    if world.item_functionality[player] == 'hard':
+    if world.item_functionality[player] == ItemFunc.option_hard:
         rom.write_byte(0x180181, 0x01)  # Make silver arrows work only on ganon
         rom.write_byte(0x180182, 0x00)  # Don't auto equip silvers on pickup
         # Powdered Fairies Prize
@@ -972,7 +972,7 @@ def patch_rom(world, rom, player, enemized):
         rom.write_int16(0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x02)  # Hookshot only
-    elif world.item_functionality[player] == 'expert':
+    elif world.item_functionality[player] == ItemFunc.option_expert:
         rom.write_byte(0x180181, 0x01)  # Make silver arrows work only on ganon
         rom.write_byte(0x180182, 0x00)  # Don't auto equip silvers on pickup
         # Powdered Fairies Prize
@@ -1040,7 +1040,7 @@ def patch_rom(world, rom, player, enemized):
     # set up game internal RNG seed
     rom.write_bytes(0x178000, local_random.getrandbits(8 * 1024).to_bytes(1024, 'big'))
     prize_replacements = {}
-    if world.item_functionality[player] in ['hard', 'expert']:
+    if world.item_functionality[player] in (ItemFunc.option_hard, ItemFunc.option_expert):
         prize_replacements[0xE0] = 0xDF  # Fairy -> heart
         prize_replacements[0xE3] = 0xD8  # Big magic -> small magic
 
@@ -1189,7 +1189,7 @@ def patch_rom(world, rom, player, enemized):
     rom.write_byte(0x180043, 0xFF if world.swordless[player] else 0x00)  # starting sword for link
     rom.write_byte(0x180044, 0x01 if world.swordless[player] else 0x00)  # hammer activates tablets
 
-    if world.item_functionality[player] == 'easy':
+    if world.item_functionality[player] == ItemFunc.option_easy:
         rom.write_byte(0x18003F, 0x01)  # hammer can harm ganon
         rom.write_byte(0x180041, 0x02)  # Allow swordless medallion use EVERYWHERE.
         rom.write_byte(0x180044, 0x01)  # hammer activates tablets

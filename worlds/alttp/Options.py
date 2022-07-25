@@ -271,6 +271,33 @@ class Swordless(Toggle):
     display_name = "Swordless"
 
 
+class Difficulty(Choice):
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    option_expert = 3
+    default = option_normal
+
+
+class ItemPool(Difficulty):
+    """Determines the frequency of useful items in the pool.
+    Easy doubles the number of upgrades and progressive weapons and armor.
+    Hard has maximum of: 14 hearts, blue mail, tempered sword, red shield, and
+    silvers are removed if glitch logic is enabled.
+    Expert has maximum of: 8 hearts, green mail, master sword, fighter shield,
+    and silvers are removed if glitch logic is enabled."""
+    display_name = "Item Pool"
+
+
+class ItemFunc(Difficulty):
+    """Modifies the functionality of certain items within the item pool.
+    Easy allows hammer to damage ganon and collect tablets, and medallions can be used anywhere without a sword.
+    Hard makes potions less effective, faeries can't be caught,cape uses double magic,
+    byrna does not grant invulnerability, boomerangs do not stun, and silvers are disabled outside Ganon.
+    Expert is like hard except potions are even weaker, and hookshot does not stun."""
+    display_name = "Item Functionality"
+
+
 # Might be a decent idea to split "Bow" into its own option with choices of
 # Defer to Progressive Option (default), Progressive, Non-Progressive, Bow + Silvers, Retro
 class RetroBow(Toggle):
@@ -498,6 +525,8 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "dungeon_counters": Counters,
     "progressive": Progressive,
     "swordless": Swordless,
+    "item_pool": ItemPool,
+    "item_functionality": ItemFunc,
     "retro_bow": RetroBow,
     "retro_caves": RetroCaves,
     "hints": Hints,
