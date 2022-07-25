@@ -700,17 +700,18 @@ async def countdown(ctx: Context, timer: int):
 
 
 def broadcast_countdown(ctx: Context, timer: int, message: str):
-    compatabilityThreshold = Version(0, 3, 5)
+    # Remove backwards compatibility around 0.3.7
+    compatability_threshold = Version(0, 3, 5)
 
-    oldClients, newClients = [], []
+    old_clients, new_clients = [], []
 
     for teams in ctx.clients.values():
         for clients in teams.values():
             for client in clients:
-                newClients.append(client) if client.version >= compatabilityThreshold else oldClients.append(client)
+                new_clients.append(client) if client.version >= compatability_threshold else old_clients.append(client)
 
-    ctx.broadcast(oldClients, [{"cmd": "Print", "text": message }])
-    ctx.broadcast(newClients, [{"cmd": "PrintJSON", "type": "Countdown", "countdown": timer, 
+    ctx.broadcast(old_clients, [{"cmd": "Print", "text": message }])
+    ctx.broadcast(new_clients, [{"cmd": "PrintJSON", "type": "Countdown", "countdown": timer, 
         "data": [{ "text": message }]}])
 
 
