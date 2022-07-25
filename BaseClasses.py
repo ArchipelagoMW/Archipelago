@@ -1222,7 +1222,6 @@ class Spoiler():
         self.world = world
         self.hashes = {}
         self.entrances = OrderedDict()
-        self.medallions = {}
         self.playthrough = {}
         self.unreachables = set()
         self.locations = {}
@@ -1347,7 +1346,6 @@ class Spoiler():
         out = OrderedDict()
         out['Entrances'] = list(self.entrances.values())
         out.update(self.locations)
-        out['Special'] = self.medallions
         if self.hashes:
             out['Hashes'] = self.hashes
         if self.shops:
@@ -1399,11 +1397,6 @@ class Spoiler():
 
                     outfile.write('Mode:                            %s\n' % self.world.mode[player])
                     outfile.write('Goal:                            %s\n' % self.world.goal[player])
-                    if "triforce" in self.world.goal[player]:  # triforce hunt
-                        outfile.write("Pieces available for Triforce:   %s\n" %
-                                      self.world.triforce_pieces_available[player])
-                        outfile.write("Pieces required for Triforce:    %s\n" %
-                                      self.world.triforce_pieces_required[player])
                     outfile.write('Difficulty:                      %s\n' % self.world.difficulty[player])
                     outfile.write('Item Functionality:              %s\n' % self.world.item_functionality[player])
                     outfile.write('Entrance Shuffle:                %s\n' % self.world.shuffle[player])
@@ -1428,11 +1421,6 @@ class Spoiler():
                                                          '<=>' if entry['direction'] == 'both' else
                                                          '<=' if entry['direction'] == 'exit' else '=>',
                                                          entry['exit']) for entry in self.entrances.values()]))
-
-            if self.medallions:
-                outfile.write('\n\nMedallions:\n')
-                for dungeon, medallion in self.medallions.items():
-                    outfile.write(f'\n{dungeon}: {medallion}')
 
             AutoWorld.call_all(self.world, "write_spoiler", outfile)
 

@@ -598,8 +598,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     ret.blue_clock_time = int(get_choice_legacy('blue_clock_time', weights, 2))
     ret.green_clock_time = int(get_choice_legacy('green_clock_time', weights, 4))
 
-    ret.dungeon_counters = get_choice_legacy('dungeon_counters', weights, 'default')
-
     ret.plando_texts = {}
     if PlandoSettings.texts in plando_options:
         tt = TextTable()

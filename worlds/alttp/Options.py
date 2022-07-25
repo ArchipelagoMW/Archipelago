@@ -240,6 +240,20 @@ class Enemies(Choice):
     option_chaos = 2
 
 
+class Counters(Choice):
+    """Determines if an item counter shows up in dungeons.
+    Default will be True if compasses are in their own dungeons, otherwise on pickup."""
+    display_name = "Dungeon Item Counter"
+    option_off = 0
+    option_compass = 1
+    option_default = 2
+    option_on = 3
+    alias_pickup = option_compass
+    alias_true = 3
+    alias_false = 0
+    default = option_compass
+
+
 class Progressive(Choice):
     display_name = "Progressive Items"
     option_off = 0
@@ -486,6 +500,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "smallkey_shuffle": smallkey_shuffle,
     "compass_shuffle": compass_shuffle,
     "map_shuffle": map_shuffle,
+    "dungeon_counters": Counters,
     "progressive": Progressive,
     "swordless": Swordless,
     "retro_bow": RetroBow,

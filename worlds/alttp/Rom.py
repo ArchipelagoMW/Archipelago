@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import Utils
 from Patch import read_rom
+from .Options import Counters
 
 LTTPJPN10HASH = '03a63945398191337e896e5771f77173'
 RANDOMIZERBASEHASH = '9952c2a3ec1b421e408df0d20c8f0c7f'
@@ -1502,9 +1503,9 @@ def patch_rom(world, rom, player, enemized):
     # compasses showing dungeon count
     if world.clock_mode[player] or not world.dungeon_counters[player]:
         rom.write_byte(0x18003C, 0x00)  # Currently must be off if timer is on, because they use same HUD location
-    elif world.dungeon_counters[player] is True:
+    elif world.dungeon_counters[player] == Counters.option_on:
         rom.write_byte(0x18003C, 0x02)  # always on
-    elif world.compass_shuffle[player] or world.dungeon_counters[player] == 'pickup':
+    elif world.compass_shuffle[player] or world.dungeon_counters[player] == Counters.alias_pickup:
         rom.write_byte(0x18003C, 0x01)  # show on pickup
     else:
         rom.write_byte(0x18003C, 0x00)
