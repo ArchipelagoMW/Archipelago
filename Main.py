@@ -47,7 +47,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.item_functionality = args.item_functionality.copy()
     world.timer = args.timer.copy()
     world.goal = args.goal.copy()
-    world.open_pyramid = args.open_pyramid.copy()
     world.boss_shuffle = args.shufflebosses.copy()
     world.enemy_health = args.enemy_health.copy()
     world.enemy_damage = args.enemy_damage.copy()
@@ -364,7 +363,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 for location in world.get_filled_locations():
                     if type(location.address) == int:
                         assert location.item.code is not None, "item code None should be event, " \
-                                                               "location.address should then also be None"
+                                                               "location.address should then also be None. Location: " \
+                                                               f" {location}"
                         locations_data[location.player][location.address] = \
                             location.item.code, location.item.player, location.item.flags
                         if location.name in world.start_location_hints[location.player]:

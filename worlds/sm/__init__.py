@@ -7,6 +7,8 @@ import threading
 import base64
 from typing import Set, List, TextIO
 
+from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
+
 logger = logging.getLogger("Super Metroid")
 
 from .Locations import lookup_name_to_id as locations_lookup_name_to_id
@@ -123,8 +125,8 @@ class SMWorld(World):
         self.remote_items = self.world.remote_items[self.player]
 
         if (len(self.variaRando.randoExec.setup.restrictedLocs) > 0):
-            self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("items")
-            logger.warning(f"accessibility forced to 'items' for player {self.world.get_player_name(self.player)} because of 'fun' settings")
+            self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("minimal")
+            logger.warning(f"accessibility forced to 'minimal' for player {self.world.get_player_name(self.player)} because of 'fun' settings")
     
     def generate_basic(self):
         itemPool = self.variaRando.container.itemPool
@@ -654,11 +656,10 @@ class SMLocation(Location):
     def can_comeback(self, state: CollectionState, item: Item):
         randoExec = state.world.worlds[self.player].variaRando.randoExec
         for key in locationsDict[self.name].AccessFrom.keys():
-            if (randoExec.areaGraph.canAccess(  state.smbm[self.player], 
-                                                key,
-                                                randoExec.graphSettings.startAP,
-                                                state.smbm[self.player].maxDiff,
-                                                None)):
+            if (randoExec.areaGraph.canAccessList(  state.smbm[self.player], 
+                                                    key,
+                                                    [randoExec.graphSettings.startAP, 'Landing Site'] if not GraphUtils.isStandardStart(randoExec.graphSettings.startAP) else ['Landing Site'],
+                                                    state.smbm[self.player].maxDiff)):
                 return True
         return False
 

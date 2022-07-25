@@ -27,13 +27,17 @@ class SMZ3CollectionState(metaclass=AutoLogicRegister):
         # for unit tests where MultiWorld is instantiated before worlds
         if hasattr(parent, "state"):
             self.smz3state = {player: TotalSMZ3Item.Progression([]) for player in parent.get_game_players("SMZ3")}
+            for player, group in parent.groups.items():
+                if (group["game"] == "SMZ3"):
+                    self.smz3state[player] = TotalSMZ3Item.Progression([])
+                    if player not in parent.state.smz3state:
+                        parent.state.smz3state[player] = TotalSMZ3Item.Progression([])
         else:
             self.smz3state = {}
 
     def copy_mixin(self, ret) -> CollectionState:
-        ret.smz3state = {player: copy.deepcopy(self.smz3state[player]) for player in self.world.get_game_players("SMZ3")}
+        ret.smz3state = {player: copy.deepcopy(self.smz3state[player]) for player in self.smz3state}
         return ret
-
 
 class SMZ3Web(WebWorld):
     tutorials = [Tutorial(
@@ -106,6 +110,7 @@ class SMZ3World(World):
         niceItems = TotalSMZ3Item.Item.CreateNicePool(self.smz3World)
         junkItems = TotalSMZ3Item.Item.CreateJunkPool(self.smz3World)
         allJunkItems = niceItems + junkItems
+        self.junkItemsNames = [item.Type.name for item in junkItems]
 
         if (self.smz3World.Config.Keysanity):
             progressionItems = self.progression + self.dungeon + self.keyCardsItems
@@ -256,11 +261,11 @@ class SMZ3World(World):
             base_combined_rom = basepatch.apply(base_combined_rom)
 
             patcher = TotalSMZ3Patch(self.smz3World,
-                                    [world.smz3World for key, world in self.world.worlds.items() if isinstance(world, SMZ3World)],
+                                    [world.smz3World for key, world in self.world.worlds.items() if isinstance(world, SMZ3World) and hasattr(world, "smz3World")],
                                     self.world.seed_name,
                                     self.world.seed,
                                     self.local_random,
-                                    self.world.world_name_lookup,
+                                    {v: k for k, v in self.world.player_name.items()},
                                     next(iter(loc.player for loc in self.world.get_locations() if (loc.item.name == "SilverArrows" and loc.item.player == self.player))))
             patches = patcher.Create(self.smz3World.Config)
             patches.update(self.apply_sm_custom_sprite())
@@ -312,7 +317,7 @@ class SMZ3World(World):
         return slot_data
 
     def collect(self, state: CollectionState, item: Item) -> bool:
-        state.smz3state[item.player].Add([TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World)])
+        state.smz3state[self.player].Add([TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World if hasattr(self, "smz3World") else None)])
         if item.advancement:
             state.prog_items[item.name, item.player] += 1
             return True  # indicate that a logical state change has occured
@@ -321,7 +326,7 @@ class SMZ3World(World):
     def remove(self, state: CollectionState, item: Item) -> bool:
         name = self.collect_item(state, item, True)
         if name:
-            state.smz3state[item.player].Remove([TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World)])
+            state.smz3state[item.player].Remove([TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World if hasattr(self, "smz3World") else None)])
             state.prog_items[name, item.player] -= 1
             if state.prog_items[name, item.player] < 1:
                 del (state.prog_items[name, item.player])
@@ -330,7 +335,9 @@ class SMZ3World(World):
 
     def create_item(self, name: str) -> Item:
         return SMZ3Item(name, ItemClassification.progression,
-                        TotalSMZ3Item.ItemType[name], self.item_name_to_id[name], player = self.player)
+                        TotalSMZ3Item.ItemType[name], self.item_name_to_id[name], 
+                        self.player,
+                        TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[name], self))
 
     def pre_fill(self):
         from Fill import fill_restrictive
@@ -363,6 +370,9 @@ class SMZ3World(World):
             return self.smz3DungeonItems
         else:
             return []
+
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choice(self.junkItemsNames)
 
     def write_spoiler(self, spoiler_handle: TextIO):
             self.world.spoiler.unreachables.update(self.unreachable)
