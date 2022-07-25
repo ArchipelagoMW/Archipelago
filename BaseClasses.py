@@ -87,7 +87,7 @@ class MultiWorld():
         self.shuffle_ganon = True
         self.spoiler = Spoiler(self)
         self.fix_trock_doors = self.AttributeProxy(
-            lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
+            lambda player: self.shuffle[player] != 'vanilla' or self.world_state[player] == 2)
         self.fix_skullwoods_exit = self.AttributeProxy(
             lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
         self.fix_palaceofdarkness_exit = self.AttributeProxy(
@@ -103,7 +103,6 @@ class MultiWorld():
             set_player_attr('_region_cache', {})
             set_player_attr('shuffle', "vanilla")
             set_player_attr('logic', "noglitches")
-            set_player_attr('mode', 'open')
             set_player_attr('difficulty', 'normal')
             set_player_attr('item_functionality', 'normal')
             set_player_attr('timer', False)
@@ -825,7 +824,7 @@ class CollectionState():
         if self.has('Moon Pearl', player):
             return True
 
-        return region.is_light_world if self.world.mode[player] != 'inverted' else region.is_dark_world
+        return region.is_light_world if self.world.world_state[player] != 2 else region.is_dark_world
 
     def can_reach_light_world(self, player: int) -> bool:
         if True in [i.is_light_world for i in self.reachable_regions[player]]:
@@ -844,18 +843,18 @@ class CollectionState():
         return self.has(self.world.turtle_rock_medallion[player].current_key.title(), player)
 
     def can_boots_clip_lw(self, player: int) -> bool:
-        if self.world.mode[player] == 'inverted':
+        if self.world.world_state[player] == 2:
             return self.has('Pegasus Boots', player) and self.has('Moon Pearl', player)
         return self.has('Pegasus Boots', player)
 
     def can_boots_clip_dw(self, player: int) -> bool:
-        if self.world.mode[player] != 'inverted':
+        if self.world.world_state[player] != 2:
             return self.has('Pegasus Boots', player) and self.has('Moon Pearl', player)
         return self.has('Pegasus Boots', player)
 
     def can_get_glitched_speed_lw(self, player: int) -> bool:
         rules = [self.has('Pegasus Boots', player), any([self.has('Hookshot', player), self.has_sword(player)])]
-        if self.world.mode[player] == 'inverted':
+        if self.world.world_state[player] == 2:
             rules.append(self.has('Moon Pearl', player))
         return all(rules)
 
@@ -864,7 +863,7 @@ class CollectionState():
 
     def can_get_glitched_speed_dw(self, player: int) -> bool:
         rules = [self.has('Pegasus Boots', player), any([self.has('Hookshot', player), self.has_sword(player)])]
-        if self.world.mode[player] != 'inverted':
+        if self.world.world_state[player] != 2:
             rules.append(self.has('Moon Pearl', player))
         return all(rules)
 
@@ -1323,7 +1322,7 @@ class Spoiler():
             self.bosses[str(player)]["Ice Palace"] = self.world.get_dungeon("Ice Palace", player).boss.name
             self.bosses[str(player)]["Misery Mire"] = self.world.get_dungeon("Misery Mire", player).boss.name
             self.bosses[str(player)]["Turtle Rock"] = self.world.get_dungeon("Turtle Rock", player).boss.name
-            if self.world.mode[player] != 'inverted':
+            if self.world.world_state[player] != 2:
                 self.bosses[str(player)]["Ganons Tower Basement"] = \
                     self.world.get_dungeon('Ganons Tower', player).bosses['bottom'].name
                 self.bosses[str(player)]["Ganons Tower Middle"] = self.world.get_dungeon('Ganons Tower', player).bosses[
@@ -1395,7 +1394,6 @@ class Spoiler():
                 if player in self.world.get_game_players("A Link to the Past"):
                     outfile.write('%s%s\n' % ('Hash: ', self.hashes[player]))
 
-                    outfile.write('Mode:                            %s\n' % self.world.mode[player])
                     outfile.write('Goal:                            %s\n' % self.world.goal[player])
                     outfile.write('Difficulty:                      %s\n' % self.world.difficulty[player])
                     outfile.write('Item Functionality:              %s\n' % self.world.item_functionality[player])

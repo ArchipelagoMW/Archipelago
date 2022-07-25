@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import Utils
 from Patch import read_rom
-from .Options import Counters
+from .Options import Counters, WorldState
 
 LTTPJPN10HASH = '03a63945398191337e896e5771f77173'
 RANDOMIZERBASEHASH = '9952c2a3ec1b421e408df0d20c8f0c7f'
@@ -297,7 +297,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
         'AllowEnemyZeroDamage': True,
         'ShuffleEnemyDamageGroups': bool(world.enemy_damage[player].value),
         'EnemyDamageChaosMode': world.enemy_damage[player].value == EnemyDamage.option_chaos,
-        'EasyModeEscape': world.mode[player] == "standard",
+        'EasyModeEscape': world.world_state[player] == WorldState.option_standard,
         'EnemiesAbsorbable': False,
         'AbsorbableSpawnRate': 10,
         'AbsorbableTypes': {
@@ -363,14 +363,14 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
             'MiseryMire': world.get_dungeon("Misery Mire", player).boss.enemizer_name,
             'TurtleRock': world.get_dungeon("Turtle Rock", player).boss.enemizer_name,
             'GanonsTower1':
-                world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower',
-                                  player).bosses['bottom'].enemizer_name,
+                world.get_dungeon('Ganons Tower' if world.world_state[player] != WorldState.option_inverted
+                                  else 'Inverted Ganons Tower', player).bosses['bottom'].enemizer_name,
             'GanonsTower2':
-                world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower',
-                                  player).bosses['middle'].enemizer_name,
+                world.get_dungeon('Ganons Tower' if world.world_state[player] != WorldState.option_inverted
+                                  else 'Inverted Ganons Tower', player).bosses['middle'].enemizer_name,
             'GanonsTower3':
-                world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower',
-                                  player).bosses['top'].enemizer_name,
+                world.get_dungeon('Ganons Tower' if world.world_state[player] != WorldState.option_inverted
+                                  else 'Inverted Ganons Tower', player).bosses['top'].enemizer_name,
             'GanonsTower4': 'Agahnim2',
             'Ganon': 'Ganon',
         }
@@ -865,7 +865,7 @@ def patch_rom(world, rom, player, enemized):
                 else:
                     # patch door table
                     rom.write_byte(0xDBB73 + exit.addresses, exit.target)
-    if world.mode[player] == 'inverted':
+    if world.world_state[player] == WorldState.option_inverted:
         patch_shuffled_dark_sanc(world, rom, player)
 
     write_custom_shops(rom, world, player)
@@ -918,11 +918,11 @@ def patch_rom(world, rom, player, enemized):
         rom.write_byte(0x51DE, 0x00)
 
     # set open mode:
-    if world.mode[player] in ['open', 'inverted']:
+    if world.world_state[player] in (WorldState.option_open, WorldState.option_inverted):
         rom.write_byte(0x180032, 0x01)  # open mode
-    if world.mode[player] == 'inverted':
+    if world.world_state[player] == WorldState.option_inverted:
         set_inverted_mode(world, player, rom)
-    elif world.mode[player] == 'standard':
+    elif world.world_state[player] == WorldState.option_standard:
         rom.write_byte(0x180032, 0x00)  # standard mode
 
     uncle_location = world.get_location('Link\'s Uncle', player)
@@ -942,7 +942,7 @@ def patch_rom(world, rom, player, enemized):
         rom.write_bytes(0x6D323, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
 
     # set light cones
-    rom.write_byte(0x180038, 0x01 if world.mode[player] == "standard" else 0x00)
+    rom.write_byte(0x180038, 0x01 if world.world_state[player] == WorldState.option_standard else 0x00)
     rom.write_byte(0x180039, 0x01 if world.light_world_light_cone else 0x00)
     rom.write_byte(0x18003A, 0x01 if world.dark_world_light_cone else 0x00)
 
@@ -1242,7 +1242,7 @@ def patch_rom(world, rom, player, enemized):
         player] else 0x00)  # Toggle whether to be in real/fake dark world when dying in a DW dungeon before killing aga1
     rom.write_byte(0x180169,
                    0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
-    if world.mode[player] == 'inverted':
+    if world.world_state[player] == WorldState.option_inverted:
         rom.write_byte(0x180169, 0x02)  # lock aga/ganon tower door with crystals in inverted
     rom.write_byte(0x180171,
                    0x01 if world.ganon_at_pyramid[player] else 0x00)  # Enable respawning on pyramid after ganon death
@@ -1446,14 +1446,14 @@ def patch_rom(world, rom, player, enemized):
     rom.write_bytes(0x183000, equip[0x340:])
     rom.write_bytes(0x271A6, equip[0x340:0x340 + 60])
 
-    rom.write_byte(0x18004A, 0x00 if world.mode[player] != 'inverted' else 0x01)  # Inverted mode
+    rom.write_byte(0x18004A, 0x00 if world.world_state[player] != WorldState.option_inverted else 0x01)  # Inverted mode
     rom.write_byte(0x18005D, 0x00)  # Hammer always breaks barrier
-    rom.write_byte(0x2AF79, 0xD0 if world.mode[
-                                        player] != 'inverted' else 0xF0)  # vortexes: Normal  (D0=light to dark, F0=dark to light, 42 = both)
-    rom.write_byte(0x3A943, 0xD0 if world.mode[
-                                        player] != 'inverted' else 0xF0)  # Mirror: Normal  (D0=Dark to Light, F0=light to dark, 42 = both)
-    rom.write_byte(0x3A96D, 0xF0 if world.mode[
-                                        player] != 'inverted' else 0xD0)  # Residual Portal: Normal  (F0= Light Side, D0=Dark Side, 42 = both (Darth Vader))
+    rom.write_byte(0x2AF79, 0xD0 if world.world_state[
+                                        player] != WorldState.option_inverted else 0xF0)  # vortexes: Normal  (D0=light to dark, F0=dark to light, 42 = both)
+    rom.write_byte(0x3A943, 0xD0 if world.world_state[
+                                        player] != WorldState.option_inverted else 0xF0)  # Mirror: Normal  (D0=Dark to Light, F0=light to dark, 42 = both)
+    rom.write_byte(0x3A96D, 0xF0 if world.world_state[
+                                        player] != WorldState.option_inverted else 0xD0)  # Residual Portal: Normal  (F0= Light Side, D0=Dark Side, 42 = both (Darth Vader))
     rom.write_byte(0x3A9A7, 0xD0)  # Residual Portal: Normal  (D0= Light Side, F0=Dark Side, 42 = both (Darth Vader))
     if 'u' in world.shop_shuffle[player]:
         rom.write_bytes(0x180080,
@@ -1491,7 +1491,7 @@ def patch_rom(world, rom, player, enemized):
     # c - enabled for inside compasses
     # s - enabled for inside small keys
     # block HC upstairs doors in rain state in standard mode
-    rom.write_byte(0x18008A, 0x01 if world.mode[player] == "standard" and world.shuffle[player] != 'vanilla' else 0x00)
+    rom.write_byte(0x18008A, 0x01 if world.world_state[player] == WorldState.option_standard and world.shuffle[player] != 'vanilla' else 0x00)
 
     rom.write_byte(0x18016A, 0x10 | ((0x01 if world.smallkey_shuffle[player] else 0x00)
                                      | (0x02 if world.compass_shuffle[player] else 0x00)
@@ -1589,7 +1589,7 @@ def patch_rom(world, rom, player, enemized):
     rom.write_bytes(0x180185, [0, 0, 0])  # Uncle respawn refills (magic, bombs, arrows)
     rom.write_bytes(0x180188, [0, 0, 0])  # Zelda respawn refills (magic, bombs, arrows)
     rom.write_bytes(0x18018B, [0, 0, 0])  # Mantle respawn refills (magic, bombs, arrows)
-    if world.mode[player] == 'standard' and uncle_location.item and uncle_location.item.player == player:
+    if world.world_state[player] == WorldState.option_standard and uncle_location.item and uncle_location.item.player == player:
         if uncle_location.item.name in {'Bow', 'Progressive Bow'}:
             rom.write_byte(0x18004E, 1)  # Escape Fill (arrows)
             rom.write_int16(0x180183, 300)  # Escape fill rupee bow
@@ -1618,7 +1618,7 @@ def patch_rom(world, rom, player, enemized):
 
     # allow smith into multi-entrance caves in appropriate shuffles
     if world.shuffle[player] in ['restricted', 'full', 'crossed', 'insanity', 'madness'] or (
-            world.shuffle[player] == 'simple' and world.mode[player] == 'inverted'):
+            world.shuffle[player] == 'simple' and world.world_state[player] == WorldState.option_inverted):
         rom.write_byte(0x18004C, 0x01)
 
     # set correct flag for hera basement item
@@ -2107,7 +2107,7 @@ def write_strings(rom, world, player):
         tt['kakariko_flophouse_man_no_flippers'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
         tt['kakariko_flophouse_man'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
 
-    if world.mode[player] == 'inverted':
+    if world.world_state[player] == WorldState.option_inverted:
         tt['sign_village_of_outcasts'] = 'attention\nferal ducks sighted\nhiding in statues\n\nflute players beware\n'
 
     def hint_text(dest, ped_hint=False):
@@ -2153,7 +2153,7 @@ def write_strings(rom, world, player):
             entrances_to_hint = {}
             entrances_to_hint.update(InconvenientDungeonEntrances)
             if world.shuffle_ganon:
-                if world.mode[player] == 'inverted':
+                if world.world_state[player] == WorldState.option_inverted:
                     entrances_to_hint.update({'Inverted Ganons Tower': 'The sealed castle door'})
                 else:
                     entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
@@ -2189,14 +2189,14 @@ def write_strings(rom, world, player):
             if world.shuffle[player] not in ['simple', 'restricted', 'restricted_legacy']:
                 entrances_to_hint.update(ConnectorEntrances)
                 entrances_to_hint.update(DungeonEntrances)
-                if world.mode[player] == 'inverted':
+                if world.world_state[player] == WorldState.option_inverted:
                     entrances_to_hint.update({'Inverted Agahnims Tower': 'The dark mountain tower'})
                 else:
                     entrances_to_hint.update({'Agahnims Tower': 'The sealed castle door'})
             elif world.shuffle[player] == 'restricted':
                 entrances_to_hint.update(ConnectorEntrances)
             entrances_to_hint.update(OtherEntrances)
-            if world.mode[player] == 'inverted':
+            if world.world_state[player] == WorldState.option_inverted:
                 entrances_to_hint.update({'Inverted Dark Sanctuary': 'The dark sanctuary cave'})
                 entrances_to_hint.update({'Inverted Big Bomb Shop': 'The old hero\'s dark home'})
                 entrances_to_hint.update({'Inverted Links House': 'The old hero\'s light home'})
@@ -2206,7 +2206,7 @@ def write_strings(rom, world, player):
             if world.shuffle[player] in ['insanity', 'madness_legacy', 'insanity_legacy']:
                 entrances_to_hint.update(InsanityEntrances)
                 if world.shuffle_ganon:
-                    if world.mode[player] == 'inverted':
+                    if world.world_state[player] == WorldState.option_inverted:
                         entrances_to_hint.update({'Inverted Pyramid Entrance': 'The extra castle passage'})
                     else:
                         entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
@@ -2438,7 +2438,7 @@ def write_strings(rom, world, player):
     tt['tablet_bombos_book'] = bombos_text
 
     # inverted spawn menu changes
-    if world.mode[player] == 'inverted':
+    if world.world_state[player] == WorldState.option_inverted:
         tt['menu_start_2'] = "{MENU}\n{SPEED0}\n≥@'s house\n Dark Chapel\n{CHOICE3}"
         tt['menu_start_3'] = "{MENU}\n{SPEED0}\n≥@'s house\n Dark Chapel\n Mountain Cave\n{CHOICE2}"
 

@@ -9,7 +9,7 @@ from worlds.alttp.Dungeons import get_dungeon_item_pool_player
 from worlds.alttp.EntranceShuffle import connect_entrance
 from Fill import FillError
 from worlds.alttp.Items import ItemFactory, GetBeemizerItem
-from worlds.alttp.Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle
+from worlds.alttp.Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle, WorldState
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 # Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -231,10 +231,10 @@ def generate_itempool(world):
     if world.goal[player] not in {'ganon', 'pedestal', 'bosses', 'triforcehunt', 'localtriforcehunt', 'icerodhunt',
                                   'ganontriforcehunt', 'localganontriforcehunt', 'crystals', 'ganonpedestal'}:
         raise NotImplementedError(f"Goal {world.goal[player]} for player {player}")
-    if world.mode[player] not in {'open', 'standard', 'inverted'}:
-        raise NotImplementedError(f"Mode {world.mode[player]} for player {player}")
+    if world.world_state[player] not in {WorldState.option_open, WorldState.option_standard, WorldState.option_inverted}:
+        raise NotImplementedError(f"Mode {world.world_state[player]} for player {player}")
     if world.timer[player] not in {False, 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'}:
-        raise NotImplementedError(f"Timer {world.mode[player]} for player {player}")
+        raise NotImplementedError(f"Timer {world.world_state[player]} for player {player}")
 
     if world.timer[player] in ['ohko', 'timed-ohko']:
         world.can_take_damage[player] = False
@@ -327,7 +327,7 @@ def generate_itempool(world):
     for item in precollected_items:
         world.push_precollected(ItemFactory(item, player))
 
-    if world.mode[player] == 'standard' and not world.state.has_melee_weapon(player):
+    if world.world_state[player] == WorldState.option_standard and not world.state.has_melee_weapon(player):
         if "Link's Uncle" not in placed_items:
             found_sword = False
             found_bow = False
@@ -452,7 +452,7 @@ take_any_locations.sort()
 
 def set_up_take_anys(world, player):
     # these are references, do not modify these lists in-place
-    if world.mode[player] == 'inverted':
+    if world.world_state[player] == WorldState.option_inverted:
         take_any_locs = take_any_locations_inverted
     else:
         take_any_locs = take_any_locations
@@ -518,7 +518,7 @@ def get_pool_core(world, player: int):
     difficulty = world.difficulty[player]
     timer = world.timer[player]
     goal = world.goal[player]
-    mode = world.mode[player]
+    mode = world.world_state[player]
     swordless = world.swordless[player]
     retro_bow = world.retro_bow[player]
     logic = world.logic[player]
@@ -642,7 +642,7 @@ def get_pool_core(world, player: int):
     if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
         pool.extend(diff.universal_keys)
         item_to_place = 'Small Key (Universal)' if goal != 'icerodhunt' else 'Nothing'
-        if mode == 'standard':
+        if mode == WorldState.option_standard:
             key_location = world.random.choice(
                 ['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest',
                  'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
@@ -659,7 +659,7 @@ def make_custom_item_pool(world, player):
     difficulty = world.difficulty[player]
     timer = world.timer[player]
     goal = world.goal[player]
-    mode = world.mode[player]
+    mode = world.world_state[player]
     customitemarray = world.customitemarray
 
     pool = []
@@ -776,7 +776,7 @@ def make_custom_item_pool(world, player):
         place_item('Master Sword Pedestal', 'Triforce')
         itemtotal = itemtotal + 1
 
-    if mode == 'standard':
+    if mode == WorldState.option_standard:
         if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             key_location = world.random.choice(
                 ['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest',

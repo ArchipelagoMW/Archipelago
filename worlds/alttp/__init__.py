@@ -170,7 +170,7 @@ class ALTTPWorld(World):
                 self.er_seed = "vanilla"
             elif seed.startswith("group-") or world.is_race:
                 self.er_seed = get_same_seed(world, (
-                    shuffle, seed, world.retro_caves[player], world.mode[player], world.logic[player]))
+                    shuffle, seed, world.retro_caves[player], world.world_state[player], world.logic[player]))
             else:  # not a race or group seed, use set seed as is.
                 self.er_seed = seed
         elif world.shuffle[player] == "vanilla":
@@ -195,7 +195,7 @@ class ALTTPWorld(World):
         world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player],
                                                       world.triforce_pieces_required[player])
 
-        if world.mode[player] != 'inverted':
+        if world.world_state[player] != 2:
             create_regions(world, player)
         else:
             create_inverted_regions(world, player)
@@ -210,7 +210,7 @@ class ALTTPWorld(World):
         old_random = world.random
         world.random = random.Random(self.er_seed)
 
-        if world.mode[player] != 'inverted':
+        if world.world_state[player] != 2:
             link_entrances(world, player)
             mark_light_world_regions(world, player)
         else:
@@ -423,7 +423,7 @@ class ALTTPWorld(World):
         trash_counts = {}
         standard_keyshuffle_players = set()
         for player in world.get_game_players("A Link to the Past"):
-            if world.mode[player] == 'standard' and world.smallkey_shuffle[player] \
+            if world.world_state[player] == 1 and world.smallkey_shuffle[player] \
                     and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal and \
                     world.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons:
                 standard_keyshuffle_players.add(player)

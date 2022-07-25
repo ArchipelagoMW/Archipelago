@@ -575,8 +575,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     if not ret.shop_shuffle:
         ret.shop_shuffle = ''
 
-    ret.mode = get_choice_legacy("mode", weights)
-
     ret.difficulty = get_choice_legacy('item_pool', weights)
 
     ret.item_functionality = get_choice_legacy('item_functionality', weights)

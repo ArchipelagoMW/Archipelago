@@ -41,7 +41,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.set_seed(seed, args.race, str(args.outputname if args.outputname else world.seed))
 
     world.shuffle = args.shuffle.copy()
-    world.mode = args.mode.copy()
     world.difficulty = args.difficulty.copy()
     world.item_functionality = args.item_functionality.copy()
     world.timer = args.timer.copy()
@@ -544,7 +543,7 @@ def create_playthrough(world):
             # If Pyramid Fairy Entrance needs to be reached, also path to Big Bomb Shop
             # Maybe move the big bomb over to the Event system instead?
             if any(exit_path == 'Pyramid Fairy' for path in world.spoiler.paths.values() for (_, exit_path) in path):
-                if world.mode[player] != 'inverted':
+                if world.world_state[player] != 2:
                     world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = \
                         get_path(state, world.get_region('Big Bomb Shop', player))
                 else:

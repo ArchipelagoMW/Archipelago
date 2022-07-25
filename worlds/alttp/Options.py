@@ -29,12 +29,6 @@ class GlitchBoots(DefaultOnToggle):
     display_name = "Glitched Starting Boots"
 
 
-class Goal(Choice):
-    option_kill_ganon = 0
-    option_kill_ganon_and_gt_agahnim = 1
-    option_hand_in = 2
-
-
 class OpenPyramid(Choice):
     """Determines whether the hole at the top of pyramid is open.
     Goal will open the pyramid if the goal requires you to kill Ganon, without needing to kill Agahnim 2.
@@ -488,6 +482,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "glitches_required": Logic,
     "dark_room_logic": DarkRoomLogic,
     "glitch_boots": GlitchBoots,
+    "world_state": WorldState,
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
     "open_pyramid": OpenPyramid,
