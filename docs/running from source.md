@@ -8,7 +8,7 @@ use that version. These steps are for developers or platforms without compiled r
 
 What you'll need:
  * Python 3.8.7 or newer
-   * with pip, which depending on platform may have to be installed separately
+   * pip (Depending on platform may come included)
  * A C compiler
    * possibly optional, read OS-specific sections
 
