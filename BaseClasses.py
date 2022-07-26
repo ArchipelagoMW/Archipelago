@@ -905,7 +905,7 @@ class CollectionState():
 
 class Region:
     name: str
-    hint_text: str
+    hint: str
     player: int
     world: Optional[MultiWorld]
     entrances: List[Entrance]
@@ -925,7 +925,8 @@ class Region:
         self.exits = []
         self.locations = []
         self.world = world
-        self.hint_text = self.generate_hint_text(hint)
+        if hint:
+            self.hint = hint
         self.player = player
 
     def can_reach(self, state: CollectionState) -> bool:
@@ -941,9 +942,10 @@ class Region:
                 return True
         return False
 
-    def generate_hint_text(self, hint: str) -> str:
-        if isinstance(hint, str):
-            return hint
+    @property
+    def hint_text(self) -> str:
+        if self.hint:
+            return self.hint
         return self.name
 
     @property
