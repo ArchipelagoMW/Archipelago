@@ -309,7 +309,7 @@ class OOTWorld(World):
             if 'scene' in region:
                 new_region.scene = region['scene']
             if 'hint' in region:
-                new_region.hint_text = region['hint']
+                new_region.hint = region['hint']
             if 'dungeon' in region:
                 new_region.dungeon = region['dungeon']
             if 'time_passes' in region:
