@@ -1,4 +1,4 @@
-from Options import Choice, Range
+from Options import Choice, Range, DeathLink
 from .Creatures import all_creatures
 
 
@@ -39,8 +39,14 @@ class CreatureScans(Range):
     range_end = len(all_creatures)
 
 
+class SubnauticaDeathLink(DeathLink):
+    """When you die, everyone dies. Of course the reverse is true too.
+    Note: can be toggled via in-game console command "deathlink"."""
+
+
 options = {
     "item_pool": ItemPool,
     "goal": Goal,
-    "creature_scans": CreatureScans
+    "creature_scans": CreatureScans,
+    "death_link": SubnauticaDeathLink,
 }
