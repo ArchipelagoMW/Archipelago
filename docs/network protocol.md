@@ -198,7 +198,7 @@ Sent to clients if the server caught a problem with a packet. This only occurs f
 | original_cmd | Optional[str] | the `cmd` argument of the faulty packet, will be `None` if the `cmd` failed to be parsed |
 | text | str | A descriptive message of the problem at hand |
 
-#### PacketProblemType
+##### PacketProblemType
 PacketProblemType indicates the type problem that was detected in the faulty packet, the known problem types are below but others maybe added in the future
 
 | Type | Notes |
