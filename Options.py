@@ -35,6 +35,17 @@ class AssembleOptions(abc.ABCMeta):
 
         options.update(aliases)
 
+        if "verify" not in attrs:
+            # not overridden by class -> look up bases
+            verifiers = [f for f in (getattr(base, "verify", None) for base in bases) if f]
+            if len(verifiers) > 1:  # verify multiple bases/mixins
+                def verify(self, *args, **kwargs) -> None:
+                    for f in verifiers:
+                        f(self, *args, **kwargs)
+                attrs["verify"] = verify
+            else:
+                assert verifiers, "class Option is supposed to implement def verify"
+
         # auto-validate schema on __init__
         if "schema" in attrs.keys():
 
@@ -111,6 +122,16 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     @classmethod
     def from_any(cls, data: typing.Any) -> Option[T]:
         raise NotImplementedError
+
+    if typing.TYPE_CHECKING:
+        from Generate import PlandoSettings
+        from worlds.AutoWorld import World
+
+        def verify(self, world: World, player_name: str, plando_options: PlandoSettings) -> None:
+            pass
+    else:
+        def verify(self, *args, **kwargs) -> None:
+            pass
 
 
 class FreeText(Option):
@@ -409,7 +430,7 @@ class TextChoice(Choice):
             return self.name_lookup[self.value]
 
     @classmethod
-    def from_text(cls, text: str) -> typing.Union[TextChoice]:
+    def from_text(cls, text: str) -> TextChoice:
         if text == "random":  # chooses a random defined option but won't use any free text options
             return cls(random.choice(list(cls.name_lookup)))
         for option_name, value in cls.options.items():
@@ -418,7 +439,7 @@ class TextChoice(Choice):
         return cls(text)
 
     @classmethod
-    def from_any(cls, data: typing.Any) -> typing.Union[TextChoice]:
+    def from_any(cls, data: typing.Any) -> TextChoice:
         if type(data) == int and data in cls.options.values():
             return cls(data)
         return cls.from_text(str(data))
@@ -585,7 +606,7 @@ class VerifyKeys:
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
                                 f"Allowed keys: {cls.valid_keys}.")
 
-    def verify(self, world, plando_options, player_name: str) -> None:
+    def verify(self, world, player_name: str, plando_options) -> None:
         if self.convert_name_groups and self.verify_item_name:
             new_value = type(self.value)()  # empty container of whatever value is
             for item_name in self.value:
@@ -810,7 +831,7 @@ class ItemLinks(OptionList):
                 pool |= {item_name}
         return pool
 
-    def verify(self, world, plando_options, player_name) -> None:
+    def verify(self, world, player_name: str, plando_options) -> None:
         super(ItemLinks, self).verify(world, plando_options, player_name)
         existing_links = set()
         for link in self.value:
