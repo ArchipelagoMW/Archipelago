@@ -121,6 +121,7 @@ shop_cost_types: typing.Dict[str, typing.Tuple[str, ...]] = {
     "Leg_Eater": ("GEO",),
 }
 
+
 class HKWeb(WebWorld):
     tutorials = [Tutorial(
         "Mod Setup and Use Guide",
@@ -130,6 +131,8 @@ class HKWeb(WebWorld):
         "setup/en",
         ["Ijwu"]
     )]
+
+    bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new/choose"
 
 
 class HKWorld(World):
