@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, OptionDict, OptionList
 
 
 class Logic(Choice):
@@ -461,6 +461,50 @@ class MenuSpeed(Choice):
     option_triple = 3
     option_quadruple = 4
     option_half = 5
+
+
+class RandomSprite(OptionDict):
+    """Allows different random sprite events to be simultaneously enabled."""
+    display_name = "Random Sprite On Event"
+    valid_keys = {"enabled", "on_hit", "on_enter", "on_exit", "on_slash",
+                  "on_item", "on_bonk", "on_everything", "use_weighted_sprite_pool"}
+    default = {
+        "enabled": "off",
+        "on_hit": "on",
+        "on_enter": "off",
+        "on_exit": "off",
+        "on_slash": "off",
+        "on_item": "off",
+        "on_bonk": "off",
+        "on_everything": "off",
+        "use_weighted_sprite_bool": "off"
+    }
+
+
+class SpritePool(OptionList):
+    """Limits the pool of available sprites for random events to specified pool."""
+    valid_keys = {"Abigail", "Adol", "Adventure 2600", "Aggretsuko", "Alice", "Angry Video Game Nerd", "Arcane",
+                  "ArcticArtemisFox", "Aria", "Ark (Cape)", "Ark (No Cape)", "Arrghus", "Astor", "Astronaut", "Asuna",
+                  "B.S. Boy", "B.S. Girl", "Baba", "Baby Fro", "Baby Metroid", "Badeline", "Bananas in Pyjamas",
+                  "Bandit", "Batman", "Beau", "Bee", "Bel", "Bewp", "Big Key", "Birb", "Birb of Paradise", "Birdfruit",
+                  "Birdo", "Black Mage", "Blacksmith Link", "Blazer", "Blossom", "Bob", "Bob Ross", "Boco the Chocobo",
+                  "Boo", "Boo 2", "Bottle o' Goo", "BotW Link", "BotW Zelda", "Bowser", "Bowsette", "Bowsette Red",
+                  "Branch", "Brian", "Broccoli", "Bronzor", "Bubbles", "Bullet Bill", "Buttercup", "Cactuar", "Cadence",
+                  "Captain Novolin", "Captain Toadette", "CarlSagan42", "Casual Zelda", "Cat Boo", "Catgirl (Hidari)",
+                  "CD-i Link", "Celes", "Centaur Enos", "Charizard", "Cheep Cheep", "Chef Pepper", "Chibity", "Chrizzz",
+                  "Chrono", "Cinna", "Cirno", "Clifford", "Clippy", "Cloud", "Clyde", "Conker", "Conker Neo", "Cornelius",
+                  "Corona", "Crewmate", "Cucco", "Cursor", "D.Owls", "Dark Boy", "Dark Girl", "Dark Link",
+                  "Dark Link (Tunic)", "Dark Link (Zelda 2)", "Dark Panda", "Dark Swatchy", "Dark Zelda", "Dark Zora",
+                  "Deadpool (Mythic)", "Deadpool (SirCzah)", "Deadrock", "Decidueye", "Dekar", "Demon Link", "Dennsen86",
+                  "Diddy Kong", "Dig Dug", "Dipper", "DQ Slime", "Dragonair", "Dragonite", "Drake The Dragon", "Eevee",
+                  "Eggplant", "Eirika", "Ema Skye", "EmoSaru", "Espeon", "Ezlo", "Fierce Diety Link", "Figaro Merchant",
+                  "Finn Merten", "Finny Bear", "Flavor Guy", "Floodgate Fish", "Four Swords Link", "Fox Link",
+                  "Freya Crescent", "Frisk", "Frog Link", "Fujin", "Future Trunks", "Gamer", "Ganondorf", "Garfield",
+                  "Garnet", "Garo Master", "GBC Link", "Geno", "GliitchWiitch", "Glove Color Link", "Gobli", "Goomba",
+                  "Goose", "Graalian Noob", "GrandPOOBear", "Gretis", "Growlithe", "Gruncle Stan", "Guiz", "Hanna",
+                  "Hardhate Beetle", "Hat Color Link", "Hat Kid", "Head Link", "Headless Link", "Heem", "Hello Kitty",
+                  "Hero of Awakening", "Hero of Hyrule", "Hint Tile", "Hoarder (Bush)", "Hoarder (Pot)",
+                  "Hoarder (Rock)",}
 
 
 class Music(DefaultOnToggle):
