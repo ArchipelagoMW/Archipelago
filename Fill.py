@@ -155,7 +155,6 @@ def fast_fill(world: MultiWorld, locations: typing.List[Location],
                 break
 
         else:
-            print(f"swapping {swap}")
             swap += 1
             # we filled all reachable spots.
             # try swapping this item with previously placed items
