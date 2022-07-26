@@ -127,7 +127,6 @@ class FreeText(Option):
 
     @classmethod
     def from_text(cls, text: str) -> FreeText:
-        text.lower()
         return cls(text)
 
     @classmethod
@@ -394,7 +393,7 @@ class Choice(NumericOption):
     __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
 
 
-class TextChoice(FreeText, Choice):
+class TextChoice(Choice):
     """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string"""
 
     def __init__(self, value: typing.Union[str, int]):
@@ -410,17 +409,16 @@ class TextChoice(FreeText, Choice):
             return self.name_lookup[self.value]
 
     @classmethod
-    def from_text(cls, text: str) -> typing.Union[FreeText, Choice]:
-        text = text.lower()
+    def from_text(cls, text: str) -> typing.Union[TextChoice]:
         if text == "random":  # chooses a random defined option but won't use any free text options
-            return Choice(random.choice(list(cls.name_lookup)))
+            return cls(random.choice(list(cls.name_lookup)))
         for option_name, value in cls.options.items():
             if option_name == text:
                 return cls(value)
         return cls(text)
 
     @classmethod
-    def from_any(cls, data: typing.Any) -> typing.Union[FreeText, Choice]:
+    def from_any(cls, data: typing.Any) -> typing.Union[TextChoice]:
         if type(data) == int and data in cls.options.values():
             return cls(data)
         return cls.from_text(str(data))

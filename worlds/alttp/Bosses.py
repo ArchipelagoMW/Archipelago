@@ -166,7 +166,7 @@ boss_location_table = [
 
 
 def get_plando_bosses(boss_shuffle: str) -> List[str]:
-    options = boss_shuffle.lower().split(";")
+    options = boss_shuffle.split(";")
     bosses = []
     available_boss_names: set[str] = {boss.lower() for boss in boss_table if
                                       boss not in {'Agahnim', 'Agahnim2', 'Ganon'}}
@@ -270,6 +270,7 @@ def format_boss_location(location, level):
 
 
 def place_bosses(world, player: int):
+    # will either be an int or a lower case string with ';' between options
     boss_shuffle = world.boss_shuffle[player].value
     already_placed_bosses = []
     # handle plando
