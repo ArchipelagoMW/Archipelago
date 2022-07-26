@@ -170,7 +170,7 @@ Sent to clients purely to display a message to the player. This packet differs f
 | found | bool | Is present if type is Hint, denotes whether the location hinted for was checked. |
 | countdown | int | Is present if type is Countdown, denotes the amount of seconds remaining on the countdown |
 
-#### PrintJsonType
+##### PrintJsonType
 PrintJsonType indicates the type of [PrintJson](#PrintJson) packet, different types can be handled differently by the client and can also contain different additional arguments. When receiving an unknown type the data's list\[[JSONMessagePart](#JSONMessagePart)\] should still be printed as normally. Currently known types:
 | Type | Notes |
 | ---- | ----- |
