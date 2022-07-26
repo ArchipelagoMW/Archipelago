@@ -190,7 +190,7 @@ class Bosses(TextChoice):
                     boss_class = cls(";".join(options))
         return boss_class
 
-    def verify(self, world, plando_options, player_name: str):
+    def verify(self, world, plando_options, player_name: str) -> None:
         if isinstance(self.value, int):
             return
         from Generate import PlandoSettings

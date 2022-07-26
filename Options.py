@@ -585,7 +585,7 @@ class VerifyKeys:
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
                                 f"Allowed keys: {cls.valid_keys}.")
 
-    def verify(self, world, plando_options, player_name):
+    def verify(self, world, plando_options, player_name: str) -> None:
         if self.convert_name_groups and self.verify_item_name:
             new_value = type(self.value)()  # empty container of whatever value is
             for item_name in self.value:
@@ -810,7 +810,7 @@ class ItemLinks(OptionList):
                 pool |= {item_name}
         return pool
 
-    def verify(self, world, plando_options, player_name):
+    def verify(self, world, plando_options, player_name) -> None:
         super(ItemLinks, self).verify(world, plando_options, player_name)
         existing_links = set()
         for link in self.value:
