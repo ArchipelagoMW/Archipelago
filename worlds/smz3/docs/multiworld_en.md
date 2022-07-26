@@ -10,9 +10,8 @@
     - An emulator capable of connecting to SNI such as:
         - snes9x Multitroid
           from: [snes9x Multitroid Download](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
-        - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html)
-        - RetroArch 1.10.3 or newer from: [RetroArch BuildBot Website](https://buildbot.libretro.com/) - nightly builds
-          are required until 1.10.3 is released. Or,
+        - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html), or
+        - RetroArch 1.10.3 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
     - An SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
       compatible hardware
 - Your legally obtained Super Metroid ROM file, probably named `Super Metroid (Japan, USA).sfc` and

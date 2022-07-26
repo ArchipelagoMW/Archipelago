@@ -8,6 +8,15 @@ flowchart LR
     CC[CommonClient.py]
     AS <-- WebSockets --> CC
 
+    subgraph "Starcraft 2"
+        SC2[Starcraft 2 Game Client]
+        SC2C[Starcraft2Client.py]
+        SC2AI[apsc2 Python Package]
+
+        SC2C <--> SC2AI <-- WebSockets --> SC2
+    end
+    CC <-- Integrated --> SC2C
+
     %% ChecksFinder
     subgraph ChecksFinder
         CFC[ChecksFinderClient]
@@ -72,12 +81,14 @@ flowchart LR
         V6[VVVVVV]
         MT[Meritous]
         TW[The Witness]
+        SA2B[Sonic Adventure 2: Battle]
 
         APCLIENTPP <--> SOE
         APCLIENTPP <--> MT
         APCLIENTPP <-- The Witness Randomizer --> TW
         APCPP <--> SM64
         APCPP <--> V6
+        APCPP <--> SA2B
     end
     SOE <--> SNI <-- Various, depending on SNES device --> SOESNES
     AS <-- WebSockets --> APCLIENTPP

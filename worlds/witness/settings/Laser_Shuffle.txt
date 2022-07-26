@@ -1,0 +1,12 @@
+Items:
+Symmetry Laser
+Desert Laser
+Keep Laser
+Shadows Laser
+Quarry Laser
+Town Laser
+Swamp Laser
+Jungle Laser
+Bunker Laser
+Monastery Laser
+Treehouse Laser

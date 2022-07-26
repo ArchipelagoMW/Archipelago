@@ -35,6 +35,8 @@ class WitnessWorld(World):
     """
     game = "The Witness"
     topology_present = False
+    data_version = 5
+
     static_logic = StaticWitnessLogic()
     static_locat = StaticWitnessLocations()
     static_items = StaticWitnessItems()
@@ -45,17 +47,25 @@ class WitnessWorld(World):
         name: data.code for name, data in static_items.ALL_ITEM_TABLE.items()
     }
     location_name_to_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID
+    item_name_groups = StaticWitnessItems.ITEM_NAME_GROUPS
 
     def _get_slot_data(self):
         return {
             'seed': self.world.random.randint(0, 1000000),
             'victory_location': int(self.player_logic.VICTORY_LOCATION, 16),
             'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID,
-            'doorhex_to_id': self.player_logic.DOOR_DICT_FOR_CLIENT,
-            'door_connections_to_sever': self.player_logic.DOOR_CONNECTIONS_TO_SEVER
+            'item_id_to_door_hexes': self.items.ITEM_ID_TO_DOOR_HEX,
+            'door_hexes': self.items.DOORS,
+            'symbols_not_in_the_game': self.items.SYMBOLS_NOT_IN_THE_GAME
         }
 
     def generate_early(self):
+        if not (is_option_enabled(self.world, self.player, "shuffle_symbols")
+                or get_option_value(self.world, self.player, "shuffle_doors")
+                or is_option_enabled(self.world, self.player, "shuffle_lasers")):
+            raise Exception("This Witness world doesn't have any progression items. Please turn on Symbol Shuffle, Door"
+                            " Shuffle or Laser Shuffle")
+
         self.player_logic = WitnessPlayerLogic(self.world, self.player)
         self.locat = WitnessPlayerLocations(self.world, self.player, self.player_logic)
         self.items = WitnessPlayerItems(self.locat, self.world, self.player, self.player_logic)
@@ -76,11 +86,11 @@ class WitnessWorld(World):
         less_junk = 0
 
         # Put good item on first check if symbol shuffle is on
-        # symbols = is_option_enabled(self.world, self.player, "shuffle_symbols")
-        symbols = True
+        symbols = is_option_enabled(self.world, self.player, "shuffle_symbols")
 
         if symbols:
             random_good_item = self.world.random.choice(self.items.GOOD_ITEMS)
+
             first_check = self.world.get_location(
                 "Tutorial Gate Open", self.player
             )
@@ -88,6 +98,10 @@ class WitnessWorld(World):
             pool.remove(items_by_name[random_good_item])
 
             less_junk = 1
+
+        for item in self.player_logic.STARTING_INVENTORY:
+            self.world.push_precollected(items_by_name[item])
+            pool.remove(items_by_name[item])
 
         for item in self.items.EXTRA_AMOUNTS:
             witness_item = self.create_item(item)

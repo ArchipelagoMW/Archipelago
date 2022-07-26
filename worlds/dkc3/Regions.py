@@ -1,0 +1,883 @@
+import typing
+
+from BaseClasses import MultiWorld, Region, Entrance
+from .Items import DKC3Item
+from .Locations import DKC3Location
+from .Names import LocationName, ItemName
+
+
+def create_regions(world, player: int, active_locations):
+    menu_region = create_region(world, player, active_locations, 'Menu', None, None)
+
+    overworld_1_region_locations = {}
+    if world.goal[player] != "knautilus":
+        overworld_1_region_locations.update({LocationName.banana_bird_mother: []})
+    overworld_1_region = create_region(world, player, active_locations, LocationName.overworld_1_region,
+                                       overworld_1_region_locations, None)
+
+    overworld_2_region_locations = {}
+    overworld_2_region = create_region(world, player, active_locations, LocationName.overworld_2_region,
+                                       overworld_2_region_locations, None)
+
+    overworld_3_region_locations = {}
+    overworld_3_region = create_region(world, player, active_locations, LocationName.overworld_3_region,
+                                       overworld_3_region_locations, None)
+
+    overworld_4_region_locations = {}
+    overworld_4_region = create_region(world, player, active_locations, LocationName.overworld_4_region,
+                                       overworld_4_region_locations, None)
+
+
+    lake_orangatanga_region = create_region(world, player, active_locations, LocationName.lake_orangatanga_region, None, None)
+    kremwood_forest_region = create_region(world, player, active_locations, LocationName.kremwood_forest_region, None, None)
+    cotton_top_cove_region = create_region(world, player, active_locations, LocationName.cotton_top_cove_region, None, None)
+    mekanos_region = create_region(world, player, active_locations, LocationName.mekanos_region, None, None)
+    k3_region = create_region(world, player, active_locations, LocationName.k3_region, None, None)
+    razor_ridge_region = create_region(world, player, active_locations, LocationName.razor_ridge_region, None, None)
+    kaos_kore_region = create_region(world, player, active_locations, LocationName.kaos_kore_region, None, None)
+    krematoa_region = create_region(world, player, active_locations, LocationName.krematoa_region, None, None)
+
+
+    lakeside_limbo_region_locations = {
+        LocationName.lakeside_limbo_flag    : [0x657, 1],
+        LocationName.lakeside_limbo_bonus_1 : [0x657, 2],
+        LocationName.lakeside_limbo_bonus_2 : [0x657, 3],
+        LocationName.lakeside_limbo_dk      : [0x657, 5],
+    }
+    lakeside_limbo_region = create_region(world, player, active_locations, LocationName.lakeside_limbo_region,
+                                          lakeside_limbo_region_locations, None)
+
+    doorstop_dash_region_locations = {
+        LocationName.doorstop_dash_flag    : [0x65A, 1],
+        LocationName.doorstop_dash_bonus_1 : [0x65A, 2],
+        LocationName.doorstop_dash_bonus_2 : [0x65A, 3],
+        LocationName.doorstop_dash_dk      : [0x65A, 5],
+    }
+    doorstop_dash_region = create_region(world, player, active_locations, LocationName.doorstop_dash_region,
+                                         doorstop_dash_region_locations, None)
+
+    tidal_trouble_region_locations = {
+        LocationName.tidal_trouble_flag    : [0x659, 1],
+        LocationName.tidal_trouble_bonus_1 : [0x659, 2],
+        LocationName.tidal_trouble_bonus_2 : [0x659, 3],
+        LocationName.tidal_trouble_dk      : [0x659, 5],
+    }
+    tidal_trouble_region = create_region(world, player, active_locations, LocationName.tidal_trouble_region,
+                                         tidal_trouble_region_locations, None)
+
+    skiddas_row_region_locations = {
+        LocationName.skiddas_row_flag    : [0x65D, 1],
+        LocationName.skiddas_row_bonus_1 : [0x65D, 2],
+        LocationName.skiddas_row_bonus_2 : [0x65D, 3],
+        LocationName.skiddas_row_dk      : [0x65D, 5],
+    }
+    skiddas_row_region = create_region(world, player, active_locations, LocationName.skiddas_row_region,
+                                       skiddas_row_region_locations, None)
+
+    murky_mill_region_locations = {
+        LocationName.murky_mill_flag    : [0x65C, 1],
+        LocationName.murky_mill_bonus_1 : [0x65C, 2],
+        LocationName.murky_mill_bonus_2 : [0x65C, 3],
+        LocationName.murky_mill_dk      : [0x65C, 5],
+    }
+    murky_mill_region = create_region(world, player, active_locations, LocationName.murky_mill_region,
+                                      murky_mill_region_locations, None)
+
+    barrel_shield_bust_up_region_locations = {
+        LocationName.barrel_shield_bust_up_flag     : [0x662, 1],
+        LocationName.barrel_shield_bust_up_bonus_1  : [0x662, 2],
+        LocationName.barrel_shield_bust_up_bonus_2  : [0x662, 3],
+        LocationName.barrel_shield_bust_up_dk       : [0x662, 5],
+    }
+    barrel_shield_bust_up_region = create_region(world, player, active_locations, LocationName.barrel_shield_bust_up_region,
+                                                 barrel_shield_bust_up_region_locations, None)
+
+    riverside_race_region_locations = {
+        LocationName.riverside_race_flag    : [0x664, 1],
+        LocationName.riverside_race_bonus_1 : [0x664, 2],
+        LocationName.riverside_race_bonus_2 : [0x664, 3],
+        LocationName.riverside_race_dk      : [0x664, 5],
+    }
+    riverside_race_region = create_region(world, player, active_locations, LocationName.riverside_race_region,
+                                          riverside_race_region_locations, None)
+
+    squeals_on_wheels_region_locations = {
+        LocationName.squeals_on_wheels_flag    : [0x65B, 1],
+        LocationName.squeals_on_wheels_bonus_1 : [0x65B, 2],
+        LocationName.squeals_on_wheels_bonus_2 : [0x65B, 3],
+        LocationName.squeals_on_wheels_dk      : [0x65B, 5],
+    }
+    squeals_on_wheels_region = create_region(world, player, active_locations, LocationName.squeals_on_wheels_region,
+                                             squeals_on_wheels_region_locations, None)
+
+    springin_spiders_region_locations = {
+        LocationName.springin_spiders_flag    : [0x661, 1],
+        LocationName.springin_spiders_bonus_1 : [0x661, 2],
+        LocationName.springin_spiders_bonus_2 : [0x661, 3],
+        LocationName.springin_spiders_dk      : [0x661, 5],
+    }
+    springin_spiders_region = create_region(world, player, active_locations, LocationName.springin_spiders_region,
+                                            springin_spiders_region_locations, None)
+
+    bobbing_barrel_brawl_region_locations = {
+        LocationName.bobbing_barrel_brawl_flag     : [0x666, 1],
+        LocationName.bobbing_barrel_brawl_bonus_1  : [0x666, 2],
+        LocationName.bobbing_barrel_brawl_bonus_2  : [0x666, 3],
+        LocationName.bobbing_barrel_brawl_dk       : [0x666, 5],
+    }
+    bobbing_barrel_brawl_region = create_region(world, player, active_locations, LocationName.bobbing_barrel_brawl_region,
+                                                bobbing_barrel_brawl_region_locations, None)
+
+    bazzas_blockade_region_locations = {
+        LocationName.bazzas_blockade_flag    : [0x667, 1],
+        LocationName.bazzas_blockade_bonus_1 : [0x667, 2],
+        LocationName.bazzas_blockade_bonus_2 : [0x667, 3],
+        LocationName.bazzas_blockade_dk      : [0x667, 5],
+    }
+    bazzas_blockade_region = create_region(world, player, active_locations, LocationName.bazzas_blockade_region,
+                                           bazzas_blockade_region_locations, None)
+
+    rocket_barrel_ride_region_locations = {
+        LocationName.rocket_barrel_ride_flag    : [0x66A, 1],
+        LocationName.rocket_barrel_ride_bonus_1 : [0x66A, 2],
+        LocationName.rocket_barrel_ride_bonus_2 : [0x66A, 3],
+        LocationName.rocket_barrel_ride_dk      : [0x66A, 5],
+    }
+    rocket_barrel_ride_region = create_region(world, player, active_locations, LocationName.rocket_barrel_ride_region,
+                                              rocket_barrel_ride_region_locations, None)
+
+    kreeping_klasps_region_locations = {
+        LocationName.kreeping_klasps_flag     : [0x658, 1],
+        LocationName.kreeping_klasps_bonus_1  : [0x658, 2],
+        LocationName.kreeping_klasps_bonus_2  : [0x658, 3],
+        LocationName.kreeping_klasps_dk       : [0x658, 5],
+    }
+    kreeping_klasps_region = create_region(world, player, active_locations, LocationName.kreeping_klasps_region,
+                                           kreeping_klasps_region_locations, None)
+
+    tracker_barrel_trek_region_locations = {
+        LocationName.tracker_barrel_trek_flag    : [0x66B, 1],
+        LocationName.tracker_barrel_trek_bonus_1 : [0x66B, 2],
+        LocationName.tracker_barrel_trek_bonus_2 : [0x66B, 3],
+        LocationName.tracker_barrel_trek_dk      : [0x66B, 5],
+    }
+    tracker_barrel_trek_region = create_region(world, player, active_locations, LocationName.tracker_barrel_trek_region,
+                                               tracker_barrel_trek_region_locations, None)
+
+    fish_food_frenzy_region_locations = {
+        LocationName.fish_food_frenzy_flag    : [0x668, 1],
+        LocationName.fish_food_frenzy_bonus_1 : [0x668, 2],
+        LocationName.fish_food_frenzy_bonus_2 : [0x668, 3],
+        LocationName.fish_food_frenzy_dk      : [0x668, 5],
+    }
+    fish_food_frenzy_region = create_region(world, player, active_locations, LocationName.fish_food_frenzy_region,
+                                            fish_food_frenzy_region_locations, None)
+
+    fire_ball_frenzy_region_locations = {
+        LocationName.fire_ball_frenzy_flag    : [0x66D, 1],
+        LocationName.fire_ball_frenzy_bonus_1 : [0x66D, 2],
+        LocationName.fire_ball_frenzy_bonus_2 : [0x66D, 3],
+        LocationName.fire_ball_frenzy_dk      : [0x66D, 5],
+    }
+    fire_ball_frenzy_region = create_region(world, player, active_locations, LocationName.fire_ball_frenzy_region,
+                                            fire_ball_frenzy_region_locations, None)
+
+    demolition_drain_pipe_region_locations = {
+        LocationName.demolition_drain_pipe_flag    : [0x672, 1],
+        LocationName.demolition_drain_pipe_bonus_1 : [0x672, 2],
+        LocationName.demolition_drain_pipe_bonus_2 : [0x672, 3],
+        LocationName.demolition_drain_pipe_dk      : [0x672, 5],
+    }
+    demolition_drain_pipe_region = create_region(world, player, active_locations, LocationName.demolition_drain_pipe_region,
+                                                 demolition_drain_pipe_region_locations, None)
+
+    ripsaw_rage_region_locations = {
+        LocationName.ripsaw_rage_flag    : [0x660, 1],
+        LocationName.ripsaw_rage_bonus_1 : [0x660, 2],
+        LocationName.ripsaw_rage_bonus_2 : [0x660, 3],
+        LocationName.ripsaw_rage_dk      : [0x660, 5],
+    }
+    ripsaw_rage_region = create_region(world, player, active_locations, LocationName.ripsaw_rage_region,
+                                       ripsaw_rage_region_locations, None)
+
+    blazing_bazookas_region_locations = {
+        LocationName.blazing_bazookas_flag    : [0x66E, 1],
+        LocationName.blazing_bazookas_bonus_1 : [0x66E, 2],
+        LocationName.blazing_bazookas_bonus_2 : [0x66E, 3],
+        LocationName.blazing_bazookas_dk      : [0x66E, 5],
+    }
+    blazing_bazookas_region = create_region(world, player, active_locations, LocationName.blazing_bazookas_region,
+                                            blazing_bazookas_region_locations, None)
+
+    low_g_labyrinth_region_locations = {
+        LocationName.low_g_labyrinth_flag     : [0x670, 1],
+        LocationName.low_g_labyrinth_bonus_1  : [0x670, 2],
+        LocationName.low_g_labyrinth_bonus_2  : [0x670, 3],
+        LocationName.low_g_labyrinth_dk       : [0x670, 5],
+    }
+    low_g_labyrinth_region = create_region(world, player, active_locations, LocationName.low_g_labyrinth_region,
+                                           low_g_labyrinth_region_locations, None)
+
+    krevice_kreepers_region_locations = {
+        LocationName.krevice_kreepers_flag    : [0x673, 1],
+        LocationName.krevice_kreepers_bonus_1 : [0x673, 2],
+        LocationName.krevice_kreepers_bonus_2 : [0x673, 3],
+        LocationName.krevice_kreepers_dk      : [0x673, 5],
+    }
+    krevice_kreepers_region = create_region(world, player, active_locations, LocationName.krevice_kreepers_region,
+                                            krevice_kreepers_region_locations, None)
+
+    tearaway_toboggan_region_locations = {
+        LocationName.tearaway_toboggan_flag    : [0x65F, 1],
+        LocationName.tearaway_toboggan_bonus_1 : [0x65F, 2],
+        LocationName.tearaway_toboggan_bonus_2 : [0x65F, 3],
+        LocationName.tearaway_toboggan_dk      : [0x65F, 5],
+    }
+    tearaway_toboggan_region = create_region(world, player, active_locations, LocationName.tearaway_toboggan_region,
+                                             tearaway_toboggan_region_locations, None)
+
+    barrel_drop_bounce_region_locations = {
+        LocationName.barrel_drop_bounce_flag    : [0x66C, 1],
+        LocationName.barrel_drop_bounce_bonus_1 : [0x66C, 2],
+        LocationName.barrel_drop_bounce_bonus_2 : [0x66C, 3],
+        LocationName.barrel_drop_bounce_dk      : [0x66C, 5],
+    }
+    barrel_drop_bounce_region = create_region(world, player, active_locations, LocationName.barrel_drop_bounce_region,
+                                              barrel_drop_bounce_region_locations, None)
+
+    krack_shot_kroc_region_locations = {
+        LocationName.krack_shot_kroc_flag    : [0x66F, 1],
+        LocationName.krack_shot_kroc_bonus_1 : [0x66F, 2],
+        LocationName.krack_shot_kroc_bonus_2 : [0x66F, 3],
+        LocationName.krack_shot_kroc_dk      : [0x66F, 5],
+    }
+    krack_shot_kroc_region = create_region(world, player, active_locations, LocationName.krack_shot_kroc_region,
+                                           krack_shot_kroc_region_locations, None)
+
+    lemguin_lunge_region_locations = {
+        LocationName.lemguin_lunge_flag    : [0x65E, 1],
+        LocationName.lemguin_lunge_bonus_1 : [0x65E, 2],
+        LocationName.lemguin_lunge_bonus_2 : [0x65E, 3],
+        LocationName.lemguin_lunge_dk      : [0x65E, 5],
+    }
+    lemguin_lunge_region = create_region(world, player, active_locations, LocationName.lemguin_lunge_region,
+                                         lemguin_lunge_region_locations, None)
+
+    buzzer_barrage_region_locations = {
+        LocationName.buzzer_barrage_flag    : [0x676, 1],
+        LocationName.buzzer_barrage_bonus_1 : [0x676, 2],
+        LocationName.buzzer_barrage_bonus_2 : [0x676, 3],
+        LocationName.buzzer_barrage_dk      : [0x676, 5],
+    }
+    buzzer_barrage_region = create_region(world, player, active_locations, LocationName.buzzer_barrage_region,
+                                          buzzer_barrage_region_locations, None)
+
+    kong_fused_cliffs_region_locations = {
+        LocationName.kong_fused_cliffs_flag    : [0x674, 1],
+        LocationName.kong_fused_cliffs_bonus_1 : [0x674, 2],
+        LocationName.kong_fused_cliffs_bonus_2 : [0x674, 3],
+        LocationName.kong_fused_cliffs_dk      : [0x674, 5],
+    }
+    kong_fused_cliffs_region = create_region(world, player, active_locations, LocationName.kong_fused_cliffs_region,
+                                             kong_fused_cliffs_region_locations, None)
+
+    floodlit_fish_region_locations = {
+        LocationName.floodlit_fish_flag    : [0x669, 1],
+        LocationName.floodlit_fish_bonus_1 : [0x669, 2],
+        LocationName.floodlit_fish_bonus_2 : [0x669, 3],
+        LocationName.floodlit_fish_dk      : [0x669, 5],
+    }
+    floodlit_fish_region = create_region(world, player, active_locations, LocationName.floodlit_fish_region,
+                                         floodlit_fish_region_locations, None)
+
+    pothole_panic_region_locations = {
+        LocationName.pothole_panic_flag    : [0x677, 1],
+        LocationName.pothole_panic_bonus_1 : [0x677, 2],
+        LocationName.pothole_panic_bonus_2 : [0x677, 3],
+        LocationName.pothole_panic_dk      : [0x677, 5],
+    }
+    pothole_panic_region = create_region(world, player, active_locations, LocationName.pothole_panic_region,
+                                         pothole_panic_region_locations, None)
+
+    ropey_rumpus_region_locations = {
+        LocationName.ropey_rumpus_flag    : [0x675, 1],
+        LocationName.ropey_rumpus_bonus_1 : [0x675, 2],
+        LocationName.ropey_rumpus_bonus_2 : [0x675, 3],
+        LocationName.ropey_rumpus_dk      : [0x675, 5],
+    }
+    ropey_rumpus_region = create_region(world, player, active_locations, LocationName.ropey_rumpus_region,
+                                        ropey_rumpus_region_locations, None)
+
+    konveyor_rope_clash_region_locations = {
+        LocationName.konveyor_rope_clash_flag     : [0x657, 1],
+        LocationName.konveyor_rope_clash_bonus_1  : [0x657, 2],
+        LocationName.konveyor_rope_clash_bonus_2  : [0x657, 3],
+        LocationName.konveyor_rope_clash_dk       : [0x657, 5],
+    }
+    konveyor_rope_clash_region = create_region(world, player, active_locations, LocationName.konveyor_rope_clash_region,
+                                               konveyor_rope_clash_region_locations, None)
+
+    creepy_caverns_region_locations = {
+        LocationName.creepy_caverns_flag    : [0x678, 1],
+        LocationName.creepy_caverns_bonus_1 : [0x678, 2],
+        LocationName.creepy_caverns_bonus_2 : [0x678, 3],
+        LocationName.creepy_caverns_dk      : [0x678, 5],
+    }
+    creepy_caverns_region = create_region(world, player, active_locations, LocationName.creepy_caverns_region,
+                                          creepy_caverns_region_locations, None)
+
+    lightning_lookout_region_locations = {
+        LocationName.lightning_lookout_flag     : [0x665, 1],
+        LocationName.lightning_lookout_bonus_1  : [0x665, 2],
+        LocationName.lightning_lookout_bonus_2  : [0x665, 3],
+        LocationName.lightning_lookout_dk       : [0x665, 5],
+    }
+    lightning_lookout_region = create_region(world, player, active_locations, LocationName.lightning_lookout_region,
+                                             lightning_lookout_region_locations, None)
+
+    koindozer_klamber_region_locations = {
+        LocationName.koindozer_klamber_flag     : [0x679, 1],
+        LocationName.koindozer_klamber_bonus_1  : [0x679, 2],
+        LocationName.koindozer_klamber_bonus_2  : [0x679, 3],
+        LocationName.koindozer_klamber_dk       : [0x679, 5],
+    }
+    koindozer_klamber_region = create_region(world, player, active_locations, LocationName.koindozer_klamber_region,
+                                             koindozer_klamber_region_locations, None)
+
+    poisonous_pipeline_region_locations = {
+        LocationName.poisonous_pipeline_flag    : [0x671, 1],
+        LocationName.poisonous_pipeline_bonus_1 : [0x671, 2],
+        LocationName.poisonous_pipeline_bonus_2 : [0x671, 3],
+        LocationName.poisonous_pipeline_dk      : [0x671, 5],
+    }
+    poisonous_pipeline_region = create_region(world, player, active_locations, LocationName.poisonous_pipeline_region,
+                                              poisonous_pipeline_region_locations, None)
+
+    stampede_sprint_region_locations = {
+        LocationName.stampede_sprint_flag     : [0x67B, 1],
+        LocationName.stampede_sprint_bonus_1  : [0x67B, 2],
+        LocationName.stampede_sprint_bonus_2  : [0x67B, 3],
+        LocationName.stampede_sprint_bonus_3  : [0x67B, 4],
+        LocationName.stampede_sprint_dk       : [0x67B, 5],
+    }
+    stampede_sprint_region = create_region(world, player, active_locations, LocationName.stampede_sprint_region,
+                                           stampede_sprint_region_locations, None)
+
+    criss_cross_cliffs_region_locations = {
+        LocationName.criss_cross_cliffs_flag    : [0x67C, 1],
+        LocationName.criss_cross_cliffs_bonus_1 : [0x67C, 2],
+        LocationName.criss_cross_cliffs_bonus_2 : [0x67C, 3],
+        LocationName.criss_cross_cliffs_dk      : [0x67C, 5],
+    }
+    criss_cross_cliffs_region = create_region(world, player, active_locations, LocationName.criss_cross_cliffs_region,
+                                              criss_cross_cliffs_region_locations, None)
+
+    tyrant_twin_tussle_region_locations = {
+        LocationName.tyrant_twin_tussle_flag    : [0x67D, 1],
+        LocationName.tyrant_twin_tussle_bonus_1 : [0x67D, 2],
+        LocationName.tyrant_twin_tussle_bonus_2 : [0x67D, 3],
+        LocationName.tyrant_twin_tussle_bonus_3 : [0x67D, 4],
+        LocationName.tyrant_twin_tussle_dk      : [0x67D, 5],
+    }
+    tyrant_twin_tussle_region = create_region(world, player, active_locations, LocationName.tyrant_twin_tussle_region,
+                                              tyrant_twin_tussle_region_locations, None)
+
+    swoopy_salvo_region_locations = {
+        LocationName.swoopy_salvo_flag    : [0x663, 1],
+        LocationName.swoopy_salvo_bonus_1 : [0x663, 2],
+        LocationName.swoopy_salvo_bonus_2 : [0x663, 3],
+        LocationName.swoopy_salvo_bonus_3 : [0x663, 4],
+        LocationName.swoopy_salvo_dk      : [0x663, 5],
+    }
+    swoopy_salvo_region = create_region(world, player, active_locations, LocationName.swoopy_salvo_region,
+                                        swoopy_salvo_region_locations, None)
+
+    rocket_rush_region_locations = {
+        LocationName.rocket_rush_flag : [0x67E, 1],
+        LocationName.rocket_rush_dk   : [0x67E, 5],
+    }
+    rocket_rush_region = create_region(world, player, active_locations, LocationName.rocket_rush_region,
+                                       rocket_rush_region_locations, None)
+
+    belchas_barn_region_locations = {
+        LocationName.belchas_barn: [0x64F, 1],
+    }
+    belchas_barn_region = create_region(world, player, active_locations, LocationName.belchas_barn_region,
+                                        belchas_barn_region_locations, None)
+
+    arichs_ambush_region_locations = {
+        LocationName.arichs_ambush: [0x650, 1],
+    }
+    arichs_ambush_region = create_region(world, player, active_locations, LocationName.arichs_ambush_region,
+                                         arichs_ambush_region_locations, None)
+
+    squirts_showdown_region_locations = {
+        LocationName.squirts_showdown: [0x651, 1],
+    }
+    squirts_showdown_region = create_region(world, player, active_locations, LocationName.squirts_showdown_region,
+                                            squirts_showdown_region_locations, None)
+
+    kaos_karnage_region_locations = {
+        LocationName.kaos_karnage: [0x652, 1],
+    }
+    kaos_karnage_region = create_region(world, player, active_locations, LocationName.kaos_karnage_region,
+                                        kaos_karnage_region_locations, None)
+
+    bleaks_house_region_locations = {
+        LocationName.bleaks_house: [0x653, 1],
+    }
+    bleaks_house_region = create_region(world, player, active_locations, LocationName.bleaks_house_region,
+                                        bleaks_house_region_locations, None)
+
+    barboss_barrier_region_locations = {
+        LocationName.barboss_barrier: [0x654, 1],
+    }
+    barboss_barrier_region = create_region(world, player, active_locations, LocationName.barboss_barrier_region,
+                                           barboss_barrier_region_locations, None)
+
+    kastle_kaos_region_locations = {
+        LocationName.kastle_kaos: [0x655, 1],
+    }
+    kastle_kaos_region = create_region(world, player, active_locations, LocationName.kastle_kaos_region,
+                                       kastle_kaos_region_locations, None)
+
+    knautilus_region_locations = {
+        LocationName.knautilus: [0x656, 1],
+    }
+    knautilus_region = create_region(world, player, active_locations, LocationName.knautilus_region,
+                                     knautilus_region_locations, None)
+
+    belchas_burrow_region_locations = {
+        LocationName.belchas_burrow: [0x647, 1],
+    }
+    belchas_burrow_region = create_region(world, player, active_locations, LocationName.belchas_burrow_region,
+                                          belchas_burrow_region_locations, None)
+
+    kong_cave_region_locations = {
+        LocationName.kong_cave: [0x645, 1],
+    }
+    kong_cave_region = create_region(world, player, active_locations, LocationName.kong_cave_region,
+                                     kong_cave_region_locations, None)
+
+    undercover_cove_region_locations = {
+        LocationName.undercover_cove: [0x644, 1],
+    }
+    undercover_cove_region = create_region(world, player, active_locations, LocationName.undercover_cove_region,
+                                          undercover_cove_region_locations, None)
+
+    ks_cache_region_locations = {
+        LocationName.ks_cache: [0x642, 1],
+    }
+    ks_cache_region = create_region(world, player, active_locations, LocationName.ks_cache_region,
+                                    ks_cache_region_locations, None)
+
+    hill_top_hoard_region_locations = {
+        LocationName.hill_top_hoard: [0x643, 1],
+    }
+    hill_top_hoard_region = create_region(world, player, active_locations, LocationName.hill_top_hoard_region,
+                                          hill_top_hoard_region_locations, None)
+
+    bounty_beach_region_locations = {
+        LocationName.bounty_beach: [0x646, 1],
+    }
+    bounty_beach_region = create_region(world, player, active_locations, LocationName.bounty_beach_region,
+                                        bounty_beach_region_locations, None)
+
+    smugglers_cove_region_locations = {
+        LocationName.smugglers_cove: [0x648, 1],
+    }
+    smugglers_cove_region = create_region(world, player, active_locations, LocationName.smugglers_cove_region,
+                                          smugglers_cove_region_locations, None)
+
+    arichs_hoard_region_locations = {
+        LocationName.arichs_hoard: [0x649, 1],
+    }
+    arichs_hoard_region = create_region(world, player, active_locations, LocationName.arichs_hoard_region,
+                                        arichs_hoard_region_locations, None)
+
+    bounty_bay_region_locations = {
+        LocationName.bounty_bay: [0x64A, 1],
+    }
+    bounty_bay_region = create_region(world, player, active_locations, LocationName.bounty_bay_region,
+                                      bounty_bay_region_locations, None)
+
+    sky_high_secret_region_locations = {}
+    if False:#world.include_trade_sequence[player]:
+        sky_high_secret_region_locations.update({
+            LocationName.sky_high_secret: [0x64B, 1],
+        })
+    sky_high_secret_region = create_region(world, player, active_locations, LocationName.sky_high_secret_region,
+                                           sky_high_secret_region_locations, None)
+
+    glacial_grotto_region_locations = {
+        LocationName.glacial_grotto: [0x64C, 1],
+    }
+    glacial_grotto_region = create_region(world, player, active_locations, LocationName.glacial_grotto_region,
+                                          glacial_grotto_region_locations, None)
+
+    cifftop_cache_region_locations = {}
+    if False:#world.include_trade_sequence[player]:
+        cifftop_cache_region_locations.update({
+            LocationName.cifftop_cache: [0x64D, 1],
+        })
+    cifftop_cache_region = create_region(world, player, active_locations, LocationName.cifftop_cache_region,
+                                         cifftop_cache_region_locations, None)
+
+    sewer_stockpile_region_locations = {
+        LocationName.sewer_stockpile: [0x64E, 1],
+    }
+    sewer_stockpile_region = create_region(world, player, active_locations, LocationName.sewer_stockpile_region,
+                                           sewer_stockpile_region_locations, None)
+
+
+    # Set up the regions correctly.
+    world.regions += [
+        menu_region,
+        overworld_1_region,
+        overworld_2_region,
+        overworld_3_region,
+        overworld_4_region,
+        lake_orangatanga_region,
+        kremwood_forest_region,
+        cotton_top_cove_region,
+        mekanos_region,
+        k3_region,
+        razor_ridge_region,
+        kaos_kore_region,
+        krematoa_region,
+        lakeside_limbo_region,
+        doorstop_dash_region,
+        tidal_trouble_region,
+        skiddas_row_region,
+        murky_mill_region,
+        barrel_shield_bust_up_region,
+        riverside_race_region,
+        squeals_on_wheels_region,
+        springin_spiders_region,
+        bobbing_barrel_brawl_region,
+        bazzas_blockade_region,
+        rocket_barrel_ride_region,
+        kreeping_klasps_region,
+        tracker_barrel_trek_region,
+        fish_food_frenzy_region,
+        fire_ball_frenzy_region,
+        demolition_drain_pipe_region,
+        ripsaw_rage_region,
+        blazing_bazookas_region,
+        low_g_labyrinth_region,
+        krevice_kreepers_region,
+        tearaway_toboggan_region,
+        barrel_drop_bounce_region,
+        krack_shot_kroc_region,
+        lemguin_lunge_region,
+        buzzer_barrage_region,
+        kong_fused_cliffs_region,
+        floodlit_fish_region,
+        pothole_panic_region,
+        ropey_rumpus_region,
+        konveyor_rope_clash_region,
+        creepy_caverns_region,
+        lightning_lookout_region,
+        koindozer_klamber_region,
+        poisonous_pipeline_region,
+        stampede_sprint_region,
+        criss_cross_cliffs_region,
+        tyrant_twin_tussle_region,
+        swoopy_salvo_region,
+        rocket_rush_region,
+        belchas_barn_region,
+        arichs_ambush_region,
+        squirts_showdown_region,
+        kaos_karnage_region,
+        bleaks_house_region,
+        barboss_barrier_region,
+        kastle_kaos_region,
+        knautilus_region,
+        belchas_burrow_region,
+        kong_cave_region,
+        undercover_cove_region,
+        ks_cache_region,
+        hill_top_hoard_region,
+        bounty_beach_region,
+        smugglers_cove_region,
+        arichs_hoard_region,
+        bounty_bay_region,
+        sky_high_secret_region,
+        glacial_grotto_region,
+        cifftop_cache_region,
+        sewer_stockpile_region,
+    ]
+    
+    bazaar_region_locations = {}
+    bramble_region_locations = {}
+    flower_spot_region_locations = {}
+    barter_region_locations = {}
+    barnacle_region_locations = {}
+    blue_region_locations = {}
+    blizzard_region_locations = {}
+
+    if False:#world.include_trade_sequence[player]:
+        bazaar_region_locations.update({
+            LocationName.bazaars_general_store_1: [0x615, 2, True],
+            LocationName.bazaars_general_store_2: [0x615, 3, True],
+        })
+
+        bramble_region_locations.update({
+            LocationName.brambles_bungalow: [0x619, 2],
+        })
+
+        #flower_spot_region_locations.update({
+        #    LocationName.flower_spot: [0x615, 3, True],
+        #})
+
+        barter_region_locations.update({
+            LocationName.barters_swap_shop: [0x61B, 3],
+        })
+
+        barnacle_region_locations.update({
+            LocationName.barnacles_island: [0x61D, 2],
+        })
+
+        blue_region_locations.update({
+            LocationName.blues_beach_hut: [0x621, 4],
+        })
+
+        blizzard_region_locations.update({
+            LocationName.blizzards_basecamp: [0x625, 4, True],
+        })
+
+    bazaar_region = create_region(world, player, active_locations, LocationName.bazaar_region,
+                                  bazaar_region_locations, None)
+    bramble_region = create_region(world, player, active_locations, LocationName.bramble_region,
+                                   bramble_region_locations, None)
+    flower_spot_region = create_region(world, player, active_locations, LocationName.flower_spot_region,
+                                       flower_spot_region_locations, None)
+    barter_region = create_region(world, player, active_locations, LocationName.barter_region,
+                                  barter_region_locations, None)
+    barnacle_region = create_region(world, player, active_locations, LocationName.barnacle_region,
+                                    barnacle_region_locations, None)
+    blue_region = create_region(world, player, active_locations, LocationName.blue_region,
+                                blue_region_locations, None)
+    blizzard_region = create_region(world, player, active_locations, LocationName.blizzard_region,
+                                    blizzard_region_locations, None)
+
+    world.regions += [
+        bazaar_region,
+        bramble_region,
+        flower_spot_region,
+        barter_region,
+        barnacle_region,
+        blue_region,
+        blizzard_region,
+    ]
+
+
+def connect_regions(world, player, level_list):
+    names: typing.Dict[str, int] = {}
+
+    # Overworld
+    connect(world, player, names, 'Menu', LocationName.overworld_1_region)
+    connect(world, player, names, LocationName.overworld_1_region, LocationName.overworld_2_region,
+            lambda state: (state.has(ItemName.progressive_boat, player, 1)))
+    connect(world, player, names, LocationName.overworld_2_region, LocationName.overworld_3_region,
+            lambda state: (state.has(ItemName.progressive_boat, player, 3)))
+    connect(world, player, names, LocationName.overworld_1_region, LocationName.overworld_4_region,
+            lambda state: (state.has(ItemName.dk_coin, player, world.dk_coins_for_gyrocopter[player].value) and
+                           state.has(ItemName.progressive_boat, player, 3)))
+
+    # World Connections
+    connect(world, player, names, LocationName.overworld_1_region, LocationName.lake_orangatanga_region)
+    connect(world, player, names, LocationName.overworld_1_region, LocationName.kremwood_forest_region)
+    connect(world, player, names, LocationName.overworld_1_region, LocationName.bounty_beach_region)
+    connect(world, player, names, LocationName.overworld_1_region, LocationName.bazaar_region)
+
+    connect(world, player, names, LocationName.overworld_2_region, LocationName.cotton_top_cove_region)
+    connect(world, player, names, LocationName.overworld_2_region, LocationName.mekanos_region)
+    connect(world, player, names, LocationName.overworld_2_region, LocationName.kong_cave_region)
+    connect(world, player, names, LocationName.overworld_2_region, LocationName.bramble_region)
+
+    connect(world, player, names, LocationName.overworld_3_region, LocationName.k3_region)
+    connect(world, player, names, LocationName.overworld_3_region, LocationName.razor_ridge_region)
+    connect(world, player, names, LocationName.overworld_3_region, LocationName.kaos_kore_region)
+    connect(world, player, names, LocationName.overworld_3_region, LocationName.krematoa_region)
+    connect(world, player, names, LocationName.overworld_3_region, LocationName.undercover_cove_region)
+    connect(world, player, names, LocationName.overworld_3_region, LocationName.flower_spot_region)
+    connect(world, player, names, LocationName.overworld_3_region, LocationName.barter_region)
+
+    connect(world, player, names, LocationName.overworld_4_region, LocationName.belchas_burrow_region)
+    connect(world, player, names, LocationName.overworld_4_region, LocationName.ks_cache_region)
+    connect(world, player, names, LocationName.overworld_4_region, LocationName.hill_top_hoard_region)
+
+
+    # Lake Orangatanga Connections
+    lake_orangatanga_levels = [
+        level_list[0],
+        level_list[1],
+        level_list[2],
+        level_list[3],
+        level_list[4],
+        LocationName.belchas_barn_region,
+        LocationName.barnacle_region,
+        LocationName.smugglers_cove_region,
+    ]
+
+    for i in range(0, len(lake_orangatanga_levels)):
+        connect(world, player, names, LocationName.lake_orangatanga_region, lake_orangatanga_levels[i])
+
+    # Kremwood Forest Connections
+    kremwood_forest_levels = [
+        level_list[5],
+        level_list[6],
+        level_list[7],
+        level_list[8],
+        level_list[9],
+        LocationName.arichs_ambush_region,
+        LocationName.arichs_hoard_region,
+    ]
+
+    for i in range(0, len(kremwood_forest_levels) - 1):
+        connect(world, player, names, LocationName.kremwood_forest_region, kremwood_forest_levels[i])
+
+    connect(world, player, names, LocationName.kremwood_forest_region, kremwood_forest_levels[-1],
+            lambda state: (state.can_reach(LocationName.riverside_race_flag, "Location", player)))
+
+    # Cotton-Top Cove Connections
+    cotton_top_cove_levels = [
+        LocationName.blue_region,
+        level_list[10],
+        level_list[11],
+        level_list[12],
+        level_list[13],
+        level_list[14],
+        LocationName.squirts_showdown_region,
+        LocationName.bounty_bay_region,
+    ]
+
+    for i in range(0, len(cotton_top_cove_levels)):
+        connect(world, player, names, LocationName.cotton_top_cove_region, cotton_top_cove_levels[i])
+
+    # Mekanos Connections
+    mekanos_levels = [
+        level_list[15],
+        level_list[16],
+        level_list[17],
+        level_list[18],
+        level_list[19],
+        LocationName.kaos_karnage_region,
+    ]
+
+    for i in range(0, len(mekanos_levels)):
+        connect(world, player, names, LocationName.mekanos_region, mekanos_levels[i])
+        
+    if False:#world.include_trade_sequence[player]:
+        connect(world, player, names, LocationName.mekanos_region, LocationName.sky_high_secret_region,
+                lambda state: (state.has(ItemName.bowling_ball, player, 1)))
+    else:
+        connect(world, player, names, LocationName.mekanos_region, LocationName.sky_high_secret_region,
+                lambda state: (state.can_reach(LocationName.bleaks_house, "Location", player)))
+
+    # K3 Connections
+    k3_levels = [
+        level_list[20],
+        level_list[21],
+        level_list[22],
+        level_list[23],
+        level_list[24],
+        LocationName.bleaks_house_region,
+        LocationName.blizzard_region,
+        LocationName.glacial_grotto_region,
+    ]
+
+    for i in range(0, len(k3_levels)):
+        connect(world, player, names, LocationName.k3_region, k3_levels[i])
+
+    # Razor Ridge Connections
+    razor_ridge_levels = [
+        level_list[25],
+        level_list[26],
+        level_list[27],
+        level_list[28],
+        level_list[29],
+        LocationName.barboss_barrier_region,
+    ]
+
+    for i in range(0, len(razor_ridge_levels)):
+        connect(world, player, names, LocationName.razor_ridge_region, razor_ridge_levels[i])
+        
+    if False:#world.include_trade_sequence[player]:
+        connect(world, player, names, LocationName.razor_ridge_region, LocationName.cifftop_cache_region,
+                lambda state: (state.has(ItemName.wrench, player, 1)))
+    else:
+        connect(world, player, names, LocationName.razor_ridge_region, LocationName.cifftop_cache_region)
+
+    # KAOS Kore Connections
+    kaos_kore_levels = [
+        level_list[30],
+        level_list[31],
+        level_list[32],
+        level_list[33],
+        level_list[34],
+        LocationName.kastle_kaos_region,
+        LocationName.sewer_stockpile_region,
+    ]
+
+    for i in range(0, len(kaos_kore_levels)):
+        connect(world, player, names, LocationName.kaos_kore_region, kaos_kore_levels[i])
+
+    # Krematoa Connections
+    krematoa_levels = [
+        level_list[35],
+        level_list[36],
+        level_list[37],
+        level_list[38],
+        LocationName.rocket_rush_region,
+    ]
+
+    for i in range(0, len(krematoa_levels)):
+        connect(world, player, names, LocationName.krematoa_region, krematoa_levels[i],
+                lambda state: (state.has(ItemName.bonus_coin, player, world.krematoa_bonus_coin_cost[player].value * (i+1))))
+                
+    connect(world, player, names, LocationName.krematoa_region, LocationName.knautilus_region,
+            lambda state: (state.has(ItemName.krematoa_cog, player, 5)))
+
+
+def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):
+    # Shamelessly stolen from the ROR2 definition
+    ret = Region(name, None, name, player)
+    ret.world = world
+    if locations:
+        for locationName, locationData in locations.items():
+            loc_id = active_locations.get(locationName, 0)
+            if loc_id:
+                loc_byte   = locationData[0] if (len(locationData) > 0) else 0
+                loc_bit    = locationData[1] if (len(locationData) > 1) else 0
+                loc_invert = locationData[2] if (len(locationData) > 2) else False
+
+                location = DKC3Location(player, locationName, loc_id, ret, loc_byte, loc_bit, loc_invert)
+                ret.locations.append(location)
+    if exits:
+        for exit in exits:
+            ret.exits.append(Entrance(player, exit, ret))
+
+    return ret
+
+
+def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], source: str, target: str,
+            rule: typing.Optional[typing.Callable] = None):
+    source_region = world.get_region(source, player)
+    target_region = world.get_region(target, player)
+
+    if target not in used_names:
+        used_names[target] = 1
+        name = target
+    else:
+        used_names[target] += 1
+        name = target + (' ' * used_names[target])
+
+    connection = Entrance(player, name, source_region)
+
+    if rule:
+        connection.access_rule = rule
+
+    source_region.exits.append(connection)
+    connection.connect(target_region)
