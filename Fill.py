@@ -135,7 +135,7 @@ def accessibility_corrections(world: MultiWorld, state: CollectionState, locatio
     unreachable_locations = [location for location in world.get_locations() if location.player in minimal_players and
                              not location.can_reach(maximum_exploration_state)]
     for location in unreachable_locations:
-        if (location.item is not None and location.item.classification == ItemClassification.progression and
+        if (location.item is not None and location.item.classification & ItemClassification.progression and
                 location.address is not None and not location.locked and location.item.player not in minimal_players):
             pool.append(location.item)
             state.remove(location.item)
@@ -153,7 +153,7 @@ def inaccessible_location_rules(world: MultiWorld, state: CollectionState, locat
     maximum_exploration_state = sweep_from_pool(state, [])
     unreachable_locations = [location for location in locations if not location.can_reach(maximum_exploration_state)]
     for location in unreachable_locations:
-        add_item_rule(location, lambda item: not ((item.useful or item.advancement) and
+        add_item_rule(location, lambda item: not ((item.classification & 0b0011) and
                                               world.accessibility[item.player] != 'minimal'))
 
 
