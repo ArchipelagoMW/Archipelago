@@ -61,7 +61,6 @@ class DKC3World(World):
 
     def _get_slot_data(self):
         return {
-            #"death_link": self.world.death_link[self.player].value,
             "active_levels": self.active_level_list,
         }
 

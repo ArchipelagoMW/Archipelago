@@ -1,6 +1,6 @@
 import typing
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, OptionList
 
 
 class Goal(Choice):
@@ -12,6 +12,21 @@ class Goal(Choice):
     display_name = "Goal"
     option_knautilus = 0
     option_banana_bird_hunt = 1
+    default = 0
+
+
+class DeathLink(Choice):
+    """
+    When you die, everyone dies. Of course the reverse is true too.
+    Both Kongs: Another player dying causes you to die, even if you have multiple Kongs
+    One Kong: Another player dying causes one instance of damage to you, saving you if you have another Kong
+    """
+    display_name = "Death Link"
+    option_off = 0
+    option_both_kongs = 1
+    option_one_kong = 3
+    alias_false = 0
+    alias_true = 1
     default = 0
 
 
@@ -117,7 +132,7 @@ class StartingLifeCount(Range):
 
 
 dkc3_options: typing.Dict[str, type(Option)] = {
-    #"death_link": DeathLink,                                 # Disabled
+    "death_link": DeathLink,                                 # Disabled
     "goal": Goal,
     #"include_trade_sequence": IncludeTradeSequence,          # Disabled
     "dk_coins_for_gyrocopter": DKCoinsForGyrocopter,

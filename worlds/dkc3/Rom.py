@@ -378,6 +378,10 @@ class LocalRom(object):
 def patch_rom(world, rom, player, active_level_list):
     local_random = world.slot_seeds[player]
 
+    # Death Link
+    death_link_setting = world.death_link[player].value
+    rom.write_byte(0x3FF800, death_link_setting)
+
     # Boomer Costs
     bonus_coin_cost = world.krematoa_bonus_coin_cost[player]
     inverted_bonus_coin_cost = 0x100 - bonus_coin_cost

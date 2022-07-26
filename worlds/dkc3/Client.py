@@ -1,5 +1,6 @@
 import logging
 import asyncio
+import time
 
 from NetUtils import ClientStatus, color
 from SNIClient import Context, snes_buffered_write, snes_flush_writes, snes_read
@@ -23,18 +24,57 @@ ROMHASH_SIZE = 0x15
 
 DKC3_RECV_PROGRESS_ADDR = WRAM_START + 0x632     # DKC3_TODO: Find a permanent home for this
 DKC3_FILE_NAME_ADDR = WRAM_START + 0x5D9
-DEATH_LINK_ACTIVE_ADDR = DKC3_ROMNAME_START + 0x15     # DKC3_TODO: Find a permanent home for this
+DEATH_LINK_ACTIVE_ADDR = ROM_START + 0x3FF800     # DKC3_TODO: Test this
 
 
 async def deathlink_kill_player(ctx: Context):
-    pass
-    #if ctx.game == GAME_DKC3:
+    if ctx.game == GAME_DKC3:
         # DKC3_TODO: Handle Receiving Deathlink
+        gamemode = await snes_read(ctx, WRAM_START + 0x177E, 1) # Check Banana Bird Cave states for this byte
+
+        if not gamemode or gamemode[0] == 0x00 or gamemode[0] == 0x02:
+            # We're in a state where we can't die
+            print("Can't Die")
+            return False
+
+        if not ctx.death_link_allow_survive:
+            # Make sure we don't have animal buddies to save us
+            snes_buffered_write(ctx, WRAM_START + 0x7C, bytes([0x00, 0x00, 0x00, 0x00]))
+            extra_kong = await snes_read(ctx, WRAM_START + 0x5B0, 1)
+            snes_buffered_write(ctx, WRAM_START + 0x5B0, bytes([extra_kong[0] & ~0x40]))
+
+        active_kong = await snes_read(ctx, WRAM_START + 0x5B3, 1)
+        if active_kong and active_kong[0] == 0x1:
+            # Dixie Active
+            snes_buffered_write(ctx, WRAM_START + 0x17C6, bytes([0x23, 0x00, 0x78, 0x08]))
+            print("Kill Dixie")
+        elif active_kong and active_kong[0] == 0x2:
+            # Dixie Active
+            snes_buffered_write(ctx, WRAM_START + 0x17C6, bytes([0x23, 0x00, 0xE6, 0x08]))
+            print("Kill Kiddy") # We reach here but nothing happens?
+        else:
+            print("No active Kong")
+            return False
+    return True
+
+
+async def deathlink_verify_kill(ctx: Context):
+    if ctx.game == GAME_DKC3:
+        gamemode = await snes_read(ctx, WRAM_START + 0x177E, 1)
+        dead_flag = await snes_read(ctx, WRAM_START + 0x5B0, 1)
+
+        print("Verify Kill check: ", hex(dead_flag[0]), " | ", (dead_flag[0] & 0x20))
+        if (not dead_flag) or ((dead_flag[0] & 0x20) != 0x00) or (ctx.death_link_allow_survive and ((dead_flag[0] & 0x40) == 0x00)):
+            print("Kill Succeeded")
+            return True
+
+    return False
 
 
 async def dkc3_rom_init(ctx: Context):
     if not ctx.rom:
         ctx.finished_game = False
+        ctx.allow_collect = True
         ctx.death_link_allow_survive = False
         game_name = await snes_read(ctx, DKC3_ROMNAME_START, 0x15)
         if game_name is None or game_name != b"DONKEY KONG COUNTRY 3":
@@ -49,11 +89,12 @@ async def dkc3_rom_init(ctx: Context):
 
         ctx.rom = rom
 
-        #death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR, 1)
-        ## DKC3_TODO: Handle Deathlink
-        #if death_link:
-        #    ctx.allow_collect = bool(death_link[0] & 0b100)
-        #    await ctx.update_death_link(bool(death_link[0] & 0b1))
+        death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR, 1)
+        # DKC3_TODO: Handle Deathlink
+        if death_link:
+            print("Death Link Active")
+            ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
+            await ctx.update_death_link(bool(death_link[0] & 0b1))
     return True
 
 
@@ -64,6 +105,13 @@ async def dkc3_game_watcher(ctx: Context):
         if save_file_name is None or save_file_name[0] == 0x00:
             # We haven't loaded a save file
             return
+
+        gamemode = await snes_read(ctx, WRAM_START + 0x177E, 1)
+        dead_flag = await snes_read(ctx, WRAM_START + 0x5B0, 1)
+        if "DeathLink" in ctx.tags and dead_flag and gamemode and gamemode[0] != 0x00 and ctx.last_death_link + 1 < time.time():
+            currently_dead = ((dead_flag[0] & 0x20) != 0x00)
+            print("Currently Dead: ", currently_dead)
+            await ctx.handle_deathlink_state(currently_dead)
 
         new_checks = []
         from worlds.dkc3.Rom import location_rom_data, item_rom_data
