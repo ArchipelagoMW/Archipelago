@@ -238,9 +238,9 @@ location_rom_data = {
     0xDC30AF: [0x648, 1],
     0xDC30B0: [0x649, 1],
     0xDC30B1: [0x64A, 1],
-    0xDC30B2: [0x64B, 1],
+    #0xDC30B2: [0x64B, 1], # Disabled until Trade Sequence
     0xDC30B3: [0x64C, 1],
-    0xDC30B4: [0x64D, 1],
+    #0xDC30B4: [0x64D, 1], # Disabled until Trade Sequence
     0xDC30B5: [0x64E, 1],
 
     0xDC30B6: [0x5FD, 4], # Banana Bird Mother
