@@ -199,7 +199,7 @@ Sent to clients if the server caught a problem with a packet. This only occurs f
 | text | str | A descriptive message of the problem at hand |
 
 ##### PacketProblemType
-PacketProblemType indicates the type problem that was detected in the faulty packet, the known problem types are below but others maybe added in the future
+PacketProblemType indicates the type problem that was detected in the faulty packet, the known problem types are below but others may be added in the future.
 
 | Type | Notes |
 | ---- | ----- |
