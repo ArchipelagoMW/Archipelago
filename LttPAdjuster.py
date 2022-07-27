@@ -289,7 +289,7 @@ def run_sprite_update():
     else:
         top.withdraw()
         task = BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
-    while not done.is_Set():
+    while not done.is_set():
         task.do_events()
     logging.info("Done updating sprites")
 
