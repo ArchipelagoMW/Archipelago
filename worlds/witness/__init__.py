@@ -47,6 +47,7 @@ class WitnessWorld(World):
         name: data.code for name, data in static_items.ALL_ITEM_TABLE.items()
     }
     location_name_to_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID
+    item_name_groups = StaticWitnessItems.ITEM_NAME_GROUPS
 
     def _get_slot_data(self):
         return {
