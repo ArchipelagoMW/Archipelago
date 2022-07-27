@@ -81,7 +81,6 @@ async def dkc3_game_watcher(ctx: Context):
         if verify_save_file_name is None or verify_save_file_name[0] == 0x00 or verify_save_file_name != save_file_name:
             ctx.rom = None
             # We have somehow exited the save file (or worse)
-            print("Save Data Changed while Reading")
             return
 
         rom = await snes_read(ctx, DKC3_ROMHASH_START, ROMHASH_SIZE)
@@ -131,7 +130,6 @@ async def dkc3_game_watcher(ctx: Context):
                     snes_buffered_write(ctx, WRAM_START + 0xA26, bytes([new_item_count]))
                 elif item.item == 0xDC3003 and overworld_locked[0] != 0x01 and (current_level[0] == 0x0A and current_level[2] == 0x08 and current_level[4] == 0x01):
                     # Boomer
-                    print("Boomer Write Happened")
                     item_count = await snes_read(ctx, WRAM_START + 0xB02, 0x1)
                     new_item_count = item_count[0] + 1
                     snes_buffered_write(ctx, WRAM_START + 0xB02, bytes([new_item_count]))
