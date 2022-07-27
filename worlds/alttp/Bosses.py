@@ -1,5 +1,5 @@
 import logging
-from typing import Optional, Union, List, Tuple
+from typing import Optional, Union, List, Tuple, Callable
 
 from BaseClasses import Boss
 from Fill import FillError
@@ -13,7 +13,7 @@ def BossFactory(boss: str, player: int) -> Optional[Boss]:
     raise Exception('Unknown Boss: %s', boss)
 
 
-def ArmosKnightsDefeatRule(state, player: int):
+def ArmosKnightsDefeatRule(state, player: int) -> bool:
     # Magic amounts are probably a bit overkill
     return (
             state.has_melee_weapon(player) or
@@ -26,7 +26,7 @@ def ArmosKnightsDefeatRule(state, player: int):
             state.has('Red Boomerang', player))
 
 
-def LanmolasDefeatRule(state, player: int):
+def LanmolasDefeatRule(state, player: int) -> bool:
     return (
             state.has_melee_weapon(player) or
             state.has('Fire Rod', player) or
@@ -36,16 +36,16 @@ def LanmolasDefeatRule(state, player: int):
             state.can_shoot_arrows(player))
 
 
-def MoldormDefeatRule(state, player: int):
+def MoldormDefeatRule(state, player: int) -> bool:
     return state.has_melee_weapon(player)
 
 
-def HelmasaurKingDefeatRule(state, player: int):
+def HelmasaurKingDefeatRule(state, player: int) -> bool:
     # TODO: technically possible with the hammer
     return state.has_sword(player) or state.can_shoot_arrows(player)
 
 
-def ArrghusDefeatRule(state, player: int):
+def ArrghusDefeatRule(state, player: int) -> bool:
     if not state.has('Hookshot', player):
         return False
     # TODO: ideally we would have a check for bow and silvers, which combined with the
@@ -59,7 +59,7 @@ def ArrghusDefeatRule(state, player: int):
             (state.has('Ice Rod', player) and (state.can_shoot_arrows(player) or state.can_extend_magic(player, 16))))
 
 
-def MothulaDefeatRule(state, player: int):
+def MothulaDefeatRule(state, player: int) -> bool:
     return (
             state.has_melee_weapon(player) or
             (state.has('Fire Rod', player) and state.can_extend_magic(player, 10)) or
@@ -71,11 +71,11 @@ def MothulaDefeatRule(state, player: int):
     )
 
 
-def BlindDefeatRule(state, player: int):
+def BlindDefeatRule(state, player: int) -> bool:
     return state.has_melee_weapon(player) or state.has('Cane of Somaria', player) or state.has('Cane of Byrna', player)
 
 
-def KholdstareDefeatRule(state, player: int):
+def KholdstareDefeatRule(state, player: int) -> bool:
     return (
             (
                     state.has('Fire Rod', player) or
@@ -97,11 +97,11 @@ def KholdstareDefeatRule(state, player: int):
     )
 
 
-def VitreousDefeatRule(state, player: int):
+def VitreousDefeatRule(state, player: int) -> bool:
     return state.can_shoot_arrows(player) or state.has_melee_weapon(player)
 
 
-def TrinexxDefeatRule(state, player: int):
+def TrinexxDefeatRule(state, player: int) -> bool:
     if not (state.has('Fire Rod', player) and state.has('Ice Rod', player)):
         return False
     return state.has('Hammer', player) or state.has('Tempered Sword', player) or state.has('Golden Sword', player) or \
@@ -109,11 +109,11 @@ def TrinexxDefeatRule(state, player: int):
            (state.has_sword(player) and state.can_extend_magic(player, 32))
 
 
-def AgahnimDefeatRule(state, player: int):
+def AgahnimDefeatRule(state, player: int) -> bool:
     return state.has_sword(player) or state.has('Hammer', player) or state.has('Bug Catching Net', player)
 
 
-def GanonDefeatRule(state, player: int):
+def GanonDefeatRule(state, player: int) -> bool:
     if state.world.swordless[player]:
         return state.has('Hammer', player) and \
                state.has_fire_source(player) and \
@@ -133,7 +133,7 @@ def GanonDefeatRule(state, player: int):
         return common and state.has('Silver Bow', player) and state.can_shoot_arrows(player)
 
 
-boss_table = {
+boss_table: dict[str, Tuple[str, Optional[Callable]]] = {
     'Armos Knights': ('Armos', ArmosKnightsDefeatRule),
     'Lanmolas': ('Lanmola', LanmolasDefeatRule),
     'Moldorm': ('Moldorm', MoldormDefeatRule),
@@ -148,7 +148,7 @@ boss_table = {
     'Agahnim2': ('Agahnim2', AgahnimDefeatRule)
 }
 
-boss_location_table = [
+boss_location_table: list[Tuple[str, str]] = [
         ('Ganons Tower', 'top'),
         ('Tower of Hera', None),
         ('Skull Woods', None),
@@ -196,18 +196,18 @@ def get_plando_bosses(boss_shuffle: str) -> List[str]:
     return bosses
 
 
-def place_plando_bosses(bosses: List[str], world, player: int):
+def place_plando_bosses(bosses: List[str], world, player: int) -> Tuple[list[str], list[Tuple[str, str]]]:
     # Most to least restrictive order
     boss_locations = boss_location_table.copy()
     world.random.shuffle(boss_locations)
     boss_locations.sort(key=lambda location: -int(restrictive_boss_locations[location]))
-    already_placed_bosses = []
+    already_placed_bosses: list[str] = []
 
     for boss in bosses:
         if "-" in boss:  # handle plando locations
             loc, boss = boss.split("-")
             boss = boss.title()
-            level = None
+            level: str = None
             if loc.split(" ")[-1] in {"top", "middle", "bottom"}:
                 # split off level
                 loc = loc.split(" ")
@@ -251,43 +251,41 @@ def can_place_boss(boss: str, dungeon_name: str, level: Optional[str] = None) ->
     return True
 
 
-restrictive_boss_locations = {}
+restrictive_boss_locations: dict[Tuple[str, str], bool] = {}
 for location in boss_location_table:
     restrictive_boss_locations[location] = not all(can_place_boss(boss, *location)
                                                for boss in boss_table if not boss.startswith("Agahnim"))
 
 
-def place_boss(world, player: int, boss: str, location: str, level: Optional[str]):
+def place_boss(world, player: int, boss: str, location: str, level: Optional[str]) -> None:
     if location == 'Ganons Tower' and world.mode[player] == 'inverted':
         location = 'Inverted Ganons Tower'
     logging.debug('Placing boss %s at %s', boss, location + (' (' + level + ')' if level else ''))
-    boss_location = world.get_dungeon(location, player).bosses[level]
     world.get_dungeon(location, player).bosses[level] = BossFactory(boss, player)
 
 
-def format_boss_location(location, level):
+def format_boss_location(location: str, level: str) -> str:
     return location + (' (' + level + ')' if level else '')
 
 
-def place_bosses(world, player: int):
+def place_bosses(world, player: int) -> None:
     # will either be an int or a lower case string with ';' between options
-    boss_shuffle = world.boss_shuffle[player].value
-    already_placed_bosses = []
+    boss_shuffle: Union[str, int] = world.boss_shuffle[player].value
+    already_placed_bosses: list[str] = []
+    boss_locations: list[Tuple[str, str]] = []
     # handle plando
     if isinstance(boss_shuffle, str):
-        bosses = get_plando_bosses(boss_shuffle)
-        already_placed_bosses, remaining_locations = place_plando_bosses(bosses, world, player)
+        bosses: list[str] = get_plando_bosses(boss_shuffle)
+        already_placed_bosses, boss_locations = place_plando_bosses(bosses, world, player)
         boss_shuffle = world.boss_shuffle[player].remaining_mode
-    if boss_shuffle == Bosses.option_none:
+    if boss_shuffle == Bosses.option_none:  # vanilla boss locations
         return
 
     # Most to least restrictive order
-    if remaining_locations:
-        boss_locations = remaining_locations
-    else:
+    if not boss_locations:
         boss_locations = boss_location_table.copy()
     world.random.shuffle(boss_locations)
-    boss_locations.sort(key= lambda location: -int(restrictive_boss_locations[location]))
+    boss_locations.sort(key=lambda location: -int(restrictive_boss_locations[location]))
 
     all_bosses = sorted(boss_table.keys())  # sorted to be deterministic on older pythons
     placeable_bosses = [boss for boss in all_bosses if boss not in ['Agahnim', 'Agahnim2', 'Ganon']]
@@ -347,9 +345,9 @@ def place_bosses(world, player: int):
         raise FillError(f"Could not find boss shuffle mode {boss_shuffle}")
 
 
-def place_where_possible(world, player: int, boss: str, boss_locations):
-    remainder = []
-    placed_bosses = []
+def place_where_possible(world, player: int, boss: str, boss_locations) -> Tuple[list[Tuple[str, str]], list[str]]:
+    remainder: list[Tuple[str, str]] = []
+    placed_bosses: list[str] = []
     for loc, level in boss_locations:
         # place that boss where it can go
         if can_place_boss(boss, loc, level):
