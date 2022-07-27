@@ -9,7 +9,7 @@ from worlds.alttp.Dungeons import get_dungeon_item_pool_player
 from worlds.alttp.EntranceShuffle import connect_entrance
 from Fill import FillError
 from worlds.alttp.Items import ItemFactory, GetBeemizerItem
-from worlds.alttp.Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle, WorldState, Timer
+from worlds.alttp.Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle, WorldState, Timer, Logic
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 # Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -515,7 +515,7 @@ def get_pool_core(world, player: int):
     mode = world.world_state[player]
     swordless = world.swordless[player]
     retro_bow = world.retro_bow[player]
-    logic = world.logic[player]
+    logic = world.glitches_required[player]
 
     pool = []
     placed_items = {}
@@ -532,7 +532,7 @@ def get_pool_core(world, player: int):
         placed_items[loc] = item
 
     # provide boots to major glitch dependent seeds
-    if logic in {'owglitches', 'hybridglitches', 'nologic'} and world.glitch_boots[player] and goal != 'icerodhunt':
+    if logic in {Logic.alias_owg, Logic.alias_hmg, Logic.option_no_logic} and world.glitch_boots[player] and goal != 'icerodhunt':
         precollected_items.append('Pegasus Boots')
         pool.remove('Pegasus Boots')
         pool.append('Rupees (20)')
@@ -583,7 +583,7 @@ def get_pool_core(world, player: int):
     if want_progressives(world.random):
         pool.extend(diff.progressivebow)
         world.worlds[player].has_progressive_bows = True
-    elif (swordless or logic == 'noglitches') and goal != 'icerodhunt':
+    elif (swordless or logic == Logic.option_no_glitches) and goal != 'icerodhunt':
         swordless_bows = ['Bow', 'Silver Bow']
         if difficulty == "easy":
             swordless_bows *= 2

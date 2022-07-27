@@ -37,9 +37,8 @@ def temp_base_rule(world, player):
 
 
 def base_rule(world, player):
-    if world.logic[player] != 'nologic':
-        # Victory gets placed on Escaped Horu Event
-        world.completion_condition[player] = lambda state: state.has('Victory', player)
+    # Victory gets placed on Escaped Horu Event
+    world.completion_condition[player] = lambda state: state.has('Victory', player)
     # Events
     # Also add: can complete goal
     set_rule(world.get_location("Escaped Horu", player),

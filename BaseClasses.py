@@ -102,7 +102,6 @@ class MultiWorld():
             set_player_attr('tech_tree_layout_prerequisites', {})
             set_player_attr('_region_cache', {})
             set_player_attr('shuffle', "vanilla")
-            set_player_attr('logic', "noglitches")
             set_player_attr('difficulty', 'normal')
             set_player_attr('timer', False)
             set_player_attr('goal', 'ganon')

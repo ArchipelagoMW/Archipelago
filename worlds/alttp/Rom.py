@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import Utils
 from Patch import read_rom
-from .Options import Counters, WorldState, ItemFunc, Timer
+from .Options import Counters, WorldState, ItemFunc, Timer, Logic
 
 LTTPJPN10HASH = '03a63945398191337e896e5771f77173'
 RANDOMIZERBASEHASH = '9952c2a3ec1b421e408df0d20c8f0c7f'
@@ -834,7 +834,7 @@ def patch_rom(world, rom, player, enemized):
                                           'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit',
                                           'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)',
                                           'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)'} and \
-                            (world.logic[player] not in ['hybridglitches', 'nologic'] or 
+                            (world.glitches_required[player] not in [Logic.alias_hmg, Logic.option_no_logic] or
                                 exit.name not in {'Palace of Darkness Exit', 'Tower of Hera Exit', 'Swamp Palace Exit'}):
                         # For exits that connot be reached from another, no need to apply offset fixes.
                         rom.write_int16(0x15DB5 + 2 * offset, link_y)  # same as final else
@@ -1030,7 +1030,7 @@ def patch_rom(world, rom, player, enemized):
                      difficulty.progressive_bow_limit, item_table[difficulty.basicbow[-1]].item_code])
 
     if difficulty.progressive_bow_limit < 2 and (
-            world.swordless[player] or world.logic[player] == 'noglitches'):
+            world.swordless[player] or world.glitches_required[player] == Logic.option_no_glitches):
         rom.write_bytes(0x180098, [2, item_table["Silver Bow"].item_code])
         rom.write_byte(0x180181, 0x01)  # Make silver arrows work only on ganon
         rom.write_byte(0x180182, 0x00)  # Don't auto equip silvers on pickup
@@ -1568,9 +1568,9 @@ def patch_rom(world, rom, player, enemized):
     rom.write_byte(0x180020, digging_game_rng)
     rom.write_byte(0xEFD95, digging_game_rng)
     rom.write_byte(0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
-    rom.write_byte(0x1800A4, 0x01 if world.logic[player] != 'nologic' else 0x00)  # enable POD EG fix
-    rom.write_byte(0x186383, 0x01 if world.glitch_triforce or world.logic[
-        player] == 'nologic' else 0x00)  # disable glitching to Triforce from Ganons Room
+    rom.write_byte(0x1800A4, 0x01 if world.glitches_required[player] != Logic.option_no_logic else 0x00)  # enable POD EG fix
+    rom.write_byte(0x186383, 0x01 if world.glitch_triforce or world.glitches_required[
+        player] == Logic.option_no_logic else 0x00)  # disable glitching to Triforce from Ganons Room
     rom.write_byte(0x180042, 0x01 if world.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
 
     # remove shield from uncle
@@ -2317,7 +2317,7 @@ def write_strings(rom, world, player):
     tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
     tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
     if world.worlds[player].has_progressive_bows and (world.difficulty_requirements[player].progressive_bow_limit >= 2 or (
-            world.swordless[player] or world.logic[player] == 'noglitches')):
+            world.swordless[player] or world.glitches_required[player] == Logic.option_no_glitches)):
         prog_bow_locs = world.find_item_locations('Progressive Bow', player)
         world.slot_seeds[player].shuffle(prog_bow_locs)
         found_bow = False

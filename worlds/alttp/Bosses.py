@@ -122,7 +122,7 @@ def GanonDefeatRule(state, player: int):
     can_hurt = state.has_beam_sword(player)
     common = can_hurt and state.has_fire_source(player)
     # silverless ganon may be needed in anything higher than no glitches
-    if state.world.logic[player] != 0:
+    if state.world.glitches_required[player] != 0:
         # need to light torch a sufficient amount of times
         return common and (state.has('Tempered Sword', player) or state.has('Golden Sword', player) or (
                 state.has('Silver Bow', player) and state.can_shoot_arrows(player)) or
@@ -192,14 +192,17 @@ for location in boss_location_table:
     restrictive_boss_locations[location] = not all(can_place_boss(boss, *location)
                                                for boss in boss_table if not boss.startswith("Agahnim"))
 
+
 def place_boss(world, player: int, boss: str, location: str, level: Optional[str]):
-    if location == 'Ganons Tower' and world.mode[player] == 'inverted':
+    if location == 'Ganons Tower' and world.world_state[player] == 2:
         location = 'Inverted Ganons Tower'
     logging.debug('Placing boss %s at %s', boss, location + (' (' + level + ')' if level else ''))
     world.get_dungeon(location, player).bosses[level] = BossFactory(boss, player)
 
+
 def format_boss_location(location, level):
     return location + (' (' + level + ')' if level else '')
+
 
 def place_bosses(world, player: int):
     if world.boss_shuffle[player] == 'none':

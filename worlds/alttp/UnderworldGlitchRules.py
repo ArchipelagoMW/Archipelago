@@ -1,6 +1,7 @@
 
 from BaseClasses import Entrance
 from worlds.generic.Rules import set_rule, add_rule
+from .Options import WorldState
 
 # We actually need the logic to properly "mark" these regions as Light or Dark world. 
 # Therefore we need to make these connections during the normal link_entrances stage, rather than during set_rules. 
@@ -94,7 +95,7 @@ def underworld_glitches_rules(world, player):
                 'Misery Mire (Entrance)': (lambda state: True),
                 'Tower of Hera (Bottom)': (lambda state: state.can_reach('Tower of Hera Big Key Door', 'Entrance', player))
             }
-            inverted = world.mode[player] == 'inverted'
+            inverted = world.world_state[player] == WorldState.option_inverted
             hera_rule = lambda state: (state.has('Moon Pearl', player) or not inverted) and \
                                       rule_map.get(world.get_entrance('Tower of Hera', player).connected_region.name, lambda state: False)(state)
             gt_rule = lambda state: (state.has('Moon Pearl', player) or inverted) and \

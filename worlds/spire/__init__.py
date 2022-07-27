@@ -57,8 +57,7 @@ class SpireWorld(World):
             event_item = SpireItem(item, self.player)
             self.world.get_location(event, self.player).place_locked_item(event_item)
 
-        if self.world.logic[self.player] != 'no logic':
-            self.world.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        self.world.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
 
     def set_rules(self):
