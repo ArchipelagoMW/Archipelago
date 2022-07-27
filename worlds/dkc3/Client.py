@@ -79,7 +79,6 @@ async def dkc3_game_watcher(ctx: Context):
 
         verify_save_file_name = await snes_read(ctx, DKC3_FILE_NAME_ADDR, 0x5)
         if verify_save_file_name is None or verify_save_file_name[0] == 0x00 or verify_save_file_name != save_file_name:
-            ctx.rom = None
             # We have somehow exited the save file (or worse)
             return
 
