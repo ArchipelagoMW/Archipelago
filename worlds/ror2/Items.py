@@ -1,5 +1,6 @@
 from typing import Dict
 from BaseClasses import Item
+from .Options import ItemWeights
 
 
 class RiskOfRainItem(Item):
@@ -139,15 +140,15 @@ scraps_only: Dict[str, int] = {
 }
 
 item_pool_weights: Dict[int, Dict[str, int]] = {
-    0: default_weights,
-    1: new_weights,
-    2: uncommon_weights,
-    3: legendary_weights,
-    4: lunartic_weights,
-    5: chaos_weights,
-    6: no_scraps_weights,
-    7: even_weights,
-    8: scraps_only
+    ItemWeights.option_default:     default_weights,
+    ItemWeights.option_new:         new_weights,
+    ItemWeights.option_uncommon:    uncommon_weights,
+    ItemWeights.option_legendary:   legendary_weights,
+    ItemWeights.option_lunartic:    lunartic_weights,
+    ItemWeights.option_chaos:       chaos_weights,
+    ItemWeights.option_no_scraps:   no_scraps_weights,
+    ItemWeights.option_even:        even_weights,
+    ItemWeights.option_scraps_only: scraps_only
 }
 
 lookup_id_to_name: Dict[int, str] = {id: name for name, id in item_table.items()}

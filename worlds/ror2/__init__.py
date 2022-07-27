@@ -1,4 +1,5 @@
 import string
+from typing import Dict
 from .Items import RiskOfRainItem, item_table, item_pool_weights
 from .Locations import RiskOfRainLocation, item_pickups
 from .Rules import set_rules
@@ -39,6 +40,11 @@ class RiskOfRainWorld(World):
     web = RiskOfWeb()
     total_revivals: int
 
+    def generate_early(self) -> None:
+        # figure out how many revivals should exist in the pool
+        self.total_revivals = int(self.world.total_revivals[self.player].value / 100 *
+                                  self.world.total_locations[self.player].value)
+
     def generate_basic(self) -> None:
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
         if self.world.start_with_revive[self.player].value:
@@ -46,11 +52,11 @@ class RiskOfRainWorld(World):
 
         # if presets are enabled generate junk_pool from the selected preset
         pool_option = self.world.item_weights[self.player].value
+        junk_pool: Dict[str, int] = {}
         if self.world.item_pool_presets[self.player]:
             # generate chaos weights if the preset is chosen
             if pool_option == ItemWeights.option_chaos:
-                junk_pool = item_pool_weights[5].copy()
-                for name, max_value in junk_pool.items():
+                for name, max_value in item_pool_weights[pool_option].items():
                     junk_pool[name] = self.world.random.randint(0, max_value)
             else:
                 junk_pool = item_pool_weights[pool_option].copy()
@@ -74,9 +80,6 @@ class RiskOfRainWorld(World):
 
         # Generate item pool
         itempool: list = []
-        # figure out how many revivals should exist in the pool
-        self.total_revivals = int(self.world.total_revivals[self.player].value / 100 *
-                                  self.world.total_locations[self.player].value)
         # Add revive items for the player
         itempool += ["Dio's Best Friend"] * self.total_revivals
 
