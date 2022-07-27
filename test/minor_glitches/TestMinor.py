@@ -8,6 +8,7 @@ from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import create_regions
 from worlds.alttp.Shops import create_shops
+from worlds.alttp.Options import Logic, MireMedallion, TurtleMedallion
 from test.TestBase import TestBase
 
 from worlds import AutoWorld
@@ -21,14 +22,13 @@ class TestMinor(TestBase):
             setattr(args, name, {1: option.from_any(option.default)})
         self.world.set_options(args)
         self.world.set_default_common_options()
-        self.world.logic[1] = "minorglitches"
+        setattr(self.world, "logic", {1: Logic(Logic.option_minor_glitches)})
         self.world.difficulty_requirements[1] = difficulties['normal']
         create_regions(self.world, 1)
         create_dungeons(self.world, 1)
         create_shops(self.world, 1)
         link_entrances(self.world, 1)
         self.world.worlds[1].create_items()
-        self.world.required_medallions[1] = ['Ether', 'Quake']
         self.world.itempool.extend(get_dungeon_item_pool(self.world))
         self.world.itempool.extend(ItemFactory(
             ['Green Pendant', 'Red Pendant', 'Blue Pendant', 'Beat Agahnim 1', 'Beat Agahnim 2', 'Crystal 1',

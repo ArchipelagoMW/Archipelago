@@ -122,7 +122,7 @@ def GanonDefeatRule(state, player: int):
     can_hurt = state.has_beam_sword(player)
     common = can_hurt and state.has_fire_source(player)
     # silverless ganon may be needed in anything higher than no glitches
-    if state.world.logic[player] != 'noglitches':
+    if state.world.logic[player] != 0:
         # need to light torch a sufficient amount of times
         return common and (state.has('Tempered Sword', player) or state.has('Golden Sword', player) or (
                 state.has('Silver Bow', player) and state.can_shoot_arrows(player)) or

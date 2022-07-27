@@ -7,7 +7,7 @@ import typing
 from BaseClasses import Item, CollectionState, Tutorial
 from .SubClasses import ALttPItem
 from ..AutoWorld import World, WebWorld, LogicMixin
-from .Options import alttp_options, smallkey_shuffle, TriforceMode
+from .Options import alttp_options, smallkey_shuffle, TriforceMode, Logic
 from .Items import as_dict_item_table, item_name_groups, item_table, GetBeemizerItem
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
 from .Rules import set_rules
@@ -186,7 +186,7 @@ class ALTTPWorld(World):
                 if option == "original_dungeon":
                     self.dungeon_specific_item_names |= self.item_name_groups[option.item_name_group]
 
-        world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
+        world.difficulty_requirements[player] = difficulties[world.item_pool[player].current_key]
 
     def create_regions(self):
         player = self.player
@@ -515,7 +515,7 @@ def get_same_seed(world, seed_def: tuple) -> str:
 
 class ALttPLogic(LogicMixin):
     def _lttp_has_key(self, item, player, count: int = 1):
-        if self.world.logic[player] == 'nologic':
+        if self.world.logic[player] == Logic.option_no_logic:
             return True
         if self.world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             return self.can_buy_unlimited('Small Key (Universal)', player)

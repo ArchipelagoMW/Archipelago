@@ -16,6 +16,7 @@ major_glitches = Logic.option_overworld_glitches
 hybrid_glitches = Logic.option_hybrid_major_glitches
 no_glitches = Logic.option_no_glitches
 
+
 def set_rules(world):
     player_logic = world.world.glitches_required[world.player].value
     player = world.player

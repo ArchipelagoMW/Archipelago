@@ -2,6 +2,8 @@
 from collections import defaultdict
 from worlds.alttp.OverworldGlitchRules import overworld_glitch_connections
 from worlds.alttp.UnderworldGlitchRules import underworld_glitch_connections
+from worlds.alttp.Options import Logic
+
 
 def link_entrances(world, player):
     connect_two_way(world, 'Links House', 'Links House Exit', player) # unshuffled. For now
@@ -1067,10 +1069,10 @@ def link_entrances(world, player):
         raise NotImplementedError(
             f'{world.shuffle[player]} Shuffling not supported yet. Player {world.get_player_name(player)}')
 
-    if world.logic[player] in ['owglitches', 'hybridglitches', 'nologic']:
+    if world.logic[player] in (Logic.alias_owg, Logic.alias_hmg, Logic.option_no_logic):
         overworld_glitch_connections(world, player)
         # mandatory hybrid major glitches connections
-        if world.logic[player] in ['hybridglitches', 'nologic']:
+        if world.logic[player] in (Logic.alias_hmg, Logic.option_no_logic):
             underworld_glitch_connections(world, player)
 
     # check for swamp palace fix
@@ -1774,10 +1776,10 @@ def link_inverted_entrances(world, player):
     else:
         raise NotImplementedError('Shuffling not supported yet')
 
-    if world.logic[player] in ['owglitches', 'hybridglitches', 'nologic']:
+    if world.logic[player] in (Logic.alias_owg, Logic.alias_hmg, Logic.option_no_logic):
         overworld_glitch_connections(world, player)
         # mandatory hybrid major glitches connections
-        if world.logic[player] in ['hybridglitches', 'nologic']:
+        if world.logic[player] in (Logic.alias_hmg, Logic.option_no_logic):
             underworld_glitch_connections(world, player)
 
     # patch swamp drain
@@ -1956,7 +1958,7 @@ def connect_mandatory_exits(world, entrances, caves, must_be_exits, player):
         invalid_connections = Must_Exit_Invalid_Connections.copy()
     invalid_cave_connections = defaultdict(set)
 
-    if world.logic[player] in ['owglitches', 'hybridglitches', 'nologic']:
+    if world.logic[player] in (Logic.alias_owg, Logic.alias_hmg, Logic.option_no_logic):
         from worlds.alttp import OverworldGlitchRules
         for entrance in OverworldGlitchRules.get_non_mandatory_exits(world.mode[player] == 'inverted'):
             invalid_connections[entrance] = set()

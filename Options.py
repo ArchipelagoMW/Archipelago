@@ -82,7 +82,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     options: typing.Dict[str, int]
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.get_current_option_name()})"
+        return f"{self.__class__.__name__}({self.get_current_option_name})"
 
     def __hash__(self) -> int:
         return hash(self.value)
@@ -91,6 +91,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     def current_key(self) -> str:
         return self.name_lookup[self.value]
 
+    @property
     def get_current_option_name(self) -> str:
         """For display purposes."""
         return self.get_option_name(self.value)
