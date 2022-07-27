@@ -578,20 +578,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     boss_shuffle = get_choice_legacy('boss_shuffle', weights)
     ret.shufflebosses = get_plando_bosses(boss_shuffle, plando_options)
 
-    ret.timer = {'none': False,
-                 None: False,
-                 False: False,
-                 'timed': 'timed',
-                 'timed_ohko': 'timed-ohko',
-                 'ohko': 'ohko',
-                 'timed_countdown': 'timed-countdown',
-                 'display': 'display'}[get_choice_legacy('timer', weights, False)]
-
-    ret.countdown_start_time = int(get_choice_legacy('countdown_start_time', weights, 10))
-    ret.red_clock_time = int(get_choice_legacy('red_clock_time', weights, -2))
-    ret.blue_clock_time = int(get_choice_legacy('blue_clock_time', weights, 2))
-    ret.green_clock_time = int(get_choice_legacy('green_clock_time', weights, 4))
-
     ret.plando_texts = {}
     if PlandoSettings.texts in plando_options:
         tt = TextTable()
@@ -615,7 +601,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                     get_choice_legacy("direction", placement, "both")
                 ))
 
-    ret.sprite_pool = weights.get('sprite_pool', [])
     ret.sprite = get_choice_legacy('sprite', weights, "Link")
     if 'random_sprite_on_event' in weights:
         randomoneventweights = weights['random_sprite_on_event']

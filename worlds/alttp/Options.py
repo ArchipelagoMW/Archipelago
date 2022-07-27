@@ -191,6 +191,54 @@ class PrizeShuffle(Choice):
     default = option_general
 
 
+class Timer(Choice):
+    """Displays a timer that can count up or down while you play and can add clocks to the item pool that add or
+    subtract time.
+    Timed counts up from 0 and adds clocks to the pool.
+    Timed ohko counts down with clocks in the pool.
+    OHKO has the timer at 0 with no clocks. Permanent OHKO.
+    Countdown counts down with clocks in the pool. No penalty at 0 though.
+    Display counts up from 0 with no clocks in the pool."""
+    display_name = "In Game Timer"
+    option_none = 0
+    option_timed = 1
+    option_timed_ohko = 2
+    option_ohko = 3
+    option_timed_countdown = 4
+    option_display = 5
+
+
+class Countdown(Range):
+    """Determines the starting time for the timed OHKO and timed countdown modes in minutes."""
+    display_name = "Countdown Start Time"
+    range_end = 60
+    default = 20
+
+
+class RedClock(Range):
+    """The amount of time in minutes gained or lost from red clocks."""
+    display_name = "Red Clock Time"
+    range_start = -5
+    range_end = 1
+    default = -2
+
+
+class BlueClock(Range):
+    """The amount of time in minutes gained from blue clocks."""
+    display_name = "Blue Clock Time"
+    range_start = 1
+    range_end = 3
+    default = 2
+
+
+class GreenClock(Range):
+    """The amount of time in minutes gained from green clocks."""
+    display_name = "Green Clock Time"
+    range_start = 4
+    range_end = 15
+    default = 4
+
+
 class WorldState(Choice):
     """Starting world state for the game.
     Standard starts with the rain sequence and uncle will have a guaranteed weapon including bombs.
@@ -640,8 +688,14 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "bush_shuffle": BushShuffle,
     "shop_item_slots": ShopItemSlots,
     "shop_price_modifier": ShopPriceModifier,
+    "timer": Timer,
+    "countdown_start_time": Countdown,
+    "red_clock_time": RedClock,
+    "blue_clock_time": BlueClock,
+    "green_clock_time": GreenClock,
     "shuffle_prizes": PrizeShuffle,
     "tile_shuffle": TileShuffle,
+    "sprite_pool": SpritePool,
     "ow_palettes": OWPalette,
     "uw_palettes": UWPalette,
     "hud_palettes": HUDPalette,

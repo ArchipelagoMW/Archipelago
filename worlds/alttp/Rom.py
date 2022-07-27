@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import Utils
 from Patch import read_rom
-from .Options import Counters, WorldState, ItemFunc
+from .Options import Counters, WorldState, ItemFunc, Timer
 
 LTTPJPN10HASH = '03a63945398191337e896e5771f77173'
 RANDOMIZERBASEHASH = '9952c2a3ec1b421e408df0d20c8f0c7f'
@@ -251,8 +251,6 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
         _populate_sprite_table()
         if userandomsprites:
             if sprite_pool:
-                if isinstance(sprite_pool, str):
-                    sprite_pool = sprite_pool.split(':')
                 for spritename in sprite_pool:
                     sprite = Sprite(spritename) if os.path.isfile(spritename) else Sprite.get_sprite_from_name(
                         spritename, local_random)
@@ -1012,7 +1010,7 @@ def patch_rom(world, rom, player, enemized):
         # Set stun items
         rom.write_byte(0x180180, 0x03)  # All standard items
         # Set overflow items for progressive equipment
-        if world.timer[player] in ['timed', 'timed-countdown', 'timed-ohko']:
+        if world.timer[player] in (Timer.option_timed, Timer.option_timed_countdown, Timer.option_timed_ohko):
             overflow_replacement = GREEN_CLOCK
         else:
             overflow_replacement = GREEN_TWENTY_RUPEES
