@@ -39,10 +39,6 @@ class RiskOfRainWorld(World):
     web = RiskOfWeb()
     total_revivals: int
 
-    def generate_early(self) -> None:
-        self.total_revivals = int(self.world.total_revivals[self.player].value / 100 *
-                                  self.world.total_locations[self.player].value)
-
     def generate_basic(self) -> None:
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
         if self.world.start_with_revive[self.player].value:
@@ -78,7 +74,9 @@ class RiskOfRainWorld(World):
 
         # Generate item pool
         itempool = []
-
+        # figure out how many revivals should exist in the pool
+        self.total_revivals = int(self.world.total_revivals[self.player].value / 100 *
+                                  self.world.total_locations[self.player].value)
         # Add revive items for the player
         itempool += ["Dio's Best Friend"] * self.total_revivals
 
@@ -95,7 +93,16 @@ class RiskOfRainWorld(World):
         set_rules(self.world, self.player)
 
     def create_regions(self) -> None:
-        create_regions(self.world, self.player)
+        menu = create_region(self.world, self.player, "Menu")
+        petrichor = create_region(self.world, self.player, "Petrichor V",
+                                  [f"ItemPickup{i + 1}" for i in range(self.world.total_locations[self.player].value)])
+
+        connection = Entrance(self.player, "Lobby", menu)
+        menu.exits.append(connection)
+        connection.connect(petrichor)
+
+        self.world.regions += [menu, petrichor]
+
         create_events(self.world, self.player)
 
     def fill_slot_data(self):
@@ -136,17 +143,6 @@ def create_events(world: MultiWorld, player: int) -> None:
     victory_event = RiskOfRainLocation(player, "Victory", None, world_region)
     victory_event.place_locked_item(RiskOfRainItem("Victory", ItemClassification.progression, None, player))
     world_region.locations.append(victory_event)
-
-
-# generate locations based on player setting
-def create_regions(world: MultiWorld, player: int) -> None:
-    menu = create_region(world, player, "Menu")
-    petrichor = create_region(world, player, "Petrichor V",
-                                       [f"ItemPickup{i+1}" for i in range(world.total_locations[player].value)])
-    connection = Entrance(player, "Petrichor V", menu)
-    menu.exits.append(connection)
-    connection.connect(petrichor)
-    world.regions = [menu, petrichor]
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations: list[str] = None) -> Region:
