@@ -5,114 +5,58 @@ import math
 
 
 class UndertaleLogic(LogicMixin):
-    def _prev_area(self, player: int, world: MultiWorld, area: int):
+    def _undertale_prev_area(self, player: int, area: int):
         if area == 1:
-            return world.get_region("Snowdin Forest", player).entrances[0].parent_region.name
+            return self.world.get_region("Snowdin Forest", player).entrances[0].parent_region.name
         elif area == 2:
-            return world.get_region("Waterfall", player).entrances[0].parent_region.name
+            return self.world.get_region("Waterfall", player).entrances[0].parent_region.name
         elif area == 3:
-            return world.get_region("Hotland", player).entrances[0].parent_region.name
+            return self.world.get_region("Hotland", player).entrances[0].parent_region.name
         elif area == 4:
-            return world.get_region("Core", player).entrances[0].parent_region.name
+            return self.world.get_region("Core", player).entrances[0].parent_region.name
 
-    def _is_route(self, world: MultiWorld, player: int, route: int):
+    def _undertale_is_route(self, player: int, route: int):
         if route == 3:
-            return (world.route_required[player].current_key == "all_routes")
-        if world.route_required[player].current_key == "all_routes":
+            return (self.world.route_required[player].current_key == "all_routes")
+        if self.world.route_required[player].current_key == "all_routes":
             return True
         if route == 0:
-            return (world.route_required[player].current_key == "neutral")
+            return (self.world.route_required[player].current_key == "neutral")
         if route == 1:
-            return (world.route_required[player].current_key == "pacifist")
+            return (self.world.route_required[player].current_key == "pacifist")
         if route == 2:
-            return (world.route_required[player].current_key == "genocide")
+            return (self.world.route_required[player].current_key == "genocide")
         return False
 
-    def _has_plot(self, player: int, world: MultiWorld, item: str):
+    def _undertale_has_plot(self, player: int, item: str):
         if item == "Goat Plush":
             return (self.has("Goat Plush", player) or self.has("Progressive Plot",player,1))
         elif item == "Complete Skeleton":
-            return (self.has("Complete Skeleton", player) or (self.has("Progressive Plot",player,2) and self._is_route(world,player,1)))
+            return (self.has("Complete Skeleton", player) or (self.has("Progressive Plot",player,2) and self._undertale_is_route(player,1)))
         elif item == "Snow Shovel":
-            return (self.has("Snow Shovel", player) or (self.has("Progressive Plot",player,2) and not self._is_route(world,player,1)) or
-                    (self.has("Progressive Plot",player,3) and self._is_route(world,player,1)))
+            return (self.has("Snow Shovel", player) or (self.has("Progressive Plot",player,2) and not self._undertale_is_route(player,1)) or
+                    (self.has("Progressive Plot",player,3) and self._undertale_is_route(player,1)))
         elif item == "Fish":
-            return (self.has("Fish", player) or (self.has("Progressive Plot",player,4) and self._is_route(world,player,1)))
+            return (self.has("Fish", player) or (self.has("Progressive Plot",player,4) and self._undertale_is_route(player,1)))
         elif item == "Heat Suit":
-            return (self.has("Heat Suit", player) or (self.has("Progressive Plot",player,3) and not self._is_route(world,player,1)) or
-                    (self.has("Progressive Plot",player,5) and self._is_route(world,player,1)))
+            return (self.has("Heat Suit", player) or (self.has("Progressive Plot",player,3) and not self._undertale_is_route(player,1)) or
+                    (self.has("Progressive Plot",player,5) and self._undertale_is_route(player,1)))
         elif item == "Cooking Set":
-            return ((self.has("Cooking Set", player) or self._is_route(world,player,2)) or (self.has("Progressive Plot",player,3) and self._is_route(world,player,2)) or
-                    (self.has("Progressive Plot",player,4) and self._is_route(world,player,0)) or (self.has("Progressive Plot",player,6) and self._is_route(world,player,1)))
+            return ((self.has("Cooking Set", player) or self._undertale_is_route(player,2)) or (self.has("Progressive Plot",player,3) and self._undertale_is_route(player,2)) or
+                    (self.has("Progressive Plot",player,4) and self._undertale_is_route(player,0)) or (self.has("Progressive Plot",player,6) and self._undertale_is_route(player,1)))
         elif item == "Microphone":
-            return ((self.has("Microphone", player) or self._is_route(world,player,2)) or (self.has("Progressive Plot",player,3) and self._is_route(world,player,2)) or
-                    (self.has("Progressive Plot",player,5) and self._is_route(world,player,0)) or (self.has("Progressive Plot",player,7) and self._is_route(world,player,1)))
+            return ((self.has("Microphone", player) or self._undertale_is_route(player,2)) or (self.has("Progressive Plot",player,3) and self._undertale_is_route(player,2)) or
+                    (self.has("Progressive Plot",player,5) and self._undertale_is_route(player,0)) or (self.has("Progressive Plot",player,7) and self._undertale_is_route(player,1)))
         elif item == "Bridge Tools":
-            return ((self.has("Bridge Tools", player)) or (self.has("Progressive Plot",player,4) and self._is_route(world,player,2)) or
-                    (self.has("Progressive Plot",player,6) and self._is_route(world,player,0)) or (self.has("Progressive Plot",player,8) and self._is_route(world,player,1)))
+            return ((self.has("Bridge Tools", player)) or (self.has("Progressive Plot",player,4) and self._undertale_is_route(player,2)) or
+                    (self.has("Progressive Plot",player,6) and self._undertale_is_route(player,0)) or (self.has("Progressive Plot",player,8) and self._undertale_is_route(player,1)))
         elif item == "Mettaton Plush":
-            return (self.has("Mettaton Plush", player) or (self.has("Progressive Plot",player,5) and self._is_route(world,player,2)) or
-                    (self.has("Progressive Plot",player,7) and self._is_route(world,player,0)) or (self.has("Progressive Plot",player,9) and self._is_route(world,player,1)))
+            return (self.has("Mettaton Plush", player) or (self.has("Progressive Plot",player,5) and self._undertale_is_route(player,2)) or
+                    (self.has("Progressive Plot",player,7) and self._undertale_is_route(player,0)) or (self.has("Progressive Plot",player,9) and self._undertale_is_route(player,1)))
         elif item == "DT Extractor":
-            return ((self.has('DT Extractor', player) or self.has("Progressive Plot",player,10)) and self._is_route(world,player,1))
+            return ((self.has('DT Extractor', player) or self.has("Progressive Plot",player,10)) and self._undertale_is_route(player,1))
 
-    def _reach_snowdin(self, player: int, world: MultiWorld):
-        if self._prev_area(player,world,1) == "Old Home":
-            return (self._has_plot(player, world, "Goat Plush"))
-        elif self._prev_area(player,world,1) == "Waterfall":
-            return (self._reach_waterfall(player, world) and self._has_plot(player, world, "Heat Suit"))
-        elif self._prev_area(player,world,1) == "Hotland":
-            return (self._reach_news_show(player, world) and self._has_plot(player, world, "Bridge Tools"))
-
-    def _reach_papyrus_date(self, player: int, world: MultiWorld):
-        return (self._reach_snowdin(player, world) and self._has_plot(player, world, "Complete Skeleton"))
-
-    def _reach_waterfall(self, player: int, world: MultiWorld):
-        if self._prev_area(player,world,2) == "Old Home":
-            return (self._has_plot(player, world, "Goat Plush"))
-        elif self._prev_area(player,world,2) == "Snowdin Town":
-            return (self._reach_snowdin(player, world) and self._has_plot(player, world, "Snow Shovel"))
-        elif self._prev_area(player,world,2) == "Hotland":
-            return (self._reach_news_show(player, world) and self._has_plot(player, world, "Bridge Tools"))
-
-    def _reach_undyne_hangout(self, player: int, world: MultiWorld):
-        return (self._reach_papyrus_date(player, world) and self._reach_waterfall(player, world) and self._has_plot(player, world, "Fish"))
-
-    def _reach_hotland(self, player: int, world: MultiWorld):
-        if self._prev_area(player,world,3) == "Old Home":
-            return (self._has_plot(player, world, "Goat Plush"))
-        elif self._prev_area(player,world,3) == "Snowdin Town":
-            return (self._reach_snowdin(player, world) and self._has_plot(player, world, "Snow Shovel"))
-        elif self._prev_area(player,world,3) == "Waterfall":
-            return (self._reach_waterfall(player, world) and self._has_plot(player, world, "Heat Suit"))
-
-    def _reach_cooking_show(self, player: int, world: MultiWorld):
-        return (self._reach_hotland(player, world) and self._has_plot(player, world, "Cooking Set"))
-
-    def _reach_news_show(self, player: int, world: MultiWorld):
-        return (self._reach_cooking_show(player, world) and self._has_plot(player, world, "Microphone"))
-
-    def _reach_core(self, player: int, world: MultiWorld):
-        if self._prev_area(player,world,4) == "Hotland":
-            return (self._reach_news_show(player, world) and self._has_plot(player, world, "Bridge Tools"))
-        elif self._prev_area(player,world,4) == "Snowdin Town":
-            return (self._reach_snowdin(player, world) and self._has_plot(player, world, "Snow Shovel"))
-        elif self._prev_area(player,world,4) == "Waterfall":
-            return (self._reach_waterfall(player, world) and self._has_plot(player, world, "Heat Suit"))
-
-    def _reach_core_mettaton(self, player: int, world: MultiWorld):
-        return (self._reach_core(player, world) and self._has_plot(player, world, "Mettaton Plush"))
-
-    def _reach_new_home(self, player: int, world: MultiWorld):
-        return (self._reach_core_mettaton(player, world))
-
-    def _reach_sans(self, player: int, world: MultiWorld):
-        return (self._reach_new_home(player, world) and (self.has("Determination", player) or self.has("Soul Piece", player, self.world.soul_pieces[player])))
-
-    def _reach_true_lab(self, player: int, world: MultiWorld):
-        return (self._reach_undyne_hangout(player, world) and self._reach_sans(player, world) and self.has('Undyne Letter EX', player) and self._has_plot(player, world, "DT Extractor"))
-
-    def _can_level(self, exp: int, lvl: int):
+    def _undertale_can_level(self, exp: int, lvl: int):
         if (exp >= 10 and lvl == 1):
             return True
         elif (exp >= 30 and lvl == 2):
@@ -156,128 +100,139 @@ class UndertaleLogic(LogicMixin):
 
 # Sets rules on entrances and advancements that are always applied
 def set_rules(world: MultiWorld, player: int):
-    if world.state._is_route(world, player,1):
-        set_rule(world.get_location(("Papyrus Plot"), player), lambda state: state._reach_snowdin(player, world))
-        set_rule(world.get_location(("Undyne Plot"), player), lambda state: state._reach_waterfall(player, world))
-        set_rule(world.get_location(("True Lab Plot"), player), lambda state: state._reach_new_home(player, world))
-        set_rule(world.get_location(("Chisps Machine"), player), lambda state: state._reach_true_lab(player, world))
-        set_rule(world.get_location(("Dog Sale 1"), player), lambda state: state._reach_cooking_show(player, world))
-        set_rule(world.get_location(("Cat Sale"), player), lambda state: state._reach_cooking_show(player, world))
-        set_rule(world.get_location(("Dog Sale 2"), player), lambda state: state._reach_cooking_show(player, world))
-        set_rule(world.get_location(("Dog Sale 3"), player), lambda state: state._reach_cooking_show(player, world))
-        set_rule(world.get_location(("Dog Sale 4"), player), lambda state: state._reach_cooking_show(player, world))
-        set_rule(world.get_location(("Hush Trade"), player), lambda state: state._reach_news_show(player, world) and state.has('Hot Dog...?', player, 1))
-        set_rule(world.get_location(("Letter Quest"), player), lambda state: state._reach_sans(player, world))
-    if (not world.state._is_route(world, player,2)) or world.state._is_route(world,player,3):
-        set_rule(world.get_location(("Nicecream Punch Card"), player), lambda state: state.has('Punch Card', player, 3) and state._reach_waterfall(player, world))
-        set_rule(world.get_location(("Nicecream Snowdin"), player), lambda state: state._reach_snowdin(player, world))
-        set_rule(world.get_location(("Nicecream Waterfall"), player), lambda state: state._reach_waterfall(player, world))
-        set_rule(world.get_location(("Card Reward"), player), lambda state: state._reach_waterfall(player, world))
-        set_rule(world.get_location(("Apron Hidden"), player), lambda state: state._reach_cooking_show(player, world))
-        set_rule(world.get_location(("Cooking Show Plot"), player), lambda state: state._reach_cooking_show(player, world))
-        set_rule(world.get_location(("TV Show Plot"), player), lambda state: state._reach_news_show(player, world))
-    if world.state._is_route(world,player,2) and (world.rando_love[player] or world.rando_stats[player]):
+    set_rule(world.get_entrance("Old Home Exit", player), lambda state: state._undertale_has_plot(player, "Goat Plush"))
+    set_rule(world.get_entrance("Snowdin Town Exit", player), lambda state: state._undertale_has_plot(player, "Snow Shovel"))
+    set_rule(world.get_entrance("Papyrus\' Home Entrance", player), lambda state: state._undertale_has_plot(player, "Complete Skeleton"))
+    set_rule(world.get_entrance("Waterfall Exit", player), lambda state: state._undertale_has_plot(player, "Heat Suit"))
+    set_rule(world.get_entrance("Undyne\'s Home Entrance", player), lambda state: state._undertale_has_plot(player, "Fish") and state.can_reach('Papyrus\' Home', 'Region', player))
+    set_rule(world.get_entrance("Cooking Show Entrance", player), lambda state: state._undertale_has_plot(player, "Cooking Set"))
+    set_rule(world.get_entrance("News Show Entrance", player), lambda state: state._undertale_has_plot(player, "Microphone"))
+    set_rule(world.get_entrance("Hotland Exit", player), lambda state: state._undertale_has_plot(player, "Bridge Tools"))
+    set_rule(world.get_entrance("Core Exit", player), lambda state: state._undertale_has_plot(player, "Mettaton Plush"))
+    set_rule(world.get_entrance("New Home Exit", player), lambda state: state.has("Determination", player) or state.has("Soul Piece", player, state.world.soul_pieces[player]))
+    set_rule(world.get_entrance("Lab Elevator", player), lambda state: state.can_reach('Core Exit', 'Region', player) and state.can_reach('Undyne\'s Home', 'Region', player) and state.has('Undyne Letter EX', player) and state._undertale_has_plot(player, "DT Extractor"))
+    if world.state._undertale_is_route(player,1):
+        set_rule(world.get_location(("Papyrus Plot"), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
+        set_rule(world.get_location(("Undyne Plot"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+        set_rule(world.get_location(("True Lab Plot"), player), lambda state: state.can_reach('New Home', 'Region', player) and state.can_reach('Letter Quest', 'Location', player))
+        set_rule(world.get_location(("Chisps Machine"), player), lambda state: state.can_reach('True Lab', 'Region', player))
+        set_rule(world.get_location(("Dog Sale 1"), player), lambda state: state.can_reach('Cooking Show', 'Region', player))
+        set_rule(world.get_location(("Cat Sale"), player), lambda state: state.can_reach('Cooking Show', 'Region', player))
+        set_rule(world.get_location(("Dog Sale 2"), player), lambda state: state.can_reach('Cooking Show', 'Region', player))
+        set_rule(world.get_location(("Dog Sale 3"), player), lambda state: state.can_reach('Cooking Show', 'Region', player))
+        set_rule(world.get_location(("Dog Sale 4"), player), lambda state: state.can_reach('Cooking Show', 'Region', player))
+        set_rule(world.get_location(("Hush Trade"), player), lambda state: state.can_reach('New Show', 'Region', player) and state.has('Hot Dog...?', player, 1))
+        set_rule(world.get_location(("Letter Quest"), player), lambda state: state.can_reach('New Home Exit', 'Entrance', player))
+    if (not world.state._undertale_is_route(player,2)) or world.state._undertale_is_route(player,3):
+        set_rule(world.get_location(("Nicecream Punch Card"), player), lambda state: state.has('Punch Card', player, 3) and state.can_reach('Waterfall', 'Region', player))
+        set_rule(world.get_location(("Nicecream Snowdin"), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
+        set_rule(world.get_location(("Nicecream Waterfall"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+        set_rule(world.get_location(("Card Reward"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+        set_rule(world.get_location(("Apron Hidden"), player), lambda state: state.can_reach('Cooking Show', 'Region', player))
+        set_rule(world.get_location(("Cooking Show Plot"), player), lambda state: state.can_reach('Cooking Show', 'Region', player))
+        set_rule(world.get_location(("TV Show Plot"), player), lambda state: state.can_reach('New Show', 'Region', player))
+    if world.state._undertale_is_route(player,2) and (world.rando_love[player] or world.rando_stats[player]):
         maxlv = 5
         exp = 190
         curarea = "Old Home"
-        while exp < 50000:
-            if str(world.state._prev_area(player, world, 1)) == curarea:
+        while maxlv < 20:
+            if world.state._undertale_prev_area(player, 1) == curarea:
                 curarea = "Snowdin Town"
                 exp += 407
-            if str(world.state._prev_area(player, world, 2)) == curarea:
+            elif world.state._undertale_prev_area(player, 2) == curarea:
                 curarea = "Waterfall"
                 exp += 1643
-            if str(world.state._prev_area(player, world, 3)) == curarea:
+            elif world.state._undertale_prev_area(player, 3) == curarea:
                 curarea = "Hotland"
                 exp += 3320
-            if str(world.state._prev_area(player, world, 4)) == curarea:
+            elif world.state._undertale_prev_area(player, 4) == curarea:
                 curarea = "Core"
                 exp = 50000
-            while world.state._can_level(exp, maxlv):
+            elif curarea == "Core":
+                curarea = "Sans"
+                exp = 99999
+            while world.state._undertale_can_level(exp, maxlv):
                 maxlv += 1
                 if world.rando_stats[player]:
                     if curarea == "Snowdin Town":
-                        set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state._reach_snowdin(player, world))
-                        set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state._reach_snowdin(player, world))
+                        set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
+                        set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
                         if maxlv == 9 or maxlv == 13 or maxlv == 17:
-                            set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state._reach_snowdin(player, world))
+                            set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
                     elif curarea == "Waterfall":
-                        set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state._reach_waterfall(player, world))
-                        set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state._reach_waterfall(player, world))
+                        set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+                        set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state.can_reach('Waterfall', 'Region', player))
                         if maxlv == 9 or maxlv == 13 or maxlv == 17:
-                            set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state._reach_waterfall(player, world))
+                            set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state.can_reach('Waterfall', 'Region', player))
                     elif curarea == "Hotland":
-                        set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state._reach_hotland(player, world))
-                        set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state._reach_hotland(player, world))
+                        set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state.can_reach('News Show', 'Region', player))
+                        set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state.can_reach('News Show', 'Region', player))
                         if maxlv == 9 or maxlv == 13 or maxlv == 17:
-                            set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state._reach_hotland(player, world))
+                            set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state.can_reach('News Show', 'Region', player))
                     elif curarea == "Core":
-                        set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state._reach_core_mettaton(player, world))
-                        set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state._reach_core_mettaton(player, world))
+                        set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state.can_reach('Core Exit', 'Entrance', player))
+                        set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state.can_reach('Core Exit', 'Entrance', player))
                         if maxlv == 9 or maxlv == 13 or maxlv == 17:
-                            set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state._reach_core_mettaton(player, world))
+                            set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state.can_reach('Core Exit', 'Entrance', player))
+                    elif curarea == "Sans":
+                        set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state.can_reach('New Home Exit', 'Entrance', player))
+                        set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state.can_reach('New Home Exit', 'Entrance', player))
+                        if maxlv == 9 or maxlv == 13 or maxlv == 17:
+                            set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state.can_reach('New Home Exit', 'Entrance', player))
                 if world.rando_love[player]:
                     if curarea == "Snowdin Town":
-                        set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state._reach_snowdin(player, world))
+                        set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
                     elif curarea == "Waterfall":
-                        set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state._reach_waterfall(player, world))
+                        set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state.can_reach('Waterfall', 'Region', player))
                     elif curarea == "Hotland":
-                        set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state._reach_hotland(player, world))
+                        set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state.can_reach('News Show', 'Region', player))
                     elif curarea == "Core":
-                        set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state._reach_core_mettaton(player, world))
-        exp = 99999
-        while world.state._can_level(exp, maxlv):
-            maxlv += 1
-            if world.rando_stats[player]:
-                set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state._reach_sans(player, world))
-                set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state._reach_sans(player, world))
-                if maxlv == 9 or maxlv == 13 or maxlv == 17:
-                    set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state._reach_sans(player, world))
-            if world.rando_love[player]:
-                set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state._reach_sans(player, world))
-    set_rule(world.get_location(("Snowman"), player), lambda state: state._reach_snowdin(player, world))
-    set_rule(world.get_location(("Waterfall Plot"), player), lambda state: state._reach_snowdin(player, world))
-    set_rule(world.get_location(("Hotland Plot"), player), lambda state: state._reach_waterfall(player, world))
-    set_rule(world.get_location(("Core Plot"), player), lambda state: state._reach_news_show(player, world))
-    set_rule(world.get_location(("Mettaton Plot"), player), lambda state: state._reach_core_mettaton(player, world))
-    set_rule(world.get_location(("Bunny 1"), player), lambda state: state._reach_snowdin(player, world))
-    set_rule(world.get_location(("Bunny 2"), player), lambda state: state._reach_snowdin(player, world))
-    set_rule(world.get_location(("Bunny 3"), player), lambda state: state._reach_snowdin(player, world))
-    set_rule(world.get_location(("Bunny 4"), player), lambda state: state._reach_snowdin(player, world))
-    set_rule(world.get_location(("Astro 1"), player), lambda state: state._reach_waterfall(player, world))
-    set_rule(world.get_location(("Astro 2"), player), lambda state: state._reach_waterfall(player, world))
-    set_rule(world.get_location(("Gerson 1"), player), lambda state: state._reach_waterfall(player, world))
-    set_rule(world.get_location(("Gerson 2"), player), lambda state: state._reach_waterfall(player, world))
-    set_rule(world.get_location(("Gerson 3"), player), lambda state: state._reach_waterfall(player, world))
-    set_rule(world.get_location(("Gerson 4"), player), lambda state: state._reach_waterfall(player, world))
-    set_rule(world.get_location(("Present Knife"), player), lambda state: state._reach_new_home(player, world))
-    set_rule(world.get_location(("Present Locket"), player), lambda state: state._reach_new_home(player, world))
-    set_rule(world.get_location(("Trash Burger"), player), lambda state: state._reach_core(player, world))
-    set_rule(world.get_location(("Quiche Bench"), player), lambda state: state._reach_waterfall(player, world))
-    set_rule(world.get_location(("Tutu Hidden"), player), lambda state: state._reach_waterfall(player, world))
-    set_rule(world.get_location(("Grass Shoes"), player), lambda state: state._reach_waterfall(player, world))
-    set_rule(world.get_location(("TemmieShop 1"), player), lambda state: state._reach_waterfall(player, world))
-    set_rule(world.get_location(("TemmieShop 2"), player), lambda state: state._reach_waterfall(player, world))
-    set_rule(world.get_location(("TemmieShop 3"), player), lambda state: state._reach_waterfall(player, world))
-    set_rule(world.get_location(("TemmieShop 4"), player), lambda state: state._reach_waterfall(player, world))
-    set_rule(world.get_location(("Noodles Fridge"), player), lambda state: state._reach_hotland(player, world))
-    set_rule(world.get_location(("Pan Hidden"), player), lambda state: state._reach_hotland(player, world))
-    set_rule(world.get_location(("Bratty Catty 1"), player), lambda state: state._reach_news_show(player, world))
-    set_rule(world.get_location(("Bratty Catty 2"), player), lambda state: state._reach_news_show(player, world))
-    set_rule(world.get_location(("Bratty Catty 3"), player), lambda state: state._reach_news_show(player, world))
-    set_rule(world.get_location(("Bratty Catty 4"), player), lambda state: state._reach_news_show(player, world))
-    set_rule(world.get_location(("Burgerpants 1"), player), lambda state: state._reach_news_show(player, world))
-    set_rule(world.get_location(("Burgerpants 2"), player), lambda state: state._reach_news_show(player, world))
-    set_rule(world.get_location(("Burgerpants 3"), player), lambda state: state._reach_news_show(player, world))
-    set_rule(world.get_location(("Burgerpants 4"), player), lambda state: state._reach_news_show(player, world))
+                        set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state.can_reach('Core Exit', 'Entrance', player))
+                    elif curarea == "Sans":
+                        set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state.can_reach('New Home Exit', 'Entrance', player))
+    set_rule(world.get_location(("Snowman"), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
+    set_rule(world.get_location(("Waterfall Plot"), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
+    set_rule(world.get_location(("Hotland Plot"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+    set_rule(world.get_location(("Core Plot"), player), lambda state: state.can_reach('New Show', 'Region', player))
+    set_rule(world.get_location(("Mettaton Plot"), player), lambda state: state.can_reach('Core Exit', 'Entrance', player))
+    set_rule(world.get_location(("Bunny 1"), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
+    set_rule(world.get_location(("Bunny 2"), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
+    set_rule(world.get_location(("Bunny 3"), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
+    set_rule(world.get_location(("Bunny 4"), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
+    set_rule(world.get_location(("Astro 1"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+    set_rule(world.get_location(("Astro 2"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+    set_rule(world.get_location(("Gerson 1"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+    set_rule(world.get_location(("Gerson 2"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+    set_rule(world.get_location(("Gerson 3"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+    set_rule(world.get_location(("Gerson 4"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+    set_rule(world.get_location(("Present Knife"), player), lambda state: state.can_reach('New Home', 'Region', player))
+    set_rule(world.get_location(("Present Locket"), player), lambda state: state.can_reach('New Home', 'Region', player))
+    set_rule(world.get_location(("Trash Burger"), player), lambda state: state.can_reach('Core', 'Region', player))
+    set_rule(world.get_location(("Quiche Bench"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+    set_rule(world.get_location(("Tutu Hidden"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+    set_rule(world.get_location(("Grass Shoes"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+    set_rule(world.get_location(("TemmieShop 1"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+    set_rule(world.get_location(("TemmieShop 2"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+    set_rule(world.get_location(("TemmieShop 3"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+    set_rule(world.get_location(("TemmieShop 4"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
+    set_rule(world.get_location(("Noodles Fridge"), player), lambda state: state.can_reach('Hotland', 'Region', player))
+    set_rule(world.get_location(("Pan Hidden"), player), lambda state: state.can_reach('Hotland', 'Region', player))
+    set_rule(world.get_location(("Bratty Catty 1"), player), lambda state: state.can_reach('New Show', 'Region', player))
+    set_rule(world.get_location(("Bratty Catty 2"), player), lambda state: state.can_reach('New Show', 'Region', player))
+    set_rule(world.get_location(("Bratty Catty 3"), player), lambda state: state.can_reach('New Show', 'Region', player))
+    set_rule(world.get_location(("Bratty Catty 4"), player), lambda state: state.can_reach('New Show', 'Region', player))
+    set_rule(world.get_location(("Burgerpants 1"), player), lambda state: state.can_reach('New Show', 'Region', player))
+    set_rule(world.get_location(("Burgerpants 2"), player), lambda state: state.can_reach('New Show', 'Region', player))
+    set_rule(world.get_location(("Burgerpants 3"), player), lambda state: state.can_reach('New Show', 'Region', player))
+    set_rule(world.get_location(("Burgerpants 4"), player), lambda state: state.can_reach('New Show', 'Region', player))
 
 
 # Sets rules on completion condition
 def set_completion_rules(world: MultiWorld, player: int):
     completion_requirements = lambda state: True
-    if not world.state._is_route(world, player, 1):
-        completion_requirements = lambda state: state._reach_sans(player, world) and state.has("ATK Up", player, 19) and state.has("HP Up", player, 19) and state.has("DEF Up", player, 4)
-    if world.state._is_route(world, player, 1):
-        completion_requirements = lambda state: state._reach_true_lab(player, world)
+    if not world.state._undertale_is_route(player, 1):
+        completion_requirements = lambda state: state.can_reach('New Home Exit', 'Entrance', player) and state.has("ATK Up", player, 19) and state.has("HP Up", player, 19) and state.has("DEF Up", player, 4)
+    if world.state._undertale_is_route(player, 1):
+        completion_requirements = lambda state: state.can_reach('True Lab', 'Region', player)
 
     world.completion_condition[player] = lambda state: completion_requirements(state)
