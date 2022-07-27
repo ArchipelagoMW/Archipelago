@@ -1,6 +1,7 @@
 from ..generic.Rules import set_rule, add_rule
 from BaseClasses import MultiWorld
 from ..AutoWorld import LogicMixin
+import math
 
 
 class UndertaleLogic(LogicMixin):
@@ -111,47 +112,46 @@ class UndertaleLogic(LogicMixin):
     def _reach_true_lab(self, player: int, world: MultiWorld):
         return (self._reach_undyne_hangout(player, world) and self._reach_sans(player, world) and self.has('Undyne Letter EX', player) and self._has_plot(player, world, "DT Extractor"))
 
-
-def can_level(exp: int, lvl: int):
-    if (exp >= 10 and lvl == 1):
-        return True
-    elif (exp >= 30 and lvl == 2):
-        return True
-    elif (exp >= 70 and lvl == 3):
-        return True
-    elif (exp >= 120 and lvl == 4):
-        return True
-    elif (exp >= 200 and lvl == 5):
-        return True
-    elif (exp >= 300 and lvl == 6):
-        return True
-    elif (exp >= 500 and lvl == 7):
-        return True
-    elif (exp >= 800 and lvl == 8):
-        return True
-    elif (exp >= 1200 and lvl == 9):
-        return True
-    elif (exp >= 1700 and lvl == 10):
-        return True
-    elif (exp >= 2500 and lvl == 11):
-        return True
-    elif (exp >= 3500 and lvl == 12):
-        return True
-    elif (exp >= 5000 and lvl == 13):
-        return True
-    elif (exp >= 7000 and lvl == 14):
-        return True
-    elif (exp >= 10000 and lvl == 15):
-        return True
-    elif (exp >= 15000 and lvl == 16):
-        return True
-    elif (exp >= 25000 and lvl == 17):
-        return True
-    elif (exp >= 50000 and lvl == 18):
-        return True
-    elif (exp >= 99999 and lvl == 19):
-        return True
-    return False
+    def _can_level(self, exp: int, lvl: int):
+        if (exp >= 10 and lvl == 1):
+            return True
+        elif (exp >= 30 and lvl == 2):
+            return True
+        elif (exp >= 70 and lvl == 3):
+            return True
+        elif (exp >= 120 and lvl == 4):
+            return True
+        elif (exp >= 200 and lvl == 5):
+            return True
+        elif (exp >= 300 and lvl == 6):
+            return True
+        elif (exp >= 500 and lvl == 7):
+            return True
+        elif (exp >= 800 and lvl == 8):
+            return True
+        elif (exp >= 1200 and lvl == 9):
+            return True
+        elif (exp >= 1700 and lvl == 10):
+            return True
+        elif (exp >= 2500 and lvl == 11):
+            return True
+        elif (exp >= 3500 and lvl == 12):
+            return True
+        elif (exp >= 5000 and lvl == 13):
+            return True
+        elif (exp >= 7000 and lvl == 14):
+            return True
+        elif (exp >= 10000 and lvl == 15):
+            return True
+        elif (exp >= 15000 and lvl == 16):
+            return True
+        elif (exp >= 25000 and lvl == 17):
+            return True
+        elif (exp >= 50000 and lvl == 18):
+            return True
+        elif (exp >= 99999 and lvl == 19):
+            return True
+        return False
 
 
 # Sets rules on entrances and advancements that are always applied
@@ -176,39 +176,65 @@ def set_rules(world: MultiWorld, player: int):
         set_rule(world.get_location(("Apron Hidden"), player), lambda state: state._reach_cooking_show(player, world))
         set_rule(world.get_location(("Cooking Show Plot"), player), lambda state: state._reach_cooking_show(player, world))
         set_rule(world.get_location(("TV Show Plot"), player), lambda state: state._reach_news_show(player, world))
-    if world.state._is_route(world,player,2) and world.rando_love[player]:
+    if world.state._is_route(world,player,2) and (world.rando_love[player] or world.rando_stats[player]):
         maxlv = 5
         exp = 190
         curarea = "Old Home"
-        while curarea != "Core":
-            if UndertaleLogic._prev_area(UndertaleLogic(), player, world, 1) == curarea:
+        while exp < 50000:
+            if str(world.state._prev_area(player, world, 1)) == curarea:
                 curarea = "Snowdin Town"
-                exp += 412
-                while can_level(exp, maxlv):
-                    maxlv += 1
-                    set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state._reach_snowdin(player, world))
-            if UndertaleLogic._prev_area(UndertaleLogic(), player, world, 2) == curarea:
+                exp += 407
+            if str(world.state._prev_area(player, world, 2)) == curarea:
                 curarea = "Waterfall"
                 exp += 1643
-                while can_level(exp, maxlv):
-                    maxlv += 1
-                    set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state._reach_waterfall(player, world))
-            if UndertaleLogic._prev_area(UndertaleLogic(), player, world, 3) == curarea:
+            if str(world.state._prev_area(player, world, 3)) == curarea:
                 curarea = "Hotland"
                 exp += 3320
-                while can_level(exp, maxlv):
-                    maxlv += 1
-                    set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state._reach_hotland(player, world))
-            if UndertaleLogic._prev_area(UndertaleLogic(), player, world, 4) == curarea:
+            if str(world.state._prev_area(player, world, 4)) == curarea:
                 curarea = "Core"
                 exp = 50000
-                while can_level(exp, maxlv):
-                    maxlv += 1
-                    set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state._reach_core_mettaton(player, world))
+            while world.state._can_level(exp, maxlv):
+                maxlv += 1
+                if world.rando_stats[player]:
+                    if curarea == "Snowdin Town":
+                        set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state._reach_snowdin(player, world))
+                        set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state._reach_snowdin(player, world))
+                        if maxlv == 9 or maxlv == 13 or maxlv == 17:
+                            set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state._reach_snowdin(player, world))
+                    elif curarea == "Waterfall":
+                        set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state._reach_waterfall(player, world))
+                        set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state._reach_waterfall(player, world))
+                        if maxlv == 9 or maxlv == 13 or maxlv == 17:
+                            set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state._reach_waterfall(player, world))
+                    elif curarea == "Hotland":
+                        set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state._reach_hotland(player, world))
+                        set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state._reach_hotland(player, world))
+                        if maxlv == 9 or maxlv == 13 or maxlv == 17:
+                            set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state._reach_hotland(player, world))
+                    elif curarea == "Core":
+                        set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state._reach_core_mettaton(player, world))
+                        set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state._reach_core_mettaton(player, world))
+                        if maxlv == 9 or maxlv == 13 or maxlv == 17:
+                            set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state._reach_core_mettaton(player, world))
+                if world.rando_love[player]:
+                    if curarea == "Snowdin Town":
+                        set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state._reach_snowdin(player, world))
+                    elif curarea == "Waterfall":
+                        set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state._reach_waterfall(player, world))
+                    elif curarea == "Hotland":
+                        set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state._reach_hotland(player, world))
+                    elif curarea == "Core":
+                        set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state._reach_core_mettaton(player, world))
         exp = 99999
-        while can_level(exp, maxlv):
+        while world.state._can_level(exp, maxlv):
             maxlv += 1
-            set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state._reach_sans(player, world))
+            if world.rando_stats[player]:
+                set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state._reach_sans(player, world))
+                set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state._reach_sans(player, world))
+                if maxlv == 9 or maxlv == 13 or maxlv == 17:
+                    set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state._reach_sans(player, world))
+            if world.rando_love[player]:
+                set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state._reach_sans(player, world))
     set_rule(world.get_location(("Snowman"), player), lambda state: state._reach_snowdin(player, world))
     set_rule(world.get_location(("Waterfall Plot"), player), lambda state: state._reach_snowdin(player, world))
     set_rule(world.get_location(("Hotland Plot"), player), lambda state: state._reach_waterfall(player, world))
@@ -250,7 +276,7 @@ def set_rules(world: MultiWorld, player: int):
 def set_completion_rules(world: MultiWorld, player: int):
     completion_requirements = lambda state: True
     if not world.state._is_route(world, player, 1):
-        completion_requirements = lambda state: state._reach_sans(player, world)
+        completion_requirements = lambda state: state._reach_sans(player, world) and state.has("ATK Up", player, 19) and state.has("HP Up", player, 19) and state.has("DEF Up", player, 4)
     if world.state._is_route(world, player, 1):
         completion_requirements = lambda state: state._reach_true_lab(player, world)
 

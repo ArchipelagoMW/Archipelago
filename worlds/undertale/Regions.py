@@ -37,11 +37,13 @@ def link_randomized_undertale_areas(world, player):
     else:
         for (exit, region) in randomized_connections:
             world.get_entrance(exit, player).connect(world.get_region(region, player))
+            world.spoiler.set_entrance(exit, region, 'entrance', player)
 
 
 # (Region name, list of exits)
 undertale_regions = [
     ('Menu', ['New Game']),
+    ('???', []),
     ('Ruins', ['Ruins Exit']),
     ('Old Home', ['Old Home Exit']),
     ('Snowdin Forest', ['Snowdin Forest Exit']),
@@ -56,6 +58,7 @@ undertale_regions = [
 
 # (Entrance, region pointed to)
 mandatory_connections = [
+    ('New Game', '???'),
     ('New Game', 'Ruins'),
     ('Ruins Exit', 'Old Home'),
     ('Snowdin Forest Exit', 'Snowdin Town'),

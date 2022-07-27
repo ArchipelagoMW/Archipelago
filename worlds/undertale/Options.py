@@ -21,7 +21,7 @@ class IncludeTemy(Toggle):
 class SoulPieces(Range):
     default = 5
     range_start = 1
-    range_end = 10
+    range_end = 5
 
 
 class SoulHunt(Toggle):
@@ -60,6 +60,13 @@ class RandomizeAreas(Toggle):
     default = 0
 
 
+class RandomizeStats(Toggle):
+    """Makes each stat increase from LV a separate item. GENOCIDE ONLY!
+    This may be a problem to some people, make sure everyone is okay with this option before choosing to have it on."""
+    display_name = "Randomize Stats"
+    default = 0
+
+
 undertale_options: typing.Dict[str, type(Option)] = {
     "route_required":                           RouteRequired,
     "temy_include":                             IncludeTemy,
@@ -70,4 +77,5 @@ undertale_options: typing.Dict[str, type(Option)] = {
     "prog_plot":                                ProgressivePlot,
     "rando_love":                                RandomizeLove,
     "rando_area":                                RandomizeAreas,
+    "rando_stats":                                RandomizeStats,
 }

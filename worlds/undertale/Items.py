@@ -88,6 +88,9 @@ item_table = {
     "100G": ItemData(77999, False),
     "1000G": ItemData(77998, False),
     "10000G": ItemData(77997, False),
+    "ATK Up": ItemData(77065, True),
+    "DEF Up": ItemData(77066, True),
+    "HP Up": ItemData(77067, True),
 }
 
 non_key_items = {
@@ -102,6 +105,9 @@ non_key_items = {
     "Hot Cat": 1,
     "Abandoned Quiche": 1,
     "Monster Candy": 4,
+    "ATK Up": 19,
+    "DEF Up": 4,
+    "HP Up": 19,
 }
 
 required_armor = {
