@@ -379,9 +379,9 @@ class SMZ3World(World):
             self.world.spoiler.unreachables.update(self.unreachable)
 
     def JunkFillGT(self):
-        GTLocationNames = [loc.Name for loc in self.smz3World.GetRegion("Ganon's Tower").Locations]
+        locationNamesGT = [loc.Name for loc in self.smz3World.GetRegion("Ganon's Tower").Locations]
         for loc in self.locations.values():
-            if loc.name in GTLocationNames and loc.item is None:
+            if loc.name in locationNamesGT and loc.item is None:
                 poolLength = len(self.world.itempool)
                 # start looking at a random starting index and loop at start if no match found
                 for i in range(self.world.random.randint(0, poolLength), poolLength):
@@ -394,7 +394,7 @@ class SMZ3World(World):
                             itemFromPool = self.world.itempool.pop(i)
                             break
                 self.world.push_item(loc, itemFromPool, False)
-                loc.event = itemFromPool.advancement
+                loc.event = False
 
     def FillItemAtLocation(self, itemPool, itemType, location):
         itemToPlace = TotalSMZ3Item.Item.Get(itemPool, itemType, self.smz3World)
