@@ -73,7 +73,7 @@ class RiskOfRainWorld(World):
             junk_pool.pop("Lunar Item")
 
         # Generate item pool
-        itempool = []
+        itempool: list = []
         # figure out how many revivals should exist in the pool
         self.total_revivals = int(self.world.total_revivals[self.player].value / 100 *
                                   self.world.total_locations[self.player].value)

@@ -2,11 +2,11 @@ from BaseClasses import MultiWorld
 from ..generic.Rules import set_rule, add_rule
 
 
-def set_rules(world: MultiWorld, player: int):
+def set_rules(world: MultiWorld, player: int) -> None:
     total_locations = world.total_locations[player].value  # total locations for current player
     event_location_step = 25  # set an event location at these locations for "spheres"
     divisions = total_locations // event_location_step
-    total_revivals = world.worlds[player].total_revivals
+    total_revivals = world.worlds[player].total_revivals  # pulling this info we calculated in generate_basic
 
     if divisions:
         for i in range(1, divisions):  # since divisions is the floor of total_locations / 25

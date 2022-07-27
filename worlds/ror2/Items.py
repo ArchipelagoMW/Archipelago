@@ -7,7 +7,7 @@ class RiskOfRainItem(Item):
 
 
 # 37000 - 38000
-item_table = {
+item_table: Dict[str, int] = {
     "Dio's Best Friend":    37001,
     "Common Item":          37002,
     "Uncommon Item":        37003,
@@ -21,7 +21,7 @@ item_table = {
     "Item Scrap, Yellow":   37011
 }
 
-default_weights = {
+default_weights: Dict[str, int] = {
     "Item Scrap, Green":    16,
     "Item Scrap, Red":      4,
     "Item Scrap, Yellow":   1,
@@ -34,7 +34,7 @@ default_weights = {
     "Equipment":            32
 }
 
-new_weights = {
+new_weights: Dict[str, int] = {
     "Item Scrap, Green":    15,
     "Item Scrap, Red":      5,
     "Item Scrap, Yellow":   1,
@@ -47,7 +47,7 @@ new_weights = {
     "Equipment":            20
 }
 
-uncommon_weights = {
+uncommon_weights: Dict[str, int] = {
     "Item Scrap, Green":    45,
     "Item Scrap, Red":      5,
     "Item Scrap, Yellow":   1,
@@ -60,7 +60,7 @@ uncommon_weights = {
     "Equipment":            20
 }
 
-legendary_weights = {
+legendary_weights: Dict[str, int] = {
     "Item Scrap, Green":    15,
     "Item Scrap, Red":      5,
     "Item Scrap, Yellow":   1,
@@ -73,7 +73,7 @@ legendary_weights = {
     "Equipment":            20
 }
 
-lunartic_weights = {
+lunartic_weights: Dict[str, int] = {
     "Item Scrap, Green":    0,
     "Item Scrap, Red":      0,
     "Item Scrap, Yellow":   0,
@@ -86,7 +86,7 @@ lunartic_weights = {
     "Equipment":            0
 }
 
-chaos_weights = {
+chaos_weights: Dict[str, int] = {
     "Item Scrap, Green":    80,
     "Item Scrap, Red":      45,
     "Item Scrap, Yellow":   30,
@@ -99,7 +99,7 @@ chaos_weights = {
     "Equipment":            40
 }
 
-no_scraps_weights = {
+no_scraps_weights: Dict[str, int] = {
     "Item Scrap, Green":    0,
     "Item Scrap, Red":      0,
     "Item Scrap, Yellow":   0,
@@ -112,7 +112,7 @@ no_scraps_weights = {
     "Equipment":            25
 }
 
-even_weights = {
+even_weights: Dict[str, int] = {
     "Item Scrap, Green":    1,
     "Item Scrap, Red":      1,
     "Item Scrap, Yellow":   1,
@@ -125,7 +125,7 @@ even_weights = {
     "Equipment":            1
 }
 
-scraps_only = {
+scraps_only: Dict[str, int] = {
     "Item Scrap, Green":    70,
     "Item Scrap, White":    100,
     "Item Scrap, Red":      30,
