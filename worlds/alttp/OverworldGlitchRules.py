@@ -209,7 +209,6 @@ def get_mirror_offset_spots_lw(player):
     yield ('Death Mountain Offset Mirror (Houlihan Exit)', 'Death Mountain', 'Hyrule Castle Ledge', lambda state: state.has('Magic Mirror', player) and state.can_boots_clip_dw(player) and state.has('Moon Pearl', player))
 
 
-
 def get_invalid_bunny_revival_dungeons():
     """
     Dungeon regions that can't be bunny revived from without superbunny state.
@@ -302,6 +301,7 @@ def create_no_logic_connections(player, world, connections):
         parent.exits.append(connection)
         connection.connect(target)
 
+
 def create_owg_connections(player, world, connections):
     for entrance, parent_region, target_region, *rule_override in connections:
         parent = world.get_region(parent_region, player)
@@ -309,6 +309,7 @@ def create_owg_connections(player, world, connections):
         connection = Entrance(player, entrance, parent)
         parent.exits.append(connection)
         connection.connect(target)
+
 
 def set_owg_connection_rules(player, world, connections, default_rule):
     for entrance, _, _, *rule_override in connections:
