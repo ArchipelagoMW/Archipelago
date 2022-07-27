@@ -1,5 +1,5 @@
 import logging
-from typing import Optional, Union, List, Tuple, Callable
+from typing import Optional, Union, List, Tuple, Callable, Dict
 
 from BaseClasses import Boss
 from Fill import FillError
@@ -133,7 +133,7 @@ def GanonDefeatRule(state, player: int) -> bool:
         return common and state.has('Silver Bow', player) and state.can_shoot_arrows(player)
 
 
-boss_table: dict[str, Tuple[str, Optional[Callable]]] = {
+boss_table: Dict[str, Tuple[str, Optional[Callable]]] = {
     'Armos Knights': ('Armos', ArmosKnightsDefeatRule),
     'Lanmolas': ('Lanmola', LanmolasDefeatRule),
     'Moldorm': ('Moldorm', MoldormDefeatRule),
@@ -251,7 +251,7 @@ def can_place_boss(boss: str, dungeon_name: str, level: Optional[str] = None) ->
     return True
 
 
-restrictive_boss_locations: dict[Tuple[str, str], bool] = {}
+restrictive_boss_locations: Dict[Tuple[str, str], bool] = {}
 for location in boss_location_table:
     restrictive_boss_locations[location] = not all(can_place_boss(boss, *location)
                                                for boss in boss_table if not boss.startswith("Agahnim"))
