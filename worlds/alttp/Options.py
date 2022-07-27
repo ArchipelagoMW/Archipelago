@@ -463,6 +463,7 @@ class MenuSpeed(Choice):
     option_half = 5
 
 
+# TODO this is a bad way to do this. maybe turn enabled into a toggle then the rest of these into an Optionlist?
 class RandomSprite(OptionDict):
     """Allows different random sprite events to be simultaneously enabled."""
     display_name = "Random Sprite On Event"
@@ -539,6 +540,26 @@ class SpritePool(OptionList):
                   "Will", "Wizzrobe", "Wolf Link (Festive)", "Wolf Link (TP)", "Yoshi", "Yunica Tovah", "Zandra",
                   "Zaruvyen", "Zebra Unicorn", "Zeckemyro", "Zelda", "Zero Suit Samus", "Zora"}
 
+
+# # TODO obviously waiting on the freetext options
+# class Sprite(TextChoice):
+#     valid_keys = SpritePool.valid_keys
+#     option_link = 0
+#     option_random_on_hit = 1
+#     option_random_on_enter = 2
+#     option_random_on_exit = 3
+#     option_random_on_slash = 4
+#     option_random_on_item = 5
+#     option_random_on_bonk = 6
+#     option_random_on_all = 7
+#
+#     def verify(self, world, player_name, plando_options) -> None:
+#         if isinstance(self.value, int):
+#             return
+#         if self.value in self.valid_keys:
+#             return
+#         raise ValueError(f"{self.value} for {player_name} is not a valid Sprite option.")
+#
 
 class Music(DefaultOnToggle):
     display_name = "Play music"
