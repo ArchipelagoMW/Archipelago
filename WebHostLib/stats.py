@@ -17,7 +17,7 @@ from .models import Room
 def get_db_data():
     games_played = defaultdict(Counter)
     total_games = Counter()
-    cutoff = date.today()-timedelta(days=30000)
+    cutoff = date.today()-timedelta(days=30)
     room: Room
     for room in select(room for room in Room if room.creation_time >= cutoff):
         for slot in room.seed.slots:
