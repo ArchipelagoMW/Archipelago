@@ -195,8 +195,9 @@ class Bosses(TextChoice):
             return
         from Generate import PlandoSettings
         if not(PlandoSettings.bosses & plando_options):
+            import logging
             self.value = self.remaining_mode
-            Warning(f"The plando bosses module is turned off so {self.name_lookup[self.value].title()} "
+            logging.warning(f"The plando bosses module is turned off so {self.name_lookup[self.value].title()} "
                     f"boss shuffle will be used for player {player_name}.")
 
 
