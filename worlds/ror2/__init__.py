@@ -1,5 +1,5 @@
 import string
-from typing import Dict
+from typing import Dict, List
 from .Items import RiskOfRainItem, item_table, item_pool_weights
 from .Locations import RiskOfRainLocation, item_pickups
 from .Rules import set_rules
@@ -79,7 +79,7 @@ class RiskOfRainWorld(World):
             junk_pool.pop("Lunar Item")
 
         # Generate item pool
-        itempool: list = []
+        itempool: List = []
         # Add revive items for the player
         itempool += ["Dio's Best Friend"] * self.total_revivals
 
@@ -148,7 +148,7 @@ def create_events(world: MultiWorld, player: int) -> None:
     world_region.locations.append(victory_event)
 
 
-def create_region(world: MultiWorld, player: int, name: str, locations: list[str] = None) -> Region:
+def create_region(world: MultiWorld, player: int, name: str, locations: List[str] = None) -> Region:
     ret = Region(name, RegionType.Generic, name, player, world)
     if locations:
         for location in locations:
