@@ -203,8 +203,8 @@ PacketProblemType indicates the type problem that was detected in the faulty pac
 
 | Type | Notes |
 | ---- | ----- |
-| cmd | signaling that the `cmd` argument of the faulty packet could not be parsed correctly |
-| arguments | signaling that the arguments of the faulty packet are not correct |
+| cmd | `cmd` argument of the faulty packet could not be parsed correctly |
+| arguments | arguments of the faulty packet are not correct |
 
 ### Retrieved
 Sent to clients as a response the a [Get](#Get) package
