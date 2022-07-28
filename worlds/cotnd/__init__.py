@@ -1,7 +1,6 @@
 
 # TODO:
 # Write tutorial
-# Add world description
 # Increment data version
 
 import logging
@@ -20,13 +19,26 @@ id_offset: int = 247000
 
 
 class CotNDWebWorld(WebWorld):
-    settings_page = True
-    game_info_languages: ['en']
-    tutorials: List[Tutorial] = []
     theme = "dirt"
+    game_info_languages: ['en']
+
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up Crypt of the NecroDancer for Archipelago.",
+        "English",
+        "necrodancer_en.md",
+        "cotnd/en",
+        ["Espeon"],
+    )
+
+    tutorials: List[Tutorial] = [setup_en]
 
 
 class CotNDWorld(World):
+    """
+    Crypt of the NecroDancer is a roguelike rhythm game. Move to the beat in an ever-changing dungeon while fighting
+    skeletons, dragons, and rapping moles. Descend into the crypt to defeat the NecroDancer and claim the Golden Lute!
+    """
     game: str                           = "Crypt of the NecroDancer"
     options: Dict[str, Option[Any]]     = cotnd_options
     item_name_to_id: Dict[str, int]     = {name: (id_offset + index) for index, name in enumerate(item_table)}
