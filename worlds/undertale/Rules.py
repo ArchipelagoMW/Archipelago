@@ -102,15 +102,16 @@ class UndertaleLogic(LogicMixin):
 def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_entrance("Old Home Exit", player), lambda state: state._undertale_has_plot(player, "Goat Plush"))
     set_rule(world.get_entrance("Snowdin Town Exit", player), lambda state: state._undertale_has_plot(player, "Snow Shovel"))
-    set_rule(world.get_entrance("Papyrus\' Home Entrance", player), lambda state: state._undertale_has_plot(player, "Complete Skeleton"))
     set_rule(world.get_entrance("Waterfall Exit", player), lambda state: state._undertale_has_plot(player, "Heat Suit"))
-    set_rule(world.get_entrance("Undyne\'s Home Entrance", player), lambda state: state._undertale_has_plot(player, "Fish") and state.can_reach('Papyrus\' Home', 'Region', player))
     set_rule(world.get_entrance("Cooking Show Entrance", player), lambda state: state._undertale_has_plot(player, "Cooking Set"))
     set_rule(world.get_entrance("News Show Entrance", player), lambda state: state._undertale_has_plot(player, "Microphone"))
     set_rule(world.get_entrance("Hotland Exit", player), lambda state: state._undertale_has_plot(player, "Bridge Tools"))
     set_rule(world.get_entrance("Core Exit", player), lambda state: state._undertale_has_plot(player, "Mettaton Plush"))
     set_rule(world.get_entrance("New Home Exit", player), lambda state: state.has("Determination", player) or state.has("Soul Piece", player, state.world.soul_pieces[player]))
-    set_rule(world.get_entrance("Lab Elevator", player), lambda state: state.can_reach('Core Exit', 'Region', player) and state.can_reach('Undyne\'s Home', 'Region', player) and state.has('Undyne Letter EX', player) and state._undertale_has_plot(player, "DT Extractor"))
+    if world.state._undertale_is_route(player, 1):
+        set_rule(world.get_entrance("Papyrus\' Home Entrance", player), lambda state: state._undertale_has_plot(player, "Complete Skeleton"))
+        set_rule(world.get_entrance("Undyne\'s Home Entrance", player), lambda state: state._undertale_has_plot(player, "Fish") and state.has('Papyrus Date', player))
+        set_rule(world.get_entrance("Lab Elevator", player), lambda state: state.has('Undyne Letter EX', player) and state.has('Undyne Date', player) and state.has('Alphys Date', player) and state._undertale_has_plot(player, "DT Extractor"))
     if world.state._undertale_is_route(player,1):
         set_rule(world.get_location(("Papyrus Plot"), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
         set_rule(world.get_location(("Undyne Plot"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
@@ -121,7 +122,7 @@ def set_rules(world: MultiWorld, player: int):
         set_rule(world.get_location(("Dog Sale 2"), player), lambda state: state.can_reach('Cooking Show', 'Region', player))
         set_rule(world.get_location(("Dog Sale 3"), player), lambda state: state.can_reach('Cooking Show', 'Region', player))
         set_rule(world.get_location(("Dog Sale 4"), player), lambda state: state.can_reach('Cooking Show', 'Region', player))
-        set_rule(world.get_location(("Hush Trade"), player), lambda state: state.can_reach('New Show', 'Region', player) and state.has('Hot Dog...?', player, 1))
+        set_rule(world.get_location(("Hush Trade"), player), lambda state: state.can_reach('News Show', 'Region', player) and state.has('Hot Dog...?', player, 1))
         set_rule(world.get_location(("Letter Quest"), player), lambda state: state.can_reach('New Home Exit', 'Entrance', player))
     if (not world.state._undertale_is_route(player,2)) or world.state._undertale_is_route(player,3):
         set_rule(world.get_location(("Nicecream Punch Card"), player), lambda state: state.has('Punch Card', player, 3) and state.can_reach('Waterfall', 'Region', player))
@@ -130,7 +131,7 @@ def set_rules(world: MultiWorld, player: int):
         set_rule(world.get_location(("Card Reward"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
         set_rule(world.get_location(("Apron Hidden"), player), lambda state: state.can_reach('Cooking Show', 'Region', player))
         set_rule(world.get_location(("Cooking Show Plot"), player), lambda state: state.can_reach('Cooking Show', 'Region', player))
-        set_rule(world.get_location(("TV Show Plot"), player), lambda state: state.can_reach('New Show', 'Region', player))
+        set_rule(world.get_location(("TV Show Plot"), player), lambda state: state.can_reach('News Show', 'Region', player))
     if world.state._undertale_is_route(player,2) and (world.rando_love[player] or world.rando_stats[player]):
         maxlv = 5
         exp = 190
@@ -143,7 +144,7 @@ def set_rules(world: MultiWorld, player: int):
                 curarea = "Waterfall"
                 exp += 1643
             elif world.state._undertale_prev_area(player, 3) == curarea:
-                curarea = "Hotland"
+                curarea = "News Show"
                 exp += 3320
             elif world.state._undertale_prev_area(player, 4) == curarea:
                 curarea = "Core"
@@ -164,7 +165,7 @@ def set_rules(world: MultiWorld, player: int):
                         set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state.can_reach('Waterfall', 'Region', player))
                         if maxlv == 9 or maxlv == 13 or maxlv == 17:
                             set_rule(world.get_location(("DEF "+str(maxlv)), player), lambda state: state.can_reach('Waterfall', 'Region', player))
-                    elif curarea == "Hotland":
+                    elif curarea == "News Show":
                         set_rule(world.get_location(("ATK "+str(maxlv)), player), lambda state: state.can_reach('News Show', 'Region', player))
                         set_rule(world.get_location(("HP "+str(maxlv)), player), lambda state: state.can_reach('News Show', 'Region', player))
                         if maxlv == 9 or maxlv == 13 or maxlv == 17:
@@ -184,7 +185,7 @@ def set_rules(world: MultiWorld, player: int):
                         set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
                     elif curarea == "Waterfall":
                         set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state.can_reach('Waterfall', 'Region', player))
-                    elif curarea == "Hotland":
+                    elif curarea == "News Show":
                         set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state.can_reach('News Show', 'Region', player))
                     elif curarea == "Core":
                         set_rule(world.get_location(("LOVE "+str(maxlv)), player), lambda state: state.can_reach('Core Exit', 'Entrance', player))
@@ -193,7 +194,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location(("Snowman"), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
     set_rule(world.get_location(("Waterfall Plot"), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
     set_rule(world.get_location(("Hotland Plot"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
-    set_rule(world.get_location(("Core Plot"), player), lambda state: state.can_reach('New Show', 'Region', player))
+    set_rule(world.get_location(("Core Plot"), player), lambda state: state.can_reach('News Show', 'Region', player))
     set_rule(world.get_location(("Mettaton Plot"), player), lambda state: state.can_reach('Core Exit', 'Entrance', player))
     set_rule(world.get_location(("Bunny 1"), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
     set_rule(world.get_location(("Bunny 2"), player), lambda state: state.can_reach('Snowdin Town', 'Region', player))
@@ -217,21 +218,21 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location(("TemmieShop 4"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
     set_rule(world.get_location(("Noodles Fridge"), player), lambda state: state.can_reach('Hotland', 'Region', player))
     set_rule(world.get_location(("Pan Hidden"), player), lambda state: state.can_reach('Hotland', 'Region', player))
-    set_rule(world.get_location(("Bratty Catty 1"), player), lambda state: state.can_reach('New Show', 'Region', player))
-    set_rule(world.get_location(("Bratty Catty 2"), player), lambda state: state.can_reach('New Show', 'Region', player))
-    set_rule(world.get_location(("Bratty Catty 3"), player), lambda state: state.can_reach('New Show', 'Region', player))
-    set_rule(world.get_location(("Bratty Catty 4"), player), lambda state: state.can_reach('New Show', 'Region', player))
-    set_rule(world.get_location(("Burgerpants 1"), player), lambda state: state.can_reach('New Show', 'Region', player))
-    set_rule(world.get_location(("Burgerpants 2"), player), lambda state: state.can_reach('New Show', 'Region', player))
-    set_rule(world.get_location(("Burgerpants 3"), player), lambda state: state.can_reach('New Show', 'Region', player))
-    set_rule(world.get_location(("Burgerpants 4"), player), lambda state: state.can_reach('New Show', 'Region', player))
+    set_rule(world.get_location(("Bratty Catty 1"), player), lambda state: state.can_reach('News Show', 'Region', player))
+    set_rule(world.get_location(("Bratty Catty 2"), player), lambda state: state.can_reach('News Show', 'Region', player))
+    set_rule(world.get_location(("Bratty Catty 3"), player), lambda state: state.can_reach('News Show', 'Region', player))
+    set_rule(world.get_location(("Bratty Catty 4"), player), lambda state: state.can_reach('News Show', 'Region', player))
+    set_rule(world.get_location(("Burgerpants 1"), player), lambda state: state.can_reach('News Show', 'Region', player))
+    set_rule(world.get_location(("Burgerpants 2"), player), lambda state: state.can_reach('News Show', 'Region', player))
+    set_rule(world.get_location(("Burgerpants 3"), player), lambda state: state.can_reach('News Show', 'Region', player))
+    set_rule(world.get_location(("Burgerpants 4"), player), lambda state: state.can_reach('News Show', 'Region', player))
 
 
 # Sets rules on completion condition
 def set_completion_rules(world: MultiWorld, player: int):
     completion_requirements = lambda state: True
     if not world.state._undertale_is_route(player, 1):
-        completion_requirements = lambda state: state.can_reach('New Home Exit', 'Entrance', player) and state.has("ATK Up", player, 19) and state.has("HP Up", player, 19) and state.has("DEF Up", player, 4)
+        completion_requirements = lambda state: state.can_reach('New Home Exit', 'Entrance', player)
     if world.state._undertale_is_route(player, 1):
         completion_requirements = lambda state: state.can_reach('True Lab', 'Region', player)
 

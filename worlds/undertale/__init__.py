@@ -55,7 +55,9 @@ class UndertaleWorld(World):
         }
 
     def generate_basic(self):
-
+        self.world.get_location("Undyne Date", self.player).place_locked_item(self.create_item("Undyne Date"))
+        self.world.get_location("Alphys Date", self.player).place_locked_item(self.create_item("Alphys Date"))
+        self.world.get_location("Papyrus Date", self.player).place_locked_item(self.create_item("Papyrus Date"))
         # Generate item pool
         itempool = []
         if self.world.route_required[self.player].current_key == "all_routes":
@@ -105,7 +107,7 @@ class UndertaleWorld(World):
         if self.world.prog_plot[self.player]:
             itempool = [item if item not in plot_items else "Progressive Plot" for item in itempool]
         if self.world.route_required[self.player].current_key == "genocide":
-            itempool = [item for item in itempool if item != "Popato Chisps" and item != "Nice Cream" and item != "Hot Cat" and item != "Hot Dog...?" and item != "Punch Card"]
+            itempool = [item for item in itempool if item != "Popato Chisps" and item != "Stained Apron" and item != "Nice Cream" and item != "Hot Cat" and item != "Hot Dog...?" and item != "Punch Card"]
         elif self.world.route_required[self.player].current_key == "neutral":
             itempool = [item for item in itempool if item != "Popato Chisps" and item != "Hot Cat" and item != "Hot Dog...?"]
         # Choose locations to automatically exclude based on settings

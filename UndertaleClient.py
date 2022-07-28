@@ -74,8 +74,7 @@ class UndertaleContext(CommonContext):
         self.syncing = False
         self.deathlink_status = False
 
-    async def connection_closed(self):
-        await super().connection_closed()
+    def clear_undertale_files(self):
         path = os.path.expandvars(r"%localappdata%/UNDERTALE")
         for root, dirs, files in os.walk(path):
             for file in files:
@@ -95,28 +94,18 @@ class UndertaleContext(CommonContext):
                     os.remove(root+"/"+file)
                 elif file.find(".LV") > -1:
                     os.remove(root+"/"+file)
+                elif file.find("area") > -1:
+                    os.remove(root+"/"+file)
+                elif file.find(".mine") > -1:
+                    os.remove(root+"/"+file)
+
+    async def connection_closed(self):
+        await super().connection_closed()
+        self.clear_undertale_files()
 
     async def shutdown(self):
         await super().shutdown()
-        path = os.path.expandvars(r"%localappdata%/UNDERTALE")
-        for root, dirs, files in os.walk(path):
-            for file in files:
-                if file.find("check") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".item") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".victory") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".route") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".playerspot") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".mad") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".youDied") > -1:
-                    os.remove(root+"/"+file)
-                elif file.find(".LV") > -1:
-                    os.remove(root+"/"+file)
+        self.clear_undertale_files()
 
     def update_online_mode(self, online):
         old_tags = self.tags.copy()
@@ -232,6 +221,10 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
             ctx.pieces_needed = 0
         if args["slot_data"]['rando_love']:
             filename = f"LOVErando.LV"
+            with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
+                f.close()
+        if args["slot_data"]['rando_stats']:
+            filename = f"STATrando.LV"
             with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
                 f.close()
         filename = f"{ctx.route}.route"

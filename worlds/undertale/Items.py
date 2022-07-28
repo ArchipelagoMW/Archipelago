@@ -88,9 +88,12 @@ item_table = {
     "100G": ItemData(77999, False),
     "1000G": ItemData(77998, False),
     "10000G": ItemData(77997, False),
-    "ATK Up": ItemData(77065, True),
-    "DEF Up": ItemData(77066, True),
-    "HP Up": ItemData(77067, True),
+    "ATK Up": ItemData(77065, False),
+    "DEF Up": ItemData(77066, False),
+    "HP Up": ItemData(77067, False),
+    "Undyne Date": ItemData(None, True),
+    "Alphys Date": ItemData(None, True),
+    "Papyrus Date": ItemData(None, True),
 }
 
 non_key_items = {

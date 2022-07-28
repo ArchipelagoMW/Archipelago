@@ -142,6 +142,9 @@ advancement_table = {
     "HP 18": AdvData(79616, '???'),
     "HP 19": AdvData(79617, '???'),
     "HP 20": AdvData(79618, '???'),
+    "Undyne Date": AdvData(None, 'Undyne\'s Home'),
+    "Alphys Date": AdvData(None, 'Hotland'),
+    "Papyrus Date": AdvData(None, 'Papyrus\' Home'),
 }
 
 exclusion_table = {
