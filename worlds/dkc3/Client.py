@@ -116,18 +116,18 @@ async def dkc3_game_watcher(ctx: Context):
 
                 # Handle Coin Displays
                 current_level = await snes_read(ctx, WRAM_START + 0x5E3, 0x5)
-                overworld_locked = await snes_read(ctx, WRAM_START + 0x5FC, 0x1)
-                if item.item == 0xDC3002 and overworld_locked[0] != 0x01 and (current_level[0] == 0x0A and current_level[2] == 0x00 and current_level[4] == 0x03):
+                overworld_locked = ((await snes_read(ctx, WRAM_START + 0x5FC, 0x1))[0] == 0x01)
+                if item.item == 0xDC3002 and not overworld_locked and (current_level[0] == 0x0A and current_level[2] == 0x00 and current_level[4] == 0x03):
                     # Bazaar and Barter
                     item_count = await snes_read(ctx, WRAM_START + 0xB02, 0x1)
                     new_item_count = item_count[0] + 1
                     snes_buffered_write(ctx, WRAM_START + 0xB02, bytes([new_item_count]))
-                elif item.item == 0xDC3002 and overworld_locked[0] != 0x01 and current_level[0] == 0x04:
+                elif item.item == 0xDC3002 and not overworld_locked and current_level[0] == 0x04:
                     # Swanky
                     item_count = await snes_read(ctx, WRAM_START + 0xA26, 0x1)
                     new_item_count = item_count[0] + 1
                     snes_buffered_write(ctx, WRAM_START + 0xA26, bytes([new_item_count]))
-                elif item.item == 0xDC3003 and overworld_locked[0] != 0x01 and (current_level[0] == 0x0A and current_level[2] == 0x08 and current_level[4] == 0x01):
+                elif item.item == 0xDC3003 and not overworld_locked and (current_level[0] == 0x0A and current_level[2] == 0x08 and current_level[4] == 0x01):
                     # Boomer
                     item_count = await snes_read(ctx, WRAM_START + 0xB02, 0x1)
                     new_item_count = item_count[0] + 1
