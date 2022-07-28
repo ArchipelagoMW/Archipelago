@@ -42,6 +42,10 @@ class OOTRegion(Region):
         self.pretty_name = None
         self.font_color = None
 
+    @property
+    def hint_text(self):
+        return self.hint
+
     def get_scene(self): 
         if self.scene: 
             return self.scene

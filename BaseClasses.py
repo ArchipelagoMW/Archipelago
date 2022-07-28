@@ -944,15 +944,11 @@ class Region:
 
     @property
     def hint_text(self) -> str:
-        if self.hint:
-            return self.hint
-        return self.name
+        return self.hint if self.hint else self.name
 
     @property
     def entrance(self) -> Entrance:
-        if self.entrances:
-            return self.entrances[0]
-        return None
+        return self.entrances[0] if self.entrances else None
 
     def __repr__(self):
         return self.__str__()
