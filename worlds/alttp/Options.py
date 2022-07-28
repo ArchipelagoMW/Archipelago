@@ -154,7 +154,34 @@ class Bosses(TextChoice):
     option_chaos = 3
     option_singularity = 4
 
-    remaining_mode: int = option_none
+    bosses: set = {
+        "Armos Knights",
+        "Lanmolas",
+        "Moldorm",
+        "Helmasaur King",
+        "Arrghus",
+        "Mothula",
+        "Blind",
+        "Kholdstare",
+        "Vitreous",
+        "Trinexx",
+    }
+
+    locations: set = {
+        "Ganons Tower Top",
+        "Tower of Hera",
+        "Skull Woods",
+        "Ganons Tower Middle",
+        "Eastern Palace",
+        "Desert Palace",
+        "Palace of Darkness",
+        "Swamp Palace",
+        "Thieves Town",
+        "Ice Palace",
+        "Misery Mire",
+        "Turtle Rock",
+        "Ganons Tower Bottom"
+    }
 
     def __init__(self, value: typing.Union[str, int]):
         assert isinstance(value, str) or isinstance(value, int), \
@@ -164,31 +191,77 @@ class Bosses(TextChoice):
     @classmethod
     def from_text(cls, text: str):
         import random
-        text.lower()
+        # set all of our text to lower case for name checking
+        text = text.lower()
+        cls.bosses = {boss_name.lower() for boss_name in cls.bosses}
+        cls.locations = {boss_location.lower() for boss_location in cls.locations}
         if text == "random":
             return cls(random.choice(list(cls.name_lookup)))
         for option_name, value in cls.options.items():
             if option_name == text:
                 return cls(value)
         options = text.split(";")
+
+        # since plando exists in the option verify the plando values given are valid
+        cls.validate_plando_bosses(options)
+
+        # find out what type of boss shuffle we should use for placing bosses after plando
+        # and add as a string to look nice in the spoiler
         if "random" in options:
-            shuffle = random.choice(list(cls.name_lookup))
+            shuffle = random.choice(cls.options)
             options.remove("random")
-            boss_class = cls(";".join(options))
-            boss_class.remaining_mode = shuffle
+            options = ";".join(options) + ";" + shuffle
+            boss_class = cls(options)
         else:
             for option in options:
                 if option in cls.options:
-                    options.remove(option)
                     boss_class = cls(";".join(options))
-                    boss_class.remaining_mode = cls.options[option]
+                    break
             else:
                 if len(options) == 1:
-                    boss_class = cls(options[0])
-                    boss_class.remaining_mode = cls.option_singularity
+                    if cls.valid_boss_name(options[0]):
+                        options = options[0] + ";singularity"
+                        boss_class = cls(options)
+                    else:
+                        options = options[0] + ";none"
+                        boss_class = cls(options)
                 else:
-                    boss_class = cls(";".join(options))
+                    options = ";".join(options) + ";none"
+                    boss_class = cls(options)
         return boss_class
+
+    @classmethod
+    def validate_plando_bosses(cls, options: typing.List[str]) -> None:
+        from .Bosses import can_place_boss, format_boss_location
+        for option in options:
+            if option == "random" or option in cls.options:
+                continue
+            if "-" in option:
+                location, boss = option.split("-")
+                level = ''
+                if not cls.valid_boss_name(boss):
+                    raise ValueError(f"{boss} is not a valid boss name for location {location}.")
+                if not cls.valid_location_name(location):
+                    raise ValueError(f"{location} is not a valid boss location name.")
+                if location.split(" ")[-1] in ("top", "middle", "bottom"):
+                    location = location.split(" ")
+                    level = location[-1]
+                    location = " ".join(location[:-1])
+                location = location.title().replace("Of", "of")
+                if not can_place_boss(boss.title(), location, level):
+                    raise ValueError(f"{format_boss_location(location, level)} "
+                                     f"is not a valid location for {boss.title()}.")
+            else:
+                if not cls.valid_boss_name(option):
+                    raise ValueError(f"{option} is not a valid boss name.")
+
+    @classmethod
+    def valid_boss_name(cls, value: str) -> bool:
+        return value.lower() in cls.bosses
+
+    @classmethod
+    def valid_location_name(cls, value: str) -> bool:
+        return value in cls.locations
 
     def verify(self, world, player_name: str, plando_options) -> None:
         if isinstance(self.value, int):
@@ -196,7 +269,9 @@ class Bosses(TextChoice):
         from Generate import PlandoSettings
         if not(PlandoSettings.bosses & plando_options):
             import logging
-            self.value = self.remaining_mode
+            # plando is disabled but plando options were given so pull the option and change it to an int
+            option = self.value.split(";")[-1]
+            self.value = self.options[option]
             logging.warning(f"The plando bosses module is turned off so {self.name_lookup[self.value].title()} "
                     f"boss shuffle will be used for player {player_name}.")
 
