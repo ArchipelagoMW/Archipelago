@@ -132,7 +132,7 @@ class HKWeb(WebWorld):
         ["Ijwu"]
     )]
 
-    bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new/choose"
+    bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new?assignees=&labels=bug%2C+needs+investigation&template=bug_report.md&title="
 
 
 class HKWorld(World):
