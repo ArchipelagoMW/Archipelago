@@ -138,7 +138,7 @@ class DKC3World(World):
             patch_rom(self.world, rom, self.player, self.active_level_list)
 
             self.active_level_list.append(LocationName.rocket_rush_region)
-        
+
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
                 if world.player_name[player] != 'Player%d' % player else ''
@@ -146,12 +146,12 @@ class DKC3World(World):
             rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
             rom.write_to_file(rompath)
             self.rom_name = rom.name
-        except:
-            raise
-        else:
+
             patch = DKC3DeltaPatch(os.path.splitext(rompath)[0]+DKC3DeltaPatch.patch_file_ending, player=player,
                                    player_name=world.player_name[player], patched_path=rompath)
             patch.write()
+        except:
+            raise
         finally:
             if os.path.exists(rompath):
                 os.unlink(rompath)
