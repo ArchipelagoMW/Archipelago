@@ -1,5 +1,5 @@
 import Utils
-from Patch import read_rom
+from Patch import read_rom, APDeltaPatch
 from .Locations import lookup_id_to_name, all_locations
 from .Levels import level_list, level_dict
 
@@ -528,6 +528,15 @@ def patch_rom(world, rom, player, active_level_list):
     rom.write_byte(0x3B97E9, 0x80)
     rom.write_byte(0x3B97EA, 0xEA)
 
+
+class DKC3DeltaPatch(APDeltaPatch):
+    hash = USHASH
+    game = "Donkey Kong Country 3"
+    patch_file_ending = ".apdkc3"
+
+    @classmethod
+    def get_source_data(cls) -> bytes:
+        return get_base_rom_bytes()
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:
