@@ -168,15 +168,17 @@ Sent to clients purely to display a message to the player. This packet differs f
 | receiving | int | Is present if type is Hint or ItemSend and marks the destination player's ID. |
 | item | [NetworkItem](#NetworkItem) | Is present if type is Hint or ItemSend and marks the source player id, location id, item id and item flags. |
 | found | bool | Is present if type is Hint, denotes whether the location hinted for was checked. |
-| countdown | int | Is present if type is Countdown, denotes the amount of seconds remaining on the countdown |
+| countdown | int | Is present if type is `Countdown`, denotes the amount of seconds remaining on the countdown. |
 
 ##### PrintJsonType
-PrintJsonType indicates the type of [PrintJson](#PrintJson) packet, different types can be handled differently by the client and can also contain different additional arguments. When receiving an unknown type the data's list\[[JSONMessagePart](#JSONMessagePart)\] should still be printed as normally. Currently known types:
+PrintJsonType indicates the type of [PrintJson](#PrintJson) packet, different types can be handled differently by the client and can also contain additional arguments. When receiving an unknown type the data's list\[[JSONMessagePart](#JSONMessagePart)\] should still be printed as normal. 
+
+Currently defined types are:
 | Type | Notes |
 | ---- | ----- |
-| ItemSend | The message is in response to a player receiving an item |
-| Hint | The message is in response to a player hinting |
-| Countdown | The message contains information about the current server Countdown |
+| ItemSend | The message is in response to a player receiving an item. |
+| Hint | The message is in response to a player hinting. |
+| Countdown | The message contains information about the current server Countdown. |
 
 ### DataPackage
 Sent to clients to provide what is known as a 'data package' which contains information to enable a client to most easily communicate with the Archipelago server. Contents include things like location id to name mappings, among others; see [Data Package Contents](#Data-Package-Contents) for more info.
