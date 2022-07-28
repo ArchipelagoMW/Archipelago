@@ -33,7 +33,7 @@ class OOTRegion(Region):
 
     def __init__(self, name: str, player: int, world):
         super(OOTRegion, self).__init__(name, player, world)
-        self.hint = None
+        self.hint = ' '
         self.price = None
         self.time_passes = False
         self.provides_time = TimeOfDay.NONE

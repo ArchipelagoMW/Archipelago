@@ -274,7 +274,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
             for location in world.get_filled_locations():
                 if type(location.address) is int:
-                    main_entrance = location.parent_region.get_entrance
+                    main_entrance = location.parent_region.entrance
                     if location.game != "A Link to the Past":
                         checks_in_area[location.player]["Light World"].append(location.address)
                     elif location.parent_region.dungeon:
