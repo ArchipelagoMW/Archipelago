@@ -1,33 +1,34 @@
-# Using the Archipelago Website
+# Using the Archipelago website to set up multiworlds
 
-This guide encompasses the use cases for rolling and hosting multiworld games on the Archipelago website. This guide
-should only take a couple of minutes to read.
+This guide describes how to generate and host multiworld games on the Archipelago website. This guide
+should only take a few minutes to read.
 
-## Rolling the Seed On the Website
+## Generating, then hosting a multiworld on the website
 
-1. After gathering the YAML files together in one location, select all the files and compress them into a `.ZIP` file.
-2. Next go to the "Generate Game" page. Generate game
-   page: [Archipelago Seed Generation Page](/generate). Here, you can adjust some server settings
-   such as forfeit rules and the cost for a player to use a hint before generation.
-3. After adjusting the host settings to your liking click on the Upload File button and using the explorer window that
-   opens, navigate to the location where you zipped the player files and upload this zip. The page will generate your
-   game and refresh multiple times to check on completion status.
-4. After the generation completes you will be on a Seed Info page that provides the seed, the date/time of creation, a
-   link to the spoiler log, if available, and links to any rooms created from this seed.
-5. To begin playing, click on "Create New Room", which will take you to the room page. From here you can navigate back
-   to the Seed Info page or to the Tracker page. Sharing the link to the room page with your friends will provide them
-   with the necessary info and files for them to connect to the multiworld.
+First, make sure each player has their config files finished and saved to their computers.
 
-## Hosting a Pre-Generated Multiworld on the Website
+1. Have one person collect each config file (for the rest of this guide, we'll assume you were the one who collected 
+   them). Create a .zip file and put each config file inside.
+2. Go to the ["Generate Game" page](/generate). Here, you can adjust some multiworld settings if you like.
+3. Click on the Upload File button. A window will appear. Use it to find and select the .zip file you made.
+   The page will refresh multiple times as it generates your multiworld.
+   - After the generation completes, a Seed Info page will appear with some information about your multiworld.
+4. To host a server for your multiworld, click on "Create New Room". The server will start!
+   - Some players may need to download files to play in their worlds. The links to these files are on the server page.
+     Be sure to share those links with the players who need them!
+   - Explore the links and commands on this page to learn more about what you can do with the website!
+   - Servers hosted on the website will stop running after 6 hours of inactivity. Refresh or reload the page to start
+     the server again.
 
-The easiest and most recommended method is to generate the game on the website which will allow you to create a private
-room with all the necessary files you can share, as well as hosting the game and supporting item trackers for various
-games.
+## Hosting a pre-generated multiworld on the website
 
-If for some reason the seed was rolled on a machine, then either the resulting zip file or the
-resulting `AP_XXXXX.archipelago` inside the zip file can be uploaded to the host game page. Host game
-page: [Archipelago Seed Upload Page](/uploads)
+Follow these instructions only if you generated a multiworld on your computer.
 
-This will give a page with the seed info and a link to the spoiler log, if it exists. Click on "Create New Room" and
-then share the link to the resulting page the other players so that they can download their patches or mods. The room
-will also have a link to a Multiworld Tracker and tell you what the players need to connect to from their clients.
+1. Upload the .zip file you generated to the ["Host Game" page](/uploads).
+    - A Seed Info page will appear with some information about your multiworld.
+2. Click "Create New Room". A server will start for your multiworld!
+   - Some players may need to download files to play in their worlds. The links to these files are on the server page.
+     Be sure to share those links with the players who need them!
+   - Explore the links and commands on this page to learn more about what you can do with the website!
+   - Servers hosted on the website will stop running after 6 hours of inactivity. Refresh or reload the page to start
+     the server again.

@@ -75,7 +75,7 @@ Advanced players can create their own config file using a text editor. Read the
 
 Once all players have their config files, one person must collect them and put them in a .zip file. Then that person
 goes to the [Generate Game](https://archipelago.gg/generate) page and clicks `Upload File`. Once they select the .zip,
-that's it! Go to [Hosting an Archipelago Server] below to see more about hosting the multiworld now that it's been
+that's it! Go to [Hosting an Archipelago server] below to see more about hosting the multiworld now that it's been
 generated.
 - There are several options on the Generate Game page, like adding a password. Most of these control what players can do
   outside of their game. Mouse over the question marks to learn more about each option.
