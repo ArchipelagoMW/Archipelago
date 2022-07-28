@@ -260,7 +260,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
             for region in world.regions:
                 if region.player in er_hint_data and region.locations:
-                    main_entrance = region.get_entrance
+                    main_entrance = region.entrance
                     for location in region.locations:
                         if type(location.address) == int:  # skips events and crystals
                             if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:

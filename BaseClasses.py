@@ -949,7 +949,7 @@ class Region:
         return self.name
 
     @property
-    def get_entrance(self) -> Entrance:
+    def entrance(self) -> Entrance:
         if self.entrances:
             return self.entrances[0]
         return None
