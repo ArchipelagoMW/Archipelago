@@ -156,7 +156,7 @@ class UndertaleWorld(World):
         slot_data = self._get_undertale_data()
         for option_name in undertale_options:
             option = getattr(self.world, option_name)[self.player]
-            if option_name == "rando_love" and self.world.route_required[self.player].current_key != "genocide" and self.world.route_required[self.player].current_key != "all_routes":
+            if (option_name == "rando_love" or option_name == "rando_stats") and self.world.route_required[self.player].current_key != "genocide" and self.world.route_required[self.player].current_key != "all_routes":
                 option.value = False
             if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)

@@ -69,13 +69,13 @@ class RandomizeStats(Toggle):
 
 undertale_options: typing.Dict[str, type(Option)] = {
     "route_required":                           RouteRequired,
+    "prog_plot":                                ProgressivePlot,
+    "soul_hunt":                                SoulHunt,
+    "soul_pieces":                              SoulPieces,
+    "rando_love":                               RandomizeLove,
+    "rando_stats":                              RandomizeStats,
+    "rando_area":                               RandomizeAreas,
     "temy_include":                             IncludeTemy,
     "no_equips":                                NoEquips,
     "only_flakes":                              OnlyFlakes,
-    "soul_hunt":                                SoulHunt,
-    "soul_pieces":                              SoulPieces,
-    "prog_plot":                                ProgressivePlot,
-    "rando_love":                                RandomizeLove,
-    "rando_area":                                RandomizeAreas,
-    "rando_stats":                                RandomizeStats,
 }
