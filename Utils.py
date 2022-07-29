@@ -277,7 +277,12 @@ def get_default_options() -> dict:
         },
         "oot_options": {
             "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
-        }
+        },
+        "dkc3_options": {
+            "rom_file": "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc",
+            "sni": "SNI",
+            "rom_start": True,
+        },
     }
 
     return options

@@ -354,7 +354,7 @@ Shipwreck (Shipwreck) - Keep 3rd Pressure Plate - True:
 Keep Tower (Keep) - Keep - 0x04F8F:
 158206 - 0x0361B (Tower Shortcut to Keep Panel) - True - True
 Door - 0x04F8F (Tower Shortcut to Keep) - 0x0361B
-158704 - 0x0360E (Laser Panel Hedges) - 0x01A0F - Environment & Sound
+158704 - 0x0360E (Laser Panel Hedges) - 0x01A0F & 0x019E7 & 0x019DC & 0x00139 - Environment & Sound
 158705 - 0x03317 (Laser Panel Pressure Plates) - 0x01D3F - Shapers & Squares & Black/White Squares & Colored Squares & Stars & Stars + Same Colored Symbol & Dots
 Laser - 0x014BB (Laser) - 0x0360E | 0x03317
 
