@@ -51,7 +51,7 @@ weapons_upgrade_5_table = {
     "Twin Princes' Greatsword": 0x005FAC30,
     "Storm Curved Sword": 0x003E4180,
     "Dragonslayer Swordspear": 0x008BC540,
-
+    "Sage's Crystal Staff": 0x00C8CE40,
 }
 
 weapons_upgrade_10_table = {
@@ -105,6 +105,7 @@ weapons_upgrade_10_table = {
     "Sniper Crossbow": 0x00D83790,
 
     "Claw": 0x00A7D8C0,
+    "Drang Twinspears": 0x00F5AAA0,
 }
 
 shields_table = {
@@ -125,7 +126,6 @@ shields_table = {
     "Dragon Crest Shield": 0x01432E60,
     "Shield of Want": 0x0144B500,
     "Black Iron Greatshield": 0x0150EA00,
-    "Great Magic Shield": 0x40144F38,
     "Greatshield of Glory": 0x01515F30,
     "Sacred Bloom Shield": 0x013572C0,
     "Golden Wing Crest Shield": 0x0143CAA0,
@@ -291,6 +291,7 @@ rings_table = {
     "Knight's Ring": 0x20004FEC,
     "Red Tearstone Ring": 0x20004ECA,
     "Dragonscale Ring": 0x2000515E,
+    "Knight Slayer's Ring": 0x20005000,
 }
 
 spells_table = {
@@ -311,10 +312,12 @@ spells_table = {
     "Soul Stream": 0x4018B820,
     "Divine Pillars of Light": 0x4038C340,
     "Great Magic Barrier": 0x40365628,
-
+    "Great Magic Shield": 0x40144F38,
 }
 
 misc_items_table = {
+    "Tower Key": 0x400007DF,
+    "Grave Key": 0x400007D9,
     "Cell Key": 0x400007DA,
     "Small Lothric Banner": 0x40000836,
     "Mortician's Ashes": 0x4000083B,
@@ -349,7 +352,6 @@ misc_items_table = {
     "Xanthous Ashes": 0x40000864,
     "Old Cell Key": 0x400007DC,
     "Jailer's Key Ring": 0x400007D8,
-    "Path of the Dragon Gesture": 0x40002346,
     "Logan's Scroll": 0x40000855,
     "Storm Ruler": 0x006132D0,
     "Giant's Coal": 0x40000839,
@@ -363,14 +365,19 @@ key_items_list = {
     "Small Lothric Banner",
     "Basin of Vows",
     "Small Doll",
-    "Path of the Dragon Gesture",
     "Storm Ruler",
     "Grand Archives Key",
     "Cinders of a Lord - Abyss Watcher",
     "Cinders of a Lord - Yhorm the Giant",
     "Cinders of a Lord - Aldrich",
     "Cinders of a Lord - Lothric Prince",
-    "Mortician's Ashes"
+    "Mortician's Ashes",
+    "Cell Key",
+    "Tower Key",
+    "Jailbreaker's Key",
+    "Prisoner Chief's Ashes",
+    "Old Cell Key",
+    "Jailer's Key Ring",
 }
 
 item_dictionary_table = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table, **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table}

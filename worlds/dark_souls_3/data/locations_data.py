@@ -9,8 +9,12 @@ cemetery_of_ash_table = {
 }
 
 fire_link_shrine_table = {
-    "FS: Broken Straight Sword": 0x001EF9B0,  # Multiple
+    # "FS: Coiled Sword": 0x40000859, You can still light the Firelink Shrine fire whether you have it or not, useless
+    "FS: Broken Straight Sword": 0x001EF9B0,
     "FS: East-West Shield": 0x0142B930,
+    "FS: Uchigatana": 0x004C4B40,
+    "FS: Master's Attire": 0x148F5008,
+    "FS: Master's Gloves": 0x148F53F0,
 }
 
 firelink_shrine_bell_tower_table = {
@@ -40,6 +44,7 @@ high_wall_of_lothric = {
     "HWL: Soul of Boreal Valley Vordt": 0x400002CF,
     "HWL: Soul of the Dancer": 0x400002CA,
     "HWL: Way of Blue Covenant": 0x2000274C,
+    "HWL: Greirat's Ashes": 0x4000083F,
 }
 
 undead_settlement_table = {
@@ -53,7 +58,7 @@ undead_settlement_table = {
     "US: Cleric Gloves": 0x11D90D90,
     "US: Cleric Trousers": 0x11D91178,
 
-    "US: Mortician's Ashes": 0x4000083B,  #  Key item for Grave Key for Firelink Towerlocations
+    "US: Mortician's Ashes": 0x4000083B,
     "US: Caestus": 0x00A7FFD0,
     "US: Plank Shield": 0x01346150,
     "US: Flame Stoneplate Ring": 0x20004E52,
@@ -99,7 +104,7 @@ road_of_sacrifice_table = {
 
     "RS: Butcher Knife": 0x006BE130,
     "RS: Brigand Axe": 0x006B1DE0,
-    "RS: Braille Divine Tome of Carim": 0x40000847,  # Shop
+    "RS: Braille Divine Tome of Carim": 0x40000847,
     "RS: Morne's Ring": 0x20004F1A,
     "RS: Twin Dragon Greatshield": 0x01513820,
     "RS: Heretic's Staff": 0x00C8F550,
@@ -121,12 +126,12 @@ road_of_sacrifice_table = {
     "RS: Conjurator Manchettes": 0x149E9630,
     "RS: Conjurator Boots": 0x149E9A18,
 
-    "RS: Great Swamp Pyromancy Tome": 0x4000084F,  # Shop
+    "RS: Great Swamp Pyromancy Tome": 0x4000084F,
 
     "RS: Great Club": 0x007B4A80,
     "RS: Exile Greatsword": 0x005DD770,
 
-    "RS: Farron Coal ": 0x40000837,  # Shop
+    "RS: Farron Coal ": 0x40000837,
 
     "RS: Sellsword Twinblades": 0x00F42400,
     "RS: Sellsword Helm": 0x11481060,
@@ -147,7 +152,7 @@ road_of_sacrifice_table = {
 }
 
 cathedral_of_the_deep_table = {
-    "CD: Paladin's Ashes": 0x4000083D,      #Shop
+    "CD: Paladin's Ashes": 0x4000083D,
     "CD: Spider Shield": 0x01435570,
     "CD: Crest Shield": 0x01430750,
     "CD: Notched Whip": 0x00B7DE50,
@@ -161,7 +166,7 @@ cathedral_of_the_deep_table = {
     "CD: Seek Guidance": 0x40360420,
 
     "CD: Aldrich's Sapphire": 0x20005096,
-    "CD: Deep Braille Divine Tome": 0x40000860,  # Shop
+    "CD: Deep Braille Divine Tome": 0x40000860,
 
     "CD: Saint Bident": 0x008C1360,
     "CD: Maiden Hood": 0x14BD12E0,
@@ -202,7 +207,7 @@ farron_keep_table = {
     "FK: Wolf's Blood Swordgrass": 0x4000016E,
     "FK: Greatsword": 0x005C50D0,
 
-    "FK: Sage's Coal": 0x40000838,  # Shop #Unique
+    "FK: Sage's Coal": 0x40000838,
     "FK: Stone Parma": 0x01443FD0,
     "FK: Sage's Scroll": 0x40000854,
     "FK: Crown of Dusk": 0x15D75C80,
@@ -211,8 +216,8 @@ farron_keep_table = {
     "FK: Pharis's Hat": 0x1487AB00,
     "FK: Black Bow of Pharis": 0x00D7E970,
 
-    "FK: Dreamchaser's Ashes": 0x4000083C,  # Shop #Unique
-    "FK: Great Axe": 0x006B9310,  # Multiple
+    "FK: Dreamchaser's Ashes": 0x4000083C,
+    "FK: Great Axe": 0x006B9310,
     "FK: Dragon Crest Shield": 0x01432E60,
     "FK: Lightning Spear": 0x40362B30,
     "FK: Atonement": 0x4039ADA0,
@@ -251,6 +256,7 @@ smouldering_lake_table = {
     "SL: Fume Ultra Greatsword": 0x0060E4B0,
     "SL: Black Iron Greatshield": 0x0150EA00,
     "SL: Soul of the Old Demon King": 0x400002D0,
+    "SL: Knight Slayer's Ring": 0x20005000,
 }
 
 irithyll_of_the_boreal_valley_table = {
@@ -266,7 +272,6 @@ irithyll_of_the_boreal_valley_table = {
 
     "IBV: Smough's Great Hammer": 0x007E30B0,
     "IBV: Leo Ring": 0x20004EE8,
-    "IBV: Greirat's Ashes": 0x4000083F,
     "IBV: Excrement-covered Ashes": 0x40000862,
 
     "IBV: Dark Stoneplate Ring": 0x20004E70,
@@ -286,6 +291,7 @@ irithyll_of_the_boreal_valley_table = {
     "IBV: Golden Ritual Spear": 0x00C83200,
     "IBV: Soul of Pontiff Sulyvahn": 0x400002D4,
     "IBV: Aldrich Faithful Covenant": 0x2000272E,
+    "IBV: Drang Twinspears": 0x00F5AAA0,
 }
 
 irithyll_dungeon_table = {
@@ -354,8 +360,11 @@ lothric_castle_table = {
     "LC: Braille Divine Tome of Lothric": 0x40000848,
     "LC: Knight's Ring": 0x20004FEC,
     "LC: Sunlight Straight Sword": 0x00203230,
-    "LC: Grand Archives Key": 0x400007DE,
     "LC: Soul of Dragonslayer Armour": 0x400002D1,
+
+    # The Black Hand Gotthard corpse appears when you have defeated Yhorm and Aldrich and triggered the cutscene
+    "LC: Grand Archives Key": 0x400007DE,       # On Black Hand Gotthard corpse
+    "LC: Gotthard Twinswords": 0x00F53570       # On Black Hand Gotthard corpse
 }
 
 consumed_king_garden_table = {
@@ -366,7 +375,7 @@ consumed_king_garden_table = {
     "CKG: Shadow Leggings": 0x14D401F8,
     "CKG: Claw": 0x00A7D8C0,
     "CKG: Soul of Consumed Oceiros": 0x400002CE,
-    "CKG: Path of the Dragon Gesture": 0x40002346,
+    # "CKG: Path of the Dragon Gesture": 0x40002346, I can't technically randomize it as it is a gesture and not an item
 }
 
 grand_archives_table = {
@@ -383,6 +392,7 @@ grand_archives_table = {
     "GA: Divine Pillars of Light": 0x4038C340,
     "GA: Cinders of a Lord - Lothric Prince": 0x4000084E,
     "GA: Soul of the Twin Princes": 0x400002DB,
+    "GA: Sage's Crystal Staff": 0x00C8CE40,
 }
 
 untended_graves_table = {
@@ -414,6 +424,8 @@ archdragon_peak_table = {
     "AP: Dragonslayer Leggings": 0x158B1CF8,
     "AP: Ricard's Rapier": 0x002E3BF0,
     "AP: Soul of the Nameless King": 0x400002D2,
+    "AP: Dragon Tooth": 0x007E09A0,
+    "AP: Havel's Greatshield": 0x013376F0,
 }
 
 location_dictionary_table = {**cemetery_of_ash_table, **fire_link_shrine_table, **firelink_shrine_bell_tower_table, **high_wall_of_lothric, **undead_settlement_table, **road_of_sacrifice_table,
