@@ -69,6 +69,10 @@ class B64UUIDConverter(BaseConverter):
 app.url_map.converters["suuid"] = B64UUIDConverter
 app.jinja_env.filters['suuid'] = lambda value: base64.urlsafe_b64encode(value.bytes).rstrip(b'=').decode('ascii')
 
+# has automatic patch integration
+import Patch
+app.jinja_env.filters['supports_apdeltapatch'] = lambda game_name: game_name in Patch.AutoPatchRegister.patch_types
+
 
 def get_world_theme(game_name: str):
     if game_name in AutoWorldRegister.world_types:
