@@ -49,7 +49,7 @@ class PlayerDefinition(object):
         region_name = "player" + str(self.id) + region_tag
         region = Region("player" + str(self.id) + region_tag, RegionType.Generic,
                         "Region Hint", self.id, self.world)
-        self.locations += generate_locations(size,
+        self.locations += generate_locations(self.world, size,
                                              self.id, None, region, region_tag)
 
         entrance = Entrance(self.id, region_name + "_entrance", parent)
@@ -87,7 +87,7 @@ def regionContains(region: Region, item: Item) -> bool:
 
 def generate_player_data(multi_world: MultiWorld, player_id: int, location_count: int = 0, prog_item_count: int = 0, basic_item_count: int = 0) -> PlayerDefinition:
     menu = multi_world.get_region("Menu", player_id)
-    locations = generate_locations(location_count, player_id, None, menu)
+    locations = generate_locations(multi_world, location_count, player_id, None, menu)
     prog_items = generate_items(prog_item_count, player_id, True)
     multi_world.itempool += prog_items
     basic_items = generate_items(basic_item_count, player_id, False)
@@ -96,12 +96,14 @@ def generate_player_data(multi_world: MultiWorld, player_id: int, location_count
     return PlayerDefinition(multi_world, player_id, menu, locations, prog_items, basic_items)
 
 
-def generate_locations(count: int, player_id: int, address: int = None, region: Region = None, tag: str = "") -> List[Location]:
+def generate_locations(multi_world: MultiWorld, count: int, player_id: int, address: int = None, region: Region = None,
+                       tag: str = "") -> List[Location]:
     locations = []
     prefix = "player" + str(player_id) + tag + "_location"
     for i in range(count):
         name = prefix + str(i)
         location = Location(player_id, name, address, region)
+        location.world = multi_world
         locations.append(location)
         region.locations.append(location)
     return locations
