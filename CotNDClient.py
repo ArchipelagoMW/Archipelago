@@ -22,8 +22,10 @@ data_path = ''
 system = platform.system()
 if system == 'Windows':
     data_path = os.path.expandvars('%LOCALAPPDATA%\\NecroDancer')
-elif system == 'Darwin' or system == 'Linux':
-    system = os.path.expanduser('~/.local/share/NecroDancer')
+elif system == 'Darwin':
+    data_path = os.path.expanduser('~/Library/Application Support/NecroDancer')
+elif system == 'Linux':
+    data_path = os.path.expanduser('~/.local/share/NecroDancer')
 else:
     logger.error(f'Unrecognized operating system {system}, please report.')
 
