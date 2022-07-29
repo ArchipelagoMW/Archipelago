@@ -103,7 +103,6 @@ def generate_locations(multi_world: MultiWorld, count: int, player_id: int, addr
     for i in range(count):
         name = prefix + str(i)
         location = Location(player_id, name, address, region)
-        location.world = multi_world
         locations.append(location)
         region.locations.append(location)
     return locations
