@@ -1,8 +1,3 @@
-
-# TODO:
-# Write tutorial
-# Increment data version
-
 import logging
 from typing import Dict, List, Set, Any
 
@@ -44,7 +39,7 @@ class CotNDWorld(World):
     item_name_to_id: Dict[str, int]     = {name: (id_offset + index) for index, name in enumerate(item_table)}
     location_name_to_id: Dict[str, int] = {name: (id_offset + index) for index, name in enumerate(
         [loc for char in all_chars for instance in range(1, 10) for loc in get_char_locations(char, instance, True)])}
-    data_version: int                   = 0
+    data_version: int                   = 1
 
     item_name_groups: Dict[str, Set[str]] = {t: {k for k, v in item_table.items() if v[1] == t} for t in item_types}
     junk_items: List[str] = list(item_name_groups['Junk'])
