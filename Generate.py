@@ -194,7 +194,9 @@ def main(args=None, callback=ERmain):
                     for player, path in player_path_cache.items():
                         for yaml in weights_cache[path]:
                             if category_name is None:
-                                yaml[key] = option
+                                for category in yaml:
+                                    if category not in {"description", "name", "game", "requires", "triggers"}:
+                                        yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
                             else:
