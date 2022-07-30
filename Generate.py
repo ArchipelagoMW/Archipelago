@@ -159,7 +159,7 @@ def main(args=None, callback=ERmain):
             player_files[player_id] = filename
             player_id += 1
 
-    args.multi = max(player_id-1, args.multi)
+    args.multi = max(player_id - 1 - bool(meta_weights), args.multi)
     print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed} with plando: "
           f"{args.plando}")
 
