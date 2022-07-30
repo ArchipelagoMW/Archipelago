@@ -26,8 +26,8 @@ class CotNDWebWorld(WebWorld):
         "Multiworld Setup Guide",
         "A guide to setting up Crypt of the NecroDancer for Archipelago.",
         "English",
-        "necrodancer_en.md",
-        "cotnd/en",
+        "setup_en.md",
+        "setup/en",
         ["Espeon"],
     )
 
@@ -49,6 +49,8 @@ class CotNDWorld(World):
     item_name_groups: Dict[str, Set[str]] = {t: {k for k, v in item_table.items() if v[1] == t} for t in item_types}
     junk_items: List[str] = list(item_name_groups['Junk'])
     trap_items: List[str] = list(item_name_groups['Trap'])
+
+    web = CotNDWebWorld()
 
     ### Autoworld Methods ###
 
