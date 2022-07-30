@@ -195,7 +195,7 @@ def main(args=None, callback=ERmain):
                         for yaml in weights_cache[path]:
                             if category_name is None:
                                 for category in yaml:
-                                    if category in AutoWorldRegister.world_types or category in Options.per_game_common_options:
+                                    if category in AutoWorldRegister.world_types or category in Options.common_options:
                                         yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
