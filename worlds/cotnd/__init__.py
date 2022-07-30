@@ -15,7 +15,7 @@ id_offset: int = 247000
 
 class CotNDWebWorld(WebWorld):
     theme = "dirt"
-    game_info_languages: ['en']
+    game_info_languages = ['en']
 
     setup_en = Tutorial(
         "Multiworld Setup Guide",
