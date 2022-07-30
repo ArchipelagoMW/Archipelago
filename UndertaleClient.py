@@ -73,6 +73,7 @@ class UndertaleContext(CommonContext):
         self.got_deathlink = False
         self.syncing = False
         self.deathlink_status = False
+        self.tem_armor = False
 
     def clear_undertale_files(self):
         path = os.path.expandvars(r"%localappdata%/UNDERTALE")
@@ -216,8 +217,9 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         if not os.path.exists(os.path.expandvars(r"%localappdata%/UNDERTALE")):
             os.mkdir(os.path.expandvars(r"%localappdata%/UNDERTALE"))
         ctx.route = args["slot_data"]['route']
-        ctx.pieces_needed = args["slot_data"]['soul_pieces']
-        if not args["slot_data"]['soul_hunt']:
+        ctx.pieces_needed = args["slot_data"]['key_pieces']
+        ctx.tem_armor = args["slot_data"]['temy_include']
+        if not args["slot_data"]['key_hunt']:
             ctx.pieces_needed = 0
         if args["slot_data"]['rando_love']:
             filename = f"LOVErando.LV"
@@ -285,6 +287,8 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                     os.remove(os.path.expandvars(r"%localappdata%/UNDERTALE/"+f"{str(counter)}PLR0.item"))
                 counter -= 1
             placedPlot = 0
+            placedWeapon = 0
+            placedArmor = 0
             for item in args['items']:
                 id = NetworkItem(*item).location
                 while NetworkItem(*item).location < 0 and \
@@ -347,6 +351,55 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                             else:
                                 f.write(str(77786-11000))
                         placedPlot += 1
+                    elif NetworkItem(*item).item == 77701:
+                        if placedWeapon == 0:
+                            f.write(str(77013-11000))
+                        elif placedWeapon == 1:
+                            f.write(str(77014-11000))
+                        elif placedWeapon == 2:
+                            f.write(str(77025-11000))
+                        elif placedWeapon == 3:
+                            f.write(str(77045-11000))
+                        elif placedWeapon == 4:
+                            f.write(str(77049-11000))
+                        elif placedWeapon == 5:
+                            f.write(str(77047-11000))
+                        elif placedWeapon == 6:
+                            if str(ctx.route) == "genocide" or str(ctx.route) == "all_routes":
+                                f.write(str(77052-11000))
+                            else:
+                                f.write(str(77051-11000))
+                        else:
+                            f.write(str(77003-11000))
+                        placedWeapon += 1
+                    elif NetworkItem(*item).item == 77702:
+                        if placedArmor == 0:
+                            f.write(str(77012-11000))
+                        elif placedArmor == 1:
+                            f.write(str(77015-11000))
+                        elif placedArmor == 2:
+                            f.write(str(77024-11000))
+                        elif placedArmor == 3:
+                            f.write(str(77044-11000))
+                        elif placedArmor == 4:
+                            f.write(str(77048-11000))
+                        elif placedArmor == 5:
+                            if str(ctx.route) == "genocide":
+                                f.write(str(77053-11000))
+                            else:
+                                f.write(str(77046-11000))
+                        elif placedArmor == 6 and ((not str(ctx.route) == "genocide") or ctx.tem_armor):
+                            if str(ctx.route) == "all_routes":
+                                f.write(str(77053-11000))
+                            elif str(ctx.route) == "genocide":
+                                f.write(str(77064-11000))
+                            else:
+                                f.write(str(77050-11000))
+                        elif placedArmor == 7 and ctx.tem_armor and not str(ctx.route) == "genocide":
+                            f.write(str(77064-11000))
+                        else:
+                            f.write(str(77004-11000))
+                        placedArmor += 1
                     else:
                         f.write(str(NetworkItem(*item).item-11000))
                     f.close()
@@ -356,6 +409,10 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                     filename = f"{str(-99999)}PLR{str(0)}.item"
                     with open(os.path.expandvars(r"%localappdata%/UNDERTALE/" + filename), 'w') as f:
                         f.write(str(77787 - 11000))
+                        f.close()
+                    filename = f"{str(-99998)}PLR{str(0)}.item"
+                    with open(os.path.expandvars(r"%localappdata%/UNDERTALE/" + filename), 'w') as f:
+                        f.write(str(77789 - 11000))
                         f.close()
         ctx.watcher_event.set()
 

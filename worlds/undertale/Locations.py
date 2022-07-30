@@ -81,6 +81,8 @@ advancement_table = {
     "Core Plot": AdvData(79061, 'Hotland'),
     "Mettaton Plot": AdvData(79062, 'Core'),
     "True Lab Plot": AdvData(79063, 'Hotland'),
+    "Left New Home Key": AdvData(79064, 'New Home'),
+    "Right New Home Key": AdvData(79065, 'New Home'),
     "LOVE 2": AdvData(79902, '???'),
     "LOVE 3": AdvData(79903, '???'),
     "LOVE 4": AdvData(79904, '???'),

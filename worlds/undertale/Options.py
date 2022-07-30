@@ -18,15 +18,15 @@ class IncludeTemy(Toggle):
     default = 1
 
 
-class SoulPieces(Range):
+class KeyPieces(Range):
     default = 5
     range_start = 1
     range_end = 5
 
 
-class SoulHunt(Toggle):
-    """Adds Soul Pieces to the item pool, you need all of them to enter the last corridor."""
-    display_name = "Soul Piece Hunt"
+class KeyHunt(Toggle):
+    """Adds Key Pieces to the item pool, you need all of them to enter the last corridor."""
+    display_name = "Key Piece Hunt"
     default = 0
 
 
@@ -34,6 +34,18 @@ class ProgressivePlot(Toggle):
     """Makes the plot items progressive."""
     display_name = "Progressive Plot"
     default = 1
+
+
+class ProgressiveArmor(Toggle):
+    """Makes the armor progressive."""
+    display_name = "Progressive Armor"
+    default = 0
+
+
+class ProgressiveWeapons(Toggle):
+    """Makes the weapons progressive."""
+    display_name = "Progressive Weapons"
+    default = 0
 
 
 class OnlyFlakes(Toggle):
@@ -70,12 +82,14 @@ class RandomizeStats(Toggle):
 undertale_options: typing.Dict[str, type(Option)] = {
     "route_required":                           RouteRequired,
     "prog_plot":                                ProgressivePlot,
-    "soul_hunt":                                SoulHunt,
-    "soul_pieces":                              SoulPieces,
+    "key_hunt":                                 KeyHunt,
+    "key_pieces":                               KeyPieces,
     "rando_love":                               RandomizeLove,
     "rando_stats":                              RandomizeStats,
     "rando_area":                               RandomizeAreas,
     "temy_include":                             IncludeTemy,
     "no_equips":                                NoEquips,
     "only_flakes":                              OnlyFlakes,
+    "prog_armor":                               ProgressiveArmor,
+    "prog_weapons":                             ProgressiveWeapons,
 }

@@ -13,6 +13,8 @@ class UndertaleItem(Item):
 
 item_table = {
     "Progressive Plot": ItemData(77700, True),
+    "Progressive Weapons": ItemData(77701, False),
+    "Progressive Armor": ItemData(77702, False),
     "Monster Candy": ItemData(77001, False),
     "Croquet Roll": ItemData(77002, False),
     "Stick": ItemData(77003, False),
@@ -82,9 +84,10 @@ item_table = {
     "Microphone": ItemData(77784, True),
     "Bridge Tools": ItemData(77785, True),
     "Mettaton Plush": ItemData(77786, True),
-    "Determination": ItemData(77787, True),
+    "Left Home Key": ItemData(77787, True),
     "LOVE": ItemData(77788, True),
-    "Soul Piece": ItemData(77000, True),
+    "Right Home Key": ItemData(77789, True),
+    "Key Piece": ItemData(77000, True),
     "100G": ItemData(77999, False),
     "1000G": ItemData(77998, False),
     "10000G": ItemData(77997, False),
@@ -115,18 +118,22 @@ non_key_items = {
 
 required_armor = {
     "Cloudy Glasses": 1,
-    "Torn Notebook": 1,
-    "Tough Glove": 1,
     "Manly Bandanna": 1,
     "Old Tutu": 1,
-    "Ballet Shoes": 1,
-    "Burnt Pan": 1,
     "Stained Apron": 1,
-    "Worn Dagger": 1,
     "Heart Locket": 1,
     "Faded Ribbon": 1,
-    "Toy Knife": 1,
     "Cowboy Hat": 1,
+    "temy armor": 1,
+}
+
+required_weapons = {
+    "Torn Notebook": 1,
+    "Tough Glove": 1,
+    "Ballet Shoes": 1,
+    "Burnt Pan": 1,
+    "Worn Dagger": 1,
+    "Toy Knife": 1,
     "Empty Gun": 1,
 }
 

@@ -107,7 +107,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_entrance("News Show Entrance", player), lambda state: state._undertale_has_plot(player, "Microphone"))
     set_rule(world.get_entrance("Hotland Exit", player), lambda state: state._undertale_has_plot(player, "Bridge Tools"))
     set_rule(world.get_entrance("Core Exit", player), lambda state: state._undertale_has_plot(player, "Mettaton Plush"))
-    set_rule(world.get_entrance("New Home Exit", player), lambda state: state.has("Determination", player) or state.has("Soul Piece", player, state.world.soul_pieces[player]))
+    set_rule(world.get_entrance("New Home Exit", player), lambda state: (state.has("Left Home Key", player) and state.has("Right Home Key", player)) or state.has("Key Piece", player, state.world.key_pieces[player]))
     if world.state._undertale_is_route(player, 1):
         set_rule(world.get_entrance("Papyrus\' Home Entrance", player), lambda state: state._undertale_has_plot(player, "Complete Skeleton"))
         set_rule(world.get_entrance("Undyne\'s Home Entrance", player), lambda state: state._undertale_has_plot(player, "Fish") and state.has('Papyrus Date', player))
@@ -208,6 +208,8 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location(("Gerson 4"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
     set_rule(world.get_location(("Present Knife"), player), lambda state: state.can_reach('New Home', 'Region', player))
     set_rule(world.get_location(("Present Locket"), player), lambda state: state.can_reach('New Home', 'Region', player))
+    set_rule(world.get_location(("Left New Home Key"), player), lambda state: state.can_reach('New Home', 'Region', player))
+    set_rule(world.get_location(("Right New Home Key"), player), lambda state: state.can_reach('New Home', 'Region', player))
     set_rule(world.get_location(("Trash Burger"), player), lambda state: state.can_reach('Core', 'Region', player))
     set_rule(world.get_location(("Quiche Bench"), player), lambda state: state.can_reach('Waterfall', 'Region', player))
     set_rule(world.get_location(("Tutu Hidden"), player), lambda state: state.can_reach('Waterfall', 'Region', player))

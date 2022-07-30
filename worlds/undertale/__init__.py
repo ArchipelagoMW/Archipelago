@@ -2,7 +2,7 @@ import os
 import json
 from base64 import b64encode, b64decode
 from math import ceil
-from .Items import UndertaleItem, item_table, required_armor, non_key_items, key_items, junk_weights_all, plot_items, junk_weights_neutral, junk_weights_pacifist, junk_weights_genocide
+from .Items import UndertaleItem, item_table, required_armor, required_weapons, non_key_items, key_items, junk_weights_all, plot_items, junk_weights_neutral, junk_weights_pacifist, junk_weights_genocide
 from .Locations import UndertaleAdvancement, advancement_table, exclusion_table
 from .Regions import undertale_regions, link_undertale_areas
 from .Rules import set_rules, set_completion_rules
@@ -46,12 +46,14 @@ class UndertaleWorld(World):
             'temy_armor_include': bool(self.world.temy_include[self.player].value),
             'only_flakes': bool(self.world.only_flakes[self.player].value),
             'no_equips': bool(self.world.no_equips[self.player].value),
-            'soul_hunt': bool(self.world.soul_hunt[self.player].value),
-            'soul_pieces': self.world.soul_pieces[self.player].value,
+            'key_hunt': bool(self.world.key_hunt[self.player].value),
+            'key_pieces': self.world.key_pieces[self.player].value,
             'prog_plot': bool(self.world.prog_plot[self.player].value),
             'rando_love': bool(self.world.rando_love[self.player].value),
             'rando_area': bool(self.world.rando_area[self.player].value),
-            'rando_stats': bool(self.world.rando_stats[self.player].value)
+            'rando_stats': bool(self.world.rando_stats[self.player].value),
+            'prog_armor': bool(self.world.prog_armor[self.player].value),
+            'prog_weapons': bool(self.world.prog_weapons[self.player].value)
         }
 
     def generate_basic(self):
@@ -79,6 +81,15 @@ class UndertaleWorld(World):
         if not self.world.no_equips[self.player]:
             for (name, num) in required_armor.items():
                 itempool += [name] * num
+            for (name, num) in required_weapons.items():
+                itempool += [name] * num
+        if not self.world.temy_include[self.player]:
+            if "temy armor" in itempool:
+                itempool.remove("temy armor")
+        if self.world.prog_armor[self.player]:
+            itempool = [item if item not in required_armor else "Progressive Armor" for item in itempool]
+        if self.world.prog_weapons[self.player]:
+            itempool = [item if item not in required_weapons else "Progressive Weapons" for item in itempool]
         if self.world.route_required[self.player].current_key == "genocide" or self.world.route_required[self.player].current_key == "all_routes":
             if not self.world.only_flakes[self.player]:
                 itempool += ["Snowman Piece"] * 2
@@ -94,12 +105,11 @@ class UndertaleWorld(World):
         if self.world.route_required[self.player].current_key == "genocide":
             itempool.remove("Cooking Set")
             itempool.remove("Microphone")
-        if self.world.temy_include[self.player]:
-            itempool += ["temy armor"]
-        if self.world.soul_hunt[self.player]:
-            itempool += ["Soul Piece"] * self.world.soul_pieces[self.player].value
+        if self.world.key_hunt[self.player]:
+            itempool += ["Key Piece"] * self.world.key_pieces[self.player].value
         else:
-            itempool += ["Determination"]
+            itempool += ["Left Home Key"]
+            itempool += ["Right Home Key"]
         if not self.world.rando_love[self.player] or (self.world.route_required[self.player].current_key != "genocide" and self.world.route_required[self.player].current_key != "all_routes"):
             itempool = [item for item in itempool if not item == "LOVE"]
         if not self.world.rando_stats[self.player] or (self.world.route_required[self.player].current_key != "genocide" and self.world.route_required[self.player].current_key != "all_routes"):
