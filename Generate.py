@@ -128,10 +128,9 @@ def main(args=None, callback=ERmain):
 
     if args.meta_file_path and os.path.exists(args.meta_file_path):
         try:
-            weights_cache[args.meta_file_path] = read_weights_yamls(args.meta_file_path)
+            meta_weights = read_weights_yamls(args.meta_file_path)[-1]
         except Exception as e:
             raise ValueError(f"File {args.meta_file_path} is destroyed. Please fix your yaml.") from e
-        meta_weights = weights_cache[args.meta_file_path][-1]
         print(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights)}")
         del(meta_weights["meta_description"])
         if args.samesettings:
@@ -159,7 +158,7 @@ def main(args=None, callback=ERmain):
             player_files[player_id] = filename
             player_id += 1
 
-    args.multi = max(player_id - 1 - bool(meta_weights), args.multi)
+    args.multi = max(player_id - 1, args.multi)
     print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed} with plando: "
           f"{args.plando}")
 
@@ -207,6 +206,8 @@ def main(args=None, callback=ERmain):
     player = 1
     while player <= args.multi:
         path = player_path_cache[player]
+        if path == args.meta_file_path:
+            continue
         if path:
             try:
                 settings: Tuple[argparse.Namespace, ...] = settings_cache[path] if settings_cache[path] else \
