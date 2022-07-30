@@ -61,6 +61,10 @@ class PlandoSettings(enum.IntFlag):
         else:
             return base | part
 
+    @classmethod
+    def to_string(cls) -> str:
+        return f"{[part.name for part in cls]}"
+
 
 def mystery_argparse():
     options = get_options()
@@ -161,7 +165,7 @@ def main(args=None, callback=ERmain):
 
     args.multi = max(player_id-1, args.multi)
     print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed} with plando: "
-          f"{args.plando}")
+          f"{args.plando.to_string()}")
 
     if not weights_cache:
         raise Exception(f"No weights found. Provide a general weights file ({args.weights_file_path}) or individual player files. "
