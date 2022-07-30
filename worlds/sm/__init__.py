@@ -598,7 +598,7 @@ class SMWorld(World):
 
     def create_item(self, name: str) -> Item:
         item = next(x for x in ItemManager.Items.values() if x.Name == name)
-        return SMItem(item.Name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Name],
+        return SMItem(item.Name, ItemClassification.progression if item.Class != 'Minor' else ItemClassification.filler, item.Type, self.item_name_to_id[item.Name],
                       player=self.player)
 
     def get_filler_item_name(self) -> str:

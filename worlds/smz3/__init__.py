@@ -8,6 +8,7 @@ from typing import Dict, Set, TextIO
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, RegionType, CollectionState, \
     Tutorial
 from worlds.generic.Rules import set_rule
+from worlds.smz3.TotalSMZ3.Item import ItemType
 import worlds.smz3.TotalSMZ3.Item as TotalSMZ3Item
 from worlds.smz3.TotalSMZ3.World import World as TotalSMZ3World
 from worlds.smz3.TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
@@ -79,6 +80,99 @@ class SMZ3World(World):
         self.locations = {}
         self.unreachable = []
         super().__init__(world, player)
+
+    @classmethod
+    def isProgression(cls, itemType):
+        progressionTypes = {
+                                ItemType.ProgressiveShield,
+                                ItemType.ProgressiveSword,
+                                ItemType.Bow,
+                                ItemType.Hookshot,
+                                ItemType.Mushroom,
+                                ItemType.Powder,
+                                ItemType.Firerod,
+                                ItemType.Icerod,
+                                ItemType.Bombos,
+                                ItemType.Ether,
+                                ItemType.Quake,
+                                ItemType.Lamp,
+                                ItemType.Hammer,
+                                ItemType.Shovel,
+                                ItemType.Flute,
+                                ItemType.Bugnet,
+                                ItemType.Book,
+                                ItemType.Bottle,
+                                ItemType.Somaria,
+                                ItemType.Byrna,
+                                ItemType.Cape,
+                                ItemType.Mirror,
+                                ItemType.Boots,
+                                ItemType.ProgressiveGlove,
+                                ItemType.Flippers,
+                                ItemType.MoonPearl,
+                                ItemType.HalfMagic,
+
+                                ItemType.Grapple,
+                                ItemType.Charge,
+                                ItemType.Ice,
+                                ItemType.Wave,
+                                ItemType.Plasma,
+                                ItemType.Varia,
+                                ItemType.Gravity,
+                                ItemType.Morph,
+                                ItemType.Bombs,
+                                ItemType.SpringBall,
+                                ItemType.ScrewAttack,
+                                ItemType.HiJump,
+                                ItemType.SpaceJump,
+                                ItemType.SpeedBooster,
+
+                                ItemType.ETank,
+                                ItemType.ReserveTank,
+
+                                ItemType.BigKeyGT,
+                                ItemType.KeyGT,
+                                ItemType.BigKeyEP,
+                                ItemType.BigKeyDP,
+                                ItemType.BigKeyTH,
+                                ItemType.BigKeyPD,
+                                ItemType.BigKeySP,
+                                ItemType.BigKeySW,
+                                ItemType.BigKeyTT,
+                                ItemType.BigKeyIP,
+                                ItemType.BigKeyMM,
+                                ItemType.BigKeyTR,
+
+                                ItemType.KeyHC,
+                                ItemType.KeyCT,
+                                ItemType.KeyDP,
+                                ItemType.KeyTH,
+                                ItemType.KeyPD,
+                                ItemType.KeySP,
+                                ItemType.KeySW,
+                                ItemType.KeyTT,
+                                ItemType.KeyIP,
+                                ItemType.KeyMM,
+                                ItemType.KeyTR,
+
+                                ItemType.CardCrateriaL1,
+                                ItemType.CardCrateriaL2,
+                                ItemType.CardCrateriaBoss,
+                                ItemType.CardBrinstarL1,
+                                ItemType.CardBrinstarL2,
+                                ItemType.CardBrinstarBoss,
+                                ItemType.CardNorfairL1,
+                                ItemType.CardNorfairL2,
+                                ItemType.CardNorfairBoss,
+                                ItemType.CardMaridiaL1,
+                                ItemType.CardMaridiaL2,
+                                ItemType.CardMaridiaBoss,
+                                ItemType.CardWreckedShipL1,
+                                ItemType.CardWreckedShipBoss,
+                                ItemType.CardLowerNorfairL1,
+                                ItemType.CardLowerNorfairBoss,
+                            }
+        return itemType in progressionTypes
 
     @classmethod
     def stage_assert_generate(cls, world):
@@ -337,7 +431,8 @@ class SMZ3World(World):
         return False
 
     def create_item(self, name: str) -> Item:
-        return SMZ3Item(name, ItemClassification.progression,
+        return SMZ3Item(name, 
+                        ItemClassification.progression if SMZ3World.isProgression(TotalSMZ3Item.ItemType[name]) else ItemClassification.filler,
                         TotalSMZ3Item.ItemType[name], self.item_name_to_id[name], 
                         self.player,
                         TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[name], self))
