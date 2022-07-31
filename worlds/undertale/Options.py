@@ -74,7 +74,7 @@ class RandomizeAreas(Toggle):
 
 class RandomizeStats(Toggle):
     """Makes each stat increase from LV a separate item. GENOCIDE ONLY!
-    This may be a problem to some people, make sure everyone is okay with this option before choosing to have it on."""
+    Warning: This tends to spam chat with sending out checks."""
     display_name = "Randomize Stats"
     default = 0
 

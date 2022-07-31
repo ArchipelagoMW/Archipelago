@@ -61,11 +61,13 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
 
 
 class UndertaleContext(CommonContext):
+    tags = {"AP"}
+    game = "Undertale"
     command_processor = UndertaleCommandProcessor
     items_handling = 0b111
     route = None
     pieces_needed = None
-    progkeys = []
+    progkeys: typing.Set[int]
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -75,7 +77,17 @@ class UndertaleContext(CommonContext):
         self.syncing = False
         self.deathlink_status = False
         self.tem_armor = False
-        self.progkeys = []
+        self.progkeys = set()
+
+    async def server_auth(self, password_requested: bool = False):
+        if password_requested and not self.password:
+            await self.server_auth(password_requested)
+        await self.get_username()
+        await self.send_connect()
+
+    def on_package(self, cmd: str, args: dict):
+        if cmd == "Connected":
+            self.game = self.slot_info[self.slot].game
 
     def clear_undertale_files(self):
         path = os.path.expandvars(r"%localappdata%/UNDERTALE")
@@ -134,65 +146,9 @@ class UndertaleContext(CommonContext):
         self.ui = UTManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
-    async def server_auth(self, password_requested: bool = False):
-        if password_requested and not self.password:
-            await super(UndertaleContext, self).server_auth(password_requested)
-        if not self.auth:
-            logger.info('Enter slot name:')
-            self.auth = await self.console_input()
-
-        await self.send_connect()
-
     def on_deathlink(self, data: dict):
         self.got_deathlink = True
         super().on_deathlink(data)
-
-
-async def server_loop(ctx: CommonContext, address=None):
-    cached_address = None
-    if ctx.server and ctx.server.socket:
-        logger.error('Already connected')
-        return
-
-    if address is None:  # set through CLI or APBP
-        address = ctx.server_address
-
-    # Wait for the user to provide a multiworld server address
-    if not address:
-        logger.info('Please connect to an Archipelago server.')
-        return
-
-    address = f"ws://{address}" if "://" not in address else address
-    port = urllib.parse.urlparse(address).port or 38281
-    logger.info(f'Connecting to Archipelago server at {address}')
-    try:
-        socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None)
-        ctx.server = Endpoint(socket)
-        logger.info('Connected')
-        ctx.server_address = address
-        ctx.current_reconnect_delay = ctx.starting_reconnect_delay
-        async for data in ctx.server.socket:
-            for msg in decode(data):
-                await process_server_cmd(ctx, msg)
-        logger.warning('Disconnected from multiworld server, type /connect to reconnect')
-    except ConnectionRefusedError:
-        if cached_address:
-            logger.error('Unable to connect to multiworld server at cached address. '
-                         'Please use the connect button above.')
-        else:
-            logger.exception('Connection refused by the multiworld server')
-    except websockets.InvalidURI:
-        logger.exception('Failed to connect to the multiworld server (invalid URI)')
-    except (OSError, websockets.InvalidURI):
-        logger.exception('Failed to connect to the multiworld server')
-    except Exception as e:
-        logger.exception('Lost connection to the multiworld server, type /connect to reconnect')
-    finally:
-        await ctx.connection_closed()
-        if ctx.server_address:
-            logger.info(f"... reconnecting in {ctx.current_reconnect_delay}s")
-            asyncio.create_task(server_autoreconnect(ctx), name="server auto reconnect")
-        ctx.current_reconnect_delay *= 2
 
 
 def to_room_name(place_name: str):
@@ -220,7 +176,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
             os.mkdir(os.path.expandvars(r"%localappdata%/UNDERTALE"))
         ctx.route = args["slot_data"]['route']
         ctx.pieces_needed = args["slot_data"]['key_pieces']
-        ctx.tem_armor = args["slot_data"]['temy_include']
+        ctx.tem_armor = args["slot_data"]['temy_armor_include']
         if not args["slot_data"]['key_hunt']:
             ctx.pieces_needed = 0
         if args["slot_data"]['rando_love']:
@@ -275,33 +231,24 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         while place != "Core Exit":
             if args["slot_data"][place] == "Snowdin Forest":
                 if ctx.route == "pacifist":
-                    ctx.progkeys[counter] = 77779
-                    counter += 1
-                ctx.progkeys[counter] = 77778
-                counter += 1
+                    ctx.progkeys.add(77779)
+                ctx.progkeys.add(77778)
                 place = "Snowdin Town Exit"
             elif args["slot_data"][place] == "Waterfall":
                 if ctx.route == "pacifist":
-                    ctx.progkeys[counter] = 77780
-                    counter += 1
-                ctx.progkeys[counter] = 77781
-                counter += 1
+                    ctx.progkeys.add(77780)
+                ctx.progkeys.add(77781)
                 place = "Waterfall Exit"
             elif args["slot_data"][place] == "Hotland":
                 if ctx.route != "genocide":
-                    ctx.progkeys[counter] = 77783
-                    counter += 1
-                    ctx.progkeys[counter] = 77784
-                    counter += 1
-                ctx.progkeys[counter] = 77785
-                counter += 1
+                    ctx.progkeys.add(77783)
+                    ctx.progkeys.add(77784)
+                ctx.progkeys.add(77785)
                 place = "Hotland Exit"
             elif args["slot_data"][place] == "Core":
-                ctx.progkeys[counter] = 77786
-                counter += 1
+                ctx.progkeys.add(77786)
                 if ctx.route == "pacifist":
-                    ctx.progkeys[counter] = 77782
-                    counter += 1
+                    ctx.progkeys.add(77782)
                 place = "Core Exit"
 
     elif cmd == 'ReceivedItems':
@@ -556,15 +503,12 @@ def copier(_src, _dst):
 
 if __name__ == '__main__':
 
-    async def main():
-        multiprocessing.freeze_support()
-        parser = get_base_parser()
-        parser.add_argument('apz5_file', default="", type=str, nargs="?",
-                            help='Path to an APZ5 file')
-        args = parser.parse_args()
-
+    async def main(args):
         ctx = UndertaleContext(args.connect, args.password)
+        ctx.auth = args.name
+        ctx.server_address = args.connect
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
+
         if gui_enabled:
             ctx.run_gui()
         ctx.run_cli()
@@ -574,23 +518,20 @@ if __name__ == '__main__':
 
         multiplayer_watcher = asyncio.create_task(
             multi_watcher(ctx), name="UndertaleMultiplayerWatcher")
-
         await ctx.exit_event.wait()
-        ctx.server_address = None
-
         await ctx.shutdown()
-
         await progression_watcher
-
         await multiplayer_watcher
 
     import colorama
 
     parser = get_base_parser(description="Undertale Client, for text interfacing.")
+    parser.add_argument('--name', default=None, help="Slot Name to connect as.")
+    parser.add_argument("url", nargs="?", help="Archipelago connection url")
     parser.add_argument('--install', '-i', dest='install', nargs='?', default="",
         help="Patch the vanilla game for randomization. Does not launch the client afterwards.")
 
-    args, rest = parser.parse_known_args()
+    args = parser.parse_args()
     if args.install != "":
         logging.info("Patching Undertale")
         if os.path.exists(os.getcwd() + r"/Undertale"):
@@ -608,7 +549,15 @@ if __name__ == '__main__':
     if not os.path.exists(os.getcwd() + r"/Undertale"):
         os.mkdir(os.getcwd() + r"/Undertale")
 
+    if args.url:
+        url = urllib.parse.urlparse(args.url)
+        args.connect = url.netloc
+        if url.username:
+            args.name = urllib.parse.unquote(url.username)
+        if url.password:
+            args.password = urllib.parse.unquote(url.password)
+
     colorama.init()
 
-    asyncio.run(main())
+    asyncio.run(main(args))
     colorama.deinit()
