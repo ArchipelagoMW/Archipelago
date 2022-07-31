@@ -63,7 +63,7 @@ class PlandoSettings(enum.IntFlag):
 
     def __str__(self) -> str:
         if self.value:
-            return ', '.join((flag.name for flag in PlandoSetting if self.value & flag.value))
+            return ', '.join((flag.name for flag in PlandoSettings if self.value & flag.value))
         return 'Off'
 
 
