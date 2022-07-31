@@ -180,28 +180,28 @@ def main(args=None, callback=ERmain):
     erargs.enemizercli = args.enemizercli
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
-        {fname: ( tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
-                for fname, yamls in weights_cache.items()}
-    player_path_cache = {}
-    for player in range(1, args.multi + 1):
-        player_path_cache[player] = player_files.get(player, args.weights_file_path)
+        {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
+         for fname, yamls in weights_cache.items()}
 
     if meta_weights:
         for category_name, category_dict in meta_weights.items():
             for key in category_dict:
                 option = get_choice(key, category_dict)
                 if option is not None:
-                    for player, path in player_path_cache.items():
+                    for path in weights_cache:
                         for yaml in weights_cache[path]:
                             if category_name is None:
                                 for category in yaml:
-                                    if category in AutoWorldRegister.world_types or category in Options.common_options:
+                                    if category in AutoWorldRegister.world_types and category in Options.common_options:
                                         yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
                             else:
-                               yaml[category_name][key] = option
+                                yaml[category_name][key] = option
 
+    player_path_cache = {}
+    for player in range(1, args.multi + 1):
+        player_path_cache[player] = player_files.get(player, args.weights_file_path)
     name_counter = Counter()
     erargs.player_settings = {}
 
