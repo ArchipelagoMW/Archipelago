@@ -61,9 +61,8 @@ class PlandoSettings(enum.IntFlag):
         else:
             return base | part
 
-    @classmethod
-    def __str__(cls) -> str:
-        return f"{[part.name for part in cls]}"
+    def __str__(self) -> str:
+        return f"{[part.name for part in self]}"
 
 
 def mystery_argparse():
