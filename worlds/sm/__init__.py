@@ -271,7 +271,7 @@ class SMWorld(World):
             data.append(w1)
         return data
 
-    def APPatchRom(self, romPatcher):
+    def APPrePatchRom(self, romPatcher):
         # first apply the sm multiworld code patch named 'basepatch' (also has empty tables that we'll overwrite),
         #  + apply some patches from varia that we want to be always-on.
         # basepatch and variapatches are both generated from https://github.com/lordlou/SMBasepatch
@@ -279,6 +279,8 @@ class SMWorld(World):
                                               "data", "SMBasepatch_prebuilt", "multiworld-basepatch.ips"))
         romPatcher.applyIPSPatch(os.path.join(os.path.dirname(__file__),
                                               "data", "SMBasepatch_prebuilt", "variapatches.ips"))
+
+    def APPostPatchRom(self, romPatcher):
         symbols = get_sm_symbols(os.path.join(os.path.dirname(__file__), 
                                               "data", "SMBasepatch_prebuilt", "sm-basepatch-symbols.json"))
         multiWorldLocations = []
@@ -504,7 +506,7 @@ class SMWorld(World):
         outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
 
         try:
-            self.variaRando.PatchRom(outputFilename, self.APPatchRom)
+            self.variaRando.PatchRom(outputFilename, self.APPrePatchRom, self.APPostPatchRom)
             self.write_crc(outputFilename)
             self.rom_name = self.romName
         except:

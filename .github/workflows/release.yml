@@ -51,7 +51,7 @@ jobs:
           chmod a+rx appimagetool
       - name: Download run-time dependencies
         run: |
-          wget -nv https://github.com/alttpo/sni/releases/download/v0.0.81/sni-v0.0.81-manylinux2014-amd64.tar.xz
+          wget -nv https://github.com/alttpo/sni/releases/download/v0.0.82/sni-v0.0.82-manylinux2014-amd64.tar.xz
           tar xf sni-*.tar.xz
           rm sni-*.tar.xz
           mv sni-* SNI
