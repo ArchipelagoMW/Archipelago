@@ -75,7 +75,7 @@ class Texts:
                 }
         if item.IsMap(): name = "Map"
         elif item.IsCompass(): name = "Compass"
-        elif item.IsKeycard(): name = "Keycard"
+        elif item.IsSmMap(): name = "SmMap"
         else: name = nameMap[item.Type]
 
         items = Texts.scripts["Items"]

@@ -10,6 +10,7 @@ class IcePalace(Z3Region, IReward):
 
     def __init__(self, world, config: Config):
         super().__init__(world, config)
+        self.Weight = 4
         self.RegionItems = [ ItemType.KeyIP, ItemType.BigKeyIP, ItemType.MapIP, ItemType.CompassIP]
         self.Reward = RewardType.Null
         self.Locations = [
@@ -43,7 +44,7 @@ class IcePalace(Z3Region, IReward):
             ]
 
     def CanNotWasteKeysBeforeAccessible(self, items: Progression, locations: List[Location]):
-        return not items.BigKeyIP or any(l.ItemIs(ItemType.BigKeyIP, self.world) for l in locations)
+        return self.world.ForwardSearch or not items.BigKeyIP or any(l.ItemIs(ItemType.BigKeyIP, self.world) for l in locations)
 
     def CanEnter(self, items: Progression):
         return items.MoonPearl and items.Flippers and items.CanLiftHeavy() and items.CanMeltFreezors()

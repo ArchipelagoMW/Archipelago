@@ -12,9 +12,10 @@ from worlds.smz3.TotalSMZ3.Item import ItemType
 import worlds.smz3.TotalSMZ3.Item as TotalSMZ3Item
 from worlds.smz3.TotalSMZ3.World import World as TotalSMZ3World
 from worlds.smz3.TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
-from worlds.smz3.TotalSMZ3.Config import Config, GameMode, GanonInvincible, Goal, KeyShuffle, MorphLocation, SMLogic, SwordLocation, Z3Logic
+from worlds.smz3.TotalSMZ3.Config import Config, GameMode, Goal, KeyShuffle, MorphLocation, SMLogic, SwordLocation, Z3Logic
 from worlds.smz3.TotalSMZ3.Location import LocationType, locations_start_id, Location as TotalSMZ3Location
 from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
+from worlds.smz3.TotalSMZ3.WorldState import WorldState
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
@@ -60,12 +61,12 @@ class SMZ3World(World):
     """
     game: str = "SMZ3"
     topology_present = False
-    data_version = 1
+    data_version = 2
     options = smz3_options
     item_names: Set[str] = frozenset(TotalSMZ3Item.lookup_name_to_id)
     location_names: Set[str]
     item_name_to_id = TotalSMZ3Item.lookup_name_to_id
-    location_name_to_id: Dict[str, int] = {key : locations_start_id + value.Id for key, value in TotalSMZ3World(Config({}), "", 0, "").locationLookup.items()}
+    location_name_to_id: Dict[str, int] = {key : locations_start_id + value.Id for key, value in TotalSMZ3World(Config(), "", 0, "").locationLookup.items()}
     web = SMZ3Web()
 
     remote_items: bool = False
@@ -180,30 +181,29 @@ class SMZ3World(World):
         base_combined_rom = get_base_rom_bytes()
 
     def generate_early(self):
-        config = Config({})
-        config.GameMode = GameMode.Multiworld
-        config.Z3Logic = Z3Logic.Normal
-        config.SMLogic = SMLogic(self.world.sm_logic[self.player].value)
-        config.SwordLocation = SwordLocation(self.world.sword_location[self.player].value)
-        config.MorphLocation = MorphLocation(self.world.morph_location[self.player].value)
-        config.Goal = Goal.DefeatBoth
-        config.KeyShuffle = KeyShuffle(self.world.key_shuffle[self.player].value)
-        config.Keysanity = config.KeyShuffle != KeyShuffle.Null
-        config.GanonInvincible = GanonInvincible.BeforeCrystals
+        self.config = Config()
+        self.config.GameMode = GameMode.Multiworld
+        self.config.Z3Logic = Z3Logic.Normal
+        self.config.SMLogic = SMLogic(self.world.sm_logic[self.player].value)
+        self.config.SwordLocation = SwordLocation(self.world.sword_location[self.player].value)
+        self.config.MorphLocation = MorphLocation(self.world.morph_location[self.player].value)
+        self.config.Goal = Goal.DefeatBoth
+        self.config.KeyShuffle = KeyShuffle(self.world.key_shuffle[self.player].value)
 
         self.local_random = random.Random(self.world.random.randint(0, 1000))
-        self.smz3World = TotalSMZ3World(config, self.world.get_player_name(self.player), self.player, self.world.seed_name)
+        self.smz3World = TotalSMZ3World(self.config, self.world.get_player_name(self.player), self.player, self.world.seed_name)
         self.smz3DungeonItems = []
         SMZ3World.location_names = frozenset(self.smz3World.locationLookup.keys())
 
         self.world.state.smz3state[self.player] = TotalSMZ3Item.Progression([])
     
     def generate_basic(self):
-        self.smz3World.Setup(self.world.random)
+        self.smz3World.Setup(WorldState.Generate(self.config, self.world.random))
         self.dungeon = TotalSMZ3Item.Item.CreateDungeonPool(self.smz3World)
         self.dungeon.reverse()
         self.progression = TotalSMZ3Item.Item.CreateProgressionPool(self.smz3World)
         self.keyCardsItems = TotalSMZ3Item.Item.CreateKeycards(self.smz3World)
+        self.SmMapsItems = TotalSMZ3Item.Item.CreateSmMaps(self.smz3World)
 
         niceItems = TotalSMZ3Item.Item.CreateNicePool(self.smz3World)
         junkItems = TotalSMZ3Item.Item.CreateJunkPool(self.smz3World)
@@ -211,7 +211,7 @@ class SMZ3World(World):
         self.junkItemsNames = [item.Type.name for item in junkItems]
 
         if (self.smz3World.Config.Keysanity):
-            progressionItems = self.progression + self.dungeon + self.keyCardsItems
+            progressionItems = self.progression + self.dungeon + self.keyCardsItems + self.SmMapsItems
         else:
             progressionItems = self.progression 
             for item in self.keyCardsItems:
@@ -524,7 +524,8 @@ class SMZ3World(World):
 
     def InitialFillInOwnWorld(self):
         self.FillItemAtLocation(self.dungeon, TotalSMZ3Item.ItemType.KeySW, self.smz3World.GetLocation("Skull Woods - Pinball Room"))
-        self.FillItemAtLocation(self.dungeon, TotalSMZ3Item.ItemType.KeySP, self.smz3World.GetLocation("Swamp Palace - Entrance"))
+        if (not self.smz3World.Config.Keysanity):
+            self.FillItemAtLocation(self.dungeon, TotalSMZ3Item.ItemType.KeySP, self.smz3World.GetLocation("Swamp Palace - Entrance"))
 
         # /* Check Swords option and place as needed */
         if self.smz3World.Config.SwordLocation == SwordLocation.Uncle:
