@@ -289,7 +289,7 @@ def run_sprite_update():
     else:
         top.withdraw()
         task = BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
-    while not done.isSet():
+    while not done.is_set():
         task.do_events()
     logging.info("Done updating sprites")
 
@@ -300,6 +300,7 @@ def update_sprites(task, on_finish=None):
     sprite_dir = user_path("data", "sprites", "alttpr")
     os.makedirs(sprite_dir, exist_ok=True)
     ctx = get_cert_none_ssl_context()
+
     def finished():
         task.close_window()
         if on_finish:
