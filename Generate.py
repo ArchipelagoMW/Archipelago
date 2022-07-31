@@ -187,13 +187,13 @@ def main(args=None, callback=ERmain):
     if meta_weights:
         for category_name, category_dict in meta_weights.items():
             for key in category_dict:
-                option = get_choice(key, category_dict)
+                option = roll_meta_option(key, category_name, category_dict)
                 if option is not None:
                     for path in weights_cache:
                         for yaml in weights_cache[path]:
                             if category_name is None:
                                 for category in yaml:
-                                    if category in AutoWorldRegister.world_types and category in Options.common_options:
+                                    if category in AutoWorldRegister.world_types and key in Options.common_options:
                                         yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
@@ -384,6 +384,19 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
                             f'overwrite a root option. '
                             f'This is probably in error.')
     return weights
+
+
+def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
+    if not game:
+        return get_choice(option_key, category_dict)
+    if game in AutoWorldRegister.world_types:
+        for key, option in AutoWorldRegister.world_types[game].options.items() | Options.per_game_common_options.items():
+            if option_key == key:
+                if option.supports_weighting:
+                    return get_choice(option_key, category_dict)
+                else:
+                    return category_dict[option_key]
+    raise Exception(f"Error generating meta option {option_key} for {game}.")
 
 
 def roll_linked_options(weights: dict) -> dict:
