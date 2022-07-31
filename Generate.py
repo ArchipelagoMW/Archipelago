@@ -132,7 +132,8 @@ def main(args=None, callback=ERmain):
         except Exception as e:
             raise ValueError(f"File {args.meta_file_path} is destroyed. Please fix your yaml.") from e
         print(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights)}")
-        del(meta_weights["meta_description"])
+        if "meta_description" in meta_weights:
+            del(meta_weights["meta_description"])
         if args.samesettings:
             raise Exception("Cannot mix --samesettings with --meta")
     else:
