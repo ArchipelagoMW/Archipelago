@@ -833,7 +833,7 @@ class ItemLinks(OptionList):
         return pool
 
     def verify(self, world, player_name: str, plando_options) -> None:
-        super(ItemLinks, self).verify(world, plando_options, player_name)
+        super(ItemLinks, self).verify(world, player_name, plando_options)
         existing_links = set()
         for link in self.value:
             if link["name"] in existing_links:
