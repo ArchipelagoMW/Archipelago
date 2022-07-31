@@ -69,7 +69,6 @@ window.addEventListener('load', () => {
 
     // Check if we are on an anchor when coming in, and scroll to it.
     const hash = window.location.hash;
-    console.log(hash);
     if (hash) {
       const offset = 128;  // To account for navbar banner at top of page.
       window.scrollTo(0, 0);
