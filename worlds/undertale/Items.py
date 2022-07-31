@@ -139,15 +139,15 @@ required_weapons = {
 
 plot_items = {
     "Goat Plush": 1,
-    "Snow Shovel": 1,
     "Complete Skeleton": 1,
+    "Snow Shovel": 1,
     "Fish": 1,
     "Heat Suit": 1,
-    "DT Extractor": 1,
     "Cooking Set": 1,
     "Microphone": 1,
     "Bridge Tools": 1,
     "Mettaton Plush": 1,
+    "DT Extractor": 1,
 }
 
 key_items = {

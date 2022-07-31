@@ -65,6 +65,7 @@ class UndertaleContext(CommonContext):
     items_handling = 0b111
     route = None
     pieces_needed = None
+    progkeys = []
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -74,6 +75,7 @@ class UndertaleContext(CommonContext):
         self.syncing = False
         self.deathlink_status = False
         self.tem_armor = False
+        self.progkeys = []
 
     def clear_undertale_files(self):
         path = os.path.expandvars(r"%localappdata%/UNDERTALE")
@@ -268,6 +270,39 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
             f.write(to_room_name(args["slot_data"]["Core"]))
             f.close()
+        counter = 0
+        place = "Old Home Exit"
+        while place != "Core Exit":
+            if args["slot_data"][place] == "Snowdin Forest":
+                if ctx.route == "pacifist":
+                    ctx.progkeys[counter] = 77779
+                    counter += 1
+                ctx.progkeys[counter] = 77778
+                counter += 1
+                place = "Snowdin Town Exit"
+            elif args["slot_data"][place] == "Waterfall":
+                if ctx.route == "pacifist":
+                    ctx.progkeys[counter] = 77780
+                    counter += 1
+                ctx.progkeys[counter] = 77781
+                counter += 1
+                place = "Waterfall Exit"
+            elif args["slot_data"][place] == "Hotland":
+                if ctx.route != "genocide":
+                    ctx.progkeys[counter] = 77783
+                    counter += 1
+                    ctx.progkeys[counter] = 77784
+                    counter += 1
+                ctx.progkeys[counter] = 77785
+                counter += 1
+                place = "Hotland Exit"
+            elif args["slot_data"][place] == "Core":
+                ctx.progkeys[counter] = 77786
+                counter += 1
+                if ctx.route == "pacifist":
+                    ctx.progkeys[counter] = 77782
+                    counter += 1
+                place = "Core Exit"
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
