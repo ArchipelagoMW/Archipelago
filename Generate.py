@@ -62,7 +62,9 @@ class PlandoSettings(enum.IntFlag):
             return base | part
 
     def __str__(self) -> str:
-        return f"{[part.name for part in self]}"
+        if self.value:
+            return ', '.join((flag.name for flag in PlandoSetting if self.value & flag.value))
+        return 'Off'
 
 
 def mystery_argparse():
