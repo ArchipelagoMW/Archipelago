@@ -176,19 +176,16 @@ def place_plando_bosses(bosses: List[str], world, player: int) -> Tuple[List[str
         if "-" in boss:  # handle plando locations
             loc, boss = boss.split("-")
             boss = boss.title()
-            level: str = ""
+            level: str = None
             if loc.split(" ")[-1] in {"top", "middle", "bottom"}:
                 # split off level
                 loc = loc.split(" ")
                 level = loc[-1]
                 loc = " ".join(loc[:-1])
             loc = loc.title().replace("Of", "of")
-            if can_place_boss(boss, loc, level) and (loc, level) in boss_locations:
-                place_boss(world, player, boss, loc, level)
-                already_placed_bosses.append(boss)
-                boss_locations.remove((loc, level))
-            else:
-                raise Exception(f"Cannot place {boss} at {format_boss_location(loc, level)} for player {player}.")
+            place_boss(world, player, boss, loc, level)
+            already_placed_bosses.append(boss)
+            boss_locations.remove((loc, level))
         else:  # boss chosen with no specified locations
             boss = boss.title()
             boss_locations, already_placed_bosses = place_where_possible(world, player, boss, boss_locations)
