@@ -5,7 +5,7 @@ import copy
 import os
 import threading
 import base64
-from typing import Set, List, TextIO, Optional
+from typing import Set, TextIO
 
 from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
 
@@ -735,8 +735,8 @@ class SMLocation(Location):
 
 class SMItem(Item):
     game = "Super Metroid"
-    type: Optional[str] = None
+    type: str
 
-    def __init__(self, name, classification, type: str, code, player: int = None):
+    def __init__(self, name, classification, type: str, code, player: int):
         super(SMItem, self).__init__(name, classification, code, player)
         self.type = type
