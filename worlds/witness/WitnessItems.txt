@@ -30,8 +30,8 @@ Traps:
 Doors:
 1100 - Glass Factory Entry (Panel) - 0x01A54
 1105 - Symmetry Island Lower (Panel) - 0x000B0
-1107 - Door to Symmetry Island Upper (Panel) - 0x1C349
-1110 - Door to Desert Flood Light Room (Panel) - 0x0C339
+1107 - Upper (Panel) - 0x1C349
+1110 - Light Room Entry (Panel) - 0x0C339
 1111 - Desert Flood Room Flood Controls (Panel) - 0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B
 1119 - Quarry Door to Mill (Panel) - 0x01E5A,0x01E59
 1120 - Quarry Mill Ramp Controls (Panel) - 0x03678,0x03676
@@ -83,11 +83,11 @@ Doors:
 1619 - Orchard Middle Gate - 0x03307
 1620 - Orchard Second Gate - 0x03313
 1621 - Desert Door to Flood Light Room - 0x09FEE
-1624 - Desert Door to Pond Room - 0x0C2C3
-1627 - Desert Door to Water Levels Room - 0x0A24B
+1624 - Desert Pond Room Entry - 0x0C2C3
+1627 - Desert Flood Room Entry - 0x0A24B
 1630 - Desert Door to Elevator Room - 0x0C316
-1633 - Quarry Main Entry 1 - 0x09D6F
-1636 - Quarry Main Entry 2 - 0x17C07
+1633 - Quarry Entry Door 1 - 0x09D6F
+1636 - Quarry Entry Door 2 - 0x17C07
 1639 - Quarry Door to Mill - 0x02010
 1642 - Quarry Mill Side Door - 0x275FF
 1645 - Quarry Mill Rooftop Shortcut - 0x17CE8
@@ -173,7 +173,7 @@ Doors:
 1906 - Symmetry Island Doors - 0x17F3E,0x18269
 1909 - Orchard Gates - 0x03313,0x03307
 1912 - Desert Doors - 0x09FEE,0x0C2C3,0x0A24B,0x0C316
-1915 - Quarry Main Entry - 0x09D6F
+1915 - Quarry Entry Door - 0x09D6F
 1918 - Quarry Mill Shortcuts - 0x17C07,0x17CE8,0x0368A
 1921 - Quarry Boathouse Barriers - 0x17C50,0x3865F
 1924 - Shadows Laser Room Door - 0x194B2,0x19665

@@ -1,8 +1,8 @@
 Items:
 Glass Factory Entry (Panel)
 Symmetry Island Lower (Panel)
-Door to Symmetry Island Upper (Panel)
-Door to Desert Flood Light Room (Panel)
+Upper (Panel)
+Light Room Entry (Panel)
 Desert Flood Room Flood Controls (Panel)
 Quarry Door to Mill (Panel)
 Quarry Mill Ramp Controls (Panel)

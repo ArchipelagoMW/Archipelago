@@ -66,8 +66,8 @@ Inside Glass Factory Behind Back Wall (Glass Factory) - Boat - 0x17CC8:
 158039 - 0x17CC8 (Boat Spawn) - 0x17CA6 | 0x17CDF | 0x09DB8 | 0x17C95 - Boat
 
 Outside Symmetry Island (Symmetry Island) - Main Island - True - Symmetry Island Lower - 0x17F3E:
-158040 - 0x000B0 (Symmetry Island Lower Panel) - 0x0343A - Dots
-Door - 0x17F3E (Symmetry Island Lower) - 0x000B0
+158040 - 0x000B0 (Lower Panel) - 0x0343A - Dots
+Door - 0x17F3E (Lower) - 0x000B0
 
 Symmetry Island Lower (Symmetry Island) - Symmetry Island Upper - 0x18269:
 158041 - 0x00022 (Right 1) - True - Symmetry & Dots
@@ -81,20 +81,20 @@ Symmetry Island Lower (Symmetry Island) - Symmetry Island Upper - 0x18269:
 158049 - 0x00073 (Back 4) - 0x00075 - Symmetry & Colored Dots
 158050 - 0x00077 (Back 5) - 0x00073 - Symmetry & Colored Dots
 158051 - 0x00079 (Back 6) - 0x00077 - Symmetry & Colored Dots
-158052 - 0x00065 (Fading Lines 1) - 0x00079 - Symmetry & Colored Dots
-158053 - 0x0006D (Fading Lines 2) - 0x00065 - Symmetry & Colored Dots
-158054 - 0x00072 (Fading Lines 3) - 0x0006D - Symmetry & Colored Dots
-158055 - 0x0006F (Fading Lines 4) - 0x00072 - Symmetry & Colored Dots
-158056 - 0x00070 (Fading Lines 5) - 0x0006F - Symmetry & Colored Dots
-158057 - 0x00071 (Fading Lines 6) - 0x00070 - Symmetry & Colored Dots
-158058 - 0x00076 (Fading Lines 7) - 0x00071 - Symmetry & Colored Dots
+158052 - 0x00065 (Left 1) - 0x00079 - Symmetry & Colored Dots
+158053 - 0x0006D (Left 2) - 0x00065 - Symmetry & Colored Dots
+158054 - 0x00072 (Left 3) - 0x0006D - Symmetry & Colored Dots
+158055 - 0x0006F (Left 4) - 0x00072 - Symmetry & Colored Dots
+158056 - 0x00070 (Left 5) - 0x0006F - Symmetry & Colored Dots
+158057 - 0x00071 (Left 6) - 0x00070 - Symmetry & Colored Dots
+158058 - 0x00076 (Left 7) - 0x00071 - Symmetry & Colored Dots
 158059 - 0x009B8 (Scenery Outlines 1) - True - Symmetry & Environment
 158060 - 0x003E8 (Scenery Outlines 2) - 0x009B8 - Symmetry & Environment
 158061 - 0x00A15 (Scenery Outlines 3) - 0x003E8 - Symmetry & Environment
 158062 - 0x00B53 (Scenery Outlines 4) - 0x00A15 - Symmetry & Environment
 158063 - 0x00B8D (Scenery Outlines 5) - 0x00B53 - Symmetry & Environment
-158064 - 0x1C349 (Door to Symmetry Island Upper Panel) - 0x00076 - Symmetry & Dots
-Door - 0x18269 (Door to Symmetry Island Upper) - 0x1C349
+158064 - 0x1C349 (Upper Panel) - 0x00076 - Symmetry & Dots
+Door - 0x18269 (Upper) - 0x1C349
 
 Symmetry Island Upper (Symmetry Island):
 158065 - 0x00A52 (Yellow 1) - True - Symmetry & Colored Dots
@@ -123,34 +123,34 @@ Desert Outside (Desert) - Main Island - True - Desert Floodlight Room - 0x09FEE:
 158652 - 0x0CC7B (Vault) - True - Dots & Shapers & Rotated Shapers & Negative Shapers
 158653 - 0x0339E (Vault Box) - 0x0CC7B - True
 158602 - 0x17CE7 (Discard) - True - Triangles
-158076 - 0x00698 (Sun Reflection 1) - True - Reflection
-158077 - 0x0048F (Sun Reflection 2) - 0x00698 - Reflection
-158078 - 0x09F92 (Sun Reflection 3) - 0x0048F & 0x09FA0 - Reflection
-158079 - 0x09FA0 (Reflection 3 Control) - 0x0048F - True
-158080 - 0x0A036 (Sun Reflection 4) - 0x09F92 - Reflection
-158081 - 0x09DA6 (Sun Reflection 5) - 0x09F92 - Reflection
-158082 - 0x0A049 (Sun Reflection 6) - 0x09F92 - Reflection
-158083 - 0x0A053 (Sun Reflection 7) - 0x0A036 & 0x09DA6 & 0x0A049 - Reflection
-158084 - 0x09F94 (Sun Reflection 8) - 0x0A053 & 0x09F86 - Reflection
-158085 - 0x09F86 (Reflection 8 Control) - 0x0A053 - True
-158086 - 0x0C339 (Door to Desert Flood Light Room Panel) - 0x09F94 - True
-Door - 0x09FEE (Door to Desert Flood Light Room) - 0x0C339 - True
+158076 - 0x00698 (Surface 1) - True - Reflection
+158077 - 0x0048F (Surface 2) - 0x00698 - Reflection
+158078 - 0x09F92 (Surface 3) - 0x0048F & 0x09FA0 - Reflection
+158079 - 0x09FA0 (Surface 3 Control) - 0x0048F - True
+158080 - 0x0A036 (Surface 4) - 0x09F92 - Reflection
+158081 - 0x09DA6 (Surface 5) - 0x09F92 - Reflection
+158082 - 0x0A049 (Surface 6) - 0x09F92 - Reflection
+158083 - 0x0A053 (Surface 7) - 0x0A036 & 0x09DA6 & 0x0A049 - Reflection
+158084 - 0x09F94 (Surface 8) - 0x0A053 & 0x09F86 - Reflection
+158085 - 0x09F86 (Surface 8 Control) - 0x0A053 - True
+158086 - 0x0C339 (Light Room Entry Panel) - 0x09F94 - True
+Door - 0x09FEE (Light Room Entry) - 0x0C339 - True
 
 Desert Floodlight Room (Desert) - Desert Pond Room - 0x0C2C3:
 158087 - 0x09FAA (Light Control) - True - True
-158088 - 0x00422 (Artificial Light Reflection 1) - 0x09FAA - Reflection
-158089 - 0x006E3 (Artificial Light Reflection 2) - 0x09FAA - Reflection
-158090 - 0x0A02D (Artificial Light Reflection 3) - 0x09FAA & 0x00422 & 0x006E3 - Reflection
-Door - 0x0C2C3 (Door to Pond Room) - 0x0A02D
+158088 - 0x00422 (Light Room 1) - 0x09FAA - Reflection
+158089 - 0x006E3 (Light Room 2) - 0x09FAA - Reflection
+158090 - 0x0A02D (Light Room 3) - 0x09FAA & 0x00422 & 0x006E3 - Reflection
+Door - 0x0C2C3 (Pond Room Entry) - 0x0A02D
 
 Desert Pond Room (Desert) - Desert Water Levels Room - 0x0A24B:
-158091 - 0x00C72 (Pond Reflection 1) - True - Reflection
-158092 - 0x0129D (Pond Reflection 2) - 0x00C72 - Reflection
-158093 - 0x008BB (Pond Reflection 3) - 0x0129D - Reflection
-158094 - 0x0078D (Pond Reflection 4) - 0x008BB - Reflection
-158095 - 0x18313 (Pond Reflection 5) - 0x0078D - Reflection
-158096 - 0x0A249 (Door to Water Levels Room Panel) - 0x18313 - Reflection
-Door - 0x0A24B (Door to Water Levels Room) - 0x0A249
+158091 - 0x00C72 (Pond Room 1) - True - Reflection
+158092 - 0x0129D (Pond Room 2) - 0x00C72 - Reflection
+158093 - 0x008BB (Pond Room 3) - 0x0129D - Reflection
+158094 - 0x0078D (Pond Room 4) - 0x008BB - Reflection
+158095 - 0x18313 (Pond Room 5) - 0x0078D - Reflection
+158096 - 0x0A249 (Flood Room Entry Panel) - 0x18313 - Reflection
+Door - 0x0A24B (Flood Room Entry) - 0x0A249
 
 Desert Water Levels Room (Desert) - Desert Elevator Room - 0x0C316:
 158097 - 0x1C2DF (Reduce Water Level Far Left) - True - True
@@ -161,37 +161,37 @@ Desert Water Levels Room (Desert) - Desert Elevator Room - 0x0C316:
 158102 - 0x1831D (Raise Water Level Far Right) - True - True
 158103 - 0x1C2B1 (Raise Water Level Near Left) - True - True
 158104 - 0x1831B (Raise Water Level Near Right) - True - True
-158105 - 0x04D18 (Flood Reflection 1) - 0x1C260 & 0x1831C - Reflection
-158106 - 0x01205 (Flood Reflection 2) - 0x04D18 & 0x1C260 & 0x1831C - Reflection
-158107 - 0x181AB (Flood Reflection 3) - 0x01205 & 0x1C260 & 0x1831C - Reflection
-158108 - 0x0117A (Flood Reflection 4) - 0x181AB & 0x1C260 & 0x1831C - Reflection
-158109 - 0x17ECA (Flood Reflection 5) - 0x0117A & 0x1C260 & 0x1831C - Reflection
-158110 - 0x18076 (Flood Reflection 6) - 0x17ECA & 0x1C260 & 0x1831C - Reflection
+158105 - 0x04D18 (Flood Room 1) - 0x1C260 & 0x1831C - Reflection
+158106 - 0x01205 (Flood Room 2) - 0x04D18 & 0x1C260 & 0x1831C - Reflection
+158107 - 0x181AB (Flood Room 3) - 0x01205 & 0x1C260 & 0x1831C - Reflection
+158108 - 0x0117A (Flood Room 4) - 0x181AB & 0x1C260 & 0x1831C - Reflection
+158109 - 0x17ECA (Flood Room 5) - 0x0117A & 0x1C260 & 0x1831C - Reflection
+158110 - 0x18076 (Flood Room 6) - 0x17ECA & 0x1C260 & 0x1831C - Reflection
 Door - 0x0C316 (Door to Elevator Room) - 0x18076
 
 Desert Elevator Room (Desert) - Desert Lowest Level Inbetween Shortcuts - 0x012FB:
-158111 - 0x17C31 (Final Transparent Reflection) - True - Reflection
-158113 - 0x012D7 (Final Reflection) - 0x17C31 & 0x0A015 - Reflection
-158114 - 0x0A015 (Final Reflection Control) - 0x17C31 - True
-158115 - 0x0A15C (Final Bent Reflection 1) - True - Reflection
-158116 - 0x09FFF (Final Bent Reflection 2) - 0x0A15C - Reflection
-158117 - 0x0A15F (Final Bent Reflection 3) - 0x09FFF - Reflection
+158111 - 0x17C31 (Final Transparent) - True - Reflection
+158113 - 0x012D7 (Final Hexagonal) - 0x17C31 & 0x0A015 - Reflection
+158114 - 0x0A015 (Final Hexagonal Control) - 0x17C31 - True
+158115 - 0x0A15C (Final Bent 1) - True - Reflection
+158116 - 0x09FFF (Final Bent 2) - 0x0A15C - Reflection
+158117 - 0x0A15F (Final Bent 3) - 0x09FFF - Reflection
 158701 - 0x03608 (Laser Panel) - 0x012D7 & 0x0A15F - True
 Laser - 0x012FB (Laser) - 0x03608
 
 Desert Lowest Level Inbetween Shortcuts (Desert):
 
 Outside Quarry (Quarry) - Main Island - True - Quarry Between Entry Doors - 0x09D6F:
-158118 - 0x09E57 (Door to Quarry 1 Panel) - True - Squares & Black/White Squares
+158118 - 0x09E57 (Entry Door 1 Panel) - True - Squares & Black/White Squares
 158120 - 0x17CC4 (Elevator Control) - 0x0367C - Dots & Eraser
 158603 - 0x17CF0 (Discard) - True - Triangles
 158702 - 0x03612 (Laser Panel) - 0x0A3D0 & 0x0367C - Eraser & Shapers
 Laser - 0x01539 (Laser) - 0x03612
-Door - 0x09D6F (Door to Quarry 1) - 0x09E57
+Door - 0x09D6F (Entry Door 1) - 0x09E57
 
 Quarry Between Entry Doors (Quarry) - Quarry - 0x17C07:
-158119 - 0x17C09 (Door to Quarry 2 Panel) - True - Shapers
-Door - 0x17C07 (Door to Quarry 2) - 0x17C09
+158119 - 0x17C09 (Entry Door 2 Panel) - True - Shapers
+Door - 0x17C07 (Entry Door 2) - 0x17C09
 
 Quarry (Quarry) - Quarry Mill Ground Floor - 0x02010:
 158121 - 0x01E5A (Door to Mill Left) - True - Squares & Black/White Squares

@@ -40,7 +40,7 @@ class StaticWitnessLocations:
 
         "Symmetry Island Right 5",
         "Symmetry Island Back 6",
-        "Symmetry Island Fading Lines 7",
+        "Symmetry Island Left 7",
         "Symmetry Island Scenery Outlines 5",
         "Symmetry Island Laser Panel",
 
@@ -48,10 +48,12 @@ class StaticWitnessLocations:
 
         "Desert Vault Box",
         "Desert Discard",
-        "Desert Sun Reflection 8",
-        "Desert Artificial Light Reflection 3",
-        "Desert Pond Reflection 5",
-        "Desert Flood Reflection 6",
+        "Desert Surface 8",
+        "Desert Light Room 3",
+        "Desert Pond Room 5",
+        "Desert Flood Room 6",
+        "Desert Final Bent 3",
+        "Desert Final Hexagonal",
         "Desert Laser Panel",
 
         "Quarry Mill Eraser and Dots 6",
