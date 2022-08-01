@@ -82,8 +82,8 @@ class DropPrize(Enum):
     Fairy = 0xE3
 
 class Patch:
-    Major = 0
-    Minor = 1
+    Major = 11
+    Minor = 3
     allWorlds: List[World]
     myWorld: World
     seedGuid: str

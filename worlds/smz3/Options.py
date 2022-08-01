@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, Option
+from Options import Choice, Option, Toggle, DefaultOnToggle
 
 class SMLogic(Choice):
     """This option selects what kind of logic to use for item placement inside
@@ -55,9 +55,78 @@ class KeyShuffle(Choice):
     option_Keysanity = 1
     default = 0
 
+class OpenTower(Choice):
+    display_name = "Open Tower"
+    option_NoCrystals = 0
+    option_OneCrystal = 1
+    option_TwoCrystals = 2
+    option_ThreeCrystals = 3
+    option_FourCrystals = 4
+    option_FiveCrystals = 5
+    option_SixCrystals = 6
+    option_SevenCrystals = 7
+    default = 7
+
+class GanonVulnerable(Choice):
+    display_name = "Ganon Vulnerable"
+    option_NoCrystals = 0
+    option_OneCrystal = 1
+    option_TwoCrystals = 2
+    option_ThreeCrystals = 3
+    option_FourCrystals = 4
+    option_FiveCrystals = 5
+    option_SixCrystals = 6
+    option_SevenCrystals = 7
+    default = 7
+
+class OpenTourian(Choice):
+    display_name = "Open Tourian"
+    option_NoBosses = 0
+    option_OneBoss = 1
+    option_TwoBosses = 2
+    option_ThreeBosses = 3
+    option_FourBosses = 4
+    default = 4
+
+class SpinJumpsAnimation(Toggle):
+    """Enable separate space/screw jump animations"""
+    display_name = "Spin Jumps Animation"
+
+class HeartBeepSpeed(Choice):
+    display_name = "Heart Beep Speed"
+    option_Off = 0
+    option_Quarter = 1
+    option_Half = 2
+    option_Normal = 3
+    option_Double = 4
+    default = 3
+
+class HeartColor(Choice):
+    display_name = "Heart Color"
+    option_Red = 0
+    option_Green = 1
+    option_Blue = 2
+    option_Yellow = 3
+    default = 0
+
+class QuickSwap(Toggle):
+    display_name = "Quick Swap"
+
+class EnergyBeep(DefaultOnToggle):
+    display_name = "Energy Beep"
+
+
 smz3_options: typing.Dict[str, type(Option)] = {
     "sm_logic": SMLogic,
     "sword_location": SwordLocation,
     "morph_location": MorphLocation,
-    "key_shuffle": KeyShuffle
+    "key_shuffle": KeyShuffle,
+    "open_tower": OpenTower, 
+    "ganon_vulnerable": GanonVulnerable,
+    "open_tourian": OpenTourian,
+    "spin_jumps_animation": SpinJumpsAnimation,
+    "heart_beep_speed": HeartBeepSpeed,
+    "heart_color": HeartColor, 
+    "quick_swap": QuickSwap,
+    "energy_beep": EnergyBeep
     }

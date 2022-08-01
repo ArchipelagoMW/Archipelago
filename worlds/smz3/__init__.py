@@ -12,7 +12,7 @@ from worlds.smz3.TotalSMZ3.Item import ItemType
 import worlds.smz3.TotalSMZ3.Item as TotalSMZ3Item
 from worlds.smz3.TotalSMZ3.World import World as TotalSMZ3World
 from worlds.smz3.TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
-from worlds.smz3.TotalSMZ3.Config import Config, GameMode, Goal, KeyShuffle, MorphLocation, SMLogic, SwordLocation, Z3Logic
+from worlds.smz3.TotalSMZ3.Config import Config, GameMode, Goal, KeyShuffle, MorphLocation, SMLogic, SwordLocation, Z3Logic, OpenTower, GanonVulnerable, OpenTourian
 from worlds.smz3.TotalSMZ3.Location import LocationType, locations_start_id, Location as TotalSMZ3Location
 from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
 from worlds.smz3.TotalSMZ3.WorldState import WorldState
@@ -189,6 +189,9 @@ class SMZ3World(World):
         self.config.MorphLocation = MorphLocation(self.world.morph_location[self.player].value)
         self.config.Goal = Goal.DefeatBoth
         self.config.KeyShuffle = KeyShuffle(self.world.key_shuffle[self.player].value)
+        self.config.OpenTower = OpenTower(self.world.open_tower[self.player].value)
+        self.config.GanonVulnerable = GanonVulnerable(self.world.ganon_vulnerable[self.player].value)
+        self.config.OpenTourian = OpenTourian(self.world.open_tourian[self.player].value)
 
         self.local_random = random.Random(self.world.random.randint(0, 1000))
         self.smz3World = TotalSMZ3World(self.config, self.world.get_player_name(self.player), self.player, self.world.seed_name)
@@ -352,6 +355,49 @@ class SMZ3World(World):
                 
         return patch
 
+    def SnesCustomization(self, addr: int):
+        addr = (0x400000 if addr < 0x800000 else 0)| (addr & 0x3FFFFF)
+        return addr
+
+    def apply_customization(self):
+        patch = {}
+
+        # smSpinjumps
+        if (self.world.spin_jumps_animation[self.player].value == 1):
+            patch[self.SnesCustomization(0x9B93FE)] = bytearray([0x01])
+
+        # z3HeartBeep
+        values =    [ 0x00, 0x80, 0x40, 0x20, 0x10]
+        index = self.world.heart_beep_speed[self.player].value
+        patch[0x400033] = bytearray([values[index if index < len(values) else 2]])
+
+        # z3HeartColor
+        values =    [
+                        [0x24, [0x18, 0x00]],
+                        [0x3C, [0x04, 0x17]],
+                        [0x2C, [0xC9, 0x69]],
+                        [0x28, [0xBC, 0x02]]
+                    ]
+        index = self.world.heart_color[self.player].value
+        (hud, fileSelect) = values[index if index < len(values) else 0]
+        for i in range(0, 20, 2):
+            patch[self.SnesCustomization(0xDFA1E + i)] = bytearray([hud])
+        patch[self.SnesCustomization(0x1BD6AA)] = bytearray(fileSelect)
+
+        # z3QuickSwap
+        patch[0x40004B] = bytearray([0x01 if self.world.quick_swap[self.player].value else 0x00])
+
+        # smEnergyBeepOff
+        if (self.world.energy_beep[self.player].value == 0):
+            for ([addr, value]) in [
+                            [0x90EA9B, 0x80],
+                            [0x90F337, 0x80],
+                            [0x91E6D5, 0x80]
+                        ]:
+                patch[self.SnesCustomization(addr)] = bytearray([value])
+
+        return patch
+
     def generate_output(self, output_directory: str):
         try:
             base_combined_rom = get_base_rom_bytes()
@@ -368,6 +414,7 @@ class SMZ3World(World):
             patches = patcher.Create(self.smz3World.Config)
             patches.update(self.apply_sm_custom_sprite())
             patches.update(self.apply_item_names())
+            patches.update(self.apply_customization())
             for addr, bytes in patches.items():
                 offset = 0
                 for byte in bytes:
