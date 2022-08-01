@@ -101,9 +101,9 @@ sm_options:
   # Alternatively, a path to a program to open the .sfc file with
   rom_start: true
 factorio_options:
-  executable: "factorio\\bin\\x64\\factorio"
+  executable: "factorio/bin/x64/factorio"
   # by default, no settings are loaded if this file does not exist.  If this file does exist, then it will be used.
-  server_settings: "factorio\\data\\server-settings.json"
+  # server_settings: "factorio\\data\\server-settings.json"
 minecraft_options: 
   forge_directory: "Minecraft Forge server"
   max_heap_size: "2G"

@@ -224,7 +224,6 @@ def get_default_options() -> dict:
         },
         "factorio_options": {
             "executable": os.path.join("factorio", "bin", "x64", "factorio"),
-            "server_settings": os.path.join("factorio", "data", "server-settings.json"),
         },
         "sm_options": {
             "rom_file": "Super Metroid (JU).sfc",

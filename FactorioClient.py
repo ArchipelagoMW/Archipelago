@@ -411,8 +411,9 @@ if __name__ == '__main__':
     factorio_server_logger = logging.getLogger("FactorioServer")
     options = Utils.get_options()
     executable = options["factorio_options"]["executable"]
-    server_settings = args.server_settings if args.server_settings else options["factorio_options"]["server_settings"]
-    server_settings = os.path.abspath(server_settings)
+    server_settings = args.server_settings if args.server_settings else options["factorio_options"].get("server_settings", None)
+    if server_settings:
+        server_settings = os.path.abspath(server_settings)
 
     if not os.path.exists(os.path.dirname(executable)):
         raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")
@@ -424,7 +425,7 @@ if __name__ == '__main__':
         else:
             raise FileNotFoundError(f"Path {executable} is not an executable file.")
 
-    if os.path.isfile(server_settings):
+    if server_settings and os.path.isfile(server_settings):
         server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password, "--server-settings", server_settings, *rest)
     else:
         server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password, *rest)
