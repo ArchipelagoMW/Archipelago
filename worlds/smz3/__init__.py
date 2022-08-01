@@ -10,6 +10,7 @@ from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassi
 from worlds.generic.Rules import set_rule
 import worlds.smz3.TotalSMZ3.Item as TotalSMZ3Item
 from worlds.smz3.TotalSMZ3.World import World as TotalSMZ3World
+from worlds.smz3.TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
 from worlds.smz3.TotalSMZ3.Config import Config, GameMode, GanonInvincible, Goal, KeyShuffle, MorphLocation, SMLogic, SwordLocation, Z3Logic
 from worlds.smz3.TotalSMZ3.Location import LocationType, locations_start_id, Location as TotalSMZ3Location
 from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
@@ -67,6 +68,8 @@ class SMZ3World(World):
 
     remote_items: bool = False
     remote_start_inventory: bool = False
+
+    locationNamesGT: Set[str] = {loc.Name for loc in GanonsTower(None, None).Locations}
 
     # first added for 0.2.6
     required_client_version = (0, 2, 6)
@@ -364,6 +367,7 @@ class SMZ3World(World):
                         item.item.Progression = False
                         item.location.event = False
                         self.unreachable.append(item.location)
+        self.JunkFillGT()
 
     def get_pre_fill_items(self):
         if (not self.smz3World.Config.Keysanity):
@@ -376,6 +380,23 @@ class SMZ3World(World):
 
     def write_spoiler(self, spoiler_handle: TextIO):
             self.world.spoiler.unreachables.update(self.unreachable)
+
+    def JunkFillGT(self):
+        for loc in self.locations.values():
+            if loc.name in self.locationNamesGT and loc.item is None:
+                poolLength = len(self.world.itempool)
+                # start looking at a random starting index and loop at start if no match found
+                for i in range(self.world.random.randint(0, poolLength), poolLength):
+                    if not self.world.itempool[i].advancement:
+                        itemFromPool = self.world.itempool.pop(i)
+                        break
+                else:
+                    for i in range(0, poolLength):
+                        if not self.world.itempool[i].advancement:
+                            itemFromPool = self.world.itempool.pop(i)
+                            break
+                self.world.push_item(loc, itemFromPool, False)
+                loc.event = False
 
     def FillItemAtLocation(self, itemPool, itemType, location):
         itemToPlace = TotalSMZ3Item.Item.Get(itemPool, itemType, self.smz3World)
@@ -401,7 +422,7 @@ class SMZ3World(World):
             raise Exception(f"Tried to front fill {item.Name} in, but no location was available")
         
         location.Item = item
-        itemFromPool = next((i for i in self.world.itempool if i.player == self.player and i.name == item.Type.name), None)
+        itemFromPool = next((i for i in self.world.itempool if i.player == self.player and i.name == item.Type.name and i.advancement == item.Progression), None)
         if itemFromPool is not None:
             self.world.get_location(location.Name, self.player).place_locked_item(itemFromPool)
             self.world.itempool.remove(itemFromPool)
