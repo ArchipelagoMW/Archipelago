@@ -3,7 +3,7 @@ import copy
 import os
 import random
 import threading
-from typing import Dict, Set, TextIO
+from typing import Dict, Set, TextIO, Optional
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, RegionType, CollectionState, \
     Tutorial
@@ -573,8 +573,10 @@ class SMZ3Location(Location):
 
 class SMZ3Item(Item):
     game = "SMZ3"
+    type: ItemType
+    item = None
 
-    def __init__(self, name, classification, type, code, player: int = None, item=None):
+    def __init__(self, name, classification, type: ItemType, code, player: int = None, item=None):
+        super(SMZ3Item, self).__init__(name, classification, code, player)
         self.type = type
         self.item = item
-        super(SMZ3Item, self).__init__(name, classification, code, player)

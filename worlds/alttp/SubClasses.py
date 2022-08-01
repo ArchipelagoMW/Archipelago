@@ -18,20 +18,18 @@ class ALttPLocation(Location):
 
 class ALttPItem(Item):
     game: str = "A Link to the Past"
+    type: Optional[str]
+    _pedestal_hint_text: Optional[str]
+    _hint_text: Optional[str] = None
     dungeon = None
 
-    def __init__(self, name, player, classification=ItemClassification.filler, type=None, item_code=None, pedestal_hint=None,
-                 pedestal_credit=None, sick_kid_credit=None, zora_credit=None, witch_credit=None,
-                 flute_boy_credit=None, hint_text=None):
+    def __init__(self, name, player, classification=ItemClassification.filler, type=None, item_code=None,
+                 pedestal_hint=None, **kwargs):
         super(ALttPItem, self).__init__(name, classification, item_code, player)
         self.type = type
         self._pedestal_hint_text = pedestal_hint
-        self.pedestal_credit_text = pedestal_credit
-        self.sickkid_credit_text = sick_kid_credit
-        self.zora_credit_text = zora_credit
-        self.magicshop_credit_text = witch_credit
-        self.fluteboy_credit_text = flute_boy_credit
-        self._hint_text = hint_text
+        if "hint_text" in kwargs:
+            self._hint_text = kwargs["hint_text"]
 
     @property
     def crystal(self) -> bool:

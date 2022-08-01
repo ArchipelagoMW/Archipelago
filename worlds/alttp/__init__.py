@@ -124,6 +124,17 @@ class ALTTPWorld(World):
     required_client_version = (0, 3, 2)
     web = ALTTPWeb()
 
+    pedestal_credit_texts: typing.Dict[int, str] = \
+        {data.item_code: data.pedestal_credit for data in item_table.values() if data.pedestal_credit}
+    sickkid_credit_texts: typing.Dict[int, str] = \
+        {data.item_code: data.sick_kid_credit for data in item_table.values() if data.sick_kid_credit}
+    zora_credit_texts: typing.Dict[int, str] = \
+        {data.item_code: data.zora_credit for data in item_table.values() if data.zora_credit}
+    magicshop_credit_texts: typing.Dict[int, str] = \
+        {data.item_code: data.witch_credit for data in item_table.values() if data.witch_credit}
+    fluteboy_credit_texts: typing.Dict[int, str] = \
+        {data.item_code: data.flute_boy_credit for data in item_table.values() if data.flute_boy_credit}
+
     set_rules = set_rules
 
     create_items = generate_itempool

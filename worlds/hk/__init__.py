@@ -629,8 +629,9 @@ class HKLocation(Location):
 
 class HKItem(Item):
     game = "Hollow Knight"
+    type: str
 
-    def __init__(self, name, advancement, code, type, player: int = None):
+    def __init__(self, name, advancement, code, type: str, player: int = None):
         if name == "Mimic_Grub":
             classification = ItemClassification.trap
         elif type in ("Grub", "DreamWarrior", "Root", "Egg"):
