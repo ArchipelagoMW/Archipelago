@@ -24,7 +24,7 @@ def ap_id_to_oot_data(ap_id):
 
 class OOTItem(Item):
     game: str = "Ocarina of Time"
-    type: typing.Optional[str] = None
+    type: str
 
     def __init__(self, name, player, data, event, force_not_advancement):
         (type, advancement, index, special) = data
