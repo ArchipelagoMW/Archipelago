@@ -396,6 +396,15 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
                     return get_choice(option_key, category_dict)
                 else:
                     return category_dict[option_key]
+    if game == "A Link to the Past":  # TODO wow i hate this
+        if option_key in {"glitches_required", "dark_room_logic", "entrance_shuffle", "goals", "triforce_pieces_mode",
+                          "triforce_pieces_percentage", "triforce_pieces_available", "triforce_pieces_extra",
+                          "triforce_pieces_required", "shop_shuffle", "mode", "item_pool", "item_functionality",
+                          "boss_shuffle", "enemy_damage", "enemy_health", "timer", "countdown_start_time",
+                          "red_clock_time", "blue_clock_time", "green_clock_time", "dungeon_counters", "shuffle_prizes",
+                          "misery_mire_medallion", "turtle_rock_medallion", "sprite_pool", "sprite",
+                          "random_sprite_on_event"}:
+            return get_choice(option_key, category_dict)
     raise Exception(f"Error generating meta option {option_key} for {game}.")
 
 
