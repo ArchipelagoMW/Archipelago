@@ -461,30 +461,37 @@ class Palette(Choice):
 
 
 class OWPalette(Palette):
+    """Determines the type of palette to be used for the overworld backgrounds."""
     display_name = "Overworld Palette"
 
 
 class UWPalette(Palette):
+    """Determines the type of palette to be used for the underworld/dungeon backgrounds."""
     display_name = "Underworld Palette"
 
 
 class HUDPalette(Palette):
+    """Determines the type of palette to be used for the menu and HUD elements."""
     display_name = "Menu Palette"
 
 
 class SwordPalette(Palette):
+    """Determines the type of palette to be used for Link's sword."""
     display_name = "Sword Palette"
 
 
 class ShieldPalette(Palette):
+    """Determines the type of palette to be used for Link's Shield."""
     display_name = "Shield Palette"
 
 
 class LinkPalette(Palette):
+    """Determines the type of palette to be used for Link's Clothes. Not supported by all sprites."""
     display_name = "Link Palette"
 
 
 class HeartBeep(Choice):
+    """Determines the speed of the heart beep sound effect."""
     display_name = "Heart Beep Rate"
     option_normal = 0
     option_double = 1
@@ -495,6 +502,7 @@ class HeartBeep(Choice):
 
 
 class HeartColor(Choice):
+    """Sets colors of hearts representing your current health."""
     display_name = "Heart Color"
     option_red = 0
     option_blue = 1
@@ -503,10 +511,12 @@ class HeartColor(Choice):
 
 
 class QuickSwap(DefaultOnToggle):
+    """Allows swapping between items with the L/R buttons without opening the menu."""
     display_name = "L/R Quickswapping"
 
 
 class MenuSpeed(Choice):
+    """Determines the speed at which the menu opens and closes."""
     display_name = "Menu Speed"
     option_normal = 0
     option_instant = 1,
@@ -517,6 +527,7 @@ class MenuSpeed(Choice):
 
 
 # TODO this is a bad way to do this. maybe turn enabled into a toggle then the rest of these into an Optionlist?
+# not adding to the options dict until putting together a better solution.
 class RandomSprite(OptionDict):
     """Allows different random sprite events to be simultaneously enabled."""
     display_name = "Random Sprite On Event"
@@ -596,6 +607,7 @@ class SpritePool(OptionList):
 
 # # TODO obviously waiting on the freetext options
 # class Sprite(TextChoice):
+#   """Allows you to either specify which sprite you'd like to use or use a random on event option with the sprite pool."""
 #     valid_keys = SpritePool.valid_keys
 #     option_link = 0
 #     option_random_on_hit = 1
@@ -615,19 +627,25 @@ class SpritePool(OptionList):
 #
 
 class Music(DefaultOnToggle):
+    """If music is played in the game."""
     display_name = "Play music"
 
 
 class ReduceFlashing(DefaultOnToggle):
+    """If screen flashing should be reduced for certain events such as wall opening animations and misery mire
+    opening."""
     display_name = "Reduce Screen Flashes"
 
 
 class TriforceHud(Choice):
+    """How the HUD for Triforce Hunt modes should appear. Goal shows the full counter once a piece is collected
+    or Murahadala is spoken to."""
     display_name = "Display Method for Triforce Hunt"
-    option_normal = 0
+    option_always_show = 0
     option_hide_goal = 1
     option_hide_required = 2
     option_hide_both = 3
+    alias_normal = option_always_show
 
 
 class BeemizerRange(Range):
