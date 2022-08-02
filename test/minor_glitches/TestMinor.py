@@ -23,6 +23,8 @@ class TestMinor(TestBase):
         self.world.set_options(args)
         self.world.set_default_common_options()
         setattr(self.world, "glitches_required", {1: Logic(Logic.option_minor_glitches)})
+        setattr(self.world, "misery_mire_medallion", {1: MireMedallion(MireMedallion.option_ether)})
+        setattr(self.world, "turtle_rock_medallion", {1: TurtleMedallion(TurtleMedallion.option_quake)})
         self.world.difficulty_requirements[1] = difficulties['normal']
         create_regions(self.world, 1)
         create_dungeons(self.world, 1)

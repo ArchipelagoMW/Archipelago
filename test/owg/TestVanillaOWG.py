@@ -8,7 +8,6 @@ from worlds.alttp.ItemPool import difficulties, generate_itempool
 from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import create_regions
 from worlds.alttp.Shops import create_shops
-from worlds.alttp.Rules import set_rules
 from test.TestBase import TestBase
 from worlds.alttp.Options import Logic, MireMedallion, TurtleMedallion
 
@@ -24,7 +23,7 @@ class TestVanillaOWG(TestBase):
         self.world.set_options(args)
         self.world.set_default_common_options()
         self.world.difficulty_requirements[1] = difficulties['normal']
-        setattr(self.world, "logic", {1: Logic(Logic.alias_owg)})
+        setattr(self.world, "glitches_required", {1: Logic(Logic.alias_owg)})
         setattr(self.world, "misery_mire_medallion", {1: MireMedallion(MireMedallion.option_ether)})
         setattr(self.world, "turtle_rock_medallion", {1: TurtleMedallion(TurtleMedallion.option_quake)})
         create_regions(self.world, 1)
