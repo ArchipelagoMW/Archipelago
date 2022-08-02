@@ -26,7 +26,7 @@ Menu points:
  - PlayerName: your name in the multiworld. Can also be called Slot Name and is the name you entered when creating your settings.
  - Password: optional password, leave blank if no password was set.
 
-After the connection is made, start a new game, you should start to see Archipelago chat messages to appear, such as a message announcing that you joined the multiworld.
+After the connection is made, start a new game. You should start to see Archipelago chat messages to appear, such as a message announcing that you joined the multiworld.
 
 ## Resuming
 
