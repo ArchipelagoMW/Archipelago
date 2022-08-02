@@ -249,6 +249,11 @@ class WorldState(Choice):
     option_standard = 1
     option_open = 0
     option_inverted = 2
+    default = option_open
+
+    @property
+    def inverted(self) -> bool:
+        return self.value == self.option_inverted
 
 
 class Medallions(Choice):

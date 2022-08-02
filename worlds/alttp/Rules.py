@@ -45,14 +45,14 @@ def set_rules(world):
     global_rules(world, player)
     dungeon_boss_rules(world, player)
 
-    if world.world_state[player] != WorldState.option_inverted:
+    if not world.world_state[player].inverted:
         default_rules(world, player)
 
     if world.world_state[player] == WorldState.option_open:
         open_rules(world, player)
     elif world.world_state[player] == WorldState.option_standard:
         standard_rules(world, player)
-    elif world.world_state[player] == WorldState.option_inverted:
+    elif world.world_state[player].inverted:
         open_rules(world, player)
         inverted_rules(world, player)
     else:
@@ -78,7 +78,7 @@ def set_rules(world):
         # require aga2 to beat ganon
         add_rule(world.get_location('Ganon', player), lambda state: state.has('Beat Agahnim 2', player))
 
-    if world.world_state[player] != WorldState.option_inverted:
+    if not world.world_state[player].inverted:
         set_big_bomb_rules(world, player)
         if player_logic in {major_glitches, hybrid_glitches, no_logic} and world.shuffle[player] not in {'insanity', 'insanity_legacy', 'madness'}:
             path_to_courtyard = mirrorless_path_to_castle_courtyard(world, player)
@@ -99,10 +99,10 @@ def set_rules(world):
     set_trock_key_rules(world, player)
 
     set_rule(ganons_tower, lambda state: state.has_crystals(state.world.crystals_needed_for_gt[player], player))
-    if world.world_state[player] != WorldState.option_inverted and player_logic in [major_glitches, hybrid_glitches, no_logic]:
+    if not world.world_state[player].inverted and player_logic in [major_glitches, hybrid_glitches, no_logic]:
         add_rule(world.get_entrance('Ganons Tower', player), lambda state: state.world.get_entrance('Ganons Tower Ascent', player).can_reach(state), 'or')
 
-    set_bunny_rules(world, player, world.world_state[player] == WorldState.option_inverted)
+    set_bunny_rules(world, player, world.world_state[player].inverted)
 
 
 def mirrorless_path_to_castle_courtyard(world, player):
@@ -672,7 +672,7 @@ def inverted_rules(world, player):
 
 def no_glitches_rules(world, player):
     """"""
-    if world.world_state[player] == WorldState.option_inverted:
+    if world.world_state[player].inverted:
         set_rule(world.get_entrance('Zoras River', player), lambda state: state.has('Moon Pearl', player) and (state.has('Flippers', player) or state.can_lift_rocks(player)))
         set_rule(world.get_entrance('Lake Hylia Central Island Pier', player), lambda state: state.has('Moon Pearl', player) and state.has('Flippers', player))  # can be fake flippered to
         set_rule(world.get_entrance('Lake Hylia Island Pier', player), lambda state: state.has('Moon Pearl', player) and state.has('Flippers', player))  # can be fake flippered to
@@ -697,7 +697,7 @@ def no_glitches_rules(world, player):
     add_conditional_lamps(world, player)
 
 def fake_flipper_rules(world, player):
-    if world.world_state[player] == WorldState.option_inverted:
+    if world.world_state[player].inverted:
         set_rule(world.get_entrance('Zoras River', player), lambda state: state.has('Moon Pearl', player))
         set_rule(world.get_entrance('Lake Hylia Central Island Pier', player), lambda state: state.has('Moon Pearl', player))
         set_rule(world.get_entrance('Lake Hylia Island Pier', player), lambda state: state.has('Moon Pearl', player))
@@ -775,7 +775,7 @@ def add_conditional_lamps(world, player):
                          'Location', True)
     add_conditional_lamp('Palace of Darkness - Dark Basement - Right', 'Palace of Darkness (Entrance)',
                          'Location', True)
-    if world.world_state[player] != WorldState.option_inverted:
+    if not world.world_state[player].inverted:
         add_conditional_lamp('Agahnim 1', 'Agahnims Tower', 'Entrance')
         add_conditional_lamp('Castle Tower - Dark Maze', 'Agahnims Tower')
     else:
@@ -811,7 +811,7 @@ def swordless_rules(world, player):
     set_rule(world.get_entrance('Ice Palace Entrance Room', player), lambda state: state.has('Fire Rod', player) or state.has('Bombos', player)) #in swordless mode bombos pads are present in the relevant parts of ice palace
     set_rule(world.get_entrance('Ganon Drop', player), lambda state: state.has('Hammer', player))  # need to damage ganon to get tiles to drop
 
-    if world.world_state[player] != WorldState.option_inverted:
+    if not world.world_state[player].inverted:
         set_rule(world.get_entrance('Agahnims Tower', player), lambda state: state.has('Cape', player) or state.has('Hammer', player) or state.has('Beat Agahnim 1', player))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
         set_rule(world.get_entrance('Turtle Rock', player), lambda state: state.has('Moon Pearl', player) and state.has_turtle_rock_medallion(player) and state.can_reach('Turtle Rock (Top)', 'Region', player))   # sword not required to use medallion for opening in swordless (!)
         set_rule(world.get_entrance('Misery Mire', player), lambda state: state.has('Moon Pearl', player) and state.has_misery_mire_medallion(player))  # sword not required to use medallion for opening in swordless (!)
