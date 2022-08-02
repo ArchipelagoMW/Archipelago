@@ -7,7 +7,7 @@ import urllib.request
 import urllib.parse
 from typing import Set, Dict, Tuple, Callable, Any, Union
 import os
-from collections import Counter
+from collections import Counter, ChainMap
 import string
 import enum
 
@@ -132,8 +132,10 @@ def main(args=None, callback=ERmain):
         except Exception as e:
             raise ValueError(f"File {args.meta_file_path} is destroyed. Please fix your yaml.") from e
         print(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights)}")
-        if "meta_description" in meta_weights:
+        try:  # meta description allows us to verify that the file named meta.yaml is intentionally a meta file
             del(meta_weights["meta_description"])
+        except Exception as e:
+            raise ValueError("No meta description found for meta.yaml. Unable to verify.") from e
         if args.samesettings:
             raise Exception("Cannot mix --samesettings with --meta")
     else:
@@ -209,8 +211,6 @@ def main(args=None, callback=ERmain):
     player = 1
     while player <= args.multi:
         path = player_path_cache[player]
-        if path == args.meta_file_path:
-            continue
         if path:
             try:
                 settings: Tuple[argparse.Namespace, ...] = settings_cache[path] if settings_cache[path] else \
@@ -390,12 +390,12 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
     if not game:
         return get_choice(option_key, category_dict)
     if game in AutoWorldRegister.world_types:
-        for key, option in AutoWorldRegister.world_types[game].options.items() | Options.per_game_common_options.items():
-            if option_key == key:
-                if option.supports_weighting:
-                    return get_choice(option_key, category_dict)
-                else:
-                    return category_dict[option_key]
+        game_world = AutoWorldRegister.world_types[game]
+        options = ChainMap(game_world.options, Options.per_game_common_options)
+        if option_key in options:
+            if options[option_key].supports_weighting:
+                return get_choice(option_key, category_dict)
+            return options[option_key]
     if game == "A Link to the Past":  # TODO wow i hate this
         if option_key in {"glitches_required", "dark_room_logic", "entrance_shuffle", "goals", "triforce_pieces_mode",
                           "triforce_pieces_percentage", "triforce_pieces_available", "triforce_pieces_extra",
