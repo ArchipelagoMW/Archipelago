@@ -39,5 +39,5 @@ Warning: Currently it is not checked if this is the correct multiworld belonging
 
 If you don't see the connect window check that you see a qmodmanager_log-Subnautica.txt in Subnautica, if not
 QModManager4 is not correctly installed, otherwise open it and look
-for `[Info   :   BepInEx] Loading [Archipelago 1.1.0.0]`, version number doesn't matter. If it doesn't show this, then
+for `[Info   :   BepInEx] Loading [Archipelago`. If it doesn't show this, then
 QModManager4 didn't find the Archipelago mod, so check your paths.
