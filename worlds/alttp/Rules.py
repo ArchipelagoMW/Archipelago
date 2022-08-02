@@ -18,9 +18,9 @@ no_glitches = Logic.option_no_glitches
 
 
 def set_rules(world):
-    player_logic = world.world.glitches_required[world.player].value
     player = world.player
     world = world.world
+    player_logic = world.glitches_required[player].value
     if player_logic == no_logic:
         if player == next(player_id for player_id in world.get_game_players("A Link to the Past")
                           if player_logic == no_logic):  # only warn one time
@@ -58,24 +58,18 @@ def set_rules(world):
     else:
         raise NotImplementedError(f'World state {world.world_state[player]} is not implemented yet')
 
-    if player_logic == no_glitches:
-        no_glitches_rules(world, player)
+    no_glitches_rules(world, player)
+    if player_logic == minor_glitches:
+        fake_flipper_rules(world, player)
     elif player_logic == major_glitches:
         # Initially setting no_glitches_rules to set the baseline rules for some
         # entrances. The overworld_glitches_rules set is primarily additive.
-        no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
         overworld_glitches_rules(world, player)
     elif player_logic in [hybrid_glitches, no_logic]:
-        no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
         overworld_glitches_rules(world, player)
         underworld_glitches_rules(world, player)
-    elif player_logic == minor_glitches:
-        no_glitches_rules(world, player)
-        fake_flipper_rules(world, player)
-    else:
-        raise NotImplementedError(f'Not implemented yet: Logic - {player_logic}')
 
     if world.goal[player] == 'bosses':
         # require all bosses to beat ganon
@@ -519,7 +513,7 @@ def default_rules(world, player):
     set_rule(world.get_entrance('Floating Island Mirror Spot', player), lambda state: state.has('Magic Mirror', player))
     set_rule(world.get_entrance('Turtle Rock', player), lambda state: state.has('Moon Pearl', player) and state.has_sword(player) and state.has_turtle_rock_medallion(player) and state.can_reach('Turtle Rock (Top)', 'Region', player))  # sword required to cast magic (!)
 
-    set_rule(world.get_entrance('Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid[player])
+    set_rule(world.get_entrance('Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid[player].to_bool(world, player))
 
     if world.swordless[player]:
         swordless_rules(world, player)
@@ -671,7 +665,7 @@ def inverted_rules(world, player):
     set_rule(world.get_entrance('Dark Grassy Lawn Flute', player), lambda state: state.has('Activated Flute', player))
     set_rule(world.get_entrance('Hammer Peg Area Flute', player), lambda state: state.has('Activated Flute', player))
 
-    set_rule(world.get_entrance('Inverted Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid[player])
+    set_rule(world.get_entrance('Inverted Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid[player].to_bool(world, player))
 
     if world.swordless[player]:
         swordless_rules(world, player)

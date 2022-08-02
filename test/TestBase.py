@@ -48,7 +48,7 @@ class TestBase(unittest.TestCase):
             with self.subTest(msg="Reach Location", location=location, access=access, items=items,
                               all_except=all_except, path=path, entry=i):
 
-                self.assertEqual(self.world.get_location(location, 1).can_reach(state), access)
+                self.assertEqual(access, self.world.get_location(location, 1).can_reach(state))
 
             # check for partial solution
             if not all_except and access:  # we are not supposed to be able to reach location with partial inventory

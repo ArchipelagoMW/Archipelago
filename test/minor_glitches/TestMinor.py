@@ -22,7 +22,7 @@ class TestMinor(TestBase):
             setattr(args, name, {1: option.from_any(option.default)})
         self.world.set_options(args)
         self.world.set_default_common_options()
-        setattr(self.world, "logic", {1: Logic(Logic.option_minor_glitches)})
+        setattr(self.world, "glitches_required", {1: Logic(Logic.option_minor_glitches)})
         self.world.difficulty_requirements[1] = difficulties['normal']
         create_regions(self.world, 1)
         create_dungeons(self.world, 1)

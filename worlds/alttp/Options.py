@@ -12,6 +12,7 @@ class Logic(Choice):
     option_overworld_glitches = 2
     option_hybrid_major_glitches = 3
     option_no_logic = 4
+    alias_none = option_no_glitches
     alias_owg = 2
     alias_hmg = 3
 
@@ -48,14 +49,13 @@ class OpenPyramid(Choice):
     def to_bool(self, world: MultiWorld, player: int) -> bool:
         if self.value == self.option_goal:
             return world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
-        elif self.value == self.option_auto:
+        if self.value == self.option_auto:
             return world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'} \
             and (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'} or not
                  world.shuffle_ganon)
-        elif self.value == self.option_open:
+        if self.value == self.option_open:
             return True
-        else:
-            return False
+        return False
 
 
 class DungeonItem(Choice):
