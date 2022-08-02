@@ -7,7 +7,6 @@ from worlds.alttp.Options import Logic, WorldState
 
 def link_entrances(world, player):
     standard = world.world_state[player] == WorldState.option_standard
-    inverted = world.world_state[player] == WorldState.option_inverted
     connect_two_way(world, 'Links House', 'Links House Exit', player)  # unshuffled. For now
     connect_exit(world, 'Chris Houlihan Room Exit', 'Links House', player)  # should always match link's house, except for plandos
 
@@ -1093,9 +1092,9 @@ def link_entrances(world, player):
     if world.get_entrance('Ganons Tower', player).connected_region.name != 'Ganons Tower (Entrance)':
         world.ganonstower_vanilla[player] = False
 
-def link_inverted_entrances(world, player):
-    # Link's house shuffled freely, Houlihan set in mandatory_connections 
 
+def link_inverted_entrances(world, player):
+    # Link's house shuffled freely, Houlihan set in mandatory_connections
     Dungeon_Exits = Inverted_Dungeon_Exits_Base.copy()
     Cave_Exits = Cave_Exits_Base.copy()
     Old_Man_House = Old_Man_House_Base.copy()
@@ -1873,7 +1872,7 @@ def scramble_holes(world, player):
     else:
         hole_targets.append(('Pyramid Exit', 'Pyramid'))
 
-    if standard:
+    if world.world_state[player] == WorldState.option_standard:
         # cannot move uncle cave
         connect_two_way(world, 'Hyrule Castle Secret Entrance Stairs', 'Hyrule Castle Secret Entrance Exit', player)
         connect_entrance(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance', player)
@@ -2215,6 +2214,7 @@ def simple_shuffle_dungeons(world, player):
             connect_two_way(world, 'Dark Death Mountain Ledge (West)', 'Turtle Rock Ledge Exit (West)', player)
             connect_two_way(world, 'Dark Death Mountain Ledge (East)', 'Turtle Rock Ledge Exit (East)', player)
 
+
 def crossed_shuffle_dungeons(world, player: int):
     lw_entrances = LW_Dungeon_Entrances.copy()
     dw_entrances = DW_Dungeon_Entrances.copy()
@@ -2248,6 +2248,7 @@ def crossed_shuffle_dungeons(world, player: int):
 
     connect_caves(world, dungeon_entrances, [], dungeon_exits, player)
     assert not dungeon_exits , "make sure all exits are accounted for"
+
 
 def inverted_crossed_shuffle_dungeons(world, player: int):
 
@@ -2299,6 +2300,7 @@ def inverted_crossed_shuffle_dungeons(world, player: int):
 
     connect_caves(world, dungeon_entrances, [], dungeon_exits, player)
     assert not dungeon_exits, "make sure all exits are accounted for"
+
 
 def unbias_some_entrances(world, Dungeon_Exits, Cave_Exits, Old_Man_House, Cave_Three_Exits):
     def shuffle_lists_in_list(ls):
