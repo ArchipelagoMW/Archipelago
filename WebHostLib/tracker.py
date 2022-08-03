@@ -354,8 +354,8 @@ def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, wa
         return render_template(
             "trackers/" + player_tracker.template,
             all_progression_items=player_tracker.all_prog_items,
-            player=player_tracker.player,
-            team=player_tracker.team,
+            player=tracked_player,
+            team=tracked_team,
             room=player_tracker.room,
             player_name=player_tracker.name,
             checked_locations=sorted(player_tracker.checked_locations),
@@ -442,7 +442,7 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
                     item, recipient, flags = player_locations[location]
                     if recipient in slots_aimed_at_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
-                        
+
                     if ms_player == player:  # a check done by the tracked player
                         lttp_checks_done[location_to_area[location]] += 1
                         lttp_checks_done["Total"] += 1
@@ -524,7 +524,7 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
     }
 
     timespinner_location_ids = {
-        "Present": [ 
+        "Present": [
             1337000, 1337001, 1337002, 1337003, 1337004, 1337005, 1337006, 1337007, 1337008, 1337009,
             1337010, 1337011, 1337012, 1337013, 1337014, 1337015, 1337016, 1337017, 1337018, 1337019,
             1337020, 1337021, 1337022, 1337023, 1337024, 1337025, 1337026, 1337027, 1337028, 1337029,
@@ -545,20 +545,20 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
             1337150, 1337151, 1337152, 1337153, 1337154, 1337155,
                      1337171, 1337172, 1337173, 1337174, 1337175],
         "Ancient Pyramid": [
-                                                                  1337236, 
+                                                                  1337236,
                                                                   1337246, 1337247, 1337248, 1337249]
     }
 
     if(slot_data["DownloadableItems"]):
         timespinner_location_ids["Present"] += [
                                                                   1337156, 1337157,          1337159,
-            1337160, 1337161, 1337162, 1337163, 1337164, 1337165, 1337166, 1337167, 1337168, 1337169, 
+            1337160, 1337161, 1337162, 1337163, 1337164, 1337165, 1337166, 1337167, 1337168, 1337169,
             1337170]
     if(slot_data["Cantoran"]):
         timespinner_location_ids["Past"].append(1337176)
     if(slot_data["LoreChecks"]):
         timespinner_location_ids["Present"] += [
-                                                                           1337177, 1337178, 1337179, 
+                                                                           1337177, 1337178, 1337179,
             1337180, 1337181, 1337182, 1337183, 1337184, 1337185, 1337186, 1337187]
         timespinner_location_ids["Past"] += [
                                                                                     1337188, 1337189,
