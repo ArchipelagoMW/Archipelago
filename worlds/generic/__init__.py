@@ -1,7 +1,7 @@
 from typing import NamedTuple, Union
 import logging
 
-from BaseClasses import Item, Tutorial
+from BaseClasses import Item, Tutorial, ItemClassification
 
 from ..AutoWorld import World, WebWorld
 from NetUtils import SlotType
@@ -15,6 +15,8 @@ class GenericWeb(WebWorld):
     commands = Tutorial('Archipelago Server and Client Commands',
                         'A guide detailing the commands available to the user when participating in an Archipelago session.',
                         'English', 'commands_en.md', 'commands/en', ['jat2980', 'Ijwu'])
+    mac = Tutorial('Archipelago Setup Guide for Mac', 'A guide detailing how to run Archipelago clients on macOS.', 
+                   'English', 'mac_en.md','mac/en', ['Bicoloursnake'])
     plando = Tutorial('Archipelago Plando Guide', 'A guide to understanding and using plando for your game.',
                       'English', 'plando_en.md', 'plando/en', ['alwaysintreble', 'Alchav'])
     setup = Tutorial('Multiworld Setup Tutorial',
@@ -25,7 +27,7 @@ class GenericWeb(WebWorld):
     using_website = Tutorial('Archipelago Website User Guide',
                              'A guide to using the Archipelago website to generate multiworlds or host pre-generated multiworlds.',
                              'English', 'using_website_en.md', 'using_website/en', ['alwaysintreble'])
-    tutorials = [setup, using_website, commands, advanced_settings, triggers, plando]
+    tutorials = [setup, using_website, mac, commands, advanced_settings, triggers, plando]
 
 
 class GenericWorld(World):
@@ -46,7 +48,7 @@ class GenericWorld(World):
 
     def create_item(self, name: str) -> Item:
         if name == "Nothing":
-            return Item(name, False, -1, self.player)
+            return Item(name, ItemClassification.filler, -1, self.player)
         raise KeyError(name)
 
 

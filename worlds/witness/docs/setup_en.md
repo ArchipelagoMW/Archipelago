@@ -2,8 +2,8 @@
 
 ## Required Software
 
-- [The Witness (Steam)](https://store.steampowered.com/app/210970/The_Witness/)
-- [The Witness Archipelago Randomizer](https://github.com/JarnoWesthof/The-Witness-Randomizer-for-Archipelago/releases)
+- [The Witness for 64-bit Windows (e.g. Steam version)](https://store.steampowered.com/app/210970/The_Witness/)
+- [The Witness Archipelago Randomizer](https://github.com/Jarno458/The-Witness-Randomizer-for-Archipelago/releases)
 
 ## Optional Software
 
@@ -18,7 +18,7 @@ It is recommended to do every single one of these steps when you connect to a wo
 1. Launch The Witness
 2. Start a fresh save (unless you have absolutely no other choice)
 3. Do not move
-4. Launch [The Witness Archipelago Randomizer](https://github.com/JarnoWesthof/The-Witness-Randomizer-for-Archipelago)
+4. Launch [The Witness Archipelago Randomizer](https://github.com/Jarno458/The-Witness-Randomizer-for-Archipelago)
 5. Enter the Archipelago address, slot name and password
 6. Press "Randomize"
 7. Wait for the randomization to fully finish before moving in-game
@@ -38,4 +38,4 @@ The Witness has a fully functional map tracker that supports auto-tracking.
 3. Click on the "AP" symbol at the top.
 4. Enter the AP address, slot name and password. 
 
-The rest should take care of itself! Items and checks will be marked automatically, and it even knows your settings - It will hide checks & adjust logic accordingly.
+The rest should take care of itself! Items and checks will be marked automatically, and it even knows your settings - It will hide checks & adjust logic accordingly. Note that the tracker may be out of date.

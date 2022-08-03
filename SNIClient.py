@@ -20,7 +20,7 @@ import worlds.ff6wc
 import ModuleUpdate
 ModuleUpdate.update()
 
-from Utils import init_logging
+from Utils import init_logging, messagebox
 
 if __name__ == "__main__":
     init_logging("SNIClient", exception_logger="Client")
@@ -84,7 +84,10 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
             snes_device_number = int(options[1])
 
         self.ctx.snes_reconnect_address = None
-        asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number), name="SNES Connect")
+        if self.ctx.snes_connect_task:
+            self.ctx.snes_connect_task.cancel()
+        self.ctx.snes_connect_task =  asyncio.create_task(snes_connect(self.ctx, snes_address, snes_device_number),
+                                                          name="SNES Connect")
         return True
 
     def _cmd_snes_close(self) -> bool:
@@ -121,6 +124,7 @@ class Context(CommonContext):
     command_processor = SNIClientCommandProcessor
     game = "A Link to the Past"
     items_handling = None  # set in game_watcher
+    snes_connect_task: typing.Optional[asyncio.Task] = None
 
     def __init__(self, snes_address, server_address, password):
         super(Context, self).__init__(server_address, password)
@@ -186,6 +190,11 @@ class Context(CommonContext):
         elif self.death_state == DeathState.dead:
             if not currently_dead:
                 self.death_state = DeathState.alive
+
+    async def shutdown(self):
+        await super(Context, self).shutdown()
+        if self.snes_connect_task:
+            await self.snes_connect_task
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected", "RoomUpdate"}:
@@ -659,17 +668,18 @@ async def get_snes_devices(ctx: Context) -> typing.List[str]:
     }
     await socket.send(dumps(DeviceList_Request))
 
-    reply = loads(await socket.recv())
-    devices = reply['Results'] if 'Results' in reply and len(reply['Results']) > 0 else None
+    reply: dict = loads(await socket.recv())
+    devices: typing.List[str] = reply['Results'] if 'Results' in reply and len(reply['Results']) > 0 else []
 
     if not devices:
         snes_logger.info('No SNES device found. Please connect a SNES device to SNI.')
-        while not devices:
-            await asyncio.sleep(1)
+        while not devices and not ctx.exit_event.is_set():
+            await asyncio.sleep(0.1)
             await socket.send(dumps(DeviceList_Request))
             reply = loads(await socket.recv())
-            devices = reply['Results'] if 'Results' in reply and len(reply['Results']) > 0 else None
-    await verify_snes_app(socket)
+            devices = reply['Results'] if 'Results' in reply and len(reply['Results']) > 0 else []
+    if devices:
+        await verify_snes_app(socket)
     await socket.close()
     return sorted(devices)
 
@@ -889,7 +899,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
     def new_check(location_id):
         new_locations.append(location_id)
         ctx.locations_checked.add(location_id)
-        location = ctx.location_name_getter(location_id)
+        location = ctx.location_names[location_id]
         snes_logger.info(
             f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
 
@@ -1145,9 +1155,9 @@ async def game_watcher(ctx: Context):
                 item = ctx.items_received[recv_index]
                 recv_index += 1
                 logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                    color(ctx.item_name_getter(item.item), 'red', 'bold'),
+                    color(ctx.item_names[item.item], 'red', 'bold'),
                     color(ctx.player_names[item.player], 'yellow'),
-                    ctx.location_name_getter(item.location), recv_index, len(ctx.items_received)))
+                    ctx.location_names[item.location], recv_index, len(ctx.items_received)))
 
                 snes_buffered_write(ctx, RECV_PROGRESS_ADDR,
                                     bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
@@ -1202,7 +1212,7 @@ async def game_watcher(ctx: Context):
                 location_id = locations_start_id + itemIndex
 
                 ctx.locations_checked.add(location_id)
-                location = ctx.location_name_getter(location_id)
+                location = ctx.location_names[location_id]
                 snes_logger.info(
                     f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                 await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
@@ -1231,9 +1241,9 @@ async def game_watcher(ctx: Context):
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x602,
                                     bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
                 logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                    color(ctx.item_name_getter(item.item), 'red', 'bold'),
+                    color(ctx.item_names[item.item], 'red', 'bold'),
                     color(ctx.player_names[item.player], 'yellow'),
-                    ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
+                    ctx.location_names[item.location], itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
         elif ctx.game == GAME_SMZ3:
             currentGame = await snes_read(ctx, SRAM_START + 0x33FE, 2)
@@ -1274,7 +1284,7 @@ async def game_watcher(ctx: Context):
                 location_id = locations_start_id + itemIndex
 
                 ctx.locations_checked.add(location_id)
-                location = ctx.location_name_getter(location_id)
+                location = ctx.location_names[location_id]
                 snes_logger.info(f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                 await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
@@ -1295,8 +1305,8 @@ async def game_watcher(ctx: Context):
                 itemOutPtr += 1
                 snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x602, bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
                 logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                    color(ctx.item_name_getter(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
-                    ctx.location_name_getter(item.location), itemOutPtr, len(ctx.items_received)))
+                    color(ctx.item_names[item.item], 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
+                    ctx.location_names[item.location], itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
         elif ctx.game == GAME_FF6WC:
             location_index += 1
@@ -1438,7 +1448,11 @@ async def main():
     if args.diff_file:
         import Patch
         logging.info("Patch file was supplied. Creating sfc rom..")
-        meta, romfile = Patch.create_rom_file(args.diff_file)
+        try:
+            meta, romfile = Patch.create_rom_file(args.diff_file)
+        except Exception as e:
+            messagebox('Error', str(e), True)
+            raise
         if "server" in meta:
             args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
@@ -1464,7 +1478,7 @@ async def main():
         ctx.run_gui()
     ctx.run_cli()
 
-    snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address), name="SNES Connect")
+    ctx.snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address), name="SNES Connect")
     watcher_task = asyncio.create_task(game_watcher(ctx), name="GameWatcher")
 
     await ctx.exit_event.wait()
@@ -1473,15 +1487,12 @@ async def main():
     ctx.snes_reconnect_address = None
     if ctx.snes_socket is not None and not ctx.snes_socket.closed:
         await ctx.snes_socket.close()
-    if snes_connect_task:
-        snes_connect_task.cancel()
     await watcher_task
     await ctx.shutdown()
 
 
 def get_alttp_settings(romfile: str):
     lastSettings = Utils.get_adjuster_settings(GAME_ALTTP)
-    adjusted = False
     adjustedromfile = ''
     if lastSettings:
         choice = 'no'
@@ -1504,8 +1515,13 @@ def get_alttp_settings(romfile: str):
 
             if gui_enabled:
 
-                from tkinter import Tk, PhotoImage, Label, LabelFrame, Frame, Button
-                applyPromptWindow = Tk()
+                try:
+                    from tkinter import Tk, PhotoImage, Label, LabelFrame, Frame, Button
+                    applyPromptWindow = Tk()
+                except Exception as e:
+                    logging.error('Could not load tkinter, which is likely not installed.')
+                    return '', False
+
                 applyPromptWindow.resizable(False, False)
                 applyPromptWindow.protocol('WM_DELETE_WINDOW', lambda: onButtonClick())
                 logo = PhotoImage(file=Utils.local_path('data', 'icon.png'))

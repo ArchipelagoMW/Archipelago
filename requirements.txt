@@ -1,4 +1,4 @@
-colorama>=0.4.4
+colorama>=0.4.5
 websockets>=10.3
 PyYAML>=6.0
 jellyfish>=0.9.0

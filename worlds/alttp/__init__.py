@@ -77,7 +77,7 @@ class ALTTPWeb(WebWorld):
         msu.description,
         "Español",
         "msu1_es.md",
-        "msu1/en",
+        "msu1/es",
         ["Edos"]
     )
 
@@ -472,13 +472,14 @@ class ALTTPWorld(World):
                 while gtower_locations and gt_item_pool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
                     item_to_place = gt_item_pool.pop()
-                    if item_to_place in localrest:
-                        localrest.remove(item_to_place)
-                    else:
-                        restitempool.remove(item_to_place)
-                    world.push_item(spot_to_fill, item_to_place, False)
-                    fill_locations.remove(spot_to_fill)  # very slow, unfortunately
-                    trash_count -= 1
+                    if spot_to_fill.item_rule(item_to_place):
+                        if item_to_place in localrest:
+                            localrest.remove(item_to_place)
+                        else:
+                            restitempool.remove(item_to_place)
+                        world.push_item(spot_to_fill, item_to_place, False)
+                        fill_locations.remove(spot_to_fill)  # very slow, unfortunately
+                        trash_count -= 1
 
 
     def get_filler_item_name(self) -> str:

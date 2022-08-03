@@ -19,6 +19,12 @@ class StaticWitnessLocations:
         "Laser": 700,
     }
 
+    EXTRA_LOCATIONS = {
+        "Tutorial Front Left",
+        "Tutorial Back Left",
+        "Tutorial Back Right",
+    }
+
     GENERAL_LOCATIONS = {
         "Tutorial Gate Open",
 
@@ -50,11 +56,12 @@ class StaticWitnessLocations:
 
         "Quarry Mill Eraser and Dots 6",
         "Quarry Mill Eraser and Squares 8",
-        "Quarry Mill Small Squares & Dots & and Eraser",
+        "Quarry Mill Small Squares & Dots & Eraser",
         "Quarry Boathouse Intro Shapers",
+        "Quarry Boathouse Intro Stars",
         "Quarry Boathouse Eraser and Shapers 5",
-        "Quarry Boathouse Stars & Eraser & and Shapers 2",
-        "Quarry Boathouse Stars & Eraser & and Shapers 5",
+        "Quarry Boathouse Stars & Eraser & Shapers 2",
+        "Quarry Boathouse Stars & Eraser & Shapers 5",
         "Quarry Discard",
         "Quarry Laser",
 
@@ -82,7 +89,7 @@ class StaticWitnessLocations:
         "Town Rooftop Discard",
         "Town Symmetry Squares 5 + Dots",
         "Town Full Dot Grid Shapers 5",
-        "Town Shapers & Dots & and Eraser",
+        "Town Shapers & Dots & Eraser",
         "Town Laser",
 
         "Theater Discard",
@@ -138,7 +145,7 @@ class StaticWitnessLocations:
     UNCOMMON_LOCATIONS = {
         "Mountaintop River Shape",
         "Tutorial Patio Floor",
-        "Quarry Mill Big Squares & Dots & and Eraser",
+        "Quarry Mill Big Squares & Dots & Eraser",
         "Theater Tutorial Video",
         "Theater Desert Video",
         "Theater Jungle Video",
@@ -165,11 +172,11 @@ class StaticWitnessLocations:
         "Inside Mountain Secret Area Lone Pillar",
         "Inside Mountain Secret Area Wooden Beam Shapers",
         "Inside Mountain Secret Area Wooden Beam Squares and Shapers",
-        "Inside Mountain Secret Area Wooden Beam Shapers and Squares",
+        "Inside Mountain Secret Area Wooden Beam Stars and Squares",
         "Inside Mountain Secret Area Wooden Beam Shapers and Stars",
         "Inside Mountain Secret Area Upstairs Invisible Dots 8",
         "Inside Mountain Secret Area Upstairs Invisible Dot Symmetry 3",
-        "Inside Mountain Secret Area Upstairs Dot Grid Shapers",
+        "Inside Mountain Secret Area Upstairs Dot Grid Negative Shapers",
         "Inside Mountain Secret Area Upstairs Dot Grid Rotated Shapers",
 
         "Challenge Vault Box",
@@ -241,6 +248,13 @@ class WitnessPlayerLocations:
         if is_option_enabled(world, player, "shuffle_hard"):
             self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | StaticWitnessLocations.HARD_LOCATIONS
 
+        if is_option_enabled(world, player, "shuffle_symbols") and is_option_enabled(world, player, "shuffle_doors"):
+            if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
+                # This particular combination of logic settings leads to logic so restrictive that generation can fail
+                # Hence, we add some extra sphere 0 locations
+
+                self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | StaticWitnessLocations.EXTRA_LOCATIONS
+
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | player_logic.ADDED_CHECKS
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS - {
@@ -259,9 +273,6 @@ class WitnessPlayerLocations:
 
         event_locations = {
             p for p in player_logic.NECESSARY_EVENT_PANELS
-            if StaticWitnessLogic.CHECKS_BY_HEX[p]["checkName"]
-            not in self.CHECK_LOCATIONS
-            or p in player_logic.ALWAYS_EVENT_HEX_CODES
         }
 
         self.EVENT_LOCATION_TABLE = {

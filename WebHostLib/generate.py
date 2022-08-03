@@ -12,7 +12,7 @@ from flask import request, flash, redirect, url_for, session, render_template
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from BaseClasses import seeddigits, get_seed
-from Generate import handle_name
+from Generate import handle_name, PlandoSettings
 import pickle
 
 from .models import *
@@ -114,13 +114,13 @@ def gen_game(gen_options, meta: TypeOptional[Dict[str, object]] = None, owner=No
 
         erargs = parse_arguments(['--multi', str(playercount)])
         erargs.seed = seed
-        erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwrittin in mystery
+        erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
         erargs.spoiler = 0 if race else 2
         erargs.race = race
         erargs.outputname = seedname
         erargs.outputpath = target.name
         erargs.teams = 1
-        erargs.plando_options = ", ".join(plando_options)
+        erargs.plando_options = PlandoSettings.from_set(plando_options)
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):
