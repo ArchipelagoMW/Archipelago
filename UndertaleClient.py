@@ -67,7 +67,7 @@ class UndertaleContext(CommonContext):
     items_handling = 0b111
     route = None
     pieces_needed = None
-    progkeys: typing.Set[int]
+    progkeys: list[int]
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -77,7 +77,7 @@ class UndertaleContext(CommonContext):
         self.syncing = False
         self.deathlink_status = False
         self.tem_armor = False
-        self.progkeys = set()
+        self.progkeys = []
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -226,29 +226,29 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
             f.write(to_room_name(args["slot_data"]["Core"]))
             f.close()
-        counter = 0
         place = "Old Home Exit"
+        ctx.progkeys.append("Goat Plush")
         while place != "Core Exit":
             if args["slot_data"][place] == "Snowdin Forest":
                 if ctx.route == "pacifist":
-                    ctx.progkeys.add(77779)
-                ctx.progkeys.add(77778)
+                    ctx.progkeys.append(77779)
+                ctx.progkeys.append(77778)
                 place = "Snowdin Town Exit"
             elif args["slot_data"][place] == "Waterfall":
                 if ctx.route == "pacifist":
-                    ctx.progkeys.add(77780)
-                ctx.progkeys.add(77781)
+                    ctx.progkeys.append(77780)
+                ctx.progkeys.append(77781)
                 place = "Waterfall Exit"
             elif args["slot_data"][place] == "Hotland":
                 if ctx.route != "genocide":
-                    ctx.progkeys.add(77783)
-                    ctx.progkeys.add(77784)
-                ctx.progkeys.add(77785)
+                    ctx.progkeys.append(77783)
+                    ctx.progkeys.append(77784)
+                ctx.progkeys.append(77785)
                 place = "Hotland Exit"
             elif args["slot_data"][place] == "Core":
-                ctx.progkeys.add(77786)
+                ctx.progkeys.append(77786)
                 if ctx.route == "pacifist":
-                    ctx.progkeys.add(77782)
+                    ctx.progkeys.append(77782)
                 place = "Core Exit"
 
     elif cmd == 'ReceivedItems':
@@ -265,8 +265,8 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         if start_index == len(ctx.items_received):
             counter = -1
             while counter > -99:
-                if os.path.exists(os.path.expandvars(r"%localappdata%/UNDERTALE/"+f"{str(counter)}PLR0.item")):
-                    os.remove(os.path.expandvars(r"%localappdata%/UNDERTALE/"+f"{str(counter)}PLR0.item"))
+                if os.path.exists(os.path.expandvars(r"%localappdata%/UNDERTALE/"+f"{str(counter)}PLR{str(ctx.slot)}.item")):
+                    os.remove(os.path.expandvars(r"%localappdata%/UNDERTALE/"+f"{str(counter)}PLR{str(ctx.slot)}.item"))
                 counter -= 1
             placedPlot = 0
             placedWeapon = 0
@@ -279,59 +279,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                 filename = f"{str(id)}PLR{str(NetworkItem(*item).player)}.item"
                 with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
                     if NetworkItem(*item).item == 77700:
-                        if placedPlot == 0:
-                            f.write(str(77777-11000))
-                        elif placedPlot == 1:
-                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
-                                f.write(str(77779-11000))
-                            else:
-                                f.write(str(77778-11000))
-                        elif placedPlot == 2:
-                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
-                                f.write(str(77778-11000))
-                            else:
-                                f.write(str(77781-11000))
-                        elif placedPlot == 3:
-                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
-                                f.write(str(77780-11000))
-                            elif str(ctx.route) == "genocide":
-                                f.write(str(77785-11000))
-                            else:
-                                f.write(str(77783-11000))
-                        elif placedPlot == 4:
-                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
-                                f.write(str(77781-11000))
-                            elif str(ctx.route) == "genocide":
-                                f.write(str(77786-11000))
-                            else:
-                                f.write(str(77784-11000))
-                        elif placedPlot == 5:
-                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
-                                f.write(str(77783-11000))
-                            elif str(ctx.route) == "genocide":
-                                f.write(str(77786-11000))
-                            else:
-                                f.write(str(77785-11000))
-                        elif placedPlot == 6:
-                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
-                                f.write(str(77784-11000))
-                            else:
-                                f.write(str(77786-11000))
-                        elif placedPlot == 7:
-                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
-                                f.write(str(77785-11000))
-                            else:
-                                f.write(str(77786-11000))
-                        elif placedPlot == 8:
-                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
-                                f.write(str(77786-11000))
-                            else:
-                                f.write(str(77786-11000))
-                        else:
-                            if str(ctx.route) == "pacifist" or str(ctx.route) == "all_routes":
-                                f.write(str(77782-11000))
-                            else:
-                                f.write(str(77786-11000))
+                        f.write(str(ctx.progkeys[placedPlot]-11000))
                         placedPlot += 1
                     elif NetworkItem(*item).item == 77701:
                         if placedWeapon == 0:

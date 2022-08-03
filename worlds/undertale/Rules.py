@@ -1,10 +1,44 @@
 from ..generic.Rules import set_rule, add_rule
 from BaseClasses import MultiWorld
 from ..AutoWorld import LogicMixin
+import typing
 import math
 
 
 class UndertaleLogic(LogicMixin):
+    def _undertale_reqplot(self, player: int, plotitem: str):
+        from worlds.undertale.Regions import randomized_connections
+        temp_data = {}
+        progkeys = []
+        for (exit, region) in randomized_connections:
+            temp_data[exit] = self.world.get_entrance(exit, player).connected_region.name
+            temp_data[region] = self.world.get_region(region, player).entrances[0].name
+        place = "Old Home Exit"
+        progkeys.append("Goat Plush")
+        while place != "Core Exit":
+            if temp_data[place] == "Snowdin Forest":
+                if self.world.route_required[player].current_key == "pacifist":
+                    progkeys.append("Complete Skeleton")
+                progkeys.append("Snow Shovel")
+                place = "Snowdin Town Exit"
+            elif temp_data[place] == "Waterfall":
+                if self.world.route_required[player].current_key == "pacifist":
+                    progkeys.append("Fish")
+                progkeys.append("Heat Suit")
+                place = "Waterfall Exit"
+            elif temp_data[place] == "Hotland":
+                if self.world.route_required[player].current_key != "genocide":
+                    progkeys.append("Cooking Set")
+                    progkeys.append("Microphone")
+                progkeys.append("Bridge Tools")
+                place = "Hotland Exit"
+            elif temp_data[place] == "Core":
+                progkeys.append("Mettaton Plush")
+                if self.world.route_required[player].current_key == "pacifist":
+                    progkeys.append("DT Extractor")
+                place = "Core Exit"
+        return progkeys.index(plotitem)+1
+
     def _undertale_prev_area(self, player: int, area: int):
         if area == 1:
             return self.world.get_region("Snowdin Forest", player).entrances[0].parent_region.name
@@ -30,31 +64,25 @@ class UndertaleLogic(LogicMixin):
 
     def _undertale_has_plot(self, player: int, item: str):
         if item == "Goat Plush":
-            return (self.has("Goat Plush", player) or self.has("Progressive Plot",player,1))
+            return (self.has("Goat Plush", player) or self.has("Progressive Plot",player,self._undertale_reqplot(player,"Goat Plush")))
         elif item == "Complete Skeleton":
-            return (self.has("Complete Skeleton", player) or (self.has("Progressive Plot",player,2) and self._undertale_is_route(player,1)))
+            return (self.has("Complete Skeleton", player) or self.has("Progressive Plot",player,self._undertale_reqplot(player,"Complete Skeleton")))
         elif item == "Snow Shovel":
-            return (self.has("Snow Shovel", player) or (self.has("Progressive Plot",player,2) and not self._undertale_is_route(player,1)) or
-                    (self.has("Progressive Plot",player,3) and self._undertale_is_route(player,1)))
+            return (self.has("Snow Shovel", player) or self.has("Progressive Plot",player,self._undertale_reqplot(player,"Snow Shovel")))
         elif item == "Fish":
-            return (self.has("Fish", player) or (self.has("Progressive Plot",player,4) and self._undertale_is_route(player,1)))
+            return (self.has("Fish", player) or self.has("Progressive Plot",player,self._undertale_reqplot(player,"Fish")))
         elif item == "Heat Suit":
-            return (self.has("Heat Suit", player) or (self.has("Progressive Plot",player,3) and not self._undertale_is_route(player,1)) or
-                    (self.has("Progressive Plot",player,5) and self._undertale_is_route(player,1)))
+            return (self.has("Heat Suit", player) or self.has("Progressive Plot",player,self._undertale_reqplot(player,"Heat Suit")))
         elif item == "Cooking Set":
-            return ((self.has("Cooking Set", player) or self._undertale_is_route(player,2)) or (self.has("Progressive Plot",player,3) and self._undertale_is_route(player,2)) or
-                    (self.has("Progressive Plot",player,4) and self._undertale_is_route(player,0)) or (self.has("Progressive Plot",player,6) and self._undertale_is_route(player,1)))
+            return (self.has("Cooking Set", player) or self._undertale_is_route(player,2) or self.has("Progressive Plot",player,self._undertale_reqplot(player,"Cooking Set")))
         elif item == "Microphone":
-            return ((self.has("Microphone", player) or self._undertale_is_route(player,2)) or (self.has("Progressive Plot",player,3) and self._undertale_is_route(player,2)) or
-                    (self.has("Progressive Plot",player,5) and self._undertale_is_route(player,0)) or (self.has("Progressive Plot",player,7) and self._undertale_is_route(player,1)))
+            return (self.has("Microphone", player) or self._undertale_is_route(player,2) or self.has("Progressive Plot",player,self._undertale_reqplot(player,"Microphone")))
         elif item == "Bridge Tools":
-            return ((self.has("Bridge Tools", player)) or (self.has("Progressive Plot",player,4) and self._undertale_is_route(player,2)) or
-                    (self.has("Progressive Plot",player,6) and self._undertale_is_route(player,0)) or (self.has("Progressive Plot",player,8) and self._undertale_is_route(player,1)))
+            return (self.has("Bridge Tools", player) or self.has("Progressive Plot",player,self._undertale_reqplot(player,"Bridge Tools")))
         elif item == "Mettaton Plush":
-            return (self.has("Mettaton Plush", player) or (self.has("Progressive Plot",player,5) and self._undertale_is_route(player,2)) or
-                    (self.has("Progressive Plot",player,7) and self._undertale_is_route(player,0)) or (self.has("Progressive Plot",player,9) and self._undertale_is_route(player,1)))
+            return (self.has("Mettaton Plush", player) or self.has("Progressive Plot",player,self._undertale_reqplot(player,"Mettaton Plush")))
         elif item == "DT Extractor":
-            return ((self.has('DT Extractor', player) or self.has("Progressive Plot",player,10)) and self._undertale_is_route(player,1))
+            return (self.has('DT Extractor', player) or self.has("Progressive Plot",player,self._undertale_reqplot(player,"DT Extractor")))
 
     def _undertale_can_level(self, exp: int, lvl: int):
         if (exp >= 10 and lvl == 1):
