@@ -67,7 +67,7 @@ class UndertaleContext(CommonContext):
     items_handling = 0b111
     route = None
     pieces_needed = None
-    progkeys: list[int]
+    progkeys = None
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
