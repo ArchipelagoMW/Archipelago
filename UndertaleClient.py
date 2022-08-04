@@ -279,7 +279,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                 filename = f"{str(id)}PLR{str(NetworkItem(*item).player)}.item"
                 with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
                     if NetworkItem(*item).item == 77700:
-                        f.write(str(ctx.progkeys[placedPlot]-11000))
+                        f.write(str(int(ctx.progkeys[placedPlot])-11000))
                         placedPlot += 1
                     elif NetworkItem(*item).item == 77701:
                         if placedWeapon == 0:
