@@ -389,7 +389,8 @@ class MultiWorld():
         self.state.collect(item, True)
 
     def push_item(self, location: Location, item: Item, collect: bool = True):
-        assert location.can_fill(self.state, item, False), f"Cannot place {item} into {location}."
+        if not location.can_fill(self.state, item, False):
+            raise Exception(f"Cannot place {item} into {location}.")
         location.item = item
         item.location = location
         item.world = self  # try to not have this here anymore and create it with item?
