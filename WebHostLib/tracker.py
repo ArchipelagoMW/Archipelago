@@ -342,14 +342,14 @@ def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, wa
         abort(404)
 
     player_tracker, multisave, inventory, seed_checks_in_area, lttp_checks_done, \
-    slot_data, games, player_name, display_icons = fill_tracker_data(room, tracked_team, tracked_player)
+        slot_data, games, player_name, display_icons = fill_tracker_data(room, tracked_team, tracked_player)
 
     game_name = games[tracked_player]
     # TODO move all games in game_specific_trackers to new system
     if game_name in game_specific_trackers and not want_generic:
         specific_tracker = game_specific_trackers.get(game_name, None)
-        return specific_tracker(multisave, room, player_tracker.all_locations, inventory, tracked_team, tracked_player, player_name,
-                                seed_checks_in_area, lttp_checks_done, slot_data[tracked_player])
+        return specific_tracker(multisave, room, player_tracker.all_locations, inventory, tracked_team, tracked_player,
+                                player_name, seed_checks_in_area, lttp_checks_done, slot_data[tracked_player])
     elif game_name in AutoWorldRegister.world_types and not want_generic:
         return render_template(
             "trackers/" + player_tracker.template,
