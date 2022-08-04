@@ -14,7 +14,8 @@ class SwampPalace(Z3Region, IReward):
         self.Reward = RewardType.Null
         self.Locations = [
             Location(self, 256+135, 0x1EA9D, LocationType.Regular, "Swamp Palace - Entrance")
-                .Allow(lambda item, items: self.Config.Keysanity or item.Is(ItemType.KeySP, self.world)),
+                .Allow(lambda item, items: self.Config.Keysanity or self.Config.MinimalAccessibility or
+                                           item.Is(ItemType.KeySP, self.world)),
             Location(self, 256+136, 0x1E986, LocationType.Regular, "Swamp Palace - Map Chest",
                 lambda items: items.KeySP),
             Location(self, 256+137, 0x1E989, LocationType.Regular, "Swamp Palace - Big Chest",

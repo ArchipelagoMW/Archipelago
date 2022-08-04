@@ -19,6 +19,7 @@ from ..AutoWorld import World, AutoLogicRegister, WebWorld
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
 from .Options import smz3_options
+from Options import Accessibility
 
 world_folder = os.path.dirname(__file__)
 logger = logging.getLogger("SMZ3")
@@ -189,6 +190,7 @@ class SMZ3World(World):
         config.KeyShuffle = KeyShuffle(self.world.key_shuffle[self.player].value)
         config.Keysanity = config.KeyShuffle != KeyShuffle.Null
         config.GanonInvincible = GanonInvincible.BeforeCrystals
+        config.MinimalAccessibility = self.world.accessibility[self.player] == Accessibility.option_minimal
 
         self.local_random = random.Random(self.world.random.randint(0, 1000))
         self.smz3World = TotalSMZ3World(config, self.world.get_player_name(self.player), self.player, self.world.seed_name)
