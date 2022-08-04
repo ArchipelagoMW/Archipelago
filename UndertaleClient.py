@@ -227,7 +227,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
             f.write(to_room_name(args["slot_data"]["Core"]))
             f.close()
         place = "Old Home Exit"
-        ctx.progkeys.append("Goat Plush")
+        ctx.progkeys.append(77777)
         while place != "Core Exit":
             if args["slot_data"][place] == "Snowdin Forest":
                 if ctx.route == "pacifist":
