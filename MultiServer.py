@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import asyncio
-from calendar import c
 import functools
 import logging
 import zlib
