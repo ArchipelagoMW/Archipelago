@@ -37,7 +37,7 @@ Warning: Currently it is not checked if this is the correct multiworld belonging
 
 ## Troubleshooting
 
-If you don't see the connect window check that you see a qmodmanager_log-Subnautica.txt in Subnautica, if not
+If you don't see the Connect Menu within the Main Menu, check that you see a file named `qmodmanager_log-Subnautica.txt` in the Subnautica game directory. If not,
 QModManager4 is not correctly installed, otherwise open it and look
 for `[Info   :   BepInEx] Loading [Archipelago`. If it doesn't show this, then
 QModManager4 didn't find the Archipelago mod, so check your paths.
