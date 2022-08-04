@@ -152,7 +152,8 @@ The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
 All arguments for this packet are optional, only changes are sent.
 
 ### Print
-Sent to clients purely to display a message to the player.
+Sent to clients purely to display a message to the player. 
+* *Deprecation warning: clients that connect with version 0.3.5 or higher will nolonger recieve Print packets, instead all messsages are send as [PrintJSON](#PrintJSON)*
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
