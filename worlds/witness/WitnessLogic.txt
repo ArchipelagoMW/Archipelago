@@ -354,7 +354,7 @@ Shipwreck (Shipwreck) - Keep 3rd Pressure Plate - True:
 Keep Tower (Keep) - Keep - 0x04F8F:
 158206 - 0x0361B (Tower Shortcut to Keep Panel) - True - True
 Door - 0x04F8F (Tower Shortcut to Keep) - 0x0361B
-158704 - 0x0360E (Laser Panel Hedges) - 0x01A0F - Environment & Sound
+158704 - 0x0360E (Laser Panel Hedges) - 0x01A0F & 0x019E7 & 0x019DC & 0x00139 - Environment & Sound
 158705 - 0x03317 (Laser Panel Pressure Plates) - 0x01D3F - Shapers & Squares & Black/White Squares & Colored Squares & Stars & Stars + Same Colored Symbol & Dots
 Laser - 0x014BB (Laser) - 0x0360E | 0x03317
 
@@ -765,7 +765,9 @@ Inside Mountain Second Layer (Inside Mountain) - Inside Mountain Second Layer Li
 158430 - 0x09FD8 (Color Cycle 5) - 0x09FD7 - Color Cycle & RGB & Squares & Colored Squares & Symmetry & Colored Dots
 Door - 0x09FFB (Staircase Near) - 0x09FD8
 
-Inside Mountain Second Layer Blue Bridge (Inside Mountain) - Inside Mountain Second Layer Beyond Bridge - TrueOneWay - Inside Mountain Second Layer Elevator Room - 0x09EDD:
+Inside Mountain Second Layer Blue Bridge (Inside Mountain) - Inside Mountain Second Layer Beyond Bridge - TrueOneWay - Inside Mountain Second Layer At Door - TrueOneWay:
+
+Inside Mountain Second Layer At Door (Inside Mountain) - Inside Mountain Second Layer Elevator Room - 0x09EDD:
 Door - 0x09EDD (Door to Elevator) - 0x09ED8 & 0x09E86
 
 Inside Mountain Second Layer Light Bridge Room Near (Inside Mountain):

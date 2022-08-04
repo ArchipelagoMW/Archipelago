@@ -277,7 +277,12 @@ def get_default_options() -> dict:
         },
         "oot_options": {
             "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
-        }
+        },
+        "dkc3_options": {
+            "rom_file": "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc",
+            "sni": "SNI",
+            "rom_start": True,
+        },
     }
 
     return options
@@ -474,9 +479,13 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
 def stream_input(stream, queue):
     def queuer():
         while 1:
-            text = stream.readline().strip()
-            if text:
-                queue.put_nowait(text)
+            try:
+                text = stream.readline().strip()
+            except UnicodeDecodeError as e:
+                logging.exception(e)
+            else:
+                if text:
+                    queue.put_nowait(text)
 
     from threading import Thread
     thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)

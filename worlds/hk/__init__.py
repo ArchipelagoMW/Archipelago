@@ -121,6 +121,7 @@ shop_cost_types: typing.Dict[str, typing.Tuple[str, ...]] = {
     "Leg_Eater": ("GEO",),
 }
 
+
 class HKWeb(WebWorld):
     tutorials = [Tutorial(
         "Mod Setup and Use Guide",
@@ -130,6 +131,8 @@ class HKWeb(WebWorld):
         "setup/en",
         ["Ijwu"]
     )]
+
+    bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new?assignees=&labels=bug%2C+needs+investigation&template=bug_report.md&title="
 
 
 class HKWorld(World):
@@ -254,6 +257,9 @@ class HKWorld(World):
 
             if location_name == "Start":
                 if item_name in randomized_starting_items:
+                    if item_name == "Focus":
+                        self.create_location("Focus")
+                        unfilled_locations += 1
                     pool.append(item)
                 else:
                     self.world.push_precollected(item)
@@ -502,6 +508,7 @@ class HKWorld(World):
         location.place_locked_item(item)
         if costs:
             location.costs = costs.pop()
+        return location
 
     def collect(self, state, item: HKItem) -> bool:
         change = super(HKWorld, self).collect(state, item)

@@ -188,7 +188,10 @@ class Context(CommonContext):
     async def shutdown(self):
         await super(Context, self).shutdown()
         if self.snes_connect_task:
-            await self.snes_connect_task
+            try:
+                await asyncio.wait_for(self.snes_connect_task, 1)
+            except asyncio.TimeoutError:
+                self.snes_connect_task.cancel()
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected", "RoomUpdate"}:
@@ -598,7 +601,7 @@ class SNESState(enum.IntEnum):
     SNES_ATTACHED = 3
 
 
-def launch_sni(ctx: Context):
+def launch_sni():
     sni_path = Utils.get_options()["lttp_options"]["sni"]
 
     if not os.path.isdir(sni_path):
@@ -636,11 +639,9 @@ async def _snes_connect(ctx: Context, address: str):
     address = f"ws://{address}" if "://" not in address else address
     snes_logger.info("Connecting to SNI at %s ..." % address)
     seen_problems = set()
-    succesful = False
-    while not succesful:
+    while 1:
         try:
             snes_socket = await websockets.connect(address, ping_timeout=None, ping_interval=None)
-            succesful = True
         except Exception as e:
             problem = "%s" % e
             # only tell the user about new problems, otherwise silently lay in wait for a working connection
@@ -650,7 +651,7 @@ async def _snes_connect(ctx: Context, address: str):
 
                 if len(seen_problems) == 1:
                     # this is the first problem. Let's try launching SNI if it isn't already running
-                    launch_sni(ctx)
+                    launch_sni()
 
             await asyncio.sleep(1)
         else:
