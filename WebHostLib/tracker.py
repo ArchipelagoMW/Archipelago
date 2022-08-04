@@ -405,17 +405,17 @@ def get_tracker_icons_and_regions(player_tracker: PlayerTracker) -> Dict[str, st
     return display_icons
 
 
-def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
+def fill_tracker_data(room: Room, tracked_team: int, tracked_player: int) -> Tuple:
     """Collect seed information and pare it down to a single player"""
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
         precollected_items, games, slot_data, groups = get_static_room_data(room)
-    player_name = names[team][player - 1]
-    location_to_area = player_location_to_area[player]
+    player_name = names[tracked_team][tracked_player - 1]
+    location_to_area = player_location_to_area[tracked_player]
     inventory = collections.Counter()
     lttp_checks_done = {loc_name: 0 for loc_name in default_locations}
 
     # Add starting items to inventory
-    starting_items = precollected_items[player]
+    starting_items = precollected_items[tracked_player]
     if starting_items:
         for item_id in starting_items:
             attribute_item_solo(inventory, item_id)
@@ -425,9 +425,9 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
     else:
         multisave: Dict[str, Any] = {}
 
-    slots_aimed_at_player = {player}
+    slots_aimed_at_player = {tracked_player}
     for group_id, group_members in groups.items():
-        if player in group_members:
+        if tracked_player in group_members:
             slots_aimed_at_player.add(group_id)
 
     checked_locations = set()
@@ -435,7 +435,7 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
     for (ms_team, ms_player), locations_checked in multisave.get("location_checks", {}).items():
         # Skip teams and players not matching the request
         player_locations = locations[ms_player]
-        if ms_team == team:
+        if ms_team == tracked_team:
             # If the player does not have the item, do nothing
             for location in locations_checked:
                 if location in player_locations:
@@ -443,7 +443,7 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
                     if recipient in slots_aimed_at_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
 
-                    if ms_player == player:  # a check done by the tracked player
+                    if ms_player == tracked_player:  # a check done by the tracked player
                         lttp_checks_done[location_to_area[location]] += 1
                         lttp_checks_done["Total"] += 1
                         checked_locations.add(lookup_any_location_id_to_name[location])
@@ -451,7 +451,7 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
     prog_items = collections.Counter
     all_location_names = set()
 
-    all_location_names = {lookup_any_location_id_to_name[id] for id in locations[player]}
+    all_location_names = {lookup_any_location_id_to_name[id] for id in locations[tracked_player]}
     prog_items = collections.Counter()
     for player in locations:
         for location in locations[player]:
@@ -467,18 +467,18 @@ def fill_tracker_data(room: Room, team: int, player: int) -> Tuple:
 
     player_tracker = PlayerTracker(
         room,
-        team,
-        player,
+        tracked_team,
+        tracked_player,
         player_name,
         all_location_names,
         checked_locations,
         prog_items,
         items_received,
-        slot_data[player]
+        slot_data[tracked_player]
     )
 
     # grab webworld and apply its theme to the tracker
-    webworld = AutoWorldRegister.world_types[games[player]].web
+    webworld = AutoWorldRegister.world_types[games[tracked_player]].web
     player_tracker.theme = webworld.theme
     # allow the world to add information to the tracker class
     webworld.modify_tracker(player_tracker)
