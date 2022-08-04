@@ -42,6 +42,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         """Overrides the current difficulty set for the seed.  Takes the argument casual, normal, hard, or brutal"""
         options = difficulty.split()
         num_options = len(options)
+        set_difficulty = True
 
         if num_options > 0:
             if options[0] == "Casual" or "casual":
@@ -54,6 +55,10 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                 self.ctx.difficulty_override = 3
             else:
                 sc2_logger.info("Unable to parse difficulty '" + options[0] + "'")
+                set_difficulty = False
+
+            if set_difficulty:
+                sc2_logger.info("Difficulty set to " + options[0])
         else:
             sc2_logger.info("Difficulty needs to be specified in the command.")
 
