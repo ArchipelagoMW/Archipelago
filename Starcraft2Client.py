@@ -38,6 +38,25 @@ nest_asyncio.apply()
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: SC2Context
 
+    def _cmd_difficulty(self, difficulty: str = "") -> bool:
+        """Overrides the current difficulty set for the seed.  Takes the argument casual, normal, hard, or brutal"""
+        options = difficulty.split()
+        num_options = len(options)
+
+        if num_options > 0:
+            if options[0] == "Casual" or "casual":
+                self.ctx.difficulty_override = 0
+            elif options[0] == "Normal" or "normal":
+                self.ctx.difficulty_override = 1
+            elif options[0] == "Hard" or "hard":
+                self.ctx.difficulty_override = 2
+            elif options[0] == "Brutal" or "brutal":
+                self.ctx.difficulty_override = 3
+            else:
+                sc2_logger.info("Unable to parse difficulty '" + options[0] + "'")
+        else:
+            sc2_logger.info("Difficulty needs to be specified in the command.")
+
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
         the next mission in a chain the other player is doing."""
@@ -91,6 +110,7 @@ class SC2Context(CommonContext):
     missions_unlocked = False
     current_tooltip = None
     last_loc_list = None
+    difficulty_override = -1
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -450,7 +470,10 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
         game_state = 0
         if iteration == 0:
             start_items = calculate_items(self.ctx.items_received)
-            difficulty = calc_difficulty(self.ctx.difficulty)
+            if self.ctx.difficulty_override >= 0:
+                difficulty = calc_difficulty(self.ctx.difficulty_override)
+            else:
+                difficulty = calc_difficulty(self.ctx.difficulty)
             await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
