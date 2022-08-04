@@ -6,14 +6,19 @@ from BaseClasses import Location, Item, ItemClassification
 
 class ALttPLocation(Location):
     game: str = "A Link to the Past"
+    crystal: bool
+    player_address: Optional[int]
+    _hint_text: Optional[str]
+    shop_slot: Optional[int] = None
+    """If given as integer, shop_slot is the shop's inventory index."""
+    shop_slot_disabled: bool = False
 
-    def __init__(self, player: int, name: str = '', address=None, crystal: bool = False,
-                 hint_text: Optional[str] = None, parent=None,
-                 player_address=None):
+    def __init__(self, player: int, name: str, address: Optional[int] = None, crystal: bool = False,
+                 hint_text: Optional[str] = None, parent=None, player_address: Optional[int] = None):
         super(ALttPLocation, self).__init__(player, name, address, parent)
         self.crystal = crystal
         self.player_address = player_address
-        self._hint_text: str = hint_text
+        self._hint_text = hint_text
 
 
 class ALttPItem(Item):
