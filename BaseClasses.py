@@ -384,7 +384,6 @@ class MultiWorld():
         return self.worlds[player].create_item(item_name)
 
     def push_precollected(self, item: Item):
-        item.world = self
         self.precollected_items[item.player].append(item)
         self.state.collect(item, True)
 
@@ -392,7 +391,6 @@ class MultiWorld():
         assert location.can_fill(self.state, item, False), f"Cannot place {item} into {location}."
         location.item = item
         item.location = location
-        item.world = self  # try to not have this here anymore and create it with item?
         if collect:
             self.state.collect(item, location.event, location)
 
@@ -1102,7 +1100,6 @@ class Location:
         self.item = item
         item.location = self
         self.event = item.advancement
-        self.item.world = self.parent_region.world
         self.locked = True
 
     def __repr__(self):
@@ -1148,7 +1145,6 @@ class ItemClassification(IntFlag):
 
 class Item:
     location: Optional[Location] = None
-    world: Optional[MultiWorld] = None
     code: Optional[int] = None  # an item with ID None is called an Event, and does not get written to multidata
     name: str
     game: str = "Generic"
@@ -1175,11 +1171,11 @@ class Item:
         self.code = code
 
     @property
-    def hint_text(self):
+    def hint_text(self) -> str:
         return getattr(self, "_hint_text", self.name.replace("_", " ").replace("-", " "))
 
     @property
-    def pedestal_hint_text(self):
+    def pedestal_hint_text(self) -> str:
         return getattr(self, "_pedestal_hint_text", self.name.replace("_", " ").replace("-", " "))
 
     @property
@@ -1205,7 +1201,7 @@ class Item:
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player
 
-    def __lt__(self, other: Item):
+    def __lt__(self, other: Item) -> bool:
         if other.player != self.player:
             return other.player < self.player
         return self.name < other.name
@@ -1213,11 +1209,13 @@ class Item:
     def __hash__(self):
         return hash((self.name, self.player))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__str__()
 
-    def __str__(self):
-        return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
+    def __str__(self) -> str:
+        if self.location:
+            return self.location.parent_region.world.get_name_string_for_object(self)
+        return f"{self.name} (Player {self.player})"
 
 
 class Spoiler():
