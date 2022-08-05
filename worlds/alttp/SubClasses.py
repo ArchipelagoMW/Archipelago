@@ -20,16 +20,15 @@ class ALttPItem(Item):
     game: str = "A Link to the Past"
     type: Optional[str]
     _pedestal_hint_text: Optional[str]
-    _hint_text: Optional[str] = None
+    _hint_text: Optional[str]
     dungeon = None
 
     def __init__(self, name, player, classification=ItemClassification.filler, type=None, item_code=None,
-                 pedestal_hint=None, **kwargs):
+                 pedestal_hint=None, hint_text=None, **kwargs):
         super(ALttPItem, self).__init__(name, classification, item_code, player)
         self.type = type
         self._pedestal_hint_text = pedestal_hint
-        if "hint_text" in kwargs:
-            self._hint_text = kwargs["hint_text"]
+        self._hint_text = hint_text
 
     @property
     def crystal(self) -> bool:
