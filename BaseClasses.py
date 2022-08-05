@@ -1145,7 +1145,7 @@ class ItemClassification(IntFlag):
 
 class Item:
     game: str = "Generic"
-    __slots__ = ("world", "name", "classification", "code", "player", "location")
+    __slots__ = ("name", "classification", "code", "player", "location")
     name: str
     classification: ItemClassification
     code: Optional[int]
