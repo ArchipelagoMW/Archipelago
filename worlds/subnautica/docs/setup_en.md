@@ -31,7 +31,7 @@ After the connection is made, start a new game. You should start to see Archipel
 ## Resuming
 
 When loading a savegame it will automatically attempt to resume the connection that was active when the savegame was made. 
-If that connection information is no longer valid, such as if the server's IP and/or port has changed, you can use the Connect Menu to connect to the new instance before loading the savegame.
+If that connection information is no longer valid, such as if the server's IP and/or port has changed, the Connect Menu will reappear after loading. Use the Connect Menu before or after loading the savegame to connect to the new instance.
 
 Warning: Currently it is not checked if this is the correct multiworld belonging to that savegame, please ensure that yourself beforehand.
 
