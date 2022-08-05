@@ -15,6 +15,11 @@
       compatible hardware
 - Your legally obtained Donkey Kong Country 3 ROM file, probably named `Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc`
 
+## Optional Software
+- Donkey Kong Country 3 Tracker
+	- PopTracker from: [PopTracker Releases Page](https://github.com/black-sliver/PopTracker/releases/)
+	- Donkey Kong Country 3 Archipelago PopTracker pack from: [DKC3 AP Tracker Releases Page](https://github.com/PoryGone/DKC3_AP_Tracker/releases/)
+
 ## Installation Procedures
 
 ### Windows Setup
@@ -57,7 +62,6 @@ validator page: [YAML Validation page](/mysterycheck)
 4. You will be presented with a server page, from which you can download your patch file.
 5. Double-click on your patch file, and the Donkey Kong Country 3 Client will launch automatically, create your ROM from the
    patch file, and open your emulator for you.
-6. Since this is a single-player game, you will no longer need the client, so feel free to close it.
 
 ## Joining a MultiWorld Game
 
