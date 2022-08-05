@@ -17,7 +17,7 @@ from Launcher import components, icon_paths
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 import subprocess
 import pkg_resources
-requirement = 'cx-Freeze>=6.11'
+requirement = 'cx-Freeze==6.10'
 try:
     pkg_resources.require(requirement)
     import cx_Freeze
@@ -70,7 +70,7 @@ def _threaded_hash(filepath):
 
 
 # cx_Freeze's build command runs other commands. Override to accept --yes and store that.
-class BuildCommand(cx_Freeze.command.build.Build):
+class BuildCommand(cx_Freeze.dist.build):
     user_options = [
         ('yes', 'y', 'Answer "yes" to all questions.'),
     ]
@@ -87,8 +87,8 @@ class BuildCommand(cx_Freeze.command.build.Build):
 
 
 # Override cx_Freeze's build_exe command for pre and post build steps
-class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
-    user_options = cx_Freeze.command.build_exe.BuildEXE.user_options + [
+class BuildExeCommand(cx_Freeze.dist.build_exe):
+    user_options = cx_Freeze.dist.build_exe.user_options + [
         ('yes', 'y', 'Answer "yes" to all questions.'),
         ('extra-data=', None, 'Additional files to add.'),
     ]
