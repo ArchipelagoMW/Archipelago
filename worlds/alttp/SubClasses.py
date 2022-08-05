@@ -24,7 +24,7 @@ class ALttPItem(Item):
     dungeon = None
 
     def __init__(self, name, player, classification=ItemClassification.filler, type=None, item_code=None,
-                 pedestal_hint=None, hint_text=None, **kwargs):
+                 pedestal_hint=None, hint_text=None):
         super(ALttPItem, self).__init__(name, classification, item_code, player)
         self.type = type
         self._pedestal_hint_text = pedestal_hint
