@@ -52,7 +52,7 @@ class ItemData(typing.NamedTuple):
     hint_text: typing.Optional[str]
 
     def as_init_dict(self) -> typing.Dict[str, typing.Any]:
-        return {key: value for key, value in self._asdict().items() if key in
+        return {key: getattr(self, key) for key in
                 ('classification', 'type', 'item_code', 'pedestal_hint', 'hint_text')}
 
 
