@@ -178,6 +178,6 @@ class UndertaleWorld(World):
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]
         item = UndertaleItem(name,
-                                ItemClassification.progression if item_data.progression else ItemClassification.filler,
+                                item_data.classification,
                                 item_data.code, self.player)
         return item

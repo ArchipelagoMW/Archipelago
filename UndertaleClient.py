@@ -44,8 +44,8 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
     def _cmd_online(self):
         """Makes you no longer able to see other Undertale players."""
         if isinstance(self.ctx, UndertaleContext):
-            self.ctx.update_online_mode(not ("online" in self.ctx.tags))
-            if "online" in self.ctx.tags:
+            self.ctx.update_online_mode(not ("Online" in self.ctx.tags))
+            if "Online" in self.ctx.tags:
                 self.output(f"Now online.")
             else:
                 self.output(f"Now offline.")
@@ -61,7 +61,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
 
 
 class UndertaleContext(CommonContext):
-    tags = {"AP"}
+    tags = {"AP", "Online"}
     game = "Undertale"
     command_processor = UndertaleCommandProcessor
     items_handling = 0b111
@@ -125,9 +125,9 @@ class UndertaleContext(CommonContext):
     def update_online_mode(self, online):
         old_tags = self.tags.copy()
         if online:
-            self.tags.add("online")
+            self.tags.add("Online")
         else:
-            self.tags -= {"online"}
+            self.tags -= {"Online"}
         if old_tags != self.tags and self.server and not self.server.socket.closed:
             asyncio.create_task(self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}]))
 
@@ -357,7 +357,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         tags = args.get("tags", [])
         if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
             ctx.on_deathlink(args["data"])
-        elif "online" in tags:
+        elif "Online" in tags:
             data = args.get("data", [])
             if data["player"] != ctx.slot and data["player"] != None:
                 filename = f"FRISK" + str(data["player"]) + ".playerspot"
@@ -372,7 +372,7 @@ async def multi_watcher(ctx: UndertaleContext):
         path = os.path.expandvars(r"%localappdata%/UNDERTALE")
         for root, dirs, files in os.walk(path):
             for file in files:
-                if file.find("spots.mine") > -1 and "online" in ctx.tags:
+                if file.find("spots.mine") > -1 and "Online" in ctx.tags:
                     with open(root + "/" + file) as mine:
                         this_x = mine.readline()
                         this_y = mine.readline()
@@ -380,7 +380,7 @@ async def multi_watcher(ctx: UndertaleContext):
                         this_sprite = mine.readline()
                         this_frame = mine.readline()
                         mine.close()
-                    message = [{"cmd": 'Bounce', "tags": ['online'], "games": ["Undertale"],
+                    message = [{"cmd": 'Bounce', "tags": ["Online"],
                                 "data": {"player": ctx.slot, "x": this_x, "y": this_y, "room": this_room,
                                          "spr": this_sprite, "frm": this_frame}}]
                     await ctx.send_msgs(message)

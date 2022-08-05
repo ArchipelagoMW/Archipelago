@@ -17,24 +17,24 @@ class UndertaleLogic(LogicMixin):
         progkeys.append("Goat Plush")
         while place != "Core Exit":
             if temp_data[place] == "Snowdin Forest":
-                if self.world.route_required[player].current_key == "pacifist":
+                if self._undertale_is_route(player, 1):
                     progkeys.append("Complete Skeleton")
                 progkeys.append("Snow Shovel")
                 place = "Snowdin Town Exit"
             elif temp_data[place] == "Waterfall":
-                if self.world.route_required[player].current_key == "pacifist":
+                if self._undertale_is_route(player, 1):
                     progkeys.append("Fish")
                 progkeys.append("Heat Suit")
                 place = "Waterfall Exit"
             elif temp_data[place] == "Hotland":
-                if self.world.route_required[player].current_key != "genocide":
+                if self._undertale_is_route(player, 2):
                     progkeys.append("Cooking Set")
                     progkeys.append("Microphone")
                 progkeys.append("Bridge Tools")
                 place = "Hotland Exit"
             elif temp_data[place] == "Core":
                 progkeys.append("Mettaton Plush")
-                if self.world.route_required[player].current_key == "pacifist":
+                if self._undertale_is_route(player, 1):
                     progkeys.append("DT Extractor")
                 place = "Core Exit"
         return progkeys.index(plotitem)+1
