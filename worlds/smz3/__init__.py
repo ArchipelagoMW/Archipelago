@@ -19,6 +19,7 @@ from ..AutoWorld import World, AutoLogicRegister, WebWorld
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
 from .Options import smz3_options
+from Options import Accessibility
 
 world_folder = os.path.dirname(__file__)
 logger = logging.getLogger("SMZ3")
@@ -77,7 +78,7 @@ class SMZ3World(World):
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
-        self.locations = {}
+        self.locations: Dict[str, Location] = {}
         self.unreachable = []
         super().__init__(world, player)
 
@@ -189,6 +190,7 @@ class SMZ3World(World):
         config.KeyShuffle = KeyShuffle(self.world.key_shuffle[self.player].value)
         config.Keysanity = config.KeyShuffle != KeyShuffle.Null
         config.GanonInvincible = GanonInvincible.BeforeCrystals
+        config.MinimalAccessibility = self.world.accessibility[self.player] == Accessibility.option_minimal
 
         self.local_random = random.Random(self.world.random.randint(0, 1000))
         self.smz3World = TotalSMZ3World(config, self.world.get_player_name(self.player), self.player, self.world.seed_name)
@@ -481,15 +483,13 @@ class SMZ3World(World):
             if loc.name in self.locationNamesGT and loc.item is None:
                 poolLength = len(self.world.itempool)
                 # start looking at a random starting index and loop at start if no match found
-                for i in range(self.world.random.randint(0, poolLength), poolLength):
-                    if not self.world.itempool[i].advancement:
+                start = self.world.random.randint(0, poolLength)
+                for off in range(0, poolLength):
+                    i = (start + off) % poolLength
+                    if self.world.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap) \
+                            and loc.can_fill(self.world.state, self.world.itempool[i], False):
                         itemFromPool = self.world.itempool.pop(i)
                         break
-                else:
-                    for i in range(0, poolLength):
-                        if not self.world.itempool[i].advancement:
-                            itemFromPool = self.world.itempool.pop(i)
-                            break
                 self.world.push_item(loc, itemFromPool, False)
                 loc.event = False
 
