@@ -1154,7 +1154,6 @@ class Item:
     location: Optional[Location]
 
     def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int):
-        self.world = None
         self.name = name
         self.classification = classification
         self.player = player
