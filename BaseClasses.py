@@ -1144,31 +1144,21 @@ class ItemClassification(IntFlag):
 
 
 class Item:
-    location: Optional[Location] = None
-    code: Optional[int] = None  # an item with ID None is called an Event, and does not get written to multidata
-    name: str
     game: str = "Generic"
-    type: str = None
+    __slots__ = ("name", "classification", "code", "player", "location")
+    name: str
     classification: ItemClassification
-
-    # need to find a decent place for these to live and to allow other games to register texts if they want.
-    pedestal_credit_text: str = "and the Unknown Item"
-    sickkid_credit_text: Optional[str] = None
-    magicshop_credit_text: Optional[str] = None
-    zora_credit_text: Optional[str] = None
-    fluteboy_credit_text: Optional[str] = None
-
-    # hopefully temporary attributes to satisfy legacy LttP code, proper implementation in subclass ALttPItem
-    smallkey: bool = False
-    bigkey: bool = False
-    map: bool = False
-    compass: bool = False
+    code: Optional[int]
+    """an item with code None is called an Event, and does not get written to multidata"""
+    player: int
+    location: Optional[Location]
 
     def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int):
         self.name = name
         self.classification = classification
         self.player = player
         self.code = code
+        self.location = None
 
     @property
     def hint_text(self) -> str:

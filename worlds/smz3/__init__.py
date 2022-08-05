@@ -573,8 +573,10 @@ class SMZ3Location(Location):
 
 class SMZ3Item(Item):
     game = "SMZ3"
+    type: ItemType
+    item: Item
 
-    def __init__(self, name, classification, type, code, player: int = None, item=None):
+    def __init__(self, name, classification, type: ItemType, code, player: int, item: Item):
+        super(SMZ3Item, self).__init__(name, classification, code, player)
         self.type = type
         self.item = item
-        super(SMZ3Item, self).__init__(name, classification, code, player)
