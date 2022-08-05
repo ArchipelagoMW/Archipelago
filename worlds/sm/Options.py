@@ -52,6 +52,10 @@ class DeathLink(Choice):
     alias_true = 1
     default = 0
 
+class RemoteItems(Toggle):
+    """Indicates you get items sent from your own world. This allows coop play of a world."""
+    display_name = "Remote Items"  
+
 class MaxDifficulty(Choice):
     """Depending on the perceived difficulties of the techniques, bosses, hell runs etc. from the preset, it will prevent the Randomizer from placing an item in a location too difficult to reach with the current items."""
     display_name = "Maximum Difficulty"
@@ -139,15 +143,15 @@ class BossRandomization(Toggle):
     display_name = "Boss Randomization"
 
 class FunCombat(Toggle):
-    """Forces removal of Plasma Beam and Screw Attack if the preset and settings allow it. In addition, can randomly remove Spazer and Wave Beam from the Combat set. If used, might force 'items' accessibility."""
+    """Forces removal of Plasma Beam and Screw Attack if the preset and settings allow it. In addition, can randomly remove Spazer and Wave Beam from the Combat set. If used, might force 'minimal' accessibility."""
     display_name = "Fun Combat"
 
 class FunMovement(Toggle):
-    """Forces removal of Space Jump if the preset allows it. In addition, can randomly remove High Jump, Grappling Beam, Spring Ball, Speed Booster, and Bombs from the Movement set. If used, might force 'items' accessibility."""
+    """Forces removal of Space Jump if the preset allows it. In addition, can randomly remove High Jump, Grappling Beam, Spring Ball, Speed Booster, and Bombs from the Movement set. If used, might force 'minimal' accessibility."""
     display_name = "Fun Movement"
 
 class FunSuits(Toggle):
-    """If the preset and seed layout allow it, will force removal of at least one of Varia Suit and/or Gravity Suit. If used, might force 'items' accessibility."""
+    """If the preset and seed layout allow it, will force removal of at least one of Varia Suit and/or Gravity Suit. If used, might force 'minimal' accessibility."""
     display_name = "Fun Suits"
 
 class LayoutPatches(DefaultOnToggle):
@@ -176,31 +180,35 @@ class ElevatorsDoorsSpeed(DefaultOnToggle):
 
 class SpinJumpRestart(Toggle):
     """Allows Samus to start spinning in mid air after jumping or falling."""
-    displayname = "Spin Jump Restart"
+    display_name = "Spin Jump Restart"
+
+class SpeedKeep(Toggle):
+    """Let Samus keeps her momentum when landing from a fall or from jumping."""
+    display_name = "Momentum conservation (a.k.a. Speedkeep)"
 
 class InfiniteSpaceJump(Toggle):
     """Space jumps can be done quicker and at any time in air, water or lava, even after falling long distances."""
-    displayname = "Infinite Space Jump"
+    display_name = "Infinite Space Jump"
 
 class RefillBeforeSave(Toggle):
     """Refill energy and ammo when saving."""
-    displayname = "Refill Before Save"
+    display_name = "Refill Before Save"
 
 class Hud(Toggle):
     """Displays the current area name and the number of remaining items of selected item split in the HUD for the current area."""
-    displayname = "Hud"
+    display_name = "Hud"
 
 class Animals(Toggle):
     """Replace saving the animals in the escape sequence by a random surprise."""
-    displayname = "Animals"
+    display_name = "Animals"
 
 class NoMusic(Toggle):
     """Disable the background music."""
-    displayname = "No Music"
+    display_name = "No Music"
 
 class RandomMusic(Toggle):
     """Randomize the background music."""
-    displayname = "Random Music"
+    display_name = "Random Music"
 
 class CustomPreset(OptionDict):
     """
@@ -209,7 +217,7 @@ class CustomPreset(OptionDict):
     settings: hard rooms, hellruns and bosses settings
     controller: predefined controller mapping and moon walk setting
     """
-    displayname = "Custom Preset"
+    display_name = "Custom Preset"
     default = {  "knows": {},
                  "settings": {},
                  "controller": {}
@@ -217,14 +225,14 @@ class CustomPreset(OptionDict):
 
 class VariaCustomPreset(OptionList):
     """use an entry from the preset list on https://randommetroidsolver.pythonanywhere.com/presets"""
-    displayname = "Varia Custom Preset"  
+    display_name = "Varia Custom Preset"  
     default = {}
-
 
 sm_options: typing.Dict[str, type(Option)] = {
     "start_inventory_removes_from_pool": StartItemsRemovesFromPool,
     "preset": Preset,
     "start_location": StartLocation,
+    "remote_items": RemoteItems,
     "death_link": DeathLink,
     #"majors_split": "Full",
     #"scav_num_locs": "10",
@@ -262,7 +270,7 @@ sm_options: typing.Dict[str, type(Option)] = {
     #"item_sounds": "on",
     "elevators_doors_speed": ElevatorsDoorsSpeed,
     "spin_jump_restart": SpinJumpRestart,
-    #"rando_speed": "off",
+    "rando_speed": SpeedKeep,
     "infinite_space_jump": InfiniteSpaceJump,
     "refill_before_save": RefillBeforeSave,
     "hud": Hud,
@@ -270,5 +278,5 @@ sm_options: typing.Dict[str, type(Option)] = {
     "no_music": NoMusic,
     "random_music": RandomMusic,
     "custom_preset": CustomPreset,
-    "varia_custom_preset": VariaCustomPreset
+    "varia_custom_preset": VariaCustomPreset,
     }

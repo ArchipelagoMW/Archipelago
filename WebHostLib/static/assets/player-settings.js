@@ -6,24 +6,24 @@ window.addEventListener('load', () => {
   // Update game name on page
   document.getElementById('game-name').innerText = gameName;
 
-  Promise.all([fetchSettingData()]).then((results) => {
+  fetchSettingData().then((results) => {
     let settingHash = localStorage.getItem(`${gameName}-hash`);
     if (!settingHash) {
       // If no hash data has been set before, set it now
-      localStorage.setItem(`${gameName}-hash`, md5(results[0]));
+      settingHash = md5(JSON.stringify(results));
+      localStorage.setItem(`${gameName}-hash`, settingHash);
       localStorage.removeItem(gameName);
-      settingHash = md5(results[0]);
     }
 
-    if (settingHash !== md5(results[0])) {
+    if (settingHash !== md5(JSON.stringify(results))) {
       showUserMessage("Your settings are out of date! Click here to update them! Be aware this will reset " +
         "them all to default.");
       document.getElementById('user-message').addEventListener('click', resetSettings);
     }
 
     // Page setup
-    createDefaultSettings(results[0]);
-    buildUI(results[0]);
+    createDefaultSettings(results);
+    buildUI(results);
     adjustHeaderWidth();
 
     // Event listeners
@@ -36,7 +36,8 @@ window.addEventListener('load', () => {
     const nameInput = document.getElementById('player-name');
     nameInput.addEventListener('keyup', (event) => updateBaseSetting(event));
     nameInput.value = playerSettings.name;
-  }).catch((error) => {
+  }).catch((e) => {
+    console.error(e);
     const url = new URL(window.location.href);
     window.location.replace(`${url.protocol}//${url.hostname}/page-not-found`);
   })
@@ -158,9 +159,72 @@ const buildOptionsTable = (settings, romOpts = false) => {
         element.appendChild(rangeVal);
         break;
 
+      case 'special_range':
+        element = document.createElement('div');
+        element.classList.add('special-range-container');
+
+        // Build the select element
+        let specialRangeSelect = document.createElement('select');
+        specialRangeSelect.setAttribute('data-key', setting);
+        Object.keys(settings[setting].value_names).forEach((presetName) => {
+          let presetOption = document.createElement('option');
+          presetOption.innerText = presetName;
+          presetOption.value = settings[setting].value_names[presetName];
+          specialRangeSelect.appendChild(presetOption);
+        });
+        let customOption = document.createElement('option');
+        customOption.innerText = 'Custom';
+        customOption.value = 'custom';
+        customOption.selected = true;
+        specialRangeSelect.appendChild(customOption);
+        if (Object.values(settings[setting].value_names).includes(Number(currentSettings[gameName][setting]))) {
+          specialRangeSelect.value = Number(currentSettings[gameName][setting]);
+        }
+
+        // Build range element
+        let specialRangeWrapper = document.createElement('div');
+        specialRangeWrapper.classList.add('special-range-wrapper');
+        let specialRange = document.createElement('input');
+        specialRange.setAttribute('type', 'range');
+        specialRange.setAttribute('data-key', setting);
+        specialRange.setAttribute('min', settings[setting].min);
+        specialRange.setAttribute('max', settings[setting].max);
+        specialRange.value = currentSettings[gameName][setting];
+
+        // Build rage value element
+        let specialRangeVal = document.createElement('span');
+        specialRangeVal.classList.add('range-value');
+        specialRangeVal.setAttribute('id', `${setting}-value`);
+        specialRangeVal.innerText = currentSettings[gameName][setting] ?? settings[setting].defaultValue;
+
+        // Configure select event listener
+        specialRangeSelect.addEventListener('change', (event) => {
+          if (event.target.value === 'custom') { return; }
+
+          // Update range slider
+          specialRange.value = event.target.value;
+          document.getElementById(`${setting}-value`).innerText = event.target.value;
+          updateGameSetting(event);
+        });
+
+        // Configure range event handler
+        specialRange.addEventListener('change', (event) => {
+          // Update select element
+          specialRangeSelect.value =
+            (Object.values(settings[setting].value_names).includes(parseInt(event.target.value))) ?
+            parseInt(event.target.value) : 'custom';
+          document.getElementById(`${setting}-value`).innerText = event.target.value;
+          updateGameSetting(event);
+        });
+
+        element.appendChild(specialRangeSelect);
+        specialRangeWrapper.appendChild(specialRange);
+        specialRangeWrapper.appendChild(specialRangeVal);
+        element.appendChild(specialRangeWrapper);
+        break;
+
       default:
-        console.error(`Unknown setting type: ${settings[setting].type}`);
-        console.error(setting);
+        console.error(`Ignoring unknown setting type: ${settings[setting].type} with name ${setting}`);
         return;
     }
 

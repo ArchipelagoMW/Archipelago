@@ -1,7 +1,7 @@
 known_logic_tricks = {
     'Fewer Tunic Requirements': {
         'name'    : 'logic_fewer_tunic_requirements',
-        'tags'    : ("General", "Fire Temple", "Water Temple", "Gerudo Training Grounds", "Zora's Fountain",),
+        'tags'    : ("General", "Fire Temple", "Water Temple", "Gerudo Training Ground", "Zora's Fountain",),
         'tooltip' : '''\
                     Allows the following possible without Tunics:
                     - Enter Water Temple. The key below the center
@@ -10,7 +10,7 @@ known_logic_tricks = {
                     accessible, and not Volvagia.
                     - Zora's Fountain Bottom Freestanding PoH.
                     Might not have enough health to resurface.
-                    - Gerudo Training Grounds Underwater
+                    - Gerudo Training Ground Underwater
                     Silver Rupee Chest. May need to make multiple
                     trips.
                     '''},
@@ -51,20 +51,20 @@ known_logic_tricks = {
                     Can be reached by side-hopping off
                     the watchtower.
                     '''},
-    'Dodongo\'s Cavern Staircase with Bow': {
+    "Dodongo's Cavern Staircase with Bow": {
         'name'    : 'logic_dc_staircase',
         'tags'    : ("Dodongo's Cavern",),
         'tooltip' : '''\
                     The Bow can be used to knock down the stairs
                     with two well-timed shots.
                     '''},
-    'Dodongo\'s Cavern Spike Trap Room Jump without Hover Boots': {
+    "Dodongo's Cavern Spike Trap Room Jump without Hover Boots": {
         'name'    : 'logic_dc_jump',
         'tags'    : ("Dodongo's Cavern",),
         'tooltip' : '''\
                     Jump is adult only.
                     '''},
-    'Dodongo\'s Cavern Vines GS from Below with Longshot': {
+    "Dodongo's Cavern Vines GS from Below with Longshot": {
         'name'    : 'logic_dc_vines_gs',
         'tags'    : ("Dodongo's Cavern", "Skulltulas",),
         'tooltip' : '''\
@@ -73,9 +73,9 @@ known_logic_tricks = {
                     from below, by shooting it through the vines,
                     bypassing the need to lower the staircase.
                     '''},
-    'Gerudo Fortress "Kitchen" with No Additional Items': {
+    '''Thieves' Hideout "Kitchen" with No Additional Items''': {
         'name'    : 'logic_gerudo_kitchen',
-        'tags'    : ("Gerudo's Fortress",),
+        'tags'    : ("Thieves' Hideout", "Gerudo's Fortress"),
         'tooltip' : '''\
                     The logic normally guarantees one of Bow, Hookshot,
                     or Hover Boots.
@@ -157,7 +157,7 @@ known_logic_tricks = {
                     Can jump up to the spinning platform from
                     below as adult.
                     '''},
-    'Crater\'s Bean PoH with Hover Boots': {
+    "Crater's Bean PoH with Hover Boots": {
         'name'    : 'logic_crater_bean_poh_with_hovers',
         'tags'    : ("Death Mountain Crater",),
         'tooltip' : '''\
@@ -165,7 +165,7 @@ known_logic_tricks = {
                     near Goron City and walk up the
                     very steep slope.
                     '''},
-    'Zora\'s Domain Entry with Cucco': {
+    "Zora's Domain Entry with Cucco": {
         'name'    : 'logic_zora_with_cucco',
         'tags'    : ("Zora's River",),
         'tooltip' : '''\
@@ -185,9 +185,9 @@ known_logic_tricks = {
                     a particularly egregious example. Logic normally
                     expects Din's Fire and Song of Time.
                     '''},
-    'Gerudo Training Grounds MQ Left Side Silver Rupees with Hookshot': {
+    'Gerudo Training Ground MQ Left Side Silver Rupees with Hookshot': {
         'name'    : 'logic_gtg_mq_with_hookshot',
-        'tags'    : ("Gerudo Training Grounds",),
+        'tags'    : ("Gerudo Training Ground",),
         'tooltip' : '''\
                     The highest silver rupee can be obtained by
                     hookshotting the target and then immediately jump
@@ -238,14 +238,6 @@ known_logic_tricks = {
                     front of the switch, either use the Hover Boots
                     or hit the shortcut switch at the top of the
                     room and jump from the glass blocks that spawn.
-                    '''},
-    'Forest Temple MQ Twisted Hallway Switch with Hookshot': {
-        'name'    : 'logic_forest_mq_hallway_switch_hookshot',
-        'tags'    : ("Forest Temple",),
-        'tooltip' : '''\
-                    There's a very small gap between the glass block
-                    and the wall. Through that gap you can hookshot
-                    the target on the ceiling.
                     '''},
     'Death Mountain Trail Chest with Strength': {
         'name'    : 'logic_dmt_bombable',
@@ -412,7 +404,7 @@ known_logic_tricks = {
                     Longshot can be shot through the ceiling to obtain 
                     the token with two fewer small keys than normal.
                     '''},
-    'Zora\'s River Lower Freestanding PoH as Adult with Nothing': {
+    "Zora's River Lower Freestanding PoH as Adult with Nothing": {
         'name'    : 'logic_zora_river_lower',
         'tags'    : ("Zora's River",),
         'tooltip' : '''\
@@ -510,7 +502,7 @@ known_logic_tricks = {
                     you can get enough of a break to take some time
                     to aim more carefully.
                     '''},
-    'Dodongo\'s Cavern Scarecrow GS with Armos Statue': {
+    "Dodongo's Cavern Scarecrow GS with Armos Statue": {
         'name'    : 'logic_dc_scarecrow_gs',
         'tags'    : ("Dodongo's Cavern", "Skulltulas",),
         'tooltip' : '''\
@@ -549,7 +541,7 @@ known_logic_tricks = {
         'name'    : 'logic_spirit_mq_lower_adult',
         'tags'    : ("Spirit Temple",),
         'tooltip' : '''\
-                    It can be done with Din\'s Fire and Bow.
+                    It can be done with Din's Fire and Bow.
                     Whenever an arrow passes through a lit torch, it
                     resets the timer. It's finicky but it's also
                     possible to stand on the pillar next to the center
@@ -712,13 +704,13 @@ known_logic_tricks = {
                     in the same jump in order to destroy it before you
                     fall into the lava.
                     '''},
-    'Zora\'s Domain Entry with Hover Boots': {
+    "Zora's Domain Entry with Hover Boots": {
         'name'    : 'logic_zora_with_hovers',
         'tags'    : ("Zora's River",),
         'tooltip' : '''\
                     Can hover behind the waterfall as adult.
                     '''},
-    'Zora\'s Domain GS with No Additional Items': {
+    "Zora's Domain GS with No Additional Items": {
         'name'    : 'logic_domain_gs',
         'tags'    : ("Zora's Domain", "Skulltulas",),
         'tooltip' : '''\
@@ -744,7 +736,7 @@ known_logic_tricks = {
                     needing a Bow.
                     Applies in both vanilla and MQ Shadow.
                     '''},
-    'Stop Link the Goron with Din\'s Fire': {
+    "Stop Link the Goron with Din's Fire": {
         'name'    : 'logic_link_goron_dins',
         'tags'    : ("Goron City",),
         'tooltip' : '''\
@@ -833,7 +825,7 @@ known_logic_tricks = {
                     Link will not be expected to do anything at Gerudo's
                     Fortress.
                     '''},
-    'Zora\'s River Upper Freestanding PoH as Adult with Nothing': {
+    "Zora's River Upper Freestanding PoH as Adult with Nothing": {
         'name'    : 'logic_zora_river_upper',
         'tags'    : ("Zora's River",),
         'tooltip' : '''\
@@ -907,9 +899,9 @@ known_logic_tricks = {
                     Skulltula and obtain the token by having the Boomerang
                     interact with it along the return path.
                     '''},
-    'Gerudo Training Grounds Left Side Silver Rupees without Hookshot': {
+    'Gerudo Training Ground Left Side Silver Rupees without Hookshot': {
         'name'    : 'logic_gtg_without_hookshot',
-        'tags'    : ("Gerudo Training Grounds",),
+        'tags'    : ("Gerudo Training Ground",),
         'tooltip' : '''\
                     After collecting the rest of the silver rupees in the room,
                     you can reach the final silver rupee on the ceiling by being
@@ -919,9 +911,9 @@ known_logic_tricks = {
                     the edge of a flame wall before it can rise up to block you.
                     To do so without taking damage is more precise.
                     '''},
-    'Gerudo Training Grounds MQ Left Side Silver Rupees without Hookshot': {
+    'Gerudo Training Ground MQ Left Side Silver Rupees without Hookshot': {
         'name'    : 'logic_gtg_mq_without_hookshot',
-        'tags'    : ("Gerudo Training Grounds",),
+        'tags'    : ("Gerudo Training Ground",),
         'tooltip' : '''\
                     After collecting the rest of the silver rupees in the room,
                     you can reach the final silver rupee on the ceiling by being
@@ -932,18 +924,18 @@ known_logic_tricks = {
                     Also included with this trick is that fact that the switch
                     that unbars the door to the final chest of GTG can be hit
                     without a projectile, using a precise jump slash.
-                    This trick supersedes "Gerudo Training Grounds MQ Left Side
+                    This trick supersedes "Gerudo Training Ground MQ Left Side
                     Silver Rupees with Hookshot".
                     '''},
-    'Reach Gerudo Training Grounds Fake Wall Ledge with Hover Boots': {
+    'Reach Gerudo Training Ground Fake Wall Ledge with Hover Boots': {
         'name'    : 'logic_gtg_fake_wall',
-        'tags'    : ("Gerudo Training Grounds",),
+        'tags'    : ("Gerudo Training Ground",),
         'tooltip' : '''\
                     A precise Hover Boots use from the top of the chest can allow
                     you to grab the ledge without needing the usual requirements.
                     In Master Quest, this always skips a Song of Time requirement.
                     In Vanilla, this skips a Hookshot requirement, but is only
-                    relevant if "Gerudo Training Grounds Left Side Silver Rupees
+                    relevant if "Gerudo Training Ground Left Side Silver Rupees
                     without Hookshot" is enabled.
                     '''},
     'Water Temple Cracked Wall with No Additional Items': {
@@ -979,7 +971,7 @@ known_logic_tricks = {
                     in the Water Temple are not going to be relevant unless this
                     trick is first enabled.
                     '''},
-    'Water Temple Central Pillar GS with Farore\'s Wind': {
+    "Water Temple Central Pillar GS with Farore's Wind": {
         'name'    : 'logic_water_central_gs_fw',
         'tags'    : ("Water Temple", "Skulltulas",),
         'tooltip' : '''\
@@ -1112,7 +1104,7 @@ known_logic_tricks = {
                     this allows you to obtain the GS on the door frame
                     as adult without Hookshot or Song of Time.
                     '''},
-    'Dodongo\'s Cavern MQ Early Bomb Bag Area as Child': {
+    "Dodongo's Cavern MQ Early Bomb Bag Area as Child": {
         'name'    : 'logic_dc_mq_child_bombs',
         'tags'    : ("Dodongo's Cavern",),
         'tooltip' : '''\
@@ -1121,7 +1113,7 @@ known_logic_tricks = {
                     without needing a Slingshot. You will
                     take fall damage.
                     '''},
-    'Dodongo\'s Cavern Two Scrub Room with Strength': {
+    "Dodongo's Cavern Two Scrub Room with Strength": {
         'name'    : 'logic_dc_scrub_room',
         'tags'    : ("Dodongo's Cavern",),
         'tooltip' : '''\
@@ -1130,7 +1122,7 @@ known_logic_tricks = {
                     destroy the mud wall blocking the room with two
                     Deku Scrubs.
                     '''},
-    'Dodongo\'s Cavern Child Slingshot Skips': {
+    "Dodongo's Cavern Child Slingshot Skips": {
         'name'    : 'logic_dc_slingshot_skip',
         'tags'    : ("Dodongo's Cavern",),
         'tooltip' : '''\
@@ -1140,7 +1132,7 @@ known_logic_tricks = {
                     you also enable the Adult variant: "Dodongo's
                     Cavern Spike Trap Room Jump without Hover Boots".
                     '''},
-    'Dodongo\'s Cavern MQ Light the Eyes with Strength': {
+    "Dodongo's Cavern MQ Light the Eyes with Strength": {
         'name'    : 'logic_dc_mq_eyes',
         'tags'    : ("Dodongo's Cavern",),
         'tooltip' : '''\
@@ -1153,7 +1145,7 @@ known_logic_tricks = {
                     Also, the bombable floor before King Dodongo can be
                     destroyed with Hammer if hit in the very center.
                     '''},
-    'Dodongo\'s Cavern MQ Back Areas as Child without Explosives': {
+    "Dodongo's Cavern MQ Back Areas as Child without Explosives": {
         'name'    : 'logic_dc_mq_child_back',
         'tags'    : ("Dodongo's Cavern",),
         'tooltip' : '''\
@@ -1240,7 +1232,7 @@ known_logic_tricks = {
                     It can also be done as child, using the
                     Slingshot instead of the Bow.
                     '''},
-    'Fire Temple East Tower without Scarecrow\'s Song': {
+    "Fire Temple East Tower without Scarecrow's Song": {
         'name'    : 'logic_fire_scarecrow',
         'tags'    : ("Fire Temple",),
         'tooltip' : '''\
@@ -1285,33 +1277,33 @@ known_logic_tricks = {
                     Removes the requirements for the Lens of Truth
                     in Bottom of the Well.
                     '''},
-    'Ganon\'s Castle MQ without Lens of Truth': {
+    "Ganon's Castle MQ without Lens of Truth": {
         'name'    : 'logic_lens_castle_mq',
         'tags'    : ("Lens of Truth","Ganon's Castle",),
         'tooltip' : '''\
                     Removes the requirements for the Lens of Truth
                     in Ganon's Castle MQ.
                     '''},
-    'Ganon\'s Castle without Lens of Truth': {
+    "Ganon's Castle without Lens of Truth": {
         'name'    : 'logic_lens_castle',
         'tags'    : ("Lens of Truth","Ganon's Castle",),
         'tooltip' : '''\
                     Removes the requirements for the Lens of Truth
                     in Ganon's Castle.
                     '''},
-    'Gerudo Training Grounds MQ without Lens of Truth': {
+    'Gerudo Training Ground MQ without Lens of Truth': {
         'name'    : 'logic_lens_gtg_mq',
-        'tags'    : ("Lens of Truth","Gerudo Training Grounds",),
+        'tags'    : ("Lens of Truth","Gerudo Training Ground",),
         'tooltip' : '''\
                     Removes the requirements for the Lens of Truth
-                    in Gerudo Training Grounds MQ.
+                    in Gerudo Training Ground MQ.
                     '''},
-    'Gerudo Training Grounds without Lens of Truth': {
+    'Gerudo Training Ground without Lens of Truth': {
         'name'    : 'logic_lens_gtg',
-        'tags'    : ("Lens of Truth","Gerudo Training Grounds",),
+        'tags'    : ("Lens of Truth","Gerudo Training Ground",),
         'tooltip' : '''\
                     Removes the requirements for the Lens of Truth
-                    in Gerudo Training Grounds.
+                    in Gerudo Training Ground.
                     '''},
     'Jabu MQ without Lens of Truth': {
         'name'    : 'logic_lens_jabu_mq',

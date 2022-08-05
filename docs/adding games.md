@@ -6,6 +6,11 @@ There are two key steps to incorporating a game into Archipelago:
 - Game Modification 
 - Archipelago Server Integration
 
+Refer to the following documents as well:
+- [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md) for network communication between client and server.
+- [world api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md) for documentation on server side code and creating a world package.
+
+
 # Game Modification  
 One half of the work required to integrate a game into Archipelago is the development of the game client. This is 
 typically done through a modding API or other modification process, described further down.
@@ -190,53 +195,44 @@ This is a good way to get any project you're working on sued out from under you.
 The right way to distribute modified versions of a game's binaries, assuming that the licensing terms do not allow you
 to copy them wholesale, is as patches. 
 
-There are many patch formats, which I'll cover in brief. The common theme is that you can’t distribute anything that wasn't
-made by you. Patches are files that describe how your modified file differs from the original one, thus avoiding the
-issue of distributing someone else’s original work.
+There are many patch formats, which I'll cover in brief. The common theme is that you can’t distribute anything that
+wasn't made by you. Patches are files that describe how your modified file differs from the original one, thus avoiding
+the issue of distributing someone else’s original work.
 
 Users who have a copy of the game just need to apply the patch, and those who don’t are unable to play.  
-  
-### IPS Patches
-This is an extremely simple, early patch format, but is limited to games of about 16 Megabytes in size or less.
-You will often find IPS patches being used to distribute mods for old video game ROMs.
-IPS patches are a delta patch format, which means they act only as a simple list of alterations that need to be made to
-an original file in order to produce a new one.
 
-Archipelago may use pre-made IPS patches to apply specific changes to a game, but will not create IPS patches as a means
-of distributing game modifications. Although IPS patches can be applied quickly, creating them is quite slow, so using
-them for distributing randomized games is not current practice. 
+### Patches
 
-However, due to the format's simplicity, even patch files of this type can unintentionally include copyrighted data.
-This is because IPS patches don't have a good way to shift existing data in a file, and thus if data has to be moved
-forward x number of bytes, which might be necessary for data insertion, the patch will simply include a copy of the
-shifted bytes after the inserted ones. 
-Increasing and decreasing file size is also not a universally supported operation, due to the patch format's age.  
-  
-### BPS Patches
-BPS is the younger cousin of the IPS patch. 
+#### IPS
+IPS patches are a simple list of chunks to replace in the original to generate the output. It is not possible to encode
+moving of a chunk, so they may inadvertently contain copyrighted material and should be avoided unless you know it's
+fine.
 
-More flexible and theoretically future-proofed for any file size, BPS patches are based on the idea of linear patching.
-Unlike IPS patches, which use a system called delta patching, linear patches act as a series of steps for creating a
-modified file from scratch through a combination of original data and patch data, which is appended onto the end of the
-modified game file as the patch progresses.
+#### UPS, BPS, VCDIFF (xdelta), bsdiff
+Other patch formats generate the difference between two streams (delta patches) with varying complexity. This way it is
+possible to insert bytes or move chunks without including any original data. Bsdiff is highly optimized and includes
+compression, so this format is used by APBP.
 
-This means that some operations, like inserting data into the middle of a file instead of simply overwriting it,
-are much easier to do.
-However, like IPS, it isn't a format well suited to randomizers, due to the asymmetric costs of creating and applying
-BPS patches.  
-  
-### Xdelta Patches
-Xdelta is the true successor to IPS, featuring better optimization and verification, and manages to transcend many of
-the limitations of IPS. However, Xdelta patches are particularly expensive to create.  
-  
-### bsdiff  
-bsdiff is the current format adopted by Archipelago for creating and distributing patches.
-It is much faster to create patches of this variety, which is why it sees use in this application.
-  
+Only a bsdiff module is integrated into AP. If the final patch requires or is based on any other patch, convert them to
+bsdiff or APBP before adding it to the AP source code as "basepatch.bsdiff4" or "basepatch.apbp".
+
+#### APBP Archipelago Binary Patch
+Starting with version 4 of the APBP format, this is a ZIP file containing metadata in `archipelago.json` and additional
+files required by the game / patching process. For ROM-based games the ZIP will include a `delta.bsdiff4` which is the
+bsdiff between the original and the randomized ROM.
+
+To make using APBP easy, they can be generated by inheriting from `Patch.APDeltaPatch`.
+
 ### Mod files
 Games which support modding will usually just let you drag and drop the mod’s files into a folder somewhere.
-Mod files come in many forms, but the rules about not distributing other people's content remain the same.  
-  
+Mod files come in many forms, but the rules about not distributing other people's content remain the same.
+They can either be generic and modify the game using a seed or `slot_data` from the AP websocket, or they can be
+generated per seed.
+
+If the mod is generated by AP and is installed from a ZIP file, it may be possible to include APBP metadata for easy
+integration into the Webhost by inheriting from `Patch.APContainer`.
+
+
 ## Archipelago Integration
 Integrating a randomizer into Archipelago involves a few steps.
 There are several things that may need to be done, but the most important is to create an implementation of the 
@@ -248,7 +244,11 @@ checks, what options to offer for the player’s yaml file, and the code to init
 
 Here’s an example of what your world module can look like:  
   
-![Example world module directory open in Window's Explorer](./img/archipelago-world-directory-example.png)  
+![Example world module directory open in Window's Explorer](./img/archipelago-world-directory-example.png)
+
+The minimum requirements for a new archipelago world are the package itself (the world folder containing a file named `__init__.py`),
+which must define a `World` class object for the game with a game name, create an equal number of items and locations with rules,
+a win condition, and at least one `Region` object.
   
 Let's give a quick breakdown of what the contents for these files look like.
 This is just one example of an Archipelago world - the way things are done below is not an immutable property of Archipelago.  
@@ -337,6 +337,7 @@ fields in the class being extended.
 This is also a good place to put game-specific quirky behavior that needs to be managed, as it tends to make things a bit
 cluttered if you put these things elsewhere.  
   
-The various methods and attributes are documented in `/worlds/AutoWorld.py[World]`, 
+The various methods and attributes are documented in `/worlds/AutoWorld.py[World]` and
+[world api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md),
 though it is also recommended to look at existing implementations to see how all this works first-hand. 
 Once you get all that, all that remains to do is test the game and publish your work.

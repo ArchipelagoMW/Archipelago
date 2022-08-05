@@ -18,6 +18,16 @@ Currently, the following games are supported:
 * VVVVVV
 * Raft
 * Super Mario 64
+* Meritous
+* Super Metroid/Link to the Past combo randomizer (SMZ3)
+* ChecksFinder
+* ArchipIDLE
+* Hollow Knight
+* The Witness
+* Sonic Adventure 2: Battle
+* Starcraft 2: Wings of Liberty
+* Donkey Kong Country 3
+* Dark Souls 3
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled
@@ -41,7 +51,7 @@ Archipelago was directly forked from bonta0's `multiworld_31` branch of ALttPEnt
 ## Running Archipelago
 For most people all you need to do is head over to the [releases](https://github.com/ArchipelagoMW/Archipelago/releases) page then download and run the appropriate installer. The installers function on Windows only.
 
-If you are running Archipelago from a non-Windows system then the likely scenario is that you are comfortable running source code directly. Please see our wiki page on [running Archipelago from source](https://github.com/ArchipelagoMW/Archipelago/wiki/Running-from-source).
+If you are running Archipelago from a non-Windows system then the likely scenario is that you are comfortable running source code directly. Please see our doc on [running Archipelago from source](docs/running%20from%20source.md).
 
 ## Related Repositories
 This project makes use of multiple other projects. We wouldn't be here without these other repositories and the contributions of their developers, past and present.
@@ -50,22 +60,8 @@ This project makes use of multiple other projects. We wouldn't be here without t
 * [Enemizer](https://github.com/Ijwu/Enemizer)
 * [Ocarina of Time Randomizer](https://github.com/TestRunnerSRL/OoT-Randomizer)
 
-## Contributing
-Contributions are welcome. We have a few asks of any new contributors.
+## [Contributing](/docs/contributing.md)
 
-* Ensure that all changes which affect logic are covered by unit tests. 
-* Do not introduce any unit test failures/regressions.
+## [FAQ](https://archipelago.gg/faq/en/)
 
-Otherwise, we tend to judge code on a case to case basis. It is a generally good idea to stick to PEP-8 guidelines to ensure consistency with existing code. (And to make the linter happy.)
-
-## Code of Conduct
-We conduct ourselves openly and inclusively here. Please do not contribute to an environment which makes other people uncomfortable. This means that we expect all contributors or participants here to:
-
-* Be welcoming and inclusive in tone and language.
-* Be respectful of others and their abilities.
-* Show empathy when speaking with others.
-* Be gracious and accept feedback and constructive criticism.
-
-These guidelines apply to all channels of communication within this GitHub repository. Please be respectful in both public channels, such as issues, and private, such as private messaging or emails.
-
-Any incidents of abuse may be reported directly to Ijwu at hmfarran@gmail.com.
+## [Code of Conduct](/docs/code_of_conduct.md)

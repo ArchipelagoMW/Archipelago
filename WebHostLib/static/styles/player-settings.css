@@ -1,5 +1,5 @@
 html{
-    background-image: url('../static/backgrounds/grass/grass-0007-large.png');
+    background-image: url('../static/backgrounds/grass.png');
     background-repeat: repeat;
     background-size: 650px 650px;
 }
@@ -47,31 +47,22 @@ html{
 #player-settings h1{
     font-size: 2.5rem;
     font-weight: normal;
-    border-bottom: 1px solid #ffffff;
     width: 100%;
     margin-bottom: 0.5rem;
-    color: #ffffff;
     text-shadow: 1px 1px 4px #000000;
 }
 
 #player-settings h2{
-    font-size: 2rem;
+    font-size: 40px;
     font-weight: normal;
-    border-bottom: 1px solid #ffffff;
     width: 100%;
     margin-bottom: 0.5rem;
-    color: #ffe993;
     text-transform: lowercase;
     text-shadow: 1px 1px 2px #000000;
 }
 
 #player-settings h3, #player-settings h4, #player-settings h5, #player-settings h6{
-    color: #ffffff;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
-}
-
-#player-settings a{
-    color: #ffef00;
 }
 
 #player-settings input:not([type]){
@@ -102,6 +93,19 @@ html{
     flex-grow: 1;
 }
 
+#player-settings .left{
+    margin-right: 10px;
+}
+
+#player-settings .right{
+    margin-left: 10px;
+}
+
+#player-settings table{
+    margin-bottom: 30px;
+    width: 100%;
+}
+
 #player-settings table .select-container{
     display: flex;
     flex-direction: row;
@@ -126,11 +130,32 @@ html{
     margin-left: 0.25rem;
 }
 
+#player-settings table .special-range-container{
+    display: flex;
+    flex-direction: column;
+}
+
+#player-settings table .special-range-wrapper{
+    display: flex;
+    flex-direction: row;
+}
+
+#player-settings table .special-range-wrapper input[type=range]{
+    flex-grow: 1;
+}
+
 #player-settings table label{
     display: block;
     min-width: 200px;
     margin-right: 4px;
     cursor: default;
+}
+
+#player-settings th, #player-settings td{
+    border: none;
+    padding: 3px;
+    font-size: 17px;
+    vertical-align: top;
 }
 
 @media all and (max-width: 1000px), all and (orientation: portrait){

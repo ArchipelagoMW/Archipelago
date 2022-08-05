@@ -5,5 +5,8 @@
 	"Vasagatan": ["BalboaIsland"],
 	"BalboaIsland": ["CaravanIsland"],
 	"CaravanIsland": ["Tangaroa"],
-	"Tangaroa": []
+	"Tangaroa": ["Varuna Point"],
+	"Varuna Point": ["Temperance"],
+	"Temperance": ["Utopia"],
+	"Utopia": []
 }

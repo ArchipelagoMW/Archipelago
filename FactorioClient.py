@@ -5,9 +5,11 @@ import json
 import string
 import copy
 import subprocess
-import sys
 import time
 import random
+
+import ModuleUpdate
+ModuleUpdate.update()
 
 import factorio_rcon
 import colorama
@@ -19,7 +21,7 @@ if __name__ == "__main__":
     Utils.init_logging("FactorioClient", exception_logger="Client")
 
 from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled, \
-     get_base_parser
+    get_base_parser
 from MultiServer import mark_raw
 from NetUtils import NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePart
 
@@ -62,6 +64,8 @@ class FactorioContext(CommonContext):
         self.write_data_path = None
         self.death_link_tick: int = 0  # last send death link on Factorio layer
         self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
+        self.energy_link_increment = 0
+        self.last_deplete = 0
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -105,6 +109,34 @@ class FactorioContext(CommonContext):
             if "checked_locations" in args and args["checked_locations"]:
                 self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
                                                 item_name in args["checked_locations"]})
+            if cmd == "Connected" and self.energy_link_increment:
+                asyncio.create_task(self.send_msgs([{
+                    "cmd": "SetNotify", "keys": ["EnergyLink"]
+                }]))
+        elif cmd == "SetReply":
+            if args["key"] == "EnergyLink":
+                if self.energy_link_increment and args.get("last_deplete", -1) == self.last_deplete:
+                    # it's our deplete request
+                    gained = int(args["original_value"] - args["value"])
+                    gained_text = Utils.format_SI_prefix(gained) + "J"
+                    if gained:
+                        logger.debug(f"EnergyLink: Received {gained_text}. "
+                                     f"{Utils.format_SI_prefix(args['value'])}J remaining.")
+                        self.rcon_client.send_command(f"/ap-energylink {gained}")
+
+    def run_gui(self):
+        from kvui import GameManager
+
+        class FactorioManager(GameManager):
+            logging_pairs = [
+                ("Client", "Archipelago"),
+                ("FactorioServer", "Factorio Server Log"),
+                ("FactorioWatcher", "Bridge Data Log"),
+            ]
+            base_title = "Archipelago Factorio Client"
+
+        self.ui = FactorioManager(self)
+        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
 async def game_watcher(ctx: FactorioContext):
@@ -113,11 +145,14 @@ async def game_watcher(ctx: FactorioContext):
     next_bridge = time.perf_counter() + 1
     try:
         while not ctx.exit_event.is_set():
-            if ctx.awaiting_bridge and ctx.rcon_client and time.perf_counter() > next_bridge:
+            # TODO: restore on-demand refresh
+            if ctx.rcon_client and time.perf_counter() > next_bridge:
                 next_bridge = time.perf_counter() + 1
                 ctx.awaiting_bridge = False
                 data = json.loads(ctx.rcon_client.send_command("/ap-sync"))
-                if data["slot_name"] != ctx.auth:
+                if not ctx.auth:
+                    pass  # auth failed, wait for new attempt
+                elif data["slot_name"] != ctx.auth:
                     bridge_logger.warning(f"Connected World is not the expected one {data['slot_name']} != {ctx.auth}")
                 elif data["seed_name"] != ctx.seed_name:
                     bridge_logger.warning(
@@ -127,8 +162,7 @@ async def game_watcher(ctx: FactorioContext):
                     research_data = data["research_done"]
                     research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
                     victory = data["victory"]
-                    if "death_link" in data:    # TODO: Remove this if statement around version 0.2.4 or so
-                        await ctx.update_death_link(data["death_link"])
+                    await ctx.update_death_link(data["death_link"])
 
                     if not ctx.finished_game and victory:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -144,7 +178,31 @@ async def game_watcher(ctx: FactorioContext):
                     if death_link_tick != ctx.death_link_tick:
                         ctx.death_link_tick = death_link_tick
                         if "DeathLink" in ctx.tags:
-                            await ctx.send_death()
+                            asyncio.create_task(ctx.send_death())
+                    if ctx.energy_link_increment:
+                        in_world_bridges = data["energy_bridges"]
+                        if in_world_bridges:
+                            in_world_energy = data["energy"]
+                            if in_world_energy < (ctx.energy_link_increment * in_world_bridges):
+                                # attempt to refill
+                                ctx.last_deplete = time.time()
+                                asyncio.create_task(ctx.send_msgs([{
+                                    "cmd": "Set", "key": "EnergyLink", "operations":
+                                        [{"operation": "add", "value": -ctx.energy_link_increment * in_world_bridges},
+                                         {"operation": "max", "value": 0}],
+                                    "last_deplete": ctx.last_deplete
+                                }]))
+                            # Above Capacity - (len(Bridges) * ENERGY_INCREMENT)
+                            elif in_world_energy > (in_world_bridges * ctx.energy_link_increment * 5) - \
+                                ctx.energy_link_increment*in_world_bridges:
+                                value = ctx.energy_link_increment * in_world_bridges
+                                asyncio.create_task(ctx.send_msgs([{
+                                    "cmd": "Set", "key": "EnergyLink", "operations":
+                                        [{"operation": "add", "value": value}]
+                                }]))
+                                ctx.rcon_client.send_command(
+                                    f"/ap-energylink -{value}")
+                                logger.debug(f"EnergyLink: Sent {Utils.format_SI_prefix(value)}J")
 
             await asyncio.sleep(0.1)
 
@@ -233,12 +291,16 @@ async def factorio_server_watcher(ctx: FactorioContext):
         factorio_process.wait(5)
 
 
-async def get_info(ctx, rcon_client):
+async def get_info(ctx: FactorioContext, rcon_client: factorio_rcon.RCONClient):
     info = json.loads(rcon_client.send_command("/ap-rcon-info"))
     ctx.auth = info["slot_name"]
     ctx.seed_name = info["seed_name"]
     # 0.2.0 addition, not present earlier
     death_link = bool(info.get("death_link", False))
+    ctx.energy_link_increment = info.get("energy_link", 0)
+    logger.debug(f"Energy Link Increment: {ctx.energy_link_increment}")
+    if ctx.energy_link_increment and ctx.ui:
+        ctx.ui.enable_energy_link()
     await ctx.update_death_link(death_link)
 
 
@@ -282,8 +344,10 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
             await asyncio.sleep(0.01)
 
     except Exception as e:
-        logger.exception(e)
-        logger.error("Aborted Factorio Server Bridge")
+        logger.exception(e, extra={"compact_gui": True})
+        msg = "Aborted Factorio Server Bridge"
+        logger.error(msg)
+        ctx.gui_error(msg, e)
         ctx.exit_event.set()
 
     else:
@@ -299,15 +363,11 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
 async def main(args):
     ctx = FactorioContext(args.connect, args.password)
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
-    input_task = None
+
     if gui_enabled:
-        from kvui import FactorioManager
-        ctx.ui = FactorioManager(ctx)
-        ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
-    else:
-        ui_task = None
-    if sys.stdin:
-        input_task = asyncio.create_task(console_loop(ctx), name="Input")
+        ctx.run_gui()
+    ctx.run_cli()
+
     factorio_server_task = asyncio.create_task(factorio_spinup_server(ctx), name="FactorioSpinupServer")
     successful_launch = await factorio_server_task
     if successful_launch:
@@ -322,12 +382,6 @@ async def main(args):
         await factorio_server_task
 
     await ctx.shutdown()
-
-    if ui_task:
-        await ui_task
-
-    if input_task:
-        input_task.cancel()
 
 
 class FactorioJSONtoTextParser(JSONtoTextParser):
@@ -346,6 +400,7 @@ if __name__ == '__main__':
                                          "Refer to Factorio --help for those.")
     parser.add_argument('--rcon-port', default='24242', type=int, help='Port to use to communicate with Factorio')
     parser.add_argument('--rcon-password', help='Password to authenticate with RCON.')
+    parser.add_argument('--server-settings', help='Factorio server settings configuration file.')
 
     args, rest = parser.parse_known_args()
     colorama.init()
@@ -356,6 +411,9 @@ if __name__ == '__main__':
     factorio_server_logger = logging.getLogger("FactorioServer")
     options = Utils.get_options()
     executable = options["factorio_options"]["executable"]
+    server_settings = args.server_settings if args.server_settings else options["factorio_options"].get("server_settings", None)
+    if server_settings:
+        server_settings = os.path.abspath(server_settings)
 
     if not os.path.exists(os.path.dirname(executable)):
         raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")
@@ -367,9 +425,10 @@ if __name__ == '__main__':
         else:
             raise FileNotFoundError(f"Path {executable} is not an executable file.")
 
-    server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password, *rest)
+    if server_settings and os.path.isfile(server_settings):
+        server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password, "--server-settings", server_settings, *rest)
+    else:
+        server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password, *rest)
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main(args))
-    loop.close()
+    asyncio.run(main(args))
     colorama.deinit()

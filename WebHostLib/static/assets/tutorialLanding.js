@@ -23,6 +23,7 @@ window.addEventListener('load', () => {
       games.forEach((game) => {
         const gameTitle = document.createElement('h2');
         gameTitle.innerText = game.gameTitle;
+        gameTitle.id = `${encodeURIComponent(game.gameTitle)}`;
         tutorialDiv.appendChild(gameTitle);
 
         game.tutorials.forEach((tutorial) => {
@@ -65,7 +66,16 @@ window.addEventListener('load', () => {
       showError();
       console.error(error);
     }
+
+    // Check if we are on an anchor when coming in, and scroll to it.
+    const hash = window.location.hash;
+    if (hash) {
+      const offset = 128;  // To account for navbar banner at top of page.
+      window.scrollTo(0, 0);
+      const rect = document.getElementById(hash.slice(1)).getBoundingClientRect();
+      window.scrollTo(rect.left, rect.top - offset);
+    }
   };
-  ajax.open('GET', `${window.location.origin}/static/assets/tutorial/tutorials.json`, true);
+  ajax.open('GET', `${window.location.origin}/static/generated/tutorials.json`, true);
   ajax.send();
 });

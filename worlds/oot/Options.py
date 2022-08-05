@@ -172,12 +172,12 @@ class ExtraTriforces(Range):
 
 class LogicalChus(Toggle):
     """Bombchus are properly considered in logic. The first found pack will have 20 chus; Kokiri Shop and Bazaar sell refills; bombchus open Bombchu Bowling."""
-    displayname = "Bombchus Considered in Logic"
+    display_name = "Bombchus Considered in Logic"
 
 
 class MQDungeons(Range):
     """Number of MQ dungeons. The dungeons to replace are randomly selected."""
-    displayname = "Number of MQ Dungeons"
+    display_name = "Number of MQ Dungeons"
     range_start = 0
     range_end = 12
     default = 0
@@ -204,7 +204,7 @@ world_options: typing.Dict[str, type(Option)] = {
 
 class LacsCondition(Choice): 
     """Set the requirements for the Light Arrow Cutscene in the Temple of Time."""
-    displayname = "Light Arrow Cutscene Requirement"
+    display_name = "Light Arrow Cutscene Requirement"
     option_vanilla = 0
     option_stones = 1
     option_medallions = 2
@@ -214,7 +214,7 @@ class LacsCondition(Choice):
 
 class LacsStones(Range):
     """Set the number of Spiritual Stones required for LACS."""
-    displayname = "Spiritual Stones Required for LACS"
+    display_name = "Spiritual Stones Required for LACS"
     range_start = 0
     range_end = 3
     default = 3
@@ -222,7 +222,7 @@ class LacsStones(Range):
 
 class LacsMedallions(Range):
     """Set the number of medallions required for LACS."""
-    displayname = "Medallions Required for LACS"
+    display_name = "Medallions Required for LACS"
     range_start = 0
     range_end = 6
     default = 6
@@ -230,7 +230,7 @@ class LacsMedallions(Range):
 
 class LacsRewards(Range):
     """Set the number of dungeon rewards required for LACS."""
-    displayname = "Dungeon Rewards Required for LACS"
+    display_name = "Dungeon Rewards Required for LACS"
     range_start = 0
     range_end = 9
     default = 9
@@ -238,7 +238,7 @@ class LacsRewards(Range):
 
 class LacsTokens(Range):
     """Set the number of Gold Skulltula Tokens required for LACS."""
-    displayname = "Tokens Required for LACS"
+    display_name = "Tokens Required for LACS"
     range_start = 0
     range_end = 100
     default = 40
@@ -255,7 +255,7 @@ lacs_options: typing.Dict[str, type(Option)] = {
 
 class BridgeStones(Range):
     """Set the number of Spiritual Stones required for the rainbow bridge."""
-    displayname = "Spiritual Stones Required for Bridge"
+    display_name = "Spiritual Stones Required for Bridge"
     range_start = 0
     range_end = 3
     default = 3
@@ -263,7 +263,7 @@ class BridgeStones(Range):
 
 class BridgeMedallions(Range):
     """Set the number of medallions required for the rainbow bridge."""
-    displayname = "Medallions Required for Bridge"
+    display_name = "Medallions Required for Bridge"
     range_start = 0
     range_end = 6
     default = 6
@@ -271,7 +271,7 @@ class BridgeMedallions(Range):
 
 class BridgeRewards(Range):
     """Set the number of dungeon rewards required for the rainbow bridge."""
-    displayname = "Dungeon Rewards Required for Bridge"
+    display_name = "Dungeon Rewards Required for Bridge"
     range_start = 0
     range_end = 9
     default = 9
@@ -279,7 +279,7 @@ class BridgeRewards(Range):
 
 class BridgeTokens(Range):
     """Set the number of Gold Skulltula Tokens required for the rainbow bridge."""
-    displayname = "Tokens Required for Bridge"
+    display_name = "Tokens Required for Bridge"
     range_start = 0
     range_end = 100
     default = 40
@@ -295,7 +295,7 @@ bridge_options: typing.Dict[str, type(Option)] = {
 
 class SongShuffle(Choice): 
     """Set where songs can appear."""
-    displayname = "Shuffle Songs"
+    display_name = "Shuffle Songs"
     option_song = 0
     option_dungeon = 1
     option_any = 2
@@ -304,7 +304,7 @@ class SongShuffle(Choice):
 class ShopShuffle(Choice): 
     """Randomizes shop contents. "fixed_number" randomizes a specific number of items per shop; 
     "random_number" randomizes the value for each shop. """
-    displayname = "Shopsanity"
+    display_name = "Shopsanity"
     option_off = 0
     option_fixed_number = 1
     option_random_number = 2
@@ -314,14 +314,14 @@ class ShopShuffle(Choice):
 class ShopSlots(Range):
     """Number of items per shop to be randomized into the main itempool. 
     Only active if Shopsanity is set to "fixed_number." """
-    displayname = "Shuffled Shop Slots"
+    display_name = "Shuffled Shop Slots"
     range_start = 0
     range_end = 4
 
 
 class TokenShuffle(Choice): 
     """Token rewards from Gold Skulltulas are shuffled into the pool."""
-    displayname = "Tokensanity"
+    display_name = "Tokensanity"
     option_off = 0
     option_dungeons = 1
     option_overworld = 2
@@ -331,7 +331,7 @@ class TokenShuffle(Choice):
 
 class ScrubShuffle(Choice): 
     """Shuffle the items sold by Business Scrubs, and set the prices."""
-    displayname = "Scrub Shuffle"
+    display_name = "Scrub Shuffle"
     option_off = 0
     option_low = 1
     option_regular = 2
@@ -343,37 +343,37 @@ class ScrubShuffle(Choice):
 
 class ShuffleCows(Toggle):
     """Cows give items when Epona's Song is played."""
-    displayname = "Shuffle Cows"
+    display_name = "Shuffle Cows"
 
 
 class ShuffleSword(Toggle):
     """Shuffle Kokiri Sword into the item pool."""
-    displayname = "Shuffle Kokiri Sword"
+    display_name = "Shuffle Kokiri Sword"
 
 
 class ShuffleOcarinas(Toggle):
     """Shuffle the Fairy Ocarina and Ocarina of Time into the item pool."""
-    displayname = "Shuffle Ocarinas"
+    display_name = "Shuffle Ocarinas"
 
 
 class ShuffleEgg(Toggle):
     """Shuffle the Weird Egg from Malon at Hyrule Castle."""
-    displayname = "Shuffle Weird Egg"
+    display_name = "Shuffle Weird Egg"
 
 
 class ShuffleCard(Toggle):
     """Shuffle the Gerudo Membership Card into the item pool."""
-    displayname = "Shuffle Gerudo Card"
+    display_name = "Shuffle Gerudo Card"
 
 
 class ShuffleBeans(Toggle):
     """Adds a pack of 10 beans to the item pool and changes the bean salesman to sell one item for 60 rupees."""
-    displayname = "Shuffle Magic Beans"
+    display_name = "Shuffle Magic Beans"
 
 
 class ShuffleMedigoronCarpet(Toggle):
     """Shuffle the items sold by Medigoron and the Haunted Wasteland Carpet Salesman."""
-    displayname = "Shuffle Medigoron & Carpet Salesman"
+    display_name = "Shuffle Medigoron & Carpet Salesman"
 
 
 shuffle_options: typing.Dict[str, type(Option)] = {
@@ -394,7 +394,7 @@ shuffle_options: typing.Dict[str, type(Option)] = {
 
 class ShuffleMapCompass(Choice): 
     """Control where to shuffle dungeon maps and compasses."""
-    displayname = "Maps & Compasses"
+    display_name = "Maps & Compasses"
     option_remove = 0
     option_startwith = 1
     option_vanilla = 2
@@ -408,7 +408,7 @@ class ShuffleMapCompass(Choice):
 
 class ShuffleKeys(Choice): 
     """Control where to shuffle dungeon small keys."""
-    displayname = "Small Keys"
+    display_name = "Small Keys"
     option_remove = 0
     option_vanilla = 2
     option_dungeon = 3
@@ -421,8 +421,8 @@ class ShuffleKeys(Choice):
 
 
 class ShuffleGerudoKeys(Choice): 
-    """Control where to shuffle the Gerudo Fortress small keys."""
-    displayname = "Gerudo Fortress Keys"
+    """Control where to shuffle the Thieves' Hideout small keys."""
+    display_name = "Thieves' Hideout Keys"
     option_vanilla = 0
     option_overworld = 1
     option_any_dungeon = 2
@@ -432,7 +432,7 @@ class ShuffleGerudoKeys(Choice):
 
 class ShuffleBossKeys(Choice): 
     """Control where to shuffle boss keys, except the Ganon's Castle Boss Key."""
-    displayname = "Boss Keys"
+    display_name = "Boss Keys"
     option_remove = 0
     option_vanilla = 2
     option_dungeon = 3
@@ -446,7 +446,7 @@ class ShuffleBossKeys(Choice):
 
 class ShuffleGanonBK(Choice):
     """Control where to shuffle the Ganon's Castle Boss Key."""
-    displayname = "Ganon's Boss Key"
+    display_name = "Ganon's Boss Key"
     option_remove = 0
     option_vanilla = 2
     option_dungeon = 3
@@ -461,7 +461,7 @@ class ShuffleGanonBK(Choice):
 
 class EnhanceMC(Toggle):
     """Map tells if a dungeon is vanilla or MQ. Compass tells what the dungeon reward is."""
-    displayname = "Maps and Compasses Give Information"
+    display_name = "Maps and Compasses Give Information"
 
 
 dungeon_items_options: typing.Dict[str, type(Option)] = {
@@ -476,60 +476,68 @@ dungeon_items_options: typing.Dict[str, type(Option)] = {
 
 class SkipChildZelda(Toggle):
     """Game starts with Zelda's Letter, the item at Zelda's Lullaby, and the relevant events already completed."""
-    displayname = "Skip Child Zelda"
+    display_name = "Skip Child Zelda"
 
 
 class SkipEscape(DefaultOnToggle):
     """Skips the tower collapse sequence between the Ganondorf and Ganon fights."""
-    displayname = "Skip Tower Escape Sequence"
+    display_name = "Skip Tower Escape Sequence"
 
 
 class SkipStealth(DefaultOnToggle):
     """The crawlspace into Hyrule Castle skips straight to Zelda."""
-    displayname = "Skip Child Stealth"
+    display_name = "Skip Child Stealth"
 
 
 class SkipEponaRace(DefaultOnToggle):
     """Epona can always be summoned with Epona's Song."""
-    displayname = "Skip Epona Race"
+    display_name = "Skip Epona Race"
 
 
 class SkipMinigamePhases(DefaultOnToggle):
     """Dampe Race and Horseback Archery give both rewards if the second condition is met on the first attempt."""
-    displayname = "Skip Some Minigame Phases"
+    display_name = "Skip Some Minigame Phases"
 
 
 class CompleteMaskQuest(Toggle):
     """All masks are immediately available to borrow from the Happy Mask Shop."""
-    displayname = "Complete Mask Quest"
+    display_name = "Complete Mask Quest"
 
 
 class UsefulCutscenes(Toggle):
     """Reenables the Poe cutscene in Forest Temple, Darunia in Fire Temple, and Twinrova introduction. Mostly useful for glitched."""
-    displayname = "Enable Useful Cutscenes"
+    display_name = "Enable Useful Cutscenes"
 
 
 class FastChests(DefaultOnToggle):
     """All chest animations are fast. If disabled, major items have a slow animation."""
-    displayname = "Fast Chest Cutscenes"
+    display_name = "Fast Chest Cutscenes"
 
 
 class FreeScarecrow(Toggle):
     """Pulling out the ocarina near a scarecrow spot spawns Pierre without needing the song."""
-    displayname = "Free Scarecrow's Song"
+    display_name = "Free Scarecrow's Song"
 
 
 class FastBunny(Toggle):
     """Bunny Hood lets you move 1.5x faster like in Majora's Mask."""
-    displayname = "Fast Bunny Hood"
+    display_name = "Fast Bunny Hood"
 
 
 class ChickenCount(Range):
     """Controls the number of Cuccos for Anju to give an item as child."""
-    displayname = "Cucco Count"
+    display_name = "Cucco Count"
     range_start = 0
     range_end = 7
     default = 7
+
+
+class BigPoeCount(Range):
+    """Number of Big Poes required for the Poe Collector's item."""
+    display_name = "Big Poe Count"
+    range_start = 1
+    range_end = 10
+    default = 1
 
 
 timesavers_options: typing.Dict[str, type(Option)] = {
@@ -544,18 +552,18 @@ timesavers_options: typing.Dict[str, type(Option)] = {
     "free_scarecrow": FreeScarecrow, 
     "fast_bunny_hood": FastBunny,
     "chicken_count": ChickenCount,
-    # "big_poe_count": make_range(1, 10, 1),
+    "big_poe_count": BigPoeCount,
 }
 
 
 class CSMC(Toggle):
     """Changes chests containing progression into large chests, and nonprogression into small chests."""
-    displayname = "Chest Size Matches Contents"
+    display_name = "Chest Size Matches Contents"
 
 
 class Hints(Choice): 
     """Gossip Stones can give hints about item locations."""
-    displayname = "Gossip Stones"
+    display_name = "Gossip Stones"
     option_none = 0
     option_mask = 1
     option_agony = 2
@@ -566,12 +574,12 @@ class Hints(Choice):
 
 class MiscHints(DefaultOnToggle):
     """Controls whether the Temple of Time altar gives dungeon prize info and whether Ganondorf hints the Light Arrows."""
-    displayname = "Misc Hints"
+    display_name = "Misc Hints"
 
 
 class HintDistribution(Choice):
     """Choose the hint distribution to use. Affects the frequency of strong hints, which items are always hinted, etc."""
-    displayname = "Hint Distribution"
+    display_name = "Hint Distribution"
     option_balanced = 0
     option_ddr = 1
     option_league = 2
@@ -586,7 +594,7 @@ class HintDistribution(Choice):
 
 class TextShuffle(Choice): 
     """Randomizes text in the game for comedic effect."""
-    displayname = "Text Shuffle"
+    display_name = "Text Shuffle"
     option_none = 0
     option_except_hints = 1
     option_complete = 2
@@ -595,7 +603,7 @@ class TextShuffle(Choice):
 
 class DamageMultiplier(Choice): 
     """Controls the amount of damage Link takes."""
-    displayname = "Damage Multiplier"
+    display_name = "Damage Multiplier"
     option_half = 0
     option_normal = 1
     option_double = 2
@@ -606,12 +614,12 @@ class DamageMultiplier(Choice):
 
 class HeroMode(Toggle):
     """Hearts will not drop from enemies or objects."""
-    displayname = "Hero Mode"
+    display_name = "Hero Mode"
 
 
 class StartingToD(Choice):
     """Change the starting time of day."""
-    displayname = "Starting Time of Day"
+    display_name = "Starting Time of Day"
     option_default = 0
     option_sunrise = 1
     option_morning = 2
@@ -625,12 +633,12 @@ class StartingToD(Choice):
 
 class ConsumableStart(Toggle):
     """Start the game with full Deku Sticks and Deku Nuts."""
-    displayname = "Start with Consumables"
+    display_name = "Start with Consumables"
 
 
 class RupeeStart(Toggle):
     """Start with a full wallet. Wallet upgrades will also fill your wallet."""
-    displayname = "Start with Rupees"
+    display_name = "Start with Rupees"
 
 
 misc_options: typing.Dict[str, type(Option)] = {
@@ -648,7 +656,7 @@ misc_options: typing.Dict[str, type(Option)] = {
 
 class ItemPoolValue(Choice): 
     """Changes the number of items available in the game."""
-    displayname = "Item Pool"
+    display_name = "Item Pool"
     option_plentiful = 0
     option_balanced = 1
     option_scarce = 2
@@ -658,7 +666,7 @@ class ItemPoolValue(Choice):
 
 class IceTraps(Choice): 
     """Adds ice traps to the item pool."""
-    displayname = "Ice Traps"
+    display_name = "Ice Traps"
     option_off = 0
     option_normal = 1
     option_on = 2
@@ -672,7 +680,7 @@ class IceTraps(Choice):
 
 class IceTrapVisual(Choice): 
     """Changes the appearance of ice traps as freestanding items."""
-    displayname = "Ice Trap Appearance"
+    display_name = "Ice Trap Appearance"
     option_major_only = 0
     option_junk_only = 1
     option_anything = 2
@@ -693,13 +701,13 @@ class AdultTradeItem(Choice):
 
 class EarlyTradeItem(AdultTradeItem):
     """Earliest item that can appear in the adult trade sequence."""
-    displayname = "Adult Trade Sequence Earliest Item"
+    display_name = "Adult Trade Sequence Earliest Item"
     default = 6
 
 
 class LateTradeItem(AdultTradeItem):
     """Latest item that can appear in the adult trade sequence."""
-    displayname = "Adult Trade Sequence Latest Item"
+    display_name = "Adult Trade Sequence Latest Item"
     default = 9
 
 
@@ -715,19 +723,19 @@ itempool_options: typing.Dict[str, type(Option)] = {
 
 class Targeting(Choice): 
     """Default targeting option."""
-    displayname = "Default Targeting Option"
+    display_name = "Default Targeting Option"
     option_hold = 0
     option_switch = 1
 
 
 class DisplayDpad(DefaultOnToggle):
     """Show dpad icon on HUD for quick actions (ocarina, hover boots, iron boots)."""
-    displayname = "Display D-Pad HUD"
+    display_name = "Display D-Pad HUD"
 
 
 class CorrectColors(DefaultOnToggle):
     """Makes in-game models match their HUD element colors."""
-    displayname = "Item Model Colors Match Cosmetics"
+    display_name = "Item Model Colors Match Cosmetics"
 
 
 class Music(Choice): 
@@ -739,22 +747,22 @@ class Music(Choice):
 
 class BackgroundMusic(Music):
     """Randomize or disable background music."""
-    displayname = "Background Music"
+    display_name = "Background Music"
 
 
 class Fanfares(Music):
     """Randomize or disable item fanfares."""
-    displayname = "Fanfares"
+    display_name = "Fanfares"
 
 
 class OcarinaFanfares(Toggle):
     """Enable ocarina songs as fanfares. These are longer than usual fanfares. Does nothing without fanfares randomized."""
-    displayname = "Ocarina Songs as Fanfares"
+    display_name = "Ocarina Songs as Fanfares"
 
 
 class SwordTrailDuration(Range):
     """Set the duration for sword trails."""
-    displayname = "Sword Trail Duration"
+    display_name = "Sword Trail Duration"
     range_start = 4
     range_end = 20
     default = 4
@@ -798,7 +806,7 @@ cosmetic_options: typing.Dict[str, type(Option)] = {
 
 class SfxOcarina(Choice):
     """Change the sound of the ocarina."""
-    displayname = "Ocarina Instrument"
+    display_name = "Ocarina Instrument"
     option_ocarina = 1
     option_malon = 2
     option_whistle = 3
@@ -824,7 +832,7 @@ class LogicTricks(OptionList):
     """Set various tricks for logic in Ocarina of Time. 
 Format as a comma-separated list of "nice" names: ["Fewer Tunic Requirements", "Hidden Grottos without Stone of Agony"].
 A full list of supported tricks can be found at https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LogicTricks.py"""
-    displayname = "Logic Tricks"
+    display_name = "Logic Tricks"
     valid_keys = frozenset(normalized_name_tricks)
     valid_keys_casefold = True
 

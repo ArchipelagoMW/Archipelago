@@ -1,6 +1,7 @@
-# TODO: convert this into a system like AutoWorld
+from __future__ import annotations
 
 import shutil
+import json
 import bsdiff4
 import yaml
 import os
@@ -9,31 +10,187 @@ import threading
 import concurrent.futures
 import zipfile
 import sys
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Dict, Any, Union, BinaryIO
+
+import ModuleUpdate
+ModuleUpdate.update()
 
 import Utils
 
-current_patch_version = 3
+current_patch_version = 4
 
+
+class AutoPatchRegister(type):
+    patch_types: Dict[str, APDeltaPatch] = {}
+    file_endings: Dict[str, APDeltaPatch] = {}
+
+    def __new__(cls, name: str, bases, dct: Dict[str, Any]):
+        # construct class
+        new_class = super().__new__(cls, name, bases, dct)
+        if "game" in dct:
+            AutoPatchRegister.patch_types[dct["game"]] = new_class
+            if not dct["patch_file_ending"]:
+                raise Exception(f"Need an expected file ending for {name}")
+            AutoPatchRegister.file_endings[dct["patch_file_ending"]] = new_class
+        return new_class
+
+    @staticmethod
+    def get_handler(file: str) -> Optional[type(APDeltaPatch)]:
+        for file_ending, handler in AutoPatchRegister.file_endings.items():
+            if file.endswith(file_ending):
+                return handler
+
+
+class APContainer:
+    """A zipfile containing at least archipelago.json"""
+    version: int = current_patch_version
+    compression_level: int = 9
+    compression_method: int = zipfile.ZIP_DEFLATED
+    game: Optional[str] = None
+
+    # instance attributes:
+    path: Optional[str]
+    player: Optional[int]
+    player_name: str
+    server: str
+
+    def __init__(self, path: Optional[str] = None, player: Optional[int] = None,
+                 player_name: str = "", server: str = ""):
+        self.path = path
+        self.player = player
+        self.player_name = player_name
+        self.server = server
+
+    def write(self, file: Optional[Union[str, BinaryIO]] = None):
+        if not self.path and not file:
+            raise FileNotFoundError(f"Cannot write {self.__class__.__name__} due to no path provided.")
+        with zipfile.ZipFile(file if file else self.path, "w", self.compression_method, True, self.compression_level) \
+                as zf:
+            if file:
+                self.path = zf.filename
+            self.write_contents(zf)
+
+    def write_contents(self, opened_zipfile: zipfile.ZipFile):
+        manifest = self.get_manifest()
+        try:
+            manifest = json.dumps(manifest)
+        except Exception as e:
+            raise Exception(f"Manifest {manifest} did not convert to json.") from e
+        else:
+            opened_zipfile.writestr("archipelago.json", manifest)
+
+    def read(self, file: Optional[Union[str, BinaryIO]] = None):
+        """Read data into patch object. file can be file-like, such as an outer zip file's stream."""
+        if not self.path and not file:
+            raise FileNotFoundError(f"Cannot read {self.__class__.__name__} due to no path provided.")
+        with zipfile.ZipFile(file if file else self.path, "r") as zf:
+            if file:
+                self.path = zf.filename
+            self.read_contents(zf)
+
+    def read_contents(self, opened_zipfile: zipfile.ZipFile):
+        with opened_zipfile.open("archipelago.json", "r") as f:
+            manifest = json.load(f)
+        if manifest["compatible_version"] > self.version:
+            raise Exception(f"File (version: {manifest['compatible_version']}) too new "
+                            f"for this handler (version: {self.version})")
+        self.player = manifest["player"]
+        self.server = manifest["server"]
+        self.player_name = manifest["player_name"]
+
+    def get_manifest(self) -> dict:
+        return {
+            "server": self.server,  # allow immediate connection to server in multiworld. Empty string otherwise
+            "player": self.player,
+            "player_name": self.player_name,
+            "game": self.game,
+            # minimum version of patch system expected for patching to be successful
+            "compatible_version": 4,
+            "version": current_patch_version,
+        }
+
+
+class APDeltaPatch(APContainer, metaclass=AutoPatchRegister):
+    """An APContainer that additionally has delta.bsdiff4
+    containing a delta patch to get the desired file, often a rom."""
+
+    hash = Optional[str]  # base checksum of source file
+    patch_file_ending: str = ""
+    delta: Optional[bytes] = None
+    result_file_ending: str = ".sfc"
+    source_data: bytes
+
+    def __init__(self, *args, patched_path: str = "", **kwargs):
+        self.patched_path = patched_path
+        super(APDeltaPatch, self).__init__(*args, **kwargs)
+
+    def get_manifest(self) -> dict:
+        manifest = super(APDeltaPatch, self).get_manifest()
+        manifest["base_checksum"] = self.hash
+        manifest["result_file_ending"] = self.result_file_ending
+        return manifest
+
+    @classmethod
+    def get_source_data(cls) -> bytes:
+        """Get Base data"""
+        raise NotImplementedError()
+
+    @classmethod
+    def get_source_data_with_cache(cls) -> bytes:
+        if not hasattr(cls, "source_data"):
+            cls.source_data = cls.get_source_data()
+        return cls.source_data
+
+    def write_contents(self, opened_zipfile: zipfile.ZipFile):
+        super(APDeltaPatch, self).write_contents(opened_zipfile)
+        # write Delta
+        opened_zipfile.writestr("delta.bsdiff4",
+                                bsdiff4.diff(self.get_source_data_with_cache(), open(self.patched_path, "rb").read()),
+                                compress_type=zipfile.ZIP_STORED)  # bsdiff4 is a format with integrated compression
+
+    def read_contents(self, opened_zipfile: zipfile.ZipFile):
+        super(APDeltaPatch, self).read_contents(opened_zipfile)
+        self.delta = opened_zipfile.read("delta.bsdiff4")
+
+    def patch(self, target: str):
+        """Base + Delta -> Patched"""
+        if not self.delta:
+            self.read()
+        result = bsdiff4.patch(self.get_source_data_with_cache(), self.delta)
+        with open(target, "wb") as f:
+            f.write(result)
+
+
+# legacy patch handling follows:
 GAME_ALTTP = "A Link to the Past"
 GAME_SM = "Super Metroid"
 GAME_SOE = "Secret of Evermore"
-supported_games = {"A Link to the Past", "Super Metroid", "Secret of Evermore"}
+GAME_SMZ3 = "SMZ3"
+GAME_DKC3 = "Donkey Kong Country 3"
+supported_games = {"A Link to the Past", "Super Metroid", "Secret of Evermore", "SMZ3", "Donkey Kong Country 3"}
 
 preferred_endings = {
     GAME_ALTTP: "apbp",
     GAME_SM: "apm3",
-    GAME_SOE: "apsoe"
+    GAME_SOE: "apsoe",
+    GAME_SMZ3: "apsmz",
+    GAME_DKC3: "apdkc3"
 }
 
 
 def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: str = GAME_ALTTP) -> bytes:
     if game == GAME_ALTTP:
-        from worlds.alttp.Rom import JAP10HASH as HASH
+        from worlds.alttp.Rom import LTTPJPN10HASH as HASH
     elif game == GAME_SM:
-        from worlds.sm.Rom import JAP10HASH as HASH
+        from worlds.sm.Rom import SMJUHASH as HASH
     elif game == GAME_SOE:
         from worlds.soe.Patch import USHASH as HASH
+    elif game == GAME_SMZ3:
+        from worlds.alttp.Rom import LTTPJPN10HASH as ALTTPHASH
+        from worlds.sm.Rom import SMJUHASH as SMHASH
+        HASH = ALTTPHASH + SMHASH
+    elif game == GAME_DKC3:
+        from worlds.dkc3.Rom import USHASH as HASH
     else:
         raise RuntimeError(f"Selected game {game} for base rom not found.")
 
@@ -63,7 +220,10 @@ def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str
                            meta,
                            game)
     target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + (
-        ".apbp" if game == GAME_ALTTP else ".apm3")
+        ".apbp" if game == GAME_ALTTP
+        else ".apsmz" if game == GAME_SMZ3
+        else ".apdkc3" if game == GAME_DKC3
+        else ".apm3")
     write_lzma(bytes, target)
     return target
 
@@ -88,18 +248,31 @@ def get_base_rom_data(game: str):
     elif game == GAME_SM:
         from worlds.sm.Rom import get_base_rom_bytes
     elif game == GAME_SOE:
-        file_name = Utils.get_options()["soe_options"]["rom_file"]
-        get_base_rom_bytes = lambda: bytes(read_rom(open(file_name, "rb")))
+        from worlds.soe.Patch import get_base_rom_path
+        get_base_rom_bytes = lambda: bytes(read_rom(open(get_base_rom_path(), "rb")))
+    elif game == GAME_SMZ3:
+        from worlds.smz3.Rom import get_base_rom_bytes
+    elif game == GAME_DKC3:
+        from worlds.dkc3.Rom import get_base_rom_bytes
     else:
         raise RuntimeError("Selected game for base rom not found.")
     return get_base_rom_bytes()
 
 
 def create_rom_file(patch_file: str) -> Tuple[dict, str]:
-    data, target, patched_data = create_rom_bytes(patch_file)
-    with open(target, "wb") as f:
-        f.write(patched_data)
-    return data, target
+    auto_handler = AutoPatchRegister.get_handler(patch_file)
+    if auto_handler:
+        handler: APDeltaPatch = auto_handler(patch_file)
+        target = os.path.splitext(patch_file)[0]+handler.result_file_ending
+        handler.patch(target)
+        return {"server": handler.server,
+                "player": handler.player,
+                "player_name": handler.player_name}, target
+    else:
+        data, target, patched_data = create_rom_bytes(patch_file)
+        with open(target, "wb") as f:
+            f.write(patched_data)
+        return data, target
 
 
 def update_patch_data(patch_data: bytes, server: str = "") -> bytes:
@@ -218,24 +391,20 @@ if __name__ == "__main__":
                     if 'server' in data:
                         Utils.persistent_store("servers", data['hash'], data['server'])
                         print(f"Host is {data['server']}")
-                elif rom.endswith(".archipelago"):
-                    import json
-                    import zlib
-
-                    with open(rom, 'rb') as fr:
-
-                        multidata = zlib.decompress(fr.read()).decode("utf-8")
-                        with open(rom + '.txt', 'w') as fw:
-                            fw.write(multidata)
-                        multidata = json.loads(multidata)
-                        for romname in multidata['roms']:
-                            Utils.persistent_store("servers", "".join(chr(byte) for byte in romname[2]), address)
-                        from Utils import get_options
-
-                        multidata["server_options"] = get_options()["server_options"]
-                        multidata = zlib.compress(json.dumps(multidata).encode("utf-8"), 9)
-                        with open(rom + "_updated.archipelago", 'wb') as f:
-                            f.write(multidata)
+                elif rom.endswith(".apsmz"):
+                    print(f"Applying patch {rom}")
+                    data, target = create_rom_file(rom)
+                    print(f"Created rom {target}.")
+                    if 'server' in data:
+                        Utils.persistent_store("servers", data['hash'], data['server'])
+                        print(f"Host is {data['server']}")
+                elif rom.endswith(".apdkc3"):
+                    print(f"Applying patch {rom}")
+                    data, target = create_rom_file(rom)
+                    print(f"Created rom {target}.")
+                    if 'server' in data:
+                        Utils.persistent_store("servers", data['hash'], data['server'])
+                        print(f"Host is {data['server']}")
 
                 elif rom.endswith(".zip"):
                     print(f"Updating host in patch files contained in {rom}")
@@ -243,7 +412,9 @@ if __name__ == "__main__":
 
                     def _handle_zip_file_entry(zfinfo: zipfile.ZipInfo, server: str):
                         data = zfr.read(zfinfo)
-                        if zfinfo.filename.endswith(".apbp") or zfinfo.filename.endswith(".apm3"):
+                        if zfinfo.filename.endswith(".apbp") or \
+                           zfinfo.filename.endswith(".apm3") or \
+                           zfinfo.filename.endswith(".apdkc3"):
                             data = update_patch_data(data, server)
                         with ziplock:
                             zfw.writestr(zfinfo, data)

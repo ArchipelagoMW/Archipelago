@@ -8,5 +8,9 @@
     "Thatch",
     "Sand",
     "Raw_Beet",
-    "Raw_Potato"
+    "Raw_Potato",
+    "MetalOre",
+    "TitaniumOre",
+    "CopperOre",
+    "ExplosiveGoo"
 ]

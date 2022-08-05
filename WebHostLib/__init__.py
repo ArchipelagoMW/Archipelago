@@ -46,7 +46,7 @@ app.config["PONY"] = {
     'create_db': True
 }
 app.config["MAX_ROLL"] = 20
-app.config["CACHE_TYPE"] = "simple"
+app.config["CACHE_TYPE"] = "flask_caching.backends.SimpleCache"
 app.config["JSON_AS_ASCII"] = False
 app.config["PATCH_TARGET"] = "archipelago.gg"
 
@@ -68,6 +68,16 @@ class B64UUIDConverter(BaseConverter):
 # short UUID
 app.url_map.converters["suuid"] = B64UUIDConverter
 app.jinja_env.filters['suuid'] = lambda value: base64.urlsafe_b64encode(value.bytes).rstrip(b'=').decode('ascii')
+
+# has automatic patch integration
+import Patch
+app.jinja_env.filters['supports_apdeltapatch'] = lambda game_name: game_name in Patch.AutoPatchRegister.patch_types
+
+
+def get_world_theme(game_name: str):
+    if game_name in AutoWorldRegister.world_types:
+        return AutoWorldRegister.world_types[game_name].web.theme
+    return 'grass'
 
 
 @app.before_request
@@ -97,13 +107,13 @@ def weighted_settings():
 # Player settings pages
 @app.route('/games/<string:game>/player-settings')
 def player_settings(game):
-    return render_template(f"player-settings.html", game=game)
+    return render_template(f"player-settings.html", game=game, theme=get_world_theme(game))
 
 
 # Game Info Pages
 @app.route('/games/<string:game>/info/<string:lang>')
 def game_info(game, lang):
-    return render_template('gameInfo.html', game=game, lang=lang)
+    return render_template('gameInfo.html', game=game, lang=lang, theme=get_world_theme(game))
 
 
 # List of supported games
@@ -112,23 +122,32 @@ def games():
     worlds = {}
     for game, world in AutoWorldRegister.world_types.items():
         if not world.hidden:
-            worlds[game] = world.__doc__ if world.__doc__ else "No description provided."
+            worlds[game] = world
     return render_template("supportedGames.html", worlds=worlds)
 
 
 @app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
 def tutorial(game, file, lang):
-    return render_template("tutorial.html", game=game, file=file, lang=lang)
+    return render_template("tutorial.html", game=game, file=file, lang=lang, theme=get_world_theme(game))
 
 
 @app.route('/tutorial/')
 def tutorial_landing():
+    worlds = {}
+    for game, world in AutoWorldRegister.world_types.items():
+        if not world.hidden:
+            worlds[game] = world
     return render_template("tutorialLanding.html")
 
 
 @app.route('/faq/<string:lang>/')
 def faq(lang):
     return render_template("faq.html", lang=lang)
+
+
+@app.route('/glossary/<string:lang>/')
+def terms(lang):
+    return render_template("glossary.html", lang=lang)
 
 
 @app.route('/seed/<suuid:seed>')
@@ -160,7 +179,12 @@ def _read_log(path: str):
 
 @app.route('/log/<suuid:room>')
 def display_log(room: UUID):
-    return Response(_read_log(os.path.join("logs", str(room) + ".txt")), mimetype="text/plain;charset=UTF-8")
+    room = Room.get(id=room)
+    if room is None:
+        return abort(404)
+    if room.owner == session["_id"]:
+        return Response(_read_log(os.path.join("logs", str(room.id) + ".txt")), mimetype="text/plain;charset=UTF-8")
+    return "Access Denied", 403
 
 
 @app.route('/room/<suuid:room>', methods=['GET', 'POST'])
@@ -201,7 +225,17 @@ def get_datapackge():
     return Response(json.dumps(network_data_package, indent=4), mimetype="text/plain")
 
 
+@app.route('/index')
+@app.route('/sitemap')
+def get_sitemap():
+    available_games = []
+    for game, world in AutoWorldRegister.world_types.items():
+        if not world.hidden:
+            available_games.append(game)
+    return render_template("siteMap.html", games=available_games)
+
+
 from WebHostLib.customserver import run_server_process
-from . import tracker, upload, landing, check, generate, downloads, api  # to trigger app routing picking up on it
+from . import tracker, upload, landing, check, generate, downloads, api, stats  # to trigger app routing picking up on it
 
 app.register_blueprint(api.api_endpoints)

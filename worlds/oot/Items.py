@@ -1,15 +1,17 @@
 import typing
 
-from BaseClasses import Item
+from BaseClasses import Item, ItemClassification
+
 
 def oot_data_to_ap_id(data, event): 
     if event or data[2] is None or data[0] == 'Shop': 
         return None
     offset = 66000
-    if data[0] in ['Item', 'BossKey', 'Compass', 'Map', 'SmallKey', 'Token', 'GanonBossKey', 'FortressSmallKey', 'Song']:
+    if data[0] in ['Item', 'BossKey', 'Compass', 'Map', 'SmallKey', 'Token', 'GanonBossKey', 'HideoutSmallKey', 'Song']:
         return offset + data[2]
     else: 
         raise Exception(f'Unexpected OOT item type found: {data[0]}')
+
 
 def ap_id_to_oot_data(ap_id): 
     offset = 66000
@@ -19,23 +21,31 @@ def ap_id_to_oot_data(ap_id):
     except IndexError: 
         raise Exception(f'Could not find desired item ID: {ap_id}')
 
+
 class OOTItem(Item):
     game: str = "Ocarina of Time"
 
     def __init__(self, name, player, data, event, force_not_advancement):
         (type, advancement, index, special) = data
         # "advancement" is True, False or None; some items are not advancement based on settings
+        if force_not_advancement:
+            classification = ItemClassification.useful
+        elif name == "Ice Trap":
+            classification = ItemClassification.trap
+        elif name == 'Gold Skulltula Token':
+            classification = ItemClassification.progression_skip_balancing
+        elif advancement:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
         adv = bool(advancement) and not force_not_advancement
-        super(OOTItem, self).__init__(name, adv, oot_data_to_ap_id(data, event), player)
+        super(OOTItem, self).__init__(name, classification, oot_data_to_ap_id(data, event), player)
         self.type = type
         self.index = index
         self.special = special or {}
         self.looks_like_item = None
         self.price = special.get('price', None) if special else None
         self.internal = False
-        self.trap = name == 'Ice Trap'
-        if force_not_advancement:
-            self.never_exclude = True
     
     # The playthrough calculation calls a function that uses "sweep_for_events(key_only=True)"
     # This checks if the item it's looking for is a small key, using the small key property. 
@@ -51,7 +61,7 @@ class OOTItem(Item):
 
     @property
     def dungeonitem(self) -> bool:
-        return self.type in ['SmallKey', 'FortressSmallKey', 'BossKey', 'GanonBossKey', 'Map', 'Compass']
+        return self.type in ['SmallKey', 'HideoutSmallKey', 'BossKey', 'GanonBossKey', 'Map', 'Compass']
 
 
 
@@ -191,8 +201,8 @@ item_table = {
     'Small Key (Spirit Temple)':                       ('SmallKey', True,  0xB2, {'progressive': float('Inf')}),
     'Small Key (Shadow Temple)':                       ('SmallKey', True,  0xB3, {'progressive': float('Inf')}),
     'Small Key (Bottom of the Well)':                  ('SmallKey', True,  0xB4, {'progressive': float('Inf')}),
-    'Small Key (Gerudo Training Grounds)':             ('SmallKey',True, 0xB5, {'progressive': float('Inf')}),
-    'Small Key (Gerudo Fortress)':                     ('FortressSmallKey',True, 0xB6, {'progressive': float('Inf')}),
+    'Small Key (Gerudo Training Ground)':              ('SmallKey',True, 0xB5, {'progressive': float('Inf')}),
+    'Small Key (Thieves Hideout)':                     ('HideoutSmallKey',True, 0xB6, {'progressive': float('Inf')}),
     'Small Key (Ganons Castle)':                       ('SmallKey', True,  0xB7, {'progressive': float('Inf')}),
     'Double Defense':                                  ('Item',     True,  0xB8, None),
     'Magic Bean Pack':                                 ('Item',     True,  0xC9, None),

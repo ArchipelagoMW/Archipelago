@@ -24,8 +24,6 @@ class RomPatcher:
             'Removes_Gravity_Suit_heat_protection',
             # door ASM to skip G4 cutscene when all 4 bosses are dead
             'g4_skip.ips',
-            # basepatch is generated from https://github.com/lordlou/SMBasepatch
-            'basepatch.ips'
         ],
         # VARIA tweaks
         'VariaTweaks' : ['WS_Etank', 'LN_Chozo_SpaceJump_Check_Disable', 'ln_chozo_platform.ips', 'bomb_torizo.ips'],

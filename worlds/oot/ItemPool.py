@@ -570,15 +570,15 @@ vanillaSK = {
     'Forest Temple Well Chest': 'Small Key (Forest Temple)',
     'Ganons Castle Light Trial Invisible Enemies Chest': 'Small Key (Ganons Castle)',
     'Ganons Castle Light Trial Lullaby Chest': 'Small Key (Ganons Castle)',
-    'Gerudo Training Grounds Beamos Chest': 'Small Key (Gerudo Training Grounds)',
-    'Gerudo Training Grounds Eye Statue Chest': 'Small Key (Gerudo Training Grounds)',
-    'Gerudo Training Grounds Hammer Room Switch Chest': 'Small Key (Gerudo Training Grounds)',
-    'Gerudo Training Grounds Heavy Block Third Chest': 'Small Key (Gerudo Training Grounds)',
-    'Gerudo Training Grounds Hidden Ceiling Chest': 'Small Key (Gerudo Training Grounds)',
-    'Gerudo Training Grounds Near Scarecrow Chest': 'Small Key (Gerudo Training Grounds)',
-    'Gerudo Training Grounds Stalfos Chest': 'Small Key (Gerudo Training Grounds)',
-    'Gerudo Training Grounds Underwater Silver Rupee Chest': 'Small Key (Gerudo Training Grounds)',
-    'Gerudo Training Grounds Freestanding Key': 'Small Key (Gerudo Training Grounds)',
+    'Gerudo Training Ground Beamos Chest': 'Small Key (Gerudo Training Ground)',
+    'Gerudo Training Ground Eye Statue Chest': 'Small Key (Gerudo Training Ground)',
+    'Gerudo Training Ground Hammer Room Switch Chest': 'Small Key (Gerudo Training Ground)',
+    'Gerudo Training Ground Heavy Block Third Chest': 'Small Key (Gerudo Training Ground)',
+    'Gerudo Training Ground Hidden Ceiling Chest': 'Small Key (Gerudo Training Ground)',
+    'Gerudo Training Ground Near Scarecrow Chest': 'Small Key (Gerudo Training Ground)',
+    'Gerudo Training Ground Stalfos Chest': 'Small Key (Gerudo Training Ground)',
+    'Gerudo Training Ground Underwater Silver Rupee Chest': 'Small Key (Gerudo Training Ground)',
+    'Gerudo Training Ground Freestanding Key': 'Small Key (Gerudo Training Ground)',
     'Shadow Temple After Wind Hidden Chest': 'Small Key (Shadow Temple)',
     'Shadow Temple Early Silver Rupee Chest': 'Small Key (Shadow Temple)',
     'Shadow Temple Falling Spikes Switch Chest': 'Small Key (Shadow Temple)',
@@ -612,9 +612,9 @@ vanillaSK = {
     'Ganons Castle MQ Shadow Trial Eye Switch Chest': 'Small Key (Ganons Castle)',
     'Ganons Castle MQ Spirit Trial Sun Back Left Chest': 'Small Key (Ganons Castle)',
     'Ganons Castle MQ Forest Trial Freestanding Key': 'Small Key (Ganons Castle)',
-    'Gerudo Training Grounds MQ Dinolfos Chest': 'Small Key (Gerudo Training Grounds)',
-    'Gerudo Training Grounds MQ Flame Circle Chest': 'Small Key (Gerudo Training Grounds)',
-    'Gerudo Training Grounds MQ Underwater Silver Rupee Chest': 'Small Key (Gerudo Training Grounds)',
+    'Gerudo Training Ground MQ Dinolfos Chest': 'Small Key (Gerudo Training Ground)',
+    'Gerudo Training Ground MQ Flame Circle Chest': 'Small Key (Gerudo Training Ground)',
+    'Gerudo Training Ground MQ Underwater Silver Rupee Chest': 'Small Key (Gerudo Training Ground)',
     'Shadow Temple MQ Falling Spikes Switch Chest': 'Small Key (Shadow Temple)',
     'Shadow Temple MQ Invisible Blades Invisible Chest': 'Small Key (Shadow Temple)',
     'Shadow Temple MQ Early Gibdos Chest': 'Small Key (Shadow Temple)',
@@ -1031,7 +1031,7 @@ def get_pool_core(world):
             pool.extend(['Bombchus'] * 2)
         if not world.dungeon_mq['Bottom of the Well']:
             pool.extend(['Bombchus'])
-        if world.dungeon_mq['Gerudo Training Grounds']:
+        if world.dungeon_mq['Gerudo Training Ground']:
             pool.extend(['Bombchus'])
         if world.shuffle_medigoron_carpet_salesman:
             pool.append('Bombchus')
@@ -1044,7 +1044,7 @@ def get_pool_core(world):
                 pool.extend(['Bombchus (10)'] * 2)
         if not world.dungeon_mq['Bottom of the Well']:
                 pool.extend(['Bombchus (10)'])
-        if world.dungeon_mq['Gerudo Training Grounds']:
+        if world.dungeon_mq['Gerudo Training Ground']:
                 pool.extend(['Bombchus (10)'])
         if world.dungeon_mq['Ganons Castle']:
             pool.extend(['Bombchus (10)'])
@@ -1058,49 +1058,49 @@ def get_pool_core(world):
         skip_in_spoiler_locations.append('Wasteland Bombchu Salesman')
 
     pool.extend(['Ice Trap'])
-    if not world.dungeon_mq['Gerudo Training Grounds']:
+    if not world.dungeon_mq['Gerudo Training Ground']:
         pool.extend(['Ice Trap'])
     if not world.dungeon_mq['Ganons Castle']:
         pool.extend(['Ice Trap'] * 4)
 
     if world.gerudo_fortress == 'open':
-        placed_items['GF North F1 Carpenter'] = 'Recovery Heart'
-        placed_items['GF North F2 Carpenter'] = 'Recovery Heart'
-        placed_items['GF South F1 Carpenter'] = 'Recovery Heart'
-        placed_items['GF South F2 Carpenter'] = 'Recovery Heart'
-        skip_in_spoiler_locations.extend(['GF North F1 Carpenter', 'GF North F2 Carpenter', 'GF South F1 Carpenter', 'GF South F2 Carpenter'])
+        placed_items['Hideout Jail Guard (1 Torch)'] = 'Recovery Heart'
+        placed_items['Hideout Jail Guard (2 Torches)'] = 'Recovery Heart'
+        placed_items['Hideout Jail Guard (3 Torches)'] = 'Recovery Heart'
+        placed_items['Hideout Jail Guard (4 Torches)'] = 'Recovery Heart'
+        skip_in_spoiler_locations.extend(['Hideout Jail Guard (1 Torch)', 'Hideout Jail Guard (2 Torches)', 'Hideout Jail Guard (3 Torches)', 'Hideout Jail Guard (4 Torches)'])
     elif world.shuffle_fortresskeys in ['any_dungeon', 'overworld', 'keysanity']:
         if world.gerudo_fortress == 'fast':
-            pool.append('Small Key (Gerudo Fortress)')
-            placed_items['GF North F2 Carpenter'] = 'Recovery Heart'
-            placed_items['GF South F1 Carpenter'] = 'Recovery Heart'
-            placed_items['GF South F2 Carpenter'] = 'Recovery Heart'
-            skip_in_spoiler_locations.extend(['GF North F2 Carpenter', 'GF South F1 Carpenter', 'GF South F2 Carpenter'])
+            pool.append('Small Key (Thieves Hideout)')
+            placed_items['Hideout Jail Guard (2 Torches)'] = 'Recovery Heart'
+            placed_items['Hideout Jail Guard (3 Torches)'] = 'Recovery Heart'
+            placed_items['Hideout Jail Guard (4 Torches)'] = 'Recovery Heart'
+            skip_in_spoiler_locations.extend(['Hideout Jail Guard (2 Torches)', 'Hideout Jail Guard (3 Torches)', 'Hideout Jail Guard (4 Torches)'])
         else:
-            pool.extend(['Small Key (Gerudo Fortress)'] * 4)
+            pool.extend(['Small Key (Thieves Hideout)'] * 4)
         if world.item_pool_value == 'plentiful':
-            pending_junk_pool.append('Small Key (Gerudo Fortress)')
+            pending_junk_pool.append('Small Key (Thieves Hideout)')
     else:
         if world.gerudo_fortress == 'fast':
-            placed_items['GF North F1 Carpenter'] = 'Small Key (Gerudo Fortress)'
-            placed_items['GF North F2 Carpenter'] = 'Recovery Heart'
-            placed_items['GF South F1 Carpenter'] = 'Recovery Heart'
-            placed_items['GF South F2 Carpenter'] = 'Recovery Heart'
-            skip_in_spoiler_locations.extend(['GF North F2 Carpenter', 'GF South F1 Carpenter', 'GF South F2 Carpenter'])
+            placed_items['Hideout Jail Guard (1 Torch)']   = 'Small Key (Thieves Hideout)'
+            placed_items['Hideout Jail Guard (2 Torches)'] = 'Recovery Heart'
+            placed_items['Hideout Jail Guard (3 Torches)'] = 'Recovery Heart'
+            placed_items['Hideout Jail Guard (4 Torches)'] = 'Recovery Heart'
+            skip_in_spoiler_locations.extend(['Hideout Jail Guard (2 Torches)', 'Hideout Jail Guard (3 Torches)', 'Hideout Jail Guard (4 Torches)'])
         else:
-            placed_items['GF North F1 Carpenter'] = 'Small Key (Gerudo Fortress)'
-            placed_items['GF North F2 Carpenter'] = 'Small Key (Gerudo Fortress)'
-            placed_items['GF South F1 Carpenter'] = 'Small Key (Gerudo Fortress)'
-            placed_items['GF South F2 Carpenter'] = 'Small Key (Gerudo Fortress)'
+            placed_items['Hideout Jail Guard (1 Torch)']   = 'Small Key (Thieves Hideout)'
+            placed_items['Hideout Jail Guard (2 Torches)'] = 'Small Key (Thieves Hideout)'
+            placed_items['Hideout Jail Guard (3 Torches)'] = 'Small Key (Thieves Hideout)'
+            placed_items['Hideout Jail Guard (4 Torches)'] = 'Small Key (Thieves Hideout)'
 
     if world.shuffle_gerudo_card and world.gerudo_fortress != 'open':
         pool.append('Gerudo Membership Card')
     elif world.shuffle_gerudo_card:
         pending_junk_pool.append('Gerudo Membership Card')
-        placed_items['GF Gerudo Membership Card'] = 'Ice Trap'
-        skip_in_spoiler_locations.append('GF Gerudo Membership Card')
+        placed_items['Hideout Gerudo Membership Card'] = 'Ice Trap'
+        skip_in_spoiler_locations.append('Hideout Gerudo Membership Card')
     else:
-        placed_items['GF Gerudo Membership Card'] = 'Gerudo Membership Card'
+        placed_items['Hideout Gerudo Membership Card'] = 'Gerudo Membership Card'
     if world.shuffle_gerudo_card and world.item_pool_value == 'plentiful':
         pending_junk_pool.append('Gerudo Membership Card')
 
@@ -1111,7 +1111,7 @@ def get_pool_core(world):
         pending_junk_pool.append('Small Key (Water Temple)')
         pending_junk_pool.append('Small Key (Shadow Temple)')
         pending_junk_pool.append('Small Key (Spirit Temple)')
-        pending_junk_pool.append('Small Key (Gerudo Training Grounds)')
+        pending_junk_pool.append('Small Key (Gerudo Training Ground)')
         pending_junk_pool.append('Small Key (Ganons Castle)')
 
     if world.item_pool_value == 'plentiful' and world.shuffle_bosskeys in ['any_dungeon', 'overworld', 'keysanity']:
@@ -1250,7 +1250,7 @@ def get_pool_core(world):
         pool.extend(ShT_vanilla)
     if not world.dungeon_mq['Bottom of the Well']:
         pool.extend(BW_vanilla)
-    if world.dungeon_mq['Gerudo Training Grounds']:
+    if world.dungeon_mq['Gerudo Training Ground']:
         pool.extend(GTG_MQ)
     else:
         pool.extend(GTG_vanilla)

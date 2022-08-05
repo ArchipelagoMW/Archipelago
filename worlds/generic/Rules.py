@@ -12,6 +12,20 @@ else:
     ItemRule = typing.Callable[[object], bool]
 
 
+def group_locality_rules(world):
+    for group_id, group in world.groups.items():
+        if set(world.player_ids) == set(group["players"]):
+            continue
+        if group["local_items"]:
+            for location in world.get_locations():
+                if location.player not in group["players"]:
+                    forbid_items_for_player(location, group["local_items"], group_id)
+        if group["non_local_items"]:
+            for location in world.get_locations():
+                if location.player in group["players"]:
+                    forbid_items_for_player(location, group["non_local_items"], group_id)
+
+
 def locality_rules(world, player: int):
     if world.local_items[player].value:
         for location in world.get_locations():
@@ -31,7 +45,7 @@ def exclusion_rules(world, player: int, exclude_locations: typing.Set[str]):
             if loc_name not in world.worlds[player].location_name_to_id:
                 raise Exception(f"Unable to exclude location {loc_name} in player {player}'s world.") from e
         else: 
-            add_item_rule(location, lambda i: not (i.advancement or i.never_exclude))
+            add_item_rule(location, lambda i: not (i.advancement or i.useful))
             location.progress_type = LocationProgressType.EXCLUDED
 
 

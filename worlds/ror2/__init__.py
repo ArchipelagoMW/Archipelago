@@ -3,11 +3,22 @@ from .Items import RiskOfRainItem, item_table, item_pool_weights
 from .Locations import location_table, RiskOfRainLocation, base_location_table
 from .Rules import set_rules
 
-from BaseClasses import Region, Entrance, Item, MultiWorld
+from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from .Options import ror2_options
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 
 client_version = 1
+
+
+class RiskOfWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Risk of Rain 2 integration for Archipelago multiworld games.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Ijwu"]
+    )]
 
 
 class RiskOfRainWorld(World):
@@ -25,6 +36,7 @@ class RiskOfRainWorld(World):
 
     data_version = 3
     forced_auto_forfeit = True
+    web = RiskOfWeb()
 
     def generate_basic(self):
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
@@ -90,6 +102,7 @@ class RiskOfRainWorld(World):
 
     def create_regions(self):
         create_regions(self.world, self.player)
+        create_events(self.world, self.player, int(self.world.total_locations[self.player]))
 
     def fill_slot_data(self):
         return {
@@ -97,13 +110,30 @@ class RiskOfRainWorld(World):
             "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for i in range(16)),
             "totalLocations": self.world.total_locations[self.player].value,
             "totalRevivals": self.world.total_revivals[self.player].value,
-            "startWithDio": self.world.start_with_revive[self.player].value
+            "startWithDio": self.world.start_with_revive[self.player].value,
+            "FinalStageDeath": self.world.final_stage_death[self.player].value
         }
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
-        item = RiskOfRainItem(name, True, item_id, self.player)
+        item = RiskOfRainItem(name, ItemClassification.filler, item_id, self.player)
+        if name == "Dio's Best Friend":
+            item.classification = ItemClassification.progression
+        elif name in {"Equipment", "Legendary Item"}:
+            item.classification = ItemClassification.useful
         return item
+
+
+def create_events(world: MultiWorld, player: int, total_locations: int):
+    num_of_events = total_locations // 25
+    if total_locations / 25 == num_of_events:
+        num_of_events -= 1
+    for i in range(num_of_events):
+        event_loc = RiskOfRainLocation(player, f"Pickup{(i + 1) * 25}", None, world.get_region('Petrichor V', player))
+        event_loc.place_locked_item(RiskOfRainItem(f"Pickup{(i + 1) * 25}", ItemClassification.progression, None, player))
+        event_loc.access_rule(lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", player))
+        world.get_region('Petrichor V', player).locations.append(event_loc)
+
 
 # generate locations based on player setting
 def create_regions(world, player: int):
@@ -115,16 +145,12 @@ def create_regions(world, player: int):
     ]
 
     world.get_entrance("Lobby", player).connect(world.get_region("Petrichor V", player))
-    world.get_location("Level One", player).place_locked_item(RiskOfRainItem("Beat Level One", True, None, player))
-    world.get_location("Level Two", player).place_locked_item(RiskOfRainItem("Beat Level Two", True, None, player))
-    world.get_location("Level Three", player).place_locked_item(RiskOfRainItem("Beat Level Three", True, None, player))
-    world.get_location("Level Four", player).place_locked_item(RiskOfRainItem("Beat Level Four", True, None, player))
-    world.get_location("Level Five", player).place_locked_item(RiskOfRainItem("Beat Level Five", True, None, player))
-    world.get_location("Victory", player).place_locked_item(RiskOfRainItem("Victory", True, None, player))
+    world.get_location("Victory", player).place_locked_item(RiskOfRainItem("Victory", ItemClassification.progression,
+                                                                           None, player))
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, None, name, player)
+    ret = Region(name, RegionType.Generic, name, player)
     ret.world = world
     if locations:
         for location in locations:

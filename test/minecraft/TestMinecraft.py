@@ -1,6 +1,6 @@
 import worlds.minecraft.Options
 from test.TestBase import TestBase
-from BaseClasses import MultiWorld
+from BaseClasses import MultiWorld, ItemClassification
 from worlds import AutoWorld
 from worlds.minecraft import MinecraftWorld
 from worlds.minecraft.Items import MinecraftItem, item_table
@@ -16,7 +16,10 @@ def MCItemFactory(items, player: int):
         singleton = True
     for item in items:
         if item in item_table:
-            ret.append(MinecraftItem(item, item_table[item].progression, item_table[item].code, player))
+            ret.append(MinecraftItem(
+                item, ItemClassification.progression if item_table[item].progression else ItemClassification.filler,
+                item_table[item].code, player
+            ))
         else:
             raise Exception(f"Unknown item {item}")
 
@@ -41,6 +44,7 @@ class TestMinecraft(TestBase):
         setattr(self.world, "bee_traps", {1: BeeTraps(0)})
         setattr(self.world, "combat_difficulty", {1: CombatDifficulty(1)}) # normal
         setattr(self.world, "structure_compasses", {1: Toggle(False)})
+        setattr(self.world, "death_link", {1: Toggle(False)})
         AutoWorld.call_single(self.world, "create_regions", 1)
         AutoWorld.call_single(self.world, "generate_basic", 1)
         AutoWorld.call_single(self.world, "set_rules", 1)

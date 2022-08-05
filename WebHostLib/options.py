@@ -4,6 +4,7 @@ from Utils import __version__
 from jinja2 import Template
 import yaml
 import json
+import typing
 
 from worlds.AutoWorld import AutoWorldRegister
 import Options
@@ -17,13 +18,30 @@ handled_in_js = {"start_inventory", "local_items", "non_local_items", "start_hin
 def create():
     os.makedirs(os.path.join(target_folder, 'configs'), exist_ok=True)
 
-    def dictify_range(option):
-        data = {option.range_start: 0, option.range_end: 0, "random": 0, "random-low": 0, "random-high": 0,
-                option.default: 50}
+    def dictify_range(option: typing.Union[Options.Range, Options.SpecialRange]):
+        data = {}
+        special = getattr(option, "special_range_cutoff", None)
+        if special is not None:
+            data[special] = 0
+        data.update({
+            option.range_start: 0,
+            option.range_end: 0,
+            "random": 0, "random-low": 0, "random-high": 0,
+            option.default: 50
+        })
         notes = {
+            special: "minimum value without special meaning",
             option.range_start: "minimum value",
             option.range_end: "maximum value"
         }
+
+        for name, number in getattr(option, "special_range_names", {}).items():
+            if number in data:
+                data[name] = data[number]
+                del data[number]
+            else:
+                data[name] = 0
+
         return data, notes
 
     def default_converter(default_value):
@@ -42,7 +60,7 @@ def create():
 
     for game_name, world in AutoWorldRegister.world_types.items():
 
-        all_options = {**world.options, **Options.per_game_common_options}
+        all_options = {**Options.per_game_common_options, **world.options}
         res = Template(open(os.path.join("WebHostLib", "templates", "options.yaml")).read()).render(
             options=all_options,
             __version__=__version__, game=game_name, yaml_dump=yaml.dump,
@@ -89,15 +107,25 @@ def create():
                     "value": "random",
                 })
 
+                if option.default == "random":
+                    this_option["defaultValue"] = "random"
+
             elif hasattr(option, "range_start") and hasattr(option, "range_end"):
                 game_options[option_name] = {
                     "type": "range",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                     "description": option.__doc__ if option.__doc__ else "Please document me!",
-                    "defaultValue": option.default if hasattr(option, "default") else option.range_start,
+                    "defaultValue": option.default if hasattr(
+                        option, "default") and option.default != "random" else option.range_start,
                     "min": option.range_start,
                     "max": option.range_end,
                 }
+
+                if hasattr(option, "special_range_names"):
+                    game_options[option_name]["type"] = 'special_range'
+                    game_options[option_name]["value_names"] = {}
+                    for key, val in option.special_range_names.items():
+                        game_options[option_name]["value_names"][key] = val
 
             elif getattr(option, "verify_item_name", False):
                 game_options[option_name] = {
@@ -132,7 +160,7 @@ def create():
         with open(os.path.join(target_folder, 'player-settings', game_name + ".json"), "w") as f:
             json.dump(player_settings, f, indent=2, separators=(',', ': '))
 
-        if not world.hidden:
+        if not world.hidden and world.web.settings_page is True:
             weighted_settings["baseOptions"]["game"][game_name] = 0
             weighted_settings["games"][game_name] = {}
             weighted_settings["games"][game_name]["gameSettings"] = game_options

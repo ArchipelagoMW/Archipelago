@@ -9,12 +9,46 @@ from .Regions import mc_regions, link_minecraft_structures, default_connections
 from .Rules import set_advancement_rules, set_completion_rules
 from worlds.generic.Rules import exclusion_rules
 
-from BaseClasses import Region, Entrance, Item
+from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification
 from .Options import minecraft_options
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 
-client_version = 7
-minecraft_version = "1.17.1"
+client_version = 9
+
+class MinecraftWebWorld(WebWorld):
+    theme = "jungle"
+    bug_report_page = "https://github.com/KonoTyran/Minecraft_AP_Randomizer/issues/new?assignees=&labels=bug&template=bug_report.yaml&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
+
+    setup = Tutorial(
+        "Multiworld Setup Tutorial",
+        "A guide to setting up the Archipelago Minecraft software on your computer. This guide covers"
+        "single-player, multiworld, and related software.",
+        "English",
+        "minecraft_en.md",
+        "minecraft/en",
+        ["Kono Tyran"]
+    )
+
+    setup_es = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Español",
+        "minecraft_es.md",
+        "minecraft/es",
+        ["Edos"]
+    )
+
+    setup_sv = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Swedish",
+        "minecraft_sv.md",
+        "minecraft/sv",
+        ["Albinum"]
+    )
+
+    tutorials = [setup, setup_es, setup_sv]
+
 
 class MinecraftWorld(World):
     """
@@ -26,11 +60,12 @@ class MinecraftWorld(World):
     game: str = "Minecraft"
     options = minecraft_options
     topology_present = True
+    web = MinecraftWebWorld()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 4
+    data_version = 7
 
     def _get_mc_data(self):
         exits = [connection[0] for connection in default_connections]
@@ -40,14 +75,14 @@ class MinecraftWorld(World):
             'player_name': self.world.get_player_name(self.player),
             'player_id': self.player,
             'client_version': client_version,
-            'minecraft_version': minecraft_version,
             'structures': {exit: self.world.get_entrance(exit, self.player).connected_region.name for exit in exits},
-            'advancement_goal': self.world.advancement_goal[self.player],
-            'egg_shards_required': min(self.world.egg_shards_required[self.player], self.world.egg_shards_available[self.player]),
-            'egg_shards_available': self.world.egg_shards_available[self.player],
+            'advancement_goal': self.world.advancement_goal[self.player].value,
+            'egg_shards_required': min(self.world.egg_shards_required[self.player].value,
+                                       self.world.egg_shards_available[self.player].value),
+            'egg_shards_available': self.world.egg_shards_available[self.player].value,
             'required_bosses': self.world.required_bosses[self.player].current_key,
-            'MC35': bool(self.world.send_defeated_mobs[self.player]),
-            'death_link': bool(self.world.death_link[self.player]),
+            'MC35': bool(self.world.send_defeated_mobs[self.player].value),
+            'death_link': bool(self.world.death_link[self.player].value),
             'starting_items': str(self.world.starting_items[self.player].value),
             'race': self.world.is_race,
         }
@@ -66,10 +101,11 @@ class MinecraftWorld(World):
             for struct_name in structures:
                 itempool.append(f"Structure Compass ({struct_name})")
         # Add dragon egg shards
-        itempool += ["Dragon Egg Shard"] * self.world.egg_shards_available[self.player]
+        if self.world.egg_shards_required[self.player] > 0:
+            itempool += ["Dragon Egg Shard"] * self.world.egg_shards_available[self.player]
         # Add bee traps if desired
         bee_trap_quantity = ceil(self.world.bee_traps[self.player] * (len(self.location_names)-len(itempool)) * 0.01)
-        itempool += ["Bee Trap (Minecraft)"] * bee_trap_quantity
+        itempool += ["Bee Trap"] * bee_trap_quantity
         # Fill remaining items with randomly generated junk
         itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names)-len(itempool))
         # Convert itempool into real items
@@ -92,6 +128,9 @@ class MinecraftWorld(World):
 
         self.world.itempool += itempool
 
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choices(list(junk_weights.keys()), weights=list(junk_weights.values()))[0]
+
     def set_rules(self):
         set_advancement_rules(self.world, self.player)
         set_completion_rules(self.world, self.player)
@@ -111,7 +150,7 @@ class MinecraftWorld(World):
 
     def generate_output(self, output_directory: str):
         data = self._get_mc_data()
-        filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_name(self.player)}.apmc"
+        filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_file_safe_player_name(self.player)}.apmc"
         with open(os.path.join(output_directory, filename), 'wb') as f:
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 
@@ -125,10 +164,17 @@ class MinecraftWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]
-        item = MinecraftItem(name, item_data.progression, item_data.code, self.player)
-        nonexcluded_items = ["Sharpness III Book", "Infinity Book", "Looting III Book"]
-        if name in nonexcluded_items:  # prevent books from going on excluded locations
-            item.never_exclude = True
+        if name == "Bee Trap":
+            classification = ItemClassification.trap
+            # prevent books from going on excluded locations
+        elif name in ("Sharpness III Book", "Infinity Book", "Looting III Book"):
+            classification = ItemClassification.useful
+        elif item_data.progression:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+        item = MinecraftItem(name, classification, item_data.code, self.player)
+
         return item
 
 def mc_update_output(raw_data, server, port):

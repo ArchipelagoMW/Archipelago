@@ -30,7 +30,7 @@ def set_rules(world):
             # Set access rules according to max glitches for multiworld progression.
             # Set accessibility to none, and shuffle assuming the no logic players can always win
             world.accessibility[player] = world.accessibility[player].from_text("minimal")
-            world.progression_balancing[player].value = False
+            world.progression_balancing[player].value = 0
 
     else:
         world.completion_condition[player] = lambda state: state.has('Triforce', player)
@@ -935,7 +935,6 @@ def set_trock_key_rules(world, player):
                 else:
                     # A key is required in the Big Key Chest to prevent a possible softlock.  Place an extra key to ensure 100% locations still works
                     item = ItemFactory('Small Key (Turtle Rock)', player)
-                    item.world = world
                     location = world.get_location('Turtle Rock - Big Key Chest', player)
                     location.place_locked_item(item)
                     location.event = True

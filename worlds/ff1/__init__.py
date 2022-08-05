@@ -1,9 +1,21 @@
 from typing import Dict
-from BaseClasses import Item, Location, MultiWorld
+from BaseClasses import Item, Location, MultiWorld, Tutorial, ItemClassification
 from .Items import ItemData, FF1Items, FF1_STARTER_ITEMS, FF1_PROGRESSION_LIST, FF1_BRIDGE
 from .Locations import EventId, FF1Locations, generate_rule, CHAOS_TERMINATED_EVENT
 from .Options import ff1_options
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
+
+
+class FF1Web(WebWorld):
+    settings_page = "https://finalfantasyrandomizer.com/"
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing Final Fantasy multiworld. This guide only covers playing multiworld.",
+        "English",
+        "multiworld_en.md",
+        "multiworld/en",
+        ["jat2980"]
+    )]
 
 
 class FF1World(World):
@@ -28,6 +40,8 @@ class FF1World(World):
     item_name_to_id = ff1_items.get_item_name_to_code_dict()
     location_name_to_id = ff1_locations.get_location_name_to_address_dict()
 
+    web = FF1Web()
+
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.locked_items = []
@@ -41,7 +55,7 @@ class FF1World(World):
         rules = get_options(self.world, 'rules', self.player)
         menu_region = self.ff1_locations.create_menu_region(self.player, locations, rules)
         terminated_event = Location(self.player, CHAOS_TERMINATED_EVENT, EventId, menu_region)
-        terminated_item = Item(CHAOS_TERMINATED_EVENT, True, EventId, self.player)
+        terminated_item = Item(CHAOS_TERMINATED_EVENT, ItemClassification.progression, EventId, self.player)
         terminated_event.place_locked_item(terminated_item)
 
         items = get_options(self.world, 'items', self.player)
@@ -70,6 +84,11 @@ class FF1World(World):
             if possible_early_items:
                 progression_item = self.world.random.choice(possible_early_items)
                 self._place_locked_item_in_sphere0(progression_item)
+        else:
+            # Fail generation if there are no items in the pool
+            raise Exception("FFR settings submitted with no key items. Please ensure you generated the settings using "
+                            "finalfantasyrandomizer.com AND enabled the AP flag")
+
         items = [self.create_item(name) for name, data in items.items() for x in range(data['count']) if name not in
                  self.locked_items]
 
@@ -91,6 +110,9 @@ class FF1World(World):
         slot_data: Dict[str, object] = {}
 
         return slot_data
+
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choice(["Heal", "Pure", "Soft", "Tent", "Cabin", "House"])
 
 
 def get_options(world: MultiWorld, name: str, player: int):
