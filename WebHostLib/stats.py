@@ -18,15 +18,16 @@ from .models import Room
 PLOT_WIDTH = 600
 
 
-def get_db_data() -> typing.Tuple[typing.Dict[str, int], typing.Dict[datetime.date, typing.Dict[str, int]]]:
+def get_db_data(known_games: str) -> typing.Tuple[typing.Dict[str, int], typing.Dict[datetime.date, typing.Dict[str, int]]]:
     games_played = defaultdict(Counter)
     total_games = Counter()
     cutoff = date.today()-timedelta(days=30)
     room: Room
     for room in select(room for room in Room if room.creation_time >= cutoff):
         for slot in room.seed.slots:
-            total_games[slot.game] += 1
-            games_played[room.creation_time.date()][slot.game] += 1
+            if slot.game in known_games:
+                total_games[slot.game] += 1
+                games_played[room.creation_time.date()][slot.game] += 1
     return total_games, games_played
 
 
@@ -73,10 +74,12 @@ def create_game_played_figure(all_games_data: typing.Dict[datetime.date, typing.
 @app.route('/stats')
 @cache.memoize(timeout=60 * 60)  # regen once per hour should be plenty
 def stats():
+    from worlds import network_data_package
+    known_games = set(network_data_package["games"])
     plot = figure(title="Games Played Per Day", x_axis_type='datetime', x_axis_label="Date",
                   y_axis_label="Games Played", sizing_mode="scale_both", width=PLOT_WIDTH, height=500)
 
-    total_games, games_played = get_db_data()
+    total_games, games_played = get_db_data(known_games)
     days = sorted(games_played)
 
     color_palette = get_color_palette(len(total_games))

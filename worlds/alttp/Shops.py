@@ -335,7 +335,6 @@ def create_shops(world, player: int):
                 else:
                     loc.item = ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player)
                     loc.shop_slot_disabled = True
-                loc.item.world = world
                 shop.region.locations.append(loc)
                 world.clear_location_cache()
 

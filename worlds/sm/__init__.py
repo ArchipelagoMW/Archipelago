@@ -5,7 +5,7 @@ import copy
 import os
 import threading
 import base64
-from typing import Set, List, TextIO
+from typing import Set, TextIO
 
 from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
 
@@ -598,7 +598,7 @@ class SMWorld(World):
 
     def create_item(self, name: str) -> Item:
         item = next(x for x in ItemManager.Items.values() if x.Name == name)
-        return SMItem(item.Name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Name],
+        return SMItem(item.Name, ItemClassification.progression if item.Class != 'Minor' else ItemClassification.filler, item.Type, self.item_name_to_id[item.Name],
                       player=self.player)
 
     def get_filler_item_name(self) -> str:
@@ -735,7 +735,8 @@ class SMLocation(Location):
 
 class SMItem(Item):
     game = "Super Metroid"
+    type: str
 
-    def __init__(self, name, classification, type, code, player: int = None):
+    def __init__(self, name, classification, type: str, code, player: int):
         super(SMItem, self).__init__(name, classification, code, player)
         self.type = type

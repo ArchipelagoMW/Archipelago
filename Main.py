@@ -217,9 +217,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     logger.info("Running Item Plando")
 
-    for item in world.itempool:
-        item.world = world
-
     distribute_planned(world)
 
     logger.info('Running Pre Main Fill.')
