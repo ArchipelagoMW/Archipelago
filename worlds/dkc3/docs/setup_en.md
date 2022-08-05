@@ -15,6 +15,11 @@
       compatible hardware
 - Your legally obtained Donkey Kong Country 3 ROM file, probably named `Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc`
 
+## Optional Software
+- Donkey Kong Country 3 Tracker
+	- PopTracker from: [PopTracker Releases Page](https://github.com/black-sliver/PopTracker/releases/)
+	- Donkey Kong Country 3 Archipelago PopTracker pack from: [DKC3 AP Tracker Releases Page](https://github.com/PoryGone/DKC3_AP_Tracker/releases/)
+
 ## Installation Procedures
 
 ### Windows Setup
