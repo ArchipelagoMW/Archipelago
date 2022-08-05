@@ -60,8 +60,11 @@ This project makes use of multiple other projects. We wouldn't be here without t
 * [Enemizer](https://github.com/Ijwu/Enemizer)
 * [Ocarina of Time Randomizer](https://github.com/TestRunnerSRL/OoT-Randomizer)
 
-## [Contributing](/docs/contributing.md)
+## Contributing
+For contribution guidelines please see our [Contributing doc](/docs/contributing.md)
 
-## [FAQ](https://archipelago.gg/faq/en/)
+## FAQ
+For Frequently asked questions please see the website's [FAQ Page](https://archipelago.gg/faq/en/)
 
-## [Code of Conduct](/docs/code_of_conduct.md)
+## Code of Conduct
+Please refer to our [code of conduct](/docs/code_of_conduct.md)

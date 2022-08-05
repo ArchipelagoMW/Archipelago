@@ -1,3 +1,4 @@
+# Code of Conduct
 We conduct ourselves openly and inclusively here. Please do not contribute to an environment which makes other people uncomfortable. This means that we expect all contributors or participants here to:
 
 * Be welcoming and inclusive in tone and language.
