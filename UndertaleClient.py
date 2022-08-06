@@ -47,7 +47,8 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
         """Patch the game automatically."""
         if isinstance(self.ctx, UndertaleContext):
             for file_name in os.listdir(steaminstall+"\\steamapps\\common\\Undertale\\"):
-                os.system('copy "'+steaminstall+'\\steamapps\\common\\Undertale\\'+file_name+'" "'+os.getcwd() +"\\Undertale\\"+file_name)
+                if file_name != "steam_api.dll":
+                    os.system('copy "'+steaminstall+'\\steamapps\\common\\Undertale\\'+file_name+'" "'+os.getcwd() +"\\Undertale\\"+file_name)
             bsdiff4.file_patch_inplace(os.getcwd() + r"/Undertale/data.win", undertale.data_path("patch.bsdiff"))
             self.output(f"Patched.")
 
