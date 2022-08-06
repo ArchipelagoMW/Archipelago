@@ -165,7 +165,7 @@ minecraft_versions.json
 .python-version
 
 #undertale stuff
-Undertale/
+/Undertale/
 
 # OS General Files
 .DS_Store
