@@ -91,6 +91,7 @@ const createDefaultSettings = (settingData) => {
           case 'locations-list':
           case 'custom-list':
             newSettings[game][gameSetting] = [];
+            console.log(`Setting ${game} ${setting.type} ${gameSetting} to [].`);
             break;
 
           default:
