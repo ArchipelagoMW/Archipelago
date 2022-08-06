@@ -43,15 +43,16 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         options = difficulty.split()
         num_options = len(options)
         set_difficulty = True
+        difficulty = options[0].lower
 
         if num_options > 0:
-            if options[0].lower == "casual":
+            if difficulty == "casual":
                 self.ctx.difficulty_override = 0
-            elif options[0].lower == "normal":
+            elif difficulty == "normal":
                 self.ctx.difficulty_override = 1
-            elif options[0].lower == "hard":
+            elif difficulty == "hard":
                 self.ctx.difficulty_override = 2
-            elif options[0].lower == "brutal":
+            elif difficulty == "brutal":
                 self.ctx.difficulty_override = 3
             else:
                 sc2_logger.info("Unable to parse difficulty '" + options[0] + "'")
