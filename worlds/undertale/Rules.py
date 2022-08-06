@@ -27,7 +27,7 @@ class UndertaleLogic(LogicMixin):
                 progkeys.append("Heat Suit")
                 place = "Waterfall Exit"
             elif temp_data[place] == "Hotland":
-                if self._undertale_is_route(player, 2):
+                if not self._undertale_is_route(player, 2):
                     progkeys.append("Cooking Set")
                     progkeys.append("Microphone")
                 progkeys.append("Bridge Tools")

@@ -5,11 +5,12 @@ from BaseClasses import ItemClassification
 
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
-    classification: int
+    classification: any
 
 
 class UndertaleItem(Item):
     game: str = "Undertale"
+
 
 
 item_table = {

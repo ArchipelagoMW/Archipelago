@@ -230,12 +230,12 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         ctx.progkeys.append(77777)
         while place != "Core Exit":
             if args["slot_data"][place] == "Snowdin Forest":
-                if ctx.route == "pacifist":
+                if ctx.route == "pacifist" or ctx.route == "all_routes":
                     ctx.progkeys.append(77779)
                 ctx.progkeys.append(77778)
                 place = "Snowdin Town Exit"
             elif args["slot_data"][place] == "Waterfall":
-                if ctx.route == "pacifist":
+                if ctx.route == "pacifist" or ctx.route == "all_routes":
                     ctx.progkeys.append(77780)
                 ctx.progkeys.append(77781)
                 place = "Waterfall Exit"
@@ -247,7 +247,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                 place = "Hotland Exit"
             elif args["slot_data"][place] == "Core":
                 ctx.progkeys.append(77786)
-                if ctx.route == "pacifist":
+                if ctx.route == "pacifist" or ctx.route == "all_routes":
                     ctx.progkeys.append(77782)
                 place = "Core Exit"
 
