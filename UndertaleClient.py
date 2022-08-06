@@ -20,6 +20,7 @@ if __name__ == "__main__":
 
 from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot
 from worlds import network_data_package, AutoWorldRegister, undertale
+from MultiServer import mark_raw
 from CommonClient import gui_enabled, get_base_parser, ClientCommandProcessor, CommonContext, server_loop, \
     gui_enabled, console_loop, ClientCommandProcessor, logger, get_base_parser, keep_alive, server_autoreconnect, \
     process_server_cmd
@@ -38,6 +39,15 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
     def _cmd_patch(self):
         """Patch the game."""
         if isinstance(self.ctx, UndertaleContext):
+            bsdiff4.file_patch_inplace(os.getcwd() + r"/Undertale/data.win", undertale.data_path("patch.bsdiff"))
+            self.output(f"Patched.")
+
+    @mark_raw
+    def _cmd_auto_patch(self, steaminstall: str):
+        """Patch the game automatically."""
+        if isinstance(self.ctx, UndertaleContext):
+            for file_name in os.listdir(steaminstall+"\\steamapps\\common\\Undertale\\"):
+                os.system('copy "'+steaminstall+'\\steamapps\\common\\Undertale\\'+file_name+'" "'+os.getcwd() +"\\Undertale\\"+file_name)
             bsdiff4.file_patch_inplace(os.getcwd() + r"/Undertale/data.win", undertale.data_path("patch.bsdiff"))
             self.output(f"Patched.")
 
