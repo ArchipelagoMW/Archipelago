@@ -4,19 +4,30 @@ from base64 import b64encode, b64decode
 from math import ceil
 from .Items import UndertaleItem, item_table, required_armor, required_weapons, non_key_items, key_items, junk_weights_all, plot_items, junk_weights_neutral, junk_weights_pacifist, junk_weights_genocide
 from .Locations import UndertaleAdvancement, advancement_table, exclusion_table
-from .Regions import undertale_regions, link_undertale_areas
+from .Regions import undertale_regions, link_undertale_areas, randomized_connections
 from .Rules import set_rules, set_completion_rules
 from worlds.generic.Rules import exclusion_rules
-
-from BaseClasses import Region, Entrance, Item, ItemClassification
+from BaseClasses import Region, Entrance, Tutorial, Item, ItemClassification
 from .Options import undertale_options
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 
 client_version = 7
 
 
 def data_path(*args):
     return os.path.join(os.path.dirname(__file__), 'data', *args)
+
+
+class UndertaleWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Tutorial",
+        "A guide to setting up the Archipelago ChecksFinder software on your computer. This guide covers "
+        "single-player, multiworld, and related software.",
+        "English",
+        "undertale_en.md",
+        "undertale/en",
+        ["Mewlif"]
+    )]
 
 
 class UndertaleWorld(World):
@@ -28,6 +39,7 @@ class UndertaleWorld(World):
     game: str = "Undertale"
     options = undertale_options
     topology_present = True
+    web = UndertaleWeb()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
@@ -170,7 +182,7 @@ class UndertaleWorld(World):
                 option.value = False
             if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
-        for (exit, region) in Regions.randomized_connections:
+        for (exit, region) in randomized_connections:
             slot_data[exit] = self.world.get_entrance(exit, self.player).connected_region.name
             slot_data[region] = self.world.get_region(region, self.player).entrances[0].name
         return slot_data

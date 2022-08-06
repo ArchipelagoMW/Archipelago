@@ -15,7 +15,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a YAML file?
 
-You can customize your settings by visiting the [Undertale Player Settings Page](../player-settings)
+You can customize your settings by visiting the [Undertale Player Settings Page](/games/Undertale/player-settings)
 
 ### Generating a Undertale game
 

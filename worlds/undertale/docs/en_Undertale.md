@@ -13,7 +13,7 @@ the Nicecream bought in Hotland, and anything you cannot get in your chosen rout
 ## When the player receives an item, what happens?
 
 When the player receives an item in Undertale, it will go into their inventory if they have space, otherwise it will 
-wait until they do have space. That includes items that don't appear in your inventory
+wait until they do have space. That includes items that don't appear in your inventory.
 
 ## What is the victory condition?
 
