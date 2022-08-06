@@ -33,7 +33,7 @@ leave this window open as this is your server console.
 
 ### Connect to the MultiServer
 
-Using Minecraft 1.18.2 connect to the server `localhost`.
+Using Minecraft 1.19 connect to the server `localhost`.
 
 If you are using the website to host the game then it should auto-connect to the AP server without the need to `/connect`
 
