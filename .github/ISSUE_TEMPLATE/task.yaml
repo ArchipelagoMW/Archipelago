@@ -8,6 +8,3 @@ body:
   - type: textarea
     attributes:
       label: What task needs to be completed?
-  - type: textarea
-    attributes:
-      label: Is there someone specific to assign this task to?
