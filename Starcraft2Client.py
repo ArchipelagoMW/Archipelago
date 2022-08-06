@@ -43,7 +43,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         options = difficulty.split()
         num_options = len(options)
         set_difficulty = True
-        difficulty_choice = options[0].lower
+        difficulty_choice = options[0].lower()
 
         if num_options > 0:
             if difficulty_choice == "casual":
