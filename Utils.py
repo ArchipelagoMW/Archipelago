@@ -30,7 +30,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.3"
+__version__ = "0.3.4"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith('linux')
@@ -479,9 +479,13 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
 def stream_input(stream, queue):
     def queuer():
         while 1:
-            text = stream.readline().strip()
-            if text:
-                queue.put_nowait(text)
+            try:
+                text = stream.readline().strip()
+            except UnicodeDecodeError as e:
+                logging.exception(e)
+            else:
+                if text:
+                    queue.put_nowait(text)
 
     from threading import Thread
     thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)

@@ -61,6 +61,11 @@ class PlandoSettings(enum.IntFlag):
         else:
             return base | part
 
+    def __str__(self) -> str:
+        if self.value:
+            return ", ".join((flag.name for flag in PlandoSettings if self.value & flag.value))
+        return "Off"
+
 
 def mystery_argparse():
     options = get_options()
