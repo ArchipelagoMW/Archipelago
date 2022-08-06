@@ -221,7 +221,7 @@ class Factorio(World):
                     # Return the liquid to the pool and get a new ingredient.
                     pool.append(new_ingredient)
                     new_ingredient = pool.pop(0)
-                liquids_used += 1
+                liquids_used += 1 if new_ingredient in fluids else 0
             new_ingredients[new_ingredient] = 1
         return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients,
                       original.products, original.energy)

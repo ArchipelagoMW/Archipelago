@@ -765,7 +765,9 @@ Inside Mountain Second Layer (Inside Mountain) - Inside Mountain Second Layer Li
 158430 - 0x09FD8 (Color Cycle 5) - 0x09FD7 - Color Cycle & RGB & Squares & Colored Squares & Symmetry & Colored Dots
 Door - 0x09FFB (Staircase Near) - 0x09FD8
 
-Inside Mountain Second Layer Blue Bridge (Inside Mountain) - Inside Mountain Second Layer Beyond Bridge - TrueOneWay - Inside Mountain Second Layer Elevator Room - 0x09EDD:
+Inside Mountain Second Layer Blue Bridge (Inside Mountain) - Inside Mountain Second Layer Beyond Bridge - TrueOneWay - Inside Mountain Second Layer At Door - TrueOneWay:
+
+Inside Mountain Second Layer At Door (Inside Mountain) - Inside Mountain Second Layer Elevator Room - 0x09EDD:
 Door - 0x09EDD (Door to Elevator) - 0x09ED8 & 0x09E86
 
 Inside Mountain Second Layer Light Bridge Room Near (Inside Mountain):

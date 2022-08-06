@@ -121,6 +121,7 @@ shop_cost_types: typing.Dict[str, typing.Tuple[str, ...]] = {
     "Leg_Eater": ("GEO",),
 }
 
+
 class HKWeb(WebWorld):
     tutorials = [Tutorial(
         "Mod Setup and Use Guide",
@@ -130,6 +131,8 @@ class HKWeb(WebWorld):
         "setup/en",
         ["Ijwu"]
     )]
+
+    bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new?assignees=&labels=bug%2C+needs+investigation&template=bug_report.md&title="
 
 
 class HKWorld(World):
@@ -629,8 +632,9 @@ class HKLocation(Location):
 
 class HKItem(Item):
     game = "Hollow Knight"
+    type: str
 
-    def __init__(self, name, advancement, code, type, player: int = None):
+    def __init__(self, name, advancement, code, type: str, player: int = None):
         if name == "Mimic_Grub":
             classification = ItemClassification.trap
         elif type in ("Grub", "DreamWarrior", "Root", "Egg"):
