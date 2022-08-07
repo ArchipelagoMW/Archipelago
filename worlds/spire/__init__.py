@@ -22,6 +22,11 @@ class SpireWeb(WebWorld):
 
 
 class SpireWorld(World):
+    """
+    A deck-building roguelike where you must craft a unique deck, encounter bizarre creatures, discover relics of
+    immense power, and Slay the Spire!
+    """
+
     options = spire_options
     game = "Slay the Spire"
     topology_present = False
