@@ -35,9 +35,7 @@ class SM64World(World):
     location_name_to_id = location_table
 
     data_version = 6
-    required_client_version = (0,3,0)
-    
-    forced_auto_forfeit = False
+    required_client_version = (0, 3, 0)
 
     area_connections: typing.Dict[int, int]
 
