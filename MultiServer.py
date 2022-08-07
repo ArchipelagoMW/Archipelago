@@ -197,11 +197,11 @@ class Context:
         self.forced_auto_forfeits = collections.defaultdict(lambda: False)
         self.non_hintable_names = {}
 
-        self.init_datapackage()
-        self._init_datapackage()
+        self._load_game_data()
+        self._init_game_data()
 
     # Datapackage retrieval
-    def init_datapackage(self):
+    def _load_game_data(self):
         from worlds import network_data_package, AutoWorldRegister
         self.gamespackage = network_data_package["games"]
 
@@ -211,7 +211,7 @@ class Context:
             self.forced_auto_forfeits[world_name] = world.forced_auto_forfeit
             self.non_hintable_names[world_name] = world.hint_blacklist
 
-    def _init_datapackage(self):
+    def _init_game_data(self):
         for game_name, game_package in self.gamespackage.items():
             for item_name, item_id in game_package["item_name_to_id"].items():
                 self.item_names[item_id] = item_name
@@ -874,14 +874,14 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
         ctx.save()
 
 
-def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[NetUtils.Hint]:
+def collect_hints(ctx: Context, team: int, slot: int, item_name: str) -> typing.List[NetUtils.Hint]:
     hints = []
     slots: typing.Set[int] = {slot}
     for group_id, group in ctx.groups.items():
         if slot in group:
             slots.add(group_id)
 
-    seeked_item_id = ctx.item_names_for_game(ctx.games[slot])[item]
+    seeked_item_id = ctx.item_names_for_game(ctx.games[slot])[item_name]
     for finding_player, check_data in ctx.locations.items():
         for location_id, (item_id, receiving_player, item_flags) in check_data.items():
             if receiving_player in slots and item_id == seeked_item_id:
@@ -1170,8 +1170,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
             forfeit_player(self.ctx, self.client.team, self.client.slot)
             return True
         elif "disabled" in self.ctx.forfeit_mode:
-            self.output(
-                "Sorry, client item releasing has been disabled on this server. You can ask the server admin for a /release")
+            self.output("Sorry, client item releasing has been disabled on this server. "
+                        "You can ask the server admin for a /release")
             return False
         else:  # is auto or goal
             if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
@@ -1322,9 +1322,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     hints = []
                 elif not for_location and hint_name in self.ctx.item_name_groups[game]:  # item group name
                     hints = []
-                    for item in self.ctx.item_name_groups[game][hint_name]:
-                        if item in self.ctx.item_names_for_game(game):  # ensure item has an ID
-                            hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item))
+                    for item_name in self.ctx.item_name_groups[game][hint_name]:
+                        if item_name in self.ctx.item_names_for_game(game):  # ensure item has an ID
+                            hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item_name))
                 elif not for_location and hint_name in self.ctx.item_names_for_game(game):  # item name
                     hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_name)
                 else:  # location name
@@ -1387,12 +1387,12 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 return False
 
     @mark_raw
-    def _cmd_hint(self, item: str = "") -> bool:
+    def _cmd_hint(self, item_name: str = "") -> bool:
         """Use !hint {item_name},
         for example !hint Lamp to get a spoiler peek for that item.
         If hint costs are on, this will only give you one new result,
         you can rerun the command to get more in that case."""
-        return self.get_hints(item)
+        return self.get_hints(item_name)
 
     @mark_raw
     def _cmd_hint_location(self, location: str = "") -> bool:
@@ -1592,7 +1592,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             for location in args["locations"]:
                 if type(location) is not int:
                     await ctx.send_msgs(client,
-                                        [{'cmd': 'InvalidPacket', "type": "argument", "text": 'LocationScouts',
+                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts',
                                           "original_cmd": cmd}])
                     return
 
@@ -1804,18 +1804,18 @@ class ServerCommandProcessor(CommonCommandProcessor):
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
             team, slot = self.ctx.player_name_lookup[seeked_player]
-            item = " ".join(item_name)
+            item_name = " ".join(item_name)
             names = self.ctx.item_names_for_game(self.ctx.games[slot])
-            item, usable, response = get_intended_text(item, names)
+            item_name, usable, response = get_intended_text(item_name, names)
             if usable:
                 amount: int = int(amount)
-                new_items = [NetworkItem(names[item], -1, 0) for _ in range(int(amount))]
+                new_items = [NetworkItem(names[item_name], -1, 0) for _ in range(int(amount))]
                 send_items_to(self.ctx, team, slot, *new_items)
 
                 send_new_items(self.ctx)
                 self.ctx.notify_all(
                     'Cheat console: sending ' + ('' if amount == 1 else f'{amount} of ') +
-                    f'"{item}" to {self.ctx.get_aliased_name(team, slot)}')
+                    f'"{item_name}" to {self.ctx.get_aliased_name(team, slot)}')
                 return True
             else:
                 self.output(response)
@@ -1828,22 +1828,22 @@ class ServerCommandProcessor(CommonCommandProcessor):
         """Sends an item to the specified player"""
         return self._cmd_send_multiple(1, player_name, *item_name)
 
-    def _cmd_hint(self, player_name: str, *item: str) -> bool:
+    def _cmd_hint(self, player_name: str, *item_name: str) -> bool:
         """Send out a hint for a player's item to their team"""
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
             team, slot = self.ctx.player_name_lookup[seeked_player]
-            item = " ".join(item)
+            item_name = " ".join(item_name)
             game = self.ctx.games[slot]
-            item, usable, response = get_intended_text(item, self.ctx.all_item_and_group_names[game])
+            item_name, usable, response = get_intended_text(item_name, self.ctx.all_item_and_group_names[game])
             if usable:
-                if item in self.ctx.item_name_groups[game]:
+                if item_name in self.ctx.item_name_groups[game]:
                     hints = []
-                    for item in self.ctx.item_name_groups[game][item]:
-                        if item in self.ctx.item_names_for_game(game):  # ensure item has an ID
-                            hints.extend(collect_hints(self.ctx, team, slot, item))
+                    for item_name_from_group in self.ctx.item_name_groups[game][item_name]:
+                        if item_name_from_group in self.ctx.item_names_for_game(game):  # ensure item has an ID
+                            hints.extend(collect_hints(self.ctx, team, slot, item_name_from_group))
                 else:  # item name
-                    hints = collect_hints(self.ctx, team, slot, item)
+                    hints = collect_hints(self.ctx, team, slot, item_name)
 
                 if hints:
                     notify_hints(self.ctx, team, hints)
@@ -1859,15 +1859,16 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(response)
             return False
 
-    def _cmd_hint_location(self, player_name: str, *location: str) -> bool:
+    def _cmd_hint_location(self, player_name: str, *location_name: str) -> bool:
         """Send out a hint for a player's location to their team"""
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
             team, slot = self.ctx.player_name_lookup[seeked_player]
-            item = " ".join(location)
-            item, usable, response = get_intended_text(item, self.ctx.location_names_for_game(self.ctx.games[slot]))
+            location_name = " ".join(location_name)
+            location_name, usable, response = get_intended_text(location_name,
+                                                                self.ctx.location_names_for_game(self.ctx.games[slot]))
             if usable:
-                hints = collect_hint_location_name(self.ctx, team, slot, item)
+                hints = collect_hint_location_name(self.ctx, team, slot, location_name)
                 if hints:
                     notify_hints(self.ctx, team, hints)
                 else:

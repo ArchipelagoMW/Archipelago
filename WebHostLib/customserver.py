@@ -49,6 +49,8 @@ class DBCommandProcessor(ServerCommandProcessor):
 
 class WebHostContext(Context):
     def __init__(self, static_server_data: dict):
+        # static server data is used during _load_game_data to load required data,
+        # without needing to import worlds system, which takes quite a bit of memory
         self.static_server_data = static_server_data
         super(WebHostContext, self).__init__("", 0, "", "", 1, 40, True, "enabled", "enabled", "enabled", 0, 2)
         del self.static_server_data
@@ -56,7 +58,7 @@ class WebHostContext(Context):
         self.video = {}
         self.tags = ["AP", "WebHost"]
 
-    def init_datapackage(self):
+    def _load_game_data(self):
         for key, value in self.static_server_data.items():
             setattr(self, key, value)
 

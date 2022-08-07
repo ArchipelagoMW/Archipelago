@@ -328,16 +328,6 @@ def get_options() -> dict:
     return get_options.options
 
 
-def get_item_name_from_id(code: int) -> str:
-    from worlds import lookup_any_item_id_to_name
-    return lookup_any_item_id_to_name.get(code, f'Unknown item (ID:{code})')
-
-
-def get_location_name_from_id(code: int) -> str:
-    from worlds import lookup_any_location_id_to_name
-    return lookup_any_location_id_to_name.get(code, f'Unknown location (ID:{code})')
-
-
 def persistent_store(category: str, key: typing.Any, value: typing.Any):
     path = user_path("_persistent_storage.yaml")
     storage: dict = persistent_load()
