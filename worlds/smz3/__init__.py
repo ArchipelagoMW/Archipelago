@@ -490,7 +490,7 @@ class SMZ3World(World):
                 start = self.world.random.randint(0, poolLength)
                 for off in range(0, poolLength):
                     i = (start + off) % poolLength
-                    if loc.can_fill(self.world.state, junkPool[i][1], False):
+                    if i not in toRemove and loc.can_fill(self.world.state, junkPool[i][1], False):
                         itemFromPool = junkPool[i][1]
                         toRemove.append(junkPool[i][0])
                         break
