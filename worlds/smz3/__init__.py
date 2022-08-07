@@ -479,20 +479,27 @@ class SMZ3World(World):
             self.world.spoiler.unreachables.update(self.unreachable)
 
     def JunkFillGT(self):
+        poolLength = len(self.world.itempool)
+        junkPool = [(i, self.world.itempool[i]) for i in range(0, poolLength) 
+                    if self.world.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap)]
+        toRemove = []
         for loc in self.locations.values():
             if loc.name in self.locationNamesGT and loc.item is None:
-                poolLength = len(self.world.itempool)
+                poolLength = len(junkPool)
                 # start looking at a random starting index and loop at start if no match found
                 start = self.world.random.randint(0, poolLength)
                 for off in range(0, poolLength):
                     i = (start + off) % poolLength
-                    if self.world.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap) \
-                            and loc.can_fill(self.world.state, self.world.itempool[i], False):
-                        itemFromPool = self.world.itempool.pop(i)
+                    if loc.can_fill(self.world.state, junkPool[i][1], False):
+                        itemFromPool = junkPool[i][1]
+                        toRemove.append(junkPool[i][0])
                         break
                 self.world.push_item(loc, itemFromPool, False)
                 loc.event = False
-
+        toRemove.sort(reverse = True)
+        for i in toRemove: 
+            self.world.itempool.pop(i)
+            
     def FillItemAtLocation(self, itemPool, itemType, location):
         itemToPlace = TotalSMZ3Item.Item.Get(itemPool, itemType, self.smz3World)
         if (itemToPlace == None):
