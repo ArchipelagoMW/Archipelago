@@ -88,60 +88,68 @@ class RaftLogic(LogicMixin):
         return self.raft_can_access_radio_tower(player)
 
     def raft_can_access_vasagatan(self, player):
-        return self.raft_can_complete_radio_tower(player) and self.raft_can_navigate(player) and self.has("Vasagatan Frequency", player)
+        return self.raft_can_navigate(player) and self.has("Vasagatan Frequency", player)
 
     def raft_can_complete_vasagatan(self, player):
         return self.raft_can_access_vasagatan(player)
 
     def raft_can_access_balboa_island(self, player):
-        return (self.raft_can_complete_vasagatan(player)
-            and self.raft_can_drive(player)
-            and self.has("Balboa Island Frequency", player))
+        return self.raft_can_drive(player) and self.has("Balboa Island Frequency", player)
 
     def raft_can_complete_balboa_island(self, player):
         return self.raft_can_access_balboa_island(player) and self.raft_can_craft_machete(player)
 
     def raft_can_access_caravan_island(self, player):
-        return self.raft_can_complete_balboa_island(player) and self.raft_can_drive(player) and self.has("Caravan Island Frequency", player)
+        return self.raft_can_drive(player) and self.has("Caravan Island Frequency", player)
 
     def raft_can_complete_caravan_island(self, player):
         return self.raft_can_access_caravan_island(player) and self.raft_can_craft_ziplineTool(player)
 
     def raft_can_access_tangaroa(self, player):
-        return self.raft_can_complete_caravan_island(player) and self.raft_can_drive(player) and self.has("Tangaroa Frequency", player)
+        return self.raft_can_drive(player) and self.has("Tangaroa Frequency", player)
 
     def raft_can_complete_tangaroa(self, player):
-        return self.raft_can_access_tangaroa(player)
+        return self.raft_can_access_tangaroa(player) and self.raft_can_craft_ziplineTool(player)
 
     def raft_can_access_varuna_point(self, player):
-        return self.raft_can_complete_tangaroa(player) and self.raft_can_drive(player) and self.has("Varuna Point Frequency", player)
+        return self.raft_can_drive(player) and self.has("Varuna Point Frequency", player)
 
     def raft_can_complete_varuna_point(self, player):
-        return self.raft_can_access_varuna_point(player)
+        return self.raft_can_access_varuna_point(player) and self.raft_can_craft_ziplineTool(player)
 
     def raft_can_access_temperance(self, player):
-        return self.raft_can_complete_varuna_point(player) and self.raft_can_drive(player) and self.has("Temperance Frequency", player)
+        return self.raft_can_drive(player) and self.has("Temperance Frequency", player)
 
     def raft_can_complete_temperance(self, player):
-        return self.raft_can_access_temperance(player)
+        return self.raft_can_access_temperance(player) # No zipline required on Temperance
 
     def raft_can_access_utopia(self, player):
-        return self.raft_can_complete_temperance(player) and self.raft_can_drive(player) and self.has("Utopia Frequency", player)
+        return (self.raft_can_drive(player)
+            # Access checks are to prevent frequencies for other
+            # islands from appearing in Utopia
+            and self.raft_can_access_radio_tower(self, player)
+            and self.raft_can_access_vasagatan(self, player)
+            and self.raft_can_access_balboa_island(self, player)
+            and self.raft_can_access_caravan_island(self, player)
+            and self.raft_can_access_tangaroa(self, player)
+            and self.raft_can_access_varuna_point(self, player)
+            and self.raft_can_access_temperance(self, player)
+            and self.has("Utopia Frequency", player))
 
     def raft_can_complete_utopia(self, player):
-        return self.raft_can_access_utopia(player)
+        return self.raft_can_access_utopia(player) and self.raft_can_craft_ziplineTool(player)
 
 def set_rules(world, player):
     regionChecks = {
         "Raft": lambda state: True,
         "ResearchTable": lambda state: True,
         "RadioTower": lambda state: state.raft_can_access_radio_tower(player), # All can_access functions have state as implicit parameter for function
-        "Vasagatan": lambda state: state.raft_can_complete_radio_tower(player) and state.raft_can_access_vasagatan(player),
-        "BalboaIsland": lambda state: state.raft_can_complete_vasagatan(player) and state.raft_can_access_balboa_island(player),
-        "CaravanIsland": lambda state: state.raft_can_complete_balboa_island(player) and state.raft_can_access_caravan_island(player),
-        "Tangaroa": lambda state: state.raft_can_complete_caravan_island(player) and state.raft_can_access_tangaroa(player),
-        "Varuna Point": lambda state: state.raft_can_complete_tangaroa(player) and state.raft_can_access_varuna_point(player),
-        "Temperance": lambda state: state.raft_can_complete_varuna_point(player) and state.raft_can_access_temperance(player),
+        "Vasagatan": lambda state: state.raft_can_access_vasagatan(player),
+        "BalboaIsland": lambda state: state.raft_can_access_balboa_island(player),
+        "CaravanIsland": lambda state: state.raft_can_access_caravan_island(player),
+        "Tangaroa": lambda state: state.raft_can_access_tangaroa(player),
+        "Varuna Point": lambda state: state.raft_can_access_varuna_point(player),
+        "Temperance": lambda state: state.raft_can_access_temperance(player),
         "Utopia": lambda state: state.raft_can_complete_temperance(player) and state.raft_can_access_utopia(player)
     }
     itemChecks = {
@@ -183,7 +191,7 @@ def set_rules(world, player):
         if region != "Menu":
             for exitRegion in world.get_region(region, player).exits:
                 set_rule(world.get_entrance(exitRegion.name, player), regionChecks[region])
-     
+
     # Location access rules
     for location in location_table:
         locFromWorld = world.get_location(location["name"], player)

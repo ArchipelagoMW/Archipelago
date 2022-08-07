@@ -91,10 +91,6 @@ class RaftWorld(World):
 
     def create_regions(self):
         create_regions(self.world, self.player)
-
-    def fill_slot_data(self):
-        slot_data = {}
-        return slot_data
     
     def get_pre_fill_items(self):
         if self.world.island_frequency_locations[self.player] in [0, 1]:
@@ -166,7 +162,8 @@ class RaftWorld(World):
     def fill_slot_data(self):
         return {
             "IslandGenerationDistance": self.world.island_generation_distance[self.player].value,
-            "ExpensiveResearch": self.world.expensive_research[self.player].value
+            "ExpensiveResearch": self.world.expensive_research[self.player].value,
+            "DeathLink": self.world.death_link[self.player].value
         }
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):

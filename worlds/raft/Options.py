@@ -1,4 +1,4 @@
-from Options import Range, Toggle, DefaultOnToggle, Choice
+from Options import Range, Toggle, DefaultOnToggle, Choice, DeathLink
 
 class UseResourcePacks(DefaultOnToggle):
     """Uses Resource Packs to fill out the item pool from Raft. Resource Packs have basic earlygame items such as planks, plastic, or food."""
@@ -73,5 +73,6 @@ raft_options = {
     "expensive_research": ExpensiveResearch,
     "progressive_items": ProgressiveItems,
     "big_island_early_crafting": BigIslandEarlyCrafting,
-    "paddleboard_mode": PaddleboardMode
+    "paddleboard_mode": PaddleboardMode,
+    "death_link": DeathLink
 }
