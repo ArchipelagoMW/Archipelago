@@ -14,7 +14,7 @@ import Utils
 
 Utils.local_path.cached_path = os.path.dirname(__file__)
 
-from WebHostLib import app as raw_app
+from WebHostLib import register, app as raw_app
 from waitress import serve
 
 from WebHostLib.models import db
@@ -22,14 +22,13 @@ from WebHostLib.autolauncher import autohost, autogen
 from WebHostLib.lttpsprites import update_sprites_lttp
 from WebHostLib.options import create as create_options_files
 
-from worlds.AutoWorld import AutoWorldRegister
-
 configpath = os.path.abspath("config.yaml")
 if not os.path.exists(configpath):  # fall back to config.yaml in home
     configpath = os.path.abspath(Utils.user_path('config.yaml'))
 
 
 def get_app():
+    register()
     app = raw_app
     if os.path.exists(configpath):
         import yaml
@@ -43,6 +42,7 @@ def get_app():
 def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]:
     import json
     import shutil
+    from worlds.AutoWorld import AutoWorldRegister
     worlds = {}
     data = []
     for game, world in AutoWorldRegister.world_types.items():

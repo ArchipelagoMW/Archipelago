@@ -202,12 +202,12 @@ class Context:
 
     # Datapackage retrieval
     def _load_game_data(self):
-        from worlds import network_data_package, AutoWorldRegister
-        self.gamespackage = network_data_package["games"]
+        import worlds
+        self.gamespackage = worlds.network_data_package["games"]
 
         self.item_name_groups = {world_name: world.item_name_groups for world_name, world in
-                                 AutoWorldRegister.world_types.items()}
-        for world_name, world in AutoWorldRegister.world_types.items():
+                                 worlds.AutoWorldRegister.world_types.items()}
+        for world_name, world in worlds.AutoWorldRegister.world_types.items():
             self.forced_auto_forfeits[world_name] = world.forced_auto_forfeit
             self.non_hintable_names[world_name] = world.hint_blacklist
 

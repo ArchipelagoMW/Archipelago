@@ -9,9 +9,10 @@ import time
 import random
 import pickle
 import logging
+import datetime
 
 import Utils
-from .models import *
+from .models import db_session, Room, select, commit, Command, db
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor
 from Utils import get_public_ipv4, get_public_ipv6, restricted_loads, cache_argsless
@@ -114,18 +115,19 @@ class WebHostContext(Context):
 def get_random_port():
     return random.randint(49152, 65535)
 
+
 @cache_argsless
 def get_static_server_data() -> dict:
-    from worlds import network_data_package, AutoWorldRegister
+    import worlds
     data = {
         "forced_auto_forfeits": {},
         "non_hintable_names": {},
-        "gamespackage": network_data_package["games"],
+        "gamespackage": worlds.network_data_package["games"],
         "item_name_groups": {world_name: world.item_name_groups for world_name, world in
-                             AutoWorldRegister.world_types.items()},
+                             worlds.AutoWorldRegister.world_types.items()},
     }
 
-    for world_name, world in AutoWorldRegister.world_types.items():
+    for world_name, world in worlds.AutoWorldRegister.world_types.items():
         data["forced_auto_forfeits"][world_name] = world.forced_auto_forfeit
         data["non_hintable_names"][world_name] = world.hint_blacklist
 
