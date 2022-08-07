@@ -8,7 +8,7 @@ from BaseClasses import Item, CollectionState, Tutorial
 from .SubClasses import ALttPItem
 from ..AutoWorld import World, WebWorld, LogicMixin
 from .Options import alttp_options, smallkey_shuffle
-from .Items import as_dict_item_table, item_name_groups, item_table, GetBeemizerItem
+from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
 from .Rules import set_rules
 from .ItemPool import generate_itempool, difficulties
@@ -124,6 +124,17 @@ class ALTTPWorld(World):
     required_client_version = (0, 3, 2)
     web = ALTTPWeb()
 
+    pedestal_credit_texts: typing.Dict[int, str] = \
+        {data.item_code: data.pedestal_credit for data in item_table.values() if data.pedestal_credit}
+    sickkid_credit_texts: typing.Dict[int, str] = \
+        {data.item_code: data.sick_kid_credit for data in item_table.values() if data.sick_kid_credit}
+    zora_credit_texts: typing.Dict[int, str] = \
+        {data.item_code: data.zora_credit for data in item_table.values() if data.zora_credit}
+    magicshop_credit_texts: typing.Dict[int, str] = \
+        {data.item_code: data.witch_credit for data in item_table.values() if data.witch_credit}
+    fluteboy_credit_texts: typing.Dict[int, str] = \
+        {data.item_code: data.flute_boy_credit for data in item_table.values() if data.flute_boy_credit}
+
     set_rules = set_rules
 
     create_items = generate_itempool
@@ -176,17 +187,6 @@ class ALTTPWorld(World):
     def create_regions(self):
         player = self.player
         world = self.world
-        if world.open_pyramid[player] == 'goal':
-            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
-                                                                'localganontriforcehunt', 'ganonpedestal'}
-        elif world.open_pyramid[player] == 'auto':
-            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
-                                                                'localganontriforcehunt', 'ganonpedestal'} and \
-                                         (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull',
-                                                                    'dungeonscrossed'} or not world.shuffle_ganon)
-        else:
-            world.open_pyramid[player] = {'on': True, 'off': False, 'yes': True, 'no': False}.get(
-                world.open_pyramid[player], 'auto')
 
         world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player],
                                                       world.triforce_pieces_required[player])
@@ -411,7 +411,7 @@ class ALTTPWorld(World):
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
     def create_item(self, name: str) -> Item:
-        return ALttPItem(name, self.player, **as_dict_item_table[name])
+        return ALttPItem(name, self.player, **item_init_table[name])
 
     @classmethod
     def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,

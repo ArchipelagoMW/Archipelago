@@ -236,7 +236,7 @@ class MyGameLocation(Location):
     game: str = "My Game"
 
     # override constructor to automatically mark event locations as such
-    def __init__(self, player: int, name = '', code = None, parent = None):
+    def __init__(self, player: int, name = "", code = None, parent = None):
         super(MyGameLocation, self).__init__(player, name, code, parent)
         self.event = code is None
 ```
@@ -487,14 +487,14 @@ def create_items(self) -> None:
     for item in map(self.create_item, mygame_items):
         if item in exclude:
             exclude.remove(item)  # this is destructive. create unique list above
-            self.world.itempool.append(self.create_item('nothing'))
+            self.world.itempool.append(self.create_item("nothing"))
         else:
             self.world.itempool.append(item)
 
     # itempool and number of locations should match up.
     # If this is not the case we want to fill the itempool with junk.
     junk = 0  # calculate this based on player settings
-    self.world.itempool += [self.create_item('nothing') for _ in range(junk)]
+    self.world.itempool += [self.create_item("nothing") for _ in range(junk)]
 ```
 
 #### create_regions
@@ -628,7 +628,7 @@ class MyGameLogic(LogicMixin):
     def _mygame_has_key(self, world: MultiWorld, player: int):
         # Arguments above are free to choose
         # it may make sense to use World as argument instead of MultiWorld
-        return self.has('key', player)  # or whatever
+        return self.has("key", player)  # or whatever
 ```
 ```python
 # __init__.py

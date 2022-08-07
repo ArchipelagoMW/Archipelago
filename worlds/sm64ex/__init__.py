@@ -5,12 +5,9 @@ from .Items import item_table, cannon_item_table, SM64Item
 from .Locations import location_table, SM64Location
 from .Options import sm64_options
 from .Rules import set_rules
-from .Regions import create_regions, sm64courses
+from .Regions import create_regions, sm64courses, sm64entrances_s, sm64_internalloc_to_string, sm64_internalloc_to_regionid
 from BaseClasses import Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
-
-client_version = 1
-
 
 class SM64Web(WebWorld):
     tutorials = [Tutorial(
@@ -38,7 +35,7 @@ class SM64World(World):
     location_name_to_id = location_table
 
     data_version = 6
-    forced_auto_forfeit = False
+    required_client_version = (0, 3, 0)
 
     area_connections: typing.Dict[int, int]
 
@@ -55,10 +52,10 @@ class SM64World(World):
         set_rules(self.world, self.player, self.area_connections)
         if self.topology_present:
             # Write area_connections to spoiler log
-            for painting_id, course_id in self.area_connections.items():
+            for entrance, destination in self.area_connections.items():
                 self.world.spoiler.set_entrance(
-                    sm64courses[painting_id] + " Painting",
-                    sm64courses[course_id],
+                    sm64_internalloc_to_string[entrance] + " Entrance",
+                    sm64_internalloc_to_string[destination],
                     'entrance', self.player)
 
     def create_item(self, name: str) -> Item:
@@ -75,9 +72,13 @@ class SM64World(World):
 
     def generate_basic(self):
         staritem = self.create_item("Power Star")
-        starcount = min(self.world.StarsToFinish[self.player].value + self.world.ExtraStars[self.player].value,120)
+        starcount = self.world.AmountOfStars[self.player].value
         if (not self.world.EnableCoinStars[self.player].value):
-            starcount = max(starcount - 15,self.world.StarsToFinish[self.player].value)
+            starcount = max(35,self.world.AmountOfStars[self.player].value-15)
+        starcount = max(starcount, self.world.FirstBowserStarDoorCost[self.player].value, 
+                        self.world.BasementStarDoorCost[self.player].value, self.world.SecondFloorStarDoorCost[self.player].value,
+                        self.world.MIPS1Cost[self.player].value, self.world.MIPS2Cost[self.player].value,
+                        self.world.StarsToFinish[self.player].value)
         self.world.itempool += [staritem for i in range(0,starcount)]
         mushroomitem = self.create_item("1Up Mushroom") 
         self.world.itempool += [mushroomitem for i in range(starcount,120 - (15 if not self.world.EnableCoinStars[self.player].value else 0))]
@@ -115,6 +116,11 @@ class SM64World(World):
     def fill_slot_data(self):
         return {
             "AreaRando": self.area_connections,
+            "FirstBowserDoorCost": self.world.FirstBowserStarDoorCost[self.player].value,
+            "BasementDoorCost": self.world.BasementStarDoorCost[self.player].value,
+            "SecondFloorCost": self.world.SecondFloorStarDoorCost[self.player].value,
+            "MIPS1Cost": self.world.MIPS1Cost[self.player].value,
+            "MIPS2Cost": self.world.MIPS2Cost[self.player].value,
             "StarsToFinish": self.world.StarsToFinish[self.player].value,
             "DeathLink": self.world.death_link[self.player].value,
         }
@@ -143,8 +149,9 @@ class SM64World(World):
     def modify_multidata(self, multidata):
         if self.topology_present:
             er_hint_data = {}
-            for painting_id, course_id in self.area_connections.items():
-                region = self.world.get_region(sm64courses[course_id], self.player)
+            for entrance, destination in self.area_connections.items():
+                regionid = sm64_internalloc_to_regionid[destination]
+                region = self.world.get_region(sm64courses[regionid], self.player)
                 for location in region.locations:
-                    er_hint_data[location.address] = sm64courses[painting_id]
+                    er_hint_data[location.address] = sm64_internalloc_to_string[entrance]
             multidata['er_hint_data'][self.player] = er_hint_data
