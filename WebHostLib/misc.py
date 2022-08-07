@@ -4,7 +4,7 @@ import os
 import jinja2.exceptions
 from flask import request, redirect, url_for, render_template, Response, session, abort, send_from_directory
 
-from models import count, Seed, commit, Room, db_session, Command, UUID, uuid4
+from .models import count, Seed, commit, Room, db_session, Command, UUID, uuid4
 from worlds.AutoWorld import AutoWorldRegister
 from . import app, cache
 
