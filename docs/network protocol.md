@@ -501,7 +501,7 @@ Color options:
 * green_bg
 * yellow_bg
 * blue_bg
-* purple_bg
+* magenta_bg
 * cyan_bg
 * white_bg
 

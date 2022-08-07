@@ -935,7 +935,6 @@ def set_trock_key_rules(world, player):
                 else:
                     # A key is required in the Big Key Chest to prevent a possible softlock.  Place an extra key to ensure 100% locations still works
                     item = ItemFactory('Small Key (Turtle Rock)', player)
-                    item.world = world
                     location = world.get_location('Turtle Rock - Big Key Chest', player)
                     location.place_locked_item(item)
                     location.event = True
