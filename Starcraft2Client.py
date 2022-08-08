@@ -42,7 +42,6 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         """Overrides the current difficulty set for the seed.  Takes the argument casual, normal, hard, or brutal"""
         options = difficulty.split()
         num_options = len(options)
-        set_difficulty = True
         difficulty_choice = options[0].lower()
 
         if num_options > 0:
@@ -55,19 +54,22 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             elif difficulty_choice == "brutal":
                 self.ctx.difficulty_override = 3
             else:
-                sc2_logger.info("Unable to parse difficulty '" + options[0] + "'")
-                set_difficulty = False
+                self.output("Unable to parse difficulty '" + options[0] + "'")
+                return False
 
-            if set_difficulty:
-                sc2_logger.info("Difficulty set to " + options[0])
+            self.output("Difficulty set to " + options[0])
+            return True
+
         else:
-            sc2_logger.info("Difficulty needs to be specified in the command.")
+            self.output("Difficulty needs to be specified in the command.")
+            return False
 
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
         the next mission in a chain the other player is doing."""
         self.ctx.missions_unlocked = True
         sc2_logger.info("Mission check has been disabled")
+        return True
 
     def _cmd_play(self, mission_id: str = "") -> bool:
         """Start a Starcraft 2 mission"""
@@ -83,6 +85,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         else:
             sc2_logger.info(
                 "Mission ID needs to be specified.  Use /unfinished or /available to view ids for available missions.")
+            return False
 
         return True
 
