@@ -74,8 +74,8 @@ class Dialog:
 
             if (lineIndex > 0):
                 bytes.append(0xF8 if lineIndex == 1 else    #// row 2
-                             0xF6 if lineIndex == 2 else    #// scroll
-                             0xF9)                          #// row 3
+                             0xF9 if lineIndex == 2 else    #// row 3
+                             0xF6)                          #// scroll
 
             #// The first box needs to fill the full width with spaces as the palette is loaded weird.
             letters = line + (" " * wrap) if padOut and lineIndex < 3 else line
