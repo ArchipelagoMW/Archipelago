@@ -102,6 +102,7 @@ class UndertaleContext(CommonContext):
 
     def clear_undertale_files(self):
         path = os.path.expandvars(r"%localappdata%/UNDERTALE")
+        self.finished_game = False
         for root, dirs, files in os.walk(path):
             for file in files:
                 if file.find("check") > -1:

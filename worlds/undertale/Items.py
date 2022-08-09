@@ -90,9 +90,9 @@ item_table = {
     "LOVE": ItemData(77788, ItemClassification.useful),
     "Right Home Key": ItemData(77789, ItemClassification.progression),
     "Key Piece": ItemData(77000, ItemClassification.progression),
-    "50G": ItemData(77999, ItemClassification.useful),
-    "100G": ItemData(77998, ItemClassification.useful),
-    "500G": ItemData(77997, ItemClassification.useful),
+    "100G": ItemData(77999, ItemClassification.useful),
+    "500G": ItemData(77998, ItemClassification.useful),
+    "1000G": ItemData(77997, ItemClassification.useful),
     "ATK Up": ItemData(77065, ItemClassification.useful),
     "DEF Up": ItemData(77066, ItemClassification.useful),
     "HP Up": ItemData(77067, ItemClassification.useful),
@@ -103,9 +103,9 @@ item_table = {
 
 non_key_items = {
     "Butterscotch Pie": 1,
-    "50G": 2,
-    "100G": 4,
-    "500G": 2,
+    "100G": 2,
+    "500G": 4,
+    "1000G": 2,
     "Face Steak": 1,
     "Snowman Piece": 1,
     "Instant Noodles": 1,
@@ -116,6 +116,8 @@ non_key_items = {
     "ATK Up": 19,
     "DEF Up": 4,
     "HP Up": 19,
+    "Spider Donut": 1,
+    "Spider Cider": 1,
 }
 
 required_armor = {
