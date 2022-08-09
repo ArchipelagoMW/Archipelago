@@ -606,7 +606,11 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
 
 
 def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset(("a", "the"))):
-    """Sorts a sequence of text ignoring typical articles like "a" or "the"."""
+    """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
     def sorter(element: str) -> str:
-        return " ".join(filter(lambda word: word.lower() not in ignore, element.split()))
+        parts = element.split(maxsplit=1)
+        if parts[0].lower() in ignore:
+            return parts[1]
+        else:
+            return element
     return sorted(data, key=lambda i: sorter(key(i)) if key else sorter(i))
