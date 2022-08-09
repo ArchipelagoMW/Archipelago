@@ -579,12 +579,12 @@ class Context:
         finished_msg = f'{self.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1})' \
                        f' has completed their goal.'
         self.notify_all(finished_msg)
+        if "auto" in self.collect_mode:
+            collect_player(self, client.team, client.slot)
         if "auto" in self.forfeit_mode:
             forfeit_player(self, client.team, client.slot)
         elif self.forced_auto_forfeits[self.games[client.slot]]:
             forfeit_player(self, client.team, client.slot)
-        if "auto" in self.collect_mode:
-            collect_player(self, client.team, client.slot)
 
 
 def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False):
