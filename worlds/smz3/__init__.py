@@ -510,7 +510,7 @@ class SMZ3World(World):
                         item.item.Progression = False
                         item.location.event = False
                         self.unreachable.append(item.location)
-        self.JunkFillGT()
+        self.JunkFillGT(0.5)
 
     def get_pre_fill_items(self):
         if (not self.smz3World.Config.Keysanity):
@@ -524,21 +524,27 @@ class SMZ3World(World):
     def write_spoiler(self, spoiler_handle: TextIO):
             self.world.spoiler.unreachables.update(self.unreachable)
 
-    def JunkFillGT(self):
+    def JunkFillGT(self, factor):
         poolLength = len(self.world.itempool)
-        junkPool = [(i, self.world.itempool[i]) for i in range(0, poolLength) 
-                    if self.world.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap)]
+        junkPoolIdx = [i for i in range(0, poolLength) 
+                    if self.world.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap) and
+                    self.world.itempool[i].player == self.player]
         toRemove = []
         for loc in self.locations.values():
+            # commenting this for now since doing a partial GT pre fill would allow for non SMZ3 progression in GT
+            # which isnt desirable (SMZ3 logic only filters for SMZ3 items). Having progression in GT can only happen in Single Player.
+            # if len(toRemove) >= int(len(self.locationNamesGT) * factor * self.smz3World.TowerCrystals / 7):
+            #     break
             if loc.name in self.locationNamesGT and loc.item is None:
-                poolLength = len(junkPool)
+                poolLength = len(junkPoolIdx)
                 # start looking at a random starting index and loop at start if no match found
                 start = self.world.random.randint(0, poolLength)
                 for off in range(0, poolLength):
                     i = (start + off) % poolLength
-                    if i not in toRemove and loc.can_fill(self.world.state, junkPool[i][1], False):
-                        itemFromPool = junkPool[i][1]
-                        toRemove.append(junkPool[i][0])
+                    candidate = self.world.itempool[junkPoolIdx[i]]
+                    if junkPoolIdx[i] not in toRemove and loc.can_fill(self.world.state, candidate, False):
+                        itemFromPool = candidate
+                        toRemove.append(junkPoolIdx[i])
                         break
                 self.world.push_item(loc, itemFromPool, False)
                 loc.event = False
