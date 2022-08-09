@@ -897,7 +897,10 @@ class SpriteSelector():
         sprites = []
 
         for file in os.listdir(path):
-            sprites.append((file, Sprite(os.path.join(path, file))))
+            try:
+                sprites.append((file, Sprite(os.path.join(path, file))))
+            except Exception as e:
+                logging.exception(f"Could not load sprite from file {file}, ignoring it.")
 
         sprites.sort(key=lambda s: str.lower(s[1].name or "").strip())
 
