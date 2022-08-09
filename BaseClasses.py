@@ -384,7 +384,6 @@ class MultiWorld():
         return self.worlds[player].create_item(item_name)
 
     def push_precollected(self, item: Item):
-        item.world = self
         self.precollected_items[item.player].append(item)
         self.state.collect(item, True)
 
@@ -392,7 +391,6 @@ class MultiWorld():
         assert location.can_fill(self.state, item, False), f"Cannot place {item} into {location}."
         location.item = item
         item.location = location
-        item.world = self  # try to not have this here anymore and create it with item?
         if collect:
             self.state.collect(item, location.event, location)
 
@@ -1066,26 +1064,25 @@ class LocationProgressType(IntEnum):
 
 
 class Location:
-    # If given as integer, then this is the shop's inventory index
-    shop_slot: Optional[int] = None
-    shop_slot_disabled: bool = False
+    game: str = "Generic"
+    player: int
+    name: str
+    address: Optional[int]
+    parent_region: Optional[Region]
     event: bool = False
     locked: bool = False
-    game: str = "Generic"
     show_in_spoiler: bool = True
-    crystal: bool = False
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow = staticmethod(lambda item, state: False)
     access_rule = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
     item: Optional[Item] = None
-    parent_region: Optional[Region]
 
-    def __init__(self, player: int, name: str = '', address: int = None, parent=None):
-        self.name: str = name
-        self.address: Optional[int] = address
+    def __init__(self, player: int, name: str = '', address: Optional[int] = None, parent: Optional[Region] = None):
+        self.player = player
+        self.name = name
+        self.address = address
         self.parent_region = parent
-        self.player: int = player
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
         return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
@@ -1102,7 +1099,6 @@ class Location:
         self.item = item
         item.location = self
         self.event = item.advancement
-        self.item.world = self.parent_region.world
         self.locked = True
 
     def __repr__(self):
@@ -1147,39 +1143,28 @@ class ItemClassification(IntFlag):
 
 
 class Item:
-    location: Optional[Location] = None
-    world: Optional[MultiWorld] = None
-    code: Optional[int] = None  # an item with ID None is called an Event, and does not get written to multidata
-    name: str
     game: str = "Generic"
-    type: str = None
+    __slots__ = ("name", "classification", "code", "player", "location")
+    name: str
     classification: ItemClassification
-
-    # need to find a decent place for these to live and to allow other games to register texts if they want.
-    pedestal_credit_text: str = "and the Unknown Item"
-    sickkid_credit_text: Optional[str] = None
-    magicshop_credit_text: Optional[str] = None
-    zora_credit_text: Optional[str] = None
-    fluteboy_credit_text: Optional[str] = None
-
-    # hopefully temporary attributes to satisfy legacy LttP code, proper implementation in subclass ALttPItem
-    smallkey: bool = False
-    bigkey: bool = False
-    map: bool = False
-    compass: bool = False
+    code: Optional[int]
+    """an item with code None is called an Event, and does not get written to multidata"""
+    player: int
+    location: Optional[Location]
 
     def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int):
         self.name = name
         self.classification = classification
         self.player = player
         self.code = code
+        self.location = None
 
     @property
-    def hint_text(self):
+    def hint_text(self) -> str:
         return getattr(self, "_hint_text", self.name.replace("_", " ").replace("-", " "))
 
     @property
-    def pedestal_hint_text(self):
+    def pedestal_hint_text(self) -> str:
         return getattr(self, "_pedestal_hint_text", self.name.replace("_", " ").replace("-", " "))
 
     @property
@@ -1205,7 +1190,7 @@ class Item:
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player
 
-    def __lt__(self, other: Item):
+    def __lt__(self, other: Item) -> bool:
         if other.player != self.player:
             return other.player < self.player
         return self.name < other.name
@@ -1213,11 +1198,13 @@ class Item:
     def __hash__(self):
         return hash((self.name, self.player))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__str__()
 
-    def __str__(self):
-        return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
+    def __str__(self) -> str:
+        if self.location:
+            return self.location.parent_region.world.get_name_string_for_object(self)
+        return f"{self.name} (Player {self.player})"
 
 
 class Spoiler():

@@ -19,6 +19,7 @@ from ..AutoWorld import World, AutoLogicRegister, WebWorld
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
 from .Options import smz3_options
+from Options import Accessibility
 
 world_folder = os.path.dirname(__file__)
 logger = logging.getLogger("SMZ3")
@@ -77,7 +78,7 @@ class SMZ3World(World):
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
-        self.locations = {}
+        self.locations: Dict[str, Location] = {}
         self.unreachable = []
         super().__init__(world, player)
 
@@ -481,15 +482,13 @@ class SMZ3World(World):
             if loc.name in self.locationNamesGT and loc.item is None:
                 poolLength = len(self.world.itempool)
                 # start looking at a random starting index and loop at start if no match found
-                for i in range(self.world.random.randint(0, poolLength), poolLength):
-                    if not self.world.itempool[i].advancement:
+                start = self.world.random.randint(0, poolLength)
+                for off in range(0, poolLength):
+                    i = (start + off) % poolLength
+                    if self.world.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap) \
+                            and loc.can_fill(self.world.state, self.world.itempool[i], False):
                         itemFromPool = self.world.itempool.pop(i)
                         break
-                else:
-                    for i in range(0, poolLength):
-                        if not self.world.itempool[i].advancement:
-                            itemFromPool = self.world.itempool.pop(i)
-                            break
                 self.world.push_item(loc, itemFromPool, False)
                 loc.event = False
 
@@ -525,6 +524,7 @@ class SMZ3World(World):
 
     def InitialFillInOwnWorld(self):
         self.FillItemAtLocation(self.dungeon, TotalSMZ3Item.ItemType.KeySW, self.smz3World.GetLocation("Skull Woods - Pinball Room"))
+        self.FillItemAtLocation(self.dungeon, TotalSMZ3Item.ItemType.KeySP, self.smz3World.GetLocation("Swamp Palace - Entrance"))
 
         # /* Check Swords option and place as needed */
         if self.smz3World.Config.SwordLocation == SwordLocation.Uncle:
@@ -573,8 +573,10 @@ class SMZ3Location(Location):
 
 class SMZ3Item(Item):
     game = "SMZ3"
+    type: ItemType
+    item: Item
 
-    def __init__(self, name, classification, type, code, player: int = None, item=None):
+    def __init__(self, name, classification, type: ItemType, code, player: int, item: Item):
+        super(SMZ3Item, self).__init__(name, classification, code, player)
         self.type = type
         self.item = item
-        super(SMZ3Item, self).__init__(name, classification, code, player)
