@@ -235,6 +235,8 @@ class Bosses(TextChoice):
         from .Bosses import can_place_boss, format_boss_location
         for option in options:
             if option == "random" or option in cls.options:
+                if option != options[-1]:
+                    raise ValueError(f"{option} option must be at the end of the boss_shuffle options!")
                 continue
             if "-" in option:
                 location, boss = option.split("-")
