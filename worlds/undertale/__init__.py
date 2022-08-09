@@ -44,7 +44,7 @@ class UndertaleWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 4
+    data_version = 0 #Need to change to 5 when ready to merge.
 
     def _get_undertale_data(self):
         return {
