@@ -196,7 +196,7 @@ class Bosses(TextChoice):
         cls.bosses = {boss_name.lower() for boss_name in cls.bosses}
         cls.locations = {boss_location.lower() for boss_location in cls.locations}
         if text == "random":
-            return cls(random.choice(list(cls.name_lookup)))
+            return cls(random.choice(list(cls.options.values())))
         for option_name, value in cls.options.items():
             if option_name == text:
                 return cls(value)
@@ -208,7 +208,7 @@ class Bosses(TextChoice):
         # find out what type of boss shuffle we should use for placing bosses after plando
         # and add as a string to look nice in the spoiler
         if "random" in options:
-            shuffle = random.choice(cls.options)
+            shuffle = random.choice(list(cls.options))
             options.remove("random")
             options = ";".join(options) + ";" + shuffle
             boss_class = cls(options)
