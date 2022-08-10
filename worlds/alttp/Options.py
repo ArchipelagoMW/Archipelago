@@ -542,7 +542,7 @@ class RandomSprite(OptionDict):
         "on_item": "off",
         "on_bonk": "off",
         "on_everything": "off",
-        "use_weighted_sprite_bool": "off"
+        "use_weighted_sprite_pool": "off"
     }
 
 
