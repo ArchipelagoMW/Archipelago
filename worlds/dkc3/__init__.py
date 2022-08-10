@@ -12,7 +12,7 @@ from .Levels import level_list
 from .Rules import set_rules
 from .Names import ItemName, LocationName
 from ..AutoWorld import WebWorld, World
-from .Rom import LocalRom, patch_rom, get_base_rom_path
+from .Rom import LocalRom, patch_rom, get_base_rom_path, DKC3DeltaPatch
 import Patch
 
 
@@ -82,7 +82,7 @@ class DKC3World(World):
         itempool: typing.List[DKC3Item] = []
 
         # Levels
-        total_required_locations = 161
+        total_required_locations = 159
 
         number_of_banana_birds = 0
         # Rocket Rush Cog
@@ -105,7 +105,7 @@ class DKC3World(World):
 
         ## Brothers Bear
         if False:#self.world.include_trade_sequence[self.player]:
-            total_required_locations += 8
+            total_required_locations += 10
 
         number_of_bonus_coins = (self.world.krematoa_bonus_coin_cost[self.player] * 5)
         number_of_bonus_coins += math.ceil((85 - number_of_bonus_coins) * self.world.percentage_of_extra_bonus_coins[self.player] / 100)
@@ -138,19 +138,23 @@ class DKC3World(World):
             patch_rom(self.world, rom, self.player, self.active_level_list)
 
             self.active_level_list.append(LocationName.rocket_rush_region)
-        
+
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
                 if world.player_name[player] != 'Player%d' % player else ''
 
             rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
             rom.write_to_file(rompath)
-            Patch.create_patch_file(rompath, player=player, player_name=world.player_name[player], game=Patch.GAME_DKC3)
-            os.unlink(rompath)
             self.rom_name = rom.name
+
+            patch = DKC3DeltaPatch(os.path.splitext(rompath)[0]+DKC3DeltaPatch.patch_file_ending, player=player,
+                                   player_name=world.player_name[player], patched_path=rompath)
+            patch.write()
         except:
             raise
         finally:
+            if os.path.exists(rompath):
+                os.unlink(rompath)
             self.rom_name_available_event.set() # make sure threading continues and errors are collected
 
     def modify_multidata(self, multidata: dict):

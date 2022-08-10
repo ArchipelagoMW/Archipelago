@@ -50,7 +50,7 @@ option_docstrings = {
                             "pool and open their locations for randomization.",
     "RandomizeGrubs": "Randomize Grubs into the item pool and open their locations for randomization.",
     "RandomizeMimics": "Randomize Mimic Grubs into the item pool and open their locations for randomization."
-                      "Mimic Grubs are always placed in your own game.",
+                       "Mimic Grubs are always placed in your own game.",
     "RandomizeMaps": "Randomize Maps into the item pool. This causes Cornifer to give you a message allowing you to see"
                      " and buy an item that is randomized into that location as well.",
     "RandomizeStags": "Randomize Stag Stations unlocks into the item pool as well as placing randomized items "
