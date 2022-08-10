@@ -363,7 +363,7 @@ class ALTTPWorld(World):
         world = self.world
         player = self.player
         return (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
-                or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
+                or world.enemy_health[player] or world.enemy_damage[player]
                 or world.pot_shuffle[player] or world.bush_shuffle[player]
                 or world.killable_thieves[player])
 

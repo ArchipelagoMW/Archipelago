@@ -419,8 +419,8 @@ class EnemyHealth(Choice):
     """Modifies amount of health that enemies have.
     Easy reduces their health, hard increases it, and expert greatly increases it."""
     display_name = "Enemy Health"
-    option_easy = 0
-    option_normal = 1
+    option_easy = 1
+    option_normal = 0
     option_hard = 2
     option_expert = 3
 
