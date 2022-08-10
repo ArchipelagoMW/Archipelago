@@ -8,6 +8,7 @@ from typing import Dict, Set, TextIO
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, RegionType, CollectionState, \
     Tutorial
 from worlds.generic.Rules import set_rule
+from worlds.smz3.TotalSMZ3.Item import ItemType
 import worlds.smz3.TotalSMZ3.Item as TotalSMZ3Item
 from worlds.smz3.TotalSMZ3.World import World as TotalSMZ3World
 from worlds.smz3.TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
@@ -18,6 +19,7 @@ from ..AutoWorld import World, AutoLogicRegister, WebWorld
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
 from .Options import smz3_options
+from Options import Accessibility
 
 world_folder = os.path.dirname(__file__)
 logger = logging.getLogger("SMZ3")
@@ -76,9 +78,102 @@ class SMZ3World(World):
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
-        self.locations = {}
+        self.locations: Dict[str, Location] = {}
         self.unreachable = []
         super().__init__(world, player)
+
+    @classmethod
+    def isProgression(cls, itemType):
+        progressionTypes = {
+                                ItemType.ProgressiveShield,
+                                ItemType.ProgressiveSword,
+                                ItemType.Bow,
+                                ItemType.Hookshot,
+                                ItemType.Mushroom,
+                                ItemType.Powder,
+                                ItemType.Firerod,
+                                ItemType.Icerod,
+                                ItemType.Bombos,
+                                ItemType.Ether,
+                                ItemType.Quake,
+                                ItemType.Lamp,
+                                ItemType.Hammer,
+                                ItemType.Shovel,
+                                ItemType.Flute,
+                                ItemType.Bugnet,
+                                ItemType.Book,
+                                ItemType.Bottle,
+                                ItemType.Somaria,
+                                ItemType.Byrna,
+                                ItemType.Cape,
+                                ItemType.Mirror,
+                                ItemType.Boots,
+                                ItemType.ProgressiveGlove,
+                                ItemType.Flippers,
+                                ItemType.MoonPearl,
+                                ItemType.HalfMagic,
+
+                                ItemType.Grapple,
+                                ItemType.Charge,
+                                ItemType.Ice,
+                                ItemType.Wave,
+                                ItemType.Plasma,
+                                ItemType.Varia,
+                                ItemType.Gravity,
+                                ItemType.Morph,
+                                ItemType.Bombs,
+                                ItemType.SpringBall,
+                                ItemType.ScrewAttack,
+                                ItemType.HiJump,
+                                ItemType.SpaceJump,
+                                ItemType.SpeedBooster,
+
+                                ItemType.ETank,
+                                ItemType.ReserveTank,
+
+                                ItemType.BigKeyGT,
+                                ItemType.KeyGT,
+                                ItemType.BigKeyEP,
+                                ItemType.BigKeyDP,
+                                ItemType.BigKeyTH,
+                                ItemType.BigKeyPD,
+                                ItemType.BigKeySP,
+                                ItemType.BigKeySW,
+                                ItemType.BigKeyTT,
+                                ItemType.BigKeyIP,
+                                ItemType.BigKeyMM,
+                                ItemType.BigKeyTR,
+
+                                ItemType.KeyHC,
+                                ItemType.KeyCT,
+                                ItemType.KeyDP,
+                                ItemType.KeyTH,
+                                ItemType.KeyPD,
+                                ItemType.KeySP,
+                                ItemType.KeySW,
+                                ItemType.KeyTT,
+                                ItemType.KeyIP,
+                                ItemType.KeyMM,
+                                ItemType.KeyTR,
+
+                                ItemType.CardCrateriaL1,
+                                ItemType.CardCrateriaL2,
+                                ItemType.CardCrateriaBoss,
+                                ItemType.CardBrinstarL1,
+                                ItemType.CardBrinstarL2,
+                                ItemType.CardBrinstarBoss,
+                                ItemType.CardNorfairL1,
+                                ItemType.CardNorfairL2,
+                                ItemType.CardNorfairBoss,
+                                ItemType.CardMaridiaL1,
+                                ItemType.CardMaridiaL2,
+                                ItemType.CardMaridiaBoss,
+                                ItemType.CardWreckedShipL1,
+                                ItemType.CardWreckedShipBoss,
+                                ItemType.CardLowerNorfairL1,
+                                ItemType.CardLowerNorfairBoss,
+                            }
+        return itemType in progressionTypes
 
     @classmethod
     def stage_assert_generate(cls, world):
@@ -337,7 +432,8 @@ class SMZ3World(World):
         return False
 
     def create_item(self, name: str) -> Item:
-        return SMZ3Item(name, ItemClassification.progression,
+        return SMZ3Item(name, 
+                        ItemClassification.progression if SMZ3World.isProgression(TotalSMZ3Item.ItemType[name]) else ItemClassification.filler,
                         TotalSMZ3Item.ItemType[name], self.item_name_to_id[name], 
                         self.player,
                         TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[name], self))
@@ -386,15 +482,13 @@ class SMZ3World(World):
             if loc.name in self.locationNamesGT and loc.item is None:
                 poolLength = len(self.world.itempool)
                 # start looking at a random starting index and loop at start if no match found
-                for i in range(self.world.random.randint(0, poolLength), poolLength):
-                    if not self.world.itempool[i].advancement:
+                start = self.world.random.randint(0, poolLength)
+                for off in range(0, poolLength):
+                    i = (start + off) % poolLength
+                    if self.world.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap) \
+                            and loc.can_fill(self.world.state, self.world.itempool[i], False):
                         itemFromPool = self.world.itempool.pop(i)
                         break
-                else:
-                    for i in range(0, poolLength):
-                        if not self.world.itempool[i].advancement:
-                            itemFromPool = self.world.itempool.pop(i)
-                            break
                 self.world.push_item(loc, itemFromPool, False)
                 loc.event = False
 
@@ -430,6 +524,7 @@ class SMZ3World(World):
 
     def InitialFillInOwnWorld(self):
         self.FillItemAtLocation(self.dungeon, TotalSMZ3Item.ItemType.KeySW, self.smz3World.GetLocation("Skull Woods - Pinball Room"))
+        self.FillItemAtLocation(self.dungeon, TotalSMZ3Item.ItemType.KeySP, self.smz3World.GetLocation("Swamp Palace - Entrance"))
 
         # /* Check Swords option and place as needed */
         if self.smz3World.Config.SwordLocation == SwordLocation.Uncle:
@@ -478,8 +573,10 @@ class SMZ3Location(Location):
 
 class SMZ3Item(Item):
     game = "SMZ3"
+    type: ItemType
+    item: Item
 
-    def __init__(self, name, classification, type, code, player: int = None, item=None):
+    def __init__(self, name, classification, type: ItemType, code, player: int, item: Item):
+        super(SMZ3Item, self).__init__(name, classification, code, player)
         self.type = type
         self.item = item
-        super(SMZ3Item, self).__init__(name, classification, code, player)
