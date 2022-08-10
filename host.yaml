@@ -126,8 +126,6 @@ soe_options:
   rom_file: "Secret of Evermore (USA).sfc"
 ffr_options:
   display_msgs: true
-tloz_options:
-  rom_file: "Legend of Zelda, The (U) (PRG0) [!].nes"
 smz3_options:
   # Set this to your SNI folder location if you want the MultiClient to attempt an auto start, does nothing if not found
   sni: "SNI"

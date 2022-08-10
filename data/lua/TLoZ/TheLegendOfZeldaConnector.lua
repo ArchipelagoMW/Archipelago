@@ -50,7 +50,9 @@ local boomerang             = 0x0674
 local magicalBoomerang      = 0x0675
 local magicalShield         = 0x0676
 local rupeesToAdd           = 0x067D
-local itemsObtained         = 0x0673
+local itemsObtained         = 0x0677
+local remoteTriforce        = 0x0678
+local localTriforce         = 0x0679
 
 itemAPids = {
     ["Boomerang"] = 7100,
@@ -179,6 +181,7 @@ local function gotBomb()
     local currentBombs = u8(bombs)
     local maxBombs = u8(maxBombs)
     wU8(bombs, math.min(bombs + 4, maxBombs))
+    wU8(0x505, 0x29) -- Fake bomb.
 end
 
 local function gotArrow()
@@ -273,11 +276,10 @@ local function gotHeartContainer()
     wU8(heartContainers, bit.lshift(currentHeartContainers, 4) + currentHearts)
 end
 
-local function gotTriforceFragment(count)
-    -- Doing it this way since we don't know where we'll get pieces from.
+local function gotTriforceFragment()
     local triforceByte = 0xFF
-    local currentPieces = bit.rshift(triforceByte, count - 8)
-    wU8(triforceFragments, currentPieces)
+    local newTriforceCount = u8(remoteTriforce) + 1
+    wU8(remoteTriforce, newTriforceCount)
 end
 
 local function gotBoomerang()
@@ -323,8 +325,8 @@ local function gotItem(item)
     if itemName == "Magical Boomerang" then gotMagicalBoomerang() end
     if itemName == "Raft" then gotRaft() end
     if itemName == "Stepladder" then gotStepladder() end
-    if itemName == "gotRecorder" then gotRecorder() end
-    if itemName == "gotMagicalRod" then gotMagicalRod() end
+    if itemName == "Recorder" then gotRecorder() end
+    if itemName == "Magical Rod" then gotMagicalRod() end
     if itemName == "Red Candle" then gotRedCandle() end
     if itemName == "Book of Magic" then gotBookOfMagic() end
     if itemName == "Magical Key" then gotMagicalKey() end
@@ -352,9 +354,10 @@ end
 
 
 local function StateOKForMainLoop()
-    memDomain.saveram()
-    local gameMode = u8(0x12)
-    return bit.band(gameMode, 0x05)
+    memDomain.ram()
+    local gameMode = u8(0x12) 
+    print(gameMode)
+    return gameMode == 5 
 end
 
 local function checkCaveItemObtained()
@@ -362,31 +365,23 @@ local function checkCaveItemObtained()
     local gameMode = u8(0x12)
     local returnTable = {}
     returnTable["itemSlot"] = -1
+    returnTable["caveType"] = "None"
     local screen = u8(0xEB)
     returnTable["screen"] = screen
     if bit.band(gameMode, 0x0B) then -- if we're in a cave
         local itemLift = u8(0x506)
         local xPosition = u8(0x70)
         if itemLift > 0 then
-            if xPosition == 0x58 then
-                returnTable["itemSlot"] = 1
-            end
-            if xPosition == 0x78 then
-                returnTable["itemSlot"] = 2
-            end
-            if xPosition == 0x98 then
-                returnTable["itemSlot"] = 3
-            end
+            returnTable["itemSlot"] = u8(0x438) + 1
             memDomain.rom()
             local caveType = u8(0x18480 + screen)
             caveType = caveType - 0x40
             caveType = math.floor(caveType / 4)
-            returnTable["caveType"] = "None"
             if caveType == 0x10 then
-                returnTable["caveType"] = "Shop 5"
+                returnTable["caveType"] = "Shop 4"
             end
             if caveType == 0x0A then
-                returnTable["caveType"] = "Shop 1"
+                returnTable["caveType"] = "Shop 5"
             end
             if caveType == 0x0E then
                 returnTable["caveType"] = "Shop 2"
@@ -395,7 +390,7 @@ local function checkCaveItemObtained()
                 returnTable["caveType"] = "Shop 3"
             end
             if caveType == 0x0D then
-                returnTable["caveType"] = "Shop 4"
+                returnTable["caveType"] = "Shop 1"
             end
             if caveType == 0x01 then
                 returnTable["caveType"] = "Take Any"
@@ -503,6 +498,14 @@ function generateUnderworld79LocationChecked()
     return data
 end
 
+function updateTriforceFragments()
+    memDomain.ram()
+    local triforceByte = 0xFF
+    totalTriforceCount = u8(remoteTriforce) + u8(localTriforce)
+    local currentPieces = bit.rshift(triforceByte, 8 - math.min(8, totalTriforceCount))
+    wU8(triforceFragments, currentPieces)
+end
+
 function processBlock(block)
     if block ~= nil then
         local msgBlock = block['messages']
@@ -517,6 +520,8 @@ function processBlock(block)
         local itemsBlock = block["items"]
         memDomain.saveram()
         isInGame = StateOKForMainLoop()
+        updateTriforceFragments()
+        print(isInGame)
         if itemsBlock ~= nil and isInGame then
             memDomain.ram()
             --get item from item code

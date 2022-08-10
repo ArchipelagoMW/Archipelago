@@ -15,7 +15,6 @@ import typing
 
 from json import loads, dumps
 
-import TLoZClientExtension
 import worlds.ff6wc
 import ModuleUpdate
 ModuleUpdate.update()
@@ -31,7 +30,6 @@ import websockets
 from NetUtils import ClientStatus, color
 from worlds.alttp import Regions, Shops
 from worlds.alttp.Rom import ROM_PLAYER_LIMIT
-from worlds.sm.Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
 from worlds.smz3.Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
 from worlds.ff6wc.Rom import ROM_PLAYER_LIMIT as FF6WC_ROM_PLAYER_LIMIT
 from worlds.ff6wc.Rom import ROM_NAME as FF6WC_ROM_NAME
@@ -1072,7 +1070,7 @@ async def game_watcher(ctx: Context):
                             location_index = 0
                             character_index = 0
                             esper_index = 0
-                            location_names = [*FF6Rom.event_flag_location_names.keys()]
+                            ff6_location_names = [*FF6Rom.event_flag_location_names.keys()]
                             obtained_items = []
                         else:
                             ctx.game = GAME_ALTTP
@@ -1179,72 +1177,6 @@ async def game_watcher(ctx: Context):
                 ctx.locations_scouted.add(scout_location)
                 await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [scout_location]}])
             await track_locations(ctx, roomid, roomdata)
-        elif ctx.game == GAME_SM:
-            gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
-            if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
-                currently_dead = gamemode[0] in SM_DEATH_MODES
-                await ctx.handle_deathlink_state(currently_dead)
-            if gamemode is not None and gamemode[0] in SM_ENDGAME_MODES:
-                if not ctx.finished_game:
-                    await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                    ctx.finished_game = True
-                continue
-
-            data = await snes_read(ctx, SM_RECV_PROGRESS_ADDR + 0x680, 4)
-            if data is None:
-                continue
-
-            recv_index = data[0] | (data[1] << 8)
-            recv_item = data[2] | (data[3] << 8)
-
-            while (recv_index < recv_item):
-                itemAdress = recv_index * 8
-                message = await snes_read(ctx, SM_RECV_PROGRESS_ADDR + 0x700 + itemAdress, 8)
-                # worldId = message[0] | (message[1] << 8)  # unused
-                # itemId = message[2] | (message[3] << 8)  # unused
-                itemIndex = (message[4] | (message[5] << 8)) >> 3
-
-                recv_index += 1
-                snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x680,
-                                    bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
-
-                from worlds.sm.Locations import locations_start_id
-                location_id = locations_start_id + itemIndex
-
-                ctx.locations_checked.add(location_id)
-                location = ctx.location_names[location_id]
-                snes_logger.info(
-                    f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
-                await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
-
-            data = await snes_read(ctx, SM_RECV_PROGRESS_ADDR + 0x600, 4)
-            if data is None:
-                continue
-
-            # recv_itemOutPtr = data[0] | (data[1] << 8) # unused
-            itemOutPtr = data[2] | (data[3] << 8)
-
-            from worlds.sm.Items import items_start_id
-            from worlds.sm.Locations import locations_start_id
-            if itemOutPtr < len(ctx.items_received):
-                item = ctx.items_received[itemOutPtr]
-                itemId = item.item - items_start_id
-                if bool(ctx.items_handling & 0b010):
-                    locationId = (item.location - locations_start_id) if (item.location >= 0 and item.player == ctx.slot) else 0xFF
-                else:
-                    locationId = 0x00 #backward compat
-
-                playerID = item.player if item.player <= SM_ROM_PLAYER_LIMIT else 0
-                snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes(
-                	[playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, locationId & 0xFF]))
-                itemOutPtr += 1
-                snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x602,
-                                    bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
-                logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                    color(ctx.item_names[item.item], 'red', 'bold'),
-                    color(ctx.player_names[item.player], 'yellow'),
-                    ctx.location_names[item.location], itemOutPtr, len(ctx.items_received)))
-            await snes_flush_writes(ctx)
         elif ctx.game == GAME_SMZ3:
             currentGame = await snes_read(ctx, SRAM_START + 0x33FE, 2)
             if (currentGame is not None):
@@ -1312,7 +1244,7 @@ async def game_watcher(ctx: Context):
             location_index += 1
             if location_index >= len(FF6Rom.event_flag_location_names):
                 location_index = 0
-            location_name = location_names[location_index]
+            location_name = ff6_location_names[location_index]
             location_id = FF6Rom.event_flag_location_names[location_name]
             event_byte, event_bit = FF6Rom.get_event_flag_value(location_id)
             event_data = await snes_read(ctx, event_byte, 1)
@@ -1368,9 +1300,9 @@ async def game_watcher(ctx: Context):
                             snes_buffered_write(ctx, character_recruit_byte, bytes([new_recruit_data]))
                             snes_buffered_write(ctx, FF6Rom.items_received_address, bytes([items_received_amount + 1]))
                             snes_logger.info('Received %s from %s (%s)' % (
-                                color(ctx.item_name_getter(character_item.item), 'red', 'bold'),
+                                color(ctx.item_names[character_item.item], 'red', 'bold'),
                                 color(ctx.player_names[character_item.player], 'yellow'),
-                                ctx.location_name_getter(character_item.location)))
+                                ctx.location_names[character_item.location]))
                 elif item_name in FF6Rom.espers:
                     esper_index = FF6Rom.espers.index(item_name)
                     esper_byte, esper_bit = FF6Rom.get_obtained_esper_bit(esper_index)
@@ -1385,9 +1317,9 @@ async def game_watcher(ctx: Context):
 
                         snes_buffered_write(ctx, FF6Rom.items_received_address, bytes([items_received_amount + 1]))
                         snes_logger.info('Received %s from %s (%s)' % (
-                            color(ctx.item_name_getter(item.item), 'red', 'bold'),
+                            color(ctx.item_names[item.item], 'red', 'bold'),
                             color(ctx.player_names[item.player], 'yellow'),
-                            ctx.location_name_getter(item.location)))
+                            ctx.location_names[item.location]))
 
                 else:
                     item_types_data = await snes_read(ctx, FF6Rom.item_types_base_address, 255)
@@ -1414,7 +1346,7 @@ async def game_watcher(ctx: Context):
                             snes_logger.info('Received %s from %s (%s)' % (
                                 color(item_name, 'red', 'bold'),
                                 color(ctx.player_names[item.player], 'yellow'),
-                                ctx.location_name_getter(item.location)))
+                                ctx.location_names[item.location]))
                             break
 
             await snes_flush_writes(ctx)

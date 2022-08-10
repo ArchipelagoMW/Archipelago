@@ -6,7 +6,7 @@ import threading
 from typing import NamedTuple, Union
 import logging
 
-from BaseClasses import Item, Location, Region, Entrance, MultiWorld
+from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification
 from . import Logic
 from .Rom import FF6WCDeltaPatch
 from ..generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
@@ -63,13 +63,13 @@ class FF6WCWorld(World):
         self.rom_name_available_event = threading.Event()
 
     def create_item(self, name: str):
-        return FF6WCItem(name, True, self.item_name_to_id[name], self.player)
+        return FF6WCItem(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
 
     def create_filler_item(self, name: str):
-        return FF6WCItem(name, False, self.item_name_to_id[name], self.player)
+        return FF6WCItem(name, ItemClassification.filler, self.item_name_to_id[name], self.player)
 
     def create_event(self, event: str):
-        return FF6WCItem(event, True, None, self.player)
+        return FF6WCItem(event, ItemClassification.progression, None, self.player)
 
     def create_location(self, name, id, parent, event=False):
         return_location = FF6WCLocation(self.player, name, id, parent)

@@ -124,7 +124,7 @@ item_prices = {
     "Letter": 20,
     "Small Key": 40,
     "Heart Container": 80,
-    "Triforce Fragment": 80,
+    "Triforce Fragment": 200,
     "Magical Shield": 45,
     "Boomerang": 5,
     "Magical Boomerang": 20,

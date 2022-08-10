@@ -4,9 +4,9 @@ major_locations = [
     "Wooden Sword Cave",
     "White Sword Pond",
     "Magical Sword Grave",
-    "Take Any Cave 1",
-    "Take Any Cave 2",
-    "Take Any Cave 3",
+    "Take Any Item 1",
+    "Take Any Item 2",
+    "Take Any Item 3",
     "Armos Knights",
     "Ocean Heart Container",
     "Letter Cave",
@@ -63,7 +63,7 @@ floor_location_game_offsets_early = {
     "Level 1 Item 2": 0x44,
     "Level 1 Boss": 0x35,
     "Level 1 Triforce": 0x36,
-    "Level 2 Item": 0x5F,
+    "Level 2 Item": 0x4F,
     "Level 2 Boss": 0x0E,
     "Level 2 Triforce": 0x0D,
     "Level 3 Item": 0x0F,
@@ -121,7 +121,7 @@ floor_location_game_offsets_late = {
     "Level 8 Item 2": 0x6F,
     "Level 8 Boss": 0x3C,
     "Level 8 Triforce": 0x2C,
-    "Level 9 Item 1": 0x5F,
+    "Level 9 Item 1": 0x4F,
     "Level 9 Item 2": 0x00,
     "Level 9 Rupee Drop 1": 0x40,
     "Level 9 Rupee Drop 2": 0x12,
@@ -211,9 +211,9 @@ major_location_ids = {
     "White Sword Pond": 0x18617,
     "Magical Sword Grave": 0x1861A,
     "Letter Cave": 0x18629,
-    "Take Any Cave 1": 0x18613,
-    "Take Any Cave 2": 0x18614,
-    "Take Any Cave 3": 0x18615,
+    "Take Any Item 1": 0x18613,
+    "Take Any Item 2": 0x18614,
+    "Take Any Item 3": 0x18615,
     "Armos Knights": 0x10D05,
     "Ocean Heart Container": 0x1789A
 }
@@ -223,9 +223,9 @@ major_location_offsets = {
     "White Sword Pond": 0x0A,
     "Magical Sword Grave": 0x21,
     "Letter Cave": 0x0E,
-    "Take Any Cave 1": 0x7B,
-    "Take Any Cave 2": 0x2C,
-    "Take Any Cave 3": 0x47,
+    "Take Any Item 1": 0x7B,
+    "Take Any Item 2": 0x2C,
+    "Take Any Item 3": 0x47,
     "Armos Knights": 0x24,
     "Ocean Heart Container": 0x5F
 }
@@ -239,11 +239,11 @@ overworld_locations = [
     "Ocean Heart Container"
 ]
 
-underworld1_locations = [*floor_location_game_offsets_early.items()]
+underworld1_locations = [*floor_location_game_offsets_early.keys()]
 
-underworld2_locations = [*floor_location_game_offsets_late.items()]
+underworld2_locations = [*floor_location_game_offsets_late.keys()]
 
-cave_locations = ["Take Any Cave 1", "Take Any Cave 2", "Take Any Cave 3", *shop_locations]
+cave_locations = ["Take Any Item 1", "Take Any Item 2", "Take Any Item 3"] + [*shop_locations]
 
 location_table_base = [x for x in major_locations] + \
                       [y for y in all_level_locations] + \
