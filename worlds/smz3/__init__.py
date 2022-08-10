@@ -187,7 +187,7 @@ class SMZ3World(World):
         self.config.SMLogic = SMLogic(self.world.sm_logic[self.player].value)
         self.config.SwordLocation = SwordLocation(self.world.sword_location[self.player].value)
         self.config.MorphLocation = MorphLocation(self.world.morph_location[self.player].value)
-        self.config.Goal = Goal.DefeatBoth
+        self.config.Goal = Goal(self.world.goal[self.player].value)
         self.config.KeyShuffle = KeyShuffle(self.world.key_shuffle[self.player].value)
         self.config.OpenTower = OpenTower(self.world.open_tower[self.player].value)
         self.config.GanonVulnerable = GanonVulnerable(self.world.ganon_vulnerable[self.player].value)

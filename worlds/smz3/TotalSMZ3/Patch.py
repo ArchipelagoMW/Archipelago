@@ -735,7 +735,7 @@ class Patch:
 
     def WritePreOpenPyramid(self, goal: Goal):
         if (goal == Goal.FastGanonDefeatMotherBrain):
-            self.patches.append(Snes(0x30808B), [0x01])
+            self.patches.append((Snes(0x30808B), [0x01]))
 
     def WriteGanonInvicible(self, goal: Goal):
         #/* Defaults to $00 (never) at [asm]/z3/randomizer/tables.asm */
