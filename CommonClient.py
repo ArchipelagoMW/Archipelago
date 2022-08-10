@@ -723,7 +723,7 @@ if __name__ == '__main__':
     class TextContext(CommonContext):
         tags = {"AP", "IgnoreGame", "TextOnly"}
         game = ""  # empty matches any game since 0.3.2
-        items_handling = 0  # don't receive any NetworkItems
+        items_handling = 0b111  # receive all items for /received
 
         async def server_auth(self, password_requested: bool = False):
             if password_requested and not self.password:
