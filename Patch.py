@@ -166,13 +166,19 @@ GAME_ALTTP = "A Link to the Past"
 GAME_SM = "Super Metroid"
 GAME_SOE = "Secret of Evermore"
 GAME_SMZ3 = "SMZ3"
-supported_games = {"A Link to the Past", "Super Metroid", "Secret of Evermore", "SMZ3"}
+GAME_FF6WC = "Final Fantasy 6 Worlds Collide"
+GAME_TLOZ = "The Legend of Zelda"
+GAME_DKC3 = "Donkey Kong Country 3"
+supported_games = {"A Link to the Past", "Super Metroid", "Secret of Evermore", "SMZ3", "Donkey Kong Country 3", "Final Fantasy 6 Worlds Collide"}
 
 preferred_endings = {
     GAME_ALTTP: "apbp",
     GAME_SM: "apm3",
     GAME_SOE: "apsoe",
-    GAME_SMZ3: "apsmz"
+    GAME_SMZ3: "apsmz",
+    GAME_FF6WC: "apff6wc",
+    GAME_TLOZ: "aptloz",
+    GAME_DKC3: "apdkc3"
 }
 
 
@@ -187,6 +193,12 @@ def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: str = GAM
         from worlds.alttp.Rom import LTTPJPN10HASH as ALTTPHASH
         from worlds.sm.Rom import SMJUHASH as SMHASH
         HASH = ALTTPHASH + SMHASH
+    elif game == GAME_FF6WC:
+        from worlds.ff6wc.Rom import NA10HASH as HASH
+    elif game == GAME_TLOZ:
+        from worlds.tloz.Rom import NA10CHECKSUM as HASH
+    elif game == GAME_DKC3:
+        from worlds.dkc3.Rom import USHASH as HASH
     else:
         raise RuntimeError(f"Selected game {game} for base rom not found.")
 
@@ -216,7 +228,12 @@ def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str
                            meta,
                            game)
     target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + (
-        ".apbp" if game == GAME_ALTTP else ".apsmz" if game == GAME_SMZ3 else ".apm3")
+        ".apbp" if game == GAME_ALTTP
+        else ".apsmz" if game == GAME_SMZ3
+        else ".apdkc3" if game == GAME_DKC3
+        else ".apff6wc" if game == GAME_FF6WC
+        else ".apm3" if game == GAME_SM
+        else ".aptloz")
     write_lzma(bytes, target)
     return target
 
@@ -245,6 +262,12 @@ def get_base_rom_data(game: str):
         get_base_rom_bytes = lambda: bytes(read_rom(open(get_base_rom_path(), "rb")))
     elif game == GAME_SMZ3:
         from worlds.smz3.Rom import get_base_rom_bytes
+    elif game == GAME_FF6WC:
+        from worlds.ff6wc.Rom import get_base_rom_bytes
+    elif game == GAME_TLOZ:
+        from worlds.tloz.Rom import get_base_rom_bytes
+    elif game == GAME_DKC3:
+        from worlds.dkc3.Rom import get_base_rom_bytes
     else:
         raise RuntimeError("Selected game for base rom not found.")
     return get_base_rom_bytes()
@@ -389,6 +412,13 @@ if __name__ == "__main__":
                     if 'server' in data:
                         Utils.persistent_store("servers", data['hash'], data['server'])
                         print(f"Host is {data['server']}")
+                elif rom.endswith(".apdkc3"):
+                    print(f"Applying patch {rom}")
+                    data, target = create_rom_file(rom)
+                    print(f"Created rom {target}.")
+                    if 'server' in data:
+                        Utils.persistent_store("servers", data['hash'], data['server'])
+                        print(f"Host is {data['server']}")
 
                 elif rom.endswith(".zip"):
                     print(f"Updating host in patch files contained in {rom}")
@@ -396,7 +426,9 @@ if __name__ == "__main__":
 
                     def _handle_zip_file_entry(zfinfo: zipfile.ZipInfo, server: str):
                         data = zfr.read(zfinfo)
-                        if zfinfo.filename.endswith(".apbp") or zfinfo.filename.endswith(".apm3"):
+                        if zfinfo.filename.endswith(".apbp") or \
+                           zfinfo.filename.endswith(".apm3") or \
+                           zfinfo.filename.endswith(".apdkc3"):
                             data = update_patch_data(data, server)
                         with ziplock:
                             zfw.writestr(zfinfo, data)

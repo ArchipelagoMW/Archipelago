@@ -1,0 +1,42 @@
+# This file defines application shortcuts for the Applications menu.
+# To install, copy this file to your configuration directory:
+#   On MacOS and Linux, this is "$HOME/.sni/"
+#   On Windows, this is "%LOCALAPPDATA%/sni/"
+
+# `apps` is a list of application shortcuts
+apps:
+
+- # `name` is what is displayed in the Applications menu:
+  name: RetroArch
+  # `os` specifies that this app is only launchable on this particular operating system
+  # if `os` is missing/empty, then the Application will appear on all operating systems.
+  # valid values are:
+  #   "windows" = Windows
+  #   "linux" = Linux
+  #   "darwin" = MacOS
+  os: darwin
+  # `path` is the location of the executable to open:
+  #   On MacOS, app bundle folders that end in .app are launched via `open -a <path> <args...>`
+  #   On Windows and Linux, executable files are launched normally
+  path: /Applications/RetroArch.app
+
+- name: RetroArch
+  os: windows
+  path: C:\RetroArch-Win64\RetroArch.exe
+
+- name: OpenTracker
+  os: darwin
+  # `dir` is the current directory that the executable is launched from:
+  dir: $HOME/Developer/me/alttpo/OpenTracker/OpenTracker/bin/Debug/net5.0
+  # `path` does not have to be an absolute path, and could be found in the system lookup $PATH
+  path: dotnet
+  # `args` is the list of arguments passed to the application:
+  args:
+    - OpenTracker.dll
+
+- name: SNI Home Page
+  # `url` will open the given URL when clicked in the menu:
+  #   On MacOS,   URLs are launched via `open <url>`
+  #   On Windows, URLs are launched via `start <url>`
+  #   On Linux,   URLs are launched via `xdg-open <url>`
+  url: https://github.com/alttpo/sni

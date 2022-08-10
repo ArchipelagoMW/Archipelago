@@ -5,14 +5,34 @@ import threading
 from typing import NamedTuple, Union
 
 import Utils
-from BaseClasses import Item, Location, Region, Entrance, MultiWorld
+from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
 from .Items import item_table
 from .Locations import location_table, level_locations
 from .Options import tloz_options
 from .Rom import TLoZDeltaPatch
-from ..AutoWorld import World
+from ..AutoWorld import World, WebWorld
 from ..generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
 
+class TLoZWeb(WebWorld):
+    setup = Tutorial(
+        "Multiworld Setup Tutorial",
+        "A guide to setting up The Legend of Zelda for Archipelago on your computer.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Edos"]
+    )
+
+    setup_es = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Español",
+        "setup_es.md",
+        "setup/es",
+        setup.authors
+    )
+
+    tutorials = [setup, setup_es]
 
 class TLoZWorld(World):
     options = tloz_options
@@ -53,10 +73,10 @@ class TLoZWorld(World):
         self.levels = None
 
     def create_item(self, name: str):
-        return TLoZItem(name, True, self.item_name_to_id[name], self.player)
+        return TLoZItem(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
 
     def create_event(self, event: str):
-        return TLoZItem(event, True, None, self.player)
+        return TLoZItem(event, ItemClassification.progression, None, self.player)
 
     def create_location(self, name, id, parent, event=False):
         return_location = TLoZLocation(self.player, name, id, parent)
@@ -117,11 +137,11 @@ class TLoZWorld(World):
         if not self.world.ExpandedPool[self.player]:
             item_amounts = Items.item_amounts_standard
             self.world.get_location(
-                "Take Any Cave 1",
+                "Take Any Item 1",
                 self.player
             ).place_locked_item(self.world.create_item("Water of Life (Red)", self.player))
             self.world.get_location(
-                "Take Any Cave 3",
+                "Take Any Item 3",
                 self.player
             ).place_locked_item(self.world.create_item("Heart Container", self.player))
         for item in map(self.create_item, self.item_name_to_id):
@@ -207,16 +227,16 @@ class TLoZWorld(World):
         add_rule(self.world.get_location("Ocean Heart Container", self.player),
                  lambda state: state.has("Stepladder", self.player))
         if self.world.StartingPosition[self.player] != 2:
-            # Don't allow take any caves until we can actually get in one
-            add_rule(self.world.get_location("Take Any Cave 1", self.player),
+            # Don't allow Take Any Items until we can actually get in one
+            add_rule(self.world.get_location("Take Any Item 1", self.player),
                      lambda state: state.has_group("weapons", self.player) or
                                    state.has_group("candles", self.player) or
                                    state.has("Raft", self.player))
-            add_rule(self.world.get_location("Take Any Cave 2", self.player),
+            add_rule(self.world.get_location("Take Any Item 2", self.player),
                      lambda state: state.has_group("weapons", self.player) or
                                   state.has_group("candles", self.player) or
                                   state.has("Raft", self.player))
-            add_rule(self.world.get_location("Take Any Cave 3", self.player),
+            add_rule(self.world.get_location("Take Any Item 3", self.player),
                      lambda state: state.has_group("weapons", self.player) or
                                    state.has_group("candles", self.player) or
                                    state.has("Raft", self.player))
@@ -246,9 +266,9 @@ class TLoZWorld(World):
         # We can't risk leaving a Triforce piece behind
         # As for other risks, there's a perfectly good new game option for anyone who
         # decides to abandon obvious progression for multiple caves
-        forbid_item(self.world.get_location("Take Any Cave 1", self.player), "Triforce", self.player)
-        forbid_item(self.world.get_location("Take Any Cave 2", self.player), "Triforce", self.player)
-        forbid_item(self.world.get_location("Take Any Cave 3", self.player), "Triforce", self.player)
+        forbid_item(self.world.get_location("Take Any Item 1", self.player), "Triforce", self.player)
+        forbid_item(self.world.get_location("Take Any Item 2", self.player), "Triforce", self.player)
+        forbid_item(self.world.get_location("Take Any Item 3", self.player), "Triforce", self.player)
 
         set_rule(self.world.get_region("Menu", self.player), lambda state: True)
         set_rule(self.world.get_region("Overworld", self.player), lambda state: True)
@@ -260,9 +280,22 @@ class TLoZWorld(World):
         self.world.get_location("Level 9 Boss", self.player).place_locked_item(self.create_item("Recovery Heart"))
         self.world.completion_condition[self.player] = lambda state: state.has("Zelda", self.player)
 
+    def apply_base_patch(self, rom_data):
+        # Remove level check for Triforce Fragments (and maps and compasses, but this won't matter)
+        rom_data[0x6C9B:0x6C9D] = bytearray([0xEA, 0xEA])
+        # Replace AND #07 TAY with a JSR to free space later in the bank
+        rom_data[0x6CB5:0x6CB8] = bytearray([0x20, 0xF0, 0x7E])
+        # Check if we're picking up a Triforce Fragment. If so, increment the local count
+        # In either case, we do the instructions we overwrote with the JSR and then RTS to normal flow
+        # N.B.: the location of these instructions in the PRG ROM and where the bank is mapped to
+        # do not correspond to each other: while it is not an error that we're jumping to 7EF0,
+        # this was calculated by hand, and so if any errors arise it'll likely be here.
+        rom_data[0x7770:0x777B] = bytearray([0xE0, 0x1B, 0xD0, 0x03, 0xEE, 0x79, 0x06, 0x29, 0x07, 0xAA, 0x60])
+
     def apply_randomizer(self):
         with open(Rom.get_base_rom_path(), 'rb') as rom:
             rom_data = bytearray(rom.read())
+            self.apply_base_patch(rom_data)
             for location in self.world.get_filled_locations():
                 if location.name == "Level 9 Boss" or location.name == "Zelda":
                     continue
@@ -278,7 +311,7 @@ class TLoZWorld(World):
                         item_id = item_id | 0b11000000
                     price_location = Locations.shop_price_location_ids[location.name]
                     rom_data[price_location] = Items.item_prices[item]
-                if location.name == "Take Any Cave 3":
+                if location.name == "Take Any Item 3":
                     item_id = item_id | 0b01000000
                 rom_data[location_id] = item_id
             secret_caves = random.sample(sorted(Locations.secret_money_ids), 3)
@@ -326,7 +359,7 @@ class TLoZWorld(World):
         rom_name = getattr(self, "rom_name", None)
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
-            new_name = rom_name
+            new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
 

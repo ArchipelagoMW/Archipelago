@@ -51,7 +51,7 @@ class ZeldaCommandProcessor(ClientCommandProcessor):
 
 class ZeldaContext(CommonContext):
     command_processor = ZeldaCommandProcessor
-    items_handling = 0b111  # full remote
+    items_handling = 0b101  # get sent remote and starting items
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -80,13 +80,13 @@ class ZeldaContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
-            self.game = self.games.get(self.slot, None)
+            asyncio.create_task(parse_locations(self.locations_array, self, True))
         elif cmd == 'Print':
             msg = args['text']
             if ': !' not in msg:
                 self._set_message(msg, SYSTEM_MESSAGE_ID)
         elif cmd == "ReceivedItems":
-            msg = f"Received {', '.join([self.item_name_getter(item.item) for item in args['items']])}"
+            msg = f"Received {', '.join([self.item_names[item.item] for item in args['items']])}"
             self._set_message(msg, SYSTEM_MESSAGE_ID)
         elif cmd == 'PrintJSON':
             print_type = args['type']
@@ -96,20 +96,20 @@ class ZeldaContext(CommonContext):
             sending_player_id = item.player
             sending_player_name = self.player_names[item.player]
             if print_type == 'Hint':
-                msg = f"Hint: Your {self.item_name_getter(item.item)} is at" \
-                      f" {self.player_names[item.player]}'s {self.location_name_getter(item.location)}"
+                msg = f"Hint: Your {self.item_names[item.item]} is at" \
+                      f" {self.player_names[item.player]}'s {self.location_names[item.location]}"
                 self._set_message(msg, item.item)
             elif print_type == 'ItemSend' and receiving_player_id != self.slot:
                 if sending_player_id == self.slot:
                     if receiving_player_id == self.slot:
-                        msg = f"You found your own {self.item_name_getter(item.item)}"
+                        msg = f"You found your own {self.item_names[item.item]}"
                     else:
-                        msg = f"You sent {self.item_name_getter(item.item)} to {receiving_player_name}"
+                        msg = f"You sent {self.item_names[item.item]} to {receiving_player_name}"
                 else:
                     if receiving_player_id == sending_player_id:
-                        msg = f"{sending_player_name} found their {self.item_name_getter(item.item)}"
+                        msg = f"{sending_player_name} found their {self.item_names[item.item]}"
                     else:
-                        msg = f"{sending_player_name} sent {self.item_name_getter(item.item)} to " \
+                        msg = f"{sending_player_name} sent {self.item_names[item.item]} to " \
                               f"{receiving_player_name}"
                 self._set_message(msg, item.item)
 
@@ -137,15 +137,17 @@ def get_payload(ctx: ZeldaContext):
     )
 
 
-async def parse_locations(locations_array: List[int], ctx: ZeldaContext, force: bool, zone):
+async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone="None"):
     if locations_array == ctx.locations_array and not force:
         return
     else:
         # print("New values")
         ctx.locations_array = locations_array
         locations_checked = []
+        location = None
         for location in ctx.missing_locations:
             location_name = worlds.lookup_any_location_id_to_name[location]
+
             if location_name in Locations.overworld_locations and zone == "overworld":
                 status = locations_array[Locations.major_location_offsets[location_name]]
                 if status & 0x10:
@@ -170,7 +172,7 @@ async def parse_locations(locations_array: List[int], ctx: ZeldaContext, force: 
                     if location_name == location_data:
                         locations_checked.append(location)
         if locations_checked:
-            print([ctx.location_name_getter(location) for location in locations_checked])
+            print([ctx.location_names[location] for location in locations_checked])
             await ctx.send_msgs([
                 {"cmd": "LocationChecks",
                  "locations": locations_checked}

@@ -60,7 +60,7 @@ def create():
 
     for game_name, world in AutoWorldRegister.world_types.items():
 
-        all_options = {**world.options, **Options.per_game_common_options}
+        all_options = {**Options.per_game_common_options, **world.options}
         res = Template(open(os.path.join("WebHostLib", "templates", "options.yaml")).read()).render(
             options=all_options,
             __version__=__version__, game=game_name, yaml_dump=yaml.dump,
@@ -110,7 +110,7 @@ def create():
                 if option.default == "random":
                     this_option["defaultValue"] = "random"
 
-            elif hasattr(option, "range_start") and hasattr(option, "range_end"):
+            elif issubclass(option, Options.Range):
                 game_options[option_name] = {
                     "type": "range",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
@@ -121,7 +121,7 @@ def create():
                     "max": option.range_end,
                 }
 
-                if hasattr(option, "special_range_names"):
+                if issubclass(option, Options.SpecialRange):
                     game_options[option_name]["type"] = 'special_range'
                     game_options[option_name]["value_names"] = {}
                     for key, val in option.special_range_names.items():
@@ -141,7 +141,7 @@ def create():
                     "description": option.__doc__ if option.__doc__ else "Please document me!",
                 }
 
-            elif hasattr(option, "valid_keys"):
+            elif issubclass(option, Options.OptionList) or issubclass(option, Options.OptionSet):
                 if option.valid_keys:
                     game_options[option_name] = {
                         "type": "custom-list",

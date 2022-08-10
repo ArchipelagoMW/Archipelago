@@ -1088,10 +1088,10 @@ def get_pool_core(world):
             placed_items['Hideout Jail Guard (4 Torches)'] = 'Recovery Heart'
             skip_in_spoiler_locations.extend(['Hideout Jail Guard (2 Torches)', 'Hideout Jail Guard (3 Torches)', 'Hideout Jail Guard (4 Torches)'])
         else:
-            placed_items['Hideout Jail Guard (1 Torch)']   = 'Small Key (Gerudo Fortress)'
-            placed_items['Hideout Jail Guard (2 Torches)'] = 'Small Key (Gerudo Fortress)'
-            placed_items['Hideout Jail Guard (3 Torches)'] = 'Small Key (Gerudo Fortress)'
-            placed_items['Hideout Jail Guard (4 Torches)'] = 'Small Key (Gerudo Fortress)'
+            placed_items['Hideout Jail Guard (1 Torch)']   = 'Small Key (Thieves Hideout)'
+            placed_items['Hideout Jail Guard (2 Torches)'] = 'Small Key (Thieves Hideout)'
+            placed_items['Hideout Jail Guard (3 Torches)'] = 'Small Key (Thieves Hideout)'
+            placed_items['Hideout Jail Guard (4 Torches)'] = 'Small Key (Thieves Hideout)'
 
     if world.shuffle_gerudo_card and world.gerudo_fortress != 'open':
         pool.append('Gerudo Membership Card')
