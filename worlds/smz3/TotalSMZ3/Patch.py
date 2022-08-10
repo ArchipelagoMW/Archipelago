@@ -619,6 +619,7 @@ class Patch:
         if (self.myWorld.Config.Keysanity):
             self.patches.append((Snes(0x40003B), [ 1 ])) #// MapMode #$00 = Always On (default) - #$01 = Require Map Item
             self.patches.append((Snes(0x400045), [ 0x0f ])) #// display ----dcba a: Small Keys, b: Big Key, c: Map, d: Compass
+            self.patches.append((Snes(0x40016A), [ 0x01 ])) #// enable local item dialog boxes for dungeon and keycard items
 
     def WriteSMKeyCardDoors(self):
         if (not self.myWorld.Config.Keysanity):

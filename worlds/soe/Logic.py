@@ -1,5 +1,6 @@
 from BaseClasses import MultiWorld
 from ..AutoWorld import LogicMixin
+from .Options import EnergyCore
 from typing import Set
 # TODO: Options may preset certain progress steps (i.e. P_ROCK_SKIP), set in generate_early?
 
@@ -8,9 +9,9 @@ from . import pyevermizer
 # TODO: resolve/flatten/expand rules to get rid of recursion below where possible
 # Logic.rules are all rules including locations, excluding those with no progress (i.e. locations that only drop items)
 rules = [rule for rule in pyevermizer.get_logic() if len(rule.provides) > 0]
-# Logic.items are all items excluding non-progression items and duplicates
+# Logic.items are all items and extra items excluding non-progression items and duplicates
 item_names: Set[str] = set()
-items = [item for item in filter(lambda item: item.progression, pyevermizer.get_items())
+items = [item for item in filter(lambda item: item.progression, pyevermizer.get_items() + pyevermizer.get_extra_items())
          if item.name not in item_names and not item_names.add(item.name)]
 
 
@@ -47,4 +48,9 @@ class SecretOfEvermoreLogic(LogicMixin):
         """
         Returns True if count of one of evermizer's progress steps is reached based on collected items. i.e. 2 * P_DE
         """
+        if progress == pyevermizer.P_ENERGY_CORE:  # logic is shared between worlds, so we override in the call
+            w = world.worlds[player]
+            if w.energy_core == EnergyCore.option_fragments:
+                progress = pyevermizer.P_CORE_FRAGMENT
+                count = w.required_fragments
         return self._soe_count(progress, world, player, count) >= count

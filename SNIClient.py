@@ -37,7 +37,7 @@ from worlds.ff6wc import Rom as FF6Rom
 from worlds.tloz import Rom as TLoZRom
 import Utils
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
-from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3, GAME_FF6WC, GAME_TLOZ
+from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3, GAME_FF6WC, GAME_TLOZ, GAME_DKC3
 
 snes_logger = logging.getLogger("SNES")
 
@@ -66,7 +66,7 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
     def _cmd_snes(self, snes_options: str = "") -> bool:
         """Connect to a snes. Optionally include network address of a snes to connect to,
         otherwise show available devices; and a SNES device number if more than one SNES is detected.
-        Examples: "/snes", "/snes 1", "/snes localhost:8080 1" """
+        Examples: "/snes", "/snes 1", "/snes localhost:23074 1" """
 
         snes_address = self.ctx.snes_address
         snes_device_number = -1
@@ -192,7 +192,10 @@ class Context(CommonContext):
     async def shutdown(self):
         await super(Context, self).shutdown()
         if self.snes_connect_task:
-            await self.snes_connect_task
+            try:
+                await asyncio.wait_for(self.snes_connect_task, 1)
+            except asyncio.TimeoutError:
+                self.snes_connect_task.cancel()
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected", "RoomUpdate"}:
@@ -255,6 +258,9 @@ async def deathlink_kill_player(ctx: Context):
             if not gamemode or gamemode[0] in SM_DEATH_MODES or (
                     ctx.death_link_allow_survive and health is not None and health > 0):
                 ctx.death_state = DeathState.dead
+        elif ctx.game == GAME_DKC3:
+            from worlds.dkc3.Client import deathlink_kill_player as dkc3_deathlink_kill_player
+            await dkc3_deathlink_kill_player(ctx)
         ctx.last_death_link = time.time()
 
 
@@ -599,7 +605,7 @@ class SNESState(enum.IntEnum):
     SNES_ATTACHED = 3
 
 
-def launch_sni(ctx: Context):
+def launch_sni():
     sni_path = Utils.get_options()["lttp_options"]["sni"]
 
     if not os.path.isdir(sni_path):
@@ -637,11 +643,9 @@ async def _snes_connect(ctx: Context, address: str):
     address = f"ws://{address}" if "://" not in address else address
     snes_logger.info("Connecting to SNI at %s ..." % address)
     seen_problems = set()
-    succesful = False
-    while not succesful:
+    while 1:
         try:
             snes_socket = await websockets.connect(address, ping_timeout=None, ping_interval=None)
-            succesful = True
         except Exception as e:
             problem = "%s" % e
             # only tell the user about new problems, otherwise silently lay in wait for a working connection
@@ -651,7 +655,7 @@ async def _snes_connect(ctx: Context, address: str):
 
                 if len(seen_problems) == 1:
                     # this is the first problem. Let's try launching SNI if it isn't already running
-                    launch_sni(ctx)
+                    launch_sni()
 
             await asyncio.sleep(1)
         else:
@@ -1038,13 +1042,10 @@ async def game_watcher(ctx: Context):
         if not ctx.rom:
             ctx.finished_game = False
             ctx.death_link_allow_survive = False
-            console = await snes_read(ctx, 0x0, 3)
-            if console is None:
-                continue
-            if console == "NES":
-                ctx.game = "The Legend of Zelda"
-                ctx.items_handling = 0b001
-            else:
+
+            from worlds.dkc3.Client import dkc3_rom_init
+            init_handled = await dkc3_rom_init(ctx)
+            if not init_handled:
                 game_name = await snes_read(ctx, SM_ROMNAME_START, 5)
                 if game_name is None:
                     continue
@@ -1063,42 +1064,26 @@ async def game_watcher(ctx: Context):
                         ctx.game = GAME_SMZ3
                         ctx.items_handling = 0b101  # local items and remote start inventory
                     else:
-                        game_name = await snes_read(ctx, FF6WC_ROM_NAME, 3)
-                        if game_name == b'6WC':  # piggy backing off SMZ3 since rom name in same place
-                            ctx.game = GAME_FF6WC
-                            ctx.items_handling = 0b001
-                            location_index = 0
-                            character_index = 0
-                            esper_index = 0
-                            ff6_location_names = [*FF6Rom.event_flag_location_names.keys()]
-                            obtained_items = []
-                        else:
-                            ctx.game = GAME_ALTTP
-                            ctx.items_handling = 0b001  # full local
+                        ctx.game = GAME_ALTTP
+                        ctx.items_handling = 0b001  # full local
 
-            rom = await snes_read(
-                ctx,
-                SM_ROMNAME_START if ctx.game == GAME_SM
-                else SMZ3_ROMNAME_START if ctx.game == GAME_SMZ3
-                else FF6WC_ROM_NAME if ctx.game == GAME_FF6WC
-                else TLoZRom.ROM_NAME if ctx.game == GAME_TLOZ
-                else ROMNAME_START, ROMNAME_SIZE)
-            if rom is None or rom == bytes([0] * ROMNAME_SIZE):
-                continue
+                rom = await snes_read(ctx, SM_ROMNAME_START if ctx.game == GAME_SM else SMZ3_ROMNAME_START if ctx.game == GAME_SMZ3 else ROMNAME_START, ROMNAME_SIZE)
+                if rom is None or rom == bytes([0] * ROMNAME_SIZE):
+                    continue
 
-            ctx.rom = rom
-            if ctx.game != GAME_SMZ3 and ctx.game != GAME_TLOZ:
-                death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
-                                             SM_DEATH_LINK_ACTIVE_ADDR, 1)
-                if death_link:
-                    ctx.allow_collect = bool(death_link[0] & 0b100)
-                    ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
-                    await ctx.update_death_link(bool(death_link[0] & 0b1))
-            if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
-                ctx.locations_checked = set()
-                ctx.locations_scouted = set()
-                ctx.locations_info = {}
-            ctx.prev_rom = ctx.rom
+                ctx.rom = rom
+                if ctx.game != GAME_SMZ3:
+                    death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
+                                                 SM_DEATH_LINK_ACTIVE_ADDR, 1)
+                    if death_link:
+                        ctx.allow_collect = bool(death_link[0] & 0b100)
+                        ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
+                        await ctx.update_death_link(bool(death_link[0] & 0b1))
+                if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
+                    ctx.locations_checked = set()
+                    ctx.locations_scouted = set()
+                    ctx.locations_info = {}
+                ctx.prev_rom = ctx.rom
 
             if ctx.awaiting_rom:
                 await ctx.server_auth(False)
@@ -1350,12 +1335,9 @@ async def game_watcher(ctx: Context):
                             break
 
             await snes_flush_writes(ctx)
-        elif ctx.game == GAME_TLOZ:
-            data = await snes_read(ctx, 0x000000, 3)
-            if data is None:
-                continue
-            print(data)
-            #TLoZClientExtension.main_loop()
+        elif ctx.game == GAME_DKC3:
+            from worlds.dkc3.Client import dkc3_game_watcher
+            await dkc3_game_watcher(ctx)
 
 
 async def run_game(romfile):
@@ -1373,7 +1355,7 @@ async def main():
     parser = get_base_parser()
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a Archipelago Binary Patch file')
-    parser.add_argument('--snes', default='localhost:8080', help='Address of the SNI server.')
+    parser.add_argument('--snes', default='localhost:23074', help='Address of the SNI server.')
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
     args = parser.parse_args()
 
