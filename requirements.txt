@@ -16,3 +16,4 @@ Werkzeug==2.2.1
 gunicorn>-20.1.0
 nest-asyncio>=1.5.5
 factorio-rcon-py>=2.0.1
+maseya-z3pr>=1.0.0rc1
