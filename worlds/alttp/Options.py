@@ -302,6 +302,9 @@ class Counters(Choice):
 
 
 class Progressive(Choice):
+    """Determines if items with upgrades are gained progressively. This involves sword, bow, boomerang, gloves, armor,
+    and shields. Grouped random will randomly choose whether each group is progressive or not: i.e. you could have
+    progressive swords and still find Titan's Mitts before Power Glove."""
     display_name = "Progressive Items"
     option_off = 0
     option_grouped_random = 1
