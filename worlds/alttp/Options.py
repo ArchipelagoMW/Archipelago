@@ -274,7 +274,7 @@ class Bosses(TextChoice):
             # plando is disabled but plando options were given so pull the option and change it to an int
             option = self.value.split(";")[-1]
             self.value = self.options[option]
-            logging.warning(f"The plando bosses module is turned off so {self.name_lookup[self.value].title()} "
+            logging.warning(f"The plando bosses module is turned off, so {self.name_lookup[self.value].title()} "
                     f"boss shuffle will be used for player {player_name}.")
 
 
