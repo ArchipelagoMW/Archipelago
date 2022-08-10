@@ -19,7 +19,13 @@ from worlds.sc2wol.Items import lookup_id_to_name, item_table
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 from worlds.sc2wol import SC2WoLWorld
 
-from Utils import init_logging
+from pathlib import Path
+import re
+from MultiServer import mark_raw
+import ctypes
+import sys
+
+from Utils import init_logging, is_windows
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -38,11 +44,38 @@ nest_asyncio.apply()
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: SC2Context
 
+    def _cmd_difficulty(self, difficulty: str = "") -> bool:
+        """Overrides the current difficulty set for the seed.  Takes the argument casual, normal, hard, or brutal"""
+        options = difficulty.split()
+        num_options = len(options)
+        difficulty_choice = options[0].lower()
+
+        if num_options > 0:
+            if difficulty_choice == "casual":
+                self.ctx.difficulty_override = 0
+            elif difficulty_choice == "normal":
+                self.ctx.difficulty_override = 1
+            elif difficulty_choice == "hard":
+                self.ctx.difficulty_override = 2
+            elif difficulty_choice == "brutal":
+                self.ctx.difficulty_override = 3
+            else:
+                self.output("Unable to parse difficulty '" + options[0] + "'")
+                return False
+
+            self.output("Difficulty set to " + options[0])
+            return True
+
+        else:
+            self.output("Difficulty needs to be specified in the command.")
+            return False
+
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
         the next mission in a chain the other player is doing."""
         self.ctx.missions_unlocked = True
         sc2_logger.info("Mission check has been disabled")
+        return True
 
     def _cmd_play(self, mission_id: str = "") -> bool:
         """Start a Starcraft 2 mission"""
@@ -58,6 +91,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         else:
             sc2_logger.info(
                 "Mission ID needs to be specified.  Use /unfinished or /available to view ids for available missions.")
+            return False
 
         return True
 
@@ -72,6 +106,17 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
         request_unfinished_missions(self.ctx.checked_locations, self.ctx.mission_req_table, self.ctx.ui, self.ctx)
         return True
+
+    @mark_raw
+    def _cmd_set_path(self, path: str = '') -> bool:
+        """Manually set the SC2 install directory (if the automatic detection fails)."""
+        if path:
+            os.environ["SC2PATH"] = path
+            check_mod_install()
+            return True
+        else:
+            sc2_logger.warning("When using set_path, you must type the path to your SC2 install directory.")
+        return False
 
 
 class SC2Context(CommonContext):
@@ -91,14 +136,12 @@ class SC2Context(CommonContext):
     missions_unlocked = False
     current_tooltip = None
     last_loc_list = None
+    difficulty_override = -1
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(SC2Context, self).server_auth(password_requested)
-        if not self.auth:
-            logger.info('Enter slot name:')
-            self.auth = await self.console_input()
-
+        await self.get_username()
         await self.send_connect()
 
     def on_package(self, cmd: str, args: dict):
@@ -113,6 +156,11 @@ class SC2Context(CommonContext):
                     mission_data["category"] = wol_default_categories[i]
             for mission in slot_req_table:
                 self.mission_req_table[mission] = MissionInfo(**slot_req_table[mission])
+
+            # Look for and set SC2PATH.
+            # check_game_install_path() returns True if and only if it finds + sets SC2PATH.
+            if "SC2PATH" not in os.environ and check_game_install_path():
+                check_mod_install()
 
         if cmd in {"PrintJSON"}:
             if "receiving" in args:
@@ -418,8 +466,9 @@ async def starcraft_launch(ctx: SC2Context, mission_id):
 
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id]}. If game does not launch check log file for errors.")
 
-    run_game(sc2.maps.get(maps_table[mission_id - 1]), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
-                                                            name="Archipelago", fullscreen=True)], realtime=True)
+    with DllDirectory(None):
+        run_game(sc2.maps.get(maps_table[mission_id - 1]), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
+                                                                name="Archipelago", fullscreen=True)], realtime=True)
 
 
 class ArchipelagoBot(sc2.bot_ai.BotAI):
@@ -450,7 +499,10 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
         game_state = 0
         if iteration == 0:
             start_items = calculate_items(self.ctx.items_received)
-            difficulty = calc_difficulty(self.ctx.difficulty)
+            if self.ctx.difficulty_override >= 0:
+                difficulty = calc_difficulty(self.ctx.difficulty_override)
+            else:
+                difficulty = calc_difficulty(self.ctx.difficulty)
             await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
@@ -797,6 +849,101 @@ def initialize_blank_mission_dict(location_table):
         unlocks[mission] = []
 
     return unlocks
+
+
+def check_game_install_path() -> bool:
+    # First thing: go to the default location for ExecuteInfo.
+    # An exception for Windows is included because it's very difficult to find ~\Documents if the user moved it.
+    if is_windows:
+        # The next five lines of utterly inscrutable code are brought to you by copy-paste from Stack Overflow.
+        # https://stackoverflow.com/questions/6227590/finding-the-users-my-documents-path/30924555#
+        import ctypes.wintypes
+        CSIDL_PERSONAL = 5  # My Documents
+        SHGFP_TYPE_CURRENT = 0  # Get current, not default value
+
+        buf = ctypes.create_unicode_buffer(ctypes.wintypes.MAX_PATH)
+        ctypes.windll.shell32.SHGetFolderPathW(None, CSIDL_PERSONAL, None, SHGFP_TYPE_CURRENT, buf)
+        documentspath = buf.value
+        einfo = str(documentspath / Path("StarCraft II\\ExecuteInfo.txt"))
+    else:
+        einfo = str(sc2.paths.get_home() / Path(sc2.paths.USERPATH[sc2.paths.PF]))
+
+    # Check if the file exists.
+    if os.path.isfile(einfo):
+
+        # Open the file and read it, picking out the latest executable's path.
+        with open(einfo) as f:
+            content = f.read()
+        if content:
+            base = re.search(r" = (.*)Versions", content).group(1)
+            if os.path.exists(base):
+                executable = sc2.paths.latest_executeble(Path(base).expanduser() / "Versions")
+
+                # Finally, check the path for an actual executable.
+                # If we find one, great. Set up the SC2PATH.
+                if os.path.isfile(executable):
+                    sc2_logger.info(f"Found an SC2 install at {base}!")
+                    sc2_logger.debug(f"Latest executable at {executable}.")
+                    os.environ["SC2PATH"] = base
+                    sc2_logger.debug(f"SC2PATH set to {base}.")
+                    return True
+                else:
+                    sc2_logger.warning(f"We may have found an SC2 install at {base}, but couldn't find {executable}.")
+            else:
+                sc2_logger.warning(f"{einfo} pointed to {base}, but we could not find an SC2 install there.")
+    else:
+        sc2_logger.warning(f"Couldn't find {einfo}. Please run /set_path with your SC2 install directory.")
+    return False
+
+
+def check_mod_install() -> bool:
+    # Pull up the SC2PATH if set. If not, encourage the user to manually run /set_path.
+    try:
+        # Check inside the Mods folder for Archipelago.SC2Mod. If found, tell user. If not, tell user.
+        if os.path.isfile(modfile := (os.environ["SC2PATH"] / Path("Mods") / Path("Archipelago.SC2Mod"))):
+            sc2_logger.info(f"Archipelago mod found at {modfile}.")
+            return True
+        else:
+            sc2_logger.warning(f"Archipelago mod could not be found at {modfile}. Please install the mod file there.")
+    except KeyError:
+        sc2_logger.warning(f"SC2PATH isn't set. Please run /set_path with the path to your SC2 install.")
+    return False
+
+
+class DllDirectory:
+    # Credit to Black Sliver for this code.
+    # More info: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setdlldirectoryw
+    _old: typing.Optional[str] = None
+    _new: typing.Optional[str] = None
+
+    def __init__(self, new: typing.Optional[str]):
+        self._new = new
+
+    def __enter__(self):
+        old = self.get()
+        if self.set(self._new):
+            self._old = old
+
+    def __exit__(self, *args):
+        if self._old is not None:
+            self.set(self._old)
+
+    @staticmethod
+    def get() -> str:
+        if sys.platform == "win32":
+            n = ctypes.windll.kernel32.GetDllDirectoryW(0, None)
+            buf = ctypes.create_unicode_buffer(n)
+            ctypes.windll.kernel32.GetDllDirectoryW(n, buf)
+            return buf.value
+        # NOTE: other OS may support os.environ["LD_LIBRARY_PATH"], but this fix is windows-specific
+        return None
+
+    @staticmethod
+    def set(s: typing.Optional[str]) -> bool:
+        if sys.platform == "win32":
+            return ctypes.windll.kernel32.SetDllDirectoryW(s) != 0
+        # NOTE: other OS may support os.environ["LD_LIBRARY_PATH"], but this fix is windows-specific
+        return False
 
 
 if __name__ == '__main__':

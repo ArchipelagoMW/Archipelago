@@ -12,6 +12,7 @@ import io
 import collections
 import importlib
 import logging
+import decimal
 
 if typing.TYPE_CHECKING:
     from tkinter import Tk
@@ -29,7 +30,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.3"
+__version__ = "0.3.4"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith('linux')
@@ -276,7 +277,12 @@ def get_default_options() -> dict:
         },
         "oot_options": {
             "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
-        }
+        },
+        "dkc3_options": {
+            "rom_file": "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc",
+            "sni": "SNI",
+            "rom_start": True,
+        },
     }
 
     return options
@@ -320,16 +326,6 @@ def get_options() -> dict:
         else:
             raise FileNotFoundError(f"Could not find {filenames[1]} to load options.")
     return get_options.options
-
-
-def get_item_name_from_id(code: int) -> str:
-    from worlds import lookup_any_item_id_to_name
-    return lookup_any_item_id_to_name.get(code, f'Unknown item (ID:{code})')
-
-
-def get_location_name_from_id(code: int) -> str:
-    from worlds import lookup_any_location_id_to_name
-    return lookup_any_location_id_to_name.get(code, f'Unknown location (ID:{code})')
 
 
 def persistent_store(category: str, key: typing.Any, value: typing.Any):
@@ -473,9 +469,13 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
 def stream_input(stream, queue):
     def queuer():
         while 1:
-            text = stream.readline().strip()
-            if text:
-                queue.put_nowait(text)
+            try:
+                text = stream.readline().strip()
+            except UnicodeDecodeError as e:
+                logging.exception(e)
+            else:
+                if text:
+                    queue.put_nowait(text)
 
     from threading import Thread
     thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)
@@ -494,17 +494,25 @@ class VersionException(Exception):
     pass
 
 
+def chaining_prefix(index: int, labels: typing.Tuple[str]) -> str:
+    text = ""
+    max_label = len(labels) - 1
+    while index > max_label:
+        text += labels[-1]
+        index -= max_label
+    return labels[index] + text
+
+
 # noinspection PyPep8Naming
 def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")) -> str:
+    """Formats a value into a value + metric/si prefix. More info at https://en.wikipedia.org/wiki/Metric_prefix"""
     n = 0
-
-    while value > power:
+    value = decimal.Decimal(value)
+    while value >= power:
         value /= power
         n += 1
-    if type(value) == int:
-        return f"{value} {power_labels[n]}"
-    else:
-        return f"{value:0.3f} {power_labels[n]}"
+
+    return f"{value.quantize(decimal.Decimal('1.00'))} {chaining_prefix(n, power_labels)}"
 
 
 def get_fuzzy_ratio(word1: str, word2: str) -> float:
@@ -559,6 +567,9 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
 
 
 def messagebox(title: str, text: str, error: bool = False) -> None:
+    def run(*args: str):
+        return subprocess.run(args, capture_output=True, text=True).stdout.split('\n', 1)[0] or None
+
     def is_kivy_running():
         if 'kivy' in sys.modules:
             from kivy.app import App
@@ -569,6 +580,15 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         from kvui import MessageBox
         MessageBox(title, text, error).open()
         return
+
+    if is_linux and not 'tkinter' in sys.modules:
+        # prefer native dialog
+        kdialog = shutil.which('kdialog')
+        if kdialog:
+            return run(kdialog, f'--title={title}', '--error' if error else '--msgbox', text)
+        zenity = shutil.which('zenity')
+        if zenity:
+            return run(zenity, f'--title={title}', f'--text={text}', '--error' if error else '--info')
 
     # fall back to tk
     try:
@@ -583,3 +603,14 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         root.withdraw()
         showerror(title, text) if error else showinfo(title, text)
         root.update()
+
+
+def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset(("a", "the"))):
+    """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
+    def sorter(element: str) -> str:
+        parts = element.split(maxsplit=1)
+        if parts[0].lower() in ignore:
+            return parts[1]
+        else:
+            return element
+    return sorted(data, key=lambda i: sorter(key(i)) if key else sorter(i))

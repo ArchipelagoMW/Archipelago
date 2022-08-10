@@ -1,51 +1,98 @@
-# Starcraft 2 Wings of Liberty Randomizer Setup Guide
+# StarCraft 2 Wings of Liberty Randomizer Setup Guide
+
+This guide contains instructions on how to install and troubleshoot the StarCraft 2 Archipelago client, as well as where
+to obtain a config file for StarCraft 2.
 
 ## Required Software
 
-- [Starcraft 2](https://starcraft2.com/en-us/)
-- [Starcraft 2 AP Client](https://github.com/ArchipelagoMW/Archipelago)
-- [Starcraft 2 AP Maps and Data](https://github.com/TheCondor07/Starcraft2ArchipelagoData)
+- [StarCraft 2](https://starcraft2.com/en-us/)
+- [The most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
+- [StarCraft 2 AP Maps and Data](https://github.com/TheCondor07/Starcraft2ArchipelagoData)
 
-## General Concept
+## How do I install this randomizer?
 
-Starcraft 2 AP Client launches a custom version of Starcraft 2 running modified Wings of Liberty campaign maps
- to allow for randomization of the items
+1. Install StarCraft 2 and Archipelago using the first two links above. (The StarCraft 2 client for Archipelago is
+   included by default.)
+2. Click the third link above and follow the instructions there.
+3. Linux users should also follow the instructions found at the bottom of this page 
+   (["Running in Linux"](#running-in-linux)).
 
-## Installation Procedures
+## Where do I get a config file (aka "YAML") for this game?
 
-Follow the installation directions at the 
-[Starcraft 2 AP Maps and Data](https://github.com/TheCondor07/Starcraft2ArchipelagoData) page you can find the .zip 
-files on the releases page. After it is installed just run ArchipelagoStarcraftClient.exe to start the client to connect
-to a Multiworld Game.
+The [Player Settings](https://archipelago.gg/games/Starcraft%202%20Wings%20of%20Liberty/player-settings) page on this
+website allows you to choose your personal settings for the randomizer and download them into a config file. Remember
+the name you type in the `Player Name` box; that's the "slot name" the client will ask you for when you attempt to
+connect!
 
-## Joining a MultiWorld Game
+### And why do I need a config file?
 
-1. Run ArchipelagoStarcraftClient.exe
-2. Type in /connect [sever ip]
-3. Insert slot name and password as prompted
-4. Once connected, use /unfinished to find what missions you can play and '/play [mission id]' to launch a mission. For 
-new games under default settings the first mission available will always be Liberation Day[1] playable using the command
-'/play 1'
+Config files tell Archipelago how you'd like your game to be randomized, even if you're only using default settings.
+When you're setting up a multiworld, every world needs its own config file.
+Check out [Creating a YAML](https://archipelago.gg/tutorial/Archipelago/setup/en#creating-a-yaml) for more information.
 
-## Where do I get a config file?
+## How do I join a MultiWorld game?
 
-The [Player Settings](/games/Starcraft%202%20Wings%20of%20Liberty/player-settings) page on the website allows you to
-configure your personal settings and export them into a config file
+1. Run ArchipelagoStarcraft2Client.exe.
+2. Type `/connect [server ip]`.
+3. Type your slot name and the server's password when prompted.
+4. Once connected, switch to the 'StarCraft 2 Launcher' tab in the client. There, you can see every mission. By default,
+   only 'Liberation Day' will be available at the beginning. Just click on a mission to start it!
 
-## Game isn't launching when I type /play
+## The game isn't launching when I try to start a mission.
 
-First check the log file for issues (stored at [Archipelago Directory]/logs/SC2Client.txt. There is sometimes an issue 
-where the client can not find Starcraft 2.  Usually Documents/Starcraft 2/ExecuteInfo.txt is checked to find where 
-Starcraft 2 is installed. On some computers particularly if you have OneDrive running this may  fail.  The following 
-directions may help you in this case if you are on Windows. 
+First, check the log file for issues (stored at `[Archipelago Directory]/logs/SC2Client.txt`). If the below fix doesn't
+work for you, and you can't figure out the log file, visit our [Discord's](https://discord.com/invite/8Z65BR2)
+tech-support channel for help. Please include a specific description of what's going wrong and attach your log file to
+your message.
 
-1. Navigate to '%userprofile%'.  Easiest way to do this is to hit Windows key+R type in %userprofile% and hit run or 
-type in %userprofile% in the navigation bar of your file explorer. 
-2. If it does not exist create a folder in her named 'Documents'.
-3. Locate your 'My Documents' folder on your pc.  If you navigate to 'My PC' on the sidebar of file explorer should be a
-link to this folder there labeled 'Documents'.
-4. Find a folder labeled 'Starcraft 2' and copy it.
-5. Paste this Starcraft 2 folder into the folder created or found in step 2.
+### Check your installation
 
-These steps have been shown to work for some people for some people having issues with launching the game.  If you are 
-still having issues check out our [Discord](https://discord.com/invite/8Z65BR2) for help.
+Make sure you've followed the installation instructions completely. Specifically, make sure that you've placed the Maps
+and Mods folders directly inside the StarCraft II installation folder. They should be in the same location as the
+SC2Data, Support, Support64, and Versions folders.
+
+## Running in Linux
+
+To run StarCraft 2 through Archipelago in Linux, you will need to install the game using Wine, then run the Linux build
+of the Archipelago client.
+
+Make sure you have StarCraft 2 installed using Wine, and that you have followed the
+[installation procedures](#how-do-i-install-this-randomizer?) to add the Archipelago maps to the correct location. You will not
+need to copy the .dll files. If you're having trouble installing or running StarCraft 2 on Linux, I recommend using the
+Lutris installer.
+
+Copy the following into a .sh file, replacing the values of **WINE** and **SC2PATH** variables with the relevant
+locations, as well as setting **PATH_TO_ARCHIPELAGO** to the directory containing the AppImage if it is not in the same
+folder as the script.
+
+```sh
+# Let the client know we're running SC2 in Wine
+export SC2PF=WineLinux
+export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+
+# FIXME Replace with path to the version of Wine used to run SC2
+export WINE="/usr/bin/wine"
+
+# FIXME Replace with path to StarCraft II install folder
+export SC2PATH="/home/user/Games/starcraft-ii/drive_c/Program Files (x86)/StarCraft II/"
+
+# FIXME Set to directory which contains Archipelago AppImage file
+PATH_TO_ARCHIPELAGO=
+
+# Gets the latest version of Archipelago AppImage in PATH_TO_ARCHIPELAGO.
+# If PATH_TO_ARCHIPELAGO is not set, this defaults to the directory containing
+# this script file.
+ARCHIPELAGO="$(ls ${PATH_TO_ARCHIPELAGO:-$(dirname $0)}/Archipelago_*.AppImage | sort -r | head -1)"
+
+# Start the Archipelago client
+$ARCHIPELAGO Starcraft2Client
+```
+
+For Lutris installs, you can run `lutris -l` to get the numerical ID of your StarCraft II install, then run the command
+below, replacing **${ID}** with the numerical ID.
+
+    lutris lutris:rungameid/${ID} --output-script sc2.sh
+
+This will get all of the relevant environment variables Lutris sets to run StarCraft 2 in a script, including the path
+to the Wine binary that Lutris uses. You can then remove the line that runs the Battle.Net launcher and copy the code
+above into the existing script.

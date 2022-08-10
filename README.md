@@ -26,6 +26,8 @@ Currently, the following games are supported:
 * The Witness
 * Sonic Adventure 2: Battle
 * Starcraft 2: Wings of Liberty
+* Donkey Kong Country 3
+* Dark Souls 3
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled
@@ -49,7 +51,7 @@ Archipelago was directly forked from bonta0's `multiworld_31` branch of ALttPEnt
 ## Running Archipelago
 For most people all you need to do is head over to the [releases](https://github.com/ArchipelagoMW/Archipelago/releases) page then download and run the appropriate installer. The installers function on Windows only.
 
-If you are running Archipelago from a non-Windows system then the likely scenario is that you are comfortable running source code directly. Please see our wiki page on [running Archipelago from source](https://github.com/ArchipelagoMW/Archipelago/wiki/Running-from-source).
+If you are running Archipelago from a non-Windows system then the likely scenario is that you are comfortable running source code directly. Please see our doc on [running Archipelago from source](docs/running%20from%20source.md).
 
 ## Related Repositories
 This project makes use of multiple other projects. We wouldn't be here without these other repositories and the contributions of their developers, past and present.
@@ -66,7 +68,10 @@ Contributions are welcome. We have a few asks of any new contributors.
 
 Otherwise, we tend to judge code on a case to case basis. It is a generally good idea to stick to PEP-8 guidelines to ensure consistency with existing code. (And to make the linter happy.)
 
-For adding a new game to Archipelago please see the docs folder for the relevant information and feel free to ask any questions in the #archipelago-dev channel in our discord.
+For adding a new game to Archipelago and other documentation on how Archipelago functions, please see [the docs folder](docs/) for the relevant information and feel free to ask any questions in the #archipelago-dev channel in our discord.
+
+## FAQ
+For frequently asked questions see the website's [FAQ Page](https://archipelago.gg/faq/en/)
 
 ## Code of Conduct
 We conduct ourselves openly and inclusively here. Please do not contribute to an environment which makes other people uncomfortable. This means that we expect all contributors or participants here to:

@@ -26,7 +26,7 @@ name: YourName{number} # Your name in-game. Spaces will be replaced with undersc
 game: # Pick a game to play
   A Link to the Past: 1
 requires:
-  version: 0.2.3 # Version of Archipelago required for this yaml to work as expected.
+  version: 0.3.3 # Version of Archipelago required for this yaml to work as expected.
 # Shared Options supported by all games:
 accessibility:
   items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations
@@ -175,12 +175,15 @@ A Link to the Past:
   retro_caves:
     on: 0 # Zelda-1 like mode. There are randomly placed take-any caves that contain one Sword and choices of Heart Container/Blue Potion.
     off: 50
-  hints: # Vendors: King Zora and Bottle Merchant say what they're selling.
-  #    On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints.
+  hints: # On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints.
     'on': 50
-    vendors: 0
     'off': 0
     full: 0
+  scams: # If on, these Merchants will no longer tell you what they're selling.
+    'off': 50
+    'king_zora': 0
+    'bottle_merchant': 0
+    'all': 0
   swordless:
     on: 0 # Your swords are replaced by rupees. Gameplay changes have been made to accommodate this change
     off: 1
@@ -273,6 +276,7 @@ A Link to the Past:
     p: 0 # Randomize the prices of the items in shop inventories
     u: 0 # Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
     w: 0 # Consider witch's hut like any other shop and shuffle/randomize it too
+    P: 0 # Prices of the items in shop inventories cost hearts, arrow, or bombs instead of rupees
     ip: 0 # Shuffle inventories and randomize prices
     fpu: 0 # Generate new inventories, randomize prices and shuffle capacity upgrades into item pool
     uip: 0 # Shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool

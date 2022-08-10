@@ -1,5 +1,6 @@
 import typing
 from .ExtractedData import logic_options, starts, pool_options
+from .Rules import cost_terms
 
 from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, SpecialRange
 from .Charms import vanilla_costs, names as charm_names
@@ -9,19 +10,6 @@ if typing.TYPE_CHECKING:
     from random import Random
 else:
     Random = typing.Any
-
-
-class Disabled(Toggle):
-    def __init__(self, value: int):
-        super(Disabled, self).__init__(0)
-
-    @classmethod
-    def from_text(cls, text: str) -> Toggle:
-        return cls(0)
-
-    @classmethod
-    def from_any(cls, data: typing.Any):
-        return cls(0)
 
 
 locations = {"option_" + start: i for i, start in enumerate(starts)}
@@ -36,6 +24,8 @@ option_docstrings = {
                          "randomization.",
     "RandomizeSkills": "Allow for Skills, such as Mantis Claw or Shade Soul, to be randomized into the item pool. "
                        "Also opens their locations for receiving randomized items.",
+    "RandomizeFocus": "Removes the ability to focus and randomizes it into the item pool.",
+    "RandomizeSwim": "Removes the ability to swim in water and randomizes it into the item pool.",
     "RandomizeCharms": "Allow for Charms to be randomized into the item pool and open their locations for "
                        "randomization. Includes Charms sold in shops.",
     "RandomizeKeys": "Allow for Keys to be randomized into the item pool. Includes those sold in shops.",
@@ -59,6 +49,8 @@ option_docstrings = {
     "RandomizeBossEssence": "Randomize boss essence drops, such as those for defeating Warrior Dreams, into the item "
                             "pool and open their locations for randomization.",
     "RandomizeGrubs": "Randomize Grubs into the item pool and open their locations for randomization.",
+    "RandomizeMimics": "Randomize Mimic Grubs into the item pool and open their locations for randomization."
+                       "Mimic Grubs are always placed in your own game.",
     "RandomizeMaps": "Randomize Maps into the item pool. This causes Cornifer to give you a message allowing you to see"
                      " and buy an item that is randomized into that location as well.",
     "RandomizeStags": "Randomize Stag Stations unlocks into the item pool as well as placing randomized items "
@@ -70,6 +62,7 @@ option_docstrings = {
     "RandomizeJournalEntries": "Randomize the Hunter's Journal as well as the findable journal entries into the item "
                                "pool, and open their locations for randomization. Does not include journal entries "
                                "gained by killing enemies.",
+    "RandomizeNail": "Removes the ability to swing the nail left, right and up, and shuffles these into the item pool.",
     "RandomizeGeoRocks": "Randomize Geo Rock rewards into the item pool and open their locations for randomization.",
     "RandomizeBossGeo": "Randomize boss Geo drops into the item pool and open those locations for randomization.",
     "RandomizeSoulTotems": "Randomize Soul Refill items into the item pool and open the Soul Totem locations for"
@@ -110,12 +103,16 @@ default_on = {
     "RandomizeRelics"
 }
 
-# not supported at this time
-disabled = {
-    "RandomizeFocus",
-    "RandomizeSwim",
-    "RandomizeMimics",
-    "RandomizeNail",
+shop_to_option = {
+    "Seer": "SeerRewardSlots",
+    "Grubfather": "GrubfatherRewardSlots",
+    "Sly": "SlyShopSlots",
+    "Sly_(Key)": "SlyKeyShopSlots",
+    "Iselda": "IseldaShopSlots",
+    "Salubra": "SalubraShopSlots",
+    "Leg_Eater": "LegEaterShopSlots",
+    "Salubra_(Requires_Charms)": "IseldaShopSlots",
+    "Egg_Shop": "EggShopSlots",
 }
 
 hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {}
@@ -124,9 +121,6 @@ for option_name, option_data in pool_options.items():
     extra_data = {"__module__": __name__, "items": option_data[0], "locations": option_data[1]}
     if option_name in option_docstrings:
         extra_data["__doc__"] = option_docstrings[option_name]
-    if option_name in disabled:
-        extra_data["__doc__"] = "Disabled Option. Not implemented."
-        option = type(option_name, (Disabled,), extra_data)
     if option_name in default_on:
         option = type(option_name, (DefaultOnToggle,), extra_data)
     else:
@@ -142,11 +136,34 @@ for option_name in logic_options.values():
     if option_name in option_docstrings:
         extra_data["__doc__"] = option_docstrings[option_name]
         option = type(option_name, (Toggle,), extra_data)
-    if option_name in disabled:
-        extra_data["__doc__"] = "Disabled Option. Not implemented."
-        option = type(option_name, (Disabled,), extra_data)
     globals()[option.__name__] = option
     hollow_knight_logic_options[option.__name__] = option
+
+
+class RandomizeElevatorPass(Toggle):
+    """Adds an Elevator Pass item to the item pool, which is then required to use the large elevators connecting
+    City of Tears to the Forgotten Crossroads and Resting Grounds."""
+    display_name = "Randomize Elevator Pass"
+    default = False
+
+
+class SplitMothwingCloak(Toggle):
+    """Splits the Mothwing Cloak into left- and right-only versions of the item. Randomly adds a second left or
+    right Mothwing cloak item which functions as the upgrade to Shade Cloak."""
+    display_name = "Split Mothwing Cloak"
+    default = False
+
+
+class SplitMantisClaw(Toggle):
+    """Splits the Mantis Claw into left- and right-only versions of the item."""
+    display_name = "Split Mantis Claw"
+    default = False
+
+
+class SplitCrystalHeart(Toggle):
+    """Splits the Crystal Heart into left- and right-only versions of the item."""
+    display_name = "Split Crystal Heart"
+    default = False
 
 
 class MinimumGrubPrice(Range):
@@ -178,7 +195,7 @@ class MaximumEssencePrice(MinimumEssencePrice):
 
 
 class MinimumEggPrice(Range):
-    """The minimum rancid egg price in the range of prices that an item should cost from Ijii.
+    """The minimum rancid egg price in the range of prices that an item should cost from Jiji.
     Only takes effect if the EggSlotShops option is greater than 0."""
     display_name = "Minimum Egg Price"
     range_start = 1
@@ -187,7 +204,7 @@ class MinimumEggPrice(Range):
 
 
 class MaximumEggPrice(MinimumEggPrice):
-    """The maximum rancid egg price in the range of prices that an item should cost from Ijii.
+    """The maximum rancid egg price in the range of prices that an item should cost from Jiji.
     Only takes effect if the EggSlotShops option is greater than 0."""
     display_name = "Maximum Egg Price"
     default = 10
@@ -205,7 +222,24 @@ class MinimumCharmPrice(Range):
 class MaximumCharmPrice(MinimumCharmPrice):
     """The maximum charm price in the range of prices that an item should cost for Salubra's shop item which also
     carry a charm cost."""
+    display_name = "Maximum Charm Requirement"
     default = 20
+
+
+class MinimumGeoPrice(Range):
+    """The minimum geo price for items in geo shops."""
+    display_name = "Minimum Geo Price"
+    range_start = 1
+    range_end = 200
+    default = 1
+
+
+class MaximumGeoPrice(Range):
+    """The maximum geo price for items in geo shops."""
+    display_name = "Maximum Geo Price"
+    range_start = 1
+    range_end = 2000
+    default = 400
 
 
 class RandomCharmCosts(SpecialRange):
@@ -256,11 +290,89 @@ class PlandoCharmCosts(OptionDict):
         return charm_costs
 
 
+class SlyShopSlots(Range):
+    """For each extra slot, add a location to the Sly Shop and a filler item to the item pool."""
+
+    display_name = "Sly Shop Slots"
+    default = 8
+    range_end = 16
+
+
+class SlyKeyShopSlots(Range):
+    """For each extra slot, add a location to the Sly Shop (requiring Shopkeeper's Key) and a filler item to the item pool."""
+
+    display_name = "Sly Key Shop Slots"
+    default = 6
+    range_end = 16
+
+
+class IseldaShopSlots(Range):
+    """For each extra slot, add a location to the Iselda Shop and a filler item to the item pool."""
+
+    display_name = "Iselda Shop Slots"
+    default = 2
+    range_end = 16
+
+
+class SalubraShopSlots(Range):
+    """For each extra slot, add a location to the Salubra Shop, and a filler item to the item pool."""
+
+    display_name = "Salubra Shop Slots"
+    default = 5
+    range_start = 0
+    range_end = 16
+
+
+class SalubraCharmShopSlots(Range):
+    """For each extra slot, add a location to the Salubra Shop (requiring Charms), and a filler item to the item pool."""
+
+    display_name = "Salubra Charm Shop Slots"
+    default = 5
+    range_end = 16
+
+
+class LegEaterShopSlots(Range):
+    """For each extra slot, add a location to the Leg Eater Shop and a filler item to the item pool."""
+
+    display_name = "Leg Eater Shop Slots"
+    default = 3
+    range_end = 16
+
+
+class GrubfatherRewardSlots(Range):
+    """For each extra slot, add a location to the Grubfather and a filler item to the item pool."""
+
+    display_name = "Grubfather Reward Slots"
+    default = 7
+    range_end = 16
+
+
+class SeerRewardSlots(Range):
+    """For each extra slot, add a location to the Seer and a filler item to the item pool."""
+
+    display_name = "Seer Reward Reward Slots"
+    default = 8
+    range_end = 16
+
+
 class EggShopSlots(Range):
-    """For each slot, add a location to the Egg Shop and a Geo drop to the item pool."""
+    """For each slot, add a location to the Egg Shop and a filler item to the item pool."""
 
     display_name = "Egg Shop Item Slots"
     range_end = 16
+
+
+class ExtraShopSlots(Range):
+    """For each extra slot, add a location to a randomly chosen shop a filler item to the item pool.
+
+    The Egg Shop will be excluded from this list unless it has at least one item.
+
+    Shops are capped at 16 items each.
+    """
+
+    display_name = "Additional Shop Slots"
+    default = 0
+    range_end = 9 * 16  # Number of shops x max slots per shop.
 
 
 class Goal(Choice):
@@ -288,6 +400,25 @@ class WhitePalace(Choice):
     default = 0
 
 
+class DeathLink(Choice):
+    """
+    When you die, everyone dies. Of course the reverse is true too.
+    When enabled, choose how incoming deathlinks are handled:
+    vanilla: DeathLink kills you and is just like any other death.  RIP your previous shade and geo.
+    shadeless: DeathLink kills you, but no shade spawns and no geo is lost.  Your previous shade, if any, is untouched.
+    shade: DeathLink functions like a normal death if you do not already have a shade, shadeless otherwise.
+    """
+    option_off = 0
+    alias_false = 0
+    alias_no = 0
+    alias_true = 1
+    alias_on = 1
+    alias_yes = 1
+    option_shadeless = 1
+    option_vanilla = 2
+    option_shade = 3
+
+
 class StartingGeo(Range):
     """The amount of starting geo you have."""
     display_name = "Starting Geo"
@@ -296,22 +427,70 @@ class StartingGeo(Range):
     default = 0
 
 
+class CostSanity(Choice):
+    """If enabled, most locations with costs (like stag stations) will have randomly determined costs.
+    If set to shopsonly, CostSanity will only apply to shops (including Grubfather, Seer and Egg Shop).
+    If set to notshops, CostSanity will only apply to non-shops (e.g. Stag stations and Cornifer locations)
+
+    These costs can be in Geo (except Grubfather, Seer and Eggshop), Grubs, Charms, Essence and/or Rancid Eggs
+    """
+    option_off = 0
+    alias_false = 0
+    alias_no = 0
+    option_on = 1
+    alias_true = 1
+    alias_yes = 1
+    option_shopsonly = 2
+    option_notshops = 3
+    display_name = "Cost Sanity"
+
+
+class CostSanityHybridChance(Range):
+    """The chance that a CostSanity cost will include two components instead of one, e.g. Grubs + Essence"""
+    range_end = 100
+    default = 10
+
+
+cost_sanity_weights: typing.Dict[str, type(Option)] = {}
+for term, cost in cost_terms.items():
+    option_name = f"CostSanity{cost.option}Weight"
+    extra_data = {
+        "__module__": __name__, "range_end": 1000,
+        "__doc__": (
+            f"The likelihood of Costsanity choosing a {cost.option} cost."
+            " Chosen as a sum of all weights from other types."
+        ),
+        "default": cost.weight
+    }
+    if cost == 'GEO':
+        extra_data["__doc__"] += " Geo costs will never be chosen for Grubfather, Seer, or Egg Shop."
+
+    option = type(option_name, (Range,), extra_data)
+    globals()[option.__name__] = option
+    cost_sanity_weights[option.__name__] = option
+
+
 hollow_knight_options: typing.Dict[str, type(Option)] = {
     **hollow_knight_randomize_options,
+    RandomizeElevatorPass.__name__: RandomizeElevatorPass,
     **hollow_knight_logic_options,
-    StartLocation.__name__: StartLocation,
-    MinimumGrubPrice.__name__: MinimumGrubPrice,
-    MaximumGrubPrice.__name__: MaximumGrubPrice,
-    MinimumEssencePrice.__name__: MinimumEssencePrice,
-    MaximumEssencePrice.__name__: MaximumEssencePrice,
-    MinimumCharmPrice.__name__: MinimumCharmPrice,
-    MaximumCharmPrice.__name__: MaximumCharmPrice,
-    RandomCharmCosts.__name__: RandomCharmCosts,
-    PlandoCharmCosts.__name__: PlandoCharmCosts,
-    MinimumEggPrice.__name__: MinimumEggPrice,
-    MaximumEggPrice.__name__: MaximumEggPrice,
-    EggShopSlots.__name__: EggShopSlots,
-    Goal.__name__: Goal,
-    WhitePalace.__name__: WhitePalace,
-    StartingGeo.__name__: StartingGeo,
+    **{
+        option.__name__: option
+        for option in (
+            StartLocation, Goal, WhitePalace, StartingGeo, DeathLink,
+            MinimumGeoPrice, MaximumGeoPrice,
+            MinimumGrubPrice, MaximumGrubPrice,
+            MinimumEssencePrice, MaximumEssencePrice,
+            MinimumCharmPrice, MaximumCharmPrice,
+            RandomCharmCosts, PlandoCharmCosts,
+            MinimumEggPrice, MaximumEggPrice, EggShopSlots,
+            SlyShopSlots, SlyKeyShopSlots, IseldaShopSlots,
+            SalubraShopSlots, SalubraCharmShopSlots,
+            LegEaterShopSlots, GrubfatherRewardSlots,
+            SeerRewardSlots, ExtraShopSlots,
+            SplitCrystalHeart, SplitMothwingCloak, SplitMantisClaw,
+            CostSanity, CostSanityHybridChance,
+        )
+    },
+    **cost_sanity_weights
 }

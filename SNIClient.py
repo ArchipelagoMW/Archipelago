@@ -18,7 +18,7 @@ from json import loads, dumps
 import ModuleUpdate
 ModuleUpdate.update()
 
-from Utils import init_logging
+from Utils import init_logging, messagebox
 
 if __name__ == "__main__":
     init_logging("SNIClient", exception_logger="Client")
@@ -33,7 +33,7 @@ from worlds.sm.Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
 from worlds.smz3.Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
 import Utils
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
-from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3
+from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3, GAME_DKC3
 
 snes_logger = logging.getLogger("SNES")
 
@@ -62,7 +62,7 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
     def _cmd_snes(self, snes_options: str = "") -> bool:
         """Connect to a snes. Optionally include network address of a snes to connect to,
         otherwise show available devices; and a SNES device number if more than one SNES is detected.
-        Examples: "/snes", "/snes 1", "/snes localhost:8080 1" """
+        Examples: "/snes", "/snes 1", "/snes localhost:23074 1" """
 
         snes_address = self.ctx.snes_address
         snes_device_number = -1
@@ -188,7 +188,10 @@ class Context(CommonContext):
     async def shutdown(self):
         await super(Context, self).shutdown()
         if self.snes_connect_task:
-            await self.snes_connect_task
+            try:
+                await asyncio.wait_for(self.snes_connect_task, 1)
+            except asyncio.TimeoutError:
+                self.snes_connect_task.cancel()
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected", "RoomUpdate"}:
@@ -251,6 +254,9 @@ async def deathlink_kill_player(ctx: Context):
             if not gamemode or gamemode[0] in SM_DEATH_MODES or (
                     ctx.death_link_allow_survive and health is not None and health > 0):
                 ctx.death_state = DeathState.dead
+        elif ctx.game == GAME_DKC3:
+            from worlds.dkc3.Client import deathlink_kill_player as dkc3_deathlink_kill_player
+            await dkc3_deathlink_kill_player(ctx)
         ctx.last_death_link = time.time()
 
 
@@ -595,7 +601,7 @@ class SNESState(enum.IntEnum):
     SNES_ATTACHED = 3
 
 
-def launch_sni(ctx: Context):
+def launch_sni():
     sni_path = Utils.get_options()["lttp_options"]["sni"]
 
     if not os.path.isdir(sni_path):
@@ -633,11 +639,9 @@ async def _snes_connect(ctx: Context, address: str):
     address = f"ws://{address}" if "://" not in address else address
     snes_logger.info("Connecting to SNI at %s ..." % address)
     seen_problems = set()
-    succesful = False
-    while not succesful:
+    while 1:
         try:
             snes_socket = await websockets.connect(address, ping_timeout=None, ping_interval=None)
-            succesful = True
         except Exception as e:
             problem = "%s" % e
             # only tell the user about new problems, otherwise silently lay in wait for a working connection
@@ -647,7 +651,7 @@ async def _snes_connect(ctx: Context, address: str):
 
                 if len(seen_problems) == 1:
                     # this is the first problem. Let's try launching SNI if it isn't already running
-                    launch_sni(ctx)
+                    launch_sni()
 
             await asyncio.sleep(1)
         else:
@@ -1034,44 +1038,48 @@ async def game_watcher(ctx: Context):
         if not ctx.rom:
             ctx.finished_game = False
             ctx.death_link_allow_survive = False
-            game_name = await snes_read(ctx, SM_ROMNAME_START, 5)
-            if game_name is None:
-                continue
-            elif game_name[:2] == b"SM":
-                ctx.game = GAME_SM
-                # versions lower than 0.3.0 dont have item handling flag nor remote item support
-                romVersion = int(game_name[2:5].decode('UTF-8'))
-                if romVersion < 30:
-                    ctx.items_handling = 0b001 # full local 
-                else:
-                    item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
-                    ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
-            else:
-                game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
-                if game_name == b"ZSM":
-                    ctx.game = GAME_SMZ3
-                    ctx.items_handling = 0b101  # local items and remote start inventory
-                else:
-                    ctx.game = GAME_ALTTP
-                    ctx.items_handling = 0b001  # full local
 
-            rom = await snes_read(ctx, SM_ROMNAME_START if ctx.game == GAME_SM else SMZ3_ROMNAME_START if ctx.game == GAME_SMZ3 else ROMNAME_START, ROMNAME_SIZE)
-            if rom is None or rom == bytes([0] * ROMNAME_SIZE):
-                continue
+            from worlds.dkc3.Client import dkc3_rom_init
+            init_handled = await dkc3_rom_init(ctx)
+            if not init_handled:
+                game_name = await snes_read(ctx, SM_ROMNAME_START, 5)
+                if game_name is None:
+                    continue
+                elif game_name[:2] == b"SM":
+                    ctx.game = GAME_SM
+                    # versions lower than 0.3.0 dont have item handling flag nor remote item support
+                    romVersion = int(game_name[2:5].decode('UTF-8'))
+                    if romVersion < 30:
+                        ctx.items_handling = 0b001 # full local
+                    else:
+                        item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
+                        ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
+                else:
+                    game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
+                    if game_name == b"ZSM":
+                        ctx.game = GAME_SMZ3
+                        ctx.items_handling = 0b101  # local items and remote start inventory
+                    else:
+                        ctx.game = GAME_ALTTP
+                        ctx.items_handling = 0b001  # full local
 
-            ctx.rom = rom
-            if ctx.game != GAME_SMZ3:
-                death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
-                                             SM_DEATH_LINK_ACTIVE_ADDR, 1)
-                if death_link:
-                    ctx.allow_collect = bool(death_link[0] & 0b100)
-                    ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
-                    await ctx.update_death_link(bool(death_link[0] & 0b1))
-            if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
-                ctx.locations_checked = set()
-                ctx.locations_scouted = set()
-                ctx.locations_info = {}
-            ctx.prev_rom = ctx.rom
+                rom = await snes_read(ctx, SM_ROMNAME_START if ctx.game == GAME_SM else SMZ3_ROMNAME_START if ctx.game == GAME_SMZ3 else ROMNAME_START, ROMNAME_SIZE)
+                if rom is None or rom == bytes([0] * ROMNAME_SIZE):
+                    continue
+
+                ctx.rom = rom
+                if ctx.game != GAME_SMZ3:
+                    death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
+                                                 SM_DEATH_LINK_ACTIVE_ADDR, 1)
+                    if death_link:
+                        ctx.allow_collect = bool(death_link[0] & 0b100)
+                        ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
+                        await ctx.update_death_link(bool(death_link[0] & 0b1))
+                if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
+                    ctx.locations_checked = set()
+                    ctx.locations_scouted = set()
+                    ctx.locations_info = {}
+                ctx.prev_rom = ctx.rom
 
             if ctx.awaiting_rom:
                 await ctx.server_auth(False)
@@ -1279,6 +1287,9 @@ async def game_watcher(ctx: Context):
                     color(ctx.item_names[item.item], 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
                     ctx.location_names[item.location], itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
+        elif ctx.game == GAME_DKC3:
+            from worlds.dkc3.Client import dkc3_game_watcher
+            await dkc3_game_watcher(ctx)
 
 
 async def run_game(romfile):
@@ -1296,14 +1307,18 @@ async def main():
     parser = get_base_parser()
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a Archipelago Binary Patch file')
-    parser.add_argument('--snes', default='localhost:8080', help='Address of the SNI server.')
+    parser.add_argument('--snes', default='localhost:23074', help='Address of the SNI server.')
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
     args = parser.parse_args()
 
     if args.diff_file:
         import Patch
         logging.info("Patch file was supplied. Creating sfc rom..")
-        meta, romfile = Patch.create_rom_file(args.diff_file)
+        try:
+            meta, romfile = Patch.create_rom_file(args.diff_file)
+        except Exception as e:
+            messagebox('Error', str(e), True)
+            raise
         if "server" in meta:
             args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
@@ -1366,8 +1381,13 @@ def get_alttp_settings(romfile: str):
 
             if gui_enabled:
 
-                from tkinter import Tk, PhotoImage, Label, LabelFrame, Frame, Button
-                applyPromptWindow = Tk()
+                try:
+                    from tkinter import Tk, PhotoImage, Label, LabelFrame, Frame, Button
+                    applyPromptWindow = Tk()
+                except Exception as e:
+                    logging.error('Could not load tkinter, which is likely not installed.')
+                    return '', False
+
                 applyPromptWindow.resizable(False, False)
                 applyPromptWindow.protocol('WM_DELETE_WINDOW', lambda: onButtonClick())
                 logo = PhotoImage(file=Utils.local_path('data', 'icon.png'))

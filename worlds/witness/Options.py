@@ -7,37 +7,49 @@ from Options import Toggle, DefaultOnToggle, Option, Range, Choice
 #    "Play the randomizer in hardmode"
 #    display_name = "Hard Mode"
 
-# class UnlockSymbols(DefaultOnToggle):
-#    "All Puzzle symbols of a specific panel need to be unlocked before the panel can be used"
-#    display_name = "Unlock Symbols"
-
 class DisableNonRandomizedPuzzles(DefaultOnToggle):
-    """Disable puzzles that cannot be randomized.
-    Non randomized puzzles are Shadows, Monastery, and Greenhouse.
+    """Disables puzzles that cannot be randomized.
+    This includes many puzzles that heavily involve the environment, such as Shadows, Monastery or Orchard.
     The lasers for those areas will be activated as you solve optional puzzles throughout the island."""
     display_name = "Disable non randomized puzzles"
 
 
 class EarlySecretArea(Toggle):
-    """The Mountainside shortcut to the Mountain Secret Area is open from the start.
+    """Opens the Mountainside shortcut to the Mountain Secret Area from the start.
     (Otherwise known as "UTM", "Caves" or the "Challenge Area")"""
     display_name = "Early Secret Area"
 
 
 class ShuffleSymbols(DefaultOnToggle):
-    """You will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols."""
+    """You will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols.
+    If you turn this off, there will be no progression items in the game unless you turn on door shuffle."""
     display_name = "Shuffle Symbols"
 
 
-class ShuffleDoors(Toggle):
-    """Many doors around the island will have their panels turned off initially.
-    You will need to find the items that power the panels to open those doors."""
+class ShuffleLasers(Toggle):
+    """If on, the 11 lasers are turned into items and will activate on their own upon receiving them.
+    Note: There is a visual bug that can occur with the Desert Laser. It does not affect gameplay - The Laser can still
+    be redirected as normal, for both applications of redirection."""
+    display_name = "Shuffle Lasers"
+
+
+class ShuffleDoors(Choice):
+    """If on, opening doors will require their respective "keys".
+    If set to "panels", those keys will unlock the panels on doors.
+    In "doors_simple" and "doors_complex", the doors will magically open by themselves upon receiving the key.
+    The last option, "max", is a combination of "doors_complex" and "panels"."""
     display_name = "Shuffle Doors"
+    option_none = 0
+    option_panels = 1
+    option_doors_simple = 2
+    option_doors_complex = 3
+    option_max = 4
 
 
 class ShuffleDiscardedPanels(Toggle):
-    """Discarded Panels will have items on them.
-    Solving certain Discarded Panels may still be necessary!"""
+    """Add Discarded Panels into the location pool.
+    Solving certain Discarded Panels may still be necessary to beat the game, even if this is off."""
+
     display_name = "Shuffle Discarded Panels"
 
 
@@ -52,9 +64,10 @@ class ShuffleUncommonLocations(Toggle):
     display_name = "Shuffle Uncommon Locations"
 
 
-class ShuffleHardLocations(Toggle):
-    """Adds some harder locations into the game, e.g. Mountain Secret Area panels"""
-    display_name = "Shuffle Hard Locations"
+class ShufflePostgame(Toggle):
+    """Adds locations into the pool that are guaranteed to be locked behind your goal. Use this if you don't play with
+    forfeit on victory."""
+    display_name = "Shuffle Postgame"
 
 
 class VictoryCondition(Choice):
@@ -103,18 +116,19 @@ class PuzzleSkipAmount(Range):
 
 the_witness_options: Dict[str, type] = {
     # "hard_mode": HardMode,
+    "shuffle_symbols": ShuffleSymbols,
+    "shuffle_doors": ShuffleDoors,
+    "shuffle_lasers": ShuffleLasers,
     "disable_non_randomized_puzzles": DisableNonRandomizedPuzzles,
     "shuffle_discarded_panels": ShuffleDiscardedPanels,
     "shuffle_vault_boxes": ShuffleVaultBoxes,
     "shuffle_uncommon": ShuffleUncommonLocations,
-    "shuffle_hard": ShuffleHardLocations,
+    "shuffle_postgame": ShufflePostgame,
     "victory_condition": VictoryCondition,
-    "trap_percentage": TrapPercentage,
-    "early_secret_area": EarlySecretArea,
-    # "shuffle_symbols": ShuffleSymbols,
-    # "shuffle_doors": ShuffleDoors,
     "mountain_lasers": MountainLasers,
     "challenge_lasers": ChallengeLasers,
+    "early_secret_area": EarlySecretArea,
+    "trap_percentage": TrapPercentage,
     "puzzle_skip_amount": PuzzleSkipAmount,
 }
 

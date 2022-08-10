@@ -22,6 +22,21 @@ class WitnessLogic(LogicMixin):
     def _witness_has_lasers(self, world, player: int, amount: int) -> bool:
         lasers = 0
 
+        if is_option_enabled(world, player, "shuffle_lasers"):
+            lasers += int(self.has("Symmetry Laser", player))
+            lasers += int(self.has("Desert Laser", player)
+                          and self.has("Desert Laser Redirection", player))
+            lasers += int(self.has("Town Laser", player))
+            lasers += int(self.has("Monastery Laser", player))
+            lasers += int(self.has("Keep Laser", player))
+            lasers += int(self.has("Quarry Laser", player))
+            lasers += int(self.has("Treehouse Laser", player))
+            lasers += int(self.has("Jungle Laser", player))
+            lasers += int(self.has("Bunker Laser", player))
+            lasers += int(self.has("Swamp Laser", player))
+            lasers += int(self.has("Shadows Laser", player))
+            return lasers >= amount
+
         lasers += int(self.has("Symmetry Laser Activation", player))
         lasers += int(self.has("Desert Laser Activation", player)
                       and self.has("Desert Laser Redirection", player))
@@ -48,11 +63,8 @@ class WitnessLogic(LogicMixin):
         if (check_name + " Solved" in locat.EVENT_LOCATION_TABLE
                 and not self.has(player_logic.EVENT_ITEM_PAIRS[check_name + " Solved"], player)):
             return False
-        if panel not in player_logic.ORIGINAL_EVENT_PANELS and not self.can_reach(check_name, "Location", player):
-            return False
-        if (panel in player_logic.ORIGINAL_EVENT_PANELS
-                and check_name + " Solved" not in locat.EVENT_LOCATION_TABLE
-                and not self._witness_safe_manual_panel_check(panel, world, player, player_logic, locat)):
+        if (check_name + " Solved" not in locat.EVENT_LOCATION_TABLE
+                and not self._witness_meets_item_requirements(panel, world, player, player_logic, locat)):
             return False
         return True
 
@@ -79,8 +91,10 @@ class WitnessLogic(LogicMixin):
                     if not self._witness_has_lasers(world, player, get_option_value(world, player, "challenge_lasers")):
                         valid_option = False
                         break
-                elif item in player_logic.ORIGINAL_EVENT_PANELS:
-                    valid_option = self._witness_can_solve_panel(item, world, player, player_logic, locat)
+                elif item in player_logic.EVENT_PANELS:
+                    if not self._witness_can_solve_panel(item, world, player, player_logic, locat):
+                        valid_option = False
+                        break
                 elif not self.has(item, player):
                     valid_option = False
                     break
@@ -89,24 +103,6 @@ class WitnessLogic(LogicMixin):
                 return True
 
         return False
-
-    def _witness_safe_manual_panel_check(self, panel, world, player, player_logic: WitnessPlayerLogic, locat):
-        """
-        nested can_reach can cause problems, but only if the region being
-        checked is neither of the two original regions from the first
-        can_reach.
-        A nested can_reach is okay here because the only panels this
-        function is called on are panels that exist on either side of all
-        connections they are required for.
-        The spoiler log looks so much nicer this way,
-        it gets rid of a bunch of event items, only leaving a couple. :)
-        """
-        region = StaticWitnessLogic.CHECKS_BY_HEX[panel]["region"]["name"]
-
-        return (
-                self._witness_meets_item_requirements(panel, world, player, player_logic, locat)
-                and self.can_reach(region, "Region", player)
-        )
 
     def _witness_can_solve_panels(self, panel_hex_to_solve_set, world, player, player_logic: WitnessPlayerLogic, locat):
         """

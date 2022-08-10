@@ -35,7 +35,6 @@ class V6World(World):
     location_name_to_id = location_table
 
     data_version = 1
-    forced_auto_forfeit = False
 
     area_connections: typing.Dict[int, int]
     area_cost_map: typing.Dict[int,int]

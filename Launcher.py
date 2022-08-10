@@ -126,7 +126,7 @@ components: Iterable[Component] = (
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient'),
     # SNI
     Component('SNI Client', 'SNIClient',
-              file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3')),
+              file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3', '.apdkc3')),
     Component('LttP Adjuster', 'LttPAdjuster'),
     # Factorio
     Component('Factorio Client', 'FactorioClient'),
@@ -206,14 +206,7 @@ def launch(exe, in_terminal=False):
 
 
 def run_gui():
-    if not sys.stdout:
-        from kvui import App, ContainerLayout, GridLayout, Button, Label  # this kills stdout
-    else:
-        from kivy.app import App
-        from kivy.uix.button import Button
-        from kivy.uix.floatlayout import FloatLayout as ContainerLayout
-        from kivy.uix.gridlayout import GridLayout
-        from kivy.uix.label import Label
+    from kvui import App, ContainerLayout, GridLayout, Button, Label
 
     class Launcher(App):
         base_title: str = "Archipelago Launcher"
