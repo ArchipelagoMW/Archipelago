@@ -10,15 +10,21 @@
     {% include 'header/oceanHeader.html' %}
     <div id="games" class="markdown">
         <h1>Currently Supported Games</h1>
-        {% for game_name, world in worlds.items() | sort(attribute=0) %}
+        {% for game_name in worlds | title_sorted %}
+        {% set world = worlds[game_name] %}
         <h2>{{ game_name }}</h2>
         <p>
             {{ world.__doc__ | default("No description provided.", true) }}<br />
             <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Game Page</a>
+            {% if world.web.tutorials %}
             <span class="link-spacer">|</span>
+            <a href="{{ url_for("tutorial_landing") }}#{{ game_name }}">Setup Guides</a>
+            {% endif %}
             {% if world.web.settings_page is string %}
+            <span class="link-spacer">|</span>
             <a href="{{ world.web.settings_page }}">Settings Page</a>
             {% elif world.web.settings_page %}
+            <span class="link-spacer">|</span>
             <a href="{{ url_for("player_settings", game=game_name) }}">Settings Page</a>
             {% endif %}
             {% if world.web.bug_report_page %}
