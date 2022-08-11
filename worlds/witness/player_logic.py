@@ -355,6 +355,7 @@ class WitnessPlayerLogic:
             "0x19B24": "Shadows Lower Avoid Patterns Visible",
             "0x2700B": "Open Door to Treehouse Laser House",
             "0x00055": "Orchard Apple Trees 4 Turns On",
+            "0x17DDB": "Left Orange Bridge Fully Extended",
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {

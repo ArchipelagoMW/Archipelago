@@ -14,8 +14,8 @@ from .Rules import set_rules
 from .ItemPool import generate_itempool, difficulties
 from .Shops import create_shops, ShopSlotFill
 from .Dungeons import create_dungeons
-from .Rom import LocalRom, patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, get_hash_string, \
-    get_base_rom_path, LttPDeltaPatch
+from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
+    get_hash_string, get_base_rom_path, LttPDeltaPatch
 import Patch
 from itertools import chain
 
@@ -155,6 +155,9 @@ class ALTTPWorld(World):
     def generate_early(self):
         player = self.player
         world = self.world
+
+        if self.use_enemizer():
+            check_enemizer(world.enemizer)
 
         # system for sharing ER layouts
         self.er_seed = str(world.random.randint(0, 2 ** 64))
@@ -341,14 +344,19 @@ class ALTTPWorld(World):
     def stage_post_fill(cls, world):
         ShopSlotFill(world)
 
+    def use_enemizer(self):
+        world = self.world
+        player = self.player
+        return (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
+                or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
+                or world.pot_shuffle[player] or world.bush_shuffle[player]
+                or world.killable_thieves[player])
+
     def generate_output(self, output_directory: str):
         world = self.world
         player = self.player
         try:
-            use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
-                            or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                            or world.pot_shuffle[player] or world.bush_shuffle[player]
-                            or world.killable_thieves[player])
+            use_enemizer = self.use_enemizer()
 
             rom = LocalRom(get_base_rom_path())
 
