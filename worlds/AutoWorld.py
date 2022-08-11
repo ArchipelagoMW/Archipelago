@@ -48,6 +48,7 @@ class AutoWorldRegister(type):
                 raise RuntimeError(f"""Game {dct["game"]} already registered.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
         new_class.__file__ = sys.modules[new_class.__module__].__file__
+        new_class.is_zip = ".apworld" in new_class.__file__
         return new_class
 
 
@@ -164,6 +165,9 @@ class World(metaclass=AutoWorldRegister):
     # Hide World Type from various views. Does not remove functionality.
     hidden: bool = False
 
+    # see WebWorld for options
+    web: WebWorld = WebWorld()
+
     # autoset on creation:
     world: "MultiWorld"
     player: int
@@ -175,7 +179,8 @@ class World(metaclass=AutoWorldRegister):
     item_names: Set[str]  # set of all potential item names
     location_names: Set[str]  # set of all potential location names
 
-    web: WebWorld = WebWorld()
+    is_zip: bool  # was loaded from a .apworld ?
+    __file__: str  # path it was loaded from
 
     def __init__(self, world: "MultiWorld", player: int):
         self.world = world
