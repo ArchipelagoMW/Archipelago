@@ -207,10 +207,10 @@ def ShopSlotFill(world):
             shops_per_sphere.append(current_shops_slots)
             candidates_per_sphere.append(current_candidates)
             for location in sphere:
-                if location.shop_slot is not None:
+                if isinstance(location, ALttPLocation) and location.shop_slot is not None:
                     if not location.shop_slot_disabled:
                         current_shops_slots.append(location)
-                elif not location.locked and not location.item.name in blacklist_words:
+                elif not location.locked and location.item.name not in blacklist_words:
                     current_candidates.append(location)
             if cumu_weights:
                 x = cumu_weights[-1]
@@ -335,7 +335,6 @@ def create_shops(world, player: int):
                 else:
                     loc.item = ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player)
                     loc.shop_slot_disabled = True
-                loc.item.world = world
                 shop.region.locations.append(loc)
                 world.clear_location_cache()
 
@@ -460,10 +459,11 @@ def shuffle_shops(world, items, player: int):
                     f"Not all upgrades put into Player{player}' item pool. Putting remaining items in Capacity Upgrade shop instead.")
                 bombupgrades = sum(1 for item in new_items if 'Bomb Upgrade' in item)
                 arrowupgrades = sum(1 for item in new_items if 'Arrow Upgrade' in item)
+                slots = iter(range(2))
                 if bombupgrades:
-                    capacityshop.add_inventory(1, 'Bomb Upgrade (+5)', 100, bombupgrades)
+                    capacityshop.add_inventory(next(slots), 'Bomb Upgrade (+5)', 100, bombupgrades)
                 if arrowupgrades:
-                    capacityshop.add_inventory(1, 'Arrow Upgrade (+5)', 100, arrowupgrades)
+                    capacityshop.add_inventory(next(slots), 'Arrow Upgrade (+5)', 100, arrowupgrades)
         else:
             for item in new_items:
                 world.push_precollected(ItemFactory(item, player))

@@ -1,0 +1,14 @@
+Items:
+Dots
+Colored Dots
+Sound Dots
+Symmetry
+Triangles
+Eraser
+Shapers
+Rotated Shapers
+Negative Shapers
+Stars
+Stars + Same Colored Symbol
+Black/White Squares
+Colored Squares

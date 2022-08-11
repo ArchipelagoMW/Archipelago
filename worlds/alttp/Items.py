@@ -51,6 +51,11 @@ class ItemData(typing.NamedTuple):
     flute_boy_credit: typing.Optional[str]
     hint_text: typing.Optional[str]
 
+    def as_init_dict(self) -> typing.Dict[str, typing.Any]:
+        return {key: getattr(self, key) for key in
+                ('classification', 'type', 'item_code', 'pedestal_hint', 'hint_text')}
+
+
 # Format: Name: (Advancement, Type, ItemCode, Pedestal Hint Text, Pedestal Credit Text, Sick Kid Credit Text, Zora Credit Text, Witch Credit Text, Flute Boy Credit Text, Hint Text)
 item_table = {'Bow': ItemData(IC.progression, None, 0x0B, 'You have\nchosen the\narcher class.', 'the stick and twine', 'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'the Bow'),
               'Progressive Bow': ItemData(IC.progression, None, 0x64, 'You have\nchosen the\narcher class.', 'the stick and twine', 'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'a Bow'),
@@ -218,7 +223,7 @@ item_table = {'Bow': ItemData(IC.progression, None, 0x0B, 'You have\nchosen the\
               'Open Floodgate': ItemData(IC.progression, 'Event', None, None, None, None, None, None, None, None),
               }
 
-as_dict_item_table = {name: data._asdict() for name, data in item_table.items()}
+item_init_table = {name: data.as_init_dict() for name, data in item_table.items()}
 
 progression_mapping = {
     "Golden Sword": ("Progressive Sword", 4),

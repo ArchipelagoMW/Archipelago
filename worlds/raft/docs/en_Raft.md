@@ -5,10 +5,10 @@ The player settings page for this game is located <a href="../player-settings">h
 you need to configure and export a config file.
 
 ## What does randomization do to this game?
-All of the items from the Research Table, as well as all the note/blueprint pickups from story islands, are changed to location checks. Blueprint items themselves are never given. The Research Table recipes will *remove* the researched items for that recipe once learned, meaning many more resources must be put into the Research Table to get all the unlocks from it.
+All of the items from the Research Table, as well as all the note/blueprint/character pickups from story islands, are changed to location checks. Blueprint items themselves are never given when receiving a blueprint.
 
 ## What is the goal of Raft when randomized?
-The goal remains the same: To pick up the note that has the frequency for the next unreleased story island from Tangaroa.
+The goal remains the same: To complete the game by getting to the end of the game and finishing Utopia.
 
 ## Which items can be in another player's world?
 All of the craftable items from the Research Table and Blueprints, as well as frequencies. Since there are more locations in Raft than there are items to receive, Resource Packs with basic earlygame materials and/or duplicate items may be added to the item pool (configurable).
