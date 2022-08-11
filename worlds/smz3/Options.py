@@ -87,15 +87,12 @@ class GanonVulnerable(Range):
     range_end = 7
     default = 7
 
-class OpenTourian(Choice):
+class OpenTourian(Range):
     """The amount of boss tokens required to enter Tourian. The amount can be found in-game 
     on a sign above the door leading to the Tourian entrance."""
     display_name = "Open Tourian"
-    option_NoBosses = 0
-    option_OneBoss = 1
-    option_TwoBosses = 2
-    option_ThreeBosses = 3
-    option_FourBosses = 4
+    range_start = 0
+    range_end = 4
     default = 4
 
 class SpinJumpsAnimation(Toggle):
