@@ -1,5 +1,5 @@
 from ..generic.Rules import add_rule, set_rule
-from .Regions import smgcourses, connect_regions
+from .regions import smgcourses, connect_regions
 def set_rules(world, player: int):
     
     def smg_gate_open(self, player: int):
