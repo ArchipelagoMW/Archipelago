@@ -190,7 +190,6 @@ class SMZ3World(World):
         config.KeyShuffle = KeyShuffle(self.world.key_shuffle[self.player].value)
         config.Keysanity = config.KeyShuffle != KeyShuffle.Null
         config.GanonInvincible = GanonInvincible.BeforeCrystals
-        config.MinimalAccessibility = self.world.accessibility[self.player] == Accessibility.option_minimal
 
         self.local_random = random.Random(self.world.random.randint(0, 1000))
         self.smz3World = TotalSMZ3World(config, self.world.get_player_name(self.player), self.player, self.world.seed_name)
@@ -525,6 +524,7 @@ class SMZ3World(World):
 
     def InitialFillInOwnWorld(self):
         self.FillItemAtLocation(self.dungeon, TotalSMZ3Item.ItemType.KeySW, self.smz3World.GetLocation("Skull Woods - Pinball Room"))
+        self.FillItemAtLocation(self.dungeon, TotalSMZ3Item.ItemType.KeySP, self.smz3World.GetLocation("Swamp Palace - Entrance"))
 
         # /* Check Swords option and place as needed */
         if self.smz3World.Config.SwordLocation == SwordLocation.Uncle:

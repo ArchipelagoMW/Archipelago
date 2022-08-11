@@ -44,11 +44,38 @@ nest_asyncio.apply()
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: SC2Context
 
+    def _cmd_difficulty(self, difficulty: str = "") -> bool:
+        """Overrides the current difficulty set for the seed.  Takes the argument casual, normal, hard, or brutal"""
+        options = difficulty.split()
+        num_options = len(options)
+        difficulty_choice = options[0].lower()
+
+        if num_options > 0:
+            if difficulty_choice == "casual":
+                self.ctx.difficulty_override = 0
+            elif difficulty_choice == "normal":
+                self.ctx.difficulty_override = 1
+            elif difficulty_choice == "hard":
+                self.ctx.difficulty_override = 2
+            elif difficulty_choice == "brutal":
+                self.ctx.difficulty_override = 3
+            else:
+                self.output("Unable to parse difficulty '" + options[0] + "'")
+                return False
+
+            self.output("Difficulty set to " + options[0])
+            return True
+
+        else:
+            self.output("Difficulty needs to be specified in the command.")
+            return False
+
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
         the next mission in a chain the other player is doing."""
         self.ctx.missions_unlocked = True
         sc2_logger.info("Mission check has been disabled")
+        return True
 
     def _cmd_play(self, mission_id: str = "") -> bool:
         """Start a Starcraft 2 mission"""
@@ -64,6 +91,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         else:
             sc2_logger.info(
                 "Mission ID needs to be specified.  Use /unfinished or /available to view ids for available missions.")
+            return False
 
         return True
 
@@ -108,6 +136,7 @@ class SC2Context(CommonContext):
     missions_unlocked = False
     current_tooltip = None
     last_loc_list = None
+    difficulty_override = -1
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -470,7 +499,10 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
         game_state = 0
         if iteration == 0:
             start_items = calculate_items(self.ctx.items_received)
-            difficulty = calc_difficulty(self.ctx.difficulty)
+            if self.ctx.difficulty_override >= 0:
+                difficulty = calc_difficulty(self.ctx.difficulty_override)
+            else:
+                difficulty = calc_difficulty(self.ctx.difficulty)
             await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
