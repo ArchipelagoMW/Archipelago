@@ -153,7 +153,7 @@ def discord():
 
 @app.route('/datapackage')
 @cache.cached()
-def get_datapackge():
+def get_datapackage():
     """A pretty print version of /api/datapackage"""
     from worlds import network_data_package
     import json
