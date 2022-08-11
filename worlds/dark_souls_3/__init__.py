@@ -16,14 +16,26 @@ from ..generic.Rules import set_rule
 
 
 class DarkSouls3Web(WebWorld):
-    tutorials = [Tutorial(
+    bug_report_page = "https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/issues"
+    setup_en = Tutorial(
         "Multiworld Setup Tutorial",
         "A guide to setting up the Archipelago Dark Souls III randomizer on your computer.",
         "English",
         "setup_en.md",
         "setup/en",
         ["Marech"]
-    )]
+    )
+
+    setup_fr = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Marech"]
+    )
+
+    tutorials = [setup_en, setup_fr]
 
 
 class DarkSouls3World(World):
