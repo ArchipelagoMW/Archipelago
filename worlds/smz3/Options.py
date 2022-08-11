@@ -102,11 +102,12 @@ class SpinJumpsAnimation(Toggle):
 class HeartBeepSpeed(Choice):
     """Sets the speed of the heart beep sound in A Link to the Past."""
     display_name = "Heart Beep Speed"
-    option_NoBeep = 0
+    option_Off = 0
     option_Quarter = 1
     option_Half = 2
     option_Normal = 3
     option_Double = 4
+    alias_false = 0
     default = 3
 
 class HeartColor(Choice):
