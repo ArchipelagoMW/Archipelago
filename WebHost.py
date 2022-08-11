@@ -30,7 +30,8 @@ if not os.path.exists(configpath):  # fall back to config.yaml in home
 
 def get_app():
     register()
-    app = ProxyFix(raw_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+    app = raw_app
+    app = ProxyFix(app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
     if os.path.exists(configpath):
         import yaml
         app.config.from_file(configpath, yaml.safe_load)
