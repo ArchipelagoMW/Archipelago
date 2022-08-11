@@ -1,0 +1,340 @@
+{
+ "Knows": {
+  "WallJump": [
+   false,
+   0
+  ],
+  "ShineSpark": [
+   false,
+   0
+  ],
+  "MidAirMorph": [
+   false,
+   0
+  ],
+  "CrouchJump": [
+   false,
+   0
+  ],
+  "Mockball": [
+   true,
+   1
+  ],
+  "SimpleShortCharge": [
+   true,
+   1
+  ],
+  "InfiniteBombJump": [
+   true,
+   5
+  ],
+  "GreenGateGlitch": [
+   true,
+   5
+  ],
+  "ShortCharge": [
+   false,
+   0
+  ],
+  "GravityJump": [
+   true,
+   10
+  ],
+  "SpringBallJump": [
+   true,
+   10
+  ],
+  "SpringBallJumpFromWall": [
+   false,
+   0
+  ],
+  "GetAroundWallJump": [
+   true,
+   10
+  ],
+  "DraygonGrappleKill": [
+   true,
+   5
+  ],
+  "DraygonSparkKill": [
+   false,
+   0
+  ],
+  "MicrowaveDraygon": [
+   true,
+   1
+  ],
+  "MicrowavePhantoon": [
+   true,
+   5
+  ],
+  "IceZebSkip": [
+   false,
+   0
+  ],
+  "SpeedZebSkip": [
+   false,
+   0
+  ],
+  "HiJumpMamaTurtle": [
+   false,
+   0
+  ],
+  "GravLessLevel1": [
+   true,
+   50
+  ],
+  "GravLessLevel2": [
+   false,
+   0
+  ],
+  "GravLessLevel3": [
+   false,
+   0
+  ],
+  "CeilingDBoost": [
+   true,
+   1
+  ],
+  "BillyMays": [
+   true,
+   1
+  ],
+  "AlcatrazEscape": [
+   true,
+   25
+  ],
+  "ReverseGateGlitch": [
+   true,
+   5
+  ],
+  "ReverseGateGlitchHiJumpLess": [
+   false,
+   0
+  ],
+  "EarlyKraid": [
+   true,
+   1
+  ],
+  "XrayDboost": [
+   false,
+   0
+  ],
+  "XrayIce": [
+   true,
+   10
+  ],
+  "RedTowerClimb": [
+   true,
+   25
+  ],
+  "RonPopeilScrew": [
+   false,
+   0
+  ],
+  "OldMBWithSpeed": [
+   false,
+   0
+  ],
+  "Moondance": [
+   false,
+   0
+  ],
+  "HiJumpLessGauntletAccess": [
+   true,
+   50
+  ],
+  "HiJumpGauntletAccess": [
+   true,
+   25
+  ],
+  "LowGauntlet": [
+   false,
+   0
+  ],
+  "IceEscape": [
+   false,
+   0
+  ],
+  "WallJumpCathedralExit": [
+   true,
+   5
+  ],
+  "BubbleMountainWallJump": [
+   true,
+   5
+  ],
+  "NovaBoost": [
+   false,
+   0
+  ],
+  "NorfairReserveDBoost": [
+   false,
+   0
+  ],
+  "CrocPBsDBoost": [
+   false,
+   0
+  ],
+  "CrocPBsIce": [
+   false,
+   0
+  ],
+  "IceMissileFromCroc": [
+   false,
+   0
+  ],
+  "FrogSpeedwayWithoutSpeed": [
+   false,
+   0
+  ],
+  "LavaDive": [
+   true,
+   50
+  ],
+  "LavaDiveNoHiJump": [
+   false,
+   0
+  ],
+  "WorstRoomIceCharge": [
+   false,
+   0
+  ],
+  "ScrewAttackExit": [
+   false,
+   0
+  ],
+  "ScrewAttackExitWithoutScrew": [
+   false,
+   0
+  ],
+  "FirefleasWalljump": [
+   true,
+   25
+  ],
+  "ContinuousWallJump": [
+   false,
+   0
+  ],
+  "DiagonalBombJump": [
+   false,
+   0
+  ],
+  "MockballWs": [
+   false,
+   0
+  ],
+  "SpongeBathBombJump": [
+   false,
+   0
+  ],
+  "SpongeBathHiJump": [
+   true,
+   1
+  ],
+  "SpongeBathSpeed": [
+   true,
+   5
+  ],
+  "TediousMountEverest": [
+   false,
+   0
+  ],
+  "DoubleSpringBallJump": [
+   false,
+   0
+  ],
+  "BotwoonToDraygonWithIce": [
+   false,
+   0
+  ],
+  "DraygonRoomGrappleExit": [
+   false,
+   0
+  ],
+  "DraygonRoomCrystalFlash": [
+   false,
+   0
+  ],
+  "PreciousRoomXRayExit": [
+   false,
+   0
+  ],
+  "MochtroidClip": [
+   true,
+   5
+  ],
+  "PuyoClip": [
+   false,
+   0
+  ],
+  "PuyoClipXRay": [
+   false,
+   0
+  ],
+  "SnailClip": [
+   false,
+   0
+  ],
+  "SuitlessPuyoClip": [
+   false,
+   0
+  ],
+  "KillPlasmaPiratesWithSpark": [
+   false,
+   0
+  ],
+  "KillPlasmaPiratesWithCharge": [
+   true,
+   5
+  ],
+  "AccessSpringBallWithHiJump": [
+   true,
+   1
+  ],
+  "AccessSpringBallWithSpringBallBombJumps": [
+   true,
+   10
+  ],
+  "AccessSpringBallWithBombJumps": [
+   false,
+   0
+  ],
+  "AccessSpringBallWithSpringBallJump": [
+   false,
+   0
+  ],
+  "AccessSpringBallWithXRayClimb": [
+   false,
+   0
+  ],
+  "AccessSpringBallWithGravJump": [
+   false,
+   0
+  ]
+ },
+ "Settings": {
+  "Ice": "Gimme energy",
+  "MainUpperNorfair": "Gimme energy",
+  "LowerNorfair": "Default",
+  "Kraid": "Default",
+  "Phantoon": "Default",
+  "Draygon": "Default",
+  "Ridley": "Default",
+  "MotherBrain": "Default",
+  "X-Ray": "I don't like spikes",
+  "Gauntlet": "I don't like acid"
+ },
+ "Controller": {
+  "A": "Jump",
+  "B": "Dash",
+  "X": "Shoot",
+  "Y": "Item Cancel",
+  "L": "Angle Down",
+  "R": "Angle Up",
+  "Select": "Item Select",
+  "Moonwalk": false
+ },
+ "password": "90f2524685d745fb06d03bd94ddf3eca1d9d5a835b452ad52b2097becee01b7f",
+ "score": 152
+}
