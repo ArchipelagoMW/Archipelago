@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, Option, Toggle, DefaultOnToggle
+from Options import Choice, Option, Toggle, DefaultOnToggle, Range
 
 class SMLogic(Choice):
     """This option selects what kind of logic to use for item placement inside
@@ -71,37 +71,25 @@ class KeyShuffle(Choice):
     option_Keysanity = 1
     default = 0
 
-class OpenTower(Choice):
+class OpenTower(Range):
     """The amount of crystals required to be able to enter Ganon's Tower. 
     If this is set to Random, the amount can be found in-game on a sign next to Ganon's Tower."""
     display_name = "Open Tower"
-    option_NoCrystals = 0
-    option_OneCrystal = 1
-    option_TwoCrystals = 2
-    option_ThreeCrystals = 3
-    option_FourCrystals = 4
-    option_FiveCrystals = 5
-    option_SixCrystals = 6
-    option_SevenCrystals = 7
+    range_start = 0
+    range_end = 7
     default = 7
 
-class GanonVulnerable(Choice):
-    """The amount of crystals required to be able to harm Ganon. If this is set to Random, 
-    the amount can be found in-game on a sign near the top of the Pyramid."""
+class GanonVulnerable(Range):
+    """The amount of crystals required to be able to harm Ganon. The amount can be found 
+    in-game on a sign near the top of the Pyramid."""
     display_name = "Ganon Vulnerable"
-    option_NoCrystals = 0
-    option_OneCrystal = 1
-    option_TwoCrystals = 2
-    option_ThreeCrystals = 3
-    option_FourCrystals = 4
-    option_FiveCrystals = 5
-    option_SixCrystals = 6
-    option_SevenCrystals = 7
+    range_start = 0
+    range_end = 7
     default = 7
 
 class OpenTourian(Choice):
-    """The amount of boss tokens required to enter Tourian. If this is set to Random, 
-    the amount can be found in-game on a sign above the door leading to the Tourian entrance."""
+    """The amount of boss tokens required to enter Tourian. The amount can be found in-game 
+    on a sign above the door leading to the Tourian entrance."""
     display_name = "Open Tourian"
     option_NoBosses = 0
     option_OneBoss = 1

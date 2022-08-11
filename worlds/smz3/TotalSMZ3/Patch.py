@@ -693,11 +693,11 @@ class Patch:
                     plmTablePos += 0x08
                 doorId += 1
 
-            #/* Write plaque showing SM bosses that needs to be killed */
-            if (self.myWorld.Config.OpenTourian != OpenTourian.FourBosses):
-                plaqueData = getWordArray(0xA5ED) + getWordArray(plaquePlm) + getWordArray(0x044F) + getWordArray(KeycardPlaque.Zero + self.myWorld.TourianBossTokens)
-                self.patches.append((Snes(0x8f0000 + plmTablePos), plaqueData))
-                plmTablePos += 0x08
+        #/* Write plaque showing SM bosses that needs to be killed */
+        if (self.myWorld.Config.OpenTourian != OpenTourian.FourBosses):
+            plaqueData = getWordArray(0xA5ED) + getWordArray(plaquePlm) + getWordArray(0x044F) + getWordArray(KeycardPlaque.Zero + self.myWorld.TourianBossTokens)
+            self.patches.append((Snes(0x8f0000 + plmTablePos), plaqueData))
+            plmTablePos += 0x08
 
         self.patches.append((Snes(0x8f0000 + plmTablePos), [ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ]))
 
