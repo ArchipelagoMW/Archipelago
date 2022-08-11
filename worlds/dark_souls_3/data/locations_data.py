@@ -92,6 +92,7 @@ undead_settlement_table = {
     "US: Soul of the Rotted Greatwood": 0x400002D7,
     "US: Hawk Ring": 0x20004F92,
     "US: Warrior of Sunlight Covenant": 0x20002738,
+    "US: Red and White Round Shield": 0x01343A40,
 }
 
 road_of_sacrifice_table = {
@@ -375,6 +376,7 @@ consumed_king_garden_table = {
     "CKG: Shadow Leggings": 0x14D401F8,
     "CKG: Claw": 0x00A7D8C0,
     "CKG: Soul of Consumed Oceiros": 0x400002CE,
+    "CKG: Magic Stoneplate Ring": 0x20004E66,
     # "CKG: Path of the Dragon Gesture": 0x40002346, I can't technically randomize it as it is a gesture and not an item
 }
 
@@ -393,6 +395,11 @@ grand_archives_table = {
     "GA: Cinders of a Lord - Lothric Prince": 0x4000084E,
     "GA: Soul of the Twin Princes": 0x400002DB,
     "GA: Sage's Crystal Staff": 0x00C8CE40,
+    "GA: Outrider Knight Helm": 0x1328B740,
+    "GA: Outrider Knight Armor": 0x1328BB28,
+    "GA: Outrider Knight Gauntlets": 0x1328BF10,
+    "GA: Outrider Knight Leggings": 0x1328C2F8,
+    "GA: Crystal Scroll": 0x40000856,
 }
 
 untended_graves_table = {
