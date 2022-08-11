@@ -48,7 +48,6 @@ class Config:
     Keysanity: bool = KeyShuffle != KeyShuffle.Null
     Race: bool = False
     GanonInvincible: GanonInvincible = GanonInvincible.BeforeCrystals
-    MinimalAccessibility: bool = False  # AP specific accessibility: minimal
 
     def __init__(self, options: Dict[str, str]):
         self.GameMode = self.ParseOption(options, GameMode.Multiworld)
