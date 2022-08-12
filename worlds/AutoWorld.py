@@ -14,6 +14,10 @@ if TYPE_CHECKING:
 class AutoWorldRegister(type):
     world_types: Dict[str, type(World)] = {}
 
+    @property
+    def is_zip(cls: World):
+        return ".apworld" in cls.__file__
+
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
             assert isinstance(dct["web"], WebWorld), "WebWorld has to be instantiated."
@@ -48,7 +52,6 @@ class AutoWorldRegister(type):
                 raise RuntimeError(f"""Game {dct["game"]} already registered.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
         new_class.__file__ = sys.modules[new_class.__module__].__file__
-        new_class.is_zip = ".apworld" in new_class.__file__
         return new_class
 
 
