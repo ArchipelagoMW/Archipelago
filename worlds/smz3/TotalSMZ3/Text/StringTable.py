@@ -3,7 +3,7 @@ from typing import Any, List
 import copy
 from worlds.smz3.TotalSMZ3.Text.Dialog import Dialog
 from worlds.smz3.TotalSMZ3.Text.Texts import text_folder
-from yaml import load, Loader
+from Utils import unsafe_parse_yaml
 
 class StringTable:
 
@@ -11,7 +11,7 @@ class StringTable:
     def ParseEntries(resource: str):
         with open(resource, 'rb') as f:
             yaml = str(f.read(), "utf-8")
-        content = load(yaml, Loader)
+        content = unsafe_parse_yaml(yaml)
 
         result = []
         for entryValue in content:
