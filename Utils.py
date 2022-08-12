@@ -413,6 +413,9 @@ def restricted_loads(s):
 
 
 class KeyedDefaultDict(collections.defaultdict):
+    """defaultdict variant that uses the missing key as argument to default_factory"""
+    default_factory: typing.Callable[[typing.Any], typing.Any]
+
     def __missing__(self, key):
         self[key] = value = self.default_factory(key)
         return value
