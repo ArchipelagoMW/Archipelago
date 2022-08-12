@@ -1150,6 +1150,7 @@ class Item:
     code: Optional[int]
     """an item with code None is called an Event, and does not get written to multidata"""
     player: int
+    type: str = 'none'
     location: Optional[Location]
 
     def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int):

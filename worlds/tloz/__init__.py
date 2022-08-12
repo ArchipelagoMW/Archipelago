@@ -365,6 +365,7 @@ class TLoZWorld(World):
 
 class TLoZItem(Item):
     game = 'The Legend of Zelda'
+    type = 'none'
 
 
 class TLoZLocation(Location):

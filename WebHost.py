@@ -5,7 +5,6 @@ import logging
 import typing
 
 import ModuleUpdate
-from werkzeug.middleware.proxy_fix import ProxyFix
 
 ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt"))
 ModuleUpdate.update()
@@ -30,12 +29,11 @@ if not os.path.exists(configpath):  # fall back to config.yaml in home
 
 def get_app():
     register()
-    app = app = ProxyFix(raw_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+    app = raw_app
     if os.path.exists(configpath):
         import yaml
         app.config.from_file(configpath, yaml.safe_load)
         logging.info(f"Updated config from {configpath}")
-    app.config = app.app.config
     db.bind(**app.config["PONY"])
     db.generate_mapping(create_tables=True)
     return app
