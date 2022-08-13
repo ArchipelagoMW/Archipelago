@@ -319,9 +319,9 @@ class WitnessPlayerLogic:
             "0x00037": "Monastery Branch Panels Activate",
             "0x0A079": "Access to Bunker Laser",
             "0x0A3B5": "Door to Tutorial Discard Opens",
-            "0x00139": "Keep Hedges 2 Turns On",
-            "0x019DC": "Keep Hedges 3 Turns On",
-            "0x019E7": "Keep Hedges 4 Turns On",
+            "0x00139": "Keep Hedges 1 Knowledge",
+            "0x019DC": "Keep Hedges 2 Knowledge",
+            "0x019E7": "Keep Hedges 3 Knowledge",
             "0x01D3F": "Keep Laser Panel (Pressure Plates) Activates",
             "0x09F7F": "Mountain Access",
             "0x0367C": "Quarry Laser Mill Requirement Met",
@@ -355,6 +355,7 @@ class WitnessPlayerLogic:
             "0x19B24": "Shadows Lower Avoid Patterns Visible",
             "0x2700B": "Open Door to Treehouse Laser House",
             "0x00055": "Orchard Apple Trees 4 Turns On",
+            "0x17DDB": "Left Orange Bridge Fully Extended",
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {

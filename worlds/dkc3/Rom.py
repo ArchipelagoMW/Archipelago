@@ -1,5 +1,5 @@
 import Utils
-from Patch import read_rom
+from Patch import read_rom, APDeltaPatch
 from .Locations import lookup_id_to_name, all_locations
 from .Levels import level_list, level_dict
 
@@ -238,9 +238,9 @@ location_rom_data = {
     0xDC30AF: [0x648, 1],
     0xDC30B0: [0x649, 1],
     0xDC30B1: [0x64A, 1],
-    0xDC30B2: [0x64B, 1],
+    #0xDC30B2: [0x64B, 1], # Disabled until Trade Sequence
     0xDC30B3: [0x64C, 1],
-    0xDC30B4: [0x64D, 1],
+    #0xDC30B4: [0x64D, 1], # Disabled until Trade Sequence
     0xDC30B5: [0x64E, 1],
 
     0xDC30B6: [0x5FD, 4], # Banana Bird Mother
@@ -528,6 +528,15 @@ def patch_rom(world, rom, player, active_level_list):
     rom.write_byte(0x3B97E9, 0x80)
     rom.write_byte(0x3B97EA, 0xEA)
 
+
+class DKC3DeltaPatch(APDeltaPatch):
+    hash = USHASH
+    game = "Donkey Kong Country 3"
+    patch_file_ending = ".apdkc3"
+
+    @classmethod
+    def get_source_data(cls) -> bytes:
+        return get_base_rom_bytes()
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:
