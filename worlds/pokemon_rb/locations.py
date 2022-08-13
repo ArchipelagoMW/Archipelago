@@ -1,6 +1,6 @@
-# from typing import List, Tuple, Optional, Callable, NamedTuple
+
 from BaseClasses import Location
-from .extracted_data import rom_addresses
+from .rom_addresses import rom_addresses
 loc_id_start = 17200000
 locations = []
 
@@ -49,7 +49,7 @@ class Rod:
         self.flag = flag
 
 
-def get_locations(player=None): # world: Optional[MultiWorld], player: Optional[int]):
+def get_locations(player=None):
     # Event flags
     locations = [
 
@@ -57,6 +57,9 @@ def get_locations(player=None): # world: Optional[MultiWorld], player: Optional[
         LocationData("Fuchsia City", "Fishing Guru's Brother", "Good Rod", rom_addresses["Rod_Fuchsia_City_Fishing_Brother"], Rod(4)),
         LocationData("Route 12 South", "Fishing Guru's Brother", "Super Rod", rom_addresses["Rod_Route_12_Fishing_Brother"], Rod(5)),
 
+        LocationData("Pallet Town", "Player's PC", "Potion", rom_addresses['PC_Item'], EventFlag(1),
+                     item_rule=lambda i: i.player == player and "Badge" not in i.name),
+        LocationData("Celadon City", "Mansion Lady", "Tea", rom_addresses["Event_Mansion_Lady"], EventFlag(2)),
         LocationData("Pallet Town", "Rival's Sister", "Town Map", rom_addresses["Event_Rivals_Sister"], EventFlag(24),
                      lambda state: state.has("Oak's Parcel", player)),
         LocationData("Pallet Town", "Oak's Gift", "Poke Ball", rom_addresses["Event_Oaks_Gift"], EventFlag(36),
@@ -66,23 +69,23 @@ def get_locations(player=None): # world: Optional[MultiWorld], player: Optional[
                      EventFlag(41), lambda state: state._pokemon_rb_can_cut(player) or state._pokemon_rb_can_surf(player)),
         LocationData("Viridian City", "Pokemart Quest", "Oak's Parcel", rom_addresses["Event_Pokemart_Quest"],
                      EventFlag(57)),
-        LocationData("Viridian Gym", "Giovanni", "TM27 Fissure", rom_addresses["Event_Viridian_Gym"], EventFlag(80)),
+        LocationData("Viridian Gym", "Giovanni 2", "TM27 Fissure", rom_addresses["Event_Viridian_Gym"], EventFlag(80)),
         LocationData("Route 2 East", "Oak's Aide", "HM05 Flash", rom_addresses["Event_Route_2_Oaks_Aide"],
                      EventFlag(984), item_rule=lambda i: not i.advancement),
         LocationData("Pewter City", "Museum", "Old Amber", rom_addresses["Event_Museum"], EventFlag(105), lambda state: state._pokemon_rb_can_cut(player)),
-        LocationData("Pewter City", "Brock", "TM34 Bide", rom_addresses["Event_Pewter_Gym"], EventFlag(118)),
+        LocationData("Pewter Gym", "Brock 2", "TM34 Bide", rom_addresses["Event_Pewter_Gym"], EventFlag(118)),
         LocationData("Cerulean City", "Bicycle Shop", "Bicycle", rom_addresses["Event_Bicycle_Shop"], EventFlag(192),
                      lambda state: state.has("Bike Voucher", player)),
-        LocationData("Cerulean City", "Misty", "TM11 Bubble Beam", rom_addresses["Event_Cerulean_Gym"],
+        LocationData("Cerulean Gym", "Misty 2", "TM11 Bubble Beam", rom_addresses["Event_Cerulean_Gym"],
                      EventFlag(190)),
         LocationData("Route 24", "Nugget Bridge", "Nugget", rom_addresses["Event_Nugget_Bridge"], EventFlag(1344)),
         LocationData("Route 25", "Bill", "S.S. Ticket", rom_addresses["Event_Bill"], EventFlag(1372)),
-        LocationData("Lavender Town", "Save Mr. Fuji", "Poke Flute", rom_addresses["Event_Fuji"], EventFlag(296)),
-        LocationData("Lavender Town", "Mourning Girl", "TM39 Swift", rom_addresses["Event_Mourning_Girl"],
+        LocationData("Lavender Town", "Mr. Fuji", "Poke Flute", rom_addresses["Event_Fuji"], EventFlag(296), lambda state: state.has("Fuji Saved", player)),
+        LocationData("Route 12 North", "Mourning Girl", "TM39 Swift", rom_addresses["Event_Mourning_Girl"],
                      EventFlag(1152)),
         LocationData("Vermilion City", "Pokemon Fan Club", "Bike Voucher", rom_addresses["Event_Pokemon_Fan_Club"],
                      EventFlag(337)),
-        LocationData("Vermilion City", "Lt. Surge", "TM24 Thunderbolt", rom_addresses["Event_Vermillion_Gym"],
+        LocationData("Vermilion Gym", "Lt. Surge 2", "TM24 Thunderbolt", rom_addresses["Event_Vermillion_Gym"],
                      EventFlag(358), lambda state: state._pokemon_rb_can_cut(player or state._pokemon_rb_can_surf(player))),
         LocationData("S.S. Anne 2F", "Captain", "HM01 Cut", rom_addresses["Event_SS_Anne_Captain"], EventFlag(1504)),
         LocationData("Route 11 East", "Oak's Aide", "Item Finder", rom_addresses["Event_Rt11_Oaks_Aide"],
@@ -98,7 +101,7 @@ def get_locations(player=None): # world: Optional[MultiWorld], player: Optional[
         LocationData("Celadon City", "Counter Man", "TM18 Counter", rom_addresses["Event_Counter"], EventFlag(399)),
         LocationData("Celadon City", "Gambling Addict", "Coin Case", rom_addresses["Event_Gambling_Addict"],
                      EventFlag(480)),
-        LocationData("Celadon City", "Erika", "TM21 Mega Drain", rom_addresses["Event_Celadon_Gym"], EventFlag(424)),
+        LocationData("Celadon Gym", "Erika 2", "TM21 Mega Drain", rom_addresses["Event_Celadon_Gym"], EventFlag(424)),
         LocationData("Silph Co 11F", "Silph Co President", "Master Ball", rom_addresses["Event_Silph_Co_President"],
                      EventFlag(1933), lambda state: state.has("Card Key", player)),
         LocationData("Silph Co 2F", "Woman", "TM36 Self Destruct", rom_addresses["Event_Scared_Woman"],
@@ -107,28 +110,27 @@ def get_locations(player=None): # world: Optional[MultiWorld], player: Optional[
                      lambda state: state._pokemon_rb_can_cut(player)),
         LocationData("Fuchsia City", "Oak's Aide", "Exp. All", rom_addresses["Event_Rt_15_Oaks_Aide"], EventFlag(1200), item_rule=lambda i: not i.advancement),
         LocationData("Fuchsia City", "Safari Zone Warden", "HM04 Strength", rom_addresses["Event_Warden"], EventFlag(568)),
-        LocationData("Fuchsia City", "Koga", "TM06 Toxic", rom_addresses["Event_Fuschia_Gym"], EventFlag(600)),
+        LocationData("Fuchsia Gym", "Koga 2", "TM06 Toxic", rom_addresses["Event_Fuschia_Gym"], EventFlag(600)),
         LocationData("Safari Zone West", "Secret House", "HM03 Surf", rom_addresses["Event_Safari_Zone_Secret_House"], EventFlag(2176)),
         LocationData("Cinnabar Island", "Lab Scientist", "TM35 Metronome", rom_addresses["Event_Lab_Scientist"], EventFlag(727)),
-        LocationData("Cinnabar Island", "Blaine", "TM38 Fire Blast", rom_addresses["Event_Cinnabar_Gym"],
+        LocationData("Cinnabar Gym", "Blaine 2", "TM38 Fire Blast", rom_addresses["Event_Cinnabar_Gym"],
                      EventFlag(664), lambda state: state.has("Secret Key", player)),
         LocationData("Copycat's House", "Copycat", "TM31 Mimic", rom_addresses["Event_Copycat"], EventFlag(832)),
         LocationData("Saffron City", "Mr. Psychic", "TM29 Psychic", rom_addresses["Event_Mr_Psychic"], EventFlag(944)),
-        LocationData("Saffron City", "Sabrina", "TM46 Psywave", rom_addresses["Event_Saffron_Gym"], EventFlag(864),
-                     lambda state: state.has("Silph Scope", player) and state.has("Card Key", player)),
+        LocationData("Saffron Gym", "Sabrina 2", "TM46 Psywave", rom_addresses["Event_Saffron_Gym"], EventFlag(864)),
         LocationData("Cerulean City", "Rocket Thief", "TM28 Dig", rom_addresses["Event_Rocket_Thief"],
-                     Missable(5), lambda state: state.has("Helped Bill", player)),
+                     Missable(6)),
         LocationData("Route 2 East", "South Item", "Moon Stone", rom_addresses["Missable_Route_2_Item_1"],
-                     Missable(24)),
-        LocationData("Route 2 East", "North Item", "HP Up", rom_addresses["Missable_Route_2_Item_2"], Missable(25)),
-        LocationData("Route 4", "Item", "TM04 Whirlwind", rom_addresses["Missable_Route_4_Item"], Missable(26)),
+                     Missable(25)),
+        LocationData("Route 2 East", "North Item", "HP Up", rom_addresses["Missable_Route_2_Item_2"], Missable(26)),
+        LocationData("Route 4", "Item", "TM04 Whirlwind", rom_addresses["Missable_Route_4_Item"], Missable(27)),
         LocationData("Route 9", "Item", "TM30 Teleport", rom_addresses["Missable_Route_9_Item"], Missable(28)),
         LocationData("Route 12 North", "Item 1", "TM16 Pay Day", rom_addresses["Missable_Route_12_Item_1"], Missable(30)),
         LocationData("Route 12 South", "Item 2", "Iron", rom_addresses["Missable_Route_12_Item_2"], Missable(31),
                      lambda state: state._pokemon_rb_can_cut(player)),
-        LocationData("Route 15", "Item", "TM20 Rage", rom_addresses["Missable_Route_15_Item"], Missable(32)),
+        LocationData("Route 15", "Item", "TM20 Rage", rom_addresses["Missable_Route_15_Item"], Missable(32), lambda state: state._pokemon_rb_can_cut(player)),
         LocationData("Route 24", "Item", "TM45 Thunder Wave", rom_addresses["Missable_Route_24_Item"], Missable(37)),
-        LocationData("Route 25", "Item", "TM19 Seismic Toss", rom_addresses["Missable_Route_25_Item"], Missable(38)),
+        LocationData("Route 25", "Item", "TM19 Seismic Toss", rom_addresses["Missable_Route_25_Item"], Missable(38), lambda state: state._pokemon_rb_can_cut(player)),
         LocationData("Viridian Gym", "Item", "Revive", rom_addresses["Missable_Viridian_Gym_Item"], Missable(51)),
         LocationData("Cerulean Cave 1F", "Item 1", "Full Restore", rom_addresses["Missable_Cerulean_Cave_1F_Item_1"],
                      Missable(53)),
@@ -178,17 +180,20 @@ def get_locations(player=None): # world: Optional[MultiWorld], player: Optional[
                      Missable(101)),
         LocationData("Viridian Forest", "Southwest Item", "Poke Ball",
                      rom_addresses["Missable_Viridian_Forest_Item_3"], Missable(102)),
-        LocationData("Mt Moon 1F", "Item 1", "Potion", rom_addresses["Missable_Mt_Moon_1F_Item_1"], Missable(103)),
-        LocationData("Mt Moon 1F", "Item 2", "Moon Stone", rom_addresses["Missable_Mt_Moon_1F_Item_2"], Missable(104)),
-        LocationData("Mt Moon 1F", "Item 3", "Rare Candy", rom_addresses["Missable_Mt_Moon_1F_Item_3"], Missable(105)),
-        LocationData("Mt Moon 1F", "Item 4", "Escape Rope", rom_addresses["Missable_Mt_Moon_1F_Item_4"],
+        LocationData("Mt Moon 1F", "West Item", "Potion", rom_addresses["Missable_Mt_Moon_1F_Item_1"], Missable(103)),
+        LocationData("Mt Moon 1F", "Northwest Item", "Moon Stone", rom_addresses["Missable_Mt_Moon_1F_Item_2"], Missable(104)),
+        LocationData("Mt Moon 1F", "Southeast Item", "Rare Candy", rom_addresses["Missable_Mt_Moon_1F_Item_3"], Missable(105)),
+        LocationData("Mt Moon 1F", "East Item", "Escape Rope", rom_addresses["Missable_Mt_Moon_1F_Item_4"],
                      Missable(106)),
-        LocationData("Mt Moon 1F", "Item 5", "Potion", rom_addresses["Missable_Mt_Moon_1F_Item_5"], Missable(107)),
-        LocationData("Mt Moon 1F", "Item 6", "TM12 Water Gun", rom_addresses["Missable_Mt_Moon_1F_Item_6"],
+        LocationData("Mt Moon 1F", "South Item", "Potion", rom_addresses["Missable_Mt_Moon_1F_Item_5"], Missable(107)),
+        LocationData("Mt Moon 1F", "Southwest Item", "TM12 Water Gun", rom_addresses["Missable_Mt_Moon_1F_Item_6"],
                      Missable(108)),
-        LocationData("Mt Moon B2F", "Item 1", "HP Up", rom_addresses["Missable_Mt_Moon_B2F_Item_1"], Missable(109)),
+        #LocationData("Mt Moon B2F", "Fossil 1", "HP Up", rom_addresses[""], Missable(109)),
+        #LocationData("Mt Moon B2F", "Fossil 2", "TM01 Mega Punch", rom_addresses[""],
+        #             Missable(110)),
+        LocationData("Mt Moon B2F", "Item 1", "HP Up", rom_addresses["Missable_Mt_Moon_B2F_Item_1"], Missable(111)),
         LocationData("Mt Moon B2F", "Item 2", "TM01 Mega Punch", rom_addresses["Missable_Mt_Moon_B2F_Item_2"],
-                     Missable(110)),
+                     Missable(112)),
         LocationData("S.S. Anne 1F", "Item", "TM08 Body Slam", rom_addresses["Missable_SS_Anne_1F_Item"],
                      Missable(114)),
         LocationData("S.S. Anne 2F", "Item 1", "Max Ether", rom_addresses["Missable_SS_Anne_2F_Item_1"],
@@ -226,10 +231,10 @@ def get_locations(player=None): # world: Optional[MultiWorld], player: Optional[
                      rom_addresses["Missable_Rocket_Hideout_B4F_Item_2"], Missable(133)),
         LocationData("Rocket Hideout B4F", "Item 3", "Iron", rom_addresses["Missable_Rocket_Hideout_B4F_Item_3"],
                      Missable(134), lambda state: state.has("Lift Key", player)),
-        LocationData("Rocket Hideout B4F", "Item 4", "Silph Scope",
-                     rom_addresses["Missable_Rocket_Hideout_B4F_Item_4"], Missable(135), lambda state: state.has("Lift Key", player)),
-        LocationData("Rocket Hideout B4F", "Item 5", "Lift Key", rom_addresses["Missable_Rocket_Hideout_B4F_Item_5"],
-                     Missable(136)),
+        LocationData("Rocket Hideout B4F", "Giovanni Item", "Silph Scope",
+                     rom_addresses["Missable_Rocket_Hideout_B4F_Item_4"], EventFlag(0x6A7), lambda state: state.has("Lift Key", player)), # Missable(135)
+        LocationData("Rocket Hideout B4F", "Rocket Grunt Item", "Lift Key", rom_addresses["Missable_Rocket_Hideout_B4F_Item_5"],
+                     EventFlag(0x6A6)), # Missable(136)
         LocationData("Silph Co 3F", "Item", "Hyper Potion", rom_addresses["Missable_Silph_Co_3F_Item"], Missable(144),
                      lambda state: state.has("Card Key", player)),
         LocationData("Silph Co 4F", "Item 1", "Full Heal", rom_addresses["Missable_Silph_Co_4F_Item_1"],
@@ -239,7 +244,7 @@ def get_locations(player=None): # world: Optional[MultiWorld], player: Optional[
         LocationData("Silph Co 4F", "Item 3", "Escape Rope", rom_addresses["Missable_Silph_Co_4F_Item_3"],
                      Missable(150), lambda state: state.has("Card Key", player)),
         LocationData("Silph Co 5F", "Item 1", "TM09 Take Down", rom_addresses["Missable_Silph_Co_5F_Item_1"],
-                     Missable(155), lambda state: state.has("Card Key", player)),
+                     Missable(155)),
         LocationData("Silph Co 5F", "Item 2", "Protein", rom_addresses["Missable_Silph_Co_5F_Item_2"], Missable(156),
                      lambda state: state.has("Card Key", player)),
         LocationData("Silph Co 5F", "Item 3", "Card Key", rom_addresses["Missable_Silph_Co_5F_Item_3"], Missable(157)),
@@ -296,9 +301,9 @@ def get_locations(player=None): # world: Optional[MultiWorld], player: Optional[
         LocationData("Cerulean Cave 2F", "Item 1", "PP Up", rom_addresses["Missable_Cerulean_Cave_2F_Item_1"],
                      Missable(206)),
         LocationData("Cerulean Cave 2F", "Item 2", "Ultra Ball", rom_addresses["Missable_Cerulean_Cave_2F_Item_2"],
-                     Missable(207)),
+                     Missable(207), lambda state: state._pokemon_rb_can_surf(player)),
         LocationData("Cerulean Cave 2F", "Item 3", "Full Restore", rom_addresses["Missable_Cerulean_Cave_2F_Item_3"],
-                     Missable(208)),
+                     Missable(208), lambda state: state._pokemon_rb_can_surf(player)),
         LocationData("Cerulean Cave B1F", "tem 1", "Ultra Ball", rom_addresses["Missable_Cerulean_Cave_B1F_Item_1"],
                      Missable(210)),
         LocationData("Cerulean Cave B1F", "Item 2", "Max Revive", rom_addresses["Missable_Cerulean_Cave_B1F_Item_2"],
@@ -308,19 +313,19 @@ def get_locations(player=None): # world: Optional[MultiWorld], player: Optional[
         LocationData("Victory Road 1F", "Item 2", "Rare Candy", rom_addresses["Missable_Victory_Road_1F_Item_2"],
                      Missable(213)),
 
-        LocationData("Pewter Gym", "Badge", "Boulder Badge", rom_addresses['Badge_Pewter_Gym'], EventFlag(0x77)),
-        LocationData("Cerulean Gym", "Badge", "Cascade Badge", rom_addresses['Badge_Cerulean_Gym'], EventFlag(0xBF)),
-        LocationData("Vermilion Gym", "Badge", "Thunder Badge", rom_addresses['Badge_Vermilion_Gym'], EventFlag(0x167)),
-        LocationData("Celadon Gym", "Badge", "Rainbow Badge", rom_addresses['Badge_Celadon_Gym'], EventFlag(0x1A9)),
-        LocationData("Fuchsia Gym", "Badge", "Soul Badge", rom_addresses['Badge_Fuchsia_Gym'], EventFlag(0x259)),
-        LocationData("Saffron Gym", "Badge", "Marsh Badge", rom_addresses['Badge_Saffron_Gym'], EventFlag(0x361), lambda state: state.has("Silph Co Liberated", player)),
-        LocationData("Cinnabar Gym", "Badge", "Volcano Badge", rom_addresses['Badge_Cinnabar_Gym'], EventFlag(0x299), lambda state: state.has("Secret Key", player)),
-        LocationData("Viridian Gym", "Badge", "Earth Badge", rom_addresses['Badge_Viridian_Gym'], EventFlag(0x51)),
+        LocationData("Pewter Gym", "Brock 1", "Boulder Badge", rom_addresses['Badge_Pewter_Gym'], EventFlag(0x8A0)),
+        LocationData("Cerulean Gym", "Misty 1", "Cascade Badge", rom_addresses['Badge_Cerulean_Gym'], EventFlag(0x8A1)),
+        LocationData("Vermilion Gym", "Lt. Surge 1", "Thunder Badge", rom_addresses['Badge_Vermilion_Gym'], EventFlag(0x8A2)),
+        LocationData("Celadon Gym", "Erika 1", "Rainbow Badge", rom_addresses['Badge_Celadon_Gym'], EventFlag(0x8A3)),
+        LocationData("Fuchsia Gym", "Koga 1", "Soul Badge", rom_addresses['Badge_Fuchsia_Gym'], EventFlag(0x8A4)),
+        LocationData("Saffron Gym", "Sabrina 1", "Marsh Badge", rom_addresses['Badge_Saffron_Gym'], EventFlag(0x8A5)),
+        LocationData("Cinnabar Gym", "Blaine 1", "Volcano Badge", rom_addresses['Badge_Cinnabar_Gym'], EventFlag(0x8A6)),
+        LocationData("Viridian Gym", "Giovanni 1", "Earth Badge", rom_addresses['Badge_Viridian_Gym'], EventFlag(0x8A7)),
 
-        LocationData("Viridian Forest", "Hidden Item Entrance Tree", "Antidote", rom_addresses['Hidden_Item_Viridian_Forest_1'], Hidden(1), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
-        LocationData("Viridian Forest", "Hidden Item Northwest by Trainer", "Potion", rom_addresses['Hidden_Item_Viridian_Forest_2'], Hidden(0), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
-        LocationData("Mt Moon B2F", "Hidden Item Rock", "Moon Stone", rom_addresses['Hidden_Item_MtMoonB2F_1'], Hidden(2), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
-        LocationData("Route 25", "Hidden Item Outside Bill's House", "Ether", rom_addresses['Hidden_Item_Route_25_1'], Hidden(3), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
+        LocationData("Viridian Forest", "Hidden Item Northwest by Trainer", "Potion", rom_addresses['Hidden_Item_Viridian_Forest_1'], Hidden(0), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
+        LocationData("Viridian Forest", "Hidden Item Entrance Tree", "Antidote", rom_addresses['Hidden_Item_Viridian_Forest_2'], Hidden(1), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
+        LocationData("Mt Moon B2F", "Hidden Item Dead End Before Fossils", "Moon Stone", rom_addresses['Hidden_Item_MtMoonB2F_1'], Hidden(2), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
+        LocationData("Route 25", "Hidden Item Fence Outside Bill's House", "Ether", rom_addresses['Hidden_Item_Route_25_1'], Hidden(3), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
         LocationData("Route 9", "Hidden Item Rock By Grass", "Ether", rom_addresses['Hidden_Item_Route_9'], Hidden(4), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
         LocationData("S.S. Anne 1F", "Hidden Item Kitchen Trash", "Great Ball", rom_addresses['Hidden_Item_SS_Anne_Kitchen'], Hidden(5), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
         LocationData("S.S. Anne B1F", "Hidden Item Under Pillow", "Hyper Potion", rom_addresses['Hidden_Item_SS_Anne_B1F'], Hidden(6), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
@@ -338,7 +343,7 @@ def get_locations(player=None): # world: Optional[MultiWorld], player: Optional[
         LocationData("Silph Co 5F", "Hidden Item Pot Plant", "Elixir", rom_addresses['Hidden_Item_Silph_Co_5F'], Hidden(18), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
         LocationData("Silph Co 9F", "Hidden Item Nurse Bed", "Max Potion", rom_addresses['Hidden_Item_Silph_Co_9F'], Hidden(19), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
         LocationData("Copycat's House", "Hidden Item Desk", "Nugget", rom_addresses['Hidden_Item_Copycats_House'], Hidden(20), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
-        LocationData("Cerulean Cave 1F", "Hidden Item Center Rocks", "Rare Candy", rom_addresses['Hidden_Item_Cerulean_Cave_1F'], Hidden(21), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
+        LocationData("Cerulean Cave 1F", "Hidden Item Center Rocks", "Rare Candy", rom_addresses['Hidden_Item_Cerulean_Cave_1F'], Hidden(21), lambda state: state._pokemon_rb_can_get_hidden_items(player) and state._pokemon_rb_can_surf(player)),
         LocationData("Cerulean Cave B1F", "Hidden Item Northeast Rocks", "Ultra Ball", rom_addresses['Hidden_Item_Cerulean_Cave_B1F'], Hidden(22), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
         LocationData("Power Plant", "Hidden Item Central Dead End", "Max Elixir", rom_addresses['Hidden_Item_Power_Plant_1'], Hidden(23), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
         LocationData("Power Plant", "Hidden Item Before Zapdos", "PP Up", rom_addresses['Hidden_Item_Power_Plant_2'], Hidden(24), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
@@ -372,9 +377,7 @@ def get_locations(player=None): # world: Optional[MultiWorld], player: Optional[
         LocationData("Cerulean City", "Hidden Item Gym Badge Guy's Backyard", "Rare Candy", rom_addresses['Hidden_Item_Cerulean_City'], Hidden(52), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
         LocationData("Route 4", "Hidden Item Plateau East Of Mt Moon", "Great Ball", rom_addresses['Hidden_Item_Route_4'], Hidden(53), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
 
-        LocationData("Pallet Town", "Player's PC", "Tea", rom_addresses['PC_Item'], item_rule=lambda i: i.player == player and "Badge" not in i.name),
-
-        LocationData("Route 25", "Helped Bill", "Helped Bill", event=True),
+        LocationData("Indigo Plateau", "Become Champion", "Become Champion", event=True),
         LocationData("Pokemon Tower 7F", "Fuji Saved", "Fuji Saved", event=True),
         LocationData("Silph Co 11F", "Silph Co Liberated", "Silph Co Liberated", rule=lambda state: state.has("Card Key", player), event=True)
 
@@ -389,35 +392,10 @@ def get_locations(player=None): # world: Optional[MultiWorld], player: Optional[
                 breakpoint()
             else:
                 addresses.add(location.rom_address)
-        #pool[location.original_item] = pool.get(location.original_item, 0) + 1
-    #print(pool)
     return locations
-# locations = get_locations(0)
-# with open("c:\\src\\pokered\\pokeblue.gbc", "br") as file:
-#     data = bytearray(file.read())
-# for location in locations:
-#     data[location.rom_address] = 1
-# with open("c:\\src\\pokered\\pokebluep.gbc", "bw") as file:
-#     file.write(data)
-#
-# for location in locations:
-#     if isinstance(location.ram_address, Missable):
-#         f = f"Missable({location.ram_address.flag})"
-#     else:
-#         f = f"EventFlag({location.ram_address.flag})"
-#     for add, tag in rom_addresses.items():
-#         if tag == location.rom_address:
-#             break
-#     name = location.name.split(":")[1]
-#     line = "        LocationData(\"" + location.region + "\", \"" + name + "\", \"" + location.original_item + \
-#         f"\", rom_addresses[\"{tag}\"], " + f + "),"
-#     print(line)
-#
-
-
 
 class PokemonRBLocation(Location):
-    game = "Pokemon Red and Blue"
+    game = "Pokemon Red - Blue"
 
     def __init__(self, player, name, address, rom_address, access_rule, item_rule):
         super(PokemonRBLocation, self).__init__(

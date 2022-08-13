@@ -1,13 +1,15 @@
 
-from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
+from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType, LocationProgressType
 from .locations import get_locations, PokemonRBLocation
-
 
 def create_region(world: MultiWorld, player: int, name: str, locations_per_region=None, exits=None):
     ret = Region(name, RegionType.Generic, name, player, world)
     for location in locations_per_region.get(name, []):
-        location.parent_region = ret
-        ret.locations.append(location)
+        if world.randomize_hidden_items[player].value or "Hidden" not in location.name:
+            location.parent_region = ret
+            ret.locations.append(location)
+            if world.randomize_hidden_items[player].value == 2 and "Hidden" in location.name:
+                location.progress_type = LocationProgressType.EXCLUDED
     locations_per_region[name] = []
     if exits:
         for exit in exits:
@@ -140,10 +142,10 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "Pallet Town", "Route 1")
     connect(world, player, "Route 1", "Viridian City")
     connect(world, player, "Viridian City", "Route 22")
-    connect(world, player, "Route 22", "Route 23 South", lambda state: state._pokemon_rb_has_badges(4, player))
-    connect(world, player, "Route 23 South", "Route 23 North", lambda state: state._pokemon_rb_has_badges(6, player))
+    connect(world, player, "Route 22", "Route 23 South", lambda state: state._pokemon_rb_has_badges(min(4,state.world.badge_goal[player]), player))
+    connect(world, player, "Route 23 South", "Route 23 North", lambda state: state._pokemon_rb_has_badges(min(6, state.world.badge_goal[player]), player))
     connect(world, player, "Viridian City", "Viridian Gym", lambda state:
-                     state._pokemon_rb_has_badges(7, player), one_way=True)
+                     state._pokemon_rb_has_badges(min(7, state.world.badge_goal[player] - 1), player), one_way=True)
     connect(world, player, "Route 2", "Route 2 East", lambda state: state._pokemon_rb_can_cut(player))
     connect(world, player, "Route 2 East", "Diglett's Cave", lambda state: state._pokemon_rb_can_cut(player))
     connect(world, player, "Route 2", "Viridian Forest")
@@ -161,7 +163,8 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "Cerulean City", "Route 9", lambda state: state._pokemon_rb_can_cut(player))
     connect(world, player, "Route 9", "Route 10 North")
     connect(world, player, "Route 10 North", "Rock Tunnel", lambda state: state._pokemon_rb_can_flash(player))
-    connect(world, player, "Route 10 North", "Power Plant", lambda state: state._pokemon_rb_can_surf(player), one_way=True)
+    connect(world, player, "Route 10 North", "Power Plant", lambda state: state._pokemon_rb_can_surf(player) and
+            (state.has("Plant Key", player) or not state.world.extra_key_items[player].value), one_way=True)
     connect(world, player, "Rock Tunnel", "Route 10 South", lambda state: state._pokemon_rb_can_flash(player))
     connect(world, player, "Route 10 South", "Lavender Town")
     connect(world, player, "Lavender Town", "Pokemon Tower 1F", one_way=True)
@@ -171,7 +174,7 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "Pokemon Tower 4F", "Pokemon Tower 5F", one_way=True)
     connect(world, player, "Pokemon Tower 5F", "Pokemon Tower 6F", one_way=True)
     connect(world, player, "Pokemon Tower 6F", "Pokemon Tower 7F", lambda state: state.has("Silph Scope", player))
-    connect(world, player, "Cerulean City", "Route 5", lambda state: state.has("Helped Bill", player)) #lambda state: state._pokemon_rb_can_cut(player) or state.has("Donuts", player))
+    connect(world, player, "Cerulean City", "Route 5")
     connect(world, player, "Route 5", "Saffron City", lambda state: state._pokemon_rb_can_pass_guards(player))
     connect(world, player, "Route 5", "Underground Tunnel North-South")
     connect(world, player, "Route 6", "Underground Tunnel North-South")
@@ -187,10 +190,9 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "S.S. Anne 1F", "S.S. Anne B1F", one_way=True)
     connect(world, player, "Vermilion City", "Route 11")
     connect(world, player, "Vermilion City", "Diglett's Cave")
-    connect(world, player, "Route 12 West", "Route 11 East")
+    connect(world, player, "Route 12 West", "Route 11 East", lambda state: state._pokemon_rb_can_strength(player) or not state.world.extra_strength_boulders[player].value)
     connect(world, player, "Route 12 West", "Route 12 North", lambda state: state.has("Poke Flute", player))
-    connect(world, player, "Route 12 West", "Route 12 North", lambda state: state.has("Poke Flute", player))
-    connect(world, player, "Route 12 North", "Route 12 South", lambda state: state.has("Poke Flute", player))
+    connect(world, player, "Route 12 West", "Route 12 South", lambda state: state.has("Poke Flute", player))
     connect(world, player, "Route 12 North", "Lavender Town")
     connect(world, player, "Route 7", "Lavender Town")
     connect(world, player, "Route 7", "Underground Tunnel West-East")
@@ -204,37 +206,30 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "Fuchsia City", "Fuchsia Gym", one_way=True)
     connect(world, player, "Fuchsia City", "Route 18")
     connect(world, player, "Fuchsia City", "Safari Zone Gate", one_way=True)
-    connect(world, player, "Safari Zone Gate", "Safari Zone Center", one_way=True)
+    connect(world, player, "Safari Zone Gate", "Safari Zone Center", lambda state: state.has("Safari Pass", player) or not state.world.extra_strength_boulders[player].value, one_way=True)
     connect(world, player, "Safari Zone Center", "Safari Zone East", one_way=True)
     connect(world, player, "Safari Zone Center", "Safari Zone West", one_way=True)
     connect(world, player, "Safari Zone Center", "Safari Zone North", one_way=True)
     connect(world, player, "Fuchsia City", "Route 15")
-    connect(world, player, "Route 15", "Route 14", lambda state: state._pokemon_rb_can_strength(player))
+    connect(world, player, "Route 15", "Route 14")
     connect(world, player, "Route 14", "Route 13")
-    connect(world, player, "Route 13", "Route 12 South")
+    connect(world, player, "Route 13", "Route 12 South", lambda state: state._pokemon_rb_can_strength(player) or state._pokemon_rb_can_surf(player) or not state.world.extra_strength_boulders[player].value)
     connect(world, player, "Fuchsia City", "Route 19", lambda state: state._pokemon_rb_can_surf(player))
     connect(world, player, "Route 20 East", "Route 19")
-    connect(world, player, "Route 20 West", "Cinnabar Island")
+    connect(world, player, "Route 20 West", "Cinnabar Island", lambda state: state._pokemon_rb_can_surf(player))
     connect(world, player, "Route 20 West", "Seafoam Islands 1F")
     connect(world, player, "Route 20 East", "Seafoam Islands 1F", one_way=True)
     connect(world, player, "Seafoam Islands 1F", "Route 20 East", lambda state: state._pokemon_rb_can_strength(player), one_way=True)
-    if world.routing[player].value:
-        connect(world, player, "Viridian City", "Route 2")
-        connect(world, player, "Route 3", "Mt Moon 1F", lambda state: state.has("Oak's Parcel", player), one_way=True)
-        connect(world, player, "Route 11", "Route 11 East", lambda state: state._pokemon_rb_can_strength(player))
-        connect(world, player, "Cinnabar Island", "Cinnabar Gym", one_way=True)
-        connect(world, player, "Cinnabar Island", "Pokemon Mansion 1F", lambda state: state.has("Secret Key", player), one_way=True)
-    else:
-        connect(world, player, "Viridian City", "Route 2", lambda state: state.has("Oak's Parcel", player))
-        connect(world, player, "Route 3", "Mt Moon 1F", one_way=True)
-        connect(world, player, "Route 11", "Route 11 East")
-        connect(world, player, "Cinnabar Island", "Cinnabar Gym", lambda state: state.has("Secret Key", player), one_way=True)
-        connect(world, player, "Cinnabar Island", "Pokemon Mansion 1F", one_way=True)
+    connect(world, player, "Viridian City", "Route 2", lambda state: state.has("Oak's Parcel", player) or state.world.old_man[player].value == 2)
+    connect(world, player, "Route 3", "Mt Moon 1F", one_way=True)
+    connect(world, player, "Route 11", "Route 11 East", lambda state: state._pokemon_rb_can_strength(player))
+    connect(world, player, "Cinnabar Island", "Cinnabar Gym", lambda state: state.has("Secret Key", player), one_way=True)
+    connect(world, player, "Cinnabar Island", "Pokemon Mansion 1F", lambda state: state.has("Mansion Key", player) or not state.world.extra_key_items[player].value, one_way=True)
     connect(world, player, "Seafoam Islands 1F", "Seafoam Islands B1F", one_way=True)
     connect(world, player, "Seafoam Islands B1F", "Seafoam Islands B2F", one_way=True)
     connect(world, player, "Seafoam Islands B2F", "Seafoam Islands B3F", one_way=True)
     connect(world, player, "Seafoam Islands B3F", "Seafoam Islands B4F", one_way=True)
-    connect(world, player, "Route 21", "Cinnabar Island")
+    connect(world, player, "Route 21", "Cinnabar Island", lambda state: state._pokemon_rb_can_surf(player))
     connect(world, player, "Pallet Town", "Route 21", lambda state: state._pokemon_rb_can_surf(player))
     connect(world, player, "Saffron City", "Silph Co 1F", lambda state: state.has("Fuji Saved", player), one_way=True)
     connect(world, player, "Silph Co 1F", "Silph Co 2F", one_way=True)
@@ -247,26 +242,25 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "Silph Co 8F", "Silph Co 9F", one_way=True)
     connect(world, player, "Silph Co 9F", "Silph Co 10F", one_way=True)
     connect(world, player, "Silph Co 10F", "Silph Co 11F", one_way=True)
-    connect(world, player, "Celadon City", "Rocket Hideout B1F", one_way=True)
+    connect(world, player, "Celadon City", "Rocket Hideout B1F", lambda state: state.has("Hideout Key", player) or not state.world.extra_key_items[player].value, one_way=True)
     connect(world, player, "Rocket Hideout B1F", "Rocket Hideout B2F", one_way=True)
     connect(world, player, "Rocket Hideout B2F", "Rocket Hideout B3F", one_way=True)
     connect(world, player, "Rocket Hideout B3F", "Rocket Hideout B4F", one_way=True)
     connect(world, player, "Pokemon Mansion 1F", "Pokemon Mansion 2F", one_way=True)
     connect(world, player, "Pokemon Mansion 2F", "Pokemon Mansion 3F", one_way=True)
     connect(world, player, "Pokemon Mansion 1F", "Pokemon Mansion B1F", one_way=True)
-    connect(world, player, "Route 23 North", "Victory Road 1F", lambda state: state._pokemon_rb_has_badges(8, player), one_way=True)
-    connect(world, player, "Victory Road 1F", "Victory Road 2F", lambda state: state._pokemon_rb_can_strength(player), one_way=True)
+    connect(world, player, "Route 23 North", "Victory Road 1F", lambda state: state._pokemon_rb_has_badges(min(8, state.world.badge_goal[player]), player) and state._pokemon_rb_can_strength(player), one_way=True)
+    connect(world, player, "Victory Road 1F", "Victory Road 2F", one_way=True)
     connect(world, player, "Victory Road 2F", "Victory Road 3F", one_way=True)
     connect(world, player, "Victory Road 2F", "Indigo Plateau", one_way=True)
     connect(world, player, "Cerulean City", "Cerulean Cave 1F", lambda state:
-        state.has("Boulder Badge", player) and state.has("Cascade Badge", player) and state.has("Thunder Badge", player)
-        and state.has("Rainbow Badge", player) and state.has("Soul Badge", player) and state.has("Marsh Badge", player)
-        and state.has("Volcano Badge", player) and state.has("Earth Badge", player) and
-        state._pokemon_rb_can_strength(player) and state._pokemon_rb_can_surf(player), one_way=True)
+            state._pokemon_rb_cerulean_cave(state.world.cerulean_cave_goal[player].value, player) and
+            state._pokemon_rb_can_surf(player), one_way=True)
     connect(world, player, "Cerulean Cave 1F", "Cerulean Cave 2F", one_way=True)
-    connect(world, player, "Cerulean Cave 1F", "Cerulean Cave B1F", one_way=True)
+    connect(world, player, "Cerulean Cave 1F", "Cerulean Cave B1F", lambda state: state._pokemon_rb_can_surf(player), one_way=True)
     if world.worlds[player].fly_map != "Pallet Town":
-        connect(world, player, "Menu", world.worlds[player].fly_map, lambda state: state._pokemon_rb_can_fly(player), one_way=True, name="Fly to " + world.worlds[player].fly_map)
+        connect(world, player, "Menu", world.worlds[player].fly_map, lambda state: state._pokemon_rb_can_fly(player), one_way=True,
+                name="Fly to " + world.worlds[player].fly_map)
 
 
 def connect(world: MultiWorld, player: int, source: str, target: str, rule: callable = lambda state: True, one_way=False, name=None):

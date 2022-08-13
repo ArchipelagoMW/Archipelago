@@ -1,6 +1,10 @@
 import asyncio
 import json
 import time
+import os
+import bsdiff4
+import subprocess
+import zipfile
 from asyncio import StreamReader, StreamWriter
 from typing import List
 
@@ -9,9 +13,9 @@ import Utils
 from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, ClientCommandProcessor, logger, \
     get_base_parser
 
-from worlds.pokemon_rb.locations import get_locations, Rod, EventFlag, Missable, Hidden
+from worlds.pokemon_rb.locations import get_locations
 location_data = get_locations()
-location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}}
+location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}, "List": {}}
 location_bytes_bits = {}
 for location in location_data:
     if location.ram_address is not None:
@@ -48,8 +52,8 @@ class GBCommandProcessor(ClientCommandProcessor):
 
 class GBContext(CommonContext):
     command_processor = GBCommandProcessor
-    game = 'Pokemon Red and Blue'
-    items_handling = 0b111  # full remote
+    game = 'Pokemon Red - Blue'
+    items_handling = 0b101
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -77,7 +81,9 @@ class GBContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
-            asyncio.create_task(parse_locations(self.locations_array, self, True))
+            self.locations_array = None
+        elif cmd == "RoomInfo":
+            self.seed_name = args['seed_name']
         elif cmd == 'Print':
             msg = args['text']
             if ': !' not in msg:
@@ -134,64 +140,45 @@ def get_payload(ctx: GBContext):
     )
 
 
-async def parse_locations(data: List, ctx: GBContext, force=False):
-    if force:
-        locations = data
-    else:
-        #locations = {"EventFlag": {}, "Missable": {}, "Hidden": {}, "Rod": {}}
-        locations = []
-        flags = {"EventFlag": data[:0x140], "Missable": data[0x140:0x140 + 0x20],
-                 "Hidden": data[0x140 + 0x20: 0x140 + 0x20 + 0x0E], "Rod": data[0x140 + 0x20 + 0x0E:]}
-        for flag_type, loc_map in location_map.items():
-            #locations[flag_type] = {}
-            for flag, loc_id in loc_map.items():
-                try:
-                    if flags[flag_type][location_bytes_bits[loc_id]['byte']] & 1 << location_bytes_bits[loc_id]['bit']:
-                        locations.append(loc_id)
-                except:
-                    breakpoint()
-        if locations == ctx.locations_array:
-            return
-        ctx.locations_array = locations
-    print(locations)
+async def parse_locations(data: List, ctx: GBContext):
+    # logger.setLevel(10)
+    # logger.debug(data)
+    locations = []
+    flags = {"EventFlag": data[:0x140], "Missable": data[0x140:0x140 + 0x20],
+             "Hidden": data[0x140 + 0x20: 0x140 + 0x20 + 0x0E], "Rod": data[0x140 + 0x20 + 0x0E:]}
+
+    # Check for clear problems
+
+    if len(flags['Rod']) > 1:
+        logger.warning("Data from emulator too long! Please submit a bug report with this data:")
+        logger.warning(f"{flags}")
+        return
+    if flags["EventFlag"][1] + flags["EventFlag"][8] + flags["EventFlag"][9] + flags["EventFlag"][12] \
+            + flags["EventFlag"][61] + flags["EventFlag"][62] + flags["EventFlag"][63] + flags["EventFlag"][64] \
+            + flags["EventFlag"][65] + flags["EventFlag"][66] + flags["EventFlag"][67] + flags["EventFlag"][68] \
+            + flags["EventFlag"][69] + flags["EventFlag"][70] != 0:
+        logger.warning("Erroneous Event flags set! Please submit a bug report with this data:")
+        logger.warning(f"{flags}")
+        return
+    for flag_type, loc_map in location_map.items():
+        #locations[flag_type] = {}
+        for flag, loc_id in loc_map.items():
+            try:
+                if flags[flag_type][location_bytes_bits[loc_id]['byte']] & 1 << location_bytes_bits[loc_id]['bit']:
+                    locations.append(loc_id)
+            except:
+                breakpoint()
+    if flags["EventFlag"][280] & 1 and not ctx.finished_game:
+        await ctx.send_msgs([
+                    {"cmd": "StatusUpdate",
+                     "status": 30}
+                ])
+        ctx.finished_game = True
+    if locations == ctx.locations_array:
+        return
+    ctx.locations_array = locations
     if locations is not None:
         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations}])
-
-    #print(locations_array)
-
-    # else:
-    #     # print("New values")
-    #     ctx.locations_array = locations_array
-    #     locations_checked = []
-    #     if len(locations_array) > 0xFE and locations_array[0xFE] & 0x02 != 0 and not ctx.finished_game:
-    #         await ctx.send_msgs([
-    #             {"cmd": "StatusUpdate",
-    #              "status": 30}
-    #         ])
-    #         ctx.finished_game = True
-    #     for location in ctx.missing_locations:
-    #         # index will be - 0x100 or 0x200
-    #         index = location
-    #         if location < 0x200:
-    #             # Location is a chest
-    #             index -= 0x100
-    #             flag = 0x04
-    #         else:
-    #             # Location is an NPC
-    #             index -= 0x200
-    #             flag = 0x02
-    #
-    #         # print(f"Location: {ctx.location_names[location]}")
-    #         # print(f"Index: {str(hex(index))}")
-    #         # print(f"value: {locations_array[index] & flag != 0}")
-    #         if locations_array[index] & flag != 0:
-    #             locations_checked.append(location)
-    #     if locations_checked:
-    #         # print([ctx.location_names[location] for location in locations_checked])
-    #         await ctx.send_msgs([
-    #             {"cmd": "LocationChecks",
-    #              "locations": locations_checked}
-    #         ])
 
 
 async def gb_sync_task(ctx: GBContext):
@@ -212,16 +199,27 @@ async def gb_sync_task(ctx: GBContext):
                     data = await asyncio.wait_for(reader.readline(), timeout=5)
                     data_decoded = json.loads(data.decode())
                     #print(data_decoded)
-                    if ctx.game is not None and 'locations' in data_decoded:
-                        # Not just a keep alive ping, parse
-                        asyncio.create_task(parse_locations(data_decoded['locations'], ctx, False))
+
+                    if ctx.seed_name and ctx.seed_name != bytes(data_decoded['seedName']).decode():
+                        msg = "The server is running a different multiworld than your client is. (invalid seed_name)"
+                        logger.info(msg, extra={'compact_gui': True})
+                        ctx.gui_error('Error', msg)
+                        error_status = CONNECTION_RESET_STATUS
+                    ctx.seed_name = bytes(data_decoded['seedName']).decode()
                     if not ctx.auth:
                         ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
                         if ctx.auth == '':
                             logger.info("Invalid ROM detected. No player name built into the ROM.")
-                        print("NAME: " + ctx.auth)
+                        #print("NAME: " + ctx.auth)
                         if ctx.awaiting_rom:
                             await ctx.server_auth(False)
+                    #print(f"setting seed_name {ctx.seed_name} from gb_sync_task")
+                    if 'locations' in data_decoded and ctx.game and ctx.gb_status == CONNECTION_CONNECTED_STATUS \
+                            and not error_status and ctx.auth:
+                        # Not just a keep alive ping, parse
+                        asyncio.create_task(parse_locations(data_decoded['locations'], ctx))
+                        if 'serial' in data_decoded:
+                            print(data_decoded['serial'])
                 except asyncio.TimeoutError:
                     logger.debug("Read Timed Out, Reconnecting")
                     error_status = CONNECTION_TIMING_OUT_STATUS
@@ -265,15 +263,57 @@ async def gb_sync_task(ctx: GBContext):
                 ctx.gb_status = CONNECTION_REFUSED_STATUS
                 continue
 
+async def run_game(romfile):
+    auto_start = Utils.get_options()["pkrb_options"].get("rom_start", True)
+    if auto_start is True:
+        import webbrowser
+        webbrowser.open(romfile)
+    elif os.path.isfile(auto_start):
+        subprocess.Popen([auto_start, romfile],
+                         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+async def patch_and_run_game(game_version, patch_file):
+    base_name = os.path.splitext(patch_file)[0]
+    comp_path = base_name + '.gb'
+    with open(Utils.local_path(Utils.get_options()["pkrb_options"][f"{game_version}_rom_file"]), "rb") as stream:
+        base_rom = bytes(stream.read())
+    with open(Utils.local_path('data', f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
+        base_patch = bytes(stream.read())
+    base_patched_rom_data = bsdiff4.patch(base_rom, base_patch)
+    with zipfile.ZipFile(patch_file, 'r') as patch_archive:
+        with patch_archive.open('delta.bsdiff4', 'r') as stream:
+            patch = stream.read()
+    patched_rom_data = bsdiff4.patch(base_patched_rom_data, patch)
+    with open(comp_path, "wb") as patched_rom_file:
+        patched_rom_file.write(patched_rom_data)
+
+    asyncio.create_task(run_game(comp_path))
+
 
 if __name__ == '__main__':
-    # Text Mode to use !hint and such with games that have no text entry
-    Utils.init_logging("GameboyClient")
+
+    Utils.init_logging("PokemonClient")
 
     options = Utils.get_options()
-    DISPLAY_MSGS = options["ffr_options"]["display_msgs"]
 
-    async def main(args):
+    async def main():
+        parser = get_base_parser()
+        parser.add_argument('patch_file', default="", type=str, nargs="?",
+                            help='Path to an APRED or APBLUE patch file')
+        args = parser.parse_args()
+
+        if args.patch_file:
+            ext = args.patch_file.split(".")[len(args.patch_file.split(".")) - 1].lower()
+            if ext == "apred":
+                logger.info("APRED file supplied, beginning patching process...")
+                asyncio.create_task(patch_and_run_game("red", args.patch_file))
+            elif ext == "apblue":
+                logger.info("APBLUE file supplied, beginning patching process...")
+                asyncio.create_task(patch_and_run_game("blue", args.patch_file))
+            else:
+                logger.warning(f"Unknown patch file extension {ext}")
+
         ctx = GBContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
         if gui_enabled:
@@ -292,9 +332,7 @@ if __name__ == '__main__':
 
     import colorama
 
-    parser = get_base_parser()
-    args = parser.parse_args()
     colorama.init()
 
-    asyncio.run(main(args))
+    asyncio.run(main())
     colorama.deinit()

@@ -125,7 +125,6 @@ def home_path(*path: str) -> str:
 
 def user_path(*path: str) -> str:
     """Returns either local_path or home_path based on write permissions."""
-    return os.path.join("C:\\src\\Archipelago\\", *path)
     if hasattr(user_path, 'cached_path'):
         pass
     elif os.access(local_path(), os.W_OK):

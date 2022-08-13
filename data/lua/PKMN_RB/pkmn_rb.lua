@@ -7,16 +7,17 @@ local STATE_TENTATIVELY_CONNECTED = "Tentatively Connected"
 local STATE_INITIAL_CONNECTION_MADE = "Initial Connection Made"
 local STATE_UNINITIALIZED = "Uninitialized"
 
-local APIndex = 0x1A80
+local APIndex = 0x1A6E
 local APItemAddress = 0x00FF
-local EventFlagAddress = 0x1747
-local MissableAddress = 0x15A6
-local HiddenItemsAddress = 0x16F0
-local RodAddress = 0x1728
-local HasPokemon = 0x116B
+local EventFlagAddress = 0x1735
+local MissableAddress = 0x161A
+local HiddenItemsAddress = 0x16DE
+local RodAddress = 0x1716
+local InGame = 0x1A71
 
 local ItemsReceived = nil
-
+local playerName = nil
+local seedName = nil
 
 local prevstate = ""
 local curstate =  STATE_UNINITIALIZED
@@ -75,15 +76,6 @@ function slice (tbl, s, e)
     return new
 end
 
-function slice (tbl, s, e)
-    local pos, new = 1, {}
-    for i = s + 1, e do
-        new[pos] = tbl[i]
-        pos = pos + 1
-    end
-    return new
-end
-
 function processBlock(block)
     if block == nil then
         return
@@ -115,8 +107,6 @@ function generateLocationsChecked()
 	missables = uRange(MissableAddress, 0x20)
 	hiddenitems = uRange(HiddenItemsAddress, 0x0E)
 	rod = u8(RodAddress)
-    --data = {events, missables, hiddenitems, rod}
-	
 
 	data = {}
 
@@ -126,6 +116,27 @@ function generateLocationsChecked()
 	table.insert(data, rod)
 
     return data
+end
+function generateSerialData()
+    memDomain.wram()
+	status = u8(0x1A73)
+    if status == 0 then
+      return nil
+    end
+    return uRange(0x1A76, u8(0x1A74))
+end
+local function arrayEqual(a1, a2)
+  if #a1 ~= #a2 then
+    return false
+  end
+
+  for i, v in ipairs(a1) do
+    if v ~= a2[i] then
+      return false
+    end
+  end
+
+  return true
 end
 
 function receive()
@@ -137,7 +148,7 @@ function receive()
         curstate = STATE_UNINITIALIZED
         return
     elseif e == 'timeout' then
-        print("timeout")
+        --print("timeout") -- this keeps happening for some reason? just hide it
         return
     elseif e ~= nil then
         print(e)
@@ -149,12 +160,25 @@ function receive()
     end
     -- Determine Message to send back
     memDomain.rom()
-    local playerName = uRange(0xFFF0, 0x10)
+    newPlayerName = uRange(0xFFF0, 0x10)
+    newSeedName = uRange(0xFFDC, 20)
+    if (playerName ~= nil and not arrayEqual(playerName, newPlayerName)) or (seedName ~= nil and not arrayEqual(seedName, newSeedName)) then
+        print("ROM changed, quitting")
+        curstate = STATE_UNINITIALIZED
+        return
+    end
+    playerName = newPlayerName
+    seedName = newSeedName
     local retTable = {}
     retTable["playerName"] = playerName
+    retTable["seedName"] = seedName
     memDomain.wram()
-    if u8(HasPokemon) ~= 0x00 then
+    if u8(InGame) == 0xAC then
         retTable["locations"] = generateLocationsChecked()
+        serialData = generateSerialData()
+        if serialData ~= nil then
+        retTable["serial"] = serialData
+        end
     end
     msg = json.encode(retTable).."\n"
     local ret, error = gbSocket:send(msg)
@@ -183,11 +207,11 @@ function main()
         if (curstate == STATE_OK) or (curstate == STATE_INITIAL_CONNECTION_MADE) or (curstate == STATE_TENTATIVELY_CONNECTED) then
             if (frame % 60 == 0) then
                 receive()
-                if u8(HasPokemon) ~= 0x00 them
+                if u8(InGame) == 0xAC then
                     ItemIndex = u16(APIndex)
                     if ItemsReceived[ItemIndex + 1] ~= nil then
-                        wU8(APItemAddress, ItemsReceived[ItemIndex] - 172000000)
-                    end if
+                        wU8(APItemAddress, ItemsReceived[ItemIndex + 1] - 172000000)
+                    end
                 end
             end
         elseif (curstate == STATE_UNINITIALIZED) then
