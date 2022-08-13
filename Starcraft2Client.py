@@ -44,6 +44,21 @@ nest_asyncio.apply()
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: SC2Context
 
+    def _cmd_print_unlocks(self) -> bool:
+        """Will start automatically printing unlocks to a file called 'SC2Unlocks.txt'.  Will update this file every
+        one second until this command is typed again to cancel this task. """
+        if self.ctx.print_unlocks_task and not self.ctx.print_unlocks_task.done():
+            self.ctx.print_unlocks_task.cancel()
+
+            self.output("Automatic print unlocks turned off.")
+
+        else:
+            self.ctx.print_unlocks_task = asyncio.create_task(print_unlocks(1, self.ctx))
+
+            self.output("Automatic print unlocks turned on.")
+
+        return True
+
     def _cmd_difficulty(self, difficulty: str = "") -> bool:
         """Overrides the current difficulty set for the seed.  Takes the argument casual, normal, hard, or brutal"""
         options = difficulty.split()
@@ -133,6 +148,7 @@ class SC2Context(CommonContext):
     announcements = []
     announcement_pos = 0
     sc2_run_task: typing.Optional[asyncio.Task] = None
+    print_unlocks_task: typing.Optional[asyncio.Task] = None
     missions_unlocked = False
     current_tooltip = None
     last_loc_list = None
@@ -651,6 +667,19 @@ def calc_objectives_completed(mission, missions_info, locations_done, unfinished
 
     else:
         return -1
+
+
+async def print_unlocks(interval, ctx):
+    while True:
+        with open('SC2Unlocks.txt', 'w') as f:
+            unlocks = []
+
+            for unlock in ctx.items_received:
+                unlocks.append(lookup_id_to_name[unlock.item])
+
+            f.write(", ".join(unlock for unlock in unlocks))
+
+        await asyncio.sleep(interval)
 
 
 def request_unfinished_missions(locations_done, location_table, ui, ctx):
