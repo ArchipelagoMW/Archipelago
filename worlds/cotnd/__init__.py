@@ -5,7 +5,7 @@ from BaseClasses import Region, RegionType, Entrance, Item, Tutorial, ItemClassi
 from Options import Option
 from ..AutoWorld import World, WebWorld
 from .Characters import all_chars
-from .Items import item_table, always_available_items, item_types, get_normal_items
+from .Items import build_item_table, always_available_items, get_normal_items
 from .Locations import get_char_locations, CryptLocation
 from .Options import cotnd_options
 
@@ -36,12 +36,12 @@ class CotNDWorld(World):
     """
     game: str                           = "Crypt of the NecroDancer"
     options: Dict[str, Option[Any]]     = cotnd_options
-    item_name_to_id: Dict[str, int]     = {name: (id_offset + index) for index, name in enumerate(item_table)}
+    item_name_to_id: Dict[str, int]     = {name: (id_offset + index) for index, name in enumerate(build_item_table())}
     location_name_to_id: Dict[str, int] = {name: (id_offset + index) for index, name in enumerate(
-        [loc for char in all_chars for instance in range(1, 10) for loc in get_char_locations(char, instance, True)])}
+        [loc for char in all_chars for instance in range(1, 18) for loc in get_char_locations(char, instance, True, True)])}
     data_version: int                   = 1
 
-    item_name_groups: Dict[str, Set[str]] = {t: {k for k, v in item_table.items() if v[1] == t} for t in item_types}
+    item_name_groups: Dict[str, Set[str]] = {t: {k for k, v in build_item_table().items() if v['Type'] == t} for t in {v['Type'] for v in build_item_table().values()}}
     junk_items: List[str] = list(item_name_groups['Junk'])
     trap_items: List[str] = list(item_name_groups['Trap'])
 
@@ -55,7 +55,19 @@ class CotNDWorld(World):
     def generate_early(self) -> None:
         self.chars = sorted(list(set(self.world.available_characters[self.player].value) | 
             {self.world.starting_character[self.player].current_key.capitalize()}))
-        self.items: List[str] = get_normal_items(self.chars, self.world.reduce_starting_items[self.player].value)
+
+        self.dlc_packs = ['base']
+        if self.world.dlc[self.player].current_key in ['both', 'amplified']:
+            self.dlc_packs.append('amp')
+        if self.world.dlc[self.player].current_key in ['both', 'synchrony']:
+            self.dlc_packs.append('sync')
+        self.amplified = 'amp' in self.dlc_packs
+
+        self.item_table = build_item_table(self.world.split_weapons[self.player])
+
+        self.items: List[str] = get_normal_items(self.chars, self.dlc_packs,
+            self.world.reduce_starting_items[self.player].value,
+            self.world.split_weapons[self.player].value)
 
         # give starting character
         starting_char = f"Unlock {self.world.starting_character[self.player].current_key.capitalize()}"
@@ -92,18 +104,18 @@ class CotNDWorld(World):
         flawless = self.world.randomize_flawless[self.player].value
         reduce_logic = self.world.reduce_logic[self.player].value
         # Add starting char if necessary, purge duplicates and ordering
-        locations = [loc for char in self.chars for loc in get_char_locations(char, 1, flawless)]
+        locations = [loc for char in self.chars for loc in get_char_locations(char, 1, flawless, self.amplified)]
         self.char_counts = {char: 1 for char in self.chars}
 
         # Add locations until enough are made
         gen = char_generator(self.chars)
         while len(locations) < len(self.items):
             char, instance = next(gen)
-            locations += get_char_locations(char, instance, flawless)
+            locations += get_char_locations(char, instance, flawless, self.amplified)
             self.char_counts[char] += 1
 
         for name in locations:
-            loc = CryptLocation(self.player, name, self.location_name_to_id[name], crypt, reduce_logic)
+            loc = CryptLocation(self.player, name, self.location_name_to_id[name], crypt, reduce_logic, self.amplified)
             crypt.locations.append(loc)
 
         # Victory condition: clear all characters
@@ -129,14 +141,15 @@ class CotNDWorld(World):
             'prevent_bad_samples': self.world.prevent_bad_samples[self.player].value,
             'char_counts': self.char_counts,
             'keep_inventory': self.world.keep_inventory_on_death[self.player].value,
+            'split_weapons': self.world.split_weapons[self.player].value,
         }
 
     def create_item(self, name: str) -> Item:
         try:
-            data = item_table[name]
-            ret = Item(name, ItemClassification(data[0]), self.item_name_to_id[name], self.player)
+            data = self.item_table[name]
+            ret = Item(name, ItemClassification(data['AP Item Class']), self.item_name_to_id[name], self.player)
             ret.game = self.game
-            ret.type = data[1]
+            ret.type = data['Type']
             return ret
         except KeyError:
             logging.error(f"{name} not a valid item name for CotND")

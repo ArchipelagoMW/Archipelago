@@ -1,0 +1,287 @@
+AP Name,AP Item Class,Type,ND Name,Default,DLC
+Unlock Cadence,prog,Character,Cadence,no,base
+Unlock Melody,prog,Character,Melody,no,base
+Unlock Aria,prog,Character,Aria,no,base
+Unlock Dorian,prog,Character,Dorian,no,base
+Unlock Eli,prog,Character,Eli,no,base
+Unlock Monk,prog,Character,Monk,no,base
+Unlock Dove,prog,Character,Dove,no,base
+Unlock Coda,prog,Character,Coda,no,base
+Unlock Bolt,prog,Character,Bolt,no,base
+Unlock Bard,prog,Character,Bard,no,base
+Unlock Nocturna,prog,Character,Nocturna,no,amp
+Unlock Diamond,prog,Character,Diamond,no,amp
+Unlock Mary,prog,Character,Mary,no,amp
+Unlock Tempo,prog,Character,Tempo,no,amp
+Unlock Klarinetta,prog,Character,Klarinetta,no,sync
+Unlock Chaunter,prog,Character,Chaunter,no,sync
+Unlock Suzu,prog,Character,Suzu,no,sync
+Chainmail,prog,Armor,ArmorChainmail,no,base
+Heavy Glass Armor,prog,Armor,ArmorHeavyglass,no,amp
+Heavy Plate,prog,Armor,ArmorHeavyplate,no,base
+Leather Armor,prog,Armor,ArmorLeather,yes,base
+Plate Armor,prog,Armor,ArmorPlatemail,no,base
+Karate Gi,prog,Armor,ArmorGi,no,base
+Glass Armor,prog,Armor,ArmorGlass,no,base
+Obsidian Armor,prog,Armor,ArmorObsidian,no,base
+Quartz Armor,prog,Armor,ArmorQuartz,no,amp
+Ballet Shoes,useful,Feet,FeetBalletShoes,yes,base
+Winged Boots,useful,Feet,FeetBootsWinged,yes,base
+Explorers Boots,useful,Feet,FeetBootsExplorers,yes,base
+Lead Boots,useful,Feet,FeetBootsLead,yes,base
+Boots of Leaping,useful,Feet,FeetBootsLeaping,yes,base
+Boots of Lunging,useful,Feet,FeetBootsLunging,yes,base
+Boots of Pain,useful,Feet,FeetBootsPain,no,base
+Hargreaves,useful,Feet,FeetGreaves,no,base
+Boots of Strength,useful,Feet,FeetBootsStrength,yes,base
+Glass Slippers,useful,Feet,FeetGlassSlippers,yes,amp
+Crown of Thorns,useful,Head,HeadCrownOfThorns,no,base
+Crown of Teleportation,useful,Head,HeadCrownOfTeleportation,yes,base
+Circlet of Telepathy,useful,Head,HeadCircletTelepathy,yes,base
+Miner's Cap,useful,Head,HeadMinersCap,yes,base
+Monocle,useful,Head,HeadMonocle,yes,base
+Helm,useful,Head,HeadHelm,no,base
+Glass Jaw,useful,Head,HeadGlassJaw,no,base
+Blast Helm,useful,Head,HeadBlastHelm,no,base
+Spiked Ears,useful,Head,HeadSpikedEars,no,amp
+Sunglasses,useful,Head,HeadSunglasses,no,base
+Torch,useful,Torch,Torch1,yes,base
+Bright Torch,useful,Torch,Torch2,no,base
+Luminous Torch,useful,Torch,Torch3,no,base
+Torch of Foresight,useful,Torch,TorchForesight,no,base
+Glass Torch,useful,Torch,TorchGlass,no,base
+Infernal Torch,useful,Torch,TorchInfernal,no,base
+Obsidian Torch,useful,Torch,TorchObsidian,no,base
+Torch of Strength,useful,Torch,TorchStrength,no,amp
+Torch of Walls,useful,Torch,TorchWalls,no,amp
+Crystal Shovel,useful,Shovel,ShovelCrystal,yes,base
+Battle Shovel,useful,Shovel,ShovelBattle,no,amp
+Titanium Shovel,useful,Shovel,ShovelTitanium,yes,base
+Blood Shovel,useful,Shovel,ShovelBlood,no,base
+Obsidian Shovel,useful,Shovel,ShovelObsidian,no,base
+Glass Shovel,useful,Shovel,ShovelGlass,no,base
+Shovel of Courage,useful,Shovel,ShovelCourage,no,amp
+Shovel of Strength,useful,Shovel,ShovelStrength,no,amp
+Pickaxe,useful,Shovel,Pickaxe,no,base
+Ring of Courage,prog,Ring,RingCourage,no,base
+Ring of War,prog,Ring,RingWar,no,base
+Ring of Peace,prog,Ring,RingPeace,no,base
+Ring of Mana,prog,Ring,RingMana,no,base
+Ring of Shadows,prog,Ring,RingShadows,no,base
+Ring of Might,prog,Ring,RingMight,no,base
+Ring of Charisma,prog,Ring,RingCharisma,yes,base
+Ring of Luck,prog,Ring,RingLuck,no,base
+Ring of Gold,prog,Ring,RingGold,no,base
+Ring of Piercing,prog,Ring,RingPiercing,no,amp
+Ring of Regeneration,prog,Ring,RingRegeneration,no,base
+Ring of Protection,prog,Ring,RingProtection,no,base
+Ring of Shielding,prog,Ring,RingShielding,no,base
+Ring of Becoming,prog,Ring,RingBecoming,no,base
+Ring of Pain,prog,Ring,RingPain,no,amp
+Ring of Frost,prog,Ring,RingFrost,no,amp
+Ring of Phasing,prog,Ring,RingPhasing,no,base
+Dagger,prog,Weapon,WeaponDagger,yes,base
+Titanium Dagger,prog,Weapon,WeaponTitaniumDagger,yes,base
+Obsidian Dagger,prog,Weapon,WeaponObsidianDagger,yes,base
+Gold Dagger,prog,Weapon,WeaponGoldenDagger,yes,base
+Blood Dagger,prog,Weapon,WeaponBloodDagger,yes,base
+Glass Dagger,prog,Weapon,WeaponGlassDagger,yes,base
+Onyx Dagger,prog,Weapon,Sync_WeaponOnyxDagger,yes,sync
+Electric Dagger,prog,Weapon,WeaponDaggerElectric,yes,amp
+Jeweled Dagger,prog,Weapon,WeaponDaggerJeweled,yes,base
+Dagger of Frost,prog,Weapon,WeaponDaggerFrost,yes,base
+Dagger of Phasing,prog,Weapon,WeaponDaggerPhasing,yes,base
+Broadsword,prog,Weapon,WeaponBroadsword,yes,base
+Titanium Broadsword,prog,Weapon,WeaponTitaniumBroadsword,yes,base
+Obsidian Broadsword,prog,Weapon,WeaponObsidianBroadsword,yes,base
+Gold Broadsword,prog,Weapon,WeaponGoldBroadsword,yes,base
+Blood Broadsword,prog,Weapon,WeaponBloodBroadsword,yes,base
+Glass Broadsword,prog,Weapon,WeaponGlassBroadsword,yes,base
+Onyx Broadsword,prog,Weapon,Sync_WeaponOnyxBroadsword,yes,sync
+Longsword,prog,Weapon,WeaponLongsword,no,base
+Titanium Longsword,prog,Weapon,WeaponTitaniumLongsword,no,base
+Obsidian Longsword,prog,Weapon,WeaponObsidianLongsword,no,base
+Gold Longsword,prog,Weapon,WeaponGoldLongsword,no,base
+Blood Longsword,prog,Weapon,WeaponBloodLongsword,no,base
+Glass Longsword,prog,Weapon,WeaponGlassLongsword,no,base
+Onyx Longsword,prog,Weapon,Sync_WeaponOnyxLongsword,no,sync
+Whip,prog,Weapon,WeaponWhip,no,base
+Titanium Whip,prog,Weapon,WeaponTitaniumWhip,no,base
+Obsidian Whip,prog,Weapon,WeaponObsidianWhip,no,base
+Gold Whip,prog,Weapon,WeaponGoldWhip,no,base
+Blood Whip,prog,Weapon,WeaponBloodWhip,no,base
+Glass Whip,prog,Weapon,WeaponGlassWhip,no,base
+Onyx Whip,prog,Weapon,Sync_WeaponOnyxWhip,no,sync
+Spear,prog,Weapon,WeaponSpear,no,base
+Titanium Spear,prog,Weapon,WeaponTitaniumSpear,no,base
+Obsidian Spear,prog,Weapon,WeaponObsidianSpear,no,base
+Gold Spear,prog,Weapon,WeaponGoldSpear,no,base
+Blood Spear,prog,Weapon,WeaponBloodSpear,no,base
+Glass Spear,prog,Weapon,WeaponGlassSpear,no,base
+Onyx Spear,prog,Weapon,Sync_WeaponOnyxSpear,no,sync
+Rapier,prog,Weapon,WeaponRapier,no,base
+Titanium Rapier,prog,Weapon,WeaponTitaniumRapier,no,base
+Obsidian Rapier,prog,Weapon,WeaponObsidianRapier,no,base
+Gold Rapier,prog,Weapon,WeaponGoldRapier,no,base
+Blood Rapier,prog,Weapon,WeaponBloodRapier,no,base
+Glass Rapier,prog,Weapon,WeaponGlassRapier,no,base
+Onyx Rapier,prog,Weapon,Sync_WeaponOnyxRapier,no,sync
+Bow,prog,Weapon,WeaponBow,yes,base
+Titanium Bow,prog,Weapon,WeaponTitaniumBow,yes,base
+Obsidian Bow,prog,Weapon,WeaponObsidianBow,yes,base
+Gold Bow,prog,Weapon,WeaponGoldBow,yes,base
+Blood Bow,prog,Weapon,WeaponBloodBow,yes,base
+Glass Bow,prog,Weapon,WeaponGlassBow,yes,base
+Onyx Bow,prog,Weapon,Sync_WeaponOnyxBow,yes,sync
+Crossbow,prog,Weapon,WeaponCrossbow,yes,base
+Titanium Crossbow,prog,Weapon,WeaponTitaniumCrossbow,yes,base
+Obsidian Crossbow,prog,Weapon,WeaponObsidianCrossbow,yes,base
+Gold Crossbow,prog,Weapon,WeaponGoldCrossbow,yes,base
+Blood Crossbow,prog,Weapon,WeaponBloodCrossbow,yes,base
+Glass Crossbow,prog,Weapon,WeaponGlassCrossbow,yes,base
+Onyx Crossbow,prog,Weapon,Sync_WeaponOnyxCrossbow,yes,sync
+Flail,prog,Weapon,WeaponFlail,no,base
+Titanium Flail,prog,Weapon,WeaponTitaniumFlail,no,base
+Obsidian Flail,prog,Weapon,WeaponObsidianFlail,no,base
+Gold Flail,prog,Weapon,WeaponGoldFlail,no,base
+Blood Flail,prog,Weapon,WeaponBloodFlail,no,base
+Glass Flail,prog,Weapon,WeaponGlassFlail,no,base
+Onyx Flail,prog,Weapon,Sync_WeaponOnyxFlail,no,sync
+Cat o' Nine Tails,prog,Weapon,WeaponCat,no,base
+Titanium Cat,prog,Weapon,WeaponTitaniumCat,no,base
+Obsidian Cat,prog,Weapon,WeaponObsidianCat,no,base
+Gold Cat,prog,Weapon,WeaponGoldCat,no,base
+Blood Cat,prog,Weapon,WeaponBloodCat,no,base
+Glass Cat,prog,Weapon,WeaponGlassCat,no,base
+Onyx Cat,prog,Weapon,Sync_WeaponOnyxCat,no,sync
+Axe,prog,Weapon,WeaponAxe,no,amp
+Titanium Axe,prog,Weapon,WeaponTitaniumAxe,no,amp
+Obsidian Axe,prog,Weapon,WeaponObsidianAxe,no,amp
+Gold Axe,prog,Weapon,WeaponGoldAxe,no,amp
+Blood Axe,prog,Weapon,WeaponBloodAxe,no,amp
+Glass Axe,prog,Weapon,WeaponGlassAxe,no,amp
+Onyx Axe,prog,Weapon,Sync_WeaponOnyxAxe,no,sync
+Harp,prog,Weapon,WeaponHarp,no,amp
+Titanium Harp,prog,Weapon,WeaponTitaniumHarp,no,amp
+Obsidian Harp,prog,Weapon,WeaponObsidianHarp,no,amp
+Gold Harp,prog,Weapon,WeaponGoldHarp,no,amp
+Blood Harp,prog,Weapon,WeaponBloodHarp,no,amp
+Glass Harp,prog,Weapon,WeaponGlassHarp,no,amp
+Onyx Harp,prog,Weapon,Sync_WeaponOnyxHarp,no,sync
+Warhammer,prog,Weapon,WeaponWarhammer,no,amp
+Titanium Warhammer,prog,Weapon,WeaponTitaniumWarhammer,no,amp
+Obsidian Warhammer,prog,Weapon,WeaponObsidianWarhammer,no,amp
+Gold Warhammer,prog,Weapon,WeaponGoldWarhammer,no,amp
+Blood Warhammer,prog,Weapon,WeaponBloodWarhammer,no,amp
+Glass Warhammer,prog,Weapon,WeaponGlassWarhammer,no,amp
+Onyx Warhammer,prog,Weapon,Sync_WeaponOnyxWarhammer,no,sync
+Staff,prog,Weapon,WeaponStaff,no,amp
+Titanium Staff,prog,Weapon,WeaponTitaniumStaff,no,amp
+Obsidian Staff,prog,Weapon,WeaponObsidianStaff,no,amp
+Gold Staff,prog,Weapon,WeaponGoldStaff,no,amp
+Blood Staff,prog,Weapon,WeaponBloodStaff,no,amp
+Glass Staff,prog,Weapon,WeaponGlassStaff,no,amp
+Onyx Staff,prog,Weapon,Sync_WeaponOnyxStaff,no,sync
+Cutlass,prog,Weapon,WeaponCutlass,yes,amp
+Titanium Cutlass,prog,Weapon,WeaponTitaniumCutlass,yes,amp
+Obsidian Cutlass,prog,Weapon,WeaponObsidianCutlass,yes,amp
+Gold Cutlass,prog,Weapon,WeaponGoldCutlass,yes,amp
+Blood Cutlass,prog,Weapon,WeaponBloodCutlass,yes,amp
+Glass Cutlass,prog,Weapon,WeaponGlassCutlass,yes,amp
+Onyx Cutlass,prog,Weapon,Sync_WeaponOnyxCutlass,yes,sync
+Trident,prog,Weapon,Sync_WeaponTrident,no,sync
+Titanium Trident,prog,Weapon,Sync_WeaponTitaniumTrident,no,sync
+Obsidian Trident,prog,Weapon,Sync_WeaponObsidianTrident,no,sync
+Gold Trident,prog,Weapon,Sync_WeaponGoldTrident,no,sync
+Blood Trident,prog,Weapon,Sync_WeaponBloodTrident,no,sync
+Glass Trident,prog,Weapon,Sync_WeaponGlassTrident,no,sync
+Onyx Trident,prog,Weapon,Sync_WeaponOnyxTrident,no,sync
+Blunderbuss,prog,Weapon,WeaponBlunderbuss,yes,base
+Rifle,prog,Weapon,WeaponRifle,no,base
+Wooden Shield,useful,Shield,Sync_ShieldWooden,yes,sync
+Titanium Shield,useful,Shield,Sync_ShieldTitanium,no,sync
+Heavy Shield,useful,Shield,Sync_ShieldHeavy,no,sync
+Obsidian Shield,useful,Shield,Sync_ShieldObsidian,no,sync
+Shield of Strength,useful,Shield,Sync_ShieldStrength,yes,sync
+Reflective Shield,useful,Shield,Sync_ShieldReflective,no,sync
+Shield of Shove,useful,Shield,Sync_ShieldShove,no,sync
+Earth Spell,prog,Spell,SpellEarth,no,amp
+Fireball Spell,prog,Spell,SpellFireball,no,base
+Pulse Spell,prog,Spell,SpellPulse,no,amp
+Freeze Enemies Spell,prog,Spell,SpellFreezeEnemies,no,base
+Heal Spell,prog,Spell,SpellHeal,no,base
+Bomb Spell,prog,Spell,SpellBomb,no,base
+Shield Spell,prog,Spell,SpellShield,no,base
+Transmute Spell,prog,Spell,SpellTransmute,no,base
+Berserk Spell,prog,Spell,Sync_SpellBerzerk,no,sync
+Charm Spell,prog,Spell,Sync_SpellCharm,no,sync
+Dash Spell,prog,Spell,Sync_SpellDash,no,sync
+Earthquake Scroll,useful,Scroll,ScrollEarthquake,no,base
+Fear Scroll,useful,Scroll,ScrollFear,no,base
+Fireball Scroll,useful,Scroll,ScrollFireball,yes,base
+Freeze Enemies Scroll,useful,Scroll,ScrollFreezeEnemies,no,base
+Riches Scroll,useful,Scroll,ScrollRiches,no,base
+Shield Scroll,useful,Scroll,ScrollShield,no,base
+Enchant Weapon Scroll,useful,Scroll,ScrollEnchantWeapon,no,base
+Scroll of Need,useful,Scroll,ScrollNeed,no,base
+Pulse Scroll,useful,Scroll,ScrollPulse,yes,amp
+Transmute Scroll,useful,Scroll,ScrollTransmute,no,base
+Berserk Scroll,useful,Scroll,Sync_ScrollBerzerk,no,sync
+Earth Tome,useful,Tome,TomeEarth,no,amp
+Fireball Tome,useful,Tome,TomeFireball,no,amp
+Freeze Tome,useful,Tome,TomeFreeze,no,amp
+Pulse Tome,useful,Tome,TomePulse,no,amp
+Shield Tome,useful,Tome,TomeShield,no,amp
+Transmute Tome,useful,Tome,TomeTransmute,no,amp
+Apple,useful,Food,Food1,yes,base
+Cheese,useful,Food,Food2,no,base
+Drumstick,useful,Food,Food3,no,base
+Ham,useful,Food,Food4,no,base
+Carrot,useful,Food,FoodCarrot,no,amp
+Cookies,useful,Food,FoodCookies,no,amp
+Magic Apple,useful,Food,FoodMagic1,yes,amp
+Magic Cheese,useful,Food,FoodMagic2,no,amp
+Magic Drumstick,useful,Food,FoodMagic3,no,amp
+Magic Ham,useful,Food,FoodMagic4,no,amp
+Magic Carrot,useful,Food,FoodMagicCarrot,no,amp
+Magic Cookies,useful,Food,FoodMagicCookies,no,amp
+Bomb Charm,useful,Charm,CharmBomb,yes,amp
+Frost Charm,useful,Charm,CharmFrost,yes,base
+Gluttony Charm,useful,Charm,CharmGluttony,yes,base
+Grenade Charm,useful,Charm,CharmGrenade,yes,amp
+Nazar Charm,useful,Charm,CharmNazar,yes,base
+Protection Charm,useful,Charm,CharmProtection,yes,base
+Risk Charm,useful,Charm,CharmRisk,yes,base
+Strength Charm,useful,Charm,CharmStrength,yes,base
+Throwing Charm,useful,Charm,Sync_CharmThrowing,no,sync
+Heart Container,useful,Heart,MiscHeartContainer,yes,base
+Double Heart Container,useful,Heart,MiscHeartContainer2,yes,base
+Cursed Heart Container,useful,Heart,MiscHeartContainerCursed,yes,amp
+Double Cursed Heart Container,useful,Heart,MiscHeartContainerCursed2,yes,amp
+Empty Heart Container,useful,Heart,MiscHeartContainerEmpty,yes,base
+Double Empty Heart Container,useful,Heart,MiscHeartContainerEmpty2,yes,base
+Cursed Potion,useful,Misc,CursedPotion,no,amp
+Holy Water,useful,Misc,HolyWater,no,base
+War Drum,useful,Misc,WarDrum,no,base
+Blood Drum,useful,Misc,BloodDrum,no,base
+Heart Transplant,useful,Misc,HeartTransplant,no,base
+Backpack,useful,Misc,HudBackpack,yes,base
+Holster,useful,Misc,Holster,no,base
+Bag of Holding,useful,Misc,BagHolding,no,base
+Compass,useful,Misc,MiscCompass,yes,base
+Coupon,useful,Misc,MiscCoupon,yes,base
+Map,useful,Misc,MiscMap,yes,base
+Monkey's Paw,useful,Misc,MiscMonkeyPaw,yes,amp
+Throwing Stars,useful,Misc,ThrowingStars,no,amp
+Dove Familiar,useful,Misc,FamiliarDove,no,amp
+Ice Spirit Familiar,useful,Misc,FamiliarIceSpirit,no,amp
+Shopkeeper Familiar,useful,Misc,FamiliarShopkeeper,no,amp
+Rat Familiar,useful,Misc,FamiliarRat,no,amp
+Instant Health,junk,Junk,APInstantHealth,no,base
+Full Heal,junk,Junk,APFullHeal,no,base
+Instant Gold (50),junk,Junk,APInstantGold,no,base
+Instant Gold (200),junk,Junk,APInstantGold2,no,base
+Leprechaun!,trap,Trap,APLeprechaun,no,base
+Teleport Trap,trap,Trap,APTeleportTrap,no,base
+Confusion Trap,trap,Trap,APConfuseTrap,no,base
+Scatter Trap,trap,Trap,APScatterTrap,no,base

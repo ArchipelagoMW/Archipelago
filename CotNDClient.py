@@ -10,7 +10,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, 
 import Utils
 from worlds import network_data_package
 
-from worlds.cotnd.Items import item_table, bad_items, always_available_items
+from worlds.cotnd.Items import build_item_table, bad_items, always_available_items
 
 UDP_IP = "127.0.0.1"
 UDP_PORT = 8980
@@ -142,10 +142,9 @@ class CotNDContext(CommonContext):
             self.prevent_bad_samples = slot_data['prevent_bad_samples']
             self.char_counts = slot_data['char_counts']
             self.keep_inventory = slot_data['keep_inventory']
+            self.split_weapons = slot_data['split_weapons']
             self.nonce = str(int(time.time()))
-
-    def item_data(self, networkitem):
-        return item_table[self.item_names[networkitem.item]]
+            self.item_table = build_item_table(self.split_weapons)
 
     def on_deathlink(self, data: dict):
         self.deathlink_pending = True
@@ -181,14 +180,11 @@ class CotNDContext(CommonContext):
         # Which items to spawn
         item_state = {}
         item_names_received = always_available_items | set(map(lambda item: self.item_names[item.item], self.items_received))
-        for name, info in item_table.items():
-            if info[1] in {'Character', 'Junk', 'Trap'}:
+        for name, info in self.item_table.items():
+            if info['Type'] in {'Character', 'Junk', 'Trap'}:
                 continue
-            if type(info[2]) == list:
-                for s in info[2]:
-                    item_state[s] = name in item_names_received or (not self.reduce_starting_items and info[3])
-            else:
-                item_state[info[2]] = name in item_names_received or (not self.reduce_starting_items and info[3])
+            for s in info['ND Name']:
+                item_state[s] = name in item_names_received or (not self.reduce_starting_items and info['Default'])
 
         # Chests to replace
         replace_chests = set()
@@ -204,18 +200,15 @@ class CotNDContext(CommonContext):
         characters = []
         for item in self.items_received:
             item_name = self.item_names[item.item]
-            data = item_table[item_name]
-            if data[1] == 'Character':
-                characters.append(item_name[7:])
-            if data[1] in {'Junk', 'Trap'}:
-                pending_items.append(data[2])
-            if self.free_samples:
-                if data[1] != 'Weapon':
-                    if self.item_names[item.item] in bad_items and self.prevent_bad_samples:
-                        continue
-                    pending_items.append(data[2] if isinstance(data[2], str) else data[2][0])
-                else:
-                    pending_items.append(data[2] if isinstance(data[2], str) else data[2][1]) # send titanium weapon
+            data = self.item_table[item_name]
+            if data['Type'] == 'Character':
+                characters.append(data['ND Name'][0])
+            elif data['Type'] in {'Junk', 'Trap'}:
+                pending_items.append(data['ND Name'][0])
+            elif self.free_samples:
+                if item_name in bad_items and self.prevent_bad_samples:
+                    continue
+                pending_items.append(data['ND Name'][0])
 
         # prevent async deathlink problems
         previous_deathlink_state = self.deathlink_pending

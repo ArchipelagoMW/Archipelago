@@ -3,6 +3,15 @@ from Options import Choice, Toggle, DefaultOnToggle, Range, OptionList
 from .Characters import all_chars
 
 
+class DLC(Choice):
+    """Which DLC packs to include content from. Amplified includes 4 characters, Zone 5, and new items. Synchrony includes 3 characters, new items, and balance fixes."""
+    display_name = "DLC Packs"
+    option_both = 0
+    option_amplified = 1
+    option_synchrony = 2
+    option_none = 3
+
+
 class Characters(OptionList):
     """Characters which contain checks. Each will be represented at least once."""
     display_name = "Available Characters"
@@ -27,6 +36,9 @@ class StartingChar(Choice):
     option_diamond = 11
     option_mary = 12
     option_tempo = 13
+    option_klarinetta = 14
+    option_chaunter = 15
+    option_suzu = 16
 
 
 class KeepInventory(Toggle):
@@ -37,6 +49,11 @@ class KeepInventory(Toggle):
 class ReduceStartingItems(Toggle):
     """Normally, all diamond-unlocked items are restricted. If this is turned on, almost all item types are initially restricted."""
     display_name = "Reduce Starting Available Items"
+
+
+class SplitWeapons(Toggle):
+    """Normally, all weapons of a given type are unlocked by one item. If this is turned on, different material types will be unlocked by separate items."""
+    display_name = "Split Weapon Unlocks"
 
 
 class ReduceLogic(Toggle):
@@ -68,11 +85,13 @@ class TrapPercentage(Range):
 
 
 cotnd_options = {
+    'dlc':                      DLC,
     'available_characters':     Characters,
     'starting_character':       StartingChar,
     'randomize_flawless':       RandomizeFlawless,
     'keep_inventory_on_death':  KeepInventory,
     'reduce_starting_items':    ReduceStartingItems,
+    'split_weapons':            SplitWeapons,
     'reduce_logic':             ReduceLogic,
     'free_samples':             FreeSamples,
     'prevent_bad_samples':      PreventBadSamples,
