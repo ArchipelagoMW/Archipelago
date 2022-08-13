@@ -28,7 +28,7 @@ class RiskOfRainWorld(World):
      first crash landing.
     """
     game: str = "Risk of Rain 2"
-    options = ror2_options
+    option_definitions = ror2_options
     topology_present = False
 
     item_name_to_id = item_table

@@ -39,7 +39,7 @@ class SubnauticaWorld(World):
 
     item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
     location_name_to_id = all_locations
-    options = Options.options
+    option_definitions = Options.options
 
     data_version = 5
     required_client_version = (0, 3, 3)

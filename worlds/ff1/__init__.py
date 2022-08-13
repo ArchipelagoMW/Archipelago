@@ -27,7 +27,7 @@ class FF1World(World):
     Part puzzle and part speed-run, it breathes new life into one of the most influential games ever made.
     """
 
-    options = ff1_options
+    option_definitions = ff1_options
     game = "Final Fantasy"
     topology_present = False
     remote_items = True
