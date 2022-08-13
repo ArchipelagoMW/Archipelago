@@ -13,8 +13,8 @@ class Logic(Choice):
     option_hybrid_major_glitches = 3
     option_no_logic = 4
     alias_none = option_no_glitches
-    alias_owg = 2
-    alias_hmg = 3
+    alias_owg = option_overworld_glitches
+    alias_hmg = option_hybrid_major_glitches
 
 
 class DarkRoomLogic(Choice):
@@ -66,8 +66,8 @@ class DungeonItem(Choice):
     option_any_world = 3
     option_different_world = 4
     option_start_with = 6
-    alias_true = 3
-    alias_false = 0
+    alias_true = option_any_world
+    alias_false = option_original_dungeon
 
     @property
     def in_dungeon(self):
@@ -185,9 +185,9 @@ class PrizeShuffle(Choice):
     option_general = 1
     option_bonk = 2
     option_both = 3
-    alias_g = 1
-    alias_b = 2
-    alias_bg = 3
+    alias_g = option_general
+    alias_b = option_bonk
+    alias_bg = option_both
     default = option_general
 
 
@@ -296,8 +296,8 @@ class Counters(Choice):
     option_default = 2
     option_on = 3
     alias_pickup = option_compass
-    alias_true = 3
-    alias_false = 0
+    alias_true = option_on
+    alias_false = option_off
     default = option_compass
 
 
@@ -309,8 +309,8 @@ class Progressive(Choice):
     option_off = 0
     option_grouped_random = 1
     option_on = 2
-    alias_false = 0
-    alias_true = 2
+    alias_false = option_off
+    alias_true = option_on
     default = 2
 
     def want_progressives(self, random):
@@ -379,8 +379,8 @@ class Hints(Choice):
     option_on = 2
     option_full = 3
     default = 2
-    alias_false = 0
-    alias_true = 2
+    alias_false = option_off
+    alias_true = option_on
 
 
 class Scams(Choice):
@@ -390,7 +390,7 @@ class Scams(Choice):
     option_king_zora = 1
     option_bottle_merchant = 2
     option_all = 3
-    alias_false = 0
+    alias_false = option_off
 
     @property
     def gives_king_zora_hint(self):
@@ -415,7 +415,7 @@ class EnemyDamage(Choice):
     option_default = 0
     option_shuffled = 1
     option_chaos = 2
-    alias_none = 0
+    alias_none = option_default
 
 
 class EnemyHealth(Choice):
@@ -501,7 +501,7 @@ class HeartBeep(Choice):
     option_half = 2
     option_quarter = 3
     option_off = 4
-    alias_false = 4
+    alias_false = option_off
 
 
 class HeartColor(Choice):
