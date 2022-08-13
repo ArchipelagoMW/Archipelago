@@ -481,7 +481,7 @@ def get_specific_item_hint(world, checked):
 def get_random_location_hint(world, checked):
     locations = list(filter(lambda location:
         is_not_checked(location, checked)
-        and (isinstance(location.item, OOTItem) and location.item.type not in ('Drop', 'Event', 'Shop', 'DungeonReward'))
+        and not (isinstance(location.item, OOTItem) and location.item.type in ('Drop', 'Event', 'Shop', 'DungeonReward'))
         # and not (location.parent_region.dungeon and isRestrictedDungeonItem(location.parent_region.dungeon, location.item)) # AP already locks dungeon items
         and not location.locked
         and location.name not in world.hint_exclusions
