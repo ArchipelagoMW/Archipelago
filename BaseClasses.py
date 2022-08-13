@@ -833,10 +833,10 @@ class CollectionState():
         return False
 
     def has_misery_mire_medallion(self, player: int) -> bool:
-        return self.has(self.world.misery_mire_medallion[player].get_current_option_name, player)
+        return self.has(self.world.misery_mire_medallion[player].current_option_name, player)
 
     def has_turtle_rock_medallion(self, player: int) -> bool:
-        return self.has(self.world.turtle_rock_medallion[player].get_current_option_name, player)
+        return self.has(self.world.turtle_rock_medallion[player].current_option_name, player)
 
     def can_boots_clip_lw(self, player: int) -> bool:
         if self.world.world_state[player] == 2:
