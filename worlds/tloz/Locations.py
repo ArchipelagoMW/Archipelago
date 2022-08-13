@@ -51,11 +51,11 @@ for level in level_locations:
         all_level_locations.append(location)
 
 shop_locations = [
-    "Shop 1 Item 1", "Shop 1 Item 2", "Shop 1 Item 3",
-    "Shop 2 Item 1", "Shop 2 Item 2", "Shop 2 Item 3",
-    "Shop 3 Item 1", "Shop 3 Item 2", "Shop 3 Item 3",
-    "Shop 4 Item 1", "Shop 4 Item 2", "Shop 4 Item 3",
-    "Shop 5 Item 1", "Shop 5 Item 2", "Shop 5 Item 3"
+    "Arrow Shop Item 1", "Arrow Shop Item 2", "Arrow Shop Item 3",
+    "Candle Shop Item 1", "Candle Shop Item 2", "Candle Shop Item 3",
+    "Shield Shop Item 1", "Shield Shop Item 2", "Shield Shop Item 3",
+    "Blue Ring Shop Item 1", "Blue Ring Shop Item 2", "Blue Ring Shop Item 3",
+    "Potion Shop Item 1", "Potion Shop Item 2", "Potion Shop Item 3"
 ]
 
 floor_location_game_offsets_early = {
@@ -165,39 +165,39 @@ for key, value in floor_location_game_offsets_late.items():
 dungeon_items = {**floor_location_game_ids_early, **floor_location_game_ids_late}
 
 shop_location_ids = {
-    "Shop 1 Item 1": 0x18637,
-    "Shop 1 Item 2": 0x18638,
-    "Shop 1 Item 3": 0x18639,
-    "Shop 2 Item 1": 0x1863A,
-    "Shop 2 Item 2": 0x1863B,
-    "Shop 2 Item 3": 0x1863C,
-    "Shop 3 Item 1": 0x1863D,
-    "Shop 3 Item 2": 0x1863E,
-    "Shop 3 Item 3": 0x1863F,
-    "Shop 4 Item 1": 0x18640,
-    "Shop 4 Item 2": 0x18641,
-    "Shop 4 Item 3": 0x18642,
-    "Shop 5 Item 1": 0x1862E,
-    "Shop 5 Item 2": 0x1862F,
-    "Shop 5 Item 3": 0x18630
+    "Arrow Shop Item 1": 0x18637,
+    "Arrow Shop Item 2": 0x18638,
+    "Arrow Shop Item 3": 0x18639,
+    "Candle Shop Item 1": 0x1863A,
+    "Candle Shop Item 2": 0x1863B,
+    "Candle Shop Item 3": 0x1863C,
+    "Shield Shop Item 1": 0x1863D,
+    "Shield Shop Item 2": 0x1863E,
+    "Shield Shop Item 3": 0x1863F,
+    "Blue Ring Shop Item 1": 0x18640,
+    "Blue Ring Shop Item 2": 0x18641,
+    "Blue Ring Shop Item 3": 0x18642,
+    "Potion Shop Item 1": 0x1862E,
+    "Potion Shop Item 2": 0x1862F,
+    "Potion Shop Item 3": 0x18630
 }
 
 shop_price_location_ids = {
-    "Shop 1 Item 1": 0x18673,
-    "Shop 1 Item 2": 0x18674,
-    "Shop 1 Item 3": 0x18675,
-    "Shop 2 Item 1": 0x18676,
-    "Shop 2 Item 2": 0x18677,
-    "Shop 2 Item 3": 0x18678,
-    "Shop 3 Item 1": 0x18679,
-    "Shop 3 Item 2": 0x1867A,
-    "Shop 3 Item 3": 0x1867B,
-    "Shop 4 Item 1": 0x1867C,
-    "Shop 4 Item 2": 0x1867D,
-    "Shop 4 Item 3": 0x1867E,
-    "Shop 5 Item 1": 0x1866A,
-    "Shop 5 Item 2": 0x1866B,
-    "Shop 5 Item 3": 0x1866C
+    "Arrow Shop Item 1": 0x18673,
+    "Arrow Shop Item 2": 0x18674,
+    "Arrow Shop Item 3": 0x18675,
+    "Candle Shop Item 1": 0x18676,
+    "Candle Shop Item 2": 0x18677,
+    "Candle Shop Item 3": 0x18678,
+    "Shield Shop Item 1": 0x18679,
+    "Shield Shop Item 2": 0x1867A,
+    "Shield Shop Item 3": 0x1867B,
+    "Blue Ring Shop Item 1": 0x1867C,
+    "Blue Ring Shop Item 2": 0x1867D,
+    "Blue Ring Shop Item 3": 0x1867E,
+    "Potion Shop Item 1": 0x1866A,
+    "Potion Shop Item 2": 0x1866B,
+    "Potion Shop Item 3": 0x1866C
 }
 
 secret_money_ids = {

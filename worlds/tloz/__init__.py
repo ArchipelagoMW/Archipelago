@@ -119,7 +119,7 @@ class TLoZWorld(World):
         self.world.regions.append(overworld)
 
     def create_items(self):
-        reserved_store_slots = random.sample(Locations.shop_locations[0:-3], 2)
+        reserved_store_slots = random.sample(Locations.shop_locations[0:-3], 3)
         self.world.get_location(
             reserved_store_slots[0],
             self.player
@@ -132,6 +132,11 @@ class TLoZWorld(World):
             self.player
         ).place_locked_item(
             self.world.create_item("Bomb", self.player))
+        self.world.get_location(
+            reserved_store_slots[2],
+            self.player
+        ).place_locked_item(
+            self.world.create_item("Water of Life (Red)", self.player))
         start_locked = False
         item_amounts = Items.item_amounts_all
         if not self.world.ExpandedPool[self.player]:
@@ -255,20 +260,20 @@ class TLoZWorld(World):
                 if location  not in Locations.all_level_locations:
                     forbid_item(self.world.get_location(location, self.player), "Triforce Fragment", self.player)
 
-        add_rule(self.world.get_location("Shop 5 Item 1", self.player),
+        add_rule(self.world.get_location("Potion Shop Item 1", self.player),
                  lambda state: state.has("Letter", self.player))
-        add_rule(self.world.get_location("Shop 5 Item 2", self.player),
+        add_rule(self.world.get_location("Potion Shop Item 2", self.player),
                  lambda state: state.has("Letter", self.player))
-        add_rule(self.world.get_location("Shop 5 Item 3", self.player),
+        add_rule(self.world.get_location("Potion Shop Item 3", self.player),
                  lambda state: state.has("Letter", self.player))
 
         # Bad things to not do
         # We can't risk leaving a Triforce piece behind
         # As for other risks, there's a perfectly good new game option for anyone who
         # decides to abandon obvious progression for multiple caves
-        forbid_item(self.world.get_location("Take Any Item 1", self.player), "Triforce", self.player)
-        forbid_item(self.world.get_location("Take Any Item 2", self.player), "Triforce", self.player)
-        forbid_item(self.world.get_location("Take Any Item 3", self.player), "Triforce", self.player)
+        #forbid_item(self.world.get_location("Take Any Item 1", self.player), "Triforce", self.player)
+        #forbid_item(self.world.get_location("Take Any Item 2", self.player), "Triforce", self.player)
+        #forbid_item(self.world.get_location("Take Any Item 3", self.player), "Triforce", self.player)
 
         set_rule(self.world.get_region("Menu", self.player), lambda state: True)
         set_rule(self.world.get_region("Overworld", self.player), lambda state: True)
@@ -310,12 +315,23 @@ class TLoZWorld(World):
                     if location.name[-1] == "3":  # Final item in stores has bit 6 and 7 set
                         item_id = item_id | 0b11000000
                     price_location = Locations.shop_price_location_ids[location.name]
-                    rom_data[price_location] = Items.item_prices[item]
+                    item_price = Items.item_prices[item]
+                    if item == "Rupee":
+                        item_class = location.item.classification
+                        if item_class == ItemClassification.progression:
+                            item_price = item_price * 2
+                        elif item_class == ItemClassification.useful:
+                            item_price = item_price // 2
+                        elif item_class == ItemClassification.filler:
+                            item_price = item_price // 2
+                        elif item_class == ItemClassification.trap:
+                            item_price = item_price * 2
+                    rom_data[price_location] = item_price
                 if location.name == "Take Any Item 3":
                     item_id = item_id | 0b01000000
                 rom_data[location_id] = item_id
             secret_caves = random.sample(sorted(Locations.secret_money_ids), 3)
-            secret_cave_money_amounts = [10, 30, 100]
+            secret_cave_money_amounts = [20, 50, 100]
             for i, amount in enumerate(secret_cave_money_amounts):
                 amount = amount * random.triangular(1.5, 2.5)
                 secret_cave_money_amounts[i] = int(amount)

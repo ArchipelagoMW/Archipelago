@@ -1,45 +1,50 @@
-from BaseClasses import Item
+from BaseClasses import ItemClassification
 import typing
 from typing import Dict
+
+progression = ItemClassification.progression
+filler = ItemClassification.filler
+useful = ItemClassification.useful
+trap = ItemClassification.trap
 
 
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
-    progression: bool
+    classification: ItemClassification
 
 
 item_table: Dict[str, ItemData] = {
-    'Boomerang': ItemData(100, False),
-    'Bow': ItemData(101, True),
-    'Magical Boomerang': ItemData(102, False),
-    'Raft': ItemData(103, True),
-    'Stepladder': ItemData(104, True),
-    'Recorder': ItemData(105, True),
-    'Magical Rod': ItemData(106, True),
-    'Red Candle': ItemData(107, True),
-    'Book of Magic': ItemData(108, True),
-    'Magical Key': ItemData(109, False),
-    'Red Ring': ItemData(110, False),
-    'Silver Arrow': ItemData(111, True),
-    'Sword': ItemData(112, True),
-    'White Sword': ItemData(113, True),
-    'Magical Sword': ItemData(114, True),
-    'Heart Container': ItemData(115, True),
-    'Letter': ItemData(116, False),
-    'Magical Shield': ItemData(117, False),
-    'Candle': ItemData(118, True),
-    'Arrow': ItemData(119, True),
-    'Food': ItemData(120, True),
-    'Water of Life (Blue)': ItemData(121, False),
-    'Water of Life (Red)': ItemData(122, False),
-    'Blue Ring': ItemData(123, False),
-    'Triforce Fragment': ItemData(124, True),
-    'Power Bracelet': ItemData(125, False),
-    'Small Key': ItemData(126, False),
-    'Bomb': ItemData(127, False),
-    'Recovery Heart': ItemData(128, False),
-    'Five Rupees': ItemData(129, False),
-    'Rupee': ItemData(129, False),
+    'Boomerang': ItemData(100, useful),
+    'Bow': ItemData(101, progression),
+    'Magical Boomerang': ItemData(102, useful),
+    'Raft': ItemData(103, progression),
+    'Stepladder': ItemData(104, progression),
+    'Recorder': ItemData(105, progression),
+    'Magical Rod': ItemData(106, progression),
+    'Red Candle': ItemData(107, progression),
+    'Book of Magic': ItemData(108, progression),
+    'Magical Key': ItemData(109, useful),
+    'Red Ring': ItemData(110, useful),
+    'Silver Arrow': ItemData(111, progression),
+    'Sword': ItemData(112, progression),
+    'White Sword': ItemData(113, progression),
+    'Magical Sword': ItemData(114, progression),
+    'Heart Container': ItemData(115, progression),
+    'Letter': ItemData(116, progression),
+    'Magical Shield': ItemData(117, useful),
+    'Candle': ItemData(118, progression),
+    'Arrow': ItemData(119, progression),
+    'Food': ItemData(120, progression),
+    'Water of Life (Blue)': ItemData(121, useful),
+    'Water of Life (Red)': ItemData(122, useful),
+    'Blue Ring': ItemData(123, useful),
+    'Triforce Fragment': ItemData(124, progression),
+    'Power Bracelet': ItemData(125, useful),
+    'Small Key': ItemData(126, filler),
+    'Bomb': ItemData(127, filler),
+    'Recovery Heart': ItemData(128, filler),
+    'Five Rupees': ItemData(129, filler),
+    'Rupee': ItemData(129, filler),
 }
 
 item_amounts_all = {
@@ -50,7 +55,7 @@ item_amounts_all = {
     "Small Key": 27,
     "Bomb": 18,
     "Five Rupees": 13,
-    "Water of Life (Red)": 5,
+    "Water of Life (Red)": 4,
     "Silver Arrow": 2,
     "Rupee": 0
 }

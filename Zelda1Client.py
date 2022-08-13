@@ -169,6 +169,9 @@ async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone=
                     caveType = locations_array["caveType"]
                 if caveType != "None":
                     location_data = f"{caveType} Item {locations_array['itemSlot']}"
+                    print(location_name)
+                    print(location_data)
+                    print("=======")
                     if location_name == location_data:
                         locations_checked.append(location)
         if locations_checked:

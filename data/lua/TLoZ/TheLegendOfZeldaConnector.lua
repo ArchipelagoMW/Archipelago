@@ -295,7 +295,9 @@ local function gotMagicalShield()
 end
 
 local function gotRecoveryHeart()
-    local currentHearts = bit.band(u8(heartContainers, 0x0F)) + 1
+    local currentHearts = bit.band(u8(heartContainers), 0x0F)
+    if currentHearts < 0xF then currentHearts = currentHearts + 1 end
+    currentHearts = bit.bor(bit.band(u8(heartContainers), 0xF0), currentHearts)
     wU8(heartContainers, currentHearts)
 end
 
@@ -319,7 +321,6 @@ local function gotItem(item)
     wU8(0x602, 4)
     numberObtained = u8(itemsObtained) + 1
     wU8(itemsObtained, numberObtained)
-    print(itemName)
     if itemName == "Boomerang" then gotBoomerang() end
     if itemName == "Bow" then gotBow() end
     if itemName == "Magical Boomerang" then gotMagicalBoomerang() end
@@ -356,7 +357,6 @@ end
 local function StateOKForMainLoop()
     memDomain.ram()
     local gameMode = u8(0x12) 
-    print(gameMode)
     return gameMode == 5 
 end
 
@@ -378,19 +378,19 @@ local function checkCaveItemObtained()
             caveType = caveType - 0x40
             caveType = math.floor(caveType / 4)
             if caveType == 0x10 then
-                returnTable["caveType"] = "Shop 4"
+                returnTable["caveType"] = "Blue Ring Shop"
             end
             if caveType == 0x0A then
-                returnTable["caveType"] = "Shop 5"
+                returnTable["caveType"] = "Potion Shop"
             end
             if caveType == 0x0E then
-                returnTable["caveType"] = "Shop 2"
+                returnTable["caveType"] = "Candle Shop"
             end
             if caveType == 0x0F then
-                returnTable["caveType"] = "Shop 3"
+                returnTable["caveType"] = "Shield Shop"
             end
             if caveType == 0x0D then
-                returnTable["caveType"] = "Shop 1"
+                returnTable["caveType"] = "Arrow Shop"
             end
             if caveType == 0x01 then
                 returnTable["caveType"] = "Take Any"
@@ -432,7 +432,7 @@ local function drawText(x, y, message, color)
     if is23Or24Or25 then
         gui.addmessage(message)
     elseif is26To28 then
-        gui.drawText(x, y, message, color, 0xB0000000, 18, "Courier New", nil, nil, nil, "client")
+        gui.drawText(x, y, message, color, 0xB0000000, 18, "Courier New", "middle", "bottom", nil, "client")
     end
 end
 
@@ -521,7 +521,6 @@ function processBlock(block)
         memDomain.saveram()
         isInGame = StateOKForMainLoop()
         updateTriforceFragments()
-        print(isInGame)
         if itemsBlock ~= nil and isInGame then
             memDomain.ram()
             --get item from item code
