@@ -5,7 +5,7 @@ Those are located in the `worlds/` folder (source) or  `<insall dir>/lib/worlds/
 See [world api.md](world api.md) for details.
 
 apworld provides a way to package and ship a world that is not part of the main distribution by placing a `*.apworld`
-file in the worlds folder.
+file into the worlds folder.
 
 
 ## File Format
