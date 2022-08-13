@@ -8,22 +8,23 @@
 ## Concept général
 
 Le client Archipelago de Dark Souls III est un fichier dinput8.dll. Cette .dll va lancer une invite de commande Windows
-permettant de lire des informations de la partie et écrire des commandes pour intéragir avec le serveur Archipelago.  
+permettant de lire des informations de la partie et écrire des commandes pour intéragir avec le serveur Archipelago.
 
 Le mélange des objets est réalisé par le fichier AP.json, un fichier généré par le serveur Archipelago.
 
 ## Procédures d'installation
 
-<span style="color:red">**Il y a des risques de bannissement permanent des serveurs FromSoftware si ce mod est utilisé en ligne**</span>  
-Ce client a été testé sur la version Steam officielle du jeu (v1.15/1.35), peu importe les DLCs actuellement installés.  
+<span style="color:tomato">
+**Il y a des risques de bannissement permanent des serveurs FromSoftware si ce mod est utilisé en ligne.**
+</span>  
+Ce client a été testé sur la version Steam officielle du jeu (v1.15/1.35), peu importe les DLCs actuellement installés.
 
-Télécharger le fichier dinput8.dll disponible dans le 
-[Client AP de Dark Souls III](https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases).  
+Télécharger le fichier dinput8.dll disponible dans le [Client AP de Dark Souls III](https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases).
 Vous devez ensuite ajouter les deux fichiers suivants à la racine du jeu 
-( ex: "SteamLibrary\steamapps\common\DARK SOULS III\Game" ):  
+(ex: "SteamLibrary\steamapps\common\DARK SOULS III\Game"):
 - **dinput8.dll**
 - **AP.json** : Le fichier .json téléchargé depuis la <em>room</em> ou donné par l'hôte de la partie, nommé 
-AP-{ROOM_ID}.json, doit être renommé en AP.json.  
+AP-{ROOM_ID}.json, doit être renommé en AP.json.
 
 ## Rejoindre une partie Multiworld
 
