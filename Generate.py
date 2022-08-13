@@ -310,9 +310,7 @@ def get_choice(option, root, value=None) -> Any:
     if option not in root:
         return value
     if isinstance(root[option], list):
-        if len(root[option]) > 0:
-            return random.choices(root[option])[0]
-        return value
+        return random.choices(root[option])[0]
     if type(root[option]) is not dict:
         return root[option]
     if not root[option]:
@@ -516,11 +514,7 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
             if hasattr(player_option, "verify"):
                 player_option.verify(AutoWorldRegister.world_types[ret.game])
     else:
-        if option.default == "random":
-            player_option = option.from_any("random")
-            setattr(ret, option_key, player_option)
-        else:
-            setattr(ret, option_key, option(option.default))
+        setattr(ret, option_key, option.from_any(option.default))
 
 
 def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings.bosses):
