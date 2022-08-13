@@ -118,6 +118,7 @@ non_key_items = {
     "HP Up": 19,
     "Spider Donut": 1,
     "Spider Cider": 1,
+    "Hush Puppy": 1,
 }
 
 required_armor = {

@@ -98,22 +98,17 @@ class UndertaleWorld(World):
         if not self.world.temy_include[self.player]:
             if "temy armor" in itempool:
                 itempool.remove("temy armor")
-        if self.world.prog_armor[self.player]:
-            itempool = [item if item not in required_armor else "Progressive Armor" for item in itempool]
-        if self.world.prog_weapons[self.player]:
-            itempool = [item if item not in required_weapons else "Progressive Weapons" for item in itempool]
-        if self.world.route_required[self.player].current_key == "genocide" or self.world.route_required[self.player].current_key == "all_routes":
-            if not self.world.only_flakes[self.player]:
-                itempool += ["Snowman Piece"] * 2
-            if not self.world.no_equips[self.player]:
-                itempool = ["Real Knife" if item == "Worn Dagger" else "The Locket" if item == "Heart Locket" else item for item in itempool]
+        if self.world.route_required[self.player].current_key == "genocide":
+            itempool = [item for item in itempool if item != "Popato Chisps" and item != "Stained Apron" and item != "Nice Cream" and item != "Hot Cat" and item != "Hot Dog...?" and item != "Punch Card"]
+        elif self.world.route_required[self.player].current_key == "neutral":
+            itempool = [item for item in itempool if item != "Popato Chisps" and item != "Hot Cat" and item != "Hot Dog...?"]
         if self.world.route_required[self.player].current_key == "pacifist" or self.world.route_required[self.player].current_key == "all_routes":
             itempool += ["Undyne Letter EX"]
-            itempool += ["Hush Puppy"]
         else:
             itempool.remove("Complete Skeleton")
             itempool.remove("Fish")
             itempool.remove("DT Extractor")
+            itempool.remove("Hush Puppy")
         if self.world.route_required[self.player].current_key == "genocide":
             itempool.remove("Cooking Set")
             itempool.remove("Microphone")
@@ -128,10 +123,15 @@ class UndertaleWorld(World):
             itempool = [item for item in itempool if not (item == "ATK Up" or item == "DEF Up" or item == "HP Up")]
         if self.world.prog_plot[self.player]:
             itempool = [item if item not in plot_items else "Progressive Plot" for item in itempool]
-        if self.world.route_required[self.player].current_key == "genocide":
-            itempool = [item for item in itempool if item != "Popato Chisps" and item != "Stained Apron" and item != "Nice Cream" and item != "Hot Cat" and item != "Hot Dog...?" and item != "Punch Card"]
-        elif self.world.route_required[self.player].current_key == "neutral":
-            itempool = [item for item in itempool if item != "Popato Chisps" and item != "Hot Cat" and item != "Hot Dog...?"]
+        if self.world.prog_armor[self.player]:
+            itempool = [item if item not in required_armor else "Progressive Armor" for item in itempool]
+        if self.world.prog_weapons[self.player]:
+            itempool = [item if item not in required_weapons else "Progressive Weapons" for item in itempool]
+        if self.world.route_required[self.player].current_key == "genocide" or self.world.route_required[self.player].current_key == "all_routes":
+            if not self.world.only_flakes[self.player]:
+                itempool += ["Snowman Piece"] * 2
+            if not self.world.no_equips[self.player]:
+                itempool = ["Real Knife" if item == "Worn Dagger" else "The Locket" if item == "Heart Locket" else item for item in itempool]
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
         exclusion_pool.update(exclusion_table[self.world.route_required[self.player].current_key])

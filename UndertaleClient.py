@@ -48,7 +48,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, UndertaleContext):
             for file_name in os.listdir(steaminstall+"\\steamapps\\common\\Undertale\\"):
                 if file_name != "steam_api.dll":
-                    os.system('copy "'+steaminstall+'\\steamapps\\common\\Undertale\\'+file_name+'" "'+os.getcwd() +"\\Undertale\\"+file_name)
+                    copier(steaminstall+'\\steamapps\\common\\Undertale\\'+file_name, os.getcwd() +"\\Undertale\\"+file_name)
             bsdiff4.file_patch_inplace(os.getcwd() + r"/Undertale/data.win", undertale.data_path("patch.bsdiff"))
             self.output(f"Patched.")
 
@@ -79,6 +79,8 @@ class UndertaleContext(CommonContext):
     route = None
     pieces_needed = None
     progkeys = None
+    completed_routes = None
+    completed_count = 0
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -89,10 +91,15 @@ class UndertaleContext(CommonContext):
         self.deathlink_status = False
         self.tem_armor = False
         self.progkeys = []
+        self.completed_count = 0
+        self.completed_routes = {}
+        self.completed_routes["pacifist"] = 0
+        self.completed_routes["genocide"] = 0
+        self.completed_routes["neutral"] = 0
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
-            await self.server_auth(password_requested)
+            await super().server_auth(password_requested)
         await self.get_username()
         await self.send_connect()
 
@@ -189,6 +196,10 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         ctx.route = args["slot_data"]['route']
         ctx.pieces_needed = args["slot_data"]['key_pieces']
         ctx.tem_armor = args["slot_data"]['temy_armor_include']
+
+        await ctx.send_msgs([{"cmd": "Get", "keys": [str(ctx.slot)+" RoutesDone neutral", str(ctx.slot)+" RoutesDone pacifist", str(ctx.slot)+" RoutesDone genocide"]}])
+        await ctx.send_msgs([{"cmd": "SetNotify", "keys": [str(ctx.slot)+" RoutesDone neutral", str(ctx.slot)+" RoutesDone pacifist", str(ctx.slot)+" RoutesDone genocide"]}])
+        print(ctx.slot)
         if not args["slot_data"]['key_hunt']:
             ctx.pieces_needed = 0
         if args["slot_data"]['rando_love']:
@@ -262,7 +273,25 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                 if ctx.route == "pacifist" or ctx.route == "all_routes":
                     ctx.progkeys.append(77782)
                 place = "Core Exit"
-
+    elif cmd == 'Retrieved':
+        if str(ctx.slot)+" RoutesDone neutral" in args["keys"]:
+            if args["keys"][str(ctx.slot)+" RoutesDone neutral"] is not None:
+                ctx.completed_routes["neutral"] = args["keys"][str(ctx.slot)+" RoutesDone neutral"]
+        if str(ctx.slot)+" RoutesDone genocide" in args["keys"]:
+            if args["keys"][str(ctx.slot)+" RoutesDone genocide"] is not None:
+                ctx.completed_routes["genocide"] = args["keys"][str(ctx.slot)+" RoutesDone genocide"]
+        if str(ctx.slot)+" RoutesDone pacifist" in args["keys"]:
+            if args["keys"][str(ctx.slot) + " RoutesDone pacifist"] is not None:
+                ctx.completed_routes["pacifist"] = args["keys"][str(ctx.slot)+" RoutesDone pacifist"]
+    elif cmd == 'SetReply':
+        if args["value"] != None:
+            if str(ctx.slot)+" RoutesDone pacifist" == args["key"]:
+                ctx.completed_routes["pacifist"] = args["value"]
+            elif str(ctx.slot)+" RoutesDone genocide" == args["key"]:
+                ctx.completed_routes["genocide"] = args["value"]
+            elif str(ctx.slot)+" RoutesDone neutral" == args["key"]:
+                ctx.completed_routes["neutral"] = args["value"]
+        print(args["key"])
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
 
@@ -434,11 +463,21 @@ async def game_watcher(ctx: UndertaleContext):
                 if file.find("victory") > -1 and file.find(str(ctx.route)) > -1:
                     victory = True
                 if file.find("victory") > -1:
-                    found_routes += 1
+                    if str(ctx.route) == "all_routes":
+                        if file.find("neutral") > -1 and ctx.completed_routes["neutral"] != 1:
+                            await ctx.send_msgs([{"cmd": "Set", "key": str(ctx.slot)+' RoutesDone neutral', "default": 0, "want_reply": True, "operations": [{"operation": "max", "value": 1}]}])
+                        elif file.find("pacifist") > -1 and ctx.completed_routes["pacifist"] != 1:
+                            await ctx.send_msgs([{"cmd": "Set", "key": str(ctx.slot)+' RoutesDone pacifist', "default": 0, "want_reply": True, "operations": [{"operation": "max", "value": 1}]}])
+                        elif file.find("genocide") > -1 and ctx.completed_routes["genocide"] != 1:
+                            await ctx.send_msgs([{"cmd": "Set", "key": str(ctx.slot)+' RoutesDone genocide', "default": 0, "want_reply": True, "operations": [{"operation": "max", "value": 1}]}])
+        if str(ctx.route) == "all_routes":
+            found_routes += ctx.completed_routes["neutral"]
+            found_routes += ctx.completed_routes["pacifist"]
+            found_routes += ctx.completed_routes["genocide"]
         if str(ctx.route) == "all_routes" and found_routes >= 3:
             victory = True
         ctx.locations_checked = sending
-        if not ctx.finished_game and victory:
+        if (not ctx.finished_game) and victory:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
         await asyncio.sleep(0.1)
