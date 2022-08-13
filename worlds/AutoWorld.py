@@ -189,17 +189,17 @@ class World(metaclass=AutoWorldRegister):
         self.world = world
         self.player = player
 
-    def __getattr__(self, key):
-        if key == "is_zip":
+    def __getattr__(self, name):
+        if name == "is_zip":
             return type(self).is_zip
         raise AttributeError
 
-    def __setattr__(self, key, value):
-        if key == "is_zip":
+    def __setattr__(self, name, value):
+        if name == "is_zip":
             type(self).is_zip = value
-        elif key == "__file__":
-            raise AttributeError("Can't set attribute '__file__'")
-        self.__dict__[key] = value
+        elif name == "__file__":
+            raise AttributeError("can't set attribute '__file__'")
+        super().__setattr__(name, value)
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",
