@@ -362,6 +362,8 @@ class SC2Context(CommonContext):
         await super(SC2Context, self).shutdown()
         if self.sc2_run_task:
             self.sc2_run_task.cancel()
+        if self.print_unlocks_task:
+            self.print_unlocks_task.cancel()
 
     def play_mission(self, mission_id):
         if self.missions_unlocked or \
