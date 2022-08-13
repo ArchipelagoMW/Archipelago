@@ -23,8 +23,7 @@ Télécharger le fichier dinput8.dll disponible dans le [Client AP de Dark Souls
 Vous devez ensuite ajouter les deux fichiers suivants à la racine du jeu 
 (ex: "SteamLibrary\steamapps\common\DARK SOULS III\Game"):
 - **dinput8.dll**
-- **AP.json** : Le fichier .json téléchargé depuis la <em>room</em> ou donné par l'hôte de la partie, nommé 
-AP-{ROOM_ID}.json, doit être renommé en AP.json.
+- **AP.json** : Le fichier .json téléchargé depuis la <em>room</em> ou donné par l'hôte de la partie, nommé AP-{ROOM_ID}.json, doit être renommé en AP.json.
 
 ## Rejoindre une partie Multiworld
 
