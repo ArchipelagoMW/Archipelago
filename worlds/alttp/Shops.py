@@ -301,7 +301,7 @@ def create_shops(world, player: int):
                         new_items = new_dark_shop
                 keeper = world.random.choice([0xA0, 0xC1, 0xFF])
                 player_shop_table[name] = ShopData(typ, shop_id, keeper, custom, locked, new_items, sram_offset)
-    if world.world_state[player] == 2:
+    if world.world_state[player].inverted:
         # make sure that blue potion is available in inverted, special case locked = None; lock when done.
         player_shop_table["Dark Lake Hylia Shop"] = \
             player_shop_table["Dark Lake Hylia Shop"]._replace(items=_inverted_hylia_shop_defaults, locked=None)
