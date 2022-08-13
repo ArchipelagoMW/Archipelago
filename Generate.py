@@ -513,8 +513,10 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
         else:
             if hasattr(player_option, "verify"):
                 player_option.verify(AutoWorldRegister.world_types[ret.game])
-    else:
+    elif option.default == "random":
         setattr(ret, option_key, option.from_any(option.default))
+    else:
+        setattr(ret, option_key, option(option.default))
 
 
 def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings.bosses):
