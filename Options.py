@@ -136,7 +136,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
 
 class FreeText(Option):
     """Text option that allows users to enter strings.
-    Needs to be validated by the world and is set to all lower case."""
+    Needs to be validated by the world or option definition."""
 
     def __init__(self, value: str):
         assert isinstance(value, str), "value of FreeText must be a string"
@@ -432,25 +432,18 @@ class TextChoice(Choice):
 
     @classmethod
     def from_text(cls, text: str) -> TextChoice:
-        if text == "random":  # chooses a random defined option but won't use any free text options
+        if text.lower() == "random":  # chooses a random defined option but won't use any free text options
             return cls(random.choice(list(cls.name_lookup)))
         for option_name, value in cls.options.items():
-            if option_name == text:
+            if option_name.lower() == text.lower():
                 return cls(value)
         return cls(text)
-
-    @classmethod
-    def from_any(cls, data: typing.Any) -> TextChoice:
-        if type(data) == int and data in cls.options.values():
-            return cls(data)
-        return cls.from_text(str(data))
 
     @classmethod
     def get_option_name(cls, value: T) -> str:
         if isinstance(value, str):
             return value
-        else:
-            return cls.name_lookup[value]
+        return cls.name_lookup[value]
 
     def __eq__(self, other: typing.Any):
         if isinstance(other, self.__class__):
