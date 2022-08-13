@@ -7,7 +7,7 @@ import typing
 from BaseClasses import Item, CollectionState, Tutorial
 from .SubClasses import ALttPItem
 from ..AutoWorld import World, WebWorld, LogicMixin
-from .Options import alttp_options, smallkey_shuffle, TriforceMode, Logic
+from .Options import alttp_options, smallkey_shuffle, TriforceMode, Logic, WorldState
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
 from .Rules import set_rules
@@ -209,7 +209,7 @@ class ALTTPWorld(World):
         world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player],
                                                       world.triforce_pieces_required[player])
 
-        if world.world_state[player] != 2:
+        if not world.world_state[player].inverted:
             create_regions(world, player)
         else:
             create_inverted_regions(world, player)
@@ -224,7 +224,7 @@ class ALTTPWorld(World):
         old_random = world.random
         world.random = random.Random(self.er_seed)
 
-        if world.world_state[player] != 2:
+        if not world.world_state[player].inverted:
             link_entrances(world, player)
             mark_light_world_regions(world, player)
         else:
@@ -442,7 +442,7 @@ class ALTTPWorld(World):
         trash_counts = {}
         standard_keyshuffle_players = set()
         for player in world.get_game_players("A Link to the Past"):
-            if world.world_state[player] == 1 and world.smallkey_shuffle[player] \
+            if world.world_state[player] == WorldState.option_standard and world.smallkey_shuffle[player] \
                     and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal and \
                     world.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons:
                 standard_keyshuffle_players.add(player)

@@ -87,7 +87,7 @@ class MultiWorld():
         self.shuffle_ganon = True
         self.spoiler = Spoiler(self)
         self.fix_trock_doors = self.AttributeProxy(
-            lambda player: self.shuffle[player] != 'vanilla' or self.world_state[player] == 2)
+            lambda player: self.shuffle[player] != 'vanilla' or self.world_state[player].inverted)
         self.fix_skullwoods_exit = self.AttributeProxy(
             lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
         self.fix_palaceofdarkness_exit = self.AttributeProxy(
@@ -1352,7 +1352,7 @@ class Spoiler():
             res = getattr(self.world, option_key)[player]
             display_name = getattr(option_obj, "display_name", option_key)
             try:
-                outfile.write(f'{display_name + ":":33}{res.get_current_option_name}\n')
+                outfile.write(f'{display_name + ":":33}{res.current_option_name}\n')
             except:
                 raise Exception
 
