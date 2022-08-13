@@ -40,7 +40,7 @@ class PercentageOfYoshiEggs(Range):
     What Percentage of Yoshi Eggs are required to finish Yoshi Egg Hunt
     """
     display_name = "Required Percentage of Yoshi Eggs"
-    range_start = 0
+    range_start = 1
     range_end = 100
     default = 100
 

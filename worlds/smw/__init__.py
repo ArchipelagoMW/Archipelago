@@ -13,7 +13,7 @@ from .Rules import set_rules
 from ..generic.Rules import add_rule
 from .Names import ItemName, LocationName
 from ..AutoWorld import WebWorld, World
-#from .Rom import LocalRom, patch_rom, get_base_rom_path, SMWDeltaPatch
+from .Rom import LocalRom, patch_rom, get_base_rom_path, SMWDeltaPatch
 import Patch
 
 
@@ -53,11 +53,11 @@ class SMWWorld(World):
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
 
-    #@classmethod
-    #def stage_assert_generate(cls, world):
-    #    rom_file = get_base_rom_path()
-    #    if not os.path.exists(rom_file):
-    #        raise FileNotFoundError(rom_file)
+    @classmethod
+    def stage_assert_generate(cls, world):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def _get_slot_data(self):
         return {
@@ -154,7 +154,6 @@ class SMWWorld(World):
 
 
     def generate_output(self, output_directory: str):
-        return
         try:
             world = self.world
             player = self.player
