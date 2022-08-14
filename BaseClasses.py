@@ -1202,7 +1202,7 @@ class Item:
         return self.__str__()
 
     def __str__(self) -> str:
-        if self.location:
+        if self.location and self.location.parent_region and self.location.parent_region.world:
             return self.location.parent_region.world.get_name_string_for_object(self)
         return f"{self.name} (Player {self.player})"
 
