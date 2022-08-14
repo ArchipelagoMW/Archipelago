@@ -28,7 +28,7 @@ class TestBase(unittest.TestCase):
     def testEmptyStateCanReachSomething(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             # Final Fantasy logic is controlled by finalfantasyrandomizer.com
-            if game_name != "Archipelago" and game_name != "Final Fantasy":
+            if game_name not in {"Archipelago", "Final Fantasy", "Sudoku"}:
                 with self.subTest("Game", game=game_name):
                     world = setup_default_world(world_type)
                     state = CollectionState(world)
