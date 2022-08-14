@@ -691,7 +691,7 @@ Treehouse Second Purple Bridge (Treehouse) - Treehouse Left Orange Bridge - 0x17
 158367 - 0x17D91 (Second Purple Bridge 6) - 0x17BDF - Stars & Squares & Colored Squares
 158368 - 0x17DC6 (Second Purple Bridge 7) - 0x17D91 - Stars & Squares & Colored Squares
 
-Treehouse Left Orange Bridge (Treehouse) - Treehouse Laser Room - 0x0C323:
+Treehouse Left Orange Bridge (Treehouse) - Treehouse Laser Room Front Platform - 0x17DDB - Treehouse Laser Room Back Platform - 0x17DDB:
 158376 - 0x17DB3 (Left Orange Bridge 1) - True - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
 158377 - 0x17DB5 (Left Orange Bridge 2) - 0x17DB3 - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
 158378 - 0x17DB6 (Left Orange Bridge 3) - 0x17DB5 - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
@@ -707,8 +707,6 @@ Treehouse Left Orange Bridge (Treehouse) - Treehouse Laser Room - 0x0C323:
 158388 - 0x17DAE (Left Orange Bridge 13) - 0x17DEC - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
 158389 - 0x17DB0 (Left Orange Bridge 14) - 0x17DAE - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
 158390 - 0x17DDB (Left Orange Bridge 15) - 0x17DB0 - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
-158611 - 0x17FA0 (Burnt House Discard) - 0x17DDB - Triangles
-Door - 0x0C323 (Door to Laser House) - 0x17DDB & 0x17DA2 & 0x2700B
 
 Treehouse Green Bridge (Treehouse):
 158369 - 0x17E3C (Green Bridge 1) - True - Stars & Shapers
@@ -719,6 +717,12 @@ Treehouse Green Bridge (Treehouse):
 158374 - 0x17E5F (Green Bridge 6) - 0x17E5B - Stars & Shapers & Colored Shapers & Negative Shapers & Colored Negative Shapers & Stars + Same Colored Symbol
 158375 - 0x17E61 (Green Bridge 7) - 0x17E5F - Stars & Shapers & Rotated Shapers
 158610 - 0x17FA9 (Green Bridge Discard) - 0x17E61 - Triangles
+
+Treehouse Laser Room Front Platform (Treehouse) - Treehouse Laser Room - 0x0C323:
+Door - 0x0C323 (Door to Laser House) - 0x17DA2 & 0x2700B & 0x17DDB
+
+Treehouse Laser Room Back Platform (Treehouse):
+158611 - 0x17FA0 (Burnt House Discard) - True - Triangles
 
 Treehouse Laser Room (Treehouse):
 158712 - 0x03613 (Laser Panel) - True - True

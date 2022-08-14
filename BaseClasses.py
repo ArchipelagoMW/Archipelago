@@ -1064,26 +1064,25 @@ class LocationProgressType(IntEnum):
 
 
 class Location:
-    # If given as integer, then this is the shop's inventory index
-    shop_slot: Optional[int] = None
-    shop_slot_disabled: bool = False
+    game: str = "Generic"
+    player: int
+    name: str
+    address: Optional[int]
+    parent_region: Optional[Region]
     event: bool = False
     locked: bool = False
-    game: str = "Generic"
     show_in_spoiler: bool = True
-    crystal: bool = False
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow = staticmethod(lambda item, state: False)
     access_rule = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
     item: Optional[Item] = None
-    parent_region: Optional[Region]
 
-    def __init__(self, player: int, name: str = '', address: int = None, parent=None):
-        self.name: str = name
-        self.address: Optional[int] = address
+    def __init__(self, player: int, name: str = '', address: Optional[int] = None, parent: Optional[Region] = None):
+        self.player = player
+        self.name = name
+        self.address = address
         self.parent_region = parent
-        self.player: int = player
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
         return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
@@ -1203,7 +1202,7 @@ class Item:
         return self.__str__()
 
     def __str__(self) -> str:
-        if self.location:
+        if self.location and self.location.parent_region and self.location.parent_region.world:
             return self.location.parent_region.world.get_name_string_for_object(self)
         return f"{self.name} (Player {self.player})"
 
