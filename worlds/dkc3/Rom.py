@@ -243,7 +243,7 @@ location_rom_data = {
     #0xDC30B4: [0x64D, 1], # Disabled until Trade Sequence
     0xDC30B5: [0x64E, 1],
 
-    0xDC30B6: [0x5FD, 4], # Banana Bird Mother
+    0xDC30B6: [0x5FE, 4], # Banana Bird Mother
 
     # DKC3_TODO: Disabled until Trade Sequence
     #0xDC30B7: [0x615, 2, True],
@@ -400,7 +400,6 @@ def patch_rom(world, rom, player, active_level_list):
     rom.write_byte(0x3484DE, 0xEA)
     rom.write_byte(0x348528, 0x80) # Prevent Single-Ski Lock
 
-
     # Make Swanky free
     rom.write_byte(0x348C48, 0x00)
 
@@ -515,6 +514,18 @@ def patch_rom(world, rom, player, active_level_list):
     rom.write_byte(0x32DD62, 0xEA)
     rom.write_byte(0x32DD63, 0xEA)
     rom.write_byte(0x32DD64, 0xEA)
+
+    # Don't grant Banana Birds at Bears
+    rom.write_byte(0x3492DB, 0xEA)
+    rom.write_byte(0x3492DC, 0xEA)
+    rom.write_byte(0x3492DD, 0xEA)
+    rom.write_byte(0x3493F4, 0xEA)
+    rom.write_byte(0x3493F5, 0xEA)
+    rom.write_byte(0x3493F6, 0xEA)
+
+    # Don't grant present at Blizzard
+    rom.write_byte(0x349508, 0xEA)
+    rom.write_byte(0x349509, 0xEA)
 
     # Don't grant Patch and Skis from their bosses
     rom.write_byte(0x3F3762, 0x00)
