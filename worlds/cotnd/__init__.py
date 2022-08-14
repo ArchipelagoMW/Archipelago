@@ -4,7 +4,7 @@ from typing import Dict, List, Set, Any
 from BaseClasses import Region, RegionType, Entrance, Item, Tutorial, ItemClassification
 from Options import Option
 from ..AutoWorld import World, WebWorld
-from .Characters import all_chars
+from .Characters import all_chars, base_chars, amplified_chars, synchrony_chars
 from .Items import build_item_table, always_available_items, get_normal_items
 from .Locations import get_char_locations, CryptLocation
 from .Options import cotnd_options
@@ -53,15 +53,20 @@ class CotNDWorld(World):
     # decide characters and starting character
     # remove start_inventory dupes
     def generate_early(self) -> None:
-        self.chars = sorted(list(set(self.world.available_characters[self.player].value) | 
-            {self.world.starting_character[self.player].current_key.capitalize()}))
-
         self.dlc_packs = ['base']
         if self.world.dlc[self.player].current_key in ['both', 'amplified']:
             self.dlc_packs.append('amp')
         if self.world.dlc[self.player].current_key in ['both', 'synchrony']:
             self.dlc_packs.append('sync')
         self.amplified = 'amp' in self.dlc_packs
+
+        # Collect list of allowed chars based on dlc settings
+        allowed_chars = set(base_chars + (amplified_chars if 'amp' in self.dlc_packs else [])
+            + (synchrony_chars if 'sync' in self.dlc_packs else []))
+        char_list = set(self.world.available_characters[self.player].value)
+        char_list.add(self.world.starting_character[self.player].current_key.capitalize())
+
+        self.chars = sorted(list(char_list & allowed_chars))
 
         self.item_table = build_item_table(self.world.split_weapons[self.player])
 
@@ -70,9 +75,11 @@ class CotNDWorld(World):
             self.world.split_weapons[self.player].value)
 
         # give starting character
-        starting_char = f"Unlock {self.world.starting_character[self.player].current_key.capitalize()}"
-        self.world.push_precollected(self.create_item(starting_char))
-        self.items.remove(starting_char)
+        starting_char = self.world.starting_character[self.player].current_key.capitalize()
+        if starting_char not in self.chars: # due to dlc incompatibility
+            starting_char = self.world.random.choice(self.chars)
+        self.world.push_precollected(self.create_item(f'Unlock {starting_char}'))
+        self.items.remove(f'Unlock {starting_char}')
 
         # remove items that we started with
         start_inventory = self.world.start_inventory[self.player].value
@@ -147,8 +154,7 @@ class CotNDWorld(World):
     def create_item(self, name: str) -> Item:
         try:
             data = self.item_table[name]
-            ret = Item(name, ItemClassification(data['AP Item Class']), self.item_name_to_id[name], self.player)
-            ret.game = self.game
+            ret = CotNDItem(name, ItemClassification(data['AP Item Class']), self.item_name_to_id[name], self.player)
             ret.type = data['Type']
             return ret
         except KeyError:
@@ -160,3 +166,6 @@ class CotNDWorld(World):
             return self.world.random.choice(self.trap_items)
         else:
             return self.world.random.choice(self.junk_items)
+
+class CotNDItem(Item):
+    game: str = 'Crypt of the NecroDancer'

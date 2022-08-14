@@ -53,7 +53,7 @@ def build_item_table(split_weapons=True):
 
             if not split_weapons and row['Type'] == 'Weapon':
                 # might have to merge this with an existing weapon
-                name_parts = row['AP Name'].split(maxsplit=1)
+                name_parts = item_name.split(maxsplit=1)
                 if name_parts[0] in weapon_materials:
                     weapon_type = name_parts[1]
                     if weapon_type == 'Cat': # hardcoded silly exception for cat
