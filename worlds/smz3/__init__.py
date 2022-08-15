@@ -62,7 +62,7 @@ class SMZ3World(World):
     game: str = "SMZ3"
     topology_present = False
     data_version = 2
-    options = smz3_options
+    option_definitions = smz3_options
     item_names: Set[str] = frozenset(TotalSMZ3Item.lookup_name_to_id)
     location_names: Set[str]
     item_name_to_id = TotalSMZ3Item.lookup_name_to_id

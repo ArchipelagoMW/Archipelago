@@ -41,7 +41,7 @@ class V6World(World):
 
     music_map: typing.Dict[int,int]
 
-    options = v6_options
+    option_definitions = v6_options
 
     def create_regions(self):
         create_regions(self.world,self.player)

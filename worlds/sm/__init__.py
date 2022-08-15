@@ -79,7 +79,7 @@ class SMWorld(World):
     game: str = "Super Metroid"
     topology_present = True
     data_version = 1
-    options = sm_options
+    option_definitions = sm_options
     item_names: Set[str] = frozenset(items_lookup_name_to_id)
     location_names: Set[str] = frozenset(locations_lookup_name_to_id)
     item_name_to_id = items_lookup_name_to_id
@@ -567,7 +567,7 @@ class SMWorld(World):
     def fill_slot_data(self): 
         slot_data = {}
         if not self.world.is_race:
-            for option_name in self.options:
+            for option_name in self.option_definitions:
                 option = getattr(self.world, option_name)[self.player]
                 slot_data[option_name] = option.value
 

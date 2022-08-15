@@ -39,7 +39,7 @@ class SM64World(World):
 
     area_connections: typing.Dict[int, int]
 
-    options = sm64_options
+    option_definitions = sm64_options
 
     def generate_early(self):
         self.topology_present = self.world.AreaRandomizer[self.player].value

@@ -110,7 +110,7 @@ class ALTTPWorld(World):
     Ganon!
     """
     game: str = "A Link to the Past"
-    options = alttp_options
+    option_definitions = alttp_options
     topology_present = True
     item_name_groups = item_name_groups
     hint_blacklist = {"Triforce"}
