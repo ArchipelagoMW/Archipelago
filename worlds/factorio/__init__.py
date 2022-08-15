@@ -193,7 +193,7 @@ class Factorio(World):
 
         return super(Factorio, self).collect_item(state, item, remove)
 
-    options = factorio_options
+    option_definitions = factorio_options
 
     @classmethod
     def stage_write_spoiler(cls, world, spoiler_handle):

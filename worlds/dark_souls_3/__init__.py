@@ -46,7 +46,7 @@ class DarkSouls3World(World):
     """
 
     game: str = "Dark Souls III"
-    options = dark_souls_options
+    option_definitions = dark_souls_options
     topology_present: bool = True
     remote_items: bool = False
     remote_start_inventory: bool = False
@@ -158,7 +158,7 @@ class DarkSouls3World(World):
 
     # For each region, add the associated locations retrieved from the corresponding location_table
     def create_region(self, region_name, location_table) -> Region:
-        new_region = Region(region_name, RegionType.Generic, region_name, self.player)
+        new_region = Region(region_name, RegionType.Generic, region_name, self.player, self.world)
         if location_table:
             for name, address in location_table.items():
                 location = DarkSouls3Location(self.player, name, self.location_name_to_id[name], new_region)
