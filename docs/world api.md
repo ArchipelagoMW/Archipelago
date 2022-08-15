@@ -86,7 +86,7 @@ inside a World object.
 
 Players provide customized settings for their World in the form of yamls.
 Those are accessible through `self.world.<option_name>[self.player]`. A dict
-of valid options has to be provided in `self.options`. Options are automatically
+of valid options has to be provided in `self.option_definitions`. Options are automatically
 added to the `World` object for easy access.
 
 ### World Options
