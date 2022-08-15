@@ -293,15 +293,15 @@ class SMWorld(World):
             if itemLoc.player == self.player and locationsDict[itemLoc.name].Id != None:
                 # this SM world can find this item: write full item data to tables and assign player data for writing
                 romPlayerID = itemLoc.item.player if itemLoc.item.player <= ROM_PLAYER_LIMIT else 0
-                if itemLoc.item.type in ItemManager.Items:
-                    itemId = ItemManager.Items[itemLoc.item.type].Id 
+                if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items:
+                    itemId = ItemManager.Items[itemLoc.item.type].Id
                 else:
                     itemId = ItemManager.Items['ArchipelagoItem'].Id + idx
                     multiWorldItems.append({"sym": symbols["message_item_names"],
                                             "offset": (vanillaItemTypesCount + idx)*64,
                                             "values": self.convertToROMItemName(itemLoc.item.name)})
                     idx += 1
-                
+
                 if (romPlayerID > 0 and romPlayerID not in self.playerIDMap.keys()):
                     playerIDCount += 1
                     self.playerIDMap[romPlayerID] = playerIDCount
@@ -488,7 +488,13 @@ class SMWorld(World):
         # commit all the changes we've made here to the ROM
         romPatcher.commitIPS()
 
-        itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == self.player]
+        itemLocs = [
+            ItemLocation(ItemManager.Items[itemLoc.item.type
+                         if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
+                         'ArchipelagoItem'],
+                         locationsDict[itemLoc.name], True)
+            for itemLoc in self.world.get_locations() if itemLoc.player == self.player
+        ]
         romPatcher.writeItemsLocs(itemLocs)
 
         itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.world.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.world.get_locations() if itemLoc.item.player == self.player] 
