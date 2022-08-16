@@ -57,12 +57,13 @@ give it one of the following classes: tooltip-left, tooltip-right, tooltip-top, 
 .tooltip:after, [data-tooltip]:after {
 	z-index: 10000;
 	padding: 8px;
-	width: 160px;
+	width: 260px;
     border-radius: 4px;
 	background-color: #000;
 	background-color: hsla(0, 0%, 20%, 0.9);
 	color: #fff;
 	content: attr(data-tooltip);
+	white-space: pre-wrap;
 	font-size: 14px;
 	line-height: 1.2;
 }
