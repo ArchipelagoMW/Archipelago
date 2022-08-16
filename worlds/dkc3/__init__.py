@@ -4,7 +4,7 @@ import math
 import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from .Items import DKC3Item, ItemData, item_table, inventory_table
+from .Items import DKC3Item, ItemData, item_table, inventory_table, junk_table
 from .Locations import DKC3Location, all_locations, setup_locations
 from .Options import dkc3_options
 from .Regions import create_regions, connect_regions
@@ -40,7 +40,7 @@ class DKC3World(World):
     game: str = "Donkey Kong Country 3"
     options = dkc3_options
     topology_present = False
-    data_version = 1
+    data_version = 2
     #hint_blacklist = {LocationName.rocket_rush_flag}
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -99,9 +99,12 @@ class DKC3World(World):
 
         # Bosses
         total_required_locations += number_of_bosses
-        
+
         # Secret Caves
         total_required_locations += 13
+
+        if self.world.kongsanity[self.player]:
+            total_required_locations += 39
 
         ## Brothers Bear
         if False:#self.world.include_trade_sequence[self.player]:
@@ -118,7 +121,13 @@ class DKC3World(World):
 
         total_junk_count = total_required_locations - len(itempool)
 
-        itempool += [self.create_item(ItemName.bear_coin)] * total_junk_count
+        junk_pool = []
+        junk_keys = list(junk_table.keys())
+        for i in range(total_junk_count):
+            junk_item = self.world.random.choice(junk_keys)
+            junk_pool += [self.create_item(junk_item)]
+
+        itempool += junk_pool
 
         self.active_level_list = level_list.copy()
 
