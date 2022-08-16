@@ -20,7 +20,7 @@ class Bk_SudokuWebWorld(WebWorld):
 
 class Bk_SudokuWorld(World):
     """
-    Play a little Sudoku while your on BK mode to maybe get some usefull hints
+    Play a little Sudoku while your in BK mode to maybe get some usefull hints
     """
     game = "Sudoku"
     web = Bk_SudokuWebWorld()

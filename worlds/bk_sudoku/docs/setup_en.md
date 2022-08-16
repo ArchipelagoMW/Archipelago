@@ -6,7 +6,7 @@
 
 ## General Concept
 
-This is a universal client, it cannot to any multiworld slot, and lets you play some sudoku's to unlock random hints
+This is a universal client, it can connect to any multiworld slot, and lets you play some sudoku's to unlock random hints
 
 ## Installation Procedures
 
