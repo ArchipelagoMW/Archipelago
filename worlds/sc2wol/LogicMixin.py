@@ -10,7 +10,8 @@ class SC2WoLLogic(LogicMixin):
         return self.has_any({'Marine', 'Marauder'}, player)
 
     def _sc2wol_has_air(self, world: MultiWorld, player: int) -> bool:
-        return self.has_any({'Viking', 'Wraith', 'Medivac', 'Banshee', 'Hercules'}, player)
+        return self.has_any({'Viking', 'Wraith', 'Banshee'}, player) or \
+               (self._sc2wol_has_common_unit(world, player) and self.has_any('Hercules', 'Medivac'))
 
     def _sc2wol_has_air_anti_air(self, world: MultiWorld, player: int) -> bool:
         return self.has_any({'Viking', 'Wraith'}, player)

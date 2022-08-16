@@ -138,16 +138,20 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Maw of the Void", "Maw of the Void: Expansion Prisoners", SC2WOL_LOC_ID_OFFSET + 1202),
         LocationData("Maw of the Void", "Maw of the Void: South Close Prisoners", SC2WOL_LOC_ID_OFFSET + 1203,
                      lambda state: state.has('Battlecruiser', player) or state.has('Science Vessel', player) and
-                                   state._sc2wol_has_air(world, player)),
+                                   state._sc2wol_has_air(world, player) and
+                                   state._sc2wol_has_mobile_anti_air(world, player)),
         LocationData("Maw of the Void", "Maw of the Void: South Far Prisoners", SC2WOL_LOC_ID_OFFSET + 1204,
                      lambda state: state.has('Battlecruiser', player) or state.has('Science Vessel', player) and
-                                   state._sc2wol_has_air(world, player)),
+                                   state._sc2wol_has_air(world, player) and
+                                   state._sc2wol_has_mobile_anti_air(world, player)),
         LocationData("Maw of the Void", "Maw of the Void: North Prisoners", SC2WOL_LOC_ID_OFFSET + 1205,
                      lambda state: state.has('Battlecruiser', player) or state.has('Science Vessel', player) and
-                                   state._sc2wol_has_air(world, player)),
+                                   state._sc2wol_has_air(world, player) and
+                                   state._sc2wol_has_mobile_anti_air(world, player)),
         LocationData("Maw of the Void", "Beat Maw of the Void", None,
                      lambda state: state.has('Battlecruiser', player) or state.has('Science Vessel', player) and
-                                   state._sc2wol_has_air(world, player)),
+                                   state._sc2wol_has_air(world, player) and
+                                   state._sc2wol_has_mobile_anti_air(world, player)),
         LocationData("Devil's Playground", "Devil's Playground: Victory", SC2WOL_LOC_ID_OFFSET + 1300,
                      lambda state: state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player)),
         LocationData("Devil's Playground", "Devil's Playground: Tosh's Miners", SC2WOL_LOC_ID_OFFSET + 1301),
