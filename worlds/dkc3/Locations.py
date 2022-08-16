@@ -221,6 +221,55 @@ level_location_table = {
     LocationName.rocket_rush_dk:      0xDC30A0,
 }
 
+kong_location_table = {
+    LocationName.lakeside_limbo_kong: 0xDC3100,
+    LocationName.doorstop_dash_kong:  0xDC3104,
+    LocationName.tidal_trouble_kong:  0xDC3108,
+    LocationName.skiddas_row_kong:    0xDC310C,
+    LocationName.murky_mill_kong:     0xDC3110,
+
+    LocationName.barrel_shield_bust_up_kong: 0xDC3114,
+    LocationName.riverside_race_kong:        0xDC3118,
+    LocationName.squeals_on_wheels_kong:     0xDC311C,
+    LocationName.springin_spiders_kong:      0xDC3120,
+    LocationName.bobbing_barrel_brawl_kong:  0xDC3124,
+
+    LocationName.bazzas_blockade_kong:     0xDC3128,
+    LocationName.rocket_barrel_ride_kong:  0xDC312C,
+    LocationName.kreeping_klasps_kong:     0xDC3130,
+    LocationName.tracker_barrel_trek_kong: 0xDC3134,
+    LocationName.fish_food_frenzy_kong:    0xDC3138,
+
+    LocationName.fire_ball_frenzy_kong:      0xDC313C,
+    LocationName.demolition_drain_pipe_kong: 0xDC3140,
+    LocationName.ripsaw_rage_kong:           0xDC3144,
+    LocationName.blazing_bazookas_kong:      0xDC3148,
+    LocationName.low_g_labyrinth_kong:       0xDC314C,
+
+    LocationName.krevice_kreepers_kong:   0xDC3150,
+    LocationName.tearaway_toboggan_kong:  0xDC3154,
+    LocationName.barrel_drop_bounce_kong: 0xDC3158,
+    LocationName.krack_shot_kroc_kong:    0xDC315C,
+    LocationName.lemguin_lunge_kong:      0xDC3160,
+
+    LocationName.buzzer_barrage_kong:    0xDC3164,
+    LocationName.kong_fused_cliffs_kong: 0xDC3168,
+    LocationName.floodlit_fish_kong:     0xDC316C,
+    LocationName.pothole_panic_kong:     0xDC3170,
+    LocationName.ropey_rumpus_kong:      0xDC3174,
+
+    LocationName.konveyor_rope_clash_kong: 0xDC3178,
+    LocationName.creepy_caverns_kong:      0xDC317C,
+    LocationName.lightning_lookout_kong:   0xDC3180,
+    LocationName.koindozer_klamber_kong:   0xDC3184,
+    LocationName.poisonous_pipeline_kong:  0xDC3188,
+
+    LocationName.stampede_sprint_kong:    0xDC318C,
+    LocationName.criss_cross_cliffs_kong: 0xDC3191,
+    LocationName.tyrant_twin_tussle_kong: 0xDC3195,
+    LocationName.swoopy_salvo_kong:       0xDC319A,
+}
+
 
 boss_location_table = {
     LocationName.belchas_barn:     0xDC30A1,
@@ -266,6 +315,7 @@ all_locations = {
     **boss_location_table,
     **secret_cave_location_table,
     **brothers_bear_location_table,
+    **kong_location_table,
 }
 
 location_table = {}
@@ -276,6 +326,9 @@ def setup_locations(world, player: int):
 
     if False:#world.include_trade_sequence[player].value:
         location_table.update({**brothers_bear_location_table})
+
+    if world.kongsanity[player].value:
+        location_table.update({**kong_location_table})
 
     return location_table
 
