@@ -103,7 +103,9 @@ const buildOptionsTable = (settings, romOpts = false) => {
     const tdl = document.createElement('td');
     const label = document.createElement('label');
     label.setAttribute('for', setting);
-    label.setAttribute('data-tooltip', settings[setting].description);
+    label.setAttribute('data-modal-title', settings[setting].displayName);
+    label.setAttribute('data-modal', settings[setting].description);
+    label.addEventListener('click', displayModal);
     label.innerText = `${settings[setting].displayName}:`;
     tdl.appendChild(label);
     tr.appendChild(tdl);
@@ -309,4 +311,42 @@ const hideUserMessage = () => {
   const userMessage = document.getElementById('user-message');
   userMessage.classList.remove('visible');
   userMessage.removeEventListener('click', hideUserMessage);
+};
+
+const displayModal = (evt) => {
+  hideModal();
+  const overlay = document.createElement('div');
+  overlay.id = 'ap-modal-overlay';
+  overlay.classList.add('ap-modal-overlay');
+  overlay.style.zIndex = 10000;
+  overlay.addEventListener('click', hideModal);
+
+  const modal = document.createElement('div');
+  modal.classList.add('ap-modal');
+  modal.addEventListener('click', (evt) => evt.stopPropagation());
+
+  const modalHeader = document.createElement('div');
+  modalHeader.classList.add('ap-modal-header');
+  modalHeader.innerText = event.target.getAttribute('data-modal-title');
+
+  modalContent = document.createElement('div');
+  modalContent.classList.add('ap-modal-content')
+  modalContent.innerHTML = event.target.getAttribute('data-modal');
+
+  modal.appendChild(modalHeader);
+  modal.appendChild(modalContent);
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+  document.body.addEventListener('keydown', hideModal);
+};
+
+const hideModal = (evt) => {
+  // If the user did not press Escape, do nothing
+  if (evt && evt.key && evt.key !== 'Escape') { return; }
+
+  const modal = document.getElementById('ap-modal-overlay');
+  if (modal) {
+    document.body.removeChild(modal);
+    document.removeEventListener('keydown', hideModal);
+  }
 };
