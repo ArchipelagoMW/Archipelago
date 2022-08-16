@@ -7,8 +7,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report! If this bug occurred during generation check your 
-        Archipelago install for a log and upload it - if relevant - with this report, as well as all yaml files used.
+        Thanks for taking the time to fill out this bug report! If this bug occurred during local generation check your 
+        Archipelago install for a log (`Archipelago/logs`) and upload it with this report, as well as all yaml files 
+        used.
   - type: textarea
     id: what-happened
     attributes:

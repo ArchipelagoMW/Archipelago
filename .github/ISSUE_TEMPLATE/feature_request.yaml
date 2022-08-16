@@ -10,7 +10,7 @@ body:
         Please replace `Category` in the title with what this feature will be targeting, such as Core generation,
         website, documentation, or a game.
         Note: this is not for requesting new games to be added. If you would like to request a game the best place to
-        ask is about it is in the discord.
+        ask is about it is in the [discord](https://archipelago.gg/discord).
   - type: textarea
     id: feature
     attributes:
