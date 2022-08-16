@@ -32,14 +32,14 @@ def room_info(room: UUID):
 
 @api_endpoints.route('/datapackage')
 @cache.cached()
-def get_datapackge():
+def get_datapackage():
     from worlds import network_data_package
     return network_data_package
 
 
 @api_endpoints.route('/datapackage_version')
 @cache.cached()
-def get_datapackge_versions():
+def get_datapackage_versions():
     from worlds import network_data_package, AutoWorldRegister
     version_package = {game: world.data_version for game, world in AutoWorldRegister.world_types.items()}
     version_package["version"] = network_data_package["version"]

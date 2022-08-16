@@ -802,7 +802,7 @@ def getTracker(tracker: UUID):
     for (team, player), data in multisave.get("video", []):
         video[(team, player)] = data
 
-    return render_template("trackers/" + "multiworldTracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
+    return render_template("trackers/" + "multiworldTracker.html", inventory=inventory, get_item_name_from_id=lookup_any_item_id_to_name,
                            lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
                            tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=alttp_icons,
                            multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
