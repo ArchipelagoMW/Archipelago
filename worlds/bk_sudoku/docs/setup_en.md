@@ -10,7 +10,7 @@ This is a universal client, it can connect to any multiworld slot, and lets you 
 
 ## Installation Procedures
 
-Download latest release on [BK Sudoku Releases](https://github.com/Jarno458/sudoku/releases). Download and extract the Bk_Sudoku.zip file
+Download latest release on [BK Sudoku Releases](https://github.com/Jarno458/sudoku/releases). Download and extract the Bk_Sudoku.zip file.
 
 ## Joining a MultiWorld Game
 
