@@ -12,7 +12,7 @@ def setup_default_world(world_type) -> MultiWorld:
     world.player_name = {1: "Tester"}
     world.set_seed()
     args = Namespace()
-    for name, option in world_type.options.items():
+    for name, option in world_type.option_definitions.items():
         setattr(args, name, {1: option.from_any(option.default)})
     world.set_options(args)
     world.set_default_common_options()

@@ -26,16 +26,42 @@ class MorphLocation(Enum):
 
 class Goal(Enum):
         DefeatBoth = 0
+        FastGanonDefeatMotherBrain = 1
+        AllDungeonsDefeatMotherBrain = 2
 
 class KeyShuffle(Enum):
         Null = 0
         Keysanity = 1
 
-class GanonInvincible(Enum):
-        Never = 0
-        BeforeCrystals = 1
-        BeforeAllDungeons = 2
-        Always = 3
+class OpenTower(Enum):
+        Random = -1
+        NoCrystals = 0
+        OneCrystal = 1
+        TwoCrystals = 2
+        ThreeCrystals = 3
+        FourCrystals = 4
+        FiveCrystals = 5
+        SixCrystals = 6
+        SevenCrystals = 7
+
+class GanonVulnerable(Enum):
+        Random = -1
+        NoCrystals = 0
+        OneCrystal = 1
+        TwoCrystals = 2
+        ThreeCrystals = 3
+        FourCrystals = 4
+        FiveCrystals = 5
+        SixCrystals = 6
+        SevenCrystals = 7
+
+class OpenTourian(Enum):
+        Random = -1
+        NoBosses = 0
+        OneBoss = 1
+        TwoBosses = 2
+        ThreeBosses = 3
+        FourBosses = 4
 
 class Config:
     GameMode: GameMode = GameMode.Multiworld
@@ -45,63 +71,20 @@ class Config:
     MorphLocation: MorphLocation = MorphLocation.Randomized
     Goal: Goal = Goal.DefeatBoth
     KeyShuffle: KeyShuffle = KeyShuffle.Null
-    Keysanity: bool = KeyShuffle != KeyShuffle.Null
     Race: bool = False
-    GanonInvincible: GanonInvincible = GanonInvincible.BeforeCrystals
 
-    def __init__(self, options: Dict[str, str]):
-        self.GameMode = self.ParseOption(options, GameMode.Multiworld)
-        self.Z3Logic = self.ParseOption(options, Z3Logic.Normal)
-        self.SMLogic = self.ParseOption(options, SMLogic.Normal)
-        self.SwordLocation = self.ParseOption(options, SwordLocation.Randomized)
-        self.MorphLocation = self.ParseOption(options, MorphLocation.Randomized)
-        self.Goal = self.ParseOption(options, Goal.DefeatBoth)
-        self.GanonInvincible = self.ParseOption(options, GanonInvincible.BeforeCrystals)
-        self.KeyShuffle = self.ParseOption(options, KeyShuffle.Null)
-        self.Keysanity = self.KeyShuffle != KeyShuffle.Null
-        self.Race = self.ParseOptionWith(options, "Race", False)
+    OpenTower: OpenTower = OpenTower.SevenCrystals
+    GanonVulnerable: GanonVulnerable = GanonVulnerable.SevenCrystals
+    OpenTourian: OpenTourian = OpenTourian.FourBosses
 
-    def ParseOption(self, options:Dict[str, str], defaultValue:Enum):
-        enumKey = defaultValue.__class__.__name__.lower()
-        if (enumKey in options):
-            return defaultValue.__class__[options[enumKey]]
-        return defaultValue
+    @property
+    def SingleWorld(self) -> bool:
+        return self.GameMode == GameMode.Normal
+    
+    @property
+    def Multiworld(self) -> bool:
+        return self.GameMode == GameMode.Multiworld
 
-    def ParseOptionWith(self, options:Dict[str, str], option:str, defaultValue:bool):
-        if (option.lower() in options):
-            return options[option.lower()]
-        return defaultValue
-
-    """ public static RandomizerOption GetRandomizerOption<T>(string description, string defaultOption = "") where T : Enum {
-        var enumType = typeof(T);
-        var values = Enum.GetValues(enumType).Cast<Enum>();
-
-        return new RandomizerOption {
-            Key = enumType.Name.ToLower(),
-            Description = description,
-            Type = RandomizerOptionType.Dropdown,
-            Default = string.IsNullOrEmpty(defaultOption) ? GetDefaultValue<T>().ToLString() : defaultOption,
-            Values = values.ToDictionary(k => k.ToLString(), v => v.GetDescription())
-        };
-    }
-
-    public static RandomizerOption GetRandomizerOption(string name, string description, bool defaultOption = false) {
-        return new RandomizerOption {
-            Key = name.ToLower(),
-            Description = description,
-            Type = RandomizerOptionType.Checkbox,
-            Default = defaultOption.ToString().ToLower(),
-            Values = new Dictionary<string, string>()
-        };
-    }
-
-    public static TEnum GetDefaultValue<TEnum>() where TEnum : Enum {
-        Type t = typeof(TEnum);
-        var attributes = (DefaultValueAttribute[])t.GetCustomAttributes(typeof(DefaultValueAttribute), false);
-        if ((attributes?.Length ?? 0) > 0) {
-            return (TEnum)attributes.First().Value;
-        }
-        else {
-            return default;
-        }
-    } """
+    @property
+    def Keysanity(self) -> bool:
+        return self.KeyShuffle != KeyShuffle.Null

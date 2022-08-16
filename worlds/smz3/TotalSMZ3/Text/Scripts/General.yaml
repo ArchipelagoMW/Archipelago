@@ -377,9 +377,76 @@ Items:
     THE GREEN
     BOOMERANG IS
     THE FASTEST!
-  Keycard: |-
-    A key from
-    the future?
+
+  CardCrateriaL1: |-
+    An Alien Key!
+    It says On top
+    of the world!
+  CardCrateriaL2: |-
+    An Alien Key!
+    It says Lower
+    the drawbridge
+  CardCrateriaBoss: |-
+    An Alien Key!
+    It says The First
+    and The Last
+  CardBrinstarL1: |-
+    An Alien Key!
+    It says But wait
+    there's more!
+  CardBrinstarL2: |-
+    An Alien Key!
+    It says
+    Green Monkeys
+  CardBrinstarBoss: |-
+    An Alien Key!
+    It says
+    Metroid DLC
+  CardNorfairL1: |-
+    An Alien Key!
+    It says ice?
+    In this heat?
+  CardNorfairL2: |-
+    An Alien Key!
+    It says
+    THE BUBBLES!
+  CardNorfairBoss: |-
+    An Alien Key!
+    It says
+    Place your bets
+  CardMaridiaL1: |-
+    An Alien Key!
+    It says A
+    Day at the Beach
+  CardMaridiaL2: |-
+    An Alien Key!
+    It says
+    That's a Moray
+  CardMaridiaBoss: |-
+    An Alien Key!
+    It says Shrimp
+    for dinner?
+  CardWreckedShipL1: |-
+    An Alien Key!
+    It says
+    Gutter Ball
+  CardWreckedShipBoss: |-
+    An Alien Key!
+    It says The
+    Ghost of Arrghus
+  CardLowerNorfairL1: |-
+    An Alien Key!
+    It says Worst
+    Key in the Game
+  CardLowerNorfairBoss: |-
+    An Alien Key!
+    It says
+    This guy again?
+
+  SmMap: |-
+    You can now
+    find your way
+    to the stars!
 
   Something: |-
     A small victory!

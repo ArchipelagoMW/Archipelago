@@ -5,6 +5,7 @@ import zlib
 from collections import defaultdict
 from functools import partial
 
+from .Items import OOTItem
 from .LocationList import business_scrubs
 from .Hints import writeGossipStoneHints, buildAltarHints, \
         buildGanonText, getSimpleHintNoPrefix
@@ -1881,9 +1882,9 @@ def get_override_entry(player_id, location):
         type = 2
     elif location.type == 'GS Token':
         type = 3
-    elif location.type == 'Shop' and location.item.type != 'Shop':
+    elif location.type == 'Shop' and not (isinstance(location.item, OOTItem) and location.item.type == 'Shop'):
         type = 0
-    elif location.type == 'GrottoNPC' and location.item.type != 'Shop':
+    elif location.type == 'GrottoNPC' and not (isinstance(location.item, OOTItem) and location.item.type == 'Shop'):
         type = 4
     elif location.type in ['Song', 'Cutscene']:
         type = 5

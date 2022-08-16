@@ -6,7 +6,7 @@ import typing
 from BaseClasses import Location
 from worlds.smz3.TotalSMZ3.Item import Item, ItemType
 from worlds.smz3.TotalSMZ3.Location import LocationType
-from worlds.smz3.TotalSMZ3.Region import IMedallionAccess, IReward, RewardType, SMRegion, Z3Region
+from worlds.smz3.TotalSMZ3.Region import IReward, RewardType, SMRegion, Z3Region
 from worlds.smz3.TotalSMZ3.Regions.Zelda.EasternPalace import EasternPalace
 from worlds.smz3.TotalSMZ3.Regions.Zelda.DesertPalace import DesertPalace
 from worlds.smz3.TotalSMZ3.Regions.Zelda.TowerOfHera import TowerOfHera
@@ -18,10 +18,14 @@ from worlds.smz3.TotalSMZ3.Regions.Zelda.IcePalace import IcePalace
 from worlds.smz3.TotalSMZ3.Regions.Zelda.MiseryMire import MiseryMire
 from worlds.smz3.TotalSMZ3.Regions.Zelda.TurtleRock import TurtleRock
 from worlds.smz3.TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
+from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.Brinstar.Kraid import Kraid
+from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.WreckedShip import WreckedShip
+from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.Maridia.Inner import Inner
+from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.NorfairLower.East import East
 from worlds.smz3.TotalSMZ3.Text.StringTable import StringTable
 
 from worlds.smz3.TotalSMZ3.World import World
-from worlds.smz3.TotalSMZ3.Config import Config, GameMode, GanonInvincible
+from worlds.smz3.TotalSMZ3.Config import Config, OpenTourian, Goal
 from worlds.smz3.TotalSMZ3.Text.Texts import Texts
 from worlds.smz3.TotalSMZ3.Text.Dialog import Dialog
 
@@ -30,6 +34,11 @@ class KeycardPlaque:
     Level2 = 0xe1
     Boss = 0xe2
     Null = 0x00  
+    Zero = 0xe3
+    One = 0xe4
+    Two = 0xe5
+    Three = 0xe6
+    Four = 0xe7
 
 class KeycardDoors:
     Left = 0xd414
@@ -73,8 +82,8 @@ class DropPrize(Enum):
     Fairy = 0xE3
 
 class Patch:
-    Major = 0
-    Minor = 1
+    Major = 11
+    Minor = 3
     allWorlds: List[World]
     myWorld: World
     seedGuid: str
@@ -105,13 +114,16 @@ class Patch:
 
         self.WriteDiggingGameRng()
 
-        self.WritePrizeShuffle()
+        self.WritePrizeShuffle(self.myWorld.WorldState.DropPrizes)
 
         self.WriteRemoveEquipmentFromUncle( self.myWorld.GetLocation("Link's Uncle").APLocation.item.item if 
                                             self.myWorld.GetLocation("Link's Uncle").APLocation.item.game == "SMZ3" else
                                             Item(ItemType.Something))
 
-        self.WriteGanonInvicible(config.GanonInvincible)
+        self.WriteGanonInvicible(config.Goal)
+        self.WritePreOpenPyramid(config.Goal)
+        self.WriteCrystalsNeeded(self.myWorld.TowerCrystals, self.myWorld.GanonCrystals)
+        self.WriteBossesNeeded(self.myWorld.TourianBossTokens)
         self.WriteRngBlock()
 
         self.WriteSaveAndQuitFromBossRoom()
@@ -135,26 +147,27 @@ class Patch:
         return {patch[0]:patch[1] for patch in self.patches}
     
     def WriteMedallions(self):
+        from worlds.smz3.TotalSMZ3.WorldState import Medallion
         turtleRock = next(region for region in self.myWorld.Regions if isinstance(region, TurtleRock))
         miseryMire = next(region for region in self.myWorld.Regions if isinstance(region, MiseryMire))
 
         turtleRockAddresses = [0x308023, 0xD020, 0xD0FF, 0xD1DE ]
         miseryMireAddresses = [ 0x308022, 0xCFF2, 0xD0D1, 0xD1B0 ]
 
-        if turtleRock.Medallion == ItemType.Bombos:
+        if turtleRock.Medallion == Medallion.Bombos:
             turtleRockValues = [0x00, 0x51, 0x10, 0x00]
-        elif turtleRock.Medallion == ItemType.Ether:
+        elif turtleRock.Medallion == Medallion.Ether:
             turtleRockValues = [0x01, 0x51, 0x18, 0x00]
-        elif turtleRock.Medallion == ItemType.Quake:
+        elif turtleRock.Medallion == Medallion.Quake:
             turtleRockValues = [0x02, 0x14, 0xEF, 0xC4]
         else:
             raise exception(f"Tried using {turtleRock.Medallion} in place of Turtle Rock medallion")
 
-        if miseryMire.Medallion == ItemType.Bombos:
+        if miseryMire.Medallion == Medallion.Bombos:
             miseryMireValues = [0x00, 0x51, 0x00, 0x00]
-        elif miseryMire.Medallion == ItemType.Ether:
+        elif miseryMire.Medallion == Medallion.Ether:
             miseryMireValues = [0x01, 0x13, 0x9F, 0xF1]
-        elif miseryMire.Medallion == ItemType.Quake:
+        elif miseryMire.Medallion == Medallion.Quake:
             miseryMireValues = [0x02, 0x51, 0x08, 0x00]
         else:
             raise exception(f"Tried using {miseryMire.Medallion} in place of Misery Mire medallion")
@@ -174,12 +187,19 @@ class Patch:
         self.rnd.shuffle(pendantsBlueRed)
         pendantRewards = pendantsGreen + pendantsBlueRed
 
+        bossTokens = [ 1, 2, 3, 4 ]
+
         regions = [region for region in self.myWorld.Regions if isinstance(region, IReward)]
         crystalRegions = [region for region in regions if region.Reward == RewardType.CrystalBlue] +  [region for region in regions if region.Reward == RewardType.CrystalRed]
         pendantRegions = [region for region in regions if region.Reward == RewardType.PendantGreen] +  [region for region in regions if region.Reward == RewardType.PendantNonGreen]
+        bossRegions =   [region for region in regions if region.Reward == RewardType.BossTokenKraid] + \
+                        [region for region in regions if region.Reward == RewardType.BossTokenPhantoon] + \
+                        [region for region in regions if region.Reward == RewardType.BossTokenDraygon] + \
+                        [region for region in regions if region.Reward == RewardType.BossTokenRidley]
 
         self.patches += self.RewardPatches(crystalRegions, crystalRewards, self.CrystalValues)
         self.patches += self.RewardPatches(pendantRegions, pendantRewards, self.PendantValues)
+        self.patches += self.RewardPatches(bossRegions, bossTokens, self.BossTokenValues)
 
     def RewardPatches(self, regions: List[IReward], rewards: List[int], rewardValues: Callable):
         addresses = [self.RewardAddresses(region) for region in regions]
@@ -189,17 +209,22 @@ class Patch:
 
     def RewardAddresses(self, region: IReward):
         regionType = {
-                    EasternPalace : [ 0x2A09D, 0xABEF8, 0xABEF9, 0x308052, 0x30807C, 0x1C6FE ],
-                    DesertPalace : [ 0x2A09E, 0xABF1C, 0xABF1D, 0x308053, 0x308078, 0x1C6FF ],
-                    TowerOfHera : [ 0x2A0A5, 0xABF0A, 0xABF0B, 0x30805A, 0x30807A, 0x1C706 ],
-                    PalaceOfDarkness : [ 0x2A0A1, 0xABF00, 0xABF01, 0x308056, 0x30807D, 0x1C702 ],
-                    SwampPalace : [ 0x2A0A0, 0xABF6C, 0xABF6D, 0x308055, 0x308071, 0x1C701 ],
-                    SkullWoods : [ 0x2A0A3, 0xABF12, 0xABF13, 0x308058, 0x30807B, 0x1C704 ],
-                    ThievesTown : [ 0x2A0A6, 0xABF36, 0xABF37, 0x30805B, 0x308077, 0x1C707 ],
-                    IcePalace : [ 0x2A0A4, 0xABF5A, 0xABF5B, 0x308059, 0x308073, 0x1C705 ],
-                    MiseryMire : [ 0x2A0A2, 0xABF48, 0xABF49, 0x308057, 0x308075, 0x1C703 ],
-                    TurtleRock : [ 0x2A0A7, 0xABF24, 0xABF25, 0x30805C, 0x308079, 0x1C708 ]
+                    EasternPalace : [ 0x2A09D, 0xABEF8, 0xABEF9, 0x308052, 0x30807C, 0x1C6FE, 0x30D100],
+                    DesertPalace : [ 0x2A09E, 0xABF1C, 0xABF1D, 0x308053, 0x308078, 0x1C6FF, 0x30D101 ],
+                    TowerOfHera : [ 0x2A0A5, 0xABF0A, 0xABF0B, 0x30805A, 0x30807A, 0x1C706, 0x30D102 ],
+                    PalaceOfDarkness : [ 0x2A0A1, 0xABF00, 0xABF01, 0x308056, 0x30807D, 0x1C702, 0x30D103 ],
+                    SwampPalace : [ 0x2A0A0, 0xABF6C, 0xABF6D, 0x308055, 0x308071, 0x1C701, 0x30D104 ],
+                    SkullWoods : [ 0x2A0A3, 0xABF12, 0xABF13, 0x308058, 0x30807B, 0x1C704, 0x30D105 ],
+                    ThievesTown : [ 0x2A0A6, 0xABF36, 0xABF37, 0x30805B, 0x308077, 0x1C707, 0x30D106 ],
+                    IcePalace : [ 0x2A0A4, 0xABF5A, 0xABF5B, 0x308059, 0x308073, 0x1C705, 0x30D107 ],
+                    MiseryMire : [ 0x2A0A2, 0xABF48, 0xABF49, 0x308057, 0x308075, 0x1C703, 0x30D108 ],
+                    TurtleRock : [ 0x2A0A7, 0xABF24, 0xABF25, 0x30805C, 0x308079, 0x1C708, 0x30D109 ],
+                    Kraid : [ 0xF26002, 0xF26004, 0xF26005, 0xF26000, 0xF26006, 0xF26007, 0x82FD36 ],
+                    WreckedShip : [ 0xF2600A, 0xF2600C, 0xF2600D, 0xF26008, 0xF2600E, 0xF2600F, 0x82FE26 ],
+                    Inner : [ 0xF26012, 0xF26014, 0xF26015, 0xF26010, 0xF26016, 0xF26017, 0x82FE76 ],
+                    East : [ 0xF2601A, 0xF2601C, 0xF2601D, 0xF26018, 0xF2601E, 0xF2601F, 0x82FDD6 ]
                     }
+
         result = regionType.get(type(region), None)
         if result is None:
             raise exception(f"Region {region} should not be a dungeon reward region")
@@ -208,13 +233,13 @@ class Patch:
 
     def CrystalValues(self, crystal: int):
         crystalMap = {
-                1 : [ 0x02, 0x34, 0x64, 0x40, 0x7F, 0x06 ],
-                2 : [ 0x10, 0x34, 0x64, 0x40, 0x79, 0x06 ],
-                3 : [ 0x40, 0x34, 0x64, 0x40, 0x6C, 0x06 ],
-                4 : [ 0x20, 0x34, 0x64, 0x40, 0x6D, 0x06 ],
-                5 : [ 0x04, 0x32, 0x64, 0x40, 0x6E, 0x06 ],
-                6 : [ 0x01, 0x32, 0x64, 0x40, 0x6F, 0x06 ],
-                7 : [ 0x08, 0x34, 0x64, 0x40, 0x7C, 0x06 ],
+                1 : [ 0x02, 0x34, 0x64, 0x40, 0x7F, 0x06, 0x10 ],
+                2 : [ 0x10, 0x34, 0x64, 0x40, 0x79, 0x06, 0x10 ],
+                3 : [ 0x40, 0x34, 0x64, 0x40, 0x6C, 0x06, 0x10 ],
+                4 : [ 0x20, 0x34, 0x64, 0x40, 0x6D, 0x06, 0x10 ],
+                5 : [ 0x04, 0x32, 0x64, 0x40, 0x6E, 0x06, 0x11 ],
+                6 : [ 0x01, 0x32, 0x64, 0x40, 0x6F, 0x06, 0x11 ],
+                7 : [ 0x08, 0x34, 0x64, 0x40, 0x7C, 0x06, 0x10 ],
                 }
         result = crystalMap.get(crystal, None)
         if result is None:
@@ -224,13 +249,26 @@ class Patch:
 
     def PendantValues(self, pendant: int):
         pendantMap = {
-                    1 : [ 0x04, 0x38, 0x62, 0x00, 0x69, 0x01 ],
-                    2 : [ 0x01, 0x32, 0x60, 0x00, 0x69, 0x03 ],
-                    3 : [ 0x02, 0x34, 0x60, 0x00, 0x69, 0x02 ],
+                        1 : [ 0x04, 0x38, 0x62, 0x00, 0x69, 0x01, 0x12 ],
+                        2 : [ 0x01, 0x32, 0x60, 0x00, 0x69, 0x03, 0x14 ],
+                        3 : [ 0x02, 0x34, 0x60, 0x00, 0x69, 0x02, 0x13 ]
                     }
         result = pendantMap.get(pendant, None)
         if result is None:
             raise exception(f"Tried using {pendant} as a pendant number")
+        else:
+            return result
+
+    def BossTokenValues(self, token: int):
+        tokenMap = {
+                        1 : [ 0x01, 0x38, 0x40, 0x80, 0x69, 0x80, 0x15 ],
+                        2 : [ 0x02, 0x34, 0x42, 0x80, 0x69, 0x81, 0x16 ],
+                        3 : [ 0x04, 0x34, 0x44, 0x80, 0x69, 0x82, 0x17 ],
+                        4 : [ 0x08, 0x32, 0x46, 0x80, 0x69, 0x83, 0x18 ]
+                    }
+        result = tokenMap.get(token, None)
+        if result is None:
+            raise exception(f"Tried using {token} as a boss token number")
         else:
             return result
     
@@ -259,7 +297,7 @@ class Patch:
                     ItemType.SpaceJump : 0xEF1B,
                     ItemType.ScrewAttack : 0xEF1F
                     }
-            plmId = 0xEFE0 if self.myWorld.Config.GameMode == GameMode.Multiworld else \
+            plmId = 0xEFE0 if self.myWorld.Config.Multiworld else \
                                 itemMap.get(location.APLocation.item.item.Type, 0xEFE0)
             if (plmId == 0xEFE0):
                 plmId += 4 if location.Type == LocationType.Chozo else 8 if location.Type == LocationType.Hidden else 0
@@ -268,7 +306,7 @@ class Patch:
             return plmId
 
         for location in locations:
-            if (self.myWorld.Config.GameMode == GameMode.Multiworld):
+            if (self.myWorld.Config.Multiworld):
                 self.patches.append((Snes(location.Address), getWordArray(GetSMItemPLM(location))))
                 self.patches.append(self.ItemTablePatch(location, self.GetZ3ItemId(location)))
             else:
@@ -283,18 +321,14 @@ class Patch:
                 self.patches.append((Snes(0x9E3BB), [0xE4] if location.APLocation.item.game == "SMZ3" and location.APLocation.item.item.Type == ItemType.KeyTH else [0xEB]))
             elif (location.Type in [LocationType.Pedestal, LocationType.Ether, LocationType.Bombos]):
                 text = Texts.ItemTextbox(location.APLocation.item.item if location.APLocation.item.game == "SMZ3" else Item(ItemType.Something))
-                dialog = Dialog.Simple(text)
                 if (location.Type == LocationType.Pedestal):
                     self.stringTable.SetPedestalText(text)
-                    self.patches.append((Snes(0x308300), dialog))
                 elif (location.Type == LocationType.Ether):
                     self.stringTable.SetEtherText(text)
-                    self.patches.append((Snes(0x308F00), dialog))
                 elif (location.Type == LocationType.Bombos):
                     self.stringTable.SetBombosText(text)
-                    self.patches.append((Snes(0x309000), dialog))
 
-            if (self.myWorld.Config.GameMode == GameMode.Multiworld):
+            if (self.myWorld.Config.Multiworld):
                 self.patches.append((Snes(location.Address), [(location.Id - 256)]))
                 self.patches.append(self.ItemTablePatch(location, self.GetZ3ItemId(location)))
             else:
@@ -305,11 +339,11 @@ class Patch:
             item = location.APLocation.item.item
             itemDungeon = None
             if item.IsKey():
-                itemDungeon = ItemType.Key if (not item.World.Config.Keysanity or item.Type != ItemType.KeyHC) else ItemType.KeyHC
+                itemDungeon = ItemType.Key
             elif item.IsBigKey(): 
                 itemDungeon = ItemType.BigKey
             elif item.IsMap():
-                itemDungeon = ItemType.Map if (not item.World.Config.Keysanity or item.Type != ItemType.MapHC) else ItemType.MapHC
+                itemDungeon = ItemType.Map
             elif item.IsCompass():
                 itemDungeon = ItemType.Compass
 
@@ -327,15 +361,11 @@ class Patch:
 
     def WriteDungeonMusic(self, keysanity: bool):
         if (not keysanity):
-            regions = [region for region in self.myWorld.Regions if isinstance(region, IReward)]
-            music = []
+            regions = [region for region in self.myWorld.Regions if isinstance(region, Z3Region) and isinstance(region, IReward) and 
+                                                                    region.Reward != None and region.Reward != RewardType.Agahnim]
             pendantRegions = [region for region in regions if region.Reward in [RewardType.PendantGreen, RewardType.PendantNonGreen]]
             crystalRegions = [region for region in regions if region.Reward in [RewardType.CrystalBlue, RewardType.CrystalRed]]
-            regions = pendantRegions + crystalRegions
-            music = [
-                        0x11, 0x11, 0x11, 0x16, 0x16,
-                        0x16, 0x16, 0x16, 0x16, 0x16,
-                    ]
+            music = [0x11 if (region.Reward == RewardType.PendantGreen or region.Reward == RewardType.PendantNonGreen) else 0x16 for region in regions]
             self.patches += self.MusicPatches(regions, music)
 
     #IEnumerable<byte> RandomDungeonMusic() {
@@ -366,51 +396,13 @@ class Patch:
         else:
             return result
 
-    def WritePrizeShuffle(self):
-        prizePackItems = 56
-        treePullItems = 3
-
-        bytes = []
-        drop = 0
-        final = 0
-
-        pool = [
-            DropPrize.Heart, DropPrize.Heart, DropPrize.Heart, DropPrize.Heart, DropPrize.Green, DropPrize.Heart, DropPrize.Heart, DropPrize.Green,         #// pack 1
-            DropPrize.Blue, DropPrize.Green, DropPrize.Blue, DropPrize.Red, DropPrize.Blue, DropPrize.Green, DropPrize.Blue, DropPrize.Blue,                #// pack 2
-            DropPrize.FullMagic, DropPrize.Magic, DropPrize.Magic, DropPrize.Blue, DropPrize.FullMagic, DropPrize.Magic, DropPrize.Heart, DropPrize.Magic,  #// pack 3
-            DropPrize.Bomb1, DropPrize.Bomb1, DropPrize.Bomb1, DropPrize.Bomb4, DropPrize.Bomb1, DropPrize.Bomb1, DropPrize.Bomb8, DropPrize.Bomb1,        #// pack 4
-            DropPrize.Arrow5, DropPrize.Heart, DropPrize.Arrow5, DropPrize.Arrow10, DropPrize.Arrow5, DropPrize.Heart, DropPrize.Arrow5, DropPrize.Arrow10,#// pack 5
-            DropPrize.Magic, DropPrize.Green, DropPrize.Heart, DropPrize.Arrow5, DropPrize.Magic, DropPrize.Bomb1, DropPrize.Green, DropPrize.Heart,       #// pack 6
-            DropPrize.Heart, DropPrize.Fairy, DropPrize.FullMagic, DropPrize.Red, DropPrize.Bomb8, DropPrize.Heart, DropPrize.Red, DropPrize.Arrow10,      #// pack 7
-            DropPrize.Green, DropPrize.Blue, DropPrize.Red,#// from pull trees
-            DropPrize.Green, DropPrize.Red,#// from prize crab
-            DropPrize.Green, #// stunned prize
-            DropPrize.Red,#// saved fish prize
-        ]
-
-        prizes = pool
-        self.rnd.shuffle(prizes)
-
-        #/* prize pack drop order */
-        (bytes, prizes) = SplitOff(prizes, prizePackItems)
-        self.patches.append((Snes(0x6FA78), [byte.value for byte in bytes]))
-
-        #/* tree pull prizes */
-        (bytes, prizes) = SplitOff(prizes, treePullItems)
-        self.patches.append((Snes(0x1DFBD4), [byte.value for byte in bytes]))
-
-        #/* crab prizes */
-        (drop, final, prizes) = (prizes[0], prizes[1], prizes[2:])
-        self.patches.append((Snes(0x6A9C8), [ drop.value ]))
-        self.patches.append((Snes(0x6A9C4), [ final.value ]))
-
-        #/* stun prize */
-        (drop, prizes) = (prizes[0], prizes[1:])
-        self.patches.append((Snes(0x6F993), [ drop.value ]))
-
-        #/* fish prize */
-        drop = prizes[0]
-        self.patches.append((Snes(0x1D82CC), [ drop.value ]))
+    def WritePrizeShuffle(self, dropPrizes):
+        self.patches.append((Snes(0x6FA78), [e.value for e in dropPrizes.Packs]))
+        self.patches.append((Snes(0x1DFBD4), [e.value for e in dropPrizes.TreePulls]))
+        self.patches.append((Snes(0x6A9C8), [dropPrizes.CrabContinous.value]))
+        self.patches.append((Snes(0x6A9C4), [dropPrizes.CrabFinal.value]))
+        self.patches.append((Snes(0x6F993), [dropPrizes.Stun.value]))
+        self.patches.append((Snes(0x1D82CC), [dropPrizes.Fish.value]))
 
         self.patches += self.EnemyPrizePackDistribution()
 
@@ -524,46 +516,29 @@ class Patch:
         redCrystalDungeons = [region for region in regions if region.Reward == RewardType.CrystalRed]
 
         sahasrahla = Texts.SahasrahlaReveal(greenPendantDungeon)
-        self.patches.append((Snes(0x308A00), Dialog.Simple(sahasrahla)))
         self.stringTable.SetSahasrahlaRevealText(sahasrahla)
 
         bombShop = Texts.BombShopReveal(redCrystalDungeons)
-        self.patches.append((Snes(0x308E00), Dialog.Simple(bombShop)))
         self.stringTable.SetBombShopRevealText(bombShop)
 
         blind = Texts.Blind(self.rnd)
-        self.patches.append((Snes(0x308800), Dialog.Simple(blind)))
         self.stringTable.SetBlindText(blind)
 
         tavernMan = Texts.TavernMan(self.rnd)
-        self.patches.append((Snes(0x308C00), Dialog.Simple(tavernMan)))
         self.stringTable.SetTavernManText(tavernMan)
 
         ganon = Texts.GanonFirstPhase(self.rnd)
-        self.patches.append((Snes(0x308600), Dialog.Simple(ganon)))
         self.stringTable.SetGanonFirstPhaseText(ganon)
-
-        #// Todo: Verify these two are correct if ganon invincible patch is ever added
-        #// ganon_fall_in_alt in v30
-        ganonFirstPhaseInvincible = "You think you\nare ready to\nface me?\n\nI will not die\n\nunless you\ncomplete your\ngoals. Dingus!"
-        self.patches.append((Snes(0x309100), Dialog.Simple(ganonFirstPhaseInvincible)))
-
-        #// ganon_phase_3_alt in v30
-        ganonThirdPhaseInvincible = "Got wax in\nyour ears?\nI cannot die!"
-        self.patches.append((Snes(0x309200), Dialog.Simple(ganonThirdPhaseInvincible)))
-        #// ---
 
         silversLocation = [loc for world in self.allWorlds for loc in world.Locations if loc.ItemIs(ItemType.SilverArrows, self.myWorld)]
         if len(silversLocation) == 0:      
             silvers = Texts.GanonThirdPhaseMulti(None, self.myWorld, self.silversWorldID, self.playerIDToNames[self.silversWorldID])
         else:
-            silvers = Texts.GanonThirdPhaseMulti(silversLocation[0].Region, self.myWorld) if config.GameMode == GameMode.Multiworld else \
+            silvers = Texts.GanonThirdPhaseMulti(silversLocation[0].Region, self.myWorld) if config.Multiworld else \
                         Texts.GanonThirdPhaseSingle(silversLocation[0].Region)
-        self.patches.append((Snes(0x308700), Dialog.Simple(silvers)))
         self.stringTable.SetGanonThirdPhaseText(silvers)
 
         triforceRoom = Texts.TriforceRoom(self.rnd)
-        self.patches.append((Snes(0x308400), Dialog.Simple(triforceRoom)))
         self.stringTable.SetTriforceRoomText(triforceRoom)
 
     def WriteStringTable(self):
@@ -579,26 +554,32 @@ class Patch:
         return bytearray(name, 'utf8') 
 
     def WriteSeedData(self):
-        configField =                                                                            \
+        configField1 =                                                                           \
             ((1 if self.myWorld.Config.Race else 0) << 15) |                                     \
             ((1 if self.myWorld.Config.Keysanity else 0) << 13) |                                \
-            ((1 if self.myWorld.Config.GameMode == Config.GameMode.Multiworld else 0) << 12) |   \
+            ((1 if self.myWorld.Config.Multiworld else 0) << 12) |                               \
             (self.myWorld.Config.Z3Logic.value << 10) |                                          \
             (self.myWorld.Config.SMLogic.value << 8) |                                           \
             (Patch.Major << 4) |                                                                 \
             (Patch.Minor << 0)
 
+        configField2 =                                                                           \
+            ((1 if self.myWorld.Config.SwordLocation else 0) << 14) |                            \
+            ((1 if self.myWorld.Config.MorphLocation else 0) << 12) |                            \
+            ((1 if self.myWorld.Config.Goal else 0) << 8)     
+
         self.patches.append((Snes(0x80FF50), getWordArray(self.myWorld.Id)))
-        self.patches.append((Snes(0x80FF52), getWordArray(configField)))
+        self.patches.append((Snes(0x80FF52), getWordArray(configField1)))
         self.patches.append((Snes(0x80FF54), getDoubleWordArray(self.seed)))
+        self.patches.append((Snes(0x80FF58), getWordArray(configField2)))
         #/* Reserve the rest of the space for future use */
-        self.patches.append((Snes(0x80FF58), [0x00] * 8))
+        self.patches.append((Snes(0x80FF5A), [0x00] * 6))
         self.patches.append((Snes(0x80FF60), bytearray(self.seedGuid, 'utf8')))
         self.patches.append((Snes(0x80FF80), bytearray(self.myWorld.Guid, 'utf8')))
 
     def WriteCommonFlags(self):
         #/* Common Combo Configuration flags at [asm]/config.asm */
-        if (self.myWorld.Config.GameMode == GameMode.Multiworld):
+        if (self.myWorld.Config.Multiworld):
             self.patches.append((Snes(0xF47000), getWordArray(0x0001)))
         if (self.myWorld.Config.Keysanity):
             self.patches.append((Snes(0xF47006), getWordArray(0x0001)))
@@ -619,97 +600,104 @@ class Patch:
         if (self.myWorld.Config.Keysanity):
             self.patches.append((Snes(0x40003B), [ 1 ])) #// MapMode #$00 = Always On (default) - #$01 = Require Map Item
             self.patches.append((Snes(0x400045), [ 0x0f ])) #// display ----dcba a: Small Keys, b: Big Key, c: Map, d: Compass
-            self.patches.append((Snes(0x40016A), [ 0x01 ])) #// enable local item dialog boxes for dungeon and keycard items
+            self.patches.append((Snes(0x40016A), [ 0x01 ])) #// FreeItemText: db #$01 ; #00 = Off (default) - #$01 = On
 
     def WriteSMKeyCardDoors(self):
-        if (not self.myWorld.Config.Keysanity):
-            return
-
-        plaquePLm = 0xd410
-
-        doorList = [
-                        #// RoomId  Door Facing              yyxx  Keycard Event Type                   Plaque type               yyxx, Address (if 0 a dynamic PLM is created)
-                        #// Crateria
-                        [ 0x91F8, KeycardDoors.Right,      0x2601, KeycardEvents.CrateriaLevel1,        KeycardPlaque.Level1,   0x2400, 0x0000 ], #// Crateria - Landing Site - Door to gauntlet
-                        [ 0x91F8, KeycardDoors.Left,       0x168E, KeycardEvents.CrateriaLevel1,        KeycardPlaque.Level1,   0x148F, 0x801E ], #// Crateria - Landing Site - Door to landing site PB
-                        [ 0x948C, KeycardDoors.Left,       0x062E, KeycardEvents.CrateriaLevel2,        KeycardPlaque.Level2,   0x042F, 0x8222 ], #// Crateria - Before Moat - Door to moat (overwrite PB door)
-                        [ 0x99BD, KeycardDoors.Left,       0x660E, KeycardEvents.CrateriaBoss,          KeycardPlaque.Boss,     0x640F, 0x8470 ], #// Crateria - Before G4 - Door to G4
-                        [ 0x9879, KeycardDoors.Left,       0x062E, KeycardEvents.CrateriaBoss,          KeycardPlaque.Boss,     0x042F, 0x8420 ], #// Crateria - Before BT - Door to Bomb Torizo
-                        
-                        #// Brinstar
-                        [ 0x9F11, KeycardDoors.Left,       0x060E, KeycardEvents.BrinstarLevel1,        KeycardPlaque.Level1,   0x040F, 0x8784 ], #// Brinstar - Blue Brinstar - Door to ceiling e-tank room
-
-                        [ 0x9AD9, KeycardDoors.Right,      0xA601, KeycardEvents.BrinstarLevel2,        KeycardPlaque.Level2,   0xA400, 0x0000 ], #// Brinstar - Green Brinstar - Door to etecoon area                
-                        [ 0x9D9C, KeycardDoors.Down,       0x0336, KeycardEvents.BrinstarBoss,          KeycardPlaque.Boss,     0x0234, 0x863A ], #// Brinstar - Pink Brinstar - Door to spore spawn                
-                        [ 0xA130, KeycardDoors.Left,       0x161E, KeycardEvents.BrinstarLevel2,        KeycardPlaque.Level2,   0x141F, 0x881C ], #// Brinstar - Pink Brinstar - Door to wave gate e-tank
-                        [ 0xA0A4, KeycardDoors.Left,       0x062E, KeycardEvents.BrinstarLevel2,        KeycardPlaque.Level2,   0x042F, 0x0000 ], #// Brinstar - Pink Brinstar - Door to spore spawn super
-
-                        [ 0xA56B, KeycardDoors.Left,       0x161E, KeycardEvents.BrinstarBoss,          KeycardPlaque.Boss,     0x141F, 0x8A1A ], #// Brinstar - Before Kraid - Door to Kraid
-
-                        #// Upper Norfair
-                        [ 0xA7DE, KeycardDoors.Right,      0x3601, KeycardEvents.NorfairLevel1,         KeycardPlaque.Level1,   0x3400, 0x8B00 ], #// Norfair - Business Centre - Door towards Ice
-                        [ 0xA923, KeycardDoors.Right,      0x0601, KeycardEvents.NorfairLevel1,         KeycardPlaque.Level1,   0x0400, 0x0000 ], #// Norfair - Pre-Crocomire - Door towards Ice
-
-                        [ 0xA788, KeycardDoors.Left,       0x162E, KeycardEvents.NorfairLevel2,         KeycardPlaque.Level2,   0x142F, 0x8AEA ], #// Norfair - Lava Missile Room - Door towards Bubble Mountain
-                        [ 0xAF72, KeycardDoors.Left,       0x061E, KeycardEvents.NorfairLevel2,         KeycardPlaque.Level2,   0x041F, 0x0000 ], #// Norfair - After frog speedway - Door to Bubble Mountain
-                        [ 0xAEDF, KeycardDoors.Down,       0x0206, KeycardEvents.NorfairLevel2,         KeycardPlaque.Level2,   0x0204, 0x0000 ], #// Norfair - Below bubble mountain - Door to Bubble Mountain
-                        [ 0xAD5E, KeycardDoors.Right,      0x0601, KeycardEvents.NorfairLevel2,         KeycardPlaque.Level2,   0x0400, 0x0000 ], #// Norfair - LN Escape - Door to Bubble Mountain
-                        
-                        [ 0xA923, KeycardDoors.Up,         0x2DC6, KeycardEvents.NorfairBoss,           KeycardPlaque.Boss,     0x2EC4, 0x8B96 ], #// Norfair - Pre-Crocomire - Door to Crocomire
-
-                        #// Lower Norfair
-                        [ 0xB4AD, KeycardDoors.Left,       0x160E, KeycardEvents.LowerNorfairLevel1,    KeycardPlaque.Level1,   0x140F, 0x0000 ], #// Lower Norfair - WRITG - Door to Amphitheatre
-                        [ 0xAD5E, KeycardDoors.Left,       0x065E, KeycardEvents.LowerNorfairLevel1,    KeycardPlaque.Level1,   0x045F, 0x0000 ], #// Lower Norfair - Exit - Door to "Reverse LN Entry"
-                        [ 0xB37A, KeycardDoors.Right,      0x0601, KeycardEvents.LowerNorfairBoss,      KeycardPlaque.Boss,     0x0400, 0x8EA6 ], #// Lower Norfair - Pre-Ridley - Door to Ridley
-
-                        #// Maridia
-                        [ 0xD0B9, KeycardDoors.Left,       0x065E, KeycardEvents.MaridiaLevel1,         KeycardPlaque.Level1,   0x045F, 0x0000 ], #// Maridia - Mt. Everest - Door to Pink Maridia
-                        [ 0xD5A7, KeycardDoors.Right,      0x1601, KeycardEvents.MaridiaLevel1,         KeycardPlaque.Level1,   0x1400, 0x0000 ], #// Maridia - Aqueduct - Door towards Beach
-
-                        [ 0xD617, KeycardDoors.Left,       0x063E, KeycardEvents.MaridiaLevel2,         KeycardPlaque.Level2,   0x043F, 0x0000 ], #// Maridia - Pre-Botwoon - Door to Botwoon
-                        [ 0xD913, KeycardDoors.Right,      0x2601, KeycardEvents.MaridiaLevel2,         KeycardPlaque.Level2,   0x2400, 0x0000 ], #// Maridia - Pre-Colloseum - Door to post-botwoon
-
-                        [ 0xD78F, KeycardDoors.Right,      0x2601, KeycardEvents.MaridiaBoss,           KeycardPlaque.Boss,     0x2400, 0xC73B ], #// Maridia - Precious Room - Door to Draygon
-
-                        [ 0xDA2B, KeycardDoors.BossLeft,   0x164E, 0x00f0,                              KeycardPlaque.Null,     0x144F, 0x0000 ], #// Maridia - Change Cac Alley Door to Boss Door (prevents key breaking)
-
-                        #// Wrecked Ship
-                        [ 0x93FE, KeycardDoors.Left,       0x167E, KeycardEvents.WreckedShipLevel1,     KeycardPlaque.Level1,   0x147F, 0x0000 ], #// Wrecked Ship - Outside Wrecked Ship West - Door to Reserve Tank Check
-                        [ 0x968F, KeycardDoors.Left,       0x060E, KeycardEvents.WreckedShipLevel1,     KeycardPlaque.Level1,   0x040F, 0x0000 ], #// Wrecked Ship - Outside Wrecked Ship West - Door to Bowling Alley
-                        [ 0xCE40, KeycardDoors.Left,       0x060E, KeycardEvents.WreckedShipLevel1,     KeycardPlaque.Level1,   0x040F, 0x0000 ], #// Wrecked Ship - Gravity Suit - Door to Bowling Alley
-
-                        [ 0xCC6F, KeycardDoors.Left,       0x064E, KeycardEvents.WreckedShipBoss,       KeycardPlaque.Boss,     0x044F, 0xC29D ], #// Wrecked Ship - Pre-Phantoon - Door to Phantoon   
-        ]
-
-        doorId = 0x0000
+        plaquePlm = 0xd410
         plmTablePos = 0xf800
-        for door in doorList:
-            doorArgs = doorId | door[3] if door[4] != KeycardPlaque.Null else door[3]
-            if (door[6] == 0):
-                #// Write dynamic door
-                doorData = []
-                for x in door[0:3]:
-                    doorData += getWordArray(x)
-                doorData += getWordArray(doorArgs)
-                self.patches.append((Snes(0x8f0000 + plmTablePos), doorData))
-                plmTablePos += 0x08
-            else:
-                #// Overwrite existing door
-                doorData = []
-                for x in door[1:3]:
-                    doorData += getWordArray(x)
-                doorData += getWordArray(doorArgs)
-                self.patches.append((Snes(0x8f0000 + door[6]), doorData))
-                if((door[3] == KeycardEvents.BrinstarBoss and door[0] != 0x9D9C) or door[3] == KeycardEvents.LowerNorfairBoss or door[3] == KeycardEvents.MaridiaBoss or door[3] == KeycardEvents.WreckedShipBoss):
-                    #// Overwrite the extra parts of the Gadora with a PLM that just deletes itself
-                    self.patches.append((Snes(0x8f0000 + door[6] + 0x06), [ 0x2F, 0xB6, 0x00, 0x00, 0x00, 0x00, 0x2F, 0xB6, 0x00, 0x00, 0x00, 0x00 ]))
 
-            #// Plaque data
-            if (door[4] != KeycardPlaque.Null):
-                plaqueData = getWordArray(door[0]) + getWordArray(plaquePLm) + getWordArray(door[5]) + getWordArray(door[4])
-                self.patches.append((Snes(0x8f0000 + plmTablePos), plaqueData))
-                plmTablePos += 0x08
-            doorId += 1
+        if ( self.myWorld.Config.Keysanity):
+            doorList = [
+                            #// RoomId  Door Facing              yyxx  Keycard Event Type                   Plaque type               yyxx, Address (if 0 a dynamic PLM is created)
+                            #// Crateria
+                            [ 0x91F8, KeycardDoors.Right,      0x2601, KeycardEvents.CrateriaLevel1,        KeycardPlaque.Level1,   0x2400, 0x0000 ], #// Crateria - Landing Site - Door to gauntlet
+                            [ 0x91F8, KeycardDoors.Left,       0x168E, KeycardEvents.CrateriaLevel1,        KeycardPlaque.Level1,   0x148F, 0x801E ], #// Crateria - Landing Site - Door to landing site PB
+                            [ 0x948C, KeycardDoors.Left,       0x062E, KeycardEvents.CrateriaLevel2,        KeycardPlaque.Level2,   0x042F, 0x8222 ], #// Crateria - Before Moat - Door to moat (overwrite PB door)
+                            [ 0x99BD, KeycardDoors.Left,       0x660E, KeycardEvents.CrateriaBoss,          KeycardPlaque.Boss,     0x640F, 0x8470 ], #// Crateria - Before G4 - Door to G4
+                            [ 0x9879, KeycardDoors.Left,       0x062E, KeycardEvents.CrateriaBoss,          KeycardPlaque.Boss,     0x042F, 0x8420 ], #// Crateria - Before BT - Door to Bomb Torizo
+                            
+                            #// Brinstar
+                            [ 0x9F11, KeycardDoors.Left,       0x060E, KeycardEvents.BrinstarLevel1,        KeycardPlaque.Level1,   0x040F, 0x8784 ], #// Brinstar - Blue Brinstar - Door to ceiling e-tank room
+
+                            [ 0x9AD9, KeycardDoors.Right,      0xA601, KeycardEvents.BrinstarLevel2,        KeycardPlaque.Level2,   0xA400, 0x0000 ], #// Brinstar - Green Brinstar - Door to etecoon area                
+                            [ 0x9D9C, KeycardDoors.Down,       0x0336, KeycardEvents.BrinstarBoss,          KeycardPlaque.Boss,     0x0234, 0x863A ], #// Brinstar - Pink Brinstar - Door to spore spawn                
+                            [ 0xA130, KeycardDoors.Left,       0x161E, KeycardEvents.BrinstarLevel2,        KeycardPlaque.Level2,   0x141F, 0x881C ], #// Brinstar - Pink Brinstar - Door to wave gate e-tank
+                            [ 0xA0A4, KeycardDoors.Left,       0x062E, KeycardEvents.BrinstarLevel2,        KeycardPlaque.Level2,   0x042F, 0x0000 ], #// Brinstar - Pink Brinstar - Door to spore spawn super
+
+                            [ 0xA56B, KeycardDoors.Left,       0x161E, KeycardEvents.BrinstarBoss,          KeycardPlaque.Boss,     0x141F, 0x8A1A ], #// Brinstar - Before Kraid - Door to Kraid
+
+                            #// Upper Norfair
+                            [ 0xA7DE, KeycardDoors.Right,      0x3601, KeycardEvents.NorfairLevel1,         KeycardPlaque.Level1,   0x3400, 0x8B00 ], #// Norfair - Business Centre - Door towards Ice
+                            [ 0xA923, KeycardDoors.Right,      0x0601, KeycardEvents.NorfairLevel1,         KeycardPlaque.Level1,   0x0400, 0x0000 ], #// Norfair - Pre-Crocomire - Door towards Ice
+
+                            [ 0xA788, KeycardDoors.Left,       0x162E, KeycardEvents.NorfairLevel2,         KeycardPlaque.Level2,   0x142F, 0x8AEA ], #// Norfair - Lava Missile Room - Door towards Bubble Mountain
+                            [ 0xAF72, KeycardDoors.Left,       0x061E, KeycardEvents.NorfairLevel2,         KeycardPlaque.Level2,   0x041F, 0x0000 ], #// Norfair - After frog speedway - Door to Bubble Mountain
+                            [ 0xAEDF, KeycardDoors.Down,       0x0206, KeycardEvents.NorfairLevel2,         KeycardPlaque.Level2,   0x0204, 0x0000 ], #// Norfair - Below bubble mountain - Door to Bubble Mountain
+                            [ 0xAD5E, KeycardDoors.Right,      0x0601, KeycardEvents.NorfairLevel2,         KeycardPlaque.Level2,   0x0400, 0x0000 ], #// Norfair - LN Escape - Door to Bubble Mountain
+                            
+                            [ 0xA923, KeycardDoors.Up,         0x2DC6, KeycardEvents.NorfairBoss,           KeycardPlaque.Boss,     0x2EC4, 0x8B96 ], #// Norfair - Pre-Crocomire - Door to Crocomire
+
+                            #// Lower Norfair
+                            [ 0xB4AD, KeycardDoors.Left,       0x160E, KeycardEvents.LowerNorfairLevel1,    KeycardPlaque.Level1,   0x140F, 0x0000 ], #// Lower Norfair - WRITG - Door to Amphitheatre
+                            [ 0xAD5E, KeycardDoors.Left,       0x065E, KeycardEvents.LowerNorfairLevel1,    KeycardPlaque.Level1,   0x045F, 0x0000 ], #// Lower Norfair - Exit - Door to "Reverse LN Entry"
+                            [ 0xB37A, KeycardDoors.Right,      0x0601, KeycardEvents.LowerNorfairBoss,      KeycardPlaque.Boss,     0x0400, 0x8EA6 ], #// Lower Norfair - Pre-Ridley - Door to Ridley
+
+                            #// Maridia
+                            [ 0xD0B9, KeycardDoors.Left,       0x065E, KeycardEvents.MaridiaLevel1,         KeycardPlaque.Level1,   0x045F, 0x0000 ], #// Maridia - Mt. Everest - Door to Pink Maridia
+                            [ 0xD5A7, KeycardDoors.Right,      0x1601, KeycardEvents.MaridiaLevel1,         KeycardPlaque.Level1,   0x1400, 0x0000 ], #// Maridia - Aqueduct - Door towards Beach
+
+                            [ 0xD617, KeycardDoors.Left,       0x063E, KeycardEvents.MaridiaLevel2,         KeycardPlaque.Level2,   0x043F, 0x0000 ], #// Maridia - Pre-Botwoon - Door to Botwoon
+                            [ 0xD913, KeycardDoors.Right,      0x2601, KeycardEvents.MaridiaLevel2,         KeycardPlaque.Level2,   0x2400, 0x0000 ], #// Maridia - Pre-Colloseum - Door to post-botwoon
+
+                            [ 0xD78F, KeycardDoors.Right,      0x2601, KeycardEvents.MaridiaBoss,           KeycardPlaque.Boss,     0x2400, 0xC73B ], #// Maridia - Precious Room - Door to Draygon
+
+                            [ 0xDA2B, KeycardDoors.BossLeft,   0x164E, 0x00f0,                              KeycardPlaque.Null,     0x144F, 0x0000 ], #// Maridia - Change Cac Alley Door to Boss Door (prevents key breaking)
+
+                            #// Wrecked Ship
+                            [ 0x93FE, KeycardDoors.Left,       0x167E, KeycardEvents.WreckedShipLevel1,     KeycardPlaque.Level1,   0x147F, 0x0000 ], #// Wrecked Ship - Outside Wrecked Ship West - Door to Reserve Tank Check
+                            [ 0x968F, KeycardDoors.Left,       0x060E, KeycardEvents.WreckedShipLevel1,     KeycardPlaque.Level1,   0x040F, 0x0000 ], #// Wrecked Ship - Outside Wrecked Ship West - Door to Bowling Alley
+                            [ 0xCE40, KeycardDoors.Left,       0x060E, KeycardEvents.WreckedShipLevel1,     KeycardPlaque.Level1,   0x040F, 0x0000 ], #// Wrecked Ship - Gravity Suit - Door to Bowling Alley
+
+                            [ 0xCC6F, KeycardDoors.Left,       0x064E, KeycardEvents.WreckedShipBoss,       KeycardPlaque.Boss,     0x044F, 0xC29D ], #// Wrecked Ship - Pre-Phantoon - Door to Phantoon   
+            ]
+
+            doorId = 0x0000
+            for door in doorList:
+                #/* When "Fast Ganon" is set, don't place the G4 Boss key door to enable faster games */
+                if (door[0] == 0x99BD and self.myWorld.Config.Goal == Goal.FastGanonDefeatMotherBrain):
+                    continue
+                doorArgs = doorId | door[3] if door[4] != KeycardPlaque.Null else door[3]
+                if (door[6] == 0):
+                    #// Write dynamic door
+                    doorData = []
+                    for x in door[0:3]:
+                        doorData += getWordArray(x)
+                    doorData += getWordArray(doorArgs)
+                    self.patches.append((Snes(0x8f0000 + plmTablePos), doorData))
+                    plmTablePos += 0x08
+                else:
+                    #// Overwrite existing door
+                    doorData = []
+                    for x in door[1:3]:
+                        doorData += getWordArray(x)
+                    doorData += getWordArray(doorArgs)
+                    self.patches.append((Snes(0x8f0000 + door[6]), doorData))
+                    if((door[3] == KeycardEvents.BrinstarBoss and door[0] != 0x9D9C) or door[3] == KeycardEvents.LowerNorfairBoss or door[3] == KeycardEvents.MaridiaBoss or door[3] == KeycardEvents.WreckedShipBoss):
+                        #// Overwrite the extra parts of the Gadora with a PLM that just deletes itself
+                        self.patches.append((Snes(0x8f0000 + door[6] + 0x06), [ 0x2F, 0xB6, 0x00, 0x00, 0x00, 0x00, 0x2F, 0xB6, 0x00, 0x00, 0x00, 0x00 ]))
+
+                #// Plaque data
+                if (door[4] != KeycardPlaque.Null):
+                    plaqueData = getWordArray(door[0]) + getWordArray(plaquePlm) + getWordArray(door[5]) + getWordArray(door[4])
+                    self.patches.append((Snes(0x8f0000 + plmTablePos), plaqueData))
+                    plmTablePos += 0x08
+                doorId += 1
+
+        #/* Write plaque showing SM bosses that needs to be killed */
+        if (self.myWorld.Config.OpenTourian != OpenTourian.FourBosses):
+            plaqueData = getWordArray(0xA5ED) + getWordArray(plaquePlm) + getWordArray(0x044F) + getWordArray(KeycardPlaque.Zero + self.myWorld.TourianBossTokens)
+            self.patches.append((Snes(0x8f0000 + plmTablePos), plaqueData))
+            plmTablePos += 0x08
 
         self.patches.append((Snes(0x8f0000 + plmTablePos), [ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ]))
 
@@ -745,20 +733,32 @@ class Patch:
                     (Snes(0xDD313), [ 0x00, 0x00, 0xE4, 0xFF, 0x08, 0x0E ]),
                 ]
 
-    def WriteGanonInvicible(self, invincible: GanonInvincible):
+    def WritePreOpenPyramid(self, goal: Goal):
+        if (goal == Goal.FastGanonDefeatMotherBrain):
+            self.patches.append((Snes(0x30808B), [0x01]))
+
+    def WriteGanonInvicible(self, goal: Goal):
         #/* Defaults to $00 (never) at [asm]/z3/randomizer/tables.asm */
-        invincibleMap = {
-                        GanonInvincible.Never : 0x00,
-                        GanonInvincible.Always : 0x01,
-                        GanonInvincible.BeforeAllDungeons : 0x02,
-                        GanonInvincible.BeforeCrystals : 0x03,
-                        }
-        value = invincibleMap.get(invincible, None)
+        valueMap =  {
+                        Goal.DefeatBoth : 0x03,
+                        Goal.FastGanonDefeatMotherBrain : 0x04,
+                        Goal.AllDungeonsDefeatMotherBrain : 0x02
+                    }
+        value = valueMap.get(goal, None)
         if (value is None):
-            raise exception(f"Unknown Ganon invincible value {invincible}")
+            raise exception(f"Unknown Ganon invincible value {goal}")
         else:
             self.patches.append((Snes(0x30803E), [value]))
 
+    def WriteBossesNeeded(self, tourianBossTokens):
+        self.patches.append((Snes(0xF47200), getWordArray(tourianBossTokens)))
+
+    def WriteCrystalsNeeded(self, towerCrystals, ganonCrystals):
+        self.patches.append((Snes(0x30805E), [towerCrystals]))
+        self.patches.append((Snes(0x30805F), [ganonCrystals]))
+
+        self.stringTable.SetTowerRequirementText(f"You need {towerCrystals} crystals to enter Ganon's Tower.")
+        self.stringTable.SetGanonRequirementText(f"You need {ganonCrystals} crystals to defeat Ganon.")
 
     def WriteRngBlock(self):
         #/* Repoint RNG Block */
