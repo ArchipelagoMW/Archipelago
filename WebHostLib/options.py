@@ -52,7 +52,7 @@ def create():
     def get_html_doc(option_type: type(Options.Option)) -> str:
         if not option_type.__doc__:
             return "Please document me!"
-        return "\n".join(piece.strip() for piece in option_type.__doc__.split("\n"))
+        return "\n".join(line.strip() for line in option_type.__doc__.split("\n")).strip()
 
     weighted_settings = {
         "baseOptions": {
