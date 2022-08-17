@@ -95,22 +95,22 @@ def call_stage(world: "MultiWorld", method_name: str, *args: Any) -> None:
 
 class WebWorld:
     """Webhost integration"""
-    # display a settings page. Can be a link to an out-of-ap settings tool too.
+    
     settings_page: Union[bool, str] = True
-
-    # docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'
+    """display a settings page. Can be a link to a specific page or external tool."""
+    
     game_info_languages: List[str] = ['en']
+    """docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'"""
 
-    # docs folder will also be scanned for tutorial guides given the relevant information in this list. Each Tutorial
-    # class is to be used for one guide.
     tutorials: List["Tutorial"]
+    """docs folder will also be scanned for tutorial guides. Each Tutorial class is to be used for one guide."""
 
-    # Choose a theme for your /game/* pages
-    # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone
     theme = "grass"
+    """Choose a theme for you /game/* pages.
+    Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone"""
 
-    # display a link to a bug report page, most likely a link to a GitHub issue page.
     bug_report_page: Optional[str]
+    """display a link to a bug report page, most likely a link to a GitHub issue page."""
 
 
 class World(metaclass=AutoWorldRegister):
