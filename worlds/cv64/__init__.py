@@ -53,7 +53,7 @@ class CV64World(World):
     options_dataclass = CV64Options
     options: CV64Options
     topology_present = True
-    data_version = 0
+    data_version = 1
     remote_items = False
 
     item_name_to_id = get_item_names_to_ids()
