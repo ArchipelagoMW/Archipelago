@@ -9,6 +9,7 @@ from flask_caching import Cache
 from flask_compress import Compress
 from werkzeug.routing import BaseConverter
 
+from Utils import title_sorted
 from .models import *
 
 UPLOAD_FOLDER = os.path.relpath('uploads')
@@ -65,6 +66,7 @@ class B64UUIDConverter(BaseConverter):
 # short UUID
 app.url_map.converters["suuid"] = B64UUIDConverter
 app.jinja_env.filters['suuid'] = lambda value: base64.urlsafe_b64encode(value.bytes).rstrip(b'=').decode('ascii')
+app.jinja_env.filters["title_sorted"] = title_sorted
 
 
 def register():

@@ -10,6 +10,7 @@ class SwampPalace(Z3Region, IReward):
 
     def __init__(self, world, config: Config):
         super().__init__(world, config)
+        self.Weight = 3
         self.RegionItems = [ ItemType.KeySP, ItemType.BigKeySP, ItemType.MapSP, ItemType.CompassSP]
         self.Reward = RewardType.Null
         self.Locations = [
