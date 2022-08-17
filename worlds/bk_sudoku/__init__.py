@@ -4,7 +4,7 @@ from typing import Dict
 
 
 class Bk_SudokuWebWorld(WebWorld):
-    settings_page = "https://archipelago.gg/games/Sudoku/info/en"
+    settings_page = "games/Sudoku/info/en"
     theme = 'partyTime'
     tutorials = [
         Tutorial(
