@@ -52,6 +52,7 @@ weapons_upgrade_5_table = {
     "Storm Curved Sword": 0x003E4180,
     "Dragonslayer Swordspear": 0x008BC540,
     "Sage's Crystal Staff": 0x00C8CE40,
+    "Irithyll Rapier": 0x002E8A10
 }
 
 weapons_upgrade_10_table = {
@@ -365,6 +366,11 @@ misc_items_table = {
     "Dragon Chaser's Ashes": 0x40000867,
     "Twinkling Dragon Torso Stone": 0x40000184,
     "Braille Divine Tome of Lothric": 0x40000848,
+    "Hollow's Ashes": 0x40000865,
+    "Irina's Ashes": 0x40000843,
+    "Karla's Ashes": 0x40000842,
+    "Cornyx's Ashes": 0x40000841,
+    "Orbeck's Ashes": 0x40000840
 }
 
 key_items_list = {
