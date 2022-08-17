@@ -9,4 +9,4 @@ ex. "MyGame4: implement new game" or "Docs: add new guide for customizing MyGame
 ## How was this tested?
 
 
-## If this makes graphical changes please attach screenshots
+## If this makes graphical changes, please attach screenshots.

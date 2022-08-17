@@ -61,10 +61,10 @@ This project makes use of multiple other projects. We wouldn't be here without t
 * [Ocarina of Time Randomizer](https://github.com/TestRunnerSRL/OoT-Randomizer)
 
 ## Contributing
-For contribution guidelines please see our [Contributing doc](/docs/contributing.md)
+For contribution guidelines, please see our [Contributing doc.](/docs/contributing.md)
 
 ## FAQ
-For Frequently asked questions please see the website's [FAQ Page](https://archipelago.gg/faq/en/)
+For Frequently asked questions, please see the website's [FAQ Page.](https://archipelago.gg/faq/en/)
 
 ## Code of Conduct
-Please refer to our [code of conduct](/docs/code_of_conduct.md)
+Please refer to our [code of conduct.](/docs/code_of_conduct.md)

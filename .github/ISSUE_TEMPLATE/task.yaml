@@ -1,5 +1,5 @@
 name: Task
-description: Submit a task to be done. If this is not targeting core it should likely be elsewhere.
+description: Submit a task to be done. If this is not targeting core, it should likely be elsewhere.
 title: "Core: "
 labels:
   - core
