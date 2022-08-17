@@ -24,6 +24,7 @@ import re
 from MultiServer import mark_raw
 import ctypes
 import sys
+from shutil import copyfile
 
 from Utils import init_logging, is_windows
 
@@ -117,6 +118,10 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         else:
             sc2_logger.warning("When using set_path, you must type the path to your SC2 install directory.")
         return False
+
+    def _cmd_download_data(self) -> bool:
+        download_sc2_data_zip()
+        return True
 
 
 class SC2Context(CommonContext):
@@ -944,6 +949,74 @@ class DllDirectory:
             return ctypes.windll.kernel32.SetDllDirectoryW(s) != 0
         # NOTE: other OS may support os.environ["LD_LIBRARY_PATH"], but this fix is windows-specific
         return False
+
+
+def download_sc2_data_zip() -> bool:
+    # https://stackoverflow.com/questions/67962757/python-how-to-download-repository-zip-file-from-github-using-github-api
+    if "SC2PATH" not in os.environ:
+        sc2_logger.warning("Attempted to download data files, but SC2PATH is not set. Please set it and try again.")
+        return False
+    import requests
+
+    headers = {
+        "Accept": 'application/vnd.github.v3+json'
+    }
+
+    OWNER = 'TheCondor07'
+    REPO = 'Starcraft2ArchipelagoData'
+
+    REF = 'main'  # branch name
+
+    EXT = 'zip'
+
+    url = f'https://api.github.com/repos/{OWNER}/{REPO}/{EXT}ball/{REF}'
+    print('url:', url)
+
+    r = requests.get(url, headers=headers)
+
+    if r.status_code == 200:
+        print('size:', len(r.content))
+        with open(f'{REPO}.{EXT}', 'wb') as fh:
+            fh.write(r.content)
+        print(r.content[:10])  # display only some part
+    else:
+        print(r.text)
+
+    sc2_logger.info("Successfully downloaded data .zip.")
+
+    if Path(f"{REPO}.{EXT}").is_file():
+        # Here's the plan:
+        # 1) Iterate through all files in the .zip
+        # 2) Select only the non-folders
+        # 3) Should all look like "TheCondor.../folder1/folder2/file.ext"
+        #    Extract them to "[SC2PATH]/folder1/folder2/file.ext"
+        #    Ignore specific hard-coded exceptions
+        # 4) Delete the .zip afterward
+
+        import zipfile
+        try:
+            with zipfile.ZipFile(f"{REPO}.{EXT}") as data_zip:
+                for itemname in data_zip.namelist()[1:]:
+                    if ("52.dll" not in itemname) and ("README.md" not in itemname):
+
+                        # Set up the destination based on itemname
+                        # Extract the item to the destination
+                        sc2_logger.info(f"Checking out {itemname}.")
+                        relpath = itemname[itemname.find("/")+1:]
+                        sc2_logger.info(f"relpath: {relpath}")
+                        destpath = os.environ["SC2PATH"].replace("\\", "/") + relpath
+                        sc2_logger.info(f"extracting to: {destpath}")
+                        if (itemname[-1] == '/') and (not os.path.exists(destpath)):
+                            os.makedirs(destpath)
+                        else:
+                            try:
+                                with open(destpath, "wb") as fout:
+                                    fout.write(data_zip.read(itemname))
+                            except PermissionError:
+                                sc2_logger.warning(f"Couldn't extract {itemname} because of a PermissionError.")
+        finally:
+            os.remove(f"{REPO}.{EXT}")
+    return True
 
 
 if __name__ == '__main__':
