@@ -13,7 +13,7 @@ funnel_slice_sizes = {TechTreeLayout.option_small_funnels: 6,
 
 
 def get_shapes(factorio_world) -> Dict[str, List[str]]:
-    world = factorio_world.world
+    world = factorio_world.multiworld
     player = factorio_world.player
     prerequisites: Dict[str, Set[str]] = {}
     layout = world.tech_tree_layout[player].value

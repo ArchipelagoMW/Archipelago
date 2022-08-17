@@ -748,7 +748,7 @@ def replace_max_item(items, item, max):
 
 
 def generate_itempool(ootworld):
-    world = ootworld.world
+    world = ootworld.multiworld
     player = ootworld.player
     global random
     random = world.random
@@ -1280,32 +1280,32 @@ def get_pool_core(world):
 
     if world.free_scarecrow:
         item = world.create_item('Scarecrow Song')
-        world.world.push_precollected(item)
+        world.multiworld.push_precollected(item)
         world.remove_from_start_inventory.append(item.name)
     
     if world.no_epona_race:
         item = world.create_item('Epona')
-        world.world.push_precollected(item)
+        world.multiworld.push_precollected(item)
         world.remove_from_start_inventory.append(item.name)
 
     if world.shuffle_mapcompass == 'remove' or world.shuffle_mapcompass == 'startwith':
         for item in [item for dungeon in world.dungeons for item in dungeon.dungeon_items]:
-            world.world.push_precollected(item)
+            world.multiworld.push_precollected(item)
             world.remove_from_start_inventory.append(item.name)
             pool.extend(get_junk_item())
     if world.shuffle_smallkeys == 'remove':
         for item in [item for dungeon in world.dungeons for item in dungeon.small_keys]:
-            world.world.push_precollected(item)
+            world.multiworld.push_precollected(item)
             world.remove_from_start_inventory.append(item.name)
             pool.extend(get_junk_item())
     if world.shuffle_bosskeys == 'remove':
         for item in [item for dungeon in world.dungeons if dungeon.name != 'Ganons Castle' for item in dungeon.boss_key]:
-            world.world.push_precollected(item)
+            world.multiworld.push_precollected(item)
             world.remove_from_start_inventory.append(item.name)
             pool.extend(get_junk_item())
     if world.shuffle_ganon_bosskey in ['remove', 'triforce']:
         for item in [item for dungeon in world.dungeons if dungeon.name == 'Ganons Castle' for item in dungeon.boss_key]:
-            world.world.push_precollected(item)
+            world.multiworld.push_precollected(item)
             world.remove_from_start_inventory.append(item.name)
             pool.extend(get_junk_item())
 
@@ -1331,7 +1331,7 @@ def get_pool_core(world):
             # Yes somehow you need 3 keys. This dungeon is bonkers
             items = [world.create_item('Small Key (Spirit Temple)') for i in range(3)]
             for item in items:
-                world.world.push_precollected(item)
+                world.multiworld.push_precollected(item)
                 world.remove_from_start_inventory.append(item.name)
         #if not world.dungeon_mq['Fire Temple']:
         #    world.state.collect(ItemFactory('Small Key (Fire Temple)'))
@@ -1346,7 +1346,7 @@ def get_pool_core(world):
 
     if not world.keysanity and not world.dungeon_mq['Fire Temple']:
         item = world.create_item('Small Key (Fire Temple)')
-        world.world.push_precollected(item)
+        world.multiworld.push_precollected(item)
         world.remove_from_start_inventory.append(item.name)
 
     if world.triforce_hunt:

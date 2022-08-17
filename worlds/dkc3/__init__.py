@@ -72,13 +72,13 @@ class DKC3World(World):
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
         for option_name in dkc3_options:
-            option = getattr(self.world, option_name)[self.player]
+            option = getattr(self.multiworld, option_name)[self.player]
             slot_data[option_name] = option.value
 
         return slot_data
 
     def generate_basic(self):
-        self.topology_present = self.world.level_shuffle[self.player].value
+        self.topology_present = self.multiworld.level_shuffle[self.player].value
         itempool: typing.List[DKC3Item] = []
 
         # Levels
@@ -88,14 +88,14 @@ class DKC3World(World):
         # Rocket Rush Cog
         total_required_locations -= 1
         number_of_cogs = 4
-        self.world.get_location(LocationName.rocket_rush_flag, self.player).place_locked_item(self.create_item(ItemName.krematoa_cog))
+        self.multiworld.get_location(LocationName.rocket_rush_flag, self.player).place_locked_item(self.create_item(ItemName.krematoa_cog))
         number_of_bosses = 8
-        if self.world.goal[self.player] == "knautilus":
-            self.world.get_location(LocationName.kastle_kaos, self.player).place_locked_item(self.create_item(ItemName.victory))
+        if self.multiworld.goal[self.player] == "knautilus":
+            self.multiworld.get_location(LocationName.kastle_kaos, self.player).place_locked_item(self.create_item(ItemName.victory))
             number_of_bosses = 7
         else:
-            self.world.get_location(LocationName.banana_bird_mother, self.player).place_locked_item(self.create_item(ItemName.victory))
-            number_of_banana_birds = self.world.number_of_banana_birds[self.player]
+            self.multiworld.get_location(LocationName.banana_bird_mother, self.player).place_locked_item(self.create_item(ItemName.victory))
+            number_of_banana_birds = self.multiworld.number_of_banana_birds[self.player]
 
         # Bosses
         total_required_locations += number_of_bosses
@@ -107,8 +107,8 @@ class DKC3World(World):
         if False:#self.world.include_trade_sequence[self.player]:
             total_required_locations += 10
 
-        number_of_bonus_coins = (self.world.krematoa_bonus_coin_cost[self.player] * 5)
-        number_of_bonus_coins += math.ceil((85 - number_of_bonus_coins) * self.world.percentage_of_extra_bonus_coins[self.player] / 100)
+        number_of_bonus_coins = (self.multiworld.krematoa_bonus_coin_cost[self.player] * 5)
+        number_of_bonus_coins += math.ceil((85 - number_of_bonus_coins) * self.multiworld.percentage_of_extra_bonus_coins[self.player] / 100)
 
         itempool += [self.create_item(ItemName.bonus_coin)] * number_of_bonus_coins
         itempool += [self.create_item(ItemName.dk_coin)] * 41
@@ -122,20 +122,20 @@ class DKC3World(World):
 
         self.active_level_list = level_list.copy()
 
-        if self.world.level_shuffle[self.player]:
-            self.world.random.shuffle(self.active_level_list)
+        if self.multiworld.level_shuffle[self.player]:
+            self.multiworld.random.shuffle(self.active_level_list)
 
-        connect_regions(self.world, self.player, self.active_level_list)
+        connect_regions(self.multiworld, self.player, self.active_level_list)
 
-        self.world.itempool += itempool
+        self.multiworld.itempool += itempool
 
     def generate_output(self, output_directory: str):
         try:
-            world = self.world
+            world = self.multiworld
             player = self.player
 
             rom = LocalRom(get_base_rom_path())
-            patch_rom(self.world, rom, self.player, self.active_level_list)
+            patch_rom(self.multiworld, rom, self.player, self.active_level_list)
 
             self.active_level_list.append(LocationName.rocket_rush_region)
 
@@ -165,7 +165,7 @@ class DKC3World(World):
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
         if self.topology_present:
             world_names = [
@@ -181,14 +181,14 @@ class DKC3World(World):
             er_hint_data = {}
             for world_index in range(len(world_names)):
                 for level_index in range(5):
-                    level_region = self.world.get_region(self.active_level_list[world_index * 5 + level_index], self.player)
+                    level_region = self.multiworld.get_region(self.active_level_list[world_index * 5 + level_index], self.player)
                     for location in level_region.locations:
                         er_hint_data[location.address] = world_names[world_index]
             multidata['er_hint_data'][self.player] = er_hint_data
 
     def create_regions(self):
-        location_table = setup_locations(self.world, self.player)
-        create_regions(self.world, self.player, location_table)
+        location_table = setup_locations(self.multiworld, self.player)
+        create_regions(self.multiworld, self.player, location_table)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
@@ -205,4 +205,4 @@ class DKC3World(World):
         return created_item
 
     def set_rules(self):
-        set_rules(self.world, self.player)
+        set_rules(self.multiworld, self.player)

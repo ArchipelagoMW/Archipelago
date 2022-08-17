@@ -90,7 +90,7 @@ def item_in_locations(state, item: str, player: int, locations: typing.Sequence)
 
 
 def item_name(state, location: str, player: int) -> typing.Optional[typing.Tuple[str, int]]:
-    location = state.world.get_location(location, player)
+    location = state.multiworld.get_location(location, player)
     if location.item is None:
         return None
     return location.item.name, location.item.player

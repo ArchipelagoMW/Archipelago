@@ -348,7 +348,7 @@ class EntranceShuffleError(Exception):
 
 
 def shuffle_random_entrances(ootworld):
-    world = ootworld.world
+    world = ootworld.multiworld
     player = ootworld.player
 
     # Gather locations to keep reachable for validation
@@ -572,7 +572,7 @@ def place_one_way_priority_entrance(ootworld, priority_name, allowed_regions, al
     all_state, none_state, one_way_entrance_pools, one_way_target_entrance_pools):
 
     avail_pool = list(chain.from_iterable(one_way_entrance_pools[t] for t in allowed_types if t in one_way_entrance_pools))
-    ootworld.world.random.shuffle(avail_pool)
+    ootworld.multiworld.random.shuffle(avail_pool)
 
     for entrance in avail_pool:
         if entrance.replaces:
@@ -622,11 +622,11 @@ def shuffle_entrance_pool(ootworld, entrance_pool, target_entrances, locations_t
     raise EntranceShuffleError(f'Entrance placement attempt count exceeded for world {ootworld.player}')
 
 def shuffle_entrances(ootworld, entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state):
-    ootworld.world.random.shuffle(entrances)
+    ootworld.multiworld.random.shuffle(entrances)
     for entrance in entrances:
         if entrance.connected_region != None:
             continue
-        ootworld.world.random.shuffle(target_entrances)
+        ootworld.multiworld.random.shuffle(target_entrances)
         for target in target_entrances:
             if target.connected_region == None:
                 continue
@@ -637,7 +637,7 @@ def shuffle_entrances(ootworld, entrances, target_entrances, rollbacks, location
 
 
 def split_entrances_by_requirements(ootworld, entrances_to_split, assumed_entrances):
-    world = ootworld.world
+    world = ootworld.multiworld
     player = ootworld.player
 
     # Disconnect all root assumed entrances and save original connections
@@ -679,7 +679,7 @@ def split_entrances_by_requirements(ootworld, entrances_to_split, assumed_entran
 # TODO: improve this function
 def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all_state_orig, none_state_orig):
 
-    world = ootworld.world
+    world = ootworld.multiworld
     player = ootworld.player
 
     all_state = all_state_orig.copy()
@@ -794,7 +794,7 @@ def same_hint_area(first, second):
         return False
 
 def get_entrance_replacing(region, entrance_name, player):
-    original_entrance = region.world.get_entrance(entrance_name, player)
+    original_entrance = region.multiworld.get_entrance(entrance_name, player)
     if not original_entrance.shuffled:
         return original_entrance
 
@@ -809,14 +809,14 @@ def get_entrance_replacing(region, entrance_name, player):
 def change_connections(entrance, target):
     entrance.connect(target.disconnect())
     entrance.replaces = target.replaces
-    if entrance.reverse and not entrance.world.worlds[entrance.player].decouple_entrances:
+    if entrance.reverse and not entrance.multiworld.worlds[entrance.player].decouple_entrances:
         target.replaces.reverse.connect(entrance.reverse.assumed.disconnect())
         target.replaces.reverse.replaces = entrance.reverse
 
 def restore_connections(entrance, target):
     target.connect(entrance.disconnect())
     entrance.replaces = None
-    if entrance.reverse and not entrance.world.worlds[entrance.player].decouple_entrances:
+    if entrance.reverse and not entrance.multiworld.worlds[entrance.player].decouple_entrances:
         entrance.reverse.assumed.connect(target.replaces.reverse.disconnect())
         target.replaces.reverse.replaces = None
 
@@ -833,7 +833,7 @@ def check_entrances_compatibility(entrance, target, rollbacks):
 def confirm_replacement(entrance, target):
     delete_target_entrance(target)
     logging.getLogger('').debug(f'Connected {entrance} to {entrance.connected_region}')
-    if entrance.reverse and not entrance.world.worlds[entrance.player].decouple_entrances:
+    if entrance.reverse and not entrance.multiworld.worlds[entrance.player].decouple_entrances:
         replaced_reverse = target.replaces.reverse
         delete_target_entrance(entrance.reverse.assumed)
         logging.getLogger('').debug(f'Connected {replaced_reverse} to {replaced_reverse.connected_region}')

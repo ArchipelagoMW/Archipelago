@@ -151,7 +151,7 @@ class ALTTPWorld(World):
 
     def generate_early(self):
         player = self.player
-        world = self.world
+        world = self.multiworld
 
         if self.use_enemizer():
             check_enemizer(world.enemizer)
@@ -186,7 +186,7 @@ class ALTTPWorld(World):
 
     def create_regions(self):
         player = self.player
-        world = self.world
+        world = self.multiworld
 
         world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player],
                                                       world.triforce_pieces_required[player])
@@ -258,15 +258,15 @@ class ALTTPWorld(World):
                 if 'Sword' in item_name:
                     if state.has('Golden Sword', item.player):
                         pass
-                    elif state.has('Tempered Sword', item.player) and self.world.difficulty_requirements[
+                    elif state.has('Tempered Sword', item.player) and self.multiworld.difficulty_requirements[
                         item.player].progressive_sword_limit >= 4:
                         return 'Golden Sword'
-                    elif state.has('Master Sword', item.player) and self.world.difficulty_requirements[
+                    elif state.has('Master Sword', item.player) and self.multiworld.difficulty_requirements[
                         item.player].progressive_sword_limit >= 3:
                         return 'Tempered Sword'
-                    elif state.has('Fighter Sword', item.player) and self.world.difficulty_requirements[item.player].progressive_sword_limit >= 2:
+                    elif state.has('Fighter Sword', item.player) and self.multiworld.difficulty_requirements[item.player].progressive_sword_limit >= 2:
                         return 'Master Sword'
-                    elif self.world.difficulty_requirements[item.player].progressive_sword_limit >= 1:
+                    elif self.multiworld.difficulty_requirements[item.player].progressive_sword_limit >= 1:
                         return 'Fighter Sword'
                 elif 'Glove' in item_name:
                     if state.has('Titans Mitts', item.player):
@@ -278,20 +278,20 @@ class ALTTPWorld(World):
                 elif 'Shield' in item_name:
                     if state.has('Mirror Shield', item.player):
                         return
-                    elif state.has('Red Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 3:
+                    elif state.has('Red Shield', item.player) and self.multiworld.difficulty_requirements[item.player].progressive_shield_limit >= 3:
                         return 'Mirror Shield'
-                    elif state.has('Blue Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
+                    elif state.has('Blue Shield', item.player) and self.multiworld.difficulty_requirements[item.player].progressive_shield_limit >= 2:
                         return 'Red Shield'
-                    elif self.world.difficulty_requirements[item.player].progressive_shield_limit >= 1:
+                    elif self.multiworld.difficulty_requirements[item.player].progressive_shield_limit >= 1:
                         return 'Blue Shield'
                 elif 'Bow' in item_name:
                     if state.has('Silver Bow', item.player):
                         return
-                    elif state.has('Bow', item.player) and (self.world.difficulty_requirements[item.player].progressive_bow_limit >= 2
-                        or self.world.logic[item.player] == 'noglitches'
-                        or self.world.swordless[item.player]): # modes where silver bow is always required for ganon
+                    elif state.has('Bow', item.player) and (self.multiworld.difficulty_requirements[item.player].progressive_bow_limit >= 2
+                                                            or self.multiworld.logic[item.player] == 'noglitches'
+                                                            or self.multiworld.swordless[item.player]): # modes where silver bow is always required for ganon
                         return 'Silver Bow'
-                    elif self.world.difficulty_requirements[item.player].progressive_bow_limit >= 1:
+                    elif self.multiworld.difficulty_requirements[item.player].progressive_bow_limit >= 1:
                         return 'Bow'
         elif item.advancement:
             return item_name
@@ -299,7 +299,7 @@ class ALTTPWorld(World):
     def pre_fill(self):
         from Fill import fill_restrictive, FillError
         attempts = 5
-        world = self.world
+        world = self.multiworld
         player = self.player
         all_state = world.get_all_state(use_cache=True)
         crystals = [self.create_item(name) for name in ['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6']]
@@ -342,7 +342,7 @@ class ALTTPWorld(World):
         ShopSlotFill(world)
 
     def use_enemizer(self):
-        world = self.world
+        world = self.multiworld
         player = self.player
         return (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
                 or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
@@ -350,7 +350,7 @@ class ALTTPWorld(World):
                 or world.killable_thieves[player])
 
     def generate_output(self, output_directory: str):
-        world = self.world
+        world = self.multiworld
         player = self.player
         try:
             use_enemizer = self.use_enemizer()
@@ -413,7 +413,7 @@ class ALTTPWorld(World):
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
     def create_item(self, name: str) -> Item:
         return ALttPItem(name, self.player, **item_init_table[name])
@@ -488,16 +488,16 @@ class ALTTPWorld(World):
 
 
     def get_filler_item_name(self) -> str:
-        if self.world.goal[self.player] == "icerodhunt":
+        if self.multiworld.goal[self.player] == "icerodhunt":
             item = "Nothing"
         else:
-            item = self.world.random.choice(extras_list)
-        return GetBeemizerItem(self.world, self.player, item)
+            item = self.multiworld.random.choice(extras_list)
+        return GetBeemizerItem(self.multiworld, self.player, item)
 
     def get_pre_fill_items(self):
         res = []
         if self.dungeon_local_item_names:
-            for (name, player), dungeon in self.world.dungeons.items():
+            for (name, player), dungeon in self.multiworld.dungeons.items():
                 if player == self.player:
                     for item in dungeon.all_items:
                         if item.name in self.dungeon_local_item_names:
@@ -516,8 +516,8 @@ def get_same_seed(world, seed_def: tuple) -> str:
 
 class ALttPLogic(LogicMixin):
     def _lttp_has_key(self, item, player, count: int = 1):
-        if self.world.logic[player] == 'nologic':
+        if self.multiworld.logic[player] == 'nologic':
             return True
-        if self.world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+        if self.multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             return self.can_buy_unlimited('Small Key (Universal)', player)
         return self.prog_items[item, player] >= count

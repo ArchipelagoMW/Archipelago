@@ -6,9 +6,9 @@ from BaseClasses import Location
 # TODO: implement Mapstone counting, Open, OpenWorld, connection rules
 
 def set_rules(world):
-    temp_base_rule(world.world, world.player)
+    temp_base_rule(world.multiworld, world.player)
     for logicset in world.logic_sets:
-        apply_or_ruleset(world.world, world.player, logicset)
+        apply_or_ruleset(world.multiworld, world.player, logicset)
 
 
 def tautology(state):

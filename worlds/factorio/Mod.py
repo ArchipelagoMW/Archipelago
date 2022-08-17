@@ -74,7 +74,7 @@ class FactorioModFile(Patch.APContainer):
 
 def generate_mod(world, output_directory: str):
     player = world.player
-    multiworld = world.world
+    multiworld = world.multiworld
     global data_final_template, locale_template, control_template, data_template, settings_template
     with template_load_lock:
         if not data_final_template:

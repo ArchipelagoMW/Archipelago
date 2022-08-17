@@ -51,7 +51,7 @@ class WitnessWorld(World):
 
     def _get_slot_data(self):
         return {
-            'seed': self.world.random.randint(0, 1000000),
+            'seed': self.multiworld.random.randint(0, 1000000),
             'victory_location': int(self.player_logic.VICTORY_LOCATION, 16),
             'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID,
             'item_id_to_door_hexes': self.items.ITEM_ID_TO_DOOR_HEX,
@@ -60,15 +60,15 @@ class WitnessWorld(World):
         }
 
     def generate_early(self):
-        if not (is_option_enabled(self.world, self.player, "shuffle_symbols")
-                or get_option_value(self.world, self.player, "shuffle_doors")
-                or is_option_enabled(self.world, self.player, "shuffle_lasers")):
+        if not (is_option_enabled(self.multiworld, self.player, "shuffle_symbols")
+                or get_option_value(self.multiworld, self.player, "shuffle_doors")
+                or is_option_enabled(self.multiworld, self.player, "shuffle_lasers")):
             raise Exception("This Witness world doesn't have any progression items. Please turn on Symbol Shuffle, Door"
                             " Shuffle or Laser Shuffle")
 
-        self.player_logic = WitnessPlayerLogic(self.world, self.player)
-        self.locat = WitnessPlayerLocations(self.world, self.player, self.player_logic)
-        self.items = WitnessPlayerItems(self.locat, self.world, self.player, self.player_logic)
+        self.player_logic = WitnessPlayerLogic(self.multiworld, self.player)
+        self.locat = WitnessPlayerLocations(self.multiworld, self.player, self.player_logic)
+        self.items = WitnessPlayerItems(self.locat, self.multiworld, self.player, self.player_logic)
         self.regio = WitnessRegions(self.locat)
 
         self.junk_items_created = {key: 0 for key in self.items.JUNK_WEIGHTS.keys()}
@@ -86,12 +86,12 @@ class WitnessWorld(World):
         less_junk = 0
 
         # Put good item on first check if symbol shuffle is on
-        symbols = is_option_enabled(self.world, self.player, "shuffle_symbols")
+        symbols = is_option_enabled(self.multiworld, self.player, "shuffle_symbols")
 
         if symbols:
-            random_good_item = self.world.random.choice(self.items.GOOD_ITEMS)
+            random_good_item = self.multiworld.random.choice(self.items.GOOD_ITEMS)
 
-            first_check = self.world.get_location(
+            first_check = self.multiworld.get_location(
                 "Tutorial Gate Open", self.player
             )
             first_check.place_locked_item(items_by_name[random_good_item])
@@ -100,7 +100,7 @@ class WitnessWorld(World):
             less_junk = 1
 
         for item in self.player_logic.STARTING_INVENTORY:
-            self.world.push_precollected(items_by_name[item])
+            self.multiworld.push_precollected(items_by_name[item])
             pool.remove(items_by_name[item])
 
         for item in self.items.EXTRA_AMOUNTS:
@@ -120,16 +120,16 @@ class WitnessWorld(World):
             item_obj = self.create_item(
                 self.player_logic.EVENT_ITEM_PAIRS[event_location]
             )
-            location_obj = self.world.get_location(event_location, self.player)
+            location_obj = self.multiworld.get_location(event_location, self.player)
             location_obj.place_locked_item(item_obj)
 
-        self.world.itempool += pool
+        self.multiworld.itempool += pool
 
     def create_regions(self):
-        self.regio.create_regions(self.world, self.player, self.player_logic)
+        self.regio.create_regions(self.multiworld, self.player, self.player_logic)
 
     def set_rules(self):
-        set_rules(self.world, self.player, self.player_logic, self.locat)
+        set_rules(self.multiworld, self.player, self.player_logic, self.locat)
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
@@ -138,7 +138,7 @@ class WitnessWorld(World):
 
         for option_name in the_witness_options:
             slot_data[option_name] = get_option_value(
-                self.world, self.player, option_name
+                self.multiworld, self.player, option_name
             )
 
         return slot_data
@@ -191,7 +191,7 @@ def create_region(world: MultiWorld, player: int, name: str,
     """
 
     ret = Region(name, RegionType.Generic, name, player)
-    ret.world = world
+    ret.multiworld = world
     if region_locations:
         for location in region_locations:
             loc_id = locat.CHECK_LOCATION_TABLE[location]

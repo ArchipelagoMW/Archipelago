@@ -169,7 +169,7 @@ class World(metaclass=AutoWorldRegister):
     web: WebWorld = WebWorld()
 
     # autoset on creation:
-    world: "MultiWorld"
+    multiworld: "MultiWorld"
     player: int
 
     # automatically generated
@@ -183,7 +183,7 @@ class World(metaclass=AutoWorldRegister):
     __file__: str  # path it was loaded from
 
     def __init__(self, world: "MultiWorld", player: int):
-        self.world = world
+        self.multiworld = world
         self.player = player
 
     # overridable methods that get called by Main.py, sorted by execution order
@@ -268,7 +268,7 @@ class World(metaclass=AutoWorldRegister):
     def get_filler_item_name(self) -> str:
         """Called when the item pool needs to be filled with additional items to match location count."""
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
-        return self.world.random.choice(tuple(self.item_name_to_id.keys()))
+        return self.multiworld.random.choice(tuple(self.item_name_to_id.keys()))
 
     # decent place to implement progressive items, in most cases can stay as-is
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:

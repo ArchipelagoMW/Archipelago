@@ -328,7 +328,7 @@ if __name__ == "__main__":
                         from worlds.alttp.Rom import get_base_rom_path
                         adjuster_settings.rom = target
                         adjuster_settings.baserom = get_base_rom_path()
-                        adjuster_settings.world = None
+                        adjuster_settings.multiworld = None
                         whitelist = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
                                         "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
                                         "reduceflashing", "deathlink"}
@@ -364,7 +364,7 @@ if __name__ == "__main__":
                         if adjust_wanted and adjust_wanted.startswith("y"):
                             if hasattr(adjuster_settings, "sprite_pool"):
                                 from LttPAdjuster import AdjusterWorld
-                                adjuster_settings.world = AdjusterWorld(getattr(adjuster_settings, "sprite_pool"))
+                                adjuster_settings.multiworld = AdjusterWorld(getattr(adjuster_settings, "sprite_pool"))
 
                             adjusted = True
                             import LttPAdjuster

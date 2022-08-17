@@ -378,7 +378,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
     # Requires the target regions have been defined in the world.
     def create_delayed_rules(self):
         for region_name, node, subrule_name in self.delayed_rules:
-            region = self.world.world.get_region(region_name, self.player)
+            region = self.world.multiworld.get_region(region_name, self.player)
             event = OOTLocation(self.player, subrule_name, type='Event', parent=region, internal=True)
             event.show_in_spoiler = False
 

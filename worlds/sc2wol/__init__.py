@@ -58,32 +58,32 @@ class SC2WoLWorld(World):
         return StarcraftWoLItem(name, data.classification, data.code, self.player)
 
     def create_regions(self):
-        self.mission_req_table = create_regions(self.world, self.player, get_locations(self.world, self.player),
+        self.mission_req_table = create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player),
                                                 self.location_cache)
 
     def generate_basic(self):
-        excluded_items = get_excluded_items(self, self.world, self.player)
+        excluded_items = get_excluded_items(self, self.multiworld, self.player)
 
-        assign_starter_items(self.world, self.player, excluded_items, self.locked_locations)
+        assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations)
 
-        pool = get_item_pool(self.world, self.player, excluded_items)
+        pool = get_item_pool(self.multiworld, self.player, excluded_items)
 
-        fill_item_pool_with_dummy_items(self, self.world, self.player, self.locked_locations, self.location_cache, pool)
+        fill_item_pool_with_dummy_items(self, self.multiworld, self.player, self.locked_locations, self.location_cache, pool)
 
-        self.world.itempool += pool
+        self.multiworld.itempool += pool
 
     def set_rules(self):
-        setup_events(self.world, self.player, self.locked_locations, self.location_cache)
+        setup_events(self.multiworld, self.player, self.locked_locations, self.location_cache)
 
-        self.world.completion_condition[self.player] = lambda state: state.has('All-In: Victory', self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has('All-In: Victory', self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.world.random.choice(filler_items)
+        return self.multiworld.random.choice(filler_items)
 
     def fill_slot_data(self):
         slot_data = {}
         for option_name in sc2wol_options:
-            option = getattr(self.world, option_name)[self.player]
+            option = getattr(self.multiworld, option_name)[self.player]
             if type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
         slot_req_table = {}

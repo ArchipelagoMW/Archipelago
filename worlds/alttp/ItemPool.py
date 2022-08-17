@@ -224,7 +224,7 @@ for diff in {'easy', 'normal', 'hard', 'expert'}:
 
 def generate_itempool(world):
     player = world.player
-    world = world.world
+    world = world.multiworld
 
     if world.difficulty[player] not in difficulties:
         raise NotImplementedError(f"Diffulty {world.difficulty[player]}")
@@ -286,7 +286,7 @@ def generate_itempool(world):
         region = world.get_region('Light World', player)
 
         loc = ALttPLocation(player, "Murahdahla", parent=region)
-        loc.access_rule = lambda state: state.has_triforce_pieces(state.world.treasure_hunt_count[player], player)
+        loc.access_rule = lambda state: state.has_triforce_pieces(state.multiworld.treasure_hunt_count[player], player)
 
         region.locations.append(loc)
         world.clear_location_cache()

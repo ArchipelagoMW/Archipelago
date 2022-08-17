@@ -40,44 +40,44 @@ class RiskOfRainWorld(World):
 
     def generate_basic(self):
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
-        if self.world.start_with_revive[self.player].value:
-            self.world.push_precollected(self.world.create_item("Dio's Best Friend", self.player))
+        if self.multiworld.start_with_revive[self.player].value:
+            self.multiworld.push_precollected(self.multiworld.create_item("Dio's Best Friend", self.player))
 
         # if presets are enabled generate junk_pool from the selected preset
-        pool_option = self.world.item_weights[self.player].value
-        if self.world.item_pool_presets[self.player].value:
+        pool_option = self.multiworld.item_weights[self.player].value
+        if self.multiworld.item_pool_presets[self.player].value:
             # generate chaos weights if the preset is chosen
             if pool_option == 5:
                 junk_pool = {
-                    "Item Scrap, Green": self.world.random.randint(0, 80),
-                    "Item Scrap, Red": self.world.random.randint(0, 45),
-                    "Item Scrap, Yellow": self.world.random.randint(0, 30),
-                    "Item Scrap, White": self.world.random.randint(0, 100),
-                    "Common Item": self.world.random.randint(0, 100),
-                    "Uncommon Item": self.world.random.randint(0, 70),
-                    "Legendary Item": self.world.random.randint(0, 30),
-                    "Boss Item": self.world.random.randint(0, 20),
-                    "Lunar Item": self.world.random.randint(0, 60),
-                    "Equipment": self.world.random.randint(0, 40)
+                    "Item Scrap, Green": self.multiworld.random.randint(0, 80),
+                    "Item Scrap, Red": self.multiworld.random.randint(0, 45),
+                    "Item Scrap, Yellow": self.multiworld.random.randint(0, 30),
+                    "Item Scrap, White": self.multiworld.random.randint(0, 100),
+                    "Common Item": self.multiworld.random.randint(0, 100),
+                    "Uncommon Item": self.multiworld.random.randint(0, 70),
+                    "Legendary Item": self.multiworld.random.randint(0, 30),
+                    "Boss Item": self.multiworld.random.randint(0, 20),
+                    "Lunar Item": self.multiworld.random.randint(0, 60),
+                    "Equipment": self.multiworld.random.randint(0, 40)
                 }
             else:
                 junk_pool = item_pool_weights[pool_option].copy()
         else:  # generate junk pool from user created presets
             junk_pool = {
-                "Item Scrap, Green": self.world.green_scrap[self.player].value,
-                "Item Scrap, Red": self.world.red_scrap[self.player].value,
-                "Item Scrap, Yellow": self.world.yellow_scrap[self.player].value,
-                "Item Scrap, White": self.world.white_scrap[self.player].value,
-                "Common Item": self.world.common_item[self.player].value,
-                "Uncommon Item": self.world.uncommon_item[self.player].value,
-                "Legendary Item": self.world.legendary_item[self.player].value,
-                "Boss Item": self.world.boss_item[self.player].value,
-                "Lunar Item": self.world.lunar_item[self.player].value,
-                "Equipment": self.world.equipment[self.player].value
+                "Item Scrap, Green": self.multiworld.green_scrap[self.player].value,
+                "Item Scrap, Red": self.multiworld.red_scrap[self.player].value,
+                "Item Scrap, Yellow": self.multiworld.yellow_scrap[self.player].value,
+                "Item Scrap, White": self.multiworld.white_scrap[self.player].value,
+                "Common Item": self.multiworld.common_item[self.player].value,
+                "Uncommon Item": self.multiworld.uncommon_item[self.player].value,
+                "Legendary Item": self.multiworld.legendary_item[self.player].value,
+                "Boss Item": self.multiworld.boss_item[self.player].value,
+                "Lunar Item": self.multiworld.lunar_item[self.player].value,
+                "Equipment": self.multiworld.equipment[self.player].value
             }
 
         # remove lunar items from the pool if they're disabled in the yaml unless lunartic is rolled
-        if not self.world.enable_lunar[self.player]:
+        if not self.multiworld.enable_lunar[self.player]:
             if not pool_option == 4:
                 junk_pool.pop("Lunar Item")
 
@@ -85,33 +85,33 @@ class RiskOfRainWorld(World):
         itempool = []
 
         # Add revive items for the player
-        itempool += ["Dio's Best Friend"] * int(self.world.total_revivals[self.player] / 100 * self.world.total_locations[self.player])
+        itempool += ["Dio's Best Friend"] * int(self.multiworld.total_revivals[self.player] / 100 * self.multiworld.total_locations[self.player])
 
         # Fill remaining items with randomly generated junk
-        itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
-                                              k=self.world.total_locations[self.player] -
-                                                int(self.world.total_revivals[self.player] / 100 * self.world.total_locations[self.player]))
+        itempool += self.multiworld.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
+                                                   k=self.multiworld.total_locations[self.player] -
+                                                     int(self.multiworld.total_revivals[self.player] / 100 * self.multiworld.total_locations[self.player]))
 
         # Convert itempool into real items
         itempool = list(map(lambda name: self.create_item(name), itempool))
 
-        self.world.itempool += itempool
+        self.multiworld.itempool += itempool
 
     def set_rules(self):
-        set_rules(self.world, self.player)
+        set_rules(self.multiworld, self.player)
 
     def create_regions(self):
-        create_regions(self.world, self.player)
-        create_events(self.world, self.player, int(self.world.total_locations[self.player]))
+        create_regions(self.multiworld, self.player)
+        create_events(self.multiworld, self.player, int(self.multiworld.total_locations[self.player]))
 
     def fill_slot_data(self):
         return {
-            "itemPickupStep": self.world.item_pickup_step[self.player].value,
-            "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for i in range(16)),
-            "totalLocations": self.world.total_locations[self.player].value,
-            "totalRevivals": self.world.total_revivals[self.player].value,
-            "startWithDio": self.world.start_with_revive[self.player].value,
-            "FinalStageDeath": self.world.final_stage_death[self.player].value
+            "itemPickupStep": self.multiworld.item_pickup_step[self.player].value,
+            "seed": "".join(self.multiworld.slot_seeds[self.player].choice(string.digits) for i in range(16)),
+            "totalLocations": self.multiworld.total_locations[self.player].value,
+            "totalRevivals": self.multiworld.total_revivals[self.player].value,
+            "startWithDio": self.multiworld.start_with_revive[self.player].value,
+            "FinalStageDeath": self.multiworld.final_stage_death[self.player].value
         }
 
     def create_item(self, name: str) -> Item:
@@ -151,7 +151,7 @@ def create_regions(world, player: int):
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, RegionType.Generic, name, player)
-    ret.world = world
+    ret.multiworld = world
     if locations:
         for location in locations:
             loc_id = location_table[location]

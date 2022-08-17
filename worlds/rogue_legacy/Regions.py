@@ -59,7 +59,7 @@ def create_regions(world, player: int):
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     # Shamelessly stolen from the ROR2 definition, lol
     ret = Region(name, RegionType.Generic, name, player)
-    ret.world = world
+    ret.multiworld = world
     if locations:
         for location in locations:
             loc_id = location_table.get(location, 0)

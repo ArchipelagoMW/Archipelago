@@ -254,7 +254,7 @@ def set_creature_rule(world, player, creature_name: str):
 
 def set_rules(subnautica_world: "SubnauticaWorld"):
     player = subnautica_world.player
-    world = subnautica_world.world
+    world = subnautica_world.multiworld
 
     for loc in location_table.values():
         set_location_rule(world, player, loc)

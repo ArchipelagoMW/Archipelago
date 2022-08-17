@@ -1458,11 +1458,11 @@ def get_alttp_settings(romfile: str):
             from worlds.alttp.Rom import get_base_rom_path
             lastSettings.rom = romfile
             lastSettings.baserom = get_base_rom_path()
-            lastSettings.world = None
+            lastSettings.multiworld = None
 
             if hasattr(lastSettings, "sprite_pool"):
                 from LttPAdjuster import AdjusterWorld
-                lastSettings.world = AdjusterWorld(getattr(lastSettings, "sprite_pool"))
+                lastSettings.multiworld = AdjusterWorld(getattr(lastSettings, "sprite_pool"))
 
             adjusted = True
             import LttPAdjuster
