@@ -33,12 +33,12 @@ leave this window open as this is your server console.
 
 ### Connect to the MultiServer
 
-Using Minecraft 1.18.2 connect to the server `localhost`.
+Open Minecraft, go to `Multiplayer > Direct Connection`, and join the `localhost` server address.
 
 If you are using the website to host the game then it should auto-connect to the AP server without the need to `/connect`
 
 otherwise once you are in game type `/connect <AP-Address> (Port) (Password)` where `<AP-Address>` is the address of the
-Archipelago server. `(Port)` is only required if the Archipelago server is not using the default port of 38281.
+Archipelago server. `(Port)` is only required if the Archipelago server is not using the default port of 38281. Note that there is no colon between `<AP-Address>` and `(Port)`.
 `(Password)` is only required if the Archipelago server you are using has a password set.
 
 ### Play the game

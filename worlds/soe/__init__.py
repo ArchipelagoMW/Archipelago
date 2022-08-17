@@ -151,7 +151,7 @@ class SoEWorld(World):
     space station where the final boss must be defeated. 
     """
     game: str = "Secret of Evermore"
-    options = soe_options
+    option_definitions = soe_options
     topology_present = False
     remote_items = False
     data_version = 3
@@ -162,7 +162,7 @@ class SoEWorld(World):
     location_name_to_id, location_id_to_raw = _get_location_mapping()
     item_name_groups = _get_item_grouping()
 
-    trap_types = [name[12:] for name in options if name.startswith('trap_chance_')]
+    trap_types = [name[12:] for name in option_definitions if name.startswith('trap_chance_')]
 
     evermizer_seed: int
     connect_name: str
@@ -339,7 +339,7 @@ class SoEWorld(World):
             placement_file = out_base + '.txt'
             patch_file = out_base + '.apsoe'
             flags = 'l'  # spoiler log
-            for option_name in self.options:
+            for option_name in self.option_definitions:
                 option = getattr(self.world, option_name)[self.player]
                 if hasattr(option, 'to_flag'):
                     flags += option.to_flag()

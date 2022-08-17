@@ -5,7 +5,7 @@ import copy
 import os
 import threading
 import base64
-from typing import Set, List, TextIO
+from typing import Set, TextIO
 
 from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
 
@@ -16,7 +16,7 @@ from .Items import lookup_name_to_id as items_lookup_name_to_id
 from .Regions import create_regions
 from .Rules import set_rules, add_entrance_rule
 from .Options import sm_options
-from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT, SMDeltaPatch
+from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT, SMDeltaPatch, get_sm_symbols
 import Utils
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, RegionType, CollectionState, Tutorial
@@ -79,7 +79,7 @@ class SMWorld(World):
     game: str = "Super Metroid"
     topology_present = True
     data_version = 1
-    options = sm_options
+    option_definitions = sm_options
     item_names: Set[str] = frozenset(items_lookup_name_to_id)
     location_names: Set[str] = frozenset(locations_lookup_name_to_id)
     item_name_to_id = items_lookup_name_to_id
@@ -125,8 +125,8 @@ class SMWorld(World):
         self.remote_items = self.world.remote_items[self.player]
 
         if (len(self.variaRando.randoExec.setup.restrictedLocs) > 0):
-            self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("items")
-            logger.warning(f"accessibility forced to 'items' for player {self.world.get_player_name(self.player)} because of 'fun' settings")
+            self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("minimal")
+            logger.warning(f"accessibility forced to 'minimal' for player {self.world.get_player_name(self.player)} because of 'fun' settings")
     
     def generate_basic(self):
         itemPool = self.variaRando.container.itemPool
@@ -201,10 +201,7 @@ class SMWorld(World):
         create_locations(self, self.player)
         create_regions(self, self.world, self.player)
 
-    def getWord(self, w):
-        return (w & 0x00FF, (w & 0xFF00) >> 8)
-    
-    def getWordArray(self, w):
+    def getWordArray(self, w): # little-endian convert a 16-bit number to an array of numbers <= 255 each
         return [w & 0x00FF, (w & 0xFF00) >> 8]
 
     # used for remote location Credits Spoiler of local items
@@ -269,109 +266,177 @@ class SMWorld(World):
         itemName = "___" + itemName + "___"
 
         for char in itemName:
-            (w0, w1) = self.getWord(charMap.get(char, 0x3C4E))
+            [w0, w1] = self.getWordArray(charMap.get(char, 0x3C4E))
             data.append(w0)
             data.append(w1)
         return data
 
-    def APPatchRom(self, romPatcher):
-        multiWorldLocations = {}
-        multiWorldItems = {}
+    def APPrePatchRom(self, romPatcher):
+        # first apply the sm multiworld code patch named 'basepatch' (also has empty tables that we'll overwrite),
+        #  + apply some patches from varia that we want to be always-on.
+        # basepatch and variapatches are both generated from https://github.com/lordlou/SMBasepatch
+        romPatcher.applyIPSPatch(os.path.join(os.path.dirname(__file__),
+                                              "data", "SMBasepatch_prebuilt", "multiworld-basepatch.ips"))
+        romPatcher.applyIPSPatch(os.path.join(os.path.dirname(__file__),
+                                              "data", "SMBasepatch_prebuilt", "variapatches.ips"))
+
+    def APPostPatchRom(self, romPatcher):
+        symbols = get_sm_symbols(os.path.join(os.path.dirname(__file__), 
+                                              "data", "SMBasepatch_prebuilt", "sm-basepatch-symbols.json"))
+        multiWorldLocations = []
+        multiWorldItems = []
         idx = 0
         self.playerIDMap = {}
-        playerIDCount = 0 # 0 is for "Archipelago" server
+        playerIDCount = 0 # 0 is for "Archipelago" server; highest possible = 200 (201 entries)
+        vanillaItemTypesCount = 21
         for itemLoc in self.world.get_locations():
-            romPlayerID = itemLoc.item.player if itemLoc.item.player <= ROM_PLAYER_LIMIT else 0
             if itemLoc.player == self.player and locationsDict[itemLoc.name].Id != None:
-                if itemLoc.item.type in ItemManager.Items:
-                    itemId = ItemManager.Items[itemLoc.item.type].Id 
+                # this SM world can find this item: write full item data to tables and assign player data for writing
+                romPlayerID = itemLoc.item.player if itemLoc.item.player <= ROM_PLAYER_LIMIT else 0
+                if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items:
+                    itemId = ItemManager.Items[itemLoc.item.type].Id
                 else:
                     itemId = ItemManager.Items['ArchipelagoItem'].Id + idx
-                    multiWorldItems[0x029EA3 + idx*64] = self.convertToROMItemName(itemLoc.item.name)
+                    multiWorldItems.append({"sym": symbols["message_item_names"],
+                                            "offset": (vanillaItemTypesCount + idx)*64,
+                                            "values": self.convertToROMItemName(itemLoc.item.name)})
                     idx += 1
-                
+
                 if (romPlayerID > 0 and romPlayerID not in self.playerIDMap.keys()):
                     playerIDCount += 1
                     self.playerIDMap[romPlayerID] = playerIDCount
 
-                (w0, w1) = self.getWord(0 if itemLoc.item.player == self.player else 1)
-                (w2, w3) = self.getWord(itemId)
-                (w4, w5) = self.getWord(romPlayerID)
-                (w6, w7) = self.getWord(0 if itemLoc.item.advancement else 1)
-                multiWorldLocations[0x1C6000 + locationsDict[itemLoc.name].Id*8] = [w0, w1, w2, w3, w4, w5, w6, w7]
+                [w0, w1] = self.getWordArray(0 if itemLoc.item.player == self.player else 1)
+                [w2, w3] = self.getWordArray(itemId)
+                [w4, w5] = self.getWordArray(romPlayerID)
+                [w6, w7] = self.getWordArray(0 if itemLoc.item.advancement else 1)
+                multiWorldLocations.append({"sym": symbols["rando_item_table"],
+                                            "offset": locationsDict[itemLoc.name].Id*8,
+                                            "values": [w0, w1, w2, w3, w4, w5, w6, w7]})
 
-            if itemLoc.item.player == self.player:
+            elif itemLoc.item.player == self.player:
+                # this SM world owns the item: so in case the sending player might not have anything placed in this
+                # world to receive from it, assign them space in playerIDMap so that the ROM can display their name
+                # (SM item name not needed, as SM item type id will be in the message they send to this world live)
+                romPlayerID = itemLoc.player if itemLoc.player <= ROM_PLAYER_LIMIT else 0
                 if (romPlayerID > 0 and romPlayerID not in self.playerIDMap.keys()):
                     playerIDCount += 1
                     self.playerIDMap[romPlayerID] = playerIDCount
 
-        itemSprites = ["off_world_prog_item.bin", "off_world_item.bin"]
+        itemSprites = [{"fileName":          "off_world_prog_item.bin",
+                        "paletteSymbolName": "prog_item_eight_palette_indices",
+                        "dataSymbolName":    "offworld_graphics_data_progression_item"},
+
+                       {"fileName":          "off_world_item.bin",
+                        "paletteSymbolName": "nonprog_item_eight_palette_indices",
+                        "dataSymbolName":    "offworld_graphics_data_item"}]
         idx = 0
-        offworldSprites = {}
-        for fileName in itemSprites:
-            with open(Utils.local_path("lib", "worlds", "sm", "data", "custom_sprite", fileName) if Utils.is_frozen() else Utils.local_path("worlds", "sm", "data", "custom_sprite", fileName), 'rb') as stream:
+        offworldSprites = []
+        for itemSprite in itemSprites:
+            with open(os.path.join(os.path.dirname(__file__), "data", "custom_sprite", itemSprite["fileName"]), 'rb') as stream:
                 buffer = bytearray(stream.read())
-                offworldSprites[0x027882 + 10*(21 + idx) + 2] = buffer[0:8]
-                offworldSprites[0x049100 + idx*256] = buffer[8:264]
+                offworldSprites.append({"sym": symbols[itemSprite["paletteSymbolName"]],
+                                        "offset": 0,
+                                        "values": buffer[0:8]})
+                offworldSprites.append({"sym": symbols[itemSprite["dataSymbolName"]],
+                                        "offset": 0,
+                                        "values": buffer[8:264]})
                 idx += 1
-            
-        openTourianGreyDoors = {0x07C823 + 5: [0x0C], 0x07C831 + 5: [0x0C]}
 
-        deathLink = {0x277f04: [self.world.death_link[self.player].value]}
-        remoteItem = {0x277f06: self.getWordArray(0b001 + (0b010 if self.remote_items else 0b000))}
+        deathLink = [{"sym": symbols["config_deathlink"],
+                      "offset": 0,
+                      "values": [self.world.death_link[self.player].value]}]
+        remoteItem = [{"sym": symbols["config_remote_items"],
+                       "offset": 0,
+                       "values": self.getWordArray(0b001 + (0b010 if self.remote_items else 0b000))}]
+        ownPlayerId = [{"sym": symbols["config_player_id"],
+                        "offset": 0,
+                        "values": self.getWordArray(self.player)}]
 
-        playerNames = {}
-        playerNameIDMap = {}
-        playerNames[0x1C5000] = "Archipelago".upper().center(16).encode()
-        playerNameIDMap[0x1C5800] = self.getWordArray(0)
+        playerNames = []
+        playerNameIDMap = []
+        playerNames.append({"sym": symbols["rando_player_table"],
+                            "offset": 0,
+                            "values": "Archipelago".upper().center(16).encode()})
+        playerNameIDMap.append({"sym": symbols["rando_player_id_table"],
+                                "offset": 0,
+                                "values": self.getWordArray(0)})
         for key,value in self.playerIDMap.items():
-            playerNames[0x1C5000 + value * 16] = self.world.player_name[key][:16].upper().center(16).encode()
-            playerNameIDMap[0x1C5800 + value * 2] = self.getWordArray(key)
+            playerNames.append({"sym": symbols["rando_player_table"],
+                                "offset": value * 16,
+                                "values": self.world.player_name[key][:16].upper().center(16).encode()})
+            playerNameIDMap.append({"sym": symbols["rando_player_id_table"],
+                                    "offset": value * 2,
+                                    "values": self.getWordArray(key)})
 
         patchDict = {   'MultiWorldLocations': multiWorldLocations,
                         'MultiWorldItems': multiWorldItems,
                         'offworldSprites': offworldSprites,
-                        'openTourianGreyDoors': openTourianGreyDoors,
                         'deathLink': deathLink,
                         'remoteItem': remoteItem,
+                        'ownPlayerId': ownPlayerId,
                         'PlayerName':  playerNames,
                         'PlayerNameIDMap':  playerNameIDMap}
+
+        # convert an array of symbolic byte_edit dicts like {"sym": symobj, "offset": 0, "values": [1, 0]}
+        # to a single rom patch dict like {0x438c: [1, 0], 0xa4a5: [0, 0, 0]} which varia will understand and apply
+        def resolve_symbols_to_file_offset_based_dict(byte_edits_arr) -> dict:
+            this_patch_as_dict = {}
+            for byte_edit in byte_edits_arr:
+                offset_within_rom_file = byte_edit["sym"]["offset_within_rom_file"] + byte_edit["offset"]
+                this_patch_as_dict[offset_within_rom_file] = byte_edit["values"]
+            return this_patch_as_dict
+
+        for patchname, byte_edits_arr in patchDict.items():
+            patchDict[patchname] = resolve_symbols_to_file_offset_based_dict(byte_edits_arr)
+
         romPatcher.applyIPSPatchDict(patchDict)
+
+        openTourianGreyDoors = {0x07C823 + 5: [0x0C], 0x07C831 + 5: [0x0C]}
+        romPatcher.applyIPSPatchDict({'openTourianGreyDoors': openTourianGreyDoors})
+
 
         # set rom name
         # 21 bytes
         from Main import __version__
-        self.romName = bytearray(f'SM{__version__.replace(".", "")[0:3]}_{self.player}_{self.world.seed:11}\0', 'utf8')[:21]
+        self.romName = bytearray(f'SM{__version__.replace(".", "")[0:3]}_{self.player}_{self.world.seed:11}', 'utf8')[:21]
         self.romName.extend([0] * (21 - len(self.romName)))
         # clients should read from 0x7FC0, the location of the rom title in the SNES header.
         # duplicative ROM name at 0x1C4F00 is still written here for now, since people with archipelago pre-0.3.0 client installed will still be depending on this location for connecting to SM
         romPatcher.applyIPSPatch('ROMName', { 'ROMName':  {0x1C4F00 : self.romName, 0x007FC0 : self.romName} })
 
 
-        startItemROMAddressBase = 0x2FD8B9
+        startItemROMAddressBase = symbols["start_item_data_major"]["offset_within_rom_file"]
 
-        # current, base value or bitmask, max, base value or bitmask
-        startItemROMDict = {'ETank': [0x8, 0x64, 0xA, 0x64],
-                            'Missile': [0xC, 0x5, 0xE, 0x5],
-                            'Super': [0x10, 0x5, 0x12, 0x5],
-                            'PowerBomb': [0x14, 0x5, 0x16, 0x5],
-                            'Reserve': [0x1A, 0x64, 0x18, 0x64],
-                            'Morph': [0x2, 0x4, 0x0, 0x4],
-                            'Bomb': [0x3, 0x10, 0x1, 0x10],
-                            'SpringBall': [0x2, 0x2, 0x0, 0x2],
-                            'HiJump': [0x3, 0x1, 0x1, 0x1],
-                            'Varia': [0x2, 0x1, 0x0, 0x1],
-                            'Gravity': [0x2, 0x20, 0x0, 0x20],
-                            'SpeedBooster': [0x3, 0x20, 0x1, 0x20],
-                            'SpaceJump': [0x3, 0x2, 0x1, 0x2],
-                            'ScrewAttack': [0x2, 0x8, 0x0, 0x8],
-                            'Charge': [0x7, 0x10, 0x5, 0x10],
-                            'Ice': [0x6, 0x2, 0x4, 0x2], 
-                            'Wave': [0x6, 0x1, 0x4, 0x1],
-                            'Spazer': [0x6, 0x4, 0x4, 0x4], 
-                            'Plasma': [0x6, 0x8, 0x4, 0x8],
-                            'Grapple': [0x3, 0x40, 0x1, 0x40],
-                            'XRayScope': [0x3, 0x80, 0x1, 0x80]
+        # array for each item:
+        #  offset within ROM table "start_item_data_major" of this item"s info (starting status)
+        #  item bitmask or amount per pickup (BVOB = base value or bitmask),
+        #  offset within ROM table "start_item_data_major" of this item"s info (starting maximum/starting collected items)
+        #                                 current  BVOB   max
+        #                                 -------  ----   ---
+        startItemROMDict = {"ETank":        [ 0x8, 0x64,  0xA],
+                            "Missile":      [ 0xC,  0x5,  0xE],
+                            "Super":        [0x10,  0x5, 0x12],
+                            "PowerBomb":    [0x14,  0x5, 0x16],
+                            "Reserve":      [0x1A, 0x64, 0x18],
+                            "Morph":        [ 0x2,  0x4,  0x0],
+                            "Bomb":         [ 0x3, 0x10,  0x1],
+                            "SpringBall":   [ 0x2,  0x2,  0x0],
+                            "HiJump":       [ 0x3,  0x1,  0x1],
+                            "Varia":        [ 0x2,  0x1,  0x0],
+                            "Gravity":      [ 0x2, 0x20,  0x0],
+                            "SpeedBooster": [ 0x3, 0x20,  0x1],
+                            "SpaceJump":    [ 0x3,  0x2,  0x1],
+                            "ScrewAttack":  [ 0x2,  0x8,  0x0],
+                            "Charge":       [ 0x7, 0x10,  0x5],
+                            "Ice":          [ 0x6,  0x2,  0x4],
+                            "Wave":         [ 0x6,  0x1,  0x4],
+                            "Spazer":       [ 0x6,  0x4,  0x4],
+                            "Plasma":       [ 0x6,  0x8,  0x4],
+                            "Grapple":      [ 0x3, 0x40,  0x1],
+                            "XRayScope":    [ 0x3, 0x80,  0x1]
+
+        # BVOB = base value or bitmask
                             }
         mergedData = {}
         hasETank = False
@@ -379,48 +444,58 @@ class SMWorld(World):
         hasPlasma = False
         for startItem in self.startItems:
             item = startItem.Type
-            if item == 'ETank': hasETank = True
-            if item == 'Spazer': hasSpazer = True
-            if item == 'Plasma': hasPlasma = True
-            if (item in ['ETank', 'Missile', 'Super', 'PowerBomb', 'Reserve']):
-                (currentValue, currentBase, maxValue, maxBase) = startItemROMDict[item]
+            if item == "ETank": hasETank = True
+            if item == "Spazer": hasSpazer = True
+            if item == "Plasma": hasPlasma = True
+            if (item in ["ETank", "Missile", "Super", "PowerBomb", "Reserve"]):
+                (currentValue, amountPerItem, maxValue) = startItemROMDict[item]
                 if (startItemROMAddressBase + currentValue) in mergedData:
-                    mergedData[startItemROMAddressBase + currentValue] += currentBase
-                    mergedData[startItemROMAddressBase + maxValue] += maxBase
+                    mergedData[startItemROMAddressBase + currentValue] += amountPerItem
+                    mergedData[startItemROMAddressBase + maxValue] += amountPerItem
                 else:
-                    mergedData[startItemROMAddressBase + currentValue] = currentBase
-                    mergedData[startItemROMAddressBase + maxValue] = maxBase
+                    mergedData[startItemROMAddressBase + currentValue] = amountPerItem
+                    mergedData[startItemROMAddressBase + maxValue] = amountPerItem
             else:
-                (collected, currentBitmask, equipped, maxBitmask) = startItemROMDict[item]
+                (collected, bitmask, equipped) = startItemROMDict[item]
                 if (startItemROMAddressBase + collected) in mergedData:
-                    mergedData[startItemROMAddressBase + collected] |= currentBitmask
-                    mergedData[startItemROMAddressBase + equipped] |= maxBitmask
+                    mergedData[startItemROMAddressBase + collected] |= bitmask
+                    mergedData[startItemROMAddressBase + equipped] |= bitmask
                 else:
-                    mergedData[startItemROMAddressBase + collected] = currentBitmask
-                    mergedData[startItemROMAddressBase + equipped] = maxBitmask
+                    mergedData[startItemROMAddressBase + collected] = bitmask
+                    mergedData[startItemROMAddressBase + equipped] = bitmask
 
         if hasETank:
+            # we are overwriting the starting energy, so add up the E from 99 (normal starting energy) rather than from 0
             mergedData[startItemROMAddressBase + 0x8] += 99
             mergedData[startItemROMAddressBase + 0xA] += 99
 
         if hasSpazer and hasPlasma:
+            # de-equip spazer.
+            # otherwise, firing the unintended spazer+plasma combo would cause massive game glitches and crashes
             mergedData[startItemROMAddressBase + 0x4] &= ~0x4
 
         for key, value in mergedData.items():
             if (key - startItemROMAddressBase > 7):
-                (w0, w1) = self.getWord(value)
+                [w0, w1] = self.getWordArray(value)
                 mergedData[key] = [w0, w1]
             else:
                 mergedData[key] = [value]
-            
 
-        startItemPatch = { 'startItemPatch':  mergedData }
-        romPatcher.applyIPSPatch('startItemPatch', startItemPatch)
 
+        startItemPatch = { "startItemPatch":  mergedData }
+        romPatcher.applyIPSPatch("startItemPatch", startItemPatch)
+
+        # commit all the changes we've made here to the ROM
         romPatcher.commitIPS()
 
-        itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == self.player]
-        romPatcher.writeItemsLocs(itemLocs) 
+        itemLocs = [
+            ItemLocation(ItemManager.Items[itemLoc.item.type
+                         if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
+                         'ArchipelagoItem'],
+                         locationsDict[itemLoc.name], True)
+            for itemLoc in self.world.get_locations() if itemLoc.player == self.player
+        ]
+        romPatcher.writeItemsLocs(itemLocs)
 
         itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.world.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.world.get_locations() if itemLoc.item.player == self.player] 
         progItemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.world.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.world.get_locations() if itemLoc.item.player == self.player and itemLoc.item.advancement == True] 
@@ -437,7 +512,7 @@ class SMWorld(World):
         outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
 
         try:
-            self.variaRando.PatchRom(outputFilename, self.APPatchRom)
+            self.variaRando.PatchRom(outputFilename, self.APPrePatchRom, self.APPostPatchRom)
             self.write_crc(outputFilename)
             self.rom_name = self.romName
         except:
@@ -492,7 +567,7 @@ class SMWorld(World):
     def fill_slot_data(self): 
         slot_data = {}
         if not self.world.is_race:
-            for option_name in self.options:
+            for option_name in self.option_definitions:
                 option = getattr(self.world, option_name)[self.player]
                 slot_data[option_name] = option.value
 
@@ -529,7 +604,7 @@ class SMWorld(World):
 
     def create_item(self, name: str) -> Item:
         item = next(x for x in ItemManager.Items.values() if x.Name == name)
-        return SMItem(item.Name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Name],
+        return SMItem(item.Name, ItemClassification.progression if item.Class != 'Minor' else ItemClassification.filler, item.Type, self.item_name_to_id[item.Name],
                       player=self.player)
 
     def get_filler_item_name(self) -> str:
@@ -666,7 +741,8 @@ class SMLocation(Location):
 
 class SMItem(Item):
     game = "Super Metroid"
+    type: str
 
-    def __init__(self, name, classification, type, code, player: int = None):
+    def __init__(self, name, classification, type: str, code, player: int):
         super(SMItem, self).__init__(name, classification, code, player)
         self.type = type

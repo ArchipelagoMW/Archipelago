@@ -36,7 +36,8 @@ class ShuffleLasers(Toggle):
 class ShuffleDoors(Choice):
     """If on, opening doors will require their respective "keys".
     If set to "panels", those keys will unlock the panels on doors.
-    In "doors_simple" and "doors_complex", the doors will magically open by themselves upon receiving the key."""
+    In "doors_simple" and "doors_complex", the doors will magically open by themselves upon receiving the key.
+    The last option, "max", is a combination of "doors_complex" and "panels"."""
     display_name = "Shuffle Doors"
     option_none = 0
     option_panels = 1
@@ -124,10 +125,10 @@ the_witness_options: Dict[str, type] = {
     "shuffle_uncommon": ShuffleUncommonLocations,
     "shuffle_postgame": ShufflePostgame,
     "victory_condition": VictoryCondition,
-    "trap_percentage": TrapPercentage,
-    "early_secret_area": EarlySecretArea,
     "mountain_lasers": MountainLasers,
     "challenge_lasers": ChallengeLasers,
+    "early_secret_area": EarlySecretArea,
+    "trap_percentage": TrapPercentage,
     "puzzle_skip_amount": PuzzleSkipAmount,
 }
 

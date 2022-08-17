@@ -41,12 +41,13 @@ class WitnessWorld(World):
     static_locat = StaticWitnessLocations()
     static_items = StaticWitnessItems()
     web = WitnessWebWorld()
-    options = the_witness_options
+    option_definitions = the_witness_options
 
     item_name_to_id = {
         name: data.code for name, data in static_items.ALL_ITEM_TABLE.items()
     }
     location_name_to_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID
+    item_name_groups = StaticWitnessItems.ITEM_NAME_GROUPS
 
     def _get_slot_data(self):
         return {
