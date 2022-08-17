@@ -93,6 +93,9 @@ undead_settlement_table = {
     "US: Hawk Ring": 0x20004F92,
     "US: Warrior of Sunlight Covenant": 0x20002738,
     "US: Red and White Round Shield": 0x01343A40,
+    "US: Hollow's Ashes": 0x40000865,
+    "US: Irina's Ashes": 0x40000843,
+    "US: Cornyx's Ashes": 0x40000841
 }
 
 road_of_sacrifice_table = {
@@ -150,6 +153,7 @@ road_of_sacrifice_table = {
     "RS: Grass Crest Shield": 0x01437C80,
     "RS: Soul of a Crystal Sage": 0x400002CB,
     "RS: Great Swamp Ring": 0x20004F10,
+    "RS: Orbeck's Ashes": 0x40000840
 }
 
 cathedral_of_the_deep_table = {
@@ -316,6 +320,7 @@ irithyll_dungeon_table = {
     "ID: Jailer's Key Ring": 0x400007D8,
     "ID: Dusk Crown Ring": 0x20004F4C,
     "ID: Dark Clutch Ring": 0x20005028,
+    "ID: Karla's Ashes": 0x40000842
 }
 
 profaned_capital_table = {
@@ -360,6 +365,7 @@ lothric_castle_table = {
     "LC: Caitha's Chime": 0x00CA06C0,
     "LC: Braille Divine Tome of Lothric": 0x40000848,
     "LC: Knight's Ring": 0x20004FEC,
+    "LC: Irithyll Rapier": 0x002E8A10,
     "LC: Sunlight Straight Sword": 0x00203230,
     "LC: Soul of Dragonslayer Armour": 0x400002D1,
 
