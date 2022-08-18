@@ -11,6 +11,54 @@ import os
 import math
 
 
+level_unlock_map = {
+    0x657: [0x65A],
+    0x65A: [0x680, 0x639, 0x659],
+    0x659: [0x65D],
+    0x65D: [0x65C],
+    0x65C: [0x688, 0x64F],
+
+    0x662: [0x681, 0x664],
+    0x664: [0x65B],
+    0x65B: [0x689, 0x661],
+    0x661: [0x63A, 0x666],
+    0x666: [0x650, 0x649],
+
+    0x667: [0x66A],
+    0x66A: [0x682, 0x658],
+    0x658: [0x68A, 0x66B],
+    0x66B: [0x668],
+    0x668: [0x651],
+
+    0x66D: [0x63C, 0x672],
+    0x672: [0x68B, 0x660],
+    0x660: [0x683, 0x66E],
+    0x66E: [0x670],
+    0x670: [0x652],
+
+    0x673: [0x684, 0x65F],
+    0x65F: [0x66C],
+    0x66C: [0x66F],
+    0x66F: [0x65E],
+    0x65E: [0x63D, 0x653, 0x68C, 0x64C],
+
+    0x676: [0x63E, 0x674, 0x685],
+    0x674: [0x63F, 0x669],
+    0x669: [0x677],
+    0x677: [0x68D, 0x675],
+    0x675: [0x654],
+
+    0x67A: [0x640, 0x678],
+    0x678: [0x665],
+    0x665: [0x686, 0x679],
+    0x679: [0x68E, 0x671],
+
+    0x67B: [0x67C],
+    0x67C: [0x67D],
+    0x67D: [0x663],
+    0x663: [0x67E],
+}
+
 location_rom_data = {
     0xDC3000: [0x657, 1], # Lakeside Limbo
     0xDC3001: [0x657, 2],
@@ -295,6 +343,18 @@ location_rom_data = {
     #0xDC30BE: [0x625, 4, True],
 }
 
+boss_location_ids = [
+    0xDC30A1,
+    0xDC30A2,
+    0xDC30A3,
+    0xDC30A4,
+    0xDC30A5,
+    0xDC30A6,
+    0xDC30A7,
+    0xDC30A8,
+    0xDC30B6,
+]
+
 
 item_rom_data = {
     0xDC3001: [0x5D5], # 1-Up Balloon
@@ -526,6 +586,9 @@ def patch_rom(world, rom, player, active_level_list):
             rom.write_byte(level_dict[level_list[i]].nameIDAddress, level_dict[active_level_list[i]].nameID)
             rom.write_byte(level_dict[level_list[i]].levelIDAddress, level_dict[active_level_list[i]].levelID)
 
+            rom.write_byte(0x3FF800 + level_dict[active_level_list[i]].levelID, level_dict[level_list[i]].levelID)
+            rom.write_byte(0x3FF860 + level_dict[level_list[i]].levelID, level_dict[active_level_list[i]].levelID)
+
         # First levels of each world
         rom.write_byte(0x34BC3E, (0x32 + level_dict[active_level_list[0]].levelID))
         rom.write_byte(0x34BC47, (0x32 + level_dict[active_level_list[5]].levelID))
@@ -554,12 +617,15 @@ def patch_rom(world, rom, player, active_level_list):
 
     # Handle KONGsanity Here
     if world.kongsanity[player]:
+        # Arich's Hoard KONGsanity fix
+        rom.write_bytes(0x34BA8C, bytearray([0xEA, 0xEA]))
+
         # Don't hide the level flag if the 0x80 bit is set
         rom.write_bytes(0x34CE92, bytearray([0x80]))
 
-        # Use the `!` next to level name for indicating bonuses and KONG letters
-        rom.write_bytes(0x34B8F0, bytearray([0x9C]))
-        rom.write_bytes(0x34B8F3, bytearray([0x9C]))
+        # Use the `!` next to level name for indicating KONG letters
+        rom.write_bytes(0x34B8F0, bytearray([0x80]))
+        rom.write_bytes(0x34B8F3, bytearray([0x80]))
 
         # Hijack to code to set the 0x80 flag for the level when you complete KONG
         rom.write_bytes(0x3BCD4B, bytearray([0x22, 0x80, 0xFA, 0XB8])) # JSL $B8FA80

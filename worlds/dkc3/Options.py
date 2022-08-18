@@ -6,7 +6,7 @@ from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, O
 class Goal(Choice):
     """
     Determines the goal of the seed
-    Knautilus: Reach the Knautilus and defeat Baron K. Roolenstein
+    Knautilus: Scuttle the Knautilus in Krematoa and defeat Baron K. Roolenstein
     Banana Bird Hunt: Find a certain number of Banana Birds and rescue their mother
     """
     display_name = "Goal"
