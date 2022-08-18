@@ -104,3 +104,5 @@ Disabled Locations:
 0x09DE0 (Bunker Laser)
 0x0A079 (Bunker Elevator Control)
 0x0042D (Mountaintop River Shape)
+
+0x17CAA (River Door to Garden Panel)
