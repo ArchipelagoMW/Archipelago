@@ -286,6 +286,12 @@ end)
 -- hook into researches done
 script.on_event(defines.events.on_research_finished, function(event)
     local technology = event.research
+    if string.find(technology.force.name, "EE_TESTFORCE") == 1 then
+        --Don't acknowledge AP research as an Editor Extensions test force
+        --Also no need for free samples in the Editor extensions testing surfaces, as these testing surfaces
+        --are worked on exclusively in editor mode.
+		return
+	end
     if technology.researched and string.find(technology.name, "ap%-") == 1 then
         -- check if it came from the server anyway, then we don't need to double send.
         dumpInfo(technology.force) --is sendable

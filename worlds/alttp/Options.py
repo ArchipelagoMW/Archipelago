@@ -215,9 +215,11 @@ class Scams(Choice):
     option_all = 3
     alias_false = 0
 
+    @property
     def gives_king_zora_hint(self):
         return self.value in {0, 2}
 
+    @property
     def gives_bottle_merchant_hint(self):
         return self.value in {0, 1}
 

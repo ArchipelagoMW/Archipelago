@@ -173,8 +173,8 @@ Doors:
 1906 - Symmetry Island Doors - 0x17F3E,0x18269
 1909 - Orchard Gates - 0x03313,0x03307
 1912 - Desert Doors - 0x09FEE,0x0C2C3,0x0A24B,0x0C316
-1915 - Quarry Entry Door - 0x09D6F
-1918 - Quarry Mill Shortcuts - 0x17C07,0x17CE8,0x0368A
+1915 - Quarry Main Entry - 0x09D6F,0x17C07
+1918 - Quarry Mill Shortcuts - 0x17CE8,0x0368A,0x275FF
 1921 - Quarry Boathouse Barriers - 0x17C50,0x3865F
 1924 - Shadows Laser Room Door - 0x194B2,0x19665
 1927 - Shadows Barriers - 0x19865,0x0A2DF,0x1855B,0x19ADE

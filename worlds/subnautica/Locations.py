@@ -560,8 +560,12 @@ location_table: Dict[int, LocationDict] = {
     33129: {'can_slip_through': False,
             'name': 'Floating Island - Cave Entrance PDA',
             'need_laser_cutter': False,
-            'position': {'x': -748.9, 'y': 14.4, 'z': -1179.5}}}
-
+            'position': {'x': -748.9, 'y': 14.4, 'z': -1179.5}},
+    33130: {'can_slip_through': False,
+            'name': 'Degasi Seabase - Jellyshroom Cave - Outside PDA',
+            'need_laser_cutter': False,
+            'position': {'x': -83.2, 'y': -276.4, 'z': -345.5}},
+}
 if False:  # turn to True to export for Subnautica mod
     payload = {location_id: location_data["position"] for location_id, location_data in location_table.items()}
     import json

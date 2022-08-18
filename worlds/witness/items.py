@@ -64,11 +64,11 @@ class StaticWitnessItems:
         for item in StaticWitnessLogic.ALL_DOOR_ITEMS:
             item_tab[item[0]] = ItemData(158000 + item[1], True, False)
 
-            if item[1] in range(1500, 1512):
+            # 1500 - 1510 are the laser items, which are handled like doors but should be their own separate group.
+            if item[1] in range(1500, 1511):
                 self.ITEM_NAME_GROUPS.setdefault("Lasers", set()).add(item[0])
-                continue
-
-            self.ITEM_NAME_GROUPS.setdefault("Doors", set()).add(item[0])
+            else:
+                self.ITEM_NAME_GROUPS.setdefault("Doors", set()).add(item[0])
 
         for item in StaticWitnessLogic.ALL_TRAPS:
             item_tab[item[0]] = ItemData(
