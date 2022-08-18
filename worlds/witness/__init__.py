@@ -57,7 +57,8 @@ class WitnessWorld(World):
             'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID,
             'item_id_to_door_hexes': self.items.ITEM_ID_TO_DOOR_HEX,
             'door_hexes': self.items.DOORS,
-            'symbols_not_in_the_game': self.items.SYMBOLS_NOT_IN_THE_GAME
+            'symbols_not_in_the_game': self.items.SYMBOLS_NOT_IN_THE_GAME,
+            'disabled_panels': self.player_logic.COMPLETELY_DISABLED_CHECKS,
         }
 
     def generate_early(self):
