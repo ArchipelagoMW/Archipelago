@@ -46,7 +46,7 @@ class DarkSouls3World(World):
     """
 
     game: str = "Dark Souls III"
-    options = dark_souls_options
+    option_definitions = dark_souls_options
     topology_present: bool = True
     remote_items: bool = False
     remote_start_inventory: bool = False

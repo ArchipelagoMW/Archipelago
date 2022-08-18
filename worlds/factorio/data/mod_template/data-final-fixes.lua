@@ -211,8 +211,8 @@ copy_factorio_icon(new_tree_copy, "{{ progressive_technology_table[item_name][0]
 {%- endif -%}
 {#- connect Technology  #}
 {%- if original_tech_name in tech_tree_layout_prerequisites %}
-{%- for prerequesite in tech_tree_layout_prerequisites[original_tech_name] %}
-table.insert(new_tree_copy.prerequisites, "ap-{{ tech_table[prerequesite] }}-")
+{%- for prerequisite in tech_tree_layout_prerequisites[original_tech_name] %}
+table.insert(new_tree_copy.prerequisites, "ap-{{ tech_table[prerequisite] }}-")
 {% endfor %}
 {% endif -%}
 {#- add new Technology to game #}

@@ -38,7 +38,7 @@ class DKC3World(World):
     mystery of why Donkey Kong and Diddy disappeared while on vacation.
     """
     game: str = "Donkey Kong Country 3"
-    options = dkc3_options
+    option_definitions = dkc3_options
     topology_present = False
     data_version = 2
     #hint_blacklist = {LocationName.rocket_rush_flag}
