@@ -37,7 +37,7 @@ class WitnessPlayerLogic:
         """
 
         if panel_hex in self.COMPLETELY_DISABLED_CHECKS:
-            return frozenset({frozenset("F")})
+            return frozenset()
 
         check_obj = StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]
 
@@ -76,7 +76,7 @@ class WitnessPlayerLogic:
                 dep_obj = StaticWitnessLogic.CHECKS_BY_HEX.get(option_panel)
 
                 if option_panel in self.COMPLETELY_DISABLED_CHECKS:
-                    new_items = frozenset({frozenset("F")})
+                    new_items = frozenset()
                 elif option_panel in {"7 Lasers", "11 Lasers"}:
                     new_items = frozenset({frozenset([option_panel])})
                 # If a panel turns on when a panel in a different region turns on,
