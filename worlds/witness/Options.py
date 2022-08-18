@@ -15,9 +15,9 @@ class DisableNonRandomizedPuzzles(DefaultOnToggle):
 
 
 class EarlySecretArea(Toggle):
-    """Opens the Mountainside shortcut to the Mountain Secret Area from the start.
+    """Opens the Mountainside shortcut to the Caves from the start.
     (Otherwise known as "UTM", "Caves" or the "Challenge Area")"""
-    display_name = "Early Secret Area"
+    display_name = "Early Caves"
 
 
 class ShuffleSymbols(DefaultOnToggle):
@@ -90,7 +90,7 @@ class MountainLasers(Range):
 
 
 class ChallengeLasers(Range):
-    """Sets the amount of beams required to enter the secret area through the Mountain Bottom Layer Discard."""
+    """Sets the amount of beams required to enter the Caves through the Mountain Bottom Floor Discard."""
     display_name = "Required Lasers for Challenge"
     range_start = 1
     range_end = 11
