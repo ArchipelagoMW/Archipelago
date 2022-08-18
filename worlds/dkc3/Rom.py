@@ -52,7 +52,6 @@ level_unlock_map = {
     0x678: [0x665],
     0x665: [0x686, 0x679],
     0x679: [0x68E, 0x671],
-    0x671: [0x655],
 
     0x67B: [0x67C],
     0x67C: [0x67D],
@@ -624,9 +623,9 @@ def patch_rom(world, rom, player, active_level_list):
         # Don't hide the level flag if the 0x80 bit is set
         rom.write_bytes(0x34CE92, bytearray([0x80]))
 
-        # Use the `!` next to level name for indicating bonuses and KONG letters
-        rom.write_bytes(0x34B8F0, bytearray([0x9C]))
-        rom.write_bytes(0x34B8F3, bytearray([0x9C]))
+        # Use the `!` next to level name for indicating KONG letters
+        rom.write_bytes(0x34B8F0, bytearray([0x80]))
+        rom.write_bytes(0x34B8F3, bytearray([0x80]))
 
         # Hijack to code to set the 0x80 flag for the level when you complete KONG
         rom.write_bytes(0x3BCD4B, bytearray([0x22, 0x80, 0xFA, 0XB8])) # JSL $B8FA80
