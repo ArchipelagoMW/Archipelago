@@ -20,7 +20,7 @@ class SC2WoLLogic(LogicMixin):
         return self.has_any({'Marine', 'Goliath'}, player) or self._sc2wol_has_air_anti_air(world, player)
 
     def _sc2wol_has_anti_air(self, world: MultiWorld, player: int) -> bool:
-        return self.has_any({'Missile Turret', 'Thor', 'War Pigs', 'Spartan Company', "Hel's Angel"}, player) or self._sc2wol_has_competent_anti_air(world, player)
+        return self.has_any({'Missile Turret', 'Thor', 'War Pigs', 'Spartan Company', "Hel's Angel", 'Battlecruiser'}, player) or self._sc2wol_has_competent_anti_air(world, player)
 
     def _sc2wol_has_heavy_defense(self, world: MultiWorld, player: int) -> bool:
         return (self.has_any({'Siege Tank', 'Vulture'}, player) or
