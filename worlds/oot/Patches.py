@@ -5,6 +5,7 @@ import zlib
 from collections import defaultdict
 from functools import partial
 
+from .Items import OOTItem
 from .LocationList import business_scrubs
 from .Hints import writeGossipStoneHints, buildAltarHints, \
         buildGanonText, getSimpleHintNoPrefix
@@ -1881,9 +1882,9 @@ def get_override_entry(player_id, location):
         type = 2
     elif location.type == 'GS Token':
         type = 3
-    elif location.type == 'Shop' and location.item.type != 'Shop':
+    elif location.type == 'Shop' and not (isinstance(location.item, OOTItem) and location.item.type == 'Shop'):
         type = 0
-    elif location.type == 'GrottoNPC' and location.item.type != 'Shop':
+    elif location.type == 'GrottoNPC' and not (isinstance(location.item, OOTItem) and location.item.type == 'Shop'):
         type = 4
     elif location.type in ['Song', 'Cutscene']:
         type = 5
@@ -2103,7 +2104,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
 
     shop_objs = { 0x0148 } # "Sold Out" object
     for location in locations:
-        if location.item.type == 'Shop':
+        if isinstance(location.item, OOTItem) and location.item.type == 'Shop':
             shop_objs.add(location.item.special['object'])
             rom.write_int16(location.address1, location.item.index)
         else:

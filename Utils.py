@@ -11,7 +11,6 @@ import io
 import collections
 import importlib
 import logging
-import decimal
 from yaml import load, load_all, dump, SafeLoader
 
 try:
@@ -423,6 +422,10 @@ def get_text_between(text: str, start: str, end: str) -> str:
     return text[text.index(start) + len(start): text.rindex(end)]
 
 
+def get_text_after(text: str, start: str) -> str:
+    return text[text.index(start) + len(start):]
+
+
 loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}
 
 
@@ -507,6 +510,7 @@ def chaining_prefix(index: int, labels: typing.Tuple[str]) -> str:
 # noinspection PyPep8Naming
 def format_SI_prefix(value, power=1000, power_labels=("", "k", "M", "G", "T", "P", "E", "Z", "Y")) -> str:
     """Formats a value into a value + metric/si prefix. More info at https://en.wikipedia.org/wiki/Metric_prefix"""
+    import decimal
     n = 0
     value = decimal.Decimal(value)
     limit = power - decimal.Decimal("0.005")
