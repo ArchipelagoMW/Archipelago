@@ -37,7 +37,7 @@ class UndertaleWorld(World):
     from their underground prison.
     """
     game: str = "Undertale"
-    options = undertale_options
+    option_definitions = undertale_options
     topology_present = True
     web = UndertaleWeb()
 
