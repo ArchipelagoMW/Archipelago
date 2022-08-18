@@ -1,26 +1,23 @@
-import random
 import logging
 import os
+import random
 import threading
 import typing
 
 from BaseClasses import Item, CollectionState, Tutorial
+from .Dungeons import create_dungeons
+from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
+from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
+from .ItemPool import generate_itempool, difficulties
+from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
+from .Options import alttp_options, smallkey_shuffle
+from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
+from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
+    get_hash_string, get_base_rom_path, LttPDeltaPatch
+from .Rules import set_rules
+from .Shops import create_shops, ShopSlotFill
 from .SubClasses import ALttPItem
 from ..AutoWorld import World, WebWorld, LogicMixin
-from .Options import alttp_options, smallkey_shuffle
-from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
-from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
-from .Rules import set_rules
-from .ItemPool import generate_itempool, difficulties
-from .Shops import create_shops, ShopSlotFill
-from .Dungeons import create_dungeons
-from .Rom import LocalRom, patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, get_hash_string, \
-    get_base_rom_path, LttPDeltaPatch
-import Patch
-from itertools import chain
-
-from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
-from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 
 lttp_logger = logging.getLogger("A Link to the Past")
 
@@ -110,7 +107,7 @@ class ALTTPWorld(World):
     Ganon!
     """
     game: str = "A Link to the Past"
-    options = alttp_options
+    option_definitions = alttp_options
     topology_present = True
     item_name_groups = item_name_groups
     hint_blacklist = {"Triforce"}
@@ -155,6 +152,9 @@ class ALTTPWorld(World):
     def generate_early(self):
         player = self.player
         world = self.world
+
+        if self.use_enemizer():
+            check_enemizer(world.enemizer)
 
         # system for sharing ER layouts
         self.er_seed = str(world.random.randint(0, 2 ** 64))
@@ -341,14 +341,19 @@ class ALTTPWorld(World):
     def stage_post_fill(cls, world):
         ShopSlotFill(world)
 
+    def use_enemizer(self):
+        world = self.world
+        player = self.player
+        return (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
+                or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
+                or world.pot_shuffle[player] or world.bush_shuffle[player]
+                or world.killable_thieves[player])
+
     def generate_output(self, output_directory: str):
         world = self.world
         player = self.player
         try:
-            use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
-                            or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                            or world.pot_shuffle[player] or world.bush_shuffle[player]
-                            or world.killable_thieves[player])
+            use_enemizer = self.use_enemizer()
 
             rom = LocalRom(get_base_rom_path())
 

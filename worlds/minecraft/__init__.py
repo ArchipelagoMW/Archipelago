@@ -58,7 +58,7 @@ class MinecraftWorld(World):
     victory!
     """
     game: str = "Minecraft"
-    options = minecraft_options
+    option_definitions = minecraft_options
     topology_present = True
     web = MinecraftWebWorld()
 

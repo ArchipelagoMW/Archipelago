@@ -7,8 +7,7 @@ changes it up by allowing you to plan out certain aspects of the game by placing
 certain bosses in certain rooms, edit text for certain NPCs/signs, or even force certain region connections. Each of
 these options are going to be detailed separately as `item plando`, `boss plando`, `text plando`,
 and `connection plando`. Every game in archipelago supports item plando but the other plando options are only supported
-by certain games. Currently, Minecraft and LTTP both support connection plando, but only LTTP supports text and boss
-plando.
+by certain games. Currently, only LTTP supports text and boss plando. Support for connection plando may vary.
 
 ### Enabling Plando
 
