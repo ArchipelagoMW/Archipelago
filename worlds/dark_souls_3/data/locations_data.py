@@ -93,7 +93,6 @@ undead_settlement_table = {
     "US: Hawk Ring": 0x20004F92,
     "US: Warrior of Sunlight Covenant": 0x20002738,
     "US: Red and White Round Shield": 0x01343A40,
-    "US: Hollow's Ashes": 0x40000865,
     "US: Irina's Ashes": 0x40000843,
     "US: Cornyx's Ashes": 0x40000841
 }
