@@ -21,7 +21,7 @@ class IncludeTemy(Toggle):
 class KeyPieces(Range):
     default = 5
     range_start = 1
-    range_end = 15
+    range_end = 14
 
 
 class KeyHunt(Toggle):

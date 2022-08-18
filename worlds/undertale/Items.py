@@ -103,8 +103,7 @@ item_table = {
 
 non_key_items = {
     "Butterscotch Pie": 1,
-    "100G": 2,
-    "500G": 4,
+    "500G": 2,
     "1000G": 2,
     "Face Steak": 1,
     "Snowman Piece": 1,
@@ -112,10 +111,6 @@ non_key_items = {
     "Astronaut Food": 2,
     "Hot Cat": 1,
     "Abandoned Quiche": 1,
-    "Monster Candy": 4,
-    "ATK Up": 19,
-    "DEF Up": 4,
-    "HP Up": 19,
     "Spider Donut": 1,
     "Spider Cider": 1,
     "Hush Puppy": 1,
@@ -168,6 +163,9 @@ key_items = {
     "Mettaton Plush": 1,
     "Punch Card": 3,
     "Hot Dog...?": 1,
+    "ATK Up": 19,
+    "DEF Up": 4,
+    "HP Up": 19,
     "LOVE": 19,
 }
 
@@ -187,6 +185,9 @@ junk_weights_all = {
     "Cinnamon Bun": 10,
     "Starfait": 12,
     "Punch Card": 8,
+    "Monster Candy": 6,
+    "100G": 6,
+    "500G": 3,
 }
 
 junk_weights_neutral = {
@@ -203,6 +204,9 @@ junk_weights_neutral = {
     "Cinnamon Bun": 10,
     "Starfait": 12,
     "Punch Card": 8,
+    "Monster Candy": 6,
+    "100G": 6,
+    "500G": 3,
 }
 
 junk_weights_pacifist = {
@@ -221,6 +225,9 @@ junk_weights_pacifist = {
     "Cinnamon Bun": 10,
     "Starfait": 12,
     "Punch Card": 8,
+    "Monster Candy": 6,
+    "100G": 6,
+    "500G": 3,
 }
 
 junk_weights_genocide = {
@@ -236,6 +243,9 @@ junk_weights_genocide = {
     "Spider Cider": 8,
     "Cinnamon Bun": 10,
     "Starfait": 12,
+    "Monster Candy": 6,
+    "100G": 6,
+    "500G": 3,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
