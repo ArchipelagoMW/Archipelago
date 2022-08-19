@@ -427,6 +427,10 @@ def get_text_between(text: str, start: str, end: str) -> str:
     return text[text.index(start) + len(start): text.rindex(end)]
 
 
+def get_text_after(text: str, start: str) -> str:
+    return text[text.index(start) + len(start):]
+
+
 loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}
 
 
