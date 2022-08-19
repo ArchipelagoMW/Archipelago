@@ -1,6 +1,5 @@
 from typing import List, Tuple, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld
-from .Options import is_option_enabled
 
 EventId: Optional[int] = None
 

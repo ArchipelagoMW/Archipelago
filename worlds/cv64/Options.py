@@ -19,8 +19,8 @@ class StartLocation(Choice):
     option_forest = 0
     option_villa = 1
     option_cc = 2
-    option_randomstage = 3
-    option_randommap = 4
+    option_random_stage = 3
+    option_random_map = 4
 
 
 class EntranceRandomization(Choice):
@@ -78,6 +78,7 @@ class NumberOfStages(Range):
     range_start = 1
     range_end = 13
     default = 10
+    display_name = "Number of Stages"
 
 
 class Special2sPerWarp(Range):
@@ -85,6 +86,7 @@ class Special2sPerWarp(Range):
     range_start = 0
     range_end = 9
     default = 5
+    display_name = "Special2s Per Warp"
 
 
 class ExtraSpecial2s(Range):
@@ -92,21 +94,24 @@ class ExtraSpecial2s(Range):
     range_start = 0
     range_end = 20
     default = 10
+    display_name = "Extra Special2s"
 
 
 class Special1sRequired(Range):
     """Sets how many Special1s are needed to enter Dracula's chamber (if Dracula's Chamber Condition is set to
     Special1s)."""
-    range_start = 1
+    range_start = 0
     range_end = 50
     default = 10
+    display_name = "Special1s Required"
 
 
 class ExtraSpecial1s(Range):
     """Sets how many extra Speical1s are in the pool in addition to what's needed to enter Dracula's chamber."""
-    range_start = 1
+    range_start = 0
     range_end = 13
     default = 10
+    display_name = "Extra Special1s"
 
 
 class CarrieLogic(Toggle):
@@ -122,32 +127,32 @@ class GlitchLogic(Toggle):
 
 
 cv64_options: Dict[str, Option] = {
-    "NumberOfStages": NumberOfStages,
-    "StartLocation": StartLocation,
-    "EntranceRandomization": EntranceRandomization,
-    "Special2sPerWarp": Special2sPerWarp,
-    "ExtraSpecial2s": ExtraSpecial2s,
-    "DraculasCondition": DraculasChamberCondition,
-    "Special1sRequired": Special1sRequired,
-    "ExtraSpecial1s": ExtraSpecial1s,
-    "CarrieLogic": CarrieLogic,
-    "GlitchLogic": GlitchLogic,
-    "FightRenon": FightRenon,
-    "FightVincent": FightVincent,
-    "BadEndingCondition": BadEndingCondition,
-    "IncreaseItemLimit": IncreaseItemLimit,
-    "RevealInvisibleItems": RevealInvisibleItems,
-    "DeathLink": DeathLink,
+    "number_of_stages": NumberOfStages,
+    "start_location": StartLocation,
+    "entrance_randomization": EntranceRandomization,
+    "special2s_per_warp": Special2sPerWarp,
+    "extra_special2s": ExtraSpecial2s,
+    "draculas_condition": DraculasChamberCondition,
+    "special1s_required": Special1sRequired,
+    "extra_special1s": ExtraSpecial1s,
+    "carrie_logic": CarrieLogic,
+    "glitch_logic": GlitchLogic,
+    "fight_renon": FightRenon,
+    "fight_vincent": FightVincent,
+    "bad_ending_condition": BadEndingCondition,
+    "increase_item_limit": IncreaseItemLimit,
+    "reveal_invisible_items": RevealInvisibleItems,
+    "death_link": DeathLink,
 }
 
 
-def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
-    return get_option_value(world, player, name) > 0
+#def is_option_enabled(world: MultiWorld, player: int, name: str) -> bool:
+#    return get_option_value(world, player, name) > 0
 
 
-def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, dict]:
-    option = getattr(world, name, None)
-    if option == None:
-        return 0
+#def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, dict]:
+#    option = getattr(world, name, None)
+#    if option is None:
+#        return 0
 
-    return option[player].value
+#    return option[player].value

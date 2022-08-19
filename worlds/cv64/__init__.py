@@ -5,8 +5,8 @@ import threading
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from .Items import item_table, filler_items
 from .Locations import get_locations, EventId
-from .LogicMixin import CV64Logic
-from .Options import is_option_enabled, get_option_value, cv64_options
+# from .LogicMixin import CV64Logic
+from .Options import cv64_options
 from .Regions import create_regions
 from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch
 from ..AutoWorld import World, WebWorld
@@ -34,10 +34,10 @@ class CV64World(World):
     way to Dracula's chamber and stop his rule of terror.
     """
     game: str = "Castlevania"
-    options = cv64_options
+    option_definitions = cv64_options
     topology_present = False
     data_version = 0
-    # hint_blacklist = {LocationName.rocket_rush_flag}
+    # hint_blacklist = {}
     remote_items = False
     web = CV64Web()
 
@@ -50,6 +50,8 @@ class CV64World(World):
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
+        self.location_cache = []
+        self.locked_locations = []
 
     @classmethod
     def stage_assert_generate(cls, world):
@@ -115,13 +117,11 @@ class CV64World(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
-    def fill_slot_data(self) -> Dict[str, object]:
-        slot_data: Dict[str, object] = {}
-
+    def fill_slot_data(self) -> dict:
+        slot_data = {}
         for option_name in cv64_options:
-            slot_data[option_name] = get_option_value(self.world, self.player, option_name)
-
-        slot_data["PersonalItems"] = get_personal_items(self.player, self.location_cache)
+            option = getattr(self.world, option_name)[self.player]
+            slot_data[option_name] = option.value
 
         return slot_data
 

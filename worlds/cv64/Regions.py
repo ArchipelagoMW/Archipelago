@@ -1,6 +1,5 @@
 from typing import List, Set, Dict, Tuple, Optional, Callable
 from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
-from .Options import is_option_enabled
 from .Locations import LocationData
 
 
@@ -71,8 +70,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region.keys())
         
     world.regions += regions
-
-    connectStartingRegion(world, player)
 
     names: Dict[str, int] = {}
 
