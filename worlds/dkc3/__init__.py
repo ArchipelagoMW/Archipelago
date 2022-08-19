@@ -122,10 +122,8 @@ class DKC3World(World):
         total_junk_count = total_required_locations - len(itempool)
 
         junk_pool = []
-        junk_keys = list(junk_table.keys())
-        for i in range(total_junk_count):
-            junk_item = self.world.random.choice(junk_keys)
-            junk_pool += [self.create_item(junk_item)]
+        for item_name in self.world.random.choices(list(junk_table.keys()), k=total_junk_count):
+            junk_pool += [self.create_item(item_name)]
 
         itempool += junk_pool
 
