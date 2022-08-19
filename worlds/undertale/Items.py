@@ -236,7 +236,6 @@ junk_weights_genocide = {
     "Glamburger": 10,
     "Crab Apple": 12,
     "Sea Tea": 12,
-    "Nice Cream": 10,
     "Spider Donut": 10,
     "Junk Food": 12,
     "Temmie Flakes": 10,
