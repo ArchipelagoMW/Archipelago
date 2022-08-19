@@ -1,11 +1,8 @@
-from lib2to3.pgen2.token import OP
-import logging
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, RegionType
 from ..AutoWorld import World, WebWorld
 from . import Items, Locations, Options
-from .Items import item_table
 from .Rules import set_location_rules
 
 class Hylics2Web(WebWorld):
@@ -20,7 +17,7 @@ class Hylics2Web(WebWorld):
 
 class Hylics2World(World):
     """
-    description
+    Hylics 2 is a surreal and unusual RPG, with an equally bizarre visual style to go alongside it. Play as Wayne, travel the world, and gather your allies to defeat the nefarious Gibby in his Hylemxylem!
     """
     game: str = "Hylics 2"
     web = Hylics2Web()
@@ -43,181 +40,127 @@ class Hylics2World(World):
 
         # Generate item pool
         pool = []
-        for item in item_table.values():
-            for i in range(item["count"]):
-                hylics2_item = self.create_item(item["name"])
-                pool.append(hylics2_item)
+        
+        for i, data in Items.item_table.items():
+            if data["count"] > 0:
+                for j in range(data["count"]):
+                    pool.append(Hylics2Item(data["name"], data["classification"], i, self.player))
         
         self.world.itempool += pool
 
+        # Place victory item
+        loc = Location(self.player, "Defeat Gibby", None, self.world.get_region("Hylemxylem", self.player))
+        loc.place_locked_item(Item("Victory", ItemClassification.skip_balancing, None, self.player))
+        self.world.get_region("Hylemxylem", self.player).locations.append(loc)
+
     #def fill_slot_data(self) -> Dict[str, Any]:
 
-    def create_item(self, name: str) -> Item:
-        item_id: int = self.item_name_to_id[name]
-
-        return Hylics2Item(name,
-                           item_table[item_id]["classification"],
-                           item_id, player=self.player)
-
     def create_regions(self) -> None:
-        r = Region("Menu", RegionType.Generic, "Menu", self.player, self.world)
-        r.exits = [Entrance(self.player, "New Game", r)]
-        self.world.regions.append(r)
 
-        r = Region("Afterlife", RegionType.Generic, "Afterlife", self.player, self.world)
-        r.exits = [Entrance(self.player, "To Waynehouse", r), Entrance(self.player, "To New Muldul", r), Entrance(self.player, "To Viewax", r), Entrance(self.player, "To TV Island", r), Entrance(self.player, "To Shield Facility", r), Entrance(self.player, "To Worm Pod", r), Entrance(self.player, "To Foglast", r), Entrance(self.player, "To Sage Labyrinth", r), Entrance(self.player, "To Hylemxylem", r)]
-        self.world.regions.append(r)
+        region_table: Dict[int, Region] = {
+            0: Region("Menu", RegionType.Generic, "Menu", self.player, self.world),
+            1: Region("Afterlife", RegionType.Generic, "Afterlife", self.player, self.world),
+            2: Region("Waynehouse", RegionType.Generic, "Waynehouse", self.player, self.world),
+            3: Region("World", RegionType.Generic, "World", self.player, self.world),
+            4: Region("New Muldul", RegionType.Generic, "New Muldul", self.player, self.world),
+            5: Region("New Muldul Vault", RegionType.Generic, "New Muldul Vault", self.player, self.world),
+            6: Region("Viewax", RegionType.Generic, "Viewax's Edifice", self.player, self.world),
+            7: Region("Airship", RegionType.Generic, "Airship", self.player, self.world),
+            8: Region("Arcade Island", RegionType.Generic, "Arcade Island", self.player, self.world),
+            9: Region("TV Island", RegionType.Generic, "TV Island", self.player, self.world),
+            10: Region("Juice Ranch", RegionType.Generic, "Juice Ranch", self.player, self.world),
+            11: Region("Shield Facility", RegionType.Generic, "Shield Facility", self.player, self.world),
+            12: Region("Worm Pod", RegionType.Generic, "Worm Pod", self.player, self.world),
+            13: Region("Foglast", RegionType.Generic, "Foglast", self.player, self.world),
+            14: Region("Drill Castle", RegionType.Generic, "Drill Castle", self.player, self.world),
+            15: Region("Sage Labyrinth", RegionType.Generic, "Sage Labyrinth", self.player, self.world),
+            16: Region("Sage Airship", RegionType.Generic, "Sage Airship", self.player, self.world),
+            17: Region("Hylemxylem", RegionType.Generic, "Hylemxylem", self.player, self.world)
+        }
 
-        r = Region("Waynehouse", RegionType.Generic, "Waynehouse", self.player, self.world)
-        r.exits = [Entrance(self.player, "To World", r), Entrance(self.player, "To Afterlife", r)]
-        self.world.regions.append(r)
+        region_exit_table: Dict[int, List[str]] = {
+            0: ["New Game"],
 
-        r = Region("World", RegionType.Generic, "World", self.player, self.world)
-        r.exits = [Entrance(self.player, "To Waynehouse", r), Entrance(self.player, "To New Muldul", r), Entrance(self.player, "To Drill Castle", r), Entrance(self.player, "To Viewax", r), Entrance(self.player, "To Airship", r), Entrance(self.player, "To Arcade Island", r), Entrance(self.player, "To TV Island", r), Entrance(self.player, "To Juice Ranch", r), Entrance(self.player, "To Shield Facility", r), Entrance(self.player, "To Worm Pod", r), Entrance(self.player, "To Foglast", r), Entrance(self.player, "To Sage Airship", r), Entrance(self.player, "To Hylemxylem", r)]
-        self.world.regions.append(r)
+            1: ["To Waynehouse",
+                "To New Muldul",
+                "To Viewax",
+                "To TV Island",
+                "To Shield Facility",
+                "To Worm Pod",
+                "To Foglast",
+                "To Sage Labyrinth",
+                "To Hylemxylem"],
 
-        r = Region("New Muldul", RegionType.Generic, "New Muldul", self.player, self.world)
-        r.exits = [Entrance(self.player, "To World", r), Entrance(self.player, "To Afterlife", r), Entrance(self.player, "To New Muldul Vault", r)]
-        self.world.regions.append(r)
+            2: ["To World",
+                "To Afterlife",],
 
-        r = Region("New Muldul Vault", RegionType.Generic, "New Muldul Vault", self.player, self.world)
-        r.exits = [Entrance(self.player, "To New Muldul", r)]
-        self.world.regions.append(r)
+            3: ["To Waynehouse",
+                "To New Muldul",
+                "To Drill Castle",
+                "To Viewax",
+                "To Arcade Island",
+                "To TV Island",
+                "To Juice Ranch",
+                "To Shield Facility",
+                "To Worm Pod",
+                "To Foglast",
+                "To Sage Airship",
+                "To Hylemxylem"],
 
-        r = Region("Viewax", RegionType.Generic, "Viewax's Edifice", self.player, self.world)
-        r.exits = [Entrance(self.player, "To World", r), Entrance(self.player, "To Afterlife", r)]
-        self.world.regions.append(r)
+            4: ["To World",
+                "To Afterlife",
+                "To New Muldul Vault"],
+            
+            5: ["To New Muldul"],
+            
+            6: ["To World",
+                "To Afterlife"],
+            
+            7: ["To World"],
+            
+            8: ["To World"],
+            
+            9: ["To World",
+                "To Afterlife"],
+            
+            10: ["To World"],
+            
+            11: ["To World",
+                 "To Afterlife",
+                 "To Worm Pod"],
+            
+            12: ["To Shield Facility",
+                 "To Afterlife"],
+            
+            13: ["To World",
+                 "To Afterlife"],
+            
+            14: ["To World",
+                 "To Sage Labyrinth"],
+            
+            15: ["To Drill Castle",
+                 "To Afterlife"],
+            
+            16: ["To World"],
+            
+            17: ["To World",
+                "To Afterlife"]
+        }
 
-        r = Region("Airship", RegionType.Generic, "Airship", self.player, self.world)
-        r.exits = [Entrance(self.player, "To World", r)]
-        self.world.regions.append(r)
-
-        r = Region("Arcade Island", RegionType.Generic, "Arcade Island", self.player, self.world)
-        r.exits = [Entrance(self.player, "To World", r)]
-        self.world.regions.append(r)
-
-        r = Region("TV Island", RegionType.Generic, "TV Island", self.player, self.world)
-        r.exits = [Entrance(self.player, "To World", r), Entrance(self.player, "To Afterlife", r)]
-        self.world.regions.append(r)
-
-        r = Region("Juice Ranch", RegionType.Generic, "Juice Ranch", self.player, self.world)
-        r.exits = [Entrance(self.player, "To World", r)]
-        self.world.regions.append(r)
-
-        r = Region("Shield Facility", RegionType.Generic, "Shield Facility", self.player, self.world)
-        r.exits = [Entrance(self.player, "To World", r), Entrance(self.player, "To Afterlife", r), Entrance(self.player, "To Worm Pod", r)]
-        self.world.regions.append(r)
-
-        r = Region("Worm Pod", RegionType.Generic, "Worm Pod", self.player, self.world)
-        r.exits = [Entrance(self.player, "To Shield Facility", r), Entrance(self.player, "To Afterlife", r)]
-        self.world.regions.append(r)
-
-        r = Region("Foglast", RegionType.Generic, "Foglast", self.player, self.world)
-        r.exits = [Entrance(self.player, "To World", r), Entrance(self.player, "To Afterlife", r)]
-        self.world.regions.append(r)
-
-        r = Region("Drill Castle", RegionType.Generic, "Drill Castle", self.player, self.world)
-        r.exits = [Entrance(self.player, "To World", r), Entrance(self.player, "To Sage Labyrinth", r)]
-        self.world.regions.append(r)
-
-        r = Region("Sage Labyrinth", RegionType.Generic, "Sage Labyrinth", self.player, self.world)
-        r.exits = [Entrance(self.player, "To Drill Castle", r), Entrance(self.player, "To Afterlife", r)]
-        self.world.regions.append(r)
-
-        r = Region("Sage Airship", RegionType.Generic, "Sage Airship", self.player, self.world)
-        r.exits = [Entrance(self.player, "To World", r)]
-        self.world.regions.append(r)
-
-        r = Region("Hylemxylem", RegionType.Generic, "Hylemxylem", self.player, self.world)
-        r.exits = [Entrance(self.player, "To World", r), Entrance(self.player, "To Afterlife", r)]
-        self.world.regions.append(r)
-
-        self.world.get_entrance("New Game", self.player)\
-            .connect(self.world.get_region("Waynehouse", self.player))
-        self.world.get_entrance("To Waynehouse", self.player)\
-            .connect(self.world.get_region("Waynehouse", self.player))
-        self.world.get_entrance("To New Muldul", self.player)\
-            .connect(self.world.get_region("New Muldul", self.player))
-        self.world.get_entrance("To Viewax", self.player)\
-            .connect(self.world.get_region("Viewax", self.player))
-        self.world.get_entrance("To TV Island", self.player)\
-            .connect(self.world.get_region("TV Island", self.player))
-        self.world.get_entrance("To Shield Facility", self.player)\
-            .connect(self.world.get_region("Shield Facility", self.player))
-        self.world.get_entrance("To Worm Pod", self.player)\
-            .connect(self.world.get_region("Worm Pod", self.player))
-        self.world.get_entrance("To Foglast", self.player)\
-            .connect(self.world.get_region("Foglast", self.player))
-        self.world.get_entrance("To Sage Labyrinth", self.player)\
-            .connect(self.world.get_region("Sage Labyrinth", self.player))
-        self.world.get_entrance("To Hylemxylem", self.player)\
-            .connect(self.world.get_region("Hylemxylem", self.player))
-        self.world.get_entrance("To World", self.player)\
-            .connect(self.world.get_region("World", self.player))
-        self.world.get_entrance("To Afterlife", self.player)\
-            .connect(self.world.get_region("Afterlife", self.player))
-        self.world.get_entrance("To Drill Castle", self.player)\
-            .connect(self.world.get_region("Drill Castle", self.player))
-        self.world.get_entrance("To Airship", self.player)\
-            .connect(self.world.get_region("Airship", self.player))
-        self.world.get_entrance("To Arcade Island", self.player)\
-            .connect(self.world.get_region("Arcade Island", self.player))
-        self.world.get_entrance("To Juice Ranch", self.player)\
-            .connect(self.world.get_region("Juice Ranch", self.player))
-        self.world.get_entrance("To Sage Airship", self.player)\
-            .connect(self.world.get_region("Sage Airship", self.player))
-        self.world.get_entrance("To New Muldul Vault", self.player)\
-            .connect(self.world.get_region("New Muldul Vault", self.player))
+        for i, reg in region_table.items():
+            self.world.regions.append(reg)
+            for j, exits in region_exit_table.items():
+                if j is i:
+                    for j2 in exits:
+                        k = Entrance(self.player, j2, reg)
+                        reg.exits.append(k)
+                        k.connect(reg)
 
         for l, data in Locations.location_table.items():
-            reg = data["region"]
-            match reg:
-                case "Afterlife":
-                    self.world.get_region("Afterlife", self.player).locations\
-                        .append(Hylics2Location(self.player, data["name"], None, self.world.get_region("Afterlife", self.player)))
-                case "Waynehouse":
-                    self.world.get_region("Waynehouse", self.player).locations\
-                        .append(Hylics2Location(self.player, data["name"], None, self.world.get_region("Waynehouse", self.player)))
-                case "New Muldul":
-                    self.world.get_region("New Muldul", self.player).locations\
-                        .append(Hylics2Location(self.player, data["name"], None, self.world.get_region("New Muldul", self.player)))
-                case "New Muldul Vault":
-                    self.world.get_region("New Muldul Vault", self.player).locations\
-                        .append(Hylics2Location(self.player, data["name"], None, self.world.get_region("New Muldul Vault", self.player)))
-                case "Viewax":
-                    self.world.get_region("Viewax", self.player).locations\
-                        .append(Hylics2Location(self.player, data["name"], None, self.world.get_region("Viewax", self.player)))
-                case "Airship":
-                    self.world.get_region("Airship", self.player).locations\
-                        .append(Hylics2Location(self.player, data["name"], None, self.world.get_region("Airship", self.player)))
-                case "Arcade Island":
-                    self.world.get_region("Arcade Island", self.player).locations\
-                        .append(Hylics2Location(self.player, data["name"], None, self.world.get_region("Arcade Island", self.player)))
-                case "TV Island":
-                    self.world.get_region("TV Island", self.player).locations\
-                        .append(Hylics2Location(self.player, data["name"], None, self.world.get_region("TV Island", self.player)))
-                case "Juice Ranch":
-                    self.world.get_region("Juice Ranch", self.player).locations\
-                        .append(Hylics2Location(self.player, data["name"], None, self.world.get_region("Juice Ranch", self.player)))
-                case "Worm Pod":
-                    self.world.get_region("Worm Pod", self.player).locations\
-                        .append(Hylics2Location(self.player, data["name"], None, self.world.get_region("Worm Pod", self.player)))
-                case "Foglast":
-                    self.world.get_region("Foglast", self.player).locations\
-                        .append(Hylics2Location(self.player, data["name"], None, self.world.get_region("Foglast", self.player)))
-                case "Drill Castle":
-                    self.world.get_region("Drill Castle", self.player).locations\
-                        .append(Hylics2Location(self.player, data["name"], None, self.world.get_region("Drill Castle", self.player)))
-                case "Sage Labyrinth":
-                    self.world.get_region("Sage Labyrinth", self.player).locations\
-                        .append(Hylics2Location(self.player, data["name"], None, self.world.get_region("Sage Labyrinth", self.player)))
-                case "Sage Airship":
-                    self.world.get_region("Sage Airship", self.player).locations\
-                        .append(Hylics2Location(self.player, data["name"], None, self.world.get_region("Sage Airship", self.player)))
-                case "Hylemxylem":
-                    self.world.get_region("Hylemxylem", self.player).locations\
-                        .append(Hylics2Location(self.player, data["name"], None, self.world.get_region("Hylemxylem", self.player)))
+            region_table[data["region"]].locations\
+                .append(Hylics2Location(self.player, data["name"], l, region_table[data["region"]]))
 
+    
 
 class Hylics2Location(Location):
     game: str = "Hylics 2"

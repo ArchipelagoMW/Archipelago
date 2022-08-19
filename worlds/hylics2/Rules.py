@@ -1,8 +1,6 @@
 from typing import TYPE_CHECKING
 
 from ..generic.Rules import set_rule
-from BaseClasses import MultiWorld
-from ..AutoWorld import LogicMixin
 
 if TYPE_CHECKING:
     from . import Hylics2World
@@ -60,18 +58,45 @@ def set_location_rules(hylics2_world: "Hylics2World"):
     player = hylics2_world.player
     world = hylics2_world.world
 
-    # Entrances
-    set_rule(world.get_entrance('To Viewax', player), lambda state: _hylics2_has_pneumatophore(state, player))
-    set_rule(world.get_entrance('To TV Island', player), lambda state: _hylics2_has_airship(state, player))
-    set_rule(world.get_entrance('To Shield Facility', player), lambda state: _hylics2_has_airship(state, player))
-    set_rule(world.get_entrance('To Airship', player), lambda state: _hylics2_has_airship(state, player))
-    set_rule(world.get_entrance('To Arcade Island', player), lambda state: _hylics2_has_airship(state, player))
-    set_rule(world.get_entrance('To Juice Ranch', player), lambda state: _hylics2_has_airship(state, player))
-    set_rule(world.get_entrance('To Worm Pod', player), lambda state: _hylics2_has_worm_room_key(state, player))
-    set_rule(world.get_entrance('To Foglast', player), lambda state: _hylics2_has_airship(state, player) and _hylics2_has_worm_room_key(state, player))
-    set_rule(world.get_entrance('To Sage Labyrinth', player), lambda state: _hylics2_has_airship(state, player) and _hylics2_has_skull_bomb(state, player) and _hylics2_has_bridge_key(state, player))
-    set_rule(world.get_entrance('To Hylemxylem', player), lambda state: _hylics2_has_airship(state, player) and _hylics2_has_worm_room_key(player) and _hylics2_has_bridge_key(state, player))
-    set_rule(world.get_entrance('To Sage Airship', player), lambda state: _hylics2_has_airship(state, player) and _hylics2_has_skull_bomb(state, player) and _hylics2_has_deep_key(state, player))
+    # Exits
+    for i in world.get_region("Afterlife", player).exits:
+        if i.name is "To Viewax":
+            set_rule(i, lambda state: _hylics2_has_pneumatophore(state, player))
+        elif i.name is "To TV Island" or "To Shield Facility":
+            set_rule(i, lambda state: _hylics2_has_airship(state, player))
+        elif i.name is "To Worm Pod":
+            set_rule(i, lambda state: _hylics2_has_worm_room_key(state, player))
+        elif i.name is "To Foglast":
+            set_rule(i, lambda state: _hylics2_has_airship(state, player) and _hylics2_has_worm_room_key(state, player))
+        elif i.name is "To Sage Labyrinth":
+            set_rule(i, lambda state: _hylics2_has_airship(state, player) and _hylics2_has_skull_bomb(state, player) and _hylics2_has_bridge_key(state, player))
+        elif i.name is "To Hylemxylem":
+            set_rule(i, lambda state: _hylics2_has_airship(state, player) and _hylics2_has_worm_room_key(player) and _hylics2_has_bridge_key(state, player))
+
+    for i in world.get_region("World", player).exits:
+        if i.name is "To Viewax":
+            set_rule(i, lambda state: _hylics2_has_pneumatophore(state, player))
+        elif i.name is "To TV Island" or "To Shield Facility" or "To Airship" or "To Arcade Island" or "To Juice Ranch":
+            set_rule(i, lambda state: _hylics2_has_airship(state, player))
+        elif i.name is "To Worm Pod":
+            set_rule(i, lambda state: _hylics2_has_worm_room_key(state, player))
+        elif i.name is "To Foglast":
+            set_rule(i, lambda state: _hylics2_has_airship(state, player) and _hylics2_has_worm_room_key(state, player))
+        elif i.name is "To Sage Labyrinth":
+            set_rule(i, lambda state: _hylics2_has_airship(state, player) and _hylics2_has_skull_bomb(state, player) and _hylics2_has_bridge_key(state, player))
+        elif i.name is "To Sage Airship":
+            set_rule(i, lambda state: _hylics2_has_airship(state, player) and _hylics2_has_skull_bomb(state, player) and _hylics2_has_deep_key(state, player))
+        elif i.name is "To Hylemxylem":
+            set_rule(i, lambda state: _hylics2_has_airship(state, player) and _hylics2_has_worm_room_key(player) and _hylics2_has_bridge_key(state, player))
+
+    for i in world.get_region("Shield Facility", player).exits:
+        if i.name is "To Worm Pod":
+            set_rule(i, lambda state: _hylics2_has_worm_room_key(state, player))
+
+    for i in world.get_region("Drill Castle", player).exits:
+        if i.name is "To Sage Labyrinth":
+            set_rule(i, lambda state: _hylics2_has_airship(state, player) and _hylics2_has_skull_bomb(state, player) and _hylics2_has_bridge_key(state, player))
+
 
     # New Muldul
     set_rule(world.get_location("New Muldul: Underground Chest", player), lambda state: _hylics2_has_pneumatophore(state, player))
@@ -109,6 +134,7 @@ def set_location_rules(hylics2_world: "Hylics2World"):
     set_rule(world.get_location("Airship: Talk to Somsnosa", player), lambda state: _hylics2_has_worm_room_key(state, player))
 
     # Foglast
+    set_rule(world.get_location("Foglast: TV", player), lambda state: _hylics2_has_clicker(state, player))
     set_rule(world.get_location("Foglast: Roof Sarcophagus", player), lambda state: _hylics2_has_bridge_key(state, player))
     set_rule(world.get_location("Foglast: Under Lair Sarcophagus 1", player), lambda state: _hylics2_has_bridge_key(state, player))
     set_rule(world.get_location("Foglast: Under Lair Sarcophagus 2", player), lambda state: _hylics2_has_bridge_key(state, player))
@@ -118,7 +144,6 @@ def set_location_rules(hylics2_world: "Hylics2World"):
     set_rule(world.get_location("Foglast: Sage Item 2", player), lambda state: _hylics2_has_bridge_key(state, player))
 
     # Drill Castle
-    set_rule(world.get_location("Drill Castle: Ledge Banana", player), lambda state: _hylics2_has_pneumatophore(state, player))
     set_rule(world.get_location("Drill Castle: Island Banana", player), lambda state: _hylics2_has_pneumatophore(state, player))
     set_rule(world.get_location("Drill Castle: Island Pot", player), lambda state: _hylics2_has_pneumatophore(state, player))
     set_rule(world.get_location("Drill Castle: Cave Sarcophagus", player), lambda state: _hylics2_has_pneumatophore(state, player))
