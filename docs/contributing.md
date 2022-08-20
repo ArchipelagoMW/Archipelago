@@ -1,5 +1,5 @@
 # Contributing
-Contributions are welcome. We have a few asks of any new contributors.
+Contributions are welcome. We have a few requests of any new contributors.
 
 * Ensure that all changes which affect logic are covered by unit tests. 
 * Do not introduce any unit test failures/regressions.
