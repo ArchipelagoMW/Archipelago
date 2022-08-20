@@ -493,7 +493,8 @@ async def server_loop(ctx: CommonContext, address=None):
     logger.info(f'Connecting to Archipelago server at {address}')
     try:
         socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None)
-        ctx.ui.update_address_bar(server_url.netloc)
+        if ctx.ui is not None:
+            ctx.ui.update_address_bar(server_url.netloc)
         ctx.server = Endpoint(socket)
         logger.info('Connected')
         ctx.server_address = address
@@ -562,18 +563,21 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
                 f" for each location checked. Use !hint for more information.")
             ctx.hint_cost = int(args['hint_cost'])
             ctx.check_points = int(args['location_check_points'])
-            players = args.get("players", [])
-            if len(players) < 1:
-                logger.info('No player connected')
-            else:
-                players.sort()
-                current_team = -1
-                logger.info('Connected Players:')
-                for network_player in players:
-                    if network_player.team != current_team:
-                        logger.info(f'  Team #{network_player.team + 1}')
-                        current_team = network_player.team
-                    logger.info('    %s (Player %d)' % (network_player.alias, network_player.slot))
+
+            if "players" in args:  # TODO remove when servers sending this are outdated
+                players = args.get("players", [])
+                if len(players) < 1:
+                    logger.info('No player connected')
+                else:
+                    players.sort()
+                    current_team = -1
+                    logger.info('Connected Players:')
+                    for network_player in players:
+                        if network_player.team != current_team:
+                            logger.info(f'  Team #{network_player.team + 1}')
+                            current_team = network_player.team
+                        logger.info('    %s (Player %d)' % (network_player.alias, network_player.slot))
+
             # update datapackage
             await ctx.prepare_datapackage(set(args["games"]), args["datapackage_versions"])
 
@@ -723,7 +727,7 @@ if __name__ == '__main__':
     class TextContext(CommonContext):
         tags = {"AP", "IgnoreGame", "TextOnly"}
         game = ""  # empty matches any game since 0.3.2
-        items_handling = 0  # don't receive any NetworkItems
+        items_handling = 0b111  # receive all items for /received
 
         async def server_auth(self, password_requested: bool = False):
             if password_requested and not self.password:

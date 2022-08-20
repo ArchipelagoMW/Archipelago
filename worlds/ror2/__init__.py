@@ -5,7 +5,7 @@ from .Rules import set_rules
 
 from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from .Options import ror2_options
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 
 client_version = 1
 
@@ -28,7 +28,7 @@ class RiskOfRainWorld(World):
      first crash landing.
     """
     game: str = "Risk of Rain 2"
-    options = ror2_options
+    option_definitions = ror2_options
     topology_present = False
 
     item_name_to_id = item_table

@@ -39,7 +39,7 @@ class SM64World(World):
 
     area_connections: typing.Dict[int, int]
 
-    options = sm64_options
+    option_definitions = sm64_options
 
     def generate_early(self):
         self.topology_present = self.world.AreaRandomizer[self.player].value
@@ -118,7 +118,7 @@ class SM64World(World):
             "AreaRando": self.area_connections,
             "FirstBowserDoorCost": self.world.FirstBowserStarDoorCost[self.player].value,
             "BasementDoorCost": self.world.BasementStarDoorCost[self.player].value,
-            "SecondFloorCost": self.world.SecondFloorStarDoorCost[self.player].value,
+            "SecondFloorDoorCost": self.world.SecondFloorStarDoorCost[self.player].value,
             "MIPS1Cost": self.world.MIPS1Cost[self.player].value,
             "MIPS2Cost": self.world.MIPS2Cost[self.player].value,
             "StarsToFinish": self.world.StarsToFinish[self.player].value,

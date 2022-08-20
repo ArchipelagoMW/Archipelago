@@ -3,7 +3,7 @@ from typing import Any, List
 import copy
 from worlds.smz3.TotalSMZ3.Text.Dialog import Dialog
 from worlds.smz3.TotalSMZ3.Text.Texts import text_folder
-from yaml import load, Loader
+from Utils import unsafe_parse_yaml
 
 class StringTable:
 
@@ -11,7 +11,7 @@ class StringTable:
     def ParseEntries(resource: str):
         with open(resource, 'rb') as f:
             yaml = str(f.read(), "utf-8")
-        content = load(yaml, Loader)
+        content = unsafe_parse_yaml(yaml)
 
         result = []
         for entryValue in content:
@@ -20,8 +20,6 @@ class StringTable:
                 result.append((key, value))
             elif isinstance(value, str):
                 result.append((key, Dialog.Compiled(value)))
-            elif isinstance(value, dict):
-                result.append((key, Dialog.Compiled(value["NoPause"], False)))
             else: raise Exception(f"Did not expect an object of type {type(value)}")
         return result
 
@@ -47,9 +45,11 @@ class StringTable:
 
     def SetGanonThirdPhaseText(self, text: str):
         self.SetText("ganon_phase_3", text)
+        self.SetText("ganon_phase_3_no_silvers", text)
+        self.SetText("ganon_phase_3_no_silvers_alt", text)
 
     def SetTriforceRoomText(self, text: str):
-        self.SetText("end_triforce", "{NOBORDER}\n" + text)
+        self.SetText("end_triforce", f"{{NOBORDER}}\n{text}")
 
     def SetPedestalText(self, text: str):
         self.SetText("mastersword_pedestal_translated", text)
@@ -59,6 +59,12 @@ class StringTable:
 
     def SetBombosText(self, text: str):
         self.SetText("tablet_bombos_book", text)
+
+    def SetTowerRequirementText(self, text: str):
+        self.SetText("sign_ganons_tower", text)
+
+    def SetGanonRequirementText(self, text: str):
+        self.SetText("sign_ganon", text)
 
     def SetText(self, name: str, text: str):
         count = 0

@@ -25,7 +25,7 @@ class NorthWest(Z3Region):
 
     def CanEnter(self, items: Progression):
         return items.MoonPearl and ((
-                self.world.CanAquire(items, RewardType.Agahnim) or
+                self.world.CanAcquire(items, RewardType.Agahnim) or
                 items.CanAccessDarkWorldPortal(self.Config) and items.Flippers
             ) and items.Hookshot and (items.Flippers or items.CanLiftLight() or items.Hammer) or
             items.Hammer and items.CanLiftLight() or
