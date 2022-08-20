@@ -54,7 +54,7 @@ Example:
 ```
 
 ## (Server -> Client)
-These packets are are sent from the multiworld server to the client. They are not messages which the server accepts.
+These packets are sent from the multiworld server to the client. They are not messages which the server accepts.
 * [RoomInfo](#roominfo)
 * [ConnectionRefused](#connectionrefused)
 * [Connected](#connected)
@@ -220,7 +220,7 @@ Sent to clients if the server caught a problem with a packet. This only occurs f
 | original_cmd | Optional[str] | The `cmd` argument of the faulty packet, will be `None` if the `cmd` failed to be parsed. |
 | text         | str           | A descriptive message of the problem at hand.                                             |
 
-##### PacketProblemType
+#### PacketProblemType
 `PacketProblemType` indicates the type of problem that was detected in the faulty packet, the known problem types are below but others may be added in the future.
 
 | Type | Notes |

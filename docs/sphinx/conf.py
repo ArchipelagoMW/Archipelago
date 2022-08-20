@@ -28,6 +28,7 @@ author = 'Archipelago Team and Contributors'
 # ones.
 extensions = [
     "myst_parser",
+    "sphinxcontrib.mermaid",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
 ]
@@ -40,7 +41,7 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-myst_heading_anchors = 3
+myst_heading_anchors = 4
 
 # -- Options for HTML output -------------------------------------------------
 

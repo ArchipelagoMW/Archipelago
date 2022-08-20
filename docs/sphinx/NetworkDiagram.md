@@ -1,4 +1,8 @@
-```mermaid
+# Archipelago Network Diagram
+(Psst, scroll down and zoom in.)
+
+
+```{mermaid}
 flowchart LR
     %% Diagram arranged specifically so output generates no terrible crossing lines.
     %% AP Server

@@ -12,6 +12,7 @@ __all__ = [
     "AutoWorldRegister",
     "world_sources",
     "folder",
+    "World"
 ]
 
 if typing.TYPE_CHECKING:
