@@ -425,7 +425,7 @@ async def multi_watcher(ctx: UndertaleContext):
                                 "data": {"player": ctx.slot, "x": this_x, "y": this_y, "room": this_room,
                                          "spr": this_sprite, "frm": this_frame}}]
                     await ctx.send_msgs(message)
-        await asyncio.sleep(0.02)
+        await asyncio.sleep(0.1)
 
 
 async def game_watcher(ctx: UndertaleContext):
@@ -507,20 +507,18 @@ if __name__ == '__main__':
         ctx.auth = args.name
         ctx.server_address = args.connect
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
-
-        if gui_enabled:
-            ctx.run_gui()
-        ctx.run_cli()
-
         progression_watcher = asyncio.create_task(
             game_watcher(ctx), name="UndertaleProgressionWatcher")
 
         multiplayer_watcher = asyncio.create_task(
             multi_watcher(ctx), name="UndertaleMultiplayerWatcher")
+
+        if gui_enabled:
+            ctx.run_gui()
+        ctx.run_cli()
+
         await ctx.exit_event.wait()
         await ctx.shutdown()
-        await progression_watcher
-        await multiplayer_watcher
 
     import colorama
 

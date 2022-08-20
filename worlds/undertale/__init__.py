@@ -87,6 +87,10 @@ class UndertaleWorld(World):
         # Add all required progression items
         for (name, num) in key_items.items():
             itempool += [name] * num
+        for (name, num) in required_armor.items():
+            itempool += [name] * num
+        for (name, num) in required_weapons.items():
+            itempool += [name] * num
         if not self.world.temy_include[self.player]:
             if "temy armor" in itempool:
                 itempool.remove("temy armor")
@@ -121,11 +125,6 @@ class UndertaleWorld(World):
             itempool = [item if item not in required_armor else "Progressive Armor" for item in itempool]
         if self.world.prog_weapons[self.player]:
             itempool = [item if item not in required_weapons else "Progressive Weapons" for item in itempool]
-        if not self.world.no_equips[self.player]:
-            for (name, num) in required_armor.items():
-                itempool += [name] * num
-            for (name, num) in required_weapons.items():
-                itempool += [name] * num
         if self.world.route_required[self.player].current_key == "genocide" or self.world.route_required[self.player].current_key == "all_routes":
             if not self.world.only_flakes[self.player]:
                 itempool += ["Snowman Piece"] * 2
@@ -133,6 +132,8 @@ class UndertaleWorld(World):
                 itempool = ["Real Knife" if item == "Worn Dagger" else "The Locket" if item == "Heart Locket" else item for item in itempool]
         if self.world.only_flakes[self.player]:
             itempool = [item for item in itempool if item not in non_key_items]
+        if self.world.no_equips[self.player]:
+            itempool = [item for item in itempool if item not in required_armor and item not in required_weapons]
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
         exclusion_pool.update(exclusion_table[self.world.route_required[self.player].current_key])
