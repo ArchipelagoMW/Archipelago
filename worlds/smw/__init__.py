@@ -138,17 +138,12 @@ class SMWWorld(World):
 
         itempool += [self.create_item(ItemName.one_up_mushroom)] * junk_count
 
-        self.world.get_location(LocationName.yoshis_island_koopaling, self.player).place_locked_item(self.create_item(ItemName.koopaling))
-        self.world.get_location(LocationName.donut_plains_koopaling, self.player).place_locked_item(self.create_item(ItemName.koopaling))
-        self.world.get_location(LocationName.vanilla_dome_koopaling, self.player).place_locked_item(self.create_item(ItemName.koopaling))
-        self.world.get_location(LocationName.twin_bridges_koopaling, self.player).place_locked_item(self.create_item(ItemName.koopaling))
-        self.world.get_location(LocationName.forest_koopaling, self.player).place_locked_item(self.create_item(ItemName.koopaling))
-        self.world.get_location(LocationName.chocolate_koopaling, self.player).place_locked_item(self.create_item(ItemName.koopaling))
-        self.world.get_location(LocationName.valley_koopaling, self.player).place_locked_item(self.create_item(ItemName.koopaling))
-        self.world.get_location(LocationName.vanilla_reznor, self.player).place_locked_item(self.create_item(ItemName.koopaling))
-        self.world.get_location(LocationName.forest_reznor, self.player).place_locked_item(self.create_item(ItemName.koopaling))
-        self.world.get_location(LocationName.chocolate_reznor, self.player).place_locked_item(self.create_item(ItemName.koopaling))
-        self.world.get_location(LocationName.valley_reznor, self.player).place_locked_item(self.create_item(ItemName.koopaling))
+        boss_location_names = [LocationName.yoshis_island_koopaling, LocationName.donut_plains_koopaling, LocationName.vanilla_dome_koopaling,
+                               LocationName.twin_bridges_koopaling, LocationName.forest_koopaling, LocationName.chocolate_koopaling,
+                               LocationName.valley_koopaling, LocationName.vanilla_reznor, LocationName.forest_reznor, LocationName.chocolate_reznor, LocationName.valley_reznor]
+
+        for location_name in boss_location_names:
+            self.world.get_location(location_name, self.player).place_locked_item(self.create_item(ItemName.koopaling))
 
         self.world.itempool += itempool
 
