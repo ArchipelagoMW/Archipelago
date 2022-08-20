@@ -5,7 +5,7 @@ from .Rules import set_rules
 
 from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from .Options import ror2_options
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 
 client_version = 1
 
@@ -28,7 +28,7 @@ class RiskOfRainWorld(World):
      first crash landing.
     """
     game: str = "Risk of Rain 2"
-    options = ror2_options
+    option_definitions = ror2_options
     topology_present = False
 
     item_name_to_id = item_table
@@ -110,15 +110,16 @@ class RiskOfRainWorld(World):
             "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for i in range(16)),
             "totalLocations": self.world.total_locations[self.player].value,
             "totalRevivals": self.world.total_revivals[self.player].value,
-            "startWithDio": self.world.start_with_revive[self.player].value
+            "startWithDio": self.world.start_with_revive[self.player].value,
+            "FinalStageDeath": self.world.final_stage_death[self.player].value
         }
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
         item = RiskOfRainItem(name, ItemClassification.filler, item_id, self.player)
-        if name == 'Dio\'s Best Friend':
+        if name == "Dio's Best Friend":
             item.classification = ItemClassification.progression
-        elif name == 'Equipment':
+        elif name in {"Equipment", "Legendary Item"}:
             item.classification = ItemClassification.useful
         return item
 

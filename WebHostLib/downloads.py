@@ -36,14 +36,14 @@ def download_patch(room_id, patch_id):
             fname = f"P{patch.player_id}_{patch.player_name}_{app.jinja_env.filters['suuid'](room_id)}" \
                     f"{AutoPatchRegister.patch_types[patch.game].patch_file_ending}"
             new_file.seek(0)
-            return send_file(new_file, as_attachment=True, attachment_filename=fname)
+            return send_file(new_file, as_attachment=True, download_name=fname)
         else:
             patch_data = update_patch_data(patch.data, server=f"{app.config['PATCH_TARGET']}:{last_port}")
             patch_data = BytesIO(patch_data)
 
             fname = f"P{patch.player_id}_{patch.player_name}_{app.jinja_env.filters['suuid'](room_id)}." \
                     f"{preferred_endings[patch.game]}"
-        return send_file(patch_data, as_attachment=True, attachment_filename=fname)
+        return send_file(patch_data, as_attachment=True, download_name=fname)
 
 
 @app.route("/dl_spoiler/<suuid:seed_id>")
@@ -66,7 +66,7 @@ def download_slot_file(room_id, player_id: int):
             from worlds.minecraft import mc_update_output
             fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_P{slot_data.player_id}_{slot_data.player_name}.apmc"
             data = mc_update_output(slot_data.data, server=app.config['PATCH_TARGET'], port=room.last_port)
-            return send_file(io.BytesIO(data), as_attachment=True, attachment_filename=fname)
+            return send_file(io.BytesIO(data), as_attachment=True, download_name=fname)
         elif slot_data.game == "Factorio":
             with zipfile.ZipFile(io.BytesIO(slot_data.data)) as zf:
                 for name in zf.namelist():
@@ -78,9 +78,11 @@ def download_slot_file(room_id, player_id: int):
             fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_SP.apv6"
         elif slot_data.game == "Super Mario 64":
             fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_SP.apsm64ex"
+        elif slot_data.game == "Dark Souls III":
+            fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}.json"
         else:
             return "Game download not supported."
-        return send_file(io.BytesIO(slot_data.data), as_attachment=True, attachment_filename=fname)
+        return send_file(io.BytesIO(slot_data.data), as_attachment=True, download_name=fname)
 
 
 @app.route("/templates")
