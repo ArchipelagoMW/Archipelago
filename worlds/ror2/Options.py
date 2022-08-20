@@ -1,4 +1,4 @@
-import typing
+from typing import Dict
 from Options import Option, DefaultOnToggle, Range, Choice
 
 
@@ -36,7 +36,8 @@ class AllowLunarItems(DefaultOnToggle):
 class StartWithRevive(DefaultOnToggle):
     """Start the game with a `Dio's Best Friend` item."""
     display_name = "Start with a Revive"
-    
+
+
 class FinalStageDeath(DefaultOnToggle):
     """Death on the final boss stage counts as a win."""
     display_name = "Final Stage Death is Win"
@@ -124,7 +125,7 @@ class Equipment(Range):
 
 class ItemPoolPresetToggle(DefaultOnToggle):
     """Will use the item weight presets when set to true, otherwise will use the custom set item pool weights."""
-    display_name = "Item Weight Presets"
+    display_name = "Use Item Weight Presets"
 
 
 class ItemWeights(Choice):
@@ -150,7 +151,7 @@ class ItemWeights(Choice):
 
 
 # define a dictionary for the weights of the generated item pool.
-ror2_weights: typing.Dict[str, type(Option)] = {
+ror2_weights: Dict[str, type(Option)] = {
     "green_scrap":          GreenScrap,
     "red_scrap":            RedScrap,
     "yellow_scrap":         YellowScrap,
@@ -163,7 +164,7 @@ ror2_weights: typing.Dict[str, type(Option)] = {
     "equipment":            Equipment
 }
 
-ror2_options: typing.Dict[str, type(Option)] = {
+ror2_options: Dict[str, type(Option)] = {
     "total_locations":      TotalLocations,
     "total_revivals":       TotalRevivals,
     "start_with_revive":    StartWithRevive,
