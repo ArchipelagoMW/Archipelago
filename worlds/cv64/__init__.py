@@ -33,7 +33,7 @@ class CV64World(World):
     Reinhardt Schneider or powerful sorceress Carrie Fernandez, brave many terrifying traps and foes as you make your
     way to Dracula's chamber and stop his rule of terror.
     """
-    game: str = "Castlevania"
+    game: str = "Castlevania 64"
     option_definitions = cv64_options
     topology_present = False
     data_version = 0

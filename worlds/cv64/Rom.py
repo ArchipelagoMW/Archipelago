@@ -103,43 +103,43 @@ def patch_rom(world, rom, player):
     local_random = world.slot_seeds[player]
 
     # Disable vampire Vincent cutscene
-    rom.write_byte(0xAACC0, 0x24)
-    rom.write_byte(0xAACC1, 0x01)
-    rom.write_byte(0xAACC2, 0x00)
-    rom.write_byte(0xAACC3, 0x01)
+    # rom.write_byte(0xAACC0, 0x24)
+    # rom.write_byte(0xAACC1, 0x01)
+    # rom.write_byte(0xAACC2, 0x00)
+    # rom.write_byte(0xAACC3, 0x01)
 
     # Increase item capacity to 99
-    rom.write_byte(0xBF30B, 0x63)
+    # rom.write_byte(0xBF30B, 0x63)
 
     # Disable Easy Mode cutoff point
-    rom.write_byte(0xD9E18, 0x24)
-    rom.write_byte(0xD9E19, 0x0D)
-    rom.write_byte(0xD9E1A, 0x00)
-    rom.write_byte(0xD9E1B, 0x00)
+    # rom.write_byte(0xD9E18, 0x24)
+    # rom.write_byte(0xD9E19, 0x0D)
+    # rom.write_byte(0xD9E1A, 0x00)
+     #rom.write_byte(0xD9E1B, 0x00)
 
     # Fix both elevator bridges for both characters
-    rom.write_byte(0x6CEAA0, 0x24)
-    rom.write_byte(0x6CEAA1, 0x0B)
-    rom.write_byte(0x6CEAA2, 0x00)
-    rom.write_byte(0x6CEAA3, 0x01)
-    rom.write_byte(0x6CEAA4, 0x24)
-    rom.write_byte(0x6CEAA5, 0x0D)
-    rom.write_byte(0x6CEAA6, 0x00)
-    rom.write_byte(0x6CEAA7, 0x01)
+    # rom.write_byte(0x6CEAA0, 0x24)
+    # rom.write_byte(0x6CEAA1, 0x0B)
+    # rom.write_byte(0x6CEAA2, 0x00)
+    #rom.write_byte(0x6CEAA3, 0x01)
+    #rom.write_byte(0x6CEAA4, 0x24)
+    #rom.write_byte(0x6CEAA5, 0x0D)
+    #rom.write_byte(0x6CEAA6, 0x00)
+    #rom.write_byte(0x6CEAA7, 0x01)
 
     # Write the new item bytes
-    # for locationid, address in locations_rom_data.items():
-    #    rom.write_byte(address, get_item_byte(locationid))
+    for locationid, address in locations_rom_data.items():
+       rom.write_byte(address, 0x11)
 
     from Main import __version__
     rom.name = bytearray(f'CV64{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
-    rom.write_bytes(0x7FC0, rom.name)
+    # rom.write_bytes(0x7FC0, rom.name)
 
 
 class CV64DeltaPatch(APDeltaPatch):
     hash = USHASH
-    game = "Castlevania"
+    game = "Castlevania 64"
     patch_file_ending = ".apcv64"
 
     @classmethod

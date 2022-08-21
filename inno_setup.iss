@@ -55,6 +55,7 @@ Name: "core";             Description: "Core Files"; Types: full hosting playing
 Name: "generator";        Description: "Generator"; Types: full hosting
 Name: "generator/sm";     Description: "Super Metroid ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/dkc3";   Description: "Donkey Kong Country 3 ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
+Name: "generator/cv64";   Description: "Castlevania 64 ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 12582912; Flags: disablenouninstallwarning
 Name: "generator/soe";    Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/lttp";   Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
 Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296; Flags: disablenouninstallwarning
@@ -64,6 +65,7 @@ Name: "client/sni";       Description: "SNI Client"; Types: full playing
 Name: "client/sni/lttp";  Description: "SNI Client - A Link to the Past Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/sni/sm";    Description: "SNI Client - Super Metroid Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/sni/dkc3";  Description: "SNI Client - Donkey Kong Country 3 Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/sni/cv64";  Description: "SNI Client - Castlevania 64 Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/factorio";  Description: "Factorio"; Types: full playing
 Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDiskSpaceRequired: 226894278
 Name: "client/oot";       Description: "Ocarina of Time"; Types: full playing
@@ -79,6 +81,7 @@ NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-mod
 Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"; Flags: external; Components: client/sni/lttp or generator/lttp
 Source: "{code:GetSMROMPath}"; DestDir: "{app}"; DestName: "Super Metroid (JU).sfc"; Flags: external; Components: client/sni/sm or generator/sm
 Source: "{code:GetDKC3ROMPath}"; DestDir: "{app}"; DestName: "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc"; Flags: external; Components: client/sni/dkc3 or generator/dkc3
+Source: "{code:GetCV64ROMPath}"; DestDir: "{app}"; DestName: "Castlevania (USA).z64"; Flags: external; Components: client/sni/cv64 or generator/cv64
 Source: "{code:GetSoEROMPath}"; DestDir: "{app}"; DestName: "Secret of Evermore (USA).sfc"; Flags: external; Components: generator/soe
 Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: client/oot or generator/oot
 Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -151,6 +154,11 @@ Root: HKCR; Subkey: "{#MyAppName}dkc3patch";                     ValueData: "Arc
 Root: HKCR; Subkey: "{#MyAppName}dkc3patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}dkc3patch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
 
+Root: HKCR; Subkey: ".apcv64";                                 ValueData: "{#MyAppName}cv64patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}cv64patch";                     ValueData: "Archipelago Castlevania 64 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}cv64patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}cv64patch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
+
 Root: HKCR; Subkey: ".apsmz3";                                 ValueData: "{#MyAppName}smz3patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}smz3patch";                     ValueData: "Archipelago SMZ3 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}smz3patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
@@ -216,6 +224,9 @@ var SMRomFilePage: TInputFileWizardPage;
 
 var dkc3rom: string;
 var DKC3RomFilePage: TInputFileWizardPage;
+
+var cv64rom: string;
+var CV64RomFilePage: TInputFileWizardPage;
 
 var soerom: string;
 var SoERomFilePage: TInputFileWizardPage;
@@ -308,6 +319,8 @@ begin
     Result := not (SMROMFilePage.Values[0] = '')
   else if (assigned(DKC3ROMFilePage)) and (CurPageID = DKC3ROMFilePage.ID) then
     Result := not (DKC3ROMFilePage.Values[0] = '')
+  else if (assigned(CV64ROMFilePage)) and (CurPageID = CV64ROMFilePage.ID) then
+    Result := not (CV64ROMFilePage.Values[0] = '')
   else if (assigned(SoEROMFilePage)) and (CurPageID = SoEROMFilePage.ID) then
     Result := not (SoEROMFilePage.Values[0] = '')
   else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
@@ -364,6 +377,22 @@ begin
     Result := '';
  end;
 
+function GetCV64ROMPath(Param: string): string;
+begin
+  if Length(cv64rom) > 0 then
+    Result := cv64rom
+  else if Assigned(CV64RomFilePage) then
+    begin
+      R := CompareStr(GetSNESMD5OfFile(CV64ROMFilePage.Values[0]), '1cc5cf3b4d29d8c3ade957648b529dc1')
+      if R <> 0 then
+        MsgBox('Castlevania 64 ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := CV64ROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+ end;
+
 function GetSoEROMPath(Param: string): string;
 begin
   if Length(soerom) > 0 then
@@ -412,6 +441,10 @@ begin
   if Length(dkc3rom) = 0 then
     DKC3RomFilePage:= AddRomPage('Donkey Kong Country 3 - Dixie Kong''s Double Trouble! (USA) (En,Fr).sfc');
 
+  cv64rom := CheckRom('Castlevania (USA).z64', '1cc5cf3b4d29d8c3ade957648b529dc1');
+  if Length(cv64rom) = 0 then
+    CV64RomFilePage:= AddRomPage('Castlevania (USA).z64');
+
   soerom := CheckRom('Secret of Evermore (USA).sfc', '6e9c94511d04fac6e0a1e582c170be3a');
   if Length(soerom) = 0 then
     SoEROMFilePage:= AddRomPage('Secret of Evermore (USA).sfc');
@@ -427,6 +460,8 @@ begin
     Result := not (WizardIsComponentSelected('client/sni/sm') or WizardIsComponentSelected('generator/sm'));
   if (assigned(DKC3ROMFilePage)) and (PageID = DKC3ROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('client/sni/dkc3') or WizardIsComponentSelected('generator/dkc3'));
+  if (assigned(CV64ROMFilePage)) and (PageID = CV64ROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('client/sni/CV64') or WizardIsComponentSelected('generator/CV64'));
   if (assigned(SoEROMFilePage)) and (PageID = SoEROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/soe'));
   if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then

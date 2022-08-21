@@ -117,7 +117,7 @@ class APDeltaPatch(APContainer, metaclass=AutoPatchRegister):
     hash = Optional[str]  # base checksum of source file
     patch_file_ending: str = ""
     delta: Optional[bytes] = None
-    result_file_ending: str = ".sfc"
+    result_file_ending: str = ".z64"
     source_data: bytes
 
     def __init__(self, *args, patched_path: str = "", **kwargs):
@@ -167,14 +167,17 @@ GAME_SM = "Super Metroid"
 GAME_SOE = "Secret of Evermore"
 GAME_SMZ3 = "SMZ3"
 GAME_DKC3 = "Donkey Kong Country 3"
-supported_games = {"A Link to the Past", "Super Metroid", "Secret of Evermore", "SMZ3", "Donkey Kong Country 3"}
+GAME_CV64 = "Castlevania 64"
+supported_games = {"A Link to the Past", "Super Metroid", "Secret of Evermore", "SMZ3", "Donkey Kong Country 3",
+                   "Castlevania 64"}
 
 preferred_endings = {
     GAME_ALTTP: "apbp",
     GAME_SM: "apm3",
     GAME_SOE: "apsoe",
     GAME_SMZ3: "apsmz",
-    GAME_DKC3: "apdkc3"
+    GAME_DKC3: "apdkc3",
+    GAME_CV64: "apcv64"
 }
 
 
@@ -191,6 +194,8 @@ def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: str = GAM
         HASH = ALTTPHASH + SMHASH
     elif game == GAME_DKC3:
         from worlds.dkc3.Rom import USHASH as HASH
+    elif game == GAME_CV64:
+        from worlds.cv64.Rom import USHASH as HASH
     else:
         raise RuntimeError(f"Selected game {game} for base rom not found.")
 
@@ -223,6 +228,7 @@ def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str
         ".apbp" if game == GAME_ALTTP
         else ".apsmz" if game == GAME_SMZ3
         else ".apdkc3" if game == GAME_DKC3
+        else ".apcv64" if game == GAME_CV64
         else ".apm3")
     write_lzma(bytes, target)
     return target
@@ -254,6 +260,8 @@ def get_base_rom_data(game: str):
         from worlds.smz3.Rom import get_base_rom_bytes
     elif game == GAME_DKC3:
         from worlds.dkc3.Rom import get_base_rom_bytes
+    elif game == GAME_CV64:
+        from worlds.cv64.Rom import get_base_rom_bytes
     else:
         raise RuntimeError("Selected game for base rom not found.")
     return get_base_rom_bytes()
@@ -405,6 +413,13 @@ if __name__ == "__main__":
                     if 'server' in data:
                         Utils.persistent_store("servers", data['hash'], data['server'])
                         print(f"Host is {data['server']}")
+                elif rom.endswith(".apcv64"):
+                    print(f"Applying patch {rom}")
+                    data, target = create_rom_file(rom)
+                    print(f"Created rom {target}.")
+                    if 'server' in data:
+                        Utils.persistent_store("servers", data['hash'], data['server'])
+                        print(f"Host is {data['server']}")
 
                 elif rom.endswith(".zip"):
                     print(f"Updating host in patch files contained in {rom}")
@@ -414,7 +429,8 @@ if __name__ == "__main__":
                         data = zfr.read(zfinfo)
                         if zfinfo.filename.endswith(".apbp") or \
                            zfinfo.filename.endswith(".apm3") or \
-                           zfinfo.filename.endswith(".apdkc3"):
+                           zfinfo.filename.endswith(".apdkc3") or \
+                           zfinfo.filename.endswith(".apcv64"):
                             data = update_patch_data(data, server)
                         with ziplock:
                             zfw.writestr(zfinfo, data)
