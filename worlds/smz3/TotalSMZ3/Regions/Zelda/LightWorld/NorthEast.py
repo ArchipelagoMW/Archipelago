@@ -24,5 +24,5 @@ class NorthEast(Z3Region):
             Location(self, 256+42, 0x1EA85, LocationType.Regular, "Sahasrahla's Hut - Middle").Weighted(sphereOne),
             Location(self, 256+43, 0x1EA88, LocationType.Regular, "Sahasrahla's Hut - Right").Weighted(sphereOne),
             Location(self, 256+44, 0x5F1FC, LocationType.Regular, "Sahasrahla",
-                lambda items: self.world.CanAquire(items, RewardType.PendantGreen))
+                lambda items: self.world.CanAcquire(items, RewardType.PendantGreen))
             ]

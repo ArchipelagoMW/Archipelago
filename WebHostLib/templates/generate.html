@@ -41,12 +41,11 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <label for="forfeit_mode">Forfeit Permission:</label>
-                                        <span
-                                                class="interactive"
-                                                data-tooltip="A forfeit releases all remaining items from the locations
-                                                in your world.">(?)
-                                        </span>
+                                        <label for="forfeit_mode">Forfeit Permission:
+                                            <span class="interactive" data-tooltip="A forfeit releases all remaining items from the locations in your world.">
+                                                (?)
+                                            </span>
+                                        </label>
                                     </td>
                                     <td>
                                         <select name="forfeit_mode" id="forfeit_mode">
@@ -63,12 +62,11 @@
 
                                 <tr>
                                     <td>
-                                        <label for="collect_mode">Collect Permission:</label>
-                                        <span
-                                                class="interactive"
-                                                data-tooltip="A collect releases all of your remaining items to you
-                                                from across the multiworld.">(?)
-                                        </span>
+                                        <label for="collect_mode">Collect Permission:
+                                            <span class="interactive" data-tooltip="A collect releases all of your remaining items to you from across the multiworld.">
+                                                (?)
+                                            </span>
+                                        </label>
                                     </td>
                                     <td>
                                         <select name="collect_mode" id="collect_mode">
@@ -85,12 +83,11 @@
 
                                 <tr>
                                     <td>
-                                        <label for="remaining_mode">Remaining Permission:</label>
-                                        <span
-                                            class="interactive"
-                                            data-tooltip="Remaining lists all items still in your world by name only."
-                                        >(?)
-                                        </span>
+                                        <label for="remaining_mode">Remaining Permission:
+                                            <span class="interactive" data-tooltip="Remaining lists all items still in your world by name only.">
+                                                (?)
+                                            </span>
+                                        </label>
                                     </td>
                                     <td>
                                         <select name="remaining_mode" id="remaining_mode">
@@ -104,14 +101,13 @@
                                         </select>
                                     </td>
                                 </tr>
-
                                 <tr>
                                     <td>
-                                        <label for="item_cheat">Item Cheat:</label>
-                                        <span
-                                                class="interactive"
-                                                data-tooltip="Allows players to use the !getitem command.">(?)
-                                        </span>
+                                        <label for="item_cheat">Item Cheat:
+                                            <span class="interactive" data-tooltip="Allows players to use the !getitem command.">
+                                                (?)
+                                            </span>
+                                        </label>
                                     </td>
                                     <td>
                                         <select name="item_cheat" id="item_cheat">
@@ -124,19 +120,6 @@
                                         </select>
                                     </td>
                                 </tr>
-
-                                <tr>
-                                        <td>
-                                            <label for="server_password">Server Password:</label>
-                                            <span
-                                                class="interactive"
-                                                data-tooltip="Allows for issuing of server console commands from any text client or in-game client using the !admin command.">(?)
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <input id="server_password" name="server_password">
-                                        </td>
-                                    </tr>
                             </tbody>
                         </table>
                         </div>
@@ -145,12 +128,11 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <label for="hint_cost">Hint Cost:</label>
-                                            <span
-                                                class="interactive"
-                                                data-tooltip="After gathering hint points equal to this percentage of your total checks, players can !hint <itemname>
-                                                to get the location of that hint item.">(?)
-                                            </span>
+                                            <label for="hint_cost"> Hint Cost:
+                                                <span class="interactive" data-tooltip="After gathering this many checks, players can !hint <itemname> to get the location of that hint item.">
+                                                    (?)
+                                                </span>
+                                            </label>
                                         </td>
                                         <td>
                                             <select name="hint_cost" id="hint_cost">
@@ -165,9 +147,8 @@
                                     <tr>
                                         <td>
                                             <label for="location_check_points">Hint points per location check:</label>
-                                            <span
-                                                class="interactive"
-                                                data-tooltip="Hint points to gain from each location check.">(?)
+                                            <span class="interactive" data-tooltip="Hint points to gain from each location check.">
+                                                (?)
                                             </span>
                                         </td>
                                         <td>
@@ -231,23 +212,34 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label for="plando_options">Plando Options:</label>
-                                            <span
-                                                class="interactive"
-                                                data-tooltip="Allows players to plan some of the randomization. See the 'Archipelago Plando Guide' in 'Setup Guides' for more information.">(?)
+                                            <label for="server_password">Server Password:
+                                                <span class="interactive" data-tooltip="Allows for issuing of server console commands from any text client or in-game client using the !admin command.">
+                                                    (?)
+                                                </span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <input id="server_password" name="server_password">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Plando Options:
+                                            <span class="interactive" data-tooltip="Allows players to plan some of the randomization. See the 'Archipelago Plando Guide' in 'Setup Guides' for more information.">
+                                                (?)
                                             </span>
                                         </td>
                                         <td>
-                                            <input type="checkbox" name="plando_bosses" value="bosses" checked>
+                                            <input type="checkbox" id="plando_bosses" name="plando_bosses" value="bosses" checked>
                                             <label for="plando_bosses">Bosses</label><br>
 
-                                            <input type="checkbox" name="plando_items" value="items" checked>
+                                            <input type="checkbox" id="plando_items" name="plando_items" value="items" checked>
                                             <label for="plando_items">Items</label><br>
 
-                                            <input type="checkbox" name="plando_connections" value="connections" checked>
+                                            <input type="checkbox" id="plando_connections" name="plando_connections" value="connections" checked>
                                             <label for="plando_connections">Connections</label><br>
 
-                                            <input type="checkbox" name="plando_texts" value="texts" checked>
+                                            <input type="checkbox" id="plando_texts" name="plando_texts" value="texts" checked>
                                             <label for="plando_texts">Text</label>
                                         </td>
                                     </tr>

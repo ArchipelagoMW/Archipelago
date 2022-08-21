@@ -52,7 +52,7 @@ For `nested_option_two`, `option_two_setting_one` will be rolled 14 times and `o
 times against each other. This means `option_two_setting_two` will be more likely to occur, but it isn't guaranteed,
 adding more randomness and "mystery" to your settings. Every configurable setting supports weights.
 
-### Root Options
+## Root Options
 
 Currently, there are only a few options that are root options. Everything else should be nested within one of these root
 options or in some cases nested within other nested options. The only options that should exist in root
@@ -95,14 +95,14 @@ games you want settings for.
   more triggers in the triggers guide. Triggers
   guide: [Archipelago Triggers Guide](/tutorial/Archipelago/triggers/en)
 
-### Game Options
+## Game Options
 
 One of your root settings will be the name of the game you would like to populate with settings. Since it is possible to
 give a weight to any option it is possible to have one file that can generate a seed for you where you don't know which
 game you'll play. For these cases you'll want to fill the game options for every game that can be rolled by these
 settings. If a game can be rolled it **must** have a settings section even if it is empty.
 
-#### Universal Game Options
+### Universal Game Options
 
 Some options in Archipelago can be used by every game but must still be placed within the relevant game's section.
 
@@ -174,6 +174,8 @@ A Link to the Past:
     - Moon Pearl
   start_location_hints:
     - Spike Cave
+  priority_locations:
+    - Link's House
   exclude_locations:
     - Cave 45
   item_links:
@@ -207,9 +209,10 @@ Timespinner:
 
 * `description` gives us a general overview so if we pull up this file later we can understand the intent.
 * `name` is `Example Player` and this will be used in the server console when sending and receiving items.
-* `game` has an equal chance of being either `A Link to the Past` or `Timespinner` with a 10/20 chance for each. The reason for this is becuase each game has a weight of 10 and the toal of all weights is 20.
+* `game` has an equal chance of being either `A Link to the Past` or `Timespinner` with a 10/20 chance for each. This is
+  because each game has a weight of 10 and the total of all weights is 20.
 * `requires` is set to required release version 0.3.2 or higher.
-* `accesibility` is set to `none` which will set this seed to beatable only meaning some locations and items may be
+* `accessibility` is set to `none` which will set this seed to beatable only, so some locations and items may be
   completely inaccessible but the seed will still be completable.
 * `progression_balancing` is set on, giving it the default value, meaning we will likely receive important items
   earlier increasing the chance of having things to do.
@@ -225,8 +228,8 @@ Timespinner:
   1 and 7 will be chosen at random, weighted towards a high number.
 * `start_inventory` defines an area for us to determine what items we would like to start the seed with. For this
   example we have:
-    * `Pegasus Boots: 1` which gives us 1 copy of the Pegasus Boots
-    * `Bombs (3)` gives us 2 packs of 3 bombs or 6 total bombs
+  * `Pegasus Boots: 1` which gives us 1 copy of the Pegasus Boots
+  * `Bombs (3): 2` gives us 2 packs of 3 bombs or 6 total bombs
 * `start_hints` gives us a starting hint for the hammer available at the beginning of the multiworld which we can use
   with no cost.
 * `local_items` forces the `Bombos`, `Ether`, and `Quake` medallions to all be placed within our own world, meaning we
@@ -234,22 +237,19 @@ Timespinner:
 * `non_local_items` forces the `Moon Pearl` to be placed in someone else's world, meaning we won't be able to find it.
 * `start_location_hints` gives us a starting hint for the `Spike Cave` location available at the beginning of the
   multiworld that can be used for no cost.
+* `priority_locations` forces a progression item to be placed on the `Link's House` location.
 * `exclude_locations` forces a not important item to be placed on the `Cave 45` location.
 * `item_links` 
   * For `A Link to the Past` all players in the `rods` item link group will share their fire and ice rods and the player
-items will be replaced with single rupees.
-  * For `Timespinner` all players in the `TSAll` item link group will share their entire item pool and the`Twin Pyramid 
-  * For `A Link to the Past` all players in the `rods` item link group will share their fire and ice rods and the player
-items will be replaced with single rupees.
+    items will be replaced with single rupees.
   * For `Timespinner` all players in the `TSAll` item link group will share their entire item pool and the `Twin Pyramid 
-Key` and `Timespinner Wheel` will be forced among the worlds of those in the group. The `null` replacement item will, instead
-of forcing a specific chosen item, allow the generator to randomly pick a filler item in place of putting in another one of the linked item.
+    Key` and `Timespinner Wheel` will be forced among the worlds of those in the group. The `null` replacement item will, 
+    instead of forcing a specific chosen item, allow the generator to randomly pick a filler item to replace the player items.
 * `triggers` allows us to define a trigger such that if our `smallkey_shuffle` option happens to roll the `any_world`
-  result it will also ensure that `bigkey_shuffle`, `map_shuffle`, and `compass_shuffle` are also forced to
-  the `any_world`
-  result.
+  result it will also ensure that `bigkey_shuffle`, `map_shuffle`, and `compass_shuffle` are also forced to the
+  `any_world` result. More information on triggers can be found in the [triggers guide](/tutorial/Archipelago/triggers/en).
 
-### Generating Multiple Worlds
+## Generating Multiple Worlds
 
 YAML files can be configured to generate multiple worlds using only one file. This is mostly useful if you are playing an asynchronous multiworld (shortened to async) and are wanting to submit multiple worlds as they can be condensed into one file, removing the need to manage separate files if one chooses to do so.  
   
@@ -257,7 +257,7 @@ As a precautionary measure, before submitting a multi-game yaml like this one in
 
 To configure your file to generate multiple worlds, use 3 dashes `---` on an empty line to separate the ending of one world and the beginning of another world.
 
-#### Example
+### Example
 
 ```yaml
 description: Example of generating multiple worlds. World 1 of 3
@@ -272,7 +272,7 @@ Super Mario 64:
   StrictCapRequirements: true
   StrictCannonRequirements: true
   StarsToFinish: 70
-  ExtraStars: 30
+  AmountOfStars: 70
   DeathLink: true
   BuddyChecks: true
   AreaRandomizer: true
