@@ -355,7 +355,7 @@ class Patch:
             return ItemType.Something.value
 
     def ItemTablePatch(self, location: Location, itemId: int):
-        itemtype = 0 if location.APLocation.item.player == location.Region.multiworld.Id else 1
+        itemtype = 0 if location.APLocation.item.player == location.Region.world.Id else 1
         owner = location.APLocation.item.player if location.APLocation.item.player < 256 else 0
         return (0x386000 + (location.Id * 8), getWordArray(itemtype) + getWordArray(itemId) + getWordArray(owner))
 
