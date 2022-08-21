@@ -1,5 +1,5 @@
 from typing import Dict
-from BaseClasses import Item, Location, MultiWorld, Tutorial
+from BaseClasses import Item, Location, MultiWorld, Tutorial, ItemClassification
 from .Items import ItemData, FF1Items, FF1_STARTER_ITEMS, FF1_PROGRESSION_LIST, FF1_BRIDGE
 from .Locations import EventId, FF1Locations, generate_rule, CHAOS_TERMINATED_EVENT
 from .Options import ff1_options
@@ -27,7 +27,7 @@ class FF1World(World):
     Part puzzle and part speed-run, it breathes new life into one of the most influential games ever made.
     """
 
-    options = ff1_options
+    option_definitions = ff1_options
     game = "Final Fantasy"
     topology_present = False
     remote_items = True
@@ -54,8 +54,9 @@ class FF1World(World):
         locations = get_options(self.world, 'locations', self.player)
         rules = get_options(self.world, 'rules', self.player)
         menu_region = self.ff1_locations.create_menu_region(self.player, locations, rules)
+        menu_region.world = self.world
         terminated_event = Location(self.player, CHAOS_TERMINATED_EVENT, EventId, menu_region)
-        terminated_item = Item(CHAOS_TERMINATED_EVENT, True, EventId, self.player)
+        terminated_item = Item(CHAOS_TERMINATED_EVENT, ItemClassification.progression, EventId, self.player)
         terminated_event.place_locked_item(terminated_item)
 
         items = get_options(self.world, 'items', self.player)
@@ -113,6 +114,7 @@ class FF1World(World):
 
     def get_filler_item_name(self) -> str:
         return self.world.random.choice(["Heal", "Pure", "Soft", "Tent", "Cabin", "House"])
+
 
 def get_options(world: MultiWorld, name: str, player: int):
     return getattr(world, name, None)[player].value

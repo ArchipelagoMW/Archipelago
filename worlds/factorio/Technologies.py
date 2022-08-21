@@ -19,8 +19,8 @@ pool = ThreadPoolExecutor(1)
 
 
 def load_json_data(data_name: str) -> Union[List[str], Dict[str, Any]]:
-    with open(os.path.join(source_folder, f"{data_name}.json")) as f:
-        return json.load(f)
+    import pkgutil
+    return json.loads(pkgutil.get_data(__name__, "data/" + data_name + ".json").decode())
 
 
 techs_future = pool.submit(load_json_data, "techs")
@@ -501,6 +501,7 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
 item_stack_sizes: Dict[str, int] = items_future.result()
 non_stacking_items: Set[str] = {item for item, stack in item_stack_sizes.items() if stack == 1}
 stacking_items: Set[str] = set(item_stack_sizes) - non_stacking_items
+valid_ingredients: Set[str] = stacking_items | fluids
 
 # cleanup async helpers
 pool.shutdown()

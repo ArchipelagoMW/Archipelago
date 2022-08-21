@@ -6,13 +6,8 @@
 import typing
 
 from BaseClasses import Item, ItemClassification
+from worlds.alttp import ALTTPWorld
 
-
-# pedestal_credit_text: str = "and the Unknown Item"
-# sickkid_credit_text: Optional[str] = None
-# magicshop_credit_text: Optional[str] = None
-# zora_credit_text: Optional[str] = None
-# fluteboy_credit_text: Optional[str] = None
 
 class MeritousLttPText(typing.NamedTuple):
     pedestal: typing.Optional[str]
@@ -143,6 +138,7 @@ LttPCreditsText = {
 
 class MeritousItem(Item):
     game: str = "Meritous"
+    type: str
 
     def __init__(self, name, advancement, code, player):
         super(MeritousItem, self).__init__(name,
@@ -170,14 +166,6 @@ class MeritousItem(Item):
         else:
             self.type = "Artifact"
             self.classification = ItemClassification.useful
-
-        if name in LttPCreditsText:
-            lttp = LttPCreditsText[name]
-            self.pedestal_credit_text = f"and the {lttp.pedestal}"
-            self.sickkid_credit_text = lttp.sickkid
-            self.magicshop_credit_text = lttp.magicshop
-            self.zora_credit_text = lttp.zora
-            self.fluteboy_credit_text = lttp.fluteboy
 
 
 offset = 593_000
@@ -217,3 +205,10 @@ item_groups = {
     "Important Artifacts": ["Shield Boost", "Circuit Booster", "Metabolism", "Dodge Enhancer"],
     "Crystals": ["Crystals x500", "Crystals x1000", "Crystals x2000"]
 }
+
+ALTTPWorld.pedestal_credit_texts.update({item_table[name]: f"and the {texts.pedestal}"
+                                         for name, texts in LttPCreditsText.items()})
+ALTTPWorld.sickkid_credit_texts.update({item_table[name]: texts.sickkid for name, texts in LttPCreditsText.items()})
+ALTTPWorld.magicshop_credit_texts.update({item_table[name]: texts.magicshop for name, texts in LttPCreditsText.items()})
+ALTTPWorld.zora_credit_texts.update({item_table[name]: texts.zora for name, texts in LttPCreditsText.items()})
+ALTTPWorld.fluteboy_credit_texts.update({item_table[name]: texts.fluteboy for name, texts in LttPCreditsText.items()})
