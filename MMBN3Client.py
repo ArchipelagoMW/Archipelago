@@ -5,7 +5,7 @@ import multiprocessing
 import subprocess
 from asyncio import StreamReader, StreamWriter
 
-from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, \
+from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
 import Utils
 from worlds import network_data_package
@@ -15,7 +15,8 @@ from worlds.mmbn3.Utils import data_path
 
 
 CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart mmbn3_connector.lua"
-CONNECTION_REFUSED_STATUS = "Connection refused. Please start your emulator and make sure mmbn3_connector.lua is running"
+CONNECTION_REFUSED_STATUS = \
+    "Connection refused. Please start your emulator and make sure mmbn3_connector.lua is running"
 CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator, then restart mmbn3_connector.lua"
 CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
@@ -40,9 +41,11 @@ mmbn3_loc_name_to_id = network_data_package["games"]["MegaMan Battle Network 3"]
 
 script_version: int = 1
 
+
 def get_item_value(ap_id):
     # TODO OOT had ap_id - 66000. I'm assuming this is because of the ROM offset, which for GBA is 8000000, let's try that?
     return ap_id - 8000000
+
 
 class MMBN3CommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx):
@@ -53,10 +56,11 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, MMBN3Context):
             logger.info(f"GBA Status: {self.ctx.gba_status}")
 
+
 class MMBN3Context(CommonContext):
     command_processor = MMBN3CommandProcessor
     # TODO No idea what full local means or what this is. Ask espeon about it
-    items_handling = 0b001 #full local
+    items_handling = 0b001  # full local
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -90,11 +94,13 @@ class MMBN3Context(CommonContext):
         self.ui = MMBN3Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
+
 def get_payload(ctx: MMBN3Context):
     return json.dumps({
         "items": [get_item_value(item.item) for item in ctx.items_received],
         "playerNames": [name for (i, name) in ctx.player_names.items() if i != 0]
     })
+
 
 async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
     # Game completion handling
@@ -112,6 +118,7 @@ async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
             "cmd": "LocationChecks",
             "locations": [mmbn3_loc_name_to_id[loc] for loc in ctx.location_table if ctx.location_table[loc]]
         }])
+
 
 async def gba_sync_task(ctx: MMBN3Context):
     logger.info("Starting GBA connector. Use /gba for status information.")
@@ -152,7 +159,7 @@ async def gba_sync_task(ctx: MMBN3Context):
                     error_status = CONNECTION_TIMING_OUT_STATUS
                     writer.close()
                     ctx.gba_streams = None
-                except ConnectionResetError as e:
+                except ConnectionResetError:
                     logger.debug("Read failed due to Connection Lost, Reconnecting")
                     error_status = CONNECTION_RESET_STATUS
                     writer.close()
@@ -161,7 +168,7 @@ async def gba_sync_task(ctx: MMBN3Context):
                 logger.debug("Connection Timed Out, Reconnecting")
                 error_status = CONNECTION_TIMING_OUT_STATUS
                 writer.close()
-                ctx.gba_streams
+                ctx.gba_streams = None
             except ConnectionResetError:
                 logger.debug("Connection Lost, Reconnecting")
                 error_status = CONNECTION_RESET_STATUS
