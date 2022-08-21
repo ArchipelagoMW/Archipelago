@@ -86,7 +86,7 @@ inside a World object.
 
 Players provide customized settings for their World in the form of yamls.
 Those are accessible through `self.world.<option_name>[self.player]`. A dict
-of valid options has to be provided in `self.options`. Options are automatically
+of valid options has to be provided in `self.option_definitions`. Options are automatically
 added to the `World` object for easy access.
 
 ### World Options
@@ -236,7 +236,7 @@ class MyGameLocation(Location):
     game: str = "My Game"
 
     # override constructor to automatically mark event locations as such
-    def __init__(self, player: int, name = '', code = None, parent = None):
+    def __init__(self, player: int, name = "", code = None, parent = None):
         super(MyGameLocation, self).__init__(player, name, code, parent)
         self.event = code is None
 ```
@@ -252,7 +252,7 @@ to describe it and a `display_name` property for display on the website and in
 spoiler logs.
 
 The actual name as used in the yaml is defined in a `dict[str, Option]`, that is
-assigned to the world under `self.options`.
+assigned to the world under `self.option_definitions`.
 
 Common option types are `Toggle`, `DefaultOnToggle`, `Choice`, `Range`.
 For more see `Options.py` in AP's base directory.
@@ -328,7 +328,7 @@ from .Options import mygame_options  # import the options dict
 
 class MyGameWorld(World):
     #...
-    options = mygame_options  # assign the options dict to the world
+    option_definitions = mygame_options  # assign the options dict to the world
     #...
 ```
     
@@ -365,7 +365,7 @@ class MyGameLocation(Location):  # or from Locations import MyGameLocation
 class MyGameWorld(World):
     """Insert description of the world/game here."""
     game: str = "My Game"  # name of the game/world
-    options = mygame_options  # options the player can set
+    option_definitions = mygame_options  # options the player can set
     topology_present: bool = True  # show path to required location checks in spoiler
     remote_items: bool = False  # True if all items come from the server
     remote_start_inventory: bool = False  # True if start inventory comes from the server
@@ -487,14 +487,14 @@ def create_items(self) -> None:
     for item in map(self.create_item, mygame_items):
         if item in exclude:
             exclude.remove(item)  # this is destructive. create unique list above
-            self.world.itempool.append(self.create_item('nothing'))
+            self.world.itempool.append(self.create_item("nothing"))
         else:
             self.world.itempool.append(item)
 
     # itempool and number of locations should match up.
     # If this is not the case we want to fill the itempool with junk.
     junk = 0  # calculate this based on player settings
-    self.world.itempool += [self.create_item('nothing') for _ in range(junk)]
+    self.world.itempool += [self.create_item("nothing") for _ in range(junk)]
 ```
 
 #### create_regions
@@ -628,7 +628,7 @@ class MyGameLogic(LogicMixin):
     def _mygame_has_key(self, world: MultiWorld, player: int):
         # Arguments above are free to choose
         # it may make sense to use World as argument instead of MultiWorld
-        return self.has('key', player)  # or whatever
+        return self.has("key", player)  # or whatever
 ```
 ```python
 # __init__.py

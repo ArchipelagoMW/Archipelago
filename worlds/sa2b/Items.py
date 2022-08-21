@@ -2,6 +2,7 @@ import typing
 
 from BaseClasses import Item, ItemClassification
 from .Names import ItemName
+from worlds.alttp import ALTTPWorld
 
 
 class ItemData(typing.NamedTuple):
@@ -17,9 +18,6 @@ class SA2BItem(Item):
 
     def __init__(self, name, classification: ItemClassification, code: int = None, player: int = None):
         super(SA2BItem, self).__init__(name, classification, code, player)
-
-        if self.name == ItemName.sonic_light_shoes or self.name == ItemName.shadow_air_shoes:
-            self.pedestal_credit_text = "and the Soap Shoes"
 
 
 # Separate tables for each type of item.
@@ -94,3 +92,6 @@ item_table = {
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
+
+ALTTPWorld.pedestal_credit_texts[item_table[ItemName.sonic_light_shoes].code] = "and the Soap Shoes"
+ALTTPWorld.pedestal_credit_texts[item_table[ItemName.shadow_air_shoes].code] = "and the Soap Shoes"

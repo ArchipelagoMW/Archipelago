@@ -9,7 +9,7 @@ class East(SMRegion, IReward):
 
     def __init__(self, world, config: Config):
         super().__init__(world, config)
-        self.Reward = RewardType.GoldenFourBoss
+        self.Reward = RewardType.Null
         self.Locations = [
             Location(self, 74, 0x8F8FCA, LocationType.Visible, "Missile (lower Norfair above fire flea room)",
                 lambda items: self.CanExit(items)),
@@ -30,11 +30,11 @@ class East(SMRegion, IReward):
     def CanExit(self, items:Progression):
         if self.Logic == SMLogic.Normal:
                 # /*Bubble Mountain*/
-            return items.CardNorfairL2 or (
+            return items.Morph and (items.CardNorfairL2 or (
                 # /* Volcano Room and Blue Gate */
                 items.Gravity) and items.Wave and (
                 # /*Spikey Acid Snakes and Croc Escape*/
-                items.Grapple or items.SpaceJump)
+                items.Grapple or items.SpaceJump))
         else:
             # /*Vanilla LN Escape*/
             return (items.Morph and (items.CardNorfairL2 or # /*Bubble Mountain*/ 

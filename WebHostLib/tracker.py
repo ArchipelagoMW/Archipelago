@@ -11,7 +11,7 @@ from worlds.alttp import Items
 from WebHostLib import app, cache, Room
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
-from MultiServer import get_item_name_from_id, Context
+from MultiServer import Context
 from NetUtils import SlotType
 
 alttp_icons = {
@@ -987,10 +987,10 @@ def getTracker(tracker: UUID):
         if game_state == 30:
             inventory[team][player][106] = 1  # Triforce
 
-    player_big_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1) if playernumber not in groups}
-    player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1) if playernumber not in groups}
+    player_big_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
+    player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
     for loc_data in locations.values():
-         for values in loc_data.values():
+        for values in loc_data.values():
             item_id, item_player, flags = values
 
             if item_id in ids_big_key:
@@ -1021,7 +1021,7 @@ def getTracker(tracker: UUID):
     for (team, player), data in multisave.get("video", []):
         video[(team, player)] = data
 
-    return render_template("tracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
+    return render_template("tracker.html", inventory=inventory, get_item_name_from_id=lookup_any_item_id_to_name,
                            lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
                            tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=alttp_icons,
                            multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,

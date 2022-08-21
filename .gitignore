@@ -116,6 +116,9 @@ target/
 profile_default/
 ipython_config.py
 
+# vim editor
+*.swp
+
 # SageMath parsed files
 *.sage.py
 
@@ -152,10 +155,17 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-#minecraft server stuff
+# minecraft server stuff
 jdk*/
 minecraft*/
 minecraft_versions.json
 
-#pyenv
+# pyenv
 .python-version
+
+# OS General Files
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+[Dd]esktop.ini
