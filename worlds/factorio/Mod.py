@@ -107,7 +107,7 @@ def generate_mod(world, output_directory: str):
     random = multiworld.slot_seeds[player]
 
     def flop_random(low, high, base=None):
-        """Guarentees 50% below base and 50% above base, uniform distribution in each direction."""
+        """Guarantees 50% below base and 50% above base, uniform distribution in each direction."""
         if base:
             distance = random.random()
             if random.randint(0, 1):
