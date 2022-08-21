@@ -24,7 +24,6 @@ import re
 from MultiServer import mark_raw
 import ctypes
 import sys
-from shutil import copyfile
 
 from Utils import init_logging, is_windows
 
@@ -120,7 +119,17 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         return False
 
     def _cmd_download_data(self) -> bool:
-        download_sc2_data_zip()
+        """Download the most recent release of the necessary files for playing SC2 with Archipelago."""
+        if "SC2PATH" not in os.environ:
+            check_game_install_path()
+        tempzip = download_latest_release_zip('TheCondor07', 'Starcraft2ArchipelagoData')
+        if tempzip != '':
+            try:
+                extract_release_zip_to(tempzip, os.environ["SC2PATH"])
+            finally:
+                os.remove(tempzip)
+        else:
+            sc2_logger.warning("Download failed. Could not find/write zip.")
         return True
 
 
@@ -951,71 +960,52 @@ class DllDirectory:
         return False
 
 
-def download_sc2_data_zip() -> bool:
-    # https://stackoverflow.com/questions/67962757/python-how-to-download-repository-zip-file-from-github-using-github-api
-    if "SC2PATH" not in os.environ:
-        sc2_logger.warning("Attempted to download data files, but SC2PATH is not set. Please set it and try again.")
-        return False
+def download_latest_release_zip(owner, repo) -> str:
     import requests
 
-    headers = {
-        "Accept": 'application/vnd.github.v3+json'
-    }
+    headers = {"Accept": 'application/vnd.github.v3+json'}
 
-    OWNER = 'TheCondor07'
-    REPO = 'Starcraft2ArchipelagoData'
-
-    REF = 'main'  # branch name
-
-    EXT = 'zip'
-
-    url = f'https://api.github.com/repos/{OWNER}/{REPO}/{EXT}ball/{REF}'
+    url = f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
     print('url:', url)
 
-    r = requests.get(url, headers=headers)
+    r1 = requests.get(url, headers=headers)
+    download_url = r1.json()["assets"][0]["browser_download_url"]
+    r2 = requests.get(download_url, headers=headers)
 
-    if r.status_code == 200:
-        print('size:', len(r.content))
-        with open(f'{REPO}.{EXT}', 'wb') as fh:
-            fh.write(r.content)
-        print(r.content[:10])  # display only some part
+    if r2.status_code == 200:
+        with open(f'{repo}.zip', 'wb') as fh:
+            fh.write(r2.content)
     else:
-        print(r.text)
+        print(r2.text)
 
-    sc2_logger.info("Successfully downloaded data .zip.")
+    if Path(f"{repo}.zip").is_file():
+        print("Successfully downloaded data .zip.")
+        return f"{repo}.zip"
+    else:
+        print("Download failed. Could not create .zip file.")
+        return ""
 
-    if Path(f"{REPO}.{EXT}").is_file():
-        # Here's the plan:
-        # 1) Iterate through all files in the .zip
-        # 2) Select only the non-folders
-        # 3) Should all look like "TheCondor.../folder1/folder2/file.ext"
-        #    Extract them to "[SC2PATH]/folder1/folder2/file.ext"
-        #    Ignore specific hard-coded exceptions
-        # 4) Delete the .zip afterward
 
-        import zipfile
-        try:
-            with zipfile.ZipFile(f"{REPO}.{EXT}") as data_zip:
-                for itemname in data_zip.namelist()[1:]:
-                    if ("52.dll" not in itemname) and ("README.md" not in itemname):
-
-                        # Set up the destination based on itemname
-                        # Extract the item to the destination
-                        sc2_logger.info(f"Checking out {itemname}.")
-                        relpath = itemname[itemname.find("/")+1:]
-                        sc2_logger.info(f"relpath: {relpath}")
-                        destpath = os.environ["SC2PATH"].replace("\\", "/") + relpath
-                        sc2_logger.info(f"extracting to: {destpath}")
-                        if (itemname[-1] == '/') and (not os.path.exists(destpath)):
-                            os.makedirs(destpath)
-                        else:
-                            try:
-                                with open(destpath, "wb") as fout:
-                                    fout.write(data_zip.read(itemname))
-                            except PermissionError:
-                                sc2_logger.warning(f"Couldn't extract {itemname} because of a PermissionError.")
-        finally:
-            os.remove(f"{REPO}.{EXT}")
+def extract_release_zip_to(zip:str, dest:str) -> bool:
+    """
+    Extracts a .zip file to the target location. Assumes it's a release downloaded from GitHub, in which the top-level
+    contents of the .zip are a folder named after the author, repo, and some string of numbers. This function extracts
+    only the contents of that folder, stripping its name from their paths and replacing it with dest.
+    """
+    import zipfile
+    with zipfile.ZipFile(zip) as data_zip:
+        for itemname in data_zip.namelist():
+            sc2_logger.info(f"Checking out {itemname}.")
+            destpath = dest.replace("\\", "/") + itemname
+            sc2_logger.info(f"extracting to: {destpath}")
+            if (itemname[-1] == '/') and (not os.path.exists(destpath)):
+                os.makedirs(destpath)
+            else:
+                try:
+                    with open(destpath, "wb") as fout:
+                        fout.write(data_zip.read(itemname))
+                except PermissionError:
+                    sc2_logger.warning(f"Couldn't extract {itemname} because of a PermissionError.")
     return True
 
 
