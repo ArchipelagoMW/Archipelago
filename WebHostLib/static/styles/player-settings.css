@@ -116,6 +116,10 @@ html{
     flex-grow: 1;
 }
 
+#player-settings table select:disabled{
+    background-color: lightgray;
+}
+
 #player-settings table .range-container{
     display: flex;
     flex-direction: row;
@@ -138,10 +142,23 @@ html{
 #player-settings table .special-range-wrapper{
     display: flex;
     flex-direction: row;
+    margin-top: 0.25rem;
 }
 
 #player-settings table .special-range-wrapper input[type=range]{
     flex-grow: 1;
+}
+
+#player-settings table .randomize-button {
+    max-height: 24px;
+    line-height: 16px;
+    padding: 2px 8px;
+    margin: 0 0 0 0.25rem;
+    font-size: 12px
+}
+
+#player-settings table .randomize-button.active {
+    background-color: yellow;
 }
 
 #player-settings table label{
