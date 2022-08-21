@@ -17,14 +17,14 @@ class Hylics2Web(WebWorld):
 
 class Hylics2World(World):
     """
-    Hylics 2 is a surreal and unusual RPG, with an equally bizarre visual style to go alongside it. Play as Wayne, travel the world, and gather your allies to defeat the nefarious Gibby in his Hylemxylem!
+    Hylics 2 is a surreal and unusual RPG, with an equally bizarre yet unique visual style. Play as Wayne, travel the world, and gather your allies to defeat the nefarious Gibby in his Hylemxylem!
     """
     game: str = "Hylics 2"
     web = Hylics2Web()
 
     item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
     location_name_to_id = {data["name"]: loc_id for loc_id, data in Locations.location_table.items()}
-    options: Options.hylics2_options
+    options: Options.options
 
     topology_present: bool = False
     remote_items: bool = True
@@ -32,9 +32,8 @@ class Hylics2World(World):
 
     data_version: 1
 
-    prefill_items: List[Item]
-
-    set_rules = set_location_rules
+    def set_rules(self):
+        set_location_rules(self.world, self.player)
 
     def generate_basic(self):
 
@@ -150,11 +149,11 @@ class Hylics2World(World):
         for i, reg in region_table.items():
             self.world.regions.append(reg)
             for j, exits in region_exit_table.items():
-                if j is i:
-                    for j2 in exits:
-                        k = Entrance(self.player, j2, reg)
-                        reg.exits.append(k)
-                        k.connect(reg)
+                if j == i:
+                    for k in exits:
+                        ent = Entrance(self.player, k, reg)
+                        reg.exits.append(ent)
+                        ent.connect(reg)
 
         for l, data in Locations.location_table.items():
             region_table[data["region"]].locations\
