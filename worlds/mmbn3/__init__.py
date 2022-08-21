@@ -27,4 +27,3 @@ class MMBN3World(World):
 
     def create_item(self, name: str) -> "Item":
         pass
-
