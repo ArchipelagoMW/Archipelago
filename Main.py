@@ -217,9 +217,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     logger.info("Running Item Plando")
 
-    for item in world.itempool:
-        item.world = world
-
     distribute_planned(world)
 
     logger.info('Running Pre Main Fill.')
@@ -426,7 +423,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             world.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
 
         zipfilename = output_path(f"AP_{world.seed_name}.zip")
-        logger.info(f'Creating final archive at {zipfilename}.')
+        logger.info(f"Creating final archive at {zipfilename}")
         with zipfile.ZipFile(zipfilename, mode="w", compression=zipfile.ZIP_DEFLATED,
                              compresslevel=9) as zf:
             for file in os.scandir(temp_dir):

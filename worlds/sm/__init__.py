@@ -5,7 +5,7 @@ import copy
 import os
 import threading
 import base64
-from typing import Set, List, TextIO
+from typing import Set, TextIO
 
 from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
 
@@ -79,7 +79,7 @@ class SMWorld(World):
     game: str = "Super Metroid"
     topology_present = True
     data_version = 1
-    options = sm_options
+    option_definitions = sm_options
     item_names: Set[str] = frozenset(items_lookup_name_to_id)
     location_names: Set[str] = frozenset(locations_lookup_name_to_id)
     item_name_to_id = items_lookup_name_to_id
@@ -271,7 +271,7 @@ class SMWorld(World):
             data.append(w1)
         return data
 
-    def APPatchRom(self, romPatcher):
+    def APPrePatchRom(self, romPatcher):
         # first apply the sm multiworld code patch named 'basepatch' (also has empty tables that we'll overwrite),
         #  + apply some patches from varia that we want to be always-on.
         # basepatch and variapatches are both generated from https://github.com/lordlou/SMBasepatch
@@ -279,6 +279,8 @@ class SMWorld(World):
                                               "data", "SMBasepatch_prebuilt", "multiworld-basepatch.ips"))
         romPatcher.applyIPSPatch(os.path.join(os.path.dirname(__file__),
                                               "data", "SMBasepatch_prebuilt", "variapatches.ips"))
+
+    def APPostPatchRom(self, romPatcher):
         symbols = get_sm_symbols(os.path.join(os.path.dirname(__file__), 
                                               "data", "SMBasepatch_prebuilt", "sm-basepatch-symbols.json"))
         multiWorldLocations = []
@@ -291,15 +293,15 @@ class SMWorld(World):
             if itemLoc.player == self.player and locationsDict[itemLoc.name].Id != None:
                 # this SM world can find this item: write full item data to tables and assign player data for writing
                 romPlayerID = itemLoc.item.player if itemLoc.item.player <= ROM_PLAYER_LIMIT else 0
-                if itemLoc.item.type in ItemManager.Items:
-                    itemId = ItemManager.Items[itemLoc.item.type].Id 
+                if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items:
+                    itemId = ItemManager.Items[itemLoc.item.type].Id
                 else:
                     itemId = ItemManager.Items['ArchipelagoItem'].Id + idx
                     multiWorldItems.append({"sym": symbols["message_item_names"],
                                             "offset": (vanillaItemTypesCount + idx)*64,
                                             "values": self.convertToROMItemName(itemLoc.item.name)})
                     idx += 1
-                
+
                 if (romPlayerID > 0 and romPlayerID not in self.playerIDMap.keys()):
                     playerIDCount += 1
                     self.playerIDMap[romPlayerID] = playerIDCount
@@ -486,7 +488,13 @@ class SMWorld(World):
         # commit all the changes we've made here to the ROM
         romPatcher.commitIPS()
 
-        itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == self.player]
+        itemLocs = [
+            ItemLocation(ItemManager.Items[itemLoc.item.type
+                         if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
+                         'ArchipelagoItem'],
+                         locationsDict[itemLoc.name], True)
+            for itemLoc in self.world.get_locations() if itemLoc.player == self.player
+        ]
         romPatcher.writeItemsLocs(itemLocs)
 
         itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.world.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.world.get_locations() if itemLoc.item.player == self.player] 
@@ -504,7 +512,7 @@ class SMWorld(World):
         outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
 
         try:
-            self.variaRando.PatchRom(outputFilename, self.APPatchRom)
+            self.variaRando.PatchRom(outputFilename, self.APPrePatchRom, self.APPostPatchRom)
             self.write_crc(outputFilename)
             self.rom_name = self.romName
         except:
@@ -559,7 +567,7 @@ class SMWorld(World):
     def fill_slot_data(self): 
         slot_data = {}
         if not self.world.is_race:
-            for option_name in self.options:
+            for option_name in self.option_definitions:
                 option = getattr(self.world, option_name)[self.player]
                 slot_data[option_name] = option.value
 
@@ -596,7 +604,7 @@ class SMWorld(World):
 
     def create_item(self, name: str) -> Item:
         item = next(x for x in ItemManager.Items.values() if x.Name == name)
-        return SMItem(item.Name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Name],
+        return SMItem(item.Name, ItemClassification.progression if item.Class != 'Minor' else ItemClassification.filler, item.Type, self.item_name_to_id[item.Name],
                       player=self.player)
 
     def get_filler_item_name(self) -> str:
@@ -733,7 +741,8 @@ class SMLocation(Location):
 
 class SMItem(Item):
     game = "Super Metroid"
+    type: str
 
-    def __init__(self, name, classification, type, code, player: int = None):
+    def __init__(self, name, classification, type: str, code, player: int):
         super(SMItem, self).__init__(name, classification, code, player)
         self.type = type
