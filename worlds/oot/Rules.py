@@ -3,6 +3,7 @@ import logging
 
 from .SaveContext import SaveContext
 from .Regions import TimeOfDay
+from .Items import oot_is_item_of_type
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_item
@@ -138,7 +139,7 @@ def set_rules(ootworld):
         # Sheik in Ice Cavern is the only song location in a dungeon; need to ensure that it cannot be anything else.
         # This is required if map/compass included, or any_dungeon shuffle.
         location = world.get_location('Sheik in Ice Cavern', player)
-        add_item_rule(location, lambda item: item.player == player and item.type == 'Song')
+        add_item_rule(location, lambda item: item.player == player and oot_is_item_of_type(item, 'Song'))
 
     if ootworld.skip_child_zelda:
         # If skip child zelda is on, the item at Song from Impa must be giveable by the save context. 
@@ -181,7 +182,7 @@ def set_shop_rules(ootworld):
     wallet = ootworld.parser.parse_rule('Progressive_Wallet')
     wallet2 = ootworld.parser.parse_rule('(Progressive_Wallet, 2)')
 
-    for location in filter(lambda location: location.item and location.item.type == 'Shop', ootworld.get_locations()):
+    for location in filter(lambda location: location.item and oot_is_item_of_type(location.item, 'Shop'), ootworld.get_locations()):
         # Add wallet requirements
         if location.item.name in ['Buy Arrows (50)', 'Buy Fish', 'Buy Goron Tunic', 'Buy Bombchu (20)', 'Buy Bombs (30)']:
             add_rule(location, wallet)

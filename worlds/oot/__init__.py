@@ -8,7 +8,7 @@ logger = logging.getLogger("Ocarina of Time")
 from .Location import OOTLocation, LocationFactory, location_name_to_id
 from .Entrance import OOTEntrance
 from .EntranceShuffle import shuffle_random_entrances, entrance_shuffle_table, EntranceShuffleError
-from .Items import OOTItem, item_table, oot_data_to_ap_id
+from .Items import OOTItem, item_table, oot_data_to_ap_id, oot_is_item_of_type
 from .ItemPool import generate_itempool, add_dungeon_items, get_junk_item, get_junk_pool
 from .Regions import OOTRegion, TimeOfDay
 from .Rules import set_rules, set_shop_rules, set_entrances_based_rules
@@ -95,7 +95,7 @@ class OOTWorld(World):
     to rescue the Seven Sages, and then confront Ganondorf to save Hyrule!
     """
     game: str = "Ocarina of Time"
-    options: dict = oot_options
+    option_definitions: dict = oot_options
     topology_present: bool = True
     item_name_to_id = {item_name: oot_data_to_ap_id(data, False) for item_name, data in item_table.items() if
                        data[2] is not None}
@@ -793,7 +793,7 @@ class OOTWorld(World):
         # This includes all locations for which show_in_spoiler is false, and shuffled shop items.
         for loc in self.get_locations():
             if loc.address is not None and (
-                    not loc.show_in_spoiler or (loc.item is not None and loc.item.type == 'Shop')
+                    not loc.show_in_spoiler or oot_is_item_of_type(loc.item, 'Shop')
                     or (self.skip_child_zelda and loc.name in ['HC Zeldas Letter', 'Song from Impa'])):
                 loc.address = None
 
@@ -869,11 +869,11 @@ class OOTWorld(World):
                         autoworld.major_item_locations.append(loc)
 
                     if loc.game == "Ocarina of Time" and loc.item.code and (not loc.locked or
-                        (loc.item.type == 'Song' or
-                            (loc.item.type == 'SmallKey'         and world.worlds[loc.player].shuffle_smallkeys     == 'any_dungeon') or
-                            (loc.item.type == 'HideoutSmallKey'  and world.worlds[loc.player].shuffle_fortresskeys  == 'any_dungeon') or
-                            (loc.item.type == 'BossKey'          and world.worlds[loc.player].shuffle_bosskeys      == 'any_dungeon') or
-                            (loc.item.type == 'GanonBossKey'     and world.worlds[loc.player].shuffle_ganon_bosskey == 'any_dungeon'))):
+                        (oot_is_item_of_type(loc.item, 'Song') or
+                            (oot_is_item_of_type(loc.item, 'SmallKey')         and world.worlds[loc.player].shuffle_smallkeys     == 'any_dungeon') or
+                            (oot_is_item_of_type(loc.item, 'HideoutSmallKey')  and world.worlds[loc.player].shuffle_fortresskeys  == 'any_dungeon') or
+                            (oot_is_item_of_type(loc.item, 'BossKey')          and world.worlds[loc.player].shuffle_bosskeys      == 'any_dungeon') or
+                            (oot_is_item_of_type(loc.item, 'GanonBossKey')     and world.worlds[loc.player].shuffle_ganon_bosskey == 'any_dungeon'))):
                         if loc.player in barren_hint_players:
                             hint_area = get_hint_area(loc)
                             items_by_region[loc.player][hint_area]['weight'] += 1
@@ -888,7 +888,7 @@ class OOTWorld(World):
             elif barren_hint_players or woth_hint_players:  # Check only relevant oot locations for barren/woth
                 for player in (barren_hint_players | woth_hint_players):
                     for loc in world.worlds[player].get_locations():
-                        if loc.item.code and (not loc.locked or loc.item.type == 'Song'):
+                        if loc.item.code and (not loc.locked or oot_is_item_of_type(loc.item, 'Song')):
                             if player in barren_hint_players:
                                 hint_area = get_hint_area(loc)
                                 items_by_region[player][hint_area]['weight'] += 1

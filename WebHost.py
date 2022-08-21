@@ -42,20 +42,39 @@ def get_app():
 def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]:
     import json
     import shutil
+    import zipfile
+
+    zfile: zipfile.ZipInfo
+
     from worlds.AutoWorld import AutoWorldRegister
     worlds = {}
     data = []
     for game, world in AutoWorldRegister.world_types.items():
         if hasattr(world.web, 'tutorials') and (not world.hidden or game == 'Archipelago'):
             worlds[game] = world
+
+    base_target_path = Utils.local_path("WebHostLib", "static", "generated", "docs")
     for game, world in worlds.items():
         # copy files from world's docs folder to the generated folder
-        source_path = Utils.local_path(os.path.dirname(sys.modules[world.__module__].__file__), 'docs')
-        target_path = Utils.local_path("WebHostLib", "static", "generated", "docs", game)
-        files = os.listdir(source_path)
-        for file in files:
-            os.makedirs(os.path.dirname(Utils.local_path(target_path, file)), exist_ok=True)
-            shutil.copyfile(Utils.local_path(source_path, file), Utils.local_path(target_path, file))
+        target_path = os.path.join(base_target_path, game)
+        os.makedirs(target_path, exist_ok=True)
+
+        if world.zip_path:
+            zipfile_path = world.zip_path
+
+            assert os.path.isfile(zipfile_path), f"{zipfile_path} is not a valid file(path)."
+            assert zipfile.is_zipfile(zipfile_path), f"{zipfile_path} is not a valid zipfile."
+
+            with zipfile.ZipFile(zipfile_path) as zf:
+                for zfile in zf.infolist():
+                    if not zfile.is_dir() and "/docs/" in zfile.filename:
+                        zf.extract(zfile, target_path)
+        else:
+            source_path = Utils.local_path(os.path.dirname(world.__file__), "docs")
+            files = os.listdir(source_path)
+            for file in files:
+                shutil.copyfile(Utils.local_path(source_path, file), Utils.local_path(target_path, file))
+
         # build a json tutorial dict per game
         game_data = {'gameTitle': game, 'tutorials': []}
         for tutorial in world.web.tutorials:
@@ -85,7 +104,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
         for games in data:
             if 'Archipelago' in games['gameTitle']:
                 generic_data = data.pop(data.index(games))
-        sorted_data = [generic_data] + sorted(data, key=lambda entry: entry["gameTitle"].lower())
+        sorted_data = [generic_data] + Utils.title_sorted(data, key=lambda entry: entry["gameTitle"].lower())
         json.dump(sorted_data, json_target, indent=2, ensure_ascii=False)
     return sorted_data
 
