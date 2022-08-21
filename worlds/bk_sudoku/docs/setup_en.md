@@ -8,6 +8,8 @@
 
 This is a client that can connect to any multiworld slot, and lets you play Sudoku to unlock random hints for that slot's locations.
 
+Due to the fact that the Sudoku client may connect to any slot, it is not necessary to generate a YAML for this game as it does not generate any new slots in the multiworld session.
+
 ## Installation Procedures
 
 Go to the latest release on [BK Sudoku Releases](https://github.com/Jarno458/sudoku/releases). Download and extract the `Bk_Sudoku.zip` file.
