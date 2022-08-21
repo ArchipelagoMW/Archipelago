@@ -68,6 +68,12 @@ class BuddyChecks(Toggle):
     """Bob-omb Buddies are checks, Cannon Unlocks are items"""
     display_name = "Bob-omb Buddy Checks"
 
+class ExclamationBoxes(Choice):
+    """Include 1Up Exclamation Boxes during randomization"""
+    display_name = "Randomize 1Up !-Blocks"
+    option_Off = 0
+    option_1Ups_Only = 1
+
 class ProgressiveKeys(DefaultOnToggle):
     """Keys will first grant you access to the Basement, then to the Secound Floor"""
     display_name = "Progressive Keys"
@@ -87,4 +93,5 @@ sm64_options: typing.Dict[str,type(Option)] = {
     "StarsToFinish": StarsToFinish,
     "death_link": DeathLink,
     "BuddyChecks": BuddyChecks,
+    "ExclamationBoxes": ExclamationBoxes
 } 
