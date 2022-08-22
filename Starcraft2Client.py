@@ -118,19 +118,22 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             sc2_logger.warning("When using set_path, you must type the path to your SC2 install directory.")
         return False
 
-    def _cmd_download_data(self) -> bool:
-        """Download the most recent release of the necessary files for playing SC2 with Archipelago."""
+    def _cmd_download_data(self, force: bool = False) -> bool:
+        """Download the most recent release of the necessary files for playing SC2 with
+        Archipelago. force should be True or False. force=True will overwrite your files."""
         if "SC2PATH" not in os.environ:
             check_game_install_path()
-        tempzip = download_latest_release_zip('TheCondor07', 'Starcraft2ArchipelagoData')
+        tempzip, version = download_latest_release_zip('TheCondor07', 'Starcraft2ArchipelagoData', force_download=force)
         if tempzip != '':
             try:
                 import zipfile
                 zipfile.ZipFile(tempzip).extractall(path=os.environ["SC2PATH"])
+                sc2_logger.info(f"Download complete. Version {version} installed.")
             finally:
                 os.remove(tempzip)
         else:
-            sc2_logger.warning("Download failed. Could not find/write zip.")
+            sc2_logger.warning("Download aborted/failed. Read the log for more information.")
+            return False
         return True
 
 
@@ -912,17 +915,52 @@ def check_game_install_path() -> bool:
 
 
 def check_mod_install() -> bool:
-    # Pull up the SC2PATH if set. If not, encourage the user to manually run /set_path.
-    try:
-        # Check inside the Mods folder for Archipelago.SC2Mod. If found, tell user. If not, tell user.
-        if os.path.isfile(modfile := (os.environ["SC2PATH"] / Path("Mods") / Path("Archipelago.SC2Mod"))):
-            sc2_logger.info(f"Archipelago mod found at {modfile}.")
-            return True
-        else:
-            sc2_logger.warning(f"Archipelago mod could not be found at {modfile}. Please install the mod file there.")
-    except KeyError:
-        sc2_logger.warning(f"SC2PATH isn't set. Please run /set_path with the path to your SC2 install.")
-    return False
+    """Searches for all required files."""
+    if "SC2PATH" not in os.environ:
+        check_game_install_path()
+
+    mapdir = os.environ['SC2PATH'] / Path('Maps/ArchipelagoCampaign')
+    modfile = os.environ["SC2PATH"] / Path("Mods/Archipelago.SC2Mod")
+    wol_required_maps = [
+        "ap_thanson01.SC2Map", "ap_thanson02.SC2Map", "ap_thanson03a.SC2Map", "ap_thanson03b.SC2Map",
+        "ap_thorner01.SC2Map", "ap_thorner02.SC2Map", "ap_thorner03.SC2Map", "ap_thorner04.SC2Map", "ap_thorner05s.SC2Map",
+        "ap_traynor01.SC2Map", "ap_traynor02.SC2Map", "ap_traynor03.SC2Map",
+        "ap_ttosh01.SC2Map", "ap_ttosh02.SC2Map", "ap_ttosh03a.SC2Map", "ap_ttosh03b.SC2Map",
+        "ap_ttychus01.SC2Map", "ap_ttychus02.SC2Map", "ap_ttychus03.SC2Map", "ap_ttychus04.SC2Map", "ap_ttychus05.SC2Map",
+        "ap_tvalerian01.SC2Map", "ap_tvalerian02a.SC2Map", "ap_tvalerian02b.SC2Map", "ap_tvalerian03.SC2Map",
+        "ap_tzeratul01.SC2Map", "ap_tzeratul02.SC2Map", "ap_tzeratul03.SC2Map", "ap_tzeratul04.SC2Map"
+    ]
+    needs_files = False
+
+    # Check for maps.
+    missing_maps = []
+    for mapfile in wol_required_maps:
+        if not os.path.isfile(mapdir / mapfile):
+            missing_maps.append(mapfile)
+    if len(missing_maps) >= 19:
+        sc2_logger.warning(f"All map files missing from {mapdir}.")
+        needs_files = True
+    elif len(missing_maps) > 0:
+        for map in missing_maps:
+            sc2_logger.debug(f"Missing {map} from {mapdir}.")
+            sc2_logger.warning(f"Missing {len(missing_maps)} map files.")
+        needs_files = True
+    else:  # Must be no maps missing
+        sc2_logger.info(f"All maps found in {mapdir}.")
+
+    # Check for mods.
+    if os.path.isfile(modfile):
+        sc2_logger.info(f"Archipelago mod found at {modfile}.")
+    else:
+        sc2_logger.warning(f"Archipelago mod could not be found at {modfile}.")
+        needs_files = True
+
+    # Final verdict.
+    if needs_files:
+        sc2_logger.warning(f"Required files are missing. Run /download_data to acquire them.")
+        return False
+    else:
+        return True
 
 
 class DllDirectory:
@@ -961,32 +999,41 @@ class DllDirectory:
         return False
 
 
-def download_latest_release_zip(owner:str, repo:str, current_version:str=None, force_download=False) -> str:
+def download_latest_release_zip(owner: str, repo: str, current_version: str = None, force_download=False) -> (str, str):
+    """Downloads the latest release of a GitHub repo to the current directory as a .zip file."""
     import requests
 
     headers = {"Accept": 'application/vnd.github.v3+json'}
-
     url = f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
-    print("url:", url)
 
     r1 = requests.get(url, headers=headers)
-    if (force_download is False) and (current_version == r1.json()["tag_name"]):
-        sc2_logger.info("Latest version already installed.")
-        return ""
-    sc2_logger.info(f"Attempting to download version {r1.json()['tag_name']} of {repo}.")
-    download_url = r1.json()["assets"][0]["browser_download_url"]
-    r2 = requests.get(download_url, headers=headers)
+    if r1.status_code == 200:
+        latest_version = r1.json()["tag_name"]
+        sc2_logger.info(f"Latest version: {latest_version}.")
+    else:
+        sc2_logger.warning(f"Status code: {r1.status_code}")
+        sc2_logger.warning(f"Failed to reach GitHub. Could not find download link.")
+        sc2_logger.warning(f"text: {r1.text}")
+        return "", current_version
 
+    if (force_download is False) and (current_version == latest_version):
+        sc2_logger.info("Latest version already installed.")
+        return "", current_version
+
+    sc2_logger.info(f"Attempting to download version {latest_version} of {repo}.")
+    download_url = r1.json()["assets"][0]["browser_download_url"]
+
+    r2 = requests.get(download_url, headers=headers)
     if r2.status_code == 200:
         with open(f"{repo}.zip", "wb") as fh:
             fh.write(r2.content)
         sc2_logger.info(f"Successfully downloaded {repo}.zip.")
-        return f"{repo}.zip"
+        return f"{repo}.zip", latest_version
     else:
         sc2_logger.warning(f"Status code: {r2.status_code}")
-        sc2_logger.warning("Download failed. Logging text below.")
-        sc2_logger.warning(r2.text)
-        return ""
+        sc2_logger.warning("Download failed.")
+        sc2_logger.warning(f"text: {r2.text}")
+        return "", current_version
 
 
 if __name__ == '__main__':
