@@ -823,24 +823,24 @@ Caves (Caves) - Main Island - 0x2D73F - Main Island - 0x2D859 - Path to Challeng
 158451 - 0x335AB (Elevator Inside Control) - True - Dots & Squares & Black/White Squares
 158452 - 0x335AC (Elevator Upper Outside Control) - 0x335AB - Squares & Black/White Squares
 158453 - 0x3369D (Elevator Lower Outside Control) - 0x335AB - Squares & Black/White Squares & Dots
-158454 - 0x00190 (Blue Tunnel Right First Mount 1) - True - Dots & Triangles
-158455 - 0x00558 (Blue Tunnel Right First Mount 2) - 0x00190 - Dots & Triangles
-158456 - 0x00567 (Blue Tunnel Right First Mount 3) - 0x00558 - Dots & Triangles
-158457 - 0x006FE (Blue Tunnel Right First Mount 4) - 0x00567 - Dots & Triangles
-158458 - 0x01A0D (Blue Tunnel Left First Mount) - True - Symmetry & Triangles
-158459 - 0x008B8 (Blue Tunnel Left Second Mount 1) - True - Squares & Black/White Squares & Triangles
-158460 - 0x00973 (Blue Tunnel Left Second Mount 2) - 0x008B8 - Stars & Triangles
-158461 - 0x0097B (Blue Tunnel Left Second Mount 3) - 0x00973 - Stars & Triangles & Stars + Same Colored Symbol
-158462 - 0x0097D (Blue Tunnel Left Second Mount 4) - 0x0097B - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol & Triangles
-158463 - 0x0097E (Blue Tunnel Left Second Mount 5) - 0x0097D - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
-158464 - 0x00994 (Blue Tunnel Right Second Mount 1) - True - Rotated Shapers & Triangles
-158465 - 0x334D5 (Blue Tunnel Right Second Mount 2) - 0x00994 - Rotated Shapers & Triangles
-158466 - 0x00995 (Blue Tunnel Right Second Mount 3) - 0x334D5 - Rotated Shapers & Triangles
-158467 - 0x00996 (Blue Tunnel Right Second Mount 4) - 0x00995 - Shapers & Triangles
-158468 - 0x00998 (Blue Tunnel Right Second Mount 5) - 0x00996 - Shapers & Triangles
-158469 - 0x009A4 (Blue Tunnel Left Third Mount) - True - Shapers
-158470 - 0x018A0 (Blue Tunnel Right Third Mount) - True - Shapers & Symmetry
-158471 - 0x00A72 (Blue Tunnel Left Fourth Mount) - True - Shapers & Negative Shapers
+158454 - 0x00190 (Alcove Right First Mount 1) - True - Dots & Triangles
+158455 - 0x00558 (Alcove Right First Mount 2) - 0x00190 - Dots & Triangles
+158456 - 0x00567 (Alcove Right First Mount 3) - 0x00558 - Dots & Triangles
+158457 - 0x006FE (Alcove Right First Mount 4) - 0x00567 - Dots & Triangles
+158458 - 0x01A0D (Alcove Left First Mount) - True - Symmetry & Triangles
+158459 - 0x008B8 (Alcove Left Second Mount 1) - True - Squares & Black/White Squares & Triangles
+158460 - 0x00973 (Alcove Left Second Mount 2) - 0x008B8 - Stars & Triangles
+158461 - 0x0097B (Alcove Left Second Mount 3) - 0x00973 - Stars & Triangles & Stars + Same Colored Symbol
+158462 - 0x0097D (Alcove Left Second Mount 4) - 0x0097B - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol & Triangles
+158463 - 0x0097E (Alcove Left Second Mount 5) - 0x0097D - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
+158464 - 0x00994 (Alcove Right Second Mount 1) - True - Rotated Shapers & Triangles
+158465 - 0x334D5 (Alcove Right Second Mount 2) - 0x00994 - Rotated Shapers & Triangles
+158466 - 0x00995 (Alcove Right Second Mount 3) - 0x334D5 - Rotated Shapers & Triangles
+158467 - 0x00996 (Alcove Right Second Mount 4) - 0x00995 - Shapers & Triangles
+158468 - 0x00998 (Alcove Right Second Mount 5) - 0x00996 - Shapers & Triangles
+158469 - 0x009A4 (Alcove Left Third Mount) - True - Shapers
+158470 - 0x018A0 (Alcove Right Third Mount) - True - Shapers & Symmetry
+158471 - 0x00A72 (Alcove Left Fourth Mount) - True - Shapers & Negative Shapers
 158472 - 0x32962 (First Floor Left) - True - Rotated Shapers & Broken Rotated Shapers
 158473 - 0x32966 (First Floor Grounded) - True - Stars & Squares & Black/White Squares & Stars + Same Colored Symbol
 158474 - 0x01A31 (First Floor Middle) - True - Near Row & RGB & Squares & Colored Squares
