@@ -1,4 +1,6 @@
-from Options import Choice, Range, DeathLink, Toggle
+import typing
+
+from Options import Choice, Range, DeathLink
 from .Creatures import all_creatures
 
 
@@ -39,7 +41,7 @@ class CreatureScans(Range):
     range_end = len(all_creatures)
 
 
-class AggressiveScanLogic(Toggle):
+class AggressiveScanLogic(Choice):
     """By default (Stasis), aggressive Creature Scans are logically expected only with a Stasis Rifle.
     Containment: Removes Stasis Rifle as expected solution and expects Alien Containment instead.
     Either: Creatures may be expected to be scanned via Stasis Rifle or Containment, whichever is found first.
