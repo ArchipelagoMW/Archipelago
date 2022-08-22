@@ -123,12 +123,22 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         Archipelago. force should be True or False. force=True will overwrite your files."""
         if "SC2PATH" not in os.environ:
             check_game_install_path()
-        tempzip, version = download_latest_release_zip('TheCondor07', 'Starcraft2ArchipelagoData', force_download=force)
+
+        if os.path.exists(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt"):
+            with open(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt", "r") as f:
+                current_ver = f.read()
+        else:
+            current_ver = None
+
+        tempzip, version = download_latest_release_zip('TheCondor07', 'Starcraft2ArchipelagoData', current_version=current_ver, force_download=force)
+
         if tempzip != '':
             try:
                 import zipfile
                 zipfile.ZipFile(tempzip).extractall(path=os.environ["SC2PATH"])
                 sc2_logger.info(f"Download complete. Version {version} installed.")
+                with open(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt", "w") as f:
+                    f.write(version)
             finally:
                 os.remove(tempzip)
         else:
@@ -175,10 +185,8 @@ class SC2Context(CommonContext):
             for mission in slot_req_table:
                 self.mission_req_table[mission] = MissionInfo(**slot_req_table[mission])
 
-            # Look for and set SC2PATH.
-            # check_game_install_path() returns True if and only if it finds + sets SC2PATH.
-            if "SC2PATH" not in os.environ and check_game_install_path():
-                check_mod_install()
+            # Looks for the required maps and mods for SC2. Runs check_game_install_path.
+            check_mod_install()
 
         if cmd in {"PrintJSON"}:
             if "receiving" in args:
