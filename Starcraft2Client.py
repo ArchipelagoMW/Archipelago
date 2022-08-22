@@ -187,6 +187,11 @@ class SC2Context(CommonContext):
 
             # Looks for the required maps and mods for SC2. Runs check_game_install_path.
             check_mod_install()
+            if os.path.exists(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt"):
+                with open(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt", "r") as f:
+                    current_ver = f.read()
+                if check_for_updates("TheCondor07", "Starcraft2ArchipelagoData", current_ver):
+                    sc2_logger.info("NOTICE: Update for required files found. Run /download_data to install.")
 
         if cmd in {"PrintJSON"}:
             if "receiving" in args:
@@ -1042,6 +1047,27 @@ def download_latest_release_zip(owner: str, repo: str, current_version: str = No
         sc2_logger.warning("Download failed.")
         sc2_logger.warning(f"text: {r2.text}")
         return "", current_version
+
+
+def check_for_updates(owner: str, repo: str, current_version: str) -> bool:
+    import requests
+
+    headers = {"Accept": 'application/vnd.github.v3+json'}
+    url = f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
+
+    r1 = requests.get(url, headers=headers)
+    if r1.status_code == 200:
+        latest_version = r1.json()["tag_name"]
+        if current_version != latest_version:
+            return True
+        else:
+            return False
+
+    else:
+        sc2_logger.warning(f"Failed to reach GitHub while checking for updates.")
+        sc2_logger.warning(f"Status code: {r1.status_code}")
+        sc2_logger.warning(f"text: {r1.text}")
+        return False
 
 
 if __name__ == '__main__':
