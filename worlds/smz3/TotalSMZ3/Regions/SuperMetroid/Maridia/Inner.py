@@ -9,20 +9,17 @@ class Inner(SMRegion, IReward):
 
     def __init__(self, world, config: Config):
         super().__init__(world, config)
-        self.Reward = RewardType.GoldenFourBoss
+        self.Reward = RewardType.Null
         self.Locations = [
             Location(self, 140, 0x8FC4AF, LocationType.Visible, "Super Missile (yellow Maridia)",
-                lambda items: items.CardMaridiaL1 and items.CanPassBombPassages() if self.Logic == SMLogic.Normal else \
-                lambda items: items.CardMaridiaL1 and items.CanPassBombPassages() and
-                    (items.Gravity or items.Ice or items.HiJump and items.CanSpringBallJump())),
+                lambda items: items.CardMaridiaL1 and items.CanPassBombPassages() and self.CanReachAqueduct(items) and
+                    (items.Gravity or items.Ice or items.HiJump and items.SpringBall)),
             Location(self, 141, 0x8FC4B5, LocationType.Visible, "Missile (yellow Maridia super missile)",
-                lambda items: items.CardMaridiaL1 and items.CanPassBombPassages() if self.Logic == SMLogic.Normal else \
                 lambda items: items.CardMaridiaL1 and items.CanPassBombPassages() and
-                    (items.Gravity or items.Ice or items.HiJump and items.CanSpringBallJump())),
+                    (items.Gravity or items.Ice or items.HiJump and items.SpringBall)),
             Location(self, 142, 0x8FC533, LocationType.Visible, "Missile (yellow Maridia false wall)",
-                lambda items: items.CardMaridiaL1 and items.CanPassBombPassages() if self.Logic == SMLogic.Normal else \
                 lambda items: items.CardMaridiaL1 and items.CanPassBombPassages() and
-                    (items.Gravity or items.Ice or items.HiJump and items.CanSpringBallJump())),
+                    (items.Gravity or items.Ice or items.HiJump and items.SpringBall)),
             Location(self, 143, 0x8FC559, LocationType.Chozo, "Plasma Beam",
                 lambda items: self.CanDefeatDraygon(items) and (items.ScrewAttack or items.Plasma) and (items.HiJump or items.CanFly()) if self.Logic == SMLogic.Normal else \
                 lambda items: self.CanDefeatDraygon(items) and
@@ -31,17 +28,17 @@ class Inner(SMRegion, IReward):
             Location(self, 144, 0x8FC5DD, LocationType.Visible, "Missile (left Maridia sand pit room)",
                 lambda items: self.CanReachAqueduct(items) and items.Super and items.CanPassBombPassages() if self.Logic == SMLogic.Normal else \
                 lambda items: self.CanReachAqueduct(items) and items.Super and
-                    (items.HiJump and (items.SpaceJump or items.CanSpringBallJump()) or items.Gravity)),
+                    (items.Gravity or items.HiJump and (items.SpaceJump or items.CanSpringBallJump()))),
             Location(self, 145, 0x8FC5E3, LocationType.Chozo, "Reserve Tank, Maridia",
                 lambda items: self.CanReachAqueduct(items) and items.Super and items.CanPassBombPassages() if self.Logic == SMLogic.Normal else \
                 lambda items: self.CanReachAqueduct(items) and items.Super and
-                    (items.HiJump and (items.SpaceJump or items.CanSpringBallJump()) or items.Gravity)),
+                    (items.Gravity or items.HiJump and (items.SpaceJump or items.CanSpringBallJump()))),
             Location(self, 146, 0x8FC5EB, LocationType.Visible, "Missile (right Maridia sand pit room)",
                 lambda items: self.CanReachAqueduct(items) and items.Super) if self.Logic == SMLogic.Normal else \
                 lambda items: self.CanReachAqueduct(items) and items.Super and (items.HiJump or items.Gravity),
             Location(self, 147, 0x8FC5F1, LocationType.Visible, "Power Bomb (right Maridia sand pit room)",
                 lambda items: self.CanReachAqueduct(items) and items.Super) if self.Logic == SMLogic.Normal else \
-                lambda items: self.CanReachAqueduct(items) and items.Super and (items.HiJump and items.CanSpringBallJump() or items.Gravity),
+                lambda items: self.CanReachAqueduct(items) and items.Super and (items.Gravity or items.HiJump and items.CanSpringBallJump()),
             Location(self, 148, 0x8FC603, LocationType.Visible, "Missile (pink Maridia)", 
                 lambda items: self.CanReachAqueduct(items) and items.SpeedBooster if self.Logic == SMLogic.Normal else \
                 lambda items: self.CanReachAqueduct(items) and items.Gravity),

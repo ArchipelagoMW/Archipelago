@@ -49,8 +49,7 @@ class PlayerDefinition(object):
         region_name = "player" + str(self.id) + region_tag
         region = Region("player" + str(self.id) + region_tag, RegionType.Generic,
                         "Region Hint", self.id, self.world)
-        self.locations += generate_locations(size,
-                                             self.id, None, region, region_tag)
+        self.locations += generate_locations(size, self.id, None, region, region_tag)
 
         entrance = Entrance(self.id, region_name + "_entrance", parent)
         parent.exits.append(entrance)

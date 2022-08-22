@@ -2,6 +2,7 @@
 {% import "macros.html" as macros %}
 {% block head %}
     <title>Multiworld {{ room.id|suuid }}</title>
+    {% if should_refresh %}<meta http-equiv="refresh" content="2">{% endif %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/hostRoom.css") }}"/>
 {% endblock %}
 
@@ -16,9 +17,9 @@
             This room has a <a href="{{ url_for("getTracker", tracker=room.tracker) }}">Multiworld Tracker</a> enabled.
             <br />
         {% endif %}
-        This room will be closed after {{ room.timeout//60//60 }} hours of inactivity. Should you wish to continue
-        later,
-        you can simply refresh this page and the server will be started again.<br>
+        The server for this room will be paused after {{ room.timeout//60//60 }} hours of inactivity.
+        Should you wish to continue later,
+        anyone can simply refresh this page and the server will resume.<br>
         {% if room.last_port %}
             You can connect to this room by using <span class="interactive"
             data-tooltip="This means address/ip is {{ config['PATCH_TARGET'] }} and port is {{ room.last_port }}.">
