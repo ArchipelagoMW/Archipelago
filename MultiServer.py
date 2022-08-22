@@ -36,6 +36,7 @@ from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, Networ
     SlotType
 
 min_client_version = Version(0, 1, 6)
+print_command_compatability_threshold = Version(0, 3, 5) # Remove backwards compatibility around 0.3.7
 colorama.init()
 
 # functions callable on storable data on the server by clients
@@ -291,20 +292,27 @@ class Context:
 
     # text
 
-    def notify_all(self, text):
+    def notify_all(self, text: str):
         logging.info("Notice (all): %s" % text)
-        self.broadcast_all([{"cmd": "Print", "text": text}])
+        broadcast_text_all(self, text)
 
     def notify_client(self, client: Client, text: str):
         if not client.auth:
             return
         logging.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
-        asyncio.create_task(self.send_msgs(client, [{"cmd": "Print", "text": text}]))
+        if client.version >= print_command_compatability_threshold:
+            asyncio.create_task(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }]}]))
+        else:
+            asyncio.create_task(self.send_msgs(client, [{"cmd": "Print", "text": text}]))
 
     def notify_client_multiple(self, client: Client, texts: typing.List[str]):
         if not client.auth:
             return
-        asyncio.create_task(self.send_msgs(client, [{"cmd": "Print", "text": text} for text in texts]))
+        if client.version >= print_command_compatability_threshold:
+            asyncio.create_task(self.send_msgs(client, 
+                [{"cmd": "PrintJSON", "data": [{ "text": text }]} for text in texts]))
+        else:
+            asyncio.create_task(self.send_msgs(client, [{"cmd": "Print", "text": text} for text in texts]))
 
     # loading
 
@@ -721,19 +729,33 @@ async def on_client_left(ctx: Context, client: Client):
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
-async def countdown(ctx: Context, timer):
-    ctx.notify_all(f'[Server]: Starting countdown of {timer}s')
+async def countdown(ctx: Context, timer: int):
+    broadcast_countdown(ctx, timer, f"[Server]: Starting countdown of {timer}s")
     if ctx.countdown_timer:
         ctx.countdown_timer = timer  # timer is already running, set it to a different time
     else:
         ctx.countdown_timer = timer
         while ctx.countdown_timer > 0:
-            ctx.notify_all(f'[Server]: {ctx.countdown_timer}')
+            broadcast_countdown(ctx, ctx.countdown_timer, f"[Server]: {ctx.countdown_timer}")
             ctx.countdown_timer -= 1
             await asyncio.sleep(1)
-        ctx.notify_all(f'[Server]: GO')
+        broadcast_countdown(ctx, 0, f"[Server]: GO")
         ctx.countdown_timer = 0
 
+def broadcast_text_all(ctx: Context, text: str, additional_arguments: dict = {}):
+    old_clients, new_clients = [], []
+
+    for teams in ctx.clients.values():
+        for clients in teams.values():
+            for client in clients:
+                new_clients.append(client) if client.version >= print_command_compatability_threshold \
+                    else old_clients.append(client)
+
+    ctx.broadcast(old_clients, [{"cmd": "Print", "text": text }])
+    ctx.broadcast(new_clients, [{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
+
+def broadcast_countdown(ctx: Context, timer: int, message: str):
+    broadcast_text_all(ctx, message, { "type": "Countdown", "countdown": timer })
 
 def get_players_string(ctx: Context):
     auth_clients = {(c.team, c.slot) for c in ctx.endpoints if c.auth}
