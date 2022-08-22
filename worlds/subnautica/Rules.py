@@ -90,7 +90,7 @@ def has_prawn(state: "CollectionState", player: int):
            has_mobile_vehicle_bay(state, player)
 
 
-def has_praw_propulsion_arm(state: "CollectionState", player: int):
+def has_prawn_propulsion_arm(state: "CollectionState", player: int):
     return state.has("Prawn Suit Propulsion Cannon Fragment", player, 2) and \
            has_vehicle_upgrade_console(state, player)
 
@@ -108,7 +108,7 @@ def has_laser_cutter(state: "CollectionState", player: int):
     return state.has("Laser Cutter Fragment", player, 3)
 
 
-def has_stasis_rile(state: "CollectionState", player: int):
+def has_stasis_rifle(state: "CollectionState", player: int):
     return state.has("Stasis Rifle Fragment", player, 2)
 
 
@@ -119,7 +119,7 @@ def has_containment(state: "CollectionState", player: int):
 # Either we have propulsion cannon, or prawn + propulsion cannon arm
 def has_propulsion_cannon(state: "CollectionState", player: int):
     return state.has("Propulsion Cannon Fragment", player, 2) or \
-           (has_prawn(state, player) and has_praw_propulsion_arm(state, player))
+           (has_prawn(state, player) and has_prawn_propulsion_arm(state, player))
 
 
 def has_cyclops_shield(state: "CollectionState", player: int):
@@ -259,10 +259,10 @@ def set_creature_rule(world, player: int, creature_name: str) -> "Location":
 
 
 aggression_rules: Dict[int, Callable[["CollectionState", int], bool]] = {
-    AggressiveScanLogic.option_stasis: has_stasis_rile,
+    AggressiveScanLogic.option_stasis: has_stasis_rifle,
     AggressiveScanLogic.option_containment: has_containment,
     AggressiveScanLogic.option_either: lambda state, player:
-        has_stasis_rile(state, player) or has_containment(state, player)
+    has_stasis_rifle(state, player) or has_containment(state, player)
 }
 
 
