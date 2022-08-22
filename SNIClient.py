@@ -304,6 +304,7 @@ SM_RECV_QUEUE_START  = SRAM_START + 0x2000
 SM_RECV_QUEUE_WCOUNT = SRAM_START + 0x2602
 SM_SEND_QUEUE_START  = SRAM_START + 0x2700
 SM_SEND_QUEUE_RCOUNT = SRAM_START + 0x2680
+SM_SEND_QUEUE_WCOUNT = SRAM_START + 0x2682
 
 SM_DEATH_LINK_ACTIVE_ADDR = ROM_START + 0x277f04    # 1 byte
 SM_REMOTE_ITEM_FLAG_ADDR = ROM_START + 0x277f06    # 1 byte
@@ -1086,15 +1087,12 @@ async def game_watcher(ctx: Context):
             if ctx.awaiting_rom:
                 await ctx.server_auth(False)
             elif ctx.server is None:
-                snes_logger.warning("ROM detected but no active multiworld server connection. Use /connect to connect")
+                snes_logger.warning("ROM detected but no active multiworld server connection. " +
+                                    "Connect using command: /connect server:port")
 
         if ctx.auth and ctx.auth != ctx.rom:
             snes_logger.warning("ROM change detected, please reconnect to the multiworld server")
             await ctx.disconnect()
-
-        if ctx.server is None or ctx.slot is None:
-            # not successfully connected to a multiworld server
-            continue
 
         if ctx.game == GAME_ALTTP:
             gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
@@ -1167,6 +1165,9 @@ async def game_watcher(ctx: Context):
                 await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [scout_location]}])
             await track_locations(ctx, roomid, roomdata)
         elif ctx.game == GAME_SM:
+            if ctx.server is None or ctx.slot is None:
+                # not successfully connected to a multiworld server, cannot process the game sending items
+                continue
             gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
             if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
                 currently_dead = gamemode[0] in SM_DEATH_MODES
@@ -1182,7 +1183,7 @@ async def game_watcher(ctx: Context):
                 continue
 
             recv_index = data[0] | (data[1] << 8)
-            recv_item = data[2] | (data[3] << 8)
+            recv_item = data[2] | (data[3] << 8) # this is actually SM_SEND_QUEUE_WCOUNT
 
             while (recv_index < recv_item):
                 itemAdress = recv_index * 8
@@ -1232,6 +1233,9 @@ async def game_watcher(ctx: Context):
                     ctx.location_names[item.location], itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
         elif ctx.game == GAME_SMZ3:
+            if ctx.server is None or ctx.slot is None:
+                # not successfully connected to a multiworld server, cannot process the game sending items
+                continue
             currentGame = await snes_read(ctx, SRAM_START + 0x33FE, 2)
             if (currentGame is not None):
                 if (currentGame[0] != 0):
