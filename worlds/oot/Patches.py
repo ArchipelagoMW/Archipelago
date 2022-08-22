@@ -2104,7 +2104,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
 
     shop_objs = { 0x0148 } # "Sold Out" object
     for location in locations:
-        if location.item.type == 'Shop':
+        if isinstance(location.item, OOTItem) and location.item.type == 'Shop':
             shop_objs.add(location.item.special['object'])
             rom.write_int16(location.address1, location.item.index)
         else:

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import sys
+import pathlib
 from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, TYPE_CHECKING
 
 from Options import Option
@@ -48,13 +49,14 @@ class AutoWorldRegister(type):
                 raise RuntimeError(f"""Game {dct["game"]} already registered.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
         new_class.__file__ = sys.modules[new_class.__module__].__file__
-        new_class.is_zip = ".apworld" in new_class.__file__
+        if ".apworld" in new_class.__file__:
+            new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
         return new_class
 
 
 class AutoLogicRegister(type):
-    def __new__(cls, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoLogicRegister:
-        new_class = super().__new__(cls, name, bases, dct)
+    def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoLogicRegister:
+        new_class = super().__new__(mcs, name, bases, dct)
         function: Callable[..., Any]
         for item_name, function in dct.items():
             if item_name == "copy_mixin":
@@ -179,7 +181,7 @@ class World(metaclass=AutoWorldRegister):
     item_names: Set[str]  # set of all potential item names
     location_names: Set[str]  # set of all potential location names
 
-    is_zip: bool  # was loaded from a .apworld ?
+    zip_path: Optional[pathlib.Path] = None  # If loaded from a .apworld, this is the Path to it.
     __file__: str  # path it was loaded from
 
     def __init__(self, world: "MultiWorld", player: int):

@@ -493,7 +493,8 @@ async def server_loop(ctx: CommonContext, address=None):
     logger.info(f'Connecting to Archipelago server at {address}')
     try:
         socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None)
-        ctx.ui.update_address_bar(server_url.netloc)
+        if ctx.ui is not None:
+            ctx.ui.update_address_bar(server_url.netloc)
         ctx.server = Endpoint(socket)
         logger.info('Connected')
         ctx.server_address = address
