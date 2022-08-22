@@ -20,13 +20,15 @@ on the size of the feature, and if new styles are required, there may be an addi
 before the PR is accepted wherein Farrak works with the designer to implement styles.
 
 ### Restrictions on Style Changes
-Pull requests which change the overall look and feel of the website are rejected. A
-professional designer is paid to develop the styles and assets for the Archipelago website.
-In an effort to maintain a consistent look and feel, pull requests which exclusively change
-site styles are typically rejected as well. Please note this applies to code which changes
-the look and feel of the site, not to small tweaks to CSS for your custom page. It is
-therefore worth noting there are a couple files which, if changed in your pull request,
-will cause it to draw additional scrutiny.
+A professional designer is paid to develop the styles and assets for the Archipelago website.
+In an effort to maintain a consistent look and feel, pull requests which *exclusively*
+change site styles are rejected. Please note this applies to code which changes the overall
+look and feel of the site, not to small tweaks to CSS for your custom page. The intention
+behind these restrictions is to maintain a curated feel for the design of the site. If
+any PR affects the overall feel of the site but includes additive changes, there will
+likely be a conversation about how to implement those changes without compromising the
+curated site style. It is therefore worth noting there are a couple files which, if
+changed in your pull request, will cause it to draw additional scrutiny.
 
 These closely guarded files are:
 - `globalStyles.css`
