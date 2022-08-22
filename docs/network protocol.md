@@ -15,13 +15,16 @@ In the case that the client does not authenticate properly and receives a [Conne
 
 There are also a number of community-supported libraries available that implement this network protocol to make integrating with Archipelago easier.
 
-| Language / Framework        |                                                                                                                                                                                                                                            Project |
-|:----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| Python                      | [CommonClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py)<br/><br/>__For Super Nintendo__<br/>[SNIClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/SNIClient.py) + [SNI](https://github.com/alttpo/sni) |
-| Java / Kotlin               |                                                                                                                                                      [Archipelago.MultiClient.Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java) |
-| C# / .Net                   |                                                                                                                                                        [Archipelago.MultiClient.Net](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net) |
-| C++                         |                                                                                                                                             [apclientpp](https://github.com/black-sliver/apclientpp) / [APCpp](https://github.com/N00byKing/APCpp) |
-| JavaScript (Browser + Node) |                                                                                                                                                                                        [archipelago.js](https://github.com/ThePhar/archipelago.js) |
+| Language/Runtime              | Project                                                                                            | Remarks                                                                         |
+|-------------------------------|----------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| Python                        | [Archipelago CommonClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py) |                                                                                 |
+|                               | [Archipelago SNIClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/SNIClient.py)       | For Super Nintendo Game Support; Requires [SNI](https://github.com/alttpo/sni). |
+| JVM (Java / Kotlin)           | [Archipelago.MultiClient.Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java)      |                                                                                 |
+| .NET (C# / C++ / F# / VB.NET) | [Archipelago.MultiClient.Net](https://www.nuget.org/packages/Archipelago.MultiClient.Net)  |                                                                                 |
+| C++                           | [apclientpp](https://github.com/black-sliver/apclientpp)                                           | almost-header-only                                                              |
+|                               | [APCpp](https://github.com/N00byKing/APCpp)                                                        | CMake                                                                           |
+| JavaScript / TypeScript       | [archipelago.js](https://www.npmjs.com/package/archipelago.js)                               | Browser and Node.js Supported                                                   |
+| Haxe                          | [hxArchipelago](https://lib.haxe.org/p/hxArchipelago)                                    |                                                                                 |
 
 ## Synchronizing Items
 When the client receives a [ReceivedItems](#ReceivedItems) packet, if the `index` argument does not match the next index that the client expects then it is expected that the client will re-sync items with the server. This can be accomplished by sending the server a [Sync](#Sync) packet and then a [LocationChecks](#LocationChecks) packet.
