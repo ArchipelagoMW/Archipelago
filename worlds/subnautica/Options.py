@@ -33,7 +33,7 @@ class Goal(Choice):
 
 
 class CreatureScans(Range):
-    """Place items on specific, randomly chosen creature scans.
+    """Place items on specific, randomly chosen, creature scans.
     Warning: Includes aggressive Leviathans."""
     display_name = "Creature Scans"
     range_end = len(all_creatures)
