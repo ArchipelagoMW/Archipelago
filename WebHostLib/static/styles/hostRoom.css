@@ -55,4 +55,7 @@
     border: 1px solid #2a6c2f;
     border-radius: 6px;
     color: #000000;
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-height: 600px;
 }
