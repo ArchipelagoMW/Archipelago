@@ -112,7 +112,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         """Manually set the SC2 install directory (if the automatic detection fails)."""
         if path:
             os.environ["SC2PATH"] = path
-            check_mod_install()
+            is_mod_installed_correctly()
             return True
         else:
             sc2_logger.warning("When using set_path, you must type the path to your SC2 install directory.")
@@ -186,11 +186,11 @@ class SC2Context(CommonContext):
                 self.mission_req_table[mission] = MissionInfo(**slot_req_table[mission])
 
             # Looks for the required maps and mods for SC2. Runs check_game_install_path.
-            check_mod_install()
+            is_mod_installed_correctly()
             if os.path.exists(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt"):
                 with open(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt", "r") as f:
                     current_ver = f.read()
-                if check_for_updates("TheCondor07", "Starcraft2ArchipelagoData", current_ver):
+                if is_mod_update_available("TheCondor07", "Starcraft2ArchipelagoData", current_ver):
                     sc2_logger.info("NOTICE: Update for required files found. Run /download_data to install.")
 
         if cmd in {"PrintJSON"}:
@@ -927,7 +927,7 @@ def check_game_install_path() -> bool:
     return False
 
 
-def check_mod_install() -> bool:
+def is_mod_installed_correctly() -> bool:
     """Searches for all required files."""
     if "SC2PATH" not in os.environ:
         check_game_install_path()
@@ -1049,7 +1049,7 @@ def download_latest_release_zip(owner: str, repo: str, current_version: str = No
         return "", current_version
 
 
-def check_for_updates(owner: str, repo: str, current_version: str) -> bool:
+def is_mod_update_available(owner: str, repo: str, current_version: str) -> bool:
     import requests
 
     headers = {"Accept": 'application/vnd.github.v3+json'}
