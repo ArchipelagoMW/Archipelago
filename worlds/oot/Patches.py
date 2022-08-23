@@ -2110,22 +2110,19 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
         else:
             if location.item.trap:
                 item_display = location.item.looks_like_item
-            elif location.item.game != "Ocarina of Time": 
-                item_display = location.item
-                if location.item.advancement:
-                    item_display.index = 0xCB
-                else:
-                    item_display.index = 0xCC
-                item_display.special = {}
             else:
                 item_display = location.item
 
             # bottles in shops should look like empty bottles
             # so that that are different than normal shop refils
-            if 'shop_object' in item_display.special:
-                rom_item = read_rom_item(rom, item_display.special['shop_object'])
+            if location.item.trap or location.item.game == "Ocarina of Time":
+                if 'shop_object' in item_display.special:
+                    rom_item = read_rom_item(rom, item_display.special['shop_object'])
+                else:
+                    rom_item = read_rom_item(rom, item_display.index)
             else:
-                rom_item = read_rom_item(rom, item_display.index)
+                display_index = 0xCB if location.item.advancement else 0xCC
+                rom_item = read_rom_item(rom, display_index)
 
             shop_objs.add(rom_item['object_id'])
             shop_id = world.current_shop_id
