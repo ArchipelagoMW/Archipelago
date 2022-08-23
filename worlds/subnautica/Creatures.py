@@ -50,10 +50,8 @@ all_creatures: Dict[str, int] = {
     "Lava Larva": 1300,
     "Lava Lizard": 1300,
     "Sea Dragon Leviathan": 1300,
-    "Sea Emperor Leviathan": 1700,
+    "Cuddlefish": 300,
     "Sea Emperor Juvenile": 1700,
-
-    # "Cuddlefish": 300, # maybe at some point, needs hatching in containment chamber (20 real-life minutes)
 }
 
 # be nice and make these require Stasis Rifle
@@ -73,10 +71,29 @@ aggressive: Set[str] = {
     "River Prowler",
 }
 
+containment: Set[str] = {  # creatures that have to be raised from eggs
+    "Cuddlefish",
+}
+
+hatchable: Set[str] = {  # aggressive creatures that can be grown from eggs as alternative to stasis
+    "Ampeel",  # warning: electric shocks
+    "Crabsquid",  # warning: electric shocks
+    "Crabsnake",
+    "Boneshark",
+    "Crashfish",
+    "Gasopod",
+    "Lava Lizard",
+    "Mesmer",
+    "Sand Shark",
+    "Stalker",
+}
+
 suffix: str = " Scan"
 
 creature_locations: Dict[str, int] = {
-    creature+suffix: creature_id for creature_id, creature in enumerate(all_creatures, start=34000)
+    creature + suffix: creature_id for creature_id, creature in enumerate(all_creatures, start=34000)
 }
 
 all_creatures_presorted: List[str] = sorted(all_creatures)
+all_creatures_presorted_without_containment = [name for name in all_creatures_presorted if name not in containment]
+

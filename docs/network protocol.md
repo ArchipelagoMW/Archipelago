@@ -152,7 +152,8 @@ The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
 All arguments for this packet are optional, only changes are sent.
 
 ### Print
-Sent to clients purely to display a message to the player.
+Sent to clients purely to display a message to the player. 
+* *Deprecation warning: clients that connect with version 0.3.5 or higher will nolonger recieve Print packets, instead all messsages are send as [PrintJSON](#PrintJSON)*
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
@@ -164,10 +165,21 @@ Sent to clients purely to display a message to the player. This packet differs f
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | data | list\[[JSONMessagePart](#JSONMessagePart)\] | Type of this part of the message. |
-| type | str | May be present to indicate the nature of this message. Known types are Hint and ItemSend. |
+| type | str | May be present to indicate the [PrintJsonType](#PrintJsonType) of this message. |
 | receiving | int | Is present if type is Hint or ItemSend and marks the destination player's ID. |
 | item | [NetworkItem](#NetworkItem) | Is present if type is Hint or ItemSend and marks the source player id, location id, item id and item flags. |
 | found | bool | Is present if type is Hint, denotes whether the location hinted for was checked. |
+| countdown | int | Is present if type is `Countdown`, denotes the amount of seconds remaining on the countdown. |
+
+##### PrintJsonType
+PrintJsonType indicates the type of [PrintJson](#PrintJson) packet, different types can be handled differently by the client and can also contain additional arguments. When receiving an unknown type the data's list\[[JSONMessagePart](#JSONMessagePart)\] should still be printed as normal. 
+
+Currently defined types are:
+| Type | Notes |
+| ---- | ----- |
+| ItemSend | The message is in response to a player receiving an item. |
+| Hint | The message is in response to a player hinting. |
+| Countdown | The message contains information about the current server Countdown. |
 
 ### DataPackage
 Sent to clients to provide what is known as a 'data package' which contains information to enable a client to most easily communicate with the Archipelago server. Contents include things like location id to name mappings, among others; see [Data Package Contents](#Data-Package-Contents) for more info.
