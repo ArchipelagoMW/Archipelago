@@ -36,6 +36,9 @@ class WitnessPlayerLogic:
         Panels outside of the same region will still be checked manually.
         """
 
+        if panel_hex in self.COMPLETELY_DISABLED_CHECKS:
+            return frozenset()
+
         check_obj = StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]
 
         these_items = frozenset({frozenset()})
@@ -72,7 +75,9 @@ class WitnessPlayerLogic:
             for option_panel in option:
                 dep_obj = StaticWitnessLogic.CHECKS_BY_HEX.get(option_panel)
 
-                if option_panel in {"7 Lasers", "11 Lasers"}:
+                if option_panel in self.COMPLETELY_DISABLED_CHECKS:
+                    new_items = frozenset()
+                elif option_panel in {"7 Lasers", "11 Lasers"}:
                     new_items = frozenset({frozenset([option_panel])})
                 # If a panel turns on when a panel in a different region turns on,
                 # the latter panel will be an "event panel", unless it ends up being
@@ -204,9 +209,11 @@ class WitnessPlayerLogic:
         elif get_option_value(world, player, "victory_condition") == 3:
             self.VICTORY_LOCATION = "0xFFF00"
 
-        self.COMPLETELY_DISABLED_CHECKS.add(
-            self.VICTORY_LOCATION
-        )
+        if get_option_value(world, player, "challenge_lasers") <= 7:
+            adjustment_linesets_in_order.append([
+                "Requirement Changes:",
+                "0xFFF00 - 11 Lasers - True",
+            ])
 
         if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
             adjustment_linesets_in_order.append(get_disable_unrandomized_list())
@@ -356,6 +363,12 @@ class WitnessPlayerLogic:
             "0x2700B": "Open Door to Treehouse Laser House",
             "0x00055": "Orchard Apple Trees 4 Turns On",
             "0x17DDB": "Left Orange Bridge Fully Extended",
+            "0x03535": "Shipwreck Video Pattern Knowledge",
+            "0x03542": "Mountain Video Pattern Knowledge",
+            "0x0339E": "Desert Video Pattern Knowledge",
+            "0x03481": "Tutorial Video Pattern Knowledge",
+            "0x03702": "Jungle Video Pattern Knowledge",
+            "0x0356B": "Challenge Video Pattern Knowledge",
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
@@ -371,12 +384,6 @@ class WitnessPlayerLogic:
             "0x0C2B2": "Bunker Laser Activation",
             "0x00BF6": "Swamp Laser Activation",
             "0x028A4": "Treehouse Laser Activation",
-            "0x03535": "Shipwreck Video Pattern Knowledge",
-            "0x03542": "Mountain Video Pattern Knowledge",
-            "0x0339E": "Desert Video Pattern Knowledge",
-            "0x03481": "Tutorial Video Pattern Knowledge",
-            "0x03702": "Jungle Video Pattern Knowledge",
-            "0x0356B": "Challenge Video Pattern Knowledge",
             "0x09F7F": "Mountaintop Trap Door Turns On",
             "0x17C34": "Mountain Access",
         }
