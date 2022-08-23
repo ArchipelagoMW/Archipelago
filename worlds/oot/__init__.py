@@ -807,9 +807,10 @@ class OOTWorld(World):
 
         with i_o_limiter:
             # Make traps appear as other random items
-            ice_traps = [loc.item for loc in self.get_locations() if loc.item.trap]
-            for trap in ice_traps:
-                trap.looks_like_item = self.create_item(self.world.slot_seeds[self.player].choice(self.fake_items).name)
+            trap_location_ids = [loc.address for loc in self.get_locations() if loc.item.trap]
+            self.trap_appearances = {}
+            for loc_id in trap_location_ids:
+                self.trap_appearances[loc_id] = self.create_item(self.world.slot_seeds[self.player].choice(self.fake_items).name)
 
             # Seed hint RNG, used for ganon text lines also
             self.hint_rng = self.world.slot_seeds[self.player]

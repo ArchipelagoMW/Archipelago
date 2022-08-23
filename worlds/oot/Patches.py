@@ -1844,7 +1844,7 @@ def write_rom_item(rom, item_id, item):
 
 
 def get_override_table(world):
-    return list(filter(lambda val: val != None, map(partial(get_override_entry, world.player), world.world.get_filled_locations(world.player))))
+    return list(filter(lambda val: val != None, map(partial(get_override_entry, world), world.world.get_filled_locations(world.player))))
 
 
 override_struct = struct.Struct('>xBBBHBB') # match override_t in get_items.c
@@ -1852,10 +1852,10 @@ def get_override_table_bytes(override_table):
     return b''.join(sorted(itertools.starmap(override_struct.pack, override_table)))
 
 
-def get_override_entry(player_id, location):
+def get_override_entry(ootworld, location):
     scene = location.scene
     default = location.default
-    player_id = 0 if player_id == location.item.player else min(location.item.player, 255)
+    player_id = 0 if ootworld.player == location.item.player else min(location.item.player, 255)
     if location.item.game != 'Ocarina of Time': 
         # This is an AP sendable. It's guaranteed to not be None. 
         if location.item.advancement:
@@ -1869,7 +1869,7 @@ def get_override_entry(player_id, location):
 
     if location.item.trap:
         item_id = 0x7C  # Ice Trap ID, to get "X is a fool" message
-        looks_like_item_id = location.item.looks_like_item.index
+        looks_like_item_id = ootworld.trap_appearances[location.address].index
     else:
         looks_like_item_id = 0
 
@@ -2110,7 +2110,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
             rom.write_int16(location.address1, location.item.index)
         else:
             if location.item.trap:
-                item_display = location.item.looks_like_item
+                item_display = world.trap_appearances[location.address]
             else:
                 item_display = location.item
 
