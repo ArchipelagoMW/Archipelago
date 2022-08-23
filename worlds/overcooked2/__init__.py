@@ -1,7 +1,10 @@
-from AutoWorld import World, WebWorld
+from .Items import is_progression  # this is just a dummy
+from ..AutoWorld import World, WebWorld
 from .Options import overcooked_options
-from .Overcooked2Levels import Overcooked2Level
-from .Items import item_frequencies, item_table
+from .Items import item_table, is_progression, Overcooked2Item
+from .Locations import location_id_to_name, location_name_to_id
+from .Regions import create_regions
+from BaseClasses import ItemClassification
 
 class Overcooked2Web(WebWorld):
     pass
@@ -16,14 +19,45 @@ class Overcooked2Web(World):
     randomized to increase gameplay variety. Best enjoyed with a friend or three.
     """
     game = "Overcooked! 2"
-    topology_present = False
-    data_version = 7
     web = Overcooked2Web()
     option_definitions = overcooked_options
+    topology_present: bool = False
+    remote_items: bool = True
+    remote_start_inventory: bool = True
+    data_version = 0
+    base_id = 0
 
-    location_id_to_name = {level.level_name(): level.level_id() for level in Overcooked2Level()}
-    location_name_to_id = {level.level_id(): level.level_name() for level in Overcooked2Level()}
+    location_id_to_name = location_id_to_name
+    location_name_to_id = location_name_to_id
 
+    # use this for pre-generation
+    def generate_early(self) -> None:
+        pass
+
+    def create_item(self, item: str):
+        if is_progression(item):
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+            
+        return Overcooked2Item(item, classification, self.item_name_to_id[item], self.player)
+
+    def create_event(self, event: str):
+        return Overcooked2Item(event, True, None, self.player)
+
+    # called to place player's items into the MultiWorld's itempool
+    def create_items(self):
+        pass
+
+    # called to place player's regions into the MultiWorld's regions list. If it's hard to separate, this can be done during generate_early or basic as well.
+    def create_regions(self):
+        create_regions(self.world,self.player)
+
+    # called to set access and item rules on locations and entrances.
+    def set_rules(self):
+        pass
+
+    # After this step all regions and items have to be in the MultiWorld's regions and itempool.
     def generate_basic(self) -> None:
         itempool = []
         pool_counts = item_frequencies.copy()
@@ -31,3 +65,7 @@ class Overcooked2Web(World):
         for item_name in item_table:
             for _ in range(pool_counts.get(item_name, 1)):
                 itempool.append(self.create_item(item_name))
+
+    
+    def generate_output(self, output_directory: str) -> None:
+        pass

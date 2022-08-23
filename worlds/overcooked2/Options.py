@@ -46,7 +46,7 @@ class StarThresholdScale(Range):
     default = 30
 
 
-overcooked_options: typing.Dict[str, type(Option)] = {
+overcooked_options = {
     "AlwaysServerOldestOrder": AlwaysServerOldestOrder,
     "AlwaysPreserveCookingProgress": AlwaysPreserveCookingProgress,
     "AlwaysStartLevelTimer": AlwaysStartLevelTimer,
