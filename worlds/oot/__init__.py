@@ -178,6 +178,10 @@ class OOTWorld(World):
         if self.skip_child_zelda:
             self.shuffle_weird_egg = False
 
+        # Ganon boss key should not be in itempool in triforce hunt
+        if self.triforce_hunt:
+            self.shuffle_ganon_bosskey = 'remove'
+
         # Determine skipped trials in GT
         # This needs to be done before the logic rules in GT are parsed
         trial_list = ['Forest', 'Fire', 'Water', 'Spirit', 'Shadow', 'Light']

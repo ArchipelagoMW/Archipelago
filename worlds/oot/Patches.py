@@ -2091,7 +2091,8 @@ def get_locked_doors(rom, world):
                 return [0x00D4 + scene * 0x1C + 0x04 + flag_byte, flag_bits]
 
         # If boss door, set the door's unlock flag
-        if (world.shuffle_bosskeys == 'remove' and scene != 0x0A) or (world.shuffle_ganon_bosskey == 'remove' and scene == 0x0A):
+        if (world.shuffle_bosskeys == 'remove' and scene != 0x0A) or (
+            world.shuffle_ganon_bosskey == 'remove' and scene == 0x0A and not world.triforce_hunt):
             if actor_id == 0x002E and actor_type == 0x05:
                 return [0x00D4 + scene * 0x1C + 0x04 + flag_byte, flag_bits]
 
