@@ -641,7 +641,11 @@ def calc_objectives_completed(mission, missions_info, locations_done, unfinished
 
     if missions_info[mission].extra_locations > 0:
         for i in range(missions_info[mission].extra_locations):
-            if (missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i) in locations_done:
+            # We need to look at the name of the location to check if it was a location that was removed, the ids of
+            # locations that were removed aren't used to maintain backwards compatibility so if we detect with no
+            # location data there we skip over
+            if ((missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i) in locations_done) or ctx.location_names[
+                    missions_info[mission].id * 100 + SC2WOL_LOC_ID_OFFSET + i][:16] == "Unknown location":
                 objectives_complete += 1
             else:
                 unfinished_locations[mission].append(ctx.location_names[
