@@ -1,8 +1,10 @@
 from typing import Dict, TypedDict
 
+
 class LocationDict(TypedDict, total=False):
     name: str
     region: int 
+
 
 location_table: Dict[int, LocationDict] = {
     # Waynehouse
@@ -50,9 +52,7 @@ location_table: Dict[int, LocationDict] = {
     # New Muldul Vault
     200643: {'name': "New Muldul: Talk to Pongorma",
              'region': 4},
-    #200644: {'name': "New Muldul: Pongorma Joins",
-    #         'region': 4},
-    200645: {'name': "New Muldul: Rescued Blerol",
+    200645: {'name': "New Muldul: Rescued Blerol 1",
              'region': 4},
     200646: {'name': "New Muldul: Rescued Blerol 2",
              'region': 4},
@@ -72,8 +72,6 @@ location_table: Dict[int, LocationDict] = {
              'region': 6},
     200653: {'name': "Viewax's Edifice: Talk to Dedusmuln",
              'region': 6},
-    #200654: {'name': "Viewax's Edifice: Dedusmuln Joins",
-    #         'region': 6},
     200655: {'name': "Viewax's Edifice: Canopic Jar",
              'region': 6},
     200656: {'name': "Viewax's Edifice: Cave Sarcophagus",
@@ -146,8 +144,6 @@ location_table: Dict[int, LocationDict] = {
              'region': 10},
     200688: {'name': "Juice Ranch: Battle with Somsnosa",
              'region': 10},
-    #200689: {'name': "Juice Ranch: Somsnosa Joins",
-    #         'region': 10},
     200690: {'name': "Juice Ranch: Fridge",
              'region': 10},
 
@@ -220,6 +216,8 @@ location_table: Dict[int, LocationDict] = {
              'region': 15},
     200724: {'name': "Sage Labyrinth: B2 Hidden Sarcophagus 2",
              'region': 15},
+    200754: {'name': "Sage Labyrinth: 2F Sarcophagus",
+             'region': 15},
     200725: {'name': "Sage Labyrinth: Motor Hunter Sarcophagus",
              'region': 15},
     200726: {'name': "Sage Labyrinth: Sage Item 1",
@@ -279,8 +277,11 @@ location_table: Dict[int, LocationDict] = {
     200752: {'name': "Hylemxylem: Drained Upper Reservoir Burrito 3",
              'region': 17},
     200753: {'name': "Hylemxylem: Upper Reservoir Hole Key",
-             'region': 17},
+             'region': 17}
+}
 
+
+tv_location_table: Dict[int, LocationDict] = {
     200627: {'name': "Waynehouse: TV",
              'region': 2},
     200631: {'name': "Afterlife: TV",
@@ -299,4 +300,14 @@ location_table: Dict[int, LocationDict] = {
              'region': 14},
     200735: {'name': "Sage Airship: TV",
              'region': 16}
+}
+
+
+party_location_table: Dict[int, LocationDict] = {
+    200644: {'name': "New Muldul: Pongorma Joins",
+             'region': 4},
+    200654: {'name': "Viewax's Edifice: Dedusmuln Joins",
+             'region': 6},
+    200689: {'name': "Juice Ranch: Somsnosa Joins",
+             'region': 10}
 }
