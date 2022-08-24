@@ -1,15 +1,19 @@
-from typing import Dict, List
 import os
+import typing
+# import math
 import threading
 
-from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
-from .Items import item_table, filler_items
-from .Locations import get_locations, EventId
-# from .LogicMixin import CV64Logic
+from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
+from .Items import CV64Item, ItemData, item_table, junk_table
+from .Locations import CV64Location, all_locations, setup_locations
 from .Options import cv64_options
-from .Regions import create_regions
+from .Regions import create_regions, connect_regions
+from .Levels import level_list
+from .Rules import set_rules
+from .Names import ItemName, LocationName
+from ..AutoWorld import WebWorld, World
 from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch
-from ..AutoWorld import World, WebWorld
+# import math
 
 
 class CV64Web(WebWorld):
@@ -39,19 +43,16 @@ class CV64World(World):
     data_version = 0
     # hint_blacklist = {}
     remote_items = False
-    web = CV64Web()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
+    location_name_to_id = all_locations
 
-    locked_locations: List[str]
-    location_cache: List[Location]
+    active_level_list: typing.List[str]
+    web = CV64Web()
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
-        self.location_cache = []
-        self.locked_locations = []
 
     @classmethod
     def stage_assert_generate(cls, world):
@@ -59,27 +60,56 @@ class CV64World(World):
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
 
-    def create_regions(self):
-        create_regions(self.world, self.player, get_locations(self.world, self.player),
-                       self.location_cache)
+    def _get_slot_data(self):
+        return {
+            "death_link": self.world.death_link[self.player].value,
+            "active_levels": self.active_level_list,
+        }
 
-    def create_item(self, name: str) -> Item:
-        return create_item_with_correct_settings(self.world, self.player, name)
+    def _create_items(self, name: str):
+        data = item_table[name]
+        return [self.create_item(name)] * data.quantity
 
-    def get_filler_item_name(self) -> str:
-        return self.world.random.choice(filler_items)
+    def fill_slot_data(self) -> dict:
+        slot_data = self._get_slot_data()
+        for option_name in cv64_options:
+            option = getattr(self.world, option_name)[self.player]
+            slot_data[option_name] = option.value
 
-    def set_rules(self):
-        setup_events(self.player, self.locked_locations, self.location_cache)
-
-        self.world.completion_condition[self.player] = lambda state: state.has('Youre Winner', self.player)
+        return slot_data
 
     def generate_basic(self):
-        pool = get_item_pool(self.world, self.player)
+        itempool: typing.List[CV64Item] = []
 
-        fill_item_pool_with_dummy_items(self, self.world, self.player, self.locked_locations, self.location_cache, pool)
+        # Levels
+        total_required_locations = 28
 
-        self.world.itempool += pool
+        # number_of_specials = 0
+        self.world.get_location(LocationName.the_end, self.player).place_locked_item(self.create_item(ItemName.victory))
+
+        itempool += [self.create_item(ItemName.special_one)] * 1
+        itempool += [self.create_item(ItemName.roast_beef)] * 4
+        itempool += [self.create_item(ItemName.powerup)] * 1
+        itempool += [self.create_item(ItemName.sun_card)] * 3
+        itempool += [self.create_item(ItemName.moon_card)] * 3
+        itempool += [self.create_item(ItemName.left_tower_key)] * 1
+
+        total_junk_count = total_required_locations - len(itempool)
+
+        junk_pool = []
+        for item_name in self.world.random.choices(list(junk_table.keys()), k=total_junk_count):
+            junk_pool += [self.create_item(item_name)]
+
+        itempool += junk_pool
+
+        self.active_level_list = level_list.copy()
+
+        if self.world.stage_shuffle[self.player]:
+            self.world.random.shuffle(self.active_level_list)
+
+        connect_regions(self.world, self.player, self.active_level_list)
+
+        self.world.itempool += itempool
 
     def generate_output(self, output_directory: str):
         try:
@@ -87,7 +117,7 @@ class CV64World(World):
             player = self.player
 
             rom = LocalRom(get_base_rom_path())
-            patch_rom(self.world, rom, self.player)
+            patch_rom(self.world, rom, self.player, self.active_level_list)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
@@ -117,62 +147,23 @@ class CV64World(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
-    def fill_slot_data(self) -> dict:
-        slot_data = {}
-        for option_name in cv64_options:
-            option = getattr(self.world, option_name)[self.player]
-            slot_data[option_name] = option.value
+    def create_regions(self):
+        location_table = setup_locations(self.world, self.player)
+        create_regions(self.world, self.player, location_table)
 
-        return slot_data
+    def create_item(self, name: str, force_non_progression=False) -> Item:
+        data = item_table[name]
 
+        if force_non_progression:
+            classification = ItemClassification.filler
+        elif data.progression:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
 
-def get_item_pool(world: MultiWorld, player: int) -> List[Item]:
-    pool: List[Item] = []
+        created_item = CV64Item(name, classification, data.code, self.player)
 
-    for name, data in item_table.items():
-        for _ in range(data.count):
-            item = create_item_with_correct_settings(world, player, name)
-            pool.append(item)
+        return created_item
 
-    return pool
-
-
-def fill_item_pool_with_dummy_items(self: CV64World, world: MultiWorld, player: int, locked_locations: List[str],
-                                    location_cache: List[Location], pool: List[Item]):
-    for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
-        item = create_item_with_correct_settings(world, player, self.get_filler_item_name())
-        pool.append(item)
-
-
-def create_item_with_correct_settings(world: MultiWorld, player: int, name: str) -> Item:
-    data = item_table[name]
-    if data.progression:
-        classification = ItemClassification.progression
-    else:
-        classification = ItemClassification.filler
-    item = Item(name, classification, data.code, player)
-
-    if not item.advancement:
-        return item
-
-    return item
-
-
-def setup_events(player: int, locked_locations: List[str], location_cache: List[Location]):
-    for location in location_cache:
-        if location.address == EventId:
-            item = Item(location.name, ItemClassification.progression, EventId, player)
-
-            locked_locations.append(location.name)
-
-            location.place_locked_item(item)
-
-
-def get_personal_items(player: int, locations: List[Location]) -> Dict[int, int]:
-    personal_items: Dict[int, int] = {}
-
-    for location in locations:
-        if location.address and location.item and location.item.code and location.item.player == player:
-            personal_items[location.address] = location.item.code
-
-    return personal_items
+    def set_rules(self):
+        set_rules(self.world, self.player)

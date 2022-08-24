@@ -1,9 +1,9 @@
 import Utils
 import hashlib
 import os
-import math
+# import math
 
-from BaseClasses import Location
+# from BaseClasses import Location
 from Patch import read_rom, APDeltaPatch
 
 USHASH = '1cc5cf3b4d29d8c3ade957648b529dc1'
@@ -100,7 +100,7 @@ class LocalRom(object):
 
 
 def patch_rom(world, rom, player):
-    local_random = world.slot_seeds[player]
+    # local_random = world.slot_seeds[player]
 
     # Disable vampire Vincent cutscene
     # rom.write_byte(0xAACC0, 0x24)
@@ -115,21 +115,25 @@ def patch_rom(world, rom, player):
     # rom.write_byte(0xD9E18, 0x24)
     # rom.write_byte(0xD9E19, 0x0D)
     # rom.write_byte(0xD9E1A, 0x00)
-     #rom.write_byte(0xD9E1B, 0x00)
+    # rom.write_byte(0xD9E1B, 0x00)
 
     # Fix both elevator bridges for both characters
     # rom.write_byte(0x6CEAA0, 0x24)
     # rom.write_byte(0x6CEAA1, 0x0B)
     # rom.write_byte(0x6CEAA2, 0x00)
-    #rom.write_byte(0x6CEAA3, 0x01)
-    #rom.write_byte(0x6CEAA4, 0x24)
-    #rom.write_byte(0x6CEAA5, 0x0D)
-    #rom.write_byte(0x6CEAA6, 0x00)
-    #rom.write_byte(0x6CEAA7, 0x01)
+    # rom.write_byte(0x6CEAA3, 0x01)
+    # rom.write_byte(0x6CEAA4, 0x24)
+    # rom.write_byte(0x6CEAA5, 0x0D)
+    # rom.write_byte(0x6CEAA6, 0x00)
+    # rom.write_byte(0x6CEAA7, 0x01)
 
     # Write the new item bytes
-    for locationid, address in locations_rom_data.items():
-       rom.write_byte(address, 0x11)
+    for location_name in world.location_name_to_id:
+        loc = world.get_locations(location_name, player)
+        if loc.item.player == player:
+            rom.write_byte(locations_rom_data[loc.code], loc.item.code - 0xC64000)
+        else:
+            rom.write_byte(locations_rom_data[loc.code], 0x11)
 
     from Main import __version__
     rom.name = bytearray(f'CV64{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
@@ -145,10 +149,6 @@ class CV64DeltaPatch(APDeltaPatch):
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
-
-
-# def get_item_byte(locationid):
-#    pass
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:

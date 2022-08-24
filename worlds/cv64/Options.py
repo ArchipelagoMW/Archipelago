@@ -23,14 +23,11 @@ class StartLocation(Choice):
     option_random_map = 4
 
 
-class EntranceRandomization(Choice):
-    """Sets which map exit destinations to shuffle. Regardless of the setting or character chosen, the Villa coffin and
-    Castle Center elevator bridges can possibly send you to two different places (depending on whether it is day or
-    night for the former)."""
-    display_name = "Entrance Randomization"
-    option_none = 0
-    option_stages = 1
-    option_all = 2
+class StageShuffle(Toggle):
+    """Shuffles the order the stages link up in. The Villa coffin can send you to one of two stages depending on the
+    time of day, and both Castle Center elevator bridges are intact for both characters and also lead to different
+    places regardless of the chosen character or setting."""
+    display_name = "Stage Shuffle"
 
 
 class DraculasChamberCondition(Choice):
@@ -129,7 +126,7 @@ class GlitchLogic(Toggle):
 cv64_options: Dict[str, Option] = {
     "number_of_stages": NumberOfStages,
     "start_location": StartLocation,
-    "entrance_randomization": EntranceRandomization,
+    "stage_shuffle": StageShuffle,
     "special2s_per_warp": Special2sPerWarp,
     "extra_special2s": ExtraSpecial2s,
     "draculas_condition": DraculasChamberCondition,

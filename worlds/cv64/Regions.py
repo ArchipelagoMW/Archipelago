@@ -1,132 +1,211 @@
-from typing import List, Set, Dict, Tuple, Optional, Callable
-from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
-from .Locations import LocationData
+import typing
+
+from BaseClasses import MultiWorld, Region, Entrance
+from .Items import CV64Item
+from .Locations import CV64Location
+from .Names import LocationName, ItemName
 
 
-def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location]):
-    locations_per_region = get_locations_per_region(locations)
+class LevelGate:
+    gate_levels: typing.List[int]
+    gate_emblem_count: int
 
-    regions = [
-        create_region(world, player, locations_per_region, location_cache, 'Menu'),
-        create_region(world, player, locations_per_region, location_cache, 'Forest of Silence - start'),
-        create_region(world, player, locations_per_region, location_cache, 'Forest of Silence - switch 1'),
-        create_region(world, player, locations_per_region, location_cache, 'Forest of Silence - switch 2'),
-        create_region(world, player, locations_per_region, location_cache, 'Forest of Silence - switch 3'),
-        create_region(world, player, locations_per_region, location_cache, 'Forest of Silence - end'),
-        create_region(world, player, locations_per_region, location_cache, 'Castle Wall main - start'),
-        create_region(world, player, locations_per_region, location_cache, 'Castle Wall main - exit to Villa'),
-        create_region(world, player, locations_per_region, location_cache, 'Castle Wall main - Bone Dragon switch'),
-        create_region(world, player, locations_per_region, location_cache, 'Castle Wall main - Dracula switch'),
-        create_region(world, player, locations_per_region, location_cache, 'Castle Wall main - descent'),
-        create_region(world, player, locations_per_region, location_cache, 'Castle Wall - left tower'),
-        create_region(world, player, locations_per_region, location_cache, 'Castle Wall - right tower'),
-        #create_region(world, player, locations_per_region, location_cache, 'Villa front yard - cerberus side'),
-        #create_region(world, player, locations_per_region, location_cache, 'Villa front yard - fountain side'),
-        #create_region(world, player, locations_per_region, location_cache, 'Villa foyer - main'),
-        #create_region(world, player, locations_per_region, location_cache, 'Villa foyer - servant entrance'),
-        #create_region(world, player, locations_per_region, location_cache, 'Villa living area - main'),
-        #create_region(world, player, locations_per_region, location_cache, 'Villa living area - storeroom'),
-        #create_region(world, player, locations_per_region, location_cache, 'Villa living area - archives'),
-        #create_region(world, player, locations_per_region, location_cache, 'Villa maze - front entrance'),
-        #create_region(world, player, locations_per_region, location_cache, 'Villa maze - back entrance'),
-        #create_region(world, player, locations_per_region, location_cache, 'Villa maze - crypt entrance'),
-        #create_region(world, player, locations_per_region, location_cache, 'Villa maze - main'),
-        #create_region(world, player, locations_per_region, location_cache, 'Villa vampire crypt'),
-        #create_region(world, player, locations_per_region, location_cache, 'Tunnel'),
-        #create_region(world, player, locations_per_region, location_cache, 'Underground Waterway - main'),
-        #create_region(world, player, locations_per_region, location_cache, 'Underground Waterway - mid'),
-        #create_region(world, player, locations_per_region, location_cache, 'Underground Waterway - Carrie crawlspace'),
-        #create_region(world, player, locations_per_region, location_cache, 'Fan meeting room'),
-        #create_region(world, player, locations_per_region, location_cache, 'Castle Center basement - main'),
-        #create_region(world, player, locations_per_region, location_cache, 'Castle Center basement - giant crystal'),
-        #create_region(world, player, locations_per_region, location_cache, 'Castle Center basement - torture chamber'),
-        #create_region(world, player, locations_per_region, location_cache, 'Castle Center elevator bottom'),
-        #create_region(world, player, locations_per_region, location_cache, 'Castle Center elevator top'),
-        #create_region(world, player, locations_per_region, location_cache, 'Castle Center factory floor'),
-        #create_region(world, player, locations_per_region, location_cache, 'Castle Center lizard lab - main'),
-        #create_region(world, player, locations_per_region, location_cache, 'Castle Center lizard lab - cracked wall'),
-        #create_region(world, player, locations_per_region, location_cache, 'Castle Center library'),
-        #create_region(world, player, locations_per_region, location_cache, 'Castle Center inventions - main'),
-        #create_region(world, player, locations_per_region, location_cache, 'Castle Center inventions - lizard exit'),
-        #create_region(world, player, locations_per_region, location_cache, 'Duel Tower'),
-        #create_region(world, player, locations_per_region, location_cache, 'Tower of Sorcery'),
-        #create_region(world, player, locations_per_region, location_cache, 'Tower of Execution - main'),
-        #create_region(world, player, locations_per_region, location_cache, 'Tower of Execution - gated ledge'),
-        #create_region(world, player, locations_per_region, location_cache, 'Tower of Science - main turret room'),
-        #create_region(world, player, locations_per_region, location_cache, 'Tower of Science - key2 hallway'),
-        #create_region(world, player, locations_per_region, location_cache, 'Tower of Science - spiky conveyors'),
-        #create_region(world, player, locations_per_region, location_cache, 'Tower of Science - locked key3 room'),
-        #create_region(world, player, locations_per_region, location_cache, 'Room of Clocks'),
-        #create_region(world, player, locations_per_region, location_cache, 'Clock Tower - start'),
-        #create_region(world, player, locations_per_region, location_cache, 'Clock Tower - middle'),
-        #create_region(world, player, locations_per_region, location_cache, 'Clock Tower - end'),
-        #create_region(world, player, locations_per_region, location_cache, 'Castle Keep - staircase'),
-        #create_region(world, player, locations_per_region, location_cache, 'Castle Keep - story boss tower'),
-        #create_region(world, player, locations_per_region, location_cache, 'Drac chamber'),
-        #create_region(world, player, locations_per_region, location_cache, 'Stage Select'),
+    def __init__(self, emblems):
+        self.gate_emblem_count = emblems
+        self.gate_levels = list()
+
+
+shuffleable_regions = [
+    LocationName.forest_of_silence,
+    LocationName.castle_wall,
+    LocationName.villa,
+    LocationName.tunnel,
+    LocationName.underground_waterway,
+    LocationName.castle_center,
+    LocationName.duel_tower,
+    LocationName.tower_of_execution,
+    LocationName.tower_of_science,
+    LocationName.tower_of_sorcery,
+    LocationName.room_of_clocks,
+    LocationName.clock_tower,
+]
+
+
+def create_regions(world, player: int, active_locations):
+    menu_region = create_region(world, player, active_locations, 'Menu', None, None)
+    gate_0_region = create_region(world, player, active_locations, 'Gate 0', None, None)
+    gate_1_region = create_region(world, player, active_locations, 'Gate 1', None, None)
+    gate_2_region = create_region(world, player, active_locations, 'Gate 2', None, None)
+    gate_3_region = create_region(world, player, active_locations, 'Gate 3', None, None)
+    gate_4_region = create_region(world, player, active_locations, 'Gate 4', None, None)
+    gate_5_region = create_region(world, player, active_locations, 'Gate 5', None, None)
+    gate_6_region = create_region(world, player, active_locations, 'Gate 6', None, None)
+    gate_7_region = create_region(world, player, active_locations, 'Gate 7', None, None)
+
+    # Forest of Silence regions
+
+    forest_start_region_locations = [
+        LocationName.forest_main_torch1,
+        LocationName.forest_main_torch2,
+        LocationName.forest_main_torch3,
+    ]
+    forest_start_region = create_region(world, player, active_locations, LocationName.forest_of_silence,
+                                        forest_start_region_locations, None)
+
+    forest_switch1_region_locations = [
+        LocationName.forest_main_torch4,
+        LocationName.forest_main_torch5,
+        LocationName.forest_main_torch6,
+        LocationName.forest_main_torch7,
+        LocationName.forest_main_torch8,
+    ]
+    forest_switch1_region = create_region(world, player, active_locations, LocationName.forest_switch1,
+                                          forest_switch1_region_locations, None)
+
+    forest_switch2_region_locations = [
+        LocationName.forest_main_torch9,
+        LocationName.forest_main_torch10,
+        LocationName.forest_main_torch11,
+        LocationName.forest_main_torch12,
+        LocationName.forest_main_torch13,
+    ]
+    forest_switch2_region = create_region(world, player, active_locations, LocationName.forest_switch2,
+                                          forest_switch2_region_locations, None)
+
+    forest_switch3_region_locations = [
+        LocationName.forest_main_torch14,
+        LocationName.forest_main_torch15,
+        LocationName.forest_main_torch16,
+        LocationName.forest_main_torch17,
+        LocationName.forest_main_torch18,
+        LocationName.forest_main_torch19,
+        LocationName.forest_main_torch20,
+    ]
+    forest_switch3_region = create_region(world, player, active_locations, LocationName.forest_switch3,
+                                          forest_switch3_region_locations, None)
+
+    forest_end_region_locations = []
+    forest_end_region = create_region(world, player, active_locations, LocationName.forest_end,
+                                      forest_end_region_locations, None)
+
+    # Castle Wall regions
+
+    cw_start_region_locations = []
+    cw_start_region = create_region(world, player, active_locations, LocationName.castle_wall,
+                                    cw_start_region_locations, None)
+
+    cw_exit_region_locations = [
+        LocationName.cw_main_torch4
+    ]
+    cw_exit_region = create_region(world, player, active_locations, LocationName.cw_exit,
+                                   cw_exit_region_locations, None)
+
+    cw_descent_region_locations = [
+        LocationName.cw_main_torch5,
+        LocationName.cw_main_torch6
+    ]
+    cw_descent_region = create_region(world, player, active_locations, LocationName.cw_descent,
+                                      cw_descent_region_locations, None)
+
+    cw_bone_dragon_region_locations = [
+        LocationName.cw_main_torch7
+    ]
+    cw_bone_dragon_region = create_region(world, player, active_locations, LocationName.cw_bd_switch,
+                                          cw_bone_dragon_region_locations, None)
+
+    cw_dracula_region_locations = [
+        LocationName.cw_main_torch8
+    ]
+    cw_dracula_region = create_region(world, player, active_locations, LocationName.cw_drac_switch,
+                                      cw_dracula_region_locations, None)
+
+    cw_rtower_region_locations = [
+        LocationName.cw_main_torch1
+    ]
+    cw_rtower_region = create_region(world, player, active_locations, LocationName.cw_rtower,
+                                     cw_rtower_region_locations, None)
+
+    cw_ltower_region_locations = [
+        LocationName.cw_main_torch2,
+        LocationName.cw_main_torch3
+    ]
+    cw_ltower_region = create_region(world, player, active_locations, LocationName.cw_ltower,
+                                     cw_ltower_region_locations, None)
+
+    villa_start_region_locations = [
+        LocationName.the_end
+    ]
+    villa_start_region = create_region(world, player, active_locations, LocationName.villa,
+                                       villa_start_region_locations, None)
+
+    # Set up the regions correctly.
+    world.regions += [
+        menu_region,
+        # gate_0_region,
+        # gate_1_region,
+        # gate_2_region,
+        # gate_3_region,
+        # gate_4_region,
+        # gate_5_region,
+        # gate_6_region,
+        # gate_7_region,
+        forest_start_region,
+        forest_switch1_region,
+        forest_switch2_region,
+        forest_switch3_region,
+        forest_end_region,
+        cw_start_region,
+        cw_exit_region,
+        cw_bone_dragon_region,
+        cw_dracula_region,
+        cw_rtower_region,
+        cw_ltower_region,
+        villa_start_region
     ]
 
-    if __debug__:
-        throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region.keys())
-        
-    world.regions += regions
 
-    names: Dict[str, int] = {}
+def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_emblems, gate_bosses):
+    names: typing.Dict[str, int] = {}
 
-    connect(world, player, names, 'Menu', 'Forest of Silence - start')
-    connect(world, player, names, 'Forest of Silence - start', 'Forest of Silence - switch 1')
-    connect(world, player, names, 'Forest of Silence - switch 1', 'Forest of Silence - switch 2')
-    connect(world, player, names, 'Forest of Silence - switch 2', 'Forest of Silence - switch 3')
-    connect(world, player, names, 'Forest of Silence - switch 3', 'Forest of Silence - end')
-    connect(world, player, names, 'Forest of Silence - end', 'Castle Wall main - start')
-    connect(world, player, names, 'Castle Wall main - start', 'Castle Wall - right tower')
-    connect(world, player, names, 'Castle Wall main - start', 'Castle Wall - left tower',
-            lambda state: state.has('Left Tower Key', player))
-    connect(world, player, names, 'Castle Wall - right tower', 'Castle Wall main - Bone Dragon switch')
-    connect(world, player, names, 'Castle Wall - left tower', 'Castle Wall main - Dracula switch')
-    connect(world, player, names, 'Castle Wall main - Bone Dragon switch', 'Castle Wall main - descent')
-    connect(world, player, names, 'Castle Wall main - Dracula switch', 'Castle Wall main - descent')
-    connect(world, player, names, 'Castle Wall main - Bone Dragon switch', 'Castle Wall main - exit to Villa')
-
-
-def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionNames: Set[str]):
-    existingRegions = set()
-
-    for region in regions:
-        existingRegions.add(region.name)
-
-    if regionNames - existingRegions:
-        raise Exception("Castlevania: the following regions are used in locations: {}, but no such region exists".format(regionNames - existingRegions))
+    connect(world, player, names, 'Menu', LocationName.forest_of_silence)
+    connect(world, player, names, LocationName.forest_of_silence, LocationName.forest_switch1)
+    connect(world, player, names, LocationName.forest_switch1, LocationName.forest_switch2)
+    connect(world, player, names, LocationName.forest_switch3, LocationName.forest_switch3)
+    connect(world, player, names, LocationName.forest_switch3, LocationName.forest_end)
+    connect(world, player, names, LocationName.forest_end, LocationName.castle_wall)
+    connect(world, player, names, LocationName.castle_wall, LocationName.cw_rtower)
+    connect(world, player, names, LocationName.cw_rtower, LocationName.cw_bd_switch)
+    connect(world, player, names, LocationName.cw_bd_switch, LocationName.cw_descent)
+    connect(world, player, names, LocationName.cw_bd_switch, LocationName.cw_exit)
+    connect(world, player, names, LocationName.cw_descent, LocationName.castle_wall)
+    connect(world, player, names, LocationName.castle_wall, LocationName.cw_ltower,
+            lambda state: (state.has(ItemName.left_tower_key, player)))
+    connect(world, player, names, LocationName.cw_ltower, LocationName.cw_drac_switch)
+    connect(world, player, names, LocationName.cw_drac_switch, LocationName.cw_descent)
+    connect(world, player, names, LocationName.cw_exit, LocationName.villa,
+            lambda state: (state.can_reach(LocationName.cw_drac_switch, player)))
 
 
-def create_location(player: int, location_data: LocationData, region: Region,
-                    location_cache: List[Location]) -> Location:
-    location = Location(player, location_data.name, location_data.code, region)
-    location.access_rule = location_data.rule
+def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):
+    # Shamelessly stolen from the SA2B definition, which was in turn shamelessly stolen from the ROR2 definition.
+    # Anyone want to continue the chain?
+    ret = Region(name, None, name, player)
+    ret.world = world
+    if locations:
+        for location in locations:
+            loc_id = active_locations.get(location, 0)
+            if loc_id:
+                location = CV64Location(player, location, loc_id, ret)
+                ret.locations.append(location)
+    if exits:
+        for exit in exits:
+            ret.exits.append(Entrance(player, exit, ret))
 
-    if id is None:
-        location.event = True
-        location.locked = True
-
-    location_cache.append(location)
-
-    return location
-
-
-def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]],
-                  location_cache: List[Location], name: str) -> Region:
-    region = Region(name, RegionType.Generic, name, player)
-    region.world = world
-
-    if name in locations_per_region:
-        for location_data in locations_per_region[name]:
-            location = create_location(player, location_data, region, location_cache)
-            region.locations.append(location)
-
-    return region
+    return ret
 
 
-def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: str, target: str, rule: Optional[Callable] = None):
+def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], source: str, target: str,
+            rule: typing.Optional[typing.Callable] = None):
     source_region = world.get_region(source, player)
     target_region = world.get_region(target, player)
 
@@ -144,12 +223,3 @@ def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: 
 
     source_region.exits.append(connection)
     connection.connect(target_region)
-
-
-def get_locations_per_region(locations: Tuple[LocationData, ...]) -> Dict[str, List[LocationData]]:
-    per_region: Dict[str, List[LocationData]]  = {}
-
-    for location in locations:
-        per_region.setdefault(location.region, []).append(location)
-
-    return per_region
