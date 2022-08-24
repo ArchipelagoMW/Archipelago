@@ -186,8 +186,7 @@ async def gba_sync_task(ctx: MMBN3Context):
         else:
             try:
                 logger.debug("Attempting to connect to GBA")
-                # TODO This one has a port 28921. Not sure if that needs to be DIFFERENT than OOT, or IDENTICAL. Must ask.
-                ctx.gba_streams = await asyncio.wait_for(asyncio.open_connection("localhost", 28921), timeout=10)
+                ctx.gba_streams = await asyncio.wait_for(asyncio.open_connection("localhost", 28922), timeout=10)
                 ctx.gba_status = CONNECTION_TENTATIVE_STATUS
             except TimeoutError:
                 logger.debug("Connection Timed Out, Trying Again")
