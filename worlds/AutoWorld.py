@@ -2,10 +2,14 @@ from __future__ import annotations
 
 import logging
 import sys
-from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, NamedTuple
+import pathlib
+from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, TYPE_CHECKING
 
-from BaseClasses import MultiWorld, Item, CollectionState, Location, Tutorial
 from Options import Option
+from BaseClasses import CollectionState
+
+if TYPE_CHECKING:
+    from BaseClasses import MultiWorld, Item, Location, Tutorial
 
 
 class AutoWorldRegister(type):
@@ -23,7 +27,8 @@ class AutoWorldRegister(type):
 
         # build rest
         dct["item_names"] = frozenset(dct["item_name_to_id"])
-        dct["item_name_groups"] = dct.get("item_name_groups", {})
+        dct["item_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
+                                   in dct.get("item_name_groups", {}).items()}
         dct["item_name_groups"]["Everything"] = dct["item_names"]
         dct["location_names"] = frozenset(dct["location_name_to_id"])
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
@@ -41,14 +46,18 @@ class AutoWorldRegister(type):
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
         if "game" in dct:
+            if dct["game"] in AutoWorldRegister.world_types:
+                raise RuntimeError(f"""Game {dct["game"]} already registered.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
         new_class.__file__ = sys.modules[new_class.__module__].__file__
+        if ".apworld" in new_class.__file__:
+            new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
         return new_class
 
 
 class AutoLogicRegister(type):
-    def __new__(cls, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoLogicRegister:
-        new_class = super().__new__(cls, name, bases, dct)
+    def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoLogicRegister:
+        new_class = super().__new__(mcs, name, bases, dct)
         function: Callable[..., Any]
         for item_name, function in dct.items():
             if item_name == "copy_mixin":
@@ -62,12 +71,12 @@ class AutoLogicRegister(type):
         return new_class
 
 
-def call_single(world: MultiWorld, method_name: str, player: int, *args: Any) -> Any:
+def call_single(world: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
     method = getattr(world.worlds[player], method_name)
     return method(*args)
 
 
-def call_all(world: MultiWorld, method_name: str, *args: Any) -> None:
+def call_all(world: "MultiWorld", method_name: str, *args: Any) -> None:
     world_types: Set[AutoWorldRegister] = set()
     for player in world.player_ids:
         world_types.add(world.worlds[player].__class__)
@@ -79,7 +88,7 @@ def call_all(world: MultiWorld, method_name: str, *args: Any) -> None:
             stage_callable(world, *args)
 
 
-def call_stage(world: MultiWorld, method_name: str, *args: Any) -> None:
+def call_stage(world: "MultiWorld", method_name: str, *args: Any) -> None:
     world_types = {world.worlds[player].__class__ for player in world.player_ids}
     for world_type in world_types:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
@@ -89,29 +98,29 @@ def call_stage(world: MultiWorld, method_name: str, *args: Any) -> None:
 
 class WebWorld:
     """Webhost integration"""
-    # display a settings page. Can be a link to an out-of-ap settings tool too.
+    
     settings_page: Union[bool, str] = True
-
-    # docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'
+    """display a settings page. Can be a link to a specific page or external tool."""
+    
     game_info_languages: List[str] = ['en']
+    """docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'"""
 
-    # docs folder will also be scanned for tutorial guides given the relevant information in this list. Each Tutorial
-    # class is to be used for one guide.
-    tutorials: List[Tutorial]
+    tutorials: List["Tutorial"]
+    """docs folder will also be scanned for tutorial guides. Each Tutorial class is to be used for one guide."""
 
-    # Choose a theme for your /game/* pages
-    # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone
     theme = "grass"
+    """Choose a theme for you /game/* pages.
+    Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone"""
 
-    # display a link to a bug report page, most likely a link to a GitHub issue page.
     bug_report_page: Optional[str]
+    """display a link to a bug report page, most likely a link to a GitHub issue page."""
 
 
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    options: Dict[str, Option[Any]] = {}  # link your Options mapping
+    option_definitions: Dict[str, Option[Any]] = {}  # link your Options mapping
     game: str  # name the game
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
 
@@ -159,8 +168,11 @@ class World(metaclass=AutoWorldRegister):
     # Hide World Type from various views. Does not remove functionality.
     hidden: bool = False
 
+    # see WebWorld for options
+    web: WebWorld = WebWorld()
+
     # autoset on creation:
-    world: MultiWorld
+    world: "MultiWorld"
     player: int
 
     # automatically generated
@@ -170,9 +182,10 @@ class World(metaclass=AutoWorldRegister):
     item_names: Set[str]  # set of all potential item names
     location_names: Set[str]  # set of all potential location names
 
-    web: WebWorld = WebWorld()
+    zip_path: Optional[pathlib.Path] = None  # If loaded from a .apworld, this is the Path to it.
+    __file__: str  # path it was loaded from
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, world: "MultiWorld", player: int):
         self.world = world
         self.player = player
 
@@ -207,12 +220,12 @@ class World(metaclass=AutoWorldRegister):
 
     @classmethod
     def fill_hook(cls,
-                  progitempool: List[Item],
-                  nonexcludeditempool: List[Item],
-                  localrestitempool: Dict[int, List[Item]],
-                  nonlocalrestitempool: Dict[int, List[Item]],
-                  restitempool: List[Item],
-                  fill_locations: List[Location]) -> None:
+                  progitempool: List["Item"],
+                  nonexcludeditempool: List["Item"],
+                  localrestitempool: Dict[int, List["Item"]],
+                  nonlocalrestitempool: Dict[int, List["Item"]],
+                  restitempool: List["Item"],
+                  fill_locations: List["Location"]) -> None:
         """Special method that gets called as part of distribute_items_restrictive (main fill).
         This gets called once per present world type."""
         pass
@@ -250,7 +263,7 @@ class World(metaclass=AutoWorldRegister):
 
     # end of ordered Main.py calls
 
-    def create_item(self, name: str) -> Item:
+    def create_item(self, name: str) -> "Item":
         """Create an item for this world type and player.
         Warning: this may be called with self.world = None, for example by MultiServer"""
         raise NotImplementedError
@@ -261,7 +274,7 @@ class World(metaclass=AutoWorldRegister):
         return self.world.random.choice(tuple(self.item_name_to_id.keys()))
 
     # decent place to implement progressive items, in most cases can stay as-is
-    def collect_item(self, state: CollectionState, item: Item, remove: bool = False) -> Optional[str]:
+    def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
         """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
         Collect None to skip item.
         :param state: CollectionState to collect into
@@ -272,18 +285,18 @@ class World(metaclass=AutoWorldRegister):
         return None
 
     # called to create all_state, return Items that are created during pre_fill
-    def get_pre_fill_items(self) -> List[Item]:
+    def get_pre_fill_items(self) -> List["Item"]:
         return []
 
     # following methods should not need to be overridden.
-    def collect(self, state: CollectionState, item: Item) -> bool:
+    def collect(self, state: "CollectionState", item: "Item") -> bool:
         name = self.collect_item(state, item)
         if name:
             state.prog_items[name, self.player] += 1
             return True
         return False
 
-    def remove(self, state: CollectionState, item: Item) -> bool:
+    def remove(self, state: "CollectionState", item: "Item") -> bool:
         name = self.collect_item(state, item, True)
         if name:
             state.prog_items[name, self.player] -= 1
@@ -292,7 +305,7 @@ class World(metaclass=AutoWorldRegister):
             return True
         return False
 
-    def create_filler(self) -> Item:
+    def create_filler(self) -> "Item":
         return self.create_item(self.get_filler_item_name())
 
 

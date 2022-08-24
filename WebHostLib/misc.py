@@ -124,7 +124,7 @@ def display_log(room: UUID):
 
 @app.route('/room/<suuid:room>', methods=['GET', 'POST'])
 def host_room(room: UUID):
-    room = Room.get(id=room)
+    room: Room = Room.get(id=room)
     if room is None:
         return abort(404)
     if request.method == "POST":
@@ -134,10 +134,13 @@ def host_room(room: UUID):
                 Command(room=room, commandtext=cmd)
                 commit()
 
+    now = datetime.datetime.utcnow()
+    # indicate that the page should reload to get the assigned port
+    should_refresh = not room.last_port and now - room.creation_time < datetime.timedelta(seconds=3)
     with db_session:
-        room.last_activity = datetime.datetime.utcnow()  # will trigger a spinup, if it's not already running
+        room.last_activity = now  # will trigger a spinup, if it's not already running
 
-    return render_template("hostRoom.html", room=room)
+    return render_template("hostRoom.html", room=room, should_refresh=should_refresh)
 
 
 @app.route('/favicon.ico')
@@ -153,7 +156,7 @@ def discord():
 
 @app.route('/datapackage')
 @cache.cached()
-def get_datapackge():
+def get_datapackage():
     """A pretty print version of /api/datapackage"""
     from worlds import network_data_package
     import json

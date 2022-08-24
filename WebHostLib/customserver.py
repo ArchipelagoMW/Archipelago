@@ -103,7 +103,7 @@ class WebHostContext(Context):
         room.multisave = pickle.dumps(self.get_save())
         # saving only occurs on activity, so we can "abuse" this information to mark this as last_activity
         if not exit_save:  # we don't want to count a shutdown as activity, which would restart the server again
-            room.last_activity = datetime.utcnow()
+            room.last_activity = datetime.datetime.utcnow()
         return True
 
     def get_save(self) -> dict:

@@ -34,12 +34,12 @@ class SM64World(World):
     item_name_to_id = item_table
     location_name_to_id = location_table
 
-    data_version = 6
+    data_version = 7
     required_client_version = (0, 3, 0)
 
     area_connections: typing.Dict[int, int]
 
-    options = sm64_options
+    option_definitions = sm64_options
 
     def generate_early(self):
         self.topology_present = self.world.AreaRandomizer[self.player].value
@@ -71,7 +71,6 @@ class SM64World(World):
         return item
 
     def generate_basic(self):
-        staritem = self.create_item("Power Star")
         starcount = self.world.AmountOfStars[self.player].value
         if (not self.world.EnableCoinStars[self.player].value):
             starcount = max(35,self.world.AmountOfStars[self.player].value-15)
@@ -79,17 +78,15 @@ class SM64World(World):
                         self.world.BasementStarDoorCost[self.player].value, self.world.SecondFloorStarDoorCost[self.player].value,
                         self.world.MIPS1Cost[self.player].value, self.world.MIPS2Cost[self.player].value,
                         self.world.StarsToFinish[self.player].value)
-        self.world.itempool += [staritem for i in range(0,starcount)]
-        mushroomitem = self.create_item("1Up Mushroom") 
-        self.world.itempool += [mushroomitem for i in range(starcount,120 - (15 if not self.world.EnableCoinStars[self.player].value else 0))]
+        self.world.itempool += [self.create_item("Power Star") for i in range(0,starcount)]
+        self.world.itempool += [self.create_item("1Up Mushroom") for i in range(starcount,120 - (15 if not self.world.EnableCoinStars[self.player].value else 0))]
 
         if (not self.world.ProgressiveKeys[self.player].value):
             key1 = self.create_item("Basement Key")
             key2 = self.create_item("Second Floor Key")
             self.world.itempool += [key1,key2]
         else:
-            key = self.create_item("Progressive Key")
-            self.world.itempool += [key,key]
+            self.world.itempool += [self.create_item("Progressive Key") for i in range(0,2)]
 
         wingcap = self.create_item("Wing Cap")
         metalcap = self.create_item("Metal Cap")
@@ -110,6 +107,39 @@ class SM64World(World):
             self.world.get_location("THI: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock THI"))
             self.world.get_location("RR: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock RR"))
 
+        if (self.world.ExclamationBoxes[self.player].value > 0):
+            self.world.itempool += [self.create_item("1Up Mushroom") for i in range(0,29)]
+        else:
+            self.world.get_location("CCM: 1Up Block Near Snowman", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("CCM: 1Up Block Ice Pillar", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("CCM: 1Up Block Secret Slide", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("BBH: 1Up Block Top of Mansion", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("HMC: 1Up Block above Pit", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("HMC: 1Up Block Past Rolling Rocks", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("SSL: 1Up Block Outside Pyramid", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("SSL: 1Up Block Pyramid Left Path", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("SSL: 1Up Block Pyramid Back", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("SL: 1Up Block Near Moneybags", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("SL: 1Up Block inside Igloo", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("WDW: 1Up Block in Downtown", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("TTM: 1Up Block on Red Mushroom", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("THI: 1Up Block THI Small near Start", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("THI: 1Up Block THI Large near Start", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("THI: 1Up Block Windy Area", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("TTC: 1Up Block Midway Up", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("TTC: 1Up Block at the Top", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("RR: 1Up Block Top of Red Coin Maze", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("RR: 1Up Block Under Fly Guy", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("RR: 1Up Block On House in the Sky", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("Bowser in the Dark World 1Up Block on Tower", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("Bowser in the Dark World 1Up Block near Goombas", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("Cavern of the Metal Cap 1Up Block", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("Vanish Cap Under the Moat 1Up Block", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("Bowser in the Fire Sea 1Up Block Swaying Stairs", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("Bowser in the Fire Sea 1Up Block Near Poles", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("Wing Mario Over the Rainbow 1Up Block", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+            self.world.get_location("Bowser in the Sky 1Up Block", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+
     def get_filler_item_name(self) -> str:
         return "1Up Mushroom"
 
@@ -118,7 +148,7 @@ class SM64World(World):
             "AreaRando": self.area_connections,
             "FirstBowserDoorCost": self.world.FirstBowserStarDoorCost[self.player].value,
             "BasementDoorCost": self.world.BasementStarDoorCost[self.player].value,
-            "SecondFloorCost": self.world.SecondFloorStarDoorCost[self.player].value,
+            "SecondFloorDoorCost": self.world.SecondFloorStarDoorCost[self.player].value,
             "MIPS1Cost": self.world.MIPS1Cost[self.player].value,
             "MIPS2Cost": self.world.MIPS2Cost[self.player].value,
             "StarsToFinish": self.world.StarsToFinish[self.player].value,

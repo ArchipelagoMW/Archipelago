@@ -33,11 +33,11 @@ class SC2WoLWorld(World):
 
     game = "Starcraft 2 Wings of Liberty"
     web = Starcraft2WoLWebWorld()
-    data_version = 2
+    data_version = 3
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
-    options = sc2wol_options
+    option_definitions = sc2wol_options
 
     item_name_groups = item_name_groups
     locked_locations: typing.List[str]
