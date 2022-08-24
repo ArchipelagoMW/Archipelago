@@ -21,19 +21,20 @@ class Overcooked2World(Enum):
             return 8
 
         return 6
-    
+
     def get_base_id(self) -> int:
         if self == Overcooked2World.ONE:
             return 1
 
         prev = Overcooked2World(self.value - 1)
         return prev.get_base_id() + prev.get_sublevel_count()
-    
+
     def name(self) -> str:
         if self == Overcooked2World.KEVIN:
             return "Kevin"
-        
+
         return "World " + self.as_str()
+
 
 class Overcooked2Level:
     world: Overcooked2World
@@ -55,14 +56,32 @@ class Overcooked2Level:
                 raise StopIteration
             self.world = Overcooked2World(self.world.value + 1)
             self.sublevel = 1
-        
+
         return self
 
     def level_id(self) -> int:
         return self.world.get_base_id() + (self.sublevel - 1)
-    
+
     def level_name(self) -> str:
         return self.world.as_str() + "-" + str(self.sublevel)
+
+    def reward_id_one_star(self) -> int:
+        return 1000 + self.level_id()
+
+    def reward_id_two_star(self) -> int:
+        return 2000 + self.level_id()
+
+    def reward_id_three_star(self) -> int:
+        return 3000 + self.level_id()
+
+    def reward_name_one_star(self) -> str:
+        return self.level_name() + " Reward (1-Star)"
+
+    def reward_name_two_star(self) -> str:
+        return self.level_name() + " Reward (2-Star)"
+
+    def reward_name_three_star(self) -> str:
+        return self.level_name() + " Reward (3-Star)"
 
     def world_name(self) -> str:
         return self.world.name()
