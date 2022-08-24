@@ -39,10 +39,12 @@ class Overcooked2World(Enum):
 class Overcooked2Level:
     world: Overcooked2World
     sublevel: int
-    as_str: bool
 
-    def __init__(self, as_str=False):
-        self.as_str = as_str
+    def __init__(self, world: Overcooked2World, sublevel: int):
+        self.world = world
+        self.sublevel = sublevel
+
+    def __init__(self):
         self.world = Overcooked2World.ONE
         self.sublevel = 0
 
@@ -65,22 +67,22 @@ class Overcooked2Level:
     def level_name(self) -> str:
         return self.world.as_str() + "-" + str(self.sublevel)
 
-    def reward_id_one_star(self) -> int:
+    def location_id_one_star(self) -> int:
         return 1000 + self.level_id()
 
-    def reward_id_two_star(self) -> int:
+    def location_id_two_star(self) -> int:
         return 2000 + self.level_id()
 
-    def reward_id_three_star(self) -> int:
+    def location_id_three_star(self) -> int:
         return 3000 + self.level_id()
 
-    def reward_name_one_star(self) -> str:
+    def location_name_one_star(self) -> str:
         return self.level_name() + " Reward (1-Star)"
 
-    def reward_name_two_star(self) -> str:
+    def location_name_two_star(self) -> str:
         return self.level_name() + " Reward (2-Star)"
 
-    def reward_name_three_star(self) -> str:
+    def location_name_three_star(self) -> str:
         return self.level_name() + " Reward (3-Star)"
 
     def world_name(self) -> str:
