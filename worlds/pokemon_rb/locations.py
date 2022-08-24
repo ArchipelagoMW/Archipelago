@@ -304,7 +304,7 @@ def get_locations(player=None):
                      Missable(207), lambda state: state._pokemon_rb_can_surf(player)),
         LocationData("Cerulean Cave 2F", "Item 3", "Full Restore", rom_addresses["Missable_Cerulean_Cave_2F_Item_3"],
                      Missable(208), lambda state: state._pokemon_rb_can_surf(player)),
-        LocationData("Cerulean Cave B1F", "tem 1", "Ultra Ball", rom_addresses["Missable_Cerulean_Cave_B1F_Item_1"],
+        LocationData("Cerulean Cave B1F", "Item 1", "Ultra Ball", rom_addresses["Missable_Cerulean_Cave_B1F_Item_1"],
                      Missable(210)),
         LocationData("Cerulean Cave B1F", "Item 2", "Max Revive", rom_addresses["Missable_Cerulean_Cave_B1F_Item_2"],
                      Missable(211)),

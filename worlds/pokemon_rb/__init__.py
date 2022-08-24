@@ -10,6 +10,7 @@ from .options import pokemon_rb_options
 from .rom_addresses import rom_addresses
 from .text import encode_text
 from Patch import APDeltaPatch, read_rom
+from .poke_data import pokemons, types, type_chart
 import Utils
 import os
 import hashlib
@@ -89,7 +90,7 @@ class PokemonRedBlueWorld(World):
                 loc = self.world.get_location("Pallet Town - Player's PC", self.player)
             else:
                 loc = self.world.get_location("Viridian City - Pokemart Quest", self.player)
-            for i, item in item_pool:
+            for i, item in enumerate(item_pool):
                 if item.name == "Oak's Parcel":
                     loc.place_locked_item(item_pool.pop(i))
 
@@ -139,7 +140,7 @@ class PokemonRedBlueWorld(World):
 
         # if self.world.goal[self.player].value:
         #     data[rom_addresses['Options']] |= 1
-        if not self.world.extra_key_items[self.player].value:
+        if self.world.extra_key_items[self.player].value:
             data[rom_addresses['Options']] |= 4
         if self.world.blind_trainers[self.player].value > 0:
             data[rom_addresses['Option_Trainer_Encounters']] = 1
@@ -150,16 +151,17 @@ class PokemonRedBlueWorld(World):
         data[rom_addresses['Option_Badge_Goal']] = self.world.badge_goal[self.player].value - 2
         data[rom_addresses['Option_Viridian_Gym_Badges']] = self.world.badge_goal[self.player].value - 1
         data[rom_addresses['Option_EXP_Modifier']] = self.world.exp_modifier[self.player].value
-        if not self.world.extra_strength_boulders[self.player].value:
+        if self.world.extra_strength_boulders[self.player].value:
             for i in range(0, 3):
-                data[rom_addresses['Option_Boulders'] + (i * 3)] = 0x11
+                data[rom_addresses['Option_Boulders'] + (i * 3)] = 0x15
         if self.world.old_man[self.player].value == 2:
             data[rom_addresses['Option_Old_Man']] = 0x11
             data[rom_addresses['Option_Old_Man_Lying']] = 0x15
-            hm_moves = ["Cut", "Fly", "Surf", "Strength", "Flash"]
+        hm_moves = ["Cut", "Fly", "Surf", "Strength", "Flash"]
         if self.world.badges_needed_for_hm_moves[self.player].value == 0:
             for hm_move in hm_moves:
-                write_bytes(data, bytearray([0x3E, 0x01, 0xA7, 0x00]), rom_addresses["HM_" + hm_move + "_Badge_a"])  # ld a, 1; and a; nop;
+                write_bytes(data, bytearray([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
+                            rom_addresses["HM_" + hm_move + "_Badge_a"])
         elif self.extra_badges:
             written_badges = set()
             for hm_move, badge in self.extra_badges.items():
@@ -175,9 +177,7 @@ class PokemonRedBlueWorld(World):
                 if badge not in written_badges:
                     write_bytes(data, encode_text("Nothing"), rom_addresses["Badge_Text_" + badge.replace(" ", "_")])
 
-
-        from .poke_data import pokemons, types, type_chart
-        chart = type_chart.copy()
+        chart = type_chart.deepcopy()
         if self.world.randomize_type_matchup_attacking_types[self.player].value == 1:
             attacking_types = []
             for matchup in chart:
@@ -191,10 +191,10 @@ class PokemonRedBlueWorld(World):
         if self.world.randomize_type_matchup_defending_types[self.player].value == 1:
             defending_types = []
             for matchup in chart:
-                defending_types.append(matchup[0])
+                defending_types.append(matchup[1])
             self.world.random.shuffle(defending_types)
             for (matchup, defending_type) in zip(chart, defending_types):
-                matchup[1] = defending_types
+                matchup[1] = defending_type
         elif self.world.randomize_type_matchup_defending_types[self.player].value == 2:
             for matchup in chart:
                 matchup[1] = self.world.random.choice(list(types.keys()))

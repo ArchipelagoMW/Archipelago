@@ -135,7 +135,7 @@ def host_room(room: UUID):
                 commit()
 
     with db_session:
-        room.last_activity = datetime.utcnow()  # will trigger a spinup, if it's not already running
+        room.last_activity = datetime.datetime.utcnow()  # will trigger a spinup, if it's not already running
 
     return render_template("hostRoom.html", room=room)
 

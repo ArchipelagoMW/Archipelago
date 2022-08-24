@@ -46,7 +46,7 @@ class PokemonLogic(LogicMixin):
             return (ret + self.has("Secret Key", player) + self.has("Mansion Key", player)
                     + self.has("Safari Pass", player) + self.has("Plant Key", player)
                     + self.has("Hideout Key", player)) >= count
-        return (ret + self.has("HM01 Cut", player) + self.has("HM02 Fly", player) + self.has("HM03 Surf")
+        return (ret + self.has("HM01 Cut", player) + self.has("HM02 Fly", player) + self.has("HM03 Surf", player)
                 + self.has("HM04 Strength", player) + self.has("HM05 Flash", player)) >= count
 
     def _pokemon_rb_can_pass_guards(self, player):
