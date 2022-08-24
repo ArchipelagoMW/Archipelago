@@ -48,6 +48,7 @@ class AggressiveScanLogic(Choice):
     None: Aggressive Creatures are assumed to not need any tools to scan.
 
     Note: Containment, Either and None adds Cuddlefish as an option for scans.
+    Note: Stasis, Either and None adds unhatchable aggressive species, such as Warper.
     Note: This is purely a logic expectation, and does not affect gameplay, only placement."""
     display_name = "Aggressive Creature Scan Logic"
     option_stasis = 0

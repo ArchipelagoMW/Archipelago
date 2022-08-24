@@ -1,3 +1,4 @@
+import functools
 import logging
 from typing import List, Dict, Any
 
@@ -52,13 +53,20 @@ class SubnauticaWorld(World):
             self.create_item("Seaglide Fragment"),
             self.create_item("Seaglide Fragment")
         ]
-        if self.world.creature_scan_logic[self.player] == Options.AggressiveScanLogic.option_stasis:
-            valid_creatures = Creatures.all_creatures_presorted_without_containment
+        scan_option: Options.AggressiveScanLogic = self.world.creature_scan_logic[self.player]
+        if scan_option == Options.AggressiveScanLogic.option_stasis:
+            # remove containment only creatures
+            valid_creatures = Creatures.Cache.all_creatures_presorted_without_containment
             self.world.creature_scans[self.player].value = min(len(
-                Creatures.all_creatures_presorted_without_containment),
+                Creatures.Cache.all_creatures_presorted_without_containment),
+                self.world.creature_scans[self.player].value)
+        elif scan_option == Options.AggressiveScanLogic.option_containment:
+            valid_creatures = Creatures.Cache.all_creatures_presorted_without_stasis
+            self.world.creature_scans[self.player].value = min(len(
+                Creatures.Cache.all_creatures_presorted_without_containment),
                 self.world.creature_scans[self.player].value)
         else:
-            valid_creatures = Creatures.all_creatures_presorted
+            valid_creatures = Creatures.Cache.all_creatures_presorted
         self.creatures_to_scan = self.world.random.sample(valid_creatures,
                                                           self.world.creature_scans[self.player].value)
 

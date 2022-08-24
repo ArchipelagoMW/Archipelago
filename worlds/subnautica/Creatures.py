@@ -1,3 +1,4 @@
+import functools
 from typing import Dict, Set, List
 
 # EN Locale Creature Name to rough depth in meters found at
@@ -94,6 +95,21 @@ creature_locations: Dict[str, int] = {
     creature + suffix: creature_id for creature_id, creature in enumerate(all_creatures, start=34000)
 }
 
-all_creatures_presorted: List[str] = sorted(all_creatures)
-all_creatures_presorted_without_containment = [name for name in all_creatures_presorted if name not in containment]
 
+class Cache:
+    """Only compute presorted lists if needed and then cache them."""
+    @functools.cached_property
+    def all_creatures_presorted(self) -> List[str]:
+        return sorted(all_creatures)
+
+    @functools.cached_property
+    def all_creatures_presorted_without_containment(self) -> List[str]:
+        return [name for name in self.all_creatures_presorted if name not in containment]
+
+    @functools.cached_property
+    def all_creatures_presorted_without_stasis(self) -> List[str]:
+        return [name for name in self.all_creatures_presorted if name not in aggressive or name in hatchable]
+
+
+# only singleton needed
+Cache: Cache = Cache()
