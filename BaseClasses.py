@@ -977,6 +977,8 @@ class Entrance:
         self.name = name
         self.parent_region = parent
         self.player = player
+        if parent:
+            parent.exits.append(self)
 
     def can_reach(self, state: CollectionState) -> bool:
         if self.parent_region.can_reach(state) and self.access_rule(state):
