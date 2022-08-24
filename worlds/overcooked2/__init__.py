@@ -47,10 +47,6 @@ class Overcooked2World(World):
 
     # Helper Functions
 
-    def add_event(self, event: str) -> None:
-        self.world.itempool += Overcooked2Item(
-            event, ItemClassification.progression_skip_balancing, None, self.player)
-
     def create_item(self, item: str):
         if is_progression(item):
             classification = ItemClassification.progression
@@ -58,6 +54,13 @@ class Overcooked2World(World):
             classification = ItemClassification.filler
 
         return Overcooked2Item(item, classification, self.item_name_to_id[item], self.player)
+
+    def create_event(self, event: str) -> None:
+        return Overcooked2Item(event, ItemClassification.progression_skip_balancing, None, self.player)
+
+    def place_event(self,  location_name: str, item_name: str):
+        location: Location = self.world.get_location(location_name)
+        location.place_locked_item(self.create_event(item_name))
 
     def add_region(self, region_name: str):
         region = Region(
@@ -80,15 +83,22 @@ class Overcooked2World(World):
         sourceRegion.exits.append(connection)
         connection.connect(targetRegion)
 
-    def add_location(self, region_name: str, location_name: str) -> None:
+    def add_location(
+            self, region_name: str, location_name: str, rule: Callable[[CollectionState],
+                                                                       bool] | None = None) -> None:
+        location = Overcooked2Location(
+            self.player,
+            location_name,
+            self.location_name_to_id[location_name],
+            region,
+        )
+
+        if rule is not None:
+            location.access_rule = rule
+
         region = self.world.get_region(region_name, self.player)
         region.locations.append(
-            Overcooked2Location(
-                self.player,
-                location_name,
-                self.location_name_to_id[location_name],
-                region,
-            )
+            location
         )
 
     def set_location_rule(self, location_name: str, rule):
@@ -142,7 +152,7 @@ class Overcooked2World(World):
         sublevel = 1
         for n in range(1, 37):
             progress: float = float(n)/36.0
-            progress *= progress # x^2 curve
+            progress *= progress  # x^2 curve
 
             star_count = int(progress*float(self.stars_to_win))
             min = (n-1)*3
@@ -159,19 +169,18 @@ class Overcooked2World(World):
                 level = 1
                 sublevel += 1
 
-
     # After this step all regions and items have to be in the MultiWorld's regions and itempool.
-    def generate_basic(self) -> None:
 
+    def generate_basic(self) -> None:
         # Add Items
         self.world.itempool += [self.create_item(item_name)
                                 for item_name in item_table]
 
         # Add Events (Star Acquisition)
-        for _ in Overcooked2Level():
-            self.add_event("Star")
-            self.add_event("Star")
-            self.add_event("Star")
+        for level in Overcooked2Level():
+            self.place_event(level.location_name_one_star(), "Star")
+            self.place_event(level.location_name_two_star(), "Star")
+            self.place_event(level.location_name_three_star(), "Star")
 
     def generate_regions(self) -> None:
         # Menu -> Overworld
@@ -185,14 +194,24 @@ class Overcooked2World(World):
             # Create Region (e.g. "1-1")
             self.add_region(level_name)
 
-            # Populate Region With Events (e.g. "1-1 Reward (1 Star)")
-            self.add_location(level_name, level.location_name_one_star())
-            self.add_location(level_name, level.location_name_two_star())
-            self.add_location(level_name, level.location_name_three_star())
+            # Add Locations to store events
+            # TODO: Access Rules
+            self.add_location(
+                level_name,
+                level.location_name_one_star(),
+            )
+            self.add_location(
+                level_name,
+                level.location_name_two_star(),
+            )
+            self.add_location(
+                level_name,
+                level.location_name_three_star(),
+            )
 
             # Overworld -> Level
             level_access_rule: Callable[[CollectionState], bool] = lambda state: \
-                self.
+                state.has("Star", self.player, self.level_unlock_counts[level.level_id()])
             self.connect_regions("Overworld", level_name, level_access_rule)
 
             # Level --> Overworld

@@ -47,7 +47,6 @@ item_table = {
     "Serving Emote"                 : ItemData(33  , True),
     "Preparing Emote"               : ItemData(34  , True),
     "Washing Up Emote"              : ItemData(35  , True),
-    "Victory"                       : ItemData(None, True),
 }
 
 pickup_id_to_name: typing.Dict[int, str] = {

@@ -9,7 +9,6 @@ class Overcooked2Location(Location):
         super(Overcooked2Location, self).__init__(player, name, code, parent)
         self.event = code is None
 
-# Menu + Levels + Rewards + Credits
 location_name_to_id = dict()
 for level in Overcooked2Level():
     location_name_to_id[level.reward_name_one_star()] = level.reward_id_one_star()
