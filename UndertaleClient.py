@@ -50,6 +50,10 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
                 if file_name != "steam_api.dll":
                     copier(steaminstall+'\\steamapps\\common\\Undertale\\'+file_name, os.getcwd() +"\\Undertale\\"+file_name)
             bsdiff4.file_patch_inplace(os.getcwd() + r"/Undertale/data.win", undertale.data_path("patch.bsdiff"))
+            os.makedirs(name=os.getcwd() +"\\Undertale\\" + "Custom Sprites", exist_ok=True)
+            with open(os.path.expandvars(os.getcwd() +"\\Undertale\\" + "Custom Sprites\\" + "Which Character.txt"), 'w') as f:
+                f.writelines(["// Put the folder name of the sprites you want to play as, make sure it is the only line other than this one.\n", "frisk"])
+                f.close()
             self.output(f"Patched.")
 
     def _cmd_online(self):
