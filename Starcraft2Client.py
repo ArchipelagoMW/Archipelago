@@ -647,14 +647,15 @@ def calc_unfinished_missions(ctx: SC2Context, unlocks=None):
     available_missions = calc_available_missions(ctx, unlocks)
 
     for name in available_missions:
-        if not ctx.mission_req_table[name].extra_locations == -1:
+        objectives = tuple(ctx.locations_for_mission(name))
+        if objectives:
             objectives_completed = calc_objectives_completed(ctx, name)
 
-            if objectives_completed < sum(1 for _ in ctx.locations_for_mission(name)):
+            if objectives_completed < len(objectives):
                 unfinished_missions.append(name)
                 locations_completed.append(objectives_completed)
 
-        else:
+        else:  # infer that this is the final mission as it has no objectives
             unfinished_missions.append(name)
             locations_completed.append(-1)
 
