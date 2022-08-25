@@ -40,4 +40,4 @@ clocktower_key_one   = "Clocktower Key1"
 clocktower_key_two   = "Clocktower Key2"
 clocktower_key_three = "Clocktower Key3"
 
-victory = "The Count is Down!"
+victory = "Marriage Proposal"

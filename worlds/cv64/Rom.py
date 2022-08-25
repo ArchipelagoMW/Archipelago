@@ -10,7 +10,7 @@ USHASH = '1cc5cf3b4d29d8c3ade957648b529dc1'
 ROM_PLAYER_LIMIT = 65535
 
 
-locations_rom_data = {
+rom_loc_offsets = {
     0xC64001: 0x10C67B,  # Forest of Silence
     0xC64002: 0x10C71B,
     0xC64003: 0x10C6BB,
@@ -42,19 +42,18 @@ locations_rom_data = {
     0xC6401C: 0x10C810,
 }
 
-
-item_rom_data = {
-    0xC64002: 0x02,  # Red jewel(S)
-    0xC64003: 0x03,  # Red jewel(L)
-    0xC64004: 0x04,  # Special1
-    0xC64007: 0x07,  # Roast beef
-    0xC6400C: 0x0C,  # PowerUp
-    0xC64017: 0x17,  # Sun card
-    0xC64018: 0x18,  # Moon card
-    0xC6401A: 0x1A,  # 500 GOLD
-    0xC6401B: 0x1B,  # 300 GOLD
-    0xC6401C: 0x1C,  # 100 GOLD
-    0xC6401E: 0x1E,  # Left Tower Key
+rom_item_bytes = {
+    "Red jewel(S)": 0x02,
+    "Red jewel(L)": 0x03,
+    "Special1": 0x04,
+    "Roast beef": 0x07,
+    "PowerUp": 0x0C,
+    "Sun card": 0x17,
+    "Moon card": 0x18,
+    "500 GOLD": 0x1A,
+    "300 GOLD": 0x1B,
+    "100 GOLD": 0x1C,
+    "Left Tower Key": 0x1E,
 }
 
 
@@ -99,7 +98,7 @@ class LocalRom(object):
             self.buffer = bytearray(stream.read())
 
 
-def patch_rom(world, rom, player):
+def patch_rom(world, rom, player, offsets_to_ids):
     # local_random = world.slot_seeds[player]
 
     # Disable vampire Vincent cutscene
@@ -128,16 +127,13 @@ def patch_rom(world, rom, player):
     # rom.write_byte(0x6CEAA7, 0x01)
 
     # Write the new item bytes
-    for location_name in world.location_name_to_id:
-        loc = world.get_locations(location_name, player)
-        if loc.item.player == player:
-            rom.write_byte(locations_rom_data[loc.code], loc.item.code - 0xC64000)
-        else:
-            rom.write_byte(locations_rom_data[loc.code], 0x11)
+    for offset, item_id in offsets_to_ids.items():
+        rom.write_byte(offset, item_id)
 
-    from Main import __version__
-    rom.name = bytearray(f'CV64{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
-    rom.name.extend([0] * (21 - len(rom.name)))
+
+    # from Main import __version__
+    # rom.name = bytearray(f'CV64{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
+    # rom.name.extend([0] * (21 - len(rom.name)))
     # rom.write_bytes(0x7FC0, rom.name)
 
 

@@ -4,6 +4,7 @@ from BaseClasses import MultiWorld, Region, Entrance
 from .Items import CV64Item
 from .Locations import CV64Location
 from .Names import LocationName, ItemName
+from .Rom import rom_loc_offsets
 
 
 class LevelGate:
@@ -48,31 +49,16 @@ def create_regions(world, player: int, active_locations):
         LocationName.forest_main_torch1,
         LocationName.forest_main_torch2,
         LocationName.forest_main_torch3,
-    ]
-    forest_start_region = create_region(world, player, active_locations, LocationName.forest_of_silence,
-                                        forest_start_region_locations, None)
-
-    forest_switch1_region_locations = [
         LocationName.forest_main_torch4,
         LocationName.forest_main_torch5,
         LocationName.forest_main_torch6,
         LocationName.forest_main_torch7,
         LocationName.forest_main_torch8,
-    ]
-    forest_switch1_region = create_region(world, player, active_locations, LocationName.forest_switch1,
-                                          forest_switch1_region_locations, None)
-
-    forest_switch2_region_locations = [
         LocationName.forest_main_torch9,
         LocationName.forest_main_torch10,
         LocationName.forest_main_torch11,
         LocationName.forest_main_torch12,
         LocationName.forest_main_torch13,
-    ]
-    forest_switch2_region = create_region(world, player, active_locations, LocationName.forest_switch2,
-                                          forest_switch2_region_locations, None)
-
-    forest_switch3_region_locations = [
         LocationName.forest_main_torch14,
         LocationName.forest_main_torch15,
         LocationName.forest_main_torch16,
@@ -81,62 +67,31 @@ def create_regions(world, player: int, active_locations):
         LocationName.forest_main_torch19,
         LocationName.forest_main_torch20,
     ]
-    forest_switch3_region = create_region(world, player, active_locations, LocationName.forest_switch3,
-                                          forest_switch3_region_locations, None)
+    forest_start_region = create_region(world, player, active_locations, LocationName.forest_of_silence,
+                                        forest_start_region_locations, None)
 
-    forest_end_region_locations = []
-    forest_end_region = create_region(world, player, active_locations, LocationName.forest_end,
-                                      forest_end_region_locations, None)
 
     # Castle Wall regions
 
-    cw_start_region_locations = []
-    cw_start_region = create_region(world, player, active_locations, LocationName.castle_wall,
-                                    cw_start_region_locations, None)
-
-    cw_exit_region_locations = [
-        LocationName.cw_main_torch4
-    ]
-    cw_exit_region = create_region(world, player, active_locations, LocationName.cw_exit,
-                                   cw_exit_region_locations, None)
-
-    cw_descent_region_locations = [
+    cw_main_region_locations = [
+        LocationName.cw_main_torch1,
+        LocationName.cw_main_torch4,
         LocationName.cw_main_torch5,
-        LocationName.cw_main_torch6
+        LocationName.cw_main_torch6,
+        LocationName.cw_main_torch7,
     ]
-    cw_descent_region = create_region(world, player, active_locations, LocationName.cw_descent,
-                                      cw_descent_region_locations, None)
-
-    cw_bone_dragon_region_locations = [
-        LocationName.cw_main_torch7
-    ]
-    cw_bone_dragon_region = create_region(world, player, active_locations, LocationName.cw_bd_switch,
-                                          cw_bone_dragon_region_locations, None)
-
-    cw_dracula_region_locations = [
-        LocationName.cw_main_torch8
-    ]
-    cw_dracula_region = create_region(world, player, active_locations, LocationName.cw_drac_switch,
-                                      cw_dracula_region_locations, None)
-
-    cw_rtower_region_locations = [
-        LocationName.cw_main_torch1
-    ]
-    cw_rtower_region = create_region(world, player, active_locations, LocationName.cw_rtower,
-                                     cw_rtower_region_locations, None)
+    cw_start_region = create_region(world, player, active_locations, LocationName.castle_wall,
+                                    cw_main_region_locations, None)
 
     cw_ltower_region_locations = [
         LocationName.cw_main_torch2,
-        LocationName.cw_main_torch3
+        LocationName.cw_main_torch3,
+        LocationName.cw_main_torch8,
+        LocationName.the_end
     ]
     cw_ltower_region = create_region(world, player, active_locations, LocationName.cw_ltower,
                                      cw_ltower_region_locations, None)
 
-    villa_start_region_locations = [
-        LocationName.the_end
-    ]
-    villa_start_region = create_region(world, player, active_locations, LocationName.villa,
-                                       villa_start_region_locations, None)
 
     # Set up the regions correctly.
     world.regions += [
@@ -150,45 +105,25 @@ def create_regions(world, player: int, active_locations):
         # gate_6_region,
         # gate_7_region,
         forest_start_region,
-        forest_switch1_region,
-        forest_switch2_region,
-        forest_switch3_region,
-        forest_end_region,
         cw_start_region,
-        cw_exit_region,
-        cw_bone_dragon_region,
-        cw_dracula_region,
-        cw_rtower_region,
         cw_ltower_region,
-        villa_start_region
     ]
 
 
-def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_emblems, gate_bosses):
+def connect_regions(world, player):
     names: typing.Dict[str, int] = {}
 
     connect(world, player, names, 'Menu', LocationName.forest_of_silence)
-    connect(world, player, names, LocationName.forest_of_silence, LocationName.forest_switch1)
-    connect(world, player, names, LocationName.forest_switch1, LocationName.forest_switch2)
-    connect(world, player, names, LocationName.forest_switch3, LocationName.forest_switch3)
-    connect(world, player, names, LocationName.forest_switch3, LocationName.forest_end)
-    connect(world, player, names, LocationName.forest_end, LocationName.castle_wall)
-    connect(world, player, names, LocationName.castle_wall, LocationName.cw_rtower)
-    connect(world, player, names, LocationName.cw_rtower, LocationName.cw_bd_switch)
-    connect(world, player, names, LocationName.cw_bd_switch, LocationName.cw_descent)
-    connect(world, player, names, LocationName.cw_bd_switch, LocationName.cw_exit)
-    connect(world, player, names, LocationName.cw_descent, LocationName.castle_wall)
+
+    connect(world, player, names, LocationName.forest_of_silence, LocationName.castle_wall)
+
     connect(world, player, names, LocationName.castle_wall, LocationName.cw_ltower,
             lambda state: (state.has(ItemName.left_tower_key, player)))
-    connect(world, player, names, LocationName.cw_ltower, LocationName.cw_drac_switch)
-    connect(world, player, names, LocationName.cw_drac_switch, LocationName.cw_descent)
-    connect(world, player, names, LocationName.cw_exit, LocationName.villa,
-            lambda state: (state.can_reach(LocationName.cw_drac_switch, player)))
 
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):
     # Shamelessly stolen from the SA2B definition, which was in turn shamelessly stolen from the ROR2 definition.
-    # Anyone want to continue the chain?
+    # Perhaps one day the chain will continue?
     ret = Region(name, None, name, player)
     ret.world = world
     if locations:
@@ -196,6 +131,8 @@ def create_region(world: MultiWorld, player: int, active_locations, name: str, l
             loc_id = active_locations.get(location, 0)
             if loc_id:
                 location = CV64Location(player, location, loc_id, ret)
+                if loc_id != 0xC64000:
+                    location.rom_offset = rom_loc_offsets[loc_id]
                 ret.locations.append(location)
     if exits:
         for exit in exits:

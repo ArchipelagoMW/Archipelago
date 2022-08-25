@@ -11,11 +11,14 @@ class CV64Location(Location):
     progress_bit:  int = 0
     inverted_bit: bool = False
 
-    def __init__(self, player: int, name: str = '', address: int = None, parent=None, prog_byte: int = None, prog_bit: int = None, invert: bool = False):
+    rom_offset: int
+
+    def __init__(self, player: int, name: str = '', address: int = None, parent=None, prog_byte: int = None,
+                 prog_bit: int = None, invert: bool = False):
         super().__init__(player, name, address, parent)
         self.progress_byte = prog_byte
-        self.progress_bit  = prog_bit
-        self.inverted_bit  = invert
+        self.progress_bit = prog_bit
+        self.inverted_bit = invert
 
 
 forest_location_table = {
@@ -50,6 +53,7 @@ cw_location_table = {
     LocationName.cw_main_torch6: 0xC6401A,
     LocationName.cw_main_torch7: 0xC6401B,
     LocationName.cw_main_torch8: 0xC6401C,
+    LocationName.the_end: 0xC64000
 }
 
 all_locations = {

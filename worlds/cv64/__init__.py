@@ -12,7 +12,7 @@ from .Levels import level_list
 from .Rules import set_rules
 from .Names import ItemName, LocationName
 from ..AutoWorld import WebWorld, World
-from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch
+from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch, rom_item_bytes
 # import math
 
 
@@ -66,17 +66,35 @@ class CV64World(World):
             "active_levels": self.active_level_list,
         }
 
+    def create_regions(self):
+        location_table = setup_locations(self.world, self.player)
+        create_regions(self.world, self.player, location_table)
+
+    def create_item(self, name: str, force_non_progression=False) -> Item:
+        data = item_table[name]
+
+        if force_non_progression:
+            classification = ItemClassification.filler
+        elif data.progression:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+
+        created_item = CV64Item(name, classification, data.code, self.player)
+        if name != "Marriage Proposal":
+            created_item.item_byte = rom_item_bytes[name]
+
+        return created_item
+
+    def lookup_table(self):
+        pass
+
     def _create_items(self, name: str):
         data = item_table[name]
         return [self.create_item(name)] * data.quantity
 
-    def fill_slot_data(self) -> dict:
-        slot_data = self._get_slot_data()
-        for option_name in cv64_options:
-            option = getattr(self.world, option_name)[self.player]
-            slot_data[option_name] = option.value
-
-        return slot_data
+    def set_rules(self):
+        set_rules(self.world, self.player)
 
     def generate_basic(self):
         itempool: typing.List[CV64Item] = []
@@ -107,7 +125,7 @@ class CV64World(World):
         if self.world.stage_shuffle[self.player]:
             self.world.random.shuffle(self.active_level_list)
 
-        connect_regions(self.world, self.player, self.active_level_list)
+        connect_regions(self.world, self.player)
 
         self.world.itempool += itempool
 
@@ -117,7 +135,17 @@ class CV64World(World):
             player = self.player
 
             rom = LocalRom(get_base_rom_path())
-            patch_rom(self.world, rom, self.player, self.active_level_list)
+
+            offsets_to_ids = {}
+            for location_name in self.location_name_to_id:
+                loc = self.world.get_location(location_name, self.player)
+                if loc.item.name != "Marriage Proposal":
+                    if loc.item.player == self.player:
+                        offsets_to_ids[loc.rom_offset] = loc.item.item_byte
+                    else:
+                        offsets_to_ids[loc.rom_offset] = 0x11
+
+            patch_rom(self.world, rom, self.player, offsets_to_ids)  # self.active_level_list
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
@@ -137,6 +165,14 @@ class CV64World(World):
                 os.unlink(rompath)
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
+    def fill_slot_data(self) -> dict:
+        slot_data = self._get_slot_data()
+        for option_name in cv64_options:
+            option = getattr(self.world, option_name)[self.player]
+            slot_data[option_name] = option.value
+
+        return slot_data
+
     def modify_multidata(self, multidata: dict):
         import base64
         # wait for self.rom_name to be available.
@@ -146,24 +182,3 @@ class CV64World(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
-
-    def create_regions(self):
-        location_table = setup_locations(self.world, self.player)
-        create_regions(self.world, self.player, location_table)
-
-    def create_item(self, name: str, force_non_progression=False) -> Item:
-        data = item_table[name]
-
-        if force_non_progression:
-            classification = ItemClassification.filler
-        elif data.progression:
-            classification = ItemClassification.progression
-        else:
-            classification = ItemClassification.filler
-
-        created_item = CV64Item(name, classification, data.code, self.player)
-
-        return created_item
-
-    def set_rules(self):
-        set_rules(self.world, self.player)

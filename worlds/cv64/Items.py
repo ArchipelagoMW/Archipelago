@@ -13,6 +13,7 @@ class ItemData(typing.NamedTuple):
 
 class CV64Item(Item):
     game: str = "Castlevania 64"
+    item_byte = int
 
 
 # Separate tables for each type of item.
