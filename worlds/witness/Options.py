@@ -65,8 +65,8 @@ class ShuffleUncommonLocations(Toggle):
 
 
 class ShufflePostgame(Toggle):
-    """Adds locations into the pool that are guaranteed to be locked behind your goal. Use this if you don't play with
-    forfeit on victory."""
+    """Adds locations into the pool that are guaranteed to become accessible before or at the same time as your goal.
+    Use this if you don't play with forfeit on victory."""
     display_name = "Shuffle Postgame"
 
 
