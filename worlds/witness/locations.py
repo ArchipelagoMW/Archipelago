@@ -150,10 +150,10 @@ class StaticWitnessLocations:
     }
 
     CAVES_LOCATIONS = {
-        "Caves Blue Tunnel Right First Mount 4",
+        "Caves Blue Tunnel Right First4",
         "Caves Blue Tunnel Left First Mount",
-        "Caves Blue Tunnel Left Second Mount 5",
-        "Caves Blue Tunnel Right Second Mount 5",
+        "Caves Blue Tunnel Left Second5",
+        "Caves Blue Tunnel Right Second5",
         "Caves Blue Tunnel Right Third Mount",
         "Caves Blue Tunnel Left Fourth Mount",
         "Caves Blue Tunnel Left Third Mount",
@@ -173,6 +173,8 @@ class StaticWitnessLocations:
         "Caves Left Upstairs Left Row 5",
 
         "Tunnels Vault Box",
+        "Challenge Vault Box",
+        "Challenge Video",
         "Mountain Bottom Floor Discard",
         "Theater Challenge Video",
     }
@@ -243,10 +245,11 @@ class WitnessPlayerLocations:
             StaticWitnessLocations.GENERAL_LOCATIONS
         )
 
-        doors = get_option_value(world, player, "shuffle_doors")
+        doors = get_option_value(world, player, "shuffle_doors") >= 2
         earlyutm = is_option_enabled(world, player, "early_secret_area")
         victory = get_option_value(world, player, "victory_condition")
-        lasers = get_option_value(world, player, "challenge_lasers")
+        mount_lasers = get_option_value(world, player, "mountain_lasers")
+        chal_lasers = get_option_value(world, player, "challenge_lasers")
         laser_shuffle = get_option_value(world, player, "shuffle_lasers")
 
         postgame = set()
@@ -256,14 +259,19 @@ class WitnessPlayerLocations:
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | postgame
 
-        if earlyutm or doors >= 2 or (victory == 1 and (lasers <= 11 or laser_shuffle)):
+        mountain_enterable_from_top = victory == 0 or victory == 1 or (victory == 3 and chal_lasers > mount_lasers)
+
+        if earlyutm or doors:  # in non-doors, there is no way to get symbol-locked by the final pillars (currently)
             postgame -= StaticWitnessLocations.CAVES_LOCATIONS
 
-        if doors >= 2:
+        if doors or mountain_enterable_from_top:
             postgame -= StaticWitnessLocations.MOUNTAIN_REACHABLE_FROM_BEHIND
 
-        if victory != 2:
+        if mountain_enterable_from_top:
             postgame -= StaticWitnessLocations.MOUNTAIN_UNREACHABLE_FROM_BEHIND
+
+        if (victory == 0 and doors) or victory == 1 or (victory == 2 and mount_lasers > chal_lasers and doors):
+            postgame -= set("Mountain Bottom Layer Discard")
 
         if is_option_enabled(world, player, "shuffle_discarded_panels"):
             self.PANEL_TYPES_TO_SHUFFLE.add("Discard")
