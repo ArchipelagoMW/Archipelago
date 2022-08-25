@@ -128,6 +128,7 @@ class APDeltaPatch(APContainer, metaclass=AutoPatchRegister):
         manifest = super(APDeltaPatch, self).get_manifest()
         manifest["base_checksum"] = self.hash
         manifest["result_file_ending"] = self.result_file_ending
+        manifest["patch_file_ending"] = self.patch_file_ending
         return manifest
 
     @classmethod
