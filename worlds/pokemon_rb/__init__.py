@@ -15,12 +15,12 @@ import Utils
 import os
 import hashlib
 import bsdiff4
-
+from copy import deepcopy
 
 class PokemonRedBlueWorld(World):
     """Pokemon"""
     game = "Pokemon Red - Blue"
-    options = pokemon_rb_options
+    option_definitions = pokemon_rb_options
     remote_items = False
     data_version = 0
     topology_present = False
@@ -177,7 +177,7 @@ class PokemonRedBlueWorld(World):
                 if badge not in written_badges:
                     write_bytes(data, encode_text("Nothing"), rom_addresses["Badge_Text_" + badge.replace(" ", "_")])
 
-        chart = type_chart.deepcopy()
+        chart = deepcopy(type_chart)
         if self.world.randomize_type_matchup_attacking_types[self.player].value == 1:
             attacking_types = []
             for matchup in chart:
@@ -235,6 +235,7 @@ class PokemonRedBlueWorld(World):
         else:
             patch = BlueDeltaPatch(os.path.splitext(rompath)[0] + BlueDeltaPatch.patch_file_ending, player=self.player,
                                    player_name=self.world.player_name[self.player], patched_path=rompath)
+
         patch.write()
         os.unlink(rompath)
 
@@ -257,6 +258,7 @@ class BlueDeltaPatch(APDeltaPatch):
     hash = "50927e843568814f7ed45ec4f944bd8b"
     game_version = "blue"
     game = "Pokemon Red - Blue"
+    result_file_ending = ".gb"
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes(cls.game_version, cls.hash)
@@ -267,6 +269,7 @@ class RedDeltaPatch(APDeltaPatch):
     hash = "3d45c1ee9abd5738df46d2bdda8b57dc"
     game_version = "red"
     game = "Pokemon Red - Blue"
+    result_file_ending = ".gb"
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes(cls.game_version, cls.hash)
@@ -287,7 +290,6 @@ def get_base_rom_bytes(game_version: str, hash: str="") -> bytes:
         if hash != basemd5.hexdigest():
             raise Exception('Supplied Base Rom does not match known MD5 for US(1.0) release. '
                             'Get the correct game and version, then dump it')
-        #get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     with open(Utils.local_path('data', f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
         base_patch = bytes(stream.read())
     base_rom_bytes = bsdiff4.patch(base_rom_bytes, base_patch)
@@ -304,7 +306,7 @@ def get_base_rom_path(game_version: str) -> str:
 
 class PokemonRBItem(Item):
     game = "Pokemon Red - Blue"
-    type = "idk"
+    type = None
     def __init__(self, name, player: int = None):
         item_data = item_table[name]
         super(PokemonRBItem, self).__init__(

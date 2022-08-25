@@ -167,9 +167,7 @@ GAME_SM = "Super Metroid"
 GAME_SOE = "Secret of Evermore"
 GAME_SMZ3 = "SMZ3"
 GAME_DKC3 = "Donkey Kong Country 3"
-GAME_POKE_RB = "Pokemon Red - Blue"
-supported_games = {"A Link to the Past", "Super Metroid", "Secret of Evermore", "SMZ3", "Donkey Kong Country 3",
-                   "Pokemon Red - Blue"}
+supported_games = {"A Link to the Past", "Super Metroid", "Secret of Evermore", "SMZ3", "Donkey Kong Country 3"}
 
 preferred_endings = {
     GAME_ALTTP: "apbp",
@@ -177,7 +175,6 @@ preferred_endings = {
     GAME_SOE: "apsoe",
     GAME_SMZ3: "apsmz",
     GAME_DKC3: "apdkc3",
-    GAME_POKE_RB: "aprb"
 }
 
 
