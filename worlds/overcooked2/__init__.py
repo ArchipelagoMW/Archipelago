@@ -14,8 +14,6 @@ from .Items import item_table, is_progression, Overcooked2Item
 from .Locations import location_id_to_name, location_name_to_id
 
 
-
-
 class Overcooked2Web(WebWorld):
     pass
 
@@ -150,17 +148,6 @@ class Overcooked2World(World):
         # Assign new kitchens to each spot on the overworld using pure random chance and nothing else
         self.level_mapping = level_shuffle_factory(self.world.random)
 
-    def generate_basic(self) -> None:
-        # Add Items
-        self.world.itempool += [self.create_item(item_name)
-                                for item_name in item_table]
-
-        # Add Events (Star Acquisition)
-        for level in Overcooked2Level():
-            self.place_event(level.location_name_one_star(), "Star")
-            self.place_event(level.location_name_two_star(), "Star")
-            self.place_event(level.location_name_three_star(), "Star")
-
     def generate_regions(self) -> None:
         # Menu -> Overworld
         self.add_region("Menu")
@@ -205,8 +192,19 @@ class Overcooked2World(World):
         )
         self.world.completion_condition[self.player] = completion_condition
 
+    def generate_basic(self) -> None:
+        # Add Items
+        self.world.itempool += [self.create_item(item_name)
+                                for item_name in item_table]
+
+        # Add Events (Star Acquisition)
+        for level in Overcooked2Level():
+            self.place_event(level.location_name_one_star(), "Star")
+            self.place_event(level.location_name_two_star(), "Star")
+            self.place_event(level.location_name_three_star(), "Star")
+
     def generate_output(self, output_directory: str) -> None:
-        
+
         # Serialize Level Order
         story_level_order = dict()
 
@@ -216,7 +214,7 @@ class Overcooked2World(World):
                 "DLC": level.dlc.value,
                 "LevelID": level.level_id,
             }
-        
+
         custom_level_order = dict()
         custom_level_order["Story"] = story_level_order
 
@@ -244,10 +242,10 @@ class Overcooked2World(World):
             "LevelForceReveal": [
                 1,  # 1-1
                 7,  # 2-1
-                13, # 3-1
-                19, # 4-1
-                25, # 5-1
-                31, # 6-1
+                13,  # 3-1
+                19,  # 4-1
+                25,  # 5-1
+                31,  # 6-1
             ],
             "SaveFolderName": mod_name,
 
@@ -272,7 +270,7 @@ class Overcooked2World(World):
             "Custom66TimerScale": 0.6,
 
             "CustomLevelOrder": custom_level_order,
-            
+
             # Items (Starting Inventory)
             "CustomOrderLifetime": 66.6,  # 2/3rd of original
             "DisableWood": True,
