@@ -749,7 +749,7 @@ def calc_available_missions(ctx: SC2Context, unlocks=None):
     return available_missions
 
 
-def mission_reqs_completed(ctx: SC2Context, location_to_check, missions_complete):
+def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete):
     """Returns a bool signifying if the mission has all requirements complete and can be done
 
     Arguments:
@@ -757,40 +757,40 @@ def mission_reqs_completed(ctx: SC2Context, location_to_check, missions_complete
     locations_to_check -- the mission string name to check
     missions_complete -- an int of how many missions have been completed
 """
-    if len(ctx.mission_req_table[location_to_check].required_world) >= 1:
+    if len(ctx.mission_req_table[mission_name].required_world) >= 1:
         # A check for when the requirements are being or'd
         or_success = False
 
         # Loop through required missions
-        for req_mission in ctx.mission_req_table[location_to_check].required_world:
+        for req_mission in ctx.mission_req_table[mission_name].required_world:
             req_success = True
 
             # Check if required mission has been completed
             if not (ctx.mission_req_table[list(ctx.mission_req_table)[req_mission - 1]].id *
-                    victory_modulo + SC2WOL_LOC_ID_OFFSET) in ctx.locations_checked:
-                if not ctx.mission_req_table[location_to_check].or_requirements:
+                    victory_modulo + SC2WOL_LOC_ID_OFFSET) in ctx.checked_locations:
+                if not ctx.mission_req_table[mission_name].or_requirements:
                     return False
                 else:
                     req_success = False
 
             # Recursively check required mission to see if it's requirements are met, in case !collect has been done
             if not mission_reqs_completed(ctx, list(ctx.mission_req_table)[req_mission - 1], missions_complete):
-                if not ctx.mission_req_table[location_to_check].or_requirements:
+                if not ctx.mission_req_table[mission_name].or_requirements:
                     return False
                 else:
                     req_success = False
 
             # If requirement check succeeded mark or as satisfied
-            if ctx.mission_req_table[location_to_check].or_requirements and req_success:
+            if ctx.mission_req_table[mission_name].or_requirements and req_success:
                 or_success = True
 
-        if ctx.mission_req_table[location_to_check].or_requirements:
+        if ctx.mission_req_table[mission_name].or_requirements:
             # Return false if or requirements not met
             if not or_success:
                 return False
 
         # Check number of missions
-        if missions_complete >= ctx.mission_req_table[location_to_check].number:
+        if missions_complete >= ctx.mission_req_table[mission_name].number:
             return True
         else:
             return False
