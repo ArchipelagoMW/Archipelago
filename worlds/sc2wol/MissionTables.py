@@ -12,6 +12,7 @@ hard_regions_list = ["Maw of the Void", "Engine of Destruction", "In Utter Darkn
 
 class MissionInfo(NamedTuple):
     id: int
+    extra_locations: int
     required_world: List[int]
     category: str
     number: int = 0  # number of worlds need beaten
