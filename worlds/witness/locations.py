@@ -150,13 +150,13 @@ class StaticWitnessLocations:
     }
 
     CAVES_LOCATIONS = {
-        "Caves Blue Tunnel Right First4",
-        "Caves Blue Tunnel Left First Mount",
-        "Caves Blue Tunnel Left Second5",
-        "Caves Blue Tunnel Right Second5",
-        "Caves Blue Tunnel Right Third Mount",
-        "Caves Blue Tunnel Left Fourth Mount",
-        "Caves Blue Tunnel Left Third Mount",
+        "Caves Blue Tunnel Right First 4",
+        "Caves Blue Tunnel Left First 1",
+        "Caves Blue Tunnel Left Second 5",
+        "Caves Blue Tunnel Right Second 5",
+        "Caves Blue Tunnel Right Third 1",
+        "Caves Blue Tunnel Left Fourth 1",
+        "Caves Blue Tunnel Left Third 1",
 
         "Caves First Floor Middle",
         "Caves First Floor Right",
