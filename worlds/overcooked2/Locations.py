@@ -10,4 +10,4 @@ location_name_to_id = dict()
 location_id_to_name = dict()
 for level in Overcooked2Level():
     location_name_to_id[level.location_name_completed()] = level.level_id()
-    location_name_to_id[level.level_id()] = level.location_name_completed()
+    location_id_to_name[level.level_id()] = level.location_name_completed()
