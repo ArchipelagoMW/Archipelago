@@ -168,6 +168,8 @@ class Overcooked2World(World):
             if level > 6:
                 level = 1
                 sublevel += 1
+        
+        
 
     # After this step all regions and items have to be in the MultiWorld's regions and itempool.
 
@@ -227,4 +229,94 @@ class Overcooked2World(World):
         self.world.completion_condition[self.player] = completion_condition
 
     def generate_output(self, output_directory: str) -> None:
-        pass
+        data = {
+            # Implicit to rando
+            "DisableAllMods": False,
+            "UnlockAllChefs": True,
+            "UnlockAllDLC": True,
+            "DisplayFPS": True,
+            "SkipTutorialPopups": True,
+
+            # Quality of Life
+            "DisplayLeaderboardScores": self.display_leaderboard_scores,
+            "AlwaysServeOldestOrder": self.display_leaderboard_scores,
+            "PreserveCookingProgress": self.always_preserve_cooking_progress,
+            "FixDoubleServing": self.fix_bugs,
+            "FixSinkBug": self.fix_bugs,
+            "FixControlStickThrowBug": self.fix_bugs,
+            "FixEmptyBurnerThrow": self.fix_bugs,
+            "TimerAlwaysStarts": self.always_preserve_cooking_progress,
+            "RevealAllLevels": True,
+            "PurchaseAllLevels": True,
+            "SkipTutorial": True,
+            "CheatsEnabled": True,
+            "CustomOrderLifetime": 66.0,
+            "LevelUnlockRequirements": {
+                "37": 1,
+                "38": 2,
+                "39": 4,
+                "40": 6,
+                "41": 2
+            },
+            "LevelPurchaseRequirements": {
+                "38": 5,
+                "1": 1
+            },
+            "LeaderboardScoreScale": {
+                "FourStars": 0.01,
+                "ThreeStars": 0.01,
+                "TwoStars": 0.01,
+                "OneStar": 0.01
+            },
+            "Custom66TimerScale": 1.0,
+            "CustomLevelOrder": {
+                "Story": {
+                    "1": {
+                        "DLC": "Campfire Cook Off",
+                        "LevelID": 0
+                    },
+                    "2": {
+                        "DLC": "Story",
+                        "LevelID": 1
+                    },
+                    "3": {
+                        "DLC": "Campfire Cook Off",
+                        "LevelID": 5
+                    },
+                    "4": {
+                        "DLC": "Seasonal",
+                        "LevelID": 30
+                    },
+                    "5": {
+                        "DLC": "Campfire Cook Off",
+                        "LevelID": 6
+                    },
+                    "6": {
+                        "DLC": "Campfire Cook Off",
+                        "LevelID": 7
+                    }
+                }
+            },
+            "LevelForceReveal": [36, 37, 38, 40],
+            "DisableWood": False,
+            "DisableCoal": True,
+            "DisableOnePlate": True,
+            "DisableFireExtinguisher": True,
+            "DisableBellows": True,
+            "PlatesStartDirty": True,
+            "MaxTipCombo": 3,
+            "DisableDash": False,
+            "DisableThrow": True,
+            "DisableCatch": True,
+            "DisableControlStick": True,
+            "DisableWokDrag": True,
+            "SkipAllOnionKing": True,
+            "WashTimeMultiplier": 2.5,
+            "BurnSpeedMultiplier": 4.0,
+            "MaxOrdersOnScreenOffset": -2,
+            "ChoppingTimeScale": 0.5,
+            "BackpackMovementScale": 0.666,
+            "RespawnTime": 10.0,
+            "CarnivalDispenserRefactoryTime": 4.0,
+            "SaveFolderName": "test_save_dir"
+        }
