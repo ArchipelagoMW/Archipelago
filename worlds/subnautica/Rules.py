@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Dict, Callable
 
 from worlds.generic.Rules import set_rule, add_rule
 from .Locations import location_table, LocationDict
-from .Creatures import all_creatures, aggressive, suffix
+from .Creatures import all_creatures, aggressive, hatchable, containment, suffix
 from .Options import AggressiveScanLogic
 import math
 
@@ -258,14 +258,6 @@ def set_creature_rule(world, player: int, creature_name: str) -> "Location":
     return location
 
 
-aggression_rules: Dict[int, Callable[["CollectionState", int], bool]] = {
-    AggressiveScanLogic.option_stasis: has_stasis_rifle,
-    AggressiveScanLogic.option_containment: has_containment,
-    AggressiveScanLogic.option_either: lambda state, player:
-    has_stasis_rifle(state, player) or has_containment(state, player)
-}
-
-
 def set_rules(subnautica_world: "SubnauticaWorld"):
     player = subnautica_world.player
     world = subnautica_world.world
@@ -274,11 +266,22 @@ def set_rules(subnautica_world: "SubnauticaWorld"):
         set_location_rule(world, player, loc)
 
     if subnautica_world.creatures_to_scan:
-        aggressive_rule = aggression_rules.get(world.creature_scan_logic[player], None)
+        scan_logic = world.creature_scan_logic[player]
         for creature_name in subnautica_world.creatures_to_scan:
             location = set_creature_rule(world, player, creature_name)
-            if creature_name in aggressive and aggressive_rule:
-                add_rule(location, lambda state: aggressive_rule(state, player))
+            if creature_name in containment:
+                add_rule(location, lambda state: has_containment(state, player))
+            if creature_name in aggressive:
+                if scan_logic == AggressiveScanLogic.option_stasis:
+                    add_rule(location, lambda state: has_stasis_rifle(state, player))
+                elif scan_logic == AggressiveScanLogic.option_containment:
+                    add_rule(location, lambda state: has_containment(state, player))
+                elif scan_logic == AggressiveScanLogic.option_either:
+                    if creature_name in hatchable:
+                        add_rule(location, lambda state: has_stasis_rifle(state, player)
+                                                      or has_containment(state, player))
+                    else:
+                        add_rule(location, lambda state: has_stasis_rifle(state, player))
 
     # Victory locations
     set_rule(world.get_location("Neptune Launch", player), lambda state:
