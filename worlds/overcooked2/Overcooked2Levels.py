@@ -72,7 +72,7 @@ class Overcooked2Dlc(Enum):
         assert False
 
 
-class Overcooked2World(Enum):
+class Overcooked2GameWorld(Enum):
     ONE = 1
     TWO = 2
     THREE = 3
@@ -82,26 +82,26 @@ class Overcooked2World(Enum):
     KEVIN = 7
 
     def as_str(self) -> str:
-        if self == Overcooked2World.KEVIN:
+        if self == Overcooked2GameWorld.KEVIN:
             return "Kevin"
 
         return str(int(self.value))
 
     def get_sublevel_count(self) -> int:
-        if self == Overcooked2World.KEVIN:
+        if self == Overcooked2GameWorld.KEVIN:
             return 8
 
         return 6
 
     def get_base_id(self) -> int:
-        if self == Overcooked2World.ONE:
+        if self == Overcooked2GameWorld.ONE:
             return 1
 
-        prev = Overcooked2World(self.value - 1)
+        prev = Overcooked2GameWorld(self.value - 1)
         return prev.get_base_id() + prev.get_sublevel_count()
 
     def name(self) -> str:
-        if self == Overcooked2World.KEVIN:
+        if self == Overcooked2GameWorld.KEVIN:
             return "Kevin"
 
         return "World " + self.as_str()
@@ -115,13 +115,13 @@ class Overcooked2Level:
     dlc: str
     sublevel: int
 
-    def __init__(self, world: Overcooked2World, sublevel: int, dlc="Story"):
+    def __init__(self, world: Overcooked2GameWorld, sublevel: int, dlc="Story"):
         self.world = world
         self.sublevel = sublevel
         self.dlc = Overcooked2Dlc("Story")
 
     def __init__(self):
-        self.world = Overcooked2World.ONE
+        self.world = Overcooked2GameWorld.ONE
         self.sublevel = 0
 
     def __iter__(self):
@@ -130,9 +130,9 @@ class Overcooked2Level:
     def __next__(self):
         self.sublevel += 1
         if self.sublevel > self.world.get_sublevel_count():
-            if self.world == Overcooked2World.KEVIN:
+            if self.world == Overcooked2GameWorld.KEVIN:
                 raise StopIteration
-            self.world = Overcooked2World(self.world.value + 1)
+            self.world = Overcooked2GameWorld(self.world.value + 1)
             self.sublevel = 1
 
         return self

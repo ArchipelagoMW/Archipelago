@@ -6,7 +6,7 @@ from typing import Callable
 from BaseClasses import MultiWorld, ItemClassification, CollectionState, Region, Entrance, Location, RegionType
 from ..AutoWorld import World, WebWorld
 
-from .Overcooked2Levels import Overcooked2Level, Overcooked2World, Overcooked2GenericLevel, level_shuffle_factory
+from .Overcooked2Levels import Overcooked2Level, Overcooked2GameWorld, Overcooked2GenericLevel, level_shuffle_factory
 from .Locations import Overcooked2Location, location_name_to_id
 from .Options import overcooked_options
 from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name
@@ -58,7 +58,7 @@ class Overcooked2World(World):
         return Overcooked2Item(event, ItemClassification.progression_skip_balancing, None, self.player)
 
     def place_event(self,  location_name: str, item_name: str):
-        location: Location = self.world.get_location(location_name)
+        location: Location = self.world.get_location(location_name, self.player)
         location.place_locked_item(self.create_event(item_name))
 
     def add_region(self, region_name: str):
@@ -191,8 +191,8 @@ class Overcooked2World(World):
         completion_condition: Callable[[CollectionState], bool] = lambda state: \
             state.can_reach(
                 self.world.get_location(
-                    Overcooked2Level(Overcooked2World.SIX, 6).location_name_one_star(),
-                    self.player
+                    "6-6 Completed",
+                    self.player,
                 )
         )
         self.world.completion_condition[self.player] = completion_condition
@@ -209,7 +209,7 @@ class Overcooked2World(World):
         # Add Events (Star Acquisition)
         for level in Overcooked2Level():
             for n in [1, 2, 3]:
-                self.place_event(level.location_name_star_event(1), "Star")
+                self.place_event(level.location_name_star_event(n), "Star")
 
     # Items get distributed to locations
 
@@ -221,7 +221,7 @@ class Overcooked2World(World):
 
         for level_id in self.level_mapping:
             level: Overcooked2GenericLevel = self.level_mapping[level_id]
-            custom_level_order[str(level_id)] = {
+            story_level_order[str(level_id)] = {
                 "DLC": level.dlc.value,
                 "LevelID": level.level_id,
             }
@@ -342,4 +342,8 @@ def level_unlock_requirement_factory(stars_to_win: int) -> dict[int, int]:
         if level > 6:
             level = 1
             sublevel += 1
-    return level_unlock_counts()
+    
+    for n in range(37, 46):
+        level_unlock_counts[n] = 0
+
+    return level_unlock_counts

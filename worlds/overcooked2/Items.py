@@ -11,7 +11,7 @@ class Overcooked2Item(Item):
 
 
 item_table: dict[str, ItemData] = {
-    "Wood"                          : ItemData(0),
+    "Wood"                          : ItemData(36), # python doesn't like this being 0
     "Coal Bucket"                   : ItemData(1),
     "Spare Plate"                   : ItemData(2),
     "Fire Extinguisher"             : ItemData(3),
