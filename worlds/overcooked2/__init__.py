@@ -1,21 +1,19 @@
-from .Items import is_progression  # this is just a dummy
+import os
+import json
+import typing
+
+from typing import Callable
+
+from BaseClasses import MultiWorld, ItemClassification, CollectionState, Region, Entrance, Location, RegionType
 from ..AutoWorld import World, WebWorld
+
+from .Overcooked2Levels import Overcooked2Level, Overcooked2World, Overcooked2GenericLevel, level_shuffle_factory
+from .Locations import Overcooked2Location, location_name_to_id
 from .Options import overcooked_options
 from .Items import item_table, is_progression, Overcooked2Item
 from .Locations import location_id_to_name, location_name_to_id
-from BaseClasses import ItemClassification, CollectionState
-
-from .Overcooked2Levels import Overcooked2Level, Overcooked2World
-from .Locations import Overcooked2Location, location_name_to_id
-from .Logic import Overcooked2Logic
-
-import typing
-from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
-
-from random import Random
 
 
-from typing import Callable
 
 
 class Overcooked2Web(WebWorld):
@@ -129,6 +127,7 @@ class Overcooked2World(World):
     # Helper Data
 
     level_unlock_counts: dict[int, int]  # level_id, stars to purchase
+    level_mapping: dict[int, Overcooked2GenericLevel]  # level_id, level
 
     # Autoworld Hooks
 
@@ -145,33 +144,11 @@ class Overcooked2World(World):
         self.star_threshold_scale = 100.0 / float(self.world.StarThresholdScale[self.player].value)
 
         # Generate level unlock requirements such that the levels get harder to unlock
-        # the further the game has progressed, and levels progress radially rather
-        # than linearly
-        level_unlock_counts = dict()
-        level = 1
-        sublevel = 1
-        for n in range(1, 37):
-            progress: float = float(n)/36.0
-            progress *= progress  # x^2 curve
+        # the further the game has progressed, and levels progress radially rather than linearly
+        self.level_unlock_counts = level_unlock_requirement_factory(self.stars_to_win)
 
-            star_count = int(progress*float(self.stars_to_win))
-            min = (n-1)*3
-            if (star_count > min):
-                star_count = min
-
-            level_id = (level-1)*6 + sublevel
-
-            # print("%d-%d (%d) = %d" % (level, sublevel, level_id, star_count))
-            level_unlock_counts[level_id] = star_count
-
-            level += 1
-            if level > 6:
-                level = 1
-                sublevel += 1
-        
-        
-
-    # After this step all regions and items have to be in the MultiWorld's regions and itempool.
+        # Assign new kitchens to each spot on the overworld using pure random chance and nothing else
+        self.level_mapping = level_shuffle_factory(self.world.random)
 
     def generate_basic(self) -> None:
         # Add Items
@@ -229,13 +206,50 @@ class Overcooked2World(World):
         self.world.completion_condition[self.player] = completion_condition
 
     def generate_output(self, output_directory: str) -> None:
+        
+        # Serialize Level Order
+        story_level_order = dict()
+
+        for level_id in self.level_mapping:
+            level: Overcooked2GenericLevel = self.level_mapping[level_id]
+            custom_level_order[str(level_id)] = {
+                "DLC": level.dlc.value,
+                "LevelID": level.level_id,
+            }
+        
+        custom_level_order = dict()
+        custom_level_order["Story"] = story_level_order
+
+        # Serialize Unlock Requirements
+        level_purchase_requirements = dict()
+        for level_id in self.level_unlock_counts:
+            level_purchase_requirements[str(level_id)] = self.level_unlock_counts[level_id]
+
+        # Put it all together
+
+        mod_name = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}"
+
         data = {
-            # Implicit to rando
+            # Changes Inherent to rando
             "DisableAllMods": False,
             "UnlockAllChefs": True,
             "UnlockAllDLC": True,
             "DisplayFPS": True,
+            "SkipTutorial": True,
+            "SkipAllOnionKing": True,
             "SkipTutorialPopups": True,
+            "RevealAllLevels": False,
+            "PurchaseAllLevels": False,
+            "CheatsEnabled": False,
+            "LevelForceReveal": [
+                1,  # 1-1
+                7,  # 2-1
+                13, # 3-1
+                19, # 4-1
+                25, # 5-1
+                31, # 6-1
+            ],
+            "SaveFolderName": mod_name,
 
             # Quality of Life
             "DisplayLeaderboardScores": self.display_leaderboard_scores,
@@ -246,77 +260,79 @@ class Overcooked2World(World):
             "FixControlStickThrowBug": self.fix_bugs,
             "FixEmptyBurnerThrow": self.fix_bugs,
             "TimerAlwaysStarts": self.always_preserve_cooking_progress,
-            "RevealAllLevels": True,
-            "PurchaseAllLevels": True,
-            "SkipTutorial": True,
-            "CheatsEnabled": True,
-            "CustomOrderLifetime": 66.0,
-            "LevelUnlockRequirements": {
-                "37": 1,
-                "38": 2,
-                "39": 4,
-                "40": 6,
-                "41": 2
-            },
-            "LevelPurchaseRequirements": {
-                "38": 5,
-                "1": 1
-            },
+
+            # Game Modifications
+            "LevelPurchaseRequirements": level_purchase_requirements,
             "LeaderboardScoreScale": {
-                "FourStars": 0.01,
-                "ThreeStars": 0.01,
-                "TwoStars": 0.01,
-                "OneStar": 0.01
+                "FourStars": 1.0,
+                "ThreeStars": self.star_threshold_scale,
+                "TwoStars": self.star_threshold_scale*0.666,
+                "OneStar": self.star_threshold_scale*0.25
             },
-            "Custom66TimerScale": 1.0,
-            "CustomLevelOrder": {
-                "Story": {
-                    "1": {
-                        "DLC": "Campfire Cook Off",
-                        "LevelID": 0
-                    },
-                    "2": {
-                        "DLC": "Story",
-                        "LevelID": 1
-                    },
-                    "3": {
-                        "DLC": "Campfire Cook Off",
-                        "LevelID": 5
-                    },
-                    "4": {
-                        "DLC": "Seasonal",
-                        "LevelID": 30
-                    },
-                    "5": {
-                        "DLC": "Campfire Cook Off",
-                        "LevelID": 6
-                    },
-                    "6": {
-                        "DLC": "Campfire Cook Off",
-                        "LevelID": 7
-                    }
-                }
-            },
-            "LevelForceReveal": [36, 37, 38, 40],
-            "DisableWood": False,
+            "Custom66TimerScale": 0.6,
+
+            "CustomLevelOrder": custom_level_order,
+            
+            # Items (Starting Inventory)
+            "CustomOrderLifetime": 66.6,  # 2/3rd of original
+            "DisableWood": True,
             "DisableCoal": True,
             "DisableOnePlate": True,
             "DisableFireExtinguisher": True,
             "DisableBellows": True,
             "PlatesStartDirty": True,
-            "MaxTipCombo": 3,
-            "DisableDash": False,
+            "MaxTipCombo": 2,
+            "DisableDash": True,
             "DisableThrow": True,
             "DisableCatch": True,
             "DisableControlStick": True,
             "DisableWokDrag": True,
-            "SkipAllOnionKing": True,
-            "WashTimeMultiplier": 2.5,
-            "BurnSpeedMultiplier": 4.0,
+            "WashTimeMultiplier": 0.666,
+            "BurnSpeedMultiplier": 1.75,
             "MaxOrdersOnScreenOffset": -2,
-            "ChoppingTimeScale": 0.5,
+            "ChoppingTimeScale": 0.666,
             "BackpackMovementScale": 0.666,
             "RespawnTime": 10.0,
-            "CarnivalDispenserRefactoryTime": 4.0,
-            "SaveFolderName": "test_save_dir"
+            "CarnivalDispenserRefactoryTime": 3.0,
+            # "LevelUnlockRequirements": { # TODO
+            #     "37": 1,
+            #     "38": 2,
+            #     "39": 4,
+            #     "40": 1,
+            #     "41": 2,
+            #     "42": 3,
+            #     "43": 3,
+            #     "44": 3
+            # },
         }
+
+        # Save to disk
+
+        filepath = os.path.join(output_directory, mod_name + ".json")
+        with open(filepath, "w") as file:
+            json.dump(data, file)
+
+
+def level_unlock_requirement_factory(stars_to_win: int) -> dict[int, int]:
+    level_unlock_counts = dict()
+    level = 1
+    sublevel = 1
+    for n in range(1, 37):
+        progress: float = float(n)/36.0
+        progress *= progress  # x^2 curve
+
+        star_count = int(progress*float(stars_to_win))
+        min = (n-1)*3
+        if (star_count > min):
+            star_count = min
+
+        level_id = (level-1)*6 + sublevel
+
+        # print("%d-%d (%d) = %d" % (level, sublevel, level_id, star_count))
+        level_unlock_counts[level_id] = star_count
+
+        level += 1
+        if level > 6:
+            level = 1
+            sublevel += 1
+    return level_unlock_counts()
