@@ -294,10 +294,10 @@ class Overcooked2World(World):
             "DisableCatch": True,
             "DisableControlStick": True,
             "DisableWokDrag": True,
-            "WashTimeMultiplier": 0.666,
-            "BurnSpeedMultiplier": 1.75,
+            "WashTimeMultiplier": 1.5,
+            "BurnSpeedMultiplier": 1.5,
             "MaxOrdersOnScreenOffset": -2,
-            "ChoppingTimeScale": 0.666,
+            "ChoppingTimeScale": 1.5,
             "BackpackMovementScale": 0.666,
             "RespawnTime": 10.0,
             "CarnivalDispenserRefactoryTime": 3.0,
@@ -336,7 +336,10 @@ def level_unlock_requirement_factory(stars_to_win: int) -> dict[int, int]:
         level_id = (level-1)*6 + sublevel
 
         # print("%d-%d (%d) = %d" % (level, sublevel, level_id, star_count))
-        level_unlock_counts[level_id] = star_count
+
+        # +3 because the tutorial level starts 3-starred
+        # TODO: handle-ingame instead
+        level_unlock_counts[level_id] = star_count + 3
 
         level += 1
         if level > 6:
