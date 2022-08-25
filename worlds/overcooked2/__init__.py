@@ -1,6 +1,5 @@
 import os
 import json
-import typing
 
 from typing import Callable
 
@@ -12,6 +11,7 @@ from .Locations import Overcooked2Location, location_name_to_id
 from .Options import overcooked_options
 from .Items import item_table, is_progression, Overcooked2Item
 from .Locations import location_id_to_name, location_name_to_id
+from .Logic import has_requirements_for_level_star
 
 
 class Overcooked2Web(WebWorld):
@@ -79,37 +79,36 @@ class Overcooked2World(World):
         sourceRegion.exits.append(connection)
         connection.connect(targetRegion)
 
-    def add_location(
-            self, region_name: str, location_name: str, rule: Callable[[CollectionState],
-                                                                       bool] | None = None) -> None:
+    def add_level_location(
+        self,
+        region_name: str,
+        location_name: str,
+        level_id: int,
+        stars: int,
+        is_event: bool = False,
+    ) -> None:
+        completion_condition: Callable[[CollectionState], bool] = lambda state: \
+            has_requirements_for_level_star(state, self.level_mapping[level_id], stars)
+
+        if is_event:
+            location_id = None
+        else:
+            location_id = level_id
+
+        region = self.world.get_region(region_name, self.player)
         location = Overcooked2Location(
             self.player,
             location_name,
-            self.location_name_to_id[location_name],
+            location_id,
             region,
         )
 
-        if rule is not None:
-            location.access_rule = rule
+        location.event = is_event
+        location.access_rule = completion_condition
 
-        region = self.world.get_region(region_name, self.player)
         region.locations.append(
             location
         )
-
-    def set_location_rule(self, location_name: str, rule):
-        location = self.world.get_location(location_name, self.player)
-        location.access_rule = rule
-
-    def set_entrance_rule(self, entrance_name: str, rule):
-        entrance = self.world.get_entrance(entrance_name, self.player)
-        entrance.access_rule = rule
-
-    def can_enter_level(self, state: CollectionState, level_name: str) -> bool:
-        return False
-
-    def can_earn_level_star(self, state: CollectionState, level_name: str) -> bool:
-        return False
 
     # YAML Config
 
@@ -148,7 +147,7 @@ class Overcooked2World(World):
         # Assign new kitchens to each spot on the overworld using pure random chance and nothing else
         self.level_mapping = level_shuffle_factory(self.world.random)
 
-    def generate_regions(self) -> None:
+    def create_regions(self) -> None:
         # Menu -> Overworld
         self.add_region("Menu")
         self.add_region("Overworld")
@@ -160,20 +159,23 @@ class Overcooked2World(World):
             # Create Region (e.g. "1-1")
             self.add_region(level_name)
 
-            # Add Locations to store events
-            # TODO: Access Rules
-            self.add_location(
+            # Add Location to house progression item (1-star)
+            self.add_level_location(
                 level_name,
-                level.location_name_one_star(),
+                level.location_name_completed(),
+                level.level_id(),
+                1,
             )
-            self.add_location(
-                level_name,
-                level.location_name_two_star(),
-            )
-            self.add_location(
-                level_name,
-                level.location_name_three_star(),
-            )
+
+            # Add Locations to house star aquisition events
+            for n in [1, 2, 3]:
+                self.add_level_location(
+                    level_name,
+                    level.location_name_star_event(n),
+                    level.level_id(),
+                    n,
+                    is_event=True,
+                )
 
             # Overworld -> Level
             level_access_rule: Callable[[CollectionState], bool] = lambda state: \
@@ -192,18 +194,24 @@ class Overcooked2World(World):
         )
         self.world.completion_condition[self.player] = completion_condition
 
-    def generate_basic(self) -> None:
+    def create_items(self):
         # Add Items
         self.world.itempool += [self.create_item(item_name)
                                 for item_name in item_table]
 
+    def set_rules(self):
+        pass
+
+    def generate_basic(self) -> None:
         # Add Events (Star Acquisition)
         for level in Overcooked2Level():
-            self.place_event(level.location_name_one_star(), "Star")
-            self.place_event(level.location_name_two_star(), "Star")
-            self.place_event(level.location_name_three_star(), "Star")
+            for n in [1, 2, 3]:
+                self.place_event(level.location_name_star_event(1), "Star")
+
+    # Items get distributed to locations
 
     def generate_output(self, output_directory: str) -> None:
+        mod_name = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}"
 
         # Serialize Level Order
         story_level_order = dict()
@@ -225,8 +233,6 @@ class Overcooked2World(World):
 
         # Put it all together
 
-        mod_name = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}"
-
         data = {
             # Changes Inherent to rando
             "DisableAllMods": False,
@@ -240,8 +246,8 @@ class Overcooked2World(World):
             "PurchaseAllLevels": False,
             "CheatsEnabled": False,
             "LevelForceReveal": [
-                1,  # 1-1
-                7,  # 2-1
+                1,   # 1-1
+                7,   # 2-1
                 13,  # 3-1
                 19,  # 4-1
                 25,  # 5-1

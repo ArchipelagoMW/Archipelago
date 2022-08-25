@@ -143,23 +143,11 @@ class Overcooked2Level:
     def level_name(self) -> str:
         return self.world.as_str() + "-" + str(self.sublevel)
 
-    def location_id_one_star(self) -> int:
-        return 1000 + self.level_id()
+    def location_name_completed(self) -> str:
+        return self.level_name() + " Completed"
 
-    def location_id_two_star(self) -> int:
-        return 2000 + self.level_id()
-
-    def location_id_three_star(self) -> int:
-        return 3000 + self.level_id()
-
-    def location_name_one_star(self) -> str:
-        return self.level_name() + " Reward (1-Star)"
-
-    def location_name_two_star(self) -> str:
-        return self.level_name() + " Reward (2-Star)"
-
-    def location_name_three_star(self) -> str:
-        return self.level_name() + " Reward (3-Star)"
+    def location_name_star_event(self, stars: int) -> str:
+        return "%s (%d-Star)" % (self.level_name(), stars)
 
     def world_name(self) -> str:
         return self.world.name()
