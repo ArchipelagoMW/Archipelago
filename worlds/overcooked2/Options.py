@@ -1,5 +1,4 @@
-import typing
-from Options import Option, DefaultOnToggle, Range, Toggle, Choice
+from Options import DefaultOnToggle, Range
 
 
 class AlwaysServerOldestOrder(DefaultOnToggle):

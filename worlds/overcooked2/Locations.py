@@ -7,11 +7,7 @@ class Overcooked2Location(Location):
 
 
 location_name_to_id = dict()
-for level in Overcooked2Level():
-    location_name_to_id[level.reward_name_one_star()] = level.reward_id_one_star()
-    location_name_to_id[level.reward_name_two_star()] = level.reward_id_two_star()
-    location_name_to_id[level.reward_name_three_star()] = level.reward_id_three_star()
-
 location_id_to_name = dict()
-for name in location_name_to_id:
-    location_id_to_name[location_name_to_id[name]] = name
+for level in Overcooked2Level():
+    location_name_to_id[level.location_name_completed()] = level.level_id()
+    location_name_to_id[level.level_id()] = level.location_name_completed()
