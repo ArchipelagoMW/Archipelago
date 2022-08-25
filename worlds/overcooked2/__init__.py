@@ -9,7 +9,7 @@ from ..AutoWorld import World, WebWorld
 from .Overcooked2Levels import Overcooked2Level, Overcooked2World, Overcooked2GenericLevel, level_shuffle_factory
 from .Locations import Overcooked2Location, location_name_to_id
 from .Options import overcooked_options
-from .Items import item_table, is_progression, Overcooked2Item
+from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name
 from .Locations import location_id_to_name, location_name_to_id
 from .Logic import has_requirements_for_level_star
 
@@ -37,6 +37,9 @@ class Overcooked2World(World):
     remote_start_inventory: bool = True
     data_version = 0
     base_id = 0
+
+    item_name_to_id = item_name_to_id
+    item_id_to_name = item_id_to_name
 
     location_id_to_name = location_id_to_name
     location_name_to_id = location_name_to_id

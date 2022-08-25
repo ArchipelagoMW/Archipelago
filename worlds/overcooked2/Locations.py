@@ -1,5 +1,5 @@
 from BaseClasses import Location
-from Overcooked2Levels import Overcooked2Level
+from .Overcooked2Levels import Overcooked2Level
 
 
 class Overcooked2Location(Location):
