@@ -43,6 +43,7 @@ class SC2WoLWorld(World):
     locked_locations: typing.List[str]
     location_cache: typing.List[Location]
     mission_req_table = {}
+    required_client_version = 0, 3, 5
 
     def __init__(self, world: MultiWorld, player: int):
         super(SC2WoLWorld, self).__init__(world, player)

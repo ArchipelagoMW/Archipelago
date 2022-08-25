@@ -152,8 +152,9 @@ class CommonContext:
     # locations
     locations_checked: typing.Set[int]  # local state
     locations_scouted: typing.Set[int]
-    missing_locations: typing.Set[int]
+    missing_locations: typing.Set[int]  # server state
     checked_locations: typing.Set[int]  # server state
+    server_locations: typing.Set[int]  # all locations the server knows of, missing_location | checked_locations
     locations_info: typing.Dict[int, NetworkItem]
 
     # internals
@@ -184,8 +185,9 @@ class CommonContext:
         self.locations_checked = set()  # local state
         self.locations_scouted = set()
         self.items_received = []
-        self.missing_locations = set()
+        self.missing_locations = set()  # server state
         self.checked_locations = set()  # server state
+        self.server_locations = set()  # all locations the server knows of, missing_location | checked_locations
         self.locations_info = {}
 
         self.input_queue = asyncio.Queue()
@@ -632,6 +634,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         # when /missing is used for the client side view of what is missing.
         ctx.missing_locations = set(args["missing_locations"])
         ctx.checked_locations = set(args["checked_locations"])
+        ctx.server_locations = ctx.missing_locations | ctx. checked_locations
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]

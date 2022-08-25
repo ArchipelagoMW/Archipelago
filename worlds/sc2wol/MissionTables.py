@@ -12,7 +12,6 @@ hard_regions_list = ["Maw of the Void", "Engine of Destruction", "In Utter Darkn
 
 class MissionInfo(NamedTuple):
     id: int
-    extra_locations: int
     required_world: List[int]
     category: str
     number: int = 0  # number of worlds need beaten
@@ -69,8 +68,8 @@ vanilla_mission_req_table = {
     "Zero Hour": MissionInfo(3, 4, [2], "Mar Sara", completion_critical=True),
     "Evacuation": MissionInfo(4, 4, [3], "Colonist"),
     "Outbreak": MissionInfo(5, 3, [4], "Colonist"),
-    "Safe Haven": MissionInfo(6, 1, [5], "Colonist", number=7),
-    "Haven's Fall": MissionInfo(7, 1, [5], "Colonist", number=7),
+    "Safe Haven": MissionInfo(6, 4, [5], "Colonist", number=7),
+    "Haven's Fall": MissionInfo(7, 4, [5], "Colonist", number=7),
     "Smash and Grab": MissionInfo(8, 5, [3], "Artifact", completion_critical=True),
     "The Dig": MissionInfo(9, 4, [8], "Artifact", number=8, completion_critical=True),
     "The Moebius Factor": MissionInfo(10, 9, [9], "Artifact", number=11, completion_critical=True),
