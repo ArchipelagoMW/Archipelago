@@ -421,7 +421,7 @@ Town Red Rooftop (Town):
 158224 - 0x28B39 (Tall Hexagonal) - 0x079DF - Reflection
 
 Town Wooden Rooftop (Town):
-158240 - 0x28AD9 (Wooden Rooftop) - 0x28AC1 - Rotated Wooden Rooftop
+158240 - 0x28AD9 (Wooden Rooftop) - 0x28AC1 - Rotated Shapers & Dots & Eraser
 
 Town Church (Town):
 158227 - 0x28A69 (Church Lattice) - 0x03BB0 - Environment
