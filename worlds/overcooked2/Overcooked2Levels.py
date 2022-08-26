@@ -41,7 +41,7 @@ class Overcooked2Dlc(Enum):
     def end_level_id(self) -> int:
         id = None
         if self == Overcooked2Dlc.STORY:
-            id = 6*6 + 8 # world_count*level_count + kevin count
+            id = 6*6 + 8  # world_count*level_count + kevin count
         if self == Overcooked2Dlc.SURF_N_TURF:
             id = 3*4 + 1
         if self == Overcooked2Dlc.CAMPFIRE_COOK_OFF:
@@ -52,15 +52,15 @@ class Overcooked2Dlc(Enum):
             id = 3*4 + 3
         if self == Overcooked2Dlc.SEASONAL:
             id = 31
-        
-        id = self.start_level_id() + id + 1 # +1 to make the range exclusive
+
+        id = self.start_level_id() + id + 1  # +1 to make the range exclusive
 
         return id
 
-    # Tutorial + Horde Levels
+    # Tutorial + Horde Levels + Endgame
     def excluded_levels(self) -> list[int]:
         if self == Overcooked2Dlc.STORY:
-            return [0]
+            return [0, 36]
         if self == Overcooked2Dlc.SURF_N_TURF:
             return []
         if self == Overcooked2Dlc.CAMPFIRE_COOK_OFF:
@@ -187,6 +187,9 @@ def level_shuffle_factory(rng: Random) -> dict[int, Overcooked2GenericLevel]:  #
     result: dict[int, Overcooked2GenericLevel] = dict()
     story = Overcooked2Dlc.STORY
     for level_id in range(story.start_level_id(), story.end_level_id()):
-        result[level_id] = pool.pop(0)
+        if level_id not in story.excluded_levels():
+            result[level_id] = pool.pop(0)
+        else:
+            result[level_id] = Overcooked2GenericLevel(level_id) # This is just 6-6 right now
 
     return result
