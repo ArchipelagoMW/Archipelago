@@ -133,16 +133,16 @@ class Overcooked2World(World):
     # Autoworld Hooks
 
     def generate_early(self):
-        self.always_serve_oldest_order = self.world.AlwaysServerOldestOrder[self.player].value
-        self.always_preserve_cooking_progress = self.world.AlwaysPreserveCookingProgress[self.player].value
-        self.always_start_level_timer = self.world.AlwaysStartLevelTimer[self.player].value
-        self.display_leaderboard_scores = self.world.DisplayLeaderboardScores[self.player].value
-        self.shuffle_level_order = self.world.ShuffleLevelOrder[self.player].value
-        self.fix_bugs = self.world.FixBugs[self.player].value
-        self.stars_to_win = self.world.StarsToWin[self.player].value
+        self.always_serve_oldest_order        = bool(self.world.AlwaysServerOldestOrder      [self.player].value)
+        self.always_preserve_cooking_progress = bool(self.world.AlwaysPreserveCookingProgress[self.player].value)
+        self.always_start_level_timer         = bool(self.world.AlwaysStartLevelTimer        [self.player].value)
+        self.display_leaderboard_scores       = bool(self.world.DisplayLeaderboardScores     [self.player].value)
+        self.shuffle_level_order              = bool(self.world.ShuffleLevelOrder            [self.player].value)
+        self.fix_bugs                         = bool(self.world.FixBugs                      [self.player].value)
+        self.stars_to_win                     = int (self.world.StarsToWin                   [self.player].value)
 
         # 0.0 to 1.0 where 1.0 is World Record
-        self.star_threshold_scale = 100.0 / float(self.world.StarThresholdScale[self.player].value)
+        self.star_threshold_scale = float(self.world.StarThresholdScale[self.player].value) / 100.0
 
         # Generate level unlock requirements such that the levels get harder to unlock
         # the further the game has progressed, and levels progress radially rather than linearly
@@ -285,13 +285,13 @@ class Overcooked2World(World):
 
             # Quality of Life
             "DisplayLeaderboardScores": self.display_leaderboard_scores,
-            "AlwaysServeOldestOrder": self.display_leaderboard_scores,
+            "AlwaysServeOldestOrder": self.always_serve_oldest_order,
             "PreserveCookingProgress": self.always_preserve_cooking_progress,
             "FixDoubleServing": self.fix_bugs,
             "FixSinkBug": self.fix_bugs,
             "FixControlStickThrowBug": self.fix_bugs,
             "FixEmptyBurnerThrow": self.fix_bugs,
-            "TimerAlwaysStarts": self.always_preserve_cooking_progress,
+            "TimerAlwaysStarts": self.always_start_level_timer,
 
             # Game Modifications
             "LevelPurchaseRequirements": level_purchase_requirements,
@@ -306,7 +306,7 @@ class Overcooked2World(World):
             "CustomLevelOrder": custom_level_order,
 
             # Items (Starting Inventory)
-            "CustomOrderLifetime": 66.6,  # 2/3rd of original
+            "CustomOrderLifetime": 75.0,  # 100 seconds is original
             "DisableWood": True,
             "DisableCoal": True,
             "DisableOnePlate": True,
@@ -326,7 +326,8 @@ class Overcooked2World(World):
             "BackpackMovementScale": 0.666,
             "RespawnTime": 10.0,
             "CarnivalDispenserRefactoryTime": 3.0,
-            "LevelUnlockRequirements": level_unlock_requirements
+            "LevelUnlockRequirements": level_unlock_requirements,
+            "LockedEmotes": [1, 2, 3, 4, 5, 6],
         }
 
         # Save to disk
