@@ -39,20 +39,23 @@ class Overcooked2Dlc(Enum):
 
     # exclusive
     def end_level_id(self) -> int:
+        id = None
         if self == Overcooked2Dlc.STORY:
-            return 1 + (6*6 + 8)
+            id = 6*6 + 8 # world_count*level_count + kevin count
         if self == Overcooked2Dlc.SURF_N_TURF:
-            return (3*4 + 1) + 1
+            id = 3*4 + 1
         if self == Overcooked2Dlc.CAMPFIRE_COOK_OFF:
-            return (3*4 + 3) + 1
+            id = 3*4 + 3
         if self == Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE:
-            return (3*3 + 3) + 1
+            id = 3*3 + 3
         if self == Overcooked2Dlc.CARNIVAL_OF_CHAOS:
-            return (3*4 + 3) + 1
+            id = 3*4 + 3
         if self == Overcooked2Dlc.SEASONAL:
-            return 32 + 1
+            id = 31
+        
+        id = self.start_level_id() + id + 1 # +1 to make the range exclusive
 
-        assert False
+        return id
 
     # Tutorial + Horde Levels
     def excluded_levels(self) -> list[int]:
