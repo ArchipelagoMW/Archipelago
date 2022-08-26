@@ -53,20 +53,14 @@ class SubnauticaWorld(World):
             self.create_item("Seaglide Fragment")
         ]
         scan_option: Options.AggressiveScanLogic = self.world.creature_scan_logic[self.player]
-        if scan_option == Options.AggressiveScanLogic.option_stasis:
-            # remove containment only creatures
-            valid_creatures = Creatures.Definitions.all_creatures_presorted_without_containment
-            self.world.creature_scans[self.player].value = min(len(
-                Creatures.Definitions.all_creatures_presorted_without_containment),
-                self.world.creature_scans[self.player].value)
-        elif scan_option == Options.AggressiveScanLogic.option_containment:
-            valid_creatures = Creatures.Definitions.all_creatures_presorted_without_stasis
-            self.world.creature_scans[self.player].value = min(len(
-                Creatures.Definitions.all_creatures_presorted_without_stasis),
-                self.world.creature_scans[self.player].value)
-        else:
-            valid_creatures = Creatures.Definitions.all_creatures_presorted
-        self.creatures_to_scan = self.world.random.sample(valid_creatures,
+        creature_pool = scan_option.get_pool()
+
+        self.world.creature_scans[self.player].value = min(
+            len(creature_pool),
+            self.world.creature_scans[self.player].value
+        )
+
+        self.creatures_to_scan = self.world.random.sample(creature_pool,
                                                           self.world.creature_scans[self.player].value)
 
     def create_regions(self):

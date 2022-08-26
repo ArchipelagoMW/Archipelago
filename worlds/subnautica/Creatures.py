@@ -111,6 +111,9 @@ class Definitions:
     def all_creatures_presorted_without_stasis(self) -> List[str]:
         return [name for name in self.all_creatures_presorted if name not in aggressive or name in hatchable]
 
+    @functools.cached_property
+    def all_creatures_presorted_without_aggressive(self) -> List[str]:
+        return [name for name in self.all_creatures_presorted if name not in aggressive]
 
 # only singleton needed
 Definitions: Definitions = Definitions()
