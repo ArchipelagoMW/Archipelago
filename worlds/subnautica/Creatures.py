@@ -96,8 +96,9 @@ creature_locations: Dict[str, int] = {
 }
 
 
-class Cache:
-    """Only compute presorted lists if needed and then cache them."""
+class Definitions:
+    """Only compute lists if needed and then cache them."""
+
     @functools.cached_property
     def all_creatures_presorted(self) -> List[str]:
         return sorted(all_creatures)
@@ -112,4 +113,4 @@ class Cache:
 
 
 # only singleton needed
-Cache: Cache = Cache()
+Definitions: Definitions = Definitions()

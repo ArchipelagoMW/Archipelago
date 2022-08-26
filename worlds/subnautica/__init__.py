@@ -1,4 +1,3 @@
-import functools
 import logging
 from typing import List, Dict, Any
 
@@ -63,7 +62,7 @@ class SubnauticaWorld(World):
         elif scan_option == Options.AggressiveScanLogic.option_containment:
             valid_creatures = Creatures.Cache.all_creatures_presorted_without_stasis
             self.world.creature_scans[self.player].value = min(len(
-                Creatures.Cache.all_creatures_presorted_without_containment),
+                Creatures.Cache.all_creatures_presorted_without_stasis),
                 self.world.creature_scans[self.player].value)
         else:
             valid_creatures = Creatures.Cache.all_creatures_presorted
