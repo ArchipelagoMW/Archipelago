@@ -112,13 +112,8 @@ class Overcooked2Level:
     Abstraction for a playable levels in Overcooked 2. By default constructor
     it can be used as an iterator for all locations in the Story map.
     """
-    dlc: str
+    world: Overcooked2GameWorld
     sublevel: int
-
-    def __init__(self, world: Overcooked2GameWorld, sublevel: int, dlc="Story"):
-        self.world = world
-        self.sublevel = sublevel
-        self.dlc = Overcooked2Dlc("Story")
 
     def __init__(self):
         self.world = Overcooked2GameWorld.ONE
@@ -130,9 +125,9 @@ class Overcooked2Level:
     def __next__(self):
         self.sublevel += 1
         if self.sublevel > self.world.get_sublevel_count():
+            self.world = Overcooked2GameWorld(self.world.value + 1)
             if self.world == Overcooked2GameWorld.KEVIN:
                 raise StopIteration
-            self.world = Overcooked2GameWorld(self.world.value + 1)
             self.sublevel = 1
 
         return self

@@ -90,8 +90,9 @@ class Overcooked2World(World):
         stars: int,
         is_event: bool = False,
     ) -> None:
-        completion_condition: Callable[[CollectionState], bool] = lambda state: \
-            has_requirements_for_level_star(state, self.level_mapping[level_id], stars)
+        completion_condition: Callable[[CollectionState], bool] = \
+            lambda state, level=self.level_mapping[level_id], stars=stars: \
+            has_requirements_for_level_star(state, level, stars)
 
         if is_event:
             location_id = None
@@ -163,12 +164,13 @@ class Overcooked2World(World):
             self.add_region(level_name)
 
             # Add Location to house progression item (1-star)
-            self.add_level_location(
-                level_name,
-                level.location_name_completed(),
-                level.level_id(),
-                1,
-            )
+            if level.world != Overcooked2GameWorld.KEVIN:  # Kevin Levels don't have progression items
+                self.add_level_location(
+                    level_name,
+                    level.location_name_completed(),
+                    level.level_id(),
+                    1,
+                )
 
             # Add Locations to house star aquisition events
             for n in [1, 2, 3]:
@@ -181,8 +183,15 @@ class Overcooked2World(World):
                 )
 
             # Overworld -> Level
-            level_access_rule: Callable[[CollectionState], bool] = lambda state: \
-                state.has("Star", self.player, self.level_unlock_counts[level.level_id()])
+            if level.world != Overcooked2GameWorld.KEVIN:
+                level_access_rule: Callable[[CollectionState], bool] = \
+                    lambda state, required_star_count=self.level_unlock_counts[level.level_id()]: \
+                    state.has("Star", self.player, required_star_count)
+            else:
+                level_access_rule: Callable[[CollectionState], bool] = \
+                    lambda state, item_name=level_name: \
+                    state.has(item_name, self.player)
+
             self.connect_regions("Overworld", level_name, level_access_rule)
 
             # Level --> Overworld
@@ -232,7 +241,9 @@ class Overcooked2World(World):
         # Serialize Unlock Requirements
         level_purchase_requirements = dict()
         for level_id in self.level_unlock_counts:
-            level_purchase_requirements[str(level_id)] = self.level_unlock_counts[level_id]
+            # +3 because the tutorial level starts 3-starred
+            # TODO: handle-ingame instead
+            level_purchase_requirements[str(level_id)] = self.level_unlock_counts[level_id] + 3
 
         # Put it all together
 
@@ -337,15 +348,13 @@ def level_unlock_requirement_factory(stars_to_win: int) -> dict[int, int]:
 
         # print("%d-%d (%d) = %d" % (level, sublevel, level_id, star_count))
 
-        # +3 because the tutorial level starts 3-starred
-        # TODO: handle-ingame instead
-        level_unlock_counts[level_id] = star_count + 3
+        level_unlock_counts[level_id] = star_count
 
         level += 1
         if level > 6:
             level = 1
             sublevel += 1
-    
+
     for n in range(37, 46):
         level_unlock_counts[n] = 0
 
