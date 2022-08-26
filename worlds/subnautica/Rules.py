@@ -261,7 +261,7 @@ def set_creature_rule(world, player: int, creature_name: str) -> "Location":
 def get_aggression_rule(option: AggressiveScanLogic, creature_name: str) -> \
         Optional[Callable[["CollectionState", int], bool]]:
     """Get logic rule for a creature scan location."""
-    if creature_name not in hatchable:  # can only be done via stasis
+    if creature_name not in hatchable and option != option.option_none:  # can only be done via stasis
         return has_stasis_rifle
     # otherwise allow option preference
     return aggression_rules.get(option.value, None)
