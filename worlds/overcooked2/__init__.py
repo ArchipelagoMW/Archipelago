@@ -241,9 +241,7 @@ class Overcooked2World(World):
         # Serialize Unlock Requirements
         level_purchase_requirements = dict()
         for level_id in self.level_unlock_counts:
-            # +3 because the tutorial level starts 3-starred
-            # TODO: handle-ingame instead
-            level_purchase_requirements[str(level_id)] = self.level_unlock_counts[level_id] + 3
+            level_purchase_requirements[str(level_id)] = self.level_unlock_counts[level_id]
 
         # Set Kevin Unlock Requirements
         def kevin_level_to_keyholder_level_id(level_id: int) -> int | None:
@@ -273,6 +271,7 @@ class Overcooked2World(World):
             "RevealAllLevels": False,
             "PurchaseAllLevels": False,
             "CheatsEnabled": False,
+            "ImpossibleTutorial": True,
             "LevelForceReveal": [
                 1,   # 1-1
                 7,   # 2-1
