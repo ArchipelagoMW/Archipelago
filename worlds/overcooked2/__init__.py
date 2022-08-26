@@ -9,10 +9,9 @@ from ..AutoWorld import World, WebWorld
 from .Overcooked2Levels import Overcooked2Level, Overcooked2GameWorld, Overcooked2GenericLevel, level_shuffle_factory
 from .Locations import Overcooked2Location, location_name_to_id
 from .Options import overcooked_options
-from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name
+from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event
 from .Locations import location_id_to_name, location_name_to_id
 from .Logic import has_requirements_for_level_star
-
 
 class Overcooked2Web(WebWorld):
     pass
@@ -257,6 +256,16 @@ class Overcooked2World(World):
             if keyholder_level_id is not None:
                 level_unlock_requirements[str(level_id)] = keyholder_level_id
 
+        # Place Items at Level Completion Screens (local only)
+        on_level_completed: dict[str, dict[str, str]] = dict()
+        for item in self.world.itempool:
+            location: Location = self.world.find_item(item.name, self.player)
+            if location.player != self.player:
+                continue # Not in this world
+            
+            level_id = str(location_name_to_id[location.name])
+            on_level_completed[level_id] = item_to_unlock_event(item.name)
+
         # Put it all together
 
         data = {
@@ -327,6 +336,9 @@ class Overcooked2World(World):
             "CarnivalDispenserRefactoryTime": 3.0,
             "LevelUnlockRequirements": level_unlock_requirements,
             "LockedEmotes": [1, 2, 3, 4, 5, 6],
+
+            # Item Unlocking
+            "OnLevelCompleted": on_level_completed,
         }
 
         # Save to disk
