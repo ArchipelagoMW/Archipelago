@@ -125,9 +125,9 @@ class Overcooked2Level:
     def __next__(self):
         self.sublevel += 1
         if self.sublevel > self.world.get_sublevel_count():
-            self.world = Overcooked2GameWorld(self.world.value + 1)
             if self.world == Overcooked2GameWorld.KEVIN:
                 raise StopIteration
+            self.world = Overcooked2GameWorld(self.world.value + 1)
             self.sublevel = 1
 
         return self

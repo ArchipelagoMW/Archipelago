@@ -245,6 +245,20 @@ class Overcooked2World(World):
             # TODO: handle-ingame instead
             level_purchase_requirements[str(level_id)] = self.level_unlock_counts[level_id] + 3
 
+        # Set Kevin Unlock Requirements
+        def kevin_level_to_keyholder_level_id(sublevel: int) -> int | None:
+            location = self.world.find_item(f"Kevin-{sublevel}", self.player)
+            if location.player != self.player:
+                return None # This kevin level will be unlocked by the server at runtime
+            level_id = location_name_to_id[location.name]
+            return level_id
+
+        level_unlock_requirements = dict()
+        for level_id in range(37, 45):
+            keyholder_level_id = kevin_level_to_keyholder_level_id(level_id)
+            if keyholder_level_id is not None:
+                level_unlock_requirements[str(level_id)] = keyholder_level_id
+
         # Put it all together
 
         data = {
@@ -312,16 +326,7 @@ class Overcooked2World(World):
             "BackpackMovementScale": 0.666,
             "RespawnTime": 10.0,
             "CarnivalDispenserRefactoryTime": 3.0,
-            # "LevelUnlockRequirements": { # TODO
-            #     "37": 1,
-            #     "38": 2,
-            #     "39": 4,
-            #     "40": 1,
-            #     "41": 2,
-            #     "42": 3,
-            #     "43": 3,
-            #     "44": 3
-            # },
+            "LevelUnlockRequirements": level_unlock_requirements
         }
 
         # Save to disk
