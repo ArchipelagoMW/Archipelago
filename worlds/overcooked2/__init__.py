@@ -246,8 +246,8 @@ class Overcooked2World(World):
             level_purchase_requirements[str(level_id)] = self.level_unlock_counts[level_id] + 3
 
         # Set Kevin Unlock Requirements
-        def kevin_level_to_keyholder_level_id(sublevel: int) -> int | None:
-            location = self.world.find_item(f"Kevin-{sublevel}", self.player)
+        def kevin_level_to_keyholder_level_id(level_id: int) -> int | None:
+            location = self.world.find_item(f"Kevin-{level_id-36}", self.player)
             if location.player != self.player:
                 return None # This kevin level will be unlocked by the server at runtime
             level_id = location_name_to_id[location.name]
