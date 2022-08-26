@@ -5,6 +5,7 @@ import os
 
 # from BaseClasses import Location
 from Patch import read_rom, APDeltaPatch
+from .Names import PatchName
 
 USHASH = '1cc5cf3b4d29d8c3ade957648b529dc1'
 ROM_PLAYER_LIMIT = 65535
@@ -101,40 +102,37 @@ class LocalRom(object):
 def patch_rom(world, rom, player, offsets_to_ids):
     # local_random = world.slot_seeds[player]
 
-    # Disable vampire Vincent cutscene
-    # rom.write_byte(0xAACC0, 0x24)
-    # rom.write_byte(0xAACC1, 0x01)
-    # rom.write_byte(0xAACC2, 0x00)
-    # rom.write_byte(0xAACC3, 0x01)
-
-    # Increase item capacity to 99
-    # rom.write_byte(0xBF30B, 0x63)
+    # NOP out the CRC BNEs
+    rom.write_bytes(0x66C, [0x00, 0x00, 0x00, 0x00])
+    rom.write_bytes(0x678, [0x00, 0x00, 0x00, 0x00])
 
     # Disable Easy Mode cutoff point
-    # rom.write_byte(0xD9E18, 0x24)
-    # rom.write_byte(0xD9E19, 0x0D)
-    # rom.write_byte(0xD9E1A, 0x00)
-    # rom.write_byte(0xD9E1B, 0x00)
+    rom.write_bytes(0xD9E18, [0x24, 0x0D, 0x00, 0x00])
 
     # Fix both elevator bridges for both characters
-    # rom.write_byte(0x6CEAA0, 0x24)
-    # rom.write_byte(0x6CEAA1, 0x0B)
-    # rom.write_byte(0x6CEAA2, 0x00)
-    # rom.write_byte(0x6CEAA3, 0x01)
-    # rom.write_byte(0x6CEAA4, 0x24)
-    # rom.write_byte(0x6CEAA5, 0x0D)
-    # rom.write_byte(0x6CEAA6, 0x00)
-    # rom.write_byte(0x6CEAA7, 0x01)
+    rom.write_bytes(0x6CEAA0, [0x24, 0x0B, 0x00, 0x01])
+    rom.write_bytes(0x6CEAA4, [0x24, 0x0D, 0x00, 0x01])
+
+    # Disable vampire Vincent cutscene
+    if world.fight_vincent[player] == "never":
+        rom.write_bytes(0xAACC0, [0x24, 0x01, 0x00, 0x01])
+
+    # Increase item capacity to 100
+    if world.increase_item_limit[player] == "true":
+        rom.write_byte(0xBF30B, 0x64)
+
+    # Custom warp menu and remote item-rewarding check code injection
+    rom.write_bytes(0x19B98, [0x08, 0x06, 0x0D, 0x8B])  # J 0x8018362C
+    rom.write_bytes(0x10681C, PatchName.remote_item_and_warp)
+
+    # Custom warp menu code
+    rom.write_bytes(0xADD68, [0x0C, 0x04, 0xAB, 0x12])  # JAL 0x8012AC48
+    rom.write_bytes(0xADE28, PatchName.stage_select_overwrite)
+    rom.write_byte(0xADD6F, world.special2s_per_warp[player])
 
     # Write the new item bytes
     for offset, item_id in offsets_to_ids.items():
         rom.write_byte(offset, item_id)
-
-
-    # from Main import __version__
-    # rom.name = bytearray(f'CV64{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
-    # rom.name.extend([0] * (21 - len(rom.name)))
-    # rom.write_bytes(0x7FC0, rom.name)
 
 
 class CV64DeltaPatch(APDeltaPatch):

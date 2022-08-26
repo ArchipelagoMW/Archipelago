@@ -143,7 +143,10 @@ class CV64World(World):
                     if loc.item.player == self.player:
                         offsets_to_ids[loc.rom_offset] = loc.item.item_byte
                     else:
-                        offsets_to_ids[loc.rom_offset] = 0x11
+                        if loc.item.classification == ItemClassification.progression:
+                            offsets_to_ids[loc.rom_offset] = 0x11
+                        else:
+                            offsets_to_ids[loc.rom_offset] = 0x12
 
             patch_rom(self.world, rom, self.player, offsets_to_ids)  # self.active_level_list
 
