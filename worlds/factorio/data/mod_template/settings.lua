@@ -1,7 +1,7 @@
 -- Find out if more than one AP mod is loaded, and if so, error out.
 function mod_is_AP(str)
-    -- lua string.match is way more restrictive than regex. Regex would be "^AP-\d{20}-P[1-9]\d*-.+$"
-	local result = string.match(str, "^AP%-%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%-P[1-9]%d-%-.+$")
+    -- lua string.match is way more restrictive than regex. Regex would be "^AP-W?\d{20}-P[1-9]\d*-.+$"
+	local result = string.match(str, "^AP%-W?%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%-P[1-9]%d-%-.+$")
 	if result ~= nil then
 		log("Archipelago Mod: " .. result .. " is loaded.")
 	end
