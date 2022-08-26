@@ -398,7 +398,7 @@ Door - 0x0A0C9 (Cargo Box Entry) - 0x0A0C8
 Door - 0x034F5 (Wooden Roof Stairs) - 0x28AC1
 158225 - 0x28998 (Tinted Glass Door Panel) - True - Stars & Rotated Shapers
 Door - 0x28A61 (Tinted Glass Door) - 0x28998
-158226 - 0x28A0D (Church Entry Panel) - 0x28998 - Stars & RGB & Environment
+158226 - 0x28A0D (Church Entry Panel) - 0x28A61 - Stars & RGB & Environment
 Door - 0x03BB0 (Church Entry) - 0x28A0D
 158228 - 0x28A79 (Maze Stair Control) - True - Environment
 Door - 0x28AA2 (Maze Stairs) - 0x28A79
