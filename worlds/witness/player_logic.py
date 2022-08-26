@@ -372,6 +372,8 @@ class WitnessPlayerLogic:
             "0x03481": "Tutorial Video Pattern Knowledge",
             "0x03702": "Jungle Video Pattern Knowledge",
             "0x0356B": "Challenge Video Pattern Knowledge",
+            "0x0A15F": "Desert Laser Panel Shutters Open (1)",
+            "0x012D7": "Desert Laser Panel Shutters Open (2)",
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {

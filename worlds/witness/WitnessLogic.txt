@@ -135,6 +135,8 @@ Desert Outside (Desert) - Main Island - True - Desert Floodlight Room - 0x09FEE:
 158085 - 0x09F86 (Surface 8 Control) - 0x0A053 - True
 158086 - 0x0C339 (Light Room Entry Panel) - 0x09F94 - True
 Door - 0x09FEE (Light Room Entry) - 0x0C339 - True
+158701 - 0x03608 (Laser Panel) - 0x012D7 & 0x0A15F - True
+Laser - 0x012FB (Laser) - 0x03608
 
 Desert Floodlight Room (Desert) - Desert Pond Room - 0x0C2C3:
 158087 - 0x09FAA (Light Control) - True - True
@@ -176,8 +178,6 @@ Desert Elevator Room (Desert) - Desert Lowest Level Inbetween Shortcuts - 0x012F
 158115 - 0x0A15C (Final Bent 1) - True - Reflection
 158116 - 0x09FFF (Final Bent 2) - 0x0A15C - Reflection
 158117 - 0x0A15F (Final Bent 3) - 0x09FFF - Reflection
-158701 - 0x03608 (Laser Panel) - 0x012D7 & 0x0A15F - True
-Laser - 0x012FB (Laser) - 0x03608
 
 Desert Lowest Level Inbetween Shortcuts (Desert):
 
