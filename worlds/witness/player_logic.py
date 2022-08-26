@@ -60,7 +60,10 @@ class WitnessPlayerLogic:
                 for dependentItem in door_items:
                     all_options.add(items_option.union(dependentItem))
 
-            return frozenset(all_options)
+            if panel_hex != "0x28A0D":
+                return frozenset(all_options)
+            else:  # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved
+                these_items = all_options
 
         these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
 
