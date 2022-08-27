@@ -1,9 +1,5 @@
 from Options import Range, Toggle, DefaultOnToggle, Choice, DeathLink
 
-class UseResourcePacks(DefaultOnToggle):
-    """Uses Resource Packs to fill out the item pool from Raft. Resource Packs have basic earlygame items such as planks, plastic, or food."""
-    display_name = "Use resource packs"
-
 class MinimumResourcePackAmount(Range):
     """The minimum amount of resources available in a resource pack"""
     display_name = "Minimum resource pack amount"
@@ -19,14 +15,21 @@ class MaximumResourcePackAmount(Range):
     default = 5
 
 class DuplicateItems(Choice):
-    """Adds duplicates of items to the item pool. These will be selected alongside
-    Resource Packs (if configured). Note that there are not many progression items,
-    and selecting Progression may produce many of the same duplicate item."""
+    """Adds duplicates of items to the item pool (if configured in Filler items).
+    These will be selected alongside Resource Packs (if configured). Note that
+    there are not many progression items, and selecting Progression may produce
+    many of the same duplicate item."""
     display_name = "Duplicate items"
-    option_disabled = 0
-    option_progression = 1
-    option_non_progression = 2
-    option_any = 3
+    option_progression = 0
+    option_non_progression = 1
+    option_any = 2
+
+class FillerItemTypes(Choice):
+    """Determines whether to use Resource Packs, Duplicate Items (as configured), or both."""
+    display_name = "Filler items"
+    option_resource_packs = 0
+    option_duplicates = 1
+    option_both = 2
 
 class IslandFrequencyLocations(Choice):
     """Sets where frequencies for story islands are located."""
@@ -64,10 +67,10 @@ class PaddleboardMode(Toggle):
     display_name = "Paddleboard Mode"
 
 raft_options = {
-    "use_resource_packs": UseResourcePacks,
     "minimum_resource_pack_amount": MinimumResourcePackAmount,
     "maximum_resource_pack_amount": MaximumResourcePackAmount,
     "duplicate_items": DuplicateItems,
+    "filler_item_types": FillerItemTypes,
     "island_frequency_locations": IslandFrequencyLocations,
     "island_generation_distance": IslandGenerationDistance,
     "expensive_research": ExpensiveResearch,

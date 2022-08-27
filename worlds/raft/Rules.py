@@ -127,13 +127,13 @@ class RaftLogic(LogicMixin):
         return (self.raft_can_drive(player)
             # Access checks are to prevent frequencies for other
             # islands from appearing in Utopia
-            and self.raft_can_access_radio_tower(self, player)
-            and self.raft_can_access_vasagatan(self, player)
-            and self.raft_can_access_balboa_island(self, player)
-            and self.raft_can_access_caravan_island(self, player)
-            and self.raft_can_access_tangaroa(self, player)
-            and self.raft_can_access_varuna_point(self, player)
-            and self.raft_can_access_temperance(self, player)
+            and self.raft_can_access_radio_tower(player)
+            and self.raft_can_access_vasagatan(player)
+            and self.raft_can_access_balboa_island(player)
+            and self.raft_can_access_caravan_island(player)
+            and self.raft_can_access_tangaroa(player)
+            and self.raft_can_access_varuna_point(player)
+            and self.raft_can_access_temperance(player)
             and self.has("Utopia Frequency", player))
 
     def raft_can_complete_utopia(self, player):

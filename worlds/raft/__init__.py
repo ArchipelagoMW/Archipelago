@@ -56,21 +56,21 @@ class RaftWorld(World):
         extraItemNamePool = []
         extras = len(location_table) - len(item_table) - 1 # Victory takes up 1 unaccounted-for slot
         if extras > 0:
-            if (self.world.use_resource_packs[self.player].value):
+            if (self.world.filler_item_types[self.player].value != 1): # Use resource packs
                 for packItem in resourcePackItems:
                     for i in range(minimumResourcePackAmount, maximumResourcePackAmount + 1):
                         extraItemNamePool.append(createResourcePackName(i, packItem))
 
-            if self.world.duplicate_items[self.player].value != 0:
+            if self.world.filler_item_types[self.player].value != 0: # Use duplicate items
                 dupeItemPool = item_table.copy()
                 # Remove frequencies if necessary
                 if self.world.island_frequency_locations[self.player].value != 3: # Not completely random locations
                     dupeItemPool = (itm for itm in dupeItemPool if "Frequency" not in itm["name"])
                 
                 # Remove progression or non-progression items if necessary
-                if (self.world.duplicate_items[self.player].value == 1): # Progression only
+                if (self.world.duplicate_items[self.player].value == 0): # Progression only
                     dupeItemPool = (itm for itm in dupeItemPool if itm["progression"] == True)
-                elif (self.world.duplicate_items[self.player].value == 2): # Non-progression only
+                elif (self.world.duplicate_items[self.player].value == 1): # Non-progression only
                     dupeItemPool = (itm for itm in dupeItemPool if itm["progression"] == False)
                 
                 dupeItemPool = list(dupeItemPool)
@@ -162,8 +162,8 @@ class RaftWorld(World):
     def fill_slot_data(self):
         return {
             "IslandGenerationDistance": self.world.island_generation_distance[self.player].value,
-            "ExpensiveResearch": self.world.expensive_research[self.player].value,
-            "DeathLink": self.world.death_link[self.player].value
+            "ExpensiveResearch": bool(self.world.expensive_research[self.player].value),
+            "DeathLink": bool(self.world.death_link[self.player].value)
         }
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
