@@ -142,10 +142,10 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "Pallet Town", "Route 1")
     connect(world, player, "Route 1", "Viridian City")
     connect(world, player, "Viridian City", "Route 22")
-    connect(world, player, "Route 22", "Route 23 South", lambda state: state._pokemon_rb_has_badges(min(4,state.world.badge_goal[player]), player))
-    connect(world, player, "Route 23 South", "Route 23 North", lambda state: state._pokemon_rb_has_badges(min(6, state.world.badge_goal[player]), player))
+    connect(world, player, "Route 22", "Route 23 South", lambda state: state._pokemon_rb_has_badges(min(4,state.world.victory_road_condition[player]), player))
+    connect(world, player, "Route 23 South", "Route 23 North", lambda state: state._pokemon_rb_has_badges(min(6, state.world.victory_road_condition[player]), player))
     connect(world, player, "Viridian City", "Viridian Gym", lambda state:
-                     state._pokemon_rb_has_badges(min(7, state.world.badge_goal[player] - 1), player), one_way=True)
+                     state._pokemon_rb_has_badges(min(7, state.world.victory_road_condition[player] - 1), player), one_way=True)
     connect(world, player, "Route 2", "Route 2 East", lambda state: state._pokemon_rb_can_cut(player))
     connect(world, player, "Route 2 East", "Diglett's Cave", lambda state: state._pokemon_rb_can_cut(player))
     connect(world, player, "Route 2", "Viridian Forest")
@@ -249,12 +249,12 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "Pokemon Mansion 1F", "Pokemon Mansion 2F", one_way=True)
     connect(world, player, "Pokemon Mansion 2F", "Pokemon Mansion 3F", one_way=True)
     connect(world, player, "Pokemon Mansion 1F", "Pokemon Mansion B1F", one_way=True)
-    connect(world, player, "Route 23 North", "Victory Road 1F", lambda state: state._pokemon_rb_has_badges(min(8, state.world.badge_goal[player]), player) and state._pokemon_rb_can_strength(player), one_way=True)
+    connect(world, player, "Route 23 North", "Victory Road 1F", lambda state: state._pokemon_rb_has_badges(min(8, state.world.victory_road_condition[player]), player) and state._pokemon_rb_can_strength(player), one_way=True)
     connect(world, player, "Victory Road 1F", "Victory Road 2F", one_way=True)
     connect(world, player, "Victory Road 2F", "Victory Road 3F", one_way=True)
     connect(world, player, "Victory Road 2F", "Indigo Plateau", one_way=True)
     connect(world, player, "Cerulean City", "Cerulean Cave 1F", lambda state:
-            state._pokemon_rb_cerulean_cave(state.world.cerulean_cave_goal[player].value, player) and
+            state._pokemon_rb_cerulean_cave(state.world.cerulean_cave_condition[player].value, player) and
             state._pokemon_rb_can_surf(player), one_way=True)
     connect(world, player, "Cerulean Cave 1F", "Cerulean Cave 2F", one_way=True)
     connect(world, player, "Cerulean Cave 1F", "Cerulean Cave B1F", lambda state: state._pokemon_rb_can_surf(player), one_way=True)
