@@ -34,59 +34,55 @@ shuffleable_regions = [
 
 def create_regions(world, player: int, active_locations):
     menu_region = create_region(world, player, active_locations, 'Menu', None, None)
-    gate_0_region = create_region(world, player, active_locations, 'Gate 0', None, None)
-    gate_1_region = create_region(world, player, active_locations, 'Gate 1', None, None)
-    gate_2_region = create_region(world, player, active_locations, 'Gate 2', None, None)
-    gate_3_region = create_region(world, player, active_locations, 'Gate 3', None, None)
-    gate_4_region = create_region(world, player, active_locations, 'Gate 4', None, None)
-    gate_5_region = create_region(world, player, active_locations, 'Gate 5', None, None)
-    gate_6_region = create_region(world, player, active_locations, 'Gate 6', None, None)
-    gate_7_region = create_region(world, player, active_locations, 'Gate 7', None, None)
+    warp2_region = create_region(world, player, active_locations, 'Warp 2', None, None)
+    warp3_region = create_region(world, player, active_locations, 'Warp 3', None, None)
+    warp4_region = create_region(world, player, active_locations, 'Warp 4', None, None)
+    warp5_region = create_region(world, player, active_locations, 'Warp 5', None, None)
+    warp6_region = create_region(world, player, active_locations, 'Warp 6', None, None)
+    warp7_region = create_region(world, player, active_locations, 'Warp 7', None, None)
+    warp8_region = create_region(world, player, active_locations, 'Warp 8', None, None)
 
     # Forest of Silence regions
-
     forest_start_region_locations = [
-        LocationName.forest_main_torch1,
-        LocationName.forest_main_torch2,
-        LocationName.forest_main_torch3,
-        LocationName.forest_main_torch4,
-        LocationName.forest_main_torch5,
-        LocationName.forest_main_torch6,
-        LocationName.forest_main_torch7,
-        LocationName.forest_main_torch8,
-        LocationName.forest_main_torch9,
-        LocationName.forest_main_torch10,
-        LocationName.forest_main_torch11,
-        LocationName.forest_main_torch12,
-        LocationName.forest_main_torch13,
-        LocationName.forest_main_torch14,
-        LocationName.forest_main_torch15,
-        LocationName.forest_main_torch16,
-        LocationName.forest_main_torch17,
-        LocationName.forest_main_torch18,
-        LocationName.forest_main_torch19,
-        LocationName.forest_main_torch20,
+        LocationName.forest_pillars_right,
+        LocationName.forest_pillars_top,
+        LocationName.forest_bone_mom,
+        LocationName.forest_lgaz_in,
+        LocationName.forest_lgaz_top,
+        LocationName.forest_hgaz_in,
+        LocationName.forest_hgaz_top,
+        LocationName.forest_weretiger_sw,
+        LocationName.forest_weretiger_gate,
+        LocationName.forest_dirge_tomb,
+        LocationName.forest_corpse_save,
+        LocationName.forest_dbridge_wall,
+        LocationName.forest_dbridge_sw,
+        LocationName.forest_dbridge_gate_r,
+        LocationName.forest_dbridge_tomb,
+        LocationName.forest_bface_tomb,
+        LocationName.forest_ibridge,
+        LocationName.forest_werewolf_tomb,
+        LocationName.forest_werewolf_tree,
+        LocationName.forest_final_sw,
     ]
     forest_start_region = create_region(world, player, active_locations, LocationName.forest_of_silence,
                                         forest_start_region_locations, None)
 
-
     # Castle Wall regions
-
     cw_main_region_locations = [
-        LocationName.cw_main_torch1,
-        LocationName.cw_main_torch4,
-        LocationName.cw_main_torch5,
-        LocationName.cw_main_torch6,
-        LocationName.cw_main_torch7,
+        LocationName.cw_bottom_middle,
+        LocationName.cw_rrampart,
+        LocationName.cw_lrampart,
+        LocationName.cw_dragon_sw,
+        LocationName.cwr_bottom,
     ]
     cw_start_region = create_region(world, player, active_locations, LocationName.castle_wall,
                                     cw_main_region_locations, None)
 
     cw_ltower_region_locations = [
-        LocationName.cw_main_torch2,
-        LocationName.cw_main_torch3,
-        LocationName.cw_main_torch8,
+        LocationName.cw_drac_sw,
+        LocationName.cwl_bottom,
+        LocationName.cwl_bridge,
         LocationName.the_end
     ]
     cw_ltower_region = create_region(world, player, active_locations, LocationName.cw_ltower,
@@ -96,14 +92,13 @@ def create_regions(world, player: int, active_locations):
     # Set up the regions correctly.
     world.regions += [
         menu_region,
-        # gate_0_region,
-        # gate_1_region,
-        # gate_2_region,
-        # gate_3_region,
-        # gate_4_region,
-        # gate_5_region,
-        # gate_6_region,
-        # gate_7_region,
+        warp2_region,
+        warp3_region,
+        warp4_region,
+        warp5_region,
+        warp6_region,
+        warp7_region,
+        warp8_region,
         forest_start_region,
         cw_start_region,
         cw_ltower_region,
@@ -112,6 +107,8 @@ def create_regions(world, player: int, active_locations):
 
 def connect_regions(world, player):
     names: typing.Dict[str, int] = {}
+    connect(world, player, names, 'Menu', 'Warp 2',
+            lambda state: (state.has(ItemName.special_two + 3, player)))
 
     connect(world, player, names, 'Menu', LocationName.forest_of_silence)
 
