@@ -15,14 +15,12 @@ class MaximumResourcePackAmount(Range):
     default = 5
 
 class DuplicateItems(Choice):
-    """Adds duplicates of items to the item pool (if configured in Filler items).
-    These will be selected alongside Resource Packs (if configured). Note that
-    there are not many progression items, and selecting Progression may produce
-    many of the same duplicate item."""
+    """Adds duplicates of items to the item pool (if configured in Filler items). These will be selected alongside Resource Packs (if configured). Note that there are not many progression items, and selecting Progression may produce many of the same duplicate item."""
     display_name = "Duplicate items"
     option_progression = 0
     option_non_progression = 1
     option_any = 2
+    default = 2
 
 class FillerItemTypes(Choice):
     """Determines whether to use Resource Packs, Duplicate Items (as configured), or both."""
@@ -36,9 +34,11 @@ class IslandFrequencyLocations(Choice):
     display_name = "Frequency locations"
     option_vanilla = 0
     option_random_on_island = 1
-    option_progressive = 2
-    option_anywhere = 3
-    default = 1
+    option_random_island_order = 2
+    option_random_on_island_random_order = 3
+    option_progressive = 4
+    option_anywhere = 5
+    default = 2
 
 class IslandGenerationDistance(Choice):
     """Sets how far away islands spawn from you when you input their coordinates into the Receiver."""
