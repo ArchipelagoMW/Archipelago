@@ -47,32 +47,28 @@ class Overcooked2Dlc(Enum):
         if self == Overcooked2Dlc.CAMPFIRE_COOK_OFF:
             id = 3*4 + 3
         if self == Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE:
-            id = 3*3 + 3
+            id = 3*3 + 3 + 9
         if self == Overcooked2Dlc.CARNIVAL_OF_CHAOS:
             id = 3*4 + 3
         if self == Overcooked2Dlc.SEASONAL:
             id = 31
 
-        id = self.start_level_id() + id
-
-        return id
+        return self.start_level_id() + id
 
     # Tutorial + Horde Levels + Endgame
     def excluded_levels(self) -> list[int]:
         if self == Overcooked2Dlc.STORY:
             return [0, 36]
-        if self == Overcooked2Dlc.SURF_N_TURF:
-            return []
-        if self == Overcooked2Dlc.CAMPFIRE_COOK_OFF:
-            return []
+
+        return []
+    
+    def horde_levels(self) -> list[int]:
         if self == Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE:
             return [12, 13, 14, 15, 16, 17, 18, 19]
-        if self == Overcooked2Dlc.CARNIVAL_OF_CHAOS:
-            return []
         if self == Overcooked2Dlc.SEASONAL:
             return [13, 15]
 
-        assert False
+        return []
 
 
 class Overcooked2GameWorld(Enum):
@@ -166,16 +162,18 @@ class Overcooked2GenericLevel():
         return self.__str__()
 
 
-def level_shuffle_factory(rng: Random) -> dict[int, Overcooked2GenericLevel]:  # return <story_level_id, level>
+def level_shuffle_factory(rng: Random, shuffle_horde_levels=False) -> dict[int, Overcooked2GenericLevel]:  # return <story_level_id, level>
 
-    # Create a list of all valid levels for selection (excludes tutorial and kevin levels)
+    # Create a list of all valid levels for selection
+    # (excludes tutorial, throne, kevin and sometimes horde levels)
     pool = list()
     for dlc in Overcooked2Dlc:
         for level_id in range(dlc.start_level_id(), dlc.end_level_id()):
             if level_id not in dlc.excluded_levels():
-                pool.append(
-                    Overcooked2GenericLevel(level_id, dlc)
-                )
+                if shuffle_horde_levels or level_id not in dlc.horde_levels():
+                    pool.append(
+                        Overcooked2GenericLevel(level_id, dlc)
+                    )
 
     # Sort the pool to eliminate risk
     pool.sort(key=lambda x: int(x.dlc)*1000 + x.level_id)
@@ -193,3 +191,42 @@ def level_shuffle_factory(rng: Random) -> dict[int, Overcooked2GenericLevel]:  #
             result[level_id] = Overcooked2GenericLevel(level_id) # This is just 6-6 right now
 
     return result
+
+dlc_level_id_to_name = {
+    (Overcooked2Dlc.STORY, 1 ): "Story 1-1",
+    (Overcooked2Dlc.STORY, 2 ): "Story 1-2",
+    (Overcooked2Dlc.STORY, 3 ): "Story 1-3",
+    (Overcooked2Dlc.STORY, 4 ): "Story 1-4",
+    (Overcooked2Dlc.STORY, 5 ): "Story 1-5",
+    (Overcooked2Dlc.STORY, 6 ): "Story 1-6",
+    (Overcooked2Dlc.STORY, 7 ): "Story 2-1",
+    (Overcooked2Dlc.STORY, 8 ): "Story 2-2",
+    (Overcooked2Dlc.STORY, 9 ): "Story 2-3",
+    (Overcooked2Dlc.STORY, 10): "Story 2-4",
+    (Overcooked2Dlc.STORY, 11): "Story 2-5",
+    (Overcooked2Dlc.STORY, 12): "Story 2-6",
+    (Overcooked2Dlc.STORY, 13): "Story 3-1",
+    (Overcooked2Dlc.STORY, 14): "Story 3-2",
+    (Overcooked2Dlc.STORY, 15): "Story 3-3",
+    (Overcooked2Dlc.STORY, 16): "Story 3-4",
+    (Overcooked2Dlc.STORY, 17): "Story 3-5",
+    (Overcooked2Dlc.STORY, 18): "Story 3-6",
+    (Overcooked2Dlc.STORY, 19): "Story 4-1",
+    (Overcooked2Dlc.STORY, 20): "Story 4-2",
+    (Overcooked2Dlc.STORY, 21): "Story 4-3",
+    (Overcooked2Dlc.STORY, 22): "Story 4-4",
+    (Overcooked2Dlc.STORY, 23): "Story 4-5",
+    (Overcooked2Dlc.STORY, 24): "Story 4-6",
+    (Overcooked2Dlc.STORY, 25): "Story 5-1",
+    (Overcooked2Dlc.STORY, 26): "Story 5-2",
+    (Overcooked2Dlc.STORY, 27): "Story 5-3",
+    (Overcooked2Dlc.STORY, 28): "Story 5-4",
+    (Overcooked2Dlc.STORY, 29): "Story 5-5",
+    (Overcooked2Dlc.STORY, 30): "Story 5-6",
+    (Overcooked2Dlc.STORY, 31): "Story 6-1",
+    (Overcooked2Dlc.STORY, 32): "Story 6-2",
+    (Overcooked2Dlc.STORY, 33): "Story 6-3",
+    (Overcooked2Dlc.STORY, 34): "Story 6-4",
+    (Overcooked2Dlc.STORY, 35): "Story 6-5",
+    (Overcooked2Dlc.STORY, 36): "Story 6-6",
+}
