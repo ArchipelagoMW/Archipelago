@@ -53,7 +53,7 @@ class Overcooked2Dlc(Enum):
         if self == Overcooked2Dlc.SEASONAL:
             id = 31
 
-        id = self.start_level_id() + id + 1  # +1 to make the range exclusive
+        id = self.start_level_id() + id
 
         return id
 
@@ -66,9 +66,9 @@ class Overcooked2Dlc(Enum):
         if self == Overcooked2Dlc.CAMPFIRE_COOK_OFF:
             return []
         if self == Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE:
-            return []
-        if self == Overcooked2Dlc.CARNIVAL_OF_CHAOS:
             return [12, 13, 14, 15, 16, 17, 18, 19]
+        if self == Overcooked2Dlc.CARNIVAL_OF_CHAOS:
+            return []
         if self == Overcooked2Dlc.SEASONAL:
             return [13, 15]
 
