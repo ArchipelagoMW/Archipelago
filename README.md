@@ -61,26 +61,10 @@ This project makes use of multiple other projects. We wouldn't be here without t
 * [Ocarina of Time Randomizer](https://github.com/TestRunnerSRL/OoT-Randomizer)
 
 ## Contributing
-Contributions are welcome. We have a few asks of any new contributors.
-
-* Ensure that all changes which affect logic are covered by unit tests. 
-* Do not introduce any unit test failures/regressions.
-
-Otherwise, we tend to judge code on a case to case basis. It is a generally good idea to stick to PEP-8 guidelines to ensure consistency with existing code. (And to make the linter happy.)
-
-For adding a new game to Archipelago and other documentation on how Archipelago functions, please see [the docs folder](docs/) for the relevant information and feel free to ask any questions in the #archipelago-dev channel in our discord.
+For contribution guidelines, please see our [Contributing doc.](/docs/contributing.md)
 
 ## FAQ
-For frequently asked questions see the website's [FAQ Page](https://archipelago.gg/faq/en/)
+For Frequently asked questions, please see the website's [FAQ Page.](https://archipelago.gg/faq/en/)
 
 ## Code of Conduct
-We conduct ourselves openly and inclusively here. Please do not contribute to an environment which makes other people uncomfortable. This means that we expect all contributors or participants here to:
-
-* Be welcoming and inclusive in tone and language.
-* Be respectful of others and their abilities.
-* Show empathy when speaking with others.
-* Be gracious and accept feedback and constructive criticism.
-
-These guidelines apply to all channels of communication within this GitHub repository. Please be respectful in both public channels, such as issues, and private, such as private messaging or emails.
-
-Any incidents of abuse may be reported directly to Ijwu at hmfarran@gmail.com.
+Please refer to our [code of conduct.](/docs/code_of_conduct.md)
