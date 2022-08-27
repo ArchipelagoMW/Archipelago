@@ -624,7 +624,7 @@ def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset
     def sorter(element: str) -> str:
         parts = element.split(maxsplit=1)
         if parts[0].lower() in ignore:
-            return parts[1]
+            return parts[1].lower()
         else:
-            return element
+            return element.lower()
     return sorted(data, key=lambda i: sorter(key(i)) if key else sorter(i))
