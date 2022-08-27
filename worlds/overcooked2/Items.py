@@ -41,12 +41,12 @@ item_table: dict[str, ItemData] = {
     "Kevin-6": ItemData(27),
     "Kevin-7": ItemData(29),
     "Kevin-8": ItemData(29),
-    "Ok Emote": ItemData(30),
-    "Cooking Emote": ItemData(31),
-    "Curse Emote": ItemData(32),
-    "Serving Emote": ItemData(33),
-    "Preparing Emote": ItemData(34),
-    "Washing Up Emote": ItemData(35),
+    "Cooking Emote": ItemData(30),
+    "Curse Emote": ItemData(31),
+    "Serving Emote": ItemData(32),
+    "Preparing Emote": ItemData(33),
+    "Washing Up Emote": ItemData(34),
+    "Ok Emote": ItemData(35),
 }
 
 item_name_to_config_name = {

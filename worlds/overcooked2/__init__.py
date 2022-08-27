@@ -353,7 +353,7 @@ class Overcooked2World(World):
             "RespawnTime": 10.0,
             "CarnivalDispenserRefactoryTime": 4.0,
             "LevelUnlockRequirements": level_unlock_requirements,
-            "LockedEmotes": [1, 2, 3, 4, 5, 6],
+            "LockedEmotes": [0, 1, 2, 3, 4, 5],
 
             # Item Unlocking
             "OnLevelCompleted": on_level_completed,
