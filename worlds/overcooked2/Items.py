@@ -17,8 +17,8 @@ item_table: dict[str, ItemData] = {
     "Fire Extinguisher": ItemData(3),
     "Bellows": ItemData(4),
     "Clean Dishes": ItemData(5),
-    "Progressive Tip Jar": ItemData(6),
-    "Progressive Tip Jar": ItemData(7),
+    "Larger Tip Jar": ItemData(6),
+    "Larger Tip Jar": ItemData(7),
     "Dash": ItemData(8),
     "Throw": ItemData(9),
     "Catch": ItemData(10),
@@ -27,8 +27,8 @@ item_table: dict[str, ItemData] = {
     "Dish Scrubber": ItemData(13),
     "Burn Leniency": ItemData(14),
     "Sharp Knife": ItemData(15),
-    "Progressive Order Lookahead": ItemData(16),
-    "Progressive Order Lookahead": ItemData(17),
+    "Order Lookahead": ItemData(16),
+    "Order Lookahead": ItemData(17),
     "Lightweight Backpack": ItemData(18),
     "Faster Respawn Time": ItemData(19),
     "Faster Condiment/Drink Switch": ItemData(20),
@@ -115,9 +115,9 @@ def item_to_unlock_event(item_name: str) -> dict[str, str]:
     elif "Emote" in item_name:
         action = "UNLOCK_EMOTE"
         payload = str(item_table[item_name].code - 30)
-    elif item_name == "Progressive Tip Jar":
+    elif item_name == "Larger Tip Jar":
         action = "INC_TIP_COMBO"
-    elif item_name == "Progressive Order Lookahead":
+    elif item_name == "Order Lookahead":
         action = "INC_ORDERS_ON_SCREEN"
     else:
         config_name = item_name_to_config_name[item_name]
