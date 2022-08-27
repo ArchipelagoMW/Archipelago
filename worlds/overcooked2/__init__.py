@@ -89,9 +89,6 @@ class Overcooked2World(World):
         stars: int,
         is_event: bool = False,
     ) -> None:
-        completion_condition: Callable[[CollectionState], bool] = \
-            lambda state, level=self.level_mapping[level_id], stars=stars: \
-            has_requirements_for_level_star(state, level, stars)
 
         if is_event:
             location_id = None
@@ -107,6 +104,14 @@ class Overcooked2World(World):
         )
 
         location.event = is_event
+
+        # if level_id is none, then it's the 6-6 edge case
+        if level_id is None:
+            level_id = 36
+
+        completion_condition: Callable[[CollectionState], bool] = \
+            lambda state, level=self.level_mapping[level_id], stars=stars: \
+            has_requirements_for_level_star(state, level, stars)
         location.access_rule = completion_condition
 
         region.locations.append(
@@ -163,7 +168,16 @@ class Overcooked2World(World):
             self.add_region(level_name)
 
             # Add Location to house progression item (1-star)
-            if level.world != Overcooked2GameWorld.KEVIN:  # Kevin Levels don't have progression items
+            # Kevin Levels don't have progression items
+            # 6-6 doesn't either, but it does have victory condition which is placed later
+            if level.level_id() == 36:
+                self.add_level_location(
+                    level_name,
+                    level.location_name_completed(),
+                    None,
+                    1,
+                )
+            elif level.world != Overcooked2GameWorld.KEVIN:
                 self.add_level_location(
                     level_name,
                     level.location_name_completed(),
@@ -197,12 +211,7 @@ class Overcooked2World(World):
             self.connect_regions(level_name, "Overworld")
 
         completion_condition: Callable[[CollectionState], bool] = lambda state: \
-            state.can_reach(
-                self.world.get_location(
-                    "6-6 Completed",
-                    self.player,
-                )
-        )
+            state.has("Victory", self.player)
         self.world.completion_condition[self.player] = completion_condition
 
     def create_items(self):
@@ -218,6 +227,9 @@ class Overcooked2World(World):
         for level in Overcooked2Level():
             for n in [1, 2, 3]:
                 self.place_event(level.location_name_star_event(n), "Star")
+        
+        # Add Victory Condition
+        self.place_event("6-6 Completed", "Victory")
 
     # Items get distributed to locations
 
