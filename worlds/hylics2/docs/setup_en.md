@@ -4,13 +4,27 @@
 
 - Hylics 2 from: [Steam](https://store.steampowered.com/app/1286710/Hylics_2/) or [itch.io](https://mason-lindroth.itch.io/hylics-2)
 - BepInEx from: [GitHub](https://github.com/BepInEx/BepInEx/releases)
-- Archipelago Mod for Hylics 2 from: TBA
+- Archipelago Mod for Hylics 2 from: [GitHub](https://github.com/TRPG0/ArchipelagoHylics2)
 
-## Installation Procedures
+## Instructions (Windows)
+
+1. Download and install BepInEx 5 (32-bit, version 5.4.20 or newer) to your Hylics 2 root folder. Do not use any versions of BepInEx 6.
+
+2. Start Hylics 2 once so that BepInEx can create its required configuration files.
+
+3. Download the latest version of ArchipelagoHylics2 from the [Releases](https://github.com/TRPG0/ArchipelagoHylics2/releases) page and extract the contents of the zip file into `BepInEx\plugins`.
+
+4. Start Hylics 2 again. To verify that the mod is working, begin a new game or load a save file, and then open the console. (default key: `/`)
 
 ## Connecting
 
-## Reconnecting
+To connect to an Archipelago server, open the in-game console and use the command `/connect [address:port] [name] [password]`. The port and password are both optional arguments - if no port is provided then the default port of 38281 is used.
 
-## Troubleshooting
+## Other Commands
 
+There are a few additional commands that can be used while playing Hylics 2 randomizer:
+
+- `/popups` - Enables or disables in-game messages when an item is found or recieved.
+- `/airship` - Resummons the airship at the dock above New Muldul and teleports Wayne to it, in case the player gets stuck. Player must have the DOCK KEY to use this command.
+- `/deathlink` - Enables or disables DeathLink.
+- `![command]` - Entering any command with an `!` at the beginning allows for remotely sending commands to the server.

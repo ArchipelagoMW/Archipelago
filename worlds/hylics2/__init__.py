@@ -1,5 +1,5 @@
 import random
-from typing import List, Dict, Any
+from typing import Dict, Any
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, RegionType
 from worlds.generic.Rules import set_rule
 from ..AutoWorld import World, WebWorld
@@ -25,8 +25,11 @@ class Hylics2World(World):
     game: str = "Hylics 2"
     web = Hylics2Web()
 
-    item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
-    location_name_to_id = {data["name"]: loc_id for loc_id, data in Locations.location_table.items()}
+    all_items = {**Items.item_table, **Items.gesture_item_table, **Items.party_item_table}
+    all_locations = {**Locations.location_table, **Locations.tv_location_table, **Locations.party_location_table}
+
+    item_name_to_id = {data["name"]: item_id for item_id, data in all_items.items()}
+    location_name_to_id = {data["name"]: loc_id for loc_id, data in all_locations.items()}
     option_definitions = Options.hylics2_options
 
     topology_present: bool = True
