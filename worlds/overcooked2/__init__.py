@@ -306,15 +306,15 @@ class Overcooked2World(World):
             "LeaderboardScoreScale": {
                 "FourStars": 1.0,
                 "ThreeStars": self.star_threshold_scale,
-                "TwoStars": self.star_threshold_scale*0.666,
-                "OneStar": self.star_threshold_scale*0.25
+                "TwoStars": self.star_threshold_scale*0.8,
+                "OneStar": self.star_threshold_scale*0.4
             },
-            "Custom66TimerScale": 0.6,
+            "Custom66TimerScale": 0.5,
 
             "CustomLevelOrder": custom_level_order,
 
             # Items (Starting Inventory)
-            "CustomOrderLifetime": 75.0,  # 100 seconds is original
+            "CustomOrderLifetime": 80.0,  # 100 seconds is original
             "DisableWood": True,
             "DisableCoal": True,
             "DisableOnePlate": True,
@@ -327,7 +327,7 @@ class Overcooked2World(World):
             "DisableCatch": True,
             "DisableControlStick": True,
             "DisableWokDrag": True,
-            "WashTimeMultiplier": 1.4,
+            "WashTimeMultiplier": 1.5,
             "BurnSpeedMultiplier": 1.5,
             "MaxOrdersOnScreenOffset": -2,
             "ChoppingTimeScale": 1.4,
