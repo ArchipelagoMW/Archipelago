@@ -257,14 +257,14 @@ class Overcooked2World(World):
                 level_unlock_requirements[str(level_id)] = keyholder_level_id
 
         # Place Items at Level Completion Screens (local only)
-        on_level_completed: dict[str, dict[str, str]] = dict()
+        on_level_completed: dict[str, list[dict[str, str]]] = dict()
         for item in self.world.itempool:
             location: Location = self.world.find_item(item.name, self.player)
             if location.player != self.player:
                 continue # Not in this world
             
             level_id = str(location_name_to_id[location.name])
-            on_level_completed[level_id] = item_to_unlock_event(item.name)
+            on_level_completed[level_id] = [item_to_unlock_event(item.name)]
 
         # Put it all together
 
@@ -327,13 +327,13 @@ class Overcooked2World(World):
             "DisableCatch": True,
             "DisableControlStick": True,
             "DisableWokDrag": True,
-            "WashTimeMultiplier": 1.5,
+            "WashTimeMultiplier": 1.4,
             "BurnSpeedMultiplier": 1.5,
             "MaxOrdersOnScreenOffset": -2,
-            "ChoppingTimeScale": 1.5,
-            "BackpackMovementScale": 0.666,
+            "ChoppingTimeScale": 1.4,
+            "BackpackMovementScale": 0.7,
             "RespawnTime": 10.0,
-            "CarnivalDispenserRefactoryTime": 3.0,
+            "CarnivalDispenserRefactoryTime": 4.0,
             "LevelUnlockRequirements": level_unlock_requirements,
             "LockedEmotes": [1, 2, 3, 4, 5, 6],
 

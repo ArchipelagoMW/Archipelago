@@ -124,7 +124,7 @@ def item_to_unlock_event(item_name: str) -> dict[str, str]:
         vanilla_value = vanilla_values[config_name]
 
         action = "SET_VALUE"
-        payload = f"{config_name}:{vanilla_value}"
+        payload = f"{config_name}={vanilla_value}"
 
     return {
         "message": message,
