@@ -209,6 +209,8 @@ class DarkSouls3World(World):
                  lambda state: state.has("Jailer's Key Ring", self.player))
         set_rule(self.world.get_location("ID: Covetous Gold Serpent Ring", self.player),
                  lambda state: state.has("Old Cell Key", self.player))
+        set_rule(self.world.get_location("ID: Karla's Ashes", self.player),
+                 lambda state: state.has("Jailers Key Ring", self.player))
         black_hand_gotthard_corpse_rule = lambda state: \
             (state.can_reach("AL: Cinders of a Lord - Aldrich", "Location", self.player) and
              state.can_reach("PC: Cinders of a Lord - Yhorm the Giant", "Location", self.player))

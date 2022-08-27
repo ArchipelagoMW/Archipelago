@@ -92,6 +92,9 @@ undead_settlement_table = {
     "US: Soul of the Rotted Greatwood": 0x400002D7,
     "US: Hawk Ring": 0x20004F92,
     "US: Warrior of Sunlight Covenant": 0x20002738,
+    "US: Red and White Round Shield": 0x01343A40,
+    "US: Irina's Ashes": 0x40000843,
+    "US: Cornyx's Ashes": 0x40000841
 }
 
 road_of_sacrifice_table = {
@@ -149,6 +152,7 @@ road_of_sacrifice_table = {
     "RS: Grass Crest Shield": 0x01437C80,
     "RS: Soul of a Crystal Sage": 0x400002CB,
     "RS: Great Swamp Ring": 0x20004F10,
+    "RS: Orbeck's Ashes": 0x40000840
 }
 
 cathedral_of_the_deep_table = {
@@ -315,6 +319,7 @@ irithyll_dungeon_table = {
     "ID: Jailer's Key Ring": 0x400007D8,
     "ID: Dusk Crown Ring": 0x20004F4C,
     "ID: Dark Clutch Ring": 0x20005028,
+    "ID: Karla's Ashes": 0x40000842
 }
 
 profaned_capital_table = {
@@ -359,6 +364,7 @@ lothric_castle_table = {
     "LC: Caitha's Chime": 0x00CA06C0,
     "LC: Braille Divine Tome of Lothric": 0x40000848,
     "LC: Knight's Ring": 0x20004FEC,
+    "LC: Irithyll Rapier": 0x002E8A10,
     "LC: Sunlight Straight Sword": 0x00203230,
     "LC: Soul of Dragonslayer Armour": 0x400002D1,
 
@@ -375,6 +381,7 @@ consumed_king_garden_table = {
     "CKG: Shadow Leggings": 0x14D401F8,
     "CKG: Claw": 0x00A7D8C0,
     "CKG: Soul of Consumed Oceiros": 0x400002CE,
+    "CKG: Magic Stoneplate Ring": 0x20004E66,
     # "CKG: Path of the Dragon Gesture": 0x40002346, I can't technically randomize it as it is a gesture and not an item
 }
 
@@ -393,6 +400,11 @@ grand_archives_table = {
     "GA: Cinders of a Lord - Lothric Prince": 0x4000084E,
     "GA: Soul of the Twin Princes": 0x400002DB,
     "GA: Sage's Crystal Staff": 0x00C8CE40,
+    "GA: Outrider Knight Helm": 0x1328B740,
+    "GA: Outrider Knight Armor": 0x1328BB28,
+    "GA: Outrider Knight Gauntlets": 0x1328BF10,
+    "GA: Outrider Knight Leggings": 0x1328C2F8,
+    "GA: Crystal Scroll": 0x40000856,
 }
 
 untended_graves_table = {
