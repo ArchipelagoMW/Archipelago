@@ -241,6 +241,21 @@ class Overcooked2World(World):
         level_purchase_requirements = dict()
         for level_id in self.level_unlock_counts:
             level_purchase_requirements[str(level_id)] = self.level_unlock_counts[level_id]
+        
+        # Override Vanilla Unlock Chain Behavior
+        # (all worlds accessible from the start and progressible in any order)
+        level_unlock_requirements = dict()
+        level_force_reveal = [
+            1,   # 1-1
+            7,   # 2-1
+            13,  # 3-1
+            19,  # 4-1
+            25,  # 5-1
+            31,  # 6-1
+        ]
+        for level_id in range(1, 37):
+            if (level_id not in level_force_reveal):
+                level_unlock_requirements[str(level_id)] = level_id - 1
 
         # Set Kevin Unlock Requirements
         def kevin_level_to_keyholder_level_id(level_id: int) -> int | None:
@@ -249,8 +264,6 @@ class Overcooked2World(World):
                 return None # This kevin level will be unlocked by the server at runtime
             level_id = location_name_to_id[location.name]
             return level_id
-
-        level_unlock_requirements = dict()
         for level_id in range(37, 45):
             keyholder_level_id = kevin_level_to_keyholder_level_id(level_id)
             if keyholder_level_id is not None:
@@ -281,14 +294,7 @@ class Overcooked2World(World):
             "PurchaseAllLevels": False,
             "CheatsEnabled": False,
             "ImpossibleTutorial": True,
-            "LevelForceReveal": [
-                1,   # 1-1
-                7,   # 2-1
-                13,  # 3-1
-                19,  # 4-1
-                25,  # 5-1
-                31,  # 6-1
-            ],
+            "LevelForceReveal": level_force_reveal,
             "SaveFolderName": mod_name,
 
             # Quality of Life
