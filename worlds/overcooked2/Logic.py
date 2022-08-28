@@ -1,13 +1,3706 @@
 from BaseClasses import CollectionState
 from .Overcooked2Levels import Overcooked2GenericLevel
 
-def has_requirements_for_level_star(state: CollectionState, level: Overcooked2GenericLevel, stars: int) -> bool:
+def has_requirements_for_level_star(state: CollectionState, level: Overcooked2GenericLevel, stars: int, player: int) -> bool:
     assert stars >= 0 and stars <= 3
 
     # First ensure that previous stars are obtainable
     if stars > 1:
-        if not has_requirements_for_level_star(state, level, stars-1):
+        if not has_requirements_for_level_star(state, level, stars-1, player):
             return False
     
-    # Then, assess completableness
-    return True # TODO
+    # Second, ensure that global requirements are met
+    if not meets_requirements(state, "*", stars, player):
+        return False
+
+    # Finally, return success only if this level's requirements are met
+    return meets_requirements(state, level.shortname(), stars, player)
+
+def meets_requirements(state: CollectionState, name: str, stars: int, player: int):
+    # Get requirements for level
+    (exclusive_reqs, additive_reqs) = level_logic[name][stars-1]
+
+    # print(f"{name} ({stars}-Stars): {exclusive_reqs}|{additive_reqs}")
+
+    # Check if we meet exclusive requirements
+    if len(exclusive_reqs) > 0 and not state.has_all(exclusive_reqs, player):
+        return False
+
+    # Check if we meet additive requirements
+    if len(additive_reqs) == 0:
+        return True
+
+    total: float = 0.0
+    for (item_name, weight) in additive_reqs:
+        if state.has(item_name, player):
+            total += weight
+
+    return total >= 0.99 # be nice to rounding errors :)
+
+# Level 1 - dict keyed by friendly level names
+# Level 2 - tuple with 3 elements, one for each star requirement
+# Level 3 - tuple with 3 elements, one for exclusive requirements and one for additive requirements
+# Level 4 (exclusive) - set of item name strings of items which MUST be in the inventory to allow logical completion
+# Level 4 (additive)  - list of tuples containing item name and item weight where the sum of which are in the player's inventory
+#                       must be 1.0+ to allow logical completion 
+# 
+# Each Star's logical requirements imply any previous requirements
+# 
+level_logic = {
+    # "Tutorial": [],
+    "*": (
+        ( # 1-star
+            { # Exclusive
+                
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+                ("Spare Plate", 0.4),
+                ("Sharp Knife", 0.2),
+                ("Burn Leniency", 0.2),
+                ("Larger Tip Jar", 0.3),
+                ("Dish Scrubber", 0.2),
+                ("Dash", 0.5),
+                ("Throw", 0.5),
+                ("Catch", 0.1),
+                ("Clean Dishes", 0.1),
+                ("Guest Patience", 0.1),
+                ("Order Lookahead", 0.2),
+            },
+        ),
+        ( # 3-star
+            [ # Exclusive
+                "Dash",
+                "Spare Plate",
+                "Larger Tip Jar",
+                "Throw",
+            ],
+            { # Additive
+            },
+        )
+    ),
+    "Story 1-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 1-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 1-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 1-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 1-5": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 1-6": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 2-1": (
+        ( # 1-star
+            { # Exclusive
+                "Throw",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 2-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 2-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Throw",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 2-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            [ # Additive
+                ("Fire Extinguisher", 0.2),
+            ]
+        )
+    ),
+    "Story 2-5": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 2-6": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 3-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 3-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Throw",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 3-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 3-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Throw",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 3-5": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Throw",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 3-6": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 4-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 4-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Throw",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 4-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 4-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 4-5": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 4-6": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 5-1": (
+        ( # 1-star
+            { # Exclusive
+                "Remote Control Batteries"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 5-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Fire Extinguisher",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 5-3": (
+        ( # 1-star
+            { # Exclusive
+                "Remote Control Batteries"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 5-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 5-5": (
+        ( # 1-star
+            { # Exclusive
+                "Remote Control Batteries"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 5-6": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 6-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+                "Fire Extinguisher",
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 6-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 6-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 6-4": (
+        ( # 1-star
+            { # Exclusive
+                "Remote Control Batteries"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 6-5": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story 6-6": (
+        ( # 1-star
+            { # Exclusive
+                "Throw",
+                "Dash",
+                "Spare Plate",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story K-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story K-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story K-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story K-4": (
+        ( # 1-star
+            { # Exclusive
+                "Fire Extinguisher",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story K-5": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story K-6": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story K-7": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Story K-8": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Surf 1-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Surf 1-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Surf 1-3": (
+        ( # 1-star
+            { # Exclusive
+                "Throw",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Surf 1-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Surf 2-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Bellows",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Surf 2-2": (
+        ( # 1-star
+            { # Exclusive
+                "Remote Control Batteries"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Bellows",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Surf 2-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Surf 2-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Surf 3-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Bellows",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Surf 3-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Surf 3-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Surf 3-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Bellows",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Surf K-1": (
+        ( # 1-star
+            { # Exclusive
+                "Remote Control Batteries"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Throw",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Campfire 1-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Wood"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Campfire 1-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Wood"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Campfire 1-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+                "Lightweight Backpack"
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Campfire 1-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Campfire 2-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Campfire 2-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+                "Lightweight Backpack"
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Campfire 2-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Wood"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+                "Lightweight Backpack"
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Campfire 2-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Wood"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Campfire 3-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+                "Lightweight Backpack"
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Campfire 3-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Campfire 3-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Lightweight Backpack",
+                "Wood",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+                
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Campfire 3-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Wood",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Campfire K-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Campfire K-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Campfire K-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Carnival 1-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Carnival 1-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Carnival 1-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Carnival 1-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+                "Faster Condiment/Drink Switch"
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Carnival 2-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Carnival 2-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+                "Faster Condiment/Drink Switch"
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Carnival 2-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Carnival 2-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+                "Faster Condiment/Drink Switch"
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Carnival 3-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Carnival 3-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+                "Faster Condiment/Drink Switch"
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Carnival 3-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+                "Faster Condiment/Drink Switch"
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Carnival 3-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+                "Faster Condiment/Drink Switch"
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Carnival K-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Carnival K-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Carnival K-3": (
+        ( # 1-star
+            { # Exclusive
+                "Remote Control Batteries"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde 1-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde 1-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Coal Bucket",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde 1-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Coal Bucket",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde 2-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde 2-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde 2-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Coal Bucket",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde 3-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde 3-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde 3-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Coal Bucket",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde K-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde K-2": (
+        ( # 1-star
+            { # Exclusive
+                "Remote Control Batteries"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde K-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde H-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde H-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde H-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde H-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde H-5": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde H-6": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde H-7": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Horde H-8": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Christmas 1-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Christmas 1-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Christmas 1-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Christmas 1-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Christmas 1-5": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Chinese 1-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Chinese 1-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Wok Wheels"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Chinese 1-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Chinese 1-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Wok Wheels"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Chinese 1-5": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Chinese 1-6": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Chinese 1-7": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Wok Wheels"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Winter 1-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Winter 1-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Winter 1-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Winter 1-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Winter 1-5": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Spring 1-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Wok Wheels"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Spring 1-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Spring 1-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Wok Wheels"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Spring 1-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Spring 1-5": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "SOBO 1-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+                "Faster Condiment/Drink Switch"
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "SOBO 1-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+                "Faster Condiment/Drink Switch"
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "SOBO 1-3": (
+        ( # 1-star
+            { # Exclusive
+                "Remote Control Batteries"
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Fire Extinguisher",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "SOBO 1-4": (
+        ( # 1-star
+            { # Exclusive
+                "Fire Extinguisher",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+                "Faster Condiment/Drink Switch"
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "SOBO 1-5": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+                "Fire Extinguisher",
+                "Faster Condiment/Drink Switch",
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Moon 1-1": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Moon 1-2": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Moon 1-3": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Moon 1-4": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+    "Moon 1-5": (
+        ( # 1-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 2-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        ),
+        ( # 3-star
+            { # Exclusive
+
+            },
+            { # Additive
+
+            },
+        )
+    ),
+}

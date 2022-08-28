@@ -111,7 +111,7 @@ class Overcooked2World(World):
 
         completion_condition: Callable[[CollectionState], bool] = \
             lambda state, level=self.level_mapping[level_id], stars=stars: \
-            has_requirements_for_level_star(state, level, stars)
+            has_requirements_for_level_star(state, level, stars, self.player)
         location.access_rule = completion_condition
 
         region.locations.append(
