@@ -175,8 +175,6 @@ class SMWWorld(World):
             self.rom_name_available_event.set() # make sure threading continues and errors are collected
 
     def modify_multidata(self, multidata: dict):
-        return
-
         import base64
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()
@@ -186,6 +184,7 @@ class SMWWorld(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
+        return
         if self.topology_present:
             world_names = [
                 LocationName.yoshis_island_region,

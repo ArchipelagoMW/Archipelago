@@ -12,22 +12,31 @@ import os
 import math
 
 
-location_rom_data = {
-
+ability_rom_data = {
+    0xBC0003: [[0x1F2C, 0x7]], # Run         0x80
+    0xBC0004: [[0x1F2C, 0x6]], # Carry       0x40
+    0xBC0005: [[0x1F2C, 0x2]], # Swim        0x04
+    0xBC0006: [[0x1F2C, 0x3]], # Spin Jump   0x08
+    0xBC0007: [[0x1F2C, 0x5]], # Climb       0x20
+    0xBC0008: [[0x1F2C, 0x1]], # Yoshi       0x02
+    0xBC0009: [[0x1F2C, 0x4]], # P-Switch    0x10
+    #0xBC000A: [[]]
+    0xBC000B: [[0x1F2D, 0x3]], # P-Balloon   0x08
+    0xBC000D: [[0x1F2D, 0x4]], # Super Star  0x10
 }
 
 
 item_rom_data = {
-    0xBC3001: [0x18E4], # 1-Up Mushroom
-    0xBC3002: [0xF48], # Yoshi Egg
+    0xBC3001: [0x18E4, 0x1], # 1-Up Mushroom
+    0xBC3002: [0xF48, 0x1, 0x1F], # Yoshi Egg
 
-    0xBC000E: [0x1F27], # Green Switch Palace
-    0xBC000F: [0x1F28], # Yellow Switch Palace
-    0xBC0010: [0x1F29], # Blue Switch Palace
-    0xBC0011: [0x1F2A], # Red Switch Palace
+    0xBC000E: [0x1F28, 0x1, 0x1C], # Yellow Switch Palace
+    0xBC000F: [0x1F27, 0x1, 0x1C], # Green Switch Palace
+    0xBC0010: [0x1F2A, 0x1, 0x1C], # Red Switch Palace
+    0xBC0011: [0x1F29, 0x1, 0x1C], # Blue Switch Palace
 
-    0xBC0013: [0x0086], # Ice Trap
-    0xBC0014: [0x18BD], # Stun Trap
+    0xBC0013: [0x0086, 0x1, 0x0E], # Ice Trap
+    0xBC0014: [0x18BD, 0x7F, 0x18], # Stun Trap
 }
 
 music_rom_data = [
@@ -73,6 +82,414 @@ class LocalRom(object):
             self.buffer = bytearray(stream.read())
 
 
+def handle_ability_code(rom):
+    # Lock Abilities
+
+    #rom.write_byte(0xC581, 0x01) # No Stars
+    #rom.write_byte(0x62E6, 0x01) # No Star Music
+    #rom.write_byte(0xC300, 0x01) # No P-Balloons
+    #rom.write_byte(0xC305, 0x01) # No P-Balloons
+
+    # Run
+    rom.write_bytes(0x5977, bytearray([0x22, 0x10, 0xBA, 0x03])) # JSL $03BA10
+    rom.write_bytes(0x597B, bytearray([0xEA] * 0x04))
+
+    RUN_SUB_ADDR = 0x01BA10
+    rom.write_bytes(RUN_SUB_ADDR + 0x00, bytearray([0xDA]))             # PHX
+    rom.write_bytes(RUN_SUB_ADDR + 0x01, bytearray([0x08]))             # PHP
+    rom.write_bytes(RUN_SUB_ADDR + 0x02, bytearray([0x90, 0x03]))       # BCC +0x03
+    rom.write_bytes(RUN_SUB_ADDR + 0x04, bytearray([0xC8]))             # INY
+    rom.write_bytes(RUN_SUB_ADDR + 0x05, bytearray([0xA9, 0x70]))       # LDA #70
+    rom.write_bytes(RUN_SUB_ADDR + 0x07, bytearray([0xAA]))             # TAX
+    rom.write_bytes(RUN_SUB_ADDR + 0x08, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(RUN_SUB_ADDR + 0x0B, bytearray([0x89, 0x80]))       # BIT #80
+    rom.write_bytes(RUN_SUB_ADDR + 0x0D, bytearray([0xF0, 0x04]))       # BEQ +0x04
+    rom.write_bytes(RUN_SUB_ADDR + 0x0F, bytearray([0x8A]))             # TXA
+    rom.write_bytes(RUN_SUB_ADDR + 0x10, bytearray([0x8D, 0xE4, 0x13])) # STA $13E4
+    rom.write_bytes(RUN_SUB_ADDR + 0x13, bytearray([0x8A]))             # TXA
+    rom.write_bytes(RUN_SUB_ADDR + 0x14, bytearray([0x28]))             # PLP
+    rom.write_bytes(RUN_SUB_ADDR + 0x15, bytearray([0xFA]))             # PLX
+    rom.write_bytes(RUN_SUB_ADDR + 0x16, bytearray([0x6B]))             # RTL
+    # End Run
+
+    # Purple Block Carry
+    rom.write_bytes(0x726F, bytearray([0x22, 0x28, 0xBA, 0x03])) # JSL $03BA28
+    rom.write_bytes(0x7273, bytearray([0xEA] * 0x02))
+
+    PURPLE_BLOCK_CARRY_SUB_ADDR = 0x01BA28
+    rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x04, bytearray([0x89, 0x40]))       # BIT #40
+    rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x06, bytearray([0xF0, 0x09]))       # BEQ +0x09
+    rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x08, bytearray([0x28]))             # PLP
+    rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x09, bytearray([0xAD, 0x8F, 0x14])) # LDA $148F
+    rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x0C, bytearray([0x0D, 0x7A, 0x18])) # ORA $187A
+    rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x0F, bytearray([0x80, 0x03]))       # BRA +0x03
+    rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x11, bytearray([0x28]))             # PLP
+    rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x12, bytearray([0xA9, 0x01]))       # LDA #01
+    rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x14, bytearray([0x6B]))             # RTL
+    # End Purple Block Carry
+
+    # Springboard Carry
+    rom.write_bytes(0xE6D8, bytearray([0x22, 0x40, 0xBA, 0x03])) # JSL $03BA40
+    rom.write_bytes(0xE6DC, bytearray([0xEA] * 0x02))
+
+    SPRINGBOARD_CARRY_SUB_ADDR = 0x01BA40
+    rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x00, bytearray([0x48]))             # PHA
+    rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x01, bytearray([0x08]))             # PHP
+    rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x02, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x05, bytearray([0x89, 0x40]))       # BIT #40
+    rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x07, bytearray([0xF0, 0x08]))       # BEQ +0x08
+    rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x09, bytearray([0xA9, 0x0B]))       # LDA #0B
+    rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x0B, bytearray([0x9D, 0xC8, 0x14])) # STA $14C8, X
+    rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x0E, bytearray([0x9E, 0x02, 0x16])) # STZ $1602, X
+    rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x11, bytearray([0x28]))             # PLP
+    rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x12, bytearray([0x68]))             # PLA
+    rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x13, bytearray([0x6B]))             # RTL
+    # End Springboard Carry
+
+    # Shell Carry
+    rom.write_bytes(0xAA66, bytearray([0xAD, 0x2C, 0x1F]))       # LDA $1F2C
+    rom.write_bytes(0xAA69, bytearray([0x89, 0x40]))             # BIT #40
+    rom.write_bytes(0xAA6B, bytearray([0xF0, 0x07]))             # BEQ +0x07
+    rom.write_bytes(0xAA6D, bytearray([0x22, 0x60, 0xBA, 0x03])) # JSL $03BA60
+    rom.write_bytes(0xAA71, bytearray([0xEA] * 0x02))
+
+    SHELL_CARRY_SUB_ADDR = 0x01BA60
+    rom.write_bytes(SHELL_CARRY_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(SHELL_CARRY_SUB_ADDR + 0x01, bytearray([0xA9, 0x0B]))       # LDA #0B
+    rom.write_bytes(SHELL_CARRY_SUB_ADDR + 0x03, bytearray([0x9D, 0xC8, 0x14])) # STA $14C8, X
+    rom.write_bytes(SHELL_CARRY_SUB_ADDR + 0x06, bytearray([0xEE, 0x70, 0x14])) # INC $1470
+    rom.write_bytes(SHELL_CARRY_SUB_ADDR + 0x09, bytearray([0xA9, 0x0B]))       # LDA #08
+    rom.write_bytes(SHELL_CARRY_SUB_ADDR + 0x0B, bytearray([0x8D, 0x98, 0x14])) # STA $1498
+    rom.write_bytes(SHELL_CARRY_SUB_ADDR + 0x0E, bytearray([0x28]))             # PLP
+    rom.write_bytes(SHELL_CARRY_SUB_ADDR + 0x0F, bytearray([0x6B]))             # RTL
+    # End Shell Carry
+
+    # Yoshi Carry
+    rom.write_bytes(0xF309, bytearray([0x22, 0x70, 0xBA, 0x03])) # JSL $03BA70
+    rom.write_bytes(0xF30D, bytearray([0xEA] * 0x06))
+
+    YOSHI_CARRY_SUB_ADDR = 0x01BA70
+    rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x04, bytearray([0x89, 0x40]))       # BIT #40
+    rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x06, bytearray([0xF0, 0x0A]))       # BEQ +0x0A
+    rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x08, bytearray([0xA9, 0x12]))       # LDA #12
+    rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x0A, bytearray([0x8D, 0xA3, 0x14])) # STA $14A3
+    rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x0D, bytearray([0xA9, 0x21]))       # LDA #21
+    rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x0F, bytearray([0x8D, 0xFC, 0x1D])) # STA $1DFC
+    rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x12, bytearray([0x28]))             # PLP
+    rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x13, bytearray([0x6B]))             # RTL
+    # End Yoshi Carry
+
+    # Climb
+    rom.write_bytes(0x4D72, bytearray([0x5C, 0x88, 0xBA, 0x03])) # JML $03BA88
+    rom.write_bytes(0x4D76, bytearray([0xEA] * 0x03))
+
+    CLIMB_SUB_ADDR = 0x01BA88
+    rom.write_bytes(CLIMB_SUB_ADDR + 0x00, bytearray([0x08]))                   # PHP
+    rom.write_bytes(CLIMB_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F]))       # LDA $1F2C
+    rom.write_bytes(CLIMB_SUB_ADDR + 0x04, bytearray([0x89, 0x20]))             # BIT #20
+    rom.write_bytes(CLIMB_SUB_ADDR + 0x06, bytearray([0xF0, 0x09]))             # BEQ +0x09
+    rom.write_bytes(CLIMB_SUB_ADDR + 0x08, bytearray([0xA5, 0x8B]))             # LDA $8B
+    rom.write_bytes(CLIMB_SUB_ADDR + 0x0A, bytearray([0x85, 0x74]))             # STA $74
+    rom.write_bytes(CLIMB_SUB_ADDR + 0x0C, bytearray([0x28]))                   # PLP
+    rom.write_bytes(CLIMB_SUB_ADDR + 0x0D, bytearray([0x5C, 0x17, 0xDB, 0x00])) # JML $00DB17
+    rom.write_bytes(CLIMB_SUB_ADDR + 0x11, bytearray([0x28]))                   # PLP
+    rom.write_bytes(CLIMB_SUB_ADDR + 0x12, bytearray([0x5C, 0x76, 0xCD, 0x00])) # JML $00CD76
+    # End Climb
+
+    # P-Switch
+    rom.write_bytes(0xAB1A, bytearray([0x22, 0xA0, 0xBA, 0x03])) # JSL $03BAA0
+    rom.write_bytes(0xAB1E, bytearray([0xEA] * 0x01))
+
+    P_SWITCH_SUB_ADDR = 0x01BAA0
+    rom.write_bytes(P_SWITCH_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(P_SWITCH_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(P_SWITCH_SUB_ADDR + 0x04, bytearray([0x89, 0x10]))       # BIT #10
+    rom.write_bytes(P_SWITCH_SUB_ADDR + 0x06, bytearray([0xF0, 0x04]))       # BEQ +0x04
+    rom.write_bytes(P_SWITCH_SUB_ADDR + 0x08, bytearray([0xA9, 0xB0]))       # LDA #B0
+    rom.write_bytes(P_SWITCH_SUB_ADDR + 0x0A, bytearray([0x80, 0x02]))       # BRA +0x02
+    rom.write_bytes(P_SWITCH_SUB_ADDR + 0x0C, bytearray([0xA9, 0x01]))       # LDA #01
+    rom.write_bytes(P_SWITCH_SUB_ADDR + 0x0E, bytearray([0x99, 0xAD, 0x14])) # STA $14AD
+    rom.write_bytes(P_SWITCH_SUB_ADDR + 0x11, bytearray([0x28]))             # PLP
+    rom.write_bytes(P_SWITCH_SUB_ADDR + 0x12, bytearray([0x6B]))             # RTL
+    # End P-Switch
+
+    # Spin Jump
+    rom.write_bytes(0x5645, bytearray([0xAD, 0x2C, 0x1F]))       # LDA $1F2C
+    rom.write_bytes(0x5648, bytearray([0x89, 0x08]))             # BIT #08
+    rom.write_bytes(0x564A, bytearray([0xF0, 0x12]))             # BEQ +0x12
+    rom.write_bytes(0x564C, bytearray([0x22, 0xB8, 0xBA, 0x03])) # JSL $03BAB8
+
+    SPIN_JUMP_SUB_ADDR = 0x01BAB8
+    rom.write_bytes(SPIN_JUMP_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(SPIN_JUMP_SUB_ADDR + 0x01, bytearray([0x1A]))             # INC
+    rom.write_bytes(SPIN_JUMP_SUB_ADDR + 0x02, bytearray([0x8D, 0x0D, 0x14])) # STA $140D
+    rom.write_bytes(SPIN_JUMP_SUB_ADDR + 0x05, bytearray([0xA9, 0x04]))       # LDA #04
+    rom.write_bytes(SPIN_JUMP_SUB_ADDR + 0x07, bytearray([0x8D, 0xFC, 0x1D])) # STA $1DFC
+    rom.write_bytes(SPIN_JUMP_SUB_ADDR + 0x0A, bytearray([0xA4, 0x76]))       # LDY #76
+    rom.write_bytes(SPIN_JUMP_SUB_ADDR + 0x0C, bytearray([0x28]))             # PLP
+    rom.write_bytes(SPIN_JUMP_SUB_ADDR + 0x0D, bytearray([0x6B]))             # RTL
+    # End Spin Jump
+
+    # Swim
+    rom.write_bytes(0x5A25, bytearray([0x22, 0xC8, 0xBA, 0x03])) # JSL $03BAC8
+    rom.write_bytes(0x5A29, bytearray([0xEA] * 0x04))
+
+    SWIM_SUB_ADDR = 0x01BAC8
+    rom.write_bytes(SWIM_SUB_ADDR + 0x00, bytearray([0x48]))             # PHA
+    rom.write_bytes(SWIM_SUB_ADDR + 0x01, bytearray([0x08]))             # PHP
+    rom.write_bytes(SWIM_SUB_ADDR + 0x02, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(SWIM_SUB_ADDR + 0x05, bytearray([0x89, 0x04]))       # BIT #04
+    rom.write_bytes(SWIM_SUB_ADDR + 0x07, bytearray([0xF0, 0x0C]))       # BEQ +0x0C
+    rom.write_bytes(SWIM_SUB_ADDR + 0x09, bytearray([0x28]))             # PLP
+    rom.write_bytes(SWIM_SUB_ADDR + 0x0A, bytearray([0x68]))             # PLA
+    rom.write_bytes(SWIM_SUB_ADDR + 0x0B, bytearray([0xDD, 0x84, 0xD9])) # CMP $D489, X
+    rom.write_bytes(SWIM_SUB_ADDR + 0x0E, bytearray([0xB0, 0x03]))       # BCS +0x03
+    rom.write_bytes(SWIM_SUB_ADDR + 0x10, bytearray([0xBD, 0x84, 0xD9])) # LDA $D489, X
+    rom.write_bytes(SWIM_SUB_ADDR + 0x13, bytearray([0x80, 0x0A]))       # BRA +0x0A
+    rom.write_bytes(SWIM_SUB_ADDR + 0x15, bytearray([0x28]))             # PLP
+    rom.write_bytes(SWIM_SUB_ADDR + 0x16, bytearray([0x68]))             # PLA
+    rom.write_bytes(SWIM_SUB_ADDR + 0x17, bytearray([0xDD, 0xBE, 0xDE])) # CMP $DEBE, X
+    rom.write_bytes(SWIM_SUB_ADDR + 0x1A, bytearray([0xB0, 0x03]))       # BCS +0x03
+    rom.write_bytes(SWIM_SUB_ADDR + 0x1C, bytearray([0xBD, 0xBE, 0xDE])) # LDA $DEBE, X
+    rom.write_bytes(SWIM_SUB_ADDR + 0x1F, bytearray([0x6B]))             # RTL
+    # End Swim
+
+    # Item Swim
+    rom.write_bytes(0x59D7, bytearray([0x22, 0xE8, 0xBA, 0x03])) # JSL $03BAE8
+    rom.write_bytes(0x59DB, bytearray([0xEA] * 0x02))
+
+    SWIM_SUB_ADDR = 0x01BAE8
+    rom.write_bytes(SWIM_SUB_ADDR + 0x00, bytearray([0x48]))             # PHA
+    rom.write_bytes(SWIM_SUB_ADDR + 0x01, bytearray([0x08]))             # PHP
+    rom.write_bytes(SWIM_SUB_ADDR + 0x02, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(SWIM_SUB_ADDR + 0x05, bytearray([0x89, 0x04]))       # BIT #04
+    rom.write_bytes(SWIM_SUB_ADDR + 0x07, bytearray([0xF0, 0x0A]))       # BEQ +0x0A
+    rom.write_bytes(SWIM_SUB_ADDR + 0x09, bytearray([0x28]))             # PLP
+    rom.write_bytes(SWIM_SUB_ADDR + 0x0A, bytearray([0x68]))             # PLA
+    rom.write_bytes(SWIM_SUB_ADDR + 0x0B, bytearray([0xC9, 0xF0]))       # CMP #F0
+    rom.write_bytes(SWIM_SUB_ADDR + 0x0D, bytearray([0xB0, 0x02]))       # BCS +0x02
+    rom.write_bytes(SWIM_SUB_ADDR + 0x0F, bytearray([0xA9, 0xF0]))       # LDA #F0
+    rom.write_bytes(SWIM_SUB_ADDR + 0x11, bytearray([0x80, 0x08]))       # BRA +0x08
+    rom.write_bytes(SWIM_SUB_ADDR + 0x13, bytearray([0x28]))             # PLP
+    rom.write_bytes(SWIM_SUB_ADDR + 0x14, bytearray([0x68]))             # PLA
+    rom.write_bytes(SWIM_SUB_ADDR + 0x15, bytearray([0xC9, 0xFF]))       # CMP #FF
+    rom.write_bytes(SWIM_SUB_ADDR + 0x17, bytearray([0xB0, 0x02]))       # BCS +0x02
+    rom.write_bytes(SWIM_SUB_ADDR + 0x19, bytearray([0xA9, 0x00]))       # LDA #00
+    rom.write_bytes(SWIM_SUB_ADDR + 0x1B, bytearray([0x6B]))             # RTL
+    # End Item Swim
+
+    # Yoshi
+    rom.write_bytes(0x109FB, bytearray([0x22, 0x08, 0xBB, 0x03])) # JSL $03BB08
+    rom.write_bytes(0x109FF, bytearray([0xEA] * 0x02))
+
+    YOSHI_SUB_ADDR = 0x01BB08
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x04, bytearray([0x89, 0x02]))       # BIT #02
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x06, bytearray([0xF0, 0x06]))       # BEQ +0x06
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x08, bytearray([0x28]))             # PLP
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x09, bytearray([0xB9, 0xA1, 0x88])) # LDA $88A1, Y
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x0C, bytearray([0x80, 0x04]))       # BRA +0x04
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x0E, bytearray([0x28]))             # PLP
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x0F, bytearray([0xB9, 0xA2, 0x88])) # LDA $88A2, Y
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x12, bytearray([0x9D, 0x1C, 0x15])) # STA $151C, X
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x15, bytearray([0x6B]))             # RTL
+    # End Yoshi
+
+    # Baby Yoshi
+    rom.write_bytes(0xA2B8, bytearray([0x22, 0x20, 0xBB, 0x03])) # JSL $03BB20
+    rom.write_bytes(0xA2BC, bytearray([0xEA] * 0x01))
+
+    YOSHI_SUB_ADDR = 0x01BB20
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x01, bytearray([0x9C, 0x1E, 0x14])) # STZ $141E
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x04, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x07, bytearray([0x89, 0x02]))       # BIT #02
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x09, bytearray([0xF0, 0x05]))       # BEQ +0x05
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x0B, bytearray([0x28]))             # PLP
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x0C, bytearray([0xA9, 0x35]))       # LDA #35
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x0E, bytearray([0x80, 0x03]))       # BRA +0x03
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x10, bytearray([0x28]))             # PLP
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x11, bytearray([0xA9, 0x70]))       # LDA #70
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x13, bytearray([0x6B]))             # RTL
+    # End Baby Yoshi
+
+    # Midway Gate
+    rom.write_bytes(0x72E4, bytearray([0x22, 0x38, 0xBB, 0x03])) # JSL $03BB38
+
+    MIDWAY_GATE_SUB_ADDR = 0x01BB38
+    rom.write_bytes(MIDWAY_GATE_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(MIDWAY_GATE_SUB_ADDR + 0x01, bytearray([0xAD, 0x2D, 0x1F])) # LDA $1F2D
+    rom.write_bytes(MIDWAY_GATE_SUB_ADDR + 0x04, bytearray([0x89, 0x01]))       # BIT #01
+    rom.write_bytes(MIDWAY_GATE_SUB_ADDR + 0x06, bytearray([0xF0, 0x07]))       # BEQ +0x07
+    rom.write_bytes(MIDWAY_GATE_SUB_ADDR + 0x08, bytearray([0x28]))             # PLP
+    rom.write_bytes(MIDWAY_GATE_SUB_ADDR + 0x09, bytearray([0xA9, 0x01]))       # LDA #01
+    rom.write_bytes(MIDWAY_GATE_SUB_ADDR + 0x0B, bytearray([0x85, 0x19]))       # STA $19
+    rom.write_bytes(MIDWAY_GATE_SUB_ADDR + 0x0D, bytearray([0x80, 0x01]))       # BRA +0x01
+    rom.write_bytes(MIDWAY_GATE_SUB_ADDR + 0x0F, bytearray([0x28]))             # PLP
+    rom.write_bytes(MIDWAY_GATE_SUB_ADDR + 0x10, bytearray([0x6B]))             # RTL
+    # End Midway Gate
+
+    # Mushroom
+    rom.write_bytes(0x5156, bytearray([0x22, 0x50, 0xBB, 0x03])) # JSL $03BB50
+    rom.write_bytes(0x515A, bytearray([0xEA] * 0x04))
+
+    MUSHROOM_SUB_ADDR = 0x01BB50
+    rom.write_bytes(MUSHROOM_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(MUSHROOM_SUB_ADDR + 0x01, bytearray([0xAD, 0x2D, 0x1F])) # LDA $1F2D
+    rom.write_bytes(MUSHROOM_SUB_ADDR + 0x04, bytearray([0x89, 0x01]))       # BIT #01
+    rom.write_bytes(MUSHROOM_SUB_ADDR + 0x06, bytearray([0xF0, 0x05]))       # BEQ +0x05
+    rom.write_bytes(MUSHROOM_SUB_ADDR + 0x08, bytearray([0x28]))             # PLP
+    rom.write_bytes(MUSHROOM_SUB_ADDR + 0x09, bytearray([0xE6, 0x19]))       # INC $19
+    rom.write_bytes(MUSHROOM_SUB_ADDR + 0x0B, bytearray([0x80, 0x01]))       # BRA +0x01
+    rom.write_bytes(MUSHROOM_SUB_ADDR + 0x0D, bytearray([0x28]))             # PLP
+    rom.write_bytes(MUSHROOM_SUB_ADDR + 0x0E, bytearray([0xA9, 0x00]))       # LDA #00
+    rom.write_bytes(MUSHROOM_SUB_ADDR + 0x10, bytearray([0x85, 0x71]))       # STA $72
+    rom.write_bytes(MUSHROOM_SUB_ADDR + 0x12, bytearray([0x64, 0x9D]))       # STZ $9D
+    rom.write_bytes(MUSHROOM_SUB_ADDR + 0x14, bytearray([0x6B]))             # RTL
+    # End Mushroom
+
+    # Take Damage
+    rom.write_bytes(0x5142, bytearray([0x22, 0x65, 0xBB, 0x03])) # JSL $03BB65
+    rom.write_bytes(0x5146, bytearray([0x60] * 0x01))            # RTS
+
+    DAMAGE_SUB_ADDR = 0x01BB65
+    rom.write_bytes(DAMAGE_SUB_ADDR + 0x00, bytearray([0x8D, 0x97, 0x14])) # STA $1497
+    rom.write_bytes(DAMAGE_SUB_ADDR + 0x03, bytearray([0x80, 0xF4]))       # BRA -0x0C
+    # End Take Damage
+
+    # Fire Flower Cycle
+    rom.write_bytes(0x5187, bytearray([0x22, 0x6A, 0xBB, 0x03])) # JSL $03BB6A
+    rom.write_bytes(0x518B, bytearray([0x60] * 0x01))            # RTS
+
+    PALETTE_CYCLE_SUB_ADDR = 0x01BB6A
+    rom.write_bytes(PALETTE_CYCLE_SUB_ADDR + 0x00, bytearray([0xCE, 0x9B, 0x14])) # DEC $149B
+    rom.write_bytes(PALETTE_CYCLE_SUB_ADDR + 0x03, bytearray([0xF0, 0xEF]))       # BEQ -0x11
+    rom.write_bytes(PALETTE_CYCLE_SUB_ADDR + 0x05, bytearray([0x6B]))             # RTL
+    # End Fire Flower Cycle
+
+    # Pipe Exit
+    rom.write_bytes(0x526D, bytearray([0x22, 0x70, 0xBB, 0x03])) # JSL $03BB70
+    rom.write_bytes(0x5271, bytearray([0x60, 0xEA] * 0x01))      # RTS, NOP
+
+    PIPE_EXIT_SUB_ADDR = 0x01BB70
+    rom.write_bytes(PIPE_EXIT_SUB_ADDR + 0x00, bytearray([0x9C, 0x19, 0x14])) # STZ $1419
+    rom.write_bytes(PIPE_EXIT_SUB_ADDR + 0x03, bytearray([0xA9, 0x00]))       # LDA #00
+    rom.write_bytes(PIPE_EXIT_SUB_ADDR + 0x05, bytearray([0x85, 0x71]))       # STA $72
+    rom.write_bytes(PIPE_EXIT_SUB_ADDR + 0x07, bytearray([0x64, 0x9D]))       # STZ $9D
+    rom.write_bytes(PIPE_EXIT_SUB_ADDR + 0x09, bytearray([0x6B]))             # RTL
+    # End Pipe Exit
+
+    # Cape Transform
+    rom.write_bytes(0x5168, bytearray([0x22, 0x7A, 0xBB, 0x03])) # JSL $03BB7A
+    rom.write_bytes(0x516C, bytearray([0xEA] * 0x01))            # RTS, NOP
+    rom.write_bytes(0x516D, bytearray([0xF0, 0xD1]))             # BEQ -0x2F
+
+    CAPE_TRANSFORM_SUB_ADDR = 0x01BB7A
+    rom.write_bytes(CAPE_TRANSFORM_SUB_ADDR + 0x00, bytearray([0xA5, 0x19])) # LDA $19
+    rom.write_bytes(CAPE_TRANSFORM_SUB_ADDR + 0x02, bytearray([0x4A]))       # LSR
+    rom.write_bytes(CAPE_TRANSFORM_SUB_ADDR + 0x03, bytearray([0xD0, 0xDF])) # BNE -0x21
+    rom.write_bytes(CAPE_TRANSFORM_SUB_ADDR + 0x05, bytearray([0x6B]))       # RTL
+    # End Cape Transform
+
+    # Fire Flower
+    rom.write_bytes(0xC5F7, bytearray([0x22, 0x80, 0xBB, 0x03])) # JSL $03BB80
+
+    FIRE_FLOWER_SUB_ADDR = 0x01BB80
+    rom.write_bytes(FIRE_FLOWER_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(FIRE_FLOWER_SUB_ADDR + 0x01, bytearray([0xAD, 0x2D, 0x1F])) # LDA $1F2D
+    rom.write_bytes(FIRE_FLOWER_SUB_ADDR + 0x04, bytearray([0x89, 0x02]))       # BIT #02
+    rom.write_bytes(FIRE_FLOWER_SUB_ADDR + 0x06, bytearray([0xF0, 0x07]))       # BEQ +0x07
+    rom.write_bytes(FIRE_FLOWER_SUB_ADDR + 0x08, bytearray([0x28]))             # PLP
+    rom.write_bytes(FIRE_FLOWER_SUB_ADDR + 0x09, bytearray([0xA9, 0x03]))       # LDA #03
+    rom.write_bytes(FIRE_FLOWER_SUB_ADDR + 0x0B, bytearray([0x85, 0x19]))       # STA $19
+    rom.write_bytes(FIRE_FLOWER_SUB_ADDR + 0x0D, bytearray([0x80, 0x01]))       # BRA +0x01
+    rom.write_bytes(FIRE_FLOWER_SUB_ADDR + 0x0F, bytearray([0x28]))             # PLP
+    rom.write_bytes(FIRE_FLOWER_SUB_ADDR + 0x10, bytearray([0x6B]))             # RTL
+    # End Fire Flower
+
+    # Cape
+    rom.write_bytes(0xC598, bytearray([0x22, 0x91, 0xBB, 0x03])) # JSL $03BB91
+
+    CAPE_SUB_ADDR = 0x01BB91
+    rom.write_bytes(CAPE_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(CAPE_SUB_ADDR + 0x01, bytearray([0xAD, 0x2D, 0x1F])) # LDA $1F2D
+    rom.write_bytes(CAPE_SUB_ADDR + 0x04, bytearray([0x89, 0x04]))       # BIT #04
+    rom.write_bytes(CAPE_SUB_ADDR + 0x06, bytearray([0xF0, 0x07]))       # BEQ +0x07
+    rom.write_bytes(CAPE_SUB_ADDR + 0x08, bytearray([0x28]))             # PLP
+    rom.write_bytes(CAPE_SUB_ADDR + 0x09, bytearray([0xA9, 0x02]))       # LDA #02
+    rom.write_bytes(CAPE_SUB_ADDR + 0x0B, bytearray([0x85, 0x19]))       # STA $19
+    rom.write_bytes(CAPE_SUB_ADDR + 0x0D, bytearray([0x80, 0x01]))       # BRA +0x01
+    rom.write_bytes(CAPE_SUB_ADDR + 0x0F, bytearray([0x28]))             # PLP
+    rom.write_bytes(CAPE_SUB_ADDR + 0x10, bytearray([0x6B]))             # RTL
+    # End Cape
+
+    # P-Balloon SMW_TODO: Test this
+    rom.write_bytes(0xC2FF, bytearray([0x22, 0xA2, 0xBB, 0x03])) # JSL $03BBA2
+    rom.write_bytes(0xC303, bytearray([0xEA] * 0x06))
+
+    P_BALLOON_SUB_ADDR = 0x01BBA2
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x01, bytearray([0xAD, 0x2D, 0x1F])) # LDA $1F2D
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x04, bytearray([0x89, 0x08]))       # BIT #08
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x06, bytearray([0xF0, 0x0D]))       # BEQ +0x0D
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x08, bytearray([0x28]))             # PLP
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x09, bytearray([0xA9, 0x09]))       # LDA #09
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x0B, bytearray([0x8D, 0xF3, 0x13])) # STA $13F3
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x0E, bytearray([0xA9, 0xFF]))       # LDA #FF
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x10, bytearray([0x8D, 0x91, 0x18])) # STA $1891
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x13, bytearray([0x80, 0x0B]))       # BRA +0x0B
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x15, bytearray([0x28]))             # PLP
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x16, bytearray([0xA9, 0x01]))       # LDA #01
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x18, bytearray([0x8D, 0xF3, 0x13])) # STA $13F3
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x1B, bytearray([0xA9, 0x01]))       # LDA #01
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x1D, bytearray([0x8D, 0x91, 0x18])) # STA $1891
+    rom.write_bytes(P_BALLOON_SUB_ADDR + 0x20, bytearray([0x6B]))             # RTL
+    # End P-Balloon
+
+    # Star SMW_TODO: Test this
+    rom.write_bytes(0xC580, bytearray([0x22, 0xC8, 0xBB, 0x03])) # JSL $03BBC8
+    rom.write_bytes(0xC584, bytearray([0xEA] * 0x01))
+
+    STAR_SUB_ADDR = 0x01BBC8
+    rom.write_bytes(STAR_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(STAR_SUB_ADDR + 0x01, bytearray([0xAD, 0x2D, 0x1F])) # LDA $1F2D
+    rom.write_bytes(STAR_SUB_ADDR + 0x04, bytearray([0x89, 0x10]))       # BIT #10
+    rom.write_bytes(STAR_SUB_ADDR + 0x06, bytearray([0xF0, 0x08]))       # BEQ +0x08
+    rom.write_bytes(STAR_SUB_ADDR + 0x08, bytearray([0x28]))             # PLP
+    rom.write_bytes(STAR_SUB_ADDR + 0x09, bytearray([0xA9, 0xFF]))       # LDA #FF
+    rom.write_bytes(STAR_SUB_ADDR + 0x0B, bytearray([0x8D, 0x90, 0x14])) # STA $1490
+    rom.write_bytes(STAR_SUB_ADDR + 0x0E, bytearray([0x80, 0x06]))       # BRA +0x06
+    rom.write_bytes(STAR_SUB_ADDR + 0x10, bytearray([0x28]))             # PLP
+    rom.write_bytes(STAR_SUB_ADDR + 0x11, bytearray([0xA9, 0x01]))       # LDA #01
+    rom.write_bytes(STAR_SUB_ADDR + 0x13, bytearray([0x8D, 0x90, 0x14])) # STA $1490
+    rom.write_bytes(STAR_SUB_ADDR + 0x16, bytearray([0x6B]))             # RTL
+    # End Star
+
+    # Star Timer SMW_TODO: Test this
+    rom.write_bytes(0xC2E3, bytearray([0x22, 0xE0, 0xBB, 0x03])) # JSL $03BBE0
+
+    STAR_TIMER_SUB_ADDR = 0x01BBE0
+    rom.write_bytes(STAR_TIMER_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(STAR_TIMER_SUB_ADDR + 0x01, bytearray([0xAD, 0x2D, 0x1F])) # LDA $1F2D
+    rom.write_bytes(STAR_TIMER_SUB_ADDR + 0x04, bytearray([0x89, 0x10]))       # BIT #10
+    rom.write_bytes(STAR_TIMER_SUB_ADDR + 0x06, bytearray([0xF0, 0x07]))       # BEQ +0x07
+    rom.write_bytes(STAR_TIMER_SUB_ADDR + 0x08, bytearray([0x28]))             # PLP
+    rom.write_bytes(STAR_TIMER_SUB_ADDR + 0x09, bytearray([0xA5, 0x13]))       # LDA $13
+    rom.write_bytes(STAR_TIMER_SUB_ADDR + 0x0B, bytearray([0xC0, 0x1E]))       # CPY #1E
+    rom.write_bytes(STAR_TIMER_SUB_ADDR + 0x0D, bytearray([0x80, 0x05]))       # BRA +0x05
+    rom.write_bytes(STAR_TIMER_SUB_ADDR + 0x0F, bytearray([0x28]))             # PLP
+    rom.write_bytes(STAR_TIMER_SUB_ADDR + 0x10, bytearray([0xA5, 0x13]))       # LDA $13
+    rom.write_bytes(STAR_TIMER_SUB_ADDR + 0x12, bytearray([0xC0, 0x01]))       # CPY #01
+    rom.write_bytes(STAR_TIMER_SUB_ADDR + 0x14, bytearray([0x6B]))             # RTL
+    # End Star Timer
+
+    return
+
 
 def patch_rom(world, rom, player, active_level_dict):
     local_random = world.slot_seeds[player]
@@ -104,32 +521,7 @@ def patch_rom(world, rom, player, active_level_dict):
     if world.goal[player] == "yoshi_egg_hunt":
         rom.write_bytes(0x3F1AA, bytearray([0x00] * 0x20))
 
-    # Lock Abilities
-    rom.write_bytes(0x597C, bytearray([0xEA] * 0x03)) # Run
-    rom.write_byte(0xAA5C, 0x80) # Shell/Key/P-Switch Carry
-    rom.write_byte(0xE6D8, 0x80) # Springboard Carry
-    rom.write_byte(0x7275, 0x80) # Purple Block Carry
-    rom.write_byte(0xF1EC, 0x80) # Yoshi Carry
-    rom.write_byte(0x4D62, 0x80) # Climb
-    rom.write_byte(0xAB1B, 0x01) # P-Switch
-    rom.write_byte(0x563E, 0x80) # Spin Jump
-    rom.write_bytes(0x5984, bytearray([0xFF] * 0x03)) # Swim
-    rom.write_byte(0x59D8, 0xFF) # Item Swim
-    rom.write_byte(0x59DB, 0x00) # Item Swim
-    rom.write_byte(0x108A1, 0x78) # Yoshi
-    rom.write_byte(0xA2BC, 0x70) # Baby Yoshi
-
-    # Lock Upgrades
-    rom.write_byte(0xC599, 0x00) # No Capes
-    rom.write_byte(0xC5F8, 0x00) # No Fire Flowers
-    rom.write_byte(0x5156, 0xEA) # No Mushrooms
-    rom.write_byte(0x5157, 0xEA) # No Mushrooms
-    rom.write_byte(0x72E6, 0xEA) # No Midway Gate
-    rom.write_byte(0x72E7, 0xEA) # No Midway Gate
-    rom.write_byte(0xC581, 0x01) # No Stars
-    rom.write_byte(0x62E6, 0x01) # No Star Music
-    rom.write_byte(0xC300, 0x01) # No P-Balloons
-    rom.write_byte(0xC305, 0x01) # No P-Balloons
+    handle_ability_code(rom)
 
     # Handle Level Shuffle Here
     if world.level_shuffle[player]:
@@ -176,8 +568,8 @@ def patch_rom(world, rom, player, active_level_dict):
 
 
     from Main import __version__
-    rom.name = bytearray(f'SMW{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:20]
-    rom.name.extend([0] * (20 - len(rom.name)))
+    rom.name = bytearray(f'SMW{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
+    rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
 
 
