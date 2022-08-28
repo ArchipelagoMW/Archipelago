@@ -34,15 +34,15 @@ class FixBugs(DefaultOnToggle):
 class StarsToWin(Range):
     """Number of stars required to unlock 6-6. All levels between 1-1 and 6-6 will be spread between these two numbers"""
     range_start = 0
-    range_end = 105
-    default = 80
+    range_end = 129
+    default = 90
 
 
 class StarThresholdScale(Range):
     """How difficult should the final star for each level be on a scale of 1-100, where 100 is the world record score (Vanilla 4-Star is 45 on average)"""
     range_start = 1
     range_end = 100
-    default = 40
+    default = 45
 
 
 overcooked_options = {
