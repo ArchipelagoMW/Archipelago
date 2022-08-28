@@ -104,7 +104,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
         for games in data:
             if 'Archipelago' in games['gameTitle']:
                 generic_data = data.pop(data.index(games))
-        sorted_data = [generic_data] + Utils.title_sorted(data, key=lambda entry: entry["gameTitle"].lower())
+        sorted_data = [generic_data] + Utils.title_sorted(data, key=lambda entry: entry["gameTitle"])
         json.dump(sorted_data, json_target, indent=2, ensure_ascii=False)
     return sorted_data
 
