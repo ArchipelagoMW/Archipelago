@@ -12,7 +12,7 @@ from worlds import network_data_package
 from worlds.mmbn3.Rom import Rom, compress_rom_file
 from worlds.mmbn3.GBAPatch import apply_patch_file
 from worlds.mmbn3.Utils import data_path
-
+from worlds.mmbn3.Locations import location_data_table
 
 CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart mmbn3_connector.lua"
 CONNECTION_REFUSED_STATUS = \
@@ -116,8 +116,16 @@ async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
         ctx.location_table = payload['locations']
         await ctx.send_msgs([{
             "cmd": "LocationChecks",
-            "locations": [mmbn3_loc_name_to_id[loc] for loc in ctx.location_table if ctx.location_table[loc]]
+            "locations": [mmbn3_loc_name_to_id[loc] for loc in ctx.location_table
+                          if check_item_packet(loc, ctx.location_table[loc])]
         }])
+
+
+def check_item_packet(name,packet):
+    locData = location_data_table[name]
+    if packet & locData.flag_mask:
+        logger.info("You found the item at location "+name)
+    return packet & locData.flag_mask
 
 
 async def gba_sync_task(ctx: MMBN3Context):
@@ -135,7 +143,7 @@ async def gba_sync_task(ctx: MMBN3Context):
                     # Data will return a dict with up to four fields
                     # 1. str: player name (always)
                     # 2. int: script version (always)
-                    # 3. dict[str, bool]: checked locations
+                    # 3. dict[str, byte]: value of location's memory byte
                     # 4. bool: whether the game currently registers as complete
                     data = await asyncio.wait_for(reader.readline(), timeout=10)
                     data_decoded = json.loads(data.decode())
@@ -185,7 +193,7 @@ async def gba_sync_task(ctx: MMBN3Context):
                 logger.info("Lost connection to GBA and attempting to reconnect. Use /gba for status updates")
         else:
             try:
-                logger.debug("Attempting to connect to GBA")
+                logger.info("Attempting to connect to GBA")
                 ctx.gba_streams = await asyncio.wait_for(asyncio.open_connection("localhost", 28922), timeout=10)
                 ctx.gba_status = CONNECTION_TENTATIVE_STATUS
             except TimeoutError:

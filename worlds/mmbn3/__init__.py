@@ -34,7 +34,9 @@ class MMBN3World(World):
     game: str = "MegaMan Battle Network 3"
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = all_locations
+
+    location_name_to_id = {locData.name: locData.id for locData in all_locations}
+    location_name_to_data = {locData.name: locData for locData in all_locations}
 
     active_level_list: typing.List[str]
     web = MMBN3Web()

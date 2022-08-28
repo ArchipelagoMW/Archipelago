@@ -1,32 +1,30 @@
-#ACDC Area Net
+## Blue Mystery Datas
+# ACDC Area
 ACDC_1_Southwest_BMD = "ACDC 1 Southwest BMD"
 ACDC_1_Northeast_BMD = "ACDC 1 Northeast BMD"
-ACDC_1_PMD = "ACDC 1 PMD"
 ACDC_2_Center_BMD = "ACDC 2 Center BMD"
 ACDC_2_North_BMD = "ACDC 2 North BMD"
 ACDC_3_Southwest_BMD = "ACDC 3 Southwest BMD"
 ACDC_3_Northeast_BMD = "ACDC 3 Northeast BMD"
 
-#SciLab Area Net
+# SciLab Area
 SciLab_1_WWW_BMD = "SciLab 1 WWW BMD"
 SciLab_1_East_BMD = "SciLab 1 East BMD"
 SciLab_2_West_BMD = "SciLab 2 West BMD"
 SciLab_2_South_BMD = "SciLab 2 South BMD"
 
-#Yoka Area Net
-Yoka_1_North_BMD = "Yoka 1 North BMD"
+# Yoka Area
+Yoka_1_North_MBD = "Yoka 1 North MBD"
 Yoka_1_WWW_BMD = "Yoka 1 WWW BMD"
-Yoka_1_PMD = "Yoka 1 PMD"
 Yoka_2_Upper_BMD = "Yoka 2 Upper BMD"
 Yoka_2_Lower_BMD = "Yoka 2 Lower BMD"
 
-#Beach Area Net
+# Beach Area
 Beach_1_BMD = "Beach 1 BMD"
-Beach_1_PMD = "Beach 1 PMD"
 Beach_2_West_BMD = "Beach 2 West BMD"
 Beach_2_East_BMD = "Beach 2 East BMD"
 
-#Undernet
+# Undernet Area
 Undernet_1_South_BMD = "Undernet 1 South BMD"
 Undernet_1_WWW_BMD = "Undernet 1 WWW BMD"
 Undernet_2_Upper_BMD = "Undernet 2 Upper BMD"
@@ -45,9 +43,8 @@ Undernet_6_TV_BMD = "Undernet 6 TV BMD"
 Undernet_7_West_BMD = "Undernet 7 West BMD"
 Undernet_7_Northwest_BMD = "Undernet 7 Northwest BMD"
 Undernet_7_Northeast_BMD = "Undernet 7 Northeast BMD"
-Undernet_7_PMD = "Undernet 7 PMD"
 
-#Secret Area
+# Secret Area
 Secret_1_South_BMD = "Secret 1 South BMD"
 Secret_1_Northeast_BMD = "Secret 1 Northeast BMD"
 Secret_1_Northwest_BMD = "Secret 1 Northwest BMD"
@@ -58,7 +55,7 @@ Secret_3_South_BMD = "Secret 3 South BMD"
 Secret_3_Island_BMD = "Secret 3 Island BMD"
 Secret_3_BugFrag_BMD = "Secret 3 BugFrag BMD"
 
-#School Area
+# School Area
 School_1_Entrance_BMD = "School 1 Entrance BMD"
 School_1_North_Central_BMD = "School 1 North Central BMD"
 School_1_Far_West_BMD_2 = "School 1 Far West BMD 2"
@@ -66,7 +63,7 @@ School_2_Entrance_BMD = "School 2 Entrance BMD"
 School_2_South_BMD = "School 2 South BMD"
 School_2_Mainframe_BMD = "School 2 Mainframe BMD"
 
-#Zoo Area
+# Zoo Area
 Zoo_1_East_BMD = "Zoo 1 East BMD"
 Zoo_1_Central_BMD = "Zoo 1 Central BMD"
 Zoo_1_North_BMD = "Zoo 1 North BMD"
@@ -81,7 +78,10 @@ Zoo_4_West_BMD = "Zoo 4 West BMD"
 Zoo_4_Northwest_BMD = "Zoo 4 Northwest BMD"
 Zoo_4_Southeast_BMD = "Zoo 4 Southeast BMD"
 
-#Hospital Area
+# Hades Area
+Hades_South_BMD = "Hades South BMD"
+
+# Hospital Area
 Hospital_1_Center_BMD = "Hospital 1 Center BMD"
 Hospital_1_West_BMD = "Hospital 1 West BMD"
 Hospital_1_North_BMD = "Hospital 1 North BMD"
@@ -98,7 +98,7 @@ Hospital_5_Southwest_BMD = "Hospital 5 Southwest BMD"
 Hospital_5_Northeast_BMD = "Hospital 5 Northeast BMD"
 Hospital_5_Island_BMD = "Hospital 5 Island BMD"
 
-#WWW Comp
+# WWW Area
 WWW_1_Central_BMD = "WWW 1 Central BMD"
 WWW_1_West_BMD = "WWW 1 West BMD"
 WWW_1_East_BMD = "WWW 1 East BMD"
@@ -109,7 +109,7 @@ WWW_3_North_BMD = "WWW 3 North BMD"
 WWW_4_Northwest_BMD = "WWW 4 Northwest BMD"
 WWW_4_Central_BMD = "WWW 4 Central BMD"
 
-#Misc Net Areas
+# Misc Net Area
 ACDC_Dog_House_BMD = "ACDC Dog House BMD"
 ACDC_Lans_TV_BMD = "ACDC Lan's TV BMD"
 ACDC_Yais_Phone_BMD = "ACDC Yai's Phone BMD"
@@ -143,17 +143,51 @@ Yais_HP_BMD_2 = "Yai's HP BMD 2"
 Dexs_HP_BMD_1 = "Dex's HP BMD 1"
 Dexs_HP_BMD_2 = "Dex's HP BMD 2"
 Tamakos_HP_BMD = "Tamako's HP BMD"
+
+# Story Item BMDs
+Undernet_7_Upper_BMD = "Undernet 7 Upper BMD"
+School_1_KeyData_A_BMD = "School 1 KeyData A BMD"
+School_1_KeyDataB_BMD = "School 1 KeyDataB BMD"
+School_1_KeyDataC_BMD = "School 1 KeyDataC BMD"
+School_2_CodeC_BMD = "School 2 CodeC BMD"
+School_2_CodeA_BMD = "School 2 CodeA BMD"
+School_2_CodeB_BMD = "School 2 CodeB BMD"
+Hades_HadesKey_BMD = "Hades HadesKey BMD"
+WWW_1_South_BMD = "WWW 1 South BMD"
+WWW_2_West_BMD = "WWW 2 West BMD"
+WWW_3_South_BMD = "WWW 3 South BMD"
+WWW_4_East_BMD = "WWW 4 East BMD"
+
+## Purple Mystery Data
+ACDC_1_PMD = "ACDC 1 PMD"
+Yoka_1_PMD = "Yoka 1 PMD"
+Beach_1_PMD = "Beach 1 PMD"
+Undernet_7_PMD = "Undernet 7 PMD"
 Mayls_HP_PMD = "Mayl's HP PMD"
 SciLab_Computer_PMD = "SciLab Computer PMD"
 Zoo_Panda_PMD = "Zoo Panda PMD"
 DNN_Security_Panel_PMD = "DNN Security Panel PMD"
 DNN_Main_Console_PMD = "DNN Main Console PMD"
 Tamakos_HP_PMD = "Tamako's HP PMD"
-Hades_South_BMD = "Hades South BMD"
 
-#Real World Checks
+## Overworld Items
+Yoka_Quiz_Master = "Yoka Quiz Master"
+Hospital_Quiz_Queen = "Hospital Quiz Queen"
+Hades_Quiz_King = "Hades Quiz King"
+ACDC_SonicWav_W_Trade = "ACDC SonicWav W Trade"
+ACDC_Bubbler_C_Trade = "ACDC Bubbler C Trade"
+ACDC_Recov120_S_Trade = "ACDC Recov120 S Trade"
+SciLab_Shake1_S_Trade = "SciLab Shake1 S Trade"
+Yoka_FireSwrd_P_Trade = "Yoka FireSwrd P Trade"
+Hospital_DynaWav_V_Trade = "Hospital DynaWav V Trade"
+DNN_WideSwrd_C_Trade = "DNN WideSwrd C Trade"
+DNN_HoleMetr_H_Trade = "DNN HoleMetr H Trade"
+DNN_Shadow_J_Trade = "DNN Shadow J Trade"
+Hades_GrabBack_K_Trade = "Hades GrabBack K Trade"
+Comedian = "Comedian"
+Villain = "Villain"
+Mod_Tools_Guy = "Mod Tools Guy"
 ACDC_School_Desk = "ACDC School Desk"
-ACDC_Bookshelf = "ACDC Bookshelf"
 ACDC_Class_5B_Blackboard = "ACDC Class 5B Blackboard"
 SciLab_Garbage_Can = "SciLab Garbage Can"
 Yoka_Inn_TV = "Yoka Inn TV"
@@ -170,3 +204,68 @@ Beach_DNN_Poster = "Beach DNN Poster"
 Hades_Boat_Dock = "Hades Boat Dock"
 WWW_Control_Room_1_Screen = "WWW Control Room 1 Screen"
 WWW_Wilys_Desk = "WWW Wily's Desk"
+
+## Numberman Codes
+Numberman_Code_01 = "Numberman Code 01"
+Numberman_Code_02 = "Numberman Code 02"
+Numberman_Code_03 = "Numberman Code 03"
+Numberman_Code_04 = "Numberman Code 04"
+Numberman_Code_05 = "Numberman Code 05"
+Numberman_Code_06 = "Numberman Code 06"
+Numberman_Code_07 = "Numberman Code 07"
+Numberman_Code_08 = "Numberman Code 08"
+Numberman_Code_09 = "Numberman Code 09"
+Numberman_Code_10 = "Numberman Code 10"
+Numberman_Code_11 = "Numberman Code 11"
+Numberman_Code_12 = "Numberman Code 12"
+Numberman_Code_13 = "Numberman Code 13"
+Numberman_Code_14 = "Numberman Code 14"
+Numberman_Code_15 = "Numberman Code 15"
+Numberman_Code_16 = "Numberman Code 16"
+Numberman_Code_17 = "Numberman Code 17"
+Numberman_Code_18 = "Numberman Code 18"
+Numberman_Code_19 = "Numberman Code 19"
+Numberman_Code_20 = "Numberman Code 20"
+Numberman_Code_21 = "Numberman Code 21"
+Numberman_Code_22 = "Numberman Code 22"
+Numberman_Code_23 = "Numberman Code 23"
+Numberman_Code_24 = "Numberman Code 24"
+Numberman_Code_25 = "Numberman Code 25"
+Numberman_Code_26 = "Numberman Code 26"
+Numberman_Code_27 = "Numberman Code 27"
+Numberman_Code_28 = "Numberman Code 28"
+Numberman_Code_29 = "Numberman Code 29"
+Numberman_Code_30 = "Numberman Code 30"
+Numberman_Code_31 = "Numberman Code 31"
+
+## Jobs
+Please_deliver_this = "Job: Please deliver this"
+My_Navi_is_sick = "Job: My Navi is sick"
+Help_me_with_my_son = "Job: Help me with my son!"
+Transmission_error = "Job: Transmission error"
+Chip_Prices = "Job: Chip Prices"
+Im_broke = "Job: I'm broke?!"
+Rare_chips_for_cheap = "Job: Rare chips for cheap!"
+Be_my_boyfriend = "Job: Be my boyfriend"
+Will_you_deliver = "Job: Will you deliver?"
+Look_for_friends = "Job: Look for friends (Tora)"
+Stuntmen_wanted = "Job: Stuntmen wanted! (Tora)"
+Riot_stopped = "Job: Riot stopped (Tora)"
+Gathering_Data = "Job: Gathering Data (Tora)"
+Somebody_please_help = "Job: Somebody, please help!"
+Looking_for_condor = "Job: Looking for condor"
+Help_with_rehab = "Job: Help with rehab"
+Old_Master = "Job: Old Master"
+Catching_gang_members = "Job: Catching gang members"
+Please_adopt_a_virus = "Job: Please adopt a virus!"
+Legendary_Tomes = "Job: Legendary Tomes"
+Legendary_Tomes_Treasure = "Job: Legendary Tomes - Treasure"
+Hide_and_seek_First_Child = "Job: Hide and seek! First Child"
+Hide_and_seek_Second_Child = "Job: Hide and seek! Second Child"
+Hide_and_seek_Third_Child = "Job: Hide and seek! Third Child"
+Hide_and_seek_Fourth_Child = "Job: Hide and seek! Fourth Child"
+Hide_and_seek_Fifth_Child = "Job: Hide and seek! Fifth Child"
+Finding_the_blue_Navi = "Job: Finding the blue Navi"
+Give_your_support = "Job: Give your support"
+Stamp_collecting = "Job: Stamp collecting"
+Help_with_a_will = "Job: Help with a will"
