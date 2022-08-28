@@ -139,7 +139,7 @@ class ALTTPWorld(World):
 
     enemizer_path: str = Utils.get_options()["generator"]["enemizer_path"] \
         if os.path.isabs(Utils.get_options()["generator"]["enemizer_path"]) \
-        else Utils.user_path(Utils.get_options()["generator"]["enemizer_path"])
+        else Utils.local_path(Utils.get_options()["generator"]["enemizer_path"])
 
     def __init__(self, *args, **kwargs):
         self.dungeon_local_item_names = set()
