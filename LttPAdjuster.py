@@ -897,6 +897,8 @@ class SpriteSelector():
         sprites = []
 
         for file in os.listdir(path):
+            if file == '.gitignore':
+                continue
             try:
                 sprites.append((file, Sprite(os.path.join(path, file))))
             except Exception as e:
