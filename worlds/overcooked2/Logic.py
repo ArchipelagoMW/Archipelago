@@ -339,10 +339,10 @@ level_logic = {
         ),
         ( # 3-star
             { # Exclusive
-
+                "Fire Extinguisher",
             },
             [ # Additive
-                ("Fire Extinguisher", 0.2),
+                
             ]
         )
     ),

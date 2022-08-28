@@ -1,6 +1,6 @@
 from BaseClasses import Item
 import typing
-
+import codecs
 
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
@@ -9,44 +9,45 @@ class ItemData(typing.NamedTuple):
 class Overcooked2Item(Item):
     game: str = "Overcooked! 2"
 
+oc2_base_id: int = int.from_bytes(codecs.encode(b"oc2", "hex"), byteorder="big")
 
 item_table: dict[str, ItemData] = {
-    "Wood": ItemData(36),  # python doesn't like this being 0
-    "Coal Bucket": ItemData(1),
-    "Spare Plate": ItemData(2),
-    "Fire Extinguisher": ItemData(3),
-    "Bellows": ItemData(4),
-    "Clean Dishes": ItemData(5),
-    "Larger Tip Jar": ItemData(6),
-    "Larger Tip Jar": ItemData(7),
-    "Dash": ItemData(8),
-    "Throw": ItemData(9),
-    "Catch": ItemData(10),
-    "Remote Control Batteries": ItemData(11),
-    "Wok Wheels": ItemData(12),
-    "Dish Scrubber": ItemData(13),
-    "Burn Leniency": ItemData(14),
-    "Sharp Knife": ItemData(15),
-    "Order Lookahead": ItemData(16),
-    "Order Lookahead": ItemData(17),
-    "Lightweight Backpack": ItemData(18),
-    "Faster Respawn Time": ItemData(19),
-    "Faster Condiment/Drink Switch": ItemData(20),
-    "Guest Patience": ItemData(21),
-    "Kevin-1": ItemData(22),
-    "Kevin-2": ItemData(23),
-    "Kevin-3": ItemData(24),
-    "Kevin-4": ItemData(25),
-    "Kevin-5": ItemData(26),
-    "Kevin-6": ItemData(27),
-    "Kevin-7": ItemData(29),
-    "Kevin-8": ItemData(29),
-    "Cooking Emote": ItemData(30),
-    "Curse Emote": ItemData(31),
-    "Serving Emote": ItemData(32),
-    "Preparing Emote": ItemData(33),
-    "Washing Up Emote": ItemData(34),
-    "Ok Emote": ItemData(35),
+    "Wood"                          : ItemData(oc2_base_id + 1 ) ,
+    "Coal Bucket"                   : ItemData(oc2_base_id + 2 ) ,
+    "Spare Plate"                   : ItemData(oc2_base_id + 3 ) ,
+    "Fire Extinguisher"             : ItemData(oc2_base_id + 4 ) ,
+    "Bellows"                       : ItemData(oc2_base_id + 5 ) ,
+    "Clean Dishes"                  : ItemData(oc2_base_id + 6 ) ,
+    "Larger Tip Jar"                : ItemData(oc2_base_id + 7 ) ,
+    "Larger Tip Jar"                : ItemData(oc2_base_id + 8 ) ,
+    "Dash"                          : ItemData(oc2_base_id + 9 ) ,
+    "Throw"                         : ItemData(oc2_base_id + 10) ,
+    "Catch"                         : ItemData(oc2_base_id + 11) ,
+    "Remote Control Batteries"      : ItemData(oc2_base_id + 12) ,
+    "Wok Wheels"                    : ItemData(oc2_base_id + 13) ,
+    "Dish Scrubber"                 : ItemData(oc2_base_id + 14) ,
+    "Burn Leniency"                 : ItemData(oc2_base_id + 15) ,
+    "Sharp Knife"                   : ItemData(oc2_base_id + 16) ,
+    "Order Lookahead"               : ItemData(oc2_base_id + 17) ,
+    "Order Lookahead"               : ItemData(oc2_base_id + 18) ,
+    "Lightweight Backpack"          : ItemData(oc2_base_id + 19) ,
+    "Faster Respawn Time"           : ItemData(oc2_base_id + 20) ,
+    "Faster Condiment/Drink Switch" : ItemData(oc2_base_id + 21) ,
+    "Guest Patience"                : ItemData(oc2_base_id + 22) ,
+    "Kevin-1"                       : ItemData(oc2_base_id + 23) ,
+    "Kevin-2"                       : ItemData(oc2_base_id + 24) ,
+    "Kevin-3"                       : ItemData(oc2_base_id + 25) ,
+    "Kevin-4"                       : ItemData(oc2_base_id + 26) ,
+    "Kevin-5"                       : ItemData(oc2_base_id + 27) ,
+    "Kevin-6"                       : ItemData(oc2_base_id + 28) ,
+    "Kevin-7"                       : ItemData(oc2_base_id + 29) ,
+    "Kevin-8"                       : ItemData(oc2_base_id + 30) ,
+    "Cooking Emote"                 : ItemData(oc2_base_id + 31) ,
+    "Curse Emote"                   : ItemData(oc2_base_id + 32) ,
+    "Serving Emote"                 : ItemData(oc2_base_id + 33) ,
+    "Preparing Emote"               : ItemData(oc2_base_id + 34) ,
+    "Washing Up Emote"              : ItemData(oc2_base_id + 35) ,
+    "Ok Emote"                      : ItemData(oc2_base_id + 36) ,
 }
 
 item_name_to_config_name = {
@@ -101,7 +102,7 @@ item_name_to_id: typing.Dict[str, int] = {
 
 
 def is_progression(item_name: str) -> bool:
-    return "Emote" not in item_name
+    return not item_name.endswith("Emote")
 
 
 def item_to_unlock_event(item_name: str) -> dict[str, str]:
