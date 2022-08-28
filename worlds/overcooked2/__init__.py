@@ -3,7 +3,7 @@ import json
 
 from typing import Callable
 
-from BaseClasses import MultiWorld, ItemClassification, CollectionState, Region, Entrance, Location, RegionType
+from BaseClasses import MultiWorld, ItemClassification, CollectionState, Region, Entrance, Location, RegionType, Tutorial
 from ..AutoWorld import World, WebWorld
 
 from .Overcooked2Levels import Overcooked2Level, Overcooked2GameWorld, Overcooked2GenericLevel, level_shuffle_factory
@@ -13,8 +13,19 @@ from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id,
 from .Locations import location_id_to_name, location_name_to_id
 from .Logic import has_requirements_for_level_star
 
+
 class Overcooked2Web(WebWorld):
-    pass
+    bug_report_page = "https://github.com/toasterparty/oc2-modding/issues"
+    setup_en = Tutorial(
+        "Multiworld Setup Tutorial",
+        "A guide to setting up the Overcooked! 2 randomizer on your computer.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["toasterparty"]
+    )
+
+    tutorials = [setup_en]
 
 
 class Overcooked2World(World):
