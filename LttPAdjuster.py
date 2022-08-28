@@ -752,6 +752,7 @@ class SpriteSelector():
         self.window['pady'] = 5
         self.spritesPerRow = 32
         self.all_sprites = []
+        self.invalid_sprites = []
         self.sprite_pool = spritePool
 
         def open_custom_sprite_dir(_evt):
@@ -833,6 +834,13 @@ class SpriteSelector():
         self.window.focus()
         tkinter_center_window(self.window)
 
+        if self.invalid_sprites:
+            invalid = sorted(self.invalid_sprites)
+            logging.warning(f"The following sprites are invalid: {', '.join(invalid)}")
+            msg = f"{invalid[0]} "
+            msg += f"and {len(invalid)-1} more are invalid" if len(invalid) > 1 else "is invalid"
+            messagebox.showerror("Invalid sprites detected", msg, parent=self.window)
+
     def remove_from_sprite_pool(self, button, spritename):
         self.callback(("remove", spritename))
         self.spritePoolButtons.buttons.remove(button)
@@ -899,10 +907,11 @@ class SpriteSelector():
         for file in os.listdir(path):
             if file == '.gitignore':
                 continue
-            try:
-                sprites.append((file, Sprite(os.path.join(path, file))))
-            except Exception as e:
-                logging.exception(f"Could not load sprite from file {file}, ignoring it.")
+            sprite = Sprite(os.path.join(path, file))
+            if sprite.valid:
+                sprites.append((file, sprite))
+            else:
+                self.invalid_sprites.append(file)
 
         sprites.sort(key=lambda s: str.lower(s[1].name or "").strip())
 
