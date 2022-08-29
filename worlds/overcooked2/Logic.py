@@ -9,7 +9,8 @@ def has_requirements_for_level_access(state: CollectionState, level_name: str, p
         return state.has(level_name, player)
     
     # Must have enough stars to purchase level
-    if not state.has("Star", player, required_star_count):
+    star_count = state.item_count("Star", player) + state.item_count("Bonus Star", player)
+    if star_count < required_star_count:
         return False
 
     # If this isn't the first level in a world, it needs the previous level to be unlocked first
