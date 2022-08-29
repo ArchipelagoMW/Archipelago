@@ -9,8 +9,6 @@ class Overcooked2Location(Location):
 location_name_to_id = dict()
 location_id_to_name = dict()
 for level in Overcooked2Level():
-    if level.world == Overcooked2GameWorld.KEVIN:
-        continue # kevin levels currently do not have item locations
     if level.level_id() == 36:
         continue # level 6-6 does not have an item location
     location_name_to_id[level.location_name_completed()] = level.level_id()

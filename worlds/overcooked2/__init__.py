@@ -179,7 +179,6 @@ class Overcooked2World(World):
             self.add_region(level_name)
 
             # Add Location to house progression item (1-star)
-            # Kevin Levels don't have progression items
             # 6-6 doesn't either, but it does have victory condition which is placed later
             if level.level_id() == 36:
                 self.add_level_location(
@@ -188,7 +187,7 @@ class Overcooked2World(World):
                     None,
                     1,
                 )
-            elif level.world != Overcooked2GameWorld.KEVIN:
+            else:
                 self.add_level_location(
                     level_name,
                     level.location_name_completed(),
@@ -226,13 +225,19 @@ class Overcooked2World(World):
         self.world.completion_condition[self.player] = completion_condition
 
     def create_items(self):
-        # Add Items
-        self.world.itempool += [self.create_item(item_name)
-                                for item_name in item_table]
-
+        # Make Items with multiple instances
         for item_name in item_frequencies:
-            for _ in range(0, item_frequencies[item_name]-1): # -1 because it was already added once
+            freq = item_frequencies[item_name]
+            self.world.itempool += [self.create_item(item_name) for _ in range(0, freq)]
+
+        # Make Items with one instance
+        for item_name in item_table:
+            if item_name not in item_frequencies.keys():
                 self.world.itempool.append(self.create_item(item_name))
+
+        # Fill any free space with filler
+        while len(self.world.itempool) < len(location_name_to_id):
+            self.world.itempool.append(self.create_item("Bonus Star"))
 
     def set_rules(self):
         pass
@@ -300,9 +305,9 @@ class Overcooked2World(World):
         on_level_completed: dict[str, list[dict[str, str]]] = dict()
         for location in self.world.get_locations():
             if location.item.player != self.player:
-                continue # this item is not for the local player
+                continue  # this item is not for the local player
             if location.item.code is None:
-                continue # this is an event, not an item
+                continue  # this is an event, not an item
             level_id = str(location_name_to_id[location.name])
             on_level_completed[level_id] = [item_to_unlock_event(location.item.name)]
 

@@ -46,14 +46,16 @@ item_table: dict[str, ItemData] = {
     "Preparing Emote"               : ItemData(oc2_base_id + 32),
     "Washing Up Emote"              : ItemData(oc2_base_id + 33),
     "Ok Emote"                      : ItemData(oc2_base_id + 34),
+    "Bonus Star"                    : ItemData(oc2_base_id + 35),
 }
 
 # exclusive
-oc2_end_id = item_table["Ok Emote"].code + 1
+oc2_end_id = item_table["Bonus Star"].code + 1
 
 item_frequencies = {
     "Larger Tip Jar": 2,
     "Order Lookahead": 2,
+    "Bonus Star": 0,
 }
 
 item_name_to_config_name = {
@@ -126,6 +128,9 @@ def item_to_unlock_event(item_name: str) -> dict[str, str]:
         action = "INC_TIP_COMBO"
     elif item_name == "Order Lookahead":
         action = "INC_ORDERS_ON_SCREEN"
+    elif item_name == "Bonus Star":
+        action = "INC_STAR_COUNT"
+        payload = "1"
     else:
         config_name = item_name_to_config_name[item_name]
         vanilla_value = vanilla_values[config_name]

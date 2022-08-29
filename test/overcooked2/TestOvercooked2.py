@@ -129,17 +129,11 @@ class Overcooked2Test(unittest.TestCase):
         number_of_items = 0
         for item_name in item_frequencies:
             freq = item_frequencies[item_name]
-            self.assertGreater(freq, 0)
+            self.assertGreaterEqual(freq, 0)
             number_of_items += freq
         
         for item_name in item_table:
             if item_name not in item_frequencies.keys():
                 number_of_items += 1
-        
-        # TODO: Consider putting in the same number of items as checks
-        # self.assertEqual(len(location_name_to_id), number_of_items)
 
-        # For now, we will be happy as long as the number of locations is enough to house all progression
-        # items but not so much that some locations place nothing
-        self.assertGreaterEqual(len(location_name_to_id), number_of_items-6) # non-progression
-        self.assertLessEqual(len(location_name_to_id), number_of_items)
+        self.assertLessEqual(number_of_items, len(location_name_to_id), "Too many items (before fillers placed)")
