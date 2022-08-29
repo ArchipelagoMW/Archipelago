@@ -3,7 +3,7 @@ import json
 
 from typing import Callable
 
-from BaseClasses import MultiWorld, ItemClassification, CollectionState, Region, Entrance, Location, RegionType, Tutorial
+from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, RegionType, Tutorial
 from ..AutoWorld import World, WebWorld
 
 from .Overcooked2Levels import Overcooked2Level, Overcooked2GameWorld, Overcooked2GenericLevel, level_shuffle_factory
@@ -11,7 +11,7 @@ from .Locations import Overcooked2Location, location_name_to_id
 from .Options import overcooked_options
 from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event
 from .Locations import location_id_to_name, location_name_to_id
-from .Logic import has_requirements_for_level_star
+from .Logic import has_requirements_for_level_star, has_requirements_for_level_access
 
 
 class Overcooked2Web(WebWorld):
@@ -207,15 +207,15 @@ class Overcooked2World(World):
                 )
 
             # Overworld -> Level
-            if level.world != Overcooked2GameWorld.KEVIN:
-                level_access_rule: Callable[[CollectionState], bool] = \
-                    lambda state, required_star_count=self.level_unlock_counts[level.level_id()]: \
-                    state.has("Star", self.player, required_star_count)
+            required_star_count: int = self.level_unlock_counts[level.level_id()]
+            if level.level_id() % 6 != 1:
+                previous_level_name: str = Overcooked2GenericLevel(level.level_id()-1).shortname().split(" ")[1]
             else:
-                level_access_rule: Callable[[CollectionState], bool] = \
-                    lambda state, item_name=level_name: \
-                    state.has(item_name, self.player)
+                previous_level_name = None
 
+            level_access_rule: Callable[[CollectionState], bool] = \
+                lambda state, level_name=level_name, previous_level_name=previous_level_name, required_star_count=required_star_count: \
+                has_requirements_for_level_access(state, level_name, previous_level_name, required_star_count, self.player)
             self.connect_regions("Overworld", level_name, level_access_rule)
 
             # Level --> Overworld
@@ -284,7 +284,7 @@ class Overcooked2World(World):
         def kevin_level_to_keyholder_level_id(level_id: int) -> int | None:
             location = self.world.find_item(f"Kevin-{level_id-36}", self.player)
             if location.player != self.player:
-                return None # This kevin level will be unlocked by the server at runtime
+                return None  # This kevin level will be unlocked by the server at runtime
             level_id = location_name_to_id[location.name]
             return level_id
         for level_id in range(37, 45):
@@ -297,7 +297,7 @@ class Overcooked2World(World):
         for item in self.world.itempool:
             location: Location = self.world.find_item(item.name, self.player)
             if location.player != self.player:
-                continue # Not in this world
+                continue  # Not in this world
             
             level_id = str(location_name_to_id[location.name])
             on_level_completed[level_id] = [item_to_unlock_event(item.name)]

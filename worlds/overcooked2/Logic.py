@@ -1,7 +1,29 @@
-from BaseClasses import CollectionState
-from .Overcooked2Levels import Overcooked2GenericLevel
+from BaseClasses import CollectionState, Region
+from .Overcooked2Levels import Overcooked2Level, Overcooked2GenericLevel, Overcooked2GameWorld
 
-def has_requirements_for_level_star(state: CollectionState, level: Overcooked2GenericLevel, stars: int, player: int) -> bool:
+
+def has_requirements_for_level_access(state: CollectionState, level_name: str, previous_level_name: str | None,
+                                      required_star_count: int, player: int) -> bool:
+    # Kevin Levels Need to have the corresponding items
+    if level_name.startswith("K"):
+        return state.has(level_name, player)
+    
+    # Must have enough stars to purchase level
+    if not state.has("Star", player, required_star_count):
+        return False
+
+    # If this isn't the first level in a world, it needs the previous level to be unlocked first
+    if previous_level_name is not None:
+        previous_level: Region = state.world.get_region(previous_level_name, player)
+        if not state.can_reach(previous_level):
+            return False
+
+    # If we made it this far we have all requirements
+    return True
+
+
+def has_requirements_for_level_star(
+        state: CollectionState, level: Overcooked2GenericLevel, stars: int, player: int) -> bool:
     assert stars >= 0 and stars <= 3
 
     # First ensure that previous stars are obtainable
@@ -15,6 +37,7 @@ def has_requirements_for_level_star(state: CollectionState, level: Overcooked2Ge
 
     # Finally, return success only if this level's requirements are met
     return meets_requirements(state, level.shortname(), stars, player)
+
 
 def meets_requirements(state: CollectionState, name: str, stars: int, player: int):
     # Get requirements for level
@@ -35,7 +58,8 @@ def meets_requirements(state: CollectionState, name: str, stars: int, player: in
         if state.has(item_name, player):
             total += weight
 
-    return total >= 0.99 # be nice to rounding errors :)
+    return total >= 0.99  # be nice to rounding errors :)
+
 
 # Level 1 - dict keyed by friendly level names
 # Level 2 - tuple with 3 elements, one for each star requirement
