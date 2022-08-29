@@ -747,7 +747,8 @@ def create_regions(world, player: int, active_locations):
         add_location_to_region(world, player, active_locations, LocationName.yoshis_island_2_region, LocationName.yoshis_island_2_dragon,
                                lambda state: (state.has(ItemName.yoshi_activate, player) or
                                               state.has(ItemName.mario_climb, player)))
-        add_location_to_region(world, player, active_locations, LocationName.yoshis_island_3_region, LocationName.yoshis_island_3_dragon)
+        add_location_to_region(world, player, active_locations, LocationName.yoshis_island_3_region, LocationName.yoshis_island_3_dragon,
+                               lambda state: state.has(ItemName.p_switch, player))
         add_location_to_region(world, player, active_locations, LocationName.yoshis_island_4_region, LocationName.yoshis_island_4_dragon,
                                lambda state: (state.has(ItemName.yoshi_activate, player) or
                                               state.has(ItemName.mario_swim, player) or

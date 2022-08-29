@@ -23,8 +23,14 @@ ROMHASH_SIZE = 0x15
 
 SMW_PROGRESS_DATA = 0x1F02
 SMW_EVENT_ROM_DATA = ROM_START + 0x2D608
+SMW_GOAL_DATA = ROM_START + 0x01BFA0
+SMW_REQUIRED_BOSSES_DATA = ROM_START + 0x01BFA1
+SMW_REQUIRED_EGGS_DATA = ROM_START + 0x01BFA2
 
 SMW_GAME_STATE_ADDR = WRAM_START + 0x100
+SMW_CURRENT_LEVEL_ADDR = WRAM_START + 0x13BF
+SMW_MESSAGE_BOX_ADDR = WRAM_START + 0x1426
+SMW_EGG_COUNT_ADDR = WRAM_START + 0xF48
 SMW_SFX_ADDR = WRAM_START + 0x1DFC
 
 SMW_RECV_PROGRESS_ADDR = WRAM_START + 0x1F2B     # SMW_TODO: Find a permanent home for this
@@ -63,9 +69,34 @@ async def smw_game_watcher(ctx: Context):
     if ctx.game == GAME_SMW:
         # SMW_TODO: Handle Deathlink
         game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
-        if game_state is None or game_state[0] != 0x14:
+        if game_state is None:
+            # We're not properly connected
+            return
+        elif game_state[0] >= 0x18:
+            if not ctx.finished_game:
+                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                ctx.finished_game = True
+            return
+        elif game_state[0] != 0x14:
             # We haven't loaded a save file
             return
+
+        # Check for Egg Hunt ending
+        goal = await snes_read(ctx, SMW_GOAL_DATA, 0x1)
+        if goal[0] == 1:
+            current_level = await snes_read(ctx, SMW_CURRENT_LEVEL_ADDR, 0x1)
+            message_box = await snes_read(ctx, SMW_MESSAGE_BOX_ADDR, 0x1)
+            egg_count = await snes_read(ctx, SMW_EGG_COUNT_ADDR, 0x1)
+            required_egg_count = await snes_read(ctx, SMW_REQUIRED_EGGS_DATA, 0x1)
+
+            if current_level[0] == 0x28 and message_box[0] == 0x01 and egg_count[0] >= required_egg_count[0]:
+                snes_buffered_write(ctx, WRAM_START + 0x13C6, bytes([0x08]))
+                snes_buffered_write(ctx, WRAM_START + 0x13CE, bytes([0x01]))
+                snes_buffered_write(ctx, WRAM_START + 0x1DE9, bytes([0x01]))
+                snes_buffered_write(ctx, SMW_GAME_STATE_ADDR, bytes([0x18]))
+
+                await snes_flush_writes(ctx)
+                return
 
         new_checks = []
         from worlds.smw.Rom import item_rom_data, ability_rom_data

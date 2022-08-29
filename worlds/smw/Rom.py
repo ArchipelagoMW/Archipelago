@@ -2,7 +2,7 @@ import Utils
 from Patch import read_rom, APDeltaPatch
 from .Locations import lookup_id_to_name, all_locations
 from .Levels import level_info_dict, full_level_list, submap_level_list, location_id_to_level_id
-from .Names.TextBox import generate_goal_text
+from .Names.TextBox import generate_goal_text, title_text_mapping
 
 USHASH = 'cdd3c8c37322978ca8669b34bc89c804'
 ROM_PLAYER_LIMIT = 65535
@@ -514,6 +514,45 @@ def patch_rom(world, rom, player, active_level_dict):
     # Prevent Title Screen Deaths
     rom.write_byte(0x1C6A, 0x80)
 
+    # Title Screen Text
+    player_name_bytes = bytearray()
+    player_name = world.get_player_name(player)
+    for i in range(16):
+        char = " "
+        if i < len(player_name):
+            char = world.get_player_name(player)[i]
+        upper_char = char.upper()
+        if upper_char not in title_text_mapping:
+            for byte in title_text_mapping["."]:
+                player_name_bytes.append(byte)
+        else:
+            for byte in title_text_mapping[upper_char]:
+                player_name_bytes.append(byte)
+
+    rom.write_bytes(0x2B7F1, player_name_bytes) # MARIO A
+    rom.write_bytes(0x2B726, player_name_bytes) # MARIO A
+
+    rom.write_bytes(0x2B815, bytearray([0xFC, 0x38] * 0x10)) # MARIO B
+    rom.write_bytes(0x2B74A, bytearray([0xFC, 0x38] * 0x10)) # MARIO B
+    rom.write_bytes(0x2B839, bytearray([0x71, 0x31, 0x74, 0x31, 0x2D, 0x31, 0x84, 0x30,
+                                        0x82, 0x30, 0x6F, 0x31, 0x73, 0x31, 0x70, 0x31,
+                                        0x71, 0x31, 0x75, 0x31, 0x83, 0x30, 0xFC, 0x38,
+                                        0xFC, 0x38, 0xFC, 0x38, 0xFC, 0x38, 0xFC, 0x38])) # MARIO C
+    rom.write_bytes(0x2B76E, bytearray([0xFC, 0x38] * 0x10)) # MARIO C
+    rom.write_bytes(0x2B79E, bytearray([0xFC, 0x38] * 0x05)) # EMPTY
+    rom.write_bytes(0x2B7AE, bytearray([0xFC, 0x38] * 0x05)) # EMPTY
+    rom.write_bytes(0x2B8A8, bytearray([0xFC, 0x38] * 0x0D)) # 2 PLAYER GAME
+
+    rom.write_bytes(0x2B85D, bytearray([0xFC, 0x38] * 0x0A)) # ERASE
+
+    rom.write_bytes(0x2B88E, bytearray([0x2C, 0x31, 0x73, 0x31, 0x75, 0x31, 0x82, 0x30, 0x30, 0x31, 0xFC, 0x38, 0x31, 0x31, 0x73, 0x31,
+                                        0x73, 0x31, 0x7C, 0x30, 0xFC, 0x38, 0xFC, 0x38, 0xFC, 0x38])) # 1 Player Game
+
+    # Title Options
+    rom.write_bytes(0x1E6A, bytearray([0x01]))
+    rom.write_bytes(0x1E6C, bytearray([0x01]))
+    rom.write_bytes(0x1E6E, bytearray([0x01]))
+
     # Always allow Start+Select
     rom.write_bytes(0x2267, bytearray([0xEA, 0xEA]))
 
@@ -564,7 +603,14 @@ def patch_rom(world, rom, player, active_level_dict):
             print("Writing: ", hex(0x2D608 + level_id), " | ", hex(tile_data.eventIDValue))
             rom.write_byte(0x2D608 + level_id, tile_data.eventIDValue)
 
-    # SMW_TODO: Store all relevant option results in ROM somewhere
+    # Store all relevant option results in ROM
+    rom.write_byte(0x01BFA0, world.goal[player].value)
+    rom.write_byte(0x01BFA1, world.bosses_required[player].value)
+    required_yoshi_eggs = max(math.floor(
+        world.number_of_yoshi_eggs[player].value * (world.percentage_of_yoshi_eggs[player].value / 100.0)), 1)
+    rom.write_byte(0x01BFA2, required_yoshi_eggs)
+    rom.write_byte(0x01BFA3, world.display_sent_item_popups[player].value)
+    rom.write_byte(0x01BFA4, world.display_received_item_popups[player].value)
 
 
     from Main import __version__
