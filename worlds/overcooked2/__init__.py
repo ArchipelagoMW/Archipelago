@@ -9,7 +9,7 @@ from ..AutoWorld import World, WebWorld
 from .Overcooked2Levels import Overcooked2Level, Overcooked2GameWorld, Overcooked2GenericLevel, level_shuffle_factory
 from .Locations import Overcooked2Location, location_name_to_id
 from .Options import overcooked_options
-from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event
+from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies
 from .Locations import location_id_to_name, location_name_to_id
 from .Logic import has_requirements_for_level_star, has_requirements_for_level_access
 
@@ -229,6 +229,10 @@ class Overcooked2World(World):
         # Add Items
         self.world.itempool += [self.create_item(item_name)
                                 for item_name in item_table]
+
+        for item_name in item_frequencies:
+            for _ in range(0, item_frequencies[item_name]-1): # -1 because it was already added once
+                self.world.itempool.append(self.create_item(item_name))
 
     def set_rules(self):
         pass
