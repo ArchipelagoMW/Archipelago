@@ -106,6 +106,25 @@ class Overcooked2GameWorld(Enum):
         return "World " + self.as_str()
 
 
+
+class Overcooked2GenericLevel():
+    dlc: Overcooked2Dlc
+    level_id: int
+
+    def __init__(self, level_id: int, dlc: Overcooked2Dlc = Overcooked2Dlc("Story")):
+        self.dlc = dlc
+        self.level_id = level_id
+
+    def __str__(self) -> str:
+        return f"{self.dlc.value}|{self.level_id}"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+    
+    def shortname(self) -> str:
+        return level_id_to_shortname[(self.dlc, self.level_id)]
+
+
 class Overcooked2Level:
     """
     Abstraction for a playable levels in Overcooked 2. By default constructor
@@ -145,24 +164,9 @@ class Overcooked2Level:
 
     def world_name(self) -> str:
         return self.world.name()
-
-
-class Overcooked2GenericLevel():
-    dlc: Overcooked2Dlc
-    level_id: int
-
-    def __init__(self, level_id: int, dlc: Overcooked2Dlc = Overcooked2Dlc("Story")):
-        self.dlc = dlc
-        self.level_id = level_id
-
-    def __str__(self) -> str:
-        return f"{self.dlc.value}|{self.level_id}"
-
-    def __repr__(self) -> str:
-        return self.__str__()
     
-    def shortname(self) -> str:
-        return level_id_to_shortname[(self.dlc, self.level_id)]
+    def to_generic_level(self) -> Overcooked2GenericLevel:
+        return Overcooked2GenericLevel(self.level_id())
 
 
 def level_shuffle_factory(rng: Random, shuffle_horde_levels=False) -> dict[int, Overcooked2GenericLevel]:  # return <story_level_id, level>
