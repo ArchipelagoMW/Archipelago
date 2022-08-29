@@ -269,7 +269,7 @@ class WitnessPlayerLocations:
         if earlyutm or doors:  # in non-doors, there is no way to get symbol-locked by the final pillars (currently)
             postgame -= StaticWitnessLocations.CAVES_LOCATIONS
 
-        if (victory == 0 and doors) or (victory == 2 and mount_lasers > chal_lasers and (doors or earlyutm)):
+        if (doors or earlyutm) and (victory == 0 or (victory == 2 and mount_lasers > chal_lasers)):
             postgame -= {"Challenge Vault Box", "Theater Challenge Video"}
 
         if doors or mountain_enterable_from_top:
