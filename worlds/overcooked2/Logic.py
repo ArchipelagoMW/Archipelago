@@ -80,6 +80,7 @@ def meets_requirements(state: CollectionState, name: str, stars: int, player: in
 # list to be compelted before it can be pressed
 #
 ramp_logic = {
+    "1-5": [],
     "2-2": [],
     "3-1": [],
     "5-2": [],
