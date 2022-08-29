@@ -59,13 +59,18 @@ all_creatures: Dict[str, int] = {
 aggressive: Set[str] = {
     "Cave Crawler",  # is very easy without Stasis Rifle, but included for consistency
     "Crashfish",
+    "Biter",
     "Bleeder",
+    "Blighter",
+    "Blood Crawler",
     "Mesmer",
     "Reaper Leviathan",
     "Crabsquid",
     "Warper",
     "Crabsnake",
     "Ampeel",
+    "Stalker",
+    "Sand Shark",
     "Boneshark",
     "Lava Lizard",
     "Sea Dragon Leviathan",
