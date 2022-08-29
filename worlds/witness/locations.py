@@ -173,8 +173,6 @@ class StaticWitnessLocations:
         "Caves Left Upstairs Left Row 5",
 
         "Tunnels Vault Box",
-        "Challenge Vault Box",
-        "Challenge Video",
         "Mountain Bottom Floor Discard",
         "Theater Challenge Video",
     }
@@ -196,6 +194,12 @@ class StaticWitnessLocations:
 
         "Mountain Final Room Left Pillar 4",
         "Mountain Final Room Right Pillar 4",
+    }
+
+    MOUNTAIN_EXTRAS = {
+        "Challenge Vault Box",
+        "Theater Challenge Video",
+        "Mountain Bottom Floor Discard"
     }
 
     ALL_LOCATIONS_TO_ID = dict()
@@ -256,6 +260,7 @@ class WitnessPlayerLocations:
         postgame = postgame | StaticWitnessLocations.CAVES_LOCATIONS
         postgame = postgame | StaticWitnessLocations.MOUNTAIN_REACHABLE_FROM_BEHIND
         postgame = postgame | StaticWitnessLocations.MOUNTAIN_UNREACHABLE_FROM_BEHIND
+        postgame = postgame | StaticWitnessLocations.MOUNTAIN_EXTRAS
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | postgame
 
@@ -264,6 +269,9 @@ class WitnessPlayerLocations:
         if earlyutm or doors:  # in non-doors, there is no way to get symbol-locked by the final pillars (currently)
             postgame -= StaticWitnessLocations.CAVES_LOCATIONS
 
+        if (victory == 0 and doors) or (victory == 2 and mount_lasers > chal_lasers and (doors or earlyutm)):
+            postgame -= {"Challenge Vault Box", "Theater Challenge Video"}
+
         if doors or mountain_enterable_from_top:
             postgame -= StaticWitnessLocations.MOUNTAIN_REACHABLE_FROM_BEHIND
 
@@ -271,7 +279,7 @@ class WitnessPlayerLocations:
             postgame -= StaticWitnessLocations.MOUNTAIN_UNREACHABLE_FROM_BEHIND
 
         if (victory == 0 and doors) or victory == 1 or (victory == 2 and mount_lasers > chal_lasers and doors):
-            postgame -= set("Mountain Bottom Layer Discard")
+            postgame -= {"Mountain Bottom Floor Discard"}
 
         if is_option_enabled(world, player, "shuffle_discarded_panels"):
             self.PANEL_TYPES_TO_SHUFFLE.add("Discard")
