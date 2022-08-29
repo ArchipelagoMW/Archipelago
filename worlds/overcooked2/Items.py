@@ -48,6 +48,9 @@ item_table: dict[str, ItemData] = {
     "Ok Emote"                      : ItemData(oc2_base_id + 34),
 }
 
+# exclusive
+oc2_end_id = item_table["Ok Emote"].code + 1
+
 item_frequencies = {
     "Larger Tip Jar": 2,
     "Order Lookahead": 2,

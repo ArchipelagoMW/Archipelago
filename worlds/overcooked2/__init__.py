@@ -9,7 +9,7 @@ from ..AutoWorld import World, WebWorld
 from .Overcooked2Levels import Overcooked2Level, Overcooked2GameWorld, Overcooked2GenericLevel, level_shuffle_factory
 from .Locations import Overcooked2Location, location_name_to_id
 from .Options import overcooked_options
-from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies
+from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies, oc2_base_id, oc2_end_id
 from .Locations import location_id_to_name, location_name_to_id
 from .Logic import has_requirements_for_level_star, has_requirements_for_level_access
 
@@ -298,13 +298,13 @@ class Overcooked2World(World):
 
         # Place Items at Level Completion Screens (local only)
         on_level_completed: dict[str, list[dict[str, str]]] = dict()
-        for item in self.world.itempool:
-            location: Location = self.world.find_item(item.name, self.player)
-            if location.player != self.player:
-                continue  # Not in this world
-            
+        for location in self.world.get_locations():
+            if location.item.player != self.player:
+                continue # this item is not for the local player
+            if location.item.code is None:
+                continue # this is an event, not an item
             level_id = str(location_name_to_id[location.name])
-            on_level_completed[level_id] = [item_to_unlock_event(item.name)]
+            on_level_completed[level_id] = [item_to_unlock_event(location.item.name)]
 
         # Put it all together
 
