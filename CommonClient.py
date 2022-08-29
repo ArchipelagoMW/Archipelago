@@ -345,6 +345,8 @@ class CommonContext:
         cache_package = Utils.persistent_load().get("datapackage", {}).get("games", {})
         needed_updates: typing.Set[str] = set()
         for game in relevant_games:
+            if game not in remote_datepackage_versions:
+                continue
             remote_version: int = remote_datepackage_versions[game]
 
             if remote_version == 0:  # custom datapackage for this game
