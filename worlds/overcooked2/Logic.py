@@ -4,6 +4,16 @@ from .Overcooked2Levels import Overcooked2GenericLevel
 
 def has_requirements_for_level_access(state: CollectionState, level_name: str, previous_level_name: str | None,
                                       required_star_count: int, player: int) -> bool:
+    # Check if the ramps in the overworld are set correctly
+    if level_name in ramp_logic:
+        # if not state.has("Ramp Button"):
+        #     return False # need the item to use ramps
+
+        for req in ramp_logic[level_name]:
+             # TODO: while entirely logical, the spoiler might show some checks slightly out of order
+            if not state.can_reach(state.world.get_location(req + " Completed", player)):
+                return False # This level needs another to be beaten first
+
     # Kevin Levels Need to have the corresponding items
     if level_name.startswith("K"):
         return state.has(level_name, player)
@@ -16,6 +26,7 @@ def has_requirements_for_level_access(state: CollectionState, level_name: str, p
     # If this isn't the first level in a world, it needs the previous level to be unlocked first
     if previous_level_name is not None:
         previous_level: Region = state.world.get_region(previous_level_name, player)
+        # TODO: while entirely logical, the spoiler might show some checks slightly out of order
         if not state.can_reach(previous_level):
             return False
 
@@ -61,6 +72,29 @@ def meets_requirements(state: CollectionState, name: str, stars: int, player: in
 
     return total >= 0.99  # be nice to rounding errors :)
 
+# If key missing, doesn't require a ramp to access (or the logic is handled by a preceeding level)
+#
+# If empty, a ramp is required to access, but the ramp button is garunteed accessible
+#
+# If populated, a ramp is required to access and the button requires all levels in the
+# list to be compelted before it can be pressed
+#
+ramp_logic = {
+    "2-2": [],
+    "3-1": [],
+    "5-2": [],
+    "6-1": [],
+    "6-2": ["5-1"], # 5-1 spawns blue button, blue button gets you to red button
+    "Kevin-1": [],
+    "Kevin-7": ["5-1"], # 5-1 spawns blue button,
+                        # press blue button,
+                        # climb blue ramp,
+                        # jump the gap,
+                        # climb wood ramps
+    "Kevin-8": ["5-1", "6-2"], # Same as above, but 6-2 spawns the ramp to K8
+}
+
+# 1, 2, 3, 4, 5, 6
 
 # Level 1 - dict keyed by friendly level names
 # Level 2 - tuple with 3 elements, one for each star requirement
