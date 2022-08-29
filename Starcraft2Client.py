@@ -489,7 +489,7 @@ async def starcraft_launch(ctx: SC2Context, mission_id: int):
 class ArchipelagoBot(sc2.bot_ai.BotAI):
     game_running: bool = False
     mission_completed: bool = False
-    boni: typing.List[bool] = [False for x in range(max_bonus)]
+    boni: typing.List[bool]
 
     ctx: SC2Context
     mission_id: int
@@ -501,6 +501,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     def __init__(self, ctx: SC2Context, mission_id):
         self.ctx = ctx
         self.mission_id = mission_id
+        self.boni = [False for x in range(max_bonus)]
 
         super(ArchipelagoBot, self).__init__()
 
@@ -577,8 +578,9 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     if game_state & (1 << 1) and not self.mission_completed:
                         if self.mission_id != 29:
                             print("Mission Completed")
-                            await self.ctx.send_msgs([{"cmd": 'LocationChecks', "locations":
-                                [SC2WOL_LOC_ID_OFFSET + victory_modulo * self.mission_id]}])
+                            await self.ctx.send_msgs(
+                                [{"cmd": 'LocationChecks',
+                                  "locations": [SC2WOL_LOC_ID_OFFSET + victory_modulo * self.mission_id]}])
                             self.mission_completed = True
                         else:
                             print("Game Complete")
