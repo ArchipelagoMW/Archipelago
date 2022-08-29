@@ -1,5 +1,5 @@
 from BaseClasses import CollectionState, Region
-from .Overcooked2Levels import Overcooked2Level, Overcooked2GenericLevel, Overcooked2GameWorld
+from .Overcooked2Levels import Overcooked2GenericLevel
 
 
 def has_requirements_for_level_access(state: CollectionState, level_name: str, previous_level_name: str | None,

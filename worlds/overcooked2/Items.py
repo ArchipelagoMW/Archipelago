@@ -115,7 +115,7 @@ def item_to_unlock_event(item_name: str) -> dict[str, str]:
         payload = str(kevin_num + 36)
     elif "Emote" in item_name:
         action = "UNLOCK_EMOTE"
-        payload = str(item_table[item_name].code - 30)
+        payload = str(item_table[item_name].code - item_table["Cooking Emote"].code)
     elif item_name == "Larger Tip Jar":
         action = "INC_TIP_COMBO"
     elif item_name == "Order Lookahead":
