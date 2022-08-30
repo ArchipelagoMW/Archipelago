@@ -582,7 +582,7 @@ def calc_objectives_completed(ctx: SC2Context, mission: str) -> int:
     objectives_complete = 0
     objectives_exist = 0
 
-    for i in range(max_bonus):
+    for i in range(max_bonus+1):
         loc_id: int = ctx.mission_req_table[mission].id * victory_modulo + SC2WOL_LOC_ID_OFFSET + i
         if loc_id in ctx.server_locations:
             objectives_exist += 1
