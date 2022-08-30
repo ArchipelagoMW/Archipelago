@@ -120,8 +120,13 @@ class Overcooked2World(World):
         if level_id is None:
             level_id = 36
 
+        if level_id in self.level_mapping.keys():
+            level = self.level_mapping[level_id]
+        else:
+            level = Overcooked2GenericLevel(level_id)
+
         completion_condition: Callable[[CollectionState], bool] = \
-            lambda state, level=self.level_mapping[level_id], stars=stars: \
+            lambda state, level=level, stars=stars: \
             has_requirements_for_level_star(state, level, stars, self.player)
         location.access_rule = completion_condition
 
@@ -164,7 +169,10 @@ class Overcooked2World(World):
         self.level_unlock_counts = level_unlock_requirement_factory(self.stars_to_win)
 
         # Assign new kitchens to each spot on the overworld using pure random chance and nothing else
-        self.level_mapping = level_shuffle_factory(self.world.random)
+        if self.shuffle_level_order:
+            self.level_mapping = level_shuffle_factory(self.world.random)
+        else:
+            self.level_mapping = None
 
     def create_regions(self) -> None:
         # Menu -> Overworld
@@ -259,12 +267,13 @@ class Overcooked2World(World):
         # Serialize Level Order
         story_level_order = dict()
 
-        for level_id in self.level_mapping:
-            level: Overcooked2GenericLevel = self.level_mapping[level_id]
-            story_level_order[str(level_id)] = {
-                "DLC": level.dlc.value,
-                "LevelID": level.level_id,
-            }
+        if self.shuffle_level_order:
+            for level_id in self.level_mapping:
+                level: Overcooked2GenericLevel = self.level_mapping[level_id]
+                story_level_order[str(level_id)] = {
+                    "DLC": level.dlc.value,
+                    "LevelID": level.level_id,
+                }
 
         custom_level_order = dict()
         custom_level_order["Story"] = story_level_order
@@ -365,6 +374,7 @@ class Overcooked2World(World):
             "DisableCatch": True,
             "DisableControlStick": True,
             "DisableWokDrag": True,
+            "DisableRampButton": True,
             "WashTimeMultiplier": 1.5,
             "BurnSpeedMultiplier": 1.5,
             "MaxOrdersOnScreenOffset": -2,

@@ -6,8 +6,8 @@ def has_requirements_for_level_access(state: CollectionState, level_name: str, p
                                       required_star_count: int, player: int) -> bool:
     # Check if the ramps in the overworld are set correctly
     if level_name in ramp_logic:
-        # if not state.has("Ramp Button"):
-        #     return False # need the item to use ramps
+        if not state.has("Ramp Button", player):
+            return False # need the item to use ramps
 
         for req in ramp_logic[level_name]:
              # TODO: while entirely logical, the spoiler might show some checks slightly out of order

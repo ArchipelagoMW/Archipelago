@@ -46,7 +46,8 @@ item_table: dict[str, ItemData] = {
     "Preparing Emote"               : ItemData(oc2_base_id + 32),
     "Washing Up Emote"              : ItemData(oc2_base_id + 33),
     "Ok Emote"                      : ItemData(oc2_base_id + 34),
-    "Bonus Star"                    : ItemData(oc2_base_id + 35),
+    "Ramp Button"                   : ItemData(oc2_base_id + 35),
+    "Bonus Star"                    : ItemData(oc2_base_id + 36),
 }
 
 # exclusive
@@ -77,6 +78,7 @@ item_name_to_config_name = {
     "Faster Respawn Time"          : "RespawnTime"                   ,
     "Faster Condiment/Drink Switch": "CarnivalDispenserRefactoryTime",
     "Guest Patience"               : "CustomOrderLifetime"           ,
+    "Ramp Button"                  : "DisableRampButton"             ,
 }
 
 vanilla_values = {
@@ -91,6 +93,7 @@ vanilla_values = {
     "DisableCatch": False,
     "DisableControlStick": False,
     "DisableWokDrag": False,
+    "DisableRampButton": False,
     "WashTimeMultiplier": 1.0,
     "BurnSpeedMultiplier": 1.0,
     "ChoppingTimeScale": 1.0,
