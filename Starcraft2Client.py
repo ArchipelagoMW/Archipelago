@@ -170,7 +170,7 @@ class SC2Context(CommonContext):
     def on_print_json(self, args: dict):
         relevant = False
         if "receiving" in args:
-            if self.slot_concerns_self(copy.deepcopy(args["receiving"])):
+            if self.slot_concerns_self(args["receiving"]):
                 relevant = True
         if "item" in args:
             if self.slot_concerns_self(args["item"].player):
