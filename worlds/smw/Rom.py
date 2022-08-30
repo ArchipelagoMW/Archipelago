@@ -560,6 +560,7 @@ def patch_rom(world, rom, player, active_level_dict):
     if world.goal[player] == "yoshi_egg_hunt":
         rom.write_bytes(0x3F1AA, bytearray([0x00] * 0x20))
 
+    # Prevent Switch Palaces setting the Switch Palace flags
     rom.write_bytes(0x6EC9A, bytearray([0xEA, 0xEA]))
     rom.write_bytes(0x6EB1, bytearray([0xEA, 0xEA]))
     rom.write_bytes(0x6EB4, bytearray([0xEA, 0xEA, 0xEA]))
