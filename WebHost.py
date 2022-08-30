@@ -12,7 +12,7 @@ ModuleUpdate.update()
 # in case app gets imported by something like gunicorn
 import Utils
 
-Utils.local_path.cached_path = os.path.dirname(__file__)
+Utils.local_path.cached_path = os.path.dirname(__file__) or "."
 
 from WebHostLib import register, app as raw_app
 from waitress import serve
