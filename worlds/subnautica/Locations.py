@@ -15,7 +15,12 @@ class LocationDict(TypedDict, total=False):
     need_propulsion_cannon: bool
 
 
-events: List[str] = ["Neptune Launch", "Disable Quarantine", "Full Infection", "Repair Aurora Drive"]
+events: List[str] = [
+    "Neptune Launch",
+    "Disable Quarantine",
+    "Full Infection",
+    "Repair Aurora Drive",
+]
 
 location_table: Dict[int, LocationDict] = {
     33000: {'can_slip_through': False,
