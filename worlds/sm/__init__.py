@@ -81,8 +81,8 @@ class SMWorld(World):
     data_version = 2
     option_definitions = sm_options
 
-    item_name_to_id = dict((value.Name, items_start_id + value.Id) for key, value in ItemManager.Items.items() if value.Id != None)
-    location_name_to_id = dict((key, locations_start_id + value.Id) for key, value in locationsDict.items() if value.Id != None)
+    item_name_to_id = {value.Name: items_start_id + value.Id for key, value in ItemManager.Items.items() if value.Id != None}
+    location_name_to_id = {key: locations_start_id + value.Id for key, value in locationsDict.items() if value.Id != None}
     web = SMWeb()
 
     remote_items: bool = False
@@ -700,7 +700,7 @@ class SMWorld(World):
                                                             dest.Name) for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions if src.Boss]))
 
 def create_locations(self, player: int):
-    for name in locationsDict.keys():
+    for name in locationsDict:
         self.locations[name] = SMLocation(player, name, self.location_name_to_id.get(name, None))
 
 
