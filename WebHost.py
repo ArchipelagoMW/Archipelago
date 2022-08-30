@@ -12,7 +12,7 @@ ModuleUpdate.update()
 # in case app gets imported by something like gunicorn
 import Utils
 
-Utils.local_path.cached_path = os.path.dirname(__file__) or "."
+Utils.local_path.cached_path = os.path.dirname(__file__) or "."  # py3.8 is not abs. remove "." when dropping 3.8
 
 from WebHostLib import register, app as raw_app
 from waitress import serve
