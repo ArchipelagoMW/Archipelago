@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import copy
 import ctypes
 import logging
 import multiprocessing
@@ -33,7 +34,7 @@ sc2_logger = logging.getLogger("Starcraft2")
 
 import colorama
 
-from NetUtils import ClientStatus
+from NetUtils import ClientStatus, RawJSONtoTextParser
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 
 nest_asyncio.apply()
@@ -138,6 +139,11 @@ class SC2Context(CommonContext):
     last_loc_list = None
     difficulty_override = -1
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
+    raw_text_parser: RawJSONtoTextParser
+
+    def __init__(self, *args, **kwargs):
+        super(SC2Context, self).__init__(*args, **kwargs)
+        self.raw_text_parser = RawJSONtoTextParser(self)
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -161,14 +167,14 @@ class SC2Context(CommonContext):
             if "SC2PATH" not in os.environ and check_game_install_path():
                 check_mod_install()
 
-        if cmd in {"PrintJSON"}:
-            if "receiving" in args:
-                if self.slot_concerns_self(args["receiving"]):
-                    self.announcements.append(args["data"])
-                    return
-            if "item" in args:
-                if self.slot_concerns_self(args["item"].player):
-                    self.announcements.append(args["data"])
+    def on_print_json(self, args: dict):
+        if "receiving" in args:
+            if self.slot_concerns_self(copy.deepcopy(args["receiving"])):
+                self.announcements.append(self.raw_text_parser(args["data"]))
+                return
+        if "item" in args:
+            if self.slot_concerns_self(args["item"].player):
+                self.announcements.append(self.raw_text_parser(copy.deepcopy(args["data"])))
 
     def run_gui(self):
         from kvui import GameManager, HoverBehavior, ServerToolTip
@@ -522,33 +528,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
 
         else:
             if self.ctx.announcement_pos < len(self.ctx.announcements):
-                index = 0
-                message = ""
-                while index < len(self.ctx.announcements[self.ctx.announcement_pos]):
-                    message += self.ctx.announcements[self.ctx.announcement_pos][index]["text"]
-                    index += 1
-
-                index = 0
-                start_rem_pos = -1
-                # Remove unneeded [Color] tags
-                while index < len(message):
-                    if message[index] == '[':
-                        start_rem_pos = index
-                        index += 1
-                    elif message[index] == ']' and start_rem_pos > -1:
-                        temp_msg = ""
-
-                        if start_rem_pos > 0:
-                            temp_msg = message[:start_rem_pos]
-                        if index < len(message) - 1:
-                            temp_msg += message[index + 1:]
-
-                        message = temp_msg
-                        index += start_rem_pos - index
-                        start_rem_pos = -1
-                    else:
-                        index += 1
-
+                message = self.ctx.announcements[self.ctx.announcement_pos]
                 await self.chat_send("SendMessage " + message)
                 self.ctx.announcement_pos += 1
 
