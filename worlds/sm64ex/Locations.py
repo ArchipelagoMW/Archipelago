@@ -245,7 +245,7 @@ locBitFS_table = {
 
 locWMotR_table = {
     "Wing Mario Over the Rainbow Red Coins": 3626154,
-    "Wing Mario Over the Rainbow 1Up Block": 3626242
+    "Wing Mario Over the Rainbow 1Up Block": 3626243
 }
 
 locBitS_table = {
