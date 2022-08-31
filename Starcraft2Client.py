@@ -168,17 +168,18 @@ class SC2Context(CommonContext):
                 check_mod_install()
 
     def on_print_json(self, args: dict):
-        relevant = False
-        if "receiving" in args:
-            if self.slot_concerns_self(args["receiving"]):
-                relevant = True
-        if "item" in args:
-            if self.slot_concerns_self(args["item"].player):
-                relevant = True
+        if "receiving" in args and self.slot_concerns_self(args["receiving"]):
+            relevant = True
+        elif "item" in args and self.slot_concerns_self(args["item"].player):
+            relevant = True
+        else:
+            relevant = False
+
         if relevant:
             self.announcements.append(self.raw_text_parser(copy.deepcopy(args["data"])))
+
         super(SC2Context, self).on_print_json(args)
-                
+
     def run_gui(self):
         from kvui import GameManager, HoverBehavior, ServerToolTip
         from kivy.app import App
