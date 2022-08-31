@@ -1,7 +1,6 @@
 from enum import Enum
 from random import Random
 
-
 class Overcooked2Dlc(Enum):
     STORY = "Story"
     SURF_N_TURF = "Surf 'n' Turf"
@@ -61,12 +60,28 @@ class Overcooked2Dlc(Enum):
             return [0, 36]
 
         return []
-    
+
     def horde_levels(self) -> list[int]:
         if self == Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE:
             return [12, 13, 14, 15, 16, 17, 18, 19]
         if self == Overcooked2Dlc.SEASONAL:
             return [13, 15]
+
+        return []
+
+    def prep_levels(self) -> list[int]:
+        if self == Overcooked2Dlc.STORY:
+            return [1, 2, 5, 10, 12, 13, 28, 31]
+        if self == Overcooked2Dlc.SURF_N_TURF:
+            return [0, 4]
+        if self == Overcooked2Dlc.CAMPFIRE_COOK_OFF:
+            return [0, 2, 4, 9]
+        if self == Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE:
+            return [0, 1, 4]
+        if self == Overcooked2Dlc.CARNIVAL_OF_CHAOS:
+            return [0, 1, 3, 4, 5]
+        if self == Overcooked2Dlc.SEASONAL:
+            return [0, 1, 5, 6, 12, 14, 16, 17, 18, 22, 23, 24, 29]
 
         return []
 
@@ -169,18 +184,24 @@ class Overcooked2Level:
         return Overcooked2GenericLevel(self.level_id())
 
 
-def level_shuffle_factory(rng: Random, shuffle_horde_levels=False) -> dict[int, Overcooked2GenericLevel]:  # return <story_level_id, level>
-
+def level_shuffle_factory(rng: Random, shuffle_prep_levels: bool, shuffle_horde_levels=False) -> dict[int, Overcooked2GenericLevel]:  # return <story_level_id, level>
     # Create a list of all valid levels for selection
     # (excludes tutorial, throne, kevin and sometimes horde levels)
     pool = list()
     for dlc in Overcooked2Dlc:
         for level_id in range(dlc.start_level_id(), dlc.end_level_id()):
-            if level_id not in dlc.excluded_levels():
-                if shuffle_horde_levels or level_id not in dlc.horde_levels():
-                    pool.append(
-                        Overcooked2GenericLevel(level_id, dlc)
-                    )
+            if level_id in dlc.excluded_levels():
+                continue
+            
+            if not shuffle_horde_levels and level_id in dlc.horde_levels():
+                continue
+            
+            if not shuffle_prep_levels and level_id in dlc.prep_levels():
+                continue
+
+            pool.append(
+                Overcooked2GenericLevel(level_id, dlc)
+            )                
 
     # Sort the pool to eliminate risk
     pool.sort(key=lambda x: int(x.dlc)*1000 + x.level_id)

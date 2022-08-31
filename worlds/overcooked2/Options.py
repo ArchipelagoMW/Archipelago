@@ -1,4 +1,4 @@
-from Options import DefaultOnToggle, Range
+from Options import DefaultOnToggle, Range, Choice
 
 
 class AlwaysServerOldestOrder(DefaultOnToggle):
@@ -9,11 +9,6 @@ class AlwaysServerOldestOrder(DefaultOnToggle):
 class AlwaysPreserveCookingProgress(DefaultOnToggle):
     """Modifies the game to behave more like AYCE, where adding an item to an in-progress container doesn't reset the entire progress bar."""
     display_name = "Preserve Cooking/Mixing Progress"
-
-
-class AlwaysStartLevelTimer(DefaultOnToggle):
-    """Modifies the game to behave more like AYCE, where levels that introduce new recipes do not start with a paused timer."""
-    display_name = "Level Timer Always Starts"
 
 
 class DisplayLeaderboardScores(DefaultOnToggle):
@@ -36,6 +31,19 @@ class ShorterLevelDuration(DefaultOnToggle):
     display_name = "ShorterLevelDuration"
 
 
+
+class PrepLevels(Choice):
+    """Choose How "Prep Levels" are landled (levels where the timer does not start until the first order is served)
+    Original: Prep Levels may appear
+    Excluded: Prep Levels are excluded from the pool during level shuffling
+    All You Can Eat: Prep Levels may appear, but the timer automatically starts. The star score requirements are also adjusted to use the All You Can Eat World Record if it exists."""
+    auto_display_name = True
+    display_name = "PrepLevels"
+    option_original = 0
+    option_excluded = 1
+    option_ayce = 2
+    default = 2
+
 class StarsToWin(Range):
     """Number of stars required to unlock 6-6. All levels between 1-1 and 6-6 will be spread between these two numbers"""
     range_start = 0
@@ -53,11 +61,11 @@ class StarThresholdScale(Range):
 overcooked_options = {
     "AlwaysServerOldestOrder": AlwaysServerOldestOrder,
     "AlwaysPreserveCookingProgress": AlwaysPreserveCookingProgress,
-    "AlwaysStartLevelTimer": AlwaysStartLevelTimer,
     "DisplayLeaderboardScores": DisplayLeaderboardScores,
     "ShuffleLevelOrder": ShuffleLevelOrder,
     "FixBugs": FixBugs,
     "StarsToWin": StarsToWin,
     "StarThresholdScale": StarThresholdScale,
     "ShorterLevelDuration": ShorterLevelDuration,
+    "PrepLevels": PrepLevels,
 }

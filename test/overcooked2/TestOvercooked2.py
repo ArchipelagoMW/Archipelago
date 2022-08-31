@@ -67,7 +67,7 @@ class Overcooked2Test(unittest.TestCase):
     def testOvercooked2ShuffleFactory(self):
         previous_runs = set()
         for seed in range(0, 5):
-            levels = level_shuffle_factory(Random(seed))
+            levels = level_shuffle_factory(Random(seed), True)
 
             self.assertEqual(len(levels), 44)
 
@@ -79,6 +79,9 @@ class Overcooked2Test(unittest.TestCase):
 
             self.assertNotIn(levels[15], previous_runs)
             previous_runs.add(levels[15])
+
+        levels = level_shuffle_factory(Random(123), False)
+        self.assertEqual(len(levels), 44)
 
     def testLevelNameRepresentation(self):
         shortnames = [level.to_generic_level().shortname() for level in Overcooked2Level()]

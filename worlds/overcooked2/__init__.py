@@ -1,6 +1,8 @@
 import os
 import json
 
+from enum import Enum
+
 from typing import Callable
 
 from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, RegionType, Tutorial
@@ -27,6 +29,10 @@ class Overcooked2Web(WebWorld):
 
     tutorials = [setup_en]
 
+class PrepLevelMode(Enum):
+    original = 0
+    excluded = 1
+    ayce = 2
 
 class Overcooked2World(World):
     """
@@ -138,13 +144,14 @@ class Overcooked2World(World):
 
     always_serve_oldest_order: bool
     always_preserve_cooking_progress: bool
-    always_start_level_timer: bool
     display_leaderboard_scores: bool
     shuffle_level_order: bool
     fix_bugs: bool
     shorter_level_duration: bool
     stars_to_win: int
     star_threshold_scale: float
+
+    prep_levels: PrepLevelMode
 
     # Helper Data
 
@@ -156,12 +163,12 @@ class Overcooked2World(World):
     def generate_early(self):
         self.always_serve_oldest_order        = bool(self.world.AlwaysServerOldestOrder      [self.player].value)
         self.always_preserve_cooking_progress = bool(self.world.AlwaysPreserveCookingProgress[self.player].value)
-        self.always_start_level_timer         = bool(self.world.AlwaysStartLevelTimer        [self.player].value)
         self.display_leaderboard_scores       = bool(self.world.DisplayLeaderboardScores     [self.player].value)
         self.shuffle_level_order              = bool(self.world.ShuffleLevelOrder            [self.player].value)
         self.fix_bugs                         = bool(self.world.FixBugs                      [self.player].value)
         self.shorter_level_duration           = bool(self.world.ShorterLevelDuration         [self.player].value)
         self.stars_to_win                     = int (self.world.StarsToWin                   [self.player].value)
+        self.prep_levels = PrepLevelMode(self.world.PrepLevels[self.player].value)
 
         # 0.0 to 1.0 where 1.0 is World Record
         self.star_threshold_scale = float(self.world.StarThresholdScale[self.player].value) / 100.0
@@ -172,7 +179,7 @@ class Overcooked2World(World):
 
         # Assign new kitchens to each spot on the overworld using pure random chance and nothing else
         if self.shuffle_level_order:
-            self.level_mapping = level_shuffle_factory(self.world.random)
+            self.level_mapping = level_shuffle_factory(self.world.random, self.prep_levels != PrepLevelMode.excluded)
         else:
             self.level_mapping = None
 
@@ -348,7 +355,7 @@ class Overcooked2World(World):
             "FixSinkBug": self.fix_bugs,
             "FixControlStickThrowBug": self.fix_bugs,
             "FixEmptyBurnerThrow": self.fix_bugs,
-            "TimerAlwaysStarts": self.always_start_level_timer,
+            "TimerAlwaysStarts": self.prep_levels == PrepLevelMode.ayce,
             "LevelTimerScale": 0.666 if self.shorter_level_duration else 1.0,
 
             # Game Modifications
