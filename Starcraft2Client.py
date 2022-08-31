@@ -9,6 +9,7 @@ import os.path
 import re
 import sys
 import typing
+import queue
 from pathlib import Path
 
 import nest_asyncio
@@ -127,12 +128,7 @@ class SC2Context(CommonContext):
     difficulty = -1
     all_in_choice = 0
     mission_req_table: typing.Dict[str, MissionInfo] = {}
-    items_rec_to_announce = []
-    rec_announce_pos = 0
-    items_sent_to_announce = []
-    sent_announce_pos = 0
-    announcements = []
-    announcement_pos = 0
+    announcements = queue.Queue()
     sc2_run_task: typing.Optional[asyncio.Task] = None
     missions_unlocked: bool = False  # allow launching missions ignoring requirements
     current_tooltip = None
@@ -176,7 +172,7 @@ class SC2Context(CommonContext):
             relevant = False
 
         if relevant:
-            self.announcements.append(self.raw_text_parser(copy.deepcopy(args["data"])))
+            self.announcements.put(self.raw_text_parser(copy.deepcopy(args["data"])))
 
         super(SC2Context, self).on_print_json(args)
 
@@ -485,10 +481,6 @@ def calc_difficulty(difficulty):
 
 
 async def starcraft_launch(ctx: SC2Context, mission_id: int):
-    ctx.rec_announce_pos = len(ctx.items_rec_to_announce)
-    ctx.sent_announce_pos = len(ctx.items_sent_to_announce)
-    ctx.announcements_pos = len(ctx.announcements)
-
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id]}. If game does not launch check log file for errors.")
 
     with DllDirectory(None):
@@ -500,7 +492,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     game_running: bool = False
     mission_completed: bool = False
     boni: typing.List[bool]
-
+    setup_done: bool
     ctx: SC2Context
     mission_id: int
 
@@ -509,15 +501,17 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     last_received_update: int = 0
 
     def __init__(self, ctx: SC2Context, mission_id):
+        self.setup_done = False
         self.ctx = ctx
         self.mission_id = mission_id
-        self.boni = [False for x in range(max_bonus)]
+        self.boni = [False for _ in range(max_bonus)]
 
         super(ArchipelagoBot, self).__init__()
 
     async def on_step(self, iteration: int):
         game_state = 0
-        if iteration == 0:
+        if not self.setup_done:
+            self.setup_done = True
             start_items = calculate_items(self.ctx.items_received)
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
@@ -531,10 +525,10 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
             self.last_received_update = len(self.ctx.items_received)
 
         else:
-            if self.ctx.announcement_pos < len(self.ctx.announcements):
-                message = self.ctx.announcements[self.ctx.announcement_pos]
+            if not self.ctx.announcements.empty():
+                message = self.ctx.announcements.get(timeout=1)
                 await self.chat_send("SendMessage " + message)
-                self.ctx.announcement_pos += 1
+                self.ctx.announcements.task_done()
 
             # Archipelago reads the health
             for unit in self.all_own_units():
