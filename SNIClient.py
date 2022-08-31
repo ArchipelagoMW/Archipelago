@@ -1196,7 +1196,7 @@ async def game_watcher(ctx: Context):
                 snes_buffered_write(ctx, SM_SEND_QUEUE_RCOUNT,
                                     bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
 
-                from worlds.sm.Locations import locations_start_id
+                from worlds.sm import locations_start_id
                 location_id = locations_start_id + itemIndex
 
                 ctx.locations_checked.add(location_id)
@@ -1211,8 +1211,8 @@ async def game_watcher(ctx: Context):
 
             itemOutPtr = data[0] | (data[1] << 8)
 
-            from worlds.sm.Items import items_start_id
-            from worlds.sm.Locations import locations_start_id
+            from worlds.sm import items_start_id
+            from worlds.sm import locations_start_id
             if itemOutPtr < len(ctx.items_received):
                 item = ctx.items_received[itemOutPtr]
                 itemId = item.item - items_start_id
