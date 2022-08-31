@@ -218,7 +218,6 @@ class SC2Context(CommonContext):
             def on_leave(self):
                 self.ctx.ui.clear_tooltip()
 
-
             @property
             def ctx(self) -> CommonContext:
                 return App.get_running_app().ctx
