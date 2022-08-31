@@ -586,7 +586,7 @@ def request_unfinished_missions(ctx: SC2Context):
 
         message += ", ".join(f"{mark_up_mission_name(ctx, mission, unlocks)}[{ctx.mission_req_table[mission].id}] " +
                              mark_up_objectives(
-                                 f"[{unfinished_missions[mission]}/"
+                                 f"[{len(unfinished_missions[mission])}/"
                                  f"{sum(1 for _ in ctx.locations_for_mission(mission))}]",
                                  ctx, unfinished_locations, mission)
                              for mission in unfinished_missions)
