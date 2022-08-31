@@ -1,5 +1,6 @@
 from BaseClasses import CollectionState, Region
 from .Overcooked2Levels import Overcooked2GenericLevel
+from .Items import item_frequencies
 
 
 def has_requirements_for_level_access(state: CollectionState, level_name: str, previous_level_name: str | None,
@@ -61,16 +62,23 @@ def meets_requirements(state: CollectionState, name: str, stars: int, player: in
     if len(exclusive_reqs) > 0 and not state.has_all(exclusive_reqs, player):
         return False
 
+    for item_name in item_frequencies:
+        if item_name in exclusive_reqs:
+            if not state.has(item_name, player, item_frequencies[item_name]):
+                return # need to have all variants of a progressive item to get the score
+
     # Check if we meet additive requirements
     if len(additive_reqs) == 0:
         return True
 
     total: float = 0.0
     for (item_name, weight) in additive_reqs:
-        if state.has(item_name, player):
+        for _ in range(0, state.item_count(item_name, player)):
             total += weight
+            if total >= 0.99:
+                return True
 
-    return total >= 0.99  # be nice to rounding errors :)
+    return False # be nice to rounding errors :)
 
 # If key missing, doesn't require a ramp to access (or the logic is handled by a preceeding level)
 #
@@ -127,7 +135,7 @@ level_logic = {
                 ("Burn Leniency", 0.2),
                 ("Larger Tip Jar", 0.3),
                 ("Dish Scrubber", 0.2),
-                ("Dash", 0.5),
+                ("Progressive Dash", 0.3),
                 ("Throw", 0.5),
                 ("Catch", 0.1),
                 ("Clean Dishes", 0.1),
@@ -137,7 +145,7 @@ level_logic = {
         ),
         ( # 3-star
             [ # Exclusive
-                "Dash",
+                "Progressive Dash",
                 "Spare Plate",
                 "Larger Tip Jar",
                 "Throw",
@@ -1060,7 +1068,7 @@ level_logic = {
         ( # 1-star
             { # Exclusive
                 "Throw",
-                "Dash",
+                "Progressive Dash",
                 "Spare Plate",
             },
             { # Additive

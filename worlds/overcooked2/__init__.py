@@ -335,7 +335,7 @@ class Overcooked2World(World):
             "SkipTutorialPopups": True,
             "RevealAllLevels": False,
             "PurchaseAllLevels": False,
-            "CheatsEnabled": False,
+            "CheatsEnabled": True, # TODO: off for release
             "ImpossibleTutorial": True,
             "LevelForceReveal": level_force_reveal,
             "SaveFolderName": mod_name,
@@ -373,6 +373,7 @@ class Overcooked2World(World):
             "PlatesStartDirty": True,
             "MaxTipCombo": 2,
             "DisableDash": True,
+            "WeakDash": True,
             "DisableThrow": True,
             "DisableCatch": True,
             "DisableControlStick": True,

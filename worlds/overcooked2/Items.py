@@ -19,7 +19,7 @@ item_table: dict[str, ItemData] = {
     "Bellows"                       : ItemData(oc2_base_id + 5 ),
     "Clean Dishes"                  : ItemData(oc2_base_id + 6 ),
     "Larger Tip Jar"                : ItemData(oc2_base_id + 7 ),
-    "Dash"                          : ItemData(oc2_base_id + 8 ),
+    "Progressive Dash"              : ItemData(oc2_base_id + 8 ),
     "Throw"                         : ItemData(oc2_base_id + 9 ),
     "Catch"                         : ItemData(oc2_base_id + 10),
     "Remote Control Batteries"      : ItemData(oc2_base_id + 11),
@@ -56,6 +56,7 @@ oc2_end_id = item_table["Bonus Star"].code + 1
 item_frequencies = {
     "Larger Tip Jar": 2,
     "Order Lookahead": 2,
+    "Progressive Dash": 2,
     "Bonus Star": 0,
 }
 
@@ -66,7 +67,6 @@ item_name_to_config_name = {
     "Fire Extinguisher"            : "DisableFireExtinguisher"       ,
     "Bellows"                      : "DisableBellows"                ,
     "Clean Dishes"                 : "PlatesStartDirty"              ,
-    "Dash"                         : "DisableDash"                   ,
     "Throw"                        : "DisableThrow"                  ,
     "Catch"                        : "DisableCatch"                  ,
     "Remote Control Batteries"     : "DisableControlStick"           ,
@@ -88,7 +88,6 @@ vanilla_values = {
     "DisableFireExtinguisher": False,
     "DisableBellows": False,
     "PlatesStartDirty": False,
-    "DisableDash": False,
     "DisableThrow": False,
     "DisableCatch": False,
     "DisableControlStick": False,
@@ -134,6 +133,8 @@ def item_to_unlock_event(item_name: str) -> dict[str, str]:
     elif item_name == "Bonus Star":
         action = "INC_STAR_COUNT"
         payload = "1"
+    elif item_name == "Progressive Dash":
+        action = "INC_DASH"
     else:
         config_name = item_name_to_config_name[item_name]
         vanilla_value = vanilla_values[config_name]
