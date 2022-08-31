@@ -31,6 +31,11 @@ class FixBugs(DefaultOnToggle):
     display_name = "Bug Fixes"
 
 
+class ShorterLevelDuration(DefaultOnToggle):
+    """In the interest of making seeds take less time to complete, this option shortens levels by about 1/3rd of their original duration. Points required to earn stars are scaled accordingly."""
+    display_name = "ShorterLevelDuration"
+
+
 class StarsToWin(Range):
     """Number of stars required to unlock 6-6. All levels between 1-1 and 6-6 will be spread between these two numbers"""
     range_start = 0
@@ -54,4 +59,5 @@ overcooked_options = {
     "FixBugs": FixBugs,
     "StarsToWin": StarsToWin,
     "StarThresholdScale": StarThresholdScale,
+    "ShorterLevelDuration": ShorterLevelDuration,
 }

@@ -142,6 +142,7 @@ class Overcooked2World(World):
     display_leaderboard_scores: bool
     shuffle_level_order: bool
     fix_bugs: bool
+    shorter_level_duration: bool
     stars_to_win: int
     star_threshold_scale: float
 
@@ -159,6 +160,7 @@ class Overcooked2World(World):
         self.display_leaderboard_scores       = bool(self.world.DisplayLeaderboardScores     [self.player].value)
         self.shuffle_level_order              = bool(self.world.ShuffleLevelOrder            [self.player].value)
         self.fix_bugs                         = bool(self.world.FixBugs                      [self.player].value)
+        self.shorter_level_duration           = bool(self.world.ShorterLevelDuration         [self.player].value)
         self.stars_to_win                     = int (self.world.StarsToWin                   [self.player].value)
 
         # 0.0 to 1.0 where 1.0 is World Record
@@ -347,6 +349,7 @@ class Overcooked2World(World):
             "FixControlStickThrowBug": self.fix_bugs,
             "FixEmptyBurnerThrow": self.fix_bugs,
             "TimerAlwaysStarts": self.always_start_level_timer,
+            "LevelTimerScale": 0.666 if self.shorter_level_duration else 1.0,
 
             # Game Modifications
             "LevelPurchaseRequirements": level_purchase_requirements,
