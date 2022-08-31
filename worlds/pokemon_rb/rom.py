@@ -9,12 +9,14 @@ from .rom_addresses import rom_addresses
 import worlds.pokemon_rb.poke_data as poke_data
 from Patch import read_rom, APDeltaPatch
 
+
 def choose_forced_type(chances, random):
     n = random.randint(1, 100)
     for chance in chances:
         if chance[0] >= n:
             return chance[1]
     return None
+
 
 def filter_moves(moves, type, random):
     ret = []
@@ -42,11 +44,14 @@ def generate_output(self, output_directory: str):
     data = bytearray(get_base_rom_bytes(game_version))
 
     for location in self.world.get_locations():
-        if location.player != self.player or location.address is None:
+        if location.player != self.player or location.rom_address is None:
             continue
         if location.item.player == self.player:
             if location.rom_address:
-                data[location.rom_address] = self.item_name_to_id[location.item.name] - 172000000
+                if location.item.name in poke_data.pokemon_data.keys():
+                    data[location.rom_address] = poke_data.pokemon_data[location.item.name]["id"]
+                else:
+                    data[location.rom_address] = self.item_name_to_id[location.item.name] - 172000000
 
         else:
             data[location.rom_address] = 0x2C  # AP Item
@@ -234,6 +239,44 @@ def generate_output(self, output_directory: str):
             address = rom_addresses["Learnset_" + mon.replace(" ", "")]
             for i, move in enumerate(learnsets[mon]):
                 data[(address + 1) + i * 2] = poke_data.moves[move]["id"]
+
+    # encounter_slots = []
+    # #new_encounter_table = {}
+    # for area, size in poke_data.encounter_tables.items():
+    #     for i in range(0, size):
+    #         encounter_slots.append(rom_addresses[area] + 1 + (i * 2))
+    #         #new_encounter_table[area + "_" + i] = rom_addresses[area] + 1 + (i * 2)
+    # encounter_slots.append(rom_addresses["Gift_Eevee"])
+    # encounter_slots.append(rom_addresses["Gift_Lapras"])
+    # encounter_slots.append(rom_addresses["Gift_Hitmonchan"])
+    # encounter_slots.append(rom_addresses["Gift_Hitmonlee"])
+    # encounter_slots.append(rom_addresses["Gift_Aerodactyl"])
+    # encounter_slots.append(rom_addresses["Gift_Kabuto"])
+    # encounter_slots.append(rom_addresses["Gift_Omanyte"])
+    # #initial_mons = [pokemon for pokemon in poke_data.first_stage_pokemon if pokemon not in poke_data.legendary_pokemon]
+    # random.shuffle(encounter_slots)
+    # #for mon in initial_mons:
+    # #    data[encounter_slots.pop()] = poke_data.pokemon_data[mon]["id"]
+    # mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon]
+    # placed_mons = {pokemon: 0 for pokemon in poke_data.pokemon_data.keys()}
+    # for slot in encounter_slots:
+    #     #data[slot] = poke_data.pokemon_data[random.choice(mons_list)]["id"]
+    #     stat_base = get_base_stat_total(poke_data.id_to_mon[data[slot]])
+    #     mons_list.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
+    #     mon = mons_list[round(random.triangular(0, 50, 0))]
+    #     data[slot] = poke_data.pokemon_data[mon]["id"]
+    #     placed_mons[mon] += 1
+    # for mon, count in placed_mons.items():
+    #     if mon in poke_data.first_stage_pokemon and mon not in poke_data.legendary_pokemon and count == 0:
+    #         encounter_slots.sort(key=lambda address: placed_mons[poke_data.id_to_mon[data[address]]])
+    #         for slot in encounter_slots:
+    #             old_mon = poke_data.id_to_mon[data[slot]]
+    #             if placed_mons[old_mon] > 1:
+    #                 data[slot] = poke_data.pokemon_data[mon]["id"]
+    #                 placed_mons[mon] += 1
+    #                 placed_mons[old_mon] -= 1
+    #                 break
+    # print(placed_mons)
 
     mons = [mon["id"] for mon in poke_data.pokemon_data.values()]
     random.shuffle(mons)

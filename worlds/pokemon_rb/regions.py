@@ -10,11 +10,10 @@ def create_region(world: MultiWorld, player: int, name: str, locations_per_regio
             ret.locations.append(location)
             if world.randomize_hidden_items[player].value == 2 and "Hidden" in location.name:
                 location.progress_type = LocationProgressType.EXCLUDED
-    locations_per_region[name] = []
     if exits:
         for exit in exits:
             ret.exits.append(Entrance(player, exit, ret))
-
+    locations_per_region[name] = []
     return ret
 
 
@@ -30,9 +29,11 @@ def create_regions(world: MultiWorld, player: int):
         locations_per_region[location_data.region].append(location)
     regions = [
         create_region(world, player, "Menu", locations_per_region),
+        create_region(world, player, "Anywhere", locations_per_region),
         create_region(world, player, "Pallet Town", locations_per_region),
         create_region(world, player, "Route 1", locations_per_region),
         create_region(world, player, "Viridian City", locations_per_region),
+        create_region(world, player, "Viridian City North", locations_per_region),
         create_region(world, player, "Viridian Gym", locations_per_region),
         create_region(world, player, "Route 2", locations_per_region),
         create_region(world, player, "Route 2 East", locations_per_region),
@@ -54,7 +55,8 @@ def create_regions(world: MultiWorld, player: int):
         create_region(world, player, "Route 25", locations_per_region),
         create_region(world, player, "Route 9", locations_per_region),
         create_region(world, player, "Route 10 North", locations_per_region),
-        create_region(world, player, "Rock Tunnel", locations_per_region),
+        create_region(world, player, "Rock Tunnel 1F", locations_per_region),
+        create_region(world, player, "Rock Tunnel B1F", locations_per_region),
         create_region(world, player, "Power Plant", locations_per_region),
         create_region(world, player, "Route 10 South", locations_per_region),
         create_region(world, player, "Lavender Town", locations_per_region),
@@ -80,6 +82,7 @@ def create_regions(world: MultiWorld, player: int):
         create_region(world, player, "Route 11 East", locations_per_region),
         create_region(world, player, "Route 12 North", locations_per_region),
         create_region(world, player, "Route 12 South", locations_per_region),
+        create_region(world, player, "Route 12 Grass", locations_per_region),
         create_region(world, player, "Route 12 West", locations_per_region),
         create_region(world, player, "Route 7", locations_per_region),
         create_region(world, player, "Underground Tunnel West-East", locations_per_region),
@@ -136,18 +139,21 @@ def create_regions(world: MultiWorld, player: int):
         create_region(world, player, "Cerulean Cave 1F", locations_per_region),
         create_region(world, player, "Cerulean Cave 2F", locations_per_region),
         create_region(world, player, "Cerulean Cave B1F", locations_per_region),
+        create_region(world, player, "Evolution", locations_per_region),
         ]
     world.regions += regions
+    connect(world, player, "Menu", "Anywhere", one_way=True)
     connect(world, player, "Menu", "Pallet Town", one_way=True)
     connect(world, player, "Pallet Town", "Route 1")
     connect(world, player, "Route 1", "Viridian City")
     connect(world, player, "Viridian City", "Route 22")
-    connect(world, player, "Route 22", "Route 23 South", lambda state: state._pokemon_rb_has_badges(min(4,state.world.victory_road_condition[player]), player))
+    connect(world, player, "Route 22", "Route 23 South", lambda state: state._pokemon_rb_can_surf(player) and state._pokemon_rb_has_badges(min(5, state.world.victory_road_condition[player]), player))
     connect(world, player, "Route 23 South", "Route 23 North", lambda state: state._pokemon_rb_has_badges(min(6, state.world.victory_road_condition[player]), player))
-    connect(world, player, "Viridian City", "Viridian Gym", lambda state:
+    connect(world, player, "Viridian City North", "Viridian Gym", lambda state:
                      state._pokemon_rb_has_badges(min(7, state.world.victory_road_condition[player] - 1), player), one_way=True)
     connect(world, player, "Route 2", "Route 2 East", lambda state: state._pokemon_rb_can_cut(player))
     connect(world, player, "Route 2 East", "Diglett's Cave", lambda state: state._pokemon_rb_can_cut(player))
+    connect(world, player, "Route 2", "Viridian City North")
     connect(world, player, "Route 2", "Viridian Forest")
     connect(world, player, "Route 2", "Pewter City")
     connect(world, player, "Pewter City", "Pewter Gym", one_way=True)
@@ -162,11 +168,12 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "Route 24", "Route 25", one_way=True)
     connect(world, player, "Cerulean City", "Route 9", lambda state: state._pokemon_rb_can_cut(player))
     connect(world, player, "Route 9", "Route 10 North")
-    connect(world, player, "Route 10 North", "Rock Tunnel", lambda state: state._pokemon_rb_can_flash(player))
+    connect(world, player, "Route 10 North", "Rock Tunnel 1F", lambda state: state._pokemon_rb_can_flash(player))
     connect(world, player, "Route 10 North", "Power Plant", lambda state: state._pokemon_rb_can_surf(player) and
             (state.has("Plant Key", player) or not state.world.extra_key_items[player].value), one_way=True)
-    connect(world, player, "Rock Tunnel", "Route 10 South", lambda state: state._pokemon_rb_can_flash(player))
-    connect(world, player, "Route 10 South", "Lavender Town")
+    connect(world, player, "Rock Tunnel 1F", "Route 10 South", lambda state: state._pokemon_rb_can_flash(player))
+    connect(world, player, "Rock Tunnel 1F", "Rock Tunnel B1F")
+    connect(world, player, "Lavender Town", "Pokemon Tower 1F", one_way=True)
     connect(world, player, "Lavender Town", "Pokemon Tower 1F", one_way=True)
     connect(world, player, "Pokemon Tower 1F", "Pokemon Tower 2F", one_way=True)
     connect(world, player, "Pokemon Tower 2F", "Pokemon Tower 3F", one_way=True)
@@ -193,6 +200,7 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "Route 12 West", "Route 11 East", lambda state: state._pokemon_rb_can_strength(player) or not state.world.extra_strength_boulders[player].value)
     connect(world, player, "Route 12 West", "Route 12 North", lambda state: state.has("Poke Flute", player))
     connect(world, player, "Route 12 West", "Route 12 South", lambda state: state.has("Poke Flute", player))
+    connect(world, player, "Route 12 South", "Route 12 Grass", lambda state: state._pokemon_rb_can_cut(player))
     connect(world, player, "Route 12 North", "Lavender Town")
     connect(world, player, "Route 7", "Lavender Town")
     connect(world, player, "Route 7", "Underground Tunnel West-East")
@@ -220,7 +228,7 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "Route 20 West", "Seafoam Islands 1F")
     connect(world, player, "Route 20 East", "Seafoam Islands 1F", one_way=True)
     connect(world, player, "Seafoam Islands 1F", "Route 20 East", lambda state: state._pokemon_rb_can_strength(player), one_way=True)
-    connect(world, player, "Viridian City", "Route 2", lambda state: state.has("Oak's Parcel", player) or state.world.old_man[player].value == 2)
+    connect(world, player, "Viridian City", "Viridian City North", lambda state: state.has("Oak's Parcel", player) or state.world.old_man[player].value == 2 or state._pokemon_rb_can_cut(player))
     connect(world, player, "Route 3", "Mt Moon 1F", one_way=True)
     connect(world, player, "Route 11", "Route 11 East", lambda state: state._pokemon_rb_can_strength(player))
     connect(world, player, "Cinnabar Island", "Cinnabar Gym", lambda state: state.has("Secret Key", player), one_way=True)
@@ -262,6 +270,20 @@ def create_regions(world: MultiWorld, player: int):
         connect(world, player, "Menu", world.worlds[player].fly_map, lambda state: state._pokemon_rb_can_fly(player), one_way=True,
                 name="Fly to " + world.worlds[player].fly_map)
 
+
+
+    # from .poke_data import encounter_tables
+    # wild_locs = ""
+    # for table, size in encounter_tables.items():
+    #     for region in regions:
+    #         if "Wild_" + region.name.replace(" ", "") == table:
+    #             for i in range(1, size+1):
+    #                 wild_locs += f"LocationData(\"{region.name}\", \"Wild Pokemon - {i}\", rom_addresses[\"{table}\"] + {(i * 2) + 1}, None),\r\n"
+    #             break
+    #     else:
+    #         for i in range(1, size + 1):
+    #             wild_locs += f"LocationData(\"{table}\", \"Wild Pokemon - {i}\", rom_addresses[\"{table}\"] + {(i * 2) + 1}, None),\r\n"
+    # breakpoint()
 
 def connect(world: MultiWorld, player: int, source: str, target: str, rule: callable = lambda state: True, one_way=False, name=None):
     source_region = world.get_region(source, player)

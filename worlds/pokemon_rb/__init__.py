@@ -2,7 +2,7 @@ from typing import Dict, List, Set, Tuple, TextIO
 
 from BaseClasses import Item, MultiWorld, ItemClassification
 from .items import item_table, filler_items
-from .locations import get_locations
+from .locations import get_locations, PokemonRBLocation
 from ..AutoWorld import World, WebWorld
 from .regions import create_regions
 from .logic import PokemonLogic
@@ -10,7 +10,7 @@ from .options import pokemon_rb_options
 from .rom_addresses import rom_addresses
 from .text import encode_text
 from .rom import generate_output, get_base_rom_bytes, get_base_rom_path
-
+import worlds.pokemon_rb.poke_data as poke_data
 
 class PokemonRedBlueWorld(World):
     """Pokemon"""
@@ -21,7 +21,7 @@ class PokemonRedBlueWorld(World):
     topology_present = False
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
-    location_name_to_id = {location.name: location.address for location in get_locations()}
+    location_name_to_id = {location.name: location.address for location in get_locations() if location.type == "Item"}
     item_name_groups = {}
 
     def __init__(self, world: MultiWorld, player: int):
@@ -31,7 +31,7 @@ class PokemonRedBlueWorld(World):
         self.extra_badges = {}
         self.type_chart = None
 
-    def generate_basic(self):
+    def generate_early(self):
         if self.world.badges_needed_for_hm_moves[self.player].value >= 2:
             badges_to_add = ["Soul Badge", "Volcano Badge", "Earth Badge"]
             if self.world.badges_needed_for_hm_moves[self.player].value == 3:
@@ -45,9 +45,58 @@ class PokemonRedBlueWorld(World):
             for badge in badges_to_add:
                 self.extra_badges[hm_moves.pop()] = badge
 
+    def generate_basic(self) -> None:
+        def get_base_stat_total(mon):
+            return (poke_data.pokemon_data[mon]["atk"] + poke_data.pokemon_data[mon]["def"]
+                    + poke_data.pokemon_data[mon]["hp"] + poke_data.pokemon_data[mon]["spd"]
+                    + poke_data.pokemon_data[mon]["spc"])
+
+        encounter_slots = [location for location in get_locations(self.player) if
+                              location.type == "Wild Encounter"]
+        for location in encounter_slots:
+            if isinstance(location.original_item, list):
+                location.original_item = location.original_item[not self.world.game_version[self.player].value]
+        placed_mons = {pokemon: 0 for pokemon in poke_data.pokemon_data.keys()}
+        if False:
+            for slot in encounter_slots:
+                location = self.world.get_location(slot.name, self.player)
+                location.item = self.create_item(slot.original_item)
+                location.event = True
+                location.locked = True
+                location.item.location = location
+                placed_mons[location.item.name] += 1
+        else:
+            mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon]
+            self.world.random.shuffle(encounter_slots)
+            locations = []
+            for slot in encounter_slots:
+                stat_base = get_base_stat_total(slot.original_item)
+                mons_list.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
+                mon = mons_list[round(self.world.random.triangular(0, 50, 0))]
+                placed_mons[mon] += 1
+                location = self.world.get_location(slot.name, self.player)
+                location.item = self.create_item(mon)
+                location.event = True
+                location.locked = True
+                location.item.location = location
+                locations.append(location)
+
+            missing_mons = [pokemon for pokemon in poke_data.first_stage_pokemon if placed_mons[pokemon] == 0 and pokemon
+                            not in poke_data.legendary_pokemon]
+            for mon in missing_mons:
+                stat_base = get_base_stat_total(mon)
+                locations.sort(key=lambda slot: abs(get_base_stat_total(slot.item.name) - stat_base))
+                for location in locations:
+                    if placed_mons[location.item.name] > 1 or location.item.name not in poke_data.first_stage_pokemon:
+                        placed_mons[location.item.name] -= 1
+                        location.item = self.create_item(mon)
+                        location.item.location = location
+                        placed_mons[mon] += 1
+                        break
+            print(len([pokemon for pokemon in placed_mons if placed_mons[pokemon] > 1]))
 
     def create_items(self) -> None:
-        locations = get_locations(self.player)
+        locations = [location for location in get_locations(self.player) if location.type == "Item"]
         item_pool = []
         badgelocs = []
         badges = []
@@ -132,12 +181,6 @@ class PokemonRedBlueWorld(World):
             spoiler_handle.write("\n\nType matchups:\n\n")
             for matchup in self.type_chart:
                 spoiler_handle.write(f"{matchup[0]} deals {matchup[2] * 10}% damage to {matchup[1]}\n")
-
-
-
-
-
-
 
 
 class PokemonRBItem(Item):

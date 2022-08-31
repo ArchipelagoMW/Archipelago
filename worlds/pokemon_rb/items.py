@@ -1,5 +1,5 @@
 from BaseClasses import ItemClassification
-
+from .poke_data import pokemon_data
 filler_items = []
 
 class ItemData:
@@ -160,6 +160,9 @@ item_table = {
     "Silph Co Liberated": ItemData(None, ItemClassification.progression),
     "Become Champion": ItemData(None, ItemClassification.progression)
 }
+item_table.update(
+    {pokemon: ItemData(None, ItemClassification.progression) for pokemon in pokemon_data.keys()}
+)
 # for TM in range(0,  51):
 #     item_table.append(ItemData(201 + TM, f"TM{TM}", ItemClassification.filler))
 # for item in item_table:

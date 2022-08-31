@@ -1,27 +1,28 @@
-pokemon_ids = {
-     'Rhydon': 1, 'Kangaskhan': 2, 'Nidoran M': 3, 'Clefairy': 4, 'Spearow': 5, 'Voltorb': 6, 'Nidoking': 7,
-     'Slowbro': 8, 'Ivysaur': 9, 'Exeggutor': 10, 'Lickitung': 11, 'Exeggcute': 12, 'Grimer': 13, 'Gengar': 14,
-     'Nidoran F': 15, 'Nidoqueen': 16, 'Cubone': 17, 'Rhyhorn': 18, 'Lapras': 19, 'Arcanine': 20, 'Mew': 21,
-     'Gyarados': 22, 'Shellder': 23, 'Tentacool': 24, 'Gastly': 25, 'Scyther': 26, 'Staryu': 27, 'Blastoise': 28,
-     'Pinsir': 29, 'Tangela': 30, 'Growlithe': 33, 'Onix': 34, 'Fearow': 35, 'Pidgey': 36, 'Slowpoke': 37,
-     'Kadabra': 38, 'Graveler': 39, 'Chansey': 40, 'Machoke': 41, 'Mr Mime': 42, 'Hitmonlee': 43, 'Hitmonchan': 44,
-     'Arbok': 45, 'Parasect': 46, 'Psyduck': 47, 'Drowzee': 48, 'Golem': 49, 'Magmar': 51, 'Electabuzz': 53,
-     'Magneton': 54, 'Koffing': 55, 'Mankey': 57, 'Seel': 58, 'Diglett': 59, 'Tauros': 60, 'Farfetchd': 64,
-     'Venonat': 65, 'Dragonite': 66, 'Doduo': 70, 'Poliwag': 71, 'Jynx': 72, 'Moltres': 73, 'Articuno': 74,
-     'Zapdos': 75, 'Ditto': 76, 'Meowth': 77, 'Krabby': 78, 'Vulpix': 82, 'Ninetales': 83, 'Pikachu': 84, 'Raichu': 85,
-     'Dratini': 88, 'Dragonair': 89, 'Kabuto': 90, 'Kabutops': 91, 'Horsea': 92, 'Seadra': 93, 'Sandshrew': 96,
-     'Sandslash': 97, 'Omanyte': 98, 'Omastar': 99, 'Jigglypuff': 100, 'Wigglytuff': 101, 'Eevee': 102, 'Flareon': 103,
-     'Jolteon': 104, 'Vaporeon': 105, 'Machop': 106, 'Zubat': 107, 'Ekans': 108, 'Paras': 109, 'Poliwhirl': 110,
-     'Poliwrath': 111, 'Weedle': 112, 'Kakuna': 113, 'Beedrill': 114, 'Dodrio': 116, 'Primeape': 117, 'Dugtrio': 118,
-     'Venomoth': 119, 'Dewgong': 120, 'Caterpie': 123, 'Metapod': 124, 'Butterfree': 125, 'Machamp': 126,
-     'Golduck': 128, 'Hypno': 129, 'Golbat': 130, 'Mewtwo': 131, 'Snorlax': 132, 'Magikarp': 133, 'Muk': 136,
-     'Kingler': 138, 'Cloyster': 139, 'Electrode': 141, 'Clefable': 142, 'Weezing': 143, 'Persian': 144, 'Marowak': 145,
-     'Haunter': 147, 'Abra': 148, 'Alakazam': 149, 'Pidgeotto': 150, 'Pidgeot': 151, 'Starmie': 152, 'Bulbasaur': 153,
-     'Venusaur': 154, 'Tentacruel': 155, 'Goldeen': 157, 'Seaking': 158, 'Ponyta': 163, 'Rapidash': 164, 'Rattata': 165,
-     'Raticate': 166, 'Nidorino': 167, 'Nidorina': 168, 'Geodude': 169, 'Porygon': 170, 'Aerodactyl': 171,
-     'Magnemite': 173, 'Charmander': 176, 'Squirtle': 177, 'Charmeleon': 178, 'Wartortle': 179, 'Charizard': 180,
-     'Oddish': 185, 'Gloom': 186, 'Vileplume': 187, 'Bellsprout': 188, 'Weepinbell': 189, 'Victreebel': 190
-     }
+id_to_mon = {1: 'Rhydon', 2: 'Kangaskhan', 3: 'Nidoran M', 4: 'Clefairy', 5: 'Spearow', 6: 'Voltorb', 7: 'Nidoking',
+             8: 'Slowbro', 9: 'Ivysaur', 10: 'Exeggutor', 11: 'Lickitung', 12: 'Exeggcute', 13: 'Grimer', 14: 'Gengar',
+             15: 'Nidoran F', 16: 'Nidoqueen', 17: 'Cubone', 18: 'Rhyhorn', 19: 'Lapras', 20: 'Arcanine', 21: 'Mew',
+             22: 'Gyarados', 23: 'Shellder', 24: 'Tentacool', 25: 'Gastly', 26: 'Scyther', 27: 'Staryu',
+             28: 'Blastoise', 29: 'Pinsir', 30: 'Tangela', 33: 'Growlithe', 34: 'Onix', 35: 'Fearow', 36: 'Pidgey',
+             37: 'Slowpoke', 38: 'Kadabra', 39: 'Graveler', 40: 'Chansey', 41: 'Machoke', 42: 'Mr Mime',
+             43: 'Hitmonlee', 44: 'Hitmonchan', 45: 'Arbok', 46: 'Parasect', 47: 'Psyduck', 48: 'Drowzee', 49: 'Golem',
+             51: 'Magmar', 53: 'Electabuzz', 54: 'Magneton', 55: 'Koffing', 57: 'Mankey', 58: 'Seel', 59: 'Diglett',
+             60: 'Tauros', 64: 'Farfetchd', 65: 'Venonat', 66: 'Dragonite', 70: 'Doduo', 71: 'Poliwag', 72: 'Jynx',
+             73: 'Moltres', 74: 'Articuno', 75: 'Zapdos', 76: 'Ditto', 77: 'Meowth', 78: 'Krabby', 82: 'Vulpix',
+             83: 'Ninetales', 84: 'Pikachu', 85: 'Raichu', 88: 'Dratini', 89: 'Dragonair', 90: 'Kabuto', 91: 'Kabutops',
+             92: 'Horsea', 93: 'Seadra', 96: 'Sandshrew', 97: 'Sandslash', 98: 'Omanyte', 99: 'Omastar',
+             100: 'Jigglypuff', 101: 'Wigglytuff', 102: 'Eevee', 103: 'Flareon', 104: 'Jolteon', 105: 'Vaporeon',
+             106: 'Machop', 107: 'Zubat', 108: 'Ekans', 109: 'Paras', 110: 'Poliwhirl', 111: 'Poliwrath', 112: 'Weedle',
+             113: 'Kakuna', 114: 'Beedrill', 116: 'Dodrio', 117: 'Primeape', 118: 'Dugtrio', 119: 'Venomoth',
+             120: 'Dewgong', 123: 'Caterpie', 124: 'Metapod', 125: 'Butterfree', 126: 'Machamp', 128: 'Golduck',
+             129: 'Hypno', 130: 'Golbat', 131: 'Mewtwo', 132: 'Snorlax', 133: 'Magikarp', 136: 'Muk', 138: 'Kingler',
+             139: 'Cloyster', 141: 'Electrode', 142: 'Clefable', 143: 'Weezing', 144: 'Persian', 145: 'Marowak',
+             147: 'Haunter', 148: 'Abra', 149: 'Alakazam', 150: 'Pidgeotto', 151: 'Pidgeot', 152: 'Starmie',
+             153: 'Bulbasaur', 154: 'Venusaur', 155: 'Tentacruel', 157: 'Goldeen', 158: 'Seaking', 163: 'Ponyta',
+             164: 'Rapidash', 165: 'Rattata', 166: 'Raticate', 167: 'Nidorino', 168: 'Nidorina', 169: 'Geodude',
+             170: 'Porygon', 171: 'Aerodactyl', 173: 'Magnemite', 176: 'Charmander', 177: 'Squirtle', 178: 'Charmeleon',
+             179: 'Wartortle', 180: 'Charizard', 185: 'Oddish', 186: 'Gloom', 187: 'Vileplume', 188: 'Bellsprout',
+             189: 'Weepinbell', 190: 'Victreebel'}
+
 
 pokemon_dex = {
     'Bulbasaur': 1, 'Ivysaur': 2, 'Venusaur': 3, 'Charmander': 4, 'Charmeleon': 5, 'Charizard': 6, 'Squirtle': 7,
@@ -852,6 +853,9 @@ evolves_from = {
     "Dragonite": "Dragonair"
 }
 
+
+
+
 learnsets = {
     'Rhydon': ['Stomp', 'Tail Whip', 'Fury Attack', 'Horn Drill', 'Leer', 'Take Down'],
     'Kangaskhan': ['Bite', 'Tail Whip', 'Mega Punch', 'Leer', 'Dizzy Punch'],
@@ -912,7 +916,8 @@ learnsets = {
     'Doduo': ['Growl', 'Fury Attack', 'Drill Peck', 'Rage', 'Tri Attack', 'Agility'],
     'Poliwag': ['Hypnosis', 'Water Gun', 'Doubleslap', 'Body Slam', 'Amnesia', 'Hydro Pump'],
     'Jynx': ['Lick', 'Doubleslap', 'Ice Punch', 'Body Slam', 'Thrash', 'Blizzard'],
-    'Moltres': ['Leer', 'Agility', 'Sky Attack'], 'Articuno': ['Blizzard', 'Agility', 'Mist'],
+    'Moltres': ['Leer', 'Agility', 'Sky Attack'],
+    'Articuno': ['Blizzard', 'Agility', 'Mist'],
     'Zapdos': ['Thunder', 'Agility', 'Light Screen'],
     'Meowth': ['Bite', 'Pay Day', 'Screech', 'Fury Swipes', 'Slash'],
     'Krabby': ['Vicegrip', 'Guillotine', 'Stomp', 'Crabhammer', 'Harden'],
@@ -991,6 +996,9 @@ learnsets = {
     'Weepinbell': ['Wrap', 'Poisonpowder', 'Sleep Powder', 'Stun Spore', 'Acid', 'Razor Leaf', 'Slam'],
     'Victreebel': ['Wrap', 'Poisonpowder', 'Sleep Powder']
 }
+
+#pokemon_per_type = {poke_type: [pokemon for pokemon in pokemon_data if pokemon_data[pokemon]['type1'] == poke_type or
+#                                pokemon_data[pokemon]['type2'] == poke_type] for poke_type in type_names.values()}
 
 moves = {
      'No Move': {'id': 0, 'power': 0, 'type': 'Typeless', 'accuracy': 0, 'pp': 0},
@@ -1160,3 +1168,29 @@ moves = {
      'Substitute': {'id': 164, 'power': 0, 'type': 'Normal', 'accuracy': 100, 'pp': 10},
      #'Struggle': {'id': 165, 'power': 50, 'type': 'Struggle_Type', 'accuracy': 100, 'pp': 10}
 }
+
+encounter_tables = {'Wild_Super_Rod_A': 2, 'Wild_Super_Rod_B': 2, 'Wild_Super_Rod_C': 3, 'Wild_Super_Rod_D': 2,
+                    'Wild_Super_Rod_E': 2, 'Wild_Super_Rod_F': 4, 'Wild_Super_Rod_G': 4, 'Wild_Super_Rod_H': 4,
+                    'Wild_Super_Rod_I': 4, 'Wild_Super_Rod_J': 4, 'Wild_Route1': 10, 'Wild_Route2': 10,
+                    'Wild_Route22': 10, 'Wild_ViridianForest': 10, 'Wild_Route3': 10, 'Wild_MtMoon1F': 10,
+                    'Wild_MtMoonB1F': 10, 'Wild_MtMoonB2F': 10, 'Wild_Route4': 10, 'Wild_Route24': 10,
+                    'Wild_Route25': 10, 'Wild_Route9': 10, 'Wild_Route5': 10, 'Wild_Route6': 10,
+                    'Wild_Route11': 10, 'Wild_RockTunnel1F': 10, 'Wild_RockTunnelB1F': 10, 'Wild_Route10': 10,
+                    'Wild_Route12': 10, 'Wild_Route8': 10, 'Wild_Route7': 10, 'Wild_PokemonTower3F': 10,
+                    'Wild_PokemonTower4F': 10, 'Wild_PokemonTower5F': 10, 'Wild_PokemonTower6F': 10,
+                    'Wild_PokemonTower7F': 10, 'Wild_Route13': 10, 'Wild_Route14': 10, 'Wild_Route15': 10,
+                    'Wild_Route16': 10, 'Wild_Route17': 10, 'Wild_Route18': 10, 'Wild_SafariZoneCenter': 10,
+                    'Wild_SafariZoneEast': 10, 'Wild_SafariZoneNorth': 10, 'Wild_SafariZoneWest': 10,
+                    'Wild_SeaRoutes': 10, 'Wild_SeafoamIslands1F': 10, 'Wild_SeafoamIslandsB1F': 10,
+                    'Wild_SeafoamIslandsB2F': 10, 'Wild_SeafoamIslandsB3F': 10, 'Wild_SeafoamIslandsB4F': 10,
+                    'Wild_PokemonMansion1F': 10, 'Wild_PokemonMansion2F': 10, 'Wild_PokemonMansion3F': 10,
+                    'Wild_PokemonMansionB1F': 10, 'Wild_Route21': 10, 'Wild_CeruleanCave1F': 10,
+                    'Wild_CeruleanCave2F': 10, 'Wild_CeruleanCaveB1F': 10, 'Wild_PowerPlant': 10,
+                    'Wild_Route23': 10, 'Wild_VictoryRoad2F': 10, 'Wild_VictoryRoad3F': 10,
+                    'Wild_VictoryRoad1F': 10, 'Wild_DiglettsCave': 10, 'Wild_Good_Rod': 2}
+
+
+
+first_stage_pokemon = [pokemon for pokemon in pokemon_data.keys() if pokemon not in evolves_from]
+legendary_pokemon = ["Articuno", "Zapdos", "Moltres", "Mewtwo"]
+

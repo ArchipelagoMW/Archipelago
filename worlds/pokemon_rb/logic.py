@@ -1,5 +1,5 @@
 from ..AutoWorld import LogicMixin
-
+import worlds.pokemon_rb.poke_data as poke_data
 
 class PokemonLogic(LogicMixin):
     def _pokemon_rb_can_surf(self, player):
@@ -57,3 +57,10 @@ class PokemonLogic(LogicMixin):
                 + self.has("Thunder Badge", player) + self.has("Rainbow Badge", player)
                 + self.has("Marsh Badge", player) + self.has("Soul Badge", player)
                 + self.has("Volcano Badge", player) + self.has("Earth Badge", player)) >= count
+
+    def _pokemon_rb_has_pokemon(self, count, player):
+        obtained_pokemon = set()
+        for pokemon in poke_data.pokemon_data.keys():
+            if self.has(pokemon, player):
+                obtained_pokemon.add(pokemon)
+        return len(obtained_pokemon) >= count
