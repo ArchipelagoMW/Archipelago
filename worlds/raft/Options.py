@@ -59,7 +59,7 @@ class ProgressiveItems(DefaultOnToggle):
     display_name = "Progressive items"
 
 class BigIslandEarlyCrafting(Toggle):
-    """Allows recipes that require items from big islands (eg leather) to lock earlygame items like the Receiver, Bolt, or Smelter."""
+    """Allows recipes that require items from big islands (eg leather) to lock earlygame items like the Receiver, Bolt, or Smelter. Big islands are available from the start of the game, however it can take a long time to find them."""
     display_name = "Early recipes behind big islands"
 
 class PaddleboardMode(Toggle):

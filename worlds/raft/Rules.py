@@ -12,9 +12,6 @@ class RaftLogic(LogicMixin):
 
     def raft_can_smelt_items(self, player):
         return self.has("Smelter", player)
-    
-    def raft_can_find_titanium(self, player):
-        return self.has("Metal detector", player)
 
     def raft_can_craft_bolt(self, player):
         return self.raft_can_smelt_items(player) and self.has("Bolt", player)
@@ -27,12 +24,19 @@ class RaftLogic(LogicMixin):
 
     def raft_can_craft_circuitBoard(self, player):
         return self.raft_can_smelt_items(player) and self.has("Circuit board", player)
+    
+    def raft_can_craft_shovel(self, player):
+        return self.raft_can_smelt_items(player) and self.has("Shovel", player) and self.raft_can_craft_bolt(player)
 
     def raft_can_craft_reciever(self, player):
         return self.raft_can_craft_circuitBoard(player) and self.raft_can_craft_hinge(player) and self.has("Receiver", player)
 
     def raft_can_craft_antenna(self, player):
         return self.raft_can_craft_circuitBoard(player) and self.raft_can_craft_bolt(player) and self.has("Antenna", player)
+    
+    def raft_can_find_titanium(self, player):
+        return (self.has("Metal detector", player) and self.raft_can_craft_battery(player)
+            and self.raft_can_craft_shovel(player))
 
     def raft_can_craft_plasticBottle(self, player):
         return self.raft_can_smelt_items(player) and self.has("Empty bottle", player)
@@ -60,7 +64,7 @@ class RaftLogic(LogicMixin):
         return self.raft_can_craft_hinge(player) and self.raft_can_craft_bolt(player) and self.has("Zipline tool", player)
 
     def raft_can_get_dirt(self, player):
-        return self.raft_can_smelt_items(player) and self.raft_can_craft_bolt(player) and self.has("Shovel", player)
+        return self.raft_can_craft_shovel(player) and self.raft_big_islands_available(player)
 
     def raft_can_craft_grassPlot(self, player):
         return self.raft_can_get_dirt(player) and self.has("Grass plot", player)
@@ -134,7 +138,8 @@ class RaftLogic(LogicMixin):
             and self.raft_can_access_tangaroa(player)
             and self.raft_can_access_varuna_point(player)
             and self.raft_can_access_temperance(player)
-            and self.has("Utopia Frequency", player))
+            and self.has("Utopia Frequency", player)
+            and self.raft_can_craft_shovel(player)) # Shovels are available but we don't want to softlock players
 
     def raft_can_complete_utopia(self, player):
         return self.raft_can_access_utopia(player) and self.raft_can_craft_ziplineTool(player)
