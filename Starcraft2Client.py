@@ -581,23 +581,6 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     await self.chat_send("LostConnection - Lost connection to game.")
 
 
-def calc_objectives_completed(ctx: SC2Context, mission: str) -> int:
-    objectives_complete = 0
-    objectives_exist = 0
-
-    for i in range(max_bonus+1):
-        loc_id: int = ctx.mission_req_table[mission].id * victory_modulo + SC2WOL_LOC_ID_OFFSET + i
-        if loc_id in ctx.server_locations:
-            objectives_exist += 1
-            if loc_id in ctx.checked_locations:
-                objectives_complete += 1
-
-    if objectives_exist == 0:
-        return -1
-
-    return objectives_complete
-
-
 def request_unfinished_missions(ctx: SC2Context):
     if ctx.mission_req_table:
         message = "Unfinished Missions: "
@@ -632,11 +615,10 @@ def calc_unfinished_missions(ctx: SC2Context, unlocks=None):
     available_missions = calc_available_missions(ctx, unlocks)
 
     for name in available_missions:
-        objectives = tuple(ctx.locations_for_mission(name))
+        objectives = set(ctx.locations_for_mission(name))
         if objectives:
-            objectives_completed = calc_objectives_completed(ctx, name)
-
-            if objectives_completed < len(objectives):
+            objectives_completed = ctx.checked_locations & objectives
+            if len(objectives_completed) < len(objectives):
                 unfinished_missions.append(name)
                 locations_completed.append(objectives_completed)
 
@@ -644,8 +626,7 @@ def calc_unfinished_missions(ctx: SC2Context, unlocks=None):
             unfinished_missions.append(name)
             locations_completed.append(-1)
 
-    return available_missions, {unfinished_missions[i]: locations_completed[i]
-                                for i in range(len(unfinished_missions))}
+    return available_missions, dict(zip(unfinished_missions, locations_completed))
 
 
 def is_mission_available(ctx: SC2Context, mission_id_to_check):
