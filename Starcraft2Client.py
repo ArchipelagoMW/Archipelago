@@ -195,6 +195,7 @@ class SC2Context(CommonContext):
 
         class MissionButton(HoverableButton):
             tooltip_text = StringProperty("Test")
+            ctx: SC2Context
 
             def __init__(self, *args, **kwargs):
                 super(HoverableButton, self).__init__(*args, **kwargs)
@@ -215,10 +216,8 @@ class SC2Context(CommonContext):
                     self.ctx.current_tooltip = self.layout
 
             def on_leave(self):
-                if self.ctx.current_tooltip:
-                    App.get_running_app().root.remove_widget(self.ctx.current_tooltip)
+                self.ctx.ui.clear_tooltip()
 
-                self.ctx.current_tooltip = None
 
             @property
             def ctx(self) -> CommonContext:
@@ -240,13 +239,19 @@ class SC2Context(CommonContext):
             mission_panel = None
             last_checked_locations = {}
             mission_id_to_button = {}
-            launching = False
+            launching: typing.Union[bool, int] = False  # if int -> mission ID
             refresh_from_launching = True
             first_check = True
             ctx: SC2Context
 
             def __init__(self, ctx):
                 super().__init__(ctx)
+
+            def clear_tooltip(self):
+                if self.ctx.current_tooltip:
+                    App.get_running_app().root.remove_widget(self.ctx.current_tooltip)
+
+                self.ctx.current_tooltip = None
 
             def build(self):
                 container = super().build()
@@ -329,13 +334,17 @@ class SC2Context(CommonContext):
                     self.refresh_from_launching = False
 
                     self.mission_panel.clear_widgets()
-                    self.mission_panel.add_widget(Label(text="Launching Mission"))
+                    self.mission_panel.add_widget(Label(text="Launching Mission: " +
+                                                             lookup_id_to_mission[self.launching]))
+                    if self.ctx.ui:
+                        self.ctx.ui.clear_tooltip()
 
             def mission_callback(self, button):
                 if not self.launching:
-                    self.ctx.play_mission(list(self.mission_id_to_button.keys())
-                                          [list(self.mission_id_to_button.values()).index(button)])
-                    self.launching = True
+                    mission_id: int = list(self.mission_id_to_button.values()).index(button)
+                    self.ctx.play_mission(list(self.mission_id_to_button)
+                                          [mission_id])
+                    self.launching = mission_id
                     Clock.schedule_once(self.finish_launching, 10)
 
             def finish_launching(self, dt):
