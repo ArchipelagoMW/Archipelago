@@ -13,6 +13,7 @@ from .rules import set_rules
 from .regions import WitnessRegions
 from .Options import is_option_enabled, the_witness_options, get_option_value
 from .utils import best_junk_to_add_based_on_weights
+from logging import warning
 
 
 class WitnessWebWorld(WebWorld):
@@ -41,7 +42,7 @@ class WitnessWorld(World):
     static_locat = StaticWitnessLocations()
     static_items = StaticWitnessItems()
     web = WitnessWebWorld()
-    options = the_witness_options
+    option_definitions = the_witness_options
 
     item_name_to_id = {
         name: data.code for name, data in static_items.ALL_ITEM_TABLE.items()
@@ -56,15 +57,20 @@ class WitnessWorld(World):
             'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID,
             'item_id_to_door_hexes': self.items.ITEM_ID_TO_DOOR_HEX,
             'door_hexes': self.items.DOORS,
-            'symbols_not_in_the_game': self.items.SYMBOLS_NOT_IN_THE_GAME
+            'symbols_not_in_the_game': self.items.SYMBOLS_NOT_IN_THE_GAME,
+            'disabled_panels': self.player_logic.COMPLETELY_DISABLED_CHECKS,
         }
 
     def generate_early(self):
         if not (is_option_enabled(self.world, self.player, "shuffle_symbols")
                 or get_option_value(self.world, self.player, "shuffle_doors")
                 or is_option_enabled(self.world, self.player, "shuffle_lasers")):
-            raise Exception("This Witness world doesn't have any progression items. Please turn on Symbol Shuffle, Door"
-                            " Shuffle or Laser Shuffle")
+            if self.world.players == 1:
+                warning("This Witness world doesn't have any progression items. Please turn on Symbol Shuffle, Door"
+                        " Shuffle or Laser Shuffle if that doesn't seem right.")
+            else:
+                raise Exception("This Witness world doesn't have any progression items. Please turn on Symbol Shuffle,"
+                                " Door Shuffle or Laser Shuffle.")
 
         self.player_logic = WitnessPlayerLogic(self.world, self.player)
         self.locat = WitnessPlayerLocations(self.world, self.player, self.player_logic)

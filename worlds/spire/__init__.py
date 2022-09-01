@@ -27,7 +27,7 @@ class SpireWorld(World):
     immense power, and Slay the Spire!
     """
 
-    options = spire_options
+    option_definitions = spire_options
     game = "Slay the Spire"
     topology_present = False
     data_version = 1

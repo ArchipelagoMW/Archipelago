@@ -152,8 +152,9 @@ class CommonContext:
     # locations
     locations_checked: typing.Set[int]  # local state
     locations_scouted: typing.Set[int]
-    missing_locations: typing.Set[int]
+    missing_locations: typing.Set[int]  # server state
     checked_locations: typing.Set[int]  # server state
+    server_locations: typing.Set[int]  # all locations the server knows of, missing_location | checked_locations
     locations_info: typing.Dict[int, NetworkItem]
 
     # internals
@@ -184,8 +185,9 @@ class CommonContext:
         self.locations_checked = set()  # local state
         self.locations_scouted = set()
         self.items_received = []
-        self.missing_locations = set()
+        self.missing_locations = set()  # server state
         self.checked_locations = set()  # server state
+        self.server_locations = set()  # all locations the server knows of, missing_location | checked_locations
         self.locations_info = {}
 
         self.input_queue = asyncio.Queue()
@@ -345,6 +347,8 @@ class CommonContext:
         cache_package = Utils.persistent_load().get("datapackage", {}).get("games", {})
         needed_updates: typing.Set[str] = set()
         for game in relevant_games:
+            if game not in remote_datepackage_versions:
+                continue
             remote_version: int = remote_datepackage_versions[game]
 
             if remote_version == 0:  # custom datapackage for this game
@@ -493,7 +497,8 @@ async def server_loop(ctx: CommonContext, address=None):
     logger.info(f'Connecting to Archipelago server at {address}')
     try:
         socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None)
-        ctx.ui.update_address_bar(server_url.netloc)
+        if ctx.ui is not None:
+            ctx.ui.update_address_bar(server_url.netloc)
         ctx.server = Endpoint(socket)
         logger.info('Connected')
         ctx.server_address = address
@@ -631,6 +636,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         # when /missing is used for the client side view of what is missing.
         ctx.missing_locations = set(args["missing_locations"])
         ctx.checked_locations = set(args["checked_locations"])
+        ctx.server_locations = ctx.missing_locations | ctx. checked_locations
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
