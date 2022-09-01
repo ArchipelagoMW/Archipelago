@@ -28,6 +28,7 @@ README.html
 .vs/
 EnemizerCLI/
 /Players/
+/SNI/
 /options.yaml
 /config.yaml
 /logs/
@@ -115,6 +116,9 @@ target/
 # IPython
 profile_default/
 ipython_config.py
+
+# vim editor
+*.swp
 
 # SageMath parsed files
 *.sage.py

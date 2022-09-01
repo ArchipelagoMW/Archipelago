@@ -289,7 +289,7 @@ def run_sprite_update():
     else:
         top.withdraw()
         task = BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
-    while not done.isSet():
+    while not done.is_set():
         task.do_events()
     logging.info("Done updating sprites")
 
@@ -300,6 +300,7 @@ def update_sprites(task, on_finish=None):
     sprite_dir = user_path("data", "sprites", "alttpr")
     os.makedirs(sprite_dir, exist_ok=True)
     ctx = get_cert_none_ssl_context()
+
     def finished():
         task.close_window()
         if on_finish:
@@ -751,6 +752,7 @@ class SpriteSelector():
         self.window['pady'] = 5
         self.spritesPerRow = 32
         self.all_sprites = []
+        self.invalid_sprites = []
         self.sprite_pool = spritePool
 
         def open_custom_sprite_dir(_evt):
@@ -832,6 +834,13 @@ class SpriteSelector():
         self.window.focus()
         tkinter_center_window(self.window)
 
+        if self.invalid_sprites:
+            invalid = sorted(self.invalid_sprites)
+            logging.warning(f"The following sprites are invalid: {', '.join(invalid)}")
+            msg = f"{invalid[0]} "
+            msg += f"and {len(invalid)-1} more are invalid" if len(invalid) > 1 else "is invalid"
+            messagebox.showerror("Invalid sprites detected", msg, parent=self.window)
+
     def remove_from_sprite_pool(self, button, spritename):
         self.callback(("remove", spritename))
         self.spritePoolButtons.buttons.remove(button)
@@ -896,7 +905,13 @@ class SpriteSelector():
         sprites = []
 
         for file in os.listdir(path):
-            sprites.append((file, Sprite(os.path.join(path, file))))
+            if file == '.gitignore':
+                continue
+            sprite = Sprite(os.path.join(path, file))
+            if sprite.valid:
+                sprites.append((file, sprite))
+            else:
+                self.invalid_sprites.append(file)
 
         sprites.sort(key=lambda s: str.lower(s[1].name or "").strip())
 

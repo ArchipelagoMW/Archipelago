@@ -121,6 +121,7 @@ shop_cost_types: typing.Dict[str, typing.Tuple[str, ...]] = {
     "Leg_Eater": ("GEO",),
 }
 
+
 class HKWeb(WebWorld):
     tutorials = [Tutorial(
         "Mod Setup and Use Guide",
@@ -131,6 +132,8 @@ class HKWeb(WebWorld):
         ["Ijwu"]
     )]
 
+    bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new?assignees=&labels=bug%2C+needs+investigation&template=bug_report.md&title="
+
 
 class HKWorld(World):
     """Beneath the fading town of Dirtmouth sleeps a vast, ancient kingdom. Many are drawn beneath the surface, 
@@ -139,7 +142,7 @@ class HKWorld(World):
     As the enigmatic Knight, you’ll traverse the depths, unravel its mysteries and conquer its evils.
     """  # from https://www.hollowknight.com
     game: str = "Hollow Knight"
-    options = hollow_knight_options
+    option_definitions = hollow_knight_options
 
     web = HKWeb()
 
@@ -432,7 +435,7 @@ class HKWorld(World):
         slot_data = {}
 
         options = slot_data["options"] = {}
-        for option_name in self.options:
+        for option_name in self.option_definitions:
             option = getattr(self.world, option_name)[self.player]
             try:
                 optionvalue = int(option.value)
@@ -625,8 +628,9 @@ class HKLocation(Location):
 
 class HKItem(Item):
     game = "Hollow Knight"
+    type: str
 
-    def __init__(self, name, advancement, code, type, player: int = None):
+    def __init__(self, name, advancement, code, type: str, player: int = None):
         if name == "Mimic_Grub":
             classification = ItemClassification.trap
         elif type in ("Grub", "DreamWarrior", "Root", "Egg"):

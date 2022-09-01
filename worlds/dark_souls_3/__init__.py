@@ -16,14 +16,26 @@ from ..generic.Rules import set_rule
 
 
 class DarkSouls3Web(WebWorld):
-    tutorials = [Tutorial(
+    bug_report_page = "https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/issues"
+    setup_en = Tutorial(
         "Multiworld Setup Tutorial",
         "A guide to setting up the Archipelago Dark Souls III randomizer on your computer.",
         "English",
         "setup_en.md",
         "setup/en",
         ["Marech"]
-    )]
+    )
+
+    setup_fr = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Marech"]
+    )
+
+    tutorials = [setup_en, setup_fr]
 
 
 class DarkSouls3World(World):
@@ -34,12 +46,12 @@ class DarkSouls3World(World):
     """
 
     game: str = "Dark Souls III"
-    options = dark_souls_options
+    option_definitions = dark_souls_options
     topology_present: bool = True
     remote_items: bool = False
     remote_start_inventory: bool = False
     web = DarkSouls3Web()
-    data_version = 1
+    data_version = 2
     base_id = 100000
     item_name_to_id = {name: id for id, name in enumerate(item_dictionary_table, base_id)}
     location_name_to_id = {name: id for id, name in enumerate(location_dictionary_table, base_id)}
@@ -167,17 +179,15 @@ class DarkSouls3World(World):
 
         # Define the access rules to the entrances
         set_rule(self.world.get_entrance("Goto Bell Tower", self.player),
-                 lambda state: state.has("Mortician's Ashes", self.player))
+                 lambda state: state.has("Tower Key", self.player))
         set_rule(self.world.get_entrance("Goto Undead Settlement", self.player),
                  lambda state: state.has("Small Lothric Banner", self.player))
         set_rule(self.world.get_entrance("Goto Lothric Castle", self.player),
                  lambda state: state.has("Basin of Vows", self.player))
-        set_rule(self.world.get_location("HWL: Soul of the Dancer", self.player),
-                 lambda state: state.has("Basin of Vows", self.player))
         set_rule(self.world.get_entrance("Goto Irithyll of the boreal", self.player),
                  lambda state: state.has("Small Doll", self.player))
         set_rule(self.world.get_entrance("Goto Archdragon peak", self.player),
-                 lambda state: state.has("Path of the Dragon Gesture", self.player))
+                 lambda state: state.can_reach("CKG: Soul of Consumed Oceiros", "Location", self.player))
         set_rule(self.world.get_entrance("Goto Profaned capital", self.player),
                  lambda state: state.has("Storm Ruler", self.player))
         set_rule(self.world.get_entrance("Goto Grand Archives", self.player),
@@ -187,6 +197,23 @@ class DarkSouls3World(World):
                  state.has("Cinders of a Lord - Yhorm the Giant", self.player) and
                  state.has("Cinders of a Lord - Aldrich", self.player) and
                  state.has("Cinders of a Lord - Lothric Prince", self.player))
+
+        # Define the access rules to some specific locations
+        set_rule(self.world.get_location("HWL: Soul of the Dancer", self.player),
+                 lambda state: state.has("Basin of Vows", self.player))
+        set_rule(self.world.get_location("HWL: Greirat's Ashes", self.player),
+                 lambda state: state.has("Cell Key", self.player))
+        set_rule(self.world.get_location("ID: Bellowing Dragoncrest Ring", self.player),
+                 lambda state: state.has("Jailbreaker's Key", self.player))
+        set_rule(self.world.get_location("ID: Prisoner Chief's Ashes", self.player),
+                 lambda state: state.has("Jailer's Key Ring", self.player))
+        set_rule(self.world.get_location("ID: Covetous Gold Serpent Ring", self.player),
+                 lambda state: state.has("Old Cell Key", self.player))
+        black_hand_gotthard_corpse_rule = lambda state: \
+            (state.can_reach("AL: Cinders of a Lord - Aldrich", "Location", self.player) and
+             state.can_reach("PC: Cinders of a Lord - Yhorm the Giant", "Location", self.player))
+        set_rule(self.world.get_location("LC: Grand Archives Key", self.player), black_hand_gotthard_corpse_rule)
+        set_rule(self.world.get_location("LC: Gotthard Twinswords", self.player), black_hand_gotthard_corpse_rule)
 
         self.world.completion_condition[self.player] = lambda state: \
             state.has("Cinders of a Lord - Abyss Watcher", self.player) and \
@@ -201,6 +228,12 @@ class DarkSouls3World(World):
             self.world.get_location("IBV: Soul of Pontiff Sulyvahn", self.player).place_locked_item(item)
         else:
             self.world.itempool += [item]
+
+        # Fill item pool with additional items
+        item_pool_len = self.item_name_to_id.__len__()
+        total_required_locations = self.location_name_to_id.__len__()
+        for i in range(item_pool_len, total_required_locations):
+            self.world.itempool += [self.create_item("Soul of an Intrepid Hero")]
 
     def generate_output(self, output_directory: str):
         # Depending on the specified option, modify items hexadecimal value to add an upgrade level

@@ -37,7 +37,7 @@ class RaftWorld(World):
     lastItemId = max(filter(lambda val: val is not None, item_name_to_id.values()))
 
     location_name_to_id = locations_lookup_name_to_id
-    options = raft_options
+    option_definitions = raft_options
 
     data_version = 2
     required_client_version = (0, 3, 4)

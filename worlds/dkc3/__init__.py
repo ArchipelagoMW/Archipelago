@@ -4,7 +4,7 @@ import math
 import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from .Items import DKC3Item, ItemData, item_table, inventory_table
+from .Items import DKC3Item, ItemData, item_table, inventory_table, junk_table
 from .Locations import DKC3Location, all_locations, setup_locations
 from .Options import dkc3_options
 from .Regions import create_regions, connect_regions
@@ -12,7 +12,7 @@ from .Levels import level_list
 from .Rules import set_rules
 from .Names import ItemName, LocationName
 from ..AutoWorld import WebWorld, World
-from .Rom import LocalRom, patch_rom, get_base_rom_path
+from .Rom import LocalRom, patch_rom, get_base_rom_path, DKC3DeltaPatch
 import Patch
 
 
@@ -38,9 +38,9 @@ class DKC3World(World):
     mystery of why Donkey Kong and Diddy disappeared while on vacation.
     """
     game: str = "Donkey Kong Country 3"
-    options = dkc3_options
+    option_definitions = dkc3_options
     topology_present = False
-    data_version = 1
+    data_version = 2
     #hint_blacklist = {LocationName.rocket_rush_flag}
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -99,9 +99,12 @@ class DKC3World(World):
 
         # Bosses
         total_required_locations += number_of_bosses
-        
+
         # Secret Caves
         total_required_locations += 13
+
+        if self.world.kongsanity[self.player]:
+            total_required_locations += 39
 
         ## Brothers Bear
         if False:#self.world.include_trade_sequence[self.player]:
@@ -118,7 +121,11 @@ class DKC3World(World):
 
         total_junk_count = total_required_locations - len(itempool)
 
-        itempool += [self.create_item(ItemName.bear_coin)] * total_junk_count
+        junk_pool = []
+        for item_name in self.world.random.choices(list(junk_table.keys()), k=total_junk_count):
+            junk_pool += [self.create_item(item_name)]
+
+        itempool += junk_pool
 
         self.active_level_list = level_list.copy()
 
@@ -138,19 +145,23 @@ class DKC3World(World):
             patch_rom(self.world, rom, self.player, self.active_level_list)
 
             self.active_level_list.append(LocationName.rocket_rush_region)
-        
+
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
                 if world.player_name[player] != 'Player%d' % player else ''
 
             rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
             rom.write_to_file(rompath)
-            Patch.create_patch_file(rompath, player=player, player_name=world.player_name[player], game=Patch.GAME_DKC3)
-            os.unlink(rompath)
             self.rom_name = rom.name
+
+            patch = DKC3DeltaPatch(os.path.splitext(rompath)[0]+DKC3DeltaPatch.patch_file_ending, player=player,
+                                   player_name=world.player_name[player], patched_path=rompath)
+            patch.write()
         except:
             raise
         finally:
+            if os.path.exists(rompath):
+                os.unlink(rompath)
             self.rom_name_available_event.set() # make sure threading continues and errors are collected
 
     def modify_multidata(self, multidata: dict):

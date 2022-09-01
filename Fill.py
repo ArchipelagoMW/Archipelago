@@ -220,8 +220,8 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
                 world.push_item(defaultlocations.pop(i), item_to_place, False)
                 break
         else:
-            logging.warning(
-                f"Could not place non_local_item {item_to_place} among {defaultlocations}, tossing.")
+            raise Exception(f"Could not place non_local_item {item_to_place} among {defaultlocations}. "
+                            f"Too many non-local items for too few remaining locations.")
 
     world.random.shuffle(defaultlocations)
 

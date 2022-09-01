@@ -102,9 +102,15 @@ const buildOptionsTable = (settings, romOpts = false) => {
     // td Left
     const tdl = document.createElement('td');
     const label = document.createElement('label');
+    label.textContent = `${settings[setting].displayName}: `;
     label.setAttribute('for', setting);
-    label.setAttribute('data-tooltip', settings[setting].description);
-    label.innerText = `${settings[setting].displayName}:`;
+
+    const questionSpan = document.createElement('span');
+    questionSpan.classList.add('interactive');
+    questionSpan.setAttribute('data-tooltip', settings[setting].description);
+    questionSpan.innerText = '(?)';
+
+    label.appendChild(questionSpan);
     tdl.appendChild(label);
     tr.appendChild(tdl);
 

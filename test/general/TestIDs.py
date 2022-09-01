@@ -52,3 +52,13 @@ class TestIDs(unittest.TestCase):
                 else:
                     for location_id in world_type.location_id_to_name:
                         self.assertGreater(location_id, 0)
+
+    def testDuplicateItemIDs(self):
+        for gamename, world_type in AutoWorldRegister.world_types.items():
+            with self.subTest(game=gamename):
+                self.assertEqual(len(world_type.item_id_to_name), len(world_type.item_name_to_id))
+
+    def testDuplicateLocationIDs(self):
+        for gamename, world_type in AutoWorldRegister.world_types.items():
+            with self.subTest(game=gamename):
+                self.assertEqual(len(world_type.location_id_to_name), len(world_type.location_name_to_id))

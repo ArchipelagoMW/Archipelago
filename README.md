@@ -51,7 +51,7 @@ Archipelago was directly forked from bonta0's `multiworld_31` branch of ALttPEnt
 ## Running Archipelago
 For most people all you need to do is head over to the [releases](https://github.com/ArchipelagoMW/Archipelago/releases) page then download and run the appropriate installer. The installers function on Windows only.
 
-If you are running Archipelago from a non-Windows system then the likely scenario is that you are comfortable running source code directly. Please see our wiki page on [running Archipelago from source](https://github.com/ArchipelagoMW/Archipelago/wiki/Running-from-source).
+If you are running Archipelago from a non-Windows system then the likely scenario is that you are comfortable running source code directly. Please see our doc on [running Archipelago from source](docs/running%20from%20source.md).
 
 ## Related Repositories
 This project makes use of multiple other projects. We wouldn't be here without these other repositories and the contributions of their developers, past and present.
@@ -61,26 +61,10 @@ This project makes use of multiple other projects. We wouldn't be here without t
 * [Ocarina of Time Randomizer](https://github.com/TestRunnerSRL/OoT-Randomizer)
 
 ## Contributing
-Contributions are welcome. We have a few asks of any new contributors.
-
-* Ensure that all changes which affect logic are covered by unit tests. 
-* Do not introduce any unit test failures/regressions.
-
-Otherwise, we tend to judge code on a case to case basis. It is a generally good idea to stick to PEP-8 guidelines to ensure consistency with existing code. (And to make the linter happy.)
-
-For adding a new game to Archipelago and other documentation on how Archipelago functions, please see the docs folder for the relevant information and feel free to ask any questions in the #archipelago-dev channel in our discord.
+For contribution guidelines, please see our [Contributing doc.](/docs/contributing.md)
 
 ## FAQ
-For frequently asked questions see the website's [FAQ Page](https://archipelago.gg/faq/en/)
+For Frequently asked questions, please see the website's [FAQ Page.](https://archipelago.gg/faq/en/)
 
 ## Code of Conduct
-We conduct ourselves openly and inclusively here. Please do not contribute to an environment which makes other people uncomfortable. This means that we expect all contributors or participants here to:
-
-* Be welcoming and inclusive in tone and language.
-* Be respectful of others and their abilities.
-* Show empathy when speaking with others.
-* Be gracious and accept feedback and constructive criticism.
-
-These guidelines apply to all channels of communication within this GitHub repository. Please be respectful in both public channels, such as issues, and private, such as private messaging or emails.
-
-Any incidents of abuse may be reported directly to Ijwu at hmfarran@gmail.com.
+Please refer to our [code of conduct.](/docs/code_of_conduct.md)
