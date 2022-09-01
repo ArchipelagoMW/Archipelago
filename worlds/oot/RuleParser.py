@@ -217,7 +217,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                         value=ast.Attribute(
                             value=ast.Attribute(
                                 value=ast.Name(id='state', ctx=ast.Load()),
-                                attr='world',
+                                attr='multiworld',
                                 ctx=ast.Load()),
                             attr='worlds',
                             ctx=ast.Load()),
