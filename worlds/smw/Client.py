@@ -4,6 +4,7 @@ import asyncio
 from NetUtils import ClientStatus, color
 from worlds import AutoWorldRegister
 from SNIClient import Context, snes_buffered_write, snes_flush_writes, snes_read
+from .Names.TextBox import generate_received_text
 from Patch import GAME_SMW
 
 snes_logger = logging.getLogger("SNES")
@@ -26,15 +27,17 @@ SMW_EVENT_ROM_DATA = ROM_START + 0x2D608
 SMW_GOAL_DATA = ROM_START + 0x01BFA0
 SMW_REQUIRED_BOSSES_DATA = ROM_START + 0x01BFA1
 SMW_REQUIRED_EGGS_DATA = ROM_START + 0x01BFA2
+SMW_SEND_MSG_DATA = ROM_START + 0x01BFA3
+SMW_RECEIVE_MSG_DATA = ROM_START + 0x01BFA4
 
 SMW_GAME_STATE_ADDR = WRAM_START + 0x100
 SMW_CURRENT_LEVEL_ADDR = WRAM_START + 0x13BF
 SMW_MESSAGE_BOX_ADDR = WRAM_START + 0x1426
 SMW_EGG_COUNT_ADDR = WRAM_START + 0xF48
 SMW_SFX_ADDR = WRAM_START + 0x1DFC
+SMW_MESSAGE_QUEUE_ADDR = WRAM_START + 0xCB91
 
 SMW_RECV_PROGRESS_ADDR = WRAM_START + 0x1F2B     # SMW_TODO: Find a permanent home for this
-DKC3_FILE_NAME_ADDR = WRAM_START + 0x5D9
 DEATH_LINK_ACTIVE_ADDR = DKC3_ROMNAME_START + 0x15     # SMW_TODO: Find a permanent home for this
 
 
@@ -57,12 +60,52 @@ async def smw_rom_init(ctx: Context):
 
         ctx.rom = game_hash
 
+        receive_option = await snes_read(ctx, SMW_RECEIVE_MSG_DATA, 0x1)
+        send_option = await snes_read(ctx, SMW_SEND_MSG_DATA, 0x1)
+
+        ctx.receive_option = receive_option[0]
+        ctx.send_option = send_option[0]
+
         #death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR, 1)
         ## SMW_TODO: Handle Deathlink
         #if death_link:
         #    ctx.allow_collect = bool(death_link[0] & 0b100)
         #    await ctx.update_death_link(bool(death_link[0] & 0b1))
     return True
+
+
+def add_message_to_queue(ctx: Context, new_message):
+
+    if not hasattr(ctx, "message_queue"):
+        ctx.message_queue = []
+
+    ctx.message_queue.append(new_message)
+
+    return
+
+
+async def handle_message_queue(ctx: Context):
+
+    game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
+    if game_state[0] != 0x14:
+        return
+
+    message_box = await snes_read(ctx, SMW_MESSAGE_BOX_ADDR, 0x1)
+    if message_box[0] != 0x00:
+        return
+
+    if not hasattr(ctx, "message_queue") or len(ctx.message_queue) == 0:
+        return
+
+    next_message = ctx.message_queue.pop(0)
+
+    snes_buffered_write(ctx, SMW_MESSAGE_QUEUE_ADDR, bytes(next_message))
+    snes_buffered_write(ctx, SMW_MESSAGE_BOX_ADDR, bytes([0x03]))
+    snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([0x22]))
+
+    await snes_flush_writes(ctx)
+
+    return
 
 
 async def smw_game_watcher(ctx: Context):
@@ -77,13 +120,13 @@ async def smw_game_watcher(ctx: Context):
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                 ctx.finished_game = True
             return
-        elif game_state[0] != 0x14:
+        elif game_state[0] < 0x0B:
             # We haven't loaded a save file
             return
 
         # Check for Egg Hunt ending
         goal = await snes_read(ctx, SMW_GOAL_DATA, 0x1)
-        if goal[0] == 1:
+        if game_state[0] == 0x14 and goal[0] == 1:
             current_level = await snes_read(ctx, SMW_CURRENT_LEVEL_ADDR, 0x1)
             message_box = await snes_read(ctx, SMW_MESSAGE_BOX_ADDR, 0x1)
             egg_count = await snes_read(ctx, SMW_EGG_COUNT_ADDR, 0x1)
@@ -97,6 +140,8 @@ async def smw_game_watcher(ctx: Context):
 
                 await snes_flush_writes(ctx)
                 return
+
+        await handle_message_queue(ctx)
 
         new_checks = []
         from worlds.smw.Rom import item_rom_data, ability_rom_data
@@ -125,7 +170,7 @@ async def smw_game_watcher(ctx: Context):
                         new_checks.append(loc_id)
 
         verify_game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
-        if verify_game_state is None or verify_game_state[0] != 0x14 or verify_game_state != game_state:
+        if verify_game_state is None or verify_game_state[0] < 0x0B or verify_game_state[0] > 0x29:
             # We have somehow exited the save file (or worse)
             print("Exit Save File")
             return
@@ -144,6 +189,10 @@ async def smw_game_watcher(ctx: Context):
                 f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
 
+        if game_state[0] != 0x14:
+            # Don't receive items outside of in-level mode
+            return
+
         recv_count = await snes_read(ctx, SMW_RECV_PROGRESS_ADDR, 1)
         recv_index = recv_count[0]
 
@@ -154,6 +203,13 @@ async def smw_game_watcher(ctx: Context):
                 color(ctx.item_names[item.item], 'red', 'bold'),
                 color(ctx.player_names[item.player], 'yellow'),
                 ctx.location_names[item.location], recv_index, len(ctx.items_received)))
+
+            if ctx.receive_option == 1 or (ctx.receive_option == 2 and ((item.flags & 1) != 0)):
+                item_name = ctx.item_names[item.item]
+                player_name = ctx.player_names[item.player]
+
+                receive_message = generate_received_text(item_name, player_name)
+                add_message_to_queue(ctx, receive_message)
 
             snes_buffered_write(ctx, SMW_RECV_PROGRESS_ADDR, bytes([recv_index]))
             if item.item in item_rom_data:
@@ -170,31 +226,42 @@ async def smw_game_watcher(ctx: Context):
                     snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([item_rom_data[item.item][2]]))
 
                 snes_buffered_write(ctx, WRAM_START + item_rom_data[item.item][0], bytes([new_item_count]))
-            else:
-                if item.item in ability_rom_data:
-                    # Handle Upgrades
-                    for rom_data in ability_rom_data[item.item]:
-                        data = await snes_read(ctx, WRAM_START + rom_data[0], 1)
-                        masked_data = data[0] | (1 << rom_data[1])
-                        snes_buffered_write(ctx, WRAM_START + rom_data[0], bytes([masked_data]))
-                elif item.item == 0xBC000A:
-                    # Handle Progressive Powerup
-                    data = await snes_read(ctx, WRAM_START + 0x1F2D, 1)
-                    mushroom_data = data[0] & (1 << 0)
-                    fire_flower_data = data[0] & (1 << 1)
-                    cape_data = data[0] & (1 << 2)
-                    if mushroom_data == 0:
-                        masked_data = data[0] | (1 << 0)
-                        snes_buffered_write(ctx, WRAM_START + 0x1F2D, bytes([masked_data]))
-                    elif fire_flower_data == 0:
-                        masked_data = data[0] | (1 << 1)
-                        snes_buffered_write(ctx, WRAM_START + 0x1F2D, bytes([masked_data]))
-                    elif cape_data == 0:
-                        masked_data = data[0] | (1 << 2)
-                        snes_buffered_write(ctx, WRAM_START + 0x1F2D, bytes([masked_data]))
-                    else:
-                        # Extra Powerup?
-                        pass
+            elif item.item in ability_rom_data:
+                # Handle Upgrades
+                for rom_data in ability_rom_data[item.item]:
+                    data = await snes_read(ctx, WRAM_START + rom_data[0], 1)
+                    masked_data = data[0] | (1 << rom_data[1])
+                    snes_buffered_write(ctx, WRAM_START + rom_data[0], bytes([masked_data]))
+                    snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([0x3E])) # SMW_TODO: Custom sounds for each
+            elif item.item == 0xBC000A:
+                # Handle Progressive Powerup
+                data = await snes_read(ctx, WRAM_START + 0x1F2D, 1)
+                mushroom_data = data[0] & (1 << 0)
+                fire_flower_data = data[0] & (1 << 1)
+                cape_data = data[0] & (1 << 2)
+                if mushroom_data == 0:
+                    masked_data = data[0] | (1 << 0)
+                    snes_buffered_write(ctx, WRAM_START + 0x1F2D, bytes([masked_data]))
+                    snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([0x3E]))
+                elif fire_flower_data == 0:
+                    masked_data = data[0] | (1 << 1)
+                    snes_buffered_write(ctx, WRAM_START + 0x1F2D, bytes([masked_data]))
+                    snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([0x3E]))
+                elif cape_data == 0:
+                    masked_data = data[0] | (1 << 2)
+                    snes_buffered_write(ctx, WRAM_START + 0x1F2D, bytes([masked_data]))
+                    snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([0x41]))
+                else:
+                    # Extra Powerup?
+                    pass
+            elif item.item == 0xBC0015:
+                # Handle Literature Trap
+                from .Names.LiteratureTrap import lit_trap_text_list
+                import random
+                rand_trap = random.choice(lit_trap_text_list)
+
+                for message in rand_trap:
+                    add_message_to_queue(ctx, message)
 
             await snes_flush_writes(ctx)
 

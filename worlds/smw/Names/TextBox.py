@@ -16,6 +16,8 @@ text_mapping = {
     "a": 0x40, "b": 0x41, "c": 0x42, "d": 0x43, "e": 0x44, "f": 0x45, "g": 0x46, "h": 0x47, "i": 0x48, "j": 0x49,
     "k": 0x4A, "l": 0x4B, "m": 0x4C, "n": 0x4D, "o": 0x4E, "p": 0x4F, "q": 0x50, "r": 0x51, "s": 0x52, "t": 0x53,
     "u": 0x54, "v": 0x55, "w": 0x56, "x": 0x57, "y": 0x58, "z": 0x59,
+
+    "#": 0x5A, "(": 0x5B, ")": 0x5C, "'": 0x5D
 }
 
 title_text_mapping = {
@@ -64,3 +66,52 @@ def generate_goal_text(world: MultiWorld, player: int):
 
     return out_array
 
+
+def generate_received_text(item_name: str, player_name: str):
+    out_array = bytearray()
+
+    item_name = item_name[:18]
+    player_name = player_name[:18]
+
+    item_buffer = max(0, math.floor((18 - len(item_name)) / 2))
+    player_buffer = max(0, math.floor((18 - len(player_name)) / 2))
+
+    out_array += bytearray([0x9F, 0x9F])
+    out_array += string_to_bytes("     Received")
+    out_array[-1] += 0x80
+    out_array += bytearray([0x1F] * item_buffer)
+    out_array += string_to_bytes(item_name)
+    out_array[-1] += 0x80
+    out_array += string_to_bytes("       from")
+    out_array[-1] += 0x80
+    out_array += bytearray([0x1F] * player_buffer)
+    out_array += string_to_bytes(player_name)
+    out_array[-1] += 0x80
+    out_array += bytearray([0x9F, 0x9F])
+
+    return out_array
+
+
+def generate_sent_text(item_name: str, player_name: str):
+    out_array = bytearray()
+
+    item_name = item_name[:18]
+    player_name = player_name[:18]
+
+    item_buffer = max(0, math.floor((18 - len(item_name)) / 2))
+    player_buffer = max(0, math.floor((18 - len(player_name)) / 2))
+
+    out_array += bytearray([0x9F, 0x9F])
+    out_array += string_to_bytes("       Sent")
+    out_array[-1] += 0x80
+    out_array += bytearray([0x1F] * item_buffer)
+    out_array += string_to_bytes(item_name)
+    out_array[-1] += 0x80
+    out_array += string_to_bytes("        to")
+    out_array[-1] += 0x80
+    out_array += bytearray([0x1F] * player_buffer)
+    out_array += string_to_bytes(player_name)
+    out_array[-1] += 0x80
+    out_array += bytearray([0x9F, 0x9F])
+
+    return out_array

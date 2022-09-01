@@ -491,6 +491,30 @@ def handle_ability_code(rom):
     return
 
 
+def handle_yoshi_box(rom):
+
+    rom.write_bytes(0xEC3D, bytearray([0xEA] * 0x03)) # NOP Lines that cause Yoshi Rescue Box normally
+
+    rom.write_bytes(0x2B20F, bytearray([0x20, 0x60, 0xDC])) # JSR $05DC60
+
+    YOSHI_BOX_SUB_ADDR = 0x02DC60
+    rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x00, bytearray([0x08]))                   # PHP
+    rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x01, bytearray([0xAD, 0x26, 0x14]))       # LDA $1426
+    rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x04, bytearray([0xC9, 0x03]))             # CMP #03
+    rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x06, bytearray([0xF0, 0x06]))             # BEQ +0x06
+    rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x08, bytearray([0x28]))                   # PLP
+    rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x09, bytearray([0xB9, 0xD9, 0xA5]))       # LDA $A5B9, Y
+    rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x0C, bytearray([0x80, 0x08]))             # BRA +0x08
+    rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x0E, bytearray([0x28]))                   # PLP
+    rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x0F, bytearray([0xDA]))                   # PHX
+    rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x10, bytearray([0xBB]))                   # TYX
+    rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x11, bytearray([0xBF, 0x00, 0xCA, 0x7E])) # LDA $7ECA00, X
+    rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x15, bytearray([0xFA]))                   # PLX
+    rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x16, bytearray([0x60]))                   # RTS
+
+    return
+
+
 def patch_rom(world, rom, player, active_level_dict):
     local_random = world.slot_seeds[player]
 
@@ -566,6 +590,8 @@ def patch_rom(world, rom, player, active_level_dict):
     rom.write_bytes(0x6EB4, bytearray([0xEA, 0xEA, 0xEA]))
 
     handle_ability_code(rom)
+
+    handle_yoshi_box(rom)
 
     # Handle Level Shuffle Here
     if world.level_shuffle[player]:
