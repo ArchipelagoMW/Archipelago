@@ -26,7 +26,7 @@ inventory directly.
 Victory is achieved when the player kills the Ender Dragon, enters the portal in The End, and completes the credits
 sequence either by skipping it or watching hit play out.
 
-## What recipes are shuffled?
+## Which recipes are locked?
 
 * Archery
   * Bow
