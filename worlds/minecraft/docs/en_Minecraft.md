@@ -9,7 +9,7 @@ config file.
 
 Recipes are removed from the crafting book and shuffled into the item pool. It can also optionally change which
 structures appear in each dimension. Crafting recipes are re-learned when they are received from other players as item
-checks, and occasionally when completing your own achievements. See below for what recipes are shuffled.
+checks, and occasionally when completing your own achievements. See below for which recipes are shuffled.
 
 ## What is considered a location check in minecraft?
 
