@@ -128,9 +128,9 @@ def set_rules(hylics2world):
 
     # New Muldul Vault
     set_rule(world.get_location("New Muldul: Rescued Blerol 1", player), 
-        lambda state: state._hylics2_has_jail_key(player))
+        lambda state: state._hylics2_has_jail_key(player) and state._hylics2_has_paddle(player) and (state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player)))
     set_rule(world.get_location("New Muldul: Rescued Blerol 2", player), 
-        lambda state: state._hylics2_has_jail_key(player))
+        lambda state: state._hylics2_has_jail_key(player) and state._hylics2_has_paddle(player) and (state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player)))
     set_rule(world.get_location("New Muldul: Vault Left Chest", player), 
         lambda state: state._hylics2_enter_foglast(player) and state._hylics2_has_bridge_key(player))
     set_rule(world.get_location("New Muldul: Vault Right Chest", player), 
@@ -301,7 +301,13 @@ def set_rules(hylics2world):
 
         add_rule(world.get_location("Viewax's Edifice: Defeat Viewax", player), 
             lambda state: state._hylics2_has_2_members(player))
+        add_rule(world.get_location("New Muldul: Rescued Blerol 1", player), 
+            lambda state: state._hylics2_has_2_members(player))
+        add_rule(world.get_location("New Muldul: Rescued Blerol 2", player), 
+            lambda state: state._hylics2_has_2_members(player))
         add_rule(world.get_location("Juice Ranch: Battle with Somsnosa", player), 
+            lambda state: state._hylics2_has_2_members(player))
+        add_rule(world.get_location("Juice Ranch: Somsnosa Joins", player), 
             lambda state: state._hylics2_has_2_members(player))
         add_rule(world.get_location("Juice Ranch: Fridge", player), 
             lambda state: state._hylics2_has_2_members(player))
