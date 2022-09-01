@@ -294,7 +294,18 @@ accessPoints = [
                                                     sm.canGetBackFromRidleyZone(),
                                                     sm.canPassWastelandDessgeegas(),
                                                     sm.canPassRedKiHunters())),
-        'RidleyRoomOut': Cache.ldeco(lambda sm: sm.canHellRun(**Settings.hellRunsTable['LowerNorfair']['Main']))
+        'RidleyRoomOut': Cache.ldeco(lambda sm: sm.canHellRun(**Settings.hellRunsTable['LowerNorfair']['Main'])),
+        'Wasteland': Cache.ldeco(lambda sm: sm.wand(sm.canHellRun(**Settings.hellRunsTable['LowerNorfair']['Main']),
+                                                    sm.canGetBackFromRidleyZone(),
+                                                    sm.canPassWastelandDessgeegas()))
+    }, internal=True),
+    AccessPoint('Wasteland', 'LowerNorfair', {
+        # no transition to firefleas to exlude pb of shame location when starting at firefleas top
+        'Ridley Zone': Cache.ldeco(lambda sm: sm.wand(sm.canHellRun(**Settings.hellRunsTable['LowerNorfair']['Main']),
+                                                      sm.traverse('WastelandLeft'),
+                                                      sm.canGetBackFromRidleyZone(),
+                                                      sm.canPassWastelandDessgeegas(),
+                                                      sm.canPassNinjaPirates()))
     }, internal=True),
     AccessPoint('Three Muskateers Room Left', 'LowerNorfair', {
         'Firefleas': Cache.ldeco(lambda sm: sm.wand(sm.canHellRun(**Settings.hellRunsTable['LowerNorfair']['Main']),
