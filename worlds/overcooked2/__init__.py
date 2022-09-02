@@ -9,12 +9,10 @@ from BaseClasses import ItemClassification, CollectionState, Region, Entrance, L
 from ..AutoWorld import World, WebWorld
 
 from .Overcooked2Levels import Overcooked2Level, Overcooked2GameWorld, Overcooked2GenericLevel, level_shuffle_factory
-from .Locations import Overcooked2Location, location_name_to_id
+from .Locations import Overcooked2Location, oc2_location_name_to_id, oc2_location_id_to_name
 from .Options import overcooked_options
 from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies, oc2_base_id, oc2_end_id
-from .Locations import location_id_to_name, location_name_to_id
 from .Logic import has_requirements_for_level_star, has_requirements_for_level_access
-
 
 class Overcooked2Web(WebWorld):
     bug_report_page = "https://github.com/toasterparty/oc2-modding/issues"
@@ -57,8 +55,8 @@ class Overcooked2World(World):
     item_name_to_id = item_name_to_id
     item_id_to_name = item_id_to_name
 
-    location_id_to_name = location_id_to_name
-    location_name_to_id = location_name_to_id
+    location_id_to_name = oc2_location_name_to_id
+    location_name_to_id = oc2_location_id_to_name
 
     # Helper Functions
 
@@ -253,7 +251,7 @@ class Overcooked2World(World):
                 self.world.itempool.append(self.create_item(item_name))
 
         # Fill any free space with filler
-        while len(self.world.itempool) < len(location_name_to_id):
+        while len(self.world.itempool) < len(oc2_location_name_to_id):
             self.world.itempool.append(self.create_item("Bonus Star"))
 
     def set_rules(self):
@@ -312,7 +310,7 @@ class Overcooked2World(World):
             location = self.world.find_item(f"Kevin-{level_id-36}", self.player)
             if location.player != self.player:
                 return None  # This kevin level will be unlocked by the server at runtime
-            level_id = location_name_to_id[location.name]
+            level_id = oc2_location_name_to_id[location.name]
             return level_id
         for level_id in range(37, 45):
             keyholder_level_id = kevin_level_to_keyholder_level_id(level_id)
@@ -326,7 +324,9 @@ class Overcooked2World(World):
                 continue  # this item is not for the local player
             if location.item.code is None:
                 continue  # this is an event, not an item
-            level_id = str(location_name_to_id[location.name])
+            if location.name not in oc2_location_name_to_id:
+                continue # not for local player
+            level_id = str(oc2_location_name_to_id[location.name])
             on_level_completed[level_id] = [item_to_unlock_event(location.item.name)]
 
         # Put it all together
