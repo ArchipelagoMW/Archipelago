@@ -8,10 +8,10 @@ from typing import Callable
 from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, RegionType, Tutorial
 from ..AutoWorld import World, WebWorld
 
-from .Overcooked2Levels import Overcooked2Level, Overcooked2GameWorld, Overcooked2GenericLevel, level_shuffle_factory
+from .Overcooked2Levels import Overcooked2Level, Overcooked2GenericLevel, level_shuffle_factory
 from .Locations import Overcooked2Location, oc2_location_name_to_id, oc2_location_id_to_name
 from .Options import overcooked_options
-from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies, oc2_base_id, oc2_end_id
+from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies
 from .Logic import has_requirements_for_level_star, has_requirements_for_level_access
 
 class Overcooked2Web(WebWorld):
@@ -48,15 +48,15 @@ class Overcooked2World(World):
     option_definitions = overcooked_options
     topology_present: bool = False
     remote_items: bool = True
-    remote_start_inventory: bool = True
+    remote_start_inventory: bool = False
     data_version = 0
     base_id = 0
 
     item_name_to_id = item_name_to_id
     item_id_to_name = item_id_to_name
 
-    location_id_to_name = oc2_location_name_to_id
-    location_name_to_id = oc2_location_id_to_name
+    location_id_to_name = oc2_location_id_to_name
+    location_name_to_id = oc2_location_name_to_id
 
     # Helper Functions
 
@@ -240,19 +240,24 @@ class Overcooked2World(World):
         self.world.completion_condition[self.player] = completion_condition
 
     def create_items(self):
+        added_items = 0
+
         # Make Items with multiple instances
         for item_name in item_frequencies:
             freq = item_frequencies[item_name]
             self.world.itempool += [self.create_item(item_name) for _ in range(0, freq)]
+            added_items += freq
 
         # Make Items with one instance
         for item_name in item_table:
             if item_name not in item_frequencies.keys():
                 self.world.itempool.append(self.create_item(item_name))
+                added_items += 1
 
         # Fill any free space with filler
-        while len(self.world.itempool) < len(oc2_location_name_to_id):
+        while added_items < len(oc2_location_name_to_id):
             self.world.itempool.append(self.create_item("Bonus Star"))
+            added_items += 1
 
     def set_rules(self):
         pass
@@ -319,15 +324,17 @@ class Overcooked2World(World):
 
         # Place Items at Level Completion Screens (local only)
         on_level_completed: dict[str, list[dict[str, str]]] = dict()
-        for location in self.world.get_locations():
-            if location.item.player != self.player:
-                continue  # this item is not for the local player
-            if location.item.code is None:
-                continue  # this is an event, not an item
-            if location.name not in oc2_location_name_to_id:
-                continue # not for local player
-            level_id = str(oc2_location_name_to_id[location.name])
-            on_level_completed[level_id] = [item_to_unlock_event(location.item.name)]
+        regions = self.world.get_regions(self.player)
+        for region in regions:
+            for location in region.locations:
+                if location.item is None:
+                    continue
+                if location.item.code is None:
+                    continue # it's an event
+                if location.item.player != self.player:
+                    continue # not for us
+                level_id = str(oc2_location_name_to_id[location.name])
+                on_level_completed[level_id] = [item_to_unlock_event(location.item.name)]
 
         # Put it all together
 
