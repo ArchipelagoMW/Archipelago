@@ -6,7 +6,7 @@ from random import Random
 from worlds.overcooked2.Items import *
 from worlds.overcooked2.Overcooked2Levels import Overcooked2Level, level_shuffle_factory, level_id_to_shortname
 from worlds.overcooked2.Logic import level_logic
-from worlds.overcooked2.Locations import location_name_to_id
+from worlds.overcooked2.Locations import oc2_location_name_to_id
 
 
 class Overcooked2Test(unittest.TestCase):
@@ -100,7 +100,7 @@ class Overcooked2Test(unittest.TestCase):
                 self.assertIn(level_name, level_logic.keys())
 
         region_names = [level.level_name() for level in Overcooked2Level()]
-        for location_name in location_name_to_id.keys():
+        for location_name in oc2_location_name_to_id.keys():
             level_name = location_name.split(" ")[0]
             self.assertIn(level_name, region_names)
 
@@ -139,4 +139,4 @@ class Overcooked2Test(unittest.TestCase):
             if item_name not in item_frequencies.keys():
                 number_of_items += 1
 
-        self.assertLessEqual(number_of_items, len(location_name_to_id), "Too many items (before fillers placed)")
+        self.assertLessEqual(number_of_items, len(oc2_location_name_to_id), "Too many items (before fillers placed)")
