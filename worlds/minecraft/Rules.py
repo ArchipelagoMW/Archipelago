@@ -276,10 +276,10 @@ def set_advancement_rules(world: MultiWorld, player: int):
 
     # 1.19 advancements
 
-    # can make a cake, and can reach a pillager outposts for allays
-    set_rule(world.get_location("Birthday Song", player), lambda state: state.can_reach("The Lie", "Location", player))
-    # find allay and craft a noteblock
-    set_rule(world.get_location("You've Got a Friend in Me", player), lambda state: state.has("Progressive Tools", player, 2) and state._mc_has_iron_ingots(player))
+    # can make a cake, and a noteblock, and can reach a pillager outposts for allays
+    set_rule(world.get_location("Birthday Song", player), lambda state: state.can_reach("The Lie", "Location", player) and state.has("Progressive Tools", player, 2) and state._mc_has_iron_ingots(player))
+    # can get to outposts.
+    # set_rule(world.get_location("You've Got a Friend in Me", player), lambda state: True)
     # craft bucket and adventure to find frog spawning biome
     set_rule(world.get_location("Bukkit Bukkit", player), lambda state: state.has("Bucket", player) and state._mc_has_iron_ingots(player) and state._mc_can_adventure(player))
     # I don't like this one its way to easy to get. just a pain to find.

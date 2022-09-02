@@ -37,7 +37,6 @@ for file in os.scandir(folder):
 world_sources.sort()
 for world_source in world_sources:
     if world_source.is_zip:
-
         importer = zipimport.zipimporter(os.path.join(folder, world_source.path))
         importer.load_module(world_source.path.split(".", 1)[0])
     else:

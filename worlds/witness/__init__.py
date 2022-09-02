@@ -13,6 +13,7 @@ from .rules import set_rules
 from .regions import WitnessRegions
 from .Options import is_option_enabled, the_witness_options, get_option_value
 from .utils import best_junk_to_add_based_on_weights
+from logging import warning
 
 
 class WitnessWebWorld(WebWorld):
@@ -63,8 +64,12 @@ class WitnessWorld(World):
         if not (is_option_enabled(self.multiworld, self.player, "shuffle_symbols")
                 or get_option_value(self.multiworld, self.player, "shuffle_doors")
                 or is_option_enabled(self.multiworld, self.player, "shuffle_lasers")):
-            raise Exception("This Witness world doesn't have any progression items. Please turn on Symbol Shuffle, Door"
-                            " Shuffle or Laser Shuffle")
+            if self.multiworld.players == 1:
+                warning("This Witness world doesn't have any progression items. Please turn on Symbol Shuffle, Door"
+                        " Shuffle or Laser Shuffle if that doesn't seem right.")
+            else:
+                raise Exception("This Witness world doesn't have any progression items. Please turn on Symbol Shuffle,"
+                                " Door Shuffle or Laser Shuffle.")
 
         self.player_logic = WitnessPlayerLogic(self.multiworld, self.player)
         self.locat = WitnessPlayerLocations(self.multiworld, self.player, self.player_logic)

@@ -1,7 +1,7 @@
 import collections
 import typing
 
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 
 from BaseClasses import Region, Entrance, Location, Item, RegionType, Tutorial, ItemClassification
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \

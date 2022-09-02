@@ -44,7 +44,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Zero Hour", "Beat Zero Hour", None,
                      lambda state: state._sc2wol_has_common_unit(world, player)),
         LocationData("Evacuation", "Evacuation: Victory", SC2WOL_LOC_ID_OFFSET + 400,
-                     lambda state: state._sc2wol_has_mobile_anti_air(world, player)),
+                     lambda state: state._sc2wol_has_anti_air(world, player)),
         LocationData("Evacuation", "Evacuation: First Chysalis", SC2WOL_LOC_ID_OFFSET + 401),
         LocationData("Evacuation", "Evacuation: Second Chysalis", SC2WOL_LOC_ID_OFFSET + 402,
                      lambda state: state._sc2wol_has_common_unit(world, player)),
@@ -52,7 +52,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
                      lambda state: state._sc2wol_has_common_unit(world, player)),
         LocationData("Evacuation", "Beat Evacuation", None,
                      lambda state: state._sc2wol_has_common_unit(world, player) and
-                                   state._sc2wol_has_mobile_anti_air(world, player)),
+                                   state._sc2wol_has_competent_anti_air(world, player)),
         LocationData("Outbreak", "Outbreak: Victory", SC2WOL_LOC_ID_OFFSET + 500,
                      lambda state: state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player)),
         LocationData("Outbreak", "Outbreak: Left Infestor", SC2WOL_LOC_ID_OFFSET + 501,
@@ -63,19 +63,37 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
                      lambda state: state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player)),
         LocationData("Safe Haven", "Safe Haven: Victory", SC2WOL_LOC_ID_OFFSET + 600,
                      lambda state: state._sc2wol_has_common_unit(world, player) and
-                                   state._sc2wol_has_mobile_anti_air(world, player)),
+                                   state._sc2wol_has_competent_anti_air(world, player)),
+        LocationData("Safe Haven", "Safe Haven: North Nexus", SC2WOL_LOC_ID_OFFSET + 601,
+                     lambda state: state._sc2wol_has_common_unit(world, player) and
+                                   state._sc2wol_has_competent_anti_air(world, player)),
+        LocationData("Safe Haven", "Safe Haven: East Nexus", SC2WOL_LOC_ID_OFFSET + 602,
+                     lambda state: state._sc2wol_has_common_unit(world, player) and
+                                   state._sc2wol_has_competent_anti_air(world, player)),
+        LocationData("Safe Haven", "Safe Haven: South Nexus", SC2WOL_LOC_ID_OFFSET + 603,
+                     lambda state: state._sc2wol_has_common_unit(world, player) and
+                                   state._sc2wol_has_competent_anti_air(world, player)),
         LocationData("Safe Haven", "Beat Safe Haven", None,
                      lambda state: state._sc2wol_has_common_unit(world, player) and
-                                   state._sc2wol_has_mobile_anti_air(world, player)),
+                                   state._sc2wol_has_competent_anti_air(world, player)),
         LocationData("Haven's Fall", "Haven's Fall: Victory", SC2WOL_LOC_ID_OFFSET + 700,
                      lambda state: state._sc2wol_has_common_unit(world, player) and
-                                   state._sc2wol_has_mobile_anti_air(world, player)),
+                                   state._sc2wol_has_competent_anti_air(world, player)),
+        LocationData("Haven's Fall", "Haven's Fall: North Hive", SC2WOL_LOC_ID_OFFSET + 701,
+                     lambda state: state._sc2wol_has_common_unit(world, player) and
+                                   state._sc2wol_has_competent_anti_air(world, player)),
+        LocationData("Haven's Fall", "Haven's Fall: East Hive", SC2WOL_LOC_ID_OFFSET + 702,
+                     lambda state: state._sc2wol_has_common_unit(world, player) and
+                                   state._sc2wol_has_competent_anti_air(world, player)),
+        LocationData("Haven's Fall", "Haven's Fall: South Hive", SC2WOL_LOC_ID_OFFSET + 703,
+                     lambda state: state._sc2wol_has_common_unit(world, player) and
+                                   state._sc2wol_has_competent_anti_air(world, player)),
         LocationData("Haven's Fall", "Beat Haven's Fall", None,
                      lambda state: state._sc2wol_has_common_unit(world, player) and
-                                   state._sc2wol_has_mobile_anti_air(world, player)),
+                                   state._sc2wol_has_competent_anti_air(world, player)),
         LocationData("Smash and Grab", "Smash and Grab: Victory", SC2WOL_LOC_ID_OFFSET + 800,
                      lambda state: state._sc2wol_has_common_unit(world, player) and
-                                   state._sc2wol_has_mobile_anti_air(world, player)),
+                                   state._sc2wol_has_competent_anti_air(world, player)),
         LocationData("Smash and Grab", "Smash and Grab: First Relic", SC2WOL_LOC_ID_OFFSET + 801),
         LocationData("Smash and Grab", "Smash and Grab: Second Relic", SC2WOL_LOC_ID_OFFSET + 802),
         LocationData("Smash and Grab", "Smash and Grab: Third Relic", SC2WOL_LOC_ID_OFFSET + 803,
@@ -101,11 +119,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
                                    state._sc2wol_has_anti_air(world, player) and
                                    state._sc2wol_has_heavy_defense(world, player)),
         LocationData("The Moebius Factor", "The Moebius Factor: Victory", SC2WOL_LOC_ID_OFFSET + 1000,
-                     lambda state: state._sc2wol_has_air(world, player)),
-        LocationData("The Moebius Factor", "The Moebius Factor: 1st Data Core ", SC2WOL_LOC_ID_OFFSET + 1001,
-                     lambda state: True),
-        LocationData("The Moebius Factor", "The Moebius Factor: 2nd Data Core", SC2WOL_LOC_ID_OFFSET + 1002,
-                     lambda state: state._sc2wol_has_air(world, player)),
+                     lambda state: state._sc2wol_has_air(world, player) and state._sc2wol_has_anti_air(world, player)),
         LocationData("The Moebius Factor", "The Moebius Factor: South Rescue", SC2WOL_LOC_ID_OFFSET + 1003,
                      lambda state: state._sc2wol_able_to_rescue(world, player)),
         LocationData("The Moebius Factor", "The Moebius Factor: Wall Rescue", SC2WOL_LOC_ID_OFFSET + 1004,
@@ -121,35 +135,49 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("The Moebius Factor", "Beat The Moebius Factor", None,
                      lambda state: state._sc2wol_has_air(world, player)),
         LocationData("Supernova", "Supernova: Victory", SC2WOL_LOC_ID_OFFSET + 1100,
-                     lambda state: state._sc2wol_has_common_unit(world, player)),
+                     lambda state: state._sc2wol_beats_protoss_deathball(world, player)),
         LocationData("Supernova", "Supernova: West Relic", SC2WOL_LOC_ID_OFFSET + 1101),
-        LocationData("Supernova", "Supernova: North Relic", SC2WOL_LOC_ID_OFFSET + 1102,
-                     lambda state: state._sc2wol_has_common_unit(world, player)),
+        LocationData("Supernova", "Supernova: North Relic", SC2WOL_LOC_ID_OFFSET + 1102),
         LocationData("Supernova", "Supernova: South Relic", SC2WOL_LOC_ID_OFFSET + 1103,
-                     lambda state: state._sc2wol_has_common_unit(world, player)),
+                     lambda state: state._sc2wol_beats_protoss_deathball(world, player)),
         LocationData("Supernova", "Supernova: East Relic", SC2WOL_LOC_ID_OFFSET + 1104,
-                     lambda state: state._sc2wol_has_common_unit(world, player)),
+                     lambda state: state._sc2wol_beats_protoss_deathball(world, player)),
         LocationData("Supernova", "Beat Supernova", None,
-                     lambda state: state._sc2wol_has_common_unit(world, player)),
+                     lambda state: state._sc2wol_beats_protoss_deathball(world, player)),
         LocationData("Maw of the Void", "Maw of the Void: Victory", SC2WOL_LOC_ID_OFFSET + 1200,
-                     lambda state: state.has('Battlecruiser', player) or state.has('Science Vessel', player) and
-                                   state._sc2wol_has_air(world, player)),
+                     lambda state: state.has('Battlecruiser', player) or
+                                   state._sc2wol_has_air(world, player) and
+                                   state._sc2wol_has_competent_anti_air(world, player) and
+                                   state.has('Science Vessel', player)),
         LocationData("Maw of the Void", "Maw of the Void: Landing Zone Cleared", SC2WOL_LOC_ID_OFFSET + 1201),
-        LocationData("Maw of the Void", "Maw of the Void: Expansion Prisoners", SC2WOL_LOC_ID_OFFSET + 1202),
+        LocationData("Maw of the Void", "Maw of the Void: Expansion Prisoners", SC2WOL_LOC_ID_OFFSET + 1202,
+                     lambda state: state.has('Battlecruiser', player) or
+                                   state._sc2wol_has_air(world, player) and
+                                   state._sc2wol_has_competent_anti_air(world, player) and
+                                   state.has('Science Vessel', player)),
         LocationData("Maw of the Void", "Maw of the Void: South Close Prisoners", SC2WOL_LOC_ID_OFFSET + 1203,
-                     lambda state: state.has('Battlecruiser', player) or state.has('Science Vessel', player) and
-                                   state._sc2wol_has_air(world, player)),
+                     lambda state: state.has('Battlecruiser', player) or
+                                   state._sc2wol_has_air(world, player) and
+                                   state._sc2wol_has_competent_anti_air(world, player) and
+                                   state.has('Science Vessel', player)),
         LocationData("Maw of the Void", "Maw of the Void: South Far Prisoners", SC2WOL_LOC_ID_OFFSET + 1204,
-                     lambda state: state.has('Battlecruiser', player) or state.has('Science Vessel', player) and
-                                   state._sc2wol_has_air(world, player)),
+                     lambda state: state.has('Battlecruiser', player) or
+                                   state._sc2wol_has_air(world, player) and
+                                   state._sc2wol_has_competent_anti_air(world, player) and
+                                   state.has('Science Vessel', player)),
         LocationData("Maw of the Void", "Maw of the Void: North Prisoners", SC2WOL_LOC_ID_OFFSET + 1205,
-                     lambda state: state.has('Battlecruiser', player) or state.has('Science Vessel', player) and
-                                   state._sc2wol_has_air(world, player)),
+                     lambda state: state.has('Battlecruiser', player) or
+                                   state._sc2wol_has_air(world, player) and
+                                   state._sc2wol_has_competent_anti_air(world, player) and
+                                   state.has('Science Vessel', player)),
         LocationData("Maw of the Void", "Beat Maw of the Void", None,
-                     lambda state: state.has('Battlecruiser', player) or state.has('Science Vessel', player) and
-                                   state._sc2wol_has_air(world, player)),
+                     lambda state: state.has('Battlecruiser', player) or
+                                   state._sc2wol_has_air(world, player) and
+                                   state._sc2wol_has_competent_anti_air(world, player) and
+                                   state.has('Science Vessel', player)),
         LocationData("Devil's Playground", "Devil's Playground: Victory", SC2WOL_LOC_ID_OFFSET + 1300,
-                     lambda state: state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player)),
+                     lambda state: state._sc2wol_has_anti_air(world, player) and (
+                             state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player))),
         LocationData("Devil's Playground", "Devil's Playground: Tosh's Miners", SC2WOL_LOC_ID_OFFSET + 1301),
         LocationData("Devil's Playground", "Devil's Playground: Brutalisk", SC2WOL_LOC_ID_OFFSET + 1302,
                      lambda state: state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player)),
@@ -157,17 +185,17 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
                      lambda state: state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player)),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: Victory", SC2WOL_LOC_ID_OFFSET + 1400,
                      lambda state: state._sc2wol_has_common_unit(world, player) and
-                                   state._sc2wol_has_mobile_anti_air(world, player)),
+                                   state._sc2wol_has_competent_anti_air(world, player)),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: Close Relic", SC2WOL_LOC_ID_OFFSET + 1401),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: West Relic", SC2WOL_LOC_ID_OFFSET + 1402,
                      lambda state: state._sc2wol_has_common_unit(world, player) and
-                                   state._sc2wol_has_mobile_anti_air(world, player)),
+                                   state._sc2wol_has_competent_anti_air(world, player)),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: North-East Relic", SC2WOL_LOC_ID_OFFSET + 1403,
                      lambda state: state._sc2wol_has_common_unit(world, player) and
-                                   state._sc2wol_has_mobile_anti_air(world, player)),
+                                   state._sc2wol_has_competent_anti_air(world, player)),
         LocationData("Welcome to the Jungle", "Beat Welcome to the Jungle", None,
                      lambda state: state._sc2wol_has_common_unit(world, player) and
-                                   state._sc2wol_has_mobile_anti_air(world, player)),
+                                   state._sc2wol_has_competent_anti_air(world, player)),
         LocationData("Breakout", "Breakout: Victory", SC2WOL_LOC_ID_OFFSET + 1500),
         LocationData("Breakout", "Breakout: Diamondback Prison", SC2WOL_LOC_ID_OFFSET + 1501),
         LocationData("Breakout", "Breakout: Siegetank Prison", SC2WOL_LOC_ID_OFFSET + 1502),
@@ -180,7 +208,8 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Ghost of a Chance", "Ghost of a Chance: Third Island Spectres", SC2WOL_LOC_ID_OFFSET + 1605),
         LocationData("Ghost of a Chance", "Beat Ghost of a Chance", None),
         LocationData("The Great Train Robbery", "The Great Train Robbery: Victory", SC2WOL_LOC_ID_OFFSET + 1700,
-                     lambda state: state._sc2wol_has_train_killers(world, player)),
+                     lambda state: state._sc2wol_has_train_killers(world, player) and
+                                   state._sc2wol_has_anti_air(world, player)),
         LocationData("The Great Train Robbery", "The Great Train Robbery: North Defiler", SC2WOL_LOC_ID_OFFSET + 1701),
         LocationData("The Great Train Robbery", "The Great Train Robbery: Mid Defiler", SC2WOL_LOC_ID_OFFSET + 1702),
         LocationData("The Great Train Robbery", "The Great Train Robbery: South Defiler", SC2WOL_LOC_ID_OFFSET + 1703),
@@ -198,20 +227,20 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Cutthroat", "Beat Cutthroat", None,
                      lambda state: state._sc2wol_has_common_unit(world, player)),
         LocationData("Engine of Destruction", "Engine of Destruction: Victory", SC2WOL_LOC_ID_OFFSET + 1900,
-                     lambda state: state._sc2wol_has_mobile_anti_air(world, player)),
+                     lambda state: state._sc2wol_has_competent_anti_air(world, player)),
         LocationData("Engine of Destruction", "Engine of Destruction: Odin", SC2WOL_LOC_ID_OFFSET + 1901),
         LocationData("Engine of Destruction", "Engine of Destruction: Loki", SC2WOL_LOC_ID_OFFSET + 1902,
-                     lambda state: state._sc2wol_has_mobile_anti_air(world, player) and
+                     lambda state: state._sc2wol_has_competent_anti_air(world, player) and
                                    state._sc2wol_has_common_unit(world, player) or state.has('Wraith', player)),
         LocationData("Engine of Destruction", "Engine of Destruction: Lab Devourer", SC2WOL_LOC_ID_OFFSET + 1903),
         LocationData("Engine of Destruction", "Engine of Destruction: North Devourer", SC2WOL_LOC_ID_OFFSET + 1904,
-                     lambda state: state._sc2wol_has_mobile_anti_air(world, player) and
+                     lambda state: state._sc2wol_has_competent_anti_air(world, player) and
                                    state._sc2wol_has_common_unit(world, player) or state.has('Wraith', player)),
         LocationData("Engine of Destruction", "Engine of Destruction: Southeast Devourer", SC2WOL_LOC_ID_OFFSET + 1905,
-                     lambda state: state._sc2wol_has_mobile_anti_air(world, player) and
+                     lambda state: state._sc2wol_has_competent_anti_air(world, player) and
                                    state._sc2wol_has_common_unit(world, player) or state.has('Wraith', player)),
         LocationData("Engine of Destruction", "Beat Engine of Destruction", None,
-                     lambda state: state._sc2wol_has_mobile_anti_air(world, player) and
+                     lambda state: state._sc2wol_has_competent_anti_air(world, player) and
                                    state._sc2wol_has_common_unit(world, player) or state.has('Wraith', player)),
         LocationData("Media Blitz", "Media Blitz: Victory", SC2WOL_LOC_ID_OFFSET + 2000,
                      lambda state: state._sc2wol_has_competent_comp(world, player)),
@@ -224,13 +253,19 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Media Blitz", "Media Blitz: Science Facility", SC2WOL_LOC_ID_OFFSET + 2004),
         LocationData("Media Blitz", "Beat Media Blitz", None,
                      lambda state: state._sc2wol_has_competent_comp(world, player)),
-        LocationData("Piercing the Shroud", "Piercing the Shroud: Victory", SC2WOL_LOC_ID_OFFSET + 2100),
+        LocationData("Piercing the Shroud", "Piercing the Shroud: Victory", SC2WOL_LOC_ID_OFFSET + 2100,
+                     lambda state: state.has_any({'Combat Shield (Marine)', 'Stabilizer Medpacks (Medic)'}, player)),
         LocationData("Piercing the Shroud", "Piercing the Shroud: Holding Cell Relic", SC2WOL_LOC_ID_OFFSET + 2101),
-        LocationData("Piercing the Shroud", "Piercing the Shroud: Brutalisk Relic", SC2WOL_LOC_ID_OFFSET + 2102),
-        LocationData("Piercing the Shroud", "Piercing the Shroud: First Escape Relic", SC2WOL_LOC_ID_OFFSET + 2103),
-        LocationData("Piercing the Shroud", "Piercing the Shroud: Second Escape Relic", SC2WOL_LOC_ID_OFFSET + 2104),
-        LocationData("Piercing the Shroud", "Piercing the Shroud: Brutalisk ", SC2WOL_LOC_ID_OFFSET + 2105),
-        LocationData("Piercing the Shroud", "Beat Piercing the Shroud", None),
+        LocationData("Piercing the Shroud", "Piercing the Shroud: Brutalisk Relic", SC2WOL_LOC_ID_OFFSET + 2102,
+                     lambda state: state.has_any({'Combat Shield (Marine)', 'Stabilizer Medpacks (Medic)'}, player)),
+        LocationData("Piercing the Shroud", "Piercing the Shroud: First Escape Relic", SC2WOL_LOC_ID_OFFSET + 2103,
+                     lambda state: state.has_any({'Combat Shield (Marine)', 'Stabilizer Medpacks (Medic)'}, player)),
+        LocationData("Piercing the Shroud", "Piercing the Shroud: Second Escape Relic", SC2WOL_LOC_ID_OFFSET + 2104,
+                     lambda state: state.has_any({'Combat Shield (Marine)', 'Stabilizer Medpacks (Medic)'}, player)),
+        LocationData("Piercing the Shroud", "Piercing the Shroud: Brutalisk ", SC2WOL_LOC_ID_OFFSET + 2105,
+                     lambda state: state.has_any({'Combat Shield (Marine)', 'Stabilizer Medpacks (Medic)'}, player)),
+        LocationData("Piercing the Shroud", "Beat Piercing the Shroud", None,
+                     lambda state: state.has_any({'Combat Shield (Marine)', 'Stabilizer Medpacks (Medic)'}, player)),
         LocationData("Whispers of Doom", "Whispers of Doom: Victory", SC2WOL_LOC_ID_OFFSET + 2200),
         LocationData("Whispers of Doom", "Whispers of Doom: First Hatchery", SC2WOL_LOC_ID_OFFSET + 2201),
         LocationData("Whispers of Doom", "Whispers of Doom: Second Hatchery", SC2WOL_LOC_ID_OFFSET + 2202),
@@ -251,13 +286,12 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
                      lambda state: state._sc2wol_has_protoss_common_units(world, player)),
         LocationData("Echoes of the Future", "Beat Echoes of the Future", None,
                      lambda state: state._sc2wol_has_protoss_medium_units(world, player)),
-        LocationData("In Utter Darkness", "In Utter Darkness: Defeat", SC2WOL_LOC_ID_OFFSET + 2500,
-                     lambda state: state._sc2wol_has_protoss_medium_units(world, player)),
+        LocationData("In Utter Darkness", "In Utter Darkness: Defeat", SC2WOL_LOC_ID_OFFSET + 2500),
         LocationData("In Utter Darkness", "In Utter Darkness: Protoss Archive", SC2WOL_LOC_ID_OFFSET + 2501,
                      lambda state: state._sc2wol_has_protoss_medium_units(world, player)),
-        LocationData("In Utter Darkness", "In Utter Darkness: Kills", SC2WOL_LOC_ID_OFFSET + 2502),
-        LocationData("In Utter Darkness", "Beat In Utter Darkness", None,
-                     lambda state: state._sc2wol_has_protoss_medium_units(world, player)),
+        LocationData("In Utter Darkness", "In Utter Darkness: Kills", SC2WOL_LOC_ID_OFFSET + 2502,
+                     lambda state: state._sc2wol_has_protoss_common_units(world, player)),
+        LocationData("In Utter Darkness", "Beat In Utter Darkness", None),
         LocationData("Gates of Hell", "Gates of Hell: Victory", SC2WOL_LOC_ID_OFFSET + 2600,
                      lambda state: state._sc2wol_has_competent_comp(world, player)),
         LocationData("Gates of Hell", "Gates of Hell: Large Army", SC2WOL_LOC_ID_OFFSET + 2601,

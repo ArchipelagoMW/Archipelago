@@ -200,7 +200,10 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
                     connect(world, player, names, "Menu", missions[i])
                 else:
                     connect(world, player, names, missions[connection], missions[i],
-                            (lambda name: (lambda state: state.has(f"Beat {name}", player)))(missions[connection]))
+                            (lambda name, missions_req: (lambda state: state.has(f"Beat {name}", player) and
+                                                                       state._sc2wol_cleared_missions(world, player,
+                                                                                                      missions_req)))
+                            (missions[connection], vanilla_shuffle_order[i].number))
                     connections.append(connection + 1)
 
             mission_req_table.update({missions[i]: MissionInfo(

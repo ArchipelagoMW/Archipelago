@@ -129,6 +129,8 @@ def getItemGenericName(item):
 
 
 def isRestrictedDungeonItem(dungeon, item):
+    if not isinstance(item, OOTItem):
+        return False
     if (item.map or item.compass) and dungeon.multiworld.shuffle_mapcompass == 'dungeon':
         return item in dungeon.dungeon_items
     if item.type == 'SmallKey' and dungeon.multiworld.shuffle_smallkeys == 'dungeon':

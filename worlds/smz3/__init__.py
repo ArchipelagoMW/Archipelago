@@ -590,14 +590,16 @@ class SMZ3World(World):
         # /* Check Swords option and place as needed */
         if self.smz3World.Config.SwordLocation == SwordLocation.Uncle:
             self.FillItemAtLocation(self.progression, TotalSMZ3Item.ItemType.ProgressiveSword, self.smz3World.GetLocation("Link's Uncle"))
-        elif self.smz3World.Config.SwordLocation == SwordLocation.Early:
-            self.FrontFillItemInOwnWorld(self.progression, TotalSMZ3Item.ItemType.ProgressiveSword)
 
         # /* Check Morph option and place as needed */
         if self.smz3World.Config.MorphLocation == MorphLocation.Original:
             self.FillItemAtLocation(self.progression, TotalSMZ3Item.ItemType.Morph, self.smz3World.GetLocation("Morphing Ball"))
         elif self.smz3World.Config.MorphLocation == MorphLocation.Early:
             self.FrontFillItemInOwnWorld(self.progression, TotalSMZ3Item.ItemType.Morph)
+
+        # We do early Sword placement after Morph in case its Original location
+        if self.smz3World.Config.SwordLocation == SwordLocation.Early:
+            self.FrontFillItemInOwnWorld(self.progression, TotalSMZ3Item.ItemType.ProgressiveSword)
 
         # /* We place a PB and Super in Sphere 1 to make sure the filler
         #    * doesn't start locking items behind this when there are a

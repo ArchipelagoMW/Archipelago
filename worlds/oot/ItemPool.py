@@ -1388,6 +1388,10 @@ def get_pool_core(world):
         remove_junk_pool = list(remove_junk_pool) + ['Recovery Heart', 'Bombs (20)', 'Arrows (30)', 'Ice Trap']
 
         junk_candidates = [item for item in pool if item in remove_junk_pool]
+        if len(pending_junk_pool) > len(junk_candidates):
+            excess = len(pending_junk_pool) - len(junk_candidates)
+            if world.triforce_hunt:
+                raise RuntimeError(f"Items in the pool for player {world.player} exceed locations. Add {excess} location(s) or remove {excess} triforce piece(s).")
         while pending_junk_pool:
             pending_item = pending_junk_pool.pop()
             if not junk_candidates:

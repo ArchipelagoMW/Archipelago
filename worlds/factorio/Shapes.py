@@ -1,7 +1,7 @@
 from typing import Dict, List, Set
 from collections import deque
 
-from worlds.factorio.Options import TechTreeLayout
+from .Options import TechTreeLayout
 
 funnel_layers = {TechTreeLayout.option_small_funnels: 3,
                  TechTreeLayout.option_medium_funnels: 4,

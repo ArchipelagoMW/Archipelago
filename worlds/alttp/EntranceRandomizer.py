@@ -212,9 +212,7 @@ def parse_arguments(argv, no_defaults=False):
                              Alternatively, can be a ALttP Rom patched with a Link
                              sprite that will be extracted.
                              ''')
-    parser.add_argument('--gui', help='Launch the GUI', action='store_true')
 
-    parser.add_argument('--enemizercli', default=defval('EnemizerCLI/EnemizerCLI.Core'))
     parser.add_argument('--shufflebosses', default=defval('none'), choices=['none', 'basic', 'normal', 'chaos',
                                                                             "singularity"])
 

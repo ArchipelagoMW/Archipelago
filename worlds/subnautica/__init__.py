@@ -41,8 +41,8 @@ class SubnauticaWorld(World):
     location_name_to_id = all_locations
     option_definitions = Options.options
 
-    data_version = 5
-    required_client_version = (0, 3, 4)
+    data_version = 6
+    required_client_version = (0, 3, 5)
 
     prefill_items: List[Item]
     creatures_to_scan: List[str]
@@ -52,8 +52,16 @@ class SubnauticaWorld(World):
             self.create_item("Seaglide Fragment"),
             self.create_item("Seaglide Fragment")
         ]
-        self.creatures_to_scan = self.multiworld.random.sample(Creatures.all_creatures_presorted,
-                                                               self.multiworld.creature_scans[self.player].value)
+        scan_option: Options.AggressiveScanLogic = self.multiworld.creature_scan_logic[self.player]
+        creature_pool = scan_option.get_pool()
+
+        self.multiworld.creature_scans[self.player].value = min(
+            len(creature_pool),
+            self.multiworld.creature_scans[self.player].value
+        )
+
+        self.creatures_to_scan = self.multiworld.random.sample(creature_pool,
+                                                          self.multiworld.creature_scans[self.player].value)
 
     def create_regions(self):
         self.multiworld.regions += [
