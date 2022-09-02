@@ -88,6 +88,7 @@ def create_regions(world: MultiWorld, player: int):
         create_region(world, player, "Underground Tunnel West-East", locations_per_region),
         create_region(world, player, "Route 8", locations_per_region),
         create_region(world, player, "Celadon City", locations_per_region),
+        create_region(world, player, "Celadon Prize Corner", locations_per_region),
         create_region(world, player, "Celadon Gym", locations_per_region),
         create_region(world, player, "Route 16", locations_per_region),
         create_region(world, player, "Route 17", locations_per_region),
@@ -208,6 +209,7 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "Route 8", "Celadon City")
     connect(world, player, "Route 7", "Celadon City")
     connect(world, player, "Celadon City", "Celadon Gym", lambda state: state._pokemon_rb_can_cut(player), one_way=True)
+    connect(world, player, "Celadon City", "Celadon Prize Corner")
     connect(world, player, "Celadon City", "Route 16")
     connect(world, player, "Route 16", "Route 17", lambda state: state.has("Poke Flute", player) and state.has("Bicycle", player))
     connect(world, player, "Route 17", "Route 18", lambda state: state.has("Bicycle", player))
@@ -262,7 +264,7 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "Victory Road 2F", "Victory Road 3F", one_way=True)
     connect(world, player, "Victory Road 2F", "Indigo Plateau", one_way=True)
     connect(world, player, "Cerulean City", "Cerulean Cave 1F", lambda state:
-            state._pokemon_rb_cerulean_cave(state.world.cerulean_cave_condition[player].value, player) and
+            state._pokemon_rb_cerulean_cave(state.world.cerulean_cave_condition[player].value + (state.world.extra_key_items[player].value * 4), player) and
             state._pokemon_rb_can_surf(player), one_way=True)
     connect(world, player, "Cerulean Cave 1F", "Cerulean Cave 2F", one_way=True)
     connect(world, player, "Cerulean Cave 1F", "Cerulean Cave B1F", lambda state: state._pokemon_rb_can_surf(player), one_way=True)

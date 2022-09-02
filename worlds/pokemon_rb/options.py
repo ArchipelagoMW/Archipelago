@@ -29,12 +29,12 @@ class VictoryRoadCondition(Range):
 
 
 class CeruleanCaveCondition(Range):
-    """Number of badges, gyms defeeated, and key items (not counting items you can lose) required to access Cerulean Cave."""
-    """If extra_key_items is turned off, HMs will count in their place."""
+    """Number of badges, HMs, and key items (not counting items you can lose) required to access Cerulean Cave."""
+    """If extra_key_items is turned on, the number chosen will be increased by 4."""
     display_name = "Cerulean Cave Condition"
-    range_start = 16
-    range_end = 32
-    default = 24
+    range_start = 0
+    range_end = 25
+    default = 20
 
 
 class BadgeSanity(Toggle):
@@ -159,7 +159,7 @@ class RandomizePokemonMovesets(Choice):
 class StartWithFourMoves(Toggle):
     """If movesets are randomized, this will give all Pokemon 4 starting moves."""
     display_name = "Start With Four Moves"
-    default = 1
+    default = 0
 
 class RandomizePokemonTypes(Choice):
     """Randomize the types of each Pokemon. Follow Evolutions will ensure Pokémon's types remain the same when evolving

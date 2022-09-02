@@ -11,6 +11,7 @@ from .rom_addresses import rom_addresses
 from .text import encode_text
 from .rom import generate_output, get_base_rom_bytes, get_base_rom_path
 import worlds.pokemon_rb.poke_data as poke_data
+import logging
 
 class PokemonRedBlueWorld(World):
     """Pokemon"""
@@ -83,17 +84,20 @@ class PokemonRedBlueWorld(World):
 
             missing_mons = [pokemon for pokemon in poke_data.first_stage_pokemon if placed_mons[pokemon] == 0 and pokemon
                             not in poke_data.legendary_pokemon]
+            missing_mons = [pokemon for pokemon in poke_data.pokemon_data.keys() if placed_mons[pokemon] == 0 and pokemon
+                            not in poke_data.legendary_pokemon]
             for mon in missing_mons:
                 stat_base = get_base_stat_total(mon)
                 locations.sort(key=lambda slot: abs(get_base_stat_total(slot.item.name) - stat_base))
                 for location in locations:
-                    if placed_mons[location.item.name] > 1 or location.item.name not in poke_data.first_stage_pokemon:
+                    if placed_mons[location.item.name] > 1: # or location.item.name not in poke_data.first_stage_pokemon:
                         placed_mons[location.item.name] -= 1
                         location.item = self.create_item(mon)
                         location.item.location = location
                         placed_mons[mon] += 1
                         break
-            print(len([pokemon for pokemon in placed_mons if placed_mons[pokemon] > 1]))
+        print(len([pokemon for pokemon in placed_mons if placed_mons[pokemon] > 0]))
+        pass
 
     def create_items(self) -> None:
         locations = [location for location in get_locations(self.player) if location.type == "Item"]
@@ -121,22 +125,22 @@ class PokemonRedBlueWorld(World):
                         item_pool[i] = item
                         break
         self.world.random.shuffle(item_pool)
-        place_pc_item = True
-        if self.world.old_man[self.player].value == 1:
-            place_pc_item = [True, False][self.world.random.randint(0, 1)]
-        if place_pc_item:
-            for i, item in enumerate(item_pool):
-                if "Badge" not in item.name:
-                    self.world.get_location("Pallet Town - Player's PC", self.player).place_locked_item(item_pool.pop(i))
-                    break
-        if self.world.old_man[self.player].value == 1:
-            if not place_pc_item:
-                loc = self.world.get_location("Pallet Town - Player's PC", self.player)
-            else:
-                loc = self.world.get_location("Viridian City - Pokemart Quest", self.player)
-            for i, item in enumerate(item_pool):
-                if item.name == "Oak's Parcel":
-                    loc.place_locked_item(item_pool.pop(i))
+        # place_pc_item = True
+        # if self.world.old_man[self.player].value == 1:
+        #     place_pc_item = [True, False][self.world.random.randint(0, 1)]
+        # if place_pc_item:
+        #     for i, item in enumerate(item_pool):
+        #         if "Badge" not in item.name:
+        #             self.world.get_location("Pallet Town - Player's PC", self.player).place_locked_item(item_pool.pop(i))
+        #             break
+        # if self.world.old_man[self.player].value == 1:
+        #     if not place_pc_item:
+        #         loc = self.world.get_location("Pallet Town - Player's PC", self.player)
+        #     else:
+        #         loc = self.world.get_location("Viridian City - Pokemart Quest", self.player)
+        #     for i, item in enumerate(item_pool):
+        #         if item.name == "Oak's Parcel":
+        #             loc.place_locked_item(item_pool.pop(i))
 
         self.world.itempool += item_pool
 
@@ -145,6 +149,33 @@ class PokemonRedBlueWorld(World):
             self.world.random.shuffle(badges)
             from Fill import fill_restrictive
             fill_restrictive(self.world, state, badgelocs, badges, True, True)
+
+    def pre_fill(self):
+        if self.world.old_man[self.player].value == 1:
+            for item in self.world.itempool:
+                if item.name == "Oak's Parcel" and item.player == self.player:
+                    self.world.itempool.remove(item)
+                    break
+            else:
+                logging.waring(f"Early Parcel option selected for {self.world.player_name[self.player]} but no Oak's Parcel found in the item pool.")
+            locations = []
+            for location in self.world.get_locations():
+                if location.player == self.player \
+                        and location.item is None \
+                        and location.can_reach(self.world.state):
+                    locations.append(location)
+            self.world.random.shuffle(locations)
+            location = locations.pop()
+            location.place_locked_item(item)
+        location = self.world.get_location("Pallet Town - Player's PC", self.player)
+        if location.item is None:
+            player_items = []
+            for item in self.world.itempool:
+                if item.player == self.player:
+                    player_items.append(item)
+            self.world.random.shuffle(player_items)
+            location.place_locked_item(player_items[0])
+            self.world.itempool.remove(player_items[0])
 
     def create_regions(self):
         if self.world.free_fly_location[self.player].value:
