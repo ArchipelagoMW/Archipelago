@@ -13,7 +13,7 @@ that can be found in other players games include, gold, max health increase, spe
 Additionally, within your player settings yaml you can enable "Bad items" in the pool, resulting in negative effects on 
 the Noita world.
 
-As chests are quite rare in the Noita world, options in the Archipelago Noita mod allow you to set a kil count to spawn 
+As chests are quite rare in the Noita world, options in the Archipelago Noita mod allow you to set a kill count to spawn 
 chests. 
 
 ## What is the goal of Noita 
