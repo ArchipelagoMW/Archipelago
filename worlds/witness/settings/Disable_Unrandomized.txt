@@ -1,15 +1,15 @@
 Event Items:
-Town Tower 4th Door Opens - 0x17CFB,0x3C12B,0x00B8D,0x17CF7
-Monastery Laser Activation - 0x00A5B,0x17CE7,0x17FA9,0x17CA4
+Monastery Laser Activation - 0x00A5B,0x17CE7,0x17FA9
 Bunker Laser Activation - 0x00061,0x17D01,0x17C42
 Shadows Laser Activation - 0x00021,0x17D28,0x17C71
 
 Requirement Changes:
-0x17C65 - 0x00A5B | 0x17CE7 | 0x17FA9 | 0x17CA4
+0x17C65 - 0x00A5B | 0x17CE7 | 0x17FA9
 0x0C2B2 - 0x00061 | 0x17D01 | 0x17C42
 0x181B3 - 0x00021 | 0x17D28 | 0x17C71
 0x28B39 - True - Reflection
 0x17CAB - True - True
+0x2779A - True - 0x17CFB | 0x3C12B | 0x17CF7
 
 Disabled Locations:
 0x03505 (Tutorial Gate Close)
@@ -61,7 +61,7 @@ Disabled Locations:
 0x193AA (Monastery Branch Avoid 2)
 0x193AB (Monastery Branch Follow 1)
 0x193A6 (Monastery Branch Follow 2)
-0x17CA4 (Monastery Laser) - 0x193A6 - True
+0x17CA4 (Monastery Laser)
 0x18590 (Tree Outlines) - True - Symmetry & Environment
 0x28AE3 (Vines Shadows Follow) - 0x18590 - Shadows Follow & Environment
 0x28938 (Four-way Apple Tree) - 0x28AE3 - Environment
@@ -104,3 +104,5 @@ Disabled Locations:
 0x09DE0 (Bunker Laser)
 0x0A079 (Bunker Elevator Control)
 0x0042D (Mountaintop River Shape)
+
+0x17CAA (River Door to Garden Panel)

@@ -1,5 +1,6 @@
 from BaseClasses import Item, ItemClassification
 import typing
+from .MissionTables import vanilla_mission_req_table
 
 
 class ItemData(typing.NamedTuple):
@@ -49,27 +50,27 @@ item_table = {
 
     "Projectile Accelerator (Bunker)": ItemData(200 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 0),
     "Neosteel Bunker (Bunker)": ItemData(201 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 1),
-    "Titanium Housing (Missile Turret)": ItemData(202 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 2),
+    "Titanium Housing (Missile Turret)": ItemData(202 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 2, classification=ItemClassification.filler),
     "Hellstorm Batteries (Missile Turret)": ItemData(203 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 3),
     "Advanced Construction (SCV)": ItemData(204 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 4),
     "Dual-Fusion Welders (SCV)": ItemData(205 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 5),
-    "Fire-Suppression System (Building)": ItemData(206 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 6),
+    "Fire-Suppression System (Building)": ItemData(206 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 6, classification=ItemClassification.filler),
     "Orbital Command (Building)": ItemData(207 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 7),
     "Stimpack (Marine)": ItemData(208 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 8),
-    "Combat Shield (Marine)": ItemData(209 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 9),
-    "Advanced Medic Facilities (Medic)": ItemData(210 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 10),
-    "Stabilizer Medpacks (Medic)": ItemData(211 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 11),
+    "Combat Shield (Marine)": ItemData(209 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 9, classification=ItemClassification.progression),
+    "Advanced Medic Facilities (Medic)": ItemData(210 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 10, classification=ItemClassification.progression),
+    "Stabilizer Medpacks (Medic)": ItemData(211 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 11, classification=ItemClassification.progression),
     "Incinerator Gauntlets (Firebat)": ItemData(212 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 12, classification=ItemClassification.filler),
     "Juggernaut Plating (Firebat)": ItemData(213 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 13),
     "Concussive Shells (Marauder)": ItemData(214 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 14),
     "Kinetic Foam (Marauder)": ItemData(215 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 15),
     "U-238 Rounds (Reaper)": ItemData(216 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 16),
-    "G-4 Clusterbomb (Reaper)": ItemData(217 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 17, classification=ItemClassification.filler),
+    "G-4 Clusterbomb (Reaper)": ItemData(217 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 17, classification=ItemClassification.progression),
 
     "Twin-Linked Flamethrower (Hellion)": ItemData(300 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 0, classification=ItemClassification.filler),
     "Thermite Filaments (Hellion)": ItemData(301 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 1),
-    "Cerberus Mine (Vulture)": ItemData(302 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 2),
-    "Replenishable Magazine (Vulture)": ItemData(303 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 3),
+    "Cerberus Mine (Vulture)": ItemData(302 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 2, classification=ItemClassification.filler),
+    "Replenishable Magazine (Vulture)": ItemData(303 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 3, classification=ItemClassification.filler),
     "Multi-Lock Weapons System (Goliath)": ItemData(304 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 4),
     "Ares-Class Targeting System (Goliath)": ItemData(305 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 5),
     "Tri-Lithium Power Cell (Diamondback)": ItemData(306 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 6, classification=ItemClassification.filler),
@@ -77,9 +78,9 @@ item_table = {
     "Maelstrom Rounds (Siege Tank)": ItemData(308 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 8),
     "Shaped Blast (Siege Tank)": ItemData(309 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 9),
     "Rapid Deployment Tube (Medivac)": ItemData(310 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 10, classification=ItemClassification.filler),
-    "Advanced Healing AI (Medivac)": ItemData(311 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 11),
+    "Advanced Healing AI (Medivac)": ItemData(311 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 11, classification=ItemClassification.filler),
     "Tomahawk Power Cells (Wraith)": ItemData(312 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 12, classification=ItemClassification.filler),
-    "Displacement Field (Wraith)": ItemData(313 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 13),
+    "Displacement Field (Wraith)": ItemData(313 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 13, classification=ItemClassification.filler),
     "Ripwave Missiles (Viking)": ItemData(314 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 14),
     "Phobos-Class Weapons System (Viking)": ItemData(315 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 15),
     "Cross-Spectrum Dampeners (Banshee)": ItemData(316 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 16, classification=ItemClassification.filler),
@@ -88,7 +89,7 @@ item_table = {
     "Defensive Matrix (Battlecruiser)": ItemData(319 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 19, classification=ItemClassification.filler),
     "Ocular Implants (Ghost)": ItemData(320 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 20),
     "Crius Suit (Ghost)": ItemData(321 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 21),
-    "Psionic Lash (Spectre)": ItemData(322 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 22),
+    "Psionic Lash (Spectre)": ItemData(322 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 22, classification=ItemClassification.progression),
     "Nyx-Class Cloaking Module (Spectre)": ItemData(323 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 23),
     "330mm Barrage Cannon (Thor)": ItemData(324 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 24, classification=ItemClassification.filler),
     "Immortality Protocol (Thor)": ItemData(325 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 25, classification=ItemClassification.filler),
@@ -97,12 +98,12 @@ item_table = {
     "Missile Turret": ItemData(401 + SC2WOL_ITEM_ID_OFFSET, "Building", 1, classification=ItemClassification.progression),
     "Sensor Tower": ItemData(402 + SC2WOL_ITEM_ID_OFFSET, "Building", 2),
 
-    "War Pigs": ItemData(500 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 0),
+    "War Pigs": ItemData(500 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 0, classification=ItemClassification.progression),
     "Devil Dogs": ItemData(501 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 1, classification=ItemClassification.filler),
     "Hammer Securities": ItemData(502 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 2),
-    "Spartan Company": ItemData(503 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 3),
+    "Spartan Company": ItemData(503 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 3, classification=ItemClassification.progression),
     "Siege Breakers": ItemData(504 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 4),
-    "Hel's Angel": ItemData(505 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 5),
+    "Hel's Angel": ItemData(505 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 5, classification=ItemClassification.progression),
     "Dusk Wings": ItemData(506 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 6),
     "Jackson's Revenge": ItemData(507 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 7),
 
@@ -153,12 +154,7 @@ basic_unit: typing.Tuple[str, ...] = (
 item_name_groups = {}
 for item, data in item_table.items():
     item_name_groups.setdefault(data.type, []).append(item)
-item_name_groups["Missions"] = ["Beat Liberation Day", "Beat The Outlaws", "Beat Zero Hour", "Beat Evacuation",
-                         "None Outbreak", "Beat Safe Haven", "Beat Haven's Fall", "Beat Smash and Grab", "Beat The Dig",
-                         "Beat The Moebius Factor", "Beat Supernova", "Beat Maw of the Void", "Beat Devil's Playground",
-                         "Beat Welcome to the Jungle", "Beat Breakout", "Beat Ghost of a Chance",
-                         "Beat The Great Train Robbery", "Beat Cutthroat", "Beat Engine of Destruction",
-                         "Beat Media Blitz", "Beat Piercing the Shroud"]
+item_name_groups["Missions"] = ["Beat " + mission_name for mission_name in vanilla_mission_req_table]
 
 filler_items: typing.Tuple[str, ...] = (
     '+15 Starting Minerals',

@@ -63,7 +63,7 @@ class PlandoSettings(enum.IntFlag):
 
     def __str__(self) -> str:
         if self.value:
-            return ", ".join((flag.name for flag in PlandoSettings if self.value & flag.value))
+            return ", ".join(flag.name for flag in PlandoSettings if self.value & flag.value)
         return "Off"
 
 
@@ -84,11 +84,6 @@ def mystery_argparse():
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=defaults["players"], type=lambda value: max(int(value), 1))
     parser.add_argument('--spoiler', type=int, default=defaults["spoiler"])
-    parser.add_argument('--lttp_rom', default=options["lttp_options"]["rom_file"],
-                        help="Path to the 1.0 JP LttP Baserom.")  # absolute, relative to cwd or relative to app path
-    parser.add_argument('--sm_rom', default=options["sm_options"]["rom_file"],
-                        help="Path to the 1.0 JP SM Baserom.")
-    parser.add_argument('--enemizercli', default=resolve_path(defaults["enemizer_path"], local_path))
     parser.add_argument('--outputpath', default=resolve_path(options["general_options"]["output_path"], user_path),
                         help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
     parser.add_argument('--race', action='store_true', default=defaults["race"])
@@ -182,10 +177,6 @@ def main(args=None, callback=ERmain):
     erargs.outputpath = args.outputpath
 
     Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
-
-    erargs.lttp_rom = args.lttp_rom
-    erargs.sm_rom = args.sm_rom
-    erargs.enemizercli = args.enemizercli
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
@@ -396,7 +387,7 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
         return get_choice(option_key, category_dict)
     if game in AutoWorldRegister.world_types:
         game_world = AutoWorldRegister.world_types[game]
-        options = ChainMap(game_world.options, Options.per_game_common_options)
+        options = ChainMap(game_world.option_definitions, Options.per_game_common_options)
         if option_key in options:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
@@ -559,7 +550,7 @@ def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings
         setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
     if ret.game in AutoWorldRegister.world_types:
-        for option_key, option in world_type.options.items():
+        for option_key, option in world_type.option_definitions.items():
             handle_option(ret, game_weights, option_key, option)
         for option_key, option in Options.per_game_common_options.items():
             # skip setting this option if already set from common_options, defaulting to root option

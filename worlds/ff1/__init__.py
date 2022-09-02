@@ -27,7 +27,7 @@ class FF1World(World):
     Part puzzle and part speed-run, it breathes new life into one of the most influential games ever made.
     """
 
-    options = ff1_options
+    option_definitions = ff1_options
     game = "Final Fantasy"
     topology_present = False
     remote_items = True
@@ -54,6 +54,7 @@ class FF1World(World):
         locations = get_options(self.world, 'locations', self.player)
         rules = get_options(self.world, 'rules', self.player)
         menu_region = self.ff1_locations.create_menu_region(self.player, locations, rules)
+        menu_region.world = self.world
         terminated_event = Location(self.player, CHAOS_TERMINATED_EVENT, EventId, menu_region)
         terminated_item = Item(CHAOS_TERMINATED_EVENT, ItemClassification.progression, EventId, self.player)
         terminated_event.place_locked_item(terminated_item)
