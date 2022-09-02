@@ -903,7 +903,7 @@ class CollectionState():
 
 class Region:
     name: str
-    hint: str
+    hint: Optional[str]
     player: int
     world: Optional[MultiWorld]
     entrances: List[Entrance]
@@ -917,14 +917,13 @@ class Region:
     is_light_world: bool = False
     is_dark_world: bool = False
 
-    def __init__(self, name: str, player: int, world: MultiWorld, hint: str = None):
+    def __init__(self, name: str, player: int, world: MultiWorld, hint: Optional[str] = None):
         self.name = name
         self.entrances = []
         self.exits = []
         self.locations = []
         self.world = world
-        if hint:
-            self.hint = hint
+        self.hint = hint
         self.player = player
 
     def can_reach(self, state: CollectionState) -> bool:
