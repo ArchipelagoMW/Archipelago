@@ -158,12 +158,12 @@ class TriforceGoal(Range):
     """Number of Triforce pieces required to complete the game."""
     display_name = "Required Triforce Pieces"
     range_start = 1
-    range_end = 100
+    range_end = 80
     default = 20
 
 
 class ExtraTriforces(Range):
-    """Percentage of additional Triforce pieces in the pool, separate from the item pool setting."""
+    """Percentage of additional Triforce pieces in the pool. With high numbers, you may need to randomize additional locations to have enough items."""
     display_name = "Percentage of Extra Triforce Pieces"
     range_start = 0
     range_end = 100
