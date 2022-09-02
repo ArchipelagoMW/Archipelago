@@ -70,7 +70,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
     world.player_name = args.name.copy()
-    world.enemizer = args.enemizercli
     world.sprite = args.sprite.copy()
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
