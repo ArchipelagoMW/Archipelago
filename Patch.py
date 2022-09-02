@@ -17,7 +17,7 @@ ModuleUpdate.update()
 
 import Utils
 
-current_patch_version = 4
+current_patch_version = 5
 
 
 class AutoPatchRegister(type):
