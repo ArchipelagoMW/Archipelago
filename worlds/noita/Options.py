@@ -8,12 +8,12 @@ class TotalLocations(Range):
     range_end = 500
     default = 100
 
-class BadAffects(DefaultOnToggle):
-    """Negative affects on the Noita world are added to the item pool."""
+class BadEffects(DefaultOnToggle):
+    """Negative effects on the Noita world are added to the item pool."""
     display_name = "Bad Times"
 
 
 noita_options: Dict[str, type(Option)] = {
     "total_locations":      TotalLocations,
-    "bad_affects":          BadAffects
+    "bad_effects":          BadEffects
 }

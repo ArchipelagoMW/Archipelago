@@ -40,7 +40,7 @@ class NoitaWorld(World):
 
     def generate_basic(self):
 
-        if self.world.bad_affects[self.player].value:
+        if self.world.bad_effects[self.player].value:
             pool_option = 0
         else:
             pool_option = 1
@@ -74,7 +74,7 @@ class NoitaWorld(World):
         return {
             "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for i in range(16)),
             "totalLocations": self.world.total_locations[self.player].value,
-            "badAffects": self.world.bad_affects[self.player].value,
+            "badEffects": self.world.bad_effects[self.player].value,
         }
 
     def create_item(self, name: str) -> Item:
@@ -83,6 +83,8 @@ class NoitaWorld(World):
             classification = ItemClassification.progression
         elif name.startswith("Wand"):
             classification = ItemClassification.useful
+        elif name == "Bad":
+            classification = ItemClassification.trap
         else:
             classification = ItemClassification.filler
         item = NoitaItem(name, classification, item_id, self.player)
