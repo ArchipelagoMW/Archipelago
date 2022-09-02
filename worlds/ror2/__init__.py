@@ -93,7 +93,7 @@ class RiskOfRainWorld(World):
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
-        set_rules(self.world, self.player)
+        set_rules(self.multiworld, self.player)
 
     def create_regions(self) -> None:
         menu = create_region(self.multiworld, self.player, "Menu")

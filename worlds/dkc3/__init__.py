@@ -103,7 +103,7 @@ class DKC3World(World):
         # Secret Caves
         total_required_locations += 13
 
-        if self.world.kongsanity[self.player]:
+        if self.multiworld.kongsanity[self.player]:
             total_required_locations += 39
 
         ## Brothers Bear
@@ -122,7 +122,7 @@ class DKC3World(World):
         total_junk_count = total_required_locations - len(itempool)
 
         junk_pool = []
-        for item_name in self.world.random.choices(list(junk_table.keys()), k=total_junk_count):
+        for item_name in self.multiworld.random.choices(list(junk_table.keys()), k=total_junk_count):
             junk_pool += [self.create_item(item_name)]
 
         itempool += junk_pool

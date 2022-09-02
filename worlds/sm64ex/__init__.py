@@ -75,11 +75,11 @@ class SM64World(World):
         if (not self.multiworld.EnableCoinStars[self.player].value):
             starcount = max(35,self.multiworld.AmountOfStars[self.player].value-15)
         starcount = max(starcount, self.multiworld.FirstBowserStarDoorCost[self.player].value,
-                        self.multiworld.BasementStarDoorCost[self.player].value, self.world.SecondFloorStarDoorCost[self.player].value,
-                        self.multiworld.MIPS1Cost[self.player].value, self.world.MIPS2Cost[self.player].value,
+                        self.multiworld.BasementStarDoorCost[self.player].value, self.multiworld.SecondFloorStarDoorCost[self.player].value,
+                        self.multiworld.MIPS1Cost[self.player].value, self.multiworld.MIPS2Cost[self.player].value,
                         self.multiworld.StarsToFinish[self.player].value)
         self.multiworld.itempool += [self.create_item("Power Star") for i in range(0,starcount)]
-        self.multiworld.itempool += [self.create_item("1Up Mushroom") for i in range(starcount,120 - (15 if not self.world.EnableCoinStars[self.player].value else 0))]
+        self.multiworld.itempool += [self.create_item("1Up Mushroom") for i in range(starcount,120 - (15 if not self.multiworld.EnableCoinStars[self.player].value else 0))]
 
         if (not self.multiworld.ProgressiveKeys[self.player].value):
             key1 = self.create_item("Basement Key")
