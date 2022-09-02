@@ -298,7 +298,7 @@ class Toggle(NumericOption):
         if type(data) == str:
             return cls.from_text(data)
         else:
-            return cls(data)
+            return cls(int(data))
 
     @classmethod
     def get_option_name(cls, value):
