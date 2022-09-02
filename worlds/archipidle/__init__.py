@@ -49,7 +49,7 @@ class ArchipIDLEWorld(World):
         self.prog_items = set()
 
         for i in range(100):
-            item = Item(
+            item = ArchipIDLEItem(
                 item_table_copy[i],
                 ItemClassification.progression if i < 20 else ItemClassification.filler,
                 self.item_name_to_id[item_table_copy[i]],
@@ -57,7 +57,6 @@ class ArchipIDLEWorld(World):
             )
             if i < 20:
                 self.prog_items.add(item_table_copy[i])
-            item.game = 'ArchipIDLE'
             self.world.itempool.append(item)
 
     def set_rules(self):
@@ -87,6 +86,10 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None):
             region.locations.append(location)
 
     return region
+
+
+class ArchipIDLEItem(Item):
+    game = "ArchipIDLE"
 
 
 class ArchipIDLELocation(Location):

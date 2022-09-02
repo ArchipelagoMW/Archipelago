@@ -5,7 +5,7 @@ from .Locations import RiskOfRainLocation, item_pickups
 from .Rules import set_rules
 
 from BaseClasses import Region, Entrance, Item, ItemClassification, MultiWorld, Tutorial
-from .Options import ror2_options
+from .Options import ror2_options, ItemWeights
 from worlds.AutoWorld import World, WebWorld
 
 client_version = 1
