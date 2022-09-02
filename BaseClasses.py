@@ -204,10 +204,11 @@ class MultiWorld():
         for player in self.player_ids:
             self.custom_data[player] = {}
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
+            self.worlds[player] = world_type(self, player)
             for option_key in world_type.option_definitions:
                 setattr(self, option_key, getattr(args, option_key, {}))
+                self.worlds[player].options[option_key] = getattr(args, option_key)[player]
 
-            self.worlds[player] = world_type(self, player)
 
     def set_item_links(self):
         item_links = {}

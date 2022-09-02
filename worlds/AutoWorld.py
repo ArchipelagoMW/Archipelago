@@ -121,6 +121,7 @@ class World(metaclass=AutoWorldRegister):
     A Game should have its own subclass of World in which it defines the required data structures."""
 
     option_definitions: Dict[str, Option[Any]] = {}  # link your Options mapping
+    options: Dict[str, Option[Any]] = {}  # option names to resulting option object
     game: str  # name the game
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
 
