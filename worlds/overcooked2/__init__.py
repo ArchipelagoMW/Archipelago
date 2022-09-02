@@ -2,15 +2,14 @@ import os
 import json
 
 from enum import Enum
-
-from typing import Callable
+from typing import Callable, Dict, Any
 
 from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, RegionType, Tutorial
 from worlds.AutoWorld import World, WebWorld
 
 from .Overcooked2Levels import Overcooked2Level, Overcooked2GameWorld, Overcooked2GenericLevel, level_shuffle_factory
 from .Locations import Overcooked2Location, oc2_location_name_to_id, oc2_location_id_to_name
-from .Options import overcooked_options
+from .Options import overcooked_options, OC2Options, OC2OnToggle
 from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies, oc2_base_id, oc2_end_id
 from .Logic import has_requirements_for_level_star, has_requirements_for_level_access
 
@@ -28,10 +27,12 @@ class Overcooked2Web(WebWorld):
 
     tutorials = [setup_en]
 
+
 class PrepLevelMode(Enum):
     original = 0
     excluded = 1
     ayce = 2
+
 
 class Overcooked2World(World):
     """
@@ -59,6 +60,8 @@ class Overcooked2World(World):
     location_id_to_name = oc2_location_name_to_id
     location_name_to_id = oc2_location_id_to_name
 
+    options: Dict[str, Any]
+
     # Helper Functions
 
     def create_item(self, item: str):
@@ -69,7 +72,7 @@ class Overcooked2World(World):
 
         return Overcooked2Item(item, classification, self.item_name_to_id[item], self.player)
 
-    def create_event(self, event: str) -> None:
+    def create_event(self, event: str) -> Overcooked2Item:
         return Overcooked2Item(event, ItemClassification.progression_skip_balancing, None, self.player)
 
     def place_event(self,  location_name: str, item_name: str):
@@ -139,6 +142,10 @@ class Overcooked2World(World):
             location
         )
 
+    def get_options(self) -> Dict[str, Any]:
+        return OC2Options({option.__name__: getattr(self.world, name)[self.player].result
+                          if issubclass(option, OC2OnToggle) else getattr(self.world, name)[self.player].value
+                           for name, option in overcooked_options.items()})
     # YAML Config
 
     always_serve_oldest_order: bool
@@ -160,21 +167,14 @@ class Overcooked2World(World):
     # Autoworld Hooks
 
     def generate_early(self):
-        self.always_serve_oldest_order        = bool(self.world.AlwaysServerOldestOrder      [self.player].value)
-        self.always_preserve_cooking_progress = bool(self.world.AlwaysPreserveCookingProgress[self.player].value)
-        self.display_leaderboard_scores       = bool(self.world.DisplayLeaderboardScores     [self.player].value)
-        self.shuffle_level_order              = bool(self.world.ShuffleLevelOrder            [self.player].value)
-        self.fix_bugs                         = bool(self.world.FixBugs                      [self.player].value)
-        self.shorter_level_duration           = bool(self.world.ShorterLevelDuration         [self.player].value)
-        self.stars_to_win                     = int (self.world.StarsToWin                   [self.player].value)
-        self.prep_levels = PrepLevelMode(self.world.PrepLevels[self.player].value)
+        self.options = self.get_options()
 
         # 0.0 to 1.0 where 1.0 is World Record
-        self.star_threshold_scale = float(self.world.StarThresholdScale[self.player].value) / 100.0
+        self.star_threshold_scale = self.options["StarThresholdScale"] / 100.0
 
         # Generate level unlock requirements such that the levels get harder to unlock
         # the further the game has progressed, and levels progress radially rather than linearly
-        self.level_unlock_counts = level_unlock_requirement_factory(self.stars_to_win)
+        self.level_unlock_counts = level_unlock_requirement_factory(self.options["StarsToWin"])
 
         # Assign new kitchens to each spot on the overworld using pure random chance and nothing else
         if self.shuffle_level_order:
