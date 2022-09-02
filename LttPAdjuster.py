@@ -61,7 +61,7 @@ def main():
     parser.add_argument('--allowcollect', help='Allow collection of other player items', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
     parser.add_argument('--triforcehud', default='hide_goal', const='hide_goal', nargs='?',
-                        choices=['normal', 'hide_goal', 'hide_required', 'hide_both'],
+                        choices=['always_show', 'hide_goal', 'hide_required', 'hide_both'],
                         help='''\
                             Hide the triforce hud in certain circumstances.
                             hide_goal will hide the hud until finding a triforce piece, hide_required will hide the total amount needed to win
