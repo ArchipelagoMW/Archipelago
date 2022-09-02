@@ -28,7 +28,9 @@ ability_rom_data = {
 
 item_rom_data = {
     0xBC3001: [0x18E4, 0x1], # 1-Up Mushroom
+
     0xBC3002: [0xF48, 0x1, 0x1F], # Yoshi Egg
+    0xBC3012: [0xF48, 0x1, 0x09], # Boss Token
 
     0xBC000E: [0x1F28, 0x1, 0x1C], # Yellow Switch Palace
     0xBC000F: [0x1F27, 0x1, 0x1C], # Green Switch Palace
@@ -515,6 +517,24 @@ def handle_yoshi_box(rom):
     return
 
 
+def handle_bowser_damage(rom):
+
+    rom.write_bytes(0x1A509, bytearray([0x20, 0x00, 0xBC])) # JSR $03BC00
+
+    BOWSER_BALLS_SUB_ADDR = 0x01BC00
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x00, bytearray([0x08]))                   # PHP
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x01, bytearray([0xAD, 0x48, 0x0F]))       # LDA $F48
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x04, bytearray([0xCF, 0xA1, 0xBF, 0x03])) # CMP $03BFA1
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x08, bytearray([0x90, 0x06]))             # BCC +0x06
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x0A, bytearray([0x28]))                   # PLP
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x0B, bytearray([0xEE, 0xB8, 0x14]))       # INC $14B8
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x0E, bytearray([0x80, 0x01]))             # BRA +0x01
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x10, bytearray([0x28]))                   # PLP
+    rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x11, bytearray([0x60]))                   # RTS
+
+    return
+
+
 def patch_rom(world, rom, player, active_level_dict):
     local_random = world.slot_seeds[player]
 
@@ -580,9 +600,8 @@ def patch_rom(world, rom, player, active_level_dict):
     # Always allow Start+Select
     rom.write_bytes(0x2267, bytearray([0xEA, 0xEA]))
 
-    # Repurpose Bonus Stars counter for Yoshi Eggs
-    if world.goal[player] == "yoshi_egg_hunt":
-        rom.write_bytes(0x3F1AA, bytearray([0x00] * 0x20))
+    # Repurpose Bonus Stars counter for Boss Token or Yoshi Eggs
+    rom.write_bytes(0x3F1AA, bytearray([0x00] * 0x20))
 
     # Prevent Switch Palaces setting the Switch Palace flags
     rom.write_bytes(0x6EC9A, bytearray([0xEA, 0xEA]))
@@ -592,6 +611,7 @@ def patch_rom(world, rom, player, active_level_dict):
     handle_ability_code(rom)
 
     handle_yoshi_box(rom)
+    handle_bowser_damage(rom)
 
     # Handle Level Shuffle Here
     if world.level_shuffle[player]:

@@ -224,19 +224,22 @@ async def smw_game_watcher(ctx: Context):
 
             snes_buffered_write(ctx, SMW_RECV_PROGRESS_ADDR, bytes([recv_index]))
             if item.item in item_rom_data:
-                item_count = await snes_read(ctx, WRAM_START + item_rom_data[item.item][0], 0x1)
-                increment = item_rom_data[item.item][1]
+                if not (item.item == 0xBC0002 and goal[0] != 1) and not (item.item == 0xBC0012 and goal[0] != 0):
+                    # Don't handle Yoshi Eggs in Bowser Goal or Boss Tokens in Yoshi Egg Hunt Goal
 
-                new_item_count = item_count[0]
-                if increment > 1:
-                    new_item_count = increment
-                else:
-                    new_item_count += increment
+                    item_count = await snes_read(ctx, WRAM_START + item_rom_data[item.item][0], 0x1)
+                    increment = item_rom_data[item.item][1]
 
-                if verify_game_state[0] == 0x14 and len(item_rom_data[item.item]) > 2:
-                    snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([item_rom_data[item.item][2]]))
+                    new_item_count = item_count[0]
+                    if increment > 1:
+                        new_item_count = increment
+                    else:
+                        new_item_count += increment
 
-                snes_buffered_write(ctx, WRAM_START + item_rom_data[item.item][0], bytes([new_item_count]))
+                    if verify_game_state[0] == 0x14 and len(item_rom_data[item.item]) > 2:
+                        snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([item_rom_data[item.item][2]]))
+
+                    snes_buffered_write(ctx, WRAM_START + item_rom_data[item.item][0], bytes([new_item_count]))
             elif item.item in ability_rom_data:
                 # Handle Upgrades
                 for rom_data in ability_rom_data[item.item]:
