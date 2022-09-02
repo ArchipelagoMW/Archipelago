@@ -88,7 +88,6 @@ def create_regions(world, player: int, active_locations):
     cw_ltower_region = create_region(world, player, active_locations, LocationName.cw_ltower,
                                      cw_ltower_region_locations, None)
 
-
     # Set up the regions correctly.
     world.regions += [
         menu_region,
@@ -107,8 +106,8 @@ def create_regions(world, player: int, active_locations):
 
 def connect_regions(world, player):
     names: typing.Dict[str, int] = {}
-    connect(world, player, names, 'Menu', 'Warp 2',
-            lambda state: (state.has(ItemName.special_two + 3, player)))
+    # connect(world, player, names, 'Menu', 'Warp 2',
+    #         lambda state: (state.has(ItemName.special_two + 3, player)))
 
     connect(world, player, names, 'Menu', LocationName.forest_of_silence)
 

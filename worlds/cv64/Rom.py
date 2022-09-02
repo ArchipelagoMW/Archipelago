@@ -44,17 +44,47 @@ rom_loc_offsets = {
 }
 
 rom_item_bytes = {
+    "White jewel": 0x01,
     "Red jewel(S)": 0x02,
     "Red jewel(L)": 0x03,
     "Special1": 0x04,
+    "Special2": 0x05,
+    "Roast chicken": 0x06,
     "Roast beef": 0x07,
+    "Healing kit": 0x08,
+    "Purifying": 0x09,
+    "Cure ampoule": 0x0A,
+    "pot-pourri": 0x0B,
     "PowerUp": 0x0C,
+    "Holy water": 0x0D,
+    "Cross": 0x0E,
+    "Axe": 0x0F,
+    "Knife": 0x10,
+    "Wooden stake": 0x11,
+    "Rose": 0x12,
+    "The contract": 0x13,
+    "engagement ring": 0x14,
+    "Magical Nitro": 0x15,
+    "Mandragora": 0x16,
     "Sun card": 0x17,
     "Moon card": 0x18,
+    "Incandescent gaze": 0x19,
     "500 GOLD": 0x1A,
     "300 GOLD": 0x1B,
     "100 GOLD": 0x1C,
+    "Archives key": 0x1D,
     "Left Tower Key": 0x1E,
+    "Storeroom Key": 0x1F,
+    "Garden Key": 0x20,
+    "Copper Key": 0x21,
+    "Chamber Key": 0x22,
+    "Execution Key": 0x23,
+    "Science Key1": 0x24,
+    "Science Key2": 0x25,
+    "Science Key3": 0x26,
+    "Clocktower Key1": 0x27,
+    "Clocktower Key2": 0x28,
+    "Clocktower Key3": 0x29,
 }
 
 
@@ -176,6 +206,13 @@ def patch_rom(world, rom, player, offsets_to_ids):
     rom.write_bytes(0x106780, PatchName.normal_door_code)
     rom.write_bytes(0x6EF298, PatchName.ct_door_hook)
     rom.write_bytes(0x1067B0, PatchName.ct_door_code)
+
+    # Nitro and Mandragora patches
+    # Prevent "can explode" flag from setting
+    rom.write_bytes(0xB5D7AA, [0x00, 0x00, 0x00, 0x00])
+    # Prevent tossing Nitro in Hazardous Waste Disposers
+    # rom.write_bytes(0xBF648, [0x24, 0x02, 0x00, 0x01])  # ADDIU	V0, R0, 0x0001
+    # Prevent setting the "can explode" bitflag
 
     # Write the new item bytes
     for offset, item_id in offsets_to_ids.items():
