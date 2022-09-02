@@ -23,6 +23,7 @@ ROMNAME_SIZE = 0x15
 ROMHASH_SIZE = 0x15
 
 SMW_PROGRESS_DATA = 0x1F02
+SMW_DRAGON_COINS_DATA = 0x1F2F
 SMW_EVENT_ROM_DATA = ROM_START + 0x2D608
 SMW_GOAL_DATA = ROM_START + 0x01BFA0
 SMW_REQUIRED_BOSSES_DATA = ROM_START + 0x01BFA1
@@ -154,7 +155,17 @@ async def smw_game_watcher(ctx: Context):
 
                 if level_data[1] == 2:
                     # Dragon Coins Check
-                    pass
+
+                    progress_byte = (level_data[0] // 8) + SMW_DRAGON_COINS_DATA
+                    progress_bit  = 7 - (level_data[0] % 8)
+
+                    data = await snes_read(ctx, WRAM_START + progress_byte, 1)
+                    masked_data = data[0] & (1 << progress_bit)
+                    bit_set = (masked_data != 0)
+
+                    if bit_set:
+                        # SMW_TODO: Handle non-included checks
+                        new_checks.append(loc_id)
                 else:
                     event_id_value = event_id[0] + level_data[1]
 
