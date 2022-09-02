@@ -6,13 +6,14 @@ from enum import Enum
 from typing import Callable
 
 from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, RegionType, Tutorial
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 
 from .Overcooked2Levels import Overcooked2Level, Overcooked2GameWorld, Overcooked2GenericLevel, level_shuffle_factory
 from .Locations import Overcooked2Location, oc2_location_name_to_id, oc2_location_id_to_name
 from .Options import overcooked_options
 from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies, oc2_base_id, oc2_end_id
 from .Logic import has_requirements_for_level_star, has_requirements_for_level_access
+
 
 class Overcooked2Web(WebWorld):
     bug_report_page = "https://github.com/toasterparty/oc2-modding/issues"

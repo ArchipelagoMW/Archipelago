@@ -2,12 +2,14 @@ from BaseClasses import Item
 import typing
 import codecs
 
+
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
 
 
 class Overcooked2Item(Item):
     game: str = "Overcooked! 2"
+
 
 oc2_base_id: int = int.from_bytes(codecs.encode(b"oc2", "hex"), byteorder="big")
 
