@@ -277,6 +277,8 @@ class WitnessPlayerLocations:
         if not is_option_enabled(world, player, "shuffle_postgame"):
             self.CHECK_LOCATIONS -= postgame
 
+        self.CHECK_LOCATIONS.discard(StaticWitnessLogic.CHECKS_BY_HEX[player_logic.VICTORY_LOCATION]["checkName"])
+
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS - {
             StaticWitnessLogic.CHECKS_BY_HEX[check_hex]["checkName"]
             for check_hex in player_logic.COMPLETELY_DISABLED_CHECKS

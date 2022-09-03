@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import sys
+import pathlib
 from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, TYPE_CHECKING
 
 from Options import Option
@@ -26,7 +27,8 @@ class AutoWorldRegister(type):
 
         # build rest
         dct["item_names"] = frozenset(dct["item_name_to_id"])
-        dct["item_name_groups"] = dct.get("item_name_groups", {})
+        dct["item_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
+                                   in dct.get("item_name_groups", {}).items()}
         dct["item_name_groups"]["Everything"] = dct["item_names"]
         dct["location_names"] = frozenset(dct["location_name_to_id"])
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
@@ -48,13 +50,14 @@ class AutoWorldRegister(type):
                 raise RuntimeError(f"""Game {dct["game"]} already registered.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
         new_class.__file__ = sys.modules[new_class.__module__].__file__
-        new_class.is_zip = ".apworld" in new_class.__file__
+        if ".apworld" in new_class.__file__:
+            new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
         return new_class
 
 
 class AutoLogicRegister(type):
-    def __new__(cls, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoLogicRegister:
-        new_class = super().__new__(cls, name, bases, dct)
+    def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoLogicRegister:
+        new_class = super().__new__(mcs, name, bases, dct)
         function: Callable[..., Any]
         for item_name, function in dct.items():
             if item_name == "copy_mixin":
@@ -95,22 +98,22 @@ def call_stage(world: "MultiWorld", method_name: str, *args: Any) -> None:
 
 class WebWorld:
     """Webhost integration"""
-    # display a settings page. Can be a link to an out-of-ap settings tool too.
+    
     settings_page: Union[bool, str] = True
-
-    # docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'
+    """display a settings page. Can be a link to a specific page or external tool."""
+    
     game_info_languages: List[str] = ['en']
+    """docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'"""
 
-    # docs folder will also be scanned for tutorial guides given the relevant information in this list. Each Tutorial
-    # class is to be used for one guide.
     tutorials: List["Tutorial"]
+    """docs folder will also be scanned for tutorial guides. Each Tutorial class is to be used for one guide."""
 
-    # Choose a theme for your /game/* pages
-    # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone
     theme = "grass"
+    """Choose a theme for you /game/* pages.
+    Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone"""
 
-    # display a link to a bug report page, most likely a link to a GitHub issue page.
     bug_report_page: Optional[str]
+    """display a link to a bug report page, most likely a link to a GitHub issue page."""
 
 
 class World(metaclass=AutoWorldRegister):
@@ -179,7 +182,7 @@ class World(metaclass=AutoWorldRegister):
     item_names: Set[str]  # set of all potential item names
     location_names: Set[str]  # set of all potential location names
 
-    is_zip: bool  # was loaded from a .apworld ?
+    zip_path: Optional[pathlib.Path] = None  # If loaded from a .apworld, this is the Path to it.
     __file__: str  # path it was loaded from
 
     def __init__(self, world: "MultiWorld", player: int):

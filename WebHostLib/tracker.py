@@ -987,10 +987,10 @@ def getTracker(tracker: UUID):
         if game_state == 30:
             inventory[team][player][106] = 1  # Triforce
 
-    player_big_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1) if playernumber not in groups}
-    player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1) if playernumber not in groups}
+    player_big_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
+    player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
     for loc_data in locations.values():
-         for values in loc_data.values():
+        for values in loc_data.values():
             item_id, item_player, flags = values
 
             if item_id in ids_big_key:
