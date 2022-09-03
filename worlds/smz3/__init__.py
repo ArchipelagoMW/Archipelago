@@ -526,9 +526,11 @@ class SMZ3World(World):
 
     def JunkFillGT(self, factor):
         poolLength = len(self.world.itempool)
+        playerGroups = self.world.get_player_groups(self.player)
+        playerGroups.add(self.player)
         junkPoolIdx = [i for i in range(0, poolLength) 
                     if self.world.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap) and
-                    self.world.itempool[i].player == self.player]
+                    self.world.itempool[i].player in playerGroups]
         toRemove = []
         for loc in self.locations.values():
             # commenting this for now since doing a partial GT pre fill would allow for non SMZ3 progression in GT
