@@ -34,16 +34,13 @@ class NoitaWorld(World):
     item_name_to_id = item_table
     location_name_to_id = item_pickups
 
-    data_version = 5
-    forced_auto_forfeit = True
+    data_version = 1
+    forced_auto_forfeit = False
     web = NoitaWeb()
 
     def generate_basic(self):
 
-        if self.world.bad_effects[self.player].value:
-            pool_option = 0
-        else:
-            pool_option = 1
+        pool_option = self.world.bad_effects[self.player].value
         junk_pool: Dict[str, int] = {}
         junk_pool = item_pool_weights[pool_option].copy()
         # Generate item pool
@@ -54,7 +51,6 @@ class NoitaWorld(World):
 
         # Convert itempool into real items
         itempool = list(map(lambda name: self.create_item(name), itempool))
-
         self.world.itempool += itempool
 
     def create_regions(self) -> None:

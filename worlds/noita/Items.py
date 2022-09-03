@@ -58,8 +58,6 @@ no_bad_weights: Dict[str, int] = {
 }
 
 item_pool_weights: Dict[int, Dict[str, int]] = {
-    0:      default_weights,
-    1:      no_bad_weights
+    0:      no_bad_weights,
+    1:      default_weights
 }
-
-lookup_id_to_name: Dict[int, str] = {id: name for name, id in item_table.items()}
