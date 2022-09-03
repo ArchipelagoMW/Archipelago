@@ -11,4 +11,5 @@ item_table = {
   "Grand Star Kitchen": 8013,
   "Grand Star Bedroom": 8014,
   "Grand Star Engine Room": 8015,
+  "Green Star": 8016,
 }

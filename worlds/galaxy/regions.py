@@ -3,7 +3,7 @@ import typing
 from BaseClasses import MultiWorld, Region, Location, RegionType
 from .locations import SMGLocation, location_table, locHH_table, locGE_table, \
 locSJ_table, locBR_table, locBB_table, \
-locGG_table, locFF_table, locDD_table, locDDune, \
+locGG_table, locFF_table, locDD_table, locDDune_table, \
 locspecialstages_table, locbosses_table, \
 locGL_table, locSS_table, locTT_table, \
 locDN_table, locMM_table, locHL_table \
@@ -15,11 +15,7 @@ smgcourses = ["Good Egg", "Honeyhive", "Loopdeeloop", "Flipswitch", "Bowser Jr. 
               "Gold Leaf", "Sea Slide", "Toy Time", "Bonefin", "Bowser Jr.'s Lava Reactor",
               "Gateway", "Deep Dark", "Dreadnaught", "Melty Molton", "Matter Splatter"]
 
-def create_regions(world, MultiWorld, player, int):
-    regSS = Region("Menu", RegionType.Generic, "Comment Obserbatory", player, world)
-    locspecialstages_names = [name for name, id in locSS_table.items()]
-    regSS.locations += [SMGLocation(player, loc_name, location_table[loc_name], regspecialstages) for loc_name in locspecialstages_names]
-    world.regions.append(regSS)
+def create_regions(world: MultiWorld, player: int):
     
     # defines the good egg galaxy region
     regGE = Region("Good Egg", RegionType.Generic, "Good Egg", player, world)
