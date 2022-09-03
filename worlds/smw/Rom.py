@@ -430,7 +430,7 @@ def handle_ability_code(rom):
     rom.write_bytes(CAPE_SUB_ADDR + 0x10, bytearray([0x6B]))             # RTL
     # End Cape
 
-    # P-Balloon SMW_TODO: Test this
+    # P-Balloon
     rom.write_bytes(0xC2FF, bytearray([0x22, 0xA2, 0xBB, 0x03])) # JSL $03BBA2
     rom.write_bytes(0xC303, bytearray([0xEA] * 0x06))
 
@@ -453,7 +453,7 @@ def handle_ability_code(rom):
     rom.write_bytes(P_BALLOON_SUB_ADDR + 0x20, bytearray([0x6B]))             # RTL
     # End P-Balloon
 
-    # Star SMW_TODO: Test this
+    # Star
     rom.write_bytes(0xC580, bytearray([0x22, 0xC8, 0xBB, 0x03])) # JSL $03BBC8
     rom.write_bytes(0xC584, bytearray([0xEA] * 0x01))
 
@@ -472,8 +472,8 @@ def handle_ability_code(rom):
     rom.write_bytes(STAR_SUB_ADDR + 0x16, bytearray([0x6B]))             # RTL
     # End Star
 
-    # Star Timer SMW_TODO: Test this
-    rom.write_bytes(0xC2E3, bytearray([0x22, 0xE0, 0xBB, 0x03])) # JSL $03BBE0
+    # Star Timer
+    rom.write_bytes(0x62E3, bytearray([0x22, 0xE0, 0xBB, 0x03])) # JSL $03BBE0
 
     STAR_TIMER_SUB_ADDR = 0x01BBE0
     rom.write_bytes(STAR_TIMER_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
@@ -662,6 +662,7 @@ def patch_rom(world, rom, player, active_level_dict):
     rom.write_byte(0x01BFA2, required_yoshi_eggs)
     rom.write_byte(0x01BFA3, world.display_sent_item_popups[player].value)
     rom.write_byte(0x01BFA4, world.display_received_item_popups[player].value)
+    rom.write_byte(0x01BFA5, world.death_link[player].value)
 
 
     from Main import __version__

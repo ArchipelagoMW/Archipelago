@@ -35,7 +35,7 @@ title_text_mapping = {
 def string_to_bytes(input_string):
     out_array = bytearray()
     for letter in input_string:
-        out_array.append(text_mapping[letter])
+        out_array.append(text_mapping[letter] if letter in text_mapping else text_mapping["."])
 
     return out_array
 

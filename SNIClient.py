@@ -239,6 +239,10 @@ async def deathlink_kill_player(ctx: Context):
             snes_buffered_write(ctx, WRAM_START + 0x0A50, bytes([255])) # deal 255 of damage at next opportunity
             if not ctx.death_link_allow_survive:
                 snes_buffered_write(ctx, WRAM_START + 0x09D6, bytes([0, 0]))  # set current reserve to 0
+        elif ctx.game == GAME_SMW:
+            from worlds.smw.Client import deathlink_kill_player as smw_deathlink_kill_player
+            await smw_deathlink_kill_player(ctx)
+
         await snes_flush_writes(ctx)
         await asyncio.sleep(1)
 
@@ -257,9 +261,6 @@ async def deathlink_kill_player(ctx: Context):
         elif ctx.game == GAME_DKC3:
             from worlds.dkc3.Client import deathlink_kill_player as dkc3_deathlink_kill_player
             await dkc3_deathlink_kill_player(ctx)
-        elif ctx.game == GAME_SMW:
-            from worlds.smw.Client import deathlink_kill_player as smw_deathlink_kill_player
-            await smw_deathlink_kill_player(ctx)
         ctx.last_death_link = time.time()
 
 
