@@ -38,10 +38,7 @@ class TestBase(unittest.TestCase):
 
             with self.subTest("Game", game=game_name):
                 world = setup_default_world(world_type)
-                location_count = 0
-                for location in world.get_locations():
-                    if not location.event and location.item is None:  # ignore events and manually placed
-                        location_count += 1
+                location_count = sum(0 if location.event or location.item else 1 for location in world.get_locations())
                 self.assertGreaterEqual(
                     len(world.itempool),
                     location_count,
