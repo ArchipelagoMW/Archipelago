@@ -35,7 +35,6 @@ class TestBase(unittest.TestCase):
         for game_name, world_type in AutoWorldRegister.world_types.items():
 
             if game_name not in {"Archipelago", "Final Fantasy"}:
-                continue
 
             with self.subTest("Game", game=game_name):
                 world = setup_default_world(world_type)
