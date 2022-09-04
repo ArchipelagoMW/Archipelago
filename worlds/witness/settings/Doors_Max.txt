@@ -1,100 +1,100 @@
 Items:
-Outside Tutorial Outpost Path
-Outside Tutorial Outpost Entry
-Outside Tutorial Outpost Exit
-Glass Factory Entry
-Glass Factory Back Wall
-Symmetry Island Lower Door
-Symmetry Island Upper Door
-Orchard Middle Gate
-Orchard Second Gate
-Desert Light Room Entry
-Desert Pond Room Entry
-Desert Flood Room Entry
-Desert Elevator Room Entry
-Quarry Entry 1
-Quarry Entry 2
-Quarry Mill Entry
-Quarry Mill Side Exit
-Quarry Mill Roof Exit
-Quarry Mill Stairs
-Quarry Boathouse Dock
-Quarry Boathouse First Barrier
-Quarry Boathouse Second Barrier
-Shadows Timed Door
-Shadows Laser Entry Right
-Shadows Laser Entry Left
-Shadows Quarry Barrier
-Shadows Ledge Barrier
-Keep Hedge Maze 1 Exit
-Keep Pressure Plates 1 Exit
-Keep Hedge Maze 2 Shortcut
-Keep Hedge Maze 2 Exit
-Keep Hedge Maze 3 Shortcut
-Keep Hedge Maze 3 Exit
-Keep Hedge Maze 4 Shortcut
-Keep Hedge Maze 4 Exit
-Keep Pressure Plates 2 Exit
-Keep Pressure Plates 3 Exit
-Keep Pressure Plates 4 Exit
-Keep Shadows Shortcut
-Keep Tower Shortcut
-Monastery Shortcut
-Monastery Entry Inner
-Monastery Entry Outer
-Monastery Garden Entry
-Town Cargo Box Entry
-Town Wooden Roof Stairs
-Town Tinted Glass Door
-Town Church Entry
-Town Maze Stairs
-Town Windmill Entry
-Town RGB House Stairs
-Town Tower First Door
-Town Tower Third Door
-Town Tower Fourth Door
-Town Tower Second Door
-Theater Entry
-Theater Exit Left
-Theater Exit Right
-Jungle Bamboo Laser Shortcut
-Jungle Popup Wall
-River Monastery Shortcut
-Bunker Entry
-Bunker Tinted Glass Door
-Bunker UV Room Entry
-Bunker Elevator Room Entry
-Swamp Entry
+Outside Tutorial Outpost Path (Door)
+Outside Tutorial Outpost Entry (Door)
+Outside Tutorial Outpost Exit (Door)
+Glass Factory Entry (Door)
+Glass Factory Back Wall (Door)
+Symmetry Island Lower (Door)
+Symmetry Island Upper (Door)
+Orchard First Gate (Door)
+Orchard Second Gate (Door)
+Desert Light Room Entry (Door)
+Desert Pond Room Entry (Door)
+Desert Flood Room Entry (Door)
+Desert Elevator Room Entry (Door)
+Quarry Entry 1 (Door)
+Quarry Entry 2 (Door)
+Quarry Mill Entry (Door)
+Quarry Mill Side Exit (Door)
+Quarry Mill Roof Exit (Door)
+Quarry Mill Stairs (Door)
+Quarry Boathouse Dock (Door)
+Quarry Boathouse First Barrier (Door)
+Quarry Boathouse Second Barrier (Door)
+Shadows Timed Door (Door)
+Shadows Laser Entry Right (Door)
+Shadows Laser Entry Left (Door)
+Shadows Quarry Barrier (Door)
+Shadows Ledge Barrier (Door)
+Keep Hedge Maze 1 Exit (Door)
+Keep Pressure Plates 1 Exit (Door)
+Keep Hedge Maze 2 Shortcut (Door)
+Keep Hedge Maze 2 Exit (Door)
+Keep Hedge Maze 3 Shortcut (Door)
+Keep Hedge Maze 3 Exit (Door)
+Keep Hedge Maze 4 Shortcut (Door)
+Keep Hedge Maze 4 Exit (Door)
+Keep Pressure Plates 2 Exit (Door)
+Keep Pressure Plates 3 Exit (Door)
+Keep Pressure Plates 4 Exit (Door)
+Keep Shadows Shortcut (Door)
+Keep Tower Shortcut (Door)
+Monastery Shortcut (Door)
+Monastery Entry Inner (Door)
+Monastery Entry Outer (Door)
+Monastery Garden Entry (Door)
+Town Cargo Box Entry (Door)
+Town Wooden Roof Stairs (Door)
+Town Tinted Glass Door (Door)
+Town Church Entry (Door)
+Town Maze Stairs (Door)
+Town Windmill Entry (Door)
+Town RGB House Stairs (Door)
+Town Tower First Door (Door)
+Town Tower Third Door (Door)
+Town Tower Fourth Door (Door)
+Town Tower Second Door (Door)
+Theater Entry (Door)
+Theater Exit Left (Door)
+Theater Exit Right (Door)
+Jungle Bamboo Laser Shortcut (Door)
+Jungle Popup Wall (Door)
+River Monastery Shortcut (Door)
+Bunker Entry (Door)
+Bunker Tinted Glass Door (Door)
+Bunker UV Room Entry (Door)
+Bunker Elevator Room Entry (Door)
+Swamp Entry (Door)
 Swamp Between Bridges First Door
 Swamp Platform Shortcut Door
-Swamp Cyan Water Pump
+Swamp Cyan Water Pump (Door)
 Swamp Between Bridges Second Door
-Swamp Red Water Pump
-Swamp Red Underwater Exit
-Swamp Blue Water Pump
-Swamp Purple Water Pump
-Swamp Laser Shortcut
-Treehouse First Door
-Treehouse Second Door
-Treehouse Third Door
-Treehouse Drawbridge
-Treehouse Laser House Entry
-Mountain Floor 1 Exit
-Mountain Floor 2 Staircase Near
-Mountain Floor 2 Exit
-Mountain Floor 2 Staircase Far
-Mountain Bottom Floor Giant Puzzle Exit
-Mountain Bottom Floor Final Room Entry
-Mountain Bottom Floor Rock
-Caves Entry
-Caves Pillar Door
-Caves Mountain Shortcut
-Caves Swamp Shortcut
-Challenge Entry
-Challenge Tunnels Entry
-Tunnels Theater Shortcut
-Tunnels Desert Shortcut
-Tunnels Town Shortcut
+Swamp Red Water Pump (Door)
+Swamp Red Underwater Exit (Door)
+Swamp Blue Water Pump (Door)
+Swamp Purple Water Pump (Door)
+Swamp Laser Shortcut (Door)
+Treehouse First Door (Door)
+Treehouse Second Door (Door)
+Treehouse Third Door (Door)
+Treehouse Drawbridge (Door)
+Treehouse Laser House Entry (Door)
+Mountain Floor 1 Exit (Door)
+Mountain Floor 2 Staircase Near (Door)
+Mountain Floor 2 Exit (Door)
+Mountain Floor 2 Staircase Far (Door)
+Mountain Bottom Floor Giant Puzzle Exit (Door)
+Mountain Bottom Floor Final Room Entry (Door)
+Mountain Bottom Floor Rock (Door)
+Caves Entry (Door)
+Caves Pillar Door (Door)
+Caves Mountain Shortcut (Door)
+Caves Swamp Shortcut (Door)
+Challenge Entry (Door)
+Challenge Tunnels Entry (Door)
+Tunnels Theater Shortcut (Door)
+Tunnels Desert Shortcut (Door)
+Tunnels Town Shortcut (Door)
 
 Desert Flood Controls (Panel)
 Quarry Mill Ramp Controls (Panel)

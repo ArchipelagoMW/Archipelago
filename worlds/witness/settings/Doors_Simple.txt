@@ -1,16 +1,16 @@
 Items:
-Glass Factory Back Wall
-Quarry Boathouse Dock
+Glass Factory Back Wall (Door)
+Quarry Boathouse Dock (Door)
 Outside Tutorial Outpost Doors
-Glass Factory Entry
+Glass Factory Entry (Door)
 Symmetry Island Doors
 Orchard Gates
 Desert Doors
 Quarry Main Entry
-Quarry Mill Entry
+Quarry Mill Entry (Door)
 Quarry Mill Shortcuts
 Quarry Boathouse Barriers
-Shadows Timed Door
+Shadows Timed Door (Door)
 Shadows Laser Room Door
 Shadows Barriers
 Keep Hedge Maze Doors
@@ -20,25 +20,25 @@ Monastery Entry
 Monastery Shortcuts
 Town Doors
 Town Tower Doors
-Theater Entry
+Theater Entry (Door)
 Theater Exit
 Jungle & River Shortcuts
-Jungle Popup Wall
+Jungle Popup Wall (Door)
 Bunker Doors
 Swamp Doors
-Swamp Laser Shortcut
+Swamp Laser Shortcut (Door)
 Swamp Water Pumps
 Treehouse Entry Doors
-Treehouse Drawbridge
-Treehouse Laser House Entry
-Mountain Floor 1 Exit
+Treehouse Drawbridge (Door)
+Treehouse Laser House Entry (Door)
+Mountain Floor 1 Exit (Door)
 Mountain Floor 2 Stairs & Doors
-Mountain Bottom Floor Giant Puzzle Exit
-Mountain Bottom Floor Final Room Entry
+Mountain Bottom Floor Giant Puzzle Exit (Door)
+Mountain Bottom Floor Final Room Entry (Door)
 Mountain Bottom Floor Doors to Caves
 Caves Doors to Challenge
 Caves Exits to Main Island
-Challenge Tunnels Entry
+Challenge Tunnels Entry (Door)
 Tunnels Doors
 
 Added Locations:

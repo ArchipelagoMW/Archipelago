@@ -29,9 +29,9 @@ Traps:
 
 Doors:
 1100 - Glass Factory Entry (Panel) - 0x01A54
-1105 - Symmetry Island Lower Door (Panel) - 0x000B0
-1107 - Symmetry Island Upper Door (Panel) - 0x1C349
-1110 - Light Room Entry (Panel) - 0x0C339
+1105 - Symmetry Island Lower (Panel) - 0x000B0
+1107 - Symmetry Island Upper (Panel) - 0x1C349
+1110 - Desert Light Room Entry (Panel) - 0x0C339
 1111 - Desert Flood Controls (Panel) - 0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B
 1119 - Quarry Mill Entry (Panel) - 0x01E5A,0x01E59
 1120 - Quarry Mill Ramp Controls (Panel) - 0x03678,0x03676
@@ -41,14 +41,14 @@ Doors:
 1131 - Shadows Door Timer (Panel) - 0x334DB,0x334DC
 1150 - Monastery Entry Left (Panel) - 0x00B10
 1151 - Monastery Entry Right (Panel) - 0x00C92
-1162 - Town Door (Panel) - 0x28998
+1162 - Town Tinted Glass Door (Panel) - 0x28998
 1163 - Town Church Entry (Panel) - 0x28A0D
 1166 - Town Maze Panel (Drop-Down Staircase) (Panel) - 0x28A79
 1169 - Windmill Entry (Panel) - 0x17F5F
 1200 - Treehouse First & Second Doors (Panel) - 0x0288C,0x02886
 1202 - Treehouse Third Door (Panel) - 0x0A182
 1205 - Treehouse Laser House Door Timer (Panel) - 0x2700B,0x334DC
-1208 - Treehouse Shortcut Drop-Down Bridge (Panel) - 0x17CBC
+1208 - Treehouse Drawbridge (Panel) - 0x17CBC
 1175 - Jungle Popup Wall (Panel) - 0x17CAB
 1180 - Bunker Entry (Panel) - 0x17C2E
 1183 - Bunker Tinted Glass Door (Panel) - 0x0A099
@@ -59,7 +59,7 @@ Doors:
 1197 - Swamp Maze Control (Panel) - 0x17C0A
 1310 - Boat - 0x17CDF,0x17CC8,0x17CA6,0x09DB8,0x17C95,0x0A054
 
-1400 - Caves Mountain Shortcut - 0x2D73F
+1400 - Caves Mountain Shortcut (Door) - 0x2D73F
 
 1500 - Symmetry Laser - 0x00509
 1501 - Desert Laser - 0x012FB,0x01317
@@ -73,101 +73,101 @@ Doors:
 1509 - Swamp Laser - 0x00BF6
 1510 - Treehouse Laser - 0x028A4
 
-1600 - Outside Tutorial Outpost Path - 0x03BA2
-1603 - Outside Tutorial Outpost Entry - 0x0A170
-1606 - Outside Tutorial Outpost Exit - 0x04CA3
-1609 - Glass Factory Entry - 0x01A29
-1612 - Glass Factory Back Wall - 0x0D7ED
-1615 - Symmetry Island Lower Door - 0x17F3E
-1618 - Symmetry Island Upper Door - 0x18269
-1619 - Orchard Middle Gate - 0x03307
-1620 - Orchard Second Gate - 0x03313
-1621 - Desert Light Room Entry - 0x09FEE
-1624 - Desert Pond Room Entry - 0x0C2C3
-1627 - Desert Flood Room Entry - 0x0A24B
-1630 - Desert Elevator Room Entry - 0x0C316
-1633 - Quarry Entry 1 - 0x09D6F
-1636 - Quarry Entry 2 - 0x17C07
-1639 - Quarry Mill Entry - 0x02010
-1642 - Quarry Mill Side Exit - 0x275FF
-1645 - Quarry Mill Roof Exit - 0x17CE8
-1648 - Quarry Mill Stairs - 0x0368A
-1651 - Quarry Boathouse Dock - 0x2769B,0x27163
-1653 - Quarry Boathouse First Barrier - 0x17C50
-1654 - Quarry Boathouse Second Barrier - 0x3865F
-1656 - Shadows Timed Door - 0x19B24
-1657 - Shadows Laser Entry Right - 0x194B2
-1660 - Shadows Laser Entry Left - 0x19665
-1663 - Shadows Quarry Barrier - 0x19865,0x0A2DF
-1666 - Shadows Ledge Barrier - 0x1855B,0x19ADE
-1669 - Keep Hedge Maze 1 Exit - 0x01954
-1672 - Keep Pressure Plates 1 Exit - 0x01BEC
-1675 - Keep Hedge Maze 2 Shortcut - 0x018CE
-1678 - Keep Hedge Maze 2 Exit - 0x019D8
-1681 - Keep Hedge Maze 3 Shortcut - 0x019B5
-1684 - Keep Hedge Maze 3 Exit - 0x019E6
-1687 - Keep Hedge Maze 4 Shortcut - 0x0199A
-1690 - Keep Hedge Maze 4 Exit - 0x01A0E
-1693 - Keep Pressure Plates 2 Exit - 0x01BEA
-1696 - Keep Pressure Plates 3 Exit - 0x01CD5
-1699 - Keep Pressure Plates 4 Exit - 0x01D40
-1702 - Keep Shadows Shortcut - 0x09E3D
-1705 - Keep Tower Shortcut - 0x04F8F
-1708 - Monastery Shortcut - 0x0364E
-1711 - Monastery Entry Inner - 0x0C128
-1714 - Monastery Entry Outer - 0x0C153
-1717 - Monastery Garden Entry - 0x03750
-1718 - Town Cargo Box Entry - 0x0A0C9
-1720 - Town Wooden Roof Stairs - 0x034F5
-1723 - Town Tinted Glass Door - 0x28A61
-1726 - Town Church Entry - 0x03BB0
-1729 - Town Maze Stairs - 0x28AA2
-1732 - Town Windmill Entry - 0x1845B
-1735 - Town RGB House Stairs - 0x2897B
-1738 - Town Tower First Door - 0x27798
-1741 - Town Tower Third Door - 0x27799
-1744 - Town Tower Fourth Door - 0x2779A
-1747 - Town Tower Second Door - 0x2779C
-1750 - Theater Entry - 0x17F88
-1753 - Theater Exit Left - 0x0A16D
-1756 - Theater Exit Right - 0x3CCDF
-1759 - Jungle Bamboo Laser Shortcut - 0x3873B
-1760 - Jungle Popup Wall - 0x1475B
-1762 - River Monastery Shortcut - 0x0CF2A
-1765 - Bunker Entry - 0x0C2A4
-1768 - Bunker Tinted Glass Door - 0x17C79
-1771 - Bunker UV Room Entry - 0x0C2A3
-1774 - Bunker Elevator Room Entry - 0x0A08D
-1777 - Swamp Entry - 0x00C1C
+1600 - Outside Tutorial Outpost Path (Door) - 0x03BA2
+1603 - Outside Tutorial Outpost Entry (Door) - 0x0A170
+1606 - Outside Tutorial Outpost Exit (Door) - 0x04CA3
+1609 - Glass Factory Entry (Door) - 0x01A29
+1612 - Glass Factory Back Wall (Door) - 0x0D7ED
+1615 - Symmetry Island Lower (Door) - 0x17F3E
+1618 - Symmetry Island Upper (Door) - 0x18269
+1619 - Orchard First Gate (Door) - 0x03307
+1620 - Orchard Second Gate (Door) - 0x03313
+1621 - Desert Light Room Entry (Door) - 0x09FEE
+1624 - Desert Pond Room Entry (Door) - 0x0C2C3
+1627 - Desert Flood Room Entry (Door) - 0x0A24B
+1630 - Desert Elevator Room Entry (Door) - 0x0C316
+1633 - Quarry Entry 1 (Door) - 0x09D6F
+1636 - Quarry Entry 2 (Door) - 0x17C07
+1639 - Quarry Mill Entry (Door) - 0x02010
+1642 - Quarry Mill Side Exit (Door) - 0x275FF
+1645 - Quarry Mill Roof Exit (Door) - 0x17CE8
+1648 - Quarry Mill Stairs (Door) - 0x0368A
+1651 - Quarry Boathouse Dock (Door) - 0x2769B,0x27163
+1653 - Quarry Boathouse First Barrier (Door) - 0x17C50
+1654 - Quarry Boathouse Second Barrier (Door) - 0x3865F
+1656 - Shadows Timed Door (Door) - 0x19B24
+1657 - Shadows Laser Entry Right (Door) - 0x194B2
+1660 - Shadows Laser Entry Left (Door) - 0x19665
+1663 - Shadows Quarry Barrier (Door) - 0x19865,0x0A2DF
+1666 - Shadows Ledge Barrier (Door) - 0x1855B,0x19ADE
+1669 - Keep Hedge Maze 1 Exit (Door) - 0x01954
+1672 - Keep Pressure Plates 1 Exit (Door) - 0x01BEC
+1675 - Keep Hedge Maze 2 Shortcut (Door) - 0x018CE
+1678 - Keep Hedge Maze 2 Exit (Door) - 0x019D8
+1681 - Keep Hedge Maze 3 Shortcut (Door) - 0x019B5
+1684 - Keep Hedge Maze 3 Exit (Door) - 0x019E6
+1687 - Keep Hedge Maze 4 Shortcut (Door) - 0x0199A
+1690 - Keep Hedge Maze 4 Exit (Door) - 0x01A0E
+1693 - Keep Pressure Plates 2 Exit (Door) - 0x01BEA
+1696 - Keep Pressure Plates 3 Exit (Door) - 0x01CD5
+1699 - Keep Pressure Plates 4 Exit (Door) - 0x01D40
+1702 - Keep Shadows Shortcut (Door) - 0x09E3D
+1705 - Keep Tower Shortcut (Door) - 0x04F8F
+1708 - Monastery Shortcut (Door) - 0x0364E
+1711 - Monastery Entry Inner (Door) - 0x0C128
+1714 - Monastery Entry Outer (Door) - 0x0C153
+1717 - Monastery Garden Entry (Door) - 0x03750
+1718 - Town Cargo Box Entry (Door) - 0x0A0C9
+1720 - Town Wooden Roof Stairs (Door) - 0x034F5
+1723 - Town Tinted Glass Door (Door) - 0x28A61
+1726 - Town Church Entry (Door) - 0x03BB0
+1729 - Town Maze Stairs (Door) - 0x28AA2
+1732 - Town Windmill Entry (Door) - 0x1845B
+1735 - Town RGB House Stairs (Door) - 0x2897B
+1738 - Town Tower First Door (Door) - 0x27798
+1741 - Town Tower Third Door (Door) - 0x27799
+1744 - Town Tower Fourth Door (Door) - 0x2779A
+1747 - Town Tower Second Door (Door) - 0x2779C
+1750 - Theater Entry (Door) - 0x17F88
+1753 - Theater Exit Left (Door) - 0x0A16D
+1756 - Theater Exit Right (Door) - 0x3CCDF
+1759 - Jungle Bamboo Laser Shortcut (Door) - 0x3873B
+1760 - Jungle Popup Wall (Door) - 0x1475B
+1762 - River Monastery Shortcut (Door) - 0x0CF2A
+1765 - Bunker Entry (Door) - 0x0C2A4
+1768 - Bunker Tinted Glass Door (Door) - 0x17C79
+1771 - Bunker UV Room Entry (Door) - 0x0C2A3
+1774 - Bunker Elevator Room Entry (Door) - 0x0A08D
+1777 - Swamp Entry (Door) - 0x00C1C
 1780 - Swamp Between Bridges First Door - 0x184B7
 1783 - Swamp Platform Shortcut Door - 0x38AE6
-1786 - Swamp Cyan Water Pump - 0x04B7F
+1786 - Swamp Cyan Water Pump (Door) - 0x04B7F
 1789 - Swamp Between Bridges Second Door - 0x18507
-1792 - Swamp Red Water Pump - 0x183F2
-1795 - Swamp Red Underwater Exit - 0x305D5
-1798 - Swamp Blue Water Pump - 0x18482
-1801 - Swamp Purple Water Pump - 0x0A1D6
-1804 - Swamp Laser Shortcut - 0x2D880
-1807 - Treehouse First Door - 0x0C309
-1810 - Treehouse Second Door - 0x0C310
-1813 - Treehouse Third Door - 0x0A181
-1816 - Treehouse Drawbridge - 0x0C32D
-1819 - Treehouse Laser House Entry - 0x0C323
-1822 - Mountain Floor 1 Exit - 0x09E54
-1825 - Mountain Floor 2 Staircase Near - 0x09FFB
-1828 - Mountain Floor 2 Exit - 0x09EDD
-1831 - Mountain Floor 2 Staircase Far - 0x09E07
-1834 - Mountain Bottom Floor Giant Puzzle Exit - 0x09F89
-1840 - Mountain Bottom Floor Final Room Entry - 0x0C141
-1843 - Mountain Bottom Floor Rock - 0x17F33
-1846 - Caves Entry - 0x2D77D
-1849 - Caves Pillar Door - 0x019A5
-1855 - Caves Swamp Shortcut - 0x2D859
-1858 - Challenge Entry - 0x0A19A
-1861 - Challenge Tunnels Entry - 0x0348A
-1864 - Tunnels Theater Shortcut - 0x27739
-1867 - Tunnels Desert Shortcut - 0x27263
-1870 - Tunnels Town Shortcut - 0x09E87
+1792 - Swamp Red Water Pump (Door) - 0x183F2
+1795 - Swamp Red Underwater Exit (Door) - 0x305D5
+1798 - Swamp Blue Water Pump (Door) - 0x18482
+1801 - Swamp Purple Water Pump (Door) - 0x0A1D6
+1804 - Swamp Laser Shortcut (Door) - 0x2D880
+1807 - Treehouse First Door (Door) - 0x0C309
+1810 - Treehouse Second Door (Door) - 0x0C310
+1813 - Treehouse Third Door (Door) - 0x0A181
+1816 - Treehouse Drawbridge (Door) - 0x0C32D
+1819 - Treehouse Laser House Entry (Door) - 0x0C323
+1822 - Mountain Floor 1 Exit (Door) - 0x09E54
+1825 - Mountain Floor 2 Staircase Near (Door) - 0x09FFB
+1828 - Mountain Floor 2 Exit (Door) - 0x09EDD
+1831 - Mountain Floor 2 Staircase Far (Door) - 0x09E07
+1834 - Mountain Bottom Floor Giant Puzzle Exit (Door) - 0x09F89
+1840 - Mountain Bottom Floor Final Room Entry (Door) - 0x0C141
+1843 - Mountain Bottom Floor Rock (Door) - 0x17F33
+1846 - Caves Entry (Door) - 0x2D77D
+1849 - Caves Pillar Door (Door) - 0x019A5
+1855 - Caves Swamp Shortcut (Door) - 0x2D859
+1858 - Challenge Entry (Door) - 0x0A19A
+1861 - Challenge Tunnels Entry (Door) - 0x0348A
+1864 - Tunnels Theater Shortcut (Door) - 0x27739
+1867 - Tunnels Desert Shortcut (Door) - 0x27263
+1870 - Tunnels Town Shortcut (Door) - 0x09E87
 
 1903 - Outside Tutorial Outpost Doors - 0x03BA2,0x0A170,0x04CA3
 1906 - Symmetry Island Doors - 0x17F3E,0x18269
