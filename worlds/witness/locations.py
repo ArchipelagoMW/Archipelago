@@ -133,9 +133,7 @@ class StaticWitnessLocations:
 
         "Mountainside Discard",
         "Mountainside Vault Box",
-    }
 
-    UNCOMMON_LOCATIONS = {
         "Mountaintop River Shape",
         "Tutorial Patio Floor",
         "Quarry Mill Control Room Left",
@@ -286,9 +284,6 @@ class WitnessPlayerLocations:
 
         if is_option_enabled(world, player, "shuffle_vault_boxes"):
             self.PANEL_TYPES_TO_SHUFFLE.add("Vault")
-
-        if is_option_enabled(world, player, "shuffle_uncommon"):
-            self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | StaticWitnessLocations.UNCOMMON_LOCATIONS
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | player_logic.ADDED_CHECKS
 

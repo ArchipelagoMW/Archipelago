@@ -58,12 +58,6 @@ class ShuffleVaultBoxes(Toggle):
     display_name = "Shuffle Vault Boxes"
 
 
-class ShuffleUncommonLocations(Toggle):
-    """Adds some optional puzzles that are somewhat difficult or out of the way.
-    Examples: Mountaintop River Shape, Tutorial Patio Floor, Theater Videos"""
-    display_name = "Shuffle Uncommon Locations"
-
-
 class ShufflePostgame(Toggle):
     """Adds locations into the pool that are guaranteed to become accessible before or at the same time as your goal.
     Use this if you don't play with forfeit on victory."""
@@ -122,7 +116,6 @@ the_witness_options: Dict[str, type] = {
     "disable_non_randomized_puzzles": DisableNonRandomizedPuzzles,
     "shuffle_discarded_panels": ShuffleDiscardedPanels,
     "shuffle_vault_boxes": ShuffleVaultBoxes,
-    "shuffle_uncommon": ShuffleUncommonLocations,
     "shuffle_postgame": ShufflePostgame,
     "victory_condition": VictoryCondition,
     "mountain_lasers": MountainLasers,
