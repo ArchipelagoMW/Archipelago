@@ -34,8 +34,8 @@ class TestBase(unittest.TestCase):
     def testItemCountGreaterEqualLocations(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
 
-            if game_name not in {"Archipelago", "Final Fantasy"}:
-
+            if game_name in {"Final Fantasy"}:
+                continue
             with self.subTest("Game", game=game_name):
                 world = setup_default_world(world_type)
                 location_count = sum(0 if location.event or location.item else 1 for location in world.get_locations())
