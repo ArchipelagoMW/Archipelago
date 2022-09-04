@@ -334,8 +334,8 @@ location_id_to_level_id = {
     LocationName.forest_ghost_house_dragon:   [0x41, 2],
     LocationName.forest_secret_exit_1:        [0x46, 0],
     LocationName.forest_secret_dragon:        [0x46, 2],
-    LocationName.forest_fortress:             [0x1F, 2],
-    LocationName.forest_castle:               [0x20, 2],
+    LocationName.forest_fortress:             [0x1F, 0],
+    LocationName.forest_castle:               [0x20, 0],
     LocationName.forest_castle_dragon:        [0x20, 2],
     LocationName.blue_switch_palace:          [0x45, 0],
 
@@ -388,13 +388,21 @@ location_id_to_level_id = {
     LocationName.star_road_5_exit_2: [0x5A, 1],
 
     LocationName.special_zone_1_exit_1: [0x4E, 0],
+    LocationName.special_zone_1_dragon: [0x4E, 2],
     LocationName.special_zone_2_exit_1: [0x4F, 0],
+    LocationName.special_zone_2_dragon: [0x4F, 2],
     LocationName.special_zone_3_exit_1: [0x50, 0],
+    LocationName.special_zone_3_dragon: [0x50, 2],
     LocationName.special_zone_4_exit_1: [0x51, 0],
+    LocationName.special_zone_4_dragon: [0x51, 2],
     LocationName.special_zone_5_exit_1: [0x4C, 0],
+    LocationName.special_zone_5_dragon: [0x4C, 2],
     LocationName.special_zone_6_exit_1: [0x4B, 0],
+    LocationName.special_zone_6_dragon: [0x4B, 2],
     LocationName.special_zone_7_exit_1: [0x4A, 0],
+    LocationName.special_zone_7_dragon: [0x4A, 2],
     LocationName.special_zone_8_exit_1: [0x49, 0],
+    LocationName.special_zone_8_dragon: [0x49, 2],
 }
 
 def generate_level_list(world):
