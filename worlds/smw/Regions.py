@@ -768,7 +768,10 @@ def create_regions(world, player: int, active_locations):
         add_location_to_region(world, player, active_locations, LocationName.donut_secret_2_region, LocationName.donut_secret_2_dragon,
                                lambda state: state.has(ItemName.mario_climb, player))
         add_location_to_region(world, player, active_locations, LocationName.vanilla_dome_1_region, LocationName.vanilla_dome_1_dragon,
-                               lambda state: (state.has(ItemName.mario_carry, player) and state.has(ItemName.mario_run, player)))
+                               lambda state: (state.has(ItemName.mario_carry, player) and
+                                              state.has(ItemName.mario_run, player) and
+                                              (state.has(ItemName.super_star_active, player) or
+                                               state.has(ItemName.progressive_powerup, player, 1))))
         add_location_to_region(world, player, active_locations, LocationName.vanilla_dome_2_region, LocationName.vanilla_dome_2_dragon,
                                lambda state: (state.has(ItemName.mario_swim, player) and
                                               state.has(ItemName.p_switch, player) and
@@ -828,7 +831,8 @@ def create_regions(world, player: int, active_locations):
                                               (state.has(ItemName.mario_carry, player) and state.has(ItemName.p_switch, player))))
         add_location_to_region(world, player, active_locations, LocationName.sunken_ghost_ship_region, LocationName.sunken_ghost_ship_dragon,
                                lambda state: (state.has(ItemName.mario_swim, player) and
-                                              state.has(ItemName.super_star_active, player)))
+                                              state.has(ItemName.super_star_active, player) and
+                                              state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(world, player, active_locations, LocationName.valley_of_bowser_1_region, LocationName.valley_of_bowser_1_dragon)
         add_location_to_region(world, player, active_locations, LocationName.valley_of_bowser_2_region, LocationName.valley_of_bowser_2_dragon)
         add_location_to_region(world, player, active_locations, LocationName.valley_of_bowser_3_region, LocationName.valley_of_bowser_3_dragon)
@@ -905,7 +909,9 @@ def connect_regions(world, player, level_to_tile_dict):
     connect(world, player, names, LocationName.donut_plains_castle_region, LocationName.donut_plains_castle)
     
     connect(world, player, names, LocationName.vanilla_dome_1_region, LocationName.vanilla_dome_1_exit_1,
-            lambda state: state.has(ItemName.mario_run, player))
+            lambda state: (state.has(ItemName.mario_run, player) and
+                           (state.has(ItemName.super_star_active, player) or
+                            state.has(ItemName.progressive_powerup, player, 1))))
     connect(world, player, names, LocationName.vanilla_dome_1_region, LocationName.vanilla_dome_1_exit_2,
             lambda state: (state.has(ItemName.yoshi_activate, player) and state.has(ItemName.mario_carry, player) and
                            (state.has(ItemName.mario_climb, player) or
@@ -968,9 +974,7 @@ def connect_regions(world, player, level_to_tile_dict):
                            state.has(ItemName.progressive_powerup, player, 1)))
     connect(world, player, names, LocationName.forest_of_illusion_4_region, LocationName.forest_of_illusion_4_exit_1)
     connect(world, player, names, LocationName.forest_of_illusion_4_region, LocationName.forest_of_illusion_4_exit_2,
-            lambda state: (state.has(ItemName.mario_carry, player) and
-                           (state.has(ItemName.p_switch, player) or
-                            state.has(ItemName.progressive_powerup, player, 3))))
+            lambda state: state.has(ItemName.mario_carry, player))
     connect(world, player, names, LocationName.forest_ghost_house_region, LocationName.forest_ghost_house_exit_1,
             lambda state: state.has(ItemName.p_switch, player))
     connect(world, player, names, LocationName.forest_ghost_house_region, LocationName.forest_ghost_house_exit_2,
