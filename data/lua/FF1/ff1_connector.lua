@@ -98,8 +98,8 @@ local extensionConsumableLookup = {
 }
 
 local noOverworldItemsLookup = {
-    [500] = 0x0B,
-    [501] = 0x12,
+    [499] = 0x2B,
+    [500] = 0x12,
 }
 
 local itemMessages = {}
@@ -346,7 +346,7 @@ function processBlock(block)
                 -- This is a key item
                 memoryLocation = memoryLocation - 0x0E0
                 wU8(memoryLocation, 0x01)
-            elseif v >= 0x1E0 and v <= 0x1F3 then
+            elseif v >= 0x1E0 and v <= 0x1F2 then
                 -- This is a movement item
                 -- Minus Offset (0x100) - movement offset (0xE0)
                 memoryLocation = memoryLocation - 0x1E0
@@ -356,10 +356,10 @@ function processBlock(block)
                 else
                     wU8(memoryLocation, 0x01)
                 end
-            elseif v >= 0x1F4 and v <= 0x1F5 then
+            elseif v >= 0x1F3 and v <= 0x1F4 then
                 -- NoOverworld special items
                 memoryLocation = noOverworldItemsLookup[v]
-                u8(memoryLocation, 0x01)
+                wU8(memoryLocation, 0x01)
             elseif v >= 0x16C and v <= 0x1AF then
                 -- This is a gold item
                 amountToAdd = goldLookup[v]
