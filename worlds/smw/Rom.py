@@ -510,7 +510,7 @@ def handle_yoshi_box(rom):
     rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x0E, bytearray([0x28]))                   # PLP
     rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x0F, bytearray([0xDA]))                   # PHX
     rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x10, bytearray([0xBB]))                   # TYX
-    rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x11, bytearray([0xBF, 0x00, 0xCA, 0x7E])) # LDA $7ECA00, X
+    rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x11, bytearray([0xBF, 0x00, 0xC2, 0x7E])) # LDA $7EC200, X
     rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x15, bytearray([0xFA]))                   # PLX
     rom.write_bytes(YOSHI_BOX_SUB_ADDR + 0x16, bytearray([0x60]))                   # RTS
 
