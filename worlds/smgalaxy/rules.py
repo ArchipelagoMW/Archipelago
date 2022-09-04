@@ -1,3 +1,4 @@
+from sqlite3 import connect
 from ..generic.Rules import add_rule, set_rule
 from .regions import smgcourses, connect_regions
 def set_rules(world, player: int):
@@ -18,6 +19,7 @@ def set_rules(world, player: int):
         return self.has('Green Star 3')
 
     # main stage logic 
+    set_rule(world.get_region('Menu', player), lambda state: True)
     connect_regions(world, player, "Menu", "Good Egg", lambda state: True)
     connect_regions(world, player, "Menu", "Honeyhive", lambda state: state.has("Power Star", player, 3))
     connect_regions(world, player, "Menu", "Fountain", lambda state: state.has("Grand Star Terrace", player))
@@ -26,12 +28,13 @@ def set_rules(world, player: int):
     connect_regions(world, player, "Menu", "Kitchen", lambda state: state.has("Grand Star Fountain", player))
     connect_regions(world, player, "Kitchen", "Beach Bowl", lambda state: state.has("Power Star", player, 18))
     connect_regions(world, player, "Kitchen", "Ghostly", lambda state: state.has("Power Star", player, 20))
-    connect_regions(world, player, "Kitchen", "Bedroom", lambda state: state.has("Grand Star Kitchen", player))
+    connect_regions(world, player, "Menu", "Bedroom", lambda state: state.has("Grand Star Kitchen", player))
     connect_regions(world, player, "Bedroom" "Gusty Gardens", lambda state: state.has("Power Star", player, 24))
     connect_regions(world, player, "Bedroom" "Freezeflame", lambda state: state.has("Power Star", player, 26))
     connect_regions(world, player, "Menu", "Engine Room", lambda state: state.has("Grand Star Bedroom", player))
     connect_regions(world, player, "Engine Room", "Gold Leaf", lambda state: state.has("Power Star", player, 34))
     connect_regions(world, player, "Engine Room", "Toy Time", lambda state: state.has("Power Star", player, 40))
+    connect_regions(world, player, "Engine Room", "Sea Slide", lambda state: state.has("Power Star", player, 36))
     connect_regions(world, player, "Menu", "Garden", lambda state: state.has("Grand Star Engine Room", player))
     connect_regions(world, player, "Garden" "Deep Dark", lambda state: state.has("Power Star", player, 46))
     connect_regions(world, player, "Garden" "Dreadnaught", lambda state: state.has("Power Star", player, 48))

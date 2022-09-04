@@ -19,7 +19,7 @@ locHH_table = {
     "HH: Honeyhive Cosmic Mario Race": 170000009,
     "HH: Honeyhive's Purple Coins": 170000010,
 }
-locspecialstages_table ={
+locspecialstages_table = {
     "LDL: Surfing 101": 170000012,
     "FS: Painting the Planet Yellow": 170000013,
     "RG: Rolling in the Clouds": 170000028,
