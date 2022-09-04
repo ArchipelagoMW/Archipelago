@@ -410,7 +410,7 @@ class Overcooked2World(World):
 
         # Save to disk
 
-        filepath = os.path.join(output_directory, mod_name + ".json")
+        filepath = os.path.join(output_directory, mod_name + ".oc2.json")
         with open(filepath, "w") as file:
             json.dump(data, file)
 
