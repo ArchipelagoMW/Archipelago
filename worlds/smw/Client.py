@@ -38,6 +38,7 @@ SMW_CURRENT_LEVEL_ADDR = WRAM_START + 0x13BF
 SMW_MESSAGE_BOX_ADDR   = WRAM_START + 0x1426
 SMW_EGG_COUNT_ADDR     = WRAM_START + 0xF48
 SMW_SFX_ADDR           = WRAM_START + 0x1DFC
+SMW_PAUSE_ADDR         = WRAM_START + 0x13D4
 SMW_MESSAGE_QUEUE_ADDR = WRAM_START + 0xC391
 
 SMW_RECV_PROGRESS_ADDR = WRAM_START + 0x1F2B
@@ -55,6 +56,10 @@ async def deathlink_kill_player(ctx: Context):
 
         message_box = await snes_read(ctx, SMW_MESSAGE_BOX_ADDR, 0x1)
         if message_box[0] != 0x00:
+            return
+
+        pause_state = await snes_read(ctx, SMW_PAUSE_ADDR, 0x1)
+        if pause_state[0] != 0x00:
             return
 
         snes_buffered_write(ctx, WRAM_START + 0x9D, bytes([0x30])) # Freeze Gameplay
@@ -125,6 +130,10 @@ async def handle_message_queue(ctx: Context):
 
     message_box = await snes_read(ctx, SMW_MESSAGE_BOX_ADDR, 0x1)
     if message_box[0] != 0x00:
+        return
+
+    pause_state = await snes_read(ctx, SMW_PAUSE_ADDR, 0x1)
+    if pause_state[0] != 0x00:
         return
 
     if not hasattr(ctx, "message_queue") or len(ctx.message_queue) == 0:
