@@ -68,21 +68,28 @@ class OldMan(Choice):
 
 
 class ExtraKeyItems(Toggle):
-    """Adds key items that are required to access the Rocket Hideout, Cinnabar Mansion, Safari Zone, and Power Plant."""
+    """Adds key items that are required to access the Rocket Hideout, Cinnabar Mansion, Safari Zone, and Power Plant.
+    Adds four item pickups to Rock Tunnel B1F."""
     display_name = "Extra Key Items"
     default = 1
 
 
 class ExtraStrengthBoulders(Toggle):
-    """Adds Strength Boulders blocking the Route 11 gate, and in Route 13 (can be bypassed with Surf)."""
-    """This potentially increases the usefulness of Strength as well as the Bicycle."""
+    """Adds Strength Boulders blocking the Route 11 gate, and in Route 13 (can be bypassed with Surf).
+    This potentially increases the usefulness of Strength as well as the Bicycle."""
     display_name = "Extra Strength Boulders"
     default = 1
 
 
+class RequireItemFinder(Toggle):
+    """Require Item Finder to pick up hidden items."""
+    display_name = "Require Item Finder"
+    default = 0
+
+
 class RandomizeHiddenItems(Choice):
-    """Randomize hidden items. If you choose exclude, they will be randomized but will be guaranteed junk items."""
-    """Hidden items require the Item Finder to pick up."""
+    """Randomize hidden items. If you choose exclude, they will be randomized but will be guaranteed junk items.
+    Hidden items require the Item Finder to pick up."""
     display_name = "Randomize Hidden Items"
     option_on = 1
     option_off = 0
@@ -96,6 +103,30 @@ class FreeFlyLocation(Toggle):
     """One random fly destination will be unlocked by default."""
     display_name = "Free Fly Location"
     default = 1
+
+
+class OaksAidRt2(Range):
+    """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 2"""
+    display_name = "Oak's Aide Route 2"
+    range_start = 0
+    range_end = 80
+    default = 10
+
+
+class OaksAidRt11(Range):
+    """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 2"""
+    display_name = "Oak's Aide Route 2"
+    range_start = 0
+    range_end = 80
+    default = 30
+
+
+class OaksAidRt15(Range):
+    """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 2"""
+    display_name = "Oak's Aide Route 2"
+    range_start = 0
+    range_end = 80
+    default = 50
 
 
 base_exp = 16
@@ -118,6 +149,20 @@ class ExpModifier(SpecialRange):
         "suptuple": base_exp * 7,
         "octuple": base_exp * 8,
     }
+
+
+class RandomizePokemon(Choice):
+    """Randomize all Pokemon encountered or received. match_types will select a Pokemon with at least one type matching
+    the original type of the original pokemon. match_base_stats will prefer Pokemon with closer base stat totals.
+    match_types_and_base_stats will match types and will weight towards similar base stats, but there may not be many
+    to choose from."""
+    display_name = "Randomize Pokemon"
+    default = 0
+    option_vanilla = 0
+    option_match_types = 1
+    option_match_base_stats = 2
+    option_match_types_and_base_stats = 3
+    option_completely_random = 4
 
 
 class BlindTrainers(Choice):
@@ -148,6 +193,21 @@ class RandomizePokemonStats(Choice):
     option_shuffle = 1
     option_randomize = 2
 
+
+class RandomizePokemonCatchRates(Toggle):
+    """Randomize the catch rate for each Pokemon."""
+    display_name = "Randomize Catch Rates"
+    default = 0
+
+
+class MinimumCatchRate(Range):
+    """Minimum catch rate for each Pokemon. If randomize_catch_rates is on, this will be the minimum value that can be
+    chosen. Otherwise, it will raise any Pokemon's catch rate up to this value if its normal catch rate is lower."""
+    range_start = 1
+    range_end = 255
+    default = 3
+
+
 class RandomizePokemonMovesets(Choice):
     """Randomize the moves learned by Pokemon. prefer_types will prefer moves that match the type of the Pokemon."""
     display_name = "Randomize Pokemon Movesets"
@@ -156,15 +216,43 @@ class RandomizePokemonMovesets(Choice):
     option_completely_random = 2
     default = 0
 
+
 class StartWithFourMoves(Toggle):
     """If movesets are randomized, this will give all Pokemon 4 starting moves."""
     display_name = "Start With Four Moves"
     default = 0
 
+
+class TMCompatibility(Choice):
+    """Randomize which Pokemon can learn each TM. prefer_types: 90% chance if Pokemon's type matches the move,
+    50% chance if move is Normal type and the Pokemon is not, and 25% chance otherwise. Pokemon will retain the same
+    TM compatibility when they evolve if the evolved form has the same type(s). Mew will always be able to learn
+    every TM."""
+    display_name = "TM Compatibility"
+    default = 0
+    option_vanilla = 0
+    option_prefer_types = 1
+    option_completely_random = 2
+    option_full_compatibility = 3
+
+
+class HMCompatibility(Choice):
+    """Randomize which Pokemon can learn each HM. prefer_types: 100% chance if Pokemon's type matches the move,
+    75% chance if move is Normal type and the Pokemon is not, and 25% chance otherwise. Pokemon will retain the same
+    HM compatibility when they evolve if the evolved form has the same type(s). Mew will always be able to learn
+    every HM."""
+    display_name = "HM Compatibility"
+    default = 0
+    option_vanilla = 0
+    option_prefer_types = 1
+    option_completely_random = 2
+    option_full_compatibility = 3
+
+
 class RandomizePokemonTypes(Choice):
-    """Randomize the types of each Pokemon. Follow Evolutions will ensure Pokémon's types remain the same when evolving
+    """Randomize the types of each Pokemon. Follow Evolutions will ensure Pokemon's types remain the same when evolving
     (except possibly gaining a type)."""
-    display_name = "Pokémon Types"
+    display_name = "Pokemon Types"
     option_vanilla = 0
     option_follow_evolutions = 1
     option_randomize = 2
@@ -182,7 +270,6 @@ class SecondaryTypeChance(SpecialRange):
     special_range_names = {
         "vanilla": -1
     }
-
 
 
 class RandomizeTypeChartAttackingTypes(Choice):
@@ -224,10 +311,16 @@ class RandomizeTypeChartTypeEffectiveness(Choice):
 
 
 class NormalizeEncounterChances(Toggle):
-    """Each wild encounter table has 10 slots for Pokémon. Normally the chance for each being chosen ranges from
+    """Each wild encounter table has 10 slots for Pokemon. Normally the chance for each being chosen ranges from
     19.9% to 1.2%. Turn this on to normalize them all to 10% each."""
     default = 0
 
+
+class StartingMoney(Range):
+    """The amount of money you start with."""
+    default = 3000
+    range_start = 0
+    range_end = 999999
 
 pokemon_rb_options = {
     "game_version": GameVersion,
@@ -239,18 +332,28 @@ pokemon_rb_options = {
     "old_man": OldMan,
     "extra_key_items": ExtraKeyItems,
     "extra_strength_boulders": ExtraStrengthBoulders,
+    "require_item_finder": RequireItemFinder,
     "randomize_hidden_items": RandomizeHiddenItems,
     "free_fly_location": FreeFlyLocation,
+    "oaks_aide_rt_2": OaksAidRt2,
+    "oaks_aide_rt_11": OaksAidRt11,
+    "oaks_aide_rt_15": OaksAidRt15,
     "blind_trainers": BlindTrainers,
     "minimum_steps_between_encounters": MinimumStepsBetweenEncounters,
     "exp_modifier": ExpModifier,
+    "randomize_pokemon": RandomizePokemon,
     "randomize_pokemon_stats": RandomizePokemonStats,
+    "randomize_pokemon_catch_rates": RandomizePokemonCatchRates,
+    "minimum_catch_rate": MinimumCatchRate,
     "randomize_pokemon_movesets": RandomizePokemonMovesets,
     "start_with_four_moves": StartWithFourMoves,
+    "tm_compatibility": TMCompatibility,
+    "hm_compatibility": HMCompatibility,
     "randomize_pokemon_types": RandomizePokemonTypes,
     "secondary_type_chance": SecondaryTypeChance,
     "randomize_type_matchup_attacking_types": RandomizeTypeChartAttackingTypes,
     "randomize_type_matchup_defending_types": RandomizeTypeChartDefendingTypes,
     "randomize_type_matchup_type_effectiveness": RandomizeTypeChartTypeEffectiveness,
     "normalize_encounter_chances": NormalizeEncounterChances,
+    "starting_money": StartingMoney,
 }

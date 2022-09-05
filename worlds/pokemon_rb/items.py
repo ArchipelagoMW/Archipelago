@@ -163,6 +163,12 @@ item_table = {
 item_table.update(
     {pokemon: ItemData(None, ItemClassification.progression) for pokemon in pokemon_data.keys()}
 )
+item_table.update(
+    {f"Encounter {pokemon}": ItemData(None, ItemClassification.progression) for pokemon in pokemon_data.keys()}
+)
+item_table.update(
+    {f"Static {pokemon}": ItemData(None, ItemClassification.progression) for pokemon in pokemon_data.keys()}
+)
 # for TM in range(0,  51):
 #     item_table.append(ItemData(201 + TM, f"TM{TM}", ItemClassification.filler))
 # for item in item_table:

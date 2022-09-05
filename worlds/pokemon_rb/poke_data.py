@@ -1189,6 +1189,17 @@ encounter_tables = {'Wild_Super_Rod_A': 2, 'Wild_Super_Rod_B': 2, 'Wild_Super_Ro
                     'Wild_Route23': 10, 'Wild_VictoryRoad2F': 10, 'Wild_VictoryRoad3F': 10,
                     'Wild_VictoryRoad1F': 10, 'Wild_DiglettsCave': 10, 'Wild_Good_Rod': 2}
 
+hm_moves = ["Cut", "Fly", "Surf", "Strength", "Flash"]
+
+tm_moves = [
+    'Mega Punch', 'Razor Wind', 'Swords Dance', 'Whirlwind', 'Mega Kick', 'Toxic', 'Horn Drill', 'Body Slam',
+    'Take Down', 'Double Edge', 'Bubblebeam', 'Water Gun', 'Ice Beam', 'Blizzard', 'Hyper Beam', 'Pay Day',
+    'Submission', 'Counter', 'Seismic Toss', 'Rage', 'Mega Drain', 'Solarbeam', 'Dragon Rage', 'Thunderbolt', 'Thunder',
+    'Earthquake', 'Fissure', 'Dig', 'Psychic', 'Teleport', 'Mimic', 'Double Team', 'Reflect', 'Bide', 'Metronome',
+    'Selfdestruct', 'Egg Bomb', 'Fire Blast', 'Swift', 'Skull Bash', 'Softboiled', 'Dream Eater', 'Sky Attack', 'Rest',
+    'Thunder Wave', 'Psywave', 'Explosion', 'Rock Slide', 'Tri Attack', 'Substitute'
+]
+
 
 
 first_stage_pokemon = [pokemon for pokemon in pokemon_data.keys() if pokemon not in evolves_from]

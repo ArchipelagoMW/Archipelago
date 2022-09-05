@@ -3,9 +3,12 @@ from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType, Loca
 from .locations import get_locations, PokemonRBLocation
 
 def create_region(world: MultiWorld, player: int, name: str, locations_per_region=None, exits=None):
+    if "Rock" in name:
+        pass
     ret = Region(name, RegionType.Generic, name, player, world)
     for location in locations_per_region.get(name, []):
-        if world.randomize_hidden_items[player].value or "Hidden" not in location.name:
+        if (world.randomize_hidden_items[player].value or "Hidden" not in location.name) and \
+                (world.extra_key_items[player].value or name != "Rock Tunnel B1F" or "Item" not in location.name):
             location.parent_region = ret
             ret.locations.append(location)
             if world.randomize_hidden_items[player].value == 2 and "Hidden" in location.name:
@@ -87,10 +90,12 @@ def create_regions(world: MultiWorld, player: int):
         create_region(world, player, "Route 7", locations_per_region),
         create_region(world, player, "Underground Tunnel West-East", locations_per_region),
         create_region(world, player, "Route 8", locations_per_region),
+        create_region(world, player, "Route 8 Grass", locations_per_region),
         create_region(world, player, "Celadon City", locations_per_region),
         create_region(world, player, "Celadon Prize Corner", locations_per_region),
         create_region(world, player, "Celadon Gym", locations_per_region),
         create_region(world, player, "Route 16", locations_per_region),
+        create_region(world, player, "Route 16 North", locations_per_region),
         create_region(world, player, "Route 17", locations_per_region),
         create_region(world, player, "Route 18", locations_per_region),
         create_region(world, player, "Fuchsia City", locations_per_region),
@@ -207,16 +212,18 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "Route 7", "Underground Tunnel West-East")
     connect(world, player, "Route 8", "Underground Tunnel West-East")
     connect(world, player, "Route 8", "Celadon City")
+    connect(world, player, "Route 8", "Route 8 Grass", lambda state: state._pokemon_rb_can_cut(player), one_way=True)
     connect(world, player, "Route 7", "Celadon City")
     connect(world, player, "Celadon City", "Celadon Gym", lambda state: state._pokemon_rb_can_cut(player), one_way=True)
     connect(world, player, "Celadon City", "Celadon Prize Corner")
     connect(world, player, "Celadon City", "Route 16")
+    connect(world, player, "Route 16", "Route 16 North", lambda state: state._pokemon_rb_can_cut(player), one_way=True)
     connect(world, player, "Route 16", "Route 17", lambda state: state.has("Poke Flute", player) and state.has("Bicycle", player))
     connect(world, player, "Route 17", "Route 18", lambda state: state.has("Bicycle", player))
     connect(world, player, "Fuchsia City", "Fuchsia Gym", one_way=True)
     connect(world, player, "Fuchsia City", "Route 18")
     connect(world, player, "Fuchsia City", "Safari Zone Gate", one_way=True)
-    connect(world, player, "Safari Zone Gate", "Safari Zone Center", lambda state: state.has("Safari Pass", player) or not state.world.extra_strength_boulders[player].value, one_way=True)
+    connect(world, player, "Safari Zone Gate", "Safari Zone Center", lambda state: state.has("Safari Pass", player) or not state.world.extra_key_items[player].value, one_way=True)
     connect(world, player, "Safari Zone Center", "Safari Zone East", one_way=True)
     connect(world, player, "Safari Zone Center", "Safari Zone West", one_way=True)
     connect(world, player, "Safari Zone Center", "Safari Zone North", one_way=True)

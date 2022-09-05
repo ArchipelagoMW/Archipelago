@@ -9,9 +9,10 @@ from .logic import PokemonLogic
 from .options import pokemon_rb_options
 from .rom_addresses import rom_addresses
 from .text import encode_text
-from .rom import generate_output, get_base_rom_bytes, get_base_rom_path
+from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, generate_basic
 import worlds.pokemon_rb.poke_data as poke_data
 import logging
+
 
 class PokemonRedBlueWorld(World):
     """Pokemon"""
@@ -31,6 +32,8 @@ class PokemonRedBlueWorld(World):
         self.fly_map_code = None
         self.extra_badges = {}
         self.type_chart = None
+        self.local_poke_data = None
+        self.learnsets = None
 
     def generate_early(self):
         if self.world.badges_needed_for_hm_moves[self.player].value >= 2:
@@ -47,57 +50,8 @@ class PokemonRedBlueWorld(World):
                 self.extra_badges[hm_moves.pop()] = badge
 
     def generate_basic(self) -> None:
-        def get_base_stat_total(mon):
-            return (poke_data.pokemon_data[mon]["atk"] + poke_data.pokemon_data[mon]["def"]
-                    + poke_data.pokemon_data[mon]["hp"] + poke_data.pokemon_data[mon]["spd"]
-                    + poke_data.pokemon_data[mon]["spc"])
+        generate_basic(self)
 
-        encounter_slots = [location for location in get_locations(self.player) if
-                              location.type == "Wild Encounter"]
-        for location in encounter_slots:
-            if isinstance(location.original_item, list):
-                location.original_item = location.original_item[not self.world.game_version[self.player].value]
-        placed_mons = {pokemon: 0 for pokemon in poke_data.pokemon_data.keys()}
-        if False:
-            for slot in encounter_slots:
-                location = self.world.get_location(slot.name, self.player)
-                location.item = self.create_item(slot.original_item)
-                location.event = True
-                location.locked = True
-                location.item.location = location
-                placed_mons[location.item.name] += 1
-        else:
-            mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon]
-            self.world.random.shuffle(encounter_slots)
-            locations = []
-            for slot in encounter_slots:
-                stat_base = get_base_stat_total(slot.original_item)
-                mons_list.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
-                mon = mons_list[round(self.world.random.triangular(0, 50, 0))]
-                placed_mons[mon] += 1
-                location = self.world.get_location(slot.name, self.player)
-                location.item = self.create_item(mon)
-                location.event = True
-                location.locked = True
-                location.item.location = location
-                locations.append(location)
-
-            missing_mons = [pokemon for pokemon in poke_data.first_stage_pokemon if placed_mons[pokemon] == 0 and pokemon
-                            not in poke_data.legendary_pokemon]
-            missing_mons = [pokemon for pokemon in poke_data.pokemon_data.keys() if placed_mons[pokemon] == 0 and pokemon
-                            not in poke_data.legendary_pokemon]
-            for mon in missing_mons:
-                stat_base = get_base_stat_total(mon)
-                locations.sort(key=lambda slot: abs(get_base_stat_total(slot.item.name) - stat_base))
-                for location in locations:
-                    if placed_mons[location.item.name] > 1: # or location.item.name not in poke_data.first_stage_pokemon:
-                        placed_mons[location.item.name] -= 1
-                        location.item = self.create_item(mon)
-                        location.item.location = location
-                        placed_mons[mon] += 1
-                        break
-        print(len([pokemon for pokemon in placed_mons if placed_mons[pokemon] > 0]))
-        pass
 
     def create_items(self) -> None:
         locations = [location for location in get_locations(self.player) if location.type == "Item"]
@@ -107,57 +61,35 @@ class PokemonRedBlueWorld(World):
         for location in locations:
             if "Hidden" in location.name and not self.world.randomize_hidden_items[self.player].value:
                 continue
+            if "Rock Tunnel B1F" in location.region and not self.world.extra_key_items[self.player].value:
+                continue
             item = self.create_item(location.original_item)
             if location.event:
                 self.world.get_location(location.name, self.player).place_locked_item(item)
-            elif "Badge" in item.name and not self.world.badgesanity[self.player]:
-                badgelocs.append(self.world.get_location(location.name, self.player))
-                badges.append(item)
-            else:
+            elif ("Badge" not in item.name or self.world.badgesanity[self.player]) and \
+                    (item.name != "Oak's Parcel" or self.world.old_man[self.player] != 1):
+                #badgelocs.append(self.world.get_location(location.name, self.player))
+                #badges.append(item)
+            #else:
                 item_pool.append(item)
 
+        # self.world.random.shuffle(item_pool)
+        # if self.world.extra_key_items[self.player].value:
+        #     for item_name in ["Plant Key", "Mansion Key", "Hideout Key", "Safari Pass"]:
+        #         item = self.create_item(item_name)
+        #         for i, old_item in enumerate(item_pool):
+        #             if old_item.classification == ItemClassification.filler:
+        #                 item_pool[i] = item
+        #                 break
         self.world.random.shuffle(item_pool)
-        if self.world.extra_key_items[self.player].value:
-            for item_name in ["Plant Key", "Mansion Key", "Hideout Key", "Safari Pass"]:
-                item = self.create_item(item_name)
-                for i, old_item in enumerate(item_pool):
-                    if old_item.classification == ItemClassification.filler:
-                        item_pool[i] = item
-                        break
-        self.world.random.shuffle(item_pool)
-        # place_pc_item = True
-        # if self.world.old_man[self.player].value == 1:
-        #     place_pc_item = [True, False][self.world.random.randint(0, 1)]
-        # if place_pc_item:
-        #     for i, item in enumerate(item_pool):
-        #         if "Badge" not in item.name:
-        #             self.world.get_location("Pallet Town - Player's PC", self.player).place_locked_item(item_pool.pop(i))
-        #             break
-        # if self.world.old_man[self.player].value == 1:
-        #     if not place_pc_item:
-        #         loc = self.world.get_location("Pallet Town - Player's PC", self.player)
-        #     else:
-        #         loc = self.world.get_location("Viridian City - Pokemart Quest", self.player)
-        #     for i, item in enumerate(item_pool):
-        #         if item.name == "Oak's Parcel":
-        #             loc.place_locked_item(item_pool.pop(i))
 
         self.world.itempool += item_pool
 
-        if not self.world.badgesanity[self.player].value:
-            state = self.world.get_all_state(False)
-            self.world.random.shuffle(badges)
-            from Fill import fill_restrictive
-            fill_restrictive(self.world, state, badgelocs, badges, True, True)
 
     def pre_fill(self):
+
         if self.world.old_man[self.player].value == 1:
-            for item in self.world.itempool:
-                if item.name == "Oak's Parcel" and item.player == self.player:
-                    self.world.itempool.remove(item)
-                    break
-            else:
-                logging.waring(f"Early Parcel option selected for {self.world.player_name[self.player]} but no Oak's Parcel found in the item pool.")
+            item = self.create_item("Oak's Parcel")
             locations = []
             for location in self.world.get_locations():
                 if location.player == self.player \
@@ -176,6 +108,35 @@ class PokemonRedBlueWorld(World):
             self.world.random.shuffle(player_items)
             location.place_locked_item(player_items[0])
             self.world.itempool.remove(player_items[0])
+        if not self.world.badgesanity[self.player].value:
+            badges = []
+            badgelocs = []
+            for badge in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge",
+                          "Marsh Badge", "Volcano Badge", "Earth Badge"]:
+                badges.append(self.create_item(badge))
+            for loc in ["Pewter Gym - Brock 1", "Cerulean Gym - Misty 1", "Vermilion Gym - Lt. Surge 1",
+                          "Celadon Gym - Erika 1", "Fuchsia Gym - Koga 1", "Saffron Gym - Sabrina 1",
+                          "Cinnabar Gym - Blaine 1", "Viridian Gym - Giovanni 1"]:
+                badgelocs.append(self.world.get_location(loc, self.player))
+            state = self.world.get_all_state(False)
+            self.world.random.shuffle(badges)
+            self.world.random.shuffle(badgelocs)
+            from Fill import fill_restrictive
+            fill_restrictive(self.world, state, badgelocs, badges, True, True)
+
+        intervene = False
+        test_state = self.world.get_all_state(False)
+        if not self.world.has_beaten_game(test_state, self.player):
+            intervene = True
+        elif self.world.accessibility[self.player].current_key != "minimal":
+            if not self.world.get_location("Cinnabar Island - Lab Scientist", self.player).can_reach(test_state) or \
+                    not self.world.get_location("Route 2 - North Item", self.player).can_reach(test_state):
+                intervene = True
+        if intervene:
+            logging.warning(
+                f"HM-compatible Pokémon possibly missing, placing Mew on Route 1 for player {self.player}")
+            loc = self.world.get_location("Route 1 - Wild Pokemon - 1", self.player)
+            loc.item = self.create_item("Mew")
 
     def create_regions(self):
         if self.world.free_fly_location[self.player].value:

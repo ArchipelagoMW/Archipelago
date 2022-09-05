@@ -1,13 +1,14 @@
-from copy import deepcopy
 import os
 import hashlib
 import Utils
 import bsdiff4
+import logging
+from copy import deepcopy
+from Patch import read_rom, APDeltaPatch
 from .text import encode_text
 from .rom_addresses import rom_addresses
-#from .poke_data import poke_data.pokemon_data, poke_data.type_names, poke_data.type_ids, poke_data.type_chart, poke_data.evolves_from
+from .locations import get_locations
 import worlds.pokemon_rb.poke_data as poke_data
-from Patch import read_rom, APDeltaPatch
 
 
 def choose_forced_type(chances, random):
@@ -36,6 +37,196 @@ def get_move(moves, chances, random, starting_move=False):
             return move
     else:
         return get_move(moves, [], random, starting_move)
+
+
+def get_encounter_slots(self):
+    encounter_slots = [location for location in get_locations(self.player) if location.type == "Wild Encounter"]
+
+    for location in encounter_slots:
+        if isinstance(location.original_item, list):
+            location.original_item = location.original_item[not self.world.game_version[self.player].value]
+    return encounter_slots
+
+def generate_basic(self):
+    def get_base_stat_total(mon):
+        return (poke_data.pokemon_data[mon]["atk"] + poke_data.pokemon_data[mon]["def"]
+                + poke_data.pokemon_data[mon]["hp"] + poke_data.pokemon_data[mon]["spd"]
+                + poke_data.pokemon_data[mon]["spc"])
+
+    local_poke_data = deepcopy(poke_data.pokemon_data)
+    learnsets = deepcopy(poke_data.learnsets)
+
+    for mon, mon_data in local_poke_data.items():
+        if self.world.randomize_pokemon_stats[self.player].value == 1:
+            stats = [mon_data["hp"], mon_data["atk"], mon_data["def"], mon_data["spd"], mon_data["spc"]]
+            self.world.random.shuffle(stats)
+            mon_data["hp"] = stats[0]
+            mon_data["atk"] = stats[1]
+            mon_data["def"] = stats[2]
+            mon_data["spd"] = stats[3]
+            mon_data["spc"] = stats[4]
+        elif self.world.randomize_pokemon_stats[self.player].value == 2:
+            old_stats = mon_data["hp"] + mon_data["atk"] + mon_data["def"] + mon_data["spd"] + mon_data["spc"]
+            stats = [0, 0, 0, 0, 0]
+            while old_stats > 0:
+                old_stats -= 1
+                stats[self.world.random.randint(0, 4)] += 1
+            mon_data["hp"] = stats[0]
+            mon_data["atk"] = stats[1]
+            mon_data["def"] = stats[2]
+            mon_data["spd"] = stats[3]
+            mon_data["spc"] = stats[4]
+        if self.world.randomize_pokemon_types[self.player].value:
+            if self.world.randomize_pokemon_types[self.player].value == 1 and mon in poke_data.evolves_from:
+                type1 = local_poke_data[poke_data.evolves_from[mon]]["type1"]
+                type2 = local_poke_data[poke_data.evolves_from[mon]]["type2"]
+                if type1 == type2:
+                    if self.world.secondary_type_chance[self.player].value == -1:
+                        if mon_data["type1"] != mon_data["type2"]:
+                            while type2 == type1:
+                                type2 = self.world.random.choice(list(poke_data.type_names.values()))
+                    elif self.world.random.randint(1, 100) <= self.world.secondary_type_chance[self.player].value:
+                        type2 = self.world.random.choice(list(poke_data.type_names.values()))
+            else:
+                type1 = self.world.random.choice(list(poke_data.type_names.values()))
+                type2 = type1
+                if ((self.world.secondary_type_chance[self.player].value == -1 and mon_data["type1"]
+                     != mon_data["type2"]) or self.world.random.randint(1, 100)
+                        <= self.world.secondary_type_chance[self.player].value):
+                    while type2 == type1:
+                        type2 = self.world.random.choice(list(poke_data.type_names.values()))
+
+            mon_data["type1"] = type1
+            mon_data["type2"] = type2
+        if self.world.randomize_pokemon_movesets[self.player].value:
+            if self.world.randomize_pokemon_movesets[self.player].value == 1:
+                if mon_data["type1"] == "Normal" and mon_data["type2"] == "Normal":
+                    chances = [[75, "Normal"]]
+                elif mon_data["type1"] == "Normal" or mon_data["type2"] == "Normal":
+                    if mon_data["type1"] == "Normal":
+                        second_type = mon_data["type2"]
+                    else:
+                        second_type = mon_data["type1"]
+                    chances = [[30, "Normal"], [85, second_type]]
+                elif mon_data["type1"] == mon_data["type2"]:
+                    chances = [[60, mon_data["type1"]], [80, "Normal"]]
+                else:
+                    chances = [[50, mon_data["type1"]], [80, mon_data["type2"]], [85, "Normal"]]
+            else:
+                chances = []
+            moves = set(poke_data.moves.keys())
+            moves -= set(["No Move"] + poke_data.hm_moves)
+            mon_data["start move 1"] = get_move(moves, chances, self.world.random, True)
+            for i in range(2, 5):
+                if mon_data[f"start move {i}"] != "No Move" or self.world.start_with_four_moves[
+                        self.player].value == 1:
+                    mon_data[f"start move {i}"] = get_move(moves, chances, self.world.random)
+            if mon in learnsets:
+                for move_num in range(0, len(learnsets[mon])):
+                    learnsets[mon][move_num] = get_move(moves, chances, self.world.random)
+        if self.world.randomize_pokemon_catch_rates[self.player].value:
+            mon_data["catch rate"] = self.world.random.randint(self.world.minimum_catch_rate[self.player], 255)
+        else:
+            mon_data["catch rate"] = max(self.world.minimum_catch_rate[self.player], mon_data["catch rate"])
+
+        if mon in poke_data.evolves_from.keys():
+            if mon_data["type1"] == local_poke_data[poke_data.evolves_from[mon]]["type1"] and mon_data["type2"] == local_poke_data[poke_data.evolves_from[mon]]["type2"]:
+                mon_data["tms"] = local_poke_data[poke_data.evolves_from[mon]]["tms"]
+        elif mon != "Mew":
+            tms_hms = poke_data.tm_moves + poke_data.hm_moves
+            for flag, tm_move in enumerate(tms_hms):
+                if (flag < 50 and self.world.tm_compatibility[self.player].value == 1) or (flag >= 50 and self.world.hm_compatibility[self.player].value == 1):
+                    type_match = poke_data.moves[tm_move]["type"] in [mon_data["type1"], mon_data["type2"]]
+                    bit = int(self.world.random.randint(1, 100) < [[90, 50, 25], [100, 75, 25]][flag >= 50][0 if type_match else 1 if poke_data.moves[tm_move]["type"] == "Normal" else 2])
+                elif (flag < 50 and self.world.tm_compatibility[self.player].value == 2) or (flag >= 50 and self.world.hm_compatibility[self.player].value == 2):
+                    bit = [0, 1][self.world.random.randint(0, 1)]
+                elif (flag < 50 and self.world.tm_compatibility[self.player].value == 3) or (flag >= 50 and self.world.hm_compatibility[self.player].value == 3):
+                    bit = 1
+                else:
+                    continue
+                if bit:
+                    mon_data["tms"][int(flag / 8)] |= 1 << (flag % 8)
+                    # if tm_move in poke_data.hm_moves:
+                    #     print(f"{mon}: {tm_move} - {bit}")
+                else:
+                    mon_data["tms"][int(flag / 8)] &= ~(1 << (flag % 8))
+
+                #if mon == "Bulbasaur":
+                    #print(mon + ": " + tm_move + " " + ["no", "yes"][bit])
+    #print(local_poke_data["Bulbasaur"]["tms"])
+
+
+    encounter_slots = get_encounter_slots(self)
+
+    placed_mons = {pokemon: 0 for pokemon in poke_data.pokemon_data.keys()}
+    if self.world.randomize_pokemon[self.player].value:
+        mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon]
+        self.world.random.shuffle(encounter_slots)
+        locations = []
+        for slot in encounter_slots:
+            if self.world.randomize_pokemon[self.player].value in [1, 3]:
+                type_mons = [pokemon for pokemon in mons_list if any([poke_data.pokemon_data[slot.original_item][
+                    "type1"] in [local_poke_data[pokemon]["type1"], local_poke_data[pokemon]["type2"]],
+                    poke_data.pokemon_data[slot.original_item]["type2"] in [local_poke_data[pokemon]["type1"],
+                                                                          local_poke_data[pokemon]["type2"]]])]
+                if not type_mons:
+                    type_mons = mons_list.copy()
+                self.world.random.shuffle(type_mons)
+                if self.world.randomize_pokemon[self.player].value == 3:
+                    stat_base = get_base_stat_total(slot.original_item)
+                    type_mons.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
+                mon = type_mons[round(self.world.random.triangular(0, len(type_mons) - 1, 0))]
+            if self.world.randomize_pokemon[self.player].value == 2:
+                stat_base = get_base_stat_total(slot.original_item)
+                mons_list.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
+                mon = mons_list[round(self.world.random.triangular(0, 50, 0))]
+            elif self.world.randomize_pokemon[self.player].value == 4:
+                mon = self.world.random.choice(mons_list)
+            placed_mons[mon] += 1
+            location = self.world.get_location(slot.name, self.player)
+            location.item = self.create_item(mon)
+            location.event = True
+            location.locked = True
+            location.item.location = location
+            locations.append(location)
+
+        missing_mons = [pokemon for pokemon in poke_data.first_stage_pokemon if placed_mons[pokemon] == 0 and pokemon
+                        not in poke_data.legendary_pokemon]
+        # missing_mons = [pokemon for pokemon in poke_data.pokemon_data.keys() if placed_mons[pokemon] == 0 and pokemon
+        #                not in poke_data.legendary_pokemon]
+        for mon in missing_mons:
+            stat_base = get_base_stat_total(mon)
+            #candidate_locations = locations.copy()
+            candidate_locations = get_encounter_slots(self)
+            if self.world.randomize_pokemon[self.player].value in [1, 3]:
+                candidate_locations = [slot for slot in candidate_locations if any([poke_data.pokemon_data[slot.original_item][
+                    "type1"] in [local_poke_data[mon]["type1"], local_poke_data[mon]["type2"]],
+                    poke_data.pokemon_data[slot.original_item]["type2"] in [local_poke_data[mon]["type1"],
+                                                                          local_poke_data[mon]["type2"]]])]
+            if not candidate_locations:
+                candidate_locations = get_locations(self.player)
+            candidate_locations = [self.world.get_location(location.name, self.player) for location in candidate_locations]
+            candidate_locations.sort(key=lambda slot: abs(get_base_stat_total(slot.item.name) - stat_base))
+            for location in candidate_locations:
+                if placed_mons[location.item.name] > 1 or location.item.name not in poke_data.first_stage_pokemon:
+                    placed_mons[location.item.name] -= 1
+                    location.item = self.create_item(mon)
+                    location.item.location = location
+                    placed_mons[mon] += 1
+                    break
+
+    else:
+        for slot in encounter_slots:
+            location = self.world.get_location(slot.name, self.player)
+            location.item = self.create_item(slot.original_item)
+            location.event = True
+            location.locked = True
+            location.item.location = location
+            placed_mons[location.item.name] += 1
+
+    self.local_poke_data = local_poke_data
+    self.learnsets = learnsets
+
 
 
 def generate_output(self, output_directory: str):
@@ -70,15 +261,25 @@ def generate_output(self, output_directory: str):
     data[rom_addresses['Option_Badge_Goal']] = self.world.victory_road_condition[self.player].value - 2
     data[rom_addresses['Option_Viridian_Gym_Badges']] = self.world.victory_road_condition[self.player].value - 1
     data[rom_addresses['Option_EXP_Modifier']] = self.world.exp_modifier[self.player].value
+    if not self.world.require_item_finder[self.player].value:
+        data[rom_addresses['Option_Itemfinder']] = 0
     if self.world.extra_strength_boulders[self.player].value:
         for i in range(0, 3):
             data[rom_addresses['Option_Boulders'] + (i * 3)] = 0x15
+    if self.world.extra_key_items[self.player].value:
+        for i in range(0, 4):
+            data[rom_addresses['Option_Rock_Tunnel_Extra_Items'] + (i * 3)] = 0x15
     if self.world.old_man[self.player].value == 2:
         data[rom_addresses['Option_Old_Man']] = 0x11
         data[rom_addresses['Option_Old_Man_Lying']] = 0x15
-    hm_moves = ["Cut", "Fly", "Surf", "Strength", "Flash"]
+    money = str(self.world.starting_money[self.player].value)
+    while len(money) < 6:
+        money = "0" + money
+    data[rom_addresses["Starting_Money_High"]] = int(money[:2], 16)
+    data[rom_addresses["Starting_Money_Middle"]] = int(money[2:4], 16)
+    data[rom_addresses["Starting_Money_Low"]] = int(money[4:], 16)
     if self.world.badges_needed_for_hm_moves[self.player].value == 0:
-        for hm_move in hm_moves:
+        for hm_move in poke_data.hm_moves:
             write_bytes(data, bytearray([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
                         rom_addresses["HM_" + hm_move + "_Badge_a"])
     elif self.extra_badges:
@@ -145,99 +346,31 @@ def generate_output(self, output_directory: str):
         for i, chance in enumerate(chances):
             data[rom_addresses['Encounter_Chances'] + (i * 2)] = chance
 
-    local_poke_data = deepcopy(poke_data.pokemon_data)
-    learnsets = deepcopy(poke_data.learnsets)
 
-    for mon, mon_data in local_poke_data.items():
-        if self.world.randomize_pokemon_stats[self.player].value == 1:
-            stats = [mon_data["hp"], mon_data["atk"], mon_data["def"], mon_data["spd"], mon_data["spc"]]
-            random.shuffle(stats)
-            mon_data["hp"] = stats[0]
-            mon_data["atk"] = stats[1]
-            mon_data["def"] = stats[2]
-            mon_data["spd"] = stats[3]
-            mon_data["spc"] = stats[4]
-        elif self.world.randomize_pokemon_stats[self.player].value == 2:
-            old_stats = mon_data["hp"] + mon_data["atk"] + mon_data["def"] + mon_data["spd"] + mon_data["spc"]
-            stats = [0, 0, 0, 0, 0]
-            while old_stats > 0:
-                old_stats -= 1
-                stats[random.randint(0, 4)] += 1
-            mon_data["hp"] = stats[0]
-            mon_data["atk"] = stats[1]
-            mon_data["def"] = stats[2]
-            mon_data["spd"] = stats[3]
-            mon_data["spc"] = stats[4]
-        if self.world.randomize_pokemon_types[self.player].value:
-            if self.world.randomize_pokemon_types[self.player].value == 1 and mon in poke_data.evolves_from:
-                type1 = local_poke_data[poke_data.evolves_from[mon]]["type1"]
-                type2 = local_poke_data[poke_data.evolves_from[mon]]["type2"]
-                if type1 == type2:
-                    if self.world.secondary_type_chance[self.player].value == -1:
-                        if mon_data["type1"] != mon_data["type2"]:
-                            while type2 == type1:
-                                type2 = random.choice(list(poke_data.type_names.values()))
-                    elif random.randint(1, 100) <= self.world.secondary_type_chance[self.player].value:
-                        type2 = random.choice(list(poke_data.type_names.values()))
-            else:
-                type1 = random.choice(list(poke_data.type_names.values()))
-                type2 = type1
-                if ((self.world.secondary_type_chance[self.player].value == -1 and mon_data["type1"]
-                     != mon_data["type2"]) or random.randint(1, 100)
-                        <= self.world.secondary_type_chance[self.player].value):
-                    while type2 == type1:
-                        type2 = random.choice(list(poke_data.type_names.values()))
+    #print(local_poke_data)
+    #print(learnsets)
 
-            mon_data["type1"] = type1
-            mon_data["type2"] = type2
-        if self.world.randomize_pokemon_movesets[self.player].value:
-            if self.world.randomize_pokemon_movesets[self.player].value == 1:
-                if mon_data["type1"] == "Normal" and mon_data["type2"] == "Normal":
-                    chances = [[75, "Normal"]]
-                elif mon_data["type1"] == "Normal" or mon_data["type2"] == "Normal":
-                    if mon_data["type1"] == "Normal":
-                        second_type = mon_data["type2"]
-                    else:
-                        second_type = mon_data["type1"]
-                    chances = [[30, "Normal"], [85, second_type]]
-                elif mon_data["type1"] == mon_data["type2"]:
-                    chances = [[60, mon_data["type1"]], [80, "Normal"]]
-                else:
-                    chances = [[50, mon_data["type1"]], [80, mon_data["type2"]], [85, "Normal"]]
-            else:
-                chances = []
-            moves = list(poke_data.moves.keys())
-            moves.remove("No Move")
-            mon_data["start move 1"] = get_move(moves, chances, random, True)
-            for i in range(2, 5):
-                if mon_data[f"start move {i}"] != "No Move" or self.world.start_with_four_moves[self.player].value == 1:
-                    mon_data[f"start move {i}"] = get_move(moves, chances, random)
-            if mon in learnsets:
-                for move_num in range(0, len(learnsets[mon])):
-                    learnsets[mon][move_num] = get_move(moves, chances, random)
-
-    print(local_poke_data)
-    print(learnsets)
-
-    for mon, mon_data in local_poke_data.items():
+    for mon, mon_data in self.local_poke_data.items():
         if mon == "Mew":
             address = rom_addresses["Base_Stats_Mew"]
         else:
             address = rom_addresses["Base_Stats"] + (28 * (mon_data["dex"] - 1))
-        data[address + 1] = local_poke_data[mon]["hp"]
-        data[address + 2] = local_poke_data[mon]["atk"]
-        data[address + 3] = local_poke_data[mon]["def"]
-        data[address + 4] = local_poke_data[mon]["spd"]
-        data[address + 5] = local_poke_data[mon]["spc"]
-        data[address + 6] = poke_data.type_ids[local_poke_data[mon]["type1"]]
-        data[address + 7] = poke_data.type_ids[local_poke_data[mon]["type2"]]
-        data[address + 15] = poke_data.moves[local_poke_data[mon]["start move 1"]]["id"]
-        data[address + 16] = poke_data.moves[local_poke_data[mon]["start move 2"]]["id"]
-        data[address + 17] = poke_data.moves[local_poke_data[mon]["start move 3"]]["id"]
-        data[address + 18] = poke_data.moves[local_poke_data[mon]["start move 4"]]["id"]
-        if mon in learnsets:
+        data[address + 1] = self.local_poke_data[mon]["hp"]
+        data[address + 2] = self.local_poke_data[mon]["atk"]
+        data[address + 3] = self.local_poke_data[mon]["def"]
+        data[address + 4] = self.local_poke_data[mon]["spd"]
+        data[address + 5] = self.local_poke_data[mon]["spc"]
+        data[address + 6] = poke_data.type_ids[self.local_poke_data[mon]["type1"]]
+        data[address + 7] = poke_data.type_ids[self.local_poke_data[mon]["type2"]]
+        data[address + 8] = self.local_poke_data[mon]["catch rate"]
+        data[address + 15] = poke_data.moves[self.local_poke_data[mon]["start move 1"]]["id"]
+        data[address + 16] = poke_data.moves[self.local_poke_data[mon]["start move 2"]]["id"]
+        data[address + 17] = poke_data.moves[self.local_poke_data[mon]["start move 3"]]["id"]
+        data[address + 18] = poke_data.moves[self.local_poke_data[mon]["start move 4"]]["id"]
+        write_bytes(data, self.local_poke_data[mon]["tms"], address + 20)
+        if mon in self.learnsets:
             address = rom_addresses["Learnset_" + mon.replace(" ", "")]
-            for i, move in enumerate(learnsets[mon]):
+            for i, move in enumerate(self.learnsets[mon]):
                 data[(address + 1) + i * 2] = poke_data.moves[move]["id"]
 
     # encounter_slots = []
@@ -277,6 +410,11 @@ def generate_output(self, output_directory: str):
     #                 placed_mons[old_mon] -= 1
     #                 break
     # print(placed_mons)
+
+
+    data[rom_addresses["Option_Aide_Rt2"]] = self.world.oaks_aide_rt_2[self.player]
+    data[rom_addresses["Option_Aide_Rt11"]] = self.world.oaks_aide_rt_11[self.player]
+    data[rom_addresses["Option_Aide_Rt15"]] = self.world.oaks_aide_rt_15[self.player]
 
     mons = [mon["id"] for mon in poke_data.pokemon_data.values()]
     random.shuffle(mons)
@@ -335,6 +473,7 @@ def get_base_rom_path(game_version: str) -> str:
     if not os.path.exists(file_name):
         file_name = Utils.local_path(file_name)
     return file_name
+
 
 class BlueDeltaPatch(APDeltaPatch):
     patch_file_ending = ".apblue"

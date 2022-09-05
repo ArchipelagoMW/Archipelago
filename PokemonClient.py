@@ -14,13 +14,19 @@ from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, 
     get_base_parser
 
 from worlds.pokemon_rb.locations import get_locations
+
 location_data = get_locations()
-location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}, "List": {}}
+location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}, "list": {}}
 location_bytes_bits = {}
 for location in location_data:
     if location.ram_address is not None:
-        location_map[type(location.ram_address).__name__][location.ram_address.flag] = location.address
-        location_bytes_bits[location.address] = {'byte': location.ram_address.byte, 'bit': location.ram_address.bit}
+        if type(location.ram_address).__name__ == "list":
+            location_map[type(location.ram_address).__name__][(location.ram_address[0].flag, location.ram_address[1].flag)] = location.address
+            location_bytes_bits[location.address] = [{'byte': location.ram_address[0].byte, 'bit': location.ram_address[0].bit},
+                                                     {'byte': location.ram_address[1].byte, 'bit': location.ram_address[1].bit}]
+        else:
+            location_map[type(location.ram_address).__name__][location.ram_address.flag] = location.address
+            location_bytes_bits[location.address] = {'byte': location.ram_address.byte, 'bit': location.ram_address.bit}
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -141,33 +147,27 @@ def get_payload(ctx: GBContext):
 
 
 async def parse_locations(data: List, ctx: GBContext):
-    # logger.setLevel(10)
-    # logger.debug(data)
     locations = []
     flags = {"EventFlag": data[:0x140], "Missable": data[0x140:0x140 + 0x20],
              "Hidden": data[0x140 + 0x20: 0x140 + 0x20 + 0x0E], "Rod": data[0x140 + 0x20 + 0x0E:]}
 
     # Check for clear problems
-
     if len(flags['Rod']) > 1:
-        logger.warning("Data from emulator too long! Please submit a bug report with this data:")
-        logger.warning(f"{flags}")
         return
     if flags["EventFlag"][1] + flags["EventFlag"][8] + flags["EventFlag"][9] + flags["EventFlag"][12] \
             + flags["EventFlag"][61] + flags["EventFlag"][62] + flags["EventFlag"][63] + flags["EventFlag"][64] \
             + flags["EventFlag"][65] + flags["EventFlag"][66] + flags["EventFlag"][67] + flags["EventFlag"][68] \
             + flags["EventFlag"][69] + flags["EventFlag"][70] != 0:
-        logger.warning("Erroneous Event flags set! Please submit a bug report with this data:")
-        logger.warning(f"{flags}")
         return
+
     for flag_type, loc_map in location_map.items():
-        #locations[flag_type] = {}
         for flag, loc_id in loc_map.items():
-            try:
-                if flags[flag_type][location_bytes_bits[loc_id]['byte']] & 1 << location_bytes_bits[loc_id]['bit']:
+            if flag_type == "list":
+                if (flags["EventFlag"][location_bytes_bits[loc_id][0]['byte']] & 1 << location_bytes_bits[loc_id][0]['bit']
+                        and flags["Missable"][location_bytes_bits[loc_id][1]['byte']] & 1 << location_bytes_bits[loc_id][1]['bit']):
                     locations.append(loc_id)
-            except:
-                breakpoint()
+            elif flags[flag_type][location_bytes_bits[loc_id]['byte']] & 1 << location_bytes_bits[loc_id]['bit']:
+                locations.append(loc_id)
     if flags["EventFlag"][280] & 1 and not ctx.finished_game:
         await ctx.send_msgs([
                     {"cmd": "StatusUpdate",
@@ -210,10 +210,8 @@ async def gb_sync_task(ctx: GBContext):
                         ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
                         if ctx.auth == '':
                             logger.info("Invalid ROM detected. No player name built into the ROM.")
-                        #print("NAME: " + ctx.auth)
                         if ctx.awaiting_rom:
                             await ctx.server_auth(False)
-                    #print(f"setting seed_name {ctx.seed_name} from gb_sync_task")
                     if 'locations' in data_decoded and ctx.game and ctx.gb_status == CONNECTION_CONNECTED_STATUS \
                             and not error_status and ctx.auth:
                         # Not just a keep alive ping, parse
@@ -262,6 +260,7 @@ async def gb_sync_task(ctx: GBContext):
                 logger.debug("Connection Refused, Trying Again")
                 ctx.gb_status = CONNECTION_REFUSED_STATUS
                 continue
+
 
 async def run_game(romfile):
     auto_start = Utils.get_options()["pkrb_options"].get("rom_start", True)
