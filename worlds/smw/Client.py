@@ -106,6 +106,8 @@ async def smw_rom_init(ctx: Context):
         ctx.receive_option = receive_option[0]
         ctx.send_option = send_option[0]
 
+        ctx.message_queue = []
+
         ctx.allow_collect = True
 
         death_link = await snes_read(ctx, SMW_DEATH_LINK_ACTIVE_ADDR, 1)
@@ -186,6 +188,7 @@ async def smw_game_watcher(ctx: Context):
             return
         elif game_state[0] < 0x0B:
             # We haven't loaded a save file
+            ctx.message_queue = []
             return
         elif mario_state[0] in SMW_INVALID_MARIO_STATES:
             # Mario can't come to the phonee right now
