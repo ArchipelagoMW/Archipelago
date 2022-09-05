@@ -265,12 +265,24 @@ class Overcooked2World(World):
     # Items get distributed to locations
 
     def generate_output(self, output_directory: str) -> None:
+        if self.world.players != 1:
+            return
+
+        mod_name = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}"
+        data = self.fill_json_data()
+        # Save to disk
+
+        filepath = os.path.join(output_directory, mod_name + ".oc2.json")
+        with open(filepath, "w") as file:
+            json.dump(data, file)
+
+    def fill_json_data(self) -> Dict[str, Any]:
         mod_name = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}"
 
         # Serialize Level Order
         story_level_order = dict()
 
-        if self.shuffle_level_order:
+        if self.options["ShuffleLevelOrder"]:
             for level_id in self.level_mapping:
                 level: Overcooked2GenericLevel = self.level_mapping[level_id]
                 story_level_order[str(level_id)] = {
@@ -329,7 +341,7 @@ class Overcooked2World(World):
 
         # Put it all together
 
-        data = {
+        base_data = {
             # Changes Inherent to rando
             "DisableAllMods": False,
             "UnlockAllChefs": True,
@@ -340,30 +352,13 @@ class Overcooked2World(World):
             "SkipTutorialPopups": True,
             "RevealAllLevels": False,
             "PurchaseAllLevels": False,
-            "CheatsEnabled": True, # TODO: off for release
+            "CheatsEnabled": True,  # TODO: off for release
             "ImpossibleTutorial": True,
             "LevelForceReveal": level_force_reveal,
             "SaveFolderName": mod_name,
 
-            # Quality of Life
-            "DisplayLeaderboardScores": self.display_leaderboard_scores,
-            "AlwaysServeOldestOrder": self.always_serve_oldest_order,
-            "PreserveCookingProgress": self.always_preserve_cooking_progress,
-            "FixDoubleServing": self.fix_bugs,
-            "FixSinkBug": self.fix_bugs,
-            "FixControlStickThrowBug": self.fix_bugs,
-            "FixEmptyBurnerThrow": self.fix_bugs,
-            "TimerAlwaysStarts": self.prep_levels == PrepLevelMode.ayce,
-            "LevelTimerScale": 0.666 if self.shorter_level_duration else 1.0,
-
             # Game Modifications
             "LevelPurchaseRequirements": level_purchase_requirements,
-            "LeaderboardScoreScale": {
-                "FourStars": 1.0,
-                "ThreeStars": self.star_threshold_scale,
-                "TwoStars": self.star_threshold_scale*0.8,
-                "OneStar": self.star_threshold_scale*0.4
-            },
             "Custom66TimerScale": 0.5,
 
             "CustomLevelOrder": custom_level_order,
@@ -399,12 +394,26 @@ class Overcooked2World(World):
             "OnLevelCompleted": on_level_completed,
         }
 
-        # Save to disk
+        # Set remaining data in the options dict
+        bugs = ["FixDoubleServing", "FixSinkBug", "FixControlStickThrowBug", "FixEmptyBurnerThrow"]
+        for bug in bugs:
+            self.options[bug] = self.options["FixBugs"]
+        self.options["PreserveCookingProgress"] = self.options["AlwaysPreserveCookingProgress"]
+        self.options["TimerAlwaysStarts"] = self.options["PrepLevels"] == PrepLevelMode.ayce
+        self.options["LevelTimerScale"] = 0.666 if self.options["ShorterLevelDuration"] else 1.0
+        star_threshold_scale = self.options["StarThresholdScale"] / 100
+        self.options["LeaderboardScoreScale"] = {
+            "FourStars": 1.0,
+            "ThreeStars": star_threshold_scale,
+            "TwoStars": star_threshold_scale * 0.8,
+            "OneStar": star_threshold_scale * 0.4,
+        }
 
-        filepath = os.path.join(output_directory, mod_name + ".oc2.json")
-        with open(filepath, "w") as file:
-            json.dump(data, file)
+        base_data.update(self.options)
+        return base_data
 
+    def fill_slot_data(self) -> Dict[str, Any]:
+        return self.fill_json_data()
 
 def level_unlock_requirement_factory(stars_to_win: int) -> dict[int, int]:
     level_unlock_counts = dict()
