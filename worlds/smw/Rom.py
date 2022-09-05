@@ -535,6 +535,63 @@ def handle_bowser_damage(rom):
     return
 
 
+def handle_level_shuffle(rom, active_level_dict):
+    rom.write_bytes(0x37600, bytearray([0x00] * 0x800)) # Duplicate Level Table
+
+    rom.write_bytes(0x2D89C, bytearray([0x00, 0xF6, 0x06])) # Level Load Pointer
+    rom.write_bytes(0x20F46, bytearray([0x00, 0xF6, 0x06])) # Mid Gate Pointer
+    rom.write_bytes(0x20E7B, bytearray([0x00, 0xF6, 0x06])) # Level Name Pointer
+    rom.write_bytes(0x21543, bytearray([0x00, 0xF6, 0x06])) # Also Level Name Pointer?
+    rom.write_bytes(0x20F64, bytearray([0x00, 0xF6, 0x06])) # Level Beaten Pointer
+
+    ### Fix Translevel Check
+    rom.write_bytes(0x2D8AE, bytearray([0x20, 0x00, 0xDD]))       # JSR $DD00
+    rom.write_bytes(0x2D8B1, bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA])) # NOP NOP NOP NOP NOP
+
+    rom.write_bytes(0x2D7CB, bytearray([0x20, 0x00, 0xDD]))       # JSR $DD00
+    rom.write_bytes(0x2D7CE, bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA])) # NOP NOP NOP NOP NOP
+
+    rom.write_bytes(0x2DD00, bytearray([0xDA]))             # PHX
+    rom.write_bytes(0x2DD01, bytearray([0x08]))             # PHP
+    rom.write_bytes(0x2DD02, bytearray([0xE2, 0x30]))       # SEP #30
+    rom.write_bytes(0x2DD04, bytearray([0xAE, 0xBF, 0x13])) # LDX $13BF
+    rom.write_bytes(0x2DD07, bytearray([0xE0, 0x25]))       # CPX #25
+    rom.write_bytes(0x2DD09, bytearray([0x90, 0x04]))       # BCC $DD0F
+    rom.write_bytes(0x2DD0B, bytearray([0xA2, 0x01]))       # LDX #01
+    rom.write_bytes(0x2DD0D, bytearray([0x80, 0x02]))       # BRA $DD11
+    rom.write_bytes(0x2DD0F, bytearray([0xA2, 0x00]))       # LDX #00
+    rom.write_bytes(0x2DD11, bytearray([0x86, 0x0F]))       # STX $0F
+    rom.write_bytes(0x2DD13, bytearray([0x28]))             # PLP
+    rom.write_bytes(0x2DD14, bytearray([0xFA]))             # PLX
+    rom.write_bytes(0x2DD15, bytearray([0x60]))             # RTS
+    ### End Fix Translevel Check
+
+    ### Fix Snake Blocks
+    rom.write_bytes(0x192FB, bytearray([0x20, 0x18, 0xBC])) # JSR $03BC18
+
+    SNAKE_BLOCKS_SUB_ADDR = 0x01BC18
+    rom.write_bytes(SNAKE_BLOCKS_SUB_ADDR + 0x00, bytearray([0x08]))                   # PHP
+    rom.write_bytes(SNAKE_BLOCKS_SUB_ADDR + 0x01, bytearray([0xAD, 0xBF, 0x13]))       # LDA $13BF
+    rom.write_bytes(SNAKE_BLOCKS_SUB_ADDR + 0x04, bytearray([0xC9, 0x20]))             # CMP #20
+    rom.write_bytes(SNAKE_BLOCKS_SUB_ADDR + 0x06, bytearray([0xF0, 0x05]))             # BEQ +0x05
+    rom.write_bytes(SNAKE_BLOCKS_SUB_ADDR + 0x08, bytearray([0x28]))                   # PLP
+    rom.write_bytes(SNAKE_BLOCKS_SUB_ADDR + 0x09, bytearray([0xA9, 0x01]))             # LDA #01
+    rom.write_bytes(SNAKE_BLOCKS_SUB_ADDR + 0x0B, bytearray([0x80, 0x03]))             # BRA +0x03
+    rom.write_bytes(SNAKE_BLOCKS_SUB_ADDR + 0x0D, bytearray([0x28]))                   # PLP
+    rom.write_bytes(SNAKE_BLOCKS_SUB_ADDR + 0x0E, bytearray([0xA9, 0x00]))             # LDA #00
+    rom.write_bytes(SNAKE_BLOCKS_SUB_ADDR + 0x10, bytearray([0x60]))                   # RTS
+    ### End Fix Snake Blocks
+
+    for level_id, level_data in level_info_dict.items():
+        tile_id = active_level_dict[level_id]
+        tile_data = level_info_dict[tile_id]
+
+        print("Writing: ", hex(tile_data.levelIDAddress), " | ", hex(level_id))
+        rom.write_byte(tile_data.levelIDAddress, level_id)
+        print("Writing: ", hex(0x2D608 + level_id), " | ", hex(tile_data.eventIDValue))
+        rom.write_byte(0x2D608 + level_id, tile_data.eventIDValue)
+
+
 def patch_rom(world, rom, player, active_level_dict):
     local_random = world.slot_seeds[player]
 
@@ -615,44 +672,7 @@ def patch_rom(world, rom, player, active_level_dict):
 
     # Handle Level Shuffle Here
     if world.level_shuffle[player]:
-        rom.write_bytes(0x37600, bytearray([0x00] * 0x800)) # Duplicate Level Table
-        
-        rom.write_bytes(0x2D89C, bytearray([0x00, 0xF6, 0x06])) # Level Load Pointer
-        rom.write_bytes(0x20F46, bytearray([0x00, 0xF6, 0x06])) # Mid Gate Pointer
-        rom.write_bytes(0x20E7B, bytearray([0x00, 0xF6, 0x06])) # Level Name Pointer
-        rom.write_bytes(0x21543, bytearray([0x00, 0xF6, 0x06])) # Also Level Name Pointer?
-        rom.write_bytes(0x20F64, bytearray([0x00, 0xF6, 0x06])) # Level Beaten Pointer
-
-        ### Fix Translevel Check
-        rom.write_bytes(0x2D8AE, bytearray([0x20, 0x00, 0xDD]))       # JSR $DD00
-        rom.write_bytes(0x2D8B1, bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA])) # NOP NOP NOP NOP NOP
-        
-        rom.write_bytes(0x2D7CB, bytearray([0x20, 0x00, 0xDD]))       # JSR $DD00
-        rom.write_bytes(0x2D7CE, bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA])) # NOP NOP NOP NOP NOP
-
-        rom.write_bytes(0x2DD00, bytearray([0xDA]))             # PHX
-        rom.write_bytes(0x2DD01, bytearray([0x08]))             # PHP
-        rom.write_bytes(0x2DD02, bytearray([0xE2, 0x30]))       # SEP #30
-        rom.write_bytes(0x2DD04, bytearray([0xAE, 0xBF, 0x13])) # LDX $13BF
-        rom.write_bytes(0x2DD07, bytearray([0xE0, 0x25]))       # CPX #25
-        rom.write_bytes(0x2DD09, bytearray([0x90, 0x04]))       # BCC $DD0F
-        rom.write_bytes(0x2DD0B, bytearray([0xA2, 0x01]))       # LDX #01
-        rom.write_bytes(0x2DD0D, bytearray([0x80, 0x02]))       # BRA $DD11
-        rom.write_bytes(0x2DD0F, bytearray([0xA2, 0x00]))       # LDX #00
-        rom.write_bytes(0x2DD11, bytearray([0x86, 0x0F]))       # STX $0F
-        rom.write_bytes(0x2DD13, bytearray([0x28]))             # PLP
-        rom.write_bytes(0x2DD14, bytearray([0xFA]))             # PLX
-        rom.write_bytes(0x2DD15, bytearray([0x60]))             # RTS
-        ### End Fix Translevel Check
-
-        for level_id, level_data in level_info_dict.items():
-            tile_id = active_level_dict[level_id]
-            tile_data = level_info_dict[tile_id]
-
-            print("Writing: ", hex(tile_data.levelIDAddress), " | ", hex(level_id))
-            rom.write_byte(tile_data.levelIDAddress, level_id)
-            print("Writing: ", hex(0x2D608 + level_id), " | ", hex(tile_data.eventIDValue))
-            rom.write_byte(0x2D608 + level_id, tile_data.eventIDValue)
+        handle_level_shuffle(rom, active_level_dict)
 
     # Store all relevant option results in ROM
     rom.write_byte(0x01BFA0, world.goal[player].value)
