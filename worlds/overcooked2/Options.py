@@ -8,7 +8,7 @@ class OC2OnToggle(DefaultOnToggle):
         return bool(self.value)
 
 
-class AlwaysServerOldestOrder(OC2OnToggle):
+class AlwaysServeOldestOrder(OC2OnToggle):
     """Modifies the game so that serving an expired order doesn't target the ticket with the highest tip. This helps players dig out of a broken tip combo fater."""
     display_name = "Always Serve Oldest Order"
 
@@ -66,7 +66,7 @@ class StarThresholdScale(Range):
 
 
 overcooked_options = {
-    "always_serve_oldest_order": AlwaysServerOldestOrder,
+    "always_serve_oldest_order": AlwaysServeOldestOrder,
     "always_preserve_cooking_progress": AlwaysPreserveCookingProgress,
     "display_leaderboard_scores": DisplayLeaderboardScores,
     "shuffle_level_order": ShuffleLevelOrder,
