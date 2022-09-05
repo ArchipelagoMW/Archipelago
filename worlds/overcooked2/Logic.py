@@ -65,7 +65,7 @@ def meets_requirements(state: CollectionState, name: str, stars: int, player: in
     for item_name in item_frequencies:
         if item_name in exclusive_reqs:
             if not state.has(item_name, player, item_frequencies[item_name]):
-                return # need to have all variants of a progressive item to get the score
+                return False # need to have all variants of a progressive item to get the score
 
     # Check if we meet additive requirements
     if len(additive_reqs) == 0:
