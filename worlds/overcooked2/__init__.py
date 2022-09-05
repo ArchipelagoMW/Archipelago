@@ -2,7 +2,7 @@ import os
 import json
 
 from enum import Enum
-from typing import Callable, Dict, Any, List
+from typing import Callable, Dict, Any, List, Optional
 
 from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, RegionType, Tutorial
 from worlds.AutoWorld import World, WebWorld
@@ -93,12 +93,12 @@ class Overcooked2World(World):
         )
         self.world.regions.append(region)
 
-    def connect_regions(self, source: str, target: str, rule: Callable[[CollectionState], bool] = None):
+    def connect_regions(self, source: str, target: str, rule: Optional[Callable[[CollectionState], bool]] = None):
         sourceRegion = self.world.get_region(source, self.player)
         targetRegion = self.world.get_region(target, self.player)
 
         connection = Entrance(self.player, '', sourceRegion)
-        if rule is not None:
+        if rule:
             connection.access_rule = rule
 
         sourceRegion.exits.append(connection)
@@ -131,7 +131,6 @@ class Overcooked2World(World):
         # if level_id is none, then it's the 6-6 edge case
         if level_id is None:
             level_id = 36
-
         if self.level_mapping is not None and level_id in self.level_mapping:
             level = self.level_mapping[level_id]
         else:
@@ -314,7 +313,7 @@ class Overcooked2World(World):
                 level_unlock_requirements[str(level_id)] = level_id - 1
 
         # Set Kevin Unlock Requirements
-        def kevin_level_to_keyholder_level_id(level_id: int) -> int:
+        def kevin_level_to_keyholder_level_id(level_id: int) -> Optional[int]:
             location = self.world.find_item(f"Kevin-{level_id-36}", self.player)
             if location.player != self.player:
                 return None  # This kevin level will be unlocked by the server at runtime
