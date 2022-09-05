@@ -77,7 +77,7 @@ class FF1Context(CommonContext):
             msg = f"Received {', '.join([self.item_names[item.item] for item in args['items']])}"
             self._set_message(msg, SYSTEM_MESSAGE_ID)
         elif cmd == 'PrintJSON':
-            print_type = args['type']
+            print_type = args.get('type', None)
             item = args['item']
             receiving_player_id = args['receiving']
             receiving_player_name = self.player_names[receiving_player_id]
