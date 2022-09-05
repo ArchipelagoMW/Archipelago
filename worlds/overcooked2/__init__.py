@@ -2,17 +2,17 @@ import os
 import json
 
 from enum import Enum
-
-from typing import Callable
+from typing import Callable, Dict, Any, List
 
 from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, RegionType, Tutorial
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 
 from .Overcooked2Levels import Overcooked2Level, Overcooked2GenericLevel, level_shuffle_factory
 from .Locations import Overcooked2Location, oc2_location_name_to_id, oc2_location_id_to_name
-from .Options import overcooked_options
+from .Options import overcooked_options, OC2Options, OC2OnToggle
 from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies
 from .Logic import has_requirements_for_level_star, has_requirements_for_level_access
+
 
 class Overcooked2Web(WebWorld):
     bug_report_page = "https://github.com/toasterparty/oc2-modding/issues"
@@ -27,10 +27,12 @@ class Overcooked2Web(WebWorld):
 
     tutorials = [setup_en]
 
+
 class PrepLevelMode(Enum):
     original = 0
     excluded = 1
     ayce = 2
+
 
 class Overcooked2World(World):
     """
@@ -58,9 +60,15 @@ class Overcooked2World(World):
     location_id_to_name = oc2_location_id_to_name
     location_name_to_id = oc2_location_name_to_id
 
+    options: Dict[str, Any]
+    itempool: List[Overcooked2Item]
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.itempool = []
     # Helper Functions
 
-    def create_item(self, item: str):
+    def create_item(self, item: str) -> Overcooked2Item:
         if is_progression(item):
             classification = ItemClassification.progression
         else:
@@ -68,7 +76,7 @@ class Overcooked2World(World):
 
         return Overcooked2Item(item, classification, self.item_name_to_id[item], self.player)
 
-    def create_event(self, event: str) -> None:
+    def create_event(self, event: str) -> Overcooked2Item:
         return Overcooked2Item(event, ItemClassification.progression_skip_balancing, None, self.player)
 
     def place_event(self,  location_name: str, item_name: str):
@@ -124,7 +132,7 @@ class Overcooked2World(World):
         if level_id is None:
             level_id = 36
 
-        if level_id in self.level_mapping.keys():
+        if level_id in self.level_mapping:
             level = self.level_mapping[level_id]
         else:
             level = Overcooked2GenericLevel(level_id)
@@ -138,18 +146,10 @@ class Overcooked2World(World):
             location
         )
 
-    # YAML Config
-
-    always_serve_oldest_order: bool
-    always_preserve_cooking_progress: bool
-    display_leaderboard_scores: bool
-    shuffle_level_order: bool
-    fix_bugs: bool
-    shorter_level_duration: bool
-    stars_to_win: int
-    star_threshold_scale: float
-
-    prep_levels: PrepLevelMode
+    def get_options(self) -> Dict[str, Any]:
+        return OC2Options({option.__name__: getattr(self.world, name)[self.player].result
+                          if issubclass(option, OC2OnToggle) else getattr(self.world, name)[self.player].value
+                           for name, option in overcooked_options.items()})
 
     # Helper Data
 
@@ -159,25 +159,19 @@ class Overcooked2World(World):
     # Autoworld Hooks
 
     def generate_early(self):
-        self.always_serve_oldest_order        = bool(self.world.AlwaysServerOldestOrder      [self.player].value)
-        self.always_preserve_cooking_progress = bool(self.world.AlwaysPreserveCookingProgress[self.player].value)
-        self.display_leaderboard_scores       = bool(self.world.DisplayLeaderboardScores     [self.player].value)
-        self.shuffle_level_order              = bool(self.world.ShuffleLevelOrder            [self.player].value)
-        self.fix_bugs                         = bool(self.world.FixBugs                      [self.player].value)
-        self.shorter_level_duration           = bool(self.world.ShorterLevelDuration         [self.player].value)
-        self.stars_to_win                     = int (self.world.StarsToWin                   [self.player].value)
-        self.prep_levels = PrepLevelMode(self.world.PrepLevels[self.player].value)
+        self.options = self.get_options()
 
         # 0.0 to 1.0 where 1.0 is World Record
-        self.star_threshold_scale = float(self.world.StarThresholdScale[self.player].value) / 100.0
+        self.star_threshold_scale = self.options["StarThresholdScale"] / 100.0
 
         # Generate level unlock requirements such that the levels get harder to unlock
         # the further the game has progressed, and levels progress radially rather than linearly
-        self.level_unlock_counts = level_unlock_requirement_factory(self.stars_to_win)
+        self.level_unlock_counts = level_unlock_requirement_factory(self.options["StarsToWin"])
 
         # Assign new kitchens to each spot on the overworld using pure random chance and nothing else
-        if self.shuffle_level_order:
-            self.level_mapping = level_shuffle_factory(self.world.random, self.prep_levels != PrepLevelMode.excluded)
+        if self.options["ShuffleLevelOrder"]:
+            self.level_mapping = \
+                level_shuffle_factory(self.world.random, self.options["PrepLevels"] != PrepLevelMode.excluded)
         else:
             self.level_mapping = None
 
@@ -240,24 +234,21 @@ class Overcooked2World(World):
         self.world.completion_condition[self.player] = completion_condition
 
     def create_items(self):
-        added_items = 0
-
         # Make Items with multiple instances
         for item_name in item_frequencies:
             freq = item_frequencies[item_name]
-            self.world.itempool += [self.create_item(item_name) for _ in range(0, freq)]
-            added_items += freq
+            self.itempool += [self.create_item(item_name) for _ in range(freq)]
 
         # Make Items with one instance
         for item_name in item_table:
-            if item_name not in item_frequencies.keys():
-                self.world.itempool.append(self.create_item(item_name))
-                added_items += 1
+            if item_name not in item_frequencies:
+                self.itempool.append(self.create_item(item_name))
 
         # Fill any free space with filler
-        while added_items < len(oc2_location_name_to_id):
-            self.world.itempool.append(self.create_item("Bonus Star"))
-            added_items += 1
+        while len(self.itempool) < len(oc2_location_name_to_id):
+            self.itempool.append(self.create_item("Bonus Star"))
+
+        self.world.itempool += self.itempool
 
     def set_rules(self):
         pass
@@ -274,12 +265,24 @@ class Overcooked2World(World):
     # Items get distributed to locations
 
     def generate_output(self, output_directory: str) -> None:
+        if self.world.players != 1:
+            return
+
+        mod_name = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}"
+        data = self.fill_json_data()
+        # Save to disk
+
+        filepath = os.path.join(output_directory, mod_name + ".oc2.json")
+        with open(filepath, "w") as file:
+            json.dump(data, file)
+
+    def fill_json_data(self) -> Dict[str, Any]:
         mod_name = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}"
 
         # Serialize Level Order
         story_level_order = dict()
 
-        if self.shuffle_level_order:
+        if self.options["ShuffleLevelOrder"]:
             for level_id in self.level_mapping:
                 level: Overcooked2GenericLevel = self.level_mapping[level_id]
                 story_level_order[str(level_id)] = {
@@ -338,7 +341,7 @@ class Overcooked2World(World):
 
         # Put it all together
 
-        data = {
+        base_data = {
             # Changes Inherent to rando
             "DisableAllMods": False,
             "UnlockAllChefs": True,
@@ -349,30 +352,13 @@ class Overcooked2World(World):
             "SkipTutorialPopups": True,
             "RevealAllLevels": False,
             "PurchaseAllLevels": False,
-            "CheatsEnabled": True, # TODO: off for release
+            "CheatsEnabled": True,  # TODO: off for release
             "ImpossibleTutorial": True,
             "LevelForceReveal": level_force_reveal,
             "SaveFolderName": mod_name,
 
-            # Quality of Life
-            "DisplayLeaderboardScores": self.display_leaderboard_scores,
-            "AlwaysServeOldestOrder": self.always_serve_oldest_order,
-            "PreserveCookingProgress": self.always_preserve_cooking_progress,
-            "FixDoubleServing": self.fix_bugs,
-            "FixSinkBug": self.fix_bugs,
-            "FixControlStickThrowBug": self.fix_bugs,
-            "FixEmptyBurnerThrow": self.fix_bugs,
-            "TimerAlwaysStarts": self.prep_levels == PrepLevelMode.ayce,
-            "LevelTimerScale": 0.666 if self.shorter_level_duration else 1.0,
-
             # Game Modifications
             "LevelPurchaseRequirements": level_purchase_requirements,
-            "LeaderboardScoreScale": {
-                "FourStars": 1.0,
-                "ThreeStars": self.star_threshold_scale,
-                "TwoStars": self.star_threshold_scale*0.8,
-                "OneStar": self.star_threshold_scale*0.4
-            },
             "Custom66TimerScale": 0.5,
 
             "CustomLevelOrder": custom_level_order,
@@ -408,12 +394,26 @@ class Overcooked2World(World):
             "OnLevelCompleted": on_level_completed,
         }
 
-        # Save to disk
+        # Set remaining data in the options dict
+        bugs = ["FixDoubleServing", "FixSinkBug", "FixControlStickThrowBug", "FixEmptyBurnerThrow"]
+        for bug in bugs:
+            self.options[bug] = self.options["FixBugs"]
+        self.options["PreserveCookingProgress"] = self.options["AlwaysPreserveCookingProgress"]
+        self.options["TimerAlwaysStarts"] = self.options["PrepLevels"] == PrepLevelMode.ayce
+        self.options["LevelTimerScale"] = 0.666 if self.options["ShorterLevelDuration"] else 1.0
+        star_threshold_scale = self.options["StarThresholdScale"] / 100
+        self.options["LeaderboardScoreScale"] = {
+            "FourStars": 1.0,
+            "ThreeStars": star_threshold_scale,
+            "TwoStars": star_threshold_scale * 0.8,
+            "OneStar": star_threshold_scale * 0.4,
+        }
 
-        filepath = os.path.join(output_directory, mod_name + ".oc2.json")
-        with open(filepath, "w") as file:
-            json.dump(data, file)
+        base_data.update(self.options)
+        return base_data
 
+    def fill_slot_data(self) -> Dict[str, Any]:
+        return self.fill_json_data()
 
 def level_unlock_requirement_factory(stars_to_win: int) -> dict[int, int]:
     level_unlock_counts = dict()
