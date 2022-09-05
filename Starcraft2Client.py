@@ -340,9 +340,8 @@ class SC2Context(CommonContext):
 
             def mission_callback(self, button):
                 if not self.launching:
-                    mission_id: int = list(self.mission_id_to_button.values()).index(button)
-                    self.ctx.play_mission(list(self.mission_id_to_button)
-                                          [mission_id])
+                    mission_id: int = next(k for k, v in self.mission_id_to_button.items() if v == button)
+                    self.ctx.play_mission(mission_id)
                     self.launching = mission_id
                     Clock.schedule_once(self.finish_launching, 10)
 
@@ -359,7 +358,7 @@ class SC2Context(CommonContext):
         if self.sc2_run_task:
             self.sc2_run_task.cancel()
 
-    def play_mission(self, mission_id):
+    def play_mission(self, mission_id: int):
         if self.missions_unlocked or \
                 is_mission_available(self, mission_id):
             if self.sc2_run_task:
