@@ -43,7 +43,8 @@ SMW_MESSAGE_QUEUE_ADDR = WRAM_START + 0xC391
 
 SMW_RECV_PROGRESS_ADDR = WRAM_START + 0x1F2B
 
-SMW_GOAL_LEVELS = [0x28, 0x31, 0x32]
+SMW_GOAL_LEVELS          = [0x28, 0x31, 0x32]
+SMW_INVALID_MARIO_STATES = [0x05, 0x06, 0x0A, 0x0C, 0x0D]
 
 async def deathlink_kill_player(ctx: Context):
     if ctx.game == GAME_SMW:
@@ -155,6 +156,7 @@ async def smw_game_watcher(ctx: Context):
     if ctx.game == GAME_SMW:
         # SMW_TODO: Handle Deathlink
         game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
+        mario_state = await snes_read(ctx, SMW_MARIO_STATE_ADDR, 0x1)
         if game_state is None:
             # We're not properly connected
             return
@@ -169,9 +171,11 @@ async def smw_game_watcher(ctx: Context):
         elif game_state[0] < 0x0B:
             # We haven't loaded a save file
             return
+        elif mario_state[0] in SMW_INVALID_MARIO_STATES:
+            # Mario can't come to the phonee right now
+            return
 
         if "DeathLink" in ctx.tags and game_state[0] == 0x14 and ctx.last_death_link + 1 < time.time():
-            mario_state = await snes_read(ctx, SMW_MARIO_STATE_ADDR, 0x1)
             currently_dead = mario_state[0] == 0x09
             await ctx.handle_deathlink_state(currently_dead)
 
