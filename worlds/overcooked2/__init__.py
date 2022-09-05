@@ -2,7 +2,7 @@ import os
 import json
 
 from enum import Enum
-from typing import Callable, Dict, Any
+from typing import Callable, Dict, Any, List
 
 from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, RegionType, Tutorial
 from worlds.AutoWorld import World, WebWorld
@@ -61,10 +61,14 @@ class Overcooked2World(World):
     location_name_to_id = oc2_location_name_to_id
 
     options: Dict[str, Any]
+    itempool: List[Overcooked2Item]
 
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.itempool = []
     # Helper Functions
 
-    def create_item(self, item: str):
+    def create_item(self, item: str) -> Overcooked2Item:
         if is_progression(item):
             classification = ItemClassification.progression
         else:
@@ -128,7 +132,7 @@ class Overcooked2World(World):
         if level_id is None:
             level_id = 36
 
-        if level_id in self.level_mapping.keys():
+        if level_id in self.level_mapping:
             level = self.level_mapping[level_id]
         else:
             level = Overcooked2GenericLevel(level_id)
@@ -146,18 +150,6 @@ class Overcooked2World(World):
         return OC2Options({option.__name__: getattr(self.world, name)[self.player].result
                           if issubclass(option, OC2OnToggle) else getattr(self.world, name)[self.player].value
                            for name, option in overcooked_options.items()})
-    # YAML Config
-
-    always_serve_oldest_order: bool
-    always_preserve_cooking_progress: bool
-    display_leaderboard_scores: bool
-    shuffle_level_order: bool
-    fix_bugs: bool
-    shorter_level_duration: bool
-    stars_to_win: int
-    star_threshold_scale: float
-
-    prep_levels: PrepLevelMode
 
     # Helper Data
 
@@ -177,8 +169,9 @@ class Overcooked2World(World):
         self.level_unlock_counts = level_unlock_requirement_factory(self.options["StarsToWin"])
 
         # Assign new kitchens to each spot on the overworld using pure random chance and nothing else
-        if self.shuffle_level_order:
-            self.level_mapping = level_shuffle_factory(self.world.random, self.prep_levels != PrepLevelMode.excluded)
+        if self.options["ShuffleLevelOrder"]:
+            self.level_mapping = \
+                level_shuffle_factory(self.world.random, self.options["PrepLevels"] != PrepLevelMode.excluded)
         else:
             self.level_mapping = None
 
@@ -241,24 +234,21 @@ class Overcooked2World(World):
         self.world.completion_condition[self.player] = completion_condition
 
     def create_items(self):
-        added_items = 0
-
         # Make Items with multiple instances
         for item_name in item_frequencies:
             freq = item_frequencies[item_name]
-            self.world.itempool += [self.create_item(item_name) for _ in range(0, freq)]
-            added_items += freq
+            self.itempool += [self.create_item(item_name) for _ in range(freq)]
 
         # Make Items with one instance
         for item_name in item_table:
-            if item_name not in item_frequencies.keys():
-                self.world.itempool.append(self.create_item(item_name))
-                added_items += 1
+            if item_name not in item_frequencies:
+                self.itempool.append(self.create_item(item_name))
 
         # Fill any free space with filler
-        while added_items < len(oc2_location_name_to_id):
-            self.world.itempool.append(self.create_item("Bonus Star"))
-            added_items += 1
+        while len(self.itempool) < len(oc2_location_name_to_id):
+            self.itempool.append(self.create_item("Bonus Star"))
+
+        self.world.itempool += self.itempool
 
     def set_rules(self):
         pass
