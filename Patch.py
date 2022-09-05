@@ -169,8 +169,7 @@ GAME_SM = "Super Metroid"
 GAME_SOE = "Secret of Evermore"
 GAME_SMZ3 = "SMZ3"
 GAME_DKC3 = "Donkey Kong Country 3"
-GAME_GALAXY = "Super Mario Galaxy"
-supported_games = {"A Link to the Past", "Super Metroid", "Secret of Evermore", "Super Mario Galaxy", "SMZ3", "Donkey Kong Country 3"}
+supported_games = {"A Link to the Past", "Super Metroid", "Secret of Evermore", "SMZ3", "Donkey Kong Country 3"}
 
 preferred_endings = {
     GAME_ALTTP: "apbp",
@@ -178,7 +177,6 @@ preferred_endings = {
     GAME_SOE: "apsoe",
     GAME_SMZ3: "apsmz",
     GAME_DKC3: "apdkc3",
-    GAME_GALAXY: "apg",
 }
 
 
@@ -195,8 +193,6 @@ def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: str = GAM
         HASH = ALTTPHASH + SMHASH
     elif game == GAME_DKC3:
         from worlds.dkc3.Rom import USHASH as HASH
-    elif game == GAME_GALAXY:
-        from worlds.smgalaxy.Rom import USHASH as HASH
     else:
         raise RuntimeError(f"Selected game {game} for base rom not found.")
 
