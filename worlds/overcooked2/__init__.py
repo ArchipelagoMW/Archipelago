@@ -93,7 +93,7 @@ class Overcooked2World(World):
         )
         self.world.regions.append(region)
 
-    def connect_regions(self, source: str, target: str, rule: Callable[[CollectionState], bool] | None = None):
+    def connect_regions(self, source: str, target: str, rule: Callable[[CollectionState], bool] = None):
         sourceRegion = self.world.get_region(source, self.player)
         targetRegion = self.world.get_region(target, self.player)
 
@@ -314,7 +314,7 @@ class Overcooked2World(World):
                 level_unlock_requirements[str(level_id)] = level_id - 1
 
         # Set Kevin Unlock Requirements
-        def kevin_level_to_keyholder_level_id(level_id: int) -> int | None:
+        def kevin_level_to_keyholder_level_id(level_id: int) -> int:
             location = self.world.find_item(f"Kevin-{level_id-36}", self.player)
             if location.player != self.player:
                 return None  # This kevin level will be unlocked by the server at runtime

@@ -3,7 +3,7 @@ from .Overcooked2Levels import Overcooked2GenericLevel
 from .Items import item_frequencies
 
 
-def has_requirements_for_level_access(state: CollectionState, level_name: str, previous_level_name: str | None,
+def has_requirements_for_level_access(state: CollectionState, level_name: str, previous_level_name: str,
                                       required_star_count: int, player: int) -> bool:
     # Check if the ramps in the overworld are set correctly
     if level_name in ramp_logic:
