@@ -133,8 +133,8 @@ def handle_ability_code(rom):
     # End Purple Block Carry
 
     # Springboard Carry
-    rom.write_bytes(0xE6D8, bytearray([0x22, 0x40, 0xBA, 0x03])) # JSL $03BA40
-    rom.write_bytes(0xE6DC, bytearray([0xEA] * 0x02))
+    rom.write_bytes(0xE6DA, bytearray([0x22, 0x40, 0xBA, 0x03])) # JSL $03BA40
+    rom.write_bytes(0xE6DE, bytearray([0xEA] * 0x04))
 
     SPRINGBOARD_CARRY_SUB_ADDR = 0x01BA40
     rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x00, bytearray([0x48]))             # PHA
