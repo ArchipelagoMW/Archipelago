@@ -5,9 +5,11 @@ import urllib.parse
 import sys
 import typing
 import time
+import functools
 
-import ModuleUpdate
-ModuleUpdate.update()
+if __name__ == "__main__":
+    import ModuleUpdate
+    ModuleUpdate.update()
 
 import websockets
 
@@ -17,7 +19,8 @@ if __name__ == "__main__":
     Utils.init_logging("TextClient", exception_logger="Client")
 
 from MultiServer import CommandProcessor
-from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot
+from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, \
+    ClientStatus, Permission, NetworkSlot, RawJSONtoTextParser
 from Utils import Version, stream_input
 from worlds import network_data_package, AutoWorldRegister
 import os
@@ -203,6 +206,10 @@ class CommonContext:
 
         # execution
         self.keep_alive_task = asyncio.create_task(keep_alive(self), name="Bouncy")
+
+    @functools.cached_property
+    def raw_text_parser(self) -> RawJSONtoTextParser:
+        return RawJSONtoTextParser(self)
 
     @property
     def total_locations(self) -> typing.Optional[int]:
