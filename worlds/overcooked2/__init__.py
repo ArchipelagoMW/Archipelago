@@ -15,6 +15,8 @@ from .Logic import has_requirements_for_level_star, has_requirements_for_level_a
 
 
 class Overcooked2Web(WebWorld):
+    theme = "partyTime"
+
     bug_report_page = "https://github.com/toasterparty/oc2-modding/issues"
     setup_en = Tutorial(
         "Multiworld Setup Tutorial",
