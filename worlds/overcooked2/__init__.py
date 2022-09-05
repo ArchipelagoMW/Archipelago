@@ -152,8 +152,8 @@ class Overcooked2World(World):
 
     # Helper Data
 
-    level_unlock_counts: dict[int, int]  # level_id, stars to purchase
-    level_mapping: dict[int, Overcooked2GenericLevel]  # level_id, level
+    level_unlock_counts: Dict[int, int]  # level_id, stars to purchase
+    level_mapping: Dict[int, Overcooked2GenericLevel]  # level_id, level
 
     # Autoworld Hooks
 
@@ -325,7 +325,7 @@ class Overcooked2World(World):
                 level_unlock_requirements[str(level_id)] = keyholder_level_id
 
         # Place Items at Level Completion Screens (local only)
-        on_level_completed: dict[str, list[dict[str, str]]] = dict()
+        on_level_completed: Dict[str, list[Dict[str, str]]] = dict()
         regions = self.world.get_regions(self.player)
         for region in regions:
             for location in region.locations:
@@ -414,7 +414,7 @@ class Overcooked2World(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         return self.fill_json_data()
 
-def level_unlock_requirement_factory(stars_to_win: int) -> dict[int, int]:
+def level_unlock_requirement_factory(stars_to_win: int) -> Dict[int, int]:
     level_unlock_counts = dict()
     level = 1
     sublevel = 1

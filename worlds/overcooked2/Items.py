@@ -1,10 +1,10 @@
 from BaseClasses import Item
-import typing
+from typing import Optional, NamedTuple, Dict
 import codecs
 
 
-class ItemData(typing.NamedTuple):
-    code: typing.Optional[int]
+class ItemData(NamedTuple):
+    code: Optional[int]
 
 
 class Overcooked2Item(Item):
@@ -13,7 +13,7 @@ class Overcooked2Item(Item):
 
 oc2_base_id: int = int.from_bytes(codecs.encode(b"oc2", "hex"), byteorder="big")
 
-item_table: dict[str, ItemData] = {
+item_table: Dict[str, ItemData] = {
     "Wood"                          : ItemData(oc2_base_id + 1 ),
     "Coal Bucket"                   : ItemData(oc2_base_id + 2 ),
     "Spare Plate"                   : ItemData(oc2_base_id + 3 ),
@@ -104,11 +104,11 @@ vanilla_values = {
     "CustomOrderLifetime": 100.0,
 }
 
-item_id_to_name: typing.Dict[int, str] = {
+item_id_to_name: Dict[int, str] = {
     data.code: item_name for item_name, data in item_table.items() if data.code
 }
 
-item_name_to_id: typing.Dict[str, int] = {
+item_name_to_id: Dict[str, int] = {
     item_name: data.code for item_name, data in item_table.items() if data.code
 }
 
@@ -117,7 +117,7 @@ def is_progression(item_name: str) -> bool:
     return not item_name.endswith("Emote")
 
 
-def item_to_unlock_event(item_name: str) -> dict[str, str]:
+def item_to_unlock_event(item_name: str) -> Dict[str, str]:
     message = f"{item_name} Acquired!"
     action = ""
     payload = ""

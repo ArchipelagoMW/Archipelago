@@ -1,5 +1,6 @@
 from enum import Enum
 from random import Random
+from typing import List, Dict
 
 class Overcooked2Dlc(Enum):
     STORY = "Story"
@@ -55,13 +56,13 @@ class Overcooked2Dlc(Enum):
         return self.start_level_id() + id
 
     # Tutorial + Horde Levels + Endgame
-    def excluded_levels(self) -> list[int]:
+    def excluded_levels(self) -> List[int]:
         if self == Overcooked2Dlc.STORY:
             return [0, 36]
 
         return []
 
-    def horde_levels(self) -> list[int]:
+    def horde_levels(self) -> List[int]:
         if self == Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE:
             return [12, 13, 14, 15, 16, 17, 18, 19]
         if self == Overcooked2Dlc.SEASONAL:
@@ -69,7 +70,7 @@ class Overcooked2Dlc(Enum):
 
         return []
 
-    def prep_levels(self) -> list[int]:
+    def prep_levels(self) -> List[int]:
         if self == Overcooked2Dlc.STORY:
             return [1, 2, 5, 10, 12, 13, 28, 31]
         if self == Overcooked2Dlc.SURF_N_TURF:
@@ -184,7 +185,7 @@ class Overcooked2Level:
         return Overcooked2GenericLevel(self.level_id())
 
 
-def level_shuffle_factory(rng: Random, shuffle_prep_levels: bool, shuffle_horde_levels=False) -> dict[int, Overcooked2GenericLevel]:  # return <story_level_id, level>
+def level_shuffle_factory(rng: Random, shuffle_prep_levels: bool, shuffle_horde_levels=False) -> Dict[int, Overcooked2GenericLevel]:  # return <story_level_id, level>
     # Create a list of all valid levels for selection
     # (excludes tutorial, throne, kevin and sometimes horde levels)
     pool = list()
@@ -210,7 +211,7 @@ def level_shuffle_factory(rng: Random, shuffle_prep_levels: bool, shuffle_horde_
     rng.shuffle(pool)
 
     # Return the first 44 levels and assign those to each level
-    result: dict[int, Overcooked2GenericLevel] = dict()
+    result: Dict[int, Overcooked2GenericLevel] = dict()
     story = Overcooked2Dlc.STORY
     for level_id in range(story.start_level_id(), story.end_level_id()):
         if level_id not in story.excluded_levels():
