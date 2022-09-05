@@ -502,6 +502,10 @@ def patch_rom(world, rom, player, active_level_list):
     # Make Swanky free
     rom.write_byte(0x348C48, 0x00)
 
+    rom.write_bytes(0x34AB70, bytearray([0xEA, 0xEA]))
+    rom.write_bytes(0x34ABF7, bytearray([0xEA, 0xEA]))
+    rom.write_bytes(0x34ACD0, bytearray([0xEA, 0xEA]))
+
     # Banana Bird Costs
     if world.goal[player] == "banana_bird_hunt":
         banana_bird_cost = math.floor(world.number_of_banana_birds[player] * world.percentage_of_banana_birds[player] / 100.0)
