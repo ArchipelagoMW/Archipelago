@@ -38,7 +38,7 @@ class FixBugs(OC2OnToggle):
 
 
 class ShorterLevelDuration(OC2OnToggle):
-    """In the interest of making seeds take less time to complete, this option shortens levels by about 1/3rd of their original duration. Points required to earn stars are scaled accordingly. ("Boss Levels" which change scenery mid-game are not affected.)"""
+    """In the interest of making levels more "bite-sized" and thus seeds faster to complete, this option shortens levels by about 1/3rd of their original duration. Points required to earn stars are scaled accordingly. ("Boss Levels" which change scenery mid-game are not affected.)"""
     display_name = "Shorter Level Duration"
 
 
