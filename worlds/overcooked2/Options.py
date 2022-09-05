@@ -52,14 +52,15 @@ class PrepLevels(Choice):
 
 
 class StarsToWin(Range):
-    """Number of stars required to unlock 6-6. All levels between 1-1 and 6-6 will be spread between these two numbers"""
+    """Number of stars required to unlock 6-6. Level purchase requirements between 1-1 and 6-6 will be spread between these two numbers.
+    Using too high of a number may result in more frequent generation failures, especially when horde levels are enabled."""
     range_start = 0
     range_end = 129
     default = 84
 
 
 class StarThresholdScale(Range):
-    """How difficult should the final star for each level be on a scale of 1-100%, where 100% is the world record score (Vanilla 4-Star is 45% on average)"""
+    """How difficult should the third star for each level be on a scale of 1-100%, where 100% is the current world record score and 45% is the average vanilla 4-Star score."""
     range_start = 1
     range_end = 100
     default = 55

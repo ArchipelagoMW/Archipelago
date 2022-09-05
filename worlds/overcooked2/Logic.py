@@ -3277,7 +3277,7 @@ level_logic = {
             },
         )
     ),
-    "Winter 1-2": (
+    "Winter H-2": (
         ( # 1-star
             { # Exclusive
 
@@ -3329,7 +3329,7 @@ level_logic = {
             },
         )
     ),
-    "Winter 1-4": (
+    "Winter H-4": (
         ( # 1-star
             { # Exclusive
 

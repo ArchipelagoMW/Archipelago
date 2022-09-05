@@ -139,6 +139,9 @@ class Overcooked2GenericLevel():
     
     def shortname(self) -> str:
         return level_id_to_shortname[(self.dlc, self.level_id)]
+    
+    def is_horde(self) -> bool:
+        return self.level_id in self.dlc.horde_levels()
 
 
 class Overcooked2Level:
@@ -345,9 +348,9 @@ level_id_to_shortname = {
     (Overcooked2Dlc.SEASONAL                  , 10 ): "Chinese 1-6"   ,
     (Overcooked2Dlc.SEASONAL                  , 11 ): "Chinese 1-7"   ,
     (Overcooked2Dlc.SEASONAL                  , 12 ): "Winter 1-1"    ,
-    (Overcooked2Dlc.SEASONAL                  , 13 ): "Winter 1-2"    , # Horde Level
+    (Overcooked2Dlc.SEASONAL                  , 13 ): "Winter H-2"    ,
     (Overcooked2Dlc.SEASONAL                  , 14 ): "Winter 1-3"    ,
-    (Overcooked2Dlc.SEASONAL                  , 15 ): "Winter 1-4"    , # Horde Level
+    (Overcooked2Dlc.SEASONAL                  , 15 ): "Winter H-4"    ,
     (Overcooked2Dlc.SEASONAL                  , 16 ): "Winter 1-5"    ,
     (Overcooked2Dlc.SEASONAL                  , 17 ): "Spring 1-1"    ,
     (Overcooked2Dlc.SEASONAL                  , 18 ): "Spring 1-2"    ,

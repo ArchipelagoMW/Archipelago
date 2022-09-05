@@ -182,13 +182,14 @@ class Overcooked2World(World):
 
         for level in Overcooked2Level():
             level_name = level.level_name()
+            level_id = level.level_id()
 
             # Create Region (e.g. "1-1")
             self.add_region(level_name)
 
             # Add Location to house progression item (1-star)
-            # 6-6 doesn't either, but it does have victory condition which is placed later
-            if level.level_id() == 36:
+            if level_id == 36:
+                # 6-6 doesn't have progression, but it does have victory condition which is placed later
                 self.add_level_location(
                     level_name,
                     level.location_name_completed(),
@@ -199,24 +200,29 @@ class Overcooked2World(World):
                 self.add_level_location(
                     level_name,
                     level.location_name_completed(),
-                    level.level_id(),
+                    level_id,
                     1,
                 )
 
-            # Add Locations to house star aquisition events
-            for n in [1, 2, 3]:
-                self.add_level_location(
-                    level_name,
-                    level.location_name_star_event(n),
-                    level.level_id(),
-                    n,
-                    is_event=True,
-                )
+            is_horde = (self.level_mapping is not None) and \
+                level_id in self.level_mapping.keys() and \
+                self.level_mapping[level_id].is_horde()
+
+            # Add Locations to house star aquisition events, except for horde levels
+            if not is_horde:
+                for n in [1, 2, 3]:
+                    self.add_level_location(
+                        level_name,
+                        level.location_name_star_event(n),
+                        level_id,
+                        n,
+                        is_event=True,
+                    )
 
             # Overworld -> Level
-            required_star_count: int = self.level_unlock_counts[level.level_id()]
-            if level.level_id() % 6 != 1:
-                previous_level_name: str = Overcooked2GenericLevel(level.level_id()-1).shortname().split(" ")[1]
+            required_star_count: int = self.level_unlock_counts[level_id]
+            if level_id % 6 != 1:
+                previous_level_name: str = Overcooked2GenericLevel(level_id-1).shortname().split(" ")[1]
             else:
                 previous_level_name = None
 
@@ -257,7 +263,7 @@ class Overcooked2World(World):
         for level in Overcooked2Level():
             for n in [1, 2, 3]:
                 self.place_event(level.location_name_star_event(n), "Star")
-        
+
         # Add Victory Condition
         self.place_event("6-6 Completed", "Victory")
 
@@ -296,7 +302,7 @@ class Overcooked2World(World):
         level_purchase_requirements = dict()
         for level_id in self.level_unlock_counts:
             level_purchase_requirements[str(level_id)] = self.level_unlock_counts[level_id]
-        
+
         # Override Vanilla Unlock Chain Behavior
         # (all worlds accessible from the start and progressible in any order)
         level_unlock_requirements = dict()
@@ -332,9 +338,9 @@ class Overcooked2World(World):
                 if location.item is None:
                     continue
                 if location.item.code is None:
-                    continue # it's an event
+                    continue  # it's an event
                 if location.item.player != self.player:
-                    continue # not for us
+                    continue  # not for us
                 level_id = str(oc2_location_name_to_id[location.name])
                 on_level_completed[level_id] = [item_to_unlock_event(location.item.name)]
 
@@ -413,6 +419,7 @@ class Overcooked2World(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return self.fill_json_data()
+
 
 def level_unlock_requirement_factory(stars_to_win: int) -> Dict[int, int]:
     level_unlock_counts = dict()
