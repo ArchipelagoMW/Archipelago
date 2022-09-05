@@ -170,7 +170,7 @@ class Overcooked2World(World):
         # Assign new kitchens to each spot on the overworld using pure random chance and nothing else
         if self.options["ShuffleLevelOrder"]:
             self.level_mapping = \
-                level_shuffle_factory(self.world.random, self.options["PrepLevels"] != PrepLevelMode.excluded)
+                level_shuffle_factory(self.world.random, self.options["PrepLevels"] != PrepLevelMode.excluded.value)
         else:
             self.level_mapping = None
 
@@ -398,7 +398,7 @@ class Overcooked2World(World):
         for bug in bugs:
             self.options[bug] = self.options["FixBugs"]
         self.options["PreserveCookingProgress"] = self.options["AlwaysPreserveCookingProgress"]
-        self.options["TimerAlwaysStarts"] = self.options["PrepLevels"] == PrepLevelMode.ayce
+        self.options["TimerAlwaysStarts"] = self.options["PrepLevels"] == PrepLevelMode.ayce.value
         self.options["LevelTimerScale"] = 0.666 if self.options["ShorterLevelDuration"] else 1.0
         star_threshold_scale = self.options["StarThresholdScale"] / 100
         self.options["LeaderboardScoreScale"] = {
