@@ -34,6 +34,8 @@ SMW_DEATH_LINK_ACTIVE_ADDR = ROM_START + 0x01BFA5
 
 SMW_GAME_STATE_ADDR    = WRAM_START + 0x100
 SMW_MARIO_STATE_ADDR   = WRAM_START + 0x71
+SMW_BOSS_STATE_ADDR    = WRAM_START + 0xD9B
+SMW_ACTIVE_BOSS_ADDR   = WRAM_START + 0x13FC
 SMW_CURRENT_LEVEL_ADDR = WRAM_START + 0x13BF
 SMW_MESSAGE_BOX_ADDR   = WRAM_START + 0x1426
 SMW_EGG_COUNT_ADDR     = WRAM_START + 0xF48
@@ -45,6 +47,8 @@ SMW_RECV_PROGRESS_ADDR = WRAM_START + 0x1F2B
 
 SMW_GOAL_LEVELS          = [0x28, 0x31, 0x32]
 SMW_INVALID_MARIO_STATES = [0x05, 0x06, 0x0A, 0x0C, 0x0D]
+SMW_BAD_TEXT_BOX_LEVELS  = [0x26, 0x02, 0x4B]
+SMW_BOSS_STATES          = [0x80, 0xC0, 0xC1]
 
 async def deathlink_kill_player(ctx: Context):
     if ctx.game == GAME_SMW:
@@ -136,6 +140,18 @@ async def handle_message_queue(ctx: Context):
 
     pause_state = await snes_read(ctx, SMW_PAUSE_ADDR, 0x1)
     if pause_state[0] != 0x00:
+        return
+
+    current_level = await snes_read(ctx, SMW_CURRENT_LEVEL_ADDR, 0x1)
+    if current_level[0] in SMW_BAD_TEXT_BOX_LEVELS:
+        return
+
+    boss_state = await snes_read(ctx, SMW_BOSS_STATE_ADDR, 0x1)
+    if boss_state[0] in SMW_BOSS_STATES:
+        return
+
+    active_boss = await snes_read(ctx, SMW_ACTIVE_BOSS_ADDR, 0x1)
+    if active_boss[0] != 0x00:
         return
 
     if not hasattr(ctx, "message_queue") or len(ctx.message_queue) == 0:
