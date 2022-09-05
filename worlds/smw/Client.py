@@ -43,6 +43,7 @@ SMW_MESSAGE_QUEUE_ADDR = WRAM_START + 0xC391
 
 SMW_RECV_PROGRESS_ADDR = WRAM_START + 0x1F2B
 
+SMW_GOAL_LEVELS = [0x28, 0x31, 0x32]
 
 async def deathlink_kill_player(ctx: Context):
     if ctx.game == GAME_SMW:
@@ -159,8 +160,11 @@ async def smw_game_watcher(ctx: Context):
             return
         elif game_state[0] >= 0x18:
             if not ctx.finished_game:
-                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                ctx.finished_game = True
+                current_level = await snes_read(ctx, SMW_CURRENT_LEVEL_ADDR, 0x1)
+
+                if current_level[0] in SMW_GOAL_LEVELS:
+                    await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                    ctx.finished_game = True
             return
         elif game_state[0] < 0x0B:
             # We haven't loaded a save file
