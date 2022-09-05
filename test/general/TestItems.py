@@ -1,6 +1,6 @@
 import unittest
 from worlds.AutoWorld import AutoWorldRegister
-
+from . import setup_default_world
 
 class TestBase(unittest.TestCase):
     def testCreateItem(self):
@@ -29,3 +29,21 @@ class TestBase(unittest.TestCase):
                         with self.subTest(group_name, group_name=group_name):
                             for item in items:
                                 self.assertIn(item, world_type.item_name_to_id)
+
+    def testItemCountGreaterEqualLocations(self):
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+
+            if game_name == "Archipelago" or game_name == "Final Fantasy":
+                continue
+
+            with self.subTest("Game", game=game_name):
+                world = setup_default_world(world_type)
+                location_count = 0
+                for location in world.get_locations():
+                    if not location.event and location.item is None: # ignore events and manually placed
+                        location_count += 1
+                self.assertGreaterEqual(
+                    len(world.itempool),
+                    location_count,
+                    f"{game_name} Item count MUST meet or exceede the number of locations",    
+                )
