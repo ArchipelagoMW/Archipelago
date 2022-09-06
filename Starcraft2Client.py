@@ -159,10 +159,13 @@ class SC2Context(CommonContext):
                 check_mod_install()
 
     def on_print_json(self, args: dict):
+        # goes to this world
         if "receiving" in args and self.slot_concerns_self(args["receiving"]):
             relevant = True
+        # found in this world
         elif "item" in args and self.slot_concerns_self(args["item"].player):
             relevant = True
+        # not related
         else:
             relevant = False
 

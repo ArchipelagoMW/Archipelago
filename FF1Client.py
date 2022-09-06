@@ -82,8 +82,19 @@ class FF1Context(CommonContext):
         relevant = args.get("type", None) in {"Hint", "ItemSend"}
         if relevant:
             item = args["item"]
-            msg = self.raw_text_parser(copy.deepcopy(args["data"]))
-            self._set_message(msg, item.item)
+            # goes to this world
+            if self.slot_concerns_self(args["receiving"]):
+                relevant = True
+            # found in this world
+            elif self.slot_concerns_self(item.player):
+                relevant = True
+            # not related
+            else:
+                relevant = False
+            if relevant:
+                item = args["item"]
+                msg = self.raw_text_parser(copy.deepcopy(args["data"]))
+                self._set_message(msg, item.item)
 
     def run_gui(self):
         from kvui import GameManager
