@@ -19,8 +19,9 @@ from os.path import isfile
 from shutil import which
 from typing import Iterable, Sequence, Callable, Union, Optional
 
-import ModuleUpdate
-ModuleUpdate.update()
+if __name__ == "__main__":
+    import ModuleUpdate
+    ModuleUpdate.update()
 
 from Utils import is_frozen, user_path, local_path, init_logging, open_filename, messagebox, \
     is_windows, is_macos, is_linux
@@ -69,6 +70,7 @@ def browse_files():
         webbrowser.open(file)
 
 
+# noinspection PyArgumentList
 class Type(Enum):
     TOOL = auto()
     FUNC = auto()  # not a real component
