@@ -7,9 +7,8 @@ import typing
 import time
 import functools
 
-if __name__ == "__main__":
-    import ModuleUpdate
-    ModuleUpdate.update()
+import ModuleUpdate
+ModuleUpdate.update()
 
 import websockets
 
