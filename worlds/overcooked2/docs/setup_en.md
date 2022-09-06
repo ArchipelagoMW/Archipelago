@@ -1,5 +1,10 @@
 # Overcooked! 2 Randomizer Setup Guide
 
+## Quick Links
+- [Main Page](../../../../games/Overcooked!%202/info/en)
+- [Settings Page](../../../../games/Overcooked!%202/player-settings)
+- [OC2-Modding GitHub](https://github.com/toasterparty/oc2-modding)
+
 ## Required Software
 
 - Windows 10+ (Windows 7 requires extra installation steps, dm toasterparty if you exist)
