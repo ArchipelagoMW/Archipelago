@@ -396,14 +396,8 @@ if __name__ == "__main__":
                         print(f"Host is {data['server']}")
                 elif rom.endswith(".apm3") \
                         or rom.endswith(".apsmz") \
+                        or rom.endswith(".apdkc3") \
                         or rom.endswith(ZillionDeltaPatch.patch_file_ending):
-                    print(f"Applying patch {rom}")
-                    data, target = create_rom_file(rom)
-                    print(f"Created rom {target}.")
-                    if 'server' in data:
-                        Utils.persistent_store("servers", data['hash'], data['server'])
-                        print(f"Host is {data['server']}")
-                elif rom.endswith(".apdkc3"):
                     print(f"Applying patch {rom}")
                     data, target = create_rom_file(rom)
                     print(f"Created rom {target}.")

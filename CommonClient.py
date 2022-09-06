@@ -131,7 +131,6 @@ class CommonContext:
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
     command_processor: typing.Type[ClientCommandProcessor] = ClientCommandProcessor
-    game: typing.Optional[str] = None
     ui = None
     ui_task: typing.Optional[asyncio.Task] = None
     input_task: typing.Optional[asyncio.Task] = None
@@ -153,6 +152,7 @@ class CommonContext:
     # locations
     locations_checked: typing.Set[int]  # local state
     locations_scouted: typing.Set[int]
+    items_received: typing.List[NetworkItem]
     missing_locations: typing.Set[int]  # server state
     checked_locations: typing.Set[int]  # server state
     server_locations: typing.Set[int]  # all locations the server knows of, missing_location | checked_locations
@@ -166,7 +166,7 @@ class CommonContext:
         # server state
         self.server_address = server_address
         self.username = None
-        self.password: str = password
+        self.password = password
         self.hint_cost = None
         self.slot_info = {}
         self.permissions = {
@@ -185,7 +185,7 @@ class CommonContext:
 
         self.locations_checked = set()  # local state
         self.locations_scouted = set()
-        self.items_received: typing.List[NetworkItem] = []
+        self.items_received = []
         self.missing_locations = set()  # server state
         self.checked_locations = set()  # server state
         self.server_locations = set()  # all locations the server knows of, missing_location | checked_locations

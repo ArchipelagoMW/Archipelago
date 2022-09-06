@@ -1,21 +1,24 @@
 from typing import Any, Dict, cast
-from Options import AssembleOptions, DefaultOnToggle, ItemDict, Range, RangeWithSpecialMax, Toggle, Choice
+from Options import AssembleOptions, DefaultOnToggle, ItemDict, Range, SpecialRange, Toggle, Choice
 from zilliandomizer.options import \
     Options as ZzOptions, char_to_gun, char_to_jump, ID, \
     VBLR as ZzVBLR, VBLR_CHOICES, chars, Chars, ItemCounts as ZzItemCounts
 from zilliandomizer.options.parsing import validate as zz_validate
 
 
-class ZillionContinues(RangeWithSpecialMax):
+class ZillionContinues(SpecialRange):
     """
     number of continues before game over
 
     game over teleports you to your ship, keeping items and open doors
     """
+    default = 3
     range_start = 0
     range_end = 21
-    default = 3
     display_name = "continues"
+    special_range_names = {
+        "infinity": 21
+    }
 
 
 class ZillionEarlyScope(Toggle):

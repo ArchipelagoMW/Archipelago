@@ -152,13 +152,8 @@ const buildOptionsTable = (settings, romOpts = false) => {
         range.setAttribute('min', settings[setting].min);
         range.setAttribute('max', settings[setting].max);
         range.value = currentSettings[gameName][setting];
-        const settingMax = settings[setting].max;
-        const specialMax = settings[setting].specialMax;
         range.addEventListener('change', (event) => {
-          const v = event.target.value;
-          // if at max and have specialMax, use that, else use value
-          const text = ((v == settingMax) && specialMax) || v;
-          document.getElementById(`${setting}-value`).innerText = text;
+          document.getElementById(`${setting}-value`).innerText = event.target.value;
           updateGameSetting(event);
         });
         element.appendChild(range);

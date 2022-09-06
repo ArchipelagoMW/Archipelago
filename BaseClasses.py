@@ -1080,9 +1080,9 @@ class Location:
     item: Optional[Item] = None
 
     def __init__(self, player: int, name: str = '', address: Optional[int] = None, parent: Optional[Region] = None):
-        self.player: int = player
-        self.name: str = name
-        self.address: Optional[int] = address
+        self.player = player
+        self.name = name
+        self.address = address
         self.parent_region = parent
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
