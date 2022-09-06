@@ -162,9 +162,17 @@ def patch_rom(world, rom, player, offsets_to_ids):
     if world.increase_item_limit[player] == "true":
         rom.write_byte(0xBF30B, 0x64)
 
-    # Custom warp menu and remote item-rewarding check code injection
+    # Custom warp menu, remote item rewarding, and DeathLink code injection
     rom.write_bytes(0x19B98, [0x08, 0x06, 0x0D, 0x8B])  # J 0x8018362C
     rom.write_bytes(0x10681C, PatchName.remote_item_and_warp)
+
+    # NPC item textbox hack hook
+    rom.write_bytes(0xBF1DC, [0x08, 0x06, 0x0D, 0xEC])  # J 0x8013BFEC
+    rom.write_bytes(0xBF1E0, [0x27, 0xBD, 0xFF, 0xE0])  # ADDIU SP, SP, -0x20
+
+    # Subweapon check function hook
+    rom.write_bytes(0xBF32C, [0x00, 0x00, 0x00, 0x00])  # NOP
+    rom.write_bytes(0xBF330, [0x08, 0x06, 0x0D, 0xE5])  # J	0x80183794
 
     # Custom warp menu code
     rom.write_bytes(0xADD68, [0x0C, 0x04, 0xAB, 0x12])  # JAL 0x8012AC48
