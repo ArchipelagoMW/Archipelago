@@ -38,7 +38,9 @@ SMW_BOSS_STATE_ADDR    = WRAM_START + 0xD9B
 SMW_ACTIVE_BOSS_ADDR   = WRAM_START + 0x13FC
 SMW_CURRENT_LEVEL_ADDR = WRAM_START + 0x13BF
 SMW_MESSAGE_BOX_ADDR   = WRAM_START + 0x1426
-SMW_EGG_COUNT_ADDR     = WRAM_START + 0xF48
+SMW_BONUS_STAR_ADDR    = WRAM_START + 0xF48
+SMW_EGG_COUNT_ADDR     = WRAM_START + 0x1F24
+SMW_BOSS_COUNT_ADDR    = WRAM_START + 0x1F26
 SMW_SFX_ADDR           = WRAM_START + 0x1DFC
 SMW_PAUSE_ADDR         = WRAM_START + 0x13D4
 SMW_MESSAGE_QUEUE_ADDR = WRAM_START + 0xC391
@@ -191,7 +193,7 @@ async def smw_game_watcher(ctx: Context):
             ctx.message_queue = []
             return
         elif mario_state[0] in SMW_INVALID_MARIO_STATES:
-            # Mario can't come to the phonee right now
+            # Mario can't come to the phone right now
             return
 
         if "DeathLink" in ctx.tags and game_state[0] == 0x14 and ctx.last_death_link + 1 < time.time():
@@ -214,6 +216,17 @@ async def smw_game_watcher(ctx: Context):
 
                 await snes_flush_writes(ctx)
                 return
+
+        egg_count     = await snes_read(ctx, SMW_EGG_COUNT_ADDR, 0x1)
+        boss_count    = await snes_read(ctx, SMW_BOSS_COUNT_ADDR, 0x1)
+        display_count = await snes_read(ctx, SMW_BONUS_STAR_ADDR, 0x1)
+
+        if goal[0] == 0 and boss_count[0] > display_count[0]:
+            snes_buffered_write(ctx, SMW_BONUS_STAR_ADDR, bytes([boss_count[0]]))
+            await snes_flush_writes(ctx)
+        elif goal[0] == 1 and egg_count[0] > display_count[0]:
+            snes_buffered_write(ctx, SMW_BONUS_STAR_ADDR, bytes([egg_count[0]]))
+            await snes_flush_writes(ctx)
 
         await handle_message_queue(ctx)
 
@@ -300,22 +313,19 @@ async def smw_game_watcher(ctx: Context):
 
             snes_buffered_write(ctx, SMW_RECV_PROGRESS_ADDR, bytes([recv_index]))
             if item.item in item_rom_data:
-                if not (item.item == 0xBC0002 and goal[0] != 1) and not (item.item == 0xBC0012 and goal[0] != 0):
-                    # Don't handle Yoshi Eggs in Bowser Goal or Boss Tokens in Yoshi Egg Hunt Goal
+                item_count = await snes_read(ctx, WRAM_START + item_rom_data[item.item][0], 0x1)
+                increment = item_rom_data[item.item][1]
 
-                    item_count = await snes_read(ctx, WRAM_START + item_rom_data[item.item][0], 0x1)
-                    increment = item_rom_data[item.item][1]
+                new_item_count = item_count[0]
+                if increment > 1:
+                    new_item_count = increment
+                else:
+                    new_item_count += increment
 
-                    new_item_count = item_count[0]
-                    if increment > 1:
-                        new_item_count = increment
-                    else:
-                        new_item_count += increment
+                if verify_game_state[0] == 0x14 and len(item_rom_data[item.item]) > 2:
+                    snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([item_rom_data[item.item][2]]))
 
-                    if verify_game_state[0] == 0x14 and len(item_rom_data[item.item]) > 2:
-                        snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([item_rom_data[item.item][2]]))
-
-                    snes_buffered_write(ctx, WRAM_START + item_rom_data[item.item][0], bytes([new_item_count]))
+                snes_buffered_write(ctx, WRAM_START + item_rom_data[item.item][0], bytes([new_item_count]))
             elif item.item in ability_rom_data:
                 # Handle Upgrades
                 for rom_data in ability_rom_data[item.item]:

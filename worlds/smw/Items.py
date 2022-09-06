@@ -17,11 +17,11 @@ class SMWItem(Item):
 
 # Separate tables for each type of item.
 junk_table = {
-    ItemName.one_up_mushroom: ItemData(0xBC3001, False),
+    ItemName.one_up_mushroom: ItemData(0xBC0001, False),
 }
 
 collectable_table = {
-    ItemName.yoshi_egg:       ItemData(0xBC3002, True),
+    ItemName.yoshi_egg:       ItemData(0xBC0002, True),
 }
 
 upgrade_table = {

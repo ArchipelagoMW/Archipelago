@@ -249,16 +249,17 @@ switch_palace_levels = [
 ]
 
 location_id_to_level_id = {
-    LocationName.yoshis_island_1_exit_1: [0x29, 0],
-    LocationName.yoshis_island_1_dragon: [0x29, 2],
-    LocationName.yoshis_island_2_exit_1: [0x2A, 0],
-    LocationName.yoshis_island_2_dragon: [0x2A, 2],
-    LocationName.yoshis_island_3_exit_1: [0x27, 0],
-    LocationName.yoshis_island_3_dragon: [0x27, 2],
-    LocationName.yoshis_island_4_exit_1: [0x26, 0],
-    LocationName.yoshis_island_4_dragon: [0x26, 2],
-    LocationName.yoshis_island_castle:   [0x25, 0],
-    LocationName.yellow_switch_palace:   [0x14, 0],
+    LocationName.yoshis_island_1_exit_1:  [0x29, 0],
+    LocationName.yoshis_island_1_dragon:  [0x29, 2],
+    LocationName.yoshis_island_2_exit_1:  [0x2A, 0],
+    LocationName.yoshis_island_2_dragon:  [0x2A, 2],
+    LocationName.yoshis_island_3_exit_1:  [0x27, 0],
+    LocationName.yoshis_island_3_dragon:  [0x27, 2],
+    LocationName.yoshis_island_4_exit_1:  [0x26, 0],
+    LocationName.yoshis_island_4_dragon:  [0x26, 2],
+    LocationName.yoshis_island_castle:    [0x25, 0],
+    LocationName.yoshis_island_koopaling: [0x25, 0],
+    LocationName.yellow_switch_palace:    [0x14, 0],
 
     LocationName.donut_plains_1_exit_1:     [0x15, 0],
     LocationName.donut_plains_1_exit_2:     [0x15, 1],
@@ -280,6 +281,7 @@ location_id_to_level_id = {
     LocationName.donut_secret_house_exit_1: [0x13, 0],
     LocationName.donut_secret_house_exit_2: [0x13, 1],
     LocationName.donut_plains_castle:       [0x07, 0],
+    LocationName.donut_plains_koopaling:    [0x07, 0],
     LocationName.green_switch_palace:       [0x08, 0],
 
     LocationName.vanilla_dome_1_exit_1:      [0x3E, 0],
@@ -302,7 +304,9 @@ location_id_to_level_id = {
     LocationName.vanilla_ghost_house_exit_1: [0x2B, 0],
     LocationName.vanilla_ghost_house_dragon: [0x2B, 2],
     LocationName.vanilla_fortress:           [0x0B, 0],
+    LocationName.vanilla_reznor:             [0x0B, 0],
     LocationName.vanilla_dome_castle:        [0x40, 0],
+    LocationName.vanilla_dome_koopaling:     [0x40, 0],
     LocationName.red_switch_palace:          [0x3F, 0],
 
     LocationName.butter_bridge_1_exit_1: [0x0C, 0],
@@ -317,6 +321,7 @@ location_id_to_level_id = {
     LocationName.soda_lake_exit_1:       [0x11, 0],
     LocationName.soda_lake_dragon:       [0x11, 2],
     LocationName.twin_bridges_castle:    [0x0E, 0],
+    LocationName.twin_bridges_koopaling: [0x0E, 0],
 
     LocationName.forest_of_illusion_1_exit_1: [0x42, 0],
     LocationName.forest_of_illusion_1_exit_2: [0x42, 1],
@@ -335,7 +340,9 @@ location_id_to_level_id = {
     LocationName.forest_secret_exit_1:        [0x46, 0],
     LocationName.forest_secret_dragon:        [0x46, 2],
     LocationName.forest_fortress:             [0x1F, 0],
+    LocationName.forest_reznor:               [0x1F, 0],
     LocationName.forest_castle:               [0x20, 0],
+    LocationName.forest_koopaling:            [0x20, 0],
     LocationName.forest_castle_dragon:        [0x20, 2],
     LocationName.blue_switch_palace:          [0x45, 0],
 
@@ -354,7 +361,9 @@ location_id_to_level_id = {
     LocationName.chocolate_ghost_house_exit_1: [0x21, 0],
     LocationName.chocolate_secret_exit_1:      [0x3B, 0],
     LocationName.chocolate_fortress:           [0x1B, 0],
+    LocationName.chocolate_reznor:             [0x1B, 0],
     LocationName.chocolate_castle:             [0x1A, 0],
+    LocationName.chocolate_koopaling:          [0x1A, 0],
 
     LocationName.sunken_ghost_ship:        [0x18, 0],
     LocationName.sunken_ghost_ship_dragon: [0x18, 2],
@@ -372,7 +381,9 @@ location_id_to_level_id = {
     LocationName.valley_ghost_house_exit_2: [0x38, 1],
     LocationName.valley_ghost_house_dragon: [0x38, 2],
     LocationName.valley_fortress:           [0x35, 0],
+    LocationName.valley_reznor:             [0x35, 0],
     LocationName.valley_castle:             [0x34, 0],
+    LocationName.valley_koopaling:          [0x34, 0],
     LocationName.valley_castle_dragon:      [0x34, 2],
 
     LocationName.star_road_1_exit_1: [0x58, 0],

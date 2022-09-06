@@ -27,10 +27,10 @@ ability_rom_data = {
 
 
 item_rom_data = {
-    0xBC3001: [0x18E4, 0x1], # 1-Up Mushroom
+    0xBC0001: [0x18E4, 0x1], # 1-Up Mushroom
 
-    0xBC3002: [0xF48, 0x1, 0x1F], # Yoshi Egg
-    0xBC3012: [0xF48, 0x1, 0x09], # Boss Token
+    0xBC0002: [0x1F24, 0x1, 0x1F], # Yoshi Egg
+    0xBC0012: [0x1F26, 0x1, 0x09], # Boss Token
 
     0xBC000E: [0x1F28, 0x1, 0x1C], # Yellow Switch Palace
     0xBC000F: [0x1F27, 0x1, 0x1C], # Green Switch Palace
@@ -659,6 +659,7 @@ def patch_rom(world, rom, player, active_level_dict):
 
     # Repurpose Bonus Stars counter for Boss Token or Yoshi Eggs
     rom.write_bytes(0x3F1AA, bytearray([0x00] * 0x20))
+    rom.write_bytes(0x20F9F, bytearray([0xEA] * 0x3B))
 
     # Prevent Switch Palaces setting the Switch Palace flags
     rom.write_bytes(0x6EC9A, bytearray([0xEA, 0xEA]))
