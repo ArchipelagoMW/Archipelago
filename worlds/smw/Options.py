@@ -120,6 +120,13 @@ class LiteratureTrapWeight(BaseTrapWeight):
     display_name = "Literature Trap Weight"
 
 
+class Autosave(DefaultOnToggle):
+    """
+    Whether a save prompt will appear after every level
+    """
+    display_name = "Autosave"
+
+
 class MusicShuffle(Toggle):
     """
     Whether music is shuffled
@@ -159,6 +166,7 @@ smw_options: typing.Dict[str, type(Option)] = {
     "ice_trap_weight": IceTrapWeight,
     "stun_trap_weight": StunTrapWeight,
     "literature_trap_weight": LiteratureTrapWeight,
+    "autosave": Autosave,
     "music_shuffle": MusicShuffle,
     "palette_shuffle": PaletteShuffle,
     "starting_life_count": StartingLifeCount,

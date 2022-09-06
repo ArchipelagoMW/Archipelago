@@ -657,6 +657,10 @@ def patch_rom(world, rom, player, active_level_dict):
     # Always allow Start+Select
     rom.write_bytes(0x2267, bytearray([0xEA, 0xEA]))
 
+    # Always bring up save prompt on beating a level
+    if world.autosave[player]:
+        rom.write_bytes(0x20F93, bytearray([0x00]))
+
     # Repurpose Bonus Stars counter for Boss Token or Yoshi Eggs
     rom.write_bytes(0x3F1AA, bytearray([0x00] * 0x20))
     rom.write_bytes(0x20F9F, bytearray([0xEA] * 0x3B))
