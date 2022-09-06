@@ -59,4 +59,4 @@ Otherwise, if you just want to play the vanilla game without any modifications (
 
 Since the goal of randomizer isn't to achieve new personal high score, players may find themselves waiting for a level timer to expire once they've met their objectives. A new feature called *Auto-Complete* has been added to automatically complete levels once a target star count has been achieved.
 
-To enable *Auto-Complete*, press the `"Show"` button near the top of your screen to expand the modding controls. Then, press the "`Auto-Complete <x>`" button until it shows the desired setting.
+To enable *Auto-Complete*, press the `Show` button near the top of your screen to expand the modding controls. Then, press the `Auto-Complete <x>` button until it shows the desired setting.
