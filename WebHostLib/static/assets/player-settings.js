@@ -36,7 +36,8 @@ window.addEventListener('load', () => {
     const nameInput = document.getElementById('player-name');
     nameInput.addEventListener('keyup', (event) => updateBaseSetting(event));
     nameInput.value = playerSettings.name;
-  }).catch(() => {
+  }).catch((e) => {
+    console.error(e);
     const url = new URL(window.location.href);
     window.location.replace(`${url.protocol}//${url.hostname}/page-not-found`);
   })
@@ -101,9 +102,15 @@ const buildOptionsTable = (settings, romOpts = false) => {
     // td Left
     const tdl = document.createElement('td');
     const label = document.createElement('label');
+    label.textContent = `${settings[setting].displayName}: `;
     label.setAttribute('for', setting);
-    label.setAttribute('data-tooltip', settings[setting].description);
-    label.innerText = `${settings[setting].displayName}:`;
+
+    const questionSpan = document.createElement('span');
+    questionSpan.classList.add('interactive');
+    questionSpan.setAttribute('data-tooltip', settings[setting].description);
+    questionSpan.innerText = '(?)';
+
+    label.appendChild(questionSpan);
     tdl.appendChild(label);
     tr.appendChild(tdl);
 
@@ -161,6 +168,70 @@ const buildOptionsTable = (settings, romOpts = false) => {
         rangeVal.setAttribute('id', `${setting}-value`);
         rangeVal.innerText = currentSettings[gameName][setting] ?? settings[setting].defaultValue;
         element.appendChild(rangeVal);
+        break;
+
+      case 'special_range':
+        element = document.createElement('div');
+        element.classList.add('special-range-container');
+
+        // Build the select element
+        let specialRangeSelect = document.createElement('select');
+        specialRangeSelect.setAttribute('data-key', setting);
+        Object.keys(settings[setting].value_names).forEach((presetName) => {
+          let presetOption = document.createElement('option');
+          presetOption.innerText = presetName;
+          presetOption.value = settings[setting].value_names[presetName];
+          specialRangeSelect.appendChild(presetOption);
+        });
+        let customOption = document.createElement('option');
+        customOption.innerText = 'Custom';
+        customOption.value = 'custom';
+        customOption.selected = true;
+        specialRangeSelect.appendChild(customOption);
+        if (Object.values(settings[setting].value_names).includes(Number(currentSettings[gameName][setting]))) {
+          specialRangeSelect.value = Number(currentSettings[gameName][setting]);
+        }
+
+        // Build range element
+        let specialRangeWrapper = document.createElement('div');
+        specialRangeWrapper.classList.add('special-range-wrapper');
+        let specialRange = document.createElement('input');
+        specialRange.setAttribute('type', 'range');
+        specialRange.setAttribute('data-key', setting);
+        specialRange.setAttribute('min', settings[setting].min);
+        specialRange.setAttribute('max', settings[setting].max);
+        specialRange.value = currentSettings[gameName][setting];
+
+        // Build rage value element
+        let specialRangeVal = document.createElement('span');
+        specialRangeVal.classList.add('range-value');
+        specialRangeVal.setAttribute('id', `${setting}-value`);
+        specialRangeVal.innerText = currentSettings[gameName][setting] ?? settings[setting].defaultValue;
+
+        // Configure select event listener
+        specialRangeSelect.addEventListener('change', (event) => {
+          if (event.target.value === 'custom') { return; }
+
+          // Update range slider
+          specialRange.value = event.target.value;
+          document.getElementById(`${setting}-value`).innerText = event.target.value;
+          updateGameSetting(event);
+        });
+
+        // Configure range event handler
+        specialRange.addEventListener('change', (event) => {
+          // Update select element
+          specialRangeSelect.value =
+            (Object.values(settings[setting].value_names).includes(parseInt(event.target.value))) ?
+            parseInt(event.target.value) : 'custom';
+          document.getElementById(`${setting}-value`).innerText = event.target.value;
+          updateGameSetting(event);
+        });
+
+        element.appendChild(specialRangeSelect);
+        specialRangeWrapper.appendChild(specialRange);
+        specialRangeWrapper.appendChild(specialRangeVal);
+        element.appendChild(specialRangeWrapper);
         break;
 
       default:

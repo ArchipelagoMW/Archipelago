@@ -1,5 +1,5 @@
 import typing
-from Options import Option, Range, Choice, Toggle, DefaultOnToggle, AssembleOptions, DeathLink
+from Options import Option, Range, Choice, Toggle, DefaultOnToggle, AssembleOptions, DeathLink, ProgressionBalancing
 
 
 class EvermizerFlags:
@@ -35,6 +35,32 @@ class Difficulty(EvermizerFlags, Choice):
     alias_chaos = 3
     default = 1
     flags = ['e', 'n', 'h', 'x']
+
+
+class EnergyCore(EvermizerFlags, Choice):
+    """How to obtain the Energy Core"""
+    display_name = "Energy Core"
+    option_vanilla = 0
+    option_shuffle = 1
+    option_fragments = 2
+    default = 1
+    flags = ['z', '', 'Z']
+
+
+class RequiredFragments(Range):
+    """Required fragment count for Energy Core = Fragments"""
+    display_name = "Required Fragments"
+    range_start = 1
+    range_end = 99
+    default = 10
+
+
+class AvailableFragments(Range):
+    """Placed fragment count for Energy Core = Fragments"""
+    display_name = "Available Fragments"
+    range_start = 1
+    range_end = 99
+    default = 11
 
 
 class MoneyModifier(Range):
@@ -184,28 +210,38 @@ class TrapChanceOHKO(TrapChance):
     item_name = "OHKO Trap"
 
 
+class SoEProgressionBalancing(ProgressionBalancing):
+    default = 30
+    __doc__ = ProgressionBalancing.__doc__.replace(f"default {ProgressionBalancing.default}", f"default {default}")
+    special_range_names = {**ProgressionBalancing.special_range_names, "normal": default}
+
+
 soe_options: typing.Dict[str, type(Option)] = {
-    "difficulty":           Difficulty,
-    "money_modifier":       MoneyModifier,
-    "exp_modifier":         ExpModifier,
-    "fix_sequence":         FixSequence,
-    "fix_cheats":           FixCheats,
-    "fix_infinite_ammo":    FixInfiniteAmmo,
-    "fix_atlas_glitch":     FixAtlasGlitch,
-    "fix_wings_glitch":     FixWingsGlitch,
-    "shorter_dialogs":      ShorterDialogs,
-    "short_boss_rush":      ShortBossRush,
-    "ingredienizer":        Ingredienizer,
-    "sniffamizer":          Sniffamizer,
-    "callbeadamizer":       Callbeadamizer,
-    "musicmizer":           Musicmizer,
-    "doggomizer":           Doggomizer,
-    "turdo_mode":           TurdoMode,
-    "death_link":           DeathLink,
-    "trap_count":           TrapCount,
-    "trap_chance_quake":    TrapChanceQuake,
-    "trap_chance_poison":   TrapChancePoison,
-    "trap_chance_confound": TrapChanceConfound,
-    "trap_chance_hud":      TrapChanceHUD,
-    "trap_chance_ohko":     TrapChanceOHKO,
+    "difficulty":            Difficulty,
+    "energy_core":           EnergyCore,
+    "required_fragments":    RequiredFragments,
+    "available_fragments":   AvailableFragments,
+    "money_modifier":        MoneyModifier,
+    "exp_modifier":          ExpModifier,
+    "fix_sequence":          FixSequence,
+    "fix_cheats":            FixCheats,
+    "fix_infinite_ammo":     FixInfiniteAmmo,
+    "fix_atlas_glitch":      FixAtlasGlitch,
+    "fix_wings_glitch":      FixWingsGlitch,
+    "shorter_dialogs":       ShorterDialogs,
+    "short_boss_rush":       ShortBossRush,
+    "ingredienizer":         Ingredienizer,
+    "sniffamizer":           Sniffamizer,
+    "callbeadamizer":        Callbeadamizer,
+    "musicmizer":            Musicmizer,
+    "doggomizer":            Doggomizer,
+    "turdo_mode":            TurdoMode,
+    "death_link":            DeathLink,
+    "trap_count":            TrapCount,
+    "trap_chance_quake":     TrapChanceQuake,
+    "trap_chance_poison":    TrapChancePoison,
+    "trap_chance_confound":  TrapChanceConfound,
+    "trap_chance_hud":       TrapChanceHUD,
+    "trap_chance_ohko":      TrapChanceOHKO,
+    "progression_balancing": SoEProgressionBalancing,
 }

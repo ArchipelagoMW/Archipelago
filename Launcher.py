@@ -10,21 +10,21 @@ Scroll down to components= to add components to the launcher as well as setup.py
 
 
 import argparse
-from os.path import isfile
-import sys
-from typing import Iterable, Sequence, Callable, Union, Optional
-import subprocess
 import itertools
-from Utils import is_frozen, user_path, local_path, init_logging
-from shutil import which
 import shlex
+import subprocess
+import sys
 from enum import Enum, auto
-import logging
+from os.path import isfile
+from shutil import which
+from typing import Iterable, Sequence, Callable, Union, Optional
 
+if __name__ == "__main__":
+    import ModuleUpdate
+    ModuleUpdate.update()
 
-is_linux = sys.platform.startswith('linux')
-is_macos = sys.platform == 'darwin'
-is_windows = sys.platform in ("win32", "cygwin", "msys")
+from Utils import is_frozen, user_path, local_path, init_logging, open_filename, messagebox, \
+    is_windows, is_macos, is_linux
 
 
 def open_host_yaml():
@@ -42,22 +42,16 @@ def open_host_yaml():
 
 
 def open_patch():
+    suffixes = []
+    for c in components:
+        if isfile(get_exe(c)[-1]):
+            suffixes += c.file_identifier.suffixes if c.type == Type.CLIENT and \
+                                                      isinstance(c.file_identifier, SuffixIdentifier) else []
     try:
-        import tkinter
-        import tkinter.filedialog
+        filename = open_filename('Select patch', (('Patches', suffixes),))
     except Exception as e:
-        logging.error("Could not load tkinter, which is likely not installed. "
-                      "This attempt was made because Launcher.open_patch was used.")
-        raise e
+        messagebox('Error', str(e), error=True)
     else:
-        root = tkinter.Tk()
-        root.withdraw()
-        suffixes = []
-        for c in components:
-            if isfile(get_exe(c)[-1]):
-                suffixes += c.file_identifier.suffixes if c.type == Type.CLIENT and \
-                                                          isinstance(c.file_identifier, SuffixIdentifier) else []
-        filename = tkinter.filedialog.askopenfilename(filetypes=(('Patches', ' '.join(suffixes)),))
         file, _, component = identify(filename)
         if file and component:
             launch([*get_exe(component), file], component.cli)
@@ -76,6 +70,7 @@ def browse_files():
         webbrowser.open(file)
 
 
+# noinspection PyArgumentList
 class Type(Enum):
     TOOL = auto()
     FUNC = auto()  # not a real component
@@ -137,7 +132,7 @@ components: Iterable[Component] = (
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient'),
     # SNI
     Component('SNI Client', 'SNIClient',
-              file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3')),
+              file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3', '.apdkc3')),
     Component('LttP Adjuster', 'LttPAdjuster'),
     # Factorio
     Component('Factorio Client', 'FactorioClient'),
@@ -220,14 +215,7 @@ def launch(exe, in_terminal=False):
 
 
 def run_gui():
-    if not sys.stdout:
-        from kvui import App, ContainerLayout, GridLayout, Button, Label  # this kills stdout
-    else:
-        from kivy.app import App
-        from kivy.uix.button import Button
-        from kivy.uix.floatlayout import FloatLayout as ContainerLayout
-        from kivy.uix.gridlayout import GridLayout
-        from kivy.uix.label import Label
+    from kvui import App, ContainerLayout, GridLayout, Button, Label
 
     class Launcher(App):
         base_title: str = "Archipelago Launcher"

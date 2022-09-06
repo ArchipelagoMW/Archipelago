@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import argparse
 import logging
 import random
@@ -5,8 +7,9 @@ import urllib.request
 import urllib.parse
 from typing import Set, Dict, Tuple, Callable, Any, Union
 import os
-from collections import Counter
+from collections import Counter, ChainMap
 import string
+import enum
 
 import ModuleUpdate
 
@@ -25,7 +28,43 @@ from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
 import copy
 
-categories = set(AutoWorldRegister.world_types)
+
+class PlandoSettings(enum.IntFlag):
+    items = 0b0001
+    connections = 0b0010
+    texts = 0b0100
+    bosses = 0b1000
+
+    @classmethod
+    def from_option_string(cls, option_string: str) -> PlandoSettings:
+        result = cls(0)
+        for part in option_string.split(","):
+            part = part.strip().lower()
+            if part:
+                result = cls._handle_part(part, result)
+        return result
+
+    @classmethod
+    def from_set(cls, option_set: Set[str]) -> PlandoSettings:
+        result = cls(0)
+        for part in option_set:
+            result = cls._handle_part(part, result)
+        return result
+
+    @classmethod
+    def _handle_part(cls, part: str, base: PlandoSettings) -> PlandoSettings:
+        try:
+            part = cls[part]
+        except Exception as e:
+            raise KeyError(f"{part} is not a recognized name for a plando module. "
+                           f"Known options: {', '.join(flag.name for flag in cls)}") from e
+        else:
+            return base | part
+
+    def __str__(self) -> str:
+        if self.value:
+            return ", ".join(flag.name for flag in PlandoSettings if self.value & flag.value)
+        return "Off"
 
 
 def mystery_argparse():
@@ -45,11 +84,6 @@ def mystery_argparse():
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=defaults["players"], type=lambda value: max(int(value), 1))
     parser.add_argument('--spoiler', type=int, default=defaults["spoiler"])
-    parser.add_argument('--lttp_rom', default=options["lttp_options"]["rom_file"],
-                        help="Path to the 1.0 JP LttP Baserom.")  # absolute, relative to cwd or relative to app path
-    parser.add_argument('--sm_rom', default=options["sm_options"]["rom_file"],
-                        help="Path to the 1.0 JP SM Baserom.")
-    parser.add_argument('--enemizercli', default=resolve_path(defaults["enemizer_path"], local_path))
     parser.add_argument('--outputpath', default=resolve_path(options["general_options"]["output_path"], user_path),
                         help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
     parser.add_argument('--race', action='store_true', default=defaults["race"])
@@ -64,7 +98,7 @@ def mystery_argparse():
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
     if not os.path.isabs(args.meta_file_path):
         args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
-    args.plando: Set[str] = {arg.strip().lower() for arg in args.plando.split(",")}
+    args.plando: PlandoSettings = PlandoSettings.from_option_string(args.plando)
     return args, options
 
 
@@ -94,12 +128,14 @@ def main(args=None, callback=ERmain):
 
     if args.meta_file_path and os.path.exists(args.meta_file_path):
         try:
-            weights_cache[args.meta_file_path] = read_weights_yamls(args.meta_file_path)
+            meta_weights = read_weights_yamls(args.meta_file_path)[-1]
         except Exception as e:
             raise ValueError(f"File {args.meta_file_path} is destroyed. Please fix your yaml.") from e
-        meta_weights = weights_cache[args.meta_file_path][-1]
         print(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights)}")
-        del(meta_weights["meta_description"])
+        try:  # meta description allows us to verify that the file named meta.yaml is intentionally a meta file
+            del(meta_weights["meta_description"])
+        except Exception as e:
+            raise ValueError("No meta description found for meta.yaml. Unable to verify.") from e
         if args.samesettings:
             raise Exception("Cannot mix --samesettings with --meta")
     else:
@@ -108,22 +144,26 @@ def main(args=None, callback=ERmain):
     player_files = {}
     for file in os.scandir(args.player_files_path):
         fname = file.name
-        if file.is_file() and os.path.join(args.player_files_path, fname) not in {args.meta_file_path, args.weights_file_path}:
+        if file.is_file() and not file.name.startswith(".") and \
+                os.path.join(args.player_files_path, fname) not in {args.meta_file_path, args.weights_file_path}:
             path = os.path.join(args.player_files_path, fname)
             try:
                 weights_cache[fname] = read_weights_yamls(path)
             except Exception as e:
                 raise ValueError(f"File {fname} is destroyed. Please fix your yaml.") from e
-            else:
-                for yaml in weights_cache[fname]:
-                    print(f"P{player_id} Weights: {fname} >> "
-                          f"{get_choice('description', yaml, 'No description specified')}")
-                    player_files[player_id] = fname
-                    player_id += 1
 
-    args.multi = max(player_id-1, args.multi)
+    # sort dict for consistent results across platforms:
+    weights_cache = {key: value for key, value in sorted(weights_cache.items())}
+    for filename, yaml_data in weights_cache.items():
+        for yaml in yaml_data:
+            print(f"P{player_id} Weights: {filename} >> "
+                  f"{get_choice('description', yaml, 'No description specified')}")
+            player_files[player_id] = filename
+            player_id += 1
+
+    args.multi = max(player_id - 1, args.multi)
     print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed} with plando: "
-          f"{', '.join(args.plando)}")
+          f"{args.plando}")
 
     if not weights_cache:
         raise Exception(f"No weights found. Provide a general weights file ({args.weights_file_path}) or individual player files. "
@@ -138,31 +178,29 @@ def main(args=None, callback=ERmain):
 
     Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
 
-    erargs.lttp_rom = args.lttp_rom
-    erargs.sm_rom = args.sm_rom
-    erargs.enemizercli = args.enemizercli
-
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
-        {fname: ( tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
-                for fname, yamls in weights_cache.items()}
-    player_path_cache = {}
-    for player in range(1, args.multi + 1):
-        player_path_cache[player] = player_files.get(player, args.weights_file_path)
+        {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
+         for fname, yamls in weights_cache.items()}
 
     if meta_weights:
         for category_name, category_dict in meta_weights.items():
             for key in category_dict:
-                option = get_choice(key, category_dict)
+                option = roll_meta_option(key, category_name, category_dict)
                 if option is not None:
-                    for player, path in player_path_cache.items():
+                    for path in weights_cache:
                         for yaml in weights_cache[path]:
                             if category_name is None:
-                                yaml[key] = option
+                                for category in yaml:
+                                    if category in AutoWorldRegister.world_types and key in Options.common_options:
+                                        yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
                             else:
-                               yaml[category_name][key] = option
+                                yaml[category_name][key] = option
 
+    player_path_cache = {}
+    for player in range(1, args.multi + 1):
+        player_path_cache[player] = player_files.get(player, args.weights_file_path)
     name_counter = Counter()
     erargs.player_settings = {}
 
@@ -344,6 +382,28 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
     return weights
 
 
+def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
+    if not game:
+        return get_choice(option_key, category_dict)
+    if game in AutoWorldRegister.world_types:
+        game_world = AutoWorldRegister.world_types[game]
+        options = ChainMap(game_world.option_definitions, Options.per_game_common_options)
+        if option_key in options:
+            if options[option_key].supports_weighting:
+                return get_choice(option_key, category_dict)
+            return options[option_key]
+    if game == "A Link to the Past":  # TODO wow i hate this
+        if option_key in {"glitches_required", "dark_room_logic", "entrance_shuffle", "goals", "triforce_pieces_mode",
+                          "triforce_pieces_percentage", "triforce_pieces_available", "triforce_pieces_extra",
+                          "triforce_pieces_required", "shop_shuffle", "mode", "item_pool", "item_functionality",
+                          "boss_shuffle", "enemy_damage", "enemy_health", "timer", "countdown_start_time",
+                          "red_clock_time", "blue_clock_time", "green_clock_time", "dungeon_counters", "shuffle_prizes",
+                          "misery_mire_medallion", "turtle_rock_medallion", "sprite_pool", "sprite",
+                          "random_sprite_on_event"}:
+            return get_choice(option_key, category_dict)
+    raise Exception(f"Error generating meta option {option_key} for {game}.")
+
+
 def roll_linked_options(weights: dict) -> dict:
     weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     for option_set in weights["linked_options"]:
@@ -399,7 +459,7 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
 def get_plando_bosses(boss_shuffle: str, plando_options: Set[str]) -> str:
     if boss_shuffle in boss_shuffle_options:
         return boss_shuffle_options[boss_shuffle]
-    elif "bosses" in plando_options:
+    elif PlandoSettings.bosses in plando_options:
         options = boss_shuffle.lower().split(";")
         remainder_shuffle = "none"  # vanilla
         bosses = []
@@ -448,7 +508,7 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
         setattr(ret, option_key, option(option.default))
 
 
-def roll_settings(weights: dict, plando_options: Set[str] = frozenset(("bosses",))):
+def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings.bosses):
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
@@ -461,17 +521,11 @@ def roll_settings(weights: dict, plando_options: Set[str] = frozenset(("bosses",
         if tuplize_version(version) > version_tuple:
             raise Exception(f"Settings reports required version of generator is at least {version}, "
                             f"however generator is of version {__version__}")
-        required_plando_options = requirements.get("plando", "")
-        if required_plando_options:
-            required_plando_options = set(option.strip() for option in required_plando_options.split(","))
-            required_plando_options -= plando_options
+        required_plando_options = PlandoSettings.from_option_string(requirements.get("plando", ""))
+        if required_plando_options not in plando_options:
             if required_plando_options:
-                if len(required_plando_options) == 1:
-                    raise Exception(f"Settings reports required plando module {', '.join(required_plando_options)}, "
-                                    f"which is not enabled.")
-                else:
-                    raise Exception(f"Settings reports required plando modules {', '.join(required_plando_options)}, "
-                                    f"which are not enabled.")
+                raise Exception(f"Settings reports required plando module {str(required_plando_options)}, "
+                                f"which is not enabled.")
 
     ret = argparse.Namespace()
     for option_key in Options.per_game_common_options:
@@ -494,18 +548,18 @@ def roll_settings(weights: dict, plando_options: Set[str] = frozenset(("bosses",
         setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
     if ret.game in AutoWorldRegister.world_types:
-        for option_key, option in world_type.options.items():
+        for option_key, option in world_type.option_definitions.items():
             handle_option(ret, game_weights, option_key, option)
         for option_key, option in Options.per_game_common_options.items():
             # skip setting this option if already set from common_options, defaulting to root option
             if not (option_key in Options.common_options and option_key not in game_weights):
                 handle_option(ret, game_weights, option_key, option)
-        if "items" in plando_options:
+        if PlandoSettings.items in plando_options:
             ret.plando_items = game_weights.get("plando_items", [])
         if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
             # bad hardcoded behavior to make this work for now
             ret.plando_connections = []
-            if "connections" in plando_options:
+            if PlandoSettings.connections in plando_options:
                 options = game_weights.get("plando_connections", [])
                 for placement in options:
                     if roll_percentage(get_choice("percentage", placement, 100)):
@@ -551,9 +605,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     ret.goal = goals[goal]
 
-    # TODO consider moving open_pyramid to an automatic variable in the core roller, set to True when
-    # fast ganon + ganon at hole
-    ret.open_pyramid = get_choice_legacy('open_pyramid', weights, 'goal')
 
     extra_pieces = get_choice_legacy('triforce_pieces_mode', weights, 'available')
 
@@ -625,7 +676,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
             raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
 
     ret.plando_texts = {}
-    if "texts" in plando_options:
+    if PlandoSettings.texts in plando_options:
         tt = TextTable()
         tt.removeUnwantedText()
         options = weights.get("plando_texts", [])
@@ -637,7 +688,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                 ret.plando_texts[at] = str(get_choice_legacy("text", placement))
 
     ret.plando_connections = []
-    if "connections" in plando_options:
+    if PlandoSettings.connections in plando_options:
         options = weights.get("plando_connections", [])
         for placement in options:
             if roll_percentage(get_choice_legacy("percentage", placement, 100)):

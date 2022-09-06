@@ -2,15 +2,14 @@ import json
 from pathlib import Path
 from typing import Dict, Set, NamedTuple, List
 
-from BaseClasses import Item
+from BaseClasses import Item, ItemClassification
 
 
 class ItemData(NamedTuple):
     name: str
     code: int
     item_type: str
-    progression: bool
-
+    classification: ItemClassification
 
 FF1_BRIDGE = 'Bridge'
 
@@ -21,10 +20,15 @@ FF1_STARTER_ITEMS = [
 
 FF1_PROGRESSION_LIST = [
     "Rod", "Cube", "Lute", "Key", "Chime", "Oxyale",
-    "Ship", "Canoe", "Floater", "Canal",
+    "Ship", "Canoe", "Floater", "Mark", "Sigil", "Canal",
     "Crown", "Crystal", "Herb", "Tnt", "Adamant", "Slab", "Ruby", "Bottle",
     "Shard",
     "EarthOrb", "FireOrb", "WaterOrb", "AirOrb"
+]
+
+FF1_USEFUL_LIST = [
+    "Tail", "Masamune", "Xcalber", "Katana", "Vorpal",
+    "DragonArmor", "Opal", "AegisShield",  "Ribbon"
 ]
 
 
@@ -38,8 +42,9 @@ class FF1Items:
         with open(file_path) as file:
             items = json.load(file)
             # Hardcode progression and categories for now
-            self._item_table = [ItemData(name, code, "FF1Item", name in FF1_PROGRESSION_LIST)
-                                for name, code in items.items()]
+            self._item_table = [ItemData(name, code, "FF1Item", ItemClassification.progression if name in
+                                FF1_PROGRESSION_LIST else ItemClassification.useful if name in FF1_USEFUL_LIST else
+                                ItemClassification.filler) for name, code in items.items()]
             self._item_table_lookup = {item.name: item for item in self._item_table}
 
     def _get_item_table(self) -> List[ItemData]:
@@ -62,7 +67,8 @@ class FF1Items:
 
     def generate_item(self, name: str, player: int) -> Item:
         item = self._get_item_table_lookup().get(name)
-        return Item(name, item.progression, item.code, player)
+        return Item(name, item.classification,
+                    item.code, player)
 
     def get_item_name_to_code_dict(self) -> Dict[str, int]:
         return {name: item.code for name, item in self._get_item_table_lookup().items()}

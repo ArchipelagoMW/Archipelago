@@ -5,34 +5,47 @@ import random
 import threading
 from typing import Dict, Set, TextIO
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState, Tutorial
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, RegionType, CollectionState, \
+    Tutorial
 from worlds.generic.Rules import set_rule
+from worlds.smz3.TotalSMZ3.Item import ItemType
 import worlds.smz3.TotalSMZ3.Item as TotalSMZ3Item
 from worlds.smz3.TotalSMZ3.World import World as TotalSMZ3World
-from worlds.smz3.TotalSMZ3.Config import Config, GameMode, GanonInvincible, Goal, KeyShuffle, MorphLocation, SMLogic, SwordLocation, Z3Logic
+from worlds.smz3.TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
+from worlds.smz3.TotalSMZ3.Config import Config, GameMode, Goal, KeyShuffle, MorphLocation, SMLogic, SwordLocation, Z3Logic, OpenTower, GanonVulnerable, OpenTourian
 from worlds.smz3.TotalSMZ3.Location import LocationType, locations_start_id, Location as TotalSMZ3Location
 from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
+from worlds.smz3.TotalSMZ3.WorldState import WorldState
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
 from .Options import smz3_options
+from Options import Accessibility
 
 world_folder = os.path.dirname(__file__)
 logger = logging.getLogger("SMZ3")
 
+# Location IDs in the range 256+196 to 256+202 shifted +34 between 11.2 and 11.3
+# this is required to keep backward compatibility
+def convertLocSMZ3IDToAPID(value):
+    return (value - 34) if value >= 256+230 and value <= 256+236 else value
 
 class SMZ3CollectionState(metaclass=AutoLogicRegister):
     def init_mixin(self, parent: MultiWorld):
         # for unit tests where MultiWorld is instantiated before worlds
         if hasattr(parent, "state"):
             self.smz3state = {player: TotalSMZ3Item.Progression([]) for player in parent.get_game_players("SMZ3")}
+            for player, group in parent.groups.items():
+                if (group["game"] == "SMZ3"):
+                    self.smz3state[player] = TotalSMZ3Item.Progression([])
+                    if player not in parent.state.smz3state:
+                        parent.state.smz3state[player] = TotalSMZ3Item.Progression([])
         else:
             self.smz3state = {}
 
     def copy_mixin(self, ret) -> CollectionState:
-        ret.smz3state = {player: copy.deepcopy(self.smz3state[player]) for player in self.world.get_game_players("SMZ3")}
+        ret.smz3state = {player: copy.deepcopy(self.smz3state[player]) for player in self.smz3state}
         return ret
-
 
 class SMZ3Web(WebWorld):
     tutorials = [Tutorial(
@@ -52,70 +65,169 @@ class SMZ3World(World):
     """
     game: str = "SMZ3"
     topology_present = False
-    data_version = 1
-    options = smz3_options
+    data_version = 3
+    option_definitions = smz3_options
     item_names: Set[str] = frozenset(TotalSMZ3Item.lookup_name_to_id)
     location_names: Set[str]
     item_name_to_id = TotalSMZ3Item.lookup_name_to_id
-    location_name_to_id: Dict[str, int] = {key : locations_start_id + value.Id for key, value in TotalSMZ3World(Config({}), "", 0, "").locationLookup.items()}
+    location_name_to_id: Dict[str, int] = {key : locations_start_id + convertLocSMZ3IDToAPID(value.Id)
+        for key, value in TotalSMZ3World(Config(), "", 0, "").locationLookup.items()}
     web = SMZ3Web()
 
     remote_items: bool = False
     remote_start_inventory: bool = False
+
+    locationNamesGT: Set[str] = {loc.Name for loc in GanonsTower(None, None).Locations}
 
     # first added for 0.2.6
     required_client_version = (0, 2, 6)
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
-        self.locations = {}
+        self.locations: Dict[str, Location] = {}
         self.unreachable = []
         super().__init__(world, player)
+
+    @classmethod
+    def isProgression(cls, itemType):
+        progressionTypes = {
+                                ItemType.ProgressiveShield,
+                                ItemType.ProgressiveSword,
+                                ItemType.Bow,
+                                ItemType.Hookshot,
+                                ItemType.Mushroom,
+                                ItemType.Powder,
+                                ItemType.Firerod,
+                                ItemType.Icerod,
+                                ItemType.Bombos,
+                                ItemType.Ether,
+                                ItemType.Quake,
+                                ItemType.Lamp,
+                                ItemType.Hammer,
+                                ItemType.Shovel,
+                                ItemType.Flute,
+                                ItemType.Bugnet,
+                                ItemType.Book,
+                                ItemType.Bottle,
+                                ItemType.Somaria,
+                                ItemType.Byrna,
+                                ItemType.Cape,
+                                ItemType.Mirror,
+                                ItemType.Boots,
+                                ItemType.ProgressiveGlove,
+                                ItemType.Flippers,
+                                ItemType.MoonPearl,
+                                ItemType.HalfMagic,
+
+                                ItemType.Grapple,
+                                ItemType.Charge,
+                                ItemType.Ice,
+                                ItemType.Wave,
+                                ItemType.Plasma,
+                                ItemType.Varia,
+                                ItemType.Gravity,
+                                ItemType.Morph,
+                                ItemType.Bombs,
+                                ItemType.SpringBall,
+                                ItemType.ScrewAttack,
+                                ItemType.HiJump,
+                                ItemType.SpaceJump,
+                                ItemType.SpeedBooster,
+
+                                ItemType.ETank,
+                                ItemType.ReserveTank,
+
+                                ItemType.BigKeyGT,
+                                ItemType.KeyGT,
+                                ItemType.BigKeyEP,
+                                ItemType.BigKeyDP,
+                                ItemType.BigKeyTH,
+                                ItemType.BigKeyPD,
+                                ItemType.BigKeySP,
+                                ItemType.BigKeySW,
+                                ItemType.BigKeyTT,
+                                ItemType.BigKeyIP,
+                                ItemType.BigKeyMM,
+                                ItemType.BigKeyTR,
+
+                                ItemType.KeyHC,
+                                ItemType.KeyCT,
+                                ItemType.KeyDP,
+                                ItemType.KeyTH,
+                                ItemType.KeyPD,
+                                ItemType.KeySP,
+                                ItemType.KeySW,
+                                ItemType.KeyTT,
+                                ItemType.KeyIP,
+                                ItemType.KeyMM,
+                                ItemType.KeyTR,
+
+                                ItemType.CardCrateriaL1,
+                                ItemType.CardCrateriaL2,
+                                ItemType.CardCrateriaBoss,
+                                ItemType.CardBrinstarL1,
+                                ItemType.CardBrinstarL2,
+                                ItemType.CardBrinstarBoss,
+                                ItemType.CardNorfairL1,
+                                ItemType.CardNorfairL2,
+                                ItemType.CardNorfairBoss,
+                                ItemType.CardMaridiaL1,
+                                ItemType.CardMaridiaL2,
+                                ItemType.CardMaridiaBoss,
+                                ItemType.CardWreckedShipL1,
+                                ItemType.CardWreckedShipBoss,
+                                ItemType.CardLowerNorfairL1,
+                                ItemType.CardLowerNorfairBoss,
+                            }
+        return itemType in progressionTypes
 
     @classmethod
     def stage_assert_generate(cls, world):
         base_combined_rom = get_base_rom_bytes()
 
     def generate_early(self):
-        config = Config({})
-        config.GameMode = GameMode.Multiworld
-        config.Z3Logic = Z3Logic.Normal
-        config.SMLogic = SMLogic(self.world.sm_logic[self.player].value)
-        config.SwordLocation = SwordLocation(self.world.sword_location[self.player].value)
-        config.MorphLocation = MorphLocation(self.world.morph_location[self.player].value)
-        config.Goal = Goal.DefeatBoth
-        config.KeyShuffle = KeyShuffle(self.world.key_shuffle[self.player].value)
-        config.Keysanity = config.KeyShuffle != KeyShuffle.Null
-        config.GanonInvincible = GanonInvincible.BeforeCrystals
+        self.config = Config()
+        self.config.GameMode = GameMode.Multiworld
+        self.config.Z3Logic = Z3Logic.Normal
+        self.config.SMLogic = SMLogic(self.world.sm_logic[self.player].value)
+        self.config.SwordLocation = SwordLocation(self.world.sword_location[self.player].value)
+        self.config.MorphLocation = MorphLocation(self.world.morph_location[self.player].value)
+        self.config.Goal = Goal(self.world.goal[self.player].value)
+        self.config.KeyShuffle = KeyShuffle(self.world.key_shuffle[self.player].value)
+        self.config.OpenTower = OpenTower(self.world.open_tower[self.player].value)
+        self.config.GanonVulnerable = GanonVulnerable(self.world.ganon_vulnerable[self.player].value)
+        self.config.OpenTourian = OpenTourian(self.world.open_tourian[self.player].value)
 
         self.local_random = random.Random(self.world.random.randint(0, 1000))
-        self.smz3World = TotalSMZ3World(config, self.world.get_player_name(self.player), self.player, self.world.seed_name)
+        self.smz3World = TotalSMZ3World(self.config, self.world.get_player_name(self.player), self.player, self.world.seed_name)
         self.smz3DungeonItems = []
         SMZ3World.location_names = frozenset(self.smz3World.locationLookup.keys())
 
         self.world.state.smz3state[self.player] = TotalSMZ3Item.Progression([])
     
     def generate_basic(self):
-        self.smz3World.Setup(self.world.random)
+        self.smz3World.Setup(WorldState.Generate(self.config, self.world.random))
         self.dungeon = TotalSMZ3Item.Item.CreateDungeonPool(self.smz3World)
         self.dungeon.reverse()
         self.progression = TotalSMZ3Item.Item.CreateProgressionPool(self.smz3World)
         self.keyCardsItems = TotalSMZ3Item.Item.CreateKeycards(self.smz3World)
+        self.SmMapsItems = TotalSMZ3Item.Item.CreateSmMaps(self.smz3World)
 
         niceItems = TotalSMZ3Item.Item.CreateNicePool(self.smz3World)
         junkItems = TotalSMZ3Item.Item.CreateJunkPool(self.smz3World)
         allJunkItems = niceItems + junkItems
+        self.junkItemsNames = [item.Type.name for item in junkItems]
 
         if (self.smz3World.Config.Keysanity):
-            progressionItems = self.progression + self.dungeon + self.keyCardsItems
+            progressionItems = self.progression + self.dungeon + self.keyCardsItems + self.SmMapsItems
         else:
             progressionItems = self.progression 
             for item in self.keyCardsItems:
-                self.world.push_precollected(SMZ3Item(item.Type.name, False, item.Type, self.item_name_to_id[item.Type.name], self.player, item))
+                self.world.push_precollected(SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item))
 
-        itemPool = [SMZ3Item(item.Type.name, True, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in progressionItems] + \
-                    [SMZ3Item(item.Type.name, False, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in allJunkItems]
-        self.smz3DungeonItems = [SMZ3Item(item.Type.name, True, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in self.dungeon]
+        itemPool = [SMZ3Item(item.Type.name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in progressionItems] + \
+                    [SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in allJunkItems]
+        self.smz3DungeonItems = [SMZ3Item(item.Type.name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in self.dungeon]
         self.world.itempool += itemPool
 
     def set_rules(self):
@@ -248,6 +360,49 @@ class SMZ3World(World):
                 
         return patch
 
+    def SnesCustomization(self, addr: int):
+        addr = (0x400000 if addr < 0x800000 else 0)| (addr & 0x3FFFFF)
+        return addr
+
+    def apply_customization(self):
+        patch = {}
+
+        # smSpinjumps
+        if (self.world.spin_jumps_animation[self.player].value == 1):
+            patch[self.SnesCustomization(0x9B93FE)] = bytearray([0x01])
+
+        # z3HeartBeep
+        values =    [ 0x00, 0x80, 0x40, 0x20, 0x10]
+        index = self.world.heart_beep_speed[self.player].value
+        patch[0x400033] = bytearray([values[index if index < len(values) else 2]])
+
+        # z3HeartColor
+        values =    [
+                        [0x24, [0x18, 0x00]],
+                        [0x3C, [0x04, 0x17]],
+                        [0x2C, [0xC9, 0x69]],
+                        [0x28, [0xBC, 0x02]]
+                    ]
+        index = self.world.heart_color[self.player].value
+        (hud, fileSelect) = values[index if index < len(values) else 0]
+        for i in range(0, 20, 2):
+            patch[self.SnesCustomization(0xDFA1E + i)] = bytearray([hud])
+        patch[self.SnesCustomization(0x1BD6AA)] = bytearray(fileSelect)
+
+        # z3QuickSwap
+        patch[0x40004B] = bytearray([0x01 if self.world.quick_swap[self.player].value else 0x00])
+
+        # smEnergyBeepOff
+        if (self.world.energy_beep[self.player].value == 0):
+            for ([addr, value]) in [
+                            [0x90EA9B, 0x80],
+                            [0x90F337, 0x80],
+                            [0x91E6D5, 0x80]
+                        ]:
+                patch[self.SnesCustomization(addr)] = bytearray([value])
+
+        return patch
+
     def generate_output(self, output_directory: str):
         try:
             base_combined_rom = get_base_rom_bytes()
@@ -255,15 +410,16 @@ class SMZ3World(World):
             base_combined_rom = basepatch.apply(base_combined_rom)
 
             patcher = TotalSMZ3Patch(self.smz3World,
-                                    [world.smz3World for key, world in self.world.worlds.items() if isinstance(world, SMZ3World)],
+                                    [world.smz3World for key, world in self.world.worlds.items() if isinstance(world, SMZ3World) and hasattr(world, "smz3World")],
                                     self.world.seed_name,
                                     self.world.seed,
                                     self.local_random,
-                                    self.world.world_name_lookup,
-                                    next(iter(loc.player for loc in self.world.get_locations() if loc.item == self.create_item("SilverArrows"))))
+                                    {v: k for k, v in self.world.player_name.items()},
+                                    next(iter(loc.player for loc in self.world.get_locations() if (loc.item.name == "SilverArrows" and loc.item.player == self.player))))
             patches = patcher.Create(self.smz3World.Config)
             patches.update(self.apply_sm_custom_sprite())
             patches.update(self.apply_item_names())
+            patches.update(self.apply_customization())
             for addr, bytes in patches.items():
                 offset = 0
                 for byte in bytes:
@@ -311,7 +467,7 @@ class SMZ3World(World):
         return slot_data
 
     def collect(self, state: CollectionState, item: Item) -> bool:
-        state.smz3state[item.player].Add([TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World)])
+        state.smz3state[self.player].Add([TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World if hasattr(self, "smz3World") else None)])
         if item.advancement:
             state.prog_items[item.name, item.player] += 1
             return True  # indicate that a logical state change has occured
@@ -320,7 +476,7 @@ class SMZ3World(World):
     def remove(self, state: CollectionState, item: Item) -> bool:
         name = self.collect_item(state, item, True)
         if name:
-            state.smz3state[item.player].Remove([TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World)])
+            state.smz3state[item.player].Remove([TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World if hasattr(self, "smz3World") else None)])
             state.prog_items[name, item.player] -= 1
             if state.prog_items[name, item.player] < 1:
                 del (state.prog_items[name, item.player])
@@ -328,7 +484,11 @@ class SMZ3World(World):
         return False
 
     def create_item(self, name: str) -> Item:
-        return SMZ3Item(name, True, TotalSMZ3Item.ItemType[name], self.item_name_to_id[name], player = self.player)
+        return SMZ3Item(name, 
+                        ItemClassification.progression if SMZ3World.isProgression(TotalSMZ3Item.ItemType[name]) else ItemClassification.filler,
+                        TotalSMZ3Item.ItemType[name], self.item_name_to_id[name], 
+                        self.player,
+                        TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[name], self))
 
     def pre_fill(self):
         from Fill import fill_restrictive
@@ -351,10 +511,11 @@ class SMZ3World(World):
                 exception_item = [TotalSMZ3Item.ItemType.BigKeySW, TotalSMZ3Item.ItemType.BigKeySP, TotalSMZ3Item.ItemType.KeyTH]
                 for item in self.smz3DungeonItems:
                     if item.item.Type in exception_item and item.location.always_allow(all_state, item) and not all_state.can_reach(item.location):
-                        item.advancement = False
+                        item.classification = ItemClassification.filler
                         item.item.Progression = False
                         item.location.event = False
                         self.unreachable.append(item.location)
+        self.JunkFillGT(0.5)
 
     def get_pre_fill_items(self):
         if (not self.smz3World.Config.Keysanity):
@@ -362,9 +523,42 @@ class SMZ3World(World):
         else:
             return []
 
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choice(self.junkItemsNames)
+
     def write_spoiler(self, spoiler_handle: TextIO):
             self.world.spoiler.unreachables.update(self.unreachable)
 
+    def JunkFillGT(self, factor):
+        poolLength = len(self.world.itempool)
+        playerGroups = self.world.get_player_groups(self.player)
+        playerGroups.add(self.player)
+        junkPoolIdx = [i for i in range(0, poolLength) 
+                    if self.world.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap) and
+                    self.world.itempool[i].player in playerGroups]
+        toRemove = []
+        for loc in self.locations.values():
+            # commenting this for now since doing a partial GT pre fill would allow for non SMZ3 progression in GT
+            # which isnt desirable (SMZ3 logic only filters for SMZ3 items). Having progression in GT can only happen in Single Player.
+            # if len(toRemove) >= int(len(self.locationNamesGT) * factor * self.smz3World.TowerCrystals / 7):
+            #     break
+            if loc.name in self.locationNamesGT and loc.item is None:
+                poolLength = len(junkPoolIdx)
+                # start looking at a random starting index and loop at start if no match found
+                start = self.world.random.randint(0, poolLength)
+                for off in range(0, poolLength):
+                    i = (start + off) % poolLength
+                    candidate = self.world.itempool[junkPoolIdx[i]]
+                    if junkPoolIdx[i] not in toRemove and loc.can_fill(self.world.state, candidate, False):
+                        itemFromPool = candidate
+                        toRemove.append(junkPoolIdx[i])
+                        break
+                self.world.push_item(loc, itemFromPool, False)
+                loc.event = False
+        toRemove.sort(reverse = True)
+        for i in toRemove: 
+            self.world.itempool.pop(i)
+            
     def FillItemAtLocation(self, itemPool, itemType, location):
         itemToPlace = TotalSMZ3Item.Item.Get(itemPool, itemType, self.smz3World)
         if (itemToPlace == None):
@@ -389,7 +583,7 @@ class SMZ3World(World):
             raise Exception(f"Tried to front fill {item.Name} in, but no location was available")
         
         location.Item = item
-        itemFromPool = next((i for i in self.world.itempool if i.player == self.player and i.name == item.Type.name), None)
+        itemFromPool = next((i for i in self.world.itempool if i.player == self.player and i.name == item.Type.name and i.advancement == item.Progression), None)
         if itemFromPool is not None:
             self.world.get_location(location.Name, self.player).place_locked_item(itemFromPool)
             self.world.itempool.remove(itemFromPool)
@@ -397,18 +591,22 @@ class SMZ3World(World):
 
     def InitialFillInOwnWorld(self):
         self.FillItemAtLocation(self.dungeon, TotalSMZ3Item.ItemType.KeySW, self.smz3World.GetLocation("Skull Woods - Pinball Room"))
+        if (not self.smz3World.Config.Keysanity):
+            self.FillItemAtLocation(self.dungeon, TotalSMZ3Item.ItemType.KeySP, self.smz3World.GetLocation("Swamp Palace - Entrance"))
 
         # /* Check Swords option and place as needed */
         if self.smz3World.Config.SwordLocation == SwordLocation.Uncle:
             self.FillItemAtLocation(self.progression, TotalSMZ3Item.ItemType.ProgressiveSword, self.smz3World.GetLocation("Link's Uncle"))
-        elif self.smz3World.Config.SwordLocation == SwordLocation.Early:
-            self.FrontFillItemInOwnWorld(self.progression, TotalSMZ3Item.ItemType.ProgressiveSword)
 
         # /* Check Morph option and place as needed */
         if self.smz3World.Config.MorphLocation == MorphLocation.Original:
             self.FillItemAtLocation(self.progression, TotalSMZ3Item.ItemType.Morph, self.smz3World.GetLocation("Morphing Ball"))
         elif self.smz3World.Config.MorphLocation == MorphLocation.Early:
             self.FrontFillItemInOwnWorld(self.progression, TotalSMZ3Item.ItemType.Morph)
+
+        # We do early Sword placement after Morph in case its Original location
+        if self.smz3World.Config.SwordLocation == SwordLocation.Early:
+            self.FrontFillItemInOwnWorld(self.progression, TotalSMZ3Item.ItemType.ProgressiveSword)
 
         # /* We place a PB and Super in Sphere 1 to make sure the filler
         #    * doesn't start locking items behind this when there are a
@@ -445,8 +643,10 @@ class SMZ3Location(Location):
 
 class SMZ3Item(Item):
     game = "SMZ3"
+    type: ItemType
+    item: Item
 
-    def __init__(self, name, advancement, type, code, player: int = None, item = None):
+    def __init__(self, name, classification, type: ItemType, code, player: int, item: Item):
+        super(SMZ3Item, self).__init__(name, classification, code, player)
         self.type = type
         self.item = item
-        super(SMZ3Item, self).__init__(name, advancement, code, player)

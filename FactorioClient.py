@@ -20,8 +20,7 @@ import Utils
 if __name__ == "__main__":
     Utils.init_logging("FactorioClient", exception_logger="Client")
 
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger, gui_enabled, \
-    get_base_parser
+from CommonClient import CommonContext, server_loop, ClientCommandProcessor, logger, gui_enabled, get_base_parser
 from MultiServer import mark_raw
 from NetUtils import NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePart
 
@@ -150,7 +149,9 @@ async def game_watcher(ctx: FactorioContext):
                 next_bridge = time.perf_counter() + 1
                 ctx.awaiting_bridge = False
                 data = json.loads(ctx.rcon_client.send_command("/ap-sync"))
-                if data["slot_name"] != ctx.auth:
+                if not ctx.auth:
+                    pass  # auth failed, wait for new attempt
+                elif data["slot_name"] != ctx.auth:
                     bridge_logger.warning(f"Connected World is not the expected one {data['slot_name']} != {ctx.auth}")
                 elif data["seed_name"] != ctx.seed_name:
                     bridge_logger.warning(
@@ -342,8 +343,10 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
             await asyncio.sleep(0.01)
 
     except Exception as e:
-        logger.exception(e)
-        logger.error("Aborted Factorio Server Bridge")
+        logger.exception(e, extra={"compact_gui": True})
+        msg = "Aborted Factorio Server Bridge"
+        logger.error(msg)
+        ctx.gui_error(msg, e)
         ctx.exit_event.set()
 
     else:
@@ -396,6 +399,7 @@ if __name__ == '__main__':
                                          "Refer to Factorio --help for those.")
     parser.add_argument('--rcon-port', default='24242', type=int, help='Port to use to communicate with Factorio')
     parser.add_argument('--rcon-password', help='Password to authenticate with RCON.')
+    parser.add_argument('--server-settings', help='Factorio server settings configuration file.')
 
     args, rest = parser.parse_known_args()
     colorama.init()
@@ -406,6 +410,9 @@ if __name__ == '__main__':
     factorio_server_logger = logging.getLogger("FactorioServer")
     options = Utils.get_options()
     executable = options["factorio_options"]["executable"]
+    server_settings = args.server_settings if args.server_settings else options["factorio_options"].get("server_settings", None)
+    if server_settings:
+        server_settings = os.path.abspath(server_settings)
 
     if not os.path.exists(os.path.dirname(executable)):
         raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")
@@ -417,7 +424,10 @@ if __name__ == '__main__':
         else:
             raise FileNotFoundError(f"Path {executable} is not an executable file.")
 
-    server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password, *rest)
+    if server_settings and os.path.isfile(server_settings):
+        server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password, "--server-settings", server_settings, *rest)
+    else:
+        server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password, *rest)
 
     asyncio.run(main(args))
     colorama.deinit()

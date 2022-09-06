@@ -341,6 +341,8 @@ class VariaRandomizer:
             if preset == 'custom':
                 PresetLoader.factory(world.custom_preset[player].value).load(self.player)
             elif preset == 'varia_custom':
+                if len(world.varia_custom_preset[player].value) == 0:
+                    raise Exception("varia_custom was chosen but varia_custom_preset is missing.")
                 url = 'https://randommetroidsolver.pythonanywhere.com/presetWebService'
                 preset_name = next(iter(world.varia_custom_preset[player].value))
                 payload = '{{"preset": "{}"}}'.format(preset_name)
@@ -695,7 +697,7 @@ class VariaRandomizer:
         #if args.patchOnly == False:
         #    randoExec.postProcessItemLocs(itemLocs, args.hideItems)
 
-    def PatchRom(self, outputFilename, customPatchApply = None):
+    def PatchRom(self, outputFilename, customPrePatchApply = None, customPostPatchApply = None):
         args = self.args
         optErrMsgs = self.optErrMsgs
 
@@ -747,6 +749,9 @@ class VariaRandomizer:
             else:
                 romPatcher = RomPatcher(magic=args.raceMagic)
 
+            if customPrePatchApply != None:
+                customPrePatchApply(romPatcher)
+
             if args.hud == True or args.majorsSplit == "FullWithHUD":
                 args.patches.append("varia_hud.ips")
             if args.patchOnly == False:
@@ -765,8 +770,8 @@ class VariaRandomizer:
                 # don't color randomize custom ships
                 args.shift_ship_palette = False
 
-            if customPatchApply != None:
-                customPatchApply(romPatcher)
+            if customPostPatchApply != None:
+                customPostPatchApply(romPatcher)
 
             # we have to write ips to ROM before doing our direct modifications which will rewrite some parts (like in credits),
             # but in web mode we only want to generate a global ips at the end

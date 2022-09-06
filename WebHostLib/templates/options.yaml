@@ -46,6 +46,9 @@ requires:
     {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}
     {{ sub_option_name }}: {% if suboption_option_id == option.default %}50{% else %}0{% endif %}
     {%- endfor -%}
+    {% if option.default == "random" %}
+    random: 50
+    {%- endif -%}
     {%- else %}
     {{ yaml_dump(default_converter(option.default)) | indent(4, first=False) }}
   {%- endif -%}

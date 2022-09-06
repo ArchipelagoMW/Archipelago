@@ -1,5 +1,6 @@
 import typing
 
+from BaseClasses import MultiWorld
 from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink
 
 
@@ -25,6 +26,35 @@ class Goal(Choice):
     option_kill_ganon = 0
     option_kill_ganon_and_gt_agahnim = 1
     option_hand_in = 2
+
+
+class OpenPyramid(Choice):
+    """Determines whether the hole at the top of pyramid is open.
+    Goal will open the pyramid if the goal requires you to kill Ganon, without needing to kill Agahnim 2.
+    Auto is the same as goal except if Ganon's dropdown is in another location, the hole will be closed."""
+    display_name = "Open Pyramid Hole"
+    option_closed = 0
+    option_open = 1
+    option_goal = 2
+    option_auto = 3
+    default = option_goal
+
+    alias_true = option_open
+    alias_false = option_closed
+    alias_yes = option_open
+    alias_no = option_closed
+
+    def to_bool(self, world: MultiWorld, player: int) -> bool:
+        if self.value == self.option_goal:
+            return world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
+        elif self.value == self.option_auto:
+            return world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'} \
+            and (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'} or not
+                 world.shuffle_ganon)
+        elif self.value == self.option_open:
+            return True
+        else:
+            return False
 
 
 class DungeonItem(Choice):
@@ -147,10 +177,17 @@ class Swordless(Toggle):
     display_name = "Swordless"
 
 
-class Retro(Toggle):
-    """Zelda-1 like mode. You have to purchase a quiver to shoot arrows using rupees
-    and there are randomly placed take-any caves that contain one Sword and choices of Heart Container/Blue Potion."""
-    display_name = "Retro"
+# Might be a decent idea to split "Bow" into its own option with choices of
+# Defer to Progressive Option (default), Progressive, Non-Progressive, Bow + Silvers, Retro
+class RetroBow(Toggle):
+    """Zelda-1 like mode. You have to purchase a quiver to shoot arrows using rupees."""
+    display_name = "Retro Bow"
+
+
+class RetroCaves(Toggle):
+    """Zelda-1 like mode. There are randomly placed take-any caves that contain one Sword and
+    choices of Heart Container/Blue Potion."""
+    display_name = "Retro Caves"
 
 
 class RestrictBossItem(Toggle):
@@ -178,9 +215,11 @@ class Scams(Choice):
     option_all = 3
     alias_false = 0
 
+    @property
     def gives_king_zora_hint(self):
         return self.value in {0, 2}
 
+    @property
     def gives_bottle_merchant_hint(self):
         return self.value in {0, 1}
 
@@ -324,13 +363,15 @@ class AllowCollect(Toggle):
 alttp_options: typing.Dict[str, type(Option)] = {
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
+    "open_pyramid": OpenPyramid,
     "bigkey_shuffle": bigkey_shuffle,
     "smallkey_shuffle": smallkey_shuffle,
     "compass_shuffle": compass_shuffle,
     "map_shuffle": map_shuffle,
     "progressive": Progressive,
     "swordless": Swordless,
-    "retro": Retro,
+    "retro_bow": RetroBow,
+    "retro_caves": RetroCaves,
     "hints": Hints,
     "scams": Scams,
     "restrict_dungeon_item_on_boss": RestrictBossItem,

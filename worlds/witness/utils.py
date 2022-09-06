@@ -89,10 +89,48 @@ def parse_lambda(lambda_string):
     return lambda_set
 
 
-@cache_argsless
-def get_disable_unrandomized_list():
-    adjustment_file = "Disable_Unrandomized.txt"
+def get_adjustment_file(adjustment_file):
     path = os.path.join(os.path.dirname(__file__), adjustment_file)
 
     with open(path) as f:
         return [line.strip() for line in f.readlines()]
+
+
+@cache_argsless
+def get_disable_unrandomized_list():
+    return get_adjustment_file("settings/Disable_Unrandomized.txt")
+
+
+@cache_argsless
+def get_early_utm_list():
+    return get_adjustment_file("settings/Early_UTM.txt")
+
+
+@cache_argsless
+def get_symbol_shuffle_list():
+    return get_adjustment_file("settings/Symbol_Shuffle.txt")
+
+
+@cache_argsless
+def get_door_panel_shuffle_list():
+    return get_adjustment_file("settings/Door_Panel_Shuffle.txt")
+
+
+@cache_argsless
+def get_doors_simple_list():
+    return get_adjustment_file("settings/Doors_Simple.txt")
+
+
+@cache_argsless
+def get_doors_complex_list():
+    return get_adjustment_file("settings/Doors_Complex.txt")
+
+
+@cache_argsless
+def get_doors_max_list():
+    return get_adjustment_file("settings/Doors_Max.txt")
+
+
+@cache_argsless
+def get_laser_shuffle():
+    return get_adjustment_file("settings/Laser_Shuffle.txt")

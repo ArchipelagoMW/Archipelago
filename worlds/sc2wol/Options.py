@@ -38,16 +38,24 @@ class AllInMap(Choice):
 class MissionOrder(Choice):
     """Determines the order the missions are played in.
     Vanilla: Keeps the standard mission order and branching from the WoL Campaign.
-    Vanilla Shuffled: Keeps same branching paths from the WoL Campaign but randomizes the order of missions within"""
+    Vanilla Shuffled: Keeps same branching paths from the WoL Campaign but randomizes the order of missions within."""
     display_name = "Mission Order"
     option_vanilla = 0
     option_vanilla_shuffled = 1
+
 
 class ShuffleProtoss(DefaultOnToggle):
     """Determines if the 3 protoss missions are included in the shuffle if Vanilla Shuffled is enabled.  If this is
     not the 3 protoss missions will stay in their vanilla order in the mission order making them optional to complete
     the game."""
     display_name = "Shuffle Protoss Missions"
+
+
+class RelegateNoBuildMissions(DefaultOnToggle):
+    """If enabled, all no build missions besides the needed first one will be placed at the end of optional routes so
+    that none of them become required to complete the game.  Only takes effect if mission order is not set to vanilla."""
+    display_name = "Relegate No-Build Missions"
+
 
 # noinspection PyTypeChecker
 sc2wol_options: Dict[str, Option] = {
@@ -56,7 +64,8 @@ sc2wol_options: Dict[str, Option] = {
     "bunker_upgrade": BunkerUpgrade,
     "all_in_map": AllInMap,
     "mission_order": MissionOrder,
-    "shuffle_protoss": ShuffleProtoss
+    "shuffle_protoss": ShuffleProtoss,
+    "relegate_no_build": RelegateNoBuildMissions
 }
 
 

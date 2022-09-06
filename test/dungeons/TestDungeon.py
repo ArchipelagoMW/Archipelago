@@ -1,7 +1,7 @@
 import unittest
 from argparse import Namespace
 
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import MultiWorld, CollectionState, ItemClassification
 from worlds.alttp.Dungeons import create_dungeons, get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import mandatory_connections, connect_simple
 from worlds.alttp.ItemPool import difficulties, generate_itempool
@@ -16,7 +16,7 @@ class TestDungeon(unittest.TestCase):
     def setUp(self):
         self.world = MultiWorld(1)
         args = Namespace()
-        for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].options.items():
+        for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
             setattr(args, name, {1: option.from_any(option.default)})
         self.world.set_options(args)
         self.world.set_default_common_options()
@@ -60,7 +60,7 @@ class TestDungeon(unittest.TestCase):
                             state.blocked_connections[1].add(exit)
 
                 for item in items:
-                    item.advancement = True
+                    item.classification = ItemClassification.progression
                     state.collect(item)
 
                 self.assertEqual(self.world.get_location(location, 1).can_reach(state), access)

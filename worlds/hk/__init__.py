@@ -2,89 +2,123 @@ from __future__ import annotations
 
 import logging
 import typing
-from collections import Counter
+from copy import deepcopy
+import itertools
+import operator
 
 logger = logging.getLogger("Hollow Knight")
 
 from .Items import item_table, lookup_type_to_names, item_name_groups
 from .Regions import create_regions
-from .Rules import set_rules
-from .Options import hollow_knight_options, hollow_knight_randomize_options, disabled
+from .Rules import set_rules, cost_terms
+from .Options import hollow_knight_options, hollow_knight_randomize_options, Goal, WhitePalace, CostSanity, \
+    shop_to_option
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
-    event_names, item_effects, connectors, one_ways
+    event_names, item_effects, connectors, one_ways, vanilla_shop_costs, vanilla_location_costs
 from .Charms import names as charm_names
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, Tutorial
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, LocationProgressType, Tutorial, ItemClassification
 from ..AutoWorld import World, LogicMixin, WebWorld
 
-white_palace_locations = {
+path_of_pain_locations = {
     "Soul_Totem-Path_of_Pain_Below_Thornskip",
-    "Soul_Totem-White_Palace_Final",
     "Lore_Tablet-Path_of_Pain_Entrance",
     "Soul_Totem-Path_of_Pain_Left_of_Lever",
     "Soul_Totem-Path_of_Pain_Hidden",
     "Soul_Totem-Path_of_Pain_Entrance",
     "Soul_Totem-Path_of_Pain_Final",
-    "Soul_Totem-White_Palace_Entrance",
     "Soul_Totem-Path_of_Pain_Below_Lever",
-    "Lore_Tablet-Palace_Throne",
     "Soul_Totem-Path_of_Pain_Second",
+    "Journal_Entry-Seal_of_Binding",
+    "Warp-Path_of_Pain_Complete",
+    "Defeated_Path_of_Pain_Arena",
+    "Completed_Path_of_Pain",
+    # Path of Pain transitions
+    "White_Palace_17[right1]", "White_Palace_17[bot1]",
+    "White_Palace_18[top1]", "White_Palace_18[right1]",
+    "White_Palace_19[left1]", "White_Palace_19[top1]",
+    "White_Palace_20[bot1]",
+}
+
+white_palace_transitions = {
+    # Event-Transitions:
+    # "Grubfather_2",
+    "White_Palace_01[left1]", "White_Palace_01[right1]", "White_Palace_01[top1]",
+    "White_Palace_02[left1]",
+    "White_Palace_03_hub[bot1]", "White_Palace_03_hub[left1]", "White_Palace_03_hub[left2]",
+    "White_Palace_03_hub[right1]", "White_Palace_03_hub[top1]",
+    "White_Palace_04[right2]", "White_Palace_04[top1]",
+    "White_Palace_05[left1]", "White_Palace_05[left2]", "White_Palace_05[right1]", "White_Palace_05[right2]",
+    "White_Palace_06[bot1]", "White_Palace_06[left1]", "White_Palace_06[top1]", "White_Palace_07[bot1]",
+    "White_Palace_07[top1]", "White_Palace_08[left1]", "White_Palace_08[right1]",
+    "White_Palace_09[right1]",
+    "White_Palace_11[door2]",
+    "White_Palace_12[bot1]", "White_Palace_12[right1]",
+    "White_Palace_13[left1]", "White_Palace_13[left2]", "White_Palace_13[left3]", "White_Palace_13[right1]",
+    "White_Palace_14[bot1]", "White_Palace_14[right1]",
+    "White_Palace_15[left1]", "White_Palace_15[right1]", "White_Palace_15[right2]",
+    "White_Palace_16[left1]", "White_Palace_16[left2]",
+}
+
+white_palace_checks = {
+    "Soul_Totem-White_Palace_Final",
+    "Soul_Totem-White_Palace_Entrance",
+    "Lore_Tablet-Palace_Throne",
     "Soul_Totem-White_Palace_Left",
     "Lore_Tablet-Palace_Workshop",
     "Soul_Totem-White_Palace_Hub",
-    "Journal_Entry-Seal_of_Binding",
-    "Soul_Totem-White_Palace_Right",
-    "King_Fragment",
-    # Events:
-    "Palace_Entrance_Lantern_Lit",
-    "Palace_Left_Lantern_Lit",
-    "Palace_Right_Lantern_Lit",
-    "Warp-Path_of_Pain_Complete",
-    "Defeated_Path_of_Pain_Arena",
-    "Palace_Atrium_Gates_Opened",
-    "Completed_Path_of_Pain",
-    "Warp-White_Palace_Atrium_to_Palace_Grounds",
-    "Warp-White_Palace_Entrance_to_Palace_Grounds",
-    # Event-Regions:
+    "Soul_Totem-White_Palace_Right"
+}
+
+white_palace_events = {
     "White_Palace_03_hub",
     "White_Palace_13",
     "White_Palace_01",
-    # Event-Transitions:
-    "White_Palace_12[bot1]", "White_Palace_12[bot1]", "White_Palace_03_hub[bot1]", "White_Palace_16[left2]",
-    "White_Palace_16[left2]", "White_Palace_11[door2]", "White_Palace_11[door2]", "White_Palace_18[top1]",
-    "White_Palace_18[top1]", "White_Palace_15[left1]", "White_Palace_15[left1]", "White_Palace_05[left2]",
-    "White_Palace_05[left2]", "White_Palace_14[bot1]", "White_Palace_14[bot1]", "White_Palace_13[left2]",
-    "White_Palace_13[left2]", "White_Palace_03_hub[left1]", "White_Palace_03_hub[left1]", "White_Palace_15[right2]",
-    "White_Palace_15[right2]", "White_Palace_06[top1]", "White_Palace_06[top1]", "White_Palace_03_hub[bot1]",
-    "White_Palace_08[right1]", "White_Palace_08[right1]", "White_Palace_03_hub[right1]", "White_Palace_03_hub[right1]",
-    "White_Palace_01[right1]", "White_Palace_01[right1]", "White_Palace_08[left1]", "White_Palace_08[left1]",
-    "White_Palace_19[left1]", "White_Palace_19[left1]", "White_Palace_04[right2]", "White_Palace_04[right2]",
-    "White_Palace_01[left1]", "White_Palace_01[left1]", "White_Palace_17[right1]", "White_Palace_17[right1]",
-    "White_Palace_07[bot1]", "White_Palace_07[bot1]", "White_Palace_20[bot1]", "White_Palace_20[bot1]",
-    "White_Palace_03_hub[left2]", "White_Palace_03_hub[left2]", "White_Palace_18[right1]", "White_Palace_18[right1]",
-    "White_Palace_05[right1]", "White_Palace_05[right1]", "White_Palace_17[bot1]", "White_Palace_17[bot1]",
-    "White_Palace_09[right1]", "White_Palace_09[right1]", "White_Palace_16[left1]", "White_Palace_16[left1]",
-    "White_Palace_13[left1]", "White_Palace_13[left1]", "White_Palace_06[bot1]", "White_Palace_06[bot1]",
-    "White_Palace_15[right1]", "White_Palace_15[right1]", "White_Palace_06[left1]", "White_Palace_06[left1]",
-    "White_Palace_05[right2]", "White_Palace_05[right2]", "White_Palace_04[top1]", "White_Palace_04[top1]",
-    "White_Palace_19[top1]", "White_Palace_19[top1]", "White_Palace_14[right1]", "White_Palace_14[right1]",
-    "White_Palace_03_hub[top1]", "White_Palace_03_hub[top1]", "Grubfather_2", "White_Palace_13[left3]",
-    "White_Palace_13[left3]", "White_Palace_02[left1]", "White_Palace_02[left1]", "White_Palace_12[right1]",
-    "White_Palace_12[right1]", "White_Palace_07[top1]", "White_Palace_07[top1]", "White_Palace_05[left1]",
-    "White_Palace_05[left1]", "White_Palace_13[right1]", "White_Palace_13[right1]", "White_Palace_01[top1]",
-    "White_Palace_01[top1]",
-
+    "Palace_Entrance_Lantern_Lit",
+    "Palace_Left_Lantern_Lit",
+    "Palace_Right_Lantern_Lit",
+    "Palace_Atrium_Gates_Opened",
+    "Warp-White_Palace_Atrium_to_Palace_Grounds",
+    "Warp-White_Palace_Entrance_to_Palace_Grounds",
 }
 
 progression_charms = {
-    # Baulder Killers
+    # Baldur Killers
     "Grubberfly's_Elegy", "Weaversong", "Glowing_Womb",
-    # Spore Shroom spots in fungle wastes
+    # Spore Shroom spots in fungal wastes and elsewhere
     "Spore_Shroom",
     # Tuk gives egg,
     "Defender's_Crest",
     # Unlocks Grimm Troupe
     "Grimmchild1", "Grimmchild2"
+}
+
+# Vanilla placements of the following items have no impact on logic, thus we can avoid creating these items and
+# locations entirely when the option to randomize them is disabled.
+logicless_options = {
+    "RandomizeVesselFragments", "RandomizeGeoChests", "RandomizeJunkPitChests", "RandomizeRelics",
+    "RandomizeMaps", "RandomizeJournalEntries", "RandomizeGeoRocks", "RandomizeBossGeo",
+    "RandomizeLoreTablets", "RandomizeSoulTotems",
+}
+
+# Options that affect vanilla starting items
+randomizable_starting_items: typing.Dict[str, typing.Tuple[str, ...]] = {
+    "RandomizeFocus": ("Focus",),
+    "RandomizeSwim": ("Swim",),
+    "RandomizeNail": ('Upslash', 'Leftslash', 'Rightslash')
+}
+
+# Shop cost types.
+shop_cost_types: typing.Dict[str, typing.Tuple[str, ...]] = {
+    "Egg_Shop": ("RANCIDEGGS",),
+    "Grubfather": ("GRUBS",),
+    "Seer": ("ESSENCE",),
+    "Salubra_(Requires_Charms)": ("CHARMS", "GEO"),
+    "Sly": ("GEO",),
+    "Sly_(Key)": ("GEO",),
+    "Iselda": ("GEO",),
+    "Salubra": ("GEO",),
+    "Leg_Eater": ("GEO",),
 }
 
 
@@ -98,6 +132,8 @@ class HKWeb(WebWorld):
         ["Ijwu"]
     )]
 
+    bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new?assignees=&labels=bug%2C+needs+investigation&template=bug_report.md&title="
+
 
 class HKWorld(World):
     """Beneath the fading town of Dirtmouth sleeps a vast, ancient kingdom. Many are drawn beneath the surface, 
@@ -106,7 +142,7 @@ class HKWorld(World):
     As the enigmatic Knight, you’ll traverse the depths, unravel its mysteries and conquer its evils.
     """  # from https://www.hollowknight.com
     game: str = "Hollow Knight"
-    options = hollow_knight_options
+    option_definitions = hollow_knight_options
 
     web = HKWeb()
 
@@ -116,120 +152,290 @@ class HKWorld(World):
     item_name_groups = item_name_groups
 
     ranges: typing.Dict[str, typing.Tuple[int, int]]
-    shops: typing.Dict[str, str] = {
-        "Egg_Shop": "Egg",
-        "Grubfather": "Grub",
-        "Seer": "Essence",
-        "Salubra_(Requires_Charms)": "Charm"
-    }
     charm_costs: typing.List[int]
+    cached_filler_items = {}
     data_version = 2
-
-    allow_white_palace = False
 
     def __init__(self, world, player):
         super(HKWorld, self).__init__(world, player)
-        self.created_multi_locations: typing.Dict[str, int] = Counter()
+        self.created_multi_locations: typing.Dict[str, typing.List[HKLocation]] = {
+            location: list() for location in multi_locations
+        }
         self.ranges = {}
+        self.created_shop_items = 0
+        self.vanilla_shop_costs = deepcopy(vanilla_shop_costs)
 
     def generate_early(self):
         world = self.world
         charm_costs = world.RandomCharmCosts[self.player].get_costs(world.random)
         self.charm_costs = world.PlandoCharmCosts[self.player].get_costs(charm_costs)
-        world.exclude_locations[self.player].value.update(white_palace_locations)
+        # world.exclude_locations[self.player].value.update(white_palace_locations)
         world.local_items[self.player].value.add("Mimic_Grub")
-        for vendor, unit in self.shops.items():
-            mini = getattr(world, f"Minimum{unit}Price")[self.player]
-            maxi = getattr(world, f"Maximum{unit}Price")[self.player]
+        for term, data in cost_terms.items():
+            mini = getattr(world, f"Minimum{data.option}Price")[self.player]
+            maxi = getattr(world, f"Maximum{data.option}Price")[self.player]
             # if minimum > maximum, set minimum to maximum
             mini.value = min(mini.value, maxi.value)
-            self.ranges[unit] = mini.value, maxi.value
+            self.ranges[term] = mini.value, maxi.value
         world.push_precollected(HKItem(starts[world.StartLocation[self.player].current_key],
                                        True, None, "Event", self.player))
-        for option_name in disabled:
-            getattr(world, option_name)[self.player].value = 0
+
+    def white_palace_exclusions(self):
+        exclusions = set()
+        wp = self.world.WhitePalace[self.player]
+        if wp <= WhitePalace.option_nopathofpain:
+            exclusions.update(path_of_pain_locations)
+        if wp <= WhitePalace.option_kingfragment:
+            exclusions.update(white_palace_checks)
+        if wp == WhitePalace.option_exclude:
+            exclusions.add("King_Fragment")
+            if self.world.RandomizeCharms[self.player]:
+                # If charms are randomized, this will be junk-filled -- so transitions and events are not progression
+                exclusions.update(white_palace_transitions)
+                exclusions.update(white_palace_events)
+        return exclusions
 
     def create_regions(self):
         menu_region: Region = create_region(self.world, self.player, 'Menu')
         self.world.regions.append(menu_region)
+        # wp_exclusions = self.white_palace_exclusions()
 
         # Link regions
         for event_name in event_names:
+            #if event_name in wp_exclusions:
+            #    continue
             loc = HKLocation(self.player, event_name, None, menu_region)
             loc.place_locked_item(HKItem(event_name,
-                                         self.allow_white_palace or event_name not in white_palace_locations,
+                                         True, #event_name not in wp_exclusions,
                                          None, "Event", self.player))
             menu_region.locations.append(loc)
         for entry_transition, exit_transition in connectors.items():
+            #if entry_transition in wp_exclusions:
+            #    continue
             if exit_transition:
                 # if door logic fulfilled -> award vanilla target as event
                 loc = HKLocation(self.player, entry_transition, None, menu_region)
                 loc.place_locked_item(HKItem(exit_transition,
-                                             self.allow_white_palace or exit_transition not in white_palace_locations,
+                                             True, #exit_transition not in wp_exclusions,
                                              None, "Event", self.player))
                 menu_region.locations.append(loc)
 
     def create_items(self):
+        unfilled_locations = 0
         # Generate item pool and associated locations (paired in HK)
         pool: typing.List[HKItem] = []
-        geo_replace: typing.Set[str] = set()
+        wp_exclusions = self.white_palace_exclusions()
+        junk_replace: typing.Set[str] = set()
         if self.world.RemoveSpellUpgrades[self.player]:
-            geo_replace.add("Abyss_Shriek")
-            geo_replace.add("Shade_Soul")
-            geo_replace.add("Descending_Dark")
+            junk_replace.update(("Abyss_Shriek", "Shade_Soul", "Descending_Dark"))
+
+        randomized_starting_items = set()
+        for attr, items in randomizable_starting_items.items():
+            if getattr(self.world, attr)[self.player]:
+                randomized_starting_items.update(items)
+
+        # noinspection PyShadowingNames
+        def _add(item_name: str, location_name: str):
+            """
+            Adds a pairing of an item and location, doing appropriate checks to see if it should be vanilla or not.
+            """
+            nonlocal unfilled_locations
+
+            vanilla = not randomized
+            excluded = False
+
+            if not vanilla and location_name in wp_exclusions:
+                if location_name == 'King_Fragment':
+                    excluded = True
+                else:
+                    vanilla = True
+
+            if item_name in junk_replace:
+                item_name = self.get_filler_item_name()
+
+            item = self.create_item(item_name)
+
+            if location_name == "Start":
+                if item_name in randomized_starting_items:
+                    if item_name == "Focus":
+                        self.create_location("Focus")
+                        unfilled_locations += 1
+                    pool.append(item)
+                else:
+                    self.world.push_precollected(item)
+                return
+
+            if vanilla:
+                location = self.create_vanilla_location(location_name, item)
+            else:
+                pool.append(item)
+                if location_name in multi_locations:  # Create shop locations later.
+                    return
+                location = self.create_location(location_name)
+                unfilled_locations += 1
+            if excluded:
+                location.progress_type = LocationProgressType.EXCLUDED
 
         for option_key, option in hollow_knight_randomize_options.items():
-            if getattr(self.world, option_key)[self.player]:
-                for item_name, location_name in zip(option.items, option.locations):
-                    if item_name in geo_replace:
-                        item_name = "Geo_Rock-Default"
-                    item = self.create_item(item_name)
-                    if location_name in white_palace_locations:
-                        self.create_location(location_name).place_locked_item(item)
-                    elif location_name == "Start":
-                        self.world.push_precollected(item)
-                    else:
-                        self.create_location(location_name)
-                        pool.append(item)
-            else:
-                for item_name, location_name in zip(option.items, option.locations):
-                    item = self.create_item(item_name)
-                    if location_name == "Start":
-                        self.world.push_precollected(item)
-                    else:
-                        self.create_location(location_name).place_locked_item(item)
-        for i in range(self.world.EggShopSlots[self.player].value):
-            self.create_location("Egg_Shop")
-            pool.append(self.create_item("Geo_Rock-Default"))
-        if not self.allow_white_palace:
-            loc = self.world.get_location("King_Fragment", self.player)
-            if loc.item and loc.item.name == loc.name:
-                loc.item.advancement = False
-        self.world.itempool += pool
+            randomized = getattr(self.world, option_key)[self.player]
+            for item_name, location_name in zip(option.items, option.locations):
+                if item_name in junk_replace:
+                    item_name = self.get_filler_item_name()
 
-        for shopname in self.shops:
-            prices: typing.List[int] = []
-            locations: typing.List[HKLocation] = []
-            for x in range(1, self.created_multi_locations[shopname]+1):
-                loc = self.world.get_location(self.get_multi_location_name(shopname, x), self.player)
-                locations.append(loc)
-                prices.append(loc.cost)
-            prices.sort()
-            for loc, price in zip(locations, prices):
-                loc.cost = price
+                if (item_name == "Crystal_Heart" and self.world.SplitCrystalHeart[self.player]) or \
+                        (item_name == "Mothwing_Cloak" and self.world.SplitMothwingCloak[self.player]):
+                    _add("Left_" + item_name, location_name)
+                    _add("Right_" + item_name, "Split_" + location_name)
+                    continue
+                if item_name == "Mantis_Claw" and self.world.SplitMantisClaw[self.player]:
+                    _add("Left_" + item_name, "Left_" + location_name)
+                    _add("Right_" + item_name, "Right_" + location_name)
+                    continue
+                if item_name == "Shade_Cloak" and self.world.SplitMothwingCloak[self.player]:
+                    if self.world.random.randint(0, 1):
+                        item_name = "Left_Mothwing_Cloak"
+                    else:
+                        item_name = "Right_Mothwing_Cloak"
+
+                _add(item_name, location_name)
+
+        if self.world.RandomizeElevatorPass[self.player]:
+            randomized = True
+            _add("Elevator_Pass", "Elevator_Pass")
+
+        for shop, locations in self.created_multi_locations.items():
+            for _ in range(len(locations), getattr(self.world, shop_to_option[shop])[self.player].value):
+                loc = self.create_location(shop)
+                unfilled_locations += 1
+
+        # Balance the pool
+        item_count = len(pool)
+        additional_shop_items = max(item_count - unfilled_locations, self.world.ExtraShopSlots[self.player].value)
+
+        # Add additional shop items, as needed.
+        if additional_shop_items > 0:
+            shops = list(shop for shop, locations in self.created_multi_locations.items() if len(locations) < 16)
+            if not self.world.EggShopSlots[self.player].value:  # No eggshop, so don't place items there
+                shops.remove('Egg_Shop')
+
+            for _ in range(additional_shop_items):
+                shop = self.world.random.choice(shops)
+                loc = self.create_location(shop)
+                unfilled_locations += 1
+                if len(self.created_multi_locations[shop]) >= 16:
+                    shops.remove(shop)
+                    if not shops:
+                        break
+
+        # Create filler items, if needed
+        if item_count < unfilled_locations:
+            pool.extend(self.create_item(self.get_filler_item_name()) for _ in range(unfilled_locations - item_count))
+        self.world.itempool += pool
+        self.apply_costsanity()
+        self.sort_shops_by_cost()
+
+    def sort_shops_by_cost(self):
+        for shop, locations in self.created_multi_locations.items():
+            randomized_locations = list(loc for loc in locations if not loc.vanilla)
+            prices = sorted(
+                (loc.costs for loc in randomized_locations),
+                key=lambda costs: (len(costs),) + tuple(costs.values())
+            )
+            for loc, costs in zip(randomized_locations, prices):
+                loc.costs = costs
+
+    def apply_costsanity(self):
+        setting = self.world.CostSanity[self.player].value
+        if not setting:
+            return  # noop
+
+        def _compute_weights(weights: dict, desc: str) -> typing.Dict[str, int]:
+            if all(x == 0 for x in weights.values()):
+                logger.warning(
+                    f"All {desc} weights were zero for {self.world.player_name[self.player]}."
+                    f" Setting them to one instead."
+                )
+                weights = {k: 1 for k in weights}
+
+            return {k: v for k, v in weights.items() if v}
+
+        random = self.world.random
+        hybrid_chance = getattr(self.world, f"CostSanityHybridChance")[self.player].value
+        weights = {
+            data.term: getattr(self.world, f"CostSanity{data.option}Weight")[self.player].value
+            for data in cost_terms.values()
+        }
+        weights_geoless = dict(weights)
+        del weights_geoless["GEO"]
+
+        weights = _compute_weights(weights, "CostSanity")
+        weights_geoless = _compute_weights(weights_geoless, "Geoless CostSanity")
+
+        if hybrid_chance > 0:
+            if len(weights) == 1:
+                logger.warning(
+                    f"Only one cost type is available for CostSanity in {self.world.player_name[self.player]}'s world."
+                    f" CostSanityHybridChance will not trigger."
+                )
+            if len(weights_geoless) == 1:
+                logger.warning(
+                    f"Only one cost type is available for CostSanity in {self.world.player_name[self.player]}'s world."
+                    f" CostSanityHybridChance will not trigger in geoless locations."
+                )
+
+        for region in self.world.get_regions(self.player):
+            for location in region.locations:
+                if location.vanilla:
+                    continue
+                if not location.costs:
+                    continue
+                if location.name == "Vessel_Fragment-Basin":
+                    continue
+                if setting == CostSanity.option_notshops and location.basename in multi_locations:
+                    continue
+                if setting == CostSanity.option_shopsonly and location.basename not in multi_locations:
+                    continue
+                if location.basename in {'Grubfather', 'Seer', 'Eggshop'}:
+                    our_weights = dict(weights_geoless)
+                else:
+                    our_weights = dict(weights)
+
+                rolls = 1
+                if random.randrange(100) < hybrid_chance:
+                    rolls = 2
+
+                if rolls > len(our_weights):
+                    terms = list(our_weights.keys())  # Can't randomly choose cost types, using all of them.
+                else:
+                    terms = []
+                    for _ in range(rolls):
+                        term = random.choices(list(our_weights.keys()), list(our_weights.values()))[0]
+                        del our_weights[term]
+                        terms.append(term)
+
+                location.costs = {term: random.randint(*self.ranges[term]) for term in terms}
+                location.sort_costs()
 
     def set_rules(self):
         world = self.world
         player = self.player
         if world.logic[player] != 'nologic':
-            world.completion_condition[player] = lambda state: state.has('DREAMER', player, 3)
+            goal = world.Goal[player]
+            if goal == Goal.option_siblings:
+                world.completion_condition[player] = lambda state: state._hk_siblings_ending(player)
+            elif goal == Goal.option_radiance:
+                world.completion_condition[player] = lambda state: state._hk_can_beat_radiance(player)
+            else:
+                # Hollow Knight or Any goal.
+                world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player)
+
         set_rules(self)
 
     def fill_slot_data(self):
         slot_data = {}
 
         options = slot_data["options"] = {}
-        for option_name in self.options:
+        for option_name in self.option_definitions:
             option = getattr(self.world, option_name)[self.player]
             try:
                 optionvalue = int(option.value)
@@ -241,12 +447,24 @@ class HKWorld(World):
         # 32 bit int
         slot_data["seed"] = self.world.slot_seeds[self.player].randint(-2147483647, 2147483646)
 
-        for shop, unit in self.shops.items():
-            slot_data[f"{unit}_costs"] = {
-                f"{shop}_{i}":
-                    self.world.get_location(f"{shop}_{i}", self.player).cost
-                for i in range(1, 1 + self.created_multi_locations[shop])
-            }
+        # Backwards compatibility for shop cost data (HKAP < 0.1.0)
+        if not self.world.CostSanity[self.player]:
+            for shop, terms in shop_cost_types.items():
+                unit = cost_terms[next(iter(terms))].option
+                if unit == "Geo":
+                    continue
+                slot_data[f"{unit}_costs"] = {
+                    loc.name: next(iter(loc.costs.values()))
+                    for loc in self.created_multi_locations[shop]
+                }
+
+        # HKAP 0.1.0 and later cost data.
+        location_costs = {}
+        for region in self.world.get_regions(self.player):
+            for location in region.locations:
+                if location.costs:
+                    location_costs[location.name] = location.costs
+        slot_data["location_costs"] = location_costs
 
         slot_data["notch_costs"] = self.charm_costs
 
@@ -256,30 +474,52 @@ class HKWorld(World):
         item_data = item_table[name]
         return HKItem(name, item_data.advancement, item_data.id, item_data.type, self.player)
 
-    def create_location(self, name: str) -> HKLocation:
-        unit = self.shops.get(name, None)
-        if unit:
-            cost = self.world.random.randint(*self.ranges[unit])
-        else:
-            cost = 0
-        if name in multi_locations:
-            self.created_multi_locations[name] += 1
-            name = self.get_multi_location_name(name, self.created_multi_locations[name])
+    def create_location(self, name: str, vanilla=False) -> HKLocation:
+        costs = None
+        basename = name
+        if name in shop_cost_types:
+            costs = {
+                term: self.world.random.randint(*self.ranges[term])
+                for term in shop_cost_types[name]
+            }
+        elif name in vanilla_location_costs:
+            costs = vanilla_location_costs[name]
+
+        multi = self.created_multi_locations.get(name)
+
+        if multi is not None:
+            i = len(multi) + 1
+            name = f"{name}_{i}"
 
         region = self.world.get_region("Menu", self.player)
-        loc = HKLocation(self.player, name, self.location_name_to_id[name], region)
-        if unit:
-            loc.unit = unit
-            loc.cost = cost
+        loc = HKLocation(self.player, name,
+                         self.location_name_to_id[name], region, costs=costs, vanilla=vanilla,
+                         basename=basename)
+
+        if multi is not None:
+            multi.append(loc)
+
         region.locations.append(loc)
         return loc
+
+    def create_vanilla_location(self, location: str, item: Item):
+        costs = self.vanilla_shop_costs.get((location, item.name))
+        location = self.create_location(location, vanilla=True)
+        location.place_locked_item(item)
+        if costs:
+            location.costs = costs.pop()
+        return location
 
     def collect(self, state, item: HKItem) -> bool:
         change = super(HKWorld, self).collect(state, item)
         if change:
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
                 state.prog_items[effect_name, item.player] += effect_value
-
+        if item.name in {"Left_Mothwing_Cloak", "Right_Mothwing_Cloak"}:
+            if state.prog_items.get(('RIGHTDASH', item.player), 0) and \
+                    state.prog_items.get(('LEFTDASH', item.player), 0):
+                (state.prog_items["RIGHTDASH", item.player], state.prog_items["LEFTDASH", item.player]) = \
+                    ([max(state.prog_items["RIGHTDASH", item.player], state.prog_items["LEFTDASH", item.player])] * 2)
         return change
 
     def remove(self, state, item: HKItem) -> bool:
@@ -309,16 +549,39 @@ class HKWorld(World):
             name = world.get_player_name(player)
             spoiler_handle.write(f'\n{name}\n')
             hk_world: HKWorld = world.worlds[player]
-            for shop_name, unit_name in cls.shops.items():
-                for x in range(1, hk_world.created_multi_locations[shop_name]+1):
-                    loc = world.get_location(hk_world.get_multi_location_name(shop_name, x), player)
-                    spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost} {unit_name}")
+
+            if world.CostSanity[player].value:
+                for loc in sorted(
+                    (
+                        loc for loc in itertools.chain(*(region.locations for region in world.get_regions(player)))
+                        if loc.costs
+                    ), key=operator.attrgetter('name')
+                ):
+                    spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost_text()}")
+            else:
+                for shop_name, locations in hk_world.created_multi_locations.items():
+                    for loc in locations:
+                        spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost_text()}")
 
     def get_multi_location_name(self, base: str, i: typing.Optional[int]) -> str:
         if i is None:
-            i = self.created_multi_locations[base]
-        assert 0 < i < 18, "limited number of multi location IDs reserved."
+            i = len(self.created_multi_locations[base]) + 1
+        assert 1 <= 16, "limited number of multi location IDs reserved."
         return f"{base}_{i}"
+
+    def get_filler_item_name(self) -> str:
+        if self.player not in self.cached_filler_items:
+            fillers = ["One_Geo", "Soul_Refill"]
+            exclusions = self.white_palace_exclusions()
+            for group in (
+                    'RandomizeGeoRocks', 'RandomizeSoulTotems', 'RandomizeLoreTablets', 'RandomizeJunkPitChests',
+                    'RandomizeRancidEggs'
+            ):
+                if getattr(self.world, group):
+                    fillers.extend(item for item in hollow_knight_randomize_options[group].items if item not in
+                                   exclusions)
+            self.cached_filler_items[self.player] = fillers
+        return self.world.random.choice(self.cached_filler_items[self.player])
 
 
 def create_region(world: MultiWorld, player: int, name: str, location_names=None, exits=None) -> Region:
@@ -337,27 +600,57 @@ def create_region(world: MultiWorld, player: int, name: str, location_names=None
 
 class HKLocation(Location):
     game: str = "Hollow Knight"
-    cost: int = 0
+    costs: typing.Dict[str, int] = None
     unit: typing.Optional[str] = None
+    vanilla = False
+    basename: str
 
-    def __init__(self, player: int, name: str, code=None, parent=None):
+    def sort_costs(self):
+        if self.costs is None:
+            return
+        self.costs = {k: self.costs[k] for k in sorted(self.costs.keys(), key=lambda x: cost_terms[x].sort)}
+
+    def __init__(
+            self, player: int, name: str, code=None, parent=None,
+            costs: typing.Dict[str, int] = None, vanilla: bool = False, basename: str = None
+    ):
+        self.basename = basename or name
         super(HKLocation, self).__init__(player, name, code if code else None, parent)
+        self.vanilla = vanilla
+        if costs:
+            self.costs = dict(costs)
+            self.sort_costs()
+
+    def cost_text(self, separator=" and "):
+        if self.costs is None:
+            return None
+        return separator.join(
+            f"{value} {cost_terms[term].singular if value == 1 else cost_terms[term].plural}"
+            for term, value in self.costs.items()
+        )
 
 
 class HKItem(Item):
     game = "Hollow Knight"
+    type: str
 
-    def __init__(self, name, advancement, code, type, player: int = None):
-        super(HKItem, self).__init__(name, advancement, code if code else None, player)
-        self.type = type
+    def __init__(self, name, advancement, code, type: str, player: int = None):
         if name == "Mimic_Grub":
-            self.trap = True
-
-        if type in ("Grub", "DreamWarrior", "Root", "Egg"):
-            self.skip_in_prog_balancing = True
-
-        if type == "Charm" and name not in progression_charms:
-            self.skip_in_prog_balancing = True
+            classification = ItemClassification.trap
+        elif type in ("Grub", "DreamWarrior", "Root", "Egg"):
+            classification = ItemClassification.progression_skip_balancing
+        elif type == "Charm" and name not in progression_charms:
+            classification = ItemClassification.progression_skip_balancing
+        elif type in ("Map", "Journal"):
+            classification = ItemClassification.filler
+        elif type in ("Mask", "Ore", "Vessel"):
+            classification = ItemClassification.useful
+        elif advancement:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+        super(HKItem, self).__init__(name, classification, code if code else None, player)
+        self.type = type
 
 
 class HKLogicMixin(LogicMixin):
@@ -371,3 +664,38 @@ class HKLogicMixin(LogicMixin):
 
     def _hk_start(self, player, start_location: str) -> bool:
         return self.world.StartLocation[player] == start_location
+
+    def _hk_nail_combat(self, player: int) -> bool:
+        return self.has_any({'LFFTSLASH', 'RIGHTSLASH', 'UPSLASH'}, player)
+
+    def _hk_can_beat_thk(self, player: int) -> bool:
+        return (
+            self.has('Opened_Black_Egg_Temple', player)
+            and (self.count('FIREBALL', player) + self.count('SCREAM', player) + self.count('QUAKE', player)) > 1
+            and self._hk_nail_combat(player)
+            and (
+                self.has_any({'LEFTDASH', 'RIGHTDASH'}, player)
+                or self._hk_option(player, 'ProficientCombat')
+            )
+        )
+
+    def _hk_siblings_ending(self, player: int) -> bool:
+        return self._hk_can_beat_thk(player) and self.has('WHITEFRAGMENT', player, 3)
+
+    def _hk_can_beat_radiance(self, player: int) -> bool:
+        return (
+            self._hk_siblings_ending(player)
+            and self.has('DREAMNAIL', player, 1)
+            and (
+                (self.has('LEFTCLAW', player) and self.has('RIGHTCLAW', player))
+                or self.has('WINGS', player)
+            )
+            and (
+                self.count('FIREBALL', player) + self.count('SCREAM', player)
+                + self.count('QUAKE', player)
+            ) > 1
+            and (
+                (self.has('LEFTDASH', player, 2) and self.has('RIGHTDASH', player, 2))  # Both Shade Cloaks
+                or (self._hk_option(player, 'ProficientCombat') and self.has('QUAKE', player))  # or Dive
+            )
+        )

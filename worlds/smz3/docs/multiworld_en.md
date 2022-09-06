@@ -10,9 +10,8 @@
     - An emulator capable of connecting to SNI such as:
         - snes9x Multitroid
           from: [snes9x Multitroid Download](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
-        - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html)
-        - RetroArch 1.10.3 or newer from: [RetroArch BuildBot Website](https://buildbot.libretro.com/) - nightly builds
-          are required until 1.10.3 is released. Or,
+        - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html), or
+        - RetroArch 1.10.3 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
     - An SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
       compatible hardware
 - Your legally obtained Super Metroid ROM file, probably named `Super Metroid (Japan, USA).sfc` and
@@ -68,7 +67,7 @@ validator page: [YAML Validation page](/mysterycheck)
 
 When you join a multiworld game, you will be asked to provide your config file to whoever is hosting. Once that is done,
 the host will provide you with either a link to download your patch file, or with a zip file containing everyone's patch
-files. Your patch file should have a `.apsmz` extension.
+files. Your patch file should have a `.apsmz3` extension.
 
 Put your patch file on your desktop or somewhere convenient, and double click it. This should automatically launch the
 client, and will also create your ROM in the same place as your patch file.
@@ -87,9 +86,10 @@ first time launching, you may be prompted to allow it to communicate through the
 3. Click on **New Lua Script Window...**
 4. In the new window, click **Browse...**
 5. Select the connector lua file included with your client
-    - SuperNintendoClient users should download `sniConnector.lua` from the client download page
-    - SNIClient users should look in their Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
+    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
       emulator is 64-bit or 32-bit.
+6. If you see an error while loading the script that states `socket.dll missing` or similar, navigate to the folder of 
+the lua you are using in your file explorer and copy the `socket.dll` to the base folder of your snes9x install.
 
 ##### BizHawk
 
@@ -101,8 +101,7 @@ first time launching, you may be prompted to allow it to communicate through the
 3. Click on the Tools menu and click on **Lua Console**
 4. Click the button to open a new Lua script.
 5. Select the `Connector.lua` file included with your client
-    - SuperNintendoClient users should download `sniConnector.lua` from the client download page
-    - SNIClient users should look in their Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
+    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
       emulator is 64-bit or 32-bit. Please note the most recent versions of BizHawk are 64-bit only.
 
 ##### RetroArch 1.10.3 or newer

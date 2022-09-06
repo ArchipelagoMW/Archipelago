@@ -1,6 +1,7 @@
 import typing
 
-from BaseClasses import Item
+from BaseClasses import Item, ItemClassification
+
 
 def oot_data_to_ap_id(data, event): 
     if event or data[2] is None or data[0] == 'Shop': 
@@ -11,6 +12,7 @@ def oot_data_to_ap_id(data, event):
     else: 
         raise Exception(f'Unexpected OOT item type found: {data[0]}')
 
+
 def ap_id_to_oot_data(ap_id): 
     offset = 66000
     val = ap_id - offset
@@ -19,42 +21,40 @@ def ap_id_to_oot_data(ap_id):
     except IndexError: 
         raise Exception(f'Could not find desired item ID: {ap_id}')
 
+
+def oot_is_item_of_type(item, item_type):
+    if not isinstance(item, OOTItem):
+        return False
+    return item.type == item_type
+
+
 class OOTItem(Item):
     game: str = "Ocarina of Time"
+    type: str
 
     def __init__(self, name, player, data, event, force_not_advancement):
         (type, advancement, index, special) = data
         # "advancement" is True, False or None; some items are not advancement based on settings
-        adv = bool(advancement) and not force_not_advancement
-        super(OOTItem, self).__init__(name, adv, oot_data_to_ap_id(data, event), player)
+        if force_not_advancement:
+            classification = ItemClassification.useful
+        elif name == "Ice Trap":
+            classification = ItemClassification.trap
+        elif name == 'Gold Skulltula Token':
+            classification = ItemClassification.progression_skip_balancing
+        elif advancement:
+            classification = ItemClassification.progression
+        else:
+            classification = ItemClassification.filler
+        super(OOTItem, self).__init__(name, classification, oot_data_to_ap_id(data, event), player)
         self.type = type
         self.index = index
         self.special = special or {}
-        self.looks_like_item = None
         self.price = special.get('price', None) if special else None
         self.internal = False
-        self.trap = name == 'Ice Trap'
-        if force_not_advancement:
-            self.never_exclude = True
-        if name == 'Gold Skulltula Token':
-            self.skip_in_prog_balancing = True
-    
-    # The playthrough calculation calls a function that uses "sweep_for_events(key_only=True)"
-    # This checks if the item it's looking for is a small key, using the small key property. 
-    # Because of overlapping item fields, this means that OoT small keys are technically counted, unless we do this.
-    # This causes them to be double-collected during playthrough and generation. 
-    @property
-    def smallkey(self) -> bool:
-        return False
-
-    @property
-    def bigkey(self) -> bool: 
-        return False
 
     @property
     def dungeonitem(self) -> bool:
         return self.type in ['SmallKey', 'HideoutSmallKey', 'BossKey', 'GanonBossKey', 'Map', 'Compass']
-
 
 
 # Progressive: True  -> Advancement

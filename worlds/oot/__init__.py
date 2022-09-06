@@ -8,7 +8,7 @@ logger = logging.getLogger("Ocarina of Time")
 from .Location import OOTLocation, LocationFactory, location_name_to_id
 from .Entrance import OOTEntrance
 from .EntranceShuffle import shuffle_random_entrances, entrance_shuffle_table, EntranceShuffleError
-from .Items import OOTItem, item_table, oot_data_to_ap_id
+from .Items import OOTItem, item_table, oot_data_to_ap_id, oot_is_item_of_type
 from .ItemPool import generate_itempool, add_dungeon_items, get_junk_item, get_junk_pool
 from .Regions import OOTRegion, TimeOfDay
 from .Rules import set_rules, set_shop_rules, set_entrances_based_rules
@@ -82,7 +82,7 @@ class OOTWeb(WebWorld):
         "Español",
         "setup_es.md",
         "setup/es",
-        setup.author
+        setup.authors
     )
 
     tutorials = [setup, setup_es]
@@ -90,12 +90,12 @@ class OOTWeb(WebWorld):
 
 class OOTWorld(World):
     """
-    The Legend of Zelda: Ocarina of Time is a 3D action/adventure game. Travel through Hyrule in two time periods, 
-    learn magical ocarina songs, and explore twelve dungeons on your quest. Use Link's many items and abilities 
+    The Legend of Zelda: Ocarina of Time is a 3D action/adventure game. Travel through Hyrule in two time periods,
+    learn magical ocarina songs, and explore twelve dungeons on your quest. Use Link's many items and abilities
     to rescue the Seven Sages, and then confront Ganondorf to save Hyrule!
     """
     game: str = "Ocarina of Time"
-    options: dict = oot_options
+    option_definitions: dict = oot_options
     topology_present: bool = True
     item_name_to_id = {item_name: oot_data_to_ap_id(data, False) for item_name, data in item_table.items() if
                        data[2] is not None}
@@ -178,6 +178,10 @@ class OOTWorld(World):
         if self.skip_child_zelda:
             self.shuffle_weird_egg = False
 
+        # Ganon boss key should not be in itempool in triforce hunt
+        if self.triforce_hunt:
+            self.shuffle_ganon_bosskey = 'remove'
+
         # Determine skipped trials in GT
         # This needs to be done before the logic rules in GT are parsed
         trial_list = ['Forest', 'Fire', 'Water', 'Spirit', 'Shadow', 'Light']
@@ -186,7 +190,11 @@ class OOTWorld(World):
 
         # Determine which dungeons are MQ
         # Possible future plan: allow user to pick which dungeons are MQ
-        mq_dungeons = self.world.random.sample(dungeon_table, self.mq_dungeons)
+        if self.logic_rules == 'glitchless':
+            mq_dungeons = self.world.random.sample(dungeon_table, self.mq_dungeons)
+        else:
+            self.mq_dungeons = 0
+            mq_dungeons = []
         self.dungeon_mq = {item['name']: (item in mq_dungeons) for item in dungeon_table}
 
         # Determine tricks in logic
@@ -577,7 +585,7 @@ class OOTWorld(World):
                        (loc.internal or loc.type == 'Drop') and loc.event and loc.locked and loc not in reachable]
         for loc in unreachable:
             loc.parent_region.locations.remove(loc)
-        # Exception: Sell Big Poe is an event which is only reachable if Bottle with Big Poe is in the item pool. 
+        # Exception: Sell Big Poe is an event which is only reachable if Bottle with Big Poe is in the item pool.
         # We allow it to be removed only if Bottle with Big Poe is not in the itempool.
         bigpoe = self.world.get_location('Sell Big Poe from Market Guard House', self.player)
         if not all_state.has('Bottle with Big Poe', self.player) and bigpoe not in reachable:
@@ -632,7 +640,7 @@ class OOTWorld(World):
             if shufflebk in itempools:
                 itempools[shufflebk].extend(dungeon.boss_key)
 
-            # We can't put a dungeon item on the end of a dungeon if a song is supposed to go there. Make sure not to include it. 
+            # We can't put a dungeon item on the end of a dungeon if a song is supposed to go there. Make sure not to include it.
             dungeon_locations = [loc for region in dungeon.regions for loc in region.locations
                                  if loc.item is None and (
                                          self.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations)]
@@ -793,7 +801,7 @@ class OOTWorld(World):
         # This includes all locations for which show_in_spoiler is false, and shuffled shop items.
         for loc in self.get_locations():
             if loc.address is not None and (
-                    not loc.show_in_spoiler or (loc.item is not None and loc.item.type == 'Shop')
+                    not loc.show_in_spoiler or oot_is_item_of_type(loc.item, 'Shop')
                     or (self.skip_child_zelda and loc.name in ['HC Zeldas Letter', 'Song from Impa'])):
                 loc.address = None
 
@@ -803,9 +811,10 @@ class OOTWorld(World):
 
         with i_o_limiter:
             # Make traps appear as other random items
-            ice_traps = [loc.item for loc in self.get_locations() if loc.item.trap]
-            for trap in ice_traps:
-                trap.looks_like_item = self.create_item(self.world.slot_seeds[self.player].choice(self.fake_items).name)
+            trap_location_ids = [loc.address for loc in self.get_locations() if loc.item.trap]
+            self.trap_appearances = {}
+            for loc_id in trap_location_ids:
+                self.trap_appearances[loc_id] = self.create_item(self.world.slot_seeds[self.player].choice(self.fake_items).name)
 
             # Seed hint RNG, used for ganon text lines also
             self.hint_rng = self.world.slot_seeds[self.player]
@@ -869,15 +878,15 @@ class OOTWorld(World):
                         autoworld.major_item_locations.append(loc)
 
                     if loc.game == "Ocarina of Time" and loc.item.code and (not loc.locked or
-                        (loc.item.type == 'Song' or
-                            (loc.item.type == 'SmallKey'         and world.worlds[loc.player].shuffle_smallkeys     == 'any_dungeon') or
-                            (loc.item.type == 'HideoutSmallKey'  and world.worlds[loc.player].shuffle_fortresskeys  == 'any_dungeon') or
-                            (loc.item.type == 'BossKey'          and world.worlds[loc.player].shuffle_bosskeys      == 'any_dungeon') or
-                            (loc.item.type == 'GanonBossKey'     and world.worlds[loc.player].shuffle_ganon_bosskey == 'any_dungeon'))):
+                        (oot_is_item_of_type(loc.item, 'Song') or
+                            (oot_is_item_of_type(loc.item, 'SmallKey')         and world.worlds[loc.player].shuffle_smallkeys     == 'any_dungeon') or
+                            (oot_is_item_of_type(loc.item, 'HideoutSmallKey')  and world.worlds[loc.player].shuffle_fortresskeys  == 'any_dungeon') or
+                            (oot_is_item_of_type(loc.item, 'BossKey')          and world.worlds[loc.player].shuffle_bosskeys      == 'any_dungeon') or
+                            (oot_is_item_of_type(loc.item, 'GanonBossKey')     and world.worlds[loc.player].shuffle_ganon_bosskey == 'any_dungeon'))):
                         if loc.player in barren_hint_players:
                             hint_area = get_hint_area(loc)
                             items_by_region[loc.player][hint_area]['weight'] += 1
-                            if loc.item.advancement or loc.item.never_exclude:
+                            if loc.item.advancement or loc.item.useful:
                                 items_by_region[loc.player][hint_area]['is_barren'] = False
                         if loc.player in woth_hint_players and loc.item.advancement:
                             # Skip item at location and see if game is still beatable
@@ -888,7 +897,7 @@ class OOTWorld(World):
             elif barren_hint_players or woth_hint_players:  # Check only relevant oot locations for barren/woth
                 for player in (barren_hint_players | woth_hint_players):
                     for loc in world.worlds[player].get_locations():
-                        if loc.item.code and (not loc.locked or loc.item.type == 'Song'):
+                        if loc.item.code and (not loc.locked or oot_is_item_of_type(loc.item, 'Song')):
                             if player in barren_hint_players:
                                 hint_area = get_hint_area(loc)
                                 items_by_region[player][hint_area]['weight'] += 1

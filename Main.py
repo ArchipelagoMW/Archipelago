@@ -1,4 +1,3 @@
-import copy
 import collections
 from itertools import zip_longest, chain
 import logging
@@ -48,7 +47,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.item_functionality = args.item_functionality.copy()
     world.timer = args.timer.copy()
     world.goal = args.goal.copy()
-    world.open_pyramid = args.open_pyramid.copy()
     world.boss_shuffle = args.shufflebosses.copy()
     world.enemy_health = args.enemy_health.copy()
     world.enemy_damage = args.enemy_damage.copy()
@@ -72,7 +70,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
     world.player_name = args.name.copy()
-    world.enemizer = args.enemizercli
     world.sprite = args.sprite.copy()
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
@@ -145,13 +142,12 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     # temporary home for item links, should be moved out of Main
     for group_id, group in world.groups.items():
         def find_common_pool(players: Set[int], shared_pool: Set[str]):
-            advancement = set()
+            classifications = collections.defaultdict(int)
             counters = {player: {name: 0 for name in shared_pool} for player in players}
             for item in world.itempool:
                 if item.player in counters and item.name in shared_pool:
                     counters[item.player][item.name] += 1
-                    if item.advancement:
-                        advancement.add(item.name)
+                    classifications[item.name] |= item.classification
 
             for player in players.copy():
                 if all([counters[player][item] == 0 for item in shared_pool]):
@@ -169,18 +165,18 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 else:
                     for player in players:
                         del(counters[player][item])
-            return counters, advancement
+            return counters, classifications
 
-        common_item_count, common_advancement_items = find_common_pool(group["players"], group["item_pool"])
+        common_item_count, classifications = find_common_pool(group["players"], group["item_pool"])
         if not common_item_count:
             continue
 
         new_itempool = []
         for item_name, item_count in next(iter(common_item_count.values())).items():
-            advancement = item_name in common_advancement_items
             for _ in range(item_count):
                 new_item = group["world"].create_item(item_name)
-                new_item.advancement = advancement
+                # mangle together all original classification bits
+                new_item.classification |= classifications[item_name]
                 new_itempool.append(new_item)
 
         region = Region("Menu", RegionType.Generic, "ItemLink", group_id, world)
@@ -219,9 +215,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         world._all_state = None
 
     logger.info("Running Item Plando")
-
-    for item in world.itempool:
-        item.world = world
 
     distribute_planned(world)
 
@@ -265,7 +258,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
             # collect ER hint info
             er_hint_data = {player: {} for player in world.get_game_players("A Link to the Past") if
-                            world.shuffle[player] != "vanilla" or world.retro[player]}
+                            world.shuffle[player] != "vanilla" or world.retro_caves[player]}
 
             for region in world.regions:
                 if region.player in er_hint_data and region.locations:
@@ -305,7 +298,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             takeanyregions = ["Old Man Sword Cave", "Take-Any #1", "Take-Any #2", "Take-Any #3", "Take-Any #4"]
             for index, take_any in enumerate(takeanyregions):
                 for region in [world.get_region(take_any, player) for player in
-                               world.get_game_players("A Link to the Past") if world.retro[player]]:
+                               world.get_game_players("A Link to the Past") if world.retro_caves[player]]:
                     item = world.create_item(
                         region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
                         region.player)
@@ -366,7 +359,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 for location in world.get_filled_locations():
                     if type(location.address) == int:
                         assert location.item.code is not None, "item code None should be event, " \
-                                                               "location.address should then also be None"
+                                                               "location.address should then also be None. Location: " \
+                                                               f" {location}"
                         locations_data[location.player][location.address] = \
                             location.item.code, location.item.player, location.item.flags
                         if location.name in world.start_location_hints[location.player]:
@@ -428,7 +422,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             world.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
 
         zipfilename = output_path(f"AP_{world.seed_name}.zip")
-        logger.info(f'Creating final archive at {zipfilename}.')
+        logger.info(f"Creating final archive at {zipfilename}")
         with zipfile.ZipFile(zipfilename, mode="w", compression=zipfile.ZIP_DEFLATED,
                              compresslevel=9) as zf:
             for file in os.scandir(temp_dir):

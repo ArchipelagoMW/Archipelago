@@ -45,12 +45,11 @@ class MeritousWorld(World):
     item_name_groups = item_groups
 
     data_version = 2
-    forced_auto_forfeit = False
 
     # NOTE: Remember to change this before this game goes live
     required_client_version = (0, 2, 4)
 
-    options = meritous_options
+    option_definitions = meritous_options
 
     def __init__(self, world: MultiWorld, player: int):
         super(MeritousWorld, self).__init__(world, player)
@@ -68,6 +67,7 @@ class MeritousWorld(World):
         ]
 
     def create_item(self, name: str) -> Item:
+
         return MeritousItem(name, self._is_progression(
             name), item_table[name], self.player)
 
@@ -83,15 +83,18 @@ class MeritousWorld(World):
         crystal_pool = []
 
         for _ in range(0, qty):
-            rand_crystals = self.world.random.randrange(0, 32)
-            if rand_crystals < 16:
-                crystal_pool += [self.create_item("Crystals x500")]
-            elif rand_crystals < 28:
-                crystal_pool += [self.create_item("Crystals x1000")]
-            else:
-                crystal_pool += [self.create_item("Crystals x2000")]
+            crystal_pool.append(self.create_filler())
 
         return crystal_pool
+
+    def get_filler_item_name(self) -> str:
+        rand_crystals = self.world.random.randrange(0, 32)
+        if rand_crystals < 16:
+            return "Crystals x500"
+        elif rand_crystals < 28:
+            return "Crystals x1000"
+        else:
+            return "Crystals x2000"
 
     def generate_early(self):
         self.goal = self.world.goal[self.player].value

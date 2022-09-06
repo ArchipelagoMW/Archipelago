@@ -13,9 +13,18 @@ These steps should be followed in order to establish a gameplay connection with 
 
 In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
 
-There are libraries available that implement this network protocol in [Python](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py), [Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java), [.Net](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net) and [C++](https://github.com/black-sliver/apclientpp)
+There are also a number of community-supported libraries available that implement this network protocol to make integrating with Archipelago easier.
 
-For Super Nintendo games there are clients available in either [Node](https://github.com/ArchipelagoMW/SuperNintendoClient) or [Python](https://github.com/ArchipelagoMW/Archipelago/blob/main/SNIClient.py), There are also game specific clients available for [The Legend of Zelda: Ocarina of Time](https://github.com/ArchipelagoMW/Z5Client) or [Final Fantasy 1](https://github.com/ArchipelagoMW/Archipelago/blob/main/FF1Client.py)
+| Language/Runtime              | Project                                                                                            | Remarks                                                                         |
+|-------------------------------|----------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| Python                        | [Archipelago CommonClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py) |                                                                                 |
+|                               | [Archipelago SNIClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/SNIClient.py)       | For Super Nintendo Game Support; Utilizes [SNI](https://github.com/alttpo/sni). |
+| JVM (Java / Kotlin)           | [Archipelago.MultiClient.Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java)      |                                                                                 |
+| .NET (C# / C++ / F# / VB.NET) | [Archipelago.MultiClient.Net](https://www.nuget.org/packages/Archipelago.MultiClient.Net)          |                                                                                 |
+| C++                           | [apclientpp](https://github.com/black-sliver/apclientpp)                                           | almost-header-only                                                              |
+|                               | [APCpp](https://github.com/N00byKing/APCpp)                                                        | CMake                                                                           |
+| JavaScript / TypeScript       | [archipelago.js](https://www.npmjs.com/package/archipelago.js)                                     | Browser and Node.js Supported                                                   |
+| Haxe                          | [hxArchipelago](https://lib.haxe.org/p/hxArchipelago)                                              |                                                                                 |
 
 ## Synchronizing Items
 When the client receives a [ReceivedItems](#ReceivedItems) packet, if the `index` argument does not match the next index that the client expects then it is expected that the client will re-sync items with the server. This can be accomplished by sending the server a [Sync](#Sync) packet and then a [LocationChecks](#LocationChecks) packet.
@@ -63,10 +72,9 @@ Sent to clients when they connect to an Archipelago server.
 | permissions | dict\[str, [Permission](#Permission)\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "forfeit", "collect" and "remaining". |
 | hint_cost | int | The amount of points it costs to receive a hint from the server. |
 | location_check_points | int | The amount of hint points you receive per item/location check completed. ||
-| players | list\[[NetworkPlayer](#NetworkPlayer)\] | Sent only if the client is properly authenticated (see [Archipelago Connection Handshake](#Archipelago-Connection-Handshake)). Information on the players currently connected to the server. |
-| games | list\[str\] | sorted list of game names for the players, so first player's game will be games\[0\]. Matches game names in datapackage. |
-| datapackage_version | int | Data version of the [data package](#Data-Package-Contents) the server will send. Used to update the client's (optional) local cache. |
-| datapackage_versions | dict\[str, int\] | Data versions of the individual games' data packages the server will send. |
+| games | list\[str\] | List of games present in this multiworld. |
+| datapackage_version | int | Sum of individual games' datapackage version. Deprecated. Use `datapackage_versions` instead. |
+| datapackage_versions | dict\[str, int\] | Data versions of the individual games' data packages the server will send. Used to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents). |
 | seed_name | str | uniquely identifying name of this generation |
 | time | float | Unix time stamp of "now". Send for time synchronization if wanted for things like the DeathLink Bounce. |
 
@@ -146,14 +154,15 @@ The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | hint_points | int | New argument. The client's current hint points. |
-| players | list\[[NetworkPlayer](#NetworkPlayer)\] | Changed argument. Always sends all players, whether connected or not. |
+| players | list\[[NetworkPlayer](#NetworkPlayer)\] | Send in the event of an alias rename. Always sends all players, whether connected or not. |
 | checked_locations | list\[int\] | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
 | missing_locations | list\[int\] | Should never be sent as an update, if needed is the inverse of checked_locations. |
 
 All arguments for this packet are optional, only changes are sent.
 
 ### Print
-Sent to clients purely to display a message to the player.
+Sent to clients purely to display a message to the player. 
+* *Deprecation warning: clients that connect with version 0.3.5 or higher will nolonger recieve Print packets, instead all messsages are send as [PrintJSON](#PrintJSON)*
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
@@ -165,10 +174,21 @@ Sent to clients purely to display a message to the player. This packet differs f
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | data | list\[[JSONMessagePart](#JSONMessagePart)\] | Type of this part of the message. |
-| type | str | May be present to indicate the nature of this message. Known types are Hint and ItemSend. |
+| type | str | May be present to indicate the [PrintJsonType](#PrintJsonType) of this message. |
 | receiving | int | Is present if type is Hint or ItemSend and marks the destination player's ID. |
 | item | [NetworkItem](#NetworkItem) | Is present if type is Hint or ItemSend and marks the source player id, location id, item id and item flags. |
 | found | bool | Is present if type is Hint, denotes whether the location hinted for was checked. |
+| countdown | int | Is present if type is `Countdown`, denotes the amount of seconds remaining on the countdown. |
+
+##### PrintJsonType
+PrintJsonType indicates the type of [PrintJson](#PrintJson) packet, different types can be handled differently by the client and can also contain additional arguments. When receiving an unknown type the data's list\[[JSONMessagePart](#JSONMessagePart)\] should still be printed as normal. 
+
+Currently defined types are:
+| Type | Notes |
+| ---- | ----- |
+| ItemSend | The message is in response to a player receiving an item. |
+| Hint | The message is in response to a player hinting. |
+| Countdown | The message contains information about the current server Countdown. |
 
 ### DataPackage
 Sent to clients to provide what is known as a 'data package' which contains information to enable a client to most easily communicate with the Archipelago server. Contents include things like location id to name mappings, among others; see [Data Package Contents](#Data-Package-Contents) for more info.
@@ -192,8 +212,23 @@ Sent to clients after a client requested this message be sent to them, more info
 ### InvalidPacket
 Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked for.
 
+#### Arguments
+| Name | Type | Notes |
+| ---- | ---- | ----- |
+| type | str | The [PacketProblemType](#PacketProblemType) that was detected in the packet. |
+| original_cmd | Optional[str] | The `cmd` argument of the faulty packet, will be `None` if the `cmd` failed to be parsed. |
+| text | str | A descriptive message of the problem at hand. |
+
+##### PacketProblemType
+`PacketProblemType` indicates the type of problem that was detected in the faulty packet, the known problem types are below but others may be added in the future.
+
+| Type | Notes |
+| ---- | ----- |
+| cmd | `cmd` argument of the faulty packet that could not be parsed correctly. |
+| arguments | Arguments of the faulty packet which were not correct. |
+
 ### Retrieved
-Sent to clients as a response the a [Get](#Get) package
+Sent to clients as a response the a [Get](#Get) package.
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
@@ -238,7 +273,7 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | name | str | The player name for this client. |
 | uuid | str | Unique identifier for player client. |
 | version | [NetworkVersion](#NetworkVersion) | An object representing the Archipelago version this client supports. |
-| items_handling | int | Flags configuring which items should be sent by the server. Read below for individual flags.
+| items_handling | int | Flags configuring which items should be sent by the server. Read below for individual flags. |
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags) |
 
 #### items_handling flags
@@ -259,7 +294,7 @@ Update arguments from the Connect package, currently only updating tags and item
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| items_handling | int | Flags configuring which items should be sent by the server.
+| items_handling | int | Flags configuring which items should be sent by the server. |
 | tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags) |
 
 ### Sync
@@ -282,7 +317,7 @@ Sent to the server to inform it of locations the client has seen, but not checke
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | locations | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server. |
-| create_as_hint | bool | If True, the scouted locations get created and broadcasted as a player-visible hint. |
+| create_as_hint | int | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply. |
 
 ### StatusUpdate
 Sent to the server to update on the sender's status. Examples include readiness or goal completion. (Example: defeated Ganon in A Link to the Past)
@@ -344,7 +379,7 @@ Additional arguments sent in this package will also be added to the [SetReply](#
 #### DataStorageOperation
 A DataStorageOperation manipulates or alters the value of a key in the data storage. If the operation transforms the value from one state to another then the current value of the key is used as the starting point otherwise the [Set](#Set)'s package `default` is used if the key does not exist on the server already.
 DataStorageOperations consist of an object containing both the operation to be applied, provided in the form of a string, as well as the value to be used for that operation, Example:
-```js
+```json
 {"operation": "add", "value": 12}
 ```
 
@@ -399,7 +434,7 @@ class NetworkPlayer(NamedTuple):
 ```
 
 Example:
-```js
+```json
 [
     {"team": 0, "slot": 1, "alias": "Lord MeowsiePuss", "name": "Meow"}, 
     {"team": 0, "slot": 2, "alias": "Doggo", "name": "Bork"},
@@ -419,7 +454,7 @@ class NetworkItem(NamedTuple):
     flags: int
 ```
 In JSON this may look like:
-```js
+```json
 [
     {"item": 1, "location": 1, "player": 1, "flags": 1},
     {"item": 2, "location": 2, "player": 2, "flags": 2},
@@ -487,7 +522,7 @@ Color options:
 * green_bg
 * yellow_bg
 * blue_bg
-* purple_bg
+* magenta_bg
 * cyan_bg
 * white_bg
 
