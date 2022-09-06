@@ -661,6 +661,9 @@ def patch_rom(world, rom, player, active_level_dict):
     if world.autosave[player]:
         rom.write_bytes(0x20F93, bytearray([0x00]))
 
+    # Starting Life Count
+    rom.write_bytes(0x1E25, bytearray([world.starting_life_count[player].value - 1]))
+
     # Repurpose Bonus Stars counter for Boss Token or Yoshi Eggs
     rom.write_bytes(0x3F1AA, bytearray([0x00] * 0x20))
     rom.write_bytes(0x20F9F, bytearray([0xEA] * 0x3B))
