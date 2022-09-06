@@ -15,6 +15,20 @@ local curstate =  STATE_UNINITIALIZED
 local mmbn3Socket = nil
 local frame = 0
 
+local IsInMenu = false
+local IsInDialog = false
+local IsInBattle = false
+local IsItemQueued = false
+
+-- States
+local ITEMSTATE_READY = "Item State Ready" -- Ready for the next item if there are any
+local ITEMSTATE_ITEMSENTNOTCLAIMED = "Item Sent Not Claimed" -- The ItemBit is set, but the dialog has not been closed yet
+local ITEMSTATE_ITEMQUEUEDNOTSENT = "Item Queued Not Sent" -- There are items to be sent but the ItemBit is not set, usually due to the game being in a non-receivable state
+local itemState = ITEMSTATE_READY
+
+local itemQueue = {}
+
+
 local acdc_bmd_checks = function()
     local checks ={}
     checks["ACDC 1 Southwest BMD"] = memory.read_u8(0x020001d0)
@@ -330,7 +344,7 @@ local jobs_checks = function()
     checks["Job: Hide and seek! Third Child"] = memory.read_u8(0x2000188)
     checks["Job: Hide and seek! Fourth Child"] = memory.read_u8(0x2000189)
     checks["Job: Hide and seek! Fifth Child"] = memory.read_u8(0x2000302)
-    checks["Job: Finding the blue Navi"] = memory.read_u8(0x2000031)
+    checks["Job: Finding the blue Navi"] = memory.read_u8(0x2000302)
     checks["Job: Give your support"] = memory.read_u8(0x2000302)
     checks["Job: Stamp collecting"] = memory.read_u8(0x2000302)
     checks["Job: Help with a will"] = memory.read_u8(0x2000303)
@@ -353,71 +367,6 @@ local game_modes = {
     [4]={name="Cutscene", loaded=true},
     [5]={name="Paused", loaded=true}
 }
-
-local function get_current_game_mode()
-    local mode = -1
-    local logo_state = state_logo:get()
-    if logo_state == 0x802C5880 or logo_state == 0x00000000 then
-        mode = 0
-    else
-        if state_main:get() == 1 then
-            mode = 1
-        else
-            -- Here's where we determine if you're in a battle, cutscene, menu, or otherwise
-            -- Gonna need to revisit this later
-            --[[
-            local menu_state = state_menu:get()
-            if menu_state == 0 then
-                    if state_sub:get() == 4 then
-                        mode = 4
-                    else
-                        mode = 3
-                    end
-                end
-            elseif (0 < menu_state and menu_state < 9) or menu_state == 13 then
-                mode = 5
-            elseif menu_state == 9 or menu_state == 0xB then
-                mode = 7
-            else
-                mode = 8
-            end
-            --]]
-        end
-    end
-    return mode, game_modes[mode]
-end
-
-function InSafeState()
-    return true
-    --return game_modes[get_current_game_mode()].loaded
-end
-
-function item_receivable()
-    -- Places you can't receive an item for whatever reason. Possibly unneeded
-    local excluded_scenes = {}
-
-    local details
-    local scene
-    _, details = get_current_game_mode()
-    scene = global_context:rawget('cur_scene'):rawget()
-
-    local playerQueued = mainmemory.read_u16_be(incoming_player_addr)
-    local itemQueued = mainmemory.read_u16_be(incoming_item_addr)
-
-    -- Safe to receive an item if the scene is normal, player is not in an excluded scene, and no item is already queued
-    return details.name == "Normal Gameplay" and excluded_scenes[scene] == nil and playerQueued == 0 and itemQueued == 0
-end
-
-local get_player_name = function()
-    -- MMBN3 doesn't have a player name, so this will probably need to be changed so it doesn't autheticate on it
-    -- local rom_name_bytes = mainmemory.readbyterange(rom_name_location, 16)
-    -- return bytes_to_string(rom_name_bytes)
-    return "MegaMan"
-end
-
-function setPlayerName(id, name)
-    -- Again, possibly unneeded. Double check this later
-end
 
 function is_game_complete()
     -- If the game is complete, do not read memory
@@ -447,8 +396,6 @@ function process_blocks(block)
     if block == nil then
         return
     end
-    -- Here is where the OOT code writes the player name which we might not need
-    -- Here is where the OOT code handles death linking, which we are not doing yet
 
     -- Queue item for receiving if one exists
     item_queue = block['items']
@@ -468,9 +415,11 @@ local process_block = function(block)
     if block == nil then
         return
     end
+    --Temporary skip checking. REMOVE BEFORE TESTING
     if block ~= nil then
         return
     end
+
     -- Write player names on first connect or after reset (N64 logo, title screen, file select)
     cur_mode = get_current_game_mode()
     if (first_connect or cur_mode == 0 or cur_mode == 1 or cur_mode == 2) and (#block['playerNames'] > 0) then
@@ -498,6 +447,7 @@ end
 
 local receive = function()
     l, e = mmbn3Socket:receive()
+
     -- Handle incoming message
     if e == 'closed' then
         if curstate == STATE_OK then
@@ -515,18 +465,17 @@ local receive = function()
     end
     process_block(json.decode(l))
 
+
     -- Determine message to send back
     local retTable = {}
-    retTable["playerName"] = get_player_name()
     retTable["scriptVersion"] = script_version
-    if InSafeState() then
-        retTable["locations"] = check_all_locations()
-        retTable["gameComplete"] = is_game_complete()
-    end
+    retTable["locations"] = check_all_locations()
+    retTable["gameComplete"] = is_game_complete()
 
     -- Send the message
     msg = json.encode(retTable).."\n"
     local ret, error = mmbn3Socket:send(msg)
+
     if ret == nil then
         print(error)
     elseif curstate == STATE_INITIAL_CONNECTION_MADE then

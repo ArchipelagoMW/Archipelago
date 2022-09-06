@@ -19,7 +19,7 @@ class MMBN3Web(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["digiholic","XKirby"]
+        ["digiholic"]
     )
     tutorials = [setup_en]
 
