@@ -592,6 +592,19 @@ def handle_level_shuffle(rom, active_level_dict):
         rom.write_byte(0x2D608 + level_id, tile_data.eventIDValue)
 
 
+def handle_music_shuffle(rom, world, player):
+    from .Aesthetics import generate_shuffled_level_music, generate_shuffled_ow_music, level_music_address_data, ow_music_address_data
+
+    shuffled_level_music = generate_shuffled_level_music(world, player)
+    for i in range(len(shuffled_level_music)):
+        rom.write_byte(level_music_address_data[i], shuffled_level_music[i])
+
+    shuffled_ow_music = generate_shuffled_ow_music(world, player)
+    for i in range(len(shuffled_ow_music)):
+        for addr in ow_music_address_data[i]:
+            rom.write_byte(addr, shuffled_ow_music[i])
+
+
 def patch_rom(world, rom, player, active_level_dict):
     local_random = world.slot_seeds[player]
 
@@ -681,6 +694,10 @@ def patch_rom(world, rom, player, active_level_dict):
     # Handle Level Shuffle Here
     if world.level_shuffle[player]:
         handle_level_shuffle(rom, active_level_dict)
+
+    # Handle Music Shuffle
+    if world.music_shuffle[player] != "none":
+        handle_music_shuffle(rom, world, player)
 
     # Store all relevant option results in ROM
     rom.write_byte(0x01BFA0, world.goal[player].value)

@@ -63,6 +63,7 @@ class DisplaySentItemPopups(Choice):
     """
     What messages to display in-game for items sent
     """
+    display_name = "Display Sent Item Popups"
     option_none = 0
     option_all = 1
     default = 1
@@ -72,6 +73,7 @@ class DisplayReceivedItemPopups(Choice):
     """
     What messages to display in-game for items received
     """
+    display_name = "Display Received Item Popups"
     option_none = 0
     option_all = 1
     option_progression = 2
@@ -127,11 +129,15 @@ class Autosave(DefaultOnToggle):
     display_name = "Autosave"
 
 
-class MusicShuffle(Toggle):
+class MusicShuffle(Choice):
     """
-    Whether music is shuffled
+    Music shuffle type
     """
     display_name = "Music Shuffle"
+    option_none = 0
+    option_simple_unique = 1
+    option_singularity = 2
+    default = 0
 
 
 class PaletteShuffle(Toggle):
