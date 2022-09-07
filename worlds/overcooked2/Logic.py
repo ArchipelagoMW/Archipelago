@@ -365,7 +365,7 @@ level_logic = {
     "Story 2-3": (
         ( # 1-star
             { # Exclusive
-
+                "Throw"
             },
             { # Additive
 
@@ -373,7 +373,7 @@ level_logic = {
         ),
         ( # 2-star
             { # Exclusive
-                "Throw",
+
             },
             { # Additive
 
@@ -498,7 +498,11 @@ level_logic = {
 
             },
             { # Additive
-
+                ("Throw", 1.0),
+                ("Progressive Dash", 0.5),
+                ("Sharp Knife", 0.5),
+                ("Larger Tip Jar", 0.25),
+                ("Dish Scrubber", 0.25),
             },
         ),
         ( # 2-star
@@ -2632,11 +2636,14 @@ level_logic = {
 
             },
             { # Additive
-
+                ("Throw", 0.5),
+                ("Progressive Dash", 0.5),
+                ("Coal Bucket", 0.5),
             },
         ),
         ( # 2-star
             { # Exclusive
+                "Throw",
                 "Coal Bucket",
             },
             { # Additive
