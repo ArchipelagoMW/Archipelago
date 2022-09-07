@@ -1641,7 +1641,7 @@ level_logic = {
     "Campfire 1-1": (
         ( # 1-star
             { # Exclusive
-
+                "Wood"
             },
             { # Additive
 
@@ -1649,7 +1649,7 @@ level_logic = {
         ),
         ( # 2-star
             { # Exclusive
-                "Wood"
+                
             },
             { # Additive
 
@@ -1667,7 +1667,7 @@ level_logic = {
     "Campfire 1-2": (
         ( # 1-star
             { # Exclusive
-
+                "Wood"
             },
             { # Additive
 
@@ -1675,7 +1675,7 @@ level_logic = {
         ),
         ( # 2-star
             { # Exclusive
-                "Wood"
+
             },
             { # Additive
 
@@ -1797,7 +1797,7 @@ level_logic = {
     "Campfire 2-3": (
         ( # 1-star
             { # Exclusive
-
+                "Wood"
             },
             { # Additive
 
@@ -1805,7 +1805,7 @@ level_logic = {
         ),
         ( # 2-star
             { # Exclusive
-                "Wood"
+
             },
             { # Additive
 
@@ -1823,7 +1823,7 @@ level_logic = {
     "Campfire 2-4": (
         ( # 1-star
             { # Exclusive
-
+                "Wood"
             },
             { # Additive
 
@@ -1831,7 +1831,7 @@ level_logic = {
         ),
         ( # 2-star
             { # Exclusive
-                "Wood"
+
             },
             { # Additive
 
@@ -1901,7 +1901,7 @@ level_logic = {
     "Campfire 3-3": (
         ( # 1-star
             { # Exclusive
-
+                "Wood",
             },
             { # Additive
 
@@ -1910,7 +1910,6 @@ level_logic = {
         ( # 2-star
             { # Exclusive
                 "Lightweight Backpack",
-                "Wood",
             },
             { # Additive
 
@@ -1928,7 +1927,7 @@ level_logic = {
     "Campfire 3-4": (
         ( # 1-star
             { # Exclusive
-
+                "Wood",
             },
             { # Additive
 
@@ -1936,7 +1935,7 @@ level_logic = {
         ),
         ( # 2-star
             { # Exclusive
-                "Wood",
+
             },
             { # Additive
 
