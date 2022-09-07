@@ -55,7 +55,7 @@ class PrepLevels(Choice):
     option_original = 0
     option_excluded = 1
     option_all_you_can_eat = 2
-    default = 2
+    default = 1
 
 
 class StarsToWin(Range):
@@ -65,7 +65,7 @@ class StarsToWin(Range):
     display_name = "Stars to Win"
     range_start = 0
     range_end = 129
-    default = 84
+    default = 60
 
 
 class StarThresholdScale(Range):

@@ -347,6 +347,7 @@ class Overcooked2World(World):
                 on_level_completed[level_id] = [item_to_unlock_event(location.item.name)]
 
         # Put it all together
+        star_threshold_scale = self.options["StarThresholdScale"] / 100
 
         base_data = {
             # Changes Inherent to rando
@@ -366,7 +367,7 @@ class Overcooked2World(World):
 
             # Game Modifications
             "LevelPurchaseRequirements": level_purchase_requirements,
-            "Custom66TimerScale": 0.5,
+            "Custom66TimerScale": max(0.4, (1.0 - star_threshold_scale)),
 
             "CustomLevelOrder": custom_level_order,
 
@@ -408,7 +409,6 @@ class Overcooked2World(World):
         self.options["PreserveCookingProgress"] = self.options["AlwaysPreserveCookingProgress"]
         self.options["TimerAlwaysStarts"] = self.options["PrepLevels"] == PrepLevelMode.ayce.value
         self.options["LevelTimerScale"] = 0.666 if self.options["ShorterLevelDuration"] else 1.0
-        star_threshold_scale = self.options["StarThresholdScale"] / 100
         self.options["LeaderboardScoreScale"] = {
             "FourStars": 1.0,
             "ThreeStars": star_threshold_scale,
