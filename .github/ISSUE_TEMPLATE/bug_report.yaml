@@ -1,0 +1,35 @@
+name: Bug Report
+description: File a bug report.
+title: "Bug: "
+labels:
+  - bug / fix
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! If this bug occurred during local generation check your 
+        Archipelago install for a log (probably `C:\ProgramData\Archipelago\logs`)
+        and upload it with this report, as well as all yaml files used.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: expected-results
+    attributes:
+      label: What were the expected results?
+    validations:
+      required: true
+  - type: dropdown
+    id: version
+    attributes:
+      label: Software
+      description: Where did this bug occur?
+      options:
+        - Website
+        - Local generation
+        - While playing
+    validations:
+      required: true

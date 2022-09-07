@@ -16,15 +16,18 @@ are queued up for it.
 In the case that the client does not authenticate properly and receives a [ConnectionRefused](#connectionrefused) then 
 the server will maintain the connection and allow for follow-up [Connect](#connect) packet.
 
-There are libraries available that implement this network protocol in 
-[Python](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py), 
-[Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java), 
-[.NET](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net) and 
-[C++](https://github.com/black-sliver/apclientpp)
+There are also a number of community-supported libraries available that implement this network protocol to make integrating with Archipelago easier.
 
-For Super Nintendo games there are clients available in 
-[Python](https://github.com/ArchipelagoMW/Archipelago/blob/main/SNIClient.py). There is also a game specific client for 
-[Final Fantasy 1](https://github.com/ArchipelagoMW/Archipelago/blob/main/FF1Client.py)
+| Language/Runtime              | Project                                                                                            | Remarks                                                                         |
+|-------------------------------|----------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| Python                        | [Archipelago CommonClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py) |                                                                                 |
+|                               | [Archipelago SNIClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/SNIClient.py)       | For Super Nintendo Game Support; Utilizes [SNI](https://github.com/alttpo/sni). |
+| JVM (Java / Kotlin)           | [Archipelago.MultiClient.Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java)      |                                                                                 |
+| .NET (C# / C++ / F# / VB.NET) | [Archipelago.MultiClient.Net](https://www.nuget.org/packages/Archipelago.MultiClient.Net)          |                                                                                 |
+| C++                           | [apclientpp](https://github.com/black-sliver/apclientpp)                                           | almost-header-only                                                              |
+|                               | [APCpp](https://github.com/N00byKing/APCpp)                                                        | CMake                                                                           |
+| JavaScript / TypeScript       | [archipelago.js](https://www.npmjs.com/package/archipelago.js)                                     | Browser and Node.js Supported                                                   |
+| Haxe                          | [hxArchipelago](https://lib.haxe.org/p/hxArchipelago)                                              |                                                                                 |
 
 ## Synchronizing Items
 When the client receives a [ReceivedItems](#receiveditems) packet, if the `index` argument does not match the next index
@@ -171,7 +174,8 @@ The arguments for RoomUpdate are identical to [RoomInfo](#roominfo) barring:
 All arguments for this packet are optional, only changes are sent.
 
 ### Print
-Sent to clients purely to display a message to the player.
+Sent to clients purely to display a message to the player. 
+* *Deprecation warning: clients that connect with version 0.3.5 or higher will nolonger recieve Print packets, instead all messsages are send as [PrintJSON](#PrintJSON)*
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
@@ -183,11 +187,22 @@ being sent with this packet allows for more configurable or specific messaging.
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| data | list\[[JSONMessagePart](#jsonmessagepart)\] | Type of this part of the message. |
-| type | str | May be present to indicate the nature of this message. Known types are Hint and ItemSend. |
+| data | list\[[JSONMessagePart](#JSONMessagePart)\] | Type of this part of the message. |
+| type | str | May be present to indicate the [PrintJsonType](#PrintJsonType) of this message. |
 | receiving | int | Is present if type is Hint or ItemSend and marks the destination player's ID. |
 | item | [NetworkItem](#networkitem) | Is present if type is Hint or ItemSend and marks the source player id, location id, item id and item flags. |
 | found | bool | Is present if type is Hint, denotes whether the location hinted for was checked. |
+| countdown | int | Is present if type is `Countdown`, denotes the amount of seconds remaining on the countdown. |
+
+##### PrintJsonType
+PrintJsonType indicates the type of [PrintJson](#PrintJson) packet, different types can be handled differently by the client and can also contain additional arguments. When receiving an unknown type the data's list\[[JSONMessagePart](#JSONMessagePart)\] should still be printed as normal. 
+
+Currently defined types are:
+| Type | Notes |
+| ---- | ----- |
+| ItemSend | The message is in response to a player receiving an item. |
+| Hint | The message is in response to a player hinting. |
+| Countdown | The message contains information about the current server Countdown. |
 
 ### DataPackage
 Sent to clients to provide what is known as a 'data package' which contains information to enable a client to most 

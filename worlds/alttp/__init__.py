@@ -4,6 +4,7 @@ import random
 import threading
 import typing
 
+import Utils
 from BaseClasses import Item, CollectionState, Tutorial
 from .Dungeons import create_dungeons
 from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
@@ -136,6 +137,10 @@ class ALTTPWorld(World):
 
     create_items = generate_itempool
 
+    enemizer_path: str = Utils.get_options()["generator"]["enemizer_path"] \
+        if os.path.isabs(Utils.get_options()["generator"]["enemizer_path"]) \
+        else Utils.local_path(Utils.get_options()["generator"]["enemizer_path"])
+
     def __init__(self, *args, **kwargs):
         self.dungeon_local_item_names = set()
         self.dungeon_specific_item_names = set()
@@ -150,11 +155,11 @@ class ALTTPWorld(World):
             raise FileNotFoundError(rom_file)
 
     def generate_early(self):
+        if self.use_enemizer():
+            check_enemizer(self.enemizer_path)
+
         player = self.player
         world = self.world
-
-        if self.use_enemizer():
-            check_enemizer(world.enemizer)
 
         # system for sharing ER layouts
         self.er_seed = str(world.random.randint(0, 2 ** 64))
@@ -360,7 +365,7 @@ class ALTTPWorld(World):
             patch_rom(world, rom, player, use_enemizer)
 
             if use_enemizer:
-                patch_enemizer(world, player, rom, world.enemizer, output_directory)
+                patch_enemizer(world, player, rom, self.enemizer_path, output_directory)
 
             if world.is_race:
                 patch_race_rom(rom, world, player)
@@ -373,7 +378,7 @@ class ALTTPWorld(World):
                 'hud': world.hud_palettes[player],
                 'sword': world.sword_palettes[player],
                 'shield': world.shield_palettes[player],
-                'link': world.link_palettes[player]
+                # 'link': world.link_palettes[player]
             }
             palettes_options = {key: option.current_key for key, option in palettes_options.items()}
 
