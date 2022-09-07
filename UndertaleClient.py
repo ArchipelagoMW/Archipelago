@@ -136,6 +136,12 @@ class UndertaleContext(CommonContext):
                     os.remove(root+"/"+file)
                 elif file.find(".mine") > -1:
                     os.remove(root+"/"+file)
+                elif file.find(".flag") > -1:
+                    os.remove(root+"/"+file)
+                elif file.find("scout") > -1:
+                    os.remove(root+"/"+file)
+                elif file.find(".hint") > -1:
+                    os.remove(root+"/"+file)
 
     async def connection_closed(self):
         await super().connection_closed()
@@ -204,6 +210,9 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         await ctx.send_msgs([{"cmd": "Get", "keys": [str(ctx.slot)+" RoutesDone neutral", str(ctx.slot)+" RoutesDone pacifist", str(ctx.slot)+" RoutesDone genocide"]}])
         await ctx.send_msgs([{"cmd": "SetNotify", "keys": [str(ctx.slot)+" RoutesDone neutral", str(ctx.slot)+" RoutesDone pacifist", str(ctx.slot)+" RoutesDone genocide"]}])
         print(ctx.slot)
+        if args["slot_data"]['only_flakes']:
+            with open(os.path.expandvars(r"%localappdata%/UNDERTALE/GenoNoChest.flag"), 'w') as f:
+                f.close()
         if not args["slot_data"]['key_hunt']:
             ctx.pieces_needed = 0
         if args["slot_data"]['rando_love']:
@@ -277,6 +286,18 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                 if ctx.route == "pacifist" or ctx.route == "all_routes":
                     ctx.progkeys.append(77782)
                 place = "Core Exit"
+    elif cmd == 'LocationInfo':
+        locationid = args["locations"][0].location
+        filename = f"{str(locationid-12000)}.hint"
+        with open(os.path.expandvars(r"%localappdata%/UNDERTALE/" + filename), 'w') as f:
+            toDraw = ""
+            for i in range(20):
+                if i < len(str(ctx.item_names[args["locations"][0].item])):
+                    toDraw += str(ctx.item_names[args["locations"][0].item])[i]
+                else:
+                    break
+            f.write(toDraw)
+            f.close()
     elif cmd == 'Retrieved':
         if str(ctx.slot)+" RoutesDone neutral" in args["keys"]:
             if args["keys"][str(ctx.slot)+" RoutesDone neutral"] is not None:
@@ -458,6 +479,10 @@ async def game_watcher(ctx: UndertaleContext):
                 if file.find("DontBeMad.mad") > -1 and "DeathLink" in ctx.tags:
                     os.remove(root+"/"+file)
                     await ctx.send_death()
+                if file.find("scout.") > -1:
+                    if (ctx.server_locations.__contains__(int(file.split(".")[1])+12000)):
+                        await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [int(file.split(".")[1])+12000], "create_as_hint": int(2)}])
+                    os.remove(root+"/"+file)
                 if file.find("check ") > -1:
                     st = file.split("check ", -1)[1]
                     st = st.split(".spot", -1)[0]
