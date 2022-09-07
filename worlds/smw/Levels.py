@@ -106,7 +106,9 @@ level_info_dict = {
     0x35: SMWLevel(LocationName.valley_fortress_region, 0x37B59, 0x41, SMWPath(0x08, 0x32, 0x04)),
     0x34: SMWLevel(LocationName.valley_castle_region, 0x37B57, 0x40, SMWPath(0x08, 0x31, 0x04)),
     0x31: SMWLevel(LocationName.front_door, 0x37B37, 0x45),
+    0x81: SMWLevel(LocationName.front_door, 0x37B37, 0x45), # Fake Extra Front Door
     0x32: SMWLevel(LocationName.back_door, 0x37B39, 0x42),
+    0x82: SMWLevel(LocationName.back_door, 0x37B39, 0x42), # Fake Extra Back Door
     0x30: SMWLevel(LocationName.valley_star_road, 0x37B34, 0x44),
 
     0x5B: SMWLevel(LocationName.star_road_donut, 0x37DD3, 0x50),
@@ -416,7 +418,22 @@ location_id_to_level_id = {
     LocationName.special_zone_8_dragon: [0x49, 2],
 }
 
-def generate_level_list(world):
+def generate_level_list(world, player):
+
+    if not world.level_shuffle[player]:
+        out_level_list = full_level_list.copy()
+        out_level_list[0x00] = 0x03
+        out_level_list[0x11] = 0x28
+
+        if world.bowser_castle_doors[player] == "fast":
+            out_level_list[0x41] = 0x82
+            out_level_list[0x42] = 0x32
+        elif world.bowser_castle_doors[player] == "slow":
+            out_level_list[0x41] = 0x31
+            out_level_list[0x42] = 0x81
+
+        return out_level_list
+
     shuffled_level_list = []
     castle_fortress_levels_copy = castle_levels.copy() + fortress_levels.copy()
     world.random.shuffle(castle_fortress_levels_copy)
@@ -432,7 +449,7 @@ def generate_level_list(world):
     world.random.shuffle(switch_palace_levels_copy)
 
     # Yoshi's Island
-    shuffled_level_list.append(0x28)
+    shuffled_level_list.append(0x03)
     shuffled_level_list.append(easy_single_levels_copy.pop(0))
     shuffled_level_list.append(0x14)
     shuffled_level_list.append(easy_single_levels_copy.pop(0))
@@ -454,7 +471,7 @@ def generate_level_list(world):
     shuffled_level_list.append(single_levels_copy.pop(0))
     shuffled_level_list.append(single_levels_copy.pop(0))
     shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
-    shuffled_level_list.append(0x03)
+    shuffled_level_list.append(0x28)
     shuffled_level_list.append(0x16)
 
     double_levels_copy = (easy_double_levels_copy.copy() + hard_double_levels_copy.copy())
@@ -517,9 +534,16 @@ def generate_level_list(world):
     shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
 
     # Front/Back Door
-    shuffled_level_list.append(0x31)
-    shuffled_level_list.append(0x32)
-    
+    if world.bowser_castle_doors[player] == "fast":
+        shuffled_level_list.append(0x82)
+        shuffled_level_list.append(0x32)
+    elif world.bowser_castle_doors[player] == "slow":
+        shuffled_level_list.append(0x31)
+        shuffled_level_list.append(0x81)
+    else:
+        shuffled_level_list.append(0x31)
+        shuffled_level_list.append(0x32)
+
     shuffled_level_list.append(0x30)
 
     # Star Road

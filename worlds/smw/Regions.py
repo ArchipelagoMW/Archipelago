@@ -1091,6 +1091,10 @@ def connect_regions(world, player, level_to_tile_dict):
     # Connect levels to each other
     for current_level_id, current_level_data in level_info_dict.items():
         # Connect tile regions to correct level regions
+
+        if current_level_id not in level_to_tile_dict.keys():
+            continue
+
         current_tile_id = level_to_tile_dict[current_level_id]
         current_tile_data = level_info_dict[current_tile_id]
         current_tile_name = current_tile_data.levelName

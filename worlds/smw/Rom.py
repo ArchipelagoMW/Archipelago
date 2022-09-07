@@ -583,6 +583,9 @@ def handle_level_shuffle(rom, active_level_dict):
     ### End Fix Snake Blocks
 
     for level_id, level_data in level_info_dict.items():
+        if level_id not in active_level_dict.keys():
+            continue
+
         tile_id = active_level_dict[level_id]
         tile_data = level_info_dict[tile_id]
 
@@ -691,9 +694,8 @@ def patch_rom(world, rom, player, active_level_dict):
     handle_yoshi_box(rom)
     handle_bowser_damage(rom)
 
-    # Handle Level Shuffle Here
-    if world.level_shuffle[player]:
-        handle_level_shuffle(rom, active_level_dict)
+    # Handle Level Shuffle
+    handle_level_shuffle(rom, active_level_dict)
 
     # Handle Music Shuffle
     if world.music_shuffle[player] != "none":

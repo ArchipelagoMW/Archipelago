@@ -52,6 +52,20 @@ class DragonCoinChecks(Toggle):
     display_name = "Dragon Coin Checks"
 
 
+class BowserCastleDoors(Choice):
+    """
+    How the doors of Bowser's Castle
+    Vanilla: Front and Back Doors behave as vanilla
+    Fast: Both doors behave as the Back Door
+    Slow: Both doors behave as the Front Door
+    """
+    display_name = "Bowser Castle Doors"
+    option_vanilla = 0
+    option_fast = 1
+    option_slow = 2
+    default = 0
+
+
 class LevelShuffle(Toggle):
     """
     Whether levels are shuffled
@@ -165,6 +179,7 @@ smw_options: typing.Dict[str, type(Option)] = {
     "number_of_yoshi_eggs": NumberOfYoshiEggs,
     "percentage_of_yoshi_eggs": PercentageOfYoshiEggs,
     "dragon_coin_checks": DragonCoinChecks,
+    "bowser_castle_doors": BowserCastleDoors,
     "level_shuffle": LevelShuffle,
     "display_sent_item_popups": DisplaySentItemPopups,
     "display_received_item_popups": DisplayReceivedItemPopups,

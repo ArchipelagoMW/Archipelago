@@ -80,12 +80,8 @@ class SMWWorld(World):
     def generate_basic(self):
         itempool: typing.List[SMWItem] = []
 
-        if self.world.level_shuffle[self.player]:
-            self.active_level_dict = dict(zip(generate_level_list(self.world), full_level_list))
-            self.topology_present = True
-        else:
-            # SMW_TODO: Make Back Door -> Front 
-            self.active_level_dict = dict(zip(full_level_list, full_level_list))
+        self.active_level_dict = dict(zip(generate_level_list(self.world, self.player), full_level_list))
+        self.topology_present = self.world.level_shuffle[self.player]
 
         connect_regions(self.world, self.player, self.active_level_dict)
         
