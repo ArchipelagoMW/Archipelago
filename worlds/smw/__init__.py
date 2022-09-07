@@ -8,7 +8,7 @@ from .Items import SMWItem, ItemData, item_table
 from .Locations import SMWLocation, all_locations, setup_locations
 from .Options import smw_options
 from .Regions import create_regions, connect_regions
-from .Levels import full_level_list, generate_level_list
+from .Levels import full_level_list, generate_level_list, location_id_to_level_id
 from .Rules import set_rules
 from ..generic.Rules import add_rule
 from .Names import ItemName, LocationName
@@ -180,7 +180,6 @@ class SMWWorld(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
-        return
         if self.topology_present:
             world_names = [
                 LocationName.yoshis_island_region,
@@ -193,12 +192,36 @@ class SMWWorld(World):
                 LocationName.star_road_region,
                 LocationName.special_zone_region,
             ]
+            world_cutoffs = [
+                0x07,
+                0x13,
+                0x1F,
+                0x26,
+                0x30,
+                0x39,
+                0x44,
+                0x4F,
+                0x59
+            ]
             er_hint_data = {}
-            for world_index in range(len(world_names)):
-                for level_index in range(5):
-                    level_region = self.world.get_region(self.active_level_dict[world_index * 5 + level_index], self.player)
-                    for location in level_region.locations:
-                        er_hint_data[location.address] = world_names[world_index]
+            for loc_name, level_data in location_id_to_level_id.items():
+                level_id = level_data[0]
+
+                if level_id not in self.active_level_dict:
+                    continue
+
+                keys_list = list(self.active_level_dict.keys())
+                level_index = keys_list.index(level_id)
+                for i in range(len(world_cutoffs)):
+                    if level_index >= world_cutoffs[i]:
+                        continue
+
+                    #print("Hint Found: ", loc_name, " | ", hex(level_index), " | ", world_names[i])
+
+                    location = self.world.get_location(loc_name, self.player)
+                    er_hint_data[location.address] = world_names[i]
+                    break
+
             multidata['er_hint_data'][self.player] = er_hint_data
 
     def create_regions(self):
