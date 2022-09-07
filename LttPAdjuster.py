@@ -83,9 +83,9 @@ def main():
     parser.add_argument('--ow_palettes', default='default',
                         choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
                                  'sick'])
-    parser.add_argument('--link_palettes', default='default',
-                        choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
-                                 'sick'])
+    # parser.add_argument('--link_palettes', default='default',
+    #                     choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
+    #                              'sick'])
     parser.add_argument('--shield_palettes', default='default',
                         choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
                                  'sick'])
