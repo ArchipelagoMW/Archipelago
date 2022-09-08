@@ -38,7 +38,7 @@ class PrepLevelMode(Enum):
 
 class Overcooked2World(World):
     """
-    Overcooked! 2 is a frantic paced cooking arcade game where
+    Overcooked! 2 is a frantic paced arcade cooking game where
     players race against the clock to complete orders for points. Bring
     peace to the Onion Kingdom once again by recovering lost items and abilities,
     earning stars to unlock levels, and defeating the unbread horde. Levels are
