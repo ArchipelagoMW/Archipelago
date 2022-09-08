@@ -188,7 +188,8 @@ class Overcooked2Level:
         return Overcooked2GenericLevel(self.level_id())
 
 
-def level_shuffle_factory(rng: Random, shuffle_prep_levels: bool, shuffle_horde_levels=False) -> Dict[int, Overcooked2GenericLevel]:  # return <story_level_id, level>
+ # return <story_level_id, level>
+def level_shuffle_factory(rng: Random, shuffle_prep_levels: bool, shuffle_horde_levels: bool) -> Dict[int, Overcooked2GenericLevel]:
     # Create a list of all valid levels for selection
     # (excludes tutorial, throne, kevin and sometimes horde levels)
     pool = list()

@@ -23,7 +23,7 @@ item_table: Dict[str, ItemData] = {
     "Larger Tip Jar"                : ItemData(oc2_base_id + 7 ),
     "Progressive Dash"              : ItemData(oc2_base_id + 8 ),
     "Progressive Throw/Catch"       : ItemData(oc2_base_id + 9 ),
-    "Coin Purse (Horde)"            : ItemData(oc2_base_id + 10),
+    "Coin Purse"                    : ItemData(oc2_base_id + 10),
     "Remote Control Batteries"      : ItemData(oc2_base_id + 11),
     "Wok Wheels"                    : ItemData(oc2_base_id + 12),
     "Dish Scrubber"                 : ItemData(oc2_base_id + 13),
@@ -50,18 +50,18 @@ item_table: Dict[str, ItemData] = {
     "Ok Emote"                      : ItemData(oc2_base_id + 34),
     "Ramp Button"                   : ItemData(oc2_base_id + 35),
     "Bonus Star"                    : ItemData(oc2_base_id + 36),
+    "Calmer Unbread"                : ItemData(oc2_base_id + 37),
 }
 
 # exclusive
-oc2_end_id = item_table["Bonus Star"].code + 1
+oc2_end_id = item_table["Calmer Unbread"].code + 1
 
 item_frequencies = {
     "Progressive Throw/Catch": 2,
     "Larger Tip Jar": 2,
     "Order Lookahead": 2,
     "Progressive Dash": 2,
-    "Bonus Star": 0,
-    "Coin Purse (Horde)": 0, # NYI
+    "Bonus Star": 0, # Filler Item
     # default: 1
 }
 
@@ -82,6 +82,8 @@ item_name_to_config_name = {
     "Faster Condiment/Drink Switch": "CarnivalDispenserRefactoryTime",
     "Guest Patience"               : "CustomOrderLifetime"           ,
     "Ramp Button"                  : "DisableRampButton"             ,
+    "Calmer Unbread"               : "AggressiveHorde"               ,
+    "Coin Purse"                   : "DisableEarnHordeMoney"         ,
 }
 
 vanilla_values = {
@@ -101,6 +103,8 @@ vanilla_values = {
     "RespawnTime": 5.0,
     "CarnivalDispenserRefactoryTime": 0.0,
     "CustomOrderLifetime": 100.0,
+    "AggressiveHorde": False,
+    "DisableEarnHordeMoney": False,
 }
 
 item_id_to_name: Dict[int, str] = {

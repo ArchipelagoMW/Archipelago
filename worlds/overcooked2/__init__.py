@@ -68,7 +68,15 @@ class Overcooked2World(World):
     def __init__(self, *args):
         super().__init__(*args)
         self.itempool = []
+
     # Helper Functions
+
+    def is_level_horde(self, level_id: int) -> bool:
+        return self.options["IncludeHordeLevels"] and \
+            (self.level_mapping is not None) and \
+            level_id in self.level_mapping.keys() and \
+            self.level_mapping[level_id].is_horde()
+
 
     def create_item(self, item: str) -> Overcooked2Item:
         if is_progression(item):
@@ -172,7 +180,11 @@ class Overcooked2World(World):
         # Assign new kitchens to each spot on the overworld using pure random chance and nothing else
         if self.options["ShuffleLevelOrder"]:
             self.level_mapping = \
-                level_shuffle_factory(self.world.random, self.options["PrepLevels"] != PrepLevelMode.excluded.value)
+                level_shuffle_factory(
+                    self.world.random,
+                    self.options["PrepLevels"] != PrepLevelMode.excluded.value,
+                    self.options["IncludeHordeLevels"],
+                )
         else:
             self.level_mapping = None
 
@@ -206,12 +218,8 @@ class Overcooked2World(World):
                     1,
                 )
 
-            is_horde = (self.level_mapping is not None) and \
-                level_id in self.level_mapping.keys() and \
-                self.level_mapping[level_id].is_horde()
-
             # Add Locations to house star aquisition events, except for horde levels
-            if not is_horde:
+            if not self.is_level_horde(level_id):
                 for n in [1, 2, 3]:
                     self.add_level_location(
                         level_name,
@@ -243,6 +251,10 @@ class Overcooked2World(World):
     def create_items(self):
         # Make Items
         for item_name in item_table:
+
+            if item_name in ["Coin Purse", "Calmer Unbread"] and not self.options["IncludeHordeLevels"]:
+                continue # don't put items in the pool which have no effect
+
             if item_name in item_frequencies:
                 freq = item_frequencies[item_name]
                 self.itempool += [self.create_item(item_name) for _ in range(freq)]
@@ -261,6 +273,9 @@ class Overcooked2World(World):
     def generate_basic(self) -> None:
         # Add Events (Star Acquisition)
         for level in Overcooked2Level():
+            if self.is_level_horde(level.level_id()):
+                continue # horde levels don't have star rewards
+
             for n in [1, 2, 3]:
                 self.place_event(level.location_name_star_event(n), "Star")
 

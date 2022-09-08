@@ -110,6 +110,18 @@ ramp_logic = {
     "Kevin-8": ["5-1", "6-2"], # Same as above, but 6-2 spawns the ramp to K8
 }
 
+horde_logic = { # Additive
+    ("Calmer Unbread", 0.7),
+    ("Coin Purse", 0.6),
+    ("Spare Plate", 0.3),
+    ("Progressive Throw/Catch", 0.3),
+    ("Progressive Dash", 0.3),
+    ("Sharp Knife", 0.2),
+    ("Dish Scrubber", 0.2),
+    ("Burn Leniency", 0.1),
+    ("Clean Dishes", 0.1),
+}
+
 # 1, 2, 3, 4, 5, 6
 
 # Level 1 - dict keyed by friendly level names
@@ -144,7 +156,6 @@ level_logic = {
                 ("Dish Scrubber", 0.2),
                 ("Progressive Dash", 0.3),
                 ("Progressive Throw/Catch", 0.5),
-                ("Catch", 0.1),
                 ("Clean Dishes", 0.1),
                 ("Guest Patience", 0.1),
                 ("Order Lookahead", 0.2),
@@ -2432,11 +2443,11 @@ level_logic = {
     "Horde 1-1": (
         ( # 1-star
             { # Exclusive
-
+                
             },
             { # Additive
 
-            },
+            }
         ),
         ( # 2-star
             { # Exclusive
@@ -2460,9 +2471,7 @@ level_logic = {
             { # Exclusive
 
             },
-            { # Additive
-
-            },
+            horde_logic
         ),
         ( # 2-star
             { # Exclusive
@@ -2749,9 +2758,7 @@ level_logic = {
             { # Exclusive
 
             },
-            { # Additive
-
-            },
+            horde_logic,
         ),
         ( # 2-star
             { # Exclusive
@@ -2775,9 +2782,7 @@ level_logic = {
             { # Exclusive
 
             },
-            { # Additive
-
-            },
+            horde_logic,
         ),
         ( # 2-star
             { # Exclusive
@@ -2801,9 +2806,7 @@ level_logic = {
             { # Exclusive
 
             },
-            { # Additive
-
-            },
+            horde_logic,
         ),
         ( # 2-star
             { # Exclusive
@@ -2827,9 +2830,7 @@ level_logic = {
             { # Exclusive
 
             },
-            { # Additive
-
-            },
+            horde_logic,
         ),
         ( # 2-star
             { # Exclusive
@@ -2853,9 +2854,7 @@ level_logic = {
             { # Exclusive
 
             },
-            { # Additive
-
-            },
+            horde_logic,
         ),
         ( # 2-star
             { # Exclusive
@@ -2879,9 +2878,7 @@ level_logic = {
             { # Exclusive
 
             },
-            { # Additive
-
-            },
+            horde_logic,
         ),
         ( # 2-star
             { # Exclusive
@@ -2905,9 +2902,7 @@ level_logic = {
             { # Exclusive
 
             },
-            { # Additive
-
-            },
+            horde_logic,
         ),
         ( # 2-star
             { # Exclusive
@@ -2931,9 +2926,7 @@ level_logic = {
             { # Exclusive
 
             },
-            { # Additive
-
-            },
+            horde_logic,
         ),
         ( # 2-star
             { # Exclusive
@@ -3295,9 +3288,7 @@ level_logic = {
             { # Exclusive
 
             },
-            { # Additive
-
-            },
+            horde_logic,
         ),
         ( # 2-star
             { # Exclusive
@@ -3347,9 +3338,7 @@ level_logic = {
             { # Exclusive
 
             },
-            { # Additive
-
-            },
+            horde_logic,
         ),
         ( # 2-star
             { # Exclusive

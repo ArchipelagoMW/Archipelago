@@ -28,6 +28,11 @@ class ShuffleLevelOrder(OC2OnToggle):
     display_name = "Shuffle Level Order"
 
 
+class IncludeHordeLevels(OC2OnToggle):
+    """Includes "Horde Defence" levels in the pool of possible kitchens when Shuffle Level Order is enabled. Also adds two horde-specific items into the item pool."""
+    display_name = "Include Horde Levels"
+
+
 class FixBugs(OC2OnToggle):
     """Fixes Bugs Present in the base game:
     - Double Serving Exploit
@@ -48,7 +53,7 @@ class PrepLevels(Choice):
     - Original: Prep Levels may appear
 
     - Excluded: Prep Levels are excluded from the pool during level shuffling
-    
+
     - All You Can Eat: Prep Levels may appear, but the timer automatically starts. The star score requirements are also adjusted to use the All You Can Eat World Record (if it exists)"""
     auto_display_name = True
     display_name = "Prep Level Behavior"
@@ -60,7 +65,7 @@ class PrepLevels(Choice):
 
 class StarsToWin(Range):
     """Number of stars required to unlock 6-6.
-    
+
     Level purchase requirements between 1-1 and 6-6 will be spread between these two numbers. Using too high of a number may result in more frequent generation failures, especially when horde levels are enabled."""
     display_name = "Stars to Win"
     range_start = 0
@@ -79,6 +84,7 @@ class StarThresholdScale(Range):
 overcooked_options = {
     # randomization options
     "shuffle_level_order": ShuffleLevelOrder,
+    "include_horde_levels": IncludeHordeLevels,
     "prep_levels": PrepLevels,
 
     # quality of life options

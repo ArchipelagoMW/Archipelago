@@ -58,6 +58,9 @@ class Overcooked2Test(unittest.TestCase):
 
         self.assertFalse(is_progression("Preparing Emote"))
 
+        for item_name in item_table:
+            item_to_unlock_event(item_name)
+
     def testOvercooked2Levels(self):
         level_count = 0
         for _ in Overcooked2Level():
@@ -67,7 +70,7 @@ class Overcooked2Test(unittest.TestCase):
     def testOvercooked2ShuffleFactory(self):
         previous_runs = set()
         for seed in range(0, 5):
-            levels = level_shuffle_factory(Random(seed), True)
+            levels = level_shuffle_factory(Random(seed), True, False)
 
             self.assertEqual(len(levels), 44)
 
@@ -80,7 +83,7 @@ class Overcooked2Test(unittest.TestCase):
             self.assertNotIn(levels[15], previous_runs)
             previous_runs.add(levels[15])
 
-        levels = level_shuffle_factory(Random(123), False)
+        levels = level_shuffle_factory(Random(123), False, True)
         self.assertEqual(len(levels), 44)
 
     def testLevelNameRepresentation(self):
@@ -113,9 +116,11 @@ class Overcooked2Test(unittest.TestCase):
             for l in logic:
                 self.assertEqual(len(l), 2)
                 (exclusive, additive) = l
+
                 for req in exclusive:
                     self.assertEqual(type(req), str)
                     self.assertIn(req, item_table.keys())
+
                 if len(additive) != 0:
                     self.assertGreater(len(additive), 1)
                     total_weight = 0.0
@@ -125,6 +130,7 @@ class Overcooked2Test(unittest.TestCase):
                         self.assertEqual(type(item_name), str)
                         self.assertEqual(type(weight), float)
                         total_weight += weight
+                        self.assertIn(item_name, item_table.keys())
 
                     self.assertGreaterEqual(total_weight, 0.99, "Additive requirements must add to 1.0 or greater to have any effect")
 
