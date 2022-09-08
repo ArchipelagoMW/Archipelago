@@ -241,14 +241,12 @@ class Overcooked2World(World):
         self.world.completion_condition[self.player] = completion_condition
 
     def create_items(self):
-        # Make Items with multiple instances
-        for item_name in item_frequencies:
-            freq = item_frequencies[item_name]
-            self.itempool += [self.create_item(item_name) for _ in range(freq)]
-
-        # Make Items with one instance
+        # Make Items
         for item_name in item_table:
-            if item_name not in item_frequencies:
+            if item_name in item_frequencies:
+                freq = item_frequencies[item_name]
+                self.itempool += [self.create_item(item_name) for _ in range(freq)]
+            else:
                 self.itempool.append(self.create_item(item_name))
 
         # Fill any free space with filler

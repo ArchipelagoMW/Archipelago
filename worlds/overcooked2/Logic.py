@@ -63,9 +63,16 @@ def meets_requirements(state: CollectionState, name: str, stars: int, player: in
         return False
 
     for item_name in item_frequencies:
-        if item_name in exclusive_reqs:
-            if not state.has(item_name, player, item_frequencies[item_name]):
-                return False # need to have all variants of a progressive item to get the score
+        if item_name not in exclusive_reqs:
+            continue # not a requirement
+        
+        if state.has(item_name, player, item_frequencies[item_name]):
+            continue # player has enough
+
+        if item_name == "Progressive Throw/Catch":
+            continue # catching basically does nothing for skilled players, so ignore it's requirement
+
+        return False # need to have all variants of a progressive item to get the score
 
     # Check if we meet additive requirements
     if len(additive_reqs) == 0:
@@ -136,7 +143,7 @@ level_logic = {
                 ("Larger Tip Jar", 0.3),
                 ("Dish Scrubber", 0.2),
                 ("Progressive Dash", 0.3),
-                ("Throw", 0.5),
+                ("Progressive Throw/Catch", 0.5),
                 ("Catch", 0.1),
                 ("Clean Dishes", 0.1),
                 ("Guest Patience", 0.1),
@@ -148,7 +155,7 @@ level_logic = {
                 "Progressive Dash",
                 "Spare Plate",
                 "Larger Tip Jar",
-                "Throw",
+                "Progressive Throw/Catch",
             ],
             { # Additive
             },
@@ -313,7 +320,7 @@ level_logic = {
     "Story 2-1": (
         ( # 1-star
             { # Exclusive
-                "Throw",
+                "Progressive Throw/Catch",
             },
             { # Additive
 
@@ -365,7 +372,7 @@ level_logic = {
     "Story 2-3": (
         ( # 1-star
             { # Exclusive
-                "Throw"
+                "Progressive Throw/Catch"
             },
             { # Additive
 
@@ -498,7 +505,7 @@ level_logic = {
 
             },
             { # Additive
-                ("Throw", 1.0),
+                ("Progressive Throw/Catch", 1.0),
                 ("Progressive Dash", 0.5),
                 ("Sharp Knife", 0.5),
                 ("Larger Tip Jar", 0.25),
@@ -507,7 +514,7 @@ level_logic = {
         ),
         ( # 2-star
             { # Exclusive
-                "Throw",
+                "Progressive Throw/Catch",
             },
             { # Additive
 
@@ -559,7 +566,7 @@ level_logic = {
         ),
         ( # 2-star
             { # Exclusive
-                "Throw",
+                "Progressive Throw/Catch",
             },
             { # Additive
 
@@ -585,7 +592,7 @@ level_logic = {
         ),
         ( # 2-star
             { # Exclusive
-                "Throw",
+                "Progressive Throw/Catch",
             },
             { # Additive
 
@@ -663,7 +670,7 @@ level_logic = {
         ),
         ( # 2-star
             { # Exclusive
-                "Throw",
+                "Progressive Throw/Catch",
             },
             { # Additive
 
@@ -1071,7 +1078,7 @@ level_logic = {
     "Story 6-6": (
         ( # 1-star
             { # Exclusive
-                "Throw",
+                "Progressive Throw/Catch",
                 "Progressive Dash",
                 "Spare Plate",
             },
@@ -1359,7 +1366,7 @@ level_logic = {
     "Surf 1-3": (
         ( # 1-star
             { # Exclusive
-                "Throw",
+                "Progressive Throw/Catch",
             },
             { # Additive
 
@@ -1627,7 +1634,7 @@ level_logic = {
         ),
         ( # 2-star
             { # Exclusive
-                "Throw",
+                "Progressive Throw/Catch",
             },
             { # Additive
 
@@ -2636,14 +2643,14 @@ level_logic = {
 
             },
             { # Additive
-                ("Throw", 0.5),
+                ("Progressive Throw/Catch", 0.5),
                 ("Progressive Dash", 0.5),
                 ("Coal Bucket", 0.5),
             },
         ),
         ( # 2-star
             { # Exclusive
-                "Throw",
+                "Progressive Throw/Catch",
                 "Coal Bucket",
             },
             { # Additive

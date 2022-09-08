@@ -22,8 +22,8 @@ item_table: Dict[str, ItemData] = {
     "Clean Dishes"                  : ItemData(oc2_base_id + 6 ),
     "Larger Tip Jar"                : ItemData(oc2_base_id + 7 ),
     "Progressive Dash"              : ItemData(oc2_base_id + 8 ),
-    "Throw"                         : ItemData(oc2_base_id + 9 ),
-    "Catch"                         : ItemData(oc2_base_id + 10),
+    "Progressive Throw/Catch"       : ItemData(oc2_base_id + 9 ),
+    "Coin Purse (Horde)"            : ItemData(oc2_base_id + 10),
     "Remote Control Batteries"      : ItemData(oc2_base_id + 11),
     "Wok Wheels"                    : ItemData(oc2_base_id + 12),
     "Dish Scrubber"                 : ItemData(oc2_base_id + 13),
@@ -56,10 +56,13 @@ item_table: Dict[str, ItemData] = {
 oc2_end_id = item_table["Bonus Star"].code + 1
 
 item_frequencies = {
+    "Progressive Throw/Catch": 2,
     "Larger Tip Jar": 2,
     "Order Lookahead": 2,
     "Progressive Dash": 2,
     "Bonus Star": 0,
+    "Coin Purse (Horde)": 0, # NYI
+    # default: 1
 }
 
 item_name_to_config_name = {
@@ -69,8 +72,6 @@ item_name_to_config_name = {
     "Fire Extinguisher"            : "DisableFireExtinguisher"       ,
     "Bellows"                      : "DisableBellows"                ,
     "Clean Dishes"                 : "PlatesStartDirty"              ,
-    "Throw"                        : "DisableThrow"                  ,
-    "Catch"                        : "DisableCatch"                  ,
     "Remote Control Batteries"     : "DisableControlStick"           ,
     "Wok Wheels"                   : "DisableWokDrag"                ,
     "Dish Scrubber"                : "WashTimeMultiplier"            ,
@@ -90,8 +91,6 @@ vanilla_values = {
     "DisableFireExtinguisher": False,
     "DisableBellows": False,
     "PlatesStartDirty": False,
-    "DisableThrow": False,
-    "DisableCatch": False,
     "DisableControlStick": False,
     "DisableWokDrag": False,
     "DisableRampButton": False,
@@ -137,6 +136,8 @@ def item_to_unlock_event(item_name: str) -> Dict[str, str]:
         payload = "1"
     elif item_name == "Progressive Dash":
         action = "INC_DASH"
+    elif item_name == "Progressive Throw/Catch":
+        action = "INC_THROW"
     else:
         config_name = item_name_to_config_name[item_name]
         vanilla_value = vanilla_values[config_name]
