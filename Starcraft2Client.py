@@ -291,7 +291,6 @@ class SC2Context(CommonContext):
                             category_panel.add_widget(
                                 Label(text=category, size_hint_y=None, height=50, outline_width=1))
 
-                            # Map is completed
                             for mission in categories[category]:
                                 text = mission
                                 tooltip = ""
@@ -300,10 +299,6 @@ class SC2Context(CommonContext):
                                 if mission in unfinished_missions:
                                     text = f"[color=6495ED]{text}[/color]"
 
-                                    tooltip = f"Uncollected locations:\n"
-                                    tooltip += "\n".join([self.ctx.location_names[loc] for loc in
-                                                          self.ctx.locations_for_mission(mission)
-                                                          if loc in self.ctx.missing_locations])
                                 elif mission in available_missions:
                                     text = f"[color=FFFFFF]{text}[/color]"
                                 # Map requirements not met
@@ -319,6 +314,14 @@ class SC2Context(CommonContext):
                                             tooltip += " and "
                                     if self.ctx.mission_req_table[mission].number > 0:
                                         tooltip += f"{self.ctx.mission_req_table[mission].number} missions completed"
+                                remaining_location_names: typing.List[str] = [
+                                    self.ctx.location_names[loc] for loc in self.ctx.locations_for_mission(mission)
+                                    if loc in self.ctx.missing_locations]
+                                if remaining_location_names:
+                                    if tooltip:
+                                        tooltip += "\n"
+                                    tooltip += f"Uncollected locations:\n"
+                                    tooltip += "\n".join(remaining_location_names)
 
                                 mission_button = MissionButton(text=text, size_hint_y=None, height=50)
                                 mission_button.tooltip_text = tooltip
