@@ -14,7 +14,7 @@ class LocationData:
     text_archive_address: 0x00
     text_script_index: 0
 
-    def __init__(self, name, id, flag, mask, text_archive_address, text_script_index):
+    def __init__(self, name, id, flag, mask, text_archive_address=0x0, text_script_index=0x0):
         self.name = name
         self.id = id
         self.flag_byte = flag

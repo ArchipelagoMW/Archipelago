@@ -3,13 +3,13 @@ import json
 import os
 import multiprocessing
 import subprocess
+
 from asyncio import StreamReader, StreamWriter
 
 from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
 import Utils
 from worlds import network_data_package
-from worlds.mmbn3.Rom import Rom, compress_rom_file
 from worlds.mmbn3.GBAPatch import apply_patch_file
 from worlds.mmbn3.Utils import data_path
 from worlds.mmbn3.Locations import location_data_table
@@ -41,6 +41,7 @@ mmbn3_loc_name_to_id = network_data_package["games"]["MegaMan Battle Network 3"]
 
 script_version: int = 1
 
+testingData = False
 
 def get_item_value(ap_id):
     # TODO OOT had ap_id - 66000. I'm assuming this is because of the ROM offset, which for GBA is 8000000, let's try that?
@@ -55,6 +56,11 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
         """Check GBA Connection State"""
         if isinstance(self.ctx, MMBN3Context):
             logger.info(f"GBA Status: {self.ctx.gba_status}")
+
+    def _cmd_test(self):
+        global testingData
+        logger.info("Sending test package")
+        testingData = True
 
 
 class MMBN3Context(CommonContext):
@@ -96,10 +102,19 @@ class MMBN3Context(CommonContext):
 
 
 def get_payload(ctx: MMBN3Context):
-    return json.dumps({
-        "items": [get_item_value(item.item) for item in ctx.items_received],
-        "playerNames": [name for (i, name) in ctx.player_names.items() if i != 0]
-    })
+    global testingData
+    if testingData:
+        return json.dumps(
+            {
+                "items": ["test"]
+            }
+        )
+    else:
+        return json.dumps(
+            {
+                "items": []
+            }
+        )
 
 
 async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
@@ -129,12 +144,15 @@ def check_item_packet(name,packet):
 
 
 async def gba_sync_task(ctx: MMBN3Context):
+    global testingData
+
     logger.info("Starting GBA connector. Use /gba for status information.")
     while not ctx.exit_event.is_set():
         error_status = None
         if ctx.gba_streams:
             (reader, writer) = ctx.gba_streams
             msg = get_payload(ctx).encode()
+            testingData = False
             writer.write(msg)
             writer.write(b'\n')
             try:
@@ -221,11 +239,11 @@ async def patch_and_run_game(apmmbn3_file):
     decomp_path = base_name + '-decomp.gba'
     comp_path = base_name + '.gba'
     # Load vanilla ROM, patch file, compress ROM
-    rom = Rom(Utils.local_path(Utils.get_options()["mmbn3_options"]["rom_file"]))
-    apply_patch_file(rom, apmmbn3_file)
-    rom.write_to_file(decomp_path)
+    #rom = Rom(Utils.local_path(Utils.get_options()["mmbn3_options"]["rom_file"]))
+    #apply_patch_file(rom, apmmbn3_file)
+    #rom.write_to_file(decomp_path)
     os.chdir(data_path("Compress"))
-    compress_rom_file(decomp_path, comp_path)
+    #compress_rom_file(decomp_path, comp_path)
     os.remove(decomp_path)
     asyncio.create_task(run_game(comp_path))
 

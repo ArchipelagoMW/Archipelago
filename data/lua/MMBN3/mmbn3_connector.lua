@@ -15,19 +15,19 @@ local curstate =  STATE_UNINITIALIZED
 local mmbn3Socket = nil
 local frame = 0
 
-local IsInMenu = false
-local IsInDialog = false
-local IsInBattle = false
-local IsItemQueued = false
-
 -- States
 local ITEMSTATE_READY = "Item State Ready" -- Ready for the next item if there are any
 local ITEMSTATE_ITEMSENTNOTCLAIMED = "Item Sent Not Claimed" -- The ItemBit is set, but the dialog has not been closed yet
 local ITEMSTATE_ITEMQUEUEDNOTSENT = "Item Queued Not Sent" -- There are items to be sent but the ItemBit is not set, usually due to the game being in a non-receivable state
 local itemState = ITEMSTATE_READY
 
-local itemQueue = {}
+local itemsReceived = {}
+local itemsPending = {}
+local itemsClaimed = {}
 
+local previousMemory = {}
+-- Some terminology here. Locations can be "Checked" or "Unchecked", very simple. These can only be sent.
+-- Items are "Sent" from PYthon, and "Received" here. When an item is ready to be collected, it is "Queued". Once the item has been obtained in-game, it is "Claimed"
 
 local acdc_bmd_checks = function()
     local checks ={}
@@ -39,7 +39,6 @@ local acdc_bmd_checks = function()
     checks["ACDC 3 Northeast BMD"] = memory.read_u8(0x020001d2)
     return checks
 end
-
 local sci_bmd_checks = function()
     local checks ={}
     checks["SciLab 1 WWW BMD"] = memory.read_u8(0x20001d8)
@@ -48,7 +47,6 @@ local sci_bmd_checks = function()
     checks["SciLab 2 South BMD"] = memory.read_u8(0x20001d9)
             return checks
 end
-
 local yoka_bmd_checks = function()
     local checks ={}
     checks["Yoka 1 North MBD"] = memory.read_u8(0x20001e0)
@@ -57,7 +55,6 @@ local yoka_bmd_checks = function()
     checks["Yoka 2 Lower BMD"] = memory.read_u8(0x20001e1)
             return checks
 end
-
 local beach_bmd_checks = function()
     local checks ={}
     checks["Beach 1 BMD"] = memory.read_u8(0x20001e8)
@@ -65,7 +62,6 @@ local beach_bmd_checks = function()
     checks["Beach 2 East BMD"] = memory.read_u8(0x20001e9)
             return checks
 end
-
 local undernet_bmd_checks = function()
     local checks ={}
     checks["Undernet 1 South BMD"] = memory.read_u8(0x20001f0)
@@ -88,7 +84,6 @@ local undernet_bmd_checks = function()
     checks["Undernet 7 Northeast BMD"] = memory.read_u8(0x20001f6)
             return checks
 end
-
 local secret_bmd_checks = function()
     local checks ={}
     checks["Secret 1 South BMD"] = memory.read_u8(0x2000200)
@@ -102,7 +97,6 @@ local secret_bmd_checks = function()
     checks["Secret 3 BugFrag BMD"] = memory.read_u8(0x2000202)
             return checks
 end
-
 local school_bmd_checks = function()
     local checks ={}
     checks["School 1 Entrance BMD"] = memory.read_u8(0x2000208)
@@ -113,7 +107,6 @@ local school_bmd_checks = function()
     checks["School 2 Mainframe BMD"] = memory.read_u8(0x2000209)
             return checks
 end
-
 local zoo_bmd_checks = function()
     local checks ={}
     checks["Zoo 1 East BMD"] = memory.read_u8(0x2000210)
@@ -131,13 +124,11 @@ local zoo_bmd_checks = function()
     checks["Zoo 4 Southeast BMD"] = memory.read_u8(0x2000213)
             return checks
 end
-
 local hades_bmd_checks = function()
     local checks ={}
     checks["Hades South BMD"] = memory.read_u8(0x20001eb)
     return checks
 end
-
 local hospital_bmd_checks = function()
     local checks ={}
     checks["Hospital 1 Center BMD"] = memory.read_u8(0x2000218)
@@ -157,7 +148,6 @@ local hospital_bmd_checks = function()
     checks["Hospital 5 Island BMD"] = memory.read_u8(0x200021c)
             return checks
 end
-
 local www_bmd_checks = function()
     local checks ={}
     checks["WWW 1 Central BMD"] = memory.read_u8(0x2000220)
@@ -171,7 +161,6 @@ local www_bmd_checks = function()
     checks["WWW 4 Central BMD"] = memory.read_u8(0x2000223)
             return checks
 end
-
 local misc_bmd_checks = function()
     local checks ={}
     checks["ACDC Dog House BMD"] = memory.read_u8(0x2000240)
@@ -209,7 +198,6 @@ local misc_bmd_checks = function()
     checks["Tamako's HP BMD"] = memory.read_u8(0x200023c)
             return checks
 end
-
 local story_bmd_checks = function()
     local checks ={}
     checks["Undernet 7 Upper BMD"] = memory.read_u8(0x20001f6)
@@ -226,7 +214,6 @@ local story_bmd_checks = function()
     checks["WWW 4 East BMD"] = memory.read_u8(0x2000223)
     return checks
 end
-
 local pmd_checks = function()
     local checks ={}
     checks["ACDC 1 PMD"] = memory.read_u8(0x020001d0)
@@ -241,7 +228,6 @@ local pmd_checks = function()
     checks["Tamako's HP PMD"] = memory.read_u8(0x200023c)
     return checks
 end
-
 local overworld_checks = function()
     local checks ={}
     checks["Yoka Quiz Master"] = memory.read_u8(0x200005f)
@@ -279,7 +265,6 @@ local overworld_checks = function()
     checks["WWW Wily's Desk"] = memory.read_u8(0x200024d)
     return checks
 end
-
 local numberman_checks = function()
     local checks ={}
     checks["Numberman Code 01"] = memory.read_u8(0x2000430)
@@ -315,7 +300,6 @@ local numberman_checks = function()
     checks["Numberman Code 31"] = memory.read_u8(0x2000433)
     return checks
 end
-
 local jobs_checks = function()
     local checks ={}
     checks["Job: Please deliver this"] = memory.read_u8(0x2000300)
@@ -350,7 +334,6 @@ local jobs_checks = function()
     checks["Job: Help with a will"] = memory.read_u8(0x2000303)
     return checks
 end
-
 local check_all_locations = function()
     local location_checks = {}
     for name,checked in pairs(acdc_bmd_checks()) do location_checks[name] = checked end
@@ -367,6 +350,19 @@ local game_modes = {
     [4]={name="Cutscene", loaded=true},
     [5]={name="Paused", loaded=true}
 }
+
+function IsInMenu()
+    return false
+end
+function IsInDialog()
+    return false
+end
+function IsInBattle()
+    return false
+end
+function IsItemQueued()
+    return false
+end
 
 function is_game_complete()
     -- If the game is complete, do not read memory
@@ -391,23 +387,95 @@ function is_game_complete()
     return false
 end
 
-function process_blocks(block)
-    -- Sometimes the block is nothing, if this is the case then quietly stop processing
-    if block == nil then
-        return
-    end
+local GetMessage = function(item)
+    bytes = {
+        0x02,
+        0x00,
+        0xF1,
+        0x00,
+        0x1C,
+        0x29,
+        0x27,
+        0x29,
+        0x2D,
+        0x3A,
+        0x2D,
+        0x32,
+        0x2B,
+        0xE8,
+        0x1E,
+        0x36,
+        0x25,
+        0x32,
+        0x37,
+        0x31,
+        0x2D,
+        0x37,
+        0x37,
+        0x2D,
+        0x33,
+        0x32,
+        0xEA,
+        0x00,
+        0x0A,
+        0x00,
+        0x4D,
+        0xEA,
+        0x00,
+        0x0A,
+        0x00,
+        0x4D,
+        0xEA,
+        0x00,
+        0x0A,
+        0x00,
+        0xEB,
+        0xE9,
+        0xF8,
+        0x00,
+        0xF8,
+        0x04,
+        0x18,
+        0xF6,
+        0x10,
+        0x1F,
+        0x00,
+        0x0B,
+        0x01,
+        0x11,
+        0x33,
+        0x38,
+        0xE8,
+        0x51,
+        0xF9,
+        0x00,
+        0x1F,
+        0x01,
+        0x00,
+        0xF9,
+        0x00,
+        0x0B,
+        0x03,
+        0x51,
+        0x47,
+        0x47,
+        0xF8,
+        0x0C,
+        0xF8,
+        0x08,
+        0xEB,
+        0xE7
+    }
 
-    -- Queue item for receiving if one exists
-    item_queue = block['items']
-    received_items_count = mainmemory.read_u16_be(internal_count_addr)
-    if received_items_count < #item_queue then
-        -- There are items to send: remember lua tables are 1-indexed!
-        if item_receivable() then
-            mainmemory.write_u16_be(incoming_player_addr, 0x00)
-            mainmemory.write_u16_be(incoming_item_addr, item_queue[received_items_count+1])
-        end
-    end
-    return
+    return bytes
+end
+
+local QueueItem = function(item)
+    -- Write the item message to RAM
+    memory.write_bytes_as_array(0x203FD10, GetMessage(item))
+    -- Signal that the item is ready to be read
+    memory.write_u32_le(0x203FD00,0x00000001)
+    table.remove(itemsPending,1) --We called this with a 1, we can remove with a 1
 end
 
 local process_block = function(block)
@@ -415,33 +483,25 @@ local process_block = function(block)
     if block == nil then
         return
     end
-    --Temporary skip checking. REMOVE BEFORE TESTING
-    if block ~= nil then
-        return
-    end
-
-    -- Write player names on first connect or after reset (N64 logo, title screen, file select)
-    cur_mode = get_current_game_mode()
-    if (first_connect or cur_mode == 0 or cur_mode == 1 or cur_mode == 2) and (#block['playerNames'] > 0) then
-        first_connect = false
-        local index = 1
-        while (index <= #block['playerNames']) and (index < 255) do
-            setPlayerName(index, block['playerNames'][index])
-            index = index + 1
-        end
-        setPlayerName(255, 'APPlayer')
-    end
-
     -- Queue item for receiving, if one exists
     item_queue = block['items']
-    --received_items_count = mainmemory.read_u16_be(internal_count_addr)
-    if received_items_count < #item_queue then
-        -- There are items to send: remember lua tables are 1-indexed!
-        if item_receivable() then
-            --mainmemory.write_u16_be(incoming_player_addr, 0x00)
-            --mainmemory.write_u16_be(incoming_item_addr, item_queue[received_items_count+1])
+    if #item_queue > #itemsReceived then
+        -- Because we always make sure to add things to the items received and items claimed lists in the exact order they come,
+        -- we can use the end index of itemsReceived to know which ones to add next
+        for i=#itemsReceived+1,#item_queue,1 do
+            table.insert(itemsReceived,item_queue[i])
+            table.insert(itemsPending,item_queue[i])
         end
     end
+
+    if #itemsPending > 0 then
+
+        -- Make sure we're not in any state that would preclude getting a dialog event
+        --if ~IsItemQueued() and ~IsInBattle() and ~IsInMenu() and ~IsInDialog() then
+            QueueItem(itemsPending[1])
+        --end
+    end
+
     return
 end
 
@@ -468,6 +528,7 @@ local receive = function()
 
     -- Determine message to send back
     local retTable = {}
+    retTable["playerName"] = "MegaMan"
     retTable["scriptVersion"] = script_version
     retTable["locations"] = check_all_locations()
     retTable["gameComplete"] = is_game_complete()
