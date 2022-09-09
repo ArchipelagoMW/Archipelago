@@ -135,11 +135,6 @@ class SC2Context(CommonContext):
     last_loc_list = None
     difficulty_override = -1
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
-    raw_text_parser: RawJSONtoTextParser
-
-    def __init__(self, *args, **kwargs):
-        super(SC2Context, self).__init__(*args, **kwargs)
-        self.raw_text_parser = RawJSONtoTextParser(self)
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -164,10 +159,13 @@ class SC2Context(CommonContext):
                 check_mod_install()
 
     def on_print_json(self, args: dict):
+        # goes to this world
         if "receiving" in args and self.slot_concerns_self(args["receiving"]):
             relevant = True
+        # found in this world
         elif "item" in args and self.slot_concerns_self(args["item"].player):
             relevant = True
+        # not related
         else:
             relevant = False
 
