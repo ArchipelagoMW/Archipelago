@@ -165,7 +165,7 @@ def fast_fill(world: MultiWorld, locations: typing.List[Location],
                 # number of times we will swap an individual item to prevent this
                 swap_count = swapped_items[placed_item.player,
                                            placed_item.name]
-                if swap_count > 1:
+                if swap_count > 1 or placed_item.advancement:
                     continue
 
                 location.item = None
