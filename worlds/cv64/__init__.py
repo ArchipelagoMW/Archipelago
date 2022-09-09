@@ -100,17 +100,36 @@ class CV64World(World):
         itempool: typing.List[CV64Item] = []
 
         # Levels
-        total_required_locations = 28
+        total_required_locations = 165
 
         # number_of_specials = 0
         self.world.get_location(LocationName.the_end, self.player).place_locked_item(self.create_item(ItemName.victory))
 
         itempool += [self.create_item(ItemName.special_one)] * 1
-        itempool += [self.create_item(ItemName.roast_beef)] * 4
-        itempool += [self.create_item(ItemName.powerup)] * 1
-        itempool += [self.create_item(ItemName.sun_card)] * 3
-        itempool += [self.create_item(ItemName.moon_card)] * 3
+        itempool += [self.create_item(ItemName.special_two)] * 2
+        itempool += [self.create_item(ItemName.roast_chicken)] * 15
+        itempool += [self.create_item(ItemName.roast_beef)] * 17
+        itempool += [self.create_item(ItemName.healing_kit)] * 1
+        itempool += [self.create_item(ItemName.purifying)] * 5
+        itempool += [self.create_item(ItemName.cure_ampoule)] * 3
+        itempool += [self.create_item(ItemName.powerup)] * 9
+        itempool += [self.create_item(ItemName.magical_nitro)] * 2
+        itempool += [self.create_item(ItemName.mandragora)] * 2
+        itempool += [self.create_item(ItemName.sun_card)] * 7
+        itempool += [self.create_item(ItemName.moon_card)] * 7
         itempool += [self.create_item(ItemName.left_tower_key)] * 1
+        itempool += [self.create_item(ItemName.storeroom_key)] * 1
+        itempool += [self.create_item(ItemName.archives_key)] * 1
+        itempool += [self.create_item(ItemName.garden_key)] * 1
+        itempool += [self.create_item(ItemName.copper_key)] * 1
+        itempool += [self.create_item(ItemName.chamber_key)] * 1
+        itempool += [self.create_item(ItemName.execution_key)] * 1
+        itempool += [self.create_item(ItemName.science_key_one)] * 1
+        itempool += [self.create_item(ItemName.science_key_two)] * 1
+        itempool += [self.create_item(ItemName.science_key_three)] * 1
+        itempool += [self.create_item(ItemName.clocktower_key_one)] * 1
+        itempool += [self.create_item(ItemName.clocktower_key_two)] * 1
+        itempool += [self.create_item(ItemName.clocktower_key_three)] * 1
 
         total_junk_count = total_required_locations - len(itempool)
 

@@ -26,12 +26,31 @@ junk_table = {
 }
 
 main_table = {
-    ItemName.special_one:    ItemData(0xC64004, True),
-    ItemName.roast_beef:     ItemData(0xC64007, False),
-    ItemName.powerup:        ItemData(0xC6400C, False),
-    ItemName.sun_card:       ItemData(0xC64017, False),
-    ItemName.moon_card:      ItemData(0xC64018, False),
-    ItemName.left_tower_key: ItemData(0xC6401E, True),
+    ItemName.special_one:          ItemData(0xC64004, True),
+    ItemName.special_two:          ItemData(0xC64005, True),
+    ItemName.roast_chicken:        ItemData(0xC64006, False),
+    ItemName.roast_beef:           ItemData(0xC64007, False),
+    ItemName.healing_kit:          ItemData(0xC64008, True),
+    ItemName.purifying:            ItemData(0xC64009, False),
+    ItemName.cure_ampoule:         ItemData(0xC6400A, False),
+    ItemName.powerup:              ItemData(0xC6400C, False),
+    ItemName.magical_nitro:        ItemData(0xC64015, True),
+    ItemName.mandragora:           ItemData(0xC64016, True),
+    ItemName.sun_card:             ItemData(0xC64017, False),
+    ItemName.moon_card:            ItemData(0xC64018, False),
+    ItemName.left_tower_key:       ItemData(0xC6401E, True),
+    ItemName.storeroom_key:        ItemData(0xC6401E, True),
+    ItemName.archives_key:         ItemData(0xC6401E, True),
+    ItemName.garden_key:           ItemData(0xC6401E, True),
+    ItemName.copper_key:           ItemData(0xC6401E, True),
+    ItemName.chamber_key:          ItemData(0xC6401E, True),
+    ItemName.execution_key:        ItemData(0xC6401E, True),
+    ItemName.science_key_one:      ItemData(0xC6401E, True),
+    ItemName.science_key_two:      ItemData(0xC6401E, True),
+    ItemName.science_key_three:    ItemData(0xC6401E, True),
+    ItemName.clocktower_key_one:   ItemData(0xC6401E, True),
+    ItemName.clocktower_key_two:   ItemData(0xC6401E, True),
+    ItemName.clocktower_key_three: ItemData(0xC6401E, True),
 }
 
 event_table = {
