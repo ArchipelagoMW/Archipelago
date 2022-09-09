@@ -292,8 +292,8 @@ class SC2Context(CommonContext):
                                 Label(text=category, size_hint_y=None, height=50, outline_width=1))
 
                             for mission in categories[category]:
-                                text = mission
-                                tooltip = ""
+                                text: str = mission
+                                tooltip: str = ""
 
                                 # Map has uncollected locations
                                 if mission in unfinished_missions:
@@ -305,14 +305,14 @@ class SC2Context(CommonContext):
                                 else:
                                     text = f"[color=a9a9a9]{text}[/color]"
                                     tooltip = f"Requires: "
-                                    if len(self.ctx.mission_req_table[mission].required_world) > 0:
+                                    if self.ctx.mission_req_table[mission].required_world:
                                         tooltip += ", ".join(list(self.ctx.mission_req_table)[req_mission - 1] for
                                                              req_mission in
                                                              self.ctx.mission_req_table[mission].required_world)
 
-                                        if self.ctx.mission_req_table[mission].number > 0:
+                                        if self.ctx.mission_req_table[mission].number:
                                             tooltip += " and "
-                                    if self.ctx.mission_req_table[mission].number > 0:
+                                    if self.ctx.mission_req_table[mission].number:
                                         tooltip += f"{self.ctx.mission_req_table[mission].number} missions completed"
                                 remaining_location_names: typing.List[str] = [
                                     self.ctx.location_names[loc] for loc in self.ctx.locations_for_mission(mission)
