@@ -23,7 +23,9 @@ ROMHASH_SIZE = 0x15
 
 SMW_PROGRESS_DATA     = WRAM_START + 0x1F02
 SMW_DRAGON_COINS_DATA = WRAM_START + 0x1F2F
+SMW_PATH_DATA         = WRAM_START + 0x1EA2
 SMW_EVENT_ROM_DATA    = ROM_START + 0x2D608
+SMW_ACTIVE_LEVEL_DATA = ROM_START + 0x37F70
 
 SMW_GOAL_DATA              = ROM_START + 0x01BFA0
 SMW_REQUIRED_BOSSES_DATA   = ROM_START + 0x01BFA1
@@ -41,6 +43,7 @@ SMW_MESSAGE_BOX_ADDR   = WRAM_START + 0x1426
 SMW_BONUS_STAR_ADDR    = WRAM_START + 0xF48
 SMW_EGG_COUNT_ADDR     = WRAM_START + 0x1F24
 SMW_BOSS_COUNT_ADDR    = WRAM_START + 0x1F26
+SMW_NUM_EVENTS_ADDR    = WRAM_START + 0x1F2E
 SMW_SFX_ADDR           = WRAM_START + 0x1DFC
 SMW_PAUSE_ADDR         = WRAM_START + 0x13D4
 SMW_MESSAGE_QUEUE_ADDR = WRAM_START + 0xC391
@@ -51,6 +54,7 @@ SMW_GOAL_LEVELS          = [0x28, 0x31, 0x32]
 SMW_INVALID_MARIO_STATES = [0x05, 0x06, 0x0A, 0x0C, 0x0D]
 SMW_BAD_TEXT_BOX_LEVELS  = [0x26, 0x02, 0x4B]
 SMW_BOSS_STATES          = [0x80, 0xC0, 0xC1]
+SMW_UNCOLLECTABLE_LEVELS = [0x25, 0x07, 0x0B, 0x40, 0x0E, 0x1F, 0x20, 0x1B, 0x1A, 0x35, 0x34, 0x31, 0x32]
 
 async def deathlink_kill_player(ctx: Context):
     if ctx.game == GAME_SMW:
@@ -232,10 +236,10 @@ async def smw_game_watcher(ctx: Context):
 
         new_checks = []
         event_data = await snes_read(ctx, SMW_EVENT_ROM_DATA, 0x60)
-        progress_data = await snes_read(ctx, SMW_PROGRESS_DATA, 0x0F)
-        dragon_coins_data = await snes_read(ctx, SMW_DRAGON_COINS_DATA, 0x0C)
+        progress_data = bytearray(await snes_read(ctx, SMW_PROGRESS_DATA, 0x0F))
+        dragon_coins_data = bytearray(await snes_read(ctx, SMW_DRAGON_COINS_DATA, 0x0C))
         from worlds.smw.Rom import item_rom_data, ability_rom_data
-        from worlds.smw.Levels import location_id_to_level_id
+        from worlds.smw.Levels import location_id_to_level_id, level_info_dict
         for loc_name, level_data in location_id_to_level_id.items():
             loc_id = AutoWorldRegister.world_types[ctx.game].location_name_to_id[loc_name]
             if loc_id not in ctx.locations_checked:
@@ -290,7 +294,7 @@ async def smw_game_watcher(ctx: Context):
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
 
         if game_state[0] != 0x14:
-            # Don't receive items outside of in-level mode
+            # Don't receive items or collect locations outside of in-level mode
             return
 
         recv_count = await snes_read(ctx, SMW_RECV_PROGRESS_ADDR, 1)
@@ -365,22 +369,71 @@ async def smw_game_watcher(ctx: Context):
 
             await snes_flush_writes(ctx)
 
-        # DKC3_TODO: This method of collect should work, however it does not unlock the next level correctly when previous is flagged
         # Handle Collected Locations
-        #for loc_id in ctx.checked_locations:
-        #    if loc_id not in ctx.locations_checked:
-        #        loc_data = location_rom_data[loc_id]
-        #        data = await snes_read(ctx, WRAM_START + loc_data[0], 1)
-        #        invert_bit = ((len(loc_data) >= 3) and loc_data[2])
-        #        if not invert_bit:
-        #            masked_data = data[0] | (1 << loc_data[1])
-        #            print("Collected Location: ", hex(loc_data[0]), " | ", loc_data[1])
-        #            snes_buffered_write(ctx, WRAM_START + loc_data[0], bytes([masked_data]))
-        #            await snes_flush_writes(ctx)
-        #        else:
-        #            masked_data = data[0] & ~(1 << loc_data[1])
-        #            print("Collected Inverted Location: ", hex(loc_data[0]), " | ", loc_data[1])
-        #            snes_buffered_write(ctx, WRAM_START + loc_data[0], bytes([masked_data]))
-        #            await snes_flush_writes(ctx)
-        #        ctx.locations_checked.add(loc_id)
+        new_events = 0
+        path_data = bytearray(await snes_read(ctx, SMW_PATH_DATA, 0x60))
+        for loc_id in ctx.checked_locations:
+            if loc_id not in ctx.locations_checked:
+                ctx.locations_checked.add(loc_id)
+                loc_name = ctx.location_names[loc_id]
 
+                if loc_name not in location_id_to_level_id:
+                    continue
+
+                level_data = location_id_to_level_id[loc_name]
+
+                if level_data[1] == 2:
+                    # Dragon Coins Check
+
+                    progress_byte = (level_data[0] // 8)
+                    progress_bit  = 7 - (level_data[0] % 8)
+
+                    data = dragon_coins_data[progress_byte]
+                    new_data = data | (1 << progress_bit)
+                    dragon_coins_data[progress_byte] = new_data
+                else:
+                    if level_data[0] in SMW_UNCOLLECTABLE_LEVELS:
+                        continue
+
+                    event_id = event_data[level_data[0]]
+                    event_id_value = event_id + level_data[1]
+
+                    progress_byte = (event_id_value // 8)
+                    progress_bit  = 7 - (event_id_value % 8)
+
+                    data = progress_data[progress_byte]
+                    masked_data = data & (1 << progress_bit)
+                    bit_set = (masked_data != 0)
+
+                    if bit_set:
+                        continue
+
+                    new_events += 1
+                    new_data = data | (1 << progress_bit)
+                    progress_data[progress_byte] = new_data
+
+                    tile_id = await snes_read(ctx, SMW_ACTIVE_LEVEL_DATA + level_data[0], 0x1)
+
+                    level_info = level_info_dict[tile_id[0]]
+
+                    path = level_info.exit1Path if level_data[1] == 0 else level_info.exit2Path
+
+                    if not path:
+                        continue
+
+                    this_end_path = path_data[tile_id[0]]
+                    new_data = this_end_path | path.thisEndDirection
+                    path_data[tile_id[0]] = new_data
+
+                    other_end_path = path_data[path.otherLevelID]
+                    new_data = other_end_path | path.otherEndDirection
+                    path_data[path.otherLevelID] = new_data
+
+        snes_buffered_write(ctx, SMW_DRAGON_COINS_DATA, bytes(dragon_coins_data))
+        snes_buffered_write(ctx, SMW_PROGRESS_DATA, bytes(progress_data))
+        snes_buffered_write(ctx, SMW_PATH_DATA, bytes(path_data))
+        if new_events > 0:
+            old_events = await snes_read(ctx, SMW_NUM_EVENTS_ADDR, 0x1)
+            snes_buffered_write(ctx, SMW_NUM_EVENTS_ADDR, bytes([old_events[0] + new_events]))
+
+        await snes_flush_writes(ctx)
