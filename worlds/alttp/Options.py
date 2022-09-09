@@ -282,8 +282,8 @@ class ShieldPalette(Palette):
     display_name = "Shield Palette"
 
 
-class LinkPalette(Palette):
-    display_name = "Link Palette"
+# class LinkPalette(Palette):
+#     display_name = "Link Palette"
 
 
 class HeartBeep(Choice):
@@ -387,7 +387,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "hud_palettes": HUDPalette,
     "sword_palettes": SwordPalette,
     "shield_palettes": ShieldPalette,
-    "link_palettes": LinkPalette,
+    # "link_palettes": LinkPalette,
     "heartbeep": HeartBeep,
     "heartcolor": HeartColor,
     "quickswap": QuickSwap,

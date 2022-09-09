@@ -176,7 +176,8 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
                                    state._sc2wol_has_competent_anti_air(world, player) and
                                    state.has('Science Vessel', player)),
         LocationData("Devil's Playground", "Devil's Playground: Victory", SC2WOL_LOC_ID_OFFSET + 1300,
-                     lambda state: state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player)),
+                     lambda state: state._sc2wol_has_anti_air(world, player) and (
+                             state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player))),
         LocationData("Devil's Playground", "Devil's Playground: Tosh's Miners", SC2WOL_LOC_ID_OFFSET + 1301),
         LocationData("Devil's Playground", "Devil's Playground: Brutalisk", SC2WOL_LOC_ID_OFFSET + 1302,
                      lambda state: state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player)),
