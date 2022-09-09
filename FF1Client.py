@@ -74,11 +74,13 @@ class FF1Context(CommonContext):
             msg = args['text']
             if ': !' not in msg:
                 self._set_message(msg, SYSTEM_MESSAGE_ID)
-        elif cmd == "ReceivedItems":
-            msg = f"Received {', '.join([self.item_names[item.item] for item in args['items']])}"
-            self._set_message(msg, SYSTEM_MESSAGE_ID)
 
     def on_print_json(self, args: dict):
+        if self.ui:
+            self.ui.print_json(copy.deepcopy(args["data"]))
+        else:
+            text = self.jsontotextparser(copy.deepcopy(args["data"]))
+            logger.info(text)
         relevant = args.get("type", None) in {"Hint", "ItemSend"}
         if relevant:
             item = args["item"]
