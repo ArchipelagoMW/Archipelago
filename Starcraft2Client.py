@@ -23,7 +23,7 @@ import NetUtils
 from MultiServer import mark_raw
 from Utils import init_logging, is_windows
 from worlds.sc2wol import SC2WoLWorld
-from worlds.sc2wol.Items import lookup_id_to_name, item_table, ItemData
+from worlds.sc2wol.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 from worlds.sc2wol.MissionTables import lookup_id_to_mission
 from worlds.sc2wol.Regions import MissionInfo
@@ -434,56 +434,25 @@ wol_default_categories = [
 
 def calculate_items(items: typing.List[NetUtils.NetworkItem]) -> typing.List[int]:
     network_item: NetUtils.NetworkItem
-    unit_unlocks = 0
-    armory1_unlocks = 0
-    armory2_unlocks = 0
-    upgrade_unlocks = 0
-    building_unlocks = 0
-    merc_unlocks = 0
-    lab_unlocks = 0
-    protoss_unlock = 0
-    minerals = 0
-    vespene = 0
-    supply = 0
-
-    uniques: typing.Set[int] = set()  # items that are unique and multiples would falsify the bit flag int
+    accumulators: typing.List[int] = [0 for _ in type_flaggroups]
 
     for network_item in items:
-        if network_item.item in uniques:
-            continue
-
         name: str = lookup_id_to_name[network_item.item]
         item_data: ItemData = item_table[name]
 
         # exists exactly once
         if item_data.quantity == 1:
-            uniques.add(network_item.item)
+            accumulators[type_flaggroups[item_data.type]] |= 1 << item_data.number
 
-        if item_data.type == "Unit":
-            unit_unlocks += (1 << item_data.number)
+        # exists multiple times
         elif item_data.type == "Upgrade":
-            upgrade_unlocks += (1 << item_data.number)
-        elif item_data.type == "Armory 1":
-            armory1_unlocks += (1 << item_data.number)
-        elif item_data.type == "Armory 2":
-            armory2_unlocks += (1 << item_data.number)
-        elif item_data.type == "Building":
-            building_unlocks += (1 << item_data.number)
-        elif item_data.type == "Mercenary":
-            merc_unlocks += (1 << item_data.number)
-        elif item_data.type == "Laboratory":
-            lab_unlocks += (1 << item_data.number)
-        elif item_data.type == "Protoss":
-            protoss_unlock += (1 << item_data.number)
-        elif item_data.type == "Minerals":
-            minerals += item_data.number
-        elif item_data.type == "Vespene":
-            vespene += item_data.number
-        elif item_data.type == "Supply":
-            supply += item_data.number
+            accumulators[type_flaggroups[item_data.type]] += 1 << item_data.number
 
-    return [unit_unlocks, upgrade_unlocks, armory1_unlocks, armory2_unlocks, building_unlocks, merc_unlocks,
-            lab_unlocks, protoss_unlock, minerals, vespene, supply]
+        # sum
+        else:
+            accumulators[type_flaggroups[item_data.type]] += item_data.number
+
+    return accumulators
 
 
 def calc_difficulty(difficulty):
