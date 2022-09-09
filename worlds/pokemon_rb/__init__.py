@@ -1,4 +1,6 @@
 from typing import Dict, List, Set, Tuple, TextIO
+import os
+import logging
 
 from BaseClasses import Item, MultiWorld, ItemClassification
 from .items import item_table, filler_items
@@ -9,9 +11,8 @@ from .logic import PokemonLogic
 from .options import pokemon_rb_options
 from .rom_addresses import rom_addresses
 from .text import encode_text
-from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, generate_basic
+from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, randomize_pokemon_data, randomize_pokemon
 import worlds.pokemon_rb.poke_data as poke_data
-import logging
 
 
 class PokemonRedBlueWorld(World):
@@ -35,6 +36,12 @@ class PokemonRedBlueWorld(World):
         self.local_poke_data = None
         self.learnsets = None
 
+    @classmethod
+    def stage_assert_generate(cls, world):
+        for rom_file in [get_base_rom_path("red"), get_base_rom_path("blue")]:
+            if not os.path.exists(rom_file):
+                raise FileNotFoundError(rom_file)
+
     def generate_early(self):
         if self.world.badges_needed_for_hm_moves[self.player].value >= 2:
             badges_to_add = ["Soul Badge", "Volcano Badge", "Earth Badge"]
@@ -49,15 +56,9 @@ class PokemonRedBlueWorld(World):
             for badge in badges_to_add:
                 self.extra_badges[hm_moves.pop()] = badge
 
-    def generate_basic(self) -> None:
-        generate_basic(self)
-
-
     def create_items(self) -> None:
         locations = [location for location in get_locations(self.player) if location.type == "Item"]
         item_pool = []
-        badgelocs = []
-        badges = []
         for location in locations:
             if "Hidden" in location.name and not self.world.randomize_hidden_items[self.player].value:
                 continue
@@ -66,27 +67,18 @@ class PokemonRedBlueWorld(World):
             item = self.create_item(location.original_item)
             if location.event:
                 self.world.get_location(location.name, self.player).place_locked_item(item)
-            elif ("Badge" not in item.name or self.world.badgesanity[self.player]) and \
-                    (item.name != "Oak's Parcel" or self.world.old_man[self.player] != 1):
-                #badgelocs.append(self.world.get_location(location.name, self.player))
-                #badges.append(item)
-            #else:
+            elif ("Badge" not in item.name or self.world.badgesanity[self.player].value) and \
+                    (item.name != "Oak's Parcel" or self.world.old_man[self.player].value != 1):
                 item_pool.append(item)
-
-        # self.world.random.shuffle(item_pool)
-        # if self.world.extra_key_items[self.player].value:
-        #     for item_name in ["Plant Key", "Mansion Key", "Hideout Key", "Safari Pass"]:
-        #         item = self.create_item(item_name)
-        #         for i, old_item in enumerate(item_pool):
-        #             if old_item.classification == ItemClassification.filler:
-        #                 item_pool[i] = item
-        #                 break
         self.world.random.shuffle(item_pool)
 
         self.world.itempool += item_pool
 
+        randomize_pokemon_data(self)
 
     def pre_fill(self):
+
+        randomize_pokemon(self)
 
         if self.world.old_man[self.player].value == 1:
             item = self.create_item("Oak's Parcel")
@@ -115,8 +107,8 @@ class PokemonRedBlueWorld(World):
                           "Marsh Badge", "Volcano Badge", "Earth Badge"]:
                 badges.append(self.create_item(badge))
             for loc in ["Pewter Gym - Brock 1", "Cerulean Gym - Misty 1", "Vermilion Gym - Lt. Surge 1",
-                          "Celadon Gym - Erika 1", "Fuchsia Gym - Koga 1", "Saffron Gym - Sabrina 1",
-                          "Cinnabar Gym - Blaine 1", "Viridian Gym - Giovanni 1"]:
+                        "Celadon Gym - Erika 1", "Fuchsia Gym - Koga 1", "Saffron Gym - Sabrina 1",
+                        "Cinnabar Gym - Blaine 1", "Viridian Gym - Giovanni 1"]:
                 badgelocs.append(self.world.get_location(loc, self.player))
             state = self.world.get_all_state(False)
             self.world.random.shuffle(badges)
@@ -126,11 +118,10 @@ class PokemonRedBlueWorld(World):
 
         intervene = False
         test_state = self.world.get_all_state(False)
-        if not self.world.has_beaten_game(test_state, self.player):
+        if not test_state._pokemon_rb_can_surf(self.player) or not test_state._pokemon_rb_can_strength(self.player):
             intervene = True
         elif self.world.accessibility[self.player].current_key != "minimal":
-            if not self.world.get_location("Cinnabar Island - Lab Scientist", self.player).can_reach(test_state) or \
-                    not self.world.get_location("Route 2 - North Item", self.player).can_reach(test_state):
+            if not test_state._pokemon_rb_can_cut(self.player) or not test_state._pokemon_rb_can_flash(self.player):
                 intervene = True
         if intervene:
             logging.warning(
@@ -178,6 +169,7 @@ class PokemonRedBlueWorld(World):
 class PokemonRBItem(Item):
     game = "Pokemon Red - Blue"
     type = None
+
     def __init__(self, name, player: int = None):
         item_data = item_table[name]
         super(PokemonRBItem, self).__init__(

@@ -1,6 +1,5 @@
 special_chars = {
     "PKMN": 0x4A,
-    "……": 0x56,
     "'d": 0xBB,
     "'l": 0xBC,
     "'t": 0xBE,
@@ -83,7 +82,7 @@ char_map = {
     "z": 0xB9,
     "é": 0xBA,
     "'": 0xE0,
-    "-": 0xE4,
+    "-": 0xE3,
     "?": 0xE6,
     "!": 0xE7,
     ".": 0xE8,
@@ -106,13 +105,20 @@ char_map = {
     "9": 0xFF,
 }
 
+# safe_chars = list(char_map.keys())
+# safe_chars.remove("@")
+# safe_chars.remove("#")
+# safe_chars += ["PK", "MN", "MALE", "FEMALE", "'d", "'l", "'s", "'t", "'v", "'r", "'m"]
+unsafe_chars = ["@", "#", "PKMN"]
 
-def encode_text(text: str, length: int=0, whitespace=False, force=False):
+def encode_text(text: str, length: int=0, whitespace=False, force=False, safety=False):
     encoded_text = bytearray()
     spec_char = ""
     special = False
     for char in text:
         if char == ">":
+            if spec_char in unsafe_chars:
+                raise KeyError(f"Disallowed Pokemon text special character '<{spec_char}>'")
             try:
                 encoded_text.append(special_chars[spec_char])
             except KeyError:
@@ -128,6 +134,8 @@ def encode_text(text: str, length: int=0, whitespace=False, force=False):
         elif special is True:
             spec_char += char
         else:
+            if char in unsafe_chars:
+                raise KeyError(f"Disallowed Pokemon text character '{char}'")
             try:
                 encoded_text.append(char_map[char])
             except KeyError:

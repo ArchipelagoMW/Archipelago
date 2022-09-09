@@ -88,8 +88,7 @@ class RequireItemFinder(Toggle):
 
 
 class RandomizeHiddenItems(Choice):
-    """Randomize hidden items. If you choose exclude, they will be randomized but will be guaranteed junk items.
-    Hidden items require the Item Finder to pick up."""
+    """Randomize hidden items. If you choose exclude, they will be randomized but will be guaranteed junk items."""
     display_name = "Randomize Hidden Items"
     option_on = 1
     option_off = 0

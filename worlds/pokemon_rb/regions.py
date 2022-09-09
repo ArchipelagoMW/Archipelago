@@ -1,6 +1,8 @@
 
-from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType, LocationProgressType
+from BaseClasses import MultiWorld, Region, Entrance, RegionType, LocationProgressType
+from worlds.generic.Rules import add_item_rule
 from .locations import get_locations, PokemonRBLocation
+
 
 def create_region(world: MultiWorld, player: int, name: str, locations_per_region=None, exits=None):
     if "Rock" in name:
@@ -13,6 +15,7 @@ def create_region(world: MultiWorld, player: int, name: str, locations_per_regio
             ret.locations.append(location)
             if world.randomize_hidden_items[player].value == 2 and "Hidden" in location.name:
                 location.progress_type = LocationProgressType.EXCLUDED
+                add_item_rule(location, lambda i: not (i.advancement or i.useful))
     if exits:
         for exit in exits:
             ret.exits.append(Entrance(player, exit, ret))
@@ -204,6 +207,7 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "Vermilion City", "Route 11")
     connect(world, player, "Vermilion City", "Diglett's Cave")
     connect(world, player, "Route 12 West", "Route 11 East", lambda state: state._pokemon_rb_can_strength(player) or not state.world.extra_strength_boulders[player].value)
+    connect(world, player, "Route 12 North", "Route 12 South", lambda state: state.has("Poke Flute", player) or state._pokemon_rb_can_surf( player))
     connect(world, player, "Route 12 West", "Route 12 North", lambda state: state.has("Poke Flute", player))
     connect(world, player, "Route 12 West", "Route 12 South", lambda state: state.has("Poke Flute", player))
     connect(world, player, "Route 12 South", "Route 12 Grass", lambda state: state._pokemon_rb_can_cut(player))
@@ -279,20 +283,6 @@ def create_regions(world: MultiWorld, player: int):
         connect(world, player, "Menu", world.worlds[player].fly_map, lambda state: state._pokemon_rb_can_fly(player), one_way=True,
                 name="Fly to " + world.worlds[player].fly_map)
 
-
-
-    # from .poke_data import encounter_tables
-    # wild_locs = ""
-    # for table, size in encounter_tables.items():
-    #     for region in regions:
-    #         if "Wild_" + region.name.replace(" ", "") == table:
-    #             for i in range(1, size+1):
-    #                 wild_locs += f"LocationData(\"{region.name}\", \"Wild Pokemon - {i}\", rom_addresses[\"{table}\"] + {(i * 2) + 1}, None),\r\n"
-    #             break
-    #     else:
-    #         for i in range(1, size + 1):
-    #             wild_locs += f"LocationData(\"{table}\", \"Wild Pokemon - {i}\", rom_addresses[\"{table}\"] + {(i * 2) + 1}, None),\r\n"
-    # breakpoint()
 
 def connect(world: MultiWorld, player: int, source: str, target: str, rule: callable = lambda state: True, one_way=False, name=None):
     source_region = world.get_region(source, player)

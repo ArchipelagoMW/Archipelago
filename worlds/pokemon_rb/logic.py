@@ -9,7 +9,7 @@ class PokemonLogic(LogicMixin):
                  or self.world.badges_needed_for_hm_moves[player].value == 0))
 
     def _pokemon_rb_can_cut(self, player):
-        return (self.has("HM01 Cut", player and self._can_learn_hm("100", player)) or self.has("Master Sword", player)) and (self.has("Cascade Badge", player)
+        return (self.has("HM01 Cut", player) and self._can_learn_hm("100", player) or self.has("Master Sword", player)) and (self.has("Cascade Badge", player)
                 or self.has(self.world.worlds[player].extra_badges.get("Cut"), player) or
                 self.world.badges_needed_for_hm_moves[player].value == 0)
 

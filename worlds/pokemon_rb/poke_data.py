@@ -997,9 +997,6 @@ learnsets = {
     'Victreebel': ['Wrap', 'Poisonpowder', 'Sleep Powder']
 }
 
-#pokemon_per_type = {poke_type: [pokemon for pokemon in pokemon_data if pokemon_data[pokemon]['type1'] == poke_type or
-#                                pokemon_data[pokemon]['type2'] == poke_type] for poke_type in type_names.values()}
-
 moves = {
      'No Move': {'id': 0, 'power': 0, 'type': 'Typeless', 'accuracy': 0, 'pp': 0},
      'Pound': {'id': 1, 'power': 40, 'type': 'Normal', 'accuracy': 100, 'pp': 35},

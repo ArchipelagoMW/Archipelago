@@ -14,7 +14,7 @@ item_table = {
     "Poke Ball": ItemData(4, ItemClassification.filler),
     "Town Map": ItemData(5, ItemClassification.progression_skip_balancing),
     "Bicycle": ItemData(6, ItemClassification.progression),
-    "Flippers": ItemData(7, ItemClassification.progression),
+    # "Flippers": ItemData(7, ItemClassification.progression),
     "Safari Ball": ItemData(8, ItemClassification.filler),
     "Pokedex": ItemData(9, ItemClassification.filler),
     "Moon Stone": ItemData(10, ItemClassification.useful),
@@ -75,7 +75,7 @@ item_table = {
     "X Defend": ItemData(66, ItemClassification.filler),
     "X Speed": ItemData(67, ItemClassification.filler),
     "X Special": ItemData(68, ItemClassification.filler),
-    "Coin Case": ItemData(69, ItemClassification.progression_skip_balancing), ###
+    "Coin Case": ItemData(69, ItemClassification.progression_skip_balancing),
     "Oak's Parcel": ItemData(70, ItemClassification.progression),
     "Item Finder": ItemData(71, ItemClassification.progression),
     "Silph Scope": ItemData(72, ItemClassification.progression),
@@ -91,10 +91,10 @@ item_table = {
     "Elixir": ItemData(82, ItemClassification.filler),
     "Max Elixir": ItemData(83, ItemClassification.filler),
     "Tea": ItemData(84, ItemClassification.progression),
-    "Master Sword": ItemData(85, ItemClassification.progression),
-    "Flute": ItemData(86, ItemClassification.progression),
-    "Titan's Mitt": ItemData(87, ItemClassification.progression),
-    "Lamp": ItemData(88, ItemClassification.progression),
+    # "Master Sword": ItemData(85, ItemClassification.progression),
+    # "Flute": ItemData(86, ItemClassification.progression),
+    # "Titan's Mitt": ItemData(87, ItemClassification.progression),
+    # "Lamp": ItemData(88, ItemClassification.progression),
     "Plant Key": ItemData(89, ItemClassification.progression),
     "Mansion Key": ItemData(90, ItemClassification.progression),
     "Hideout Key": ItemData(91, ItemClassification.progression),
@@ -169,7 +169,3 @@ item_table.update(
 item_table.update(
     {f"Static {pokemon}": ItemData(None, ItemClassification.progression) for pokemon in pokemon_data.keys()}
 )
-# for TM in range(0,  51):
-#     item_table.append(ItemData(201 + TM, f"TM{TM}", ItemClassification.filler))
-# for item in item_table:
-#     print(f"\"{item.name}\": ItemData({item.id}, {item.classification})")
