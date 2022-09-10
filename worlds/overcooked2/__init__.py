@@ -377,6 +377,7 @@ class Overcooked2World(World):
             "ImpossibleTutorial": True,
             "LevelForceReveal": level_force_reveal,
             "SaveFolderName": mod_name,
+            "CustomOrderTimeoutPenalty": 10,
 
             # Game Modifications
             "LevelPurchaseRequirements": level_purchase_requirements,

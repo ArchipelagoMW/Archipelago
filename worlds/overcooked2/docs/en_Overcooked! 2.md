@@ -75,3 +75,4 @@ In addition to adding items, Randomizer modifies the following aspects of *Overc
     - Based off of the curent World Record on the game's [Leaderboard](https://overcooked.greeny.dev)
     - 1-Star/2-Star scores are a lot closer to the 3-Star Score
 - Significantly reduced the time allotted to beat the final level
+- Reduced penalty for expired order
