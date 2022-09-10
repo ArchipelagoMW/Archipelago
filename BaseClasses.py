@@ -955,6 +955,14 @@ class Region:
                 return True
         return False
 
+    def get_connecting_entrance(self, outside_region_types: typing.Set[RegionType] = frozenset(
+        (RegionType.DarkWorld, RegionType.LightWorld, RegionType.Generic),)) -> Entrance:
+        for entrance in self.entrances:
+            if entrance.parent_region.type in outside_region_types:
+                return entrance
+        for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
+            return entrance.parent_region.get_connecting_entrance(outside_region_types)
+
     def __repr__(self):
         return self.__str__()
 
