@@ -31,7 +31,7 @@ class FF1World(World):
     game = "Final Fantasy"
     topology_present = False
     remote_items = True
-    data_version = 2
+    data_version = 3
     remote_start_inventory = True
 
     ff1_items = FF1Items()
