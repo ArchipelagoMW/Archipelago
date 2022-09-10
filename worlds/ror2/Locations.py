@@ -7,7 +7,7 @@ class RiskOfRainLocation(Location):
     game: str = "Risk of Rain 2"
 
 
-# 37006 - 37506
+# 38006 - 38506
 item_pickups: Dict[str, int] = {
-    f"ItemPickup{i+1}": 37000+i for i in range(TotalLocations.range_end)
+    f"ItemPickup{i+1}": 38000+i for i in range(TotalLocations.range_end)
 }
