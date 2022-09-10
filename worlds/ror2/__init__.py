@@ -1,6 +1,6 @@
 import string
 from typing import Dict, List
-from .Items import RiskOfRainItem, item_table, item_pool_weights
+from .Items import RiskOfRainItem, item_table, item_pool_weights, get_environment_table
 from .Locations import RiskOfRainLocation, item_pickups
 from .Rules import set_rules
 
@@ -50,6 +50,13 @@ class RiskOfRainWorld(World):
         if self.world.start_with_revive[self.player].value:
             self.world.push_precollected(self.world.create_item("Dio's Best Friend", self.player))
 
+        environments_pool = get_environment_table(self.world.dlc_sotv[self.player].value)
+
+        # TODO allow for different precollected environments
+        self.world.push_precollected(self.world.create_item("Titanic Plains", self.player))
+        environments_pool.pop("Titanic Plains")
+        precollected_environments = 1
+
         # if presets are enabled generate junk_pool from the selected preset
         pool_option = self.world.item_weights[self.player].value
         junk_pool: Dict[str, int] = {}
@@ -83,9 +90,16 @@ class RiskOfRainWorld(World):
         # Add revive items for the player
         itempool += ["Dio's Best Friend"] * self.total_revivals
 
+        for env_name,_ in environments_pool.items():
+            itempool += [env_name]
+
+        # precollected environments are popped from the pool so counting like this is valid
+        nonjunk_item_count = self.total_revivals + len(environments_pool)
+        junk_item_count = self.world.total_locations[self.player].value - nonjunk_item_count
+
         # Fill remaining items with randomly generated junk
         itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
-                                              k=self.world.total_locations[self.player].value - self.total_revivals)
+                                              k=junk_item_count)
 
         # Convert itempool into real items
         itempool = list(map(lambda name: self.create_item(name), itempool))

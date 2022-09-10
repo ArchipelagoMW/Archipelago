@@ -42,6 +42,9 @@ class FinalStageDeath(DefaultOnToggle):
     """Death on the final boss stage counts as a win."""
     display_name = "Final Stage Death is Win"
 
+class DLC_SOTV(DefaultOnToggle):
+    """Enable if you are using SOTV DLC."""
+    display_name = "SOTV"
 
 class GreenScrap(Range):
     """Weight of Green Scraps in the item pool. (Ignored unless Item Weight Presets is 'No')"""
@@ -169,6 +172,7 @@ ror2_options: Dict[str, type(Option)] = {
     "total_revivals":       TotalRevivals,
     "start_with_revive":    StartWithRevive,
     "final_stage_death":    FinalStageDeath,
+    "dlc_sotv":             DLC_SOTV,
     "item_pickup_step":     ItemPickupStep,
     "enable_lunar":         AllowLunarItems,
     "item_weights":         ItemWeights,
