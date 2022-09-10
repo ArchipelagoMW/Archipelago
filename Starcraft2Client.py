@@ -135,6 +135,7 @@ class SC2Context(CommonContext):
     last_loc_list = None
     difficulty_override = -1
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
+    last_bot: typing.Optional[ArchipelagoBot] = None
     raw_text_parser: RawJSONtoTextParser
 
     def __init__(self, *args, **kwargs):
@@ -355,6 +356,8 @@ class SC2Context(CommonContext):
 
     async def shutdown(self):
         await super(SC2Context, self).shutdown()
+        if self.last_bot:
+            self.last_bot.want_close = True
         if self.sc2_run_task:
             self.sc2_run_task.cancel()
 
@@ -502,7 +505,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     setup_done: bool
     ctx: SC2Context
     mission_id: int
-
+    want_close: bool = False
     can_read_game = False
 
     last_received_update: int = 0
@@ -510,12 +513,17 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     def __init__(self, ctx: SC2Context, mission_id):
         self.setup_done = False
         self.ctx = ctx
+        self.ctx.last_bot = self
         self.mission_id = mission_id
         self.boni = [False for _ in range(max_bonus)]
 
         super(ArchipelagoBot, self).__init__()
 
     async def on_step(self, iteration: int):
+        if self.want_close:
+            self.want_close = False
+            await self._client.leave()
+            return
         game_state = 0
         if not self.setup_done:
             self.setup_done = True
