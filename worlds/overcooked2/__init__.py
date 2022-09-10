@@ -411,6 +411,8 @@ class Overcooked2World(World):
             "LevelUnlockRequirements": level_unlock_requirements,
             "LockedEmotes": [0, 1, 2, 3, 4, 5],
             "StarOffset": 0,
+            "AggressiveHorde": True,
+            "DisableEarnHordeMoney": True,
 
             # Item Unlocking
             "OnLevelCompleted": on_level_completed,
