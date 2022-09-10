@@ -407,7 +407,7 @@ class Overcooked2World(World):
             "ChoppingTimeScale": 1.4,
             "BackpackMovementScale": 0.7,
             "RespawnTime": 10.0,
-            "CarnivalDispenserRefactoryTime": 4.0,
+            "CarnivalDispenserRefactoryTime": 3.3,
             "LevelUnlockRequirements": level_unlock_requirements,
             "LockedEmotes": [0, 1, 2, 3, 4, 5],
             "StarOffset": 0,
@@ -428,8 +428,8 @@ class Overcooked2World(World):
         self.options["LeaderboardScoreScale"] = {
             "FourStars": 1.0,
             "ThreeStars": star_threshold_scale,
-            "TwoStars": star_threshold_scale * 0.8,
-            "OneStar": star_threshold_scale * 0.4,
+            "TwoStars": star_threshold_scale * 0.75,
+            "OneStar": star_threshold_scale * 0.333,
         }
 
         base_data.update(self.options)

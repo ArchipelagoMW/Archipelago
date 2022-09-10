@@ -70,7 +70,7 @@ class StarsToWin(Range):
     display_name = "Stars to Win"
     range_start = 0
     range_end = 129
-    default = 60
+    default = 66
 
 
 class StarThresholdScale(Range):
@@ -78,7 +78,7 @@ class StarThresholdScale(Range):
     display_name = "Star Difficulty %"
     range_start = 1
     range_end = 100
-    default = 55
+    default = 50
 
 
 overcooked_options = {
