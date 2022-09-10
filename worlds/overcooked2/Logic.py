@@ -412,7 +412,8 @@ level_logic = {
 
             },
             { # Additive
-
+                ("Progressive Throw/Catch", 1.0),
+                ("Progressive Dash", 1.0),
             },
         ),
         ( # 2-star
