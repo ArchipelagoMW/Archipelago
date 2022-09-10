@@ -593,6 +593,7 @@ class Context:
             forfeit_player(self, client.team, client.slot)
         elif self.forced_auto_forfeits[self.games[client.slot]]:
             forfeit_player(self, client.team, client.slot)
+        self.save()  # save goal completion flag
 
 
 def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False):
