@@ -4,28 +4,32 @@ import worlds.pokemon_rb.poke_data as poke_data
 
 class PokemonLogic(LogicMixin):
     def _pokemon_rb_can_surf(self, player):
-        return (((self.has("HM03 Surf", player) and self._can_learn_hm("10000", player)) or self.has("Flippers", player)) and
-                (self.has("Soul Badge", player) or self.has(self.world.worlds[player].extra_badges.get("Surf"), player)
+        return (((self.has("HM03 Surf", player) and self._can_learn_hm("10000", player))
+                 or self.has("Flippers", player)) and (self.has("Soul Badge", player) or
+                 self.has(self.world.worlds[player].extra_badges.get("Surf"), player)
                  or self.world.badges_needed_for_hm_moves[player].value == 0))
 
     def _pokemon_rb_can_cut(self, player):
-        return (self.has("HM01 Cut", player) and self._can_learn_hm("100", player) or self.has("Master Sword", player)) and (self.has("Cascade Badge", player)
-                or self.has(self.world.worlds[player].extra_badges.get("Cut"), player) or
-                self.world.badges_needed_for_hm_moves[player].value == 0)
+        return ((self.has("HM01 Cut", player) and self._can_learn_hm("100", player) or self.has("Master Sword", player))
+                 and (self.has("Cascade Badge", player) or
+                 self.has(self.world.worlds[player].extra_badges.get("Cut"), player) or
+                 self.world.badges_needed_for_hm_moves[player].value == 0))
 
     def _pokemon_rb_can_fly(self, player):
-        return ((self.has("HM02 Fly", player) and self._can_learn_hm("1000", player)) or self.has("Flute", player)) and (self.has("Thunder Badge", player) or
-                self.has(self.world.worlds[player].extra_badges.get("Fly"), player) or
-                self.world.badges_needed_for_hm_moves[player].value == 0)
+        return (((self.has("HM02 Fly", player) and self._can_learn_hm("1000", player)) or self.has("Flute", player)) and
+               (self.has("Thunder Badge", player) or self.has(self.world.worlds[player].extra_badges.get("Fly"), player)
+                or self.world.badges_needed_for_hm_moves[player].value == 0))
 
     def _pokemon_rb_can_strength(self, player):
-        return ((self.has("HM04 Strength", player) and self._can_learn_hm("100000", player)) or self.has("Titan's Mitt", player)) and\
-               (self.has("Rainbow Badge", player) or self.has(self.world.worlds[player].extra_badges.get("Strength"), player)
+        return ((self.has("HM04 Strength", player) and self._can_learn_hm("100000", player)) or
+                self.has("Titan's Mitt", player)) and (self.has("Rainbow Badge", player) or
+                self.has(self.world.worlds[player].extra_badges.get("Strength"), player)
                 or self.world.badges_needed_for_hm_moves[player].value == 0)
 
     def _pokemon_rb_can_flash(self, player):
-        return ((self.has("HM05 Flash", player) and self._can_learn_hm("1000000", player)) or self.has("Lamp", player)) and (self.has("Boulder Badge", player) or
-                self.has(self.world.worlds[player].extra_badges.get("Flash"), player) or self.world.badges_needed_for_hm_moves[player].value == 0)
+        return (((self.has("HM05 Flash", player) and self._can_learn_hm("1000000", player)) or self.has("Lamp", player))
+                 and (self.has("Boulder Badge", player) or self.has(self.world.worlds[player].extra_badges.get("Flash"),
+                 player) or self.world.badges_needed_for_hm_moves[player].value == 0))
 
     def _can_learn_hm(self, move, player):
         for pokemon, data in self.world.worlds[player].local_poke_data.items():
@@ -48,10 +52,8 @@ class PokemonLogic(LogicMixin):
         return self.has("Tea", player)
 
     def _pokemon_rb_has_badges(self, count, player):
-        return (self.has("Boulder Badge", player) + self.has("Cascade Badge", player)
-                + self.has("Thunder Badge", player) + self.has("Rainbow Badge", player)
-                + self.has("Marsh Badge", player) + self.has("Soul Badge", player)
-                + self.has("Volcano Badge", player) + self.has("Earth Badge", player)) >= count
+        return len([item for item in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Marsh Badge",
+                                      "Soul Badge", "Volcano Badge", "Earth Badge"] if self.has(item, player)]) >= count
 
     def _pokemon_rb_has_pokemon(self, count, player):
         obtained_pokemon = set()
@@ -60,3 +62,8 @@ class PokemonLogic(LogicMixin):
                 obtained_pokemon.add(pokemon)
 
         return len(obtained_pokemon) >= count
+
+    def _pokemon_rb_fossil_checks(self, player):
+        return (self.world.get_location("Mt Moon 1F - Southwest Item", player) and self.world.get_location(
+                "Cinnabar Island - Lab Scientist", player)) and (self.has("Old Amber", player) or
+                self.has("Dome Fossil", player) or self.has("Helix Fossil", player))

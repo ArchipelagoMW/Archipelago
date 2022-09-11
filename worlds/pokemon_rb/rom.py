@@ -47,38 +47,102 @@ def get_encounter_slots(self):
     return encounter_slots
 
 
-def randomize_pokemon(self):
+def get_base_stat_total(mon):
+    return (poke_data.pokemon_data[mon]["atk"] + poke_data.pokemon_data[mon]["def"]
+            + poke_data.pokemon_data[mon]["hp"] + poke_data.pokemon_data[mon]["spd"]
+            + poke_data.pokemon_data[mon]["spc"])
 
-    def get_base_stat_total(mon):
-        return (poke_data.pokemon_data[mon]["atk"] + poke_data.pokemon_data[mon]["def"]
-                + poke_data.pokemon_data[mon]["hp"] + poke_data.pokemon_data[mon]["spd"]
-                + poke_data.pokemon_data[mon]["spc"])
+
+def randomize_pokemon(self, mon, mons_list, randomize_type):
+    if randomize_type in [1, 3]:
+        type_mons = [pokemon for pokemon in mons_list if any([poke_data.pokemon_data[mon][
+             "type1"] in [self.local_poke_data[pokemon]["type1"], self.local_poke_data[pokemon]["type2"]],
+             poke_data.pokemon_data[mon]["type2"] in [self.local_poke_data[pokemon]["type1"],
+                                                      self.local_poke_data[pokemon]["type2"]]])]
+        if not type_mons:
+            type_mons = mons_list.copy()
+        if randomize_type == 3:
+            stat_base = get_base_stat_total(mon)
+            type_mons.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
+            mon = type_mons[round(self.world.random.triangular(0, len(type_mons) - 1, 0))]
+    if randomize_type == 2:
+        stat_base = get_base_stat_total(mon)
+        mons_list.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
+        mon = mons_list[round(self.world.random.triangular(0, 50, 0))]
+    elif randomize_type == 4:
+        mon = self.world.random.choice(mons_list)
+    return mon
+
+
+def process_trainer_data(self, data):
+    if not self.world.randomize_trainer_parties[self.player].value:
+        return
+    mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon]
+    address = rom_addresses["Trainer_Data"]
+    while address < rom_addresses["Trainer_Data_End"]:
+        if data[address] == 255:
+            mode = 1
+        else:
+            mode = 0
+        while True:
+            address += 1
+            if data[address] == 0:
+                address += 1
+                break
+            address += mode
+            mon = poke_data.id_to_mon[data[address]]
+            mon = randomize_pokemon(self, mon, mons_list, self.world.randomize_trainer_parties[self.player].value)
+            data[address] = poke_data.pokemon_data[mon]["id"]
+
+
+def process_static_pokemon(self):
+    static_slots = [location for location in get_locations(self.player) if location.type in
+                    ["Static Pokemon", "Missable Pokemon"]]
+
+    mons_list = [pokemon for pokemon in poke_data.first_stage_pokemon if pokemon not in poke_data.legendary_pokemon]
+    for slot in static_slots:
+        location = self.world.get_location(slot.name, self.player)
+        randomize_type = self.world.randomize_static_pokemon[self.player].value
+        slot_type = slot.type.split()[0]
+        if not randomize_type:
+            location.item = self.create_item(slot_type + " " + slot.original_item)
+        else:
+            location.item = self.create_item(slot_type + " " +
+                                             randomize_pokemon(self, slot.original_item, mons_list, randomize_type))
+        location.event = True
+        location.locked = True
+        location.item.location = location
+
+
+def process_wild_pokemon(self):
+
     encounter_slots = get_encounter_slots(self)
 
     placed_mons = {pokemon: 0 for pokemon in poke_data.pokemon_data.keys()}
-    if self.world.randomize_pokemon[self.player].value:
+    if self.world.randomize_wild_pokemon[self.player].value:
         mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon]
         self.world.random.shuffle(encounter_slots)
         locations = []
         for slot in encounter_slots:
-            if self.world.randomize_pokemon[self.player].value in [1, 3]:
-                type_mons = [pokemon for pokemon in mons_list if any([poke_data.pokemon_data[slot.original_item][
-                    "type1"] in [self.local_poke_data[pokemon]["type1"], self.local_poke_data[pokemon]["type2"]],
-                    poke_data.pokemon_data[slot.original_item]["type2"] in [self.local_poke_data[pokemon]["type1"],
-                                                                          self.local_poke_data[pokemon]["type2"]]])]
-                if not type_mons:
-                    type_mons = mons_list.copy()
-                self.world.random.shuffle(type_mons)
-                if self.world.randomize_pokemon[self.player].value == 3:
-                    stat_base = get_base_stat_total(slot.original_item)
-                    type_mons.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
-                mon = type_mons[round(self.world.random.triangular(0, len(type_mons) - 1, 0))]
-            if self.world.randomize_pokemon[self.player].value == 2:
-                stat_base = get_base_stat_total(slot.original_item)
-                mons_list.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
-                mon = mons_list[round(self.world.random.triangular(0, 50, 0))]
-            elif self.world.randomize_pokemon[self.player].value == 4:
-                mon = self.world.random.choice(mons_list)
+            # if self.world.randomize_wild_pokemon[self.player].value in [1, 3]:
+            #     type_mons = [pokemon for pokemon in mons_list if any([poke_data.pokemon_data[slot.original_item][
+            #         "type1"] in [self.local_poke_data[pokemon]["type1"], self.local_poke_data[pokemon]["type2"]],
+            #         poke_data.pokemon_data[slot.original_item]["type2"] in [self.local_poke_data[pokemon]["type1"],
+            #                                                               self.local_poke_data[pokemon]["type2"]]])]
+            #     if not type_mons:
+            #         type_mons = mons_list.copy()
+            #     self.world.random.shuffle(type_mons)
+            #     if self.world.randomize_wild_pokemon[self.player].value == 3:
+            #         stat_base = get_base_stat_total(slot.original_item)
+            #         type_mons.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
+            #     mon = type_mons[round(self.world.random.triangular(0, len(type_mons) - 1, 0))]
+            # if self.world.randomize_wild_pokemon[self.player].value == 2:
+            #     stat_base = get_base_stat_total(slot.original_item)
+            #     mons_list.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
+            #     mon = mons_list[round(self.world.random.triangular(0, 50, 0))]
+            # elif self.world.randomize_wild_pokemon[self.player].value == 4:
+            #     mon = self.world.random.choice(mons_list)
+            mon = randomize_pokemon(self, slot.original_item, mons_list, self.world.randomize_wild_pokemon[self.player].value)
             placed_mons[mon] += 1
             location = self.world.get_location(slot.name, self.player)
             location.item = self.create_item(mon)
@@ -87,14 +151,28 @@ def randomize_pokemon(self):
             location.item.location = location
             locations.append(location)
 
-        missing_mons = [pokemon for pokemon in poke_data.first_stage_pokemon if placed_mons[pokemon] == 0 and pokemon
-                        not in poke_data.legendary_pokemon]
-        # missing_mons = [pokemon for pokemon in poke_data.pokemon_data.keys() if placed_mons[pokemon] == 0 and pokemon
-        #                not in poke_data.legendary_pokemon]
+        missing_mons = []
+        remaining_pokemon = [pokemon for pokemon in poke_data.pokemon_data.keys() if placed_mons[pokemon] == 0 and
+                            pokemon not in poke_data.legendary_pokemon]
+        if self.world.catch_em_all[self.player].value == 1:
+            missing_mons = [pokemon for pokemon in poke_data.first_stage_pokemon if placed_mons[pokemon] == 0 and
+                            pokemon not in poke_data.legendary_pokemon]
+        elif self.world.catch_em_all[self.player].value == 2:
+            missing_mons = missing_mons.copy()
+        logic_needed_mons = max(self.world.oaks_aide_rt_2[self.player].value,
+                                self.world.oaks_aide_rt_11[self.player].value,
+                                self.world.oaks_aide_rt_15[self.player].value)
+        if self.world.accessibility[self.player] == "minimal":
+            logic_needed_mons = 0
+
+        self.world.random.shuffle(remaining_pokemon)
+        while (len([pokemon for pokemon in placed_mons if placed_mons[pokemon] > 0])
+               + len(missing_mons) < logic_needed_mons):
+            missing_mons.append(remaining_pokemon.pop())
         for mon in missing_mons:
             stat_base = get_base_stat_total(mon)
             candidate_locations = get_encounter_slots(self)
-            if self.world.randomize_pokemon[self.player].value in [1, 3]:
+            if self.world.randomize_wild_pokemon[self.player].value in [1, 3]:
                 candidate_locations = [slot for slot in candidate_locations if any([poke_data.pokemon_data[slot.original_item][
                     "type1"] in [self.local_poke_data[mon]["type1"], self.local_poke_data[mon]["type2"]],
                     poke_data.pokemon_data[slot.original_item]["type2"] in [self.local_poke_data[mon]["type1"],
@@ -121,7 +199,7 @@ def randomize_pokemon(self):
             placed_mons[location.item.name] += 1
 
 
-def randomize_pokemon_data(self):
+def process_pokemon_data(self):
 
     local_poke_data = deepcopy(poke_data.pokemon_data)
     learnsets = deepcopy(poke_data.learnsets)
@@ -233,10 +311,16 @@ def generate_output(self, output_directory: str):
             continue
         if location.item.player == self.player:
             if location.rom_address:
-                if location.item.name in poke_data.pokemon_data.keys():
-                    data[location.rom_address] = poke_data.pokemon_data[location.item.name]["id"]
-                else:
-                    data[location.rom_address] = self.item_name_to_id[location.item.name] - 172000000
+                rom_address = location.rom_address
+                if not isinstance(rom_address, list):
+                    rom_address = [rom_address]
+                for address in rom_address:
+                    if location.item.name in poke_data.pokemon_data.keys():
+                        data[address] = poke_data.pokemon_data[location.item.name]["id"]
+                    elif " ".join(location.item.name.split()[1:]) in poke_data.pokemon_data.keys():
+                        data[address] = poke_data.pokemon_data[" ".join(location.item.name.split()[1:])]["id"]
+                    else:
+                        data[address] = self.item_name_to_id[location.item.name] - 172000000
 
         else:
             data[location.rom_address] = 0x2C  # AP Item
@@ -367,6 +451,11 @@ def generate_output(self, output_directory: str):
     data[rom_addresses["Option_Aide_Rt11"]] = self.world.oaks_aide_rt_11[self.player]
     data[rom_addresses["Option_Aide_Rt15"]] = self.world.oaks_aide_rt_15[self.player]
 
+    if self.world.safari_zone_normal_battles[self.player].value == 1:
+        data[rom_addresses["Option_Safari_Zone_Battle_Type"]] = 255
+
+    process_trainer_data(self, data)
+
     mons = [mon["id"] for mon in poke_data.pokemon_data.values()]
     random.shuffle(mons)
     data[rom_addresses['Title_Mon_First']] = mons.pop()
@@ -412,7 +501,7 @@ def get_base_rom_bytes(game_version: str, hash: str="") -> bytes:
         if hash != basemd5.hexdigest():
             raise Exception('Supplied Base Rom does not match known MD5 for US(1.0) release. '
                             'Get the correct game and version, then dump it')
-    with open(Utils.local_path('data', f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
+    with open(os.path.join(os.path.dirname(__file__), f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
         base_patch = bytes(stream.read())
     base_rom_bytes = bsdiff4.patch(base_rom_bytes, base_patch)
     return base_rom_bytes

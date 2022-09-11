@@ -3,6 +3,7 @@ import os
 import logging
 
 from BaseClasses import Item, MultiWorld, ItemClassification
+from Fill import fill_restrictive, FillError
 from .items import item_table, filler_items
 from .locations import get_locations, PokemonRBLocation
 from ..AutoWorld import World, WebWorld
@@ -11,7 +12,9 @@ from .logic import PokemonLogic
 from .options import pokemon_rb_options
 from .rom_addresses import rom_addresses
 from .text import encode_text
-from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, randomize_pokemon_data, randomize_pokemon
+from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, process_pokemon_data, process_wild_pokemon,\
+    process_static_pokemon
+
 import worlds.pokemon_rb.poke_data as poke_data
 
 
@@ -74,11 +77,12 @@ class PokemonRedBlueWorld(World):
 
         self.world.itempool += item_pool
 
-        randomize_pokemon_data(self)
+        process_pokemon_data(self)  # strange place for this, but it is the only place that works
 
     def pre_fill(self):
 
-        randomize_pokemon(self)
+        process_wild_pokemon(self)
+        process_static_pokemon(self)
 
         if self.world.old_man[self.player].value == 1:
             item = self.create_item("Oak's Parcel")
@@ -101,21 +105,28 @@ class PokemonRedBlueWorld(World):
             location.place_locked_item(player_items[0])
             self.world.itempool.remove(player_items[0])
         if not self.world.badgesanity[self.player].value:
-            badges = []
-            badgelocs = []
-            for badge in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge",
-                          "Marsh Badge", "Volcano Badge", "Earth Badge"]:
-                badges.append(self.create_item(badge))
-            for loc in ["Pewter Gym - Brock 1", "Cerulean Gym - Misty 1", "Vermilion Gym - Lt. Surge 1",
-                        "Celadon Gym - Erika 1", "Fuchsia Gym - Koga 1", "Saffron Gym - Sabrina 1",
-                        "Cinnabar Gym - Blaine 1", "Viridian Gym - Giovanni 1"]:
-                badgelocs.append(self.world.get_location(loc, self.player))
-            state = self.world.get_all_state(False)
-            self.world.random.shuffle(badges)
-            self.world.random.shuffle(badgelocs)
-            from Fill import fill_restrictive
-            fill_restrictive(self.world, state, badgelocs, badges, True, True)
-
+            for i in range(5):
+                try:
+                    badges = []
+                    badgelocs = []
+                    for badge in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge",
+                                  "Marsh Badge", "Volcano Badge", "Earth Badge"]:
+                        badges.append(self.create_item(badge))
+                    for loc in ["Pewter Gym - Brock 1", "Cerulean Gym - Misty 1", "Vermilion Gym - Lt. Surge 1",
+                                "Celadon Gym - Erika 1", "Fuchsia Gym - Koga 1", "Saffron Gym - Sabrina 1",
+                                "Cinnabar Gym - Blaine 1", "Viridian Gym - Giovanni 1"]:
+                        badgelocs.append(self.world.get_location(loc, self.player))
+                    state = self.world.get_all_state(False)
+                    self.world.random.shuffle(badges)
+                    self.world.random.shuffle(badgelocs)
+                    fill_restrictive(self.world, state, badgelocs.copy(), badges.copy(), True, True)
+                except FillError:
+                    for location in badgelocs:
+                        location.item = None
+                    continue
+                break
+            else:
+                raise FillError(f"Failed to place badges for player {self.player}")
         intervene = False
         test_state = self.world.get_all_state(False)
         if not test_state._pokemon_rb_can_surf(self.player) or not test_state._pokemon_rb_can_strength(self.player):

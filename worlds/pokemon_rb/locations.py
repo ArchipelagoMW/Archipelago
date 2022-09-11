@@ -71,7 +71,7 @@ def get_locations(player=None):
                      EventFlag(57)),
         LocationData("Viridian Gym", "Giovanni 2", "TM27 Fissure", rom_addresses["Event_Viridian_Gym"], EventFlag(80)),
         LocationData("Route 2 East", "Oak's Aide", "HM05 Flash", rom_addresses["Event_Route_2_Oaks_Aide"],
-                     EventFlag(984), lambda state: state._pokemon_rb_has_pokemon(state.world.oaks_aide_rt_2[player].value, player)),
+                     EventFlag(984), lambda state: state._pokemon_rb_has_pokemon(state.world.oaks_aide_rt_2[player].value + 5, player)),
         LocationData("Pewter City", "Museum", "Old Amber", rom_addresses["Event_Museum"], EventFlag(105), lambda state: state._pokemon_rb_can_cut(player)),
         LocationData("Pewter Gym", "Brock 2", "TM34 Bide", rom_addresses["Event_Pewter_Gym"], EventFlag(118)),
         LocationData("Cerulean City", "Bicycle Shop", "Bicycle", rom_addresses["Event_Bicycle_Shop"], EventFlag(192),
@@ -89,7 +89,7 @@ def get_locations(player=None):
                      EventFlag(358), lambda state: state._pokemon_rb_can_cut(player or state._pokemon_rb_can_surf(player))),
         LocationData("S.S. Anne 2F", "Captain", "HM01 Cut", rom_addresses["Event_SS_Anne_Captain"], EventFlag(1504)),
         LocationData("Route 11 East", "Oak's Aide", "Item Finder", rom_addresses["Event_Rt11_Oaks_Aide"],
-                     EventFlag(1151), lambda state: state._pokemon_rb_has_pokemon(state.world.oaks_aide_rt_11[player].value, player)),
+                     EventFlag(1151), lambda state: state._pokemon_rb_has_pokemon(state.world.oaks_aide_rt_11[player].value + 5, player)),
         LocationData("Celadon City", "Stranded Man", "TM41 Soft Boiled", rom_addresses["Event_Stranded_Man"],
                      EventFlag(384), lambda state: state._pokemon_rb_can_surf(player)),
         LocationData("Celadon City", "Thirsty Girl Gets Water", "TM13 Ice Beam",
@@ -108,7 +108,7 @@ def get_locations(player=None):
                      EventFlag(1791)),
         LocationData("Route 16 North", "House Woman", "HM02 Fly", rom_addresses["Event_Rt16_House_Woman"], EventFlag(1230)),
         LocationData("Route 15", "Oak's Aide", "Exp. All", rom_addresses["Event_Rt_15_Oaks_Aide"], EventFlag(1200),
-                     lambda state: state._pokemon_rb_has_pokemon(state.world.oaks_aide_rt_15[player].value, player)),
+                     lambda state: state._pokemon_rb_has_pokemon(state.world.oaks_aide_rt_15[player].value + 5, player)),
         LocationData("Fuchsia City", "Safari Zone Warden", "HM04 Strength", rom_addresses["Event_Warden"], EventFlag(568)),
         LocationData("Fuchsia Gym", "Koga 2", "TM06 Toxic", rom_addresses["Event_Fuschia_Gym"], EventFlag(600)),
         LocationData("Safari Zone West", "Secret House", "HM03 Surf", rom_addresses["Event_Safari_Zone_Secret_House"], EventFlag(2176)),
@@ -118,6 +118,13 @@ def get_locations(player=None):
         LocationData("Copycat's House", "Copycat", "TM31 Mimic", rom_addresses["Event_Copycat"], EventFlag(832)),
         LocationData("Saffron City", "Mr. Psychic", "TM29 Psychic", rom_addresses["Event_Mr_Psychic"], EventFlag(944)),
         LocationData("Saffron Gym", "Sabrina 2", "TM46 Psywave", rom_addresses["Event_Saffron_Gym"], EventFlag(864)),
+        LocationData("Fossil", "Item 1", "Dome Fossil",
+                     [rom_addresses["Event_Dome_Fossil"], rom_addresses["Event_Dome_Fossil_B"]], EventFlag(0x57F),
+                     lambda state: state._pokemon_rb_fossil_checks(player)),
+        LocationData("Fossil", "Item 2", "Helix Fossil",
+                     [rom_addresses["Event_Helix_Fossil"], rom_addresses["Event_Helix_Fossil_B"]], EventFlag(0x57F),
+                     lambda state: state._pokemon_rb_fossil_checks(player)),
+
         LocationData("Cerulean City", "Rocket Thief", "TM28 Dig", rom_addresses["Event_Rocket_Thief"],
                      Missable(6)),
         LocationData("Route 2 East", "South Item", "Moon Stone", rom_addresses["Missable_Route_2_Item_1"],
@@ -384,6 +391,7 @@ def get_locations(player=None):
         LocationData("Vermilion City", "Hidden Item In Water Near Fan Club", "Max Ether", rom_addresses['Hidden_Item_Vermilion_City'], Hidden(51), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
         LocationData("Cerulean City", "Hidden Item Gym Badge Guy's Backyard", "Rare Candy", rom_addresses['Hidden_Item_Cerulean_City'], Hidden(52), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
         LocationData("Route 4", "Hidden Item Plateau East Of Mt Moon", "Great Ball", rom_addresses['Hidden_Item_Route_4'], Hidden(53), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
+
 
         LocationData("Indigo Plateau", "Become Champion", "Become Champion", event=True),
         LocationData("Pokemon Tower 7F", "Fuji Saved", "Fuji Saved", event=True),
@@ -1600,6 +1608,7 @@ def get_locations(player=None):
         LocationData("Anywhere", "Old Rod Pokemon", "Magikarp", rom_addresses["Wild_Old_Rod"] + 1, None,
                      rule=lambda state: state.has("Old Rod", player), event=True, type="Wild Encounter"),
 
+        # "Wild encounters" means a Pokemon you cannot miss or release and lose - re-use it for these
         LocationData("Celadon Prize Corner", "Pokemon Prize - 1", "Abra", rom_addresses["Prize_Mon_A"], None,
                      rule=lambda state: state.has("Coin Case", player), event=True, type="Wild Encounter"),
         LocationData("Celadon Prize Corner", "Pokemon Prize - 2", "Clefairy", rom_addresses["Prize_Mon_B"], None,
@@ -1613,6 +1622,65 @@ def get_locations(player=None):
         LocationData("Celadon Prize Corner", "Pokemon Prize - 6", "Porygon", rom_addresses["Prize_Mon_F"], None,
                      rule=lambda state: state.has("Coin Case", player), event=True, type="Wild Encounter"),
 
+        # counted for pokedex, because they cannot be permanently "missed" but not for HMs since they can be released
+        # or evolved forms may not be able to learn the same HMs
+        LocationData("Celadon City", "Celadon Mansion Pokemon", "Eevee", rom_addresses["Gift_Eevee"], None,
+                     event=True, type="Static Pokemon"),
+        LocationData("Silph Co 7F", "Gift Pokemon", "Lapras", rom_addresses["Gift_Lapras"], None,
+                     event=True, type="Static Pokemon"),
+        LocationData("Route 3", "Pokemon For Sale", "Magikarp", rom_addresses["Gift_Magikarp"], None,
+                     event=True, type="Static Pokemon"),
+        LocationData("Cinnabar Island", "Old Amber Pokemon", "Aerodactyl", rom_addresses["Gift_Aerodactyl"], None,
+                     rule=lambda state: state.has("Old Amber", player), event=True, type="Static Pokemon"),
+        LocationData("Cinnabar Island", "Helix Fossil Pokemon", "Omanyte", rom_addresses["Gift_Omanyte"], None,
+                     rule=lambda state: state.has("Helix Fossil", player), event=True, type="Static Pokemon"),
+        LocationData("Cinnabar Island", "Dome Fossil Pokemon", "Kabuto", rom_addresses["Gift_Kabuto"], None,
+                     rule=lambda state: state.has("Dome Fossil", player), event=True, type="Static Pokemon"),
+
+        # not counted for logic currently. Could perhaps make static encounters resettable in the future?
+        LocationData("Power Plant", "Fake Pokeball Battle 1", "Voltorb", rom_addresses["Static_Encounter_Voltorb_A"],
+                     None, event=True, type="Missable Pokemon"),
+        LocationData("Power Plant", "Fake Pokeball Battle 2", "Voltorb", rom_addresses["Static_Encounter_Voltorb_B"],
+                     None, event=True, type="Missable Pokemon"),
+        LocationData("Power Plant", "Fake Pokeball Battle 3", "Voltorb", rom_addresses["Static_Encounter_Voltorb_C"],
+                     None, event=True, type="Missable Pokemon"),
+        LocationData("Power Plant", "Fake Pokeball Battle 4", "Voltorb", rom_addresses["Static_Encounter_Voltorb_D"],
+                     None, event=True, type="Missable Pokemon"),
+        LocationData("Power Plant", "Fake Pokeball Battle 5", "Voltorb", rom_addresses["Static_Encounter_Voltorb_E"],
+                     None, event=True, type="Missable Pokemon"),
+        LocationData("Power Plant", "Fake Pokeball Battle 6", "Voltorb", rom_addresses["Static_Encounter_Voltorb_F"],
+                     None, event=True, type="Missable Pokemon"),
+        LocationData("Power Plant", "Fake Pokeball Battle 7", "Voltorb", rom_addresses["Static_Encounter_Electrode_A"],
+                     None, event=True, type="Missable Pokemon"),
+        LocationData("Power Plant", "Fake Pokeball Battle 8", "Voltorb", rom_addresses["Static_Encounter_Electrode_B"],
+                     None, event=True, type="Missable Pokemon"),
+        # LocationData("Power Plant", "Legendary Pokemon", "Zapdos", rom_addresses["Static_Encounter_Zapdos"],
+        #              None, event=True, type="Missable Pokemon"),
+
+        LocationData("Route 12 West", "Sleeping Pokemon", "Snorlax", rom_addresses["Static_Encounter_Snorlax_A"],
+                     None, rule=lambda state: state.has("Poke Flute", player), event=True, type="Missable Pokemon"),
+        LocationData("Route 16", "Sleeping Pokemon", "Snorlax", rom_addresses["Static_Encounter_Snorlax_B"],
+                     None, rule=lambda state: state.has("Poke Flute", player), event=True, type="Missable Pokemon"),
+
+        LocationData("Saffron City", "Fighting Dojo Gift 1", "Hitmonlee", rom_addresses["Gift_Hitmonlee"],
+                     None, event=True, type="Missable Pokemon"),
+        LocationData("Saffron City", "Fighting Dojo Gift 2", "Hitmonchan", rom_addresses["Gift_Hitmonchan"],
+                     None, event=True, type="Missable Pokemon"),
+
+        LocationData("Pallet Town", "Starter 1", "Charmander", [rom_addresses["Starter1_A"],
+                     rom_addresses["Starter1_B"], rom_addresses["Starter1_C"], rom_addresses["Starter1_D"],
+                     rom_addresses["Starter1_F"], rom_addresses["Starter1_H"]], None, event=True,
+                     type="Missable Pokemon"),
+
+        LocationData("Pallet Town", "Starter 2", "Squirtle", [rom_addresses["Starter2_A"],
+                     rom_addresses["Starter2_B"], rom_addresses["Starter2_E"], rom_addresses["Starter2_F"],
+                     rom_addresses["Starter2_G"], rom_addresses["Starter2_H"], rom_addresses["Starter2_I"]], None,
+                     event=True, type="Missable Pokemon"),
+
+        LocationData("Pallet Town", "Starter 3", "Bulbasaur", [rom_addresses["Starter3_A"],
+                     rom_addresses["Starter3_B"], rom_addresses["Starter3_B"], rom_addresses["Starter3_C"],
+                     rom_addresses["Starter3_D"], rom_addresses["Starter3_E"], rom_addresses["Starter3_G"],
+                     rom_addresses["Starter3_I"]], None, event=True, type="Missable Pokemon"),
 ]
     for i, location in enumerate(locations):
         if location.event or location.rom_address is None:

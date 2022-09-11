@@ -36,6 +36,7 @@ def create_regions(world: MultiWorld, player: int):
     regions = [
         create_region(world, player, "Menu", locations_per_region),
         create_region(world, player, "Anywhere", locations_per_region),
+        create_region(world, player, "Fossil", locations_per_region),
         create_region(world, player, "Pallet Town", locations_per_region),
         create_region(world, player, "Route 1", locations_per_region),
         create_region(world, player, "Viridian City", locations_per_region),
@@ -153,6 +154,7 @@ def create_regions(world: MultiWorld, player: int):
     world.regions += regions
     connect(world, player, "Menu", "Anywhere", one_way=True)
     connect(world, player, "Menu", "Pallet Town", one_way=True)
+    connect(world, player, "Menu", "Fossil", lambda state: state._pokemon_rb_fossil_checks(player), one_way=True)
     connect(world, player, "Pallet Town", "Route 1")
     connect(world, player, "Route 1", "Viridian City")
     connect(world, player, "Viridian City", "Route 22")

@@ -150,12 +150,45 @@ class ExpModifier(SpecialRange):
     }
 
 
-class RandomizePokemon(Choice):
-    """Randomize all Pokemon encountered or received. match_types will select a Pokemon with at least one type matching
+class RandomizeWildPokemon(Choice):
+    """Randomize all wild Pokemon. match_types will select a Pokemon with at least one type matching
     the original type of the original pokemon. match_base_stats will prefer Pokemon with closer base stat totals.
     match_types_and_base_stats will match types and will weight towards similar base stats, but there may not be many
     to choose from."""
-    display_name = "Randomize Pokemon"
+    display_name = "Randomize Wild Pokemon"
+    default = 0
+    option_vanilla = 0
+    option_match_types = 1
+    option_match_base_stats = 2
+    option_match_types_and_base_stats = 3
+    option_completely_random = 4
+
+
+class RandomizeStaticPokemon(Choice):
+    """Randomize all one-time gift and encountered Pokemon. These will always be first evolution stage Pokemon."""
+    display_name = "Randomize Static Pokemon"
+    default = 0
+    option_vanilla = 0
+    option_match_types = 1
+    option_match_base_stats = 2
+    option_match_types_and_base_stats = 3
+    option_completely_random = 4
+
+
+class CatchEmAll(Choice):
+    """Guarantee all first evolution stage Pokemon are available, or all Pokemon of all stages.
+    Currently only has an effect if wild Pokemon are randomized."""
+    display_name = "Catch 'Em All"
+    default = 0
+    option_off = 0
+    alias_false = 0
+    option_first_stage = 1
+    option_all_pokemon = 2
+
+
+class RandomizeTrainerParties(Choice):
+    """Randomize enemy Pokemon encountered in trainer battles."""
+    display_name = "Randomize Trainer Parties"
     default = 0
     option_vanilla = 0
     option_match_types = 1
@@ -309,6 +342,11 @@ class RandomizeTypeChartTypeEffectiveness(Choice):
     default = 0
 
 
+class SafariZoneNormalBattles(Toggle):
+    """Change the Safari Zone to have standard wild pokemon battles."""
+    default = 1
+
+
 class NormalizeEncounterChances(Toggle):
     """Each wild encounter table has 10 slots for Pokemon. Normally the chance for each being chosen ranges from
     19.9% to 1.2%. Turn this on to normalize them all to 10% each."""
@@ -340,10 +378,13 @@ pokemon_rb_options = {
     "blind_trainers": BlindTrainers,
     "minimum_steps_between_encounters": MinimumStepsBetweenEncounters,
     "exp_modifier": ExpModifier,
-    "randomize_pokemon": RandomizePokemon,
+    "randomize_wild_pokemon": RandomizeWildPokemon,
+    "randomize_static_pokemon": RandomizeStaticPokemon,
+    "catch_em_all": CatchEmAll,
     "randomize_pokemon_stats": RandomizePokemonStats,
     "randomize_pokemon_catch_rates": RandomizePokemonCatchRates,
     "minimum_catch_rate": MinimumCatchRate,
+    "randomize_trainer_parties": RandomizeTrainerParties,
     "randomize_pokemon_movesets": RandomizePokemonMovesets,
     "start_with_four_moves": StartWithFourMoves,
     "tm_compatibility": TMCompatibility,
@@ -353,6 +394,7 @@ pokemon_rb_options = {
     "randomize_type_matchup_attacking_types": RandomizeTypeChartAttackingTypes,
     "randomize_type_matchup_defending_types": RandomizeTypeChartDefendingTypes,
     "randomize_type_matchup_type_effectiveness": RandomizeTypeChartTypeEffectiveness,
+    "safari_zone_normal_battles": SafariZoneNormalBattles,
     "normalize_encounter_chances": NormalizeEncounterChances,
     "starting_money": StartingMoney,
 }

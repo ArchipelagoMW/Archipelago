@@ -38,7 +38,7 @@ item_table = {
     "Earth Badge": ItemData(28, ItemClassification.progression),
     "Escape Rope": ItemData(29, ItemClassification.filler),
     "Repel": ItemData(30, ItemClassification.filler),
-    "Old Amber": ItemData(31, ItemClassification.useful),
+    "Old Amber": ItemData(31, ItemClassification.progression_skip_balancing),
     "Fire Stone": ItemData(32, ItemClassification.useful),
     "Thunder Stone": ItemData(33, ItemClassification.useful),
     "Water Stone": ItemData(34, ItemClassification.useful),
@@ -48,8 +48,8 @@ item_table = {
     "Carbos": ItemData(38, ItemClassification.filler),
     "Calcium": ItemData(39, ItemClassification.filler),
     "Rare Candy": ItemData(40, ItemClassification.useful),
-    "Dome Fossil": ItemData(41, ItemClassification.useful),
-    "Helix Fossil": ItemData(42, ItemClassification.useful),
+    "Dome Fossil": ItemData(41, ItemClassification.progression_skip_balancing),
+    "Helix Fossil": ItemData(42, ItemClassification.progression_skip_balancing),
     "Secret Key": ItemData(43, ItemClassification.progression),
     "Bike Voucher": ItemData(45, ItemClassification.progression),
     "X Accuracy": ItemData(46, ItemClassification.filler),
@@ -164,7 +164,7 @@ item_table.update(
     {pokemon: ItemData(None, ItemClassification.progression) for pokemon in pokemon_data.keys()}
 )
 item_table.update(
-    {f"Encounter {pokemon}": ItemData(None, ItemClassification.progression) for pokemon in pokemon_data.keys()}
+    {f"Missable {pokemon}": ItemData(None, ItemClassification.useful) for pokemon in pokemon_data.keys()}
 )
 item_table.update(
     {f"Static {pokemon}": ItemData(None, ItemClassification.progression) for pokemon in pokemon_data.keys()}
