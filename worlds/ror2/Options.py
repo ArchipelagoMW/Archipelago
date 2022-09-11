@@ -173,6 +173,7 @@ ror2_options: Dict[str, type(Option)] = {
     "start_with_revive":    StartWithRevive,
     "final_stage_death":    FinalStageDeath,
     "dlc_sotv":             DLC_SOTV,
+    # TODO add an option for whether simulacrum environments should exist in the pool
     "item_pickup_step":     ItemPickupStep,
     "enable_lunar":         AllowLunarItems,
     "item_weights":         ItemWeights,

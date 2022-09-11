@@ -55,7 +55,8 @@ class RiskOfRainWorld(World):
         # TODO allow for different precollected environments
         self.world.push_precollected(self.world.create_item("Titanic Plains", self.player))
         environments_pool.pop("Titanic Plains")
-        precollected_environments = 1
+        self.world.push_precollected(self.world.create_item("The Simulacrum (Titanic Plains)", self.player))
+        environments_pool.pop("The Simulacrum (Titanic Plains)")
 
         # if presets are enabled generate junk_pool from the selected preset
         pool_option = self.world.item_weights[self.player].value
