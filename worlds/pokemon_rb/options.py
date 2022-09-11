@@ -127,26 +127,22 @@ class OaksAidRt15(Range):
     range_end = 80
     default = 50
 
-
-base_exp = 16
-
-
 class ExpModifier(SpecialRange):
-    """Modifier for EXP gained."""
+    """Modifier for EXP gained. When specifying a number, exp is multiplied by this amount and divided by 16."""
     display_name = "Exp Modifier"
     range_start = 0
     range_end = 255
     default = 16
     special_range_names = {
-        "half": base_exp / 2,
-        "normal": base_exp,
-        "double": base_exp * 2,
-        "triple": base_exp * 3,
-        "quadruple": base_exp * 4,
-        "quintuple": base_exp * 5,
-        "sextuple": base_exp * 6,
-        "suptuple": base_exp * 7,
-        "octuple": base_exp * 8,
+        "half": default / 2,
+        "normal": default,
+        "double": default * 2,
+        "triple": default * 3,
+        "quadruple": default * 4,
+        "quintuple": default * 5,
+        "sextuple": default * 6,
+        "suptuple": default * 7,
+        "octuple": default * 8,
     }
 
 
@@ -165,7 +161,8 @@ class RandomizeWildPokemon(Choice):
 
 
 class RandomizeStaticPokemon(Choice):
-    """Randomize all one-time gift and encountered Pokemon. These will always be first evolution stage Pokemon."""
+    """Randomize all one-time gift and encountered Pokemon, except legendaries.
+    These will always be first evolution stage Pokemon."""
     display_name = "Randomize Static Pokemon"
     default = 0
     option_vanilla = 0

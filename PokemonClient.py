@@ -277,8 +277,12 @@ async def patch_and_run_game(game_version, patch_file):
     comp_path = base_name + '.gb'
     with open(Utils.local_path(Utils.get_options()["pkrb_options"][f"{game_version}_rom_file"]), "rb") as stream:
         base_rom = bytes(stream.read())
-    with open(Utils.local_path('data', f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
-        base_patch = bytes(stream.read())
+    try:
+        with open(Utils.local_path('lib', 'worlds', 'pokemon_rb', f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
+            base_patch = bytes(stream.read())
+    except FileNotFoundError:
+        with open(Utils.local_path('worlds', 'pokemon_rb', f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
+            base_patch = bytes(stream.read())
     base_patched_rom_data = bsdiff4.patch(base_rom, base_patch)
     with zipfile.ZipFile(patch_file, 'r') as patch_archive:
         with patch_archive.open('delta.bsdiff4', 'r') as stream:
