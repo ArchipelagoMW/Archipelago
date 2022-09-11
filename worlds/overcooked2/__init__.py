@@ -378,6 +378,7 @@ class Overcooked2World(World):
             "LevelForceReveal": level_force_reveal,
             "SaveFolderName": mod_name,
             "CustomOrderTimeoutPenalty": 10,
+            "LevelForceHide": [ 37, 38, 39, 40, 41, 42, 43, 44],
 
             # Game Modifications
             "LevelPurchaseRequirements": level_purchase_requirements,
