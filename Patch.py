@@ -175,7 +175,7 @@ preferred_endings = {
     GAME_SM: "apm3",
     GAME_SOE: "apsoe",
     GAME_SMZ3: "apsmz",
-    GAME_DKC3: "apdkc3",
+    GAME_DKC3: "apdkc3"
 }
 
 
