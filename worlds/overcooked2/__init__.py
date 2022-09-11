@@ -403,12 +403,12 @@ class Overcooked2World(World):
             "DisableWokDrag": True,
             "DisableRampButton": True,
             "WashTimeMultiplier": 1.5,
-            "BurnSpeedMultiplier": 1.5,
+            "BurnSpeedMultiplier": 1.43,
             "MaxOrdersOnScreenOffset": -2,
             "ChoppingTimeScale": 1.4,
             "BackpackMovementScale": 0.7,
             "RespawnTime": 10.0,
-            "CarnivalDispenserRefactoryTime": 3.3,
+            "CarnivalDispenserRefactoryTime": 3.5,
             "LevelUnlockRequirements": level_unlock_requirements,
             "LockedEmotes": [0, 1, 2, 3, 4, 5],
             "StarOffset": 0,
@@ -430,7 +430,7 @@ class Overcooked2World(World):
             "FourStars": 1.0,
             "ThreeStars": star_threshold_scale,
             "TwoStars": star_threshold_scale * 0.75,
-            "OneStar": star_threshold_scale * 0.333,
+            "OneStar": star_threshold_scale * 0.35,
         }
 
         base_data.update(self.options)
