@@ -111,15 +111,15 @@ ramp_logic = {
 }
 
 horde_logic = { # Additive
-    ("Calmer Unbread", 0.7),
-    ("Coin Purse", 0.6),
-    ("Spare Plate", 0.3),
-    ("Progressive Throw/Catch", 0.3),
+    ("Coin Purse", 0.7),
+    ("Calmer Unbread", 0.4),
     ("Progressive Dash", 0.3),
+    ("Progressive Throw/Catch", 0.3),
     ("Sharp Knife", 0.2),
     ("Dish Scrubber", 0.2),
     ("Burn Leniency", 0.1),
     ("Clean Dishes", 0.1),
+    ("Spare Plate", 0.1),
 }
 
 # 1, 2, 3, 4, 5, 6
