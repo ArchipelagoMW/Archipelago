@@ -431,7 +431,7 @@ rom_addresses = {
     "Missable_Victory_Road_2F_Item_2": 0x51946,
     "Missable_Victory_Road_2F_Item_3": 0x5194d,
     "Missable_Victory_Road_2F_Item_4": 0x51954,
-    "Gift_Lapras": 0x51d7f,
+    "Gift_Lapras": 0x51d81,
     "Missable_Silph_Co_7F_Item_1": 0x51f0b,
     "Missable_Silph_Co_7F_Item_2": 0x51f12,
     "Missable_Pokemon_Mansion_2F_Item": 0x520c7,
