@@ -232,6 +232,7 @@ class RandomizePokemonCatchRates(Toggle):
 class MinimumCatchRate(Range):
     """Minimum catch rate for each Pokemon. If randomize_catch_rates is on, this will be the minimum value that can be
     chosen. Otherwise, it will raise any Pokemon's catch rate up to this value if its normal catch rate is lower."""
+    display_name = "Minimum Catch Rate"
     range_start = 1
     range_end = 255
     default = 3
@@ -341,17 +342,20 @@ class RandomizeTypeChartTypeEffectiveness(Choice):
 
 class SafariZoneNormalBattles(Toggle):
     """Change the Safari Zone to have standard wild pokemon battles."""
-    default = 1
+    display_name = "Safari Zone Normal Battles"
+    default = 0
 
 
 class NormalizeEncounterChances(Toggle):
     """Each wild encounter table has 10 slots for Pokemon. Normally the chance for each being chosen ranges from
     19.9% to 1.2%. Turn this on to normalize them all to 10% each."""
+    display_name = "Normalize Encounter Chances"
     default = 0
 
 
 class StartingMoney(Range):
     """The amount of money you start with."""
+    display_name = "Starting Money"
     default = 3000
     range_start = 0
     range_end = 999999
