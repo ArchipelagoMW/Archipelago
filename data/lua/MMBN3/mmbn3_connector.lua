@@ -29,6 +29,30 @@ local previousMemory = {}
 -- Some terminology here. Locations can be "Checked" or "Unchecked", very simple. These can only be sent.
 -- Items are "Sent" from PYthon, and "Received" here. When an item is ready to be collected, it is "Queued". Once the item has been obtained in-game, it is "Claimed"
 
+local charDict = {
+    [' ']=0x00,['0']=0x01,['1']=0x02,['2']=0x03,['3']=0x04,['4']=0x05,['5']=0x06,['6']=0x07,['7']=0x08,['8']=0x09,['9']=0x0A,
+    ['A']=0x0B,['B']=0x0C,['C']=0x0D,['D']=0x0E,['E']=0x0F,['F']=0x10,['G']=0x11,['H']=0x12,['I']=0x13,['J']=0x14,['K']=0x15,
+    ['L']=0x16,['M']=0x17,['N']=0x18,['O']=0x19,['P']=0x1A,['Q']=0x1B,['R']=0x1C,['S']=0x1D,['T']=0x1E,['U']=0x1F,['V']=0x20,
+    ['W']=0x21,['X']=0x22,['Y']=0x23,['Z']=0x24,['a']=0x25,['b']=0x26,['c']=0x27,['d']=0x28,['e']=0x29,['f']=0x2A,['g']=0x2B,
+    ['h']=0x2C,['i']=0x2D,['j']=0x2E,['k']=0x2F,['l']=0x30,['m']=0x31,['n']=0x32,['o']=0x33,['p']=0x34,['q']=0x35,['r']=0x36,
+    ['s']=0x37,['t']=0x38,['u']=0x39,['v']=0x3A,['w']=0x3B,['x']=0x3C,['y']=0x3D,['z']=0x3E,['-']=0x3F,['×']=0x40,[']=']=0x41,
+    [':']=0x42,['+']=0x43,['÷']=0x44,['※']=0x45,['*']=0x46,['!']=0x47,['?']=0x48,['%']=0x49,['&']=0x4A,[',']=0x4B,['⋯']=0x4C,
+    ['.']=0x4D,['・']=0x4E,[';']=0x4F,['\'']=0x50,['\"']=0x51,['\~']=0x52,['/']=0x53,['(']=0x54,[')']=0x55,['「']=0x56,['」']=0x57,
+    ["[V2]"]=0x58,["[V3]"]=0x59,["[V4]"]=0x5A,["[V5]"]=0x5B,['@']=0x5C,['♥']=0x5D,['♪']=0x5E,["[MB]"]=0x5F,['■']=0x60,['_']=0x61,
+    ["[circle1]"]=0x62,["[circle2]"]=0x63,["[cross1]"]=0x64,["[cross2]"]=0x65,["[bracket1]"]=0x66,["[bracket2]"]=0x67,["[ModTools1]"]=0x68,
+    ["[ModTools2]"]=0x69,["[ModTools3]"]=0x6A,['Σ']=0x6B,['Ω']=0x6C,['α']=0x6D,['β']=0x6E,['#']=0x6F,['…']=0x70,['>']=0x71,
+    ['<']=0x72,['エ']=0x73,["[BowneGlobal1]"]=0x74,["[BowneGlobal2]"]=0x75,["[BowneGlobal3]"]=0x76,["[BowneGlobal4]"]=0x77,
+    ["[BowneGlobal5]"]=0x78,["[BowneGlobal6]"]=0x79,["[BowneGlobal7]"]=0x7A,["[BowneGlobal8]"]=0x7B,["[BowneGlobal9]"]=0x7C,
+    ["[BowneGlobal10]"]=0x7D,["[BowneGlobal11]"]=0x7E,['\n']=0xE8
+}
+
+local TableConcat = function(t1,t2)
+   for i=1,#t2 do
+      t1[#t1+1] = t2[i]
+   end
+   return t1
+end
+
 local acdc_bmd_checks = function()
     local checks ={}
     checks["ACDC 1 Southwest BMD"] = memory.read_u8(0x020001d0)
@@ -337,7 +361,22 @@ end
 local check_all_locations = function()
     local location_checks = {}
     for name,checked in pairs(acdc_bmd_checks()) do location_checks[name] = checked end
-
+    for name,checked in pairs(sci_bmd_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(yoka_bmd_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(beach_bmd_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(undernet_bmd_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(secret_bmd_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(school_bmd_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(zoo_bmd_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(hades_bmd_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(hospital_bmd_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(www_bmd_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(misc_bmd_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(story_bmd_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(pmd_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(overworld_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(numberman_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(jobs_checks()) do location_checks[name] = checked end
     return location_checks
 end
 
@@ -354,12 +393,15 @@ local game_modes = {
 function IsInMenu()
     return false
 end
+
 function IsInDialog()
     return false
 end
+
 function IsInBattle()
     return false
 end
+
 function IsItemQueued()
     return false
 end
@@ -387,86 +429,57 @@ function is_game_complete()
     return false
 end
 
-local GetMessage = function(item)
-    bytes = {
-        0x02,
-        0x00,
-        0xF1,
-        0x00,
-        0x1C,
-        0x29,
-        0x27,
-        0x29,
-        0x2D,
-        0x3A,
-        0x2D,
-        0x32,
-        0x2B,
-        0xE8,
-        0x1E,
-        0x36,
-        0x25,
-        0x32,
-        0x37,
-        0x31,
-        0x2D,
-        0x37,
-        0x37,
-        0x2D,
-        0x33,
-        0x32,
-        0xEA,
-        0x00,
-        0x0A,
-        0x00,
-        0x4D,
-        0xEA,
-        0x00,
-        0x0A,
-        0x00,
-        0x4D,
-        0xEA,
-        0x00,
-        0x0A,
-        0x00,
-        0xEB,
-        0xE9,
-        0xF8,
-        0x00,
-        0xF8,
-        0x04,
-        0x18,
-        0xF6,
-        0x10,
-        0x1F,
-        0x00,
-        0x0B,
-        0x01,
-        0x11,
-        0x33,
-        0x38,
-        0xE8,
-        0x51,
-        0xF9,
-        0x00,
-        0x1F,
-        0x01,
-        0x00,
-        0xF9,
-        0x00,
-        0x0B,
-        0x03,
-        0x51,
-        0x47,
-        0x47,
-        0xF8,
-        0x0C,
-        0xF8,
-        0x08,
-        0xEB,
-        0xE7
-    }
+local GenerateTextBytes = function(message)
+    bytes = {}
+    for i = 1, #message do
+        local c = message:sub(i,i)
+        table.insert(bytes, charDict[c])
+    end
+    return bytes
+end
 
+local GenerateChipGet = function(chip, code, amt)
+    chipBytes = chip
+    codeBytes = code
+    amountBytes = amt
+    bytes = {0xF6, 0x10, chip, 0x00, code, amt, 0x11, 0x33, 0x38, 0xE8, 0x51, 0xF9,0x00,chip,amt,0x00,0xF9,0x00,code,0x03,0x51,0x47,0x47}
+    return bytes
+
+end
+
+local GenerateGetMessageFromItem = function(item)
+    if item["type"] == "chip" then
+        return GenerateChipGet(item["chipID"],item["chipCode"],item["count"])
+    end
+    -- TODO item, subchip, program, zenny
+    return GenerateTextBytes("Empty Message")
+end
+
+local GetMessage = function(item)
+    startBytes = {0x02, 0x00}
+    playerLockBytes = {0xF8,0x00}
+    msgOpenBytes = {0xF1, 0x00}
+    textBytes = GenerateTextBytes("Receiving\ndata from\n"..item["sender"]..".")
+    dotdotWaitBytes = {0xEA,0x00,0x0A,0x00,0x4D,0xEA,0x00,0x0A,0x00,0x4D,0xEA,0x00,0x0A,0x00}
+    continueBytes = {0xEB, 0xE9}
+    playReceiveAnimationBytes = {0xF8,0x04,0x18}
+    chipGiveBytes = GenerateGetMessageFromItem(item)
+    playerFinishBytes = {0xF8, 0x0C}
+    playerUnlockBytes={0xF8, 0x08}
+    endMessageBytes = {0xEB,0xE7}
+
+    bytes = {}
+    bytes = TableConcat(bytes,startBytes)
+    bytes = TableConcat(bytes,playerLockBytes)
+    bytes = TableConcat(bytes,msgOpenBytes)
+    bytes = TableConcat(bytes,textBytes)
+    bytes = TableConcat(bytes,dotdotWaitBytes)
+    bytes = TableConcat(bytes,continueBytes)
+    bytes = TableConcat(bytes,playReceiveAnimationBytes)
+    bytes = TableConcat(bytes,chipGiveBytes)
+    bytes = TableConcat(bytes,playerFinishBytes)
+    bytes = TableConcat(bytes,playerUnlockBytes)
+    bytes = TableConcat(bytes,endMessageBytes)
     return bytes
 end
 

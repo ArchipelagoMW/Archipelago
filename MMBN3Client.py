@@ -41,7 +41,9 @@ mmbn3_loc_name_to_id = network_data_package["games"]["MegaMan Battle Network 3"]
 
 script_version: int = 1
 
-testingData = False
+testingData = {}
+items_sent = []
+locations_checked = []
 
 def get_item_value(ap_id):
     # TODO OOT had ap_id - 66000. I'm assuming this is because of the ROM offset, which for GBA is 8000000, let's try that?
@@ -57,10 +59,13 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, MMBN3Context):
             logger.info(f"GBA Status: {self.ctx.gba_status}")
 
-    def _cmd_test(self):
+    def _cmd_test(self, sender, chip, code):
         global testingData
         logger.info("Sending test package")
-        testingData = True
+        testingData["sender"] = sender
+        testingData["chipId"] = chip
+        testingData["chipCode"] = code
+
 
 
 class MMBN3Context(CommonContext):
@@ -100,21 +105,45 @@ class MMBN3Context(CommonContext):
         self.ui = MMBN3Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
+class item_info:
+    id = 0x00
+    sender = ""
+    type = ""
+    count = 1
+    #Chips
+    chipID = 0x00
+    chipCode = 0x00
+
+    def __init__(self,id,sender,type):
+        self.id = id
+        self.sender = sender
+        self.type = type
+
+    def get_json(self):
+        json_data = {
+            "id": self.id,
+            "sender": self.sender,
+            "type": self.type,
+            "chipID": self.chipID,
+            "chipCode": self.chipCode,
+            "count": self.count
+        }
+        return json_data
+
 
 def get_payload(ctx: MMBN3Context):
     global testingData
-    if testingData:
-        return json.dumps(
-            {
-                "items": ["test"]
-            }
-        )
-    else:
-        return json.dumps(
-            {
-                "items": []
-            }
-        )
+    if len(testingData) > 0:
+        test_item = item_info(len(items_sent), testingData["sender"], "chip")
+        test_item.chipID = int(testingData["chipId"])
+        test_item.chipCode = int(testingData["chipCode"])
+        test_item.count = 1
+        items_sent.append(test_item)
+        testingData = {}
+
+    return json.dumps({
+        "items": [item.get_json() for item in items_sent]
+        })
 
 
 async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
@@ -152,7 +181,7 @@ async def gba_sync_task(ctx: MMBN3Context):
         if ctx.gba_streams:
             (reader, writer) = ctx.gba_streams
             msg = get_payload(ctx).encode()
-            testingData = False
+            testingData = {}
             writer.write(msg)
             writer.write(b'\n')
             try:
