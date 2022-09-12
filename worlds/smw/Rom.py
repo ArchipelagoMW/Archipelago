@@ -614,6 +614,16 @@ def handle_music_shuffle(rom, world, player):
             rom.write_byte(addr, shuffled_ow_music[i])
 
 
+def handle_mario_palette(rom, world, player):
+    from .Aesthetics import mario_palettes, fire_mario_palettes, ow_mario_palettes
+
+    chosen_palette = world.mario_palette[player].value
+
+    rom.write_bytes(0x32C8, bytes(mario_palettes[chosen_palette]))
+    rom.write_bytes(0x32F0, bytes(fire_mario_palettes[chosen_palette]))
+    rom.write_bytes(0x359C, bytes(ow_mario_palettes[chosen_palette]))
+
+
 def patch_rom(world, rom, player, active_level_dict):
     local_random = world.slot_seeds[player]
 
@@ -706,6 +716,8 @@ def patch_rom(world, rom, player, active_level_dict):
     # Handle Music Shuffle
     if world.music_shuffle[player] != "none":
         handle_music_shuffle(rom, world, player)
+
+    handle_mario_palette(rom, world, player)
 
     # Store all relevant option results in ROM
     rom.write_byte(0x01BFA0, world.goal[player].value)

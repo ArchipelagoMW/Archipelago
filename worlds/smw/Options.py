@@ -154,6 +154,22 @@ class MusicShuffle(Choice):
     default = 0
 
 
+class MarioPalette(Choice):
+    """
+    Mario palette color
+    """
+    display_name = "Mario Palette"
+    option_mario = 0
+    option_luigi = 1
+    option_wario = 2
+    option_waluigi = 3
+    option_geno = 4
+    option_princess = 5
+    option_dark = 6
+    option_sponge = 7
+    default = 0
+
+
 class PaletteShuffle(Toggle):
     """
     Whether to shuffle level palettes
@@ -189,6 +205,7 @@ smw_options: typing.Dict[str, type(Option)] = {
     "literature_trap_weight": LiteratureTrapWeight,
     "autosave": Autosave,
     "music_shuffle": MusicShuffle,
+    "mario_palette": MarioPalette,
     "palette_shuffle": PaletteShuffle,
     "starting_life_count": StartingLifeCount,
 }
