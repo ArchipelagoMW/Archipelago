@@ -62,7 +62,7 @@ def get_locations(player=None):
         LocationData("Celadon City", "Mansion Lady", "Tea", rom_addresses["Event_Mansion_Lady"], EventFlag(2)),
         LocationData("Pallet Town", "Rival's Sister", "Town Map", rom_addresses["Event_Rivals_Sister"], EventFlag(24),
                      lambda state: state.has("Oak's Parcel", player)),
-        LocationData("Pallet Town", "Oak's Gift", "Poke Ball", rom_addresses["Event_Oaks_Gift"], EventFlag(36),
+        LocationData("Pallet Town", "Oak's Post-Route-22-Rival Gift", "Poke Ball", rom_addresses["Event_Oaks_Gift"], EventFlag(36),
                      lambda state: state.has("Oak's Parcel", player)),
         LocationData("Route 1", "Free Sample Man", "Potion", rom_addresses["Event_Free_Sample"], EventFlag(960)),
         LocationData("Viridian City", "Sleepy Guy", "TM42 Dream Eater", rom_addresses["Event_Sleepy_Guy"],
