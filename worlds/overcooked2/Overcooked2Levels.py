@@ -1,6 +1,5 @@
 from enum import Enum
-from random import Random
-from typing import List, Dict
+from typing import List
 
 class Overcooked2Dlc(Enum):
     STORY = "Story"
@@ -186,44 +185,6 @@ class Overcooked2Level:
     
     def to_generic_level(self) -> Overcooked2GenericLevel:
         return Overcooked2GenericLevel(self.level_id())
-
-
- # return <story_level_id, level>
-def level_shuffle_factory(rng: Random, shuffle_prep_levels: bool, shuffle_horde_levels: bool) -> Dict[int, Overcooked2GenericLevel]:
-    # Create a list of all valid levels for selection
-    # (excludes tutorial, throne, kevin and sometimes horde levels)
-    pool = list()
-    for dlc in Overcooked2Dlc:
-        for level_id in range(dlc.start_level_id(), dlc.end_level_id()):
-            if level_id in dlc.excluded_levels():
-                continue
-            
-            if not shuffle_horde_levels and level_id in dlc.horde_levels():
-                continue
-            
-            if not shuffle_prep_levels and level_id in dlc.prep_levels():
-                continue
-
-            pool.append(
-                Overcooked2GenericLevel(level_id, dlc)
-            )                
-
-    # Sort the pool to eliminate risk
-    pool.sort(key=lambda x: int(x.dlc)*1000 + x.level_id)
-
-    # Shuffle the pool, using the provided RNG
-    rng.shuffle(pool)
-
-    # Return the first 44 levels and assign those to each level
-    result: Dict[int, Overcooked2GenericLevel] = dict()
-    story = Overcooked2Dlc.STORY
-    for level_id in range(story.start_level_id(), story.end_level_id()):
-        if level_id not in story.excluded_levels():
-            result[level_id] = pool.pop(0)
-        else:
-            result[level_id] = Overcooked2GenericLevel(level_id) # This is just 6-6 right now
-
-    return result
 
 # Note that there are valid levels beyond what is listed here, but they are all
 # Onion King Dialogs

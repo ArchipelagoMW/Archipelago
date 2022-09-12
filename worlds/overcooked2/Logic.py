@@ -1,6 +1,8 @@
 from BaseClasses import CollectionState, Region
-from .Overcooked2Levels import Overcooked2GenericLevel
+from .Overcooked2Levels import Overcooked2GenericLevel, Overcooked2Dlc
 from .Items import item_frequencies
+from typing import Dict
+from random import Random
 
 
 def has_requirements_for_level_access(state: CollectionState, level_name: str, previous_level_name: str,
@@ -8,17 +10,17 @@ def has_requirements_for_level_access(state: CollectionState, level_name: str, p
     # Check if the ramps in the overworld are set correctly
     if level_name in ramp_logic:
         if not state.has("Ramp Button", player):
-            return False # need the item to use ramps
+            return False  # need the item to use ramps
 
         for req in ramp_logic[level_name]:
-             # TODO: while entirely logical, the spoiler might show some checks slightly out of order
+            # TODO: while entirely logical, the spoiler might show some checks slightly out of order
             if not state.can_reach(state.world.get_location(req + " Completed", player)):
-                return False # This level needs another to be beaten first
+                return False  # This level needs another to be beaten first
 
     # Kevin Levels Need to have the corresponding items
     if level_name.startswith("K"):
         return state.has(level_name, player)
-    
+
     # Must have enough stars to purchase level
     star_count = state.item_count("Star", player) + state.item_count("Bonus Star", player)
     if star_count < required_star_count:
@@ -43,7 +45,7 @@ def has_requirements_for_level_star(
     if stars > 1:
         if not has_requirements_for_level_star(state, level, stars-1, player):
             return False
-    
+
     # Second, ensure that global requirements are met
     if not meets_requirements(state, "*", stars, player):
         return False
@@ -64,15 +66,15 @@ def meets_requirements(state: CollectionState, name: str, stars: int, player: in
 
     for item_name in item_frequencies:
         if item_name not in exclusive_reqs:
-            continue # not a requirement
-        
+            continue  # not a requirement
+
         if state.has(item_name, player, item_frequencies[item_name]):
-            continue # player has enough
+            continue  # player has enough
 
         if item_name == "Progressive Throw/Catch":
-            continue # catching basically does nothing for skilled players, so ignore it's requirement
+            continue  # catching basically does nothing for skilled players, so ignore it's requirement
 
-        return False # need to have all variants of a progressive item to get the score
+        return False  # need to have all variants of a progressive item to get the score
 
     # Check if we meet additive requirements
     if len(additive_reqs) == 0:
@@ -82,10 +84,82 @@ def meets_requirements(state: CollectionState, name: str, stars: int, player: in
     for (item_name, weight) in additive_reqs:
         for _ in range(0, state.item_count(item_name, player)):
             total += weight
-            if total >= 0.99:
+            if total >= 0.99: # be nice to rounding errors :)
                 return True
 
-    return False # be nice to rounding errors :)
+    return False
+
+
+def level_shuffle_factory(
+    rng: Random,
+    shuffle_prep_levels: bool,
+    shuffle_horde_levels: bool,
+) -> Dict[int, Overcooked2GenericLevel]: # return <story_level_id, level>
+    # Create a list of all valid levels for selection
+    # (excludes tutorial, throne, kevin and sometimes horde levels)
+    pool = list()
+    for dlc in Overcooked2Dlc:
+        for level_id in range(dlc.start_level_id(), dlc.end_level_id()):
+            if level_id in dlc.excluded_levels():
+                continue
+
+            if not shuffle_horde_levels and level_id in dlc.horde_levels():
+                continue
+
+            if not shuffle_prep_levels and level_id in dlc.prep_levels():
+                continue
+
+            pool.append(
+                Overcooked2GenericLevel(level_id, dlc)
+            )
+
+    # Sort the pool to eliminate risk
+    pool.sort(key=lambda x: int(x.dlc)*1000 + x.level_id)
+
+    result: Dict[int, Overcooked2GenericLevel] = dict()
+    story = Overcooked2Dlc.STORY
+
+    while len(result) == 0 or not meets_minimum_sphere_one_requirements(result):
+        result.clear()
+
+        # Shuffle the pool, using the provided RNG
+        rng.shuffle(pool)
+
+        # Return the first 44 levels and assign those to each level
+        for level_id in range(story.start_level_id(), story.end_level_id()):
+            if level_id not in story.excluded_levels():
+                result[level_id] = pool[level_id-1]
+            else:
+                result[level_id] = Overcooked2GenericLevel(level_id)  # This is just 6-6 right now
+
+    return result
+
+
+def meets_minimum_sphere_one_requirements(
+    levels: Dict[int, Overcooked2GenericLevel],
+) -> bool:
+
+    # 1-1, 2-1, and 4-1 are garunteed to be accessible on
+    # the overworld without requiring a ramp or additional stars
+    sphere_one = [1, 7, 19]
+
+    # Peek the logic for sphere one and see how many are possible
+    # with no items
+    sphere_one_count = 0
+    for level_id in sphere_one:
+        if (is_sphere_one_accessible(levels[level_id])):
+            sphere_one_count += 1
+
+    # Require at least 2 of the 3 sphere one checks be accessible from
+    # the start
+    return sphere_one_count >= 2
+
+
+def is_sphere_one_accessible(level: Overcooked2GenericLevel) -> bool:
+    one_star_logic = level_logic[level.shortname()][0]
+    (exclusive, additive) = one_star_logic
+
+    return len(exclusive) == 0 and len(additive) == 0
 
 # If key missing, doesn't require a ramp to access (or the logic is handled by a preceeding level)
 #

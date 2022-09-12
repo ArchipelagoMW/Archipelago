@@ -7,11 +7,11 @@ from typing import Callable, Dict, Any, List, Optional
 from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, RegionType, Tutorial
 from worlds.AutoWorld import World, WebWorld
 
-from .Overcooked2Levels import Overcooked2Level, Overcooked2GenericLevel, level_shuffle_factory
+from .Overcooked2Levels import Overcooked2Level, Overcooked2GenericLevel
 from .Locations import Overcooked2Location, oc2_location_name_to_id, oc2_location_id_to_name
 from .Options import overcooked_options, OC2Options, OC2OnToggle
 from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies
-from .Logic import has_requirements_for_level_star, has_requirements_for_level_access
+from .Logic import has_requirements_for_level_star, has_requirements_for_level_access, level_shuffle_factory
 
 
 class Overcooked2Web(WebWorld):
@@ -463,6 +463,12 @@ def level_unlock_requirement_factory(stars_to_win: int) -> Dict[int, int]:
         if level > 6:
             level = 1
             sublevel += 1
+
+    # force sphere 1 to 0 stars to help keep our promises to the item fill algo
+    level_unlock_counts[1] = 0 # 1-1
+    level_unlock_counts[7] = 0 # 2-1
+    level_unlock_counts[19] = 0 # 4-1
+    # level_unlock_counts[25] = 0 # 5-1
 
     for n in range(37, 46):
         level_unlock_counts[n] = 0
