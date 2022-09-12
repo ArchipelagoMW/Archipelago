@@ -105,7 +105,7 @@ class PokemonRedBlueWorld(World):
             location = self.world.get_location(location_name, self.player)
             if location.item is None:
                 location.place_locked_item(player_items[0])
-                self.world.itempool.remove(player_items[0])
+                self.world.itempool.remove(player_items.pop(0))
         if not self.world.badgesanity[self.player].value:
             for i in range(5):
                 try:
