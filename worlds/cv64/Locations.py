@@ -63,7 +63,7 @@ villa_location_table = {
     LocationName.villafy_villa_marker: 0xC64021,
     LocationName.villafo_pot_r: 0xC64022,
     LocationName.villafo_pot_l: 0xC64023,
-    LocationName.villafo_rear_l: 0xC64023,
+    LocationName.villafo_rear_l: 0xC6403F,
     LocationName.villafo_rear_r: 0xC64024,
     LocationName.villafo_mid_r: 0xC64025,
     LocationName.villafo_mid_l: 0xC64026,
@@ -91,7 +91,6 @@ villa_location_table = {
     LocationName.villac_ent_r: 0xC6403C,
     LocationName.villac_wall_l: 0xC6403D,
     LocationName.villac_wall_r: 0xC6403E,
-    # LocationName.villac_coffin_l: 0xC6403F,
     LocationName.villac_coffin_r: 0xC64040,
 }
 
