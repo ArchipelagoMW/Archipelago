@@ -138,21 +138,27 @@ def meets_minimum_sphere_one_requirements(
 
     # 1-1, 2-1, and 4-1 are garunteed to be accessible on
     # the overworld without requiring a ramp or additional stars
-    sphere_one = [1, 7, 19]
+    sphere_one = [1, 7, 19, 25]
+    sphere_twoish = [13, 25, 2, 8]
 
     # Peek the logic for sphere one and see how many are possible
     # with no items
     sphere_one_count = 0
     for level_id in sphere_one:
-        if (is_sphere_one_accessible(levels[level_id])):
+        if (is_completable_no_items(levels[level_id])):
             sphere_one_count += 1
 
-    # Require at least 2 of the 3 sphere one checks be accessible from
-    # the start
-    return sphere_one_count >= 3
+    sphere_twoish_count = 0
+    for level_id in sphere_twoish:
+        if (is_completable_no_items(levels[level_id])):
+            sphere_twoish_count += 1
+
+    return sphere_one_count >= 2 and \
+        sphere_twoish_count >= 2 and \
+        sphere_one_count + sphere_twoish_count >= 5
 
 
-def is_sphere_one_accessible(level: Overcooked2GenericLevel) -> bool:
+def is_completable_no_items(level: Overcooked2GenericLevel) -> bool:
     one_star_logic = level_logic[level.shortname()][0]
     (exclusive, additive) = one_star_logic
 
