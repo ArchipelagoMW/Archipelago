@@ -66,7 +66,10 @@ class FF1World(World):
             def goal_rule_and_shards(state):
                 return goal_rule(state) and state.has("Shard", self.player, 32)
             terminated_event.access_rule = goal_rule_and_shards
-
+        if "MARK" in items.keys():
+            # Fail generation for Noverworld and provide link to old FFR website
+            raise Exception("FFR Noverworld seeds must be generated on an older version of FFR. Please ensure you generated the settings using "
+                            "4-4-0.finalfantasyrandomizer.com")
         menu_region.locations.append(terminated_event)
         self.world.regions += [menu_region]
 
