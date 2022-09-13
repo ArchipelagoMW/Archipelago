@@ -69,7 +69,7 @@ class StarsToWin(Range):
     Level purchase requirements between 1-1 and 6-6 will be spread between these two numbers. Using too high of a number may result in more frequent generation failures, especially when horde levels are enabled."""
     display_name = "Stars to Win"
     range_start = 0
-    range_end = 129
+    range_end = 100
     default = 66
 
 
