@@ -1,5 +1,5 @@
 from BaseClasses import CollectionState, Location
-from .Overcooked2Levels import Overcooked2GenericLevel, Overcooked2Dlc
+from .Overcooked2Levels import Overcooked2GenericLevel, Overcooked2Dlc, Overcooked2Level
 from .Items import item_frequencies
 from typing import Dict
 from random import Random
@@ -61,18 +61,6 @@ def meets_requirements(state: CollectionState, name: str, stars: int, player: in
     if len(exclusive_reqs) > 0 and not state.has_all(exclusive_reqs, player):
         return False
 
-    for item_name in item_frequencies:
-        if item_name not in exclusive_reqs:
-            continue  # not a requirement
-
-        if state.has(item_name, player, item_frequencies[item_name]):
-            continue  # player has enough
-
-        if item_name == "Progressive Throw/Catch":
-            continue  # catching basically does nothing for skilled players, so ignore it's requirement
-
-        return False  # need to have all variants of a progressive item to get the score
-
     # Check if we meet additive requirements
     if len(additive_reqs) == 0:
         return True
@@ -86,6 +74,55 @@ def meets_requirements(state: CollectionState, name: str, stars: int, player: in
 
     return False
 
+def is_item_progression(item_name, level_mapping):
+    if item_name.endswith("Emote"):
+        return False
+
+    if "Kevin" in item_name or item_name in ["Ramp Button"]:
+        return True # always progression
+    
+    def item_in_logic(shortname, _item_name):
+        for star in range(0,3):
+            (exclusive, additive) = level_logic[shortname][star]
+
+            if _item_name in exclusive:
+                return True
+
+            for req in additive:
+                if req[0] == _item_name:
+                    if req[1] > 0.3: # this bit smells of a deal with the devil, but it seems to be for the better
+                        return True 
+                    break
+
+        return False
+
+    if item_in_logic("*", item_name):
+        return True
+
+    for level in Overcooked2Level():
+        if level_mapping is None:
+            unmapped_level = Overcooked2GenericLevel(level.level_id())
+        else:
+            unmapped_level = level_mapping[level.level_id()]
+        
+        if item_in_logic(unmapped_level.shortname(), item_name):
+            return True
+
+    return False
+
+def is_useful(item_name):
+    return item_name in [
+        "Faster Respawn Time",
+        "Fire Extinguisher",
+        "Clean Dishes",
+        "Larger Tip Jar",
+        "Dish Scrubber",
+        "Burn Leniency",
+        "Sharp Knife",
+        "Order Lookahead",
+        "Guest Patience",
+        "Bonus Star",
+    ]
 
 def level_shuffle_factory(
     rng: Random,

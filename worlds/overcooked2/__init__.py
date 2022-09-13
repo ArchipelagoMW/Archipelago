@@ -11,7 +11,7 @@ from .Overcooked2Levels import Overcooked2Level, Overcooked2GenericLevel
 from .Locations import Overcooked2Location, oc2_location_name_to_id, oc2_location_id_to_name
 from .Options import overcooked_options, OC2Options, OC2OnToggle
 from .Items import item_table, is_progression, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies
-from .Logic import has_requirements_for_level_star, has_requirements_for_level_access, level_shuffle_factory
+from .Logic import has_requirements_for_level_star, has_requirements_for_level_access, level_shuffle_factory, is_item_progression, is_useful
 
 
 class Overcooked2Web(WebWorld):
@@ -78,13 +78,7 @@ class Overcooked2World(World):
             self.level_mapping[level_id].is_horde()
 
 
-    def create_item(self, item: str, classification: ItemClassification=None) -> Overcooked2Item:
-        if classification is None:
-            if is_progression(item):
-                classification = ItemClassification.progression
-            else:
-                classification = ItemClassification.filler
-
+    def create_item(self, item: str, classification: ItemClassification) -> Overcooked2Item:
         return Overcooked2Item(item, classification, self.item_name_to_id[item], self.player)
 
     def create_event(self, event: str, classification: ItemClassification) -> Overcooked2Item:
@@ -261,16 +255,36 @@ class Overcooked2World(World):
 
     def create_items(self):
         # Make Items
+        # useful = list()
+        # filler = list()
+        # progression = list()
         for item_name in item_table:
-
-            if item_name in ["Coin Purse", "Calmer Unbread"] and not self.options["IncludeHordeLevels"]:
-                continue # don't put items in the pool which have no effect
+            if is_item_progression(item_name, self.level_mapping):
+                # print(f"{item_name} is progression")
+                # progression.append(item_name)
+                classification = ItemClassification.progression
+            else:
+                # print(f"{item_name} is filler")
+                if (is_useful(item_name)):
+                    # useful.append(item_name)
+                    classification = ItemClassification.useful
+                else:
+                    # filler.append(item_name)
+                    classification = ItemClassification.filler
 
             if item_name in item_frequencies:
                 freq = item_frequencies[item_name]
-                self.itempool += [self.create_item(item_name) for _ in range(freq)]
+
+                while freq > 0:
+                    self.itempool.append(self.create_item(item_name, classification))
+                    classification = ItemClassification.useful # only the first progressive item can be progression
+                    freq -= 1
             else:
-                self.itempool.append(self.create_item(item_name))
+                self.itempool.append(self.create_item(item_name, classification))
+
+        # print(f"progression: {progression}")
+        # print(f"useful: {useful}")
+        # print(f"filler: {filler}")
 
         # Fill any free space with filler
         while len(self.itempool) < len(oc2_location_name_to_id):
