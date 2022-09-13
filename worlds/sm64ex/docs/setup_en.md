@@ -45,6 +45,14 @@ SM64EX will link `jsoncpp` dynamic if installed. If not, it will compile and lin
 
 The Compiled binary will be in `build/REGION_pc/`.
 
+# Applying Texturee/Models, and Appling patches
+Locate what textures,models, and patches you want then follow the steps bellow.
+
+1. follow the build guide until step 7
+2. point the builder to your textures and model packs unarchived folders e.g Textures: RENDER96-HD-TEXTURE-PACK-1.2 and Models: Render96_DynOs_v3.2
+3. follow the build guide until step 9 here you will drop any patches you want into the enhancements folder the click on refresh patchlist click on the patches so they are highlighted
+4. then add to the build options EXTERNAL_DATA=1 so the compiler knows to grab the new textures/models
+
 # Joining a MultiWorld Game
 
 To join, set the following launch options: `--sm64ap_name YourName --sm64ap_ip ServerIP:Port`.
