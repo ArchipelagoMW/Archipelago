@@ -78,20 +78,21 @@ class Overcooked2World(World):
             self.level_mapping[level_id].is_horde()
 
 
-    def create_item(self, item: str) -> Overcooked2Item:
-        if is_progression(item):
-            classification = ItemClassification.progression
-        else:
-            classification = ItemClassification.filler
+    def create_item(self, item: str, classification: ItemClassification=None) -> Overcooked2Item:
+        if classification is None:
+            if is_progression(item):
+                classification = ItemClassification.progression
+            else:
+                classification = ItemClassification.filler
 
         return Overcooked2Item(item, classification, self.item_name_to_id[item], self.player)
 
-    def create_event(self, event: str) -> Overcooked2Item:
-        return Overcooked2Item(event, ItemClassification.progression_skip_balancing, None, self.player)
+    def create_event(self, event: str, classification: ItemClassification) -> Overcooked2Item:
+        return Overcooked2Item(event, classification, None, self.player)
 
-    def place_event(self,  location_name: str, item_name: str):
+    def place_event(self,  location_name: str, item_name: str, classification: ItemClassification=ItemClassification.progression_skip_balancing):
         location: Location = self.world.get_location(location_name, self.player)
-        location.place_locked_item(self.create_event(item_name))
+        location.place_locked_item(self.create_event(item_name, classification))
 
     def add_region(self, region_name: str):
         region = Region(
@@ -273,7 +274,7 @@ class Overcooked2World(World):
 
         # Fill any free space with filler
         while len(self.itempool) < len(oc2_location_name_to_id):
-            self.itempool.append(self.create_item("Bonus Star"))
+            self.itempool.append(self.create_item("Bonus Star", ItemClassification.useful))
 
         self.world.itempool += self.itempool
 
