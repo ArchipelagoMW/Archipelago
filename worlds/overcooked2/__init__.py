@@ -206,7 +206,7 @@ class Overcooked2World(World):
                 # 6-6 doesn't have progression, but it does have victory condition which is placed later
                 self.add_level_location(
                     level_name,
-                    level.location_name_completed(),
+                    level.location_name_item(),
                     None,
                     1,
                 )
@@ -214,7 +214,7 @@ class Overcooked2World(World):
                 # Location to house progression item
                 self.add_level_location(
                     level_name,
-                    level.location_name_completed(),
+                    level.location_name_item(),
                     level_id,
                     1,
                 )

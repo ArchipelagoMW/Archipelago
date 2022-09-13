@@ -174,7 +174,7 @@ class Overcooked2Level:
     def level_name(self) -> str:
         return self.world.as_str() + "-" + str(self.sublevel)
 
-    def location_name_completed(self) -> str:
+    def location_name_item(self) -> str:
         return self.level_name() + " Completed"
 
     def location_name_level_complete(self) -> str:
