@@ -232,7 +232,7 @@ class Overcooked2World(World):
             # Overworld -> Level
             required_star_count: int = self.level_unlock_counts[level_id]
             if level_id % 6 != 1:
-                previous_level_name: str = Overcooked2GenericLevel(level_id-1).shortname().split(" ")[1]
+                previous_level_name: str = Overcooked2GenericLevel(level_id-1).shortname().split(" ")[1] + " Completed"
             else:
                 previous_level_name = None
 
@@ -468,7 +468,9 @@ def level_unlock_requirement_factory(stars_to_win: int) -> Dict[int, int]:
     level_unlock_counts[1] = 0 # 1-1
     level_unlock_counts[7] = 0 # 2-1
     level_unlock_counts[19] = 0 # 4-1
-    # level_unlock_counts[25] = 0 # 5-1
+
+    # Force 5-1 into sphere 1 to help things out
+    level_unlock_counts[25] = 1 # 5-1
 
     for n in range(37, 46):
         level_unlock_counts[n] = 0

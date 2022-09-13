@@ -1,4 +1,4 @@
-from BaseClasses import CollectionState, Region
+from BaseClasses import CollectionState, Location
 from .Overcooked2Levels import Overcooked2GenericLevel, Overcooked2Dlc
 from .Items import item_frequencies
 from typing import Dict
@@ -13,8 +13,8 @@ def has_requirements_for_level_access(state: CollectionState, level_name: str, p
             return False  # need the item to use ramps
 
         for req in ramp_logic[level_name]:
-            # TODO: while entirely logical, the spoiler might show some checks slightly out of order
-            if not state.can_reach(state.world.get_location(req + " Completed", player)):
+            completed_location: Location = state.world.get_location(req + " Completed", player)
+            if not state.can_reach(completed_location):
                 return False  # This level needs another to be beaten first
 
     # Kevin Levels Need to have the corresponding items
@@ -28,9 +28,8 @@ def has_requirements_for_level_access(state: CollectionState, level_name: str, p
 
     # If this isn't the first level in a world, it needs the previous level to be unlocked first
     if previous_level_name is not None:
-        previous_level: Region = state.world.get_region(previous_level_name, player)
-        # TODO: while entirely logical, the spoiler might show some checks slightly out of order
-        if not state.can_reach(previous_level):
+        previous_level_completed: Location = state.world.get_location(previous_level_name, player)
+        if not state.can_reach(previous_level_completed):
             return False
 
     # If we made it this far we have all requirements
@@ -152,12 +151,14 @@ def meets_minimum_sphere_one_requirements(
 
     # Require at least 2 of the 3 sphere one checks be accessible from
     # the start
-    return sphere_one_count >= 2
+    return sphere_one_count >= 3
 
 
 def is_sphere_one_accessible(level: Overcooked2GenericLevel) -> bool:
     one_star_logic = level_logic[level.shortname()][0]
     (exclusive, additive) = one_star_logic
+
+    # print(f"\n{level.shortname()}: {exclusive} / {additive}")
 
     return len(exclusive) == 0 and len(additive) == 0
 
