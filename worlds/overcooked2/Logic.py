@@ -5,7 +5,7 @@ from typing import Dict
 from random import Random
 
 
-def has_requirements_for_level_access(state: CollectionState, level_name: str, previous_level_name: str,
+def has_requirements_for_level_access(state: CollectionState, level_name: str, previous_level_completed_event_name: str,
                                       required_star_count: int, player: int) -> bool:
     # Check if the ramps in the overworld are set correctly
     if level_name in ramp_logic:
@@ -13,8 +13,7 @@ def has_requirements_for_level_access(state: CollectionState, level_name: str, p
             return False  # need the item to use ramps
 
         for req in ramp_logic[level_name]:
-            completed_location: Location = state.world.get_location(req + " Completed", player)
-            if not state.can_reach(completed_location):
+            if not state.has(req + " Level Complete", player):
                 return False  # This level needs another to be beaten first
 
     # Kevin Levels Need to have the corresponding items
@@ -27,9 +26,8 @@ def has_requirements_for_level_access(state: CollectionState, level_name: str, p
         return False
 
     # If this isn't the first level in a world, it needs the previous level to be unlocked first
-    if previous_level_name is not None:
-        previous_level_completed: Location = state.world.get_location(previous_level_name, player)
-        if not state.can_reach(previous_level_completed):
+    if previous_level_completed_event_name is not None:
+        if not state.has(previous_level_completed_event_name, player):
             return False
 
     # If we made it this far we have all requirements

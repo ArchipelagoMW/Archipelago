@@ -177,6 +177,12 @@ class Overcooked2Level:
     def location_name_completed(self) -> str:
         return self.level_name() + " Completed"
 
+    def location_name_level_complete(self) -> str:
+        return self.level_name() + " Level Completed"
+
+    def event_name_level_complete(self) -> str:
+        return self.level_name() + " Level Complete"
+
     def location_name_star_event(self, stars: int) -> str:
         return "%s (%d-Star)" % (self.level_name(), stars)
 
