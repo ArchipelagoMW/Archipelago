@@ -499,7 +499,7 @@ end
 local GenerateBugfragGet = function(amt)
     -- TODO amt can be more than 255, so we need to convert it to little-endian 32-bit bytecode
     bytes = {
-        0xF6, 0x50, 0x00, 0x00, 0x00, amt, 0xFF, 0xFF, 0xFF,
+        0xF6, 0x50, amt, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF,
         charDict['G'], charDict['o'], charDict['t'], charDict[':'], charDict['\n'], charDict['\"']
     }
     -- The text needs to be added one char at a time, so we need to convert the number to a string then iterate through it
@@ -526,7 +526,7 @@ local GenerateGetMessageFromItem = function(item)
     elseif item["type"] == "program" then
         return GenerateProgramGet(item["itemID"], item["subItemID"], item["count"])
     elseif item["type"] == "bugfrag" then
-        return GenerateBugfragGet(item["itemID"],item["count"])
+        return GenerateBugfragGet(item["count"])
     end
 
     return GenerateTextBytes("Empty Message")
