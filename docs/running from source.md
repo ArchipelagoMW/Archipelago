@@ -56,3 +56,8 @@ SNI is required to use SNIClient. If not integrated into the project, it has to 
 You can get the latest SNI release at [SNI Github releases](https://github.com/alttpo/sni/releases).
 It should be dropped as "SNI" into the root folder of the project. Alternatively, you can point the sni setting in
 host.yaml at your SNI folder.
+
+
+## Running tests
+
+Run `pip install pytest pytest-subtests`, then use your IDE to run tests or run `pytest` from the source folder.

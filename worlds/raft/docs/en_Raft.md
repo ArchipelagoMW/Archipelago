@@ -22,7 +22,7 @@ Decoration Packages are unchanged.
 Researches and pickups remain visually unchanged, regardless of what the unlock is.
 
 ## When the player receives an item, what happens?
-A Raft notification will appear with the item information. The unlock will also appear in the chat. Unlocks that would normally give you the item (eg Machete) will NOT give it to you, but must instead be crafted.
+A Raft notification will appear with the item information. The unlock will also appear in the chat. Unlocks that would normally give you the item (eg Zipline) will NOT give it to you, but must instead be crafted.
 
 ## Are there any limitations compared to vanilla Raft?
 - Mods that add new researchable technologies, modify story islands, or give items like blueprints are likely incompatible with Raftipelago.
