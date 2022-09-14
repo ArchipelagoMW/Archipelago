@@ -73,6 +73,7 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
         testingData["sender"] = "DebugTest"
         testingData["type"] = "key"
         testingData["itemID"] = item
+        testingData["subItemID"] = -1
         testingData["count"] = 1
 
     def _cmd_debugsubchip(self, item):
@@ -81,6 +82,7 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
         testingData["sender"] = "DebugTest"
         testingData["type"] = "subchip"
         testingData["itemID"] = item
+        testingData["subItemID"] = -1
         testingData["count"] = 1
 
     def _cmd_debugzenny(self, amt):
@@ -88,6 +90,8 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
         logger.info("Sending test package")
         testingData["sender"] = "DebugTest"
         testingData["type"] = "zenny"
+        testingData["itemID"] = -1
+        testingData["subItemID"] = -1
         testingData["count"] = amt
 
     def _cmd_debugprogram(self, program, color):
@@ -104,6 +108,8 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
         logger.info("Sending test package")
         testingData["sender"] = "DebugTest"
         testingData["type"] = "bugfrag"
+        testingData["itemID"] = -1
+        testingData["subItemID"] = -1
         testingData["count"] = amt
 
 
@@ -149,9 +155,8 @@ class item_info:
     sender = ""
     type = ""
     count = 1
-    #Chips
-    chipID = 0x00
-    chipCode = 0x00
+    itemID = 0x00 #Item ID, Chip ID, etc.
+    subItemID = 0x00 #Code for chips, color for programs
 
     def __init__(self,id,sender,type):
         self.id = id
@@ -163,8 +168,8 @@ class item_info:
             "id": self.id,
             "sender": self.sender,
             "type": self.type,
-            "chipID": self.chipID,
-            "chipCode": self.chipCode,
+            "itemID": self.itemID,
+            "subItemID": self.subItemID,
             "count": self.count
         }
         return json_data
@@ -173,9 +178,9 @@ class item_info:
 def get_payload(ctx: MMBN3Context):
     global testingData
     if len(testingData) > 0:
-        test_item = item_info(len(items_sent), testingData["sender"], "chip")
-        test_item.chipID = int(testingData["chipId"])
-        test_item.chipCode = int(testingData["chipCode"])
+        test_item = item_info(len(items_sent), testingData["sender"], testingData["type"])
+        test_item.itemID = int(testingData["itemID"])
+        test_item.subItemID = int(testingData["subItemID"])
         test_item.count = 1
         items_sent.append(test_item)
         testingData = {}

@@ -391,7 +391,7 @@ local game_modes = {
 }
 
 function IsInMenu()
-    return false
+    return memory.read_u8(0x0200027A) == 0x12
 end
 
 function IsInDialog()
@@ -399,7 +399,7 @@ function IsInDialog()
 end
 
 function IsInBattle()
-    return false
+    return memory.read_u8(0x02177270) ~= 0
 end
 
 function IsItemQueued()
