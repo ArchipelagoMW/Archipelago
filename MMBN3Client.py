@@ -11,7 +11,6 @@ from CommonClient import CommonContext, server_loop, gui_enabled, \
 import Utils
 from worlds import network_data_package
 from worlds.mmbn3.GBAPatch import apply_patch_file
-from worlds.mmbn3.Utils import data_path
 from worlds.mmbn3.Locations import location_data_table
 
 CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart mmbn3_connector.lua"
@@ -59,13 +58,53 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, MMBN3Context):
             logger.info(f"GBA Status: {self.ctx.gba_status}")
 
-    def _cmd_test(self, sender, chip, code):
+    def _cmd_debugchip(self, chip, code):
         global testingData
         logger.info("Sending test package")
-        testingData["sender"] = sender
-        testingData["chipId"] = chip
-        testingData["chipCode"] = code
+        testingData["sender"] = "DebugTest"
+        testingData["type"] = "chip"
+        testingData["itemID"] = chip
+        testingData["subItemID"] = code
+        testingData["count"] = 1
 
+    def _cmd_debugitem(self, item):
+        global testingData
+        logger.info("Sending test package")
+        testingData["sender"] = "DebugTest"
+        testingData["type"] = "key"
+        testingData["itemID"] = item
+        testingData["count"] = 1
+
+    def _cmd_debugsubchip(self, item):
+        global testingData
+        logger.info("Sending test package")
+        testingData["sender"] = "DebugTest"
+        testingData["type"] = "subchip"
+        testingData["itemID"] = item
+        testingData["count"] = 1
+
+    def _cmd_debugzenny(self, amt):
+        global testingData
+        logger.info("Sending test package")
+        testingData["sender"] = "DebugTest"
+        testingData["type"] = "zenny"
+        testingData["count"] = amt
+
+    def _cmd_debugprogram(self, program, color):
+        global testingData
+        logger.info("Sending test package")
+        testingData["sender"] = "DebugTest"
+        testingData["type"] = "program"
+        testingData["itemID"] = program
+        testingData["subItemID"] = color
+        testingData["count"] = 1
+
+    def _cmd_debugbugfrag(self, amt):
+        global testingData
+        logger.info("Sending test package")
+        testingData["sender"] = "DebugTest"
+        testingData["type"] = "bugfrag"
+        testingData["count"] = amt
 
 
 class MMBN3Context(CommonContext):
@@ -271,7 +310,7 @@ async def patch_and_run_game(apmmbn3_file):
     #rom = Rom(Utils.local_path(Utils.get_options()["mmbn3_options"]["rom_file"]))
     #apply_patch_file(rom, apmmbn3_file)
     #rom.write_to_file(decomp_path)
-    os.chdir(data_path("Compress"))
+    #os.chdir(data_path("Compress"))
     #compress_rom_file(decomp_path, comp_path)
     os.remove(decomp_path)
     asyncio.create_task(run_game(comp_path))

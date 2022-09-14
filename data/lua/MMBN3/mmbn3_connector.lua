@@ -439,19 +439,96 @@ local GenerateTextBytes = function(message)
 end
 
 local GenerateChipGet = function(chip, code, amt)
-    chipBytes = chip
-    codeBytes = code
-    amountBytes = amt
-    bytes = {0xF6, 0x10, chip, 0x00, code, amt, 0x11, 0x33, 0x38, 0xE8, 0x51, 0xF9,0x00,chip,amt,0x00,0xF9,0x00,code,0x03,0x51,0x47,0x47}
+    bytes = {
+        0xF6, 0x10, chip, 0x00, code, amt,
+        charDict['G'], charDict['o'], charDict['t'], charDict[' '], charDict['a'], charDict[' '], charDict['c'], charDict['h'], charDict['i'], charDict['p'], charDict[' '], charDict['f'], charDict['o'], charDict['r'], charDict['\n'],
+        charDict['\"'], 0xF9,0x00,chip,0x01,0x00,0xF9,0x00,code,0x03, charDict['\"'],charDict['!'],charDict['!']
+    }
     return bytes
+end
 
+local GenerateKeyItemGet = function(item, amt)
+    bytes = {
+        0xF6, 0x00, item, amt,
+        charDict['G'], charDict['o'], charDict['t'], charDict[' '], charDict['a'], charDict['\n'],
+        charDict['\"'], 0xF9, 0x00, item, 0x00, charDict['\"'],charDict['!'],charDict['!']
+    }
+    return bytes
+end
+
+local GenerateSubChipGet = function(subchip, amt)
+    -- SubChips have an extra bit of trouble. If you have too many, they're supposed to skip to another text bank
+    -- Instead, I'm going to just let it get eaten
+    bytes = {
+        0xF6, 0x20, subchip, amt, 0xFF, 0xFF, 0xFF,
+        charDict['G'], charDict['o'], charDict['t'], charDict[' '], charDict['a'], charDict['\n'],
+        charDict['S'], charDict['u'], charDict['b'], charDict['C'], charDict['h'], charDict['i'], charDict['p'], charDict[' '], charDict['f'], charDict['o'], charDict['r'], charDict['\n'],
+        charDict['\"'], 0xF9, 0x00, subchip, 0x00, charDict['\"'],charDict['!'],charDict['!']
+    }
+    return bytes
+end
+
+local GenerateZennyGet = function(amt)
+    -- TODO amt can be more than 255, so we need to convert it to little-endian 32-bit bytecode
+    bytes = {
+        0xF6, 0x30, amt, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF,
+        charDict['G'], charDict['o'], charDict['t'], charDict[' '], charDict['a'], charDict['\n'], charDict['\"']
+    }
+    -- The text needs to be added one char at a time, so we need to convert the number to a string then iterate through it
+    zennyStr = tostring(amt)
+    for i = 1, #zennyStr do
+        local c = zennyStr:sub(i,i)
+        table.insert(bytes, charDict[c])
+    end
+    bytes = TableConcat(bytes, {
+        charDict[' '], charDict['Z'], charDict['e'], charDict['n'], charDict['n'], charDict['y'], charDict['s'], charDict['\"'],charDict['!'],charDict['!']
+    })
+    return bytes
+end
+
+local GenerateProgramGet = function(program, color, amt)
+    bytes = {
+        0xF6, 0x40, program, color, amt,
+        charDict['G'], charDict['o'], charDict['t'], charDict[' '], charDict['a'], charDict[' '], charDict['N'], charDict['a'], charDict['v'], charDict['i'], charDict['\n'],
+        charDict['C'], charDict['u'], charDict['s'], charDict['t'], charDict['o'], charDict['m'], charDict['i'], charDict['z'], charDict['e'], charDict['r'], charDict[' '], charDict['P'], charDict['r'], charDict['o'], charDict['g'], charDict['r'], charDict['a'], charDict['m'], charDict[':'], charDict['\n'],
+        charDict['\"'], 0xF9, 0x00, program, 0x05, charDict['\"'],charDict['!'],charDict['!']
+    }
+    return bytes
+end
+
+local GenerateBugfragGet = function(amt)
+    -- TODO amt can be more than 255, so we need to convert it to little-endian 32-bit bytecode
+    bytes = {
+        0xF6, 0x50, amt, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF,
+        charDict['G'], charDict['o'], charDict['t'], charDict[':'], charDict['\n'], charDict['\"']
+    }
+    -- The text needs to be added one char at a time, so we need to convert the number to a string then iterate through it
+    bugFragStr = tostring(amt)
+    for i = 1, #bugFragStr do
+        local c = bugFragStr:sub(i,i)
+        table.insert(bytes, charDict[c])
+    end
+    bytes = TableConcat(bytes, {
+        charDict[' '], charDict['B'], charDict['u'], charDict['g'], charDict['F'], charDict['r'], charDict['a'], charDict['g'], charDict['s'], charDict['\"'],charDict['!'],charDict['!']
+    })
+    return {}
 end
 
 local GenerateGetMessageFromItem = function(item)
     if item["type"] == "chip" then
-        return GenerateChipGet(item["chipID"],item["chipCode"],item["count"])
+        return GenerateChipGet(item["itemID"], item["subItemID"], item["count"])
+    elseif item["type"] == "key" then
+        return GenerateKeyItemGet(item["itemID"], item["count"])
+    elseif item["type"] == "subchip" then
+        return GenerateSubChipGet(item["itemID"], item["count"])
+    elseif item["type"] == "zenny" then
+        return GenerateZennyGet(item["count"])
+    elseif item["type"] == "program" then
+        return GenerateProgramGet(item["itemID"], item["subItemID"], item["count"])
+    elseif item["type"] == "bugfrag" then
+        return GenerateBugfragGet(item["itemID"],item["count"])
     end
-    -- TODO item, subchip, program, zenny
+
     return GenerateTextBytes("Empty Message")
 end
 
