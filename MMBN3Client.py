@@ -181,7 +181,7 @@ def get_payload(ctx: MMBN3Context):
         test_item = item_info(len(items_sent), testingData["sender"], testingData["type"])
         test_item.itemID = int(testingData["itemID"])
         test_item.subItemID = int(testingData["subItemID"])
-        test_item.count = 1
+        test_item.count = int(testingData["count"])
         items_sent.append(test_item)
         testingData = {}
 

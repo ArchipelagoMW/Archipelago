@@ -457,7 +457,7 @@ local GenerateKeyItemGet = function(item, amt)
 end
 
 local GenerateSubChipGet = function(subchip, amt)
-    -- SubChips have an extra bit of trouble. If you have too many, they're supposed to skip to another text bank
+    -- SubChips have an extra bit of trouble. If you have too many, they're supposed to skip to another text bank that doesn't give you the item
     -- Instead, I'm going to just let it get eaten
     bytes = {
         0xF6, 0x20, subchip, amt, 0xFF, 0xFF, 0xFF,
@@ -499,7 +499,7 @@ end
 local GenerateBugfragGet = function(amt)
     -- TODO amt can be more than 255, so we need to convert it to little-endian 32-bit bytecode
     bytes = {
-        0xF6, 0x50, amt, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF,
+        0xF6, 0x50, 0x00, 0x00, 0x00, amt, 0xFF, 0xFF, 0xFF,
         charDict['G'], charDict['o'], charDict['t'], charDict[':'], charDict['\n'], charDict['\"']
     }
     -- The text needs to be added one char at a time, so we need to convert the number to a string then iterate through it
@@ -511,7 +511,7 @@ local GenerateBugfragGet = function(amt)
     bytes = TableConcat(bytes, {
         charDict[' '], charDict['B'], charDict['u'], charDict['g'], charDict['F'], charDict['r'], charDict['a'], charDict['g'], charDict['s'], charDict['\"'],charDict['!'],charDict['!']
     })
-    return {}
+    return bytes
 end
 
 local GenerateGetMessageFromItem = function(item)
