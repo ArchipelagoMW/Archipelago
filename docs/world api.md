@@ -485,11 +485,11 @@ def create_items(self) -> None:
     exclude = [item for item in self.multiworld.precollected_items[self.player]]
 
     for item in map(self.create_item, mygame_items):
-      if item in exclude:
-        exclude.remove(item)  # this is destructive. create unique list above
-        self.multiworld.itempool.append(self.create_item("nothing"))
-      else:
-        self.multiworld.itempool.append(item)
+        if item in exclude:
+            exclude.remove(item)  # this is destructive. create unique list above
+            self.multiworld.itempool.append(self.create_item("nothing"))
+        else:
+            self.multiworld.itempool.append(item)
 
     # itempool and number of locations should match up.
     # If this is not the case we want to fill the itempool with junk.
@@ -508,26 +508,26 @@ def create_regions(self) -> None:
     r.exits = [Entrance(self.player, "New game", r)]  # or use r.exits.append
     # Append region to MultiWorld's regions
     self.multiworld.regions.append(r)  # or use += [r...]
-
+    
     r = Region("Main Area", RegionType.Generic, "Main Area", self.player, self.multiworld)
     # Add main area's locations to main area (all but final boss)
     r.locations = [MyGameLocation(self.player, location.name,
                                   self.location_name_to_id[location.name], r)]
     r.exits = [Entrance(self.player, "Boss Door", r)]
     self.multiworld.regions.append(r)
-
+    
     r = Region("Boss Room", RegionType.Generic, "Boss Room", self.player, self.multiworld)
     # add event to Boss Room
     r.locations = [MyGameLocation(self.player, "Final Boss", None, r)]
     self.multiworld.regions.append(r)
-
+    
     # If entrances are not randomized, they should be connected here, otherwise
     # they can also be connected at a later stage.
     self.multiworld.get_entrance("New Game", self.player)
       .connect(self.multiworld.get_region("Main Area", self.player))
     self.multiworld.get_entrance("Boss Door", self.player)
       .connect(self.multiworld.get_region("Boss Room", self.player))
-
+    
     # If setting location access rules from data is easier here, set_rules can
     # possibly omitted.
 ```
@@ -538,9 +538,9 @@ def create_regions(self) -> None:
 def generate_basic(self) -> None:
     # place "Victory" at "Final Boss" and set collection as win condition
     self.multiworld.get_location("Final Boss", self.player)
-      .place_locked_item(self.create_event("Victory"))
+        .place_locked_item(self.create_event("Victory"))
     self.multiworld.completion_condition[self.player] =
-      lambda state: state.has("Victory", self.player)
+        lambda state: state.has("Victory", self.player)
 
     # place item Herb into location Chest1 for some reason
     item = self.create_item("Herb")
@@ -656,19 +656,19 @@ def generate_output(self, output_directory: str):
     # if the mod reads a json file, `json.dump()` can be used to generate that
     # code below is a dummy
     data = {
-      "seed": self.multiworld.seed_name,  # to verify the server's multiworld
-      "slot": self.multiworld.player_name[self.player],  # to connect to server
-      "items": {location.name: location.item.name
-      if location.item.player == self.player else "Remote"
-                for location in self.multiworld.get_filled_locations(self.player)},
-      # store start_inventory from player's .yaml
-      "starter_items": [item.name for item
-                        in self.multiworld.precollected_items[self.player]],
-      "final_boss_hp": self.final_boss_hp,
-      # store option name "easy", "normal" or "hard" for difficuly
-      "difficulty": self.multiworld.difficulty[self.player].current_key,
-      # store option value True or False for fixing a glitch
-      "fix_xyz_glitch": self.multiworld.fix_xyz_glitch[self.player].value
+        "seed": self.multiworld.seed_name,  # to verify the server's multiworld
+        "slot": self.multiworld.player_name[self.player],  # to connect to server
+        "items": {location.name: location.item.name
+        if location.item.player == self.player else "Remote"
+                  for location in self.multiworld.get_filled_locations(self.player)},
+        # store start_inventory from player's .yaml
+        "starter_items": [item.name for item
+                          in self.multiworld.precollected_items[self.player]],
+        "final_boss_hp": self.final_boss_hp,
+        # store option name "easy", "normal" or "hard" for difficuly
+        "difficulty": self.multiworld.difficulty[self.player].current_key,
+        # store option value True or False for fixing a glitch
+        "fix_xyz_glitch": self.multiworld.fix_xyz_glitch[self.player].value
     }
     # point to a ROM specified by the installation
     src = Utils.get_options()["mygame_options"]["rom_file"]
