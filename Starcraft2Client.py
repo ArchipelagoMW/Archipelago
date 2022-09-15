@@ -354,8 +354,9 @@ class SC2Context(CommonContext):
 
         self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
-
-        Builder.load_file(Utils.local_path(os.path.dirname(SC2WoLWorld.__file__), "Starcraft2.kv"))
+        import pkgutil
+        data = pkgutil.get_data(SC2WoLWorld.__module__, "Starcraft2.kv").decode()
+        Builder.load_string(data)
 
     async def shutdown(self):
         await super(SC2Context, self).shutdown()
