@@ -274,14 +274,12 @@ Define a property `option_<name> = <number>` per selectable value and
 `default = <number>` to set the default selection. Aliases can be set by
 defining a property `alias_<name> = <same number>`.
 
-One special case where aliases are required is when option name is `yes`, `no`,
-`on` or `off` because they parse to `True` or `False`:
 ```python
 option_off = 0
 option_on = 1
 option_some = 2
-alias_false = 0
-alias_true = 1
+alias_disabled = 0
+alias_enabled = 1
 default = 0
 ```
 
