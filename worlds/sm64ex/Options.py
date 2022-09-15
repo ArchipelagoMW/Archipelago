@@ -70,7 +70,6 @@ class AmountOfStars(Range):
 class AreaRandomizer(Choice):
     """Randomize Entrances"""
     display_name = "Entrance Randomizer"
-    alias_false = 0
     option_Off = 0
     option_Courses_Only = 1
     option_Courses_and_Secrets = 2
