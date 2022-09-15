@@ -136,26 +136,24 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
     itempool.extend(unplaced_items)
 
 
-def fast_fill(world: MultiWorld, locations: typing.List[Location],
-                     itempool: typing.List[Item], single_player_placement: bool = False) -> None:
+def remaining_fill(world: MultiWorld,
+                   locations: typing.List[Location],
+                   itempool: typing.List[Item]) -> None:
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
-    swap = 0
     swapped_items: typing.Counter[typing.Tuple[int, str]] = Counter()
     while locations and itempool:
         item_to_place = itempool.pop()
         spot_to_fill: typing.Optional[Location] = None
 
         for i, location in enumerate(locations):
-            if location.item_rule(item_to_place) and (not single_player_placement or
-                                                      location.player == item_to_place.player):
+            if location.item_rule(item_to_place):
                 # popping by index is faster than removing by content,
                 spot_to_fill = locations.pop(i)
                 # skipping a scan for the element
                 break
 
         else:
-            swap += 1
             # we filled all reachable spots.
             # try swapping this item with previously placed items
 
@@ -163,9 +161,9 @@ def fast_fill(world: MultiWorld, locations: typing.List[Location],
                 placed_item = location.item
                 # Unplaceable items can sometimes be swapped infinitely. Limit the
                 # number of times we will swap an individual item to prevent this
-                swap_count = swapped_items[placed_item.player,
-                                           placed_item.name]
-                if swap_count > 1 or placed_item.advancement:
+
+                if swapped_items[placed_item.player,
+                                 placed_item.name] > 1:
                     continue
 
                 location.item = None
@@ -175,9 +173,8 @@ def fast_fill(world: MultiWorld, locations: typing.List[Location],
                     # add the old item to the back of the queue
                     spot_to_fill = placements.pop(i)
 
-                    swap_count += 1
                     swapped_items[placed_item.player,
-                                  placed_item.name] = swap_count
+                                  placed_item.name] += 1
 
                     itempool.append(placed_item)
 
@@ -195,12 +192,21 @@ def fast_fill(world: MultiWorld, locations: typing.List[Location],
         world.push_item(spot_to_fill, item_to_place, False)
         placements.append(spot_to_fill)
 
-    if len(unplaced_items) > 0 and len(locations) > 0:
+    if unplaced_items and locations:
         # There are leftover unplaceable items and locations that won't accept them
         raise FillError(f'No more spots to place {unplaced_items}, locations {locations} are invalid. '
-                            f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
+                        f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
 
     itempool.extend(unplaced_items)
+
+
+def fast_fill(world: MultiWorld,
+              item_pool: typing.List[Item],
+              fill_locations: typing.List[Location]) -> typing.Tuple[typing.List[Item], typing.List[Location]]:
+    placing = min(len(item_pool), len(fill_locations))
+    for item, location in zip(item_pool, fill_locations):
+        world.push_item(location, item, False)
+    return item_pool[placing:], fill_locations[placing:]
 
 
 def distribute_items_restrictive(world: MultiWorld) -> None:
@@ -243,15 +249,14 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
             raise FillError(
                 f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
 
-
-    fast_fill(world, excludedlocations, filleritempool)
+    remaining_fill(world, excludedlocations, filleritempool)
     if excludedlocations:
         raise FillError(
             f"Not enough filler items for excluded locations. There are {len(excludedlocations)} more locations than items")
 
     restitempool = usefulitempool + filleritempool
 
-    fast_fill(world, defaultlocations, restitempool)
+    remaining_fill(world, defaultlocations, restitempool)
 
     unplaced = restitempool
     unfilled = defaultlocations
