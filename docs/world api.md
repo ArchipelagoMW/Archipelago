@@ -524,9 +524,9 @@ def create_regions(self) -> None:
     # If entrances are not randomized, they should be connected here, otherwise
     # they can also be connected at a later stage.
     self.multiworld.get_entrance("New Game", self.player)
-      .connect(self.multiworld.get_region("Main Area", self.player))
+        .connect(self.multiworld.get_region("Main Area", self.player))
     self.multiworld.get_entrance("Boss Door", self.player)
-      .connect(self.multiworld.get_region("Boss Room", self.player))
+        .connect(self.multiworld.get_region("Boss Room", self.player))
     
     # If setting location access rules from data is easier here, set_rules can
     # possibly omitted.
@@ -659,7 +659,7 @@ def generate_output(self, output_directory: str):
         "seed": self.multiworld.seed_name,  # to verify the server's multiworld
         "slot": self.multiworld.player_name[self.player],  # to connect to server
         "items": {location.name: location.item.name
-        if location.item.player == self.player else "Remote"
+                  if location.item.player == self.player else "Remote"
                   for location in self.multiworld.get_filled_locations(self.player)},
         # store start_inventory from player's .yaml
         "starter_items": [item.name for item
