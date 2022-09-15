@@ -53,6 +53,16 @@ local TableConcat = function(t1,t2)
    return t1
 end
 
+local int32ToByteList_le = function(x)
+    bytes = {}
+    hexString = string.format("%08x", x)
+    for i=#hexString, 1, -2 do
+      hbyte = hexString:sub(i-1, i)
+      table.insert(bytes,tonumber(hbyte,16))
+    end
+    return bytes
+end
+
 local acdc_bmd_checks = function()
     local checks ={}
     checks["ACDC 1 Southwest BMD"] = memory.read_u8(0x020001d0)
@@ -469,9 +479,9 @@ local GenerateSubChipGet = function(subchip, amt)
 end
 
 local GenerateZennyGet = function(amt)
-    -- TODO amt can be more than 255, so we need to convert it to little-endian 32-bit bytecode
+    zennyBytes = int32ToByteList_le(amt)
     bytes = {
-        0xF6, 0x30, amt, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF,
+        0xF6, 0x30, zennyBytes[1], zennyBytes[2], zennyBytes[3], zennyBytes[4], 0xFF, 0xFF, 0xFF,
         charDict['G'], charDict['o'], charDict['t'], charDict[' '], charDict['a'], charDict['\n'], charDict['\"']
     }
     -- The text needs to be added one char at a time, so we need to convert the number to a string then iterate through it
@@ -497,9 +507,9 @@ local GenerateProgramGet = function(program, color, amt)
 end
 
 local GenerateBugfragGet = function(amt)
-    -- TODO amt can be more than 255, so we need to convert it to little-endian 32-bit bytecode
+    fragBytes = int32ToByteList_le(amt)
     bytes = {
-        0xF6, 0x50, amt, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF,
+        0xF6, 0x50, fragBytes[1], fragBytes[2], fragBytes[3], fragBytes[4], 0xFF, 0xFF, 0xFF,
         charDict['G'], charDict['o'], charDict['t'], charDict[':'], charDict['\n'], charDict['\"']
     }
     -- The text needs to be added one char at a time, so we need to convert the number to a string then iterate through it
