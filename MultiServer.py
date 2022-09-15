@@ -593,6 +593,7 @@ class Context:
             forfeit_player(self, client.team, client.slot)
         elif self.forced_auto_forfeits[self.games[client.slot]]:
             forfeit_player(self, client.team, client.slot)
+        self.save()  # save goal completion flag
 
 
 def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False):
@@ -742,6 +743,7 @@ async def countdown(ctx: Context, timer: int):
         broadcast_countdown(ctx, 0, f"[Server]: GO")
         ctx.countdown_timer = 0
 
+
 def broadcast_text_all(ctx: Context, text: str, additional_arguments: dict = {}):
     old_clients, new_clients = [], []
 
@@ -754,8 +756,10 @@ def broadcast_text_all(ctx: Context, text: str, additional_arguments: dict = {})
     ctx.broadcast(old_clients, [{"cmd": "Print", "text": text }])
     ctx.broadcast(new_clients, [{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
 
+
 def broadcast_countdown(ctx: Context, timer: int, message: str):
-    broadcast_text_all(ctx, message, { "type": "Countdown", "countdown": timer })
+    broadcast_text_all(ctx, message, {"type": "Countdown", "countdown": timer})
+
 
 def get_players_string(ctx: Context):
     auth_clients = {(c.team, c.slot) for c in ctx.endpoints if c.auth}
