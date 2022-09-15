@@ -16,18 +16,17 @@ local mmbn3Socket = nil
 local frame = 0
 
 -- States
-local ITEMSTATE_READY = "Item State Ready" -- Ready for the next item if there are any
-local ITEMSTATE_ITEMSENTNOTCLAIMED = "Item Sent Not Claimed" -- The ItemBit is set, but the dialog has not been closed yet
-local ITEMSTATE_ITEMQUEUEDNOTSENT = "Item Queued Not Sent" -- There are items to be sent but the ItemBit is not set, usually due to the game being in a non-receivable state
-local itemState = ITEMSTATE_READY
+local ITEMSTATE_IDLE = "Item State Ready" -- Ready for the next item if there are any
+local ITEMSTATE_QUEUED = "Item Queued Not Sent" -- There are items to be sent but the ItemBit is not set, usually due to the game being in a non-receivable state
+local ITEMSTATE_SENT = "Item Sent Not Claimed" -- The ItemBit is set, but the dialog has not been closed yet
+local itemState = ITEMSTATE_IDLE
 
 local itemsReceived = {}
 local itemsPending = {}
 local itemsClaimed = {}
+local itemQueued = nil
 
-local previousMemory = {}
--- Some terminology here. Locations can be "Checked" or "Unchecked", very simple. These can only be sent.
--- Items are "Sent" from PYthon, and "Received" here. When an item is ready to be collected, it is "Queued". Once the item has been obtained in-game, it is "Claimed"
+local debugEnabled = false
 
 local charDict = {
     [' ']=0x00,['0']=0x01,['1']=0x02,['2']=0x03,['3']=0x04,['4']=0x05,['5']=0x06,['6']=0x07,['7']=0x08,['8']=0x09,['9']=0x0A,
@@ -61,6 +60,31 @@ local int32ToByteList_le = function(x)
       table.insert(bytes,tonumber(hbyte,16))
     end
     return bytes
+end
+
+local int16ToByteList_le = function(x)
+    bytes = {}
+    hexString = string.format("%04x", x)
+    for i=#hexString, 1, -2 do
+      hbyte = hexString:sub(i-1, i)
+      table.insert(bytes,tonumber(hbyte,16))
+    end
+    return bytes
+end
+
+--It boils my parsnips that this needs a whole ass function to do this
+local bitand = function(a, b)
+    local result = 0
+    local bitval = 1
+    while a > 0 and b > 0 do
+      if a % 2 == 1 and b % 2 == 1 then -- test the rightmost bits
+          result = result + bitval      -- set the current bit
+      end
+      bitval = bitval * 2 -- shift left
+      a = math.floor(a/2) -- shift right
+      b = math.floor(b/2)
+    end
+    return result
 end
 
 local acdc_bmd_checks = function()
@@ -400,20 +424,20 @@ local game_modes = {
     [5]={name="Paused", loaded=true}
 }
 
-function IsInMenu()
-    return memory.read_u8(0x0200027A) == 0x12
+local IsInMenu = function()
+    return bitand(memory.read_u8(0x0200027A),0x10) ~= 0
 end
 
-function IsInDialog()
-    return false
+local IsInDialog = function()
+    return bitand(memory.read_u8(0x02009480),0x01) ~= 0
 end
 
-function IsInBattle()
-    return memory.read_u8(0x02177270) ~= 0
+local IsInBattle = function()
+    return memory.read_u8(0x02177270) ~= 0x00
 end
 
-function IsItemQueued()
-    return false
+local IsItemQueued = function()
+    return memory.read_u8(0x203FD00) == 0x01
 end
 
 function is_game_complete()
@@ -449,11 +473,21 @@ local GenerateTextBytes = function(message)
 end
 
 local GenerateChipGet = function(chip, code, amt)
+    chipBytes = int16ToByteList_le(chip)
     bytes = {
-        0xF6, 0x10, chip, 0x00, code, amt,
+        0xF6, 0x10, chipBytes[1], chipBytes[2], code, amt,
         charDict['G'], charDict['o'], charDict['t'], charDict[' '], charDict['a'], charDict[' '], charDict['c'], charDict['h'], charDict['i'], charDict['p'], charDict[' '], charDict['f'], charDict['o'], charDict['r'], charDict['\n'],
-        charDict['\"'], 0xF9,0x00,chip,0x01,0x00,0xF9,0x00,code,0x03, charDict['\"'],charDict['!'],charDict['!']
+
     }
+    if chip < 256 then
+        bytes = TableConcat(bytes, {
+            charDict['\"'], 0xF9,0x00,chipBytes[1],0x01,0x00,0xF9,0x00,code,0x03, charDict['\"'],charDict['!'],charDict['!']
+        })
+    else
+        bytes = TableConcat(bytes, {
+            charDict['\"'], 0xF9,0x00,chipBytes[1],0x02,0x00,0xF9,0x00,code,0x03, charDict['\"'],charDict['!'],charDict['!']
+        })
+    end
     return bytes
 end
 
@@ -570,7 +604,7 @@ local GetMessage = function(item)
     return bytes
 end
 
-local QueueItem = function(item)
+local SendItem = function(item)
     -- Write the item message to RAM
     memory.write_bytes_as_array(0x203FD10, GetMessage(item))
     -- Signal that the item is ready to be read
@@ -583,6 +617,8 @@ local process_block = function(block)
     if block == nil then
         return
     end
+    debugEnabled = block['debug']
+
     -- Queue item for receiving, if one exists
     item_queue = block['items']
     if #item_queue > #itemsReceived then
@@ -594,12 +630,32 @@ local process_block = function(block)
         end
     end
 
-    if #itemsPending > 0 then
-
-        -- Make sure we're not in any state that would preclude getting a dialog event
-        --if ~IsItemQueued() and ~IsInBattle() and ~IsInMenu() and ~IsInDialog() then
-            QueueItem(itemsPending[1])
-        --end
+    if itemState == ITEMSTATE_IDLE then
+        --print("Item state idle")
+        if (#itemsPending > 0) then
+            --print("  Item is pending. Switching to queued state")
+            itemState = ITEMSTATE_QUEUED
+            itemQueued = itemsPending[1]
+        end
+    elseif itemState == ITEMSTATE_QUEUED then
+        --print("Item state queued")
+        if (#itemsPending == 0 and itemQueued ~= nil) then
+            --print("  No item queued and pending is empty. Switching to idle")
+            itemState = ITEMSTATE_IDLE
+        end
+        if (not IsItemQueued() and not IsInBattle() and not IsInDialog() and not IsInMenu()) then
+            --print("  Game is ready to receive item. Switching to sent")
+            SendItem(itemQueued)
+            itemState = ITEMSTATE_SENT
+        end
+    elseif itemState == ITEMSTATE_SENT then
+        --print("Item state sent")
+        if (not IsInDialog() and not IsItemQueued()) then
+            --print("  Dialog cleared and item claimed. Switching to idle")
+            table.insert(itemsClaimed, itemQueued)
+            itemQueued = nil
+            itemState = ITEMSTATE_IDLE
+        end
     end
 
     return
@@ -656,6 +712,7 @@ function main()
 
     while true do
         frame = frame + 1
+
         if not (curstate == prevstate) then
             prevstate = curstate
         end
@@ -678,7 +735,22 @@ function main()
                 end
             end
         end
+        gui.cleartext()
+        if debugEnabled then
+            gui.text(0,0,"Item Queued: "..tostring(IsItemQueued()))
+            gui.text(0,16,"In Battle: "..tostring(IsInBattle()))
+            gui.text(0,32,"In Dialog: "..tostring(IsInDialog()))
+            gui.text(0,48,"In Menu: "..tostring(IsInMenu()))
+            gui.text(0,64,itemState)
+            if itemQueued == nil then
+                gui.text(0,80,"No item queued")
+            else
+                gui.text(0,80,itemQueued["type"].." "..itemQueued["itemID"])
+            end
+            gui.text(0,96,#itemsPending.." items pending "..#itemsReceived.." items received")
+        end
         emu.frameadvance()
+
     end
 end
 

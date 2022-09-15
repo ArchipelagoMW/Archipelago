@@ -41,6 +41,7 @@ mmbn3_loc_name_to_id = network_data_package["games"]["MegaMan Battle Network 3"]
 script_version: int = 1
 
 testingData = {}
+debugEnabled = True
 items_sent = []
 locations_checked = []
 
@@ -58,9 +59,14 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, MMBN3Context):
             logger.info(f"GBA Status: {self.ctx.gba_status}")
 
+    def _cmd_debug(self):
+        global debugEnabled
+        debugEnabled = not debugEnabled
+        logger.info("Debugging is now "+str(debugEnabled))
+
     def _cmd_debugchip(self, chip, code):
         global testingData
-        logger.info("Sending test package")
+        logger.info("Sending Battlechip "+str(chip))
         testingData["sender"] = "DebugTest"
         testingData["type"] = "chip"
         testingData["itemID"] = chip
@@ -69,7 +75,7 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
 
     def _cmd_debugitem(self, item):
         global testingData
-        logger.info("Sending test package")
+        logger.info("Sending Item/Subchip "+str(item))
         testingData["sender"] = "DebugTest"
         testingData["type"] = "key"
         testingData["itemID"] = item
@@ -78,7 +84,7 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
 
     def _cmd_debugsubchip(self, item):
         global testingData
-        logger.info("Sending test package")
+        logger.info("Sending Item/Subchip "+str(item))
         testingData["sender"] = "DebugTest"
         testingData["type"] = "subchip"
         testingData["itemID"] = item
@@ -87,7 +93,7 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
 
     def _cmd_debugzenny(self, amt):
         global testingData
-        logger.info("Sending test package")
+        logger.info("Sending "+str(amt)+" Zenny")
         testingData["sender"] = "DebugTest"
         testingData["type"] = "zenny"
         testingData["itemID"] = -1
@@ -96,7 +102,7 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
 
     def _cmd_debugprogram(self, program, color):
         global testingData
-        logger.info("Sending test package")
+        logger.info("Sending Navi Cust Program "+str(program))
         testingData["sender"] = "DebugTest"
         testingData["type"] = "program"
         testingData["itemID"] = program
@@ -105,7 +111,7 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
 
     def _cmd_debugbugfrag(self, amt):
         global testingData
-        logger.info("Sending test package")
+        logger.info("Sending "+str(amt)+" BugFrags")
         testingData["sender"] = "DebugTest"
         testingData["type"] = "bugfrag"
         testingData["itemID"] = -1
@@ -177,6 +183,8 @@ class item_info:
 
 def get_payload(ctx: MMBN3Context):
     global testingData
+    global debugEnabled
+
     if len(testingData) > 0:
         test_item = item_info(len(items_sent), testingData["sender"], testingData["type"])
         test_item.itemID = int(testingData["itemID"])
@@ -186,7 +194,8 @@ def get_payload(ctx: MMBN3Context):
         testingData = {}
 
     return json.dumps({
-        "items": [item.get_json() for item in items_sent]
+        "items": [item.get_json() for item in items_sent],
+        "debug": debugEnabled
         })
 
 
@@ -284,7 +293,7 @@ async def gba_sync_task(ctx: MMBN3Context):
                 logger.info("Lost connection to GBA and attempting to reconnect. Use /gba for status updates")
         else:
             try:
-                logger.info("Attempting to connect to GBA")
+                logger.debug("Attempting to connect to GBA")
                 ctx.gba_streams = await asyncio.wait_for(asyncio.open_connection("localhost", 28922), timeout=10)
                 ctx.gba_status = CONNECTION_TENTATIVE_STATUS
             except TimeoutError:
