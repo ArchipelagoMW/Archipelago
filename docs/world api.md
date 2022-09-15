@@ -512,7 +512,7 @@ def create_regions(self) -> None:
     r = Region("Main Area", RegionType.Generic, "Main Area", self.player, self.multiworld)
     # Add main area's locations to main area (all but final boss)
     r.locations = [MyGameLocation(self.player, location.name,
-                                  self.location_name_to_id[location.name], r)]
+                   self.location_name_to_id[location.name], r)]
     r.exits = [Entrance(self.player, "Boss Door", r)]
     self.multiworld.regions.append(r)
     
@@ -592,7 +592,7 @@ def set_rules(self) -> None:
     # get_item_type needs to take player/world into account
     # if MyGameItem has a type property, a more direct implementation would be
     add_item_rule(self.multiworld.get_location("Chest5", self.player),
-                  lambda item: item.player != self.player or
+                  lambda item: item.player != self.player or\
                                item.my_type == "weapon")
     # location.item_rule = ... is likely to be a bit faster
 ```
