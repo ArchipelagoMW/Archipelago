@@ -190,7 +190,11 @@ class OOTWorld(World):
 
         # Determine which dungeons are MQ
         # Possible future plan: allow user to pick which dungeons are MQ
-        mq_dungeons = self.multiworld.random.sample(dungeon_table, self.mq_dungeons)
+        if self.logic_rules == 'glitchless':
+            mq_dungeons = self.multiworld.random.sample(dungeon_table, self.mq_dungeons)
+        else:
+            self.mq_dungeons = 0
+            mq_dungeons = []
         self.dungeon_mq = {item['name']: (item in mq_dungeons) for item in dungeon_table}
 
         # Determine tricks in logic

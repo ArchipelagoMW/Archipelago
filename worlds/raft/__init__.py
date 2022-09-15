@@ -56,21 +56,21 @@ class RaftWorld(World):
         extraItemNamePool = []
         extras = len(location_table) - len(item_table) - 1 # Victory takes up 1 unaccounted-for slot
         if extras > 0:
-            if (self.multiworld.use_resource_packs[self.player].value):
+            if (self.multiworld.filler_item_types[self.player].value != 1): # Use resource packs
                 for packItem in resourcePackItems:
                     for i in range(minimumResourcePackAmount, maximumResourcePackAmount + 1):
                         extraItemNamePool.append(createResourcePackName(i, packItem))
 
-            if self.multiworld.duplicate_items[self.player].value != 0:
+            if self.multiworld.filler_item_types[self.player].value != 0: # Use duplicate items
                 dupeItemPool = item_table.copy()
                 # Remove frequencies if necessary
-                if self.multiworld.island_frequency_locations[self.player].value != 3: # Not completely random locations
+                if self.multiworld.island_frequency_locations[self.player].value != 5: # Not completely random locations
                     dupeItemPool = (itm for itm in dupeItemPool if "Frequency" not in itm["name"])
                 
                 # Remove progression or non-progression items if necessary
-                if (self.multiworld.duplicate_items[self.player].value == 1): # Progression only
+                if (self.multiworld.duplicate_items[self.player].value == 0): # Progression only
                     dupeItemPool = (itm for itm in dupeItemPool if itm["progression"] == True)
-                elif (self.multiworld.duplicate_items[self.player].value == 2): # Non-progression only
+                elif (self.multiworld.duplicate_items[self.player].value == 1): # Non-progression only
                     dupeItemPool = (itm for itm in dupeItemPool if itm["progression"] == False)
                 
                 dupeItemPool = list(dupeItemPool)
@@ -91,20 +91,16 @@ class RaftWorld(World):
 
     def create_regions(self):
         create_regions(self.multiworld, self.player)
-
-    def fill_slot_data(self):
-        slot_data = {}
-        return slot_data
     
     def get_pre_fill_items(self):
-        if self.multiworld.island_frequency_locations[self.player] in [0, 1]:
+        if self.multiworld.island_frequency_locations[self.player] in [0, 1, 2, 3]:
             return [loc.item for loc in self.multiworld.get_filled_locations()]
         return []
     
     def create_item_replaceAsNecessary(self, name: str) -> Item:
         isFrequency = "Frequency" in name
-        shouldUseProgressive = ((isFrequency and self.multiworld.island_frequency_locations[self.player].value == 2)
-                                or (not isFrequency and self.multiworld.progressive_items[self.player].value))
+        shouldUseProgressive = ((isFrequency and self.multiworld.island_frequency_locations[self.player].value == 4)
+            or (not isFrequency and self.multiworld.progressive_items[self.player].value))
         if shouldUseProgressive and name in progressive_table:
             name = progressive_table[name]
         return self.create_item(name)
@@ -148,6 +144,40 @@ class RaftWorld(World):
             self.setLocationItemFromRegion("Tangaroa", "Varuna Point Frequency")
             self.setLocationItemFromRegion("Varuna Point", "Temperance Frequency")
             self.setLocationItemFromRegion("Temperance", "Utopia Frequency")
+        elif self.multiworld.island_frequency_locations[self.player] in [2, 3]:
+            locationToFrequencyItemMap = {
+                "Vasagatan": "Vasagatan Frequency",
+                "BalboaIsland": "Balboa Island Frequency",
+                "CaravanIsland": "Caravan Island Frequency",
+                "Tangaroa": "Tangaroa Frequency",
+                "Varuna Point": "Varuna Point Frequency",
+                "Temperance": "Temperance Frequency",
+                "Utopia": "Utopia Frequency"
+            }
+            locationToVanillaFrequencyLocationMap = {
+                "RadioTower": "Radio Tower Frequency to Vasagatan",
+                "Vasagatan": "Vasagatan Frequency to Balboa",
+                "BalboaIsland": "Relay Station quest",
+                "CaravanIsland": "Caravan Island Frequency to Tangaroa",
+                "Tangaroa": "Tangaroa Frequency to Varuna Point",
+                "Varuna Point": "Varuna Point Frequency to Temperance",
+                "Temperance": "Temperance Frequency to Utopia"
+            }
+            # Utopia is never chosen until the end, otherwise these are chosen randomly
+            availableLocationList = ["Vasagatan", "BalboaIsland", "CaravanIsland", "Tangaroa", "Varuna Point", "Temperance", "Utopia"]
+            previousLocation = "RadioTower"
+            while (len(availableLocationList) > 0):
+                if (len(availableLocationList) > 1):
+                    currentLocation = availableLocationList[random.randint(0, len(availableLocationList) - 2)]
+                else:
+                    currentLocation = availableLocationList[0] # Utopia (only one left in list)
+                availableLocationList.remove(currentLocation)
+                if self.multiworld.island_frequency_locations[self.player] == 2:
+                    self.setLocationItem(locationToVanillaFrequencyLocationMap[previousLocation], locationToFrequencyItemMap[currentLocation])
+                elif self.multiworld.island_frequency_locations[self.player] == 3:
+                    self.setLocationItemFromRegion(previousLocation, locationToFrequencyItemMap[currentLocation])
+                previousLocation = currentLocation
+
         # Victory item
         self.multiworld.get_location("Utopia Complete", self.player).place_locked_item(
             RaftItem("Victory", ItemClassification.progression, None, player=self.player))
@@ -166,7 +196,8 @@ class RaftWorld(World):
     def fill_slot_data(self):
         return {
             "IslandGenerationDistance": self.multiworld.island_generation_distance[self.player].value,
-            "ExpensiveResearch": self.multiworld.expensive_research[self.player].value
+            "ExpensiveResearch": bool(self.multiworld.expensive_research[self.player].value),
+            "DeathLink": bool(self.multiworld.death_link[self.player].value)
         }
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
