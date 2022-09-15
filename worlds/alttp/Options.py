@@ -39,8 +39,6 @@ class OpenPyramid(Choice):
     option_auto = 3
     default = option_goal
 
-    alias_true = option_open
-    alias_false = option_closed
     alias_yes = option_open
     alias_no = option_closed
 
@@ -159,8 +157,6 @@ class Progressive(Choice):
     option_off = 0
     option_grouped_random = 1
     option_on = 2
-    alias_false = 0
-    alias_true = 2
     default = 2
 
     def want_progressives(self, random):
@@ -202,8 +198,6 @@ class Hints(Choice):
     option_on = 2
     option_full = 3
     default = 2
-    alias_false = 0
-    alias_true = 2
 
 
 class Scams(Choice):
@@ -213,7 +207,6 @@ class Scams(Choice):
     option_king_zora = 1
     option_bottle_merchant = 2
     option_all = 3
-    alias_false = 0
 
     @property
     def gives_king_zora_hint(self):
@@ -293,7 +286,6 @@ class HeartBeep(Choice):
     option_half = 2
     option_quarter = 3
     option_off = 4
-    alias_false = 4
 
 
 class HeartColor(Choice):
