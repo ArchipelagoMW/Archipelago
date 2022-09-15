@@ -39,7 +39,8 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Zero Hour", "Zero Hour: Third Group Rescued", SC2WOL_LOC_ID_OFFSET + 303,
                      lambda state: state._sc2wol_has_common_unit(world, player)),
         LocationData("Evacuation", "Evacuation: Victory", SC2WOL_LOC_ID_OFFSET + 400,
-                     lambda state: state._sc2wol_has_anti_air(world, player)),
+                     lambda state: state._sc2wol_has_common_unit(world, player) and
+                                   state._sc2wol_has_competent_anti_air(world, player)),
         LocationData("Evacuation", "Evacuation: First Chysalis", SC2WOL_LOC_ID_OFFSET + 401),
         LocationData("Evacuation", "Evacuation: Second Chysalis", SC2WOL_LOC_ID_OFFSET + 402,
                      lambda state: state._sc2wol_has_common_unit(world, player)),
@@ -184,7 +185,8 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Cutthroat", "Cutthroat: Southwest Relic", SC2WOL_LOC_ID_OFFSET + 1804,
                      lambda state: state._sc2wol_has_common_unit(world, player)),
         LocationData("Engine of Destruction", "Engine of Destruction: Victory", SC2WOL_LOC_ID_OFFSET + 1900,
-                     lambda state: state._sc2wol_has_competent_anti_air(world, player)),
+                     lambda state: state._sc2wol_has_competent_anti_air(world, player) and
+                                   state._sc2wol_has_common_unit(world, player) or state.has('Wraith', player)),
         LocationData("Engine of Destruction", "Engine of Destruction: Odin", SC2WOL_LOC_ID_OFFSET + 1901),
         LocationData("Engine of Destruction", "Engine of Destruction: Loki", SC2WOL_LOC_ID_OFFSET + 1902,
                      lambda state: state._sc2wol_has_competent_anti_air(world, player) and
