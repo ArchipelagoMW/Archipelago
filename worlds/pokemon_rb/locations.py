@@ -1665,6 +1665,11 @@ def get_locations(player=None):
         # LocationData("Power Plant", "Legendary Pokemon", "Zapdos", rom_addresses["Static_Encounter_Zapdos"],
         #              None, event=True, type="Missable Pokemon"),
 
+        LocationData("Pokemon Tower 6F", "Restless Soul", "Marowak", [rom_addresses["Ghost_Battle1"],
+                     rom_addresses["Ghost_Battle2"], rom_addresses["Ghost_Battle3"], rom_addresses["Ghost_Battle4"],
+                     rom_addresses["Ghost_Battle5"], rom_addresses["Ghost_Battle6"]], None, event=True,
+                     type="Missable Pokemon"),
+
         LocationData("Route 12 West", "Sleeping Pokemon", "Snorlax", rom_addresses["Static_Encounter_Snorlax_A"],
                      None, rule=lambda state: state.has("Poke Flute", player), event=True, type="Missable Pokemon"),
         LocationData("Route 16", "Sleeping Pokemon", "Snorlax", rom_addresses["Static_Encounter_Snorlax_B"],
@@ -1686,9 +1691,9 @@ def get_locations(player=None):
                      event=True, type="Missable Pokemon"),
 
         LocationData("Pallet Town", "Starter 3", "Bulbasaur", [rom_addresses["Starter3_A"],
-                     rom_addresses["Starter3_B"], rom_addresses["Starter3_B"], rom_addresses["Starter3_C"],
-                     rom_addresses["Starter3_D"], rom_addresses["Starter3_E"], rom_addresses["Starter3_G"],
-                     rom_addresses["Starter3_I"]], None, event=True, type="Missable Pokemon"),
+                     rom_addresses["Starter3_B"], rom_addresses["Starter3_C"], rom_addresses["Starter3_D"],
+                     rom_addresses["Starter3_E"], rom_addresses["Starter3_G"], rom_addresses["Starter3_I"]], None,
+                     event=True, type="Missable Pokemon"),
 ]
     for i, location in enumerate(locations):
         if location.event or location.rom_address is None:
