@@ -186,7 +186,7 @@ def check_enemizer(enemizercli):
         # some time may have passed since the lock was acquired, as such a quick re-check doesn't hurt
         if getattr(check_enemizer, "done", None):
             return
-        wanted_version = (7, 0, 1)
+        wanted_version = (7, 1, 0)
         # version info is saved on the lib, for some reason
         library_info = os.path.join(os.path.dirname(enemizercli), "EnemizerCLI.Core.deps.json")
         with open(library_info) as f:
