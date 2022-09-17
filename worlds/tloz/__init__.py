@@ -14,6 +14,7 @@ from ..AutoWorld import World, WebWorld
 from ..generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
 
 class TLoZWeb(WebWorld):
+    theme = "stone"
     setup = Tutorial(
         "Multiworld Setup Tutorial",
         "A guide to setting up The Legend of Zelda for Archipelago on your computer.",
