@@ -7,6 +7,11 @@ on:
     tags:
       - '*.*.*'
 
+env:
+  SNI_VERSION: v0.0.84
+  ENEMIZER_VERSION: 7.1
+  APPIMAGETOOL_VERSION: 13
+
 jobs:
   create-release:
     runs-on: ubuntu-latest
@@ -44,22 +49,23 @@ jobs:
       - name: Install build-time dependencies
         run: |
           echo "PYTHON=python3.9" >> $GITHUB_ENV
-          wget -nv https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage
+          wget -nv https://github.com/AppImage/AppImageKit/releases/download/$APPIMAGETOOL_VERSION/appimagetool-x86_64.AppImage
           chmod a+rx appimagetool-x86_64.AppImage
           ./appimagetool-x86_64.AppImage --appimage-extract
           echo -e '#/bin/sh\n./squashfs-root/AppRun "$@"' > appimagetool
           chmod a+rx appimagetool
       - name: Download run-time dependencies
         run: |
-          wget -nv https://github.com/alttpo/sni/releases/download/v0.0.82/sni-v0.0.82-manylinux2014-amd64.tar.xz
+          wget -nv https://github.com/alttpo/sni/releases/download/$SNI_VERSION/sni-$SNI_VERSION-manylinux2014-amd64.tar.xz
           tar xf sni-*.tar.xz
           rm sni-*.tar.xz
           mv sni-* SNI
-          wget -nv https://github.com/Ijwu/Enemizer/releases/download/7.0.1/ubuntu.16.04-x64.7z
+          wget -nv https://github.com/Ijwu/Enemizer/releases/download/$ENEMIZER_VERSION/ubuntu.16.04-x64.7z
           7za x -oEnemizerCLI/ ubuntu.16.04-x64.7z
       - name: Build
         run: |
-          "${{ env.PYTHON }}" -m pip install --upgrade pip setuptools virtualenv PyGObject  # pygobject should probably move to requirements
+          # pygobject is an optional dependency for kivy that's not in requirements
+          "${{ env.PYTHON }}" -m pip install --upgrade pip virtualenv PyGObject setuptools
           "${{ env.PYTHON }}" -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
