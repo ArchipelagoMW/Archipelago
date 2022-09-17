@@ -152,6 +152,8 @@ goods_table = {
     "Soul of Boreal Valley Vordt": 0x400002CF,
     "Soul of a Stray Demon": 0x400002E7,
     "Soul of a Demon": 0x400002E3,
+    **{"Titanite Shard #" + str(i): 0x400003E8 for i in range(1, 5)},
+    **{"Soul of a Deserted Corpse #" + str(i): 0x40000191 for i in range(1, 5)}
 }
 
 armor_table = {
