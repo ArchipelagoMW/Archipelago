@@ -19,7 +19,7 @@ class AlwaysPreserveCookingProgress(OC2OnToggle):
 
 
 class DisplayLeaderboardScores(OC2OnToggle):
-    """Mods the Overworld map to fetch and display the current world records for each level. Press number keys 1-4 to view leaderboard scores for that number of players."""
+    """Modifies the Overworld map to fetch and display the current world records for each level. Press number keys 1-4 to view leaderboard scores for that number of players."""
     display_name = "Display Leaderboard Scores"
 
 
@@ -43,7 +43,9 @@ class FixBugs(OC2OnToggle):
 
 
 class ShorterLevelDuration(OC2OnToggle):
-    """In the interest of making levels more "bite-sized" and thus seeds faster to complete, this option shortens levels by about 1/3rd of their original duration. Points required to earn stars are scaled accordingly. ("Boss Levels" which change scenery mid-game are not affected.)"""
+    """Modifies level duration to be about 1/3rd shorter than in the original game, thus bringing the item discovery pace in line with other popular Archipelago games.
+    
+    Points required to earn stars are scaled accordingly. ("Boss Levels" which change scenery mid-game are not affected.)"""
     display_name = "Shorter Level Duration"
 
 

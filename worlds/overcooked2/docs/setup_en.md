@@ -7,20 +7,20 @@
 
 ## Required Software
 
-- Windows 10
+- Windows 10+
 - [Overcooked! 2](https://store.steampowered.com/bundle/13608/Overcooked_2___Gourmet_Edition/) for PC
     - (only steam version has been tested so far, but others should work)
 - [OC2-Modding Client](https://github.com/toasterparty/oc2-modding/releases)
 
 ## Overview
 
-*OC2-Modding* is a general purpose modding framework which doubles as an Archipelago MultiWorld Client. It works by using Harmony to inject custom code into the game at runtime, so none of the game files are modified in any way.
+*OC2-Modding* is a general purpose modding framework which doubles as an Archipelago MultiWorld Client. It works by using Harmony to inject custom code into the game at runtime, so none of the orignal game files need to be modified in any way.
 
-When connecting to an Archipelago session using the in-game login screen, a JSON manifest file containing all relevant game modifications is automatically downloaded and applied.
+When connecting to an Archipelago session using the in-game login screen, a modfile containing all relevant game modifications is automatically downloaded and applied.
 
 From this point, the game will communicate with the Archipelago service directly to manage sending/receiving items. Notifications of important events will appear through an in-game console at the top of the screen.
 
-## OC2-Modding Guide
+## Overcooked! 2 Modding Guide
 
 ### Install
 
@@ -32,7 +32,7 @@ Once *OC2-Modding* is installed, you have successfully installed everything you 
 
 ### Disable
 
-To temporarily turn off *OC2-Modding* and return to the original game, open **...\Overcooked! 2\BepInEx\config\OC2Modding.cfg** and edit the following:
+To temporarily turn off *OC2-Modding* and return to the original game, open **...\Overcooked! 2\BepInEx\config\OC2Modding.cfg** in a text editor like notepad and edit the following:
 
 `DisableAllMods = true`
 
@@ -60,7 +60,7 @@ To completely remove *OC2-Modding*, navigate to your game's installation folder 
 3. Sign-in with server address, username and password of the corresponding room you would like to join.
 - Otherwise, if you just want to play the vanilla game without any modifications, you may press "Continue without Archipelago" button.
 
-4. Upon successful connection to the Archipelago service, you will be granted access to the main menu. The game will act as though you are playing for the first time. *DO NOT FEAR*, your original save data has not been overwritten; the Overcooked Randomizer just uses a temporary directory for it's save game data.
+4. Upon successful connection to the Archipelago service, you will be granted access to the main menu. The game will act as though you are playing for the first time. ***DO NOT FEAR*** — your original save data has not been overwritten; the Overcooked Randomizer just uses a temporary directory for it's save game data.
 
 ## Playing Co-Op
 

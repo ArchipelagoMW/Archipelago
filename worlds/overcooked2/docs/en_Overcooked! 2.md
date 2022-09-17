@@ -9,7 +9,7 @@
 
 The *Overcooked! 2* Randomizer completely transforms the game into a metroidvania with items and item locations. Many of the Chefs' inherent abilities have been temporarily removed such that your scoring potential is limited at the start of the game. The more your inventory grows, the easier it will be to earn 2 and 3 Stars on each level.
 
-The game takes place entirely in the "Story" campaign on a fresh save file. The ultimate goal is to reach level 6-6 and complete it once. In order to do this, you must first complete all the previous levels in World 6, collect enough stars to purchase 6-6, and have regained enough of the chef's abilities to successfully complete the level*.
+The game takes place entirely in the "Story" campaign on a fresh save file. The ultimate goal is to reach and complete level 6-6. In order to do this you must regain enough of your abilities to complete all levels in World 6 and obtain enough stars to purchase 6-6*.
 
 Randomizer can be played alone (one player switches between controlling two chefs) or up to 4 local/online friends. Player count can be changed at any time during the Archipelago game.
 
@@ -17,9 +17,9 @@ Randomizer can be played alone (one player switches between controlling two chef
 
 ## Items
 
-The first time a level is completed, a random item is given to the chef(s). If playing in a MultiWorld, completing a level may instead give another Archipelago user's their item. The item found is displayed as text at the top of the results screen.
+The first time a level is completed, a random item is given to the chef(s). If playing in a MultiWorld, completing a level may instead give another Archipelago user their item. The item found is displayed as text at the top of the results screen.
 
-The idea is that the game plays like the original experience once all items have been obtained.
+Once all items have been obtained, the game will play like the original experience.
 
 The following items were invented for Randomizer:
 
@@ -45,7 +45,7 @@ The following items were invented for Randomizer:
 - Larger Tip Jar
 - Guest Patience
 - Burn Leniency
-- Faster Condiment/Drink Switch
+- Faster Condiment & Drink Switch
 - Wok Wheels
 - Coin Purse
 - Calmer Unbread
@@ -53,7 +53,9 @@ The following items were invented for Randomizer:
 ### Overworld
 - Unlock Kevin Level (x8)
 - Ramp Button
-- Bonus Star (Filler Item)
+- Bonus Star (Filler Item*)
+
+**Note: Bonus star count varies with settings*
 
 ## Other Game Modifications
 
@@ -79,6 +81,6 @@ In addition to shuffling items, the following changes are applied to the game:
 - Stars required to unlock levels have been rebalanced
 - Points required to earn stars have been rebalanced
     - Based off of the current World Record on the game's [Leaderboard](https://overcooked.greeny.dev)
-    - 1-Star/2-Star scores are a lot closer to the 3-Star Score
+    - 1-Star/2-Star scores are much closer to the 3-Star Score
 - Significantly reduced the time allotted to beat the final level
 - Reduced penalty for expired order
