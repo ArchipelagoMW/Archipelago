@@ -725,7 +725,7 @@ def patch_rom(world, rom, player, active_level_dict):
     required_yoshi_eggs = max(math.floor(
         world.number_of_yoshi_eggs[player].value * (world.percentage_of_yoshi_eggs[player].value / 100.0)), 1)
     rom.write_byte(0x01BFA2, required_yoshi_eggs)
-    rom.write_byte(0x01BFA3, world.display_sent_item_popups[player].value)
+    #rom.write_byte(0x01BFA3, world.display_sent_item_popups[player].value)
     rom.write_byte(0x01BFA4, world.display_received_item_popups[player].value)
     rom.write_byte(0x01BFA5, world.death_link[player].value)
 

@@ -146,6 +146,9 @@ class Autosave(DefaultOnToggle):
 class MusicShuffle(Choice):
     """
     Music shuffle type
+    None: No Music is shuffled
+    Simple Unique: Each music track is consistently shuffled throughout the game
+    Singularity: The entire game uses one song for overworld and one song for levels
     """
     display_name = "Music Shuffle"
     option_none = 0
@@ -197,7 +200,7 @@ smw_options: typing.Dict[str, type(Option)] = {
     "dragon_coin_checks": DragonCoinChecks,
     "bowser_castle_doors": BowserCastleDoors,
     "level_shuffle": LevelShuffle,
-    "display_sent_item_popups": DisplaySentItemPopups,
+    #"display_sent_item_popups": DisplaySentItemPopups,
     "display_received_item_popups": DisplayReceivedItemPopups,
     "trap_fill_percentage": TrapFillPercentage,
     "ice_trap_weight": IceTrapWeight,
@@ -206,6 +209,6 @@ smw_options: typing.Dict[str, type(Option)] = {
     "autosave": Autosave,
     "music_shuffle": MusicShuffle,
     "mario_palette": MarioPalette,
-    "palette_shuffle": PaletteShuffle,
+    #"palette_shuffle": PaletteShuffle,
     "starting_life_count": StartingLifeCount,
 }
