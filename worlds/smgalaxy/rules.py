@@ -1,7 +1,9 @@
 from sqlite3 import connect
-from ..generic.Rules import add_rule, set_rule
-from .regions import smgcourses, connect_regions
-def set_rules(world, player: int):
+
+from worlds.AutoWorld import LogicMixin
+from ..generic.Rules import add_rule
+from .regions import connect_regions
+class GalaxyLogic(LogicMixin):
     
     def smg_gate_open(self, player: int):
         return self.has('Grand Star Engine Room', player) 
@@ -18,7 +20,8 @@ def set_rules(world, player: int):
     def smg_trail(self, player: int):
         return self.has('Green Star 3')
 
-    # main stage logic 
+    # main stage logic
+def set_star_rules(world,player):
     connect_regions(world, player, "Menu", "Good Egg", lambda state: True)
     connect_regions(world, player, "Menu", "Honeyhive", lambda state: state.has("Power Star", player, 3))
     connect_regions(world, player, "Menu", "Fountain", lambda state: state.has("Grand Star Terrace", player))
@@ -71,6 +74,8 @@ def set_rules(world, player: int):
     add_rule(world.get_location("BJ: Sinking the Airships", player), lambda state: state.has("Power Star", player, 23) and state.has("Grand Star Fountain", player))
     add_rule(world.get_location("BJ: King Kaliente's Spicy Return", player), lambda state: state.has("Power Star", player, 45) and state.has("Grand Star Engine Room", player))
     add_rule(world.get_location("B: Darkness on the Horizon", player), lambda state: state.has("Power Star", player, 33) and state.has("Grand Star Kitchen", player))
+    
+    
     # purple coin star logic
     if world.EnablePurpleCoinStars[player]:
         add_rule(world.get_location("DN: Battlestation's Purple Coins", player), lambda state: state.smg_purple_coins(player))
@@ -87,4 +92,5 @@ def set_rules(world, player: int):
         add_rule(world.get_location("GE: Purple Coin Omelet", player), lambda state: state.smg_purple_coins(player))
         add_rule(world.get_location("HH: Honeyhive's Purple Coins", player), lambda state: state.smg_purple_coins(player))
         add_rule(world.get_location("SJ: Purple Coin Spacewalk", player), lambda state: state.smg_purple_coins(player))
-    
+
+    world.completion_condition[player] = lambda state: state.smg_can_finish(player)

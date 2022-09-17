@@ -2,19 +2,11 @@ import imp
 import typing
 from BaseClasses import MultiWorld, Region, Location, RegionType
 from .locations import SMGLocation, location_table, locHH_table, locGE_table, \
-locSJ_table, locBR_table, locBB_table, \
-locGG_table, locFF_table, locDD_table, locDDune_table, \
-locGL_table, locSS_table, locTT_table, \
-locDN_table, locMM_table, \
-locHL_table, locbosses_table, locspecialstages_table \
-
-smgcourses = ["Good Egg", "Honeyhive", "Loopdeeloop", "Flipswitch", "Bowser Jr. Robot Reactor", 
-              "Space Junk", "Battlerock", "Rolling Green", "Hurry-Scurry", "Bowser's Star Reactor", 
-              "Beach Bowl", "Ghostly", "Bubble Breeze", "Buoy Base", "Bowser Jr.'s Ariship Armada",
-              "Gusty gardens", "Freezeflame", "Dusty Dune", "Honeyclimb", "Bowser's Dark Matter Planet",
-              "Gold Leaf", "Sea Slide", "Toy Time", "Bonefin", "Bowser Jr.'s Lava Reactor",
-              "Gateway", "Deep Dark", "Dreadnaught", "Melty Molton", "Matter Splatter"]
-
+                                    locSJ_table, locBR_table, locBB_table, \
+                                    locGG_table, locFF_table, locDD_table, locDDune_table, \
+                                    locGL_table, locSS_table, locTT_table, \
+                                    locDN_table, locMM_table, \
+                                    locHL_table, locbosses_table, locspecialstages_table
 def create_regions(world: MultiWorld, player: int):
     
     #defines the commet obserbatory

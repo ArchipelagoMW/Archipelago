@@ -2,8 +2,8 @@ import string
 from .items import item_table, SMGItem
 from .locations import location_table, SMGLocation
 from .Options import smg_options
-from .rules import set_rules
-from .regions import smgcourses, create_regions
+from .rules import set_star_rules
+from .regions import create_regions
 from BaseClasses import Item, Tutorial
 from ..AutoWorld import World, WebWorld
 
@@ -40,8 +40,8 @@ class SuperMarioGalaxy(World):
     def create_regions(self):
         create_regions(self.world,self.player)
     
-    def set_rules(self):
-        set_rules(self.world, self.player)
+    def set_star_rules(self):
+        set_star_rules(self.world, self.player)
     
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]

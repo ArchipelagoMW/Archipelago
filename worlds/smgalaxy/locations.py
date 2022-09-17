@@ -19,27 +19,29 @@ locHH_table = {
     "HH: Honeyhive Cosmic Mario Race": 170000009,
     "HH: Honeyhive's Purple Coins": 170000010,
 }
+
 locspecialstages_table = {
     "LDL: Surfing 101": 170000012,
     "FS: Painting the Planet Yellow": 170000013,
-    "RG: Rolling in the Clouds": 170000028,
-    "HS: Shrinking Satellite": 170000029,
-    "BUB: Through the Poison Swamp": 170000043,
-    "BB: The Floating Fortress": 170000044,
-    "BB: The Secret of Buoy Base": 170000045,
-    "GG: Grand Star Rescue": 170000047,
-    "GG: Gateway's Purple coins": 170000048,
-    "BF: Kingfin's Fearsome Waters": 170000067,
+    "RG: Rolling in the Clouds": 170000027,
+    "HS: Shrinking Satellite": 170000028,
+    "BUB: Through the Poison Swamp": 170000042,
+    "BB: The Floating Fortress": 170000043,
+    "BB: The Secret of Buoy Base": 170000044,
+    "GG: Grand Star Rescue": 170000045,
+    "GG: Gateway's Purple coins": 170000046,
+    "BF: Kingfin's Fearsome Waters": 170000065,
     "MS: Watch Your Step": 170000095,
     "RGT: Gizmos, Gears, and Gadgets": 170000096,
     "LDT: The Galaxy's Greatest Wave": 170000097,
     "BBT: The Electric Labyrinth": 170000098,
 }
+
 locbosses_table = {
     "BJ: Megaleg's Moon": 170000014,
-    "B: The Firery Stronghold": 170000030,
+    "B: The Firery Stronghold": 170000029,
     "BJ: Sinking the Airships": 170000045,
-    "BJ: King Kaliente's Spicy Return": 170000067,
+    "BJ: King Kaliente's Spicy Return": 170000066,
     "B:  Darkness on the Horizon": 170000095,
 }
 
@@ -55,25 +57,25 @@ locBR_table = {
     "BR: Battlerock Barrage": 170000021,
     "BR: Breaking into the Battlerock": 170000022,
     "BR: Topmaniac's Garbage dump": 170000023,
-    "BR: Topmanic's Dardevil Run": 170000025,
-    "BR: Purple Coins on the Battlerock": 170000026,
-    "BR: Luigi under the Saucer": 170000027,
+    "BR: Topmanic's Dardevil Run": 170000024,
+    "BR: Purple Coins on the Battlerock": 170000025,
+    "BR: Luigi under the Saucer": 170000026,
 }
 locBB_table = {
-    "BB: Sunken Treasure": 170000031,
-    "BB: Passing the Swim Test": 170000032,
-    "BB: The Secret Undersea Cavern": 170000033,
-    "BB: Fast Foes on the Cyclone Stone": 170000034,
-    "BB: Beachcombing for Purple Coins": 170000035,
-    "BB: Wall Jumping Water Falls": 170000036,
+    "BB: Sunken Treasure": 170000030,
+    "BB: Passing the Swim Test": 170000031,
+    "BB: The Secret Undersea Cavern": 170000032,
+    "BB: Fast Foes on the Cyclone Stone": 170000033,
+    "BB: Beachcombing for Purple Coins": 170000034,
+    "BB: Wall Jumping Water Falls": 170000035,
 }
 locG_table = {
-    "G: Luigi and the Haunted Mansion": 170000037,
-    "G: A Very Spooky Spirit": 170000038,
-    "G: Beware of Bouldergeist": 170000039,
-    "G: Bouldergeist's Daredevil Run": 170000040,
-    "G: Purple Coins in the Bone Pen": 170000041,
-    "G: Matter Splatter Mansion": 170000042,
+    "G: Luigi and the Haunted Mansion": 170000036,
+    "G: A Very Spooky Spirit": 170000037,
+    "G: Beware of Bouldergeist": 170000038,
+    "G: Bouldergeist's Daredevil Run": 170000039,
+    "G: Purple Coins in the Bone Pen": 170000040,
+    "G: Matter Splatter Mansion": 170000041,
 }
 locGG_table = {
     "GG: Bunnies in the Wind": 170000108,
@@ -101,66 +103,66 @@ locDDune_table = {
     "DDune: Treasure of the Pyramid": 170000107,
 } 
 locGL_table = {
-    "GL: Star Bunnies on the Hunt": 170000049,
-    "GL: Cataquack to the skies": 170000050,
-    "GL: When it Rains, it Pours": 170000051,
-    "GL: Cosmic Mario Forest Race": 170000052,
-    "GL: Purple Coins in the Woods": 170000053,
-    "GL: The Bell on the Big Trees": 170000054,
+    "GL: Star Bunnies on the Hunt": 170000047,
+    "GL: Cataquack to the skies": 170000048,
+    "GL: When it Rains, it Pours": 170000049,
+    "GL: Cosmic Mario Forest Race": 170000050,
+    "GL: Purple Coins in the Woods": 170000051,
+    "GL: The Bell on the Big Trees": 170000052,
  }
 locSS_table = {
-    "SS: Going After Guppy": 170000055,
-    "SS: Faster Than a Speedrunning Penguin": 170000056,
-    "SS: The Silver Stars of Sea Slide": 170000057,
-    "SS: Underwater Cosmic Mario Race": 170000058,
-    "SS: Purple Coins by the Seaside": 170000059,
-    "SS: Hurry, He's Hungry": 170000060,
+    "SS: Going After Guppy": 170000053,
+    "SS: Faster Than a Speedrunning Penguin": 170000054,
+    "SS: The Silver Stars of Sea Slide": 170000055,
+    "SS: Underwater Cosmic Mario Race": 170000056,
+    "SS: Purple Coins by the Seaside": 170000057,
+    "SS: Hurry, He's Hungry": 170000058,
 }
 locTT_table = {
-    "TT: Heavy Metal Mecha Boswer": 170000061,
-    "TT: Mario (or Luigi) Meets Mario": 170000062,
-    "TT: Bouncing Down Cake Lane": 170000063,
-    "TT: The Flipswitch Chain": 170000064,
-    "TT: Fast Foes of Toy Time": 170000067,
-    "TT: Luigi's Purple Coins": 170000065, 
+    "TT: Heavy Metal Mecha Boswer": 170000059,
+    "TT: Mario (or Luigi) Meets Mario": 170000060,
+    "TT: Bouncing Down Cake Lane": 170000061,
+    "TT: The Flipswitch Chain": 170000062,
+    "TT: Fast Foes of Toy Time": 170000063,
+    "TT: Luigi's Purple Coins": 170000064, 
 }
 locDD_table = {
-    "DD: The Underground Ghost Ship": 170000069,
-    "DD: Bubble Blastoff": 170000070,
-    "DD: Guppy and the Underground Lake": 170000071,
-    "DD: Ghost Ship Daredevil Run": 170000072,
-    "DD: Plunder the Purple Coins": 170000073,
-    "DD: Boo in Box": 170000074,
+    "DD: The Underground Ghost Ship": 170000067,
+    "DD: Bubble Blastoff": 170000068,
+    "DD: Guppy and the Underground Lake": 170000069,
+    "DD: Ghost Ship Daredevil Run": 170000070,
+    "DD: Plunder the Purple Coins": 170000071,
+    "DD: Boo in Box": 170000072,
 }
 locDN_table = {
-    "DN: Inflitrating the Dreadnought": 170000075,
-    "DN: Dreanought's Colossal Cannons": 170000076,
-    "DN: Revenge of the Topman Tribe": 170000077,
-    "DN: Topman Tribe Speed Run": 170000078,
-    "DN: Battlestation's Purple Coins": 170000079,
-    "DN: Dreadnought's Garbage Dump": 170000080,
+    "DN: Inflitrating the Dreadnought": 170000073,
+    "DN: Dreanought's Colossal Cannons": 170000074,
+    "DN: Revenge of the Topman Tribe": 170000075,
+    "DN: Topman Tribe Speed Run": 170000076,
+    "DN: Battlestation's Purple Coins": 170000077,
+    "DN: Dreadnought's Garbage Dump": 170000078,
 }
 locMM_table = {
-    "MM: The Sinking Lava Spire": 170000081,
-    "MM: Through the Meteor Storm": 170000082,
-    "MM: Fiery Dino Piranha": 170000083,
-    "MM: Lava Spire Daredevil Run": 170000084,
-    "MM: Red-Hot Purple Coins": 170000085,
-    "MM Burning Tide": 170000086,
+    "MM: The Sinking Lava Spire": 170000079,
+    "MM: Through the Meteor Storm": 170000080,
+    "MM: Fiery Dino Piranha": 170000081,
+    "MM: Lava Spire Daredevil Run": 170000082,
+    "MM: Red-Hot Purple Coins": 170000083,
+    "MM Burning Tide": 170000084,
 }
 locHL_table = {
-    "SS: Rocky Road": 170000088,
-    "SP: A Very Sticky Situation": 170000089,
-    "DDR: Giant Eel Breakout": 170000090,
-    "BM: Bigmouth's Gold Bait": 170000091,
-    "SS: Choosing a Favorite Snack": 170000092,
-    "BB: Racing the Spooky Speedster": 170000093,
-    "SC: Star Bunnies in the Snow": 170000094,
+    "SS: Rocky Road": 170000085,
+    "SP: A Very Sticky Situation": 170000086,
+    "DDR: Giant Eel Breakout": 170000087,
+    "BM: Bigmouth's Gold Bait": 170000088,
+    "SS: Choosing a Favorite Snack": 170000089,
+    "BB: Racing the Spooky Speedster": 170000090,
+    "SC: Star Bunnies in the Snow": 170000091,
 }
 location_table = { **locGE_table,**locHH_table, \
                **locSJ_table,**locBR_table,**locBB_table, \
                **locGG_table,**locFF_table,**locDDune_table, \
                **locGL_table,**locSS_table,**locTT_table, \
                **locDD_table,**locDN_table,**locMM_table, \
-               **locHL_table,**locspecialstages_table,**locbosses_table, \
+               **locHL_table,**locspecialstages_table,**locbosses_table
 }
