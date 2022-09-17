@@ -349,7 +349,7 @@ class ALTTPWorld(World):
     def use_enemizer(self):
         world = self.world
         player = self.player
-        return (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
+        return (world.boss_shuffle[player] or world.enemy_shuffle[player]
                 or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
                 or world.pot_shuffle[player] or world.bush_shuffle[player]
                 or world.killable_thieves[player])
@@ -424,8 +424,7 @@ class ALTTPWorld(World):
         return ALttPItem(name, self.player, **item_init_table[name])
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
-                        restitempool, fill_locations):
+    def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
         trash_counts = {}
         standard_keyshuffle_players = set()
         for player in world.get_game_players("A Link to the Past"):
@@ -472,25 +471,14 @@ class ALTTPWorld(World):
             for player, trash_count in trash_counts.items():
                 gtower_locations = locations_mapping[player]
                 world.random.shuffle(gtower_locations)
-                localrest = localrestitempool[player]
-                if localrest:
-                    gt_item_pool = restitempool + localrest
-                    world.random.shuffle(gt_item_pool)
-                else:
-                    gt_item_pool = restitempool.copy()
 
-                while gtower_locations and gt_item_pool and trash_count > 0:
+                while gtower_locations and filleritempool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
-                    item_to_place = gt_item_pool.pop()
+                    item_to_place = filleritempool.pop()
                     if spot_to_fill.item_rule(item_to_place):
-                        if item_to_place in localrest:
-                            localrest.remove(item_to_place)
-                        else:
-                            restitempool.remove(item_to_place)
                         world.push_item(spot_to_fill, item_to_place, False)
                         fill_locations.remove(spot_to_fill)  # very slow, unfortunately
                         trash_count -= 1
-
 
     def get_filler_item_name(self) -> str:
         if self.world.goal[self.player] == "icerodhunt":
