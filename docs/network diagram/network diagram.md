@@ -69,6 +69,12 @@ flowchart LR
     end
     SNI <-- Various, depending on SNES device --> SMZ
 
+    %% Donkey Kong Country 3
+    subgraph Donkey Kong Country 3
+        DK3[SNES]
+    end
+    SNI <-- Various, depending on SNES device --> DK3
+
     %% Native Clients or Games
     %% Games or clients which compile to native or which the client is integrated in the game.
     subgraph "Native"
@@ -82,10 +88,12 @@ flowchart LR
         MT[Meritous]
         TW[The Witness]
         SA2B[Sonic Adventure 2: Battle]
+        DS3[Dark Souls 3]
 
         APCLIENTPP <--> SOE
         APCLIENTPP <--> MT
         APCLIENTPP <-- The Witness Randomizer --> TW
+        APCLIENTPP <--> DS3
         APCPP <--> SM64
         APCPP <--> V6
         APCPP <--> SA2B

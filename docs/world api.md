@@ -86,7 +86,7 @@ inside a World object.
 
 Players provide customized settings for their World in the form of yamls.
 Those are accessible through `self.world.<option_name>[self.player]`. A dict
-of valid options has to be provided in `self.options`. Options are automatically
+of valid options has to be provided in `self.option_definitions`. Options are automatically
 added to the `World` object for easy access.
 
 ### World Options
@@ -252,7 +252,7 @@ to describe it and a `display_name` property for display on the website and in
 spoiler logs.
 
 The actual name as used in the yaml is defined in a `dict[str, Option]`, that is
-assigned to the world under `self.options`.
+assigned to the world under `self.option_definitions`.
 
 Common option types are `Toggle`, `DefaultOnToggle`, `Choice`, `Range`.
 For more see `Options.py` in AP's base directory.
@@ -274,14 +274,12 @@ Define a property `option_<name> = <number>` per selectable value and
 `default = <number>` to set the default selection. Aliases can be set by
 defining a property `alias_<name> = <same number>`.
 
-One special case where aliases are required is when option name is `yes`, `no`,
-`on` or `off` because they parse to `True` or `False`:
 ```python
 option_off = 0
 option_on = 1
 option_some = 2
-alias_false = 0
-alias_true = 1
+alias_disabled = 0
+alias_enabled = 1
 default = 0
 ```
 
@@ -328,7 +326,7 @@ from .Options import mygame_options  # import the options dict
 
 class MyGameWorld(World):
     #...
-    options = mygame_options  # assign the options dict to the world
+    option_definitions = mygame_options  # assign the options dict to the world
     #...
 ```
     
@@ -365,7 +363,7 @@ class MyGameLocation(Location):  # or from Locations import MyGameLocation
 class MyGameWorld(World):
     """Insert description of the world/game here."""
     game: str = "My Game"  # name of the game/world
-    options = mygame_options  # options the player can set
+    option_definitions = mygame_options  # options the player can set
     topology_present: bool = True  # show path to required location checks in spoiler
     remote_items: bool = False  # True if all items come from the server
     remote_start_inventory: bool = False  # True if start inventory comes from the server

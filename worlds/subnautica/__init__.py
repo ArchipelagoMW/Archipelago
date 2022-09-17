@@ -5,6 +5,7 @@ from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassifi
 from worlds.AutoWorld import World, WebWorld
 from . import Items
 from . import Locations
+from . import Creatures
 from . import Options
 from .Items import item_table
 from .Rules import set_rules
@@ -23,6 +24,10 @@ class SubnaticaWeb(WebWorld):
     )]
 
 
+all_locations = {data["name"]: loc_id for loc_id, data in Locations.location_table.items()}
+all_locations.update(Creatures.creature_locations)
+
+
 class SubnauticaWorld(World):
     """
     Subnautica is an undersea exploration game. Stranded on an alien world, you become infected by
@@ -33,25 +38,38 @@ class SubnauticaWorld(World):
     web = SubnaticaWeb()
 
     item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
-    location_name_to_id = {data["name"]: loc_id for loc_id, data in Locations.location_table.items()}
-    options = Options.options
+    location_name_to_id = all_locations
+    option_definitions = Options.options
 
-    data_version = 2
-    required_client_version = (0, 3, 3)
+    data_version = 7
+    required_client_version = (0, 3, 5)
 
     prefill_items: List[Item]
+    creatures_to_scan: List[str]
 
     def generate_early(self) -> None:
         self.prefill_items = [
             self.create_item("Seaglide Fragment"),
             self.create_item("Seaglide Fragment")
         ]
+        scan_option: Options.AggressiveScanLogic = self.world.creature_scan_logic[self.player]
+        creature_pool = scan_option.get_pool()
+
+        self.world.creature_scans[self.player].value = min(
+            len(creature_pool),
+            self.world.creature_scans[self.player].value
+        )
+
+        self.creatures_to_scan = self.world.random.sample(creature_pool,
+                                                          self.world.creature_scans[self.player].value)
 
     def create_regions(self):
         self.world.regions += [
             self.create_region("Menu", None, ["Lifepod 5"]),
             self.create_region("Planet 4546B",
-                               Locations.events + [location["name"] for location in Locations.location_table.values()])
+                               Locations.events +
+                               [location["name"] for location in Locations.location_table.values()] +
+                               [creature+Creatures.suffix for creature in self.creatures_to_scan])
         ]
 
     # refer to Rules.py
@@ -64,7 +82,7 @@ class SubnauticaWorld(World):
         # Generate item pool
         pool = []
         neptune_launch_platform = None
-        extras = 0
+        extras = self.world.creature_scans[self.player].value
         valuable = self.world.item_pool[self.player] == Options.ItemPool.option_valuable
         for item in item_table.values():
             for i in range(item["count"]):
@@ -105,6 +123,8 @@ class SubnauticaWorld(World):
         slot_data: Dict[str, Any] = {
             "goal": goal.current_key,
             "vanilla_tech": vanilla_tech,
+            "creatures_to_scan": self.creatures_to_scan,
+            "death_link": self.world.death_link[self.player].value,
         }
 
         return slot_data

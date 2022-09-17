@@ -39,8 +39,6 @@ class OpenPyramid(Choice):
     option_auto = 3
     default = option_goal
 
-    alias_true = option_open
-    alias_false = option_closed
     alias_yes = option_open
     alias_no = option_closed
 
@@ -159,8 +157,6 @@ class Progressive(Choice):
     option_off = 0
     option_grouped_random = 1
     option_on = 2
-    alias_false = 0
-    alias_true = 2
     default = 2
 
     def want_progressives(self, random):
@@ -202,8 +198,6 @@ class Hints(Choice):
     option_on = 2
     option_full = 3
     default = 2
-    alias_false = 0
-    alias_true = 2
 
 
 class Scams(Choice):
@@ -213,11 +207,12 @@ class Scams(Choice):
     option_king_zora = 1
     option_bottle_merchant = 2
     option_all = 3
-    alias_false = 0
 
+    @property
     def gives_king_zora_hint(self):
         return self.value in {0, 2}
 
+    @property
     def gives_bottle_merchant_hint(self):
         return self.value in {0, 1}
 
@@ -280,8 +275,8 @@ class ShieldPalette(Palette):
     display_name = "Shield Palette"
 
 
-class LinkPalette(Palette):
-    display_name = "Link Palette"
+# class LinkPalette(Palette):
+#     display_name = "Link Palette"
 
 
 class HeartBeep(Choice):
@@ -291,7 +286,6 @@ class HeartBeep(Choice):
     option_half = 2
     option_quarter = 3
     option_off = 4
-    alias_false = 4
 
 
 class HeartColor(Choice):
@@ -385,7 +379,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "hud_palettes": HUDPalette,
     "sword_palettes": SwordPalette,
     "shield_palettes": ShieldPalette,
-    "link_palettes": LinkPalette,
+    # "link_palettes": LinkPalette,
     "heartbeep": HeartBeep,
     "heartcolor": HeartColor,
     "quickswap": QuickSwap,

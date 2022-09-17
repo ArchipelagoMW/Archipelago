@@ -1,26 +1,24 @@
-import random
 import logging
 import os
+import random
 import threading
 import typing
 
+import Utils
 from BaseClasses import Item, CollectionState, Tutorial
+from .Dungeons import create_dungeons
+from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
+from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
+from .ItemPool import generate_itempool, difficulties
+from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
+from .Options import alttp_options, smallkey_shuffle
+from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
+from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
+    get_hash_string, get_base_rom_path, LttPDeltaPatch
+from .Rules import set_rules
+from .Shops import create_shops, ShopSlotFill
 from .SubClasses import ALttPItem
 from ..AutoWorld import World, WebWorld, LogicMixin
-from .Options import alttp_options, smallkey_shuffle
-from .Items import as_dict_item_table, item_name_groups, item_table, GetBeemizerItem
-from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
-from .Rules import set_rules
-from .ItemPool import generate_itempool, difficulties
-from .Shops import create_shops, ShopSlotFill
-from .Dungeons import create_dungeons
-from .Rom import LocalRom, patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, get_hash_string, \
-    get_base_rom_path, LttPDeltaPatch
-import Patch
-from itertools import chain
-
-from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
-from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 
 lttp_logger = logging.getLogger("A Link to the Past")
 
@@ -119,7 +117,7 @@ class ALTTPWorld(World):
     Ganon!
     """
     game: str = "A Link to the Past"
-    options = alttp_options
+    option_definitions = alttp_options
     topology_present = True
     item_name_groups = item_name_groups
     hint_blacklist = {"Triforce"}
@@ -133,9 +131,24 @@ class ALTTPWorld(World):
     required_client_version = (0, 3, 2)
     web = ALTTPWeb()
 
+    pedestal_credit_texts: typing.Dict[int, str] = \
+        {data.item_code: data.pedestal_credit for data in item_table.values() if data.pedestal_credit}
+    sickkid_credit_texts: typing.Dict[int, str] = \
+        {data.item_code: data.sick_kid_credit for data in item_table.values() if data.sick_kid_credit}
+    zora_credit_texts: typing.Dict[int, str] = \
+        {data.item_code: data.zora_credit for data in item_table.values() if data.zora_credit}
+    magicshop_credit_texts: typing.Dict[int, str] = \
+        {data.item_code: data.witch_credit for data in item_table.values() if data.witch_credit}
+    fluteboy_credit_texts: typing.Dict[int, str] = \
+        {data.item_code: data.flute_boy_credit for data in item_table.values() if data.flute_boy_credit}
+
     set_rules = set_rules
 
     create_items = generate_itempool
+
+    enemizer_path: str = Utils.get_options()["generator"]["enemizer_path"] \
+        if os.path.isabs(Utils.get_options()["generator"]["enemizer_path"]) \
+        else Utils.local_path(Utils.get_options()["generator"]["enemizer_path"])
 
     def __init__(self, *args, **kwargs):
         self.dungeon_local_item_names = set()
@@ -151,6 +164,9 @@ class ALTTPWorld(World):
             raise FileNotFoundError(rom_file)
 
     def generate_early(self):
+        if self.use_enemizer():
+            check_enemizer(self.enemizer_path)
+
         player = self.player
         world = self.world
 
@@ -339,21 +355,26 @@ class ALTTPWorld(World):
     def stage_post_fill(cls, world):
         ShopSlotFill(world)
 
+    def use_enemizer(self):
+        world = self.world
+        player = self.player
+        return (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
+                or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
+                or world.pot_shuffle[player] or world.bush_shuffle[player]
+                or world.killable_thieves[player])
+
     def generate_output(self, output_directory: str):
         world = self.world
         player = self.player
         try:
-            use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
-                            or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                            or world.pot_shuffle[player] or world.bush_shuffle[player]
-                            or world.killable_thieves[player])
+            use_enemizer = self.use_enemizer()
 
             rom = LocalRom(get_base_rom_path())
 
             patch_rom(world, rom, player, use_enemizer)
 
             if use_enemizer:
-                patch_enemizer(world, player, rom, world.enemizer, output_directory)
+                patch_enemizer(world, player, rom, self.enemizer_path, output_directory)
 
             if world.is_race:
                 patch_race_rom(rom, world, player)
@@ -366,7 +387,7 @@ class ALTTPWorld(World):
                 'hud': world.hud_palettes[player],
                 'sword': world.sword_palettes[player],
                 'shield': world.shield_palettes[player],
-                'link': world.link_palettes[player]
+                # 'link': world.link_palettes[player]
             }
             palettes_options = {key: option.current_key for key, option in palettes_options.items()}
 
@@ -410,11 +431,10 @@ class ALTTPWorld(World):
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
     def create_item(self, name: str) -> Item:
-        return ALttPItem(name, self.player, **as_dict_item_table[name])
+        return ALttPItem(name, self.player, **item_init_table[name])
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
-                        restitempool, fill_locations):
+    def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
         trash_counts = {}
         standard_keyshuffle_players = set()
         for player in world.get_game_players("A Link to the Past"):
@@ -461,25 +481,14 @@ class ALTTPWorld(World):
             for player, trash_count in trash_counts.items():
                 gtower_locations = locations_mapping[player]
                 world.random.shuffle(gtower_locations)
-                localrest = localrestitempool[player]
-                if localrest:
-                    gt_item_pool = restitempool + localrest
-                    world.random.shuffle(gt_item_pool)
-                else:
-                    gt_item_pool = restitempool.copy()
 
-                while gtower_locations and gt_item_pool and trash_count > 0:
+                while gtower_locations and filleritempool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
-                    item_to_place = gt_item_pool.pop()
+                    item_to_place = filleritempool.pop()
                     if spot_to_fill.item_rule(item_to_place):
-                        if item_to_place in localrest:
-                            localrest.remove(item_to_place)
-                        else:
-                            restitempool.remove(item_to_place)
                         world.push_item(spot_to_fill, item_to_place, False)
                         fill_locations.remove(spot_to_fill)  # very slow, unfortunately
                         trash_count -= 1
-
 
     def get_filler_item_name(self) -> str:
         if self.world.goal[self.player] == "icerodhunt":

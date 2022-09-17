@@ -26,12 +26,17 @@ class AssembleOptions(abc.ABCMeta):
 
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
         options.update(new_options)
-
         # apply aliases, without name_lookup
         aliases = {name[6:].lower(): option_id for name, option_id in attrs.items() if
                    name.startswith("alias_")}
 
         assert "random" not in aliases, "Choice option 'random' cannot be manually assigned."
+
+        # auto-alias Off and On being parsed as True and False
+        if "off" in options:
+            options["false"] = options["off"]
+        if "on" in options:
+            options["true"] = options["on"]
 
         options.update(aliases)
 
@@ -298,7 +303,7 @@ class Toggle(NumericOption):
         if type(data) == str:
             return cls.from_text(data)
         else:
-            return cls(data)
+            return cls(int(data))
 
     @classmethod
     def get_option_name(cls, value):

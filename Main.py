@@ -70,7 +70,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
     world.player_name = args.name.copy()
-    world.enemizer = args.enemizercli
     world.sprite = args.sprite.copy()
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
@@ -216,9 +215,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         world._all_state = None
 
     logger.info("Running Item Plando")
-
-    for item in world.itempool:
-        item.world = world
 
     distribute_planned(world)
 
@@ -426,7 +422,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             world.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
 
         zipfilename = output_path(f"AP_{world.seed_name}.zip")
-        logger.info(f'Creating final archive at {zipfilename}.')
+        logger.info(f"Creating final archive at {zipfilename}")
         with zipfile.ZipFile(zipfilename, mode="w", compression=zipfile.ZIP_DEFLATED,
                              compresslevel=9) as zf:
             for file in os.scandir(temp_dir):

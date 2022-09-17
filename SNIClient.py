@@ -15,9 +15,6 @@ import typing
 
 from json import loads, dumps
 
-import ModuleUpdate
-ModuleUpdate.update()
-
 from Utils import init_logging, messagebox
 
 if __name__ == "__main__":
@@ -33,7 +30,7 @@ from worlds.sm.Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
 from worlds.smz3.Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
 import Utils
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
-from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3
+from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3, GAME_DKC3
 
 snes_logger = logging.getLogger("SNES")
 
@@ -149,8 +146,8 @@ class Context(CommonContext):
     def event_invalid_slot(self):
         if self.snes_socket is not None and not self.snes_socket.closed:
             asyncio.create_task(self.snes_socket.close())
-        raise Exception('Invalid ROM detected, '
-                        'please verify that you have loaded the correct rom and reconnect your snes (/snes)')
+        raise Exception("Invalid ROM detected, "
+                        "please verify that you have loaded the correct rom and reconnect your snes (/snes)")
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -158,7 +155,7 @@ class Context(CommonContext):
         if self.rom is None:
             self.awaiting_rom = True
             snes_logger.info(
-                'No ROM detected, awaiting snes connection to authenticate to the multiworld server (/snes)')
+                "No ROM detected, awaiting snes connection to authenticate to the multiworld server (/snes)")
             return
         self.awaiting_rom = False
         self.auth = self.rom
@@ -188,7 +185,10 @@ class Context(CommonContext):
     async def shutdown(self):
         await super(Context, self).shutdown()
         if self.snes_connect_task:
-            await self.snes_connect_task
+            try:
+                await asyncio.wait_for(self.snes_connect_task, 1)
+            except asyncio.TimeoutError:
+                self.snes_connect_task.cancel()
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected", "RoomUpdate"}:
@@ -251,12 +251,15 @@ async def deathlink_kill_player(ctx: Context):
             if not gamemode or gamemode[0] in SM_DEATH_MODES or (
                     ctx.death_link_allow_survive and health is not None and health > 0):
                 ctx.death_state = DeathState.dead
+        elif ctx.game == GAME_DKC3:
+            from worlds.dkc3.Client import deathlink_kill_player as dkc3_deathlink_kill_player
+            await dkc3_deathlink_kill_player(ctx)
         ctx.last_death_link = time.time()
 
 
 SNES_RECONNECT_DELAY = 5
 
-# LttP
+# FXPAK Pro protocol memory mapping used by SNI
 ROM_START = 0x000000
 WRAM_START = 0xF50000
 WRAM_SIZE = 0x20000
@@ -287,21 +290,24 @@ SHOP_LEN = (len(Shops.shop_table) * 3) + 5
 DEATH_LINK_ACTIVE_ADDR = ROMNAME_START + 0x15       # 1 byte
 
 # SM
-SM_ROMNAME_START = 0x007FC0
+SM_ROMNAME_START = ROM_START + 0x007FC0
 
 SM_INGAME_MODES = {0x07, 0x09, 0x0b}
 SM_ENDGAME_MODES = {0x26, 0x27}
 SM_DEATH_MODES = {0x15, 0x17, 0x18, 0x19, 0x1A}
 
-SM_RECV_PROGRESS_ADDR = SRAM_START + 0x2000         # 2 bytes
-SM_RECV_ITEM_ADDR = SAVEDATA_START + 0x4D2          # 1 byte
-SM_RECV_ITEM_PLAYER_ADDR = SAVEDATA_START + 0x4D3   # 1 byte
+# RECV and SEND are from the gameplay's perspective: SNIClient writes to RECV queue and reads from SEND queue
+SM_RECV_QUEUE_START  = SRAM_START + 0x2000
+SM_RECV_QUEUE_WCOUNT = SRAM_START + 0x2602
+SM_SEND_QUEUE_START  = SRAM_START + 0x2700
+SM_SEND_QUEUE_RCOUNT = SRAM_START + 0x2680
+SM_SEND_QUEUE_WCOUNT = SRAM_START + 0x2682
 
 SM_DEATH_LINK_ACTIVE_ADDR = ROM_START + 0x277f04    # 1 byte
 SM_REMOTE_ITEM_FLAG_ADDR = ROM_START + 0x277f06    # 1 byte
 
 # SMZ3
-SMZ3_ROMNAME_START = 0x00FFC0
+SMZ3_ROMNAME_START = ROM_START + 0x00FFC0
 
 SMZ3_INGAME_MODES = {0x07, 0x09, 0x0b}
 SMZ3_ENDGAME_MODES = {0x26, 0x27}
@@ -595,7 +601,7 @@ class SNESState(enum.IntEnum):
     SNES_ATTACHED = 3
 
 
-def launch_sni(ctx: Context):
+def launch_sni():
     sni_path = Utils.get_options()["lttp_options"]["sni"]
 
     if not os.path.isdir(sni_path):
@@ -633,11 +639,9 @@ async def _snes_connect(ctx: Context, address: str):
     address = f"ws://{address}" if "://" not in address else address
     snes_logger.info("Connecting to SNI at %s ..." % address)
     seen_problems = set()
-    succesful = False
-    while not succesful:
+    while 1:
         try:
             snes_socket = await websockets.connect(address, ping_timeout=None, ping_interval=None)
-            succesful = True
         except Exception as e:
             problem = "%s" % e
             # only tell the user about new problems, otherwise silently lay in wait for a working connection
@@ -647,7 +651,7 @@ async def _snes_connect(ctx: Context, address: str):
 
                 if len(seen_problems) == 1:
                     # this is the first problem. Let's try launching SNI if it isn't already running
-                    launch_sni(ctx)
+                    launch_sni()
 
             await asyncio.sleep(1)
         else:
@@ -1034,47 +1038,54 @@ async def game_watcher(ctx: Context):
         if not ctx.rom:
             ctx.finished_game = False
             ctx.death_link_allow_survive = False
-            game_name = await snes_read(ctx, SM_ROMNAME_START, 5)
-            if game_name is None:
-                continue
-            elif game_name[:2] == b"SM":
-                ctx.game = GAME_SM
-                # versions lower than 0.3.0 dont have item handling flag nor remote item support
-                romVersion = int(game_name[2:5].decode('UTF-8'))
-                if romVersion < 30:
-                    ctx.items_handling = 0b001 # full local 
-                else:
-                    item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
-                    ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
-            else:
-                game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
-                if game_name == b"ZSM":
-                    ctx.game = GAME_SMZ3
-                    ctx.items_handling = 0b101  # local items and remote start inventory
-                else:
-                    ctx.game = GAME_ALTTP
-                    ctx.items_handling = 0b001  # full local
 
-            rom = await snes_read(ctx, SM_ROMNAME_START if ctx.game == GAME_SM else SMZ3_ROMNAME_START if ctx.game == GAME_SMZ3 else ROMNAME_START, ROMNAME_SIZE)
-            if rom is None or rom == bytes([0] * ROMNAME_SIZE):
-                continue
+            from worlds.dkc3.Client import dkc3_rom_init
+            init_handled = await dkc3_rom_init(ctx)
+            if not init_handled:
+                game_name = await snes_read(ctx, SM_ROMNAME_START, 5)
+                if game_name is None:
+                    continue
+                elif game_name[:2] == b"SM":
+                    ctx.game = GAME_SM
+                    # versions lower than 0.3.0 dont have item handling flag nor remote item support
+                    romVersion = int(game_name[2:5].decode('UTF-8'))
+                    if romVersion < 30:
+                        ctx.items_handling = 0b001 # full local
+                    else:
+                        item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
+                        ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
+                else:
+                    game_name = await snes_read(ctx, SMZ3_ROMNAME_START, 3)
+                    if game_name == b"ZSM":
+                        ctx.game = GAME_SMZ3
+                        ctx.items_handling = 0b101  # local items and remote start inventory
+                    else:
+                        ctx.game = GAME_ALTTP
+                        ctx.items_handling = 0b001  # full local
 
-            ctx.rom = rom
-            if ctx.game != GAME_SMZ3:
-                death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
-                                             SM_DEATH_LINK_ACTIVE_ADDR, 1)
-                if death_link:
-                    ctx.allow_collect = bool(death_link[0] & 0b100)
-                    ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
-                    await ctx.update_death_link(bool(death_link[0] & 0b1))
-            if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
-                ctx.locations_checked = set()
-                ctx.locations_scouted = set()
-                ctx.locations_info = {}
-            ctx.prev_rom = ctx.rom
+                rom = await snes_read(ctx, SM_ROMNAME_START if ctx.game == GAME_SM else SMZ3_ROMNAME_START if ctx.game == GAME_SMZ3 else ROMNAME_START, ROMNAME_SIZE)
+                if rom is None or rom == bytes([0] * ROMNAME_SIZE):
+                    continue
+
+                ctx.rom = rom
+                if ctx.game != GAME_SMZ3:
+                    death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR if ctx.game == GAME_ALTTP else
+                                                 SM_DEATH_LINK_ACTIVE_ADDR, 1)
+                    if death_link:
+                        ctx.allow_collect = bool(death_link[0] & 0b100)
+                        ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
+                        await ctx.update_death_link(bool(death_link[0] & 0b1))
+                if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
+                    ctx.locations_checked = set()
+                    ctx.locations_scouted = set()
+                    ctx.locations_info = {}
+                ctx.prev_rom = ctx.rom
 
             if ctx.awaiting_rom:
                 await ctx.server_auth(False)
+            elif ctx.server is None:
+                snes_logger.warning("ROM detected but no active multiworld server connection. " +
+                                    "Connect using command: /connect server:port")
 
         if ctx.auth and ctx.auth != ctx.rom:
             snes_logger.warning("ROM change detected, please reconnect to the multiworld server")
@@ -1151,6 +1162,9 @@ async def game_watcher(ctx: Context):
                 await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [scout_location]}])
             await track_locations(ctx, roomid, roomdata)
         elif ctx.game == GAME_SM:
+            if ctx.server is None or ctx.slot is None:
+                # not successfully connected to a multiworld server, cannot process the game sending items
+                continue
             gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
             if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
                 currently_dead = gamemode[0] in SM_DEATH_MODES
@@ -1161,25 +1175,25 @@ async def game_watcher(ctx: Context):
                     ctx.finished_game = True
                 continue
 
-            data = await snes_read(ctx, SM_RECV_PROGRESS_ADDR + 0x680, 4)
+            data = await snes_read(ctx, SM_SEND_QUEUE_RCOUNT, 4)
             if data is None:
                 continue
 
             recv_index = data[0] | (data[1] << 8)
-            recv_item = data[2] | (data[3] << 8)
+            recv_item = data[2] | (data[3] << 8) # this is actually SM_SEND_QUEUE_WCOUNT
 
             while (recv_index < recv_item):
                 itemAdress = recv_index * 8
-                message = await snes_read(ctx, SM_RECV_PROGRESS_ADDR + 0x700 + itemAdress, 8)
+                message = await snes_read(ctx, SM_SEND_QUEUE_START + itemAdress, 8)
                 # worldId = message[0] | (message[1] << 8)  # unused
                 # itemId = message[2] | (message[3] << 8)  # unused
                 itemIndex = (message[4] | (message[5] << 8)) >> 3
 
                 recv_index += 1
-                snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x680,
+                snes_buffered_write(ctx, SM_SEND_QUEUE_RCOUNT,
                                     bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
 
-                from worlds.sm.Locations import locations_start_id
+                from worlds.sm import locations_start_id
                 location_id = locations_start_id + itemIndex
 
                 ctx.locations_checked.add(location_id)
@@ -1188,15 +1202,14 @@ async def game_watcher(ctx: Context):
                     f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                 await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
-            data = await snes_read(ctx, SM_RECV_PROGRESS_ADDR + 0x600, 4)
+            data = await snes_read(ctx, SM_RECV_QUEUE_WCOUNT, 2)
             if data is None:
                 continue
 
-            # recv_itemOutPtr = data[0] | (data[1] << 8) # unused
-            itemOutPtr = data[2] | (data[3] << 8)
+            itemOutPtr = data[0] | (data[1] << 8)
 
-            from worlds.sm.Items import items_start_id
-            from worlds.sm.Locations import locations_start_id
+            from worlds.sm import items_start_id
+            from worlds.sm import locations_start_id
             if itemOutPtr < len(ctx.items_received):
                 item = ctx.items_received[itemOutPtr]
                 itemId = item.item - items_start_id
@@ -1206,10 +1219,10 @@ async def game_watcher(ctx: Context):
                     locationId = 0x00 #backward compat
 
                 playerID = item.player if item.player <= SM_ROM_PLAYER_LIMIT else 0
-                snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes(
+                snes_buffered_write(ctx, SM_RECV_QUEUE_START + itemOutPtr * 4, bytes(
                 	[playerID & 0xFF, (playerID >> 8) & 0xFF, itemId & 0xFF, locationId & 0xFF]))
                 itemOutPtr += 1
-                snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + 0x602,
+                snes_buffered_write(ctx, SM_RECV_QUEUE_WCOUNT,
                                     bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
                 logging.info('Received %s from %s (%s) (%d/%d in list)' % (
                     color(ctx.item_names[item.item], 'red', 'bold'),
@@ -1217,6 +1230,9 @@ async def game_watcher(ctx: Context):
                     ctx.location_names[item.location], itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
         elif ctx.game == GAME_SMZ3:
+            if ctx.server is None or ctx.slot is None:
+                # not successfully connected to a multiworld server, cannot process the game sending items
+                continue
             currentGame = await snes_read(ctx, SRAM_START + 0x33FE, 2)
             if (currentGame is not None):
                 if (currentGame[0] != 0):
@@ -1252,7 +1268,8 @@ async def game_watcher(ctx: Context):
                 snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x680, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
 
                 from worlds.smz3.TotalSMZ3.Location import locations_start_id
-                location_id = locations_start_id + itemIndex
+                from worlds.smz3 import convertLocSMZ3IDToAPID
+                location_id = locations_start_id + convertLocSMZ3IDToAPID(itemIndex)
 
                 ctx.locations_checked.add(location_id)
                 location = ctx.location_names[location_id]
@@ -1279,6 +1296,9 @@ async def game_watcher(ctx: Context):
                     color(ctx.item_names[item.item], 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
                     ctx.location_names[item.location], itemOutPtr, len(ctx.items_received)))
             await snes_flush_writes(ctx)
+        elif ctx.game == GAME_DKC3:
+            from worlds.dkc3.Client import dkc3_game_watcher
+            await dkc3_game_watcher(ctx)
 
 
 async def run_game(romfile):
