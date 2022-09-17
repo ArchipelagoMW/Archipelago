@@ -9,7 +9,7 @@ from .data.locations_data import location_dictionary_table, cemetery_of_ash_tabl
     undead_settlement_table, road_of_sacrifice_table, consumed_king_garden_table, cathedral_of_the_deep_table, \
     farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table, \
     irithyll_dungeon_table, profaned_capital_table, anor_londo_table, lothric_castle_table, grand_archives_table, \
-    untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table
+    untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table, progressive_locations
 from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
 from ..generic.Rules import set_rule
@@ -75,8 +75,7 @@ class DarkSouls3World(World):
         return DarkSouls3Item(name, item_classification, data, self.player)
 
     def create_regions(self):
-        menu_region = Region("Menu", RegionType.Generic, "Menu", self.player)
-        self.world.regions.append(menu_region)
+        menu_region = self.create_region("Menu", progressive_locations)
 
         # Create all Vanilla regions of Dark Souls III
         cemetery_of_ash_region = self.create_region("Cemetery Of Ash", cemetery_of_ash_table)
@@ -162,6 +161,8 @@ class DarkSouls3World(World):
         if location_table:
             for name, address in location_table.items():
                 location = DarkSouls3Location(self.player, name, self.location_name_to_id[name], new_region)
+                if region_name == "Menu":
+                    location.item_rule = staticmethod(lambda item: not item.advancement)
                 new_region.locations.append(location)
         self.world.regions.append(new_region)
         return new_region
