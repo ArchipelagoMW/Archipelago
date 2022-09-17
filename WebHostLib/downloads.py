@@ -81,8 +81,6 @@ def download_slot_file(room_id, player_id: int):
             fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_SP.apv6"
         elif slot_data.game == "Super Mario 64":
             fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_SP.apsm64ex"
-        elif slot_data.game == "Dark Souls III":
-            fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}.json"
         else:
             return "Game download not supported."
         return send_file(io.BytesIO(slot_data.data), as_attachment=True, download_name=fname)
