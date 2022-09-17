@@ -113,8 +113,8 @@ level_location_table = {
     LocationName.valley_of_bowser_4_exit_2: 0xBC004A,
     LocationName.valley_ghost_house_exit_1: 0xBC004B,
     LocationName.valley_ghost_house_exit_2: 0xBC004C,
-    LocationName.valley_reznor:             0xBC00B3,
     LocationName.valley_fortress:           0xBC004E,
+    LocationName.valley_reznor:             0xBC00B3,
     LocationName.valley_castle:             0xBC004F,
     LocationName.valley_koopaling:          0xBC00A6,
 
@@ -161,7 +161,7 @@ dragon_coin_location_table = {
     LocationName.vanilla_secret_1_dragon:    0xBC011A,
     LocationName.vanilla_secret_2_dragon:    0xBC011C,
     LocationName.vanilla_secret_3_dragon:    0xBC011D,
-    LocationName.vanilla_ghost_house_dragon: 0xBC011D,
+    LocationName.vanilla_ghost_house_dragon: 0xBC011E,
 
     LocationName.butter_bridge_1_dragon: 0xBC0123,
     LocationName.butter_bridge_2_dragon: 0xBC0124,
