@@ -1,6 +1,7 @@
 # world/dark_souls_3/__init__.py
 import json
 import os
+from typing import Dict
 
 from .Options import dark_souls_options
 from .data.items_data import weapons_upgrade_5_table, weapons_upgrade_10_table, item_dictionary_table, key_items_list
@@ -237,7 +238,9 @@ class DarkSouls3World(World):
         for i in range(item_pool_len, total_required_locations):
             self.world.itempool += [self.create_item("Soul of an Intrepid Hero")]
 
-    def generate_output(self, output_directory: str):
+    def fill_slot_data(self) -> Dict[str, object]:
+        slot_data: Dict[str, object] = {}
+
         # Depending on the specified option, modify items hexadecimal value to add an upgrade level
         item_dictionary = item_dictionary_table.copy()
         if self.world.randomize_weapons_level[self.player]:
@@ -271,7 +274,7 @@ class DarkSouls3World(World):
                 else:
                     locations_target.append(0)
 
-        data = {
+        slot_data = {
             "options": {
                 "auto_equip": self.world.auto_equip[self.player].value,
                 "lock_equip": self.world.lock_equip[self.player].value,
@@ -287,10 +290,10 @@ class DarkSouls3World(World):
             "itemsAddress": items_address
         }
 
-        # generate the file
-        filename = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}.json"
-        with open(os.path.join(output_directory, filename), 'w') as outfile:
-            json.dump(data, outfile)
+        return slot_data
+
+    def generate_output(self, output_directory: str):
+        pass
 
 
 class DarkSouls3Location(Location):
