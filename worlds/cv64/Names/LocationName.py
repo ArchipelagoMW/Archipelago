@@ -227,9 +227,9 @@ ccelv_atop_machine = "Castle Center - Elevator room - Atop enormous machine"
 ccelv_pipes = "Castle Center - Elevator room - Elevator pipe device"
 ccelv_staircase = "Castle Center - Elevator room - Staircase"
 
-ccff_gears_side = "Castle Center - Gear room - Side"
-ccff_gears_mid = "Castle Center - Gear room - Middle"
-ccff_gears_corner = "Castle Center - Gear room - Corner"
+ccff_gears_side = "Castle Center - Engine room - Side"
+ccff_gears_mid = "Castle Center - Engine room - Middle"
+ccff_gears_corner = "Castle Center - Engine room - Corner"
 ccff_lizard_pit = "Castle Center - Lizard man coffin room - Pit"
 ccff_lizard_corner = "Castle Center - Lizard man coffin room - Corner"
 
