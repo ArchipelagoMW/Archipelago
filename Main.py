@@ -12,6 +12,7 @@ from typing import Dict, Tuple, Optional, Set
 
 from BaseClasses import MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
 from worlds.alttp.Items import item_name_groups
+from worlds.alttp.Regions import is_overworld_region
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from Utils import output_path, get_options, __version__, version_tuple
@@ -260,22 +261,23 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
             for location in world.get_filled_locations():
                 if type(location.address) is int:
-                    main_entrance = location.parent_region.get_connecting_entrance()
                     if location.game != "A Link to the Past":
                         checks_in_area[location.player]["Light World"].append(location.address)
-                    elif location.parent_region.dungeon:
-                        dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
-                                       'Inverted Ganons Tower': 'Ganons Tower'} \
-                            .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
-                        checks_in_area[location.player][dungeonname].append(location.address)
-                    elif location.parent_region.type == RegionType.LightWorld:
-                        checks_in_area[location.player]["Light World"].append(location.address)
-                    elif location.parent_region.type == RegionType.DarkWorld:
-                        checks_in_area[location.player]["Dark World"].append(location.address)
-                    elif main_entrance.parent_region.type == RegionType.LightWorld:
-                        checks_in_area[location.player]["Light World"].append(location.address)
-                    elif main_entrance.parent_region.type == RegionType.DarkWorld:
-                        checks_in_area[location.player]["Dark World"].append(location.address)
+                    else:
+                        main_entrance = location.parent_region.get_connecting_entrance(is_overworld_region)
+                        if location.parent_region.dungeon:
+                            dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
+                                           'Inverted Ganons Tower': 'Ganons Tower'} \
+                                .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
+                            checks_in_area[location.player][dungeonname].append(location.address)
+                        elif location.parent_region.type == RegionType.LightWorld:
+                            checks_in_area[location.player]["Light World"].append(location.address)
+                        elif location.parent_region.type == RegionType.DarkWorld:
+                            checks_in_area[location.player]["Dark World"].append(location.address)
+                        elif main_entrance.parent_region.type == RegionType.LightWorld:
+                            checks_in_area[location.player]["Light World"].append(location.address)
+                        elif main_entrance.parent_region.type == RegionType.DarkWorld:
+                            checks_in_area[location.player]["Dark World"].append(location.address)
                     checks_in_area[location.player]["Total"] += 1
 
             oldmancaves = []
@@ -289,7 +291,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     player = region.player
                     location_id = SHOP_ID_START + total_shop_slots + index
 
-                    main_entrance = region.get_connecting_entrance()
+                    main_entrance = region.get_connecting_entrance(is_overworld_region)
                     if main_entrance.parent_region.type == RegionType.LightWorld:
                         checks_in_area[player]["Light World"].append(location_id)
                     else:
@@ -323,7 +325,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 precollected_items = {player: [item.code for item in world_precollected if type(item.code) == int]
                                       for player, world_precollected in world.precollected_items.items()}
                 precollected_hints = {player: set() for player in range(1, world.players + 1 + len(world.groups))}
-
 
                 for slot in world.player_ids:
                     slot_data[slot] = world.worlds[slot].fill_slot_data()

@@ -12,7 +12,8 @@ from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
 from .Options import alttp_options, smallkey_shuffle
-from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance
+from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
+    is_overworld_region
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
@@ -418,7 +419,7 @@ class ALTTPWorld(World):
 
         for region in world.regions:
             if region.player in er_hint_data and region.locations:
-                main_entrance = region.get_connecting_entrance()
+                main_entrance = region.get_connecting_entrance(is_overworld_region)
                 for location in region.locations:
                     if type(location.address) == int:  # skips events and crystals
                         if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:

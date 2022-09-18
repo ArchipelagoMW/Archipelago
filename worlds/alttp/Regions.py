@@ -4,6 +4,10 @@ import typing
 from BaseClasses import Region, Entrance, RegionType
 
 
+def is_overworld_region(region: Region) -> bool:
+    return region.type in {RegionType.DarkWorld, RegionType.LightWorld, RegionType.Generic}
+
+
 def create_regions(world, player):
 
     world.regions += [
