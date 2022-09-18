@@ -643,13 +643,12 @@ class MenuSpeed(Choice):
     option_quadruple = 4
     option_half = 5
 
-# TODO this is a bad way to do this. maybe turn enabled into a toggle then the rest of these into an Optionlist?
-# not adding to the options dict until putting together a better solution.
+
 class RandomSprite(OptionList):
     """Allows different random sprite events to be simultaneously enabled."""
-    display_name = "Random Sprite On Event"
-    valid_keys = {"enabled", "on_hit", "on_enter", "on_exit", "on_slash",
-                  "on_item", "on_bonk", "on_everything", "use_weighted_sprite_pool"}
+    display_name = "Random Sprite Events"
+    valid_keys = {"on_hit", "on_enter", "on_exit", "on_slash", "on_item", "on_bonk"}
+
 
 class RandomSpriteToggle(Toggle):
     """Enabling this will enable options in the random sprite event list, causing your sprite to be randomized from your
@@ -832,6 +831,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "use_random_sprite_events": RandomSpriteToggle,
     "random_sprite_events": RandomSprite,
     "sprite_pool": SpritePool,
+    "sprite": Sprite,
     "ow_palettes": OWPalette,
     "uw_palettes": UWPalette,
     "hud_palettes": HUDPalette,
