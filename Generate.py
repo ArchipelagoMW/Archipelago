@@ -16,7 +16,6 @@ import ModuleUpdate
 ModuleUpdate.update()
 
 import Utils
-from worlds.alttp import Options as LttPOptions
 from worlds.generic import PlandoConnection
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version, get_options, local_path, user_path
 from worlds.alttp.EntranceRandomizer import parse_arguments
@@ -566,28 +565,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                     get_choice_legacy("exit", placement),
                     get_choice_legacy("direction", placement, "both")
                 ))
-
-    ret.sprite = get_choice_legacy('sprite', weights, "Link")
-    if 'random_sprite_on_event' in weights:
-        randomoneventweights = weights['random_sprite_on_event']
-        if get_choice_legacy('enabled', randomoneventweights, False):
-            ret.sprite = 'randomon'
-            ret.sprite += '-hit' if get_choice_legacy('on_hit', randomoneventweights, True) else ''
-            ret.sprite += '-enter' if get_choice_legacy('on_enter', randomoneventweights, False) else ''
-            ret.sprite += '-exit' if get_choice_legacy('on_exit', randomoneventweights, False) else ''
-            ret.sprite += '-slash' if get_choice_legacy('on_slash', randomoneventweights, False) else ''
-            ret.sprite += '-item' if get_choice_legacy('on_item', randomoneventweights, False) else ''
-            ret.sprite += '-bonk' if get_choice_legacy('on_bonk', randomoneventweights, False) else ''
-            ret.sprite = 'randomonall' if get_choice_legacy('on_everything', randomoneventweights, False) else ret.sprite
-            ret.sprite = 'randomonnone' if ret.sprite == 'randomon' else ret.sprite
-
-            if (not ret.sprite_pool or get_choice_legacy('use_weighted_sprite_pool', randomoneventweights, False)) \
-                    and 'sprite' in weights:  # Use sprite as a weighted sprite pool, if a sprite pool is not already defined.
-                for key, value in weights['sprite'].items():
-                    if key.startswith('random'):
-                        ret.sprite_pool += ['random'] * int(value)
-                    else:
-                        ret.sprite_pool += [key] * int(value)
 
 
 if __name__ == '__main__':
