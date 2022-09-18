@@ -1,11 +1,11 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, OptionDict, OptionList
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, OptionDict, OptionList
 
 
 class Logic(Choice):
-    """Determine the logic used to reach locations."""
+    """Determine the level of glitches expected for the player to use to reach locations."""
     display_name = "Glitch Logic"
     option_no_glitches = 0
     option_minor_glitches = 1
@@ -41,8 +41,6 @@ class OpenPyramid(Choice):
     option_auto = 3
     default = option_goal
 
-    alias_true = option_open
-    alias_false = option_closed
     alias_yes = option_open
     alias_no = option_closed
 
@@ -273,12 +271,142 @@ class TurtleMedallion(Medallions):
     display_name = "Turtle Rock Medallion"
 
 
-class Bosses(Choice):
-    option_vanilla = 0
-    option_simple = 1
+class Bosses(TextChoice):
+    """Shuffles bosses around to different locations.
+    Basic will shuffle all bosses except Ganon and Agahnim anywhere they can be placed.
+    Full chooses 3 bosses at random to be placed twice instead of Lanmolas, Moldorm, and Helmasaur.
+    Chaos allows any boss to appear any number of times.
+    Singularity places a single boss in as many places as possible, and a second boss in any remaining locations.
+    Supports plando placement. Formatting here: https://archipelago.gg/tutorial/A%20Link%20to%20the%20Past/plando/en"""
+    display_name = "Boss Shuffle"
+    option_none = 0
+    option_basic = 1
     option_full = 2
     option_chaos = 3
     option_singularity = 4
+
+    bosses: set = {
+        "Armos Knights",
+        "Lanmolas",
+        "Moldorm",
+        "Helmasaur King",
+        "Arrghus",
+        "Mothula",
+        "Blind",
+        "Kholdstare",
+        "Vitreous",
+        "Trinexx",
+    }
+
+    locations: set = {
+        "Ganons Tower Top",
+        "Tower of Hera",
+        "Skull Woods",
+        "Ganons Tower Middle",
+        "Eastern Palace",
+        "Desert Palace",
+        "Palace of Darkness",
+        "Swamp Palace",
+        "Thieves Town",
+        "Ice Palace",
+        "Misery Mire",
+        "Turtle Rock",
+        "Ganons Tower Bottom"
+    }
+
+    def __init__(self, value: typing.Union[str, int]):
+        assert isinstance(value, str) or isinstance(value, int), \
+            f"{value} is not a valid option for {self.__class__.__name__}"
+        self.value = value
+
+    @classmethod
+    def from_text(cls, text: str):
+        import random
+        # set all of our text to lower case for name checking
+        text = text.lower()
+        cls.bosses = {boss_name.lower() for boss_name in cls.bosses}
+        cls.locations = {boss_location.lower() for boss_location in cls.locations}
+        if text == "random":
+            return cls(random.choice(list(cls.options.values())))
+        for option_name, value in cls.options.items():
+            if option_name == text:
+                return cls(value)
+        options = text.split(";")
+
+        # since plando exists in the option verify the plando values given are valid
+        cls.validate_plando_bosses(options)
+
+        # find out what type of boss shuffle we should use for placing bosses after plando
+        # and add as a string to look nice in the spoiler
+        if "random" in options:
+            shuffle = random.choice(list(cls.options))
+            options.remove("random")
+            options = ";".join(options) + ";" + shuffle
+            boss_class = cls(options)
+        else:
+            for option in options:
+                if option in cls.options:
+                    boss_class = cls(";".join(options))
+                    break
+            else:
+                if len(options) == 1:
+                    if cls.valid_boss_name(options[0]):
+                        options = options[0] + ";singularity"
+                        boss_class = cls(options)
+                    else:
+                        options = options[0] + ";none"
+                        boss_class = cls(options)
+                else:
+                    options = ";".join(options) + ";none"
+                    boss_class = cls(options)
+        return boss_class
+
+    @classmethod
+    def validate_plando_bosses(cls, options: typing.List[str]) -> None:
+        from .Bosses import can_place_boss, format_boss_location
+        for option in options:
+            if option == "random" or option in cls.options:
+                if option != options[-1]:
+                    raise ValueError(f"{option} option must be at the end of the boss_shuffle options!")
+                continue
+            if "-" in option:
+                location, boss = option.split("-")
+                level = ''
+                if not cls.valid_boss_name(boss):
+                    raise ValueError(f"{boss} is not a valid boss name for location {location}.")
+                if not cls.valid_location_name(location):
+                    raise ValueError(f"{location} is not a valid boss location name.")
+                if location.split(" ")[-1] in ("top", "middle", "bottom"):
+                    location = location.split(" ")
+                    level = location[-1]
+                    location = " ".join(location[:-1])
+                location = location.title().replace("Of", "of")
+                if not can_place_boss(boss.title(), location, level):
+                    raise ValueError(f"{format_boss_location(location, level)} "
+                                     f"is not a valid location for {boss.title()}.")
+            else:
+                if not cls.valid_boss_name(option):
+                    raise ValueError(f"{option} is not a valid boss name.")
+
+    @classmethod
+    def valid_boss_name(cls, value: str) -> bool:
+        return value.lower() in cls.bosses
+
+    @classmethod
+    def valid_location_name(cls, value: str) -> bool:
+        return value in cls.locations
+
+    def verify(self, world, player_name: str, plando_options) -> None:
+        if isinstance(self.value, int):
+            return
+        from Generate import PlandoSettings
+        if not(PlandoSettings.bosses & plando_options):
+            import logging
+            # plando is disabled but plando options were given so pull the option and change it to an int
+            option = self.value.split(";")[-1]
+            self.value = self.options[option]
+            logging.warning(f"The plando bosses module is turned off, so {self.name_lookup[self.value].title()} "
+                    f"boss shuffle will be used for player {player_name}.")
 
 
 class Enemies(Choice):
@@ -296,8 +424,6 @@ class Counters(Choice):
     option_default = 2
     option_on = 3
     alias_pickup = option_compass
-    alias_true = option_on
-    alias_false = option_off
     default = option_compass
 
 
@@ -309,8 +435,6 @@ class Progressive(Choice):
     option_off = 0
     option_grouped_random = 1
     option_on = 2
-    alias_false = option_off
-    alias_true = option_on
     default = 2
 
     def want_progressives(self, random):
@@ -318,8 +442,8 @@ class Progressive(Choice):
 
 
 class Swordless(Toggle):
-    """No swords. Curtains in Skull Woods and Agahnim\'s
-    Tower are removed, Agahnim\'s Tower barrier can be
+    """No swords. Curtains in Skull Woods and Agahnim's
+    Tower are removed, Agahnim's Tower barrier can be
     destroyed with hammer. Misery Mire and Turtle Rock
     can be opened without a sword. Hammer damages Ganon.
     Ether and Bombos Tablet can be activated with Hammer
@@ -379,8 +503,6 @@ class Hints(Choice):
     option_on = 2
     option_full = 3
     default = 2
-    alias_false = option_off
-    alias_true = option_on
 
 
 class Scams(Choice):
@@ -390,7 +512,6 @@ class Scams(Choice):
     option_king_zora = 1
     option_bottle_merchant = 2
     option_all = 3
-    alias_false = option_off
 
     @property
     def gives_king_zora_hint(self):
@@ -452,6 +573,7 @@ class PotShuffle(Toggle):
 
 
 class Palette(Choice):
+    """Determines the type of palette to be used for this display element."""
     option_default = 0
     option_good = 1
     option_blackout = 2
@@ -464,33 +586,27 @@ class Palette(Choice):
 
 
 class OWPalette(Palette):
-    """Determines the type of palette to be used for the overworld backgrounds."""
     display_name = "Overworld Palette"
 
 
 class UWPalette(Palette):
-    """Determines the type of palette to be used for the underworld/dungeon backgrounds."""
     display_name = "Underworld Palette"
 
 
 class HUDPalette(Palette):
-    """Determines the type of palette to be used for the menu and HUD elements."""
     display_name = "Menu Palette"
 
 
 class SwordPalette(Palette):
-    """Determines the type of palette to be used for Link's sword."""
     display_name = "Sword Palette"
 
 
 class ShieldPalette(Palette):
-    """Determines the type of palette to be used for Link's Shield."""
     display_name = "Shield Palette"
 
 
-class LinkPalette(Palette):
-    """Determines the type of palette to be used for Link's Clothes. Not supported by all sprites."""
-    display_name = "Link Palette"
+# class LinkPalette(Palette):
+#     display_name = "Link Palette"
 
 
 class HeartBeep(Choice):
@@ -501,7 +617,6 @@ class HeartBeep(Choice):
     option_half = 2
     option_quarter = 3
     option_off = 4
-    alias_false = option_off
 
 
 class HeartColor(Choice):
@@ -704,6 +819,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "hints": Hints,
     "scams": Scams,
     "restrict_dungeon_item_on_boss": RestrictBossItem,
+    "boss_shuffle": Bosses,
     "pot_shuffle": PotShuffle,
     "misery_mire_medallion": MireMedallion,
     "turtle_rock_medallion": TurtleMedallion,
@@ -727,7 +843,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "hud_palettes": HUDPalette,
     "sword_palettes": SwordPalette,
     "shield_palettes": ShieldPalette,
-    "link_palettes": LinkPalette,
+    # "link_palettes": LinkPalette,
     "heartbeep": HeartBeep,
     "heartcolor": HeartColor,
     "quickswap": QuickSwap,

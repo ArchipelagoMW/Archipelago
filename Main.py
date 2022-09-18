@@ -12,7 +12,7 @@ from typing import Dict, Tuple, Optional, Set
 
 from BaseClasses import MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
 from worlds.alttp.Items import item_name_groups
-from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
+from worlds.alttp.Regions import is_main_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from Utils import output_path, get_options, __version__, version_tuple
@@ -230,24 +230,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     output_file_futures.append(
                         pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
 
-            def get_entrance_to_region(region: Region):
-                for entrance in region.entrances:
-                    if entrance.parent_region.type in (RegionType.DarkWorld, RegionType.LightWorld, RegionType.Generic):
-                        return entrance
-                for entrance in region.entrances:  # BFS might be better here, trying DFS for now.
-                    return get_entrance_to_region(entrance.parent_region)
-
             # collect ER hint info
-            er_hint_data = {player: {} for player in world.get_game_players("A Link to the Past") if
-                            world.shuffle[player] != "vanilla" or world.retro_caves[player]}
-
-            for region in world.regions:
-                if region.player in er_hint_data and region.locations:
-                    main_entrance = get_entrance_to_region(region)
-                    for location in region.locations:
-                        if type(location.address) == int:  # skips events and crystals
-                            if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
-                                er_hint_data[region.player][location.address] = main_entrance.name
+            er_hint_data: Dict[int, Dict[int, str]] = {}
+            AutoWorld.call_all(world, 'extend_hint_information', er_hint_data)
 
             checks_in_area = {player: {area: list() for area in ordered_areas}
                               for player in range(1, world.players + 1)}
@@ -257,22 +242,23 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
             for location in world.get_filled_locations():
                 if type(location.address) is int:
-                    main_entrance = get_entrance_to_region(location.parent_region)
                     if location.game != "A Link to the Past":
                         checks_in_area[location.player]["Light World"].append(location.address)
-                    elif location.parent_region.dungeon:
-                        dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
-                                       'Inverted Ganons Tower': 'Ganons Tower'} \
-                            .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
-                        checks_in_area[location.player][dungeonname].append(location.address)
-                    elif location.parent_region.type == RegionType.LightWorld:
-                        checks_in_area[location.player]["Light World"].append(location.address)
-                    elif location.parent_region.type == RegionType.DarkWorld:
-                        checks_in_area[location.player]["Dark World"].append(location.address)
-                    elif main_entrance.parent_region.type == RegionType.LightWorld:
-                        checks_in_area[location.player]["Light World"].append(location.address)
-                    elif main_entrance.parent_region.type == RegionType.DarkWorld:
-                        checks_in_area[location.player]["Dark World"].append(location.address)
+                    else:
+                        main_entrance = location.parent_region.get_connecting_entrance(is_main_entrance)
+                        if location.parent_region.dungeon:
+                            dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
+                                           'Inverted Ganons Tower': 'Ganons Tower'} \
+                                .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
+                            checks_in_area[location.player][dungeonname].append(location.address)
+                        elif location.parent_region.type == RegionType.LightWorld:
+                            checks_in_area[location.player]["Light World"].append(location.address)
+                        elif location.parent_region.type == RegionType.DarkWorld:
+                            checks_in_area[location.player]["Dark World"].append(location.address)
+                        elif main_entrance.parent_region.type == RegionType.LightWorld:
+                            checks_in_area[location.player]["Light World"].append(location.address)
+                        elif main_entrance.parent_region.type == RegionType.DarkWorld:
+                            checks_in_area[location.player]["Dark World"].append(location.address)
                     checks_in_area[location.player]["Total"] += 1
 
             oldmancaves = []
@@ -286,7 +272,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     player = region.player
                     location_id = SHOP_ID_START + total_shop_slots + index
 
-                    main_entrance = get_entrance_to_region(region)
+                    main_entrance = region.get_connecting_entrance(is_main_entrance)
                     if main_entrance.parent_region.type == RegionType.LightWorld:
                         checks_in_area[player]["Light World"].append(location_id)
                     else:
@@ -320,7 +306,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 precollected_items = {player: [item.code for item in world_precollected if type(item.code) == int]
                                       for player, world_precollected in world.precollected_items.items()}
                 precollected_hints = {player: set() for player in range(1, world.players + 1 + len(world.groups))}
-
 
                 for slot in world.player_ids:
                     slot_data[slot] = world.worlds[slot].fill_slot_data()

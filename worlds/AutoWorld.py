@@ -221,10 +221,8 @@ class World(metaclass=AutoWorldRegister):
     @classmethod
     def fill_hook(cls,
                   progitempool: List["Item"],
-                  nonexcludeditempool: List["Item"],
-                  localrestitempool: Dict[int, List["Item"]],
-                  nonlocalrestitempool: Dict[int, List["Item"]],
-                  restitempool: List["Item"],
+                  usefulitempool: List["Item"],
+                  filleritempool: List["Item"],
                   fill_locations: List["Location"]) -> None:
         """Special method that gets called as part of distribute_items_restrictive (main fill).
         This gets called once per present world type."""
@@ -241,6 +239,11 @@ class World(metaclass=AutoWorldRegister):
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
         """Fill in the slot_data field in the Connected network package."""
         return {}
+
+    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+        """Fill in additional entrance information text into locations, which is displayed when hinted.
+        structure is {player_id: {location_id: text}} You will need to insert your own player_id."""
+        pass
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
         """For deeper modification of server multidata."""

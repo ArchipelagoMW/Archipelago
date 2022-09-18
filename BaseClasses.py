@@ -859,7 +859,7 @@ class CollectionState():
 
     def can_get_glitched_speed_dw(self, player: int) -> bool:
         rules = [self.has('Pegasus Boots', player), any([self.has('Hookshot', player), self.has_sword(player)])]
-        if self.world.world_state[player] != 2:
+        if not self.world.world_state[player].inverted:
             rules.append(self.has('Moon Pearl', player))
         return all(rules)
 
@@ -945,6 +945,13 @@ class Region:
                     state.path[self] = (self.name, state.path.get(entrance, None))
                 return True
         return False
+
+    def get_connecting_entrance(self, is_main_entrance: typing.Callable[[Entrance], bool]) -> Entrance:
+        for entrance in self.entrances:
+            if is_main_entrance(entrance):
+                return entrance
+        for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
+            return entrance.parent_region.get_connecting_entrance(is_main_entrance)
 
     def __repr__(self):
         return self.__str__()
@@ -1307,7 +1314,7 @@ class Spoiler():
             self.bosses[str(player)]["Ice Palace"] = self.world.get_dungeon("Ice Palace", player).boss.name
             self.bosses[str(player)]["Misery Mire"] = self.world.get_dungeon("Misery Mire", player).boss.name
             self.bosses[str(player)]["Turtle Rock"] = self.world.get_dungeon("Turtle Rock", player).boss.name
-            if self.world.world_state[player] != 2:
+            if not self.world.world_state[player].inverted:
                 self.bosses[str(player)]["Ganons Tower Basement"] = \
                     self.world.get_dungeon('Ganons Tower', player).bosses['bottom'].name
                 self.bosses[str(player)]["Ganons Tower Middle"] = self.world.get_dungeon('Ganons Tower', player).bosses[
@@ -1395,7 +1402,6 @@ class Spoiler():
                                                "f" in self.world.shop_shuffle[player]))
                     outfile.write('Custom Potion Shop:              %s\n' %
                                   bool_to_text("w" in self.world.shop_shuffle[player]))
-                    outfile.write('Boss shuffle:                    %s\n' % self.world.boss_shuffle[player])
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
                 outfile.write('\n'.join(['%s%s %s %s' % (f'{self.world.get_player_name(entry["player"])}: '
