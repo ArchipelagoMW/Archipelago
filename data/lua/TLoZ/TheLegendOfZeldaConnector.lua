@@ -15,6 +15,7 @@ local prevstate = ""
 local curstate =  STATE_UNINITIALIZED
 local zeldaSocket = nil
 local frame = 0
+local gameMode = 0
 
 local cave_index
 local triforce_byte
@@ -484,6 +485,18 @@ function generateOverworldLocationChecked()
     return data
 end
 
+function getHCLocation()
+    memDomain.rom()
+    data = u8(0x1789A)
+    return data
+end
+
+function getPBLocation()
+    memDomain.rom()
+    data = u8(0x10CB2)
+    return data
+end
+
 function generateUnderworld16LocationChecked()
     memDomain.ram()
     data = uRange(0x06FE, 0x81)
@@ -581,7 +594,12 @@ function receive()
     end
     retTable["caves"] = checkCaveItemObtained()
     memDomain.ram()
-    retTable["gameMode"] = u8(0x12)
+    if gameMode ~= 19 then
+        gameMode = u8(0x12)
+    end
+    retTable["gameMode"] = gameMode
+    retTable["overworldHC"] = getHCLocation()
+    retTable["overworldPB"] = getPBLocation()
     retTable["itemsObtained"] = u8(itemsObtained)
     msg = json.encode(retTable).."\n"
     local ret, error = zeldaSocket:send(msg)
@@ -624,7 +642,7 @@ function main()
                 gui.drawEllipse(248, 9, 6, 6, "Black", "Yellow")
 
                 drawText(5, 8, "Waiting for client", 0xFFFF0000)
-                drawText(5, 32, "Please start TheLegendOfZeldaClient.exe", 0xFFFF0000)
+                drawText(5, 32, "Please start Zelda1Client.exe", 0xFFFF0000)
 
                 -- Advance so the messages are drawn
                 emu.frameadvance()
