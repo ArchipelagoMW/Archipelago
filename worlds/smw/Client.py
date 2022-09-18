@@ -372,6 +372,7 @@ async def smw_game_watcher(ctx: Context):
         # Handle Collected Locations
         new_events = 0
         path_data = bytearray(await snes_read(ctx, SMW_PATH_DATA, 0x60))
+        new_dragon_coin = False
         for loc_id in ctx.checked_locations:
             if loc_id not in ctx.locations_checked:
                 ctx.locations_checked.add(loc_id)
@@ -391,6 +392,8 @@ async def smw_game_watcher(ctx: Context):
                     data = dragon_coins_data[progress_byte]
                     new_data = data | (1 << progress_bit)
                     dragon_coins_data[progress_byte] = new_data
+
+                    new_dragon_coin = True
                 else:
                     if level_data[0] in SMW_UNCOLLECTABLE_LEVELS:
                         continue
@@ -429,10 +432,11 @@ async def smw_game_watcher(ctx: Context):
                     new_data = other_end_path | path.otherEndDirection
                     path_data[path.otherLevelID] = new_data
 
-        snes_buffered_write(ctx, SMW_DRAGON_COINS_DATA, bytes(dragon_coins_data))
-        snes_buffered_write(ctx, SMW_PROGRESS_DATA, bytes(progress_data))
-        snes_buffered_write(ctx, SMW_PATH_DATA, bytes(path_data))
+        if new_dragon_coin:
+            snes_buffered_write(ctx, SMW_DRAGON_COINS_DATA, bytes(dragon_coins_data))
         if new_events > 0:
+            snes_buffered_write(ctx, SMW_PROGRESS_DATA, bytes(progress_data))
+            snes_buffered_write(ctx, SMW_PATH_DATA, bytes(path_data))
             old_events = await snes_read(ctx, SMW_NUM_EVENTS_ADDR, 0x1)
             snes_buffered_write(ctx, SMW_NUM_EVENTS_ADDR, bytes([old_events[0] + new_events]))
 
