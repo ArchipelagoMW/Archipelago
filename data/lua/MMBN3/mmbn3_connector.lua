@@ -22,7 +22,6 @@ local ITEMSTATE_SENT = "Item Sent Not Claimed" -- The ItemBit is set, but the di
 local itemState = ITEMSTATE_IDLE
 
 local itemQueued = nil
-local last_received_index = 0
 
 local debugEnabled = false
 
@@ -83,6 +82,51 @@ local bitand = function(a, b)
       b = math.floor(b/2)
     end
     return result
+end
+
+
+local IsInMenu = function()
+    return bitand(memory.read_u8(0x0200027A),0x10) ~= 0
+end
+
+local IsInDialog = function()
+    return bitand(memory.read_u8(0x02009480),0x01) ~= 0
+end
+
+local IsInBattle = function()
+    return memory.read_u8(0x02177270) ~= 0x00
+end
+
+local IsItemQueued = function()
+    return memory.read_u8(0x203FD00) == 0x01
+end
+
+-- This function actually determines when you're on ANY full-screen menu (navi cust, link battle, etc.) but we
+-- don't want to check any locations there either so it's fine.
+local IsOnTitle = function()
+    return bitand(memory.read_u8(0x020097F8),0x04) == 0
+end
+
+local saveItemIndexToRAM = function(newIndex)
+    memory.write_s32_le(0x203FD02,newIndex)
+end
+
+local loadItemIndexFromRAM = function()
+    last_index = memory.read_s32_le(0x203FD02)
+    if (last_index < 0) then
+        last_index = 0
+        saveItemIndexToRAM(0)
+    end
+    return last_index
+end
+
+local loadItemIndexFromSave = function()
+    -- As soon as the script loads, read the last received item index from SRAM
+    saveItemIndexToRAM(memory.read_s32_le(0xE0057FC))
+    -- If the last index is negative, it's probably junk data because we haven't save yet. Use 0 instead
+    if loadItemIndexFromRAM() < 0 then
+        saveItemIndexToRAM(0)
+    end
 end
 
 local acdc_bmd_checks = function()
@@ -392,6 +436,8 @@ local jobs_checks = function()
 end
 local check_all_locations = function()
     local location_checks = {}
+    -- Title Screen should not check items
+    if IsOnTitle() then return location_checks end
     for name,checked in pairs(acdc_bmd_checks()) do location_checks[name] = checked end
     for name,checked in pairs(sci_bmd_checks()) do location_checks[name] = checked end
     for name,checked in pairs(yoka_bmd_checks()) do location_checks[name] = checked end
@@ -421,36 +467,6 @@ local game_modes = {
     [4]={name="Cutscene", loaded=true},
     [5]={name="Paused", loaded=true}
 }
-
-local IsInMenu = function()
-    return bitand(memory.read_u8(0x0200027A),0x10) ~= 0
-end
-
-local IsInDialog = function()
-    return bitand(memory.read_u8(0x02009480),0x01) ~= 0
-end
-
-local IsInBattle = function()
-    return memory.read_u8(0x02177270) ~= 0x00
-end
-
-local IsItemQueued = function()
-    return memory.read_u8(0x203FD00) == 0x01
-end
-
-local saveItemIndexToRAM = function(newIndex)
-    memory.write_s32_le(0x203FD02,newIndex)
-end
-
-local loadItemIndexFromSave = function()
-    -- As soon as the script loads, read the last received item index from SRAM
-    last_received_index = memory.read_s32_le(0xE0057FC)
-    -- If the last index is negative, it's probably junk data because we haven't save yet. Use 0 instead
-    if last_received_index < 0 then
-        last_received_index = 0
-    end
-    saveItemIndexToRAM(last_received_index)
-end
 
 function is_game_complete()
     -- If the game is complete, do not read memory
@@ -598,8 +614,8 @@ local GetMessage = function(item)
     playReceiveAnimationBytes = {0xF8,0x04,0x18}
     chipGiveBytes = GenerateGetMessageFromItem(item)
     playerFinishBytes = {0xF8, 0x0C}
-    playerUnlockBytes={0xF8, 0x10, 0xF8, 0x08}
-    endMessageBytes = {0xEB,0xE7}
+    playerUnlockBytes={0xEB, 0xF8, 0x08}
+    endMessageBytes = {0xF8, 0x10, 0xE7}
 
     bytes = {}
     bytes = TableConcat(bytes,startBytes)
@@ -621,7 +637,6 @@ local SendItem = function(item)
     memory.write_bytes_as_array(0x203FD10, GetMessage(item))
     -- Signal that the item is ready to be read
     memory.write_u32_le(0x203FD00,0x00000001)
-    last_received_index = item["itemIndex"]
 end
 
 local process_block = function(block)
@@ -635,14 +650,14 @@ local process_block = function(block)
     item_queue = block['items']
 
     if itemState == ITEMSTATE_IDLE then
-        if (#item_queue > last_received_index) then
+        if (#item_queue > loadItemIndexFromRAM()) then
             --print("  Item is pending. Switching to queued state")
             itemState = ITEMSTATE_QUEUED
-            itemQueued = item_queue[last_received_index+1]
+            itemQueued = item_queue[loadItemIndexFromRAM()+1]
         end
     elseif itemState == ITEMSTATE_QUEUED then
         --print("Item state queued")
-        if (#item_queue <= last_received_index and itemQueued ~= nil) then
+        if (#item_queue <= loadItemIndexFromRAM() and itemQueued ~= nil) then
             --print("  No item queued and pending is empty. Switching to idle")
             itemState = ITEMSTATE_IDLE
         end
@@ -714,7 +729,7 @@ function main()
     end
     server, error = socket.bind('localhost', 28922)
 
-    loadItemIndexFromSave()
+    --loadItemIndexFromSave()
 
     while true do
         frame = frame + 1
@@ -753,7 +768,10 @@ function main()
             else
                 gui.text(0,32,itemQueued["type"].." "..itemQueued["itemID"])
             end
+            gui.text(0,48,"Item Index: "..loadItemIndexFromRAM())
+            gui.text(0,64,"Saved Index: "..memory.read_s32_le(0xE0057FC))
         end
+
         emu.frameadvance()
 
     end
