@@ -21,10 +21,8 @@ local ITEMSTATE_QUEUED = "Item Queued Not Sent" -- There are items to be sent bu
 local ITEMSTATE_SENT = "Item Sent Not Claimed" -- The ItemBit is set, but the dialog has not been closed yet
 local itemState = ITEMSTATE_IDLE
 
-local itemsReceived = {}
-local itemsPending = {}
-local itemsClaimed = {}
 local itemQueued = nil
+local last_received_index = 0
 
 local debugEnabled = false
 
@@ -440,6 +438,20 @@ local IsItemQueued = function()
     return memory.read_u8(0x203FD00) == 0x01
 end
 
+local saveItemIndexToRAM = function(newIndex)
+    memory.write_s32_le(0x203FD02,newIndex)
+end
+
+local loadItemIndexFromSave = function()
+    -- As soon as the script loads, read the last received item index from SRAM
+    last_received_index = memory.read_s32_le(0xE0057FC)
+    -- If the last index is negative, it's probably junk data because we haven't save yet. Use 0 instead
+    if last_received_index < 0 then
+        last_received_index = 0
+    end
+    saveItemIndexToRAM(last_received_index)
+end
+
 function is_game_complete()
     -- If the game is complete, do not read memory
     if is_game_complete then return true end
@@ -609,7 +621,7 @@ local SendItem = function(item)
     memory.write_bytes_as_array(0x203FD10, GetMessage(item))
     -- Signal that the item is ready to be read
     memory.write_u32_le(0x203FD00,0x00000001)
-    table.remove(itemsPending,1) --We called this with a 1, we can remove with a 1
+    last_received_index = item["itemIndex"]
 end
 
 local process_block = function(block)
@@ -621,25 +633,16 @@ local process_block = function(block)
 
     -- Queue item for receiving, if one exists
     item_queue = block['items']
-    if #item_queue > #itemsReceived then
-        -- Because we always make sure to add things to the items received and items claimed lists in the exact order they come,
-        -- we can use the end index of itemsReceived to know which ones to add next
-        for i=#itemsReceived+1,#item_queue,1 do
-            table.insert(itemsReceived,item_queue[i])
-            table.insert(itemsPending,item_queue[i])
-        end
-    end
 
     if itemState == ITEMSTATE_IDLE then
-        --print("Item state idle")
-        if (#itemsPending > 0) then
+        if (#item_queue > last_received_index) then
             --print("  Item is pending. Switching to queued state")
             itemState = ITEMSTATE_QUEUED
-            itemQueued = itemsPending[1]
+            itemQueued = item_queue[last_received_index+1]
         end
     elseif itemState == ITEMSTATE_QUEUED then
         --print("Item state queued")
-        if (#itemsPending == 0 and itemQueued ~= nil) then
+        if (#item_queue <= last_received_index and itemQueued ~= nil) then
             --print("  No item queued and pending is empty. Switching to idle")
             itemState = ITEMSTATE_IDLE
         end
@@ -652,11 +655,12 @@ local process_block = function(block)
         --print("Item state sent")
         if (not IsInDialog() and not IsItemQueued()) then
             --print("  Dialog cleared and item claimed. Switching to idle")
-            table.insert(itemsClaimed, itemQueued)
+            saveItemIndexToRAM(itemQueued["itemIndex"])
             itemQueued = nil
             itemState = ITEMSTATE_IDLE
         end
     end
+
 
     return
 end
@@ -710,6 +714,8 @@ function main()
     end
     server, error = socket.bind('localhost', 28922)
 
+    loadItemIndexFromSave()
+
     while true do
         frame = frame + 1
 
@@ -738,16 +744,15 @@ function main()
         gui.cleartext()
         if debugEnabled then
             gui.text(0,0,"Item Queued: "..tostring(IsItemQueued()))
-            gui.text(0,16,"In Battle: "..tostring(IsInBattle()))
-            gui.text(0,32,"In Dialog: "..tostring(IsInDialog()))
-            gui.text(0,48,"In Menu: "..tostring(IsInMenu()))
-            gui.text(0,64,itemState)
+            --gui.text(0,16,"In Battle: "..tostring(IsInBattle()))
+            --gui.text(0,32,"In Dialog: "..tostring(IsInDialog()))
+            --gui.text(0,48,"In Menu: "..tostring(IsInMenu()))
+            gui.text(0,16,itemState)
             if itemQueued == nil then
-                gui.text(0,80,"No item queued")
+                gui.text(0,32,"No item queued")
             else
-                gui.text(0,80,itemQueued["type"].." "..itemQueued["itemID"])
+                gui.text(0,32,itemQueued["type"].." "..itemQueued["itemID"])
             end
-            gui.text(0,96,#itemsPending.." items pending "..#itemsReceived.." items received")
         end
         emu.frameadvance()
 

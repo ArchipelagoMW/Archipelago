@@ -44,6 +44,7 @@ testingData = {}
 debugEnabled = True
 items_sent = []
 locations_checked = []
+itemIndex = 1
 
 def get_item_value(ap_id):
     # TODO OOT had ap_id - 66000. I'm assuming this is because of the ROM offset, which for GBA is 8000000, let's try that?
@@ -66,58 +67,75 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
 
     def _cmd_debugchip(self, chip, code):
         global testingData
+        global itemIndex
         logger.info("Sending Battlechip "+str(chip))
         testingData["sender"] = "DebugTest"
         testingData["type"] = "chip"
         testingData["itemID"] = chip
         testingData["subItemID"] = code
         testingData["count"] = 1
+        testingData["itemIndex"] = itemIndex
+        itemIndex += 1
 
     def _cmd_debugitem(self, item):
         global testingData
+        global itemIndex
         logger.info("Sending Item/Subchip "+str(item))
         testingData["sender"] = "DebugTest"
         testingData["type"] = "key"
         testingData["itemID"] = item
         testingData["subItemID"] = -1
         testingData["count"] = 1
+        testingData["itemIndex"] = itemIndex
+        itemIndex += 1
 
     def _cmd_debugsubchip(self, item):
         global testingData
+        global itemIndex
         logger.info("Sending Item/Subchip "+str(item))
         testingData["sender"] = "DebugTest"
         testingData["type"] = "subchip"
         testingData["itemID"] = item
         testingData["subItemID"] = -1
         testingData["count"] = 1
+        testingData["itemIndex"] = itemIndex
+        itemIndex += 1
 
     def _cmd_debugzenny(self, amt):
         global testingData
+        global itemIndex
         logger.info("Sending "+str(amt)+" Zenny")
         testingData["sender"] = "DebugTest"
         testingData["type"] = "zenny"
         testingData["itemID"] = -1
         testingData["subItemID"] = -1
         testingData["count"] = amt
+        testingData["itemIndex"] = itemIndex
+        itemIndex += 1
 
     def _cmd_debugprogram(self, program, color):
         global testingData
+        global itemIndex
         logger.info("Sending Navi Cust Program "+str(program))
         testingData["sender"] = "DebugTest"
         testingData["type"] = "program"
         testingData["itemID"] = program
         testingData["subItemID"] = color
         testingData["count"] = 1
+        testingData["itemIndex"] = itemIndex
+        itemIndex += 1
 
     def _cmd_debugbugfrag(self, amt):
         global testingData
+        global itemIndex
         logger.info("Sending "+str(amt)+" BugFrags")
         testingData["sender"] = "DebugTest"
         testingData["type"] = "bugfrag"
         testingData["itemID"] = -1
         testingData["subItemID"] = -1
         testingData["count"] = amt
-
+        testingData["itemIndex"] = itemIndex
+        itemIndex += 1
 
 class MMBN3Context(CommonContext):
     command_processor = MMBN3CommandProcessor
@@ -163,6 +181,7 @@ class item_info:
     count = 1
     itemID = 0x00 #Item ID, Chip ID, etc.
     subItemID = 0x00 #Code for chips, color for programs
+    itemIndex = 1
 
     def __init__(self,id,sender,type):
         self.id = id
@@ -176,7 +195,8 @@ class item_info:
             "type": self.type,
             "itemID": self.itemID,
             "subItemID": self.subItemID,
-            "count": self.count
+            "count": self.count,
+            "itemIndex": self.itemIndex
         }
         return json_data
 
@@ -190,6 +210,7 @@ def get_payload(ctx: MMBN3Context):
         test_item.itemID = int(testingData["itemID"])
         test_item.subItemID = int(testingData["subItemID"])
         test_item.count = int(testingData["count"])
+        test_item.itemIndex = int(testingData["itemIndex"])
         items_sent.append(test_item)
         testingData = {}
 
