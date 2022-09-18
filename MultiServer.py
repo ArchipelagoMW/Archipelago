@@ -126,6 +126,7 @@ class Context:
     location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     forced_auto_forfeits: typing.Dict[str, bool]
+    non_hintable_names: typing.Dict[str, typing.Set[str]]
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
@@ -196,7 +197,7 @@ class Context:
         self.item_name_groups = {}
         self.all_item_and_group_names = {}
         self.forced_auto_forfeits = collections.defaultdict(lambda: False)
-        self.non_hintable_names = {}
+        self.non_hintable_names = collections.defaultdict(frozenset)
 
         self._load_game_data()
         self._init_game_data()
@@ -2044,15 +2045,28 @@ async def main(args: argparse.Namespace):
                   args.auto_shutdown, args.compatibility, args.log_network)
     data_filename = args.multidata
 
-    try:
-        if not data_filename:
+    if not data_filename:
+        try:
             filetypes = (("Multiworld data", (".archipelago", ".zip")),)
             data_filename = Utils.open_filename("Select multiworld data", filetypes)
 
+        except Exception as e:
+            if isinstance(e, ImportError) or (e.__class__.__name__ == "TclError" and "no display" in str(e)):
+                if not isinstance(e, ImportError):
+                    logging.error(f"Failed to load tkinter ({e})")
+                logging.info("Pass a multidata filename on command line to run headless.")
+                exit(1)
+            raise
+
+        if not data_filename:
+            logging.info("No file selected. Exiting.")
+            exit(1)
+
+    try:
         ctx.load(data_filename, args.use_embedded_options)
 
     except Exception as e:
-        logging.exception('Failed to read multiworld data (%s)' % e)
+        logging.exception(f"Failed to read multiworld data ({e})")
         raise
 
     ctx.init_save(not args.disable_save)
