@@ -1,6 +1,7 @@
 # Based (read: copied almost wholesale and edited) off the FF1 Client.
 
 import asyncio
+import copy
 import json
 import logging
 import time
@@ -88,32 +89,28 @@ class ZeldaContext(CommonContext):
             msg = args['text']
             if ': !' not in msg:
                 self._set_message(msg, SYSTEM_MESSAGE_ID)
-        elif cmd == "ReceivedItems":
-            msg = f"Received {', '.join([self.item_names[item.item] for item in args['items']])}"
-            self._set_message(msg, SYSTEM_MESSAGE_ID)
-        elif cmd == 'PrintJSON':
-            print_type = args['type']
-            item = args['item']
-            receiving_player_id = args['receiving']
-            receiving_player_name = self.player_names[receiving_player_id]
-            sending_player_id = item.player
-            sending_player_name = self.player_names[item.player]
-            if print_type == 'Hint':
-                msg = f"Hint: Your {self.item_names[item.item]} is at" \
-                      f" {self.player_names[item.player]}'s {self.location_names[item.location]}"
-                self._set_message(msg, item.item)
-            elif print_type == 'ItemSend' and receiving_player_id != self.slot:
-                if sending_player_id == self.slot:
-                    if receiving_player_id == self.slot:
-                        msg = f"You found your own {self.item_names[item.item]}"
-                    else:
-                        msg = f"You sent {self.item_names[item.item]} to {receiving_player_name}"
-                else:
-                    if receiving_player_id == sending_player_id:
-                        msg = f"{sending_player_name} found their {self.item_names[item.item]}"
-                    else:
-                        msg = f"{sending_player_name} sent {self.item_names[item.item]} to " \
-                              f"{receiving_player_name}"
+
+    def on_print_json(self, args: dict):
+        if self.ui:
+            self.ui.print_json(copy.deepcopy(args["data"]))
+        else:
+            text = self.jsontotextparser(copy.deepcopy(args["data"]))
+            logger.info(text)
+        relevant = args.get("type", None) in {"Hint", "ItemSend"}
+        if relevant:
+            item = args["item"]
+            # goes to this world
+            if self.slot_concerns_self(args["receiving"]):
+                relevant = True
+            # found in this world
+            elif self.slot_concerns_self(item.player):
+                relevant = True
+            # not related
+            else:
+                relevant = False
+            if relevant:
+                item = args["item"]
+                msg = self.raw_text_parser(copy.deepcopy(args["data"]))
                 self._set_message(msg, item.item)
 
     def run_gui(self):
