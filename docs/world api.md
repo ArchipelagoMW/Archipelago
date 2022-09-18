@@ -188,7 +188,7 @@ the `/worlds` directory. The starting point for the package is `__init.py__`.
 Conventionally, your world class is placed in that file.
 
 World classes must inherit from the `World` class in `/worlds/AutoWorld.py`,
-which can be imported as `..AutoWorld.World` from your package.
+which can be imported as `worlds.AutoWorld.World` from your package.
 
 AP will pick up your world automatically due to the `AutoWorld` implementation.
 
@@ -208,6 +208,10 @@ e.g. `from .Options import mygame_options` from your `__init__.py` will load
 
 When imported names pile up it may be easier to use `from . import Options`
 and access the variable as `Options.mygame_options`.
+
+Imports from directories outside your world should use absolute imports.
+Correct use of relative / absolute imports is required for zipped worlds to
+function, see [apworld specification.md](apworld%20specification.md).
 
 ### Your Item Type
 
@@ -321,7 +325,7 @@ mygame_options: typing.Dict[str, type(Option)] = {
 ```python
 # __init__.py
 
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 from .Options import mygame_options  # import the options dict
 
 class MyGameWorld(World):
@@ -350,7 +354,7 @@ more natural. These games typically have been edited to 'bake in' the items.
 from .Options import mygame_options  # the options we defined earlier
 from .Items import mygame_items  # data used below to add items to the World
 from .Locations import mygame_locations  # same as above
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 from BaseClasses import Region, Location, Entrance, Item, RegionType, ItemClassification
 from Utils import get_options, output_path
 
@@ -551,7 +555,7 @@ def generate_basic(self) -> None:
 ### Setting Rules
 
 ```python
-from ..generic.Rules import add_rule, set_rule, forbid_item
+from worlds.generic.Rules import add_rule, set_rule, forbid_item
 from Items import get_item_type
 
 def set_rules(self) -> None:
@@ -601,7 +605,7 @@ implement more complex logic in logic mixins, even if there is no need to add
 properties to the `BaseClasses.CollectionState` state object.
 
 When importing a file that defines a class that inherits from
-`..AutoWorld.LogicMixin` the state object's class is automatically extended by
+`worlds.AutoWorld.LogicMixin` the state object's class is automatically extended by
 the mixin's members. These members should be prefixed with underscore following
 the name of the implementing world. This is due to sharing a namespace with all
 other logic mixins.
@@ -620,7 +624,7 @@ Please do this with caution and only when neccessary.
 ```python
 # Logic.py
 
-from ..AutoWorld import LogicMixin
+from worlds.AutoWorld import LogicMixin
 
 class MyGameLogic(LogicMixin):
     def _mygame_has_key(self, world: MultiWorld, player: int):
@@ -631,7 +635,7 @@ class MyGameLogic(LogicMixin):
 ```python
 # __init__.py
 
-from ..generic.Rules import set_rule
+from worlds.generic.Rules import set_rule
 import .Logic  # apply the mixin by importing its file
 
 class MyGameWorld(World):
