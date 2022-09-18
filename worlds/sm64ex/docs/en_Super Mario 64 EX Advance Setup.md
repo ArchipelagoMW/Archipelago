@@ -42,7 +42,7 @@ Dependencies for Linux: `sdl2 glew cmake python make`.
 Dependencies for Windows: `mingw-w64-x86_64-gcc mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 git make python3 mingw-w64-x86_64-cmake`
 SM64EX will link `jsoncpp` dynamic if installed. If not, it will compile and link statically.
 
-1. Clone `https://github.com/N00byKing/sm64ex` recursively, `command: git clone --recursive https://github.com/N00byKing/sm64ex`
+1. Clone `https://github.com/N00byKing/sm64ex` recursively, `command: git clone -b archipelago --recursive https://github.com/N00byKing/sm64ex`
 2. Enter `sm64ex` and copy your Rom to `baserom.REGION.z64` where `REGION` is either `us` or `jp` respectively.
 3. Compile with `make`. For faster compilation set the parameter `-jn` where `n` is the Number of CPU Cores. plus EXTERNAL_DATA=1
 
