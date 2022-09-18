@@ -793,7 +793,11 @@ def check_game_install_path() -> bool:
         with open(einfo) as f:
             content = f.read()
         if content:
-            base = re.search(r" = (.*)Versions", content).group(1)
+            try:
+                base = re.search(r" = (.*)Versions", content).group(1)
+            except AttributeError as exc:
+                raise RuntimeError(f"We found {einfo}, but it was empty. Run SC2 through the Blizzard launcher, then "
+                                   f"try again.") from exc
             if os.path.exists(base):
                 executable = sc2.paths.latest_executeble(Path(base).expanduser() / "Versions")
 
@@ -810,7 +814,8 @@ def check_game_install_path() -> bool:
             else:
                 sc2_logger.warning(f"{einfo} pointed to {base}, but we could not find an SC2 install there.")
     else:
-        sc2_logger.warning(f"Couldn't find {einfo}. Please run /set_path with your SC2 install directory.")
+        sc2_logger.warning(f"Couldn't find {einfo}. Run SC2 through the Blizzard launcher, then try again."
+                           f"If that fails, please run /set_path with your SC2 install directory.")
     return False
 
 
