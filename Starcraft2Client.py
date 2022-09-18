@@ -19,10 +19,11 @@ from sc2.data import Race
 from sc2.main import run_game
 from sc2.player import Bot
 
+import NetUtils
 from MultiServer import mark_raw
 from Utils import init_logging, is_windows
 from worlds.sc2wol import SC2WoLWorld
-from worlds.sc2wol.Items import lookup_id_to_name, item_table
+from worlds.sc2wol.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 from worlds.sc2wol.MissionTables import lookup_id_to_mission
 from worlds.sc2wol.Regions import MissionInfo
@@ -135,7 +136,7 @@ class SC2Context(CommonContext):
     last_loc_list = None
     difficulty_override = -1
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
-    raw_text_parser: RawJSONtoTextParser
+    last_bot: typing.Optional[ArchipelagoBot] = None
 
     def __init__(self, *args, **kwargs):
         super(SC2Context, self).__init__(*args, **kwargs)
@@ -164,10 +165,13 @@ class SC2Context(CommonContext):
                 check_mod_install()
 
     def on_print_json(self, args: dict):
+        # goes to this world
         if "receiving" in args and self.slot_concerns_self(args["receiving"]):
             relevant = True
+        # found in this world
         elif "item" in args and self.slot_concerns_self(args["item"].player):
             relevant = True
+        # not related
         else:
             relevant = False
 
@@ -355,6 +359,8 @@ class SC2Context(CommonContext):
 
     async def shutdown(self):
         await super(SC2Context, self).shutdown()
+        if self.last_bot:
+            self.last_bot.want_close = True
         if self.sc2_run_task:
             self.sc2_run_task.cancel()
 
@@ -431,47 +437,27 @@ wol_default_categories = [
 ]
 
 
-def calculate_items(items):
-    unit_unlocks = 0
-    armory1_unlocks = 0
-    armory2_unlocks = 0
-    upgrade_unlocks = 0
-    building_unlocks = 0
-    merc_unlocks = 0
-    lab_unlocks = 0
-    protoss_unlock = 0
-    minerals = 0
-    vespene = 0
-    supply = 0
+def calculate_items(items: typing.List[NetUtils.NetworkItem]) -> typing.List[int]:
+    network_item: NetUtils.NetworkItem
+    accumulators: typing.List[int] = [0 for _ in type_flaggroups]
 
-    for item in items:
-        data = lookup_id_to_name[item.item]
+    for network_item in items:
+        name: str = lookup_id_to_name[network_item.item]
+        item_data: ItemData = item_table[name]
 
-        if item_table[data].type == "Unit":
-            unit_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Upgrade":
-            upgrade_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Armory 1":
-            armory1_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Armory 2":
-            armory2_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Building":
-            building_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Mercenary":
-            merc_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Laboratory":
-            lab_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Protoss":
-            protoss_unlock += (1 << item_table[data].number)
-        elif item_table[data].type == "Minerals":
-            minerals += item_table[data].number
-        elif item_table[data].type == "Vespene":
-            vespene += item_table[data].number
-        elif item_table[data].type == "Supply":
-            supply += item_table[data].number
+        # exists exactly once
+        if item_data.quantity == 1:
+            accumulators[type_flaggroups[item_data.type]] |= 1 << item_data.number
 
-    return [unit_unlocks, upgrade_unlocks, armory1_unlocks, armory2_unlocks, building_unlocks, merc_unlocks,
-            lab_unlocks, protoss_unlock, minerals, vespene, supply]
+        # exists multiple times
+        elif item_data.type == "Upgrade":
+            accumulators[type_flaggroups[item_data.type]] += 1 << item_data.number
+
+        # sum
+        else:
+            accumulators[type_flaggroups[item_data.type]] += item_data.number
+
+    return accumulators
 
 
 def calc_difficulty(difficulty):
@@ -502,7 +488,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     setup_done: bool
     ctx: SC2Context
     mission_id: int
-
+    want_close: bool = False
     can_read_game = False
 
     last_received_update: int = 0
@@ -510,12 +496,17 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     def __init__(self, ctx: SC2Context, mission_id):
         self.setup_done = False
         self.ctx = ctx
+        self.ctx.last_bot = self
         self.mission_id = mission_id
         self.boni = [False for _ in range(max_bonus)]
 
         super(ArchipelagoBot, self).__init__()
 
     async def on_step(self, iteration: int):
+        if self.want_close:
+            self.want_close = False
+            await self._client.leave()
+            return
         game_state = 0
         if not self.setup_done:
             self.setup_done = True

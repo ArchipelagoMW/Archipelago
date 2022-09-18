@@ -378,7 +378,7 @@ class ALTTPWorld(World):
                 'hud': world.hud_palettes[player],
                 'sword': world.sword_palettes[player],
                 'shield': world.shield_palettes[player],
-                'link': world.link_palettes[player]
+                # 'link': world.link_palettes[player]
             }
             palettes_options = {key: option.current_key for key, option in palettes_options.items()}
 
