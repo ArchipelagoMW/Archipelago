@@ -144,6 +144,7 @@ class TriforceExtra(TriforcePieces):
 
 class TriforcePercentage(Range):
     """Percentage of required Triforce pieces that will be available."""
+    display_name = "Triforce Percent"
     range_start = 100
     range_end = 200
     default = 150
@@ -410,6 +411,8 @@ class Bosses(TextChoice):
 
 
 class Enemies(Choice):
+    """Method of enemy shuffle to use"""
+    display_name = "Enemy Shuffle"
     option_vanilla = 0
     option_shuffled = 1
     option_chaos = 2
@@ -573,7 +576,6 @@ class PotShuffle(Toggle):
 
 
 class Palette(Choice):
-    """Determines the type of palette to be used for this display element."""
     option_default = 0
     option_good = 1
     option_blackout = 2
@@ -586,22 +588,27 @@ class Palette(Choice):
 
 
 class OWPalette(Palette):
+    """Determines the type of palette to be used for the Overworld layer."""
     display_name = "Overworld Palette"
 
 
 class UWPalette(Palette):
+    """Determines the type of palette to be used for the Underworld layer."""
     display_name = "Underworld Palette"
 
 
 class HUDPalette(Palette):
+    """Determines the type of palette to be used for the gameplay HUD."""
     display_name = "Menu Palette"
 
 
 class SwordPalette(Palette):
+    """Determines the type of palette to be used for Link's sword."""
     display_name = "Sword Palette"
 
 
 class ShieldPalette(Palette):
+    """Determines the type of palette to be used for Link's Shield."""
     display_name = "Shield Palette"
 
 
@@ -658,6 +665,7 @@ class RandomSpriteToggle(Toggle):
 
 class SpritePool(OptionList):
     """Limits the pool of available sprites for random events to specified pool."""
+    display_name = "Sprite Pool"
     valid_keys = {"Abigail", "Adol", "Adventure 2600", "Aggretsuko", "Alice", "Angry Video Game Nerd", "Arcane",
                   "ArcticArtemisFox", "Aria", "Ark (Cape)", "Ark (No Cape)", "Arrghus", "Astor", "Astronaut", "Asuna",
                   "B.S. Boy", "B.S. Girl", "Baba", "Baby Fro", "Baby Metroid", "Badeline", "Bananas in Pyjamas",
@@ -717,6 +725,7 @@ class SpritePool(OptionList):
 
 class Sprite(TextChoice):
     """Allows you to either specify which sprite you'd like to use or use a random on event option with the sprite pool."""
+    display_name = "Sprite"
     valid_keys = SpritePool.valid_keys
     option_link = 0
     option_random_on_hit = 1
