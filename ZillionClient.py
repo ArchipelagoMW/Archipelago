@@ -75,43 +75,41 @@ class ZillionContext(CommonContext):
 async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.EventToGame]") -> None:
     logger.info("started zillion sync task")
     from_game: "asyncio.Queue[events.EventFromGame]" = asyncio.Queue()
-    memory = Memory(from_game, to_game)
-    next_item = 0
-    while not ctx.exit_event.is_set():
-        await memory.check()
-        if from_game.qsize():
-            event_from_game = from_game.get_nowait()
-            if isinstance(event_from_game, events.AcquireLocationEventFromGame):
-                server_id = loc_useful_id_to_pretty_id[event_from_game.id] + base_id
-                loc_name = loc_zz_name_to_name(id_to_zz_loc[event_from_game.id])
-                ctx.locations_checked.add(server_id)
-                # TODO: progress number "(1/146)" or something like that
-                if server_id in ctx.missing_locations:
-                    logger.info(f'New Check: {loc_name}')
-                    await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [server_id]}])
+    with Memory(from_game, to_game) as memory:
+        next_item = 0
+        while not ctx.exit_event.is_set():
+            await memory.check()
+            if from_game.qsize():
+                event_from_game = from_game.get_nowait()
+                if isinstance(event_from_game, events.AcquireLocationEventFromGame):
+                    server_id = loc_useful_id_to_pretty_id[event_from_game.id] + base_id
+                    loc_name = loc_zz_name_to_name(id_to_zz_loc[event_from_game.id])
+                    ctx.locations_checked.add(server_id)
+                    # TODO: progress number "(1/146)" or something like that
+                    if server_id in ctx.missing_locations:
+                        logger.info(f'New Check: {loc_name}')
+                        await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [server_id]}])
+                    else:
+                        logger.info(f"DEBUG: {loc_name} not in missing")
+                elif isinstance(event_from_game, events.DeathEventFromGame):
+                    try:
+                        await ctx.send_death()
+                    except KeyError:
+                        logger.warning("KeyError sending death")
                 else:
-                    logger.info(f"DEBUG: {loc_name} not in missing")
-            elif isinstance(event_from_game, events.DeathEventFromGame):
-                try:
-                    await ctx.send_death()
-                except KeyError:
-                    logger.warning("KeyError sending death")
-            else:
-                logger.warning(f"WARNING: unhandled event from game {event_from_game}")
-        if len(ctx.items_received) > next_item:
-            item = ctx.items_received[next_item]
-            zz_item_id = item_pretty_id_to_useful_id[item.item - base_id]
-            zz_item = id_to_zz_item[zz_item_id]
-            # TODO: use zz_item.name with info on rescue changes
-            # TODO: player name and location that they got it
-            logger.info(f'received item {zz_item.debug_name}')
-            ctx.to_game.put_nowait(
-                events.ItemEventToGame(zz_item_id)
-            )
-            next_item += 1
-        await asyncio.sleep(0.09375)
-    if memory.rai.sock:
-        memory.rai.sock.close()  # TODO: make `with`
+                    logger.warning(f"WARNING: unhandled event from game {event_from_game}")
+            if len(ctx.items_received) > next_item:
+                item = ctx.items_received[next_item]
+                zz_item_id = item_pretty_id_to_useful_id[item.item - base_id]
+                zz_item = id_to_zz_item[zz_item_id]
+                # TODO: use zz_item.name with info on rescue changes
+                # TODO: player name and location that they got it
+                logger.info(f'received item {zz_item.debug_name}')
+                ctx.to_game.put_nowait(
+                    events.ItemEventToGame(zz_item_id)
+                )
+                next_item += 1
+            await asyncio.sleep(0.09375)
 
 
 async def run_game(rom_file: str) -> None:
