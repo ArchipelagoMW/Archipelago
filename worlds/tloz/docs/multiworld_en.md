@@ -106,3 +106,6 @@ protection against obviously bad decisions in order to increase the possible ran
 of this; logic will not account for or require purchasing any slot more than once. Remote items, no matter what they
 are, will always only be sent once.
 - Second Quest is unsupported.
+- Obtaining a remote item will move the location of any existing item in that room. Should this make an item 
+inaccessible, simply exit and re-enter the room. This can be used to obtain the Ocean Heart Container item without the
+stepladder; logic does not account for this.
