@@ -52,7 +52,7 @@ class TLoZWorld(World):
             "Sword", "White Sword", "Magical Sword"
         },
         "candles": {
-            "Blue Candle", "Red Candle"
+            "Candle", "Red Candle"
         },
         "arrows": {
             "Arrow", "Silver Arrow"
