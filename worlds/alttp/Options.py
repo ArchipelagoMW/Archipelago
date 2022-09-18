@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, OptionDict, OptionList
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, OptionList
 
 
 class Logic(Choice):
@@ -643,25 +643,18 @@ class MenuSpeed(Choice):
     option_quadruple = 4
     option_half = 5
 
-
 # TODO this is a bad way to do this. maybe turn enabled into a toggle then the rest of these into an Optionlist?
 # not adding to the options dict until putting together a better solution.
-class RandomSprite(OptionDict):
+class RandomSprite(OptionList):
     """Allows different random sprite events to be simultaneously enabled."""
     display_name = "Random Sprite On Event"
     valid_keys = {"enabled", "on_hit", "on_enter", "on_exit", "on_slash",
                   "on_item", "on_bonk", "on_everything", "use_weighted_sprite_pool"}
-    default = {
-        "enabled": "off",
-        "on_hit": "on",
-        "on_enter": "off",
-        "on_exit": "off",
-        "on_slash": "off",
-        "on_item": "off",
-        "on_bonk": "off",
-        "on_everything": "off",
-        "use_weighted_sprite_pool": "off"
-    }
+
+class RandomSpriteToggle(Toggle):
+    """Enabling this will enable options in the random sprite event list, causing your sprite to be randomized from your
+    sprite pool."""
+    display_name = "Use Random Sprite Events"
 
 
 class SpritePool(OptionList):
@@ -723,26 +716,25 @@ class SpritePool(OptionList):
                   "Zaruvyen", "Zebra Unicorn", "Zeckemyro", "Zelda", "Zero Suit Samus", "Zora"}
 
 
-# # TODO obviously waiting on the freetext options
-# class Sprite(TextChoice):
-#   """Allows you to either specify which sprite you'd like to use or use a random on event option with the sprite pool."""
-#     valid_keys = SpritePool.valid_keys
-#     option_link = 0
-#     option_random_on_hit = 1
-#     option_random_on_enter = 2
-#     option_random_on_exit = 3
-#     option_random_on_slash = 4
-#     option_random_on_item = 5
-#     option_random_on_bonk = 6
-#     option_random_on_all = 7
-#
-#     def verify(self, world, player_name, plando_options) -> None:
-#         if isinstance(self.value, int):
-#             return
-#         if self.value in self.valid_keys:
-#             return
-#         raise ValueError(f"{self.value} for {player_name} is not a valid Sprite option.")
-#
+class Sprite(TextChoice):
+    """Allows you to either specify which sprite you'd like to use or use a random on event option with the sprite pool."""
+    valid_keys = SpritePool.valid_keys
+    option_link = 0
+    option_random_on_hit = 1
+    option_random_on_enter = 2
+    option_random_on_exit = 3
+    option_random_on_slash = 4
+    option_random_on_item = 5
+    option_random_on_bonk = 6
+    option_random_on_all = 7
+
+    def verify(self, world, player_name, plando_options) -> None:
+        if isinstance(self.value, int):
+            return
+        if self.value in self.valid_keys:
+            return
+        raise ValueError(f"{self.value} for {player_name} is not a valid Sprite option.")
+
 
 class Music(DefaultOnToggle):
     """If music is played in the game."""
@@ -837,6 +829,8 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "green_clock_time": GreenClock,
     "shuffle_prizes": PrizeShuffle,
     "tile_shuffle": TileShuffle,
+    "use_random_sprite_events": RandomSpriteToggle,
+    "random_sprite_events": RandomSprite,
     "sprite_pool": SpritePool,
     "ow_palettes": OWPalette,
     "uw_palettes": UWPalette,
