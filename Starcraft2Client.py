@@ -796,7 +796,7 @@ def check_game_install_path() -> bool:
             try:
                 base = re.search(r" = (.*)Versions", content).group(1)
             except AttributeError:
-                sc2_logger.warning(f"We found {einfo}, but it was empty. Run SC2 through the Blizzard launcher, then "
+                sc2_logger.warning(f"Found {einfo}, but it was empty. Run SC2 through the Blizzard launcher, then "
                                    f"try again.")
                 return False
             if os.path.exists(base):
