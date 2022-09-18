@@ -213,8 +213,7 @@ def check_enemizer(enemizercli):
 def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_random_on_event, sprite_pool):
     userandomsprites = False
     if sprite and not isinstance(sprite, Sprite):
-        sprite = sprite.lower()
-        userandomsprites = sprite.startswith('randomon')
+        userandomsprites = isinstance(sprite.value, int) and sprite > 0
 
         racerom = rom.read_byte(0x180213)
         if allow_random_on_event or not racerom:
@@ -223,24 +222,33 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
             rom.write_byte(0x186381, 0x00 if userandomsprites else 0x01)
 
         onevent = 0
-        if sprite == 'randomonall':
+        if sprite == 7:
             onevent = 0xFFFF  # Support all current and future events that can cause random sprite changes.
-        elif sprite == 'randomonnone':
+        elif userandomsprites:
+            onevent = 0x01 if sprite == 1 else 0x00
+            onevent += 0x02 if sprite == 2 else 0x00
+            onevent += 0x04 if sprite == 3 else 0x00
+            onevent += 0x08 if sprite == 4 else 0x00
+            onevent += 0x10 if sprite == 5 else 0x00
+            onevent += 0x20 if sprite == 6 else 0x00
+        if allow_random_on_event:
+            onevent = 0x01 if 'on_hit' in sprite.value else 0x00
+            onevent += 0x02 if 'on_enter' in sprite.value else 0x00
+            onevent += 0x04 if 'on_exit' in sprite.value else 0x00
+            onevent += 0x08 if 'on_slash' in sprite.value else 0x00
+            onevent += 0x10 if 'on_item' in sprite.value else 0x00
+            onevent += 0x20 if 'on_bonk' in sprite.value else 0x00
+        else:
             # Allows for opting into random on events on race rom seeds, without actually enabling any of the events initially.
             onevent = 0x0000
-        elif sprite == 'randomonrandom':
-            # Allows random to take the wheel on which events apply. (at least one event will be applied.)
-            onevent = local_random.randint(0x0001, 0x003F)
-        elif userandomsprites:
-            onevent = 0x01 if 'hit' in sprite else 0x00
-            onevent += 0x02 if 'enter' in sprite else 0x00
-            onevent += 0x04 if 'exit' in sprite else 0x00
-            onevent += 0x08 if 'slash' in sprite else 0x00
-            onevent += 0x10 if 'item' in sprite else 0x00
-            onevent += 0x20 if 'bonk' in sprite else 0x00
 
         rom.write_int16(0x18637F, onevent)
 
+        if not isinstance(sprite.value, str):
+            if sprite_pool:
+                sprite = random.choice(sprite_pool.value)
+            else:
+                sprite = "Link"
         sprite = Sprite(sprite) if os.path.isfile(sprite) else Sprite.get_sprite_from_name(sprite, local_random)
 
     # write link sprite if required
@@ -249,9 +257,9 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
         sprite.write_to_rom(rom)
 
         _populate_sprite_table()
-        if userandomsprites:
+        if userandomsprites or allow_random_on_event:
             if sprite_pool:
-                for spritename in sprite_pool:
+                for spritename in sprite_pool.value:
                     sprite = Sprite(spritename) if os.path.isfile(spritename) else Sprite.get_sprite_from_name(
                         spritename, local_random)
                     if sprite:
@@ -1203,17 +1211,18 @@ def patch_rom(world, rom, player, enemized):
         rom.write_byte(0x180044, 0x01)  # hammer activates tablets
 
     # set up clocks for timed modes
-    if world.clock_mode[player] in ['ohko', 'countdown-ohko']:
+    clock_mode = world.worlds[player].clock_mode
+    if clock_mode in ['ohko', 'countdown-ohko']:
         rom.write_bytes(0x180190, [0x01, 0x02, 0x01])  # ohko timer with resetable timer functionality
-    elif world.clock_mode[player] == 'stopwatch':
+    elif clock_mode == 'stopwatch':
         rom.write_bytes(0x180190, [0x02, 0x01, 0x00])  # set stopwatch mode
-    elif world.clock_mode[player] == 'countdown':
+    elif clock_mode == 'countdown':
         rom.write_bytes(0x180190, [0x01, 0x01, 0x00])  # set countdown, with no reset available
     else:
         rom.write_bytes(0x180190, [0x00, 0x00, 0x00])  # turn off clock mode
 
     # Set up requested clock settings
-    if world.clock_mode[player] in ['countdown-ohko', 'stopwatch', 'countdown']:
+    if world.worlds[player].clock_mode in ['countdown-ohko', 'stopwatch', 'countdown']:
         rom.write_int32(0x180200,
                         world.red_clock_time[player] * 60 * 60)  # red clock adjustment time (in frames, sint32)
         rom.write_int32(0x180204,
@@ -1226,7 +1235,7 @@ def patch_rom(world, rom, player, enemized):
         rom.write_int32(0x180208, 0)  # green clock adjustment time (in frames, sint32)
 
     # Set up requested start time for countdown modes
-    if world.clock_mode[player] in ['countdown-ohko', 'countdown']:
+    if world.worlds[player].clock_mode in ['countdown-ohko', 'countdown']:
         rom.write_int32(0x18020C, world.countdown_start_time[player] * 60 * 60)  # starting time (in frames, sint32)
     else:
         rom.write_int32(0x18020C, 0)  # starting time (in frames, sint32)
@@ -1509,7 +1518,7 @@ def patch_rom(world, rom, player, enemized):
     rom.write_byte(0x18003B, 0x01 if world.map_shuffle[player] else 0x00)  # maps showing crystals on overworld
 
     # compasses showing dungeon count
-    if world.clock_mode[player] or not world.dungeon_counters[player]:
+    if world.worlds[player].clock_mode or not world.dungeon_counters[player]:
         rom.write_byte(0x18003C, 0x00)  # Currently must be off if timer is on, because they use same HUD location
     elif world.dungeon_counters[player] == Counters.option_on:
         rom.write_byte(0x18003C, 0x02)  # always on
@@ -1917,7 +1926,11 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
                    #          0b00000010 is already used for death_link_allow_survive in super metroid.
                              (0b00000100 if allowcollect else 0))
 
-    apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event,
+    apply_random_sprite_on_event(rom,
+                                 world.random_sprite_events[player] if allow_random_on_event
+                                 else world.sprite[player] if world else '',
+                                 local_random,
+                                 allow_random_on_event,
                                  world.sprite_pool[player] if world else [])
     if isinstance(rom, LocalRom):
         rom.write_crc()

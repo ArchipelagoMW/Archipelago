@@ -403,8 +403,9 @@ class ALTTPWorld(World):
                                world.quickswap[player],
                                world.menuspeed[player].current_key,
                                world.music[player],
-                               world.sprite[player],
-                               palettes_options, world, player, True,
+                               world.random_sprite_events[player] if world.use_random_sprite_events[player]
+                               else world.sprite[player],
+                               palettes_options, world, player, world.use_random_sprite_events[player],
                                reduceflashing=world.reduceflashing[player] or world.is_race,
                                triforcehud=world.triforcehud[player].current_key,
                                deathlink=world.death_link[player],

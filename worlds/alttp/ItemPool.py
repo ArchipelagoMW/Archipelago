@@ -354,8 +354,7 @@ def generate_itempool(world):
                 item.code = 0x65  # Progressive Bow (Alt)
                 break
 
-    if clock_mode is not None:
-        world.clock_mode[player] = clock_mode
+    world.worlds[player].clock_mode = clock_mode
 
     if treasure_hunt_count is not None:
         world.treasure_hunt_count[player] = treasure_hunt_count % 999
