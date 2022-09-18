@@ -239,16 +239,13 @@ class TLoZWorld(World):
         if self.world.StartingPosition[self.player] != 2:
             # Don't allow Take Any Items until we can actually get in one
             add_rule(self.world.get_location("Take Any Item 1", self.player),
-                     lambda state: state.has_group("weapons", self.player) or
-                                   state.has_group("candles", self.player) or
+                     lambda state: state.has_group("candles", self.player) or
                                    state.has("Raft", self.player))
             add_rule(self.world.get_location("Take Any Item 2", self.player),
-                     lambda state: state.has_group("weapons", self.player) or
-                                  state.has_group("candles", self.player) or
-                                  state.has("Raft", self.player))
+                     lambda state: state.has_group("candles", self.player) or
+                                   state.has("Raft", self.player))
             add_rule(self.world.get_location("Take Any Item 3", self.player),
-                     lambda state: state.has_group("weapons", self.player) or
-                                   state.has_group("candles", self.player) or
+                     lambda state: state.has_group("candles", self.player) or
                                    state.has("Raft", self.player))
         for location in self.levels[4].locations:
             add_rule(self.world.get_location(location.name, self.player),
