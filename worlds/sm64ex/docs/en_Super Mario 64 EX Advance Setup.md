@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- Super Mario 64 US Rom (Japanese may work also. Europe and Shindou not supported)
+- Super Mario 64 US Rom (Japanese will work also. Europe and Shindou not supported)
 - Either of [sm64pclauncher](https://github.com/N00byKing/sm64pclauncher/releases) or
 - Cloning and building [sm64ex](https://github.com/N00byKing/sm64ex) manually.
 
@@ -26,7 +26,7 @@ Then follow the steps below
 8. Set the location for the Models Pack
 9. Set the location for the Texture Pack
 10. Point the Launcher to your Super Mario 64 US/JP Rom, and set the Region correspondingly
-11. Copy the .patch file/s to the enachancements folder which is located in e.g. C:/sm64pclauncher/apmario/enhancements
+11. Copy the .patch file/s to the enachancements folder which is located in e.g. C:/sm64pclauncher/apmario/enhancements NOTE: outside patches may break the game. Only the ones supplied with the repo are tested
 12. click on refresh patchlist click on the patchs you want
 13. Set Build Options. Recommended: `-jn` where `n` is the Number of CPU Cores, to build faster and add EXTERNAL_DATA=1 to the build options
 SM64EX will now be compiled. The Launcher will appear to have crashed, but this is not likely the case. Best wait a bit, but there may be a problem if it takes longer than 10 Minutes
@@ -42,7 +42,7 @@ Dependencies for Linux: `sdl2 glew cmake python make`.
 Dependencies for Windows: `mingw-w64-x86_64-gcc mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 git make python3 mingw-w64-x86_64-cmake`
 SM64EX will link `jsoncpp` dynamic if installed. If not, it will compile and link statically.
 
-1. Clone `https://github.com/N00byKing/sm64ex` recursively
+1. Clone `https://github.com/N00byKing/sm64ex` recursively, `command: git clone --recursive https://github.com/N00byKing/sm64ex`
 2. Enter `sm64ex` and copy your Rom to `baserom.REGION.z64` where `REGION` is either `us` or `jp` respectively.
 3. Compile with `make`. For faster compilation set the parameter `-jn` where `n` is the Number of CPU Cores. plus EXTERNAL_DATA=1
 
@@ -51,8 +51,8 @@ The Compiled binary will be in `build/REGION_pc/`.
 # Other Build Options
 There are more build options it's recommended to use only what is required but if you want to use these options USE AT YOUR OWN RISK.
 They are listed as Build Option, Default, Possible Values and Discription sourced from here https://github.com/sm64pc/sm64ex/wiki/Build-options
-1. VERSION us (us,eu,jp,sh) Which ROM to use. The selected ROM has to be in the repo folder with the name baserom.$VERSION.z64. sh is currently broken
-2. TARGET_BITS (32, 64) TARGET_BITS=n appends some compiler flags for an n-bit build. If the value is empty, the option does nothing, assuming your native toolchain will set everything up by itself. Use this only if you're having trouble otherwise.
+1. VERSION `us` `us,eu,jp,sh` Which ROM to use. The selected ROM has to be in the repo folder with the name baserom.$VERSION.z64. sh is currently broken
+2. TARGET_BITS `32, 64` TARGET_BITS=n appends some compiler flags for an n-bit build. If the value is empty, the option does nothing, assuming your native toolchain will set everything up by itself. Use this only if you're having trouble otherwise.
 3. TARGET_RPI 0, (0,1) If 1, select optimal settings for Raspberry PI see link here https://github.com/sm64pc/sm64ex/wiki/Helper-compiling-script-for-Raspberry-Pi
 4. TARGET_WEB 0, (0,1) If 1, build Emscripten version. see link here https://github.com/sm64pc/sm64pc/wiki/Compiling-for-the-web
 5. WINDOWS_BUILD (0,1) If 1, build for Windows. Usually set automatically if building on Windows.
