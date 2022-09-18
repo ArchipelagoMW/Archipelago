@@ -379,26 +379,36 @@ def generate_output(self, output_directory: str):
                 write_bytes(data, encode_text("Nothing"), rom_addresses["Badge_Text_" + badge.replace(" ", "_")])
 
     chart = deepcopy(poke_data.type_chart)
-    if self.world.randomize_type_matchup_attacking_types[self.player].value == 1:
+    if self.world.randomize_type_matchup_types[self.player].value == 1:
         attacking_types = []
-        for matchup in chart:
-            attacking_types.append(matchup[0])
-        self.world.random.shuffle(attacking_types)
-        for (matchup, attacking_type) in zip(chart, attacking_types):
-           matchup[0] = attacking_type
-    elif self.world.randomize_type_matchup_attacking_types[self.player].value == 2:
-        for matchup in chart:
-            matchup[0] = self.world.random.choice(list(poke_data.type_names.values()))
-    if self.world.randomize_type_matchup_defending_types[self.player].value == 1:
         defending_types = []
         for matchup in chart:
+            attacking_types.append(matchup[0])
             defending_types.append(matchup[1])
+        self.world.random.shuffle(attacking_types)
         self.world.random.shuffle(defending_types)
-        for (matchup, defending_type) in zip(chart, defending_types):
-            matchup[1] = defending_type
-    elif self.world.randomize_type_matchup_defending_types[self.player].value == 2:
+        matchups = []
+        while len(attacking_types) > 0:
+            if [attacking_types[0], defending_types[0]] not in matchups:
+                matchups.append([attacking_types.pop(0), defending_types.pop(0)])
+            else:
+                matchup = matchups.pop(0)
+                attacking_types.append(matchup[0])
+                defending_types.append(matchup[1])
+            random.shuffle(attacking_types)
+            random.shuffle(defending_types)
+        for matchup, chart_row in zip(matchups, chart):
+            chart_row[0] = matchup[0]
+            chart_row[1] = matchup[1]
+    elif self.world.randomize_type_matchup_types[self.player].value == 2:
+        used_matchups = []
         for matchup in chart:
+            matchup[0] = self.world.random.choice(list(poke_data.type_names.values()))
             matchup[1] = self.world.random.choice(list(poke_data.type_names.values()))
+            while [matchup[0], matchup[1]] in used_matchups:
+                matchup[0] = self.world.random.choice(list(poke_data.type_names.values()))
+                matchup[1] = self.world.random.choice(list(poke_data.type_names.values()))
+            used_matchups.append([matchup[0], matchup[1]])
     if self.world.randomize_type_matchup_type_effectiveness[self.player].value == 1:
         effectiveness_list = []
         for matchup in chart:
@@ -410,7 +420,6 @@ def generate_output(self, output_directory: str):
         for matchup in chart:
             matchup[2] = self.world.random.choice([0] + ([5, 20] * 5))
     elif self.world.randomize_type_matchup_type_effectiveness[self.player].value == 3:
-        #data[rom_addresses["Option_Chaos_Types"]] = 1
         for matchup in chart:
             matchup[2] = self.world.random.choice([i for i in range(0, 21) if i != 10])
     type_loc = rom_addresses["Type_Chart"]

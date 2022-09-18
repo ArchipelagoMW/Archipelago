@@ -302,23 +302,35 @@ class SecondaryTypeChance(SpecialRange):
     }
 
 
-class RandomizeTypeChartAttackingTypes(Choice):
+# class RandomizeTypeChartAttackingTypes(Choice):
+#     """The game's type chart consists of 3 columns: attacking type, defending type, and type effectiveness.
+#        Matchups that have regular type effectiveness are not in the chart. Shuffle will shuffle the attacking types
+#        across the attacking type column (so for example Normal type will still have exactly 2 types that it deals
+#        non-regular damage to). Randomize will randomize each type in the column to any random type."""
+#     display_name = "Randomize Type Chart Attacking Types"
+#     option_vanilla = 0
+#     option_shuffle = 1
+#     option_randomize = 2
+#     default = 0
+#
+#
+# class RandomizeTypeChartDefendingTypes(Choice):
+#     """The game's type chart consists of 3 columns: attacking type, defending type, and type effectiveness.
+#        Matchups that have regular type effectiveness are not in the chart. Shuffle will shuffle the defending types
+#        across the defending type column (so for example Normal type will still have exactly 2 types that it receives
+#        non-regular damage from). Randomize will randomize each type in the column to any random type."""
+#     display_name = "Randomize Type Chart Attacking Types"
+#     option_vanilla = 0
+#     option_shuffle = 1
+#     option_randomize = 2
+#     default = 0
+
+class RandomizeTypeChartTypes(Choice):
     """The game's type chart consists of 3 columns: attacking type, defending type, and type effectiveness.
        Matchups that have regular type effectiveness are not in the chart. Shuffle will shuffle the attacking types
-       across the attacking type column (so for example Normal type will still have exactly 2 types that it deals
-       non-regular damage to). Randomize will randomize each type in the column to any random type."""
-    display_name = "Randomize Type Chart Attacking Types"
-    option_vanilla = 0
-    option_shuffle = 1
-    option_randomize = 2
-    default = 0
-
-
-class RandomizeTypeChartDefendingTypes(Choice):
-    """The game's type chart consists of 3 columns: attacking type, defending type, and type effectiveness.
-       Matchups that have regular type effectiveness are not in the chart. Shuffle will shuffle the defending types
-       across the defending type column (so for example Normal type will still have exactly 2 types that it receives
-       non-regular damage from). Randomize will randomize each type in the column to any random type."""
+       across the attacking type column and the defending types across the defending type column (so for example Normal
+       type will still have exactly 2 types that it receives non-regular damage from, and 2 types it deals non-regular
+       damage to). Randomize will randomize each type in both columns to any random type."""
     display_name = "Randomize Type Chart Attacking Types"
     option_vanilla = 0
     option_shuffle = 1
@@ -330,7 +342,7 @@ class RandomizeTypeChartTypeEffectiveness(Choice):
     """The game's type chart consists of 3 columns: attacking type, defending type, and type effectiveness.
        Matchups that have regular type effectiveness are not in the chart. Shuffle will shuffle the type effectiveness
        across the type effectiveness column (so for example there will always be 6 type immunities). Randomize will
-       randomize each entry in the table to no effect, not very effective, or super effective, with no effect occurring
+       randomize each entry in the table to no effect, not very effective, or super effective; with no effect occurring
        at a low chance. Chaos will randomize the values to anywhere between 0% and 200% damage, in 10% increments."""
     display_name = "Randomize Type Chart Type Effectiveness"
     option_vanilla = 0
@@ -397,8 +409,7 @@ pokemon_rb_options = {
     "hm_compatibility": HMCompatibility,
     "randomize_pokemon_types": RandomizePokemonTypes,
     "secondary_type_chance": SecondaryTypeChance,
-    "randomize_type_matchup_attacking_types": RandomizeTypeChartAttackingTypes,
-    "randomize_type_matchup_defending_types": RandomizeTypeChartDefendingTypes,
+    "randomize_type_matchup_types": RandomizeTypeChartTypes,
     "randomize_type_matchup_type_effectiveness": RandomizeTypeChartTypeEffectiveness,
     "safari_zone_normal_battles": SafariZoneNormalBattles,
     "normalize_encounter_chances": NormalizeEncounterChances,
