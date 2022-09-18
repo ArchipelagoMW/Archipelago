@@ -1,4 +1,4 @@
-from BaseClasses import Item, ItemClassification
+from BaseClasses import Item, ItemClassification as IC
 from zilliandomizer.options import Chars
 from zilliandomizer.logic_components.items import Item as ZzItem
 
@@ -9,7 +9,7 @@ class ZillionItem(Item):
     game = "Zillion"
     zz_item: ZzItem
 
-    def __init__(self, name: str, classification: ItemClassification, code: int, player: int, start_char: Chars) -> None:
+    def __init__(self, name: str, classification: IC, code: int, player: int, start_char: Chars) -> None:
         super().__init__(name, classification, code, player)
         self.zz_item = item_id_to_zz_item[code]
         self._hint_text = self.zz_item.name

@@ -157,7 +157,7 @@ def validate(wo: Any, p: int) -> ZzOptions:
     `p` is my player id
     """
     for option_name in zillion_options:
-        assert hasattr(wo, option_name)
+        assert hasattr(wo, option_name), f"Zillion option {option_name} didn't get put in world object"
 
     jump_levels = cast(ZillionJumpLevels, wo.jump_levels[p])
     jump_option = jump_levels.get_current_option_name().lower()

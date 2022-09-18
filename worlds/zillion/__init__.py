@@ -4,7 +4,7 @@ from typing import Any, Dict, FrozenSet, Set, TextIO, Tuple, List, Optional, cas
 import os
 import logging
 
-from BaseClasses import MultiWorld, Location, Item, CollectionState, \
+from BaseClasses import ItemClassification, MultiWorld, Location, Item, CollectionState, \
     RegionType, Entrance, Tutorial
 from Options import AssembleOptions
 from .logic import clear_cache, cs_to_zz_locs
@@ -44,7 +44,7 @@ class ZillionWorld(World):
     """
     game = "Zillion"
 
-    options: Dict[str, AssembleOptions] = zillion_options  # link your Options mapping
+    option_definitions: Dict[str, AssembleOptions] = zillion_options
     topology_present: bool = True  # indicate if world type has any meaningful layout/pathing
 
     # gets automatically populated with all item and item group names
@@ -96,8 +96,8 @@ class ZillionWorld(World):
 
     logger: logging.Logger
 
-    zz_randomizer: ZzRandomizer
-    zz_patcher: ZzPatcher
+    zz_randomizer: Optional[ZzRandomizer] = None
+    zz_patcher: Optional[ZzPatcher] = None
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -125,6 +125,7 @@ class ZillionWorld(World):
                     f"{loc_zz_name_to_name(zz_name)} not in location map"
 
     def create_regions(self) -> None:
+        assert self.zz_randomizer, "generate_early hasn't been called"
         p = self.player
         w = self.world
 
@@ -193,6 +194,7 @@ class ZillionWorld(World):
         pass
 
     def generate_basic(self) -> None:
+        assert self.zz_randomizer, "generate_early hasn't been called"
         # main location name is an alias
         main_loc_name = loc_zz_name_to_name(self.zz_randomizer.locations['main'].name)
 
@@ -224,6 +226,7 @@ class ZillionWorld(World):
 
     def post_fill(self) -> None:
         """Optional Method that is called after regular fill. Can be used to do adjustments before output generation."""
+        assert self.zz_randomizer, "generate_early hasn't been called"
         zz_options = self.zz_randomizer.options
 
         empty = zz_items[4]
@@ -249,11 +252,12 @@ class ZillionWorld(World):
         for zz_loc in self.zz_randomizer.locations.values():
             assert zz_loc.item, f"not every location in world {self.player} got an item"
 
+        assert self.zz_patcher, "generate_early didn't set patcher"
         if zz_options.randomize_alarms:
             a = Alarms(self.zz_patcher.tc, self.zz_randomizer.logger)
-            a.choose_all()
+            a.choose_all(frozenset())
 
-        self.zz_patcher.write_locations(self.zz_randomizer.locations, zz_options.start_char)
+        self.zz_patcher.write_locations(self.zz_randomizer.start, zz_options.start_char)
         self.zz_patcher.all_fixes_and_options(zz_options)
         self.zz_patcher.set_external_item_interface(zz_options.start_char, zz_options.max_level)
         self.zz_patcher.set_multiworld_items(multi_items)
@@ -261,6 +265,7 @@ class ZillionWorld(World):
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.
         If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
+        assert self.zz_patcher, "didn't get patcher from generate_early"
         # original_rom_bytes = self.zz_patcher.rom
         patched_rom_bytes = self.zz_patcher.get_patched_bytes()
 
@@ -318,14 +323,17 @@ class ZillionWorld(World):
         Warning: this may be called with self.world = None, for example by MultiServer"""
         item_id = _item_name_to_id[name]
         zz_item = item_id_to_zz_item[item_id]
-        prog = zz_item.is_progression or zz_item.required
-        skip_in_prog_bal = not zz_item.is_progression
+
+        classification = ItemClassification.filler
+        if zz_item.required:
+            classification = ItemClassification.progression
+            if not zz_item.is_progression:
+                classification = ItemClassification.progression_skip_balancing
 
         # for the rescue hint text
-        start_char = self.zz_randomizer.options.start_char
+        start_char = self.zz_randomizer.options.start_char if self.zz_randomizer else "JJ"
 
-        z_item = ZillionItem(name, prog, item_id, self.player, start_char)
-        z_item.skip_in_prog_balancing = skip_in_prog_bal
+        z_item = ZillionItem(name, classification, item_id, self.player, start_char)
         return z_item
 
     def get_filler_item_name(self) -> str:

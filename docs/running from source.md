@@ -16,6 +16,10 @@ Then run any of the starting point scripts, like Generate.py, and the included M
 required modules and after pressing enter proceed to install everything automatically.
 After this, you should be able to run the programs.
 
+ * With yaml(s) in the `Players` folder, `Generate.py` will generate the multiworld archive.
+ * `MultiServer.py`, with the filename of the generated archive as a command line parameter, will host the multiworld locally.
+    * `--log-network` is a command line parameter useful for debugging.
+
 
 ## Windows
 

@@ -132,7 +132,7 @@ class CommonContext:
     # defaults
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
-    command_processor: typing.Type[ClientCommandProcessor] = ClientCommandProcessor
+    command_processor: typing.Type[CommandProcessor] = ClientCommandProcessor
     ui = None
     ui_task: typing.Optional[asyncio.Task] = None
     input_task: typing.Optional[asyncio.Task] = None
