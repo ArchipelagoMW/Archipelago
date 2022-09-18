@@ -120,7 +120,7 @@ def get_locations(player=None):
         LocationData("Saffron Gym", "Sabrina 2", "TM46 Psywave", rom_addresses["Event_Saffron_Gym"], EventFlag(864)),
         LocationData("Fossil", "Item 1", "Dome Fossil",
                      [rom_addresses["Event_Dome_Fossil"], rom_addresses["Event_Dome_Fossil_B"],
-                      rom_addresses["Dome_Fossil_Text"]], EventFlag(0x57F),
+                      rom_addresses["Dome_Fossil_Text"]], EventFlag(0x57E),
                      lambda state: state._pokemon_rb_fossil_checks(player)),
         LocationData("Fossil", "Item 2", "Helix Fossil",
                      [rom_addresses["Event_Helix_Fossil"], rom_addresses["Event_Helix_Fossil_B"],
@@ -1687,12 +1687,16 @@ def get_locations(player=None):
 
         LocationData("Pallet Town", "Starter 2", "Squirtle", [rom_addresses["Starter2_A"],
                      rom_addresses["Starter2_B"], rom_addresses["Starter2_E"], rom_addresses["Starter2_F"],
-                     rom_addresses["Starter2_G"], rom_addresses["Starter2_H"], rom_addresses["Starter2_I"]], None,
+                     rom_addresses["Starter2_G"], rom_addresses["Starter2_H"], rom_addresses["Starter2_I"],
+                     rom_addresses["Starter2_J"], rom_addresses["Starter2_K"], rom_addresses["Starter2_L"],
+                     rom_addresses["Starter2_M"], rom_addresses["Starter2_N"], rom_addresses["Starter2_O"]], None,
                      event=True, type="Missable Pokemon"),
 
         LocationData("Pallet Town", "Starter 3", "Bulbasaur", [rom_addresses["Starter3_A"],
                      rom_addresses["Starter3_B"], rom_addresses["Starter3_C"], rom_addresses["Starter3_D"],
-                     rom_addresses["Starter3_E"], rom_addresses["Starter3_G"], rom_addresses["Starter3_I"]], None,
+                     rom_addresses["Starter3_E"], rom_addresses["Starter3_G"], rom_addresses["Starter3_I"],
+                     rom_addresses["Starter3_J"], rom_addresses["Starter3_K"], rom_addresses["Starter3_L"],
+                     rom_addresses["Starter3_M"], rom_addresses["Starter3_N"], rom_addresses["Starter3_O"]], None,
                      event=True, type="Missable Pokemon"),
 ]
     for i, location in enumerate(locations):

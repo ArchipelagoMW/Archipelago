@@ -214,11 +214,13 @@ def process_pokemon_data(self):
             mon_data["spd"] = stats[3]
             mon_data["spc"] = stats[4]
         elif self.world.randomize_pokemon_stats[self.player].value == 2:
-            old_stats = mon_data["hp"] + mon_data["atk"] + mon_data["def"] + mon_data["spd"] + mon_data["spc"]
-            stats = [0, 0, 0, 0, 0]
+            old_stats = mon_data["hp"] + mon_data["atk"] + mon_data["def"] + mon_data["spd"] + mon_data["spc"] - 5
+            stats = [1, 1, 1, 1, 1]
             while old_stats > 0:
-                old_stats -= 1
-                stats[self.world.random.randint(0, 4)] += 1
+                stat = self.world.random.randint(0, 4)
+                if stats[stat] < 255:
+                    old_stats -= 1
+                    stats[stat] += 1
             mon_data["hp"] = stats[0]
             mon_data["atk"] = stats[1]
             mon_data["def"] = stats[2]
@@ -383,7 +385,7 @@ def generate_output(self, output_directory: str):
             attacking_types.append(matchup[0])
         self.world.random.shuffle(attacking_types)
         for (matchup, attacking_type) in zip(chart, attacking_types):
-            matchup[0] = attacking_type
+           matchup[0] = attacking_type
     elif self.world.randomize_type_matchup_attacking_types[self.player].value == 2:
         for matchup in chart:
             matchup[0] = self.world.random.choice(list(poke_data.type_names.values()))
@@ -454,6 +456,9 @@ def generate_output(self, output_directory: str):
     if self.world.safari_zone_normal_battles[self.player].value == 1:
         data[rom_addresses["Option_Safari_Zone_Battle_Type"]] = 255
 
+    if self.world.reusable_tms[self.player].value:
+        data[rom_addresses["Option_Reusable_TMs"]] = 0xC9
+
     process_trainer_data(self, data)
 
     mons = [mon["id"] for mon in poke_data.pokemon_data.values()]
@@ -461,6 +466,14 @@ def generate_output(self, output_directory: str):
     data[rom_addresses['Title_Mon_First']] = mons.pop()
     for mon in range(0, 16):
         data[rom_addresses['Title_Mons'] + mon] = mons.pop()
+    if self.world.game_version[self.player].value:
+        mons.sort(key=lambda mon: 0 if mon == self.world.get_location("Pallet Town - Starter 1", self.player).item.name
+                  else 1 if mon == self.world.get_location("Pallet Town - Starter 2", self.player).item.name else
+                  2 if mon == self.world.get_location("Pallet Town - Starter 3", self.player).item.name else 3)
+    else:
+        mons.sort(key=lambda mon: 0 if mon == self.world.get_location("Pallet Town - Starter 2", self.player).item.name
+                  else 1 if mon == self.world.get_location("Pallet Town - Starter 1", self.player).item.name else
+                  2 if mon == self.world.get_location("Pallet Town - Starter 3", self.player).item.name else 3)
     write_bytes(data, self.world.seed_name.encode(), 0xFFDC)
     write_bytes(data, encode_text(self.world.seed_name, 20, True), rom_addresses['Title_Seed'])
     write_bytes(data, self.world.player_name[self.player].encode(), 0xFFF0)

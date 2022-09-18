@@ -113,7 +113,7 @@ class OaksAidRt2(Range):
 
 
 class OaksAidRt11(Range):
-    """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 2"""
+    """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 11"""
     display_name = "Oak's Aide Route 2"
     range_start = 0
     range_end = 80
@@ -121,7 +121,7 @@ class OaksAidRt11(Range):
 
 
 class OaksAidRt15(Range):
-    """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 2"""
+    """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 15"""
     display_name = "Oak's Aide Route 2"
     range_start = 0
     range_end = 80
@@ -141,7 +141,7 @@ class ExpModifier(SpecialRange):
         "quadruple": default * 4,
         "quintuple": default * 5,
         "sextuple": default * 6,
-        "suptuple": default * 7,
+        "septuple": default * 7,
         "octuple": default * 8,
     }
 
@@ -353,6 +353,11 @@ class NormalizeEncounterChances(Toggle):
     default = 0
 
 
+class ReusableTMs(Toggle):
+    """Makes TMs reusable, so they will not be consumed upon use."""
+    display_name = "Reusable TMs"
+    default = 0
+
 class StartingMoney(Range):
     """The amount of money you start with."""
     display_name = "Starting Money"
@@ -397,5 +402,6 @@ pokemon_rb_options = {
     "randomize_type_matchup_type_effectiveness": RandomizeTypeChartTypeEffectiveness,
     "safari_zone_normal_battles": SafariZoneNormalBattles,
     "normalize_encounter_chances": NormalizeEncounterChances,
+    "reusable_tms": ReusableTMs,
     "starting_money": StartingMoney,
 }

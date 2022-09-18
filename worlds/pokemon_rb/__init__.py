@@ -41,9 +41,13 @@ class PokemonRedBlueWorld(World):
 
     @classmethod
     def stage_assert_generate(cls, world):
-        for rom_file in [get_base_rom_path("red"), get_base_rom_path("blue")]:
-            if not os.path.exists(rom_file):
-                raise FileNotFoundError(rom_file)
+        versions = set()
+        for player in world.player_ids:
+            if world.worlds[player].game == "Pokemon Red - Blue":
+                versions.add(world.game_version[player].current_key)
+        for version in versions:
+            if not os.path.exists(get_base_rom_path(version)):
+                raise FileNotFoundError(get_base_rom_path(version))
 
     def generate_early(self):
         if self.world.badges_needed_for_hm_moves[self.player].value >= 2:
