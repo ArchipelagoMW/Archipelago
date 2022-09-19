@@ -4,7 +4,7 @@ from .locations import location_table, SMGLocation
 from .Options import smg_options
 from .rules import set_star_rules
 from .regions import create_regions
-from BaseClasses import Item, Tutorial, ItemClassifcation
+from BaseClasses import Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
 
 client_version = 1
