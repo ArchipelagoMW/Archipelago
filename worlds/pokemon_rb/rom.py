@@ -328,6 +328,12 @@ def generate_output(self, output_directory: str):
             data[location.rom_address] = 0x2C  # AP Item
     data[rom_addresses['Fly_Location']] = self.fly_map_code
 
+    if self.world.tea[self.player].value:
+        data[rom_addresses["Option_Tea"]] = 1
+        data[rom_addresses["Guard_Drink_List"]] = 0x54
+        data[rom_addresses["Guard_Drink_List"] + 1] = 0
+        data[rom_addresses["Guard_Drink_List"] + 2] = 0
+
     # if self.world.goal[self.player].value:
     #     data[rom_addresses['Options']] |= 1
     if self.world.extra_key_items[self.player].value:

@@ -49,7 +49,10 @@ class PokemonLogic(LogicMixin):
                      "HM04 Strength", "HM05 Flash"] if self.has(item, player)]) >= count
 
     def _pokemon_rb_can_pass_guards(self, player):
-        return self.has("Tea", player)
+        if self.world.tea[player].value:
+            return self.has("Tea", player)
+        else:
+            return self.can_reach("Celadon City - Counter Man", "Location", player)
 
     def _pokemon_rb_has_badges(self, count, player):
         return len([item for item in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Marsh Badge",

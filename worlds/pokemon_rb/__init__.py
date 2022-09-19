@@ -95,6 +95,8 @@ class PokemonRedBlueWorld(World):
                 continue
             if "Rock Tunnel B1F" in location.region and not self.world.extra_key_items[self.player].value:
                 continue
+            if location.name == "Celadon City - Mansion Lady" and not self.world.tea[self.player].value:
+                continue
             item = self.create_item(location.original_item)
             if location.event:
                 self.world.get_location(location.name, self.player).place_locked_item(item)

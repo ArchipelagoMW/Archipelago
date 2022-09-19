@@ -12,13 +12,15 @@ class GameVersion(Choice):
 
 
 class TrainerName(FreeText):
-    """Your trainer name. Cannot exceed 7 characters."""
+    """Your trainer name. Cannot exceed 7 characters.
+    See the setup guide on archipelago.gg for a list of allowed characters."""
     display_name = "Trainer Name"
     default = "ASH"
 
 
 class RivalName(FreeText):
-    """Your rival's name. Cannot exceed 7 characters."""
+    """Your rival's name. Cannot exceed 7 characters.
+    See the setup guide on archipelago.gg for a list of allowed characters."""
     display_name = "Rival's Name"
     default = "GARY"
 
@@ -78,6 +80,12 @@ class OldMan(Choice):
     option_open_viridian_city = 2
     default = 2
 
+
+class Tea(Toggle):
+    """Adds a Tea item to the item pool which the Saffron guards require instead of the vending machine drinks.
+    Adds a location check to the Celadon Mansion 1F, where Tea is acquired in FireRed and LeafGreen."""
+    display_name = "Tea"
+    default = 1
 
 class ExtraKeyItems(Toggle):
     """Adds key items that are required to access the Rocket Hideout, Cinnabar Mansion, Safari Zone, and Power Plant.
@@ -376,6 +384,7 @@ pokemon_rb_options = {
     "badgesanity": BadgeSanity,
     "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
     "old_man": OldMan,
+    "tea": Tea,
     "extra_key_items": ExtraKeyItems,
     "extra_strength_boulders": ExtraStrengthBoulders,
     "require_item_finder": RequireItemFinder,
