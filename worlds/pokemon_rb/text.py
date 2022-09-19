@@ -111,13 +111,14 @@ char_map = {
 # safe_chars += ["PK", "MN", "MALE", "FEMALE", "'d", "'l", "'s", "'t", "'v", "'r", "'m"]
 unsafe_chars = ["@", "#", "PKMN"]
 
+
 def encode_text(text: str, length: int=0, whitespace=False, force=False, safety=False):
     encoded_text = bytearray()
     spec_char = ""
     special = False
     for char in text:
         if char == ">":
-            if spec_char in unsafe_chars:
+            if spec_char in unsafe_chars and safety:
                 raise KeyError(f"Disallowed Pokemon text special character '<{spec_char}>'")
             try:
                 encoded_text.append(special_chars[spec_char])
@@ -134,7 +135,7 @@ def encode_text(text: str, length: int=0, whitespace=False, force=False, safety=
         elif special is True:
             spec_char += char
         else:
-            if char in unsafe_chars:
+            if char in unsafe_chars and safety:
                 raise KeyError(f"Disallowed Pokemon text character '{char}'")
             try:
                 encoded_text.append(char_map[char])
@@ -146,5 +147,5 @@ def encode_text(text: str, length: int=0, whitespace=False, force=False, safety=
     if length > 0:
         encoded_text = encoded_text[:length]
     while whitespace and len(encoded_text) < length:
-        encoded_text.append(char_map[" "])
+        encoded_text.append(char_map[" " if whitespace is True else whitespace])
     return encoded_text

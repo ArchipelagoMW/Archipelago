@@ -1,5 +1,5 @@
 
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict, SpecialRange
+from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict, SpecialRange, FreeText
 
 
 class GameVersion(Choice):
@@ -9,6 +9,18 @@ class GameVersion(Choice):
     option_blue = 0
     #default = "random"
     default = 0
+
+
+class TrainerName(FreeText):
+    """Your trainer name. Cannot exceed 7 characters."""
+    display_name = "Trainer Name"
+    default = "ASH"
+
+
+class RivalName(FreeText):
+    """Your rival's name. Cannot exceed 7 characters."""
+    display_name = "Rival's Name"
+    default = "GARY"
 
 
 class Goal(Choice):

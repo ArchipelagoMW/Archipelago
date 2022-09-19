@@ -38,6 +38,8 @@ class PokemonRedBlueWorld(World):
         self.type_chart = None
         self.local_poke_data = None
         self.learnsets = None
+        self.player_name = None
+        self.rival_name = None
 
     @classmethod
     def stage_assert_generate(cls, world):
@@ -50,6 +52,16 @@ class PokemonRedBlueWorld(World):
                 raise FileNotFoundError(get_base_rom_path(version))
 
     def generate_early(self):
+        def encode_name(name, t):
+            if len(name) > 7:
+                raise KeyError(f"{t} name too long for player {self.world.player_name[self.player]}. Must be 7 characters or fewer.")
+            try:
+                return encode_text(name, length=8, whitespace="@", safety=True)
+            except KeyError as e:
+                raise KeyError(f"Invalid character(s) in {t} name for player {self.world.player_name[self.player]}") from e
+        self.player_name = encode_name(self.world.player_name[self.player].value, "Player")
+        self.rival_name = encode_name(self.world.rival_name[self.player].value, "Rival")
+
         if self.world.badges_needed_for_hm_moves[self.player].value >= 2:
             badges_to_add = ["Soul Badge", "Volcano Badge", "Earth Badge"]
             if self.world.badges_needed_for_hm_moves[self.player].value == 3:

@@ -486,11 +486,16 @@ def generate_output(self, output_directory: str):
     write_bytes(data, self.world.seed_name.encode(), 0xFFDC)
     write_bytes(data, encode_text(self.world.seed_name, 20, True), rom_addresses['Title_Seed'])
     write_bytes(data, self.world.player_name[self.player].encode(), 0xFFF0)
+
     slot_name = self.world.player_name[self.player]
     slot_name.replace("@", " ")
     slot_name.replace("<", " ")
     slot_name.replace(">", " ")
     write_bytes(data, encode_text(slot_name, 16, True, True), rom_addresses['Title_Slot_Name'])
+
+    write_bytes(data, self.player_name, rom_addresses['Player_Name'])
+    write_bytes(data, self.rival_name, rom_addresses['Rival_Name'])
+
     outfilepname = f'_P{self.player}'
     outfilepname += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}" \
         if self.world.player_name[self.player] != 'Player%d' % self.player else ''
