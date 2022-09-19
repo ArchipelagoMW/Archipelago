@@ -45,15 +45,21 @@ class SuperMarioGalaxy(World):
     
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
+        if name == "Power Star":
+            classification = ItemClassification.progression_skip_balancing
+        else:
+            classification = ItemClassification.progression
         item = SMGItem(name, True, item_id, self.player)
+        
         return item
+   
     
     def generate_basic(self): 
         gstaritem = self.create_item("Green Star")
         self.world.itempool += [gstaritem for i in range(0,3)]
         
         staritem = self.create_item("Power Star")
-        if(self.world.EnablePurpleCoinStars[self.player].value):
+        if( not self.world.EnablePurpleCoinStars[self.player].value):
            self.world.itempool += [staritem for i in range(0,117)]
         else:
             self.world.itempool += [staritem for i in range(0,101)]
