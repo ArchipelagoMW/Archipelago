@@ -698,10 +698,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if type(data) == list:
-            cls.verify_keys(data)
-            return cls(data)
-        elif type(data) == set:
+        if type(data) == list or type(data) == set or type(data) == frozenset:
             cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
