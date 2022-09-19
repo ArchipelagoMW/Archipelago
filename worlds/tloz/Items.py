@@ -45,8 +45,20 @@ item_table: Dict[str, ItemData] = {
     "Recovery Heart": ItemData(128, filler),
     "Five Rupees": ItemData(129, filler),
     "Rupee": ItemData(130, filler),
+    "Clock": ItemData(131, useful),
+    "Fairy": ItemData(132, useful)
 
 }
+
+# Map/Compasses: 18
+# 6 Fairies
+# 3 Clocks
+# 1 Water of Life (Red)
+# 2 Water of Life (Blue)
+# 2 Bomb
+# 2 Small Key
+# 2 Five Rupees
+# Reasoning: Adding some variety to the vanilla game.
 
 # With Take Any caves and the Potion Shop, we have two empty slots.
 # They"ll be used for anti-frustration: an extra Sword and Silver Arrow
@@ -56,12 +68,15 @@ item_amounts_all = {
     "Magical Shield": 3,
     "Food": 2,
     "Triforce Fragment": 8,
-    "Small Key": 44,
-    "Bomb": 17,
-    "Five Rupees": 16,
-    "Water of Life (Red)": 4,
+    "Small Key": 46,
+    "Bomb": 19,
+    "Five Rupees": 18,
+    "Water of Life (Red)": 5,
     "Silver Arrow": 2,
-    "Rupee": 0
+    "Rupee": 0,
+    "Fairy": 6,
+    "Clock": 3,
+    "Water of Life (Blue)": 3,
 }
 
 # Take Any caves are out, so we only get one extra slot to add in.
@@ -69,11 +84,16 @@ item_amounts_standard = {
     "Heart Container": 9,
     "Magical Shield": 1,
     "Food": 2,
-    "Small Key": 2,
-    "Five Rupees": 0,
+    "Small Key": 4,
+    "Five Rupees": 2,
+    "Bomb": 3,
     "Triforce Fragment": 8,
     "Silver Arrow": 2,
-    "Rupee": 0
+    "Rupee": 0,
+    "Fairy": 6,
+    "Clock": 3,
+    "Water of Life (Blue)": 3,
+    "Water of Life (Red)": 2,
 }
 
 item_game_ids = {
@@ -107,7 +127,9 @@ item_game_ids = {
     "Water of Life (Blue)": 0x1F,
     "Water of Life (Red)": 0x20,
     "Recovery Heart": 0x22,
-    "Rupee": 0x18
+    "Rupee": 0x18,
+    "Clock": 0x21,
+    "Fairy": 0x23
 }
 
 # Item prices are going to get a bit of a writeup here, because these are some seemingly arbitrary
@@ -165,5 +187,7 @@ item_prices = {
     "Water of Life (Blue)": 20,
     "Water of Life (Red)": 34,
     "Recovery Heart": 5,
-    "Rupee": 50
+    "Rupee": 50,
+    "Clock": 0,
+    "Fairy": 10
 }

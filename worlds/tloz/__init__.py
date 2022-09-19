@@ -11,8 +11,8 @@ from .Locations import location_table, level_locations, major_locations, shop_lo
     all_level_locations, shop_price_location_ids, secret_money_ids, location_ids
 from .Options import tloz_options
 from .Rom import TLoZDeltaPatch, get_base_rom_path
-from ..AutoWorld import World, WebWorld
-from ..generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
+from worlds.AutoWorld import World, WebWorld
+from worlds.generic.Rules import add_rule, set_rule, forbid_item
 
 class TLoZWeb(WebWorld):
     theme = "stone"
