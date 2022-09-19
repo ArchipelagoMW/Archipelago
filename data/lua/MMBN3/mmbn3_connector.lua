@@ -468,6 +468,22 @@ local game_modes = {
     [5]={name="Paused", loaded=true}
 }
 
+local Next_Progressive_Undernet_ID = function()
+    ordered_offsets = { 0x020019DB,0x020019DC,0x020019DD,0x020019DE,0x020019DF,0x020019E0,0x020019FA,0x020019E2 }
+
+    ordered_IDs = { 27,28,29,30,31,32,58,34 }
+    for i=1,#ordered_offsets do
+        offset=ordered_offsets[i]
+        index=ordered_IDs[i]
+        if memory.read_u8(offset) == 0 then
+            return index
+        end
+    end
+
+    --It shouldn't reach this point, but if it does, just give another GigFreez I guess
+    return 34
+end
+
 function is_game_complete()
     -- If the game is complete, do not read memory
     if is_game_complete then return true end
@@ -587,7 +603,10 @@ local GenerateBugfragGet = function(amt)
 end
 
 local GenerateGetMessageFromItem = function(item)
-    if item["type"] == "chip" then
+    --Special case for progressive undernet
+    if item["type"] == "progressive-undernet" then
+        return GenerateKeyItemGet(Next_Progressive_Undernet_ID(),1)
+    elseif item["type"] == "chip" then
         return GenerateChipGet(item["itemID"], item["subItemID"], item["count"])
     elseif item["type"] == "key" then
         return GenerateKeyItemGet(item["itemID"], item["count"])

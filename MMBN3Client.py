@@ -137,6 +137,18 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
         testingData["itemIndex"] = itemIndex
         itemIndex += 1
 
+    def _cmd_debugundernet(self):
+        global testingData
+        global itemIndex
+        logger.info("Sending Progressive Undernet Rank")
+        testingData["sender"] = "DebugTest"
+        testingData["type"] = "progressive-undernet"
+        testingData["itemID"] = -1
+        testingData["subItemID"] = -1
+        testingData["count"] = 1
+        testingData["itemIndex"] = itemIndex
+        itemIndex += 1
+
 class MMBN3Context(CommonContext):
     command_processor = MMBN3CommandProcessor
     # TODO No idea what full local means or what this is. Ask espeon about it
