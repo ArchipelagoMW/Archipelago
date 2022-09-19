@@ -66,7 +66,7 @@ async def dkc3_game_watcher(ctx: Context):
             return
 
         new_checks = []
-        from worlds.dkc3.Rom import location_rom_data, item_rom_data
+        from worlds.dkc3.Rom import location_rom_data, item_rom_data, boss_location_ids, level_unlock_map
         for loc_id, loc_data in location_rom_data.items():
             if loc_id not in ctx.locations_checked:
                 data = await snes_read(ctx, WRAM_START + loc_data[0], 1)
@@ -186,22 +186,40 @@ async def dkc3_game_watcher(ctx: Context):
 
         # DKC3_TODO: This method of collect should work, however it does not unlock the next level correctly when previous is flagged
         # Handle Collected Locations
-        #for loc_id in ctx.checked_locations:
-        #    if loc_id not in ctx.locations_checked:
-        #        loc_data = location_rom_data[loc_id]
-        #        data = await snes_read(ctx, WRAM_START + loc_data[0], 1)
-        #        invert_bit = ((len(loc_data) >= 3) and loc_data[2])
-        #        if not invert_bit:
-        #            masked_data = data[0] | (1 << loc_data[1])
-        #            print("Collected Location: ", hex(loc_data[0]), " | ", loc_data[1])
-        #            snes_buffered_write(ctx, WRAM_START + loc_data[0], bytes([masked_data]))
-        #            await snes_flush_writes(ctx)
-        #        else:
-        #            masked_data = data[0] & ~(1 << loc_data[1])
-        #            print("Collected Inverted Location: ", hex(loc_data[0]), " | ", loc_data[1])
-        #            snes_buffered_write(ctx, WRAM_START + loc_data[0], bytes([masked_data]))
-        #            await snes_flush_writes(ctx)
-        #        ctx.locations_checked.add(loc_id)
+        for loc_id in ctx.checked_locations:
+            if loc_id not in ctx.locations_checked and loc_id not in boss_location_ids:
+                loc_data = location_rom_data[loc_id]
+                data = await snes_read(ctx, WRAM_START + loc_data[0], 1)
+                invert_bit = ((len(loc_data) >= 3) and loc_data[2])
+                if not invert_bit:
+                    masked_data = data[0] | (1 << loc_data[1])
+                    #print("Collected Location: ", hex(loc_data[0]), " | ", loc_data[1])
+                    snes_buffered_write(ctx, WRAM_START + loc_data[0], bytes([masked_data]))
+
+                    if (loc_data[1] == 1):
+                        # Make the next levels accessible
+                        level_id = loc_data[0] - 0x632
+                        levels_to_tiles = await snes_read(ctx, ROM_START + 0x3FF800, 0x60)
+                        tiles_to_levels = await snes_read(ctx, ROM_START + 0x3FF860, 0x60)
+                        tile_id = levels_to_tiles[level_id] if levels_to_tiles[level_id] != 0xFF else level_id
+                        tile_id = tile_id + 0x632
+                        #print("Tile ID: ", hex(tile_id))
+                        if tile_id in level_unlock_map:
+                            for next_level_address in level_unlock_map[tile_id]:
+                                next_level_id = next_level_address - 0x632
+                                next_tile_id = tiles_to_levels[next_level_id] if tiles_to_levels[next_level_id] != 0xFF else next_level_id
+                                next_tile_id = next_tile_id + 0x632
+                                #print("Next Level ID: ", hex(next_tile_id))
+                                next_data = await snes_read(ctx, WRAM_START + next_tile_id, 1)
+                                snes_buffered_write(ctx, WRAM_START + next_tile_id, bytes([next_data[0] | 0x01]))
+
+                    await snes_flush_writes(ctx)
+                else:
+                    masked_data = data[0] & ~(1 << loc_data[1])
+                    print("Collected Inverted Location: ", hex(loc_data[0]), " | ", loc_data[1])
+                    snes_buffered_write(ctx, WRAM_START + loc_data[0], bytes([masked_data]))
+                    await snes_flush_writes(ctx)
+                ctx.locations_checked.add(loc_id)
 
         # Calculate Boomer Cost Text
         boomer_cost_text = await snes_read(ctx, WRAM_START + 0xAAFD, 2)

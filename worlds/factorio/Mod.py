@@ -78,9 +78,14 @@ def generate_mod(world, output_directory: str):
     global data_final_template, locale_template, control_template, data_template, settings_template
     with template_load_lock:
         if not data_final_template:
-            mod_template_folder = os.path.join(os.path.dirname(__file__), "data", "mod_template")
+            def load_template(name: str):
+                import pkgutil
+                data = pkgutil.get_data(__name__, "data/mod_template/" + name).decode()
+                return data, name, lambda: False
+
             template_env: Optional[jinja2.Environment] = \
-                jinja2.Environment(loader=jinja2.FileSystemLoader([mod_template_folder]))
+                jinja2.Environment(loader=jinja2.FunctionLoader(load_template))
+
             data_template = template_env.get_template("data.lua")
             data_final_template = template_env.get_template("data-final-fixes.lua")
             locale_template = template_env.get_template(r"locale/en/locale.cfg")
@@ -102,7 +107,7 @@ def generate_mod(world, output_directory: str):
     random = multiworld.slot_seeds[player]
 
     def flop_random(low, high, base=None):
-        """Guarentees 50% below base and 50% above base, uniform distribution in each direction."""
+        """Guarantees 50% below base and 50% above base, uniform distribution in each direction."""
         if base:
             distance = random.random()
             if random.randint(0, 1):
@@ -158,7 +163,21 @@ def generate_mod(world, output_directory: str):
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
     en_locale_dir = os.path.join(mod_dir, "locale", "en")
     os.makedirs(en_locale_dir, exist_ok=True)
-    shutil.copytree(os.path.join(os.path.dirname(__file__), "data", "mod"), mod_dir, dirs_exist_ok=True)
+
+    if world.zip_path:
+        # Maybe investigate read from zip, write to zip, without temp file?
+        with zipfile.ZipFile(world.zip_path) as zf:
+            for file in zf.infolist():
+                if not file.is_dir() and "/data/mod/" in file.filename:
+                    path_part = Utils.get_text_after(file.filename, "/data/mod/")
+                    target = os.path.join(mod_dir, path_part)
+                    os.makedirs(os.path.split(target)[0], exist_ok=True)
+
+                    with open(target, "wb") as f:
+                        f.write(zf.read(file))
+    else:
+        shutil.copytree(os.path.join(os.path.dirname(__file__), "data", "mod"), mod_dir, dirs_exist_ok=True)
+
     with open(os.path.join(mod_dir, "data.lua"), "wt") as f:
         f.write(data_template_code)
     with open(os.path.join(mod_dir, "data-final-fixes.lua"), "wt") as f:

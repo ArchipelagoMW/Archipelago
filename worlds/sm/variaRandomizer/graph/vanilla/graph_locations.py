@@ -797,10 +797,10 @@ locationsDict["Power Bomb (lower Norfair above fire flea room)"].Available = (
     lambda sm: SMBool(True)
 )
 locationsDict["Power Bomb (Power Bombs of shame)"].AccessFrom = {
-    'Ridley Zone': lambda sm: sm.canUsePowerBombs()
+    'Wasteland': lambda sm: sm.canUsePowerBombs()
 }
 locationsDict["Power Bomb (Power Bombs of shame)"].Available = (
-    lambda sm: sm.canHellRun(**Settings.hellRunsTable['LowerNorfair']['Main'])
+    lambda sm: SMBool(True)
 )
 locationsDict["Missile (lower Norfair near Wave Beam)"].AccessFrom = {
     'Firefleas': lambda sm: SMBool(True)
