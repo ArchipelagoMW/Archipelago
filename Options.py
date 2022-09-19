@@ -483,7 +483,7 @@ class Range(NumericOption):
         if text.startswith("random"):
             return cls.weighted_range(text)
         elif text == "default" and hasattr(cls, "default"):
-            return cls(cls.default)
+            return cls.from_any(cls.default)
         elif text == "high":
             return cls(cls.range_end)
         elif text == "low":
@@ -494,7 +494,7 @@ class Range(NumericOption):
                 and text in ("true", "false"):
             # these are the conditions where "true" and "false" make sense
             if text == "true":
-                return cls(cls.default)
+                return cls.from_any(cls.default)
             else:  # "false"
                 return cls(0)
         return cls(int(text))
