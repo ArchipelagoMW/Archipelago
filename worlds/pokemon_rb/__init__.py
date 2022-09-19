@@ -1,8 +1,8 @@
-from typing import Dict, List, Set, Tuple, TextIO
+from typing import TextIO
 import os
 import logging
 
-from BaseClasses import Item, MultiWorld, ItemClassification
+from BaseClasses import Item, MultiWorld, Tutorial
 from Fill import fill_restrictive, FillError
 from .items import item_table, filler_items
 from .locations import get_locations, PokemonRBLocation
@@ -18,6 +18,17 @@ from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, process
 import worlds.pokemon_rb.poke_data as poke_data
 
 
+class PokemonWebWorld(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing Pokemon Red and Blue with Archipelago.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Alchav"]
+    )]
+
+
 class PokemonRedBlueWorld(World):
     """Pokemon"""
     game = "Pokemon Red - Blue"
@@ -30,6 +41,7 @@ class PokemonRedBlueWorld(World):
     location_name_to_id = {location.name: location.address for location in get_locations() if location.type == "Item"}
     item_name_groups = {}
 
+    web = PokemonWebWorld()
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.fly_map = None
@@ -38,7 +50,7 @@ class PokemonRedBlueWorld(World):
         self.type_chart = None
         self.local_poke_data = None
         self.learnsets = None
-        self.player_name = None
+        self.trainer_name = None
         self.rival_name = None
 
     @classmethod
@@ -59,7 +71,7 @@ class PokemonRedBlueWorld(World):
                 return encode_text(name, length=8, whitespace="@", safety=True)
             except KeyError as e:
                 raise KeyError(f"Invalid character(s) in {t} name for player {self.world.player_name[self.player]}") from e
-        self.player_name = encode_name(self.world.player_name[self.player].value, "Player")
+        self.player_name = encode_name(self.world.trainer_name[self.player].value, "Player")
         self.rival_name = encode_name(self.world.rival_name[self.player].value, "Rival")
 
         if self.world.badges_needed_for_hm_moves[self.player].value >= 2:

@@ -314,29 +314,6 @@ class SecondaryTypeChance(SpecialRange):
     }
 
 
-# class RandomizeTypeChartAttackingTypes(Choice):
-#     """The game's type chart consists of 3 columns: attacking type, defending type, and type effectiveness.
-#        Matchups that have regular type effectiveness are not in the chart. Shuffle will shuffle the attacking types
-#        across the attacking type column (so for example Normal type will still have exactly 2 types that it deals
-#        non-regular damage to). Randomize will randomize each type in the column to any random type."""
-#     display_name = "Randomize Type Chart Attacking Types"
-#     option_vanilla = 0
-#     option_shuffle = 1
-#     option_randomize = 2
-#     default = 0
-#
-#
-# class RandomizeTypeChartDefendingTypes(Choice):
-#     """The game's type chart consists of 3 columns: attacking type, defending type, and type effectiveness.
-#        Matchups that have regular type effectiveness are not in the chart. Shuffle will shuffle the defending types
-#        across the defending type column (so for example Normal type will still have exactly 2 types that it receives
-#        non-regular damage from). Randomize will randomize each type in the column to any random type."""
-#     display_name = "Randomize Type Chart Attacking Types"
-#     option_vanilla = 0
-#     option_shuffle = 1
-#     option_randomize = 2
-#     default = 0
-
 class RandomizeTypeChartTypes(Choice):
     """The game's type chart consists of 3 columns: attacking type, defending type, and type effectiveness.
        Matchups that have regular type effectiveness are not in the chart. Shuffle will shuffle the attacking types
@@ -391,6 +368,8 @@ class StartingMoney(Range):
 
 pokemon_rb_options = {
     "game_version": GameVersion,
+    "trainer_name": TrainerName,
+    "rival_name": RivalName,
     #"goal": Goal,
     "victory_road_condition": VictoryRoadCondition,
     "cerulean_cave_condition": CeruleanCaveCondition,
