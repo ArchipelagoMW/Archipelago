@@ -6,8 +6,9 @@ from typing import NamedTuple, Union
 
 import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
-from .Items import item_table
-from .Locations import location_table, level_locations
+from .Items import item_table, item_amounts_all, item_amounts_standard, item_prices, item_game_ids
+from .Locations import location_table, level_locations, major_locations, shop_locations, cave_locations, \
+    all_level_locations, shop_price_location_ids, secret_money_ids, location_ids
 from .Options import tloz_options
 from .Rom import TLoZDeltaPatch
 from ..AutoWorld import World, WebWorld
@@ -101,11 +102,11 @@ class TLoZWorld(World):
                     self.levels[i + 1].locations.append(
                         self.create_location(location, self.location_name_to_id[location], self.levels[i + 1]))
 
-        for location in Locations.major_locations:
+        for location in major_locations:
             overworld.locations.append(
                 self.create_location(location, self.location_name_to_id[location], overworld))
 
-        for location in Locations.shop_locations:
+        for location in shop_locations:
             overworld.locations.append(
                 self.create_location(location, self.location_name_to_id[location], overworld))
 
@@ -121,7 +122,7 @@ class TLoZWorld(World):
 
     def create_items(self):
         # We guarantee that there will always be a key, bomb, and potion in an ungated shop.
-        reserved_store_slots = random.sample(Locations.shop_locations[0:-3], 3)
+        reserved_store_slots = random.sample(shop_locations[0:-3], 3)
         self.world.get_location(
             reserved_store_slots[0],
             self.player
@@ -140,9 +141,9 @@ class TLoZWorld(World):
         ).place_locked_item(
             self.world.create_item("Water of Life (Red)", self.player))
         start_locked = False
-        item_amounts = Items.item_amounts_all
+        item_amounts = item_amounts_all
         if not self.world.ExpandedPool[self.player]:
-            item_amounts = Items.item_amounts_standard
+            item_amounts = item_amounts_standard
             self.world.get_location(
                 "Take Any Item 1",
                 self.player
@@ -171,10 +172,10 @@ class TLoZWorld(World):
     def set_rules(self):
         # If we're doing a safe start, everything past the starting screen requires a weapon.
         if self.world.StartingPosition[self.player] == 0:
-            for location in Locations.cave_locations:
+            for location in cave_locations:
                 add_rule(self.world.get_location(location, self.player),
                          lambda state: state.has_group("weapons", self.player))
-            for location in Locations.major_locations:
+            for location in major_locations:
                 if location != "Starting Sword Cave":
                     add_rule(self.world.get_location(location, self.player),
                              lambda state: state.has_group("weapons", self.player))
@@ -194,7 +195,7 @@ class TLoZWorld(World):
                          )
         # No requiring anything in a shop until we can farm for money
         # Unless someone likes to live dangerously, of course
-        for location in Locations.shop_locations:
+        for location in shop_locations:
             if self.world.StartingPosition[self.player] != 2:
                 add_rule(self.world.get_location(location, self.player),
                          lambda state: state.has_group("weapons", self.player))
@@ -259,7 +260,7 @@ class TLoZWorld(World):
 
         if self.world.TriforceLocations[self.player] == 1:
             for location in location_table.keys():
-                if location  not in Locations.all_level_locations:
+                if location  not in all_level_locations:
                     forbid_item(self.world.get_location(location, self.player), "Triforce Fragment", self.player)
 
         add_rule(self.world.get_location("Potion Shop Item 1", self.player),
@@ -324,16 +325,16 @@ class TLoZWorld(World):
                 if location.item.player != self.player:
                     item = "Rupee"
 
-                item_id = Items.item_game_ids[item]
-                location_id = Locations.location_ids[location.name]
+                item_id = item_game_ids[item]
+                location_id = location_ids[location.name]
 
                 # Shop prices need to be set
-                if location.name in Locations.shop_locations:
+                if location.name in shop_locations:
                     if location.name[-1] == "3":
                         # Final item in stores has bit 6 and 7 set. It's what marks the cave a shop.
                         item_id = item_id | 0b11000000
-                    price_location = Locations.shop_price_location_ids[location.name]
-                    item_price = Items.item_prices[item]
+                    price_location = shop_price_location_ids[location.name]
+                    item_price = item_prices[item]
                     if item == "Rupee":
                         item_class = location.item.classification
                         if item_class == ItemClassification.progression:
@@ -348,21 +349,21 @@ class TLoZWorld(World):
                 if location.name == "Take Any Item 3":
                     # Same story as above: bit 6 is what makes this a Take Any cave
                     item_id = item_id | 0b01000000
-                if location.name in Locations.all_level_locations:
+                if location.name in all_level_locations:
                     # We want to preserve room flags: darkness and boss roars
                     item_flags = rom_data[location_id] & 0b11100000
                     item_id = item_id | item_flags
                 rom_data[location_id] = item_id
 
             # We shuffle the tiers of rupee caves. Caves that shared a value before still will.
-            secret_caves = random.sample(sorted(Locations.secret_money_ids), 3)
+            secret_caves = random.sample(sorted(secret_money_ids), 3)
             secret_cave_money_amounts = [20, 50, 100]
             for i, amount in enumerate(secret_cave_money_amounts):
                 # Giving approximately double the money to keep grinding down
                 amount = amount * random.triangular(1.5, 2.5)
                 secret_cave_money_amounts[i] = int(amount)
             for i, cave in enumerate(secret_caves):
-                rom_data[Locations.secret_money_ids[cave]] = secret_cave_money_amounts[i]
+                rom_data[secret_money_ids[cave]] = secret_cave_money_amounts[i]
             return rom_data
 
     def generate_output(self, output_directory: str):
