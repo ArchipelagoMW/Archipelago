@@ -10,7 +10,7 @@ from .Items import item_table, item_amounts_all, item_amounts_standard, item_pri
 from .Locations import location_table, level_locations, major_locations, shop_locations, cave_locations, \
     all_level_locations, shop_price_location_ids, secret_money_ids, location_ids
 from .Options import tloz_options
-from .Rom import TLoZDeltaPatch
+from .Rom import TLoZDeltaPatch, get_base_rom_path
 from ..AutoWorld import World, WebWorld
 from ..generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
 
@@ -305,7 +305,7 @@ class TLoZWorld(World):
         rom_data[0x17614:0x17617] = bytearray([0xA9, 0xA1, 0x60])
 
     def apply_randomizer(self):
-        with open(Rom.get_base_rom_path(), 'rb') as rom:
+        with open(get_base_rom_path(), 'rb') as rom:
             rom_data = bytearray(rom.read())
 
             self.apply_base_patch(rom_data)
