@@ -65,13 +65,13 @@ class PokemonRedBlueWorld(World):
 
     def generate_early(self):
         def encode_name(name, t):
-            if len(name) > 7:
-                raise KeyError(f"{t} name too long for player {self.world.player_name[self.player]}. Must be 7 characters or fewer.")
             try:
+                if len(encode_text(name)) > 7:
+                    raise IndexError(f"{t} name too long for player {self.world.player_name[self.player]}. Must be 7 characters or fewer.")
                 return encode_text(name, length=8, whitespace="@", safety=True)
             except KeyError as e:
                 raise KeyError(f"Invalid character(s) in {t} name for player {self.world.player_name[self.player]}") from e
-        self.player_name = encode_name(self.world.trainer_name[self.player].value, "Player")
+        self.trainer_name = encode_name(self.world.trainer_name[self.player].value, "Player")
         self.rival_name = encode_name(self.world.rival_name[self.player].value, "Rival")
 
         if self.world.badges_needed_for_hm_moves[self.player].value >= 2:

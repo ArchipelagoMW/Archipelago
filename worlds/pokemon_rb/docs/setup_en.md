@@ -289,6 +289,24 @@ Pokemon Red - Blue:
 
 ```
 
+For `trainer_name` and `rival_name` the following regular characters are allowed:
+
+* `‘’“”·… ABCDEFGHIJKLMNOPQRSTUVWXYZ():;[]abcdefghijklmnopqrstuvwxyzé'-?!.♂¥$×/,♀0123456789`
+
+And the following special characters (these each take up one character):
+* `<'d>`
+* `<'l>`
+* `<'t>`
+* `<'v>`
+* `<PK>`
+* `<MN>`
+* `<'r>`
+* `<'m>`
+* `<MALE>` alias for `♂`
+* `<FEMALE>` alias for `♀`
+
+
+
 ## Joining a MultiWorld Game
 
 ### Obtain your Pokémon patch file

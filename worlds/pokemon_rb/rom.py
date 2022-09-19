@@ -493,7 +493,7 @@ def generate_output(self, output_directory: str):
     slot_name.replace(">", " ")
     write_bytes(data, encode_text(slot_name, 16, True, True), rom_addresses['Title_Slot_Name'])
 
-    write_bytes(data, self.player_name, rom_addresses['Player_Name'])
+    write_bytes(data, self.trainer_name, rom_addresses['Player_Name'])
     write_bytes(data, self.rival_name, rom_addresses['Rival_Name'])
 
     outfilepname = f'_P{self.player}'

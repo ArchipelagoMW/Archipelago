@@ -1,5 +1,5 @@
 
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict, SpecialRange, FreeText
+from Options import Toggle, Choice, Range, SpecialRange, FreeText
 
 
 class GameVersion(Choice):
