@@ -1,4 +1,4 @@
-# Final Fantasy 1 (NES) Multiworld Setup Guide
+# The Legend of Zelda (NES) Multiworld Setup Guide
 
 ## Required Software
 
@@ -19,32 +19,51 @@
         3. Scroll to the bottom of the list and click the grey text **Look for another App on this PC**
         4. Browse for `EmuHawk.exe` located inside your Bizhawk folder (from step 1) and click **Open**.
 
-## Obtaining your Archipelago yaml file and randomized ROM
+## Create a Config (.yaml) File
 
-Unlike most other Archipelago.gg games Final Fantasy 1 is randomized by the main randomizer at
-the [Final Fantasy Randomizer Homepage](https://finalfantasyrandomizer.com/).
+### What is a config file and why do I need one?
 
-Generate a game by going to the site and performing the following steps:
+See the guide on setting up a basic YAML at the Archipelago setup
+guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
-1. Select the randomization options (also known as `Flags` in the community) of your choice. If you do not know what you
-   prefer, or it is your first time we suggest starting with the 'Shard Hunt' preset (which requires you to collect a
-   number of shards to go to the end dungeon) or the 'Beginner' preset if you prefer to kill the original fiends.
-2. Go to the `Beta` tab and ensure `Archipelago` is enabled. Set your player name to any name that represents you.
-3. Upload you `Final Fantasy(USA).nes` (and click `Remember ROM` for the future!)
-4. Press the `NEW` button beside `Seed` a few times
-5. Click `GENERATE ROM`
+### Where do I get a config file?
 
-It should download two files. One is the `*.nes` file which your emulator will run and the other is the yaml file
-required by Archipelago.gg
+The Player Settings page on the website allows you to configure your personal settings and export a config file from
+them. Player settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legen%20of%20Zelda/player-settings)
 
-At this point you are ready to join the multiworld. If you are uncertain on how to generate, host or join a multiworld
-please refer to the [game agnostic setup guide](/tutorial/Archipelago/setup/en).
+### Verifying your config file
+
+If you would like to validate your config file to make sure it works, you may do so on the YAML Validator page. YAML
+validator page: [YAML Validation page](/mysterycheck)
+
+## Generating a Single-Player Game
+
+1. Navigate to the Player Settings page, configure your options, and click the "Generate Game" button.
+    - Player Settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legen%20of%20Zelda/player-settings)
+2. You will be presented with a "Seed Info" page.
+3. Click the "Create New Room" link.
+4. You will be presented with a server page, from which you can download your patch file.
+5. Double-click on your patch file, and the Zelda 1 Client will launch automatically, create your ROM from the
+   patch file, and open your emulator for you.
+6. Since this is a single-player game, you will no longer need the client, so feel free to close it.
+
+## Joining a MultiWorld Game
+
+### Obtain your patch file and create your ROM
+
+When you join a multiworld game, you will be asked to provide your config file to whoever is hosting. Once that is done,
+the host will provide you with either a link to download your patch file, or with a zip file containing everyone's patch
+files. Your patch file should have a `.aptloz` extension.
+
+Put your patch file on your desktop or somewhere convenient, and double click it. This should automatically launch the
+client, and will also create your ROM in the same place as your patch file.
+
 
 ## Running the Client Program and Connecting to the Server
 
 Once the Archipelago server has been hosted:
 
-1. Navigate to your Archipelago install folder and run `ArchipelagoFF1Client.exe`
+1. Navigate to your Archipelago install folder and run `ArchipelagoZelda1Client.exe`
 2. Notice the `/connect command` on the server hosting page (It should look like `/connect archipelago.gg:*****`
    where ***** are numbers)
 3. Type the connect command into the client OR add the port to the pre-populated address on the top bar (it should
@@ -56,7 +75,7 @@ Once the Archipelago server has been hosted:
    extension `*.nes`
 2. Click on the Tools menu and click on **Lua Console**
 3. Click the folder button to open a new Lua script. (CTL-O or **Script** -> **Open Script**)
-4. Navigate to the location you installed Archipelago to. Open data/lua/FF1/ff1_connector.lua
+4. Navigate to the location you installed Archipelago to. Open data/lua/TLOZ/tloz_connector.lua
     1. If it gives a `NLua.Exceptions.LuaScriptException: .\socket.lua:13: module 'socket.core' not found:` exception
        close your emulator entirely, restart it and re-run these steps
     2. If it says `Must use a version of bizhawk 2.3.1 or higher`, double-check your Bizhawk version by clicking **
@@ -71,3 +90,22 @@ NES at any time by running `/nes`
 
 All other commands may be found on the [Archipelago Server and Client Commands Guide](/tutorial/Archipelago/commands/en)
 .
+
+## Known Issues
+
+- Shop items are not checked retroactively: if you do not have the client connected at the time you purchase a 
+shop item, Archipelago will not be made aware of it.
+- There is no tracking for what shop slots have been purchased. If you don't trust your memory, take notes or use the 
+`!missing` command.
+- Similarly, Take Any caves have no record of which items have been taken. As with shops, the `!missing` command can 
+prove helpful.
+- Stranding an item in the Take Any caves can result in an unwinnable game. Similarly, a Dangerous start can make poor
+shopping decisions and not have a weapon or way to obtain one. While there are no unwinnable starts, there is no
+protection against obviously bad decisions in order to increase the possible randomness.
+- Triforce Fragments and Heart Containers may be purchased multiple times. It is up to you if you wish to take advantage
+of this; logic will not account for or require purchasing any slot more than once. Remote items, no matter what they
+are, will always only be sent once.
+- Second Quest is unsupported.
+- Obtaining a remote item will move the location of any existing item in that room. Should this make an item 
+inaccessible, simply exit and re-enter the room. This can be used to obtain the Ocean Heart Container item without the
+stepladder; logic does not account for this.

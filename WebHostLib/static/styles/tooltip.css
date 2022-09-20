@@ -14,7 +14,6 @@ give it one of the following classes: tooltip-left, tooltip-right, tooltip-top, 
 /* Base styles for the element that has a tooltip */
 [data-tooltip], .tooltip {
 	position: relative;
-	cursor: pointer;
 }
 
 /* Base styles for the entire tooltip */
@@ -55,14 +54,15 @@ give it one of the following classes: tooltip-left, tooltip-right, tooltip-top, 
 
 /** Content styles */
 .tooltip:after, [data-tooltip]:after {
+	width: 260px;
 	z-index: 10000;
 	padding: 8px;
-	width: 160px;
     border-radius: 4px;
 	background-color: #000;
 	background-color: hsla(0, 0%, 20%, 0.9);
 	color: #fff;
 	content: attr(data-tooltip);
+	white-space: pre-wrap;
 	font-size: 14px;
 	line-height: 1.2;
 }

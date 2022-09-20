@@ -1,6 +1,7 @@
 # Based (read: copied almost wholesale and edited) off the FF1 Client.
 
 import asyncio
+import copy
 import json
 import logging
 import time
@@ -9,7 +10,7 @@ from typing import List
 
 
 import Utils
-import worlds
+from worlds import lookup_any_location_id_to_name
 from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, ClientCommandProcessor, logger, \
     get_base_parser
 
@@ -52,6 +53,9 @@ class ZeldaCommandProcessor(ClientCommandProcessor):
 class ZeldaContext(CommonContext):
     command_processor = ZeldaCommandProcessor
     items_handling = 0b101  # get sent remote and starting items
+    # Infinite Hyrule compatibility
+    overworld_item = 0x5F
+    armos_item = 0x24
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -85,32 +89,28 @@ class ZeldaContext(CommonContext):
             msg = args['text']
             if ': !' not in msg:
                 self._set_message(msg, SYSTEM_MESSAGE_ID)
-        elif cmd == "ReceivedItems":
-            msg = f"Received {', '.join([self.item_names[item.item] for item in args['items']])}"
-            self._set_message(msg, SYSTEM_MESSAGE_ID)
-        elif cmd == 'PrintJSON':
-            print_type = args['type']
-            item = args['item']
-            receiving_player_id = args['receiving']
-            receiving_player_name = self.player_names[receiving_player_id]
-            sending_player_id = item.player
-            sending_player_name = self.player_names[item.player]
-            if print_type == 'Hint':
-                msg = f"Hint: Your {self.item_names[item.item]} is at" \
-                      f" {self.player_names[item.player]}'s {self.location_names[item.location]}"
-                self._set_message(msg, item.item)
-            elif print_type == 'ItemSend' and receiving_player_id != self.slot:
-                if sending_player_id == self.slot:
-                    if receiving_player_id == self.slot:
-                        msg = f"You found your own {self.item_names[item.item]}"
-                    else:
-                        msg = f"You sent {self.item_names[item.item]} to {receiving_player_name}"
-                else:
-                    if receiving_player_id == sending_player_id:
-                        msg = f"{sending_player_name} found their {self.item_names[item.item]}"
-                    else:
-                        msg = f"{sending_player_name} sent {self.item_names[item.item]} to " \
-                              f"{receiving_player_name}"
+
+    def on_print_json(self, args: dict):
+        if self.ui:
+            self.ui.print_json(copy.deepcopy(args["data"]))
+        else:
+            text = self.jsontotextparser(copy.deepcopy(args["data"]))
+            logger.info(text)
+        relevant = args.get("type", None) in {"Hint", "ItemSend"}
+        if relevant:
+            item = args["item"]
+            # goes to this world
+            if self.slot_concerns_self(args["receiving"]):
+                relevant = True
+            # found in this world
+            elif self.slot_concerns_self(item.player):
+                relevant = True
+            # not related
+            else:
+                relevant = False
+            if relevant:
+                item = args["item"]
+                msg = self.raw_text_parser(copy.deepcopy(args["data"]))
                 self._set_message(msg, item.item)
 
     def run_gui(self):
@@ -146,10 +146,14 @@ async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone=
         locations_checked = []
         location = None
         for location in ctx.missing_locations:
-            location_name = worlds.lookup_any_location_id_to_name[location]
+            location_name = lookup_any_location_id_to_name[location]
 
             if location_name in Locations.overworld_locations and zone == "overworld":
                 status = locations_array[Locations.major_location_offsets[location_name]]
+                if location_name == "Ocean Heart Container":
+                    status = locations_array[ctx.overworld_item]
+                if location_name == "Armos Knights":
+                    status = locations_array[ctx.armos_item]
                 if status & 0x10:
                     ctx.locations_checked.add(location)
                     locations_checked.append(location)
@@ -199,7 +203,15 @@ async def nes_sync_task(ctx: ZeldaContext):
                     # 2. An array representing the memory values of the locations area (if in game)
                     data = await asyncio.wait_for(reader.readline(), timeout=5)
                     data_decoded = json.loads(data.decode())
-                    if data_decoded['gameMode'] == 19:
+                    if data_decoded["overworldHC"] is not None:
+                        ctx.overworld_item = data_decoded["overworldHC"]
+                    if data_decoded["overworldPB"] is not None:
+                        ctx.armos_item = data_decoded["overworldPB"]
+                    if data_decoded['gameMode'] == 19 and ctx.finished_game == False:
+                        await ctx.send_msgs([
+                            {"cmd": "StatusUpdate",
+                             "status": 30}
+                        ])
                         ctx.finished_game = True
                     if ctx.game is not None and 'overworld' in data_decoded:
                         # Not just a keep alive ping, parse

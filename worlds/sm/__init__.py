@@ -9,8 +9,6 @@ from typing import Set, List, TextIO
 
 logger = logging.getLogger("Super Metroid")
 
-from .Locations import lookup_name_to_id as locations_lookup_name_to_id
-from .Items import lookup_name_to_id as items_lookup_name_to_id
 from .Regions import create_regions
 from .Rules import set_rules, add_entrance_rule
 from .Options import sm_options
@@ -66,6 +64,8 @@ class SMWeb(WebWorld):
         ["Farrak Kilhn"]
     )]
 
+locations_start_id = 82000
+items_start_id = 83000
 
 class SMWorld(World):
     """
@@ -76,12 +76,11 @@ class SMWorld(World):
 
     game: str = "Super Metroid"
     topology_present = True
-    data_version = 1
-    options = sm_options
-    item_names: Set[str] = frozenset(items_lookup_name_to_id)
-    location_names: Set[str] = frozenset(locations_lookup_name_to_id)
-    item_name_to_id = items_lookup_name_to_id
-    location_name_to_id = locations_lookup_name_to_id
+    data_version = 2
+    option_definitions = sm_options
+
+    item_name_to_id = {value.Name: items_start_id + value.Id for key, value in ItemManager.Items.items() if value.Id != None}
+    location_name_to_id = {key: locations_start_id + value.Id for key, value in locationsDict.items() if value.Id != None}
     web = SMWeb()
 
     remote_items: bool = False
@@ -280,13 +279,15 @@ class SMWorld(World):
         for itemLoc in self.world.get_locations():
             romPlayerID = itemLoc.item.player if itemLoc.item.player <= ROM_PLAYER_LIMIT else 0
             if itemLoc.player == self.player and locationsDict[itemLoc.name].Id != None:
-                if itemLoc.item.type in ItemManager.Items:
-                    itemId = ItemManager.Items[itemLoc.item.type].Id 
+                # this SM world can find this item: write full item data to tables and assign player data for writing
+                romPlayerID = itemLoc.item.player if itemLoc.item.player <= ROM_PLAYER_LIMIT else 0
+                if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items:
+                    itemId = ItemManager.Items[itemLoc.item.type].Id
                 else:
                     itemId = ItemManager.Items['ArchipelagoItem'].Id + idx
                     multiWorldItems[0x029EA3 + idx*64] = self.convertToROMItemName(itemLoc.item.name)
                     idx += 1
-                
+
                 if (romPlayerID > 0 and romPlayerID not in self.playerIDMap.keys()):
                     playerIDCount += 1
                     self.playerIDMap[romPlayerID] = playerIDCount
@@ -416,8 +417,14 @@ class SMWorld(World):
 
         romPatcher.commitIPS()
 
-        itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == self.player]
-        romPatcher.writeItemsLocs(itemLocs) 
+        itemLocs = [
+            ItemLocation(ItemManager.Items[itemLoc.item.type
+                         if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
+                         'ArchipelagoItem'],
+                         locationsDict[itemLoc.name], True)
+            for itemLoc in self.world.get_locations() if itemLoc.player == self.player
+        ]
+        romPatcher.writeItemsLocs(itemLocs)
 
         itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.world.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.world.get_locations() if itemLoc.item.player == self.player] 
         progItemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.world.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.world.get_locations() if itemLoc.item.player == self.player and itemLoc.item.advancement == True] 
@@ -489,7 +496,7 @@ class SMWorld(World):
     def fill_slot_data(self): 
         slot_data = {}
         if not self.world.is_race:
-            for option_name in self.options:
+            for option_name in self.option_definitions:
                 option = getattr(self.world, option_name)[self.player]
                 slot_data[option_name] = option.value
 
@@ -582,8 +589,7 @@ class SMWorld(World):
                 loc.address = loc.item.code = None
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
-                        restitempool, fill_locations):      
+    def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
         if world.get_game_players("Super Metroid"):
             progitempool.sort(
                 key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
@@ -622,8 +628,8 @@ class SMWorld(World):
                                                             dest.Name) for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions if src.Boss]))
 
 def create_locations(self, player: int):
-    for name, id in locations_lookup_name_to_id.items():
-        self.locations[name] = SMLocation(player, name, id)
+    for name in locationsDict:
+        self.locations[name] = SMLocation(player, name, self.location_name_to_id.get(name, None))
 
 
 def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):

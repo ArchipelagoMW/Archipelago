@@ -15,9 +15,9 @@ class TriforceLocations(Choice):
     option_anywhere = 2
 
 class StartingPosition(Choice):
-    """How easy is the start of the game. <em>Safe</em> means a weapon is guaranteed in Wooden Sword Cave.
-    <em>Unsafe</em> means that progression is guaranteed between Wooden Sword Cave, Letter Cave, and Armos Knight
-    as well as any locations they unlock. <em>Dangerous</em> can require seeking out money and gambling caves in order
+    """How easy is the start of the game. Safe means a weapon is guaranteed in Starting Sword Cave.
+    Unsafe means that progression is guaranteed between Starting Sword Cave, Letter Cave, and Armos Knight
+    as well as any locations they unlock. Dangerous can require seeking out money and gambling caves in order
     to purchase initial progression."""
     display_name = "Starting Position"
     option_safe = 0

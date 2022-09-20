@@ -142,7 +142,7 @@ class HKWorld(World):
     As the enigmatic Knight, you’ll traverse the depths, unravel its mysteries and conquer its evils.
     """  # from https://www.hollowknight.com
     game: str = "Hollow Knight"
-    options = hollow_knight_options
+    option_definitions = hollow_knight_options
 
     web = HKWeb()
 
@@ -435,7 +435,7 @@ class HKWorld(World):
         slot_data = {}
 
         options = slot_data["options"] = {}
-        for option_name in self.options:
+        for option_name in self.option_definitions:
             option = getattr(self.world, option_name)[self.player]
             try:
                 optionvalue = int(option.value)

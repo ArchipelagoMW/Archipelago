@@ -7,6 +7,7 @@
 *.apm3
 *.apmc
 *.apz5
+*.aptloz
 *.pyc
 *.pyd
 *.sfc
@@ -28,6 +29,7 @@ README.html
 .vs/
 EnemizerCLI/
 /Players/
+/SNI/
 /options.yaml
 /config.yaml
 /logs/
