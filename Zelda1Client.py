@@ -10,7 +10,7 @@ from typing import List
 
 
 import Utils
-import worlds
+from worlds import lookup_any_location_id_to_name
 from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, ClientCommandProcessor, logger, \
     get_base_parser
 
@@ -146,7 +146,7 @@ async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone=
         locations_checked = []
         location = None
         for location in ctx.missing_locations:
-            location_name = worlds.lookup_any_location_id_to_name[location]
+            location_name = lookup_any_location_id_to_name[location]
 
             if location_name in Locations.overworld_locations and zone == "overworld":
                 status = locations_array[Locations.major_location_offsets[location_name]]
