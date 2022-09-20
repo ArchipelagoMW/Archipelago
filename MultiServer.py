@@ -126,6 +126,7 @@ class Context:
     location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     forced_auto_forfeits: typing.Dict[str, bool]
+    non_hintable_names: typing.Dict[str, typing.Set[str]]
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
@@ -196,7 +197,7 @@ class Context:
         self.item_name_groups = {}
         self.all_item_and_group_names = {}
         self.forced_auto_forfeits = collections.defaultdict(lambda: False)
-        self.non_hintable_names = {}
+        self.non_hintable_names = collections.defaultdict(frozenset)
 
         self._load_game_data()
         self._init_game_data()
