@@ -592,9 +592,7 @@ def handle_level_shuffle(rom, active_level_dict):
         if level_id > 0x80:
             level_id = level_id - 0x50
 
-        print("Writing: ", hex(tile_data.levelIDAddress), " | ", hex(level_id))
         rom.write_byte(tile_data.levelIDAddress, level_id)
-        print("Writing: ", hex(0x2D608 + level_id), " | ", hex(tile_data.eventIDValue))
         rom.write_byte(0x2D608 + level_id, tile_data.eventIDValue)
 
     for level_id, tile_id in active_level_dict.items():

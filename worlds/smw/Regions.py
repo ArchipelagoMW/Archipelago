@@ -10,11 +10,7 @@ from ..generic.Rules import add_rule, set_rule
 def create_regions(world, player: int, active_locations):
     menu_region = create_region(world, player, active_locations, 'Menu', None)
 
-    yoshis_island_region_locations = []
-    if world.goal[player] == "yoshi_egg_hunt":
-        yoshis_island_region_locations.append(LocationName.yoshis_house)
-    yoshis_island_region = create_region(world, player, active_locations, LocationName.yoshis_island_region,
-                                         yoshis_island_region_locations)
+    yoshis_island_region = create_region(world, player, active_locations, LocationName.yoshis_island_region, None)
     donut_plains_region = create_region(world, player, active_locations, LocationName.donut_plains_region, None)
     vanilla_dome_region = create_region(world, player, active_locations, LocationName.vanilla_dome_region, None)
     twin_bridges_region = create_region(world, player, active_locations, LocationName.twin_bridges_region, None)
@@ -26,7 +22,12 @@ def create_regions(world, player: int, active_locations):
 
 
     yoshis_house_tile = create_region(world, player, active_locations, LocationName.yoshis_house_tile, None)
-    yoshis_house_region = create_region(world, player, active_locations, LocationName.yoshis_house, None)
+
+    yoshis_house_region_locations = []
+    if world.goal[player] == "yoshi_egg_hunt":
+        yoshis_house_region_locations.append(LocationName.yoshis_house)
+    yoshis_house_region = create_region(world, player, active_locations, LocationName.yoshis_house,
+                                        yoshis_house_region_locations)
 
     yoshis_island_1_tile = create_region(world, player, active_locations, LocationName.yoshis_island_1_tile, None)
     yoshis_island_1_region = create_region(world, player, active_locations, LocationName.yoshis_island_1_region, None)
@@ -1006,7 +1007,7 @@ def connect_regions(world, player, level_to_tile_dict):
     connect(world, player, names, LocationName.valley_of_bowser_2_region, LocationName.valley_of_bowser_2_exit_2,
             lambda state: state.has(ItemName.mario_carry, player))
     connect(world, player, names, LocationName.valley_of_bowser_3_region, LocationName.valley_of_bowser_3_exit_1)
-    connect(world, player, names, LocationName.valley_of_bowser_2_region, LocationName.valley_of_bowser_2_exit_1,
+    connect(world, player, names, LocationName.valley_of_bowser_4_region, LocationName.valley_of_bowser_4_exit_1,
             lambda state: state.has(ItemName.mario_climb, player))
     connect(world, player, names, LocationName.valley_of_bowser_4_region, LocationName.valley_of_bowser_4_exit_2,
             lambda state: (state.has(ItemName.mario_climb, player) and

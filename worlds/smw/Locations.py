@@ -118,8 +118,6 @@ level_location_table = {
     LocationName.valley_castle:             0xBC004F,
     LocationName.valley_koopaling:          0xBC00A6,
 
-    LocationName.front_door:  0xBC0050,
-
     LocationName.star_road_1_exit_1: 0xBC0051,
     LocationName.star_road_1_exit_2: 0xBC0052,
     LocationName.star_road_2_exit_1: 0xBC0053,
