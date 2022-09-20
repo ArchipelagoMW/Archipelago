@@ -39,9 +39,10 @@ class SMWWorld(World):
     lost all of his abilities. Can he get them back in time to save the Princess?
     """
     game: str = "Super Mario World"
-    options = smw_options
+    option_definitions = smw_options
     topology_present = False
     data_version = 0
+    required_client_version = (0, 3, 5)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
@@ -216,7 +217,8 @@ class SMWWorld(World):
                     if level_index >= world_cutoffs[i]:
                         continue
 
-                    #print("Hint Found: ", loc_name, " | ", hex(level_index), " | ", world_names[i])
+                    if self.world.dragon_coin_checks[self.player].value == 0 and "Dragon Coins" in loc_name:
+                        continue
 
                     location = self.world.get_location(loc_name, self.player)
                     er_hint_data[location.address] = world_names[i]
