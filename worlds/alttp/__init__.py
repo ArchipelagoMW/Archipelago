@@ -12,7 +12,8 @@ from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
 from .Options import alttp_options, smallkey_shuffle
-from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
+from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
+    is_main_entrance
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
@@ -23,6 +24,7 @@ from ..AutoWorld import World, WebWorld, LogicMixin
 lttp_logger = logging.getLogger("A Link to the Past")
 
 extras_list = sum(difficulties['normal'].extras[0:5], [])
+
 
 class ALTTPWeb(WebWorld):
     setup_en = Tutorial(
@@ -409,6 +411,20 @@ class ALTTPWorld(World):
             raise
         finally:
             self.rom_name_available_event.set() # make sure threading continues and errors are collected
+
+    @classmethod
+    def stage_extend_hint_information(cls, world, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+        er_hint_data = {player: {} for player in world.get_game_players("A Link to the Past") if
+                        world.shuffle[player] != "vanilla" or world.retro_caves[player]}
+
+        for region in world.regions:
+            if region.player in er_hint_data and region.locations:
+                main_entrance = region.get_connecting_entrance(is_main_entrance)
+                for location in region.locations:
+                    if type(location.address) == int:  # skips events and crystals
+                        if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
+                            er_hint_data[region.player][location.address] = main_entrance.name
+        hint_data.update(er_hint_data)
 
     def modify_multidata(self, multidata: dict):
         import base64

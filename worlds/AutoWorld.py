@@ -240,6 +240,11 @@ class World(metaclass=AutoWorldRegister):
         """Fill in the slot_data field in the Connected network package."""
         return {}
 
+    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+        """Fill in additional entrance information text into locations, which is displayed when hinted.
+        structure is {player_id: {location_id: text}} You will need to insert your own player_id."""
+        pass
+
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
         """For deeper modification of server multidata."""
         pass
