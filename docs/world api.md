@@ -195,8 +195,10 @@ AP will pick up your world automatically due to the `AutoWorld` implementation.
 ### Requirements
 
 If your world needs specific python packages, they can be listed in
-`world/[world_name]/requirements.txt`.
-See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format)
+`world/[world_name]/requirements.txt`. ModuleUpdate.py will automatically
+pick up and install them.
+
+See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format).
 
 ### Relative Imports
 
