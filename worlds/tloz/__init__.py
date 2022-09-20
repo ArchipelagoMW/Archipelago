@@ -366,7 +366,11 @@ class TLoZWorld(World):
                     item_id = item_id | 0b01000000
                 if location.name in all_level_locations:
                     # We want to preserve room flags: darkness and boss roars
-                    item_flags = rom_data[location_id] & 0b11100000
+                    room_flags = rom_data[location_id]
+                    # Since we're stealing a bit for more items, we need to change any bit 6 boss roars to bit 7.
+                    if room_flags & 0b00100000 > 0:
+                        room_flags = room_flags | 0b01000000
+                    item_flags = room_flags & 0b11000000
                     item_id = item_id | item_flags
                 rom_data[location_id] = item_id
 
