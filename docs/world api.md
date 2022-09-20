@@ -188,15 +188,17 @@ the `/worlds` directory. The starting point for the package is `__init.py__`.
 Conventionally, your world class is placed in that file.
 
 World classes must inherit from the `World` class in `/worlds/AutoWorld.py`,
-which can be imported as `..AutoWorld.World` from your package.
+which can be imported as `worlds.AutoWorld.World` from your package.
 
 AP will pick up your world automatically due to the `AutoWorld` implementation.
 
 ### Requirements
 
 If your world needs specific python packages, they can be listed in
-`world/[world_name]/requirements.txt`.
-See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format)
+`world/[world_name]/requirements.txt`. ModuleUpdate.py will automatically
+pick up and install them.
+
+See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format).
 
 ### Relative Imports
 
@@ -208,6 +210,10 @@ e.g. `from .Options import mygame_options` from your `__init__.py` will load
 
 When imported names pile up it may be easier to use `from . import Options`
 and access the variable as `Options.mygame_options`.
+
+Imports from directories outside your world should use absolute imports.
+Correct use of relative / absolute imports is required for zipped worlds to
+function, see [apworld specification.md](apworld%20specification.md).
 
 ### Your Item Type
 
@@ -274,14 +280,12 @@ Define a property `option_<name> = <number>` per selectable value and
 `default = <number>` to set the default selection. Aliases can be set by
 defining a property `alias_<name> = <same number>`.
 
-One special case where aliases are required is when option name is `yes`, `no`,
-`on` or `off` because they parse to `True` or `False`:
 ```python
 option_off = 0
 option_on = 1
 option_some = 2
-alias_false = 0
-alias_true = 1
+alias_disabled = 0
+alias_enabled = 1
 default = 0
 ```
 
@@ -323,7 +327,7 @@ mygame_options: typing.Dict[str, type(Option)] = {
 ```python
 # __init__.py
 
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 from .Options import mygame_options  # import the options dict
 
 class MyGameWorld(World):
@@ -352,7 +356,7 @@ more natural. These games typically have been edited to 'bake in' the items.
 from .Options import mygame_options  # the options we defined earlier
 from .Items import mygame_items  # data used below to add items to the World
 from .Locations import mygame_locations  # same as above
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 from BaseClasses import Region, Location, Entrance, Item, RegionType, ItemClassification
 from Utils import get_options, output_path
 
@@ -553,7 +557,7 @@ def generate_basic(self) -> None:
 ### Setting Rules
 
 ```python
-from ..generic.Rules import add_rule, set_rule, forbid_item
+from worlds.generic.Rules import add_rule, set_rule, forbid_item
 from Items import get_item_type
 
 def set_rules(self) -> None:
@@ -603,7 +607,7 @@ implement more complex logic in logic mixins, even if there is no need to add
 properties to the `BaseClasses.CollectionState` state object.
 
 When importing a file that defines a class that inherits from
-`..AutoWorld.LogicMixin` the state object's class is automatically extended by
+`worlds.AutoWorld.LogicMixin` the state object's class is automatically extended by
 the mixin's members. These members should be prefixed with underscore following
 the name of the implementing world. This is due to sharing a namespace with all
 other logic mixins.
@@ -622,7 +626,7 @@ Please do this with caution and only when neccessary.
 ```python
 # Logic.py
 
-from ..AutoWorld import LogicMixin
+from worlds.AutoWorld import LogicMixin
 
 class MyGameLogic(LogicMixin):
     def _mygame_has_key(self, world: MultiWorld, player: int):
@@ -633,7 +637,7 @@ class MyGameLogic(LogicMixin):
 ```python
 # __init__.py
 
-from ..generic.Rules import set_rule
+from worlds.generic.Rules import set_rule
 import .Logic  # apply the mixin by importing its file
 
 class MyGameWorld(World):

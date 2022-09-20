@@ -15,9 +15,6 @@ import typing
 
 from json import loads, dumps
 
-import ModuleUpdate
-ModuleUpdate.update()
-
 from Utils import init_logging, messagebox
 
 if __name__ == "__main__":
