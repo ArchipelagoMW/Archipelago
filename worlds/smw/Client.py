@@ -27,12 +27,13 @@ SMW_PATH_DATA         = WRAM_START + 0x1EA2
 SMW_EVENT_ROM_DATA    = ROM_START + 0x2D608
 SMW_ACTIVE_LEVEL_DATA = ROM_START + 0x37F70
 
-SMW_GOAL_DATA              = ROM_START + 0x01BFA0
-SMW_REQUIRED_BOSSES_DATA   = ROM_START + 0x01BFA1
-SMW_REQUIRED_EGGS_DATA     = ROM_START + 0x01BFA2
-SMW_SEND_MSG_DATA          = ROM_START + 0x01BFA3
-SMW_RECEIVE_MSG_DATA       = ROM_START + 0x01BFA4
-SMW_DEATH_LINK_ACTIVE_ADDR = ROM_START + 0x01BFA5
+SMW_GOAL_DATA                = ROM_START + 0x01BFA0
+SMW_REQUIRED_BOSSES_DATA     = ROM_START + 0x01BFA1
+SMW_REQUIRED_EGGS_DATA       = ROM_START + 0x01BFA2
+SMW_SEND_MSG_DATA            = ROM_START + 0x01BFA3
+SMW_RECEIVE_MSG_DATA         = ROM_START + 0x01BFA4
+SMW_DEATH_LINK_ACTIVE_ADDR   = ROM_START + 0x01BFA5
+SMW_DRAGON_COINS_ACTIVE_ADDR = ROM_START + 0x01BFA6
 
 SMW_GAME_STATE_ADDR    = WRAM_START + 0x100
 SMW_MARIO_STATE_ADDR   = WRAM_START + 0x71
@@ -238,6 +239,7 @@ async def smw_game_watcher(ctx: Context):
         event_data = await snes_read(ctx, SMW_EVENT_ROM_DATA, 0x60)
         progress_data = bytearray(await snes_read(ctx, SMW_PROGRESS_DATA, 0x0F))
         dragon_coins_data = bytearray(await snes_read(ctx, SMW_DRAGON_COINS_DATA, 0x0C))
+        dragon_coins_active = await snes_read(ctx, SMW_DRAGON_COINS_ACTIVE_ADDR, 0x1)
         from worlds.smw.Rom import item_rom_data, ability_rom_data
         from worlds.smw.Levels import location_id_to_level_id, level_info_dict
         for loc_name, level_data in location_id_to_level_id.items():
@@ -248,6 +250,8 @@ async def smw_game_watcher(ctx: Context):
 
                 if level_data[1] == 2:
                     # Dragon Coins Check
+                    if not dragon_coins_active or dragon_coins_active[0] == 0:
+                        continue
 
                     progress_byte = (level_data[0] // 8)
                     progress_bit  = 7 - (level_data[0] % 8)

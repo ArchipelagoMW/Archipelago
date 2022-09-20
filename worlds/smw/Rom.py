@@ -726,6 +726,7 @@ def patch_rom(world, rom, player, active_level_dict):
     #rom.write_byte(0x01BFA3, world.display_sent_item_popups[player].value)
     rom.write_byte(0x01BFA4, world.display_received_item_popups[player].value)
     rom.write_byte(0x01BFA5, world.death_link[player].value)
+    rom.write_byte(0x01BFA6, world.dragon_coin_checks[player].value)
 
 
     from Main import __version__
