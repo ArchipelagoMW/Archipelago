@@ -5,6 +5,8 @@ Archipelago init file for The Witness
 import typing
 
 from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance, Tutorial, ItemClassification
+from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
+    get_priority_hint_items, make_hints
 from ..AutoWorld import World, WebWorld
 from .player_logic import StaticWitnessLogic, WitnessPlayerLogic
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
@@ -12,7 +14,7 @@ from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems
 from .rules import set_rules
 from .regions import WitnessRegions
 from .Options import is_option_enabled, the_witness_options, get_option_value
-from .utils import best_junk_to_add_based_on_weights
+from .utils import best_junk_to_add_based_on_weights, get_audio_logs
 from logging import warning
 
 
@@ -59,6 +61,7 @@ class WitnessWorld(World):
             'door_hexes': self.items.DOORS,
             'symbols_not_in_the_game': self.items.SYMBOLS_NOT_IN_THE_GAME,
             'disabled_panels': self.player_logic.COMPLETELY_DISABLED_CHECKS,
+            'log_ids_to_hints': self.log_ids_to_hints,
         }
 
     def generate_early(self):
@@ -76,6 +79,8 @@ class WitnessWorld(World):
         self.locat = WitnessPlayerLocations(self.world, self.player, self.player_logic)
         self.items = WitnessPlayerItems(self.locat, self.world, self.player, self.player_logic)
         self.regio = WitnessRegions(self.locat)
+
+        self.log_ids_to_hints = dict()
 
         self.junk_items_created = {key: 0 for key in self.items.JUNK_WEIGHTS.keys()}
 
@@ -136,6 +141,27 @@ class WitnessWorld(World):
 
     def set_rules(self):
         set_rules(self.world, self.player, self.player_logic, self.locat)
+
+    def post_fill(self):
+        hint_amount = 16
+
+        credits_hint = ("This Randomizer", "is brought to you by", "NewSoupVi, Jarno, jbzdarkid, sigma144")
+
+        generated_hints = make_hints(self.world, self.player, hint_amount)
+
+        audio_logs = get_audio_logs()
+
+        extra_log = audio_logs.pop(self.world.random.randrange(len(audio_logs)))
+
+        for i in range(0, len(audio_logs), 3):
+            audio_log_chunk = audio_logs[i:i + 3]
+
+            hint = generated_hints.pop()
+
+            for audio_log in audio_log_chunk:
+                self.log_ids_to_hints[int(audio_log, 16)] = hint
+
+        self.log_ids_to_hints[int(extra_log, 16)] = credits_hint
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()

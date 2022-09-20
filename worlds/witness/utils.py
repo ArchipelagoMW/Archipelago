@@ -134,3 +134,8 @@ def get_doors_max_list():
 @cache_argsless
 def get_laser_shuffle():
     return get_adjustment_file("settings/Laser_Shuffle.txt")
+
+
+@cache_argsless
+def get_audio_logs():
+    return get_adjustment_file("settings/Audio_Logs.txt")
