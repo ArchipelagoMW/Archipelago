@@ -86,6 +86,7 @@ def set_rules(world, player: int, area_connections):
         # which would make it impossible to reach downtown area without the cannon.
         add_rule(world.get_location("WDW: Quick Race Through Downtown!", player), lambda state: state.has("Cannon Unlock WDW", player))
         add_rule(world.get_location("WDW: Go to Town for Red Coins", player), lambda state: state.has("Cannon Unlock WDW", player))
+        add_rule(world.get_location("WDW: 1Up Block in Downtown", player), lambda state: state.has("Cannon Unlock WDW", player))
 
     if world.StrictCapRequirements[player]:
         add_rule(world.get_location("BoB: Mario Wings to the Sky", player), lambda state: state.has("Wing Cap", player))
@@ -109,7 +110,8 @@ def set_rules(world, player: int, area_connections):
             add_rule(world.get_location("BoB: 100 Coins", player), lambda state: state.has("Cannon Unlock BoB", player) or state.has("Wing Cap", player))
 
     #Rules for Secret Stars
-    add_rule(world.get_location("Wing Mario Over the Rainbow", player), lambda state: state.has("Wing Cap", player))
+    add_rule(world.get_location("Wing Mario Over the Rainbow Red Coins", player), lambda state: state.has("Wing Cap", player))
+    add_rule(world.get_location("Wing Mario Over the Rainbow 1Up Block", player), lambda state: state.has("Wing Cap", player))
     add_rule(world.get_location("Toad (Basement)", player), lambda state: state.can_reach("Basement", 'Region', player) and state.has("Power Star", player, 12))
     add_rule(world.get_location("Toad (Second Floor)", player), lambda state: state.can_reach("Second Floor", 'Region', player) and state.has("Power Star", player, 25))
     add_rule(world.get_location("Toad (Third Floor)", player), lambda state: state.can_reach("Third Floor", 'Region', player) and state.has("Power Star", player, 35))

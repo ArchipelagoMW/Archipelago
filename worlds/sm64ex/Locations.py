@@ -46,6 +46,9 @@ locCCM_table = {
     "CCM: Snowman's Lost His Head": 3626025,
     "CCM: Wall Kicks Will Work": 3626026,
     "CCM: Bob-omb Buddy": 3626203,
+    "CCM: 1Up Block Near Snowman": 3626215,
+    "CCM: 1Up Block Ice Pillar": 3626216,
+    "CCM: 1Up Block Secret Slide": 3626217
 }
 
 #Big Boo's Haunt
@@ -55,7 +58,8 @@ locBBH_table = {
     "BBH: Secret of the Haunted Books": 3626030,
     "BBH: Seek the 8 Red Coins": 3626031,
     "BBH: Big Boo's Balcony": 3626032,
-    "BBH: Eye to Eye in the Secret Room": 3626033
+    "BBH: Eye to Eye in the Secret Room": 3626033,
+    "BBH: 1Up Block Top of Mansion": 3626218
 }
 
 #Hazy Maze Cave
@@ -65,7 +69,9 @@ locHMC_table = {
     "HMC: Metal-Head Mario Can Move!": 3626037,
     "HMC: Navigating the Toxic Maze": 3626038,
     "HMC: A-Maze-Ing Emergency Exit": 3626039,
-    "HMC: Watch for Rolling Rocks": 3626040
+    "HMC: Watch for Rolling Rocks": 3626040,
+    "HMC: 1Up Block above Pit": 3626219,
+    "HMC: 1Up Block Past Rolling Rocks": 3626220,
 }
 
 #Lethal Lava Land
@@ -87,6 +93,9 @@ locSSL_table = {
     "SSL: Free Flying for 8 Red Coins": 3626053,
     "SSL: Pyramid Puzzle": 3626054,
     "SSL: Bob-omb Buddy": 3626207,
+    "SSL: 1Up Block Outside Pyramid": 3626221,
+    "SSL: 1Up Block Pyramid Left Path": 3626222,
+    "SSL: 1Up Block Pyramid Back": 3626223
 }
 
 #Dire, Dire Docks
@@ -108,6 +117,8 @@ locSL_table = {
     "SL: Shell Shreddin' for Red Coins": 3626067,
     "SL: Into the Igloo": 3626068,
     "SL: Bob-omb Buddy": 3626209,
+    "SL: 1Up Block Near Moneybags": 3626224,
+    "SL: 1Up Block inside Igloo": 3626225
 }
 
 #Wet-Dry World
@@ -119,6 +130,7 @@ locWDW_table = {
     "WDW: Go to Town for Red Coins": 3626074,
     "WDW: Quick Race Through Downtown!": 3626075,
     "WDW: Bob-omb Buddy": 3626210,
+    "WDW: 1Up Block in Downtown": 3626226
 }
 
 #Tall, Tall Mountain
@@ -130,6 +142,7 @@ locTTM_table = {
     "TTM: Breathtaking View from Bridge": 3626081,
     "TTM: Blast to the Lonely Mushroom": 3626082,
     "TTM: Bob-omb Buddy": 3626211,
+    "TTM: 1Up Block on Red Mushroom": 3626227
 }
 
 #Tiny-Huge Island
@@ -141,6 +154,9 @@ locTHI_table = {
     "THI: Wiggler's Red Coins": 3626088,
     "THI: Make Wiggler Squirm": 3626089,
     "THI: Bob-omb Buddy": 3626212,
+    "THI: 1Up Block THI Small near Start": 3626228,
+    "THI: 1Up Block THI Large near Start": 3626229,
+    "THI: 1Up Block Windy Area": 3626230
 }
 
 #Tick Tock Clock
@@ -150,7 +166,9 @@ locTTC_table = {
     "TTC: Get a Hand": 3626093,
     "TTC: Stomp on the Thwomp": 3626094,
     "TTC: Timed Jumps on Moving Bars": 3626095,
-    "TTC: Stop Time for Red Coins": 3626096
+    "TTC: Stop Time for Red Coins": 3626096,
+    "TTC: 1Up Block Midway Up": 3626231,
+    "TTC: 1Up Block at the Top": 3626232
 }
 
 #Rainbow Ride
@@ -162,6 +180,9 @@ locRR_table = {
     "RR: Tricky Triangles!": 3626102,
     "RR: Somewhere Over the Rainbow": 3626103,
     "RR: Bob-omb Buddy": 3626214,
+    "RR: 1Up Block Top of Red Coin Maze": 3626233,
+    "RR: 1Up Block Under Fly Guy": 3626234,
+    "RR: 1Up Block On House in the Sky": 3626235
 }
 
 loc100Coin_table = {
@@ -193,7 +214,9 @@ locSA_table = {
 
 locBitDW_table = {
     "Bowser in the Dark World Red Coins": 3626105,
-    "Bowser in the Dark World Key": 3626178
+    "Bowser in the Dark World Key": 3626178,
+    "Bowser in the Dark World 1Up Block on Tower": 3626236,
+    "Bowser in the Dark World 1Up Block near Goombas": 3626237
 }
 
 locTotWC_table = {
@@ -203,25 +226,31 @@ locTotWC_table = {
 
 locCotMC_table = {
     "Cavern of the Metal Cap Switch": 3626182,
-    "Cavern of the Metal Cap Red Coins": 3626133
+    "Cavern of the Metal Cap Red Coins": 3626133,
+    "Cavern of the Metal Cap 1Up Block": 3626241
 }
 
 locVCutM_table = {
     "Vanish Cap Under the Moat Switch": 3626183,
-    "Vanish Cap Under the Moat Red Coins": 3626147
+    "Vanish Cap Under the Moat Red Coins": 3626147,
+    "Vanish Cap Under the Moat 1Up Block": 3626242
 }
 
 locBitFS_table = {
     "Bowser in the Fire Sea Red Coins": 3626112,
-    "Bowser in the Fire Sea Key": 3626179
+    "Bowser in the Fire Sea Key": 3626179,
+    "Bowser in the Fire Sea 1Up Block Swaying Stairs": 3626238,
+    "Bowser in the Fire Sea 1Up Block Near Poles": 3626239
 }
 
 locWMotR_table = {
-    "Wing Mario Over the Rainbow": 3626154
+    "Wing Mario Over the Rainbow Red Coins": 3626154,
+    "Wing Mario Over the Rainbow 1Up Block": 3626243
 }
 
 locBitS_table = {
-    "Bowser in the Sky Red Coins": 3626119
+    "Bowser in the Sky Red Coins": 3626119,
+    "Bowser in the Sky 1Up Block": 3626240
 }
 
 #Secret Stars found inside the Castle

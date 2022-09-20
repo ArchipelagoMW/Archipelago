@@ -1,20 +1,22 @@
 from __future__ import annotations
 
-import functools
-import websockets
 import asyncio
+import collections
+import datetime
+import functools
+import logging
+import pickle
+import random
 import socket
 import threading
 import time
-import random
-import pickle
-import logging
+import websockets
 
 import Utils
-from .models import *
+from .models import db_session, Room, select, commit, Command, db
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor
-from Utils import get_public_ipv4, get_public_ipv6, restricted_loads
+from Utils import get_public_ipv4, get_public_ipv6, restricted_loads, cache_argsless
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
@@ -39,7 +41,7 @@ class CustomClientMessageProcessor(ClientMessageProcessor):
 import MultiServer
 
 MultiServer.client_message_processor = CustomClientMessageProcessor
-del (MultiServer)
+del MultiServer
 
 
 class DBCommandProcessor(ServerCommandProcessor):
@@ -48,11 +50,23 @@ class DBCommandProcessor(ServerCommandProcessor):
 
 
 class WebHostContext(Context):
-    def __init__(self):
+    room_id: int
+
+    def __init__(self, static_server_data: dict):
+        # static server data is used during _load_game_data to load required data,
+        # without needing to import worlds system, which takes quite a bit of memory
+        self.static_server_data = static_server_data
         super(WebHostContext, self).__init__("", 0, "", "", 1, 40, True, "enabled", "enabled", "enabled", 0, 2)
+        del self.static_server_data
         self.main_loop = asyncio.get_running_loop()
         self.video = {}
         self.tags = ["AP", "WebHost"]
+
+    def _load_game_data(self):
+        for key, value in self.static_server_data.items():
+            setattr(self, key, value)
+        self.forced_auto_forfeits = collections.defaultdict(lambda: False, self.forced_auto_forfeits)
+        self.non_hintable_names = collections.defaultdict(frozenset, self.non_hintable_names)
 
     def listen_to_db_commands(self):
         cmdprocessor = DBCommandProcessor(self)
@@ -94,7 +108,7 @@ class WebHostContext(Context):
         room.multisave = pickle.dumps(self.get_save())
         # saving only occurs on activity, so we can "abuse" this information to mark this as last_activity
         if not exit_save:  # we don't want to count a shutdown as activity, which would restart the server again
-            room.last_activity = datetime.utcnow()
+            room.last_activity = datetime.datetime.utcnow()
         return True
 
     def get_save(self) -> dict:
@@ -107,14 +121,32 @@ def get_random_port():
     return random.randint(49152, 65535)
 
 
-def run_server_process(room_id, ponyconfig: dict):
+@cache_argsless
+def get_static_server_data() -> dict:
+    import worlds
+    data = {
+        "forced_auto_forfeits": {},
+        "non_hintable_names": {},
+        "gamespackage": worlds.network_data_package["games"],
+        "item_name_groups": {world_name: world.item_name_groups for world_name, world in
+                             worlds.AutoWorldRegister.world_types.items()},
+    }
+
+    for world_name, world in worlds.AutoWorldRegister.world_types.items():
+        data["forced_auto_forfeits"][world_name] = world.forced_auto_forfeit
+        data["non_hintable_names"][world_name] = world.hint_blacklist
+
+    return data
+
+
+def run_server_process(room_id, ponyconfig: dict, static_server_data: dict):
     # establish DB connection for multidata and multisave
     db.bind(**ponyconfig)
     db.generate_mapping(check_tables=False)
 
     async def main():
         Utils.init_logging(str(room_id), write_mode="a")
-        ctx = WebHostContext()
+        ctx = WebHostContext(static_server_data)
         ctx.load(room_id)
         ctx.init_save()
 

@@ -16,8 +16,12 @@ The goal remains unchanged. Cure the plague, build the Neptune Escape Rocket, an
 
 ## What items and locations get shuffled?
 
-Most of the technologies the player will need throughout the game will be shuffled. Location checks in Subnautica are
-data pads and technology lockers.
+Most of the technologies the player will need throughout the game will be shuffled. 
+Location checks in Subnautica are data pads and technology lockers. 
+
+Optionally up to 50 Creatures to scan can be included as well, for each one added a random duplicate item is created.
+
+As playing without Seaglide can be daunting, 2 of your Fragments of it can always be found in these locations: Grassy Plateaus South Wreck - Databox, Grassy Plateaus South Wreck - PDA, Grassy Plateaus West Wreck - Locker PDA, Grassy Plateaus West Wreck - Data Terminal, Safe Shallows Wreck - PDA, Kelp Forest Wreck - Databox, Kelp Forest Wreck - PDA, Lifepod 3 - Databox, Lifepod 3 - PDA, Lifepod 17 - PDA, Grassy Plateaus West Wreck - Beam PDA.
 
 ## Which items can be in another player's world?
 
