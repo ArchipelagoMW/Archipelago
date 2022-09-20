@@ -4,9 +4,9 @@ major_locations = [
     "Starting Sword Cave",
     "White Sword Pond",
     "Magical Sword Grave",
-    "Take Any Item 1",
-    "Take Any Item 2",
-    "Take Any Item 3",
+    "Take Any Item Left",
+    "Take Any Item Middle",
+    "Take Any Item Right",
     "Armos Knights",
     "Ocean Heart Container",
     "Letter Cave",
@@ -92,11 +92,11 @@ for level in level_locations:
         all_level_locations.append(location)
 
 shop_locations = [
-    "Arrow Shop Item 1", "Arrow Shop Item 2", "Arrow Shop Item 3",
-    "Candle Shop Item 1", "Candle Shop Item 2", "Candle Shop Item 3",
-    "Shield Shop Item 1", "Shield Shop Item 2", "Shield Shop Item 3",
-    "Blue Ring Shop Item 1", "Blue Ring Shop Item 2", "Blue Ring Shop Item 3",
-    "Potion Shop Item 1", "Potion Shop Item 2", "Potion Shop Item 3"
+    "Arrow Shop Item Left", "Arrow Shop Item Middle", "Arrow Shop Item Right",
+    "Candle Shop Item Left", "Candle Shop Item Middle", "Candle Shop Item Right",
+    "Shield Shop Item Left", "Shield Shop Item Middle", "Shield Shop Item Right",
+    "Blue Ring Shop Item Left", "Blue Ring Shop Item Middle", "Blue Ring Shop Item Right",
+    "Potion Shop Item Left", "Potion Shop Item Middle", "Potion Shop Item Right"
 ]
 
 food_locations = [
@@ -250,39 +250,39 @@ for key, value in floor_location_game_offsets_late.items():
 dungeon_items = {**floor_location_game_ids_early, **floor_location_game_ids_late}
 
 shop_location_ids = {
-    "Arrow Shop Item 1": 0x18637,
-    "Arrow Shop Item 2": 0x18638,
-    "Arrow Shop Item 3": 0x18639,
-    "Candle Shop Item 1": 0x1863A,
-    "Candle Shop Item 2": 0x1863B,
-    "Candle Shop Item 3": 0x1863C,
-    "Shield Shop Item 1": 0x1863D,
-    "Shield Shop Item 2": 0x1863E,
-    "Shield Shop Item 3": 0x1863F,
-    "Blue Ring Shop Item 1": 0x18640,
-    "Blue Ring Shop Item 2": 0x18641,
-    "Blue Ring Shop Item 3": 0x18642,
-    "Potion Shop Item 1": 0x1862E,
-    "Potion Shop Item 2": 0x1862F,
-    "Potion Shop Item 3": 0x18630
+    "Arrow Shop Item Left": 0x18637,
+    "Arrow Shop Item Middle": 0x18638,
+    "Arrow Shop Item Right": 0x18639,
+    "Candle Shop Item Left": 0x1863A,
+    "Candle Shop Item Middle": 0x1863B,
+    "Candle Shop Item Right": 0x1863C,
+    "Shield Shop Item Left": 0x1863D,
+    "Shield Shop Item Middle": 0x1863E,
+    "Shield Shop Item Right": 0x1863F,
+    "Blue Ring Shop Item Left": 0x18640,
+    "Blue Ring Shop Item Middle": 0x18641,
+    "Blue Ring Shop Item Right": 0x18642,
+    "Potion Shop Item Left": 0x1862E,
+    "Potion Shop Item Middle": 0x1862F,
+    "Potion Shop Item Right": 0x18630
 }
 
 shop_price_location_ids = {
-    "Arrow Shop Item 1": 0x18673,
-    "Arrow Shop Item 2": 0x18674,
-    "Arrow Shop Item 3": 0x18675,
-    "Candle Shop Item 1": 0x18676,
-    "Candle Shop Item 2": 0x18677,
-    "Candle Shop Item 3": 0x18678,
-    "Shield Shop Item 1": 0x18679,
-    "Shield Shop Item 2": 0x1867A,
-    "Shield Shop Item 3": 0x1867B,
-    "Blue Ring Shop Item 1": 0x1867C,
-    "Blue Ring Shop Item 2": 0x1867D,
-    "Blue Ring Shop Item 3": 0x1867E,
-    "Potion Shop Item 1": 0x1866A,
-    "Potion Shop Item 2": 0x1866B,
-    "Potion Shop Item 3": 0x1866C
+    "Arrow Shop Item Left": 0x18673,
+    "Arrow Shop Item Middle": 0x18674,
+    "Arrow Shop Item Right": 0x18675,
+    "Candle Shop Item Left": 0x18676,
+    "Candle Shop Item Middle": 0x18677,
+    "Candle Shop Item Right": 0x18678,
+    "Shield Shop Item Left": 0x18679,
+    "Shield Shop Item Middle": 0x1867A,
+    "Shield Shop Item Right": 0x1867B,
+    "Blue Ring Shop Item Left": 0x1867C,
+    "Blue Ring Shop Item Middle": 0x1867D,
+    "Blue Ring Shop Item Right": 0x1867E,
+    "Potion Shop Item Left": 0x1866A,
+    "Potion Shop Item Middle": 0x1866B,
+    "Potion Shop Item Right": 0x1866C
 }
 
 secret_money_ids = {
@@ -296,9 +296,9 @@ major_location_ids = {
     "White Sword Pond": 0x18617,
     "Magical Sword Grave": 0x1861A,
     "Letter Cave": 0x18629,
-    "Take Any Item 1": 0x18613,
-    "Take Any Item 2": 0x18614,
-    "Take Any Item 3": 0x18615,
+    "Take Any Item Left": 0x18613,
+    "Take Any Item Middle": 0x18614,
+    "Take Any Item Right": 0x18615,
     "Armos Knights": 0x10D05,
     "Ocean Heart Container": 0x1789A
 }
@@ -308,9 +308,9 @@ major_location_offsets = {
     "White Sword Pond": 0x0A,
     "Magical Sword Grave": 0x21,
     "Letter Cave": 0x0E,
-    "Take Any Item 1": 0x7B,
-    "Take Any Item 2": 0x2C,
-    "Take Any Item 3": 0x47,
+    "Take Any Item Left": 0x7B,
+    "Take Any Item Middle": 0x2C,
+    "Take Any Item Right": 0x47,
     "Armos Knights": 0x24,
     "Ocean Heart Container": 0x5F
 }
@@ -328,7 +328,7 @@ underworld1_locations = [*floor_location_game_offsets_early.keys()]
 
 underworld2_locations = [*floor_location_game_offsets_late.keys()]
 
-cave_locations = ["Take Any Item 1", "Take Any Item 2", "Take Any Item 3"] + [*shop_locations]
+cave_locations = ["Take Any Item Left", "Take Any Item Middle", "Take Any Item Right"] + [*shop_locations]
 
 location_table_base = [x for x in major_locations] + \
                       [y for y in all_level_locations] + \

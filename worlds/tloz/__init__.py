@@ -52,6 +52,9 @@ class TLoZWorld(World):
         'swords': {
             "Sword", "White Sword", "Magical Sword"
         },
+        'good swords': {
+          "White Sword", "Magical Sword"
+        },
         "candles": {
             "Candle", "Red Candle"
         },
@@ -102,6 +105,13 @@ class TLoZWorld(World):
                     self.levels[i + 1].locations.append(
                         self.create_location(location, self.location_name_to_id[location], self.levels[i + 1]))
 
+        for level in range(1, 9):
+            boss_event = self.create_location(f"Level {level} Boss Status", None,
+                                 self.world.get_region(f"Level {i}", self.player),
+                                 True)
+            boss_event.show_in_spoiler = False
+            self.levels[level].locations.append(boss_event)
+
         for location in major_locations:
             overworld.locations.append(
                 self.create_location(location, self.location_name_to_id[location], overworld))
@@ -140,16 +150,16 @@ class TLoZWorld(World):
             self.player
         ).place_locked_item(
             self.world.create_item("Water of Life (Red)", self.player))
-        start_locked = False
+
         item_amounts = item_amounts_all
         if not self.world.ExpandedPool[self.player]:
             item_amounts = item_amounts_standard
             self.world.get_location(
-                "Take Any Item 1",
+                "Take Any Item Left",
                 self.player
             ).place_locked_item(self.world.create_item("Water of Life (Red)", self.player))
             self.world.get_location(
-                "Take Any Item 3",
+                "Take Any Item Right",
                 self.player
             ).place_locked_item(self.world.create_item("Heart Container", self.player))
         for item in map(self.create_item, self.item_name_to_id):
@@ -170,6 +180,14 @@ class TLoZWorld(World):
                 self.world.itempool.append(item)
 
     def set_rules(self):
+        # Boss events for a nicer spoiler log playthrough
+        for level in range(1, 9):
+            boss = self.world.get_location(f"Level {level} Boss", self.player)
+            boss_event = self.world.get_location(f"Level {level} Boss Status", self.player)
+            status = self.create_event(f"Boss {level} Defeated")
+            boss_event.place_locked_item(status)
+            add_rule(boss_event, lambda state: state.can_reach(boss, "Location", self.player))
+
         # If we're doing a safe start, everything past the starting screen requires a weapon.
         if self.world.StartingPosition[self.player] == 0:
             for location in cave_locations:
@@ -223,20 +241,57 @@ class TLoZWorld(World):
                  lambda state: state.has("Recorder", self.player))
         add_rule(self.world.get_location("Level 7 Boss", self.player),
                  lambda state: state.has("Recorder", self.player))
+        add_rule(self.world.get_location("Level 7 Key Drop (Stalfos)", self.player),
+                 lambda state: state.has("Recorder", self.player))
+        add_rule(self.world.get_location("Level 7 Bomb Drop (Digdogger)", self.player),
+                 lambda state: state.has("Recorder", self.player))
+        add_rule(self.world.get_location("Level 7 Rupee Drop (Dodongos)", self.player),
+                 lambda state: state.has("Recorder", self.player))
+
         for location in food_locations:
             add_rule(self.world.get_location(location, self.player),
                      lambda state: state.has("Food", self.player))
 
         add_rule(self.world.get_location("Level 8 Item (Magical Key)", self.player),
                  lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
+        add_rule(self.world.get_location("Level 8 Bomb Drop (Darknuts North)", self.player),
+                 lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
 
         for location in self.levels[9].locations:
             add_rule(self.world.get_location(location.name, self.player),
-                     lambda state: state.has("Triforce Fragment", self.player, 8))
+                     lambda state: state.has("Triforce Fragment", self.player, 8) and
+                                   state.has_group("swords", self.player))
 
-        for i in range(1, 9):
-            add_rule(self.world.get_location(f"Level {i} Triforce", self.player),
-                     lambda state: self.world.get_location(f"Level {i} Boss", self.player) in state.locations_checked)
+        #for level in range(1, 9):
+        #    location = self.world.get_location(f"Level {level} Triforce", self.player)
+        #    boss_status = f"Boss {level} Defeated"
+        #    add_rule(location, lambda state: state.has(boss_status, self.player))
+
+        add_rule(self.world.get_location("Level 1 Triforce", self.player),
+                 lambda state: state.has("Boss 1 Defeated", self.player))
+
+        add_rule(self.world.get_location("Level 2 Triforce", self.player),
+                 lambda state: state.has("Boss 2 Defeated", self.player))
+
+        add_rule(self.world.get_location("Level 3 Triforce", self.player),
+                 lambda state: state.has("Boss 3 Defeated", self.player))
+
+        add_rule(self.world.get_location("Level 4 Triforce", self.player),
+                 lambda state: state.has("Boss 4 Defeated", self.player))
+
+        add_rule(self.world.get_location("Level 5 Triforce", self.player),
+                 lambda state: state.has("Boss 5 Defeated", self.player))
+
+        add_rule(self.world.get_location("Level 6 Triforce", self.player),
+                 lambda state: state.has("Boss 6 Defeated", self.player))
+
+        add_rule(self.world.get_location("Level 7 Triforce", self.player),
+                 lambda state: state.has("Boss 7 Defeated", self.player))
+
+        add_rule(self.world.get_location("Level 8 Triforce", self.player),
+                 lambda state: state.has("Boss 8 Defeated", self.player))
+
+
 
         # Sword, raft, and ladder spots
         add_rule(self.world.get_location("White Sword Pond", self.player),
@@ -247,13 +302,13 @@ class TLoZWorld(World):
                  lambda state: state.has("Stepladder", self.player))
         if self.world.StartingPosition[self.player] != 2:
             # Don't allow Take Any Items until we can actually get in one
-            add_rule(self.world.get_location("Take Any Item 1", self.player),
+            add_rule(self.world.get_location("Take Any Item Left", self.player),
                      lambda state: state.has_group("candles", self.player) or
                                    state.has("Raft", self.player))
-            add_rule(self.world.get_location("Take Any Item 2", self.player),
+            add_rule(self.world.get_location("Take Any Item Middle", self.player),
                      lambda state: state.has_group("candles", self.player) or
                                    state.has("Raft", self.player))
-            add_rule(self.world.get_location("Take Any Item 3", self.player),
+            add_rule(self.world.get_location("Take Any Item Right", self.player),
                      lambda state: state.has_group("candles", self.player) or
                                    state.has("Raft", self.player))
         for location in self.levels[4].locations:
@@ -271,11 +326,11 @@ class TLoZWorld(World):
                 if location  not in all_level_locations:
                     forbid_item(self.world.get_location(location, self.player), "Triforce Fragment", self.player)
 
-        add_rule(self.world.get_location("Potion Shop Item 1", self.player),
+        add_rule(self.world.get_location("Potion Shop Item Left", self.player),
                  lambda state: state.has("Letter", self.player))
-        add_rule(self.world.get_location("Potion Shop Item 2", self.player),
+        add_rule(self.world.get_location("Potion Shop Item Middle", self.player),
                  lambda state: state.has("Letter", self.player))
-        add_rule(self.world.get_location("Potion Shop Item 3", self.player),
+        add_rule(self.world.get_location("Potion Shop Item Right", self.player),
                  lambda state: state.has("Letter", self.player))
 
         set_rule(self.world.get_region("Menu", self.player), lambda state: True)
@@ -331,6 +386,10 @@ class TLoZWorld(World):
                 if location.name == "Ganon" or location.name == "Zelda":
                     continue
 
+                # Neither are boss defeat events
+                if "Status" in location.name:
+                    continue
+
                 # We, of course, only care about our own world
                 if location.player != self.player:
                     continue
@@ -345,7 +404,7 @@ class TLoZWorld(World):
 
                 # Shop prices need to be set
                 if location.name in shop_locations:
-                    if location.name[-1] == "3":
+                    if location.name[-5:] == "Right":
                         # Final item in stores has bit 6 and 7 set. It's what marks the cave a shop.
                         item_id = item_id | 0b11000000
                     price_location = shop_price_location_ids[location.name]
@@ -361,7 +420,7 @@ class TLoZWorld(World):
                         elif item_class == ItemClassification.trap:
                             item_price = item_price * 2
                     rom_data[price_location] = item_price
-                if location.name == "Take Any Item 3":
+                if location.name == "Take Any Item Right":
                     # Same story as above: bit 6 is what makes this a Take Any cave
                     item_id = item_id | 0b01000000
                 if location.name in all_level_locations:
