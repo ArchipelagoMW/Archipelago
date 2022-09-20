@@ -28,6 +28,7 @@ README.html
 .vs/
 EnemizerCLI/
 /Players/
+/SNI/
 /options.yaml
 /config.yaml
 /logs/

@@ -36,6 +36,7 @@ from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, Networ
     SlotType
 
 min_client_version = Version(0, 1, 6)
+print_command_compatability_threshold = Version(0, 3, 5) # Remove backwards compatibility around 0.3.7
 colorama.init()
 
 # functions callable on storable data on the server by clients
@@ -125,6 +126,7 @@ class Context:
     location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     forced_auto_forfeits: typing.Dict[str, bool]
+    non_hintable_names: typing.Dict[str, typing.Set[str]]
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
@@ -195,7 +197,7 @@ class Context:
         self.item_name_groups = {}
         self.all_item_and_group_names = {}
         self.forced_auto_forfeits = collections.defaultdict(lambda: False)
-        self.non_hintable_names = {}
+        self.non_hintable_names = collections.defaultdict(frozenset)
 
         self._load_game_data()
         self._init_game_data()
@@ -291,20 +293,27 @@ class Context:
 
     # text
 
-    def notify_all(self, text):
+    def notify_all(self, text: str):
         logging.info("Notice (all): %s" % text)
-        self.broadcast_all([{"cmd": "Print", "text": text}])
+        broadcast_text_all(self, text)
 
     def notify_client(self, client: Client, text: str):
         if not client.auth:
             return
         logging.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
-        asyncio.create_task(self.send_msgs(client, [{"cmd": "Print", "text": text}]))
+        if client.version >= print_command_compatability_threshold:
+            asyncio.create_task(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }]}]))
+        else:
+            asyncio.create_task(self.send_msgs(client, [{"cmd": "Print", "text": text}]))
 
     def notify_client_multiple(self, client: Client, texts: typing.List[str]):
         if not client.auth:
             return
-        asyncio.create_task(self.send_msgs(client, [{"cmd": "Print", "text": text} for text in texts]))
+        if client.version >= print_command_compatability_threshold:
+            asyncio.create_task(self.send_msgs(client, 
+                [{"cmd": "PrintJSON", "data": [{ "text": text }]} for text in texts]))
+        else:
+            asyncio.create_task(self.send_msgs(client, [{"cmd": "Print", "text": text} for text in texts]))
 
     # loading
 
@@ -585,6 +594,7 @@ class Context:
             forfeit_player(self, client.team, client.slot)
         elif self.forced_auto_forfeits[self.games[client.slot]]:
             forfeit_player(self, client.team, client.slot)
+        self.save()  # save goal completion flag
 
 
 def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False):
@@ -721,18 +731,35 @@ async def on_client_left(ctx: Context, client: Client):
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
-async def countdown(ctx: Context, timer):
-    ctx.notify_all(f'[Server]: Starting countdown of {timer}s')
+async def countdown(ctx: Context, timer: int):
+    broadcast_countdown(ctx, timer, f"[Server]: Starting countdown of {timer}s")
     if ctx.countdown_timer:
         ctx.countdown_timer = timer  # timer is already running, set it to a different time
     else:
         ctx.countdown_timer = timer
         while ctx.countdown_timer > 0:
-            ctx.notify_all(f'[Server]: {ctx.countdown_timer}')
+            broadcast_countdown(ctx, ctx.countdown_timer, f"[Server]: {ctx.countdown_timer}")
             ctx.countdown_timer -= 1
             await asyncio.sleep(1)
-        ctx.notify_all(f'[Server]: GO')
+        broadcast_countdown(ctx, 0, f"[Server]: GO")
         ctx.countdown_timer = 0
+
+
+def broadcast_text_all(ctx: Context, text: str, additional_arguments: dict = {}):
+    old_clients, new_clients = [], []
+
+    for teams in ctx.clients.values():
+        for clients in teams.values():
+            for client in clients:
+                new_clients.append(client) if client.version >= print_command_compatability_threshold \
+                    else old_clients.append(client)
+
+    ctx.broadcast(old_clients, [{"cmd": "Print", "text": text }])
+    ctx.broadcast(new_clients, [{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
+
+
+def broadcast_countdown(ctx: Context, timer: int, message: str):
+    broadcast_text_all(ctx, message, {"type": "Countdown", "countdown": timer})
 
 
 def get_players_string(ctx: Context):
@@ -2018,15 +2045,28 @@ async def main(args: argparse.Namespace):
                   args.auto_shutdown, args.compatibility, args.log_network)
     data_filename = args.multidata
 
-    try:
-        if not data_filename:
+    if not data_filename:
+        try:
             filetypes = (("Multiworld data", (".archipelago", ".zip")),)
             data_filename = Utils.open_filename("Select multiworld data", filetypes)
 
+        except Exception as e:
+            if isinstance(e, ImportError) or (e.__class__.__name__ == "TclError" and "no display" in str(e)):
+                if not isinstance(e, ImportError):
+                    logging.error(f"Failed to load tkinter ({e})")
+                logging.info("Pass a multidata filename on command line to run headless.")
+                exit(1)
+            raise
+
+        if not data_filename:
+            logging.info("No file selected. Exiting.")
+            exit(1)
+
+    try:
         ctx.load(data_filename, args.use_embedded_options)
 
     except Exception as e:
-        logging.exception('Failed to read multiworld data (%s)' % e)
+        logging.exception(f"Failed to read multiworld data ({e})")
         raise
 
     ctx.init_save(not args.disable_save)
