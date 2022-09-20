@@ -8,7 +8,7 @@ import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
 from .Items import item_table, item_amounts_all, item_amounts_standard, item_prices, item_game_ids
 from .Locations import location_table, level_locations, major_locations, shop_locations, cave_locations, \
-    all_level_locations, shop_price_location_ids, secret_money_ids, location_ids
+    all_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations
 from .Options import tloz_options
 from .Rom import TLoZDeltaPatch, get_base_rom_path
 from worlds.AutoWorld import World, WebWorld
@@ -215,20 +215,28 @@ class TLoZWorld(World):
 
         add_rule(self.world.get_location("Level 5 Boss", self.player),
                  lambda state: state.has("Recorder", self.player))
+
         add_rule(self.world.get_location("Level 6 Boss", self.player),
                  lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
+
         add_rule(self.world.get_location("Level 7 Item (Red Candle)", self.player),
                  lambda state: state.has("Recorder", self.player))
         add_rule(self.world.get_location("Level 7 Boss", self.player),
                  lambda state: state.has("Recorder", self.player))
+        for location in food_locations:
+            add_rule(self.world.get_location(location, self.player),
+                     lambda state: state.has("Food", self.player))
+
         add_rule(self.world.get_location("Level 8 Item (Magical Key)", self.player),
                  lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
+
         for location in self.levels[9].locations:
             add_rule(self.world.get_location(location.name, self.player),
                      lambda state: state.has("Triforce Fragment", self.player, 8))
+
         for i in range(1, 9):
             add_rule(self.world.get_location(f"Level {i} Triforce", self.player),
-                     lambda state: state.can_reach(f"Level {i} Boss", "Location", self.player))
+                     lambda state: self.world.get_location(f"Level {i} Boss", self.player) in state.locations_checked)
 
         # Sword, raft, and ladder spots
         add_rule(self.world.get_location("White Sword Pond", self.player),
@@ -301,8 +309,15 @@ class TLoZWorld(World):
         # this was calculated by hand, and so if any errors arise it'll likely be here.
         rom_data[0x7770:0x777B] = bytearray([0xE0, 0x1B, 0xD0, 0x03, 0xEE, 0x79, 0x06, 0x29, 0x07, 0xAA, 0x60])
 
+        # Reduce variety of boss roars in order to make room for additional dungeon items
+        rom_data[0x1534C] = 0x40
+
         # Remove map/compass check so they're always on
         rom_data[0x17614:0x17617] = bytearray([0xA9, 0xA1, 0x60])
+
+        # Stealing a bit from the boss roars flag so we can have more dungeon items. This allows us to
+        # go past 0x1F items for dungeon drops.
+        rom_data[0x1785D] = 0x3F
 
     def apply_randomizer(self):
         with open(get_base_rom_path(), 'rb') as rom:

@@ -21,7 +21,7 @@ level_locations = [
     ],
     [
         "Level 2 Item (Magical Boomerang)", "Level 2 Map", "Level 2 Compass", "Level 2 Boss", "Level 2 Triforce",
-        "Level 2 Key Drop (Ropes West)", "Level 2 Key Drop (Lanmolas)",
+        "Level 2 Key Drop (Ropes West)", "Level 2 Key Drop (Moldorms)",
         "Level 2 Key Drop (Ropes Middle)", "Level 2 Key Drop (Ropes Entrance)",
         "Level 2 Bomb Drop (Keese)", "Level 2 Bomb Drop (Moblins)",
         "Level 2 Rupee Drop (Gels)",
@@ -56,8 +56,8 @@ level_locations = [
     [
         "Level 7 Item (Red Candle)", "Level 7 Map", "Level 7 Compass", "Level 7 Boss", "Level 7 Triforce",
         "Level 7 Key Drop (Ropes)", "Level 7 Key Drop (Goriyas)", "Level 7 Key Drop (Stalfos)",
-        "Level 7 Key Drop (Lanmolas)", "Level 7 Bomb Drop (Goriyas South)",
-        "Level 7 Bomb Drop (Lanmolas South)", "Level 7 Bomb Drop (Lanmolas North)",
+        "Level 7 Key Drop (Moldorms)", "Level 7 Bomb Drop (Goriyas South)",
+        "Level 7 Bomb Drop (Moldorms South)", "Level 7 Bomb Drop (Moldorms North)",
         "Level 7 Bomb Drop (Goriyas North)", "Level 7 Bomb Drop (Dodongos)",
         "Level 7 Bomb Drop (Digdogger)", "Level 7 Rupee Drop (Goriyas Central)",
         "Level 7 Rupee Drop (Dodongos)", "Level 7 Rupee Drop (Goriyas North)",
@@ -77,10 +77,10 @@ level_locations = [
         "Level 9 Map", "Level 9 Compass",
         "Level 9 Key Drop (Patra Southwest)", "Level 9 Key Drop (Like Likes and Zols East)",
         "Level 9 Key Drop (Wizzrobes and Bubbles East)", "Level 9 Key Drop (Wizzrobes East Island)",
-        "Level 9 Bomb Drop (Blue Moldorms)", "Level 9 Bomb Drop (Gels Lake)",
+        "Level 9 Bomb Drop (Blue Lanmolas)", "Level 9 Bomb Drop (Gels Lake)",
         "Level 9 Bomb Drop (Like Likes and Zols Corridor)", "Level 9 Bomb Drop (Patra Northeast)",
         "Level 9 Bomb Drop (Pols Voice)", "Level 9 Rupee Drop (Wizzrobes West Island)",
-        "Level 9 Rupee Drop (Red Moldorms)", "Level 9 Rupee Drop (Keese Southwest)",
+        "Level 9 Rupee Drop (Red Lanmolas)", "Level 9 Rupee Drop (Keese Southwest)",
         "Level 9 Rupee Drop (Keese Central Island))", "Level 9 Rupee Drop (Wizzrobes Central)",
         "Level 9 Rupee Drop (Wizzrobes North Island)", "Level 9 Rupee Drop (Gels East)"
     ]
@@ -97,6 +97,12 @@ shop_locations = [
     "Shield Shop Item 1", "Shield Shop Item 2", "Shield Shop Item 3",
     "Blue Ring Shop Item 1", "Blue Ring Shop Item 2", "Blue Ring Shop Item 3",
     "Potion Shop Item 1", "Potion Shop Item 2", "Potion Shop Item 3"
+]
+
+food_locations = [
+    "Level 7 Map", "Level 7 Boss", "Level 7 Triforce", "Level 7 Key Drop (Goriyas)",
+    "Level 7 Bomb Drop (Moldorms North)", "Level 7 Bomb Drop (Goriyas North)",
+    "Level 7 Bomb Drop (Dodongos)", "Level 7 Rupee Drop (Goriyas North)"
 ]
 
 floor_location_game_offsets_early = {
@@ -117,7 +123,7 @@ floor_location_game_offsets_early = {
     "Level 2 Boss": 0x0E,
     "Level 2 Triforce": 0x0D,
     "Level 2 Key Drop (Ropes West)": 0x6C,
-    "Level 2 Key Drop (Lanmolas)": 0x3E,
+    "Level 2 Key Drop (Moldorms)": 0x3E,
     "Level 2 Key Drop (Ropes Middle)": 0x4E,
     "Level 2 Key Drop (Ropes Entrance)": 0x7E,
     "Level 2 Bomb Drop (Keese)": 0x3F,
@@ -188,10 +194,10 @@ floor_location_game_offsets_late = {
     "Level 7 Key Drop (Ropes)": 0x78,
     "Level 7 Key Drop (Goriyas)": 0x0A,
     "Level 7 Key Drop (Stalfos)": 0x6D,
-    "Level 7 Key Drop (Lanmolas)": 0x3A,
+    "Level 7 Key Drop (Moldorms)": 0x3A,
     "Level 7 Bomb Drop (Goriyas South)": 0x69,
-    "Level 7 Bomb Drop (Lanmolas South)": 0x7A,
-    "Level 7 Bomb Drop (Lanmolas North)": 0x0B,
+    "Level 7 Bomb Drop (Moldorms South)": 0x7A,
+    "Level 7 Bomb Drop (Moldorms North)": 0x0B,
     "Level 7 Bomb Drop (Goriyas North)": 0x1B,
     "Level 7 Bomb Drop (Dodongos)": 0x0C,
     "Level 7 Bomb Drop (Digdogger)": 0x6C,
@@ -224,13 +230,13 @@ floor_location_game_offsets_late = {
     "Level 9 Key Drop (Like Likes and Zols East)": 0x56,
     "Level 9 Key Drop (Wizzrobes and Bubbles East)": 0x47,
     "Level 9 Key Drop (Wizzrobes East Island)": 0x57,
-    "Level 9 Bomb Drop (Blue Moldorms)": 0x11,
+    "Level 9 Bomb Drop (Blue Lanmolas)": 0x11,
     "Level 9 Bomb Drop (Gels Lake)": 0x23,
     "Level 9 Bomb Drop (Like Likes and Zols Corridor)": 0x25,
     "Level 9 Bomb Drop (Patra Northeast)": 0x16,
     "Level 9 Bomb Drop (Pols Voice)": 0x37,
     "Level 9 Rupee Drop (Wizzrobes West Island)": 0x40,
-    "Level 9 Rupee Drop (Red Moldorms)": 0x12,
+    "Level 9 Rupee Drop (Red Lanmolas)": 0x12,
     "Level 9 Rupee Drop (Keese Southwest)": 0x62,
     "Level 9 Rupee Drop (Keese Central Island))": 0x34,
     "Level 9 Rupee Drop (Wizzrobes Central)": 0x44,
