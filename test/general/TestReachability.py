@@ -9,10 +9,19 @@ from . import setup_default_world
 class TestBase(unittest.TestCase):
     gen_steps = ["generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill"]
 
+    default_settings_unreachable_regions = {
+        "A Link to the Past": {
+            "Chris Houlihan Room",  # glitch room by definition
+            "Desert Northern Cliffs",  # on top of mountain, only reachable via OWG
+            "Dark Death Mountain Bunny Descent Area"  # OWG Mountain descent
+        }
+    }
+
     def testAllStateCanReachEverything(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             # Final Fantasy logic is controlled by finalfantasyrandomizer.com
             if game_name != "Ori and the Blind Forest" and game_name != "Final Fantasy":  # TODO: fix Ori Logic
+                unreachable_regions = self.default_settings_unreachable_regions.get(game_name, set())
                 with self.subTest("Game", game=game_name):
                     world = setup_default_world(world_type)
                     excluded = world.exclude_locations[1].value
@@ -21,6 +30,11 @@ class TestBase(unittest.TestCase):
                         if location.name not in excluded:
                             with self.subTest("Location should be reached", location=location):
                                 self.assertTrue(location.can_reach(state))
+
+                    for region in world.get_regions():
+                        if region.name not in unreachable_regions:
+                            with self.subTest("Region should be reached", region=region):
+                                self.assertTrue(region.can_reach(state))
 
                     with self.subTest("Completion Condition"):
                         self.assertTrue(world.can_beat_game(state))
