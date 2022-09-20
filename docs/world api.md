@@ -681,3 +681,11 @@ def generate_output(self, output_directory: str):
     generate_mod(src, out_file, data)
 ```
 
+
+## Other Useful Information
+
+### requirements.txt
+
+If a world needs a package from pypi to function (pip install ...), the package
+can be added to worlds/mygame/requirements.txt and will automatically be picked
+up and installed by ModuleUpdate.py.
