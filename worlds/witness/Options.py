@@ -7,7 +7,7 @@ from Options import Toggle, DefaultOnToggle, Option, Range, Choice
 #    "Play the randomizer in hardmode"
 #    display_name = "Hard Mode"
 
-class DisableNonRandomizedPuzzles(DefaultOnToggle):
+class DisableNonRandomizedPuzzles(Toggle):
     """Disables puzzles that cannot be randomized.
     This includes many puzzles that heavily involve the environment, such as Shadows, Monastery or Orchard.
     The lasers for those areas will be activated as you solve optional puzzles throughout the island."""
