@@ -4,7 +4,7 @@
 # https://opensource.org/licenses/MIT
 
 from BaseClasses import MultiWorld, Region, Entrance, RegionType
-from .Locations import BumpStikLocation, location_table
+from .Locations import BumpStikLocation, level1_locs, level2_locs, level3_locs, level4_locs, level5_locs, location_table
 
 
 def _generate_entrances(player: int, entrance_list: [str], parent: Region):
@@ -13,38 +13,23 @@ def _generate_entrances(player: int, entrance_list: [str], parent: Region):
 
 def create_regions(world: MultiWorld, player: int):
     region_map = {
-        "Menu": [
-            "250 Points", "500 Points", "750 Points", "1000 Points", "Booster Bumper 1", "Booster Bumper 2",
-            "Treasure Bumper 1", "Treasure Bumper 2"
-            ],
-        "Level 1": [
-            "1250 Points", "1500 Points", "1750 Points", "2000 Points", "Combo Clear 4", "Chain x2",
-            "Booster Bumper 3", "Treasure Bumper 3", "Treasure Bumper 4"
-            ],
-        "Level 2": [
-            "2250 Points", "2500 Points", "2750 Points", "3000 Points", "Combo Clear 5", "All Clear",
-            "Booster Bumper 4", "Treasure Bumper 5", "Treasure Bumper 6"
-            ],
-        "Level 3": [
-            "3250 Points", "3500 Points", "3750 Points", "4000 Points", "Combo Clear 6", "Chain x3",
-            "Booster Bumper 5", "Treasure Bumper 7", "Treasure Bumper 8"
-            ],
-        "Level 4": ["Cleared All Hazards"]
+        "Menu": level1_locs + ["Bonus Booster 1"] + [f"Treasure Bumper {i + 1}" for i in range(8)],
+        "Level 1": level2_locs + ["Bonus Booster 2"] + [f"Treasure Bumper {i + 9}" for i in range(8)],
+        "Level 2": level3_locs + ["Bonus Booster 3"] + [f"Treasure Bumper {i + 17}" for i in range(8)],
+        "Level 3": level4_locs + [f"Bonus Booster {i + 4}" for i in range(2)] +
+                   [f"Treasure Bumper {i + 25}" for i in range(8)],
+        "Level 4": level5_locs
     }
 
     entrance_map = {
         "Level 1": lambda state:
-            state.has_group("Board Size", player, 2) and state.has(
-                "Booster Bumper", player, 1),
+        state.has("Booster Bumper", player, 1) and state.has("Treasure Bumper", player, 8),
         "Level 2": lambda state:
-            state.has_group("Board Size", player, 3) and state.has_group("Color", player, 1) and state.has(
-                "Booster Bumper", player, 2),
+        state.has("Booster Bumper", player, 2) and state.has("Treasure Bumper", player, 16),
         "Level 3": lambda state:
-            state.has_group("Board Size", player, 4) and state.has_group("Color", player, 2) and state.has(
-                "Booster Bumper", player, 3),
+        state.has("Booster Bumper", player, 3) and state.has("Treasure Bumper", player, 24),
         "Level 4": lambda state:
-            state.has_group("Board Size", player, 5) and state.has_group("Color", player, 3) and state.has(
-                "Booster Bumper", player, 4)
+        state.has("Booster Bumper", player, 5) and state.has("Treasure Bumper", player, 32)
     }
 
     for x, region_name in enumerate(region_map):
