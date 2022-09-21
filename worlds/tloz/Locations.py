@@ -15,7 +15,7 @@ major_locations = [
 level_locations = [
     [
         "Level 1 Item (Bow)", "Level 1 Item (Boomerang)", "Level 1 Map", "Level 1 Compass", "Level 1 Boss",
-        "Level 1 Triforce", "Level 1 Key Drop (Keese Entrance)",
+        "Level 1 Triforce", "Level 1 Key Drop (Keese Entrance)", "Level 1 Key Drop (Stalfos Middle)",
         "Level 1 Key Drop (Moblins)", "Level 1 Key Drop (Stalfos Water)",
         "Level 1 Key Drop (Stalfos Entrance)", "Level 1 Key Drop (Wallmasters)",
     ],
@@ -116,7 +116,8 @@ floor_location_game_offsets_early = {
     "Level 1 Key Drop (Moblins)": 0x23,
     "Level 1 Key Drop (Stalfos Water)": 0x33,
     "Level 1 Key Drop (Stalfos Entrance)": 0x74,
-    "Level 1 Key Drop (Wallmasters)": 0x53,
+    "Level 1 Key Drop (Stalfos Middle)": 0x53,
+    "Level 1 Key Drop (Wallmasters)": 0x45,
     "Level 2 Item (Magical Boomerang)": 0x4F,
     "Level 2 Map": 0x5F,
     "Level 2 Compass": 0x6F,
