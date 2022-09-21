@@ -453,8 +453,6 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
             raise Exception(f"Error generating option {option_key} in {ret.game}") from e
         else:
             player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
-    elif option.default == "random":
-        setattr(ret, option_key, option.from_any(option.default))
     else:
         setattr(ret, option_key, option.from_any(option.default))  # call the from_any here to support default "random"
 
