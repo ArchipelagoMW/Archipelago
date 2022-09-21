@@ -14,6 +14,13 @@ class TestBase(unittest.TestCase):
             "Chris Houlihan Room",  # glitch room by definition
             "Desert Northern Cliffs",  # on top of mountain, only reachable via OWG
             "Dark Death Mountain Bunny Descent Area"  # OWG Mountain descent
+        },
+        "Ocarina of Time": {
+            "Prelude of Light Warp",  # Prelude is not progression by default
+            "Serenade of Water Warp",  # Serenade is not progression by default
+            "Lost Woods Mushroom Timeout",  # trade quest starts after this item
+            "ZD Eyeball Frog Timeout",  # trade quest starts after this item
+            "ZR Top of Waterfall",  # dummy region used for entrance shuffle
         }
     }
 
