@@ -83,6 +83,9 @@ class BumpStikItem(Item):
         elif "Booster" in name:
             self.type = "Booster"
             self.classification = ItemClassification.progression
+        elif "Treasure" in name:
+            self.type = "Treasure"
+            self.classification = ItemClassification.progression
         else:
             self.type = "Other"
 
