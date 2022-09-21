@@ -336,9 +336,6 @@ class Factorio(World):
     def set_custom_recipes(self):
         original_rocket_part = recipes["rocket-part"]
         science_pack_pools = get_science_pack_pools()
-        for science_pack, items in science_pack_pools.items():
-            print(f"{science_pack}: {items}")
-            print()
         valid_pool = sorted(science_pack_pools[self.world.max_science_pack[self.player].get_max_pack()] & valid_ingredients)
         if len(valid_pool) < 3:
             # Not enough items in max pool. Extend to entire pool.

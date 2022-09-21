@@ -247,7 +247,6 @@ del items_future
 
 fluids: Dict[str, Dict[str, int]] = dict(fluids_future.result())
 del fluids_future
-print(fluids)
 
 recipe_sources: Dict[str, Set[str]] = {}  # recipe_name -> technology source
 
@@ -286,7 +285,6 @@ labs: Dict[str, Lab] = {}
 
 for name, prototype in machines_future.result().items():
     for machine_type, machine_data in prototype.items():
-        print(f"{name}: {machine_type}: {machine_data}")
         if machine_type == "lab":
             lab = Lab(name, machine_data.get("inputs", set()))
             labs[name] = lab
@@ -310,7 +308,6 @@ for name, prototype in machines_future.result().items():
             categories = machine_data.get("categories", set())
             if not categories:
                 continue
-            print(set(categories))
             # TODO: Use speed / fluid_box info
             speed = machine_data.get("speed", 1)
             input_fluid_box = machine_data.get("input_fluid_box", 0)
@@ -321,7 +318,6 @@ for name, prototype in machines_future.result().items():
             categories = machine_data.get("categories", set())
             if not categories:
                 continue
-            print(set(categories))
             speed = machine_data.get("speed", 1)
             input_fluid_box = machine_data.get("input_fluid_box", False)  # Can this machine mine resources with required fluids?
             output_fluid_box = machine_data.get("output_fluid_box", False)  # Can this machine mine fluid resources?
@@ -445,7 +441,6 @@ for ingredient_name in machines:
         required_machine_technologies[ingredient_name] = frozenset()
         continue
     required_machine_technologies[ingredient_name] = frozenset(recursively_get_unlocking_technologies(ingredient_name))
-    print(f"{ingredient_name}: {required_machine_technologies[ingredient_name]}")
 for ingredient_name in labs:
     required_machine_technologies[ingredient_name] = frozenset(recursively_get_unlocking_technologies(ingredient_name))
 
@@ -485,7 +480,6 @@ for category_name, machine_name in machine_per_category.items():
         techs = set()
         machine_per_category[category_name] = "character"
     required_category_technologies[category_name] = frozenset(techs)
-    print(f"{category_name}: {required_category_technologies[category_name]}")
 
 required_technologies: Dict[str, FrozenSet[Technology]] = Utils.KeyedDefaultDict(lambda ingredient_name: frozenset(
     recursively_get_unlocking_technologies(ingredient_name, unlock_func=unlock)))
@@ -619,14 +613,11 @@ useless_technologies: Set[str] = {tech_name for tech_name in common_tech_table
 
 lookup_id_to_name: Dict[int, str] = {item_id: item_name for item_name, item_id in tech_table.items()}
 
-print("\n\nReletive costs:")
 rel_cost = {}
 for name, recipe in {name: recipe for name, recipe in recipes.items() if recipe.mining and not recipe.ingredients}.items():
     machine = machines[machine_per_category[recipe.category]]
     cost = recipe.energy / machine.speed
-    print(f"Cost of {name}: {cost} = {recipe.energy} / {machine.speed}")
     for product_name, amount in recipe.products.items():
-        print(f"cost of {amount} x {product_name} = {(cost / amount)}")
         rel_cost[product_name] = cost / amount
 
 
@@ -645,8 +636,6 @@ for name, recipe in {name: recipe for name, recipe in recipes.items() if recipe.
     for product_name, amount in recipe.products.items():
         rel_cost[product_name] = cost / amount
 
-print(rel_cost)
-
 exclusion_list: Set[str] = all_ingredient_names | {"rocket-part", "used-up-uranium-fuel-cell"}
 
 
@@ -661,11 +650,6 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
             if (science_pack != "automation-science-pack" or not recipe.recursive_unlocking_technologies) \
                     and get_estimated_difficulty(recipe) < current_difficulty:
                 current |= set(recipe.products)
-            if science_pack == "automation-science-pack" and recipe.recursive_unlocking_technologies and recipe.unlocked_at_start:
-                print(f"Recipe: {name}")
-                print(f"Category: {recipe.category}")
-                print(f"unlocking_technologies: {recipe.recursive_unlocking_technologies}")
-                print(f"Estimated Difficulty: {get_estimated_difficulty(recipe)}")
 
         if science_pack == "automation-science-pack":
             # Can't handcraft automation science if fluids end up in its recipe, making the seed impossible.
