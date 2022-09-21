@@ -373,7 +373,17 @@ local function checkCaveItemObtained()
         local itemLift = u8(0x506)
         local xPosition = u8(0x70)
         if itemLift > 0 then
+            itemSlot = u8(0x438)
             returnTable["itemSlot"] = u8(0x438) + 1
+            if itemSlot == 0 then
+                returnTable["itemSlot"] = "Left"
+            end
+            if itemSlot == 1 then
+                returnTable["itemSlot"] = "Middle"
+            end
+            if itemSlot == 2 then
+                returnTable["itemSlot"] = "Right"
+            end
             memDomain.rom()
             local caveType = u8(0x18480 + screen)
             caveType = caveType - 0x40
