@@ -465,6 +465,76 @@ class TextChoice(Choice):
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
 
+class Bosses(TextChoice):
+    """Generic boss shuffle option that supports plando."""
+    bosses: set = set()
+    locations: set = set()
+
+    @classmethod
+    def from_text(cls, text: str):
+        import random
+        # set all of our text to lower case for name checking
+        text = text.lower()
+        cls.bosses = {boss_name.lower() for boss_name in cls.bosses}
+        cls.locations = {boss_location.lower() for boss_location in cls.locations}
+        if text == "random":
+            return cls(random.choice(list(cls.options.values())))
+        for option_name, value in cls.options.items():
+            if option_name == text:
+                return cls(value)
+        options = text.split(";")
+
+        # since plando exists in the option verify the plando values given are valid
+        cls.validate_plando_bosses(options)
+
+        # find out what type of boss shuffle we should use for placing bosses after plando
+        # and add as a string to look nice in the spoiler
+        if "random" in options:
+            shuffle = random.choice(list(cls.options))
+            options.remove("random")
+            options = ";".join(options) + ";" + shuffle
+            boss_class = cls(options)
+        else:
+            for option in options:
+                if option in cls.options:
+                    boss_class = cls(";".join(options))
+                    break
+            else:
+                if len(options) == 1:
+                    if cls.valid_boss_name(options[0]):
+                        options = options[0] + ";singularity"
+                    else:
+                        options = options[0] + ";none"
+                else:
+                    options = ";".join(options) + ";none"
+                boss_class = cls(options)
+        return boss_class
+
+    @classmethod
+    def validate_plando_bosses(cls, options: typing.List[str]) -> None:
+        raise NotImplementedError
+
+    @classmethod
+    def valid_boss_name(cls, value: str) -> bool:
+        return value.lower() in cls.bosses
+
+    @classmethod
+    def valid_location_name(cls, value: str) -> bool:
+        return value in cls.locations
+
+    def verify(self, world, player_name: str, plando_options) -> None:
+        if isinstance(self.value, int):
+            return
+        from Generate import PlandoSettings
+        if not(PlandoSettings.bosses & plando_options):
+            import logging
+            # plando is disabled but plando options were given so pull the option and change it to an int
+            option = self.value.split(";")[-1]
+            self.value = self.options[option]
+            logging.warning(f"The plando bosses module is turned off, so {self.name_lookup[self.value].title()} "
+                            f"boss shuffle will be used for player {player_name}.")
+
+
 class Range(NumericOption):
     range_start = 0
     range_end = 1
