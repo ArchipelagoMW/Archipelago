@@ -9,8 +9,10 @@
 
 - Windows 10+
 - [Overcooked! 2](https://store.steampowered.com/bundle/13608/Overcooked_2___Gourmet_Edition/) for PC
-    - (only steam version has been tested so far, but others should work)
-- [OC2-Modding Client](https://github.com/toasterparty/oc2-modding/releases)
+    - Windows Store (a.k.a GamePass) Version is NOT supported
+    - Epic Games Version is supported, but has never been tested
+    - GOG Version might work, but has never been tested
+- [OC2-Modding Client](https://github.com/toasterparty/oc2-modding/releases) (instructions below)
 
 ## Overview
 
