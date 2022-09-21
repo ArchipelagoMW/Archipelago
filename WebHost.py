@@ -71,9 +71,12 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
                         zf.extract(zfile, target_path)
         else:
             source_path = Utils.local_path(os.path.dirname(world.__file__), "docs")
-            files = os.listdir(source_path)
-            for file in files:
-                shutil.copyfile(Utils.local_path(source_path, file), Utils.local_path(target_path, file))
+            if os.path.exists(source_path):
+                files = os.listdir(source_path)
+                for file in files:
+                    shutil.copyfile(Utils.local_path(source_path, file), Utils.local_path(target_path, file))
+            else:
+                logging.warning(f"{game} is missing a docs folder!")
 
         # build a json tutorial dict per game
         game_data = {'gameTitle': game, 'tutorials': []}
