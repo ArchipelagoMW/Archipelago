@@ -42,6 +42,8 @@ class FinalStageDeath(DefaultOnToggle):
     """Death on the final boss stage counts as a win."""
     display_name = "Final Stage Death is Win"
 
+# TODO add deathlink as a YAML option to match other games
+
 class DLC_SOTV(DefaultOnToggle):
     """Enable if you are using SOTV DLC."""
     display_name = "SOTV"
