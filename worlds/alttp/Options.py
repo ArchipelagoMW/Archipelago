@@ -181,11 +181,6 @@ class Bosses(TextChoice):
         "Ganons Tower Bottom"
     }
 
-    def __init__(self, value: typing.Union[str, int]):
-        assert isinstance(value, str) or isinstance(value, int), \
-            f"{value} is not a valid option for {self.__class__.__name__}"
-        self.value = value
-
     @classmethod
     def from_text(cls, text: str):
         import random
@@ -235,8 +230,7 @@ class Bosses(TextChoice):
             if option == "random" or option in cls.options:
                 if option != options[-1]:
                     raise ValueError(f"{option} option must be at the end of the boss_shuffle options!")
-                continue
-            if "-" in option:
+            elif "-" in option:
                 location, boss = option.split("-")
                 level = ''
                 if not cls.valid_boss_name(boss):

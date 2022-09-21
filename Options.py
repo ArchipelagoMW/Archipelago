@@ -426,7 +426,6 @@ class TextChoice(Choice):
         assert isinstance(value, str) or isinstance(value, int), \
             f"{value} is not a valid option for {self.__class__.__name__}"
         self.value = value
-        super(TextChoice, self).__init__()
 
     @property
     def current_key(self) -> str:
