@@ -14,7 +14,7 @@ import Patch
 from . import Options
 
 from .Technologies import tech_table, recipes, free_sample_exclusions, progressive_technology_table, \
-    base_tech_table, tech_to_progressive_lookup, fluids
+    base_tech_table, tech_to_progressive_lookup, fluids, mods
 
 template_env: Optional[jinja2.Environment] = None
 
@@ -34,7 +34,8 @@ base_info = {
     "factorio_version": "1.1",
     "dependencies": [
         "base >= 1.1.0",
-        "? science-not-invited"
+        "? science-not-invited",
+        "! archipelago-extractor"
     ]
 }
 
@@ -191,6 +192,8 @@ def generate_mod(world, output_directory: str):
         f.write(locale_content)
     info = base_info.copy()
     info["name"] = mod_name
+    for mod in mods.values():
+        info["dependencies"].append(f"{mod.name} >= {mod.version}")
     with open(os.path.join(mod_dir, "info.json"), "wt") as f:
         json.dump(info, f, indent=4)
 

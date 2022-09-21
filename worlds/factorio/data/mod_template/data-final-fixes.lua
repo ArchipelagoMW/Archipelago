@@ -141,6 +141,9 @@ end
 {# This got complex, but seems to be required to hit all corner cases #}
 function adjust_energy(recipe_name, factor)
     local recipe = data.raw.recipe[recipe_name]
+    if recipe == nil then
+        error("Some mod that is installed has removed recipe \"" .. recipe_name .. "\"")
+    end
     local energy = recipe.energy_required
 
     if (recipe.normal ~= nil) then
@@ -168,6 +171,9 @@ end
 
 function set_energy(recipe_name, energy)
     local recipe = data.raw.recipe[recipe_name]
+    if recipe == nil then
+        error("Some mod that is installed has removed recipe \"" .. recipe_name .. "\"")
+    end
 
     if (recipe.normal ~= nil) then
         recipe.normal.energy_required = energy
@@ -188,6 +194,9 @@ data.raw["ammo"]["artillery-shell"].stack_size = 10
 {# each randomized tech gets set to be invisible, with new nodes added that trigger those #}
 {%- for original_tech_name, item_name, receiving_player, advancement in locations %}
 original_tech = technologies["{{original_tech_name}}"]
+if original_tech == nil then
+    error("Some mod that is installed has removed tech \"{{original_tech_name}}\"")
+end
 {#- the tech researched by the local player #}
 new_tree_copy = table.deepcopy(template_tech)
 new_tree_copy.name = "ap-{{ tech_table[original_tech_name] }}-"{# use AP ID #}
@@ -220,13 +229,13 @@ data:extend{new_tree_copy}
 {% endfor %}
 {% if recipe_time_scale %}
 {%- for recipe_name, recipe in recipes.items() %}
-{%- if recipe.category not in ("basic-solid", "basic-fluid") %}
+{%- if not recipe.mining %}
 adjust_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_scale) }})
 {%- endif %}
 {%- endfor -%}
 {% elif recipe_time_range %}
 {%- for recipe_name, recipe in recipes.items() %}
-{%- if recipe.category not in ("basic-solid", "basic-fluid") %}
+{%- if not recipe.mining %}
 set_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_range) }})
 {%- endif %}
 {%- endfor -%}

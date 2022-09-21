@@ -22,13 +22,14 @@ def load_json_data(data_name: str) -> Union[List[str], Dict[str, Any]]:
     import pkgutil
     return json.loads(pkgutil.get_data(__name__, "data/" + data_name + ".json").decode())
 
-
+# TODO: Make use of the lab information. (it has info on the science packs)
 techs_future = pool.submit(load_json_data, "techs")
 recipes_future = pool.submit(load_json_data, "recipes")
 resources_future = pool.submit(load_json_data, "resources")
 machines_future = pool.submit(load_json_data, "machines")
 fluids_future = pool.submit(load_json_data, "fluids")
 items_future = pool.submit(load_json_data, "items")
+mods_future = pool.submit(load_json_data, "mods")
 
 tech_table: Dict[str, int] = {}
 technology_table: Dict[str, Technology] = {}
@@ -94,6 +95,8 @@ class CustomTechnology(Technology):
 
     def __init__(self, origin: Technology, world, allowed_packs: Set[str], player: int):
         ingredients = origin.ingredients & allowed_packs
+        if origin.ingredients and not ingredients:
+            logging.warning(f"Technology {origin.name} has no vanilla science packs. Custom science packs are not supported.")
         military_allowed = "military-science-pack" in allowed_packs \
                            and ((ingredients & {"chemical-science-pack", "production-science-pack", "utility-science-pack"})
                                 or origin.name == "rocket-silo")
@@ -103,7 +106,8 @@ class CustomTechnology(Technology):
                 ingredients.add("military-science-pack")
             ingredients = list(ingredients)
             ingredients.sort()  # deterministic sample
-            ingredients = world.random.sample(ingredients, world.random.randint(1, len(ingredients)))
+            if ingredients:
+                ingredients = world.random.sample(ingredients, world.random.randint(1, len(ingredients)))
         elif origin.name == "rocket-silo" and military_allowed:
             ingredients.add("military-science-pack")
         super(CustomTechnology, self).__init__(origin.name, ingredients, origin.factorio_id)
@@ -115,13 +119,17 @@ class Recipe(FactorioElement):
     ingredients: Dict[str, int]
     products: Dict[str, int]
     energy: float
+    mining: bool
+    unlocked_at_start: bool
 
-    def __init__(self, name: str, category: str, ingredients: Dict[str, int], products: Dict[str, int], energy: float):
+    def __init__(self, name: str, category: str, ingredients: Dict[str, int], products: Dict[str, int], energy: float, mining: bool, unlocked_at_start: bool):
         self.name = name
         self.category = category
         self.ingredients = ingredients
         self.products = products
         self.energy = energy
+        self.mining = mining
+        self.unlocked_at_start = unlocked_at_start
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.name})"
@@ -147,7 +155,9 @@ class Recipe(FactorioElement):
     @property
     def rel_cost(self) -> float:
         ingredients = sum(self.ingredients.values())
-        return min(ingredients / amount for product, amount in self.products.items())
+        if all(amount == 0 for amount in self.products.values()):
+            return float('inf')
+        return min(ingredients / amount for product, amount in self.products.items() if amount > 0)
 
     @property
     def base_cost(self) -> Dict[str, int]:
@@ -163,6 +173,16 @@ class Recipe(FactorioElement):
             else:
                 ingredients[ingredient] += cost
         return ingredients
+
+    def detect_recursive_loop(self, recipes: Counter) -> bool:
+        for ingredient in self.ingredients.keys():
+            if ingredient in all_product_sources:
+                for recipe in all_product_sources[ingredient]:
+                    if recipe.ingredients:
+                        recipes[self.name] += 1
+                        if recipes[self.name] >= 10 or recipe.detect_recursive_loop(recipes):
+                            return True
+        return False
 
     @property
     def total_energy(self) -> float:
@@ -182,10 +202,52 @@ class Recipe(FactorioElement):
 
 
 class Machine(FactorioElement):
-    def __init__(self, name, categories):
+    def __init__(self, name, categories, machine_type, speed):
         self.name: str = name
         self.categories: set = categories
+        self.machine_type: str = machine_type
+        self.speed: float = speed
 
+class Lab(FactorioElement):
+    def __init__(self, name, inputs):
+        self.name: str = name
+        self.inputs: set = inputs
+
+
+class Mod(FactorioElement):
+    def __init__(self, name, version):
+        self.name: str = name
+        self.version: str = version
+
+
+class Item(FactorioElement):
+    def __init__(self, name, stack_size, stackable, place_result, burnt_result, fuel_value, fuel_category, rocket_launch_products):
+        self.name: str = name
+        self.stack_size: int = stack_size
+        self.stackable: bool = stackable
+        self.place_result: str = place_result
+        self.burnt_result: str = burnt_result
+        self.fuel_value: int = fuel_value
+        self.fuel_category: str = fuel_category
+        self.rocket_launch_products: Dict[str, int] = rocket_launch_products
+
+
+items: Dict[str, Item] = {}
+for name, item_data in items_future.result().items():
+    item = Item(name,
+                item_data.get("stack_size"),
+                item_data.get("stackable"),
+                item_data.get("place_result", None),
+                item_data.get("burnt_result", None),
+                item_data.get("fuel_value", 0),
+                item_data.get("fuel_category", None),
+                item_data.get("rocket_launch_products", {}))
+    items[name] = item
+del items_future
+
+fluids: Dict[str, Dict[str, int]] = dict(fluids_future.result())
+del fluids_future
+print(fluids)
 
 recipe_sources: Dict[str, Set[str]] = {}  # recipe_name -> technology source
 
@@ -213,38 +275,120 @@ for resource_name, resource_data in resources_future.result().items():
         if "required_fluid" in resource_data else {},
         "products": {data["name"]: data["amount"] for data in resource_data["products"].values()},
         "energy": resource_data["mining_time"],
-        "category": resource_data["category"]
+        "category": resource_data["category"],
+        "mining": True,
+        "unlocked_at_start": True
     }
 del resources_future
+
+machines: Dict[str, Machine] = {}
+labs: Dict[str, Lab] = {}
+
+for name, prototype in machines_future.result().items():
+    for machine_type, machine_data in prototype.items():
+        print(f"{name}: {machine_type}: {machine_data}")
+        if machine_type == "lab":
+            lab = Lab(name, machine_data.get("inputs", set()))
+            labs[name] = lab
+        if machine_type == "offshore-pump":
+            fluid = machine_data.get("fluid", None)
+            speed = machine_data.get("speed", None)
+            if not fluid or not speed:
+                continue
+            category = f"offshore-pumping-{fluid}-{speed}"
+            raw_recipes[category] = {
+                "ingredients": {},
+                "products": {fluid: (speed*60)},
+                "energy": 1,
+                "category": category,
+                "mining": True,
+                "unlocked_at_start": True
+            }
+            machine = Machine(name, {category}, machine_data.get("type"), 1)
+            machines[name] = machine
+        if machine_type == "crafting":
+            categories = machine_data.get("categories", set())
+            if not categories:
+                continue
+            print(set(categories))
+            # TODO: Use speed / fluid_box info
+            speed = machine_data.get("speed", 1)
+            input_fluid_box = machine_data.get("input_fluid_box", 0)
+            output_fluid_box = machine_data.get("output_fluid_box", 0)
+            machine = Machine(name, set(categories), machine_data.get("type"), speed)
+            machines[name] = machine
+        if machine_type == "mining":
+            categories = machine_data.get("categories", set())
+            if not categories:
+                continue
+            print(set(categories))
+            speed = machine_data.get("speed", 1)
+            input_fluid_box = machine_data.get("input_fluid_box", False)  # Can this machine mine resources with required fluids?
+            output_fluid_box = machine_data.get("output_fluid_box", False)  # Can this machine mine fluid resources?
+            machine = machines.setdefault(name, Machine(name, set(categories), machine_data.get("type"), speed))
+            machine.categories |= set(categories)  # character has both crafting and basic-solid
+            machine.speed = (machine.speed + speed) / 2
+            machines[name] = machine
+        if machine_type == "boiler":
+            input_fluid = machine_data.get("input_fluid")
+            output_fluid = machine_data.get("output_fluid")
+            target_temperature = machine_data.get("target_temperature")
+            energy_usage = machine_data.get("energy_usage")
+            amount = energy_usage / (target_temperature - fluids[input_fluid].get("default_temperature", 15)) / fluids[input_fluid].get("heat_capacity", 1)
+            amount *= 60
+            amount = int(amount)
+            category = f"boiling-{amount}-{input_fluid}-to-{output_fluid}-at-{target_temperature}-degrees-centigrade"
+            raw_recipes[category] = {
+                "ingredients": {input_fluid: amount},
+                "products": {output_fluid: amount},
+                "energy": 1,
+                "category": category,
+                "mining": False,
+                "unlocked_at_start": True
+            }
+            machine = Machine(name, {category}, machine_data.get("type"), 1)
+            machines[name] = machine
+
+        # TODO: set up machine/recipe pairs for burners in order to retrieve the burnt_result from items.
+        # TODO: set up machine/recipe pairs for retrieving rocket_launch_products from items.
+
+
+
+del machines_future
 
 for recipe_name, recipe_data in raw_recipes.items():
     # example:
     # "accumulator":{"ingredients":{"iron-plate":2,"battery":5},"products":{"accumulator":1},"category":"crafting"}
     # FIXME: add mining?
     recipe = Recipe(recipe_name, recipe_data["category"], recipe_data["ingredients"],
-                    recipe_data["products"], recipe_data["energy"] if "energy" in recipe_data else 0)
+                    recipe_data["products"], recipe_data.get("energy", 0), recipe_data.get("mining", False), recipe_data.get("unlocked_at_start", False))
     recipes[recipe_name] = recipe
-    if set(recipe.products).isdisjoint(
-            # prevents loop recipes like uranium centrifuging
-            set(recipe.ingredients)) and ("empty-barrel" not in recipe.products or recipe.name == "empty-barrel") and \
-            not recipe_name.endswith("-reprocessing"):
-        for product_name in recipe.products:
+    if set(recipe.products).isdisjoint(set(recipe.ingredients)):
+        for product_name in [product_name for product_name, amount in recipe.products.items() if amount > 0]:
             all_product_sources.setdefault(product_name, set()).add(recipe)
+            if recipe.detect_recursive_loop(Counter()):
+                # prevents loop recipes like uranium centrifuging and fluid unbarreling
+                all_product_sources.setdefault(product_name, set()).remove(recipe)
+                if not all_product_sources[product_name]:
+                    del (all_product_sources[product_name])
 
 
-machines: Dict[str, Machine] = {}
+machines["assembling-machine-1"].categories |= machines["assembling-machine-3"].categories  # mod enables this
+machines["assembling-machine-2"].categories |= machines["assembling-machine-3"].categories
+# machines["character"].categories.add("basic-crafting")
+# charter only knows the categories of "crafting" and "basic-solid" by default.
 
-for name, categories in machines_future.result().items():
-    machine = Machine(name, set(categories))
-    machines[name] = machine
 
-# add electric mining drill as a crafting machine to resolve basic-solid (mining)
-machines["electric-mining-drill"] = Machine("electric-mining-drill", {"basic-solid"})
-machines["pumpjack"] = Machine("pumpjack", {"basic-fluid"})
-machines["assembling-machine-1"].categories.add("crafting-with-fluid")  # mod enables this
-machines["character"].categories.add("basic-crafting")  # somehow this is implied and not exported
+mods: Dict[str, Mod] = {}
 
-del machines_future
+for name, version in mods_future.result().items():
+    if name in ["base"]:
+        continue
+    mod = Mod(name, version)
+    mods[name] = mod
+
+del mods_future
+
 
 # build requirements graph for all technology ingredients
 
@@ -254,7 +398,10 @@ for technology in technology_table.values():
 
 
 def unlock_just_tech(recipe: Recipe, _done) -> Set[Technology]:
-    current_technologies = recipe.unlocking_technologies
+    if recipe.unlocked_at_start:
+        current_technologies = set()
+    else:
+        current_technologies = recipe.unlocking_technologies
     for ingredient_name in recipe.ingredients:
         current_technologies |= recursively_get_unlocking_technologies(ingredient_name, _done,
                                                                        unlock_func=unlock_just_tech)
@@ -262,7 +409,10 @@ def unlock_just_tech(recipe: Recipe, _done) -> Set[Technology]:
 
 
 def unlock(recipe: Recipe, _done) -> Set[Technology]:
-    current_technologies = recipe.unlocking_technologies
+    if recipe.unlocked_at_start:
+        current_technologies = set()
+    else:
+        current_technologies = recipe.unlocking_technologies
     for ingredient_name in recipe.ingredients:
         current_technologies |= recursively_get_unlocking_technologies(ingredient_name, _done, unlock_func=unlock)
     current_technologies |= required_category_technologies[recipe.category]
@@ -291,19 +441,36 @@ def recursively_get_unlocking_technologies(ingredient_name, _done=None, unlock_f
 
 required_machine_technologies: Dict[str, FrozenSet[Technology]] = {}
 for ingredient_name in machines:
+    if ingredient_name == "character":
+        required_machine_technologies[ingredient_name] = frozenset()
+        continue
+    required_machine_technologies[ingredient_name] = frozenset(recursively_get_unlocking_technologies(ingredient_name))
+    print(f"{ingredient_name}: {required_machine_technologies[ingredient_name]}")
+for ingredient_name in labs:
     required_machine_technologies[ingredient_name] = frozenset(recursively_get_unlocking_technologies(ingredient_name))
 
 logical_machines = {}
 machine_tech_cost = {}
+
+for category in machines["character"].categories:
+    machine_tech_cost[category] = (10000, "character", machines["character"].speed)
+
 for machine in machines.values():
+    if machine.name == "character":
+        continue
     for category in machine.categories:
-        current_cost, current_machine = machine_tech_cost.get(category, (10000, "character"))
         machine_cost = len(required_machine_technologies[machine.name])
-        if machine_cost < current_cost:
-            machine_tech_cost[category] = machine_cost, machine.name
+        if machine.machine_type == "character" and not machine_cost:
+            machine_cost = 10000
+        if category in machine_tech_cost:
+            current_cost, current_machine, current_speed = machine_tech_cost.get(category)
+            if machine_cost < current_cost or (machine_cost == current_cost and machine.speed > current_speed):
+                machine_tech_cost[category] = machine_cost, machine.name, machine.speed
+        else:
+            machine_tech_cost[category] = machine_cost, machine.name, machine.speed
 
 machine_per_category: Dict[str: str] = {}
-for category, (cost, machine_name) in machine_tech_cost.items():
+for category, (cost, machine_name, speed) in machine_tech_cost.items():
     machine_per_category[category] = machine_name
 
 del machine_tech_cost
@@ -313,7 +480,12 @@ required_category_technologies: Dict[str, FrozenSet[FrozenSet[Technology]]] = {}
 for category_name, machine_name in machine_per_category.items():
     techs = set()
     techs |= recursively_get_unlocking_technologies(machine_name)
+    if category_name in machines["character"].categories and techs:
+        # Character crafting/mining categories always have no tech assigned.
+        techs = set()
+        machine_per_category[category_name] = "character"
     required_category_technologies[category_name] = frozenset(techs)
+    print(f"{category_name}: {required_category_technologies[category_name]}")
 
 required_technologies: Dict[str, FrozenSet[Technology]] = Utils.KeyedDefaultDict(lambda ingredient_name: frozenset(
     recursively_get_unlocking_technologies(ingredient_name, unlock_func=unlock)))
@@ -447,34 +619,39 @@ useless_technologies: Set[str] = {tech_name for tech_name in common_tech_table
 
 lookup_id_to_name: Dict[int, str] = {item_id: item_name for item_name, item_id in tech_table.items()}
 
-rel_cost = {
-    "wood": 10000,
-    "iron-ore": 1,
-    "copper-ore": 1,
-    "stone": 1,
-    "crude-oil": 0.5,
-    "water": 0.001,
-    "coal": 1,
-    "raw-fish": 1000,
-    "steam": 0.01,
-    "used-up-uranium-fuel-cell": 1000
-}
+print("\n\nReletive costs:")
+rel_cost = {}
+for name, recipe in {name: recipe for name, recipe in recipes.items() if recipe.mining and not recipe.ingredients}.items():
+    machine = machines[machine_per_category[recipe.category]]
+    cost = recipe.energy / machine.speed
+    print(f"Cost of {name}: {cost} = {recipe.energy} / {machine.speed}")
+    for product_name, amount in recipe.products.items():
+        print(f"cost of {amount} x {product_name} = {(cost / amount)}")
+        rel_cost[product_name] = cost / amount
+
+
+def get_estimated_difficulty(recipe: Recipe):
+    base_ingredients = recipe.base_cost
+    cost = 0
+
+    for ingredient_name, amount in base_ingredients.items():
+        cost += rel_cost.get(ingredient_name, 1000) * amount
+    return cost
+
+
+for name, recipe in {name: recipe for name, recipe in recipes.items() if recipe.mining and recipe.ingredients}.items():
+    machine = machines[machine_per_category[recipe.category]]
+    cost = (recipe.energy / machine.speed) + get_estimated_difficulty(recipe)
+    for product_name, amount in recipe.products.items():
+        rel_cost[product_name] = cost / amount
+
+print(rel_cost)
 
 exclusion_list: Set[str] = all_ingredient_names | {"rocket-part", "used-up-uranium-fuel-cell"}
-fluids: Set[str] = set(fluids_future.result())
-del fluids_future
 
 
 @Utils.cache_argsless
 def get_science_pack_pools() -> Dict[str, Set[str]]:
-    def get_estimated_difficulty(recipe: Recipe):
-        base_ingredients = recipe.base_cost
-        cost = 0
-
-        for ingredient_name, amount in base_ingredients.items():
-            cost += rel_cost.get(ingredient_name, 1) * amount
-        return cost
-
     science_pack_pools: Dict[str, Set[str]] = {}
     already_taken = exclusion_list.copy()
     current_difficulty = 5
@@ -484,12 +661,15 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
             if (science_pack != "automation-science-pack" or not recipe.recursive_unlocking_technologies) \
                     and get_estimated_difficulty(recipe) < current_difficulty:
                 current |= set(recipe.products)
+            if science_pack == "automation-science-pack" and recipe.recursive_unlocking_technologies and recipe.unlocked_at_start:
+                print(f"Recipe: {name}")
+                print(f"Category: {recipe.category}")
+                print(f"unlocking_technologies: {recipe.recursive_unlocking_technologies}")
+                print(f"Estimated Difficulty: {get_estimated_difficulty(recipe)}")
 
         if science_pack == "automation-science-pack":
             # Can't handcraft automation science if fluids end up in its recipe, making the seed impossible.
-            current -= fluids
-        elif science_pack == "logistic-science-pack":
-            current |= {"steam"}
+            current -= set(fluids)
 
         current -= already_taken
         already_taken |= current
@@ -498,10 +678,9 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
     return science_pack_pools
 
 
-item_stack_sizes: Dict[str, int] = items_future.result()
-non_stacking_items: Set[str] = {item for item, stack in item_stack_sizes.items() if stack == 1}
-stacking_items: Set[str] = set(item_stack_sizes) - non_stacking_items
-valid_ingredients: Set[str] = stacking_items | fluids
+non_stacking_items: Set[str] = {name for name, item in items.items() if not item.stackable}
+stacking_items: Set[str] = set(items) - non_stacking_items
+valid_ingredients: Set[str] = stacking_items | set(fluids)
 
 # cleanup async helpers
 pool.shutdown()
