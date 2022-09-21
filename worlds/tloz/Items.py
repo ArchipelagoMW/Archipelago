@@ -70,7 +70,7 @@ item_amounts_all = {
     "Triforce Fragment": 8,
     "Small Key": 46,
     "Bomb": 19,
-    "Five Rupees": 18,
+    "Five Rupees": 19,
     "Water of Life (Red)": 5,
     "Silver Arrow": 2,
     "Rupee": 0,
