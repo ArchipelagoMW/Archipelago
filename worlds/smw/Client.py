@@ -313,11 +313,13 @@ async def smw_game_watcher(ctx: Context):
                 ctx.location_names[item.location], recv_index, len(ctx.items_received)))
 
             if ctx.receive_option == 1 or (ctx.receive_option == 2 and ((item.flags & 1) != 0)):
-                item_name = ctx.item_names[item.item]
-                player_name = ctx.player_names[item.player]
+                if item.item != 0xBC0012:
+                    # Don't send messages for Boss Tokens
+                    item_name = ctx.item_names[item.item]
+                    player_name = ctx.player_names[item.player]
 
-                receive_message = generate_received_text(item_name, player_name)
-                add_message_to_queue(ctx, receive_message)
+                    receive_message = generate_received_text(item_name, player_name)
+                    add_message_to_queue(ctx, receive_message)
 
             snes_buffered_write(ctx, SMW_RECV_PROGRESS_ADDR, bytes([recv_index]))
             if item.item in item_rom_data:
