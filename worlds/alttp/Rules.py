@@ -55,8 +55,6 @@ def set_rules(world):
     elif world.world_state[player].inverted:
         open_rules(world, player)
         inverted_rules(world, player)
-    else:
-        raise NotImplementedError(f'World state {world.world_state[player]} is not implemented yet')
 
     no_glitches_rules(world, player)
     if player_logic == minor_glitches:
@@ -214,7 +212,7 @@ def global_rules(world, player):
     set_rule(world.get_entrance('Sewers Door', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player) or (
                          world.smallkey_shuffle[player] == smallkey_shuffle.option_universal and world.world_state[
-                     player] == 'standard'))  # standard universal small keys cannot access the shop
+                     player] == WorldState.option_standard))  # standard universal small keys cannot access the shop
     set_rule(world.get_entrance('Sewers Back Door', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player))
     set_rule(world.get_entrance('Agahnim 1', player),

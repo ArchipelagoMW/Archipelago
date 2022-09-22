@@ -808,7 +808,7 @@ class CollectionState():
         if self.has('Moon Pearl', player):
             return True
 
-        return region.is_light_world if self.world.world_state[player] != 2 else region.is_dark_world
+        return region.is_light_world if not self.world.world_state[player].inverted else region.is_dark_world
 
     def can_reach_light_world(self, player: int) -> bool:
         if True in [i.is_light_world for i in self.reachable_regions[player]]:
@@ -827,18 +827,18 @@ class CollectionState():
         return self.has(self.world.turtle_rock_medallion[player].current_option_name, player)
 
     def can_boots_clip_lw(self, player: int) -> bool:
-        if self.world.world_state[player] == 2:
+        if self.world.world_state[player].inverted:
             return self.has('Pegasus Boots', player) and self.has('Moon Pearl', player)
         return self.has('Pegasus Boots', player)
 
     def can_boots_clip_dw(self, player: int) -> bool:
-        if self.world.world_state[player] != 2:
+        if not self.world.world_state[player].inverted:
             return self.has('Pegasus Boots', player) and self.has('Moon Pearl', player)
         return self.has('Pegasus Boots', player)
 
     def can_get_glitched_speed_lw(self, player: int) -> bool:
         rules = [self.has('Pegasus Boots', player), any([self.has('Hookshot', player), self.has_sword(player)])]
-        if self.world.world_state[player] == 2:
+        if self.world.world_state[player].inverted:
             rules.append(self.has('Moon Pearl', player))
         return all(rules)
 

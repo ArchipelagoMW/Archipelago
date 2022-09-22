@@ -79,7 +79,7 @@ def create_dungeons(world, player):
                       ItemFactory(['Small Key (Turtle Rock)'] * 4, player),
                       ItemFactory(['Map (Turtle Rock)', 'Compass (Turtle Rock)'], player))
 
-    if world.world_state[player] != 2:
+    if not world.world_state[player].inverted:
         AT = make_dungeon('Agahnims Tower', 'Agahnim', ['Agahnims Tower', 'Agahnim 1'], None,
                           ItemFactory(['Small Key (Agahnims Tower)'] * 2, player), [])
         GT = make_dungeon('Ganons Tower', 'Agahnim2',

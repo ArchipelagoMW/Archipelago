@@ -1070,10 +1070,10 @@ def link_entrances(world, player):
         raise NotImplementedError(
             f'{world.shuffle[player]} Shuffling not supported yet. Player {world.get_player_name(player)}')
 
-    if world.glitches_required[player] in (Logic.alias_owg, Logic.alias_hmg, Logic.option_no_logic):
+    if world.glitches_required[player] > 1:
         overworld_glitch_connections(world, player)
         # mandatory hybrid major glitches connections
-        if world.glitches_required[player] in (Logic.alias_hmg, Logic.option_no_logic):
+        if world.glitches_required[player] > 2:
             underworld_glitch_connections(world, player)
 
     # check for swamp palace fix
@@ -1777,10 +1777,10 @@ def link_inverted_entrances(world, player):
     else:
         raise NotImplementedError('Shuffling not supported yet')
 
-    if world.glitches_required[player] in (Logic.alias_owg, Logic.alias_hmg, Logic.option_no_logic):
+    if world.glitches_required[player] > 1:
         overworld_glitch_connections(world, player)
         # mandatory hybrid major glitches connections
-        if world.glitches_required[player] in (Logic.alias_hmg, Logic.option_no_logic):
+        if world.glitches_required[player] > 2:
             underworld_glitch_connections(world, player)
 
     # patch swamp drain
@@ -1954,13 +1954,13 @@ def connect_mandatory_exits(world, entrances, caves, must_be_exits, player):
     standard = world.world_state[player] == WorldState.option_standard
     inverted = world.world_state[player] == WorldState.option_inverted
     # Keeps track of entrances that cannot be used to access each exit / cave
-    if standard:
+    if inverted:
         invalid_connections = Inverted_Must_Exit_Invalid_Connections.copy()
     else:
         invalid_connections = Must_Exit_Invalid_Connections.copy()
     invalid_cave_connections = defaultdict(set)
 
-    if world.glitches_required[player] in (Logic.alias_owg, Logic.alias_hmg, Logic.option_no_logic):
+    if world.glitches_required[player] > 1:
         from worlds.alttp import OverworldGlitchRules
         for entrance in OverworldGlitchRules.get_non_mandatory_exits(inverted):
             invalid_connections[entrance] = set()
@@ -2088,7 +2088,7 @@ def simple_shuffle_dungeons(world, player):
     dungeon_entrances = ['Eastern Palace', 'Tower of Hera', 'Thieves Town', 'Skull Woods Final Section', 'Palace of Darkness', 'Ice Palace', 'Misery Mire', 'Swamp Palace']
     dungeon_exits = ['Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Palace of Darkness Exit', 'Ice Palace Exit', 'Misery Mire Exit', 'Swamp Palace Exit']
 
-    if world.world_state[player] == WorldState.option_inverted:
+    if world.world_state[player].inverted:
         if not world.shuffle_ganon:
             connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit', player)
         else:
@@ -2103,13 +2103,15 @@ def simple_shuffle_dungeons(world, player):
 
     # mix up 4 door dungeons
     multi_dungeons = ['Desert', 'Turtle Rock']
-    if world.world_state[player] == WorldState.option_open or (world.world_state[player] == WorldState.option_inverted and world.shuffle_ganon):
+    if world.world_state[player] == WorldState.option_open or\
+            (world.world_state[player].inverted and world.shuffle_ganon):
         multi_dungeons.append('Hyrule Castle')
     world.random.shuffle(multi_dungeons)
 
     dp_target = multi_dungeons[0]
     tr_target = multi_dungeons[1]
-    if world.world_state[player] not in [WorldState.option_open, WorldState.option_inverted] or (world.world_state[player] == WorldState.option_inverted and world.shuffle_ganon is False):
+    if world.world_state[player] not in [WorldState.option_open, WorldState.option_inverted] or\
+            (world.world_state[player].inverted and not world.shuffle_ganon):
         # place hyrule castle as intended
         hc_target = 'Hyrule Castle'
     else:
@@ -2117,7 +2119,7 @@ def simple_shuffle_dungeons(world, player):
 
     # ToDo improve this?
 
-    if world.world_state[player] != WorldState.option_inverted:
+    if not world.world_state[player].inverted:
         if hc_target == 'Hyrule Castle':
             connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)', player)
             connect_two_way(world, 'Hyrule Castle Entrance (East)', 'Hyrule Castle Exit (East)', player)

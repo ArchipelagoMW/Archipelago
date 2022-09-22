@@ -445,7 +445,7 @@ take_any_locations.sort()
 
 def set_up_take_anys(world, player):
     # these are references, do not modify these lists in-place
-    if world.world_state[player] == WorldState.option_inverted:
+    if world.world_state[player].inverted:
         take_any_locs = take_any_locations_inverted
     else:
         take_any_locs = take_any_locations

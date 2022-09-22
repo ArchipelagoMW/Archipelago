@@ -296,13 +296,13 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
         'RandomizeEnemies': world.enemy_shuffle[player].value,
         'RandomizeEnemiesType': 3,
         'RandomizeBushEnemyChance': world.bush_shuffle[player].value,
-        'RandomizeEnemyHealthRange': world.enemy_health[player].value != EnemyHealth.option_normal,
+        'RandomizeEnemyHealthRange': world.enemy_health[player] != EnemyHealth.option_normal,
         'RandomizeEnemyHealthType': world.enemy_health[player].value,
         'OHKO': False,
-        'RandomizeEnemyDamage': bool(world.enemy_damage[player].value),
+        'RandomizeEnemyDamage': bool(world.enemy_damage[player]),
         'AllowEnemyZeroDamage': True,
-        'ShuffleEnemyDamageGroups': bool(world.enemy_damage[player].value),
-        'EnemyDamageChaosMode': world.enemy_damage[player].value == EnemyDamage.option_chaos,
+        'ShuffleEnemyDamageGroups': bool(world.enemy_damage[player]),
+        'EnemyDamageChaosMode': world.enemy_damage[player] == EnemyDamage.option_chaos,
         'EasyModeEscape': world.world_state[player] == WorldState.option_standard,
         'EnemiesAbsorbable': False,
         'AbsorbableSpawnRate': 10,
@@ -1064,7 +1064,7 @@ def patch_rom(world, rom, player, enemized):
         prize_replacements[0xE1] = 0xDA  # 5 Arrows -> Blue Rupee
         prize_replacements[0xE2] = 0xDB  # 10 Arrows -> Red Rupee
 
-    if world.shuffle_prizes[player].value in (PrizeShuffle.option_general, PrizeShuffle.option_both):
+    if world.shuffle_prizes[player] in (PrizeShuffle.option_general, PrizeShuffle.option_both):
         # shuffle prize packs
         prizes = [0xD8, 0xD8, 0xD8, 0xD8, 0xD9, 0xD8, 0xD8, 0xD9, 0xDA, 0xD9, 0xDA, 0xDB, 0xDA, 0xD9, 0xDA, 0xDA, 0xE0,
                   0xDF, 0xDF, 0xDA, 0xE0, 0xDF, 0xD8, 0xDF,
@@ -1126,7 +1126,7 @@ def patch_rom(world, rom, player, enemized):
             byte = int(rom.read_byte(address))
             rom.write_byte(address, prize_replacements.get(byte, byte))
 
-    if world.shuffle_prizes[player].value in (PrizeShuffle.option_bonk, PrizeShuffle.option_both):
+    if world.shuffle_prizes[player] in (PrizeShuffle.option_bonk, PrizeShuffle.option_both):
         # set bonk prizes
         bonk_prizes = [0x79, 0xE3, 0x79, 0xAC, 0xAC, 0xE0, 0xDC, 0xAC, 0xE3, 0xE3, 0xDA, 0xE3, 0xDA, 0xD8, 0xAC,
                        0xAC, 0xE3, 0xD8, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xDC, 0xDB, 0xE3, 0xDA, 0x79, 0x79,
@@ -1222,7 +1222,7 @@ def patch_rom(world, rom, player, enemized):
         rom.write_bytes(0x180190, [0x00, 0x00, 0x00])  # turn off clock mode
 
     # Set up requested clock settings
-    if world.worlds[player].clock_mode in ['countdown-ohko', 'stopwatch', 'countdown']:
+    if clock_mode in ['countdown-ohko', 'stopwatch', 'countdown']:
         rom.write_int32(0x180200,
                         world.red_clock_time[player] * 60 * 60)  # red clock adjustment time (in frames, sint32)
         rom.write_int32(0x180204,
@@ -1235,7 +1235,7 @@ def patch_rom(world, rom, player, enemized):
         rom.write_int32(0x180208, 0)  # green clock adjustment time (in frames, sint32)
 
     # Set up requested start time for countdown modes
-    if world.worlds[player].clock_mode in ['countdown-ohko', 'countdown']:
+    if clock_mode in ['countdown-ohko', 'countdown']:
         rom.write_int32(0x18020C, world.countdown_start_time[player] * 60 * 60)  # starting time (in frames, sint32)
     else:
         rom.write_int32(0x18020C, 0)  # starting time (in frames, sint32)
@@ -1518,7 +1518,7 @@ def patch_rom(world, rom, player, enemized):
     rom.write_byte(0x18003B, 0x01 if world.map_shuffle[player] else 0x00)  # maps showing crystals on overworld
 
     # compasses showing dungeon count
-    if world.worlds[player].clock_mode or not world.dungeon_counters[player]:
+    if clock_mode or not world.dungeon_counters[player]:
         rom.write_byte(0x18003C, 0x00)  # Currently must be off if timer is on, because they use same HUD location
     elif world.dungeon_counters[player] == Counters.option_on:
         rom.write_byte(0x18003C, 0x02)  # always on
