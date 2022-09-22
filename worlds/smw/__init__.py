@@ -237,6 +237,8 @@ class SMWWorld(World):
             classification = ItemClassification.filler
         elif data.progression:
             classification = ItemClassification.progression
+        elif data.trap:
+            classification = ItemClassification.trap
         else:
             classification = ItemClassification.filler
 

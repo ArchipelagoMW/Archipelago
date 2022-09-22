@@ -7,6 +7,7 @@ from .Names import ItemName
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     progression: bool
+    trap: bool = False
     quantity: int = 1
     event: bool = False
 
@@ -45,9 +46,9 @@ switch_palace_table = {
 }
 
 trap_table = {
-    ItemName.ice_trap:        ItemData(0xBC0013, False),
-    ItemName.stun_trap:       ItemData(0xBC0014, False),
-    ItemName.literature_trap: ItemData(0xBC0015, False),
+    ItemName.ice_trap:        ItemData(0xBC0013, False, True),
+    ItemName.stun_trap:       ItemData(0xBC0014, False, True),
+    ItemName.literature_trap: ItemData(0xBC0015, False, True),
 }
 
 event_table = {
