@@ -27,7 +27,8 @@ class WorldSource(typing.NamedTuple):
 world_sources: typing.List[WorldSource] = []
 file: os.DirEntry  # for me (Berserker) at least, PyCharm doesn't seem to infer the type correctly
 for file in os.scandir(folder):
-    if not file.name.startswith("_"):  # prevent explicitly loading __pycache__ and allow _* names for non-world folders
+    # prevent loading of __pycache__ and allow _* for non-world folders, disable files/folders starting with "."
+    if not file.name.startswith(("_", ".")):
         if file.is_dir():
             world_sources.append(WorldSource(file.name))
         elif file.is_file() and file.name.endswith(".apworld"):
