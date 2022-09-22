@@ -599,6 +599,22 @@ def handle_level_shuffle(rom, active_level_dict):
         rom.write_byte(0x37F70 + level_id, tile_id)
 
 
+def handle_collected_paths(rom):
+    rom.write_bytes(0x1F5B, bytearray([0x22, 0x30, 0xBC, 0x03])) # JSL $03BC30
+    rom.write_bytes(0x1F5F, bytearray([0xEA] * 0x02))
+
+    COLLECTED_PATHS_SUB_ADDR = 0x01BC30
+    rom.write_bytes(COLLECTED_PATHS_SUB_ADDR + 0x00, bytearray([0x08]))                   # PHP
+    rom.write_bytes(COLLECTED_PATHS_SUB_ADDR + 0x01, bytearray([0xAD, 0x00, 0x01]))       # LDA $0100
+    rom.write_bytes(COLLECTED_PATHS_SUB_ADDR + 0x04, bytearray([0xC9, 0x0B]))             # CMP #0B
+    rom.write_bytes(COLLECTED_PATHS_SUB_ADDR + 0x06, bytearray([0xD0, 0x04]))             # BNE +0x04
+    rom.write_bytes(COLLECTED_PATHS_SUB_ADDR + 0x08, bytearray([0x22, 0xAD, 0xDA, 0x04])) # JSL $04DAAD
+    rom.write_bytes(COLLECTED_PATHS_SUB_ADDR + 0x0C, bytearray([0x28]))                   # PLP
+    rom.write_bytes(COLLECTED_PATHS_SUB_ADDR + 0x0D, bytearray([0xEE, 0x00, 0x01]))       # INC $0100
+    rom.write_bytes(COLLECTED_PATHS_SUB_ADDR + 0x10, bytearray([0xAD, 0xAF, 0x0D]))       # LDA $0DAF
+    rom.write_bytes(COLLECTED_PATHS_SUB_ADDR + 0x13, bytearray([0x6B]))                   # RTL
+
+
 def handle_music_shuffle(rom, world, player):
     from .Aesthetics import generate_shuffled_level_music, generate_shuffled_ow_music, level_music_address_data, ow_music_address_data
 
@@ -707,6 +723,8 @@ def patch_rom(world, rom, player, active_level_dict):
 
     handle_yoshi_box(rom)
     handle_bowser_damage(rom)
+
+    handle_collected_paths(rom)
 
     # Handle Level Shuffle
     handle_level_shuffle(rom, active_level_dict)
