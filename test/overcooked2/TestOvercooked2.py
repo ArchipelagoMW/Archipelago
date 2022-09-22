@@ -4,8 +4,8 @@ import json
 from random import Random
 
 from worlds.overcooked2.Items import *
-from worlds.overcooked2.Overcooked2Levels import Overcooked2Level, level_shuffle_factory, level_id_to_shortname
-from worlds.overcooked2.Logic import level_logic
+from worlds.overcooked2.Overcooked2Levels import Overcooked2Level, level_id_to_shortname
+from worlds.overcooked2.Logic import level_logic, level_shuffle_factory
 from worlds.overcooked2.Locations import oc2_location_name_to_id
 
 
