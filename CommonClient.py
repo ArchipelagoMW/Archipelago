@@ -134,10 +134,10 @@ class CommonContext:
     current_reconnect_delay: int = starting_reconnect_delay
     command_processor: typing.Type[CommandProcessor] = ClientCommandProcessor
     ui = None
-    ui_task: typing.Optional[asyncio.Task] = None
-    input_task: typing.Optional[asyncio.Task] = None
-    keep_alive_task: typing.Optional[asyncio.Task] = None
-    server_task: typing.Optional[asyncio.Task] = None
+    ui_task: typing.Optional["asyncio.Task[None]"] = None
+    input_task: typing.Optional["asyncio.Task[None]"] = None
+    keep_alive_task: typing.Optional["asyncio.Task[None]"] = None
+    server_task: typing.Optional["asyncio.Task[None]"] = None
     server: typing.Optional[Endpoint] = None
     server_version: Version = Version(0, 0, 0)
     current_energy_link_value: int = 0  # to display in UI, gets set by server
@@ -146,7 +146,7 @@ class CommonContext:
 
     # remaining type info
     slot_info: typing.Dict[int, NetworkSlot]
-    server_address: str
+    server_address: typing.Optional[str]
     password: typing.Optional[str]
     hint_cost: typing.Optional[int]
     player_names: typing.Dict[int, str]

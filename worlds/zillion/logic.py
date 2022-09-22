@@ -35,7 +35,7 @@ def set_randomizer_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> int:
 
 
 def cs_to_zz_items(cs: CollectionState, p: int) -> List[Item]:
-    """ return the zilliandomizer options that I've collected """
+    """ return the zilliandomizer items that I've collected """
     items_tr: List[Item] = []
     for item in items:
         name = item.debug_name
@@ -46,6 +46,11 @@ def cs_to_zz_items(cs: CollectionState, p: int) -> List[Item]:
 
 
 def item_counts(cs: CollectionState, p: int) -> Tuple[Tuple[str, int], ...]:
+    """
+    the zilliandomizer items that player p has collected
+
+    ((item_name, count), (item_name, count), ...)
+    """
     return tuple((item.debug_name, cs.item_count(item.debug_name, p)) for item in items)
 
 

@@ -51,6 +51,7 @@ class MultiWorld():
     non_local_items: Dict[int, Options.NonLocalItems]
     progression_balancing: Dict[int, Options.ProgressionBalancing]
     completion_condition: Dict[int, Callable[[CollectionState], bool]]
+    exclude_locations: Dict[int, Options.ExcludeLocations]
 
     class AttributeProxy():
         def __init__(self, rule):

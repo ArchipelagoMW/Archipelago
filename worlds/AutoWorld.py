@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import sys
 import pathlib
-from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, TYPE_CHECKING
+from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Type, Union, TYPE_CHECKING
 
 from Options import AssembleOptions
 from BaseClasses import CollectionState
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 
 class AutoWorldRegister(type):
-    world_types: Dict[str, type(World)] = {}
+    world_types: Dict[str, Type[World]] = {}
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -239,7 +239,9 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
-        """Fill in the slot_data field in the Connected network package."""
+        """Fill in the `slot_data` field in the `Connected` network package.
+        This is a way the generator can give custom data to the client.
+        The client will receive this as JSON in the `Connected` response."""
         return {}
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:  # TODO: TypedDict for multidata?

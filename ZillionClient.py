@@ -1,7 +1,8 @@
 import asyncio
 import subprocess
 from typing import Any, Coroutine, Dict, Type
-import colorama  # type: ignore
+import colorama
+from NetUtils import ClientStatus
 import Utils
 from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
@@ -10,9 +11,18 @@ from zilliandomizer.zri.memory import Memory
 from zilliandomizer.zri import events
 from zilliandomizer.low_resources.loc_id_maps import id_to_loc as id_to_zz_loc
 from zilliandomizer.logic_components.items import id_to_item as id_to_zz_item
+from zilliandomizer.patch import RescueInfo
 
-from worlds.zillion.id_maps import loc_useful_id_to_pretty_id, item_pretty_id_to_useful_id, loc_zz_name_to_name
+from worlds.zillion.id_maps import item_pretty_id_to_useful_id, loc_zz_name_to_name
 from worlds.zillion.config import base_id
+
+# TODO: rom and server sometimes disagree about what item is where
+# rom said it was another player's item, when server said it was my bread
+# TODO: how to get rescue names (and other item names)
+# TODO: test multiple yamls specifying zillion with no other games
+# (reported causes archipelago to say that it can't beat the game)
+# TODO: make sure close button works on ZillionClient window
+# TODO: test rescues showing in log, (both when local and when external)
 
 
 class ZillionCommandProcessor(ClientCommandProcessor):
@@ -26,6 +36,9 @@ class ZillionContext(CommonContext):
     command_processor: Type[ClientCommandProcessor] = ZillionCommandProcessor
     to_game: "asyncio.Queue[events.EventToGame]"
     items_handling = 1  # receive items from other players
+    rescues: Dict[int, RescueInfo] = {}
+    loc_mem_to_id: Dict[int, int] = {}
+    got_slot_data: asyncio.Event
 
     def __init__(self,
                  server_address: str,
@@ -33,6 +46,7 @@ class ZillionContext(CommonContext):
                  to_game: "asyncio.Queue[events.EventToGame]"):
         super().__init__(server_address, password)
         self.to_game = to_game
+        self.got_slot_data = asyncio.Event()
 
     # override
     def on_deathlink(self, data: Dict[str, Any]) -> None:
@@ -69,20 +83,54 @@ class ZillionContext(CommonContext):
 
     def on_package(self, cmd: str, args: Dict[str, Any]) -> None:
         if cmd == "Connected":
-            logger.info("connected")
+            logger.info("logged in to Archipelago server")
+            if "slot_data" not in args:
+                logger.warn("`Connected` packet missing `slot_data`")
+                return
+            slot_data = args["slot_data"]
+
+            if "rescues" not in slot_data:
+                logger.warn("invalid Zillion `slot_data` in `Connected` packet")
+                return
+            rescues = slot_data["rescues"]
+            self.rescues = {}
+            for rescue_id, json_info in rescues.items():
+                assert rescue_id in ("0", "1"), f"invalid rescue_id in Zillion slot_data: {rescue_id}"
+                ri = RescueInfo(json_info["start_char"],
+                                json_info["room_code"],
+                                json_info["mask"])
+                self.rescues[0 if rescue_id == "0" else 1] = ri
+
+            if "loc_mem_to_id" not in slot_data:
+                logger.warn("invalid Zillion `slot_data` in `Connected` packet")
+                return
+            loc_mem_to_id = slot_data["loc_mem_to_id"]
+            self.loc_mem_to_id = {}
+            for mem_str, id_str in loc_mem_to_id.items():
+                mem = int(mem_str)
+                id_ = int(id_str)
+                room_i = mem // 256
+                assert 0 <= room_i < 74
+                assert id_ in id_to_zz_loc
+                self.loc_mem_to_id[mem] = id_
+
+            self.got_slot_data.set()
 
 
 async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.EventToGame]") -> None:
     logger.info("started zillion sync task")
     from_game: "asyncio.Queue[events.EventFromGame]" = asyncio.Queue()
-    with Memory(from_game, to_game) as memory:
+
+    logger.info("waiting for connection to server")
+    await ctx.got_slot_data.wait()
+    with Memory(ctx.rescues, ctx.loc_mem_to_id, from_game, to_game) as memory:
         next_item = 0
         while not ctx.exit_event.is_set():
             await memory.check()
             if from_game.qsize():
                 event_from_game = from_game.get_nowait()
                 if isinstance(event_from_game, events.AcquireLocationEventFromGame):
-                    server_id = loc_useful_id_to_pretty_id[event_from_game.id] + base_id
+                    server_id = event_from_game.id + base_id
                     loc_name = loc_zz_name_to_name(id_to_zz_loc[event_from_game.id])
                     ctx.locations_checked.add(server_id)
                     # TODO: progress number "(1/146)" or something like that
@@ -96,17 +144,20 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
                         await ctx.send_death()
                     except KeyError:
                         logger.warning("KeyError sending death")
+                elif isinstance(event_from_game, events.WinEventFromGame):
+                    if not ctx.finished_game:
+                        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                        ctx.finished_game = True
                 else:
                     logger.warning(f"WARNING: unhandled event from game {event_from_game}")
             if len(ctx.items_received) > next_item:
-                item = ctx.items_received[next_item]
-                zz_item_id = item_pretty_id_to_useful_id[item.item - base_id]
-                zz_item = id_to_zz_item[zz_item_id]
-                # TODO: use zz_item.name with info on rescue changes
-                # TODO: player name and location that they got it
-                logger.info(f'received item {zz_item.debug_name}')
+                zz_item_ids = [item_pretty_id_to_useful_id[item.item - base_id] for item in ctx.items_received]
+                for index in range(next_item, len(ctx.items_received)):
+                    zz_item = id_to_zz_item[zz_item_ids[index]]
+                    # TODO: use zz_item.name with info on rescue changes
+                    logger.info(f'received item {zz_item.debug_name}')
                 ctx.to_game.put_nowait(
-                    events.ItemEventToGame(zz_item_id)
+                    events.ItemEventToGame(zz_item_ids)
                 )
                 next_item += 1
             await asyncio.sleep(0.09375)

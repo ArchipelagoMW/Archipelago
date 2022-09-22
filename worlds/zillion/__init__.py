@@ -4,8 +4,9 @@ from typing import Any, Dict, FrozenSet, Set, TextIO, Tuple, List, Optional, cas
 import os
 import logging
 
-from BaseClasses import ItemClassification, MultiWorld, Location, Item, CollectionState, \
-    RegionType, Entrance, Tutorial
+from BaseClasses import ItemClassification, LocationProgressType, \
+    MultiWorld, Location, Item, CollectionState, RegionType, \
+    Entrance, Tutorial
 from Options import AssembleOptions
 from .logic import clear_cache, cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
@@ -19,7 +20,7 @@ from zilliandomizer.patch import Patcher as ZzPatcher
 from zilliandomizer.randomizer import Randomizer as ZzRandomizer
 from zilliandomizer.alarms import Alarms
 from zilliandomizer.logic_components.items import RESCUE, items as zz_items
-from zilliandomizer.logic_components.locations import Location as ZzLocation
+from zilliandomizer.logic_components.locations import Location as ZzLocation, Req
 
 from ..AutoWorld import World, WebWorld
 
@@ -30,8 +31,8 @@ class ZillionWebWorld(WebWorld):
         "Multiworld Setup Guide",
         "A guide to playing Zillion randomizer.",  # This guide covers single-player, multiworld and related software.",
         "English",
-        "multiworld_en.md",
-        "multiworld/en",
+        "setup_en.md",
+        "setup/en",
         ["beauxq"]
     )]
 
@@ -43,6 +44,7 @@ class ZillionWorld(World):
     It's based on the anime Zillion (赤い光弾ジリオン, Akai Koudan Zillion).
     """
     game = "Zillion"
+    web = ZillionWebWorld()
 
     option_definitions: Dict[str, AssembleOptions] = zillion_options
     topology_present: bool = True  # indicate if world type has any meaningful layout/pathing
@@ -139,6 +141,7 @@ class ZillionWorld(World):
             all[here_name] = ZillionRegion(zz_r, here_name, RegionType.Generic, here_name, p, w)
             self.world.regions.append(all[here_name])
 
+        limited_skill = Req(gun=3, jump=3, skill=self.zz_randomizer.options.skill, hp=940, red=1, floppy=126)
         queue = deque([start])
         done: Set[str] = set()
         while len(queue):
@@ -164,7 +167,10 @@ class ZillionWorld(World):
                                                     zz_loc, self.player, self.zz_randomizer)
 
                     loc = ZillionLocation(zz_loc, self.player, here)
-                    loc.access_rule = access_rule  # type: ignore
+                    loc.access_rule = access_rule
+                    if not (limited_skill >= zz_loc.req):
+                        loc.progress_type = LocationProgressType.EXCLUDED
+                        self.world.exclude_locations[p].value.add(loc.name)
                     here.locations.append(loc)
 
             for zz_dest in zz_here.connections.keys():
@@ -290,8 +296,27 @@ class ZillionWorld(World):
         clear_cache()
 
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
-        """Fill in the slot_data field in the Connected network package."""
-        return {}
+        """Fill in the `slot_data` field in the `Connected` network package.
+        This is a way the generator can give custom data to the client.
+        The client will receive this as JSON in the `Connected` response."""
+
+        # TODO: share a TypedDict data structure with client
+
+        assert self.zz_patcher, "didn't get patcher from generate_early"
+        rescues: Dict[str, Any] = {}
+        for i in (0, 1):
+            if i in self.zz_patcher.rescue_locations:
+                ri = self.zz_patcher.rescue_locations[i]
+                rescues[str(i)] = {
+                    "start_char": ri.start_char,
+                    "room_code": ri.room_code,
+                    "mask": ri.mask
+                }
+        self.zz_patcher.loc_memory_to_loc_id
+        return {
+            "rescues": rescues,
+            "loc_mem_to_id": self.zz_patcher.loc_memory_to_loc_id
+        }
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
         """For deeper modification of server multidata."""
