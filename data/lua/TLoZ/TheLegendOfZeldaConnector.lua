@@ -45,7 +45,9 @@ local stepladder            = 0x0663
 local magicalKey            = 0x0664
 local powerBracelet         = 0x0665
 local letter                = 0x0666
+local clockItem             = 0x066C
 local heartContainers       = 0x066F
+local partialHearts         = 0x0670
 local triforceFragments     = 0x0671
 local boomerang             = 0x0674
 local magicalBoomerang      = 0x0675
@@ -87,6 +89,8 @@ itemAPids = {
     ["Recovery Heart"] = 7128,
     ["Five Rupees"] = 7129,
     ["Rupee"] = 7129,
+    ["Clock"] = 7131,
+    ["Fairy"] = 7132
 }
 
 itemCodes = {
@@ -121,6 +125,8 @@ itemCodes = {
     ["Recovery Heart"] = 0x22,
     ["Five Rupees"] = 0x0F,
     ["Rupee"] = 0x18,
+    ["Clock"] = 0x21,
+    ["Fairy"] = 0x23
 }
 
 
@@ -297,9 +303,34 @@ end
 
 local function gotRecoveryHeart()
     local currentHearts = bit.band(u8(heartContainers), 0x0F)
-    if currentHearts < 0xF then currentHearts = currentHearts + 1 end
+    local currentHeartContainers = bit.rshift(bit.band(u8(heartContainers), 0xF0), 4)
+    if currentHearts < currentHeartContainers then 
+        currentHearts = currentHearts + 1 
+    else
+        wU8(partialHearts, 0xFF)
+    end
     currentHearts = bit.bor(bit.band(u8(heartContainers), 0xF0), currentHearts)
     wU8(heartContainers, currentHearts)
+end
+
+local function gotFairy()
+    local currentHearts = bit.band(u8(heartContainers), 0x0F)
+    local currentHeartContainers = bit.rshift(bit.band(u8(heartContainers), 0xF0), 4)
+    if currentHearts < currentHeartContainers then 
+        currentHearts = currentHearts + 3
+        if currentHearts >= currentHeartContainers then
+            currentHearts = currentHeartContainers - 1
+            wU8(partialHearts, 0xFF)
+        end
+    else
+        wU8(partialHearts, 0xFF)
+    end
+    currentHearts = bit.bor(bit.band(u8(heartContainers), 0xF0), currentHearts)
+    wU8(heartContainers, currentHearts)
+end
+
+local function gotClock()
+    wU8(clockItem, 1)
 end
 
 local function gotFiveRupees()

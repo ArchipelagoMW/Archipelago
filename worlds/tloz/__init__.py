@@ -10,7 +10,7 @@ from .Items import item_table, item_amounts_all, item_amounts_standard, item_pri
 from .Locations import location_table, level_locations, major_locations, shop_locations, cave_locations, \
     all_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations
 from .Options import tloz_options
-from .Rom import TLoZDeltaPatch, get_base_rom_path
+from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_early, first_quest_dungeon_items_late
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule, set_rule, forbid_item
 
@@ -338,7 +338,7 @@ class TLoZWorld(World):
 
     def generate_basic(self):
         ganon = self.world.get_location("Ganon", self.player)
-        ganon.place_locked_item(self.create_event("Defeated Ganon!"))
+        ganon.place_locked_item(self.create_event("Triforce of Power"))
         add_rule(ganon, lambda state: state.has("Silver Arrow", self.player) and state.has("Bow", self.player))
 
         self.world.get_location("Zelda", self.player).place_locked_item(self.create_event("Rescued Zelda!"))
@@ -373,6 +373,14 @@ class TLoZWorld(World):
         # Stealing a bit from the boss roars flag so we can have more dungeon items. This allows us to
         # go past 0x1F items for dungeon drops.
         rom_data[0x1785D] = 0x3F
+
+        # Since we're stealing a bit from the boss roars, we need to cleanse all the item data
+        # of bit 5 or else former boss roar rooms will get items they shouldn't.
+        for i in range(0, 0x7F):
+            item = rom_data[first_quest_dungeon_items_early + i]
+            rom_data[first_quest_dungeon_items_early] = item & 0b11011111
+            item = rom_data[first_quest_dungeon_items_late + i]
+            rom_data[first_quest_dungeon_items_late] = item & 0b11011111
 
     def apply_randomizer(self):
         with open(get_base_rom_path(), 'rb') as rom:

@@ -172,12 +172,12 @@ floor_location_game_offsets_early = {
     "Level 6 Compass": 0x68,
     "Level 6 Boss": 0x1C,
     "Level 6 Triforce": 0x0C,
-    "Level 6 Key Drop (Wizzrobes Entrance)": 0x6A,
+    "Level 6 Key Drop (Wizzrobes Entrance)": 0x7A,
     "Level 6 Key Drop (Keese)": 0x58,
-    "Level 6 Key Drop (Wizzrobes North Island)": 0x6A,
-    "Level 6 Key Drop (Wizzrobes North Stream)": 0x6A,
-    "Level 6 Key Drop (Vires)": 0x6A,
-    "Level 6 Bomb Drop (Wizzrobes)": 0x6A,
+    "Level 6 Key Drop (Wizzrobes North Island)": 0x29,
+    "Level 6 Key Drop (Wizzrobes North Stream)": 0x1A,
+    "Level 6 Key Drop (Vires)": 0x2D,
+    "Level 6 Bomb Drop (Wizzrobes)": 0x3C,
     "Level 6 Rupee Drop (Wizzrobes)": 0x28
 }
 
