@@ -171,3 +171,6 @@ minecraft_versions.json
 .LSOverride
 Thumbs.db
 [Dd]esktop.ini
+
+# FF6 WC stuff while I'm developing that too
+worlds/ff6wc/WorldsCollide/
