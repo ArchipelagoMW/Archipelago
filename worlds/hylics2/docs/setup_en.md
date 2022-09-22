@@ -29,4 +29,5 @@ There are a few additional commands that can be used while playing Hylics 2 rand
 - `/airship` - Resummons the airship at the dock above New Muldul and teleports Wayne to it, in case the player gets stuck. Player must have the DOCK KEY to use this command.
 - `/checked [region]` - States how many locations have been checked in a given region. If no region is given, then the player's location will be used.
 - `/deathlink` - Enables or disables DeathLink.
+- `/help [command]` - Lists a command, it's description, and it's required arguments (if any). If no command is given, all commands will be displayed.
 - `![command]` - Entering any command with an `!` at the beginning allows for remotely sending commands to the server.

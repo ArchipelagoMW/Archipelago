@@ -19,7 +19,7 @@ class Hylics2Web(WebWorld):
 
 class Hylics2World(World):
     """
-    Hylics 2 is a surreal and unusual RPG, with an equally bizarre yet unique visual style. Play as Wayne, 
+    Hylics 2 is a surreal and unusual RPG, with a bizarre yet unique visual style. Play as Wayne, 
     travel the world, and gather your allies to defeat the nefarious Gibby in his Hylemxylem!
     """
     game: str = "Hylics 2"
@@ -43,7 +43,13 @@ class Hylics2World(World):
         Rules.set_rules(self)
 
 
-    def create_item(self, name: str, classification: ItemClassification, code: int) -> "Item":
+    def create_item(self, name: str) -> "Hylics2Item":
+        item_id: int = self.item_name_to_id[name]
+
+        return Hylics2Item(name, self.all_items[item_id]["classification"], item_id, player=self.player)
+
+
+    def add_item(self, name: str, classification: ItemClassification, code: int) -> "Item":
         return Hylics2Item(name, classification, code, self.player)
 
 
@@ -67,43 +73,34 @@ class Hylics2World(World):
         for i, data in Items.item_table.items():
             if data["count"] > 0:
                 for j in range(data["count"]):
-                    pool.append(self.create_item(data["name"], data["classification"], i))
+                    pool.append(self.add_item(data["name"], data["classification"], i))
 
         # add party members if option is enabled
         if self.world.party_shuffle[self.player]:
             for i, data in Items.party_item_table.items():
-                pool.append(self.create_item(data["name"], data["classification"], i))
+                pool.append(self.add_item(data["name"], data["classification"], i))
 
         # handle gesture shuffle options
         if self.world.gesture_shuffle[self.player] == 2: # vanilla locations
             gestures = Items.gesture_item_table
             self.world.get_location("Waynehouse: TV", self.player)\
-                .place_locked_item(self.create_item(gestures[200678]["name"], # POROMER BLEB
-                    gestures[200678]["classification"], 200678))
+                .place_locked_item(self.add_item(gestures[200678]["name"], gestures[200678]["classification"], 200678))
             self.world.get_location("Afterlife: TV", self.player)\
-                .place_locked_item(self.create_item(gestures[200683]["name"], # TELEDENUDATE
-                    gestures[200683]["classification"], 200683))
+                .place_locked_item(self.add_item(gestures[200683]["name"], gestures[200683]["classification"], 200683))
             self.world.get_location("New Muldul: TV", self.player)\
-                .place_locked_item(self.create_item(gestures[200679]["name"], # SOUL CRISPER
-                    gestures[200679]["classification"], 200679))
+                .place_locked_item(self.add_item(gestures[200679]["name"], gestures[200679]["classification"], 200679))
             self.world.get_location("Viewax's Edifice: TV", self.player)\
-                .place_locked_item(self.create_item(gestures[200680]["name"], # TIME SIGIL
-                    gestures[200680]["classification"], 200680))
+                .place_locked_item(self.add_item(gestures[200680]["name"], gestures[200680]["classification"], 200680))
             self.world.get_location("TV Island: TV", self.player)\
-                .place_locked_item(self.create_item(gestures[200681]["name"], # CHARGE UP
-                    gestures[200681]["classification"], 200681))
+                .place_locked_item(self.add_item(gestures[200681]["name"], gestures[200681]["classification"], 200681))
             self.world.get_location("Juice Ranch: TV", self.player)\
-                .place_locked_item(self.create_item(gestures[200682]["name"], # FATE SANDBOX
-                    gestures[200682]["classification"], 200682))
+                .place_locked_item(self.add_item(gestures[200682]["name"], gestures[200682]["classification"], 200682))
             self.world.get_location("Foglast: TV", self.player)\
-                .place_locked_item(self.create_item(gestures[200684]["name"], # LINK MOLLUSC
-                    gestures[200684]["classification"], 200684))
+                .place_locked_item(self.add_item(gestures[200684]["name"], gestures[200684]["classification"], 200684))
             self.world.get_location("Drill Castle: TV", self.player)\
-                .place_locked_item(self.create_item(gestures[200688]["name"], # NEMATODE INTERFACE
-                    gestures[200688]["classification"], 200688))
+                .place_locked_item(self.add_item(gestures[200688]["name"], gestures[200688]["classification"], 200688))
             self.world.get_location("Sage Airship: TV", self.player)\
-                .place_locked_item(self.create_item(gestures[200685]["name"], # BOMBO - GENESIS
-                    gestures[200685]["classification"], 200685))
+                .place_locked_item(self.add_item(gestures[200685]["name"], gestures[200685]["classification"], 200685))
 
         elif self.world.gesture_shuffle[self.player] == 1: # TVs only
             gestures = list(Items.gesture_item_table.items())
@@ -117,8 +114,8 @@ class Hylics2World(World):
                 while tv[1]["name"] == "Sage Airship: TV":
                     tv = random.choice(tvs)
                 self.world.get_location(tv[1]["name"], self.player)\
-                    .place_locked_item(self.create_item(gestures[gest][1]["name"], 
-                        gestures[gest][1]["classification"], gestures[gest][0]))
+                    .place_locked_item(self.add_item(gestures[gest][1]["name"], gestures[gest][1]["classification"], 
+                    gestures[gest]))
                 gestures.remove(gestures[gest])
                 tvs.remove(tv)
 
@@ -126,13 +123,13 @@ class Hylics2World(World):
                 gest = random.choice(gestures)
                 tv = random.choice(tvs)
                 self.world.get_location(tv[1]["name"], self.player)\
-                    .place_locked_item(self.create_item(gest[1]["name"], gest[1]["classification"], gest[0]))
+                    .place_locked_item(self.add_item(gest[1]["name"], gest[1]["classification"], gest[1]))
                 gestures.remove(gest)
                 tvs.remove(tv)
 
-        else: # add to pool like normal
+        else: # add gestures to pool like normal
             for i, data in Items.gesture_item_table.items():
-                pool.append(self.create_item(data["name"], data["classification"], i))
+                pool.append(self.add_item(data["name"], data["classification"], i))
 
         # add to world's pool
         self.world.itempool += pool

@@ -23,7 +23,7 @@ class ExtraLogic(DefaultOnToggle):
 class Hylics2DeathLink(DeathLink):
     """When you die, everyone dies. The reverse is also true.
     Note that this also includes death by using the PERISH gesture.
-    Can be toggled via in-game console command "deathlink"."""
+    Can be toggled via in-game console command "/deathlink"."""
 
 hylics2_options = {
     "party_shuffle": PartyShuffle,

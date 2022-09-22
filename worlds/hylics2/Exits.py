@@ -17,7 +17,8 @@ region_exit_table: Dict[int, List[str]] = {
     2: ["To World",
         "To Afterlife",],
 
-    3: ["To Waynehouse",
+    3: ["To Airship",
+        "To Waynehouse",
         "To New Muldul",
         "To Drill Castle",
         "To Viewax",

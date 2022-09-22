@@ -73,17 +73,19 @@ class Hylics2Logic(LogicMixin):
         return self._hylics2_can_air_dash(player) and self._hylics2_has_airship(player)
 
     def _hylics2_enter_wormpod(self, player):
-        return self._hylics2_has_airship(player) and self._hylics2_has_worm_room_key(player)
+        return self._hylics2_has_airship(player) and self._hylics2_has_worm_room_key(player) and\
+            self._hylics2_has_paddle(player)
 
     def _hylics2_enter_sageship(self, player):
-        return self._hylics2_has_skull_bomb(player) and self._hylics2_has_airship(player)
+        return self._hylics2_has_skull_bomb(player) and self._hylics2_has_airship(player) and\
+            self._hylics2_has_paddle(player)
 
     def _hylics2_enter_foglast(self, player):
         return self._hylics2_enter_wormpod(player)
 
     def _hylics2_enter_hylemxylem(self, player):
-        return self._hylics2_can_air_dash(player) and self._hylics2_has_paddle(player) and\
-            self._hylics2_enter_wormpod(player) and self._hylics2_has_bridge_key(player)
+        return self._hylics2_can_air_dash(player) and self._hylics2_enter_wormpod(player) and\
+            self._hylics2_has_bridge_key(player)
 
 
 def set_rules(hylics2world):
@@ -128,9 +130,13 @@ def set_rules(hylics2world):
 
     # New Muldul Vault
     set_rule(world.get_location("New Muldul: Rescued Blerol 1", player), 
-        lambda state: state._hylics2_has_jail_key(player) and state._hylics2_has_paddle(player) and (state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player)))
+        lambda state: (state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player)) and\
+            ((state._hylics2_has_jail_key(player) and state._hylics2_has_paddle(player)) or\
+                (state._hylics2_has_bridge_key(player) and state._hylics2_has_worm_room_key(player))))
     set_rule(world.get_location("New Muldul: Rescued Blerol 2", player), 
-        lambda state: state._hylics2_has_jail_key(player) and state._hylics2_has_paddle(player) and (state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player)))
+        lambda state: (state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player)) and\
+            ((state._hylics2_has_jail_key(player) and state._hylics2_has_paddle(player)) or\
+                (state._hylics2_has_bridge_key(player) and state._hylics2_has_worm_room_key(player))))
     set_rule(world.get_location("New Muldul: Vault Left Chest", player), 
         lambda state: state._hylics2_enter_foglast(player) and state._hylics2_has_bridge_key(player))
     set_rule(world.get_location("New Muldul: Vault Right Chest", player), 
@@ -277,23 +283,21 @@ def set_rules(hylics2world):
         for i in world.get_region("Foglast", player).entrances:
             add_rule(i, lambda state: state._hylics2_has_charge_up(player))
         for i in world.get_region("Sage Airship", player).entrances:
-            add_rule(i, lambda state: state._hylics2_has_charge_up(player))
+            add_rule(i, lambda state: state._hylics2_has_charge_up(player) and state._hylics2_has_cup(player) and\
+                state._hylics2_has_worm_room_key(player))
         for i in world.get_region("Hylemxylem", player).entrances:
             add_rule(i, lambda state: state._hylics2_has_charge_up(player) and state._hylics2_has_cup(player))
 
         add_rule(world.get_location("Sage Labyrinth: Motor Hunter Sarcophagus", player), 
-            lambda state: state._hylics2_has_charge_up(player))
+            lambda state: state._hylics2_has_charge_up(player) and state._hylics2_has_cup(player))
 
     # extra rules if Shuffle Party Members is enabled
     if world.party_shuffle[player]:
-        for i in world.get_region("Viewax", player).entrances:
-            add_rule(i, lambda state: state._hylics2_has_1_member(player))
         for i in world.get_region("Arcade Island", player).entrances:
-            add_rule(i, lambda state: state._hylics2_has_1_member(player))
+            add_rule(i, lambda state: state._hylics2_has_3_members(player))
         for i in world.get_region("Foglast", player).entrances:
-            add_rule(i, lambda state: state._hylics2_has_3_members(player))
-        for i in world.get_region("New Muldul Vault", player).entrances:
-            add_rule(i, lambda state: state._hylics2_has_3_members(player))
+            add_rule(i, lambda state: state._hylics2_has_3_members(player) or\
+                (state._hylics2_has_2_members(player) and state._hylics2_has_jail_key(player)))
         for i in world.get_region("Sage Airship", player).entrances:
             add_rule(i, lambda state: state._hylics2_has_3_members(player))
         for i in world.get_region("Hylemxylem", player).entrances:
@@ -305,9 +309,17 @@ def set_rules(hylics2world):
             lambda state: state._hylics2_has_2_members(player))
         add_rule(world.get_location("New Muldul: Rescued Blerol 2", player), 
             lambda state: state._hylics2_has_2_members(player))
+        add_rule(world.get_location("New Muldul: Vault Left Chest", player), 
+            lambda state: state._hylics2_has_3_members(player))
+        add_rule(world.get_location("New Muldul: Vault Right Chest", player), 
+            lambda state: state._hylics2_has_3_members(player))
+        add_rule(world.get_location("New Muldul: Vault Bomb", player), 
+            lambda state: state._hylics2_has_2_members(player))
         add_rule(world.get_location("Juice Ranch: Battle with Somsnosa", player), 
             lambda state: state._hylics2_has_2_members(player))
         add_rule(world.get_location("Juice Ranch: Somsnosa Joins", player), 
             lambda state: state._hylics2_has_2_members(player))
-        add_rule(world.get_location("Juice Ranch: Fridge", player), 
-            lambda state: state._hylics2_has_2_members(player))
+        add_rule(world.get_location("Airship: Talk to Somsnosa", player), 
+            lambda state: state._hylics2_has_3_members(player))
+        add_rule(world.get_location("Sage Labyrinth: Motor Hunter Sarcophagus", player), 
+            lambda state: state._hylics2_has_3_members(player))
