@@ -474,16 +474,16 @@ class Bosses(TextChoice):
 
     @classmethod
     def from_text(cls, text: str):
-        import random
         # set all of our text to lower case for name checking
         text = text.lower()
-        cls.bosses = {boss_name.lower() for boss_name in cls.bosses}
-        cls.locations = {boss_location.lower() for boss_location in cls.locations}
         if text == "random":
+        import random
             return cls(random.choice(list(cls.options.values())))
         for option_name, value in cls.options.items():
             if option_name == text:
                 return cls(value)
+        cls.bosses = {boss_name.lower() for boss_name in cls.bosses}
+        cls.locations = {boss_location.lower() for boss_location in cls.locations}
         options = text.split(";")
 
         # since plando exists in the option verify the plando values given are valid
