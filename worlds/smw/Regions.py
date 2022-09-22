@@ -767,7 +767,7 @@ def create_regions(world, player: int, active_locations):
         add_location_to_region(world, player, active_locations, LocationName.donut_secret_1_region, LocationName.donut_secret_1_dragon,
                                lambda state: state.has(ItemName.mario_swim, player))
         add_location_to_region(world, player, active_locations, LocationName.donut_secret_2_region, LocationName.donut_secret_2_dragon,
-                               lambda state: state.has(ItemName.mario_climb, player))
+                               lambda state: (state.has(ItemName.mario_climb, player) or state.has(ItemName.yoshi_activate, player)))
         add_location_to_region(world, player, active_locations, LocationName.vanilla_dome_1_region, LocationName.vanilla_dome_1_dragon,
                                lambda state: (state.has(ItemName.mario_carry, player) and
                                               state.has(ItemName.mario_run, player) and
@@ -914,9 +914,10 @@ def connect_regions(world, player, level_to_tile_dict):
                            (state.has(ItemName.super_star_active, player) or
                             state.has(ItemName.progressive_powerup, player, 1))))
     connect(world, player, names, LocationName.vanilla_dome_1_region, LocationName.vanilla_dome_1_exit_2,
-            lambda state: (state.has(ItemName.yoshi_activate, player) and state.has(ItemName.mario_carry, player) and
-                           (state.has(ItemName.mario_climb, player) or
-                            state.has(ItemName.red_switch_palace, player))))
+            lambda state: (state.has(ItemName.mario_carry, player) and
+                           ((state.has(ItemName.yoshi_activate, player) and state.has(ItemName.mario_climb, player)) or
+                            (state.has(ItemName.yoshi_activate, player) and state.has(ItemName.red_switch_palace, player)) or
+                            (state.has(ItemName.red_switch_palace, player) and state.has(ItemName.mario_climb, player)))))
     connect(world, player, names, LocationName.vanilla_dome_2_region, LocationName.vanilla_dome_2_exit_1,
             lambda state: (state.has(ItemName.mario_swim, player) and
                            (state.has(ItemName.mario_climb, player) or state.has(ItemName.yoshi_activate, player))))
@@ -998,7 +999,7 @@ def connect_regions(world, player, level_to_tile_dict):
     connect(world, player, names, LocationName.chocolate_secret_region, LocationName.chocolate_secret_exit_1,
             lambda state: state.has(ItemName.mario_run, player))
     connect(world, player, names, LocationName.chocolate_castle_region, LocationName.chocolate_castle,
-            lambda state: (state.has(ItemName.mario_spin_jump, player) and state.has(ItemName.progressive_powerup, player, 1)))
+            lambda state: (state.has(ItemName.progressive_powerup, player, 1)))
             
     connect(world, player, names, LocationName.sunken_ghost_ship_region, LocationName.sunken_ghost_ship,
             lambda state: state.has(ItemName.mario_swim, player))
