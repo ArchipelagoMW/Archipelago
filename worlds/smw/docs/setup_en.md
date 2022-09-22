@@ -1,8 +1,8 @@
-# Donkey Kong Country 3 Randomizer Setup Guide
+# Super Mario World Randomizer Setup Guide
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `SNI Client - Donkey Kong Country 3 Patch Setup`
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `SNI Client - Super Mario World Patch Setup`
 
 
 - Hardware or software capable of loading and playing SNES ROM files
@@ -13,7 +13,7 @@
         - RetroArch 1.10.3 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
     - An SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
       compatible hardware
-- Your legally obtained Donkey Kong Country 3 ROM file, probably named `Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc`
+- Your legally obtained Super Mario World ROM file, probably named `Super Mario World (USA).sfc`
 
 ## Installation Procedures
 
@@ -21,7 +21,7 @@
 
 1. During the installation of Archipelago, you will have been asked to install the SNI Client. If you did not do this,
    or you are on an older version, you may run the installer again to install the SNI Client.
-2. During setup, you will be asked to locate your base ROM file. This is your Donkey Kong Country 3 ROM file.
+2. During setup, you will be asked to locate your base ROM file. This is your Super Mario World ROM file.
 3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.
     1. Extract your emulator's folder to your Desktop, or somewhere you will remember.
@@ -41,31 +41,20 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 ### Where do I get a config file?
 
 The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [Donkey Kong Country 3 Player Settings Page](/games/Donkey%20Kong%20Country%203/player-settings)
+them. Player settings page: [Super Mario World Player Settings Page](/games/Super%20Mario%20World/player-settings)
 
 ### Verifying your config file
 
 If you would like to validate your config file to make sure it works, you may do so on the YAML Validator page. YAML
 validator page: [YAML Validation page](/mysterycheck)
 
-## Generating a Single-Player Game
-
-1. Navigate to the Player Settings page, configure your options, and click the "Generate Game" button.
-    - Player Settings page: [Donkey Kong Country 3 Player Settings Page](/games/Donkey%20Kong%20Country%203/player-settings)
-2. You will be presented with a "Seed Info" page.
-3. Click the "Create New Room" link.
-4. You will be presented with a server page, from which you can download your patch file.
-5. Double-click on your patch file, and the Donkey Kong Country 3 Client will launch automatically, create your ROM from the
-   patch file, and open your emulator for you.
-6. Since this is a single-player game, you will no longer need the client, so feel free to close it.
-
 ## Joining a MultiWorld Game
 
 ### Obtain your patch file and create your ROM
 
-When you join a multiworld game, you will be asked to provide your config file to whoever is hosting. Once that is done,
+When you join a multiworld game, you will be asked to provide your config file to whomever is hosting. Once that is done,
 the host will provide you with either a link to download your patch file, or with a zip file containing everyone's patch
-files. Your patch file should have a `.apsm` extension.
+files. Your patch file should have a `.apsmw` extension.
 
 Put your patch file on your desktop or somewhere convenient, and double click it. This should automatically launch the
 client, and will also create your ROM in the same place as your patch file.
