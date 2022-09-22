@@ -405,6 +405,7 @@ class Overcooked2World(World):
             "ImpossibleTutorial": True,
             "ForbidDLC": True,
             "ForceSingleSaveSlot": True,
+            "DisableNGP": True,
             "LevelForceReveal": level_force_reveal,
             "SaveFolderName": mod_name,
             "CustomOrderTimeoutPenalty": 10,
