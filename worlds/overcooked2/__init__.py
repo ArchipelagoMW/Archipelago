@@ -403,6 +403,8 @@ class Overcooked2World(World):
             "PurchaseAllLevels": False,
             "CheatsEnabled": True,  # TODO: off for release
             "ImpossibleTutorial": True,
+            "ForbidDLC": True,
+            "ForceSingleSaveSlot": True,
             "LevelForceReveal": level_force_reveal,
             "SaveFolderName": mod_name,
             "CustomOrderTimeoutPenalty": 10,
