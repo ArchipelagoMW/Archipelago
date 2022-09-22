@@ -477,7 +477,7 @@ class Bosses(TextChoice):
         # set all of our text to lower case for name checking
         text = text.lower()
         if text == "random":
-        import random
+            import random
             return cls(random.choice(list(cls.options.values())))
         for option_name, value in cls.options.items():
             if option_name == text:
