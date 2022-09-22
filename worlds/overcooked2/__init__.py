@@ -401,7 +401,7 @@ class Overcooked2World(World):
             "SkipTutorialPopups": True,
             "RevealAllLevels": False,
             "PurchaseAllLevels": False,
-            "CheatsEnabled": True,  # TODO: off for release
+            "CheatsEnabled": False,
             "ImpossibleTutorial": True,
             "ForbidDLC": True,
             "ForceSingleSaveSlot": True,
