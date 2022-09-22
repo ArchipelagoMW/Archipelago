@@ -182,30 +182,59 @@ class LTTPBosses(Bosses):
     }
 
     @classmethod
+    def get_shuffle_type(cls, options: typing.List[str]):
+        # find out what type of boss shuffle we should use for placing bosses after plando
+        # and add as a string to look nice in the spoiler
+        if "random" in options:
+            import random
+            shuffle = random.choice(list(cls.options))
+            options.remove("random")
+            options = ";".join(options) + ";" + shuffle
+            boss_class = cls(options)
+        else:
+            for option in options:
+                if option in cls.options:
+                    options = ";".join(options)
+                    break
+            else:
+                if len(options) == 1:
+                    if cls.valid_boss_name(options[0]):
+                        options = options[0] + ";singularity"
+                    else:
+                        options = options[0] + ";none"
+                else:
+                    options = ";".join(options) + ";none"
+            boss_class = cls(options)
+        return boss_class
+
+    @classmethod
     def validate_plando_bosses(cls, options: typing.List[str]) -> None:
-        from .Bosses import can_place_boss, format_boss_location
         for option in options:
             if option == "random" or option in cls.options:
                 if option != options[-1]:
                     raise ValueError(f"{option} option must be at the end of the boss_shuffle options!")
             elif "-" in option:
                 location, boss = option.split("-")
-                level = ''
                 if not cls.valid_boss_name(boss):
                     raise ValueError(f"{boss} is not a valid boss name for location {location}.")
                 if not cls.valid_location_name(location):
                     raise ValueError(f"{location} is not a valid boss location name.")
-                if location.split(" ")[-1] in ("top", "middle", "bottom"):
-                    location = location.split(" ")
-                    level = location[-1]
-                    location = " ".join(location[:-1])
-                location = location.title().replace("Of", "of")
-                if not can_place_boss(boss.title(), location, level):
-                    raise ValueError(f"{format_boss_location(location, level)} "
-                                     f"is not a valid location for {boss.title()}.")
+                if not cls.can_place_boss(boss.title(), location):
+                    raise ValueError(f"{location} is not a valid location for {boss.title()}.")
             else:
                 if not cls.valid_boss_name(option):
                     raise ValueError(f"{option} is not a valid boss name.")
+
+    @classmethod
+    def can_place_boss(cls, boss: str, location: str) -> bool:
+        from worlds.alttp.Bosses import can_place_boss
+        level = ''
+        if location.split(" ")[-1] in ("top", "middle", "bottom"):
+            location = location.split(" ")
+            level = location[-1]
+            location = " ".join(location[:-1])
+        location = location.title().replace("Of", "of")
+        return can_place_boss(boss.title(), location, level)
 
 
 class Enemies(Choice):

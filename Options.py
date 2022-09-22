@@ -466,7 +466,9 @@ class TextChoice(Choice):
 
 
 class Bosses(TextChoice):
-    """Generic boss shuffle option that supports plando."""
+    """Generic boss shuffle option that supports plando. Format expected is 'boss-location;boss-location;shuffle_type'
+    if shuffle_type is not provided in the string, will default to null. Must override can_place_boss, which
+    passes a plando boss and location. Check if the placement is valid for your game here."""
     bosses: set = set()
     locations: set = set()
 
@@ -486,10 +488,14 @@ class Bosses(TextChoice):
 
         # since plando exists in the option verify the plando values given are valid
         cls.validate_plando_bosses(options)
+        return cls.get_shuffle_type(options)
 
+    @classmethod
+    def get_shuffle_type(cls, options: typing.List[str]):
         # find out what type of boss shuffle we should use for placing bosses after plando
         # and add as a string to look nice in the spoiler
         if "random" in options:
+            import random
             shuffle = random.choice(list(cls.options))
             options.remove("random")
             options = ";".join(options) + ";" + shuffle
@@ -497,26 +503,38 @@ class Bosses(TextChoice):
         else:
             for option in options:
                 if option in cls.options:
-                    boss_class = cls(";".join(options))
+                    options = ";".join(options)
                     break
             else:
-                if len(options) == 1:
-                    if cls.valid_boss_name(options[0]):
-                        options = options[0] + ";singularity"
-                    else:
-                        options = options[0] + ";none"
-                else:
-                    options = ";".join(options) + ";none"
-                boss_class = cls(options)
+                options = ";".join(options) + ";none"
+            boss_class = cls(options)
         return boss_class
 
     @classmethod
     def validate_plando_bosses(cls, options: typing.List[str]) -> None:
+        for option in options:
+            # check if a shuffle type was provided in the incorrect location
+            if option == "random" or option in cls.options:
+                if option != options[-1]:
+                    raise ValueError(F"{option} option must be at the end of the boss_shuffle options!")
+            elif "-" in option:
+                location, boss = option.split("-")
+                if not cls.valid_boss_name(boss):
+                    raise ValueError(F"{boss.title()} is not a valid boss name for location {location.title()}.")
+                if not cls.valid_location_name(location):
+                    raise ValueError(f"{location.title()} is not a valid boss location name for boss {boss.title()}.")
+                if not cls.can_place_boss(boss, location):
+                    raise ValueError(f"{location.title()} is not a valid location for {boss} to be placed.")
+            else:
+                raise ValueError(f"{option} is not formatted correctly.")
+
+    @classmethod
+    def can_place_boss(cls, boss: str, location: str) -> bool:
         raise NotImplementedError
 
     @classmethod
     def valid_boss_name(cls, value: str) -> bool:
-        return value.lower() in cls.bosses
+        return value in cls.bosses
 
     @classmethod
     def valid_location_name(cls, value: str) -> bool:
