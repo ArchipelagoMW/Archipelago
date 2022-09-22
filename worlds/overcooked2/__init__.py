@@ -78,7 +78,7 @@ class Overcooked2World(World):
             self.level_mapping[level_id].is_horde()
 
 
-    def create_item(self, item: str, classification: ItemClassification) -> Overcooked2Item:
+    def create_item(self, item: str, classification: ItemClassification=ItemClassification.progression) -> Overcooked2Item:
         return Overcooked2Item(item, classification, self.item_name_to_id[item], self.player)
 
     def create_event(self, event: str, classification: ItemClassification) -> Overcooked2Item:
