@@ -644,6 +644,7 @@ def patch_rom(world, rom, player, active_level_dict):
     goal_text = generate_goal_text(world, player)
 
     rom.write_bytes(0x2A6E2, goal_text)
+    rom.write_byte(0x2B1D8, 0x80)
 
     # Force all 8 Bowser's Castle Rooms
     rom.write_byte(0x3A680, 0xD4)
