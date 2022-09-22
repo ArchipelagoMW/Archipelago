@@ -5,12 +5,15 @@ from .Names import ItemName
 
 
 class ItemData(typing.NamedTuple):
-    code: typing.Optional[int]
+    itemID: typing.Optional[int]
+    subItemID: typing.Optional[int]
     progression: bool
+    sender: str
+    type: str
+    count: int
 
 class MMBN3Item(Item):
     game: str = "MegaMan Battle Network 3"
-
 
 item_table = {
     ItemName.Progressive_Undernet_Rank: ItemData(0xB31000, True),

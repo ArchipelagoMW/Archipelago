@@ -3,7 +3,6 @@ import typing
 from BaseClasses import Location
 from .Names import LocationName
 
-
 class LocationData:
     name: str = ""
     id: int = 0x00
