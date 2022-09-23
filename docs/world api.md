@@ -103,8 +103,9 @@ or boss drops for RPG-like games but could also be progress in a research tree.
 
 Each location has a `name` and an `id` (a.k.a. "code" or "address"), is placed
 in a Region and has access rules.
-The name needs to be unique in each game, the ID needs to be unique across all
-games and is best in the same range as the item IDs.
+The name needs to be unique in each game and must not be numeric (has to
+contain least 1 letter or symbol). The ID needs to be unique across all games
+and is best in the same range as the item IDs.
 World-specific IDs are 1 to 2<sup>53</sup>-1, IDs ≤ 0 are global and reserved.
 
 Special locations with ID `None` can hold events.
@@ -120,6 +121,9 @@ Progression items are items which a player may require to progress in
 their world. Progression items will be assigned to locations with higher
 priority and moved around to meet defined rules and accomplish progression
 balancing.
+
+The name needs to be unique in each game, meaning a duplicate item has the
+same ID. Name must not be numeric (has to contain at least 1 letter or symbol).
 
 Special items with ID `None` can mark events (read below).
 
@@ -195,8 +199,10 @@ AP will pick up your world automatically due to the `AutoWorld` implementation.
 ### Requirements
 
 If your world needs specific python packages, they can be listed in
-`world/[world_name]/requirements.txt`.
-See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format)
+`world/[world_name]/requirements.txt`. ModuleUpdate.py will automatically
+pick up and install them.
+
+See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format).
 
 ### Relative Imports
 
