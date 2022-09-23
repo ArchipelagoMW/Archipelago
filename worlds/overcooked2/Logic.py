@@ -36,7 +36,7 @@ def has_requirements_for_level_access(state: CollectionState, level_name: str, p
 
 def has_requirements_for_level_star(
         state: CollectionState, level: Overcooked2GenericLevel, stars: int, player: int) -> bool:
-    assert stars >= 0 and stars <= 3
+    assert 0 <= stars <= 3
 
     # First ensure that previous stars are obtainable
     if stars > 1:
