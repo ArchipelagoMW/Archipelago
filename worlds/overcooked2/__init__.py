@@ -54,7 +54,6 @@ class Overcooked2World(World):
     remote_items: bool = True
     remote_start_inventory: bool = False
     data_version = 1
-    base_id = 0
 
     item_name_to_id = item_name_to_id
     item_id_to_name = item_id_to_name
@@ -67,7 +66,6 @@ class Overcooked2World(World):
 
     def __init__(self, *args):
         super().__init__(*args)
-        self.itempool = []
 
     # Helper Functions
 
@@ -252,6 +250,8 @@ class Overcooked2World(World):
         self.world.completion_condition[self.player] = completion_condition
 
     def create_items(self):
+        self.itempool = []
+
         # Make Items
         # useful = list()
         # filler = list()
