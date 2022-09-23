@@ -54,10 +54,12 @@ class DragonCoinChecks(Toggle):
 
 class BowserCastleDoors(Choice):
     """
-    How the doors of Bowser's Castle
+    How the doors of Bowser's Castle behave
     Vanilla: Front and Back Doors behave as vanilla
     Fast: Both doors behave as the Back Door
     Slow: Both doors behave as the Front Door
+    "Front Door" requires beating all 8 Rooms
+    "Back Door" only requires going through the dark hallway to Bowser
     """
     display_name = "Bowser Castle Doors"
     option_vanilla = 0

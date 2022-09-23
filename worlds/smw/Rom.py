@@ -49,6 +49,17 @@ level_music_ids = [
 
 ]
 
+
+class SMWDeltaPatch(APDeltaPatch):
+    hash = USHASH
+    game = "Super Mario World"
+    patch_file_ending = ".apsmw"
+
+    @classmethod
+    def get_source_data(cls) -> bytes:
+        return get_base_rom_bytes()
+
+
 class LocalRom:
 
     def __init__(self, file, patch=True, vanillaRom=None, name=None, hash=None):
@@ -756,16 +767,6 @@ def patch_rom(world, rom, player, active_level_dict):
     rom.name = bytearray(f'SMW{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
-
-
-class SMWDeltaPatch(APDeltaPatch):
-    hash = USHASH
-    game = "Super Mario World"
-    patch_file_ending = ".apsmw"
-
-    @classmethod
-    def get_source_data(cls) -> bytes:
-        return get_base_rom_bytes()
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:

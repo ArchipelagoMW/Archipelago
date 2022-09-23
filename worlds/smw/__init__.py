@@ -41,7 +41,7 @@ class SMWWorld(World):
     game: str = "Super Mario World"
     option_definitions = smw_options
     topology_present = False
-    data_version = 0
+    data_version = 1
     required_client_version = (0, 3, 5)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -181,6 +181,7 @@ class SMWWorld(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
 
+    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
         if self.topology_present:
             world_names = [
                 LocationName.yoshis_island_region,
@@ -224,7 +225,7 @@ class SMWWorld(World):
                     er_hint_data[location.address] = world_names[i]
                     break
 
-            multidata['er_hint_data'][self.player] = er_hint_data
+            hint_data[self.player] = er_hint_data
 
     def create_regions(self):
         location_table = setup_locations(self.world, self.player)
