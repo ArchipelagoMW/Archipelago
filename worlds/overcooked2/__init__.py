@@ -64,8 +64,6 @@ class Overcooked2World(World):
     options: Dict[str, Any]
     itempool: List[Overcooked2Item]
 
-    def __init__(self, *args):
-        super().__init__(*args)
 
     # Helper Functions
 
