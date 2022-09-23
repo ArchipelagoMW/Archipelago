@@ -340,6 +340,9 @@ def patch_rom(world, rom, player, offsets_to_ids):
     rom.write_bytes(0xADE28, PatchName.stage_select_overwrite)
     rom.write_byte(0xADD6F, world.special2s_per_warp[player])
 
+    # On-the-fly TLB script modifier hook
+    rom.write_bytes(0x3038, [0x0C, 0x06, 0x0E, 0x0C])  # JAL 0x80183830
+
     # Fix locked doors to check the key counters instead of their vanilla key locations' flags
     # Pickup flag check modifications:
     rom.write_bytes(0x10B2D8, [0x00, 0x00, 0x00, 0x02])  # Left Tower Door
