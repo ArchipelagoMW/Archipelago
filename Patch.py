@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import bsdiff4
-import yaml
 import os
 import zipfile
 from typing import Tuple, Optional, Dict, Any, Union, BinaryIO
@@ -160,32 +159,6 @@ GAME_SM = "Super Metroid"
 GAME_SOE = "Secret of Evermore"
 GAME_SMZ3 = "SMZ3"
 GAME_DKC3 = "Donkey Kong Country 3"
-
-
-def generate_yaml(patch: bytes, metadata: Optional[dict] = None, game: str = GAME_ALTTP) -> bytes:
-    if game == GAME_ALTTP:
-        from worlds.alttp.Rom import LTTPJPN10HASH as HASH
-    elif game == GAME_SM:
-        from worlds.sm.Rom import SMJUHASH as HASH
-    elif game == GAME_SOE:
-        from worlds.soe.Patch import USHASH as HASH
-    elif game == GAME_SMZ3:
-        from worlds.alttp.Rom import LTTPJPN10HASH as ALTTPHASH
-        from worlds.sm.Rom import SMJUHASH as SMHASH
-        HASH = ALTTPHASH + SMHASH
-    elif game == GAME_DKC3:
-        from worlds.dkc3.Rom import USHASH as HASH
-    else:
-        raise RuntimeError(f"Selected game {game} for base rom not found.")
-
-    patch = yaml.dump({"meta": metadata,
-                       "patch": patch,
-                       "game": game,
-                       # minimum version of patch system expected for patching to be successful
-                       "compatible_version": 3,
-                       "version": current_patch_version,
-                       "base_checksum": HASH})
-    return patch.encode(encoding="utf-8-sig")
 
 
 def create_rom_file(patch_file: str) -> Tuple[dict, str]:
