@@ -30,6 +30,27 @@ class GlitchBoots(DefaultOnToggle):
     display_name = "Glitched Starting Boots"
 
 
+class Goal(Choice):
+    """Goal required to finish your game.
+    Ganon and tower requires climbing Ganon's tower and defeating Agahnim 2, and then Ganon.
+    Ganon requires collecting enough crystals to get to and defeat Ganon.
+    All Bosses requires killing every dungeon boss as well as both Agahnim fights, and finally Ganon.
+    Pedestal requires collecting the three pendants and pulling the master sword pedestal.
+    Pedestal Ganon requires pulling the master sword pedestal to then defeat Ganon.
+    Triforce Hunt sends you on a magical journey to collect 'em all and return them to Murahdala.
+    Triforce Hunt Ganon requires all the pieces to approach Ganon.
+    Ice Rod Hunt gives you every item except the Ice Rod, which you must find to defeat Trinexx for his Triforce Piece."""
+    display_name = "Goal"
+    option_ganon_and_tower = 0
+    option_ganon = 1
+    option_all_bosses = 2
+    option_pedestal = 3
+    option_pedestal_ganon = 4
+    option_triforce_hunt = 5
+    option_triforce_hunt_ganon = 6
+    option_ice_rod_hunt = 7
+
+
 class OpenPyramid(Choice):
     """Determines whether the hole at the top of pyramid is open.
     Goal will open the pyramid if the goal requires you to kill Ganon, without needing to kill Agahnim 2.
@@ -46,9 +67,9 @@ class OpenPyramid(Choice):
 
     def to_bool(self, world: MultiWorld, player: int) -> bool:
         if self.value == self.option_goal:
-            return world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
+            return world.goal[player] in {Goal.option_ganon, Goal.option_triforce_hunt_ganon, Goal.option_pedestal_ganon}
         if self.value == self.option_auto:
-            return world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'} \
+            return world.goal[player] in {Goal.option_ganon, Goal.option_triforce_hunt_ganon, Goal.option_pedestal_ganon} \
             and (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'} or not
                  world.shuffle_ganon)
         if self.value == self.option_open:
@@ -77,26 +98,26 @@ class DungeonItem(Choice):
         return self.value in {1, 2, 3, 4}
 
 
-class bigkey_shuffle(DungeonItem):
+class BigKeyShuffle(DungeonItem):
     """How Big Keys will be placed."""
     item_name_group = "Big Keys"
     display_name = "Big Key Shuffle"
 
 
-class smallkey_shuffle(DungeonItem):
+class SmallKeyShuffle(DungeonItem):
     """How Small Keys will be placed."""
     option_universal = 5
     item_name_group = "Small Keys"
     display_name = "Small Key Shuffle"
 
 
-class compass_shuffle(DungeonItem):
+class CompassShuffle(DungeonItem):
     """How Compasses will be placed."""
     item_name_group = "Compasses"
     display_name = "Compass Shuffle"
 
 
-class map_shuffle(DungeonItem):
+class MapShuffle(DungeonItem):
     """How maps will be placed."""
     item_name_group = "Maps"
     display_name = "Map Shuffle"
@@ -800,15 +821,16 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
     "open_pyramid": OpenPyramid,
+    "goal": Goal,
     "triforce_pieces_mode": TriforceMode,
     "triforce_pieces_extra": TriforceExtra,
     "triforce_pieces_percentage": TriforcePercentage,
     "triforce_pieces_available": TriforceAvailable,
     "triforce_pieces_required": TriforceRequired,
-    "bigkey_shuffle": bigkey_shuffle,
-    "smallkey_shuffle": smallkey_shuffle,
-    "compass_shuffle": compass_shuffle,
-    "map_shuffle": map_shuffle,
+    "bigkey_shuffle": BigKeyShuffle,
+    "smallkey_shuffle": SmallKeyShuffle,
+    "compass_shuffle": CompassShuffle,
+    "map_shuffle": MapShuffle,
     "dungeon_counters": Counters,
     "progressive": Progressive,
     "swordless": Swordless,

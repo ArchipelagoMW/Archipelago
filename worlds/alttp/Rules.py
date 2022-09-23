@@ -8,7 +8,7 @@ from worlds.alttp.UnderworldGlitchRules import underworld_glitches_rules
 from worlds.alttp.Bosses import GanonDefeatRule
 from worlds.generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations, \
     item_name
-from worlds.alttp.Options import smallkey_shuffle, Logic, DarkRoomLogic, WorldState
+from worlds.alttp.Options import SmallKeyShuffle, Logic, DarkRoomLogic, WorldState, Goal
 
 no_logic = Logic.option_no_logic
 minor_glitches = Logic.option_minor_glitches
@@ -69,10 +69,10 @@ def set_rules(world):
         overworld_glitches_rules(world, player)
         underworld_glitches_rules(world, player)
 
-    if world.goal[player] == 'bosses':
+    if world.goal[player] == Goal.option_all_bosses:
         # require all bosses to beat ganon
         add_rule(world.get_location('Ganon', player), lambda state: state.can_reach('Master Sword Pedestal', 'Location', player) and state.has('Beat Agahnim 1', player) and state.has('Beat Agahnim 2', player) and state.has_crystals(7, player))
-    elif world.goal[player] == 'ganon':
+    elif world.goal[player] == Goal.option_ganon_and_tower:
         # require aga2 to beat ganon
         add_rule(world.get_location('Ganon', player), lambda state: state.has('Beat Agahnim 2', player))
 
@@ -211,7 +211,7 @@ def global_rules(world, player):
 
     set_rule(world.get_entrance('Sewers Door', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player) or (
-                         world.smallkey_shuffle[player] == smallkey_shuffle.option_universal and world.world_state[
+                     world.smallkey_shuffle[player] == SmallKeyShuffle.option_universal and world.world_state[
                      player] == WorldState.option_standard))  # standard universal small keys cannot access the shop
     set_rule(world.get_entrance('Sewers Back Door', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player))
@@ -395,9 +395,9 @@ def global_rules(world, player):
     set_defeat_dungeon_boss_rule(world.get_location('Agahnim 2', player))
     ganon = world.get_location('Ganon', player)
     set_rule(ganon, lambda state: GanonDefeatRule(state, player))
-    if world.goal[player] in ['ganontriforcehunt', 'localganontriforcehunt']:
+    if world.goal[player] == Goal.option_triforce_hunt_ganon:
         add_rule(ganon, lambda state: state.has_triforce_pieces(state.world.treasure_hunt_count[player], player))
-    elif world.goal[player] == 'ganonpedestal':
+    elif world.goal[player] == Goal.option_pedestal_ganon:
         add_rule(world.get_location('Ganon', player), lambda state: state.can_reach('Master Sword Pedestal', 'Location', player))
     else:
         add_rule(ganon, lambda state: state.has_crystals(state.world.crystals_needed_for_ganon[player], player))
@@ -922,7 +922,7 @@ def set_trock_key_rules(world, player):
             if not can_reach_big_chest:
                 # Must not go in the Chain Chomps chest - only 2 other chests available and 3+ keys required for all other chests
                 forbid_item(world.get_location('Turtle Rock - Chain Chomps', player), 'Big Key (Turtle Rock)', player)
-            if world.accessibility[player] == 'locations' and world.goal[player] != 'icerodhunt':
+            if world.accessibility[player] == 'locations' and world.goal[player] != Goal.option_ice_rod_hunt:
                 if world.bigkey_shuffle[player] and can_reach_big_chest:
                     # Must not go in the dungeon - all 3 available chests (Chomps, Big Chest, Crystaroller) must be keys to access laser bridge, and the big key is required first
                     for location in ['Turtle Rock - Chain Chomps', 'Turtle Rock - Compass Chest',

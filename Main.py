@@ -41,7 +41,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.set_seed(seed, args.race, str(args.outputname if args.outputname else world.seed))
 
     world.shuffle = args.shuffle.copy()
-    world.goal = args.goal.copy()
     world.boss_shuffle = args.shufflebosses.copy()
     world.beemizer_total_chance = args.beemizer_total_chance.copy()
     world.beemizer_trap_chance = args.beemizer_trap_chance.copy()
@@ -83,11 +82,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     for player in world.player_ids:
         if player in world.get_game_players("A Link to the Past"):
-            # enforce pre-defined local items.
-            if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
-                world.local_items[player].value.add('Triforce Piece')
-
-            # Not possible to place pendants/crystals out side of boss prizes yet.
+            # Not possible to place pendants/crystals outside of boss prizes yet.
             world.non_local_items[player].value -= item_name_groups['Pendants']
             world.non_local_items[player].value -= item_name_groups['Crystals']
 

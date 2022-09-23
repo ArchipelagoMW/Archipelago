@@ -11,7 +11,7 @@ from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_con
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
-from .Options import alttp_options, smallkey_shuffle, TriforceMode, Logic, WorldState
+from .Options import alttp_options, SmallKeyShuffle, TriforceMode, Logic, WorldState, Goal
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
     is_main_entrance
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
@@ -460,13 +460,13 @@ class ALTTPWorld(World):
         standard_keyshuffle_players = set()
         for player in world.get_game_players("A Link to the Past"):
             if world.world_state[player] == WorldState.option_standard and world.smallkey_shuffle[player] \
-                    and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal and \
-                    world.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons:
+                    and world.smallkey_shuffle[player] != SmallKeyShuffle.option_universal and \
+                    world.smallkey_shuffle[player] != SmallKeyShuffle.option_own_dungeons:
                 standard_keyshuffle_players.add(player)
             if not world.ganonstower_vanilla[player] or \
                     world.glitches_required[player] in {Logic.alias_owg, Logic.alias_hmg, Logic.option_no_logic}:
                 pass
-            elif 'triforcehunt' in world.goal[player] and ('local' in world.goal[player] or world.players == 1):
+            elif world.goal[player] in {Goal.option_triforce_hunt, Goal.option_triforce_hunt_ganon} and world.players == 1:
                 trash_counts[player] = world.random.randint(world.crystals_needed_for_gt[player] * 2,
                                                             world.crystals_needed_for_gt[player] * 4)
             else:
@@ -512,7 +512,7 @@ class ALTTPWorld(World):
                         trash_count -= 1
 
     def get_filler_item_name(self) -> str:
-        if self.world.goal[self.player] == "icerodhunt":
+        if self.world.goal[self.player] == Goal.option_ice_rod_hunt:
             item = "Nothing"
         else:
             item = self.world.random.choice(extras_list)
@@ -542,6 +542,6 @@ class ALttPLogic(LogicMixin):
     def _lttp_has_key(self, item, player, count: int = 1):
         if self.world.glitches_required[player] == Logic.option_no_logic:
             return True
-        if self.world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+        if self.world.smallkey_shuffle[player] == SmallKeyShuffle.option_universal:
             return self.can_buy_unlimited('Small Key (Universal)', player)
         return self.prog_items[item, player] >= count

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import Utils
 from Patch import read_rom
-from .Options import Counters, WorldState, ItemFunc, Timer, Logic
+from .Options import Counters, WorldState, ItemFunc, Timer, Logic, Goal
 
 LTTPJPN10HASH = '03a63945398191337e896e5771f77173'
 RANDOMIZERBASEHASH = '9952c2a3ec1b421e408df0d20c8f0c7f'
@@ -38,7 +38,7 @@ from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts
 from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen, parse_yaml
 from worlds.alttp.Items import ItemFactory, item_table, item_name_groups, progression_items
 from worlds.alttp.EntranceShuffle import door_addresses
-from worlds.alttp.Options import smallkey_shuffle, PrizeShuffle
+from worlds.alttp.Options import SmallKeyShuffle, PrizeShuffle
 import Patch
 
 try:
@@ -1483,15 +1483,15 @@ def patch_rom(world, rom, player, enemized):
                               (0x02 if 'bombs' in world.escape_assist[player] else 0x00) |
                               (0x04 if 'magic' in world.escape_assist[player] else 0x00)))  # Escape assist
 
-    if world.goal[player] in ['pedestal', 'triforcehunt', 'localtriforcehunt', 'icerodhunt']:
+    if world.goal[player] in [Goal.option_pedestal, Goal.option_triforce_hunt, Goal.option_ice_rod_hunt]:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible
-    elif world.goal[player] in ['ganontriforcehunt', 'localganontriforcehunt']:
+    elif world.goal[player] == Goal.option_triforce_hunt_ganon:
         rom.write_byte(0x18003E, 0x05)  # make ganon invincible until enough triforce pieces are collected
-    elif world.goal[player] in ['ganonpedestal']:
+    elif world.goal[player] == Goal.option_pedestal_ganon:
         rom.write_byte(0x18003E, 0x06)
-    elif world.goal[player] in ['bosses']:
+    elif world.goal[player] == Goal.option_all_bosses:
         rom.write_byte(0x18003E, 0x02)  # make ganon invincible until all bosses are beat
-    elif world.goal[player] in ['crystals']:
+    elif world.goal[player] == Goal.option_ganon:
         rom.write_byte(0x18003E, 0x04)  # make ganon invincible until all crystals
     else:
         rom.write_byte(0x18003E, 0x03)  # make ganon invincible until all crystals and aga 2 are collected
@@ -1535,8 +1535,8 @@ def patch_rom(world, rom, player, enemized):
     # b - Big Key
     # a - Small Key
     #
-    rom.write_byte(0x180045, ((0x00 if (world.smallkey_shuffle[player] == smallkey_shuffle.option_original_dungeon or
-                                        world.smallkey_shuffle[player] == smallkey_shuffle.option_universal) else 0x01)
+    rom.write_byte(0x180045, ((0x00 if (world.smallkey_shuffle[player] == SmallKeyShuffle.option_original_dungeon or
+                                        world.smallkey_shuffle[player] == SmallKeyShuffle.option_universal) else 0x01)
                               | (0x02 if world.bigkey_shuffle[player] else 0x00)
                               | (0x04 if world.map_shuffle[player] else 0x00)
                               | (0x08 if world.compass_shuffle[player] else 0x00)))  # free roaming items in menu
@@ -1570,7 +1570,7 @@ def patch_rom(world, rom, player, enemized):
         player] else 0x0000)  # Bomb Shop Reveal
 
     rom.write_byte(0x180172, 0x01 if world.smallkey_shuffle[
-                                         player] == smallkey_shuffle.option_universal else 0x00)  # universal keys
+                                         player] == SmallKeyShuffle.option_universal else 0x00)  # universal keys
     rom.write_byte(0x18637E, 0x01 if world.retro_bow[player] else 0x00)  # Skip quiver in item shops once bought
     rom.write_byte(0x180175, 0x01 if world.retro_bow[player] else 0x00)  # rupee bow
     rom.write_byte(0x180176, 0x0A if world.retro_bow[player] else 0x00)  # wood arrow cost
@@ -2371,17 +2371,17 @@ def write_strings(rom, world, player):
     else:
         tt['sign_ganons_tower'] = f'You need {world.crystals_needed_for_gt[player]} crystals to enter.'
 
-    if world.goal[player] == 'bosses':
+    if world.goal[player] == Goal.option_all_bosses:
         tt['sign_ganon'] = 'You need to kill all bosses, Ganon last.'
-    elif world.goal[player] == 'ganonpedestal':
+    elif world.goal[player] == Goal.option_pedestal_ganon:
         tt['sign_ganon'] = 'You need to pull the pedestal to defeat Ganon.'
-    elif world.goal[player] == "ganon":
+    elif world.goal[player] == Goal.option_ganon_and_tower:
         if world.crystals_needed_for_ganon[player] == 1:
             tt['sign_ganon'] = 'You need a crystal to beat Ganon and have beaten Agahnim atop Ganons Tower.'
         else:
             tt['sign_ganon'] = f'You need {world.crystals_needed_for_ganon[player]} crystals to beat Ganon and ' \
                                f'have beaten Agahnim atop Ganons Tower'
-    elif world.goal[player] == "icerodhunt":
+    elif world.goal[player] == Goal.option_ice_rod_hunt:
         tt['sign_ganon'] = 'Go find the Ice Rod and Kill Trinexx, then talk to Murahdahla... Ganon is invincible!'
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Go kill Trinexx instead.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
@@ -2403,10 +2403,10 @@ def write_strings(rom, world, player):
     tt['sahasrahla_quest_have_master_sword'] = Sahasrahla2_texts[local_random.randint(0, len(Sahasrahla2_texts) - 1)]
     tt['blind_by_the_light'] = Blind_texts[local_random.randint(0, len(Blind_texts) - 1)]
 
-    if world.goal[player] in ['triforcehunt', 'localtriforcehunt', 'icerodhunt']:
+    if world.goal[player] in [Goal.option_triforce_hunt, Goal.option_ice_rod_hunt]:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Get the Triforce Pieces.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
-        if world.goal[player] == 'triforcehunt' and world.players > 1:
+        if world.goal[player] == Goal.option_triforce_hunt and world.players > 1:
             tt['sign_ganon'] = 'Go find the Triforce pieces with your friends... Ganon is invincible!'
         else:
             tt['sign_ganon'] = 'Go find the Triforce pieces... Ganon is invincible!'
@@ -2420,7 +2420,7 @@ def write_strings(rom, world, player):
                                "invisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\n" \
                                "hidden in  a hollow tree. If you bring\n%d Triforce piece out of %d, I can reassemble it." % \
                                (world.treasure_hunt_count[player], world.triforce_pieces_available[player])
-    elif world.goal[player] in ['pedestal']:
+    elif world.goal[player] == Goal.option_pedestal:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Your goal is at the pedestal.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
         tt['sign_ganon'] = 'You need to get to the pedestal... Ganon is invincible!'
@@ -2429,17 +2429,17 @@ def write_strings(rom, world, player):
         tt['ganon_fall_in_alt'] = 'You cannot defeat me until you finish your goal!'
         tt['ganon_phase_3_alt'] = 'Got wax in\nyour ears?\nI can not die!'
         if world.treasure_hunt_count[player] > 1:
-            if world.goal[player] == 'ganontriforcehunt' and world.players > 1:
+            if world.goal[player] == Goal.option_triforce_hunt_ganon and world.players > 1:
                 tt['sign_ganon'] = 'You need to find %d Triforce pieces out of %d with your friends to defeat Ganon.' % \
                                    (world.treasure_hunt_count[player], world.triforce_pieces_available[player])
-            elif world.goal[player] in ['ganontriforcehunt', 'localganontriforcehunt']:
+            elif world.goal[player] == Goal.option_triforce_hunt_ganon:
                 tt['sign_ganon'] = 'You need to find %d Triforce pieces out of %d to defeat Ganon.' % \
                                    (world.treasure_hunt_count[player], world.triforce_pieces_available[player])
         else:
-            if world.goal[player] == 'ganontriforcehunt' and world.players > 1:
+            if world.goal[player] == Goal.option_triforce_hunt_ganon and world.players > 1:
                 tt['sign_ganon'] = 'You need to find %d Triforce piece out of %d with your friends to defeat Ganon.' % \
                                    (world.treasure_hunt_count[player], world.triforce_pieces_available[player])
-            elif world.goal[player] in ['ganontriforcehunt', 'localganontriforcehunt']:
+            elif world.goal[player] == Goal.option_triforce_hunt_ganon:
                 tt['sign_ganon'] = 'You need to find %d Triforce piece out of %d to defeat Ganon.' % \
                                    (world.treasure_hunt_count[player], world.triforce_pieces_available[player])
 

@@ -1374,8 +1374,6 @@ class Spoiler():
                 if player in self.world.get_game_players("A Link to the Past"):
                     outfile.write('%s%s\n' % ('Hash: ', self.hashes[player]))
 
-                    outfile.write('Goal:                            %s\n' % self.world.goal[player])
-                    outfile.write('Difficulty:                      %s\n' % self.world.difficulty[player])
                     outfile.write('Entrance Shuffle:                %s\n' % self.world.shuffle[player])
                     if self.world.shuffle[player] != "vanilla":
                         outfile.write('Entrance Shuffle Seed            %s\n' % self.world.worlds[player].er_seed)

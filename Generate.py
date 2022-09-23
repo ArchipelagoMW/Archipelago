@@ -532,14 +532,9 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     else:
         ret.shuffle = entrance_shuffle if entrance_shuffle != 'none' else 'vanilla'
 
-    goal = get_choice_legacy('goals', weights, 'ganon')
-
-    ret.goal = goals[goal]
-
     ret.shop_shuffle = get_choice_legacy('shop_shuffle', weights, '')
     if not ret.shop_shuffle:
         ret.shop_shuffle = ''
-
 
     ret.plando_texts = {}
     if PlandoSettings.texts in plando_options:
