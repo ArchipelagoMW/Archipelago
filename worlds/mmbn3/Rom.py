@@ -5,7 +5,7 @@ import json
 import itertools
 
 from TextArchiveAddresses import ArchiveToReferences, ArchiveToSizeComp, ArchiveToSizeUncomp, CompressedArchives, UncompressedArchives
-from Items import ItemData
+#from Items import ItemData
 
 charDict = {
     ' ':0x00,'0':0x01,'1':0x02,'2':0x03,'3':0x04,'4':0x05,'5':0x06,'6':0x07,'7':0x08,'8':0x09,'9':0x0A,
@@ -41,12 +41,16 @@ def read_u16_le(data,offset):
 
 def int32ToByteList_le(x):
     byte32_string = "{:08x}".format(x)
-    return bytearray.fromhex(byte32_string[2:]).reverse()
+    data = bytearray.fromhex(byte32_string)
+    data.reverse()
+    return data
 
 
 def int16ToByteList_le(x):
     byte32_string = "{:04x}".format(x)
-    return bytearray.fromhex(byte32_string[2:]).reverse()
+    data = bytearray.fromhex(byte32_string)
+    data.reverse()
+    return data
 
 
 def GenerateTextBytes(message):
@@ -163,7 +167,7 @@ def list_contains_subsequence(list, sublist):
     return False
 
 
-class Message:
+class ArchiveScript:
     def __init__(self, index, messageBytes):
         self.index = index
         self.messageBoxes = []
@@ -178,6 +182,16 @@ class Message:
                 messageBox.append(byte)
                 self.messageBoxes.append(messageBox)
                 messageBox = []
+        # If there's still bytes left over, add them even if we didn't hit an end
+        if (len(messageBox) > 0):
+            self.messageBoxes.append(messageBox)
+            messageBox = []
+
+    def GetBytes(self):
+        data = []
+        for message in self.messageBoxes:
+            data.extend(message)
+        return data
 
     def __str__(self):
         s = str(self.index)+' - \n'
@@ -187,21 +201,13 @@ class Message:
 
 
 class TextArchive:
-    #startOffset = 0x00
-
-    #compressed = True
-    #compressedSize = 0x00
-    #uncompressedSize = 0x00
-    #uncompressedData = {}
-    #compressedData = {}
-
-    #references = []
-    #scriptStarts = []
-    #scripts = []
-
     def __init__(self, offset, size, compressed=True):
         self.startOffset = offset
         self.compressed = compressed
+        self.modifiedData = []
+        self.scripts = {}
+        self.scriptCount = 0xFF
+
         if compressed:
             self.compressedSize = size
             self.compressedData = GetDataChunk(rom_data, offset, size)
@@ -212,17 +218,56 @@ class TextArchive:
             self.uncompressedData = GetDataChunk(rom_data, offset, size)
             self.compressedData = ndspy.lz10.compress(self.uncompressedData)
             self.compressedSize = len(self.compressedData)
-        scriptSize = (read_u16_le(self.uncompressedData, 0)) / 2
-        i = 0
-        while i < scriptSize:
+        self.scriptCount = (read_u16_le(self.uncompressedData, 0)) >> 1
+
+        for i in range(0, self.scriptCount):
             start = read_u16_le(self.uncompressedData, i*2)
-            self.scriptStarts.append(start)
-            messageBytes = list(itertools.takewhile(lambda b: b != 0xE7, self.uncompressedData[start:]))
-            messageBytes.append(0xE7)
-            self.scripts.append(messageBytes)
-            i += 1
-        for index, script in enumerate(self.scripts):
-            Message(index, script)
+            next = read_u16_le(self.uncompressedData, (i+1)*2)
+            if start != next:
+                messageBytes = list(self.uncompressedData[start:next])
+                #messageBytes = list(itertools.takewhile(lambda b: b != 0xE7, self.uncompressedData[start:]))
+                #messageBytes.append(0xE7)
+                message = ArchiveScript(i, messageBytes)
+                self.scripts[i] = message
+
+    def GenerateData(self, compressed=True):
+        header = []
+        scripts = []
+        byteOffset = self.scriptCount * 2
+        for i in range(0, self.scriptCount):
+            header.extend(int16ToByteList_le(byteOffset))
+            if i in self.scripts:
+                script = self.scripts[i]
+                scripts.extend(script.GetBytes())
+                byteOffset += len(script.GetBytes())
+        data = []
+        data.extend(header)
+        data.extend(scripts)
+        byteData = bytes(data)
+        if compressed:
+            byteData = ndspy.lz10.compress(byteData)
+
+        return byteData
+
+    def InjectItemMessage(self, scriptIndex, messageIndex, newBytes):
+        self.scripts[scriptIndex].messageBoxes[messageIndex] = newBytes
+
+    def InjectIntoRom(self):
+        originalSize = self.uncompressedSize
+        workingData = self.modifiedData
+
+        # If the original text archive was compressed, compress this data before checking the size
+        if self.compressed:
+            workingData = ndspy.lz10.compress(self.modifiedData)
+            originalSize = self.compressedSize
+
+        if len(workingData) < originalSize:
+            # If it's shorter than the original data, we can pad the difference with FF and directrly replace
+            workingData.extend([0xFF] * (originalSize - len(workingData)))
+            pass
+        else:
+            pass
+
 
 
 def GetDataChunk(data, startOffset, size):
@@ -242,16 +287,7 @@ def main():
     rom_file = 'C:/Users/digiholic/Projects/BN3AP/armips/output.gba'
     with open(rom_file, "rb") as rom:
         rom_data = rom.read()
-        TextArchive(0x759BF8, 0x4BC, True)
-        #data = GetDataChunk(rom_data, 0x759BF8, 0x4BC)
-        #decompData = ndspy.lz10.decompress(data)
-        #data = ndspy.lz10.decompress(rom_data)
-        #out_file = 'C:/Users/digiholic/Projects/BN3AP/TextPet.v1.0-alpha3/ripped-decomp.bin'
-        #with open(out_file, "wb") as out:
-        #    out.write(decompData)
-
-        #for byte in decompData:
-        #    print(hex(byte))
-
+        archive = TextArchive(0x759BF8, 0x4BC, True)
+        
 
 if __name__ == "__main__": main()
