@@ -3,9 +3,9 @@ from __future__ import annotations
 import Utils
 from Patch import read_rom
 
-LTTPJPN10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '9952c2a3ec1b421e408df0d20c8f0c7f'
-ROM_PLAYER_LIMIT = 255
+LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
+RANDOMIZERBASEHASH: str = "13a75c5dd28055fbcf8f69bd8161871d"
+ROM_PLAYER_LIMIT: int = 255
 
 import io
 import json
@@ -123,29 +123,24 @@ class LocalRom(object):
         return expected == buffermd5.hexdigest()
 
     def patch_base_rom(self):
-        if os.path.isfile(local_path('basepatch.sfc')):
-            with open(local_path('basepatch.sfc'), 'rb') as stream:
+        if os.path.isfile(user_path('basepatch.sfc')):
+            with open(user_path('basepatch.sfc'), 'rb') as stream:
                 buffer = bytearray(stream.read())
 
             if self.verify(buffer):
                 self.buffer = buffer
-                if not os.path.exists(local_path('data', 'basepatch.apbp')):
-                    Patch.create_patch_file(local_path('basepatch.sfc'))
                 return
 
-            if not os.path.isfile(local_path('data', 'basepatch.apbp')):
-                raise RuntimeError('Base patch unverified.  Unable to continue.')
+        with open(local_path("data", "basepatch.bsdiff4"), "rb") as f:
+            delta = f.read()
 
-        if os.path.isfile(local_path('data', 'basepatch.apbp')):
-            _, target, buffer = Patch.create_rom_bytes(local_path('data', 'basepatch.apbp'), ignore_version=True)
-            if self.verify(buffer):
-                self.buffer = bytearray(buffer)
-                with open(user_path('basepatch.sfc'), 'wb') as stream:
-                    stream.write(buffer)
-                return
-            raise RuntimeError('Base patch unverified.  Unable to continue.')
-
-        raise RuntimeError('Could not find Base Patch. Unable to continue.')
+        buffer = bsdiff4.patch(get_base_rom_bytes(), delta)
+        if self.verify(buffer):
+            self.buffer = bytearray(buffer)
+            with open(user_path('basepatch.sfc'), 'wb') as stream:
+                stream.write(buffer)
+            return
+        raise RuntimeError('Base patch unverified.  Unable to continue.')
 
     def write_crc(self):
         crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF

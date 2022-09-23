@@ -5,7 +5,7 @@ from io import BytesIO
 from flask import send_file, Response, render_template
 from pony.orm import select
 
-from Patch import update_patch_data, preferred_endings, AutoPatchRegister
+from Patch import AutoPatchRegister
 from WebHostLib import app, Slot, Room, Seed, cache
 
 
@@ -41,12 +41,7 @@ def download_patch(room_id, patch_id):
             new_file.seek(0)
             return send_file(new_file, as_attachment=True, download_name=fname)
         else:
-            patch_data = update_patch_data(patch.data, server=f"{app.config['PATCH_TARGET']}:{last_port}")
-            patch_data = BytesIO(patch_data)
-
-            fname = f"P{patch.player_id}_{patch.player_name}_{app.jinja_env.filters['suuid'](room_id)}." \
-                    f"{preferred_endings[patch.game]}"
-        return send_file(patch_data, as_attachment=True, download_name=fname)
+            return "Old Patch file, no longer compatible."
 
 
 @app.route("/dl_spoiler/<suuid:seed_id>")
