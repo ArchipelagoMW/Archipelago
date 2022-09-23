@@ -48,7 +48,7 @@ def has_requirements_for_level_star(
         return False
 
     # Finally, return success only if this level's requirements are met
-    return meets_requirements(state, level.shortname(), stars, player)
+    return meets_requirements(state, level.shortname, stars, player)
 
 
 def meets_requirements(state: CollectionState, name: str, stars: int, player: int):
@@ -101,11 +101,11 @@ def is_item_progression(item_name, level_mapping):
 
     for level in Overcooked2Level():
         if level_mapping is None:
-            unmapped_level = Overcooked2GenericLevel(level.level_id())
+            unmapped_level = Overcooked2GenericLevel(level.level_id)
         else:
-            unmapped_level = level_mapping[level.level_id()]
+            unmapped_level = level_mapping[level.level_id]
         
-        if item_in_logic(unmapped_level.shortname(), item_name):
+        if item_in_logic(unmapped_level.shortname, item_name):
             return True
 
     return False
@@ -198,10 +198,10 @@ def meets_minimum_sphere_one_requirements(
 
 
 def is_completable_no_items(level: Overcooked2GenericLevel) -> bool:
-    one_star_logic = level_logic[level.shortname()][0]
+    one_star_logic = level_logic[level.shortname][0]
     (exclusive, additive) = one_star_logic
 
-    # print(f"\n{level.shortname()}: {exclusive} / {additive}")
+    # print(f"\n{level.shortname}: {exclusive} / {additive}")
 
     return len(exclusive) == 0 and len(additive) == 0
 

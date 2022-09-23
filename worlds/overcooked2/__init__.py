@@ -75,7 +75,7 @@ class Overcooked2World(World):
         return self.options["IncludeHordeLevels"] and \
             (self.level_mapping is not None) and \
             level_id in self.level_mapping.keys() and \
-            self.level_mapping[level_id].is_horde()
+            self.level_mapping[level_id].is_horde
 
 
     def create_item(self, item: str, classification: ItemClassification=ItemClassification.progression) -> Overcooked2Item:
@@ -190,64 +190,62 @@ class Overcooked2World(World):
         self.connect_regions("Menu", "Overworld")
 
         for level in Overcooked2Level():
-            level_name = level.level_name()
-            level_id = level.level_id()
 
             # Create Region (e.g. "1-1")
-            self.add_region(level_name)
+            self.add_region(level.level_name)
 
             # Add Location to house progression item (1-star)
-            if level_id == 36:
+            if level.level_id == 36:
                 # 6-6 doesn't have progression, but it does have victory condition which is placed later
                 self.add_level_location(
-                    level_name,
-                    level.location_name_item(),
+                    level.level_name,
+                    level.location_name_item,
                     None,
                     1,
                 )
             else:
                 # Location to house progression item
                 self.add_level_location(
-                    level_name,
-                    level.location_name_item(),
-                    level_id,
+                    level.level_name,
+                    level.location_name_item,
+                    level.level_id,
                     1,
                 )
 
                 # Location to house level completed event
                 self.add_level_location(
-                    level_name,
-                    level.location_name_level_complete(),
-                    level_id,
+                    level.level_name,
+                    level.location_name_level_complete,
+                    level.level_id,
                     1,
                     is_event=True,
                 )
 
             # Add Locations to house star aquisition events, except for horde levels
-            if not self.is_level_horde(level_id):
+            if not self.is_level_horde(level.level_id):
                 for n in [1, 2, 3]:
                     self.add_level_location(
-                        level_name,
+                        level.level_name,
                         level.location_name_star_event(n),
-                        level_id,
+                        level.level_id,
                         n,
                         is_event=True,
                     )
 
             # Overworld -> Level
-            required_star_count: int = self.level_unlock_counts[level_id]
-            if level_id % 6 != 1 and level_id <= 36:
-                previous_level_completed_event_name: str = Overcooked2GenericLevel(level_id-1).shortname().split(" ")[1] + " Level Complete"
+            required_star_count: int = self.level_unlock_counts[level.level_id]
+            if level.level_id % 6 != 1 and level.level_id <= 36:
+                previous_level_completed_event_name: str = Overcooked2GenericLevel(level.level_id-1).shortname.split(" ")[1] + " Level Complete"
             else:
                 previous_level_completed_event_name = None
 
             level_access_rule: Callable[[CollectionState], bool] = \
-                lambda state, level_name=level_name, previous_level_completed_event_name=previous_level_completed_event_name, required_star_count=required_star_count: \
+                lambda state, level_name=level.level_name, previous_level_completed_event_name=previous_level_completed_event_name, required_star_count=required_star_count: \
                 has_requirements_for_level_access(state, level_name, previous_level_completed_event_name, required_star_count, self.player)
-            self.connect_regions("Overworld", level_name, level_access_rule)
+            self.connect_regions("Overworld", level.level_name, level_access_rule)
 
             # Level --> Overworld
-            self.connect_regions(level_name, "Overworld")
+            self.connect_regions(level.level_name, "Overworld")
 
         completion_condition: Callable[[CollectionState], bool] = lambda state: \
             state.has("Victory", self.player)
@@ -298,10 +296,10 @@ class Overcooked2World(World):
     def generate_basic(self) -> None:
         # Add Events (Star Acquisition)
         for level in Overcooked2Level():
-            if level.level_id() != 36:
-                self.place_event(level.location_name_level_complete(), level.event_name_level_complete())
+            if level.level_id != 36:
+                self.place_event(level.location_name_level_complete, level.event_name_level_complete)
 
-            if self.is_level_horde(level.level_id()):
+            if self.is_level_horde(level.level_id):
                 continue # horde levels don't have star rewards
 
             for n in [1, 2, 3]:

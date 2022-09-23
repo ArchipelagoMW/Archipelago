@@ -95,30 +95,34 @@ class Overcooked2GameWorld(Enum):
     SIX = 6
     KEVIN = 7
 
+    @property
     def as_str(self) -> str:
         if self == Overcooked2GameWorld.KEVIN:
             return "Kevin"
 
         return str(int(self.value))
 
-    def get_sublevel_count(self) -> int:
+    @property
+    def sublevel_count(self) -> int:
         if self == Overcooked2GameWorld.KEVIN:
             return 8
 
         return 6
 
-    def get_base_id(self) -> int:
+    @property
+    def base_id(self) -> int:
         if self == Overcooked2GameWorld.ONE:
             return 1
 
         prev = Overcooked2GameWorld(self.value - 1)
-        return prev.get_base_id() + prev.get_sublevel_count()
-
+        return prev.base_id + prev.sublevel_count
+    
+    @property
     def name(self) -> str:
         if self == Overcooked2GameWorld.KEVIN:
             return "Kevin"
 
-        return "World " + self.as_str()
+        return "World " + self.as_str
 
 
 
@@ -134,11 +138,13 @@ class Overcooked2GenericLevel():
         return f"{self.dlc.value}|{self.level_id}"
 
     def __repr__(self) -> str:
-        return self.__str__()
-    
+        return f"{self}"
+
+    @property
     def shortname(self) -> str:
         return level_id_to_shortname[(self.dlc, self.level_id)]
-    
+
+    @property
     def is_horde(self) -> bool:
         return self.level_id in self.dlc.horde_levels()
 
@@ -160,7 +166,7 @@ class Overcooked2Level:
 
     def __next__(self):
         self.sublevel += 1
-        if self.sublevel > self.world.get_sublevel_count():
+        if self.sublevel > self.world.sublevel_count:
             if self.world == Overcooked2GameWorld.KEVIN:
                 raise StopIteration
             self.world = Overcooked2GameWorld(self.world.value + 1)
@@ -168,29 +174,32 @@ class Overcooked2Level:
 
         return self
 
+    @property
     def level_id(self) -> int:
-        return self.world.get_base_id() + (self.sublevel - 1)
+        return self.world.base_id + (self.sublevel - 1)
 
+    @property
     def level_name(self) -> str:
-        return self.world.as_str() + "-" + str(self.sublevel)
+        return self.world.as_str + "-" + str(self.sublevel)
 
+    @property
     def location_name_item(self) -> str:
-        return self.level_name() + " Completed"
+        return self.level_name + " Completed"
 
+    @property
     def location_name_level_complete(self) -> str:
-        return self.level_name() + " Level Completed"
+        return self.level_name + " Level Completed"
 
+    @property
     def event_name_level_complete(self) -> str:
-        return self.level_name() + " Level Complete"
+        return self.level_name + " Level Complete"
 
     def location_name_star_event(self, stars: int) -> str:
-        return "%s (%d-Star)" % (self.level_name(), stars)
-
-    def world_name(self) -> str:
-        return self.world.name()
+        return "%s (%d-Star)" % (self.level_name, stars)
     
-    def to_generic_level(self) -> Overcooked2GenericLevel:
-        return Overcooked2GenericLevel(self.level_id())
+    @property
+    def as_generic_level(self) -> Overcooked2GenericLevel:
+        return Overcooked2GenericLevel(self.level_id)
 
 # Note that there are valid levels beyond what is listed here, but they are all
 # Onion King Dialogs

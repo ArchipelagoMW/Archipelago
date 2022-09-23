@@ -87,7 +87,7 @@ class Overcooked2Test(unittest.TestCase):
         self.assertEqual(len(levels), 44)
 
     def testLevelNameRepresentation(self):
-        shortnames = [level.to_generic_level().shortname() for level in Overcooked2Level()]
+        shortnames = [level.as_generic_level.shortname for level in Overcooked2Level()]
 
         for shortname in shortnames:
             self.assertIn(shortname, level_logic.keys())
@@ -102,7 +102,7 @@ class Overcooked2Test(unittest.TestCase):
             if level_name != "Tutorial":
                 self.assertIn(level_name, level_logic.keys())
 
-        region_names = [level.level_name() for level in Overcooked2Level()]
+        region_names = [level.level_name for level in Overcooked2Level()]
         for location_name in oc2_location_name_to_id.keys():
             level_name = location_name.split(" ")[0]
             self.assertIn(level_name, region_names)
