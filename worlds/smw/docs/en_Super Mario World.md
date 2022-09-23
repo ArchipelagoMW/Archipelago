@@ -25,7 +25,7 @@ There are two goals which can be chosen:
 
 ## What items and locations get shuffled?
 
-Each unique level exit awards a location check. Optionally, collecting Five Dragon Coins in each level can also award a location check.
+Each unique level exit awards a location check. Optionally, collecting five Dragon Coins in each level can also award a location check.
 Mario's various abilities and powerups as described above are placed into the item pool.
 If the player is playing Yoshi Egg Hunt, a certain number of Yoshi Eggs will be placed into the item pool.
 Any additional items that are needed to fill out the item pool with be 1-Up Mushrooms.
