@@ -4,7 +4,7 @@ import codecs
 
 
 class ItemData(NamedTuple):
-    code: Optional[int]
+    code: int
 
 
 class Overcooked2Item(Item):
@@ -52,9 +52,6 @@ item_table: Dict[str, ItemData] = {
     "Bonus Star"                    : ItemData(oc2_base_id + 36),
     "Calmer Unbread"                : ItemData(oc2_base_id + 37),
 }
-
-# exclusive
-oc2_end_id = item_table["Calmer Unbread"].code + 1
 
 item_frequencies = {
     "Progressive Throw/Catch": 2,

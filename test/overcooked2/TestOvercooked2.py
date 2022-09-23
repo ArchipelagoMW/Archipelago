@@ -11,7 +11,6 @@ from worlds.overcooked2.Locations import oc2_location_name_to_id
 
 class Overcooked2Test(unittest.TestCase):
     def testItems(self):
-
         self.assertEqual(len(item_name_to_id), len(item_id_to_name))
         self.assertEqual(len(item_name_to_id), len(item_table))
 
@@ -19,7 +18,7 @@ class Overcooked2Test(unittest.TestCase):
         for item_name in item_table.keys():
             item: Item = item_table[item_name]
             self.assertGreaterEqual(item.code, oc2_base_id, "Overcooked Item ID out of range")
-            self.assertLess(item.code, oc2_end_id, "Overcooked Item ID out of range")
+            self.assertLessEqual(item.code, item_table["Calmer Unbread"].code, "Overcooked Item ID out of range")
 
             if previous_item is not None:
                 self.assertEqual(item.code, previous_item + 1,
@@ -51,9 +50,7 @@ class Overcooked2Test(unittest.TestCase):
         ]
         for (item_name, expected_event) in events:
             expected_event["message"] = f"{item_name} Acquired!"
-
             event = item_to_unlock_event(item_name)
-
             self.assertEqual(event, expected_event)
 
         self.assertFalse(is_progression("Preparing Emote"))
@@ -71,9 +68,7 @@ class Overcooked2Test(unittest.TestCase):
         previous_runs = set()
         for seed in range(0, 5):
             levels = level_shuffle_factory(Random(seed), True, False)
-
             self.assertEqual(len(levels), 44)
-
             previous_level_id = None
             for level_id in levels.keys():
                 if previous_level_id is not None:
@@ -110,7 +105,6 @@ class Overcooked2Test(unittest.TestCase):
     def testLogic(self):
         for level_name in level_logic.keys():
             logic = level_logic[level_name]
-
             self.assertEqual(len(logic), 3, "Levels must provide logic for 1, 2, and 3 stars")
             
             for l in logic:
