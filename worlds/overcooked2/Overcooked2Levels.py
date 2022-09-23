@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import List
 
+
 class Overcooked2Dlc(Enum):
     STORY = "Story"
     SURF_N_TURF = "Surf 'n' Turf"
@@ -116,14 +117,13 @@ class Overcooked2GameWorld(Enum):
 
         prev = Overcooked2GameWorld(self.value - 1)
         return prev.base_id + prev.sublevel_count
-    
+
     @property
     def name(self) -> str:
         if self == Overcooked2GameWorld.KEVIN:
             return "Kevin"
 
         return "World " + self.as_str
-
 
 
 class Overcooked2GenericLevel():
@@ -196,10 +196,11 @@ class Overcooked2Level:
 
     def location_name_star_event(self, stars: int) -> str:
         return "%s (%d-Star)" % (self.level_name, stars)
-    
+
     @property
     def as_generic_level(self) -> Overcooked2GenericLevel:
         return Overcooked2GenericLevel(self.level_id)
+
 
 # Note that there are valid levels beyond what is listed here, but they are all
 # Onion King Dialogs

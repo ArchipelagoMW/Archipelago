@@ -61,7 +61,7 @@ item_frequencies = {
     "Larger Tip Jar": 2,
     "Order Lookahead": 2,
     "Progressive Dash": 2,
-    "Bonus Star": 0, # Filler Item
+    "Bonus Star": 0,  # Filler Item
     # default: 1
 }
 

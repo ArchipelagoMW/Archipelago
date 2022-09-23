@@ -75,14 +75,14 @@ class Overcooked2World(World):
             level_id in self.level_mapping.keys() and \
             self.level_mapping[level_id].is_horde
 
-
-    def create_item(self, item: str, classification: ItemClassification=ItemClassification.progression) -> Overcooked2Item:
+    def create_item(self, item: str, classification: ItemClassification = ItemClassification.progression) -> Overcooked2Item:
         return Overcooked2Item(item, classification, self.item_name_to_id[item], self.player)
 
     def create_event(self, event: str, classification: ItemClassification) -> Overcooked2Item:
         return Overcooked2Item(event, classification, None, self.player)
 
-    def place_event(self,  location_name: str, item_name: str, classification: ItemClassification=ItemClassification.progression_skip_balancing):
+    def place_event(self, location_name: str, item_name: str,
+                    classification: ItemClassification = ItemClassification.progression_skip_balancing):
         location: Location = self.world.get_location(location_name, self.player)
         location.place_locked_item(self.create_event(item_name, classification))
 
@@ -233,7 +233,8 @@ class Overcooked2World(World):
             # Overworld -> Level
             required_star_count: int = self.level_unlock_counts[level.level_id]
             if level.level_id % 6 != 1 and level.level_id <= 36:
-                previous_level_completed_event_name: str = Overcooked2GenericLevel(level.level_id-1).shortname.split(" ")[1] + " Level Complete"
+                previous_level_completed_event_name: str = Overcooked2GenericLevel(
+                    level.level_id - 1).shortname.split(" ")[1] + " Level Complete"
             else:
                 previous_level_completed_event_name = None
 
@@ -275,7 +276,7 @@ class Overcooked2World(World):
 
                 while freq > 0:
                     self.itempool.append(self.create_item(item_name, classification))
-                    classification = ItemClassification.useful # only the first progressive item can be progression
+                    classification = ItemClassification.useful  # only the first progressive item can be progression
                     freq -= 1
             else:
                 self.itempool.append(self.create_item(item_name, classification))
@@ -300,7 +301,7 @@ class Overcooked2World(World):
                 self.place_event(level.location_name_level_complete, level.event_name_level_complete)
 
             if self.is_level_horde(level.level_id):
-                continue # horde levels don't have star rewards
+                continue  # horde levels don't have star rewards
 
             for n in [1, 2, 3]:
                 self.place_event(level.location_name_star_event(n), "Star")
@@ -407,7 +408,7 @@ class Overcooked2World(World):
             "LevelForceReveal": level_force_reveal,
             "SaveFolderName": mod_name,
             "CustomOrderTimeoutPenalty": 10,
-            "LevelForceHide": [ 37, 38, 39, 40, 41, 42, 43, 44],
+            "LevelForceHide": [37, 38, 39, 40, 41, 42, 43, 44],
 
             # Game Modifications
             "LevelPurchaseRequirements": level_purchase_requirements,
@@ -494,12 +495,12 @@ def level_unlock_requirement_factory(stars_to_win: int) -> Dict[int, int]:
             sublevel += 1
 
     # force sphere 1 to 0 stars to help keep our promises to the item fill algo
-    level_unlock_counts[1] = 0 # 1-1
-    level_unlock_counts[7] = 0 # 2-1
-    level_unlock_counts[19] = 0 # 4-1
+    level_unlock_counts[1] = 0  # 1-1
+    level_unlock_counts[7] = 0  # 2-1
+    level_unlock_counts[19] = 0  # 4-1
 
     # Force 5-1 into sphere 1 to help things out
-    level_unlock_counts[25] = 1 # 5-1
+    level_unlock_counts[25] = 1  # 5-1
 
     for n in range(37, 46):
         level_unlock_counts[n] = 0
