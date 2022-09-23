@@ -77,7 +77,8 @@ def randomize_pokemon(self, mon, mons_list, randomize_type):
 def process_trainer_data(self, data):
     if not self.world.randomize_trainer_parties[self.player].value:
         return
-    mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon]
+    mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
+                 or self.world.trainer_legendaries[self.player].value]
     address = rom_addresses["Trainer_Data"]
     while address < rom_addresses["Trainer_Data_End"]:
         if data[address] == 255:
@@ -96,10 +97,37 @@ def process_trainer_data(self, data):
 
 
 def process_static_pokemon(self):
+    legendary_slots = [location for location in get_locations(self.player) if location.type == "Legendary Pokemon"]
     static_slots = [location for location in get_locations(self.player) if location.type in
                     ["Static Pokemon", "Missable Pokemon"]]
+    legendary_mons = [slot.original_item for slot in legendary_slots]
 
-    mons_list = [pokemon for pokemon in poke_data.first_stage_pokemon if pokemon not in poke_data.legendary_pokemon]
+    mons_list = [pokemon for pokemon in poke_data.first_stage_pokemon if pokemon not in poke_data.legendary_pokemon
+                 or self.world.randomize_legendaries[self.player].value == 3]
+    if self.world.randomize_legendaries[self.player].value == 1:
+        self.world.random.shuffle(legendary_mons)
+        for slot in legendary_slots:
+            location = self.world.get_location(slot.name, self.player)
+            location.item = self.create_item("Missable " + legendary_mons.pop(), self.player)
+            location.locked = True
+            location.event = True
+            location.item.location = location
+    elif self.world.randomize_legendaries[self.player].value == 2:
+        static_slots = static_slots + legendary_slots
+        self.world.random.shuffle(static_slots)
+        while legendary_mons:
+            slot = static_slots.pop()
+            slot_type = slot.type.split()[0]
+            if slot_type == "Legendary":
+                slot_type = "Missable"
+            location = self.world.get_location(slot.name, self.player)
+            location.item = self.create_item(slot_type + " " + legendary_mons.pop(), self.player)
+            location.locked = True
+            location.event = True
+            location.item.location = location
+    elif self.world.randomize_legendaries[self.player].value == 3:
+        static_slots = static_slots + legendary_slots
+
     for slot in static_slots:
         location = self.world.get_location(slot.name, self.player)
         randomize_type = self.world.randomize_static_pokemon[self.player].value
@@ -120,7 +148,8 @@ def process_wild_pokemon(self):
 
     placed_mons = {pokemon: 0 for pokemon in poke_data.pokemon_data.keys()}
     if self.world.randomize_wild_pokemon[self.player].value:
-        mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon]
+        mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
+                     or self.world.randomize_legendaries[self.player].value == 3]
         self.world.random.shuffle(encounter_slots)
         locations = []
         for slot in encounter_slots:
@@ -151,14 +180,14 @@ def process_wild_pokemon(self):
             location.item.location = location
             locations.append(location)
 
-        missing_mons = []
+        mons_to_add = []
         remaining_pokemon = [pokemon for pokemon in poke_data.pokemon_data.keys() if placed_mons[pokemon] == 0 and
-                            pokemon not in poke_data.legendary_pokemon]
+                             (pokemon not in poke_data.legendary_pokemon or self.world.randomize_legendaries[self.player].value == 3)]
         if self.world.catch_em_all[self.player].value == 1:
-            missing_mons = [pokemon for pokemon in poke_data.first_stage_pokemon if placed_mons[pokemon] == 0 and
-                            pokemon not in poke_data.legendary_pokemon]
+            mons_to_add = [pokemon for pokemon in poke_data.first_stage_pokemon if placed_mons[pokemon] == 0 and
+                            (pokemon not in poke_data.legendary_pokemon or self.world.randomize_legendaries[self.player].value == 3)]
         elif self.world.catch_em_all[self.player].value == 2:
-            missing_mons = missing_mons.copy()
+            mons_to_add = remaining_pokemon.copy()
         logic_needed_mons = max(self.world.oaks_aide_rt_2[self.player].value,
                                 self.world.oaks_aide_rt_11[self.player].value,
                                 self.world.oaks_aide_rt_15[self.player].value)
@@ -167,9 +196,9 @@ def process_wild_pokemon(self):
 
         self.world.random.shuffle(remaining_pokemon)
         while (len([pokemon for pokemon in placed_mons if placed_mons[pokemon] > 0])
-               + len(missing_mons) < logic_needed_mons):
-            missing_mons.append(remaining_pokemon.pop())
-        for mon in missing_mons:
+               + len(mons_to_add) < logic_needed_mons):
+            mons_to_add.append(remaining_pokemon.pop())
+        for mon in mons_to_add:
             stat_base = get_base_stat_total(mon)
             candidate_locations = get_encounter_slots(self)
             if self.world.randomize_wild_pokemon[self.player].value in [1, 3]:

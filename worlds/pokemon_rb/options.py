@@ -87,6 +87,7 @@ class Tea(Toggle):
     display_name = "Tea"
     default = 1
 
+
 class ExtraKeyItems(Toggle):
     """Adds key items that are required to access the Rocket Hideout, Cinnabar Mansion, Safari Zone, and Power Plant.
     Adds four item pickups to Rock Tunnel B1F."""
@@ -192,6 +193,19 @@ class RandomizeStaticPokemon(Choice):
     option_completely_random = 4
 
 
+class RandomizeLegendaryPokemon(Choice):
+    """Randomize Legendaries. Mew has been added as an encounter at the Vermilion dock truck.
+    Shuffle will shuffle the legendaries with each other. Static will shuffle them into other static Pokemon locations.
+    'Any' will allow legendaries to appear anywhere based on wild and static randomization options, and their locations
+    will be randomized according to static Pokemon randomization options."""
+    display_name = "Randomize Legendary Pokemon"
+    default = 0
+    option_vanilla = 0
+    option_shuffle = 1
+    option_static = 2
+    option_any = 3
+
+
 class CatchEmAll(Choice):
     """Guarantee all first evolution stage Pokemon are available, or all Pokemon of all stages.
     Currently only has an effect if wild Pokemon are randomized."""
@@ -213,6 +227,10 @@ class RandomizeTrainerParties(Choice):
     option_match_types_and_base_stats = 3
     option_completely_random = 4
 
+
+class TrainerLegendaries(Toggle):
+    """Allow legendary Pokemon in randomized trainer parties"""
+    default = 0
 
 class BlindTrainers(Choice):
     """Prevent most trainers from initiating battles, all the time or while holding B."""
@@ -328,7 +346,7 @@ class RandomizeTypeChartTypes(Choice):
        across the attacking type column and the defending types across the defending type column (so for example Normal
        type will still have exactly 2 types that it receives non-regular damage from, and 2 types it deals non-regular
        damage to). Randomize will randomize each type in both columns to any random type."""
-    display_name = "Randomize Type Chart Attacking Types"
+    display_name = "Randomize Type Chart Types"
     option_vanilla = 0
     option_shuffle = 1
     option_randomize = 2
@@ -398,11 +416,13 @@ pokemon_rb_options = {
     "exp_modifier": ExpModifier,
     "randomize_wild_pokemon": RandomizeWildPokemon,
     "randomize_static_pokemon": RandomizeStaticPokemon,
+    "randomize_legendary_pokemon": RandomizeLegendaryPokemon,
     "catch_em_all": CatchEmAll,
     "randomize_pokemon_stats": RandomizePokemonStats,
     "randomize_pokemon_catch_rates": RandomizePokemonCatchRates,
     "minimum_catch_rate": MinimumCatchRate,
     "randomize_trainer_parties": RandomizeTrainerParties,
+    "trainer_legendaries": TrainerLegendaries,
     "randomize_pokemon_movesets": RandomizePokemonMovesets,
     "start_with_four_moves": StartWithFourMoves,
     "tm_compatibility": TMCompatibility,

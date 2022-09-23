@@ -373,7 +373,7 @@ def get_locations(player=None):
         LocationData("Route 23 South", "Hidden Item On Island", "Max Ether", rom_addresses['Hidden_Item_Route_23_3'], Hidden(31), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
         LocationData("Victory Road 2F", "Hidden Item Rock Before Moltres", "Ultra Ball", rom_addresses['Hidden_Item_Victory_Road_2F_1'], Hidden(32), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
         LocationData("Victory Road 2F", "Hidden Item Rock In Final Room", "Full Restore", rom_addresses['Hidden_Item_Victory_Road_2F_2'], Hidden(33), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
-        LocationData("Vermilion City", "Hidden Item The Truck", "Full Restore", rom_addresses['Hidden_Item_Unused_6F'], Hidden(34), lambda state: state._pokemon_rb_can_get_hidden_items(player) and state._pokemon_rb_can_surf(player) and state.has("S.S. Ticket", player)),
+        #LocationData("Vermilion City", "Hidden Item The Truck", "Max Elixir", rom_addresses['Hidden_Item_Unused_6F'], Hidden(34), lambda state: state._pokemon_rb_can_get_hidden_items(player) and state._pokemon_rb_can_surf(player) and state.has("S.S. Ticket", player)),
         LocationData("Viridian City", "Hidden Item Cuttable Tree", "Potion", rom_addresses['Hidden_Item_Viridian_City'], Hidden(35), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
         LocationData("Route 11", "Hidden Item Isolated Tree Near Gate", "Potion", rom_addresses['Hidden_Item_Route_11'], Hidden(36), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
         LocationData("Route 12 West", "Hidden Item Tree Near Gate", "Hyper Potion", rom_addresses['Hidden_Item_Route_12'], Hidden(37), lambda state: state._pokemon_rb_can_get_hidden_items(player)),
@@ -1662,8 +1662,6 @@ def get_locations(player=None):
                      None, event=True, type="Missable Pokemon"),
         LocationData("Power Plant", "Fake Pokeball Battle 8", "Voltorb", rom_addresses["Static_Encounter_Electrode_B"],
                      None, event=True, type="Missable Pokemon"),
-        # LocationData("Power Plant", "Legendary Pokemon", "Zapdos", rom_addresses["Static_Encounter_Zapdos"],
-        #              None, event=True, type="Missable Pokemon"),
 
         LocationData("Pokemon Tower 6F", "Restless Soul", "Marowak", [rom_addresses["Ghost_Battle1"],
                      rom_addresses["Ghost_Battle2"], rom_addresses["Ghost_Battle3"], rom_addresses["Ghost_Battle4"],
@@ -1698,6 +1696,17 @@ def get_locations(player=None):
                      rom_addresses["Starter3_J"], rom_addresses["Starter3_K"], rom_addresses["Starter3_L"],
                      rom_addresses["Starter3_M"], rom_addresses["Starter3_N"], rom_addresses["Starter3_O"]], None,
                      event=True, type="Missable Pokemon"),
+
+        LocationData("Power Plant", "Legendary Pokemon", "Zapdos", rom_addresses["Static_Encounter_Zapdos"],
+                     None, event=True, type="Legendary Pokemon"),
+        LocationData("Seafoam Islands B4F", "Legendary Pokemon", "Articuno", rom_addresses["Static_Encounter_Articuno"],
+                     None, event=True, type="Legendary Pokemon", rule=lambda state: state._pokemon_rb_can_strength(player)),
+        LocationData("Victory Road 2F", "Legendary Pokemon", "Moltres", rom_addresses["Static_Encounter_Moltres"],
+                     None, event=True, type="Legendary Pokemon"),
+        LocationData("Cerulean Cave B1F", "Legendary Pokemon", "Mewtwo", rom_addresses["Static_Encounter_Mewtwo"],
+                     None, event=True, type="Legendary Pokemon"),
+        LocationData("Vermilion City", "Legendary Pokemon", "Mew", rom_addresses["Static_Encounter_Mew"],
+                     None, event=True, type="Legendary Pokemon", rule=lambda state: state._pokemon_rb_can_surf(player) and state.has("S.S. Ticket", player)),
 ]
     for i, location in enumerate(locations):
         if location.event or location.rom_address is None:
