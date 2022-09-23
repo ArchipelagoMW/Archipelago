@@ -309,18 +309,6 @@ class Overcooked2World(World):
 
     # Items get distributed to locations
 
-    def generate_output(self, output_directory: str) -> None:
-        if self.world.players != 1:
-            return
-
-        mod_name = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}"
-        data = self.fill_json_data()
-        # Save to disk
-
-        filepath = os.path.join(output_directory, mod_name + ".oc2.json")
-        with open(filepath, "w") as file:
-            json.dump(data, file)
-
     def fill_json_data(self) -> Dict[str, Any]:
         mod_name = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}"
 
