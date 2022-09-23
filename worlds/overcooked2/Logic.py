@@ -1,6 +1,5 @@
-from BaseClasses import CollectionState, Location
+from BaseClasses import CollectionState
 from .Overcooked2Levels import Overcooked2GenericLevel, Overcooked2Dlc, Overcooked2Level
-from .Items import item_frequencies
 from typing import Dict
 from random import Random
 
