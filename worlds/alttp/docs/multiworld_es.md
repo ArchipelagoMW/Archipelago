@@ -111,13 +111,13 @@ automáticamente el cliente, y ademas creara la rom en el mismo directorio donde
 Cuando el cliente se lance automáticamente, QUsb2Snes debería haberse ejecutado también. Si es la primera vez que lo
 ejecutas, puedes ser que el firewall de Windows te pregunte si le permites la comunicación.
 
-##### snes9x Multitroid
+##### snes9x-rr
 
 1. Carga tu fichero de ROM, si no lo has hecho ya
 2. Abre el menu "File" y situa el raton en **Lua Scripting**
 3. Haz click en **New Lua Script Window...**
 4. En la nueva ventana, haz click en **Browse...**
-5. Navega hacia el directorio donde este situado snes9x Multitroid, entra en el directorio `lua`, y
+5. Navega hacia el directorio donde este situado snes9x-rr, entra en el directorio `lua`, y
    escoge `multibridge.lua`
 6. Observa que se ha asignado un nombre al dispositivo, y el cliente muestra "SNES Device: Connected", con el mismo
    nombre en la esquina superior izquierda.

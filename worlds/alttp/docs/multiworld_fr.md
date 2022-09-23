@@ -112,13 +112,13 @@ Quand le client se lance automatiquement, QUsb2Snes devrait se lancer automatiqu
 c'est la première fois qu'il démarre, il vous sera peut-être demandé de l'autoriser à communiquer à travers le pare-feu
 Windows.
 
-##### snes9x Multitroid
+##### snes9x-rr
 
 1. Chargez votre ROM si ce n'est pas déjà fait.
 2. Cliquez sur le menu "File" et survolez l'option **Lua Scripting**
 3. Cliquez alors sur **New Lua Script Window...**
 4. Dans la nouvelle fenêtre, sélectionnez **Browse...**
-5. Dirigez vous vers le dossier où vous avez extrait snes9x Multitroid, allez dans le dossier `lua`, puis
+5. Dirigez vous vers le dossier où vous avez extrait snes9x-rr, allez dans le dossier `lua`, puis
    choisissez `multibridge.lua`
 6. Remarquez qu'un nom vous a été assigné, et que l'interface Web affiche "SNES Device: Connected", avec ce même nom
    dans le coin en haut à gauche.

@@ -93,7 +93,7 @@ Wenn der client den Emulator automatisch gestartet hat, wird SNI ebenfalls im Hi
 Mal ist, wird möglicherweise ein Fenster angezeigt, wo man bestätigen muss, dass das Programm durch die Windows Firewall
 kommunizieren darf.
 
-##### snes9x Multitroid
+##### snes9x-rr
 
 1. Lade die Entsprechende ROM-Datei, wenn sie nicht schon automatisch geladen wurde.
 2. Klicke auf den Reiter "File" oben im Menü und wähle **Lua Scripting**
