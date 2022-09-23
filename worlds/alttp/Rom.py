@@ -4,7 +4,7 @@ import Utils
 from Patch import read_rom
 
 LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
-RANDOMIZERBASEHASH: str = "13a75c5dd28055fbcf8f69bd8161871d"
+RANDOMIZERBASEHASH: str = "9952c2a3ec1b421e408df0d20c8f0c7f"
 ROM_PLAYER_LIMIT: int = 255
 
 import io
