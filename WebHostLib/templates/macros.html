@@ -46,9 +46,6 @@
                         {% elif patch.game == "Dark Souls III" %}
                         <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
                             Download JSON File...</a>
-                        {% elif patch.game == "Overcooked! 2" and room.seed.slots|length == 1 %}
-                            <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
-                                Download JSON File...</a>
                         {% else %}
                             No file to download for this game.
                         {% endif %}
