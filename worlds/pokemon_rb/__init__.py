@@ -42,6 +42,7 @@ class PokemonRedBlueWorld(World):
     item_name_groups = {}
 
     web = PokemonWebWorld()
+
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.fly_map = None

@@ -17,6 +17,7 @@ Many baseline changes are made to the game, including:
 
 * You can hold B to run (or bike extra fast!).
 * You can hold select while talking to a trainer to re-battle them.
+* You can return to route 2 from Diglett's Cave without the use of Cut.
 * The S.S. Anne will never depart.
 * Seafoam Islands entrances are swapped.
 * After obtaining one of the fossil item checks in Mt Moon, the remaining item can be received from the Cinnabar Lab
