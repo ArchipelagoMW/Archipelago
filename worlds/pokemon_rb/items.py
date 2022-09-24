@@ -98,7 +98,6 @@ item_table = {
     "Plant Key": ItemData(89, ItemClassification.progression),
     "Mansion Key": ItemData(90, ItemClassification.progression),
     "Hideout Key": ItemData(91, ItemClassification.progression),
-    #"Unknown Pass": ItemData(92, ItemClassification.progression),
     "Safari Pass": ItemData(93, ItemClassification.progression),
     "HM01 Cut": ItemData(196, ItemClassification.progression),
     "HM02 Fly": ItemData(197, ItemClassification.progression),

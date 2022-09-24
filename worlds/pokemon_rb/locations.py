@@ -50,7 +50,6 @@ class Rod:
         self.flag = flag
 
 def get_locations(player=None):
-    # Event flags
     locations = [
 
         LocationData("Vermilion City", "Fishing Guru", "Old Rod", rom_addresses["Rod_Vermilion_City_Fishing_Guru"], Rod(3)),
@@ -197,9 +196,6 @@ def get_locations(player=None):
         LocationData("Mt Moon 1F", "South Item", "Potion", rom_addresses["Missable_Mt_Moon_1F_Item_5"], Missable(107)),
         LocationData("Mt Moon 1F", "Southwest Item", "TM12 Water Gun", rom_addresses["Missable_Mt_Moon_1F_Item_6"],
                      Missable(108)),
-        #LocationData("Mt Moon B2F", "Fossil 1", "HP Up", rom_addresses[""], Missable(109)),
-        #LocationData("Mt Moon B2F", "Fossil 2", "TM01 Mega Punch", rom_addresses[""],
-        #             Missable(110)),
         LocationData("Mt Moon B2F", "Item 1", "HP Up", rom_addresses["Missable_Mt_Moon_B2F_Item_1"], Missable(111)),
         LocationData("Mt Moon B2F", "Item 2", "TM01 Mega Punch", rom_addresses["Missable_Mt_Moon_B2F_Item_2"],
                      Missable(112)),

@@ -105,10 +105,6 @@ char_map = {
     "9": 0xFF,
 }
 
-# safe_chars = list(char_map.keys())
-# safe_chars.remove("@")
-# safe_chars.remove("#")
-# safe_chars += ["PK", "MN", "MALE", "FEMALE", "'d", "'l", "'s", "'t", "'v", "'r", "'m"]
 unsafe_chars = ["@", "#", "PKMN"]
 
 
