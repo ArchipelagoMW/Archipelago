@@ -800,7 +800,7 @@ evolves_from = {
     "Nidoqueen": "Nidorina",
     "Nidorino": "Nidoran M",
     "Nidoking": "Nidorino",
-    "Cledable": "Clefairy",
+    "Clefable": "Clefairy",
     "Ninetales": "Vulpix",
     "Wigglytuff": "Jigglypuff",
     "Golbat": "Zubat",
@@ -828,7 +828,7 @@ evolves_from = {
     "Slowbro": "Slowpoke",
     "Magneton": "Magnemite",
     "Dodrio": "Doduo",
-    "Dewdong": "Seel",
+    "Dewgong": "Seel",
     "Muk": "Grimer",
     "Cloyster": "Shellder",
     "Haunter": "Gastly",
@@ -853,8 +853,16 @@ evolves_from = {
     "Dragonite": "Dragonair"
 }
 
+evolves_to = {}
+for from_mon, to_mon in zip(evolves_from.values(), evolves_from.keys()):
+    if from_mon != "Eevee":
+        evolves_to[from_mon] = to_mon
 
-
+# basic_three_stage_pokemon = []
+# for mon in evolves_to.keys():
+#     if evolves_to[mon] in evolves_to.keys():
+#         basic_three_stage_pokemon.append(mon)
+# print(basic_three_stage_pokemon)
 
 learnsets = {
     'Rhydon': ['Stomp', 'Tail Whip', 'Fury Attack', 'Horn Drill', 'Leer', 'Take Down'],

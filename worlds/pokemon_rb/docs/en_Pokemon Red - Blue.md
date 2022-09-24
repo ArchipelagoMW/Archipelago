@@ -17,13 +17,15 @@ Many baseline changes are made to the game, including:
 
 * You can hold B to run (or bike extra fast!).
 * You can hold select while talking to a trainer to re-battle them.
-* Seafoam Islands entrances are swapped.
 * The S.S. Anne will never depart.
+* Seafoam Islands entrances are swapped.
 * After obtaining one of the fossil item checks in Mt Moon, the remaining item can be received from the Cinnabar Lab
 fossil scientist after reviving a Pokémon from a fossil.
 * A hidden item location that was outside the bounds of the Safari Zone Gate map has been moved to a reachable tile on
-this screen. Another hidden item location that was on an unused map has been moved to the Vermilion Dock truck
+this screen.
+* Mew can be encountered at the S.S. Anne dock truck. This can be randomized depending on your settings.
 * Obedience depends on the total number of badges you have obtained instead of depending on specific badges.
+* Much of the dialogue throughout the game has been removed or shortened.
 
 ## What items and locations get shuffled?
 
@@ -42,6 +44,6 @@ All items for other games will display simply as "AP ITEM," including those for 
 
 ## When the player receives an item, what happens?
 
-A "received item" sound effect will play. Currently there is no in-game message informing you of what the item is.
+A "received item" sound effect will play. Currently, there is no in-game message informing you of what the item is.
 If you are in battle, have menus or text boxes opened, or scripted events are occurring, the items will not be given to
 you until these have ended.

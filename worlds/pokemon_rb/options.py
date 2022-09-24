@@ -1,5 +1,5 @@
 
-from Options import Toggle, Choice, Range, SpecialRange, FreeText
+from Options import Toggle, Choice, Range, SpecialRange, FreeText, TextChoice
 
 
 class GameVersion(Choice):
@@ -34,7 +34,8 @@ class Goal(Choice):
 
 
 class VictoryRoadCondition(Range):
-    """Number of badges required to reach Victory Road. One fewer will be required to enter the Viridian Gym."""
+    """Number of badges required to reach Victory Road. One fewer will be required to enter the Viridian Gym.
+    Your rival will reveal the amount needed on the first Route 22 battle (after turning in Oak's Parcel)."""
     display_name = "Badge Goal"
     range_start = 2
     range_end = 8
@@ -147,6 +148,7 @@ class OaksAidRt15(Range):
     range_end = 80
     default = 50
 
+
 class ExpModifier(SpecialRange):
     """Modifier for EXP gained. When specifying a number, exp is multiplied by this amount and divided by 16."""
     display_name = "Exp Modifier"
@@ -167,11 +169,22 @@ class ExpModifier(SpecialRange):
 
 
 class RandomizeWildPokemon(Choice):
-    """Randomize all wild Pokemon. match_types will select a Pokemon with at least one type matching
-    the original type of the original pokemon. match_base_stats will prefer Pokemon with closer base stat totals.
-    match_types_and_base_stats will match types and will weight towards similar base stats, but there may not be many
-    to choose from."""
+    """Randomize all wild Pokemon and game corner prize Pokemon. match_types will select a Pokemon with at least one
+    type matching the original type of the original Pokemon. match_base_stats will prefer Pokemon with closer base stat
+    totals. match_types_and_base_stats will match types and will weight towards similar base stats, but there may not be
+    many to choose from."""
     display_name = "Randomize Wild Pokemon"
+    default = 0
+    option_vanilla = 0
+    option_match_types = 1
+    option_match_base_stats = 2
+    option_match_types_and_base_stats = 3
+    option_completely_random = 4
+
+
+class RandomizeStarterPokemon(Choice):
+    """Randomize the starter Pokemon choices."""
+    display_name = "Randomize Starter Pokemon"
     default = 0
     option_vanilla = 0
     option_match_types = 1
@@ -228,7 +241,8 @@ class RandomizeTrainerParties(Choice):
 
 
 class TrainerLegendaries(Toggle):
-    """Allow legendary Pokemon in randomized trainer parties"""
+    """Allow legendary Pokemon in randomized trainer parties."""
+    display_name = "Trainer Legendaries"
     default = 0
 
 
@@ -390,6 +404,7 @@ class StartingMoney(Range):
     range_start = 0
     range_end = 999999
 
+
 pokemon_rb_options = {
     "game_version": GameVersion,
     "trainer_name": TrainerName,
@@ -413,6 +428,7 @@ pokemon_rb_options = {
     "minimum_steps_between_encounters": MinimumStepsBetweenEncounters,
     "exp_modifier": ExpModifier,
     "randomize_wild_pokemon": RandomizeWildPokemon,
+    "randomize_starter_pokemon": RandomizeStarterPokemon,
     "randomize_static_pokemon": RandomizeStaticPokemon,
     "randomize_legendary_pokemon": RandomizeLegendaryPokemon,
     "catch_em_all": CatchEmAll,

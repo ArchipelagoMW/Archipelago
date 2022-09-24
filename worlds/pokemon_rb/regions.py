@@ -9,7 +9,7 @@ def create_region(world: MultiWorld, player: int, name: str, locations_per_regio
     for location in locations_per_region.get(name, []):
         if (world.randomize_hidden_items[player].value or "Hidden" not in location.name) and \
                 (world.extra_key_items[player].value or name != "Rock Tunnel B1F" or "Item" not in location.name) and \
-                (world.tea[player].value or name != "Celadon City - Mansion Lady"):
+                (world.tea[player].value or location.name != "Celadon City - Mansion Lady"):
             location.parent_region = ret
             ret.locations.append(location)
             if world.randomize_hidden_items[player].value == 2 and "Hidden" in location.name:

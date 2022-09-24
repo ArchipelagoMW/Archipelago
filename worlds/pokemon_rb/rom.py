@@ -91,12 +91,23 @@ def process_trainer_data(self, data):
                 address += 1
                 break
             address += mode
-            mon = poke_data.id_to_mon[data[address]]
-            mon = randomize_pokemon(self, mon, mons_list, self.world.randomize_trainer_parties[self.player].value)
+            mon = None
+            for i in range(1, 4):
+                for l in ["A", "B", "C", "D", "E", "F", "G", "H"]:
+                    if rom_addresses[f"Rival_Starter{i}_{l}"] == address:
+                        mon = " ".join(self.world.get_location(f"Pallet Town - Starter {i}", self.player).item.name.split()[1:])
+                        if l in ["D", "E", "F", "G", "H"] and mon in poke_data.evolves_to:
+                            mon = poke_data.evolves_to[mon]
+                        if l in ["F", "G", "H"] and mon in poke_data.evolves_to:
+                            mon = poke_data.evolves_to[mon]
+            if mon is None:
+                mon = poke_data.id_to_mon[data[address]]
+                mon = randomize_pokemon(self, mon, mons_list, self.world.randomize_trainer_parties[self.player].value)
             data[address] = poke_data.pokemon_data[mon]["id"]
 
 
 def process_static_pokemon(self):
+    starter_slots = [location for location in get_locations(self.player) if location.type == "Starter Pokemon"]
     legendary_slots = [location for location in get_locations(self.player) if location.type == "Legendary Pokemon"]
     static_slots = [location for location in get_locations(self.player) if location.type in
                     ["Static Pokemon", "Missable Pokemon"]]
@@ -152,6 +163,18 @@ def process_static_pokemon(self):
         location.locked = True
         location.item.location = location
 
+    for slot in starter_slots:
+        location = self.world.get_location(slot.name, self.player)
+        randomize_type = self.world.randomize_starter_pokemon[self.player].value
+        slot_type = "Missable"
+        if not randomize_type:
+            location.item = self.create_item(slot_type + " " + slot.original_item)
+        else:
+            location.item = self.create_item(slot_type + " " +
+                                             randomize_pokemon(self, slot.original_item, mons_list, randomize_type))
+        location.event = True
+        location.locked = True
+        location.item.location = location
 
 def process_wild_pokemon(self):
 
@@ -381,6 +404,7 @@ def generate_output(self, output_directory: str):
     data[rom_addresses["Starting_Money_High"]] = int(money[:2], 16)
     data[rom_addresses["Starting_Money_Middle"]] = int(money[2:4], 16)
     data[rom_addresses["Starting_Money_Low"]] = int(money[4:], 16)
+    data[rom_addresses["Text_Badges_Needed"]] = encode_text(str(self.world.victory_road_condition[self.player].value))[0]
     if self.world.badges_needed_for_hm_moves[self.player].value == 0:
         for hm_move in poke_data.hm_moves:
             write_bytes(data, bytearray([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
