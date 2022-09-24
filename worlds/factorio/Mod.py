@@ -35,6 +35,7 @@ base_info = {
     "dependencies": [
         "base >= 1.1.0",
         "? science-not-invited",
+        "? factory-levels",
         "! archipelago-extractor"
     ]
 }
