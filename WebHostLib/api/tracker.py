@@ -1,7 +1,7 @@
 import collections
 import datetime
 
-from typing import Optional, Dict, Any
+from typing import Optional
 from flask import abort, jsonify
 
 from Utils import restricted_loads
@@ -11,13 +11,14 @@ from WebHostLib.models import Room
 from WebHostLib.api import api_endpoints
 from WebHostLib.tracker import get_static_room_data
 from WebHostLib import cache
-from MultiServer import Context
 
 
 @api_endpoints.route('/tracker/<suuid:tracker>')
 @cache.memoize(timeout=60)
 def tracker_data(tracker: UUID):
     room: Optional[Room] = Room.get(tracker=tracker)
+    if not room:
+        abort(404)
 
     locations, names, use_door_tracker, player_checks_in_area, \
         player_location_to_area, precollected_items, games, slot_data, groups = get_static_room_data(room)
