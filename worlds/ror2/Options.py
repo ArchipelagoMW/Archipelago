@@ -44,6 +44,10 @@ class FinalStageDeath(DefaultOnToggle):
 
 # TODO add deathlink as a YAML option to match other games
 
+class EnvironmentsAsItems(DefaultOnToggle):
+    """Enable to add environments into the archipelago item pool."""
+    display_name = "Environments as items"
+
 class DLC_SOTV(DefaultOnToggle):
     """Enable if you are using SOTV DLC."""
     display_name = "SOTV"
@@ -174,6 +178,7 @@ ror2_options: Dict[str, type(Option)] = {
     "total_revivals":       TotalRevivals,
     "start_with_revive":    StartWithRevive,
     "final_stage_death":    FinalStageDeath,
+    "environments_as_items": EnvironmentsAsItems, # XXX fix indentation
     "dlc_sotv":             DLC_SOTV,
     # TODO add an option for whether simulacrum environments should exist in the pool
     "item_pickup_step":     ItemPickupStep,

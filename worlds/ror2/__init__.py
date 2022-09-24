@@ -50,13 +50,17 @@ class RiskOfRainWorld(World):
         if self.world.start_with_revive[self.player].value:
             self.world.push_precollected(self.world.create_item("Dio's Best Friend", self.player))
 
-        environments_pool = get_environment_table(self.world.dlc_sotv[self.player].value)
 
-        # TODO allow for different precollected environments
-        self.world.push_precollected(self.world.create_item("Titanic Plains", self.player))
-        environments_pool.pop("Titanic Plains")
-        self.world.push_precollected(self.world.create_item("The Simulacrum (Titanic Plains)", self.player))
-        environments_pool.pop("The Simulacrum (Titanic Plains)")
+        environments_pool = {}
+        # only mess with the environments if they are set as items
+        if (self.world.environments_as_items[self.player].value):
+            environments_pool = get_environment_table(self.world.dlc_sotv[self.player].value)
+
+            # TODO allow for different precollected environments
+            self.world.push_precollected(self.world.create_item("Titanic Plains", self.player))
+            environments_pool.pop("Titanic Plains")
+            self.world.push_precollected(self.world.create_item("The Simulacrum (Titanic Plains)", self.player))
+            environments_pool.pop("The Simulacrum (Titanic Plains)")
 
         # if presets are enabled generate junk_pool from the selected preset
         pool_option = self.world.item_weights[self.player].value
@@ -130,7 +134,8 @@ class RiskOfRainWorld(World):
             "totalLocations": self.world.total_locations[self.player].value,
             "totalRevivals": self.world.total_revivals[self.player].value,
             "startWithDio": self.world.start_with_revive[self.player].value,
-            "FinalStageDeath": self.world.final_stage_death[self.player].value
+            "FinalStageDeath": self.world.final_stage_death[self.player].value,
+            "EnvironmentsAsItems": self.world.environments_as_items[self.player].value
         }
 
     def create_item(self, name: str) -> Item:
