@@ -161,10 +161,10 @@ class PokemonRedBlueWorld(World):
                 raise FillError(f"Failed to place badges for player {self.player}")
         intervene = False
         test_state = self.world.get_all_state(False)
-        if not test_state._pokemon_rb_can_surf(self.player) or not test_state._pokemon_rb_can_strength(self.player):
+        if not test_state.pokemon_rb_can_surf(self.player) or not test_state.pokemon_rb_can_strength(self.player):
             intervene = True
         elif self.world.accessibility[self.player].current_key != "minimal":
-            if not test_state._pokemon_rb_can_cut(self.player) or not test_state._pokemon_rb_can_flash(self.player):
+            if not test_state.pokemon_rb_can_cut(self.player) or not test_state.pokemon_rb_can_flash(self.player):
                 intervene = True
         if intervene:
             logging.warning(
