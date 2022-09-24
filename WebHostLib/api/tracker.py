@@ -27,7 +27,7 @@ def tracker_data(tracker: UUID):
                                  for player_number in range(1, len(team) + 1) if player_number not in groups}
                    for team_number, team in enumerate(names)}
 
-    hints = {team: set() for team in range(len(names))}
+    hints = {team: [] for team in range(len(names))}
 
     finished_players = {team_number: [] for team_number, team in enumerate(names)}
     if room.multisave:
@@ -37,7 +37,7 @@ def tracker_data(tracker: UUID):
 
     if "hints" in multisave:
         for (team, slot), slot_hints in multisave["hints"].items():
-            hints[team] |= set(slot_hints)
+            hints[team] = [hint for hint in slot_hints]
 
     for (team, player), locations_checked in multisave.get("location_checks", {}).items():
         if player in groups:
@@ -57,16 +57,16 @@ def tracker_data(tracker: UUID):
     activity_timers = {}
     now = datetime.datetime.utcnow()
     for (team, player), timestamp in multisave.get("client_activity_timers", []):
-        activity_timers[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
+        activity_timers[team] = {player: now - datetime.datetime.utcfromtimestamp(timestamp)}
 
     player_names = {}
     for team, names in enumerate(names):
         for player, name in enumerate(names, 1):
-            player_names[(team, player)] = name
+            player_names[team] = {player: name}
     long_player_names = player_names.copy()
     for (team, player), alias in multisave.get("name_aliases", {}).items():
-        player_names[(team, player)] = alias
-        long_player_names[(team, player)] = f"{alias} ({long_player_names[(team, player)]})"
+        player_names[team][player] = alias
+        long_player_names[team][player] = f"{alias} ({long_player_names[team][player]})"
 
     return jsonify({
         "long_player_names": long_player_names,

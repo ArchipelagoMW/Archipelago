@@ -46,4 +46,4 @@ def get_datapackage_versions():
     return version_package
 
 
-from . import generate, user  # trigger registration
+from . import generate, user, tracker  # trigger registration
