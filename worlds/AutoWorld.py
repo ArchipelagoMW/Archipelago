@@ -231,7 +231,8 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def post_fill(self) -> None:
-        """Optional Method that is called after regular fill. Can be used to do adjustments before output generation."""
+        """Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
+        This happens before progression balancing,  so the items may not be in their final locations yet."""
 
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.

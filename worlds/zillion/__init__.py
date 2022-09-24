@@ -12,7 +12,7 @@ from .logic import clear_cache, cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
 from .options import ZillionItemCounts, zillion_options, validate
 from .id_maps import item_name_to_id as _item_name_to_id, \
-    loc_name_to_id as _loc_name_to_id, item_id_to_zz_item, loc_zz_name_to_name, zz_reg_name_to_reg_name
+    loc_name_to_id as _loc_name_to_id, item_id_to_zz_item, zz_reg_name_to_reg_name
 from .item import ZillionItem
 from .patch import ZillionDeltaPatch, get_base_rom_path
 
@@ -123,8 +123,8 @@ class ZillionWorld(World):
         # just in case the options changed anything (I don't think they do)
         for zz_name in self.zz_randomizer.locations:
             if zz_name != 'main':
-                assert loc_zz_name_to_name(zz_name) in self.location_name_to_id, \
-                    f"{loc_zz_name_to_name(zz_name)} not in location map"
+                assert self.zz_randomizer.loc_name_2_pretty[zz_name] in self.location_name_to_id, \
+                    f"{self.zz_randomizer.loc_name_2_pretty[zz_name]} not in location map"
 
     def create_regions(self) -> None:
         assert self.zz_randomizer, "generate_early hasn't been called"
@@ -166,7 +166,8 @@ class ZillionWorld(World):
                     access_rule = functools.partial(access_rule_wrapped,
                                                     zz_loc, self.player, self.zz_randomizer)
 
-                    loc = ZillionLocation(zz_loc, self.player, here)
+                    loc_name = self.zz_randomizer.loc_name_2_pretty[zz_loc.name]
+                    loc = ZillionLocation(zz_loc, self.player, loc_name, here)
                     loc.access_rule = access_rule
                     if not (limited_skill >= zz_loc.req):
                         loc.progress_type = LocationProgressType.EXCLUDED
@@ -202,7 +203,7 @@ class ZillionWorld(World):
     def generate_basic(self) -> None:
         assert self.zz_randomizer, "generate_early hasn't been called"
         # main location name is an alias
-        main_loc_name = loc_zz_name_to_name(self.zz_randomizer.locations['main'].name)
+        main_loc_name = self.zz_randomizer.loc_name_2_pretty[self.zz_randomizer.locations['main'].name]
 
         self.world.get_location(main_loc_name, self.player)\
             .place_locked_item(self.create_item("main"))
@@ -231,7 +232,20 @@ class ZillionWorld(World):
     #         location.zz_loc.item = placed_item.zz_item
 
     def post_fill(self) -> None:
-        """Optional Method that is called after regular fill. Can be used to do adjustments before output generation."""
+        """Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
+        This happens before progression balancing,  so the items may not be in their final locations yet."""
+
+        assert self.zz_randomizer, "generate_early hasn't been called"
+        assert self.zz_patcher, "generate_early didn't set patcher"
+        zz_options = self.zz_randomizer.options
+        if zz_options.randomize_alarms:
+            a = Alarms(self.zz_patcher.tc, self.zz_randomizer.logger)
+            a.choose_all(frozenset())
+
+    def finalize_item_locations(self) -> None:
+        """
+        sync zilliandomizer item locations with AP item locations
+        """
         assert self.zz_randomizer, "generate_early hasn't been called"
         zz_options = self.zz_randomizer.options
 
@@ -242,7 +256,7 @@ class ZillionWorld(World):
             if loc.player == self.player:
                 z_loc = cast(ZillionLocation, loc)
                 if z_loc.item is None:
-                    self.logger.warn("post_fill location has no item - is that ok?")
+                    self.logger.warn("generate_output location has no item - is that ok?")
                     z_loc.zz_loc.item = empty
                 elif z_loc.item.player == self.player:
                     z_item = cast(ZillionItem, z_loc.item)
@@ -256,14 +270,16 @@ class ZillionWorld(World):
 
         # verify that every location got an item
         for zz_loc in self.zz_randomizer.locations.values():
-            assert zz_loc.item, f"not every location in world {self.player} got an item"
+            assert zz_loc.item, (
+                f"location {self.zz_randomizer.loc_name_2_pretty[zz_loc.name]} "
+                f"in world {self.player} didn't get an item"
+            )
 
         assert self.zz_patcher, "generate_early didn't set patcher"
-        if zz_options.randomize_alarms:
-            a = Alarms(self.zz_patcher.tc, self.zz_randomizer.logger)
-            a.choose_all(frozenset())
 
-        self.zz_patcher.write_locations(self.zz_randomizer.start, zz_options.start_char)
+        self.zz_patcher.write_locations(self.zz_randomizer.start,
+                                        zz_options.start_char,
+                                        self.zz_randomizer.loc_name_2_pretty)
         self.zz_patcher.all_fixes_and_options(zz_options)
         self.zz_patcher.set_external_item_interface(zz_options.start_char, zz_options.max_level)
         self.zz_patcher.set_multiworld_items(multi_items)
@@ -271,6 +287,8 @@ class ZillionWorld(World):
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.
         If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
+        self.finalize_item_locations()
+
         assert self.zz_patcher, "didn't get patcher from generate_early"
         # original_rom_bytes = self.zz_patcher.rom
         patched_rom_bytes = self.zz_patcher.get_patched_bytes()
@@ -302,6 +320,9 @@ class ZillionWorld(World):
 
         # TODO: share a TypedDict data structure with client
 
+        # TODO: tell client which canisters are keywords
+        # so it can open and get those when restoring doors
+
         assert self.zz_patcher, "didn't get patcher from generate_early"
         rescues: Dict[str, Any] = {}
         for i in (0, 1):
@@ -320,10 +341,6 @@ class ZillionWorld(World):
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
         """For deeper modification of server multidata."""
-        # TODO: tell client which canisters are keywords
-        # so it can open and get those when restoring doors
-        # TODO: tell client which rescues are local,
-        # so it can notify server when it gets those locations
         pass
 
     # Spoiler writing is optional, these may not get called.

@@ -4,7 +4,7 @@ from zilliandomizer.logic_components.regions import Region as ZzRegion
 from zilliandomizer.logic_components.locations import Location as ZzLocation
 from zilliandomizer.logic_components.items import RESCUE
 
-from .id_maps import loc_zz_name_to_name, loc_name_to_id
+from .id_maps import loc_name_to_id
 from .item import ZillionItem
 
 
@@ -29,8 +29,8 @@ class ZillionLocation(Location):
     def __init__(self,
                  zz_loc: ZzLocation,
                  player: int,
+                 name: str,
                  parent: Optional[Region] = None) -> None:
-        name = loc_zz_name_to_name(zz_loc.name)
         loc_id = loc_name_to_id[name]
         super().__init__(player, name, loc_id, parent)
         self.zz_loc = zz_loc

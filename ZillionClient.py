@@ -9,20 +9,17 @@ from CommonClient import CommonContext, server_loop, gui_enabled, \
 
 from zilliandomizer.zri.memory import Memory
 from zilliandomizer.zri import events
-from zilliandomizer.low_resources.loc_id_maps import id_to_loc as id_to_zz_loc
+from zilliandomizer.utils.loc_name_maps import id_to_loc
 from zilliandomizer.logic_components.items import id_to_item as id_to_zz_item
 from zilliandomizer.patch import RescueInfo
 
-from worlds.zillion.id_maps import item_pretty_id_to_useful_id, loc_zz_name_to_name
+from worlds.zillion.id_maps import item_pretty_id_to_useful_id
 from worlds.zillion.config import base_id
 
-# TODO: rom and server sometimes disagree about what item is where
-# rom said it was another player's item, when server said it was my bread
 # TODO: how to get rescue names (and other item names)
 # TODO: test multiple yamls specifying zillion with no other games
 # (reported causes archipelago to say that it can't beat the game)
 # TODO: make sure close button works on ZillionClient window
-# TODO: test rescues showing in log, (both when local and when external)
 
 
 class ZillionCommandProcessor(ClientCommandProcessor):
@@ -111,7 +108,7 @@ class ZillionContext(CommonContext):
                 id_ = int(id_str)
                 room_i = mem // 256
                 assert 0 <= room_i < 74
-                assert id_ in id_to_zz_loc
+                assert id_ in id_to_loc
                 self.loc_mem_to_id[mem] = id_
 
             self.got_slot_data.set()
@@ -131,7 +128,7 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
                 event_from_game = from_game.get_nowait()
                 if isinstance(event_from_game, events.AcquireLocationEventFromGame):
                     server_id = event_from_game.id + base_id
-                    loc_name = loc_zz_name_to_name(id_to_zz_loc[event_from_game.id])
+                    loc_name = id_to_loc[event_from_game.id]
                     ctx.locations_checked.add(server_id)
                     # TODO: progress number "(1/146)" or something like that
                     if server_id in ctx.missing_locations:
