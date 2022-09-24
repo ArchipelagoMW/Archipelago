@@ -103,16 +103,23 @@ def process_static_pokemon(self):
     legendary_mons = [slot.original_item for slot in legendary_slots]
 
     mons_list = [pokemon for pokemon in poke_data.first_stage_pokemon if pokemon not in poke_data.legendary_pokemon
-                 or self.world.randomize_legendaries[self.player].value == 3]
-    if self.world.randomize_legendaries[self.player].value == 1:
-        self.world.random.shuffle(legendary_mons)
+                 or self.world.randomize_legendary_pokemon[self.player].value == 3]
+    if self.world.randomize_legendary_pokemon[self.player].value == 0:
         for slot in legendary_slots:
             location = self.world.get_location(slot.name, self.player)
-            location.item = self.create_item("Missable " + legendary_mons.pop(), self.player)
+            location.item = self.create_item("Missable " + slot.original_item)
             location.locked = True
             location.event = True
             location.item.location = location
-    elif self.world.randomize_legendaries[self.player].value == 2:
+    elif self.world.randomize_legendary_pokemon[self.player].value == 1:
+        self.world.random.shuffle(legendary_mons)
+        for slot in legendary_slots:
+            location = self.world.get_location(slot.name, self.player)
+            location.item = self.create_item("Missable " + legendary_mons.pop())
+            location.locked = True
+            location.event = True
+            location.item.location = location
+    elif self.world.randomize_legendary_pokemon[self.player].value == 2:
         static_slots = static_slots + legendary_slots
         self.world.random.shuffle(static_slots)
         while legendary_mons:
@@ -121,11 +128,11 @@ def process_static_pokemon(self):
             if slot_type == "Legendary":
                 slot_type = "Missable"
             location = self.world.get_location(slot.name, self.player)
-            location.item = self.create_item(slot_type + " " + legendary_mons.pop(), self.player)
+            location.item = self.create_item(slot_type + " " + legendary_mons.pop())
             location.locked = True
             location.event = True
             location.item.location = location
-    elif self.world.randomize_legendaries[self.player].value == 3:
+    elif self.world.randomize_legendary_pokemon[self.player].value == 3:
         static_slots = static_slots + legendary_slots
 
     for slot in static_slots:
@@ -149,7 +156,7 @@ def process_wild_pokemon(self):
     placed_mons = {pokemon: 0 for pokemon in poke_data.pokemon_data.keys()}
     if self.world.randomize_wild_pokemon[self.player].value:
         mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
-                     or self.world.randomize_legendaries[self.player].value == 3]
+                     or self.world.randomize_legendary_pokemon[self.player].value == 3]
         self.world.random.shuffle(encounter_slots)
         locations = []
         for slot in encounter_slots:
@@ -182,10 +189,10 @@ def process_wild_pokemon(self):
 
         mons_to_add = []
         remaining_pokemon = [pokemon for pokemon in poke_data.pokemon_data.keys() if placed_mons[pokemon] == 0 and
-                             (pokemon not in poke_data.legendary_pokemon or self.world.randomize_legendaries[self.player].value == 3)]
+                             (pokemon not in poke_data.legendary_pokemon or self.world.randomize_legendary_pokemon[self.player].value == 3)]
         if self.world.catch_em_all[self.player].value == 1:
             mons_to_add = [pokemon for pokemon in poke_data.first_stage_pokemon if placed_mons[pokemon] == 0 and
-                            (pokemon not in poke_data.legendary_pokemon or self.world.randomize_legendaries[self.player].value == 3)]
+                            (pokemon not in poke_data.legendary_pokemon or self.world.randomize_legendary_pokemon[self.player].value == 3)]
         elif self.world.catch_em_all[self.player].value == 2:
             mons_to_add = remaining_pokemon.copy()
         logic_needed_mons = max(self.world.oaks_aide_rt_2[self.player].value,
@@ -340,7 +347,7 @@ def generate_output(self, output_directory: str):
     for location in self.world.get_locations():
         if location.player != self.player or location.rom_address is None:
             continue
-        if location.item.player == self.player:
+        if location.item and location.item.player == self.player:
             if location.rom_address:
                 rom_address = location.rom_address
                 if not isinstance(rom_address, list):
@@ -355,6 +362,7 @@ def generate_output(self, output_directory: str):
 
         else:
             data[location.rom_address] = 0x2C  # AP Item
+            print("NONE")
     data[rom_addresses['Fly_Location']] = self.fly_map_code
 
     if self.world.tea[self.player].value:
@@ -367,10 +375,11 @@ def generate_output(self, output_directory: str):
     #     data[rom_addresses['Options']] |= 1
     if self.world.extra_key_items[self.player].value:
         data[rom_addresses['Options']] |= 4
-    if self.world.blind_trainers[self.player].value > 0:
-        data[rom_addresses['Option_Trainer_Encounters']] = 1
-        if self.world.blind_trainers[self.player].value == 2:
-            data[rom_addresses['Option_Trainer_Encounters'] + 2] = 0xC0  # ret nz
+    # if self.world.blind_trainers[self.player].value > 0:
+    #     data[rom_addresses['Option_Trainer_Encounters']] = 1
+    #     if self.world.blind_trainers[self.player].value == 2:
+    #         data[rom_addresses['Option_Trainer_Encounters'] + 2] = 0xC0  # ret nz
+    data[rom_addresses["Option_Blind_Trainers"]] = round(self.world.blind_trainers[self.player].value * 2.55)
     data[rom_addresses['Option_Cerulean_Cave_Condition']] = self.world.cerulean_cave_condition[self.player].value
     data[rom_addresses['Option_Encounter_Minimum_Steps']] = self.world.minimum_steps_between_encounters[self.player].value
     data[rom_addresses['Option_Badge_Goal']] = self.world.victory_road_condition[self.player].value - 2

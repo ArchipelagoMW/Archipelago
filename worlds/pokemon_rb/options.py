@@ -232,14 +232,13 @@ class TrainerLegendaries(Toggle):
     """Allow legendary Pokemon in randomized trainer parties"""
     default = 0
 
-class BlindTrainers(Choice):
-    """Prevent most trainers from initiating battles, all the time or while holding B."""
+
+class BlindTrainers(Range):
+    """Chance each frame that you are standing on a tile in a trainer's line of sight that they will fail to initiate a
+    battle. If you move into and out of their line of sight without stopping, this chance will only trigger once."""
     display_name = "Blind Trainers"
-    option_on = 2
-    option_hold_b = 1
-    option_off = 0
-    alias_true = 2
-    alias_false = 0
+    range_start = 0
+    range_end = 100
     default = 0
 
 

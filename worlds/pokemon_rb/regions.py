@@ -5,8 +5,6 @@ from .locations import get_locations, PokemonRBLocation
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations_per_region=None, exits=None):
-    if "Rock" in name:
-        pass
     ret = Region(name, RegionType.Generic, name, player, world)
     for location in locations_per_region.get(name, []):
         if (world.randomize_hidden_items[player].value or "Hidden" not in location.name) and \
