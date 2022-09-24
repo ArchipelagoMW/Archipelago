@@ -1,3 +1,5 @@
+import typing
+
 from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList
 
 
@@ -14,3 +16,7 @@ class Goal(Choice):
     option_alpha_omega = 2
     default = 0
 
+
+MMBN3Options: typing.Dict[str,type(Option)] = {
+    "Goal": Goal
+}

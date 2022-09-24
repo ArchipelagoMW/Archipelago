@@ -10,7 +10,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
 import Utils
 from worlds import network_data_package
-from worlds.mmbn3.GBAPatch import apply_patch_file
+from worlds.mmbn3.Items import items_by_id
 from worlds.mmbn3.Locations import location_data_table
 
 CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart mmbn3_connector.lua"
@@ -41,15 +41,9 @@ mmbn3_loc_name_to_id = network_data_package["games"]["MegaMan Battle Network 3"]
 script_version: int = 1
 
 testingData = {}
-debugEnabled = True
-items_sent = []
+debugEnabled = False
 locations_checked = []
 itemIndex = 1
-
-def get_item_value(ap_id):
-    # TODO OOT had ap_id - 66000. I'm assuming this is because of the ROM offset, which for GBA is 8000000, let's try that?
-    return ap_id - 8000000
-
 
 class MMBN3CommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx):
@@ -149,6 +143,7 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
         testingData["itemIndex"] = itemIndex
         itemIndex += 1
 
+
 class MMBN3Context(CommonContext):
     command_processor = MMBN3CommandProcessor
     # TODO No idea what full local means or what this is. Ask espeon about it
@@ -186,6 +181,7 @@ class MMBN3Context(CommonContext):
         self.ui = MMBN3Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
+
 class item_info:
     id = 0x00
     sender = ""
@@ -217,6 +213,7 @@ def get_payload(ctx: MMBN3Context):
     global testingData
     global debugEnabled
 
+    """
     if len(testingData) > 0:
         test_item = item_info(len(items_sent), testingData["sender"], testingData["type"])
         test_item.itemID = int(testingData["itemID"])
@@ -225,6 +222,15 @@ def get_payload(ctx: MMBN3Context):
         test_item.itemIndex = int(testingData["itemIndex"])
         items_sent.append(test_item)
         testingData = {}
+    """
+    items_sent = []
+    for i, item in enumerate(ctx.items_received):
+        item_data = items_by_id[item.item]
+        new_item = item_info(i, ctx.player_names[item.player], item_data.type)
+        new_item.itemIndex = item_data.itemID
+        new_item.subItemID = item_data.subItemID
+        new_item.count = item_data.count
+        items_sent.append(new_item)
 
     return json.dumps({
         "items": [item.get_json() for item in items_sent],
@@ -251,7 +257,7 @@ async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
         }])
 
 
-def check_item_packet(name,packet):
+def check_item_packet(name, packet):
     locData = location_data_table[name]
     if packet & locData.flag_mask:
         logger.info("You found the item at location "+name)
