@@ -122,16 +122,18 @@ def process_static_pokemon(self):
     elif self.world.randomize_legendary_pokemon[self.player].value == 2:
         static_slots = static_slots + legendary_slots
         self.world.random.shuffle(static_slots)
-        while legendary_mons:
+        while legendary_slots:
+            swap_slot = legendary_slots.pop()
             slot = static_slots.pop()
             slot_type = slot.type.split()[0]
             if slot_type == "Legendary":
                 slot_type = "Missable"
             location = self.world.get_location(slot.name, self.player)
-            location.item = self.create_item(slot_type + " " + legendary_mons.pop())
+            location.item = self.create_item(slot_type + " " + swap_slot.original_item)
             location.locked = True
             location.event = True
             location.item.location = location
+            swap_slot.original_item = slot.original_item
     elif self.world.randomize_legendary_pokemon[self.player].value == 3:
         static_slots = static_slots + legendary_slots
 
@@ -139,6 +141,8 @@ def process_static_pokemon(self):
         location = self.world.get_location(slot.name, self.player)
         randomize_type = self.world.randomize_static_pokemon[self.player].value
         slot_type = slot.type.split()[0]
+        if slot_type == "Legendary":
+            slot_type = "Missable"
         if not randomize_type:
             location.item = self.create_item(slot_type + " " + slot.original_item)
         else:
@@ -160,24 +164,6 @@ def process_wild_pokemon(self):
         self.world.random.shuffle(encounter_slots)
         locations = []
         for slot in encounter_slots:
-            # if self.world.randomize_wild_pokemon[self.player].value in [1, 3]:
-            #     type_mons = [pokemon for pokemon in mons_list if any([poke_data.pokemon_data[slot.original_item][
-            #         "type1"] in [self.local_poke_data[pokemon]["type1"], self.local_poke_data[pokemon]["type2"]],
-            #         poke_data.pokemon_data[slot.original_item]["type2"] in [self.local_poke_data[pokemon]["type1"],
-            #                                                               self.local_poke_data[pokemon]["type2"]]])]
-            #     if not type_mons:
-            #         type_mons = mons_list.copy()
-            #     self.world.random.shuffle(type_mons)
-            #     if self.world.randomize_wild_pokemon[self.player].value == 3:
-            #         stat_base = get_base_stat_total(slot.original_item)
-            #         type_mons.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
-            #     mon = type_mons[round(self.world.random.triangular(0, len(type_mons) - 1, 0))]
-            # if self.world.randomize_wild_pokemon[self.player].value == 2:
-            #     stat_base = get_base_stat_total(slot.original_item)
-            #     mons_list.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
-            #     mon = mons_list[round(self.world.random.triangular(0, 50, 0))]
-            # elif self.world.randomize_wild_pokemon[self.player].value == 4:
-            #     mon = self.world.random.choice(mons_list)
             mon = randomize_pokemon(self, slot.original_item, mons_list, self.world.randomize_wild_pokemon[self.player].value)
             placed_mons[mon] += 1
             location = self.world.get_location(slot.name, self.player)
@@ -362,7 +348,6 @@ def generate_output(self, output_directory: str):
 
         else:
             data[location.rom_address] = 0x2C  # AP Item
-            print("NONE")
     data[rom_addresses['Fly_Location']] = self.fly_map_code
 
     if self.world.tea[self.player].value:
@@ -371,14 +356,8 @@ def generate_output(self, output_directory: str):
         data[rom_addresses["Guard_Drink_List"] + 1] = 0
         data[rom_addresses["Guard_Drink_List"] + 2] = 0
 
-    # if self.world.goal[self.player].value:
-    #     data[rom_addresses['Options']] |= 1
     if self.world.extra_key_items[self.player].value:
         data[rom_addresses['Options']] |= 4
-    # if self.world.blind_trainers[self.player].value > 0:
-    #     data[rom_addresses['Option_Trainer_Encounters']] = 1
-    #     if self.world.blind_trainers[self.player].value == 2:
-    #         data[rom_addresses['Option_Trainer_Encounters'] + 2] = 0xC0  # ret nz
     data[rom_addresses["Option_Blind_Trainers"]] = round(self.world.blind_trainers[self.player].value * 2.55)
     data[rom_addresses['Option_Cerulean_Cave_Condition']] = self.world.cerulean_cave_condition[self.player].value
     data[rom_addresses['Option_Encounter_Minimum_Steps']] = self.world.minimum_steps_between_encounters[self.player].value
