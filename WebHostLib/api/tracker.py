@@ -23,7 +23,7 @@ def tracker_data(tracker: UUID):
     locations, names, use_door_tracker, player_checks_in_area, \
         player_location_to_area, precollected_items, games, slot_data, groups = get_static_room_data(room)
 
-    checks_done = {team_number: {player_number: collections.Counter()
+    checks_done = {team_number: {player_number: 0
                                  for player_number in range(1, len(team) + 1) if player_number not in groups}
                    for team_number, team in enumerate(names)}
 
@@ -39,6 +39,9 @@ def tracker_data(tracker: UUID):
         for (team, slot), slot_hints in multisave["hints"].items():
             hints[team] = [hint for hint in slot_hints]
 
+    for player in locations:
+        locations[player] = len(locations[player].keys())
+
     for (team, player), locations_checked in multisave.get("location_checks", {}).items():
         if player in groups:
             continue
@@ -46,7 +49,7 @@ def tracker_data(tracker: UUID):
         for location in locations_checked:
             if location not in player_locations or location not in player_location_to_area[player]:
                 continue
-            checks_done[team][player]["Total"] += 1
+            checks_done[team][player] += 1
 
     for (team, player), game_state in multisave.get("client_game_state", {}).items():
         if player in groups:
