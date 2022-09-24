@@ -1328,18 +1328,16 @@ async def main():
         except Exception as e:
             messagebox('Error', str(e), True)
             raise
-        if "server" in meta:
-            args.connect = meta["server"]
+        args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
         if args.diff_file.endswith(".apsoe"):
             import webbrowser
-            webbrowser.open("http://www.evermizer.com/apclient/" +
-                            (f"#server={meta['server']}" if "server" in meta else ""))
+            webbrowser.open(f"http://www.evermizer.com/apclient/#server={meta['server']}")
             logging.info("Starting Evermizer Client in your Browser...")
             import time
             time.sleep(3)
             sys.exit()
-        elif args.diff_file.endswith((".apbp", ".apz3", ".aplttp")):
+        elif args.diff_file.endswith(".aplttp"):
             adjustedromfile, adjusted = get_alttp_settings(romfile)
             asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
         else:

@@ -4,7 +4,7 @@ import json
 import os
 import sys
 import zipfile
-from typing import Tuple, Optional, Dict, Any, Union, BinaryIO
+from typing import Tuple, Optional, Dict, Any, Union, BinaryIO, TypedDict
 
 
 import ModuleUpdate
@@ -164,7 +164,13 @@ GAME_SMZ3 = "SMZ3"
 GAME_DKC3 = "Donkey Kong Country 3"
 
 
-def create_rom_file(patch_file: str) -> Tuple[dict, str]:
+class RomMeta(TypedDict):
+    server: str
+    player: Optional[int]
+    player_name: str
+
+
+def create_rom_file(patch_file: str) -> Tuple[RomMeta, str]:
     auto_handler = AutoPatchRegister.get_handler(patch_file)
     if auto_handler:
         handler: APDeltaPatch = auto_handler(patch_file)
