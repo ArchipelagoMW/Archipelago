@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import json
-import bsdiff4
 import os
+import sys
 import zipfile
 from typing import Tuple, Optional, Dict, Any, Union, BinaryIO
 
+
 import ModuleUpdate
 ModuleUpdate.update()
+
+import bsdiff4
 
 current_patch_version: int = 5
 
@@ -179,3 +182,9 @@ def read_rom(stream, strip_header=True) -> bytearray:
     if strip_header and len(buffer) % 0x400 == 0x200:
         return buffer[0x200:]
     return buffer
+
+
+if __name__ == "__main__":
+    for file in sys.argv[1:]:
+        meta_data, result_file = create_rom_file(file)
+        print(f"Patch with meta-data {meta_data} was written to {result_file}")
