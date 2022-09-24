@@ -1,15 +1,16 @@
 from __future__ import annotations
 
-import functools
-import websockets
 import asyncio
+import collections
+import datetime
+import functools
+import logging
+import pickle
+import random
 import socket
 import threading
 import time
-import random
-import pickle
-import logging
-import datetime
+import websockets
 
 import Utils
 from .models import db_session, Room, select, commit, Command, db
@@ -49,6 +50,8 @@ class DBCommandProcessor(ServerCommandProcessor):
 
 
 class WebHostContext(Context):
+    room_id: int
+
     def __init__(self, static_server_data: dict):
         # static server data is used during _load_game_data to load required data,
         # without needing to import worlds system, which takes quite a bit of memory
@@ -62,6 +65,8 @@ class WebHostContext(Context):
     def _load_game_data(self):
         for key, value in self.static_server_data.items():
             setattr(self, key, value)
+        self.forced_auto_forfeits = collections.defaultdict(lambda: False, self.forced_auto_forfeits)
+        self.non_hintable_names = collections.defaultdict(frozenset, self.non_hintable_names)
 
     def listen_to_db_commands(self):
         cmdprocessor = DBCommandProcessor(self)
@@ -103,7 +108,7 @@ class WebHostContext(Context):
         room.multisave = pickle.dumps(self.get_save())
         # saving only occurs on activity, so we can "abuse" this information to mark this as last_activity
         if not exit_save:  # we don't want to count a shutdown as activity, which would restart the server again
-            room.last_activity = datetime.utcnow()
+            room.last_activity = datetime.datetime.utcnow()
         return True
 
     def get_save(self) -> dict:
