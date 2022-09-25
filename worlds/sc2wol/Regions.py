@@ -270,7 +270,6 @@ def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: 
     if rule:
         connection.access_rule = rule
 
-    sourceRegion.exits.append(connection)
     connection.connect(targetRegion)
 
 

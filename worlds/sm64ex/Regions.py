@@ -175,7 +175,6 @@ def connect_regions(world: MultiWorld, player: int, source: str, target: str, ru
     if rule:
         connection.access_rule = rule
 
-    sourceRegion.exits.append(connection)
     connection.connect(targetRegion)
 
 def create_region(name: str, player: int, world: MultiWorld) -> Region:

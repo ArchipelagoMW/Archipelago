@@ -27,7 +27,7 @@ def create_regions(self, world, player: int):
                                                 [locationName]))
         for key in value.AccessFrom.keys():
             currentRegion =world.get_region(key, player)
-            currentRegion.exits.append(Entrance(player, key + "->"+ locationName, currentRegion))
+            Entrance(player, key + "->"+ locationName, currentRegion)
 
     world.regions += locationRegions
     #create entrances

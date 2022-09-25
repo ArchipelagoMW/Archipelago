@@ -101,7 +101,6 @@ class RiskOfRainWorld(World):
                                   [f"ItemPickup{i + 1}" for i in range(self.world.total_locations[self.player].value)])
 
         connection = Entrance(self.player, "Lobby", menu)
-        menu.exits.append(connection)
         connection.connect(petrichor)
 
         self.world.regions += [menu, petrichor]

@@ -87,7 +87,7 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
 
     if exits:
         for _exit in exits:
-            region.exits.append(Entrance(player, _exit, region))
+            Entrance(player, _exit, region)
 
     return region
 

@@ -258,7 +258,6 @@ class SMZ3World(World):
             entrance = self.world.get_entrance(region.Name + "->" + 'Menu', self.player)
             entrance.connect(startRegion)
             exit = Entrance(self.player, 'Menu' + "->" + region.Name, startRegion)
-            startRegion.exits.append(exit)
             exit.connect(currentRegion)
 
     def apply_sm_custom_sprite(self):
@@ -623,7 +622,7 @@ class SMZ3World(World):
                 ret.locations.append(location)
         if exits:
             for exit in exits:
-                ret.exits.append(Entrance(player, exit, ret))
+                Entrance(player, exit, ret)
         return ret
 
 

@@ -102,7 +102,6 @@ class Factorio(World):
         player = self.player
         menu = Region("Menu", RegionType.Generic, "Menu", player, self.world)
         crash = Entrance(player, "Crash Land", menu)
-        menu.exits.append(crash)
         nauvis = Region("Nauvis", RegionType.Generic, "Nauvis", player, self.world)
 
         skip_silo = self.world.silo[self.player].value == Silo.option_spawn

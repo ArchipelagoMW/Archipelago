@@ -74,7 +74,7 @@ class ChecksFinderWorld(World):
                 for loc_name, loc_data in advancement_table.items()
                 if loc_data.region == region_name]
             for exit in exits:
-                ret.exits.append(Entrance(self.player, exit, ret))
+                Entrance(self.player, exit, ret)
             return ret
 
         self.world.regions += [ChecksFinderRegion(*r) for r in checksfinder_regions]

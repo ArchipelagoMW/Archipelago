@@ -179,7 +179,7 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
             ret.locations.append(locationObj)
     if exits:
         for exit in exits:
-            ret.exits.append(Entrance(player, getConnectionName(name, exit), ret))
+            Entrance(player, getConnectionName(name, exit), ret)
 
     return ret
 

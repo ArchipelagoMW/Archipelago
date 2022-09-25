@@ -32,15 +32,13 @@ def create_regions(world: MultiWorld, player: int):
         if x < 3:
             storage_loc = f"PSI Key Storage {x + 1}"
             region.locations += [MeritousLocation(player, storage_loc, location_table[storage_loc], region)]
-            region.exits += _generate_entrances(player, [f"To {bosses[x]}"], region)
+            _generate_entrances(player, [f"To {bosses[x]}"], region)
         else:
             locations_end_game = ["Place of Power", "The Last Place You'll Look"]
             region.locations += [
                 MeritousLocation(player, loc_name, location_table[loc_name], region)
                 for loc_name in locations_end_game]
-            region.exits += _generate_entrances(player, ["Back to the entrance",
-                                                         "Back to the entrance with the Knife"],
-                                                region)
+            _generate_entrances(player, ["Back to the entrance", "Back to the entrance with the Knife"], region)
 
         world.regions += [region]
 
@@ -50,7 +48,7 @@ def create_regions(world: MultiWorld, player: int):
             MeritousLocation(player, boss, location_table[boss], boss_region),
             MeritousLocation(player, f"{boss} Defeat", None, boss_region)
         ]
-        boss_region.exits = _generate_entrances(player, [f"To {regions[x + 1]} Quarter"], boss_region)
+        _generate_entrances(player, [f"To {regions[x + 1]} Quarter"], boss_region)
         world.regions.append(boss_region)
 
     region_final_boss = Region(

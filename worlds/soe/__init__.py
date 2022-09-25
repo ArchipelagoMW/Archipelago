@@ -210,7 +210,7 @@ class SoEWorld(World):
     def create_regions(self):
         # TODO: generate *some* regions from locations' requirements?
         r = Region('Menu', RegionType.Generic, 'Menu', self.player, self.world)
-        r.exits = [Entrance(self.player, 'New Game', r)]
+        Entrance(self.player, 'New Game', r)
         self.world.regions += [r]
 
         r = Region('Ingame', RegionType.Generic, 'Ingame', self.player, self.world)

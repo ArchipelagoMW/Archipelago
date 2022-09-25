@@ -45,7 +45,6 @@ class WitnessRegions:
 
         connection.access_rule = self.make_lambda(panel_hex_to_solve_set, world, player, player_logic)
 
-        source_region.exits.append(connection)
         connection.connect(target_region)
 
     def create_regions(self, world, player: int, player_logic: WitnessPlayerLogic):

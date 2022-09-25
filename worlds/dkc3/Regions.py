@@ -948,5 +948,4 @@ def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], s
     if rule:
         connection.access_rule = rule
 
-    source_region.exits.append(connection)
     connection.connect(target_region)

@@ -145,7 +145,7 @@ class SubnauticaWorld(World):
                 ret.locations.append(location)
         if exits:
             for region_exit in exits:
-                ret.exits.append(Entrance(self.player, region_exit, ret))
+                Entrance(self.player, region_exit, ret)
         return ret
 
     def get_pre_fill_items(self) -> List[Item]:

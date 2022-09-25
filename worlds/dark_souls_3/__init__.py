@@ -103,58 +103,29 @@ class DarkSouls3World(World):
         kiln_of_the_first_flame_region = self.create_region("Kiln Of The First Flame", None)
 
         # Create the entrance to connect those regions
-        menu_region.exits.append(Entrance(self.player, "New Game", menu_region))
-        self.world.get_entrance("New Game", self.player).connect(cemetery_of_ash_region)
-        cemetery_of_ash_region.exits.append(Entrance(self.player, "Goto Firelink Shrine", cemetery_of_ash_region))
-        self.world.get_entrance("Goto Firelink Shrine", self.player).connect(firelink_shrine_region)
-        firelink_shrine_region.exits.append(Entrance(self.player, "Goto High Wall of Lothric",
-                                                     firelink_shrine_region))
-        firelink_shrine_region.exits.append(Entrance(self.player, "Goto Kiln Of The First Flame",
-                                                     firelink_shrine_region))
-        firelink_shrine_region.exits.append(Entrance(self.player, "Goto Bell Tower",
-                                                     firelink_shrine_region))
-        self.world.get_entrance("Goto High Wall of Lothric", self.player).connect(high_wall_of_lothric_region)
-        self.world.get_entrance("Goto Kiln Of The First Flame", self.player).connect(kiln_of_the_first_flame_region)
-        self.world.get_entrance("Goto Bell Tower", self.player).connect(firelink_shrine_bell_tower_region)
-        high_wall_of_lothric_region.exits.append(Entrance(self.player, "Goto Undead Settlement",
-                                                          high_wall_of_lothric_region))
-        high_wall_of_lothric_region.exits.append(Entrance(self.player, "Goto Lothric Castle",
-                                                          high_wall_of_lothric_region))
-        self.world.get_entrance("Goto Undead Settlement", self.player).connect(undead_settlement_region)
-        self.world.get_entrance("Goto Lothric Castle", self.player).connect(lothric_castle_region)
-        undead_settlement_region.exits.append(Entrance(self.player, "Goto Road Of Sacrifices",
-                                                       undead_settlement_region))
-        self.world.get_entrance("Goto Road Of Sacrifices", self.player).connect(road_of_sacrifices_region)
-        road_of_sacrifices_region.exits.append(Entrance(self.player, "Goto Cathedral", road_of_sacrifices_region))
-        road_of_sacrifices_region.exits.append(Entrance(self.player, "Goto Farron keep", road_of_sacrifices_region))
-        self.world.get_entrance("Goto Cathedral", self.player).connect(cathedral_of_the_deep_region)
-        self.world.get_entrance("Goto Farron keep", self.player).connect(farron_keep_region)
-        farron_keep_region.exits.append(Entrance(self.player, "Goto Carthus catacombs", farron_keep_region))
-        self.world.get_entrance("Goto Carthus catacombs", self.player).connect(catacombs_of_carthus_region)
-        catacombs_of_carthus_region.exits.append(Entrance(self.player, "Goto Irithyll of the boreal",
-                                                          catacombs_of_carthus_region))
-        catacombs_of_carthus_region.exits.append(Entrance(self.player, "Goto Smouldering Lake",
-                                                          catacombs_of_carthus_region))
-        self.world.get_entrance("Goto Irithyll of the boreal", self.player).\
-            connect(irithyll_of_the_boreal_valley_region)
-        self.world.get_entrance("Goto Smouldering Lake", self.player).connect(smouldering_lake_region)
-        irithyll_of_the_boreal_valley_region.exits.append(Entrance(self.player, "Goto Irithyll dungeon",
-                                                                   irithyll_of_the_boreal_valley_region))
-        irithyll_of_the_boreal_valley_region.exits.append(Entrance(self.player, "Goto Anor Londo",
-                                                                   irithyll_of_the_boreal_valley_region))
-        self.world.get_entrance("Goto Irithyll dungeon", self.player).connect(irithyll_dungeon_region)
-        self.world.get_entrance("Goto Anor Londo", self.player).connect(anor_londo_region)
-        irithyll_dungeon_region.exits.append(Entrance(self.player, "Goto Archdragon peak", irithyll_dungeon_region))
-        irithyll_dungeon_region.exits.append(Entrance(self.player, "Goto Profaned capital", irithyll_dungeon_region))
-        self.world.get_entrance("Goto Archdragon peak", self.player).connect(archdragon_peak_region)
-        self.world.get_entrance("Goto Profaned capital", self.player).connect(profaned_capital_region)
-        lothric_castle_region.exits.append(Entrance(self.player, "Goto Consumed King Garden", lothric_castle_region))
-        lothric_castle_region.exits.append(Entrance(self.player, "Goto Grand Archives", lothric_castle_region))
-        self.world.get_entrance("Goto Consumed King Garden", self.player).connect(consumed_king_garden_region)
-        self.world.get_entrance("Goto Grand Archives", self.player).connect(grand_archives_region)
-        consumed_king_garden_region.exits.append(Entrance(self.player, "Goto Untended Graves",
-                                                          consumed_king_garden_region))
-        self.world.get_entrance("Goto Untended Graves", self.player).connect(untended_graves_region)
+        Entrance(self.player, "New Game", menu_region).connect(cemetery_of_ash_region)
+        Entrance(self.player, "Goto Firelink Shrine", cemetery_of_ash_region).connect(firelink_shrine_region)
+        Entrance(self.player, "Goto High Wall of Lothric", firelink_shrine_region).connect(high_wall_of_lothric_region)
+        Entrance(self.player, "Goto Kiln Of The First Flame", firelink_shrine_region)\
+            .connect(kiln_of_the_first_flame_region)
+        Entrance(self.player, "Goto Bell Tower", firelink_shrine_region).connect(firelink_shrine_bell_tower_region)
+        Entrance(self.player, "Goto Undead Settlement", high_wall_of_lothric_region).connect(undead_settlement_region)
+        Entrance(self.player, "Goto Lothric Castle", high_wall_of_lothric_region).connect(lothric_castle_region)
+        Entrance(self.player, "Goto Road Of Sacrifices", undead_settlement_region).connect(road_of_sacrifices_region)
+        Entrance(self.player, "Goto Cathedral", road_of_sacrifices_region).connect(cathedral_of_the_deep_region)
+        Entrance(self.player, "Goto Farron keep", road_of_sacrifices_region).connect(farron_keep_region)
+        Entrance(self.player, "Goto Carthus catacombs", farron_keep_region).connect(catacombs_of_carthus_region)
+        Entrance(self.player, "Goto Irithyll of the boreal", catacombs_of_carthus_region)\
+            .connect(irithyll_of_the_boreal_valley_region)
+        Entrance(self.player, "Goto Smouldering Lake", catacombs_of_carthus_region).connect(smouldering_lake_region)
+        Entrance(self.player, "Goto Irithyll dungeon", irithyll_of_the_boreal_valley_region)\
+            .connect(irithyll_dungeon_region)
+        Entrance(self.player, "Goto Anor Londo", irithyll_of_the_boreal_valley_region).connect(anor_londo_region)
+        Entrance(self.player, "Goto Archdragon peak", irithyll_dungeon_region).connect(archdragon_peak_region)
+        Entrance(self.player, "Goto Profaned capital", irithyll_dungeon_region).connect(profaned_capital_region)
+        Entrance(self.player, "Goto Consumed King Garden", lothric_castle_region).connect(consumed_king_garden_region)
+        Entrance(self.player, "Goto Grand Archives", lothric_castle_region).connect(grand_archives_region)
+        Entrance(self.player, "Goto Untended Graves", consumed_king_garden_region).connect(untended_graves_region)
 
     # For each region, add the associated locations retrieved from the corresponding location_table
     def create_region(self, region_name, location_table) -> Region:

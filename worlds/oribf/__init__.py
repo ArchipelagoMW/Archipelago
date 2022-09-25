@@ -38,7 +38,6 @@ class OriBlindForest(World):
         menu = self.create_region("Menu")
         world.regions.append(menu)
         start = Entrance(self.player, "Start Game", menu)
-        menu.exits.append(start)
 
         # workaround for now, remove duplicate locations
         already_placed_locations = set()
@@ -58,7 +57,6 @@ class OriBlindForest(World):
             for exit in exits:
                 connection = Entrance(self.player, exit, parent)
                 connection.connect(world.get_region(exit, self.player))
-                parent.exits.append(connection)
 
     def generate_basic(self):
         for item_name, count in default_pool.items():

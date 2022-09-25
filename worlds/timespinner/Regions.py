@@ -219,15 +219,12 @@ def connectStartingRegion(world: MultiWorld, player: int):
 
     menu_to_tutorial = Entrance(player, 'Tutorial', menu)
     menu_to_tutorial.connect(tutorial)
-    menu.exits.append(menu_to_tutorial)
 
     tutorial_to_start = Entrance(player, 'Start Game', tutorial)
     tutorial_to_start.connect(starting_region)
-    tutorial.exits.append(tutorial_to_start)
 
     teleport_back_to_start = Entrance(player, 'Teleport back to start', space_time_continuum)
     teleport_back_to_start.connect(starting_region)
-    space_time_continuum.exits.append(teleport_back_to_start)
 
 
 def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: str, target: str, rule: Optional[Callable] = None):
@@ -246,7 +243,6 @@ def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: 
     if rule:
         connection.access_rule = rule
 
-    sourceRegion.exits.append(connection)
     connection.connect(targetRegion)
 
 

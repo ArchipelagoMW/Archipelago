@@ -40,5 +40,4 @@ def connect_regions(world: MultiWorld, player: int, source: str, target: str, ru
     connection = Entrance(player,'', sourceRegion)
     connection.access_rule = rule
 
-    sourceRegion.exits.append(connection)
     connection.connect(targetRegion)
