@@ -55,12 +55,9 @@ class ZillionContext(CommonContext):
         if password_requested and not self.password:
             await super().server_auth(password_requested)
         if not self.auth:
-            # TODO: get auth name from game
-            print("asking for slot name")
-            logger.info('Enter slot name:')
-            self.auth = await self.console_input()
-            print(f"got slot name: {self.auth}")
-
+            logger.info('waiting for connection to game...')
+            return
+        logger.info("logging in to server...")
         await self.send_connect()
 
     # override
@@ -118,9 +115,31 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
     logger.info("started zillion sync task")
     from_game: "asyncio.Queue[events.EventFromGame]" = asyncio.Queue()
 
-    logger.info("waiting for connection to server")
-    await ctx.got_slot_data.wait()
-    with Memory(ctx.rescues, ctx.loc_mem_to_id, from_game, to_game) as memory:
+    with Memory(from_game, to_game) as memory:
+        found_name = False
+        help_message_shown = False
+        logger.info("looking for game...")
+        while not found_name:
+            name = await memory.check_for_player_name()
+            if len(name):
+                ctx.auth = name.decode()
+                found_name = True
+                logger.info("connected to game")
+                if ctx.server and ctx.server.socket:  # type: ignore
+                    logger.info("logging in to server...")
+                    await ctx.send_connect()
+                else:
+                    logger.info("waiting for server connection...")
+            else:
+                if not help_message_shown:
+                    logger.info('In RetroArch, make sure "Settings > Network > Network Commands" is on.')
+                    help_message_shown = True
+                await asyncio.sleep(0.3)
+
+        logger.info("waiting for server login...")
+        await ctx.got_slot_data.wait()
+        memory.set_generation_info(ctx.rescues, ctx.loc_mem_to_id)
+
         next_item = 0
         while not ctx.exit_event.is_set():
             await memory.check()
@@ -156,7 +175,7 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
                 ctx.to_game.put_nowait(
                     events.ItemEventToGame(zz_item_ids)
                 )
-                next_item += 1
+                next_item = len(ctx.items_received)
             await asyncio.sleep(0.09375)
 
 
