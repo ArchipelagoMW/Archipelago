@@ -34,7 +34,7 @@ class Goal(Choice):
     """Goal required to finish your game.
     Ganon and tower requires climbing Ganon's tower and defeating Agahnim 2, and then Ganon.
     Ganon requires collecting enough crystals to get to and defeat Ganon.
-    All Bosses requires killing every dungeon boss as well as both Agahnim fights, and finally Ganon.
+    All Bosses requires defeating each end dungeon boss as well as both Agahnim fights, and finally Ganon.
     Pedestal requires collecting the three pendants and pulling the master sword pedestal.
     Pedestal Ganon requires pulling the master sword pedestal to then defeat Ganon.
     Triforce Hunt sends you on a magical journey to collect 'em all and return them to Murahdala.

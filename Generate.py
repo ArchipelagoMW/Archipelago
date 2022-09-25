@@ -335,20 +335,6 @@ def prefer_int(input_data: str) -> Union[str, int]:
         return input_data
 
 
-goals = {
-    'ganon': 'ganon',
-    'crystals': 'crystals',
-    'bosses': 'bosses',
-    'pedestal': 'pedestal',
-    'ganon_pedestal': 'ganonpedestal',
-    'triforce_hunt': 'triforcehunt',
-    'local_triforce_hunt': 'localtriforcehunt',
-    'ganon_triforce_hunt': 'ganontriforcehunt',
-    'local_ganon_triforce_hunt': 'localganontriforcehunt',
-    'ice_rod_hunt': 'icerodhunt',
-}
-
-
 def roll_percentage(percentage: Union[int, float]) -> bool:
     """Roll a percentage chance.
     percentage is expected to be in range [0, 100]"""
@@ -378,13 +364,7 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
                 return get_choice(option_key, category_dict)
             return options[option_key]
     if game == "A Link to the Past":  # TODO wow i hate this
-        if option_key in {"glitches_required", "dark_room_logic", "entrance_shuffle", "goals", "triforce_pieces_mode",
-                          "triforce_pieces_percentage", "triforce_pieces_available", "triforce_pieces_extra",
-                          "triforce_pieces_required", "shop_shuffle", "mode", "item_pool", "item_functionality",
-                          "boss_shuffle", "enemy_damage", "enemy_health", "timer", "countdown_start_time",
-                          "red_clock_time", "blue_clock_time", "green_clock_time", "dungeon_counters", "shuffle_prizes",
-                          "misery_mire_medallion", "turtle_rock_medallion", "sprite_pool", "sprite",
-                          "random_sprite_on_event"}:
+        if option_key in {"entrance_shuffle", "shop_shuffle"}:
             return get_choice(option_key, category_dict)
     raise Exception(f"Error generating meta option {option_key} for {game}.")
 
