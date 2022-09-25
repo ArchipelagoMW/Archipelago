@@ -108,7 +108,7 @@ def get_locations(player=None):
         LocationData("Route 16 North", "House Woman", "HM02 Fly", rom_addresses["Event_Rt16_House_Woman"], EventFlag(1230)),
         LocationData("Route 15", "Oak's Aide", "Exp. All", rom_addresses["Event_Rt_15_Oaks_Aide"], EventFlag(1200),
                      lambda state: state.pokemon_rb_has_pokemon(state.world.oaks_aide_rt_15[player].value + 5, player)),
-        LocationData("Fuchsia City", "Safari Zone Warden", "HM04 Strength", rom_addresses["Event_Warden"], EventFlag(568)),
+        LocationData("Fuchsia City", "Safari Zone Warden", "HM04 Strength", rom_addresses["Event_Warden"], EventFlag(568), lambda state: state.has("Gold Teeth", player)),
         LocationData("Fuchsia Gym", "Koga 2", "TM06 Toxic", rom_addresses["Event_Fuschia_Gym"], EventFlag(600)),
         LocationData("Safari Zone West", "Secret House", "HM03 Surf", rom_addresses["Event_Safari_Zone_Secret_House"], EventFlag(2176)),
         LocationData("Cinnabar Island", "Lab Scientist", "TM35 Metronome", rom_addresses["Event_Lab_Scientist"], EventFlag(727)),
