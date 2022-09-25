@@ -121,7 +121,7 @@ class World(metaclass=AutoWorldRegister):
     A Game should have its own subclass of World in which it defines the required data structures."""
 
     option_definitions: Dict[str, Option[Any]] = {}  # link your Options mapping
-    options: Dict[str, Option[Any]] = {}  # option names to resulting option object
+    options: Dict[str, Option[Any]]  # option names to resulting option object
     game: str  # name the game
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
 
@@ -189,6 +189,7 @@ class World(metaclass=AutoWorldRegister):
     def __init__(self, world: "MultiWorld", player: int):
         self.world = world
         self.player = player
+        self.options = {}
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",

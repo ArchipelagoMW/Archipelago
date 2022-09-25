@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import itertools
 from enum import unique, IntEnum, IntFlag
 import logging
 import json
@@ -200,24 +201,12 @@ class MultiWorld():
             self.custom_data[player] = {}
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
             self.worlds[player] = world_type(self, player)
-            for option_key in Options.common_options:
+            for option_key in itertools.chain(Options.common_options, Options.per_game_common_options,
+                                              world_type.option_definitions):
                 option_values = getattr(args, option_key, {})
                 setattr(self, option_key, option_values)
                 if player in option_values:
                     self.worlds[player].options[option_key] = option_values[player]
-
-            for option_key in Options.per_game_common_options:
-                option_values = getattr(args, option_key, {})
-                setattr(self, option_key, option_values)
-                if player in option_values:
-                    self.worlds[player].options[option_key] = option_values[player]
-
-            for option_key in world_type.option_definitions:
-                option_values = getattr(args, option_key, {})  # TODO remove {} after old lttp options
-                setattr(self, option_key, option_values)  # TODO rip out around 0.4.0
-                if player in option_values:  # TODO more lttp jank
-                    self.worlds[player].options[option_key] = option_values[player]
-
 
     def set_item_links(self):
         item_links = {}
