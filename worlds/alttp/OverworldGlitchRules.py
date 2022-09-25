@@ -2,7 +2,7 @@
 Helper functions to deliver entrance/exit/region sets to OWG rules.
 """
 
-from BaseClasses import Entrance
+from worlds.alttp.SubClasses import ALttPEntrance
 
 
 def get_sword_required_superbunny_mirror_regions():
@@ -295,16 +295,14 @@ def create_no_logic_connections(player, world, connections):
     for entrance, parent_region, target_region, *rule_override in connections:
         parent = world.get_region(parent_region, player)
         target = world.get_region(target_region, player)
-        connection = Entrance(player, entrance, parent)
-        parent.exits.append(connection)
+        connection = ALttPEntrance(player, entrance, parent)
         connection.connect(target)
 
 def create_owg_connections(player, world, connections):
     for entrance, parent_region, target_region, *rule_override in connections:
         parent = world.get_region(parent_region, player)
         target = world.get_region(target_region, player)
-        connection = Entrance(player, entrance, parent)
-        parent.exits.append(connection)
+        connection = ALttPEntrance(player, entrance, parent)
         connection.connect(target)
 
 def set_owg_connection_rules(player, world, connections, default_rule):

@@ -813,7 +813,7 @@ def patch_rom(world, rom, player, enemized):
     # patch entrance/exits/holes
     for region in world.regions:
         for exit in region.exits:
-            if exit.target is not None and exit.player == player:
+            if exit.player == player and exit.target:
                 if isinstance(exit.addresses, tuple):
                     offset = exit.target
                     room_id, ow_area, vram_loc, scroll_y, scroll_x, link_y, link_x, camera_y, camera_x, unknown_1, unknown_2, door_1, door_2 = exit.addresses

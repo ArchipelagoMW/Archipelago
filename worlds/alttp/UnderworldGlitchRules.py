@@ -1,5 +1,5 @@
 
-from BaseClasses import Entrance
+from worlds.alttp.SubClasses import ALttPEntrance
 from worlds.generic.Rules import set_rule, add_rule
 
 # We actually need the logic to properly "mark" these regions as Light or Dark world. 
@@ -8,11 +8,9 @@ def underworld_glitch_connections(world, player):
     specrock = world.get_region('Spectacle Rock Cave (Bottom)', player)
     mire = world.get_region('Misery Mire (West)', player)
 
-    kikiskip = Entrance(player, 'Kiki Skip', specrock)
-    mire_to_hera = Entrance(player, 'Mire to Hera Clip', mire)
-    mire_to_swamp = Entrance(player, 'Hera to Swamp Clip', mire)
-    specrock.exits.append(kikiskip)
-    mire.exits.extend([mire_to_hera, mire_to_swamp])
+    kikiskip = ALttPEntrance(player, 'Kiki Skip', specrock)
+    mire_to_hera = ALttPEntrance(player, 'Mire to Hera Clip', mire)
+    mire_to_swamp = ALttPEntrance(player, 'Hera to Swamp Clip', mire)
 
     if world.fix_fake_world[player]: 
         kikiskip.connect(world.get_entrance('Palace of Darkness Exit', player).connected_region)
@@ -36,7 +34,7 @@ def fake_pearl_state(state, player):
 
 # Sets the rules on where we can actually go using this clip.
 # Behavior differs based on what type of ER shuffle we're playing. 
-def dungeon_reentry_rules(world, player, clip: Entrance, dungeon_region: str, dungeon_exit: str): 
+def dungeon_reentry_rules(world, player, clip: ALttPEntrance, dungeon_region: str, dungeon_exit: str):
     fix_dungeon_exits = world.fix_palaceofdarkness_exit[player]
     fix_fake_worlds = world.fix_fake_world[player]
 

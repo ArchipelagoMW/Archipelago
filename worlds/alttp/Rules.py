@@ -1,7 +1,8 @@
 import collections
 import logging
 from worlds.alttp import OverworldGlitchRules
-from BaseClasses import RegionType, MultiWorld, Entrance
+from BaseClasses import RegionType, MultiWorld
+from worlds.alttp.SubClasses import ALttPEntrance
 from worlds.alttp.Items import ItemFactory, progression_items, item_name_groups
 from worlds.alttp.OverworldGlitchRules import overworld_glitches_rules, no_logic_rules
 from worlds.alttp.UnderworldGlitchRules import underworld_glitches_rules
@@ -826,8 +827,7 @@ def swordless_rules(world, player):
 def add_connection(parent_name, target_name, entrance_name, world, player):
     parent = world.get_region(parent_name, player)
     target = world.get_region(target_name, player)
-    connection = Entrance(player, entrance_name, parent)
-    parent.exits.append(connection)
+    connection = ALttPEntrance(player, entrance_name, parent)
     connection.connect(target)
 
 def standard_rules(world, player):

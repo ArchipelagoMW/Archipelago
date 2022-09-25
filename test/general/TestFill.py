@@ -52,7 +52,6 @@ class PlayerDefinition(object):
         self.locations += generate_locations(size, self.id, None, region, region_tag)
 
         entrance = Entrance(self.id, region_name + "_entrance", parent)
-        parent.exits.append(entrance)
         entrance.connect(region)
         entrance.access_rule = access_rule
 

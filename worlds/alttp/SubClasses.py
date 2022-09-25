@@ -1,7 +1,8 @@
 """Module extending BaseClasses.py for aLttP"""
+import typing
 from typing import Optional
 
-from BaseClasses import Location, Item, ItemClassification
+from BaseClasses import Location, Item, ItemClassification, Entrance
 
 
 class ALttPLocation(Location):
@@ -63,3 +64,14 @@ class ALttPItem(Item):
     @property
     def locked_dungeon_item(self):
         return self.location.locked and self.dungeon_item
+
+
+class ALttPEntrance(Entrance):
+    addresses = None
+    target = None
+
+    def connect(self, region, addresses=None, target=None):
+        self.connected_region = region
+        self.target = target
+        self.addresses = addresses
+        region.entrances.append(self)
