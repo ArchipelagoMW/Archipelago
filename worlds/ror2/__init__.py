@@ -135,7 +135,8 @@ class RiskOfRainWorld(World):
             "totalRevivals": self.world.total_revivals[self.player].value,
             "startWithDio": self.world.start_with_revive[self.player].value,
             "FinalStageDeath": self.world.final_stage_death[self.player].value,
-            "EnvironmentsAsItems": self.world.environments_as_items[self.player].value
+            "EnvironmentsAsItems": self.world.environments_as_items[self.player].value,
+            "DeathLink": self.world.death_link[self.player].value,
         }
 
     def create_item(self, name: str) -> Item:

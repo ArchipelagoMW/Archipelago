@@ -1,5 +1,5 @@
 from typing import Dict
-from Options import Option, Toggle, DefaultOnToggle, Range, Choice
+from Options import Option, Toggle, DefaultOnToggle, DeathLink, Range, Choice
 
 
 class TotalLocations(Range):
@@ -42,8 +42,6 @@ class StartWithRevive(DefaultOnToggle):
 class FinalStageDeath(DefaultOnToggle):
     """Death on the final boss stage counts as a win."""
     display_name = "Final Stage Death is Win"
-
-# TODO add deathlink as a YAML option to match other games
 
 class EnvironmentsAsItems(Toggle):
     """Enable to add environments into the archipelago item pool."""
@@ -181,6 +179,7 @@ ror2_options: Dict[str, type(Option)] = {
     "final_stage_death":    FinalStageDeath,
     "environments_as_items": EnvironmentsAsItems, # XXX fix indentation
     "dlc_sotv":             DLC_SOTV,
+    "death_link":           DeathLink,
     # TODO add an option for whether simulacrum environments should exist in the pool
     "item_pickup_step":     ItemPickupStep,
     "enable_lunar":         AllowLunarItems,
