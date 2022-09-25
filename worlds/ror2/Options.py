@@ -1,8 +1,9 @@
 from typing import Dict
-from Options import Option, DefaultOnToggle, Range, Choice
+from Options import Option, Toggle, DefaultOnToggle, Range, Choice
 
 
 class TotalLocations(Range):
+    # TODO mark this as a classic/legacy option and mark in options which are legacy and new
     """Number of location checks which are added to the Risk of Rain playthrough."""
     display_name = "Total Locations"
     range_start = 10
@@ -44,11 +45,11 @@ class FinalStageDeath(DefaultOnToggle):
 
 # TODO add deathlink as a YAML option to match other games
 
-class EnvironmentsAsItems(DefaultOnToggle):
+class EnvironmentsAsItems(Toggle):
     """Enable to add environments into the archipelago item pool."""
     display_name = "Environments as items"
 
-class DLC_SOTV(DefaultOnToggle):
+class DLC_SOTV(Toggle):
     """Enable if you are using SOTV DLC."""
     display_name = "SOTV"
 
