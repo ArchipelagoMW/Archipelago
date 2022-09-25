@@ -121,15 +121,17 @@ class Recipe(FactorioElement):
     products: Dict[str, int]
     energy: float
     mining: bool
+    burning: bool
     unlocked_at_start: bool
 
-    def __init__(self, name: str, category: str, ingredients: Dict[str, int], products: Dict[str, int], energy: float, mining: bool, unlocked_at_start: bool):
+    def __init__(self, name: str, category: str, ingredients: Dict[str, int], products: Dict[str, int], energy: float, mining: bool = False, unlocked_at_start: bool = False, burning: bool = False):
         self.name = name
         self.category = category
         self.ingredients = ingredients
         self.products = products
         self.energy = energy
         self.mining = mining
+        self.burning = burning
         self.unlocked_at_start = unlocked_at_start
 
     def __repr__(self):
@@ -165,12 +167,22 @@ class Recipe(FactorioElement):
         ingredients = Counter()
         for ingredient, cost in self.ingredients.items():
             if ingredient in all_product_sources:
+                recipe_counters: Dict[str, (Recipe, Counter)] = {}
                 for recipe in all_product_sources[ingredient]:
+                    recipe_ingredients = Counter()
                     if recipe.ingredients:
-                        ingredients.update({name: amount * cost / recipe.products[ingredient] for name, amount in
+                        recipe_ingredients.update({name: amount * cost / recipe.products[ingredient] for name, amount in
                                             recipe.base_cost.items()})
                     else:
-                        ingredients[ingredient] += recipe.energy * cost / recipe.products[ingredient]
+                        recipe_ingredients[ingredient] += recipe.energy * cost / recipe.products[ingredient]
+                    recipe_counters[recipe.name] = (recipe, recipe_ingredients)
+                selected_recipe_ingredients = None
+                for recipe_name, (recipe, recipe_ingredients) in recipe_counters.items():
+                    if not selected_recipe_ingredients or (
+                            sum([rel_cost.get(name, high_cost_item) * value for name, value in recipe_ingredients.items()])
+                            < sum([rel_cost.get(name, high_cost_item) * value for name, value in selected_recipe_ingredients.items()])):
+                        selected_recipe_ingredients = recipe_ingredients
+                ingredients.update(selected_recipe_ingredients)
             else:
                 ingredients[ingredient] += cost
         return ingredients
@@ -209,11 +221,14 @@ class Recipe(FactorioElement):
 
 
 class Machine(FactorioElement):
-    def __init__(self, name, categories, machine_type, speed):
+    def __init__(self, name, categories, machine_type, speed, item_sources, input_fluids, output_fluids):
         self.name: str = name
         self.categories: set = categories
         self.machine_type: str = machine_type
         self.speed: float = speed
+        self.item_sources: set = item_sources
+        self.input_fluids: int = int(input_fluids)
+        self.output_fluids: int = int(output_fluids)
 
 class Lab(FactorioElement):
     def __init__(self, name, inputs):
@@ -306,8 +321,12 @@ del resources_future
 
 machines: Dict[str, Machine] = {}
 labs: Dict[str, Lab] = {}
+rel_cost = {}
+high_cost_item = 10000
 
 for name, prototype in machines_future.result().items():
+    machine_prototype = prototype.get("common", {}).get("type", None)
+    machine_item_sources = set(prototype.get("common", {}).get("placeable_by", {}))
     for machine_type, machine_data in prototype.items():
         if machine_type == "lab":
             lab = Lab(name, machine_data.get("inputs", set()))
@@ -326,7 +345,7 @@ for name, prototype in machines_future.result().items():
                 "mining": True,
                 "unlocked_at_start": True
             }
-            machine = Machine(name, {category}, machine_data.get("type"), 1)
+            machine = Machine(name, {category}, machine_prototype, 1, machine_item_sources, 0, 1)
             machines[name] = machine
         if machine_type == "crafting":
             categories = machine_data.get("categories", set())
@@ -336,7 +355,7 @@ for name, prototype in machines_future.result().items():
             speed = machine_data.get("speed", 1)
             input_fluid_box = machine_data.get("input_fluid_box", 0)
             output_fluid_box = machine_data.get("output_fluid_box", 0)
-            machine = Machine(name, set(categories), machine_data.get("type"), speed)
+            machine = Machine(name, set(categories), machine_prototype, speed, machine_item_sources, input_fluid_box, output_fluid_box)
             machines[name] = machine
         if machine_type == "mining":
             categories = machine_data.get("categories", set())
@@ -345,7 +364,7 @@ for name, prototype in machines_future.result().items():
             speed = machine_data.get("speed", 1)
             input_fluid_box = machine_data.get("input_fluid_box", False)  # Can this machine mine resources with required fluids?
             output_fluid_box = machine_data.get("output_fluid_box", False)  # Can this machine mine fluid resources?
-            machine = machines.setdefault(name, Machine(name, set(categories), machine_data.get("type"), speed))
+            machine = machines.setdefault(name, Machine(name, set(categories), machine_prototype, speed, machine_item_sources, input_fluid_box, output_fluid_box))
             machine.categories |= set(categories)  # character has both crafting and basic-solid
             machine.speed = (machine.speed + speed) / 2
             machines[name] = machine
@@ -354,7 +373,7 @@ for name, prototype in machines_future.result().items():
             output_fluid = machine_data.get("output_fluid")
             target_temperature = machine_data.get("target_temperature")
             energy_usage = machine_data.get("energy_usage")
-            amount = energy_usage / (target_temperature - fluids[input_fluid].get("default_temperature", 15)) / fluids[input_fluid].get("heat_capacity", 1)
+            amount = energy_usage / (target_temperature - fluids[input_fluid].default_temperature) / fluids[input_fluid].heat_capacity
             amount *= 60
             amount = int(amount)
             category = f"boiling-{amount}-{input_fluid}-to-{output_fluid}-at-{target_temperature}-degrees-centigrade"
@@ -363,16 +382,33 @@ for name, prototype in machines_future.result().items():
                 "products": {output_fluid: amount},
                 "energy": 1,
                 "category": category,
-                "mining": False,
+                "mining": True,
                 "unlocked_at_start": True
             }
-            machine = Machine(name, {category}, machine_data.get("type"), 1)
+            machine = Machine(name, {category}, machine_prototype, 1, machine_item_sources, 1, 1)
             machines[name] = machine
+        if machine_type == "fuel_burner":
+            categories = set(machine_data.get("categories"))
+            fuel_items = {name: item for name, item in items.items() if item.burnt_result and item.fuel_category in categories}
+            if not fuel_items:
+                continue
+            energy_usage = machine_data.get("energy_usage")
+            for item_name, item in fuel_items.items():
+                recipe_name = f"burning-{item_name}-for-{item.burnt_result}"
+                raw_recipes[recipe_name] = {
+                    "ingredients": {item_name: 1},
+                    "products": {item.burnt_result: 1},
+                    "energy": item.fuel_value,
+                    "category": item.fuel_category,
+                    "burning": True,
+                    "unlocked_at_start": True
+                }
+            machine = machines.get(name, Machine(name, categories, machine_prototype, energy_usage * 60, machine_item_sources, 0, 0))
+            machines[name] = machine
+
 
         # TODO: set up machine/recipe pairs for burners in order to retrieve the burnt_result from items.
         # TODO: set up machine/recipe pairs for retrieving rocket_launch_products from items.
-
-
 
 del machines_future
 
@@ -380,8 +416,14 @@ for recipe_name, recipe_data in raw_recipes.items():
     # example:
     # "accumulator":{"ingredients":{"iron-plate":2,"battery":5},"products":{"accumulator":1},"category":"crafting"}
     # FIXME: add mining?
-    recipe = Recipe(recipe_name, recipe_data["category"], recipe_data["ingredients"],
-                    recipe_data["products"], recipe_data.get("energy", 0), recipe_data.get("mining", False), recipe_data.get("unlocked_at_start", False))
+    recipe = Recipe(recipe_name,
+                    recipe_data["category"],
+                    recipe_data["ingredients"],
+                    recipe_data["products"],
+                    recipe_data.get("energy", 0),
+                    recipe_data.get("mining", False),
+                    recipe_data.get("unlocked_at_start", False),
+                    recipe_data.get("burning", False))
     recipes[recipe_name] = recipe
     if set(recipe.products).isdisjoint(set(recipe.ingredients)):
         for product_name in [product_name for product_name, amount in recipe.products.items() if amount > 0]:
@@ -399,6 +441,7 @@ for recipe_name, recipe_data in raw_recipes.items():
 
 machines["assembling-machine-1"].categories |= machines["assembling-machine-3"].categories  # mod enables this
 machines["assembling-machine-2"].categories |= machines["assembling-machine-3"].categories
+machines["rocket-silo"].input_fluids = 3
 # machines["character"].categories.add("basic-crafting")
 # charter only knows the categories of "crafting" and "basic-solid" by default.
 
@@ -406,7 +449,7 @@ machines["assembling-machine-2"].categories |= machines["assembling-machine-3"].
 mods: Dict[str, Mod] = {}
 
 for name, version in mods_future.result().items():
-    if name in ["base"]:
+    if name in ["base", "archipelago-extractor"]:
         continue
     mod = Mod(name, version)
     mods[name] = mod
@@ -463,12 +506,21 @@ def recursively_get_unlocking_technologies(ingredient_name, _done=None, unlock_f
     return current_technologies
 
 
+for item_name, item in items.items():
+    if item.place_result and machines.get(item.place_result, None):
+        machines[item.place_result].item_sources |= {item_name}
+
+
 required_machine_technologies: Dict[str, FrozenSet[Technology]] = {}
-for ingredient_name in machines:
+for ingredient_name, machine in machines.items():
     if ingredient_name == "character":
         required_machine_technologies[ingredient_name] = frozenset()
         continue
-    required_machine_technologies[ingredient_name] = frozenset(recursively_get_unlocking_technologies(ingredient_name))
+    techs = recursively_get_unlocking_technologies(ingredient_name)
+    for item_name in machine.item_sources:
+        techs |= recursively_get_unlocking_technologies(item_name)
+    required_machine_technologies[ingredient_name] = frozenset(techs)
+
 for ingredient_name in labs:
     required_machine_technologies[ingredient_name] = frozenset(recursively_get_unlocking_technologies(ingredient_name))
 
@@ -527,7 +579,10 @@ def get_rocket_requirements(silo_recipe: Recipe, part_recipe: Recipe, satellite_
     return {tech.name for tech in techs}
 
 
-free_sample_exclusions: Set[str] = all_ingredient_names | {"rocket-part"}
+free_sample_exclusions: Set[str] = all_ingredient_names.copy()  # Rocket-silo crafting recipe results to be added here.
+for name, recipe in recipes.items():
+    if machines[recipe.crafting_machine].machine_type == "rocket-silo":
+        free_sample_exclusions |= set(recipe.products)
 
 # progressive technologies
 # auto-progressive
@@ -641,7 +696,6 @@ useless_technologies: Set[str] = {tech_name for tech_name in common_tech_table
 
 lookup_id_to_name: Dict[int, str] = {item_id: item_name for item_name, item_id in tech_table.items()}
 
-rel_cost = {}
 for name, recipe in {name: recipe for name, recipe in recipes.items() if recipe.mining and not recipe.ingredients}.items():
     machine = machines[machine_per_category[recipe.category]]
     cost = recipe.energy / machine.speed
@@ -654,7 +708,15 @@ def get_estimated_difficulty(recipe: Recipe):
     cost = 0
 
     for ingredient_name, amount in base_ingredients.items():
-        cost += rel_cost.get(ingredient_name, 1000) * amount
+        cost += rel_cost.get(ingredient_name, high_cost_item) * amount
+    if recipe.burning:
+        for item in machines[recipe.crafting_machine].item_sources:
+            if items[item].product_sources:
+                cost += min([get_estimated_difficulty(recipe) for recipe in items[item].product_sources])
+            else:
+                cost += high_cost_item
+
+    # print(f"{recipe.name}: {cost} ({({ingredient_name: rel_cost.get(ingredient_name, high_cost_item) * amount for ingredient_name, amount in base_ingredients.items()})})")
     return cost
 
 
@@ -664,14 +726,19 @@ for name, recipe in {name: recipe for name, recipe in recipes.items() if recipe.
     for product_name, amount in recipe.products.items():
         rel_cost[product_name] = cost / amount
 
-exclusion_list: Set[str] = all_ingredient_names | {"rocket-part", "used-up-uranium-fuel-cell"}
+exclusion_list: Set[str] = free_sample_exclusions.copy()  # Also exclude the burnt results.
 
 
 @Utils.cache_argsless
 def get_science_pack_pools() -> Dict[str, Set[str]]:
     science_pack_pools: Dict[str, Set[str]] = {}
     already_taken = exclusion_list.copy()
-    current_difficulty = 5
+    unlocked_recipes = {name: recipe for name, recipe in recipes.items()
+                        if recipe.unlocked_at_start
+                        and not recipe.recursive_unlocking_technologies
+                        and get_estimated_difficulty(recipe) < high_cost_item}  # wood in recipe is expensive.
+    average_starting_difficulty = sum([get_estimated_difficulty(recipe) for name, recipe in unlocked_recipes.items()]) / len(unlocked_recipes)
+    current_difficulty = min(average_starting_difficulty, 8)
     for science_pack in Options.MaxSciencePack.get_ordered_science_packs():
         current = science_pack_pools[science_pack] = set()
         for name, recipe in recipes.items():

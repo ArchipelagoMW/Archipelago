@@ -241,13 +241,13 @@ data:extend{new_tree_copy}
 {% endfor %}
 {% if recipe_time_scale %}
 {%- for recipe_name, recipe in recipes.items() %}
-{%- if not recipe.mining %}
+{%- if not recipe.mining and not recipe.burning %}
 adjust_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_scale) }})
 {%- endif %}
 {%- endfor -%}
 {% elif recipe_time_range %}
 {%- for recipe_name, recipe in recipes.items() %}
-{%- if not recipe.mining %}
+{%- if not recipe.mining and not recipe.burning %}
 set_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_range) }})
 {%- endif %}
 {%- endfor -%}
