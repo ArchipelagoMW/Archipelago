@@ -103,8 +103,9 @@ or boss drops for RPG-like games but could also be progress in a research tree.
 
 Each location has a `name` and an `id` (a.k.a. "code" or "address"), is placed
 in a Region and has access rules.
-The name needs to be unique in each game, the ID needs to be unique across all
-games and is best in the same range as the item IDs.
+The name needs to be unique in each game and must not be numeric (has to
+contain least 1 letter or symbol). The ID needs to be unique across all games
+and is best in the same range as the item IDs.
 World-specific IDs are 1 to 2<sup>53</sup>-1, IDs ≤ 0 are global and reserved.
 
 Special locations with ID `None` can hold events.
@@ -120,6 +121,9 @@ Progression items are items which a player may require to progress in
 their world. Progression items will be assigned to locations with higher
 priority and moved around to meet defined rules and accomplish progression
 balancing.
+
+The name needs to be unique in each game, meaning a duplicate item has the
+same ID. Name must not be numeric (has to contain at least 1 letter or symbol).
 
 Special items with ID `None` can mark events (read below).
 
@@ -613,8 +617,10 @@ the name of the implementing world. This is due to sharing a namespace with all
 other logic mixins.
 
 Typical uses are defining methods that are used instead of `state.has`
-in lambdas, e.g.`state._mygame_has(custom, world, player)` or recurring checks
-like `state._mygame_can_do_something(world, player)` to simplify lambdas.
+in lambdas, e.g.`state.mygame_has(custom, player)` or recurring checks
+like `state.mygame_can_do_something(player)` to simplify lambdas.
+Private members, only accessible from mixins, should start with `_mygame_`,
+public members with `mygame_`.
 
 More advanced uses could be to add additional variables to the state object,
 override `World.collect(self, state, item)` and `remove(self, state, item)`
@@ -629,9 +635,10 @@ Please do this with caution and only when neccessary.
 from worlds.AutoWorld import LogicMixin
 
 class MyGameLogic(LogicMixin):
-    def _mygame_has_key(self, world: MultiWorld, player: int):
+    def mygame_has_key(self, player: int):
         # Arguments above are free to choose
-        # it may make sense to use World as argument instead of MultiWorld
+        # MultiWorld can be accessed through self.world, explicitly passing in
+        # MyGameWorld instance for easy options access is also a valid approach
         return self.has("key", player)  # or whatever
 ```
 ```python
@@ -644,7 +651,7 @@ class MyGameWorld(World):
     # ...
     def set_rules(self):
         set_rule(self.world.get_location("A Door", self.player),
-                 lamda state: state._mygame_has_key(self.world, self.player))
+                 lamda state: state.mygame_has_key(self.player))
 ```
 
 ### Generate Output

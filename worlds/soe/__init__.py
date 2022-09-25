@@ -283,7 +283,7 @@ class SoEWorld(World):
         self.world.completion_condition[self.player] = lambda state: state.has('Victory', self.player)
         # set Done from goal option once we have multiple goals
         set_rule(self.world.get_location('Done', self.player),
-                 lambda state: state._soe_has(pyevermizer.P_FINAL_BOSS, self.world, self.player))
+                 lambda state: state.soe_has(pyevermizer.P_FINAL_BOSS, self.world, self.player))
         set_rule(self.world.get_entrance('New Game', self.player), lambda state: True)
         for loc in _locations:
             location = self.world.get_location(loc.name, self.player)
@@ -292,7 +292,7 @@ class SoEWorld(World):
     def make_rule(self, requires: typing.List[typing.Tuple[int]]) -> typing.Callable[[typing.Any], bool]:
         def rule(state) -> bool:
             for count, progress in requires:
-                if not state._soe_has(progress, self.world, self.player, count):
+                if not state.soe_has(progress, self.world, self.player, count):
                     return False
             return True
 
