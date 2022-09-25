@@ -941,7 +941,7 @@ class Region:
 
     @property
     def hint_text(self) -> str:
-        return self.hint if self.hint else self.name
+        return self._hint_text if self._hint_text else self.name
 
     def get_connecting_entrance(self, is_main_entrance: typing.Callable[[Entrance], bool]) -> Entrance:
         for entrance in self.entrances:

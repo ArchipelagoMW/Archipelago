@@ -866,7 +866,7 @@ class OOTWorld(World):
                 for d in world.worlds[player].dungeons:
                     items_by_region[player][d.hint_text] = {'dungeon': True, 'weight': 0, 'is_barren': True}
                 del (items_by_region[player]["Link's Pocket"])
-                del (items_by_region[player][' '])
+                del (items_by_region[player][None])
 
             if item_hint_players:  # loop once over all locations to gather major items. Check oot locations for barren/woth if needed
                 for loc in world.get_locations():

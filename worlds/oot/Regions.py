@@ -33,7 +33,6 @@ class OOTRegion(Region):
 
     def __init__(self, name: str, player: int, world):
         super(OOTRegion, self).__init__(name, player, world)
-        self.hint = ' '
         self.price = None
         self.time_passes = False
         self.provides_time = TimeOfDay.NONE
@@ -43,8 +42,12 @@ class OOTRegion(Region):
         self.font_color = None
 
     @property
-    def hint_text(self):
-        return self.hint
+    def hint(self):
+        return self._hint_text
+
+    @hint.setter
+    def hint(self, value):
+        self._hint_text = value
 
     def get_scene(self): 
         if self.scene: 
