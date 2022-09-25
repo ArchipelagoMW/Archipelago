@@ -8,7 +8,7 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies, \
-    fluids, stacking_items, valid_ingredients
+    fluids, stacking_items, valid_ingredients, mods
 from .Shapes import get_shapes
 from .Mod import generate_mod
 from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal
@@ -54,8 +54,8 @@ class Factorio(World):
     item_name_groups = {
         "Progressive": set(progressive_tech_table.keys()),
     }
-    data_version = 5
-    required_client_version = (0, 3, 0)
+    data_version = 0 if mods else 5
+    required_client_version = (0, 3, 5) if mods else (0, 3, 0)   # TODO: Update required_client_version to (0, 3, 6) when that version releases.
 
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)

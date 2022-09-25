@@ -65,6 +65,7 @@ class FactorioContext(CommonContext):
         self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
         self.energy_link_increment = 0
         self.last_deplete = 0
+        self.custom_data_package = 0
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -170,7 +171,7 @@ async def game_watcher(ctx: FactorioContext):
                     if ctx.locations_checked != research_data:
                         bridge_logger.debug(
                             f"New researches done: "
-                            f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
+                            f"{[lookup_id_to_name.get(rid, f'Unknown Research (ID: {rid})') for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
                     death_link_tick = data.get("death_link_tick", 0)
@@ -268,7 +269,11 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
                     item_id = transfer_item.item
                     player_name = ctx.player_names[transfer_item.player]
-                    if item_id not in Factorio.item_id_to_name:
+                    if ctx.custom_data_package:
+                        item_name = Factorio.item_id_to_name.get(item_id, f"Unknown Item (ID: {item_id})")
+                        factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.{(' (Item name might not match the seed.)' if Factorio.data_version else '')}")
+                        commands[ctx.send_index] = f'/ap-get-technology {item_id}\t{ctx.send_index}\t{player_name}'
+                    elif item_id not in Factorio.item_id_to_name:
                         factorio_server_logger.error(f"Cannot send unknown item ID: {item_id}")
                     else:
                         item_name = Factorio.item_id_to_name[item_id]
@@ -297,6 +302,7 @@ async def get_info(ctx: FactorioContext, rcon_client: factorio_rcon.RCONClient):
     # 0.2.0 addition, not present earlier
     death_link = bool(info.get("death_link", False))
     ctx.energy_link_increment = info.get("energy_link", 0)
+    ctx.custom_data_package = info.get("custom_data_package", 0)
     logger.debug(f"Energy Link Increment: {ctx.energy_link_increment}")
     if ctx.energy_link_increment and ctx.ui:
         ctx.ui.enable_energy_link()
