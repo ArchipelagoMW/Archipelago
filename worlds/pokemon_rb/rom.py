@@ -75,8 +75,6 @@ def randomize_pokemon(self, mon, mons_list, randomize_type):
 
 
 def process_trainer_data(self, data):
-    if not self.world.randomize_trainer_parties[self.player].value:
-        return
     mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
                  or self.world.trainer_legendaries[self.player].value]
     address = rom_addresses["Trainer_Data"]
@@ -100,10 +98,11 @@ def process_trainer_data(self, data):
                             mon = poke_data.evolves_to[mon]
                         if l in ["F", "G", "H"] and mon in poke_data.evolves_to:
                             mon = poke_data.evolves_to[mon]
-            if mon is None:
+            if mon is None and self.world.randomize_trainer_parties[self.player].value:
                 mon = poke_data.id_to_mon[data[address]]
                 mon = randomize_pokemon(self, mon, mons_list, self.world.randomize_trainer_parties[self.player].value)
-            data[address] = poke_data.pokemon_data[mon]["id"]
+            if mon is not None:
+                data[address] = poke_data.pokemon_data[mon]["id"]
 
 
 def process_static_pokemon(self):
