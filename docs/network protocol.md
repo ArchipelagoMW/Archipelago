@@ -371,7 +371,7 @@ Used to write data to the server's data storage, that data can then be shared ac
 | ------ | ----- | ------ |
 | key | str | The key to manipulate. |
 | default | any | The default value to use in case the key has no value on the server. |
-| want_reply | bool | If set, the server will send a [SetReply](#SetReply) response back to the client. |
+| want_reply | bool | If true, the server will send a [SetReply](#SetReply) response back to the client. |
 | operations | list\[[DataStorageOperation](#DataStorageOperation)\] | Operations to apply to the value, multiple operations can be present and they will be executed in order of appearance. |
 
 Additional arguments sent in this package will also be added to the [SetReply](#SetReply) package it triggers.
