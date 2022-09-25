@@ -237,6 +237,7 @@ class Item(FactorioElement):
         self.fuel_value: int = fuel_value
         self.fuel_category: str = fuel_category
         self.rocket_launch_products: Dict[str, int] = rocket_launch_products
+        self.product_sources: Set[Recipe] = set()
 
 class Fluid(FactorioElement):
     def __init__(self, name, default_temperature, max_temperature, heat_capacity):
@@ -246,6 +247,7 @@ class Fluid(FactorioElement):
         self.default_temperature: int = default_temperature
         self.max_temperature: int = max_temperature
         self.heat_capacity = heat_capacity
+        self.product_sources: Set[Recipe] = set()
 
 
 items: Dict[str, Item] = {}
@@ -389,6 +391,10 @@ for recipe_name, recipe_data in raw_recipes.items():
                 all_product_sources.setdefault(product_name, set()).remove(recipe)
                 if not all_product_sources[product_name]:
                     del (all_product_sources[product_name])
+            if product_name in items:
+                items[product_name].product_sources.add(recipe)
+            if product_name in fluids:
+                fluids[product_name].product_sources.add(recipe)
 
 
 machines["assembling-machine-1"].categories |= machines["assembling-machine-3"].categories  # mod enables this
