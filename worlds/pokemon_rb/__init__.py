@@ -126,7 +126,7 @@ class PokemonRedBlueWorld(World):
             self.world.random.shuffle(locations)
             location = locations.pop()
             location.place_locked_item(item)
-        local_locs = ["Pallet Town - Player's PC", "Fossil - Item 1", "Fossil - Item 2"]
+        local_locs = ["Pallet Town - Player's PC", "Fossil - Choice A", "Fossil - Choice B"]
         player_items = []
         for item in self.world.itempool:
             if item.player == self.player:
