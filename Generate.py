@@ -193,6 +193,10 @@ def main(args=None, callback=ERmain):
                         for path in weights_cache:
                             for yaml in weights_cache[path]:
                                 if category_name is None:
+                                    if key == "game":
+                                        yaml[key] = option
+                                        yaml.setdefault(option, {})
+                                        continue
                                     for category in yaml:
                                         if category in AutoWorldRegister.world_types and key in Options.common_options:
                                             yaml[category][key] = option
