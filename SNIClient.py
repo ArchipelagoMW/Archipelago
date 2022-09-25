@@ -15,9 +15,6 @@ import typing
 
 from json import loads, dumps
 
-import ModuleUpdate
-ModuleUpdate.update()
-
 from Utils import init_logging, messagebox
 
 if __name__ == "__main__":
@@ -1271,7 +1268,8 @@ async def game_watcher(ctx: Context):
                 snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x680, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
 
                 from worlds.smz3.TotalSMZ3.Location import locations_start_id
-                location_id = locations_start_id + itemIndex
+                from worlds.smz3 import convertLocSMZ3IDToAPID
+                location_id = locations_start_id + convertLocSMZ3IDToAPID(itemIndex)
 
                 ctx.locations_checked.add(location_id)
                 location = ctx.location_names[location_id]
