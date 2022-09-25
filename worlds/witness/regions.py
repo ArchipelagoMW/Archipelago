@@ -72,7 +72,7 @@ class WitnessRegions:
             all_locations = all_locations | set(locations_for_this_region)
 
             world.regions += [
-                create_region(world, player, region_name, self.locat,locations_for_this_region)
+                create_region(world, player, region_name, self.locat, locations_for_this_region)
             ]
 
         for region_name, region in StaticWitnessLogic.ALL_REGIONS_BY_NAME.items():

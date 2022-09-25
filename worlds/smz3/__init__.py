@@ -25,6 +25,10 @@ from Options import Accessibility
 world_folder = os.path.dirname(__file__)
 logger = logging.getLogger("SMZ3")
 
+# Location IDs in the range 256+196 to 256+202 shifted +34 between 11.2 and 11.3
+# this is required to keep backward compatibility
+def convertLocSMZ3IDToAPID(value):
+    return (value - 34) if value >= 256+230 and value <= 256+236 else value
 
 class SMZ3CollectionState(metaclass=AutoLogicRegister):
     def init_mixin(self, parent: MultiWorld):
@@ -61,12 +65,13 @@ class SMZ3World(World):
     """
     game: str = "SMZ3"
     topology_present = False
-    data_version = 2
+    data_version = 3
     option_definitions = smz3_options
     item_names: Set[str] = frozenset(TotalSMZ3Item.lookup_name_to_id)
     location_names: Set[str]
     item_name_to_id = TotalSMZ3Item.lookup_name_to_id
-    location_name_to_id: Dict[str, int] = {key : locations_start_id + value.Id for key, value in TotalSMZ3World(Config(), "", 0, "").locationLookup.items()}
+    location_name_to_id: Dict[str, int] = {key : locations_start_id + convertLocSMZ3IDToAPID(value.Id)
+        for key, value in TotalSMZ3World(Config(), "", 0, "").locationLookup.items()}
     web = SMZ3Web()
 
     remote_items: bool = False
@@ -525,9 +530,11 @@ class SMZ3World(World):
 
     def JunkFillGT(self, factor):
         poolLength = len(self.world.itempool)
+        playerGroups = self.world.get_player_groups(self.player)
+        playerGroups.add(self.player)
         junkPoolIdx = [i for i in range(0, poolLength) 
                     if self.world.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap) and
-                    self.world.itempool[i].player == self.player]
+                    self.world.itempool[i].player in playerGroups]
         toRemove = []
         for loc in self.locations.values():
             # commenting this for now since doing a partial GT pre fill would allow for non SMZ3 progression in GT

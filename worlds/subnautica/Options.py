@@ -1,7 +1,7 @@
 import typing
 
 from Options import Choice, Range, DeathLink
-from .Creatures import all_creatures
+from .Creatures import all_creatures, Definitions
 
 
 class ItemPool(Choice):
@@ -46,14 +46,27 @@ class AggressiveScanLogic(Choice):
     Containment: Removes Stasis Rifle as expected solution and expects Alien Containment instead.
     Either: Creatures may be expected to be scanned via Stasis Rifle or Containment, whichever is found first.
     None: Aggressive Creatures are assumed to not need any tools to scan.
+    Removed: No Creatures needing Stasis or Containment will be in the pool at all.
 
     Note: Containment, Either and None adds Cuddlefish as an option for scans.
+    Note: Stasis, Either and None adds unhatchable aggressive species, such as Warper.
     Note: This is purely a logic expectation, and does not affect gameplay, only placement."""
     display_name = "Aggressive Creature Scan Logic"
     option_stasis = 0
     option_containment = 1
     option_either = 2
     option_none = 3
+    option_removed = 4
+
+    def get_pool(self) -> typing.List[str]:
+        if self == self.option_removed:
+            return Definitions.all_creatures_presorted_without_aggressive
+        elif self == self.option_stasis:
+            return Definitions.all_creatures_presorted_without_containment
+        elif self == self.option_containment:
+            return Definitions.all_creatures_presorted_without_stasis
+        else:
+            return Definitions.all_creatures_presorted
 
 
 class SubnauticaDeathLink(DeathLink):

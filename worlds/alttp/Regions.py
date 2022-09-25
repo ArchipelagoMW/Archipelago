@@ -5,6 +5,10 @@ from BaseClasses import Region, RegionType
 from worlds.alttp.SubClasses import ALttPEntrance
 
 
+def is_main_entrance(entrance: Entrance) -> bool:
+    return entrance.parent_region.type in {RegionType.DarkWorld, RegionType.LightWorld, RegionType.Generic}
+
+
 def create_regions(world, player):
 
     world.regions += [
