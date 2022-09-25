@@ -237,14 +237,43 @@ class SA2BWorld(World):
             musiclist_o = list(range(0, 47))
             musiclist_s = musiclist_o.copy()
             self.world.random.shuffle(musiclist_s)
+            musiclist_o.extend(list(range(47, 78)))
+            musiclist_s.extend(list(range(47, 78)))
+
+            if self.world.sadx_music[self.player].value == 1:
+                musiclist_s = [x+100 for x in musiclist_s]
+            elif self.world.sadx_music[self.player].value == 2:
+                for i in range(len(musiclist_s)):
+                    if self.world.random.choice([True, False]):
+                        musiclist_s[i] += 100
+
             self.music_map = dict(zip(musiclist_o, musiclist_s))
+
         elif self.world.music_shuffle[self.player] == "full":
             musiclist_o = list(range(0, 78))
             musiclist_s = musiclist_o.copy()
             self.world.random.shuffle(musiclist_s)
+
+            if self.world.sadx_music[self.player].value == 1:
+                musiclist_s = [x+100 for x in musiclist_s]
+            elif self.world.sadx_music[self.player].value == 2:
+                for i in range(len(musiclist_s)):
+                    if self.world.random.choice([True, False]):
+                        musiclist_s[i] += 100
+
             self.music_map = dict(zip(musiclist_o, musiclist_s))
         else:
-            self.music_map = dict()
+            musiclist_o = list(range(0, 78))
+            musiclist_s = musiclist_o.copy()
+
+            if self.world.sadx_music[self.player].value == 1:
+                musiclist_s = [x+100 for x in musiclist_s]
+            elif self.world.sadx_music[self.player].value == 2:
+                for i in range(len(musiclist_s)):
+                    if self.world.random.choice([True, False]):
+                        musiclist_s[i] += 100
+
+            self.music_map = dict(zip(musiclist_o, musiclist_s))
 
     def create_regions(self):
         self.location_table = setup_locations(self.world, self.player)

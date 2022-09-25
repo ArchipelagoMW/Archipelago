@@ -171,6 +171,28 @@ class ChaoRaceChecks(Choice):
     default = 0
 
 
+class SADXMusic(Choice):
+    """
+    Whether the randomizer will include Sonic Adventure DX Music in the music pool
+    SA2B: Only SA2B music will be played
+    SADX: Only SADX music will be played
+    Both: Both SA2B and SADX music will be played
+    NOTE: This option requires the player to own a PC copy of SADX and to follow the addition steps in the setup guide.
+    """
+    display_name = "SADX Music"
+    option_sa2b = 0
+    option_sadx = 1
+    option_both = 2
+    default = 0
+
+    @classmethod
+    def get_option_name(cls, value) -> str:
+        if cls.auto_display_name and value != 2:
+            return cls.name_lookup[value].upper()
+        else:
+            return cls.name_lookup[value]
+
+
 class MusicShuffle(Choice):
     """
     What type of Music Shuffle is used
@@ -201,6 +223,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "timestop_trap_weight": TimestopTrapWeight,
     "confusion_trap_weight": ConfusionTrapWeight,
     "tiny_trap_weight": TinyTrapWeight,
+    "sadx_music": SADXMusic,
     "music_shuffle": MusicShuffle,
     "death_link": DeathLink,
 }
