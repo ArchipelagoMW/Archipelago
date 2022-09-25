@@ -903,7 +903,7 @@ class CollectionState():
 
 class Region:
     name: str
-    hint: Optional[str]
+    _hint_text: str
     player: int
     world: Optional[MultiWorld]
     entrances: List[Entrance]
@@ -923,7 +923,7 @@ class Region:
         self.exits = []
         self.locations = []
         self.world = world
-        self.hint = hint
+        self._hint_text = hint
         self.player = player
 
     def can_reach(self, state: CollectionState) -> bool:
@@ -943,9 +943,12 @@ class Region:
     def hint_text(self) -> str:
         return self.hint if self.hint else self.name
 
-    @property
-    def entrance(self) -> Entrance:
-        return self.entrances[0] if self.entrances else None
+    def get_connecting_entrance(self, is_main_entrance: typing.Callable[[Entrance], bool]) -> Entrance:
+        for entrance in self.entrances:
+            if is_main_entrance(entrance):
+                return entrance
+        for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
+            return entrance.parent_region.get_connecting_entrance(is_main_entrance)
 
     def __repr__(self):
         return self.__str__()
@@ -1423,7 +1426,6 @@ class Spoiler():
                                                "f" in self.world.shop_shuffle[player]))
                     outfile.write('Custom Potion Shop:              %s\n' %
                                   bool_to_text("w" in self.world.shop_shuffle[player]))
-                    outfile.write('Boss shuffle:                    %s\n' % self.world.boss_shuffle[player])
                     outfile.write('Enemy health:                    %s\n' % self.world.enemy_health[player])
                     outfile.write('Enemy damage:                    %s\n' % self.world.enemy_damage[player])
                     outfile.write('Prize shuffle                    %s\n' %

@@ -370,13 +370,13 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
         distribute_items_restrictive(multi_world)
 
-        self.assertEqual(locations[0].item, basic_items[0])
+        self.assertEqual(locations[0].item, basic_items[1])
         self.assertFalse(locations[0].event)
         self.assertEqual(locations[1].item, prog_items[0])
         self.assertTrue(locations[1].event)
         self.assertEqual(locations[2].item, prog_items[1])
         self.assertTrue(locations[2].event)
-        self.assertEqual(locations[3].item, basic_items[1])
+        self.assertEqual(locations[3].item, basic_items[0])
         self.assertFalse(locations[3].event)
 
     def test_excluded_distribute(self):
@@ -499,8 +499,8 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         removed_item: list[Item] = []
         removed_location: list[Location] = []
 
-        def fill_hook(progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool, restitempool, fill_locations):
-            removed_item.append(restitempool.pop(0))
+        def fill_hook(progitempool, usefulitempool, filleritempool, fill_locations):
+            removed_item.append(filleritempool.pop(0))
             removed_location.append(fill_locations.pop(0))
 
         multi_world.worlds[player1.id].fill_hook = fill_hook
