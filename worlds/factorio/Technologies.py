@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import string
+from sys import getrecursionlimit
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, Set, FrozenSet, Tuple, Union, List, Any
@@ -174,14 +175,21 @@ class Recipe(FactorioElement):
                 ingredients[ingredient] += cost
         return ingredients
 
-    def detect_recursive_loop(self, recipes: Counter) -> bool:
+    recursion_loop = 0
+    max_recursion_loop = 0.85 * getrecursionlimit()
+
+    def detect_recursive_loop(self) -> bool:
+        Recipe.recursion_loop += 1
+        if Recipe.max_recursion_loop < Recipe.recursion_loop:
+            Recipe.recursion_loop = 0
+            return True
         for ingredient in self.ingredients.keys():
             if ingredient in all_product_sources:
-                for recipe in all_product_sources[ingredient]:
-                    if recipe.ingredients:
-                        recipes[self.name] += 1
-                        if recipes[self.name] >= 10 or recipe.detect_recursive_loop(recipes):
+                for ingredient_recipe in all_product_sources[ingredient]:
+                    if ingredient_recipe.ingredients:
+                        if ingredient_recipe.detect_recursive_loop():
                             return True
+        Recipe.recursion_loop -= 1
         return False
 
     @property
@@ -376,7 +384,7 @@ for recipe_name, recipe_data in raw_recipes.items():
     if set(recipe.products).isdisjoint(set(recipe.ingredients)):
         for product_name in [product_name for product_name, amount in recipe.products.items() if amount > 0]:
             all_product_sources.setdefault(product_name, set()).add(recipe)
-            if recipe.detect_recursive_loop(Counter()):
+            if recipe.detect_recursive_loop():
                 # prevents loop recipes like uranium centrifuging and fluid unbarreling
                 all_product_sources.setdefault(product_name, set()).remove(recipe)
                 if not all_product_sources[product_name]:
