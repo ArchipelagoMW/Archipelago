@@ -231,6 +231,15 @@ class Item(FactorioElement):
         self.fuel_category: str = fuel_category
         self.rocket_launch_products: Dict[str, int] = rocket_launch_products
 
+class Fluid(FactorioElement):
+    def __init__(self, name, default_temperature, max_temperature, heat_capacity):
+        self.name: str = name
+        if max_temperature == "inf":
+            max_temperature = 2**64
+        self.default_temperature: int = default_temperature
+        self.max_temperature: int = max_temperature
+        self.heat_capacity = heat_capacity
+
 
 items: Dict[str, Item] = {}
 for name, item_data in items_future.result().items():
@@ -245,7 +254,13 @@ for name, item_data in items_future.result().items():
     items[name] = item
 del items_future
 
-fluids: Dict[str, Dict[str, int]] = dict(fluids_future.result())
+fluids: Dict[str, Fluid] = {}
+for name, fluid_data in fluids_future.result().items():
+    fluid = Fluid(name,
+                  fluid_data.get("default_temperature", 0),
+                  fluid_data.get("max_temperature", 0),
+                  fluid_data.get("heat_capacity", 1000))
+    fluids[name] = fluid
 del fluids_future
 
 recipe_sources: Dict[str, Set[str]] = {}  # recipe_name -> technology source
