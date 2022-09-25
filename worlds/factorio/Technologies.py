@@ -187,8 +187,7 @@ class Recipe(FactorioElement):
     @property
     def total_energy(self) -> float:
         """Total required energy (crafting time) for single craft"""
-        # TODO: multiply mining energy by 2 since drill has 0.5 speed
-        total_energy = self.energy
+        total_energy = (self.energy / machines[self.crafting_machine].speed)
         for ingredient, cost in self.ingredients.items():
             if ingredient in all_product_sources:
                 selected_recipe_energy = float('inf')
