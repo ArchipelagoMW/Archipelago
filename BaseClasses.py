@@ -954,6 +954,13 @@ class Region:
                 return True
         return False
 
+    def get_connecting_entrance(self, is_main_entrance: typing.Callable[[Entrance], bool]) -> Entrance:
+        for entrance in self.entrances:
+            if is_main_entrance(entrance):
+                return entrance
+        for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
+            return entrance.parent_region.get_connecting_entrance(is_main_entrance)
+
     def __repr__(self):
         return self.__str__()
 
@@ -1421,7 +1428,6 @@ class Spoiler():
                                                "f" in self.world.shop_shuffle[player]))
                     outfile.write('Custom Potion Shop:              %s\n' %
                                   bool_to_text("w" in self.world.shop_shuffle[player]))
-                    outfile.write('Boss shuffle:                    %s\n' % self.world.boss_shuffle[player])
                     outfile.write('Enemy health:                    %s\n' % self.world.enemy_health[player])
                     outfile.write('Enemy damage:                    %s\n' % self.world.enemy_damage[player])
                     outfile.write('Prize shuffle                    %s\n' %
