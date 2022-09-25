@@ -15,16 +15,19 @@ A great many things besides item placement can be randomized, such as the locati
 
 Many baseline changes are made to the game, including:
 
+* Bag item space increased to 128 slots (up from 20)
+* PC item storage increased to 64 slots (up from 50)
 * You can hold B to run (or bike extra fast!).
 * You can hold select while talking to a trainer to re-battle them.
 * You can return to route 2 from Diglett's Cave without the use of Cut.
+* Mew can be encountered at the S.S. Anne dock truck. This can be randomized depending on your settings.
 * The S.S. Anne will never depart.
-* Seafoam Islands entrances are swapped.
+* Seafoam Islands entrances are swapped. This means you need Strength to travel through from Cinnabar Island to Fuchsia
+City
 * After obtaining one of the fossil item checks in Mt Moon, the remaining item can be received from the Cinnabar Lab
 fossil scientist after reviving a Pokémon from a fossil.
 * A hidden item location that was outside the bounds of the Safari Zone Gate map has been moved to a reachable tile on
 this screen.
-* Mew can be encountered at the S.S. Anne dock truck. This can be randomized depending on your settings.
 * Obedience depends on the total number of badges you have obtained instead of depending on specific badges.
 * Pokémon that evolve by trading can also evolve by reaching level 35.
 * Much of the dialogue throughout the game has been removed or shortened.
