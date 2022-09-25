@@ -182,20 +182,24 @@ def main(args=None, callback=ERmain):
          for fname, yamls in weights_cache.items()}
 
     if meta_weights:
+        for category in meta_weights.values():
+            if "triggers" in category:
+                meta_weights = roll_triggers(meta_weights, category["triggers"])
         for category_name, category_dict in meta_weights.items():
             for key in category_dict:
-                option = roll_meta_option(key, category_name, category_dict)
-                if option is not None:
-                    for path in weights_cache:
-                        for yaml in weights_cache[path]:
-                            if category_name is None:
-                                for category in yaml:
-                                    if category in AutoWorldRegister.world_types and key in Options.common_options:
-                                        yaml[category][key] = option
-                            elif category_name not in yaml:
-                                logging.warning(f"Meta: Category {category_name} is not present in {path}.")
-                            else:
-                                yaml[category_name][key] = option
+                if key != "triggers" and category_name != "_Generator_Version":
+                    option = roll_meta_option(key, category_name, category_dict)
+                    if option is not None:
+                        for path in weights_cache:
+                            for yaml in weights_cache[path]:
+                                if category_name is None:
+                                    for category in yaml:
+                                        if category in AutoWorldRegister.world_types and key in Options.common_options:
+                                            yaml[category][key] = option
+                                elif category_name not in yaml:
+                                    logging.warning(f"Meta: Category {category_name} is not present in {path}.")
+                                else:
+                                    yaml[category_name][key] = option
 
     player_path_cache = {}
     for player in range(1, args.multi + 1):
