@@ -133,7 +133,7 @@ def get_locations(player=None):
         LocationData("Route 2 East", "North Item", "HP Up", rom_addresses["Missable_Route_2_Item_2"], Missable(26)),
         LocationData("Route 4", "Item", "TM04 Whirlwind", rom_addresses["Missable_Route_4_Item"], Missable(27)),
         LocationData("Route 9", "Item", "TM30 Teleport", rom_addresses["Missable_Route_9_Item"], Missable(28)),
-        LocationData("Route 12 North", "Island Item", "TM16 Pay Day", rom_addresses["Missable_Route_12_Item_1"], Missable(30)),
+        LocationData("Route 12 North", "Island Item", "TM16 Pay Day", rom_addresses["Missable_Route_12_Item_1"], Missable(30), lambda state: state.pokemon_rb_can_surf(player)),
         LocationData("Route 12 South", "Item Behind Cuttable Tree", "Iron", rom_addresses["Missable_Route_12_Item_2"], Missable(31),
                      lambda state: state.pokemon_rb_can_cut(player)),
         LocationData("Route 15", "Item", "TM20 Rage", rom_addresses["Missable_Route_15_Item"], Missable(32), lambda state: state.pokemon_rb_can_cut(player)),

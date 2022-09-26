@@ -135,7 +135,7 @@ class OaksAidRt2(Range):
 
 class OaksAidRt11(Range):
     """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 11"""
-    display_name = "Oak's Aide Route 2"
+    display_name = "Oak's Aide Route 11"
     range_start = 0
     range_end = 80
     default = 30
@@ -143,7 +143,7 @@ class OaksAidRt11(Range):
 
 class OaksAidRt15(Range):
     """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 15"""
-    display_name = "Oak's Aide Route 2"
+    display_name = "Oak's Aide Route 15"
     range_start = 0
     range_end = 80
     default = 50

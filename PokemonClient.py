@@ -49,12 +49,6 @@ class GBCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, GBContext):
             logger.info(f"Gameboy Status: {self.ctx.gb_status}")
 
-    def _cmd_toggle_msgs(self):
-        """Toggle displaying messages in bizhawk"""
-        global DISPLAY_MSGS
-        DISPLAY_MSGS = not DISPLAY_MSGS
-        logger.info(f"Messages are now {'enabled' if DISPLAY_MSGS  else 'disabled'}")
-
 
 class GBContext(CommonContext):
     command_processor = GBCommandProcessor
