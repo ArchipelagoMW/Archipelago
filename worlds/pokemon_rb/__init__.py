@@ -34,7 +34,7 @@ class PokemonRedBlueWorld(World):
     game = "Pokemon Red - Blue"
     option_definitions = pokemon_rb_options
     remote_items = False
-    data_version = 0
+    data_version = 1
     topology_present = False
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
