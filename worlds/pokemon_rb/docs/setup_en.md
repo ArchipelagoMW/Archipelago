@@ -48,9 +48,8 @@ Both the player and the person generating (if they are generating locally) will 
 ```yaml
 description: Default Pokemon Red - Blue Template # Used to describe your yaml. Useful if you have multiple files
 # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
-name: Alchav
-game:
-  Pokemon Red - Blue: 1
+name: YourName
+game: Pokemon Red - Blue
 requires:
   version: 0.3.5 # Version of Archipelago required for this yaml to work as expected.
 # Shared Options supported by all games:
@@ -62,8 +61,8 @@ Pokemon Red - Blue:
     random-low: 0
     random-high: 0
     disabled: 0
-    normal: 0
-    extreme: 1
+    normal: 50
+    extreme: 0
   accessibility: # Set rules for reachability of your items/locations.
     #    Locations: ensure everything can be reached and acquired.
     #    Items: ensure all logically relevant items can be acquired.
@@ -97,21 +96,21 @@ Pokemon Red - Blue:
 
   game_version: # Select Red or Blue version.
     red: 0
-    blue: 1
-    random: 0
+    blue: 0
+    random: 50
   trainer_name: # Your trainer name. Cannot exceed 7 characters.
     #    See the setup guide on archipelago.gg for a list of allowed characters.
-    A<'l>cha<'v><MALE>
+    ASH
 
   rival_name: # Your rival's name. Cannot exceed 7 characters.
     #    See the setup guide on archipelago.gg for a list of allowed characters.
-    <PK><MN><'d><'m><'r><'t><FEMALE>
+    GARY
 
   victory_road_condition: # Number of badges required to reach Victory Road. One fewer will be required to enter the Viridian Gym.
     #    Your rival will reveal the amount needed on the first Route 22 battle (after turning in Oak's Parcel).
     # you can add additional values between minimum and maximum
     2: 0 # minimum value
-    5: 50 # maximum value
+    8: 50 # maximum value
     random: 0
     random-low: 0
     random-high: 0
@@ -122,15 +121,15 @@ Pokemon Red - Blue:
     random: 0
     random-low: 0
     random-high: 0
-    15: 50
+    20: 50
   badgesanity: # Shuffle gym badges into the general item pool. If turned off, badges will be shuffled across the 8 gyms.
-    false: 0
-    true: 50
+    false: 50
+    true: 0
   badges_needed_for_hm_moves: # Off will remove the requirement for badges to use HM moves. Extra will give the Marsh, Volcano, and Earth
     #    Badges a random HM move to enable. Extra Plus will additionally pick two random badges to enable a second HM move.
     #    A man in Cerulean City will reveal the moves enabled by each Badge.
-    on: 0
-    off: 50
+    on: 50
+    off: 0
     extra: 0
     extra_plus: 0
   old_man: # With Open Viridian City, the Old Man will let you through without needing to turn in Oak's Parcel.
@@ -139,75 +138,75 @@ Pokemon Red - Blue:
     open_viridian_city: 50
   tea: # Adds a Tea item to the item pool which the Saffron guards require instead of the vending machine drinks.
     #    Adds a location check to the Celadon Mansion 1F, where Tea is acquired in FireRed and LeafGreen.
-    false: 50
-    true: 0
+    false: 0
+    true: 50
   extra_key_items: # Adds key items that are required to access the Rocket Hideout, Cinnabar Mansion, Safari Zone, and Power Plant.
     #    Adds four item pickups to Rock Tunnel B1F.
-    false: 50
-    true: 0
+    false: 0
+    true: 50
   extra_strength_boulders: # Adds Strength Boulders blocking the Route 11 gate, and in Route 13 (can be bypassed with Surf).
     #    This potentially increases the usefulness of Strength as well as the Bicycle.
-    false: 50
-    true: 0
+    false: 0
+    true: 50
   require_item_finder: # Require Item Finder to pick up hidden items.
     false: 50
     true: 0
   randomize_hidden_items: # Randomize hidden items. If you choose exclude, they will be randomized but will be guaranteed junk items.
     on: 0
-    off: 0
-    exclude: 50
+    off: 50
+    exclude: 0
   free_fly_location: # One random fly destination will be unlocked by default.
     false: 0
     true: 50
   oaks_aide_rt_2: # Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 2
     # you can add additional values between minimum and maximum
-    0: 1 # minimum value
+    0: 0 # minimum value
     80: 0 # maximum value
     random: 0
     random-low: 0
     random-high: 0
-    10: 0
+    10: 50
   oaks_aide_rt_11: # Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 11
     # you can add additional values between minimum and maximum
-    0: 10 # minimum value
+    0: 0 # minimum value
     80: 0 # maximum value
     random: 0
     random-low: 0
     random-high: 0
-    30: 0
+    30: 50
   oaks_aide_rt_15: # Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 15
     # you can add additional values between minimum and maximum
-    0: 10 # minimum value
+    0: 0 # minimum value
     80: 0 # maximum value
     random: 0
     random-low: 0
     random-high: 0
-    50: 0
+    50: 50
   blind_trainers: # Chance each frame that you are standing on a tile in a trainer's line of sight that they will fail to initiate a
     #    battle. If you move into and out of their line of sight without stopping, this chance will only trigger once.
     # you can add additional values between minimum and maximum
-    0: 0 # minimum value
-    100: 10 # maximum value
+    0: 50 # minimum value
+    100: 0 # maximum value
     random: 0
     random-low: 0
     random-high: 0
   minimum_steps_between_encounters: # Minimum number of steps between wild Pokemon encounters.
     # you can add additional values between minimum and maximum
     0: 0 # minimum value
-    255: 10 # maximum value
+    255: 0 # maximum value
     random: 0
     random-low: 0
     random-high: 0
-    3: 0
+    3: 50
   exp_modifier: # Modifier for EXP gained. When specifying a number, exp is multiplied by this amount and divided by 16.
     # you can add additional values between minimum and maximum
     0: 0 # minimum value
-    255: 1 # maximum value
+    255: 0 # maximum value
     random: 0
     random-low: 0
     random-high: 0
     half: 0
-    normal: 0
+    normal: 50
     double: 0
     triple: 0
     quadruple: 0
@@ -219,42 +218,42 @@ Pokemon Red - Blue:
     #    type matching the original type of the original Pokemon. match_base_stats will prefer Pokemon with closer base stat
     #    totals. match_types_and_base_stats will match types and will weight towards similar base stats, but there may not be
     #    many to choose from.
-    vanilla: 0
+    vanilla: 50
     match_types: 0
-    match_base_stats: 1
+    match_base_stats: 0
     match_types_and_base_stats: 0
     completely_random: 0
   randomize_starter_pokemon: # Randomize the starter Pokemon choices.
-    vanilla: 0
+    vanilla: 50
     match_types: 0
-    match_base_stats: 1
+    match_base_stats: 0
     match_types_and_base_stats: 0
     completely_random: 0
   randomize_static_pokemon: # Randomize all one-time gift and encountered Pokemon, except legendaries.
     #    These will always be first evolution stage Pokemon.
-    vanilla: 0
+    vanilla: 50
     match_types: 0
     match_base_stats: 0
     match_types_and_base_stats: 0
-    completely_random: 1
+    completely_random: 0
   randomize_legendary_pokemon: # Randomize Legendaries. Mew has been added as an encounter at the Vermilion dock truck.
     #    Shuffle will shuffle the legendaries with each other. Static will shuffle them into other static Pokemon locations.
     #    'Any' will allow legendaries to appear anywhere based on wild and static randomization options, and their locations
     #    will be randomized according to static Pokemon randomization options.
-    vanilla: 0
+    vanilla: 50
     shuffle: 0
-    static: 1
+    static: 0
     any: 0
   catch_em_all: # Guarantee all first evolution stage Pokemon are available, or all Pokemon of all stages.
     #    Currently only has an effect if wild Pokemon are randomized.
-    off: 0
+    off: 50
     first_stage: 0
-    all_pokemon: 1
+    all_pokemon: 0
   randomize_pokemon_stats: # Randomize base stats for each Pokemon. Shuffle will shuffle the 5 base stat values amongst each other. Randomize
     #    will completely randomize each stat, but will still add up to the same base stat total.
-    vanilla: 0
+    vanilla: 50
     shuffle: 0
-    randomize: 1
+    randomize: 0
   randomize_pokemon_catch_rates: # Randomize the catch rate for each Pokemon.
     false: 50
     true: 0
@@ -262,41 +261,41 @@ Pokemon Red - Blue:
     #    chosen. Otherwise, it will raise any Pokemon's catch rate up to this value if its normal catch rate is lower.
     # you can add additional values between minimum and maximum
     1: 0 # minimum value
-    255: 1 # maximum value
+    255: 0 # maximum value
     random: 0
     random-low: 0
     random-high: 0
-    3: 0
+    3: 50
   randomize_trainer_parties: # Randomize enemy Pokemon encountered in trainer battles.
-    vanilla: 0
+    vanilla: 50
     match_types: 0
     match_base_stats: 0
-    match_types_and_base_stats: 1
+    match_types_and_base_stats: 0
     completely_random: 0
   trainer_legendaries: # Allow legendary Pokemon in randomized trainer parties.
-    false: 0
-    true: 1
+    false: 50
+    true: 0
   randomize_pokemon_movesets: # Randomize the moves learned by Pokemon. prefer_types will prefer moves that match the type of the Pokemon.
-    vanilla: 0
-    prefer_types: 1
+    vanilla: 50
+    prefer_types: 0
     completely_random: 0
   start_with_four_moves: # If movesets are randomized, this will give all Pokemon 4 starting moves.
-    false: 0
-    true: 1
+    false: 50
+    true: 0
   tm_compatibility: # Randomize which Pokemon can learn each TM. prefer_types: 90% chance if Pokemon's type matches the move,
     #    50% chance if move is Normal type and the Pokemon is not, and 25% chance otherwise. Pokemon will retain the same
     #    TM compatibility when they evolve if the evolved form has the same type(s). Mew will always be able to learn
     #    every TM.
-    vanilla: 0
-    prefer_types: 1
+    vanilla: 50
+    prefer_types: 0
     completely_random: 0
     full_compatibility: 0
   hm_compatibility: # Randomize which Pokemon can learn each HM. prefer_types: 100% chance if Pokemon's type matches the move,
     #    75% chance if move is Normal type and the Pokemon is not, and 25% chance otherwise. Pokemon will retain the same
     #    HM compatibility when they evolve if the evolved form has the same type(s). Mew will always be able to learn
     #    every HM.
-    vanilla: 0
-    prefer_types: 1
+    vanilla: 50
+    prefer_types: 0
     completely_random: 0
     full_compatibility: 0
   randomize_pokemon_types: # Randomize the types of each Pokemon. Follow Evolutions will ensure Pokemon's types remain the same when evolving
@@ -319,36 +318,36 @@ Pokemon Red - Blue:
     #       across the attacking type column and the defending types across the defending type column (so for example Normal
     #       type will still have exactly 2 types that it receives non-regular damage from, and 2 types it deals non-regular
     #       damage to). Randomize will randomize each type in both columns to any random type.
-    vanilla: 0
-    shuffle: 1
+    vanilla: 50
+    shuffle: 0
     randomize: 0
   randomize_type_matchup_type_effectiveness: # The game's type chart consists of 3 columns: attacking type, defending type, and type effectiveness.
     #       Matchups that have regular type effectiveness are not in the chart. Shuffle will shuffle the type effectiveness
     #       across the type effectiveness column (so for example there will always be 6 type immunities). Randomize will
     #       randomize each entry in the table to no effect, not very effective, or super effective; with no effect occurring
     #       at a low chance. Chaos will randomize the values to anywhere between 0% and 200% damage, in 10% increments.
-    vanilla: 0
+    vanilla: 50
     shuffle: 0
     randomize: 0
-    chaos: 1
+    chaos: 0
   safari_zone_normal_battles: # Change the Safari Zone to have standard wild pokemon battles.
-    false: 0
-    true: 1
+    false: 50
+    true: 0
   normalize_encounter_chances: # Each wild encounter table has 10 slots for Pokemon. Normally the chance for each being chosen ranges from
     #    19.9% to 1.2%. Turn this on to normalize them all to 10% each.
-    false: 0
-    true: 1
+    false: 50
+    true: 0
   reusable_tms: # Makes TMs reusable, so they will not be consumed upon use.
-    false: 0
-    true: 10
+    false: 50
+    true: 0
   starting_money: # The amount of money you start with.
     # you can add additional values between minimum and maximum
     0: 0 # minimum value
-    999999: 1 # maximum value
+    999999: 0 # maximum value
     random: 0
     random-low: 0
     random-high: 0
-    3000: 0
+    3000: 50
   
 
 ```
