@@ -403,7 +403,7 @@ class Overcooked2World(World):
             "CustomLevelOrder": custom_level_order,
 
             # Items (Starting Inventory)
-            "CustomOrderLifetime": 80.0,  # 100 seconds is original
+            "CustomOrderLifetime": 70.0,  # 100 is original
             "DisableWood": True,
             "DisableCoal": True,
             "DisableOnePlate": True,
@@ -422,7 +422,7 @@ class Overcooked2World(World):
             "BurnSpeedMultiplier": 1.43,
             "MaxOrdersOnScreenOffset": -2,
             "ChoppingTimeScale": 1.4,
-            "BackpackMovementScale": 0.7,
+            "BackpackMovementScale": 0.75,
             "RespawnTime": 10.0,
             "CarnivalDispenserRefactoryTime": 4.0,
             "LevelUnlockRequirements": level_unlock_requirements,
