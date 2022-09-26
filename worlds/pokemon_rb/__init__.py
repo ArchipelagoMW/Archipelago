@@ -30,7 +30,9 @@ class PokemonWebWorld(WebWorld):
 
 
 class PokemonRedBlueWorld(World):
-    """Pokemon"""
+    """Pokémon Red and Pokémon Blue introduce legions of gamers to the world of Kanto, where the likes of Charmander,
+    Pikachu, and Mewtwo were first discovered. Through exciting exploration, battles, and trades, Trainers are able to
+    access 150 Pokémon."""
     game = "Pokemon Red - Blue"
     option_definitions = pokemon_rb_options
     remote_items = False
