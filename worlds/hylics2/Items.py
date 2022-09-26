@@ -1,5 +1,5 @@
 from BaseClasses import ItemClassification
-from typing import TypedDict, Dict, Set
+from typing import TypedDict, Dict
 
 
 class ItemDict(TypedDict):
@@ -234,4 +234,10 @@ party_item_table: Dict[int, ItemDict] = {
     200691: {'classification': ItemClassification.progression,
              'count': 1,
              'name': 'Somsnosa'}
+}
+
+medallion_item_table: Dict[int, ItemDict] = {
+    200692: {'classification': ItemClassification.filler,
+             'count': 30,
+             'name': '10 Bones'}
 }

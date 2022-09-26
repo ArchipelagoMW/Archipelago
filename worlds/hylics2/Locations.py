@@ -311,3 +311,73 @@ party_location_table: Dict[int, LocationDict] = {
     200689: {'name': "Juice Ranch: Somsnosa Joins",
              'region': 10}
 }
+
+
+medallion_location_table: Dict[int, LocationDict] = {
+    200755: {'name': "New Muldul: Upper House Medallion",
+             'region': 4},
+
+    200756: {'name': "New Muldul: Vault Rear Left Medallion",
+             'region': 5},
+    200757: {'name': "New Muldul: Vault Rear Right Medallion",
+             'region': 5},
+    200758: {'name': "New Muldul: Vault Center Medallion",
+             'region': 5},
+    200759: {'name': "New Muldul: Vault Front Left Medallion",
+             'region': 5},
+    200760: {'name': "New Muldul: Vault Front Right Medallion",
+             'region': 5},
+
+    200761: {'name': "Viewax's Edifice: Fort Wall Medallion",
+             'region': 6},
+    200762: {'name': "Viewax's Edifice: Jar Medallion",
+             'region': 6},
+    200763: {'name': "Viewax's Edifice: Sage Chair Medallion",
+             'region': 6},
+    200764: {'name': "Arcade 1: Lonely Medallion",
+             'region': 6},
+    200765: {'name': "Arcade 1: Alcove Medallion",
+             'region': 6},
+    200766: {'name': "Arcade 1: Lava Medallion",
+             'region': 6},
+
+    200767: {'name': "Arcade 2: Flying Machine Medallion",
+             'region': 8},
+    200768: {'name': "Arcade 2: Guarded Medallion",
+             'region': 8},
+    200769: {'name': "Arcade 2: Spinning Medallion",
+             'region': 8},
+    200770: {'name': "Arcade 2: Hook Medallion",
+             'region': 8},
+    200771: {'name': "Arcade 2: Flag Medallion",
+             'region': 8},
+
+    200772: {'name': "Foglast: Under Lair Medallion",
+             'region': 13},
+    200773: {'name': "Foglast: Mid-Air Medallion",
+             'region': 13},
+    200774: {'name': "Foglast: Top of Tower Medallion",
+             'region': 13},
+
+    200775: {'name': "Sage Airship: Walkway Medallion",
+             'region': 16},
+    200776: {'name': "Sage Airship: Flesh Medallion",
+             'region': 16},
+    200777: {'name': "Sage Airship: Top of Ship Medallion",
+             'region': 16},
+    200778: {'name': "Sage Airship: Hidden Medallion 1",
+             'region': 16},
+    200779: {'name': "Sage Airship: Hidden Medallion 2",
+             'region': 16},
+    200780: {'name': "Sage Airship: Hidden Medallion 3",
+             'region': 16},
+
+    200781: {'name': "Hylemxylem: Lower Reservoir Medallion",
+             'region': 17},
+    200782: {'name': "Hylemxylem: Lower Reservoir Hole Medallion",
+             'region': 17},
+    200783: {'name': "Hylemxylem: Drain Switch Medallion",
+             'region': 17},
+    200784: {'name': "Hylemxylem: Warpo Medallion",
+             'region': 17}
+}

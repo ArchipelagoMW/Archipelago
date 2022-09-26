@@ -7,6 +7,7 @@ from . import Items, Locations, Options, Rules, Exits
 
 
 class Hylics2Web(WebWorld):
+    theme = "ocean"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to settings up the Hylics 2 randomizer connected to an Archipelago Multiworld",
@@ -25,8 +26,10 @@ class Hylics2World(World):
     game: str = "Hylics 2"
     web = Hylics2Web()
 
-    all_items = {**Items.item_table, **Items.gesture_item_table, **Items.party_item_table}
-    all_locations = {**Locations.location_table, **Locations.tv_location_table, **Locations.party_location_table}
+    all_items = {**Items.item_table, **Items.gesture_item_table, **Items.party_item_table, 
+        **Items.medallion_item_table}
+    all_locations = {**Locations.location_table, **Locations.tv_location_table, **Locations.party_location_table,
+        **Locations.medallion_location_table}
 
     item_name_to_id = {data["name"]: item_id for item_id, data in all_items.items()}
     location_name_to_id = {data["name"]: loc_id for loc_id, data in all_locations.items()}
@@ -37,6 +40,8 @@ class Hylics2World(World):
     remote_start_inventory: bool = True
 
     data_version: 0
+
+    start_location = "Waynehouse"
 
 
     def set_rules(self):
@@ -56,6 +61,19 @@ class Hylics2World(World):
     def create_event(self, event: str):
         return Hylics2Item(event, ItemClassification.progression_skip_balancing, None, self.player)
 
+    
+    # set random starting location if option is enabled
+    def generate_early(self):
+        if self.world.random_start[self.player]:
+            i = random.randint(0, 3)
+            if i == 0:
+                self.start_location = "Waynehouse"
+            elif i == 1:
+                self.start_location = "Viewax's Edifice"
+            elif i == 2:
+                self.start_location = "TV Island"
+            elif i == 3:
+                self.start_location = "Shield Facility"
 
     def generate_basic(self):
         # create location for beating the game and place Victory event there
@@ -131,6 +149,12 @@ class Hylics2World(World):
             for i, data in Items.gesture_item_table.items():
                 pool.append(self.add_item(data["name"], data["classification"], i))
 
+        # add '10 Bones' items if medallion shuffle is enabled
+        if self.world.medallion_shuffle[self.player]:
+            for i, data in Items.medallion_item_table.items():
+                for j in range(data["count"]):
+                    pool.append(self.add_item(data["name"], data["classification"], i))
+
         # add to world's pool
         self.world.itempool += pool
 
@@ -138,8 +162,9 @@ class Hylics2World(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
             "party_shuffle": self.world.party_shuffle[self.player].value,
-            "gesture_shuffle": self.world.gesture_shuffle[self.player].value,
-            "extra_items_in_logic": self.world.extra_items_in_logic[self.player].value,
+            "medallion_shuffle": self.world.medallion_shuffle[self.player].value,
+            "random_start" : self.world.random_start[self.player].value,
+            "start_location" : self.start_location,
             "death_link": self.world.death_link[self.player].value
         }
         return slot_data
@@ -178,9 +203,19 @@ class Hylics2World(World):
                         # create entrance and connect it to parent and destination regions
                         ent = Entrance(self.player, k, reg)
                         reg.exits.append(ent)
-                        for name, num in Exits.exit_lookup_table.items():
-                            if k == name:
-                                ent.connect(region_table[num])
+                        if k == "New Game" and self.world.random_start[self.player]:
+                            if self.start_location == "Waynehouse":
+                                ent.connect(region_table[2])
+                            elif self.start_location == "Viewax's Edifice":
+                                ent.connect(region_table[6])
+                            elif self.start_location == "TV Island":
+                                ent.connect(region_table[9])
+                            elif self.start_location == "Shield Facility":
+                                ent.connect(region_table[11])
+                        else:
+                            for name, num in Exits.exit_lookup_table.items():
+                                if k == name:
+                                    ent.connect(region_table[num])
 
         # add regular locations
         for i, data in Locations.location_table.items():
@@ -193,6 +228,12 @@ class Hylics2World(World):
         # add party member locations if option is enabled
         if self.world.party_shuffle[self.player]:
             for i, data in Locations.party_location_table.items():
+                region_table[data["region"]].locations\
+                    .append(Hylics2Location(self.player, data["name"], i, region_table[data["region"]]))
+
+        # add medallion locations if option is enabled
+        if self.world.medallion_shuffle[self.player]:
+            for i, data in Locations.medallion_location_table.items():
                 region_table[data["region"]].locations\
                     .append(Hylics2Location(self.player, data["name"], i, region_table[data["region"]]))
 

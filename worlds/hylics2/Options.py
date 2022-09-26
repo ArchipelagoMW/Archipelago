@@ -1,20 +1,26 @@
-import typing
-from Options import Choice, Option, Toggle, DefaultOnToggle, Range, OptionList, DeathLink
+from Options import Choice, Toggle, DefaultOnToggle, DeathLink
 
 class PartyShuffle(Toggle):
-    """Choose whether or not to shuffle party members.
-    Note that enabling this can drastically increase both the difficulty and length of a run."""
+    """Shuffles party members into the pool.
+    Note that enabling this can potentially increase both the difficulty and length of a run."""
     display_name = "Shuffle Party Members"
 
 class GestureShuffle(Choice):
     """Choose where gestures will appear in the item pool."""
     display_name = "Shuffle Gestures"
-    option_on = 0
+    option_anywhere = 0
     option_tvs_only = 1
-    option_off = 2
-    alias_true = 0
-    alias_false = 2
+    option_default_locations = 2
     default = 0
+
+class MedallionShuffle(Toggle):
+    """Shuffles red medallions into the pool."""
+    display_name = "Shuffle Red Medallions"
+
+class RandomStart(Toggle):
+    """Start the randomizer in 1 of 4 positions.
+    (Waynehouse, Viewax's Edifice, TV Island, Shield Facility)"""
+    display_name = "Randomize Start Location"
 
 class ExtraLogic(DefaultOnToggle):
     """Include some extra items in logic (CHARGE UP, 1x PAPER CUP) to prevent the game from becoming too difficult."""
@@ -28,6 +34,8 @@ class Hylics2DeathLink(DeathLink):
 hylics2_options = {
     "party_shuffle": PartyShuffle,
     "gesture_shuffle" : GestureShuffle,
+    "medallion_shuffle" : MedallionShuffle,
+    "random_start" : RandomStart,
     "extra_items_in_logic": ExtraLogic,
     "death_link": Hylics2DeathLink
 }

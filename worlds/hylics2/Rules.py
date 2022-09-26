@@ -1,4 +1,4 @@
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.generic.Rules import add_rule
 from ..AutoWorld import LogicMixin
 
 
@@ -92,190 +92,168 @@ def set_rules(hylics2world):
     world = hylics2world.world
     player = hylics2world.player
 
-    # entrances
-    for i in world.get_region("Viewax", player).entrances:
-        set_rule(i, lambda state: state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player))
-    for i in world.get_region("TV Island", player).entrances:
-        set_rule(i, lambda state: state._hylics2_has_airship(player))
-    for i in world.get_region("Shield Facility", player).entrances:
-        set_rule(i, lambda state: state._hylics2_has_airship(player))
-    for i in world.get_region("Airship", player).entrances:
-        set_rule(i, lambda state: state._hylics2_has_airship(player))
-    for i in world.get_region("Juice Ranch", player).entrances:
-        set_rule(i, lambda state: state._hylics2_has_airship(player))
-    for i in world.get_region("Arcade Island", player).entrances:
-        set_rule(i, lambda state: state._hylics2_has_airship(player) and state._hylics2_can_air_dash(player))
-    for i in world.get_region("Worm Pod", player).entrances:
-        set_rule(i, lambda state: state._hylics2_enter_wormpod(player))
-    for i in world.get_region("Foglast", player).entrances:
-        set_rule(i, lambda state: state._hylics2_enter_foglast(player))
-    for i in world.get_region("Sage Labyrinth", player).entrances:
-        set_rule(i, lambda state: state._hylics2_has_skull_bomb(player))
-    for i in world.get_region("Sage Airship", player).entrances:
-        set_rule(i, lambda state: state._hylics2_enter_sageship(player))
-    for i in world.get_region("Hylemxylem", player).entrances:
-        set_rule(i, lambda state: state._hylics2_enter_hylemxylem(player))
-
     # Afterlife
-    set_rule(world.get_location("Afterlife: TV", player), 
+    add_rule(world.get_location("Afterlife: TV", player), 
         lambda state: state._hylics2_has_cave_key(player))
 
     # New Muldul
-    set_rule(world.get_location("New Muldul: Underground Chest", player), 
+    add_rule(world.get_location("New Muldul: Underground Chest", player), 
         lambda state: state._hylics2_can_air_dash(player))
-    set_rule(world.get_location("New Muldul: Upper House Chest 1", player), 
+    add_rule(world.get_location("New Muldul: TV", player),
+        lambda state: state._hylics2_has_house_key(player))
+    add_rule(world.get_location("New Muldul: Upper House Chest 1", player), 
         lambda state: state._hylics2_has_upper_house_key(player))
-    set_rule(world.get_location("New Muldul: Upper House Chest 2", player), 
+    add_rule(world.get_location("New Muldul: Upper House Chest 2", player), 
         lambda state: state._hylics2_has_upper_house_key(player))
 
     # New Muldul Vault
-    set_rule(world.get_location("New Muldul: Rescued Blerol 1", player), 
+    add_rule(world.get_location("New Muldul: Rescued Blerol 1", player), 
         lambda state: (state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player)) and\
             ((state._hylics2_has_jail_key(player) and state._hylics2_has_paddle(player)) or\
                 (state._hylics2_has_bridge_key(player) and state._hylics2_has_worm_room_key(player))))
-    set_rule(world.get_location("New Muldul: Rescued Blerol 2", player), 
+    add_rule(world.get_location("New Muldul: Rescued Blerol 2", player), 
         lambda state: (state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player)) and\
             ((state._hylics2_has_jail_key(player) and state._hylics2_has_paddle(player)) or\
                 (state._hylics2_has_bridge_key(player) and state._hylics2_has_worm_room_key(player))))
-    set_rule(world.get_location("New Muldul: Vault Left Chest", player), 
+    add_rule(world.get_location("New Muldul: Vault Left Chest", player), 
         lambda state: state._hylics2_enter_foglast(player) and state._hylics2_has_bridge_key(player))
-    set_rule(world.get_location("New Muldul: Vault Right Chest", player), 
+    add_rule(world.get_location("New Muldul: Vault Right Chest", player), 
         lambda state: state._hylics2_enter_foglast(player) and state._hylics2_has_bridge_key(player))
-    set_rule(world.get_location("New Muldul: Vault Bomb", player), 
+    add_rule(world.get_location("New Muldul: Vault Bomb", player), 
         lambda state: state._hylics2_enter_foglast(player) and state._hylics2_has_bridge_key(player))
 
     # Viewax's Edifice
-    set_rule(world.get_location("Viewax's Edifice: Canopic Jar", player), 
+    add_rule(world.get_location("Viewax's Edifice: Canopic Jar", player), 
         lambda state: state._hylics2_has_paddle(player))
-    set_rule(world.get_location("Viewax's Edifice: Cave Sarcophagus", player), 
+    add_rule(world.get_location("Viewax's Edifice: Cave Sarcophagus", player), 
         lambda state: state._hylics2_has_paddle(player))
-    set_rule(world.get_location("Viewax's Edifice: Shielded Key", player), 
+    add_rule(world.get_location("Viewax's Edifice: Shielded Key", player), 
         lambda state: state._hylics2_has_paddle(player))
-    set_rule(world.get_location("Viewax's Edifice: Shielded Key", player), 
+    add_rule(world.get_location("Viewax's Edifice: Shielded Key", player), 
         lambda state: state._hylics2_has_paddle(player))
-    set_rule(world.get_location("Viewax's Edifice: Tower Pot", player), 
+    add_rule(world.get_location("Viewax's Edifice: Tower Pot", player), 
         lambda state: state._hylics2_has_paddle(player))
-    set_rule(world.get_location("Viewax's Edifice: Tower Jar", player), 
+    add_rule(world.get_location("Viewax's Edifice: Tower Jar", player), 
         lambda state: state._hylics2_has_paddle(player))
-    set_rule(world.get_location("Viewax's Edifice: Tower Chest", player), 
+    add_rule(world.get_location("Viewax's Edifice: Tower Chest", player), 
         lambda state: state._hylics2_has_paddle(player) and state._hylics2_has_tower_key(player))
-    set_rule(world.get_location("Viewax's Edifice: Viewax Pot", player), 
+    add_rule(world.get_location("Viewax's Edifice: Viewax Pot", player), 
         lambda state: state._hylics2_has_paddle(player))
-    set_rule(world.get_location("Viewax's Edifice: Defeat Viewax", player), 
+    add_rule(world.get_location("Viewax's Edifice: Defeat Viewax", player), 
         lambda state: state._hylics2_has_paddle(player))
-    set_rule(world.get_location("Viewax's Edifice: TV", player), 
+    add_rule(world.get_location("Viewax's Edifice: TV", player), 
         lambda state: state._hylics2_has_paddle(player) and state._hylics2_has_jail_key(player))
-    set_rule(world.get_location("Viewax's Edifice: Sage Fridge", player), 
+    add_rule(world.get_location("Viewax's Edifice: Sage Fridge", player), 
         lambda state: state._hylics2_can_air_dash(player))
-    set_rule(world.get_location("Viewax's Edifice: Sage Item 1", player), 
+    add_rule(world.get_location("Viewax's Edifice: Sage Item 1", player), 
         lambda state: state._hylics2_can_air_dash(player))
-    set_rule(world.get_location("Viewax's Edifice: Sage Item 2", player), 
+    add_rule(world.get_location("Viewax's Edifice: Sage Item 2", player), 
         lambda state: state._hylics2_can_air_dash(player))
 
     # Arcade 1
-    set_rule(world.get_location("Arcade 1: Key", player), 
+    add_rule(world.get_location("Arcade 1: Key", player), 
         lambda state: state._hylics2_has_paddle(player))
-    set_rule(world.get_location("Arcade 1: Coin Dash", player), 
+    add_rule(world.get_location("Arcade 1: Coin Dash", player), 
         lambda state: state._hylics2_has_paddle(player))
-    set_rule(world.get_location("Arcade 1: Burrito Alcove 1", player), 
+    add_rule(world.get_location("Arcade 1: Burrito Alcove 1", player), 
         lambda state: state._hylics2_has_paddle(player))
-    set_rule(world.get_location("Arcade 1: Burrito Alcove 2", player), 
+    add_rule(world.get_location("Arcade 1: Burrito Alcove 2", player), 
         lambda state: state._hylics2_has_paddle(player))
-    set_rule(world.get_location("Arcade 1: Behind Spikes Banana", player), 
+    add_rule(world.get_location("Arcade 1: Behind Spikes Banana", player), 
         lambda state: state._hylics2_has_paddle(player))
-    set_rule(world.get_location("Arcade 1: Pyramid Banana", player), 
+    add_rule(world.get_location("Arcade 1: Pyramid Banana", player), 
         lambda state: state._hylics2_has_paddle(player))
-    set_rule(world.get_location("Arcade 1: Moving Platforms Muscle Applique", player), 
+    add_rule(world.get_location("Arcade 1: Moving Platforms Muscle Applique", player), 
         lambda state: state._hylics2_has_paddle(player))
-    set_rule(world.get_location("Arcade 1: Bed Banana", player), 
+    add_rule(world.get_location("Arcade 1: Bed Banana", player), 
         lambda state: state._hylics2_has_paddle(player))
 
     # Airship
-    set_rule(world.get_location("Airship: Talk to Somsnosa", player), 
+    add_rule(world.get_location("Airship: Talk to Somsnosa", player), 
         lambda state: state._hylics2_has_worm_room_key(player))
 
     # Foglast
-    set_rule(world.get_location("Foglast: Underground Sarcophagus", player), 
+    add_rule(world.get_location("Foglast: Underground Sarcophagus", player), 
         lambda state: state._hylics2_can_air_dash(player))
-    set_rule(world.get_location("Foglast: Shielded Key", player), 
+    add_rule(world.get_location("Foglast: Shielded Key", player), 
         lambda state: state._hylics2_can_air_dash(player))
-    set_rule(world.get_location("Foglast: TV", player), 
+    add_rule(world.get_location("Foglast: TV", player), 
         lambda state: state._hylics2_can_air_dash(player) and state._hylics2_has_clicker(player))
-    set_rule(world.get_location("Foglast: Buy Clicker", player), 
+    add_rule(world.get_location("Foglast: Buy Clicker", player), 
         lambda state: state._hylics2_can_air_dash(player))
-    set_rule(world.get_location("Foglast: Shielded Chest", player), 
+    add_rule(world.get_location("Foglast: Shielded Chest", player), 
         lambda state: state._hylics2_can_air_dash(player))
-    set_rule(world.get_location("Foglast: Cave Fridge", player), 
+    add_rule(world.get_location("Foglast: Cave Fridge", player), 
         lambda state: state._hylics2_can_air_dash(player))
-    set_rule(world.get_location("Foglast: Roof Sarcophagus", player), 
+    add_rule(world.get_location("Foglast: Roof Sarcophagus", player), 
         lambda state: state._hylics2_can_air_dash(player) and state._hylics2_has_bridge_key(player))
-    set_rule(world.get_location("Foglast: Under Lair Sarcophagus 1", player), 
+    add_rule(world.get_location("Foglast: Under Lair Sarcophagus 1", player), 
         lambda state: state._hylics2_can_air_dash(player) and state._hylics2_has_bridge_key(player))
-    set_rule(world.get_location("Foglast: Under Lair Sarcophagus 2", player), 
+    add_rule(world.get_location("Foglast: Under Lair Sarcophagus 2", player), 
         lambda state: state._hylics2_can_air_dash(player) and state._hylics2_has_bridge_key(player))
-    set_rule(world.get_location("Foglast: Under Lair Sarcophagus 3", player), 
+    add_rule(world.get_location("Foglast: Under Lair Sarcophagus 3", player), 
         lambda state: state._hylics2_can_air_dash(player) and state._hylics2_has_bridge_key(player))
-    set_rule(world.get_location("Foglast: Sage Sarcophagus", player), 
+    add_rule(world.get_location("Foglast: Sage Sarcophagus", player), 
         lambda state: state._hylics2_can_air_dash(player) and state._hylics2_has_bridge_key(player))
-    set_rule(world.get_location("Foglast: Sage Item 1", player), 
+    add_rule(world.get_location("Foglast: Sage Item 1", player), 
         lambda state: state._hylics2_can_air_dash(player) and state._hylics2_has_bridge_key(player))
-    set_rule(world.get_location("Foglast: Sage Item 2", player), 
+    add_rule(world.get_location("Foglast: Sage Item 2", player), 
         lambda state: state._hylics2_can_air_dash(player) and state._hylics2_has_bridge_key(player))
 
     # Drill Castle
-    set_rule(world.get_location("Drill Castle: Island Banana", player), 
+    add_rule(world.get_location("Drill Castle: Island Banana", player), 
         lambda state: state._hylics2_can_air_dash(player))
-    set_rule(world.get_location("Drill Castle: Island Pot", player), 
+    add_rule(world.get_location("Drill Castle: Island Pot", player), 
         lambda state: state._hylics2_can_air_dash(player))
-    set_rule(world.get_location("Drill Castle: Cave Sarcophagus", player), 
+    add_rule(world.get_location("Drill Castle: Cave Sarcophagus", player), 
         lambda state: state._hylics2_can_air_dash(player))
-    set_rule(world.get_location("Drill Castle: TV", player), 
+    add_rule(world.get_location("Drill Castle: TV", player), 
         lambda state: state._hylics2_can_air_dash(player))
 
     # Sage Labyrinth
-    set_rule(world.get_location("Sage Labyrinth: Sage Item 1", player), 
+    add_rule(world.get_location("Sage Labyrinth: Sage Item 1", player), 
         lambda state: state._hylics2_has_deep_key(player))
-    set_rule(world.get_location("Sage Labyrinth: Sage Item 2", player), 
+    add_rule(world.get_location("Sage Labyrinth: Sage Item 2", player), 
         lambda state: state._hylics2_has_deep_key(player))
-    set_rule(world.get_location("Sage Labyrinth: Sage Left Arm", player), 
+    add_rule(world.get_location("Sage Labyrinth: Sage Left Arm", player), 
         lambda state: state._hylics2_has_deep_key(player))
-    set_rule(world.get_location("Sage Labyrinth: Sage Right Arm", player), 
+    add_rule(world.get_location("Sage Labyrinth: Sage Right Arm", player), 
         lambda state: state._hylics2_has_deep_key(player))
-    set_rule(world.get_location("Sage Labyrinth: Sage Left Leg", player), 
+    add_rule(world.get_location("Sage Labyrinth: Sage Left Leg", player), 
         lambda state: state._hylics2_has_deep_key(player))
-    set_rule(world.get_location("Sage Labyrinth: Sage Right Leg", player), 
+    add_rule(world.get_location("Sage Labyrinth: Sage Right Leg", player), 
         lambda state: state._hylics2_has_deep_key(player))
 
     # Sage Airship
-    set_rule(world.get_location("Sage Airship: TV", player), 
+    add_rule(world.get_location("Sage Airship: TV", player), 
         lambda state: state._hylics2_has_tokens(player))
 
     # Hylemxylem
-    set_rule(world.get_location("Hylemxylem: Upper Chamber Banana", player), 
+    add_rule(world.get_location("Hylemxylem: Upper Chamber Banana", player), 
         lambda state: state._hylics2_has_upper_chamber_key(player))
-    set_rule(world.get_location("Hylemxylem: Across Upper Reservoir Chest", player), 
+    add_rule(world.get_location("Hylemxylem: Across Upper Reservoir Chest", player), 
         lambda state: state._hylics2_has_upper_chamber_key(player))
-    set_rule(world.get_location("Hylemxylem: Drained Lower Reservoir Chest", player), 
+    add_rule(world.get_location("Hylemxylem: Drained Lower Reservoir Chest", player), 
         lambda state: state._hylics2_has_upper_chamber_key(player))
-    set_rule(world.get_location("Hylemxylem: Drained Lower Reservoir Burrito 1", player), 
+    add_rule(world.get_location("Hylemxylem: Drained Lower Reservoir Burrito 1", player), 
         lambda state: state._hylics2_has_upper_chamber_key(player))
-    set_rule(world.get_location("Hylemxylem: Drained Lower Reservoir Burrito 2", player), 
+    add_rule(world.get_location("Hylemxylem: Drained Lower Reservoir Burrito 2", player), 
         lambda state: state._hylics2_has_upper_chamber_key(player))
-    set_rule(world.get_location("Hylemxylem: Lower Reservoir Hole Pot 1", player), 
+    add_rule(world.get_location("Hylemxylem: Lower Reservoir Hole Pot 1", player), 
         lambda state: state._hylics2_has_upper_chamber_key(player))
-    set_rule(world.get_location("Hylemxylem: Lower Reservoir Hole Pot 2", player), 
+    add_rule(world.get_location("Hylemxylem: Lower Reservoir Hole Pot 2", player), 
         lambda state: state._hylics2_has_upper_chamber_key(player))
-    set_rule(world.get_location("Hylemxylem: Lower Reservoir Hole Pot 3", player), 
+    add_rule(world.get_location("Hylemxylem: Lower Reservoir Hole Pot 3", player), 
         lambda state: state._hylics2_has_upper_chamber_key(player))
-    set_rule(world.get_location("Hylemxylem: Lower Reservoir Hole Sarcophagus", player), 
+    add_rule(world.get_location("Hylemxylem: Lower Reservoir Hole Sarcophagus", player), 
         lambda state: state._hylics2_has_upper_chamber_key(player))
-    set_rule(world.get_location("Hylemxylem: Drained Upper Reservoir Burrito 1", player), 
+    add_rule(world.get_location("Hylemxylem: Drained Upper Reservoir Burrito 1", player), 
         lambda state: state._hylics2_has_upper_chamber_key(player))
-    set_rule(world.get_location("Hylemxylem: Drained Upper Reservoir Burrito 2", player), 
+    add_rule(world.get_location("Hylemxylem: Drained Upper Reservoir Burrito 2", player), 
         lambda state: state._hylics2_has_upper_chamber_key(player))
-    set_rule(world.get_location("Hylemxylem: Drained Upper Reservoir Burrito 3", player), 
+    add_rule(world.get_location("Hylemxylem: Drained Upper Reservoir Burrito 3", player), 
         lambda state: state._hylics2_has_upper_chamber_key(player))
-    set_rule(world.get_location("Hylemxylem: Upper Reservoir Hole Key", player), 
+    add_rule(world.get_location("Hylemxylem: Upper Reservoir Hole Key", player), 
         lambda state: state._hylics2_has_upper_chamber_key(player))
 
     # extra rules if Extra Items in Logic is enabled
@@ -323,3 +301,120 @@ def set_rules(hylics2world):
             lambda state: state._hylics2_has_3_members(player))
         add_rule(world.get_location("Sage Labyrinth: Motor Hunter Sarcophagus", player), 
             lambda state: state._hylics2_has_3_members(player))
+    
+    # extra rules if Shuffle Red Medallions is enabled
+    if world.medallion_shuffle[player]:
+        add_rule(world.get_location("New Muldul: Upper House Medallion", player),
+            lambda state: state._hylics2_has_upper_house_key(player))
+        add_rule(world.get_location("New Muldul: Vault Rear Left Medallion", player), 
+            lambda state: state._hylics2_enter_foglast(player) and state._hylics2_has_bridge_key(player))
+        add_rule(world.get_location("New Muldul: Vault Rear Right Medallion", player), 
+            lambda state: state._hylics2_enter_foglast(player) and state._hylics2_has_bridge_key(player))
+        add_rule(world.get_location("New Muldul: Vault Center Medallion", player), 
+            lambda state: state._hylics2_enter_foglast(player) and state._hylics2_has_bridge_key(player))
+        add_rule(world.get_location("New Muldul: Vault Front Left Medallion", player), 
+            lambda state: state._hylics2_enter_foglast(player) and state._hylics2_has_bridge_key(player))
+        add_rule(world.get_location("New Muldul: Vault Front Right Medallion", player), 
+            lambda state: state._hylics2_enter_foglast(player) and state._hylics2_has_bridge_key(player))
+        add_rule(world.get_location("Viewax's Edifice: Fort Wall Medallion", player), 
+            lambda state: state._hylics2_has_paddle(player))
+        add_rule(world.get_location("Viewax's Edifice: Jar Medallion", player), 
+            lambda state: state._hylics2_has_paddle(player))
+        add_rule(world.get_location("Viewax's Edifice: Sage Chair Medallion", player), 
+            lambda state: state._hylics2_can_air_dash(player))
+        add_rule(world.get_location("Arcade 1: Lonely Medallion", player), 
+            lambda state: state._hylics2_has_paddle(player))
+        add_rule(world.get_location("Arcade 1: Alcove Medallion", player), 
+            lambda state: state._hylics2_has_paddle(player))
+        add_rule(world.get_location("Foglast: Under Lair Medallion", player), 
+            lambda state: state._hylics2_has_bridge_key(player))
+        add_rule(world.get_location("Foglast: Mid-Air Medallion", player), 
+            lambda state: state._hylics2_can_air_dash(player))
+        add_rule(world.get_location("Foglast: Top of Tower Medallion", player), 
+            lambda state: state._hylics2_has_paddle(player))
+        add_rule(world.get_location("Hylemxylem: Lower Reservoir Hole Medallion", player), 
+            lambda state: state._hylics2_has_upper_chamber_key(player))
+
+    # entrances
+    for i in world.get_region("Airship", player).entrances:
+        add_rule(i, lambda state: state._hylics2_has_airship(player))
+    for i in world.get_region("Arcade Island", player).entrances:
+        add_rule(i, lambda state: state._hylics2_has_airship(player) and state._hylics2_can_air_dash(player))
+    for i in world.get_region("Worm Pod", player).entrances:
+        add_rule(i, lambda state: state._hylics2_enter_wormpod(player))
+    for i in world.get_region("Foglast", player).entrances:
+        add_rule(i, lambda state: state._hylics2_enter_foglast(player))
+    for i in world.get_region("Sage Labyrinth", player).entrances:
+        add_rule(i, lambda state: state._hylics2_has_skull_bomb(player))
+    for i in world.get_region("Sage Airship", player).entrances:
+        add_rule(i, lambda state: state._hylics2_enter_sageship(player))
+    for i in world.get_region("Hylemxylem", player).entrances:
+        add_rule(i, lambda state: state._hylics2_enter_hylemxylem(player))
+
+    # random start logic (default)
+    if ((not world.random_start[player]) or \
+        (world.random_start[player] and hylics2world.start_location == "Waynehouse")):
+        # entrances
+        for i in world.get_region("Viewax", player).entrances:
+            add_rule(i, lambda state: state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player))
+        for i in world.get_region("TV Island", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("Shield Facility", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("Juice Ranch", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+    
+    # random start logic (Viewax's Edifice)
+    elif (world.random_start[player] and hylics2world.start_location == "Viewax's Edifice"):
+        for i in world.get_region("Waynehouse", player).entrances:
+            add_rule(i, lambda state: state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player))
+        for i in world.get_region("New Muldul", player).entrances:
+            add_rule(i, lambda state: state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player))
+        for i in world.get_region("New Muldul Vault", player).entrances:
+            add_rule(i, lambda state: state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player))
+        for i in world.get_region("Drill Castle", player).entrances:
+            add_rule(i, lambda state: state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player))
+        for i in world.get_region("TV Island", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("Shield Facility", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("Juice Ranch", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("Sage Labyrinth", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+
+    # random start logic (TV Island)
+    elif (world.random_start[player] and hylics2world.start_location == "TV Island"):
+        for i in world.get_region("Waynehouse", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("New Muldul", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("New Muldul Vault", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("Drill Castle", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("Viewax", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("Shield Facility", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("Juice Ranch", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("Sage Labyrinth", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+
+    # random start logic (Shield Facility)
+    elif (world.random_start[player] and hylics2world.start_location == "Shield Facility"):
+        for i in world.get_region("Waynehouse", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("New Muldul", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("New Muldul Vault", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("Drill Castle", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("Viewax", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("TV Island", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))
+        for i in world.get_region("Sage Labyrinth", player).entrances:
+            add_rule(i, lambda state: state._hylics2_has_airship(player))

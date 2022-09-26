@@ -19,6 +19,7 @@
 ## Connecting
 
 To connect to an Archipelago server, open the in-game console (default key: `/`) and use the command `/connect [address:port] [name] [password]`. The port and password are both optional - if no port is provided then the default port of 38281 is used.
+**Make sure that you have connected to a server at least once before attempting to check any locations.**
 
 ## Other Commands
 
