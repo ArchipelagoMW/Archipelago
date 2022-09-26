@@ -2331,7 +2331,7 @@ level_logic = {
     "Carnival 2-3": (
         (  # 1-star
             {  # Exclusive
-
+                "Remote Control Batteries"
             },
             {  # Additive
 
@@ -2461,7 +2461,7 @@ level_logic = {
     "Carnival 3-4": (
         (  # 1-star
             {  # Exclusive
-
+                "Remote Control Batteries"
             },
             {  # Additive
 
