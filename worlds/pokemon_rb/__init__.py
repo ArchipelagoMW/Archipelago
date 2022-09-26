@@ -2,9 +2,9 @@ from typing import TextIO
 import os
 import logging
 
-from BaseClasses import Item, MultiWorld, Tutorial
+from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from Fill import fill_restrictive, FillError
-from .items import item_table, filler_items
+from .items import item_table
 from .locations import get_locations, PokemonRBLocation
 from ..AutoWorld import World, WebWorld
 from .regions import create_regions
@@ -211,6 +211,11 @@ class PokemonRedBlueWorld(World):
             spoiler_handle.write("\n\nType matchups:\n\n")
             for matchup in self.type_chart:
                 spoiler_handle.write(f"{matchup[0]} deals {matchup[2] * 10}% damage to {matchup[1]}\n")
+
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choice([item for item in item_table if item_table[item].classification in
+                                         [ItemClassification.filler, ItemClassification.trap]])
+
 
 
 class PokemonRBItem(Item):

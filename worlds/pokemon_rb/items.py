@@ -1,6 +1,5 @@
 from BaseClasses import ItemClassification
 from .poke_data import pokemon_data
-filler_items = []
 
 class ItemData:
     def __init__(self, id, classification):
@@ -16,7 +15,7 @@ item_table = {
     "Bicycle": ItemData(6, ItemClassification.progression),
     # "Flippers": ItemData(7, ItemClassification.progression),
     "Safari Ball": ItemData(8, ItemClassification.filler),
-    "Pokedex": ItemData(9, ItemClassification.filler),
+    #"Pokedex": ItemData(9, ItemClassification.filler),
     "Moon Stone": ItemData(10, ItemClassification.useful),
     "Antidote": ItemData(11, ItemClassification.filler),
     "Burn Heal": ItemData(12, ItemClassification.filler),
@@ -65,7 +64,7 @@ item_table = {
     "Super Repel": ItemData(56, ItemClassification.filler),
     "Max Repel": ItemData(57, ItemClassification.filler),
     "Dire Hit": ItemData(58, ItemClassification.filler),
-    "Coin": ItemData(59, ItemClassification.filler),
+    #"Coin": ItemData(59, ItemClassification.filler),
     "Fresh Water": ItemData(60, ItemClassification.filler),
     "Soda Pop": ItemData(61, ItemClassification.filler),
     "Lemonade": ItemData(62, ItemClassification.filler),
