@@ -27,7 +27,6 @@ dist
 README.html
 .vs/
 EnemizerCLI/
-/SNI
 /Players/
 /SNI/
 /options.yaml
@@ -171,4 +170,3 @@ minecraft_versions.json
 .LSOverride
 Thumbs.db
 [Dd]esktop.ini
-host.yaml
