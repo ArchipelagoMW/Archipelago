@@ -30,9 +30,10 @@ class PokemonWebWorld(WebWorld):
 
 
 class PokemonRedBlueWorld(World):
-    """Pokémon Red and Pokémon Blue introduce legions of gamers to the world of Kanto, where the likes of Charmander,
-    Pikachu, and Mewtwo were first discovered. Through exciting exploration, battles, and trades, Trainers are able to
-    access 150 Pokémon."""
+    """Pokémon Red and Pokémon Blue are the original monster-collecting turn-based RPGs.  Explore the Kanto region with
+    your Pokémon, catch more than 150 unique creatures, earn badges from the region's Gym Leaders, and challenge the
+    Elite Four to become the champion!"""
+    # -MuffinJets#4559
     game = "Pokemon Red - Blue"
     option_definitions = pokemon_rb_options
     remote_items = False
