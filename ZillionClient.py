@@ -10,13 +10,12 @@ from CommonClient import CommonContext, server_loop, gui_enabled, \
 from zilliandomizer.zri.memory import Memory
 from zilliandomizer.zri import events
 from zilliandomizer.utils.loc_name_maps import id_to_loc
-from zilliandomizer.logic_components.items import id_to_item as id_to_zz_item
+from zilliandomizer.options import Chars
 from zilliandomizer.patch import RescueInfo
 
-from worlds.zillion.id_maps import item_pretty_id_to_useful_id
+from worlds.zillion.id_maps import make_id_to_others
 from worlds.zillion.config import base_id
 
-# TODO: how to get rescue names (and other item names)
 # TODO: test multiple yamls specifying zillion with no other games
 # (reported causes archipelago to say that it can't beat the game)
 # TODO: make sure close button works on ZillionClient window
@@ -33,6 +32,8 @@ class ZillionContext(CommonContext):
     command_processor: Type[ClientCommandProcessor] = ZillionCommandProcessor
     to_game: "asyncio.Queue[events.EventToGame]"
     items_handling = 1  # receive items from other players
+
+    start_char: Chars = "JJ"
     rescues: Dict[int, RescueInfo] = {}
     loc_mem_to_id: Dict[int, int] = {}
     got_slot_data: asyncio.Event
@@ -83,20 +84,31 @@ class ZillionContext(CommonContext):
                 return
             slot_data = args["slot_data"]
 
+            if "start_char" not in slot_data:
+                logger.warn("invalid Zillion `Connected` packet, `slot_data` missing `start_char`")
+                return
+            self.start_char = slot_data['start_char']
+            if self.start_char not in {"Apple", "Champ", "JJ"}:
+                logger.warn("invalid Zillion `Connected` packet, "
+                            f"`slot_data` `start_char` has invalid value: {self.start_char}")
+
             if "rescues" not in slot_data:
-                logger.warn("invalid Zillion `slot_data` in `Connected` packet")
+                logger.warn("invalid Zillion `Connected` packet, `slot_data` missing `rescues`")
                 return
             rescues = slot_data["rescues"]
             self.rescues = {}
             for rescue_id, json_info in rescues.items():
                 assert rescue_id in ("0", "1"), f"invalid rescue_id in Zillion slot_data: {rescue_id}"
+                # TODO: just take start_char out of the RescueInfo so there's no opportunity for a mismatch?
+                assert json_info["start_char"] == self.start_char, \
+                    f'mismatch in Zillion slot data: {json_info["start_char"]} {self.start_char}'
                 ri = RescueInfo(json_info["start_char"],
                                 json_info["room_code"],
                                 json_info["mask"])
                 self.rescues[0 if rescue_id == "0" else 1] = ri
 
             if "loc_mem_to_id" not in slot_data:
-                logger.warn("invalid Zillion `slot_data` in `Connected` packet")
+                logger.warn("invalid Zillion `Connected` packet, `slot_data` missing `loc_mem_to_id`")
                 return
             loc_mem_to_id = slot_data["loc_mem_to_id"]
             self.loc_mem_to_id = {}
@@ -120,8 +132,11 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
         help_message_shown = False
         logger.info("looking for game...")
         while not found_name:
+            # logger.info("looking for name")
             name = await memory.check_for_player_name()
+            # logger.info(f"found name {name}")
             if len(name):
+                # logger.info("len(name)")
                 ctx.auth = name.decode()
                 found_name = True
                 logger.info("connected to game")
@@ -134,11 +149,14 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
                 if not help_message_shown:
                     logger.info('In RetroArch, make sure "Settings > Network > Network Commands" is on.')
                     help_message_shown = True
+                # logger.info("before sleep")
                 await asyncio.sleep(0.3)
+                # logger.info("after sleep")
 
         logger.info("waiting for server login...")
         await ctx.got_slot_data.wait()
         memory.set_generation_info(ctx.rescues, ctx.loc_mem_to_id)
+        ap_id_to_name, ap_id_to_zz_id, _ap_id_to_zz_item = make_id_to_others(ctx.start_char)
 
         next_item = 0
         while not ctx.exit_event.is_set():
@@ -167,11 +185,11 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
                 else:
                     logger.warning(f"WARNING: unhandled event from game {event_from_game}")
             if len(ctx.items_received) > next_item:
-                zz_item_ids = [item_pretty_id_to_useful_id[item.item - base_id] for item in ctx.items_received]
+                zz_item_ids = [ap_id_to_zz_id[item.item] for item in ctx.items_received]
                 for index in range(next_item, len(ctx.items_received)):
-                    zz_item = id_to_zz_item[zz_item_ids[index]]
-                    # TODO: use zz_item.name with info on rescue changes
-                    logger.info(f'received item {zz_item.debug_name}')
+                    ap_id = ctx.items_received[index].item
+                    # TODO: what do I want to log here? do I need anything? is the logging from CommonClient enough?
+                    logger.info(f'received item {ap_id_to_name[ap_id]}')
                 ctx.to_game.put_nowait(
                     events.ItemEventToGame(zz_item_ids)
                 )

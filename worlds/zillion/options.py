@@ -99,19 +99,23 @@ class ZillionStartChar(Choice):
 
 class ZillionItemCounts(ItemDict):
     """ how many of each item is in the game """
-    # generic Option sets default = 0
-    # TODO: remove that, making sure it doesn't break any other games
-    # (I don't know if any of the other games inherit from generic Option and then don't set a default)
-    default = {  # type: ignore
-        "card": 50,
-        "bread": 35,
-        "opa": 26,
-        "gun": 10,
-        "floppy": 7,
-        "scope": 4,
-        "red": 2
+    default = {
+        "ID Card": 50,
+        "Bread": 35,
+        "Opa-Opa": 26,
+        "Zillion": 10,
+        "Floppy Disk": 7,
+        "Scope": 4,
+        "Red ID Card": 2
     }
     display_name = "item counts"
+
+    def __init__(self, value: Dict[str, int]) -> None:
+        super().__init__(value)
+        # need all items, so fill in missing items with default
+        for name, number in ZillionItemCounts.default.items():
+            if name not in self.value:
+                self.value[name] = number
 
 
 class ZillionSkill(Range):
@@ -137,14 +141,14 @@ zillion_options: Dict[str, AssembleOptions] = {
 
 def convert_item_counts(ic: ZillionItemCounts) -> ZzItemCounts:
     tr: ZzItemCounts = {
-        ID.card: ic.value["card"],
-        ID.red: ic.value["red"],
-        ID.floppy: ic.value["floppy"],
-        ID.bread: ic.value["bread"],
-        ID.gun: ic.value["gun"],
-        ID.opa: ic.value["opa"],
-        ID.scope: ic.value["scope"],
-        ID.empty: ic.value["empty"],
+        ID.card: ic.value["ID Card"],
+        ID.red: ic.value["Red ID Card"],
+        ID.floppy: ic.value["Floppy Disk"],
+        ID.bread: ic.value["Bread"],
+        ID.gun: ic.value["Zillion"],
+        ID.opa: ic.value["Opa-Opa"],
+        ID.scope: ic.value["Scope"],
+        ID.empty: ic.value["Empty"],
     }
     return tr
 
@@ -170,8 +174,8 @@ def validate(wo: Any, p: int) -> ZzOptions:
     guns_required = char_to_gun["Champ"][cast(ZzVBLR, gun_option)].index(3)
 
     item_counts = cast(ZillionItemCounts, wo.item_counts[p])
-    item_counts.value["opa"] = max(required_level - 1, item_counts.value["opa"])
-    item_counts.value["gun"] = max(guns_required, item_counts.value["gun"])
+    item_counts.value["Opa-Opa"] = max(required_level - 1, item_counts.value["Opa-Opa"])
+    item_counts.value["Zillion"] = max(guns_required, item_counts.value["Zillion"])
     while sum(item_counts.value.values()) > 144:
         total = sum(item_counts.value.values())
         scaler = 144 / total
@@ -179,22 +183,22 @@ def validate(wo: Any, p: int) -> ZzOptions:
             item_counts.value[key] = max(1, int(item_counts.value[key] * scaler))
     total = sum(item_counts.value.values())
     diff = 144 - total
-    if "empty" not in item_counts.value:
-        item_counts.value["empty"] = 0
-    item_counts.value["empty"] += diff
+    if "Empty" not in item_counts.value:
+        item_counts.value["Empty"] = 0
+    item_counts.value["Empty"] += diff
     assert sum(item_counts.value.values()) == 144
 
     max_level = cast(ZillionMaxLevel, wo.max_level[p])
     max_level.value = max(required_level, max_level.value)
 
     opas_per_level = cast(ZillionOpasPerLevel, wo.opas_per_level[p])
-    while (opas_per_level.value > 1) and (1 + item_counts.value["opa"] // opas_per_level.value < max_level.value):
+    while (opas_per_level.value > 1) and (1 + item_counts.value["Opa-Opa"] // opas_per_level.value < max_level.value):
         opas_per_level.value -= 1
 
     # that should be all of the level requirements met
 
     floppy_req = cast(ZillionFloppyReq, wo.floppy_req[p])
-    floppy_req.value = min(item_counts.value["floppy"], floppy_req.value)
+    floppy_req.value = min(item_counts.value["Floppy Disk"], floppy_req.value)
 
     start_char = cast(ZillionStartChar, wo.start_char[p])
     start_char_name = start_char.get_current_option_name()

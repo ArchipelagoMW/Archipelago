@@ -12,15 +12,17 @@ from .logic import clear_cache, cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
 from .options import ZillionItemCounts, zillion_options, validate
 from .id_maps import item_name_to_id as _item_name_to_id, \
-    loc_name_to_id as _loc_name_to_id, item_id_to_zz_item, zz_reg_name_to_reg_name
+    loc_name_to_id as _loc_name_to_id, make_id_to_others, \
+    zz_reg_name_to_reg_name, base_id
 from .item import ZillionItem
 from .patch import ZillionDeltaPatch, get_base_rom_path
 
 from zilliandomizer.patch import Patcher as ZzPatcher
 from zilliandomizer.randomizer import Randomizer as ZzRandomizer
 from zilliandomizer.alarms import Alarms
-from zilliandomizer.logic_components.items import RESCUE, items as zz_items
+from zilliandomizer.logic_components.items import RESCUE, items as zz_items, Item as ZzItem
 from zilliandomizer.logic_components.locations import Location as ZzLocation, Req
+from zilliandomizer.options import Chars
 
 from ..AutoWorld import World, WebWorld
 
@@ -100,10 +102,15 @@ class ZillionWorld(World):
 
     zz_randomizer: Optional[ZzRandomizer] = None
     zz_patcher: Optional[ZzPatcher] = None
+    id_to_zz_item: Optional[Dict[int, ZzItem]] = None
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.logger = logging.getLogger("Zillion")
+
+    def _make_item_maps(self, start_char: Chars) -> None:
+        _id_to_name, _id_to_zz_id, id_to_zz_item = make_id_to_others(start_char)
+        self.id_to_zz_item = id_to_zz_item
 
     @classmethod
     def stage_assert_generate(cls, world: MultiWorld) -> None:
@@ -126,8 +133,11 @@ class ZillionWorld(World):
                 assert self.zz_randomizer.loc_name_2_pretty[zz_name] in self.location_name_to_id, \
                     f"{self.zz_randomizer.loc_name_2_pretty[zz_name]} not in location map"
 
+        self._make_item_maps(zz_op.start_char)
+
     def create_regions(self) -> None:
         assert self.zz_randomizer, "generate_early hasn't been called"
+        assert self.id_to_zz_item, "generate_early hasn't been called"
         p = self.player
         w = self.world
 
@@ -158,13 +168,14 @@ class ZillionWorld(World):
                     def access_rule_wrapped(zz_loc_local: ZzLocation,
                                             p: int,
                                             zz_r: ZzRandomizer,
+                                            id_to_zz_item: Dict[int, ZzItem],
                                             cs: CollectionState) -> bool:
                         # print(f"checking access to {zz_loc_local}")
-                        accessible = cs_to_zz_locs(cs, p, zz_r)
+                        accessible = cs_to_zz_locs(cs, p, zz_r, id_to_zz_item)
                         return zz_loc_local in accessible
 
                     access_rule = functools.partial(access_rule_wrapped,
-                                                    zz_loc, self.player, self.zz_randomizer)
+                                                    zz_loc, self.player, self.zz_randomizer, self.id_to_zz_item)
 
                     loc_name = self.zz_randomizer.loc_name_2_pretty[zz_loc.name]
                     loc = ZillionLocation(zz_loc, self.player, loc_name, here)
@@ -185,16 +196,28 @@ class ZillionWorld(World):
             done.add(here.name)
 
     def create_items(self) -> None:
+        if not self.id_to_zz_item:
+            self._make_item_maps("JJ")
+            print("warning: called `create_items` without calling `generate_early` first")
+        assert self.id_to_zz_item, "failed to get item maps"
+
         # in zilliandomizer, the Randomizer class puts empties in the item pool to fill space,
         # but here in AP, empties are in the options from options.validate
         item_counts = cast(ZillionItemCounts, getattr(self.world, "item_counts")[self.player])
-        for zz_item in item_id_to_zz_item.values():
-            if zz_item.debug_name in item_counts.value:
-                count = item_counts.value[zz_item.debug_name]
-                for _ in range(count):
-                    self.world.itempool.append(self.create_item(zz_item.debug_name))
-            elif zz_item.code == RESCUE:
-                self.world.itempool.append(self.create_item(zz_item.debug_name))
+        print(item_counts)
+
+        for item_name, item_id in self.item_name_to_id.items():
+            zz_item = self.id_to_zz_item[item_id]
+            if item_id >= (4 + base_id):  # normal item
+                if item_name in item_counts.value:
+                    count = item_counts.value[item_name]
+                    print(f"Zillion Items: {item_name}  {count}")
+                    for _ in range(count):
+                        self.world.itempool.append(self.create_item(item_name))
+            elif item_id < (3 + base_id) and zz_item.code == RESCUE:
+                # One of the 3 rescues will not be in the pool and its zz_item will be 'empty'.
+                print(f"Zillion Items: {item_name}  1")
+                self.world.itempool.append(self.create_item(item_name))
 
     def set_rules(self) -> None:
         # logic for this game is in create_regions
@@ -206,9 +229,9 @@ class ZillionWorld(World):
         main_loc_name = self.zz_randomizer.loc_name_2_pretty[self.zz_randomizer.locations['main'].name]
 
         self.world.get_location(main_loc_name, self.player)\
-            .place_locked_item(self.create_item("main"))
+            .place_locked_item(self.create_item("Win"))
         self.world.completion_condition[self.player] = \
-            lambda state: state.has("main", self.player)
+            lambda state: state.has("Win", self.player)
 
     def pre_fill(self) -> None:
         """Optional method that is supposed to be used for special fill stages. This is run *after* plando."""
@@ -325,6 +348,8 @@ class ZillionWorld(World):
         # so it can open and get those when restoring doors
 
         assert self.zz_patcher, "didn't get patcher from generate_early"
+        assert self.zz_randomizer, "didn't get randomizer from generate_early"
+
         rescues: Dict[str, Any] = {}
         for i in (0, 1):
             if i in self.zz_patcher.rescue_locations:
@@ -336,6 +361,7 @@ class ZillionWorld(World):
                 }
         self.zz_patcher.loc_memory_to_loc_id
         return {
+            "start_char": self.zz_randomizer.options.start_char,
             "rescues": rescues,
             "loc_mem_to_id": self.zz_patcher.loc_memory_to_loc_id
         }
@@ -365,23 +391,25 @@ class ZillionWorld(World):
         """Create an item for this world type and player.
         Warning: this may be called with self.world = None, for example by MultiServer"""
         item_id = _item_name_to_id[name]
-        zz_item = item_id_to_zz_item[item_id]
+
+        if not self.id_to_zz_item:
+            self._make_item_maps("JJ")
+            print("warning: called `create_item` without calling `generate_early` first")
+        assert self.id_to_zz_item, "failed to get item maps"
 
         classification = ItemClassification.filler
+        zz_item = self.id_to_zz_item[item_id]
         if zz_item.required:
             classification = ItemClassification.progression
             if not zz_item.is_progression:
                 classification = ItemClassification.progression_skip_balancing
 
-        # for the rescue hint text
-        start_char = self.zz_randomizer.options.start_char if self.zz_randomizer else "JJ"
-
-        z_item = ZillionItem(name, classification, item_id, self.player, start_char)
+        z_item = ZillionItem(name, classification, item_id, self.player, zz_item)
         return z_item
 
     def get_filler_item_name(self) -> str:
         """Called when the item pool needs to be filled with additional items to match location count."""
-        return "empty"
+        return "Empty"
 
     # decent place to implement progressive items, in most cases can stay as-is
     def collect_item(self, state: CollectionState, item: Item, remove: bool = False) -> Optional[str]:

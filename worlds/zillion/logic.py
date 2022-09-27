@@ -1,18 +1,14 @@
 from typing import Dict, FrozenSet, Tuple, cast, List, Counter as _Counter
 from BaseClasses import CollectionState
-from zilliandomizer.logic_components.locations import Req, Location
+from zilliandomizer.logic_components.locations import Location
 from zilliandomizer.randomizer import Randomizer
-from zilliandomizer.logic_components.items import Item, items, item_name_to_item
+from zilliandomizer.logic_components.items import Item
 from .region import ZillionLocation
 from .item import ZillionItem
+from .id_maps import item_name_to_id
 
 # TODO: unit tests for these
 # TODO: investigate: CaitSith2 reported unbeatable generation with 2 Zillion yamls
-
-
-def cs_to_have_req(cs: CollectionState, p: int, zz_r: Randomizer) -> Req:
-    """ returns what abilities I have based on collected items and options """
-    return zz_r.make_ability(cs_to_zz_items(cs, p))
 
 
 def set_randomizer_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> int:
@@ -34,30 +30,19 @@ def set_randomizer_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> int:
     return _hash
 
 
-def cs_to_zz_items(cs: CollectionState, p: int) -> List[Item]:
-    """ return the zilliandomizer items that I've collected """
-    items_tr: List[Item] = []
-    for item in items:
-        name = item.debug_name
-        count = cs.item_count(name, p)
-        for _ in range(count):
-            items_tr.append(item)
-    return items_tr
-
-
 def item_counts(cs: CollectionState, p: int) -> Tuple[Tuple[str, int], ...]:
     """
     the zilliandomizer items that player p has collected
 
     ((item_name, count), (item_name, count), ...)
     """
-    return tuple((item.debug_name, cs.item_count(item.debug_name, p)) for item in items)
+    return tuple((item_name, cs.item_count(item_name, p)) for item_name in item_name_to_id)
 
 
 _logic_cache: Dict[int, Tuple[_Counter[Tuple[str, int]], FrozenSet[Location]]] = {}
 
 
-def cs_to_zz_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> FrozenSet[Location]:
+def cs_to_zz_locs(cs: CollectionState, p: int, zz_r: Randomizer, id_to_zz_item: Dict[int, Item]) -> FrozenSet[Location]:
     """ accessible locations from this collection state """
     # caching this function because it would be slow
     _hash = set_randomizer_locs(cs, p, zz_r)
@@ -71,7 +56,7 @@ def cs_to_zz_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> FrozenSet[Lo
     # print("cache miss")
     have_items: List[Item] = []
     for name, count in counts:
-        have_items.extend([item_name_to_item[name]] * count)
+        have_items.extend([id_to_zz_item[item_name_to_id[name]]] * count)
     have_req = zz_r.make_ability(have_items)
     tr = frozenset(zz_r.get_locations(have_req))
 
