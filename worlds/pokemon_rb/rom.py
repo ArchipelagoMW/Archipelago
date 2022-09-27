@@ -64,7 +64,7 @@ def randomize_pokemon(self, mon, mons_list, randomize_type):
         if randomize_type == 3:
             stat_base = get_base_stat_total(mon)
             type_mons.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
-            mon = type_mons[round(self.world.random.triangular(0, len(type_mons) - 1, 0))]
+        mon = type_mons[round(self.world.random.triangular(0, len(type_mons) - 1, 0))]
     if randomize_type == 2:
         stat_base = get_base_stat_total(mon)
         mons_list.sort(key=lambda mon: abs(get_base_stat_total(mon) - stat_base))
