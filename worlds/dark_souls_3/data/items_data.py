@@ -152,8 +152,22 @@ goods_table = {
     "Soul of Boreal Valley Vordt": 0x400002CF,
     "Soul of a Stray Demon": 0x400002E7,
     "Soul of a Demon": 0x400002E3,
-    **{"Titanite Shard #" + str(i): 0x400003E8 for i in range(1, 5)},
-    **{"Soul of a Deserted Corpse #" + str(i): 0x40000191 for i in range(1, 5)}
+
+    # Upgrade materials
+    **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(1, 11)},
+    **{"Large Titanite Shard #"+str(i): 0x400003E9 for i in range(1, 11)},
+    **{"Titanite Chunk #"+str(i): 0x400003EA for i in range(1, 6)},
+    **{"Titanite Slab #"+str(i): 0x400003EB for i in range(1, 4)},
+
+    # Healing
+    **{"Estus Shard #"+str(i): 0x4000085D for i in range(1, 16)},
+    **{"Undead Bone Shard #"+str(i): 0x4000085F for i in range(1, 6)},
+
+    # Souls
+    **{"Soul of a Great Champion #"+str(i): 0x400001A4 for i in range(1, 3)},
+    **{"Soul of a Champion #"+str(i): 0x400001A3 for i in range(1, 5)},
+    **{"Soul of a Venerable Old Hand #"+str(i): 0x400001A2 for i in range(1, 5)},
+    **{"Soul of a Crestfallen Knight #"+str(i): 0x40000199 for i in range(1, 11)},
 }
 
 armor_table = {

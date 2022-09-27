@@ -441,9 +441,25 @@ archdragon_peak_table = {
 }
 
 progressive_locations = {
-    **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(1, 4)},
-    **{"Firebomb #"+str(i): 0x40000124 for i in range(1, 4)},
-    **{"Soul of a Deserted Corpse #" + str(i): 0x40000191 for i in range(1, 5)},
+    # Upgrade materials
+    **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(1, 11)},
+    **{"Large Titanite Shard #"+str(i): 0x400003E9 for i in range(1, 11)},
+    **{"Titanite Chunk #"+str(i): 0x400003EA for i in range(1, 6)},
+    **{"Titanite Slab #"+str(i): 0x400003EB for i in range(1, 4)},
+
+    # Healing
+    **{"Estus Shard #"+str(i): 0x4000085D for i in range(1, 16)},
+    **{"Undead Bone Shard #"+str(i): 0x4000085F for i in range(1, 6)},
+
+    # Items
+    **{"Firebomb #"+str(i): 0x40000124 for i in range(1, 5)},
+    **{"Throwing Knife #"+str(i): 0x40000136 for i in range(1, 3)},
+
+    # Souls
+    **{"Soul of a Deserted Corpse #" + str(i): 0x40000191 for i in range(1, 6)},
+    **{"Large Soul of a Deserted Corpse #" + str(i): 0x40000192 for i in range(1, 6)},
+    **{"Soul of an Unknown Traveler #" + str(i): 0x40000193 for i in range(1, 6)},
+    **{"Large Soul of an Unknown Traveler #" + str(i): 0x40000194 for i in range(1, 6)},
 }
 
 location_dictionary_table = {**cemetery_of_ash_table, **fire_link_shrine_table, **firelink_shrine_bell_tower_table, **high_wall_of_lothric, **undead_settlement_table, **road_of_sacrifice_table,

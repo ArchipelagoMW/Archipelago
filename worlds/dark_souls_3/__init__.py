@@ -51,7 +51,7 @@ class DarkSouls3World(World):
     remote_items: bool = False
     remote_start_inventory: bool = False
     web = DarkSouls3Web()
-    data_version = 2
+    data_version = 3
     base_id = 100000
     item_name_to_id = {name: id for id, name in enumerate(item_dictionary_table, base_id)}
     location_name_to_id = {name: id for id, name in enumerate(location_dictionary_table, base_id)}
