@@ -39,7 +39,7 @@ class Hylics2World(World):
     remote_items: bool = True
     remote_start_inventory: bool = True
 
-    data_version: 0
+    data_version: 1
 
     start_location = "Waynehouse"
 

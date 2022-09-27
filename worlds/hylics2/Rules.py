@@ -335,6 +335,19 @@ def set_rules(hylics2world):
         add_rule(world.get_location("Hylemxylem: Lower Reservoir Hole Medallion", player), 
             lambda state: state._hylics2_has_upper_chamber_key(player))
 
+    # extra rules is Shuffle Red Medallions and Party Shuffle are enabled
+    if world.party_shuffle[player] and world.medallion_shuffle[player]:
+        add_rule(world.get_location("New Muldul: Vault Rear Left Medallion", player), 
+            lambda state: state._hylics2_has_jail_key(player))
+        add_rule(world.get_location("New Muldul: Vault Rear Right Medallion", player), 
+            lambda state: state._hylics2_has_jail_key(player))
+        add_rule(world.get_location("New Muldul: Vault Center Medallion", player), 
+            lambda state: state._hylics2_has_jail_key(player))
+        add_rule(world.get_location("New Muldul: Vault Front Left Medallion", player), 
+            lambda state: state._hylics2_has_jail_key(player))
+        add_rule(world.get_location("New Muldul: Vault Front Right Medallion", player), 
+            lambda state: state._hylics2_has_jail_key(player))
+
     # entrances
     for i in world.get_region("Airship", player).entrances:
         add_rule(i, lambda state: state._hylics2_has_airship(player))
