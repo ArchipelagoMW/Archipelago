@@ -46,7 +46,7 @@ class Overcooked2Test(unittest.TestCase):
             ("Curse Emote", {"action": "UNLOCK_EMOTE", "payload": "1"}),
             ("Larger Tip Jar", {"action": "INC_TIP_COMBO", "payload": ""}),
             ("Order Lookahead", {"action": "INC_ORDERS_ON_SCREEN", "payload": ""}),
-            ("Remote Control Batteries", {"action": "SET_VALUE", "payload": "DisableControlStick=False"}),
+            ("Control Stick Batteries", {"action": "SET_VALUE", "payload": "DisableControlStick=False"}),
         ]
         for (item_name, expected_event) in events:
             expected_event["message"] = f"{item_name} Acquired!"

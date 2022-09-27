@@ -925,7 +925,7 @@ level_logic = {
     "Story 5-1": (
         (  # 1-star
             {  # Exclusive
-                "Remote Control Batteries"
+                "Control Stick Batteries"
             },
             {  # Additive
 
@@ -977,7 +977,7 @@ level_logic = {
     "Story 5-3": (
         (  # 1-star
             {  # Exclusive
-                "Remote Control Batteries"
+                "Control Stick Batteries"
             },
             {  # Additive
 
@@ -1029,7 +1029,7 @@ level_logic = {
     "Story 5-5": (
         (  # 1-star
             {  # Exclusive
-                "Remote Control Batteries"
+                "Control Stick Batteries"
             },
             {  # Additive
 
@@ -1159,7 +1159,7 @@ level_logic = {
     "Story 6-4": (
         (  # 1-star
             {  # Exclusive
-                "Remote Control Batteries"
+                "Control Stick Batteries"
             },
             {  # Additive
 
@@ -1577,7 +1577,7 @@ level_logic = {
     "Surf 2-2": (
         (  # 1-star
             {  # Exclusive
-                "Remote Control Batteries"
+                "Control Stick Batteries"
             },
             {  # Additive
 
@@ -1759,7 +1759,7 @@ level_logic = {
     "Surf K-1": (
         (  # 1-star
             {  # Exclusive
-                "Remote Control Batteries"
+                "Control Stick Batteries"
             },
             {  # Additive
 
@@ -2331,7 +2331,7 @@ level_logic = {
     "Carnival 2-3": (
         (  # 1-star
             {  # Exclusive
-                "Remote Control Batteries"
+                "Control Stick Batteries"
             },
             {  # Additive
 
@@ -2461,7 +2461,7 @@ level_logic = {
     "Carnival 3-4": (
         (  # 1-star
             {  # Exclusive
-                "Remote Control Batteries"
+                "Control Stick Batteries"
             },
             {  # Additive
 
@@ -2539,7 +2539,7 @@ level_logic = {
     "Carnival K-3": (
         (  # 1-star
             {  # Exclusive
-                "Remote Control Batteries"
+                "Control Stick Batteries"
             },
             {  # Additive
 
@@ -2826,7 +2826,7 @@ level_logic = {
     "Horde K-2": (
         (  # 1-star
             {  # Exclusive
-                "Remote Control Batteries"
+                "Control Stick Batteries"
             },
             {  # Additive
 
@@ -3690,7 +3690,7 @@ level_logic = {
     "SOBO 1-3": (
         (  # 1-star
             {  # Exclusive
-                "Remote Control Batteries"
+                "Control Stick Batteries"
             },
             {  # Additive
 
