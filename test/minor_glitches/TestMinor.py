@@ -17,7 +17,7 @@ class TestMinor(TestBase):
     def setUp(self):
         self.world = MultiWorld(1)
         args = Namespace()
-        for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].options.items():
+        for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
             setattr(args, name, {1: option.from_any(option.default)})
         self.world.set_options(args)
         self.world.set_default_common_options()

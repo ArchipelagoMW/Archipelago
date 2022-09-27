@@ -36,6 +36,9 @@ class WitnessPlayerLogic:
         Panels outside of the same region will still be checked manually.
         """
 
+        if panel_hex in self.COMPLETELY_DISABLED_CHECKS:
+            return frozenset()
+
         check_obj = StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]
 
         these_items = frozenset({frozenset()})
@@ -57,7 +60,10 @@ class WitnessPlayerLogic:
                 for dependentItem in door_items:
                     all_options.add(items_option.union(dependentItem))
 
-            return frozenset(all_options)
+            if panel_hex != "0x28A0D":
+                return frozenset(all_options)
+            else:  # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved
+                these_items = all_options
 
         these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
 
@@ -72,7 +78,9 @@ class WitnessPlayerLogic:
             for option_panel in option:
                 dep_obj = StaticWitnessLogic.CHECKS_BY_HEX.get(option_panel)
 
-                if option_panel in {"7 Lasers", "11 Lasers"}:
+                if option_panel in self.COMPLETELY_DISABLED_CHECKS:
+                    new_items = frozenset()
+                elif option_panel in {"7 Lasers", "11 Lasers"}:
                     new_items = frozenset({frozenset([option_panel])})
                 # If a panel turns on when a panel in a different region turns on,
                 # the latter panel will be an "event panel", unless it ends up being
@@ -204,9 +212,11 @@ class WitnessPlayerLogic:
         elif get_option_value(world, player, "victory_condition") == 3:
             self.VICTORY_LOCATION = "0xFFF00"
 
-        self.COMPLETELY_DISABLED_CHECKS.add(
-            self.VICTORY_LOCATION
-        )
+        if get_option_value(world, player, "challenge_lasers") <= 7:
+            adjustment_linesets_in_order.append([
+                "Requirement Changes:",
+                "0xFFF00 - 11 Lasers - True",
+            ])
 
         if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
             adjustment_linesets_in_order.append(get_disable_unrandomized_list())
@@ -314,7 +324,7 @@ class WitnessPlayerLogic:
         self.VICTORY_LOCATION = "0x0356B"
         self.EVENT_ITEM_NAMES = {
             "0x01A0F": "Keep Laser Panel (Hedge Mazes) Activates",
-            "0x09D9B": "Monastery Overhead Doors Open",
+            "0x09D9B": "Monastery Shutters Open",
             "0x193A6": "Monastery Laser Panel Activates",
             "0x00037": "Monastery Branch Panels Activate",
             "0x0A079": "Access to Bunker Laser",
@@ -325,24 +335,24 @@ class WitnessPlayerLogic:
             "0x01D3F": "Keep Laser Panel (Pressure Plates) Activates",
             "0x09F7F": "Mountain Access",
             "0x0367C": "Quarry Laser Mill Requirement Met",
-            "0x009A1": "Swamp Rotated Shapers 1 Activates",
+            "0x009A1": "Swamp Between Bridges Far 1 Activates",
             "0x00006": "Swamp Cyan Water Drains",
-            "0x00990": "Swamp Broken Shapers 1 Activates",
-            "0x0A8DC": "Lower Avoid 6 Activates",
-            "0x0000A": "Swamp More Rotated Shapers 1 Access",
-            "0x09E86": "Inside Mountain Second Layer Blue Bridge Access",
-            "0x09ED8": "Inside Mountain Second Layer Yellow Bridge Access",
+            "0x00990": "Swamp Between Bridges Near Row 1 Activates",
+            "0x0A8DC": "Intro 6 Activates",
+            "0x0000A": "Swamp Beyond Rotating Bridge 1 Access",
+            "0x09E86": "Mountain Floor 2 Blue Bridge Access",
+            "0x09ED8": "Mountain Floor 2 Yellow Bridge Access",
             "0x0A3D0": "Quarry Laser Boathouse Requirement Met",
             "0x00596": "Swamp Red Water Drains",
             "0x00E3A": "Swamp Purple Water Drains",
             "0x0343A": "Door to Symmetry Island Powers On",
-            "0xFFF00": "Inside Mountain Bottom Layer Discard Turns On",
+            "0xFFF00": "Mountain Bottom Floor Discard Turns On",
             "0x17CA6": "All Boat Panels Turn On",
             "0x17CDF": "All Boat Panels Turn On",
             "0x09DB8": "All Boat Panels Turn On",
             "0x17C95": "All Boat Panels Turn On",
             "0x03BB0": "Town Church Lattice Vision From Outside",
-            "0x28AC1": "Town Shapers & Dots & Eraser Turns On",
+            "0x28AC1": "Town Wooden Rooftop Turns On",
             "0x28A69": "Town Tower 1st Door Opens",
             "0x28ACC": "Town Tower 2nd Door Opens",
             "0x28AD9": "Town Tower 3rd Door Opens",
@@ -350,11 +360,20 @@ class WitnessPlayerLogic:
             "0x03675": "Quarry Mill Ramp Activation From Above",
             "0x03679": "Quarry Mill Lift Lowering While Standing On It",
             "0x2FAF6": "Tutorial Gate Secret Solution Knowledge",
-            "0x079DF": "Town Hexagonal Reflection Turns On",
+            "0x079DF": "Town Tall Hexagonal Turns On",
             "0x17DA2": "Right Orange Bridge Fully Extended",
-            "0x19B24": "Shadows Lower Avoid Patterns Visible",
+            "0x19B24": "Shadows Intro Patterns Visible",
             "0x2700B": "Open Door to Treehouse Laser House",
             "0x00055": "Orchard Apple Trees 4 Turns On",
+            "0x17DDB": "Left Orange Bridge Fully Extended",
+            "0x03535": "Shipwreck Video Pattern Knowledge",
+            "0x03542": "Mountain Video Pattern Knowledge",
+            "0x0339E": "Desert Video Pattern Knowledge",
+            "0x03481": "Tutorial Video Pattern Knowledge",
+            "0x03702": "Jungle Video Pattern Knowledge",
+            "0x0356B": "Challenge Video Pattern Knowledge",
+            "0x0A15F": "Desert Laser Panel Shutters Open (1)",
+            "0x012D7": "Desert Laser Panel Shutters Open (2)",
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
@@ -370,12 +389,6 @@ class WitnessPlayerLogic:
             "0x0C2B2": "Bunker Laser Activation",
             "0x00BF6": "Swamp Laser Activation",
             "0x028A4": "Treehouse Laser Activation",
-            "0x03535": "Shipwreck Video Pattern Knowledge",
-            "0x03542": "Mountain Video Pattern Knowledge",
-            "0x0339E": "Desert Video Pattern Knowledge",
-            "0x03481": "Tutorial Video Pattern Knowledge",
-            "0x03702": "Jungle Video Pattern Knowledge",
-            "0x0356B": "Challenge Video Pattern Knowledge",
             "0x09F7F": "Mountaintop Trap Door Turns On",
             "0x17C34": "Mountain Access",
         }

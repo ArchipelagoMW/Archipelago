@@ -166,7 +166,7 @@ class MultiWorld():
         self.player_types[new_id] = NetUtils.SlotType.group
         self._region_cache[new_id] = {}
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
-        for option_key, option in world_type.options.items():
+        for option_key, option in world_type.option_definitions.items():
             getattr(self, option_key)[new_id] = option(option.default)
         for option_key, option in Options.common_options.items():
             getattr(self, option_key)[new_id] = option(option.default)
@@ -204,7 +204,7 @@ class MultiWorld():
         for player in self.player_ids:
             self.custom_data[player] = {}
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
-            for option_key in world_type.options:
+            for option_key in world_type.option_definitions:
                 setattr(self, option_key, getattr(args, option_key, {}))
 
             self.worlds[player] = world_type(self, player)
@@ -955,6 +955,13 @@ class Region:
                 return True
         return False
 
+    def get_connecting_entrance(self, is_main_entrance: typing.Callable[[Entrance], bool]) -> Entrance:
+        for entrance in self.entrances:
+            if is_main_entrance(entrance):
+                return entrance
+        for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
+            return entrance.parent_region.get_connecting_entrance(is_main_entrance)
+
     def __repr__(self):
         return self.__str__()
 
@@ -1202,7 +1209,7 @@ class Item:
         return self.__str__()
 
     def __str__(self) -> str:
-        if self.location:
+        if self.location and self.location.parent_region and self.location.parent_region.world:
             return self.location.parent_region.world.get_name_string_for_object(self)
         return f"{self.name} (Player {self.player})"
 
@@ -1388,7 +1395,7 @@ class Spoiler():
                 outfile.write('Game:                            %s\n' % self.world.game[player])
                 for f_option, option in Options.per_game_common_options.items():
                     write_option(f_option, option)
-                options = self.world.worlds[player].options
+                options = self.world.worlds[player].option_definitions
                 if options:
                     for f_option, option in options.items():
                         write_option(f_option, option)
@@ -1422,7 +1429,6 @@ class Spoiler():
                                                "f" in self.world.shop_shuffle[player]))
                     outfile.write('Custom Potion Shop:              %s\n' %
                                   bool_to_text("w" in self.world.shop_shuffle[player]))
-                    outfile.write('Boss shuffle:                    %s\n' % self.world.boss_shuffle[player])
                     outfile.write('Enemy health:                    %s\n' % self.world.enemy_health[player])
                     outfile.write('Enemy damage:                    %s\n' % self.world.enemy_damage[player])
                     outfile.write('Prize shuffle                    %s\n' %

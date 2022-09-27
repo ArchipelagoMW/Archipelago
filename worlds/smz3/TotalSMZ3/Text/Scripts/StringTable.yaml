@@ -4,8 +4,8 @@
 # The order of the dialog entries is significant
 - set_cursor: [0xFB, 0xFC, 0x00, 0xF9, 0xFF, 0xFF, 0xFF, 0xF8, 0xFF, 0xFF, 0xE4, 0xFE, 0x68]
 - set_cursor2: [0xFB, 0xFC, 0x00, 0xF8, 0xFF, 0xFF, 0xFF, 0xF9, 0xFF, 0xFF, 0xE4, 0xFE, 0x68]
-- game_over_menu: { NoPause: "{SPEED0}\nSave and Continue\nSave and Quit\nContinue" }
-- var_test: { NoPause: "0= ᚋ, 1= ᚌ\n2= ᚍ, 3= ᚎ" }
+- game_over_menu: "{NOPAUSE}\n{SPEED0}\nSave and Continue\nSave and Quit\nContinue"
+- var_test: "{NOPAUSE}\n0= ᚋ, 1= ᚌ\n2= ᚍ, 3= ᚎ"
 - follower_no_enter: "Can't you take me some place nice."
 - choice_1_3: [0xFB, 0xFC, 0x00, 0xF7, 0xE4, 0xF8, 0xFF, 0xF9, 0xFF, 0xFE, 0x71]
 - choice_2_3: [0xFB, 0xFC, 0x00, 0xF7, 0xFF, 0xF8, 0xE4, 0xF9, 0xFF, 0xFE, 0x71]
@@ -290,10 +290,10 @@
 # $110
 - magic_bat_wake: "You bum! I was sleeping! Where's my magic bolts?"
 - magic_bat_give_half_magic: "How you like me now?"
-- intro_main: { NoPause: "{INTRO}\n Episode  III\n{PAUSE3}\n A Link to\n   the Past\n{PAUSE3}\n  Randomizer\n{PAUSE3}\nAfter mostly disregarding what happened in the first two games.\n{PAUSE3}\nLink awakens to his uncle leaving the house.\n{PAUSE3}\nHe just runs out the door,\n{PAUSE3}\ninto the rainy night.\n{PAUSE3}\n{CHANGEPIC}\nGanon has moved around all the items in Hyrule.\n{PAUSE7}\nYou will have to find all the items necessary to beat Ganon.\n{PAUSE7}\nThis is your chance to be a hero.\n{PAUSE3}\n{CHANGEPIC}\nYou must get the 7 crystals to beat Ganon.\n{PAUSE9}\n{CHANGEPIC}" }
-- intro_throne_room: { NoPause: "{IBOX}\nLook at this Stalfos on the throne." }
-- intro_zelda_cell: { NoPause: "{IBOX}\nIt is your time to shine!" }
-- intro_agahnim: { NoPause: "{IBOX}\nAlso, you need to defeat this guy!" }
+- intro_main: "{NOPAUSE}\n{INTRO}\n Episode  III\n{PAUSE3}\n A Link to\n   the Past\n{PAUSE3}\n  Randomizer\n{PAUSE3}\nAfter mostly disregarding what happened in the first two games.\n{PAUSE3}\nLink awakens to his uncle leaving the house.\n{PAUSE3}\nHe just runs out the door,\n{PAUSE3}\ninto the rainy night.\n{PAUSE3}\n{CHANGEPIC}\nGanon has moved around all the items in Hyrule.\n{PAUSE7}\nYou will have to find all the items necessary to beat Ganon.\n{PAUSE7}\nThis is your chance to be a hero.\n{PAUSE3}\n{CHANGEPIC}\nYou must get the 7 crystals to beat Ganon.\n{PAUSE9}\n{CHANGEPIC}"
+- intro_throne_room: "{NOPAUSE}\n{IBOX}\nLook at this Stalfos on the throne."
+- intro_zelda_cell: "{NOPAUSE}\n{IBOX}\nIt is your time to shine!"
+- intro_agahnim: "{NOPAUSE}\n{IBOX}\nAlso, you need to defeat this guy!"
 - pickup_purple_chest: "A curious box. Let's take it with us!"
 - bomb_shop: "30 bombs for 100 rupees. Good deals all day!"
 - bomb_shop_big_bomb: "30 bombs for 100 rupees, 100 rupees 1 BIG bomb. Good deals all day!"
@@ -341,7 +341,6 @@
 # $140
 - agahnim_defeated: "Arrrgggghhh. Well you're coming with me!"
 - agahnim_final_meeting: "You have done well to come this far. Now, die!"
-# $142
 - zora_meeting: "What do you want?\n  ≥ Flippers\n   _Nothin'\n{CHOICE}"
 - zora_tells_cost: "Fine! But they aren't cheap. You got 500 rupees?\n  ≥ Duh\n   _Oh carp\n{CHOICE}"
 - zora_get_flippers: "Here's some Flippers for you! Swim little fish, swim."
@@ -396,14 +395,12 @@
 - lost_woods_thief: "Have you seen Andy?\n\nHe was out looking for our prized Ether medallion.\nI wonder when he will be back?"
 - blinds_hut_dude: "I'm just some dude. This is Blind's hut."
 - end_triforce: "{SPEED2}\n{MENU}\n{NOBORDER}\n     G G"
-# $174
 - toppi_fallen: "Ouch!\n\nYou Jerk!"
 - kakariko_tavern_fisherman: "Don't argue\nwith a frozen\nDeadrock.\nHe'll never\nchange his\nposition!"
 - thief_money: "It's a secret to everyone."
 - thief_desert_rupee_cave: "So you, like, busted down my door, and are being a jerk by talking to me? Normally I would be angry and make you pay for it, but I bet you're just going to break all my pots and steal my 50 rupees."
 - thief_ice_rupee_cave: "I'm a rupee pot farmer. One day I will take over the world with my skillz. Have you met my brother in the desert? He's way richer than I am."
 - telepathic_tile_south_east_darkworld_cave: "~~ Dev cave ~~\n  No farming\n   required"
-# $17A
 - cukeman: "Did you hear that Veetorp beat ajneb174 in a 1 on 1 race at AGDQ?"
 - cukeman_2: "You found Shabadoo, huh?\nNiiiiice."
 - potion_shop_no_cash: "Yo! I'm not running a charity here."
@@ -415,19 +412,25 @@
 - game_chest_lost_woods: "Pay 100 rupees, open 1 chest. Are you lucky?\nSo, Play game?\n  ≥ Play\n    Never!\n{CHOICE}"
 - kakariko_flophouse_man_no_flippers: "I sure do have a lot of beds.\n\nZora is a cheapskate and will try to sell you his trash for 500 rupees…"
 - kakariko_flophouse_man: "I sure do have a lot of beds.\n\nDid you know if you played the flute in the center of town things could happen?"
-- menu_start_2: { NoPause: "{MENU}\n{SPEED0}\n≥£'s House\n_Sanctuary\n{CHOICE3}" }
-- menu_start_3: { NoPause: "{MENU}\n{SPEED0}\n≥£'s House\n_Sanctuary\n_Mountain Cave\n{CHOICE2}" }
-- menu_pause: { NoPause: "{SPEED0}\n≥Continue Game\n_Save and Quit\n{CHOICE3}" }
+- menu_start_2: "{NOPAUSE}\n{MENU}\n{SPEED0}\n≥£'s House\n_Sanctuary\n{CHOICE3}"
+- menu_start_3: "{NOPAUSE}\n{MENU}\n{SPEED0}\n≥£'s House\n_Sanctuary\n_Mountain Cave\n{CHOICE2}"
+- menu_pause: "{NOPAUSE}\n{SPEED0}\n≥Continue Game\n_Save and Quit\n{CHOICE3}"
 - game_digging_choice: "Have 80 Rupees? Want to play digging game?\n  ≥Yes\n  _No\n{CHOICE}"
 - game_digging_start: "Okay, use the shovel with Y!"
 - game_digging_no_cash: "Shovel rental is 80 rupees.\nI have all day"
 - game_digging_end_time: "Time's up!\nTime for you to go."
 - game_digging_come_back_later: "Come back later, I have to bury things."
 - game_digging_no_follower: "Something is following you. I don't like."
-- menu_start_4: { NoPause: "{MENU}\n{SPEED0}\n≥£'s House\n_Mountain Cave\n{CHOICE3}" }
+- menu_start_4: "{NOPAUSE}\n{MENU}\n{SPEED0}\n≥£'s House\n_Mountain Cave\n{CHOICE3}"
 - ganon_fall_in_alt: "You think you\nare ready to\nface me?\n\nI will not die\n\nunless you\ncomplete your\ngoals. Dingus!"
 - ganon_phase_3_alt: "Got wax in your ears? I cannot die!"
 # $190
 - sign_east_death_mountain_bridge: "How did you get up here?"
 - fish_money: "It's a secret to everyone."
+- sign_ganons_tower: "You need all 7 crystals to enter."
+- sign_ganon: "You need all 7 crystals to beat Ganon."
+- ganon_phase_3_no_bow: "You have no bow. Dingus!"
+- ganon_phase_3_no_silvers_alt: "You can't best me without silver arrows!"
+- ganon_phase_3_no_silvers: "You can't best me without silver arrows!"
+- ganon_phase_3_silvers: "Oh no! Silver! My one true weakness!"
 - end_pad_data: ""
