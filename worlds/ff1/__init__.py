@@ -30,8 +30,6 @@ class FF1World(World):
     option_definitions = ff1_options
     game = "Final Fantasy"
     topology_present = False
-
-    remote_items = True
     data_version = 2
     remote_start_inventory = True
 
