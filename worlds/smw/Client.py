@@ -34,6 +34,7 @@ SMW_SEND_MSG_DATA            = ROM_START + 0x01BFA3
 SMW_RECEIVE_MSG_DATA         = ROM_START + 0x01BFA4
 SMW_DEATH_LINK_ACTIVE_ADDR   = ROM_START + 0x01BFA5
 SMW_DRAGON_COINS_ACTIVE_ADDR = ROM_START + 0x01BFA6
+SMW_SWAMP_DONUT_GH_ADDR      = ROM_START + 0x01BFA7
 
 SMW_GAME_STATE_ADDR    = WRAM_START + 0x100
 SMW_MARIO_STATE_ADDR   = WRAM_START + 0x71
@@ -378,6 +379,7 @@ async def smw_game_watcher(ctx: Context):
         # Handle Collected Locations
         new_events = 0
         path_data = bytearray(await snes_read(ctx, SMW_PATH_DATA, 0x60))
+        donut_gh_swapped = await snes_read(ctx, SMW_SWAMP_DONUT_GH_ADDR, 0x1)
         new_dragon_coin = False
         for loc_id in ctx.checked_locations:
             if loc_id not in ctx.locations_checked:
@@ -426,6 +428,10 @@ async def smw_game_watcher(ctx: Context):
                     level_info = level_info_dict[tile_id[0]]
 
                     path = level_info.exit1Path if level_data[1] == 0 else level_info.exit2Path
+
+                    if donut_gh_swapped[0] != 0 and tile_id[0] == 0x04:
+                        # Handle Swapped Donut GH Exits
+                        path = level_info.exit2Path if level_data[1] == 0 else level_info.exit1Path
 
                     if not path:
                         continue

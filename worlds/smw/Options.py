@@ -75,6 +75,15 @@ class LevelShuffle(Toggle):
     display_name = "Level Shuffle"
 
 
+class SwapDonutGhostHouseExits(Toggle):
+    """
+    If enabled, this option will swap which overworld direction the two exits of the level at the Donut Ghost House overworld tile go:
+    False: Normal Exit goes up, Secret Exit goes right.
+    True: Normal Exit goes right, Secret Exit goes up.
+    """
+    display_name = "Swap Donut GH Exits"
+
+
 class DisplaySentItemPopups(Choice):
     """
     What messages to display in-game for items sent
@@ -202,6 +211,7 @@ smw_options: typing.Dict[str, type(Option)] = {
     "dragon_coin_checks": DragonCoinChecks,
     "bowser_castle_doors": BowserCastleDoors,
     "level_shuffle": LevelShuffle,
+    "swap_donut_gh_exits": SwapDonutGhostHouseExits,
     #"display_sent_item_popups": DisplaySentItemPopups,
     "display_received_item_popups": DisplayReceivedItemPopups,
     "trap_fill_percentage": TrapFillPercentage,

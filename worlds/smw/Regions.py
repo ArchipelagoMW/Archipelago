@@ -1102,6 +1102,8 @@ def connect_regions(world, player, level_to_tile_dict):
         # Connect Exit regions to next tile regions
         if current_tile_data.exit1Path:
             next_tile_id = current_tile_data.exit1Path.otherLevelID
+            if world.swap_donut_gh_exits[player] and current_tile_id == 0x04:
+                next_tile_id = current_tile_data.exit2Path.otherLevelID
             next_tile_name = level_info_dict[next_tile_id].levelName
             if ("Star Road - " not in next_tile_name) and (" - Star Road" not in next_tile_name):
                 next_tile_name += " - Tile"
@@ -1109,6 +1111,8 @@ def connect_regions(world, player, level_to_tile_dict):
             connect(world, player, names, current_exit_name, next_tile_name)
         if current_tile_data.exit2Path:
             next_tile_id = current_tile_data.exit2Path.otherLevelID
+            if world.swap_donut_gh_exits[player] and current_tile_id == 0x04:
+                next_tile_id = current_tile_data.exit1Path.otherLevelID
             next_tile_name = level_info_dict[next_tile_id].levelName
             if ("Star Road - " not in next_tile_name) and (" - Star Road" not in next_tile_name):
                 next_tile_name += " - Tile"

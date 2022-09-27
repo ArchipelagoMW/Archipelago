@@ -649,6 +649,18 @@ def handle_mario_palette(rom, world, player):
     rom.write_bytes(0x359C, bytes(ow_mario_palettes[chosen_palette]))
 
 
+def handle_swap_donut_gh_exits(rom):
+    rom.write_bytes(0x2567C, bytes([0xC0]))
+    rom.write_bytes(0x25873, bytes([0xA9]))
+    rom.write_bytes(0x25875, bytes([0x85]))
+    rom.write_bytes(0x25954, bytes([0x92]))
+    rom.write_bytes(0x25956, bytes([0x0A]))
+    rom.write_bytes(0x25E31, bytes([0x00, 0x00, 0xD8, 0x04, 0x24, 0x00, 0x98, 0x04, 0x48, 0x00, 0xD8, 0x03, 0x6C, 0x00, 0x56, 0x03,
+                                    0x90, 0x00, 0x56, 0x03, 0xB4, 0x00, 0x56, 0x03, 0x10, 0x05, 0x18, 0x05, 0x28, 0x09, 0x24, 0x05,
+                                    0x38, 0x0B, 0x14, 0x07, 0xEC, 0x09, 0x12, 0x05, 0xF0, 0x09, 0xD2, 0x04, 0xF4, 0x09, 0x92, 0x04]))
+    rom.write_bytes(0x26371, bytes([0x32]))
+
+
 def patch_rom(world, rom, player, active_level_dict):
     local_random = world.slot_seeds[player]
 
@@ -752,6 +764,9 @@ def patch_rom(world, rom, player, active_level_dict):
     if world.music_shuffle[player] != "none":
         handle_music_shuffle(rom, world, player)
 
+    if world.swap_donut_gh_exits[player]:
+        handle_swap_donut_gh_exits(rom)
+
     handle_mario_palette(rom, world, player)
 
     # Store all relevant option results in ROM
@@ -764,6 +779,7 @@ def patch_rom(world, rom, player, active_level_dict):
     rom.write_byte(0x01BFA4, world.display_received_item_popups[player].value)
     rom.write_byte(0x01BFA5, world.death_link[player].value)
     rom.write_byte(0x01BFA6, world.dragon_coin_checks[player].value)
+    rom.write_byte(0x01BFA7, world.swap_donut_gh_exits[player].value)
 
 
     from Main import __version__
