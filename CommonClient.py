@@ -132,12 +132,12 @@ class CommonContext:
     # defaults
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
-    command_processor: type(CommandProcessor) = ClientCommandProcessor
+    command_processor: typing.Type[CommandProcessor] = ClientCommandProcessor
     ui = None
-    ui_task: typing.Optional[asyncio.Task] = None
-    input_task: typing.Optional[asyncio.Task] = None
-    keep_alive_task: typing.Optional[asyncio.Task] = None
-    server_task: typing.Optional[asyncio.Task] = None
+    ui_task: typing.Optional["asyncio.Task[None]"] = None
+    input_task: typing.Optional["asyncio.Task[None]"] = None
+    keep_alive_task: typing.Optional["asyncio.Task[None]"] = None
+    server_task: typing.Optional["asyncio.Task[None]"] = None
     server: typing.Optional[Endpoint] = None
     server_version: Version = Version(0, 0, 0)
     current_energy_link_value: int = 0  # to display in UI, gets set by server
@@ -146,7 +146,7 @@ class CommonContext:
 
     # remaining type info
     slot_info: typing.Dict[int, NetworkSlot]
-    server_address: str
+    server_address: typing.Optional[str]
     password: typing.Optional[str]
     hint_cost: typing.Optional[int]
     player_names: typing.Dict[int, str]
@@ -154,6 +154,7 @@ class CommonContext:
     # locations
     locations_checked: typing.Set[int]  # local state
     locations_scouted: typing.Set[int]
+    items_received: typing.List[NetworkItem]
     missing_locations: typing.Set[int]  # server state
     checked_locations: typing.Set[int]  # server state
     server_locations: typing.Set[int]  # all locations the server knows of, missing_location | checked_locations
@@ -243,7 +244,7 @@ class CommonContext:
         if self.server_task is not None:
             await self.server_task
 
-    async def send_msgs(self, msgs):
+    async def send_msgs(self, msgs: typing.List[typing.Dict[str, typing.Any]]) -> None:
         if not self.server or not self.server.socket.open or self.server.socket.closed:
             return
         await self.server.socket.send(encode(msgs))
@@ -271,7 +272,7 @@ class CommonContext:
                 logger.info('Enter slot name:')
                 self.auth = await self.console_input()
 
-    async def send_connect(self, **kwargs):
+    async def send_connect(self, **kwargs: typing.Any) -> None:
         payload = {
             'cmd': 'Connect',
             'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
@@ -282,7 +283,7 @@ class CommonContext:
             payload.update(kwargs)
         await self.send_msgs([payload])
 
-    async def console_input(self):
+    async def console_input(self) -> str:
         self.input_requests += 1
         return await self.input_queue.get()
 
@@ -390,7 +391,7 @@ class CommonContext:
 
     # DeathLink hooks
 
-    def on_deathlink(self, data: dict):
+    def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         """Gets dispatched when a new DeathLink is triggered by another linked player."""
         self.last_death_link = max(data["time"], self.last_death_link)
         text = data.get("cause", "")
@@ -477,7 +478,7 @@ async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
                 seconds_elapsed = 0
 
 
-async def server_loop(ctx: CommonContext, address=None):
+async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) -> None:
     if ctx.server and ctx.server.socket:
         logger.error('Already connected')
         return
@@ -722,7 +723,7 @@ async def console_loop(ctx: CommonContext):
             logger.exception(e)
 
 
-def get_base_parser(description=None):
+def get_base_parser(description: typing.Optional[str] = None):
     import argparse
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
