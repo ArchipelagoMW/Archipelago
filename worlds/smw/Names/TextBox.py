@@ -40,6 +40,29 @@ def string_to_bytes(input_string):
     return out_array
 
 
+def generate_text_box(input_string):
+    out_bytes = bytearray()
+    box_line_count = 0
+    box_line_chr_count = 0
+    for word in input_string.split():
+        if box_line_chr_count + len(word) > 18:
+            out_bytes[-1] += 0x80
+            box_line_count += 1
+            box_line_chr_count = 0
+
+        out_bytes.extend(string_to_bytes(word))
+        box_line_chr_count += len(word)
+
+        if box_line_chr_count < 18:
+            box_line_chr_count += 1
+            out_bytes.append(0x1F)
+
+    for i in range(box_line_count, 8):
+        out_bytes.append(0x9F)
+
+    return out_bytes
+
+
 def generate_goal_text(world: MultiWorld, player: int):
     out_array = bytearray()
     if world.goal[player] == "yoshi_egg_hunt":

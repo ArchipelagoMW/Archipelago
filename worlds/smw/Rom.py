@@ -2,7 +2,7 @@ import Utils
 from Patch import read_rom, APDeltaPatch
 from .Locations import lookup_id_to_name, all_locations
 from .Levels import level_info_dict, full_level_list, submap_level_list, location_id_to_level_id
-from .Names.TextBox import generate_goal_text, title_text_mapping
+from .Names.TextBox import generate_goal_text, title_text_mapping, generate_text_box
 
 USHASH = 'cdd3c8c37322978ca8669b34bc89c804'
 ROM_PLAYER_LIMIT = 65535
@@ -656,6 +656,9 @@ def patch_rom(world, rom, player, active_level_dict):
 
     rom.write_bytes(0x2A6E2, goal_text)
     rom.write_byte(0x2B1D8, 0x80)
+
+    intro_text = generate_text_box("Bowser has stolen all of Mario's abilities. Can you help Mario travel across Dinosaur land to get them back and save the Princess from him?")
+    rom.write_bytes(0x2A5D9, intro_text)
 
     # Force all 8 Bowser's Castle Rooms
     rom.write_byte(0x3A680, 0xD4)
