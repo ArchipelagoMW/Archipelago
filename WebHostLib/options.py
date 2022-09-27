@@ -1,6 +1,5 @@
 import logging
 import os
-from typing import Dict
 from Utils import __version__, local_path
 from jinja2 import Template
 import yaml
@@ -65,7 +64,7 @@ def create():
 
     for game_name, world in AutoWorldRegister.world_types.items():
 
-        all_options: Dict[str, Options.AssembleOptions] = {
+        all_options: typing.Dict[str, Options.AssembleOptions] = {
             **Options.per_game_common_options,
             **world.option_definitions
         }
