@@ -10,6 +10,7 @@
 - Windows 10+
 - [Overcooked! 2](https://store.steampowered.com/bundle/13608/Overcooked_2___Gourmet_Edition/) for PC
     - **Steam: Recommended**
+    - Steam (Beta Branch): Supported
     - Epic Games: Supported
     - GOG: Not officially supported - Adventurous users may choose to experiment at their own risk
     - Windows Store (aka GamePass): Not Supported
