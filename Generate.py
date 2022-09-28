@@ -182,28 +182,35 @@ def main(args=None, callback=ERmain):
          for fname, yamls in weights_cache.items()}
 
     if meta_weights:
+        # resolve triggers in each game section if they exist
         for category in meta_weights.values():
             if "triggers" in category:
                 meta_weights = roll_triggers(meta_weights, category["triggers"])
+        # each game "section"
         for category_name, category_dict in meta_weights.items():
             for key in category_dict:
-                if key != "triggers" and category_name != "_Generator_Version":
-                    option = roll_meta_option(key, category_name, category_dict)
-                    if option is not None:
-                        for path in weights_cache:
-                            for yaml in weights_cache[path]:
-                                if category_name is None:
-                                    if key == "game":
-                                        yaml[key] = option
-                                        yaml.setdefault(option, {})
-                                        continue
-                                    for category in yaml:
-                                        if category in AutoWorldRegister.world_types and key in Options.common_options:
-                                            yaml[category][key] = option
-                                elif category_name not in yaml:
-                                    logging.warning(f"Meta: Category {category_name} is not present in {path}.")
-                                else:
-                                    yaml[category_name][key] = option
+                # rolling triggers adds the generator version to the weights. not sure why but didn't want to break it
+                if key == "triggers" and category_name == "_Generator_Version":
+                    continue
+                # get result for the current option
+                option = roll_meta_option(key, category_name, category_dict)
+                if option is None:  # option_result == null shouldn't overwrite player yamls
+                    continue
+                # overwrite player options with the results
+                for path in weights_cache:
+                    for yaml in weights_cache[path]:
+                        if category_name is None:
+                            if key == "game":
+                                yaml[key] = option
+                                yaml.setdefault(option, {})
+                                continue
+                            for category in yaml:
+                                if category in AutoWorldRegister.world_types and key in Options.common_options:
+                                    yaml[category][key] = option
+                        elif category_name not in yaml:
+                            logging.warning(f"Meta: Category {category_name} is not present in {path}.")
+                        else:
+                            yaml[category_name][key] = option
 
     player_path_cache = {}
     for player in range(1, args.multi + 1):
