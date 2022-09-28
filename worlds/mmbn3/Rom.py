@@ -24,7 +24,8 @@ charDict = {
     "BowneGlobal10":0x7D,"BowneGlobal11":0x7E,'\n':0xE8
 }
 
-rom_data = {}
+rom_data = []
+modified_rom_data = []
 
 giveChipBytes = [0xF6, 0x10]
 giveItemBytes = [0xF6, 0x20]
@@ -276,18 +277,21 @@ def GetDataChunk(data, startOffset, size):
 
 def ReplaceItem(data, location, item):
     offset = location.text_archive_address
+    size = 0
+    archive = None
     if (CompressedArchives.__contains__(offset)):
         size = ArchiveToSizeComp[offset]
-        archiveData = GetDataChunk(data, offset, size)
+        archive = TextArchive(offset, size, True)
     else:
         size = ArchiveToSizeUncomp[offset]
+        archive = TextArchive(offset, size, False)
+    archive.InjectItemMessage(location.text_script_index, location.text_box_index, item.GenerateItemMessageBox())
 
 def main():
     global rom_data
     rom_file = 'C:/Users/digiholic/Projects/BN3AP/armips/output.gba'
     with open(rom_file, "rb") as rom:
         rom_data = rom.read()
-        archive = TextArchive(0x759BF8, 0x4BC, True)
         
 
 if __name__ == "__main__": main()

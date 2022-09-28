@@ -1,5 +1,5 @@
 import typing
-from Names import LocationName
+from .Names import LocationName
 from BaseClasses import CollectionState
 
 class region_info:
@@ -12,7 +12,6 @@ class region_info:
         self.locations = locations
 
 regions = [
-    region_info("Menu", ["ACDC Overworld"]),
     region_info("ACDC Overworld",
                 ["ACDC Cyberworld", "SciLab Overworld", "Yoka Overworld", "Beach Overworld"],
                 [

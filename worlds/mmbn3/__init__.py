@@ -13,6 +13,7 @@ from .Regions import regions
 from .Names import ItemName, LocationName
 from worlds.generic.Rules import add_rule, set_rule
 
+
 class MMBN3Web(WebWorld):
     theme = "ice"
 

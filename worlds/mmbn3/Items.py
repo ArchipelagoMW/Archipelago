@@ -21,15 +21,15 @@ class ProgressionType:
 
 
 class ProgramColor:
-    White = 0
-    Pink = 1
-    Yellow = 2
-    Red = 3
-    Blue = 4
-    Green = 5
-    Orange = 6
-    Purple = 7
-    Dark = 8
+    White = 1
+    Pink = 2
+    Yellow = 3
+    Red = 4
+    Blue = 5
+    Green = 6
+    Orange = 7
+    Purple = 8
+    Dark = 9
 
 
 def ChipCode(c):
@@ -47,6 +47,8 @@ class ItemData(typing.NamedTuple):
     subItemID: typing.Optional[int] = 0x00
     count: typing.Optional[int] = 1
 
+    def GenerateItemMessageBox(self) -> bytes:
+        pass
 
 class MMBN3Item(Item):
     game: str = "MegaMan Battle Network 3"
@@ -202,30 +204,30 @@ chipList: typing.List[ItemData] = [
 ]
 
 programList: typing.List[ItemData] = [
-    ItemData(0xB31084, ItemName.Airshoes,           ItemClassification.useful, ItemType.Program, 29, 0),
-    ItemData(0xB31085, ItemName.Attack_plus_White,  ItemClassification.useful, ItemType.Program, 41, ProgramColor.White),
-    ItemData(0xB31086, ItemName.Attack_plus_Pink,   ItemClassification.useful, ItemType.Program, 41, ProgramColor.Pink),
-    ItemData(0xB31087, ItemName.BrkChrg,            ItemClassification.useful, ItemType.Program,  3, 0),
-    ItemData(0xB31088, ItemName.Charge_plus_Pink,   ItemClassification.useful, ItemType.Program, 43, ProgramColor.Pink),
-    ItemData(0xB31089, ItemName.Charge_plus_White,  ItemClassification.useful, ItemType.Program, 43, ProgramColor.White),
-    ItemData(0xB3108A, ItemName.Collect,            ItemClassification.useful, ItemType.Program, 28, 0),
-    ItemData(0xB3108B, ItemName.GigFldr1,           ItemClassification.useful, ItemType.Program, 48, 0),
-    ItemData(0xB3108C, ItemName.HP_100_Pink,        ItemClassification.useful, ItemType.Program, 36, ProgramColor.Pink),
-    ItemData(0xB3108D, ItemName.HP_100_Yellow,      ItemClassification.useful, ItemType.Program, 36, ProgramColor.Yellow),
-    ItemData(0xB3108E, ItemName.HP_200_Yellow,      ItemClassification.useful, ItemType.Program, 37, ProgramColor.Yellow),
-    ItemData(0xB3108F, ItemName.HP_500_Yellow,      ItemClassification.useful, ItemType.Program, 39, ProgramColor.Yellow),
+    ItemData(0xB31084, ItemName.Airshoes,          ItemClassification.useful, ItemType.Program, 29, ProgramColor.White),
+    ItemData(0xB31085, ItemName.Attack_plus_White, ItemClassification.useful, ItemType.Program, 41, ProgramColor.White),
+    ItemData(0xB31086, ItemName.Attack_plus_Pink,  ItemClassification.useful, ItemType.Program, 41, ProgramColor.Pink),
+    ItemData(0xB31087, ItemName.BrkChrg,           ItemClassification.useful, ItemType.Program,  3, ProgramColor.Orange),
+    ItemData(0xB31088, ItemName.Charge_plus_Pink,  ItemClassification.useful, ItemType.Program, 43, ProgramColor.Pink),
+    ItemData(0xB31089, ItemName.Charge_plus_White, ItemClassification.useful, ItemType.Program, 43, ProgramColor.White),
+    ItemData(0xB3108A, ItemName.Collect,           ItemClassification.useful, ItemType.Program, 28, ProgramColor.Pink),
+    ItemData(0xB3108B, ItemName.GigFldr1,          ItemClassification.useful, ItemType.Program, 48, ProgramColor.Purple),
+    ItemData(0xB3108C, ItemName.HP_100_Pink,       ItemClassification.useful, ItemType.Program, 36, ProgramColor.Pink),
+    ItemData(0xB3108D, ItemName.HP_100_Yellow,     ItemClassification.useful, ItemType.Program, 36, ProgramColor.Yellow),
+    ItemData(0xB3108E, ItemName.HP_200_Yellow,     ItemClassification.useful, ItemType.Program, 37, ProgramColor.Yellow),
+    ItemData(0xB3108F, ItemName.HP_500_Yellow,     ItemClassification.useful, ItemType.Program, 39, ProgramColor.Yellow),
 
-    ItemData(0xB31090, ItemName.HubBatc,            ItemClassification.useful, ItemType.Program, 49, 0),
-    ItemData(0xB31091, ItemName.Jungle,             ItemClassification.useful, ItemType.Program, 27, 0),
-    ItemData(0xB31092, ItemName.OilBody,            ItemClassification.useful, ItemType.Program, 24, 0),
-    ItemData(0xB31093, ItemName.QuickGge,           ItemClassification.useful, ItemType.Program, 31, 0),
-    ItemData(0xB31094, ItemName.SetSand,            ItemClassification.useful, ItemType.Program,  7, 0),
-    ItemData(0xB31095, ItemName.SneakRun,           ItemClassification.useful, ItemType.Program, 23, 0),
-    ItemData(0xB31096, ItemName.Speed_plus_Yellow,  ItemClassification.useful, ItemType.Program, 42, ProgramColor.Yellow),
-    ItemData(0xB31097, ItemName.WpnLV_plus_White,   ItemClassification.useful, ItemType.Program, 35, ProgramColor.White),
-    ItemData(0xB31098, ItemName.WpnLV_plus_Pink,    ItemClassification.useful, ItemType.Program, 35, ProgramColor.Pink),
-    ItemData(0xB31099, ItemName.WpnLV_plus_Yellow,  ItemClassification.useful, ItemType.Program, 35, ProgramColor.Yellow),
-    ItemData(0xB3109A, ItemName.Press,              ItemClassification.useful, ItemType.Program, 20, 0)
+    ItemData(0xB31090, ItemName.HubBatc,           ItemClassification.useful, ItemType.Program, 49, ProgramColor.Orange),
+    ItemData(0xB31091, ItemName.Jungle,            ItemClassification.useful, ItemType.Program, 27, ProgramColor.White),
+    ItemData(0xB31092, ItemName.OilBody,           ItemClassification.useful, ItemType.Program, 24, ProgramColor.Yellow),
+    ItemData(0xB31093, ItemName.QuickGge,          ItemClassification.useful, ItemType.Program, 31, ProgramColor.Pink),
+    ItemData(0xB31094, ItemName.SetSand,           ItemClassification.useful, ItemType.Program,  7, ProgramColor.Green),
+    ItemData(0xB31095, ItemName.SneakRun,          ItemClassification.useful, ItemType.Program, 23, ProgramColor.Pink),
+    ItemData(0xB31096, ItemName.Speed_plus_Yellow, ItemClassification.useful, ItemType.Program, 42, ProgramColor.Yellow),
+    ItemData(0xB31097, ItemName.WpnLV_plus_White,  ItemClassification.useful, ItemType.Program, 35, ProgramColor.White),
+    ItemData(0xB31098, ItemName.WpnLV_plus_Pink,   ItemClassification.useful, ItemType.Program, 35, ProgramColor.Pink),
+    ItemData(0xB31099, ItemName.WpnLV_plus_Yellow, ItemClassification.useful, ItemType.Program, 35, ProgramColor.Yellow),
+    ItemData(0xB3109A, ItemName.Press,             ItemClassification.useful, ItemType.Program, 20, ProgramColor.White)
 ]
 
 zennyList: typing.List[ItemData] = [

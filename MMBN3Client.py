@@ -43,6 +43,7 @@ script_version: int = 1
 testingData = {}
 debugEnabled = False
 locations_checked = []
+items_sent = []
 itemIndex = 1
 
 class MMBN3CommandProcessor(ClientCommandProcessor):
@@ -213,7 +214,7 @@ def get_payload(ctx: MMBN3Context):
     global testingData
     global debugEnabled
 
-    """
+
     if len(testingData) > 0:
         test_item = item_info(len(items_sent), testingData["sender"], testingData["type"])
         test_item.itemID = int(testingData["itemID"])
@@ -222,8 +223,8 @@ def get_payload(ctx: MMBN3Context):
         test_item.itemIndex = int(testingData["itemIndex"])
         items_sent.append(test_item)
         testingData = {}
-    """
-    items_sent = []
+
+    #items_sent = []
     for i, item in enumerate(ctx.items_received):
         item_data = items_by_id[item.item]
         new_item = item_info(i, ctx.player_names[item.player], item_data.type)

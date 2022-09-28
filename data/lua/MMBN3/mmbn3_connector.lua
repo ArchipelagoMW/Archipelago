@@ -170,7 +170,7 @@ local undernet_bmd_checks = function()
     checks["Undernet 2 Lower BMD"] = memory.read_u8(0x20001f1)
     checks["Undernet 3 South BMD"] = memory.read_u8(0x20001f2)
     checks["Undernet 3 Central BMD"] = memory.read_u8(0x20001f2)
-    checks["Undernet 4 Bottom Pillar BMD"] = memory.read_u8(0x2000161)
+    checks["Undernet 4 Pillar Prog"] = memory.read_u8(0x2000161)
     checks["Undernet 4 Bottom West BMD"] = memory.read_u8(0x20001f3)
     checks["Undernet 4 Top Pillar BMD"] = memory.read_u8(0x20001f3)
     checks["Undernet 4 Top North BMD"] = memory.read_u8(0x20001f3)
@@ -301,7 +301,7 @@ end
 local story_bmd_checks = function()
     local checks ={}
     checks["Undernet 7 Upper BMD"] = memory.read_u8(0x20001f6)
-    checks["School 1 KeyData A BMD"] = memory.read_u8(0x2000208)
+    checks["School 1 KeyDataA BMD"] = memory.read_u8(0x2000208)
     checks["School 1 KeyDataB BMD"] = memory.read_u8(0x2000208)
     checks["School 1 KeyDataC BMD"] = memory.read_u8(0x2000208)
     checks["School 2 CodeC BMD"] = memory.read_u8(0x2000209)
@@ -576,11 +576,12 @@ end
 
 local GenerateProgramGet = function(program, color, amt)
     bytes = {
-        0xF6, 0x40, program, color, amt,
+        0xF6, 0x40, (program * 4), amt, color,
         charDict['G'], charDict['o'], charDict['t'], charDict[' '], charDict['a'], charDict[' '], charDict['N'], charDict['a'], charDict['v'], charDict['i'], charDict['\n'],
         charDict['C'], charDict['u'], charDict['s'], charDict['t'], charDict['o'], charDict['m'], charDict['i'], charDict['z'], charDict['e'], charDict['r'], charDict[' '], charDict['P'], charDict['r'], charDict['o'], charDict['g'], charDict['r'], charDict['a'], charDict['m'], charDict[':'], charDict['\n'],
         charDict['\"'], 0xF9, 0x00, program, 0x05, charDict['\"'],charDict['!'],charDict['!']
     }
+
     return bytes
 end
 
