@@ -4,12 +4,52 @@ from Options import Option, Toggle, DefaultOnToggle, DeathLink, Range, Choice
 
 class TotalLocations(Range):
     # TODO mark this as a classic/legacy option and mark in options which are legacy and new
+    # TODO clarify what the difference is
     """Number of location checks which are added to the Risk of Rain playthrough."""
     display_name = "Total Locations"
     range_start = 10
     range_end = 250
     default = 20
 
+class ChestsPerEnvironment(Range):
+    # TODO clarify what the difference is
+    """The number of chest locations per environment."""
+    display_name = "Chests per Environment"
+    range_start = 0
+    range_end = 20
+    default = 10
+
+class ShrinesPerEnvironment(Range):
+    # TODO clarify what the difference is
+    """The number of shrine locations per environment."""
+    display_name = "Shrines per Environment"
+    range_start = 0
+    range_end = 20
+    default = 0 # TODO change to 10
+
+class ScavengersPerEnvironment(Range):
+    # TODO clarify what the difference is
+    """The number of scavenger locations per environment."""
+    display_name = "Scavenger per Environment"
+    range_start = 0
+    range_end = 1
+    default = 0 # TODO change to 1
+
+class ScannersPerEnvironment(Range):
+    # TODO clarify what the difference is
+    """The number of shrine locations per environment."""
+    display_name = "Radio Scanners per Environment"
+    range_start = 0
+    range_end = 1
+    default = 0 # TODO change to 1
+
+class AltarsPerEnvironment(Range):
+    # TODO clarify what the difference is
+    """The number of shrine locations per environment."""
+    display_name = "Newts Per Environment"
+    range_start = 0
+    range_end = 2
+    default = 0 # TODO change to 2
 
 class TotalRevivals(Range):
     """Total Percentage of `Dio's Best Friend` item put in the item pool."""
@@ -173,17 +213,22 @@ ror2_weights: Dict[str, type(Option)] = {
 }
 
 ror2_options: Dict[str, type(Option)] = {
-    "total_locations":      TotalLocations,
-    "total_revivals":       TotalRevivals,
-    "start_with_revive":    StartWithRevive,
-    "final_stage_death":    FinalStageDeath,
-    "environments_as_items": EnvironmentsAsItems, # XXX fix indentation
-    "dlc_sotv":             DLC_SOTV,
-    "death_link":           DeathLink,
+    "total_locations":          TotalLocations,
+    "chests_per_stage":         ChestsPerEnvironment,
+    "shrines_per_stage":        ShrinesPerEnvironment,
+    "scavengers_per_stage":     ScavengersPerEnvironment,
+    "scanner_per_stage":        ScannersPerEnvironment,
+    "altars_per_stage":         AltarsPerEnvironment,
+    "total_revivals":           TotalRevivals,
+    "start_with_revive":        StartWithRevive,
+    "final_stage_death":        FinalStageDeath,
+    "environments_as_items":    EnvironmentsAsItems,
+    "dlc_sotv":                 DLC_SOTV,
+    "death_link":               DeathLink,
     # TODO add an option for whether simulacrum environments should exist in the pool
-    "item_pickup_step":     ItemPickupStep,
-    "enable_lunar":         AllowLunarItems,
-    "item_weights":         ItemWeights,
-    "item_pool_presets":    ItemPoolPresetToggle,
+    "item_pickup_step":         ItemPickupStep,
+    "enable_lunar":             AllowLunarItems,
+    "item_weights":             ItemWeights,
+    "item_pool_presets":        ItemPoolPresetToggle,
     **ror2_weights
 }

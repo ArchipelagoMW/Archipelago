@@ -27,6 +27,7 @@ item_table: Dict[str, int] = {
 # environments
 
 # TODO move the environments into stages so that they can be distributed in a reasonable order
+# TODO perhaps all the environments should be moved out to a separate file
 environment_vanilla_table: Dict[str, int] = {
     "Void Fields":                          37704, # arena
     "Distant Roost":                        37707, # blackbeach
