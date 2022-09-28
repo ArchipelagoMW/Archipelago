@@ -1,5 +1,5 @@
 from __future__ import annotations
-from concurrent.futures import Future
+
 import shutil
 import json
 import bsdiff4  # type: ignore
@@ -415,7 +415,7 @@ if __name__ == "__main__":
                             zfw.writestr(zfinfo, data)
                         return zfinfo.filename
 
-                    futures: List[Future[str]] = []
+                    futures: List[concurrent.futures.Future[str]] = []
                     with zipfile.ZipFile(rom, "r") as zfr:
                         updated_zip = os.path.splitext(rom)[0] + "_updated.zip"
                         with zipfile.ZipFile(updated_zip, "w", compression=zipfile.ZIP_DEFLATED,
