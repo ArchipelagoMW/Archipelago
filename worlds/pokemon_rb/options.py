@@ -85,21 +85,21 @@ class Tea(Toggle):
     """Adds a Tea item to the item pool which the Saffron guards require instead of the vending machine drinks.
     Adds a location check to the Celadon Mansion 1F, where Tea is acquired in FireRed and LeafGreen."""
     display_name = "Tea"
-    default = 1
+    default = 0
 
 
 class ExtraKeyItems(Toggle):
     """Adds key items that are required to access the Rocket Hideout, Cinnabar Mansion, Safari Zone, and Power Plant.
     Adds four item pickups to Rock Tunnel B1F."""
     display_name = "Extra Key Items"
-    default = 1
+    default = 0
 
 
 class ExtraStrengthBoulders(Toggle):
     """Adds Strength Boulders blocking the Route 11 gate, and in Route 13 (can be bypassed with Surf).
     This potentially increases the usefulness of Strength as well as the Bicycle."""
     display_name = "Extra Strength Boulders"
-    default = 1
+    default = 0
 
 
 class RequireItemFinder(Toggle):
@@ -396,6 +396,7 @@ class ReusableTMs(Toggle):
     """Makes TMs reusable, so they will not be consumed upon use."""
     display_name = "Reusable TMs"
     default = 0
+
 
 class StartingMoney(Range):
     """The amount of money you start with."""

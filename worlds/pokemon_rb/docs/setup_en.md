@@ -138,16 +138,16 @@ Pokemon Red - Blue:
     open_viridian_city: 50
   tea: # Adds a Tea item to the item pool which the Saffron guards require instead of the vending machine drinks.
     #    Adds a location check to the Celadon Mansion 1F, where Tea is acquired in FireRed and LeafGreen.
-    false: 0
-    true: 50
+    false: 50
+    true: 0
   extra_key_items: # Adds key items that are required to access the Rocket Hideout, Cinnabar Mansion, Safari Zone, and Power Plant.
     #    Adds four item pickups to Rock Tunnel B1F.
-    false: 0
-    true: 50
+    false: 50
+    true: 0
   extra_strength_boulders: # Adds Strength Boulders blocking the Route 11 gate, and in Route 13 (can be bypassed with Surf).
     #    This potentially increases the usefulness of Strength as well as the Bicycle.
-    false: 0
-    true: 50
+    false: 50
+    true: 0
   require_item_finder: # Require Item Finder to pick up hidden items.
     false: 50
     true: 0
