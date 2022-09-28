@@ -46,6 +46,12 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
     def _cmd_auto_patch(self, steaminstall: str):
         """Patch the game automatically."""
         if isinstance(self.ctx, UndertaleContext):
+            if steaminstall == "" or not os.path.exists("C:\\Program Files (x86)\\Steam"):
+                steaminstall = "C:\\Program Files (x86)\\Steam"
+                if not os.path.exists("C:\\Program Files (x86)\\Steam"):
+                    steaminstall = "C:\\Program Files\\Steam"
+            if not os.path.exists("C:\\Program Files (x86)\\Steam"):
+                self.output("ERROR: Folder does not exists. Please make sure you put the steam directory in this command. \"/auto_patch (Steam directory)\".")
             for file_name in os.listdir(steaminstall+"\\steamapps\\common\\Undertale\\"):
                 if file_name != "steam_api.dll":
                     copier(steaminstall+'\\steamapps\\common\\Undertale\\'+file_name, os.getcwd() +"\\Undertale\\"+file_name)
@@ -54,7 +60,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
             with open(os.path.expandvars(os.getcwd() +"\\Undertale\\" + "Custom Sprites\\" + "Which Character.txt"), 'w') as f:
                 f.writelines(["// Put the folder name of the sprites you want to play as, make sure it is the only line other than this one.\n", "frisk"])
                 f.close()
-            self.output(f"Patched.")
+            self.output(f"Patching successful!")
 
     def _cmd_online(self):
         """Makes you no longer able to see other Undertale players."""
@@ -450,6 +456,17 @@ async def multi_watcher(ctx: UndertaleContext):
                                 "data": {"player": ctx.slot, "x": this_x, "y": this_y, "room": this_room,
                                          "spr": this_sprite, "frm": this_frame}}]
                     await ctx.send_msgs(message)
+                else:
+                    this_x = "-100"
+                    this_y = "-100"
+                    this_room = "room_mysteryman"
+                    this_sprite = "spr_maincharad"
+                    this_frame = "0"
+                    message = [{"cmd": 'Bounce', "tags": ["Online"],
+                                "data": {"player": ctx.slot, "x": this_x, "y": this_y, "room": this_room,
+                                         "spr": this_sprite, "frm": this_frame}}]
+                    await ctx.send_msgs(message)
+
         await asyncio.sleep(0.1)
 
 
@@ -491,6 +508,8 @@ async def game_watcher(ctx: UndertaleContext):
                     await ctx.send_msgs(message)
                 if file.find("victory") > -1 and file.find(str(ctx.route)) > -1:
                     victory = True
+                if file.find(".playerspot") > -1 and "Online" not in ctx.tags:
+                    os.remove(root+"/"+file)
                 if file.find("victory") > -1:
                     if str(ctx.route) == "all_routes":
                         if file.find("neutral") > -1 and ctx.completed_routes["neutral"] != 1:
