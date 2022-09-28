@@ -9,6 +9,7 @@ from .Regions import create_regions, sm64courses, sm64entrances_s, sm64_internal
 from BaseClasses import Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
 
+
 class SM64Web(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
