@@ -101,7 +101,7 @@ class APContainer:
         self.server = manifest["server"]
         self.player_name = manifest["player_name"]
 
-    def get_manifest(self) -> Dict[str, Union[str, int, None]]:
+    def get_manifest(self) -> Dict[str, Any]:
         return {
             "server": self.server,  # allow immediate connection to server in multiworld. Empty string otherwise
             "player": self.player,
@@ -127,7 +127,7 @@ class APDeltaPatch(APContainer, metaclass=AutoPatchRegister):
         self.patched_path = patched_path
         super(APDeltaPatch, self).__init__(*args, **kwargs)
 
-    def get_manifest(self) -> Dict[str, Union[str, int, None]]:
+    def get_manifest(self) -> Dict[str, Any]:
         manifest = super(APDeltaPatch, self).get_manifest()
         manifest["base_checksum"] = self.hash
         manifest["result_file_ending"] = self.result_file_ending

@@ -164,7 +164,7 @@ class CommonContext:
     # current message box through kvui
     _messagebox = None
 
-    def __init__(self, server_address, password):
+    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str]) -> None:
         # server state
         self.server_address = server_address
         self.username = None

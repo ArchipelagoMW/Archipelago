@@ -217,11 +217,11 @@ def get_public_ipv6() -> str:
     return ip
 
 
-OptionType = typing.Dict[str, typing.Dict[str, typing.Any]]
+OptionsType = typing.Dict[str, typing.Dict[str, typing.Any]]
 
 
 @cache_argsless
-def get_default_options() -> OptionType:
+def get_default_options() -> OptionsType:
     # Refer to host.yaml for comments as to what all these options mean.
     options = {
         "general_options": {
@@ -293,7 +293,7 @@ def get_default_options() -> OptionType:
     return options
 
 
-def update_options(src: dict, dest: dict, filename: str, keys: list) -> OptionType:
+def update_options(src: dict, dest: dict, filename: str, keys: list) -> OptionsType:
     for key, value in src.items():
         new_keys = keys.copy()
         new_keys.append(key)
@@ -313,7 +313,7 @@ def update_options(src: dict, dest: dict, filename: str, keys: list) -> OptionTy
 
 
 @cache_argsless
-def get_options() -> OptionType:
+def get_options() -> OptionsType:
     filenames = ("options.yaml", "host.yaml")
     locations: typing.List[str] = []
     if os.path.join(os.getcwd()) != local_path():
