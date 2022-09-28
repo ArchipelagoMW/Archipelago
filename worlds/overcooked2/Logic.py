@@ -233,21 +233,19 @@ ramp_logic = {
 
 horde_logic = {  # Additive
     ("Coin Purse", 0.7),
-    ("Calmer Unbread", 0.4),
-    ("Progressive Dash", 0.3),
-    ("Progressive Throw/Catch", 0.3),
-    ("Sharp Knife", 0.2),
-    ("Dish Scrubber", 0.2),
+    ("Calmer Unbread", 0.35),
+    ("Progressive Dash", 0.2),
+    ("Progressive Throw/Catch", 0.15),
+    ("Sharp Knife", 0.15),
+    ("Dish Scrubber", 0.125),
     ("Burn Leniency", 0.1),
-    ("Clean Dishes", 0.1),
-    ("Spare Plate", 0.1),
+    ("Spare Plate", 0.075),
+    ("Clean Dishes", 0.025),
 }
-
-# 1, 2, 3, 4, 5, 6
 
 # Level 1 - dict keyed by friendly level names
 # Level 2 - tuple with 3 elements, one for each star requirement
-# Level 3 - tuple with 3 elements, one for exclusive requirements and one for additive requirements
+# Level 3 - tuple with 2 elements, one for exclusive requirements and one for additive requirements
 # Level 4 (exclusive) - set of item name strings of items which MUST be in the inventory to allow logical completion
 # Level 4 (additive)  - list of tuples containing item name and item weight where the sum of which are in the player's inventory
 #                       must be 1.0+ to allow logical completion
