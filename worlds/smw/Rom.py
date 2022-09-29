@@ -1,8 +1,7 @@
 import Utils
-from Patch import read_rom, APDeltaPatch
+from worlds.Files import APDeltaPatch
 from .Aesthetics import generate_shuffled_header_data
-from .Locations import lookup_id_to_name, all_locations
-from .Levels import level_info_dict, full_level_list, submap_level_list, location_id_to_level_id
+from .Levels import level_info_dict
 from .Names.TextBox import generate_goal_text, title_text_mapping, generate_text_box
 
 USHASH = 'cdd3c8c37322978ca8669b34bc89c804'
@@ -69,7 +68,7 @@ class LocalRom:
         self.orig_buffer = None
 
         with open(file, 'rb') as stream:
-            self.buffer = read_rom(stream)
+            self.buffer = Utils.read_rom(stream)
         
     def read_bit(self, address: int, bit_number: int) -> bool:
         bitflag = (1 << bit_number)
@@ -827,7 +826,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
         file_name = get_base_rom_path(file_name)
-        base_rom_bytes = bytes(read_rom(open(file_name, "rb")))
+        base_rom_bytes = bytes(Utils.read_rom(open(file_name, "rb")))
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
