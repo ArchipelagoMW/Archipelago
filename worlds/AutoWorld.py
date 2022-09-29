@@ -3,9 +3,9 @@ from __future__ import annotations
 import logging
 import sys
 import pathlib
-from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, TYPE_CHECKING
+from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Type, Union, TYPE_CHECKING
 
-from Options import Option
+from Options import AssembleOptions
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 
 class AutoWorldRegister(type):
-    world_types: Dict[str, type(World)] = {}
+    world_types: Dict[str, Type[World]] = {}
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -120,7 +120,7 @@ class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    option_definitions: Dict[str, Option[Any]] = {}  # link your Options mapping
+    option_definitions: Dict[str, AssembleOptions] = {}  # link your Options mapping
     game: str  # name the game
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
 
@@ -229,7 +229,8 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def post_fill(self) -> None:
-        """Optional Method that is called after regular fill. Can be used to do adjustments before output generation."""
+        """Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
+        This happens before progression balancing, so the items may not be in their final locations yet."""
 
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.
@@ -237,7 +238,9 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
-        """Fill in the slot_data field in the Connected network package."""
+        """Fill in the `slot_data` field in the `Connected` network package.
+        This is a way the generator can give custom data to the client.
+        The client will receive this as JSON in the `Connected` response."""
         return {}
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
