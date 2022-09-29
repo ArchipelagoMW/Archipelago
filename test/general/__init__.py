@@ -11,11 +11,10 @@ def setup_default_world(world_type) -> MultiWorld:
     world.game[1] = world_type.game
     world.player_name = {1: "Tester"}
     world.set_seed()
-    args = Namespace()
+    args = world.default_common_options
     for name, option in world_type.option_definitions.items():
         setattr(args, name, {1: option.from_any(option.default)})
     world.set_options(args)
-    world.set_default_common_options()
     for step in gen_steps:
         call_all(world, step)
     return world
