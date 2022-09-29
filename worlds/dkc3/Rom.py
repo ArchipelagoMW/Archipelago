@@ -1,6 +1,6 @@
 import Utils
 from Utils import read_snes_rom
-from ..Files import APDeltaPatch
+from worlds.Files import APDeltaPatch
 from .Locations import lookup_id_to_name, all_locations
 from .Levels import level_list, level_dict
 
