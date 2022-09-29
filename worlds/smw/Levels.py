@@ -186,18 +186,18 @@ easy_single_levels = [
     0x2E,
     0x3D,
     0x01,
+    0x0C,
     0x0D,
+    0x46,
+    0x1D,
 ]
 
 hard_single_levels = [
     0x2B,
     0x02,
-    0x0C,
     0x11,
     0x10,
-    0x46,
     0x22,
-    0x1D,
     0x1C,
     0x21,
     0x3B,
@@ -219,9 +219,7 @@ easy_double_levels = [
     0x0F,
     0x42,
     0x43,
-    0x41,
     0x24,
-    0x33,
     0x38,
     0x58,
     0x54,
@@ -237,7 +235,9 @@ hard_double_levels = [
     0x2D,
     0x44,
     0x47,
+    0x41,
     0x23,
+    0x33,
     0x39,
     0x59,
     0x5A,
@@ -459,12 +459,6 @@ def generate_level_list(world, player):
     shuffled_level_list.append(easy_single_levels_copy.pop(0))
     shuffled_level_list.append(easy_castle_fortress_levels_copy.pop(0))
 
-    single_levels_copy = (easy_single_levels_copy.copy() + hard_single_levels_copy.copy())
-    world.random.shuffle(single_levels_copy)
-
-    castle_fortress_levels_copy = (easy_castle_fortress_levels_copy.copy() + hard_castle_fortress_levels_copy.copy())
-    world.random.shuffle(castle_fortress_levels_copy)
-
     # Donut Plains
     shuffled_level_list.append(easy_double_levels_copy.pop(0))
     shuffled_level_list.append(easy_double_levels_copy.pop(0))
@@ -472,12 +466,18 @@ def generate_level_list(world, player):
     shuffled_level_list.append(0x08)
     shuffled_level_list.append(easy_double_levels_copy.pop(0))
     shuffled_level_list.append(easy_double_levels_copy.pop(0))
-    shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
+    shuffled_level_list.append(easy_single_levels_copy.pop(0))
+    shuffled_level_list.append(easy_single_levels_copy.pop(0))
+    shuffled_level_list.append(easy_single_levels_copy.pop(0))
+    shuffled_level_list.append(easy_castle_fortress_levels_copy.pop(0))
     shuffled_level_list.append(0x28)
     shuffled_level_list.append(0x16)
+
+    single_levels_copy = (easy_single_levels_copy.copy() + hard_single_levels_copy.copy())
+    world.random.shuffle(single_levels_copy)
+
+    castle_fortress_levels_copy = (easy_castle_fortress_levels_copy.copy() + hard_castle_fortress_levels_copy.copy())
+    world.random.shuffle(castle_fortress_levels_copy)
 
     double_levels_copy = (easy_double_levels_copy.copy() + hard_double_levels_copy.copy())
     world.random.shuffle(double_levels_copy)
