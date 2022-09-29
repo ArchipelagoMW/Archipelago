@@ -294,8 +294,17 @@ class MultiWorld():
     def get_player_name(self, player: int) -> str:
         return self.player_name[player]
 
+    # REVIEW: Change this to `_get_file_safe_player_name` ?
+    # It's not used outside of this class anymore.
     def get_file_safe_player_name(self, player: int) -> str:
         return ''.join(c for c in self.get_player_name(player) if c not in '<>:"/\\|?*')
+
+    def get_out_file_name_base(self, player: int) -> str:
+        """ the base name (without file extension) for each player's output file for a seed """
+        return f"AP_{self.seed_name}_P{player}" \
+            + (f"_{self.get_file_safe_player_name(player).replace(' ', '_')}"
+               if (self.player_name[player] != 'Player%d' % player)
+               else '')
 
     def initialize_regions(self, regions=None):
         for region in regions if regions else self.regions:
