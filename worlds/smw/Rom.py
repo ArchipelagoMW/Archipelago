@@ -248,6 +248,38 @@ def handle_ability_code(rom):
     rom.write_bytes(SPIN_JUMP_SUB_ADDR + 0x0D, bytearray([0x6B]))             # RTL
     # End Spin Jump
 
+    # Spin Jump from Water
+    rom.write_bytes(0x6A89, bytearray([0x22, 0xF8, 0xBB, 0x03])) # JSL $03BBF8
+    rom.write_bytes(0x6A8D, bytearray([0xEA] * 0x05))
+
+    SPIN_JUMP_WATER_SUB_ADDR = 0x01BBF8
+    rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x04, bytearray([0x89, 0x08]))       # BIT #08
+    rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x06, bytearray([0xF0, 0x09]))       # BEQ +0x09
+    rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x08, bytearray([0x1A]))             # INC
+    rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x09, bytearray([0x8D, 0x0D, 0x14])) # STA $140D
+    rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x0C, bytearray([0xA9, 0x04]))       # LDA #04
+    rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x0E, bytearray([0x8D, 0xFC, 0x1D])) # STA $1DFC
+    rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x11, bytearray([0x28]))             # PLP
+    rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x12, bytearray([0x6B]))             # RTL
+    # End Spin Jump from Water
+
+    # Spin Jump from Springboard
+    rom.write_bytes(0xE693, bytearray([0x22, 0x0C, 0xBC, 0x03])) # JSL $03BC0C
+    rom.write_bytes(0xE697, bytearray([0xEA] * 0x01))
+
+    SPIN_JUMP_SPRING_SUB_ADDR = 0x01BC0C
+    rom.write_bytes(SPIN_JUMP_SPRING_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(SPIN_JUMP_SPRING_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(SPIN_JUMP_SPRING_SUB_ADDR + 0x04, bytearray([0x89, 0x08]))       # BIT #08
+    rom.write_bytes(SPIN_JUMP_SPRING_SUB_ADDR + 0x06, bytearray([0xF0, 0x05]))       # BEQ +0x05
+    rom.write_bytes(SPIN_JUMP_SPRING_SUB_ADDR + 0x08, bytearray([0xA9, 0x01]))       # LDA #01
+    rom.write_bytes(SPIN_JUMP_SPRING_SUB_ADDR + 0x0A, bytearray([0x8D, 0x0D, 0x14])) # STA $140D
+    rom.write_bytes(SPIN_JUMP_SPRING_SUB_ADDR + 0x0D, bytearray([0x28]))             # PLP
+    rom.write_bytes(SPIN_JUMP_SPRING_SUB_ADDR + 0x0E, bytearray([0x6B]))             # RTL
+    # End Spin Jump from Springboard
+
     # Swim
     rom.write_bytes(0x5A25, bytearray([0x22, 0xC8, 0xBA, 0x03])) # JSL $03BAC8
     rom.write_bytes(0x5A29, bytearray([0xEA] * 0x04))
@@ -531,9 +563,9 @@ def handle_yoshi_box(rom):
 
 def handle_bowser_damage(rom):
 
-    rom.write_bytes(0x1A509, bytearray([0x20, 0x00, 0xBC])) # JSR $03BC00
+    rom.write_bytes(0x1A509, bytearray([0x20, 0x50, 0xBC])) # JSR $03BC50
 
-    BOWSER_BALLS_SUB_ADDR = 0x01BC00
+    BOWSER_BALLS_SUB_ADDR = 0x01BC50
     rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x00, bytearray([0x08]))                   # PHP
     rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x01, bytearray([0xAD, 0x48, 0x0F]))       # LDA $F48
     rom.write_bytes(BOWSER_BALLS_SUB_ADDR + 0x04, bytearray([0xCF, 0xA1, 0xBF, 0x03])) # CMP $03BFA1
@@ -579,9 +611,9 @@ def handle_level_shuffle(rom, active_level_dict):
     ### End Fix Translevel Check
 
     ### Fix Snake Blocks
-    rom.write_bytes(0x192FB, bytearray([0x20, 0x18, 0xBC])) # JSR $03BC18
+    rom.write_bytes(0x192FB, bytearray([0x20, 0x1D, 0xBC])) # JSR $03BC1D
 
-    SNAKE_BLOCKS_SUB_ADDR = 0x01BC18
+    SNAKE_BLOCKS_SUB_ADDR = 0x01BC1D
     rom.write_bytes(SNAKE_BLOCKS_SUB_ADDR + 0x00, bytearray([0x08]))                   # PHP
     rom.write_bytes(SNAKE_BLOCKS_SUB_ADDR + 0x01, bytearray([0xAD, 0xBF, 0x13]))       # LDA $13BF
     rom.write_bytes(SNAKE_BLOCKS_SUB_ADDR + 0x04, bytearray([0xC9, 0x20]))             # CMP #20
