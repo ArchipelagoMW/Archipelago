@@ -4,7 +4,7 @@ import json
 import os
 import sys
 import zipfile
-from typing import ClassVar, List, Tuple, Optional, Dict, Any, Union, BinaryIO, TypedDict
+from typing import ClassVar, Tuple, Optional, Dict, Any, Union, BinaryIO, TypedDict
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -18,9 +18,9 @@ class AutoPatchRegister(type):
     patch_types: ClassVar[Dict[str, AutoPatchRegister]] = {}
     file_endings: ClassVar[Dict[str, AutoPatchRegister]] = {}
 
-    def __new__(cls, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoPatchRegister:
+    def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoPatchRegister:
         # construct class
-        new_class = super().__new__(cls, name, bases, dct)
+        new_class = super().__new__(mcs, name, bases, dct)
         if "game" in dct:
             AutoPatchRegister.patch_types[dct["game"]] = new_class
             if not dct["patch_file_ending"]:
