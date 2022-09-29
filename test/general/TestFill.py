@@ -1,5 +1,9 @@
+import itertools
 from typing import List, Iterable
 import unittest
+
+import Options
+from Options import Accessibility
 from worlds.AutoWorld import World
 from Fill import FillError, balance_multiworld_progression, fill_restrictive, distribute_items_restrictive
 from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, RegionType, Item, Location, \
@@ -10,6 +14,7 @@ from worlds.generic.Rules import CollectionRule, locality_rules, set_rule
 def generate_multi_world(players: int = 1) -> MultiWorld:
     multi_world = MultiWorld(players)
     multi_world.player_name = {}
+    args = multi_world.default_common_options
     for i in range(players):
         player_id = i+1
         world = World(multi_world, player_id)
@@ -20,8 +25,12 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
                         "Menu Region Hint", player_id, multi_world)
         multi_world.regions.append(region)
 
+        for option_key in itertools.chain(Options.common_options, Options.per_game_common_options):
+            option_value = getattr(args, option_key, {})
+            setattr(multi_world, option_key, option_value)
+            multi_world.worlds[player_id].options[option_key] = option_value[player_id]
+
     multi_world.set_seed(0)
-    multi_world.set_default_common_options()
 
     return multi_world
 
@@ -187,7 +196,7 @@ class TestFillRestrictive(unittest.TestCase):
         items = player1.prog_items
         locations = player1.locations
 
-        multi_world.accessibility[player1.id].value = multi_world.accessibility[player1.id].option_minimal
+        multi_world.worlds[player1.id].options["accessibility"] = Accessibility.from_any(Accessibility.option_minimal)
         multi_world.completion_condition[player1.id] = lambda state: state.has(
             items[1].name, player1.id)
         set_rule(locations[1], lambda state: state.has(

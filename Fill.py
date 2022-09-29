@@ -5,6 +5,7 @@ import itertools
 from collections import Counter, deque
 
 from BaseClasses import CollectionState, Location, LocationProgressType, MultiWorld, Item
+from Options import Accessibility
 
 from worlds.AutoWorld import call_all
 
@@ -52,7 +53,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             spot_to_fill: typing.Optional[Location] = None
 
             # if minimal accessibility, only check whether location is reachable if game not beatable
-            if world.accessibility[item_to_place.player] == 'minimal':
+            if world.worlds[item_to_place.player].options["accessibility"] == Accessibility.option_minimal:
                 perform_access_check = not world.has_beaten_game(maximum_exploration_state,
                                                                  item_to_place.player) \
                     if single_player_placement else not has_beaten_game
