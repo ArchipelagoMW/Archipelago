@@ -11,7 +11,8 @@ class Overcooked2Item(Item):
     game: str = "Overcooked! 2"
 
 
-oc2_base_id: int = int.from_bytes(codecs.encode(b"oc2", "hex"), byteorder="big")
+# oc2_base_id: int = int.from_bytes(codecs.encode(b"oc2", "hex"), byteorder="big")
+oc2_base_id = 213700
 
 item_table: Dict[str, ItemData] = {
     "Wood"                          : ItemData(oc2_base_id + 1 ),
