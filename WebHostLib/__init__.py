@@ -9,9 +9,7 @@ from flask_caching import Cache
 from flask_compress import Compress
 from werkzeug.routing import BaseConverter
 
-import worlds.Files
 from Utils import title_sorted
-from .models import *
 
 UPLOAD_FOLDER = os.path.relpath('uploads')
 LOGS_FOLDER = os.path.relpath('logs')
@@ -75,6 +73,7 @@ def register():
     Note: initializes worlds subsystem."""
     # has automatic patch integration
     import worlds.AutoWorld
+    import worlds.Files
     app.jinja_env.filters['supports_apdeltapatch'] = lambda game_name: \
         game_name in worlds.Files.AutoPatchRegister.patch_types
 

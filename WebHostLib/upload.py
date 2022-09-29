@@ -9,7 +9,8 @@ from io import BytesIO
 from flask import request, flash, redirect, url_for, session, render_template
 from pony.orm import flush, select
 
-from WebHostLib import app, Seed, Room, Slot
+from . import app
+from .models import Seed, Room, Slot
 from Utils import VersionException, __version__
 from worlds.Files import AutoPatchRegister
 from NetUtils import NetworkSlot, SlotType

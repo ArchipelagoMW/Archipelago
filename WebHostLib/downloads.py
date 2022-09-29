@@ -6,7 +6,8 @@ from flask import send_file, Response, render_template
 from pony.orm import select
 
 from worlds.Files import AutoPatchRegister
-from WebHostLib import app, Slot, Room, Seed, cache
+from . import app, cache
+from .models import Slot, Room, Seed
 
 
 @app.route("/dl_patch/<suuid:room_id>/<int:patch_id>")
