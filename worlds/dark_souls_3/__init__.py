@@ -286,7 +286,7 @@ class DarkSouls3World(World):
         }
 
         # generate the file
-        filename = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}.json"
+        filename = f"{self.world.get_out_file_name_base(self.player)}.json"
         with open(os.path.join(output_directory, filename), 'w') as outfile:
             json.dump(data, outfile)
 
