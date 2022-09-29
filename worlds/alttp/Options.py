@@ -1,7 +1,9 @@
+import os
 import typing
 
 from BaseClasses import MultiWorld
 from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, OptionList
+from Utils import user_path, parse_yaml
 
 
 class Logic(Choice):
@@ -67,11 +69,13 @@ class OpenPyramid(Choice):
 
     def to_bool(self, world: MultiWorld, player: int) -> bool:
         if self.value == self.option_goal:
-            return world.goal[player] in {Goal.option_ganon, Goal.option_triforce_hunt_ganon, Goal.option_pedestal_ganon}
+            return world.goal[player] in {Goal.option_ganon, Goal.option_triforce_hunt_ganon,
+                                          Goal.option_pedestal_ganon}
         if self.value == self.option_auto:
-            return world.goal[player] in {Goal.option_ganon, Goal.option_triforce_hunt_ganon, Goal.option_pedestal_ganon} \
-            and (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'} or not
-                 world.shuffle_ganon)
+            return world.goal[player] in {Goal.option_ganon, Goal.option_triforce_hunt_ganon,
+                                          Goal.option_pedestal_ganon} \
+                   and (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'} or not
+            world.shuffle_ganon)
         if self.value == self.option_open:
             return True
         return False
@@ -422,13 +426,13 @@ class Bosses(TextChoice):
         if isinstance(self.value, int):
             return
         from Generate import PlandoSettings
-        if not(PlandoSettings.bosses & plando_options):
+        if not (PlandoSettings.bosses & plando_options):
             import logging
             # plando is disabled but plando options were given so pull the option and change it to an int
             option = self.value.split(";")[-1]
             self.value = self.options[option]
             logging.warning(f"The plando bosses module is turned off, so {self.name_lookup[self.value].title()} "
-                    f"boss shuffle will be used for player {player_name}.")
+                            f"boss shuffle will be used for player {player_name}.")
 
 
 class Enemies(Choice):
@@ -687,67 +691,18 @@ class RandomSpriteToggle(Toggle):
 class SpritePool(OptionList):
     """Limits the pool of available sprites for random events to specified pool."""
     display_name = "Sprite Pool"
-    valid_keys = {"Abigail", "Adol", "Adventure 2600", "Aggretsuko", "Alice", "Angry Video Game Nerd", "Arcane",
-                  "ArcticArtemisFox", "Aria", "Ark (Cape)", "Ark (No Cape)", "Arrghus", "Astor", "Astronaut", "Asuna",
-                  "B.S. Boy", "B.S. Girl", "Baba", "Baby Fro", "Baby Metroid", "Badeline", "Bananas in Pyjamas",
-                  "Bandit", "Batman", "Beau", "Bee", "Bel", "Bewp", "Big Key", "Birb", "Birb of Paradise", "Birdfruit",
-                  "Birdo", "Black Mage", "Blacksmith Link", "Blazer", "Blossom", "Bob", "Bob Ross", "Boco the Chocobo",
-                  "Boo", "Boo 2", "Bottle o' Goo", "BotW Link", "BotW Zelda", "Bowser", "Bowsette", "Bowsette Red",
-                  "Branch", "Brian", "Broccoli", "Bronzor", "Bubbles", "Bullet Bill", "Buttercup", "Cactuar", "Cadence",
-                  "Captain Novolin", "Captain Toadette", "CarlSagan42", "Casual Zelda", "Cat Boo", "Catgirl (Hidari)",
-                  "CD-i Link", "Celes", "Centaur Enos", "Charizard", "Cheep Cheep", "Chef Pepper", "Chibity", "Chrizzz",
-                  "Chrono", "Cinna", "Cirno", "Clifford", "Clippy", "Cloud", "Clyde", "Conker", "Conker Neo", "Cornelius",
-                  "Corona", "Crewmate", "Cucco", "Cursor", "D.Owls", "Dark Boy", "Dark Girl", "Dark Link",
-                  "Dark Link (Tunic)", "Dark Link (Zelda 2)", "Dark Panda", "Dark Swatchy", "Dark Zelda", "Dark Zora",
-                  "Deadpool (Mythic)", "Deadpool (SirCzah)", "Deadrock", "Decidueye", "Dekar", "Demon Link", "Dennsen86",
-                  "Diddy Kong", "Dig Dug", "Dipper", "DQ Slime", "Dragonair", "Dragonite", "Drake The Dragon", "Eevee",
-                  "Eggplant", "Eirika", "Ema Skye", "EmoSaru", "Espeon", "Ezlo", "Fierce Diety Link", "Figaro Merchant",
-                  "Finn Merten", "Finny Bear", "Flavor Guy", "Floodgate Fish", "Four Swords Link", "Fox Link",
-                  "Freya Crescent", "Frisk", "Frog Link", "Fujin", "Future Trunks", "Gamer", "Ganondorf", "Garfield",
-                  "Garnet", "Garo Master", "GBC Link", "Geno", "GliitchWiitch", "Glove Color Link", "Gobli", "Goomba",
-                  "Goose", "Graalian Noob", "GrandPOOBear", "Gretis", "Growlithe", "Gruncle Stan", "Guiz", "Hanna",
-                  "Hardhate Beetle", "Hat Color Link", "Hat Kid", "Head Link", "Headless Link", "Heem", "Hello Kitty",
-                  "Hero of Awakening", "Hero of Hyrule", "Hint Tile", "Hoarder (Bush)", "Hoarder (Pot)",
-                  "Hoarder (Rock)", "Hollow Knight", "Hollow Knight (Malmo/Winter", "Homer Simpson", "Hornet",
-                  "Horseman", "Hotdog", "Hyrule Knight", "Hyrule Soldier", "iBazly", "Ignignokt", "Informant Woman",
-                  "Inkling", "Invisible Link", "Jack Frost", "Jason Frudnick", "Jasp", "Jogurt", "Juste Belmont",
-                  "Juzcook", "Kaguya", "Kain", "Katsura", "Kecleon", "Kefka", "Kenny McCormick", "Ketchup", "Kholdstare",
-                  "King Gothalion", "King Graham", "Kinu", "Kira", "Kirby", "Kirby (Dreamland 3)", "Koragi", "Kore8",
-                  "Korok", "Kriv", "Lakitu", "Lapras", "League Mascot", "Lest", "Lestat", "Lily", "Linja",
-                  "Link (Zelda 1)", "Link Redrawn", "Little Hylian", "Locke", "Lucario", "Luffy", "Luigi", "Luna Maindo",
-                  "Lynel (BotW)", "Mad_Tears", "Madeline", "Magus", "Maiden", "Majora's Mask", "Mallow (Cat)",
-                  "Manga Link", "Maple Queen", "Marin", "Mario (Classic)", "Mario and Cappy", "Marisa Kirisame",
-                  "Marvin the Cat", "Matthias", "Meatwad", "Medallions", "Medli", "Mega Man (Classic)", "Megaman X",
-                  "Megaman X2", "MewLp", "Mike Jones", "Mimic", "Mini Ganon", "Minish Cap Link", "Minish Link", "Mipha",
-                  "missingno", "Moblin", "Modern Link", "Mog", "Momiji Inubashiri", "Moosh", "Mouse", "Ms. Paint Dog",
-                  "Nature Link", "Navi", "Navirou", "Ned Flanders", "Negative Link", "Neosad", "Neptune", "NES Link",
-                  "Ness", "Nia", "Niddraig", "Niko", "Ninten", "Octorok", "Old Man", "Olde Man", "Ori", "Outline Link",
-                  "Paper Mario", "Parallel Worlds Link", "Paula", "Penguin Link", "Pete", "Phoenix Wright", "Pikachu",
-                  "Pink Ribbon Link", "Piranha Plant", "Plague Knight", "Plouni", "PoC Link", "Pokey", "Pony", "Popoi",
-                  "Poppy", "Porg Knight", "Power Ranger", "Power Up with Pride Mushroom", "Powerpuff Girl", "Pride Link",
-                  "Primm", "Princess Bubblegum", "Princess Peach", "Prof.Renderer Grizzleton", "Psyduck", "Purple Chest",
-                  "Pyro", "QuadBanger", "Rainbow Link", "Rat", "Red Mage", "Reimu Hakurei (HoxNorf)", "Remeer",
-                  "Remus R Black", "Reverse Mail Order", "Rick", "Robo-Link 9000", "Rocko", "Rottytops", "Rover",
-                  "Roy Koopa", "Rumia", "Rydia", "Ryu", "Sailor Jupiter", "Sailor Mars", "Sailor Mercury", "Sailor Moon",
-                  "Sailor Venus", "Saitama", "Samurott", "Samus", "Samus (Classic)", "Samus (Super Metroid)",
-                  "Santa Hat Link", "Santa Link", "Scholar", "Selan", "SevenS1ns", "Shadow", "Shadow Sakura", "Shantae",
-                  "Shinmyoumaru Sukuna", "Shuppet", "Shy Gal", "Shy Guy", "SighnWaive", "Skunk", "Slowpoke",
-                  "SNES Controller", "Sobble", "Soda Can", "Sokka", "Solaire of Astora", "Sonic the Hedgehog", "Sora",
-                  "Sora (KH1)", "Spiked Roller", "SpongeBob SquarePants", "Spyro the Dragon", "Squall", "Squirrel",
-                  "Squirtle", "Stalfos", "Stan", "Static Link", "Steamed Ham", "Stick Man", "Super Bomb", "Super Bunny",
-                  "Super Meat Boy", "Susie", "Swatchy", "Swiper", "Tanooki Mario", "TASBot", "Tea Time", "Terra (Esper)",
-                  "Terry", "Tetra Sheet", "TGH", "The Professor", "The Pug", "Thief", "ThinkDorm", "Thomcrow", "Tile",
-                  "Tingle", "TMNT", "Toad", "Toadette", "TotemLinks", "TP Zelda", "Trogdor the Burninator",
-                  "Tunic Color Link", "TwoFaced", "Ty the Tasmanian Tiger", "Ultros", "Umbreon", "Valeera",
-                  "VanillaLink", "Vaporeon", "Vegeta", "Vera", "Vitreous", "Vivi", "Vivian", "Wario", "White Mage",
-                  "Will", "Wizzrobe", "Wolf Link (Festive)", "Wolf Link (TP)", "Yoshi", "Yunica Tovah", "Zandra",
-                  "Zaruvyen", "Zebra Unicorn", "Zeckemyro", "Zelda", "Zero Suit Samus", "Zora"}
+
+    @property
+    def valid_keys(self):
+        from worlds.alttp.Rom import _populate_sprite_table
+        sprite_table = {}
+        _populate_sprite_table(sprite_table)
+        return {sprite for sprite in sprite_table}
 
 
 class Sprite(TextChoice):
     """Allows you to either specify which sprite you'd like to use or use a random on event option with the sprite pool."""
     display_name = "Sprite"
-    valid_keys = SpritePool.valid_keys
     option_link = 0
     option_random_on_hit = 1
     option_random_on_enter = 2
@@ -756,6 +711,10 @@ class Sprite(TextChoice):
     option_random_on_item = 5
     option_random_on_bonk = 6
     option_random_on_all = 7
+
+    @property
+    def valid_keys(self):
+        return SpritePool.valid_keys
 
     def verify(self, world, player_name, plando_options) -> None:
         if isinstance(self.value, int):

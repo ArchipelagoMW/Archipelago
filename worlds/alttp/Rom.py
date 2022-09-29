@@ -3,6 +3,7 @@ from __future__ import annotations
 import Utils
 from Patch import read_rom
 from .Options import Counters, WorldState, ItemFunc, Timer, Logic, Goal
+from .Options import Sprite as SpriteOption
 
 LTTPJPN10HASH = '03a63945398191337e896e5771f77173'
 RANDOMIZERBASEHASH = '9952c2a3ec1b421e408df0d20c8f0c7f'
@@ -222,15 +223,15 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
             rom.write_byte(0x186381, 0x00 if userandomsprites else 0x01)
 
         onevent = 0
-        if sprite == 7:
+        if sprite == SpriteOption.option_random_on_all:
             onevent = 0xFFFF  # Support all current and future events that can cause random sprite changes.
         elif userandomsprites:
-            onevent = 0x01 if sprite == 1 else 0x00
-            onevent += 0x02 if sprite == 2 else 0x00
-            onevent += 0x04 if sprite == 3 else 0x00
-            onevent += 0x08 if sprite == 4 else 0x00
-            onevent += 0x10 if sprite == 5 else 0x00
-            onevent += 0x20 if sprite == 6 else 0x00
+            onevent = 0x01 if sprite == SpriteOption.option_random_on_hit else 0x00
+            onevent += 0x02 if sprite == SpriteOption.option_random_on_enter else 0x00
+            onevent += 0x04 if sprite == SpriteOption.option_random_on_exit else 0x00
+            onevent += 0x08 if sprite == SpriteOption.option_random_on_slash else 0x00
+            onevent += 0x10 if sprite == SpriteOption.option_random_on_item else 0x00
+            onevent += 0x20 if sprite == SpriteOption.option_random_on_bonk else 0x00
         if allow_random_on_event:
             onevent = 0x01 if 'on_hit' in sprite.value else 0x00
             onevent += 0x02 if 'on_enter' in sprite.value else 0x00
@@ -256,7 +257,7 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
         sprites = list()
         sprite.write_to_rom(rom)
 
-        _populate_sprite_table()
+        _populate_sprite_table(_sprite_table)
         if userandomsprites or allow_random_on_event:
             if sprite_pool:
                 for spritename in sprite_pool.value:
@@ -494,14 +495,14 @@ sprite_list_lock = threading.Lock()
 _sprite_table = {}
 
 
-def _populate_sprite_table():
+def _populate_sprite_table(_sprite_table):
     with sprite_list_lock:
         if not _sprite_table:
             def load_sprite_from_file(file):
                 sprite = Sprite(file)
                 if sprite.valid:
-                    _sprite_table[sprite.name.lower()] = sprite
-                    _sprite_table[os.path.basename(file).split(".")[0].lower()] = sprite  # alias for filename base
+                    _sprite_table[sprite.name] = sprite
+                    _sprite_table[os.path.basename(file).split(".")[0]] = sprite  # alias for filename base
                 else:
                     logging.debug(f"Spritefile {file} could not be loaded as a valid sprite.")
 
@@ -626,8 +627,8 @@ class Sprite():
 
     @staticmethod
     def get_sprite_from_name(name: str, local_random=random) -> Optional[Sprite]:
-        _populate_sprite_table()
-        name = name.lower()
+        _populate_sprite_table(_sprite_table)
+        name = name
         if name.startswith('random'):
             sprites = list(set(_sprite_table.values()))
             sprites.sort(key=lambda x: x.name)
