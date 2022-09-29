@@ -1,5 +1,5 @@
 import Utils
-from Patch import read_rom
+from Utils import read_snes_rom
 from ..Files import APDeltaPatch
 from .Locations import lookup_id_to_name, all_locations
 from .Levels import level_list, level_dict
@@ -441,13 +441,13 @@ class LocalRom(object):
         self.orig_buffer = None
 
         with open(file, 'rb') as stream:
-            self.buffer = read_rom(stream)
+            self.buffer = read_snes_rom(stream)
         #if patch:
         #    self.patch_rom()
         #    self.orig_buffer = self.buffer.copy()
         #if vanillaRom:
         #    with open(vanillaRom, 'rb') as vanillaStream:
-        #        self.orig_buffer = read_rom(vanillaStream)
+        #        self.orig_buffer = read_snes_rom(vanillaStream)
         
     def read_bit(self, address: int, bit_number: int) -> bool:
         bitflag = (1 << bit_number)
@@ -725,7 +725,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
         file_name = get_base_rom_path(file_name)
-        base_rom_bytes = bytes(read_rom(open(file_name, "rb")))
+        base_rom_bytes = bytes(read_snes_rom(open(file_name, "rb")))
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)

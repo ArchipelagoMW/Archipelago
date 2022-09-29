@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import os
 import sys
-from typing import Tuple, Optional, BinaryIO, TypedDict
+from typing import Tuple, Optional, TypedDict
 
-import ModuleUpdate
+if __name__ == "__main__":
+    import ModuleUpdate
+    ModuleUpdate.update()
+
 from worlds.Files import AutoPatchRegister, APDeltaPatch
 
-ModuleUpdate.update()
 
 GAME_ALTTP = "A Link to the Past"
 GAME_SM = "Super Metroid"
@@ -32,14 +34,6 @@ def create_rom_file(patch_file: str) -> Tuple[RomMeta, str]:
                 "player": handler.player,
                 "player_name": handler.player_name}, target
     raise NotImplementedError(f"No Handler for {patch_file} found.")
-
-
-def read_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
-    """Reads rom into bytearray and optionally strips off any smc header"""
-    buffer = bytearray(stream.read())
-    if strip_header and len(buffer) % 0x400 == 0x200:
-        return buffer[0x200:]
-    return buffer
 
 
 if __name__ == "__main__":
