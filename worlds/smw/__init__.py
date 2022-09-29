@@ -153,7 +153,7 @@ class SMWWorld(World):
             rom = LocalRom(get_base_rom_path())
             patch_rom(self.world, rom, self.player, self.active_level_dict)
 
-            rompath = os.path.join(output_directory, f'{self.world.get_out_file_name_base(self.player)}.sfc')
+            rompath = os.path.join(output_directory, f"{self.world.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 

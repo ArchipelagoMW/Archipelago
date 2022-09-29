@@ -506,7 +506,7 @@ class SMWorld(World):
 
     def generate_output(self, output_directory: str):
         outfilebase = self.world.get_out_file_name_base(self.player)
-        outputFilename = os.path.join(output_directory, f'{outfilebase}.sfc')
+        outputFilename = os.path.join(output_directory, f"{outfilebase}.sfc")
 
         try:
             self.variaRando.PatchRom(outputFilename, self.APPrePatchRom, self.APPostPatchRom)

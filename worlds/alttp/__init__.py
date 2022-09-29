@@ -396,7 +396,7 @@ class ALTTPWorld(World):
                                deathlink=world.death_link[player],
                                allowcollect=world.allow_collect[player])
 
-            rompath = os.path.join(output_directory, f'{self.world.get_out_file_name_base(self.player)}.sfc')
+            rompath = os.path.join(output_directory, f"{self.world.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
             patch = LttPDeltaPatch(os.path.splitext(rompath)[0]+LttPDeltaPatch.patch_file_ending, player=player,
                                    player_name=world.player_name[player], patched_path=rompath)

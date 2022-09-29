@@ -428,7 +428,7 @@ class SMZ3World(World):
 
             outfilebase = self.world.get_out_file_name_base(self.player)
 
-            filename = os.path.join(output_directory, f'{outfilebase}.sfc')
+            filename = os.path.join(output_directory, f"{outfilebase}.sfc")
             with open(filename, "wb") as binary_file:
                 binary_file.write(base_combined_rom)
             patch = SMZ3DeltaPatch(os.path.splitext(filename)[0]+SMZ3DeltaPatch.patch_file_ending, player=self.player,

@@ -301,7 +301,7 @@ class MultiWorld():
         """ the base name (without file extension) for each player's output file for a seed """
         return f"AP_{self.seed_name}_P{player}" \
             + (f"_{self.get_file_safe_player_name(player).replace(' ', '_')}"
-               if (self.player_name[player] != 'Player%d' % player)
+               if (self.player_name[player] != f"Player{player}")
                else '')
 
     def initialize_regions(self, regions=None):
