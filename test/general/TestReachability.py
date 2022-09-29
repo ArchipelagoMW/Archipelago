@@ -20,7 +20,7 @@ class TestBase(unittest.TestCase):
                     for location in world.get_locations():
                         if location.name not in excluded:
                             with self.subTest("Location should be reached", location=location):
-                                self.assertTrue(location.can_reach(state))
+                                self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
 
                     with self.subTest("Completion Condition"):
                         self.assertTrue(world.can_beat_game(state))
