@@ -217,8 +217,11 @@ def get_public_ipv6() -> str:
     return ip
 
 
+OptionsType = typing.Dict[str, typing.Dict[str, typing.Any]]
+
+
 @cache_argsless
-def get_default_options() -> dict:
+def get_default_options() -> OptionsType:
     # Refer to host.yaml for comments as to what all these options mean.
     options = {
         "general_options": {
@@ -295,7 +298,7 @@ def get_default_options() -> dict:
     return options
 
 
-def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
+def update_options(src: dict, dest: dict, filename: str, keys: list) -> OptionsType:
     for key, value in src.items():
         new_keys = keys.copy()
         new_keys.append(key)
@@ -315,9 +318,9 @@ def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
 
 
 @cache_argsless
-def get_options() -> dict:
+def get_options() -> OptionsType:
     filenames = ("options.yaml", "host.yaml")
-    locations = []
+    locations: typing.List[str] = []
     if os.path.join(os.getcwd()) != local_path():
         locations += filenames  # use files from cwd only if it's not the local_path
     locations += [user_path(filename) for filename in filenames]
@@ -358,7 +361,7 @@ def persistent_load() -> typing.Dict[str, dict]:
     return storage
 
 
-def get_adjuster_settings(game_name: str):
+def get_adjuster_settings(game_name: str) -> typing.Dict[str, typing.Any]:
     adjuster_settings = persistent_load().get("adjuster", {}).get(game_name, {})
     return adjuster_settings
 
@@ -397,7 +400,8 @@ class RestrictedUnpickler(pickle.Unpickler):
         # Options and Plando are unpickled by WebHost -> Generate
         if module == "worlds.generic" and name in {"PlandoItem", "PlandoConnection"}:
             return getattr(self.generic_properties_module, name)
-        if module.endswith("Options"):
+        # pep 8 specifies that modules should have "all-lowercase names" (options, not Options)
+        if module.lower().endswith("options"):
             if module == "Options":
                 mod = self.options_module
             else:
