@@ -11,6 +11,8 @@ import io
 import collections
 import importlib
 import logging
+from typing import BinaryIO
+
 from yaml import load, load_all, dump, SafeLoader
 
 try:
@@ -632,3 +634,11 @@ def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset
         else:
             return element.lower()
     return sorted(data, key=lambda i: sorter(key(i)) if key else sorter(i))
+
+
+def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
+    """Reads rom into bytearray and optionally strips off any smc header"""
+    buffer = bytearray(stream.read())
+    if strip_header and len(buffer) % 0x400 == 0x200:
+        return buffer[0x200:]
+    return buffer
