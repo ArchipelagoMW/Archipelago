@@ -2,6 +2,10 @@ from typing import Dict
 from Options import Option, Toggle, DefaultOnToggle, DeathLink, Range, Choice
 
 
+# NOTE be aware that since the range of item ids that RoR2 uses is based off of the maximums of checks
+# Be careful when changing the range_end values not to go into another game's IDs
+# NOTE that these changes to range_end must also be reflected in the RoR2 client so it understands the same ids.
+
 class TotalLocations(Range):
     # TODO mark this as a classic/legacy option and mark in options which are legacy and new
     # TODO clarify what the difference is
@@ -25,7 +29,7 @@ class ShrinesPerEnvironment(Range):
     display_name = "Shrines per Environment"
     range_start = 0
     range_end = 20
-    default = 0 # TODO change to 10
+    default = 10
 
 class ScavengersPerEnvironment(Range):
     # TODO clarify what the difference is
@@ -33,7 +37,7 @@ class ScavengersPerEnvironment(Range):
     display_name = "Scavenger per Environment"
     range_start = 0
     range_end = 1
-    default = 0 # TODO change to 1
+    default = 1
 
 class ScannersPerEnvironment(Range):
     # TODO clarify what the difference is
@@ -41,7 +45,7 @@ class ScannersPerEnvironment(Range):
     display_name = "Radio Scanners per Environment"
     range_start = 0
     range_end = 1
-    default = 0 # TODO change to 1
+    default = 1
 
 class AltarsPerEnvironment(Range):
     # TODO clarify what the difference is
@@ -49,7 +53,7 @@ class AltarsPerEnvironment(Range):
     display_name = "Newts Per Environment"
     range_start = 0
     range_end = 2
-    default = 0 # TODO change to 2
+    default = 2
 
 class TotalRevivals(Range):
     """Total Percentage of `Dio's Best Friend` item put in the item pool."""

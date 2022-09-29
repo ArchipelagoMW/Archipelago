@@ -76,10 +76,19 @@ class orderedstage_location:
         environment_index = environment[1]
         locations = {}
 
+        # due to this mapping, since environment ids are not consecutive, there are lots of "wasted" id numbers
+        # TODO perhaps a hashing algorithm could be used to compress this range and save "wasted" ids
         environment_start_id = environment_index*orderedstage_location.allocation + ror2_locations_start_orderedstage
         for n in range(chests):
-            locations|= {f"{environment_name}: Chest {n+1}": n + orderedstage_location.offset_ChestsPerEnvironment + environment_start_id}
-        # XXX handle the other locations
+            locations|= {f"{environment_name}: Chest {n+1}":            n + orderedstage_location.offset_ChestsPerEnvironment       + environment_start_id}
+        for n in range(shrines):
+            locations|= {f"{environment_name}: Shrine {n+1}":           n + orderedstage_location.offset_ShrinesPerEnvironment      + environment_start_id}
+        for n in range(scavengers):
+            locations|= {f"{environment_name}: Scavenger {n+1}":        n + orderedstage_location.offset_ScavengersPerEnvironment   + environment_start_id}
+        for n in range(scanners):
+            locations|= {f"{environment_name}: Radio Scanner {n+1}":    n + orderedstage_location.offset_ScannersPerEnvironment     + environment_start_id}
+        for n in range(altars):
+            locations|= {f"{environment_name}: Newt Altar {n+1}":       n + orderedstage_location.offset_AltarsPerEnvironment       + environment_start_id}
 
         return locations
 
