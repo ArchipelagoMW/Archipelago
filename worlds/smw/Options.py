@@ -158,13 +158,15 @@ class MusicShuffle(Choice):
     """
     Music shuffle type
     None: No Music is shuffled
-    Simple Unique: Each music track is consistently shuffled throughout the game
+    Consistent: Each music track is consistently shuffled throughout the game
+    Full: Each individual level has a random music track
     Singularity: The entire game uses one song for overworld and one song for levels
     """
     display_name = "Music Shuffle"
     option_none = 0
-    option_simple_unique = 1
-    option_singularity = 2
+    option_consistent = 1
+    option_full = 2
+    option_singularity = 3
     default = 0
 
 
@@ -184,11 +186,18 @@ class MarioPalette(Choice):
     default = 0
 
 
-class PaletteShuffle(Toggle):
+class ForegroundPaletteShuffle(Toggle):
     """
-    Whether to shuffle level palettes
+    Whether to shuffle level foreground palettes
     """
-    display_name = "Palette Shuffle"
+    display_name = "Foreground Palette Shuffle"
+
+
+class BackgroundPaletteShuffle(Toggle):
+    """
+    Whether to shuffle level background palettes
+    """
+    display_name = "Background Palette Shuffle"
 
 
 class StartingLifeCount(Range):
@@ -221,6 +230,7 @@ smw_options: typing.Dict[str, type(Option)] = {
     "autosave": Autosave,
     "music_shuffle": MusicShuffle,
     "mario_palette": MarioPalette,
-    #"palette_shuffle": PaletteShuffle,
+    "foreground_palette_shuffle": ForegroundPaletteShuffle,
+    "background_palette_shuffle": BackgroundPaletteShuffle,
     "starting_life_count": StartingLifeCount,
 }

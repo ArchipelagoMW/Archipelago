@@ -1,5 +1,6 @@
 import Utils
 from Patch import read_rom, APDeltaPatch
+from .Aesthetics import generate_shuffled_header_data
 from .Locations import lookup_id_to_name, all_locations
 from .Levels import level_info_dict, full_level_list, submap_level_list, location_id_to_level_id
 from .Names.TextBox import generate_goal_text, title_text_mapping, generate_text_box
@@ -763,6 +764,8 @@ def patch_rom(world, rom, player, active_level_dict):
     # Handle Music Shuffle
     if world.music_shuffle[player] != "none":
         handle_music_shuffle(rom, world, player)
+
+    generate_shuffled_header_data(rom, world, player)
 
     if world.swap_donut_gh_exits[player]:
         handle_swap_donut_gh_exits(rom)
