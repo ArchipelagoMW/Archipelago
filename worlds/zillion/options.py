@@ -124,6 +124,26 @@ class ZillionSkill(Range):
     default = 2
 
 
+class ZillionStartingCards(SpecialRange):
+    default = 2
+    range_start = 0
+    range_end = 10
+    display_name = "starting cards"
+    special_range_names = {
+        "vanilla": 0
+    }
+
+
+ZillionStartingCards.__doc__ = ZzOptions.starting_cards.__doc__
+
+
+class ZillionRoomGen(Toggle):
+    display_name = "room generation"
+
+
+ZillionRoomGen.__doc__ = ZzOptions.room_gen.__doc__
+
+
 zillion_options: Dict[str, AssembleOptions] = {
     "continues": ZillionContinues,
     # "early_scope": ZillionEarlyScope,  # TODO: implement
@@ -136,6 +156,8 @@ zillion_options: Dict[str, AssembleOptions] = {
     "opas_per_level": ZillionOpasPerLevel,
     "item_counts": ZillionItemCounts,
     "skill": ZillionSkill,
+    "starting_cards": ZillionStartingCards,
+    "room_gen": ZillionRoomGen,
 }
 
 
@@ -207,6 +229,10 @@ def validate(wo: Any, p: int) -> ZzOptions:
     assert start_char_name in chars
     start_char_name = cast(Chars, start_char_name)
 
+    starting_cards = cast(ZillionStartingCards, wo.starting_cards[p])
+
+    room_gen = cast(ZillionRoomGen, wo.room_gen[p])
+
     zz_item_counts = convert_item_counts(item_counts)
     zz_op = ZzOptions(
         zz_item_counts,
@@ -220,7 +246,10 @@ def validate(wo: Any, p: int) -> ZzOptions:
         floppy_req.value,
         wo.continues[p].value,
         wo.randomize_alarms[p].value,
-        # wo.early_scope[p].value
+        False,  # wo.early_scope[p].value,
+        True,  # balance defense
+        starting_cards.value,
+        bool(room_gen.value)
     )
     zz_validate(zz_op)
     return zz_op

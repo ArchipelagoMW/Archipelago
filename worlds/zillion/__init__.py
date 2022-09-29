@@ -22,7 +22,9 @@ from zilliandomizer.randomizer import Randomizer as ZzRandomizer
 from zilliandomizer.alarms import Alarms
 from zilliandomizer.logic_components.items import RESCUE, items as zz_items, Item as ZzItem
 from zilliandomizer.logic_components.locations import Location as ZzLocation, Req
+from zilliandomizer.map_gen.jump import room_jump_requirements
 from zilliandomizer.options import Chars
+from zilliandomizer.room_gen.room_gen import RoomGen
 
 from ..AutoWorld import World, WebWorld
 
@@ -103,6 +105,7 @@ class ZillionWorld(World):
     zz_randomizer: Optional[ZzRandomizer] = None
     zz_patcher: Optional[ZzPatcher] = None
     id_to_zz_item: Optional[Dict[int, ZzItem]] = None
+    _modified_rooms: FrozenSet[int] = frozenset()
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -126,6 +129,18 @@ class ZillionWorld(World):
         rom_dir_name = os.path.dirname(get_base_rom_path())
         self.zz_patcher = ZzPatcher(rom_dir_name)
         self.zz_randomizer = ZzRandomizer(zz_op)
+
+        self._modified_rooms = frozenset()
+        if zz_op.room_gen:
+            self.logger.info("Zillion room gen enabled - generating rooms...")  # this takes time
+            p = self.zz_patcher
+            jump_req_rooms = room_jump_requirements()
+            p.aem.room_gen_mods()
+            room_gen = RoomGen(p.tc, p.sm, p.aem, self.zz_randomizer.logger, zz_op.skill)
+            room_gen.generate_all(jump_req_rooms)
+            self.zz_randomizer.reset(room_gen)
+            self._modified_rooms = room_gen.get_modified_rooms()
+            self.logger.info("Zillion room gen complete")
 
         # just in case the options changed anything (I don't think they do)
         for zz_name in self.zz_randomizer.locations:
@@ -263,7 +278,7 @@ class ZillionWorld(World):
         zz_options = self.zz_randomizer.options
         if zz_options.randomize_alarms:
             a = Alarms(self.zz_patcher.tc, self.zz_randomizer.logger)
-            a.choose_all(frozenset())
+            a.choose_all(self._modified_rooms)
 
     def finalize_item_locations(self) -> None:
         """
