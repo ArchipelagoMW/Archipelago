@@ -294,8 +294,6 @@ class MultiWorld():
     def get_player_name(self, player: int) -> str:
         return self.player_name[player]
 
-    # REVIEW: Change this to `_get_file_safe_player_name` ?
-    # It's not used outside of this class anymore.
     def get_file_safe_player_name(self, player: int) -> str:
         return ''.join(c for c in self.get_player_name(player) if c not in '<>:"/\\|?*')
 
