@@ -5,7 +5,7 @@ from io import BytesIO
 from flask import send_file, Response, render_template
 from pony.orm import select
 
-from Patch import AutoPatchRegister
+from worlds.Files import AutoPatchRegister
 from WebHostLib import app, Slot, Room, Seed, cache
 
 

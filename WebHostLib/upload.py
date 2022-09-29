@@ -11,7 +11,7 @@ from pony.orm import flush, select
 
 from WebHostLib import app, Seed, Room, Slot
 from Utils import VersionException, __version__
-from Patch import AutoPatchRegister
+from worlds.Files import AutoPatchRegister
 from NetUtils import NetworkSlot, SlotType
 
 banned_zip_contents = (".sfc",)

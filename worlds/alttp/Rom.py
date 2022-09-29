@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import Utils
+import worlds.AutoWorld
+import worlds.Files
 from Patch import read_rom
 
 LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
@@ -2901,7 +2903,7 @@ hash_alphabet = [
 ]
 
 
-class LttPDeltaPatch(Patch.APDeltaPatch):
+class LttPDeltaPatch(worlds.Files.APDeltaPatch):
     hash = LTTPJPN10HASH
     game = "A Link to the Past"
     patch_file_ending = ".aplttp"

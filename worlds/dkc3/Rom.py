@@ -1,5 +1,6 @@
 import Utils
-from Patch import read_rom, APDeltaPatch
+from Patch import read_rom
+from ..Files import APDeltaPatch
 from .Locations import lookup_id_to_name, all_locations
 from .Levels import level_list, level_dict
 

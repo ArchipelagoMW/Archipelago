@@ -2,7 +2,8 @@ import hashlib
 import os
 
 import Utils
-from Patch import read_rom, APDeltaPatch
+from Patch import read_rom
+from worlds.Files import APDeltaPatch
 
 SMJUHASH = '21f3e98df4780ee1c667b84e57d88675'
 LTTPJPN10HASH = '03a63945398191337e896e5771f77173'

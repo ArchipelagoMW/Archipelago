@@ -9,6 +9,7 @@ from flask_caching import Cache
 from flask_compress import Compress
 from werkzeug.routing import BaseConverter
 
+import worlds.Files
 from Utils import title_sorted
 from .models import *
 
@@ -73,8 +74,9 @@ def register():
     """Import submodules, triggering their registering on flask routing.
     Note: initializes worlds subsystem."""
     # has automatic patch integration
-    import Patch
-    app.jinja_env.filters['supports_apdeltapatch'] = lambda game_name: game_name in Patch.AutoPatchRegister.patch_types
+    import worlds.AutoWorld
+    app.jinja_env.filters['supports_apdeltapatch'] = lambda game_name: \
+        game_name in worlds.Files.AutoPatchRegister.patch_types
 
     from WebHostLib.customserver import run_server_process
     # to trigger app routing picking up on it
