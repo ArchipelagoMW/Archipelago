@@ -68,7 +68,7 @@ class LocalRom:
         self.orig_buffer = None
 
         with open(file, 'rb') as stream:
-            self.buffer = Utils.read_rom(stream)
+            self.buffer = Utils.read_snes_rom(stream)
         
     def read_bit(self, address: int, bit_number: int) -> bool:
         bitflag = (1 << bit_number)
@@ -826,7 +826,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
         file_name = get_base_rom_path(file_name)
-        base_rom_bytes = bytes(Utils.read_rom(open(file_name, "rb")))
+        base_rom_bytes = bytes(Utils.read_snes_rom(open(file_name, "rb")))
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
@@ -835,6 +835,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
                             'Get the correct game and version, then dump it')
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
+
 
 def get_base_rom_path(file_name: str = "") -> str:
     options = Utils.get_options()
