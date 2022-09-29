@@ -5,7 +5,8 @@ import Utils
 from Patch import APDeltaPatch
 import os
 
-# TODO: most of this file is just copied from another game and not implemented for Zillion yet
+# TODO: Make sure everything here is necessary and right.
+# Some of this is just copied from another game.
 
 USHASH = 'd4bf9e7bcf9a48da53785d2ae7bc4270'
 
