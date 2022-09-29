@@ -64,7 +64,10 @@ def create():
 
     for game_name, world in AutoWorldRegister.world_types.items():
 
-        all_options = {**Options.per_game_common_options, **world.option_definitions}
+        all_options: typing.Dict[str, Options.AssembleOptions] = {
+            **Options.per_game_common_options,
+            **world.option_definitions
+        }
         with open(local_path("WebHostLib", "templates", "options.yaml")) as f:
             file_data = f.read()
         res = Template(file_data).render(

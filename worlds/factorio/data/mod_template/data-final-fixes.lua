@@ -183,6 +183,18 @@ end
 data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-2"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-1"].fluid_boxes = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes)
+if mods["factory-levels"] then
+    -- Factory-Levels allows the assembling machines to get faster (and depending on settings), more productive at crafting products, the more the
+    -- assembling machine crafts the product.  If the machine crafts enough, it may auto-upgrade to the next tier.
+    for i = 1, 25, 1 do
+        data.raw["assembling-machine"]["assembling-machine-1-level-" .. i].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
+        data.raw["assembling-machine"]["assembling-machine-1-level-" .. i].fluid_boxes = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes)
+    end
+    for i = 1, 50, 1 do
+        data.raw["assembling-machine"]["assembling-machine-2-level-" .. i].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
+    end
+end
+
 data.raw["ammo"]["artillery-shell"].stack_size = 10
 
 {# each randomized tech gets set to be invisible, with new nodes added that trigger those #}

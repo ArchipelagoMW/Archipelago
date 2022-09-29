@@ -362,7 +362,7 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
         if option_key in options:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
-            return options[option_key]
+            return category_dict[option_key]
     if game == "A Link to the Past":  # TODO wow i hate this
         if option_key in {"entrance_shuffle", "shop_shuffle"}:
             return get_choice(option_key, category_dict)

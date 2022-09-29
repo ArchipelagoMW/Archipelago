@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import LocationProgressType
+from BaseClasses import LocationProgressType, MultiWorld
 
 if typing.TYPE_CHECKING:
     import BaseClasses
@@ -37,14 +37,14 @@ def locality_rules(world, player: int):
                 forbid_items_for_player(location, world.non_local_items[player].value, player)
 
 
-def exclusion_rules(world, player: int, exclude_locations: typing.Set[str]):
+def exclusion_rules(world: MultiWorld, player: int, exclude_locations: typing.Set[str]) -> None:
     for loc_name in exclude_locations:
         try:
             location = world.get_location(loc_name, player)
         except KeyError as e:  # failed to find the given location. Check if it's a legitimate location
             if loc_name not in world.worlds[player].location_name_to_id:
                 raise Exception(f"Unable to exclude location {loc_name} in player {player}'s world.") from e
-        else: 
+        else:
             add_item_rule(location, lambda i: not (i.advancement or i.useful))
             location.progress_type = LocationProgressType.EXCLUDED
 

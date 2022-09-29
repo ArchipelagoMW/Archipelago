@@ -34,7 +34,8 @@ base_info = {
     "factorio_version": "1.1",
     "dependencies": [
         "base >= 1.1.0",
-        "? science-not-invited"
+        "? science-not-invited",
+        "? factory-levels"
     ]
 }
 
