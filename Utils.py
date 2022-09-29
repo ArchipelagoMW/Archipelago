@@ -288,6 +288,11 @@ def get_default_options() -> OptionsType:
             "sni": "SNI",
             "rom_start": True,
         },
+        "smw_options": {
+            "rom_file": "Super Mario World (USA).sfc",
+            "sni": "SNI",
+            "rom_start": True,
+        },
     }
 
     return options

@@ -171,6 +171,7 @@ GAME_SM = "Super Metroid"
 GAME_SOE = "Secret of Evermore"
 GAME_SMZ3 = "SMZ3"
 GAME_DKC3 = "Donkey Kong Country 3"
+GAME_SMW = "Super Mario World"
 supported_games = {"A Link to the Past", "Super Metroid", "Secret of Evermore", "SMZ3", "Donkey Kong Country 3"}
 
 preferred_endings = {
