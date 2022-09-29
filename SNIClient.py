@@ -15,10 +15,13 @@ import typing
 
 from json import loads, dumps
 
-from Utils import init_logging, messagebox
+# CommonClient import first to trigger ModuleUpdater
+from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
+
+import Utils
 
 if __name__ == "__main__":
-    init_logging("SNIClient", exception_logger="Client")
+    Utils.init_logging("SNIClient", exception_logger="Client")
 
 import colorama
 import websockets
@@ -28,8 +31,8 @@ from worlds.alttp import Regions, Shops
 from worlds.alttp.Rom import ROM_PLAYER_LIMIT
 from worlds.sm.Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
 from worlds.smz3.Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
-import Utils
-from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
+
+
 from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3, GAME_DKC3
 
 snes_logger = logging.getLogger("SNES")
@@ -1326,7 +1329,7 @@ async def main():
         try:
             meta, romfile = Patch.create_rom_file(args.diff_file)
         except Exception as e:
-            messagebox('Error', str(e), True)
+            Utils.messagebox('Error', str(e), True)
             raise
         args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
