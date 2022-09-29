@@ -46,15 +46,14 @@ def create():
     def default_converter(default_value):
         if isinstance(default_value, (set, frozenset)):
             return list(default_value)
+        if isinstance(default_value, str):
+            return f"{default_value}: 50"
         return default_value
 
     def get_html_doc(option_type: type(Options.Option)) -> str:
         if not option_type.__doc__:
             return "Please document me!"
         return "\n".join(line.strip() for line in option_type.__doc__.split("\n")).strip()
-
-    def is_string(var: typing.Any) -> bool:
-        return isinstance(var, str)
 
     weighted_settings = {
         "baseOptions": {
@@ -70,9 +69,7 @@ def create():
         all_options = {**Options.per_game_common_options, **world.option_definitions}
         with open(local_path("WebHostLib", "templates", "options.yaml")) as f:
             file_data = f.read()
-        template = Template(file_data)
-        template.globals["is_string"] = is_string
-        res = template.render(
+        res = Template(file_data).render(
             options=all_options,
             __version__=__version__, game=game_name, yaml_dump=yaml.dump,
             dictify_range=dictify_range, default_converter=default_converter,

@@ -49,8 +49,6 @@ requires:
     {% if option.default == "random" %}
     random: 50
     {%- endif -%}
-    {%- elif is_string(option.default) %}
-    {{ option.default }}: 50
     {%- else %}
     {{ yaml_dump(default_converter(option.default)) | indent(4, first=False) }}
   {%- endif -%}
