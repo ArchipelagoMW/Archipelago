@@ -21,7 +21,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
     if not owner:
         owner = session["_id"]
     infolist = zfile.infolist()
-    slots = set()
+    slots: typing.Set[Slot] = set()
     spoiler = ""
     multidata = None
     for file in infolist:

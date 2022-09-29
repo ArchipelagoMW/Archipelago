@@ -4,8 +4,7 @@ import json
 import os
 import sys
 import zipfile
-from typing import Tuple, Optional, Dict, Any, Union, BinaryIO, TypedDict
-
+from typing import ClassVar, List, Tuple, Optional, Dict, Any, Union, BinaryIO, TypedDict
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -16,10 +15,10 @@ current_patch_version: int = 5
 
 
 class AutoPatchRegister(type):
-    patch_types: Dict[str, APDeltaPatch] = {}
-    file_endings: Dict[str, APDeltaPatch] = {}
+    patch_types: ClassVar[Dict[str, AutoPatchRegister]] = {}
+    file_endings: ClassVar[Dict[str, AutoPatchRegister]] = {}
 
-    def __new__(cls, name: str, bases, dct: Dict[str, Any]):
+    def __new__(cls, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoPatchRegister:
         # construct class
         new_class = super().__new__(cls, name, bases, dct)
         if "game" in dct:
@@ -30,10 +29,11 @@ class AutoPatchRegister(type):
         return new_class
 
     @staticmethod
-    def get_handler(file: str) -> Optional[type(APDeltaPatch)]:
+    def get_handler(file: str) -> Optional[AutoPatchRegister]:
         for file_ending, handler in AutoPatchRegister.file_endings.items():
             if file.endswith(file_ending):
                 return handler
+        return None
 
 
 class APContainer:
@@ -56,34 +56,36 @@ class APContainer:
         self.player_name = player_name
         self.server = server
 
-    def write(self, file: Optional[Union[str, BinaryIO]] = None):
-        if not self.path and not file:
+    def write(self, file: Optional[Union[str, BinaryIO]] = None) -> None:
+        zip_file = file if file else self.path
+        if not zip_file:
             raise FileNotFoundError(f"Cannot write {self.__class__.__name__} due to no path provided.")
-        with zipfile.ZipFile(file if file else self.path, "w", self.compression_method, True, self.compression_level) \
+        with zipfile.ZipFile(zip_file, "w", self.compression_method, True, self.compression_level) \
                 as zf:
             if file:
                 self.path = zf.filename
             self.write_contents(zf)
 
-    def write_contents(self, opened_zipfile: zipfile.ZipFile):
+    def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         manifest = self.get_manifest()
         try:
-            manifest = json.dumps(manifest)
+            manifest_str = json.dumps(manifest)
         except Exception as e:
             raise Exception(f"Manifest {manifest} did not convert to json.") from e
         else:
-            opened_zipfile.writestr("archipelago.json", manifest)
+            opened_zipfile.writestr("archipelago.json", manifest_str)
 
-    def read(self, file: Optional[Union[str, BinaryIO]] = None):
+    def read(self, file: Optional[Union[str, BinaryIO]] = None) -> None:
         """Read data into patch object. file can be file-like, such as an outer zip file's stream."""
-        if not self.path and not file:
+        zip_file = file if file else self.path
+        if not zip_file:
             raise FileNotFoundError(f"Cannot read {self.__class__.__name__} due to no path provided.")
-        with zipfile.ZipFile(file if file else self.path, "r") as zf:
+        with zipfile.ZipFile(zip_file, "r") as zf:
             if file:
                 self.path = zf.filename
             self.read_contents(zf)
 
-    def read_contents(self, opened_zipfile: zipfile.ZipFile):
+    def read_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         with opened_zipfile.open("archipelago.json", "r") as f:
             manifest = json.load(f)
         if manifest["compatible_version"] > self.version:
@@ -93,7 +95,7 @@ class APContainer:
         self.server = manifest["server"]
         self.player_name = manifest["player_name"]
 
-    def get_manifest(self) -> dict:
+    def get_manifest(self) -> Dict[str, Any]:
         return {
             "server": self.server,  # allow immediate connection to server in multiworld. Empty string otherwise
             "player": self.player,
@@ -109,17 +111,17 @@ class APDeltaPatch(APContainer, metaclass=AutoPatchRegister):
     """An APContainer that additionally has delta.bsdiff4
     containing a delta patch to get the desired file, often a rom."""
 
-    hash = Optional[str]  # base checksum of source file
+    hash: Optional[str]  # base checksum of source file
     patch_file_ending: str = ""
     delta: Optional[bytes] = None
     result_file_ending: str = ".sfc"
     source_data: bytes
 
-    def __init__(self, *args, patched_path: str = "", **kwargs):
+    def __init__(self, *args: Any, patched_path: str = "", **kwargs: Any) -> None:
         self.patched_path = patched_path
         super(APDeltaPatch, self).__init__(*args, **kwargs)
 
-    def get_manifest(self) -> dict:
+    def get_manifest(self) -> Dict[str, Any]:
         manifest = super(APDeltaPatch, self).get_manifest()
         manifest["base_checksum"] = self.hash
         manifest["result_file_ending"] = self.result_file_ending
@@ -182,7 +184,7 @@ def create_rom_file(patch_file: str) -> Tuple[RomMeta, str]:
     raise NotImplementedError(f"No Handler for {patch_file} found.")
 
 
-def read_rom(stream, strip_header=True) -> bytearray:
+def read_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
     """Reads rom into bytearray and optionally strips off any smc header"""
     buffer = bytearray(stream.read())
     if strip_header and len(buffer) % 0x400 == 0x200:
