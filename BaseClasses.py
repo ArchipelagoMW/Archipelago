@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import itertools
+from argparse import Namespace
 from enum import unique, IntEnum, IntFlag
 import logging
 import json
@@ -261,12 +262,13 @@ class MultiWorld():
             group["non_local_items"] = item_link["non_local_items"]
 
     # intended for unittests
-    def set_default_common_options(self):
-        for option_key, option in Options.common_options.items():
-            setattr(self, option_key, {player_id: option(option.default) for player_id in self.player_ids})
-        for option_key, option in Options.per_game_common_options.items():
-            setattr(self, option_key, {player_id: option(option.default) for player_id in self.player_ids})
+    @property
+    def default_common_options(self) -> Namespace:
         self.state = CollectionState(self)
+        args = Namespace()
+        for option_key, option in itertools.chain(Options.common_options.items(), Options.per_game_common_options.items()):
+            setattr(args, option_key, {player_id: option.from_any(option.default) for player_id in self.player_ids})
+        return args
 
     def secure(self):
         self.random = secrets.SystemRandom()
