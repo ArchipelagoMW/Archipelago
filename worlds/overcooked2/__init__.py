@@ -50,7 +50,7 @@ class Overcooked2World(World):
     topology_present: bool = False
     remote_items: bool = True
     remote_start_inventory: bool = False
-    data_version = 0
+    data_version = 2
 
     item_name_to_id = item_name_to_id
     item_id_to_name = item_id_to_name
