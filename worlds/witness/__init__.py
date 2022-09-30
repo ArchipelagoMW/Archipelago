@@ -39,7 +39,7 @@ class WitnessWorld(World):
     """
     game = "The Witness"
     topology_present = False
-    data_version = 7
+    data_version = 8
 
     static_logic = StaticWitnessLogic()
     static_locat = StaticWitnessLocations()
@@ -63,6 +63,7 @@ class WitnessWorld(World):
             'symbols_not_in_the_game': self.items.SYMBOLS_NOT_IN_THE_GAME,
             'disabled_panels': self.player_logic.COMPLETELY_DISABLED_CHECKS,
             'log_ids_to_hints': self.log_ids_to_hints,
+            'progressive_item_lists': self.items.MULTI_LISTS_BY_CODE
         }
 
     def generate_early(self):

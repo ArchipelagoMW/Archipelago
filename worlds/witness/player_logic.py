@@ -281,7 +281,7 @@ class WitnessPlayerLogic:
                 multi_list = StaticWitnessLogic.PROGRESSIVE_TO_ITEMS[StaticWitnessLogic.ITEMS_TO_PROGRESSIVE[item]]
                 multi_list = [item for item in multi_list if item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI]
                 self.MULTI_AMOUNTS[item] = multi_list.index(item) + 1
-                self.MULTI_AMOUNTS[corresponding_multi] = len(multi_list)
+                self.MULTI_LISTS[corresponding_multi] = multi_list
             else:
                 self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
 
@@ -329,6 +329,7 @@ class WitnessPlayerLogic:
         self.THEORETICAL_ITEMS = set()
         self.THEORETICAL_ITEMS_NO_MULTI = set()
         self.MULTI_AMOUNTS = dict()
+        self.MULTI_LISTS = dict()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = set()
         self.DOOR_ITEMS_BY_ID = dict()
