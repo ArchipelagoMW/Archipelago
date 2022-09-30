@@ -14,8 +14,14 @@ def get_always_hint_items(world: MultiWorld, player: int):
         "Caves Exits to Main Island",
     ]
 
-    if is_option_enabled(world, player, "shuffle_discards"):
-        priority.append("Triangles")
+    difficulty = get_option_value(world, player, "puzzle_randomization")
+    discards = is_option_enabled(world, player, "shuffle_discards")
+
+    if discards:
+        if difficulty == 1:
+            priority.append("Arrows")
+        else:
+            priority.append("Triangles")
 
     return priority
 
