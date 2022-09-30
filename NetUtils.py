@@ -100,7 +100,7 @@ _encode = JSONEncoder(
 ).encode
 
 
-def encode(obj):
+def encode(obj: typing.Any) -> str:
     return _encode(_scan_for_TypedTuples(obj))
 
 
