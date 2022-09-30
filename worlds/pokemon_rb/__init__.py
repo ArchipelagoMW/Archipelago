@@ -34,7 +34,7 @@ class PokemonRedBlueWorld(World):
     your Pokémon, catch more than 150 unique creatures, earn badges from the region's Gym Leaders, and challenge the
     Elite Four to become the champion!"""
     # -MuffinJets#4559
-    game = "Pokemon Red - Blue"
+    game = "Pokemon Red and Blue"
     option_definitions = pokemon_rb_options
     remote_items = False
     data_version = 1
@@ -61,7 +61,7 @@ class PokemonRedBlueWorld(World):
     def stage_assert_generate(cls, world):
         versions = set()
         for player in world.player_ids:
-            if world.worlds[player].game == "Pokemon Red - Blue":
+            if world.worlds[player].game == "Pokemon Red and Blue":
                 versions.add(world.game_version[player].current_key)
         for version in versions:
             if not os.path.exists(get_base_rom_path(version)):
@@ -219,7 +219,7 @@ class PokemonRedBlueWorld(World):
 
 
 class PokemonRBItem(Item):
-    game = "Pokemon Red - Blue"
+    game = "Pokemon Red and Blue"
     type = None
 
     def __init__(self, name, player: int = None):

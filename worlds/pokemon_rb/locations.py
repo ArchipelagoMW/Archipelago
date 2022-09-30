@@ -1713,7 +1713,7 @@ def get_locations(player=None):
     return locations
 
 class PokemonRBLocation(Location):
-    game = "Pokemon Red - Blue"
+    game = "Pokemon Red and Blue"
 
     def __init__(self, player, name, address, rom_address, access_rule, item_rule):
         super(PokemonRBLocation, self).__init__(

@@ -384,7 +384,7 @@ def generate_output(self, output_directory: str):
     data[rom_addresses['Option_Cerulean_Cave_Condition']] = self.world.cerulean_cave_condition[self.player].value
     data[rom_addresses['Option_Encounter_Minimum_Steps']] = self.world.minimum_steps_between_encounters[self.player].value
     data[rom_addresses['Option_Badge_Goal']] = self.world.victory_road_condition[self.player].value - 2
-    data[rom_addresses['Option_Viridian_Gym_Badges']] = self.world.victory_road_condition[self.player].value - 1
+    data[rom_addresses['Option_Viridian_Gym_Badges']] = self.world.viridian_gym_condition[self.player].value
     data[rom_addresses['Option_EXP_Modifier']] = self.world.exp_modifier[self.player].value
     if not self.world.require_item_finder[self.player].value:
         data[rom_addresses['Option_Itemfinder']] = 0
@@ -592,7 +592,7 @@ class BlueDeltaPatch(APDeltaPatch):
     patch_file_ending = ".apblue"
     hash = "50927e843568814f7ed45ec4f944bd8b"
     game_version = "blue"
-    game = "Pokemon Red - Blue"
+    game = "Pokemon Red and Blue"
     result_file_ending = ".gb"
     @classmethod
     def get_source_data(cls) -> bytes:
@@ -603,7 +603,7 @@ class RedDeltaPatch(APDeltaPatch):
     patch_file_ending = ".apred"
     hash = "3d45c1ee9abd5738df46d2bdda8b57dc"
     game_version = "red"
-    game = "Pokemon Red - Blue"
+    game = "Pokemon Red and Blue"
     result_file_ending = ".gb"
     @classmethod
     def get_source_data(cls) -> bytes:

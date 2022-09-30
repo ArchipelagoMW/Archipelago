@@ -34,12 +34,20 @@ class Goal(Choice):
 
 
 class VictoryRoadCondition(Range):
-    """Number of badges required to reach Victory Road. One fewer will be required to enter the Viridian Gym.
+    """Number of badges required to reach Victory Road.
     Your rival will reveal the amount needed on the first Route 22 battle (after turning in Oak's Parcel)."""
     display_name = "Badge Goal"
     range_start = 2
     range_end = 8
     default = 8
+
+
+class ViridianGymCondition(Range):
+    """Number of badges required to enter Viridian Gym."""
+    display_name = "Badge Goal"
+    range_start = 0
+    range_end = 7
+    default = 7
 
 
 class CeruleanCaveCondition(Range):
@@ -412,6 +420,7 @@ pokemon_rb_options = {
     "rival_name": RivalName,
     #"goal": Goal,
     "victory_road_condition": VictoryRoadCondition,
+    "viridian_gym_condition": ViridianGymCondition,
     "cerulean_cave_condition": CeruleanCaveCondition,
     "badgesanity": BadgeSanity,
     "badges_needed_for_hm_moves": BadgesNeededForHMMoves,

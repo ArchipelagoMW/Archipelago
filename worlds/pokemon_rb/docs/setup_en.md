@@ -46,14 +46,38 @@ It is important to note that the `game_version` option determines the ROM file t
 Both the player and the person generating (if they are generating locally) will need the corresponding ROM file.
 
 ```yaml
-description: Default Pokemon Red - Blue Template # Used to describe your yaml. Useful if you have multiple files
+# What is this file?
+# This file contains options which allow you to configure your multiworld experience while allowing others
+# to play how they want as well.
+
+# How do I use it?
+# The options in this file are weighted. This means the higher number you assign to a value, the more
+# chances you have for that option to be chosen. For example, an option like this:
+#
+# map_shuffle:
+#   on: 5
+#   off: 15
+#
+# Means you have 5 chances for map shuffle to occur, and 15 chances for map shuffle to be turned off
+
+# I've never seen a file like this before. What characters am I allowed to use?
+# This is a .yaml file. You are allowed to use most characters.
+# To test if your yaml is valid or not, you can use this website:
+# http://www.yamllint.com/
+
+description: Default Pokemon Red and Blue Template # Used to describe your yaml. Useful if you have multiple files
 # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
-name: YourName
-game: Pokemon Red - Blue
+name: YourName{number}
+#{player} will be replaced with the player's slot number.
+#{PLAYER} will be replaced with the player's slot number if that slot number is greater than 1.
+#{number} will be replaced with the counter value of the name.
+#{NUMBER} will be replaced with the counter value of the name if the counter value is greater than 1.
+game:
+  Pokemon Red and Blue: 1
 requires:
   version: 0.3.5 # Version of Archipelago required for this yaml to work as expected.
 # Shared Options supported by all games:
-Pokemon Red - Blue:
+Pokemon Red and Blue:
   progression_balancing: # A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
     #    [0-99, default 50] A lower setting means more getting stuck. A higher setting means less getting stuck.
     # you can add additional values between minimum and maximum
@@ -101,16 +125,21 @@ Pokemon Red - Blue:
   trainer_name: # Your trainer name. Cannot exceed 7 characters.
     #    See the setup guide on archipelago.gg for a list of allowed characters.
     ASH
-
   rival_name: # Your rival's name. Cannot exceed 7 characters.
     #    See the setup guide on archipelago.gg for a list of allowed characters.
     GARY
-
-  victory_road_condition: # Number of badges required to reach Victory Road. One fewer will be required to enter the Viridian Gym.
+  victory_road_condition: # Number of badges required to reach Victory Road.
     #    Your rival will reveal the amount needed on the first Route 22 battle (after turning in Oak's Parcel).
     # you can add additional values between minimum and maximum
     2: 0 # minimum value
     8: 50 # maximum value
+    random: 0
+    random-low: 0
+    random-high: 0
+  viridian_gym_condition: # Number of badges required to enter Viridian Gym.
+    # you can add additional values between minimum and maximum
+    0: 0 # minimum value
+    7: 50 # maximum value
     random: 0
     random-low: 0
     random-high: 0
@@ -348,8 +377,6 @@ Pokemon Red - Blue:
     random-low: 0
     random-high: 0
     3000: 50
-  
-
 ```
 
 For `trainer_name` and `rival_name` the following regular characters are allowed:
