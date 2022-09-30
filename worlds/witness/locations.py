@@ -53,8 +53,6 @@ class StaticWitnessLocations:
         "Desert Light Room 3",
         "Desert Pond Room 5",
         "Desert Flood Room 6",
-        "Desert Final Bent 3",
-        "Desert Final Hexagonal",
         "Desert Laser Panel",
 
         "Quarry Mill Lower Row 6",
