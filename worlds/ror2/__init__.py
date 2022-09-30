@@ -100,18 +100,23 @@ class RiskOfRainWorld(World):
 
         # precollected environments are popped from the pool so counting like this is valid
         nonjunk_item_count = self.total_revivals + len(environments_pool)
-        # TODO figure out how to properly handle this for new/classic/legacy
-        #total_locations = self.world.total_locations[self.player].value
-        total_locations = len(
-            orderedstage_location.get_locations(
-                chests=self.world.chests_per_stage[self.player].value,
-                shrines=self.world.shrines_per_stage[self.player].value,
-                scavengers=self.world.scavengers_per_stage[self.player].value,
-                scanners=self.world.scanner_per_stage[self.player].value,
-                altars=self.world.altars_per_stage[self.player].value,
-                dlc_sotv=self.world.dlc_sotv[self.player].value
+
+        if (self.world.classic_mode[self.player].value):
+            # classic mode
+            total_locations = self.world.total_locations[self.player].value
+        else:
+            # explore mode
+            total_locations = len(
+                orderedstage_location.get_locations(
+                    chests=self.world.chests_per_stage[self.player].value,
+                    shrines=self.world.shrines_per_stage[self.player].value,
+                    scavengers=self.world.scavengers_per_stage[self.player].value,
+                    scanners=self.world.scanner_per_stage[self.player].value,
+                    altars=self.world.altars_per_stage[self.player].value,
+                    dlc_sotv=self.world.dlc_sotv[self.player].value
+                )
             )
-        )
+
         junk_item_count = total_locations - nonjunk_item_count
 
         # Fill remaining items with randomly generated junk
@@ -122,21 +127,24 @@ class RiskOfRainWorld(World):
         itempool = list(map(lambda name: self.create_item(name), itempool))
 
         self.world.itempool += itempool
-        print("total_locations", total_locations) # XXX
-        print("junk_item_count", junk_item_count) # XXX
-        print("len(itempool)", len(itempool)) # XXX
+        # print("total_locations", total_locations) # XXX
+        # print("junk_item_count", junk_item_count) # XXX
+        # print("len(itempool)", len(itempool)) # XXX
 
     def set_rules(self) -> None:
         set_rules(self.world, self.player)
 
     def create_regions(self) -> None:
         menu = create_region(self.world, self.player, "Menu")
-        # TODO make a classic/legacy YAML option
-        petrichor = create_region(self.world, self.player, "Petrichor V")
-        # petrichor = create_region(self.world, self.player, "Petrichor V",
-        #                           [f"ItemPickup{i + 1}" for i in range(self.world.total_locations[self.player].value)])
-
-        environment_regions = create_regions_all_orderedstage(self.world, self.player)
+        if (self.world.classic_mode[self.player].value):
+            # classic mode
+            petrichor = create_region(self.world, self.player, "Petrichor V",
+                                    [f"ItemPickup{i + 1}" for i in range(self.world.total_locations[self.player].value)])
+            environment_regions = []
+        else:
+            # explore mode
+            petrichor = create_region(self.world, self.player, "Petrichor V")
+            environment_regions = create_regions_all_orderedstage(self.world, self.player)
 
         connection = Entrance(self.player, "Lobby", menu)
         menu.exits.append(connection)
@@ -155,6 +163,7 @@ class RiskOfRainWorld(World):
         return {
             "itemPickupStep": self.world.item_pickup_step[self.player].value,
             "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for _ in range(16)),
+            "classic_mode": self.world.classic_mode[self.player].value,
             "totalLocations": self.world.total_locations[self.player].value,
             "chests_per_stage": self.world.chests_per_stage[self.player].value,
             "shrines_per_stage": self.world.shrines_per_stage[self.player].value,
@@ -170,37 +179,33 @@ class RiskOfRainWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
-        if False: pass
-        # TODO don't make every item be filler
-        # if name == "Dio's Best Friend":
-        #     classification = ItemClassification.progression
-        # elif name in {"Equipment", "Legendary Item"}:
-        #     classification = ItemClassification.useful
-        else:
-            classification = ItemClassification.filler
+        classification = ItemClassification.filler
+        if (self.world.classic_mode[self.player].value):
+            # handle the items normally when using classic_mode
+            # TODO explore mode should probably still treat items as important too
+            if name == "Dio's Best Friend":
+                classification = ItemClassification.progression
+            elif name in {"Equipment", "Legendary Item"}:
+                classification = ItemClassification.useful
+            # TODO should lunar items be marked as traps?
         item = RiskOfRainItem(name, classification, item_id, self.player)
         return item
 
 
 def create_events(world: MultiWorld, player: int) -> None:
-    world_region = world.get_region("Petrichor V", player)
-    victory_event = RiskOfRainLocation(player, "Victory", None, world_region)
-    victory_event.place_locked_item(RiskOfRainItem("Victory", ItemClassification.progression, None, player))
-    world_region.locations.append(victory_event)
-    return
-    # TODO figure out how to properly handle this for new/classic/legacy
-
     total_locations = world.total_locations[player].value
     num_of_events = total_locations // 25
     if total_locations / 25 == num_of_events:
         num_of_events -= 1
     world_region = world.get_region("Petrichor V", player)
 
-    for i in range(num_of_events):
-        event_loc = RiskOfRainLocation(player, f"Pickup{(i + 1) * 25}", None, world_region)
-        event_loc.place_locked_item(RiskOfRainItem(f"Pickup{(i + 1) * 25}", ItemClassification.progression, None, player))
-        event_loc.access_rule(lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", player))
-        world_region.locations.append(event_loc)
+    if (world.classic_mode[player].value):
+        # only setup Pickups when using classic_mode
+        for i in range(num_of_events):
+            event_loc = RiskOfRainLocation(player, f"Pickup{(i + 1) * 25}", None, world_region)
+            event_loc.place_locked_item(RiskOfRainItem(f"Pickup{(i + 1) * 25}", ItemClassification.progression, None, player))
+            event_loc.access_rule(lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", player))
+            world_region.locations.append(event_loc)
 
     victory_event = RiskOfRainLocation(player, "Victory", None, world_region)
     victory_event.place_locked_item(RiskOfRainItem("Victory", ItemClassification.progression, None, player))
