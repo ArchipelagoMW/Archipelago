@@ -26,10 +26,8 @@ class TestMinor(TestBase):
         setattr(self.world, "misery_mire_medallion", {1: MireMedallion(MireMedallion.option_ether)})
         setattr(self.world, "turtle_rock_medallion", {1: TurtleMedallion(TurtleMedallion.option_quake)})
         self.world.difficulty_requirements[1] = difficulties['normal']
-        create_regions(self.world, 1)
-        create_dungeons(self.world, 1)
-        create_shops(self.world, 1)
-        link_entrances(self.world, 1)
+        self.world.worlds[1].er_seed = 0
+        self.world.worlds[1].create_regions()
         self.world.worlds[1].create_items()
         self.world.itempool.extend(get_dungeon_item_pool(self.world))
         self.world.itempool.extend(ItemFactory(

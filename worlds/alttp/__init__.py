@@ -7,7 +7,7 @@ import typing
 import Utils
 from BaseClasses import Item, CollectionState, Tutorial
 from .Dungeons import create_dungeons
-from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
+from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect, indirect_connections
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
@@ -236,6 +236,10 @@ class ALTTPWorld(World):
 
         world.random = old_random
         plando_connect(world, player)
+
+        for region_name, entrance_name in indirect_connections.items():
+            world.register_indirect_condition(self.world.get_region(region_name, player),
+                                              self.world.get_entrance(entrance_name, player))
 
     def collect_item(self, state: CollectionState, item: Item, remove=False):
         item_name = item.name
