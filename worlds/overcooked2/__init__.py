@@ -256,6 +256,10 @@ class Overcooked2World(World):
         # filler = list()
         # progression = list()
         for item_name in item_table:
+            if not self.options["IncludeHordeLevels"] and item_name in ["Calmer Unbread", "Coin Purse"]:
+                # skip items which are irrelevant to the seed
+                continue
+
             if is_item_progression(item_name, self.level_mapping):
                 # print(f"{item_name} is progression")
                 # progression.append(item_name)
