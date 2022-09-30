@@ -2,6 +2,7 @@ import os
 
 from .utils import define_new_region, parse_lambda, lazy
 
+
 class StaticWitnessLogicObj:
     def read_logic_file(self, file_path="WitnessLogic.txt"):
         """
