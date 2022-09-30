@@ -14,7 +14,6 @@ import random
 import Options
 import Utils
 import NetUtils
-from worlds.alttp.Options import ItemFunc
 
 
 class Group(TypedDict, total=False):
@@ -746,6 +745,7 @@ class CollectionState():
 
     def can_extend_magic(self, player: int, smallmagic: int = 16,
                          fullrefill: bool = False):  # This reflects the total magic Link has, not the total extra he has.
+        from worlds.alttp.Options import ItemFunc
         basemagic = 8
         if self.has('Magic Upgrade (1/4)', player):
             basemagic = 32
