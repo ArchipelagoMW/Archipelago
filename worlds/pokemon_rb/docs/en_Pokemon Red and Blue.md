@@ -30,6 +30,7 @@ fossil scientist after reviving a Pokémon from a fossil.
 this screen.
 * Obedience depends on the total number of badges you have obtained instead of depending on specific badges.
 * Pokémon that evolve by trading can also evolve by reaching level 35.
+* Evolution stones are reusable.
 * Much of the dialogue throughout the game has been removed or shortened.
 
 ## What items and locations get shuffled?
