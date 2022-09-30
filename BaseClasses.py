@@ -40,6 +40,7 @@ class MultiWorld():
     plando_connections: List
     worlds: Dict[int, auto_world]
     groups: Dict[int, Group]
+    regions: List[Region]
     itempool: List[Item]
     is_race: bool = False
     precollected_items: Dict[int, List[Item]]
@@ -50,6 +51,9 @@ class MultiWorld():
     non_local_items: Dict[int, Options.NonLocalItems]
     progression_balancing: Dict[int, Options.ProgressionBalancing]
     completion_condition: Dict[int, Callable[[CollectionState], bool]]
+    indirect_connections: Dict[Region, Set[Entrance]]
+    exclude_locations: Dict[int, Options.ExcludeLocations]
+
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -87,6 +91,7 @@ class MultiWorld():
         self.customitemarray = []
         self.shuffle_ganon = True
         self.spoiler = Spoiler(self)
+        self.indirect_connections = {}
         self.fix_trock_doors = self.AttributeProxy(
             lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
         self.fix_skullwoods_exit = self.AttributeProxy(
@@ -404,6 +409,11 @@ class MultiWorld():
     def clear_entrance_cache(self):
         self._cached_entrances = None
 
+    def register_indirect_condition(self, region: Region, entrance: Entrance):
+        """Report that access to this Region can result in unlocking this Entrance,
+        state.can_reach(Region) in the Entrance's traversal condition, as opposed to pure transition logic."""
+        self.indirect_connections.setdefault(region, set()).add(entrance)
+
     def get_locations(self) -> List[Location]:
         if self._cached_locations is None:
             self._cached_locations = [location for region in self.regions for location in region.locations]
@@ -608,7 +618,6 @@ class CollectionState():
                 self.collect(item, True)
 
     def update_reachable_regions(self, player: int):
-        from worlds.alttp.EntranceShuffle import indirect_connections
         self.stale[player] = False
         rrp = self.reachable_regions[player]
         bc = self.blocked_connections[player]
@@ -616,7 +625,7 @@ class CollectionState():
         start = self.world.get_region('Menu', player)
 
         # init on first call - this can't be done on construction since the regions don't exist yet
-        if not start in rrp:
+        if start not in rrp:
             rrp.add(start)
             bc.update(start.exits)
             queue.extend(start.exits)
@@ -636,8 +645,7 @@ class CollectionState():
                 self.path[new_region] = (new_region.name, self.path.get(connection, None))
 
                 # Retry connections if the new region can unblock them
-                if new_region.name in indirect_connections:
-                    new_entrance = self.world.get_entrance(indirect_connections[new_region.name], player)
+                for new_entrance in self.world.indirect_connections.get(new_region, set()):
                     if new_entrance in bc and new_entrance not in queue:
                         queue.append(new_entrance)
 
@@ -993,7 +1001,7 @@ class Entrance:
 
         return False
 
-    def connect(self, region: Region, addresses=None, target=None):
+    def connect(self, region: Region, addresses: Any = None, target: Any = None) -> None:
         self.connected_region = region
         self.target = target
         self.addresses = addresses
@@ -1081,7 +1089,7 @@ class Location:
     show_in_spoiler: bool = True
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow = staticmethod(lambda item, state: False)
-    access_rule = staticmethod(lambda state: True)
+    access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
     item: Optional[Item] = None
 
