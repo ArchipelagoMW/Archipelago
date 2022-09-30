@@ -14,6 +14,7 @@ import random
 import Options
 import Utils
 import NetUtils
+from worlds.alttp.Options import ItemFunc
 
 
 class Group(TypedDict, total=False):
@@ -745,9 +746,9 @@ class CollectionState():
         elif self.has('Magic Upgrade (1/2)', player):
             basemagic = 16
         if self.can_buy_unlimited('Green Potion', player) or self.can_buy_unlimited('Blue Potion', player):
-            if self.world.item_functionality[player] == 2 and not fullrefill:
+            if self.world.item_functionality[player] == ItemFunc.option_hard and not fullrefill:
                 basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count(player))
-            elif self.world.item_functionality[player] == 3 and not fullrefill:
+            elif self.world.item_functionality[player] == ItemFunc.option_expert and not fullrefill:
                 basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count(player))
             else:
                 basemagic = basemagic + basemagic * self.bottle_count(player)

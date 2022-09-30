@@ -604,7 +604,7 @@ class VerifyKeys:
             extra = dataset - cls.valid_keys
             if extra:
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
-                                f"Allowed keys: {keys}.")
+                                f"Allowed keys: {cls.valid_keys}.")
 
     def verify(self, world, player_name: str, plando_options) -> None:
         if self.convert_name_groups and self.verify_item_name:
