@@ -3,7 +3,7 @@ import hashlib
 import Utils
 import bsdiff4
 from copy import deepcopy
-from Patch import read_rom, APDeltaPatch
+from Patch import APDeltaPatch
 from .text import encode_text
 from .rom_addresses import rom_addresses
 from .locations import get_locations
@@ -571,7 +571,8 @@ def write_bytes(data, byte_array, address):
 
 def get_base_rom_bytes(game_version: str, hash: str="") -> bytes:
     file_name = get_base_rom_path(game_version)
-    base_rom_bytes = bytes(read_rom(open(file_name, "rb")))
+    with open(file_name, "rb") as file:
+        base_rom_bytes = bytes(file.read())
     if hash:
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
