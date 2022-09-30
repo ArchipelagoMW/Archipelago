@@ -135,7 +135,8 @@ class WitnessPlayerLogic:
 
         if adj_type == "Remove Items":
             self.THEORETICAL_ITEMS.discard(line)
-            self.THEORETICAL_ITEMS_NO_MULTI.discard(StaticWitnessLogic.PROGRESSIVE_TO_ITEMS.get(line, [line]))
+            for i in StaticWitnessLogic.PROGRESSIVE_TO_ITEMS.get(line, [line]):
+                self.THEORETICAL_ITEMS_NO_MULTI.discard(i)
 
             if line in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
                 panel_hexes = StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[line][2]

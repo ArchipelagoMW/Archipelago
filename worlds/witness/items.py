@@ -167,9 +167,9 @@ class WitnessPlayerItems:
             if not is_option_enabled(world, player, "disable_non_randomized_puzzles"):
                 self.GOOD_ITEMS.append("Colored Squares")
 
-        self.GOOD_ITEMS = [
-            StaticWitnessLogic.ITEMS_TO_PROGRESSIVE.get(item, item) for item in self.GOOD_ITEMS
-        ]
+            self.GOOD_ITEMS = [
+                StaticWitnessLogic.ITEMS_TO_PROGRESSIVE.get(item, item) for item in self.GOOD_ITEMS
+            ]
 
         for event_location in locat.EVENT_LOCATION_TABLE:
             location = player_logic.EVENT_ITEM_PAIRS[event_location]
