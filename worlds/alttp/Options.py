@@ -1,9 +1,8 @@
-import os
 import typing
+from functools import lru_cache
 
 from BaseClasses import MultiWorld
 from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, OptionList
-from Utils import user_path, parse_yaml
 
 
 class Logic(Choice):
@@ -688,16 +687,19 @@ class RandomSpriteToggle(Toggle):
     display_name = "Use Random Sprite Events"
 
 
-class SpritePool(OptionList):
-    """Limits the pool of available sprites for random events to specified pool."""
-    display_name = "Sprite Pool"
-
-    @property
-    def valid_keys(self):
+class Sprites:
+    @lru_cache(None)
+    def __get__(self, instance, owner):
         from worlds.alttp.Rom import _populate_sprite_table
         sprite_table = {}
         _populate_sprite_table(sprite_table)
         return {sprite for sprite in sprite_table}
+
+
+class SpritePool(OptionList):
+    """Limits the pool of available sprites for random events to specified pool."""
+    display_name = "Sprite Pool"
+    valid_keys = Sprites()
 
 
 class Sprite(TextChoice):
@@ -712,9 +714,7 @@ class Sprite(TextChoice):
     option_random_on_bonk = 6
     option_random_on_all = 7
 
-    @property
-    def valid_keys(self):
-        return SpritePool.valid_keys
+    valid_keys = Sprites()
 
     def verify(self, world, player_name, plando_options) -> None:
         if isinstance(self.value, int):
