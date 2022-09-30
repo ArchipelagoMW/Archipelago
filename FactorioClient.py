@@ -4,9 +4,11 @@ import logging
 import json
 import string
 import copy
+import re
 import subprocess
 import time
 import random
+import typing
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -81,12 +83,14 @@ class FactorioContext(CommonContext):
     def on_print(self, args: dict):
         super(FactorioContext, self).on_print(args)
         if self.rcon_client:
-            self.print_to_game(args['text'])
+            if not args['text'].startswith(self.player_names[self.slot] + ":"):
+                self.print_to_game(args['text'])
 
     def on_print_json(self, args: dict):
         if self.rcon_client:
             text = self.factorio_json_text_parser(copy.deepcopy(args["data"]))
-            self.print_to_game(text)
+            if not text.startswith(self.player_names[self.slot] + ":"):
+                self.print_to_game(text)
         super(FactorioContext, self).on_print_json(args)
 
     @property
@@ -122,6 +126,10 @@ class FactorioContext(CommonContext):
                         logger.debug(f"EnergyLink: Received {gained_text}. "
                                      f"{Utils.format_SI_prefix(args['value'])}J remaining.")
                         self.rcon_client.send_command(f"/ap-energylink {gained}")
+
+    async def factorio_chat(self, user: str, message: str) -> None:
+        text: str = f"({user}) {message}" if not message.startswith("!") else message
+        await self.send_msgs([{"cmd": "Say", "text": text}])
 
     def run_gui(self):
         from kvui import GameManager
@@ -262,6 +270,9 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     factorio_server_logger.debug(msg)
                 else:
                     factorio_server_logger.info(msg)
+                    match: typing.Optional[re.Match] = re.match(r"^\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d \[CHAT\] ([^:]+): (.*)$", msg)
+                    if match:
+                        await ctx.factorio_chat(match.group(1), match.group(2))
             if ctx.rcon_client:
                 commands = {}
                 while ctx.send_index < len(ctx.items_received):

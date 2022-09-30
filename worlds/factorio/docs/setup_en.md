@@ -132,6 +132,7 @@ This allows you to host your own Factorio game.
 
 For additional client features, issue the `/help` command in the Archipelago Client. Once connected to the AP server,
 you can also issue the `!help` command to learn about additional commands like `!hint`.
+For more information about the commands you can use see the [commands guide](/tutorial/Archipelago/commands/en).
 
 ## Allowing Other People to Join Your Game
 
@@ -146,13 +147,6 @@ you can also issue the `!help` command to learn about additional commands like `
 In case any problems should occur, the Archipelago Client will create a file `FactorioClient.txt` in the `/logs`. The
 contents of this file may help you troubleshoot an issue on your own and is vital for requesting help from other people
 in Archipelago.
-
-## Commands in game
-
-Once you have connected to the server successfully using the Archipelago Factorio Client you should see a message
-stating you can get help using Archipelago commands by typing `!help`. Commands cannot currently be sent from within
-the Factorio session, but you can send them from the Archipelago Factorio Client. For more information about the commands
-you can use see the [commands guide](/tutorial/Archipelago/commands/en).
 
 ## Additional Resources
 
