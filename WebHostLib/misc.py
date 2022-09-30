@@ -151,7 +151,7 @@ def favicon():
 
 @app.route('/discord')
 def discord():
-    return redirect("https://discord.gg/archipelago")
+    return redirect("https://discord.gg/8Z65BR2")
 
 
 @app.route('/datapackage')

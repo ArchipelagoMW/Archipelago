@@ -40,6 +40,7 @@ class MultiWorld():
     plando_connections: List
     worlds: Dict[int, auto_world]
     groups: Dict[int, Group]
+    regions: List[Region]
     itempool: List[Item]
     is_race: bool = False
     precollected_items: Dict[int, List[Item]]
@@ -51,6 +52,8 @@ class MultiWorld():
     progression_balancing: Dict[int, Options.ProgressionBalancing]
     completion_condition: Dict[int, Callable[[CollectionState], bool]]
     indirect_connections: Dict[Region, Set[Entrance]]
+    exclude_locations: Dict[int, Options.ExcludeLocations]
+
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -536,7 +539,7 @@ class MultiWorld():
 
         beatable_fulfilled = False
 
-        def location_conditition(location: Location):
+        def location_condition(location: Location):
             """Determine if this location has to be accessible, location is already filtered by location_relevant"""
             if location.player in players["minimal"]:
                 return False
@@ -553,7 +556,7 @@ class MultiWorld():
         def all_done():
             """Check if all access rules are fulfilled"""
             if beatable_fulfilled:
-                if any(location_conditition(location) for location in locations):
+                if any(location_condition(location) for location in locations):
                     return False  # still locations required to be collected
                 return True
 
@@ -998,7 +1001,7 @@ class Entrance:
 
         return False
 
-    def connect(self, region: Region, addresses=None, target=None):
+    def connect(self, region: Region, addresses: Any = None, target: Any = None) -> None:
         self.connected_region = region
         self.target = target
         self.addresses = addresses
@@ -1086,7 +1089,7 @@ class Location:
     show_in_spoiler: bool = True
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow = staticmethod(lambda item, state: False)
-    access_rule = staticmethod(lambda state: True)
+    access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
     item: Optional[Item] = None
 
