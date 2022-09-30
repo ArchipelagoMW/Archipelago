@@ -172,6 +172,10 @@ def make_hints(world: MultiWorld, player: int, hint_amount: int):
             continue
 
         if next_random_hint_is_item:
+            if not prog_items_in_this_world:
+                next_random_hint_is_item = not next_random_hint_is_item
+                continue
+
             hint = make_hint_from_item(world, player, prog_items_in_this_world.pop())
             hints.append((hint[1], "can be found at", hint[0]))
         else:
