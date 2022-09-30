@@ -52,7 +52,8 @@ Optionally, add `--sm64ap_passwd "YourPassword"` if the room you are using requi
 The Name in this case is the one specified in your generated .yaml file.
 In case you are using the Archipelago Website, the IP should be `archipelago.gg`.
 
-If everything worked out, you will see a textbox informing you the connection has been established after the story intro.
+Should the connection fail (for example when using the wrong name or IP/Port combination) the game will inform you of that.
+Additionally, any time the game is not connected (for example when the connection is unstable) it will attempt to reconnect and display a status text.
 
 # Playing offline
 
