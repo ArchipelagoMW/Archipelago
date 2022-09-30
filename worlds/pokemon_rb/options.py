@@ -36,7 +36,7 @@ class Goal(Choice):
 class VictoryRoadCondition(Range):
     """Number of badges required to reach Victory Road.
     Your rival will reveal the amount needed on the first Route 22 battle (after turning in Oak's Parcel)."""
-    display_name = "Badge Goal"
+    display_name = "Victory Road Condition"
     range_start = 2
     range_end = 8
     default = 8
@@ -44,7 +44,7 @@ class VictoryRoadCondition(Range):
 
 class ViridianGymCondition(Range):
     """Number of badges required to enter Viridian Gym."""
-    display_name = "Badge Goal"
+    display_name = "Viridian Gym Condition"
     range_start = 0
     range_end = 7
     default = 7
