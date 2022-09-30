@@ -1,4 +1,3 @@
-import collections
 import datetime
 
 from typing import Optional
@@ -13,6 +12,7 @@ from WebHostLib.tracker import get_static_room_data
 from WebHostLib import cache
 
 
+# outputs json data to <root_path>/api/tracker/<id of current session tracker>
 @api_endpoints.route('/tracker/<suuid:tracker>')
 @cache.memoize(timeout=60)
 def tracker_data(tracker: UUID):
@@ -29,7 +29,7 @@ def tracker_data(tracker: UUID):
 
     hints = {team: [] for team in range(len(names))}
 
-    finished_players = {team_number: [] for team_number, team in enumerate(names)}
+    player_status = checks_done
     if room.multisave:
         multisave = restricted_loads(room.multisave)
     else:
@@ -40,7 +40,7 @@ def tracker_data(tracker: UUID):
             hints[team] = [hint for hint in slot_hints]
 
     for player in locations:
-        locations[player] = len(locations[player].keys())
+        locations[player] = [loc for loc in locations[player]]
 
     for (team, player), locations_checked in multisave.get("location_checks", {}).items():
         if player in groups:
@@ -54,29 +54,27 @@ def tracker_data(tracker: UUID):
     for (team, player), game_state in multisave.get("client_game_state", {}).items():
         if player in groups:
             continue
-        if game_state == 30:
-            finished_players[team].append(player)
+        player_status[team][player] = game_state
 
     activity_timers = {}
     now = datetime.datetime.utcnow()
     for (team, player), timestamp in multisave.get("client_activity_timers", []):
-        activity_timers[team] = {player: now - datetime.datetime.utcfromtimestamp(timestamp)}
+        inactive_time = now - datetime.datetime.utcfromtimestamp(timestamp)
+        activity_timers[team] = {player: str(inactive_time)}
 
     player_names = {}
     for team, names in enumerate(names):
         for player, name in enumerate(names, 1):
             player_names[team] = {player: name}
-    long_player_names = player_names.copy()
     for (team, player), alias in multisave.get("name_aliases", {}).items():
         player_names[team][player] = alias
-        long_player_names[team][player] = f"{alias} ({long_player_names[team][player]})"
 
     return jsonify({
-        "long_player_names": long_player_names,
+        "groups": groups,
         "player_names": player_names,
         "checks_done": checks_done,
         "total_checks": locations,
         "hints": hints,
         "recent_activity": activity_timers,
-        "finished_players": finished_players,
+        "game_states": player_status,
     })
