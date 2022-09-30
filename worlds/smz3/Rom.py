@@ -2,7 +2,8 @@ import hashlib
 import os
 
 import Utils
-from Patch import read_rom, APDeltaPatch
+from Utils import read_snes_rom
+from worlds.Files import APDeltaPatch
 
 SMJUHASH = '21f3e98df4780ee1c667b84e57d88675'
 LTTPJPN10HASH = '03a63945398191337e896e5771f77173'
@@ -23,7 +24,7 @@ def get_base_rom_bytes() -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
         sm_file_name = get_sm_base_rom_path()
-        sm_base_rom_bytes = bytes(read_rom(open(sm_file_name, "rb")))
+        sm_base_rom_bytes = bytes(read_snes_rom(open(sm_file_name, "rb")))
 
         basemd5 = hashlib.md5()
         basemd5.update(sm_base_rom_bytes)
@@ -31,7 +32,7 @@ def get_base_rom_bytes() -> bytes:
             raise Exception('Supplied Base Rom does not match known MD5 for SM Japan+US release. '
                             'Get the correct game and version, then dump it')
         lttp_file_name = get_lttp_base_rom_path()
-        lttp_base_rom_bytes = bytes(read_rom(open(lttp_file_name, "rb")))
+        lttp_base_rom_bytes = bytes(read_snes_rom(open(lttp_file_name, "rb")))
 
         basemd5 = hashlib.md5()
         basemd5.update(lttp_base_rom_bytes)

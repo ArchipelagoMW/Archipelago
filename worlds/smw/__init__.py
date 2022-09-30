@@ -14,7 +14,6 @@ from ..generic.Rules import add_rule
 from .Names import ItemName, LocationName
 from ..AutoWorld import WebWorld, World
 from .Rom import LocalRom, patch_rom, get_base_rom_path, SMWDeltaPatch
-import Patch
 
 
 class SMWWeb(WebWorld):
@@ -146,6 +145,7 @@ class SMWWorld(World):
 
 
     def generate_output(self, output_directory: str):
+        rompath = ""  # if variable is not declared finally clause may fail
         try:
             world = self.world
             player = self.player
@@ -163,9 +163,9 @@ class SMWWorld(World):
         except:
             raise
         finally:
+            self.rom_name_available_event.set()  # make sure threading continues and errors are collected
             if os.path.exists(rompath):
                 os.unlink(rompath)
-            self.rom_name_available_event.set() # make sure threading continues and errors are collected
 
     def modify_multidata(self, multidata: dict):
         import base64
