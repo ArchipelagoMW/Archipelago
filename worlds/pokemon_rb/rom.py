@@ -409,7 +409,7 @@ def generate_output(self, output_directory: str):
             write_bytes(data, bytearray([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
                         rom_addresses["HM_" + hm_move + "_Badge_a"])
     elif self.extra_badges:
-        written_badges = set()
+        written_badges = {}
         for hm_move, badge in self.extra_badges.items():
             data[rom_addresses["HM_" + hm_move + "_Badge_b"]] = {"Boulder Badge": 0x47, "Cascade Badge": 0x4F,
                                                                  "Thunder Badge": 0x57, "Rainbow Badge": 0x5F,
@@ -418,8 +418,12 @@ def generate_output(self, output_directory: str):
             move_text = hm_move
             if badge not in ["Marsh Badge", "Volcano Badge", "Earth Badge"]:
                 move_text = ", " + move_text
-            write_bytes(data, encode_text(move_text.upper()), rom_addresses["Badge_Text_" + badge.replace(" ", "_")])
-            written_badges.update(badge)
+            rom_address = rom_addresses["Badge_Text_" + badge.replace(" ", "_")]
+            if badge in written_badges:
+                rom_address += len(written_badges[badge])
+                move_text = ", " + move_text
+            write_bytes(data, encode_text(move_text.upper()), rom_address)
+            written_badges[badge] = move_text
         for badge in ["Marsh Badge", "Volcano Badge", "Earth Badge"]:
             if badge not in written_badges:
                 write_bytes(data, encode_text("Nothing"), rom_addresses["Badge_Text_" + badge.replace(" ", "_")])

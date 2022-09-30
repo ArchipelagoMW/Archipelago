@@ -81,10 +81,10 @@ class PokemonRedBlueWorld(World):
         if self.world.badges_needed_for_hm_moves[self.player].value >= 2:
             badges_to_add = ["Soul Badge", "Volcano Badge", "Earth Badge"]
             if self.world.badges_needed_for_hm_moves[self.player].value == 3:
-                for _ in range(0, 2):
-                    badges_to_add.append(self.world.random.choice(["Boulder Badge", "Cascade Badge", "Thunder Badge",
-                                                                   "Rainbow Badge", "Marsh Badge",   "Soul Badge",
-                                                                   "Volcano Badge", "Earth Badge"]))
+                badges = ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Marsh Badge",
+                          "Soul Badge", "Volcano Badge", "Earth Badge"]
+                self.world.random.shuffle(badges)
+                badges_to_add += [badges.pop(), badges.pop()]
             hm_moves = ["Cut", "Fly", "Surf", "Strength", "Flash"]
             self.world.random.shuffle(hm_moves)
             self.extra_badges = {}

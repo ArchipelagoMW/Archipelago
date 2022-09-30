@@ -581,6 +581,6 @@ rom_addresses = {
     "Badge_Text_Rainbow_Badge": 0x9912e,
     "Badge_Text_Soul_Badge": 0x99177,
     "Badge_Text_Marsh_Badge": 0x9918c,
-    "Badge_Text_Volcano_Badge": 0x991ce,
-    "Badge_Text_Earth_Badge": 0x991e3,
+    "Badge_Text_Volcano_Badge": 0x991d6,
+    "Badge_Text_Earth_Badge": 0x991f3,
 }
