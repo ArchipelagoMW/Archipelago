@@ -3,7 +3,8 @@ Defines constants for different types of locations in the game
 """
 
 from .Options import is_option_enabled, get_option_value
-from .player_logic import StaticWitnessLogic, WitnessPlayerLogic
+from .player_logic import WitnessPlayerLogic
+from .static_logic import StaticWitnessLogic
 
 
 class StaticWitnessLocations:
@@ -246,6 +247,10 @@ class WitnessPlayerLocations:
         self.CHECK_LOCATIONS = (
             StaticWitnessLocations.GENERAL_LOCATIONS
         )
+
+        if get_option_value(world, player, "puzzle_randomization") == 1:
+            self.CHECK_LOCATIONS.remove("Keep Pressure Plates 4")
+            self.CHECK_LOCATIONS.add("Keep Pressure Plates 2")
 
         doors = get_option_value(world, player, "shuffle_doors") >= 2
         earlyutm = is_option_enabled(world, player, "early_secret_area")

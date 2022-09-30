@@ -8,7 +8,8 @@ from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
     get_priority_hint_items, make_hints
 from ..AutoWorld import World, WebWorld
-from .player_logic import StaticWitnessLogic, WitnessPlayerLogic
+from .player_logic import WitnessPlayerLogic
+from .static_logic import StaticWitnessLogic
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems
 from .rules import set_rules
@@ -99,7 +100,7 @@ class WitnessWorld(World):
         # Put good item on first check if symbol shuffle is on
         symbols = is_option_enabled(self.world, self.player, "shuffle_symbols")
 
-        if symbols:
+        if symbols and get_option_value(self.world, self.player, "puzzle_randomization") != 1:
             random_good_item = self.world.random.choice(self.items.GOOD_ITEMS)
 
             first_check = self.world.get_location(

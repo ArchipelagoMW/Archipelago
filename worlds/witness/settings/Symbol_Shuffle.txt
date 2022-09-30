@@ -1,6 +1,8 @@
 Items:
+Arrows
 Dots
 Colored Dots
+Full Dots
 Sound Dots
 Symmetry
 Triangles

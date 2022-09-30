@@ -39,7 +39,7 @@ class WitnessPlayerLogic:
         if panel_hex in self.COMPLETELY_DISABLED_CHECKS:
             return frozenset()
 
-        check_obj = StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]
+        check_obj = self.REFERENCE_LOGIC.CHECKS_BY_HEX[panel_hex]
 
         these_items = frozenset({frozenset()})
 
@@ -47,17 +47,21 @@ class WitnessPlayerLogic:
             these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["items"]
 
         these_items = frozenset({
-            subset.intersection(self.PROG_ITEMS_ACTUALLY_IN_THE_GAME)
+            subset.intersection(self.THEORETICAL_ITEMS)
             for subset in these_items
         })
+
+        for subset in these_items:
+            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.update(subset)
 
         if panel_hex in self.DOOR_ITEMS_BY_ID:
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[panel_hex]})
 
             all_options = set()
 
-            for items_option in these_items:
-                for dependentItem in door_items:
+            for dependentItem in door_items:
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.update(dependentItem)
+                for items_option in these_items:
                     all_options.add(items_option.union(dependentItem))
 
             if panel_hex != "0x28A0D":
@@ -76,11 +80,11 @@ class WitnessPlayerLogic:
             dependent_items_for_option = frozenset({frozenset()})
 
             for option_panel in option:
-                dep_obj = StaticWitnessLogic.CHECKS_BY_HEX.get(option_panel)
+                dep_obj = self.REFERENCE_LOGIC.CHECKS_BY_HEX.get(option_panel)
 
                 if option_panel in self.COMPLETELY_DISABLED_CHECKS:
                     new_items = frozenset()
-                elif option_panel in {"7 Lasers", "11 Lasers"}:
+                elif option_panel in {"7 Lasers", "11 Lasers", "PP2 Weirdness"}:
                     new_items = frozenset({frozenset([option_panel])})
                 # If a panel turns on when a panel in a different region turns on,
                 # the latter panel will be an "event panel", unless it ends up being
@@ -116,7 +120,7 @@ class WitnessPlayerLogic:
             if line not in StaticWitnessItems.ALL_ITEM_TABLE:
                 raise RuntimeError("Item \"" + line + "\" does not exit.")
 
-            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(line)
+            self.THEORETICAL_ITEMS.add(line)
 
             if line in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
                 panel_hexes = StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[line][2]
@@ -126,7 +130,7 @@ class WitnessPlayerLogic:
             return
 
         if adj_type == "Remove Items":
-            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.discard(line)
+            self.THEORETICAL_ITEMS.discard(line)
 
             if line in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
                 panel_hexes = StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[line][2]
@@ -265,11 +269,13 @@ class WitnessPlayerLogic:
 
             self.REQUIREMENTS_BY_HEX[check_hex] = indep_requirement
 
+
+
     def make_event_item_pair(self, panel):
         """
         Makes a pair of an event panel and its event item
         """
-        name = StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] + " Solved"
+        name = self.REFERENCE_LOGIC.CHECKS_BY_HEX[panel]["checkName"] + " Solved"
         pair = (name, self.EVENT_ITEM_NAMES[panel])
         return pair
 
@@ -287,7 +293,7 @@ class WitnessPlayerLogic:
                         if panel == "TrueOneWay":
                             continue
 
-                        if StaticWitnessLogic.CHECKS_BY_HEX[panel]["region"]["name"] != region_name:
+                        if self.REFERENCE_LOGIC.CHECKS_BY_HEX[panel]["region"]["name"] != region_name:
                             self.EVENT_PANELS_FROM_REGIONS.add(panel)
 
         self.EVENT_PANELS.update(self.EVENT_PANELS_FROM_PANELS)
@@ -306,12 +312,20 @@ class WitnessPlayerLogic:
         self.EVENT_PANELS_FROM_PANELS = set()
         self.EVENT_PANELS_FROM_REGIONS = set()
 
+        self.THEORETICAL_ITEMS = set()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = set()
         self.DOOR_ITEMS_BY_ID = dict()
         self.STARTING_INVENTORY = set()
 
-        self.CONNECTIONS_BY_REGION_NAME = copy.copy(StaticWitnessLogic.STATIC_CONNECTIONS_BY_REGION_NAME)
-        self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.copy(StaticWitnessLogic.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
+        self.DIFFICULTY = get_option_value(world, player, "puzzle_randomization")
+
+        if self.DIFFICULTY == 0:
+            self.REFERENCE_LOGIC = StaticWitnessLogic.sigma_normal
+        elif self.DIFFICULTY == 1:
+            self.REFERENCE_LOGIC = StaticWitnessLogic.sigma_expert
+
+        self.CONNECTIONS_BY_REGION_NAME = copy.copy(self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME)
+        self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.copy(self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
         self.REQUIREMENTS_BY_HEX = dict()
 
         # Determining which panels need to be events is a difficult process.
@@ -333,6 +347,7 @@ class WitnessPlayerLogic:
             "0x019DC": "Keep Hedges 2 Knowledge",
             "0x019E7": "Keep Hedges 3 Knowledge",
             "0x01D3F": "Keep Laser Panel (Pressure Plates) Activates",
+            "0x01BE9": "Keep Laser Panel (Pressure Plates) Activates",
             "0x09F7F": "Mountain Access",
             "0x0367C": "Quarry Laser Mill Requirement Met",
             "0x009A1": "Swamp Between Bridges Far 1 Activates",
@@ -374,6 +389,9 @@ class WitnessPlayerLogic:
             "0x0356B": "Challenge Video Pattern Knowledge",
             "0x0A15F": "Desert Laser Panel Shutters Open (1)",
             "0x012D7": "Desert Laser Panel Shutters Open (2)",
+            "0x03613": "Treehouse Orange Bridge 13 Turns On",
+            "0x17DEC": "Treehouse Laser House Access Requirement",
+            "0x03C08": "Town Church Entry Opens",
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {

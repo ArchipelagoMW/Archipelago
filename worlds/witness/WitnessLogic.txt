@@ -338,7 +338,7 @@ Keep 3rd Pressure Plate (Keep) - Keep 4th Pressure Plate - 0x01CD5:
 158202 - 0x01CD3 (Pressure Plates 3) - 0x0A3BB - Shapers & Black/White Squares & Colored Squares
 Door - 0x01CD5 (Pressure Plates 3 Exit) - 0x01CD3
 
-Keep 4th Pressure Plate (Keep) - Keep - 0x09E3D - Keep Tower - 0x01D40:
+Keep 4th Pressure Plate (Keep) - Shadows - 0x09E3D - Keep Tower - 0x01D40:
 158203 - 0x0A3AD (Reset Pressure Plates 4) - True - True
 158204 - 0x01D3F (Pressure Plates 4) - 0x0A3AD - Shapers & Dots & Symmetry
 Door - 0x01D40 (Pressure Plates 4 Exit) - 0x01D3F
@@ -358,7 +358,7 @@ Door - 0x04F8F (Tower Shortcut) - 0x0361B
 158705 - 0x03317 (Laser Panel Pressure Plates) - 0x01D3F - Shapers & Black/White Squares & Colored Squares & Stars & Stars + Same Colored Symbol & Dots
 Laser - 0x014BB (Laser) - 0x0360E | 0x03317
 
-Outside Monastery (Monastery) - Main Island - True - Main Island - 0x0364E - Inside Monastery - 0x0C128 & 0x0C153 - Monastery Garden - 0x03750:
+Outside Monastery (Monastery) - Main Island - True - Inside Monastery - 0x0C128 & 0x0C153 - Monastery Garden - 0x03750:
 158207 - 0x03713 (Shortcut Panel) - True - True
 Door - 0x0364E (Shortcut) - 0x03713
 158208 - 0x00B10 (Entry Left) - True - True
@@ -819,7 +819,7 @@ Mountain Path to Caves (Mountain Bottom Floor) - Mountain Bottom Floor Rock - 0x
 Door - 0x2D77D (Caves Entry) - 0x00FF8
 158448 - 0x334E1 (Rock Control) - True - True
 
-Caves (Caves) - Main Island - 0x2D73F - Main Island - 0x2D859 - Path to Challenge - 0x019A5:
+Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Path to Challenge - 0x019A5:
 158451 - 0x335AB (Elevator Inside Control) - True - Dots & Black/White Squares
 158452 - 0x335AC (Elevator Upper Outside Control) - 0x335AB - Black/White Squares
 158453 - 0x3369D (Elevator Lower Outside Control) - 0x335AB - Black/White Squares & Dots

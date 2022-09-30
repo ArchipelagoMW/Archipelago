@@ -75,6 +75,13 @@ class VictoryCondition(Choice):
     option_mountain_box_long = 3
 
 
+class PuzzleRandomization(Choice):
+    """Puzzles in this randomizer are randomly generated. This setting changes the difficulty/types of puzzles."""
+    display_name = "Puzzle Randomization"
+    option_sigma_normal = 0
+    option_sigma_expert = 1
+
+
 class MountainLasers(Range):
     """Sets the amount of beams required to enter the final area."""
     display_name = "Required Lasers for Mountain Entry"
@@ -109,7 +116,7 @@ class PuzzleSkipAmount(Range):
 
 
 the_witness_options: Dict[str, type] = {
-    # "hard_mode": HardMode,
+    "puzzle_randomization": PuzzleRandomization,
     "shuffle_symbols": ShuffleSymbols,
     "shuffle_doors": ShuffleDoors,
     "shuffle_lasers": ShuffleLasers,
