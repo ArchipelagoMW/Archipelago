@@ -113,6 +113,8 @@ class StaticWitnessLogicObj:
 
 class StaticWitnessLogic:
     ALL_SYMBOL_ITEMS = set()
+    ITEMS_TO_PROGRESSIVE = dict()
+    PROGRESSIVE_TO_ITEMS = dict()
     ALL_DOOR_ITEMS = set()
     ALL_DOOR_ITEMS_AS_DICT = dict()
     ALL_USEFULS = set()
@@ -166,6 +168,13 @@ class StaticWitnessLogic:
                     current_set.add(new_door)
                     self.ALL_DOOR_ITEMS_AS_DICT[line_split[1]] = new_door
                 else:
+                    if len(line_split) > 2:
+                        progressive_items = line_split[2].split(",")
+                        for i, value in enumerate(progressive_items):
+                            self.ITEMS_TO_PROGRESSIVE[value] = line_split[1]
+                        self.PROGRESSIVE_TO_ITEMS[line_split[1]] = progressive_items
+                        current_set.add((line_split[1], int(line_split[0])))
+                        continue
                     current_set.add((line_split[1], int(line_split[0])))
 
     @lazy
@@ -174,7 +183,6 @@ class StaticWitnessLogic:
 
     @lazy
     def sigma_normal(self) -> StaticWitnessLogicObj:
-        print("Making Sigma Logic")
         return StaticWitnessLogicObj("WitnessLogic.txt")
 
     def __init__(self):

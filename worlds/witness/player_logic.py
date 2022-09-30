@@ -47,12 +47,12 @@ class WitnessPlayerLogic:
             these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["items"]
 
         these_items = frozenset({
-            subset.intersection(self.THEORETICAL_ITEMS)
+            subset.intersection(self.THEORETICAL_ITEMS_NO_MULTI)
             for subset in these_items
         })
 
         for subset in these_items:
-            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.update(subset)
+            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(subset)
 
         if panel_hex in self.DOOR_ITEMS_BY_ID:
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[panel_hex]})
@@ -60,7 +60,7 @@ class WitnessPlayerLogic:
             all_options = set()
 
             for dependentItem in door_items:
-                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.update(dependentItem)
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(dependentItem)
                 for items_option in these_items:
                     all_options.add(items_option.union(dependentItem))
 
@@ -117,20 +117,25 @@ class WitnessPlayerLogic:
         """Makes a single logic adjustment based on additional logic file"""
 
         if adj_type == "Items":
-            if line not in StaticWitnessItems.ALL_ITEM_TABLE:
-                raise RuntimeError("Item \"" + line + "\" does not exit.")
+            line_split = line.split(" - ")
+            item = line_split[0]
 
-            self.THEORETICAL_ITEMS.add(line)
+            if item not in StaticWitnessItems.ALL_ITEM_TABLE:
+                raise RuntimeError("Item \"" + item + "\" does not exit.")
 
-            if line in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
-                panel_hexes = StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[line][2]
+            self.THEORETICAL_ITEMS.add(item)
+            self.THEORETICAL_ITEMS_NO_MULTI.update(StaticWitnessLogic.PROGRESSIVE_TO_ITEMS.get(item, [item]))
+
+            if item in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
+                panel_hexes = StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[item][2]
                 for panel_hex in panel_hexes:
-                    self.DOOR_ITEMS_BY_ID.setdefault(panel_hex, set()).add(line)
+                    self.DOOR_ITEMS_BY_ID.setdefault(panel_hex, set()).add(item)
 
             return
 
         if adj_type == "Remove Items":
             self.THEORETICAL_ITEMS.discard(line)
+            self.THEORETICAL_ITEMS_NO_MULTI.discard(StaticWitnessLogic.PROGRESSIVE_TO_ITEMS.get(line, [line]))
 
             if line in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
                 panel_hexes = StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[line][2]
@@ -269,7 +274,16 @@ class WitnessPlayerLogic:
 
             self.REQUIREMENTS_BY_HEX[check_hex] = indep_requirement
 
-
+        for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI:
+            if item not in self.THEORETICAL_ITEMS:
+                corresponding_multi = StaticWitnessLogic.ITEMS_TO_PROGRESSIVE[item]
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(corresponding_multi)
+                multi_list = StaticWitnessLogic.PROGRESSIVE_TO_ITEMS[StaticWitnessLogic.ITEMS_TO_PROGRESSIVE[item]]
+                multi_list = [item for item in multi_list if item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI]
+                self.MULTI_AMOUNTS[item] = multi_list.index(item) + 1
+                self.MULTI_AMOUNTS[corresponding_multi] = len(multi_list)
+            else:
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
 
     def make_event_item_pair(self, panel):
         """
@@ -313,6 +327,9 @@ class WitnessPlayerLogic:
         self.EVENT_PANELS_FROM_REGIONS = set()
 
         self.THEORETICAL_ITEMS = set()
+        self.THEORETICAL_ITEMS_NO_MULTI = set()
+        self.MULTI_AMOUNTS = dict()
+        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = set()
         self.DOOR_ITEMS_BY_ID = dict()
         self.STARTING_INVENTORY = set()

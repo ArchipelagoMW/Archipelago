@@ -145,8 +145,10 @@ class WitnessLogic(LogicMixin):
                         valid_option = False
                         break
                 elif not self.has(item, player):
-                    valid_option = False
-                    break
+                    prog_dict = StaticWitnessLogic.ITEMS_TO_PROGRESSIVE
+                    if not (item in prog_dict and self.has(prog_dict[item], player, player_logic.MULTI_AMOUNTS[item])):
+                        valid_option = False
+                        break
 
             if valid_option:
                 return True
