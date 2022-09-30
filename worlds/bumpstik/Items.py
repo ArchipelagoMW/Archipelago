@@ -18,6 +18,11 @@ class BumpStikLttPText(typing.NamedTuple):
 
 
 LttPCreditsText = {
+    "Nothing": BumpStikLttPText("blank space",
+                                "Forgot it at home again",
+                                "Hallucinating again",
+                                "Bucket o' Nothing for 9999.99",
+                                "Nihilistic melody"),
     "Board Width": BumpStikLttPText("widening",
                                     "Bumper Kid embiggens options",
                                     "Try this shroom for size",
@@ -93,14 +98,7 @@ class BumpStikItem(Item):
 offset = 595_000
 
 item_table = {
-    "Board Width": offset + 0,
-    "Board Height": offset + 1,
-    "Starting Colors Up": offset + 2,
-    "Maximum Colors Up": offset + 3,
-    "Starting Paint Can": offset + 4,
-    "Booster Bumper": offset + 5,
-    "Hazard Bumper": offset + 6,
-    "Treasure Bumper": offset + 7
+    item: offset + x for x, item in enumerate(LttPCreditsText.keys())
 }
 
 item_groups = {

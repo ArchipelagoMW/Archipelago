@@ -57,13 +57,13 @@ class BumpStikWorld(World):
         return [self.create_item(name) for _ in range(0, qty)]
 
     def get_filler_item_name(self) -> str:
-        return "Treasure Bumper"
+        return "Nothing"
 
     def create_regions(self):
         create_regions(self.world, self.player)
 
     def create_items(self):
-        frequencies = [0, 0, 0, 0, 2, 5, 25]
+        frequencies = [0, 0, 0, 0, 0, 2, 5, 25, 32]
         item_pool = []
 
         for i, name in enumerate(item_table):
