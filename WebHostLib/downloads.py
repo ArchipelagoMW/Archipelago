@@ -5,8 +5,9 @@ from io import BytesIO
 from flask import send_file, Response, render_template
 from pony.orm import select
 
-from Patch import update_patch_data, preferred_endings, AutoPatchRegister
-from WebHostLib import app, Slot, Room, Seed, cache
+from worlds.Files import AutoPatchRegister
+from . import app, cache
+from .models import Slot, Room, Seed
 
 
 @app.route("/dl_patch/<suuid:room_id>/<int:patch_id>")
@@ -32,18 +33,16 @@ def download_patch(room_id, patch_id):
                             new_zip.writestr("archipelago.json", json.dumps(manifest))
                         else:
                             new_zip.writestr(file.filename, zf.read(file), file.compress_type, 9)
-
+            if "patch_file_ending" in manifest:
+                patch_file_ending = manifest["patch_file_ending"]
+            else:
+                patch_file_ending = AutoPatchRegister.patch_types[patch.game].patch_file_ending
             fname = f"P{patch.player_id}_{patch.player_name}_{app.jinja_env.filters['suuid'](room_id)}" \
-                    f"{AutoPatchRegister.patch_types[patch.game].patch_file_ending}"
+                    f"{patch_file_ending}"
             new_file.seek(0)
             return send_file(new_file, as_attachment=True, download_name=fname)
         else:
-            patch_data = update_patch_data(patch.data, server=f"{app.config['PATCH_TARGET']}:{last_port}")
-            patch_data = BytesIO(patch_data)
-
-            fname = f"P{patch.player_id}_{patch.player_name}_{app.jinja_env.filters['suuid'](room_id)}." \
-                    f"{preferred_endings[patch.game]}"
-        return send_file(patch_data, as_attachment=True, download_name=fname)
+            return "Old Patch file, no longer compatible."
 
 
 @app.route("/dl_spoiler/<suuid:seed_id>")
