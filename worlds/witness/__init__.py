@@ -150,20 +150,21 @@ class WitnessWorld(World):
 
         credits_hint = ("This Randomizer", "is brought to you by", "NewSoupVi, Jarno, jbzdarkid, sigma144")
 
-        generated_hints = make_hints(self.world, self.player, hint_amount)
-
         audio_logs = get_audio_logs()
 
-        self.world.random.shuffle(audio_logs)
+        if hint_amount != 0:
+            generated_hints = make_hints(self.world, self.player, hint_amount)
 
-        duplicates = len(audio_logs) // hint_amount
+            self.world.random.shuffle(audio_logs)
 
-        for _ in range(0, hint_amount):
-            hint = generated_hints.pop()
+            duplicates = len(audio_logs) // hint_amount
 
-            for _ in range(0, duplicates):
-                audio_log = audio_logs.pop()
-                self.log_ids_to_hints[int(audio_log, 16)] = hint
+            for _ in range(0, hint_amount):
+                hint = generated_hints.pop()
+
+                for _ in range(0, duplicates):
+                    audio_log = audio_logs.pop()
+                    self.log_ids_to_hints[int(audio_log, 16)] = hint
 
         if audio_logs:
             audio_log = audio_logs.pop()
