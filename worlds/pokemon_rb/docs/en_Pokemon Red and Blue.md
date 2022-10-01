@@ -32,6 +32,8 @@ this screen.
 * Pokémon that evolve by trading can also evolve by reaching level 35.
 * Evolution stones are reusable.
 * Much of the dialogue throughout the game has been removed or shortened.
+* If the Old Man is blocking your way through Viridian City, you do not have Oak's Parcel in your inventory, and you've
+exhausted your money and Poké Balls, you can get a free Poké Ball from your mom.
 
 ## What items and locations get shuffled?
 
