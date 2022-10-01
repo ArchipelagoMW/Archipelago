@@ -4,6 +4,78 @@ from BaseClasses import MultiWorld
 from Utils import cache_argsless
 from .Options import is_option_enabled, get_option_value
 
+joke_hints = [
+    ("Quaternions", "break", "my brain"),
+    ("Eclipse", "has nothing", "but you should do it anyway"),
+    ("", "Beep", ""),
+    ("Putting in custom subtitles", "shouldn't have been", "as hard as it was..."),
+    ("BK mode", "is right", "around the corner"),
+    ("", "You can do it!", ""),
+    ("", "I believe in you!", ""),
+    ("The person playing", "is", "cute <3"),
+    ("dash dot, dash dash dash", "dash, dot dot dot dot, dot dot", "dash dot, dash dash dot"),
+    ("When you think about it,", "there are actually a lot of", "bubbles in a stream"),
+    ("Never gonna give you up", "Never gonna let you down", "Never gonna run around and desert you"),
+    ("Thanks to", "the Archipelago developers", "for making this possible."),
+    ("Have you tried ChecksFinder?", "If you like puzzles,", "you might enjoy it!"),
+    ("Have you tried Dark Souls III?", "A tough game like this", "feels better when friends are helping you!"),
+    ("Have you tried Donkey Kong Country 3?", "A legendary game", "from a golden age of platformers!"),
+    ("Have you tried Factorio?", "Alone in an unknown world.", "Sound familiar?"),
+    ("Have you tried Final Fantasy?", "Experience a classic game", "improved to fit modern standards!"),
+    ("Have you tried Hollow Knight?", "Another independent hit", "revolutionising a genre!"),
+    ("Have you tried A Link to the Past?", "The Archipelago game", "that started it all!"),
+    ("Have you tried Meritous?", "You should know that obscure games", "are often groundbreaking!"),
+    ("Have you tried Ocarine of Time?", "One of the biggest randomizers,", "big inspiration for this one's features!"),
+    ("Have you tried Raft?", "Haven't you always wanted to explore", "the ocean surrounding this island?"),
+    ("Have you tried Risk of Rain 2?", "I haven't either.", "But I hear it's incredible!"),
+    ("Have you tried Rogue Legacy?", "After solving so many puzzles", "it's the perfect way to rest your brain."),
+    ("Have you tried Secret of Evermore?", "I haven't either", "But I hear it's great!"),
+    ("Have you tried Slay the Spire?", "Experience the thrill of combat", "without needing fast fingers!"),
+    ("Have you tried SMZ3?", "Why play one incredible game", "when you can play 2 at once?"),
+    ("Have you tried Starcraft 2?", "Use strategy and management", "to crush your enemies!"),
+    ("Have you tried Super Mario 64?", "3-dimensional games like this", "owe everything to that game."),
+    ("Have you tried Super Metroid?", "A classic game", "that started a whole genre."),
+    ("Have you tried Timespinner?", "Everyone who plays it", "ends up loving it!"),
+    ("Have you tried VVVVVV?", "Experience the essence of gaming", "distilled into its purest form!"),
+    ("Have you tried The Witness?", "Oh. I guess you already have.", " Thanks for playing!"),
+    ("One day I was fascinated", "by the subject of", "generation of waves by wind"),
+    ("I don't like sandwiches", "Why would you think I like sandwiches?", "Have you ever seen me with a sandwich?"),
+    ("Where are you right now?", "I'm at soup!", "What do you mean you're at soup?"),
+    ("Remember to ask", "in the Archipelago Discord", "what the Functioning Brain does."),
+    ("", "Don't use your puzzle skips", "you might need them later"),
+    ("", "For an extra challenge", "Try playing blindfolded"),
+    ("Go to the top of the mountain", "and see if you can see", "your house"),
+    ("Yellow = Red + Green", "Cyan = Green + Blue", "Magenta = Red + Blue"),
+    ("", "Maybe that panel really is unsolvable", ""),
+    ("", "Did you make sure it was plugged in?", ""),
+    ("", "Do not look into laser with remaining eye", ""),
+    ("", "Try pressing Space to jump", ""),
+    ("The Witness is a Doom clone.", "Just replace the demons", "with puzzles"),
+    ("", "Test Hint please ignore", ""),
+    ("Shapers can never be placed", "outside the panel boundaries", "even if subtracted."),
+    ("", "The Keep laser panels use", "the same trick on both sides!"),
+    ("Can't get past a door? Try going around.", "Can't go around? Try building a", "nether portal."),
+    ("", "We've been trying to reach you", "about your car's extended warranty"),
+    ("I hate this game. I hate this game.", "I hate this game.", "-chess player Bobby Fischer"),
+    ("Dear Mario,", "Please come to the castle.", "I've baked a cake for you!"),
+    ("Have you tried waking up?", "", "Yeah, me neither."),
+    ("Why do they call it The Witness,", "when wit game the player view", "play of with the game."),
+    ("", "THE WIND FISH IN NAME ONLY", "FOR IT IS NEITHER"),
+    ("Like this game? Try The Wit.nes,", "Understand, INSIGHT, Taiji", "What the Witness?, and Tametsi."),
+    ("", "In a race", "It's survival of the Witnesst"),
+    ("", "This hint has been removed", "We apologize for your inconvenience."),
+    ("", "O-----------", ""),
+    ("Circle is draw", "Square is separate", "Line is win"),
+    ("Circle is draw", "Star is pair", "Line is win"),
+    ("Circle is draw", "Circle is copy", "Line is win"),
+    ("Circle is draw", "Dot is eat", "Line is win"),
+    ("Circle is start", "Walk is draw", "Line is win"),
+    ("Circle is start", "Line is win", "Witness is you"),
+    ("Can't find any items?", "Consider a relaxing boat trip", "around the island"),
+    ("", "Don't forget to like, comment, and subscribe", ""),
+    ("Hints suggested by:", "IHNN, Beaker, MrPokemon11, Ember, TheM8,", "Yoshi348, Berserker, BowlinJim, oddGarrett."),
+]
+
 
 def get_always_hint_items(world: MultiWorld, player: int):
     priority = [
@@ -191,3 +263,7 @@ def make_hints(world: MultiWorld, player: int, hint_amount: int):
         next_random_hint_is_item = not next_random_hint_is_item
 
     return hints
+
+
+def generate_joke_hints(world: MultiWorld, amount: int):
+    return world.random.sample(joke_hints, amount)

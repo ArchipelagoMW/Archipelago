@@ -1,12 +1,12 @@
 """
 Archipelago init file for The Witness
 """
-
+import random
 import typing
 
 from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance, Tutorial, ItemClassification
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
-    get_priority_hint_items, make_hints
+    get_priority_hint_items, make_hints, generate_joke_hints
 from ..AutoWorld import World, WebWorld
 from .player_logic import WitnessPlayerLogic
 from .static_logic import StaticWitnessLogic
@@ -146,7 +146,7 @@ class WitnessWorld(World):
         set_rules(self.world, self.player, self.player_logic, self.locat)
 
     def post_fill(self):
-        hint_amount = 16
+        hint_amount = get_option_value(self.world, self.player, "hint_amount")
 
         credits_hint = ("This Randomizer", "is brought to you by", "NewSoupVi, Jarno, jbzdarkid, sigma144")
 
@@ -154,17 +154,26 @@ class WitnessWorld(World):
 
         audio_logs = get_audio_logs()
 
-        extra_log = audio_logs.pop(self.world.random.randrange(len(audio_logs)))
+        self.world.random.shuffle(audio_logs)
 
-        for i in range(0, len(audio_logs), 3):
-            audio_log_chunk = audio_logs[i:i + 3]
+        duplicates = len(audio_logs) // hint_amount
 
+        for _ in range(0, hint_amount):
             hint = generated_hints.pop()
 
-            for audio_log in audio_log_chunk:
+            for _ in range(0, duplicates):
+                audio_log = audio_logs.pop()
                 self.log_ids_to_hints[int(audio_log, 16)] = hint
 
-        self.log_ids_to_hints[int(extra_log, 16)] = credits_hint
+        if audio_logs:
+            audio_log = audio_logs.pop()
+            self.log_ids_to_hints[int(audio_log, 16)] = credits_hint
+
+        joke_hints = generate_joke_hints(self.world, len(audio_logs))
+
+        while audio_logs:
+            audio_log = audio_logs.pop()
+            self.log_ids_to_hints[int(audio_log, 16)] = joke_hints.pop()
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()

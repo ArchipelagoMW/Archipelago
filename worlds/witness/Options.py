@@ -116,6 +116,15 @@ class PuzzleSkipAmount(Range):
     default = 5
 
 
+class HintAmount(Range):
+    """Adds hints to Audio Logs. Hints will have the same number of duplicates, as many as will fit. Remaining Audio
+    Logs will have junk hints."""
+    display_name = "Hints on Audio Logs"
+    range_start = 0
+    range_end = 49
+    default = 10
+
+
 the_witness_options: Dict[str, type] = {
     "puzzle_randomization": PuzzleRandomization,
     "shuffle_symbols": ShuffleSymbols,
@@ -131,6 +140,7 @@ the_witness_options: Dict[str, type] = {
     "early_secret_area": EarlySecretArea,
     "trap_percentage": TrapPercentage,
     "puzzle_skip_amount": PuzzleSkipAmount,
+    "hint_amount": HintAmount,
 }
 
 
