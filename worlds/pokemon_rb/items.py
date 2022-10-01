@@ -174,5 +174,3 @@ item_groups = {}
 for item, data in item_table.items():
     for group in data.groups:
         item_groups[group] = item_groups.get(group, []) + [item]
-
-pass
