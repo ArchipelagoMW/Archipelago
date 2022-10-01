@@ -1,7 +1,7 @@
 import typing
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList
-
+from BaseClasses import MultiWorld
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice
 
 class Goal(Choice):
     """
@@ -17,6 +17,6 @@ class Goal(Choice):
     default = 0
 
 
-MMBN3Options: typing.Dict[str,type(Option)] = {
+MMBN3Options = {
     "Goal": Goal
 }
