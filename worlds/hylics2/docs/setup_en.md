@@ -28,6 +28,7 @@ There are a few additional commands that can be used while playing Hylics 2 rand
 - `/disconnect` - Disconnect from an Archipelago server.
 - `/popups` - Enables or disables in-game messages when an item is found or recieved.
 - `/airship` - Resummons the airship at the dock above New Muldul and teleports Wayne to it, in case the player gets stuck. Player must have the DOCK KEY to use this command.
+- `/respawn` - Moves Wayne back to the spawn position of the current area in case you get stuck. `/respawn home` will teleport Wayne back to his original starting position.
 - `/checked [region]` - States how many locations have been checked in a given region. If no region is given, then the player's location will be used.
 - `/deathlink` - Enables or disables DeathLink.
 - `/help [command]` - Lists a command, it's description, and it's required arguments (if any). If no command is given, all commands will be displayed.
