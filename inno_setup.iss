@@ -73,8 +73,8 @@ Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDi
 Name: "client/oot";       Description: "Ocarina of Time"; Types: full playing
 Name: "client/ff1";       Description: "Final Fantasy 1"; Types: full playing
 Name: "client/pkmn";      Description: "Pokemon Client"
-Name: "client/pkmn/red";  Description: "Pokemon Client - Pokemon Red Setup"; Types: full playing
-Name: "client/pkmn/blue"; Description: "Pokemon Client - Pokemon Blue Setup"; Types: full playing
+Name: "client/pkmn/red";  Description: "Pokemon Client - Pokemon Red Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
+Name: "client/pkmn/blue"; Description: "Pokemon Client - Pokemon Blue Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
 Name: "client/cf";        Description: "ChecksFinder"; Types: full playing
 Name: "client/sc2";       Description: "Starcraft 2"; Types: full playing
 Name: "client/text";      Description: "Text, to !command and chat"; Types: full playing
