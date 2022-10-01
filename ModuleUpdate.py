@@ -13,8 +13,8 @@ update_ran = getattr(sys, "frozen", False)  # don't run update if environment is
 
 if not update_ran:
     for entry in os.scandir(os.path.join(local_dir, "worlds")):
-        # skip _* (non-world) and .* (disabled) folders
-        if not entry.name.startswith(("_", ".")):
+        # skip .* (hidden / disabled) folders
+        if not entry.name.startswith("."):
             if entry.is_dir():
                 req_file = os.path.join(entry.path, "requirements.txt")
                 if os.path.exists(req_file):
