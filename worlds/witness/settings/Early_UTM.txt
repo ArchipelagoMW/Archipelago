@@ -5,5 +5,5 @@ Starting Inventory:
 Caves Exits to Main Island
 
 Remove Items:
-Caves Mountain Shortcut
-Caves Swamp Shortcut
+Caves Mountain Shortcut (Door)
+Caves Swamp Shortcut (Door)

@@ -46,7 +46,7 @@ the website is not required to generate them.
 ## How do I get started?
 
 If you are ready to start randomizing games, or want to start playing your favorite randomizer with others, please join
-our discord server at the [Archipelago Discord](https://discord.gg/archipelago). There are always people ready to answer
+our discord server at the [Archipelago Discord](https://discord.gg/8Z65BR2). There are always people ready to answer
 any questions you might have.
 
 ## What are some common terms I should know?
