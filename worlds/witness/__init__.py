@@ -145,10 +145,7 @@ class WitnessWorld(World):
     def set_rules(self):
         set_rules(self.world, self.player, self.player_logic, self.locat)
 
-    def post_fill(self):
-        return
-
-    def generate_output(self, output_directory: str) -> None:
+    def fill_slot_data(self) -> dict:
         hint_amount = get_option_value(self.world, self.player, "hint_amount")
 
         credits_hint = ("This Randomizer", "is brought to you by", "NewSoupVi, Jarno, jbzdarkid, sigma144")
@@ -179,7 +176,8 @@ class WitnessWorld(World):
             audio_log = audio_logs.pop()
             self.log_ids_to_hints[int(audio_log, 16)] = joke_hints.pop()
 
-    def fill_slot_data(self) -> dict:
+        # generate hints done
+
         slot_data = self._get_slot_data()
 
         slot_data["hard_mode"] = False
