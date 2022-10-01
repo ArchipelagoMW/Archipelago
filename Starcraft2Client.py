@@ -12,21 +12,9 @@ import typing
 import queue
 from pathlib import Path
 
-import nest_asyncio
-import sc2
-from sc2.bot_ai import BotAI
-from sc2.data import Race
-from sc2.main import run_game
-from sc2.player import Bot
-
-import NetUtils
-from MultiServer import mark_raw
+# CommonClient import first to trigger ModuleUpdater
+from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows
-from worlds.sc2wol import SC2WoLWorld
-from worlds.sc2wol.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups
-from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
-from worlds.sc2wol.MissionTables import lookup_id_to_mission
-from worlds.sc2wol.Regions import MissionInfo
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -34,10 +22,21 @@ if __name__ == "__main__":
 logger = logging.getLogger("Client")
 sc2_logger = logging.getLogger("Starcraft2")
 
-import colorama
+import nest_asyncio
+import sc2
+from sc2.bot_ai import BotAI
+from sc2.data import Race
+from sc2.main import run_game
+from sc2.player import Bot
+from worlds.sc2wol import SC2WoLWorld
+from worlds.sc2wol.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups
+from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
+from worlds.sc2wol.MissionTables import lookup_id_to_mission
+from worlds.sc2wol.Regions import MissionInfo
 
-from NetUtils import ClientStatus, RawJSONtoTextParser
-from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
+import colorama
+from NetUtils import ClientStatus, NetworkItem, RawJSONtoTextParser
+from MultiServer import mark_raw
 
 nest_asyncio.apply()
 max_bonus: int = 8
@@ -441,8 +440,8 @@ wol_default_categories = [
 ]
 
 
-def calculate_items(items: typing.List[NetUtils.NetworkItem]) -> typing.List[int]:
-    network_item: NetUtils.NetworkItem
+def calculate_items(items: typing.List[NetworkItem]) -> typing.List[int]:
+    network_item: NetworkItem
     accumulators: typing.List[int] = [0 for _ in type_flaggroups]
 
     for network_item in items:
