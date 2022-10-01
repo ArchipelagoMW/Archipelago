@@ -4,7 +4,7 @@ import logging
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from Fill import fill_restrictive, FillError
-from .items import item_table
+from .items import item_table, item_groups
 from .locations import get_locations, PokemonRBLocation
 from ..AutoWorld import World, WebWorld
 from .regions import create_regions
@@ -42,7 +42,7 @@ class PokemonRedBlueWorld(World):
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = {location.name: location.address for location in get_locations() if location.type == "Item"}
-    item_name_groups = {}
+    item_name_groups = item_groups
 
     web = PokemonWebWorld()
 
@@ -111,6 +111,7 @@ class PokemonRedBlueWorld(World):
 
         self.world.itempool += item_pool
 
+
         process_pokemon_data(self)  # strange place for this, but it is the only place that works
 
     def pre_fill(self):
@@ -141,6 +142,7 @@ class PokemonRedBlueWorld(World):
                 location.place_locked_item(player_items[0])
                 self.world.itempool.remove(player_items.pop(0))
         if not self.world.badgesanity[self.player].value:
+            self.world.non_local_items[self.player].value -= self.item_name_groups["Badges"]
             for i in range(5):
                 try:
                     badges = []
