@@ -146,6 +146,9 @@ class WitnessWorld(World):
         set_rules(self.world, self.player, self.player_logic, self.locat)
 
     def post_fill(self):
+        return
+
+    def generate_output(self, output_directory: str) -> None:
         hint_amount = get_option_value(self.world, self.player, "hint_amount")
 
         credits_hint = ("This Randomizer", "is brought to you by", "NewSoupVi, Jarno, jbzdarkid, sigma144")
