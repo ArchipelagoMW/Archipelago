@@ -160,13 +160,13 @@ item_table = {
     "Become Champion": ItemData(None, ItemClassification.progression, [])
 }
 item_table.update(
-    {pokemon: ItemData(None, ItemClassification.progression, ["Pokemon"]) for pokemon in pokemon_data.keys()}
+    {pokemon: ItemData(None, ItemClassification.progression, []) for pokemon in pokemon_data.keys()}
 )
 item_table.update(
-    {f"Missable {pokemon}": ItemData(None, ItemClassification.useful, ["Pokemon", "Missable Pokemon"]) for pokemon in pokemon_data.keys()}
+    {f"Missable {pokemon}": ItemData(None, ItemClassification.useful, []) for pokemon in pokemon_data.keys()}
 )
 item_table.update(
-    {f"Static {pokemon}": ItemData(None, ItemClassification.progression, ["Pokemon", "Static Pokemon"]) for pokemon in pokemon_data.keys()}
+    {f"Static {pokemon}": ItemData(None, ItemClassification.progression, []) for pokemon in pokemon_data.keys()}
 )
 
 
