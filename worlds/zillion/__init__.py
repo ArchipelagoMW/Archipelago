@@ -136,7 +136,7 @@ class ZillionWorld(World):
             p = self.zz_patcher
             jump_req_rooms = room_jump_requirements()
             p.aem.room_gen_mods()
-            room_gen = RoomGen(p.tc, p.sm, p.aem, self.zz_randomizer.logger, zz_op.skill)
+            room_gen = RoomGen(p.tc, p.sm, p.aem, self.zz_randomizer.logger, zz_op.skill, self.zz_randomizer.regions)
             room_gen.generate_all(jump_req_rooms)
             self.zz_randomizer.reset(room_gen)
             self._modified_rooms = room_gen.get_modified_rooms()
@@ -158,10 +158,10 @@ class ZillionWorld(World):
 
         self.zz_randomizer.place_canister_gun_reqs()
 
-        start = self.zz_randomizer.start
+        start = self.zz_randomizer.regions['start']
 
         all: Dict[str, ZillionRegion] = {}
-        for here_zz_name, zz_r in start.all.items():
+        for here_zz_name, zz_r in self.zz_randomizer.regions.items():
             here_name = "Menu" if here_zz_name == "start" else zz_reg_name_to_reg_name(here_zz_name)
             all[here_name] = ZillionRegion(zz_r, here_name, RegionType.Generic, here_name, p, w)
             self.world.regions.append(all[here_name])
@@ -315,7 +315,7 @@ class ZillionWorld(World):
 
         assert self.zz_patcher, "generate_early didn't set patcher"
 
-        self.zz_patcher.write_locations(self.zz_randomizer.start,
+        self.zz_patcher.write_locations(self.zz_randomizer.regions,
                                         zz_options.start_char,
                                         self.zz_randomizer.loc_name_2_pretty)
         self.zz_patcher.all_fixes_and_options(zz_options)
