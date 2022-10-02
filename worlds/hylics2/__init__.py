@@ -139,7 +139,7 @@ class Hylics2World(World):
 
             for i in range(len(gestures)):
                 gest = self.world.random.choice(gestures)
-                tv = random.choice(tvs)
+                tv = self.world.random.choice(tvs)
                 self.world.get_location(tv[1]["name"], self.player)\
                     .place_locked_item(self.add_item(gest[1]["name"], gest[1]["classification"], gest[1]))
                 gestures.remove(gest)
