@@ -127,7 +127,7 @@ class Hylics2World(World):
             # if Extra Items in Logic is enabled place CHARGE UP first and make sure it doesn't get 
             # placed at Sage Airship: TV
             if self.world.extra_items_in_logic[self.player]:
-                tv = random.choice(tvs)
+                tv = self.world.random.choice(tvs)
                 gest = gestures.index((200681, Items.gesture_item_table[200681]))
                 while tv[1]["name"] == "Sage Airship: TV":
                     tv = random.choice(tvs)
