@@ -26,7 +26,7 @@ level3_locs = [f"{(i + 1) * 800} Points" for i in range(4)] + \
     ["All Clear, 3 colors"]
 
 level4_locs = [f"{(i + 1) * 1500} Points" for i in range(4)] + \
-    [f"{(i + 1) * 4000} Level Points" for i in range(4)] + \
+    [f"{(i + 1) * 3000} Level Points" for i in range(4)] + \
     ["Combo 5", "Combo 7"] + ["Chain x2", "Chain x3"]
 
 level5_locs = ["100,000 Total Points", "Cleared all Hazards"]
