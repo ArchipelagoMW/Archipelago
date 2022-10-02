@@ -409,7 +409,6 @@ class DeathLink(Choice):
     shade: DeathLink functions like a normal death if you do not already have a shade, shadeless otherwise.
     """
     option_off = 0
-    alias_false = 0
     alias_no = 0
     alias_true = 1
     alias_on = 1
@@ -435,10 +434,8 @@ class CostSanity(Choice):
     These costs can be in Geo (except Grubfather, Seer and Eggshop), Grubs, Charms, Essence and/or Rancid Eggs
     """
     option_off = 0
-    alias_false = 0
     alias_no = 0
     option_on = 1
-    alias_true = 1
     alias_yes = 1
     option_shopsonly = 2
     option_notshops = 3

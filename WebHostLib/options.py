@@ -1,6 +1,6 @@
 import logging
 import os
-from Utils import __version__
+from Utils import __version__, local_path
 from jinja2 import Template
 import yaml
 import json
@@ -9,14 +9,13 @@ import typing
 from worlds.AutoWorld import AutoWorldRegister
 import Options
 
-target_folder = os.path.join("WebHostLib", "static", "generated")
-
 handled_in_js = {"start_inventory", "local_items", "non_local_items", "start_hints", "start_location_hints",
                  "exclude_locations"}
 
 
 def create():
-    os.makedirs(os.path.join(target_folder, 'configs'), exist_ok=True)
+    target_folder = local_path("WebHostLib", "static", "generated")
+    os.makedirs(os.path.join(target_folder, "configs"), exist_ok=True)
 
     def dictify_range(option: typing.Union[Options.Range, Options.SpecialRange]):
         data = {}
@@ -65,12 +64,19 @@ def create():
 
     for game_name, world in AutoWorldRegister.world_types.items():
 
-        all_options = {**Options.per_game_common_options, **world.option_definitions}
-        res = Template(open(os.path.join("WebHostLib", "templates", "options.yaml")).read()).render(
+        all_options: typing.Dict[str, Options.AssembleOptions] = {
+            **Options.per_game_common_options,
+            **world.option_definitions
+        }
+        with open(local_path("WebHostLib", "templates", "options.yaml")) as f:
+            file_data = f.read()
+        res = Template(file_data).render(
             options=all_options,
             __version__=__version__, game=game_name, yaml_dump=yaml.dump,
             dictify_range=dictify_range, default_converter=default_converter,
         )
+
+        del file_data
 
         with open(os.path.join(target_folder, 'configs', game_name + ".yaml"), "w") as f:
             f.write(res)

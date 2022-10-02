@@ -178,6 +178,10 @@ class OOTWorld(World):
         if self.skip_child_zelda:
             self.shuffle_weird_egg = False
 
+        # Ganon boss key should not be in itempool in triforce hunt
+        if self.triforce_hunt:
+            self.shuffle_ganon_bosskey = 'remove'
+
         # Determine skipped trials in GT
         # This needs to be done before the logic rules in GT are parsed
         trial_list = ['Forest', 'Fire', 'Water', 'Spirit', 'Shadow', 'Light']
@@ -186,7 +190,11 @@ class OOTWorld(World):
 
         # Determine which dungeons are MQ
         # Possible future plan: allow user to pick which dungeons are MQ
-        mq_dungeons = self.world.random.sample(dungeon_table, self.mq_dungeons)
+        if self.logic_rules == 'glitchless':
+            mq_dungeons = self.world.random.sample(dungeon_table, self.mq_dungeons)
+        else:
+            self.mq_dungeons = 0
+            mq_dungeons = []
         self.dungeon_mq = {item['name']: (item in mq_dungeons) for item in dungeon_table}
 
         # Determine tricks in logic
@@ -803,14 +811,15 @@ class OOTWorld(World):
 
         with i_o_limiter:
             # Make traps appear as other random items
-            ice_traps = [loc.item for loc in self.get_locations() if loc.item.trap]
-            for trap in ice_traps:
-                trap.looks_like_item = self.create_item(self.world.slot_seeds[self.player].choice(self.fake_items).name)
+            trap_location_ids = [loc.address for loc in self.get_locations() if loc.item.trap]
+            self.trap_appearances = {}
+            for loc_id in trap_location_ids:
+                self.trap_appearances[loc_id] = self.create_item(self.world.slot_seeds[self.player].choice(self.fake_items).name)
 
             # Seed hint RNG, used for ganon text lines also
             self.hint_rng = self.world.slot_seeds[self.player]
 
-            outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_file_safe_player_name(self.player)}"
+            outfile_name = self.world.get_out_file_name_base(self.player)
             rom = Rom(file=get_options()['oot_options']['rom_file'])
             if self.hints != 'none':
                 buildWorldGossipHints(self)

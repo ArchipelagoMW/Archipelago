@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import Utils
-from Patch import read_rom
+import worlds.AutoWorld
+import worlds.Files
 
-LTTPJPN10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '9952c2a3ec1b421e408df0d20c8f0c7f'
-ROM_PLAYER_LIMIT = 255
+LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
+RANDOMIZERBASEHASH: str = "9952c2a3ec1b421e408df0d20c8f0c7f"
+ROM_PLAYER_LIMIT: int = 255
 
 import io
 import json
@@ -34,7 +35,7 @@ from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts
     DeathMountain_texts, \
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen
+from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen, parse_yaml, read_snes_rom
 from worlds.alttp.Items import ItemFactory, item_table, item_name_groups, progression_items
 from worlds.alttp.EntranceShuffle import door_addresses
 from worlds.alttp.Options import smallkey_shuffle
@@ -57,13 +58,13 @@ class LocalRom(object):
         self.orig_buffer = None
 
         with open(file, 'rb') as stream:
-            self.buffer = read_rom(stream)
+            self.buffer = read_snes_rom(stream)
         if patch:
             self.patch_base_rom()
             self.orig_buffer = self.buffer.copy()
         if vanillaRom:
             with open(vanillaRom, 'rb') as vanillaStream:
-                self.orig_buffer = read_rom(vanillaStream)
+                self.orig_buffer = read_snes_rom(vanillaStream)
 
     def read_byte(self, address: int) -> int:
         return self.buffer[address]
@@ -123,29 +124,24 @@ class LocalRom(object):
         return expected == buffermd5.hexdigest()
 
     def patch_base_rom(self):
-        if os.path.isfile(local_path('basepatch.sfc')):
-            with open(local_path('basepatch.sfc'), 'rb') as stream:
+        if os.path.isfile(user_path('basepatch.sfc')):
+            with open(user_path('basepatch.sfc'), 'rb') as stream:
                 buffer = bytearray(stream.read())
 
             if self.verify(buffer):
                 self.buffer = buffer
-                if not os.path.exists(local_path('data', 'basepatch.apbp')):
-                    Patch.create_patch_file(local_path('basepatch.sfc'))
                 return
 
-            if not os.path.isfile(local_path('data', 'basepatch.apbp')):
-                raise RuntimeError('Base patch unverified.  Unable to continue.')
+        with open(local_path("data", "basepatch.bsdiff4"), "rb") as f:
+            delta = f.read()
 
-        if os.path.isfile(local_path('data', 'basepatch.apbp')):
-            _, target, buffer = Patch.create_rom_bytes(local_path('data', 'basepatch.apbp'), ignore_version=True)
-            if self.verify(buffer):
-                self.buffer = bytearray(buffer)
-                with open(user_path('basepatch.sfc'), 'wb') as stream:
-                    stream.write(buffer)
-                return
-            raise RuntimeError('Base patch unverified.  Unable to continue.')
-
-        raise RuntimeError('Could not find Base Patch. Unable to continue.')
+        buffer = bsdiff4.patch(get_base_rom_bytes(), delta)
+        if self.verify(buffer):
+            self.buffer = bytearray(buffer)
+            with open(user_path('basepatch.sfc'), 'wb') as stream:
+                stream.write(buffer)
+            return
+        raise RuntimeError('Base patch unverified.  Unable to continue.')
 
     def write_crc(self):
         crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
@@ -544,25 +540,29 @@ class Sprite():
 
     def get_vanilla_sprite_data(self):
         file_name = get_base_rom_path()
-        base_rom_bytes = bytes(read_rom(open(file_name, "rb")))
+        base_rom_bytes = bytes(read_snes_rom(open(file_name, "rb")))
         Sprite.sprite = base_rom_bytes[0x80000:0x87000]
         Sprite.palette = base_rom_bytes[0xDD308:0xDD380]
         Sprite.glove_palette = base_rom_bytes[0xDEDF5:0xDEDF9]
         Sprite.base_data = Sprite.sprite + Sprite.palette + Sprite.glove_palette
 
     def from_ap_sprite(self, filedata):
-        filedata = filedata.decode("utf-8-sig")
-        import yaml
-        obj = yaml.safe_load(filedata)
-        if obj["min_format_version"] > 1:
-            raise Exception("Sprite file requires an updated reader.")
-        self.author_name = obj["author"]
-        self.name = obj["name"]
-        if obj["data"]:  # skip patching for vanilla content
-            data = bsdiff4.patch(Sprite.base_data, obj["data"])
-            self.sprite = data[:self.sprite_size]
-            self.palette = data[self.sprite_size:self.palette_size]
-            self.glove_palette = data[self.sprite_size + self.palette_size:]
+        # noinspection PyBroadException
+        try:
+            obj = parse_yaml(filedata.decode("utf-8-sig"))
+            if obj["min_format_version"] > 1:
+                raise Exception("Sprite file requires an updated reader.")
+            self.author_name = obj["author"]
+            self.name = obj["name"]
+            if obj["data"]:  # skip patching for vanilla content
+                data = bsdiff4.patch(Sprite.base_data, obj["data"])
+                self.sprite = data[:self.sprite_size]
+                self.palette = data[self.sprite_size:self.palette_size]
+                self.glove_palette = data[self.sprite_size + self.palette_size:]
+        except Exception:
+            logger = logging.getLogger("apsprite")
+            logger.exception("Error parsing apsprite file")
+            self.valid = False
 
     @property
     def author_game_display(self) -> str:
@@ -659,7 +659,7 @@ class Sprite():
 
     @staticmethod
     def parse_zspr(filedata, expected_kind):
-        logger = logging.getLogger('ZSPR')
+        logger = logging.getLogger("ZSPR")
         headerstr = "<4xBHHIHIHH6x"
         headersize = struct.calcsize(headerstr)
         if len(filedata) < headersize:
@@ -667,7 +667,7 @@ class Sprite():
         version, csum, icsum, sprite_offset, sprite_size, palette_offset, palette_size, kind = struct.unpack_from(
             headerstr, filedata)
         if version not in [1]:
-            logger.error('Error parsing ZSPR file: Version %g not supported', version)
+            logger.error("Error parsing ZSPR file: Version %g not supported", version)
             return None
         if kind != expected_kind:
             return None
@@ -676,36 +676,42 @@ class Sprite():
         stream.seek(headersize)
 
         def read_utf16le(stream):
-            "Decodes a null-terminated UTF-16_LE string of unknown size from a stream"
+            """Decodes a null-terminated UTF-16_LE string of unknown size from a stream"""
             raw = bytearray()
             while True:
                 char = stream.read(2)
-                if char in [b'', b'\x00\x00']:
+                if char in [b"", b"\x00\x00"]:
                     break
                 raw += char
-            return raw.decode('utf-16_le')
+            return raw.decode("utf-16_le")
 
-        sprite_name = read_utf16le(stream)
-        author_name = read_utf16le(stream)
-        author_credits_name = stream.read().split(b"\x00", 1)[0].decode()
+        # noinspection PyBroadException
+        try:
+            sprite_name = read_utf16le(stream)
+            author_name = read_utf16le(stream)
+            author_credits_name = stream.read().split(b"\x00", 1)[0].decode()
 
-        # Ignoring the Author Rom name for the time being.
+            # Ignoring the Author Rom name for the time being.
 
-        real_csum = sum(filedata) % 0x10000
-        if real_csum != csum or real_csum ^ 0xFFFF != icsum:
-            logger.warning('ZSPR file has incorrect checksum. It may be corrupted.')
+            real_csum = sum(filedata) % 0x10000
+            if real_csum != csum or real_csum ^ 0xFFFF != icsum:
+                logger.warning("ZSPR file has incorrect checksum. It may be corrupted.")
 
-        sprite = filedata[sprite_offset:sprite_offset + sprite_size]
-        palette = filedata[palette_offset:palette_offset + palette_size]
+            sprite = filedata[sprite_offset:sprite_offset + sprite_size]
+            palette = filedata[palette_offset:palette_offset + palette_size]
 
-        if len(sprite) != sprite_size or len(palette) != palette_size:
-            logger.error('Error parsing ZSPR file: Unexpected end of file')
+            if len(sprite) != sprite_size or len(palette) != palette_size:
+                logger.error("Error parsing ZSPR file: Unexpected end of file")
+                return None
+
+            return sprite, palette, sprite_name, author_name, author_credits_name
+
+        except Exception:
+            logger.exception("Error parsing ZSPR file")
             return None
 
-        return (sprite, palette, sprite_name, author_name, author_credits_name)
-
     def decode_palette(self):
-        "Returns the palettes as an array of arrays of 15 colors"
+        """Returns the palettes as an array of arrays of 15 colors"""
 
         def array_chunk(arr, size):
             return list(zip(*[iter(arr)] * size))
@@ -2896,7 +2902,7 @@ hash_alphabet = [
 ]
 
 
-class LttPDeltaPatch(Patch.APDeltaPatch):
+class LttPDeltaPatch(worlds.Files.APDeltaPatch):
     hash = LTTPJPN10HASH
     game = "A Link to the Past"
     patch_file_ending = ".aplttp"
@@ -2910,7 +2916,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
         file_name = get_base_rom_path(file_name)
-        base_rom_bytes = bytes(read_rom(open(file_name, "rb")))
+        base_rom_bytes = bytes(read_snes_rom(open(file_name, "rb")))
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)

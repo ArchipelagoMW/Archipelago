@@ -1,15 +1,14 @@
 import typing
 
-from typing import List, Set, Tuple, NamedTuple
+from typing import List, Set, Tuple
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
-from ..AutoWorld import WebWorld
+from worlds.AutoWorld import WebWorld, World
 from .Items import StarcraftWoLItem, item_table, filler_items, item_name_groups, get_full_item_list, \
     basic_unit
 from .Locations import get_locations
 from .Regions import create_regions
 from .Options import sc2wol_options, get_option_value
 from .LogicMixin import SC2WoLLogic
-from ..AutoWorld import World
 
 
 class Starcraft2WoLWebWorld(WebWorld):
@@ -43,6 +42,7 @@ class SC2WoLWorld(World):
     locked_locations: typing.List[str]
     location_cache: typing.List[Location]
     mission_req_table = {}
+    required_client_version = 0, 3, 5
 
     def __init__(self, world: MultiWorld, player: int):
         super(SC2WoLWorld, self).__init__(world, player)

@@ -16,6 +16,10 @@ Then run any of the starting point scripts, like Generate.py, and the included M
 required modules and after pressing enter proceed to install everything automatically.
 After this, you should be able to run the programs.
 
+ * With yaml(s) in the `Players` folder, `Generate.py` will generate the multiworld archive.
+ * `MultiServer.py`, with the filename of the generated archive as a command line parameter, will host the multiworld locally.
+    * `--log_network` is a command line parameter useful for debugging.
+
 
 ## Windows
 
@@ -56,3 +60,8 @@ SNI is required to use SNIClient. If not integrated into the project, it has to 
 You can get the latest SNI release at [SNI Github releases](https://github.com/alttpo/sni/releases).
 It should be dropped as "SNI" into the root folder of the project. Alternatively, you can point the sni setting in
 host.yaml at your SNI folder.
+
+
+## Running tests
+
+Run `pip install pytest pytest-subtests`, then use your IDE to run tests or run `pytest` from the source folder.

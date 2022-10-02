@@ -3,9 +3,9 @@ from __future__ import annotations
 import logging
 import sys
 import pathlib
-from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, TYPE_CHECKING
+from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Type, Union, TYPE_CHECKING
 
-from Options import Option
+from Options import AssembleOptions
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 
 class AutoWorldRegister(type):
-    world_types: Dict[str, type(World)] = {}
+    world_types: Dict[str, Type[World]] = {}
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -27,7 +27,8 @@ class AutoWorldRegister(type):
 
         # build rest
         dct["item_names"] = frozenset(dct["item_name_to_id"])
-        dct["item_name_groups"] = dct.get("item_name_groups", {})
+        dct["item_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
+                                   in dct.get("item_name_groups", {}).items()}
         dct["item_name_groups"]["Everything"] = dct["item_names"]
         dct["location_names"] = frozenset(dct["location_name_to_id"])
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
@@ -97,29 +98,29 @@ def call_stage(world: "MultiWorld", method_name: str, *args: Any) -> None:
 
 class WebWorld:
     """Webhost integration"""
-    # display a settings page. Can be a link to an out-of-ap settings tool too.
+    
     settings_page: Union[bool, str] = True
-
-    # docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'
+    """display a settings page. Can be a link to a specific page or external tool."""
+    
     game_info_languages: List[str] = ['en']
+    """docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'"""
 
-    # docs folder will also be scanned for tutorial guides given the relevant information in this list. Each Tutorial
-    # class is to be used for one guide.
     tutorials: List["Tutorial"]
+    """docs folder will also be scanned for tutorial guides. Each Tutorial class is to be used for one guide."""
 
-    # Choose a theme for your /game/* pages
-    # Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone
     theme = "grass"
+    """Choose a theme for you /game/* pages.
+    Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone"""
 
-    # display a link to a bug report page, most likely a link to a GitHub issue page.
     bug_report_page: Optional[str]
+    """display a link to a bug report page, most likely a link to a GitHub issue page."""
 
 
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    option_definitions: Dict[str, Option[Any]] = {}  # link your Options mapping
+    option_definitions: Dict[str, AssembleOptions] = {}  # link your Options mapping
     game: str  # name the game
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
 
@@ -220,17 +221,16 @@ class World(metaclass=AutoWorldRegister):
     @classmethod
     def fill_hook(cls,
                   progitempool: List["Item"],
-                  nonexcludeditempool: List["Item"],
-                  localrestitempool: Dict[int, List["Item"]],
-                  nonlocalrestitempool: Dict[int, List["Item"]],
-                  restitempool: List["Item"],
+                  usefulitempool: List["Item"],
+                  filleritempool: List["Item"],
                   fill_locations: List["Location"]) -> None:
         """Special method that gets called as part of distribute_items_restrictive (main fill).
         This gets called once per present world type."""
         pass
 
     def post_fill(self) -> None:
-        """Optional Method that is called after regular fill. Can be used to do adjustments before output generation."""
+        """Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
+        This happens before progression balancing, so the items may not be in their final locations yet."""
 
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.
@@ -238,8 +238,15 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
-        """Fill in the slot_data field in the Connected network package."""
+        """Fill in the `slot_data` field in the `Connected` network package.
+        This is a way the generator can give custom data to the client.
+        The client will receive this as JSON in the `Connected` response."""
         return {}
+
+    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+        """Fill in additional entrance information text into locations, which is displayed when hinted.
+        structure is {player_id: {location_id: text}} You will need to insert your own player_id."""
+        pass
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
         """For deeper modification of server multidata."""
