@@ -129,7 +129,7 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
         found_name = False
         help_message_shown = False
         logger.info("looking for game...")
-        while not found_name:
+        while (not found_name) and (not ctx.exit_event.is_set()):
             # logger.info("looking for name")
             name = await memory.check_for_player_name()
             # logger.info(f"found name {name}")
@@ -151,10 +151,13 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
                 await asyncio.sleep(0.3)
                 # logger.info("after sleep")
 
-        logger.info("waiting for server login...")
-        await ctx.got_slot_data.wait()
-        memory.set_generation_info(ctx.rescues, ctx.loc_mem_to_id)
-        ap_id_to_name, ap_id_to_zz_id, _ap_id_to_zz_item = make_id_to_others(ctx.start_char)
+        ap_id_to_name: Dict[int, str] = {}
+        ap_id_to_zz_id: Dict[int, int] = {}
+        if not ctx.exit_event.is_set():
+            logger.info("waiting for server login...")
+            await ctx.got_slot_data.wait()
+            memory.set_generation_info(ctx.rescues, ctx.loc_mem_to_id)
+            ap_id_to_name, ap_id_to_zz_id, _ap_id_to_zz_item = make_id_to_others(ctx.start_char)
 
         next_item = 0
         while not ctx.exit_event.is_set():
