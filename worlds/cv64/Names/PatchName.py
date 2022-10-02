@@ -37,6 +37,9 @@ ct_door_code = [
 ]
 
 stage_select_overwrite = [
+    # Replacement for the "wipe world state" function when using the warp menu. Now it's the "Special1 jewel checker"
+    # to see how many destinations can be selected on it with the current count.
+
     0x8F, 0xA6, 0x00, 0x18,  # LW	 A2, 0x0018 (SP)
     0xA0, 0x60, 0x64, 0x37,  # SB	 R0, 0x6437 (V1)
     0x10, 0x00, 0x00, 0x29,  # B	 0x8012ACE8
@@ -83,7 +86,28 @@ stage_select_overwrite = [
     0x00, 0x00, 0x00, 0x00   # NOP
 ]
 
+custom_code_loader = [
+    # On boot, when the company logos show up, this will trigger and load most of the custom ASM data in this module
+    # off from ROM offsets 0xBFC000-0xBFFFFF and into the 803FC000-803FFFFF range in RAM.
+
+    0x3C, 0x08, 0x80, 0x40,  # LUI   T0, 0x8040
+    0x91, 0x08, 0xC0, 0x00,  # ADDIU T0, 0xC000 (T0)
+    0x15, 0x00, 0x00, 0x07,  # BNEZ  T0, [forward 7]
+    0x3C, 0x04, 0x00, 0xC0,  # LUI   A0, 0x00C0
+    0x24, 0x84, 0xC0, 0x00,  # ADDIU A0, A0, 0xC000
+    0x3C, 0x05, 0x80, 0x40,  # LUI   A1, 0x8040
+    0x24, 0xA5, 0xC0, 0x00,  # ADDIU A1, A1, 0xC000
+    0x24, 0x06, 0x40, 0x00,  # ADDIU A2, R0, 0x4000
+    0x08, 0x00, 0x5D, 0xFB,  # J     0x800177EC
+    0x00, 0x00, 0x00, 0x00,  # NOP
+    0x03, 0xE0, 0x00, 0x08   # JR    RA
+]
+
 remote_item_and_warp = [
+    # The essential multiworld function. Every frame wherein the player is in control and not in a custcene or text
+    # dialogue, this thing will check some bytes in RAM to see if an item or DeathLink has been received, and trigger
+    # the right code accordingly. Opening the warp menu is also handled here.
+
     # Stage Select menu checks
     0x3C, 0x08, 0x80, 0x34,  # LUI   T0, 0x8034
     0x95, 0x09, 0x24, 0x4A,  # LHU   T1, 0x244A (T0)
@@ -177,6 +201,9 @@ remote_item_and_warp = [
     0x24, 0x84, 0xFF, 0xFF,  # ADDIU A0, A0, 0xFFFF
     0xA5, 0x64, 0x00, 0x01,  # SH    A0, 0x0001 (T3)
     0x03, 0xE0, 0x00, 0x08,  # JR    RA
+]
+
+give_subweapon_stopper = [
     # Extension to "give subweapon" function to not change the player's weapon if the received item is a Stake or Rose
     0x24, 0x09, 0x00, 0x11,  # ADDIU T1, R0, 0x0011
     0x11, 0x24, 0x00, 0x04,  # BEQ   T1, A0, 0x801837AC
@@ -185,7 +212,10 @@ remote_item_and_warp = [
     0x00, 0x00, 0x00, 0x00,  # NOP
     0xA4, 0x6D, 0x61, 0x8A,  # SH    T5, 0x618A (V1)
     0x08, 0x04, 0xF0, 0xBF,  # J     0x8013C2FC
-    # NPC item textbox hack
+]
+
+npc_item_hack = [
+    # Hack to make NPC/shelf items show item textboxes when received.
     0x3C, 0x09, 0x80, 0x39,  # LUI   T1, 0x8039
     0x24, 0x0A, 0x00, 0x20,  # ADDIU T2, R0, 0x0020
     0xA1, 0x2A, 0x9B, 0xE0,  # SB    T2, 0x9BE0 (T1)
@@ -218,7 +248,12 @@ remote_item_and_warp = [
     0x08, 0x04, 0xF0, 0xBF,  # J     0x8013C2FC
     0xA1, 0x2B, 0x9B, 0xDF,  # SB    T3, 0x9BDF (T1)
     0x08, 0x04, 0xEF, 0xFD,  # J     0x8013C2FC
-    # On-the-fly TLB script modifiers
+]
+
+tlb_modifiers = [
+    # Whenever a TLB script loads, this thing will check the number ID in the T0 register to tell which script it is and
+    # overwrite some instructions in it on-the-fly accordingly to said number before it runs.
+
     # Prevent vampires from despawning while holding Nitro
     0x24, 0x09, 0x00, 0x83,  # ADDIU T1, R0, 0x0083
     0x3C, 0x0A, 0x24, 0x02,  # LUI   T2, 0x2402
@@ -279,7 +314,13 @@ remote_item_and_warp = [
     0xA7, 0x2D, 0x03, 0xCE,  # SH    T5, 0x03CE (T9)
     0x03, 0x20, 0x00, 0x08,  # JR    T9
     0x00, 0x00, 0x00, 0x00,  # NOP
-    # Secondary Mandragora flag/inventory checker
+]
+
+double_component_checker = [
+    # When checking to see if a bomb component can be placed at a cracked wall, this will run if the code lands at the
+    # "no need to set 2" outcome to see if the other can be set.
+
+    # Mandragora checker
     0x10, 0x40, 0x00, 0x07,  # BEQZ  V0, 0x80183928
     0x3C, 0x0A, 0x80, 0x39,  # LUI   T2, 0x8039
     0x31, 0x09, 0x80, 0x00,  # ANDI  T1, T0, 0x8000
@@ -301,7 +342,7 @@ remote_item_and_warp = [
     0x27, 0x39, 0x03, 0xE0,  # ADDIU T9, T9, 0x03E0
     0x03, 0x20, 0x00, 0x08,  # JR    T9
     0x00, 0x00, 0x00, 0x00,  # NOP
-    # Secondary Nitro flag/inventory checker
+    # Nitro checker
     0x10, 0x40, 0x00, 0x07,  # BEQZ  V0, 0x8018397C
     0x3C, 0x0A, 0x80, 0x39,  # LUI   T2, 0x8039
     0x31, 0x69, 0x40, 0x00,  # ANDI  T1, T3, 0x4000
@@ -318,7 +359,12 @@ remote_item_and_warp = [
     0x00, 0x00, 0x00, 0x00,  # NOP
     0x10, 0x00, 0xFF, 0xE8,  # B     0x80183938
     0x00, 0x00, 0x00, 0x00,  # NOP
-    # Dowwnstairs seal checker
+]
+
+downstairs_seal_checker = [
+    # This will run specifically for the downstairs crack to see if the seal has been removed before then deciding to
+    # let the player set the bomb components or not. An anti-dick measure, since there is a limited number of each
+    # component per world.
     0x14, 0x40, 0x00, 0x03,  # BNEZ  V0, 0x801839AC
     0x3C, 0x0A, 0x80, 0x39,  # LUI   T2, 0x8039
     0x91, 0x4A, 0x9C, 0x18,  # LBU   T2, 0x9C18 (T2)
@@ -330,7 +376,12 @@ remote_item_and_warp = [
     0x27, 0x39, 0x02, 0xB4,  # ADDIU T9, T9, 0x02B4
     0x03, 0x20, 0x00, 0x08,  # JR    T9
     0x00, 0x00, 0x00, 0x00,  # NOP
-    # Scene object data overwriter
+]
+
+scene_data_modifiers = [
+    # Overwrites the scene data on-the-fly after it loads and before the game reads it to load objects. Good for
+    # changing anything that is part of a compression chain in the ROM data, including some freestanding item IDs.
+
     # Demo checker (if we're in a title demo, don't do any of this)
     0x3C, 0x08, 0x80, 0x34,  # LUI   T0, 0x8034
     0x95, 0x09, 0x24, 0x4A,  # LHU   T1, 0x244A (T0)
