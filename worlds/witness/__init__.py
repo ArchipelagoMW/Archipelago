@@ -148,7 +148,7 @@ class WitnessWorld(World):
     def fill_slot_data(self) -> dict:
         hint_amount = get_option_value(self.world, self.player, "hint_amount")
 
-        credits_hint = ("This Randomizer", "is brought to you by", "NewSoupVi, Jarno, jbzdarkid, sigma144")
+        credits_hint = ("This Randomizer", "is brought to you by", "NewSoupVi, Jarno, jbzdarkid, sigma144", -1)
 
         audio_logs = get_audio_logs()
 
@@ -179,8 +179,6 @@ class WitnessWorld(World):
         # generate hints done
 
         slot_data = self._get_slot_data()
-
-        slot_data["hard_mode"] = False
 
         for option_name in the_witness_options:
             slot_data[option_name] = get_option_value(

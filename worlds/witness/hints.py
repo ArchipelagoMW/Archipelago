@@ -162,16 +162,17 @@ def make_hint_from_item(world: MultiWorld, player: int, item: str):
     if location_obj.player != player:
         location_name += " (" + world.get_player_name(location_obj.player) + ")"
 
-    return location_name, item
+    return location_name, item, location_obj.address if(location_obj.player == player) else -1
 
 
 def make_hint_from_location(world: MultiWorld, player: int, location: str):
+    location_obj = world.get_location(location, player)
     item_obj = world.get_location(location, player).item
     item_name = item_obj.name
     if item_obj.player != player:
         item_name += " (" + world.get_player_name(item_obj.player) + ")"
 
-    return location, item_name
+    return location, item_name, location_obj.address if(location_obj.player == player) else -1
 
 
 def make_hints(world: MultiWorld, player: int, hint_amount: int):
@@ -207,27 +208,27 @@ def make_hints(world: MultiWorld, player: int, hint_amount: int):
 
     for item in always_items:
         hint_pair = make_hint_from_item(world, player, item)
-        always_hint_pairs[hint_pair[0]] = (hint_pair[1], True)
+        always_hint_pairs[hint_pair[0]] = (hint_pair[1], True, hint_pair[2])
 
     for location in always_locations:
         hint_pair = make_hint_from_location(world, player, location)
-        always_hint_pairs[hint_pair[0]] = (hint_pair[1], False)
+        always_hint_pairs[hint_pair[0]] = (hint_pair[1], False, hint_pair[2])
 
     priority_hint_pairs = dict()
 
     for item in priority_items:
         hint_pair = make_hint_from_item(world, player, item)
-        priority_hint_pairs[hint_pair[0]] = (hint_pair[1], True)
+        priority_hint_pairs[hint_pair[0]] = (hint_pair[1], True, hint_pair[2])
 
     for location in priority_locations:
         hint_pair = make_hint_from_location(world, player, location)
-        priority_hint_pairs[hint_pair[0]] = (hint_pair[1], False)
+        priority_hint_pairs[hint_pair[0]] = (hint_pair[1], False, hint_pair[2])
 
     for loc, item in always_hint_pairs.items():
         if item[1]:
-            hints.append((item[0], "can be found at", loc))
+            hints.append((item[0], "can be found at", loc, item[2]))
         else:
-            hints.append((loc, "contains", item[0]))
+            hints.append((loc, "contains", item[0], item[2]))
 
     next_random_hint_is_item = world.random.randint(0, 2)
 
@@ -244,9 +245,9 @@ def make_hints(world: MultiWorld, player: int, hint_amount: int):
             del priority_hint_pairs[loc]
 
             if item[1]:
-                hints.append((item[0], "can be found at", loc))
+                hints.append((item[0], "can be found at", loc, item[2]))
             else:
-                hints.append((loc, "contains", item[0]))
+                hints.append((loc, "contains", item[0], item[2]))
             continue
 
         if next_random_hint_is_item:
@@ -255,10 +256,10 @@ def make_hints(world: MultiWorld, player: int, hint_amount: int):
                 continue
 
             hint = make_hint_from_item(world, player, prog_items_in_this_world.pop())
-            hints.append((hint[1], "can be found at", hint[0]))
+            hints.append((hint[1], "can be found at", hint[0], hint[2]))
         else:
             hint = make_hint_from_location(world, player, locations_in_this_world.pop())
-            hints.append((hint[0], "contains", hint[1]))
+            hints.append((hint[0], "contains", hint[1], hint[2]))
 
         next_random_hint_is_item = not next_random_hint_is_item
 
@@ -266,4 +267,4 @@ def make_hints(world: MultiWorld, player: int, hint_amount: int):
 
 
 def generate_joke_hints(world: MultiWorld, amount: int):
-    return world.random.sample(joke_hints, amount)
+    return [(x, y, z, -1) for (x, y, z) in world.random.sample(joke_hints, amount)]
