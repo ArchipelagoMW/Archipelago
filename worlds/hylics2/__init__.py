@@ -65,7 +65,7 @@ class Hylics2World(World):
     # set random starting location if option is enabled
     def generate_early(self):
         if self.world.random_start[self.player]:
-            i = random.randint(0, 3)
+            i = self.world.random.randint(0, 3)
             if i == 0:
                 self.start_location = "Waynehouse"
             elif i == 1:
