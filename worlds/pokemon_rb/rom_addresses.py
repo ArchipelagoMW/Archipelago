@@ -1,6 +1,6 @@
 rom_addresses = {
     "Option_Encounter_Minimum_Steps": 0x3c3,
-    "Option_Blind_Trainers": 0x317b,
+    "Option_Blind_Trainers": 0x317e,
     "Base_Stats_Mew": 0x425b,
     "Title_Mon_First": 0x4399,
     "Title_Mons": 0x4588,
