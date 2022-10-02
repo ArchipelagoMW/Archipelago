@@ -5,6 +5,7 @@ import threading
 
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, RegionType, Entrance
+from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
 from ..AutoWorld import WebWorld, World
 from .Items import MMBN3Item, ItemData, item_table, all_items
 from .Locations import MMBN3Location, all_locations, setup_locations, location_table
@@ -58,7 +59,39 @@ class MMBN3World(World):
         return MMBN3Item(item.itemName, item.progression, item.code, self.player)
 
     def generate_output(self, output_directory: str) -> None:
-        pass
+        try:
+            world = self.world
+            player = self.player
+
+            rom = LocalRom(get_base_rom_path())
+            for location_name in location_table.keys():
+                location = world.get_location(location_name, player)
+                ap_item = location.item
+                item_id = ap_item.code
+                if item_id in Items.items_by_id:
+                    item = Items.items_by_id[item_id]
+                else:
+                    item = ItemData(item_id, ap_item.name, ap_item.classification, Items.ItemType.External)
+                    item.recipient = self.world.player_name[ap_item.player]
+                rom.replace_item(location, item)
+
+            outfilepname = f'_P{player}'
+            outfilepname += f"_{world.player_name[player].replace(' ','_')}"\
+                if world.player_name[player] != 'Player%d' % player else ''
+
+            rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.gba')
+            rom.write_to_file(rompath)
+            self.rom_name = rom.name
+
+            patch = MMBN3DeltaPatch(os.path.splitext(rompath)[0]+MMBN3DeltaPatch.patch_file_ending, player=player,
+                                    player_name=world.player_name[player], patched_path=rompath)
+            patch.write()
+        except:
+            raise
+        finally:
+            if os.path.exists(rompath):
+                os.unlink(rompath)
+            self.rom_name_available_event.set()
 
     def generate_early(self) -> None:
         """

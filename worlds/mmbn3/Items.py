@@ -12,6 +12,7 @@ class ItemType:
     Zenny = "zenny"
     Program = "program"
     BugFrag = "bugfrag"
+    External = "External"
 
 
 class ProgressionType:
@@ -46,9 +47,8 @@ class ItemData(typing.NamedTuple):
     itemID: typing.Optional[int] = 0x00
     subItemID: typing.Optional[int] = 0x00
     count: typing.Optional[int] = 1
+    recipient: typing.Optional[str] = "Myself"
 
-    def GenerateItemMessageBox(self) -> bytes:
-        pass
 
 class MMBN3Item(Item):
     game: str = "MegaMan Battle Network 3"
