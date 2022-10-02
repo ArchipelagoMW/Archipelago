@@ -130,7 +130,7 @@ class Hylics2World(World):
                 tv = self.world.random.choice(tvs)
                 gest = gestures.index((200681, Items.gesture_item_table[200681]))
                 while tv[1]["name"] == "Sage Airship: TV":
-                    tv = random.choice(tvs)
+                    tv = self.world.random.choice(tvs)
                 self.world.get_location(tv[1]["name"], self.player)\
                     .place_locked_item(self.add_item(gestures[gest][1]["name"], gestures[gest][1]["classification"], 
                     gestures[gest]))
