@@ -154,11 +154,11 @@ class WitnessPlayerItems:
 
         if doors and symbols:
             self.GOOD_ITEMS = [
-                "Dots", "Black/White Squares", "Symmetry"
+                "Progressive Dots", "Black/White Squares", "Symmetry"
             ]
         elif symbols:
             self.GOOD_ITEMS = [
-                "Dots", "Black/White Squares", "Stars",
+                "Progressive Dots", "Black/White Squares", "Progressive Stars",
                 "Shapers", "Symmetry"
             ]
 
