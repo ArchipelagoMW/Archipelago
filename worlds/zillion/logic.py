@@ -8,7 +8,6 @@ from .item import ZillionItem
 from .id_maps import item_name_to_id
 
 # TODO: unit tests for these
-# TODO: investigate: CaitSith2 reported unbeatable generation with 2 Zillion yamls
 
 
 def set_randomizer_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> int:

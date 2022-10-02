@@ -91,7 +91,7 @@ class ZillionWorld(World):
 
     # If remote_start_inventory is true, the start_inventory/world.precollected_items is sent on connection,
     # otherwise the world implementation is in charge of writing the items to their output data.
-    remote_start_inventory: bool = False
+    remote_start_inventory: bool = True
 
     # For games where after a victory it is impossible to go back in and get additional/remaining Locations checked.
     # this forces forfeit:  auto for those games.
@@ -213,25 +213,25 @@ class ZillionWorld(World):
     def create_items(self) -> None:
         if not self.id_to_zz_item:
             self._make_item_maps("JJ")
-            print("warning: called `create_items` without calling `generate_early` first")
+            self.logger.warning("warning: called `create_items` without calling `generate_early` first")
         assert self.id_to_zz_item, "failed to get item maps"
 
         # in zilliandomizer, the Randomizer class puts empties in the item pool to fill space,
         # but here in AP, empties are in the options from options.validate
         item_counts = cast(ZillionItemCounts, getattr(self.world, "item_counts")[self.player])
-        print(item_counts)
+        self.logger.debug(item_counts)
 
         for item_name, item_id in self.item_name_to_id.items():
             zz_item = self.id_to_zz_item[item_id]
             if item_id >= (4 + base_id):  # normal item
                 if item_name in item_counts.value:
                     count = item_counts.value[item_name]
-                    print(f"Zillion Items: {item_name}  {count}")
+                    self.logger.debug(f"Zillion Items: {item_name}  {count}")
                     for _ in range(count):
                         self.world.itempool.append(self.create_item(item_name))
             elif item_id < (3 + base_id) and zz_item.code == RESCUE:
                 # One of the 3 rescues will not be in the pool and its zz_item will be 'empty'.
-                print(f"Zillion Items: {item_name}  1")
+                self.logger.debug(f"Zillion Items: {item_name}  1")
                 self.world.itempool.append(self.create_item(item_name))
 
     def set_rules(self) -> None:
@@ -381,7 +381,7 @@ class ZillionWorld(World):
             "loc_mem_to_id": self.zz_patcher.loc_memory_to_loc_id
         }
 
-    def modify_multidata(self, multidata: Dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
+    def modify_multidata(self, multidata: Dict[str, Any]) -> None:
         """For deeper modification of server multidata."""
         pass
 
@@ -409,7 +409,7 @@ class ZillionWorld(World):
 
         if not self.id_to_zz_item:
             self._make_item_maps("JJ")
-            print("warning: called `create_item` without calling `generate_early` first")
+            self.logger.warning("warning: called `create_item` without calling `generate_early` first")
         assert self.id_to_zz_item, "failed to get item maps"
 
         classification = ItemClassification.filler

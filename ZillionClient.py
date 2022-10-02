@@ -16,8 +16,6 @@ from zilliandomizer.patch import RescueInfo
 from worlds.zillion.id_maps import make_id_to_others
 from worlds.zillion.config import base_id
 
-# TODO: test multiple yamls specifying zillion with no other games
-# (reported causes archipelago to say that it can't beat the game)
 # TODO: make sure close button works on ZillionClient window
 
 
@@ -237,7 +235,10 @@ async def main() -> None:
     await ctx.exit_event.wait()
 
     ctx.server_address = None
+    # TODO: change logging to debug
+    logger.info("waiting for sync task to end")
     await sync_task
+    logger.info("sync task ended")
     await ctx.shutdown()
 
 
