@@ -1497,7 +1497,7 @@ def get_client_points(ctx: Context, client: Client) -> int:
 
 
 def get_slot_points(ctx: Context, team: int, slot: int) -> int:
-    if ctx.hint_start_time:
+    if ctx.hint_start_time and ctx.minutes_to_hint > 0:
         return ((ctx.location_check_points * len(ctx.location_checks[team, slot]) +
              (int(((time.time() - ctx.hint_start_time) / (60 * ctx.minutes_to_hint)) * ctx.get_hint_cost(slot)))) -
             ctx.get_hint_cost(slot) * ctx.hints_used[team, slot])
