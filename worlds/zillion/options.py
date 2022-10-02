@@ -25,6 +25,7 @@ class ZillionEarlyScope(Toggle):
     display_name = "early scope"
 
 
+# TODO: all these options docstrings don't copy correctly like this
 ZillionEarlyScope.__doc__ = ZzOptions.early_scope.__doc__
 assert ZillionEarlyScope.__doc__
 
