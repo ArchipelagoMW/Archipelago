@@ -19,6 +19,9 @@ After this, you should be able to run the programs.
  * With yaml(s) in the `Players` folder, `Generate.py` will generate the multiworld archive.
  * `MultiServer.py`, with the filename of the generated archive as a command line parameter, will host the multiworld locally.
     * `--log_network` is a command line parameter useful for debugging.
+ * `WebHost.py` will create the template yamls in `WebHostLib/static/generated`.
+    * You can copy `docs/webhost configuration sample.yaml` to `config.yaml`
+    to change WebHost options (like the web hosting port number).
 
 
 ## Windows
