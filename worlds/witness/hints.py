@@ -73,7 +73,20 @@ joke_hints = [
     ("Circle is start", "Line is win", "Witness is you"),
     ("Can't find any items?", "Consider a relaxing boat trip", "around the island"),
     ("", "Don't forget to like, comment, and subscribe", ""),
-    ("Hints suggested by:", "IHNN, Beaker, MrPokemon11, Ember, TheM8,", "Yoshi348, Berserker, BowlinJim, oddGarrett."),
+    ("Ah crap, gimme a second.", "[papers rustling]", "Sorry, nothing."),
+    ("", "Trying to get a hint?", "Too bad."),
+    ("", "Here's a hint:", "Get good at the game."),
+    ("", "I'm still not entirely sure", "what we're witnessing here."),
+    (
+        "And here we see the Witness player,",
+        "seeking answers where there are none-",
+        "Did someone turn on the loudspeaker?"
+    ),
+    (
+        "Hints suggested by:",
+        "IHNN, Beaker, MrPokemon11, Ember, TheM8, NewSoupVi,",
+        "KF, Yoshi348, Berserker, BowlinJim, oddGarrett, Pink Switch."
+    ),
 ]
 
 
