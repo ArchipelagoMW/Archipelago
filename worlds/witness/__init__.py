@@ -1,7 +1,6 @@
 """
 Archipelago init file for The Witness
 """
-import random
 import typing
 
 from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance, Tutorial, ItemClassification

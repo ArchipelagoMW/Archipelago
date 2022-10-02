@@ -1,7 +1,4 @@
-import typing
-
 from BaseClasses import MultiWorld
-from Utils import cache_argsless
 from .Options import is_option_enabled, get_option_value
 
 joke_hints = [
@@ -77,6 +74,7 @@ joke_hints = [
     ("", "Trying to get a hint?", "Too bad."),
     ("", "Here's a hint:", "Get good at the game."),
     ("", "I'm still not entirely sure", "what we're witnessing here."),
+    ("Have you found a red page yet?", "No?", "Then have you found a blue page?"),
     (
         "And here we see the Witness player,",
         "seeking answers where there are none-",
