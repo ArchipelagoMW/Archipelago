@@ -17,6 +17,7 @@ from worlds.zillion.id_maps import make_id_to_others
 from worlds.zillion.config import base_id
 
 # TODO: make sure close button works on ZillionClient window
+# TODO: test: receive remote rescue in scrolling hallway
 
 
 class ZillionCommandProcessor(ClientCommandProcessor):

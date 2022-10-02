@@ -95,7 +95,7 @@ class ZillionWorld(World):
 
     # For games where after a victory it is impossible to go back in and get additional/remaining Locations checked.
     # this forces forfeit:  auto for those games.
-    forced_auto_forfeit: bool = True
+    forced_auto_forfeit: bool = False
 
     # Hide World Type from various views. Does not remove functionality.
     hidden: bool = False
