@@ -53,9 +53,9 @@ requires:
       {% if option.default is string %}
     {{ option.default }}: 50
       {% elif option.default is iterable and option.default is not mapping %}
-    {{ option.default|list }}
+    {{ option.default | list }}
       {% else %}
-    {{ option.default }}
+    {{ yaml_dump(option.default) | indent(4, first=false) }}
       {% endif %}
     {%- endif -%}
   {%- endfor %}
