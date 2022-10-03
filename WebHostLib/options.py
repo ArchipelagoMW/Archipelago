@@ -25,9 +25,12 @@ def create():
         data.update({
             option.range_start: 0,
             option.range_end: 0,
-            "random": 0, "random-low": 0, "random-high": 0,
             option.default: 50
         })
+        for sub_option in {"random", "random-low", "random-high"}:
+            if sub_option != option.default:
+                data[sub_option] = 0
+
         notes = {
             special: "minimum value without special meaning",
             option.range_start: "minimum value",
