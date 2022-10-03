@@ -328,6 +328,19 @@ def handle_name(name: str, player: int, name_counter: Counter):
     return new_name
 
 
+from worlds.alttp.Options import Goal
+goals = {
+    'ganon': Goal.option_ganon_and_tower,
+    'crystals': Goal.option_ganon,
+    'bosses': Goal.option_all_bosses,
+    'pedestal': Goal.option_pedestal,
+    'ganon_pedestal': Goal.option_pedestal_ganon,
+    'triforce_hunt': Goal.option_triforce_hunt,
+    'ganon_triforce_hunt': Goal.option_triforce_hunt_ganon,
+    'ice_rod_hunt': Goal.option_ice_rod_hunt,
+}
+
+
 def prefer_int(input_data: str) -> Union[str, int]:
     try:
         return int(input_data)
@@ -511,6 +524,9 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         ret.shuffle = 'vanilla'
     else:
         ret.shuffle = entrance_shuffle if entrance_shuffle != 'none' else 'vanilla'
+
+    goal = get_choice_legacy('goal', weights, 'ganon')
+    ret.goal = goals[goal]
 
     ret.shop_shuffle = get_choice_legacy('shop_shuffle', weights, '')
     if not ret.shop_shuffle:

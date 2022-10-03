@@ -780,7 +780,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
     "open_pyramid": OpenPyramid,
-    "goal": Goal,
+    #"goal": Goal,
     "triforce_pieces_mode": TriforceMode,
     "triforce_pieces_extra": TriforceExtra,
     "triforce_pieces_percentage": TriforcePercentage,

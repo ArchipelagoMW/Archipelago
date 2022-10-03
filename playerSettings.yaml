@@ -106,16 +106,14 @@ A Link to the Past:
     crossed-1000: 0 # using this method, you can have the same layout as another player and share entrance information
     # however, many other settings like logic, world state, retro etc. may affect the shuffle result as well.
     crossed-group-myfriends: 0 # using this method, everyone with "group-myfriends" will share the same seed
-  goals:
+  goal:
     ganon: 50 # Climb GT, defeat Agahnim 2, and then kill Ganon
     crystals: 0 # Only killing Ganon is required. However, items may still be placed in GT
     bosses: 0 # Defeat the boss of all dungeons, including Agahnim's tower and GT (Aga 2)
     pedestal: 0 # Pull the Triforce from the Master Sword pedestal
     ganon_pedestal: 0 # Pull the Master Sword pedestal, then kill Ganon
     triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then turn them in to Murahadala in front of Hyrule Castle
-    local_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
     ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
-    local_ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
     ice_rod_hunt: 0 # You start with everything needed to 216 the seed. Find the Ice rod, then kill Trinexx at Turtle rock.
   open_pyramid:
     goal: 50 # Opens the pyramid if the goal requires you to kill Ganon, unless the goal is Slow Ganon or All Dungeons
