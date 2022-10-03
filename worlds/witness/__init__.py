@@ -110,9 +110,9 @@ class WitnessWorld(World):
             pool.remove(items_by_name[item])
 
         for item in self.items.EXTRA_AMOUNTS:
-            witness_item = self.create_item(item)
             for i in range(0, self.items.EXTRA_AMOUNTS[item]):
                 if len(pool) < len(self.locat.CHECK_LOCATION_TABLE) - len(self.locat.EVENT_LOCATION_TABLE) - less_junk:
+                    witness_item = self.create_item(item)
                     pool.append(witness_item)
 
         # Put in junk items to fill the rest
