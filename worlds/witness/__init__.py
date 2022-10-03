@@ -149,7 +149,7 @@ class WitnessWorld(World):
 
         credits_hint = ("This Randomizer", "is brought to you by", "NewSoupVi, Jarno, jbzdarkid, sigma144", -1)
 
-        audio_logs = get_audio_logs()
+        audio_logs = get_audio_logs().copy()
 
         if hint_amount != 0:
             generated_hints = make_hints(self.world, self.player, hint_amount)
