@@ -62,7 +62,7 @@ class OriBlindForest(World):
 
     def generate_basic(self):
         for item_name, count in default_pool.items():
-            self.world.itempool.extend([self.create_item(item_name)] * count)
+            self.world.itempool.extend([self.create_item(item_name) for _ in range(count)])
 
     def create_item(self, name: str) -> Item:
         return Item(name,
