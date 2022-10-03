@@ -7,7 +7,7 @@ import typing
 import Utils
 from BaseClasses import Item, CollectionState, Tutorial
 from .Dungeons import create_dungeons
-from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
+from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect, indirect_connections
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
@@ -19,7 +19,7 @@ from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enem
 from .Rules import set_rules
 from .Shops import create_shops, ShopSlotFill
 from .SubClasses import ALttPItem
-from ..AutoWorld import World, WebWorld, LogicMixin
+from worlds.AutoWorld import World, WebWorld, LogicMixin
 
 lttp_logger = logging.getLogger("A Link to the Past")
 
@@ -223,6 +223,10 @@ class ALTTPWorld(World):
         world.random = old_random
         plando_connect(world, player)
 
+        for region_name, entrance_name in indirect_connections.items():
+            world.register_indirect_condition(self.world.get_region(region_name, player),
+                                              self.world.get_entrance(entrance_name, player))
+
     def collect_item(self, state: CollectionState, item: Item, remove=False):
         item_name = item.name
         if item_name.startswith('Progressive '):
@@ -396,11 +400,7 @@ class ALTTPWorld(World):
                                deathlink=world.death_link[player],
                                allowcollect=world.allow_collect[player])
 
-            outfilepname = f'_P{player}'
-            outfilepname += f"_{world.get_file_safe_player_name(player).replace(' ', '_')}" \
-                if world.player_name[player] != 'Player%d' % player else ''
-
-            rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
+            rompath = os.path.join(output_directory, f"{self.world.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
             patch = LttPDeltaPatch(os.path.splitext(rompath)[0]+LttPDeltaPatch.patch_file_ending, player=player,
                                    player_name=world.player_name[player], patched_path=rompath)
