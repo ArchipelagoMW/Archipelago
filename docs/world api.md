@@ -103,8 +103,9 @@ or boss drops for RPG-like games but could also be progress in a research tree.
 
 Each location has a `name` and an `id` (a.k.a. "code" or "address"), is placed
 in a Region and has access rules.
-The name needs to be unique in each game, the ID needs to be unique across all
-games and is best in the same range as the item IDs.
+The name needs to be unique in each game and must not be numeric (has to
+contain least 1 letter or symbol). The ID needs to be unique across all games
+and is best in the same range as the item IDs.
 World-specific IDs are 1 to 2<sup>53</sup>-1, IDs ≤ 0 are global and reserved.
 
 Special locations with ID `None` can hold events.
@@ -120,6 +121,9 @@ Progression items are items which a player may require to progress in
 their world. Progression items will be assigned to locations with higher
 priority and moved around to meet defined rules and accomplish progression
 balancing.
+
+The name needs to be unique in each game, meaning a duplicate item has the
+same ID. Name must not be numeric (has to contain at least 1 letter or symbol).
 
 Special items with ID `None` can mark events (read below).
 
@@ -188,15 +192,17 @@ the `/worlds` directory. The starting point for the package is `__init.py__`.
 Conventionally, your world class is placed in that file.
 
 World classes must inherit from the `World` class in `/worlds/AutoWorld.py`,
-which can be imported as `..AutoWorld.World` from your package.
+which can be imported as `worlds.AutoWorld.World` from your package.
 
 AP will pick up your world automatically due to the `AutoWorld` implementation.
 
 ### Requirements
 
 If your world needs specific python packages, they can be listed in
-`world/[world_name]/requirements.txt`.
-See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format)
+`world/[world_name]/requirements.txt`. ModuleUpdate.py will automatically
+pick up and install them.
+
+See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format).
 
 ### Relative Imports
 
@@ -208,6 +214,10 @@ e.g. `from .Options import mygame_options` from your `__init__.py` will load
 
 When imported names pile up it may be easier to use `from . import Options`
 and access the variable as `Options.mygame_options`.
+
+Imports from directories outside your world should use absolute imports.
+Correct use of relative / absolute imports is required for zipped worlds to
+function, see [apworld specification.md](apworld%20specification.md).
 
 ### Your Item Type
 
@@ -274,14 +284,12 @@ Define a property `option_<name> = <number>` per selectable value and
 `default = <number>` to set the default selection. Aliases can be set by
 defining a property `alias_<name> = <same number>`.
 
-One special case where aliases are required is when option name is `yes`, `no`,
-`on` or `off` because they parse to `True` or `False`:
 ```python
 option_off = 0
 option_on = 1
 option_some = 2
-alias_false = 0
-alias_true = 1
+alias_disabled = 0
+alias_enabled = 1
 default = 0
 ```
 
@@ -323,7 +331,7 @@ mygame_options: typing.Dict[str, type(Option)] = {
 ```python
 # __init__.py
 
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 from .Options import mygame_options  # import the options dict
 
 class MyGameWorld(World):
@@ -352,7 +360,7 @@ more natural. These games typically have been edited to 'bake in' the items.
 from .Options import mygame_options  # the options we defined earlier
 from .Items import mygame_items  # data used below to add items to the World
 from .Locations import mygame_locations  # same as above
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 from BaseClasses import Region, Location, Entrance, Item, RegionType, ItemClassification
 from Utils import get_options, output_path
 
@@ -553,7 +561,7 @@ def generate_basic(self) -> None:
 ### Setting Rules
 
 ```python
-from ..generic.Rules import add_rule, set_rule, forbid_item
+from worlds.generic.Rules import add_rule, set_rule, forbid_item
 from Items import get_item_type
 
 
@@ -604,14 +612,16 @@ implement more complex logic in logic mixins, even if there is no need to add
 properties to the `BaseClasses.CollectionState` state object.
 
 When importing a file that defines a class that inherits from
-`..AutoWorld.LogicMixin` the state object's class is automatically extended by
+`worlds.AutoWorld.LogicMixin` the state object's class is automatically extended by
 the mixin's members. These members should be prefixed with underscore following
 the name of the implementing world. This is due to sharing a namespace with all
 other logic mixins.
 
 Typical uses are defining methods that are used instead of `state.has`
-in lambdas, e.g.`state._mygame_has(custom, world, player)` or recurring checks
-like `state._mygame_can_do_something(world, player)` to simplify lambdas.
+in lambdas, e.g.`state.mygame_has(custom, player)` or recurring checks
+like `state.mygame_can_do_something(player)` to simplify lambdas.
+Private members, only accessible from mixins, should start with `_mygame_`,
+public members with `mygame_`.
 
 More advanced uses could be to add additional variables to the state object,
 override `World.collect(self, state, item)` and `remove(self, state, item)`
@@ -623,25 +633,26 @@ Please do this with caution and only when neccessary.
 ```python
 # Logic.py
 
-from ..AutoWorld import LogicMixin
+from worlds.AutoWorld import LogicMixin
 
 class MyGameLogic(LogicMixin):
-    def _mygame_has_key(self, world: MultiWorld, player: int):
+    def mygame_has_key(self, player: int):
         # Arguments above are free to choose
-        # it may make sense to use World as argument instead of MultiWorld
+        # MultiWorld can be accessed through self.world, explicitly passing in
+        # MyGameWorld instance for easy options access is also a valid approach
         return self.has("key", player)  # or whatever
 ```
 ```python
 # __init__.py
 
-from ..generic.Rules import set_rule
+from worlds.generic.Rules import set_rule
 import .Logic  # apply the mixin by importing its file
 
 class MyGameWorld(World):
     # ...
     def set_rules(self):
         set_rule(self.world.get_location("A Door", self.player),
-                 lamda state: state._mygame_has_key(self.world, self.player))
+                 lamda state: state.mygame_has_key(self.player))
 ```
 
 ### Generate Output
