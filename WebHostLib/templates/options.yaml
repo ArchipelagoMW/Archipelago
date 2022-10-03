@@ -50,13 +50,13 @@ requires:
     {{ option.default }}: 50
       {%- endif -%}
     {%- else %}
-      {% if option.default is string %}
+      {%- if option.default is string -%}
     {{ option.default }}: 50
-      {% elif option.default is iterable and option.default is not mapping %}
+      {%- elif option.default is iterable and option.default is not mapping -%}
     {{ option.default | list }}
-      {% else %}
+      {%- else -%}
     {{ yaml_dump(option.default) | indent(4, first=false) }}
-      {% endif %}
+      {%- endif %}
     {%- endif -%}
   {%- endfor %}
   {% if not options %}{}{% endif %}
