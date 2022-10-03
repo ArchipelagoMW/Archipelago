@@ -43,14 +43,20 @@ requires:
     {%- if option.range_start is defined and option.range_start is number %}
     {{- range_option(option) -}}
     {%- elif option.options -%}
-    {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}
+      {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}
     {{ sub_option_name }}: {% if suboption_option_id == option.default %}50{% else %}0{% endif %}
-    {%- endfor -%}
-    {% if option.default == "random" %}
-    random: 50
-    {%- endif -%}
+      {%- endfor -%}
+      {% if option.name_lookup[option.default] not in option.options %}
+    {{ option.default }}: 50
+      {%- endif -%}
     {%- else %}
-    {{ yaml_dump(default_converter(option.default)) | indent(4, first=False) }}
-  {%- endif -%}
+      {% if option.default is string %}
+    {{ option.default }}: 50
+      {% elif option.default is iterable and option.default is not mapping %}
+    {{ option.default|list }}
+      {% else %}
+    {{ option.default }}
+      {% endif %}
+    {%- endif -%}
   {%- endfor %}
   {% if not options %}{}{% endif %}
