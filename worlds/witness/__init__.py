@@ -91,8 +91,8 @@ class WitnessWorld(World):
         items_by_name = dict()
         for item in self.items.ITEM_TABLE:
             for i in range(0, self.items.PROG_ITEM_AMOUNTS[item]):
-                witness_item = self.create_item(item)
                 if item in self.items.PROGRESSION_TABLE:
+                    witness_item = self.create_item(item)
                     pool.append(witness_item)
                     items_by_name[item] = witness_item
 
