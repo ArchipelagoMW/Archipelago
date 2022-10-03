@@ -72,7 +72,7 @@ class SMWWorld(World):
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
         for option_name in smw_options:
-            option = getattr(self.world, option_name)[self.player]
+            option = getattr(self.multiworld, option_name)[self.player]
             slot_data[option_name] = option.value
 
         return slot_data
@@ -80,20 +80,20 @@ class SMWWorld(World):
     def generate_basic(self):
         itempool: typing.List[SMWItem] = []
 
-        self.active_level_dict = dict(zip(generate_level_list(self.world, self.player), full_level_list))
-        self.topology_present = self.world.level_shuffle[self.player]
+        self.active_level_dict = dict(zip(generate_level_list(self.multiworld, self.player), full_level_list))
+        self.topology_present = self.multiworld.level_shuffle[self.player]
 
-        connect_regions(self.world, self.player, self.active_level_dict)
+        connect_regions(self.multiworld, self.player, self.active_level_dict)
         
         # Add Boss Token amount requirements for Worlds
-        add_rule(self.world.get_region(LocationName.donut_plains_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 1))
-        add_rule(self.world.get_region(LocationName.vanilla_dome_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 2))
-        add_rule(self.world.get_region(LocationName.forest_of_illusion_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 4))
-        add_rule(self.world.get_region(LocationName.chocolate_island_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 5))
-        add_rule(self.world.get_region(LocationName.valley_of_bowser_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 6))
+        add_rule(self.multiworld.get_region(LocationName.donut_plains_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 1))
+        add_rule(self.multiworld.get_region(LocationName.vanilla_dome_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 2))
+        add_rule(self.multiworld.get_region(LocationName.forest_of_illusion_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 4))
+        add_rule(self.multiworld.get_region(LocationName.chocolate_island_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 5))
+        add_rule(self.multiworld.get_region(LocationName.valley_of_bowser_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 6))
 
         total_required_locations = 96
-        if self.world.dragon_coin_checks[self.player]:
+        if self.multiworld.dragon_coin_checks[self.player]:
             total_required_locations += 49
 
         itempool += [self.create_item(ItemName.mario_run)]
@@ -111,23 +111,23 @@ class SMWWorld(World):
         itempool += [self.create_item(ItemName.red_switch_palace)]
         itempool += [self.create_item(ItemName.blue_switch_palace)]
         
-        if self.world.goal[self.player] == "yoshi_egg_hunt":
-            itempool += [self.create_item(ItemName.yoshi_egg)] * self.world.number_of_yoshi_eggs[self.player]
-            self.world.get_location(LocationName.yoshis_house, self.player).place_locked_item(self.create_item(ItemName.victory))
+        if self.multiworld.goal[self.player] == "yoshi_egg_hunt":
+            itempool += [self.create_item(ItemName.yoshi_egg)] * self.multiworld.number_of_yoshi_eggs[self.player]
+            self.multiworld.get_location(LocationName.yoshis_house, self.player).place_locked_item(self.create_item(ItemName.victory))
         else:
-            self.world.get_location(LocationName.bowser, self.player).place_locked_item(self.create_item(ItemName.victory))
+            self.multiworld.get_location(LocationName.bowser, self.player).place_locked_item(self.create_item(ItemName.victory))
 
         junk_count = total_required_locations - len(itempool)
         trap_weights = []
-        trap_weights += ([ItemName.ice_trap] * self.world.ice_trap_weight[self.player].value)
-        trap_weights += ([ItemName.stun_trap] * self.world.stun_trap_weight[self.player].value)
-        trap_weights += ([ItemName.literature_trap] * self.world.literature_trap_weight[self.player].value)
-        trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.world.trap_fill_percentage[self.player].value / 100.0))
+        trap_weights += ([ItemName.ice_trap] * self.multiworld.ice_trap_weight[self.player].value)
+        trap_weights += ([ItemName.stun_trap] * self.multiworld.stun_trap_weight[self.player].value)
+        trap_weights += ([ItemName.literature_trap] * self.multiworld.literature_trap_weight[self.player].value)
+        trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.multiworld.trap_fill_percentage[self.player].value / 100.0))
         junk_count -= trap_count
 
         trap_pool = []
         for i in range(trap_count):
-            trap_item = self.world.random.choice(trap_weights)
+            trap_item = self.multiworld.random.choice(trap_weights)
             trap_pool += [self.create_item(trap_item)]
 
         itempool += trap_pool
@@ -139,19 +139,19 @@ class SMWWorld(World):
                                LocationName.valley_koopaling, LocationName.vanilla_reznor, LocationName.forest_reznor, LocationName.chocolate_reznor, LocationName.valley_reznor]
 
         for location_name in boss_location_names:
-            self.world.get_location(location_name, self.player).place_locked_item(self.create_item(ItemName.koopaling))
+            self.multiworld.get_location(location_name, self.player).place_locked_item(self.create_item(ItemName.koopaling))
 
-        self.world.itempool += itempool
+        self.multiworld.itempool += itempool
 
 
     def generate_output(self, output_directory: str):
         rompath = ""  # if variable is not declared finally clause may fail
         try:
-            world = self.world
+            world = self.multiworld
             player = self.player
 
             rom = LocalRom(get_base_rom_path())
-            patch_rom(self.world, rom, self.player, self.active_level_dict)
+            patch_rom(self.multiworld, rom, self.player, self.active_level_dict)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
@@ -179,7 +179,7 @@ class SMWWorld(World):
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
         if self.topology_present:
@@ -218,18 +218,18 @@ class SMWWorld(World):
                     if level_index >= world_cutoffs[i]:
                         continue
 
-                    if self.world.dragon_coin_checks[self.player].value == 0 and "Dragon Coins" in loc_name:
+                    if self.multiworld.dragon_coin_checks[self.player].value == 0 and "Dragon Coins" in loc_name:
                         continue
 
-                    location = self.world.get_location(loc_name, self.player)
+                    location = self.multiworld.get_location(loc_name, self.player)
                     er_hint_data[location.address] = world_names[i]
                     break
 
             hint_data[self.player] = er_hint_data
 
     def create_regions(self):
-        location_table = setup_locations(self.world, self.player)
-        create_regions(self.world, self.player, location_table)
+        location_table = setup_locations(self.multiworld, self.player)
+        create_regions(self.multiworld, self.player, location_table)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
@@ -250,4 +250,4 @@ class SMWWorld(World):
         return created_item
 
     def set_rules(self):
-        set_rules(self.world, self.player)
+        set_rules(self.multiworld, self.player)
