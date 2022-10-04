@@ -26,8 +26,6 @@ Many baseline changes are made to the game, including:
 City
 * After obtaining one of the fossil item checks in Mt Moon, the remaining item can be received from the Cinnabar Lab
 fossil scientist after reviving a Pokémon from a fossil.
-* A hidden item location that was outside the bounds of the Safari Zone Gate map has been moved to a reachable tile on
-this screen.
 * Obedience depends on the total number of badges you have obtained instead of depending on specific badges.
 * Pokémon that evolve by trading can also evolve by reaching level 35.
 * Evolution stones are reusable.
