@@ -183,6 +183,8 @@ class Overcooked2World(World):
         self.connect_regions("Menu", "Overworld")
 
         for level in Overcooked2Level():
+            if not self.options["KevinLevels"] and level.level_id > 36:
+                break
 
             # Create Region (e.g. "1-1")
             self.add_region(level.level_name)
@@ -256,8 +258,11 @@ class Overcooked2World(World):
             if not self.options["IncludeHordeLevels"] and item_name in ["Calmer Unbread", "Coin Purse"]:
                 # skip items which are irrelevant to the seed
                 continue
+            
+            if not self.options["KevinLevels"] and item_name.startswith("Kevin"):
+                continue
 
-            if is_item_progression(item_name, self.level_mapping):
+            if is_item_progression(item_name, self.level_mapping, self.options["KevinLevels"]):
                 # print(f"{item_name} is progression")
                 # progression.append(item_name)
                 classification = ItemClassification.progression
@@ -296,6 +301,9 @@ class Overcooked2World(World):
     def generate_basic(self) -> None:
         # Add Events (Star Acquisition)
         for level in Overcooked2Level():
+            if not self.options["KevinLevels"] and level.level_id > 36:
+                break
+
             if level.level_id != 36:
                 self.place_event(level.location_name_level_complete, level.event_name_level_complete)
 
@@ -348,16 +356,18 @@ class Overcooked2World(World):
                 level_unlock_requirements[str(level_id)] = level_id - 1
 
         # Set Kevin Unlock Requirements
-        def kevin_level_to_keyholder_level_id(level_id: int) -> Optional[int]:
-            location = self.world.find_item(f"Kevin-{level_id-36}", self.player)
-            if location.player != self.player:
-                return None  # This kevin level will be unlocked by the server at runtime
-            level_id = oc2_location_name_to_id[location.name]
-            return level_id
-        for level_id in range(37, 45):
-            keyholder_level_id = kevin_level_to_keyholder_level_id(level_id)
-            if keyholder_level_id is not None:
-                level_unlock_requirements[str(level_id)] = keyholder_level_id
+        if self.options["KevinLevels"]:
+            def kevin_level_to_keyholder_level_id(level_id: int) -> Optional[int]:
+                location = self.world.find_item(f"Kevin-{level_id-36}", self.player)
+                if location.player != self.player:
+                    return None  # This kevin level will be unlocked by the server at runtime
+                level_id = oc2_location_name_to_id[location.name]
+                return level_id
+
+            for level_id in range(37, 45):
+                keyholder_level_id = kevin_level_to_keyholder_level_id(level_id)
+                if keyholder_level_id is not None:
+                    level_unlock_requirements[str(level_id)] = keyholder_level_id
 
         # Place Items at Level Completion Screens (local only)
         on_level_completed: Dict[str, list[Dict[str, str]]] = dict()

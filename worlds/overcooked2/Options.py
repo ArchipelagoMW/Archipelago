@@ -33,6 +33,11 @@ class IncludeHordeLevels(OC2OnToggle):
     display_name = "Include Horde Levels"
 
 
+class KevinLevels(OC2OnToggle):
+    """Includes the 8 Kevin level locations on the map as unlockables. Turn off to make games shorter."""
+    display_name = "Kevin Level Checks"
+
+
 class FixBugs(OC2OnToggle):
     """Fixes Bugs Present in the base game:
     - Double Serving Exploit
@@ -88,6 +93,7 @@ overcooked_options = {
     "shuffle_level_order": ShuffleLevelOrder,
     "include_horde_levels": IncludeHordeLevels,
     "prep_levels": PrepLevels,
+    "kevin_levels": KevinLevels,
 
     # quality of life options
     "fix_bugs": FixBugs,

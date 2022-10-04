@@ -74,7 +74,7 @@ def meets_requirements(state: CollectionState, name: str, stars: int, player: in
     return False
 
 
-def is_item_progression(item_name, level_mapping):
+def is_item_progression(item_name, level_mapping, include_kevin):
     if item_name.endswith("Emote"):
         return False
 
@@ -100,6 +100,9 @@ def is_item_progression(item_name, level_mapping):
         return True
 
     for level in Overcooked2Level():
+        if not include_kevin and level.level_id > 36:
+            break
+
         if level_mapping is None:
             unmapped_level = Overcooked2GenericLevel(level.level_id)
         else:
