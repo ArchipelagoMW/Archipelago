@@ -9,6 +9,8 @@ from .Locations import get_locations
 from .Regions import create_regions
 from .Options import sc2wol_options, get_option_value
 from .LogicMixin import SC2WoLLogic
+from .PoolFilter import filter_missions, filter_items
+from .MissionTables import starting_mission_locations, MissionInfo
 
 
 class Starcraft2WoLWebWorld(WebWorld):
@@ -64,9 +66,9 @@ class SC2WoLWorld(World):
     def generate_basic(self):
         excluded_items = get_excluded_items(self, self.world, self.player)
 
-        assign_starter_items(self.world, self.player, excluded_items, self.locked_locations)
+        starter_items = assign_starter_items(self.world, self.player, excluded_items, self.locked_locations)
 
-        pool = get_item_pool(self.world, self.player, excluded_items)
+        pool = get_item_pool(self.world, self.player, self.mission_req_table, starter_items, excluded_items, self.location_cache)
 
         fill_item_pool_with_dummy_items(self, self.world, self.player, self.locked_locations, self.location_cache, pool)
 
@@ -123,7 +125,7 @@ def get_excluded_items(self: SC2WoLWorld, world: MultiWorld, player: int) -> Set
     return excluded_items
 
 
-def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
+def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]) -> List[Item]:
     non_local_items = world.non_local_items[player].value
 
     local_basic_unit = tuple(item for item in basic_unit if item not in non_local_items)
@@ -138,12 +140,11 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str
     else:
         first_location = first_location + ": Victory"
 
-    assign_starter_item(world, player, excluded_items, locked_locations, first_location,
-                        local_basic_unit)
+    return [assign_starter_item(world, player, excluded_items, locked_locations, first_location, local_basic_unit)]
 
 
 def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str],
-                        location: str, item_list: Tuple[str, ...]):
+                        location: str, item_list: Tuple[str, ...]) -> Item:
 
     item_name = world.random.choice(item_list)
 
@@ -155,8 +156,11 @@ def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str]
 
     locked_locations.append(location)
 
+    return item
 
-def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:
+
+def get_item_pool(world: MultiWorld, player: int, mission_req_table: dict[str, MissionInfo],
+                  starter_items: List[str], excluded_items: Set[str], location_cache: List[Location]) -> List[Item]:
     pool: List[Item] = []
 
     for name, data in item_table.items():
@@ -165,7 +169,12 @@ def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> L
                 item = create_item_with_correct_settings(world, player, name)
                 pool.append(item)
 
-    return pool
+    existing_items = starter_items + [item.name for item in world.precollected_items[player]]
+    # For the future: goal items like Artifact Shards go here
+    locked_items = []
+
+    filtered_pool = filter_items(world, player, mission_req_table, location_cache, pool, existing_items, locked_items)
+    return filtered_pool
 
 
 def fill_item_pool_with_dummy_items(self: SC2WoLWorld, world: MultiWorld, player: int, locked_locations: List[str],

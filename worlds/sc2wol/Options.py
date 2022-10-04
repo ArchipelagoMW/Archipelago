@@ -38,22 +38,29 @@ class AllInMap(Choice):
 class MissionOrder(Choice):
     """Determines the order the missions are played in.
     Vanilla: Keeps the standard mission order and branching from the WoL Campaign.
-    Vanilla Shuffled: Keeps same branching paths from the WoL Campaign but randomizes the order of missions within."""
+    Vanilla Shuffled: Keeps same branching paths from the WoL Campaign but randomizes the order of missions within.
+    Mini Shuffle: Halves the number of missions in the campaign and randomizes the missions available.
+    Gauntlet: A linear series of 7 random missions to complete the campaign.
+    """
     display_name = "Mission Order"
     option_vanilla = 0
     option_vanilla_shuffled = 1
+    option_mini_shuffle = 2
+    option_gauntlet = 3
 
 
 class ShuffleProtoss(DefaultOnToggle):
-    """Determines if the 3 protoss missions are included in the shuffle if Vanilla Shuffled is enabled.  If this is
-    not the 3 protoss missions will stay in their vanilla order in the mission order making them optional to complete
-    the game."""
+    """Determines if the 3 protoss missions are included in the shuffle if Vanilla mission order is not enabled.
+    On Vanilla Shuffled, the 3 protoss missions will be in their normal position on the Prophecy chain if not shuffled.
+    On Mini Shuffle or Gauntlet, the 3 protoss missions will not appear and Protoss units are removed from the pool if not shuffled.
+    """
     display_name = "Shuffle Protoss Missions"
 
 
 class RelegateNoBuildMissions(DefaultOnToggle):
-    """If enabled, all no build missions besides the needed first one will be placed at the end of optional routes so
-    that none of them become required to complete the game.  Only takes effect if mission order is not set to vanilla."""
+    """Determines if the 5 no-build missions are included in the shuffle if Vanilla mission order is not enabled.
+    On Vanilla Shuffled, one no-build mission will be placed as the first mission and the rest will be placed at the end of optional routes.
+    On Mini Shuffle or Gauntlet, the 5 no-build missions will not appear."""
     display_name = "Relegate No-Build Missions"
 
 
