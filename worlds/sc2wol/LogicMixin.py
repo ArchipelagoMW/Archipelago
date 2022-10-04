@@ -53,6 +53,15 @@ class SC2WoLLogic(LogicMixin):
         return self.has_any({'Banshee', 'Battlecruiser'}, player) and self._sc2wol_has_competent_anti_air or \
                self._sc2wol_has_competent_comp(world, player) and self._sc2wol_has_air_anti_air(world, player)
 
+    def _sc2wol_has_mm_upgrade(self, world: MultiWorld, player: int) -> bool:
+        return self.has_any({"Combat Shield (Marine)", "Stabilizer Medpacks (Medic)"}, player)
+
+    def _sc2wol_survives_rip_field(self, world: MultiWorld, player: int) -> bool:
+        return self.has("Battlecruiser", player) or \
+           self._sc2wol_has_air(world, player) and \
+           self._sc2wol_has_competent_anti_air(world, player) and \
+           self.has("Science Vessel", player)
+
     def _sc2wol_cleared_missions(self, world: MultiWorld, player: int, mission_count: int) -> bool:
         return self.has_group("Missions", player, mission_count)
 

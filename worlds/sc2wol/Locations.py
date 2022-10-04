@@ -125,25 +125,13 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
                                    state.has('Science Vessel', player)),
         LocationData("Maw of the Void", "Maw of the Void: Landing Zone Cleared", SC2WOL_LOC_ID_OFFSET + 1201),
         LocationData("Maw of the Void", "Maw of the Void: Expansion Prisoners", SC2WOL_LOC_ID_OFFSET + 1202,
-                     lambda state: state.has('Battlecruiser', player) or
-                                   state._sc2wol_has_air(world, player) and
-                                   state._sc2wol_has_competent_anti_air(world, player) and
-                                   state.has('Science Vessel', player)),
+                     lambda state: state._sc2wol_survives_rip_field(world, player)),
         LocationData("Maw of the Void", "Maw of the Void: South Close Prisoners", SC2WOL_LOC_ID_OFFSET + 1203,
-                     lambda state: state.has('Battlecruiser', player) or
-                                   state._sc2wol_has_air(world, player) and
-                                   state._sc2wol_has_competent_anti_air(world, player) and
-                                   state.has('Science Vessel', player)),
+                     lambda state: state._sc2wol_survives_rip_field(world, player)),
         LocationData("Maw of the Void", "Maw of the Void: South Far Prisoners", SC2WOL_LOC_ID_OFFSET + 1204,
-                     lambda state: state.has('Battlecruiser', player) or
-                                   state._sc2wol_has_air(world, player) and
-                                   state._sc2wol_has_competent_anti_air(world, player) and
-                                   state.has('Science Vessel', player)),
+                     lambda state: state._sc2wol_survives_rip_field(world, player)),
         LocationData("Maw of the Void", "Maw of the Void: North Prisoners", SC2WOL_LOC_ID_OFFSET + 1205,
-                     lambda state: state.has('Battlecruiser', player) or
-                                   state._sc2wol_has_air(world, player) and
-                                   state._sc2wol_has_competent_anti_air(world, player) and
-                                   state.has('Science Vessel', player)),
+                     lambda state: state._sc2wol_survives_rip_field(world, player)),
         LocationData("Devil's Playground", "Devil's Playground: Victory", SC2WOL_LOC_ID_OFFSET + 1300,
                      lambda state: state._sc2wol_has_anti_air(world, player) and (
                              state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player))),
@@ -208,16 +196,16 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
                      lambda state: state._sc2wol_has_competent_comp(world, player)),
         LocationData("Media Blitz", "Media Blitz: Science Facility", SC2WOL_LOC_ID_OFFSET + 2004),
         LocationData("Piercing the Shroud", "Piercing the Shroud: Victory", SC2WOL_LOC_ID_OFFSET + 2100,
-                     lambda state: state.has_any({'Combat Shield (Marine)', 'Stabilizer Medpacks (Medic)'}, player)),
+                     lambda state: state._sc2wol_has_mm_upgrade(world, player)),
         LocationData("Piercing the Shroud", "Piercing the Shroud: Holding Cell Relic", SC2WOL_LOC_ID_OFFSET + 2101),
         LocationData("Piercing the Shroud", "Piercing the Shroud: Brutalisk Relic", SC2WOL_LOC_ID_OFFSET + 2102,
-                     lambda state: state.has_any({'Combat Shield (Marine)', 'Stabilizer Medpacks (Medic)'}, player)),
+                     lambda state: state._sc2wol_has_mm_upgrade(world, player)),
         LocationData("Piercing the Shroud", "Piercing the Shroud: First Escape Relic", SC2WOL_LOC_ID_OFFSET + 2103,
-                     lambda state: state.has_any({'Combat Shield (Marine)', 'Stabilizer Medpacks (Medic)'}, player)),
+                     lambda state: state._sc2wol_has_mm_upgrade(world, player)),
         LocationData("Piercing the Shroud", "Piercing the Shroud: Second Escape Relic", SC2WOL_LOC_ID_OFFSET + 2104,
-                     lambda state: state.has_any({'Combat Shield (Marine)', 'Stabilizer Medpacks (Medic)'}, player)),
+                     lambda state: state._sc2wol_has_mm_upgrade(world, player)),
         LocationData("Piercing the Shroud", "Piercing the Shroud: Brutalisk ", SC2WOL_LOC_ID_OFFSET + 2105,
-                     lambda state: state.has_any({'Combat Shield (Marine)', 'Stabilizer Medpacks (Medic)'}, player)),
+                     lambda state: state._sc2wol_has_mm_upgrade(world, player)),
         LocationData("Whispers of Doom", "Whispers of Doom: Victory", SC2WOL_LOC_ID_OFFSET + 2200),
         LocationData("Whispers of Doom", "Whispers of Doom: First Hatchery", SC2WOL_LOC_ID_OFFSET + 2201),
         LocationData("Whispers of Doom", "Whispers of Doom: Second Hatchery", SC2WOL_LOC_ID_OFFSET + 2202),
