@@ -51,9 +51,9 @@ The directory “HEAVY_BULLETS_Data”, however, has some good news.
 Jackpot! It might not be obvious what you’re looking at here, but I can instantly tell from this folder’s contents that 
 what we have is a game made in the Unity Engine. If you look in the sub-folders, you’ll seem some .dll files which affirm 
 our suspicions. Telltale signs for this are directories titled “Managed” and “Mono”, as well as the numbered, extension-less 
-level files and the sharedassets files. We’ll tell you a bit about why seeing a Unity game is such good news later, 
-but for now, this is what one looks like. Also keep your eyes out for an executable with a name like UnityCrashHandler, 
-that’s another dead giveaway.  
+level files and the sharedassets files. If you've identified the game as a Unity game, some useful tools and information
+to help you on your journey can be found at this [Unity Game Hacking guide.](https://github.com/imadr/Unity-game-hacking)
+
 
 ### Stardew Valley
 ![Stardew Valley Root Directory in Window's Explorer](./img/stardew-valley-directory.png)  
@@ -66,7 +66,8 @@ More on that later.
 ![Gato Roboto Root Directory in Window's Explorer](./img/gato-roboto-directory.png)  
   
 Our last example is the game Gato Roboto. This game is made in GameMaker, which is another green flag to look out for. 
-The giveaway is the file titled "data.win". This immediately tips us off that this game was made in GameMaker.  
+The giveaway is the file titled "data.win". This immediately tips us off that this game was made in GameMaker. For
+modifying GameMaker games the [Undertale Mod Tool](https://github.com/krzys-h/UndertaleModTool) is incredibly helpful.
   
 This isn't all you'll ever see looking at game files, but it's a good place to start. 
 As a general rule, the more files a game has out in plain sight, the more you'll be able to change. 
@@ -94,39 +95,10 @@ The first step is to research your game. Even if you've been dealt the worst han
 it's possible other motivated parties have concocted useful tools for your game already. 
 Always be sure to search the Internet for the efforts of other modders.  
   
-### Analysis Tools
-Depending on the game’s underlying engine, there may be some tools you can use either in lieu of or in addition to existing game tools.  
-  
-#### [dnSpy](https://github.com/dnSpy/dnSpy/releases)  
-The first tool in your toolbox is dnSpy. 
-dnSpy is useful for opening and modifying code files, like .exe and .dll files, that were made in C#. 
-This won't work for executable files made by other means, and obfuscated code (code which was deliberately made 
-difficult to reverse engineer) will thwart it, but 9 times out of 10 this is exactly what you need. 
-You'll want to avoid opening common library files in dnSpy, as these are unlikely to contain the data you're looking to 
-modify. 
+### Other helpful tools
+Depending on the game’s underlying engine, there may be some tools you can use either in lieu of or in addition to
+existing game tools.
 
-For Unity games, the file you’ll want to open will be the file (Data Folder)/Managed/Assembly-CSharp.dll, as pictured below:  
-  
-![Heavy Bullets Managed Directory in Window's Explorer](./img/heavy-bullets-managed-directory.png)  
-  
-This file will contain the data of the actual game. 
-For other C# games, the file you want is usually just the executable itself.  
-  
-With dnSpy, you can view the game’s C# code, but the tool isn’t perfect. 
-Although the names of classes, methods, variables, and more will be preserved, code structures may not remain entirely intact. This is because compilers will often subtly rewrite code to be more optimal, so that it works the same as the original code but uses fewer resources. Compiled C# files also lose comments and other documentation.  
-  
-#### [UndertaleModTool](https://github.com/krzys-h/UndertaleModTool/releases)  
-This is currently the best tool for modifying games made in GameMaker, and supports games made in both GMS 1 and 2. 
-It allows you to modify code in GML, if the game wasn't made with the wrong compiler (usually something you don't have 
-to worry about). 
-
-You'll want to open the data.win file, as this is where all the goods are kept. 
-Like dnSpy, you won’t be able to see comments. 
-In addition, you will be able to see and modify many hidden fields on items that GameMaker itself will often hide from 
-creators. 
-
-Fonts in particular are notoriously complex, and to add new sprites you may need to modify existing sprite sheets.  
-  
 #### [CheatEngine](https://cheatengine.org/)  
 CheatEngine is a tool with a very long and storied history. 
 Be warned that because it performs live modifications to the memory of other processes, it will likely be flagged as 
@@ -142,19 +114,13 @@ anything with it.
   
 ### What Modifications You Should Make to the Game
 We talked about this briefly in [Game Modification](#game-modification) section.
-The next step is to know what you need to make the game do now that you can modify it. Here are your key goals:  
-- Modify the game so that checks are shuffled  
-- Know when the player has completed a check, and react accordingly  
-- Listen for messages from the Archipelago server  
-- Modify the game to display messages from the Archipelago server  
-- Add interface for connecting to the Archipelago server with passwords and sessions  
-- Add commands for manually rewarding, re-syncing, forfeiting, and other actions  
+The next step is to know what you need to make the game do now that you can modify it. Here are your key goals:
+- Know when the player has checked a location, and react accordingly
+- Be able to receive items from the server on the fly
+- Keep an index for items received in order to resync from disconnections
+- Add interface for connecting to the Archipelago server with passwords and sessions
+- Add commands for manually rewarding, re-syncing, forfeiting, and other actions
   
-To elaborate, you need to be able to inform the server whenever you check locations, print out messages that you receive
-from the server in-game so players can read them, award items when the server tells you to, sync and re-sync when necessary,
-avoid double-awarding items while still maintaining game file integrity, and allow players to manually enter commands in
-case the client or server make mistakes. 
-
 Refer to the [Network Protocol documentation](./network%20protocol.md) for how to communicate with Archipelago's servers.  
   
 ## But my Game is a console game. Can I still add it?  
@@ -227,117 +193,39 @@ To make using APBP easy, they can be generated by inheriting from `worlds.Files.
 Games which support modding will usually just let you drag and drop the mod’s files into a folder somewhere.
 Mod files come in many forms, but the rules about not distributing other people's content remain the same.
 They can either be generic and modify the game using a seed or `slot_data` from the AP websocket, or they can be
-generated per seed.
+generated per seed. If at all possible, it's generally best practice to collect your world information from `slot_data`
+so that the users don't have to move files around in order to play.
 
 If the mod is generated by AP and is installed from a ZIP file, it may be possible to include APBP metadata for easy
 integration into the Webhost by inheriting from `worlds.Files.APContainer`.
 
 
 ## Archipelago Integration
-Integrating a randomizer into Archipelago involves a few steps.
-There are several things that may need to be done, but the most important is to create an implementation of the 
-`World` class specific to your game. This implementation should exist as a Python module within the `worlds` folder
-in the Archipelago file structure.
+In order for your game to communicate with the Archipelago server and generate the necessary randomized information,
+you must create a world package in the main Archipelago repo. This section will cover the requisites and expectations
+and show the basics of a world. More in depth documentation on the available API can be read in the [world api doc.](./world%20api.md)
+For setting up your working environment with Archipelago refer to [running from source](./running%20from%20source.md)
+and the [style guide](./style.md).
 
-This encompasses most of the data for your game – the items available, what checks you have, the logic for reaching those
-checks, what options to offer for the player’s yaml file, and the code to initialize all this data.
-
-Here’s an example of what your world module can look like:  
-  
-![Example world module directory open in Window's Explorer](./img/archipelago-world-directory-example.png)
-
-The minimum requirements for a new archipelago world are the package itself (the world folder containing a file named `__init__.py`),
-which must define a `World` class object for the game with a game name, create an equal number of items and locations with rules,
-a win condition, and at least one `Region` object.
-  
-Let's give a quick breakdown of what the contents for these files look like.
-This is just one example of an Archipelago world - the way things are done below is not an immutable property of Archipelago.  
-  
-### Items.py  
-This file is used to define the items which exist in a given game.  
-  
-![Example Items.py file open in Notepad++](./img/example-items-py-file.png)  
-  
-Some important things to note here. The center of our Items.py file is the item_table, which individually lists every
-item in the game and associates them with an ItemData.
-
-This file is rather skeletal - most of the actual data has been stripped out for simplicity.
-Each ItemData gives a numeric ID to associate with the item and a boolean telling us whether the item might allow the
-player to do more than they would have been able to before.  
-  
-Next there's the item_frequencies. This simply tells Archipelago how many times each item appears in the pool.
-Items that appear exactly once need not be listed - Archipelago will interpret absence from this dictionary as meaning
-that the item appears once.
-  
-Lastly, note the `lookup_id_to_name` dictionary, which is typically imported and used in your Archipelago `World`
-implementation. This is how Archipelago is told about the items in your world. 
-
-### Locations.py
-This file lists all locations in the game.  
-  
-![Example Locations.py file open in Notepad++](./img/example-locations-py-file.png)  
-  
-First is the achievement_table. It lists each location, the region that it can be found in (more on regions later),
-and a numeric ID to associate with each location.
-
-The exclusion table is a series of dictionaries which are used to exclude certain checks from the pool of progression
-locations based on user settings, and the events table associates certain specific checks with specific items.
-
-`lookup_id_to_name` is also present for locations, though this is a separate dictionary, to be clear.  
-  
-### Options.py  
-This file details options to be searched for in a player's YAML settings file.  
-  
-![Example Options.py file open in Notepad++](./img/example-options-py-file.png)  
-  
-There are several types of option Archipelago has support for.
-In our case, we have three separate choices a player can toggle, either On or Off.
-You can also have players choose between a number of predefined values, or have them provide a numeric value within a
-specified range. 
-  
-### Regions.py  
-This file contains data which defines the world's topology.
-In other words, it details how different regions of the game connect to each other.  
-  
-![Example Regions.py file open in Notepad++](./img/example-regions-py-file.png)  
-  
-`terraria_regions` contains a list of tuples.
-The first element of the tuple is the name of the region, and the second is a list of connections that lead out of the region.
-
-`mandatory_connections` describe where the connection leads.
-
-Above this data is a function called `link_terraria_structures` which uses our defined regions and connections to create
-something more usable for Archipelago, but this has been left out for clarity.  
-  
-### Rules.py  
-This is the file that details rules for what players can and cannot logically be required to do, based on items and settings.  
-  
-![Example Rules.py file open in Notepad++](./img/example-rules-py-file.png)  
-  
-This is the most complicated part of the job, and is one part of Archipelago that is likely to see some changes in the future.
-The first class, called `TerrariaLogic`, is an extension of the `LogicMixin` class.
-This is where you would want to define methods for evaluating certain conditions, which would then return a boolean to
-indicate whether conditions have been met. Your rule definitions should start with some sort of identifier to delineate it
-from other games, as all rules are mixed together due to `LogicMixin`. In our case, `_terraria_rule` would be a better name.
-
-The method below, `set_rules()`, is where you would assign these functions as "rules", using lambdas to associate these
-functions or combinations of them (or any other code that evaluates to a boolean, in my case just the placeholder `True`)
-to certain tasks, like checking locations or using entrances.  
-  
-### \_\_init\_\_.py  
-This is the file that actually extends the `World` class, and is where you expose functionality and data to Archipelago.  
-  
-![Example \_\_init\_\_.py file open in Notepad++](./img/example-init-py-file.png)  
-  
-This is the most important file for the implementation, and technically the only one you need, but it's best to keep this
-file as short as possible and use other script files to do most of the heavy lifting.
-If you've done things well, this will just be where you assign everything you set up in the other files to their associated
-fields in the class being extended.
-
-This is also a good place to put game-specific quirky behavior that needs to be managed, as it tends to make things a bit
-cluttered if you put these things elsewhere.  
-  
-The various methods and attributes are documented in `/worlds/AutoWorld.py[World]` and
-[world api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md),
-though it is also recommended to look at existing implementations to see how all this works first-hand. 
-Once you get all that, all that remains to do is test the game and publish your work.
+### Requirements
+A world implementation requires a few key things from its implementation
+- A folder within `worlds` that contains an `__init__.py`
+  - This is what defines it as a Python package and how it's able to be imported into Archipelago's generation system.
+During generation time only code that is defined within this file will be run. It's suggested to split up your information
+into more files to improve readability, but all of that information can be imported at its base level within your world.
+- A `World` subclass where you create your world and define all of its rules and the following requirements:
+  - Your items and locations need a `item_name_to_id` and `location_name_to_id`, respectively, mapping.
+    - The IDs that you take must not overlap with another game, but it's ok, and preferred, if your item and location
+mappings overlap with each other.
+    - Each game is able to claim 10000 IDs from their starting ID in the range of `xxxx0000`
+  - An `option_definitions` mapping of your game options with the format `{name: Class}`, where `name` uses Python snake_case.
+  - You must define your world's `create_item` method, because this may be called by the generator in certain circumstances
+  - When creating your world you submit items and regions to the Multiworld.
+    - These are lists of said objects which you can access at `self.world.itempool` and `self.world.regions`. Best practice
+for adding to these lists is with either `append` or `extend`, where `append` is a single object and `extend` is a list.
+    - Do not use `=` as this will delete other worlds' items and regions.
+    - Regions are containers for holding your world's Locations.
+      - Locations are where players will "check" for items and must exist within a region. It's also important for your
+world's submitted items to be the same as its submitted locations count.
+    - You must always have a "Menu" Region from which the generation algorithm uses to enter the game and access locations.
+  - 
