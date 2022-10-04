@@ -295,6 +295,11 @@ def get_default_options() -> OptionsType:
             "sni": "SNI",
             "rom_start": True,
         },
+        "cv64_options": {
+            "rom_file": "Castlevania (USA).z64",
+            "sni": "SNI",
+            "rom_start": True,
+        },
     }
 
     return options

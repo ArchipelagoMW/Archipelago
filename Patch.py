@@ -19,7 +19,7 @@ GAME_DKC3 = "Donkey Kong Country 3"
 
 GAME_SMW = "Super Mario World"
 
-
+GAME_CV64 = "Castlevania 64"
 
 class RomMeta(TypedDict):
     server: str

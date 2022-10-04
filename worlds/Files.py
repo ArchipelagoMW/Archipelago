@@ -111,7 +111,7 @@ class APDeltaPatch(APContainer, metaclass=AutoPatchRegister):
     hash: Optional[str]  # base checksum of source file
     patch_file_ending: str = ""
     delta: Optional[bytes] = None
-    result_file_ending: str = ".sfc"
+    result_file_ending: str = ".z64"
     source_data: bytes
 
     def __init__(self, *args: Any, patched_path: str = "", **kwargs: Any) -> None:

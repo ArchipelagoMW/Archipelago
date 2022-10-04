@@ -31,7 +31,7 @@ from worlds.alttp import Regions, Shops
 from worlds.alttp.Rom import ROM_PLAYER_LIMIT
 from worlds.sm.Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
 from worlds.smz3.Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
-from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3, GAME_DKC3, GAME_SMW
+from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3, GAME_DKC3, GAME_SMW, GAME_CV64
 
 
 snes_logger = logging.getLogger("SNES")
@@ -260,6 +260,9 @@ async def deathlink_kill_player(ctx: Context):
         elif ctx.game == GAME_DKC3:
             from worlds.dkc3.Client import deathlink_kill_player as dkc3_deathlink_kill_player
             await dkc3_deathlink_kill_player(ctx)
+        elif ctx.game == GAME_CV64:
+            from worlds.cv64.Client import deathlink_kill_player as cv64_deathlink_kill_player
+            await cv64_deathlink_kill_player(ctx)
         ctx.last_death_link = time.time()
 
 
@@ -1051,6 +1054,9 @@ async def game_watcher(ctx: Context):
                 from worlds.smw.Client import smw_rom_init
                 init_handled = await smw_rom_init(ctx)
             if not init_handled:
+                from worlds.cv64.Client import cv64_rom_init
+                init_handled = await cv64_rom_init(ctx)
+            if not init_handled:
                 game_name = await snes_read(ctx, SM_ROMNAME_START, 5)
                 if game_name is None:
                     continue
@@ -1311,6 +1317,9 @@ async def game_watcher(ctx: Context):
         elif ctx.game == GAME_SMW:
             from worlds.smw.Client import smw_game_watcher
             await smw_game_watcher(ctx)
+        elif ctx.game == GAME_CV64:
+            from worlds.cv64.Client import cv64_game_watcher
+            await cv64_game_watcher(ctx)
 
 
 async def run_game(romfile):

@@ -59,6 +59,7 @@ Name: "generator/smw";    Description: "Super Mario World ROM Setup"; Types: ful
 Name: "generator/soe";    Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/lttp";   Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
 Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296; Flags: disablenouninstallwarning
+Name: "generator/cv64";   Description: "Castlevania 64 ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 12582912; Flags: disablenouninstallwarning
 Name: "server";           Description: "Server"; Types: full hosting
 Name: "client";           Description: "Clients"; Types: full playing
 Name: "client/sni";       Description: "SNI Client"; Types: full playing
@@ -66,6 +67,7 @@ Name: "client/sni/lttp";  Description: "SNI Client - A Link to the Past Patch Se
 Name: "client/sni/sm";    Description: "SNI Client - Super Metroid Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/sni/dkc3";  Description: "SNI Client - Donkey Kong Country 3 Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/sni/smw";   Description: "SNI Client - Super Mario World Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/sni/cv64";  Description: "SNI Client - Castlevania 64 Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/factorio";  Description: "Factorio"; Types: full playing
 Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDiskSpaceRequired: 226894278
 Name: "client/oot";       Description: "Ocarina of Time"; Types: full playing
@@ -83,6 +85,7 @@ Source: "{code:GetSMROMPath}"; DestDir: "{app}"; DestName: "Super Metroid (JU).s
 Source: "{code:GetDKC3ROMPath}"; DestDir: "{app}"; DestName: "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc"; Flags: external; Components: client/sni/dkc3 or generator/dkc3
 Source: "{code:GetSMWROMPath}"; DestDir: "{app}"; DestName: "Super Mario World (USA).sfc"; Flags: external; Components: client/sni/smw or generator/smw
 Source: "{code:GetSoEROMPath}"; DestDir: "{app}"; DestName: "Secret of Evermore (USA).sfc"; Flags: external; Components: generator/soe
+Source: "{code:GetCV64ROMPath}"; DestDir: "{app}"; DestName: "Castlevania (USA).z64"; Flags: external; Components: client/sni/cv64 or generator/cc64
 Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: client/oot or generator/oot
 Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#source_path}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/sni
@@ -169,6 +172,12 @@ Root: HKCR; Subkey: "{#MyAppName}soepatch";                     ValueData: "Arch
 Root: HKCR; Subkey: "{#MyAppName}soepatch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}soepatch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
 
+Root: HKCR; Subkey: ".apcv64";                                 ValueData: "{#MyAppName}cv64patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}cv64patch";                     ValueData: "Archipelago Donkey Kong Country 3 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}cv64patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}cv64patch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
+
+
 Root: HKCR; Subkey: ".apmc";                                  ValueData: "{#MyAppName}mcdata";         Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/minecraft
 Root: HKCR; Subkey: "{#MyAppName}mcdata";                     ValueData: "Archipelago Minecraft Data"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/minecraft
 Root: HKCR; Subkey: "{#MyAppName}mcdata\DefaultIcon";         ValueData: "{app}\ArchipelagoMinecraftClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/minecraft
@@ -230,6 +239,9 @@ var SMWRomFilePage: TInputFileWizardPage;
 
 var soerom: string;
 var SoERomFilePage: TInputFileWizardPage;
+
+var cv64rom: string;
+var CV64RomFilePage: TInputFileWizardPage;
 
 var ootrom: string;
 var OoTROMFilePage: TInputFileWizardPage;
@@ -311,6 +323,35 @@ begin
     '.z64');
 end;
 
+procedure AddCV64RomPage();
+begin
+  cv64rom := FileSearch('Castlevania.z64', WizardDirValue());
+  if Length(cv64rom) > 0 then
+    begin
+      log('existing ROM found');
+      log(IntToStr(CompareStr(GetMD5OfFile(ootrom), '1cc5cf3b4d29d8c3ade957648b529dc1'))); // normal
+      log(IntToStr(CompareStr(GetMD5OfFile(ootrom), '0bbaa6de2b9cbb822f8b4d85c1d5497b'))); // byteswapped
+      if (CompareStr(GetMD5OfFile(cv64rom), '5bd1fe107bf8106b2ab6650abecd54d6') = 0) or (CompareStr(GetMD5OfFile(cv64rom), '6697768a7a7df2dd27a692a2638ea90b') = 0) then
+        begin
+        log('existing ROM verified');
+        exit;
+        end;
+      log('existing ROM failed verification');
+    end;
+  cv64rom := ''
+  CV64ROMFilePage :=
+    CreateInputFilePage(
+      wpSelectComponents,
+      'Select ROM File',
+      'Where is your CV64 US 1.0 ROM located?',
+      'Select the file, then click Next.');
+
+  CV64ROMFilePage.Add(
+    'Location of ROM file:',
+    'N64 ROM files (*.z64, *.n64)|*.z64;*.n64|All files|*.*',
+    '.z64');
+end;
+
 function NextButtonClick(CurPageID: Integer): Boolean;
 begin
   if (assigned(LttPROMFilePage)) and (CurPageID = LttPROMFilePage.ID) then
@@ -323,6 +364,8 @@ begin
     Result := not (SMWROMFilePage.Values[0] = '')
   else if (assigned(SoEROMFilePage)) and (CurPageID = SoEROMFilePage.ID) then
     Result := not (SoEROMFilePage.Values[0] = '')
+  else if (assigned(CV64ROMFilePage)) and (CurPageID = CV64ROMFilePage.ID) then
+    Result := not (CV64ROMFilePage.Values[0] = '')
   else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
     Result := not (OoTROMFilePage.Values[0] = '')
   else
@@ -409,6 +452,22 @@ begin
     Result := '';
  end;
 
+function GetCV64ROMPath(Param: string): string;
+begin
+  if Length(cv64rom) > 0 then
+    Result := cv64rom
+  else if Assigned(CV64RomFilePage) then
+    begin
+      R := CompareStr(GetMD5OfFile(CV64ROMFilePage.Values[0]), '1cc5cf3b4d29d8c3ade957648b529dc1') * CompareStr(GetMD5OfFile(OoTROMFilePage.Values[0]), '0bbaa6de2b9cbb822f8b4d85c1d5497b')
+      if R <> 0 then
+        MsgBox('Castlevania 64 ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := CV64ROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+ end;
+
 function GetOoTROMPath(Param: string): string;
 begin
   if Length(ootrom) > 0 then
@@ -428,6 +487,7 @@ end;
 procedure InitializeWizard();
 begin
   AddOoTRomPage();
+  AddCV64RomPage();
 
   lttprom := CheckRom('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', '03a63945398191337e896e5771f77173');
   if Length(lttprom) = 0 then
@@ -464,6 +524,8 @@ begin
     Result := not (WizardIsComponentSelected('client/sni/smw') or WizardIsComponentSelected('generator/smw'));
   if (assigned(SoEROMFilePage)) and (PageID = SoEROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/soe'));
+  if (assigned(CV64ROMFilePage)) and (PageID = CV64ROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('client/sni/cv64') or WizardIsComponentSelected('generator/cv64'));
   if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/oot') or WizardIsComponentSelected('client/oot'));
 end;
