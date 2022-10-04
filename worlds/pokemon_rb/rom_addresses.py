@@ -381,7 +381,6 @@ rom_addresses = {
     "Hidden_Item_Pokemon_Tower_5F": 0x46ef1,
     "Hidden_Item_Route_13_1": 0x46ef8,
     "Hidden_Item_Route_13_2": 0x46efe,
-    "Hidden_Item_Safari_Zone_Gate": 0x46f05,
     "Hidden_Item_Safari_Zone_West": 0x46f0c,
     "Hidden_Item_Silph_Co_5F": 0x46f13,
     "Hidden_Item_Silph_Co_9F": 0x46f1a,

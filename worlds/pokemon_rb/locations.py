@@ -351,7 +351,6 @@ def get_locations(player=None):
         LocationData("Route 13", "Hidden Item Dead End Boulder", "PP Up", rom_addresses['Hidden_Item_Route_13_1'], Hidden(13), lambda state: state.pokemon_rb_can_get_hidden_items(player)),
         LocationData("Route 13", "Hidden Item Dead End By Water Corner", "Calcium", rom_addresses['Hidden_Item_Route_13_2'], Hidden(14), lambda state: state.pokemon_rb_can_get_hidden_items(player)),
         LocationData("Pokemon Mansion B1F", "Hidden Item Secret Key Room Corner", "Rare Candy", rom_addresses['Hidden_Item_Pokemon_Mansion_B1F'], Hidden(15), lambda state: state.pokemon_rb_can_get_hidden_items(player)),
-        LocationData("Safari Zone Gate", "Hidden Item", "Nugget", rom_addresses['Hidden_Item_Safari_Zone_Gate'], Hidden(16), lambda state: state.pokemon_rb_can_get_hidden_items(player)),
         LocationData("Safari Zone West", "Hidden Item Secret House Statue", "Revive", rom_addresses['Hidden_Item_Safari_Zone_West'], Hidden(17), lambda state: state.pokemon_rb_can_get_hidden_items(player)),
         LocationData("Silph Co 5F", "Hidden Item Pot Plant", "Elixir", rom_addresses['Hidden_Item_Silph_Co_5F'], Hidden(18), lambda state: state.pokemon_rb_can_get_hidden_items(player)),
         LocationData("Silph Co 9F", "Hidden Item Nurse Bed", "Max Potion", rom_addresses['Hidden_Item_Silph_Co_9F'], Hidden(19), lambda state: state.pokemon_rb_can_get_hidden_items(player)),
