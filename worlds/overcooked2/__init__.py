@@ -290,7 +290,11 @@ class Overcooked2World(World):
         # print(f"filler: {filler}")
 
         # Fill any free space with filler
-        while len(self.itempool) < len(oc2_location_name_to_id):
+        pool_count = len(oc2_location_name_to_id)
+        if not self.options["KevinLevels"]:
+            pool_count -= 8
+
+        while len(self.itempool) < pool_count:
             self.itempool.append(self.create_item("Bonus Star", ItemClassification.useful))
 
         self.world.itempool += self.itempool
