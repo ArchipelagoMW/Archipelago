@@ -4,19 +4,12 @@ import time
 
 from NetUtils import ClientStatus, color
 from worlds import AutoWorldRegister
-from SNIClient import Context, snes_buffered_write, snes_flush_writes, snes_read
+from SNIClient import Context, snes_buffered_write, snes_flush_writes, snes_read, \
+                      ROM_START, WRAM_START, WRAM_SIZE, SRAM_START, ROMNAME_SIZE
 from .Names.TextBox import generate_received_text
 from Patch import GAME_SMW
 
 snes_logger = logging.getLogger("SNES")
-
-ROM_START = 0x000000
-WRAM_START = 0xF50000
-WRAM_SIZE = 0x20000
-SRAM_START = 0xE00000
-
-SAVEDATA_START = WRAM_START + 0xF000
-SAVEDATA_SIZE = 0x500
 
 SMW_ROMHASH_START = 0x7FC0
 ROMHASH_SIZE = 0x15
@@ -95,7 +88,7 @@ async def deathlink_kill_player(ctx: Context):
         return
 
 
-async def smw_rom_init(ctx: Context):
+async def rom_init(ctx: Context):
     if not ctx.rom:
         ctx.finished_game = False
         ctx.death_link_allow_survive = False
@@ -178,7 +171,7 @@ async def handle_message_queue(ctx: Context):
     return
 
 
-async def smw_game_watcher(ctx: Context):
+async def game_watcher(ctx: Context):
     if ctx.game == GAME_SMW:
         # SMW_TODO: Handle Deathlink
         game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
@@ -262,7 +255,6 @@ async def smw_game_watcher(ctx: Context):
                     bit_set = (masked_data != 0)
 
                     if bit_set:
-                        # SMW_TODO: Handle non-included checks
                         new_checks.append(loc_id)
                 else:
                     event_id_value = event_id + level_data[1]
@@ -275,7 +267,6 @@ async def smw_game_watcher(ctx: Context):
                     bit_set = (masked_data != 0)
 
                     if bit_set:
-                        # SMW_TODO: Handle non-included checks
                         new_checks.append(loc_id)
 
         verify_game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)

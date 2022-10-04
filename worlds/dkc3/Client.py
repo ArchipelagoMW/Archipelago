@@ -2,26 +2,17 @@ import logging
 import asyncio
 
 from NetUtils import ClientStatus, color
-from SNIClient import Context, snes_buffered_write, snes_flush_writes, snes_read
+from SNIClient import Context, snes_buffered_write, snes_flush_writes, snes_read, \
+                      ROM_START, WRAM_START, WRAM_SIZE, SRAM_START, ROMNAME_SIZE
 from Patch import GAME_DKC3
 
 snes_logger = logging.getLogger("SNES")
 
-# DKC3 - DKC3_TODO: Check these values
-ROM_START = 0x000000
-WRAM_START = 0xF50000
-WRAM_SIZE = 0x20000
-SRAM_START = 0xE00000
-
-SAVEDATA_START = WRAM_START + 0xF000
-SAVEDATA_SIZE = 0x500
-
 DKC3_ROMNAME_START = 0x00FFC0
 DKC3_ROMHASH_START = 0x7FC0
-ROMNAME_SIZE = 0x15
 ROMHASH_SIZE = 0x15
 
-DKC3_RECV_PROGRESS_ADDR = WRAM_START + 0x632     # DKC3_TODO: Find a permanent home for this
+DKC3_RECV_PROGRESS_ADDR = WRAM_START + 0x632
 DKC3_FILE_NAME_ADDR = WRAM_START + 0x5D9
 DEATH_LINK_ACTIVE_ADDR = DKC3_ROMNAME_START + 0x15     # DKC3_TODO: Find a permanent home for this
 
@@ -32,20 +23,20 @@ async def deathlink_kill_player(ctx: Context):
         # DKC3_TODO: Handle Receiving Deathlink
 
 
-async def dkc3_rom_init(ctx: Context):
+async def rom_init(ctx: Context):
     if not ctx.rom:
         ctx.finished_game = False
         ctx.death_link_allow_survive = False
-        game_name = await snes_read(ctx, DKC3_ROMNAME_START, 0x15)
+        game_name = await snes_read(ctx, DKC3_ROMNAME_START, ROMNAME_SIZE)
         if game_name is None or game_name != b"DONKEY KONG COUNTRY 3":
-            return False
+            return
         else:
             ctx.game = GAME_DKC3
             ctx.items_handling = 0b111  # remote items
 
         rom = await snes_read(ctx, DKC3_ROMHASH_START, ROMHASH_SIZE)
         if rom is None or rom == bytes([0] * ROMHASH_SIZE):
-            return False
+            return
 
         ctx.rom = rom
 
@@ -54,10 +45,10 @@ async def dkc3_rom_init(ctx: Context):
         #if death_link:
         #    ctx.allow_collect = bool(death_link[0] & 0b100)
         #    await ctx.update_death_link(bool(death_link[0] & 0b1))
-    return True
+    return
 
 
-async def dkc3_game_watcher(ctx: Context):
+async def game_watcher(ctx: Context):
     if ctx.game == GAME_DKC3:
         # DKC3_TODO: Handle Deathlink
         save_file_name = await snes_read(ctx, DKC3_FILE_NAME_ADDR, 0x5)
@@ -67,10 +58,11 @@ async def dkc3_game_watcher(ctx: Context):
 
         new_checks = []
         from worlds.dkc3.Rom import location_rom_data, item_rom_data, boss_location_ids, level_unlock_map
+        location_ram_data = await snes_read(ctx, WRAM_START + 0x5FE, 0x81)
         for loc_id, loc_data in location_rom_data.items():
             if loc_id not in ctx.locations_checked:
-                data = await snes_read(ctx, WRAM_START + loc_data[0], 1)
-                masked_data = data[0] & (1 << loc_data[1])
+                data = location_ram_data[loc_id - 0x5FE]
+                masked_data = data & (1 << loc_data[1])
                 bit_set = (masked_data != 0)
                 invert_bit = ((len(loc_data) >= 3) and loc_data[2])
                 if bit_set != invert_bit:
@@ -184,8 +176,9 @@ async def dkc3_game_watcher(ctx: Context):
 
             await snes_flush_writes(ctx)
 
-        # DKC3_TODO: This method of collect should work, however it does not unlock the next level correctly when previous is flagged
         # Handle Collected Locations
+        levels_to_tiles = await snes_read(ctx, ROM_START + 0x3FF800, 0x60)
+        tiles_to_levels = await snes_read(ctx, ROM_START + 0x3FF860, 0x60)
         for loc_id in ctx.checked_locations:
             if loc_id not in ctx.locations_checked and loc_id not in boss_location_ids:
                 loc_data = location_rom_data[loc_id]
@@ -193,30 +186,24 @@ async def dkc3_game_watcher(ctx: Context):
                 invert_bit = ((len(loc_data) >= 3) and loc_data[2])
                 if not invert_bit:
                     masked_data = data[0] | (1 << loc_data[1])
-                    #print("Collected Location: ", hex(loc_data[0]), " | ", loc_data[1])
                     snes_buffered_write(ctx, WRAM_START + loc_data[0], bytes([masked_data]))
 
                     if (loc_data[1] == 1):
                         # Make the next levels accessible
                         level_id = loc_data[0] - 0x632
-                        levels_to_tiles = await snes_read(ctx, ROM_START + 0x3FF800, 0x60)
-                        tiles_to_levels = await snes_read(ctx, ROM_START + 0x3FF860, 0x60)
                         tile_id = levels_to_tiles[level_id] if levels_to_tiles[level_id] != 0xFF else level_id
                         tile_id = tile_id + 0x632
-                        #print("Tile ID: ", hex(tile_id))
                         if tile_id in level_unlock_map:
                             for next_level_address in level_unlock_map[tile_id]:
                                 next_level_id = next_level_address - 0x632
                                 next_tile_id = tiles_to_levels[next_level_id] if tiles_to_levels[next_level_id] != 0xFF else next_level_id
                                 next_tile_id = next_tile_id + 0x632
-                                #print("Next Level ID: ", hex(next_tile_id))
                                 next_data = await snes_read(ctx, WRAM_START + next_tile_id, 1)
                                 snes_buffered_write(ctx, WRAM_START + next_tile_id, bytes([next_data[0] | 0x01]))
 
                     await snes_flush_writes(ctx)
                 else:
                     masked_data = data[0] & ~(1 << loc_data[1])
-                    print("Collected Inverted Location: ", hex(loc_data[0]), " | ", loc_data[1])
                     snes_buffered_write(ctx, WRAM_START + loc_data[0], bytes([masked_data]))
                     await snes_flush_writes(ctx)
                 ctx.locations_checked.add(loc_id)
