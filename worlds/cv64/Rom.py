@@ -1,13 +1,15 @@
 import Utils
+from Utils import read_snes_rom
+from worlds.Files import APDeltaPatch
 import hashlib
 import os
 # import math
 
 # from BaseClasses import Location
-from Patch import read_rom, APDeltaPatch
 from .Names import PatchName
 
 USHASH = '1cc5cf3b4d29d8c3ade957648b529dc1'
+BSUSHASH = '0bbaa6de2b9cbb822f8b4d85c1d5497b'
 ROM_PLAYER_LIMIT = 65535
 
 
@@ -244,7 +246,7 @@ class LocalRom(object):
         self.orig_buffer = None
 
         with open(file, 'rb') as stream:
-            self.buffer = read_rom(stream)
+            self.buffer = read_snes_rom(stream)
         # if patch:
         #    self.patch_rom()
         #    self.orig_buffer = self.buffer.copy()
@@ -324,7 +326,7 @@ def patch_rom(world, rom, player, offsets_to_ids):
         rom.write_byte(0xBF30B, 0x64)
 
     # Custom data-loading code
-    rom.write_bytes(0x6B5028, [0x08, 0x06, 0x0D, 0x74])  # J 0x801835D0
+    rom.write_bytes(0x6B5028, [0x08, 0x06, 0x0D, 0x70])  # J 0x801835C0
     rom.write_bytes(0x1067C0, PatchName.custom_code_loader)
 
     # Custom warp menu, remote item rewarding, and DeathLink code injection
@@ -338,7 +340,7 @@ def patch_rom(world, rom, player, offsets_to_ids):
 
     # Sub-weapon check function hook
     rom.write_bytes(0xBF32C, [0x00, 0x00, 0x00, 0x00])  # NOP
-    rom.write_bytes(0xBF330, [0x0A, 0x00, 0xFC, 0x5D])  # J	0x803F174
+    rom.write_bytes(0xBF330, [0x08, 0x0F, 0xF0, 0x5D])  # J	0x803FC174
     rom.write_bytes(0xBFC174, PatchName.give_subweapon_stopper)
 
     # Custom warp menu code
@@ -346,11 +348,10 @@ def patch_rom(world, rom, player, offsets_to_ids):
     rom.write_bytes(0xADE28, PatchName.stage_select_overwrite)
     rom.write_byte(0xADD6F, world.special2s_per_warp[player])
 
-    # On-the-fly TLB script modifier hook
-    rom.write_bytes(0x3038, [0x0C, 0x0F, 0xF1, 0x05])  # JAL 0x803FC414
-    rom.write_bytes(0xBFC33C, PatchName.double_component_checker)
-    rom.write_bytes(0xBFC3DC, PatchName.downstairs_seal_checker)
-    rom.write_bytes(0xBFC414, PatchName.tlb_modifiers)
+    # On-the-fly TLB script modifier
+    rom.write_bytes(0xBFC338, PatchName.double_component_checker)
+    rom.write_bytes(0xBFC3D4, PatchName.downstairs_seal_checker)
+    rom.write_bytes(0xBFC408, PatchName.tlb_modifiers)
 
     # On-the-fly scene object data modifier hook
     rom.write_bytes(0xEAAC8, [0x0C, 0x0F, 0xF0, 0x8A])  # JAL 0x803FC228
@@ -359,43 +360,43 @@ def patch_rom(world, rom, player, offsets_to_ids):
 
     # Fix locked doors to check the key counters instead of their vanilla key locations' flags
     # Pickup flag check modifications:
-    #rom.write_bytes(0x10B2D8, [0x00, 0x00, 0x00, 0x02])  # Left Tower Door
-    #rom.write_bytes(0x10B2F0, [0x00, 0x00, 0x00, 0x03])  # Storeroom Door
-    #rom.write_bytes(0x10B2FC, [0x00, 0x00, 0x00, 0x01])  # Archives Door
-    #rom.write_bytes(0x10B314, [0x00, 0x00, 0x00, 0x04])  # Maze Gate
-    #rom.write_bytes(0x10B350, [0x00, 0x00, 0x00, 0x05])  # Copper Door
-    #rom.write_bytes(0x10B3A4, [0x00, 0x00, 0x00, 0x06])  # Torture Chamber Door
-    #rom.write_bytes(0x10B3B0, [0x00, 0x00, 0x00, 0x07])  # ToE Gate
-    #rom.write_bytes(0x10B3BC, [0x00, 0x00, 0x00, 0x08])  # Science Door1
-    #rom.write_bytes(0x10B3C8, [0x00, 0x00, 0x00, 0x09])  # Science Door2
-    #rom.write_bytes(0x10B3D4, [0x00, 0x00, 0x00, 0x0A])  # Science Door3
-    #rom.write_bytes(0x6F0094, [0x00, 0x00, 0x00, 0x0B])  # CT Door 1
-    #rom.write_bytes(0x6F00A4, [0x00, 0x00, 0x00, 0x0C])  # CT Door 2
-    #rom.write_bytes(0x6F00B4, [0x00, 0x00, 0x00, 0x0D])  # CT Door 3
+    rom.write_bytes(0x10B2D8, [0x00, 0x00, 0x00, 0x02])  # Left Tower Door
+    rom.write_bytes(0x10B2F0, [0x00, 0x00, 0x00, 0x03])  # Storeroom Door
+    rom.write_bytes(0x10B2FC, [0x00, 0x00, 0x00, 0x01])  # Archives Door
+    rom.write_bytes(0x10B314, [0x00, 0x00, 0x00, 0x04])  # Maze Gate
+    rom.write_bytes(0x10B350, [0x00, 0x00, 0x00, 0x05])  # Copper Door
+    rom.write_bytes(0x10B3A4, [0x00, 0x00, 0x00, 0x06])  # Torture Chamber Door
+    rom.write_bytes(0x10B3B0, [0x00, 0x00, 0x00, 0x07])  # ToE Gate
+    rom.write_bytes(0x10B3BC, [0x00, 0x00, 0x00, 0x08])  # Science Door1
+    rom.write_bytes(0x10B3C8, [0x00, 0x00, 0x00, 0x09])  # Science Door2
+    rom.write_bytes(0x10B3D4, [0x00, 0x00, 0x00, 0x0A])  # Science Door3
+    rom.write_bytes(0x6F0094, [0x00, 0x00, 0x00, 0x0B])  # CT Door 1
+    rom.write_bytes(0x6F00A4, [0x00, 0x00, 0x00, 0x0C])  # CT Door 2
+    rom.write_bytes(0x6F00B4, [0x00, 0x00, 0x00, 0x0D])  # CT Door 3
     # Item counter decrement check modifications:
-    #rom.write_bytes(0xEDA84, [0x00, 0x00, 0x00, 0x01])   # Archives Door
-    #rom.write_bytes(0xEDA8C, [0x00, 0x00, 0x00, 0x02])   # Left Tower Door
-    #rom.write_bytes(0xEDA94, [0x00, 0x00, 0x00, 0x03])   # Storeroom Door
-    #rom.write_bytes(0xEDA9C, [0x00, 0x00, 0x00, 0x04])   # Maze Gate
-    #rom.write_bytes(0xEDAA4, [0x00, 0x00, 0x00, 0x05])   # Copper Door
-    #rom.write_bytes(0xEDAAC, [0x00, 0x00, 0x00, 0x06])   # Torture Chamber Door
-    #rom.write_bytes(0xEDAB4, [0x00, 0x00, 0x00, 0x07])   # ToE Gate
-    #rom.write_bytes(0xEDABC, [0x00, 0x00, 0x00, 0x08])   # Science Door1
-    #rom.write_bytes(0xEDAC4, [0x00, 0x00, 0x00, 0x09])   # Science Door2
-    #rom.write_bytes(0xEDACC, [0x00, 0x00, 0x00, 0x0A])   # Science Door3
-    #rom.write_bytes(0xEDAD4, [0x00, 0x00, 0x00, 0x0B])   # CT Door 1
-    #rom.write_bytes(0xEDADC, [0x00, 0x00, 0x00, 0x0C])   # CT Door 2
-    #rom.write_bytes(0xEDAE4, [0x00, 0x00, 0x00, 0x0D])   # CT Door 3
+    rom.write_bytes(0xEDA84, [0x00, 0x00, 0x00, 0x01])   # Archives Door
+    rom.write_bytes(0xEDA8C, [0x00, 0x00, 0x00, 0x02])   # Left Tower Door
+    rom.write_bytes(0xEDA94, [0x00, 0x00, 0x00, 0x03])   # Storeroom Door
+    rom.write_bytes(0xEDA9C, [0x00, 0x00, 0x00, 0x04])   # Maze Gate
+    rom.write_bytes(0xEDAA4, [0x00, 0x00, 0x00, 0x05])   # Copper Door
+    rom.write_bytes(0xEDAAC, [0x00, 0x00, 0x00, 0x06])   # Torture Chamber Door
+    rom.write_bytes(0xEDAB4, [0x00, 0x00, 0x00, 0x07])   # ToE Gate
+    rom.write_bytes(0xEDABC, [0x00, 0x00, 0x00, 0x08])   # Science Door1
+    rom.write_bytes(0xEDAC4, [0x00, 0x00, 0x00, 0x09])   # Science Door2
+    rom.write_bytes(0xEDACC, [0x00, 0x00, 0x00, 0x0A])   # Science Door3
+    rom.write_bytes(0xEDAD4, [0x00, 0x00, 0x00, 0x0B])   # CT Door 1
+    rom.write_bytes(0xEDADC, [0x00, 0x00, 0x00, 0x0C])   # CT Door 2
+    rom.write_bytes(0xEDAE4, [0x00, 0x00, 0x00, 0x0D])   # CT Door 3
 
-    #rom.write_bytes(0x10AB2C, [0x80, 0x15, 0xFB, 0xD4])  # Maze Gate check code pointer adjustment
-    #rom.write_bytes(0xE2E14, PatchName.normal_door_hook)
-    #rom.write_bytes(0x106780, PatchName.normal_door_code)
-    #rom.write_bytes(0x6EF298, PatchName.ct_door_hook)
-    #rom.write_bytes(0x1067B0, PatchName.ct_door_code)
+    rom.write_bytes(0x10AB2C, [0x80, 0x15, 0xFB, 0xD4])  # Maze Gate check code pointer adjustment
+    rom.write_bytes(0xE2E14, PatchName.normal_door_hook)
+    rom.write_bytes(0xBFC4F0, PatchName.normal_door_code)
+    rom.write_bytes(0x6EF298, PatchName.ct_door_hook)
+    rom.write_bytes(0xBFC528, PatchName.ct_door_code)
 
     # Nitro and Mandragora patches
     # Prevent "can explode" flag from setting
-    #rom.write_bytes(0xB5D7AA, [0x00, 0x00, 0x00, 0x00])
+    rom.write_bytes(0xB5D7AA, [0x00, 0x00, 0x00, 0x00])
     # Prevent tossing Nitro in Hazardous Waste Disposers
     # rom.write_bytes(0xBF648, [0x24, 0x02, 0x00, 0x01])  # ADDIU	V0, R0, 0x0001
     # Prevent setting the "can explode" bitflag
@@ -407,6 +408,7 @@ def patch_rom(world, rom, player, offsets_to_ids):
 
 class CV64DeltaPatch(APDeltaPatch):
     hash = USHASH
+    bshash = BSUSHASH
     game = "Castlevania 64"
     patch_file_ending = ".apcv64"
 
@@ -419,11 +421,11 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
         file_name = get_base_rom_path(file_name)
-        base_rom_bytes = bytes(read_rom(open(file_name, "rb")))
+        base_rom_bytes = bytes(read_snes_rom(open(file_name, "rb")))
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
-        if USHASH != basemd5.hexdigest():
+        if USHASH != basemd5.hexdigest() and BSUSHASH != basemd5.hexdigest():
             raise Exception('Supplied Base Rom does not match known MD5 for US(1.0) release. '
                             'Get the correct game and version, then dump it.')
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
