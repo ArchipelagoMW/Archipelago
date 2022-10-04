@@ -163,8 +163,8 @@ Pokemon Red and Blue:
     extra_plus: 0
   old_man: # With Open Viridian City, the Old Man will let you through without needing to turn in Oak's Parcel.
     vanilla: 0
-    early_parcel: 0
-    open_viridian_city: 50
+    early_parcel: 50
+    open_viridian_city: 0
   tea: # Adds a Tea item to the item pool which the Saffron guards require instead of the vending machine drinks.
     #    Adds a location check to the Celadon Mansion 1F, where Tea is acquired in FireRed and LeafGreen.
     false: 50

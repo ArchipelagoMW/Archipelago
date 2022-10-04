@@ -86,7 +86,7 @@ class OldMan(Choice):
     option_vanilla = 0
     option_early_parcel = 1
     option_open_viridian_city = 2
-    default = 2
+    default = 1
 
 
 class Tea(Toggle):
