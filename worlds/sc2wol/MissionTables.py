@@ -62,6 +62,36 @@ vanilla_shuffle_order = [
     FillMission("all_in", [26, 27], "Char", completion_critical=True, or_requirements=True)
 ]
 
+mini_shuffle_order = [
+    FillMission("no_build", [-1], "Mar Sara", completion_critical=True),
+    FillMission("easy", [0], "Colonist"),
+    FillMission("medium", [1], "Colonist"),
+    FillMission("easy", [0], "Artifact", completion_critical=True),
+    FillMission("medium", [3], "Artifact", number=4, completion_critical=True),
+    FillMission("hard", [4], "Artifact", number=8, completion_critical=True),
+    FillMission("medium", [0], "Covert", number=2),
+    FillMission("hard", [6], "Covert"),
+    FillMission("medium", [0], "Rebellion", number=3),
+    FillMission("hard", [8], "Rebellion"),
+    FillMission("medium", [4], "Prophecy"),
+    FillMission("hard", [10], "Prophecy"),
+    FillMission("hard", [5], "Char", completion_critical=True),
+    FillMission("hard", [5], "Char", completion_critical=True),
+    FillMission("all_in", [12, 13], "Char", completion_critical=True, or_requirements=True)
+]
+
+gauntlet_order = [
+    FillMission("no_build", [-1], "Mar Sara", completion_critical=True),
+    FillMission("easy", [0], "Colonist", completion_critical=True),
+    FillMission("medium", [1], "Artifact", completion_critical=True),
+    FillMission("medium", [2], "Covert", completion_critical=True),
+    FillMission("hard", [3], "Rebellion", completion_critical=True),
+    FillMission("hard", [4], "Prophecy", completion_critical=True),
+    FillMission("all_in", [5], "Char", completion_critical=True)
+]
+
+mission_orders = [vanilla_shuffle_order, vanilla_shuffle_order, mini_shuffle_order, gauntlet_order]
+
 
 vanilla_mission_req_table = {
     "Liberation Day": MissionInfo(1, 7, [], "Mar Sara", completion_critical=True),
@@ -73,7 +103,7 @@ vanilla_mission_req_table = {
     "Haven's Fall": MissionInfo(7, 4, [5], "Colonist", number=7),
     "Smash and Grab": MissionInfo(8, 5, [3], "Artifact", completion_critical=True),
     "The Dig": MissionInfo(9, 4, [8], "Artifact", number=8, completion_critical=True),
-    "The Moebius Factor": MissionInfo(10, 9, [9], "Artifact", number=11, completion_critical=True),
+    "The Moebius Factor": MissionInfo(10, 7, [9], "Artifact", number=11, completion_critical=True),
     "Supernova": MissionInfo(11, 5, [10], "Artifact", number=14, completion_critical=True),
     "Maw of the Void": MissionInfo(12, 6, [11], "Artifact", completion_critical=True),
     "Devil's Playground": MissionInfo(13, 3, [3], "Covert", number=4),
@@ -97,3 +127,16 @@ vanilla_mission_req_table = {
 
 lookup_id_to_mission: Dict[int, str] = {
     data.id: mission_name for mission_name, data in vanilla_mission_req_table.items() if data.id}
+
+
+starting_mission_locations = {
+    "Liberation Day": "Liberation Day: Victory",
+    "Breakout": "Breakout: Victory",
+    "Ghost of a Chance": "Ghost of a Chance: Victory",
+    "Piercing the Shroud": "Piercing the Shroud: Victory",
+    "Whispers of Doom": "Whispers of Doom: Victory",
+    "Belly of the Beast": "Belly of the Beast: Victory",
+    "Zero Hour": "Zero Hour: First Group Rescued",
+    "Evacuation": "Evacuation: First Chysalis",
+    "Devil's Playground": "Devil's Playground: Tosh's Miners"
+}
