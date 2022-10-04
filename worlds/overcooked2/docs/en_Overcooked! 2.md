@@ -28,7 +28,7 @@ The following items were invented for Randomizer:
 - Throw/Catch
 - Sharp Knife
 - Dish Scrubber 
-- Remote Control Batteries
+- Control Stick Batteries
 - Lightweight Backpack
 - Faster Respawn Time
 - Emote (x6)
