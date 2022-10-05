@@ -645,6 +645,8 @@ class HKItem(Item):
             classification = ItemClassification.filler
         elif type in ("Mask", "Ore", "Vessel"):
             classification = ItemClassification.useful
+        elif type in ("Dreamer"):
+            classification = ItemClassification.progression_skip_balancing
         elif advancement:
             classification = ItemClassification.progression
         else:
