@@ -133,12 +133,13 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str
         raise Exception("At least one basic unit must be local")
 
     # The first world should also be the starting world
-    first_location = list(world.worlds[player].mission_req_table)[0]
-
-    if first_location == "In Utter Darkness":
-        first_location = first_location + ": Defeat"
+    first_mission = list(world.worlds[player].mission_req_table)[0]
+    if first_mission in starting_mission_locations:
+        first_location = starting_mission_locations[first_mission]
+    elif first_mission == "In Utter Darkness":
+        first_location = first_mission + ": Defeat"
     else:
-        first_location = first_location + ": Victory"
+        first_location = first_mission + ": Victory"
 
     return [assign_starter_item(world, player, excluded_items, locked_locations, first_location, local_basic_unit)]
 
