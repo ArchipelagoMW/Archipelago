@@ -38,7 +38,7 @@ bmds = [
     LocationData(LocationName.SciLab_1_East_BMD,            0xb31007, 0x20001d8, 0x80, 0x7694B4, 230, 1),
     LocationData(LocationName.SciLab_2_West_BMD,            0xb31008, 0x20001d9, 0x80, 0x76A4F4, 230, 1),
     LocationData(LocationName.SciLab_2_South_BMD,           0xb31009, 0x20001d9, 0x40, 0x76A4F4, 231, 1),
-    LocationData(LocationName.Yoka_1_North_MBD,             0xb3100a, 0x20001e0, 0x80, 0x76D1B0, 230, 1),
+    LocationData(LocationName.Yoka_1_North_BMD,             0xb3100a, 0x20001e0, 0x80, 0x76D1B0, 230, 1),
     LocationData(LocationName.Yoka_1_WWW_BMD,               0xb3100b, 0x20001e0, 0x20, 0x76D1B0, 232, 1),
     LocationData(LocationName.Yoka_2_Upper_BMD,             0xb3100c, 0x20001e1, 0x40, 0x76DC80, 231, 1),
     LocationData(LocationName.Yoka_2_Lower_BMD,             0xb3100d, 0x20001e1, 0x80, 0x76DC80, 230, 1),
@@ -245,44 +245,44 @@ jobs = [
 ]
 
 number_traders = [
-    LocationData(LocationName.Numberman_Code_01, 0xb310cc, 0x2000430, 0x01),
-    LocationData(LocationName.Numberman_Code_02, 0xb310cd, 0x2000430, 0x02),
-    LocationData(LocationName.Numberman_Code_03, 0xb310ce, 0x2000430, 0x04),
-    LocationData(LocationName.Numberman_Code_04, 0xb310cf, 0x2000430, 0x08),
-    LocationData(LocationName.Numberman_Code_05, 0xb310d0, 0x2000430, 0x10),
-    LocationData(LocationName.Numberman_Code_06, 0xb310d1, 0x2000430, 0x20),
-    LocationData(LocationName.Numberman_Code_07, 0xb310d2, 0x2000430, 0x40),
-    LocationData(LocationName.Numberman_Code_08, 0xb310d3, 0x2000430, 0x80),
-    LocationData(LocationName.Numberman_Code_09, 0xb310d4, 0x2000431, 0x01),
-    LocationData(LocationName.Numberman_Code_10, 0xb310d5, 0x2000431, 0x02),
-    LocationData(LocationName.Numberman_Code_11, 0xb310d6, 0x2000431, 0x04),
-    LocationData(LocationName.Numberman_Code_12, 0xb310d7, 0x2000431, 0x08),
-    LocationData(LocationName.Numberman_Code_13, 0xb310d8, 0x2000431, 0x10),
-    LocationData(LocationName.Numberman_Code_14, 0xb310d9, 0x2000431, 0x20),
-    LocationData(LocationName.Numberman_Code_15, 0xb310da, 0x2000431, 0x40),
-    LocationData(LocationName.Numberman_Code_16, 0xb310db, 0x2000432, 0x01),
-    LocationData(LocationName.Numberman_Code_17, 0xb310dc, 0x2000432, 0x02),
-    LocationData(LocationName.Numberman_Code_18, 0xb310dd, 0x2000432, 0x04),
-    LocationData(LocationName.Numberman_Code_19, 0xb310de, 0x2000432, 0x08),
-    LocationData(LocationName.Numberman_Code_20, 0xb310df, 0x2000432, 0x10),
-    LocationData(LocationName.Numberman_Code_21, 0xb310e0, 0x2000432, 0x20),
-    LocationData(LocationName.Numberman_Code_22, 0xb310e1, 0x2000432, 0x40),
-    LocationData(LocationName.Numberman_Code_23, 0xb310e2, 0x2000432, 0x80),
-    LocationData(LocationName.Numberman_Code_24, 0xb310e3, 0x2000433, 0x01),
-    LocationData(LocationName.Numberman_Code_25, 0xb310e4, 0x2000433, 0x02),
-    LocationData(LocationName.Numberman_Code_26, 0xb310e5, 0x2000433, 0x04),
-    LocationData(LocationName.Numberman_Code_27, 0xb310e6, 0x2000433, 0x08),
-    LocationData(LocationName.Numberman_Code_28, 0xb310e7, 0x2000433, 0x10),
-    LocationData(LocationName.Numberman_Code_29, 0xb310e8, 0x2000433, 0x20),
-    LocationData(LocationName.Numberman_Code_30, 0xb310e9, 0x2000433, 0x40),
-    LocationData(LocationName.Numberman_Code_31, 0xb310ea, 0x2000433, 0x80)
+    LocationData(LocationName.Numberman_Code_01, 0xb310cc, 0x2000430, 0x01, 0x800000, 30, 0),
+    LocationData(LocationName.Numberman_Code_02, 0xb310cd, 0x2000430, 0x02, 0x800000, 31, 0),
+    LocationData(LocationName.Numberman_Code_03, 0xb310ce, 0x2000430, 0x04, 0x800000, 32, 0),
+    LocationData(LocationName.Numberman_Code_04, 0xb310cf, 0x2000430, 0x08, 0x800000, 33, 0),
+    LocationData(LocationName.Numberman_Code_05, 0xb310d0, 0x2000430, 0x10, 0x800000, 34, 0),
+    LocationData(LocationName.Numberman_Code_06, 0xb310d1, 0x2000430, 0x20, 0x800000, 35, 0),
+    LocationData(LocationName.Numberman_Code_07, 0xb310d2, 0x2000430, 0x40, 0x800000, 36, 0),
+    LocationData(LocationName.Numberman_Code_08, 0xb310d3, 0x2000430, 0x80, 0x800000, 37, 0),
+    LocationData(LocationName.Numberman_Code_09, 0xb310d4, 0x2000431, 0x01, 0x800000, 38, 0),
+    LocationData(LocationName.Numberman_Code_10, 0xb310d5, 0x2000431, 0x02, 0x800000, 39, 0),
+    LocationData(LocationName.Numberman_Code_11, 0xb310d6, 0x2000431, 0x04, 0x800000, 40, 0),
+    LocationData(LocationName.Numberman_Code_12, 0xb310d7, 0x2000431, 0x08, 0x800000, 41, 0),
+    LocationData(LocationName.Numberman_Code_13, 0xb310d8, 0x2000431, 0x10, 0x800000, 42, 0),
+    LocationData(LocationName.Numberman_Code_14, 0xb310d9, 0x2000431, 0x20, 0x800000, 43, 0),
+    LocationData(LocationName.Numberman_Code_15, 0xb310da, 0x2000431, 0x40, 0x800000, 44, 0),
+    LocationData(LocationName.Numberman_Code_16, 0xb310db, 0x2000432, 0x01, 0x800000, 45, 0),
+    LocationData(LocationName.Numberman_Code_17, 0xb310dc, 0x2000432, 0x02, 0x800000, 46, 0),
+    LocationData(LocationName.Numberman_Code_18, 0xb310dd, 0x2000432, 0x04, 0x800000, 47, 0),
+    LocationData(LocationName.Numberman_Code_19, 0xb310de, 0x2000432, 0x08, 0x800000, 48, 0),
+    LocationData(LocationName.Numberman_Code_20, 0xb310df, 0x2000432, 0x10, 0x800000, 49, 0),
+    LocationData(LocationName.Numberman_Code_21, 0xb310e0, 0x2000432, 0x20, 0x800000, 50, 0),
+    LocationData(LocationName.Numberman_Code_22, 0xb310e1, 0x2000432, 0x40, 0x800000, 51, 0),
+    LocationData(LocationName.Numberman_Code_23, 0xb310e2, 0x2000432, 0x80, 0x800000, 52, 0),
+    LocationData(LocationName.Numberman_Code_24, 0xb310e3, 0x2000433, 0x01, 0x800000, 53, 0),
+    LocationData(LocationName.Numberman_Code_25, 0xb310e4, 0x2000433, 0x02, 0x800000, 54, 0),
+    LocationData(LocationName.Numberman_Code_26, 0xb310e5, 0x2000433, 0x04, 0x800000, 55, 0),
+    LocationData(LocationName.Numberman_Code_27, 0xb310e6, 0x2000433, 0x08, 0x800000, 56, 0),
+    LocationData(LocationName.Numberman_Code_28, 0xb310e7, 0x2000433, 0x10, 0x800000, 57, 0),
+    LocationData(LocationName.Numberman_Code_29, 0xb310e8, 0x2000433, 0x20, 0x800000, 58, 0),
+    LocationData(LocationName.Numberman_Code_30, 0xb310e9, 0x2000433, 0x40, 0x800000, 59, 0),
+    LocationData(LocationName.Numberman_Code_31, 0xb310ea, 0x2000433, 0x80, 0x800000, 60, 0)
 ]
 
 
 all_locations: typing.List[LocationData] = bmds + pmds + overworlds + jobs + number_traders
 location_table: typing.Dict[str, int] = {locData.name: locData.id for locData in all_locations}
 location_data_table: typing.Dict[str, LocationData] = {locData.name: locData for locData in all_locations}
-
+locations_by_id: typing.Dict[int, LocationData] = {locData.id: locData for locData in all_locations}
 
 def setup_locations(world, player: int):
     # If we later include options to change what gets added to the random pool,

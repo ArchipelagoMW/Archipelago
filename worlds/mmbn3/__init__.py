@@ -7,8 +7,8 @@ import threading
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, RegionType, Entrance
 from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
 from ..AutoWorld import WebWorld, World
-from .Items import MMBN3Item, ItemData, item_table, all_items
-from .Locations import MMBN3Location, all_locations, setup_locations, location_table
+from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequences
+from .Locations import MMBN3Location, all_locations, setup_locations, location_table, location_data_table
 from .Options import MMBN3Options
 from .Regions import regions
 from .Names import ItemName, LocationName
@@ -73,13 +73,16 @@ class MMBN3World(World):
                 else:
                     item = ItemData(item_id, ap_item.name, ap_item.classification, Items.ItemType.External)
                     item.recipient = self.world.player_name[ap_item.player]
-                rom.replace_item(location, item)
+                location_data = location_data_table[location_name]
+                # print("Placing item "+item.itemName+" at location "+location_data.name)
+                rom.replace_item(location_data, item)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ','_')}"\
                 if world.player_name[player] != 'Player%d' % player else ''
 
             rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.gba')
+            rom.write_changed_rom()
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 
@@ -131,15 +134,26 @@ class MMBN3World(World):
 
     def create_items(self) -> None:
         # First add in all progression and useful items
-        required_items = [item.itemName for item in all_items if item.progression != ItemClassification.filler]
-        self.world.itempool += required_items
+        required_items = []
+        for item in all_items:
+            if item.progression != ItemClassification.filler:
+                freq = item_frequences[item.itemName] if item.itemName in item_frequences else 1
+                required_items += [item.itemName] * freq
+
+        for itemName in required_items:
+            self.world.itempool.append(self.create_item(itemName))
 
         # Then, get a random amount of fillers until we have as many items as we have locations
-        filler_items = [item.itemName for item in all_items if item.progression == ItemClassification.filler]
-        remaining = len(all_locations) - len(required_items)
+        filler_items = []
+        for item in all_items:
+            if item.progression == ItemClassification.filler:
+                freq = item_frequences[item.itemName] if item.itemName in item_frequences else 1
+                filler_items += [item.itemName] * freq
 
+        remaining = len(all_locations) - len(required_items)
         for i in range(remaining):
-            self.world.itempool.append(self.world.random.choice(filler_items))
+            item = self.create_item(self.world.random.choice(filler_items))
+            self.world.itempool.append(item)
 
     def set_rules(self) -> None:
         """
@@ -149,11 +163,11 @@ class MMBN3World(World):
         has_www_id = lambda state: state.has(ItemName.WWW_ID, self.player)
         set_rule(self.world.get_location(LocationName.ACDC_1_PMD, self.player),
                  has_www_id)
-        set_rule(self.world.get_location(LocationName.SciLab_1_WWW_BMD),
+        set_rule(self.world.get_location(LocationName.SciLab_1_WWW_BMD, self.player),
                  has_www_id)
-        set_rule(self.world.get_location(LocationName.Yoka_1_WWW_BMD),
+        set_rule(self.world.get_location(LocationName.Yoka_1_WWW_BMD, self.player),
                  has_www_id)
-        set_rule(self.world.get_location(LocationName.Undernet_1_WWW_BMD),
+        set_rule(self.world.get_location(LocationName.Undernet_1_WWW_BMD, self.player),
                  has_www_id)
 
         # Set Job additional area access

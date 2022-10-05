@@ -79,7 +79,7 @@ keyItemList: typing.List[ItemData] = [
     ItemData(0xB31014, ItemName.RegUP2,                    ItemClassification.useful,      ItemType.KeyItem,  99),
     ItemData(0xB31015, ItemName.RegUP3,                    ItemClassification.useful,      ItemType.KeyItem, 100),
     ItemData(0xB31016, ItemName.Mr_Famous_Wristband,       ItemClassification.filler,      ItemType.KeyItem,  57),
-    ItemData(0xB31017, ItemName.SubMem,                    ItemClassification.filler,      ItemType.KeyItem, 101)
+    ItemData(0xB31017, ItemName.SubMem,                    ItemClassification.useful,      ItemType.KeyItem, 101)
 ]
 
 subChipList: typing.List[ItemData] = [
@@ -251,9 +251,30 @@ zennyList: typing.List[ItemData] = [
 ]
 
 bugFragList: typing.List[ItemData] = [
-    ItemData(0x0B310AB, ItemName.bugfrag_30, ItemClassification.filler, ItemType.BugFrag, count=30)
+    # ItemData(0x0B310AB, ItemName.bugfrag_30, ItemClassification.filler, ItemType.BugFrag, count=30)
 ]
 
+item_frequences = {
+    ItemName.Progressive_Undernet_Rank: 8,
+    ItemName.ExpMem: 2,
+    ItemName.Unlocker: 2,
+    ItemName.HPMemory: 23,
+    ItemName.RegUP1: 4,
+    ItemName.RegUP2: 13,
+    ItemName.RegUP3: 4,
+    ItemName.Untrap: 2,
+    ItemName.SubMem: 4,
+    ItemName.MiniEnrg: 3,
+    ItemName.FullEnrg: 5,
+    ItemName.CopyDmg_star: 3,
+    ItemName.Charge_plus_White: 2,
+    ItemName.Charge_plus_Pink: 2,
+    ItemName.zenny_600z: 2,
+    ItemName.zenny_800z: 2,
+    ItemName.zenny_1000z: 2,
+    ItemName.zenny_1200z: 2
+
+}
 all_items: typing.List[ItemData] = keyItemList + subChipList + chipList + programList + zennyList + bugFragList
 item_table: typing.Dict[str, ItemData] = {item.itemName: item for item in all_items}
 items_by_id: typing.Dict[int, ItemData] = {item.code: item for item in all_items}

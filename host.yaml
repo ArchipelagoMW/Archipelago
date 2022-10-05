@@ -154,4 +154,7 @@ smw_options:
   # Set this to false to never autostart a rom (such as after patching)
   # True for operating system default program
   # Alternatively, a path to a program to open the .sfc file with
+mmbn3_options:
+  # File name of the MMBN3 Blue US rom
+  rom_file: "Mega Man Battle Network 3 - Blue Version (USA).gba"
   rom_start: true

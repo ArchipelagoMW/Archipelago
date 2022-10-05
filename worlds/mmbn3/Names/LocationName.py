@@ -14,7 +14,7 @@ SciLab_2_West_BMD = "SciLab 2 West BMD"
 SciLab_2_South_BMD = "SciLab 2 South BMD"
 
 # Yoka Area
-Yoka_1_North_MBD = "Yoka 1 North MBD"
+Yoka_1_North_BMD = "Yoka 1 North BMD"
 Yoka_1_WWW_BMD = "Yoka 1 WWW BMD"
 Yoka_2_Upper_BMD = "Yoka 2 Upper BMD"
 Yoka_2_Lower_BMD = "Yoka 2 Lower BMD"

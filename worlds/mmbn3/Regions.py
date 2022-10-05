@@ -12,6 +12,7 @@ class region_info:
         self.locations = locations
 
 regions = [
+    region_info("Menu", ["ACDC Overworld"], []),
     region_info("ACDC Overworld",
                 ["ACDC Cyberworld", "SciLab Overworld", "Yoka Overworld", "Beach Overworld"],
                 [
@@ -160,6 +161,7 @@ regions = [
                     LocationName.Zoo_4_Northwest_BMD,
                     LocationName.Zoo_4_Southeast_BMD,
                     LocationName.Yoka_TV_BMD,
+                    LocationName.Yoka_Armor_BMD,
                     LocationName.Yoka_Hot_Spring_BMD,
                     LocationName.Yoka_Ticket_Machine_BMD,
                     LocationName.Yoka_Giraffe_BMD,
@@ -171,7 +173,7 @@ regions = [
     region_info("Yoka Cyberworld",
                 ["ACDC Cyberworld", "SciLab Cyberworld", "Beach Cyberworld"],
                 [
-                    LocationName.Yoka_1_North_MBD,
+                    LocationName.Yoka_1_North_BMD,
                     LocationName.Yoka_1_WWW_BMD,
                     LocationName.Yoka_1_PMD,
                     LocationName.Yoka_2_Lower_BMD,

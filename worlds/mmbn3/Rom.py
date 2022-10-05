@@ -1,10 +1,14 @@
 from ndspy import lz10
 from Patch import APDeltaPatch, read_rom
 
-import BN3RomUtils
 import Utils
 import os
 import hashlib
+import bsdiff4
+
+from .BN3RomUtils import ArchiveToReferences, CompressedArchives, ArchiveToSizeComp,\
+    ArchiveToSizeUncomp, generate_external_item_message, generate_item_message,\
+    read_u16_le, int16_to_byte_list_le, int32_to_byte_list_le
 
 CHECKSUM_BLUE = "6fe31df0144759b34ad666badaacc442"
 
@@ -66,7 +70,7 @@ class TextArchive:
         self.compressed = compressed
         self.scripts = {}
         self.scriptCount = 0xFF
-        self.references = BN3RomUtils.ArchiveToReferences[offset]
+        self.references = ArchiveToReferences[offset]
         self.unused_indices = []  # A list of places it's okay to inject new scripts
 
         if compressed:
@@ -79,11 +83,11 @@ class TextArchive:
             self.uncompressedData = data
             self.compressedData = lz10.compress(self.uncompressedData)
             self.compressedSize = len(self.compressedData)
-        self.scriptCount = (BN3RomUtils.read_u16_le(self.uncompressedData, 0)) >> 1
+        self.scriptCount = (read_u16_le(self.uncompressedData, 0)) >> 1
 
         for i in range(0, self.scriptCount):
-            start_offset = BN3RomUtils.read_u16_le(self.uncompressedData, i * 2)
-            next_offset = BN3RomUtils.read_u16_le(self.uncompressedData, (i + 1) * 2)
+            start_offset = read_u16_le(self.uncompressedData, i * 2)
+            next_offset = read_u16_le(self.uncompressedData, (i + 1) * 2)
             if start_offset != next_offset:
                 message_bytes = list(self.uncompressedData[start_offset:next_offset])
                 message = ArchiveScript(i, message_bytes)
@@ -96,7 +100,7 @@ class TextArchive:
         scripts = []
         byte_offset = self.scriptCount * 2
         for i in range(0, self.scriptCount):
-            header.extend(BN3RomUtils.int16_to_byte_list_le(byte_offset))
+            header.extend(int16_to_byte_list_le(byte_offset))
             if i in self.scripts:
                 script = self.scripts[i]
                 scriptbytes = script.get_bytes()
@@ -110,7 +114,7 @@ class TextArchive:
         if compressed:
             byte_data = lz10.compress(byte_data)
 
-        return byte_data
+        return bytearray(byte_data)
 
     def inject_item_message(self, script_index, message_index, new_bytes):
         # First step, if the old message had any flag sets, we need to keep them.
@@ -129,18 +133,23 @@ class TextArchive:
         original_size = self.compressedSize if self.compressed else self.uncompressedSize
 
         working_data = self.generate_data(self.compressed)
-
+        """
+        with open("C:/Users/digiholic/Projects/BN3AP/randomized-archives/"+hex(self.startOffset)+".bin", "wb") as tempFile:
+            tempFile.write(working_data)
+        return modified_rom_data
+        """
         if len(working_data) < original_size:
             # If it's shorter than the original data, we can pad the difference with FF and directrly replace
-            working_data.extend([0xFF] * (original_size - len(working_data)))
+            working_data.extend([0x00] * (original_size - len(working_data)))
             modified_rom_data[self.startOffset:self.startOffset+len(working_data)] = working_data
         else:
-            # It needs to start on an even byte. If the rom data is odd, add an FF
-            if len(modified_rom_data) % 2 != 0:
+            # It needs to start on a byte divisible by 4. If the rom data is not, add an FF
+            while len(modified_rom_data) % 4 != 0:
                 modified_rom_data.append(0xFF)
             new_start_offset = 0x08000000 + len(modified_rom_data)
-            offset_byte = BN3RomUtils.int32_to_byte_list_le(new_start_offset)
+            offset_byte = int32_to_byte_list_le(new_start_offset)
             modified_rom_data.extend(working_data)
+            print("Archive "+hex(self.startOffset)+" is now at "+hex(new_start_offset)+" and is now length "+hex(len(working_data)))
             for offset in self.references:
                 modified_rom_data[offset:offset+4] = offset_byte
         return modified_rom_data
@@ -152,30 +161,29 @@ class LocalRom:
         self.orig_buffer = None
         self.changed_archives = {}
 
-        # This should be the post-base-patch rom
-        with open(file, 'rb') as stream:
-            self.rom_data = read_rom(stream)
+        self.rom_data = bytearray(get_patched_rom_bytes(file))
 
     def get_data_chunk(self, start_offset, size):
         return self.rom_data[start_offset:start_offset + size]
 
     def replace_item(self, location, item):
+        print("Replacing item at location "+location.name+" with "+item.itemName)
         offset = location.text_archive_address
         # If the archive is already loaded, use that
         if offset in self.changed_archives:
             archive = self.changed_archives[offset]
         else:
-            is_compressed = offset in BN3RomUtils.CompressedArchives
-            size = BN3RomUtils.ArchiveToSizeComp[offset] if is_compressed\
-                else BN3RomUtils.ArchiveToSizeUncomp[offset]
+            is_compressed = offset in CompressedArchives
+            size = ArchiveToSizeComp[offset] if is_compressed\
+                else ArchiveToSizeUncomp[offset]
             data = self.get_data_chunk(offset, size)
             archive = TextArchive(data, offset, size, is_compressed)
             self.changed_archives[offset] = archive
 
         if item.type == "External":
-            item_bytes = BN3RomUtils.generate_external_item_message(item.name, item.recipient)
+            item_bytes = generate_external_item_message(item.name, item.recipient)
         else:
-            item_bytes = BN3RomUtils.generate_item_message(item)
+            item_bytes = generate_item_message(item)
         archive.inject_item_message(location.text_script_index, location.text_box_index,
                                     item_bytes)
 
@@ -183,7 +191,7 @@ class LocalRom:
         for archive in self.changed_archives.values():
             self.rom_data = archive.inject_into_rom(self.rom_data)
 
-    def write_rom(self, out_path):
+    def write_to_file(self, out_path):
         with open(out_path, "wb") as rom:
             rom.write(self.rom_data)
 
@@ -209,7 +217,6 @@ def get_base_rom_path(file_name: str = "") -> str:
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:
-    global rom_data
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
         file_name = get_base_rom_path(file_name)
@@ -225,14 +232,11 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
 
-"""
-def read_rom(path: str = "") -> bytes:
-    global rom_data
-    global modified_rom_data
 
-    with open(path, "rb") as rom:
-        rom_bytes = rom.read()
-        rom_data = bytearray(rom_bytes)
-        modified_rom_data = bytearray(rom_data[:])
-    return rom_bytes
-"""
+def get_patched_rom_bytes(file_name: str = "") -> bytes:
+    base_rom_bytes = get_base_rom_bytes(file_name)
+    patch_path = os.path.join(os.path.dirname(__file__), "data", "bn3-ap-patch.bsdiff")
+    with open(patch_path, 'rb') as patch_file:
+        patch_bytes = patch_file.read()
+        patched_rom_bytes = bsdiff4.patch(base_rom_bytes, patch_bytes)
+    return patched_rom_bytes
