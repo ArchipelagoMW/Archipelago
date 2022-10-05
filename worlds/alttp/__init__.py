@@ -7,22 +7,24 @@ import typing
 import Utils
 from BaseClasses import Item, CollectionState, Tutorial
 from .Dungeons import create_dungeons
-from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
+from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect, indirect_connections
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
 from .Options import alttp_options, smallkey_shuffle
-from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions
+from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
+    is_main_entrance
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
 from .Shops import create_shops, ShopSlotFill
 from .SubClasses import ALttPItem
-from ..AutoWorld import World, WebWorld, LogicMixin
+from worlds.AutoWorld import World, WebWorld, LogicMixin
 
 lttp_logger = logging.getLogger("A Link to the Past")
 
 extras_list = sum(difficulties['normal'].extras[0:5], [])
+
 
 class ALTTPWeb(WebWorld):
     setup_en = Tutorial(
@@ -230,6 +232,10 @@ class ALTTPWorld(World):
         world.random = old_random
         plando_connect(world, player)
 
+        for region_name, entrance_name in indirect_connections.items():
+            world.register_indirect_condition(self.world.get_region(region_name, player),
+                                              self.world.get_entrance(entrance_name, player))
+
     def collect_item(self, state: CollectionState, item: Item, remove=False):
         item_name = item.name
         if item_name.startswith('Progressive '):
@@ -358,7 +364,7 @@ class ALTTPWorld(World):
     def use_enemizer(self):
         world = self.world
         player = self.player
-        return (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
+        return (world.boss_shuffle[player] or world.enemy_shuffle[player]
                 or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
                 or world.pot_shuffle[player] or world.bush_shuffle[player]
                 or world.killable_thieves[player])
@@ -404,11 +410,7 @@ class ALTTPWorld(World):
                                deathlink=world.death_link[player],
                                allowcollect=world.allow_collect[player])
 
-            outfilepname = f'_P{player}'
-            outfilepname += f"_{world.get_file_safe_player_name(player).replace(' ', '_')}" \
-                if world.player_name[player] != 'Player%d' % player else ''
-
-            rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
+            rompath = os.path.join(output_directory, f"{self.world.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
             patch = LttPDeltaPatch(os.path.splitext(rompath)[0]+LttPDeltaPatch.patch_file_ending, player=player,
                                    player_name=world.player_name[player], patched_path=rompath)
@@ -419,6 +421,20 @@ class ALTTPWorld(World):
             raise
         finally:
             self.rom_name_available_event.set() # make sure threading continues and errors are collected
+
+    @classmethod
+    def stage_extend_hint_information(cls, world, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+        er_hint_data = {player: {} for player in world.get_game_players("A Link to the Past") if
+                        world.shuffle[player] != "vanilla" or world.retro_caves[player]}
+
+        for region in world.regions:
+            if region.player in er_hint_data and region.locations:
+                main_entrance = region.get_connecting_entrance(is_main_entrance)
+                for location in region.locations:
+                    if type(location.address) == int:  # skips events and crystals
+                        if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
+                            er_hint_data[region.player][location.address] = main_entrance.name
+        hint_data.update(er_hint_data)
 
     def modify_multidata(self, multidata: dict):
         import base64

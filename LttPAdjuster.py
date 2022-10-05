@@ -152,7 +152,7 @@ def adjust(args):
     vanillaRom = args.baserom
     if not os.path.exists(vanillaRom) and not os.path.isabs(vanillaRom):
         vanillaRom = local_path(vanillaRom)
-    if os.path.splitext(args.rom)[-1].lower() in {'.apbp', '.aplttp'}:
+    if os.path.splitext(args.rom)[-1].lower() == '.aplttp':
         import Patch
         meta, args.rom = Patch.create_rom_file(args.rom)
 
@@ -208,7 +208,7 @@ def adjustGUI():
     romEntry2 = Entry(romDialogFrame, textvariable=romVar2)
 
     def RomSelect2():
-        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc", ".apbp")), ("All Files", "*")])
+        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc", ".aplttp")), ("All Files", "*")])
         romVar2.set(rom)
 
     romSelectButton2 = Button(romDialogFrame, text='Select Rom', command=RomSelect2)
@@ -809,7 +809,7 @@ def get_rom_options_frame(parent=None):
     vars.auto_apply = StringVar(value=adjuster_settings.auto_apply)
     autoApplyFrame = Frame(romOptionsFrame)
     autoApplyFrame.grid(row=9, column=0, columnspan=2, sticky=W)
-    filler = Label(autoApplyFrame, text="Automatically apply last used settings on opening .apbp files")
+    filler = Label(autoApplyFrame, text="Automatically apply last used settings on opening .aplttp files")
     filler.pack(side=TOP, expand=True, fill=X)
     askRadio = Radiobutton(autoApplyFrame, text='Ask', variable=vars.auto_apply, value='ask')
     askRadio.pack(side=LEFT, padx=5, pady=5)

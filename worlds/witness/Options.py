@@ -15,9 +15,9 @@ class DisableNonRandomizedPuzzles(DefaultOnToggle):
 
 
 class EarlySecretArea(Toggle):
-    """Opens the Mountainside shortcut to the Mountain Secret Area from the start.
+    """Opens the Mountainside shortcut to the Caves from the start.
     (Otherwise known as "UTM", "Caves" or the "Challenge Area")"""
-    display_name = "Early Secret Area"
+    display_name = "Early Caves"
 
 
 class ShuffleSymbols(DefaultOnToggle):
@@ -58,15 +58,9 @@ class ShuffleVaultBoxes(Toggle):
     display_name = "Shuffle Vault Boxes"
 
 
-class ShuffleUncommonLocations(Toggle):
-    """Adds some optional puzzles that are somewhat difficult or out of the way.
-    Examples: Mountaintop River Shape, Tutorial Patio Floor, Theater Videos"""
-    display_name = "Shuffle Uncommon Locations"
-
-
 class ShufflePostgame(Toggle):
-    """Adds locations into the pool that are guaranteed to be locked behind your goal. Use this if you don't play with
-    forfeit on victory."""
+    """Adds locations into the pool that are guaranteed to become accessible before or at the same time as your goal.
+    Use this if you don't play with forfeit on victory."""
     display_name = "Shuffle Postgame"
 
 
@@ -90,7 +84,7 @@ class MountainLasers(Range):
 
 
 class ChallengeLasers(Range):
-    """Sets the amount of beams required to enter the secret area through the Mountain Bottom Layer Discard."""
+    """Sets the amount of beams required to enter the Caves through the Mountain Bottom Floor Discard."""
     display_name = "Required Lasers for Challenge"
     range_start = 1
     range_end = 11
@@ -122,7 +116,6 @@ the_witness_options: Dict[str, type] = {
     "disable_non_randomized_puzzles": DisableNonRandomizedPuzzles,
     "shuffle_discarded_panels": ShuffleDiscardedPanels,
     "shuffle_vault_boxes": ShuffleVaultBoxes,
-    "shuffle_uncommon": ShuffleUncommonLocations,
     "shuffle_postgame": ShufflePostgame,
     "victory_condition": VictoryCondition,
     "mountain_lasers": MountainLasers,
