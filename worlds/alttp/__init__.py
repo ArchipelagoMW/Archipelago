@@ -403,7 +403,6 @@ class ALTTPWorld(World):
                                world.menuspeed[player].current_key,
                                world.music[player],
                                world.sprite[player],
-                               world.oof[player],
                                palettes_options, world, player, True,
                                reduceflashing=world.reduceflashing[player] or world.is_race,
                                triforcehud=world.triforcehud[player].current_key,
