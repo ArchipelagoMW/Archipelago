@@ -478,7 +478,11 @@ def generate_output(self, output_directory: str):
         data[type_loc + 1] = poke_data.type_ids[matchup[1]]
         data[type_loc + 2] = matchup[2]
         type_loc += 3
-    self.type_chart = chart
+    # sort so that super-effective matchups occur first, to prevent dual "not very effective" / "super effective"
+    # matchups from leading to damage being ultimately divided by 2 and then multiplied by 2, which can lead to
+    # damage being reduced by 1 which leads to a "not very effective" message appearing due to my changes
+    # to the way effectiveness messages are generated.
+    self.type_chart = sorted(chart, key=lambda matchup: 0 - matchup[2])
 
     if self.world.normalize_encounter_chances[self.player].value:
         chances = [25, 51, 77, 103, 129, 155, 180, 205, 230, 255]
