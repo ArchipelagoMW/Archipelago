@@ -2,10 +2,12 @@ from typing import Dict, FrozenSet, Tuple, cast, List, Counter as _Counter
 from BaseClasses import CollectionState
 from zilliandomizer.logic_components.locations import Location
 from zilliandomizer.randomizer import Randomizer
-from zilliandomizer.logic_components.items import Item
+from zilliandomizer.logic_components.items import Item, items
 from .region import ZillionLocation
 from .item import ZillionItem
 from .id_maps import item_name_to_id
+
+zz_empty = items[4]
 
 # TODO: unit tests for these
 
@@ -16,6 +18,7 @@ def set_randomizer_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> int:
 
     returns a hash of the player and of the set locations
     """
+    # print("in logic set locs")
     _hash = p
     for loc in cs.world.get_locations():
         if loc.player == p:
@@ -23,7 +26,7 @@ def set_randomizer_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> int:
             zz_name = z_loc.zz_loc.name
             zz_item = z_loc.item.zz_item \
                 if isinstance(z_loc.item, ZillionItem) and z_loc.item.player == p \
-                else None
+                else zz_empty
             zz_r.locations[zz_name].item = zz_item
             _hash += hash(zz_name) ^ hash(zz_item)
     return _hash

@@ -1,3 +1,4 @@
+from collections import Counter
 from typing import Any, Dict, cast
 from Options import AssembleOptions, DefaultOnToggle, ItemDict, Range, SpecialRange, Toggle, Choice
 from zilliandomizer.options import \
@@ -196,14 +197,35 @@ def validate(wo: Any, p: int) -> ZzOptions:
     assert gun_option in VBLR_CHOICES, f"{gun_option} in {VBLR_CHOICES}"
     guns_required = char_to_gun["Champ"][cast(ZzVBLR, gun_option)].index(3)
 
+    floppy_req = cast(ZillionFloppyReq, wo.floppy_req[p])
+
     item_counts = cast(ZillionItemCounts, wo.item_counts[p])
-    item_counts.value["Opa-Opa"] = max(required_level - 1, item_counts.value["Opa-Opa"])
-    item_counts.value["Zillion"] = max(guns_required, item_counts.value["Zillion"])
-    while sum(item_counts.value.values()) > 144:
-        total = sum(item_counts.value.values())
-        scaler = 144 / total
-        for key in item_counts.value:
-            item_counts.value[key] = max(1, int(item_counts.value[key] * scaler))
+    minimums = Counter({
+        "ID Card": 0,
+        "Bread": 0,
+        "Opa-Opa": required_level - 1,
+        "Zillion": guns_required,
+        "Floppy Disk": floppy_req.value,
+        "Scope": 0,
+        "Red ID Card": 1
+    })
+    for key in minimums:
+        if key not in item_counts.value:
+            item_counts.value[key] = ZillionItemCounts.default[key]
+        item_counts.value[key] = max(minimums[key], item_counts.value[key])
+    max_movables = 144 - sum(minimums.values())
+    input_counter = Counter(item_counts.value)
+    movables = input_counter - minimums
+    while sum(movables.values()) > max_movables:
+        total = sum(movables.values())
+        scaler = max_movables / total
+        for key in movables:
+            movables[key] = int(movables[key] * scaler)
+    item_counts.value = movables + minimums
+
+    # now have required items, and <= 144
+
+    # now fill remaining with empty
     total = sum(item_counts.value.values())
     diff = 144 - total
     if "Empty" not in item_counts.value:
@@ -219,9 +241,6 @@ def validate(wo: Any, p: int) -> ZzOptions:
         opas_per_level.value -= 1
 
     # that should be all of the level requirements met
-
-    floppy_req = cast(ZillionFloppyReq, wo.floppy_req[p])
-    floppy_req.value = min(item_counts.value["Floppy Disk"], floppy_req.value)
 
     start_char = cast(ZillionStartChar, wo.start_char[p])
     start_char_name = start_char.get_current_option_name()

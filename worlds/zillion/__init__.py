@@ -287,12 +287,14 @@ class ZillionWorld(World):
         assert self.zz_randomizer, "generate_early hasn't been called"
         zz_options = self.zz_randomizer.options
 
+        # debug_zz_loc_ids: Dict[str, int] = {}
         empty = zz_items[4]
         multi_item = empty  # a different patcher method differentiates empty from ap multi item
         multi_items: Dict[str, Tuple[str, str]] = {}  # zz_loc_name to (item_name, player_name)
         for loc in self.world.get_locations():
             if loc.player == self.player:
                 z_loc = cast(ZillionLocation, loc)
+                # debug_zz_loc_ids[z_loc.zz_loc.name] = id(z_loc.zz_loc)
                 if z_loc.item is None:
                     self.logger.warn("generate_output location has no item - is that ok?")
                     z_loc.zz_loc.item = empty
@@ -300,11 +302,24 @@ class ZillionWorld(World):
                     z_item = cast(ZillionItem, z_loc.item)
                     z_loc.zz_loc.item = z_item.zz_item
                 else:  # another player's item
+                    # print(f"put multi item in {z_loc.zz_loc.name}")
                     z_loc.zz_loc.item = multi_item
                     multi_items[z_loc.zz_loc.name] = (
                         z_loc.item.name,
                         self.world.get_player_name(z_loc.item.player)
                     )
+        # debug_zz_loc_ids.sort()
+        # for name, id_ in debug_zz_loc_ids.items():
+        #     print(id_)
+        # print("size:", len(debug_zz_loc_ids))
+
+        # debug_loc_to_id: Dict[str, int] = {}
+        # regions = self.zz_randomizer.regions
+        # for region in regions.values():
+        #     for loc in region.locations:
+        #         if loc.name not in self.zz_randomizer.locations:
+        #             print(f"region {region.name} had location {loc.name} not in locations")
+        #         debug_loc_to_id[loc.name] = id(loc)
 
         # verify that every location got an item
         for zz_loc in self.zz_randomizer.locations.values():
