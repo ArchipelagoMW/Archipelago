@@ -63,7 +63,7 @@ class BumpStikWorld(World):
         create_regions(self.world, self.player)
 
     def create_items(self):
-        frequencies = [0, 0, 0, 0, 0, 2, 5, 25, 33]
+        frequencies = [0, 0, 0, 0, 0, 4, 5, 25, 33]
         item_pool = []
 
         for i, name in enumerate(item_table):
