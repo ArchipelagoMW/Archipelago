@@ -90,7 +90,53 @@ gauntlet_order = [
     FillMission("all_in", [5], "Char", completion_critical=True)
 ]
 
-mission_orders = [vanilla_shuffle_order, vanilla_shuffle_order, mini_shuffle_order, gauntlet_order]
+grid_order = [
+    FillMission("no_build", [-1], "Colonist"),
+    FillMission("medium", [0], "Colonist"),
+    FillMission("medium", [1, 6, 3], "Colonist", or_requirements=True),
+    FillMission("hard", [2, 7], "Colonist", or_requirements=True),
+    FillMission("easy", [0], "Artifact"),
+    FillMission("medium", [1, 4], "Artifact", or_requirements=True),
+    FillMission("hard", [2, 5, 10, 7], "Artifact", or_requirements=True),
+    FillMission("hard", [3, 6, 11], "Artifact", or_requirements=True),
+    FillMission("medium", [4, 9], "Covert", or_requirements=True),
+    FillMission("hard", [5, 8, 10], "Covert", or_requirements=True),
+    FillMission("hard", [6, 9, 11], "Covert", or_requirements=True),
+    FillMission("hard", [7, 10], "Covert", or_requirements=True),
+    FillMission("hard", [8, 13], "Rebellion", or_requirements=True),
+    FillMission("hard", [9, 12, 14], "Rebellion", or_requirements=True),
+    FillMission("hard", [10, 13, 15], "Rebellion", or_requirements=True),
+    FillMission("all_in", [11, 14], "Rebellion", or_requirements=True)
+]
+
+mini_grid_order = [
+    FillMission("no_build", [-1], "Colonist"),
+    FillMission("medium", [0], "Colonist"),
+    FillMission("medium", [1, 5], "Colonist", or_requirements=True),
+    FillMission("easy", [0], "Artifact"),
+    FillMission("medium", [1, 3], "Artifact", or_requirements=True),
+    FillMission("hard", [2, 4, 8], "Artifact", or_requirements=True),
+    FillMission("medium", [3, 7], "Covert", or_requirements=True),
+    FillMission("hard", [4, 6, 8], "Covert", or_requirements=True),
+    FillMission("all_in", [5, 7], "Covert", or_requirements=True)
+]
+
+blitz_order = [
+    FillMission("no_build", [-1], "Mar Sara"),
+    FillMission("easy", [-1], "Mar Sara"),
+    FillMission("medium", [0, 1], "Colonist", number=1, or_requirements=True),
+    FillMission("medium", [0, 1], "Colonist", number=1, or_requirements=True),
+    FillMission("medium", [0, 1], "Artifact", number=2, or_requirements=True),
+    FillMission("medium", [0, 1], "Artifact", number=2, or_requirements=True),
+    FillMission("hard", [0, 1], "Covert", number=3, or_requirements=True),
+    FillMission("hard", [0, 1], "Covert", number=3, or_requirements=True),
+    FillMission("hard", [0, 1], "Rebellion", number=4, or_requirements=True),
+    FillMission("hard", [0, 1], "Rebellion", number=4, or_requirements=True),
+    FillMission("hard", [0, 1], "Char", number=5, or_requirements=True),
+    FillMission("all_in", [0, 1], "Char", number=5, or_requirements=True)
+]
+
+mission_orders = [vanilla_shuffle_order, vanilla_shuffle_order, mini_shuffle_order, grid_order, mini_grid_order, blitz_order, gauntlet_order]
 
 
 vanilla_mission_req_table = {

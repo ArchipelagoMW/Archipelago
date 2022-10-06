@@ -711,7 +711,7 @@ def calc_available_missions(ctx: SC2Context, unlocks=None):
     return available_missions
 
 
-def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete):
+def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete: int, mission_path: list[str] = []):
     """Returns a bool signifying if the mission has all requirements complete and can be done
 
     Arguments:
@@ -719,6 +719,12 @@ def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete
     locations_to_check -- the mission string name to check
     missions_complete -- an int of how many missions have been completed
 """
+    # Tracking mission path to prevent infinite recursion
+    if not mission_path:
+        mission_path = []
+    if mission_name in mission_path:
+        return False
+    mission_path.append(mission_name)
     if len(ctx.mission_req_table[mission_name].required_world) >= 1:
         # A check for when the requirements are being or'd
         or_success = False
@@ -736,7 +742,7 @@ def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete
                     req_success = False
 
             # Recursively check required mission to see if it's requirements are met, in case !collect has been done
-            if not mission_reqs_completed(ctx, list(ctx.mission_req_table)[req_mission - 1], missions_complete):
+            if not mission_reqs_completed(ctx, list(ctx.mission_req_table)[req_mission - 1], missions_complete, mission_path):
                 if not ctx.mission_req_table[mission_name].or_requirements:
                     return False
                 else:
