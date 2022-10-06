@@ -452,7 +452,6 @@ begin
     Result := zlrom
   else if Assigned(ZlROMFilePage) then
     begin
-      # TODO: Zillion MD5
       R := CompareStr(GetMD5OfFile(ZlROMFilePage.Values[0]), 'd4bf9e7bcf9a48da53785d2ae7bc4270');
       if R <> 0 then
         MsgBox('Zillion ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
