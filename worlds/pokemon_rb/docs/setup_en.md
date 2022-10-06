@@ -128,10 +128,17 @@ Pokemon Red and Blue:
   rival_name: # Your rival's name. Cannot exceed 7 characters.
     #    See the setup guide on archipelago.gg for a list of allowed characters.
     GARY
-  victory_road_condition: # Number of badges required to reach Victory Road.
+  elite_four_condition: # Number of badges required to challenge the Elite Four once the Indigo Plateau has been reached.
     #    Your rival will reveal the amount needed on the first Route 22 battle (after turning in Oak's Parcel).
     # you can add additional values between minimum and maximum
-    2: 0 # minimum value
+    0: 0 # minimum value
+    8: 50 # maximum value
+    random: 0
+    random-low: 0
+    random-high: 0
+  victory_road_condition: # Number of badges required to reach Victory Road.
+    # you can add additional values between minimum and maximum
+    0: 0 # minimum value
     8: 50 # maximum value
     random: 0
     random-low: 0
