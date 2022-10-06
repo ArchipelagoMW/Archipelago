@@ -26,7 +26,9 @@ ModuleUpdate.update()
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
 from Utils import output_path, local_path, user_path, open_file, get_cert_none_ssl_context, persistent_store, \
     get_adjuster_settings, tkinter_center_window, init_logging
-from Patch import GAME_ALTTP
+
+
+GAME_ALTTP = "A Link to the Past"
 
 
 class AdjusterWorld(object):

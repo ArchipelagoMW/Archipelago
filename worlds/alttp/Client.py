@@ -5,7 +5,6 @@ import shutil
 
 import Utils
 from CommonClient import gui_enabled
-from Patch import GAME_ALTTP
 
 from SNIClient import Context, snes_logger, snes_read, snes_buffered_write, snes_flush_writes, \
                       ROM_START, WRAM_START, WRAM_SIZE, SRAM_START, ROMNAME_SIZE
@@ -13,6 +12,15 @@ from SNIClient import Context, snes_logger, snes_read, snes_buffered_write, snes
 from worlds.alttp import Shops, Regions
 from worlds.alttp.Rom import ROM_PLAYER_LIMIT
 
+snes_logger = logging.getLogger("SNES")
+
+GAME_ALTTP = "A Link to the Past"
+
+# FXPAK Pro protocol memory mapping used by SNI
+ROM_START = 0x000000
+WRAM_START = 0xF50000
+WRAM_SIZE = 0x20000
+SRAM_START = 0xE00000
 
 ROMNAME_START = SRAM_START + 0x2000
 ROMNAME_SIZE = 0x15
@@ -588,9 +596,9 @@ async def deathlink_kill_player(ctx: Context):
             snes_buffered_write(ctx, WRAM_START + 0x0373,
                                 bytes([8]))  # deal 1 full heart of damage at next opportunity
 
+        await snes_flush_writes(ctx)
+        await asyncio.sleep(1)
 
-async def deathlink_confirm_kill(ctx: Context):
-    if ctx.game == GAME_ALTTP:
         gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
         if not gamemode or gamemode[0] in DEATH_MODES:
             ctx.death_state = DeathState.dead

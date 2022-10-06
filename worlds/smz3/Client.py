@@ -11,8 +11,17 @@ from Patch import GAME_SMZ3
 
 snes_logger = logging.getLogger("SNES")
 
+GAME_SMZ3 = "SMZ3"
+
+# FXPAK Pro protocol memory mapping used by SNI
+ROM_START = 0x000000
+WRAM_START = 0xF50000
+WRAM_SIZE = 0x20000
+SRAM_START = 0xE00000
+
 # SMZ3
 SMZ3_ROMNAME_START = ROM_START + 0x00FFC0
+ROMNAME_SIZE = 0x15
 
 SAVEDATA_START = WRAM_START + 0xF000
 

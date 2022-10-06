@@ -14,6 +14,7 @@ logger = logging.getLogger("Super Metroid")
 from .Regions import create_regions
 from .Rules import set_rules, add_entrance_rule
 from .Options import sm_options
+from .Client import SMSNIClient
 from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT, SMDeltaPatch, get_sm_symbols
 import Utils
 
