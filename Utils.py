@@ -11,6 +11,8 @@ import io
 import collections
 import importlib
 import logging
+from typing import BinaryIO
+
 from yaml import load, load_all, dump, SafeLoader
 
 try:
@@ -217,11 +219,11 @@ def get_public_ipv6() -> str:
     return ip
 
 
-OptionType = typing.Dict[str, typing.Dict[str, typing.Any]]
+OptionsType = typing.Dict[str, typing.Dict[str, typing.Any]]
 
 
 @cache_argsless
-def get_default_options() -> OptionType:
+def get_default_options() -> OptionsType:
     # Refer to host.yaml for comments as to what all these options mean.
     options = {
         "general_options": {
@@ -288,6 +290,11 @@ def get_default_options() -> OptionType:
             "sni": "SNI",
             "rom_start": True,
         },
+        "smw_options": {
+            "rom_file": "Super Mario World (USA).sfc",
+            "sni": "SNI",
+            "rom_start": True,
+        },
         "zillion_options": {
             "rom_file": "Zillion (UE) [!].sms",
             # RetroArch doesn't make it easy to launch a game from the command line.
@@ -299,7 +306,7 @@ def get_default_options() -> OptionType:
     return options
 
 
-def update_options(src: dict, dest: dict, filename: str, keys: list) -> OptionType:
+def update_options(src: dict, dest: dict, filename: str, keys: list) -> OptionsType:
     for key, value in src.items():
         new_keys = keys.copy()
         new_keys.append(key)
@@ -319,7 +326,7 @@ def update_options(src: dict, dest: dict, filename: str, keys: list) -> OptionTy
 
 
 @cache_argsless
-def get_options() -> OptionType:
+def get_options() -> OptionsType:
     filenames = ("options.yaml", "host.yaml")
     locations: typing.List[str] = []
     if os.path.join(os.getcwd()) != local_path():
@@ -402,7 +409,7 @@ class RestrictedUnpickler(pickle.Unpickler):
         if module == "worlds.generic" and name in {"PlandoItem", "PlandoConnection"}:
             return getattr(self.generic_properties_module, name)
         # pep 8 specifies that modules should have "all-lowercase names" (options, not Options)
-        if module.endswith("ptions"):
+        if module.lower().endswith("options"):
             if module == "Options":
                 mod = self.options_module
             else:
@@ -633,3 +640,11 @@ def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset
         else:
             return element.lower()
     return sorted(data, key=lambda i: sorter(key(i)) if key else sorter(i))
+
+
+def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
+    """Reads rom into bytearray and optionally strips off any smc header"""
+    buffer = bytearray(stream.read())
+    if strip_header and len(buffer) % 0x400 == 0x200:
+        return buffer[0x200:]
+    return buffer

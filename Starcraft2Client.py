@@ -12,21 +12,9 @@ import typing
 import queue
 from pathlib import Path
 
-import nest_asyncio
-import sc2
-from sc2.bot_ai import BotAI
-from sc2.data import Race
-from sc2.main import run_game
-from sc2.player import Bot
-
-import NetUtils
-from MultiServer import mark_raw
+# CommonClient import first to trigger ModuleUpdater
+from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows
-from worlds.sc2wol import SC2WoLWorld
-from worlds.sc2wol.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups
-from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
-from worlds.sc2wol.MissionTables import lookup_id_to_mission
-from worlds.sc2wol.Regions import MissionInfo
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -34,10 +22,21 @@ if __name__ == "__main__":
 logger = logging.getLogger("Client")
 sc2_logger = logging.getLogger("Starcraft2")
 
-import colorama
+import nest_asyncio
+import sc2
+from sc2.bot_ai import BotAI
+from sc2.data import Race
+from sc2.main import run_game
+from sc2.player import Bot
+from worlds.sc2wol import SC2WoLWorld
+from worlds.sc2wol.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups
+from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
+from worlds.sc2wol.MissionTables import lookup_id_to_mission
+from worlds.sc2wol.Regions import MissionInfo
 
-from NetUtils import ClientStatus, RawJSONtoTextParser
-from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
+import colorama
+from NetUtils import ClientStatus, NetworkItem, RawJSONtoTextParser
+from MultiServer import mark_raw
 
 nest_asyncio.apply()
 max_bonus: int = 8
@@ -295,34 +294,37 @@ class SC2Context(CommonContext):
                             category_panel.add_widget(
                                 Label(text=category, size_hint_y=None, height=50, outline_width=1))
 
-                            # Map is completed
                             for mission in categories[category]:
-                                text = mission
-                                tooltip = ""
+                                text: str = mission
+                                tooltip: str = ""
 
                                 # Map has uncollected locations
                                 if mission in unfinished_missions:
                                     text = f"[color=6495ED]{text}[/color]"
 
-                                    tooltip = f"Uncollected locations:\n"
-                                    tooltip += "\n".join([self.ctx.location_names[loc] for loc in
-                                                          self.ctx.locations_for_mission(mission)
-                                                          if loc in self.ctx.missing_locations])
                                 elif mission in available_missions:
                                     text = f"[color=FFFFFF]{text}[/color]"
                                 # Map requirements not met
                                 else:
                                     text = f"[color=a9a9a9]{text}[/color]"
                                     tooltip = f"Requires: "
-                                    if len(self.ctx.mission_req_table[mission].required_world) > 0:
+                                    if self.ctx.mission_req_table[mission].required_world:
                                         tooltip += ", ".join(list(self.ctx.mission_req_table)[req_mission - 1] for
                                                              req_mission in
                                                              self.ctx.mission_req_table[mission].required_world)
 
-                                        if self.ctx.mission_req_table[mission].number > 0:
+                                        if self.ctx.mission_req_table[mission].number:
                                             tooltip += " and "
-                                    if self.ctx.mission_req_table[mission].number > 0:
+                                    if self.ctx.mission_req_table[mission].number:
                                         tooltip += f"{self.ctx.mission_req_table[mission].number} missions completed"
+                                remaining_location_names: typing.List[str] = [
+                                    self.ctx.location_names[loc] for loc in self.ctx.locations_for_mission(mission)
+                                    if loc in self.ctx.missing_locations]
+                                if remaining_location_names:
+                                    if tooltip:
+                                        tooltip += "\n"
+                                    tooltip += f"Uncollected locations:\n"
+                                    tooltip += "\n".join(remaining_location_names)
 
                                 mission_button = MissionButton(text=text, size_hint_y=None, height=50)
                                 mission_button.tooltip_text = tooltip
@@ -354,8 +356,9 @@ class SC2Context(CommonContext):
 
         self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
-
-        Builder.load_file(Utils.local_path(os.path.dirname(SC2WoLWorld.__file__), "Starcraft2.kv"))
+        import pkgutil
+        data = pkgutil.get_data(SC2WoLWorld.__module__, "Starcraft2.kv").decode()
+        Builder.load_string(data)
 
     async def shutdown(self):
         await super(SC2Context, self).shutdown()
@@ -437,8 +440,8 @@ wol_default_categories = [
 ]
 
 
-def calculate_items(items: typing.List[NetUtils.NetworkItem]) -> typing.List[int]:
-    network_item: NetUtils.NetworkItem
+def calculate_items(items: typing.List[NetworkItem]) -> typing.List[int]:
+    network_item: NetworkItem
     accumulators: typing.List[int] = [0 for _ in type_flaggroups]
 
     for network_item in items:
@@ -790,7 +793,12 @@ def check_game_install_path() -> bool:
         with open(einfo) as f:
             content = f.read()
         if content:
-            base = re.search(r" = (.*)Versions", content).group(1)
+            try:
+                base = re.search(r" = (.*)Versions", content).group(1)
+            except AttributeError:
+                sc2_logger.warning(f"Found {einfo}, but it was empty. Run SC2 through the Blizzard launcher, then "
+                                   f"try again.")
+                return False
             if os.path.exists(base):
                 executable = sc2.paths.latest_executeble(Path(base).expanduser() / "Versions")
 
@@ -807,7 +815,8 @@ def check_game_install_path() -> bool:
             else:
                 sc2_logger.warning(f"{einfo} pointed to {base}, but we could not find an SC2 install there.")
     else:
-        sc2_logger.warning(f"Couldn't find {einfo}. Please run /set_path with your SC2 install directory.")
+        sc2_logger.warning(f"Couldn't find {einfo}. Run SC2 through the Blizzard launcher, then try again. "
+                           f"If that fails, please run /set_path with your SC2 install directory.")
     return False
 
 

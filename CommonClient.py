@@ -164,7 +164,7 @@ class CommonContext:
     # current message box through kvui
     _messagebox = None
 
-    def __init__(self, server_address, password):
+    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str]) -> None:
         # server state
         self.server_address = server_address
         self.username = None
@@ -244,7 +244,8 @@ class CommonContext:
         if self.server_task is not None:
             await self.server_task
 
-    async def send_msgs(self, msgs: typing.List[typing.Dict[str, typing.Any]]) -> None:
+    async def send_msgs(self, msgs: typing.List[typing.Any]) -> None:
+        """ `msgs` JSON serializable """
         if not self.server or not self.server.socket.open or self.server.socket.closed:
             return
         await self.server.socket.send(encode(msgs))

@@ -2,7 +2,7 @@ import bsdiff4  # type: ignore
 import yaml
 from typing import Any, BinaryIO, Dict, Optional, cast
 import Utils
-from Patch import APDeltaPatch
+from worlds.Files import APDeltaPatch
 import os
 
 # TODO: Make sure everything here is necessary and right.

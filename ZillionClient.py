@@ -1,11 +1,13 @@
 import asyncio
-import subprocess
 from typing import Any, Coroutine, Dict, Type
-import colorama
-from NetUtils import ClientStatus
-import Utils
+
+# CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
+from NetUtils import ClientStatus
+import Utils
+
+import colorama  # type: ignore
 
 from zilliandomizer.zri.memory import Memory
 from zilliandomizer.zri import events
