@@ -138,3 +138,12 @@ dkc3_options:
   # True for operating system default program
   # Alternatively, a path to a program to open the .sfc file with
   rom_start: true
+zillion_options:
+  # File name of the Zillion US rom
+  rom_file: "Zillion (UE) [!].sms"
+  # Set this to false to never autostart a rom (such as after patching)
+  # True for operating system default program
+  # Alternatively, a path to a program to open the .sfc file with
+  # RetroArch doesn't make it easy to launch a game from the command line.
+  # You have to know the path to the emulator core library on the user's computer.
+  rom_start: "retroarch"
