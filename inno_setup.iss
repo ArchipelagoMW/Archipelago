@@ -58,6 +58,7 @@ Name: "generator/dkc3";   Description: "Donkey Kong Country 3 ROM Setup"; Types:
 Name: "generator/soe";    Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/lttp";   Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
 Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296; Flags: disablenouninstallwarning
+Name: "generator/zl";     Description: "Zillion ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 150000; Flags: disablenouninstallwarning
 Name: "server";           Description: "Server"; Types: full hosting
 Name: "client";           Description: "Clients"; Types: full playing
 Name: "client/sni";       Description: "SNI Client"; Types: full playing
@@ -70,6 +71,7 @@ Name: "client/oot";       Description: "Ocarina of Time"; Types: full playing
 Name: "client/ff1";       Description: "Final Fantasy 1"; Types: full playing
 Name: "client/cf";        Description: "ChecksFinder"; Types: full playing
 Name: "client/sc2";       Description: "Starcraft 2"; Types: full playing
+Name: "client/zl";        Description: "Zillion"; Types: full playing
 Name: "client/text";      Description: "Text, to !command and chat"; Types: full playing
 
 [Dirs]
@@ -81,6 +83,7 @@ Source: "{code:GetSMROMPath}"; DestDir: "{app}"; DestName: "Super Metroid (JU).s
 Source: "{code:GetDKC3ROMPath}"; DestDir: "{app}"; DestName: "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc"; Flags: external; Components: client/sni/dkc3 or generator/dkc3
 Source: "{code:GetSoEROMPath}"; DestDir: "{app}"; DestName: "Secret of Evermore (USA).sfc"; Flags: external; Components: generator/soe
 Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: client/oot or generator/oot
+Source: "{code:GetZlROMPath}"; DestDir: "{app}"; DestName: "Zillion (UE) [!].sms"; Flags: external; Components: client/zl or generator/zl
 Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#source_path}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/sni
 Source: "{#source_path}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
@@ -94,6 +97,7 @@ Source: "{#source_path}\ArchipelagoLttPAdjuster.exe"; DestDir: "{app}"; Flags: i
 Source: "{#source_path}\ArchipelagoMinecraftClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/minecraft
 Source: "{#source_path}\ArchipelagoOoTClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/oot
 Source: "{#source_path}\ArchipelagoOoTAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/oot
+Source: "{#source_path}\ArchipelagoZillionClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/zl
 Source: "{#source_path}\ArchipelagoFF1Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/ff1
 Source: "{#source_path}\ArchipelagoChecksFinderClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/cf
 Source: "{#source_path}\ArchipelagoStarcraft2Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sc2
@@ -107,6 +111,7 @@ Name: "{group}\{#MyAppName} SNI Client"; Filename: "{app}\ArchipelagoSNIClient.e
 Name: "{group}\{#MyAppName} Factorio Client"; Filename: "{app}\ArchipelagoFactorioClient.exe"; Components: client/factorio
 Name: "{group}\{#MyAppName} Minecraft Client"; Filename: "{app}\ArchipelagoMinecraftClient.exe"; Components: client/minecraft
 Name: "{group}\{#MyAppName} Ocarina of Time Client"; Filename: "{app}\ArchipelagoOoTClient.exe"; Components: client/oot
+Name: "{group}\{#MyAppName} Zillion Client"; Filename: "{app}\ArchipelagoZillionClient.exe"; Components: client/zl
 Name: "{group}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Components: client/ff1
 Name: "{group}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Components: client/cf
 Name: "{group}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Components: client/sc2
@@ -117,6 +122,7 @@ Name: "{commondesktop}\{#MyAppName} SNI Client"; Filename: "{app}\ArchipelagoSNI
 Name: "{commondesktop}\{#MyAppName} Factorio Client"; Filename: "{app}\ArchipelagoFactorioClient.exe"; Tasks: desktopicon; Components: client/factorio
 Name: "{commondesktop}\{#MyAppName} Minecraft Client"; Filename: "{app}\ArchipelagoMinecraftClient.exe"; Tasks: desktopicon; Components: client/minecraft
 Name: "{commondesktop}\{#MyAppName} Ocarina of Time Client"; Filename: "{app}\ArchipelagoOoTClient.exe"; Tasks: desktopicon; Components: client/oot
+Name: "{commondesktop}\{#MyAppName} Zillion Client"; Filename: "{app}\ArchipelagoZillionClient.exe"; Tasks: desktopicon; Components: client/zl
 Name: "{commondesktop}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Tasks: desktopicon; Components: client/ff1
 Name: "{commondesktop}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Tasks: desktopicon; Components: client/cf
 Name: "{commondesktop}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Tasks: desktopicon; Components: client/sc2
@@ -150,6 +156,11 @@ Root: HKCR; Subkey: ".apdkc3";                                 ValueData: "{#MyA
 Root: HKCR; Subkey: "{#MyAppName}dkc3patch";                     ValueData: "Archipelago Donkey Kong Country 3 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}dkc3patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}dkc3patch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
+
+Root: HKCR; Subkey: ".apzl";                                   ValueData: "{#MyAppName}zlpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/zl
+Root: HKCR; Subkey: "{#MyAppName}zlpatch";                     ValueData: "Archipelago Zillion Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/zl
+Root: HKCR; Subkey: "{#MyAppName}zlpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoZillionClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/zl
+Root: HKCR; Subkey: "{#MyAppName}zlpatch\shell\open\command";  ValueData: """{app}\ArchipelagoZillionClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/zl
 
 Root: HKCR; Subkey: ".apsmz3";                                 ValueData: "{#MyAppName}smz3patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}smz3patch";                     ValueData: "Archipelago SMZ3 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
@@ -223,6 +234,9 @@ var SoERomFilePage: TInputFileWizardPage;
 var ootrom: string;
 var OoTROMFilePage: TInputFileWizardPage;
 
+var zlrom: string;
+var ZlROMFilePage: TInputFileWizardPage;
+
 function GetSNESMD5OfFile(const rom: string): string;
 var data: AnsiString;
 begin
@@ -255,6 +269,25 @@ begin
     end;
 end;
 
+function CheckSMSRom(name: string; hash: string): string;
+var rom: string;
+begin
+  log('Handling ' + name)
+  rom := FileSearch(name, WizardDirValue());
+  if Length(rom) > 0 then
+    begin
+      log('existing ROM found');
+      log(IntToStr(CompareStr(GetSMSMD5OfFile(rom), hash)));
+      if CompareStr(GetSMSMD5OfFile(rom), hash) = 0 then
+        begin
+        log('existing ROM verified');
+        Result := rom;
+        exit;
+        end;
+      log('existing ROM failed verification');
+    end;
+end;
+
 function AddRomPage(name: string): TInputFileWizardPage;
 begin
   Result :=
@@ -268,6 +301,21 @@ begin
     'Location of ROM file:',
     'SNES ROM files|*.sfc;*.smc|All files|*.*',
     '.sfc');
+end;
+
+function AddSMSRomPage(name: string): TInputFileWizardPage;
+begin
+  Result :=
+    CreateInputFilePage(
+      wpSelectComponents,
+      'Select ROM File',
+      'Where is your ' + name + ' located?',
+      'Select the file, then click Next.');
+
+  Result.Add(
+    'Location of ROM file:',
+    'SMS ROM files|*.sms|All files|*.*',
+    '.sms');
 end;
 
 procedure AddOoTRomPage();
@@ -312,6 +360,8 @@ begin
     Result := not (SoEROMFilePage.Values[0] = '')
   else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
     Result := not (OoTROMFilePage.Values[0] = '')
+  else if (assigned(ZlROMFilePage)) and (CurPageID = ZlROMFilePage.ID) then
+    Result := not (ZlROMFilePage.Values[0] = '')
   else
     Result := True;
 end;
@@ -396,6 +446,23 @@ begin
     Result := '';
 end;
 
+function GetZlROMPath(Param: string): string;
+begin
+  if Length(zlrom) > 0 then
+    Result := zlrom
+  else if Assigned(ZlROMFilePage) then
+    begin
+      # TODO: Zillion MD5
+      R := CompareStr(GetMD5OfFile(ZlROMFilePage.Values[0]), 'd4bf9e7bcf9a48da53785d2ae7bc4270');
+      if R <> 0 then
+        MsgBox('Zillion ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := ZlROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+end;
+
 procedure InitializeWizard();
 begin
   AddOoTRomPage();
@@ -415,6 +482,10 @@ begin
   soerom := CheckRom('Secret of Evermore (USA).sfc', '6e9c94511d04fac6e0a1e582c170be3a');
   if Length(soerom) = 0 then
     SoEROMFilePage:= AddRomPage('Secret of Evermore (USA).sfc');
+
+  zlrom := CheckSMSRom('Zillion (UE) [!].sms', 'd4bf9e7bcf9a48da53785d2ae7bc4270');
+  if Length(zlrom) = 0 then
+    ZlROMFilePage:= AddSMSRomPage('Zillion (UE) [!].sms');
 end;
 
 
@@ -431,4 +502,6 @@ begin
     Result := not (WizardIsComponentSelected('generator/soe'));
   if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/oot') or WizardIsComponentSelected('client/oot'));
+  if (assigned(ZlROMFilePage)) and (PageID = ZlROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('generator/zl') or WizardIsComponentSelected('client/zl'));
 end;
