@@ -101,6 +101,24 @@ def generate_bugfrag_get(amt) -> bytearray:
     return bytearray(byte_list)
 
 
+<<<<<<< Updated upstream
+=======
+def generate_progressive_undernet(progression_index, next_script) -> bytearray:
+    # This one is meant to be "silent". The text box has already been displayed.
+    # So this one just gives bytes
+    item_indices = [27, 28, 29, 30, 31, 32, 58, 34]
+    if progression_index >= len(item_indices):
+        next_script = 0xFF  # Don't overrun the array. Just continue to the end
+
+    # CheckItem for the current index. If we have it, move on to the next script.
+    byte_list = [0xf6, 0x03, item_indices[progression_index], 0x01, next_script, next_script, 0xFF, 0xE9]
+    # Otherwise, give the item silently
+    byte_list.extend(generate_key_item_get(item_indices[progression_index], 1))
+    byte_list.extend([0xEB, 0xE7]) # End the message
+    return bytearray(byte_list)
+
+
+>>>>>>> Stashed changes
 def generate_get_for_item(item) -> bytearray:
     """
     Special case for progressive undernet
