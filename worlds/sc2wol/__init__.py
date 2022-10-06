@@ -9,7 +9,7 @@ from .Locations import get_locations
 from .Regions import create_regions
 from .Options import sc2wol_options, get_option_value
 from .LogicMixin import SC2WoLLogic
-from .PoolFilter import filter_missions, filter_items
+from .PoolFilter import filter_missions, filter_items, filter_upgrades
 from .MissionTables import starting_mission_locations, MissionInfo
 
 
@@ -122,26 +122,32 @@ def get_excluded_items(self: SC2WoLWorld, world: MultiWorld, player: int) -> Set
     for item in world.precollected_items[player]:
         excluded_items.add(item.name)
 
+    excluded_items_option = getattr(world, 'excluded_items', [])
+
+    excluded_items.update(excluded_items_option[player].value)
+
     return excluded_items
 
 
 def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]) -> List[Item]:
     non_local_items = world.non_local_items[player].value
+    if get_option_value(world, player, "early_unit"):
+        local_basic_unit = tuple(item for item in basic_unit if item not in non_local_items)
+        if not local_basic_unit:
+            raise Exception("At least one basic unit must be local")
 
-    local_basic_unit = tuple(item for item in basic_unit if item not in non_local_items)
-    if not local_basic_unit:
-        raise Exception("At least one basic unit must be local")
+        # The first world should also be the starting world
+        first_mission = list(world.worlds[player].mission_req_table)[0]
+        if first_mission in starting_mission_locations:
+            first_location = starting_mission_locations[first_mission]
+        elif first_mission == "In Utter Darkness":
+            first_location = first_mission + ": Defeat"
+        else:
+            first_location = first_mission + ": Victory"
 
-    # The first world should also be the starting world
-    first_mission = list(world.worlds[player].mission_req_table)[0]
-    if first_mission in starting_mission_locations:
-        first_location = starting_mission_locations[first_mission]
-    elif first_mission == "In Utter Darkness":
-        first_location = first_mission + ": Defeat"
+        return [assign_starter_item(world, player, excluded_items, locked_locations, first_location, local_basic_unit)]
     else:
-        first_location = first_mission + ": Victory"
-
-    return [assign_starter_item(world, player, excluded_items, locked_locations, first_location, local_basic_unit)]
+        return []
 
 
 def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str],
@@ -164,15 +170,27 @@ def get_item_pool(world: MultiWorld, player: int, mission_req_table: dict[str, M
                   starter_items: List[str], excluded_items: Set[str], location_cache: List[Location]) -> List[Item]:
     pool: List[Item] = []
 
+    # For the future: goal items like Artifact Shards go here
+    locked_items = []
+
+    # YAML items
+    locked_items_option = getattr(world, 'locked_items', [])
+    yaml_locked_items = locked_items_option[player].value
+
     for name, data in item_table.items():
         if name not in excluded_items:
             for _ in range(data.quantity):
                 item = create_item_with_correct_settings(world, player, name)
-                pool.append(item)
+                if name in yaml_locked_items:
+                    locked_items.append(item)
+                else:
+                    pool.append(item)
 
     existing_items = starter_items + [item.name for item in world.precollected_items[player]]
-    # For the future: goal items like Artifact Shards go here
-    locked_items = []
+
+    # Removing upgrades for excluded items
+    for item_name in excluded_items:
+        pool = filter_upgrades(pool, item_name)
 
     filtered_pool = filter_items(world, player, mission_req_table, location_cache, pool, existing_items, locked_items)
     return filtered_pool

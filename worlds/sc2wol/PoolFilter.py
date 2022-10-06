@@ -40,22 +40,20 @@ def filter_missions(world: MultiWorld, player: int) -> dict[str, list[str]]:
     shuffle_protoss = get_option_value(world, player, "shuffle_protoss")
     relegate_no_build = get_option_value(world, player, "relegate_no_build")
 
+    mission_count = 0
+    for mission in mission_orders[mission_order_type]:
+        if mission.type == 'all_in':  # All-In is placed separately
+            continue
+        mission_count += 1
+
     # Vanilla and Vanilla Shuffled use the entire mission pool
-    if mission_order_type in (0, 1):
+    if mission_count == 28:
         return {
             'no_build': no_build_regions_list[:],
             'easy': easy_regions_list[:],
             'medium': medium_regions_list[:],
             'hard': hard_regions_list[:]
         }
-
-    mission_count = 0
-    for mission in mission_orders[mission_order_type]:
-        if mission is None:
-            continue
-        if mission.type == 'all_in':  # All-In is placed separately
-            continue
-        mission_count += 1
 
     mission_sets = [
         set(no_build_regions_list),
@@ -99,6 +97,14 @@ def filter_missions(world: MultiWorld, player: int) -> dict[str, list[str]]:
     }
 
 
+def filter_upgrades(inventory: list[Item], parent_item: Item or str):
+    item_name = parent_item.name if isinstance(parent_item, Item) else parent_item
+    return [
+        inv_item for inv_item in inventory
+        if inv_item.name in ALWAYS_USEFUL_ARMORY or not inv_item.name.endswith('(' + item_name + ')')
+    ]
+
+
 class ValidInventory:
 
     def has(self, item: str, player: int):
@@ -121,12 +127,14 @@ class ValidInventory:
         self.logical_inventory = {item.name for item in self.progression_items.union(self.locked_items)}
         requirements = mission_requirements
         mission_order_type = get_option_value(self.world, self.player, "mission_order")
-        min_units_per_structure = MIN_UNITS_PER_STRUCTURE[mission_order_type]
+        # Inventory restrictiveness based on number of missions with checks
+        mission_count = len(mission_orders[mission_order_type]) - 1
+        min_units_per_structure = int(mission_count / 7)
         if min_units_per_structure > 0:
             requirements.append(lambda state: state.has_units_per_structure(min_units_per_structure))
         while len(inventory) + len(locked_items) > inventory_size:
             if len(inventory) == 0:
-                raise Exception('Reduced item pool generation failed.')
+                raise Exception('Reduced item pool generation failed - not enough locations available to place items.')
             # Select random item from removable items
             item = self.world.random.choice(inventory)
             inventory.remove(item)
@@ -137,10 +145,7 @@ class ValidInventory:
                     # If item can be removed and is a unit, remove armory upgrades
                     # Some armory upgrades are kept regardless, as they remain logically relevant
                     if item.name in UPGRADABLE_ITEMS:
-                        inventory = [
-                            inv_item for inv_item in inventory
-                            if inv_item.name in ALWAYS_USEFUL_ARMORY or not inv_item.name.endswith('(' + item.name + ')')
-                        ]
+                        inventory = filter_upgrades(inventory, item)
                 else:
                     # If item cannot be removed, move it to locked items
                     self.logical_inventory.add(item.name)
@@ -162,7 +167,8 @@ class ValidInventory:
         self._sc2wol_has_protoss_common_units = lambda world, player: SC2WoLLogic._sc2wol_has_protoss_common_units(self, world, player)
         self._sc2wol_has_protoss_medium_units = lambda world, player: SC2WoLLogic._sc2wol_has_protoss_medium_units(self, world, player)
         self._sc2wol_has_mm_upgrade = lambda world, player: SC2WoLLogic._sc2wol_has_mm_upgrade(self, world, player)
-        self._sc2wol_has_bunker_unit = lambda world, player: SC2WoLLogic._sc2wol_has_bunker_unit(self, world, player)
+        self._sc2wol_has_manned_bunkers = lambda world, player: SC2WoLLogic._sc2wol_has_manned_bunkers(self, world, player)
+        self._sc2wol_final_mission_requirements = lambda world, player: SC2WoLLogic._sc2wol_final_mission_requirements(self, world, player)
 
     def __init__(self, world: MultiWorld, player: int,
                  item_pool: list[Item], existing_items: list[Item], locked_items: list[Item],
