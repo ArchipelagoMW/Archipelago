@@ -101,8 +101,6 @@ def generate_bugfrag_get(amt) -> bytearray:
     return bytearray(byte_list)
 
 
-<<<<<<< Updated upstream
-=======
 def generate_progressive_undernet(progression_index, next_script) -> bytearray:
     # This one is meant to be "silent". The text box has already been displayed.
     # So this one just gives bytes
@@ -118,7 +116,6 @@ def generate_progressive_undernet(progression_index, next_script) -> bytearray:
     return bytearray(byte_list)
 
 
->>>>>>> Stashed changes
 def generate_get_for_item(item) -> bytearray:
     """
     Special case for progressive undernet
@@ -126,7 +123,7 @@ def generate_get_for_item(item) -> bytearray:
         return GenerateKeyItemGet(Next_Progressive_Undernet_ID(),1)
     """
     if item.type == "undernet":
-        return generate_text_bytes("Temporary Progression Message")
+        return generate_text_bytes("Got the next\n\"Undernet Rank\"\n!!")
     if item.type == "chip":
         return generate_chip_get(item.itemID, item.subItemID, item.count)
     elif item.type == "key":

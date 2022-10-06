@@ -6,9 +6,9 @@ import os
 import hashlib
 import bsdiff4
 
-from .BN3RomUtils import ArchiveToReferences, CompressedArchives, ArchiveToSizeComp,\
-    ArchiveToSizeUncomp, generate_external_item_message, generate_item_message,\
-    read_u16_le, int16_to_byte_list_le, int32_to_byte_list_le
+from .BN3RomUtils import *  # We are literally going to use every single function from this
+
+from .Items import ItemType
 
 CHECKSUM_BLUE = "6fe31df0144759b34ad666badaacc442"
 
@@ -72,6 +72,7 @@ class TextArchive:
         self.scriptCount = 0xFF
         self.references = ArchiveToReferences[offset]
         self.unused_indices = []  # A list of places it's okay to inject new scripts
+        self.progressive_undernet_indices = []  # If this archive has progressive undernet, here they are in order
 
         if compressed:
             self.compressedSize = size
@@ -154,6 +155,20 @@ class TextArchive:
                 modified_rom_data[offset:offset+4] = offset_byte
         return modified_rom_data
 
+    def add_progression_scripts(self):
+        if len(self.unused_indices) < 9:
+            # As far as I know, this should literally not be possible.
+            # Every script I've looked at has dozens of unused indices, so finding 9 (8 plus one "ending" script)
+            # should be no problem. We re-use these so we don't have to worry about an area getting tons of these
+            raise "Error in generation -- not enough room for progressive undernet in archive "+self.startOffset
+        for i in range(8): # There are 8 progressive undernet ranks
+            new_script_index = self.unused_indices[i]
+            new_script = ArchiveScript(new_script_index, generate_progressive_undernet(i, self.unused_indices[i+1]))
+            self.scripts[new_script_index] = new_script
+            self.progressive_undernet_indices.append(new_script_index)
+        self.unused_indices = self.unused_indices[8:]  # Remove the first eight elements
+
+
 class LocalRom:
     def __init__(self, file, patch=True, vanillaRom=None, name=None, hash=None):
         self.name = name
@@ -180,7 +195,22 @@ class LocalRom:
             archive = TextArchive(data, offset, size, is_compressed)
             self.changed_archives[offset] = archive
 
-        if item.type == "External":
+        if item.type == ItemType.Undernet:
+            if len(archive.progressive_undernet_indices) == 0:
+                archive.add_progression_scripts() # Generate the new scripts
+            # Replace the item text box as normal. We just also add a new jump at the end of the script
+            item_bytes = generate_item_message(item)
+            changed_script = archive.scripts[location.text_script_index]
+            # There isn't a "Jump unconditional", so we fake one. Check flag 0 and jump
+            # to the start of our progression regardless of outcome
+            jump_to_first_undernet_bytes = [0xF3, 0x00,
+                                            0x00, 0x00,
+                                            archive.progressive_undernet_indices[0],
+                                            archive.progressive_undernet_indices[0]]
+            # Insert the new message second-to-last (the last index should be an end all by itself)
+            changed_script.messageBoxes.insert(-1, jump_to_first_undernet_bytes)
+            # item_bytes = jump_to_first_undernet_bytes
+        elif item.type == ItemType.External:
             item_bytes = generate_external_item_message(item.name, item.recipient)
         else:
             item_bytes = generate_item_message(item)
