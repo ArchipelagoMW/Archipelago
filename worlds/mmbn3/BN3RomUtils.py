@@ -88,7 +88,7 @@ def generate_zenny_get(amt) -> bytearray:
 
 def generate_program_get(program, color, amt) -> bytearray:
     # Programs are bit shifted twice to generate the "give" bit. So we multiply by 4 here
-    byte_list = [0xF6, 0x40, (program * 4), color, amt]
+    byte_list = [0xF6, 0x40, (program * 4), amt, color]
     byte_list.extend(generate_text_bytes("Got a Navi\nCustomizer Program:\n\""))
     byte_list.extend([0xF9, 0x00, program, 0x05])
     return bytearray(byte_list)
