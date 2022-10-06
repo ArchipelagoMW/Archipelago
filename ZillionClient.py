@@ -16,7 +16,7 @@ from zilliandomizer.patch import RescueInfo
 from worlds.zillion.id_maps import make_id_to_others
 from worlds.zillion.config import base_id
 
-# TODO: make sure close button works on ZillionClient window
+# TODO: find out why close button sometimes doesn't work on ZillionClient window
 # TODO: test: receive remote rescue in scrolling hallway
 
 
@@ -169,12 +169,15 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
                     server_id = event_from_game.id + base_id
                     loc_name = id_to_loc[event_from_game.id]
                     ctx.locations_checked.add(server_id)
-                    # TODO: progress number "(1/146)" or something like that
+                    # TODO: test progress number "(1/146)"
                     if server_id in ctx.missing_locations:
-                        logger.info(f'New Check: {loc_name}')
+                        n_locations = len(ctx.missing_locations) + len(ctx.checked_locations) - 1  # -1 to ignore win
+                        logger.info(f'New Check: {loc_name} ({len(ctx.locations_checked)}/{n_locations})')
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [server_id]}])
                     else:
-                        logger.info(f"DEBUG: {loc_name} not in missing")
+                        # This will happen a lot in Zillion,
+                        # because all the key words are local and unwatched by the server.
+                        logger.debug(f"DEBUG: {loc_name} not in missing")
                 elif isinstance(event_from_game, events.DeathEventFromGame):
                     try:
                         await ctx.send_death()
@@ -190,21 +193,14 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
                 zz_item_ids = [ap_id_to_zz_id[item.item] for item in ctx.items_received]
                 for index in range(next_item, len(ctx.items_received)):
                     ap_id = ctx.items_received[index].item
-                    # TODO: what do I want to log here? do I need anything? is the logging from CommonClient enough?
-                    logger.info(f'received item {ap_id_to_name[ap_id]}')
+                    from_name = ctx.player_names[ctx.items_received[index].player]
+                    # TODO: colors in this text, like sni client?
+                    logger.info(f'received {ap_id_to_name[ap_id]} from {from_name}')
                 ctx.to_game.put_nowait(
                     events.ItemEventToGame(zz_item_ids)
                 )
                 next_item = len(ctx.items_received)
             await asyncio.sleep(0.09375)
-
-
-async def run_game(rom_file: str) -> None:
-    # TODO: fix this
-    subprocess.Popen(["retroarch", rom_file],
-                     stdin=subprocess.DEVNULL,
-                     stdout=subprocess.DEVNULL,
-                     stderr=subprocess.DEVNULL)
 
 
 async def main() -> None:
@@ -222,8 +218,6 @@ async def main() -> None:
         if "server" in meta:
             args.connect = meta["server"]
         logger.info(f"wrote rom file to {rom_file}")
-
-        asyncio.create_task(run_game(rom_file))
 
     to_game: "asyncio.Queue[events.EventToGame]" = asyncio.Queue()
     ctx = ZillionContext(args.connect, args.password, to_game)
