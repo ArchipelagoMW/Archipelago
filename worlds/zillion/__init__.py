@@ -17,14 +17,11 @@ from .id_maps import item_name_to_id as _item_name_to_id, \
 from .item import ZillionItem
 from .patch import ZillionDeltaPatch, get_base_rom_path
 
-from zilliandomizer.patch import Patcher as ZzPatcher
 from zilliandomizer.randomizer import Randomizer as ZzRandomizer
-from zilliandomizer.alarms import Alarms
+from zilliandomizer.system import System
 from zilliandomizer.logic_components.items import RESCUE, items as zz_items, Item as ZzItem
 from zilliandomizer.logic_components.locations import Location as ZzLocation, Req
-from zilliandomizer.map_gen.jump import room_jump_requirements
 from zilliandomizer.options import Chars
-from zilliandomizer.room_gen.room_gen import RoomGen
 
 from ..AutoWorld import World, WebWorld
 
@@ -102,14 +99,13 @@ class ZillionWorld(World):
 
     logger: logging.Logger
 
-    zz_randomizer: Optional[ZzRandomizer] = None
-    zz_patcher: Optional[ZzPatcher] = None
     id_to_zz_item: Optional[Dict[int, ZzItem]] = None
-    _modified_rooms: FrozenSet[int] = frozenset()
+    zz_system: System
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.logger = logging.getLogger("Zillion")
+        self.zz_system = System()
 
     def _make_item_maps(self, start_char: Chars) -> None:
         _id_to_name, _id_to_zz_id, id_to_zz_item = make_id_to_others(start_char)
@@ -127,46 +123,37 @@ class ZillionWorld(World):
         zz_op = validate(self.world, self.player)
 
         rom_dir_name = os.path.dirname(get_base_rom_path())
-        self.zz_patcher = ZzPatcher(rom_dir_name)
-        self.zz_randomizer = ZzRandomizer(zz_op)
+        self.zz_system.make_patcher(rom_dir_name)
+        self.zz_system.make_randomizer(zz_op)
 
-        self._modified_rooms = frozenset()
-        if zz_op.room_gen:
-            self.logger.info("Zillion room gen enabled - generating rooms...")  # this takes time
-            p = self.zz_patcher
-            jump_req_rooms = room_jump_requirements()
-            p.aem.room_gen_mods()
-            room_gen = RoomGen(p.tc, p.sm, p.aem, self.zz_randomizer.logger, zz_op.skill, self.zz_randomizer.regions)
-            room_gen.generate_all(jump_req_rooms)
-            self.zz_randomizer.reset(room_gen)
-            self._modified_rooms = room_gen.get_modified_rooms()
-            self.logger.info("Zillion room gen complete")
+        self.zz_system.make_map()
 
         # just in case the options changed anything (I don't think they do)
-        for zz_name in self.zz_randomizer.locations:
+        assert self.zz_system.randomizer, "init failed"
+        for zz_name in self.zz_system.randomizer.locations:
             if zz_name != 'main':
-                assert self.zz_randomizer.loc_name_2_pretty[zz_name] in self.location_name_to_id, \
-                    f"{self.zz_randomizer.loc_name_2_pretty[zz_name]} not in location map"
+                assert self.zz_system.randomizer.loc_name_2_pretty[zz_name] in self.location_name_to_id, \
+                    f"{self.zz_system.randomizer.loc_name_2_pretty[zz_name]} not in location map"
 
         self._make_item_maps(zz_op.start_char)
 
     def create_regions(self) -> None:
-        assert self.zz_randomizer, "generate_early hasn't been called"
+        assert self.zz_system.randomizer, "generate_early hasn't been called"
         assert self.id_to_zz_item, "generate_early hasn't been called"
         p = self.player
         w = self.world
 
-        self.zz_randomizer.place_canister_gun_reqs()
+        self.zz_system.randomizer.place_canister_gun_reqs()
 
-        start = self.zz_randomizer.regions['start']
+        start = self.zz_system.randomizer.regions['start']
 
         all: Dict[str, ZillionRegion] = {}
-        for here_zz_name, zz_r in self.zz_randomizer.regions.items():
+        for here_zz_name, zz_r in self.zz_system.randomizer.regions.items():
             here_name = "Menu" if here_zz_name == "start" else zz_reg_name_to_reg_name(here_zz_name)
             all[here_name] = ZillionRegion(zz_r, here_name, RegionType.Generic, here_name, p, w)
             self.world.regions.append(all[here_name])
 
-        limited_skill = Req(gun=3, jump=3, skill=self.zz_randomizer.options.skill, hp=940, red=1, floppy=126)
+        limited_skill = Req(gun=3, jump=3, skill=self.zz_system.randomizer.options.skill, hp=940, red=1, floppy=126)
         queue = deque([start])
         done: Set[str] = set()
         while len(queue):
@@ -190,9 +177,9 @@ class ZillionWorld(World):
                         return zz_loc_local in accessible
 
                     access_rule = functools.partial(access_rule_wrapped,
-                                                    zz_loc, self.player, self.zz_randomizer, self.id_to_zz_item)
+                                                    zz_loc, self.player, self.zz_system.randomizer, self.id_to_zz_item)
 
-                    loc_name = self.zz_randomizer.loc_name_2_pretty[zz_loc.name]
+                    loc_name = self.zz_system.randomizer.loc_name_2_pretty[zz_loc.name]
                     loc = ZillionLocation(zz_loc, self.player, loc_name, here)
                     loc.access_rule = access_rule
                     if not (limited_skill >= zz_loc.req):
@@ -239,9 +226,9 @@ class ZillionWorld(World):
         pass
 
     def generate_basic(self) -> None:
-        assert self.zz_randomizer, "generate_early hasn't been called"
+        assert self.zz_system.randomizer, "generate_early hasn't been called"
         # main location name is an alias
-        main_loc_name = self.zz_randomizer.loc_name_2_pretty[self.zz_randomizer.locations['main'].name]
+        main_loc_name = self.zz_system.randomizer.loc_name_2_pretty[self.zz_system.randomizer.locations['main'].name]
 
         self.world.get_location(main_loc_name, self.player)\
             .place_locked_item(self.create_item("Win"))
@@ -273,19 +260,14 @@ class ZillionWorld(World):
         """Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
         This happens before progression balancing,  so the items may not be in their final locations yet."""
 
-        assert self.zz_randomizer, "generate_early hasn't been called"
-        assert self.zz_patcher, "generate_early didn't set patcher"
-        zz_options = self.zz_randomizer.options
-        if zz_options.randomize_alarms:
-            a = Alarms(self.zz_patcher.tc, self.zz_randomizer.logger)
-            a.choose_all(self._modified_rooms)
+        self.zz_system.post_fill()
 
     def finalize_item_locations(self) -> None:
         """
         sync zilliandomizer item locations with AP item locations
         """
-        assert self.zz_randomizer, "generate_early hasn't been called"
-        zz_options = self.zz_randomizer.options
+        assert self.zz_system.randomizer, "generate_early hasn't been called"
+        zz_options = self.zz_system.randomizer.options
 
         # debug_zz_loc_ids: Dict[str, int] = {}
         empty = zz_items[4]
@@ -322,30 +304,31 @@ class ZillionWorld(World):
         #         debug_loc_to_id[loc.name] = id(loc)
 
         # verify that every location got an item
-        for zz_loc in self.zz_randomizer.locations.values():
+        for zz_loc in self.zz_system.randomizer.locations.values():
             assert zz_loc.item, (
-                f"location {self.zz_randomizer.loc_name_2_pretty[zz_loc.name]} "
+                f"location {self.zz_system.randomizer.loc_name_2_pretty[zz_loc.name]} "
                 f"in world {self.player} didn't get an item"
             )
 
-        assert self.zz_patcher, "generate_early didn't set patcher"
+        zz_patcher = self.zz_system.patcher
+        assert zz_patcher, "generate_early didn't set patcher"
 
-        self.zz_patcher.write_locations(self.zz_randomizer.regions,
-                                        zz_options.start_char,
-                                        self.zz_randomizer.loc_name_2_pretty)
-        self.zz_patcher.all_fixes_and_options(zz_options)
-        self.zz_patcher.set_external_item_interface(zz_options.start_char, zz_options.max_level)
-        self.zz_patcher.set_multiworld_items(multi_items)
-        self.zz_patcher.set_rom_to_ram_data(self.world.player_name[self.player].replace(' ', '_').encode())
+        zz_patcher.write_locations(self.zz_system.randomizer.regions,
+                                   zz_options.start_char,
+                                   self.zz_system.randomizer.loc_name_2_pretty)
+        zz_patcher.all_fixes_and_options(zz_options)
+        zz_patcher.set_external_item_interface(zz_options.start_char, zz_options.max_level)
+        zz_patcher.set_multiworld_items(multi_items)
+        zz_patcher.set_rom_to_ram_data(self.world.player_name[self.player].replace(' ', '_').encode())
 
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.
         If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
         self.finalize_item_locations()
 
-        assert self.zz_patcher, "didn't get patcher from generate_early"
+        assert self.zz_system.patcher, "didn't get patcher from generate_early"
         # original_rom_bytes = self.zz_patcher.rom
-        patched_rom_bytes = self.zz_patcher.get_patched_bytes()
+        patched_rom_bytes = self.zz_system.patcher.get_patched_bytes()
 
         out_file_base = 'AP_' + self.world.seed_name
         out_file_p_name = f'_P{self.player}'
@@ -377,23 +360,24 @@ class ZillionWorld(World):
         # TODO: tell client which canisters are keywords
         # so it can open and get those when restoring doors
 
-        assert self.zz_patcher, "didn't get patcher from generate_early"
-        assert self.zz_randomizer, "didn't get randomizer from generate_early"
+        zz_patcher = self.zz_system.patcher
+        assert zz_patcher, "didn't get patcher from generate_early"
+        assert self.zz_system.randomizer, "didn't get randomizer from generate_early"
 
         rescues: Dict[str, Any] = {}
         for i in (0, 1):
-            if i in self.zz_patcher.rescue_locations:
-                ri = self.zz_patcher.rescue_locations[i]
+            if i in zz_patcher.rescue_locations:
+                ri = zz_patcher.rescue_locations[i]
                 rescues[str(i)] = {
                     "start_char": ri.start_char,
                     "room_code": ri.room_code,
                     "mask": ri.mask
                 }
-        self.zz_patcher.loc_memory_to_loc_id
+        zz_patcher.loc_memory_to_loc_id
         return {
-            "start_char": self.zz_randomizer.options.start_char,
+            "start_char": self.zz_system.randomizer.options.start_char,
             "rescues": rescues,
-            "loc_mem_to_id": self.zz_patcher.loc_memory_to_loc_id
+            "loc_mem_to_id": zz_patcher.loc_memory_to_loc_id
         }
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:

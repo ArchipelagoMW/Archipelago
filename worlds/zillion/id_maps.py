@@ -5,7 +5,7 @@ from zilliandomizer.logic_components.items import Item as ZzItem, \
 from zilliandomizer.options import Chars
 from zilliandomizer.utils.loc_name_maps import loc_to_id as pretty_loc_name_to_id
 from zilliandomizer.utils import parse_reg_name
-from .config import base_id
+from .config import base_id as base_id
 
 item_name_to_id = {
     "Apple": 0 + base_id,
