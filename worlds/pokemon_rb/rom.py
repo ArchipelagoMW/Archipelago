@@ -404,7 +404,9 @@ def generate_output(self, output_directory: str):
     data[rom_addresses["Starting_Money_High"]] = int(money[:2], 16)
     data[rom_addresses["Starting_Money_Middle"]] = int(money[2:4], 16)
     data[rom_addresses["Starting_Money_Low"]] = int(money[4:], 16)
-    data[rom_addresses["Text_Badges_Needed"]] = encode_text(str(self.world.victory_road_condition[self.player].value))[0]
+    data[rom_addresses["Text_Badges_Needed"]] = encode_text(
+        str(max(self.world.victory_road_condition[self.player].value,
+                self.world.elite_four_condition[self.player].value)))[0]
     if self.world.badges_needed_for_hm_moves[self.player].value == 0:
         for hm_move in poke_data.hm_moves:
             write_bytes(data, bytearray([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
