@@ -1,13 +1,14 @@
 from BaseClasses import MultiWorld
 from worlds.AutoWorld import LogicMixin
+from .Options import get_option_value
 
 
 class SC2WoLLogic(LogicMixin):
     def _sc2wol_has_common_unit(self, world: MultiWorld, player: int) -> bool:
         return self.has_any({'Marine', 'Marauder', 'Firebat', 'Hellion', 'Vulture'}, player)
 
-    def _sc2wol_has_bunker_unit(self, world: MultiWorld, player: int) -> bool:
-        return self.has_any({'Marine', 'Marauder'}, player)
+    def _sc2wol_has_manned_bunkers(self, world: MultiWorld, player: int) -> bool:
+        return self.has_any({'Marine', 'Marauder'}, player) and self.has('Bunker', player)
 
     def _sc2wol_has_air(self, world: MultiWorld, player: int) -> bool:
         return self.has_any({'Viking', 'Wraith', 'Banshee'}, player) or \
@@ -24,8 +25,7 @@ class SC2WoLLogic(LogicMixin):
 
     def _sc2wol_has_heavy_defense(self, world: MultiWorld, player: int) -> bool:
         return (self.has_any({'Siege Tank', 'Vulture'}, player) or
-                self.has('Bunker', player) and self._sc2wol_has_bunker_unit(world, player)) and \
-               self._sc2wol_has_anti_air(world, player)
+                self._sc2wol_has_manned_bunkers(world, player)) and self._sc2wol_has_anti_air(world, player)
 
     def _sc2wol_has_competent_comp(self, world: MultiWorld, player: int) -> bool:
         return (self.has('Marine', player) or self.has('Marauder', player) and
@@ -61,6 +61,18 @@ class SC2WoLLogic(LogicMixin):
            self._sc2wol_has_air(world, player) and \
            self._sc2wol_has_competent_anti_air(world, player) and \
            self.has("Science Vessel", player)
+
+    def _sc2wol_final_mission_requirements(self, world: MultiWorld, player: int):
+        if get_option_value(world, player, 'all_in_map') == 0:
+            # Ground
+            version_logic = sum(
+                self.has(item, player) for item in ['Planetary Fortress', 'Siege Tank', 'Psi Disruptor', 'Banshee', 'Battlecruiser']
+            ) + self._sc2wol_has_manned_bunkers(world, player) >= 3
+        else:
+            # Air
+            version_logic = self.has_any({'Viking', 'Battlecruiser'}, player) \
+                            and self.has_any({'Hive Mind Emulator', 'Psi Disruptor', 'Missile Turret'}, player)
+        return self._sc2wol_has_heavy_defense(world, player) and version_logic
 
     def _sc2wol_cleared_missions(self, world: MultiWorld, player: int, mission_count: int) -> bool:
         return self.has_group("Missions", player, mission_count)

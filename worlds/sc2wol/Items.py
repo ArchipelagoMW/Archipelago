@@ -125,8 +125,8 @@ item_table = {
     "Hercules": ItemData(615 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 15, classification=ItemClassification.progression),
     "Cellular Reactor": ItemData(616 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 16, classification=ItemClassification.filler),
     "Regenerative Bio-Steel": ItemData(617 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 17, classification=ItemClassification.filler),
-    "Hive Mind Emulator": ItemData(618 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 18),
-    "Psi Disrupter": ItemData(619 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 19, classification=ItemClassification.filler),
+    "Hive Mind Emulator": ItemData(618 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 18, ItemClassification.progression),
+    "Psi Disrupter": ItemData(619 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 19, classification=ItemClassification.progression),
 
     "Zealot": ItemData(700 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 0, classification=ItemClassification.progression),
     "Stalker": ItemData(701 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 1, classification=ItemClassification.progression),

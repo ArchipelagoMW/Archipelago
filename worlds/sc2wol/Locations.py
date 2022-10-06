@@ -247,8 +247,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Shatter the Sky", "Shatter the Sky: Leviathan", SC2WOL_LOC_ID_OFFSET + 2805,
                      lambda state: state._sc2wol_has_competent_comp(world, player)),
         LocationData("All-In", "All-In: Victory", None,
-                     lambda state: state._sc2wol_has_competent_comp(world, player) and
-                                   state._sc2wol_has_heavy_defense(world, player))
+                     lambda state: state._sc2wol_final_mission_requirements(world, player))
     ]
 
     beat_events = []
