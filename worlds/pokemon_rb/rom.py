@@ -383,7 +383,8 @@ def generate_output(self, output_directory: str):
     data[rom_addresses["Option_Blind_Trainers"]] = round(self.world.blind_trainers[self.player].value * 2.55)
     data[rom_addresses['Option_Cerulean_Cave_Condition']] = self.world.cerulean_cave_condition[self.player].value
     data[rom_addresses['Option_Encounter_Minimum_Steps']] = self.world.minimum_steps_between_encounters[self.player].value
-    data[rom_addresses['Option_Badge_Goal']] = self.world.victory_road_condition[self.player].value - 2
+    data[rom_addresses['Option_Victory_Road_Badges']] = self.world.victory_road_condition[self.player].value
+    data[rom_addresses['Option_Pokemon_League_Badges']] = self.world.elite_four_condition[self.player].value
     data[rom_addresses['Option_Viridian_Gym_Badges']] = self.world.viridian_gym_condition[self.player].value
     data[rom_addresses['Option_EXP_Modifier']] = self.world.exp_modifier[self.player].value
     if not self.world.require_item_finder[self.player].value:

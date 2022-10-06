@@ -33,11 +33,19 @@ class Goal(Choice):
     default = 0
 
 
-class VictoryRoadCondition(Range):
-    """Number of badges required to reach Victory Road.
+class EliteFourCondition(Range):
+    """Number of badges required to challenge the Elite Four once the Indigo Plateau has been reached.
     Your rival will reveal the amount needed on the first Route 22 battle (after turning in Oak's Parcel)."""
+    display_name = "Elite Four Condition"
+    range_start = 0
+    range_end = 8
+    default = 8
+
+
+class VictoryRoadCondition(Range):
+    """Number of badges required to reach Victory Road."""
     display_name = "Victory Road Condition"
-    range_start = 2
+    range_start = 0
     range_end = 8
     default = 8
 
@@ -419,6 +427,7 @@ pokemon_rb_options = {
     "trainer_name": TrainerName,
     "rival_name": RivalName,
     #"goal": Goal,
+    "elite_four_condition": EliteFourCondition,
     "victory_road_condition": VictoryRoadCondition,
     "viridian_gym_condition": ViridianGymCondition,
     "cerulean_cave_condition": CeruleanCaveCondition,
