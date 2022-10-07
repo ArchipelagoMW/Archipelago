@@ -160,6 +160,7 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
             ap_id_to_name, ap_id_to_zz_id, _ap_id_to_zz_item = make_id_to_others(ctx.start_char)
 
         next_item = 0
+        ap_local_count = len(ctx.checked_locations)  # local items that the server knows about, not key words
         # TODO: find out why close button sometimes doesn't work on ZillionClient window
         while not ctx.exit_event.is_set():
             await memory.check()
@@ -169,10 +170,10 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
                     server_id = event_from_game.id + base_id
                     loc_name = id_to_loc[event_from_game.id]
                     ctx.locations_checked.add(server_id)
-                    # TODO: test progress number "(1/146)"
                     if server_id in ctx.missing_locations:
+                        ap_local_count += 1
                         n_locations = len(ctx.missing_locations) + len(ctx.checked_locations) - 1  # -1 to ignore win
-                        logger.info(f'New Check: {loc_name} ({len(ctx.locations_checked)}/{n_locations})')
+                        logger.info(f'New Check: {loc_name} ({ap_local_count}/{n_locations})')
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [server_id]}])
                     else:
                         # This will happen a lot in Zillion,
