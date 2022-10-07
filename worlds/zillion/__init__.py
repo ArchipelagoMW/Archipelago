@@ -60,8 +60,7 @@ class ZillionWorld(World):
     # increment this every time something in your world's names/id mappings changes.
     # While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
     # retrieved by clients on every connection.
-    data_version: int = 0
-    # TODO: move out of testing
+    data_version: int = 1
 
     # NOTE: remote_items and remote_start_inventory are now available in the network protocol for the client to set.
     # These values will be removed.

@@ -234,10 +234,9 @@ async def main() -> None:
     await ctx.exit_event.wait()
 
     ctx.server_address = None
-    # TODO: change logging to debug
-    logger.info("waiting for sync task to end")
+    logger.debug("waiting for sync task to end")
     await sync_task
-    logger.info("sync task ended")
+    logger.debug("sync task ended")
     await ctx.shutdown()
 
 
