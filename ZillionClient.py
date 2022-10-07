@@ -155,7 +155,8 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
         ap_id_to_zz_id: Dict[int, int] = {}
         if not ctx.exit_event.is_set():
             logger.info("waiting for server login...")
-            await ctx.got_slot_data.wait()
+        await asyncio.wait((ctx.got_slot_data.wait(), ctx.exit_event.wait()), return_when=asyncio.FIRST_COMPLETED)
+        if not ctx.exit_event.is_set():
             memory.set_generation_info(ctx.rescues, ctx.loc_mem_to_id)
             ap_id_to_name, ap_id_to_zz_id, _ap_id_to_zz_item = make_id_to_others(ctx.start_char)
 
