@@ -11,14 +11,14 @@ by certain games. Currently, only LTTP supports text and boss plando. Support fo
 
 ### Enabling Plando
 
-On the website plando will already be enabled. If you will be generating the game locally plando features must be
+On the website plando will already be enabled. If you will be generating the game locally, plando features must be
 enabled (opt-in).
 
 * To opt-in go to the archipelago installation (default: `C:\ProgramData\Archipelago`), open the host.yaml with a text
   editor and find the `plando_options` key. The available plando modules can be enabled by adding them after this such
   as
   `plando_options: bosses, items, texts, connections`.
-* You can add the necessary plando modules for your settings to the `requires` section of your yaml. Doing so will throw an error if the options that you need to generate properly are not enabled to ensure you will get the results you desire. Only enter in the plando modules that you are using here but it should look like:
+* You can add the necessary plando modules for your settings to the `requires` section of your YAML. Doing so will throw an error if the options that you need to generate properly are not enabled to ensure you will get the results you desire. Only enter in the plando modules that you are using here but it should look like:
 
 ```yaml
   requires: 
@@ -30,24 +30,24 @@ enabled (opt-in).
 Item plando allows a player to place an item in a specific location or specific locations, place multiple items into a
 list of specific locations both in their own game or in another player's game.
 
-* The options for item plando are `from_pool`, `world`, `percentage`, `force`, `count`, and either item and location, or items
-  and locations.
+* The options for item plando are `from_pool`, `world`, `percentage`, `force`, `count`, and either `item` and
+  `location`, or `items` and `locations`.
     * `from_pool` determines if the item should be taken *from* the item pool or *added* to it. This can be true or
       false and defaults to true if omitted.
     * `world` is the target world to place the item in.
         * It gets ignored if only one world is generated.
         * Can be a number, name, true, false, null, or a list. False is the default.
-            * If a number is used it targets that slot or player number in the multiworld.
-            * If a name is used it will target the world with that player name.
-            * If set to true it will be any player's world besides your own.
-            * If set to false it will target your own world.
-            * If set to null it will target a random world in the multiworld.
+            * If a number is used, it targets that slot or player number in the multiworld.
+            * If a name is used, it will target the world with that player name.
+            * If set to true, it will be any player's world besides your own.
+            * If set to false, it will target your own world.
+            * If set to null, it will target a random world in the multiworld.
             * If a list of names is used, it will target the games with the player names specified.
     * `force` determines whether the generator will fail if the item can't be placed in the location can be true, false,
       or silent. Silent is the default.
-        * If set to true the item must be placed and the generator will throw an error if it is unable to do so.
-        * If set to false the generator will log a warning if the placement can't be done but will still generate.
-        * If set to silent and the placement fails it will be ignored entirely.
+        * If set to true, the item must be placed and the generator will throw an error if it is unable to do so.
+        * If set to false, the generator will log a warning if the placement can't be done but will still generate.
+        * If set to silent and the placement fails, it will be ignored entirely.
     * `percentage` is the percentage chance for the relevant block to trigger. This can be any value from 0 to 100 and
       if omitted will default to 100.
     * Single Placement is when you use a plando block to place a single item at a single location.
@@ -58,8 +58,8 @@ list of specific locations both in their own game or in another player's game.
         * Using the multi placement method, placements are picked randomly.
         * Instead of a number, you can use true 
     * `count` can be used to set the maximum number of items placed from the block. The default is 1 if using `item` and False if using `items`
-        * If a number is used it will try to place this number of items.
-        * If set to false it will try to place as many items from the block as it can.
+        * If a number is used, it will try to place this number of items.
+        * If set to false, it will try to place as many items from the block as it can.
         * If `min` and `max` are defined, it will try to place a number of items between these two numbers at random
 
 
@@ -142,17 +142,17 @@ plando_items:
       min: 1
       max: 4
 ```
-1. This block has a 50% chance to occur, and if it does will place either the Empire Orb or Radiant Orb on another player's
-Starter Chest 1 and removes the chosen item from the item pool.
+1. This block has a 50% chance to occur, and if it does, it will place either the Empire Orb or Radiant Orb on another
+player's Starter Chest 1 and removes the chosen item from the item pool.
 2. This block will always trigger and will place the player's swords, bow, magic meter, strength upgrades, and hookshots
 in their own dungeon major item chests.
 3. This block will always trigger and will lock boss relics on the bosses.
-4. This block has an 80% chance of occurring and when it does will place all but 1 of the items randomly among the four
-locations chosen here.
+4. This block has an 80% chance of occurring and when it does, it will place all but 1 of the items randomly among the
+four locations chosen here.
 5. This block will always trigger and will attempt to place a random 2 of Levitate, Revealer and Energize into
 other players' Master Sword Pedestals or Boss Relic 1 locations.
 6. This block will always trigger and will attempt to place a random number, between 1 and 4, of progressive swords
-into any locations within the game slots named BobsSlaytheSpire and BobsRogueLegacy
+into any locations within the game slots named BobsSlaytheSpire and BobsRogueLegacy.
 
 
 ## Boss Plando
@@ -206,9 +206,9 @@ plando_connections:
     direction: both
 ```
 
-1. These connections are decoupled so going into the lake hylia cave shop will take you to the inside of cave 45 and
-   when you leave the interior you will exit to the cave 45 ledge. Going into the cave 45 entrance will then take you to
-   the lake hylia cave shop. Walking into the entrance for the old man cave and Agahnim's Tower entrance will both take
-   you to their locations as normal but leaving old man cave will exit at Agahnim's Tower.
-2. This will force a nether fortress and a village to be the overworld structures for your game. Note that for the
+1. These connections are decoupled, so going into the Lake Hylia Cave Shop will take you to the inside of Cave 45 and
+   when you leave the interior you will exit to the Cave 45 ledge. Going into the Cave 45 entrance will then take you to
+   the Lake Hylia Cave Shop. Walking into the entrance for the Old Man Cave and Agahnim's Tower entrance will both take
+   you to their locations as normal but leaving Old Man Cave will exit at Agahnim's Tower.
+2. This will force a Nether fortress and a village to be the Overworld structures for your game. Note that for the
    Minecraft connection plando to work structure shuffle must be enabled.
