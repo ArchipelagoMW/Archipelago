@@ -73,6 +73,7 @@ validator page: [YAML Validation page](/mysterycheck)
 
 1. Provide your config (yaml) file to the host and obtain your patch file
     - When you join a multiworld game, you will be asked to provide your config file to whoever is hosting. Once that is done, the host will provide you with either a link to download your patch file, or with a zip file containing everyone's patch files. Your patch file should have a `.apzl` extension.
+       - If you activate the "room generation" option in your config (yaml), you might want to tell your host that the generation will take longer than normal. It takes approximately 20 seconds longer for each Zillion player that enables this option.
 2. Create your ROM
     - Linux
        - In the Archipelago Launcher, choose "Open Patch" and select your `.apzl` patch file.

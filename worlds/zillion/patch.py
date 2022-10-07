@@ -1,12 +1,7 @@
-import bsdiff4  # type: ignore
-import yaml
-from typing import Any, BinaryIO, Dict, Optional, cast
+from typing import BinaryIO, Optional, cast
 import Utils
 from worlds.Files import APDeltaPatch
 import os
-
-# TODO: Make sure everything here is necessary and right.
-# Some of this is just copied from another game.
 
 USHASH = 'd4bf9e7bcf9a48da53785d2ae7bc4270'
 
@@ -37,29 +32,3 @@ def read_rom(stream: BinaryIO) -> bytes:
     data = stream.read()
     # I'm not aware of any sms header.
     return data
-
-
-def generate_yaml(patch: bytes, metadata: Optional[Dict[str, Any]] = None) -> bytes:
-    """Generate old (<4) apbp format yaml"""
-    patch_yaml = yaml.dump({
-        "meta": metadata,
-        "patch": patch,
-        "game": "Zillion",
-        # minimum version of patch system expected for patching to be successful
-        "compatible_version": 1,
-        "version": 2,
-        "base_checksum": USHASH
-    })
-    return cast(bytes, patch_yaml.encode(encoding="utf-8-sig"))
-
-
-def generate_patch(vanilla_file: str, randomized_file: str, metadata: Optional[Dict[str, Any]] = None) -> bytes:
-    """Generate old (<4) apbp format patch data. Run through lzma to get a complete apbp file."""
-    with open(vanilla_file, "rb") as f:
-        vanilla = read_rom(f)
-    with open(randomized_file, "rb") as f:
-        randomized = read_rom(f)
-    if metadata is None:
-        metadata = {}
-    patch = bsdiff4.diff(vanilla, randomized)  # type: ignore
-    return generate_yaml(patch, metadata)

@@ -1,16 +1,16 @@
-from collections import deque
+from collections import deque, Counter
 import functools
-from typing import Any, Dict, FrozenSet, Set, TextIO, Tuple, List, Optional, cast
+from typing import Any, Dict, FrozenSet, Set, Tuple, Optional, cast
 import os
 import logging
 
 from BaseClasses import ItemClassification, LocationProgressType, \
-    MultiWorld, Location, Item, CollectionState, RegionType, \
+    MultiWorld, Item, CollectionState, RegionType, \
     Entrance, Tutorial
 from Options import AssembleOptions
 from .logic import clear_cache, cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
-from .options import ZillionItemCounts, zillion_options, validate
+from .options import zillion_options, validate
 from .id_maps import item_name_to_id as _item_name_to_id, \
     loc_name_to_id as _loc_name_to_id, make_id_to_others, \
     zz_reg_name_to_reg_name, base_id
@@ -27,10 +27,10 @@ from ..AutoWorld import World, WebWorld
 
 
 class ZillionWebWorld(WebWorld):
-    # theme = 'jungle'  # TODO: what themes are available?
+    theme = "stone"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to playing Zillion randomizer.",  # This guide covers single-player, multiworld and related software.",
+        "A guide to playing Zillion randomizer.",
         "English",
         "setup_en.md",
         "setup/en",
@@ -57,26 +57,11 @@ class ZillionWorld(World):
     item_name_to_id: Dict[str, int] = _item_name_to_id
     location_name_to_id: Dict[str, int] = _loc_name_to_id
 
-    # maps item group names to sets of items. Example: "Weapons" -> {"Sword", "Bow"}
-    item_name_groups: Dict[str, Set[str]] = {}
-
     # increment this every time something in your world's names/id mappings changes.
     # While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
     # retrieved by clients on every connection.
     data_version: int = 0
     # TODO: move out of testing
-    # The same code that generates the static resource for the id maps
-    # could manage the version number
-
-    # override this if changes to a world break forward-compatibility of the client
-    # The base version of (0, 1, 6) is provided for backwards compatibility and does *not* need to be updated in the
-    # future. Protocol level compatibility check moved to MultiServer.min_client_version.
-    required_client_version: Tuple[int, int, int] = (0, 1, 6)
-
-    # update this if the resulting multidata breaks forward-compatibility of the server
-    required_server_version: Tuple[int, int, int] = (0, 2, 4)
-
-    hint_blacklist: FrozenSet[str] = frozenset()  # any names that should not be hintable
 
     # NOTE: remote_items and remote_start_inventory are now available in the network protocol for the client to set.
     # These values will be removed.
@@ -86,26 +71,22 @@ class ZillionWorld(World):
     # the client finds its own items in its own world.
     remote_items: bool = False
 
-    # If remote_start_inventory is true, the start_inventory/world.precollected_items is sent on connection,
-    # otherwise the world implementation is in charge of writing the items to their output data.
-    remote_start_inventory: bool = True
-
-    # For games where after a victory it is impossible to go back in and get additional/remaining Locations checked.
-    # this forces forfeit:  auto for those games.
-    forced_auto_forfeit: bool = False
-
-    # Hide World Type from various views. Does not remove functionality.
-    hidden: bool = False
-
     logger: logging.Logger
 
     id_to_zz_item: Optional[Dict[int, ZzItem]] = None
     zz_system: System
+    _item_counts: "Counter[str]" = Counter()
+    """
+    These are the items counts that will be in the game,
+    which might be different from the item counts the player asked for in options
+    (if the player asked for something invalid).
+    """
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.logger = logging.getLogger("Zillion")
         self.zz_system = System()
+        clear_cache()
 
     def _make_item_maps(self, start_char: Chars) -> None:
         _id_to_name, _id_to_zz_id, id_to_zz_item = make_id_to_others(start_char)
@@ -120,7 +101,9 @@ class ZillionWorld(World):
             raise FileNotFoundError(rom_file)
 
     def generate_early(self) -> None:
-        zz_op = validate(self.world, self.player)
+        zz_op, item_counts = validate(self.world, self.player)
+
+        self._item_counts = item_counts
 
         rom_dir_name = os.path.dirname(get_base_rom_path())
         self.zz_system.make_patcher(rom_dir_name)
@@ -205,14 +188,14 @@ class ZillionWorld(World):
 
         # in zilliandomizer, the Randomizer class puts empties in the item pool to fill space,
         # but here in AP, empties are in the options from options.validate
-        item_counts = cast(ZillionItemCounts, getattr(self.world, "item_counts")[self.player])
+        item_counts = self._item_counts
         self.logger.debug(item_counts)
 
         for item_name, item_id in self.item_name_to_id.items():
             zz_item = self.id_to_zz_item[item_id]
             if item_id >= (4 + base_id):  # normal item
-                if item_name in item_counts.value:
-                    count = item_counts.value[item_name]
+                if item_name in item_counts:
+                    count = item_counts[item_name]
                     self.logger.debug(f"Zillion Items: {item_name}  {count}")
                     for _ in range(count):
                         self.world.itempool.append(self.create_item(item_name))
@@ -234,27 +217,6 @@ class ZillionWorld(World):
             .place_locked_item(self.create_item("Win"))
         self.world.completion_condition[self.player] = \
             lambda state: state.has("Win", self.player)
-
-    def pre_fill(self) -> None:
-        """Optional method that is supposed to be used for special fill stages. This is run *after* plando."""
-        pass
-
-    @classmethod
-    def fill_hook(cls,
-                  progitempool: List[Item],
-                  nonexcludeditempool: List[Item],
-                  localrestitempool: Dict[int, List[Item]],
-                  nonlocalrestitempool: Dict[int, List[Item]],
-                  restitempool: List[Item],
-                  fill_locations: List[Location]) -> None:
-        """Special method that gets called as part of distribute_items_restrictive (main fill).
-        This gets called once per present world type."""
-        pass
-
-    # def place_item_hook(self, location: Location) -> None:
-    #     if isinstance(location, ZillionLocation):
-    #         placed_item = cast(ZillionItem, location.item)
-    #         location.zz_loc.item = placed_item.zz_item
 
     def post_fill(self) -> None:
         """Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
@@ -330,13 +292,11 @@ class ZillionWorld(World):
         # original_rom_bytes = self.zz_patcher.rom
         patched_rom_bytes = self.zz_system.patcher.get_patched_bytes()
 
-        out_file_base = 'AP_' + self.world.seed_name
-        out_file_p_name = f'_P{self.player}'
-        out_file_p_name += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}"
+        out_file_base = self.world.get_out_file_name_base(self.player)
 
         filename = os.path.join(
             output_directory,
-            f'{out_file_base}{out_file_p_name}{ZillionDeltaPatch.result_file_ending}'
+            f'{out_file_base}{ZillionDeltaPatch.result_file_ending}'
         )
         with open(filename, "wb") as binary_file:
             binary_file.write(patched_rom_bytes)
@@ -348,7 +308,6 @@ class ZillionWorld(World):
         )
         patch.write()
         os.remove(filename)
-        clear_cache()
 
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
         """Fill in the `slot_data` field in the `Connected` network package.
@@ -382,22 +341,8 @@ class ZillionWorld(World):
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:
         """For deeper modification of server multidata."""
-        pass
-
-    # Spoiler writing is optional, these may not get called.
-    def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
-        """Write to the spoiler header. If individual it's right at the end of that player's options,
-        if as stage it's right under the common header before per-player options."""
-        pass
-
-    def write_spoiler(self, spoiler_handle: TextIO) -> None:
-        """Write to the spoiler "middle", this is after the per-player options and before locations,
-        meant for useful or interesting info."""
-        pass
-
-    def write_spoiler_end(self, spoiler_handle: TextIO) -> None:
-        """Write to the end of the spoiler"""
-        pass
+        # not modifying multidata, just want to call this at the end of the generation process
+        clear_cache()
 
     # end of ordered Main.py calls
 
@@ -424,38 +369,3 @@ class ZillionWorld(World):
     def get_filler_item_name(self) -> str:
         """Called when the item pool needs to be filled with additional items to match location count."""
         return "Empty"
-
-    # decent place to implement progressive items, in most cases can stay as-is
-    def collect_item(self, state: CollectionState, item: Item, remove: bool = False) -> Optional[str]:
-        """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
-        Collect None to skip item.
-        :param state: CollectionState to collect into
-        :param item: Item to decide on if it should be collected into state
-        :param remove: indicate if this is meant to remove from state instead of adding."""
-        if item.advancement:
-            return item.name
-        return None
-
-    # called to create all_state, return Items that are created during pre_fill
-    def get_pre_fill_items(self) -> List[Item]:
-        return []
-
-    # following methods should not need to be overridden.
-    def collect(self, state: CollectionState, item: Item) -> bool:
-        name = self.collect_item(state, item)
-        if name:
-            state.prog_items[name, self.player] += 1
-            return True
-        return False
-
-    def remove(self, state: CollectionState, item: Item) -> bool:
-        name = self.collect_item(state, item, True)
-        if name:
-            state.prog_items[name, self.player] -= 1
-            if state.prog_items[name, self.player] < 1:
-                del (state.prog_items[name, self.player])
-            return True
-        return False
-
-    def create_filler(self) -> Item:
-        return self.create_item(self.get_filler_item_name())

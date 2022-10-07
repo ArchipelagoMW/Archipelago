@@ -1,1 +1,1 @@
-git+https://github.com/beauxq/zilliandomizer@v0.2.2#egg=zilliandomizer
+git+https://github.com/beauxq/zilliandomizer@v0.4.0#egg=zilliandomizer

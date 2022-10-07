@@ -18,9 +18,6 @@ from zilliandomizer.patch import RescueInfo
 from worlds.zillion.id_maps import make_id_to_others
 from worlds.zillion.config import base_id
 
-# TODO: find out why close button sometimes doesn't work on ZillionClient window
-# TODO: test: receive remote rescue in scrolling hallway
-
 
 class ZillionCommandProcessor(ClientCommandProcessor):
     def _cmd_test_command(self) -> None:
@@ -163,6 +160,7 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
             ap_id_to_name, ap_id_to_zz_id, _ap_id_to_zz_item = make_id_to_others(ctx.start_char)
 
         next_item = 0
+        # TODO: find out why close button sometimes doesn't work on ZillionClient window
         while not ctx.exit_event.is_set():
             await memory.check()
             if from_game.qsize():

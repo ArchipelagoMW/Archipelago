@@ -1,6 +1,6 @@
 from collections import Counter
-from typing import Any, Dict, cast
-from Options import AssembleOptions, DefaultOnToggle, ItemDict, Range, SpecialRange, Toggle, Choice
+from typing import Any, Dict, Tuple, cast
+from Options import AssembleOptions, DefaultOnToggle, Range, SpecialRange, Toggle, Choice
 from zilliandomizer.options import \
     Options as ZzOptions, char_to_gun, char_to_jump, ID, \
     VBLR as ZzVBLR, VBLR_CHOICES, chars, Chars, ItemCounts as ZzItemCounts
@@ -23,22 +23,16 @@ class ZillionContinues(SpecialRange):
 
 
 class ZillionEarlyScope(Toggle):
+    """ whether to make sure there is a scope available early """
     display_name = "early scope"
 
 
-# TODO: all these options docstrings don't copy correctly like this
-ZillionEarlyScope.__doc__ = ZzOptions.early_scope.__doc__
-assert ZillionEarlyScope.__doc__
-
-
 class ZillionFloppyReq(Range):
+    """ how many floppy disks are required """
     range_start = 0
     range_end = 8
     default = 5
     display_name = "floppies required"
-
-
-ZillionFloppyReq.__doc__ = ZzOptions.floppy_req.__doc__
 
 
 class VBLR(Choice):
@@ -50,83 +44,169 @@ class VBLR(Choice):
 
 
 class ZillionGunLevels(VBLR):
+    """
+    Zillion gun power for the number of Zillion power ups you pick up
+
+    For "restrictive", Champ is the only one that can get Zillion gun power level 3.
+    """
     display_name = "gun levels"
 
 
-ZillionGunLevels.__doc__ = char_to_gun.__doc__
-# TODO: implement at least fixed width font for `` in __doc__
-
-
 class ZillionJumpLevels(VBLR):
+    """
+    jump levels for each character level
+
+    For "restrictive", Apple is the only one that can get jump level 3.
+    """
     display_name = "jump levels"
 
 
-ZillionJumpLevels.__doc__ = char_to_jump.__doc__
-
-
 class ZillionRandomizeAlarms(DefaultOnToggle):
+    """ whether to randomize the locations of alarm sensors """
     display_name = "randomize alarms"
 
 
-ZillionRandomizeAlarms.__doc__ = ZzOptions.randomize_alarms.__doc__
-
-
 class ZillionMaxLevel(Range):
+    """ the highest level you can get """
     range_start = 3
     range_end = 8
     default = 8
     display_name = "max level"
 
 
-ZillionMaxLevel.__doc__ = ZzOptions.max_level.__doc__
-
-
 class ZillionOpasPerLevel(Range):
+    """
+    how many Opa-Opas are required to level up
+
+    Lower makes you level up faster.
+    """
     range_start = 1
     range_end = 5
     default = 2
     display_name = "opa-opas per level"
 
 
-ZillionOpasPerLevel.__doc__ = ZzOptions.opas_per_level.__doc__
-
-
 class ZillionStartChar(Choice):
+    """ which character you start with """
     option_jj = 0
     option_apple = 1
     option_champ = 2
     display_name = "start character"
-    default = 0  # "random"  # TODO: implement this
+    default = "random"
 
 
-class ZillionItemCounts(ItemDict):
-    """ how many of each item is in the game """
-    default = {
-        "ID Card": 50,
-        "Bread": 35,
-        "Opa-Opa": 26,
-        "Zillion": 10,
-        "Floppy Disk": 7,
-        "Scope": 4,
-        "Red ID Card": 2
-    }
-    display_name = "item counts"
+class ZillionIDCardCount(Range):
+    """
+    how many ID Cards are in the game
 
-    def __init__(self, value: Dict[str, int]) -> None:
-        super().__init__(value)
-        # need all items, so fill in missing items with default
-        for name, number in ZillionItemCounts.default.items():
-            if name not in self.value:
-                self.value[name] = number
+    Vanilla is 63
+
+    maximum total for all items is 144
+    """
+    range_start = 0
+    range_end = 126
+    default = 42
+    display_name = "ID Card count"
+
+
+class ZillionBreadCount(Range):
+    """
+    how many Breads are in the game
+
+    Vanilla is 33
+
+    maximum total for all items is 144
+    """
+    range_start = 0
+    range_end = 126
+    default = 50
+    display_name = "Bread count"
+
+
+class ZillionOpaOpaCount(Range):
+    """
+    how many Opa-Opas are in the game
+
+    Vanilla is 26
+
+    maximum total for all items is 144
+    """
+    range_start = 0
+    range_end = 126
+    default = 26
+    display_name = "Opa-Opa count"
+
+
+class ZillionZillionCount(Range):
+    """
+    how many Zillion gun power ups are in the game
+
+    Vanilla is 6
+
+    maximum total for all items is 144
+    """
+    range_start = 0
+    range_end = 126
+    default = 8
+    display_name = "Zillion power up count"
+
+
+class ZillionFloppyDiskCount(Range):
+    """
+    how many Floppy Disks are in the game
+
+    Vanilla is 5
+
+    maximum total for all items is 144
+    """
+    range_start = 0
+    range_end = 126
+    default = 7
+    display_name = "Floppy Disk count"
+
+
+class ZillionScopeCount(Range):
+    """
+    how many Scopes are in the game
+
+    Vanilla is 4
+
+    maximum total for all items is 144
+    """
+    range_start = 0
+    range_end = 126
+    default = 4
+    display_name = "Scope count"
+
+
+class ZillionRedIDCardCount(Range):
+    """
+    how many Red ID Cards are in the game
+
+    Vanilla is 1
+
+    maximum total for all items is 144
+    """
+    range_start = 0
+    range_end = 126
+    default = 2
+    display_name = "Red ID Card count"
 
 
 class ZillionSkill(Range):
+    """ the difficulty level of the game """
     range_start = 0
     range_end = 5
     default = 2
 
 
 class ZillionStartingCards(SpecialRange):
+    """
+    how many ID Cards to start the game with
+
+    Refilling at the ship also ensures you have at least this many cards.
+    0 gives vanilla behavior.
+    """
     default = 2
     range_start = 0
     range_end = 10
@@ -136,14 +216,9 @@ class ZillionStartingCards(SpecialRange):
     }
 
 
-ZillionStartingCards.__doc__ = ZzOptions.starting_cards.__doc__
-
-
 class ZillionRoomGen(Toggle):
+    """ whether to generate rooms with random terrain """
     display_name = "room generation"
-
-
-ZillionRoomGen.__doc__ = ZzOptions.room_gen.__doc__
 
 
 zillion_options: Dict[str, AssembleOptions] = {
@@ -156,28 +231,34 @@ zillion_options: Dict[str, AssembleOptions] = {
     "max_level": ZillionMaxLevel,
     "start_char": ZillionStartChar,
     "opas_per_level": ZillionOpasPerLevel,
-    "item_counts": ZillionItemCounts,
+    "id_card_count": ZillionIDCardCount,
+    "bread_count": ZillionBreadCount,
+    "opa_opa_count": ZillionOpaOpaCount,
+    "zillion_count": ZillionZillionCount,
+    "floppy_disk_count": ZillionFloppyDiskCount,
+    "scope_count": ZillionScopeCount,
+    "red_id_card_count": ZillionRedIDCardCount,
     "skill": ZillionSkill,
     "starting_cards": ZillionStartingCards,
     "room_gen": ZillionRoomGen,
 }
 
 
-def convert_item_counts(ic: ZillionItemCounts) -> ZzItemCounts:
+def convert_item_counts(ic: "Counter[str]") -> ZzItemCounts:
     tr: ZzItemCounts = {
-        ID.card: ic.value["ID Card"],
-        ID.red: ic.value["Red ID Card"],
-        ID.floppy: ic.value["Floppy Disk"],
-        ID.bread: ic.value["Bread"],
-        ID.gun: ic.value["Zillion"],
-        ID.opa: ic.value["Opa-Opa"],
-        ID.scope: ic.value["Scope"],
-        ID.empty: ic.value["Empty"],
+        ID.card: ic["ID Card"],
+        ID.red: ic["Red ID Card"],
+        ID.floppy: ic["Floppy Disk"],
+        ID.bread: ic["Bread"],
+        ID.gun: ic["Zillion"],
+        ID.opa: ic["Opa-Opa"],
+        ID.scope: ic["Scope"],
+        ID.empty: ic["Empty"],
     }
     return tr
 
 
-def validate(wo: Any, p: int) -> ZzOptions:
+def validate(wo: Any, p: int) -> "Tuple[ZzOptions, Counter[str]]":
     """
     adjusts options to make game completion possible
 
@@ -199,7 +280,22 @@ def validate(wo: Any, p: int) -> ZzOptions:
 
     floppy_req = cast(ZillionFloppyReq, wo.floppy_req[p])
 
-    item_counts = cast(ZillionItemCounts, wo.item_counts[p])
+    card = cast(ZillionIDCardCount, wo.id_card_count[p])
+    bread = cast(ZillionBreadCount, wo.bread_count[p])
+    opa = cast(ZillionOpaOpaCount, wo.opa_opa_count[p])
+    gun = cast(ZillionZillionCount, wo.zillion_count[p])
+    floppy = cast(ZillionFloppyDiskCount, wo.floppy_disk_count[p])
+    scope = cast(ZillionScopeCount, wo.scope_count[p])
+    red = cast(ZillionRedIDCardCount, wo.red_id_card_count[p])
+    item_counts = Counter({
+        "ID Card": card,
+        "Bread": bread,
+        "Opa-Opa": opa,
+        "Zillion": gun,
+        "Floppy Disk": floppy,
+        "Scope": scope,
+        "Red ID Card": red
+    })
     minimums = Counter({
         "ID Card": 0,
         "Bread": 0,
@@ -210,34 +306,31 @@ def validate(wo: Any, p: int) -> ZzOptions:
         "Red ID Card": 1
     })
     for key in minimums:
-        if key not in item_counts.value:
-            item_counts.value[key] = ZillionItemCounts.default[key]
-        item_counts.value[key] = max(minimums[key], item_counts.value[key])
+        item_counts[key] = max(minimums[key], item_counts[key])
     max_movables = 144 - sum(minimums.values())
-    input_counter = Counter(item_counts.value)
-    movables = input_counter - minimums
+    movables = item_counts - minimums
     while sum(movables.values()) > max_movables:
         total = sum(movables.values())
         scaler = max_movables / total
         for key in movables:
             movables[key] = int(movables[key] * scaler)
-    item_counts.value = movables + minimums
+    item_counts = movables + minimums
 
     # now have required items, and <= 144
 
     # now fill remaining with empty
-    total = sum(item_counts.value.values())
+    total = sum(item_counts.values())
     diff = 144 - total
-    if "Empty" not in item_counts.value:
-        item_counts.value["Empty"] = 0
-    item_counts.value["Empty"] += diff
-    assert sum(item_counts.value.values()) == 144
+    if "Empty" not in item_counts:
+        item_counts["Empty"] = 0
+    item_counts["Empty"] += diff
+    assert sum(item_counts.values()) == 144
 
     max_level = cast(ZillionMaxLevel, wo.max_level[p])
     max_level.value = max(required_level, max_level.value)
 
     opas_per_level = cast(ZillionOpasPerLevel, wo.opas_per_level[p])
-    while (opas_per_level.value > 1) and (1 + item_counts.value["Opa-Opa"] // opas_per_level.value < max_level.value):
+    while (opas_per_level.value > 1) and (1 + item_counts["Opa-Opa"] // opas_per_level.value < max_level.value):
         opas_per_level.value -= 1
 
     # that should be all of the level requirements met
@@ -272,4 +365,4 @@ def validate(wo: Any, p: int) -> ZzOptions:
         bool(room_gen.value)
     )
     zz_validate(zz_op)
-    return zz_op
+    return zz_op, item_counts
