@@ -470,9 +470,9 @@ function GetRedROMPath(Param: string): string;
 begin
   if Length(redrom) > 0 then
     Result := redrom
-  else if Assigned(SoERomFilePage) then
+  else if Assigned(RedRomFilePage) then
     begin
-      R := CompareStr(GetSNESMD5OfFile(RedROMFilePage.Values[0]), '3d45c1ee9abd5738df46d2bdda8b57dc')
+      R := CompareStr(GetMD5OfFile(RedROMFilePage.Values[0]), '3d45c1ee9abd5738df46d2bdda8b57dc')
       if R <> 0 then
         MsgBox('Pokemon Red ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
 
@@ -488,7 +488,7 @@ begin
     Result := bluerom
   else if Assigned(BlueRomFilePage) then
     begin
-      R := CompareStr(GetSNESMD5OfFile(BlueROMFilePage.Values[0]), '50927e843568814f7ed45ec4f944bd8b')
+      R := CompareStr(GetMD5OfFile(BlueROMFilePage.Values[0]), '50927e843568814f7ed45ec4f944bd8b')
       if R <> 0 then
         MsgBox('Pokemon Blue ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
 
