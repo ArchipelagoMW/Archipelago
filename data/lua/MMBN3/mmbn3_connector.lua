@@ -149,7 +149,7 @@ local sci_bmd_checks = function()
 end
 local yoka_bmd_checks = function()
     local checks ={}
-    checks["Yoka 1 North MBD"] = memory.read_u8(0x20001e0)
+    checks["Yoka 1 North BMD"] = memory.read_u8(0x20001e0)
     checks["Yoka 1 WWW BMD"] = memory.read_u8(0x20001e0)
     checks["Yoka 2 Upper BMD"] = memory.read_u8(0x20001e1)
     checks["Yoka 2 Lower BMD"] = memory.read_u8(0x20001e1)

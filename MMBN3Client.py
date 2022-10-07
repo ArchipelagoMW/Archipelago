@@ -164,8 +164,9 @@ class MMBN3Context(CommonContext):
         if password_requested and not self.password:
             await super(MMBN3Context, self).server_auth(password_requested)
         if not self.auth:
+            await self.get_username()
             self.awaiting_rom = True
-            logger.info('Awaiting connection to Bizhawk to get player information')
+            logger.info('Awaiting conection to Bizhawk')
             return
 
         await self.send_connect()
