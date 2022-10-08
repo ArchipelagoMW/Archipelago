@@ -16,14 +16,14 @@ class AutoSNIClientRegister(type):
     @staticmethod
     async def get_handler(ctx) -> Optional[SNIClient]:
         for game, handler in AutoSNIClientRegister.game_handlers.items():
-            if await handler.rom_init(ctx):
+            if await handler.validate_rom(ctx):
                 return handler
         return None
 
 
 class SNIClient(metaclass=AutoSNIClientRegister):
 
-    async def rom_init(self, ctx):
+    async def validate_rom(self, ctx):
         raise NotImplementedError
 
     async def game_watcher(self, ctx):

@@ -93,34 +93,29 @@ class SMWSNIClient(SNIClient):
         ctx.last_death_link = time.time()
 
 
-    async def rom_init(self, ctx):
+    async def validate_rom(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
-        if not ctx.rom:
-            ctx.finished_game = False
-            ctx.death_link_allow_survive = False
-            game_hash = await snes_read(ctx, SMW_ROMHASH_START, ROMHASH_SIZE)
 
-            if game_hash is None or game_hash == bytes([0] * ROMHASH_SIZE) or game_hash[:3] != b"SMW":
-                return False
+        game_hash = await snes_read(ctx, SMW_ROMHASH_START, ROMHASH_SIZE)
+        if game_hash is None or game_hash == bytes([0] * ROMHASH_SIZE) or game_hash[:3] != b"SMW":
+            return False
 
-            ctx.game = self.game
-            ctx.items_handling = 0b111  # remote items
+        ctx.game = self.game
+        ctx.items_handling = 0b111  # remote items
 
-            ctx.rom = game_hash
+        receive_option = await snes_read(ctx, SMW_RECEIVE_MSG_DATA, 0x1)
+        send_option = await snes_read(ctx, SMW_SEND_MSG_DATA, 0x1)
 
-            receive_option = await snes_read(ctx, SMW_RECEIVE_MSG_DATA, 0x1)
-            send_option = await snes_read(ctx, SMW_SEND_MSG_DATA, 0x1)
+        ctx.receive_option = receive_option[0]
+        ctx.send_option = send_option[0]
 
-            ctx.receive_option = receive_option[0]
-            ctx.send_option = send_option[0]
+        ctx.allow_collect = True
 
-            self.message_queue = []
+        death_link = await snes_read(ctx, SMW_DEATH_LINK_ACTIVE_ADDR, 1)
+        if death_link:
+            await ctx.update_death_link(bool(death_link[0] & 0b1))
 
-            ctx.allow_collect = True
-
-            death_link = await snes_read(ctx, SMW_DEATH_LINK_ACTIVE_ADDR, 1)
-            if death_link:
-                await ctx.update_death_link(bool(death_link[0] & 0b1))
+        ctx.rom = game_hash
 
         return True
 

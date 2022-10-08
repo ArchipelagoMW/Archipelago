@@ -2,15 +2,15 @@ from __future__ import annotations
 
 import logging
 import shutil
+import time
 
 import Utils
-from CommonClient import gui_enabled
 
-from SNIClient import Context, snes_logger, snes_read, snes_buffered_write, snes_flush_writes, \
-                      ROM_START, WRAM_START, WRAM_SIZE, SRAM_START, ROMNAME_SIZE
+from NetUtils import ClientStatus, color
+from worlds.AutoSNIClient import SNIClient
 
 from worlds.alttp import Shops, Regions
-from worlds.alttp.Rom import ROM_PLAYER_LIMIT
+from .Rom import ROM_PLAYER_LIMIT
 
 snes_logger = logging.getLogger("SNES")
 
@@ -321,7 +321,8 @@ location_table_misc = {'Bottle Merchant': (0x3c9, 0x2),
 location_table_misc_id = {Regions.lookup_name_to_id[name]: data for name, data in location_table_misc.items()}
 
 
-async def track_locations(ctx: Context, roomid, roomdata):
+async def track_locations(ctx, roomid, roomdata):
+    from SNIClient import snes_read, snes_buffered_write, snes_flush_writes
     new_locations = []
 
     def new_check(location_id):
@@ -477,6 +478,7 @@ def get_alttp_settings(romfile: str):
                         printed_options["sprite_pool"] = sprite_pool
             import pprint
 
+            from CommonClient import gui_enabled
             if gui_enabled:
 
                 try:
@@ -581,8 +583,11 @@ def get_alttp_settings(romfile: str):
     return adjustedromfile, adjusted
 
 
-async def deathlink_kill_player(ctx: Context):
-    if ctx.game == GAME_ALTTP:
+class ALTTPSNIClient(SNIClient):
+    game = "A Link to the Past"
+
+    async def deathlink_kill_player(self, ctx):
+        from SNIClient import snes_read, snes_buffered_write, snes_flush_writes
         invincible = await snes_read(ctx, WRAM_START + 0x037B, 1)
         last_health = await snes_read(ctx, WRAM_START + 0xF36D, 1)
         await asyncio.sleep(0.25)
@@ -604,13 +609,14 @@ async def deathlink_kill_player(ctx: Context):
             ctx.death_state = DeathState.dead
 
 
-async def rom_init(ctx: Context):
-    if not ctx.rom:
+    async def validate_rom(self, ctx):
+        from SNIClient import snes_read, snes_buffered_write, snes_flush_writes
+
         game_hash = await snes_read(ctx, ROMNAME_START, ROMNAME_SIZE)
         if game_hash is None or game_hash == bytes([0] * ROMNAME_SIZE) or game_hash[:2] != b"AP":
-            return
+            return False
 
-        ctx.game = GAME_ALTTP
+        ctx.game = self.game
         ctx.items_handling = 0b001  # full local
 
         ctx.rom = game_hash
@@ -622,9 +628,12 @@ async def rom_init(ctx: Context):
             ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
             await ctx.update_death_link(bool(death_link[0] & 0b1))
 
+        return True
 
-async def game_watcher(ctx: Context):
-    if ctx.game == GAME_ALTTP:gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
+
+    async def game_watcher(self, ctx):
+        from SNIClient import snes_read, snes_buffered_write, snes_flush_writes
+        gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
         if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
             currently_dead = gamemode[0] in DEATH_MODES
             await ctx.handle_deathlink_state(currently_dead)
@@ -635,22 +644,10 @@ async def game_watcher(ctx: Context):
                 (gamemode[0] not in INGAME_MODES and gamemode[0] not in ENDGAME_MODES):
             return
 
-        delay = 7 if ctx.slow_mode else 2
         if gameend[0]:
             if not ctx.finished_game:
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                 ctx.finished_game = True
-
-            if time.perf_counter() - perf_counter < delay:
-                return
-            else:
-                perf_counter = time.perf_counter()
-        else:
-            game_timer = game_timer[0] | (game_timer[1] << 8) | (game_timer[2] << 16) | (game_timer[3] << 24)
-            if abs(game_timer - prev_game_timer) < (delay * 60):
-                return
-            else:
-                prev_game_timer = game_timer
 
         if gamemode in ENDGAME_MODES:  # triforce room and credits
             return

@@ -58,6 +58,9 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         otherwise show available devices; and a SNES device number if more than one SNES is detected.
         Examples: "/snes", "/snes 1", "/snes localhost:23074 1" """
 
+        self.connect_to_snes(snes_options)
+
+    def connect_to_snes(self, snes_options: str = "") -> bool:
         snes_address = self.ctx.snes_address
         snes_device_number = -1
 
@@ -526,8 +529,6 @@ async def snes_flush_writes(ctx: SNIContext):
 
 
 async def game_watcher(ctx: SNIContext):
-    #from worlds.smw.Client import SMWSNIClient
-    prev_game_timer = 0
     perf_counter = time.perf_counter()
     while not ctx.exit_event.is_set():
         try:
@@ -536,15 +537,14 @@ async def game_watcher(ctx: SNIContext):
             pass
         ctx.watcher_event.clear()
 
-        if not ctx.rom:
+        if not ctx.rom or not ctx.client_handler:
             ctx.finished_game = False
             ctx.death_link_allow_survive = False
 
             from worlds.AutoSNIClient import AutoSNIClientRegister
-            #from worlds.smw.Client import SMWSNIClient
             ctx.client_handler = await AutoSNIClientRegister.get_handler(ctx)
 
-            if ctx.client_handler is None:
+            if not ctx.client_handler:
                 continue
 
             if not ctx.rom:
@@ -562,12 +562,24 @@ async def game_watcher(ctx: SNIContext):
                 snes_logger.warning("ROM detected but no active multiworld server connection. " +
                                     "Connect using command: /connect server:port")
 
-        if ctx.auth and ctx.auth != ctx.rom:
+        if not ctx.client_handler:
+            continue
+
+        rom_validated = await ctx.client_handler.validate_rom(ctx)
+
+        if not rom_validated or (ctx.auth and ctx.auth != ctx.rom):
             snes_logger.warning("ROM change detected, please reconnect to the multiworld server")
             await ctx.disconnect()
-
-        if ctx.client_handler is None:
+            ctx.client_handler = None
+            ctx.rom = None
+            ctx.command_processor(ctx).connect_to_snes()
             continue
+
+        delay = 7 if ctx.slow_mode else 0
+        if time.perf_counter() - perf_counter < delay:
+            return
+
+        perf_counter = time.perf_counter()
 
         await ctx.client_handler.game_watcher(ctx)
 

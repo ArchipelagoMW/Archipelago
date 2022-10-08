@@ -58,31 +58,31 @@ class SMSNIClient(SNIClient):
             ctx.death_state = DeathState.dead
 
 
-    async def rom_init(self, ctx):
+    async def validate_rom(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
-        if not ctx.rom:
-            game_hash = await snes_read(ctx, SM_ROMNAME_START, ROMNAME_SIZE)
-            if game_hash is None or game_hash == bytes([0] * ROMNAME_SIZE) or game_hash[:2] != b"SM" or game_hash[:3] == b"SMW":
-                return False
 
-            ctx.game = self.game
+        game_hash = await snes_read(ctx, SM_ROMNAME_START, ROMNAME_SIZE)
+        if game_hash is None or game_hash == bytes([0] * ROMNAME_SIZE) or game_hash[:2] != b"SM" or game_hash[:3] == b"SMW":
+            return False
 
-            # versions lower than 0.3.0 dont have item handling flag nor remote item support
-            romVersion = int(game_hash[2:5].decode('UTF-8'))
-            if romVersion < 30:
-                ctx.items_handling = 0b001 # full local
-            else:
-                item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
-                ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
+        ctx.game = self.game
 
-            ctx.rom = game_hash
+        # versions lower than 0.3.0 dont have item handling flag nor remote item support
+        romVersion = int(game_hash[2:5].decode('UTF-8'))
+        if romVersion < 30:
+            ctx.items_handling = 0b001 # full local
+        else:
+            item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
+            ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
 
-            death_link = await snes_read(ctx, SM_DEATH_LINK_ACTIVE_ADDR, 1)
+        ctx.rom = game_hash
 
-            if death_link:
-                ctx.allow_collect = bool(death_link[0] & 0b100)
-                ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
-                await ctx.update_death_link(bool(death_link[0] & 0b1))
+        death_link = await snes_read(ctx, SM_DEATH_LINK_ACTIVE_ADDR, 1)
+
+        if death_link:
+            ctx.allow_collect = bool(death_link[0] & 0b100)
+            ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
+            await ctx.update_death_link(bool(death_link[0] & 0b1))
 
         return True
 

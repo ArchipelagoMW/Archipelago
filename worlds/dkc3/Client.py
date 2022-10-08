@@ -30,29 +30,23 @@ class DKC3SNIClient(SNIClient):
         # DKC3_TODO: Handle Receiving Deathlink
 
 
-    async def rom_init(self, ctx):
+    async def validate_rom(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
-        if not ctx.rom:
-            ctx.finished_game = False
-            ctx.death_link_allow_survive = False
-            game_name = await snes_read(ctx, DKC3_ROMNAME_START, ROMNAME_SIZE)
-            if game_name is None or game_name != b"DONKEY KONG COUNTRY 3":
-                return False
 
-            ctx.game = self.game
-            ctx.items_handling = 0b111  # remote items
+        game_hash = await snes_read(ctx, DKC3_ROMHASH_START, ROMHASH_SIZE)
+        if game_hash is None or game_hash == bytes([0] * ROMHASH_SIZE) or game_hash[:2] != b"D3":
+            return False
 
-            rom = await snes_read(ctx, DKC3_ROMHASH_START, ROMHASH_SIZE)
-            if rom is None or rom == bytes([0] * ROMHASH_SIZE):
-                return False
+        ctx.game = self.game
+        ctx.items_handling = 0b111  # remote items
 
-            ctx.rom = rom
+        ctx.rom = game_hash
 
-            #death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR, 1)
-            ## DKC3_TODO: Handle Deathlink
-            #if death_link:
-            #    ctx.allow_collect = bool(death_link[0] & 0b100)
-            #    await ctx.update_death_link(bool(death_link[0] & 0b1))
+        #death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR, 1)
+        ## DKC3_TODO: Handle Deathlink
+        #if death_link:
+        #    ctx.allow_collect = bool(death_link[0] & 0b100)
+        #    await ctx.update_death_link(bool(death_link[0] & 0b1))
         return True
 
 
@@ -60,10 +54,10 @@ class DKC3SNIClient(SNIClient):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
         # DKC3_TODO: Handle Deathlink
         save_file_name = await snes_read(ctx, DKC3_FILE_NAME_ADDR, 0x5)
-        if save_file_name is None or save_file_name[0] == 0x00:
+        if save_file_name is None or save_file_name[0] == 0x00 or save_file_name == bytes([0x55] * 0x05):
             # We haven't loaded a save file
             return
-        print("Game Watcher")
+
         new_checks = []
         from worlds.dkc3.Rom import location_rom_data, item_rom_data, boss_location_ids, level_unlock_map
         location_ram_data = await snes_read(ctx, WRAM_START + 0x5FE, 0x81)
@@ -78,8 +72,9 @@ class DKC3SNIClient(SNIClient):
                     new_checks.append(loc_id)
 
         verify_save_file_name = await snes_read(ctx, DKC3_FILE_NAME_ADDR, 0x5)
-        if verify_save_file_name is None or verify_save_file_name[0] == 0x00 or verify_save_file_name != save_file_name:
+        if verify_save_file_name is None or verify_save_file_name[0] == 0x00 or verify_save_file_name == bytes([0x55] * 0x05) or verify_save_file_name != save_file_name:
             # We have somehow exited the save file (or worse)
+            ctx.rom = None
             return
 
         rom = await snes_read(ctx, DKC3_ROMHASH_START, ROMHASH_SIZE)

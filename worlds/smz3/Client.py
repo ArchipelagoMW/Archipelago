@@ -3,15 +3,10 @@ import asyncio
 import time
 
 from NetUtils import ClientStatus, color
-from worlds import AutoWorldRegister
-from SNIClient import Context, snes_buffered_write, snes_flush_writes, snes_read, \
-                      ROM_START, WRAM_START, WRAM_SIZE, SRAM_START, ROMNAME_SIZE
-from Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
-from Patch import GAME_SMZ3
+from worlds.AutoSNIClient import SNIClient
+from .Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
 
 snes_logger = logging.getLogger("SNES")
-
-GAME_SMZ3 = "SMZ3"
 
 # FXPAK Pro protocol memory mapping used by SNI
 ROM_START = 0x000000
@@ -25,8 +20,9 @@ ROMNAME_SIZE = 0x15
 
 SAVEDATA_START = WRAM_START + 0xF000
 
-SMZ3_INGAME_MODES = {0x07, 0x09, 0x0b}
-SMZ3_ENDGAME_MODES = {0x26, 0x27}
+SMZ3_INGAME_MODES = {0x07, 0x09, 0x0B}
+ENDGAME_MODES = {0x19, 0x1A}
+SM_ENDGAME_MODES = {0x26, 0x27}
 SMZ3_DEATH_MODES = {0x15, 0x17, 0x18, 0x19, 0x1A}
 
 SMZ3_RECV_PROGRESS_ADDR = SRAM_START + 0x4000         # 2 bytes
@@ -34,20 +30,26 @@ SMZ3_RECV_ITEM_ADDR = SAVEDATA_START + 0x4D2          # 1 byte
 SMZ3_RECV_ITEM_PLAYER_ADDR = SAVEDATA_START + 0x4D3   # 1 byte
 
 
-async def rom_init(ctx: Context):
-    if not ctx.rom:
+class SMZ3SNIClient(SNIClient):
+    game = "SMZ3"
+
+    async def validate_rom(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+
         game_hash = await snes_read(ctx, SMZ3_ROMNAME_START, ROMNAME_SIZE)
         if game_hash is None or game_hash == bytes([0] * ROMNAME_SIZE) or game_hash[:3] != b"ZSM":
-            return
+            return False
 
-        ctx.game = GAME_SMZ3
+        ctx.game = self.game
         ctx.items_handling = 0b101  # local items and remote start inventory
 
         ctx.rom = game_hash
 
+        return True
 
-async def game_watcher(ctx: Context):
-    if ctx.game == GAME_SMZ3:
+
+    async def game_watcher(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
         if ctx.server is None or ctx.slot is None:
             # not successfully connected to a multiworld server, cannot process the game sending items
             return
