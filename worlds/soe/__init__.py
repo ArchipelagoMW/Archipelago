@@ -333,8 +333,7 @@ class SoEWorld(World):
                 switches.extend(('--available-fragments', str(self.available_fragments),
                                  '--required-fragments', str(self.required_fragments)))
             rom_file = get_base_rom_path()
-            out_base = output_path(output_directory, f'AP_{self.world.seed_name}_P{self.player}_'
-                                                     f'{self.world.get_file_safe_player_name(self.player)}')
+            out_base = output_path(output_directory, self.world.get_out_file_name_base(self.player))
             out_file = out_base + '.sfc'
             placement_file = out_base + '.txt'
             patch_file = out_base + '.apsoe'
