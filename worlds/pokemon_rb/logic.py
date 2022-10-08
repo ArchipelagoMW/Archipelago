@@ -52,6 +52,7 @@ class PokemonLogic(LogicMixin):
         if self.world.tea[player].value:
             return self.has("Tea", player)
         else:
+            # this could just be "True", but you never know what weird options I might introduce later ;)
             return self.can_reach("Celadon City - Counter Man", "Location", player)
 
     def pokemon_rb_has_badges(self, count, player):
@@ -66,7 +67,7 @@ class PokemonLogic(LogicMixin):
 
         return len(obtained_pokemon) >= count
 
-    def pokemon_rb_fossil_checks(self, player):
-        return (self.world.get_location("Mt Moon 1F - Southwest Item", player) and self.world.get_location(
-                "Cinnabar Island - Lab Scientist", player)) and (self.has("Old Amber", player) or
-                self.has("Dome Fossil", player) or self.has("Helix Fossil", player))
+    def pokemon_rb_fossil_checks(self, count, player):
+        return (self.can_reach('Mt Moon 1F - Southwest Item', 'Location', player) and
+                self.can_reach('Cinnabar Island - Lab Scientist', 'Location', player) and len(
+            [item for item in ["Dome Fossil", "Helix Fossil", "Old Amber"] if self.has(item, player)]) >= count)

@@ -67,6 +67,15 @@ class CeruleanCaveCondition(Range):
     default = 20
 
 
+class SecondFossilCheckCondition(Range):
+    """After choosing one of the fossil location items, you can obtain the remaining item from the Cinnabar Lab
+    Scientist after reviving this number of fossils."""
+    display_name = "Second Fossil Check Condition"
+    range_start = 0
+    range_end = 3
+    default = 3
+
+
 class BadgeSanity(Toggle):
     """Shuffle gym badges into the general item pool. If turned off, badges will be shuffled across the 8 gyms."""
     display_name = "Badgesanity"
@@ -431,14 +440,15 @@ pokemon_rb_options = {
     "victory_road_condition": VictoryRoadCondition,
     "viridian_gym_condition": ViridianGymCondition,
     "cerulean_cave_condition": CeruleanCaveCondition,
+    "second_fossil_check_condition": SecondFossilCheckCondition,
     "badgesanity": BadgeSanity,
-    "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
     "old_man": OldMan,
     "tea": Tea,
     "extra_key_items": ExtraKeyItems,
     "extra_strength_boulders": ExtraStrengthBoulders,
     "require_item_finder": RequireItemFinder,
     "randomize_hidden_items": RandomizeHiddenItems,
+    "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
     "free_fly_location": FreeFlyLocation,
     "oaks_aide_rt_2": OaksAidRt2,
     "oaks_aide_rt_11": OaksAidRt11,

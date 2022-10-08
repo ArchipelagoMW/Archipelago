@@ -4,9 +4,10 @@ import logging
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from Fill import fill_restrictive, FillError
+from ..AutoWorld import World, WebWorld
+from ..generic.Rules import add_item_rule
 from .items import item_table, item_groups
 from .locations import get_locations, PokemonRBLocation
-from ..AutoWorld import World, WebWorld
 from .regions import create_regions
 from .logic import PokemonLogic
 from .options import pokemon_rb_options
@@ -111,8 +112,23 @@ class PokemonRedBlueWorld(World):
 
         self.world.itempool += item_pool
 
+        process_pokemon_data(self)  # strange place for this, but it is the only place that works for now
 
-        process_pokemon_data(self)  # strange place for this, but it is the only place that works
+    def stage_pre_fill(self):
+        players = self.get_game_players("Pokemon Red and Blue")
+        locs = []
+        for player in players:
+            player_locs = [self.get_location("Fossil - Choice A", player),
+                          self.get_location("Fossil - Choice B", player)]
+            for loc in player_locs:
+                add_item_rule(loc, lambda i: i.advancement or i.name in self.worlds[player].item_name_groups["Unique"]
+                              or i.name == "Master Ball")
+            player_locs.append(self.get_location("Pallet Town - Player's PC", player))
+            for loc in player_locs:
+                if loc.name in self.priority_locations[player].value:
+                    add_item_rule(loc, lambda i: i.advancement)
+            locs += player_locs
+        fill_restrictive(self, self.state, locs, self.itempool, True, True)
 
     def pre_fill(self):
 
@@ -130,17 +146,18 @@ class PokemonRedBlueWorld(World):
             self.world.random.shuffle(locations)
             location = locations.pop()
             location.place_locked_item(item)
-        local_locs = ["Pallet Town - Player's PC", "Fossil - Choice A", "Fossil - Choice B"]
-        player_items = []
-        for item in self.world.itempool:
-            if item.player == self.player:
-                player_items.append(item)
-        self.world.random.shuffle(player_items)
-        for location_name in local_locs:
-            location = self.world.get_location(location_name, self.player)
-            if location.item is None:
-                location.place_locked_item(player_items[0])
-                self.world.itempool.remove(player_items.pop(0))
+        # local_locs = ["Pallet Town - Player's PC", "Fossil - Choice A", "Fossil - Choice B"]
+        # player_items = []
+        # for item in self.world.itempool:
+        #     if item.player == self.player:
+        #         player_items.append(item)
+        # self.world.random.shuffle(player_items)
+        # for location_name in local_locs:
+        #     location = self.world.get_location(location_name, self.player)
+        #     if location.item is None:
+        #         location.place_locked_item(player_items[0])
+        #         self.world.itempool.remove(player_items.pop(0))
+
         if not self.world.badgesanity[self.player].value:
             self.world.non_local_items[self.player].value -= self.item_name_groups["Badges"]
             for i in range(5):
@@ -165,6 +182,7 @@ class PokemonRedBlueWorld(World):
                 break
             else:
                 raise FillError(f"Failed to place badges for player {self.player}")
+
         intervene = False
         test_state = self.world.get_all_state(False)
         if not test_state.pokemon_rb_can_surf(self.player) or not test_state.pokemon_rb_can_strength(self.player):
@@ -173,6 +191,8 @@ class PokemonRedBlueWorld(World):
             if not test_state.pokemon_rb_can_cut(self.player) or not test_state.pokemon_rb_can_flash(self.player):
                 intervene = True
         if intervene:
+            # the way this is handled will be improved significantly in the future when I add options to
+            # let you choose the exact weights for HM compatibility
             logging.warning(
                 f"HM-compatible Pokémon possibly missing, placing Mew on Route 1 for player {self.player}")
             loc = self.world.get_location("Route 1 - Wild Pokemon - 1", self.player)
@@ -217,7 +237,6 @@ class PokemonRedBlueWorld(World):
     def get_filler_item_name(self) -> str:
         return self.world.random.choice([item for item in item_table if item_table[item].classification in
                                          [ItemClassification.filler, ItemClassification.trap]])
-
 
 
 class PokemonRBItem(Item):
