@@ -330,7 +330,7 @@ class SNESRequest(typing.TypedDict):
     Opcode: str
     Space: str
     Operands: typing.List[str]
-    # TODO: When Python 3.11 is the lowest version supported, Operands can use typing.NotRequired (pep-0655)
+    # TODO: When Python 3.11 is the lowest version supported, `Operands` can use `typing.NotRequired` (pep-0655)
     # Then the `Operands` key doesn't need to be given for opcodes that don't use it.
 
 
