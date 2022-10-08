@@ -3,7 +3,7 @@ import os
 import logging
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from Fill import fill_restrictive, FillError
+from Fill import fill_restrictive, FillError, sweep_from_pool
 from ..AutoWorld import World, WebWorld
 from ..generic.Rules import add_item_rule
 from .items import item_table, item_groups
@@ -172,15 +172,14 @@ class PokemonRedBlueWorld(World):
             if loc.name in self.world.priority_locations[self.player].value:
                 add_item_rule(loc, lambda i: i.advancement)
             for item in self.world.itempool:
-                self.world.itempool.remove(item)
-                from Fill import sweep_from_pool
-                state = sweep_from_pool(self.world.state, self.world.itempool + unplaced_items)
-                if (item.player == self.player and loc.item_rule(item) and
-                        state.can_reach(loc, "Location", self.player)):
-                    loc.place_locked_item(item)
-                    break
-                else:
-                    unplaced_items.append(item)
+                if item.player == self.player and loc.item_rule(item):
+                    self.world.itempool.remove(item)
+                    state = sweep_from_pool(self.world.state, self.world.itempool + unplaced_items)
+                    if state.can_reach(loc, "Location", self.player):
+                        loc.place_locked_item(item)
+                        break
+                    else:
+                        unplaced_items.append(item)
             self.world.itempool += unplaced_items
 
         intervene = False
