@@ -146,18 +146,6 @@ class PokemonRedBlueWorld(World):
             self.world.random.shuffle(locations)
             location = locations.pop()
             location.place_locked_item(item)
-        # local_locs = ["Pallet Town - Player's PC", "Fossil - Choice A", "Fossil - Choice B"]
-        # player_items = []
-        # for item in self.world.itempool:
-        #     if item.player == self.player:
-        #         player_items.append(item)
-        # self.world.random.shuffle(player_items)
-        # for location_name in local_locs:
-        #     location = self.world.get_location(location_name, self.player)
-        #     if location.item is None:
-        #         location.place_locked_item(player_items[0])
-        #         self.world.itempool.remove(player_items.pop(0))
-
         if not self.world.badgesanity[self.player].value:
             self.world.non_local_items[self.player].value -= self.item_name_groups["Badges"]
             for i in range(5):
