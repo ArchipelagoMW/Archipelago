@@ -71,6 +71,7 @@ class NoitaWorld(World):
             "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for i in range(16)),
             "totalLocations": self.world.total_locations[self.player].value,
             "badEffects": self.world.bad_effects[self.player].value,
+            "deathLink": self.world.death_link[self.player].value,
         }
 
     def create_item(self, name: str) -> Item:
