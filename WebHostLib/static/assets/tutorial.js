@@ -43,10 +43,12 @@ window.addEventListener('load', () => {
         }
 
         // Manually scroll the user to the appropriate header if anchor navigation is used
-        if (window.location.hash) {
-            const scrollTarget = document.getElementById(window.location.hash.substring(1));
-            scrollTarget?.scrollIntoView();
-        }
+        document.fonts.ready.finally(() => {
+            if (window.location.hash) {
+                const scrollTarget = document.getElementById(window.location.hash.substring(1));
+                scrollTarget?.scrollIntoView();
+            }
+        });
     }).catch((error) => {
         console.error(error);
         tutorialWrapper.innerHTML =
