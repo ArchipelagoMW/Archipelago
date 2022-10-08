@@ -41,3 +41,18 @@ clocktower_key_two   = "Clocktower Key2"
 clocktower_key_three = "Clocktower Key3"
 
 victory = "Marriage Proposal"
+
+bone_mom_one = "Creaking Skull 1"
+bone_mom_two = "Creaking Skull 2"
+forest_weretiger = "Forest Were-tiger"
+w_dragons = "White Dragons"
+vamp_couple = "Vampire Couple"
+behemoth = "Behemoth"
+rosamilla = "Rosa/Camilla"
+werejaguar = "Were-jaguar"
+werewolf = "Were-wolf"
+werebull = "Were-bull"
+weretiger = "Were-tiger"
+deathtrice = "Death/Actrise"
+
+crystal = "Giant Crystal"

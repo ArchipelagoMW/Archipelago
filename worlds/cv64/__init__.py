@@ -81,7 +81,7 @@ class CV64World(World):
             classification = ItemClassification.filler
 
         created_item = CV64Item(name, classification, data.code, self.player)
-        if name != "Marriage Proposal":
+        if name in rom_item_bytes:
             created_item.item_byte = rom_item_bytes[name]
 
         return created_item
@@ -100,23 +100,47 @@ class CV64World(World):
         itempool: typing.List[CV64Item] = []
 
         # Levels
-        total_required_locations = 165
+        total_required_locations = 213
 
         # number_of_specials = 0
         self.world.get_location(LocationName.the_end, self.player).place_locked_item(self.create_item(ItemName.victory))
 
-        itempool += [self.create_item(ItemName.special_one)] * 1
-        itempool += [self.create_item(ItemName.special_two)] * 2
-        itempool += [self.create_item(ItemName.roast_chicken)] * 15
-        itempool += [self.create_item(ItemName.roast_beef)] * 17
-        itempool += [self.create_item(ItemName.healing_kit)] * 1
-        itempool += [self.create_item(ItemName.purifying)] * 5
-        itempool += [self.create_item(ItemName.cure_ampoule)] * 3
-        itempool += [self.create_item(ItemName.powerup)] * 9
+        self.world.get_location(LocationName.forest_boss_one, self.player)\
+            .place_locked_item(self.create_item(ItemName.bone_mom_one))
+        self.world.get_location(LocationName.forest_boss_two, self.player)\
+            .place_locked_item(self.create_item(ItemName.forest_weretiger))
+        self.world.get_location(LocationName.forest_boss_three, self.player)\
+            .place_locked_item(self.create_item(ItemName.bone_mom_two))
+        self.world.get_location(LocationName.cw_boss, self.player)\
+            .place_locked_item(self.create_item(ItemName.w_dragons))
+        self.world.get_location(LocationName.villa_boss, self.player)\
+            .place_locked_item(self.create_item(ItemName.vamp_couple))
+        self.world.get_location(LocationName.cc_boss_one, self.player)\
+            .place_locked_item(self.create_item(ItemName.behemoth))
+        self.world.get_location(LocationName.cc_boss_two, self.player)\
+            .place_locked_item(self.create_item(ItemName.rosamilla))
+        self.world.get_location(LocationName.dt_boss_one, self.player)\
+            .place_locked_item(self.create_item(ItemName.werejaguar))
+        self.world.get_location(LocationName.dt_boss_two, self.player)\
+            .place_locked_item(self.create_item(ItemName.werewolf))
+        self.world.get_location(LocationName.dt_boss_three, self.player)\
+            .place_locked_item(self.create_item(ItemName.werebull))
+        self.world.get_location(LocationName.dt_boss_four, self.player)\
+            .place_locked_item(self.create_item(ItemName.weretiger))
+        self.world.get_location(LocationName.roc_boss, self.player)\
+            .place_locked_item(self.create_item(ItemName.deathtrice))
+
+        itempool += [self.create_item(ItemName.special_one)] * self.world.total_special1s[self.player].value
+        itempool += [self.create_item(ItemName.roast_chicken)] * 21
+        itempool += [self.create_item(ItemName.roast_beef)] * 24
+        itempool += [self.create_item(ItemName.healing_kit)] * 4
+        itempool += [self.create_item(ItemName.purifying)] * 14
+        itempool += [self.create_item(ItemName.cure_ampoule)] * 5
+        itempool += [self.create_item(ItemName.powerup)] * 10
         itempool += [self.create_item(ItemName.magical_nitro)] * 2
         itempool += [self.create_item(ItemName.mandragora)] * 2
-        itempool += [self.create_item(ItemName.sun_card)] * 7
-        itempool += [self.create_item(ItemName.moon_card)] * 7
+        itempool += [self.create_item(ItemName.sun_card)] * 9
+        itempool += [self.create_item(ItemName.moon_card)] * 8
         itempool += [self.create_item(ItemName.left_tower_key)] * 1
         itempool += [self.create_item(ItemName.storeroom_key)] * 1
         itempool += [self.create_item(ItemName.archives_key)] * 1
@@ -130,6 +154,19 @@ class CV64World(World):
         itempool += [self.create_item(ItemName.clocktower_key_one)] * 1
         itempool += [self.create_item(ItemName.clocktower_key_two)] * 1
         itempool += [self.create_item(ItemName.clocktower_key_three)] * 1
+
+        if self.world.draculas_condition[self.player].value == 3:
+            itempool += [self.create_item(ItemName.special_two)] * self.world.total_special2s[self.player].value
+
+        if self.world.carrie_logic[self.player]:
+            itempool += [self.create_item(ItemName.roast_beef)] * 1
+            itempool += [self.create_item(ItemName.moon_card)] * 1
+            total_required_locations += 2
+
+        if self.world.lizard_generator_items[self.player]:
+            itempool += [self.create_item(ItemName.powerup)] * 1
+            itempool += [self.create_item(ItemName.sun_card)] * 1
+            total_required_locations += 6
 
         total_junk_count = total_required_locations - len(itempool)
 
@@ -158,7 +195,7 @@ class CV64World(World):
             offsets_to_ids = {}
             for location_name in self.location_name_to_id:
                 loc = self.world.get_location(location_name, self.player)
-                if loc.item.name != "Marriage Proposal":
+                if loc.item.name in rom_item_bytes or loc.item.game != "Castlevania 64":
                     if loc.item.player == self.player:
                         offsets_to_ids[loc.rom_offset] = loc.item.item_byte
                     else:

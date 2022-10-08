@@ -34,15 +34,19 @@ rom_loc_offsets = {
     0xC64012: 0x10C733,
     0xC64013: 0x10C6B3,
     0xC64014: 0x10C72B,
+    0xC640A6: 0x7C7F9D,
+    0xC640A7: 0xBFC243,
 
     0xC64015: 0x10C7F7,  # Castle Wall
-    0xC64016: 0x10C807,
-    0xC64017: 0x10C7FF,
+    0xC64016: 0x10C7FF,
+    0xC64017: 0x10C807,
     0xC64018: 0x10C817,
     0xC64019: 0x10C80F,
     0xC6401A: 0x10C7E7,
     0xC6401B: 0x10C7DF,
     0xC6401C: 0x10C7EF,
+    0xC640A8: 0x7F99A9,
+    0xC640A9: 0x7F9A3E,
 
     0xC6401D: 0x10C87F,  # Villa
     0xC6401E: 0x10C887,
@@ -80,6 +84,29 @@ rom_loc_offsets = {
     0xC6403E: 0x10CF5B,
     0xC6403F: 0x10C8BF,
     0xC64040: 0x10CF53,
+    0xC640AA: 0xBFC25F,
+    0xC640AB: 0x8099CC,
+    0xC640AC: 0xBFC257,
+    0xC640AD: 0x80997D,
+    0xC640AE: 0x809956,
+    0xC640AF: 0x80992D,
+    0xC640B0: 0xBFC25B,
+    0xC640B1: 0x80993C,
+    0xC640B2: 0x81F07C,
+    0xC640B3: 0x83A5CA,
+    0xC640B4: 0xBFC27B,
+    0xC640B5: 0x83A604,
+    0xC640B6: 0x83A588,
+    0xC640B7: 0x83A593,
+    0xC640B8: 0x83A635,
+    0xC640B9: 0xBFC287,
+    0xC640BA: 0xBFC28B,
+    0xC640BB: 0x83A5B1,
+    0xC640BC: 0x83A610,
+    0xC640BD: 0xBFC283,
+    0xC640BE: 0x83A61B,
+    0xC640BF: 0x850FEC,
+
 
     0xC64041: 0x10C9AF,  # Tunnel
     0xC64042: 0x10C9B7,
@@ -103,6 +130,9 @@ rom_loc_offsets = {
     0xC64054: 0x10CA47,
     0xC64055: 0x10CA4F,
     0xC64056: 0x10CAAF,
+    0xC640C0: 0xBFC2AF,
+    0xC640C1: 0x86D8E0,
+    0xC640C2: 0x86D8FC,
 
     0xC64057: 0x10CB03,  # Underground Waterway
     0xC64058: 0x10CAF3,
@@ -150,6 +180,26 @@ rom_loc_offsets = {
     0xC64081: 0x10CCE7,
     0xC64082: 0x10CCFF,
     0xC64083: 0x10CD07,
+    0xC640C3: 0x8985E5,
+    0xC640C4: 0x8985D6,
+    0xC640C5: 0x8C44D9,
+    0xC640C6: 0x8C44E7,
+    0xC640C7: 0x8C450A,
+    0xC640C8: 0xBFC2C3,
+    0xC640C9: 0xBFC2C7,
+    0xC640CA: 0x8C451C,
+    0xC640CB: 0x8C44fD,
+    0xC640CC: 0x8C44F5,
+    0xC640CD: 0x8DF782,
+    0xC640CE: 0x8DF580,
+    0xC640CF: 0x8F1197,
+    0xC640D0: 0x90FCE9,
+    0xC640D1: 0x90FCDA,
+    0xC640D2: 0x90FBA7,
+    0xC640D3: 0x90FBB3,
+    0xC640D4: 0x90FBC0,
+    0xC640D5: 0x90FF1D,
+    0xC640D6: 0x90FE5C,
 
     0xC64084: 0x10CE73,  # Duel Tower
     0xC64085: 0x10CE7B,
@@ -188,9 +238,14 @@ rom_loc_offsets = {
     0xC640A1: 0x10CEB3,  # Clock Tower
     0xC640A2: 0x10CEC3,
     0xC640A3: 0x10CEBB,
+    0xC640D7: 0x99BC4D,
+    0xC640D8: 0x99BC3E,
+    0xC640D9: 0x99BC30,
 
     0xC640A4: 0x10CE9B,  # Castle Keep
     0xC640A5: 0x10CEA3,
+    0xC640DA: 0x9778C8,
+    0xC640DB: 0xBFC30F,
 }
 
 rom_item_bytes = {
@@ -286,12 +341,43 @@ def patch_rom(world, rom, player, offsets_to_ids):
     rom.write_bytes(0x66C, [0x00, 0x00, 0x00, 0x00])
     rom.write_bytes(0x678, [0x00, 0x00, 0x00, 0x00])
 
-    # Disable Easy Mode cutoff point
+    # Always offer Hard Mode on file creation
+    rom.write_bytes(0xC8810, [0x24, 0x0A, 0x01, 0x00])  # ADDIU	T2, R0, 0x0100
+
+    # Disable Easy Mode cutoff point at Castle Center elevator
     rom.write_bytes(0xD9E18, [0x24, 0x0D, 0x00, 0x00])
 
-    # Fix both elevator bridges for both characters
+    # Disable the Forest, Castle Wall, and Villa intro cutscenes and make it possible to change the starting level
+    rom.write_byte(0xB73308, 0x00)
+    rom.write_byte(0xB7331A, 0x40)
+    rom.write_byte(0xB7332B, 0x4C)
+    rom.write_byte(0xB6302B, 0x00)
+    rom.write_byte(0x109F8F, 0x00)
+
+    # Forest end-cutscene flag un-setter
+    rom.write_bytes(0xAB014, [0x08, 0x0F, 0xF1, 0x44])  # J	0x803FC510
+    rom.write_bytes(0xBFC510, PatchName.forest_endflag_unsetter)
+
+    # Make the CW drawbridge always closed (since rando doesn't play the CW intro cutscene that closes it)
+    rom.write_bytes(0x6C00EC, [0x24, 0x0A, 0x00, 0x01])  # ADDIU T2, R0, 0x0001
+    rom.write_bytes(0x6C0ADC, [0x24, 0x0A, 0x00, 0x01])  # ADDIU T2, R0, 0x0001
+
+    # Villa coffin time-of-day hack
+    rom.write_byte(0xD9D83, 0x74)
+    rom.write_bytes(0xD9D84, [0x08, 0x0F, 0xF1, 0x4C])  # J 0x803FC530
+    rom.write_bytes(0xBFC530, PatchName.coffin_time_checker)
+
+    # Fix both Castle Center elevator bridges for both characters
     rom.write_bytes(0x6CEAA0, [0x24, 0x0B, 0x00, 0x01])
     rom.write_bytes(0x6CEAA4, [0x24, 0x0D, 0x00, 0x01])
+
+    # Were-bull arena flag hack
+    rom.write_bytes(0x6E38F0, [0x0C, 0x0F, 0xF1, 0x57])
+    rom.write_bytes(0xBFC55C, PatchName.werebull_flag_unsetter)
+
+    # White dragon flag hack
+    rom.write_bytes(0xBBA84, [0x08, 0x0F, 0xF1, 0x61])  # J	0x803FC584
+    rom.write_bytes(0xBFC584, PatchName.whitedragon_flag_setter)
 
     # Enable being able to carry multiple Special jewels, Nitros, and Mandragoras simultaneously
     rom.write_bytes(0xBF1F4, [0x3C, 0x03, 0x80, 0x39])  # LUI V1, 0x8039
@@ -312,21 +398,46 @@ def patch_rom(world, rom, player, offsets_to_ids):
     rom.write_bytes(0xBF3C0, [0x25, 0x05, 0x00, 0x01])  # ADDIU A1, T0, 0x0001
     rom.write_bytes(0xBF3C4, [0x10, 0x00, 0x00, 0x03])  # B 0x8013C1E4
 
+    # Give PowerUps their Legacy of Darkness behavior when attempting to pick up more than two
+    rom.write_bytes(0xA9730, [0x24, 0x09, 0x00, 0x00])  # ADDIU	T1, R0, 0x0000
+    rom.write_bytes(0xBF2FC, [0x08, 0x0F, 0xF1, 0x6D])  # J	0x803FC5B4
+    rom.write_bytes(0xBF300, [0x00, 0x00, 0x00, 0x00])  # NOP
+    rom.write_bytes(0xBFC5B4, PatchName.give_powerup_stopper)
+
     # Rename "Wooden stake" and "Rose" to "Sent major" and "Sent" respectively
     rom.write_bytes(0xEFE34, [0x00, 0x35, 0x00, 0x47, 0x00, 0x50, 0x00, 0x56, 0x00, 0x02, 0x00, 0x4F, 0x00, 0x43, 0x00,
                               0x4C, 0x00, 0x51, 0x00, 0x54, 0x00, 0x02, 0x00, 0x02])
     rom.write_bytes(0xEFE4E, [0x00, 0x35, 0x00, 0x47, 0x00, 0x50, 0x00, 0x56])
 
-    # Disable vampire Vincent cutscene
+    # Disable or guarantee vampire Vincent's fight
     if world.fight_vincent[player] == "never":
-        rom.write_bytes(0xAACC0, [0x24, 0x01, 0x00, 0x01])
+        rom.write_bytes(0xAACC0, [0x24, 0x01, 0x00, 0x01])  # ADDIU AT, R0, 0x0001
+    elif world.fight_vincent[player] == "always":
+        rom.write_bytes(0xAACE0, [0x24, 0x18, 0x00, 0x10])  # ADDIU	T8, R0, 0x0010
+    else:
+        rom.write_bytes(0xAACE0, [0x24, 0x18, 0x00, 0x00])  # ADDIU	T8, R0, 0x0000
+
+    # Disable or guarantee Renon's fight
+    if world.fight_renon[player] == "never":
+        rom.write_bytes(0xB804F9, [0x24, 0x01, 0x00, 0x01])  # ADDIU AT, R0, 0x0001
+    elif world.fight_renon[player] == "always":
+        rom.write_bytes(0xB804F9, [0x24, 0x01, 0x00, 0x00])  # ADDIU AT, R0, 0x0000
+
+    # Disable or guarantee the Bad Ending
+    if world.bad_ending_condition[player] == "never":
+        rom.write_bytes(0xAEE5C6, [0x3C, 0x0A, 0x00, 0x00])  # LUI  T2, 0x0000
+    elif world.bad_ending_condition[player] == "always":
+        rom.write_bytes(0xAEE5C6, [0x3C, 0x0A, 0x04, 0x00])  # LUI  T2, 0x0400
 
     # Increase item capacity to 100
-    if world.increase_item_limit[player] == "true":
+    if world.increase_item_limit[player]:
         rom.write_byte(0xBF30B, 0x64)
 
+    # Prevent the vanilla Magical Nitro transport's "can explode" flag from setting
+    rom.write_bytes(0xB5D7AA, [0x00, 0x00, 0x00, 0x00])
+
     # Custom data-loading code
-    rom.write_bytes(0x6B5028, [0x08, 0x06, 0x0D, 0x70])  # J 0x801835C0
+    rom.write_bytes(0x6B5028, [0x08, 0x06, 0x0D, 0x74])  # J 0x801835D0
     rom.write_bytes(0x1067C0, PatchName.custom_code_loader)
 
     # Custom warp menu, remote item rewarding, and DeathLink code injection
@@ -346,7 +457,18 @@ def patch_rom(world, rom, player, offsets_to_ids):
     # Custom warp menu code
     rom.write_bytes(0xADD68, [0x0C, 0x04, 0xAB, 0x12])  # JAL 0x8012AC48
     rom.write_bytes(0xADE28, PatchName.stage_select_overwrite)
-    rom.write_byte(0xADD6F, world.special2s_per_warp[player])
+    rom.write_byte(0xADE47, world.special1s_per_warp[player])
+
+    # Dracula's chamber condition
+    if world.draculas_condition[player] == 1:
+        rom.write_bytes(0xE2FDC, [0x08, 0x04, 0xAB, 0x1E])  # J 0x8012AC78
+        rom.write_bytes(0xADE68, PatchName.crystal_goal_checker)
+    elif world.draculas_condition[player] == 2:
+        rom.write_bytes(0xE2FDC, [0x08, 0x04, 0xAB, 0x1E])  # J 0x8012AC78
+        rom.write_bytes(0xADE68, PatchName.boss_goal_checker)
+    elif world.draculas_condition[player] == 3:
+        rom.write_bytes(0xE2FDC, [0x08, 0x04, 0xAB, 0x1E])  # J 0x8012AC78
+        rom.write_bytes(0xADE68, PatchName.special_goal_checker)
 
     # On-the-fly TLB script modifier
     rom.write_bytes(0xBFC338, PatchName.double_component_checker)
@@ -390,16 +512,9 @@ def patch_rom(world, rom, player, offsets_to_ids):
 
     rom.write_bytes(0x10AB2C, [0x80, 0x15, 0xFB, 0xD4])  # Maze Gate check code pointer adjustment
     rom.write_bytes(0xE2E14, PatchName.normal_door_hook)
-    rom.write_bytes(0xBFC4F0, PatchName.normal_door_code)
+    rom.write_bytes(0xBFC5D0, PatchName.normal_door_code)
     rom.write_bytes(0x6EF298, PatchName.ct_door_hook)
-    rom.write_bytes(0xBFC528, PatchName.ct_door_code)
-
-    # Nitro and Mandragora patches
-    # Prevent "can explode" flag from setting
-    rom.write_bytes(0xB5D7AA, [0x00, 0x00, 0x00, 0x00])
-    # Prevent tossing Nitro in Hazardous Waste Disposers
-    # rom.write_bytes(0xBF648, [0x24, 0x02, 0x00, 0x01])  # ADDIU	V0, R0, 0x0001
-    # Prevent setting the "can explode" bitflag
+    rom.write_bytes(0xBFC608, PatchName.ct_door_code)
 
     # Write the new item bytes
     for offset, item_id in offsets_to_ids.items():
