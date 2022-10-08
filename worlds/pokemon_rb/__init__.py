@@ -114,22 +114,6 @@ class PokemonRedBlueWorld(World):
 
         process_pokemon_data(self)  # strange place for this, but it is the only place that works for now
 
-    def stage_pre_fill(self):
-        players = self.get_game_players("Pokemon Red and Blue")
-        locs = []
-        for player in players:
-            player_locs = [self.get_location("Fossil - Choice A", player),
-                          self.get_location("Fossil - Choice B", player)]
-            for loc in player_locs:
-                add_item_rule(loc, lambda i: i.advancement or i.name in self.worlds[player].item_name_groups["Unique"]
-                              or i.name == "Master Ball")
-            player_locs.append(self.get_location("Pallet Town - Player's PC", player))
-            for loc in player_locs:
-                if loc.name in self.priority_locations[player].value:
-                    add_item_rule(loc, lambda i: i.advancement)
-            locs += player_locs
-        fill_restrictive(self, self.state, locs, self.itempool, True, True)
-
     def pre_fill(self):
 
         process_wild_pokemon(self)
@@ -139,13 +123,15 @@ class PokemonRedBlueWorld(World):
             item = self.create_item("Oak's Parcel")
             locations = []
             for location in self.world.get_locations():
-                if location.player == self.player \
-                        and location.item is None \
-                        and location.can_reach(self.world.state):
+                if location.player == self.player and location.item is None and location.can_reach(self.world.state) \
+                        and location.item_rule(item):
                     locations.append(location)
             self.world.random.shuffle(locations)
             location = locations.pop()
             location.place_locked_item(item)
+
+
+
         if not self.world.badgesanity[self.player].value:
             self.world.non_local_items[self.player].value -= self.item_name_groups["Badges"]
             for i in range(5):
@@ -170,6 +156,32 @@ class PokemonRedBlueWorld(World):
                 break
             else:
                 raise FillError(f"Failed to place badges for player {self.player}")
+
+        locs = [self.world.get_location("Fossil - Choice A", self.player),
+                self.world.get_location("Fossil - Choice B", self.player)]
+        for loc in locs:
+            add_item_rule(loc, lambda i: i.advancement or i.name in self.item_name_groups["Unique"]
+                                         or i.name == "Master Ball")
+
+        loc = self.world.get_location("Pallet Town - Player's PC", self.player)
+        if loc.item is None:
+            locs.append(loc)
+
+        for loc in locs:
+            unplaced_items = []
+            if loc.name in self.world.priority_locations[self.player].value:
+                add_item_rule(loc, lambda i: i.advancement)
+            for item in self.world.itempool:
+                self.world.itempool.remove(item)
+                from Fill import sweep_from_pool
+                state = sweep_from_pool(self.world.state, self.world.itempool + unplaced_items)
+                if (item.player == self.player and loc.item_rule(item) and
+                        state.can_reach(loc, "Location", self.player)):
+                    loc.place_locked_item(item)
+                    break
+                else:
+                    unplaced_items.append(item)
+            self.world.itempool += unplaced_items
 
         intervene = False
         test_state = self.world.get_all_state(False)
