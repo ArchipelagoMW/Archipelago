@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import asyncio
 import shutil
 import time
 
@@ -587,7 +588,7 @@ class ALTTPSNIClient(SNIClient):
     game = "A Link to the Past"
 
     async def deathlink_kill_player(self, ctx):
-        from SNIClient import snes_read, snes_buffered_write, snes_flush_writes
+        from SNIClient import DeathState, snes_read, snes_buffered_write, snes_flush_writes
         invincible = await snes_read(ctx, WRAM_START + 0x037B, 1)
         last_health = await snes_read(ctx, WRAM_START + 0xF36D, 1)
         await asyncio.sleep(0.25)

@@ -59,7 +59,7 @@ class SMWSNIClient(SNIClient):
     game = "Super Mario World"
 
     async def deathlink_kill_player(self, ctx):
-        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
         game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
         if game_state[0] != 0x14:
             return
@@ -88,7 +88,6 @@ class SMWSNIClient(SNIClient):
 
         await snes_flush_writes(ctx)
 
-        from SNIClient import DeathState
         ctx.death_state = DeathState.dead
         ctx.last_death_link = time.time()
 

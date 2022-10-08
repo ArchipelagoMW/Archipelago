@@ -39,7 +39,7 @@ class SMSNIClient(SNIClient):
     game = "Super Metroid"
 
     async def deathlink_kill_player(self, ctx):
-        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
         snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([1, 0]))  # set current health to 1 (to prevent saving with 0 energy)
         snes_buffered_write(ctx, WRAM_START + 0x0A50, bytes([255])) # deal 255 of damage at next opportunity
         if not ctx.death_link_allow_survive:
@@ -54,7 +54,6 @@ class SMSNIClient(SNIClient):
             health = health[0] | (health[1] << 8)
         if not gamemode or gamemode[0] in SM_DEATH_MODES or (
                 ctx.death_link_allow_survive and health is not None and health > 0):
-            from SNIClient import DeathState
             ctx.death_state = DeathState.dead
 
 

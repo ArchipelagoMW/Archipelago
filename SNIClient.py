@@ -577,7 +577,7 @@ async def game_watcher(ctx: SNIContext):
 
         delay = 7 if ctx.slow_mode else 0
         if time.perf_counter() - perf_counter < delay:
-            return
+            continue
 
         perf_counter = time.perf_counter()
 
