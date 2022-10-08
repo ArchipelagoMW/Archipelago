@@ -884,10 +884,11 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             new_item = NetworkItem(item_id, location, slot, flags)
             send_items_to(ctx, team, target_player, new_item)
 
-            logging.info('(Team #%d) %s sent %s to %s (%s)' % (
-                team + 1, ctx.player_names[(team, slot)], ctx.item_names[item_id],
+            total = sum(item.item == item_id for item in get_received_items(ctx, team, target_player, True))
+            logging.info('(Team #%d) %s sent %s%s to %s (%s)' % (
+                team + 1, ctx.player_names[(team, slot)], ctx.item_names[item_id], ' #%i' % total if total > 1 else '',
                 ctx.player_names[(team, target_player)], ctx.location_names[location]))
-            info_text = json_format_send_event(new_item, target_player)
+            info_text = json_format_send_event(new_item, target_player, total)
             ctx.broadcast_team(team, [info_text])
 
         ctx.location_checks[team, slot] |= new_locations
@@ -947,15 +948,19 @@ def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
     return text + (". (found)" if hint.found else ".")
 
 
-def json_format_send_event(net_item: NetworkItem, receiving_player: int):
+def json_format_send_event(net_item: NetworkItem, receiving_player: int, total: int):
     parts = []
     NetUtils.add_json_text(parts, net_item.player, type=NetUtils.JSONTypes.player_id)
     if net_item.player == receiving_player:
         NetUtils.add_json_text(parts, " found their ")
         NetUtils.add_json_item(parts, net_item.item, net_item.player, net_item.flags)
+        if total > 1:
+            NetUtils.add_json_item_total(parts, total)
     else:
         NetUtils.add_json_text(parts, " sent ")
         NetUtils.add_json_item(parts, net_item.item, receiving_player, net_item.flags)
+        if total > 1:
+            NetUtils.add_json_item_total(parts, total)
         NetUtils.add_json_text(parts, " to ")
         NetUtils.add_json_text(parts, receiving_player, type=NetUtils.JSONTypes.player_id)
 
@@ -965,7 +970,8 @@ def json_format_send_event(net_item: NetworkItem, receiving_player: int):
 
     return {"cmd": "PrintJSON", "data": parts, "type": "ItemSend",
             "receiving": receiving_player,
-            "item": net_item}
+            "item": net_item,
+            **({"total": total} if total > 1 else {})}
 
 
 def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bool, str]:

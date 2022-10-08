@@ -179,6 +179,7 @@ class JSONTypes(str, enum.Enum):
     player_name = "player_name"
     item_name = "item_name"
     item_id = "item_id"
+    item_total = "item_total"
     location_name = "location_name"
     location_id = "location_id"
     entrance_name = "entrance_name"
@@ -202,6 +203,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def __init__(self, ctx):
         self.ctx = ctx
+        self.last_item_color = ""
 
     def __call__(self, input_object: typing.List[JSONMessagePart]) -> str:
         return "".join(self.handle_node(section) for section in input_object)
@@ -242,12 +244,17 @@ class JSONtoTextParser(metaclass=HandlerMeta):
             node["color"] = 'salmon'
         else:
             node["color"] = 'cyan'
+        self.last_item_color = node["color"]
         return self._handle_color(node)
 
     def _handle_item_id(self, node: JSONMessagePart):
         item_id = int(node["text"])
         node["text"] = self.ctx.item_names[item_id]
         return self._handle_item_name(node)
+
+    def _handle_item_total(self, node: JSONMessagePart):
+        node["color"] = self.last_item_color
+        return self._handle_color(node)
 
     def _handle_location_name(self, node: JSONMessagePart):
         node["color"] = 'green'
@@ -287,6 +294,10 @@ def add_json_text(parts: list, text: typing.Any, **kwargs) -> None:
 
 def add_json_item(parts: list, item_id: int, player: int = 0, item_flags: int = 0, **kwargs) -> None:
     parts.append({"text": str(item_id), "player": player, "flags": item_flags, "type": JSONTypes.item_id, **kwargs})
+
+
+def add_json_item_total(parts: list, total: int, **kwargs) -> None:
+    parts.append({"text": f" #{total}", "type": JSONTypes.item_total, **kwargs})
 
 
 def add_json_location(parts: list, item_id: int, player: int = 0, **kwargs) -> None:

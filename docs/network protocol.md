@@ -177,6 +177,7 @@ Sent to clients purely to display a message to the player. This packet differs f
 | type | str | May be present to indicate the [PrintJsonType](#PrintJsonType) of this message. |
 | receiving | int | Is present if type is Hint or ItemSend and marks the destination player's ID. |
 | item | [NetworkItem](#NetworkItem) | Is present if type is Hint or ItemSend and marks the source player id, location id, item id and item flags. |
+| total | int | May be present if type is ItemSend, specifies how many instances of this item the destination player has received so far. |
 | found | bool | Is present if type is Hint, denotes whether the location hinted for was checked. |
 | countdown | int | Is present if type is `Countdown`, denotes the amount of seconds remaining on the countdown. |
 
@@ -498,6 +499,7 @@ Possible values for `type` include:
 | player_name | Player Name, could be a player within a multiplayer game or from another team, not ID resolvable |
 | item_id | Item ID, should be resolved to Item Name |
 | item_name | Item Name, not currently used over network, but supported by reference Clients. |
+| item_total | Number of instances of a certain item that a player has received in total. |
 | location_id | Location ID, should be resolved to Location Name |
 | location_name | Location Name, not currently used over network, but supported by reference Clients. |
 | entrance_name | Entrance Name. No ID mapping exists. |
