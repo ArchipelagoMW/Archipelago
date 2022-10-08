@@ -91,12 +91,18 @@ class ClientCommandProcessor(CommandProcessor):
 
     def _cmd_items(self):
         """List all item names for the currently running game."""
+        if not self.ctx.game:
+            self.output("No game set, cannot determine existing items.")
+            return False
         self.output(f"Item Names for {self.ctx.game}")
         for item_name in AutoWorldRegister.world_types[self.ctx.game].item_name_to_id:
             self.output(item_name)
 
     def _cmd_locations(self):
         """List all location names for the currently running game."""
+        if not self.ctx.game:
+            self.output("No game set, cannot determine existing locations.")
+            return False
         self.output(f"Location Names for {self.ctx.game}")
         for location_name in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id:
             self.output(location_name)

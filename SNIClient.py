@@ -113,7 +113,7 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
 
 class SNIContext(CommonContext):
     command_processor = SNIClientCommandProcessor
-    game = "A Link to the Past"
+    game = None  # set in validate_rom
     items_handling = None  # set in game_watcher
     snes_connect_task: typing.Optional[asyncio.Task] = None
 
