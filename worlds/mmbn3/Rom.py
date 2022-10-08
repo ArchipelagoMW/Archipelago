@@ -118,13 +118,14 @@ class TextArchive:
         return bytearray(byte_data)
 
     def inject_item_message(self, script_index, message_index, new_bytes):
-        # First step, if the old message had any flag sets, we need to keep them.
+        # First step, if the old message had any flag sets or flag clears, we need to keep them.
         # Mystery data has a flag set to actually remove the mystery data, and jobs often have a completion flag
         oldbytes = self.scripts[script_index].messageBoxes[message_index]
         for i in range(len(oldbytes)-3):
             # F2 00 is the code for "flagSet", with the two bytes after it being the flag to set.
+            # F2 04 is the code for "flagClear", which also needs to come along for the ride
             # Add those to the message box after the other text.
-            if oldbytes[i] == 0xF2 and oldbytes[i+1] == 0x00:
+            if oldbytes[i] == 0xF2 and (oldbytes[i+1] == 0x00 or oldbytes[i+1] == 0x04):
                 flag = oldbytes[i:i+4]
                 new_bytes.extend(flag)
         # Then, overwrite the existing script with the new one
