@@ -95,8 +95,8 @@ class SMWSNIClient(SNIClient):
     async def validate_rom(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
-        game_hash = await snes_read(ctx, SMW_ROMHASH_START, ROMHASH_SIZE)
-        if game_hash is None or game_hash == bytes([0] * ROMHASH_SIZE) or game_hash[:3] != b"SMW":
+        rom_name = await snes_read(ctx, SMW_ROMHASH_START, ROMHASH_SIZE)
+        if rom_name is None or rom_name == bytes([0] * ROMHASH_SIZE) or rom_name[:3] != b"SMW":
             return False
 
         ctx.game = self.game
@@ -114,7 +114,7 @@ class SMWSNIClient(SNIClient):
         if death_link:
             await ctx.update_death_link(bool(death_link[0] & 0b1))
 
-        ctx.rom = game_hash
+        ctx.rom = rom_name
 
         return True
 

@@ -60,21 +60,21 @@ class SMSNIClient(SNIClient):
     async def validate_rom(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
-        game_hash = await snes_read(ctx, SM_ROMNAME_START, ROMNAME_SIZE)
-        if game_hash is None or game_hash == bytes([0] * ROMNAME_SIZE) or game_hash[:2] != b"SM" or game_hash[:3] == b"SMW":
+        rom_name = await snes_read(ctx, SM_ROMNAME_START, ROMNAME_SIZE)
+        if rom_name is None or rom_name == bytes([0] * ROMNAME_SIZE) or rom_name[:2] != b"SM" or rom_name[:3] == b"SMW":
             return False
 
         ctx.game = self.game
 
         # versions lower than 0.3.0 dont have item handling flag nor remote item support
-        romVersion = int(game_hash[2:5].decode('UTF-8'))
+        romVersion = int(rom_name[2:5].decode('UTF-8'))
         if romVersion < 30:
             ctx.items_handling = 0b001 # full local
         else:
             item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
             ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
 
-        ctx.rom = game_hash
+        ctx.rom = rom_name
 
         death_link = await snes_read(ctx, SM_DEATH_LINK_ACTIVE_ADDR, 1)
 

@@ -613,14 +613,14 @@ class ALTTPSNIClient(SNIClient):
     async def validate_rom(self, ctx):
         from SNIClient import snes_read, snes_buffered_write, snes_flush_writes
 
-        game_hash = await snes_read(ctx, ROMNAME_START, ROMNAME_SIZE)
-        if game_hash is None or game_hash == bytes([0] * ROMNAME_SIZE) or game_hash[:2] != b"AP":
+        rom_name = await snes_read(ctx, ROMNAME_START, ROMNAME_SIZE)
+        if rom_name is None or rom_name == bytes([0] * ROMNAME_SIZE) or rom_name[:2] != b"AP":
             return False
 
         ctx.game = self.game
         ctx.items_handling = 0b001  # full local
 
-        ctx.rom = game_hash
+        ctx.rom = rom_name
 
         death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR, 1)
 

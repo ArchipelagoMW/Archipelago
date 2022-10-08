@@ -36,14 +36,14 @@ class SMZ3SNIClient(SNIClient):
     async def validate_rom(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
-        game_hash = await snes_read(ctx, SMZ3_ROMNAME_START, ROMNAME_SIZE)
-        if game_hash is None or game_hash == bytes([0] * ROMNAME_SIZE) or game_hash[:3] != b"ZSM":
+        rom_name = await snes_read(ctx, SMZ3_ROMNAME_START, ROMNAME_SIZE)
+        if rom_name is None or rom_name == bytes([0] * ROMNAME_SIZE) or rom_name[:3] != b"ZSM":
             return False
 
         ctx.game = self.game
         ctx.items_handling = 0b101  # local items and remote start inventory
 
-        ctx.rom = game_hash
+        ctx.rom = rom_name
 
         return True
 
