@@ -330,6 +330,8 @@ class SNESRequest(typing.TypedDict):
     Opcode: str
     Space: str
     Operands: typing.List[str]
+    # TODO: When Python 3.11 is the lowest version supported, Operands can use typing.NotRequired (pep-0655)
+    # Then the `Operands` key doesn't need to be given for opcodes that don't use it.
 
 
 async def get_snes_devices(ctx: SNIContext) -> typing.List[str]:
@@ -337,7 +339,7 @@ async def get_snes_devices(ctx: SNIContext) -> typing.List[str]:
     DeviceList_Request: SNESRequest = {
         "Opcode": "DeviceList",
         "Space": "SNES",
-        "Operands": []  # REVIEW: Is it ok to have this here? Optional members of TypedDict is Python 3.11.
+        "Operands": []
     }
     await socket.send(dumps(DeviceList_Request))
 
