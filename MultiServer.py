@@ -844,6 +844,10 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
 
     ctx.notify_all("%s (Team #%d) has collected their items from other worlds." % (ctx.player_names[(team, slot)], team + 1))
     for source_player, location_ids in all_locations.items():
+        ### RoR2 anti-collect fix. remove once correctly fixed in client ###
+        if ctx.games[source_player] == "Risk of Rain 2":
+            continue
+        ### end anti-collect fix ###
         register_location_checks(ctx, team, source_player, location_ids, count_activity=False)
         update_checked_locations(ctx, team, source_player)
 
