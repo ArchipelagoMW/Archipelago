@@ -46,6 +46,7 @@ class Overcooked2World(World):
 
     game = "Overcooked! 2"
     web = Overcooked2Web()
+    required_client_version = (1, 3, 2)
     option_definitions = overcooked_options
     topology_present: bool = False
     remote_items: bool = True
