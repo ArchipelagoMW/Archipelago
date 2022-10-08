@@ -25,7 +25,7 @@ Many baseline changes are made to the game, including:
 * Seafoam Islands entrances are swapped. This means you need Strength to travel through from Cinnabar Island to Fuchsia
 City
 * After obtaining one of the fossil item checks in Mt Moon, the remaining item can be received from the Cinnabar Lab
-fossil scientist after reviving a Pokémon from a fossil.
+fossil scientist. This may require reviving a number of fossils, depending on your settings.
 * Obedience depends on the total number of badges you have obtained instead of depending on specific badges.
 * Pokémon that evolve by trading can also evolve by reaching level 35.
 * Evolution stones are reusable.
