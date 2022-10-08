@@ -465,12 +465,22 @@ class TextChoice(Choice):
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
 
-class Bosses(TextChoice):
-    """Generic boss shuffle option that supports plando. Format expected is 'boss-location;boss-location;shuffle_type'
-    if shuffle_type is not provided in the string, will default to null. Must override can_place_boss, which
-    passes a plando boss and location. Check if the placement is valid for your game here."""
-    bosses: set = set()
-    locations: set = set()
+class BossMeta(AssembleOptions):
+    def __new__(mcs, name, bases, attrs):
+        assert "bosses" in attrs, "Please define valid bosses for Bosses"
+        attrs["bosses"] = frozenset((boss.lower() for boss in attrs["bosses"]))
+        assert "locations" in attrs, "Please define valid locations for Bosses"
+        attrs["locations"] = frozenset((location.lower() for location in attrs["locations"]))
+        return super().__new__(mcs, name, bases, attrs)
+
+
+class PlandoBosses(TextChoice, metaclass=BossMeta):
+    """Generic boss shuffle option that supports plando. Format expected is
+    'location1-boss1;location2-boss2;shuffle_type'. If shuffle_type is not provided in the string, will default to null.
+    Must override can_place_boss, which passes a plando boss and location. Check if the placement is valid for your
+    game here."""
+    bosses: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
+    locations: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
 
     @classmethod
     def from_text(cls, text: str):
@@ -482,8 +492,6 @@ class Bosses(TextChoice):
         for option_name, value in cls.options.items():
             if option_name == text:
                 return cls(value)
-        cls.bosses = {boss_name.lower() for boss_name in cls.bosses}
-        cls.locations = {boss_location.lower() for boss_location in cls.locations}
         options = text.split(";")
 
         # since plando exists in the option verify the plando values given are valid
@@ -520,13 +528,13 @@ class Bosses(TextChoice):
             elif "-" in option:
                 location, boss = option.split("-")
                 if not cls.valid_boss_name(boss):
-                    raise ValueError(F"{boss.title()} is not a valid boss name for location {location.title()}.")
+                    raise ValueError(F"{boss.title()} is not a valid boss name.")
                 if not cls.valid_location_name(location):
-                    raise ValueError(f"{location.title()} is not a valid boss location name for boss {boss.title()}.")
+                    raise ValueError(f"{location.title()} is not a valid boss location name.")
                 if not cls.can_place_boss(boss, location):
-                    raise ValueError(f"{location.title()} is not a valid location for {boss} to be placed.")
+                    raise ValueError(f"{location.title()} is not a valid location for {boss.title()} to be placed.")
             else:
-                raise ValueError(f"{option} is not formatted correctly.")
+                raise ValueError(f"{option.title()} is not formatted correctly.")
 
     @classmethod
     def can_place_boss(cls, boss: str, location: str) -> bool:
