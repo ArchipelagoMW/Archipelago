@@ -147,11 +147,7 @@ class DKC3World(World):
 
             self.active_level_list.append(LocationName.rocket_rush_region)
 
-            outfilepname = f'_P{player}'
-            outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
-                if world.player_name[player] != 'Player%d' % player else ''
-
-            rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
+            rompath = os.path.join(output_directory, f"{self.world.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 
