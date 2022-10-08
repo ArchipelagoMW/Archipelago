@@ -467,10 +467,11 @@ class TextChoice(Choice):
 
 class BossMeta(AssembleOptions):
     def __new__(mcs, name, bases, attrs):
-        assert "bosses" in attrs, "Please define valid bosses for Bosses"
-        attrs["bosses"] = frozenset((boss.lower() for boss in attrs["bosses"]))
-        assert "locations" in attrs, "Please define valid locations for Bosses"
-        attrs["locations"] = frozenset((location.lower() for location in attrs["locations"]))
+        if name != "PlandoBosses":
+            assert "bosses" in attrs, "Please define valid bosses for Bosses"
+            attrs["bosses"] = frozenset((boss.lower() for boss in attrs["bosses"]))
+            assert "locations" in attrs, "Please define valid locations for Bosses"
+            attrs["locations"] = frozenset((location.lower() for location in attrs["locations"]))
         return super().__new__(mcs, name, bases, attrs)
 
 

@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, Bosses
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, PlandoBosses
 
 
 class Logic(Choice):
@@ -138,7 +138,7 @@ class WorldState(Choice):
     option_inverted = 2
 
 
-class LTTPBosses(Bosses):
+class LTTPBosses(PlandoBosses):
     """Shuffles bosses around to different locations.
     Basic will shuffle all bosses except Ganon and Agahnim anywhere they can be placed.
     Full chooses 3 bosses at random to be placed twice instead of Lanmolas, Moldorm, and Helmasaur.
@@ -152,7 +152,7 @@ class LTTPBosses(Bosses):
     option_chaos = 3
     option_singularity = 4
 
-    bosses: set = {
+    bosses = {
         "Armos Knights",
         "Lanmolas",
         "Moldorm",
@@ -165,7 +165,7 @@ class LTTPBosses(Bosses):
         "Trinexx",
     }
 
-    locations: set = {
+    locations = {
         "Ganons Tower Top",
         "Tower of Hera",
         "Skull Woods",
