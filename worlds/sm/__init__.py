@@ -505,10 +505,8 @@ class SMWorld(World):
         romPatcher.writeRandoSettings(self.variaRando.randoExec.randoSettings, itemLocs)
 
     def generate_output(self, output_directory: str):
-        outfilebase = 'AP_' + self.world.seed_name
-        outfilepname = f'_P{self.player}'
-        outfilepname += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}"
-        outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
+        outfilebase = self.world.get_out_file_name_base(self.player)
+        outputFilename = os.path.join(output_directory, f"{outfilebase}.sfc")
 
         try:
             self.variaRando.PatchRom(outputFilename, self.APPrePatchRom, self.APPostPatchRom)
@@ -660,8 +658,7 @@ class SMWorld(World):
                 loc.address = loc.item.code = None
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
-                        restitempool, fill_locations):      
+    def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
         if world.get_game_players("Super Metroid"):
             progitempool.sort(
                 key=lambda item: 1 if (item.name == 'Morph Ball') else 0)

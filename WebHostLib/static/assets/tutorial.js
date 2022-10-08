@@ -27,6 +27,11 @@ window.addEventListener('load', () => {
         tutorialWrapper.innerHTML += (new showdown.Converter()).makeHtml(results);
         adjustHeaderWidth();
 
+        const title = document.querySelector('h1')
+        if (title) {
+            document.title = title.textContent;
+        }
+
         // Reset the id of all header divs to something nicer
         const headers = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6'));
         const scrollTargetIndex = window.location.href.search(/#[A-z0-9-_]*$/);

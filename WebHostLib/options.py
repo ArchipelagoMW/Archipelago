@@ -15,7 +15,13 @@ handled_in_js = {"start_inventory", "local_items", "non_local_items", "start_hin
 
 def create():
     target_folder = local_path("WebHostLib", "static", "generated")
-    os.makedirs(os.path.join(target_folder, "configs"), exist_ok=True)
+    yaml_folder = os.path.join(target_folder, "configs")
+    os.makedirs(yaml_folder, exist_ok=True)
+
+    for file in os.listdir(yaml_folder):
+        full_path: str = os.path.join(yaml_folder, file)
+        if os.path.isfile(full_path):
+            os.unlink(full_path)
 
     def dictify_range(option: typing.Union[Options.Range, Options.SpecialRange]):
         data = {}
@@ -64,7 +70,10 @@ def create():
 
     for game_name, world in AutoWorldRegister.world_types.items():
 
-        all_options = {**Options.per_game_common_options, **world.option_definitions}
+        all_options: typing.Dict[str, Options.AssembleOptions] = {
+            **Options.per_game_common_options,
+            **world.option_definitions
+        }
         with open(local_path("WebHostLib", "templates", "options.yaml")) as f:
             file_data = f.read()
         res = Template(file_data).render(

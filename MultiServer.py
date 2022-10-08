@@ -126,6 +126,7 @@ class Context:
     location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     forced_auto_forfeits: typing.Dict[str, bool]
+    non_hintable_names: typing.Dict[str, typing.Set[str]]
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
@@ -196,7 +197,7 @@ class Context:
         self.item_name_groups = {}
         self.all_item_and_group_names = {}
         self.forced_auto_forfeits = collections.defaultdict(lambda: False)
-        self.non_hintable_names = {}
+        self.non_hintable_names = collections.defaultdict(frozenset)
 
         self._load_game_data()
         self._init_game_data()
@@ -221,11 +222,11 @@ class Context:
             self.all_item_and_group_names[game_name] = \
                 set(game_package["item_name_to_id"]) | set(self.item_name_groups[game_name])
 
-    def item_names_for_game(self, game: str) -> typing.Dict[str, int]:
-        return self.gamespackage[game]["item_name_to_id"]
+    def item_names_for_game(self, game: str) -> typing.Optional[typing.Dict[str, int]]:
+        return self.gamespackage[game]["item_name_to_id"] if game in self.gamespackage else None
 
-    def location_names_for_game(self, game: str) -> typing.Dict[str, int]:
-        return self.gamespackage[game]["location_name_to_id"]
+    def location_names_for_game(self, game: str) -> typing.Optional[typing.Dict[str, int]]:
+        return self.gamespackage[game]["location_name_to_id"] if game in self.gamespackage else None
 
     # General networking
     async def send_msgs(self, endpoint: Endpoint, msgs: typing.Iterable[dict]) -> bool:
@@ -743,6 +744,7 @@ async def countdown(ctx: Context, timer: int):
         broadcast_countdown(ctx, 0, f"[Server]: GO")
         ctx.countdown_timer = 0
 
+
 def broadcast_text_all(ctx: Context, text: str, additional_arguments: dict = {}):
     old_clients, new_clients = [], []
 
@@ -755,8 +757,10 @@ def broadcast_text_all(ctx: Context, text: str, additional_arguments: dict = {})
     ctx.broadcast(old_clients, [{"cmd": "Print", "text": text }])
     ctx.broadcast(new_clients, [{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
 
+
 def broadcast_countdown(ctx: Context, timer: int, message: str):
-    broadcast_text_all(ctx, message, { "type": "Countdown", "countdown": timer })
+    broadcast_text_all(ctx, message, {"type": "Countdown", "countdown": timer})
+
 
 def get_players_string(ctx: Context):
     auth_clients = {(c.team, c.slot) for c in ctx.endpoints if c.auth}
@@ -897,14 +901,14 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
         ctx.save()
 
 
-def collect_hints(ctx: Context, team: int, slot: int, item_name: str) -> typing.List[NetUtils.Hint]:
+def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, str]) -> typing.List[NetUtils.Hint]:
     hints = []
     slots: typing.Set[int] = {slot}
     for group_id, group in ctx.groups.items():
         if slot in group:
             slots.add(group_id)
 
-    seeked_item_id = ctx.item_names_for_game(ctx.games[slot])[item_name]
+    seeked_item_id = item if isinstance(item, int) else ctx.item_names_for_game(ctx.games[slot])[item]
     for finding_player, check_data in ctx.locations.items():
         for location_id, (item_id, receiving_player, item_flags) in check_data.items():
             if receiving_player in slots and item_id == seeked_item_id:
@@ -1332,13 +1336,33 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output(f"A hint costs {self.ctx.get_hint_cost(self.client.slot)} points. "
                         f"You have {points_available} points.")
             return True
+
+        elif input_text.isnumeric():
+            game = self.ctx.games[self.client.slot]
+            hint_id = int(input_text)
+            hint_name = self.ctx.item_names[hint_id] \
+                if not for_location and hint_id in self.ctx.item_names \
+                else self.ctx.location_names[hint_id] \
+                if for_location and hint_id in self.ctx.location_names \
+                else None
+            if hint_name in self.ctx.non_hintable_names[game]:
+                self.output(f"Sorry, \"{hint_name}\" is marked as non-hintable.")
+                hints = []
+            elif not for_location:
+                hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_id)
+            else:
+                hints = collect_hint_location_id(self.ctx, self.client.team, self.client.slot, hint_id)
+
         else:
             game = self.ctx.games[self.client.slot]
+            if game not in self.ctx.all_item_and_group_names:
+                self.output("Can't look up item/location for unknown game. Hint for ID instead.")
+                return False
             names = self.ctx.location_names_for_game(game) \
                 if for_location else \
                 self.ctx.all_item_and_group_names[game]
-            hint_name, usable, response = get_intended_text(input_text,
-                                                            names)
+            hint_name, usable, response = get_intended_text(input_text, names)
+
             if usable:
                 if hint_name in self.ctx.non_hintable_names[game]:
                     self.output(f"Sorry, \"{hint_name}\" is marked as non-hintable.")
@@ -1352,62 +1376,64 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_name)
                 else:  # location name
                     hints = collect_hint_location_name(self.ctx, self.client.team, self.client.slot, hint_name)
-                cost = self.ctx.get_hint_cost(self.client.slot)
-                if hints:
-                    new_hints = set(hints) - self.ctx.hints[self.client.team, self.client.slot]
-                    old_hints = set(hints) - new_hints
-                    if old_hints:
-                        notify_hints(self.ctx, self.client.team, list(old_hints))
-                        if not new_hints:
-                            self.output("Hint was previously used, no points deducted.")
-                    if new_hints:
-                        found_hints = [hint for hint in new_hints if hint.found]
-                        not_found_hints = [hint for hint in new_hints if not hint.found]
 
-                        if not not_found_hints:  # everything's been found, no need to pay
-                            can_pay = 1000
-                        elif cost:
-                            can_pay = int((points_available // cost) > 0)  # limit to 1 new hint per call
-                        else:
-                            can_pay = 1000
-
-                        self.ctx.random.shuffle(not_found_hints)
-                        # By popular vote, make hints prefer non-local placements
-                        not_found_hints.sort(key=lambda hint: int(hint.receiving_player != hint.finding_player))
-
-                        hints = found_hints
-                        while can_pay > 0:
-                            if not not_found_hints:
-                                break
-                            hint = not_found_hints.pop()
-                            hints.append(hint)
-                            can_pay -= 1
-                            self.ctx.hints_used[self.client.team, self.client.slot] += 1
-                            points_available = get_client_points(self.ctx, self.client)
-
-                        if not_found_hints:
-                            if hints and cost and int((points_available // cost) == 0):
-                                self.output(
-                                    f"There may be more hintables, however, you cannot afford to pay for any more. "
-                                    f" You have {points_available} and need at least "
-                                    f"{self.ctx.get_hint_cost(self.client.slot)}.")
-                            elif hints:
-                                self.output(
-                                    "There may be more hintables, you can rerun the command to find more.")
-                            else:
-                                self.output(f"You can't afford the hint. "
-                                            f"You have {points_available} points and need at least "
-                                            f"{self.ctx.get_hint_cost(self.client.slot)}.")
-                        notify_hints(self.ctx, self.client.team, hints)
-                        self.ctx.save()
-                        return True
-
-                else:
-                    self.output("Nothing found. Item/Location may not exist.")
-                    return False
             else:
                 self.output(response)
                 return False
+
+        if hints:
+            cost = self.ctx.get_hint_cost(self.client.slot)
+            new_hints = set(hints) - self.ctx.hints[self.client.team, self.client.slot]
+            old_hints = set(hints) - new_hints
+            if old_hints:
+                notify_hints(self.ctx, self.client.team, list(old_hints))
+                if not new_hints:
+                    self.output("Hint was previously used, no points deducted.")
+            if new_hints:
+                found_hints = [hint for hint in new_hints if hint.found]
+                not_found_hints = [hint for hint in new_hints if not hint.found]
+
+                if not not_found_hints:  # everything's been found, no need to pay
+                    can_pay = 1000
+                elif cost:
+                    can_pay = int((points_available // cost) > 0)  # limit to 1 new hint per call
+                else:
+                    can_pay = 1000
+
+                self.ctx.random.shuffle(not_found_hints)
+                # By popular vote, make hints prefer non-local placements
+                not_found_hints.sort(key=lambda hint: int(hint.receiving_player != hint.finding_player))
+
+                hints = found_hints
+                while can_pay > 0:
+                    if not not_found_hints:
+                        break
+                    hint = not_found_hints.pop()
+                    hints.append(hint)
+                    can_pay -= 1
+                    self.ctx.hints_used[self.client.team, self.client.slot] += 1
+                    points_available = get_client_points(self.ctx, self.client)
+
+                if not_found_hints:
+                    if hints and cost and int((points_available // cost) == 0):
+                        self.output(
+                            f"There may be more hintables, however, you cannot afford to pay for any more. "
+                            f" You have {points_available} and need at least "
+                            f"{self.ctx.get_hint_cost(self.client.slot)}.")
+                    elif hints:
+                        self.output(
+                            "There may be more hintables, you can rerun the command to find more.")
+                    else:
+                        self.output(f"You can't afford the hint. "
+                                    f"You have {points_available} points and need at least "
+                                    f"{self.ctx.get_hint_cost(self.client.slot)}.")
+                notify_hints(self.ctx, self.client.team, hints)
+                self.ctx.save()
+                return True
+
+        else:
+            self.output("Nothing found. Item/Location may not exist.")
+            return False
 
     @mark_raw
     def _cmd_hint(self, item_name: str = "") -> bool:
@@ -1856,17 +1882,25 @@ class ServerCommandProcessor(CommonCommandProcessor):
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
             team, slot = self.ctx.player_name_lookup[seeked_player]
-            item_name = " ".join(item_name)
             game = self.ctx.games[slot]
-            item_name, usable, response = get_intended_text(item_name, self.ctx.all_item_and_group_names[game])
+            full_name = " ".join(item_name)
+
+            if full_name.isnumeric():
+                item, usable, response = int(full_name), True, None
+            elif game in self.ctx.all_item_and_group_names:
+                item, usable, response = get_intended_text(full_name, self.ctx.all_item_and_group_names[game])
+            else:
+                self.output("Can't look up item for unknown game. Hint for ID instead.")
+                return False
+
             if usable:
-                if item_name in self.ctx.item_name_groups[game]:
+                if game in self.ctx.item_name_groups and item in self.ctx.item_name_groups[game]:
                     hints = []
-                    for item_name_from_group in self.ctx.item_name_groups[game][item_name]:
+                    for item_name_from_group in self.ctx.item_name_groups[game][item]:
                         if item_name_from_group in self.ctx.item_names_for_game(game):  # ensure item has an ID
                             hints.extend(collect_hints(self.ctx, team, slot, item_name_from_group))
-                else:  # item name
-                    hints = collect_hints(self.ctx, team, slot, item_name)
+                else:  # item name or id
+                    hints = collect_hints(self.ctx, team, slot, item)
 
                 if hints:
                     notify_hints(self.ctx, team, hints)
@@ -1887,11 +1921,22 @@ class ServerCommandProcessor(CommonCommandProcessor):
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
             team, slot = self.ctx.player_name_lookup[seeked_player]
-            location_name = " ".join(location_name)
-            location_name, usable, response = get_intended_text(location_name,
-                                                                self.ctx.location_names_for_game(self.ctx.games[slot]))
+            game = self.ctx.games[slot]
+            full_name = " ".join(location_name)
+
+            if full_name.isnumeric():
+                location, usable, response = int(full_name), True, None
+            elif self.ctx.location_names_for_game(game) is not None:
+                location, usable, response = get_intended_text(full_name, self.ctx.location_names_for_game(game))
+            else:
+                self.output("Can't look up location for unknown game. Hint for ID instead.")
+                return False
+
             if usable:
-                hints = collect_hint_location_name(self.ctx, team, slot, location_name)
+                if isinstance(location, int):
+                    hints = collect_hint_location_id(self.ctx, team, slot, location)
+                else:
+                    hints = collect_hint_location_name(self.ctx, team, slot, location)
                 if hints:
                     notify_hints(self.ctx, team, hints)
                 else:
@@ -2041,15 +2086,28 @@ async def main(args: argparse.Namespace):
                   args.auto_shutdown, args.compatibility, args.log_network)
     data_filename = args.multidata
 
-    try:
-        if not data_filename:
+    if not data_filename:
+        try:
             filetypes = (("Multiworld data", (".archipelago", ".zip")),)
             data_filename = Utils.open_filename("Select multiworld data", filetypes)
 
+        except Exception as e:
+            if isinstance(e, ImportError) or (e.__class__.__name__ == "TclError" and "no display" in str(e)):
+                if not isinstance(e, ImportError):
+                    logging.error(f"Failed to load tkinter ({e})")
+                logging.info("Pass a multidata filename on command line to run headless.")
+                exit(1)
+            raise
+
+        if not data_filename:
+            logging.info("No file selected. Exiting.")
+            exit(1)
+
+    try:
         ctx.load(data_filename, args.use_embedded_options)
 
     except Exception as e:
-        logging.exception('Failed to read multiworld data (%s)' % e)
+        logging.exception(f"Failed to read multiworld data ({e})")
         raise
 
     ctx.init_save(not args.disable_save)

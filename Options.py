@@ -26,14 +26,30 @@ class AssembleOptions(abc.ABCMeta):
 
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
         options.update(new_options)
-
         # apply aliases, without name_lookup
         aliases = {name[6:].lower(): option_id for name, option_id in attrs.items() if
                    name.startswith("alias_")}
 
         assert "random" not in aliases, "Choice option 'random' cannot be manually assigned."
 
+        # auto-alias Off and On being parsed as True and False
+        if "off" in options:
+            options["false"] = options["off"]
+        if "on" in options:
+            options["true"] = options["on"]
+
         options.update(aliases)
+
+        if "verify" not in attrs:
+            # not overridden by class -> look up bases
+            verifiers = [f for f in (getattr(base, "verify", None) for base in bases) if f]
+            if len(verifiers) > 1:  # verify multiple bases/mixins
+                def verify(self, *args, **kwargs) -> None:
+                    for f in verifiers:
+                        f(self, *args, **kwargs)
+                attrs["verify"] = verify
+            else:
+                assert verifiers, "class Option is supposed to implement def verify"
 
         # auto-validate schema on __init__
         if "schema" in attrs.keys():
@@ -112,8 +128,44 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     def from_any(cls, data: typing.Any) -> Option[T]:
         raise NotImplementedError
 
+    if typing.TYPE_CHECKING:
+        from Generate import PlandoSettings
+        from worlds.AutoWorld import World
+
+        def verify(self, world: World, player_name: str, plando_options: PlandoSettings) -> None:
+            pass
+    else:
+        def verify(self, *args, **kwargs) -> None:
+            pass
+
+
+class FreeText(Option):
+    """Text option that allows users to enter strings.
+    Needs to be validated by the world or option definition."""
+
+    def __init__(self, value: str):
+        assert isinstance(value, str), "value of FreeText must be a string"
+        self.value = value
+
+    @property
+    def current_key(self) -> str:
+        return self.value
+
+    @classmethod
+    def from_text(cls, text: str) -> FreeText:
+        return cls(text)
+
+    @classmethod
+    def from_any(cls, data: typing.Any) -> FreeText:
+        return cls.from_text(str(data))
+
+    @classmethod
+    def get_option_name(cls, value: T) -> str:
+        return value
+
 
 class NumericOption(Option[int], numbers.Integral):
+    default = 0
     # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
     # `int` is not a `numbers.Integral` according to the official typestubs
     # (even though isinstance(5, numbers.Integral) == True)
@@ -368,6 +420,53 @@ class Choice(NumericOption):
     __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
 
 
+class TextChoice(Choice):
+    """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string"""
+
+    def __init__(self, value: typing.Union[str, int]):
+        assert isinstance(value, str) or isinstance(value, int), \
+            f"{value} is not a valid option for {self.__class__.__name__}"
+        self.value = value
+        super(TextChoice, self).__init__()
+
+    @property
+    def current_key(self) -> str:
+        if isinstance(self.value, str):
+            return self.value
+        else:
+            return self.name_lookup[self.value]
+
+    @classmethod
+    def from_text(cls, text: str) -> TextChoice:
+        if text.lower() == "random":  # chooses a random defined option but won't use any free text options
+            return cls(random.choice(list(cls.name_lookup)))
+        for option_name, value in cls.options.items():
+            if option_name.lower() == text.lower():
+                return cls(value)
+        return cls(text)
+
+    @classmethod
+    def get_option_name(cls, value: T) -> str:
+        if isinstance(value, str):
+            return value
+        return cls.name_lookup[value]
+
+    def __eq__(self, other: typing.Any):
+        if isinstance(other, self.__class__):
+            return other.value == self.value
+        elif isinstance(other, str):
+            if other in self.options:
+                return other == self.current_key
+            return other == self.value
+        elif isinstance(other, int):
+            assert other in self.name_lookup, f"compared against an int that could never be equal. {self} == {other}"
+            return other == self.value
+        elif isinstance(other, bool):
+            return other == bool(self.value)
+        else:
+            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
+
+
 class Range(NumericOption):
     range_start = 0
     range_end = 1
@@ -385,7 +484,7 @@ class Range(NumericOption):
         if text.startswith("random"):
             return cls.weighted_range(text)
         elif text == "default" and hasattr(cls, "default"):
-            return cls(cls.default)
+            return cls.from_any(cls.default)
         elif text == "high":
             return cls(cls.range_end)
         elif text == "low":
@@ -396,7 +495,7 @@ class Range(NumericOption):
                 and text in ("true", "false"):
             # these are the conditions where "true" and "false" make sense
             if text == "true":
-                return cls(cls.default)
+                return cls.from_any(cls.default)
             else:  # "false"
                 return cls(0)
         return cls(int(text))
@@ -507,7 +606,7 @@ class VerifyKeys:
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
                                 f"Allowed keys: {cls.valid_keys}.")
 
-    def verify(self, world):
+    def verify(self, world, player_name: str, plando_options) -> None:
         if self.convert_name_groups and self.verify_item_name:
             new_value = type(self.value)()  # empty container of whatever value is
             for item_name in self.value:
@@ -530,7 +629,7 @@ class VerifyKeys:
 
 
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys):
-    default = {}
+    default: typing.Dict[str, typing.Any] = {}
     supports_weighting = False
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
@@ -561,7 +660,7 @@ class ItemDict(OptionDict):
 
 
 class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
-    default = []
+    default: typing.List[typing.Any] = []
     supports_weighting = False
 
     def __init__(self, value: typing.List[typing.Any]):
@@ -600,10 +699,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if type(data) == list:
-            cls.verify_keys(data)
-            return cls(data)
-        elif type(data) == set:
+        if isinstance(data, (list, set, frozenset)):
             cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
@@ -732,8 +828,8 @@ class ItemLinks(OptionList):
                 pool |= {item_name}
         return pool
 
-    def verify(self, world):
-        super(ItemLinks, self).verify(world)
+    def verify(self, world, player_name: str, plando_options) -> None:
+        super(ItemLinks, self).verify(world, player_name, plando_options)
         existing_links = set()
         for link in self.value:
             if link["name"] in existing_links:

@@ -138,3 +138,12 @@ dkc3_options:
   # True for operating system default program
   # Alternatively, a path to a program to open the .sfc file with
   rom_start: true
+smw_options:
+  # File name of the SMW US rom
+  rom_file: "Super Mario World (USA).sfc"
+  # Set this to your SNI folder location if you want the MultiClient to attempt an auto start, does nothing if not found
+  sni: "SNI"
+  # Set this to false to never autostart a rom (such as after patching)
+  # True for operating system default program
+  # Alternatively, a path to a program to open the .sfc file with
+  rom_start: true

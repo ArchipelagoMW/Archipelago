@@ -55,6 +55,7 @@ Name: "core";             Description: "Core Files"; Types: full hosting playing
 Name: "generator";        Description: "Generator"; Types: full hosting
 Name: "generator/sm";     Description: "Super Metroid ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/dkc3";   Description: "Donkey Kong Country 3 ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
+Name: "generator/smw";    Description: "Super Mario World ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/soe";    Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/lttp";   Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
 Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296; Flags: disablenouninstallwarning
@@ -64,6 +65,7 @@ Name: "client/sni";       Description: "SNI Client"; Types: full playing
 Name: "client/sni/lttp";  Description: "SNI Client - A Link to the Past Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/sni/sm";    Description: "SNI Client - Super Metroid Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/sni/dkc3";  Description: "SNI Client - Donkey Kong Country 3 Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/sni/smw";   Description: "SNI Client - Super Mario World Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/factorio";  Description: "Factorio"; Types: full playing
 Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDiskSpaceRequired: 226894278
 Name: "client/oot";       Description: "Ocarina of Time"; Types: full playing
@@ -79,6 +81,7 @@ NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-mod
 Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"; Flags: external; Components: client/sni/lttp or generator/lttp
 Source: "{code:GetSMROMPath}"; DestDir: "{app}"; DestName: "Super Metroid (JU).sfc"; Flags: external; Components: client/sni/sm or generator/sm
 Source: "{code:GetDKC3ROMPath}"; DestDir: "{app}"; DestName: "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc"; Flags: external; Components: client/sni/dkc3 or generator/dkc3
+Source: "{code:GetSMWROMPath}"; DestDir: "{app}"; DestName: "Super Mario World (USA).sfc"; Flags: external; Components: client/sni/smw or generator/smw
 Source: "{code:GetSoEROMPath}"; DestDir: "{app}"; DestName: "Secret of Evermore (USA).sfc"; Flags: external; Components: generator/soe
 Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: client/oot or generator/oot
 Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -151,6 +154,11 @@ Root: HKCR; Subkey: "{#MyAppName}dkc3patch";                     ValueData: "Arc
 Root: HKCR; Subkey: "{#MyAppName}dkc3patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}dkc3patch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
 
+Root: HKCR; Subkey: ".apsmw";                                    ValueData: "{#MyAppName}smwpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}smwpatch";                     ValueData: "Archipelago Super Mario World Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}smwpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}smwpatch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
+
 Root: HKCR; Subkey: ".apsmz3";                                 ValueData: "{#MyAppName}smz3patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}smz3patch";                     ValueData: "Archipelago SMZ3 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}smz3patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
@@ -196,7 +204,7 @@ begin
   begin
     // Is the installed version at least the packaged one ?
     Log('VC Redist x64 Version : found ' + strVersion);
-    Result := (CompareStr(strVersion, 'v14.29.30037') < 0);
+    Result := (CompareStr(strVersion, 'v14.32.31332') < 0);
   end
   else
   begin
@@ -216,6 +224,9 @@ var SMRomFilePage: TInputFileWizardPage;
 
 var dkc3rom: string;
 var DKC3RomFilePage: TInputFileWizardPage;
+
+var smwrom: string;
+var SMWRomFilePage: TInputFileWizardPage;
 
 var soerom: string;
 var SoERomFilePage: TInputFileWizardPage;
@@ -308,6 +319,8 @@ begin
     Result := not (SMROMFilePage.Values[0] = '')
   else if (assigned(DKC3ROMFilePage)) and (CurPageID = DKC3ROMFilePage.ID) then
     Result := not (DKC3ROMFilePage.Values[0] = '')
+  else if (assigned(SMWROMFilePage)) and (CurPageID = SMWROMFilePage.ID) then
+    Result := not (SMWROMFilePage.Values[0] = '')
   else if (assigned(SoEROMFilePage)) and (CurPageID = SoEROMFilePage.ID) then
     Result := not (SoEROMFilePage.Values[0] = '')
   else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
@@ -364,6 +377,22 @@ begin
     Result := '';
  end;
 
+function GetSMWROMPath(Param: string): string;
+begin
+  if Length(smwrom) > 0 then
+    Result := smwrom
+  else if Assigned(SMWRomFilePage) then
+    begin
+      R := CompareStr(GetSNESMD5OfFile(SMWROMFilePage.Values[0]), 'cdd3c8c37322978ca8669b34bc89c804')
+      if R <> 0 then
+        MsgBox('Super Mario World ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := SMWROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+ end;
+
 function GetSoEROMPath(Param: string): string;
 begin
   if Length(soerom) > 0 then
@@ -412,6 +441,10 @@ begin
   if Length(dkc3rom) = 0 then
     DKC3RomFilePage:= AddRomPage('Donkey Kong Country 3 - Dixie Kong''s Double Trouble! (USA) (En,Fr).sfc');
 
+  smwrom := CheckRom('Super Mario World (USA).sfc', 'cdd3c8c37322978ca8669b34bc89c804');
+  if Length(smwrom) = 0 then
+    SMWRomFilePage:= AddRomPage('Super Mario World (USA).sfc');
+
   soerom := CheckRom('Secret of Evermore (USA).sfc', '6e9c94511d04fac6e0a1e582c170be3a');
   if Length(soerom) = 0 then
     SoEROMFilePage:= AddRomPage('Secret of Evermore (USA).sfc');
@@ -427,6 +460,8 @@ begin
     Result := not (WizardIsComponentSelected('client/sni/sm') or WizardIsComponentSelected('generator/sm'));
   if (assigned(DKC3ROMFilePage)) and (PageID = DKC3ROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('client/sni/dkc3') or WizardIsComponentSelected('generator/dkc3'));
+  if (assigned(SMWROMFilePage)) and (PageID = SMWROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('client/sni/smw') or WizardIsComponentSelected('generator/smw'));
   if (assigned(SoEROMFilePage)) and (PageID = SoEROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/soe'));
   if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then

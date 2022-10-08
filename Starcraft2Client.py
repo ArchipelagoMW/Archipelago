@@ -12,20 +12,9 @@ import typing
 import queue
 from pathlib import Path
 
-import nest_asyncio
-import sc2
-from sc2.bot_ai import BotAI
-from sc2.data import Race
-from sc2.main import run_game
-from sc2.player import Bot
-
-from MultiServer import mark_raw
+# CommonClient import first to trigger ModuleUpdater
+from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows
-from worlds.sc2wol import SC2WoLWorld
-from worlds.sc2wol.Items import lookup_id_to_name, item_table
-from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
-from worlds.sc2wol.MissionTables import lookup_id_to_mission
-from worlds.sc2wol.Regions import MissionInfo
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -33,10 +22,21 @@ if __name__ == "__main__":
 logger = logging.getLogger("Client")
 sc2_logger = logging.getLogger("Starcraft2")
 
-import colorama
+import nest_asyncio
+import sc2
+from sc2.bot_ai import BotAI
+from sc2.data import Race
+from sc2.main import run_game
+from sc2.player import Bot
+from worlds.sc2wol import SC2WoLWorld
+from worlds.sc2wol.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups
+from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
+from worlds.sc2wol.MissionTables import lookup_id_to_mission
+from worlds.sc2wol.Regions import MissionInfo
 
-from NetUtils import ClientStatus, RawJSONtoTextParser
-from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
+import colorama
+from NetUtils import ClientStatus, NetworkItem, RawJSONtoTextParser
+from MultiServer import mark_raw
 
 nest_asyncio.apply()
 max_bonus: int = 8
@@ -135,7 +135,7 @@ class SC2Context(CommonContext):
     last_loc_list = None
     difficulty_override = -1
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
-    raw_text_parser: RawJSONtoTextParser
+    last_bot: typing.Optional[ArchipelagoBot] = None
 
     def __init__(self, *args, **kwargs):
         super(SC2Context, self).__init__(*args, **kwargs)
@@ -164,10 +164,13 @@ class SC2Context(CommonContext):
                 check_mod_install()
 
     def on_print_json(self, args: dict):
+        # goes to this world
         if "receiving" in args and self.slot_concerns_self(args["receiving"]):
             relevant = True
+        # found in this world
         elif "item" in args and self.slot_concerns_self(args["item"].player):
             relevant = True
+        # not related
         else:
             relevant = False
 
@@ -291,34 +294,37 @@ class SC2Context(CommonContext):
                             category_panel.add_widget(
                                 Label(text=category, size_hint_y=None, height=50, outline_width=1))
 
-                            # Map is completed
                             for mission in categories[category]:
-                                text = mission
-                                tooltip = ""
+                                text: str = mission
+                                tooltip: str = ""
 
                                 # Map has uncollected locations
                                 if mission in unfinished_missions:
                                     text = f"[color=6495ED]{text}[/color]"
 
-                                    tooltip = f"Uncollected locations:\n"
-                                    tooltip += "\n".join([self.ctx.location_names[loc] for loc in
-                                                          self.ctx.locations_for_mission(mission)
-                                                          if loc in self.ctx.missing_locations])
                                 elif mission in available_missions:
                                     text = f"[color=FFFFFF]{text}[/color]"
                                 # Map requirements not met
                                 else:
                                     text = f"[color=a9a9a9]{text}[/color]"
                                     tooltip = f"Requires: "
-                                    if len(self.ctx.mission_req_table[mission].required_world) > 0:
+                                    if self.ctx.mission_req_table[mission].required_world:
                                         tooltip += ", ".join(list(self.ctx.mission_req_table)[req_mission - 1] for
                                                              req_mission in
                                                              self.ctx.mission_req_table[mission].required_world)
 
-                                        if self.ctx.mission_req_table[mission].number > 0:
+                                        if self.ctx.mission_req_table[mission].number:
                                             tooltip += " and "
-                                    if self.ctx.mission_req_table[mission].number > 0:
+                                    if self.ctx.mission_req_table[mission].number:
                                         tooltip += f"{self.ctx.mission_req_table[mission].number} missions completed"
+                                remaining_location_names: typing.List[str] = [
+                                    self.ctx.location_names[loc] for loc in self.ctx.locations_for_mission(mission)
+                                    if loc in self.ctx.missing_locations]
+                                if remaining_location_names:
+                                    if tooltip:
+                                        tooltip += "\n"
+                                    tooltip += f"Uncollected locations:\n"
+                                    tooltip += "\n".join(remaining_location_names)
 
                                 mission_button = MissionButton(text=text, size_hint_y=None, height=50)
                                 mission_button.tooltip_text = tooltip
@@ -350,11 +356,14 @@ class SC2Context(CommonContext):
 
         self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
-
-        Builder.load_file(Utils.local_path(os.path.dirname(SC2WoLWorld.__file__), "Starcraft2.kv"))
+        import pkgutil
+        data = pkgutil.get_data(SC2WoLWorld.__module__, "Starcraft2.kv").decode()
+        Builder.load_string(data)
 
     async def shutdown(self):
         await super(SC2Context, self).shutdown()
+        if self.last_bot:
+            self.last_bot.want_close = True
         if self.sc2_run_task:
             self.sc2_run_task.cancel()
 
@@ -431,47 +440,27 @@ wol_default_categories = [
 ]
 
 
-def calculate_items(items):
-    unit_unlocks = 0
-    armory1_unlocks = 0
-    armory2_unlocks = 0
-    upgrade_unlocks = 0
-    building_unlocks = 0
-    merc_unlocks = 0
-    lab_unlocks = 0
-    protoss_unlock = 0
-    minerals = 0
-    vespene = 0
-    supply = 0
+def calculate_items(items: typing.List[NetworkItem]) -> typing.List[int]:
+    network_item: NetworkItem
+    accumulators: typing.List[int] = [0 for _ in type_flaggroups]
 
-    for item in items:
-        data = lookup_id_to_name[item.item]
+    for network_item in items:
+        name: str = lookup_id_to_name[network_item.item]
+        item_data: ItemData = item_table[name]
 
-        if item_table[data].type == "Unit":
-            unit_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Upgrade":
-            upgrade_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Armory 1":
-            armory1_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Armory 2":
-            armory2_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Building":
-            building_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Mercenary":
-            merc_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Laboratory":
-            lab_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Protoss":
-            protoss_unlock += (1 << item_table[data].number)
-        elif item_table[data].type == "Minerals":
-            minerals += item_table[data].number
-        elif item_table[data].type == "Vespene":
-            vespene += item_table[data].number
-        elif item_table[data].type == "Supply":
-            supply += item_table[data].number
+        # exists exactly once
+        if item_data.quantity == 1:
+            accumulators[type_flaggroups[item_data.type]] |= 1 << item_data.number
 
-    return [unit_unlocks, upgrade_unlocks, armory1_unlocks, armory2_unlocks, building_unlocks, merc_unlocks,
-            lab_unlocks, protoss_unlock, minerals, vespene, supply]
+        # exists multiple times
+        elif item_data.type == "Upgrade":
+            accumulators[type_flaggroups[item_data.type]] += 1 << item_data.number
+
+        # sum
+        else:
+            accumulators[type_flaggroups[item_data.type]] += item_data.number
+
+    return accumulators
 
 
 def calc_difficulty(difficulty):
@@ -502,7 +491,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     setup_done: bool
     ctx: SC2Context
     mission_id: int
-
+    want_close: bool = False
     can_read_game = False
 
     last_received_update: int = 0
@@ -510,12 +499,17 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     def __init__(self, ctx: SC2Context, mission_id):
         self.setup_done = False
         self.ctx = ctx
+        self.ctx.last_bot = self
         self.mission_id = mission_id
         self.boni = [False for _ in range(max_bonus)]
 
         super(ArchipelagoBot, self).__init__()
 
     async def on_step(self, iteration: int):
+        if self.want_close:
+            self.want_close = False
+            await self._client.leave()
+            return
         game_state = 0
         if not self.setup_done:
             self.setup_done = True
@@ -799,7 +793,12 @@ def check_game_install_path() -> bool:
         with open(einfo) as f:
             content = f.read()
         if content:
-            base = re.search(r" = (.*)Versions", content).group(1)
+            try:
+                base = re.search(r" = (.*)Versions", content).group(1)
+            except AttributeError:
+                sc2_logger.warning(f"Found {einfo}, but it was empty. Run SC2 through the Blizzard launcher, then "
+                                   f"try again.")
+                return False
             if os.path.exists(base):
                 executable = sc2.paths.latest_executeble(Path(base).expanduser() / "Versions")
 
@@ -816,7 +815,8 @@ def check_game_install_path() -> bool:
             else:
                 sc2_logger.warning(f"{einfo} pointed to {base}, but we could not find an SC2 install there.")
     else:
-        sc2_logger.warning(f"Couldn't find {einfo}. Please run /set_path with your SC2 install directory.")
+        sc2_logger.warning(f"Couldn't find {einfo}. Run SC2 through the Blizzard launcher, then try again. "
+                           f"If that fails, please run /set_path with your SC2 install directory.")
     return False
 
 
