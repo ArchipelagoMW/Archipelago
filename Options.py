@@ -763,7 +763,7 @@ class NonLocalItems(ItemSet):
 
 
 class EarlyItems(ItemSet):
-    """Force these items to be in locations that are reachable from the start."""
+    """Force one of each of the specified items to be in locations that are reachable from the start."""
     display_name = "Early Items"
 
 
