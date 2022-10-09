@@ -21,6 +21,13 @@ class TestBase(unittest.TestCase):
             "Lost Woods Mushroom Timeout",  # trade quest starts after this item
             "ZD Eyeball Frog Timeout",  # trade quest starts after this item
             "ZR Top of Waterfall",  # dummy region used for entrance shuffle
+        },
+        # The following SM regions are only used when the corresponding StartLocation option is selected (so not with default settings).
+        # Also, those dont have any entrances as they serve as starting Region (that's why they have to be excluded for testAllStateCanReachEverything).
+        "Super Metroid": {
+            "Ceres",
+            "Gauntlet Top",
+            "Mama Turtle"
         }
     }
 
