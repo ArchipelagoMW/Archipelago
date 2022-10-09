@@ -27,10 +27,10 @@ window.addEventListener('load', () => {
 
         // Reset the id of all header divs to something nicer
         for (const header of document.querySelectorAll('h1, h2, h3, h4, h5, h6')) {
-            const headerId = header.innerText.replaceAll(' ', '-').toLowerCase()
+            const headerId = header.innerText.replace(/\s+/g, '-').toLowerCase();
             header.setAttribute('id', headerId);
             header.addEventListener('click', () => {
-                window.location.hash = '#' + headerId;
+                window.location.hash = `#${headerId}`;
                 header.scrollIntoView();
             });
         }
