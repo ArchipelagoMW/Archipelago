@@ -488,7 +488,6 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
         # set all of our text to lower case for name checking
         text = text.lower()
         if text == "random":
-            import random
             return cls(random.choice(list(cls.options.values())))
         for option_name, value in cls.options.items():
             if option_name == text:
@@ -504,7 +503,6 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
         # find out what type of boss shuffle we should use for placing bosses after plando
         # and add as a string to look nice in the spoiler
         if "random" in options:
-            import random
             shuffle = random.choice(list(cls.options))
             options.remove("random")
             options = ";".join(options) + ";" + shuffle
