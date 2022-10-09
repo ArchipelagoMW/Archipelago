@@ -91,30 +91,6 @@ class GBContext(CommonContext):
         elif cmd == "ReceivedItems":
             msg = f"Received {', '.join([self.item_names[item.item] for item in args['items']])}"
             self._set_message(msg, SYSTEM_MESSAGE_ID)
-        # elif cmd == 'PrintJSON':
-        #     print_type = args.get("type", None)
-        #     item = args.get("item", None)
-        #     receiving_player_id = args['receiving']
-        #     receiving_player_name = self.player_names[receiving_player_id]
-        #     sending_player_id = item.player
-        #     sending_player_name = self.player_names[item.player]
-        #     if print_type == 'Hint':
-        #         msg = f"Hint: Your {self.item_names[item.item]} is at" \
-        #               f" {self.player_names[item.player]}'s {self.location_names[item.location]}"
-        #         self._set_message(msg, item.item)
-        #     elif print_type == 'ItemSend' and receiving_player_id != self.slot:
-        #         if sending_player_id == self.slot:
-        #             if receiving_player_id == self.slot:
-        #                 msg = f"You found your own {self.item_names[item.item]}"
-        #             else:
-        #                 msg = f"You sent {self.item_names[item.item]} to {receiving_player_name}"
-        #         else:
-        #             if receiving_player_id == sending_player_id:
-        #                 msg = f"{sending_player_name} found their {self.item_names[item.item]}"
-        #             else:
-        #                 msg = f"{sending_player_name} sent {self.item_names[item.item]} to " \
-        #                       f"{receiving_player_name}"
-        #         self._set_message(msg, item.item)
 
     def run_gui(self):
         from kvui import GameManager
