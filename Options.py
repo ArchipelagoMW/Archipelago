@@ -762,8 +762,8 @@ class NonLocalItems(ItemSet):
     display_name = "Not Local Items"
 
 
-class EarlyItems(ItemSet):
-    """Force one of each of the specified items to be in locations that are reachable from the start."""
+class EarlyItems(ItemDict):
+    """Force the specified items to be in locations that are reachable from the start."""
     display_name = "Early Items"
 
 

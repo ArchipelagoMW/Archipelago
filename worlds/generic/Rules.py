@@ -58,10 +58,10 @@ def early_item_rules(world: MultiWorld, player: int, early_items: typing.Set[str
         else:
             late_locations.append(location)
     for location in late_locations:
-        for early_item in early_items:
-            add_item_rule(location, lambda i, item=early_item: i.player != player or i.name != item or
+        for early_item, item_count in early_items.items():
+            add_item_rule(location, lambda i, item=early_item, count=item_count: i.player != player or i.name != item or
                           len([loc for loc in early_locations if loc.item is not None and
-                               (loc.item.player, loc.item.name) == (player, item)]) > 0)
+                               (loc.item.player, loc.item.name) == (player, item)]) >= item_count)
 
 
 def set_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule):

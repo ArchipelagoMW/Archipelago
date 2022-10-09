@@ -133,7 +133,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     for player in world.player_ids:
         exclusion_rules(world, player, world.exclude_locations[player].value)
-        early_item_rules(world, player, world.early_items[player].value)
         world.priority_locations[player].value -= world.exclude_locations[player].value
         for location_name in world.priority_locations[player].value:
             world.get_location(location_name, player).progress_type = LocationProgressType.PRIORITY
@@ -214,6 +213,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     if any(world.item_links.values()):
         world._recache()
         world._all_state = None
+
+    for player in world.player_ids:
+        early_item_rules(world, player, world.early_items[player].value)
 
     logger.info("Running Item Plando")
 
