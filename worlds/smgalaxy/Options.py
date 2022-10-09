@@ -8,5 +8,5 @@ class EnablePurpleCoinStars(DefaultOnToggle):
     display_name = "Enable Purple Coin Stars"
 
 smg_options: typing.Dict[str, type(Option)] = {
-    "EnablePurpleCoinStars": EnablePurpleCoinStars,
+    "enable_purple_coin_stars": EnablePurpleCoinStars,
 }

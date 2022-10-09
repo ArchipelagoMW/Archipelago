@@ -4,7 +4,7 @@ from .locations import location_table, SMGLocation
 from .Options import smg_options
 from .rules import set_star_rules
 from .regions import create_regions
-from BaseClasses import Item, Tutorial, ItemClassification
+from BaseClasses import Item, Tutorial, ItemClassification, Region, Location, RegionType, Entrance, MultiWorld  
 from ..AutoWorld import World, WebWorld
 
 client_version = 1
@@ -38,10 +38,10 @@ class SuperMarioGalaxy(World):
     options = smg_options
 
     def create_regions(self):
-        create_regions(self.world,self.player)
+        create_regions(self.world,self.player, location_table)
     
     def set_star_rules(self):
-        set_star_rules(self.world, self.player)
+        set_star_rules(self.world,self.player)
     
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
@@ -54,12 +54,12 @@ class SuperMarioGalaxy(World):
         return item
    
     
-    def generate_basic(self): 
+    def generate_basic(self, player): 
         gstaritem = self.create_item("Green Star")
         self.world.itempool += [gstaritem for i in range(0,3)]
         
         staritem = self.create_item("Power Star")
-        if(self.world.EnablePurpleCoinStars[self.player].value):
+        if(self.world.enable_purple_coin_stars[player]):
            self.world.itempool += [staritem for i in range(0,117)]
         else:
             self.world.itempool += [staritem for i in range(0,101)]
