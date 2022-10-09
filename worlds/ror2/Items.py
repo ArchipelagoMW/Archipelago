@@ -1,6 +1,7 @@
 from typing import Dict
 from BaseClasses import Item
 from .Options import ItemWeights
+from .RoR2Environments import *
 
 
 class RiskOfRainItem(Item):
@@ -26,57 +27,10 @@ item_table: Dict[str, int] = {
 ##################################################
 # environments
 
-# TODO move the environments into stages so that they can be distributed in a reasonable order
-# TODO perhaps all the environments should be moved out to a separate file
-environment_vanilla_table: Dict[str, int] = {
-    "Void Fields":                          37704, # arena
-    "Distant Roost":                        37707, # blackbeach
-    "Distant Roost (2)":                    37708, # blackbeach2
-    "Abyssal Depths":                       37710, # dampcavesimple
-    "Wetland Aspect":                       37712, # foggyswamp
-    "Rallypoint Delta":                     37713, # frozenwall
-    "Titanic Plains":                       37715, # golemplains
-    "Titanic Plains (2)":                   37716, # golemplains2
-    "Abandoned Aqueduct":                   37717, # goolake
-    "Commencement":                         37732, # moon2
-    "Sundered Grove":                       37735, # rootjungle
-    "Siren's Call":                         37737, # shipgraveyard
-    "Sky Meadow":                           37738, # skymeadow
-    "Scorched Acres":                       37747, # wispgraveyard
-}
+environment_offest = 37700
 
-environment_sotv_table: Dict[str, int] = {
-    "Aphelian Sanctuary":                   37703, # ancientloft
-    "The Simulacrum (Aphelian Sanctuary)":  37720, # itancientloft
-    "The Simulacrum (Abyssal Depths)":      37721, # itdampcave
-    "The Simulacrum (Rallypoint Delta)":    37722, # itfrozenwall
-    "The Simulacrum (Titanic Plains)":      37723, # itgolemplains
-    "The Simulacrum (Abandoned Aqueduct)":  37724, # itgoolake
-    "The Simulacrum (Commencement)":        37725, # itmoon
-    "The Simulacrum (Sky Meadow)":          37726, # itskymeadow
-    "Siphoned Forest":                      37739, # snowyforest
-    "Sulfur Pools":                         37741, # sulfurpools
-    "Void Locus":                           37745, # voidstage
-    "The Planetarium":                      37746, # voidraid
-}
-
-environment_hidden_realm_table: Dict[str, int] = {
-    "Hidden Realm: Bulwark's Ambry":        37705, # artifactworld
-    "Hidden Realm: Bazaar Between Time":    37706, # bazaar
-    "Hidden Realm: Gilded Coast":           37714, # goldshores
-    "Hidden Realm: A Moment, Whole":        37727, # limbo
-    "Hidden Realm: A Moment, Fractured":    37733, # mysteryspace
-}
-
-def get_environment_table(dlc_sotv:bool=False) -> Dict[str, int]:
-    environments = {}
-    environments|= environment_vanilla_table
-    if (dlc_sotv): environments|= environment_sotv_table
-    environments|= environment_hidden_realm_table
-    return environments
-
-# add environments into the item table
-item_table|= get_environment_table(dlc_sotv=True)
+# add ALL environments into the item table
+item_table|= shift_by_offset(environment_ALL_table, environment_offest)
 # use the sotv dlc in the item table so that all names can be looked up regardless of use
 
 # end of environments
@@ -211,5 +165,4 @@ item_pool_weights: Dict[int, Dict[str, int]] = {
     ItemWeights.option_scraps_only: scraps_only
 }
 
-lookup_id_to_name: Dict[int, str] = {id: name for name, id in item_table.items()} | {id: name for name, id in get_environment_table(dlc_sotv=True).items()}
-# use the sotv dlc in the lookup table so that all ids can be looked up regardless of use
+lookup_id_to_name: Dict[int, str] = {id: name for name, id in item_table.items()}

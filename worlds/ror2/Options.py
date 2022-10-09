@@ -21,7 +21,6 @@ class TotalLocations(Range):
     default = 20
 
 class ChestsPerEnvironment(Range):
-    # TODO clarify what the difference is
     """EXPLORE: The number of chest locations per environment."""
     display_name = "Chests per Environment"
     range_start = 0
@@ -29,7 +28,6 @@ class ChestsPerEnvironment(Range):
     default = 10
 
 class ShrinesPerEnvironment(Range):
-    # TODO clarify what the difference is
     """EXPLORE: The number of shrine locations per environment."""
     display_name = "Shrines per Environment"
     range_start = 0
@@ -37,7 +35,6 @@ class ShrinesPerEnvironment(Range):
     default = 10
 
 class ScavengersPerEnvironment(Range):
-    # TODO clarify what the difference is
     """EXPLORE: The number of scavenger locations per environment."""
     display_name = "Scavenger per Environment"
     range_start = 0
@@ -45,7 +42,6 @@ class ScavengersPerEnvironment(Range):
     default = 1
 
 class ScannersPerEnvironment(Range):
-    # TODO clarify what the difference is
     """EXPLORE: The number of shrine locations per environment."""
     display_name = "Radio Scanners per Environment"
     range_start = 0
@@ -53,7 +49,6 @@ class ScannersPerEnvironment(Range):
     default = 1
 
 class AltarsPerEnvironment(Range):
-    # TODO clarify what the difference is
     """EXPLORE: The number of shrine locations per environment."""
     display_name = "Newts Per Environment"
     range_start = 0

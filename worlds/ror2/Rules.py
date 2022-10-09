@@ -49,7 +49,5 @@ def set_rules(world: MultiWorld, player: int) -> None:
             add_rule(world.get_location("Victory", player),
                     lambda state: state.has("Dio's Best Friend", player,
                                             total_revivals + world.start_with_revive[player]))
-    # explore mode requires no specific rules yet
-    # TODO have locations in enviroments require the item for said environment
 
     world.completion_condition[player] = lambda state: state.has("Victory", player)
