@@ -59,7 +59,7 @@ class SuperMarioGalaxy(World):
         self.world.itempool += [gstaritem for i in range(0,3)]
         
         staritem = self.create_item("Power Star")
-        if(not self.world.EnablePurpleCoinStars[self.player].value):
+        if(self.world.EnablePurpleCoinStars[self.player].value):
            self.world.itempool += [staritem for i in range(0,117)]
         else:
             self.world.itempool += [staritem for i in range(0,101)]
@@ -70,4 +70,3 @@ class SuperMarioGalaxy(World):
         grandstar4 = self.create_item("Grand Star Bedroom")
         grandstar5 = self.create_item("Grand Star Engine Room")          
         self.world.itempool += [grandstar1,grandstar2,grandstar3,grandstar4,grandstar5]    
-        
