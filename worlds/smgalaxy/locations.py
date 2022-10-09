@@ -167,5 +167,4 @@ location_table = { **locGE_table,**locHH_table, \
                    **locGG_table,**locFF_table,**locDDune_table, \
                    **locGL_table,**locSS_table,**locTT_table, \
                    **locDD_table,**locDN_table,**locMM_table, \
-                   **locPC_table,**locHL_table,**locspecialstages_table,**locbosses_table
-}
+                   **locPC_table,**locHL_table,**locspecialstages_table,**locbosses_table}

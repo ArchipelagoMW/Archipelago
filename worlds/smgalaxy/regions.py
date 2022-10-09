@@ -1,14 +1,14 @@
 import imp
 import typing
 from .Options import smg_options
-from BaseClasses import Region, Location, RegionType, Entrance, Multiworld
+from BaseClasses import Region, Location, RegionType, Entrance, MultiWorld  
 from .locations import SMGLocation, location_table,locHH_table,locGE_table, \
                                                    locSJ_table,locBR_table,locBB_table, \
                                                    locGG_table,locFF_table,locDD_table,locDDune_table, \
                                                    locGL_table,locSS_table,locTT_table, \
                                                    locDN_table,locMM_table, \
                                                    locHL_table,locbosses_table,locspecialstages_table
-def create_regions(world: Multiworld, player: int):
+def create_regions(world: MultiWorld, player: int):
     #defines the commet obserbatory
     regspecialstages = Region("Menu", RegionType.Generic, "Ship", player, world)
     locspecialstages_names = [name for name, id in locspecialstages_table.items()]
