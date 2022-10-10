@@ -2,6 +2,7 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
+from collections import defaultdict
 from typing import Dict, NamedTuple, Optional, Set
 
 from BaseClasses import Item, MultiWorld
@@ -96,6 +97,10 @@ class WitnessPlayerItems:
     Class that defines Items for a single world
     """
 
+    @staticmethod
+    def code(item_name: str):
+        return StaticWitnessItems.ALL_ITEM_TABLE[item_name].code
+
     def __init__(self, locat: WitnessPlayerLocations, world: MultiWorld, player: int, player_logic: WitnessPlayerLogic):
         """Adds event items after logic changes due to options"""
         self.EVENT_ITEM_TABLE = dict()
@@ -104,6 +109,8 @@ class WitnessPlayerItems:
 
         self.ITEM_ID_TO_DOOR_HEX = dict()
         self.DOORS = set()
+
+        self.PROG_ITEM_AMOUNTS = defaultdict(lambda: 1)
 
         self.SYMBOLS_NOT_IN_THE_GAME = set()
 
@@ -118,7 +125,16 @@ class WitnessPlayerItems:
                 if item in StaticWitnessLogic.ALL_SYMBOL_ITEMS:
                     self.SYMBOLS_NOT_IN_THE_GAME.add(StaticWitnessItems.ALL_ITEM_TABLE[item[0]].code)
             else:
+                if item[0] in StaticWitnessLogic.PROGRESSIVE_TO_ITEMS:
+                    self.PROG_ITEM_AMOUNTS[item[0]] = len(player_logic.MULTI_LISTS[item[0]])
+
                 self.PROGRESSION_TABLE[item[0]] = self.ITEM_TABLE[item[0]]
+
+        self.MULTI_LISTS_BY_CODE = dict()
+
+        for item in self.PROG_ITEM_AMOUNTS:
+            multi_list = player_logic.MULTI_LISTS[item]
+            self.MULTI_LISTS_BY_CODE[self.code(item)] = [self.code(single_item) for single_item in multi_list]
 
         for entity_hex, items in player_logic.DOOR_ITEMS_BY_ID.items():
             entity_hex_int = int(entity_hex, 16)
@@ -138,11 +154,11 @@ class WitnessPlayerItems:
 
         if doors and symbols:
             self.GOOD_ITEMS = [
-                "Dots", "Black/White Squares", "Symmetry"
+                "Progressive Dots", "Black/White Squares", "Symmetry"
             ]
         elif symbols:
             self.GOOD_ITEMS = [
-                "Dots", "Black/White Squares", "Stars",
+                "Progressive Dots", "Black/White Squares", "Progressive Stars",
                 "Shapers", "Symmetry"
             ]
 
@@ -150,6 +166,10 @@ class WitnessPlayerItems:
                 self.GOOD_ITEMS.append("Triangles")
             if not is_option_enabled(world, player, "disable_non_randomized_puzzles"):
                 self.GOOD_ITEMS.append("Colored Squares")
+
+            self.GOOD_ITEMS = [
+                StaticWitnessLogic.ITEMS_TO_PROGRESSIVE.get(item, item) for item in self.GOOD_ITEMS
+            ]
 
         for event_location in locat.EVENT_LOCATION_TABLE:
             location = player_logic.EVENT_ITEM_PAIRS[event_location]

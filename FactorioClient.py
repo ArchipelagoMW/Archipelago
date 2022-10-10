@@ -211,6 +211,8 @@ async def game_watcher(ctx: FactorioContext):
 
 
 def stream_factorio_output(pipe, queue, process):
+    pipe.reconfigure(errors="replace")
+
     def queuer():
         while process.poll() is None:
             text = pipe.readline().strip()
