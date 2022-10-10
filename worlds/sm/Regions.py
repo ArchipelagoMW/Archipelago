@@ -6,7 +6,7 @@ def create_regions(self, world, player: int):
 
     regions = []
     for accessPoint in Logic.accessPoints:
-        if (not accessPoint.Escape):
+        if not accessPoint.Escape:
             regions.append(create_region(   self, 
                                             world, 
                                             player, 
