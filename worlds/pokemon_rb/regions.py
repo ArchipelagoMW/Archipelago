@@ -216,6 +216,7 @@ def create_regions(world: MultiWorld, player: int):
     connect(world, player, "Route 12 South", "Route 12 Grass", lambda state: state.pokemon_rb_can_cut(player))
     connect(world, player, "Route 12 North", "Lavender Town")
     connect(world, player, "Route 7", "Lavender Town")
+    connect(world, player, "Route 10 South", "Lavender Town")
     connect(world, player, "Route 7", "Underground Tunnel West-East")
     connect(world, player, "Route 8", "Underground Tunnel West-East")
     connect(world, player, "Route 8", "Celadon City")
