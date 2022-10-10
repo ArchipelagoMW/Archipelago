@@ -141,7 +141,7 @@ def user_path(*path: str) -> str:
     return os.path.join(user_path.cached_path, *path)
 
 
-def output_path(*path: str):
+def output_path(*path: str) -> str:
     if hasattr(output_path, 'cached_path'):
         return os.path.join(output_path.cached_path, *path)
     output_path.cached_path = user_path(get_options()["general_options"]["output_path"])

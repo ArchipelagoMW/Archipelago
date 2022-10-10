@@ -157,6 +157,8 @@ class CommonContext:
     hint_cost: typing.Optional[int]
     player_names: typing.Dict[int, str]
 
+    auth: typing.Optional[str]
+
     # locations
     locations_checked: typing.Set[int]  # local state
     locations_scouted: typing.Set[int]
