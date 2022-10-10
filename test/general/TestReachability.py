@@ -43,7 +43,7 @@ class TestBase(unittest.TestCase):
                     for location in world.get_locations():
                         if location.name not in excluded:
                             with self.subTest("Location should be reached", location=location):
-                                self.assertTrue(location.can_reach(state))
+                                self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
 
                     for region in world.get_regions():
                         if region.name not in unreachable_regions:

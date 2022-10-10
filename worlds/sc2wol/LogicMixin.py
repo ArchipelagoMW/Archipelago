@@ -1,5 +1,5 @@
 from BaseClasses import MultiWorld
-from ..AutoWorld import LogicMixin
+from worlds.AutoWorld import LogicMixin
 
 
 class SC2WoLLogic(LogicMixin):

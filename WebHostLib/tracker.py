@@ -8,7 +8,8 @@ import datetime
 from uuid import UUID
 
 from worlds.alttp import Items
-from WebHostLib import app, cache, Room
+from . import app, cache
+from .models import Room
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
 from MultiServer import Context

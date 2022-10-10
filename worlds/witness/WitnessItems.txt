@@ -15,6 +15,8 @@ Progression:
 71 - Black/White Squares
 72 - Colored Squares
 80 - Arrows
+200 - Progressive Dots - Dots,Full Dots
+260 - Progressive Stars - Stars,Stars + Same Colored Symbol
 
 Usefuls:
 101 - Functioning Brain - False
