@@ -29,7 +29,7 @@ level4_locs = [f"{(i + 1) * 1500} Points" for i in range(4)] + \
     [f"{(i + 1) * 3000} Level Points" for i in range(4)] + \
     ["Combo 5", "Combo 7"] + ["Chain x2", "Chain x3"]
 
-level5_locs = ["100,000 Total Points", "Cleared all Hazards"]
+level5_locs = ["75,000 Total Points", "Cleared all Hazards"]
 
 for x, list in enumerate([level1_locs, level2_locs, level3_locs, level4_locs, level5_locs]):
     for y, loc in enumerate(list):
