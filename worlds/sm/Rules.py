@@ -36,6 +36,6 @@ def set_rules(world, player):
             add_postAvailable_rule(location, player, value.PostAvailable)
             
     for accessPoint in Logic.accessPoints:
-        if (not accessPoint.Escape):
+        if not accessPoint.Escape:
             for key, value1 in accessPoint.intraTransitions.items():
                 set_entrance_rule(world.get_entrance(accessPoint.Name + "->" + key, player), player, value1)
