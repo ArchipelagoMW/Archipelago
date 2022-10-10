@@ -11,7 +11,7 @@ by certain games. Currently, only LTTP supports text and boss plando. Support fo
 
 ### Enabling Plando
 
-On the website plando will already be enabled. If you will be generating the game locally, plando features must be
+On the website, plando will already be enabled. If you will be generating the game locally, plando features must be
 enabled (opt-in).
 
 * To opt-in go to the archipelago installation (default: `C:\ProgramData\Archipelago`), open the host.yaml with a text
@@ -147,7 +147,7 @@ player's Starter Chest 1 and removes the chosen item from the item pool.
 2. This block will always trigger and will place the player's swords, bow, magic meter, strength upgrades, and hookshots
 in their own dungeon major item chests.
 3. This block will always trigger and will lock boss relics on the bosses.
-4. This block has an 80% chance of occurring and when it does, it will place all but 1 of the items randomly among the
+4. This block has an 80% chance of occurring, and when it does, it will place all but 1 of the items randomly among the
 four locations chosen here.
 5. This block will always trigger and will attempt to place a random 2 of Levitate, Revealer and Energize into
 other players' Master Sword Pedestals or Boss Relic 1 locations.
@@ -206,9 +206,9 @@ plando_connections:
     direction: both
 ```
 
-1. These connections are decoupled, so going into the Lake Hylia Cave Shop will take you to the inside of Cave 45 and
-   when you leave the interior you will exit to the Cave 45 ledge. Going into the Cave 45 entrance will then take you to
+1. These connections are decoupled, so going into the Lake Hylia Cave Shop will take you to the inside of Cave 45, and
+   when you leave the interior, you will exit to the Cave 45 ledge. Going into the Cave 45 entrance will then take you to
    the Lake Hylia Cave Shop. Walking into the entrance for the Old Man Cave and Agahnim's Tower entrance will both take
-   you to their locations as normal but leaving Old Man Cave will exit at Agahnim's Tower.
+   you to their locations as normal, but leaving Old Man Cave will exit at Agahnim's Tower.
 2. This will force a Nether fortress and a village to be the Overworld structures for your game. Note that for the
    Minecraft connection plando to work structure shuffle must be enabled.
