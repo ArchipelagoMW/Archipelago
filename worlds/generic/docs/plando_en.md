@@ -2,19 +2,20 @@
 
 ## What is Plando?
 
-The purposes of randomizers is to randomize the items in a game to give a new experience. Plando takes this concept and
+The purpose of randomizers is to randomize the items in a game to give a new experience. Plando takes this concept and
 changes it up by allowing you to plan out certain aspects of the game by placing certain items in certain locations,
 certain bosses in certain rooms, edit text for certain NPCs/signs, or even force certain region connections. Each of
 these options are going to be detailed separately as `item plando`, `boss plando`, `text plando`,
-and `connection plando`. Every game in archipelago supports item plando but the other plando options are only supported
-by certain games. Currently, only LTTP supports text and boss plando. Support for connection plando may vary.
+and `connection plando`. Every game in Archipelago supports item plando but the other plando options are only supported
+by certain games. Currently, only A Link to the Past supports text and boss plando. Support for connection plando may
+vary.
 
 ### Enabling Plando
 
 On the website, plando will already be enabled. If you will be generating the game locally, plando features must be
 enabled (opt-in).
 
-* To opt-in go to the archipelago installation (default: `C:\ProgramData\Archipelago`), open the host.yaml with a text
+* To opt-in go to the Archipelago installation (default: `C:\ProgramData\Archipelago`), open `host.yaml` with a text
   editor and find the `plando_options` key. The available plando modules can be enabled by adding them after this such
   as
   `plando_options: bosses, items, texts, connections`.
@@ -27,7 +28,7 @@ enabled (opt-in).
 ``` 
 
 ## Item Plando
-Item plando allows a player to place an item in a specific location or specific locations, place multiple items into a
+Item plando allows a player to place an item in a specific location or specific locations, or place multiple items into a
 list of specific locations both in their own game or in another player's game.
 
 * The options for item plando are `from_pool`, `world`, `percentage`, `force`, `count`, and either `item` and
@@ -43,7 +44,7 @@ list of specific locations both in their own game or in another player's game.
             * If set to false, it will target your own world.
             * If set to null, it will target a random world in the multiworld.
             * If a list of names is used, it will target the games with the player names specified.
-    * `force` determines whether the generator will fail if the item can't be placed in the location can be true, false,
+    * `force` determines whether the generator will fail if the item can't be placed in the location. Can be true, false,
       or silent. Silent is the default.
         * If set to true, the item must be placed and the generator will throw an error if it is unable to do so.
         * If set to false, the generator will log a warning if the placement can't be done but will still generate.
@@ -53,19 +54,19 @@ list of specific locations both in their own game or in another player's game.
     * Single Placement is when you use a plando block to place a single item at a single location.
         * `item` is the item you would like to place and `location` is the location to place it.
     * Multi Placement uses a plando block to place multiple items in multiple locations until either list is exhausted.
-        * `items` defines the items to use and a number letting you place multiple of it. You can use true instead of a number to have it use however many of that item are in your item pool.
+        * `items` defines the items to use, each with a number for the amount. Using `true` instead of a number uses however many of that item are in your item pool.
         * `locations` is a list of possible locations those items can be placed in.
         * Using the multi placement method, placements are picked randomly.
-        * Instead of a number, you can use true 
+
     * `count` can be used to set the maximum number of items placed from the block. The default is 1 if using `item` and False if using `items`
         * If a number is used, it will try to place this number of items.
         * If set to false, it will try to place as many items from the block as it can.
-        * If `min` and `max` are defined, it will try to place a number of items between these two numbers at random
+        * If `min` and `max` are defined, it will try to place a number of items between these two numbers at random.
 
 
 ### Available Items and Locations
 
-A list of all available items and locations can be found in the [website's datapackage](/datapackage). The items and locations will be in the `"item_name_to_id"` and `"location_name_to_id"` sections of the relevant game. You do not need the quotes but the name must be entered in the same as it appears on that page and is caps-sensitive.
+A list of all available items and locations can be found in the [website's datapackage](/datapackage). The items and locations will be in the `"item_name_to_id"` and `"location_name_to_id"` sections of the relevant game. You do not need the quotes but the name must be entered in the same as it appears on that page and is case-sensitive.
 
 ### Examples
 
@@ -157,28 +158,28 @@ into any locations within the game slots named BobsSlaytheSpire and BobsRogueLeg
 
 ## Boss Plando
 
-As this is currently only supported by A Link to the Past instead of explaining here please refer to the
+As this is currently only supported by A Link to the Past, instead of finding an explanation here, please refer to the
 relevant guide: [A Link to the Past Plando Guide](/tutorial/A%20Link%20to%20the%20Past/plando/en)
 
 ## Text Plando
 
-As this is currently only supported by A Link to the Past instead of explaining here please refer to the
+As this is currently only supported by A Link to the Past, instead of finding an explanation here, please refer to the
 relevant guide: [A Link to the Past Plando Guide](/tutorial/A%20Link%20to%20the%20Past/plando/en)
 
 ## Connections Plando
 
 This is currently only supported by Minecraft and A Link to the Past. As the way that these games interact with their
-connections is different I will only explain the basics here while more specifics for Link to the Past connection plando
-can be found in its plando guide.
+connections is different, I will only explain the basics here, while more specifics for A Link to the Past connection
+plando can be found in its plando guide.
 
-* The options for connections are `percentage`, `entrance`, `exit`, and `direction`. Each of these options support
+* The options for connections are `percentage`, `entrance`, `exit`, and `direction`. Each of these options supports
   subweights.
 * `percentage` is the percentage chance for this connection from 0 to 100 and defaults to 100.
 * Every connection has an `entrance` and an `exit`. These can be unlinked like in A Link to the Past insanity entrance
   shuffle.
 * `direction` can be `both`, `entrance`, or `exit` and determines in which direction this connection will operate.
 
-[Link to the Past connections](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/EntranceShuffle.py#L3852)
+[A Link to the Past connections](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/EntranceShuffle.py#L3852)
 
 [Minecraft connections](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Regions.py#L62)
 
@@ -186,7 +187,7 @@ can be found in its plando guide.
 
 ```yaml
 plando_connections:
-  # example block 1 - Link to the Past
+  # example block 1 - A Link to the Past
   - entrance: Cave Shop (Lake Hylia)
     exit: Cave 45
     direction: entrance
