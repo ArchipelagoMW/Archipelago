@@ -152,6 +152,8 @@ class LTTPBosses(PlandoBosses):
     option_chaos = 3
     option_singularity = 4
 
+    duplicate_bosses = True
+
     bosses = {
         "Armos Knights",
         "Lanmolas",
