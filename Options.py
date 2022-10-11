@@ -468,9 +468,10 @@ class TextChoice(Choice):
 class BossMeta(AssembleOptions):
     def __new__(mcs, name, bases, attrs):
         if name != "PlandoBosses":
-            assert "bosses" in attrs, "Please define valid bosses for Bosses"
+            assert attrs["name_lookup"][attrs["default"]], f"Please define a default shuffle option for {name}"
+            assert "bosses" in attrs, f"Please define valid bosses for {name}"
             attrs["bosses"] = frozenset((boss.lower() for boss in attrs["bosses"]))
-            assert "locations" in attrs, "Please define valid locations for Bosses"
+            assert "locations" in attrs, f"Please define valid locations for {name}"
             attrs["locations"] = frozenset((location.lower() for location in attrs["locations"]))
         return super().__new__(mcs, name, bases, attrs)
 
@@ -513,12 +514,14 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
                     options = ";".join(options)
                     break
             else:
-                options = ";".join(options) + ";none"
+                options = ";".join(options) + ";" + cls.name_lookup[cls.default]
             boss_class = cls(options)
         return boss_class
 
     @classmethod
     def validate_plando_bosses(cls, options: typing.List[str]) -> None:
+        all_locations = []
+        all_bosses = []
         for option in options:
             # check if a shuffle type was provided in the incorrect location
             if option == "random" or option in cls.options:
@@ -526,14 +529,20 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
                     raise ValueError(F"{option} option must be at the end of the boss_shuffle options!")
             elif "-" in option:
                 location, boss = option.split("-")
+                all_locations.append(location)
+                all_bosses.append(boss)
                 if not cls.valid_boss_name(boss):
-                    raise ValueError(F"{boss.title()} is not a valid boss name.")
+                    raise ValueError(f"{boss.title()} is not a valid boss name.")
                 if not cls.valid_location_name(location):
                     raise ValueError(f"{location.title()} is not a valid boss location name.")
                 if not cls.can_place_boss(boss, location):
                     raise ValueError(f"{location.title()} is not a valid location for {boss.title()} to be placed.")
             else:
                 raise ValueError(f"{option.title()} is not formatted correctly.")
+        if len(set(all_locations)) != len(all_locations):
+            raise ValueError("A Boss location can't be used multiple times.")
+        if len(set(all_bosses)) != len(all_bosses):
+            raise ValueError("A Boss can't be placed multiple times.")
 
     @classmethod
     def can_place_boss(cls, boss: str, location: str) -> bool:
