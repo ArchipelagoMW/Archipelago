@@ -229,7 +229,7 @@ class PokemonRedBlueWorld(World):
     def write_spoiler(self, spoiler_handle):
         if self.world.randomize_type_matchup_types[self.player].value or \
                 self.world.randomize_type_matchup_type_effectiveness[self.player].value:
-            spoiler_handle.write("\n\nType matchups:\n\n")
+            spoiler_handle.write(f"\n\nType matchups ({self.world.player_name[self.player]}):\n\n")
             for matchup in self.type_chart:
                 spoiler_handle.write(f"{matchup[0]} deals {matchup[2] * 10}% damage to {matchup[1]}\n")
 
