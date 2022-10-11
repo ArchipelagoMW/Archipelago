@@ -107,8 +107,8 @@ class TestPlandoBosses(unittest.TestCase):
 
     def testCI(self):
         """Bosses and Locations are supposed to be case-insensitive"""
-        MultiBosses.from_any("L1-B2").value == "l1-b2"
-        MultiBosses.from_any("Shuffle").value == "shuffle"
+        self.assertEqual(MultiBosses.from_any("L1-B2").value, "l1-b2;vanilla")
+        self.assertEqual(MultiBosses.from_any("ShUfFlE").value, SingleBosses.option_shuffle)
 
     def testPlandoSettings(self):
         """Test that plando settings verification works"""
