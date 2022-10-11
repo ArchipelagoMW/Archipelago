@@ -29,7 +29,7 @@ class Difficulty(EvermizerFlags, Choice):
     option_easy = 0
     option_normal = 1
     option_hard = 2
-    option_mystery = 3  # 'random' is reserved
+    option_random = 3  # 'mystery' is reserved
     alias_chaos = 3
     default = 1
     flags = ['e', 'n', 'h', 'x']

@@ -21,7 +21,7 @@ class AssembleOptions(abc.ABCMeta):
         new_options = {name[7:].lower(): option_id for name, option_id in attrs.items() if
                        name.startswith("option_")}
 
-        assert "random" not in new_options, "Choice option 'random' cannot be manually assigned."
+        assert "mystery" not in new_options, "Choice option 'mystery' cannot be manually assigned."
         assert len(new_options) == len(set(new_options.values())), "same ID cannot be used twice. Try alias?"
 
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
@@ -30,7 +30,7 @@ class AssembleOptions(abc.ABCMeta):
         aliases = {name[6:].lower(): option_id for name, option_id in attrs.items() if
                    name.startswith("alias_")}
 
-        assert "random" not in aliases, "Choice option 'random' cannot be manually assigned."
+        assert "mystery" not in aliases, "Choice option 'mystery' cannot be manually assigned."
 
         # auto-alias Off and On being parsed as True and False
         if "off" in options:
@@ -338,7 +338,7 @@ class Toggle(NumericOption):
 
     @classmethod
     def from_text(cls, text: str) -> Toggle:
-        if text == "random":
+        if text == "mystery":
             return cls(random.choice(list(cls.name_lookup)))
         elif text.lower() in {"off", "0", "false", "none", "null", "no"}:
             return cls(0)
@@ -372,7 +372,7 @@ class Choice(NumericOption):
     @classmethod
     def from_text(cls, text: str) -> Choice:
         text = text.lower()
-        if text == "random":
+        if text == "mystery":
             return cls(random.choice(list(cls.name_lookup)))
         for option_name, value in cls.options.items():
             if option_name == text:
@@ -438,7 +438,7 @@ class TextChoice(Choice):
 
     @classmethod
     def from_text(cls, text: str) -> TextChoice:
-        if text.lower() == "random":  # chooses a random defined option but won't use any free text options
+        if text.lower() == "mystery":  # chooses a random defined option but won't use any free text options
             return cls(random.choice(list(cls.name_lookup)))
         for option_name, value in cls.options.items():
             if option_name.lower() == text.lower():
@@ -481,7 +481,7 @@ class Range(NumericOption):
     @classmethod
     def from_text(cls, text: str) -> Range:
         text = text.lower()
-        if text.startswith("random"):
+        if text.startswith("mystery"):
             return cls.weighted_range(text)
         elif text == "default" and hasattr(cls, "default"):
             return cls.from_any(cls.default)
@@ -502,42 +502,42 @@ class Range(NumericOption):
 
     @classmethod
     def weighted_range(cls, text) -> Range:
-        if text == "random-low":
+        if text == "mystery-low":
             return cls(cls.triangular(cls.range_start, cls.range_end, cls.range_start))
-        elif text == "random-high":
+        elif text == "mystery-high":
             return cls(cls.triangular(cls.range_start, cls.range_end, cls.range_end))
-        elif text == "random-middle":
+        elif text == "mystery-middle":
             return cls(cls.triangular(cls.range_start, cls.range_end))
-        elif text.startswith("random-range-"):
+        elif text.startswith("mystery-range-"):
             return cls.custom_range(text)
-        elif text == "random":
+        elif text == "mystery":
             return cls(random.randint(cls.range_start, cls.range_end))
         else:
-            raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
-                            f"Acceptable values are: random, random-high, random-middle, random-low, "
-                            f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
-                            f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
+            raise Exception(f"mystery text \"{text}\" did not resolve to a recognized pattern. "
+                            f"Acceptable values are: mystery, mystery-high, mystery-middle, mystery-low, "
+                            f"mystery-range-low-<min>-<max>, mystery-range-middle-<min>-<max>, "
+                            f"mystery-range-high-<min>-<max>, or mystery-range-<min>-<max>.")
 
     @classmethod
     def custom_range(cls, text) -> Range:
         textsplit = text.split("-")
         try:
-            random_range = [int(textsplit[len(textsplit) - 2]), int(textsplit[len(textsplit) - 1])]
+            mystery_range = [int(textsplit[len(textsplit) - 2]), int(textsplit[len(textsplit) - 1])]
         except ValueError:
-            raise ValueError(f"Invalid random range {text} for option {cls.__name__}")
-        random_range.sort()
-        if random_range[0] < cls.range_start or random_range[1] > cls.range_end:
+            raise ValueError(f"Invalid mystery range {text} for option {cls.__name__}")
+        mystery_range.sort()
+        if mystery_range[0] < cls.range_start or mystery_range[1] > cls.range_end:
             raise Exception(
-                f"{random_range[0]}-{random_range[1]} is outside allowed range "
+                f"{mystery_range[0]}-{mystery_range[1]} is outside allowed range "
                 f"{cls.range_start}-{cls.range_end} for option {cls.__name__}")
-        if text.startswith("random-range-low"):
-            return cls(cls.triangular(random_range[0], random_range[1], random_range[0]))
-        elif text.startswith("random-range-middle"):
-            return cls(cls.triangular(random_range[0], random_range[1]))
-        elif text.startswith("random-range-high"):
-            return cls(cls.triangular(random_range[0], random_range[1], random_range[1]))
+        if text.startswith("mystery-range-low"):
+            return cls(cls.triangular(mystery_range[0], mystery_range[1], mystery_range[0]))
+        elif text.startswith("mystery-range-middle"):
+            return cls(cls.triangular(mystery_range[0], mystery_range[1]))
+        elif text.startswith("mystery-range-high"):
+            return cls(cls.triangular(mystery_range[0], mystery_range[1], mystery_range[1]))
         else:
-            return cls(random.randint(random_range[0], random_range[1]))
+            return cls(random.randint(mystery_range[0], mystery_range[1]))
 
     @classmethod
     def from_any(cls, data: typing.Any) -> Range:
@@ -571,21 +571,21 @@ class SpecialRange(Range):
 
     @classmethod
     def weighted_range(cls, text) -> Range:
-        if text == "random-low":
+        if text == "mystery-low":
             return cls(cls.triangular(cls.special_range_cutoff, cls.range_end, cls.special_range_cutoff))
-        elif text == "random-high":
+        elif text == "mystery-high":
             return cls(cls.triangular(cls.special_range_cutoff, cls.range_end, cls.range_end))
-        elif text == "random-middle":
+        elif text == "mystery-middle":
             return cls(cls.triangular(cls.special_range_cutoff, cls.range_end))
-        elif text.startswith("random-range-"):
+        elif text.startswith("mystery-range-"):
             return cls.custom_range(text)
-        elif text == "random":
+        elif text == "mystery":
             return cls(random.randint(cls.special_range_cutoff, cls.range_end))
         else:
-            raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
-                            f"Acceptable values are: random, random-high, random-middle, random-low, "
-                            f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
-                            f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
+            raise Exception(f"mystery text \"{text}\" did not resolve to a recognized pattern. "
+                            f"Acceptable values are: mystery, mystery-high, mystery-middle, mystery-low, "
+                            f"mystery-range-low-<min>-<max>, mystery-range-middle-<min>-<max>, "
+                            f"mystery-range-high-<min>-<max>, or mystery-range-<min>-<max>.")
 
 
 class VerifyKeys:

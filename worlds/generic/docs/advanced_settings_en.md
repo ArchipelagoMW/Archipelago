@@ -128,16 +128,16 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 * `item_links` allows players to link their items into a group with the same item link name and game. The items declared in `item_pool` get combined and when an item is found for the group, all players in the group receive it. Item links can also have local and non local items, forcing the items to either be placed within the worlds of the group or in worlds outside the group. If players have a varying amount of a specific item in the link, the lowest amount from the players will be the amount put into the group.
 ### Random numbers
 
-Options taking a choice of a number can also use a variety of `random` options to choose a number randomly.
+Options taking a choice of a number can also use a variety of `mystery` options to choose a number randomly.
 
-* `random` will choose a number allowed for the setting at random
-* `random-low` will choose a number allowed for the setting at random, but will be weighted towards lower numbers
-* `random-middle` will choose a number allowed for the setting at random, but will be weighted towards the middle of the
+* `mystery` will choose a number allowed for the setting at random
+* `mystery-low` will choose a number allowed for the setting at random, but will be weighted towards lower numbers
+* `mystery-middle` will choose a number allowed for the setting at random, but will be weighted towards the middle of the
   range
-* `random-high` will choose a number allowed for the setting at random, but will be weighted towards higher numbers
-* `random-range-#-#` will choose a number at random from between the specified numbers. For example `random-range-40-60`
+* `mystery-high` will choose a number allowed for the setting at random, but will be weighted towards higher numbers
+* `mystery-range-#-#` will choose a number at random from between the specified numbers. For example `mystery-range-40-60`
   will choose a number between 40 and 60
-* `random-range-low-#-#`, `random-range-middle-#-#`, and `random-range-high-#-#` will choose a number at random from the
+* `mystery-range-low-#-#`, `mystery-range-middle-#-#`, and `mystery-range-high-#-#` will choose a number at random from the
   specified numbers, but with the specified weights
 
 ### Example
@@ -158,9 +158,9 @@ A Link to the Past:
     original_dungeon: 1
     any_world: 1
   crystals_needed_for_gt:
-    random-low: 1
+    mystery-low: 1
   crystals_needed_for_ganon:
-    random-range-high-1-7: 1
+    mystery-range-high-1-7: 1
   start_inventory:
     Pegasus Boots: 1
     Bombs (3): 2

@@ -33,7 +33,7 @@ def create():
             option.range_end: 0,
             option.default: 50
         })
-        for sub_option in {"random", "random-low", "random-high"}:
+        for sub_option in {"mystery", "mystery-low", "mystery-high"}:
             if sub_option != option.default:
                 data[sub_option] = 0
 
@@ -118,12 +118,12 @@ def create():
                         this_option["defaultValue"] = sub_option_name
 
                 this_option["options"].append({
-                    "name": "Random",
-                    "value": "random",
+                    "name": "Mystery",
+                    "value": "mystery",
                 })
 
-                if option.default == "random":
-                    this_option["defaultValue"] = "random"
+                if option.default == "mystery":
+                    this_option["defaultValue"] = "mystery"
 
             elif issubclass(option, Options.Range):
                 game_options[option_name] = {
@@ -131,7 +131,7 @@ def create():
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                     "description": get_html_doc(option),
                     "defaultValue": option.default if hasattr(
-                        option, "default") and option.default != "random" else option.range_start,
+                        option, "default") and option.default != "mystery" else option.range_start,
                     "min": option.range_start,
                     "max": option.range_end,
                 }

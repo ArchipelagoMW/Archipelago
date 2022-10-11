@@ -82,9 +82,9 @@ const createDefaultSettings = (settingData) => {
               newSettings[game][gameSetting][i] =
                 (setting.hasOwnProperty('defaultValue') && setting.defaultValue === i) ? 25 : 0;
             }
-            newSettings[game][gameSetting]['random'] = 0;
-            newSettings[game][gameSetting]['random-low'] = 0;
-            newSettings[game][gameSetting]['random-high'] = 0;
+            newSettings[game][gameSetting]['mystery'] = 0;
+            newSettings[game][gameSetting]['mystery-low'] = 0;
+            newSettings[game][gameSetting]['mystery-high'] = 0;
             break;
 
           case 'items-list':
@@ -450,7 +450,7 @@ const buildWeightedSettingsDiv = (game, settings) => {
           });
         }
 
-        ['random', 'random-low', 'random-high'].forEach((option) => {
+        ['mystery', 'mystery-low', 'mystery-high'].forEach((option) => {
           const tr = document.createElement('tr');
             const tdLeft = document.createElement('td');
             tdLeft.classList.add('td-left');

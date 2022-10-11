@@ -154,17 +154,17 @@ A Link to the Past:
   crystals_needed_for_gt: # Crystals required to open GT
     0: 0
     7: 50
-    random: 0
-    random-low: 0 # any valid number, weighted towards the lower end
-    random-middle: 0 # any valid number, weighted towards the central range
-    random-high: 0 # any valid number, weighted towards the higher end
+    mystery: 0
+    mystery-low: 0 # any valid number, weighted towards the lower end
+    mystery-middle: 0 # any valid number, weighted towards the central range
+    mystery-high: 0 # any valid number, weighted towards the higher end
   crystals_needed_for_ganon: # Crystals required to hurt Ganon
     0: 0
     7: 50
-    random: 0
-    random-low: 0
-    random-middle: 0
-    random-high: 0
+    mystery: 0
+    mystery-low: 0
+    mystery-middle: 0
+    mystery-high: 0
   mode:
     standard: 0 # Begin the game by rescuing Zelda from her cell and escorting her to the Sanctuary
     open: 50 # Begin the game from your choice of Link's House or the Sanctuary
@@ -201,12 +201,12 @@ A Link to the Past:
     on: 0
     off: 50
   misery_mire_medallion: # required medallion to open Misery Mire front entrance
-    random: 50
+    mystery: 50
     Ether: 0
     Bombos: 0
     Quake: 0
   turtle_rock_medallion: # required medallion to open Turtle Rock front entrance
-    random: 50
+    mystery: 50
     Ether: 0
     Bombos: 0
     Quake: 0
@@ -259,14 +259,14 @@ A Link to the Past:
     5: 0
     15: 0
     30: 0
-    random: 0 # 0 to 30 evenly distributed
+    mystery: 0 # 0 to 30 evenly distributed
   shop_price_modifier: # Percentage modifier for shuffled item prices in shops
     # you can add additional values between minimum and maximum
     0: 0 # minimum value
     400: 0 # maximum value
-    random: 0
-    random-low: 0
-    random-high: 0
+    mystery: 0
+    mystery-low: 0
+    mystery-high: 0
     100: 50
   shop_shuffle:
     none: 50
@@ -346,9 +346,9 @@ A Link to the Past:
   #  - link
   #  - pride link
   #  - penguin link
-  #  - random  # You can specify random multiple times for however many potentially unique random sprites you want in your pool.
+  #  - mystery  # You can specify mystery multiple times for however many potentially unique random sprites you want in your pool.
   sprite: # Enter the name of your preferred sprite and weight it appropriately
-    random: 0
+    mystery: 0
     randomonhit: 0 # Random sprite on hit
     randomonenter: 0 # Random sprite on entering the underworld.
     randomonexit: 0 # Random sprite on exiting the underworld.
@@ -384,7 +384,7 @@ A Link to the Past:
     blue: 0
     green: 0
     yellow: 0
-    random: 0
+    mystery: 0
   heartbeep: # Controls the frequency of the low-health beeping
     double: 0
     normal: 50

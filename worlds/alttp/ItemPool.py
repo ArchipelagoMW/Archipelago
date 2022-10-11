@@ -421,11 +421,11 @@ def generate_itempool(world):
         world.random.shuffle(nonprogressionitems)
 
     # shuffle medallions
-    if world.required_medallions[player][0] == "random":
+    if world.required_medallions[player][0] == "mystery":
         mm_medallion = world.random.choice(['Ether', 'Quake', 'Bombos'])
     else:
         mm_medallion = world.required_medallions[player][0]
-    if world.required_medallions[player][1] == "random":
+    if world.required_medallions[player][1] == "mystery":
         tr_medallion = world.random.choice(['Ether', 'Quake', 'Bombos'])
     else:
         tr_medallion = world.required_medallions[player][1]
