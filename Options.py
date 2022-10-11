@@ -469,13 +469,13 @@ class TextChoice(Choice):
 class BossMeta(AssembleOptions):
     def __new__(mcs, name, bases, attrs):
         if name != "PlandoBosses":
-            if attrs["duplicate_bosses"]:
-                assert "option_singularity" in attrs, f"Please define option_singularity for {name}"
             assert "bosses" in attrs, f"Please define valid bosses for {name}"
             attrs["bosses"] = frozenset((boss.lower() for boss in attrs["bosses"]))
             assert "locations" in attrs, f"Please define valid locations for {name}"
             attrs["locations"] = frozenset((location.lower() for location in attrs["locations"]))
-        return super().__new__(mcs, name, bases, attrs)
+        cls = super().__new__(mcs, name, bases, attrs)
+        assert not cls.duplicate_bosses or "singularity" in cls.options, f"Please define option_singularity for {name}"
+        return cls
 
 
 class PlandoBosses(TextChoice, metaclass=BossMeta):
