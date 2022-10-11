@@ -468,7 +468,8 @@ class TextChoice(Choice):
 class BossMeta(AssembleOptions):
     def __new__(mcs, name, bases, attrs):
         if name != "PlandoBosses":
-            assert attrs["name_lookup"][attrs["default"]], f"Please define a default shuffle option for {name}"
+            if attrs["duplicate_bosses"]:
+                assert "option_singularity" in attrs, f"Please define option_singularity for {name}"
             assert "bosses" in attrs, f"Please define valid bosses for {name}"
             attrs["bosses"] = frozenset((boss.lower() for boss in attrs["bosses"]))
             assert "locations" in attrs, f"Please define valid locations for {name}"
@@ -478,11 +479,13 @@ class BossMeta(AssembleOptions):
 
 class PlandoBosses(TextChoice, metaclass=BossMeta):
     """Generic boss shuffle option that supports plando. Format expected is
-    'location1-boss1;location2-boss2;shuffle_type'. If shuffle_type is not provided in the string, will default to null.
+    'location1-boss1;location2-boss2;shuffle_type'. If shuffle_type is not provided in the string, will default.
     Must override can_place_boss, which passes a plando boss and location. Check if the placement is valid for your
     game here."""
     bosses: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
     locations: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
+
+    duplicate_bosses: bool = False
 
     @classmethod
     def from_text(cls, text: str):
@@ -504,6 +507,7 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
         # find out what type of boss shuffle we should use for placing bosses after plando
         # and add as a string to look nice in the spoiler
         if "random" in options:
+            import random
             shuffle = random.choice(list(cls.options))
             options.remove("random")
             options = ";".join(options) + ";" + shuffle
@@ -514,7 +518,13 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
                     options = ";".join(options)
                     break
             else:
-                options = ";".join(options) + ";" + cls.name_lookup[cls.default]
+                if cls.duplicate_bosses and len(options) == 1:
+                    if cls.valid_boss_name(options[0]):
+                        options = options[0] + ";" + "singularity"
+                    else:
+                        options = options[0] + ";" + cls.name_lookup[cls.default]
+                else:
+                    options = ";".join(options) + ";" + cls.name_lookup[cls.default]
             boss_class = cls(options)
         return boss_class
 
@@ -538,10 +548,14 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
                 if not cls.can_place_boss(boss, location):
                     raise ValueError(f"{location.title()} is not a valid location for {boss.title()} to be placed.")
             else:
-                raise ValueError(f"{option.title()} is not formatted correctly.")
+                if cls.duplicate_bosses:
+                    if not cls.valid_boss_name(option):
+                        raise ValueError(f"{option} is not a valid boss name.")
+                else:
+                    raise ValueError(f"{option.title()} is not formatted correctly.")
         if len(set(all_locations)) != len(all_locations):
             raise ValueError("A Boss location can't be used multiple times.")
-        if len(set(all_bosses)) != len(all_bosses):
+        if not cls.duplicate_bosses and len(set(all_bosses)) != len(all_bosses):
             raise ValueError("A Boss can't be placed multiple times.")
 
     @classmethod
