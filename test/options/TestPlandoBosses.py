@@ -20,13 +20,17 @@ class SingleBosses(PlandoBosses):
 class MultiBosses(SingleBosses):
     bosses = SingleBosses.bosses  # explicit copy required
     locations = SingleBosses.locations
-
-    option_singularity = 2
-
     duplicate_bosses = True
+
+    option_singularity = 2  # required when duplicate_bosses = True
 
 
 class TestPlandoBosses(unittest.TestCase):
+    def testCI(self):
+        """Bosses, locations and modes are supposed to be case-insensitive"""
+        self.assertEqual(MultiBosses.from_any("L1-B2").value, "l1-b2;vanilla")
+        self.assertEqual(MultiBosses.from_any("ShUfFlE").value, SingleBosses.option_shuffle)
+
     def testRandom(self):
         """Validate random is random"""
         import random
@@ -41,8 +45,8 @@ class TestPlandoBosses(unittest.TestCase):
         else:
             raise Exception("random is not random")
 
-    def testShuffleType(self):
-        """Test that simple type (no Plando) works"""
+    def testShuffleMode(self):
+        """Test that simple modes (no Plando) work"""
         self.assertEqual(MultiBosses.from_any("shuffle"), MultiBosses.option_shuffle)
         self.assertNotEqual(MultiBosses.from_any("vanilla"), MultiBosses.option_shuffle)
 
@@ -103,12 +107,11 @@ class TestPlandoBosses(unittest.TestCase):
     def testDuplicateLocation(self):
         """Can't use the same location twice"""
         with self.assertRaises(ValueError):
-            MultiBosses.from_any("l1-b2;l1-b3")
+            MultiBosses.from_any("l1-b2;l1-b2")
 
-    def testCI(self):
-        """Bosses and Locations are supposed to be case-insensitive"""
-        self.assertEqual(MultiBosses.from_any("L1-B2").value, "l1-b2;vanilla")
-        self.assertEqual(MultiBosses.from_any("ShUfFlE").value, SingleBosses.option_shuffle)
+    def testSingularity(self):
+        """Test automatic singularity mode"""
+        self.assertIn(";singularity", MultiBosses.from_any("b2").value)
 
     def testPlandoSettings(self):
         """Test that plando settings verification works"""
@@ -130,6 +133,4 @@ class TestPlandoBosses(unittest.TestCase):
         self.assertEqual(mixed, MultiBosses.option_shuffle)
         # mode stuff should just work
         regular.verify(None, "Player", Generate.PlandoSettings.items)
-
-    def testSingularity(self):
-        self.assertTrue(";singularity" in MultiBosses.from_any("b2").value)
+        self.assertEqual(regular, MultiBosses.option_shuffle)
