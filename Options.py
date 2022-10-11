@@ -521,7 +521,7 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
                 if cls.duplicate_bosses and len(options) == 1:
                     if cls.valid_boss_name(options[0]):
                         # this doesn't exist in this class but it's a forced option for classes where this is called
-                        options = options[0] + f";{cls.option_singluarity}"
+                        options = options[0] + ";singularity"
                     else:
                         options = options[0] + f";{cls.name_lookup[cls.default]}"
                 else:
