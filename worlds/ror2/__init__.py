@@ -70,10 +70,10 @@ class RiskOfRainWorld(World):
                 self.world.push_precollected(self.create_item("The Simulacrum (Titanic Plains)"))
                 environments_pool.pop("The Simulacrum (Titanic Plains)")
 
-            # TODO create an option for whether to start with a full loop granted or just an initial stage
-            # randomly choose one evironment each to construct the loop
-            for i in range(5):
-                unlock = self.world.random.choices(list(environment_available_orderedstages_table[i].keys()))
+            environments_to_precollect = 5 if self.world.begin_with_loop[self.player].value else 1
+            # percollect environments for each stage (or just stage 1)
+            for i in range(environments_to_precollect):
+                unlock = self.world.random.choices(list(environment_available_orderedstages_table[i].keys()), k=1)
                 self.world.push_precollected(self.create_item(unlock[0]))
                 environments_pool.pop(unlock[0])
 

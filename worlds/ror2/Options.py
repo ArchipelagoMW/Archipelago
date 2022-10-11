@@ -7,6 +7,7 @@ from Options import Option, Toggle, DefaultOnToggle, DeathLink, Range, Choice
 # NOTE that these changes to range_end must also be reflected in the RoR2 client so it understands the same ids.
 
 class ClassicMode(DefaultOnToggle):
+    # TODO change from a Toggle to a Choice
     """
     Classic mode: Every Item pickup increases fills a progress bar which gives location checks.
     Explore mode: Location checks are distributed across environments.
@@ -90,6 +91,10 @@ class FinalStageDeath(DefaultOnToggle):
 class EnvironmentsAsItems(Toggle):
     """Enable to add environments into the archipelago item pool."""
     display_name = "Environments as items"
+
+class BeginWithLoop(Toggle):
+    """Enable to precollect a full loop of environments. Only has an effect with EnvironmentsAsItems"""
+    display_name = "Begin With Loop"
 
 class DLC_SOTV(Toggle):
     """Enable if you are using SOTV DLC. Affects environment availability for Explore Mode and EnvironmentsAsItems."""
@@ -228,6 +233,7 @@ ror2_options: Dict[str, type(Option)] = {
     "start_with_revive":        StartWithRevive,
     "final_stage_death":        FinalStageDeath,
     "environments_as_items":    EnvironmentsAsItems,
+    "begin_with_loop":          BeginWithLoop,
     "dlc_sotv":                 DLC_SOTV,
     "death_link":               DeathLink,
     # TODO add an option for whether simulacrum environments should exist in the pool
