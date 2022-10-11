@@ -326,8 +326,8 @@ def create_events(world: MultiWorld, player: int) -> None:
         # only enforce extra events for explore_mode and environments_as_items
         for n in range(1,6):
             event_region = world.get_region(f"OrderedStage_{n}", player)
-            event_loc = RiskOfRainLocation(player, f"OrderedStage_{n} Access", None, event_region)
-            event_loc.place_locked_item(RiskOfRainItem(f"OrderedStage_{n} Access", ItemClassification.progression, None, player))
+            event_loc = RiskOfRainLocation(player, f"OrderedStage_{n}", None, event_region)
+            event_loc.place_locked_item(RiskOfRainItem(f"OrderedStage_{n}", ItemClassification.progression, None, player))
             world_region.locations.append(event_loc)
 
     victory_region = world.get_region("Victory", player)

@@ -50,4 +50,14 @@ def set_rules(world: MultiWorld, player: int) -> None:
                     lambda state: state.has("Dio's Best Friend", player,
                                             total_revivals + world.start_with_revive[player]))
 
+    elif (world.environments_as_items[player].value):
+        # When explore_mode and environments_as_items are used,
+        #   scavengers need to be locked till after a full loop since that is when they are capable of spawning.
+        # (While technically the requirement is just beating 5 stages, this will ensure that the player will have
+        #   a long enough run to have enough director credits for scavengers and help prevent being stuck in the same stages until that point.)
+        for location in world.get_locations():
+            if location.player != player: continue # ignore all checks that don't belong to this player
+            if ("Scavenger" in location.name):
+                add_rule(location, lambda state: state.has("OrderedStage_5", player))
+
     world.completion_condition[player] = lambda state: state.has("Victory", player)
