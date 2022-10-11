@@ -455,7 +455,7 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
         else:
             player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
     else:
-        setattr(ret, option_key, option.from_any(option.default))  # call the from_any here to support default "random"
+        setattr(ret, option_key, option.from_any(option.default))  # call the from_any here to support default "mystery"
 
 
 def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings.bosses):
@@ -614,11 +614,11 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     ret.shuffle_prizes = get_choice_legacy('shuffle_prizes', weights, "g")
 
-    ret.required_medallions = [get_choice_legacy("misery_mire_medallion", weights, "random"),
-                               get_choice_legacy("turtle_rock_medallion", weights, "random")]
+    ret.required_medallions = [get_choice_legacy("misery_mire_medallion", weights, "mystery"),
+                               get_choice_legacy("turtle_rock_medallion", weights, "mystery")]
 
     for index, medallion in enumerate(ret.required_medallions):
-        ret.required_medallions[index] = {"ether": "Ether", "quake": "Quake", "bombos": "Bombos", "random": "random"} \
+        ret.required_medallions[index] = {"ether": "Ether", "quake": "Quake", "bombos": "Bombos", "mystery": "mystery"} \
             .get(medallion.lower(), None)
         if not ret.required_medallions[index]:
             raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
@@ -664,8 +664,8 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
             if (not ret.sprite_pool or get_choice_legacy('use_weighted_sprite_pool', randomoneventweights, False)) \
                     and 'sprite' in weights:  # Use sprite as a weighted sprite pool, if a sprite pool is not already defined.
                 for key, value in weights['sprite'].items():
-                    if key.startswith('random'):
-                        ret.sprite_pool += ['random'] * int(value)
+                    if key.startswith('mystery'):
+                        ret.sprite_pool += ['mystery'] * int(value)
                     else:
                         ret.sprite_pool += [key] * int(value)
 
