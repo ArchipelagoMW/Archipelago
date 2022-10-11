@@ -80,7 +80,7 @@ class PokemonRedBlueWorld(World):
         self.rival_name = encode_name(self.world.rival_name[self.player].value, "Rival")
 
         if self.world.badges_needed_for_hm_moves[self.player].value >= 2:
-            badges_to_add = ["Soul Badge", "Volcano Badge", "Earth Badge"]
+            badges_to_add = ["Marsh Badge", "Volcano Badge", "Earth Badge"]
             if self.world.badges_needed_for_hm_moves[self.player].value == 3:
                 badges = ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Marsh Badge",
                           "Soul Badge", "Volcano Badge", "Earth Badge"]
