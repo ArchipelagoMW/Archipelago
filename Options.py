@@ -508,7 +508,6 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
         # find out what type of boss shuffle we should use for placing bosses after plando
         # and add as a string to look nice in the spoiler
         if "random" in options:
-            import random
             shuffle = random.choice(list(cls.options))
             options.remove("random")
             options = ";".join(options) + ";" + shuffle
@@ -531,8 +530,8 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
 
     @classmethod
     def validate_plando_bosses(cls, options: typing.List[str]) -> None:
-        all_locations = []
-        all_bosses = []
+        used_locations = []
+        used_bosses = []
         for option in options:
             # check if a shuffle type was provided in the incorrect location
             if option == "random" or option in cls.options:
@@ -540,8 +539,12 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
                     raise ValueError(F"{option} option must be at the end of the boss_shuffle options!")
             elif "-" in option:
                 location, boss = option.split("-")
-                all_locations.append(location)
-                all_bosses.append(boss)
+                if location in used_locations:
+                    raise ValueError(f"Duplicate Boss Location {location} not allowed.")
+                if not cls.duplicate_bosses and boss in used_bosses:
+                    raise ValueError(f"Duplicate Boss {boss} not allowed.")
+                used_locations.append(location)
+                used_bosses.append(boss)
                 if not cls.valid_boss_name(boss):
                     raise ValueError(f"{boss.title()} is not a valid boss name.")
                 if not cls.valid_location_name(location):
@@ -554,10 +557,6 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
                         raise ValueError(f"{option} is not a valid boss name.")
                 else:
                     raise ValueError(f"{option.title()} is not formatted correctly.")
-        if len(set(all_locations)) != len(all_locations):
-            raise ValueError("A Boss location can't be used multiple times.")
-        if not cls.duplicate_bosses and len(set(all_bosses)) != len(all_bosses):
-            raise ValueError("A Boss can't be placed multiple times.")
 
     @classmethod
     def can_place_boss(cls, boss: str, location: str) -> bool:
