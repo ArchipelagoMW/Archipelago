@@ -12,6 +12,7 @@ class CV64Location(Location):
     inverted_bit: bool = False
 
     rom_offset: int
+    loc_type: str
 
     def __init__(self, player: int, name: str = '', address: int = None, parent=None, prog_byte: int = None,
                  prog_bit: int = None, invert: bool = False):
@@ -76,7 +77,7 @@ main_location_table = {
     LocationName.villafo_pot_l: 0xC64023,
     LocationName.villafo_rear_l: 0xC6403F,
     LocationName.villafo_rear_r: 0xC64024,
-    LocationName.villafo_mid_r: 0xC64025,
+    # LocationName.villafo_mid_r: 0xC64025,
     LocationName.villafo_mid_l: 0xC64026,
     LocationName.villafo_front_l: 0xC64027,
     LocationName.villafo_front_r: 0xC64028,
@@ -290,8 +291,6 @@ boss_table = {
 
 all_locations = {
     **main_location_table,
-    **uw_carrie_location_table,
-    **cc_lizard_generator_table,
 }
 
 location_table = {}

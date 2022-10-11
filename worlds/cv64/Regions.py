@@ -4,7 +4,7 @@ from BaseClasses import MultiWorld, Region, Entrance
 from .Items import CV64Item
 from .Locations import CV64Location
 from .Names import LocationName, ItemName
-from .Rom import rom_loc_offsets
+from .Rom import rom_loc_offsets, npc_items, invis_items
 
 
 class LevelGate:
@@ -163,7 +163,7 @@ def create_regions(world, player: int, active_locations):
     villa_foyer_region_locations = [
         LocationName.villafo_front_r,
         LocationName.villafo_front_l,
-        LocationName.villafo_mid_r,
+        # LocationName.villafo_mid_r,
         LocationName.villafo_mid_l,
         LocationName.villafo_rear_r,
         LocationName.villafo_rear_l,
@@ -787,6 +787,12 @@ def create_region(world: MultiWorld, player: int, active_locations, name: str, l
                 location = CV64Location(player, location, loc_id, ret)
                 if loc_id != 0xC64000 and loc_id < 0xC640DC:
                     location.rom_offset = rom_loc_offsets[loc_id]
+                    if location.address in npc_items:
+                        location.loc_type = "npc"
+                    elif location.address in invis_items:
+                        location.loc_type = "invisible"
+                    else:
+                        location.loc_type = "normal"
                 ret.locations.append(location)
     if exits:
         for exit in exits:

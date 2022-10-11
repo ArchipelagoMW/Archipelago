@@ -61,7 +61,8 @@ class TotalSpecial2s(Range):
 
 class CarrieLogic(Toggle):
     """If enabled, the two Underground Waterway checks inside the crawlspace will be included; otherwise, they'll be
-    left vanilla. Can be combined with 'Glitch Logic' to include Carrie-only skips."""
+    left vanilla. Enable this ONLY if you already know for certain that you (and everyone else if racing the same seed)
+    will be playing as Carrie! Can be combined with 'Glitch Logic' to include Carrie-only skips."""
     display_name = "Carrie Logic"
 
 

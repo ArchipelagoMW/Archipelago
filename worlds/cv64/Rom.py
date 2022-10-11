@@ -56,7 +56,7 @@ rom_loc_offsets = {
     0xC64022: 0x10C8AF,
     0xC64023: 0x10C8B7,
     0xC64024: 0x10C8C7,
-    0xC64025: 0x10C8CF,
+    # 0xC64025: 0x10C8CF,
     0xC64026: 0x10C8D7,
     0xC64027: 0x10C8DF,
     0xC64028: 0x10C8E7,
@@ -131,7 +131,7 @@ rom_loc_offsets = {
     0xC64055: 0x10CA4F,
     0xC64056: 0x10CAAF,
     0xC640C0: 0xBFC2AF,
-    0xC640C1: 0x86D8E0,
+    0xC640C1: 0x86D8E1,
     0xC640C2: 0x86D8FC,
 
     0xC64057: 0x10CB03,  # Underground Waterway
@@ -247,6 +247,9 @@ rom_loc_offsets = {
     0xC640DA: 0x9778C8,
     0xC640DB: 0xBFC30F,
 }
+
+npc_items = {0xC6402E, 0xC6407D, 0xC6407E, 0xC6406A}
+invis_items = {}
 
 rom_item_bytes = {
     "White jewel": 0x01,
@@ -405,9 +408,37 @@ def patch_rom(world, rom, player, offsets_to_ids):
     rom.write_bytes(0xBFC5B4, PatchName.give_powerup_stopper)
 
     # Rename "Wooden stake" and "Rose" to "Sent major" and "Sent" respectively
-    rom.write_bytes(0xEFE34, [0x00, 0x35, 0x00, 0x47, 0x00, 0x50, 0x00, 0x56, 0x00, 0x02, 0x00, 0x4F, 0x00, 0x43, 0x00,
-                              0x4C, 0x00, 0x51, 0x00, 0x54, 0x00, 0x02, 0x00, 0x02])
-    rom.write_bytes(0xEFE4E, [0x00, 0x35, 0x00, 0x47, 0x00, 0x50, 0x00, 0x56])
+    rom.write_bytes(0xEFE34, cv64_text_converter("Sent major  "))
+    rom.write_bytes(0xEFE4E, cv64_text_converter("Sent"))
+
+    # Change the Stage Select menu options
+    rom.write_byte(0xADF03, 0x00)
+    rom.write_byte(0xADF33, 0x05)
+    rom.write_bytes(0xADF34, [0xA0, 0x78, 0x64, 0x2B])
+    rom.write_bytes(0xADF44, [0x00, 0x00, 0x00, 0x00])
+    rom.write_byte(0xADF63, 0x03)
+    rom.write_byte(0xADF67, 0x07)
+    rom.write_bytes(0xADF6C, [0x00, 0x00, 0x00, 0x00])
+    rom.write_bytes(0xADF70, [0xA0, 0x6A, 0x64, 0x2B])
+    rom.write_bytes(0xADF80, [0x00, 0x00, 0x00, 0x00])
+    rom.write_byte(0xADF97, 0x03)
+    rom.write_byte(0xADF9B, 0x08)
+    rom.write_bytes(0xADFA4, [0xA0, 0x62, 0x64, 0x2B])
+    rom.write_bytes(0xADFA8, [0x00, 0x00, 0x00, 0x00])
+    rom.write_byte(0xADFBF, 0x03)
+    rom.write_byte(0xADFC3, 0x0E)
+    rom.write_bytes(0xADFCC, [0xA0, 0x62, 0x64, 0x2B])
+    rom.write_bytes(0xADFD0, [0x00, 0x00, 0x00, 0x00])
+    rom.write_byte(0xADFEB, 0x12)
+    rom.write_byte(0xAE017, 0x10)
+    rom.write_byte(0xAE03B, 0x03)
+    rom.write_byte(0xAE03F, 0x17)
+    rom.write_bytes(0xAE048, [0xA0, 0x62, 0x64, 0x2B])
+    rom.write_bytes(0xAE04C, [0x00, 0x00, 0x00, 0x00])
+
+    rom.write_bytes(0xEFAD0, cv64_text_converter("Where to...?\tForest of Silence\t1` Villa\t2` Tunnel\t3` Underground "
+                                                 "Waterway\t4` Castle Center\t5` Tower of Science\t6` Tower of "
+                                                 "Execution\t7` Clock Tower"))
 
     # Disable or guarantee vampire Vincent's fight
     if world.fight_vincent[player] == "never":
@@ -469,6 +500,7 @@ def patch_rom(world, rom, player, offsets_to_ids):
     elif world.draculas_condition[player] == 3:
         rom.write_bytes(0xE2FDC, [0x08, 0x04, 0xAB, 0x1E])  # J 0x8012AC78
         rom.write_bytes(0xADE68, PatchName.special_goal_checker)
+        rom.write_byte(0xADE73, world.special2s_required[player].value)
 
     # On-the-fly TLB script modifier
     rom.write_bytes(0xBFC338, PatchName.double_component_checker)
@@ -516,6 +548,9 @@ def patch_rom(world, rom, player, offsets_to_ids):
     rom.write_bytes(0x6EF298, PatchName.ct_door_hook)
     rom.write_bytes(0xBFC608, PatchName.ct_door_code)
 
+    # Make the Easy-only candle drops in Room of Clocks appear on any difficulty
+    rom.write_byte(0x9B518F, 0x01)
+
     # Write the new item bytes
     for offset, item_id in offsets_to_ids.items():
         rom.write_byte(offset, item_id)
@@ -554,3 +589,131 @@ def get_base_rom_path(file_name: str = "") -> str:
     if not os.path.exists(file_name):
         file_name = Utils.local_path(file_name)
     return file_name
+
+
+def cv64_text_converter(cv64text) -> list:
+    char_dict = {
+        "\n": 0x01,
+        " ": 0x02,
+        "!": 0x03,
+        '"': 0x04,
+        "#": 0x05,
+        "$": 0x06,
+        "%": 0x07,
+        "&": 0x08,
+        "'": 0x09,
+        "(": 0x0A,
+        ")": 0x0B,
+        "*": 0x0C,
+        "+": 0x0D,
+        ",": 0x0E,
+        "-": 0x0F,
+        ".": 0x10,
+        "/": 0x11,
+        "0": 0x12,
+        "1": 0x13,
+        "2": 0x14,
+        "3": 0x15,
+        "4": 0x16,
+        "5": 0x17,
+        "6": 0x18,
+        "7": 0x19,
+        "8": 0x1A,
+        "9": 0x1B,
+        ":": 0x1C,
+        ";": 0x1D,
+        "<": 0x1E,
+        "=": 0x1F,
+        ">": 0x20,
+        "?": 0x21,
+        "@": 0x22,
+        "A": 0x23,
+        "B": 0x24,
+        "C": 0x25,
+        "D": 0x26,
+        "E": 0x27,
+        "F": 0x28,
+        "G": 0x29,
+        "H": 0x2A,
+        "I": 0x2B,
+        "J": 0x2C,
+        "K": 0x2D,
+        "L": 0x2E,
+        "M": 0x2F,
+        "N": 0x30,
+        "O": 0x31,
+        "P": 0x32,
+        "Q": 0x33,
+        "R": 0x34,
+        "S": 0x35,
+        "T": 0x36,
+        "U": 0x37,
+        "V": 0x38,
+        "W": 0x39,
+        "X": 0x3A,
+        "Y": 0x3B,
+        "Z": 0x3C,
+        "[": 0x3D,
+        "\\": 0x3E,
+        "]": 0x3F,
+        "^": 0x40,
+        "_": 0x41,
+
+        "a": 0x43,
+        "b": 0x44,
+        "c": 0x45,
+        "d": 0x46,
+        "e": 0x47,
+        "f": 0x48,
+        "g": 0x49,
+        "h": 0x4A,
+        "i": 0x4B,
+        "j": 0x4C,
+        "k": 0x4D,
+        "l": 0x4E,
+        "m": 0x4F,
+        "n": 0x50,
+        "o": 0x51,
+        "p": 0x52,
+        "q": 0x53,
+        "r": 0x54,
+        "s": 0x55,
+        "t": 0x56,
+        "u": 0x57,
+        "v": 0x58,
+        "w": 0x59,
+        "x": 0x5A,
+        "y": 0x5B,
+        "z": 0x5C,
+        "{": 0x5D,
+        "|": 0x5E,
+        "}": 0x5F,
+
+        "`": 0x61,
+        "「": 0x62,
+        "」": 0x63,
+
+        "~": 0x65,
+
+
+
+
+
+
+        "″": 0x72,
+        "°": 0x73,
+        "∞": 0x74
+    }
+
+    textbytes = []
+    for i in cv64text:
+        if i == "\t":
+            textbytes.append(0xFF)
+            textbytes.append(0xFF)
+        else:
+            textbytes.append(0x00)
+            textbytes.append(char_dict[i])
+    textbytes.append(0xFF)
+    textbytes.append(0xFF)
+    return textbytes
+

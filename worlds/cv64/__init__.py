@@ -100,7 +100,7 @@ class CV64World(World):
         itempool: typing.List[CV64Item] = []
 
         # Levels
-        total_required_locations = 213
+        total_required_locations = 212
 
         # number_of_specials = 0
         self.world.get_location(LocationName.the_end, self.player).place_locked_item(self.create_item(ItemName.victory))
@@ -198,6 +198,11 @@ class CV64World(World):
                 if loc.item.name in rom_item_bytes or loc.item.game != "Castlevania 64":
                     if loc.item.player == self.player:
                         offsets_to_ids[loc.rom_offset] = loc.item.item_byte
+                        if loc.loc_type == "npc":
+                            if 0x19 < offsets_to_ids[loc.rom_offset] < 0x1D:
+                                offsets_to_ids[loc.rom_offset] += 0x0D
+                            elif offsets_to_ids[loc.rom_offset] > 0x1C:
+                                offsets_to_ids[loc.rom_offset] -= 0x03
                     else:
                         if loc.item.classification == ItemClassification.progression:
                             offsets_to_ids[loc.rom_offset] = 0x11
