@@ -480,9 +480,9 @@ class BossMeta(AssembleOptions):
 
 class PlandoBosses(TextChoice, metaclass=BossMeta):
     """Generic boss shuffle option that supports plando. Format expected is
-    'location1-boss1;location2-boss2;shuffle_type'. If shuffle_type is not provided in the string, will default.
-    Must override can_place_boss, which passes a plando boss and location. Check if the placement is valid for your
-    game here."""
+    'location1-boss1;location2-boss2;shuffle_mode'.
+    If shuffle_mode is not provided in the string, this will be the default shuffle mode. Must override can_place_boss,
+    which passes a plando boss and location. Check if the placement is valid for your game here."""
     bosses: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
     locations: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
 
@@ -501,16 +501,16 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
 
         # since plando exists in the option verify the plando values given are valid
         cls.validate_plando_bosses(options)
-        return cls.get_shuffle_type(options)
+        return cls.get_shuffle_mode(options)
 
     @classmethod
-    def get_shuffle_type(cls, options: typing.List[str]):
-        # find out what type of boss shuffle we should use for placing bosses after plando
+    def get_shuffle_mode(cls, options: typing.List[str]):
+        # find out what mode of boss shuffle we should use for placing bosses after plando
         # and add as a string to look nice in the spoiler
         if "random" in options:
             shuffle = random.choice(list(cls.options))
             options.remove("random")
-            options = ";".join(options) + ";" + shuffle
+            options = ";".join(options) + f";{shuffle}"
             boss_class = cls(options)
         else:
             for option in options:
@@ -520,11 +520,12 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
             else:
                 if cls.duplicate_bosses and len(options) == 1:
                     if cls.valid_boss_name(options[0]):
-                        options = options[0] + ";" + "singularity"
+                        # this doesn't exist in this class but it's a forced option for classes where this is called
+                        options = options[0] + f";{cls.option_singluarity}"
                     else:
-                        options = options[0] + ";" + cls.name_lookup[cls.default]
+                        options = options[0] + f";{cls.name_lookup[cls.default]}"
                 else:
-                    options = ";".join(options) + ";" + cls.name_lookup[cls.default]
+                    options = ";".join(options) + f";{cls.name_lookup[cls.default]}"
             boss_class = cls(options)
         return boss_class
 
@@ -533,10 +534,10 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
         used_locations = []
         used_bosses = []
         for option in options:
-            # check if a shuffle type was provided in the incorrect location
+            # check if a shuffle mode was provided in the incorrect location
             if option == "random" or option in cls.options:
                 if option != options[-1]:
-                    raise ValueError(F"{option} option must be at the end of the boss_shuffle options!")
+                    raise ValueError(f"{option} option must be at the end of the boss_shuffle options!")
             elif "-" in option:
                 location, boss = option.split("-")
                 if location in used_locations:
