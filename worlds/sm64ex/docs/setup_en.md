@@ -3,8 +3,10 @@
 ## Required Software
 
 - Super Mario 64 US Rom (Japanese may work also. Europe and Shindou not supported)
-- Either of [sm64pclauncher](https://github.com/N00byKing/sm64pclauncher/releases) or
-- Cloning and building [sm64ex](https://github.com/N00byKing/sm64ex) manually.
+- Either of
+    - [sm64pclauncher](https://github.com/N00byKing/sm64pclauncher/releases) or
+    - Cloning and building [sm64ex](https://github.com/N00byKing/sm64ex) manually
+- Optional, for sending [commands](/tutorial/Archipelago/commands/en) like `!hint`: the TextClient from [the most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 NOTE: The above linked sm64pclauncher is a special version designed to work with the Archipelago build of sm64ex.
 You can use other sm64-port based builds with it, but you can't use a different launcher with the Archipelago build of sm64ex.
@@ -25,7 +27,9 @@ Then follow the steps below
 6. Set the location where you installed MSYS when prompted. Check the "Install Dependencies" Checkbox
 7. Set the Repo link to `https://github.com/N00byKing/sm64ex` and the Branch to `archipelago` (Top two boxes). You can choose the folder (Secound Box) at will, as long as it does not exist yet
 8. Point the Launcher to your Super Mario 64 US/JP Rom, and set the Region correspondingly
-9. Set Build Options. Recommended: `-jn` where `n` is the Number of CPU Cores, to build faster.
+9. Set Build Options and press build.
+    - Recommended: To build faster, use `-jn` where `n` is the number of CPU cores to use (e.g., `-j4` to use 4 cores).
+    - Optional: Add options from [this list](https://github.com/sm64pc/sm64ex/wiki/Build-options), separated by spaces (e.g., `-j4 BETTERCAMERA=1`).
 10. SM64EX will now be compiled. The Launcher will appear to have crashed, but this is not likely the case. Best wait a bit, but there may be a problem if it takes longer than 10 Minutes
 
 After it's done, the Build list should have another entry titled with what you named the folder in step 7.
@@ -52,7 +56,11 @@ Optionally, add `--sm64ap_passwd "YourPassword"` if the room you are using requi
 The Name in this case is the one specified in your generated .yaml file.
 In case you are using the Archipelago Website, the IP should be `archipelago.gg`.
 
-If everything worked out, you will see a textbox informing you the connection has been established after the story intro.
+Should the connection fail (for example when using the wrong name or IP/Port combination) the game will inform you of that.
+Additionally, any time the game is not connected (for example when the connection is unstable) it will attempt to reconnect and display a status text.
+
+**Important:** You must start a new file for every new seed you play. Using `⭐x0` files is **not** sufficient.
+Failing to use a new file may make some locations unavailable. However, this can be fixed without losing any progress by exiting and starting a new file.
 
 # Playing offline
 
@@ -81,6 +89,11 @@ with its name.
 
 When using a US Rom, the In-Game messages are missing some letters: `J Q V X Z` and `?`.
 The Japanese Version should have no problem displaying these.
+
+### Toad does not have an item for me.
+
+This happens when you load an existing file that had already received an item from that toad.
+To resolve this, exit and start from a `NEW` file. The server will automatically restore your progress.
 
 ### What happens if I lose connection?
 
