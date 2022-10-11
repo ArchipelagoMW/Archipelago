@@ -3,7 +3,6 @@ import typing
 import math
 import threading
 
-
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, RegionType, Entrance
 from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
 from ..AutoWorld import WebWorld, World
@@ -72,7 +71,7 @@ class MMBN3World(World):
                     item = Items.items_by_id[item_id]
                 else:
                     item = ItemData(item_id, ap_item.name, ap_item.classification, Items.ItemType.External)
-                    item.recipient = self.world.player_name[ap_item.player]
+                    item = item._replace(recipient=self.world.player_name[ap_item.player])
                 location_data = location_data_table[location_name]
                 # print("Placing item "+item.itemName+" at location "+location_data.name)
                 rom.replace_item(location_data, item)

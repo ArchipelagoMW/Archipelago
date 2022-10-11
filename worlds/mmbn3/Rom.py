@@ -212,7 +212,7 @@ class LocalRom:
             changed_script.messageBoxes.insert(-1, jump_to_first_undernet_bytes)
             # item_bytes = jump_to_first_undernet_bytes
         elif item.type == ItemType.External:
-            item_bytes = generate_external_item_message(item.name, item.recipient)
+            item_bytes = generate_external_item_message(item.itemName, item.recipient)
         else:
             item_bytes = generate_item_message(item)
         archive.inject_item_message(location.text_script_index, location.text_box_index,

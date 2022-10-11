@@ -117,7 +117,7 @@ chipList: typing.List[ItemData] = [
     ItemData(0xB31032, ItemName.FireRat_H,         ItemClassification.useful,      ItemType.Chip, 117, ChipCode('H')),
     ItemData(0xB31033, ItemName.FireSwrd_R,        ItemClassification.useful,      ItemType.Chip,  33, ChipCode('R')),
     ItemData(0xB31034, ItemName.FstGauge_star,     ItemClassification.useful,      ItemType.Chip, 158, ChipCode('*')),
-    ItemData(0xB31035, ItemName.GaiaBlde_star,     ItemClassification.useful,      ItemType.Chip, 275, ChipCode('*')),
+    ItemData(0xB31035, ItemName.GaiaBlde_star,     ItemClassification.useful,      ItemType.Chip, 276, ChipCode('*')),
     ItemData(0xB31036, ItemName.Geddon1_star,      ItemClassification.useful,      ItemType.Chip, 138, ChipCode('*')),
     ItemData(0xB31037, ItemName.Geddon1_D,         ItemClassification.filler,      ItemType.Chip, 138, ChipCode('D')),
     ItemData(0xB31038, ItemName.Geddon3_U,         ItemClassification.useful,      ItemType.Chip, 140, ChipCode('U')),
@@ -165,7 +165,7 @@ chipList: typing.List[ItemData] = [
 
     ItemData(0xB31060, ItemName.Rockcube_star,     ItemClassification.useful,      ItemType.Chip, 141, ChipCode('*')),
     ItemData(0xB31061, ItemName.Rook_F,            ItemClassification.useful,      ItemType.Chip, 153, ChipCode('F')),
-    ItemData(0xB31062, ItemName.Salamndr_star,     ItemClassification.useful,      ItemType.Chip, 272, ChipCode('*')),
+    ItemData(0xB31062, ItemName.Salamndr_star,     ItemClassification.useful,      ItemType.Chip, 273, ChipCode('*')),
     ItemData(0xB31063, ItemName.SandStage_C,       ItemClassification.useful,      ItemType.Chip, 182, ChipCode('C')),
     ItemData(0xB31064, ItemName.SideGun_S,         ItemClassification.filler,      ItemType.Chip,  12, ChipCode('S')),
     ItemData(0xB31065, ItemName.Slasher_B,         ItemClassification.useful,      ItemType.Chip,  43, ChipCode('B')),
@@ -187,7 +187,7 @@ chipList: typing.List[ItemData] = [
     ItemData(0xB31074, ItemName.Team2_star,        ItemClassification.useful,      ItemType.Chip, 169, ChipCode('*')),
     ItemData(0xB31075, ItemName.Thndrblt_star,     ItemClassification.useful,      ItemType.Chip, 274, ChipCode('*')),
     ItemData(0xB31076, ItemName.Tornado_L,         ItemClassification.useful,      ItemType.Chip,  65, ChipCode('L')),
-    ItemData(0xB31077, ItemName.Tsunami_star,      ItemClassification.useful,      ItemType.Chip, 273, ChipCode('*')),
+    ItemData(0xB31077, ItemName.Tsunami_star,      ItemClassification.useful,      ItemType.Chip, 274, ChipCode('*')),
     ItemData(0xB31078, ItemName.VarSword_B,        ItemClassification.useful,      ItemType.Chip,  38, ChipCode('B')),
     ItemData(0xB31079, ItemName.VarSword_F,        ItemClassification.useful,      ItemType.Chip,  38, ChipCode('F')),
     ItemData(0xB3107A, ItemName.WideSwrd_C,        ItemClassification.progression, ItemType.Chip,  31, ChipCode('C')),
@@ -195,12 +195,12 @@ chipList: typing.List[ItemData] = [
     ItemData(0xB3107C, ItemName.WideSwrd_L,        ItemClassification.useful,      ItemType.Chip,  31, ChipCode('L')),
     ItemData(0xB3107D, ItemName.Yo_Yo1_D,          ItemClassification.useful,      ItemType.Chip,  69, ChipCode('D')),
     ItemData(0xB3107E, ItemName.ZeusHammer_Z,      ItemClassification.useful,      ItemType.Chip, 208, ChipCode('Z')),
-    ItemData(0xB3107F, ItemName.BassGS_X,          ItemClassification.useful,      ItemType.Chip, 311, ChipCode('X')),
+    ItemData(0xB3107F, ItemName.BassGS_X,          ItemClassification.useful,      ItemType.Chip, 312, ChipCode('X')),
 
-    ItemData(0xB31080, ItemName.DeltaRay_Z,        ItemClassification.useful,      ItemType.Chip, 301, ChipCode('Z')),
-    ItemData(0xB31081, ItemName.Punk_P,            ItemClassification.useful,      ItemType.Chip, 271, ChipCode('P')),
-    ItemData(0xB31082, ItemName.DarkAura_A,        ItemClassification.useful,      ItemType.Chip, 308, ChipCode('A')),
-    ItemData(0xB31083, ItemName.AlphaArm_Omega_V,  ItemClassification.useful,      ItemType.Chip, 309, ChipCode('V'))
+    ItemData(0xB31080, ItemName.DeltaRay_Z,        ItemClassification.useful,      ItemType.Chip, 302, ChipCode('Z')),
+    ItemData(0xB31081, ItemName.Punk_P,            ItemClassification.useful,      ItemType.Chip, 272, ChipCode('P')),
+    ItemData(0xB31082, ItemName.DarkAura_A,        ItemClassification.useful,      ItemType.Chip, 309, ChipCode('A')),
+    ItemData(0xB31083, ItemName.AlphaArm_Omega_V,  ItemClassification.useful,      ItemType.Chip, 310, ChipCode('V'))
 ]
 
 programList: typing.List[ItemData] = [

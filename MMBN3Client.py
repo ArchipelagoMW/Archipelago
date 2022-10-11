@@ -13,6 +13,8 @@ from worlds import network_data_package
 from worlds.mmbn3.Items import items_by_id
 from worlds.mmbn3.Locations import location_data_table
 
+SYSTEM_MESSAGE_ID = 0
+
 CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart mmbn3_connector.lua"
 CONNECTION_REFUSED_STATUS = \
     "Connection refused. Please start your emulator and make sure mmbn3_connector.lua is running"
@@ -21,26 +23,10 @@ CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 
-"""
-Payload: lua -> client
-{
-    playerName: string,
-    locations: dict,
-    gameComplete: bool
-}
-
-Payload: client -> lua
-{
-    items: list,
-    playerNames: list
-}
-"""
-
 mmbn3_loc_name_to_id = network_data_package["games"]["MegaMan Battle Network 3"]["location_name_to_id"]
 
 script_version: int = 1
 
-testingData = {}
 debugEnabled = False
 locations_checked = []
 items_sent = []
@@ -56,103 +42,19 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
             logger.info(f"GBA Status: {self.ctx.gba_status}")
 
     def _cmd_debug(self):
+        """Toggle the Debug Text overlay in ROM"""
         global debugEnabled
         debugEnabled = not debugEnabled
         logger.info("Debugging is now "+str(debugEnabled))
 
-    def _cmd_debugchip(self, chip, code):
-        global testingData
-        global itemIndex
-        logger.info("Sending Battlechip "+str(chip))
-        testingData["sender"] = "DebugTest"
-        testingData["type"] = "chip"
-        testingData["itemID"] = chip
-        testingData["subItemID"] = code
-        testingData["count"] = 1
-        testingData["itemIndex"] = itemIndex
-        itemIndex += 1
-
-    def _cmd_debugitem(self, item):
-        global testingData
-        global itemIndex
-        logger.info("Sending Item/Subchip "+str(item))
-        testingData["sender"] = "DebugTest"
-        testingData["type"] = "key"
-        testingData["itemID"] = item
-        testingData["subItemID"] = -1
-        testingData["count"] = 1
-        testingData["itemIndex"] = itemIndex
-        itemIndex += 1
-
-    def _cmd_debugsubchip(self, item):
-        global testingData
-        global itemIndex
-        logger.info("Sending Item/Subchip "+str(item))
-        testingData["sender"] = "DebugTest"
-        testingData["type"] = "subchip"
-        testingData["itemID"] = item
-        testingData["subItemID"] = -1
-        testingData["count"] = 1
-        testingData["itemIndex"] = itemIndex
-        itemIndex += 1
-
-    def _cmd_debugzenny(self, amt):
-        global testingData
-        global itemIndex
-        logger.info("Sending "+str(amt)+" Zenny")
-        testingData["sender"] = "DebugTest"
-        testingData["type"] = "zenny"
-        testingData["itemID"] = -1
-        testingData["subItemID"] = -1
-        testingData["count"] = amt
-        testingData["itemIndex"] = itemIndex
-        itemIndex += 1
-
-    def _cmd_debugprogram(self, program, color):
-        global testingData
-        global itemIndex
-        logger.info("Sending Navi Cust Program "+str(program))
-        testingData["sender"] = "DebugTest"
-        testingData["type"] = "program"
-        testingData["itemID"] = program
-        testingData["subItemID"] = color
-        testingData["count"] = 1
-        testingData["itemIndex"] = itemIndex
-        itemIndex += 1
-
-    def _cmd_debugbugfrag(self, amt):
-        global testingData
-        global itemIndex
-        logger.info("Sending "+str(amt)+" BugFrags")
-        testingData["sender"] = "DebugTest"
-        testingData["type"] = "bugfrag"
-        testingData["itemID"] = -1
-        testingData["subItemID"] = -1
-        testingData["count"] = amt
-        testingData["itemIndex"] = itemIndex
-        itemIndex += 1
-
-    def _cmd_debugundernet(self):
-        global testingData
-        global itemIndex
-        logger.info("Sending Progressive Undernet Rank")
-        testingData["sender"] = "DebugTest"
-        testingData["type"] = "progressive-undernet"
-        testingData["itemID"] = -1
-        testingData["subItemID"] = -1
-        testingData["count"] = 1
-        testingData["itemIndex"] = itemIndex
-        itemIndex += 1
-
 
 class MMBN3Context(CommonContext):
     command_processor = MMBN3CommandProcessor
-    # TODO No idea what full local means or what this is. Ask espeon about it
+    game = "MegaMan Battle Network 3"
     items_handling = 0b001  # full local
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
-        self.game = 'MegaMan Battle Network 3'
         self.gba_streams: (StreamReader, StreamWriter) = None
         self.gba_sync_task = None
         self.gba_status = CONNECTION_INITIAL_STATUS
@@ -164,7 +66,6 @@ class MMBN3Context(CommonContext):
         if password_requested and not self.password:
             await super(MMBN3Context, self).server_auth(password_requested)
         if not self.auth:
-            await self.get_username()
             self.awaiting_rom = True
             logger.info('Awaiting conection to Bizhawk')
             return
@@ -193,7 +94,7 @@ class item_info:
     subItemID = 0x00 #Code for chips, color for programs
     itemIndex = 1
 
-    def __init__(self,id,sender,type):
+    def __init__(self, id, sender, type):
         self.id = id
         self.sender = sender
         self.type = type
@@ -212,24 +113,15 @@ class item_info:
 
 
 def get_payload(ctx: MMBN3Context):
-    global testingData
     global debugEnabled
 
-
-    if len(testingData) > 0:
-        test_item = item_info(len(items_sent), testingData["sender"], testingData["type"])
-        test_item.itemID = int(testingData["itemID"])
-        test_item.subItemID = int(testingData["subItemID"])
-        test_item.count = int(testingData["count"])
-        test_item.itemIndex = int(testingData["itemIndex"])
-        items_sent.append(test_item)
-        testingData = {}
-
-    #items_sent = []
+    items_sent = []
     for i, item in enumerate(ctx.items_received):
         item_data = items_by_id[item.item]
         new_item = item_info(i, ctx.player_names[item.player], item_data.type)
-        new_item.itemIndex = item_data.itemID
+        new_item.itemIndex = i+1
+        new_item.type = item_data.type
+        new_item.itemID = item_data.itemID
         new_item.subItemID = item_data.subItemID
         new_item.count = item_data.count
         items_sent.append(new_item)
@@ -241,6 +133,7 @@ def get_payload(ctx: MMBN3Context):
 
 
 async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
+    """
     # Game completion handling
     if payload['gameComplete'] and not ctx.finished_game:
         await ctx.send_msgs([{
@@ -248,10 +141,12 @@ async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
             "status": 30
         }])
         ctx.finished_game = True
+    """
 
     # Locations handling
     if ctx.location_table != payload['locations']:
         ctx.location_table = payload['locations']
+
         await ctx.send_msgs([{
             "cmd": "LocationChecks",
             "locations": [mmbn3_loc_name_to_id[loc] for loc in ctx.location_table
@@ -261,21 +156,16 @@ async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
 
 def check_item_packet(name, packet):
     locData = location_data_table[name]
-    if packet & locData.flag_mask:
-        logger.info("You found the item at location "+name)
     return packet & locData.flag_mask
 
 
 async def gba_sync_task(ctx: MMBN3Context):
-    global testingData
-
     logger.info("Starting GBA connector. Use /gba for status information.")
     while not ctx.exit_event.is_set():
         error_status = None
         if ctx.gba_streams:
             (reader, writer) = ctx.gba_streams
             msg = get_payload(ctx).encode()
-            testingData = {}
             writer.write(msg)
             writer.write(b'\n')
             try:
@@ -294,7 +184,7 @@ async def gba_sync_task(ctx: MMBN3Context):
                             # Not just a keep alive ping, parse
                             asyncio.create_task((parse_payload(data_decoded, ctx, False)))
                         if not ctx.auth:
-                            ctx.auth = data_decoded['playerName']
+                            await ctx.get_username()
                             if ctx.awaiting_rom:
                                 await ctx.server_auth(False)
                     else:

@@ -117,13 +117,8 @@ def generate_progressive_undernet(progression_index, next_script) -> bytearray:
 
 
 def generate_get_for_item(item) -> bytearray:
-    """
-    Special case for progressive undernet
-    if item["type"] == "progressive-undernet":
-        return GenerateKeyItemGet(Next_Progressive_Undernet_ID(),1)
-    """
     if item.type == "undernet":
-        return generate_text_bytes("Got the next\n\"Undernet Rank\"\n!!")
+        return generate_text_bytes("Got the next\n\"Undernet Rank\"!!")
     if item.type == "chip":
         return generate_chip_get(item.itemID, item.subItemID, item.count)
     elif item.type == "key":
@@ -144,7 +139,7 @@ def generate_item_message(item_data) -> bytearray:
     byte_list = [0xF8, 0x04, 0x18]
     byte_list.extend(generate_get_for_item(item_data))
     byte_list.extend([0xF8, 0x0C])
-    byte_list.extend([0xEB, 0xF8, 0x08])
+    byte_list.extend([0xEB, 0xE9, 0xF8, 0x08])
     byte_list.extend([0xF8, 0x10])
     return bytearray(byte_list)
 
@@ -153,7 +148,7 @@ def generate_external_item_message(item_name, item_recipient) -> bytearray:
     byte_list = [0xF8, 0x04, 0x18]
     byte_list.extend(generate_text_bytes("Sending data for\n" + item_name + "\nTo " + item_recipient))
     byte_list.extend([0xF8, 0x0C])
-    byte_list.extend([0xEB, 0xF8, 0x08])
+    byte_list.extend([0xEB, 0xE9, 0xF8, 0x08])
     byte_list.extend([0xF8, 0x10])
     return bytearray(byte_list)
 

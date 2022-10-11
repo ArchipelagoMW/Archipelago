@@ -575,6 +575,7 @@ local GenerateZennyGet = function(amt)
 end
 
 local GenerateProgramGet = function(program, color, amt)
+    print("Receiving Program "..tostring(program).." Color: "..color)
     bytes = {
         0xF6, 0x40, (program * 4), amt, color,
         charDict['G'], charDict['o'], charDict['t'], charDict[' '], charDict['a'], charDict[' '], charDict['N'], charDict['a'], charDict['v'], charDict['i'], charDict['\n'],
