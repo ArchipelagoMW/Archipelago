@@ -248,7 +248,6 @@ class SA2BWorld(World):
                         musiclist_s[i] += 100
 
             self.music_map = dict(zip(musiclist_o, musiclist_s))
-
         elif self.world.music_shuffle[self.player] == "full":
             musiclist_o = list(range(0, 78))
             musiclist_s = musiclist_o.copy()
@@ -260,6 +259,17 @@ class SA2BWorld(World):
                 for i in range(len(musiclist_s)):
                     if self.world.random.choice([True, False]):
                         musiclist_s[i] += 100
+
+            self.music_map = dict(zip(musiclist_o, musiclist_s))
+        elif self.world.music_shuffle[self.player] == "singularity":
+            musiclist_o = list(range(0, 78))
+            musiclist_s = [self.world.random.choice(musiclist_o)] * len(musiclist_o)
+
+            if self.world.sadx_music[self.player].value == 1:
+                musiclist_s = [x+100 for x in musiclist_s]
+            elif self.world.sadx_music[self.player].value == 2:
+                if self.world.random.choice([True, False]):
+                    musiclist_s = [x+100 for x in musiclist_s]
 
             self.music_map = dict(zip(musiclist_o, musiclist_s))
         else:

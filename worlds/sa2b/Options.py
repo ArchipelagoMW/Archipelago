@@ -199,11 +199,13 @@ class MusicShuffle(Choice):
     Off: No music is shuffled.
     Levels: Level music is shuffled.
     Full: Level, Menu, and Additional music is shuffled.
+    Singularity: Level, Menu, and Additional music is all replaced with a single random song.
     """
     display_name = "Music Shuffle Type"
     option_none = 0
     option_levels = 1
     option_full = 2
+    option_singularity = 3
     default = 0
 
 
