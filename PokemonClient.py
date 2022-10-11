@@ -5,6 +5,7 @@ import os
 import bsdiff4
 import subprocess
 import zipfile
+import hashlib
 from asyncio import StreamReader, StreamWriter
 from typing import List
 
@@ -186,8 +187,6 @@ async def gb_sync_task(ctx: GBContext):
                             and not error_status and ctx.auth:
                         # Not just a keep alive ping, parse
                         asyncio.create_task(parse_locations(data_decoded['locations'], ctx))
-                        if 'serial' in data_decoded:
-                            print(data_decoded['serial'])
                 except asyncio.TimeoutError:
                     logger.debug("Read Timed Out, Reconnecting")
                     error_status = CONNECTION_TIMING_OUT_STATUS
@@ -242,7 +241,7 @@ async def run_game(romfile):
                          stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
-async def patch_and_run_game(game_version, patch_file):
+async def patch_and_run_game(game_version, patch_file, ctx):
     base_name = os.path.splitext(patch_file)[0]
     comp_path = base_name + '.gb'
     with open(Utils.local_path(Utils.get_options()["pkrb_options"][f"{game_version}_rom_file"]), "rb") as stream:
@@ -254,14 +253,24 @@ async def patch_and_run_game(game_version, patch_file):
         with open(Utils.local_path('worlds', 'pokemon_rb', f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
             base_patch = bytes(stream.read())
     base_patched_rom_data = bsdiff4.patch(base_rom, base_patch)
+    basemd5 = hashlib.md5()
+    basemd5.update(base_patched_rom_data)
+
     with zipfile.ZipFile(patch_file, 'r') as patch_archive:
         with patch_archive.open('delta.bsdiff4', 'r') as stream:
             patch = stream.read()
     patched_rom_data = bsdiff4.patch(base_patched_rom_data, patch)
-    with open(comp_path, "wb") as patched_rom_file:
-        patched_rom_file.write(patched_rom_data)
 
-    asyncio.create_task(run_game(comp_path))
+    written_hash = patched_rom_data[0xFFCC:0xFFDC]
+    if written_hash == basemd5.digest():
+        with open(comp_path, "wb") as patched_rom_file:
+            patched_rom_file.write(patched_rom_data)
+
+        asyncio.create_task(run_game(comp_path))
+    else:
+        msg = "Patch supplied was not generated with the same base patch version as this client. Patching failed."
+        logger.warning(msg)
+        ctx.gui_error('Error', msg)
 
 
 if __name__ == '__main__':
@@ -276,23 +285,23 @@ if __name__ == '__main__':
                             help='Path to an APRED or APBLUE patch file')
         args = parser.parse_args()
 
-        if args.patch_file:
-            ext = args.patch_file.split(".")[len(args.patch_file.split(".")) - 1].lower()
-            if ext == "apred":
-                logger.info("APRED file supplied, beginning patching process...")
-                asyncio.create_task(patch_and_run_game("red", args.patch_file))
-            elif ext == "apblue":
-                logger.info("APBLUE file supplied, beginning patching process...")
-                asyncio.create_task(patch_and_run_game("blue", args.patch_file))
-            else:
-                logger.warning(f"Unknown patch file extension {ext}")
-
         ctx = GBContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
         if gui_enabled:
             ctx.run_gui()
         ctx.run_cli()
         ctx.gb_sync_task = asyncio.create_task(gb_sync_task(ctx), name="GB Sync")
+
+        if args.patch_file:
+            ext = args.patch_file.split(".")[len(args.patch_file.split(".")) - 1].lower()
+            if ext == "apred":
+                logger.info("APRED file supplied, beginning patching process...")
+                asyncio.create_task(patch_and_run_game("red", args.patch_file, ctx))
+            elif ext == "apblue":
+                logger.info("APBLUE file supplied, beginning patching process...")
+                asyncio.create_task(patch_and_run_game("blue", args.patch_file, ctx))
+            else:
+                logger.warning(f"Unknown patch file extension {ext}")
 
         await ctx.exit_event.wait()
         ctx.server_address = None

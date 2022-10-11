@@ -352,6 +352,9 @@ def generate_output(self, output_directory: str):
     game_version = self.world.game_version[self.player].current_key
     data = bytearray(get_base_rom_bytes(game_version))
 
+    basemd5 = hashlib.md5()
+    basemd5.update(data)
+
     for location in self.world.get_locations():
         if location.player != self.player or location.rom_address is None:
             continue
@@ -540,9 +543,7 @@ def generate_output(self, output_directory: str):
         mons.sort(key=lambda mon: 0 if mon == self.world.get_location("Pallet Town - Starter 2", self.player).item.name
                   else 1 if mon == self.world.get_location("Pallet Town - Starter 1", self.player).item.name else
                   2 if mon == self.world.get_location("Pallet Town - Starter 3", self.player).item.name else 3)
-    write_bytes(data, self.world.seed_name.encode(), 0xFFDC)
     write_bytes(data, encode_text(self.world.seed_name, 20, True), rom_addresses['Title_Seed'])
-    write_bytes(data, self.world.player_name[self.player].encode(), 0xFFF0)
 
     slot_name = self.world.player_name[self.player]
     slot_name.replace("@", " ")
@@ -552,6 +553,12 @@ def generate_output(self, output_directory: str):
 
     write_bytes(data, self.trainer_name, rom_addresses['Player_Name'])
     write_bytes(data, self.rival_name, rom_addresses['Rival_Name'])
+
+    write_bytes(data, basemd5.digest(), 0xFFCC)
+    write_bytes(data, self.world.seed_name.encode(), 0xFFDC)
+    write_bytes(data, self.world.player_name[self.player].encode(), 0xFFF0)
+
+
 
     outfilepname = f'_P{self.player}'
     outfilepname += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}" \
