@@ -300,7 +300,7 @@ SM_ROMNAME_START = ROM_START + 0x007FC0
 
 SM_INGAME_MODES = {0x07, 0x09, 0x0b}
 SM_ENDGAME_MODES = {0x26, 0x27}
-SM_DEATH_MODES = {0x15, 0x17, 0x18, 0x19, 0x1A}
+SM_DEATH_MODES = {0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A}
 
 # RECV and SEND are from the gameplay's perspective: SNIClient writes to RECV queue and reads from SEND queue
 SM_RECV_QUEUE_START  = SRAM_START + 0x2000
