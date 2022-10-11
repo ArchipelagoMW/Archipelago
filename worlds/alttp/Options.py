@@ -209,12 +209,14 @@ class LTTPBosses(PlandoBosses):
 
     @classmethod
     def validate_plando_bosses(cls, options: typing.List[str]) -> None:
+        all_locations = []
         for option in options:
             if option == "random" or option in cls.options:
                 if option != options[-1]:
                     raise ValueError(f"{option} option must be at the end of the boss_shuffle options!")
             elif "-" in option:
                 location, boss = option.split("-")
+                all_locations.append(location)
                 if not cls.valid_boss_name(boss):
                     raise ValueError(f"{boss} is not a valid boss name for location {location}.")
                 if not cls.valid_location_name(location):
@@ -224,6 +226,8 @@ class LTTPBosses(PlandoBosses):
             else:
                 if not cls.valid_boss_name(option):
                     raise ValueError(f"{option} is not a valid boss name.")
+        if len(set(all_locations)) != len(all_locations):
+            raise ValueError("Locations can't be used multiples for boss placements.")
 
     @classmethod
     def can_place_boss(cls, boss: str, location: str) -> bool:
