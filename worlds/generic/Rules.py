@@ -49,21 +49,6 @@ def exclusion_rules(world: MultiWorld, player: int, exclude_locations: typing.Se
             location.progress_type = LocationProgressType.EXCLUDED
 
 
-def early_item_rules(world: MultiWorld, player: int, early_items: typing.Set[str]) -> None:
-    early_locations = []
-    late_locations = []
-    for location in world.get_locations():
-        if location.can_reach(world.state):
-            early_locations.append(location)
-        else:
-            late_locations.append(location)
-    for location in late_locations:
-        for early_item, item_count in early_items.items():
-            add_item_rule(location, lambda i, item=early_item, count=item_count: i.player != player or i.name != item or
-                          len([loc for loc in early_locations if loc.item is not None and
-                               (loc.item.player, loc.item.name) == (player, item)]) >= item_count)
-
-
 def set_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule):
     spot.access_rule = rule
 
