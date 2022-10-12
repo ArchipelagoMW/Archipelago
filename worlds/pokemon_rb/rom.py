@@ -474,7 +474,7 @@ def generate_output(self, output_directory: str):
             matchup[2] = effectiveness
     elif self.world.randomize_type_matchup_type_effectiveness[self.player].value == 2:
         for matchup in chart:
-            matchup[2] = self.world.random.choice([0] + ([5, 20] * 5))
+            matchup[2] = random.choice([0] + ([5, 20] * 5))
     elif self.world.randomize_type_matchup_type_effectiveness[self.player].value == 3:
         for matchup in chart:
             matchup[2] = self.world.random.choice([i for i in range(0, 21) if i != 10])
