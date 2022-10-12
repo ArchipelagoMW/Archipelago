@@ -146,7 +146,7 @@ class PokemonRedBlueWorld(World):
                     state = self.world.get_all_state(False)
                     self.world.random.shuffle(badges)
                     self.world.random.shuffle(badgelocs)
-                    fill_restrictive(self.world, state, badgelocs.copy(), badges.copy(), True, True)
+                    fill_restrictive(self.world, state, badgelocs.copy(), badges, True, True)
                 except FillError:
                     for location in badgelocs:
                         location.item = None
