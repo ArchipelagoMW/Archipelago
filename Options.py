@@ -504,28 +504,28 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
         return cls.get_shuffle_mode(options)
 
     @classmethod
-    def get_shuffle_mode(cls, options: typing.List[str]):
+    def get_shuffle_mode(cls, option_list: typing.List[str]):
         # find out what mode of boss shuffle we should use for placing bosses after plando
         # and add as a string to look nice in the spoiler
-        if "random" in options:
+        if "random" in option_list:
             shuffle = random.choice(list(cls.options))
-            options.remove("random")
-            options = ";".join(options) + f";{shuffle}"
+            option_list.remove("random")
+            options = ";".join(option_list) + f";{shuffle}"
             boss_class = cls(options)
         else:
-            for option in options:
+            for option in option_list:
                 if option in cls.options:
-                    options = ";".join(options)
+                    options = ";".join(option_list)
                     break
             else:
-                if cls.duplicate_bosses and len(options) == 1:
-                    if cls.valid_boss_name(options[0]):
+                if cls.duplicate_bosses and len(option_list) == 1:
+                    if cls.valid_boss_name(option_list[0]):
                         # this doesn't exist in this class but it's a forced option for classes where this is called
-                        options = options[0] + ";singularity"
+                        options = option_list[0] + ";singularity"
                     else:
-                        options = options[0] + f";{cls.name_lookup[cls.default]}"
+                        options = option_list[0] + f";{cls.name_lookup[cls.default]}"
                 else:
-                    options = ";".join(options) + f";{cls.name_lookup[cls.default]}"
+                    options = ";".join(option_list) + f";{cls.name_lookup[cls.default]}"
             boss_class = cls(options)
         return boss_class
 
