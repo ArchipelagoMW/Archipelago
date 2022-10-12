@@ -295,6 +295,11 @@ def get_default_options() -> OptionsType:
             "sni": "SNI",
             "rom_start": True,
         },
+        "pkrb_options": {
+            "red_rom_file": "Pokemon Red (UE) [S][!].gb",
+            "blue_rom_file": "Pokemon Blue (UE) [S][!].gb",
+            "rom_start": True
+        }
     }
 
     return options
