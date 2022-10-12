@@ -1,7 +1,7 @@
 
 from BaseClasses import MultiWorld, Region, Entrance, RegionType, LocationProgressType
 from worlds.generic.Rules import add_item_rule
-from .locations import get_locations, PokemonRBLocation
+from .locations import location_data, PokemonRBLocation
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations_per_region=None, exits=None):
@@ -23,15 +23,11 @@ def create_region(world: MultiWorld, player: int, name: str, locations_per_regio
 
 
 def create_regions(world: MultiWorld, player: int):
-    location_data_list = get_locations(player)
     locations_per_region = {}
-    for location_data in location_data_list:
-        location = PokemonRBLocation(player, location_data.name, location_data.address, location_data.rom_address,
-                                     location_data.rule, location_data.item_rule)
-        if location_data.region not in locations_per_region:
-            locations_per_region[location_data.region] = []
-
-        locations_per_region[location_data.region].append(location)
+    for location in location_data:
+        locations_per_region.setdefault(location.region, [])
+        locations_per_region[location.region].append(PokemonRBLocation(player, location.name, location.address,
+                                                                       location.rom_address))
     regions = [
         create_region(world, player, "Menu", locations_per_region),
         create_region(world, player, "Anywhere", locations_per_region),

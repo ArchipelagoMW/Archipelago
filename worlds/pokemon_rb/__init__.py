@@ -7,7 +7,7 @@ from Fill import fill_restrictive, FillError, sweep_from_pool
 from ..AutoWorld import World, WebWorld
 from ..generic.Rules import add_item_rule
 from .items import item_table, item_groups
-from .locations import get_locations, PokemonRBLocation
+from .locations import location_data, PokemonRBLocation
 from .regions import create_regions
 from .logic import PokemonLogic
 from .options import pokemon_rb_options
@@ -15,6 +15,7 @@ from .rom_addresses import rom_addresses
 from .text import encode_text
 from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, process_pokemon_data, process_wild_pokemon,\
     process_static_pokemon
+from .rules import set_rules
 
 import worlds.pokemon_rb.poke_data as poke_data
 
@@ -42,7 +43,7 @@ class PokemonRedBlueWorld(World):
     topology_present = False
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
-    location_name_to_id = {location.name: location.address for location in get_locations() if location.type == "Item"}
+    location_name_to_id = {location.name: location.address for location in location_data if location.type == "Item"}
     item_name_groups = item_groups
 
     web = PokemonWebWorld()
@@ -92,8 +93,10 @@ class PokemonRedBlueWorld(World):
             for badge in badges_to_add:
                 self.extra_badges[hm_moves.pop()] = badge
 
+        process_pokemon_data(self)
+
     def create_items(self) -> None:
-        locations = [location for location in get_locations(self.player) if location.type == "Item"]
+        locations = [location for location in location_data if location.type == "Item"]
         item_pool = []
         for location in locations:
             if "Hidden" in location.name and not self.world.randomize_hidden_items[self.player].value:
@@ -112,7 +115,6 @@ class PokemonRedBlueWorld(World):
 
         self.world.itempool += item_pool
 
-        process_pokemon_data(self)  # strange place for this, but it is the only place that works for now
 
     def pre_fill(self):
 
@@ -210,6 +212,9 @@ class PokemonRedBlueWorld(World):
         self.fly_map_code = fly_map_code
         create_regions(self.world, self.player)
         self.world.completion_condition[self.player] = lambda state, player=self.player: state.has("Become Champion", player=player)
+
+    def set_rules(self):
+        set_rules(self.world, self.player)
 
     def create_item(self, name: str) -> Item:
         return PokemonRBItem(name, self.player)
