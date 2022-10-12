@@ -89,6 +89,22 @@ def parse_lambda(lambda_string):
     return lambda_set
 
 
+class lazy(object):
+    def __init__(self, func, name=None):
+        self.func = func
+        self.name = name if name is not None else func.__name__
+        self.__doc__ = func.__doc__
+
+    def __get__(self, instance, class_):
+        if instance is None:
+            res = self.func(class_)
+            setattr(class_, self.name, res)
+            return res
+        res = self.func(instance)
+        setattr(instance, self.name, res)
+        return res
+
+
 def get_adjustment_file(adjustment_file):
     path = os.path.join(os.path.dirname(__file__), adjustment_file)
 
@@ -134,3 +150,8 @@ def get_doors_max_list():
 @cache_argsless
 def get_laser_shuffle():
     return get_adjustment_file("settings/Laser_Shuffle.txt")
+
+
+@cache_argsless
+def get_audio_logs():
+    return get_adjustment_file("settings/Audio_Logs.txt")

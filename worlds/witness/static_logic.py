@@ -1,73 +1,15 @@
 import os
 
-from .utils import define_new_region, parse_lambda
+from .utils import define_new_region, parse_lambda, lazy
 
 
-class StaticWitnessLogic:
-    ALL_SYMBOL_ITEMS = set()
-    ALL_DOOR_ITEMS = set()
-    ALL_DOOR_ITEMS_AS_DICT = dict()
-    ALL_USEFULS = set()
-    ALL_TRAPS = set()
-    ALL_BOOSTS = set()
-    CONNECTIONS_TO_SEVER_BY_DOOR_HEX = dict()
-
-    EVENT_PANELS_FROM_REGIONS = set()
-
-    # All regions with a list of panels in them and the connections to other regions, before logic adjustments
-    ALL_REGIONS_BY_NAME = dict()
-    STATIC_CONNECTIONS_BY_REGION_NAME = dict()
-
-    CHECKS_BY_HEX = dict()
-    CHECKS_BY_NAME = dict()
-    STATIC_DEPENDENT_REQUIREMENTS_BY_HEX = dict()
-
-    def parse_items(self):
-        """
-        Parses currently defined items from WitnessItems.txt
-        """
-
-        path = os.path.join(os.path.dirname(__file__), "WitnessItems.txt")
-        with open(path, "r", encoding="utf-8") as file:
-            current_set = self.ALL_SYMBOL_ITEMS
-
-            for line in file.readlines():
-                line = line.strip()
-
-                if line == "Progression:":
-                    current_set = self.ALL_SYMBOL_ITEMS
-                    continue
-                if line == "Boosts:":
-                    current_set = self.ALL_BOOSTS
-                    continue
-                if line == "Traps:":
-                    current_set = self.ALL_TRAPS
-                    continue
-                if line == "Usefuls:":
-                    current_set = self.ALL_USEFULS
-                    continue
-                if line == "Doors:":
-                    current_set = self.ALL_DOOR_ITEMS
-                    continue
-                if line == "":
-                    continue
-
-                line_split = line.split(" - ")
-
-                if current_set is self.ALL_USEFULS:
-                    current_set.add((line_split[1], int(line_split[0]), line_split[2] == "True"))
-                elif current_set is self.ALL_DOOR_ITEMS:
-                    new_door = (line_split[1], int(line_split[0]), frozenset(line_split[2].split(",")))
-                    current_set.add(new_door)
-                    self.ALL_DOOR_ITEMS_AS_DICT[line_split[1]] = new_door
-                else:
-                    current_set.add((line_split[1], int(line_split[0])))
-
-    def read_logic_file(self):
+class StaticWitnessLogicObj:
+    def read_logic_file(self, file_path="WitnessLogic.txt"):
         """
         Reads the logic file and does the initial population of data structures
         """
-        path = os.path.join(os.path.dirname(__file__), "WitnessLogic.txt")
+        path = os.path.join(os.path.dirname(__file__), file_path)
+
         with open(path, "r", encoding="utf-8") as file:
             current_region = dict()
 
@@ -157,6 +99,99 @@ class StaticWitnessLogic:
 
                 current_region["panels"].add(check_hex)
 
+    def __init__(self, file_path="WitnessLogic.txt"):
+        # All regions with a list of panels in them and the connections to other regions, before logic adjustments
+        self.ALL_REGIONS_BY_NAME = dict()
+        self.STATIC_CONNECTIONS_BY_REGION_NAME = dict()
+
+        self.CHECKS_BY_HEX = dict()
+        self.CHECKS_BY_NAME = dict()
+        self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX = dict()
+
+        self.read_logic_file(file_path)
+
+
+class StaticWitnessLogic:
+    ALL_SYMBOL_ITEMS = set()
+    ITEMS_TO_PROGRESSIVE = dict()
+    PROGRESSIVE_TO_ITEMS = dict()
+    ALL_DOOR_ITEMS = set()
+    ALL_DOOR_ITEMS_AS_DICT = dict()
+    ALL_USEFULS = set()
+    ALL_TRAPS = set()
+    ALL_BOOSTS = set()
+    CONNECTIONS_TO_SEVER_BY_DOOR_HEX = dict()
+
+    ALL_REGIONS_BY_NAME = dict()
+    STATIC_CONNECTIONS_BY_REGION_NAME = dict()
+
+    CHECKS_BY_HEX = dict()
+    CHECKS_BY_NAME = dict()
+    STATIC_DEPENDENT_REQUIREMENTS_BY_HEX = dict()
+
+    def parse_items(self):
+        """
+        Parses currently defined items from WitnessItems.txt
+        """
+
+        path = os.path.join(os.path.dirname(__file__), "WitnessItems.txt")
+        with open(path, "r", encoding="utf-8") as file:
+            current_set = self.ALL_SYMBOL_ITEMS
+
+            for line in file.readlines():
+                line = line.strip()
+
+                if line == "Progression:":
+                    current_set = self.ALL_SYMBOL_ITEMS
+                    continue
+                if line == "Boosts:":
+                    current_set = self.ALL_BOOSTS
+                    continue
+                if line == "Traps:":
+                    current_set = self.ALL_TRAPS
+                    continue
+                if line == "Usefuls:":
+                    current_set = self.ALL_USEFULS
+                    continue
+                if line == "Doors:":
+                    current_set = self.ALL_DOOR_ITEMS
+                    continue
+                if line == "":
+                    continue
+
+                line_split = line.split(" - ")
+
+                if current_set is self.ALL_USEFULS:
+                    current_set.add((line_split[1], int(line_split[0]), line_split[2] == "True"))
+                elif current_set is self.ALL_DOOR_ITEMS:
+                    new_door = (line_split[1], int(line_split[0]), frozenset(line_split[2].split(",")))
+                    current_set.add(new_door)
+                    self.ALL_DOOR_ITEMS_AS_DICT[line_split[1]] = new_door
+                else:
+                    if len(line_split) > 2:
+                        progressive_items = line_split[2].split(",")
+                        for i, value in enumerate(progressive_items):
+                            self.ITEMS_TO_PROGRESSIVE[value] = line_split[1]
+                        self.PROGRESSIVE_TO_ITEMS[line_split[1]] = progressive_items
+                        current_set.add((line_split[1], int(line_split[0])))
+                        continue
+                    current_set.add((line_split[1], int(line_split[0])))
+
+    @lazy
+    def sigma_expert(self) -> StaticWitnessLogicObj:
+        return StaticWitnessLogicObj("WitnessLogicExpert.txt")
+
+    @lazy
+    def sigma_normal(self) -> StaticWitnessLogicObj:
+        return StaticWitnessLogicObj("WitnessLogic.txt")
+
     def __init__(self):
         self.parse_items()
-        self.read_logic_file()
+
+        self.ALL_REGIONS_BY_NAME.update(self.sigma_normal.ALL_REGIONS_BY_NAME)
+        self.STATIC_CONNECTIONS_BY_REGION_NAME.update(self.sigma_normal.STATIC_CONNECTIONS_BY_REGION_NAME)
+
+        self.CHECKS_BY_HEX.update(self.sigma_normal.CHECKS_BY_HEX)
+        self.CHECKS_BY_NAME.update(self.sigma_normal.CHECKS_BY_NAME)
+        self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX.update(self.sigma_normal.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
+
