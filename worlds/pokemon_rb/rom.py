@@ -441,8 +441,8 @@ def generate_output(self, output_directory: str):
         for matchup in chart:
             attacking_types.append(matchup[0])
             defending_types.append(matchup[1])
-        self.world.random.shuffle(attacking_types)
-        self.world.random.shuffle(defending_types)
+        random.shuffle(attacking_types)
+        random.shuffle(defending_types)
         matchups = []
         while len(attacking_types) > 0:
             if [attacking_types[0], defending_types[0]] not in matchups:
