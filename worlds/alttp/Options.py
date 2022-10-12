@@ -2,7 +2,7 @@ import typing
 from functools import lru_cache
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, OptionList
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, OptionList, PlandoBosses
 
 
 class Logic(Choice):
@@ -296,7 +296,7 @@ class TurtleMedallion(Medallions):
     display_name = "Turtle Rock Medallion"
 
 
-class Bosses(TextChoice):
+class LTTPBosses(PlandoBosses):
     """Shuffles bosses around to different locations.
     Basic will shuffle all bosses except Ganon and Agahnim anywhere they can be placed.
     Full chooses 3 bosses at random to be placed twice instead of Lanmolas, Moldorm, and Helmasaur.
@@ -310,7 +310,9 @@ class Bosses(TextChoice):
     option_chaos = 3
     option_singularity = 4
 
-    bosses: set = {
+    duplicate_bosses = True
+
+    bosses = {
         "Armos Knights",
         "Lanmolas",
         "Moldorm",
@@ -323,7 +325,7 @@ class Bosses(TextChoice):
         "Trinexx",
     }
 
-    locations: set = {
+    locations = {
         "Ganons Tower Top",
         "Tower of Hera",
         "Skull Woods",
@@ -339,99 +341,16 @@ class Bosses(TextChoice):
         "Ganons Tower Bottom"
     }
 
-    def __init__(self, value: typing.Union[str, int]):
-        assert isinstance(value, str) or isinstance(value, int), \
-            f"{value} is not a valid option for {self.__class__.__name__}"
-        self.value = value
-
     @classmethod
-    def from_text(cls, text: str):
-        import random
-        # set all of our text to lower case for name checking
-        text = text.lower()
-        cls.bosses = {boss_name.lower() for boss_name in cls.bosses}
-        cls.locations = {boss_location.lower() for boss_location in cls.locations}
-        if text == "random":
-            return cls(random.choice(list(cls.options.values())))
-        for option_name, value in cls.options.items():
-            if option_name == text:
-                return cls(value)
-        options = text.split(";")
-
-        # since plando exists in the option verify the plando values given are valid
-        cls.validate_plando_bosses(options)
-
-        # find out what type of boss shuffle we should use for placing bosses after plando
-        # and add as a string to look nice in the spoiler
-        if "random" in options:
-            shuffle = random.choice(list(cls.options))
-            options.remove("random")
-            options = ";".join(options) + ";" + shuffle
-            boss_class = cls(options)
-        else:
-            for option in options:
-                if option in cls.options:
-                    boss_class = cls(";".join(options))
-                    break
-            else:
-                if len(options) == 1:
-                    if cls.valid_boss_name(options[0]):
-                        options = options[0] + ";singularity"
-                        boss_class = cls(options)
-                    else:
-                        options = options[0] + ";none"
-                        boss_class = cls(options)
-                else:
-                    options = ";".join(options) + ";none"
-                    boss_class = cls(options)
-        return boss_class
-
-    @classmethod
-    def validate_plando_bosses(cls, options: typing.List[str]) -> None:
-        from .Bosses import can_place_boss, format_boss_location
-        for option in options:
-            if option == "random" or option in cls.options:
-                if option != options[-1]:
-                    raise ValueError(f"{option} option must be at the end of the boss_shuffle options!")
-                continue
-            if "-" in option:
-                location, boss = option.split("-")
-                level = ''
-                if not cls.valid_boss_name(boss):
-                    raise ValueError(f"{boss} is not a valid boss name for location {location}.")
-                if not cls.valid_location_name(location):
-                    raise ValueError(f"{location} is not a valid boss location name.")
-                if location.split(" ")[-1] in ("top", "middle", "bottom"):
-                    location = location.split(" ")
-                    level = location[-1]
-                    location = " ".join(location[:-1])
-                location = location.title().replace("Of", "of")
-                if not can_place_boss(boss.title(), location, level):
-                    raise ValueError(f"{format_boss_location(location, level)} "
-                                     f"is not a valid location for {boss.title()}.")
-            else:
-                if not cls.valid_boss_name(option):
-                    raise ValueError(f"{option} is not a valid boss name.")
-
-    @classmethod
-    def valid_boss_name(cls, value: str) -> bool:
-        return value.lower() in cls.bosses
-
-    @classmethod
-    def valid_location_name(cls, value: str) -> bool:
-        return value in cls.locations
-
-    def verify(self, world, player_name: str, plando_options) -> None:
-        if isinstance(self.value, int):
-            return
-        from Generate import PlandoSettings
-        if not (PlandoSettings.bosses & plando_options):
-            import logging
-            # plando is disabled but plando options were given so pull the option and change it to an int
-            option = self.value.split(";")[-1]
-            self.value = self.options[option]
-            logging.warning(f"The plando bosses module is turned off, so {self.name_lookup[self.value].title()} "
-                            f"boss shuffle will be used for player {player_name}.")
+    def can_place_boss(cls, boss: str, location: str) -> bool:
+        from worlds.alttp.Bosses import can_place_boss
+        level = ''
+        words = location.split(" ")
+        if words[-1] in ("top", "middle", "bottom"):
+            level = words[-1]
+            location = " ".join(words[:-1])
+        location = location.title().replace("Of", "of")
+        return can_place_boss(boss.title(), location, level)
 
 
 class Enemies(Choice):
@@ -800,7 +719,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "hints": Hints,
     "scams": Scams,
     "restrict_dungeon_item_on_boss": RestrictBossItem,
-    "boss_shuffle": Bosses,
+    "boss_shuffle": LTTPBosses,
     "pot_shuffle": PotShuffle,
     "misery_mire_medallion": MireMedallion,
     "turtle_rock_medallion": TurtleMedallion,
