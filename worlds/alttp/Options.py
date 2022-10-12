@@ -187,10 +187,10 @@ class LTTPBosses(PlandoBosses):
     def can_place_boss(cls, boss: str, location: str) -> bool:
         from worlds.alttp.Bosses import can_place_boss
         level = ''
-        if location.split(" ")[-1] in ("top", "middle", "bottom"):
-            location = location.split(" ")
-            level = location[-1]
-            location = " ".join(location[:-1])
+        words = location.split(" ")
+        if words[-1] in ("top", "middle", "bottom"):
+            level = words[-1]
+            location = " ".join(words[:-1])
         location = location.title().replace("Of", "of")
         return can_place_boss(boss.title(), location, level)
 
