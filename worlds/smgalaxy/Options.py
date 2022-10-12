@@ -1,4 +1,3 @@
-import imp
 import typing
 from Options import Option, DefaultOnToggle
 
