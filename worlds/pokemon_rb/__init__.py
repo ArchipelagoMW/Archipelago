@@ -126,9 +126,7 @@ class PokemonRedBlueWorld(World):
                 if location.player == self.player and location.item is None and location.can_reach(self.world.state) \
                         and location.item_rule(item):
                     locations.append(location)
-            self.world.random.shuffle(locations)
-            location = locations.pop()
-            location.place_locked_item(item)
+            self.world.random.choice(locations).place_locked_item(item)
 
 
 
