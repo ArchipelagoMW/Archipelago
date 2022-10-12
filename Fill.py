@@ -261,21 +261,21 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     locations: typing.Dict[LocationProgressType, typing.List[Location]] = {
         loc_type: [] for loc_type in LocationProgressType}
 
-    early_locations = []
-    early_priority_locations = []
-    for loc in reversed(fill_locations):
-        if loc.can_reach(world.state):
-            if loc.progress_type == LocationProgressType.PRIORITY:
-                early_priority_locations.append(loc)
-            else:
-                early_locations.append(loc)
-            fill_locations.remove(loc)
-    early_items = []
     early_items_count = {}
     for player in world.player_ids:
         for item, count in world.early_items[player].value.items():
             early_items_count[(item, player)] = count
     if early_items_count:
+        early_locations = []
+        early_priority_locations = []
+        for loc in reversed(fill_locations):
+            if loc.can_reach(world.state):
+                if loc.progress_type == LocationProgressType.PRIORITY:
+                    early_priority_locations.append(loc)
+                else:
+                    early_locations.append(loc)
+                fill_locations.remove(loc)
+
         def pull_items(pool_from, pool_to):
             for item in reversed(pool_from):
                 if (item.name, item.player) in early_items_count:
@@ -284,6 +284,7 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
                     early_items_count[(item.name, item.player)] -= 1
                     if early_items_count[(item.name, item.player)] == 0:
                         del early_items_count[(item.name, item.player)]
+        early_items = []
         pull_items(progitempool, early_items)
         if early_priority_locations:
             fill_restrictive(world, world.state, early_priority_locations, early_items, lock=True)
