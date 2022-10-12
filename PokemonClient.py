@@ -21,7 +21,7 @@ location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}, "list"
 location_bytes_bits = {}
 for location in location_data:
     if location.ram_address is not None:
-        if type(location.ram_address).__name__ == "list":
+        if type(location.ram_address) == list:
             location_map[type(location.ram_address).__name__][(location.ram_address[0].flag, location.ram_address[1].flag)] = location.address
             location_bytes_bits[location.address] = [{'byte': location.ram_address[0].byte, 'bit': location.ram_address[0].bit},
                                                      {'byte': location.ram_address[1].byte, 'bit': location.ram_address[1].bit}]
