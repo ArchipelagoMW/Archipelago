@@ -11,7 +11,7 @@ from typing import List
 
 
 import Utils
-from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, ClientCommandProcessor, logger, \
+from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
 
 from worlds.pokemon_rb.locations import get_locations
