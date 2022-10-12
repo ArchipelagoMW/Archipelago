@@ -459,11 +459,11 @@ def generate_output(self, output_directory: str):
     elif self.world.randomize_type_matchup_types[self.player].value == 2:
         used_matchups = []
         for matchup in chart:
-            matchup[0] = self.world.random.choice(list(poke_data.type_names.values()))
-            matchup[1] = self.world.random.choice(list(poke_data.type_names.values()))
+            matchup[0] = random.choice(list(poke_data.type_names.values()))
+            matchup[1] = random.choice(list(poke_data.type_names.values()))
             while [matchup[0], matchup[1]] in used_matchups:
-                matchup[0] = self.world.random.choice(list(poke_data.type_names.values()))
-                matchup[1] = self.world.random.choice(list(poke_data.type_names.values()))
+                matchup[0] = random.choice(list(poke_data.type_names.values()))
+                matchup[1] = random.choice(list(poke_data.type_names.values()))
             used_matchups.append([matchup[0], matchup[1]])
     if self.world.randomize_type_matchup_type_effectiveness[self.player].value == 1:
         effectiveness_list = []
