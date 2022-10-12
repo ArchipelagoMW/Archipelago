@@ -469,7 +469,7 @@ def generate_output(self, output_directory: str):
         effectiveness_list = []
         for matchup in chart:
             effectiveness_list.append(matchup[2])
-        self.world.random.shuffle(effectiveness_list)
+        random.shuffle(effectiveness_list)
         for (matchup, effectiveness) in zip(chart, effectiveness_list):
             matchup[2] = effectiveness
     elif self.world.randomize_type_matchup_type_effectiveness[self.player].value == 2:
