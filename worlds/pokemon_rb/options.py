@@ -219,8 +219,7 @@ class RandomizeStarterPokemon(Choice):
 
 
 class RandomizeStaticPokemon(Choice):
-    """Randomize all one-time gift and encountered Pokemon, except legendaries.
-    These will always be first evolution stage Pokemon."""
+    """Randomize one-time gift and encountered Pokemon. These will always be first evolution stage Pokemon."""
     display_name = "Randomize Static Pokemon"
     default = 0
     option_vanilla = 0
