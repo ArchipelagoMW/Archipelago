@@ -117,18 +117,12 @@ def process_static_pokemon(self):
     if self.world.randomize_legendary_pokemon[self.player].value == 0:
         for slot in legendary_slots:
             location = self.world.get_location(slot.name, self.player)
-            location.item = self.create_item("Missable " + slot.original_item)
-            location.locked = True
-            location.event = True
-            location.item.location = location
+            location.place_locked_item(self.create_item("Missable " + slot.original_item))
     elif self.world.randomize_legendary_pokemon[self.player].value == 1:
         self.world.random.shuffle(legendary_mons)
         for slot in legendary_slots:
             location = self.world.get_location(slot.name, self.player)
-            location.item = self.create_item("Missable " + legendary_mons.pop())
-            location.locked = True
-            location.event = True
-            location.item.location = location
+            location.place_locked_item(self.create_item("Missable " + legendary_mons.pop()))
     elif self.world.randomize_legendary_pokemon[self.player].value == 2:
         static_slots = static_slots + legendary_slots
         self.world.random.shuffle(static_slots)
@@ -139,10 +133,7 @@ def process_static_pokemon(self):
             if slot_type == "Legendary":
                 slot_type = "Missable"
             location = self.world.get_location(slot.name, self.player)
-            location.item = self.create_item(slot_type + " " + swap_slot.original_item)
-            location.locked = True
-            location.event = True
-            location.item.location = location
+            location.place_locked_item(self.create_item(slot_type + " " + swap_slot.original_item))
             swap_slot.original_item = slot.original_item
     elif self.world.randomize_legendary_pokemon[self.player].value == 3:
         static_slots = static_slots + legendary_slots
@@ -154,26 +145,20 @@ def process_static_pokemon(self):
         if slot_type == "Legendary":
             slot_type = "Missable"
         if not randomize_type:
-            location.item = self.create_item(slot_type + " " + slot.original_item)
+            location.place_locked_item(self.create_item(slot_type + " " + slot.original_item))
         else:
-            location.item = self.create_item(slot_type + " " +
-                                             randomize_pokemon(self, slot.original_item, mons_list, randomize_type))
-        location.event = True
-        location.locked = True
-        location.item.location = location
+            location.place_locked_item(self.create_item(slot_type + " " +
+                                             randomize_pokemon(self, slot.original_item, mons_list, randomize_type)))
 
     for slot in starter_slots:
         location = self.world.get_location(slot.name, self.player)
         randomize_type = self.world.randomize_starter_pokemon[self.player].value
         slot_type = "Missable"
         if not randomize_type:
-            location.item = self.create_item(slot_type + " " + slot.original_item)
+            location.place_locked_item(self.create_item(slot_type + " " + slot.original_item))
         else:
-            location.item = self.create_item(slot_type + " " +
-                                             randomize_pokemon(self, slot.original_item, mons_list, randomize_type))
-        location.event = True
-        location.locked = True
-        location.item.location = location
+            location.place_locked_item(self.create_item(slot_type + " " +
+                                             randomize_pokemon(self, slot.original_item, mons_list, randomize_type)))
 
 def process_wild_pokemon(self):
 
