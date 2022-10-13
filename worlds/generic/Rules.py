@@ -55,10 +55,14 @@ def set_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"],
 
 def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule, combine='and'):
     old_rule = spot.access_rule
-    if combine == 'or':
-        spot.access_rule = lambda state: rule(state) or old_rule(state)
+    # empty rule, replace instead of add
+    if old_rule is spot.__class__.access_rule:
+        spot.access_rule = rule
     else:
-        spot.access_rule = lambda state: rule(state) and old_rule(state)
+        if combine == "and":
+            spot.access_rule = lambda state: rule(state) and old_rule(state)
+        else:
+            spot.access_rule = lambda state: rule(state) or old_rule(state)
 
 
 def forbid_item(location: "BaseClasses.Location", item: str, player: int):
@@ -77,9 +81,16 @@ def forbid_items(location: "BaseClasses.Location", items: typing.Set[str]):
     location.item_rule = lambda i: i.name not in items and old_rule(i)
 
 
-def add_item_rule(location: "BaseClasses.Location", rule: ItemRule):
+def add_item_rule(location: "BaseClasses.Location", rule: ItemRule, combine: str = "and"):
     old_rule = location.item_rule
-    location.item_rule = lambda item: rule(item) and old_rule(item)
+    # empty rule, replace instead of add
+    if old_rule is location.__class__.item_rule:
+        location.item_rule = rule
+    else:
+        if combine == "and":
+            location.item_rule = lambda item: rule(item) and old_rule(item)
+        else:
+            location.item_rule = lambda item: rule(item) or old_rule(item)
 
 
 def item_in_locations(state: "BaseClasses.CollectionState", item: str, player: int,
