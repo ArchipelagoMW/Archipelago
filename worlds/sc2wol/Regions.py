@@ -144,28 +144,28 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         # Add no_build missions to the pool and fill in no_build slots
         missions_to_add = mission_pools['no_build']
         for slot in no_build_slots:
-            filler = random.randint(0, len(missions_to_add)-1)
+            filler = world.random.randint(0, len(missions_to_add)-1)
 
             missions[slot] = missions_to_add.pop(filler)
 
         # Add easy missions into pool and fill in easy slots
         missions_to_add = missions_to_add + mission_pools['easy']
         for slot in easy_slots:
-            filler = random.randint(0, len(missions_to_add) - 1)
+            filler = world.random.randint(0, len(missions_to_add) - 1)
 
             missions[slot] = missions_to_add.pop(filler)
 
         # Add medium missions into pool and fill in medium slots
         missions_to_add = missions_to_add + mission_pools['medium']
         for slot in medium_slots:
-            filler = random.randint(0, len(missions_to_add) - 1)
+            filler = world.random.randint(0, len(missions_to_add) - 1)
 
             missions[slot] = missions_to_add.pop(filler)
 
         # Add hard missions into pool and fill in hard slots
         missions_to_add = missions_to_add + mission_pools['hard']
         for slot in hard_slots:
-            filler = random.randint(0, len(missions_to_add) - 1)
+            filler = world.random.randint(0, len(missions_to_add) - 1)
 
             missions[slot] = missions_to_add.pop(filler)
 
