@@ -29,6 +29,7 @@ Currently, the following games are supported:
 * Donkey Kong Country 3
 * Dark Souls 3
 * Super Mario World
+* Pokémon Red and Blue
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

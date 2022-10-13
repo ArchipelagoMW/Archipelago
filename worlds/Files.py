@@ -99,7 +99,7 @@ class APContainer:
             "player_name": self.player_name,
             "game": self.game,
             # minimum version of patch system expected for patching to be successful
-            "compatible_version": 4,
+            "compatible_version": 5,
             "version": current_patch_version,
         }
 
