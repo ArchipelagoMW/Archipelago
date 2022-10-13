@@ -1,11 +1,10 @@
-import collections
 import typing
 from . import SoETestBase
 
 
 class AccessTest(SoETestBase):
     @staticmethod
-    def _resolveGourds(gourds: typing.Dict[str, collections.abc.Iterable[int]]):
+    def _resolveGourds(gourds: typing.Dict[str, typing.Iterable[int]]):
         return [f"{name} #{number}" for name, numbers in gourds.items() for number in numbers]
 
     def testBronzeAxe(self):

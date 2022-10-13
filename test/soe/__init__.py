@@ -1,4 +1,3 @@
-import collections.abc
 import typing
 import unittest
 from argparse import Namespace
@@ -26,7 +25,7 @@ class SoETestBase(unittest.TestCase):
         for step in gen_steps:
             call_all(self.world, step)
 
-    def collect_all_but(self, item_names: typing.Union[str, collections.abc.Iterable[str]]):
+    def collect_all_but(self, item_names: typing.Union[str, typing.Iterable[str]]):
         if isinstance(item_names, str):
             item_names = (item_names,)
         for item in self.world.get_items():
@@ -39,23 +38,23 @@ class SoETestBase(unittest.TestCase):
                 return item
         raise ValueError("No such item")
 
-    def get_items_by_name(self, item_names: typing.Union[str, collections.abc.Iterable[str]]):
+    def get_items_by_name(self, item_names: typing.Union[str, typing.Iterable[str]]):
         if isinstance(item_names, str):
             item_names = (item_names,)
         return [item for item in self.world.itempool if item.name in item_names]
 
-    def collect_by_name(self, item_names: typing.Union[str, collections.abc.Iterable[str]]):
+    def collect_by_name(self, item_names: typing.Union[str, typing.Iterable[str]]):
         items = self.get_items_by_name(item_names)
         self.collect(items)
         return items
 
-    def collect(self, items: typing.Union[Item, collections.abc.Iterable[Item]]):
+    def collect(self, items: typing.Union[Item, typing.Iterable[Item]]):
         if isinstance(items, Item):
             items = (items,)
         for item in items:
             self.world.state.collect(item)
 
-    def remove(self, items: typing.Union[Item, collections.abc.Iterable[Item]]):
+    def remove(self, items: typing.Union[Item, typing.Iterable[Item]]):
         if isinstance(items, Item):
             items = (items,)
         for item in items:
