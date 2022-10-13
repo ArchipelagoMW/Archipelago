@@ -1,5 +1,8 @@
 from typing import NamedTuple, Dict, List
 
+from BaseClasses import MultiWorld
+from .Options import get_option_value
+
 no_build_regions_list = ["Liberation Day", "Breakout", "Ghost of a Chance", "Piercing the Shroud", "Whispers of Doom",
                          "Belly of the Beast"]
 easy_regions_list = ["The Outlaws", "Zero Hour", "Evacuation", "Outbreak", "Smash and Grab", "Devil's Playground"]
@@ -115,9 +118,9 @@ mini_grid_order = [
     FillMission("medium", [1, 5], "Colonist", or_requirements=True),
     FillMission("easy", [0], "Artifact"),
     FillMission("medium", [1, 3], "Artifact", or_requirements=True),
-    FillMission("hard", [2, 4, 8], "Artifact", or_requirements=True),
+    FillMission("hard", [2, 4], "Artifact", or_requirements=True),
     FillMission("medium", [3, 7], "Covert", or_requirements=True),
-    FillMission("hard", [4, 6, 8], "Covert", or_requirements=True),
+    FillMission("hard", [4, 6], "Covert", or_requirements=True),
     FillMission("all_in", [5, 7], "Covert", or_requirements=True)
 ]
 
@@ -174,7 +177,6 @@ vanilla_mission_req_table = {
 lookup_id_to_mission: Dict[int, str] = {
     data.id: mission_name for mission_name, data in vanilla_mission_req_table.items() if data.id}
 
-
 starting_mission_locations = {
     "Liberation Day": "Liberation Day: Victory",
     "Breakout": "Breakout: Victory",
@@ -186,3 +188,15 @@ starting_mission_locations = {
     "Evacuation": "Evacuation: First Chysalis",
     "Devil's Playground": "Devil's Playground: Tosh's Miners"
 }
+
+advanced_starting_mission_locations = {
+    "Smash and Grab": "Smash and Grab: First Relic",
+    "The Great Train Robbery": "The Great Train Robbery: North Defiler"
+}
+
+
+def get_starting_mission_locations(world: MultiWorld, player: int) -> set[str]:
+    if get_option_value(world, player, 'required_tactics') > 0:
+        return {**starting_mission_locations, **advanced_starting_mission_locations}
+    else:
+        return starting_mission_locations

@@ -1,6 +1,6 @@
 from typing import Dict
 from BaseClasses import MultiWorld
-from Options import Choice, Option, DefaultOnToggle, ItemSet
+from Options import Choice, Option, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range
 
 
 class GameDifficulty(Choice):
@@ -43,8 +43,7 @@ class MissionOrder(Choice):
     Grid:  A 4x4 grid of random missions.  Start at the top left and forge a path towards All-In.
     Mini Grid:  A 3x3 version of Grid.
     Blitz:  10 random missions that open up very quickly.
-    Gauntlet: Linear series of 7 random missions to complete the campaign.
-    """
+    Gauntlet: Linear series of 7 random missions to complete the campaign."""
     display_name = "Mission Order"
     option_vanilla = 0
     option_vanilla_shuffled = 1
@@ -57,16 +56,15 @@ class MissionOrder(Choice):
 
 class ShuffleProtoss(DefaultOnToggle):
     """Determines if the 3 protoss missions are included in the shuffle if Vanilla mission order is not enabled.
-    On Vanilla Shuffled, the 3 protoss missions will be in their normal position on the Prophecy chain if not shuffled.
-    On reduced mission settings, the 3 protoss missions will not appear and Protoss units are removed from the pool if not shuffled.
-    """
+    If turned off with Vanilla Shuffled, the 3 protoss missions will be in their normal position on the Prophecy chain if not shuffled.
+    If turned off with reduced mission settings, the 3 protoss missions will not appear and Protoss units are removed from the pool."""
     display_name = "Shuffle Protoss Missions"
 
 
 class RelegateNoBuildMissions(DefaultOnToggle):
     """Determines if the 5 no-build missions are included in the shuffle if Vanilla mission order is not enabled.
-    On Vanilla Shuffled, one no-build mission will be placed as the first mission and the rest will be placed at the end of optional routes.
-    On reduced mission settings, the 5 no-build missions will not appear."""
+    If turned on with Vanilla Shuffled, one no-build mission will be placed as the first mission and the rest will be placed at the end of optional routes.
+    If turned on with reduced mission settings, the 5 no-build missions will not appear."""
     display_name = "Relegate No-Build Missions"
 
 
@@ -75,14 +73,38 @@ class EarlyUnit(DefaultOnToggle):
     display_name = "Early Unit"
 
 
+class RequiredTactics(Choice):
+    """Determines the maximum tactical difficulty of the seed (separate from mission difficulty).  Higher settings increase randomness.
+    Standard:  All missions can be completed with good micro and macro.
+    Advanced:  Completing missions may require relying on starting units and difficult-to-use units.
+    No Logic:  Units and upgrades may be placed anywhere.  LIKELY TO RENDER THE RUN IMPOSSIBLE ON HARDER DIFFICULTIES!"""
+    display_name = "Required Tactics"
+    option_standard = 0
+    option_advanced = 1
+    option_no_logic = 2
+
+
+class UnitsAlwaysHaveUpgrades(Toggle):
+    """If turned on, both upgrades will be present for each unit and structure in the seed.
+    This usually results in fewer units."""
+    display_name = "Units Always Have Upgrades"
+
+
 class LockedItems(ItemSet):
-    """Guarantees that these items will appear in your world"""
+    """Guarantees that these items will be unlockable"""
     display_name = "Locked Items"
 
 
 class ExcludedItems(ItemSet):
-    """Guarantees that these items will not appear in your world"""
+    """Guarantees that these items will not be unlockable"""
     display_name = "Excluded Items"
+
+
+class ExcludedMissions(OptionSet):
+    """Guarantees that these missions will not appear in the campaign
+    Only applies on shortened mission orders.
+    It may be impossible to build a valid campaign if too many missions are excluded."""
+    display_name = "Excluded Missions"
 
 
 # noinspection PyTypeChecker
@@ -95,15 +117,27 @@ sc2wol_options: Dict[str, Option] = {
     "shuffle_protoss": ShuffleProtoss,
     "relegate_no_build": RelegateNoBuildMissions,
     "early_unit": EarlyUnit,
+    "required_tactics": RequiredTactics,
+    "units_always_have_upgrades": UnitsAlwaysHaveUpgrades,
     "locked_items": LockedItems,
-    "excluded_items": ExcludedItems
+    "excluded_items": ExcludedItems,
+    "excluded_missions": ExcludedMissions
 }
 
 
 def get_option_value(world: MultiWorld, player: int, name: str) -> int:
     option = getattr(world, name, None)
 
-    if option == None:
+    if option is None:
         return 0
 
     return int(option[player].value)
+
+
+def get_option_set_value(world: MultiWorld, player: int, name: str) -> int:
+    option = getattr(world, name, None)
+
+    if option is None:
+        return set()
+
+    return option[player].value

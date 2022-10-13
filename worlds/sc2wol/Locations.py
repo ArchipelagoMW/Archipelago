@@ -1,5 +1,6 @@
 from typing import List, Tuple, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld
+from .Options import get_option_value
 
 from BaseClasses import Location
 
@@ -19,6 +20,7 @@ class LocationData(NamedTuple):
 
 def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[LocationData, ...]:
     # Note: rules which are ended with or True are rules identified as needed later when restricted units is an option
+    logic_level = get_option_value(world, player, 'required_tactics')
     location_table: List[LocationData] = [
         LocationData("Liberation Day", "Liberation Day: Victory", SC2WOL_LOC_ID_OFFSET + 100),
         LocationData("Liberation Day", "Liberation Day: First Statue", SC2WOL_LOC_ID_OFFSET + 101),
@@ -119,10 +121,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Supernova", "Supernova: East Relic", SC2WOL_LOC_ID_OFFSET + 1104,
                      lambda state: state._sc2wol_beats_protoss_deathball(world, player)),
         LocationData("Maw of the Void", "Maw of the Void: Victory", SC2WOL_LOC_ID_OFFSET + 1200,
-                     lambda state: state.has('Battlecruiser', player) or
-                                   state._sc2wol_has_air(world, player) and
-                                   state._sc2wol_has_competent_anti_air(world, player) and
-                                   state.has('Science Vessel', player)),
+                     lambda state: state._sc2wol_survives_rip_field(world, player)),
         LocationData("Maw of the Void", "Maw of the Void: Landing Zone Cleared", SC2WOL_LOC_ID_OFFSET + 1201),
         LocationData("Maw of the Void", "Maw of the Void: Expansion Prisoners", SC2WOL_LOC_ID_OFFSET + 1202,
                      lambda state: state._sc2wol_survives_rip_field(world, player)),
@@ -252,9 +251,13 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
 
     beat_events = []
 
-    for location_data in location_table:
-        if location_data.name.endswith((": Victory", ": Defeat")):
+    for i in range(len(location_table)):
+        # Removing all item-based logic on No Logic
+        if logic_level == 2:
+            location_table[i] = location_table[i]._replace(rule=lambda state: True)
+        # Generating Beat event locations
+        if location_table[i].name.endswith((": Victory", ": Defeat")):
             beat_events.append(
-                location_data._replace(name="Beat " + location_data.name.rsplit(": ", 1)[0], code=None)
+                location_table[i]._replace(name="Beat " + location_table[i].name.rsplit(": ", 1)[0], code=None)
             )
     return tuple(location_table + beat_events)
