@@ -613,61 +613,64 @@ class OOTWorld(World):
             "Gerudo Training Ground Maze Path Final Chest", "Gerudo Training Ground MQ Ice Arrows Chest",
         ]
 
+        def get_names(items):
+            for item in items:
+                yield item.name
+
         # Place/set rules for dungeon items
         itempools = {
-            'dungeon': [],
-            'overworld': [],
-            'any_dungeon': [],
+            'dungeon': set(),
+            'overworld': set(),
+            'any_dungeon': set(),
         }
         any_dungeon_locations = []
         for dungeon in self.dungeons:
-            itempools['dungeon'] = []
+            itempools['dungeon'] = set()
             # Put the dungeon items into their appropriate pools.
             # Build in reverse order since we need to fill boss key first and pop() returns the last element
             if self.shuffle_mapcompass in itempools:
-                itempools[self.shuffle_mapcompass].extend(dungeon.dungeon_items)
+                itempools[self.shuffle_mapcompass].update(get_names(dungeon.dungeon_items))
             if self.shuffle_smallkeys in itempools:
-                itempools[self.shuffle_smallkeys].extend(dungeon.small_keys)
+                itempools[self.shuffle_smallkeys].update(get_names(dungeon.small_keys))
             shufflebk = self.shuffle_bosskeys if dungeon.name != 'Ganons Castle' else self.shuffle_ganon_bosskey
             if shufflebk in itempools:
-                itempools[shufflebk].extend(dungeon.boss_key)
+                itempools[shufflebk].update(get_names(dungeon.boss_key))
 
             # We can't put a dungeon item on the end of a dungeon if a song is supposed to go there. Make sure not to include it.
             dungeon_locations = [loc for region in dungeon.regions for loc in region.locations
                                  if loc.item is None and (
                                          self.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations)]
             if itempools['dungeon']:  # only do this if there's anything to shuffle
-                for item in itempools['dungeon']:
+                dungeon_itempool = [item for item in self.world.itempool if item.player == self.player and item.name in itempools['dungeon']]
+                for item in dungeon_itempool:
                     self.world.itempool.remove(item)
                 self.world.random.shuffle(dungeon_locations)
                 fill_restrictive(self.world, self.world.get_all_state(False), dungeon_locations,
-                                 itempools['dungeon'], True, True)
+                                 dungeon_itempool, True, True)
             any_dungeon_locations.extend(dungeon_locations)  # adds only the unfilled locations
 
         # Now fill items that can go into any dungeon. Retrieve the Gerudo Fortress keys from the pool if necessary
         if self.shuffle_fortresskeys == 'any_dungeon':
-            fortresskeys = filter(lambda item: item.player == self.player and item.type == 'HideoutSmallKey',
-                                  self.world.itempool)
-            itempools['any_dungeon'].extend(fortresskeys)
+            itempools['any_dungeon'].add('Small Key (Thieves Hideout)')
         if itempools['any_dungeon']:
-            for item in itempools['any_dungeon']:
+            any_dungeon_itempool = [item for item in self.world.itempool if item.player == self.player and item.name in itempools['any_dungeon']]
+            for item in any_dungeon_itempool:
                 self.world.itempool.remove(item)
-            itempools['any_dungeon'].sort(key=lambda item:
-            {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'HideoutSmallKey': 1}.get(item.type, 0))
+            any_dungeon_itempool.sort(key=lambda item:
+                {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'HideoutSmallKey': 1}.get(item.type, 0))
             self.world.random.shuffle(any_dungeon_locations)
             fill_restrictive(self.world, self.world.get_all_state(False), any_dungeon_locations,
-                             itempools['any_dungeon'], True, True)
+                             any_dungeon_itempool, True, True)
 
         # If anything is overworld-only, fill into local non-dungeon locations
         if self.shuffle_fortresskeys == 'overworld':
-            fortresskeys = filter(lambda item: item.player == self.player and item.type == 'HideoutSmallKey',
-                                  self.world.itempool)
-            itempools['overworld'].extend(fortresskeys)
+            itempools['overworld'].add('Small Key (Thieves Hideout)')
         if itempools['overworld']:
-            for item in itempools['overworld']:
+            overworld_itempool = [item for item in self.world.itempool if item.player == self.player and item.name in itempools['overworld']]
+            for item in overworld_itempool:
                 self.world.itempool.remove(item)
-            itempools['overworld'].sort(key=lambda item:
-            {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'HideoutSmallKey': 1}.get(item.type, 0))
+            overworld_itempool.sort(key=lambda item:
+                {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'HideoutSmallKey': 1}.get(item.type, 0))
             non_dungeon_locations = [loc for loc in self.get_locations() if
                                      not loc.item and loc not in any_dungeon_locations and
                                      (loc.type != 'Shop' or loc.name in self.shop_prices) and
@@ -675,7 +678,7 @@ class OOTWorld(World):
                                      (loc.name not in dungeon_song_locations or self.shuffle_song_items != 'dungeon')]
             self.world.random.shuffle(non_dungeon_locations)
             fill_restrictive(self.world, self.world.get_all_state(False), non_dungeon_locations,
-                             itempools['overworld'], True, True)
+                             overworld_itempool, True, True)
 
         # Place songs
         # 5 built-in retries because this section can fail sometimes
@@ -796,6 +799,10 @@ class OOTWorld(World):
                     not loc.show_in_spoiler or oot_is_item_of_type(loc.item, 'Shop')
                     or (self.skip_child_zelda and loc.name in ['HC Zeldas Letter', 'Song from Impa'])):
                 loc.address = None
+
+    # Handle item-linked dungeon items and songs
+    def stage_pre_fill(cls):
+        pass
 
     def generate_output(self, output_directory: str):
         if self.hints != 'none':
