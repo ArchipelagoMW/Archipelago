@@ -14,9 +14,8 @@ import Utils
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
 
-from worlds.pokemon_rb.locations import get_locations
+from worlds.pokemon_rb.locations import location_data
 
-location_data = get_locations()
 location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}, "list": {}}
 location_bytes_bits = {}
 for location in location_data:
