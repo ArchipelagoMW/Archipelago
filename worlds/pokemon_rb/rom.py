@@ -112,6 +112,10 @@ def process_static_pokemon(self):
                     ["Static Pokemon", "Missable Pokemon"]]
     legendary_mons = [slot.original_item for slot in legendary_slots]
 
+    tower_6F_mons = set()
+    for i in range(1, 11):
+        tower_6F_mons.add(self.world.get_location(f"Pokemon Tower 6F - Wild Pokemon - {i}", self.player).item.name)
+
     mons_list = [pokemon for pokemon in poke_data.first_stage_pokemon if pokemon not in poke_data.legendary_pokemon
                  or self.world.randomize_legendary_pokemon[self.player].value == 3]
     if self.world.randomize_legendary_pokemon[self.player].value == 0:
@@ -126,6 +130,7 @@ def process_static_pokemon(self):
     elif self.world.randomize_legendary_pokemon[self.player].value == 2:
         static_slots = static_slots + legendary_slots
         self.world.random.shuffle(static_slots)
+        static_slots.sort(key=lambda s: 0 if s.name == "Pokemon Tower 6F - Restless Soul" else 1)
         while legendary_slots:
             swap_slot = legendary_slots.pop()
             slot = static_slots.pop()
@@ -147,8 +152,12 @@ def process_static_pokemon(self):
         if not randomize_type:
             location.place_locked_item(self.create_item(slot_type + " " + slot.original_item))
         else:
-            location.place_locked_item(self.create_item(slot_type + " " +
-                                             randomize_pokemon(self, slot.original_item, mons_list, randomize_type)))
+            mon = self.create_item(slot_type + " " +
+                                       randomize_pokemon(self, slot.original_item, mons_list, randomize_type))
+            while location.name == "Pokemon Tower 6F - Restless Soul" and mon in tower_6F_mons:
+                mon = self.create_item(slot_type + " " + randomize_pokemon(self, slot.original_item, mons_list,
+                                                                              randomize_type))
+            location.place_locked_item(mon)
 
     for slot in starter_slots:
         location = self.world.get_location(slot.name, self.player)
@@ -158,7 +167,8 @@ def process_static_pokemon(self):
             location.place_locked_item(self.create_item(slot_type + " " + slot.original_item))
         else:
             location.place_locked_item(self.create_item(slot_type + " " +
-                                             randomize_pokemon(self, slot.original_item, mons_list, randomize_type)))
+                                       randomize_pokemon(self, slot.original_item, mons_list, randomize_type)))
+
 
 def process_wild_pokemon(self):
 
@@ -172,6 +182,12 @@ def process_wild_pokemon(self):
         locations = []
         for slot in encounter_slots:
             mon = randomize_pokemon(self, slot.original_item, mons_list, self.world.randomize_wild_pokemon[self.player].value)
+            # if static Pokemon are not randomized, we make sure nothing on Pokemon Tower 6F is a Marowak
+            # if static Pokemon are randomized we deal with that during static encounter randomization
+            while (self.world.randomize_static_pokemon[self.player].value == 0 and mon == "Marowak"
+                   and "Pokemon Tower 6F" in slot.name):
+                # to account for the possibility that only one ground type Pokemon exists, match only stats for this fix
+                mon = randomize_pokemon(self, slot.original_item, mons_list, 2)
             placed_mons[mon] += 1
             location = self.world.get_location(slot.name, self.player)
             location.item = self.create_item(mon)
@@ -293,8 +309,9 @@ def process_pokemon_data(self):
                     chances = [[50, mon_data["type1"]], [80, mon_data["type2"]], [85, "Normal"]]
             else:
                 chances = []
-            moves = set(poke_data.moves.keys())
-            moves -= set(["No Move"] + poke_data.hm_moves)
+            moves = list(poke_data.moves.keys())
+            for move in ["No Move"] + poke_data.hm_moves:
+                moves.remove(move)
             mon_data["start move 1"] = get_move(moves, chances, self.world.random, True)
             for i in range(2, 5):
                 if mon_data[f"start move {i}"] != "No Move" or self.world.start_with_four_moves[
@@ -462,7 +479,7 @@ def generate_output(self, output_directory: str):
             matchup[2] = random.choice([0] + ([5, 20] * 5))
     elif self.world.randomize_type_matchup_type_effectiveness[self.player].value == 3:
         for matchup in chart:
-            matchup[2] = self.world.random.choice([i for i in range(0, 21) if i != 10])
+            matchup[2] = random.choice([i for i in range(0, 21) if i != 10])
     type_loc = rom_addresses["Type_Chart"]
     for matchup in chart:
         data[type_loc] = poke_data.type_ids[matchup[0]]

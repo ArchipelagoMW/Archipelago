@@ -130,8 +130,6 @@ class PokemonRedBlueWorld(World):
                     locations.append(location)
             self.world.random.choice(locations).place_locked_item(item)
 
-
-
         if not self.world.badgesanity[self.player].value:
             self.world.non_local_items[self.player].value -= self.item_name_groups["Badges"]
             for i in range(5):
