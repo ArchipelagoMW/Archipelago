@@ -67,7 +67,11 @@ def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"],
 
 def forbid_item(location: "BaseClasses.Location", item: str, player: int):
     old_rule = location.item_rule
-    location.item_rule = lambda i: (i.name != item or i.player != player) and old_rule(i)
+    # empty rule
+    if old_rule is location.__class__.item_rule:
+        location.item_rule = lambda i: i.name != item or i.player != player
+    else:
+        location.item_rule = lambda i: (i.name != item or i.player != player) and old_rule(i)
 
 
 def forbid_items_for_player(location: "BaseClasses.Location", items: typing.Set[str], player: int):
