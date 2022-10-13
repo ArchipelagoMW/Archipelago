@@ -74,7 +74,6 @@ def locality_rules(world: MultiWorld):
                     i.name not in sending_blockers[i.player] and old_rule(i)
 
 
-
 def exclusion_rules(world: MultiWorld, player: int, exclude_locations: typing.Set[str]) -> None:
     for loc_name in exclude_locations:
         try:
