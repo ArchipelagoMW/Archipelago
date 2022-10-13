@@ -412,17 +412,6 @@ class OOTWorld(World):
                         self.shop_prices[location.name] = int(self.world.random.betavariate(1.5, 2) * 60) * 5
 
     def fill_bosses(self, bossCount=9):
-        rewardlist = (
-            'Kokiri Emerald',
-            'Goron Ruby',
-            'Zora Sapphire',
-            'Forest Medallion',
-            'Fire Medallion',
-            'Water Medallion',
-            'Spirit Medallion',
-            'Shadow Medallion',
-            'Light Medallion'
-        )
         boss_location_names = (
             'Queen Gohma',
             'King Dodongo',
@@ -434,7 +423,7 @@ class OOTWorld(World):
             'Twinrova',
             'Links Pocket'
         )
-        boss_rewards = [self.create_item(reward) for reward in rewardlist]
+        boss_rewards = [item for item in self.itempool if item.type == 'DungeonReward']
         boss_locations = [self.world.get_location(loc, self.player) for loc in boss_location_names]
 
         placed_prizes = [loc.item.name for loc in boss_locations if loc.item is not None]
@@ -447,9 +436,8 @@ class OOTWorld(World):
             self.world.random.shuffle(prize_locs)
             item = prizepool.pop()
             loc = prize_locs.pop()
-            self.world.push_item(loc, item, collect=False)
-            loc.locked = True
-            loc.event = True
+            loc.place_locked_item(item)
+            self.world.itempool.remove(item)
 
     def create_item(self, name: str):
         if name in item_table:
@@ -496,6 +484,10 @@ class OOTWorld(World):
         # Generate itempool
         generate_itempool(self)
         add_dungeon_items(self)
+        # Add dungeon rewards
+        rewardlist = sorted(list(self.item_name_groups['rewards']))
+        self.itempool += map(self.create_item, rewardlist)
+
         junk_pool = get_junk_pool(self)
         removed_items = []
         # Determine starting items
@@ -1027,7 +1019,7 @@ class OOTWorld(World):
         all_state = self.world.get_all_state(use_cache=False)
         # Remove event progression items
         for item, player in all_state.prog_items:
-            if (item not in item_table or item_table[item][2] is None) and player == self.player:
+            if player == self.player and (item not in item_table or (item_table[item][2] is None and item_table[item][0] != 'DungeonReward')):
                 all_state.prog_items[(item, player)] = 0
         # Remove all events and checked locations
         all_state.locations_checked = {loc for loc in all_state.locations_checked if loc.player != self.player}

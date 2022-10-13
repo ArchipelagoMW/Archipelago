@@ -343,6 +343,27 @@ priority_entrance_table = {
 }
 
 
+# These hint texts have more than one entrance, so they are OK for impa's house and potion shop
+multi_interior_regions = {
+    'Kokiri Forest',
+    'Lake Hylia',
+    'the Market',
+    'Kakariko Village',
+    'Lon Lon Ranch',
+}
+
+interior_entrance_bias = {
+    'Kakariko Village -> Kak Potion Shop Front': 4,
+    'Kak Backyard -> Kak Potion Shop Back': 4,
+    'Kakariko Village -> Kak Impas House': 3,
+    'Kak Impas Ledge -> Kak Impas House Back': 3,
+    'Goron City -> GC Shop': 2,
+    'Zoras Domain -> ZD Shop': 2,
+    'Market Entrance -> Market Guard House': 2,
+    'ToT Entrance -> Temple of Time': 1,
+}
+
+
 class EntranceShuffleError(Exception):
     pass
 
@@ -500,7 +521,7 @@ def shuffle_random_entrances(ootworld):
             delete_target_entrance(remaining_target)
 
     for pool_type, entrance_pool in one_way_entrance_pools.items():
-        shuffle_entrance_pool(ootworld, entrance_pool, one_way_target_entrance_pools[pool_type], locations_to_ensure_reachable, all_state, none_state, check_all=True, retry_count=5)
+        shuffle_entrance_pool(ootworld, pool_type, entrance_pool, one_way_target_entrance_pools[pool_type], locations_to_ensure_reachable, all_state, none_state, check_all=True, retry_count=5)
         replaced_entrances = [entrance.replaces for entrance in entrance_pool]
         for remaining_target in chain.from_iterable(one_way_target_entrance_pools.values()):
             if remaining_target.replaces in replaced_entrances:
@@ -510,7 +531,7 @@ def shuffle_random_entrances(ootworld):
 
     # Shuffle all entrance pools, in order
     for pool_type, entrance_pool in entrance_pools.items():
-        shuffle_entrance_pool(ootworld, entrance_pool, target_entrance_pools[pool_type], locations_to_ensure_reachable, all_state, none_state)
+        shuffle_entrance_pool(ootworld, pool_type, entrance_pool, target_entrance_pools[pool_type], locations_to_ensure_reachable, all_state, none_state, check_all=True)
 
     # Multiple checks after shuffling to ensure everything is OK
     # Check that all entrances hook up correctly
@@ -596,7 +617,7 @@ def place_one_way_priority_entrance(ootworld, priority_name, allowed_regions, al
     raise EntranceShuffleError(f'Unable to place priority one-way entrance for {priority_name} in world {ootworld.player}')
 
 
-def shuffle_entrance_pool(ootworld, entrance_pool, target_entrances, locations_to_ensure_reachable, all_state, none_state, check_all=False, retry_count=20):
+def shuffle_entrance_pool(ootworld, pool_type, entrance_pool, target_entrances, locations_to_ensure_reachable, all_state, none_state, check_all=False, retry_count=20):
     
     restrictive_entrances, soft_entrances = split_entrances_by_requirements(ootworld, entrance_pool, target_entrances)
 
@@ -604,11 +625,11 @@ def shuffle_entrance_pool(ootworld, entrance_pool, target_entrances, locations_t
         retry_count -= 1
         rollbacks = []
         try:
-            shuffle_entrances(ootworld, restrictive_entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state)
+            shuffle_entrances(ootworld, pool_type+'Rest', restrictive_entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state)
             if check_all:
-                shuffle_entrances(ootworld, soft_entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state)
+                shuffle_entrances(ootworld, pool_type+'Soft', soft_entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state)
             else:
-                shuffle_entrances(ootworld, soft_entrances, target_entrances, rollbacks, set(), all_state, none_state)
+                shuffle_entrances(ootworld, pool_type+'Soft', soft_entrances, target_entrances, rollbacks, set(), all_state, none_state)
 
             validate_world(ootworld, None, locations_to_ensure_reachable, all_state, none_state)
             for entrance, target in rollbacks: 
@@ -621,12 +642,16 @@ def shuffle_entrance_pool(ootworld, entrance_pool, target_entrances, locations_t
 
     raise EntranceShuffleError(f'Entrance placement attempt count exceeded for world {ootworld.player}')
 
-def shuffle_entrances(ootworld, entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state):
+def shuffle_entrances(ootworld, pool_type, entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state):
     ootworld.world.random.shuffle(entrances)
     for entrance in entrances:
         if entrance.connected_region != None:
             continue
         ootworld.world.random.shuffle(target_entrances)
+        # Here we deliberately introduce bias by prioritizing certain interiors, i.e. the ones most likely to cause problems.
+        # success rate over randomization
+        if pool_type in {'InteriorSoft', 'MixedSoft'}:
+            target_entrances.sort(reverse=True, key=lambda entrance: interior_entrance_bias.get(entrance.replaces.name, 0))
         for target in target_entrances:
             if target.connected_region == None:
                 continue
@@ -715,25 +740,33 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
 
     # Check if all locations are reachable if not beatable-only or game is not yet complete
     if locations_to_ensure_reachable:
-        if world.accessibility[player].current_key != 'minimal' or not world.can_beat_game(all_state):
-            for loc in locations_to_ensure_reachable:
-                if not all_state.can_reach(loc, 'Location', player):
-                    raise EntranceShuffleError(f'{loc} is unreachable')
+        for loc in locations_to_ensure_reachable:
+            if not all_state.can_reach(loc, 'Location', player):
+                raise EntranceShuffleError(f'{loc} is unreachable')
 
     if ootworld.shuffle_interior_entrances and (ootworld.misc_hints or ootworld.hints != 'none') and \
         (entrance_placed == None or entrance_placed.type in ['Interior', 'SpecialInterior']):
         # Ensure Kak Potion Shop entrances are in the same hint area so there is no ambiguity as to which entrance is used for hints
-        potion_front_entrance = get_entrance_replacing(world.get_region('Kak Potion Shop Front', player), 'Kakariko Village -> Kak Potion Shop Front', player)
-        potion_back_entrance = get_entrance_replacing(world.get_region('Kak Potion Shop Back', player), 'Kak Backyard -> Kak Potion Shop Back', player)
-        if potion_front_entrance is not None and potion_back_entrance is not None and not same_hint_area(potion_front_entrance, potion_back_entrance):
+        potion_front = get_entrance_replacing(world.get_region('Kak Potion Shop Front', player), 'Kakariko Village -> Kak Potion Shop Front', player)
+        potion_back = get_entrance_replacing(world.get_region('Kak Potion Shop Back', player), 'Kak Backyard -> Kak Potion Shop Back', player)
+        if potion_front is not None and potion_back is not None and not same_hint_area(potion_front, potion_back):
             raise EntranceShuffleError('Kak Potion Shop entrances are not in the same hint area')
+        elif (potion_front and not potion_back) or (not potion_front and potion_back):
+            # Check the hint area and ensure it's one of the ones with more than one entrance
+            potion_placed_entrance = potion_front if potion_front else potion_back
+            if get_hint_area(potion_placed_entrance) not in multi_interior_regions:
+                raise EntranceShuffleError('Kak Potion Shop entrances can never be in the same hint area')
 
         # When cows are shuffled, ensure the same thing for Impa's House, since the cow is reachable from both sides
         if ootworld.shuffle_cows:
-            impas_front_entrance = get_entrance_replacing(world.get_region('Kak Impas House', player), 'Kakariko Village -> Kak Impas House', player)
-            impas_back_entrance = get_entrance_replacing(world.get_region('Kak Impas House Back', player), 'Kak Impas Ledge -> Kak Impas House Back', player)
-            if impas_front_entrance is not None and impas_back_entrance is not None and not same_hint_area(impas_front_entrance, impas_back_entrance):
+            impas_front = get_entrance_replacing(world.get_region('Kak Impas House', player), 'Kakariko Village -> Kak Impas House', player)
+            impas_back = get_entrance_replacing(world.get_region('Kak Impas House Back', player), 'Kak Impas Ledge -> Kak Impas House Back', player)
+            if impas_front is not None and impas_back is not None and not same_hint_area(impas_front, impas_back):
                 raise EntranceShuffleError('Kak Impas House entrances are not in the same hint area')
+            elif (impas_front and not impas_back) or (not impas_front and impas_back):
+                impas_placed_entrance = impas_front if impas_front else impas_back
+                if get_hint_area(impas_placed_entrance) not in multi_interior_regions:
+                    raise EntranceShuffleError('Kak Impas House entrances can never be in the same hint area')
 
     # Check basic refills, time passing, return to ToT
     if (ootworld.shuffle_special_interior_entrances or ootworld.shuffle_overworld_entrances or ootworld.spawn_positions) and \
@@ -845,3 +878,4 @@ def delete_target_entrance(target):
     if target.parent_region != None:
         target.parent_region.exits.remove(target)
         target.parent_region = None
+    del target
