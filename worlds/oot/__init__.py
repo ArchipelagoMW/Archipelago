@@ -1,7 +1,7 @@
 import logging
 import threading
 import copy
-from collections import Counter
+from collections import Counter, deque
 
 logger = logging.getLogger("Ocarina of Time")
 
@@ -823,18 +823,25 @@ class OOTWorld(World):
 
             # Write entrances to spoiler log
             all_entrances = self.get_shuffled_entrances()
-            all_entrances.sort(key=lambda x: x.name)
-            all_entrances.sort(key=lambda x: x.type)
+            all_entrances.sort(reverse=True, key=lambda x: x.name)
+            all_entrances.sort(reverse=True, key=lambda x: x.type)
             if not self.decouple_entrances:
-                for loadzone in all_entrances:
-                    if loadzone.primary:
-                        entrance = loadzone
+                while all_entrances:
+                    loadzone = all_entrances.pop()
+                    if loadzone.type != 'Overworld':
+                        if loadzone.primary:
+                            entrance = loadzone
+                        else:
+                            entrance = loadzone.reverse
+                        if entrance.reverse is not None:
+                            self.world.spoiler.set_entrance(entrance, entrance.replaces.reverse, 'both', self.player)
+                        else:
+                            self.world.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
                     else:
-                        entrance = loadzone.reverse
-                    if entrance.reverse is not None:
-                        self.world.spoiler.set_entrance(entrance, entrance.replaces.reverse, 'both', self.player)
-                    else:
-                        self.world.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
+                        reverse = loadzone.replaces.reverse
+                        if reverse in all_entrances:
+                            all_entrances.remove(reverse)
+                        self.world.spoiler.set_entrance(loadzone, reverse, 'both', self.player)
             else:
                 for entrance in all_entrances:
                     self.world.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
