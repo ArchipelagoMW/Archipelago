@@ -309,8 +309,9 @@ def process_pokemon_data(self):
                     chances = [[50, mon_data["type1"]], [80, mon_data["type2"]], [85, "Normal"]]
             else:
                 chances = []
-            moves = set(poke_data.moves.keys())
-            moves -= set(["No Move"] + poke_data.hm_moves)
+            moves = list(poke_data.moves.keys())
+            for move in ["No Move"] + poke_data.hm_moves:
+                moves.remove(move)
             mon_data["start move 1"] = get_move(moves, chances, self.world.random, True)
             for i in range(2, 5):
                 if mon_data[f"start move {i}"] != "No Move" or self.world.start_with_four_moves[
