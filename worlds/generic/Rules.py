@@ -67,6 +67,13 @@ def locality_rules(world: MultiWorld):
         for location in world.get_locations():
             if (location.player, location.item_rule) in func_cache:
                 location.item_rule = func_cache[location.player, location.item_rule]
+            # empty rule that just returns True, overwrite
+            elif location.item_rule is location.__class__.item_rule:
+                func_cache[location.player, location.item_rule] = location.item_rule = \
+                    lambda i, sending_blockers = forbid_data[location.player], \
+                                            old_rule = location.item_rule: \
+                    i.name not in sending_blockers[i.player]
+            # special rule, needs to also be fulfilled.
             else:
                 func_cache[location.player, location.item_rule] = location.item_rule = \
                     lambda i, sending_blockers = forbid_data[location.player], \
