@@ -231,7 +231,7 @@ async def gb_sync_task(ctx: GBContext):
 
 
 async def run_game(romfile):
-    auto_start = Utils.get_options()["pkrb_options"].get("rom_start", True)
+    auto_start = Utils.get_options()["pokemon_rb_options"].get("rom_start", True)
     if auto_start is True:
         import webbrowser
         webbrowser.open(romfile)
@@ -243,7 +243,7 @@ async def run_game(romfile):
 async def patch_and_run_game(game_version, patch_file, ctx):
     base_name = os.path.splitext(patch_file)[0]
     comp_path = base_name + '.gb'
-    with open(Utils.local_path(Utils.get_options()["pkrb_options"][f"{game_version}_rom_file"]), "rb") as stream:
+    with open(Utils.local_path(Utils.get_options()["pokemon_rb_options"][f"{game_version}_rom_file"]), "rb") as stream:
         base_rom = bytes(stream.read())
     try:
         with open(Utils.local_path('lib', 'worlds', 'pokemon_rb', f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:

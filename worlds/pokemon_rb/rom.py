@@ -586,7 +586,7 @@ def get_base_rom_bytes(game_version: str, hash: str="") -> bytes:
 
 def get_base_rom_path(game_version: str) -> str:
     options = Utils.get_options()
-    file_name = options["pkrb_options"][f"{game_version}_rom_file"]
+    file_name = options["pokemon_rb_options"][f"{game_version}_rom_file"]
     if not os.path.exists(file_name):
         file_name = Utils.local_path(file_name)
     return file_name

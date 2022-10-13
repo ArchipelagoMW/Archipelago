@@ -138,7 +138,7 @@ dkc3_options:
   # True for operating system default program
   # Alternatively, a path to a program to open the .sfc file with
   rom_start: true
-pkrb_options:
+pokemon_rb_options:
   # File names of the Pokemon Red and Blue roms
   red_rom_file: "Pokemon Red (UE) [S][!].gb"
   blue_rom_file: "Pokemon Blue (UE) [S][!].gb"
