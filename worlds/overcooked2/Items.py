@@ -68,7 +68,7 @@ item_name_to_config_name = {
     "Fire Extinguisher"            : "DisableFireExtinguisher"       ,
     "Bellows"                      : "DisableBellows"                ,
     "Clean Dishes"                 : "PlatesStartDirty"              ,
-    "Control Stick Batteries"     : "DisableControlStick"           ,
+    "Control Stick Batteries"      : "DisableControlStick"           ,
     "Wok Wheels"                   : "DisableWokDrag"                ,
     "Dish Scrubber"                : "WashTimeMultiplier"            ,
     "Burn Leniency"                : "BurnSpeedMultiplier"           ,
