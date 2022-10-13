@@ -127,6 +127,7 @@ class SC2Context(CommonContext):
     items_handling = 0b111
     difficulty = -1
     all_in_choice = 0
+    mission_order = 0
     mission_req_table: typing.Dict[str, MissionInfo] = {}
     announcements = queue.Queue()
     sc2_run_task: typing.Optional[asyncio.Task] = None
@@ -155,6 +156,7 @@ class SC2Context(CommonContext):
             self.mission_req_table = {
                 mission: MissionInfo(**slot_req_table[mission]) for mission in slot_req_table
             }
+            self.mission_order = args["slot_data"]["mission_order"]
 
             self.build_location_to_mission_mapping()
 
@@ -273,7 +275,6 @@ class SC2Context(CommonContext):
                     self.refresh_from_launching = True
 
                     self.mission_panel.clear_widgets()
-
                     if self.ctx.mission_req_table:
                         self.last_checked_locations = self.ctx.checked_locations.copy()
                         self.first_check = False
@@ -291,8 +292,17 @@ class SC2Context(CommonContext):
 
                         for category in categories:
                             category_panel = MissionCategory()
+                            # Vanilla category names
+                            if self.ctx.mission_order in (0, 1, 2):
+                                category_display_name = category
+                            # Grid category names
+                            if self.ctx.mission_order in (3, 4):
+                                category_display_name = ''
+                            # Blitz and Gauntlet category names
+                            if self.ctx.mission_order in (5, 6):
+                                category_display_name = "*" * (wol_default_category_names.index(category) + 1)
                             category_panel.add_widget(
-                                Label(text=category, size_hint_y=None, height=50, outline_width=1))
+                                Label(text=category_display_name, size_hint_y=None, height=50, outline_width=1))
 
                             for mission in categories[category]:
                                 text: str = mission
@@ -437,6 +447,9 @@ wol_default_categories = [
     "Artifact", "Artifact", "Artifact", "Artifact", "Artifact", "Covert", "Covert", "Covert", "Covert",
     "Rebellion", "Rebellion", "Rebellion", "Rebellion", "Rebellion", "Prophecy", "Prophecy", "Prophecy", "Prophecy",
     "Char", "Char", "Char", "Char"
+]
+wol_default_category_names = [
+    "Mar Sara", "Colonist", "Artifact", "Covert", "Rebellion", "Prophecy", "Char"
 ]
 
 
@@ -711,20 +724,15 @@ def calc_available_missions(ctx: SC2Context, unlocks=None):
     return available_missions
 
 
-def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete: int, mission_path: list[str] = []):
+def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete: int):
     """Returns a bool signifying if the mission has all requirements complete and can be done
 
     Arguments:
     ctx -- instance of SC2Context
     locations_to_check -- the mission string name to check
     missions_complete -- an int of how many missions have been completed
+    mission_path -- a list of missions that have already been checked
 """
-    # Tracking mission path to prevent infinite recursion
-    if not mission_path:
-        mission_path = []
-    if mission_name in mission_path:
-        return False
-    mission_path.append(mission_name)
     if len(ctx.mission_req_table[mission_name].required_world) >= 1:
         # A check for when the requirements are being or'd
         or_success = False
@@ -741,8 +749,19 @@ def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete
                 else:
                     req_success = False
 
+            # Grid-specific logic (to avoid long path checks and infinite recursion)
+            if ctx.mission_order in (3, 4):
+                if req_success:
+                    return True
+                else:
+                    if req_mission is ctx.mission_req_table[mission_name].required_world[-1]:
+                        return False
+                    else:
+                        continue
+
             # Recursively check required mission to see if it's requirements are met, in case !collect has been done
-            if not mission_reqs_completed(ctx, list(ctx.mission_req_table)[req_mission - 1], missions_complete, mission_path):
+            # Skipping recursive check on Grid settings to speed up checks and avoid infinite recursion
+            if not mission_reqs_completed(ctx, list(ctx.mission_req_table)[req_mission - 1], missions_complete):
                 if not ctx.mission_req_table[mission_name].or_requirements:
                     return False
                 else:
