@@ -62,10 +62,17 @@ def locality_rules(world: MultiWorld):
                     if sending_player in receiving_group["players"]:
                         forbid(sending_player, receiving_group_id, receiving_group["non_local_items"])
 
+        # create fewer lambda's to save memory and cache misses
+        func_cache = {}
         for location in world.get_locations():
-            location.item_rule = lambda i, sending_blockers = forbid_data[location.player], \
-                                        old_rule = location.item_rule: \
-                i.name not in sending_blockers[i.player] and old_rule(i)
+            if (location.player, location.item_rule) in func_cache:
+                location.item_rule = func_cache[location.player, location.item_rule]
+            else:
+                func_cache[location.player, location.item_rule] = location.item_rule = \
+                    lambda i, sending_blockers = forbid_data[location.player], \
+                                            old_rule = location.item_rule: \
+                    i.name not in sending_blockers[i.player] and old_rule(i)
+
 
 
 def exclusion_rules(world: MultiWorld, player: int, exclude_locations: typing.Set[str]) -> None:
