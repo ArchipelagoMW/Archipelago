@@ -63,8 +63,8 @@ def locality_rules(world: MultiWorld):
                         forbid(sending_player, receiving_group_id, receiving_group["non_local_items"])
 
         for location in world.get_locations():
-            old_rule = location.item_rule
-            location.item_rule = lambda i, sending_blockers = forbid_data[location.player]: \
+            location.item_rule = lambda i, sending_blockers = forbid_data[location.player], \
+                                        old_rule = location.item_rule: \
                 i.name not in sending_blockers[i.player] and old_rule(i)
 
 
