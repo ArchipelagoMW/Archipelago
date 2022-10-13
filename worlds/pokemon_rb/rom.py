@@ -126,6 +126,7 @@ def process_static_pokemon(self):
     elif self.world.randomize_legendary_pokemon[self.player].value == 2:
         static_slots = static_slots + legendary_slots
         self.world.random.shuffle(static_slots)
+        static_slots.sort(key=lambda s: 0 if s.name == "Pokemon Tower 6F - Restless Soul" else 1)
         while legendary_slots:
             swap_slot = legendary_slots.pop()
             slot = static_slots.pop()
