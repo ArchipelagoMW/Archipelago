@@ -59,6 +59,7 @@ Name: "generator/smw";    Description: "Super Mario World ROM Setup"; Types: ful
 Name: "generator/soe";    Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/lttp";   Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
 Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296; Flags: disablenouninstallwarning
+Name: "generator/cv64";   Description: "Castlevania 64 ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 12582912; Flags: disablenouninstallwarning
 Name: "generator/pkmn_r"; Description: "Pokemon Red ROM Setup"; Types: full hosting
 Name: "generator/pkmn_b"; Description: "Pokemon Blue ROM Setup"; Types: full hosting
 Name: "server";           Description: "Server"; Types: full hosting

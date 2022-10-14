@@ -299,7 +299,13 @@ def get_default_options() -> OptionsType:
             "red_rom_file": "Pokemon Red (UE) [S][!].gb",
             "blue_rom_file": "Pokemon Blue (UE) [S][!].gb",
             "rom_start": True
-        }
+        },
+        "cv64_options": {
+            "rom_file": "Castlevania (USA).z64",
+            "sni": "SNI",
+            "rom_start": True,
+        },
+
     }
 
     return options
