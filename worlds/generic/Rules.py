@@ -53,7 +53,7 @@ def set_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"],
     spot.access_rule = rule
 
 
-def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule, combine='and'):
+def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule, combine="and"):
     old_rule = spot.access_rule
     # empty rule, replace instead of add
     if old_rule is spot.__class__.access_rule:
