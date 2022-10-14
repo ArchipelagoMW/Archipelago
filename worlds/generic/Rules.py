@@ -57,7 +57,7 @@ def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"],
     old_rule = spot.access_rule
     # empty rule, replace instead of add
     if old_rule is spot.__class__.access_rule:
-        spot.access_rule = rule
+        spot.access_rule = rule if combine == "and" else old_rule
     else:
         if combine == "and":
             spot.access_rule = lambda state: rule(state) and old_rule(state)
