@@ -2,8 +2,8 @@ local socket = require("socket")
 local json = require('json')
 local math = require('math')
 
-local last_modified_date = '2022-05-25' -- Should be the last modified date
-local script_version = 1
+local last_modified_date = '2022-07-24' -- Should be the last modified date
+local script_version = 2
 
 --------------------------------------------------
 -- Heavily modified form of RiptideSage's tracker
@@ -1723,6 +1723,11 @@ function get_death_state()
 end
 
 function kill_link()
+    -- market entrance: 27/28/29
+    -- outside ToT: 35/36/37.
+    -- if killed on these scenes the game crashes, so we wait until not on this screen.
+    local scene = global_context:rawget('cur_scene'):rawget()
+    if scene == 27 or scene == 28 or scene == 29 or scene == 35 or scene == 36 or scene == 37 then return end
     mainmemory.write_u16_be(0x11A600, 0)
 end
 
@@ -1824,13 +1829,15 @@ function main()
         elseif (curstate == STATE_UNINITIALIZED) then
             if  (frame % 60 == 0) then
                 server:settimeout(2)
-                print("Attempting to connect")
                 local client, timeout = server:accept()
                 if timeout == nil then
                     print('Initial Connection Made')
                     curstate = STATE_INITIAL_CONNECTION_MADE
                     ootSocket = client
                     ootSocket:settimeout(0)
+                else
+                    print('Connection failed, ensure OoTClient is running and rerun oot_connector.lua')
+                    return
                 end
             end
         end

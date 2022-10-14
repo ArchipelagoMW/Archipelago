@@ -1,0 +1,3 @@
+SMBasepatch_prebuilt:
+- comes exactly from build/vanilla/ directory of https://github.com/lordlou/SMBasepatch
+- keep it in sync with the basepatch repo; do not modify the contents in this repo alone!

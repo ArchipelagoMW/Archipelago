@@ -2,7 +2,7 @@
 from worlds.smz3.TotalSMZ3.Region import Region
 from worlds.smz3.TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
 from worlds.smz3.TotalSMZ3.Item import Item, ItemType
-from yaml import load, Loader
+from Utils import unsafe_parse_yaml
 import random
 import os
 
@@ -13,7 +13,7 @@ class Texts:
     def ParseYamlScripts(resource: str):
         with open(resource, 'rb') as f:
             yaml = str(f.read(), "utf-8")
-        return load(yaml, Loader)
+        return unsafe_parse_yaml(yaml)
 
     @staticmethod        
     def ParseTextScript(resource: str):
@@ -75,7 +75,7 @@ class Texts:
                 }
         if item.IsMap(): name = "Map"
         elif item.IsCompass(): name = "Compass"
-        elif item.IsKeycard(): name = "Keycard"
+        elif item.IsSmMap(): name = "SmMap"
         else: name = nameMap[item.Type]
 
         items = Texts.scripts["Items"]

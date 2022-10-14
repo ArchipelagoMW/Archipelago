@@ -54,18 +54,27 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 Name: "core";             Description: "Core Files"; Types: full hosting playing custom; Flags: fixed
 Name: "generator";        Description: "Generator"; Types: full hosting
 Name: "generator/sm";     Description: "Super Metroid ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
+Name: "generator/dkc3";   Description: "Donkey Kong Country 3 ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
+Name: "generator/smw";    Description: "Super Mario World ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/soe";    Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/lttp";   Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
 Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296; Flags: disablenouninstallwarning
+Name: "generator/pkmn_r"; Description: "Pokemon Red ROM Setup"; Types: full hosting
+Name: "generator/pkmn_b"; Description: "Pokemon Blue ROM Setup"; Types: full hosting
 Name: "server";           Description: "Server"; Types: full hosting
 Name: "client";           Description: "Clients"; Types: full playing
 Name: "client/sni";       Description: "SNI Client"; Types: full playing
 Name: "client/sni/lttp";  Description: "SNI Client - A Link to the Past Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/sni/sm";    Description: "SNI Client - Super Metroid Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/sni/dkc3";  Description: "SNI Client - Donkey Kong Country 3 Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/sni/smw";   Description: "SNI Client - Super Mario World Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/factorio";  Description: "Factorio"; Types: full playing
 Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDiskSpaceRequired: 226894278
 Name: "client/oot";       Description: "Ocarina of Time"; Types: full playing
 Name: "client/ff1";       Description: "Final Fantasy 1"; Types: full playing
+Name: "client/pkmn";      Description: "Pokemon Client"
+Name: "client/pkmn/red";  Description: "Pokemon Client - Pokemon Red Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
+Name: "client/pkmn/blue"; Description: "Pokemon Client - Pokemon Blue Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
 Name: "client/cf";        Description: "ChecksFinder"; Types: full playing
 Name: "client/sc2";       Description: "Starcraft 2"; Types: full playing
 Name: "client/text";      Description: "Text, to !command and chat"; Types: full playing
@@ -76,8 +85,12 @@ NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-mod
 [Files]
 Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"; Flags: external; Components: client/sni/lttp or generator/lttp
 Source: "{code:GetSMROMPath}"; DestDir: "{app}"; DestName: "Super Metroid (JU).sfc"; Flags: external; Components: client/sni/sm or generator/sm
+Source: "{code:GetDKC3ROMPath}"; DestDir: "{app}"; DestName: "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc"; Flags: external; Components: client/sni/dkc3 or generator/dkc3
+Source: "{code:GetSMWROMPath}"; DestDir: "{app}"; DestName: "Super Mario World (USA).sfc"; Flags: external; Components: client/sni/smw or generator/smw
 Source: "{code:GetSoEROMPath}"; DestDir: "{app}"; DestName: "Secret of Evermore (USA).sfc"; Flags: external; Components: generator/soe
 Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: client/oot or generator/oot
+Source: "{code:GetRedROMPath}"; DestDir: "{app}"; DestName: "Pokemon Red (UE) [S][!].gb"; Flags: external; Components: client/pkmn/red or generator/pkmn_r
+Source: "{code:GetBlueROMPath}"; DestDir: "{app}"; DestName: "Pokemon Blue (UE) [S][!].gb"; Flags: external; Components: client/pkmn/blue or generator/pkmn_b
 Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#source_path}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/sni
 Source: "{#source_path}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
@@ -92,6 +105,7 @@ Source: "{#source_path}\ArchipelagoMinecraftClient.exe"; DestDir: "{app}"; Flags
 Source: "{#source_path}\ArchipelagoOoTClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/oot
 Source: "{#source_path}\ArchipelagoOoTAdjuster.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/oot
 Source: "{#source_path}\ArchipelagoFF1Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/ff1
+Source: "{#source_path}\ArchipelagoPokemonClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/pkmn
 Source: "{#source_path}\ArchipelagoChecksFinderClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/cf
 Source: "{#source_path}\ArchipelagoStarcraft2Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sc2
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
@@ -105,6 +119,7 @@ Name: "{group}\{#MyAppName} Factorio Client"; Filename: "{app}\ArchipelagoFactor
 Name: "{group}\{#MyAppName} Minecraft Client"; Filename: "{app}\ArchipelagoMinecraftClient.exe"; Components: client/minecraft
 Name: "{group}\{#MyAppName} Ocarina of Time Client"; Filename: "{app}\ArchipelagoOoTClient.exe"; Components: client/oot
 Name: "{group}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Components: client/ff1
+Name: "{group}\{#MyAppName} Pokemon Client"; Filename: "{app}\ArchipelagoPokemonClient.exe"; Components: client/pkmn
 Name: "{group}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Components: client/cf
 Name: "{group}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Components: client/sc2
 
@@ -115,6 +130,7 @@ Name: "{commondesktop}\{#MyAppName} Factorio Client"; Filename: "{app}\Archipela
 Name: "{commondesktop}\{#MyAppName} Minecraft Client"; Filename: "{app}\ArchipelagoMinecraftClient.exe"; Tasks: desktopicon; Components: client/minecraft
 Name: "{commondesktop}\{#MyAppName} Ocarina of Time Client"; Filename: "{app}\ArchipelagoOoTClient.exe"; Tasks: desktopicon; Components: client/oot
 Name: "{commondesktop}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Tasks: desktopicon; Components: client/ff1
+Name: "{commondesktop}\{#MyAppName} Pokemon Client"; Filename: "{app}\ArchipelagoPokemonClient.exe"; Tasks: desktopicon; Components: client/pkmn
 Name: "{commondesktop}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Tasks: desktopicon; Components: client/cf
 Name: "{commondesktop}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Tasks: desktopicon; Components: client/sc2
 
@@ -143,6 +159,16 @@ Root: HKCR; Subkey: "{#MyAppName}smpatch";                     ValueData: "Archi
 Root: HKCR; Subkey: "{#MyAppName}smpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}smpatch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
 
+Root: HKCR; Subkey: ".apdkc3";                                 ValueData: "{#MyAppName}dkc3patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}dkc3patch";                     ValueData: "Archipelago Donkey Kong Country 3 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}dkc3patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}dkc3patch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
+
+Root: HKCR; Subkey: ".apsmw";                                    ValueData: "{#MyAppName}smwpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}smwpatch";                     ValueData: "Archipelago Super Mario World Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}smwpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}smwpatch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
+
 Root: HKCR; Subkey: ".apsmz3";                                 ValueData: "{#MyAppName}smz3patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}smz3patch";                     ValueData: "Archipelago SMZ3 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}smz3patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
@@ -162,6 +188,16 @@ Root: HKCR; Subkey: ".apz5";                                  ValueData: "{#MyAp
 Root: HKCR; Subkey: "{#MyAppName}n64zpf";                     ValueData: "Archipelago Ocarina of Time Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/oot
 Root: HKCR; Subkey: "{#MyAppName}n64zpf\DefaultIcon";         ValueData: "{app}\ArchipelagoOoTClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/oot
 Root: HKCR; Subkey: "{#MyAppName}n64zpf\shell\open\command";  ValueData: """{app}\ArchipelagoOoTClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/oot
+
+Root: HKCR; Subkey: ".apred";                                    ValueData: "{#MyAppName}pkmnrpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/pkmn/red
+Root: HKCR; Subkey: "{#MyAppName}pkmnrpatch";                     ValueData: "Archipelago Pokemon Red Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/pkmn/red
+Root: HKCR; Subkey: "{#MyAppName}pkmnrpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoPokemonClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/pkmn/red
+Root: HKCR; Subkey: "{#MyAppName}pkmnrpatch\shell\open\command";  ValueData: """{app}\ArchipelagoPokemonClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/pkmn/red
+
+Root: HKCR; Subkey: ".apblue";                                    ValueData: "{#MyAppName}pkmnbpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/pkmn/blue
+Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch";                     ValueData: "Archipelago Pokemon Blue Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/pkmn/blue
+Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoPokemonClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/pkmn/blue
+Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\shell\open\command";  ValueData: """{app}\ArchipelagoPokemonClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/pkmn/blue
 
 Root: HKCR; Subkey: ".archipelago";                              ValueData: "{#MyAppName}multidata";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: server
 Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Archipelago Server Data";       Flags: uninsdeletekey;  ValueType: string;  ValueName: ""; Components: server
@@ -188,7 +224,7 @@ begin
   begin
     // Is the installed version at least the packaged one ?
     Log('VC Redist x64 Version : found ' + strVersion);
-    Result := (CompareStr(strVersion, 'v14.29.30037') < 0);
+    Result := (CompareStr(strVersion, 'v14.32.31332') < 0);
   end
   else
   begin
@@ -206,11 +242,23 @@ var LttPROMFilePage: TInputFileWizardPage;
 var smrom: string;
 var SMRomFilePage: TInputFileWizardPage;
 
+var dkc3rom: string;
+var DKC3RomFilePage: TInputFileWizardPage;
+
+var smwrom: string;
+var SMWRomFilePage: TInputFileWizardPage;
+
 var soerom: string;
 var SoERomFilePage: TInputFileWizardPage;
 
 var ootrom: string;
 var OoTROMFilePage: TInputFileWizardPage;
+
+var redrom: string;
+var RedROMFilePage:  TInputFileWizardPage;
+
+var bluerom: string;
+var BlueROMFilePage:  TInputFileWizardPage;
 
 function GetSNESMD5OfFile(const rom: string): string;
 var data: AnsiString;
@@ -259,6 +307,21 @@ begin
     '.sfc');
 end;
 
+function AddGBRomPage(name: string): TInputFileWizardPage;
+begin
+  Result :=
+    CreateInputFilePage(
+      wpSelectComponents,
+      'Select ROM File',
+      'Where is your ' + name + ' located?',
+      'Select the file, then click Next.');
+
+  Result.Add(
+    'Location of ROM file:',
+    'GB ROM files|*.gb;*.gbc|All files|*.*',
+    '.gb');
+end;
+
 procedure AddOoTRomPage();
 begin
   ootrom := FileSearch('The Legend of Zelda - Ocarina of Time.z64', WizardDirValue());
@@ -295,6 +358,10 @@ begin
     Result := not (LttPROMFilePage.Values[0] = '')
   else if (assigned(SMROMFilePage)) and (CurPageID = SMROMFilePage.ID) then
     Result := not (SMROMFilePage.Values[0] = '')
+  else if (assigned(DKC3ROMFilePage)) and (CurPageID = DKC3ROMFilePage.ID) then
+    Result := not (DKC3ROMFilePage.Values[0] = '')
+  else if (assigned(SMWROMFilePage)) and (CurPageID = SMWROMFilePage.ID) then
+    Result := not (SMWROMFilePage.Values[0] = '')
   else if (assigned(SoEROMFilePage)) and (CurPageID = SoEROMFilePage.ID) then
     Result := not (SoEROMFilePage.Values[0] = '')
   else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
@@ -335,6 +402,38 @@ begin
     Result := '';
  end;
 
+function GetDKC3ROMPath(Param: string): string;
+begin
+  if Length(dkc3rom) > 0 then
+    Result := dkc3rom
+  else if Assigned(DKC3RomFilePage) then
+    begin
+      R := CompareStr(GetSNESMD5OfFile(DKC3ROMFilePage.Values[0]), '120abf304f0c40fe059f6a192ed4f947')
+      if R <> 0 then
+        MsgBox('Donkey Kong Country 3 ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := DKC3ROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+ end;
+
+function GetSMWROMPath(Param: string): string;
+begin
+  if Length(smwrom) > 0 then
+    Result := smwrom
+  else if Assigned(SMWRomFilePage) then
+    begin
+      R := CompareStr(GetSNESMD5OfFile(SMWROMFilePage.Values[0]), 'cdd3c8c37322978ca8669b34bc89c804')
+      if R <> 0 then
+        MsgBox('Super Mario World ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := SMWROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+ end;
+
 function GetSoEROMPath(Param: string): string;
 begin
   if Length(soerom) > 0 then
@@ -367,6 +466,38 @@ begin
     Result := '';
 end;
 
+function GetRedROMPath(Param: string): string;
+begin
+  if Length(redrom) > 0 then
+    Result := redrom
+  else if Assigned(RedRomFilePage) then
+    begin
+      R := CompareStr(GetMD5OfFile(RedROMFilePage.Values[0]), '3d45c1ee9abd5738df46d2bdda8b57dc')
+      if R <> 0 then
+        MsgBox('Pokemon Red ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := RedROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+ end;
+
+function GetBlueROMPath(Param: string): string;
+begin
+  if Length(bluerom) > 0 then
+    Result := bluerom
+  else if Assigned(BlueRomFilePage) then
+    begin
+      R := CompareStr(GetMD5OfFile(BlueROMFilePage.Values[0]), '50927e843568814f7ed45ec4f944bd8b')
+      if R <> 0 then
+        MsgBox('Pokemon Blue ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := BlueROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+ end;
+
 procedure InitializeWizard();
 begin
   AddOoTRomPage();
@@ -379,9 +510,25 @@ begin
   if Length(smrom) = 0 then
     SMRomFilePage:= AddRomPage('Super Metroid (JU).sfc');
 
+  dkc3rom := CheckRom('Donkey Kong Country 3 - Dixie Kong''s Double Trouble! (USA) (En,Fr).sfc', '120abf304f0c40fe059f6a192ed4f947');
+  if Length(dkc3rom) = 0 then
+    DKC3RomFilePage:= AddRomPage('Donkey Kong Country 3 - Dixie Kong''s Double Trouble! (USA) (En,Fr).sfc');
+
+  smwrom := CheckRom('Super Mario World (USA).sfc', 'cdd3c8c37322978ca8669b34bc89c804');
+  if Length(smwrom) = 0 then
+    SMWRomFilePage:= AddRomPage('Super Mario World (USA).sfc');
+
   soerom := CheckRom('Secret of Evermore (USA).sfc', '6e9c94511d04fac6e0a1e582c170be3a');
   if Length(soerom) = 0 then
     SoEROMFilePage:= AddRomPage('Secret of Evermore (USA).sfc');
+
+  redrom := CheckRom('Pokemon Red (UE) [S][!].gb','3d45c1ee9abd5738df46d2bdda8b57dc');
+  if Length(redrom) = 0 then
+    RedROMFilePage:= AddGBRomPage('Pokemon Red (UE) [S][!].gb');
+
+  bluerom := CheckRom('Pokemon Blue (UE) [S][!].gb','50927e843568814f7ed45ec4f944bd8b');
+  if Length(redrom) = 0 then
+    BlueROMFilePage:= AddGBRomPage('Pokemon Blue (UE) [S][!].gb');
 end;
 
 
@@ -392,8 +539,16 @@ begin
     Result := not (WizardIsComponentSelected('client/sni/lttp') or WizardIsComponentSelected('generator/lttp'));
   if (assigned(SMROMFilePage)) and (PageID = SMROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('client/sni/sm') or WizardIsComponentSelected('generator/sm'));
+  if (assigned(DKC3ROMFilePage)) and (PageID = DKC3ROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('client/sni/dkc3') or WizardIsComponentSelected('generator/dkc3'));
+  if (assigned(SMWROMFilePage)) and (PageID = SMWROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('client/sni/smw') or WizardIsComponentSelected('generator/smw'));
   if (assigned(SoEROMFilePage)) and (PageID = SoEROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/soe'));
   if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/oot') or WizardIsComponentSelected('client/oot'));
+  if (assigned(RedROMFilePage)) and (PageID = RedROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('generator/pkmn_r') or WizardIsComponentSelected('client/pkmn/red'));
+  if (assigned(BlueROMFilePage)) and (PageID = BlueROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('generator/pkmn_b') or WizardIsComponentSelected('client/pkmn/blue'));
 end;

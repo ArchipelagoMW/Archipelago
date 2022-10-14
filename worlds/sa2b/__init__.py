@@ -46,10 +46,10 @@ def check_for_impossible_shuffle(shuffled_levels: typing.List[int], gate_0_range
 
 class SA2BWorld(World):
     """
-    Sonic Adventure 2 Battle is an action platforming game. Play as Sonic, Tails, Knuckles, Shadow, Rogue, and Eggman across 31 stages and prevent the destruction of the earth.
+    Sonic Adventure 2 Battle is an action platforming game. Play as Sonic, Tails, Knuckles, Shadow, Rouge, and Eggman across 31 stages and prevent the destruction of the earth.
     """
     game: str = "Sonic Adventure 2 Battle"
-    options = sa2b_options
+    option_definitions = sa2b_options
     topology_present = False
     data_version = 2
 
@@ -282,8 +282,7 @@ class SA2BWorld(World):
             spoiler_handle.writelines(text)
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
-                        restitempool, fill_locations):
+    def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
         if world.get_game_players("Sonic Adventure 2 Battle"):
             progitempool.sort(
                 key=lambda item: 0 if (item.name != 'Emblem') else 1)

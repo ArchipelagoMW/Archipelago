@@ -50,7 +50,7 @@ option_docstrings = {
                             "pool and open their locations for randomization.",
     "RandomizeGrubs": "Randomize Grubs into the item pool and open their locations for randomization.",
     "RandomizeMimics": "Randomize Mimic Grubs into the item pool and open their locations for randomization."
-                      "Mimic Grubs are always placed in your own game.",
+                       "Mimic Grubs are always placed in your own game.",
     "RandomizeMaps": "Randomize Maps into the item pool. This causes Cornifer to give you a message allowing you to see"
                      " and buy an item that is randomized into that location as well.",
     "RandomizeStags": "Randomize Stag Stations unlocks into the item pool as well as placing randomized items "
@@ -222,6 +222,7 @@ class MinimumCharmPrice(Range):
 class MaximumCharmPrice(MinimumCharmPrice):
     """The maximum charm price in the range of prices that an item should cost for Salubra's shop item which also
     carry a charm cost."""
+    display_name = "Maximum Charm Requirement"
     default = 20
 
 
@@ -235,7 +236,7 @@ class MinimumGeoPrice(Range):
 
 class MaximumGeoPrice(Range):
     """The maximum geo price for items in geo shops."""
-    display_name = "Minimum Geo Price"
+    display_name = "Maximum Geo Price"
     range_start = 1
     range_end = 2000
     default = 400
@@ -408,7 +409,6 @@ class DeathLink(Choice):
     shade: DeathLink functions like a normal death if you do not already have a shade, shadeless otherwise.
     """
     option_off = 0
-    alias_false = 0
     alias_no = 0
     alias_true = 1
     alias_on = 1
@@ -434,10 +434,8 @@ class CostSanity(Choice):
     These costs can be in Geo (except Grubfather, Seer and Eggshop), Grubs, Charms, Essence and/or Rancid Eggs
     """
     option_off = 0
-    alias_false = 0
     alias_no = 0
     option_on = 1
-    alias_true = 1
     alias_yes = 1
     option_shopsonly = 2
     option_notshops = 3

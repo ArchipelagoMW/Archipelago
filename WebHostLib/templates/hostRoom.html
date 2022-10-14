@@ -2,6 +2,7 @@
 {% import "macros.html" as macros %}
 {% block head %}
     <title>Multiworld {{ room.id|suuid }}</title>
+    {% if should_refresh %}<meta http-equiv="refresh" content="2">{% endif %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/hostRoom.css") }}"/>
 {% endblock %}
 

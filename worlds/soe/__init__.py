@@ -151,7 +151,7 @@ class SoEWorld(World):
     space station where the final boss must be defeated. 
     """
     game: str = "Secret of Evermore"
-    options = soe_options
+    option_definitions = soe_options
     topology_present = False
     remote_items = False
     data_version = 3
@@ -162,7 +162,7 @@ class SoEWorld(World):
     location_name_to_id, location_id_to_raw = _get_location_mapping()
     item_name_groups = _get_item_grouping()
 
-    trap_types = [name[12:] for name in options if name.startswith('trap_chance_')]
+    trap_types = [name[12:] for name in option_definitions if name.startswith('trap_chance_')]
 
     evermizer_seed: int
     connect_name: str
@@ -283,7 +283,7 @@ class SoEWorld(World):
         self.world.completion_condition[self.player] = lambda state: state.has('Victory', self.player)
         # set Done from goal option once we have multiple goals
         set_rule(self.world.get_location('Done', self.player),
-                 lambda state: state._soe_has(pyevermizer.P_FINAL_BOSS, self.world, self.player))
+                 lambda state: state.soe_has(pyevermizer.P_FINAL_BOSS, self.world, self.player))
         set_rule(self.world.get_entrance('New Game', self.player), lambda state: True)
         for loc in _locations:
             location = self.world.get_location(loc.name, self.player)
@@ -292,7 +292,7 @@ class SoEWorld(World):
     def make_rule(self, requires: typing.List[typing.Tuple[int]]) -> typing.Callable[[typing.Any], bool]:
         def rule(state) -> bool:
             for count, progress in requires:
-                if not state._soe_has(progress, self.world, self.player, count):
+                if not state.soe_has(progress, self.world, self.player, count):
                     return False
             return True
 
@@ -333,13 +333,12 @@ class SoEWorld(World):
                 switches.extend(('--available-fragments', str(self.available_fragments),
                                  '--required-fragments', str(self.required_fragments)))
             rom_file = get_base_rom_path()
-            out_base = output_path(output_directory, f'AP_{self.world.seed_name}_P{self.player}_'
-                                                     f'{self.world.get_file_safe_player_name(self.player)}')
+            out_base = output_path(output_directory, self.world.get_out_file_name_base(self.player))
             out_file = out_base + '.sfc'
             placement_file = out_base + '.txt'
             patch_file = out_base + '.apsoe'
             flags = 'l'  # spoiler log
-            for option_name in self.options:
+            for option_name in self.option_definitions:
                 option = getattr(self.world, option_name)[self.player]
                 if hasattr(option, 'to_flag'):
                     flags += option.to_flag()

@@ -25,7 +25,7 @@ class ArchipIDLEWorld(World):
     """
     game = "ArchipIDLE"
     topology_present = False
-    data_version = 3
+    data_version = 4
     hidden = (datetime.now().month != 4)  # ArchipIDLE is only visible during April
     web = ArchipIDLEWebWorld()
 
@@ -47,13 +47,12 @@ class ArchipIDLEWorld(World):
 
         item_pool = []
         for i in range(100):
-            item = Item(
+            item = ArchipIDLEItem(
                 item_table_copy[i],
                 ItemClassification.progression if i < 20 else ItemClassification.filler,
                 self.item_name_to_id[item_table_copy[i]],
                 self.player
             )
-            item.game = 'ArchipIDLE'
             item_pool.append(item)
 
         self.world.itempool += item_pool
@@ -91,6 +90,10 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
             region.exits.append(Entrance(player, _exit, region))
 
     return region
+
+
+class ArchipIDLEItem(Item):
+    game = "ArchipIDLE"
 
 
 class ArchipIDLELocation(Location):

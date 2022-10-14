@@ -17,7 +17,7 @@ class OriBlindForest(World):
     item_name_to_id = item_table
     location_name_to_id = lookup_name_to_id
 
-    options = options
+    option_definitions = options
 
     hidden = True
 

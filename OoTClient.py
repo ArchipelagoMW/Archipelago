@@ -5,7 +5,8 @@ import multiprocessing
 import subprocess
 from asyncio import StreamReader, StreamWriter
 
-from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, \
+# CommonClient import first to trigger ModuleUpdater
+from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
 import Utils
 from worlds import network_data_package
@@ -48,7 +49,7 @@ deathlink_sent_this_death: we interacted with the multiworld on this death, wait
 
 oot_loc_name_to_id = network_data_package["games"]["Ocarina of Time"]["location_name_to_id"]
 
-script_version: int = 1
+script_version: int = 2
 
 def get_item_value(ap_id):
     return ap_id - 66000
@@ -186,7 +187,7 @@ async def n64_sync_task(ctx: OoTContext):
                     data = await asyncio.wait_for(reader.readline(), timeout=10)
                     data_decoded = json.loads(data.decode())
                     reported_version = data_decoded.get('scriptVersion', 0)
-                    if reported_version == script_version:
+                    if reported_version >= script_version:
                         if ctx.game is not None and 'locations' in data_decoded:
                             # Not just a keep alive ping, parse
                             asyncio.create_task(parse_payload(data_decoded, ctx, False))

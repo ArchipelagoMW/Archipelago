@@ -40,7 +40,7 @@ class TimespinnerWorld(World):
     Travel back in time to change fate itself. Join timekeeper Lunais on her quest for revenge against the empire that killed her family.
     """
 
-    options = timespinner_options
+    option_definitions = timespinner_options
     game = "Timespinner"
     topology_present = True
     remote_items = False

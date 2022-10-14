@@ -15,7 +15,6 @@ def create_dungeons(world, player):
                           dungeon_items, player)
         for item in dungeon.all_items:
             item.dungeon = dungeon
-            item.world = world
         dungeon.boss = BossFactory(default_boss, player) if default_boss else None
         for region in dungeon.regions:
             world.get_region(region, player).dungeon = dungeon

@@ -1,8 +1,8 @@
-from typing import List, Set, Dict, Tuple, Optional, Callable, NamedTuple
+from typing import List, Set, Dict, Tuple, Optional, Callable
 from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Locations import LocationData
 from .Options import get_option_value
-from worlds.sc2wol.MissionTables import MissionInfo, vanilla_shuffle_order, vanilla_mission_req_table, \
+from .MissionTables import MissionInfo, vanilla_shuffle_order, vanilla_mission_req_table, \
     no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list
 import random
 
@@ -200,7 +200,10 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
                     connect(world, player, names, "Menu", missions[i])
                 else:
                     connect(world, player, names, missions[connection], missions[i],
-                            (lambda name: (lambda state: state.has(f"Beat {name}", player)))(missions[connection]))
+                            (lambda name, missions_req: (lambda state: state.has(f"Beat {name}", player) and
+                                                                       state._sc2wol_cleared_missions(world, player,
+                                                                                                      missions_req)))
+                            (missions[connection], vanilla_shuffle_order[i].number))
                     connections.append(connection + 1)
 
             mission_req_table.update({missions[i]: MissionInfo(

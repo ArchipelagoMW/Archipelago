@@ -30,7 +30,7 @@ class LegacyWorld(World):
     But that's OK, because no one is perfect, and you don't have to be to succeed.
     """
     game: str = "Rogue Legacy"
-    options = legacy_options
+    option_definitions = legacy_options
     topology_present = False
     data_version = 3
     required_client_version = (0, 2, 3)

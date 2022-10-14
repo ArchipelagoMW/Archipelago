@@ -21,8 +21,6 @@ class OffOnFullChoice(Choice):
     option_on = 1
     option_full = 2
     alias_chaos = 2
-    alias_false = 0
-    alias_true = 1
 
 
 class Difficulty(EvermizerFlags, Choice):
