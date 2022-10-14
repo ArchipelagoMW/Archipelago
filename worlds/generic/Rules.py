@@ -89,7 +89,7 @@ def add_item_rule(location: "BaseClasses.Location", rule: ItemRule, combine: str
     old_rule = location.item_rule
     # empty rule, replace instead of add
     if old_rule is location.__class__.item_rule:
-        location.item_rule = rule
+        location.item_rule = rule if combine == "and" else old_rule
     else:
         if combine == "and":
             location.item_rule = lambda item: rule(item) and old_rule(item)
