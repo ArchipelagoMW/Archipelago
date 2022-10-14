@@ -30,6 +30,7 @@ Currently, the following games are supported:
 * Dark Souls 3
 * Super Mario World
 * Pokémon Red and Blue
+* Hylics 2
 * Overcooked! 2
 * Zillion
 
