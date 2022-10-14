@@ -138,6 +138,14 @@ dkc3_options:
   # True for operating system default program
   # Alternatively, a path to a program to open the .sfc file with
   rom_start: true
+pokemon_rb_options:
+  # File names of the Pokemon Red and Blue roms
+  red_rom_file: "Pokemon Red (UE) [S][!].gb"
+  blue_rom_file: "Pokemon Blue (UE) [S][!].gb"
+  # Set this to false to never autostart a rom (such as after patching)
+  # True for operating system default program
+  # Alternatively, a path to a program to open the .gb file with
+  rom_start: true
 smw_options:
   # File name of the SMW US rom
   rom_file: "Super Mario World (USA).sfc"
