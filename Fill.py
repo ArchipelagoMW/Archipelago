@@ -278,6 +278,7 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     lock_later = []
 
     def mark_for_locking(location: Location):
+        nonlocal lock_later
         lock_later.append(location)
 
     # "priority fill"
