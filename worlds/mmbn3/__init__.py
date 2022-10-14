@@ -175,7 +175,7 @@ class MMBN3World(World):
         # Set Trade quests
         set_rule(self.world.get_location(LocationName.Hades_GrabBack_K_Trade, self.player),
                  lambda state: state.has(ItemName.GrabBack_K, self.player))
-        set_rule(self.world.get_location(LocationName.DNN_WideSwrd_C_Trade, self.player),
+        set_rule(self.world.get_location(LocationName.Beach_DNN_WideSwrd_C_Trade, self.player),
                  lambda state: state.has(ItemName.WideSwrd_C, self.player))
         set_rule(self.world.get_location(LocationName.Hospital_DynaWav_V_Trade, self.player),
                  lambda state: state.has(ItemName.DynaWave_V, self.player))

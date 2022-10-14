@@ -185,7 +185,7 @@ chipList: typing.List[ItemData] = [
     ItemData(0xB31072, ItemName.Sword_E,           ItemClassification.useful,      ItemType.Chip,  30, ChipCode('E')),
     ItemData(0xB31073, ItemName.Team1_star,        ItemClassification.useful,      ItemType.Chip, 132, ChipCode('*')),
     ItemData(0xB31074, ItemName.Team2_star,        ItemClassification.useful,      ItemType.Chip, 169, ChipCode('*')),
-    ItemData(0xB31075, ItemName.Thndrblt_star,     ItemClassification.useful,      ItemType.Chip, 274, ChipCode('*')),
+    ItemData(0xB31075, ItemName.Thndrblt_star,     ItemClassification.useful,      ItemType.Chip, 275, ChipCode('*')),
     ItemData(0xB31076, ItemName.Tornado_L,         ItemClassification.useful,      ItemType.Chip,  65, ChipCode('L')),
     ItemData(0xB31077, ItemName.Tsunami_star,      ItemClassification.useful,      ItemType.Chip, 274, ChipCode('*')),
     ItemData(0xB31078, ItemName.VarSword_B,        ItemClassification.useful,      ItemType.Chip,  38, ChipCode('B')),

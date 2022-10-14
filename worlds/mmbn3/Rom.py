@@ -151,7 +151,6 @@ class TextArchive:
             new_start_offset = 0x08000000 + len(modified_rom_data)
             offset_byte = int32_to_byte_list_le(new_start_offset)
             modified_rom_data.extend(working_data)
-            print("Archive "+hex(self.startOffset)+" is now at "+hex(new_start_offset)+" and is now length "+hex(len(working_data)))
             for offset in self.references:
                 modified_rom_data[offset:offset+4] = offset_byte
         return modified_rom_data
@@ -183,7 +182,6 @@ class LocalRom:
         return self.rom_data[start_offset:start_offset + size]
 
     def replace_item(self, location, item):
-        print("Replacing item at location "+location.name+" with "+item.itemName)
         offset = location.text_archive_address
         # If the archive is already loaded, use that
         if offset in self.changed_archives:
