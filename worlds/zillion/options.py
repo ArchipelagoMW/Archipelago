@@ -1,10 +1,13 @@
 from collections import Counter
-from typing import Any, Dict, Tuple, cast
+# import logging
+from typing import TYPE_CHECKING, Any, Dict, Tuple, cast
 from Options import AssembleOptions, DefaultOnToggle, Range, SpecialRange, Toggle, Choice
 from zilliandomizer.options import \
     Options as ZzOptions, char_to_gun, char_to_jump, ID, \
     VBLR as ZzVBLR, VBLR_CHOICES, chars, Chars, ItemCounts as ZzItemCounts
 from zilliandomizer.options.parsing import validate as zz_validate
+if TYPE_CHECKING:
+    from BaseClasses import MultiWorld
 
 
 class ZillionContinues(SpecialRange):
@@ -258,15 +261,16 @@ def convert_item_counts(ic: "Counter[str]") -> ZzItemCounts:
     return tr
 
 
-def validate(wo: Any, p: int) -> "Tuple[ZzOptions, Counter[str]]":
+def validate(world: "MultiWorld", p: int) -> "Tuple[ZzOptions, Counter[str]]":
     """
     adjusts options to make game completion possible
 
-    `wo` parameter is world object that has my options on it
+    `world` parameter is MultiWorld object that has my options on it
     `p` is my player id
     """
     for option_name in zillion_options:
-        assert hasattr(wo, option_name), f"Zillion option {option_name} didn't get put in world object"
+        assert hasattr(world, option_name), f"Zillion option {option_name} didn't get put in world object"
+    wo = cast(Any, world)  # so I don't need getattr on all the options
 
     jump_levels = cast(ZillionJumpLevels, wo.jump_levels[p])
     jump_option = jump_levels.get_current_option_name().lower()
@@ -310,6 +314,7 @@ def validate(wo: Any, p: int) -> "Tuple[ZzOptions, Counter[str]]":
     max_movables = 144 - sum(minimums.values())
     movables = item_counts - minimums
     while sum(movables.values()) > max_movables:
+        # logging.warning("zillion options validate: player options item counts too high")
         total = sum(movables.values())
         scaler = max_movables / total
         for key in movables:
@@ -331,6 +336,9 @@ def validate(wo: Any, p: int) -> "Tuple[ZzOptions, Counter[str]]":
 
     opas_per_level = cast(ZillionOpasPerLevel, wo.opas_per_level[p])
     while (opas_per_level.value > 1) and (1 + item_counts["Opa-Opa"] // opas_per_level.value < max_level.value):
+        # logging.warning(
+        #     "zillion options validate: option opas_per_level incompatible with options max_level and opa_opa_count"
+        # )
         opas_per_level.value -= 1
 
     # that should be all of the level requirements met
