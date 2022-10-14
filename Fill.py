@@ -24,7 +24,7 @@ def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item]
 
 def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
                      itempool: typing.List[Item], single_player_placement: bool = False, lock: bool = False,
-                     swap: bool = True) -> None:
+                     swap: bool = True, on_place: typing.Callable[[Location], None] = None) -> None:
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
 
@@ -128,6 +128,8 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             spot_to_fill.locked = lock
             placements.append(spot_to_fill)
             spot_to_fill.event = item_to_place.advancement
+            if on_place:
+                on_place(spot_to_fill)
 
     if len(unplaced_items) > 0 and len(locations) > 0:
         # There are leftover unplaceable items and locations that won't accept them
@@ -272,13 +274,25 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     defaultlocations = locations[LocationProgressType.DEFAULT]
     excludedlocations = locations[LocationProgressType.EXCLUDED]
 
-    fill_restrictive(world, world.state, prioritylocations, progitempool, lock=True, swap=False)
+    # can't lock due to accessibility corrections touching things, so we remember which ones got placed and lock later
+    lock_later = []
+
+    def mark_for_locking(location: Location):
+        lock_later.append(location)
+
+    # "priority fill"
+    fill_restrictive(world, world.state, prioritylocations, progitempool, swap=False, on_place=mark_for_locking)
     accessibility_corrections(world, world.state, prioritylocations, progitempool)
+
+    for location in lock_later:
+        location.locked = True
+    del lock_later
 
     if prioritylocations:
         defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
+        # "progression fill"
         fill_restrictive(world, world.state, defaultlocations, progitempool)
         if progitempool:
             raise FillError(
