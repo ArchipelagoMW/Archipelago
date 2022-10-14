@@ -74,7 +74,7 @@ keyItemList: typing.List[ItemData] = [
 
     ItemData(0xB31010, ItemName.SpinPurple,                ItemClassification.useful,      ItemType.KeyItem,  78),
     ItemData(0xB31011, ItemName.SpinDark,                  ItemClassification.useful,      ItemType.KeyItem,  79),
-    ItemData(0xB31012, ItemName.HPMemory,                  ItemClassification.useful,      ItemType.KeyItem,  96),
+    ItemData(0xB31012, ItemName.HPMemory,                  ItemClassification.progression, ItemType.KeyItem,  96),
     ItemData(0xB31013, ItemName.RegUP1,                    ItemClassification.useful,      ItemType.KeyItem,  98),
     ItemData(0xB31014, ItemName.RegUP2,                    ItemClassification.useful,      ItemType.KeyItem,  99),
     ItemData(0xB31015, ItemName.RegUP3,                    ItemClassification.useful,      ItemType.KeyItem, 100),

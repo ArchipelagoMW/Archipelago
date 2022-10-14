@@ -1,5 +1,5 @@
 from ndspy import lz10
-from Patch import APDeltaPatch, read_rom
+from Patch import APDeltaPatch
 
 import Utils
 import os
@@ -249,7 +249,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
         file_name = get_base_rom_path(file_name)
-        base_rom_bytes = bytes(read_rom(open(file_name, "rb")))
+        base_rom_bytes = bytes(open(file_name, "rb").read())
         rom_data = base_rom_bytes
 
         basemd5 = hashlib.md5()
