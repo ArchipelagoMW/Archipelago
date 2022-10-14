@@ -19,6 +19,7 @@
 *.wixobj
 *.lck
 *.db3
+*.gba
 *multidata
 *multisave
 *.archipelago
