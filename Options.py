@@ -427,7 +427,6 @@ class TextChoice(Choice):
         assert isinstance(value, str) or isinstance(value, int), \
             f"{value} is not a valid option for {self.__class__.__name__}"
         self.value = value
-        super(TextChoice, self).__init__()
 
     @property
     def current_key(self) -> str:
@@ -465,6 +464,124 @@ class TextChoice(Choice):
             return other == bool(self.value)
         else:
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
+
+
+class BossMeta(AssembleOptions):
+    def __new__(mcs, name, bases, attrs):
+        if name != "PlandoBosses":
+            assert "bosses" in attrs, f"Please define valid bosses for {name}"
+            attrs["bosses"] = frozenset((boss.lower() for boss in attrs["bosses"]))
+            assert "locations" in attrs, f"Please define valid locations for {name}"
+            attrs["locations"] = frozenset((location.lower() for location in attrs["locations"]))
+        cls = super().__new__(mcs, name, bases, attrs)
+        assert not cls.duplicate_bosses or "singularity" in cls.options, f"Please define option_singularity for {name}"
+        return cls
+
+
+class PlandoBosses(TextChoice, metaclass=BossMeta):
+    """Generic boss shuffle option that supports plando. Format expected is
+    'location1-boss1;location2-boss2;shuffle_mode'.
+    If shuffle_mode is not provided in the string, this will be the default shuffle mode. Must override can_place_boss,
+    which passes a plando boss and location. Check if the placement is valid for your game here."""
+    bosses: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
+    locations: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
+
+    duplicate_bosses: bool = False
+
+    @classmethod
+    def from_text(cls, text: str):
+        # set all of our text to lower case for name checking
+        text = text.lower()
+        if text == "random":
+            return cls(random.choice(list(cls.options.values())))
+        for option_name, value in cls.options.items():
+            if option_name == text:
+                return cls(value)
+        options = text.split(";")
+
+        # since plando exists in the option verify the plando values given are valid
+        cls.validate_plando_bosses(options)
+        return cls.get_shuffle_mode(options)
+
+    @classmethod
+    def get_shuffle_mode(cls, option_list: typing.List[str]):
+        # find out what mode of boss shuffle we should use for placing bosses after plando
+        # and add as a string to look nice in the spoiler
+        if "random" in option_list:
+            shuffle = random.choice(list(cls.options))
+            option_list.remove("random")
+            options = ";".join(option_list) + f";{shuffle}"
+            boss_class = cls(options)
+        else:
+            for option in option_list:
+                if option in cls.options:
+                    options = ";".join(option_list)
+                    break
+            else:
+                if cls.duplicate_bosses and len(option_list) == 1:
+                    if cls.valid_boss_name(option_list[0]):
+                        # this doesn't exist in this class but it's a forced option for classes where this is called
+                        options = option_list[0] + ";singularity"
+                    else:
+                        options = option_list[0] + f";{cls.name_lookup[cls.default]}"
+                else:
+                    options = ";".join(option_list) + f";{cls.name_lookup[cls.default]}"
+            boss_class = cls(options)
+        return boss_class
+
+    @classmethod
+    def validate_plando_bosses(cls, options: typing.List[str]) -> None:
+        used_locations = []
+        used_bosses = []
+        for option in options:
+            # check if a shuffle mode was provided in the incorrect location
+            if option == "random" or option in cls.options:
+                if option != options[-1]:
+                    raise ValueError(f"{option} option must be at the end of the boss_shuffle options!")
+            elif "-" in option:
+                location, boss = option.split("-")
+                if location in used_locations:
+                    raise ValueError(f"Duplicate Boss Location {location} not allowed.")
+                if not cls.duplicate_bosses and boss in used_bosses:
+                    raise ValueError(f"Duplicate Boss {boss} not allowed.")
+                used_locations.append(location)
+                used_bosses.append(boss)
+                if not cls.valid_boss_name(boss):
+                    raise ValueError(f"{boss.title()} is not a valid boss name.")
+                if not cls.valid_location_name(location):
+                    raise ValueError(f"{location.title()} is not a valid boss location name.")
+                if not cls.can_place_boss(boss, location):
+                    raise ValueError(f"{location.title()} is not a valid location for {boss.title()} to be placed.")
+            else:
+                if cls.duplicate_bosses:
+                    if not cls.valid_boss_name(option):
+                        raise ValueError(f"{option} is not a valid boss name.")
+                else:
+                    raise ValueError(f"{option.title()} is not formatted correctly.")
+
+    @classmethod
+    def can_place_boss(cls, boss: str, location: str) -> bool:
+        raise NotImplementedError
+
+    @classmethod
+    def valid_boss_name(cls, value: str) -> bool:
+        return value in cls.bosses
+
+    @classmethod
+    def valid_location_name(cls, value: str) -> bool:
+        return value in cls.locations
+
+    def verify(self, world, player_name: str, plando_options) -> None:
+        if isinstance(self.value, int):
+            return
+        from Generate import PlandoSettings
+        if not(PlandoSettings.bosses & plando_options):
+            import logging
+            # plando is disabled but plando options were given so pull the option and change it to an int
+            option = self.value.split(";")[-1]
+            self.value = self.options[option]
+            logging.warning(f"The plando bosses module is turned off, so {self.name_lookup[self.value].title()} "
+                            f"boss shuffle will be used for player {player_name}.")
 
 
 class Range(NumericOption):

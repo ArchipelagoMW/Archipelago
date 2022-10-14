@@ -120,7 +120,7 @@ Door - 0x03313 (Second Gate) - 0x032FF
 Orchard End (Orchard):
 
 Desert Outside (Desert) - Main Island - True - Desert Floodlight Room - 0x09FEE:
-158652 - 0x0CC7B (Vault) - True - Dots & Shapers & Rotated Shapers & Negative Shapers
+158652 - 0x0CC7B (Vault) - True - Dots & Shapers & Rotated Shapers & Negative Shapers & Full Dots
 158653 - 0x0339E (Vault Box) - 0x0CC7B - True
 158602 - 0x17CE7 (Discard) - True - Triangles
 158076 - 0x00698 (Surface 1) - True - True
@@ -338,7 +338,7 @@ Keep 3rd Pressure Plate (Keep) - Keep 4th Pressure Plate - 0x01CD5:
 158202 - 0x01CD3 (Pressure Plates 3) - 0x0A3BB - Shapers & Black/White Squares & Colored Squares
 Door - 0x01CD5 (Pressure Plates 3 Exit) - 0x01CD3
 
-Keep 4th Pressure Plate (Keep) - Keep - 0x09E3D - Keep Tower - 0x01D40:
+Keep 4th Pressure Plate (Keep) - Shadows - 0x09E3D - Keep Tower - 0x01D40:
 158203 - 0x0A3AD (Reset Pressure Plates 4) - True - True
 158204 - 0x01D3F (Pressure Plates 4) - 0x0A3AD - Shapers & Dots & Symmetry
 Door - 0x01D40 (Pressure Plates 4 Exit) - 0x01D3F
@@ -358,7 +358,7 @@ Door - 0x04F8F (Tower Shortcut) - 0x0361B
 158705 - 0x03317 (Laser Panel Pressure Plates) - 0x01D3F - Shapers & Black/White Squares & Colored Squares & Stars & Stars + Same Colored Symbol & Dots
 Laser - 0x014BB (Laser) - 0x0360E | 0x03317
 
-Outside Monastery (Monastery) - Main Island - True - Main Island - 0x0364E - Inside Monastery - 0x0C128 & 0x0C153 - Monastery Garden - 0x03750:
+Outside Monastery (Monastery) - Main Island - True - Inside Monastery - 0x0C128 & 0x0C153 - Monastery Garden - 0x03750:
 158207 - 0x03713 (Shortcut Panel) - True - True
 Door - 0x0364E (Shortcut) - 0x03713
 158208 - 0x00B10 (Entry Left) - True - True
@@ -390,11 +390,11 @@ Door - 0x0A0C9 (Cargo Box Entry) - 0x0A0C8
 158221 - 0x28AE3 (Vines) - 0x18590 - True
 158222 - 0x28938 (Apple Tree) - 0x28AE3 - True
 158223 - 0x079DF (Triple Exit) - 0x28938 - True
-158235 - 0x2899C (Wooden Roof Lower Row 1) - True - Rotated Shapers & Dots
-158236 - 0x28A33 (Wooden Roof Lower Row 2) - 0x2899C - Shapers & Dots
-158237 - 0x28ABF (Wooden Roof Lower Row 3) - 0x28A33 - Shapers & Rotated Shapers & Dots
-158238 - 0x28AC0 (Wooden Roof Lower Row 4) - 0x28ABF - Rotated Shapers & Dots
-158239 - 0x28AC1 (Wooden Roof Lower Row 5) - 0x28AC0 - Rotated Shapers & Dots
+158235 - 0x2899C (Wooden Roof Lower Row 1) - True - Rotated Shapers & Dots & Full Dots
+158236 - 0x28A33 (Wooden Roof Lower Row 2) - 0x2899C - Shapers & Dots & Full Dots
+158237 - 0x28ABF (Wooden Roof Lower Row 3) - 0x28A33 - Shapers & Rotated Shapers & Dots & Full Dots
+158238 - 0x28AC0 (Wooden Roof Lower Row 4) - 0x28ABF - Rotated Shapers & Dots & Full Dots
+158239 - 0x28AC1 (Wooden Roof Lower Row 5) - 0x28AC0 - Rotated Shapers & Dots & Full Dots
 Door - 0x034F5 (Wooden Roof Stairs) - 0x28AC1
 158225 - 0x28998 (Tinted Glass Door Panel) - True - Stars & Rotated Shapers
 Door - 0x28A61 (Tinted Glass Door) - 0x28998
@@ -421,7 +421,7 @@ Town Red Rooftop (Town):
 158224 - 0x28B39 (Tall Hexagonal) - 0x079DF - True
 
 Town Wooden Rooftop (Town):
-158240 - 0x28AD9 (Wooden Rooftop) - 0x28AC1 - Rotated Shapers & Dots & Eraser
+158240 - 0x28AD9 (Wooden Rooftop) - 0x28AC1 - Rotated Shapers & Dots & Eraser & Full Dots
 
 Town Church (Town):
 158227 - 0x28A69 (Church Lattice) - 0x03BB0 - True
@@ -819,14 +819,14 @@ Mountain Path to Caves (Mountain Bottom Floor) - Mountain Bottom Floor Rock - 0x
 Door - 0x2D77D (Caves Entry) - 0x00FF8
 158448 - 0x334E1 (Rock Control) - True - True
 
-Caves (Caves) - Main Island - 0x2D73F - Main Island - 0x2D859 - Path to Challenge - 0x019A5:
+Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Path to Challenge - 0x019A5:
 158451 - 0x335AB (Elevator Inside Control) - True - Dots & Black/White Squares
 158452 - 0x335AC (Elevator Upper Outside Control) - 0x335AB - Black/White Squares
 158453 - 0x3369D (Elevator Lower Outside Control) - 0x335AB - Black/White Squares & Dots
-158454 - 0x00190 (Blue Tunnel Right First 1) - True - Dots & Triangles
-158455 - 0x00558 (Blue Tunnel Right First 2) - 0x00190 - Dots & Triangles
-158456 - 0x00567 (Blue Tunnel Right First 3) - 0x00558 - Dots & Triangles
-158457 - 0x006FE (Blue Tunnel Right First 4) - 0x00567 - Dots & Triangles
+158454 - 0x00190 (Blue Tunnel Right First 1) - True - Dots & Triangles & Full Dots
+158455 - 0x00558 (Blue Tunnel Right First 2) - 0x00190 - Dots & Triangles & Full Dots
+158456 - 0x00567 (Blue Tunnel Right First 3) - 0x00558 - Dots & Triangles & Full Dots
+158457 - 0x006FE (Blue Tunnel Right First 4) - 0x00567 - Dots & Triangles & Full Dots
 158458 - 0x01A0D (Blue Tunnel Left First 1) - True - Symmetry & Triangles
 158459 - 0x008B8 (Blue Tunnel Left Second 1) - True - Black/White Squares & Triangles
 158460 - 0x00973 (Blue Tunnel Left Second 2) - 0x008B8 - Stars & Triangles
@@ -849,12 +849,12 @@ Caves (Caves) - Main Island - 0x2D73F - Main Island - 0x2D859 - Path to Challeng
 158479 - 0x288FC (Second Wooden Beam) - True - Black/White Squares & Shapers & Rotated Shapers
 158480 - 0x289E7 (Third Wooden Beam) - True - Stars & Black/White Squares
 158481 - 0x288AA (Fourth Wooden Beam) - True - Stars & Shapers
-158482 - 0x17FB9 (Left Upstairs Single) - True - Shapers & Dots & Negative Shapers
-158483 - 0x0A16B (Left Upstairs Left Row 1) - True - Dots
-158484 - 0x0A2CE (Left Upstairs Left Row 2) - 0x0A16B - Stars & Dots
-158485 - 0x0A2D7 (Left Upstairs Left Row 3) - 0x0A2CE - Dots & Black/White Squares & Stars + Same Colored Symbol & Stars
-158486 - 0x0A2DD (Left Upstairs Left Row 4) - 0x0A2D7 - Shapers & Dots
-158487 - 0x0A2EA (Left Upstairs Left Row 5) - 0x0A2DD - Rotated Shapers & Dots
+158482 - 0x17FB9 (Left Upstairs Single) - True - Shapers & Dots & Negative Shapers & Full Dots
+158483 - 0x0A16B (Left Upstairs Left Row 1) - True - Dots & Full Dots
+158484 - 0x0A2CE (Left Upstairs Left Row 2) - 0x0A16B - Stars & Dots & Full Dots
+158485 - 0x0A2D7 (Left Upstairs Left Row 3) - 0x0A2CE - Dots & Black/White Squares & Stars + Same Colored Symbol & Stars & Full Dots
+158486 - 0x0A2DD (Left Upstairs Left Row 4) - 0x0A2D7 - Shapers & Dots & Full Dots
+158487 - 0x0A2EA (Left Upstairs Left Row 5) - 0x0A2DD - Rotated Shapers & Dots & Full Dots
 158488 - 0x0008F (Right Upstairs Left Row 1) - True - Dots & Invisible Dots
 158489 - 0x0006B (Right Upstairs Left Row 2) - 0x0008F - Dots & Invisible Dots
 158490 - 0x0008B (Right Upstairs Left Row 3) - 0x0006B - Dots & Invisible Dots
@@ -913,7 +913,7 @@ Door - 0x09E87 (Town Shortcut) - 0x09E85
 Final Room (Mountain Final Room) - Elevator - 0x339BB & 0x33961:
 158522 - 0x0383A (Right Pillar 1) - True - Stars
 158523 - 0x09E56 (Right Pillar 2) - 0x0383A - Stars & Dots
-158524 - 0x09E5A (Right Pillar 3) - 0x09E56 - Dots
+158524 - 0x09E5A (Right Pillar 3) - 0x09E56 - Dots & Full Dots
 158525 - 0x33961 (Right Pillar 4) - 0x09E5A - Dots & Symmetry
 158526 - 0x0383D (Left Pillar 1) - True - Dots
 158527 - 0x0383F (Left Pillar 2) - 0x0383D - Black/White Squares

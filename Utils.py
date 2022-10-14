@@ -301,6 +301,11 @@ def get_default_options() -> OptionsType:
             # You have to know the path to the emulator core library on the user's computer.
             "rom_start": "retroarch",
         },
+        "pokemon_rb_options": {
+            "red_rom_file": "Pokemon Red (UE) [S][!].gb",
+            "blue_rom_file": "Pokemon Blue (UE) [S][!].gb",
+            "rom_start": True
+        }
     }
 
     return options
