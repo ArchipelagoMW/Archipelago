@@ -287,7 +287,7 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
 
     for location in lock_later:
         location.locked = True
-    del lock_later
+    del mark_for_locking, lock_later
 
     if prioritylocations:
         defaultlocations = prioritylocations + defaultlocations
