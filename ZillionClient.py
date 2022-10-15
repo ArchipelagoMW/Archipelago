@@ -1,5 +1,6 @@
 import asyncio
-from typing import Any, Coroutine, Dict, Type
+import base64
+from typing import Any, Coroutine, Dict, Optional, Type, cast
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, gui_enabled, \
@@ -120,6 +121,22 @@ class ZillionContext(CommonContext):
 
             self.got_slot_data.set()
 
+            payload = {
+                "cmd": "Get",
+                "keys": [f"zillion-{self.auth}-doors"]
+            }
+            asyncio.create_task(self.send_msgs([payload]))
+        elif cmd == "Retrieved":
+            if "keys" not in args:
+                logger.warning(f"invalid Retrieved packet to ZillionClient: {args}")
+                return
+            keys = cast(Dict[str, Optional[str]], args["keys"])
+            doors_b64 = keys[f"zillion-{self.auth}-doors"]
+            if doors_b64:
+                logger.info("received door data from server")
+                doors = base64.b64decode(doors_b64)
+                self.to_game.put_nowait(events.DoorEventToGame(doors))
+
 
 async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.EventToGame]") -> None:
     logger.info("started zillion sync task")
@@ -189,6 +206,15 @@ async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.
                     if not ctx.finished_game:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                         ctx.finished_game = True
+                elif isinstance(event_from_game, events.DoorEventFromGame):
+                    if ctx.auth:
+                        doors_b64 = base64.b64encode(event_from_game.doors).decode()
+                        payload = {
+                            "cmd": "Set",
+                            "key": f"zillion-{ctx.auth}-doors",
+                            "operations": [{"operation": "replace", "value": doors_b64}]
+                        }
+                        asyncio.create_task(ctx.send_msgs([payload]))
                 else:
                     logger.warning(f"WARNING: unhandled event from game {event_from_game}")
             if len(ctx.items_received) > next_item:
