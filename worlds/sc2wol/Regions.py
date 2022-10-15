@@ -2,7 +2,7 @@ from typing import List, Set, Dict, Tuple, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
 from .Options import get_option_value
-from worlds.sc2wol.MissionTables import MissionInfo, vanilla_shuffle_order, vanilla_mission_req_table, \
+from .MissionTables import MissionInfo, vanilla_shuffle_order, vanilla_mission_req_table, \
     no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list
 import random
 

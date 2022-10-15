@@ -1,15 +1,14 @@
 import typing
 
-from typing import List, Set, Tuple, NamedTuple
+from typing import List, Set, Tuple
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
-from ..AutoWorld import WebWorld
+from worlds.AutoWorld import WebWorld, World
 from .Items import StarcraftWoLItem, item_table, filler_items, item_name_groups, get_full_item_list, \
     basic_unit
 from .Locations import get_locations
 from .Regions import create_regions
 from .Options import sc2wol_options, get_option_value
 from .LogicMixin import SC2WoLLogic
-from ..AutoWorld import World
 
 
 class Starcraft2WoLWebWorld(WebWorld):

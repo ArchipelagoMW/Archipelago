@@ -36,7 +36,7 @@ class SM64World(World):
     location_name_to_id = location_table
 
     data_version = 8
-    required_client_version = (0, 3, 0)
+    required_client_version = (0, 3, 5)
 
     area_connections: typing.Dict[int, int]
 
@@ -173,7 +173,7 @@ class SM64World(World):
                 }
             }
         }
-        filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_file_safe_player_name(self.player)}.apsm64ex"
+        filename = f"{self.world.get_out_file_name_base(self.player)}.apsm64ex"
         with open(os.path.join(output_directory, filename), 'w') as f:
             json.dump(data, f)
 
