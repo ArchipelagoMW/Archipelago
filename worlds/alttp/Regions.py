@@ -4,8 +4,9 @@ import typing
 from BaseClasses import Entrance, MultiWorld
 from .SubClasses import LTTPRegion, LTTPRegionType
 
+
 def is_main_entrance(entrance: Entrance) -> bool:
-    return entrance.parent_region.type in {RegionType.DarkWorld, RegionType.LightWorld, RegionType.Generic}
+    return entrance.parent_region.type in {LTTPRegionType.DarkWorld, LTTPRegionType.LightWorld, LTTPRegionType.Generic}
 
 
 def create_regions(world, player):
