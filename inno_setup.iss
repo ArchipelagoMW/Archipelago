@@ -287,6 +287,15 @@ begin
   end;
 end;
 
+function GetSMSMD5OfFile(const rom: string): string;
+var data: AnsiString;
+begin
+  if LoadStringFromFile(rom, data) then
+  begin
+      Result := GetMD5OfString(data);
+  end;
+end;
+
 function CheckRom(name: string; hash: string): string;
 var rom: string;
 begin

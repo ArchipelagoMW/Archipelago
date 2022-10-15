@@ -21,6 +21,7 @@ class ZillionContinues(SpecialRange):
     range_end = 21
     display_name = "continues"
     special_range_names = {
+        "vanilla": 3,
         "infinity": 21
     }
 
