@@ -13,6 +13,9 @@
 *.z64
 *.n64
 *.nes
+*.gb
+*.gbc
+*.gba
 *.wixobj
 *.lck
 *.db3

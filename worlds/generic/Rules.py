@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import LocationProgressType
+from BaseClasses import LocationProgressType, MultiWorld
 
 if typing.TYPE_CHECKING:
     import BaseClasses
@@ -37,14 +37,14 @@ def locality_rules(world, player: int):
                 forbid_items_for_player(location, world.non_local_items[player].value, player)
 
 
-def exclusion_rules(world, player: int, exclude_locations: typing.Set[str]):
+def exclusion_rules(world: MultiWorld, player: int, exclude_locations: typing.Set[str]) -> None:
     for loc_name in exclude_locations:
         try:
             location = world.get_location(loc_name, player)
         except KeyError as e:  # failed to find the given location. Check if it's a legitimate location
             if loc_name not in world.worlds[player].location_name_to_id:
                 raise Exception(f"Unable to exclude location {loc_name} in player {player}'s world.") from e
-        else: 
+        else:
             add_item_rule(location, lambda i: not (i.advancement or i.useful))
             location.progress_type = LocationProgressType.EXCLUDED
 
@@ -53,17 +53,25 @@ def set_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"],
     spot.access_rule = rule
 
 
-def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule, combine='and'):
+def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule, combine="and"):
     old_rule = spot.access_rule
-    if combine == 'or':
-        spot.access_rule = lambda state: rule(state) or old_rule(state)
+    # empty rule, replace instead of add
+    if old_rule is spot.__class__.access_rule:
+        spot.access_rule = rule if combine == "and" else old_rule
     else:
-        spot.access_rule = lambda state: rule(state) and old_rule(state)
+        if combine == "and":
+            spot.access_rule = lambda state: rule(state) and old_rule(state)
+        else:
+            spot.access_rule = lambda state: rule(state) or old_rule(state)
 
 
 def forbid_item(location: "BaseClasses.Location", item: str, player: int):
     old_rule = location.item_rule
-    location.item_rule = lambda i: (i.name != item or i.player != player) and old_rule(i)
+    # empty rule
+    if old_rule is location.__class__.item_rule:
+        location.item_rule = lambda i: i.name != item or i.player != player
+    else:
+        location.item_rule = lambda i: (i.name != item or i.player != player) and old_rule(i)
 
 
 def forbid_items_for_player(location: "BaseClasses.Location", items: typing.Set[str], player: int):
@@ -77,9 +85,16 @@ def forbid_items(location: "BaseClasses.Location", items: typing.Set[str]):
     location.item_rule = lambda i: i.name not in items and old_rule(i)
 
 
-def add_item_rule(location: "BaseClasses.Location", rule: ItemRule):
+def add_item_rule(location: "BaseClasses.Location", rule: ItemRule, combine: str = "and"):
     old_rule = location.item_rule
-    location.item_rule = lambda item: rule(item) and old_rule(item)
+    # empty rule, replace instead of add
+    if old_rule is location.__class__.item_rule:
+        location.item_rule = rule if combine == "and" else old_rule
+    else:
+        if combine == "and":
+            location.item_rule = lambda item: rule(item) and old_rule(item)
+        else:
+            location.item_rule = lambda item: rule(item) or old_rule(item)
 
 
 def item_in_locations(state: "BaseClasses.CollectionState", item: str, player: int,

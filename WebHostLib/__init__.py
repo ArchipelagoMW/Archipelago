@@ -10,7 +10,6 @@ from flask_compress import Compress
 from werkzeug.routing import BaseConverter
 
 from Utils import title_sorted
-from .models import *
 
 UPLOAD_FOLDER = os.path.relpath('uploads')
 LOGS_FOLDER = os.path.relpath('logs')
@@ -73,8 +72,10 @@ def register():
     """Import submodules, triggering their registering on flask routing.
     Note: initializes worlds subsystem."""
     # has automatic patch integration
-    import Patch
-    app.jinja_env.filters['supports_apdeltapatch'] = lambda game_name: game_name in Patch.AutoPatchRegister.patch_types
+    import worlds.AutoWorld
+    import worlds.Files
+    app.jinja_env.filters['supports_apdeltapatch'] = lambda game_name: \
+        game_name in worlds.Files.AutoPatchRegister.patch_types
 
     from WebHostLib.customserver import run_server_process
     # to trigger app routing picking up on it

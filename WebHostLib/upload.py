@@ -1,6 +1,5 @@
 import typing
 import zipfile
-import lzma
 import json
 import base64
 import MultiServer
@@ -10,9 +9,10 @@ from io import BytesIO
 from flask import request, flash, redirect, url_for, session, render_template
 from pony.orm import flush, select
 
-from WebHostLib import app, Seed, Room, Slot
-from Utils import parse_yaml, VersionException, __version__
-from Patch import preferred_endings, AutoPatchRegister
+from . import app
+from .models import Seed, Room, Slot
+from Utils import VersionException, __version__
+from worlds.Files import AutoPatchRegister
 from NetUtils import NetworkSlot, SlotType
 
 banned_zip_contents = (".sfc",)
@@ -22,7 +22,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
     if not owner:
         owner = session["_id"]
     infolist = zfile.infolist()
-    slots = set()
+    slots: typing.Set[Slot] = set()
     spoiler = ""
     multidata = None
     for file in infolist:
@@ -38,17 +38,6 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
                            player_name=patch.player_name,
                            player_id=patch.player,
                            game=patch.game))
-        elif file.filename.endswith(tuple(preferred_endings.values())):
-            data = zfile.open(file, "r").read()
-            yaml_data = parse_yaml(lzma.decompress(data).decode("utf-8-sig"))
-            if yaml_data["version"] < 2:
-                return "Old format cannot be uploaded (outdated .apbp)"
-            metadata = yaml_data["meta"]
-
-            slots.add(Slot(data=data,
-                           player_name=metadata["player_name"],
-                           player_id=metadata["player_id"],
-                           game=yaml_data["game"]))
 
         elif file.filename.endswith(".apmc"):
             data = zfile.open(file, "r").read()
