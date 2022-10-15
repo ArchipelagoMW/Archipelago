@@ -1,11 +1,11 @@
 
-from BaseClasses import MultiWorld, Region, Entrance, RegionType, LocationProgressType
+from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType
 from worlds.generic.Rules import add_item_rule
 from .locations import location_data, PokemonRBLocation
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations_per_region=None, exits=None):
-    ret = Region(name, RegionType.Generic, name, player, world)
+    ret = Region(name, player, world)
     for location in locations_per_region.get(name, []):
         if (world.randomize_hidden_items[player].value or "Hidden" not in location.name) and \
                 (world.extra_key_items[player].value or name != "Rock Tunnel B1F" or "Item" not in location.name) and \
