@@ -615,10 +615,10 @@ def create_regions(world, player: int, active_locations):
     ]
 
 
-def connect_regions(world, player):
+def connect_regions(world, player, level_list):
     names: typing.Dict[str, int] = {}
 
-    connect(world, player, names, 'Menu', LocationName.forest_of_silence)
+    connect(world, player, names, 'Menu', level_list[0])
     connect(world, player, names, 'Menu', 'Warp 1',
             lambda state: (state.has(ItemName.special_one, player, world.special1s_per_warp[player].value)))
     connect(world, player, names, 'Warp 1', 'Warp 2',
@@ -646,7 +646,7 @@ def connect_regions(world, player):
     connect(world, player, names, LocationName.forest_switch1, LocationName.forest_switch2)
     connect(world, player, names, LocationName.forest_switch2, LocationName.forest_switch3)
     connect(world, player, names, LocationName.forest_switch3, LocationName.forest_end)
-    connect(world, player, names, LocationName.forest_end, LocationName.castle_wall)
+    connect(world, player, names, LocationName.forest_end, level_list[level_list.index(LocationName.forest_of_silence) + 1])
 
     connect(world, player, names, LocationName.castle_wall, LocationName.cw_rtower)
     connect(world, player, names, LocationName.cw_rtower, LocationName.castle_wall)
@@ -656,7 +656,7 @@ def connect_regions(world, player):
     connect(world, player, names, LocationName.castle_wall, LocationName.cw_rtower)
     connect(world, player, names, LocationName.castle_wall, LocationName.cw_exit,
             lambda state: (state.can_reach(LocationName.cw_dragon_sw, "Location", player)))
-    connect(world, player, names, LocationName.cw_exit, LocationName.villa,
+    connect(world, player, names, LocationName.cw_exit, level_list[level_list.index(LocationName.castle_wall) + 1],
             lambda state: (state.can_reach(LocationName.cw_drac_sw, "Location", player)))
     connect(world, player, names, LocationName.castle_wall, LocationName.cw_ltower,
             lambda state: (state.has(ItemName.left_tower_key, player)))
@@ -689,8 +689,8 @@ def connect_regions(world, player):
     connect(world, player, names, LocationName.villa_servant_entrance, LocationName.villa_foyer_main)
     connect(world, player, names, LocationName.villa_maze_crypt, LocationName.villa_crypt)
     connect(world, player, names, LocationName.villa_crypt, LocationName.villa_maze_crypt)
-    connect(world, player, names, LocationName.villa_crypt, LocationName.tunnel)
-    connect(world, player, names, LocationName.villa_crypt, LocationName.underground_waterway)
+    connect(world, player, names, LocationName.villa_crypt, level_list[level_list.index(LocationName.villa) + 1])
+    connect(world, player, names, LocationName.villa_crypt, level_list[level_list.index(LocationName.villa) + 2])
 
     connect(world, player, names, LocationName.tunnel, LocationName.tunnel_end)
     connect(world, player, names, LocationName.tunnel_end, LocationName.fan_meeting_room)
@@ -773,6 +773,9 @@ def connect_regions(world, player):
                 lambda state: (state.has(ItemName.special_two, player, world.special2s_required[player].value)))
     else:
         connect(world, player, names, LocationName.castle_keep, LocationName.drac_chamber)
+
+    #def connect_stages(source, stage, target):
+
 
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):

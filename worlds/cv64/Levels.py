@@ -36,13 +36,20 @@ level_dict = {
     LocationName.castle_keep:          CV64Level(0x34D2A8, 0x34D2A9, 0x14, 0x02, False, False),
 }
 
-level_list = [
+main_level_list = [
     LocationName.forest_of_silence,
     LocationName.castle_wall,
     LocationName.villa,
+    LocationName.castle_center,
+    LocationName.room_of_clocks,
+    LocationName.clock_tower,
+]
+
+char_level_list = [
+    LocationName.forest_of_silence,
+    LocationName.castle_wall,
     LocationName.tunnel,
     LocationName.underground_waterway,
-    LocationName.castle_center,
     LocationName.duel_tower,
     LocationName.tower_of_execution,
     LocationName.tower_of_science,
