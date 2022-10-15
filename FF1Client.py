@@ -123,10 +123,9 @@ def get_payload(ctx: FF1Context):
 
 
 async def parse_locations(locations_array: List[int], ctx: FF1Context, force: bool):
-    if locations_array == ctx.locations_array and not force:
+    if not locations_array or (locations_array == ctx.locations_array and not force):
         return
     else:
-        # print("New values")
         ctx.locations_array = locations_array
         locations_checked = []
         if len(locations_array) > 0xFE and locations_array[0xFE] & 0x02 != 0 and not ctx.finished_game:
@@ -147,13 +146,9 @@ async def parse_locations(locations_array: List[int], ctx: FF1Context, force: bo
                 index -= 0x200
                 flag = 0x02
 
-            # print(f"Location: {ctx.location_names[location]}")
-            # print(f"Index: {str(hex(index))}")
-            # print(f"value: {locations_array[index] & flag != 0}")
             if locations_array[index] & flag != 0:
                 locations_checked.append(location)
         if locations_checked:
-            # print([ctx.location_names[location] for location in locations_checked])
             await ctx.send_msgs([
                 {"cmd": "LocationChecks",
                  "locations": locations_checked}
@@ -178,9 +173,6 @@ async def nes_sync_task(ctx: FF1Context):
                     data = await asyncio.wait_for(reader.readline(), timeout=5)
                     data_decoded = json.loads(data.decode())
                     # print(data_decoded)
-                    if ctx.game is not None and 'locations' in data_decoded:
-                        # Not just a keep alive ping, parse
-                        asyncio.create_task(parse_locations(data_decoded['locations'], ctx, False))
                     if not ctx.auth:
                         ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
                         if ctx.auth == '':
@@ -188,6 +180,17 @@ async def nes_sync_task(ctx: FF1Context):
                                         "the ROM using the same link but adding your slot name")
                         if ctx.awaiting_rom:
                             await ctx.server_auth(False)
+                    elif ctx.auth != ''.join([chr(i) for i in data_decoded['playerName'] if i != 0]):
+                        logger.warning("ROM changed, closing connections.")
+                        ctx.auth = None
+                        ctx.locations_array = None
+                        await ctx.disconnect()
+                        error_status = CONNECTION_RESET_STATUS
+                        writer.close()
+                        ctx.nes_streams = None
+                    elif ctx.game is not None and 'locations' in data_decoded:
+                        # Not just a keep alive ping, parse
+                        asyncio.create_task(parse_locations(data_decoded['locations'], ctx, False))
                 except asyncio.TimeoutError:
                     logger.debug("Read Timed Out, Reconnecting")
                     error_status = CONNECTION_TIMING_OUT_STATUS

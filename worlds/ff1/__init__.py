@@ -4,6 +4,7 @@ from .Items import ItemData, FF1Items, FF1_STARTER_ITEMS, FF1_PROGRESSION_LIST, 
 from .Locations import EventId, FF1Locations, generate_rule, CHAOS_TERMINATED_EVENT
 from .Options import ff1_options
 from ..AutoWorld import World, WebWorld
+from Fill import fill_restrictive
 
 
 class FF1Web(WebWorld):
@@ -80,11 +81,11 @@ class FF1World(World):
         self.world.completion_condition[self.player] = lambda state: state.has(CHAOS_TERMINATED_EVENT, self.player)
 
     def generate_basic(self):
-        items = get_options(self.world, 'items', self.player)
-        if FF1_BRIDGE in items.keys():
+        item_data = get_options(self.world, 'items', self.player)
+        if FF1_BRIDGE in item_data.keys():
             self._place_locked_item_in_sphere0(FF1_BRIDGE)
-        if items:
-            possible_early_items = [name for name in FF1_STARTER_ITEMS if name in items.keys()]
+        if item_data:
+            possible_early_items = [name for name in FF1_STARTER_ITEMS if name in item_data.keys()]
             if possible_early_items:
                 progression_item = self.world.random.choice(possible_early_items)
                 self._place_locked_item_in_sphere0(progression_item)
@@ -93,10 +94,28 @@ class FF1World(World):
             raise Exception("FFR settings submitted with no key items. Please ensure you generated the settings using "
                             "finalfantasyrandomizer.com AND enabled the AP flag")
 
-        items = [self.create_item(name) for name, data in items.items() for x in range(data['count']) if name not in
-                 self.locked_items]
+        items = []
+
+        incentive_locations = []
+        for location, data in get_options(self.world, 'locations2', self.player).items():
+            if data["incentive"] is True and location not in self.locked_locations:
+                incentive_locations.append(self.world.get_location(location, self.player))
+        incentive_items = []
+        for item, data in item_data.items():
+            if item not in self.locked_items:
+                item_count = data["count"]
+                if data["incentive"] is True:
+                    incentive_items.append(self.create_item(item))
+                    item_count -= 1
+                items += [self.create_item(item) for x in range(item_count)]
 
         self.world.itempool += items
+
+        state = self.world.get_all_state(False)
+        self.world.random.shuffle(incentive_items)
+        fill_restrictive(self.world, state, incentive_locations, incentive_items, lock=True)
+
+        self.world.itempool += incentive_items
 
     def _place_locked_item_in_sphere0(self, progression_item: str):
         if progression_item:
