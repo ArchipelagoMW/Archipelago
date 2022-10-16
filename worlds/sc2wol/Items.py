@@ -165,7 +165,7 @@ advanced_basic_units = {
 }
 
 
-def get_basic_units(world: MultiWorld, player: int) -> set[str]:
+def get_basic_units(world: MultiWorld, player: int) -> typing.Set[str]:
     if get_option_value(world, player, 'required_tactics') > 0:
         return basic_units.union(advanced_basic_units)
     else:

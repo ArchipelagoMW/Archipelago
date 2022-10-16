@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Dict, List, Set
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import item_table
 from .MissionTables import no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
@@ -21,14 +21,14 @@ STARPORT_UNITS = {"Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "He
 PROTOSS_REGIONS = {"A Sinister Turn", "Echoes of the Future", "In Utter Darkness"}
 
 
-def filter_missions(world: MultiWorld, player: int) -> dict[str, list[str]]:
+def filter_missions(world: MultiWorld, player: int) -> Dict[str, List[str]]:
     """
     Returns a semi-randomly pruned tuple of no-build, easy, medium, and hard mission sets
     """
 
     mission_order_type = get_option_value(world, player, "mission_order")
     shuffle_protoss = get_option_value(world, player, "shuffle_protoss")
-    excluded_missions: set[str] = set(get_option_set_value(world, player, "excluded_missions"))
+    excluded_missions = set(get_option_set_value(world, player, "excluded_missions"))
     invalid_mission_names = excluded_missions.difference(vanilla_mission_req_table.keys())
     if invalid_mission_names:
         raise Exception("Error in locked_missions - the following are not valid mission names: " + ", ".join(invalid_mission_names))
@@ -100,7 +100,7 @@ def filter_missions(world: MultiWorld, player: int) -> dict[str, list[str]]:
     }
 
 
-def get_item_upgrades(inventory: list[Item], parent_item: Item or str):
+def get_item_upgrades(inventory: List[Item], parent_item: Item or str):
     item_name = parent_item.name if isinstance(parent_item, Item) else parent_item
     return [
         inv_item for inv_item in inventory
@@ -113,10 +113,10 @@ class ValidInventory:
     def has(self, item: str, player: int):
         return item in self.logical_inventory
 
-    def has_any(self, items: set[str], player: int):
+    def has_any(self, items: Set[str], player: int):
         return any(item in self.logical_inventory for item in items)
 
-    def has_all(self, items: set[str], player: int):
+    def has_all(self, items: Set[str], player: int):
         return all(item in self.logical_inventory for item in items)
 
     def has_units_per_structure(self) -> bool:
@@ -199,7 +199,7 @@ class ValidInventory:
         self._sc2wol_final_mission_requirements = lambda world, player: SC2WoLLogic._sc2wol_final_mission_requirements(self, world, player)
 
     def __init__(self, world: MultiWorld, player: int,
-                 item_pool: list[Item], existing_items: list[Item], locked_items: list[Item],
+                 item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],
                  has_protoss: bool):
         self.world = world
         self.player = player
@@ -241,8 +241,8 @@ class ValidInventory:
                         self.cascade_removal_map[upgrade] = associated_items
 
 
-def filter_items(world: MultiWorld, player: int, mission_req_table: dict[str, MissionInfo], location_cache: list[Location],
-                 item_pool: list[Item], existing_items: list[Item], locked_items: list[Item]) -> list[Item]:
+def filter_items(world: MultiWorld, player: int, mission_req_table: Dict[str, MissionInfo], location_cache: List[Location],
+                 item_pool: List[Item], existing_items: List[Item], locked_items: List[Item]) -> List[Item]:
     """
     Returns a semi-randomly pruned set of items based on number of available locations.
     The returned inventory must be capable of logically accessing every location in the world.
