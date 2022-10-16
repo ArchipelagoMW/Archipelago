@@ -8,7 +8,7 @@ import random
 
 
 def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location])\
-        -> tuple[dict[str, MissionInfo], int, str]:
+        -> Tuple[Dict[str, MissionInfo], int, str]:
     locations_per_region = get_locations_per_region(locations)
 
     mission_order_type = get_option_value(world, player, "mission_order")
