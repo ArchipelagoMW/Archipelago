@@ -198,7 +198,7 @@ advanced_starting_mission_locations = {
 }
 
 
-def get_starting_mission_locations(world: MultiWorld, player: int) -> set[str]:
+def get_starting_mission_locations(world: MultiWorld, player: int) -> set:
     if get_option_value(world, player, 'shuffle_no_build') or get_option_value(world, player, 'mission_order') < 2:
         # Always start with a no-build mission unless explicitly relegating them
         # Vanilla and Vanilla Shuffled always start with a no-build even when relegated
