@@ -28,7 +28,7 @@ def filter_missions(world: MultiWorld, player: int) -> dict[str, list[str]]:
 
     mission_order_type = get_option_value(world, player, "mission_order")
     shuffle_protoss = get_option_value(world, player, "shuffle_protoss")
-    excluded_missions: set = set(get_option_set_value(world, player, "excluded_missions"))
+    excluded_missions: set[str] = set(get_option_set_value(world, player, "excluded_missions"))
     invalid_mission_names = excluded_missions.difference(vanilla_mission_req_table.keys())
     if invalid_mission_names:
         raise Exception("Error in locked_missions - the following are not valid mission names: " + ", ".join(invalid_mission_names))
@@ -113,10 +113,10 @@ class ValidInventory:
     def has(self, item: str, player: int):
         return item in self.logical_inventory
 
-    def has_any(self, items: set, player: int):
+    def has_any(self, items: set[str], player: int):
         return any(item in self.logical_inventory for item in items)
 
-    def has_all(self, items: set, player: int):
+    def has_all(self, items: set[str], player: int):
         return all(item in self.logical_inventory for item in items)
 
     def has_units_per_structure(self) -> bool:
