@@ -15,7 +15,13 @@ handled_in_js = {"start_inventory", "local_items", "non_local_items", "start_hin
 
 def create():
     target_folder = local_path("WebHostLib", "static", "generated")
-    os.makedirs(os.path.join(target_folder, "configs"), exist_ok=True)
+    yaml_folder = os.path.join(target_folder, "configs")
+    os.makedirs(yaml_folder, exist_ok=True)
+
+    for file in os.listdir(yaml_folder):
+        full_path: str = os.path.join(yaml_folder, file)
+        if os.path.isfile(full_path):
+            os.unlink(full_path)
 
     def dictify_range(option: typing.Union[Options.Range, Options.SpecialRange]):
         data = {}
@@ -25,9 +31,12 @@ def create():
         data.update({
             option.range_start: 0,
             option.range_end: 0,
-            "random": 0, "random-low": 0, "random-high": 0,
             option.default: 50
         })
+        for sub_option in {"random", "random-low", "random-high"}:
+            if sub_option != option.default:
+                data[sub_option] = 0
+
         notes = {
             special: "minimum value without special meaning",
             option.range_start: "minimum value",
@@ -42,11 +51,6 @@ def create():
                 data[name] = 0
 
         return data, notes
-
-    def default_converter(default_value):
-        if isinstance(default_value, (set, frozenset)):
-            return list(default_value)
-        return default_value
 
     def get_html_doc(option_type: type(Options.Option)) -> str:
         if not option_type.__doc__:
@@ -73,7 +77,7 @@ def create():
         res = Template(file_data).render(
             options=all_options,
             __version__=__version__, game=game_name, yaml_dump=yaml.dump,
-            dictify_range=dictify_range, default_converter=default_converter,
+            dictify_range=dictify_range,
         )
 
         del file_data
