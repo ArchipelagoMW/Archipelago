@@ -29,9 +29,16 @@ class ZillionCommandProcessor(ClientCommandProcessor):
 class ZillionContext(CommonContext):
     game = "Zillion"
     command_processor: Type[ClientCommandProcessor] = ZillionCommandProcessor
-    to_game: "asyncio.Queue[events.EventToGame]"
     items_handling = 1  # receive items from other players
 
+    from_game: "asyncio.Queue[events.EventFromGame]"
+    to_game: "asyncio.Queue[events.EventToGame]"
+    ap_local_count: int
+    """ local checks watched by server """
+    next_item: int
+    """ index in `items_received` """
+    ap_id_to_name: Dict[int, str]
+    ap_id_to_zz_id: Dict[int, int]
     start_char: Chars = "JJ"
     rescues: Dict[int, RescueInfo] = {}
     loc_mem_to_id: Dict[int, int] = {}
@@ -39,11 +46,33 @@ class ZillionContext(CommonContext):
 
     def __init__(self,
                  server_address: str,
-                 password: str,
-                 to_game: "asyncio.Queue[events.EventToGame]"):
+                 password: str) -> None:
         super().__init__(server_address, password)
-        self.to_game = to_game
+        self.from_game = asyncio.Queue()
+        self.to_game = asyncio.Queue()
         self.got_slot_data = asyncio.Event()
+
+        self.reset_game_state()
+
+    def reset_game_state(self) -> None:
+        for _ in range(self.from_game.qsize()):
+            self.from_game.get_nowait()
+        for _ in range(self.to_game.qsize()):
+            self.to_game.get_nowait()
+        self.got_slot_data.clear()
+
+        self.ap_local_count = 0
+        self.next_item = 0
+        self.ap_id_to_name = {}
+        self.ap_id_to_zz_id = {}
+        self.rescues = {}
+        self.loc_mem_to_id = {}
+
+        self.locations_checked.clear()
+        self.missing_locations.clear()
+        self.checked_locations.clear()
+        self.finished_game = False
+        self.items_received.clear()
 
     # override
     def on_deathlink(self, data: Dict[str, Any]) -> None:
@@ -137,98 +166,125 @@ class ZillionContext(CommonContext):
                 doors = base64.b64decode(doors_b64)
                 self.to_game.put_nowait(events.DoorEventToGame(doors))
 
-
-async def zillion_sync_task(ctx: ZillionContext, to_game: "asyncio.Queue[events.EventToGame]") -> None:
-    logger.info("started zillion sync task")
-    from_game: "asyncio.Queue[events.EventFromGame]" = asyncio.Queue()
-
-    with Memory(from_game, to_game) as memory:
-        found_name = False
-        help_message_shown = False
-        logger.info("looking for game...")
-        while (not found_name) and (not ctx.exit_event.is_set()):
-            # logger.info("looking for name")
-            name = await memory.check_for_player_name()
-            # logger.info(f"found name {name}")
-            if len(name):
-                # logger.info("len(name)")
-                ctx.auth = name.decode()
-                found_name = True
-                logger.info("connected to game")
-                if ctx.server and ctx.server.socket:  # type: ignore
-                    logger.info("logging in to server...")
-                    await ctx.send_connect()
+    def process_from_game_queue(self) -> None:
+        if self.from_game.qsize():
+            event_from_game = self.from_game.get_nowait()
+            if isinstance(event_from_game, events.AcquireLocationEventFromGame):
+                server_id = event_from_game.id + base_id
+                loc_name = id_to_loc[event_from_game.id]
+                self.locations_checked.add(server_id)
+                if server_id in self.missing_locations:
+                    self.ap_local_count += 1
+                    n_locations = len(self.missing_locations) + len(self.checked_locations) - 1  # -1 to ignore win
+                    logger.info(f'New Check: {loc_name} ({self.ap_local_count}/{n_locations})')
+                    asyncio.create_task(self.send_msgs([
+                        {"cmd": 'LocationChecks', "locations": [server_id]}
+                    ]))
                 else:
-                    logger.info("waiting for server connection...")
+                    # This will happen a lot in Zillion,
+                    # because all the key words are local and unwatched by the server.
+                    logger.debug(f"DEBUG: {loc_name} not in missing")
+            elif isinstance(event_from_game, events.DeathEventFromGame):
+                asyncio.create_task(self.send_death())
+            elif isinstance(event_from_game, events.WinEventFromGame):
+                if not self.finished_game:
+                    asyncio.create_task(self.send_msgs([
+                        {"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}
+                    ]))
+                    self.finished_game = True
+            elif isinstance(event_from_game, events.DoorEventFromGame):
+                if self.auth:
+                    doors_b64 = base64.b64encode(event_from_game.doors).decode()
+                    payload = {
+                        "cmd": "Set",
+                        "key": f"zillion-{self.auth}-doors",
+                        "operations": [{"operation": "replace", "value": doors_b64}]
+                    }
+                    asyncio.create_task(self.send_msgs([payload]))
             else:
+                logger.warning(f"WARNING: unhandled event from game {event_from_game}")
+
+    def process_items_received(self) -> None:
+        if len(self.items_received) > self.next_item:
+            zz_item_ids = [self.ap_id_to_zz_id[item.item] for item in self.items_received]
+            for index in range(self.next_item, len(self.items_received)):
+                ap_id = self.items_received[index].item
+                from_name = self.player_names[self.items_received[index].player]
+                # TODO: colors in this text, like sni client?
+                logger.info(f'received {self.ap_id_to_name[ap_id]} from {from_name}')
+            self.to_game.put_nowait(
+                events.ItemEventToGame(zz_item_ids)
+            )
+            self.next_item = len(self.items_received)
+
+
+async def zillion_sync_task(ctx: ZillionContext) -> None:
+    logger.info("started zillion sync task")
+
+    last_log = ""
+
+    def log_no_spam(msg: str) -> None:
+        nonlocal last_log
+        if msg != last_log:
+            last_log = msg
+            logger.info(msg)
+
+    # to only show this message once per client run
+    help_message_shown = False
+
+    with Memory(ctx.from_game, ctx.to_game) as memory:
+        while not ctx.exit_event.is_set():
+            ram = await memory.read()
+            name = memory.get_player_name(ram).decode()
+            if len(name):
+                if name == ctx.auth:
+                    # this is the name we know
+                    if ctx.server and ctx.server.socket:  # type: ignore
+                        if memory.have_generation_info():
+                            log_no_spam("everything connected")
+                            await memory.process_ram(ram)
+                            ctx.process_from_game_queue()
+                            ctx.process_items_received()
+                        else:  # no generation info
+                            if ctx.got_slot_data.is_set():
+                                memory.set_generation_info(ctx.rescues, ctx.loc_mem_to_id)
+                                ctx.ap_id_to_name, ctx.ap_id_to_zz_id, _ap_id_to_zz_item = \
+                                    make_id_to_others(ctx.start_char)
+                                ctx.next_item = 0
+                                ctx.ap_local_count = len(ctx.checked_locations)
+                            else:  # no slot data yet
+                                asyncio.create_task(ctx.send_connect())
+                                log_no_spam("logging in to server...")
+                                await asyncio.wait((
+                                    ctx.got_slot_data.wait(),
+                                    ctx.exit_event.wait(),
+                                    asyncio.sleep(6)
+                                ), return_when=asyncio.FIRST_COMPLETED)  # to not spam connect packets
+                    else:  # server not connected
+                        log_no_spam("waiting for server connection...")
+                else:  # new game
+                    log_no_spam("connected to new game")
+                    await ctx.disconnect()
+                    ctx.reset_server_state()
+                    ctx.reset_game_state()
+                    memory.reset_game_state()
+
+                    ctx.auth = name
+                    asyncio.create_task(ctx.connect())
+                    await asyncio.wait((
+                        ctx.got_slot_data.wait(),
+                        ctx.exit_event.wait(),
+                        asyncio.sleep(6)
+                    ), return_when=asyncio.FIRST_COMPLETED)  # to not spam connect packets
+            else:  # no name found in game
                 if not help_message_shown:
                     logger.info('In RetroArch, make sure "Settings > Network > Network Commands" is on.')
                     help_message_shown = True
-                # logger.info("before sleep")
+                log_no_spam("looking for connection to game...")
                 await asyncio.sleep(0.3)
-                # logger.info("after sleep")
 
-        ap_id_to_name: Dict[int, str] = {}
-        ap_id_to_zz_id: Dict[int, int] = {}
-        if not ctx.exit_event.is_set():
-            logger.info("waiting for server login...")
-        await asyncio.wait((ctx.got_slot_data.wait(), ctx.exit_event.wait()), return_when=asyncio.FIRST_COMPLETED)
-        if not ctx.exit_event.is_set():
-            memory.set_generation_info(ctx.rescues, ctx.loc_mem_to_id)
-            ap_id_to_name, ap_id_to_zz_id, _ap_id_to_zz_item = make_id_to_others(ctx.start_char)
-
-        next_item = 0
-        ap_local_count = len(ctx.checked_locations)  # local items that the server knows about, not key words
-        # TODO: find out why close button sometimes doesn't work on ZillionClient window
-        while not ctx.exit_event.is_set():
-            await memory.check()
-            if from_game.qsize():
-                event_from_game = from_game.get_nowait()
-                if isinstance(event_from_game, events.AcquireLocationEventFromGame):
-                    server_id = event_from_game.id + base_id
-                    loc_name = id_to_loc[event_from_game.id]
-                    ctx.locations_checked.add(server_id)
-                    if server_id in ctx.missing_locations:
-                        ap_local_count += 1
-                        n_locations = len(ctx.missing_locations) + len(ctx.checked_locations) - 1  # -1 to ignore win
-                        logger.info(f'New Check: {loc_name} ({ap_local_count}/{n_locations})')
-                        await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [server_id]}])
-                    else:
-                        # This will happen a lot in Zillion,
-                        # because all the key words are local and unwatched by the server.
-                        logger.debug(f"DEBUG: {loc_name} not in missing")
-                elif isinstance(event_from_game, events.DeathEventFromGame):
-                    try:
-                        await ctx.send_death()
-                    except KeyError:
-                        logger.warning("KeyError sending death")
-                elif isinstance(event_from_game, events.WinEventFromGame):
-                    if not ctx.finished_game:
-                        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                        ctx.finished_game = True
-                elif isinstance(event_from_game, events.DoorEventFromGame):
-                    if ctx.auth:
-                        doors_b64 = base64.b64encode(event_from_game.doors).decode()
-                        payload = {
-                            "cmd": "Set",
-                            "key": f"zillion-{ctx.auth}-doors",
-                            "operations": [{"operation": "replace", "value": doors_b64}]
-                        }
-                        asyncio.create_task(ctx.send_msgs([payload]))
-                else:
-                    logger.warning(f"WARNING: unhandled event from game {event_from_game}")
-            if len(ctx.items_received) > next_item:
-                zz_item_ids = [ap_id_to_zz_id[item.item] for item in ctx.items_received]
-                for index in range(next_item, len(ctx.items_received)):
-                    ap_id = ctx.items_received[index].item
-                    from_name = ctx.player_names[ctx.items_received[index].player]
-                    # TODO: colors in this text, like sni client?
-                    logger.info(f'received {ap_id_to_name[ap_id]} from {from_name}')
-                ctx.to_game.put_nowait(
-                    events.ItemEventToGame(zz_item_ids)
-                )
-                next_item = len(ctx.items_received)
             await asyncio.sleep(0.09375)
+        logger.info("zillion sync task ending")
 
 
 async def main() -> None:
@@ -247,8 +303,7 @@ async def main() -> None:
             args.connect = meta["server"]
         logger.info(f"wrote rom file to {rom_file}")
 
-    to_game: "asyncio.Queue[events.EventToGame]" = asyncio.Queue()
-    ctx = ZillionContext(args.connect, args.password, to_game)
+    ctx = ZillionContext(args.connect, args.password)
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
@@ -256,7 +311,7 @@ async def main() -> None:
         ctx.run_gui()
     ctx.run_cli()
 
-    sync_task = asyncio.create_task(zillion_sync_task(ctx, to_game))
+    sync_task = asyncio.create_task(zillion_sync_task(ctx))
 
     await ctx.exit_event.wait()
 
