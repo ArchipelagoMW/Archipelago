@@ -1,13 +1,14 @@
+import json
 import logging
 import os
-from Utils import __version__, local_path
-from jinja2 import Template
-import yaml
-import json
 import typing
 
-from worlds.AutoWorld import AutoWorldRegister
+import yaml
+from jinja2 import Template
+
 import Options
+from Utils import __version__, local_path
+from worlds.AutoWorld import AutoWorldRegister
 
 handled_in_js = {"start_inventory", "local_items", "non_local_items", "start_hints", "start_location_hints",
                  "exclude_locations"}
