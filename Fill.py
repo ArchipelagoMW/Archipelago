@@ -235,7 +235,7 @@ def inaccessible_location_rules(world: MultiWorld, state: CollectionState, locat
     unreachable_locations = [location for location in locations if not location.can_reach(maximum_exploration_state)]
     if unreachable_locations:
         def forbid_important_item_rule(item: Item):
-            return not (item.classification & 0b0011) and world.accessibility[item.player] != 'minimal'
+            return not ((item.classification & 0b0011) and world.accessibility[item.player] != 'minimal')
 
         for location in unreachable_locations:
             add_item_rule(location, forbid_important_item_rule)
