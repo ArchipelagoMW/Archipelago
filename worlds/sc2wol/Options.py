@@ -42,7 +42,7 @@ class MissionOrder(Choice):
     Mini Campaign (15): Shorter version of the campaign with randomized missions and optional branches.
     Grid (16):  A 4x4 grid of random missions.  Start at the top-left and forge a path towards All-In.
     Mini Grid (9):  A 3x3 version of Grid.  Complete the bottom-right mission to win.
-    Blitz (14):  14 random missions that open up very quickly.  Complete the bottom-right mission to win.
+    Blitz (12):  12 random missions that open up very quickly.  Complete the bottom-right mission to win.
     Gauntlet (7): Linear series of 7 random missions to complete the campaign."""
     display_name = "Mission Order"
     option_vanilla = 0

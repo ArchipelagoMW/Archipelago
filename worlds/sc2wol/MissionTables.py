@@ -69,7 +69,7 @@ mini_campaign_order = [
     FillMission("no_build", [-1], "Mar Sara", completion_critical=True),
     FillMission("easy", [0], "Colonist"),
     FillMission("medium", [1], "Colonist"),
-    FillMission("easy", [0], "Artifact", completion_critical=True),
+    FillMission("medium", [0], "Artifact", completion_critical=True),
     FillMission("medium", [3], "Artifact", number=4, completion_critical=True),
     FillMission("hard", [4], "Artifact", number=8, completion_critical=True),
     FillMission("medium", [0], "Covert", number=2),

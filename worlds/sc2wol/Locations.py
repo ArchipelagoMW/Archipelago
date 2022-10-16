@@ -56,10 +56,10 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
                      lambda state: state._sc2wol_defense_rating(world, player, True) >= 4 and
                                    (state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player))),
         LocationData("Outbreak", "Outbreak: Left Infestor", SC2WOL_LOC_ID_OFFSET + 501,
-                     lambda state: state._sc2wol_defense_rating(world, player, True) >= 4 and
+                     lambda state: state._sc2wol_defense_rating(world, player, True) >= 2 and
                                    (state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player))),
         LocationData("Outbreak", "Outbreak: Right Infestor", SC2WOL_LOC_ID_OFFSET + 502,
-                     lambda state: state._sc2wol_defense_rating(world, player, True) >= 4 and
+                     lambda state: state._sc2wol_defense_rating(world, player, True) >= 2 and
                                    (state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player))),
         LocationData("Safe Haven", "Safe Haven: Victory", SC2WOL_LOC_ID_OFFSET + 600,
                      lambda state: state._sc2wol_has_common_unit(world, player) and

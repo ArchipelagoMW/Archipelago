@@ -44,7 +44,7 @@ def filter_missions(world: MultiWorld, player: int) -> dict[str, list[str]]:
         }
 
     mission_pools = [
-        no_build_regions_list,
+        [],
         easy_regions_list,
         medium_regions_list,
         hard_regions_list
@@ -63,9 +63,19 @@ def filter_missions(world: MultiWorld, player: int) -> dict[str, list[str]]:
     # Removing the new no-build missions from their original sets
     for i in range(1, len(mission_pools)):
         mission_pools[i] = [mission for mission in mission_pools[i] if mission not in excluded_missions.union(mission_pools[0])]
+    # If the first mission is a build mission, there may not be enough locations to reach Outbreak as a second mission
+    if not get_option_value(world, player, 'shuffle_no_build'):
+        # Swapping Outbreak and The Great Train Robbery
+        if "Outbreak" in mission_pools[1]:
+            mission_pools[1].remove("Outbreak")
+            mission_pools[2].append("Outbreak")
+        if "The Great Train Robbery" in mission_pools[2]:
+            mission_pools[2].remove("The Great Train Robbery")
+            mission_pools[1].append("The Great Train Robbery")
     # Removing random missions from each difficulty set in a cycle
     set_cycle = 0
     current_count = sum(len(mission_pool) for mission_pool in mission_pools)
+
     if current_count < mission_count:
         raise Exception("Not enough missions available to fill the campaign on current settings.  Please exclude fewer missions.")
     while current_count > mission_count:
@@ -73,13 +83,13 @@ def filter_missions(world: MultiWorld, player: int) -> dict[str, list[str]]:
             set_cycle = 0
         # Must contain at least one mission per set
         mission_pool = mission_pools[set_cycle]
+        if len(mission_pool) <= 1:
+            if all(len(mission_pool) <= 1 for mission_pool in mission_pools):
+                raise Exception("Not enough missions available to fill the campaign on current settings.  Please exclude fewer missions.")
+        else:
+            mission_pool.remove(world.random.choice(mission_pool))
+            current_count -= 1
         set_cycle += 1
-        if len(mission_pool) == 1:
-            if all(len(other_pool) == 1 for other_pool in mission_pools):
-                raise Exception("Not enough missions available to fill the campaign on current settings.   Please exclude fewer missions.")
-            continue
-        mission_pool.remove(world.random.choice(mission_pool))
-        current_count -= 1
 
     return {
         "no_build": mission_pools[0],
