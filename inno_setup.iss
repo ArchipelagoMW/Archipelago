@@ -32,7 +32,7 @@ AllowNoIcons=yes
 SetupIconFile={#MyAppIcon}
 UninstallDisplayIcon={app}\{#MyAppExeName}
 ; you will likely have to remove the following signtool line when testing/debugging locally. Don't include that change in PRs.
-SignTool= signtool
+
 LicenseFile= LICENSE
 WizardStyle= modern
 SetupLogging=yes
@@ -61,6 +61,7 @@ Name: "generator/lttp";   Description: "A Link to the Past ROM Setup and Enemize
 Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296; Flags: disablenouninstallwarning
 Name: "generator/pkmn_r"; Description: "Pokemon Red ROM Setup"; Types: full hosting
 Name: "generator/pkmn_b"; Description: "Pokemon Blue ROM Setup"; Types: full hosting
+Name: "generator/mmbn3";  Description: "MegaMan Battle Network 3"; Types: full hosting; ExtraDiskSpaceRequired: 8388608; Flags: disablenouninstallwarning
 Name: "server";           Description: "Server"; Types: full hosting
 Name: "client";           Description: "Clients"; Types: full playing
 Name: "client/sni";       Description: "SNI Client"; Types: full playing
@@ -75,6 +76,7 @@ Name: "client/ff1";       Description: "Final Fantasy 1"; Types: full playing
 Name: "client/pkmn";      Description: "Pokemon Client"
 Name: "client/pkmn/red";  Description: "Pokemon Client - Pokemon Red Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
 Name: "client/pkmn/blue"; Description: "Pokemon Client - Pokemon Blue Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
+Name: "client/mmbn3";     Description: "MegaMan Battle Network 3 Client"; Types: full playing;
 Name: "client/cf";        Description: "ChecksFinder"; Types: full playing
 Name: "client/sc2";       Description: "Starcraft 2"; Types: full playing
 Name: "client/text";      Description: "Text, to !command and chat"; Types: full playing
@@ -91,6 +93,7 @@ Source: "{code:GetSoEROMPath}"; DestDir: "{app}"; DestName: "Secret of Evermore 
 Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: client/oot or generator/oot
 Source: "{code:GetRedROMPath}"; DestDir: "{app}"; DestName: "Pokemon Red (UE) [S][!].gb"; Flags: external; Components: client/pkmn/red or generator/pkmn_r
 Source: "{code:GetBlueROMPath}"; DestDir: "{app}"; DestName: "Pokemon Blue (UE) [S][!].gb"; Flags: external; Components: client/pkmn/blue or generator/pkmn_b
+Source: "{code:GetBN3ROMPath}"; DestDir: "{app}"; DestName: "Mega Man Battle Network 3 - Blue Version (USA).gba"; Flags: external; Components: client/mmbn3
 Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#source_path}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/sni
 Source: "{#source_path}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
@@ -108,6 +111,7 @@ Source: "{#source_path}\ArchipelagoFF1Client.exe"; DestDir: "{app}"; Flags: igno
 Source: "{#source_path}\ArchipelagoPokemonClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/pkmn
 Source: "{#source_path}\ArchipelagoChecksFinderClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/cf
 Source: "{#source_path}\ArchipelagoStarcraft2Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sc2
+Source: "{#source_path}\ArchipelagoMMBN3Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/mmbn3
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
 [Icons]
@@ -122,6 +126,7 @@ Name: "{group}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\Archipelag
 Name: "{group}\{#MyAppName} Pokemon Client"; Filename: "{app}\ArchipelagoPokemonClient.exe"; Components: client/pkmn
 Name: "{group}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Components: client/cf
 Name: "{group}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Components: client/sc2
+Name: "{group}\{#MyAppName} MegaMan Battle Network 3 Client"; Filename: "{app}\ArchipelagoMMBN3Client.exe"; Components: client/mmbn3
 
 Name: "{commondesktop}\{#MyAppName} Folder"; Filename: "{app}"; Tasks: desktopicon
 Name: "{commondesktop}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; Components: server
@@ -133,6 +138,7 @@ Name: "{commondesktop}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\Ar
 Name: "{commondesktop}\{#MyAppName} Pokemon Client"; Filename: "{app}\ArchipelagoPokemonClient.exe"; Tasks: desktopicon; Components: client/pkmn
 Name: "{commondesktop}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Tasks: desktopicon; Components: client/cf
 Name: "{commondesktop}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Tasks: desktopicon; Components: client/sc2
+Name: "{commondesktop}\{#MyAppName} MegaMan Battle Network 3 Client"; Filename: "{app}\ArchipelagoMMBN3Client.exe"; Tasks: desktopicon; Components: client/mmbn3
 
 [Run]
 
@@ -199,6 +205,11 @@ Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch";                     ValueData: "Ar
 Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoPokemonClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/pkmn/blue
 Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\shell\open\command";  ValueData: """{app}\ArchipelagoPokemonClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/pkmn/blue
 
+Root: HKCR; Subkey: ".apbn3";                                     ValueData: "{#MyAppName}bn3bpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/mmbn3
+Root: HKCR; Subkey: "{#MyAppName}bn3bpatch";                      ValueData: "Archipelago MegaMan Battle Network 3 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/mmbn3
+Root: HKCR; Subkey: "{#MyAppName}bn3bpatch\DefaultIcon";          ValueData: "{app}\ArchipelagoMMBN3Client.exe,0";                           ValueType: string;  ValueName: ""; Components: client/mmbn3
+Root: HKCR; Subkey: "{#MyAppName}bn3bpatch\shell\open\command";   ValueData: """{app}\ArchipelagoMMBN3Client.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/mmbn3
+
 Root: HKCR; Subkey: ".archipelago";                              ValueData: "{#MyAppName}multidata";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: server
 Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Archipelago Server Data";       Flags: uninsdeletekey;  ValueType: string;  ValueName: ""; Components: server
 Root: HKCR; Subkey: "{#MyAppName}multidata\DefaultIcon";         ValueData: "{app}\ArchipelagoServer.exe,0";                         ValueType: string;  ValueName: ""; Components: server
@@ -260,6 +271,9 @@ var RedROMFilePage:  TInputFileWizardPage;
 var bluerom: string;
 var BlueROMFilePage:  TInputFileWizardPage;
 
+var bn3rom: string;
+var BN3ROMFilePage: TInputFileWizardPage;
+
 function GetSNESMD5OfFile(const rom: string): string;
 var data: AnsiString;
 begin
@@ -320,6 +334,21 @@ begin
     'Location of ROM file:',
     'GB ROM files|*.gb;*.gbc|All files|*.*',
     '.gb');
+end;
+
+function AddGBARomPage(name: string): TInputFileWizardPage;
+begin
+  Result :=
+    CreateInputFilePage(
+      wpSelectComponents,
+      'Select ROM File',
+      'Where is your ' + name + ' located?',
+      'Select the file, then click Next.');
+
+  Result.Add(
+    'Location of ROM file:',
+    'GBA ROM files|*.gba|All files|*.*',
+    '.gba');
 end;
 
 procedure AddOoTRomPage();
@@ -498,6 +527,22 @@ begin
     Result := '';
  end;
 
+function GetBN3ROMPath(Param: string): string;
+begin
+  if Length(bn3rom) > 0 then
+    Result := bn3rom
+  else if Assigned(BN3ROMFilePage) then
+    begin
+      R := CompareStr(GetMD5OfFile(BN3ROMFilePage.Values[0]), '6fe31df0144759b34ad666badaacc442')
+      if R <> 0 then
+        MsgBox('MegaMan Battle Network 3 Blue ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := BN3ROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+ end;
+
 procedure InitializeWizard();
 begin
   AddOoTRomPage();
@@ -529,6 +574,10 @@ begin
   bluerom := CheckRom('Pokemon Blue (UE) [S][!].gb','50927e843568814f7ed45ec4f944bd8b');
   if Length(redrom) = 0 then
     BlueROMFilePage:= AddGBRomPage('Pokemon Blue (UE) [S][!].gb');
+
+  bn3rom := CheckRom('Mega Man Battle Network 3 - Blue Version (USA).gba','6fe31df0144759b34ad666badaacc442');
+  if Length(bn3rom) = 0 then
+    BN3ROMFilePage:= AddGBARomPage('Mega Man Battle Network 3 - Blue Version (USA).gba');
 end;
 
 
@@ -551,4 +600,6 @@ begin
     Result := not (WizardIsComponentSelected('generator/pkmn_r') or WizardIsComponentSelected('client/pkmn/red'));
   if (assigned(BlueROMFilePage)) and (PageID = BlueROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/pkmn_b') or WizardIsComponentSelected('client/pkmn/blue'));
+  if (assigned(BN3ROMFilePage)) and (PageID = BN3ROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('generator/mmbn3') or WizardIsComponentSelected('client/mmbn3'));
 end;

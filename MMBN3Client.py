@@ -3,8 +3,12 @@ import json
 import os
 import multiprocessing
 import subprocess
+import zipfile
+import zlib
 
 from asyncio import StreamReader, StreamWriter
+
+import bsdiff4
 
 from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
@@ -133,7 +137,6 @@ def get_payload(ctx: MMBN3Context):
 
 
 async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
-    """
     # Game completion handling
     if payload['gameComplete'] and not ctx.finished_game:
         await ctx.send_msgs([{
@@ -141,7 +144,6 @@ async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
             "status": 30
         }])
         ctx.finished_game = True
-    """
 
     # Locations handling
     if ctx.location_table != payload['locations']:
@@ -184,6 +186,7 @@ async def gba_sync_task(ctx: MMBN3Context):
                             # Not just a keep alive ping, parse
                             asyncio.create_task((parse_payload(data_decoded, ctx, False)))
                         if not ctx.auth:
+                            logger.info("Lua connection detected, but no player name was set.")
                             await ctx.get_username()
                             if ctx.awaiting_rom:
                                 await ctx.server_auth(False)
@@ -249,16 +252,22 @@ async def run_game(romfile):
 
 async def patch_and_run_game(apmmbn3_file):
     base_name = os.path.splitext(apmmbn3_file)[0]
-    decomp_path = base_name + '-decomp.gba'
-    comp_path = base_name + '.gba'
-    # Load vanilla ROM, patch file, compress ROM
-    #rom = Rom(Utils.local_path(Utils.get_options()["mmbn3_options"]["rom_file"]))
-    #apply_patch_file(rom, apmmbn3_file)
-    #rom.write_to_file(decomp_path)
-    #os.chdir(data_path("Compress"))
-    #compress_rom_file(decomp_path, comp_path)
-    os.remove(decomp_path)
-    asyncio.create_task(run_game(comp_path))
+
+    with zipfile.ZipFile(apmmbn3_file, 'r') as patch_archive:
+        try:
+            with patch_archive.open("delta.bsdiff4", 'r') as stream:
+                patch_data = stream.read()
+        except KeyError as ex:
+            raise FileNotFoundError("Patch file missing from archive.")
+    rom_file = Utils.get_options()["mmbn3_options"]["rom_file"]
+    with open(rom_file, 'rb') as rom:
+        rom_bytes = rom.read()
+    patched_bytes = bsdiff4.patch(rom_bytes, patch_data)
+    patched_rom_file = base_name+".gba"
+    with open(patched_rom_file,'wb') as patched_rom:
+        patched_rom.write(patched_bytes)
+
+    asyncio.create_task(run_game(patched_rom_file))
 
 if __name__ == '__main__':
     Utils.init_logging("MMBN3Client")
@@ -266,13 +275,12 @@ if __name__ == '__main__':
     async def main():
         multiprocessing.freeze_support()
         parser = get_base_parser()
-        parser.add_argument('apmmbn3_file', default="", type=str, nargs="?",
+        parser.add_argument('patch_file', default="", type=str, nargs="?",
                             help='Path to an APMMBN3 file')
         args = parser.parse_args()
 
-        if args.apmmbn3_file:
-            logger.info("APMMBN3 file supplied, beginning patching process...")
-            asyncio.create_task(patch_and_run_game(args.apmmbn3_file))
+        if args.patch_file:
+            asyncio.create_task(patch_and_run_game(args.patch_file))
 
         ctx = MMBN3Context(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="Server Loop")
