@@ -228,7 +228,7 @@ class LocalRom:
 class MMBN3DeltaPatch(APDeltaPatch):
     hash = CHECKSUM_BLUE
     game = "MegaMan Battle Network 3"
-    patch_file_ending = ".bn3ap"
+    patch_file_ending = ".apbn3"
     result_file_ending = ".gba"
 
     @classmethod

@@ -122,7 +122,8 @@ class MMBN3World(World):
                 entrance = Entrance(self.player, connection, region)
                 entrance.connect(connection_region)
                 if connection == "Undernet":
-                    entrance.access_rule = lambda state: state.has(ItemName.HPMemory, self.player, 5)
+                    entrance.access_rule = lambda state: state.has(ItemName.HPMemory, self.player, 5) and\
+                        state.has(ItemName.Press, self.player)
                 if connection == "Secret Area":
                     entrance.access_rule = lambda state: state.has(ItemName.HPMemory, self.player, 15)
                 if connection == "WWW Island":
@@ -169,12 +170,24 @@ class MMBN3World(World):
         set_rule(self.world.get_location(LocationName.Undernet_1_WWW_BMD, self.player),
                  has_www_id)
 
+        # Set Press Program requirements
+        has_press = lambda state: state.has(ItemName.Press, self.player)
+        set_rule(self.world.get_location(LocationName.Yoka_1_PMD, self.player), has_press)
+        set_rule(self.world.get_location(LocationName.Yoka_2_Upper_BMD, self.player), has_press)
+        set_rule(self.world.get_location(LocationName.Beach_2_East_BMD, self.player), has_press)
+        set_rule(self.world.get_location(LocationName.Hades_South_BMD, self.player), has_press)
+        set_rule(self.world.get_location(LocationName.Hades_HadesKey_BMD, self.player), has_press)
+        set_rule(self.world.get_location(LocationName.Secret_3_BugFrag_BMD, self.player), has_press)
+        set_rule(self.world.get_location(LocationName.Secret_3_Island_BMD, self.player), has_press)
+
         # Set Job additional area access
         # TODO: Once we find a way to restrict overworld access
 
         # Set Trade quests
         set_rule(self.world.get_location(LocationName.Hades_GrabBack_K_Trade, self.player),
                  lambda state: state.has(ItemName.GrabBack_K, self.player))
+        set_rule(self.world.get_location(LocationName.Yoka_FireSwrd_P_Trade, self.player),
+                 lambda state: state.has(ItemName.FireSwrd_P, self.player))
         set_rule(self.world.get_location(LocationName.Beach_DNN_WideSwrd_C_Trade, self.player),
                  lambda state: state.has(ItemName.WideSwrd_C, self.player))
         set_rule(self.world.get_location(LocationName.Hospital_DynaWav_V_Trade, self.player),

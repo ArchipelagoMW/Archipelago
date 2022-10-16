@@ -115,7 +115,7 @@ chipList: typing.List[ItemData] = [
     ItemData(0xB31030, ItemName.ElecSwrd_P,        ItemClassification.useful,      ItemType.Chip,  35, ChipCode('P')),
     ItemData(0xB31031, ItemName.Fire_plus_30_star, ItemClassification.useful,      ItemType.Chip, 196, ChipCode('*')),
     ItemData(0xB31032, ItemName.FireRat_H,         ItemClassification.useful,      ItemType.Chip, 117, ChipCode('H')),
-    ItemData(0xB31033, ItemName.FireSwrd_R,        ItemClassification.useful,      ItemType.Chip,  33, ChipCode('R')),
+    ItemData(0xB31033, ItemName.FireSwrd_P,        ItemClassification.progression, ItemType.Chip, 33, ChipCode('P')),
     ItemData(0xB31034, ItemName.FstGauge_star,     ItemClassification.useful,      ItemType.Chip, 158, ChipCode('*')),
     ItemData(0xB31035, ItemName.GaiaBlde_star,     ItemClassification.useful,      ItemType.Chip, 276, ChipCode('*')),
     ItemData(0xB31036, ItemName.Geddon1_star,      ItemClassification.useful,      ItemType.Chip, 138, ChipCode('*')),
@@ -187,7 +187,7 @@ chipList: typing.List[ItemData] = [
     ItemData(0xB31074, ItemName.Team2_star,        ItemClassification.useful,      ItemType.Chip, 169, ChipCode('*')),
     ItemData(0xB31075, ItemName.Thndrblt_star,     ItemClassification.useful,      ItemType.Chip, 275, ChipCode('*')),
     ItemData(0xB31076, ItemName.Tornado_L,         ItemClassification.useful,      ItemType.Chip,  65, ChipCode('L')),
-    ItemData(0xB31077, ItemName.Tsunami_star,      ItemClassification.useful,      ItemType.Chip, 274, ChipCode('*')),
+    ItemData(0xB31077, ItemName.Fountain_star,     ItemClassification.useful, ItemType.Chip, 274, ChipCode('*')),
     ItemData(0xB31078, ItemName.VarSword_B,        ItemClassification.useful,      ItemType.Chip,  38, ChipCode('B')),
     ItemData(0xB31079, ItemName.VarSword_F,        ItemClassification.useful,      ItemType.Chip,  38, ChipCode('F')),
     ItemData(0xB3107A, ItemName.WideSwrd_C,        ItemClassification.progression, ItemType.Chip,  31, ChipCode('C')),
@@ -227,7 +227,7 @@ programList: typing.List[ItemData] = [
     ItemData(0xB31097, ItemName.WpnLV_plus_White,  ItemClassification.useful, ItemType.Program, 35, ProgramColor.White),
     ItemData(0xB31098, ItemName.WpnLV_plus_Pink,   ItemClassification.useful, ItemType.Program, 35, ProgramColor.Pink),
     ItemData(0xB31099, ItemName.WpnLV_plus_Yellow, ItemClassification.useful, ItemType.Program, 35, ProgramColor.Yellow),
-    ItemData(0xB3109A, ItemName.Press,             ItemClassification.useful, ItemType.Program, 20, ProgramColor.White)
+    ItemData(0xB3109A, ItemName.Press,             ItemClassification.progression, ItemType.Program, 20, ProgramColor.White)
 ]
 
 zennyList: typing.List[ItemData] = [

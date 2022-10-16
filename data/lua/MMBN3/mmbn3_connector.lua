@@ -24,6 +24,7 @@ local itemState = ITEMSTATE_IDLE
 local itemQueued = nil
 
 local debugEnabled = false
+local game_complete = false
 
 local charDict = {
     [' ']=0x00,['0']=0x01,['1']=0x02,['2']=0x03,['3']=0x04,['4']=0x05,['5']=0x06,['6']=0x07,['7']=0x08,['8']=0x09,['9']=0x0A,
@@ -98,7 +99,7 @@ local IsInBattle = function()
 end
 
 local IsItemQueued = function()
-    return memory.read_u8(0x203FD00) == 0x01
+    return memory.read_u8(0x203fe00) == 0x01
 end
 
 -- This function actually determines when you're on ANY full-screen menu (navi cust, link battle, etc.) but we
@@ -108,11 +109,11 @@ local IsOnTitle = function()
 end
 
 local saveItemIndexToRAM = function(newIndex)
-    memory.write_s32_le(0x203FD02,newIndex)
+    memory.write_s32_le(0x203fe02,newIndex)
 end
 
 local loadItemIndexFromRAM = function()
-    last_index = memory.read_s32_le(0x203FD02)
+    last_index = memory.read_s32_le(0x203fe02)
     if (last_index < 0) then
         last_index = 0
         saveItemIndexToRAM(0)
@@ -264,7 +265,7 @@ end
 local misc_bmd_checks = function()
     local checks ={}
     checks["ACDC Dog House BMD"] = memory.read_u8(0x2000240)
-    checks["ACDC Lan's TV BMD"] = memory.read_u8(0x2000242)
+    checks["ACDC Lan's Security Panel BMD"] = memory.read_u8(0x2000242)
     checks["ACDC Yai's Phone BMD"] = memory.read_u8(0x2000244)
     checks["ACDC NumberMan Display BMD"] = memory.read_u8(0x2000248)
     checks["ACDC Tank BMD 1"] = memory.read_u8(0x2000247)
@@ -273,8 +274,8 @@ local misc_bmd_checks = function()
     checks["ACDC School Server BMD 2"] = memory.read_u8(0x2000242)
     checks["ACDC School Blackboard BMD"] = memory.read_u8(0x2000240)
     checks["SciLab Vending Machine BMD"] = memory.read_u8(0x2000241)
-    checks["SciLab Virus Lab BMD"] = memory.read_u8(0x2000249)
-    checks["SciLab Computer BMD"] = memory.read_u8(0x2000241)
+    checks["SciLab Virus Lab Door BMD"] = memory.read_u8(0x2000249)
+    checks["SciLab Dad's Computer BMD"] = memory.read_u8(0x2000241)
     checks["Yoka Armor BMD"] = memory.read_u8(0x2000248)
     checks["Yoka TV BMD"] = memory.read_u8(0x2000247)
     checks["Yoka Hot Spring BMD"] = memory.read_u8(0x200024b)
@@ -321,10 +322,10 @@ local pmd_checks = function()
     checks["Beach 1 PMD"] = memory.read_u8(0x20001e8)
     checks["Undernet 7 PMD"] = memory.read_u8(0x20001f6)
     checks["Mayl's HP PMD"] = memory.read_u8(0x2000239)
-    checks["SciLab Computer PMD"] = memory.read_u8(0x2000241)
+    checks["SciLab Dad's Computer PMD"] = memory.read_u8(0x2000241)
     checks["Zoo Panda PMD"] = memory.read_u8(0x2000249)
-    checks["DNN Security Panel PMD"] = memory.read_u8(0x2000244)
-    checks["DNN Main Console PMD"] = memory.read_u8(0x200024b)
+    checks["Beach DNN Security Panel PMD"] = memory.read_u8(0x2000244)
+    checks["Beach DNN Main Console PMD"] = memory.read_u8(0x200024b)
     checks["Tamako's HP PMD"] = memory.read_u8(0x200023c)
     return checks
 end
@@ -339,25 +340,25 @@ local overworld_checks = function()
     checks["SciLab Shake1 S Trade"] = memory.read_u8(0x2000163)
     checks["Yoka FireSwrd P Trade"] = memory.read_u8(0x2000162)
     checks["Hospital DynaWav V Trade"] = memory.read_u8(0x2000163)
-    checks["DNN WideSwrd C Trade"] = memory.read_u8(0x2000162)
-    checks["DNN HoleMetr H Trade"] = memory.read_u8(0x2000164)
-    checks["DNN Shadow J Trade"] = memory.read_u8(0x2000163)
+    checks["Beach DNN WideSwrd C Trade"] = memory.read_u8(0x2000162)
+    checks["Beach DNN HoleMetr H Trade"] = memory.read_u8(0x2000164)
+    checks["Beach DNN Shadow J Trade"] = memory.read_u8(0x2000163)
     checks["Hades GrabBack K Trade"] = memory.read_u8(0x2000164)
     checks["Comedian"] = memory.read_u8(0x200024d)
     checks["Villain"] = memory.read_u8(0x200024d)
     --checks["Mod Tools Guy"] = memory.read_u8(
     checks["ACDC School Desk"] = memory.read_u8(0x200024c)
-    checks["ACDC Class 5B Blackboard"] = memory.read_u8(0x200024c)
+    checks["ACDC Class 5B Bookshelf"] = memory.read_u8(0x200024c)
     checks["SciLab Garbage Can"] = memory.read_u8(0x200024c)
-    checks["Yoka Inn TV"] = memory.read_u8(0x200024c)
+    checks["Yoka Inn Jars"] = memory.read_u8(0x200024c)
     checks["Yoka Zoo Garbage"] = memory.read_u8(0x200024d)
     checks["Beach Department Store"] = memory.read_u8(0x2000161)
-    checks["Beach Hospital Vent"] = memory.read_u8(0x200024c)
+    checks["Beach Hospital Plaque"] = memory.read_u8(0x200024c)
     checks["Beach Hospital Pink Door"] = memory.read_u8(0x200024d)
     checks["Beach Hospital Tree"] = memory.read_u8(0x200024c)
     checks["Beach Hospital Hidden Conversation"] = memory.read_u8(0x2000162)
     checks["Beach Hospital Girl"] = memory.read_u8(0x2000160)
-    checks["Beach DNN Tamako"] = memory.read_u8(0x200024e)
+    checks["Beach DNN Kiosk"] = memory.read_u8(0x200024e)
     checks["Beach DNN Boxes"] = memory.read_u8(0x200024c)
     checks["Beach DNN Poster"] = memory.read_u8(0x200024d)
     checks["Hades Boat Dock"] = memory.read_u8(0x200024c)
@@ -411,10 +412,10 @@ local jobs_checks = function()
     checks["Job: Rare chips for cheap!"] = memory.read_u8(0x2000301)
     checks["Job: Be my boyfriend"] = memory.read_u8(0x2000301)
     checks["Job: Will you deliver?"] = memory.read_u8(0x2000301)
-    checks["Job: Look for friends (Tora)"] = memory.read_u8(0x2000300)
-    checks["Job: Stuntmen wanted! (Tora)"] = memory.read_u8(0x2000300)
-    checks["Job: Riot stopped (Tora)"] = memory.read_u8(0x2000300)
-    checks["Job: Gathering Data (Tora)"] = memory.read_u8(0x2000300)
+    --checks["Job: Look for friends (Tora)"] = memory.read_u8(0x2000300)
+    --checks["Job: Stuntmen wanted! (Tora)"] = memory.read_u8(0x2000300)
+    --checks["Job: Riot stopped (Tora)"] = memory.read_u8(0x2000300)
+    --checks["Job: Gathering Data (Tora)"] = memory.read_u8(0x2000300)
     checks["Job: Somebody, please help!"] = memory.read_u8(0x2000301)
     checks["Job: Looking for condor"] = memory.read_u8(0x2000301)
     checks["Job: Help with rehab"] = memory.read_u8(0x2000301)
@@ -484,21 +485,13 @@ local Next_Progressive_Undernet_ID = function()
     return 34
 end
 
-function is_game_complete()
+local is_game_complete = function()
     -- If the game is complete, do not read memory
-    if is_game_complete then return true end
+    if game_complete then return true end
 
-    -- contains a pointer to the current scene
-    -- TODO actually find this memory address
-    local scene_pointer = mainmemory.read_u32_be(0x00000000)
+    local is_alpha_defeated = bitand(memory.read_u8(0x2000064), 0x04) ~= 0
 
-    -- Need a way to know what mode we're in
-    local Alpha_Defeated = 0x00000000
-    local Serenade_Defeated = 0x00000000
-    local Alpha_Omega_Defeated = 0x00000000
-
-    -- If the game is complete, set the lib variable and report the game as completed
-    if (scene_pointer == Alpha_Defeated) or (scene_pointer == Serenade_Defeated) or (scene_pointer == Alpha_Omega_Defeated) then
+    if (is_alpha_defeated) then
         game_complete = true
         return true
     end
@@ -655,9 +648,9 @@ end
 
 local SendItem = function(item)
     -- Write the item message to RAM
-    memory.write_bytes_as_array(0x203FD10, GetMessage(item))
+    memory.write_bytes_as_array(0x203fe10, GetMessage(item))
     -- Signal that the item is ready to be read
-    memory.write_u32_le(0x203FD00,0x00000001)
+    memory.write_u32_le(0x203fe00,0x00000001)
 end
 
 local process_block = function(block)

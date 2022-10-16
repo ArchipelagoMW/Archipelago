@@ -6,10 +6,12 @@ class region_info:
     name: str
     connections: typing.List[str]
     locations: typing.List[str]
+
     def __init__(self, name, connections, locations):
         self.name = name
         self.connections = connections
         self.locations = locations
+
 
 regions = [
     region_info("Menu", ["ACDC Overworld"], []),
@@ -132,7 +134,7 @@ regions = [
                     LocationName.Help_with_a_will
                 ]),
     region_info("SciLab Cyberworld",
-                ["ACDC Cyberworld", "Yoka Cyberworld", "Beach Cyberworld"],
+                ["ACDC Cyberworld", "Yoka Cyberworld", "Beach Cyberworld","Deep Undernet"],
                 [
                     LocationName.SciLab_1_East_BMD,
                     LocationName.SciLab_1_WWW_BMD,
@@ -226,7 +228,8 @@ regions = [
                     LocationName.Beach_Security_System_BMD,
                     LocationName.Beach_Broadcast_Computer_BMD,
                     LocationName.Beach_DNN_Security_Panel_PMD,
-                    LocationName.Beach_DNN_Main_Console_PMD
+                    LocationName.Beach_DNN_Main_Console_PMD,
+                    LocationName.Undernet_6_TV_BMD
                 ]),
     region_info("Beach Cyberworld",
                 ["ACDC Cyberworld", "SciLab Cyberworld", "Yoka Cyberworld", "Undernet"],
@@ -250,16 +253,20 @@ regions = [
                     LocationName.Undernet_4_Top_North_BMD,
                     LocationName.Undernet_4_Bottom_West_BMD,
                     LocationName.Undernet_4_Top_Pillar_BMD,
+                    LocationName.Undernet_5_Upper_BMD
+
+                ]),
+    region_info("Deep Undernet",
+                [],
+                [
                     LocationName.Undernet_5_Lower_BMD,
-                    LocationName.Undernet_5_Upper_BMD,
-                    LocationName.Undernet_6_TV_BMD,
                     LocationName.Undernet_6_East_BMD,
                     LocationName.Undernet_6_Central_BMD,
-                    LocationName.Undernet_7_PMD,
-                    LocationName.Undernet_7_West_BMD,
-                    LocationName.Undernet_7_Northeast_BMD,
-                    LocationName.Undernet_7_Northwest_BMD,
-                    LocationName.Undernet_7_Upper_BMD
+                    # LocationName.Undernet_7_PMD,
+                    # LocationName.Undernet_7_West_BMD,
+                    # LocationName.Undernet_7_Northeast_BMD,
+                    # LocationName.Undernet_7_Northwest_BMD,
+                    # LocationName.Undernet_7_Upper_BMD]),
                 ]),
     region_info("WWW Island",
                 [],
@@ -270,16 +277,16 @@ regions = [
                     LocationName.WWW_1_East_BMD,
                     LocationName.WWW_1_West_BMD,
                     LocationName.WWW_1_Central_BMD,
-                    LocationName.WWW_1_South_BMD,
+                    #LocationName.WWW_1_South_BMD,
                     LocationName.WWW_2_East_BMD,
                     LocationName.WWW_2_Northwest_BMD,
-                    LocationName.WWW_2_West_BMD,
+                    #LocationName.WWW_2_West_BMD,
                     LocationName.WWW_3_East_BMD,
                     LocationName.WWW_3_North_BMD,
-                    LocationName.WWW_3_South_BMD,
+                    #LocationName.WWW_3_South_BMD,
                     LocationName.WWW_4_Central_BMD,
-                    LocationName.WWW_4_Northwest_BMD,
-                    LocationName.WWW_4_East_BMD
+                    LocationName.WWW_4_Northwest_BMD
+                    #LocationName.WWW_4_East_BMD
                 ]),
     region_info("Secret Area",
                 [],
