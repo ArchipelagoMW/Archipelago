@@ -557,7 +557,7 @@ def generate_output(self, output_directory: str):
     write_bytes(data, self.rival_name, rom_addresses['Rival_Name'])
 
     write_bytes(data, basemd5.digest(), 0xFFCC)
-    write_bytes(data, self.world.seed_name.encode(), 0xFFDC)
+    write_bytes(data, self.world.seed_name[-20:].encode(), 0xFFDC)
     write_bytes(data, self.world.player_name[self.player].encode(), 0xFFF0)
 
 
