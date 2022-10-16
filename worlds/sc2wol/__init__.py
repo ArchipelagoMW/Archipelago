@@ -44,6 +44,8 @@ class SC2WoLWorld(World):
     locked_locations: typing.List[str]
     location_cache: typing.List[Location]
     mission_req_table = {}
+    final_mission_id: int
+    victory_item: str
     required_client_version = 0, 3, 5
 
     def __init__(self, world: MultiWorld, player: int):
@@ -60,8 +62,9 @@ class SC2WoLWorld(World):
         return StarcraftWoLItem(name, data.classification, data.code, self.player)
 
     def create_regions(self):
-        self.mission_req_table = create_regions(self.world, self.player, get_locations(self.world, self.player),
-                                                self.location_cache)
+        self.mission_req_table, self.final_mission_id, self.victory_item = create_regions(
+            self.world, self.player, get_locations(self.world, self.player), self.location_cache
+        )
 
     def generate_basic(self):
         excluded_items = get_excluded_items(self, self.world, self.player)
@@ -76,8 +79,7 @@ class SC2WoLWorld(World):
 
     def set_rules(self):
         setup_events(self.world, self.player, self.locked_locations, self.location_cache)
-
-        self.world.completion_condition[self.player] = lambda state: state.has('All-In: Victory', self.player)
+        self.world.completion_condition[self.player] = lambda state: state.has(self.victory_item, self.player)
 
     def get_filler_item_name(self) -> str:
         return self.world.random.choice(filler_items)
@@ -93,6 +95,7 @@ class SC2WoLWorld(World):
             slot_req_table[mission] = self.mission_req_table[mission]._asdict()
 
         slot_data["mission_req"] = slot_req_table
+        slot_data["final_mission"] = self.final_mission_id
         return slot_data
 
 
@@ -186,7 +189,7 @@ def get_item_pool(world: MultiWorld, player: int, mission_req_table: dict[str, M
                 else:
                     pool.append(item)
 
-    existing_items = starter_items + [item.name for item in world.precollected_items[player]]
+    existing_items = starter_items + [item for item in world.precollected_items[player]]
     existing_names = [item.name for item in existing_items]
     # Removing upgrades for excluded items
     for item_name in excluded_items:

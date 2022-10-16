@@ -57,8 +57,8 @@ item_table = {
     "Hellstorm Batteries (Missile Turret)": ItemData(203 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 3, parent_item="Missile Turret"),
     "Advanced Construction (SCV)": ItemData(204 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 4, parent_item="SCV"),
     "Dual-Fusion Welders (SCV)": ItemData(205 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 5, parent_item="SCV"),
-    "Fire-Suppression System (Building)": ItemData(206 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 6, classification=ItemClassification.filler, parent_item="Building"),
-    "Orbital Command (Building)": ItemData(207 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 7, parent_item="Building"),
+    "Fire-Suppression System (Building)": ItemData(206 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 6, classification=ItemClassification.filler),
+    "Orbital Command (Building)": ItemData(207 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 7),
     "Stimpack (Marine)": ItemData(208 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 8, parent_item="Marine"),
     "Combat Shield (Marine)": ItemData(209 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 9, classification=ItemClassification.progression, parent_item="Marine"),
     "Advanced Medic Facilities (Medic)": ItemData(210 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 10, classification=ItemClassification.progression, parent_item="Medic"),
@@ -123,7 +123,7 @@ item_table = {
     "Shrike Turret": ItemData(610 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 10, parent_item="Bunker"),
     "Fortified Bunker": ItemData(611 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 11, parent_item="Bunker"),
     "Planetary Fortress": ItemData(612 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 12, classification=ItemClassification.progression),
-    "Perdition Turret": ItemData(613 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 13),
+    "Perdition Turret": ItemData(613 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 13, classification=ItemClassification.progression),
     "Predator": ItemData(614 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 14, classification=ItemClassification.filler),
     "Hercules": ItemData(615 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 15, classification=ItemClassification.progression),
     "Cellular Reactor": ItemData(616 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 16, classification=ItemClassification.filler),
@@ -181,6 +181,22 @@ filler_items: typing.Tuple[str, ...] = (
     '+15 Starting Minerals',
     '+15 Starting Vespene'
 )
+
+defense_ratings = {
+    "Siege Tank": 5,
+    "Maelstrom Rounds": 2,
+    "Planetary Fortress": 3,
+    # Bunker w/ Marine/Marauder: 3,
+    "Perdition Turret": 2,
+    "Missile Turret": 2,
+    "Vulture": 2
+}
+zerg_defense_ratings = {
+    "Perdition Turret": 2,
+    # Bunker w/ Firebat
+    "Hive Mind Emulator": 3,
+    "Psi Disruptor": 3
+}
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in get_full_item_list().items() if
                                             data.code}

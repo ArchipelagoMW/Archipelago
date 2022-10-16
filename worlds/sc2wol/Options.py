@@ -36,18 +36,18 @@ class AllInMap(Choice):
 
 
 class MissionOrder(Choice):
-    """Determines the order the missions are played in.
-    Vanilla: Keeps the standard mission order and branching from the WoL Campaign.
-    Vanilla Shuffled: Keeps same branching paths from the WoL Campaign but randomizes the order of missions within.
-    Mini Shuffle: Shorter version of the campaign with randomized missions and optional branches.
-    Grid:  A 4x4 grid of random missions.  Start at the top left and forge a path towards All-In.
-    Mini Grid:  A 3x3 version of Grid.
-    Blitz:  10 random missions that open up very quickly.
-    Gauntlet: Linear series of 7 random missions to complete the campaign."""
+    """Determines the order the missions are played in.  The last three mission orders end in a random mission.
+    Vanilla (29): Keeps the standard mission order and branching from the WoL Campaign.
+    Vanilla Shuffled (29): Keeps same branching paths from the WoL Campaign but randomizes the order of missions within.
+    Mini Campaign (15): Shorter version of the campaign with randomized missions and optional branches.
+    Grid (16):  A 4x4 grid of random missions.  Start at the top-left and forge a path towards All-In.
+    Mini Grid (9):  A 3x3 version of Grid.  Complete the bottom-right mission to win.
+    Blitz (14):  14 random missions that open up very quickly.  Complete the bottom-right mission to win.
+    Gauntlet (7): Linear series of 7 random missions to complete the campaign."""
     display_name = "Mission Order"
     option_vanilla = 0
     option_vanilla_shuffled = 1
-    option_mini_shuffle = 2
+    option_mini_campaign = 2
     option_grid = 3
     option_mini_grid = 4
     option_blitz = 5
@@ -61,11 +61,11 @@ class ShuffleProtoss(DefaultOnToggle):
     display_name = "Shuffle Protoss Missions"
 
 
-class RelegateNoBuildMissions(DefaultOnToggle):
+class ShuffleNoBuild(DefaultOnToggle):
     """Determines if the 5 no-build missions are included in the shuffle if Vanilla mission order is not enabled.
-    If turned on with Vanilla Shuffled, one no-build mission will be placed as the first mission and the rest will be placed at the end of optional routes.
-    If turned on with reduced mission settings, the 5 no-build missions will not appear."""
-    display_name = "Relegate No-Build Missions"
+    If turned off with Vanilla Shuffled, one no-build mission will be placed as the first mission and the rest will be placed at the end of optional routes.
+    If turned off with reduced mission settings, the 5 no-build missions will not appear."""
+    display_name = "Shuffle No-Build Missions"
 
 
 class EarlyUnit(DefaultOnToggle):
@@ -76,7 +76,7 @@ class EarlyUnit(DefaultOnToggle):
 class RequiredTactics(Choice):
     """Determines the maximum tactical difficulty of the seed (separate from mission difficulty).  Higher settings increase randomness.
     Standard:  All missions can be completed with good micro and macro.
-    Advanced:  Completing missions may require relying on starting units and difficult-to-use units.
+    Advanced:  Completing missions may require relying on starting units and micro-heavy units.
     No Logic:  Units and upgrades may be placed anywhere.  LIKELY TO RENDER THE RUN IMPOSSIBLE ON HARDER DIFFICULTIES!"""
     display_name = "Required Tactics"
     option_standard = 0
@@ -84,7 +84,7 @@ class RequiredTactics(Choice):
     option_no_logic = 2
 
 
-class UnitsAlwaysHaveUpgrades(Toggle):
+class UnitsAlwaysHaveUpgrades(DefaultOnToggle):
     """If turned on, both upgrades will be present for each unit and structure in the seed.
     This usually results in fewer units."""
     display_name = "Units Always Have Upgrades"
@@ -115,7 +115,7 @@ sc2wol_options: Dict[str, Option] = {
     "all_in_map": AllInMap,
     "mission_order": MissionOrder,
     "shuffle_protoss": ShuffleProtoss,
-    "relegate_no_build": RelegateNoBuildMissions,
+    "shuffle_no_build": ShuffleNoBuild,
     "early_unit": EarlyUnit,
     "required_tactics": RequiredTactics,
     "units_always_have_upgrades": UnitsAlwaysHaveUpgrades,
@@ -134,7 +134,7 @@ def get_option_value(world: MultiWorld, player: int, name: str) -> int:
     return int(option[player].value)
 
 
-def get_option_set_value(world: MultiWorld, player: int, name: str) -> int:
+def get_option_set_value(world: MultiWorld, player: int, name: str) -> set:
     option = getattr(world, name, None)
 
     if option is None:

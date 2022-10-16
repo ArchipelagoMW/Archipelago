@@ -65,7 +65,7 @@ vanilla_shuffle_order = [
     FillMission("all_in", [26, 27], "Char", completion_critical=True, or_requirements=True)
 ]
 
-mini_shuffle_order = [
+mini_campaign_order = [
     FillMission("no_build", [-1], "Mar Sara", completion_critical=True),
     FillMission("easy", [0], "Colonist"),
     FillMission("medium", [1], "Colonist"),
@@ -102,13 +102,13 @@ grid_order = [
     FillMission("medium", [1, 4], "Artifact", or_requirements=True),
     FillMission("hard", [2, 5, 10, 7], "Artifact", or_requirements=True),
     FillMission("hard", [3, 6, 11], "Artifact", or_requirements=True),
-    FillMission("medium", [4, 9], "Covert", or_requirements=True),
-    FillMission("hard", [5, 8, 10], "Covert", or_requirements=True),
-    FillMission("hard", [6, 9, 11], "Covert", or_requirements=True),
+    FillMission("medium", [4, 9, 12], "Covert", or_requirements=True),
+    FillMission("hard", [5, 8, 10, 13], "Covert", or_requirements=True),
+    FillMission("hard", [6, 9, 11, 14], "Covert", or_requirements=True),
     FillMission("hard", [7, 10], "Covert", or_requirements=True),
     FillMission("hard", [8, 13], "Rebellion", or_requirements=True),
     FillMission("hard", [9, 12, 14], "Rebellion", or_requirements=True),
-    FillMission("hard", [10, 13, 15], "Rebellion", or_requirements=True),
+    FillMission("hard", [10, 13], "Rebellion", or_requirements=True),
     FillMission("all_in", [11, 14], "Rebellion", or_requirements=True)
 ]
 
@@ -139,7 +139,7 @@ blitz_order = [
     FillMission("all_in", [0, 1], "Char", number=5, or_requirements=True)
 ]
 
-mission_orders = [vanilla_shuffle_order, vanilla_shuffle_order, mini_shuffle_order, grid_order, mini_grid_order, blitz_order, gauntlet_order]
+mission_orders = [vanilla_shuffle_order, vanilla_shuffle_order, mini_campaign_order, grid_order, mini_grid_order, blitz_order, gauntlet_order]
 
 
 vanilla_mission_req_table = {
@@ -177,13 +177,16 @@ vanilla_mission_req_table = {
 lookup_id_to_mission: Dict[int, str] = {
     data.id: mission_name for mission_name, data in vanilla_mission_req_table.items() if data.id}
 
-starting_mission_locations = {
+no_build_starting_mission_locations = {
     "Liberation Day": "Liberation Day: Victory",
     "Breakout": "Breakout: Victory",
     "Ghost of a Chance": "Ghost of a Chance: Victory",
     "Piercing the Shroud": "Piercing the Shroud: Victory",
     "Whispers of Doom": "Whispers of Doom: Victory",
     "Belly of the Beast": "Belly of the Beast: Victory",
+}
+
+build_starting_mission_locations = {
     "Zero Hour": "Zero Hour: First Group Rescued",
     "Evacuation": "Evacuation: First Chysalis",
     "Devil's Playground": "Devil's Playground: Tosh's Miners"
@@ -196,7 +199,22 @@ advanced_starting_mission_locations = {
 
 
 def get_starting_mission_locations(world: MultiWorld, player: int) -> set[str]:
-    if get_option_value(world, player, 'required_tactics') > 0:
-        return {**starting_mission_locations, **advanced_starting_mission_locations}
+    if get_option_value(world, player, 'shuffle_no_build') or get_option_value(world, player, 'mission_order') < 2:
+        # Always start with a no-build mission unless explicitly relegating them
+        # Vanilla and Vanilla Shuffled always start with a no-build even when relegated
+        return no_build_starting_mission_locations
+    elif get_option_value(world, player, 'required_tactics') > 0:
+        # Advanced Tactics/No Logic add more starting missions to the pool
+        return {**build_starting_mission_locations, **advanced_starting_mission_locations}
     else:
-        return starting_mission_locations
+        # Standard starting missions when relegate is on
+        return build_starting_mission_locations
+
+
+alt_final_mission_locations = {
+    "Maw of the Void": "Maw of the Void: Victory",
+    "Engine of Destruction": "Engine of Destruction: Victory",
+    "Supernova": "Supernova: Victory",
+    "Gates of Hell": "Gates of Hell: Victory",
+    "Shatter the Sky": "Shatter the Sky: Victory"
+}

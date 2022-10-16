@@ -2,7 +2,7 @@ from typing import Callable
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import item_table
 from .MissionTables import no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
-    mission_orders, get_starting_mission_locations, MissionInfo, vanilla_mission_req_table
+    mission_orders, get_starting_mission_locations, MissionInfo, vanilla_mission_req_table, alt_final_mission_locations
 from .Options import get_option_value, get_option_set_value
 from .LogicMixin import SC2WoLLogic
 
@@ -28,8 +28,7 @@ def filter_missions(world: MultiWorld, player: int) -> dict[str, list[str]]:
 
     mission_order_type = get_option_value(world, player, "mission_order")
     shuffle_protoss = get_option_value(world, player, "shuffle_protoss")
-    relegate_no_build = get_option_value(world, player, "relegate_no_build")
-    excluded_missions: set[str] = get_option_set_value(world, player, "excluded_missions")
+    excluded_missions: set[str] = set(get_option_set_value(world, player, "excluded_missions"))
     invalid_mission_names = excluded_missions.difference(vanilla_mission_req_table.keys())
     if invalid_mission_names:
         raise Exception("Error in locked_missions - the following are not valid mission names: " + ", ".join(invalid_mission_names))
@@ -41,31 +40,31 @@ def filter_missions(world: MultiWorld, player: int) -> dict[str, list[str]]:
             "easy": easy_regions_list[:],
             "medium": medium_regions_list[:],
             "hard": hard_regions_list[:],
-            "all_in": "all_in"
+            "all_in": ["All-In"]
         }
 
-    mission_sets = [
-        set(no_build_regions_list),
-        set(easy_regions_list),
-        set(medium_regions_list),
-        set(hard_regions_list)
+    mission_pools = [
+        no_build_regions_list,
+        easy_regions_list,
+        medium_regions_list,
+        hard_regions_list
     ]
-    # Omitting No Build missions if relegating no-build
-    if relegate_no_build:
-        # The build missions in starting_mission_locations become the new "no build missions"
-        mission_sets[0] = set(get_starting_mission_locations(world, player).keys())
-        mission_sets[0].difference_update(no_build_regions_list)
-        # Removing the new no-build missions from their original sets
-        for mission_set in mission_sets[1:]:
-            mission_set.difference_update(mission_sets[0])
     # Omitting Protoss missions if not shuffling protoss
     if not shuffle_protoss:
         excluded_missions = excluded_missions.union(PROTOSS_REGIONS)
-    for mission_set in mission_sets:
-        mission_set.difference_update(excluded_missions)
+    # Replacing All-In on low mission counts
+    if mission_count < 14:
+        final_mission = world.random.choice([mission for mission in alt_final_mission_locations.keys() if mission not in excluded_missions])
+        excluded_missions.add(final_mission)
+    else:
+        final_mission = 'All-In'
+    # Yaml settings determine which missions can be placed in the first slot
+    mission_pools[0] = [mission for mission in get_starting_mission_locations(world, player).keys() if mission not in excluded_missions]
+    # Removing the new no-build missions from their original sets
+    for i in range(1, len(mission_pools)):
+        mission_pools[i] = [mission for mission in mission_pools[i] if mission not in excluded_missions.union(mission_pools[0])]
     # Removing random missions from each difficulty set in a cycle
     set_cycle = 0
-    mission_pools = [list(mission_set) for mission_set in mission_sets]
     current_count = sum(len(mission_pool) for mission_pool in mission_pools)
     if current_count < mission_count:
         raise Exception("Not enough missions available to fill the campaign on current settings.  Please exclude fewer missions.")
@@ -86,7 +85,8 @@ def filter_missions(world: MultiWorld, player: int) -> dict[str, list[str]]:
         "no_build": mission_pools[0],
         "easy": mission_pools[1],
         "medium": mission_pools[2],
-        "hard": mission_pools[3]
+        "hard": mission_pools[3],
+        "all_in": [final_mission]
     }
 
 
@@ -109,28 +109,24 @@ class ValidInventory:
     def has_all(self, items: set[str], player: int):
         return all(item in self.logical_inventory for item in items)
 
-    def has_units_per_structure(self, min_units_per_structure) -> bool:
-        return len(BARRACKS_UNITS.intersection(self.logical_inventory)) > min_units_per_structure and \
-            len(FACTORY_UNITS.intersection(self.logical_inventory)) > min_units_per_structure and \
-            len(STARPORT_UNITS.intersection(self.logical_inventory)) > min_units_per_structure
+    def has_units_per_structure(self) -> bool:
+        return len(BARRACKS_UNITS.intersection(self.logical_inventory)) > self.min_units_per_structure and \
+            len(FACTORY_UNITS.intersection(self.logical_inventory)) > self.min_units_per_structure and \
+            len(STARPORT_UNITS.intersection(self.logical_inventory)) > self.min_units_per_structure
 
     def generate_reduced_inventory(self, inventory_size: int, mission_requirements: list[Callable]) -> list[Item]:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
         inventory = list(self.item_pool)
         locked_items = list(self.locked_items)
         self.logical_inventory = {
-            item.name for item in inventory + locked_items
+            item.name for item in inventory + locked_items + self.existing_items
             if item.classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing)
         }
         requirements = mission_requirements
         cascade_keys = self.cascade_removal_map.keys()
         units_always_have_upgrades = get_option_value(self.world, self.player, "units_always_have_upgrades")
-        # Inventory restrictiveness based on number of missions with checks
-        mission_order_type = get_option_value(self.world, self.player, "mission_order")
-        mission_count = len(mission_orders[mission_order_type]) - 1
-        min_units_per_structure = int(mission_count / 7)
-        if min_units_per_structure > 0:
-            requirements.append(lambda state: state.has_units_per_structure(min_units_per_structure))
+        if self.min_units_per_structure > 0:
+            requirements.append(lambda state: state.has_units_per_structure())
 
         def attempt_removal(item: Item) -> bool:
             # If item can be removed and has associated items, remove them as well
@@ -181,7 +177,7 @@ class ValidInventory:
         self._sc2wol_has_air_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_air_anti_air(self, world, player)
         self._sc2wol_has_competent_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_competent_anti_air(self, world, player)
         self._sc2wol_has_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_anti_air(self, world, player)
-        self._sc2wol_has_heavy_defense = lambda world, player: SC2WoLLogic._sc2wol_has_heavy_defense(self, world, player)
+        self._sc2wol_defense_rating = lambda world, player, zerg_enemy: SC2WoLLogic._sc2wol_defense_rating(self, world, player, zerg_enemy)
         self._sc2wol_has_competent_comp = lambda world, player: SC2WoLLogic._sc2wol_has_competent_comp(self, world, player)
         self._sc2wol_has_train_killers = lambda world, player: SC2WoLLogic._sc2wol_has_train_killers(self, world, player)
         self._sc2wol_able_to_rescue = lambda world, player: SC2WoLLogic._sc2wol_able_to_rescue(self, world, player)
@@ -190,7 +186,6 @@ class ValidInventory:
         self._sc2wol_has_protoss_common_units = lambda world, player: SC2WoLLogic._sc2wol_has_protoss_common_units(self, world, player)
         self._sc2wol_has_protoss_medium_units = lambda world, player: SC2WoLLogic._sc2wol_has_protoss_medium_units(self, world, player)
         self._sc2wol_has_mm_upgrade = lambda world, player: SC2WoLLogic._sc2wol_has_mm_upgrade(self, world, player)
-        self._sc2wol_has_manned_bunkers = lambda world, player: SC2WoLLogic._sc2wol_has_manned_bunkers(self, world, player)
         self._sc2wol_final_mission_requirements = lambda world, player: SC2WoLLogic._sc2wol_final_mission_requirements(self, world, player)
 
     def __init__(self, world: MultiWorld, player: int,
@@ -205,14 +200,19 @@ class ValidInventory:
         # Initial filter of item pool
         self.item_pool = []
         item_quantities: dict[str, int] = dict()
+        # Inventory restrictiveness based on number of missions with checks
+        mission_order_type = get_option_value(self.world, self.player, "mission_order")
+        mission_count = len(mission_orders[mission_order_type]) - 1
+        self.min_units_per_structure = int(mission_count / 7)
+        min_upgrades = 1 if mission_count < 10 else 2
         for item in item_pool:
             item_info = item_table[item.name]
             if item_info.type == "Upgrade":
-                # All Upgrades are locked except for the final tier
+                # Locking upgrades based on mission duration
                 if item.name not in item_quantities:
                     item_quantities[item.name] = 0
                 item_quantities[item.name] += 1
-                if item_quantities[item.name] < item_info.quantity:
+                if item_quantities[item.name] < min_upgrades:
                     self.locked_items.append(item)
                 else:
                     self.item_pool.append(item)

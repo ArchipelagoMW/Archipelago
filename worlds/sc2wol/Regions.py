@@ -2,24 +2,37 @@ from typing import List, Set, Dict, Tuple, Optional, Callable
 from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Locations import LocationData
 from .Options import get_option_value
-from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table
+from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, alt_final_mission_locations
 from .PoolFilter import filter_missions
 import random
 
 
-def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location]):
+def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location])\
+        -> tuple[dict[str, MissionInfo], int, str]:
     locations_per_region = get_locations_per_region(locations)
 
     mission_order_type = get_option_value(world, player, "mission_order")
     mission_order = mission_orders[mission_order_type]
 
     mission_pools = filter_missions(world, player)
+    final_mission = mission_pools['all_in'][0]
 
     used_regions = [mission for mission_pool in mission_pools.values() for mission in mission_pool]
-    used_regions += ['All-In']
     regions = [create_region(world, player, locations_per_region, location_cache, "Menu")]
     for region_name in used_regions:
         regions.append(create_region(world, player, locations_per_region, location_cache, region_name))
+    # Changing the completion condition for alternate final missions into an event
+    if final_mission != 'All-In':
+        final_location = alt_final_mission_locations[final_mission]
+        # Final location should be near the end of the cache
+        for i in range(len(location_cache) - 1, -1, -1):
+            if location_cache[i].name == final_location:
+                location_cache[i].locked = True
+                location_cache[i].event = True
+                location_cache[i].address = None
+                break
+    else:
+        final_location = 'All-In: Victory'
 
     if __debug__:
         if mission_order_type in (0, 1):
@@ -98,7 +111,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
                 lambda state: state.has('Beat Gates of Hell', player) and (
                         state.has('Beat Shatter the Sky', player) or state.has('Beat Belly of the Beast', player)))
 
-        return vanilla_mission_req_table
+        return vanilla_mission_req_table, 29, final_location
 
     else:
         missions = []
@@ -108,8 +121,8 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
             if mission is None:
                 missions.append(None)
             elif mission.type == "all_in":
-                missions.append("All-In")
-            elif get_option_value(world, player, "relegate_no_build") and mission.relegate:
+                missions.append(final_mission)
+            elif mission.relegate and not get_option_value(world, player, "shuffle_no_build"):
                 missions.append("no_build")
             else:
                 missions.append(mission.type)
@@ -117,11 +130,11 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         # Place Protoss Missions if we are not using ShuffleProtoss and are in Vanilla Shuffled
         if get_option_value(world, player, "shuffle_protoss") == 0 and mission_order_type == 1:
             missions[22] = "A Sinister Turn"
-            medium_pool.remove("A Sinister Turn")
+            mission_pools['medium'].remove("A Sinister Turn")
             missions[23] = "Echoes of the Future"
-            medium_pool.remove("Echoes of the Future")
+            mission_pools['medium'].remove("Echoes of the Future")
             missions[24] = "In Utter Darkness"
-            hard_pool.remove("In Utter Darkness")
+            mission_pools['hard'].remove("In Utter Darkness")
 
         no_build_slots = []
         easy_slots = []
@@ -191,7 +204,8 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
                 completion_critical=mission_order[i].completion_critical,
                 or_requirements=mission_order[i].or_requirements)})
 
-        return mission_req_table
+        final_mission_id = vanilla_mission_req_table[final_mission].id
+        return mission_req_table, final_mission_id, final_mission + ': Victory'
 
 
 def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionNames: Set[str]):
