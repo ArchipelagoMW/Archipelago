@@ -96,7 +96,7 @@ def set_rules(world, player):
             player),
         "Route 25 - Hidden Item Fence Outside Bill's House": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
-        "Route 9 - Hidden Item Rock By Grass": lambda state: state.pokemon_rb_can_get_hidden_items(player),
+        "Route 9 - Hidden Item Bush By Grass": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "S.S. Anne 1F - Hidden Item Kitchen Trash": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "S.S. Anne B1F - Hidden Item Under Pillow": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Route 10 - Hidden Item Behind Rock Tunnel Entrance Tree": lambda
@@ -107,7 +107,7 @@ def set_rules(world, player):
         "Rocket Hideout B4F - Hidden Item Behind Giovanni": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Pokemon Tower 5F - Hidden Item Near West Staircase": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
-        "Route 13 - Hidden Item Dead End Boulder": lambda state: state.pokemon_rb_can_get_hidden_items(player),
+        "Route 13 - Hidden Item Dead End Bush": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Route 13 - Hidden Item Dead End By Water Corner": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Pokemon Mansion B1F - Hidden Item Secret Key Room Corner": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
