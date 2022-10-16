@@ -129,6 +129,7 @@ class SC2Context(CommonContext):
     all_in_choice = 0
     mission_order = 0
     mission_req_table: typing.Dict[str, MissionInfo] = {}
+    final_mission: int = 29
     announcements = queue.Queue()
     sc2_run_task: typing.Optional[asyncio.Task] = None
     missions_unlocked: bool = False  # allow launching missions ignoring requirements
@@ -156,7 +157,8 @@ class SC2Context(CommonContext):
             self.mission_req_table = {
                 mission: MissionInfo(**slot_req_table[mission]) for mission in slot_req_table
             }
-            self.mission_order = args["slot_data"]["mission_order"]
+            self.mission_order = args["slot_data"].get("mission_order", 0)
+            self.final_mission = args["slot_data"].get("final_mission", 29)
 
             self.build_location_to_mission_mapping()
 
@@ -296,22 +298,22 @@ class SC2Context(CommonContext):
                             if self.ctx.mission_order in (0, 1, 2):
                                 category_display_name = category
                             # Grid category names
-                            if self.ctx.mission_order in (3, 4):
+                            elif self.ctx.mission_order in (3, 4):
                                 category_display_name = ''
                             # Blitz and Gauntlet category names
-                            if self.ctx.mission_order in (5, 6):
-                                category_display_name = "*" * (wol_default_category_names.index(category) + 1)
+                            elif self.ctx.mission_order in (5, 6):
+                                col_num = wol_default_category_names.index(category)
+                                category_display_name = ["I", "II", "III", "IV", "V", "VI", "Final"][col_num]
                             category_panel.add_widget(
                                 Label(text=category_display_name, size_hint_y=None, height=50, outline_width=1))
 
                             for mission in categories[category]:
                                 text: str = mission
                                 tooltip: str = ""
-
+                                mission_id: int = self.ctx.mission_req_table[mission].id
                                 # Map has uncollected locations
                                 if mission in unfinished_missions:
                                     text = f"[color=6495ED]{text}[/color]"
-
                                 elif mission in available_missions:
                                     text = f"[color=FFFFFF]{text}[/color]"
                                 # Map requirements not met
@@ -330,6 +332,16 @@ class SC2Context(CommonContext):
                                 remaining_location_names: typing.List[str] = [
                                     self.ctx.location_names[loc] for loc in self.ctx.locations_for_mission(mission)
                                     if loc in self.ctx.missing_locations]
+
+                                if mission_id == self.ctx.final_mission:
+                                    if mission in available_missions:
+                                        text = f"[color=FFBC95]{mission}[/color]"
+                                    else:
+                                        text = f"[color=D0C0BE]{mission}[/color]"
+                                    if tooltip:
+                                        tooltip += "\n"
+                                    tooltip += "Final Mission"
+
                                 if remaining_location_names:
                                     if tooltip:
                                         tooltip += "\n"
@@ -339,7 +351,7 @@ class SC2Context(CommonContext):
                                 mission_button = MissionButton(text=text, size_hint_y=None, height=50)
                                 mission_button.tooltip_text = tooltip
                                 mission_button.bind(on_press=self.mission_callback)
-                                self.mission_id_to_button[self.ctx.mission_req_table[mission].id] = mission_button
+                                self.mission_id_to_button[mission_id] = mission_button
                                 category_panel.add_widget(mission_button)
 
                             category_panel.add_widget(Label(text=""))
@@ -568,7 +580,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
 
                 if self.can_read_game:
                     if game_state & (1 << 1) and not self.mission_completed:
-                        if self.mission_id != 29:
+                        if self.mission_id != self.ctx.final_mission:
                             print("Mission Completed")
                             await self.ctx.send_msgs(
                                 [{"cmd": 'LocationChecks',
