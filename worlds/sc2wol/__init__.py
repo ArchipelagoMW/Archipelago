@@ -1,6 +1,6 @@
 import typing
 
-from typing import List, Set, Tuple
+from typing import List, Set, Tuple, Dict
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 from .Items import StarcraftWoLItem, item_table, filler_items, item_name_groups, get_full_item_list, \
@@ -170,7 +170,7 @@ def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str]
     return item
 
 
-def get_item_pool(world: MultiWorld, player: int, mission_req_table: dict[str, MissionInfo],
+def get_item_pool(world: MultiWorld, player: int, mission_req_table: Dict[str, MissionInfo],
                   starter_items: List[str], excluded_items: Set[str], location_cache: List[Location]) -> List[Item]:
     pool: List[Item] = []
 
