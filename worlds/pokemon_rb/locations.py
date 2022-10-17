@@ -335,7 +335,7 @@ location_data = [
     LocationData("Pokemon Mansion B1F", "Hidden Item Secret Key Room Corner", "Rare Candy", rom_addresses['Hidden_Item_Pokemon_Mansion_B1F'], Hidden(15)),
     LocationData("Safari Zone West", "Hidden Item Secret House Statue", "Revive", rom_addresses['Hidden_Item_Safari_Zone_West'], Hidden(17)),
     LocationData("Silph Co 5F", "Hidden Item Pot Plant", "Elixir", rom_addresses['Hidden_Item_Silph_Co_5F'], Hidden(18)),
-    LocationData("Silph Co 9F", "Hidden Item Nurse Bed", "Max Potion", rom_addresses['Hidden_Item_Silph_Co_9F'], Hidden(19)),
+    LocationData("Silph Co 9F", "Hidden Item Nurse Bed (Card Key)", "Max Potion", rom_addresses['Hidden_Item_Silph_Co_9F'], Hidden(19)),
     LocationData("Copycat's House", "Hidden Item Desk", "Nugget", rom_addresses['Hidden_Item_Copycats_House'], Hidden(20)),
     LocationData("Cerulean Cave 1F", "Hidden Item Center Rocks", "Rare Candy", rom_addresses['Hidden_Item_Cerulean_Cave_1F'], Hidden(21)),
     LocationData("Cerulean Cave B1F", "Hidden Item Northeast Rocks", "Ultra Ball", rom_addresses['Hidden_Item_Cerulean_Cave_B1F'], Hidden(22)),

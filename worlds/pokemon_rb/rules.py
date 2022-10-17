@@ -114,7 +114,8 @@ def set_rules(world, player):
         "Safari Zone West - Hidden Item Secret House Statue": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
         "Silph Co 5F - Hidden Item Pot Plant": lambda state: state.pokemon_rb_can_get_hidden_items(player),
-        "Silph Co 9F - Hidden Item Nurse Bed": lambda state: state.pokemon_rb_can_get_hidden_items(player),
+        "Silph Co 9F - Hidden Item Nurse Bed (Card Key)": lambda state: state.pokemon_rb_can_get_hidden_items(
+            player) and state.has("Card Key", player),
         "Copycat's House - Hidden Item Desk": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Cerulean Cave 1F - Hidden Item Center Rocks": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Cerulean Cave B1F - Hidden Item Northeast Rocks": lambda state: state.pokemon_rb_can_get_hidden_items(player),
