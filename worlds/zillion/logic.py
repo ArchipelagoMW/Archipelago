@@ -18,7 +18,6 @@ def set_randomizer_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> int:
 
     returns a hash of the player and of the set locations
     """
-    # print("in logic set locs")
     _hash = p
     for loc in cs.world.get_locations():
         if loc.player == p:
