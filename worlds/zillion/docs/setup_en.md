@@ -12,7 +12,7 @@
 
 ### RetroArch
 
-RetroArch 1.9.x will not work as it is older than 1.10.3.
+RetroArch 1.9.x will not work, as it is older than 1.10.3.
 
 1. Enter the RetroArch main menu screen.
 2. Go to Main Menu --> Online Updater --> Core Downloader. Scroll down and install "Sega - MS/GG (SMS Plus GX)".
@@ -28,9 +28,9 @@ Put your Zillion ROM file in the Archipelago directory in your home directory.
 
 ### Windows Setup
 
-1. During the installation of Archipelago, you will have been asked to install the Zillion Client. If you did not do this,
+1. During the installation of Archipelago, install the Zillion Client. If you did not do this,
    or you are on an older version, you may run the installer again to install the Zillion Client.
-2. During setup, you will be asked to locate your base ROM file. This is your Zillion ROM file.
+2. During setup, you will be asked to locate your base ROM file. This is the Zillion ROM file mentioned above in Required Software.
 
 ---
 # Play
@@ -44,21 +44,19 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [Zillion Player Settings Page](/games/Zillion/player-settings)
+The [player settings page](/games/Zillion/player-settings) on the website allows you to configure your personal settings and export a config file from
+them.
 
 ### Verifying your config file
 
-If you would like to validate your config file to make sure it works, you may do so on the YAML Validator page. YAML
-validator page: [YAML Validation page](/mysterycheck)
+If you would like to validate your config file to make sure it works, you may do so on the [YAML Validator page](/mysterycheck).
 
 ## Generating a Single-Player Game
 
-1. Navigate to the Player Settings page, configure your options, and click the "Generate Game" button.
-    - Player Settings page: [Zillion Player Settings Page](/games/Zillion/player-settings)
-2. You will be presented with a "Seed Info" page.
+1. Navigate to the [player settings page](/games/Zillion/player-settings), configure your options, and click the "Generate Game" button.
+2. A "Seed Info" page will appear.
 3. Click the "Create New Room" link.
-4. You will be presented with a server page, from which you can download your patch file.
+4. A server page will appear. Download your patch file from this page.
 5. Patch your ROM file.
     - Linux
        - In the launcher, choose "Open Patch" and select your patch file.
@@ -71,22 +69,22 @@ validator page: [YAML Validation page](/mysterycheck)
 
 ## Joining a MultiWorld Game
 
-1. Provide your config (yaml) file to the host and obtain your patch file
+1. Provide your config (yaml) file to the host and obtain your patch file.
     - When you join a multiworld game, you will be asked to provide your config file to whoever is hosting. Once that is done, the host will provide you with either a link to download your patch file, or with a zip file containing everyone's patch files. Your patch file should have a `.apzl` extension.
        - If you activate the "room generation" option in your config (yaml), you might want to tell your host that the generation will take longer than normal. It takes approximately 20 seconds longer for each Zillion player that enables this option.
-2. Create your ROM
+2. Create your ROM.
     - Linux
        - In the Archipelago Launcher, choose "Open Patch" and select your `.apzl` patch file.
     - Windows
        - Put your patch file on your desktop or somewhere convenient, and double click it.
     - This should automatically launch the client, and will also create your ROM in the same place as your patch file.
-3. Connect to the client
+3. Connect to the client.
     - Use RetroArch to open the ROM that was generated.
     - Be sure to select the **SMS Plus GX** core. This core will allow external tools to read RAM data.
-4. Connect to the Archipelago Server
+4. Connect to the Archipelago Server.
     - The patch file which launched your client should have automatically connected you to the AP Server. There are a few reasons this may not happen however, including if the game is hosted on the website but was generated elsewhere. If the client window shows "Server Status: Not Connected", simply ask the host for the address of the server, and copy/paste it into the "Server" input field then press enter.
     - The client will attempt to reconnect to the new server address, and should momentarily show "Server Status: Connected".
-5. Play the game
+5. Play the game.
     - When the client shows both Game and Server as connected, you're ready to begin playing. Congratulations on successfully joining a multiworld game!
 
 ## Hosting a MultiWorld game
@@ -95,10 +93,10 @@ The recommended way to host a game is to use our hosting service. The process is
 
 1. Collect config files from your players.
 2. Create a zip file containing your players' config files.
-3. Upload that zip file to the Generate page above.
+3. Upload that zip file to the [Generation page](/generate).
     - Generate page: [WebHost Seed Generation Page](/generate)
 4. Wait a moment while the seed is generated.
-5. When the seed is generated, you will be redirected to a "Seed Info" page.
+5. When the seed is generated, a "Seed Info" page will appear.
 6. Click "Create New Room". This will take you to the server page. Provide the link to this page to your players, so
    they may download their patch files from there.
 7. Note that a link to a MultiWorld Tracker is at the top of the room page. The tracker shows the progress of all

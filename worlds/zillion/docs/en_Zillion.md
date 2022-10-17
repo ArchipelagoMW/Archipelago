@@ -1,6 +1,6 @@
 # Zillion
 
-Zillion is a metroidvania style game released in 1987 for the 8-bit Sega Master System.
+Zillion is a metroidvania-style game released in 1987 for the 8-bit Sega Master System.
 
 It's based on the anime Zillion (赤い光弾ジリオン, Akai Koudan Zillion).
 
@@ -11,7 +11,7 @@ The [player settings page for this game](../player-settings) contains all the op
 ## What changes are made to this game?
 
 The way the original game lets the player choose who to level up has a few drawbacks in a multiworld randomizer:
- - possible softlock from making bad choices (example: nobody has jump 3 when it's required)
+ - Possible softlock from making bad choices (example: nobody has jump 3 when it's required)
  - In multiworld, you won't be able to choose because you won't know it's coming beforehand.
 
 So this randomizer uses a new level-up system:
@@ -65,9 +65,9 @@ Note that in "restrictive" mode, Champ is the only one that can get Zillion powe
 
 ## What does another world's item look like in Zillion?
 
-Canisters retain their original appearance. You won't know if an item belongs to another player until you collect it.
+Canisters retain their original appearance, so you won't know if an item belongs to another player until you collect it.
 
-When you collect the item, you see the name of the player it goes to. You can see in the client log what item was collected.
+When you collect an item, you see the name of the player it goes to. You can see in the client log what item was collected.
 
 ## When the player receives an item, what happens?
 
