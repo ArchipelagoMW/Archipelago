@@ -497,8 +497,8 @@ class ALTTPWorld(World):
                             fill_locations.remove(spot_to_fill)  # very slow, unfortunately
                             trash_count -= 1
                             break
-                        else:
-                            logging.warning(f"Could not trash fill Ganon's Tower for player {player}.")
+                    else:
+                        logging.warning(f"Could not trash fill Ganon's Tower for player {player}.")
 
     def get_filler_item_name(self) -> str:
         if self.world.goal[self.player] == "icerodhunt":
