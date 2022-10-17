@@ -575,8 +575,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
         multi_world.local_items[player1.id].value = set(names(player1.basic_items))
         multi_world.local_items[player2.id].value = set(names(player2.basic_items))
-        locality_rules(multi_world, player1.id)
-        locality_rules(multi_world, player2.id)
+        locality_rules(multi_world)
 
         distribute_items_restrictive(multi_world)
 
