@@ -490,11 +490,15 @@ class ALTTPWorld(World):
 
                 while gtower_locations and filleritempool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
-                    item_to_place = filleritempool.pop()
-                    if spot_to_fill.item_rule(item_to_place):
-                        world.push_item(spot_to_fill, item_to_place, False)
-                        fill_locations.remove(spot_to_fill)  # very slow, unfortunately
-                        trash_count -= 1
+                    for index, item in enumerate(filleritempool):
+                        if spot_to_fill.item_rule(item):
+                            filleritempool.pop(index)  # remove from outer fill
+                            world.push_item(spot_to_fill, item, False)
+                            fill_locations.remove(spot_to_fill)  # very slow, unfortunately
+                            trash_count -= 1
+                            break
+                        else:
+                            logging.warning(f"Could not trash fill Ganon's Tower for player {player}.")
 
     def get_filler_item_name(self) -> str:
         if self.world.goal[self.player] == "icerodhunt":
