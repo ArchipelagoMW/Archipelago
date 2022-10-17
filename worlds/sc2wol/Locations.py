@@ -277,13 +277,13 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
 
     beat_events = []
 
-    for i in range(len(location_table)):
+    for i, location_data in enumerate(location_table):
         # Removing all item-based logic on No Logic
         if logic_level == 2:
-            location_table[i] = location_table[i]._replace(rule=lambda state: True)
+            location_table[i] = location_data._replace(rule=lambda state: True)
         # Generating Beat event locations
-        if location_table[i].name.endswith((": Victory", ": Defeat")):
+        if location_data.name.endswith((": Victory", ": Defeat")):
             beat_events.append(
-                location_table[i]._replace(name="Beat " + location_table[i].name.rsplit(": ", 1)[0], code=None)
+                location_data._replace(name="Beat " + location_data.name.rsplit(": ", 1)[0], code=None)
             )
     return tuple(location_table + beat_events)
