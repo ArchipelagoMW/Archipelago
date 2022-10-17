@@ -352,7 +352,6 @@ class Patch:
             
             return value.value
         elif (location.APLocation.item.game == "A Link to the Past"):
-            #if location.APLocation.item.code in ItemType
             return location.APLocation.item.code
         elif (location.APLocation.item.game == "Super Metroid"):
             SMNameToSMZ3Code = {
