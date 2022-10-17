@@ -17,7 +17,7 @@ def create_region(world: MultiWorld, player: int, name: str, locations_per_regio
                 add_item_rule(location, lambda i: not (i.advancement or i.useful))
     if exits:
         for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
+            Entrance(player, exit, ret)
     locations_per_region[name] = []
     return ret
 
@@ -299,7 +299,6 @@ def connect(world: MultiWorld, player: int, source: str, target: str, rule: call
 
     connection.access_rule = rule
 
-    source_region.exits.append(connection)
     connection.connect(target_region)
     if not one_way:
         connect(world, player, target, source, rule, True)

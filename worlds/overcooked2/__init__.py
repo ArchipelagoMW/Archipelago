@@ -100,7 +100,6 @@ class Overcooked2World(World):
         if rule:
             connection.access_rule = rule
 
-        sourceRegion.exits.append(connection)
         connection.connect(targetRegion)
 
     def add_level_location(

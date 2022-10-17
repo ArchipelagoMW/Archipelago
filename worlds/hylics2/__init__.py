@@ -202,7 +202,6 @@ class Hylics2World(World):
                     for k in exits:
                         # create entrance and connect it to parent and destination regions
                         ent = Entrance(self.player, k, reg)
-                        reg.exits.append(ent)
                         if k == "New Game" and self.world.random_start[self.player]:
                             if self.start_location == "Waynehouse":
                                 ent.connect(region_table[2])
