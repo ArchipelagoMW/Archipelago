@@ -325,16 +325,10 @@ class SC2Context(CommonContext):
 
                         for category in categories:
                             category_panel = MissionCategory()
-                            # Vanilla category names
-                            if self.ctx.mission_order in (0, 1, 2):
-                                category_display_name = category
-                            # Grid category names
-                            elif self.ctx.mission_order in (3, 4):
+                            if category.startswith('_'):
                                 category_display_name = ''
-                            # Blitz and Gauntlet category names
-                            elif self.ctx.mission_order in (5, 6):
-                                col_num = wol_default_category_names.index(category)
-                                category_display_name = ["I", "II", "III", "IV", "V", "VI", "Final"][col_num]
+                            else:
+                                category_display_name = category
                             category_panel.add_widget(
                                 Label(text=category_display_name, size_hint_y=None, height=50, outline_width=1))
 
