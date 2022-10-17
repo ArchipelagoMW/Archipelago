@@ -1,5 +1,6 @@
 import asyncio
 import base64
+import platform
 from typing import Any, Coroutine, Dict, Optional, Type, cast
 
 # CommonClient import first to trigger ModuleUpdater
@@ -21,9 +22,12 @@ from worlds.zillion.config import base_id
 
 
 class ZillionCommandProcessor(ClientCommandProcessor):
-    def _cmd_test_command(self) -> None:
-        """ test command processor """
-        logger.info("text command executed")
+    ctx: "ZillionContext"
+
+    def _cmd_sms(self) -> None:
+        """ Tell the client that Zillion is running in RetroArch. """
+        logger.info("ready to look for game")
+        self.ctx.look_for_retroarch.set()
 
 
 class ZillionContext(CommonContext):
@@ -44,6 +48,16 @@ class ZillionContext(CommonContext):
     loc_mem_to_id: Dict[int, int] = {}
     got_slot_data: asyncio.Event
 
+    look_for_retroarch: asyncio.Event
+    """
+    There is a bug in Python in Windows
+    https://github.com/python/cpython/issues/91227
+    that makes it so if I look for RetroArch before it's ready,
+    it breaks the asyncio udp transport system.
+
+    As a workaround, we don't look for RetroArch until this event is set.
+    """
+
     def __init__(self,
                  server_address: str,
                  password: str) -> None:
@@ -51,6 +65,11 @@ class ZillionContext(CommonContext):
         self.from_game = asyncio.Queue()
         self.to_game = asyncio.Queue()
         self.got_slot_data = asyncio.Event()
+
+        self.look_for_retroarch = asyncio.Event()
+        if platform.system() != "Windows":
+            # asyncio udp bug is only on Windows
+            self.look_for_retroarch.set()
 
         self.reset_game_state()
 
@@ -220,6 +239,14 @@ class ZillionContext(CommonContext):
 
 async def zillion_sync_task(ctx: ZillionContext) -> None:
     logger.info("started zillion sync task")
+
+    # to work around the Python bug where we can't check for RetroArch
+    if not ctx.look_for_retroarch.is_set():
+        logger.info("Start Zillion in RetroArch, then use the /sms command to connect to it.")
+    await asyncio.wait((
+        asyncio.create_task(ctx.look_for_retroarch.wait()),
+        asyncio.create_task(ctx.exit_event.wait())
+    ), return_when=asyncio.FIRST_COMPLETED)
 
     last_log = ""
 
