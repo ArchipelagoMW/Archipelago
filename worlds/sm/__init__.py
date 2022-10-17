@@ -290,10 +290,19 @@ class SMWorld(World):
         vanillaItemTypesCount = 21
         for itemLoc in self.world.get_locations():
             if itemLoc.player == self.player and locationsDict[itemLoc.name].Id != None:
+                SMZ3NameToSMType = {
+                    "ETank": "ETank", "Missile": "Missile", "Super": "Super", "PowerBomb": "PowerBomb", "Bombs": "Bomb",
+                    "Charge": "Charge", "Ice": "Ice", "HiJump": "HiJump", "SpeedBooster": "SpeedBooster",
+                    "Wave": "Wave", "Spazer": "Spazer", "SpringBall": "SpringBall", "Varia": "Varia", "Plasma": "Plasma",
+                    "Grapple": "Grapple", "Morph": "Morph", "ReserveTank": "Reserve", "Gravity": "Gravity",
+                    "XRay": "XRayScope", "SpaceJump": "SpaceJump", "ScrewAttack": "ScrewAttack"
+                }
                 # this SM world can find this item: write full item data to tables and assign player data for writing
                 romPlayerID = itemLoc.item.player if itemLoc.item.player <= ROM_PLAYER_LIMIT else 0
                 if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items:
                     itemId = ItemManager.Items[itemLoc.item.type].Id
+                elif itemLoc.item.game == "SMZ3" and itemLoc.item.name in SMZ3NameToSMType.keys():
+                    itemId = ItemManager.Items[SMZ3NameToSMType[itemLoc.item.name]].Id
                 else:
                     itemId = ItemManager.Items['ArchipelagoItem'].Id + idx
                     multiWorldItems.append({"sym": symbols["message_item_names"],

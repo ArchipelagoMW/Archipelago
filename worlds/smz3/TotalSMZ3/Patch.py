@@ -351,6 +351,21 @@ class Patch:
                 not (item.IsDungeonItem() and location.Region.IsRegionItem(item) and item.World == self.myWorld) else itemDungeon
             
             return value.value
+        elif (location.APLocation.item.game == "A Link to the Past"):
+            #if location.APLocation.item.code in ItemType
+            return location.APLocation.item.code
+        elif (location.APLocation.item.game == "Super Metroid"):
+            SMNameToSMZ3Code = {
+                "Energy Tank": ItemType.ETank, "Missile": ItemType.Missile, "Super Missile": ItemType.Super,
+                "Power Bomb": ItemType.PowerBomb, "Bomb": ItemType.Bombs, "Charge Beam": ItemType.Charge,
+                "Ice Beam": ItemType.Ice, "Hi-Jump Boots": ItemType.HiJump, "Speed Booster": ItemType.SpeedBooster,
+                "Wave Beam": ItemType.Wave, "Spazer": ItemType.Spazer, "Spring Ball": ItemType.SpringBall,
+                "Varia Suit": ItemType.Varia, "Plasma Beam": ItemType.Plasma, "Grappling Beam": ItemType.Grapple,
+                "Morph Ball": ItemType.Morph, "Reserve Tank": ItemType.ReserveTank, "Gravity Suit": ItemType.Gravity,
+                "X-Ray Scope": ItemType.XRay, "Space Jump": ItemType.SpaceJump, "Screw Attack": ItemType.ScrewAttack,
+                "Nothing": ItemType.Something, "No Energy": ItemType.Something, "Generic": ItemType.Something
+            }
+            return SMNameToSMZ3Code[location.APLocation.item.name].value
         else:
             return ItemType.Something.value
 

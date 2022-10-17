@@ -6,7 +6,7 @@ general_options:
 # These overwrite command line arguments!
 server_options:
   host: null
-  port: 38281
+  port: 77
   password: null
   multidata: null
   savefile: null
@@ -81,7 +81,7 @@ generator:
   race: 0
   # List of options that can be plando'd. Can be combined, for example "bosses, items"
   # Available options: bosses, items, texts, connections
-  plando_options: "bosses"
+  plando_options: "bosses, items"
 lttp_options:
   # File name of the v1.0 J rom
   rom_file: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
