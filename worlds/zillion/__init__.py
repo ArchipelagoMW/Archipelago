@@ -1,6 +1,6 @@
 from collections import deque, Counter
 import functools
-from typing import Any, Dict, FrozenSet, Set, Tuple, Optional, cast
+from typing import Any, Dict, FrozenSet, List, Set, Tuple, Optional, cast
 import os
 import logging
 
@@ -80,6 +80,8 @@ class ZillionWorld(World):
     which might be different from the item counts the player asked for in options
     (if the player asked for something invalid).
     """
+    my_locations: List[ZillionLocation] = []
+    """ This is kind of a cache to avoid iterating through all the multiworld locations in logic. """
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -124,6 +126,7 @@ class ZillionWorld(World):
         assert self.id_to_zz_item, "generate_early hasn't been called"
         p = self.player
         w = self.world
+        self.my_locations = []
 
         self.zz_system.randomizer.place_canister_gun_reqs()
 
@@ -168,6 +171,7 @@ class ZillionWorld(World):
                         loc.progress_type = LocationProgressType.EXCLUDED
                         self.world.exclude_locations[p].value.add(loc.name)
                     here.locations.append(loc)
+                    self.my_locations.append(loc)
 
             for zz_dest in zz_here.connections.keys():
                 dest_name = "Menu" if zz_dest.name == 'start' else zz_reg_name_to_reg_name(zz_dest.name)

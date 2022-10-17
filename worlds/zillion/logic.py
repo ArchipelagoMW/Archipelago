@@ -16,18 +16,19 @@ def set_randomizer_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> int:
     """
     sync up zilliandomizer locations with archipelago locations
 
-    returns a hash of the player and of the set locations
+    returns a hash of the player and of the set locations with their items
     """
+    z_world = cs.world.worlds[p]
+    my_locations = cast(List[ZillionLocation], getattr(z_world, "my_locations"))
+
     _hash = p
-    for loc in cs.world.get_locations():
-        if loc.player == p:
-            z_loc = cast(ZillionLocation, loc)
-            zz_name = z_loc.zz_loc.name
-            zz_item = z_loc.item.zz_item \
-                if isinstance(z_loc.item, ZillionItem) and z_loc.item.player == p \
-                else zz_empty
-            zz_r.locations[zz_name].item = zz_item
-            _hash += hash(zz_name) ^ hash(zz_item)
+    for z_loc in my_locations:
+        zz_name = z_loc.zz_loc.name
+        zz_item = z_loc.item.zz_item \
+            if isinstance(z_loc.item, ZillionItem) and z_loc.item.player == p \
+            else zz_empty
+        zz_r.locations[zz_name].item = zz_item
+        _hash += hash(zz_name) ^ hash(zz_item)
     return _hash
 
 
