@@ -82,13 +82,14 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
                     location.item = None
                     placed_item.location = None
-                    swap_state = sweep_from_pool(base_state)
+                    swap_state = sweep_from_pool(base_state, [placed_item])
+                    # swap_state assumes we can collect placed item before item_to_place
                     if (not single_player_placement or location.player == item_to_place.player) \
                             and location.can_fill(swap_state, item_to_place, perform_access_check):
 
-                        # Verify that placing this item won't reduce available locations
+                        # Verify that placing this item won't reduce available locations, which could happen with rules
+                        # that want to not have both items. Left in until removal is proven useful.
                         prev_state = swap_state.copy()
-                        prev_state.collect(placed_item)
                         prev_loc_count = len(
                             world.get_reachable_locations(prev_state))
 
