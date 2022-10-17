@@ -10,13 +10,14 @@ import random
 import socket
 import threading
 import time
+
 import websockets
+from pony.orm import db_session, commit, select
 
 import Utils
-from .models import db_session, Room, select, commit, Command, db
-
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor
 from Utils import get_public_ipv4, get_public_ipv6, restricted_loads, cache_argsless
+from .models import Room, Command, db
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):

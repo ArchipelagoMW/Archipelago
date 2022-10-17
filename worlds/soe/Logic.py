@@ -35,7 +35,7 @@ class SecretOfEvermoreLogic(LogicMixin):
                 if pvd[1] == progress and pvd[0] > 0:
                     has = True
                     for req in rule.requires:
-                        if not self._soe_has(req[1], world, player, req[0]):
+                        if not self.soe_has(req[1], world, player, req[0]):
                             has = False
                             break
                     if has:
@@ -44,7 +44,7 @@ class SecretOfEvermoreLogic(LogicMixin):
                             return n
         return n
 
-    def _soe_has(self, progress: int, world: MultiWorld, player: int, count: int = 1) -> bool:
+    def soe_has(self, progress: int, world: MultiWorld, player: int, count: int = 1) -> bool:
         """
         Returns True if count of one of evermizer's progress steps is reached based on collected items. i.e. 2 * P_DE
         """

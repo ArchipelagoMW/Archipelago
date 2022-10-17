@@ -7,7 +7,7 @@ from Options import Toggle, DefaultOnToggle, Option, Range, Choice
 #    "Play the randomizer in hardmode"
 #    display_name = "Hard Mode"
 
-class DisableNonRandomizedPuzzles(DefaultOnToggle):
+class DisableNonRandomizedPuzzles(Toggle):
     """Disables puzzles that cannot be randomized.
     This includes many puzzles that heavily involve the environment, such as Shadows, Monastery or Orchard.
     The lasers for those areas will be activated as you solve optional puzzles throughout the island."""
@@ -59,8 +59,9 @@ class ShuffleVaultBoxes(Toggle):
 
 
 class ShufflePostgame(Toggle):
-    """Adds locations into the pool that are guaranteed to become accessible before or at the same time as your goal.
-    Use this if you don't play with forfeit on victory."""
+    """Adds locations into the pool that are guaranteed to become accessible after or at the same time as your goal.
+    Use this if you don't play with forfeit on victory. IMPORTANT NOTE: The possibility of your second
+    "Progressive Dots" showing up in the Caves is ignored, they will still be considered "postgame" in base settings."""
     display_name = "Shuffle Postgame"
 
 
@@ -73,6 +74,13 @@ class VictoryCondition(Choice):
     option_challenge = 1
     option_mountain_box_short = 2
     option_mountain_box_long = 3
+
+
+class PuzzleRandomization(Choice):
+    """Puzzles in this randomizer are randomly generated. This setting changes the difficulty/types of puzzles."""
+    display_name = "Puzzle Randomization"
+    option_sigma_normal = 0
+    option_sigma_expert = 1
 
 
 class MountainLasers(Range):
@@ -108,8 +116,17 @@ class PuzzleSkipAmount(Range):
     default = 5
 
 
+class HintAmount(Range):
+    """Adds hints to Audio Logs. Hints will have the same number of duplicates, as many as will fit. Remaining Audio
+    Logs will have junk hints."""
+    display_name = "Hints on Audio Logs"
+    range_start = 0
+    range_end = 49
+    default = 10
+
+
 the_witness_options: Dict[str, type] = {
-    # "hard_mode": HardMode,
+    "puzzle_randomization": PuzzleRandomization,
     "shuffle_symbols": ShuffleSymbols,
     "shuffle_doors": ShuffleDoors,
     "shuffle_lasers": ShuffleLasers,
@@ -123,6 +140,7 @@ the_witness_options: Dict[str, type] = {
     "early_secret_area": EarlySecretArea,
     "trap_percentage": TrapPercentage,
     "puzzle_skip_amount": PuzzleSkipAmount,
+    "hint_amount": HintAmount,
 }
 
 

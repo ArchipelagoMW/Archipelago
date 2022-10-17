@@ -377,7 +377,7 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
         if option_key in options:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
-            return options[option_key]
+            return category_dict[option_key]
     if game == "A Link to the Past":  # TODO wow i hate this
         if option_key in {"glitches_required", "dark_room_logic", "entrance_shuffle", "goals", "triforce_pieces_mode",
                           "triforce_pieces_percentage", "triforce_pieces_available", "triforce_pieces_extra",

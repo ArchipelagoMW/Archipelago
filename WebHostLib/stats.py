@@ -1,14 +1,14 @@
+import typing
 from collections import Counter, defaultdict
 from colorsys import hsv_to_rgb
 from datetime import datetime, timedelta, date
 from math import tau
-import typing
 
+from bokeh.colors import RGB
 from bokeh.embed import components
 from bokeh.models import HoverTool
 from bokeh.plotting import figure, ColumnDataSource
 from bokeh.resources import INLINE
-from bokeh.colors import RGB
 from flask import render_template
 from pony.orm import select
 
