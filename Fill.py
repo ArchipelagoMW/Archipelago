@@ -24,7 +24,7 @@ def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item]
 
 def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
                      itempool: typing.List[Item], single_player_placement: bool = False, lock: bool = False,
-                     swap: bool = True, on_place: typing.Callable[[Location], None] = None) -> None:
+                     swap: bool = True, on_place: typing.Optional[typing.Callable[[Location], None]] = None) -> None:
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
 
