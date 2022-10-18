@@ -157,6 +157,7 @@ function on_player_created(event)
 {%- if silo == 2 %}
     check_spawn_silo(game.players[event.player_index].force)
 {%- endif %}
+    dumpInfo(player.force)
 end
 script.on_event(defines.events.on_player_created, on_player_created)
 
@@ -491,6 +492,7 @@ commands.add_command("ap-sync", "Used by the Archipelago client to get progress 
         ["death_link"] = DEATH_LINK,
         ["energy"] = chain_lookup(forcedata, "energy"),
         ["energy_bridges"] = chain_lookup(forcedata, "energy_bridges"),
+        ["multiplayer"] = #game.players > 1,
     }
 
     for tech_name, tech in pairs(force.technologies) do

@@ -67,6 +67,7 @@ class FactorioContext(CommonContext):
         self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
         self.energy_link_increment = 0
         self.last_deplete = 0
+        self.multiplayer: bool = False  # whether multiple different players have connected
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -128,8 +129,9 @@ class FactorioContext(CommonContext):
                         self.rcon_client.send_command(f"/ap-energylink {gained}")
 
     async def factorio_chat(self, user: str, message: str) -> None:
-        text: str = f"({user}) {message}" if not message.startswith("!") else message
-        await self.send_msgs([{"cmd": "Say", "text": text}])
+        is_cmd: bool = message.startswith("!")
+        prefix: str = f"({user}) " if self.multiplayer and not is_cmd else ""
+        await self.send_msgs([{"cmd": "Say", "text": f"{prefix}{message}"}])
 
     def run_gui(self):
         from kvui import GameManager
@@ -170,6 +172,7 @@ async def game_watcher(ctx: FactorioContext):
                     research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
                     victory = data["victory"]
                     await ctx.update_death_link(data["death_link"])
+                    ctx.multiplayer = data.get("multiplayer", False)
 
                     if not ctx.finished_game and victory:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
