@@ -78,6 +78,27 @@ class IncludeMissions(Range):
     default = 2
 
 
+class Keysanity(Toggle):
+    """
+    Determines whether picking up Chao Keys grants checks
+    """
+    display_name = "Keysanity"
+
+
+class Pipesanity(Toggle):
+    """
+    Determines whether whistling at Animal Pipes grants checks
+    """
+    display_name = "Pipesanity"
+
+
+class Beetlesanity(Toggle):
+    """
+    Determines whether destroying Gold Beetles grants checks
+    """
+    display_name = "Beetlesanity"
+
+
 class EmblemPercentageForCannonsCore(Range):
     """
     Allows logic to gate the final mission behind a number of Emblems
@@ -211,6 +232,9 @@ class MusicShuffle(Choice):
 
 sa2b_options: typing.Dict[str, type(Option)] = {
     "include_missions": IncludeMissions,
+    "keysanity": Keysanity,
+    "pipesanity": Pipesanity,
+    "beetlesanity": Beetlesanity,
     "required_rank": RequiredRank,
     "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
     "number_of_level_gates": NumberOfLevelGates,
