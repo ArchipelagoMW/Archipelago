@@ -17,11 +17,10 @@ class SoETestBase(unittest.TestCase):
         self.world.game[1] = self.game
         self.world.player_name = {1: "Tester"}
         self.world.set_seed()
-        args = Namespace()
+        args = self.world.default_common_options
         for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].option_definitions.items():
             setattr(args, name, {1: option.from_any(self.options.get(name, option.default))})
         self.world.set_options(args)
-        self.world.set_default_common_options()
         for step in gen_steps:
             call_all(self.world, step)
 
