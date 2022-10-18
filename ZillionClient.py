@@ -47,6 +47,7 @@ class ZillionContext(CommonContext):
     rescues: Dict[int, RescueInfo] = {}
     loc_mem_to_id: Dict[int, int] = {}
     got_slot_data: asyncio.Event
+    """ serves as a flag for whether I am logged in to the server """
 
     look_for_retroarch: asyncio.Event
     """

@@ -1,6 +1,6 @@
 from collections import deque, Counter
 import functools
-from typing import Any, Dict, FrozenSet, List, Set, Tuple, Optional, cast
+from typing import Any, Dict, List, Set, Tuple, Optional, cast
 import os
 import logging
 
@@ -49,9 +49,6 @@ class ZillionWorld(World):
 
     option_definitions: Dict[str, AssembleOptions] = zillion_options
     topology_present: bool = True  # indicate if world type has any meaningful layout/pathing
-
-    # gets automatically populated with all item and item group names
-    all_item_and_group_names: FrozenSet[str] = frozenset()
 
     # map names to their IDs
     item_name_to_id: Dict[str, int] = _item_name_to_id
@@ -200,8 +197,7 @@ class ZillionWorld(World):
                 if item_name in item_counts:
                     count = item_counts[item_name]
                     self.logger.debug(f"Zillion Items: {item_name}  {count}")
-                    for _ in range(count):
-                        self.world.itempool.append(self.create_item(item_name))
+                    self.world.itempool += [self.create_item(item_name) for _ in range(count)]
             elif item_id < (3 + base_id) and zz_item.code == RESCUE:
                 # One of the 3 rescues will not be in the pool and its zz_item will be 'empty'.
                 self.logger.debug(f"Zillion Items: {item_name}  1")
@@ -231,7 +227,7 @@ class ZillionWorld(World):
         """
         sync zilliandomizer item locations with AP item locations
         """
-        assert self.zz_system.randomizer, "generate_early hasn't been called"
+        assert self.zz_system.randomizer and self.zz_system.patcher, "generate_early hasn't been called"
         zz_options = self.zz_system.randomizer.options
 
         # debug_zz_loc_ids: Dict[str, int] = {}
@@ -276,7 +272,6 @@ class ZillionWorld(World):
             )
 
         zz_patcher = self.zz_system.patcher
-        assert zz_patcher, "generate_early didn't set patcher"
 
         zz_patcher.write_locations(self.zz_system.randomizer.regions,
                                    zz_options.start_char,
