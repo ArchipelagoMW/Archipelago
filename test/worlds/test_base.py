@@ -12,8 +12,14 @@ class WorldTestBase(unittest.TestCase):
     world: MultiWorld
 
     game: typing.ClassVar[str]  # define game name in subclass, example "Secret of Evermore"
+    auto_construct: typing.ClassVar[bool] = True
+    """ automatically set up a world for each test in this class """
 
     def setUp(self) -> None:
+        if self.auto_construct:
+            self.world_setup()
+
+    def world_setup(self) -> None:
         if not hasattr(self, "game"):
             raise NotImplementedError("didn't define game name")
         self.world = MultiWorld(1)
