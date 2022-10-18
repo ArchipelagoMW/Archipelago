@@ -384,6 +384,21 @@ class TestFillRestrictive(unittest.TestCase):
         self.assertTrue(sphere1_loc.item, "Did not swap required item into Sphere 1")
         self.assertEqual(sphere1_loc.item, allowed_item, "Wrong item in Sphere 1")
 
+    def test_double_sweep(self):
+        # test for PR1114
+        multi_world = generate_multi_world(1)
+        player1 = generate_player_data(multi_world, 1, 1, 1)
+        location = player1.locations[0]
+        location.address = None
+        location.event = True
+        item = player1.prog_items[0]
+        item.code = None
+        location.place_locked_item(item)
+        multi_world.state.sweep_for_events()
+        multi_world.state.sweep_for_events()
+        self.assertTrue(multi_world.state.prog_items[item.name, item.player], "Sweep did not collect - Test flawed")
+        self.assertEqual(multi_world.state.prog_items[item.name, item.player], 1, "Sweep collected multiple times")
+
 
 class TestDistributeItemsRestrictive(unittest.TestCase):
     def test_basic_distribute(self):
