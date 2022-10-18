@@ -527,7 +527,7 @@ begin
     RedROMFilePage:= AddGBRomPage('Pokemon Red (UE) [S][!].gb');
 
   bluerom := CheckRom('Pokemon Blue (UE) [S][!].gb','50927e843568814f7ed45ec4f944bd8b');
-  if Length(redrom) = 0 then
+  if Length(bluerom) = 0 then
     BlueROMFilePage:= AddGBRomPage('Pokemon Blue (UE) [S][!].gb');
 end;
 
