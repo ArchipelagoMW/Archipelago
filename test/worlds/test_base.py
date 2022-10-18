@@ -1,4 +1,3 @@
-import abc
 import typing
 import unittest
 from argparse import Namespace
@@ -8,22 +7,21 @@ from worlds import AutoWorld
 from worlds.AutoWorld import call_all
 
 
-class WorldTestBase(unittest.TestCase, abc.ABC):
+class WorldTestBase(unittest.TestCase):
     options: typing.Dict[str, typing.Any] = {}
     world: MultiWorld
 
-    @abc.abstractstaticmethod
-    def game() -> str:
-        """ game name, example: return "Secret of Evermore" """
-        ...
+    game: typing.ClassVar[str]  # define game name in subclass, example "Secret of Evermore"
 
     def setUp(self) -> None:
+        if not hasattr(self, "game"):
+            raise NotImplementedError("didn't define game name")
         self.world = MultiWorld(1)
-        self.world.game[1] = self.game()
+        self.world.game[1] = self.game
         self.world.player_name = {1: "Tester"}
         self.world.set_seed()
         args = Namespace()
-        for name, option in AutoWorld.AutoWorldRegister.world_types[self.game()].option_definitions.items():
+        for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].option_definitions.items():
             setattr(args, name, {
                 1: option.from_any(self.options.get(name, getattr(option, "default")))
             })
