@@ -45,7 +45,10 @@ _logic_cache: Dict[int, Tuple[_Counter[Tuple[str, int]], FrozenSet[Location]]] =
 
 
 def cs_to_zz_locs(cs: CollectionState, p: int, zz_r: Randomizer, id_to_zz_item: Dict[int, Item]) -> FrozenSet[Location]:
-    """ accessible locations from this collection state """
+    """
+    given an Archipelago `CollectionState`,
+    returns frozenset of accessible zilliandomizer locations
+    """
     # caching this function because it would be slow
     _hash = set_randomizer_locs(cs, p, zz_r)
     counts = item_counts(cs, p)
@@ -59,7 +62,12 @@ def cs_to_zz_locs(cs: CollectionState, p: int, zz_r: Randomizer, id_to_zz_item: 
     have_items: List[Item] = []
     for name, count in counts:
         have_items.extend([id_to_zz_item[item_name_to_id[name]]] * count)
+    # have_req is the result of converting AP CollectionState to zilliandomizer collection state
     have_req = zz_r.make_ability(have_items)
+
+    # This `get_locations` is where the core of the logic comes in.
+    # It takes a zilliandomizer collection state (a set of the abilities that I have)
+    # and returns list of all the zilliandomizer locations I can access with those abilities.
     tr = frozenset(zz_r.get_locations(have_req))
 
     # save result in cache

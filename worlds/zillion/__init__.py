@@ -146,7 +146,7 @@ class ZillionWorld(World):
             here = all[here_name]
 
             for zz_loc in zz_here.locations:
-                # if local gun reqs didn't place item
+                # if local gun reqs didn't place "keyword" item
                 if not zz_loc.item:
 
                     def access_rule_wrapped(zz_loc_local: ZzLocation,
@@ -154,7 +154,6 @@ class ZillionWorld(World):
                                             zz_r: ZzRandomizer,
                                             id_to_zz_item: Dict[int, ZzItem],
                                             cs: CollectionState) -> bool:
-                        # print(f"checking access to {zz_loc_local}")
                         accessible = cs_to_zz_locs(cs, p, zz_r, id_to_zz_item)
                         return zz_loc_local in accessible
 
