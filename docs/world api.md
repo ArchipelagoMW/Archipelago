@@ -85,7 +85,7 @@ inside a World object.
 ### Player Options
 
 Players provide customized settings for their World in the form of yamls.
-Those are accessible through `self.world.<option_name>[self.player]`. A dict
+Those are accessible through `self.world.options["<option_name>"]`. A dict
 of valid options has to be provided in `self.option_definitions`. Options are automatically
 added to the `World` object for easy access.
 
@@ -210,7 +210,7 @@ AP will only import the `__init__.py`. Depending on code size it makes sense to
 use multiple files and use relative imports to access them.
 
 e.g. `from .Options import mygame_options` from your `__init__.py` will load
-`world/[world_name]/Options.py` and make its `mygame_options` accesible.
+`world/[world_name]/Options.py` and make its `mygame_options` accessible.
 
 When imported names pile up it may be easier to use `from . import Options`
 and access the variable as `Options.mygame_options`.
@@ -262,7 +262,8 @@ to describe it and a `display_name` property for display on the website and in
 spoiler logs.
 
 The actual name as used in the yaml is defined in a `dict[str, Option]`, that is
-assigned to the world under `self.option_definitions`.
+assigned to the world under `self.option_definitions`. By convention, the string
+that defines your option should be in `snake_case`.
 
 Common option types are `Toggle`, `DefaultOnToggle`, `Choice`, `Range`.
 For more see `Options.py` in AP's base directory.
@@ -455,7 +456,7 @@ In addition, the following methods can be implemented and attributes can be set
 ```python
 def generate_early(self) -> None:
     # read player settings to world instance
-    self.final_boss_hp = self.world.final_boss_hp[self.player].value
+    self.final_boss_hp = self.world.options["final_boss_hp"].value
 ```
 
 #### create_item
