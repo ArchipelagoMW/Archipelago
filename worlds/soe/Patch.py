@@ -2,7 +2,7 @@ import bsdiff4
 import yaml
 from typing import Optional
 import Utils
-from Patch import APDeltaPatch
+from worlds.Files import APDeltaPatch
 import os
 
 
