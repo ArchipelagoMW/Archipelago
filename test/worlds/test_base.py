@@ -51,6 +51,7 @@ class WorldTestBase(unittest.TestCase, abc.ABC):
         return [item for item in self.world.itempool if item.name in item_names]
 
     def collect_by_name(self, item_names: typing.Union[str, typing.Iterable[str]]) -> typing.List[Item]:
+        """ collect all of the items in the item pool that have the given names """
         items = self.get_items_by_name(item_names)
         self.collect(items)
         return items
