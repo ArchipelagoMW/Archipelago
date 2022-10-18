@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Any, Dict, Tuple, cast
 from Options import AssembleOptions, DefaultOnToggle, Range, SpecialRange, Toggle, Choice
 from zilliandomizer.options import \
     Options as ZzOptions, char_to_gun, char_to_jump, ID, \
-    VBLR as ZzVBLR, VBLR_CHOICES, chars, Chars, ItemCounts as ZzItemCounts
+    VBLR as ZzVBLR, chars, Chars, ItemCounts as ZzItemCounts
 from zilliandomizer.options.parsing import validate as zz_validate
 if TYPE_CHECKING:
     from BaseClasses import MultiWorld

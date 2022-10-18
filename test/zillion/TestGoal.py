@@ -93,3 +93,38 @@ class TestGoalRestrictive(ZillionTestBase):
         self.assertBeatable(False)  # with all guns, jj apple can't gun
         self.collect_by_name("Champ")
         self.assertBeatable(True)
+
+
+class TestGoalAppleStart(ZillionTestBase):
+    """ creation of character rescue items has some special interactions with logic """
+    options = {
+        "start_char": "Apple",
+        "jump_levels": "balanced",
+        "gun_levels": "low",
+        "zillion_count": 5
+    }
+
+    def test_guns(self):
+        """ with low gun levels, 5 Zillion is enough to get JJ to gun 3 """
+        self.collect_by_name(["JJ", "Red ID Card", "Floppy Disk", "Opa-Opa"])
+        self.assertBeatable(False)  # not enough gun
+        self.collect_by_name("Zillion")
+        self.assertBeatable(True)
+
+
+class TestGoalChampStart(ZillionTestBase):
+    """ creation of character rescue items has some special interactions with logic """
+    options = {
+        "start_char": "Champ",
+        "jump_levels": "low",
+        "gun_levels": "balanced",
+        "opa_opa_count": 5,
+        "opas_per_level": 1
+    }
+
+    def test_jump(self):
+        """ with low jump levels, 5 level-ups is enough to get JJ to jump 3 """
+        self.collect_by_name(["JJ", "Red ID Card", "Floppy Disk", "Zillion"])
+        self.assertBeatable(False)  # not enough jump
+        self.collect_by_name("Opa-Opa")
+        self.assertBeatable(True)
