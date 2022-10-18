@@ -1,4 +1,4 @@
-from test.zillion import ZillionTestBase
+from test.worlds.zillion import ZillionTestBase
 
 from worlds.zillion.options import ZillionJumpLevels, ZillionGunLevels, validate
 from zilliandomizer.options import VBLR_CHOICES

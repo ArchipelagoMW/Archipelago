@@ -104,11 +104,18 @@ class TestGoalAppleStart(ZillionTestBase):
         "zillion_count": 5
     }
 
-    def test_guns(self):
+    def test_guns_jj_first(self):
         """ with low gun levels, 5 Zillion is enough to get JJ to gun 3 """
         self.collect_by_name(["JJ", "Red ID Card", "Floppy Disk", "Opa-Opa"])
         self.assertBeatable(False)  # not enough gun
         self.collect_by_name("Zillion")
+        self.assertBeatable(True)
+
+    def test_guns_zillions_first(self):
+        """ with low gun levels, 5 Zillion is enough to get JJ to gun 3 """
+        self.collect_by_name(["Zillion", "Red ID Card", "Floppy Disk", "Opa-Opa"])
+        self.assertBeatable(False)  # not enough gun
+        self.collect_by_name("JJ")
         self.assertBeatable(True)
 
 
@@ -122,9 +129,16 @@ class TestGoalChampStart(ZillionTestBase):
         "opas_per_level": 1
     }
 
-    def test_jump(self):
+    def test_jump_jj_first(self):
         """ with low jump levels, 5 level-ups is enough to get JJ to jump 3 """
         self.collect_by_name(["JJ", "Red ID Card", "Floppy Disk", "Zillion"])
         self.assertBeatable(False)  # not enough jump
         self.collect_by_name("Opa-Opa")
+        self.assertBeatable(True)
+
+    def test_jump_opa_first(self):
+        """ with low jump levels, 5 level-ups is enough to get JJ to jump 3 """
+        self.collect_by_name(["Opa-Opa", "Red ID Card", "Floppy Disk", "Zillion"])
+        self.assertBeatable(False)  # not enough jump
+        self.collect_by_name("JJ")
         self.assertBeatable(True)
