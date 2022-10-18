@@ -133,9 +133,18 @@ class FactorioContext(CommonContext):
         self.print_to_game(f"{self.player_names[self.slot]}: {text}")
         return text
 
-    async def factorio_chat(self, user: str, message: str) -> None:
-        is_cmd: bool = message.startswith("!")
-        prefix: str = f"({user}) " if self.multiplayer and not is_cmd else ""
+    async def chat_from_factorio(self, user: str, message: str) -> None:
+        # Pass through commands
+        if message.startswith("!"):
+            await self.send_msgs([{"cmd": "Say", "text": message}])
+            return
+
+        # Remove local coordinates
+        message = re.sub(r"\[gps=[^\]]*\]", "", message).strip()
+        if not message:
+            return
+
+        prefix: str = f"({user}) " if self.multiplayer else ""
         await self.send_msgs([{"cmd": "Say", "text": f"{prefix}{message}"}])
 
     def run_gui(self):
@@ -280,7 +289,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     factorio_server_logger.info(msg)
                     match: typing.Optional[re.Match] = re.match(r"^\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d \[CHAT\] ([^:]+): (.*)$", msg)
                     if match:
-                        await ctx.factorio_chat(match.group(1), match.group(2))
+                        await ctx.chat_from_factorio(match.group(1), match.group(2))
             if ctx.rcon_client:
                 commands = {}
                 while ctx.send_index < len(ctx.items_received):
