@@ -14,8 +14,13 @@ class ZillionTestBase(unittest.TestCase):
     options: typing.Dict[str, typing.Any] = {}
     world: MultiWorld
     game = "Zillion"
+    auto_construct: bool = True
 
     def setUp(self) -> None:
+        if self.auto_construct:
+            self.world_setup()
+
+    def world_setup(self) -> None:
         self.world = MultiWorld(1)
         # TODO: type "game" in MultiWorld
         typing.cast(typing.Dict[int, str], getattr(self.world, "game"))[1] = self.game

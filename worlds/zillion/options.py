@@ -275,12 +275,10 @@ def validate(world: "MultiWorld", p: int) -> "Tuple[ZzOptions, Counter[str]]":
 
     jump_levels = cast(ZillionJumpLevels, wo.jump_levels[p])
     jump_option = jump_levels.get_current_option_name().lower()
-    assert jump_option in VBLR_CHOICES, f"{jump_option} in {VBLR_CHOICES}"
     required_level = char_to_jump["Apple"][cast(ZzVBLR, jump_option)].index(3) + 1
 
     gun_levels = cast(ZillionGunLevels, wo.gun_levels[p])
     gun_option = gun_levels.get_current_option_name().lower()
-    assert gun_option in VBLR_CHOICES, f"{gun_option} in {VBLR_CHOICES}"
     guns_required = char_to_gun["Champ"][cast(ZzVBLR, gun_option)].index(3)
 
     floppy_req = cast(ZillionFloppyReq, wo.floppy_req[p])
