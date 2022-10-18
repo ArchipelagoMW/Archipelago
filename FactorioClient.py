@@ -128,6 +128,11 @@ class FactorioContext(CommonContext):
                                      f"{Utils.format_SI_prefix(args['value'])}J remaining.")
                         self.rcon_client.send_command(f"/ap-energylink {gained}")
 
+    def on_user_say(self, text: str) -> typing.Optional[str]:
+        # Mirror chat sent from the UI to the Factorio server.
+        self.print_to_game(f"{self.player_names[self.slot]}: {text}")
+        return text
+
     async def factorio_chat(self, user: str, message: str) -> None:
         is_cmd: bool = message.startswith("!")
         prefix: str = f"({user}) " if self.multiplayer and not is_cmd else ""
