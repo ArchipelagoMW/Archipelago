@@ -235,6 +235,8 @@ Sent to clients as a response the a [Get](#Get) package.
 | ---- | ---- | ----- |
 | keys | dict\[str\, any] | A key-value collection containing all the values for the keys requested in the [Get](#Get) package. |
 
+If a requested key was not present in the server's data, the associated value will be `null`.
+
 Additional arguments added to the [Get](#Get) package that triggered this [Retrieved](#Retrieved) will also be passed along.
 
 ### SetReply

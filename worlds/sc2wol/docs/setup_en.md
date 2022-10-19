@@ -13,9 +13,10 @@ to obtain a config file for StarCraft 2.
 
 1. Install StarCraft 2 and Archipelago using the first two links above. (The StarCraft 2 client for Archipelago is
    included by default.)
-2. Click the third link above and follow the instructions there.
-3. Linux users should also follow the instructions found at the bottom of this page 
-   (["Running in Linux"](#running-in-linux)).
+   - Linux users should also follow the instructions found at the bottom of this page 
+     (["Running in Linux"](#running-in-linux)).
+2. Run ArchipelagoStarcraft2Client.exe.
+3. Type the command `/download_data`. This will automatically install the Maps and Data files from the third link above.
 
 ## Where do I get a config file (aka "YAML") for this game?
 
@@ -40,16 +41,9 @@ Check out [Creating a YAML](https://archipelago.gg/tutorial/Archipelago/setup/en
 
 ## The game isn't launching when I try to start a mission.
 
-First, check the log file for issues (stored at `[Archipelago Directory]/logs/SC2Client.txt`). If the below fix doesn't
-work for you, and you can't figure out the log file, visit our [Discord's](https://discord.com/invite/8Z65BR2)
-tech-support channel for help. Please include a specific description of what's going wrong and attach your log file to
-your message.
-
-### Check your installation
-
-Make sure you've followed the installation instructions completely. Specifically, make sure that you've placed the Maps
-and Mods folders directly inside the StarCraft II installation folder. They should be in the same location as the
-SC2Data, Support, Support64, and Versions folders.
+First, check the log file for issues (stored at `[Archipelago Directory]/logs/SC2Client.txt`). If you can't figure out
+the log file, visit our [Discord's](https://discord.com/invite/8Z65BR2) tech-support channel for help. Please include a
+specific description of what's going wrong and attach your log file to your message.
 
 ## Running in Linux
 
