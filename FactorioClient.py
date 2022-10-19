@@ -302,6 +302,9 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
                     factorio_server_logger.debug(msg)
+                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-chat$", msg):
+                    factorio_server_logger.debug(msg)
+                    ctx.toggle_bridge_chat_out()
                 else:
                     factorio_server_logger.info(msg)
                     match: typing.Optional[re.Match] = re.match(r"^\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d \[CHAT\] ([^:]+): (.*)$", msg)
