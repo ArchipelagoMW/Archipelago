@@ -48,6 +48,9 @@ class FactorioCommandProcessor(ClientCommandProcessor):
         """Manually trigger a resync."""
         self.ctx.awaiting_bridge = True
 
+    def _cmd_toggle_chat(self):
+        """Toggle sending of chat messages from players on the Factorio server to Archipelago."""
+        self.ctx.toggle_bridge_chat_out()
 
 class FactorioContext(CommonContext):
     command_processor = FactorioCommandProcessor
@@ -68,6 +71,7 @@ class FactorioContext(CommonContext):
         self.energy_link_increment = 0
         self.last_deplete = 0
         self.multiplayer: bool = False  # whether multiple different players have connected
+        self.bridge_chat_out: bool = True
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -134,6 +138,9 @@ class FactorioContext(CommonContext):
         return text
 
     async def chat_from_factorio(self, user: str, message: str) -> None:
+        if not self.bridge_chat_out:
+            return
+
         # Pass through commands
         if message.startswith("!"):
             await self.send_msgs([{"cmd": "Say", "text": message}])
@@ -146,6 +153,16 @@ class FactorioContext(CommonContext):
 
         prefix: str = f"({user}) " if self.multiplayer else ""
         await self.send_msgs([{"cmd": "Say", "text": f"{prefix}{message}"}])
+
+    def toggle_bridge_chat_out(self) -> None:
+        self.bridge_chat_out = not self.bridge_chat_out
+        announcement: str
+        if self.bridge_chat_out:
+            announcement = "Chat is now bridged to Archipelago."
+        else:
+            announcement = "Chat is no longer bridged to Archipelago."
+        logger.info(announcement)
+        self.print_to_game(announcement)
 
     def run_gui(self):
         from kvui import GameManager
@@ -389,6 +406,7 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
 
 async def main(args):
     ctx = FactorioContext(args.connect, args.password)
+    ctx.bridge_chat_out = initial_bridge_chat_out
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
     if gui_enabled:
@@ -441,6 +459,9 @@ if __name__ == '__main__':
     server_settings = args.server_settings if args.server_settings else options["factorio_options"].get("server_settings", None)
     if server_settings:
         server_settings = os.path.abspath(server_settings)
+    if not isinstance(options["factorio_options"]["bridge_chat_out"], bool):
+        logging.warning(f"Warning: Option bridge_chat_out should be a bool.")
+    initial_bridge_chat_out: bool = bool(options["factorio_options"]["bridge_chat_out"])
 
     if not os.path.exists(os.path.dirname(executable)):
         raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")

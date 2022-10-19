@@ -231,6 +231,7 @@ def get_default_options() -> OptionsType:
         },
         "factorio_options": {
             "executable": os.path.join("factorio", "bin", "x64", "factorio"),
+            "bridge_chat_out": True,
         },
         "sm_options": {
             "rom_file": "Super Metroid (JU).sfc",
