@@ -180,9 +180,9 @@ local undernet_bmd_checks = function()
     checks["Undernet 6 East BMD"] = memory.read_u8(0x20001f5)
     checks["Undernet 6 Central BMD"] = memory.read_u8(0x20001f5)
     checks["Undernet 6 TV BMD"] = memory.read_u8(0x20001f5)
-    checks["Undernet 7 West BMD"] = memory.read_u8(0x20001f6)
-    checks["Undernet 7 Northwest BMD"] = memory.read_u8(0x20001f6)
-    checks["Undernet 7 Northeast BMD"] = memory.read_u8(0x20001f6)
+    --checks["Undernet 7 West BMD"] = memory.read_u8(0x20001f6)
+    --checks["Undernet 7 Northwest BMD"] = memory.read_u8(0x20001f6)
+    --checks["Undernet 7 Northeast BMD"] = memory.read_u8(0x20001f6)
             return checks
 end
 local secret_bmd_checks = function()
@@ -301,7 +301,7 @@ local misc_bmd_checks = function()
 end
 local story_bmd_checks = function()
     local checks ={}
-    checks["Undernet 7 Upper BMD"] = memory.read_u8(0x20001f6)
+    --checks["Undernet 7 Upper BMD"] = memory.read_u8(0x20001f6)
     checks["School 1 KeyDataA BMD"] = memory.read_u8(0x2000208)
     checks["School 1 KeyDataB BMD"] = memory.read_u8(0x2000208)
     checks["School 1 KeyDataC BMD"] = memory.read_u8(0x2000208)
@@ -309,10 +309,10 @@ local story_bmd_checks = function()
     checks["School 2 CodeA BMD"] = memory.read_u8(0x2000209)
     checks["School 2 CodeB BMD"] = memory.read_u8(0x2000209)
     checks["Hades HadesKey BMD"] = memory.read_u8(0x20001eb)
-    checks["WWW 1 South BMD"] = memory.read_u8(0x2000220)
-    checks["WWW 2 West BMD"] = memory.read_u8(0x2000221)
-    checks["WWW 3 South BMD"] = memory.read_u8(0x2000222)
-    checks["WWW 4 East BMD"] = memory.read_u8(0x2000223)
+    --checks["WWW 1 South BMD"] = memory.read_u8(0x2000220)
+    --checks["WWW 2 West BMD"] = memory.read_u8(0x2000221)
+    --checks["WWW 3 South BMD"] = memory.read_u8(0x2000222)
+    --checks["WWW 4 East BMD"] = memory.read_u8(0x2000223)
     return checks
 end
 local pmd_checks = function()
@@ -320,7 +320,7 @@ local pmd_checks = function()
     checks["ACDC 1 PMD"] = memory.read_u8(0x020001d0)
     checks["Yoka 1 PMD"] = memory.read_u8(0x20001e0)
     checks["Beach 1 PMD"] = memory.read_u8(0x20001e8)
-    checks["Undernet 7 PMD"] = memory.read_u8(0x20001f6)
+    --checks["Undernet 7 PMD"] = memory.read_u8(0x20001f6)
     checks["Mayl's HP PMD"] = memory.read_u8(0x2000239)
     checks["SciLab Dad's Computer PMD"] = memory.read_u8(0x2000241)
     checks["Zoo Panda PMD"] = memory.read_u8(0x2000249)
@@ -391,7 +391,7 @@ local numberman_checks = function()
     checks["Numberman Code 21"] = memory.read_u8(0x2000432)
     checks["Numberman Code 22"] = memory.read_u8(0x2000432)
     checks["Numberman Code 23"] = memory.read_u8(0x2000432)
-    checks["Numberman Code 24"] = memory.read_u8(0x2000433)
+    checks["Numberman Code 24"] = memory.read_u8(0x2000432)
     checks["Numberman Code 25"] = memory.read_u8(0x2000433)
     checks["Numberman Code 26"] = memory.read_u8(0x2000433)
     checks["Numberman Code 27"] = memory.read_u8(0x2000433)
@@ -486,10 +486,11 @@ local Next_Progressive_Undernet_ID = function()
 end
 
 local is_game_complete = function()
+    if IsOnTitle() then return game_complete end
+
     -- If the game is complete, do not read memory
     if game_complete then return true end
-
-    local is_alpha_defeated = bitand(memory.read_u8(0x2000064), 0x04) ~= 0
+    local is_alpha_defeated = bitand(memory.read_u8(0x2000433), 0x01) ~= 0
 
     if (is_alpha_defeated) then
         game_complete = true

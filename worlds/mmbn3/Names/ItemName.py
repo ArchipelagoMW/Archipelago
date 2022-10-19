@@ -101,6 +101,11 @@ DeltaRay_Z = "DeltaRay Z"
 Punk_P = "Punk P"
 DarkAura_A = "DarkAura A"
 AlphaArm_Omega_V = "AlphaArmΩ V"
+SonicWav_W = "SonicWav W"
+Bubbler_C = "Bubbler C"
+Shake1_S = "Shake1 S"
+HoleMetr_H = "HoleMetr H"
+Shadow_J = "Shadow J"
 
 ## Navi Cust Programs
 Airshoes = "Airshoes"
@@ -180,3 +185,5 @@ RegUP1 = "RegUP1"
 RegUP2 = "RegUP2"
 RegUP3 = "RegUP3"
 SubMem = "SubMem"
+
+Victory = "Victory"

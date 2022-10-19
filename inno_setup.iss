@@ -395,6 +395,8 @@ begin
     Result := not (SoEROMFilePage.Values[0] = '')
   else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
     Result := not (OoTROMFilePage.Values[0] = '')
+  else if (assigned(BN3ROMFilePage)) and (CurPageID = BN3ROMFilePage.ID) then
+    Result := not (BN3ROMFilePage.Values[0] = '')
   else
     Result := True;
 end;

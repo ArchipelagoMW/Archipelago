@@ -23,6 +23,7 @@ class LocationData:
         self.text_script_index = text_script_index
         self.text_box_index = text_box_index
 
+
 class MMBN3Location(Location):
     game: str = "MegaMan Battle Network 3"
 
@@ -59,9 +60,9 @@ bmds = [
     LocationData(LocationName.Undernet_6_East_BMD,          0xb3101c, 0x20001f5, 0x80, 0x775390, 230, 1),
     LocationData(LocationName.Undernet_6_Central_BMD,       0xb3101d, 0x20001f5, 0x20, 0x775390, 232, 1),
     LocationData(LocationName.Undernet_6_TV_BMD,            0xb3101e, 0x20001f5, 0x40, 0x775390, 231, 1),
-    # LocationData(LocationName.Undernet_7_West_BMD,          0xb3101f, 0x20001f6, 0x80, 0x775934, 230, 1),
-    # LocationData(LocationName.Undernet_7_Northwest_BMD,     0xb31020, 0x20001f6, 0x20, 0x775934, 232, 1),
-    # LocationData(LocationName.Undernet_7_Northeast_BMD,     0xb31021, 0x20001f6, 0x40, 0x775934, 231, 1),
+    LocationData(LocationName.Undernet_7_West_BMD,          0xb3101f, 0x20001f6, 0x80, 0x775934, 230, 1),
+    LocationData(LocationName.Undernet_7_Northwest_BMD,     0xb31020, 0x20001f6, 0x20, 0x775934, 232, 1),
+    LocationData(LocationName.Undernet_7_Northeast_BMD,     0xb31021, 0x20001f6, 0x40, 0x775934, 231, 1),
     LocationData(LocationName.Secret_1_South_BMD,           0xb31022, 0x2000200, 0x40, 0x7771CC, 241, 1),
     LocationData(LocationName.Secret_1_Northeast_BMD,       0xb31023, 0x2000200, 0x20, 0x7771CC, 242, 1),
     LocationData(LocationName.Secret_1_Northwest_BMD,       0xb31024, 0x2000200, 0x80, 0x7771CC, 240, 1),
@@ -166,7 +167,7 @@ pmds = [
     LocationData(LocationName.ACDC_1_PMD,                   0xb31084, 0x020001d0, 0x20, 0x7643B8, 232, 1),
     LocationData(LocationName.Yoka_1_PMD,                   0xb31085, 0x20001e0, 0x40, 0x76D1B0, 231, 1),
     LocationData(LocationName.Beach_1_PMD,                  0xb31086, 0x20001e8, 0x40, 0x76FF68, 231, 1),
-    # LocationData(LocationName.Undernet_7_PMD,               0xb31087, 0x20001f6, 0x10, 0x775934, 233, 1),
+    LocationData(LocationName.Undernet_7_PMD,               0xb31087, 0x20001f6, 0x10, 0x775934, 233, 1),
     LocationData(LocationName.Mayls_HP_PMD,                 0xb31088, 0x2000239, 0x40, 0x75DCC4, 231, 1),
     LocationData(LocationName.SciLab_Dads_Computer_PMD,     0xb31089, 0x2000241, 0x4, 0x761498, 231, 1),
     LocationData(LocationName.Zoo_Panda_PMD,                0xb3108a, 0x2000249, 0x40, 0x763C88, 231, 1),
@@ -176,7 +177,8 @@ pmds = [
 ]
 
 overworlds = [
-    LocationData(LocationName.Yoka_Quiz_Master,                   0xb3108e, 0x200005f, 0x8, 0x7473F8, 197, 0),
+    LocationData(LocationName.Yoka_Mr_Quiz,                       0xb310ec, 0x200005f, 0x8, 0x7473F8, 197, 0),
+    LocationData(LocationName.Yoka_Quiz_Master,                   0xb3108e, 0x200005f, 0x4, 0x7473F8, 202, 0),
     LocationData(LocationName.Hospital_Quiz_Queen,                0xb3108f, 0x200005f, 0x2, 0x757724, 202, 0),
     LocationData(LocationName.Hades_Quiz_King,                    0xb31090, 0x2000164, 0x8, 0x7519B0, 207, 0),
     LocationData(LocationName.ACDC_SonicWav_W_Trade,              0xb31091, 0x2000162, 0x10, 0x73A7F8, 192, 0),
@@ -268,7 +270,7 @@ number_traders = [
     LocationData(LocationName.Numberman_Code_21, 0xb310e1, 0x2000432, 0x08, 0x800000, 50, 0),
     LocationData(LocationName.Numberman_Code_22, 0xb310e2, 0x2000432, 0x04, 0x800000, 51, 0),
     LocationData(LocationName.Numberman_Code_23, 0xb310e3, 0x2000432, 0x02, 0x800000, 52, 0),
-    LocationData(LocationName.Numberman_Code_24, 0xb310e4, 0x2000433, 0x01, 0x800000, 53, 0),
+    LocationData(LocationName.Numberman_Code_24, 0xb310e4, 0x2000432, 0x01, 0x800000, 53, 0),
     LocationData(LocationName.Numberman_Code_25, 0xb310e5, 0x2000433, 0x80, 0x800000, 54, 0),
     LocationData(LocationName.Numberman_Code_26, 0xb310e6, 0x2000433, 0x40, 0x800000, 55, 0),
     LocationData(LocationName.Numberman_Code_27, 0xb310e7, 0x2000433, 0x20, 0x800000, 56, 0),
@@ -278,8 +280,28 @@ number_traders = [
     LocationData(LocationName.Numberman_Code_31, 0xb310eb, 0x2000433, 0x02, 0x800000, 60, 0)
 ]
 
+victory = [
+    LocationData(LocationName.Alpha_Defeated, 0xb310ed, 0x2000433, 0x01, 0x7AE20C, 0, 0)
+]
 
-all_locations: typing.List[LocationData] = bmds + pmds + overworlds + jobs + number_traders
+excluded_locations = [
+    LocationName.Undernet_7_PMD,
+    LocationName.Undernet_7_West_BMD,
+    LocationName.Undernet_7_Northeast_BMD,
+    LocationName.Undernet_7_Northwest_BMD,
+    LocationName.Secret_1_Northwest_BMD,
+    LocationName.Secret_1_Northeast_BMD,
+    LocationName.Secret_1_South_BMD,
+    LocationName.Secret_2_Upper_BMD,
+    LocationName.Secret_2_Lower_BMD,
+    LocationName.Secret_2_Island_BMD,
+    LocationName.Secret_3_Island_BMD,
+    LocationName.Secret_3_BugFrag_BMD,
+    LocationName.Secret_3_South_BMD
+]
+
+
+all_locations: typing.List[LocationData] = bmds + pmds + overworlds + jobs + number_traders + victory
 location_table: typing.Dict[str, int] = {locData.name: locData.id for locData in all_locations}
 location_data_table: typing.Dict[str, LocationData] = {locData.name: locData for locData in all_locations}
 locations_by_id: typing.Dict[int, LocationData] = {locData.id: locData for locData in all_locations}

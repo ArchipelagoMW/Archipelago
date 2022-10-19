@@ -3,11 +3,13 @@ import typing
 import math
 import threading
 
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, RegionType, Entrance
+from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, RegionType, Entrance, \
+    LocationProgressType
 from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
 from ..AutoWorld import WebWorld, World
 from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequences
-from .Locations import MMBN3Location, all_locations, setup_locations, location_table, location_data_table
+from .Locations import MMBN3Location, all_locations, setup_locations, location_table, location_data_table, \
+    excluded_locations
 from .Options import MMBN3Options
 from .Regions import regions
 from .Names import ItemName, LocationName
@@ -56,6 +58,10 @@ class MMBN3World(World):
     def create_item(self, name: str) -> "Item":
         item = Items.item_table[name]
         return MMBN3Item(item.itemName, item.progression, item.code, self.player)
+
+    def create_event(self, event: str):
+        # while we are at it, we can also add a helper to create events
+        return MMBN3Item(event, ItemClassification.progression, None, self.player)
 
     def generate_output(self, output_directory: str) -> None:
         try:
@@ -112,8 +118,10 @@ class MMBN3World(World):
             region = Region(region_info.name, RegionType.Generic, region_info.name, self.player, self.world)
             name_to_region[region_info.name] = region
             for location in region_info.locations:
-                region.locations.append(MMBN3Location(self.player, location,
-                                                      self.location_name_to_id[location], region))
+                loc = MMBN3Location(self.player, location, self.location_name_to_id[location], region)
+                if location in excluded_locations:
+                    loc.progress_type = LocationProgressType.EXCLUDED
+                region.locations.append(loc)
             self.world.regions.append(region)
         for region_info in regions:
             region = name_to_region[region_info.name]
@@ -182,25 +190,41 @@ class MMBN3World(World):
 
         # Set Job additional area access
         # TODO: Once we find a way to restrict overworld access
+        set_rule(self.world.get_location(LocationName.My_Navi_is_sick, self.player),
+                 lambda state: state.has(ItemName.Recov30_star, self.player))
 
         # Set Trade quests
-        set_rule(self.world.get_location(LocationName.Hades_GrabBack_K_Trade, self.player),
-                 lambda state: state.has(ItemName.GrabBack_K, self.player))
-        set_rule(self.world.get_location(LocationName.Yoka_FireSwrd_P_Trade, self.player),
-                 lambda state: state.has(ItemName.FireSwrd_P, self.player))
-        set_rule(self.world.get_location(LocationName.Beach_DNN_WideSwrd_C_Trade, self.player),
-                 lambda state: state.has(ItemName.WideSwrd_C, self.player))
-        set_rule(self.world.get_location(LocationName.Hospital_DynaWav_V_Trade, self.player),
-                 lambda state: state.has(ItemName.DynaWave_V, self.player))
+        set_rule(self.world.get_location(LocationName.ACDC_SonicWav_W_Trade, self.player),
+                 lambda state: state.has(ItemName.SonicWav_W, self.player))
+        set_rule(self.world.get_location(LocationName.ACDC_Bubbler_C_Trade, self.player),
+                 lambda state: state.has(ItemName.Bubbler_C, self.player))
         set_rule(self.world.get_location(LocationName.ACDC_Recov120_S_Trade, self.player),
                  lambda state: state.has(ItemName.Recov120_S, self.player))
+        set_rule(self.world.get_location(LocationName.SciLab_Shake1_S_Trade, self.player),
+                 lambda state: state.has(ItemName.Shake1_S, self.player))
+        set_rule(self.world.get_location(LocationName.Yoka_FireSwrd_P_Trade, self.player),
+                 lambda state: state.has(ItemName.FireSwrd_P, self.player))
+        set_rule(self.world.get_location(LocationName.Hospital_DynaWav_V_Trade, self.player),
+                 lambda state: state.has(ItemName.DynaWave_V, self.player))
+        set_rule(self.world.get_location(LocationName.Beach_DNN_WideSwrd_C_Trade, self.player),
+                 lambda state: state.has(ItemName.WideSwrd_C, self.player))
+        set_rule(self.world.get_location(LocationName.Beach_DNN_HoleMetr_H_Trade, self.player),
+                 lambda state: state.has(ItemName.HoleMetr_H, self.player))
+        set_rule(self.world.get_location(LocationName.Beach_DNN_Shadow_J_Trade, self.player),
+                 lambda state: state.has(ItemName.Shadow_J, self.player))
+        set_rule(self.world.get_location(LocationName.Hades_GrabBack_K_Trade, self.player),
+                 lambda state: state.has(ItemName.GrabBack_K, self.player))
 
     def generate_basic(self) -> None:
         """
         called after the previous steps. Some placement and player specific randomizations can be done here. After this
         step all regions and items have to be in the MultiWorld's regions and itempool.
         """
-        pass
+        # place "Victory" at "Final Boss" and set collection as win condition
+        self.world.get_location(LocationName.Alpha_Defeated, self.player) \
+            .place_locked_item(self.create_event("Victory"))
+        self.world.completion_condition[self.player] = \
+            lambda state: state.has(ItemName.Victory, self.player)
 
     """
     pre_fill, fill_hook and post_fill are called to modify item placement before, during and after the regular fill 

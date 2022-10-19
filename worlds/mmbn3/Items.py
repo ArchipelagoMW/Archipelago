@@ -151,20 +151,20 @@ chipList: typing.List[ItemData] = [
     ItemData(0xB31052, ItemName.PanlOut3_star,     ItemClassification.useful,      ItemType.Chip, 120, ChipCode('*')),
     ItemData(0xB31053, ItemName.Poltergeist_G,     ItemClassification.useful,      ItemType.Chip, 213, ChipCode('G')),
     ItemData(0xB31054, ItemName.Prism_Q,           ItemClassification.useful,      ItemType.Chip, 142, ChipCode('Q')),
-    ItemData(0xB31055, ItemName.Recov10_star,      ItemClassification.useful,      ItemType.Chip, 121, ChipCode('*')),
+    ItemData(0xB31055, ItemName.Recov10_star,      ItemClassification.filler,      ItemType.Chip, 121, ChipCode('*')),
     ItemData(0xB31056, ItemName.Recov120_star,     ItemClassification.useful,      ItemType.Chip, 125, ChipCode('*')),
-    ItemData(0xB31057, ItemName.Recov120_O,        ItemClassification.useful,      ItemType.Chip, 125, ChipCode('O')),
+    ItemData(0xB31057, ItemName.Recov120_O,        ItemClassification.filler,      ItemType.Chip, 125, ChipCode('O')),
     ItemData(0xB31058, ItemName.Recov120_S,        ItemClassification.progression, ItemType.Chip, 125, ChipCode('S')),
     ItemData(0xB31059, ItemName.Recov150_P,        ItemClassification.useful,      ItemType.Chip, 126, ChipCode('P')),
     ItemData(0xB3105A, ItemName.Recov200_N,        ItemClassification.useful,      ItemType.Chip, 127, ChipCode('N')),
-    ItemData(0xB3105B, ItemName.Recov30_star,      ItemClassification.useful,      ItemType.Chip, 122, ChipCode('*')),
+    ItemData(0xB3105B, ItemName.Recov30_star,      ItemClassification.progression, ItemType.Chip, 122, ChipCode('*')),
     ItemData(0xB3105C, ItemName.Recov300_R,        ItemClassification.useful,      ItemType.Chip, 128, ChipCode('R')),
     ItemData(0xB3105D, ItemName.Recov50_G,         ItemClassification.useful,      ItemType.Chip, 123, ChipCode('G')),
     ItemData(0xB3105E, ItemName.Repair_star,       ItemClassification.useful,      ItemType.Chip, 159, ChipCode('*')),
     ItemData(0xB3105F, ItemName.Repair_A,          ItemClassification.filler,      ItemType.Chip, 159, ChipCode('A')),
 
     ItemData(0xB31060, ItemName.Rockcube_star,     ItemClassification.useful,      ItemType.Chip, 141, ChipCode('*')),
-    ItemData(0xB31061, ItemName.Rook_F,            ItemClassification.useful,      ItemType.Chip, 153, ChipCode('F')),
+    ItemData(0xB31061, ItemName.Rook_F,            ItemClassification.filler,      ItemType.Chip, 153, ChipCode('F')),
     ItemData(0xB31062, ItemName.Salamndr_star,     ItemClassification.useful,      ItemType.Chip, 273, ChipCode('*')),
     ItemData(0xB31063, ItemName.SandStage_C,       ItemClassification.useful,      ItemType.Chip, 182, ChipCode('C')),
     ItemData(0xB31064, ItemName.SideGun_S,         ItemClassification.filler,      ItemType.Chip,  12, ChipCode('S')),
@@ -200,7 +200,13 @@ chipList: typing.List[ItemData] = [
     ItemData(0xB31080, ItemName.DeltaRay_Z,        ItemClassification.useful,      ItemType.Chip, 302, ChipCode('Z')),
     ItemData(0xB31081, ItemName.Punk_P,            ItemClassification.useful,      ItemType.Chip, 272, ChipCode('P')),
     ItemData(0xB31082, ItemName.DarkAura_A,        ItemClassification.useful,      ItemType.Chip, 309, ChipCode('A')),
-    ItemData(0xB31083, ItemName.AlphaArm_Omega_V,  ItemClassification.useful,      ItemType.Chip, 310, ChipCode('V'))
+    ItemData(0xB31083, ItemName.AlphaArm_Omega_V,  ItemClassification.useful,      ItemType.Chip, 310, ChipCode('V')),
+
+    ItemData(0xB310AC, ItemName.SonicWav_W,        ItemClassification.progression, ItemType.Chip, 45, ChipCode('W')),
+    ItemData(0xB310AD, ItemName.Bubbler_C,         ItemClassification.progression, ItemType.Chip, 14, ChipCode('C')),
+    ItemData(0xB310AE, ItemName.Shake1_S,          ItemClassification.progression, ItemType.Chip, 110, ChipCode('S')),
+    ItemData(0xB310AF, ItemName.HoleMetr_H,        ItemClassification.progression, ItemType.Chip, 88, ChipCode('H')),
+    ItemData(0xB310B0, ItemName.Shadow_J,          ItemClassification.progression, ItemType.Chip, 165, ChipCode('J'))
 ]
 
 programList: typing.List[ItemData] = [
@@ -222,7 +228,7 @@ programList: typing.List[ItemData] = [
     ItemData(0xB31092, ItemName.OilBody,           ItemClassification.useful, ItemType.Program, 24, ProgramColor.Yellow),
     ItemData(0xB31093, ItemName.QuickGge,          ItemClassification.useful, ItemType.Program, 31, ProgramColor.Pink),
     ItemData(0xB31094, ItemName.SetSand,           ItemClassification.useful, ItemType.Program,  7, ProgramColor.Green),
-    ItemData(0xB31095, ItemName.SneakRun,          ItemClassification.useful, ItemType.Program, 23, ProgramColor.Pink),
+    ItemData(0xB31095, ItemName.SneakRun,          ItemClassification.useful, ItemType.Program, 23, ProgramColor.Yellow),
     ItemData(0xB31096, ItemName.Speed_plus_Yellow, ItemClassification.useful, ItemType.Program, 42, ProgramColor.Yellow),
     ItemData(0xB31097, ItemName.WpnLV_plus_White,  ItemClassification.useful, ItemType.Program, 35, ProgramColor.White),
     ItemData(0xB31098, ItemName.WpnLV_plus_Pink,   ItemClassification.useful, ItemType.Program, 35, ProgramColor.Pink),
@@ -251,7 +257,7 @@ zennyList: typing.List[ItemData] = [
 ]
 
 bugFragList: typing.List[ItemData] = [
-    # ItemData(0x0B310AB, ItemName.bugfrag_30, ItemClassification.filler, ItemType.BugFrag, count=30)
+    ItemData(0x0B310AB, ItemName.bugfrag_30, ItemClassification.filler, ItemType.BugFrag, count=30)
 ]
 
 item_frequences = {

@@ -144,6 +144,7 @@ regions = [
     region_info("Yoka Overworld",
                 ["Yoka Cyberworld", "ACDC Overworld", "SciLab Overworld", "Beach Overworld", "Secret Area"],
                 [
+                    LocationName.Yoka_Mr_Quiz,
                     LocationName.Yoka_Quiz_Master,
                     LocationName.Yoka_FireSwrd_P_Trade,
                     LocationName.Yoka_Inn_Jars,
@@ -262,10 +263,10 @@ regions = [
                     LocationName.Undernet_5_Lower_BMD,
                     LocationName.Undernet_6_East_BMD,
                     LocationName.Undernet_6_Central_BMD,
-                    # LocationName.Undernet_7_PMD,
-                    # LocationName.Undernet_7_West_BMD,
-                    # LocationName.Undernet_7_Northeast_BMD,
-                    # LocationName.Undernet_7_Northwest_BMD,
+                    LocationName.Undernet_7_PMD,
+                    LocationName.Undernet_7_West_BMD,
+                    LocationName.Undernet_7_Northeast_BMD,
+                    LocationName.Undernet_7_Northwest_BMD,
                     # LocationName.Undernet_7_Upper_BMD]),
                 ]),
     region_info("WWW Island",
@@ -285,8 +286,9 @@ regions = [
                     LocationName.WWW_3_North_BMD,
                     #LocationName.WWW_3_South_BMD,
                     LocationName.WWW_4_Central_BMD,
-                    LocationName.WWW_4_Northwest_BMD
+                    LocationName.WWW_4_Northwest_BMD,
                     #LocationName.WWW_4_East_BMD
+                    LocationName.Alpha_Defeated
                 ]),
     region_info("Secret Area",
                 [],

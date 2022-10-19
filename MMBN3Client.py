@@ -3,6 +3,7 @@ import json
 import os
 import multiprocessing
 import subprocess
+import sys
 import zipfile
 import zlib
 
@@ -15,6 +16,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, \
 import Utils
 from worlds import network_data_package
 from worlds.mmbn3.Items import items_by_id
+from worlds.mmbn3.Rom import get_base_rom_path
 from worlds.mmbn3.Locations import location_data_table
 
 SYSTEM_MESSAGE_ID = 0
@@ -259,7 +261,8 @@ async def patch_and_run_game(apmmbn3_file):
                 patch_data = stream.read()
         except KeyError as ex:
             raise FileNotFoundError("Patch file missing from archive.")
-    rom_file = Utils.get_options()["mmbn3_options"]["rom_file"]
+    rom_file = get_base_rom_path()
+
     with open(rom_file, 'rb') as rom:
         rom_bytes = rom.read()
     patched_bytes = bsdiff4.patch(rom_bytes, patch_data)
@@ -278,7 +281,6 @@ if __name__ == '__main__':
         parser.add_argument('patch_file', default="", type=str, nargs="?",
                             help='Path to an APMMBN3 file')
         args = parser.parse_args()
-
         if args.patch_file:
             asyncio.create_task(patch_and_run_game(args.patch_file))
 
@@ -289,7 +291,6 @@ if __name__ == '__main__':
         ctx.run_cli()
 
         ctx.gba_sync_task = asyncio.create_task(gba_sync_task(ctx), name="GBA Sync")
-
         await ctx.exit_event.wait()
         ctx.server_address = None
 

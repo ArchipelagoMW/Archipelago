@@ -170,6 +170,7 @@ Beach_DNN_Main_Console_PMD = "Beach DNN Main Console PMD"
 Tamakos_HP_PMD = "Tamako's HP PMD"
 
 ## Overworld Items
+Yoka_Mr_Quiz = "Yoka Mr Quiz"
 Yoka_Quiz_Master = "Yoka Quiz Master"
 Hospital_Quiz_Queen = "Hospital Quiz Queen"
 Hades_Quiz_King = "Hades Quiz King"
@@ -269,3 +270,5 @@ Finding_the_blue_Navi = "Job: Finding the blue Navi"
 Give_your_support = "Job: Give your support"
 Stamp_collecting = "Job: Stamp collecting"
 Help_with_a_will = "Job: Help with a will"
+
+Alpha_Defeated = "Alpha Defeated"
