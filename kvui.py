@@ -446,6 +446,10 @@ class GameManager(App):
         self.log_panels["Archipelago"].on_message_markup(text)
         self.log_panels["All"].on_message_markup(text)
 
+    def focus_textinput(self):
+        if hasattr(self, "textinput"):
+            self.textinput.focus = True
+
     def update_address_bar(self, text: str):
         if hasattr(self, "server_connect_bar"):
             self.server_connect_bar.text = text

@@ -297,6 +297,8 @@ class CommonContext:
         await self.send_msgs([payload])
 
     async def console_input(self) -> str:
+        if self.ui:
+            self.ui.focus_textinput()
         self.input_requests += 1
         return await self.input_queue.get()
 
