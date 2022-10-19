@@ -53,10 +53,6 @@ class SC2WoLWorld(World):
         self.location_cache = []
         self.locked_locations = []
 
-    def _create_items(self, name: str):
-        data = get_full_item_list()[name]
-        return [self.create_item(name) for _ in range(data.quantity)]
-
     def create_item(self, name: str) -> Item:
         data = get_full_item_list()[name]
         return StarcraftWoLItem(name, data.classification, data.code, self.player)
