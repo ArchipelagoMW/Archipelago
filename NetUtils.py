@@ -203,10 +203,17 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def __init__(self, ctx):
         self.ctx = ctx
-        self.last_item_color = ""
 
     def __call__(self, input_object: typing.List[JSONMessagePart]) -> str:
-        return "".join(self.handle_node(section) for section in input_object)
+        # Pre-process input to merge item_total parts into the corresponding item parts.
+        parts: typing.List[JSONMessagePart] = []
+        for part in input_object:
+            if part.get("type", None) == "item_total" and parts and parts[-1].get("type", None) in ("item_id", "item_name"):
+                parts[-1]["suffix"] = part.get("text", "")
+            else:
+                parts.append(part)
+
+        return "".join(self.handle_node(part) for part in parts)
 
     def handle_node(self, node: JSONMessagePart):
         node_type = node.get("type", None)
@@ -244,17 +251,15 @@ class JSONtoTextParser(metaclass=HandlerMeta):
             node["color"] = 'salmon'
         else:
             node["color"] = 'cyan'
-        self.last_item_color = node["color"]
+        if "suffix" in node:
+            node["text"] += node["suffix"]
+            del node["suffix"]
         return self._handle_color(node)
 
     def _handle_item_id(self, node: JSONMessagePart):
         item_id = int(node["text"])
         node["text"] = self.ctx.item_names[item_id]
         return self._handle_item_name(node)
-
-    def _handle_item_total(self, node: JSONMessagePart):
-        node["color"] = self.last_item_color
-        return self._handle_color(node)
 
     def _handle_location_name(self, node: JSONMessagePart):
         node["color"] = 'green'
