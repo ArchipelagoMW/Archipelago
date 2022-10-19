@@ -87,7 +87,7 @@ class ZillionOpasPerLevel(Range):
     range_start = 1
     range_end = 5
     default = 2
-    display_name = "opa-opas per level"
+    display_name = "Opa-Opas per level"
 
 
 class ZillionStartChar(Choice):
