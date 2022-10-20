@@ -1,4 +1,5 @@
 from collections import deque, Counter
+from contextlib import redirect_stdout
 import functools
 from typing import Any, Dict, List, Set, Tuple, Optional, cast
 import os
@@ -69,6 +70,27 @@ class ZillionWorld(World):
 
     logger: logging.Logger
 
+    class LogStreamInterface:
+        logger: logging.Logger
+        buffer: List[str]
+
+        def __init__(self, logger: logging.Logger) -> None:
+            self.logger = logger
+            self.buffer = []
+
+        def write(self, msg: str) -> None:
+            if msg.endswith('\n'):
+                self.buffer.append(msg[:-1])
+                self.logger.debug("".join(self.buffer))
+                self.buffer = []
+            else:
+                self.buffer.append(msg)
+
+        def flush(self) -> None:
+            pass
+
+    lsi: LogStreamInterface
+
     id_to_zz_item: Optional[Dict[int, ZzItem]] = None
     zz_system: System
     _item_counts: "Counter[str]" = Counter()
@@ -83,6 +105,7 @@ class ZillionWorld(World):
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.logger = logging.getLogger("Zillion")
+        self.lsi = ZillionWorld.LogStreamInterface(self.logger)
         self.zz_system = System()
         clear_cache()
 
@@ -104,10 +127,11 @@ class ZillionWorld(World):
         self._item_counts = item_counts
 
         rom_dir_name = os.path.dirname(get_base_rom_path())
-        self.zz_system.make_patcher(rom_dir_name)
-        self.zz_system.make_randomizer(zz_op)
+        with redirect_stdout(self.lsi):  # type: ignore
+            self.zz_system.make_patcher(rom_dir_name)
+            self.zz_system.make_randomizer(zz_op)
 
-        self.zz_system.make_map()
+            self.zz_system.make_map()
 
         # just in case the options changed anything (I don't think they do)
         assert self.zz_system.randomizer, "init failed"
