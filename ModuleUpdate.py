@@ -44,6 +44,13 @@ def update(yes=False, force=False):
                         wheel = line.split('/')[-1]
                         name, version, _ = wheel.split('-', 2)
                         line = f'{name}=={version}'
+                    elif line.startswith('git+https://'):
+                        # extract name and version
+                        end = line.split('/')[-1]
+                        name_hash, egg = end.split("#", 1)
+                        name, _ = name_hash.split("@", 1)
+                        version = egg.split('==')[-1]
+                        line = f'{name}=={version}'
                     requirements = pkg_resources.parse_requirements(line)
                     for requirement in requirements:
                         requirement = str(requirement)
