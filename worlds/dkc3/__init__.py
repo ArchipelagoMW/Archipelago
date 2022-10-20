@@ -65,10 +65,6 @@ class DKC3World(World):
             "active_levels": self.active_level_list,
         }
 
-    def _create_items(self, name: str):
-        data = item_table[name]
-        return [self.create_item(name)] * data.quantity
-
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
         for option_name in dkc3_options:
@@ -113,17 +109,17 @@ class DKC3World(World):
         number_of_bonus_coins = (self.world.krematoa_bonus_coin_cost[self.player] * 5)
         number_of_bonus_coins += math.ceil((85 - number_of_bonus_coins) * self.world.percentage_of_extra_bonus_coins[self.player] / 100)
 
-        itempool += [self.create_item(ItemName.bonus_coin)] * number_of_bonus_coins
-        itempool += [self.create_item(ItemName.dk_coin)] * 41
-        itempool += [self.create_item(ItemName.banana_bird)] * number_of_banana_birds
-        itempool += [self.create_item(ItemName.krematoa_cog)] * number_of_cogs
-        itempool += [self.create_item(ItemName.progressive_boat)] * 3
+        itempool += [self.create_item(ItemName.bonus_coin) for _ in range(number_of_bonus_coins)]
+        itempool += [self.create_item(ItemName.dk_coin) for _ in range(41)]
+        itempool += [self.create_item(ItemName.banana_bird) for _ in range(number_of_banana_birds)]
+        itempool += [self.create_item(ItemName.krematoa_cog) for _ in range(number_of_cogs)]
+        itempool += [self.create_item(ItemName.progressive_boat) for _ in range(3)]
 
         total_junk_count = total_required_locations - len(itempool)
 
         junk_pool = []
         for item_name in self.world.random.choices(list(junk_table.keys()), k=total_junk_count):
-            junk_pool += [self.create_item(item_name)]
+            junk_pool.append(self.create_item(item_name))
 
         itempool += junk_pool
 
@@ -146,11 +142,7 @@ class DKC3World(World):
 
             self.active_level_list.append(LocationName.rocket_rush_region)
 
-            outfilepname = f'_P{player}'
-            outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
-                if world.player_name[player] != 'Player%d' % player else ''
-
-            rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
+            rompath = os.path.join(output_directory, f"{self.world.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 

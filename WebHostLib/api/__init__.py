@@ -1,11 +1,11 @@
 """API endpoints package."""
-from uuid import UUID
 from typing import List, Tuple
+from uuid import UUID
 
 from flask import Blueprint, abort
 
-from ..models import Room, Seed
 from .. import cache
+from ..models import Room, Seed
 
 api_endpoints = Blueprint('api', __name__, url_prefix="/api")
 
