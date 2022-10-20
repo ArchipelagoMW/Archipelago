@@ -353,7 +353,6 @@ class ZillionWorld(World):
                     "room_code": ri.room_code,
                     "mask": ri.mask
                 }
-        zz_patcher.loc_memory_to_loc_id
         return {
             "start_char": self.zz_system.randomizer.options.start_char,
             "rescues": rescues,
