@@ -13,7 +13,7 @@ import colorama  # type: ignore
 
 from kvui import ContainerLayout
 from kivy.uix.widget import Widget  # type: ignore
-from kivy.graphics import Rectangle  # type: ignore
+from kivy.graphics import Color, Rectangle  # type: ignore
 
 from zilliandomizer.zri.memory import Memory
 from zilliandomizer.zri import events
@@ -134,6 +134,7 @@ class ZillionContext(CommonContext):
                 def __init__(self, **kwargs: Any) -> None:
                     super().__init__(**kwargs)
                     with self.canvas:
+                        Color(1, 1, 1, 1)
                         self.bg = Rectangle(source='worlds/zillion/empty-zillion-map-row-col-labels-281.png', pos=self.pos, size=(281, 409))
                         # TODO: Why is it dark?
 
