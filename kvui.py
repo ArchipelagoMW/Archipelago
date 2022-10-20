@@ -334,7 +334,7 @@ class GameManager(App):
         # top part
         server_label = ServerLabel()
         self.connect_layout.add_widget(server_label)
-        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.server_address or "archipelago.gg", size_hint_y=None,
+        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg", size_hint_y=None,
                                                       height=30, multiline=False, write_tab=False)
         self.server_connect_bar.bind(on_text_validate=self.connect_button_action)
         self.connect_layout.add_widget(self.server_connect_bar)
