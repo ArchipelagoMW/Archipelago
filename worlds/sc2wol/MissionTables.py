@@ -15,7 +15,6 @@ hard_regions_list = ["Maw of the Void", "Engine of Destruction", "In Utter Darkn
 
 class MissionInfo(NamedTuple):
     id: int
-    extra_locations: int
     required_world: List[int]
     category: str
     number: int = 0  # number of worlds need beaten
@@ -143,35 +142,35 @@ mission_orders = [vanilla_shuffle_order, vanilla_shuffle_order, mini_campaign_or
 
 
 vanilla_mission_req_table = {
-    "Liberation Day": MissionInfo(1, 7, [], "Mar Sara", completion_critical=True),
-    "The Outlaws": MissionInfo(2, 2, [1], "Mar Sara", completion_critical=True),
-    "Zero Hour": MissionInfo(3, 4, [2], "Mar Sara", completion_critical=True),
-    "Evacuation": MissionInfo(4, 4, [3], "Colonist"),
-    "Outbreak": MissionInfo(5, 3, [4], "Colonist"),
-    "Safe Haven": MissionInfo(6, 4, [5], "Colonist", number=7),
-    "Haven's Fall": MissionInfo(7, 4, [5], "Colonist", number=7),
-    "Smash and Grab": MissionInfo(8, 5, [3], "Artifact", completion_critical=True),
-    "The Dig": MissionInfo(9, 4, [8], "Artifact", number=8, completion_critical=True),
-    "The Moebius Factor": MissionInfo(10, 7, [9], "Artifact", number=11, completion_critical=True),
-    "Supernova": MissionInfo(11, 5, [10], "Artifact", number=14, completion_critical=True),
-    "Maw of the Void": MissionInfo(12, 6, [11], "Artifact", completion_critical=True),
-    "Devil's Playground": MissionInfo(13, 3, [3], "Covert", number=4),
-    "Welcome to the Jungle": MissionInfo(14, 4, [13], "Covert"),
-    "Breakout": MissionInfo(15, 3, [14], "Covert", number=8),
-    "Ghost of a Chance": MissionInfo(16, 6, [14], "Covert", number=8),
-    "The Great Train Robbery": MissionInfo(17, 4, [3], "Rebellion", number=6),
-    "Cutthroat": MissionInfo(18, 5, [17], "Rebellion"),
-    "Engine of Destruction": MissionInfo(19, 6, [18], "Rebellion"),
-    "Media Blitz": MissionInfo(20, 5, [19], "Rebellion"),
-    "Piercing the Shroud": MissionInfo(21, 6, [20], "Rebellion"),
-    "Whispers of Doom": MissionInfo(22, 4, [9], "Prophecy"),
-    "A Sinister Turn": MissionInfo(23, 4, [22], "Prophecy"),
-    "Echoes of the Future": MissionInfo(24, 3, [23], "Prophecy"),
-    "In Utter Darkness": MissionInfo(25, 3, [24], "Prophecy"),
-    "Gates of Hell": MissionInfo(26, 2, [12], "Char", completion_critical=True),
-    "Belly of the Beast": MissionInfo(27, 4, [26], "Char", completion_critical=True),
-    "Shatter the Sky": MissionInfo(28, 5, [26], "Char", completion_critical=True),
-    "All-In": MissionInfo(29, -1, [27, 28], "Char", completion_critical=True, or_requirements=True)
+    "Liberation Day": MissionInfo(1, [], "Mar Sara", completion_critical=True),
+    "The Outlaws": MissionInfo(2, [1], "Mar Sara", completion_critical=True),
+    "Zero Hour": MissionInfo(3, [2], "Mar Sara", completion_critical=True),
+    "Evacuation": MissionInfo(4, [3], "Colonist"),
+    "Outbreak": MissionInfo(5, [4], "Colonist"),
+    "Safe Haven": MissionInfo(6, [5], "Colonist", number=7),
+    "Haven's Fall": MissionInfo(7, [5], "Colonist", number=7),
+    "Smash and Grab": MissionInfo(8, [3], "Artifact", completion_critical=True),
+    "The Dig": MissionInfo(9, [8], "Artifact", number=8, completion_critical=True),
+    "The Moebius Factor": MissionInfo(10, [9], "Artifact", number=11, completion_critical=True),
+    "Supernova": MissionInfo(11, [10], "Artifact", number=14, completion_critical=True),
+    "Maw of the Void": MissionInfo(12, [11], "Artifact", completion_critical=True),
+    "Devil's Playground": MissionInfo(13, [3], "Covert", number=4),
+    "Welcome to the Jungle": MissionInfo(14, [13], "Covert"),
+    "Breakout": MissionInfo(15, [14], "Covert", number=8),
+    "Ghost of a Chance": MissionInfo(16, [14], "Covert", number=8),
+    "The Great Train Robbery": MissionInfo(17, [3], "Rebellion", number=6),
+    "Cutthroat": MissionInfo(18, [17], "Rebellion"),
+    "Engine of Destruction": MissionInfo(19, [18], "Rebellion"),
+    "Media Blitz": MissionInfo(20, [19], "Rebellion"),
+    "Piercing the Shroud": MissionInfo(21, [20], "Rebellion"),
+    "Whispers of Doom": MissionInfo(22, [9], "Prophecy"),
+    "A Sinister Turn": MissionInfo(23, [22], "Prophecy"),
+    "Echoes of the Future": MissionInfo(24, [23], "Prophecy"),
+    "In Utter Darkness": MissionInfo(25, [24], "Prophecy"),
+    "Gates of Hell": MissionInfo(26, [12], "Char", completion_critical=True),
+    "Belly of the Beast": MissionInfo(27, [26], "Char", completion_critical=True),
+    "Shatter the Sky": MissionInfo(28, [26], "Char", completion_critical=True),
+    "All-In": MissionInfo(29, [27, 28], "Char", completion_critical=True, or_requirements=True)
 }
 
 lookup_id_to_mission: Dict[int, str] = {

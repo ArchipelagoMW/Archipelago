@@ -199,8 +199,8 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
                     connections.append(connection + 1)
 
             mission_req_table.update({missions[i]: MissionInfo(
-                vanilla_mission_req_table[missions[i]].id, vanilla_mission_req_table[missions[i]].extra_locations,
-                connections, mission_order[i].category,  number=mission_order[i].number,
+                vanilla_mission_req_table[missions[i]].id, connections, mission_order[i].category,
+                number=mission_order[i].number,
                 completion_critical=mission_order[i].completion_critical,
                 or_requirements=mission_order[i].or_requirements)})
 
