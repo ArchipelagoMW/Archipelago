@@ -9,7 +9,7 @@ from BaseClasses import ItemClassification, LocationProgressType, \
     MultiWorld, Item, CollectionState, RegionType, \
     Entrance, Tutorial
 from Options import AssembleOptions
-from .logic import clear_cache, cs_to_zz_locs
+from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
 from .options import zillion_options, validate
 from .id_maps import item_name_to_id as _item_name_to_id, \
@@ -107,7 +107,6 @@ class ZillionWorld(World):
         self.logger = logging.getLogger("Zillion")
         self.lsi = ZillionWorld.LogStreamInterface(self.logger)
         self.zz_system = System()
-        clear_cache()
 
     def _make_item_maps(self, start_char: Chars) -> None:
         _id_to_name, _id_to_zz_id, id_to_zz_item = make_id_to_others(start_char)
@@ -122,6 +121,9 @@ class ZillionWorld(World):
             raise FileNotFoundError(rom_file)
 
     def generate_early(self) -> None:
+        if not hasattr(self.world, "zillion_logic_cache"):
+            setattr(self.world, "zillion_logic_cache", {})
+
         zz_op, item_counts = validate(self.world, self.player)
 
         self._item_counts = item_counts
@@ -359,10 +361,12 @@ class ZillionWorld(World):
             "loc_mem_to_id": zz_patcher.loc_memory_to_loc_id
         }
 
-    def modify_multidata(self, multidata: Dict[str, Any]) -> None:
-        """For deeper modification of server multidata."""
-        # not modifying multidata, just want to call this at the end of the generation process
-        clear_cache()
+    # def modify_multidata(self, multidata: Dict[str, Any]) -> None:
+    #     """For deeper modification of server multidata."""
+    #     # not modifying multidata, just want to call this at the end of the generation process
+    #     cache = getattr(self.world, "zillion_logic_cache")
+    #     import sys
+    #     print(sys.getsizeof(cache))
 
     # end of ordered Main.py calls
 
