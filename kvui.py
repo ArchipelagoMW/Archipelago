@@ -334,7 +334,7 @@ class GameManager(App):
         # top part
         server_label = ServerLabel()
         self.connect_layout.add_widget(server_label)
-        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg", size_hint_y=None,
+        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:", size_hint_y=None,
                                                       height=30, multiline=False, write_tab=False)
         self.server_connect_bar.bind(on_text_validate=self.connect_button_action)
         self.connect_layout.add_widget(self.server_connect_bar)
@@ -385,6 +385,13 @@ class GameManager(App):
         self.commandprocessor("/help")
         Clock.schedule_interval(self.update_texts, 1 / 30)
         self.container.add_widget(self.grid)
+
+        self.server_connect_bar.focus = True
+        self.server_connect_bar.select_text(
+            self.server_connect_bar.text.find(":") + 1,
+            len(self.server_connect_bar.text)
+        )
+
         return self.container
 
     def update_texts(self, dt):
