@@ -182,8 +182,12 @@ class SC2Context(CommonContext):
             self.difficulty = args["slot_data"]["game_difficulty"]
             self.all_in_choice = args["slot_data"]["all_in_map"]
             slot_req_table = args["slot_data"]["mission_req"]
+            # Maintaining backwards compatibility with older slot data
             self.mission_req_table = {
-                mission: MissionInfo(**slot_req_table[mission]) for mission in slot_req_table
+                mission: MissionInfo(
+                    **{field: value for field, value in mission_info.items() if field in MissionInfo._fields}
+                )
+                for mission, mission_info in slot_req_table.items()
             }
             self.mission_order = args["slot_data"].get("mission_order", 0)
             self.final_mission = args["slot_data"].get("final_mission", 29)
