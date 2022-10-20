@@ -301,7 +301,8 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
         accessibility_corrections(world, world.state, defaultlocations)
 
     for location in lock_later:
-        location.locked = True
+        if location.item:
+            location.locked = True
     del mark_for_locking, lock_later
 
     inaccessible_location_rules(world, world.state, defaultlocations)
