@@ -11,7 +11,7 @@ import Utils
 
 import colorama  # type: ignore
 
-from kvui import ContainerLayout, BoxLayout
+from kvui import ContainerLayout
 from kivy.uix.widget import Widget  # type: ignore
 from kivy.graphics import Rectangle  # type: ignore
 
@@ -130,28 +130,29 @@ class ZillionContext(CommonContext):
             ]
             base_title = "Archipelago Zillion Client"
 
-            class MyBackground(Widget):  # TODO
+            class MapBackground(Widget):
                 def __init__(self, **kwargs: Any) -> None:
                     super().__init__(**kwargs)
                     with self.canvas:
-                        self.bg = Rectangle(source='water.png', pos=self.pos, size=self.size)
+                        self.bg = Rectangle(source='worlds/zillion/empty-zillion-map-row-col-labels-281.png', pos=self.pos, size=(281, 409))
+                        # TODO: Why is it dark?
 
                     self.bind(pos=self.update_bg)
-                    self.bind(size=self.update_bg)
+                    # self.bind(size=self.update_bg)
 
-                def update_bg(self, *args):
+                def update_bg(self, *args: Any) -> None:
                     self.bg.pos = self.pos
-                    self.bg.size = self.size
+                    # self.bg.size = (281, 409)
 
             def build(self) -> ContainerLayout:
                 container = super().build()
-                self.map_widget = BoxLayout(size_hint_x=None, width=0)
+                self.map_widget = ZillionManager.MapBackground(size_hint_x=None, width=0)
                 container.add_widget(self.map_widget)  # type: ignore
                 return container
 
             def toggle_map_width(self) -> None:
                 if self.map_widget.width == 0:  # type: ignore
-                    self.map_widget.width = 300
+                    self.map_widget.width = 281
                 else:
                     self.map_widget.width = 0
                 self.container.do_layout()  # type: ignore
