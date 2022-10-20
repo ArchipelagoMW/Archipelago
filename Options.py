@@ -78,6 +78,9 @@ class AssembleOptions(abc.ABCMeta):
 
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
+    @abc.abstractclassmethod
+    def from_any(cls, value: typing.Any) -> "Option[typing.Any]": ...
+
 
 T = typing.TypeVar('T')
 
