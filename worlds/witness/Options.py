@@ -112,8 +112,8 @@ class PuzzleSkipAmount(Range):
     Works on most panels in the game - The only big exception is The Challenge."""
     display_name = "Puzzle Skips"
     range_start = 0
-    range_end = 20
-    default = 5
+    range_end = 30
+    default = 10
 
 
 class HintAmount(Range):
