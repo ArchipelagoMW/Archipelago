@@ -1,7 +1,7 @@
 import asyncio
 import base64
 import platform
-from typing import Any, Coroutine, Dict, Optional, Type, cast
+from typing import Any, Callable, Coroutine, Dict, Optional, Type, cast
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, gui_enabled, \
@@ -10,6 +10,10 @@ from NetUtils import ClientStatus
 import Utils
 
 import colorama  # type: ignore
+
+from kvui import ContainerLayout, BoxLayout
+from kivy.uix.widget import Widget  # type: ignore
+from kivy.graphics import Rectangle  # type: ignore
 
 from zilliandomizer.zri.memory import Memory
 from zilliandomizer.zri import events
@@ -28,6 +32,10 @@ class ZillionCommandProcessor(ClientCommandProcessor):
         """ Tell the client that Zillion is running in RetroArch. """
         logger.info("ready to look for game")
         self.ctx.look_for_retroarch.set()
+
+    def _cmd_map(self) -> None:
+        """ Toggle view of the map tracker. """
+        self.ctx.ui_toggle_map()
 
 
 class ZillionContext(CommonContext):
@@ -59,6 +67,8 @@ class ZillionContext(CommonContext):
     As a workaround, we don't look for RetroArch until this event is set.
     """
 
+    ui_toggle_map: Callable[[], None]
+
     def __init__(self,
                  server_address: str,
                  password: str) -> None:
@@ -66,6 +76,7 @@ class ZillionContext(CommonContext):
         self.from_game = asyncio.Queue()
         self.to_game = asyncio.Queue()
         self.got_slot_data = asyncio.Event()
+        self.ui_toggle_map = lambda: None
 
         self.look_for_retroarch = asyncio.Event()
         if platform.system() != "Windows":
@@ -119,7 +130,34 @@ class ZillionContext(CommonContext):
             ]
             base_title = "Archipelago Zillion Client"
 
+            class MyBackground(Widget):  # TODO
+                def __init__(self, **kwargs: Any) -> None:
+                    super().__init__(**kwargs)
+                    with self.canvas:
+                        self.bg = Rectangle(source='water.png', pos=self.pos, size=self.size)
+
+                    self.bind(pos=self.update_bg)
+                    self.bind(size=self.update_bg)
+
+                def update_bg(self, *args):
+                    self.bg.pos = self.pos
+                    self.bg.size = self.size
+
+            def build(self) -> ContainerLayout:
+                container = super().build()
+                self.map_widget = BoxLayout(size_hint_x=None, width=0)
+                container.add_widget(self.map_widget)  # type: ignore
+                return container
+
+            def toggle_map_width(self) -> None:
+                if self.map_widget.width == 0:  # type: ignore
+                    self.map_widget.width = 300
+                else:
+                    self.map_widget.width = 0
+                self.container.do_layout()  # type: ignore
+
         self.ui = ZillionManager(self)
+        self.ui_toggle_map = lambda: self.ui.toggle_map_width()
         run_co: Coroutine[Any, Any, None] = self.ui.async_run()  # type: ignore
         # kivy types missing
         self.ui_task = asyncio.create_task(run_co, name="UI")

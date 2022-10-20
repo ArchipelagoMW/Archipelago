@@ -165,7 +165,7 @@ class MainLayout(GridLayout):
     pass
 
 
-class ContainerLayout(FloatLayout):
+class ContainerLayout(GridLayout):
     pass
 
 
@@ -326,7 +326,11 @@ class GameManager(App):
         super(GameManager, self).__init__()
 
     def build(self):
-        self.container = ContainerLayout()
+        self.container = ContainerLayout(cols=2)
+        # If the MainLayout grid is the only thing that goes in this container,
+        # then only 1 column will be seen.
+        # A subclass can add another widget to the container
+        # if they want the 2nd column.
 
         self.grid = MainLayout()
         self.grid.cols = 1
