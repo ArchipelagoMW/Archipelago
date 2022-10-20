@@ -5,6 +5,7 @@ from .Items import CV64Item
 from .Locations import CV64Location
 from .Names import LocationName, ItemName
 from .Rom import rom_loc_offsets, npc_items, invis_items
+from .Levels import end_regions_dict
 
 
 class LevelGate:
@@ -642,21 +643,42 @@ def connect_regions(world, player, level_list):
     connect(world, player, names, 'Warp 6', LocationName.tower_of_execution)
     connect(world, player, names, 'Warp 7', LocationName.ct_end)
 
+    def get_next_stage_start(source_stage):
+        if level_list[level_list.index(source_stage) - 1] == LocationName.villa:
+            return level_list[level_list.index(source_stage) + 2]
+        elif level_list[level_list.index(source_stage) - 2] == LocationName.castle_center:
+            return level_list[level_list.index(source_stage) + 3]
+        else:
+            return level_list[level_list.index(source_stage) + 1]
+
+    def get_prev_stage_end(source_stage):
+        if level_list.index(source_stage) - 1 >= 0:
+            if level_list[level_list.index(source_stage) - 2] == LocationName.villa:
+                return LocationName.villa_crypt
+            elif level_list[level_list.index(source_stage) - 3] == LocationName.castle_center:
+                return LocationName.cc_elev_top
+            else:
+                return end_regions_dict[level_list[level_list.index(source_stage) - 1]]
+        else:
+            return "Menu"
+
     connect(world, player, names, LocationName.forest_of_silence, LocationName.forest_switch1)
     connect(world, player, names, LocationName.forest_switch1, LocationName.forest_switch2)
     connect(world, player, names, LocationName.forest_switch2, LocationName.forest_switch3)
     connect(world, player, names, LocationName.forest_switch3, LocationName.forest_end)
-    connect(world, player, names, LocationName.forest_end, level_list[level_list.index(LocationName.forest_of_silence) + 1])
+    connect(world, player, names, LocationName.forest_end, get_next_stage_start(LocationName.forest_of_silence))
 
     connect(world, player, names, LocationName.castle_wall, LocationName.cw_rtower)
     connect(world, player, names, LocationName.cw_rtower, LocationName.castle_wall)
     connect(world, player, names, LocationName.cw_rtower, LocationName.cw_bd_switch)
     connect(world, player, names, LocationName.cw_bd_switch, LocationName.cw_descent)
+    if world.glitch_logic[player]:
+        connect(world, player, names, LocationName.cw_bd_switch, get_next_stage_start(LocationName.castle_wall))
     connect(world, player, names, LocationName.cw_descent, LocationName.castle_wall)
     connect(world, player, names, LocationName.castle_wall, LocationName.cw_rtower)
     connect(world, player, names, LocationName.castle_wall, LocationName.cw_exit,
             lambda state: (state.can_reach(LocationName.cw_dragon_sw, "Location", player)))
-    connect(world, player, names, LocationName.cw_exit, level_list[level_list.index(LocationName.castle_wall) + 1],
+    connect(world, player, names, LocationName.cw_exit, get_next_stage_start(LocationName.castle_wall),
             lambda state: (state.can_reach(LocationName.cw_drac_sw, "Location", player)))
     connect(world, player, names, LocationName.castle_wall, LocationName.cw_ltower,
             lambda state: (state.has(ItemName.left_tower_key, player)))
@@ -665,6 +687,8 @@ def connect_regions(world, player, level_list):
     connect(world, player, names, LocationName.cw_drac_switch, LocationName.cw_descent)
 
     connect(world, player, names, LocationName.villa, LocationName.villa_fy_fountain)
+    if world.glitch_logic[player] and world.carrie_logic[player]:
+        connect(world, player, names, LocationName.villa_fy_fountain, LocationName.villa)
     connect(world, player, names, LocationName.villa_fy_fountain, LocationName.villa_foyer_main)
     connect(world, player, names, LocationName.villa_foyer_main, LocationName.villa_fy_fountain)
     connect(world, player, names, LocationName.villa_foyer_main, LocationName.villa_living_main)
@@ -680,8 +704,11 @@ def connect_regions(world, player, level_list):
             lambda state: (state.has(ItemName.garden_key, player)))
     connect(world, player, names, LocationName.villa_maze_main, LocationName.villa_maze_front,
             lambda state: (state.has(ItemName.garden_key, player)))
-    connect(world, player, names, LocationName.villa_maze_main, LocationName.villa_maze_crypt,
-            lambda state: (state.has(ItemName.copper_key, player)))
+    if world.glitch_logic[player]:
+        connect(world, player, names, LocationName.villa_maze_main, LocationName.villa_maze_crypt)
+    else:
+        connect(world, player, names, LocationName.villa_maze_main, LocationName.villa_maze_crypt,
+                lambda state: (state.has(ItemName.copper_key, player)))
     connect(world, player, names, LocationName.villa_maze_crypt, LocationName.villa_maze_main)
     connect(world, player, names, LocationName.villa_maze_main, LocationName.villa_maze_back)
     connect(world, player, names, LocationName.villa_maze_back, LocationName.villa_servant_entrance)
@@ -693,12 +720,12 @@ def connect_regions(world, player, level_list):
     connect(world, player, names, LocationName.villa_crypt, level_list[level_list.index(LocationName.villa) + 2])
 
     connect(world, player, names, LocationName.tunnel, LocationName.tunnel_end)
-    connect(world, player, names, LocationName.tunnel_end, LocationName.fan_meeting_room)
+    connect(world, player, names, LocationName.tunnel_end, get_next_stage_start(LocationName.tunnel))
 
     connect(world, player, names, LocationName.underground_waterway, LocationName.uw_end)
-    connect(world, player, names, LocationName.uw_end, LocationName.fan_meeting_room)
-
-    connect(world, player, names, LocationName.fan_meeting_room, LocationName.castle_center)
+    if world.glitch_logic[player]:
+        connect(world, player, names, LocationName.uw_end, LocationName.underground_waterway)
+    connect(world, player, names, LocationName.uw_end, get_next_stage_start(LocationName.underground_waterway))
 
     connect(world, player, names, LocationName.castle_center, LocationName.cc_torture_chamber,
             lambda state: (state.has(ItemName.chamber_key, player)))
@@ -711,28 +738,34 @@ def connect_regions(world, player, level_list):
     connect(world, player, names, LocationName.cc_factory, LocationName.cc_elev_bottom)
     connect(world, player, names, LocationName.cc_factory, LocationName.cc_invention_main)
     connect(world, player, names, LocationName.cc_factory, LocationName.cc_lizard_main)
-    connect(world, player, names, LocationName.cc_lizard_main, LocationName.cc_lizard_wall,
-            lambda state: (state.has(ItemName.magical_nitro, player) and state.has(ItemName.mandragora, player)))
+    if world.glitch_logic[player] and world.carrie_logic[player]:
+        connect(world, player, names, LocationName.cc_lizard_main, LocationName.cc_lizard_wall)
+    else:
+        connect(world, player, names, LocationName.cc_lizard_main, LocationName.cc_lizard_wall,
+                lambda state: (state.has(ItemName.magical_nitro, player) and state.has(ItemName.mandragora, player)))
     connect(world, player, names, LocationName.cc_lizard_wall, LocationName.cc_library)
     connect(world, player, names, LocationName.cc_library, LocationName.cc_lizard_wall)
     connect(world, player, names, LocationName.cc_lizard_main, LocationName.cc_invention_lizard_exit)
     connect(world, player, names, LocationName.cc_invention_lizard_exit, LocationName.cc_lizard_main)
     connect(world, player, names, LocationName.cc_invention_lizard_exit, LocationName.cc_nitro)
-    # connect(world, player, names, LocationName.cc_invention_lizard_exit, LocationName.cc_invention_main)
+    if world.glitch_logic[player]:
+        connect(world, player, names, LocationName.cc_invention_lizard_exit, LocationName.cc_invention_main)
+        connect(world, player, names, LocationName.cc_invention_main, LocationName.cc_invention_lizard_exit)
     connect(world, player, names, LocationName.cc_invention_main, LocationName.cc_nitro)
     connect(world, player, names, LocationName.cc_invention_main, LocationName.cc_factory)
     connect(world, player, names, LocationName.cc_elev_top, LocationName.cc_elev_bottom)
-    connect(world, player, names, LocationName.cc_elev_top, LocationName.duel_tower)
-    connect(world, player, names, LocationName.cc_elev_top, LocationName.tower_of_science)
+    connect(world, player, names, LocationName.cc_elev_top, level_list[level_list.index(LocationName.castle_center)+1])
+    connect(world, player, names, LocationName.cc_elev_top, level_list[level_list.index(LocationName.castle_center)+3])
 
-    connect(world, player, names, LocationName.duel_tower, LocationName.cc_elev_top)
-    connect(world, player, names, LocationName.duel_tower, LocationName.tower_of_execution)
+    connect(world, player, names, LocationName.duel_tower, get_prev_stage_end(LocationName.duel_tower))
+    connect(world, player, names, LocationName.duel_tower, get_next_stage_start(LocationName.duel_tower))
 
+    connect(world, player, names, LocationName.tower_of_execution, get_prev_stage_end(LocationName.tower_of_execution))
     connect(world, player, names, LocationName.tower_of_execution, LocationName.toe_ledge,
             lambda state: (state.has(ItemName.execution_key, player)))
-    connect(world, player, names, LocationName.tower_of_execution, LocationName.room_of_clocks)
+    connect(world, player, names, LocationName.tower_of_execution, get_next_stage_start(LocationName.tower_of_execution))
 
-    connect(world, player, names, LocationName.tower_of_science, LocationName.cc_elev_top)
+    connect(world, player, names, LocationName.tower_of_science, get_prev_stage_end(LocationName.tower_of_science))
     connect(world, player, names, LocationName.tower_of_science, LocationName.tosci_key2,
             lambda state: (state.has(ItemName.science_key_one, player)))
     connect(world, player, names, LocationName.tower_of_science, LocationName.tosci_conveyors,
@@ -741,20 +774,20 @@ def connect_regions(world, player, level_list):
             lambda state: (state.has(ItemName.science_key_two, player)))
     connect(world, player, names, LocationName.tosci_conveyors, LocationName.tosci_key3,
             lambda state: (state.has(ItemName.science_key_three, player)))
-    connect(world, player, names, LocationName.tosci_conveyors, LocationName.tower_of_sorcery)
+    connect(world, player, names, LocationName.tosci_conveyors, get_next_stage_start(LocationName.tower_of_science))
 
-    connect(world, player, names, LocationName.tower_of_sorcery, LocationName.tosci_conveyors)
-    connect(world, player, names, LocationName.tower_of_sorcery, LocationName.room_of_clocks)
+    connect(world, player, names, LocationName.tower_of_sorcery, get_prev_stage_end(LocationName.tower_of_sorcery))
+    connect(world, player, names, LocationName.tower_of_sorcery, get_next_stage_start(LocationName.tower_of_sorcery))
 
     connect(world, player, names, LocationName.room_of_clocks, LocationName.roc_boss_tower)
     connect(world, player, names, LocationName.roc_boss_tower, LocationName.room_of_clocks)
-    connect(world, player, names, LocationName.room_of_clocks, LocationName.clock_tower)
+    connect(world, player, names, LocationName.room_of_clocks, get_next_stage_start(LocationName.room_of_clocks))
 
     connect(world, player, names, LocationName.clock_tower, LocationName.ct_middle,
             lambda state: (state.has(ItemName.clocktower_key_one, player)))
     connect(world, player, names, LocationName.ct_middle, LocationName.ct_end,
             lambda state: (state.has(ItemName.clocktower_key_two, player)))
-    connect(world, player, names, LocationName.ct_end, LocationName.castle_keep,
+    connect(world, player, names, LocationName.ct_end, get_next_stage_start(LocationName.clock_tower),
             lambda state: (state.has(ItemName.clocktower_key_three, player)))
 
     if world.draculas_condition[player].value == 1:
@@ -774,7 +807,6 @@ def connect_regions(world, player, level_list):
     else:
         connect(world, player, names, LocationName.castle_keep, LocationName.drac_chamber)
 
-    #def connect_stages(source, stage, target):
 
 
 

@@ -8,7 +8,7 @@ from .Items import CV64Item, ItemData, item_table, junk_table
 from .Locations import CV64Location, all_locations, setup_locations
 from .Options import cv64_options
 from .Regions import create_regions, connect_regions
-from .Levels import main_level_list, char_level_list
+from .Levels import char_level_list
 from .Rules import set_rules
 from .Names import ItemName, LocationName
 from ..AutoWorld import WebWorld, World
@@ -48,7 +48,8 @@ class CV64World(World):
     location_name_to_id = all_locations
 
     active_level_list: typing.List[str]
-    villa_cc_ids = [2, 5]
+    villa_cc_ids = [2, 3]
+    warp_level_list: typing.List[str]
     web = CV64Web()
 
     def __init__(self, world: MultiWorld, player: int):
@@ -185,10 +186,10 @@ class CV64World(World):
 
         if self.villa_cc_ids[0] < self.villa_cc_ids[1]:
             self.active_level_list.insert(self.villa_cc_ids[0], LocationName.villa)
-            self.active_level_list.insert(self.villa_cc_ids[1] + 3, LocationName.castle_center)
+            self.active_level_list.insert(self.villa_cc_ids[1] + 2, LocationName.castle_center)
         else:
             self.active_level_list.insert(self.villa_cc_ids[1], LocationName.castle_center)
-            self.active_level_list.insert(self.villa_cc_ids[0] + 5, LocationName.villa)
+            self.active_level_list.insert(self.villa_cc_ids[0] + 4, LocationName.villa)
 
         self.active_level_list.append(LocationName.castle_keep)
 

@@ -5,8 +5,13 @@ from Options import Option, Choice, DefaultOnToggle, Range, Toggle, DeathLink
 
 class StageShuffle(Toggle):
     """Shuffles which stages appear in which stage slots. Villa and Castle Center cannot appear in any character stage
-    slots, only on the main path. Castle Keep will always be at the very end. See the FAQ for more details."""
+    slots, only on the main path. Castle Keep will always be at the end of the line. See the FAQ for more details."""
     display_name = "Stage Shuffle"
+
+
+class WarpShuffle(Toggle):
+    """Shuffles the order of the stages on the warp menu and thus the order they're unlocked in."""
+    display_name = "Warp Shuffle"
 
 
 class SubweaponShuffle(DefaultOnToggle):
@@ -120,6 +125,7 @@ class RevealInvisibleItems(DefaultOnToggle):
 
 cv64_options: Dict[str, Option] = {
     "stage_shuffle": StageShuffle,
+    "warp_shuffle": WarpShuffle,
     "subweapon_shuffle": SubweaponShuffle,
     "special1s_per_warp": Special1sPerWarp,
     "total_special1s": TotalSpecial1s,
