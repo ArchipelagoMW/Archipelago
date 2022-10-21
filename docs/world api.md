@@ -275,7 +275,7 @@ its `value` will either be True or False.
 #### Range
 
 Define properties `range_start`, `range_end` and `default`. Ranges will be
-displayed as sliders on the website and can be set to random in the yaml.
+displayed as sliders on the website and can be set to mystery in the yaml.
 
 #### Choice
 
