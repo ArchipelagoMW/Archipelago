@@ -253,7 +253,7 @@ class SoEWorld(World):
                 add_item_rule(location, sphere1_blocked_items_rule)
 
         # make some logically late(r) bosses priority locations to increase complexity
-        if self.world.difficulty[self.player] == Difficulty.option_mystery:
+        if self.world.difficulty[self.player] == Difficulty.option_random:
             late_count = self.world.random.randint(0, 2)
         else:
             late_count = self.world.difficulty[self.player].value

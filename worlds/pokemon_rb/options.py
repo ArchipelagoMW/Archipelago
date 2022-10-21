@@ -7,7 +7,7 @@ class GameVersion(Choice):
     display_name = "Game Version"
     option_red = 1
     option_blue = 0
-    default = "random"
+    default = "mystery"
 
 
 class TrainerName(FreeText):

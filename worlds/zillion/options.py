@@ -96,7 +96,7 @@ class ZillionStartChar(Choice):
     option_apple = 1
     option_champ = 2
     display_name = "start character"
-    default = "random"
+    default = "mystery"
 
 
 class ZillionIDCardCount(Range):
