@@ -4,7 +4,7 @@ import os.path
 import threading
 import typing
 from worlds.AutoWorld import WebWorld, World
-from worlds.generic.Rules import forbid_items, set_rule
+from worlds.generic.Rules import add_item_rule, set_rule
 from BaseClasses import Entrance, Item, ItemClassification, Location, LocationProgressType, Region, RegionType, Tutorial
 from Utils import output_path
 
@@ -237,16 +237,20 @@ class SoEWorld(World):
                     location.progress_type = LocationProgressType.EXCLUDED
                     # TODO: do we need to set an item rule?
 
-        # disable certain items in sphere 1
-        sphere1_blocked_items = ["Gauge", "Wheel"]
-        if self.world.difficulty[self.player] != Difficulty.option_easy:
-            # remove act4 weapons and diamond eyes from sphere1
-            sphere1_blocked_items += ["Laser Lance", "Atom Smasher", "Diamond Eye"]
+        def sphere1_blocked_items_rule(item):
+            if isinstance(item, SoEItem):
+                # disable certain items in sphere 1
+                if item.name in ["Gauge", "Wheel"]:
+                    return False
+                # and some more for non-easy, non-mystery
+                if self.world.difficulty[item.player] not in (Difficulty.option_easy, Difficulty.option_mystery):
+                    if item.name in ["Laser Lance", "Atom Smasher", "Diamond Eye"]:
+                        return False
+            return True
+
         for locations in spheres[0].values():
-            from pprint import pprint
-            pprint(locations)
             for location in locations:
-                forbid_items(location, sphere1_blocked_items)
+                add_item_rule(location, sphere1_blocked_items_rule)
 
         # make some logically late(r) bosses priority locations to increase complexity
         if self.world.difficulty[self.player] == Difficulty.option_mystery:
