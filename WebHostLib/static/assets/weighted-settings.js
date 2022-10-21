@@ -412,7 +412,9 @@ const buildWeightedSettingsDiv = (game, settings) => {
           Object.keys(currentSettings[game][settingName]).forEach((option) => {
             // These options are statically generated below, and should always appear even if they are deleted
             // from localStorage
+
             if (['mystery-low', 'mystery', 'mystery-high'].includes(option)) { return; }
+
 
             const tr = document.createElement('tr');
               const tdLeft = document.createElement('td');
