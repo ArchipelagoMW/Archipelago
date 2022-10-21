@@ -377,12 +377,7 @@ class GameManager(App):
         bottom_layout.add_widget(info_button)
         self.textinput = TextInput(size_hint_y=None, height=30, multiline=False, write_tab=False)
         self.textinput.bind(on_text_validate=self.on_message)
-
-        def text_focus(event):
-            """Needs to be set via delay, as unfocusing happens after on_message"""
-            self.textinput.focus = True
-
-        self.textinput.text_focus = text_focus
+        self.textinput.text_validate_unfocus = False
         bottom_layout.add_widget(self.textinput)
         self.grid.add_widget(bottom_layout)
         self.commandprocessor("/help")
@@ -447,8 +442,6 @@ class GameManager(App):
                 self.ctx.input_queue.put_nowait(input_text)
             elif input_text:
                 self.commandprocessor(input_text)
-
-            Clock.schedule_once(textinput.text_focus)
 
         except Exception as e:
             logging.getLogger("Client").exception(e)
