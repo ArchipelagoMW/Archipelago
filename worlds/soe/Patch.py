@@ -37,30 +37,6 @@ def read_rom(stream, strip_header=True) -> bytes:
     return data
 
 
-def generate_yaml(patch: bytes, metadata: Optional[dict] = None) -> bytes:
-    """Generate old (<4) apbp format yaml"""
-    patch = yaml.dump({"meta": metadata,
-                       "patch": patch,
-                       "game": "Secret of Evermore",
-                       # minimum version of patch system expected for patching to be successful
-                       "compatible_version": 1,
-                       "version": 2,
-                       "base_checksum": USHASH})
-    return patch.encode(encoding="utf-8-sig")
-
-
-def generate_patch(vanilla_file, randomized_file, metadata: Optional[dict] = None) -> bytes:
-    """Generate old (<4) apbp format patch data. Run through lzma to get a complete apbp file."""
-    with open(vanilla_file, "rb") as f:
-        vanilla = read_rom(f)
-    with open(randomized_file, "rb") as f:
-        randomized = read_rom(f)
-    if metadata is None:
-        metadata = {}
-    patch = bsdiff4.diff(vanilla, randomized)
-    return generate_yaml(patch, metadata)
-
-
 if __name__ == '__main__':
     import sys
     print('Please use ../../Patch.py', file=sys.stderr)
