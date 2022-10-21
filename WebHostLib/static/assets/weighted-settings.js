@@ -80,9 +80,11 @@ const createDefaultSettings = (settingData) => {
           case 'special_range':
             newSettings[game][gameSetting][setting.min] = 0;
             newSettings[game][gameSetting][setting.max] = 0;
+
             newSettings[game][gameSetting]['mystery'] = 0;
             newSettings[game][gameSetting]['mystery-low'] = 0;
             newSettings[game][gameSetting]['mystery-high'] = 0;
+
             if (setting.hasOwnProperty('defaultValue')) {
               newSettings[game][gameSetting][setting.defaultValue] = 25;
             } else {
@@ -412,7 +414,9 @@ const buildWeightedSettingsDiv = (game, settings) => {
           Object.keys(currentSettings[game][settingName]).forEach((option) => {
             // These options are statically generated below, and should always appear even if they are deleted
             // from localStorage
+
             if (['mystery-low', 'mystery', 'mystery-high'].includes(option)) { return; }
+
 
             const tr = document.createElement('tr');
               const tdLeft = document.createElement('td');

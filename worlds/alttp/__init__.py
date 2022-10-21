@@ -7,7 +7,8 @@ import typing
 import Utils
 from BaseClasses import Item, CollectionState, Tutorial
 from .Dungeons import create_dungeons
-from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect, indirect_connections
+from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect, \
+    indirect_connections, indirect_connections_inverted, indirect_connections_not_inverted
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
@@ -216,9 +217,15 @@ class ALTTPWorld(World):
         if world.mode[player] != 'inverted':
             link_entrances(world, player)
             mark_light_world_regions(world, player)
+            for region_name, entrance_name in indirect_connections_not_inverted.items():
+                world.register_indirect_condition(self.world.get_region(region_name, player),
+                                                  self.world.get_entrance(entrance_name, player))
         else:
             link_inverted_entrances(world, player)
             mark_dark_world_regions(world, player)
+            for region_name, entrance_name in indirect_connections_inverted.items():
+                world.register_indirect_condition(self.world.get_region(region_name, player),
+                                                  self.world.get_entrance(entrance_name, player))
 
         world.random = old_random
         plando_connect(world, player)
@@ -226,6 +233,7 @@ class ALTTPWorld(World):
         for region_name, entrance_name in indirect_connections.items():
             world.register_indirect_condition(self.world.get_region(region_name, player),
                                               self.world.get_entrance(entrance_name, player))
+
 
     def collect_item(self, state: CollectionState, item: Item, remove=False):
         item_name = item.name
@@ -490,11 +498,15 @@ class ALTTPWorld(World):
 
                 while gtower_locations and filleritempool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
-                    item_to_place = filleritempool.pop()
-                    if spot_to_fill.item_rule(item_to_place):
-                        world.push_item(spot_to_fill, item_to_place, False)
-                        fill_locations.remove(spot_to_fill)  # very slow, unfortunately
-                        trash_count -= 1
+                    for index, item in enumerate(filleritempool):
+                        if spot_to_fill.item_rule(item):
+                            filleritempool.pop(index)  # remove from outer fill
+                            world.push_item(spot_to_fill, item, False)
+                            fill_locations.remove(spot_to_fill)  # very slow, unfortunately
+                            trash_count -= 1
+                            break
+                    else:
+                        logging.warning(f"Could not trash fill Ganon's Tower for player {player}.")
 
     def get_filler_item_name(self) -> str:
         if self.world.goal[self.player] == "icerodhunt":
