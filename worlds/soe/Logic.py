@@ -1,10 +1,11 @@
-from BaseClasses import MultiWorld, CollectionState
-from worlds.AutoWorld import LogicMixin
-from .Options import EnergyCore
 from typing import Protocol, Set
-# TODO: Options may preset certain progress steps (i.e. P_ROCK_SKIP), set in generate_early?
 
+from BaseClasses import MultiWorld
+from worlds.AutoWorld import LogicMixin
 from . import pyevermizer
+from .Options import EnergyCore
+
+# TODO: Options may preset certain progress steps (i.e. P_ROCK_SKIP), set in generate_early?
 
 # TODO: resolve/flatten/expand rules to get rid of recursion below where possible
 # Logic.rules are all rules including locations, excluding those with no progress (i.e. locations that only drop items)

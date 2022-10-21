@@ -1,9 +1,8 @@
-import bsdiff4
-import yaml
+import os
 from typing import Optional
+
 import Utils
 from worlds.Files import APDeltaPatch
-import os
 
 
 USHASH = '6e9c94511d04fac6e0a1e582c170be3a'

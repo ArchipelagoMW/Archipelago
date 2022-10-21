@@ -1,5 +1,6 @@
 import typing
-from Options import Option, Range, Choice, Toggle, DefaultOnToggle, AssembleOptions, DeathLink, ProgressionBalancing
+
+from Options import Range, Choice, Toggle, DefaultOnToggle, AssembleOptions, DeathLink, ProgressionBalancing
 
 
 # typing boilerplate
