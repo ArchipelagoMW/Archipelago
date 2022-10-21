@@ -188,7 +188,7 @@ class SoEWorld(World):
         return SoEItem(event, ItemClassification.progression, None, self.player)
 
     def create_item(self, item: typing.Union[pyevermizer.Item, str]) -> Item:
-        if type(item) is str:
+        if isinstance(item, str):
             item = self.item_id_to_raw[self.item_name_to_id[item]]
         if item.type == pyevermizer.CHECK_TRAP:
             classification = ItemClassification.trap
@@ -323,6 +323,7 @@ class SoEWorld(World):
                 if v < c:
                     return self.create_item(trap_names[t])
                 v -= c
+            assert False, "Bug in create_trap"
 
         for _ in range(trap_count):
             if len(ingredients) < 1:
@@ -343,7 +344,7 @@ class SoEWorld(World):
             location = self.world.get_location(loc.name, self.player)
             set_rule(location, self.make_rule(loc.requires))
 
-    def make_rule(self, requires: typing.List[typing.Tuple[int]]) -> typing.Callable[[typing.Any], bool]:
+    def make_rule(self, requires: typing.List[typing.Tuple[int, int]]) -> typing.Callable[[typing.Any], bool]:
         def rule(state) -> bool:
             for count, progress in requires:
                 if not state.soe_has(progress, self.world, self.player, count):
@@ -375,8 +376,8 @@ class SoEWorld(World):
         while len(self.connect_name.encode('utf-8')) > 32:
             self.connect_name = self.connect_name[:-1]
         self.connect_name_available_event.set()
-        placement_file = None
-        out_file = None
+        placement_file = ""
+        out_file = ""
         try:
             money = self.world.money_modifier[self.player].value
             exp = self.world.exp_modifier[self.player].value
@@ -400,14 +401,15 @@ class SoEWorld(World):
             with open(placement_file, "wb") as f:  # generate placement file
                 for location in filter(lambda l: l.player == self.player, self.world.get_locations()):
                     item = location.item
-                    if item.code is None:
+                    assert item is not None, "Can't handle unfilled location"
+                    if item.code is None or location.address is None:
                         continue  # skip events
                     loc = self.location_id_to_raw[location.address]
                     if item.player != self.player:
                         line = f'{loc.type},{loc.index}:{pyevermizer.CHECK_NONE},{item.code},{item.player}\n'
                     else:
-                        item = self.item_id_to_raw[item.code]
-                        line = f'{loc.type},{loc.index}:{item.type},{item.index}\n'
+                        soe_item = self.item_id_to_raw[item.code]
+                        line = f'{loc.type},{loc.index}:{soe_item.type},{soe_item.index}\n'
                     f.write(line.encode('utf-8'))
 
             if not os.path.exists(rom_file):
@@ -418,14 +420,14 @@ class SoEWorld(World):
             patch = SoEDeltaPatch(patch_file, player=self.player,
                                   player_name=player_name, patched_path=out_file)
             patch.write()
-        except:
+        except Exception:
             raise
         finally:
             try:
                 os.unlink(placement_file)
                 os.unlink(out_file)
                 os.unlink(out_file[:-4] + '_SPOILER.log')
-            except:
+            except FileNotFoundError:
                 pass
 
     def modify_multidata(self, multidata: dict):
