@@ -23,7 +23,8 @@ def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item]
 
 
 def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
-                     itempool: typing.List[Item], single_player_placement: bool = False, lock: bool = False) -> None:
+                     itempool: typing.List[Item], single_player_placement: bool = False, lock: bool = False,
+                     swap: bool = True, on_place: typing.Optional[typing.Callable[[Location], None]] = None) -> None:
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
 
@@ -70,60 +71,66 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
             else:
                 # we filled all reachable spots.
-                # try swapping this item with previously placed items
-                for (i, location) in enumerate(placements):
-                    placed_item = location.item
-                    # Unplaceable items can sometimes be swapped infinitely. Limit the
-                    # number of times we will swap an individual item to prevent this
-                    swap_count = swapped_items[placed_item.player,
-                                               placed_item.name]
-                    if swap_count > 1:
+                if swap:
+                    # try swapping this item with previously placed items
+                    for (i, location) in enumerate(placements):
+                        placed_item = location.item
+                        # Unplaceable items can sometimes be swapped infinitely. Limit the
+                        # number of times we will swap an individual item to prevent this
+                        swap_count = swapped_items[placed_item.player,
+                                                   placed_item.name]
+                        if swap_count > 1:
+                            continue
+
+                        location.item = None
+                        placed_item.location = None
+                        swap_state = sweep_from_pool(base_state, [placed_item])
+                        # swap_state assumes we can collect placed item before item_to_place
+                        if (not single_player_placement or location.player == item_to_place.player) \
+                                and location.can_fill(swap_state, item_to_place, perform_access_check):
+
+                            # Verify that placing this item won't reduce available locations, which could happen with rules
+                            # that want to not have both items. Left in until removal is proven useful.
+                            prev_state = swap_state.copy()
+                            prev_loc_count = len(
+                                world.get_reachable_locations(prev_state))
+
+                            swap_state.collect(item_to_place, True)
+                            new_loc_count = len(
+                                world.get_reachable_locations(swap_state))
+
+                            if new_loc_count >= prev_loc_count:
+                                # Add this item to the existing placement, and
+                                # add the old item to the back of the queue
+                                spot_to_fill = placements.pop(i)
+
+                                swap_count += 1
+                                swapped_items[placed_item.player,
+                                              placed_item.name] = swap_count
+
+                                reachable_items[placed_item.player].appendleft(
+                                    placed_item)
+                                itempool.append(placed_item)
+
+                                break
+
+                        # Item can't be placed here, restore original item
+                        location.item = placed_item
+                        placed_item.location = location
+
+                    if spot_to_fill is None:
+                        # Can't place this item, move on to the next
+                        unplaced_items.append(item_to_place)
                         continue
-
-                    location.item = None
-                    placed_item.location = None
-                    swap_state = sweep_from_pool(base_state)
-                    if (not single_player_placement or location.player == item_to_place.player) \
-                            and location.can_fill(swap_state, item_to_place, perform_access_check):
-
-                        # Verify that placing this item won't reduce available locations
-                        prev_state = swap_state.copy()
-                        prev_state.collect(placed_item)
-                        prev_loc_count = len(
-                            world.get_reachable_locations(prev_state))
-
-                        swap_state.collect(item_to_place, True)
-                        new_loc_count = len(
-                            world.get_reachable_locations(swap_state))
-
-                        if new_loc_count >= prev_loc_count:
-                            # Add this item to the existing placement, and
-                            # add the old item to the back of the queue
-                            spot_to_fill = placements.pop(i)
-
-                            swap_count += 1
-                            swapped_items[placed_item.player,
-                                          placed_item.name] = swap_count
-
-                            reachable_items[placed_item.player].appendleft(
-                                placed_item)
-                            itempool.append(placed_item)
-
-                            break
-
-                    # Item can't be placed here, restore original item
-                    location.item = placed_item
-                    placed_item.location = location
-
-                if spot_to_fill is None:
-                    # Can't place this item, move on to the next
+                else:
                     unplaced_items.append(item_to_place)
                     continue
-
             world.push_item(spot_to_fill, item_to_place, False)
             spot_to_fill.locked = lock
             placements.append(spot_to_fill)
             spot_to_fill.event = item_to_place.advancement
+            if on_place:
+                on_place(spot_to_fill)
 
     if len(unplaced_items) > 0 and len(locations) > 0:
         # There are leftover unplaceable items and locations that won't accept them
@@ -233,9 +240,12 @@ def accessibility_corrections(world: MultiWorld, state: CollectionState, locatio
 def inaccessible_location_rules(world: MultiWorld, state: CollectionState, locations):
     maximum_exploration_state = sweep_from_pool(state, [])
     unreachable_locations = [location for location in locations if not location.can_reach(maximum_exploration_state)]
-    for location in unreachable_locations:
-        add_item_rule(location, lambda item: not ((item.classification & 0b0011) and
-                                              world.accessibility[item.player] != 'minimal'))
+    if unreachable_locations:
+        def forbid_important_item_rule(item: Item):
+            return not ((item.classification & 0b0011) and world.accessibility[item.player] != 'minimal')
+
+        for location in unreachable_locations:
+            add_item_rule(location, forbid_important_item_rule)
 
 
 def distribute_items_restrictive(world: MultiWorld) -> None:
@@ -311,19 +321,26 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     defaultlocations = locations[LocationProgressType.DEFAULT]
     excludedlocations = locations[LocationProgressType.EXCLUDED]
 
-    prioritylocations_lock = prioritylocations.copy()
+    # can't lock due to accessibility corrections touching things, so we remember which ones got placed and lock later
+    lock_later = []
 
-    fill_restrictive(world, world.state, prioritylocations, progitempool)
+    def mark_for_locking(location: Location):
+        nonlocal lock_later
+        lock_later.append(location)
+
+    # "priority fill"
+    fill_restrictive(world, world.state, prioritylocations, progitempool, swap=False, on_place=mark_for_locking)
     accessibility_corrections(world, world.state, prioritylocations, progitempool)
 
-    for location in prioritylocations_lock:
-        if location.item:
-            location.locked = True
+    for location in lock_later:
+        location.locked = True
+    del mark_for_locking, lock_later
 
     if prioritylocations:
         defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
+        # "progression fill"
         fill_restrictive(world, world.state, defaultlocations, progitempool)
         if progitempool:
             raise FillError(
