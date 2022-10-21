@@ -295,6 +295,12 @@ def get_default_options() -> OptionsType:
             "sni": "SNI",
             "rom_start": True,
         },
+        "zillion_options": {
+            "rom_file": "Zillion (UE) [!].sms",
+            # RetroArch doesn't make it easy to launch a game from the command line.
+            # You have to know the path to the emulator core library on the user's computer.
+            "rom_start": "retroarch",
+        },
         "pokemon_rb_options": {
             "red_rom_file": "Pokemon Red (UE) [S][!].gb",
             "blue_rom_file": "Pokemon Blue (UE) [S][!].gb",
