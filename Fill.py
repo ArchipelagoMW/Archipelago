@@ -258,19 +258,6 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     usefulitempool: typing.List[Item] = []
     filleritempool: typing.List[Item] = []
 
-    for item in itempool:
-        if item.advancement:
-            progitempool.append(item)
-        elif item.useful:
-            usefulitempool.append(item)
-        else:
-            filleritempool.append(item)
-
-    call_all(world, "fill_hook", progitempool, usefulitempool, filleritempool, fill_locations)
-
-    locations: typing.Dict[LocationProgressType, typing.List[Location]] = {
-        loc_type: [] for loc_type in LocationProgressType}
-
     early_items_count = {}
     for player in world.player_ids:
         for item, count in world.early_items[player].value.items():
@@ -286,33 +273,44 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
                     early_locations.append(loc)
                 fill_locations.remove(loc)
 
-        def pull_items(pool_from, pool_to):
-            for item in reversed(pool_from):
-                if (item.name, item.player) in early_items_count:
-                    pool_to.append(item)
-                    pool_from.remove(item)
-                    early_items_count[(item.name, item.player)] -= 1
-                    if early_items_count[(item.name, item.player)] == 0:
-                        del early_items_count[(item.name, item.player)]
-        early_items = []
-        pull_items(progitempool, early_items)
-        if early_priority_locations:
-            fill_restrictive(world, world.state, early_priority_locations, early_items, lock=True)
-        pull_items(usefulitempool, early_items)
-        pull_items(filleritempool, early_items)
-        fill_restrictive(world, world.state, early_locations, early_items, lock=True)
-        if early_items:
-            logging.warning(f"Ran out of early locations for early items. Failed to place {len(early_items)} items early.")
-            for item in early_items:
+        early_prog_items = []
+        early_rest_items = []
+        for item in reversed(itempool):
+            if (item.name, item.player) in early_items_count:
                 if item.advancement:
-                    progitempool.append(item)
-                elif item.useful:
-                    usefulitempool.append(item)
+                    early_prog_items.append(item)
                 else:
-                    filleritempool.append(item)
+                    early_rest_items.append(item)
+                itempool.remove(item)
+                early_items_count[(item.name, item.player)] -= 1
+                if early_items_count[(item.name, item.player)] == 0:
+                    del early_items_count[(item.name, item.player)]
+        fill_restrictive(world, world.state, early_locations, early_rest_items, lock=True)
+        early_locations += early_priority_locations
+        fill_restrictive(world, world.state, early_locations, early_prog_items, lock=True)
+        unplaced_early_items = early_rest_items + early_prog_items
+        if unplaced_early_items:
+            logging.warning(f"Ran out of early locations for early items. Failed to place \
+                            {len(unplaced_early_items)} items early.")
+            itempool += unplaced_early_items
 
         fill_locations += early_locations + early_priority_locations
         world.random.shuffle(fill_locations)
+
+    for item in itempool:
+        if item.advancement:
+            progitempool.append(item)
+        elif item.useful:
+            usefulitempool.append(item)
+        else:
+            filleritempool.append(item)
+
+    call_all(world, "fill_hook", progitempool, usefulitempool, filleritempool, fill_locations)
+
+    locations: typing.Dict[LocationProgressType, typing.List[Location]] = {
+        loc_type: [] for loc_type in LocationProgressType}
+
+
 
     for loc in fill_locations:
         locations[loc.progress_type].append(loc)
