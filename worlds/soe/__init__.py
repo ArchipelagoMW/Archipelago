@@ -240,11 +240,11 @@ class SoEWorld(World):
         def sphere1_blocked_items_rule(item):
             if isinstance(item, SoEItem):
                 # disable certain items in sphere 1
-                if item.name in ["Gauge", "Wheel"]:
+                if item.name in {"Gauge", "Wheel"}:
                     return False
                 # and some more for non-easy, non-mystery
                 if self.world.difficulty[item.player] not in (Difficulty.option_easy, Difficulty.option_mystery):
-                    if item.name in ["Laser Lance", "Atom Smasher", "Diamond Eye"]:
+                    if item.name in {"Laser Lance", "Atom Smasher", "Diamond Eye"}:
                         return False
             return True
 
