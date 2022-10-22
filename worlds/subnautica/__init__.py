@@ -44,14 +44,13 @@ class SubnauticaWorld(World):
     data_version = 7
     required_client_version = (0, 3, 5)
 
-    prefill_items: List[Item]
     creatures_to_scan: List[str]
 
     def generate_early(self) -> None:
-        self.prefill_items = [
-            self.create_item("Seaglide Fragment"),
-            self.create_item("Seaglide Fragment")
-        ]
+        self.world.early_items[self.player].value["Seaglide Fragment"] = min(
+            2 if "Seaglide Fragment" not in self.world.early_items[self.player].value else
+            self.world.early_items[self.player]["Seaglide Fragment"].value, 2)
+
         scan_option: Options.AggressiveScanLogic = self.world.creature_scan_logic[self.player]
         creature_pool = scan_option.get_pool()
 
@@ -148,16 +147,6 @@ class SubnauticaWorld(World):
             for region_exit in exits:
                 ret.exits.append(Entrance(self.player, region_exit, ret))
         return ret
-
-    def get_pre_fill_items(self) -> List[Item]:
-        return self.prefill_items
-
-    def pre_fill(self) -> None:
-        reachable = self.world.get_reachable_locations(player=self.player)
-        self.world.random.shuffle(reachable)
-        items = self.prefill_items.copy()
-        for item in items:
-            reachable.pop().place_locked_item(item)
 
 
 class SubnauticaLocation(Location):
