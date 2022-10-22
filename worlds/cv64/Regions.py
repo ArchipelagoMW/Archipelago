@@ -5,7 +5,7 @@ from .Items import CV64Item
 from .Locations import CV64Location
 from .Names import LocationName, ItemName
 from .Rom import rom_loc_offsets, npc_items, invis_items
-from .Levels import end_regions_dict
+from .Levels import end_regions_dict, mid_regions_dict
 
 
 class LevelGate:
@@ -49,22 +49,12 @@ def create_regions(world, player: int, active_locations):
         LocationName.forest_pillars_top,
         LocationName.forest_boss_one,
         LocationName.forest_bone_mom,
-    ]
-    forest_start_region = create_region(world, player, active_locations, LocationName.forest_of_silence,
-                                        forest_start_region_locations, None)
-
-    forest_switch1_region_locations = [
         LocationName.forest_lgaz_in,
         LocationName.forest_lgaz_top,
         LocationName.forest_hgaz_in,
         LocationName.forest_hgaz_top,
         LocationName.forest_weretiger_sw,
         LocationName.forest_boss_two,
-    ]
-    forest_switch1_region = create_region(world, player, active_locations, LocationName.forest_switch1,
-                                          forest_switch1_region_locations, None)
-
-    forest_switch2_region_locations = [
         LocationName.forest_weretiger_gate,
         LocationName.forest_dirge_plaque,
         LocationName.forest_dirge_tomb,
@@ -72,10 +62,10 @@ def create_regions(world, player: int, active_locations):
         LocationName.forest_dbridge_wall,
         LocationName.forest_dbridge_sw,
     ]
-    forest_switch2_region = create_region(world, player, active_locations, LocationName.forest_switch2,
-                                          forest_switch2_region_locations, None)
+    forest_start_region = create_region(world, player, active_locations, LocationName.forest_of_silence,
+                                        forest_start_region_locations, None)
 
-    forest_switch3_region_locations = [
+    forest_mid_region_locations = [
         LocationName.forest_dbridge_gate_r,
         LocationName.forest_dbridge_tomb,
         LocationName.forest_bface_tomb,
@@ -85,8 +75,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.forest_werewolf_tree,
         LocationName.forest_final_sw,
     ]
-    forest_switch3_region = create_region(world, player, active_locations, LocationName.forest_switch3,
-                                          forest_switch3_region_locations, None)
+    forest_mid_region = create_region(world, player, active_locations, LocationName.forest_mid,
+                                          forest_mid_region_locations, None)
 
     forest_end_region_locations = [
         LocationName.forest_boss_three,
@@ -558,9 +548,7 @@ def create_regions(world, player: int, active_locations):
         warp6_region,
         warp7_region,
         forest_start_region,
-        forest_switch1_region,
-        forest_switch2_region,
-        forest_switch3_region,
+        forest_mid_region,
         forest_end_region,
         cw_start_region,
         cw_rtower_region,
@@ -616,7 +604,7 @@ def create_regions(world, player: int, active_locations):
     ]
 
 
-def connect_regions(world, player, level_list):
+def connect_regions(world, player, level_list, warp_list):
     names: typing.Dict[str, int] = {}
 
     connect(world, player, names, 'Menu', level_list[0])
@@ -635,13 +623,13 @@ def connect_regions(world, player, level_list):
     connect(world, player, names, 'Warp 6', 'Warp 7',
             lambda state: (state.has(ItemName.special_one, player, world.special1s_per_warp[player].value * 7)))
 
-    connect(world, player, names, 'Warp 1', LocationName.villa_storeroom)
-    connect(world, player, names, 'Warp 2', LocationName.tunnel_end)
-    connect(world, player, names, 'Warp 3', LocationName.underground_waterway)
-    connect(world, player, names, 'Warp 4', LocationName.castle_center)
-    connect(world, player, names, 'Warp 5', LocationName.tosci_conveyors)
-    connect(world, player, names, 'Warp 6', LocationName.tower_of_execution)
-    connect(world, player, names, 'Warp 7', LocationName.ct_end)
+    connect(world, player, names, 'Warp 1', mid_regions_dict[warp_list[0]])
+    connect(world, player, names, 'Warp 2', mid_regions_dict[warp_list[1]])
+    connect(world, player, names, 'Warp 3', mid_regions_dict[warp_list[2]])
+    connect(world, player, names, 'Warp 4', mid_regions_dict[warp_list[3]])
+    connect(world, player, names, 'Warp 5', mid_regions_dict[warp_list[4]])
+    connect(world, player, names, 'Warp 6', mid_regions_dict[warp_list[5]])
+    connect(world, player, names, 'Warp 7', mid_regions_dict[warp_list[6]])
 
     def get_next_stage_start(source_stage):
         if level_list[level_list.index(source_stage) - 1] == LocationName.villa:
@@ -662,10 +650,8 @@ def connect_regions(world, player, level_list):
         else:
             return "Menu"
 
-    connect(world, player, names, LocationName.forest_of_silence, LocationName.forest_switch1)
-    connect(world, player, names, LocationName.forest_switch1, LocationName.forest_switch2)
-    connect(world, player, names, LocationName.forest_switch2, LocationName.forest_switch3)
-    connect(world, player, names, LocationName.forest_switch3, LocationName.forest_end)
+    connect(world, player, names, LocationName.forest_of_silence, LocationName.forest_mid)
+    connect(world, player, names, LocationName.forest_mid, LocationName.forest_end)
     connect(world, player, names, LocationName.forest_end, get_next_stage_start(LocationName.forest_of_silence))
 
     connect(world, player, names, LocationName.castle_wall, LocationName.cw_rtower)

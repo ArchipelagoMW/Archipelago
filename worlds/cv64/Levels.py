@@ -3,12 +3,18 @@ from .Names import LocationName
 
 
 class CV64Level:
-    levelIDAddress: int
-    startIDAddress: int
-    levelID: int
-    startID: int
-    twoExits: bool
-    canBacktrack: bool
+    startzoneSceneOffset: int
+    startzoneSpawnOffset: int
+    startSceneID: int
+    startSpawnID: int
+
+    midSceneID: int
+    midSpawnID: int
+
+    endzoneSceneOffset: int
+    endzoneSpawnOffset: int
+    endSceneID: int
+    endSpawnID: int
     
     def __init__(self, startzoneSceneOffset: int, startzoneSpawnOffset: int, startSceneID: int, startSpawnID: int,
                  midSceneID: int, midSpawnID: int, endzoneSceneOffset: int, endzoneSpawnOffset: int, endSceneID: int, endSpawnID: int):
@@ -21,18 +27,18 @@ class CV64Level:
         self.midSpawnID = midSpawnID
 
         self.endzoneSceneOffset = endzoneSceneOffset
-        self.endzoneLocOffset = endzoneSpawnOffset
+        self.endzoneSpawnOffset = endzoneSpawnOffset
         self.endSceneID = endSceneID
         self.endSpawnID = endSpawnID
 
 
 level_dict = {
     LocationName.forest_of_silence:    CV64Level(0xFFFFFF, 0xFFFFFF, 0x00, 0x00, 0x00, 0x04,
-                                                 0x10678B, None, 0x00, 0x01),
+                                                 0x10678B, 0xB6302B, 0x00, 0x01),
     LocationName.castle_wall:          CV64Level(0xFFFFFF, 0xFFFFFF, 0x02, 0x00, 0x02, 0x07,
                                                  0x109A5F, 0x109A61, 0x02, 0x07),
     LocationName.villa:                CV64Level(0xFFFFFF, 0xFFFFFF, 0x03, 0x00, 0x05, 0x04,
-                                                 0x0D9DA3, None, 0x1A, 0x03),
+                                                 0x0D9DA3, 0x109E81, 0x1A, 0x03),
     LocationName.tunnel:               CV64Level(0xFFFFFF, 0xFFFFFF, 0x07, 0x00, 0x07, 0x03,
                                                  0x109B4F, 0x109B51, 0x07, 0x03),
     LocationName.underground_waterway: CV64Level(0xFFFFFF, 0xFFFFFF, 0x08, 0x00, 0x08, 0x03,
@@ -49,10 +55,26 @@ level_dict = {
                                                  0x109D2F, 0x109D31, 0x11, 0x01),
     LocationName.room_of_clocks:       CV64Level(0xFFFFFF, 0xFFFFFF, 0x1B, 0x00, 0x1B, 0x02,
                                                  0x109EAF, 0x109EB1, 0x1B, 0x02),
-    LocationName.clock_tower:          CV64Level(0xFFFFFF, 0xFFFFFF, 0x17, 0x00, 0x17, 0x03,
+    LocationName.clock_tower:          CV64Level(0xFFFFFF, 0xFFFFFF, 0x17, 0x00, 0x17, 0x02,
                                                  0x109E37, 0x109E39, 0x17, 0x03),
     LocationName.castle_keep:          CV64Level(0xFFFFFF, 0xFFFFFF, 0x14, 0x02, 0x14, 0x02,
                                                  0xFFFFFF, 0xFFFFFF, 0xFF, 0xFF),
+}
+
+mid_regions_dict = {
+    LocationName.forest_of_silence: LocationName.forest_mid,
+    LocationName.castle_wall: LocationName.cw_descent,
+    LocationName.villa: LocationName.villa_storeroom,
+    LocationName.tunnel: LocationName.tunnel_end,
+    LocationName.underground_waterway: LocationName.underground_waterway,
+    LocationName.castle_center: LocationName.cc_invention_lizard_exit,
+    LocationName.duel_tower: LocationName.duel_tower,
+    LocationName.tower_of_execution: LocationName.tower_of_execution,
+    LocationName.tower_of_science: LocationName.tosci_conveyors,
+    LocationName.tower_of_sorcery: LocationName.tower_of_sorcery,
+    LocationName.room_of_clocks: LocationName.room_of_clocks,
+    LocationName.clock_tower: LocationName.ct_middle,
+    LocationName.castle_keep: LocationName.castle_keep
 }
 
 end_regions_dict = {
@@ -70,22 +92,18 @@ end_regions_dict = {
     LocationName.clock_tower:          LocationName.ct_end,
 }
 
-char_level_list = [
+level_list = [
     LocationName.forest_of_silence,
     LocationName.castle_wall,
+    LocationName.villa,
     LocationName.tunnel,
     LocationName.underground_waterway,
+    LocationName.castle_center,
     LocationName.duel_tower,
     LocationName.tower_of_execution,
     LocationName.tower_of_science,
     LocationName.tower_of_sorcery,
     LocationName.room_of_clocks,
     LocationName.clock_tower,
-]
-
-warp_list = [
-    LocationName.villa,
-    LocationName.underground_waterway,
-    LocationName.tunnel,
-    LocationName.castle_center
+    LocationName.castle_keep
 ]

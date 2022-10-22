@@ -1,12 +1,13 @@
 import Utils
 from Utils import read_snes_rom
 from worlds.Files import APDeltaPatch
+
 import hashlib
 import os
-# import math
+import math
 
-# from BaseClasses import Location
-from .Names import PatchName
+from .Names import PatchName, LocationName
+from .Levels import level_list, level_dict
 
 USHASH = '1cc5cf3b4d29d8c3ade957648b529dc1'
 BSUSHASH = '0bbaa6de2b9cbb822f8b4d85c1d5497b'
@@ -337,7 +338,7 @@ class LocalRom(object):
             self.buffer = bytearray(stream.read())
 
 
-def patch_rom(world, rom, player, offsets_to_ids):
+def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     # local_random = world.slot_seeds[player]
 
     w1 = world.special1s_per_warp[player]
@@ -519,7 +520,7 @@ def patch_rom(world, rom, player, offsets_to_ids):
     # On-the-fly TLB script modifier
     rom.write_bytes(0xBFC338, PatchName.double_component_checker)
     rom.write_bytes(0xBFC3D4, PatchName.downstairs_seal_checker)
-    rom.write_bytes(0xBFC408, PatchName.tlb_modifiers)
+    rom.write_bytes(0xBFC700, PatchName.tlb_modifiers)
 
     # On-the-fly scene object data modifier hook
     rom.write_bytes(0xEAAC8, [0x0C, 0x0F, 0xF0, 0x8A])  # JAL 0x803FC228
@@ -564,6 +565,39 @@ def patch_rom(world, rom, player, offsets_to_ids):
 
     # Make the Easy-only candle drops in Room of Clocks appear on any difficulty
     rom.write_byte(0x9B518F, 0x01)
+
+    # Write the new scene/spawn IDs for Stage Shuffle
+    if world.stage_shuffle[player]:
+        for i in range(len(active_level_list) - 1):
+            if active_level_list[i - 1] == LocationName.villa:
+                rom.write_byte(level_dict[active_level_list[i]].endzoneSceneOffset,
+                               level_dict[active_level_list[i + 2]].startSceneID)
+                rom.write_byte(level_dict[active_level_list[i]].endzoneSpawnOffset,
+                               level_dict[active_level_list[i + 2]].startSpawnID)
+            elif active_level_list[i - 2] == LocationName.castle_center:
+                rom.write_byte(level_dict[active_level_list[i]].endzoneSceneOffset,
+                               level_dict[active_level_list[i + 3]].startSceneID)
+                rom.write_byte(level_dict[active_level_list[i]].endzoneSpawnOffset,
+                               level_dict[active_level_list[i + 3]].startSpawnID)
+            else:
+                rom.write_byte(level_dict[active_level_list[i]].endzoneSceneOffset, level_dict[active_level_list[i + 1]].startSceneID)
+                rom.write_byte(level_dict[active_level_list[i]].endzoneSpawnOffset, level_dict[active_level_list[i + 1]].startSpawnID)
+
+            if level_dict[active_level_list[i]].startzoneSceneOffset != 0xFFFFFF:
+                if i - 1 < 0:
+                    rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset,
+                                   level_dict[active_level_list[i]].startSceneID)
+                elif active_level_list[i - 2] == LocationName.villa:
+                    rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset, 0x1A)
+                    rom.write_byte(level_dict[active_level_list[i]].startzoneSpawnOffset, 0x03)
+                elif active_level_list[i - 3] == LocationName.castle_center:
+                    rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset, 0x0F)
+                    rom.write_byte(level_dict[active_level_list[i]].startzoneSpawnOffset, 0x03)
+                else:
+                    rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset,
+                                   level_dict[active_level_list[i - 1]].endSceneID)
+                    rom.write_byte(level_dict[active_level_list[i]].startzoneSpawnOffset,
+                                   level_dict[active_level_list[i - 1]].endSpawnID)
 
     # Write the new item bytes
     for offset, item_id in offsets_to_ids.items():

@@ -8,7 +8,7 @@ from .Items import CV64Item, ItemData, item_table, junk_table
 from .Locations import CV64Location, all_locations, setup_locations
 from .Options import cv64_options
 from .Regions import create_regions, connect_regions
-from .Levels import char_level_list
+from .Levels import level_list
 from .Rules import set_rules
 from .Names import ItemName, LocationName
 from ..AutoWorld import WebWorld, World
@@ -49,7 +49,7 @@ class CV64World(World):
 
     active_level_list: typing.List[str]
     villa_cc_ids = [2, 3]
-    warp_level_list: typing.List[str]
+    active_warp_list: typing.List[str]
     web = CV64Web()
 
     def __init__(self, world: MultiWorld, player: int):
@@ -66,6 +66,7 @@ class CV64World(World):
         return {
             "death_link": self.world.death_link[self.player].value,
             "active_levels": self.active_level_list,
+            "active_warps": self.active_warp_list
         }
 
     def create_regions(self):
@@ -132,42 +133,45 @@ class CV64World(World):
         self.world.get_location(LocationName.roc_boss, self.player)\
             .place_locked_item(self.create_item(ItemName.deathtrice))
 
-        itempool += [self.create_item(ItemName.special_one)] * self.world.total_special1s[self.player].value
-        itempool += [self.create_item(ItemName.roast_chicken)] * 21
-        itempool += [self.create_item(ItemName.roast_beef)] * 24
-        itempool += [self.create_item(ItemName.healing_kit)] * 4
-        itempool += [self.create_item(ItemName.purifying)] * 14
-        itempool += [self.create_item(ItemName.cure_ampoule)] * 5
-        itempool += [self.create_item(ItemName.powerup)] * 10
-        itempool += [self.create_item(ItemName.magical_nitro)] * 2
-        itempool += [self.create_item(ItemName.mandragora)] * 2
-        itempool += [self.create_item(ItemName.sun_card)] * 9
-        itempool += [self.create_item(ItemName.moon_card)] * 8
-        itempool += [self.create_item(ItemName.left_tower_key)] * 1
-        itempool += [self.create_item(ItemName.storeroom_key)] * 1
-        itempool += [self.create_item(ItemName.archives_key)] * 1
-        itempool += [self.create_item(ItemName.garden_key)] * 1
-        itempool += [self.create_item(ItemName.copper_key)] * 1
-        itempool += [self.create_item(ItemName.chamber_key)] * 1
-        itempool += [self.create_item(ItemName.execution_key)] * 1
-        itempool += [self.create_item(ItemName.science_key_one)] * 1
-        itempool += [self.create_item(ItemName.science_key_two)] * 1
-        itempool += [self.create_item(ItemName.science_key_three)] * 1
-        itempool += [self.create_item(ItemName.clocktower_key_one)] * 1
-        itempool += [self.create_item(ItemName.clocktower_key_two)] * 1
-        itempool += [self.create_item(ItemName.clocktower_key_three)] * 1
+        number_of_special1s = self.world.total_special1s[self.player].value
+        number_of_special2s = self.world.total_special2s[self.player].value
+
+        itempool += [self.create_item(ItemName.special_one) for _ in range(number_of_special1s)]
+        itempool += [self.create_item(ItemName.roast_chicken) for _ in range(21)]
+        itempool += [self.create_item(ItemName.roast_beef) for _ in range(24)]
+        itempool += [self.create_item(ItemName.healing_kit) for _ in range(4)]
+        itempool += [self.create_item(ItemName.purifying) for _ in range(14)]
+        itempool += [self.create_item(ItemName.cure_ampoule) for _ in range(5)]
+        itempool += [self.create_item(ItemName.powerup) for _ in range(10)]
+        itempool += [self.create_item(ItemName.magical_nitro) for _ in range(2)]
+        itempool += [self.create_item(ItemName.mandragora) for _ in range(2)]
+        itempool += [self.create_item(ItemName.sun_card) for _ in range(9)]
+        itempool += [self.create_item(ItemName.moon_card) for _ in range(8)]
+        itempool += [self.create_item(ItemName.left_tower_key)]
+        itempool += [self.create_item(ItemName.storeroom_key)]
+        itempool += [self.create_item(ItemName.archives_key)]
+        itempool += [self.create_item(ItemName.garden_key)]
+        itempool += [self.create_item(ItemName.copper_key)]
+        itempool += [self.create_item(ItemName.chamber_key)]
+        itempool += [self.create_item(ItemName.execution_key)]
+        itempool += [self.create_item(ItemName.science_key_one)]
+        itempool += [self.create_item(ItemName.science_key_two)]
+        itempool += [self.create_item(ItemName.science_key_three)]
+        itempool += [self.create_item(ItemName.clocktower_key_one)]
+        itempool += [self.create_item(ItemName.clocktower_key_two)]
+        itempool += [self.create_item(ItemName.clocktower_key_three)]
 
         if self.world.draculas_condition[self.player].value == 3:
-            itempool += [self.create_item(ItemName.special_two)] * self.world.total_special2s[self.player].value
+            itempool += [self.create_item(ItemName.special_two) for _ in range(number_of_special2s)]
 
         if self.world.carrie_logic[self.player]:
-            itempool += [self.create_item(ItemName.roast_beef)] * 1
-            itempool += [self.create_item(ItemName.moon_card)] * 1
+            itempool += [self.create_item(ItemName.roast_beef)]
+            itempool += [self.create_item(ItemName.moon_card)]
             total_required_locations += 2
 
         if self.world.lizard_generator_items[self.player]:
-            itempool += [self.create_item(ItemName.powerup)] * 1
-            itempool += [self.create_item(ItemName.sun_card)] * 1
+            itempool += [self.create_item(ItemName.powerup)]
+            itempool += [self.create_item(ItemName.sun_card)]
             total_required_locations += 6
 
         total_junk_count = total_required_locations - len(itempool)
@@ -178,22 +182,37 @@ class CV64World(World):
 
         itempool += junk_pool
 
-        self.active_level_list = char_level_list.copy()
+        self.active_level_list = level_list.copy()
+        self.active_warp_list = self.world.random.sample(self.active_level_list, 7)
 
         if self.world.stage_shuffle[self.player]:
+            self.active_level_list.remove(LocationName.villa)
+            self.active_level_list.remove(LocationName.castle_center)
+            self.active_level_list.remove(LocationName.castle_keep)
             self.world.random.shuffle(self.active_level_list)
-            self.villa_cc_ids = self.world.random.sample(range(0, 5), 2)
+            self.villa_cc_ids = self.world.random.sample(range(0, 6), 2)
+            if self.villa_cc_ids[0] < self.villa_cc_ids[1]:
+                self.active_level_list.insert(self.villa_cc_ids[0], LocationName.villa)
+                self.active_level_list.insert(self.villa_cc_ids[1] + 2, LocationName.castle_center)
+            else:
+                self.active_level_list.insert(self.villa_cc_ids[1], LocationName.castle_center)
+                self.active_level_list.insert(self.villa_cc_ids[0] + 4, LocationName.villa)
+            self.active_level_list.append(LocationName.castle_keep)
 
-        if self.villa_cc_ids[0] < self.villa_cc_ids[1]:
-            self.active_level_list.insert(self.villa_cc_ids[0], LocationName.villa)
-            self.active_level_list.insert(self.villa_cc_ids[1] + 2, LocationName.castle_center)
-        else:
-            self.active_level_list.insert(self.villa_cc_ids[1], LocationName.castle_center)
-            self.active_level_list.insert(self.villa_cc_ids[0] + 4, LocationName.villa)
+        if self.world.warp_shuffle[self.player].value == 0:
+            new_list = self.active_level_list.copy()
+            for warp in self.active_level_list:
+                if warp not in self.active_warp_list:
+                    new_list.remove(warp)
+            self.active_warp_list = new_list
+        elif self.world.warp_shuffle[self.player].value == 2:
+            new_list = level_list.copy()
+            for warp in level_list:
+                if warp not in self.active_warp_list:
+                    new_list.remove(warp)
+            self.active_warp_list = new_list
 
-        self.active_level_list.append(LocationName.castle_keep)
-
-        connect_regions(self.world, self.player, self.active_level_list)
+        connect_regions(self.world, self.player, self.active_level_list, self.active_warp_list)
 
         self.world.itempool += itempool
 
@@ -221,7 +240,7 @@ class CV64World(World):
                         else:
                             offsets_to_ids[loc.rom_offset] = 0x12
 
-            patch_rom(self.world, rom, self.player, offsets_to_ids)  # self.active_level_list
+            patch_rom(self.world, rom, self.player, offsets_to_ids, self.active_level_list, self.active_warp_list)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
@@ -240,6 +259,36 @@ class CV64World(World):
             if os.path.exists(rompath):
                 os.unlink(rompath)
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
+
+    def write_spoiler(self, spoiler_handle: typing.TextIO):
+        stagecounts = {"Main": 1, "Reinhardt": 1, "Carrie": 1}
+        spoiler_handle.write("\n")
+        header_text = "Castlevania 64 stage order:\n"
+        header_text = header_text.format(self.world.player_name[self.player])
+        spoiler_handle.write(header_text)
+        for x in range(len(self.active_level_list)):
+            if self.active_level_list[x - 1] == LocationName.villa or self.active_level_list[x - 1] \
+                    == LocationName.castle_center or self.active_level_list[x - 2] == LocationName.castle_center:
+                stagetype = "Reinhardt"
+            elif self.active_level_list[x - 2] == LocationName.villa or self.active_level_list[x - 3] \
+                    == LocationName.castle_center or self.active_level_list[x - 4] == LocationName.castle_center:
+                stagetype = "Carrie"
+            else:
+                stagetype = "Main"
+
+            if stagetype == "Reinhardt":
+                text = "{0} Stage {1}:\t{2}\n"
+            else:
+                text = "{0} Stage {1}:\t\t{2}\n"
+            text = text.format(stagetype, stagecounts[stagetype], self.active_level_list[x])
+            spoiler_handle.writelines(text)
+            stagecounts[stagetype] += 1
+
+        spoiler_handle.writelines("\nStart Warp:\t" + self.active_level_list[0])
+        for x in range(len(self.active_warp_list)):
+            text = "\nWarp {0}:\t{1}"
+            text = text.format(x + 1, self.active_warp_list[x])
+            spoiler_handle.writelines(text)
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()

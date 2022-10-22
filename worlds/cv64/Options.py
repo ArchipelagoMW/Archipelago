@@ -9,9 +9,15 @@ class StageShuffle(Toggle):
     display_name = "Stage Shuffle"
 
 
-class WarpShuffle(Toggle):
-    """Shuffles the order of the stages on the warp menu and thus the order they're unlocked in."""
+class WarpShuffle(Choice):
+    """Shuffles the order of the stages on the warp menu and thus the order they're unlocked in. Vanilla and Off only
+    make a difference if Stage Shuffle is on; Vanilla giving a warp list closer to the vanilla game's stage arrangement
+    and Off giving a list resembling the seed's shuffled stage arrangement."""
     display_name = "Warp Shuffle"
+    option_off = 0
+    option_on = 1
+    option_vanilla = 2
+    default = 0
 
 
 class SubweaponShuffle(DefaultOnToggle):
@@ -80,7 +86,7 @@ class GlitchLogic(Toggle):
 class LizardGeneratorItems(Toggle):
     """If enabled, the checks inside the Lizard-man generators in Castle Center will be included; otherwise, they'll be
     left vanilla. WARNING: picking all of these up can be a very frustrating and time-consuming process!"""
-    display_name = "Include Lizard-man Generator Items"
+    display_name = "Lizard-man Generator Items"
 
 
 class FightRenon(Choice):
