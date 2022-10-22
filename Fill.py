@@ -238,8 +238,7 @@ def accessibility_corrections(world: MultiWorld, state: CollectionState, locatio
 
 
 def inaccessible_location_rules(world: MultiWorld, state: CollectionState, locations):
-    maximum_exploration_state = state.copy()
-    maximum_exploration_state.sweep_for_events()
+    maximum_exploration_state = sweep_from_pool(state)
     unreachable_locations = [location for location in locations if not location.can_reach(maximum_exploration_state)]
     if unreachable_locations:
         def forbid_important_item_rule(item: Item):
