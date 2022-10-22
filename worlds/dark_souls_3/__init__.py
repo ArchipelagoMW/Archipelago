@@ -2,9 +2,11 @@
 import json
 import os
 
+from .Items import DarkSouls3Item
+from .Locations import DarkSouls3Location
 from .Options import dark_souls_options
-from .data.items_data import weapons_upgrade_5_table, weapons_upgrade_10_table, item_dictionary_table, key_items_list
-from .data.locations_data import location_dictionary_table, cemetery_of_ash_table, fire_link_shrine_table, \
+from .data.items_data import weapons_upgrade_5_table, weapons_upgrade_10_table, item_dictionary, key_items_list
+from .data.locations_data import location_dictionary, cemetery_of_ash_table, fire_link_shrine_table, \
     high_wall_of_lothric, \
     undead_settlement_table, road_of_sacrifice_table, consumed_king_garden_table, cathedral_of_the_deep_table, \
     farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table, \
@@ -53,8 +55,9 @@ class DarkSouls3World(World):
     web = DarkSouls3Web()
     data_version = 3
     base_id = 100000
-    item_name_to_id = {name: id for id, name in enumerate(item_dictionary_table, base_id)}
-    location_name_to_id = {name: id for id, name in enumerate(location_dictionary_table, base_id)}
+    required_client_version = (0, 3, 6)
+    item_name_to_id = DarkSouls3Item.get_name_to_id()
+    location_name_to_id = DarkSouls3Location.get_name_to_id()
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -239,18 +242,18 @@ class DarkSouls3World(World):
 
     def generate_output(self, output_directory: str):
         # Depending on the specified option, modify items hexadecimal value to add an upgrade level
-        item_dictionary = item_dictionary_table.copy()
+        item_dictionary_copy = item_dictionary.copy()
         if self.world.randomize_weapons_level[self.player]:
             # Randomize some weapons upgrades
             for name in weapons_upgrade_5_table.keys():
                 if self.world.random.randint(0, 100) < 33:
                     value = self.world.random.randint(1, 5)
-                    item_dictionary[name] += value
+                    item_dictionary_copy[name] += value
 
             for name in weapons_upgrade_10_table.keys():
                 if self.world.random.randint(0, 100) < 33:
                     value = self.world.random.randint(1, 10)
-                    item_dictionary[name] += value
+                    item_dictionary_copy[name] += value
 
         # Create the mandatory lists to generate the player's output file
         items_id = []
@@ -264,7 +267,7 @@ class DarkSouls3World(World):
                 items_address.append(item_dictionary[location.item.name])
 
             if location.player == self.player:
-                locations_address.append(location_dictionary_table[location.name])
+                locations_address.append(location_dictionary[location.name])
                 locations_id.append(location.address)
                 if location.item.player == self.player:
                     locations_target.append(item_dictionary[location.item.name])
@@ -291,11 +294,3 @@ class DarkSouls3World(World):
         filename = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}.json"
         with open(os.path.join(output_directory, filename), 'w') as outfile:
             json.dump(data, outfile)
-
-
-class DarkSouls3Location(Location):
-    game: str = "Dark Souls III"
-
-
-class DarkSouls3Item(Item):
-    game: str = "Dark Souls III"
