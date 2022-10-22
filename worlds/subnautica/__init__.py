@@ -47,9 +47,11 @@ class SubnauticaWorld(World):
     creatures_to_scan: List[str]
 
     def generate_early(self) -> None:
-        self.world.early_items[self.player].value["Seaglide Fragment"] = min(
-            2 if "Seaglide Fragment" not in self.world.early_items[self.player].value else
-            self.world.early_items[self.player]["Seaglide Fragment"].value, 2)
+        if "Seaglide Fragment" not in self.world.early_items[self.player]:
+            if self.world.early_items[self.player].value == {}:
+                # create fresh dict that is not shared with other blank dict options
+                self.world.early_items[self.player].value = {}
+            self.world.early_items[self.player].value["Seaglide Fragment"] = 2
 
         scan_option: Options.AggressiveScanLogic = self.world.creature_scan_logic[self.player]
         creature_pool = scan_option.get_pool()
