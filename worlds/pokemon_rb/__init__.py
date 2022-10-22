@@ -113,7 +113,6 @@ class PokemonRedBlueWorld(World):
                     location.original_item in item_groups["Unique"]:
                 start_inventory[location.original_item] -= 1
                 item = self.create_filler()
-                print(f"Created {item} instead of {location.original_item}")
             else:
                 item = self.create_item(location.original_item)
             if location.event:
@@ -246,7 +245,8 @@ class PokemonRedBlueWorld(World):
 
     def get_filler_item_name(self) -> str:
         return self.world.random.choice([item for item in item_table if item_table[item].classification in
-                                         [ItemClassification.filler, ItemClassification.trap]])
+                                         [ItemClassification.filler, ItemClassification.trap] and item not in
+                                         item_groups["Vending Machine Drinks"]])
 
 
 class PokemonRBItem(Item):
