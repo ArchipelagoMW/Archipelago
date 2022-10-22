@@ -154,11 +154,12 @@ def main(args=None, callback=ERmain):
     # sort dict for consistent results across platforms:
     weights_cache = {key: value for key, value in sorted(weights_cache.items())}
     for filename, yaml_data in weights_cache.items():
-        for yaml in yaml_data:
-            print(f"P{player_id} Weights: {filename} >> "
-                  f"{get_choice('description', yaml, 'No description specified')}")
-            player_files[player_id] = filename
-            player_id += 1
+        if filename not in {args.meta_file_path, args.weights_file_path}:
+            for yaml in yaml_data:
+                print(f"P{player_id} Weights: {filename} >> "
+                      f"{get_choice('description', yaml, 'No description specified')}")
+                player_files[player_id] = filename
+                player_id += 1
 
     args.multi = max(player_id - 1, args.multi)
     print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed} with plando: "
