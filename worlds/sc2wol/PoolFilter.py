@@ -170,11 +170,11 @@ class ValidInventory:
                     elif units_always_have_upgrades:
                         # Lock all associated items if any of them cannot be removed
                         transient_items += items_to_remove
-                        locked_items += transient_items
-                        self.logical_inventory = self.logical_inventory.union({
-                            transient_item.name for transient_item in transient_items
-                            if item.classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing)
-                        })
+                        for transient_item in transient_items:
+                            if transient_item not in inventory and transient_item not in locked_items:
+                                locked_items += transient_item
+                            if transient_item.classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing):
+                                self.logical_inventory.add(transient_item.name)
                         break
             else:
                 attempt_removal(item)
