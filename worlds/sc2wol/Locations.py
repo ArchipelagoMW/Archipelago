@@ -53,13 +53,13 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Evacuation", "Evacuation: Third Chysalis", SC2WOL_LOC_ID_OFFSET + 403,
                      lambda state: state._sc2wol_has_common_unit(world, player)),
         LocationData("Outbreak", "Outbreak: Victory", SC2WOL_LOC_ID_OFFSET + 500,
-                     lambda state: state._sc2wol_defense_rating(world, player, True) >= 4 and
+                     lambda state: state._sc2wol_defense_rating(world, player, True, False) >= 4 and
                                    (state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player))),
         LocationData("Outbreak", "Outbreak: Left Infestor", SC2WOL_LOC_ID_OFFSET + 501,
-                     lambda state: state._sc2wol_defense_rating(world, player, True) >= 2 and
+                     lambda state: state._sc2wol_defense_rating(world, player, True, False) >= 2 and
                                    (state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player))),
         LocationData("Outbreak", "Outbreak: Right Infestor", SC2WOL_LOC_ID_OFFSET + 502,
-                     lambda state: state._sc2wol_defense_rating(world, player, True) >= 2 and
+                     lambda state: state._sc2wol_defense_rating(world, player, True, False) >= 2 and
                                    (state._sc2wol_has_common_unit(world, player) or state.has("Reaper", player))),
         LocationData("Safe Haven", "Safe Haven: Victory", SC2WOL_LOC_ID_OFFSET + 600,
                      lambda state: state._sc2wol_has_common_unit(world, player) and
@@ -251,10 +251,10 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
                      lambda state: state._sc2wol_has_protoss_common_units(world, player)),
         LocationData("Gates of Hell", "Gates of Hell: Victory", SC2WOL_LOC_ID_OFFSET + 2600,
                      lambda state: state._sc2wol_has_competent_comp(world, player) and
-                                   state._sc2wol_defense_rating(world, player, True) > 5),
+                                   state._sc2wol_defense_rating(world, player, True) > 6),
         LocationData("Gates of Hell", "Gates of Hell: Large Army", SC2WOL_LOC_ID_OFFSET + 2601,
                      lambda state: state._sc2wol_has_competent_comp(world, player) and
-                                   state._sc2wol_defense_rating(world, player, True) > 5),
+                                   state._sc2wol_defense_rating(world, player, True) > 6),
         LocationData("Belly of the Beast", "Belly of the Beast: Victory", SC2WOL_LOC_ID_OFFSET + 2700),
         LocationData("Belly of the Beast", "Belly of the Beast: First Charge", SC2WOL_LOC_ID_OFFSET + 2701),
         LocationData("Belly of the Beast", "Belly of the Beast: Second Charge", SC2WOL_LOC_ID_OFFSET + 2702),

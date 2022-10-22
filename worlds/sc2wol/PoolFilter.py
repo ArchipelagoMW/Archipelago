@@ -187,7 +187,7 @@ class ValidInventory:
         self._sc2wol_has_air_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_air_anti_air(self, world, player)
         self._sc2wol_has_competent_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_competent_anti_air(self, world, player)
         self._sc2wol_has_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_anti_air(self, world, player)
-        self._sc2wol_defense_rating = lambda world, player, zerg_enemy: SC2WoLLogic._sc2wol_defense_rating(self, world, player, zerg_enemy)
+        self._sc2wol_defense_rating = lambda world, player, zerg_enemy, air_enemy=False: SC2WoLLogic._sc2wol_defense_rating(self, world, player, zerg_enemy, air_enemy)
         self._sc2wol_has_competent_comp = lambda world, player: SC2WoLLogic._sc2wol_has_competent_comp(self, world, player)
         self._sc2wol_has_train_killers = lambda world, player: SC2WoLLogic._sc2wol_has_train_killers(self, world, player)
         self._sc2wol_able_to_rescue = lambda world, player: SC2WoLLogic._sc2wol_able_to_rescue(self, world, player)

@@ -24,7 +24,7 @@ class SC2WoLLogic(LogicMixin):
                 or self._sc2wol_has_competent_anti_air(world, player) \
                 or get_option_value(world, player, 'required_tactics') > 0 and self.has_any({'Ghost', 'Spectre'}, player)
 
-    def _sc2wol_defense_rating(self, world: MultiWorld, player: int, zerg_enemy: bool) -> bool:
+    def _sc2wol_defense_rating(self, world: MultiWorld, player: int, zerg_enemy: bool, air_enemy: bool = True) -> bool:
         defense_score = sum((defense_ratings[item] for item in defense_ratings if self.has(item, player)))
         if self.has_any({'Marine', 'Marauder'}, player) and self.has('Bunker', player):
             defense_score += 3
@@ -32,6 +32,8 @@ class SC2WoLLogic(LogicMixin):
             defense_score += sum((zerg_defense_ratings[item] for item in zerg_defense_ratings if self.has(item, player)))
             if self.has('Firebat', player) and self.has('Bunker', player):
                 defense_score += 2
+        if not air_enemy and self.has('Missile Turret', player):
+            defense_score -= defense_ratings['Missile Turret']
         # Advanced Tactics bumps defense rating requirements down by 2
         if get_option_value(world, player, 'required_tactics') > 0:
             defense_score += 2
