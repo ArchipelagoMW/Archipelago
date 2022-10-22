@@ -796,6 +796,10 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
                 raise EntranceShuffleError('Goron City Shop not accessible as adult')
             if world.get_region('ZD Shop', player) not in all_state.adult_reachable_regions[player]:
                 raise EntranceShuffleError('Zora\'s Domain Shop not accessible as adult')
+        if ootworld.open_forest == 'closed':
+            # Ensure that Kokiri Shop is reachable as child with no items
+            if world.get_region('KF Kokiri Shop', player) not in none_state.child_reachable_regions[player]:
+                raise EntranceShuffleError('Kokiri Forest Shop not accessible as child in closed forest')
 
 
 
