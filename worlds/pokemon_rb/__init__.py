@@ -99,6 +99,7 @@ class PokemonRedBlueWorld(World):
         process_pokemon_data(self)
 
     def create_items(self) -> None:
+        start_inventory = self.world.start_inventory[self.player].value.copy()
         locations = [location for location in location_data if location.type == "Item"]
         item_pool = []
         for location in locations:
@@ -108,7 +109,13 @@ class PokemonRedBlueWorld(World):
                 continue
             if location.name == "Celadon City - Mansion Lady" and not self.world.tea[self.player].value:
                 continue
-            item = self.create_item(location.original_item)
+            if location.original_item in self.world.start_inventory[self.player].value and \
+                    location.original_item in item_groups["Unique"]:
+                start_inventory[location.original_item] -= 1
+                item = self.create_filler()
+                print(f"Created {item} instead of {location.original_item}")
+            else:
+                item = self.create_item(location.original_item)
             if location.event:
                 self.world.get_location(location.name, self.player).place_locked_item(item)
             elif ("Badge" not in item.name or self.world.badgesanity[self.player].value) and \
