@@ -2,6 +2,7 @@ import logging
 import threading
 import copy
 from collections import Counter, deque
+from string import printable
 
 logger = logging.getLogger("Ocarina of Time")
 
@@ -117,11 +118,6 @@ class OOTWorld(World):
         rom = Rom(file=get_options()['oot_options']['rom_file'])
 
     def generate_early(self):
-        # Player name MUST be at most 16 bytes ascii-encoded, otherwise won't write to ROM correctly
-        if len(bytes(self.world.get_player_name(self.player), 'ascii')) > 16:
-            raise Exception(
-                f"OoT: Player {self.player}'s name ({self.world.get_player_name(self.player)}) must be ASCII-compatible")
-
         self.parser = Rule_AST_Transformer(self, self.player)
 
         for (option_name, option) in oot_options.items():
@@ -142,6 +138,7 @@ class OOTWorld(World):
         self.starting_items = Counter()
         self.starting_songs = False  # whether starting_items contains a song
         self.file_hash = [self.world.random.randint(0, 31) for i in range(5)]
+        self.connect_name = ''.join(self.world.random.choices(printable, k=16))
 
         self.item_name_groups = {
             "medallions": {"Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion",
@@ -942,6 +939,9 @@ class OOTWorld(World):
                 autoworld.hint_data_available.set()
 
     def modify_multidata(self, multidata: dict):
+
+        # Replace connect name
+        multidata['connect_names'][self.connect_name] = multidata['connect_names'][self.world.player_name[self.player]]
 
         hint_entrances = set()
         for entrance in entrance_shuffle_table:
