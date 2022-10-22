@@ -234,6 +234,8 @@ class OOTWorld(World):
 
         # Set internal names used by the OoT generator
         self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld']
+        self.trials_random = self.world.trials[self.player].randomized
+        self.mq_dungeons_random = self.world.mq_dungeons[self.player].randomized
 
         # Hint stuff
         self.clearer_hints = True  # this is being enforced since non-oot items do not have non-clear hint text
