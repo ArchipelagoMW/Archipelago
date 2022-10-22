@@ -258,13 +258,13 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     usefulitempool: typing.List[Item] = []
     filleritempool: typing.List[Item] = []
 
-    early_items_count = {}
+    early_items_count: typing.Dict[typing.Tuple[str, int], int] = {}
     for player in world.player_ids:
         for item, count in world.early_items[player].value.items():
             early_items_count[(item, player)] = count
     if early_items_count:
-        early_locations = []
-        early_priority_locations = []
+        early_locations: typing.List[Location] = []
+        early_priority_locations: typing.List[Location] = []
         for loc in reversed(fill_locations):
             if loc.can_reach(world.state):
                 if loc.progress_type == LocationProgressType.PRIORITY:
@@ -273,8 +273,8 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
                     early_locations.append(loc)
                 fill_locations.remove(loc)
 
-        early_prog_items = []
-        early_rest_items = []
+        early_prog_items: typing.List[Item] = []
+        early_rest_items: typing.List[Item] = []
         for item in reversed(itempool):
             if (item.name, item.player) in early_items_count:
                 if item.advancement:
@@ -309,8 +309,6 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
 
     locations: typing.Dict[LocationProgressType, typing.List[Location]] = {
         loc_type: [] for loc_type in LocationProgressType}
-
-
 
     for loc in fill_locations:
         locations[loc.progress_type].append(loc)
