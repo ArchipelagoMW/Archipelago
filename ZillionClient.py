@@ -317,7 +317,7 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
                                             asyncio.sleep(6)
                                         ), return_when=asyncio.FIRST_COMPLETED)  # to not spam connect packets
                             else:  # not correct seed name
-                                logger.info("incorrect seed - did you mix up roms?")
+                                log_no_spam("incorrect seed - did you mix up roms?")
                         else:  # no room info
                             # If we get here, it looks like `RoomInfo` packet got lost
                             log_no_spam("waiting for room info from server...")
