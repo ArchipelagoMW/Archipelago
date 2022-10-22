@@ -29,7 +29,7 @@ from .SaveContext import SaveContext
 from Utils import get_options, output_path
 from BaseClasses import MultiWorld, CollectionState, RegionType, Tutorial
 from Options import Range, Toggle, OptionList
-from Fill import fill_restrictive, FillError
+from Fill import fill_restrictive, fast_fill, FillError
 from worlds.generic.Rules import exclusion_rules
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
 
@@ -756,21 +756,23 @@ class OOTWorld(World):
         # Place shop items
         # fast fill will fail because there is some logic on the shop items. we'll gather them up and place the shop items
         if self.shopsanity != 'off':
-            shop_items = list(
-                filter(lambda item: item.player == self.player and item.type == 'Shop', self.world.itempool))
+            shop_prog = list(filter(lambda item: item.player == self.player and item.type == 'Shop' 
+                and item.advancement, self.world.itempool))
+            shop_junk = list(filter(lambda item: item.player == self.player and item.type == 'Shop' 
+                and not item.advancement, self.world.itempool))
             shop_locations = list(
                 filter(lambda location: location.type == 'Shop' and location.name not in self.shop_prices,
                        self.world.get_unfilled_locations(player=self.player)))
-            shop_items.sort(key=lambda item: {
-                'Buy Deku Shield': 3 * int(self.open_forest == 'closed'),
-                'Buy Goron Tunic': 2,
-                'Buy Zora Tunic': 2
-            }.get(item.name,
-                  int(item.advancement)))  # place Deku Shields if needed, then tunics, then other advancement, then junk
+            shop_prog.sort(key=lambda item: {
+                'Buy Deku Shield': 2 * int(self.open_forest == 'closed'),
+                'Buy Goron Tunic': 1,
+                'Buy Zora Tunic': 1,
+            }.get(item.name, 0))  # place Deku Shields if needed, then tunics, then other advancement
             self.world.random.shuffle(shop_locations)
-            for item in shop_items:
+            for item in shop_prog + shop_junk:
                 self.world.itempool.remove(item)
-            fill_restrictive(self.world, self.world.get_all_state(False), shop_locations, shop_items, True, True)
+            fill_restrictive(self.world, self.world.get_all_state(False), shop_locations, shop_prog, True, True)
+            fast_fill(self.world, shop_junk, shop_locations)
         set_shop_rules(self)  # sets wallet requirements on shop items, must be done after they are filled
 
         # If skip child zelda is active and Song from Impa is unfilled, put a local giveable item into it.
