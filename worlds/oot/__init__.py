@@ -182,6 +182,22 @@ class OOTWorld(World):
         if self.triforce_hunt:
             self.shuffle_ganon_bosskey = 'remove'
 
+        # If songs/keys locked to own world by settings, add them to local_items
+        local_types = []
+        if self.shuffle_song_items != 'any':
+            local_types.append('Song')
+        if self.shuffle_mapcompass != 'keysanity':
+            local_types += ['Map', 'Compass']
+        if self.shuffle_smallkeys != 'keysanity':
+            local_types.append('SmallKey')
+        if self.shuffle_fortresskeys != 'keysanity':
+            local_types.append('FortressSmallKey')
+        if self.shuffle_bosskeys != 'keysanity':
+            local_types.append('BossKey')
+        if self.shuffle_ganon_bosskey != 'keysanity':
+            local_types.append('GanonBossKey')
+        self.world.local_items[self.player].value |= set(name for name, data in item_table.items() if data[0] in local_types)
+
         # Determine skipped trials in GT
         # This needs to be done before the logic rules in GT are parsed
         trial_list = ['Forest', 'Fire', 'Water', 'Spirit', 'Shadow', 'Light']
