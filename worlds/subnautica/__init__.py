@@ -48,9 +48,6 @@ class SubnauticaWorld(World):
 
     def generate_early(self) -> None:
         if "Seaglide Fragment" not in self.world.early_items[self.player]:
-            if self.world.early_items[self.player].value == {}:
-                # create fresh dict that is not shared with other blank dict options
-                self.world.early_items[self.player].value = {}
             self.world.early_items[self.player].value["Seaglide Fragment"] = 2
 
         scan_option: Options.AggressiveScanLogic = self.world.creature_scan_logic[self.player]
