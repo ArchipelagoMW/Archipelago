@@ -845,7 +845,7 @@ class OOTWorld(World):
                     elif option == 'any_dungeon':
                         condition = lambda location: location.parent_region.dungeon is not None
                     locations += filter(condition, multiworld.get_unfilled_locations(player=player))
-                    
+
             return locations
 
         special_fill_types = ['Song', 'GanonBossKey', 'BossKey', 'SmallKey', 'HideoutSmallKey', 'Map', 'Compass']
@@ -982,7 +982,7 @@ class OOTWorld(World):
                             if player in barren_hint_players:
                                 hint_area = get_hint_area(loc)
                                 items_by_region[player][hint_area]['weight'] += 1
-                                if loc.item.advancement:
+                                if loc.item.advancement or loc.item.useful:
                                     items_by_region[player][hint_area]['is_barren'] = False
                             if player in woth_hint_players and loc.item.advancement:
                                 state = CollectionState(world)
