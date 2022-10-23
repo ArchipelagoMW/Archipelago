@@ -6,7 +6,7 @@ from .Items import DarkSouls3Item
 from .Locations import DarkSouls3Location
 from .Options import dark_souls_options
 from .data.items_data import weapons_upgrade_5_table, weapons_upgrade_10_table, item_dictionary, key_items_list
-from .data.locations_data import location_dictionary, cemetery_of_ash_table, fire_link_shrine_table, \
+from .data.locations_data import location_dictionary, fire_link_shrine_table, \
     high_wall_of_lothric, \
     undead_settlement_table, road_of_sacrifice_table, consumed_king_garden_table, cathedral_of_the_deep_table, \
     farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table, \
@@ -82,7 +82,6 @@ class DarkSouls3World(World):
         self.world.regions.append(menu_region)
 
         # Create all Vanilla regions of Dark Souls III
-        cemetery_of_ash_region = self.create_region("Cemetery Of Ash", cemetery_of_ash_table)
         firelink_shrine_region = self.create_region("Firelink Shrine", fire_link_shrine_table)
         firelink_shrine_bell_tower_region = self.create_region("Firelink Shrine Bell Tower",
                                                                firelink_shrine_bell_tower_table)
@@ -107,9 +106,7 @@ class DarkSouls3World(World):
 
         # Create the entrance to connect those regions
         menu_region.exits.append(Entrance(self.player, "New Game", menu_region))
-        self.world.get_entrance("New Game", self.player).connect(cemetery_of_ash_region)
-        cemetery_of_ash_region.exits.append(Entrance(self.player, "Goto Firelink Shrine", cemetery_of_ash_region))
-        self.world.get_entrance("Goto Firelink Shrine", self.player).connect(firelink_shrine_region)
+        self.world.get_entrance("New Game", self.player).connect(firelink_shrine_region)
         firelink_shrine_region.exits.append(Entrance(self.player, "Goto High Wall of Lothric",
                                                      firelink_shrine_region))
         firelink_shrine_region.exits.append(Entrance(self.player, "Goto Kiln Of The First Flame",
