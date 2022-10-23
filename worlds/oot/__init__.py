@@ -1,6 +1,7 @@
 import logging
 import threading
 import copy
+import typing
 from collections import Counter, deque
 from string import printable
 
@@ -16,7 +17,7 @@ from .Rules import set_rules, set_shop_rules, set_entrances_based_rules
 from .RuleParser import Rule_AST_Transformer
 from .Options import oot_options
 from .Utils import data_path, read_json
-from .LocationList import business_scrubs, set_drop_location_names
+from .LocationList import business_scrubs, set_drop_location_names, dungeon_song_locations
 from .DungeonList import dungeon_table, create_dungeons
 from .LogicTricks import normalized_name_tricks
 from .Rom import Rom
@@ -136,7 +137,7 @@ class OOTWorld(World):
         self.regions = []  # internal cache of regions for this world, used later
         self.remove_from_start_inventory = []  # some items will be precollected but not in the inventory
         self.starting_items = Counter()
-        self.starting_songs = False  # whether starting_items contains a song
+        self.songs_as_items = False
         self.file_hash = [self.world.random.randint(0, 31) for i in range(5)]
         self.connect_name = ''.join(self.world.random.choices(printable, k=16))
 
@@ -188,12 +189,21 @@ class OOTWorld(World):
         if self.shuffle_smallkeys != 'keysanity':
             local_types.append('SmallKey')
         if self.shuffle_fortresskeys != 'keysanity':
-            local_types.append('FortressSmallKey')
+            local_types.append('HideoutSmallKey')
         if self.shuffle_bosskeys != 'keysanity':
             local_types.append('BossKey')
         if self.shuffle_ganon_bosskey != 'keysanity':
             local_types.append('GanonBossKey')
         self.world.local_items[self.player].value |= set(name for name, data in item_table.items() if data[0] in local_types)
+
+        # If any songs are itemlinked, set songs_as_items
+        for group in self.world.groups.values():
+            if self.songs_as_items or group['game'] != self.game or self.player not in group['players']:
+                continue
+            for item_name in group['item_pool']:
+                if oot_is_item_of_type(item_name, 'Song'):
+                    self.songs_as_items = True
+                    break
 
         # Determine skipped trials in GT
         # This needs to be done before the logic rules in GT are parsed
@@ -516,7 +526,7 @@ class OOTWorld(World):
                 else:
                     self.starting_items[item.name] += 1
                     if item.type == 'Song':
-                        self.starting_songs = True
+                        self.songs_as_items = True
                     # Call the junk fill and get a replacement
                     if item in self.itempool:
                         self.itempool.remove(item)
@@ -609,24 +619,6 @@ class OOTWorld(World):
             loc.parent_region.locations.remove(loc)
 
     def pre_fill(self):
-
-        # relevant for both dungeon item fill and song fill
-        dungeon_song_locations = [
-            "Deku Tree Queen Gohma Heart",
-            "Dodongos Cavern King Dodongo Heart",
-            "Jabu Jabus Belly Barinade Heart",
-            "Forest Temple Phantom Ganon Heart",
-            "Fire Temple Volvagia Heart",
-            "Water Temple Morpha Heart",
-            "Shadow Temple Bongo Bongo Heart",
-            "Spirit Temple Twinrova Heart",
-            "Song from Impa",
-            "Sheik in Ice Cavern",
-            # only one exists
-            "Bottom of the Well Lens of Truth Chest", "Bottom of the Well MQ Lens of Truth Chest",
-            # only one exists
-            "Gerudo Training Ground Maze Path Final Chest", "Gerudo Training Ground MQ Ice Arrows Chest",
-        ]
 
         def get_names(items):
             for item in items:
@@ -818,8 +810,74 @@ class OOTWorld(World):
                 loc.address = None
 
     # Handle item-linked dungeon items and songs
-    def stage_pre_fill(cls):
-        pass
+    @classmethod
+    def stage_pre_fill(cls, multiworld: MultiWorld):
+
+        def gather_locations(item_type: str, players: set[int], dungeon: str = '') -> typing.Optional[list[OOTLocation]]:
+            type_to_setting = {
+                'Song': 'shuffle_song_items',
+                'Map': 'shuffle_mapcompass',
+                'Compass': 'shuffle_mapcompass',
+                'SmallKey': 'shuffle_smallkeys',
+                'BossKey': 'shuffle_bosskeys',
+                'HideoutSmallKey': 'shuffle_fortresskeys',
+                'GanonBossKey': 'shuffle_ganon_bosskey',
+            }
+            fill_opts = {p: getattr(multiworld.worlds[p], type_to_setting[item_type]) for p in players}
+            locations = []
+            if item_type == 'Song':
+                if any(map(lambda v: v == 'any', fill_opts.values())):
+                    return None
+                for player, option in fill_opts.items():
+                    if option == 'song':
+                        condition = lambda location: location.type == 'Song'
+                    elif option == 'dungeon':
+                        condition = lambda location: location.name in dungeon_song_locations
+                    locations += filter(condition, multiworld.get_unfilled_locations(player=player))
+            else:
+                if any(map(lambda v: v == 'keysanity', fill_opts.values())):
+                    return None
+                for player, option in fill_opts.items():
+                    if option == 'dungeon':
+                        condition = lambda location: getattr(location.parent_region.dungeon, 'name', None) == dungeon
+                    elif option == 'overworld':
+                        condition = lambda location: location.parent_region.dungeon is None
+                    elif option == 'any_dungeon':
+                        condition = lambda location: location.parent_region.dungeon is not None
+                    locations += filter(condition, multiworld.get_unfilled_locations(player=player))
+                    
+            return locations
+
+        special_fill_types = ['Song', 'GanonBossKey', 'BossKey', 'SmallKey', 'HideoutSmallKey', 'Map', 'Compass']
+        for group_id, group in multiworld.groups.items():
+            if group['game'] != cls.game:
+                continue
+            group_items = [item for item in multiworld.itempool if item.player == group_id]
+            for fill_stage in special_fill_types:
+                group_stage_items = list(filter(lambda item: oot_is_item_of_type(item, fill_stage), group_items))
+                if not group_stage_items:
+                    continue
+                if fill_stage in ['Song', 'GanonBossKey', 'HideoutSmallKey']:
+                    # No need to subdivide by dungeon name
+                    locations = gather_locations(fill_stage, group['players'])
+                    if isinstance(locations, list):
+                        for item in group_stage_items:
+                            multiworld.itempool.remove(item)
+                        multiworld.random.shuffle(locations)
+                        fill_restrictive(multiworld, multiworld.get_all_state(False), locations, group_stage_items,
+                            single_player_placement=False, lock=True)
+                else:
+                    # Perform the fill task once per dungeon
+                    for dungeon_info in dungeon_table:
+                        dungeon_name = dungeon_info['name']
+                        locations = gather_locations(fill_stage, group['players'], dungeon=dungeon_name)
+                        if isinstance(locations, list):
+                            group_dungeon_items = list(filter(lambda item: dungeon_name in item.name, group_stage_items))
+                            for item in group_dungeon_items:
+                                multiworld.itempool.remove(item)
+                            multiworld.random.shuffle(locations)
+                            fill_restrictive(multiworld, multiworld.get_all_state(False), locations, group_dungeon_items,
+                                single_player_placement=False, lock=True)
 
     def generate_output(self, output_directory: str):
         if self.hints != 'none':

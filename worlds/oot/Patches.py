@@ -168,7 +168,7 @@ def patch_rom(world, rom):
     rom.write_bytes(0x1FC0CF8, Block_code)
 
     # songs as items flag
-    songs_as_items = (world.shuffle_song_items != 'song') or world.starting_songs
+    songs_as_items = (world.shuffle_song_items != 'song') or world.songs_as_items
 
     if songs_as_items:
         rom.write_byte(rom.sym('SONGS_AS_ITEMS'), 1)
