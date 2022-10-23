@@ -304,7 +304,8 @@ class ZillionWorld(World):
         zz_patcher.all_fixes_and_options(zz_options)
         zz_patcher.set_external_item_interface(zz_options.start_char, zz_options.max_level)
         zz_patcher.set_multiworld_items(multi_items)
-        zz_patcher.set_rom_to_ram_data(self.world.player_name[self.player].replace(' ', '_').encode())
+        game_id = self.world.player_name[self.player].encode() + b'\x00' + self.world.seed_name[-6:].encode()
+        zz_patcher.set_rom_to_ram_data(game_id)
 
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.
