@@ -66,7 +66,7 @@ class LegacyWorld(World):
 
     def _create_items(self, name: str):
         data = item_table[name]
-        return [self.create_item(name)] * data.quantity
+        return [self.create_item(name) for _ in range(data.quantity)]
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
@@ -89,20 +89,20 @@ class LegacyWorld(World):
 
         # Blueprints
         if self.world.progressive_blueprints[self.player]:
-            itempool += [self.create_item(ItemName.progressive_blueprints)] * 15
+            itempool += [self.create_item(ItemName.progressive_blueprints) for _ in range(15)]
         else:
             for item in blueprints_table:
                 itempool += self._create_items(item)
 
         # Check Pool settings to add a certain amount of these items.
-        itempool += [self.create_item(ItemName.health)] * int(self.world.health_pool[self.player])
-        itempool += [self.create_item(ItemName.mana)] * int(self.world.mana_pool[self.player])
-        itempool += [self.create_item(ItemName.attack)] * int(self.world.attack_pool[self.player])
-        itempool += [self.create_item(ItemName.magic_damage)] * int(self.world.magic_damage_pool[self.player])
-        itempool += [self.create_item(ItemName.armor)] * int(self.world.armor_pool[self.player])
-        itempool += [self.create_item(ItemName.equip)] * int(self.world.equip_pool[self.player])
-        itempool += [self.create_item(ItemName.crit_chance)] * int(self.world.crit_chance_pool[self.player])
-        itempool += [self.create_item(ItemName.crit_damage)] * int(self.world.crit_damage_pool[self.player])
+        itempool += [self.create_item(ItemName.health) for _ in range(self.world.health_pool[self.player])]
+        itempool += [self.create_item(ItemName.mana) for _ in range(self.world.mana_pool[self.player])]
+        itempool += [self.create_item(ItemName.attack) for _ in range(self.world.attack_pool[self.player])]
+        itempool += [self.create_item(ItemName.magic_damage) for _ in range(self.world.magic_damage_pool[self.player])]
+        itempool += [self.create_item(ItemName.armor) for _ in range(self.world.armor_pool[self.player])]
+        itempool += [self.create_item(ItemName.equip) for _ in range(self.world.equip_pool[self.player])]
+        itempool += [self.create_item(ItemName.crit_chance) for _ in range(self.world.crit_chance_pool[self.player])]
+        itempool += [self.create_item(ItemName.crit_damage) for _ in range(self.world.crit_damage_pool[self.player])]
 
         classes = self.world.available_classes[self.player]
         if "Dragon" in classes:
@@ -153,12 +153,12 @@ class LegacyWorld(World):
         if self.world.architect[self.player] == "start_unlocked":
             self.world.push_precollected(self.world.create_item(ItemName.architect, self.player))
         elif self.world.architect[self.player] != "disabled":
-            itempool += [self.create_item(ItemName.architect)]
+            itempool.append(self.create_item(ItemName.architect))
 
         # Fill item pool with the remaining
         for _ in range(len(itempool), total_required_locations):
             item = self.world.random.choice(list(misc_items_table.keys()))
-            itempool += [self.create_item(item)]
+            itempool.append(self.create_item(item))
 
         self.world.itempool += itempool
 

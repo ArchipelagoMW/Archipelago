@@ -41,7 +41,7 @@ def item_counts(cs: CollectionState, p: int) -> Tuple[Tuple[str, int], ...]:
     return tuple((item_name, cs.item_count(item_name, p)) for item_name in item_name_to_id)
 
 
-_logic_cache: Dict[int, Tuple[_Counter[Tuple[str, int]], FrozenSet[Location]]] = {}
+LogicCacheType = Dict[int, Tuple[_Counter[Tuple[str, int]], FrozenSet[Location]]]
 
 
 def cs_to_zz_locs(cs: CollectionState, p: int, zz_r: Randomizer, id_to_zz_item: Dict[int, Item]) -> FrozenSet[Location]:
@@ -50,13 +50,14 @@ def cs_to_zz_locs(cs: CollectionState, p: int, zz_r: Randomizer, id_to_zz_item: 
     returns frozenset of accessible zilliandomizer locations
     """
     # caching this function because it would be slow
+    logic_cache: LogicCacheType = getattr(cs.world, "zillion_logic_cache", {})
     _hash = set_randomizer_locs(cs, p, zz_r)
     counts = item_counts(cs, p)
     _hash += hash(counts)
 
-    if _hash in _logic_cache and _logic_cache[_hash][0] == cs.prog_items:
+    if _hash in logic_cache and logic_cache[_hash][0] == cs.prog_items:
         # print("cache hit")
-        return _logic_cache[_hash][1]
+        return logic_cache[_hash][1]
 
     # print("cache miss")
     have_items: List[Item] = []
@@ -71,10 +72,6 @@ def cs_to_zz_locs(cs: CollectionState, p: int, zz_r: Randomizer, id_to_zz_item: 
     tr = frozenset(zz_r.get_locations(have_req))
 
     # save result in cache
-    _logic_cache[_hash] = (cs.prog_items.copy(), tr)
+    logic_cache[_hash] = (cs.prog_items.copy(), tr)
 
     return tr
-
-
-def clear_cache() -> None:
-    _logic_cache.clear()

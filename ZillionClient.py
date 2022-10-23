@@ -1,7 +1,7 @@
 import asyncio
 import base64
 import platform
-from typing import Any, Callable, Coroutine, Dict, Optional, Type, cast
+from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, Type, cast
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, gui_enabled, \
@@ -54,6 +54,8 @@ class ZillionContext(CommonContext):
     start_char: Chars = "JJ"
     rescues: Dict[int, RescueInfo] = {}
     loc_mem_to_id: Dict[int, int] = {}
+    got_room_info: asyncio.Event
+    """ flag for connected to server """
     got_slot_data: asyncio.Event
     """ serves as a flag for whether I am logged in to the server """
 
@@ -75,6 +77,7 @@ class ZillionContext(CommonContext):
         super().__init__(server_address, password)
         self.from_game = asyncio.Queue()
         self.to_game = asyncio.Queue()
+        self.got_room_info = asyncio.Event()
         self.got_slot_data = asyncio.Event()
         self.ui_toggle_map = lambda: None
 
@@ -225,6 +228,9 @@ class ZillionContext(CommonContext):
                 logger.info("received door data from server")
                 doors = base64.b64decode(doors_b64)
                 self.to_game.put_nowait(events.DoorEventToGame(doors))
+        elif cmd == "RoomInfo":
+            self.seed_name = args["seed_name"]
+            self.got_room_info.set()
 
     def process_from_game_queue(self) -> None:
         if self.from_game.qsize():
@@ -278,6 +284,24 @@ class ZillionContext(CommonContext):
             self.next_item = len(self.items_received)
 
 
+def name_seed_from_ram(data: bytes) -> Tuple[str, str]:
+    """ returns player name, and end of seed string """
+    if len(data) == 0:
+        # no connection to game
+        return "", "xxx"
+    null_index = data.find(b'\x00')
+    if null_index == -1:
+        logger.warning(f"invalid game id in rom {data}")
+        null_index = len(data)
+    name = data[:null_index].decode()
+    null_index_2 = data.find(b'\x00', null_index + 1)
+    if null_index_2 == -1:
+        null_index_2 = len(data)
+    seed_name = data[null_index + 1:null_index_2].decode()
+
+    return name, seed_name
+
+
 async def zillion_sync_task(ctx: ZillionContext) -> None:
     logger.info("started zillion sync task")
 
@@ -303,47 +327,58 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
     with Memory(ctx.from_game, ctx.to_game) as memory:
         while not ctx.exit_event.is_set():
             ram = await memory.read()
-            name = memory.get_player_name(ram).decode()
+            game_id = memory.get_rom_to_ram_data(ram)
+            name, seed_end = name_seed_from_ram(game_id)
             if len(name):
                 if name == ctx.auth:
                     # this is the name we know
                     if ctx.server and ctx.server.socket:  # type: ignore
-                        if memory.have_generation_info():
-                            log_no_spam("everything connected")
-                            await memory.process_ram(ram)
-                            ctx.process_from_game_queue()
-                            ctx.process_items_received()
-                        else:  # no generation info
-                            if ctx.got_slot_data.is_set():
-                                memory.set_generation_info(ctx.rescues, ctx.loc_mem_to_id)
-                                ctx.ap_id_to_name, ctx.ap_id_to_zz_id, _ap_id_to_zz_item = \
-                                    make_id_to_others(ctx.start_char)
-                                ctx.next_item = 0
-                                ctx.ap_local_count = len(ctx.checked_locations)
-                            else:  # no slot data yet
-                                asyncio.create_task(ctx.send_connect())
-                                log_no_spam("logging in to server...")
-                                await asyncio.wait((
-                                    ctx.got_slot_data.wait(),
-                                    ctx.exit_event.wait(),
-                                    asyncio.sleep(6)
-                                ), return_when=asyncio.FIRST_COMPLETED)  # to not spam connect packets
+                        if ctx.got_room_info.is_set():
+                            if ctx.seed_name and ctx.seed_name.endswith(seed_end):
+                                # correct seed
+                                if memory.have_generation_info():
+                                    log_no_spam("everything connected")
+                                    await memory.process_ram(ram)
+                                    ctx.process_from_game_queue()
+                                    ctx.process_items_received()
+                                else:  # no generation info
+                                    if ctx.got_slot_data.is_set():
+                                        memory.set_generation_info(ctx.rescues, ctx.loc_mem_to_id)
+                                        ctx.ap_id_to_name, ctx.ap_id_to_zz_id, _ap_id_to_zz_item = \
+                                            make_id_to_others(ctx.start_char)
+                                        ctx.next_item = 0
+                                        ctx.ap_local_count = len(ctx.checked_locations)
+                                    else:  # no slot data yet
+                                        asyncio.create_task(ctx.send_connect())
+                                        log_no_spam("logging in to server...")
+                                        await asyncio.wait((
+                                            ctx.got_slot_data.wait(),
+                                            ctx.exit_event.wait(),
+                                            asyncio.sleep(6)
+                                        ), return_when=asyncio.FIRST_COMPLETED)  # to not spam connect packets
+                            else:  # not correct seed name
+                                log_no_spam("incorrect seed - did you mix up roms?")
+                        else:  # no room info
+                            # If we get here, it looks like `RoomInfo` packet got lost
+                            log_no_spam("waiting for room info from server...")
                     else:  # server not connected
                         log_no_spam("waiting for server connection...")
                 else:  # new game
                     log_no_spam("connected to new game")
                     await ctx.disconnect()
                     ctx.reset_server_state()
+                    ctx.seed_name = None
+                    ctx.got_room_info.clear()
                     ctx.reset_game_state()
                     memory.reset_game_state()
 
                     ctx.auth = name
                     asyncio.create_task(ctx.connect())
                     await asyncio.wait((
-                        ctx.got_slot_data.wait(),
+                        ctx.got_room_info.wait(),
                         ctx.exit_event.wait(),
                         asyncio.sleep(6)
-                    ), return_when=asyncio.FIRST_COMPLETED)  # to not spam connect packets
+                    ), return_when=asyncio.FIRST_COMPLETED)
             else:  # no name found in game
                 if not help_message_shown:
                     logger.info('In RetroArch, make sure "Settings > Network > Network Commands" is on.')

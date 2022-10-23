@@ -273,9 +273,14 @@ def validate(world: "MultiWorld", p: int) -> "Tuple[ZzOptions, Counter[str]]":
         assert hasattr(world, option_name), f"Zillion option {option_name} didn't get put in world object"
     wo = cast(Any, world)  # so I don't need getattr on all the options
 
+    skill = wo.skill[p].value
+
     jump_levels = cast(ZillionJumpLevels, wo.jump_levels[p])
     jump_option = jump_levels.get_current_option_name().lower()
     required_level = char_to_jump["Apple"][cast(ZzVBLR, jump_option)].index(3) + 1
+    if skill == 0:
+        # because of hp logic on final boss
+        required_level = 8
 
     gun_levels = cast(ZillionGunLevels, wo.gun_levels[p])
     gun_option = gun_levels.get_current_option_name().lower()
@@ -361,7 +366,7 @@ def validate(world: "MultiWorld", p: int) -> "Tuple[ZzOptions, Counter[str]]":
         opas_per_level.value,
         max_level.value,
         False,  # tutorial
-        wo.skill[p].value,
+        skill,
         start_char_name,
         floppy_req.value,
         wo.continues[p].value,
