@@ -13,7 +13,7 @@ class DarkSouls3Location(Location):
         output = {}
         i = 0
         for table in location_tables:
-            output |= {name: id for id, name in enumerate(table, base_id + (table_offset * i))}
+            output.update({name: id for id, name in enumerate(table, base_id + (table_offset * i))})
             i += 1
 
         return output
