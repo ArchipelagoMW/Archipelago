@@ -151,6 +151,9 @@ components: Iterable[Component] = (
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
     Component('Starcraft 2 Client', 'Starcraft2Client'),
+    # Zillion
+    Component('Zillion Client', 'ZillionClient',
+              file_identifier=SuffixIdentifier('.apzl')),
     # Functions
     Component('Open host.yaml', func=open_host_yaml),
     Component('Open Patch', func=open_patch),

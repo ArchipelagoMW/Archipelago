@@ -1,5 +1,6 @@
 from __future__ import annotations
 import abc
+from copy import deepcopy
 import math
 import numbers
 import typing
@@ -753,7 +754,7 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys):
     supports_weighting = False
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
-        self.value = value
+        self.value = deepcopy(value)
 
     @classmethod
     def from_any(cls, data: typing.Dict[str, typing.Any]) -> OptionDict:
@@ -784,7 +785,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     supports_weighting = False
 
     def __init__(self, value: typing.List[typing.Any]):
-        self.value = value or []
+        self.value = deepcopy(value)
         super(OptionList, self).__init__()
 
     @classmethod
@@ -806,11 +807,11 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
 
 class OptionSet(Option[typing.Set[str]], VerifyKeys):
-    default = frozenset()
+    default: typing.Union[typing.Set[str], typing.FrozenSet[str]] = frozenset()
     supports_weighting = False
 
-    def __init__(self, value: typing.Union[typing.Set[str, typing.Any], typing.List[str, typing.Any]]):
-        self.value = set(value)
+    def __init__(self, value: typing.Iterable[str]):
+        self.value = set(deepcopy(value))
         super(OptionSet, self).__init__()
 
     @classmethod

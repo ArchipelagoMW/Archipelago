@@ -232,13 +232,13 @@ def accessibility_corrections(world: MultiWorld, state: CollectionState, locatio
             if location in state.events:
                 state.events.remove(location)
             locations.append(location)
-
-    if pool:
+    if pool and locations:
+        locations.sort(key=lambda loc: loc.progress_type != LocationProgressType.PRIORITY)
         fill_restrictive(world, state, locations, pool)
 
 
 def inaccessible_location_rules(world: MultiWorld, state: CollectionState, locations):
-    maximum_exploration_state = sweep_from_pool(state, [])
+    maximum_exploration_state = sweep_from_pool(state)
     unreachable_locations = [location for location in locations if not location.can_reach(maximum_exploration_state)]
     if unreachable_locations:
         def forbid_important_item_rule(item: Item):
@@ -324,15 +324,10 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
         nonlocal lock_later
         lock_later.append(location)
 
-    # "priority fill"
-    fill_restrictive(world, world.state, prioritylocations, progitempool, swap=False, on_place=mark_for_locking)
-    accessibility_corrections(world, world.state, prioritylocations, progitempool)
-
-    for location in lock_later:
-        location.locked = True
-    del mark_for_locking, lock_later
-
     if prioritylocations:
+        # "priority fill"
+        fill_restrictive(world, world.state, prioritylocations, progitempool, swap=False, on_place=mark_for_locking)
+        accessibility_corrections(world, world.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
@@ -342,6 +337,11 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
             raise FillError(
                 f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
         accessibility_corrections(world, world.state, defaultlocations)
+
+    for location in lock_later:
+        if location.item:
+            location.locked = True
+    del mark_for_locking, lock_later
 
     inaccessible_location_rules(world, world.state, defaultlocations)
 
