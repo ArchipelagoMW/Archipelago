@@ -5,7 +5,7 @@ import copy
 import os
 import threading
 import base64
-from typing import Set, TextIO
+from typing import Dict, Set, TextIO
 
 from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
 
@@ -15,7 +15,7 @@ from .Regions import create_regions
 from .Rules import set_rules, add_entrance_rule
 from .Options import sm_options
 from .Client import SMSNIClient
-from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT, SMDeltaPatch, get_sm_symbols
+from .Rom import get_base_rom_path, SM_ROM_MAX_PLAYERID, SM_ROM_PLAYERDATA_COUNT, SMDeltaPatch, get_sm_symbols
 import Utils
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, RegionType, CollectionState, Tutorial
@@ -281,47 +281,83 @@ class SMWorld(World):
                                               "data", "SMBasepatch_prebuilt", "variapatches.ips"))
 
     def APPostPatchRom(self, romPatcher):
-        symbols = get_sm_symbols(os.path.join(os.path.dirname(__file__), 
+        symbols = get_sm_symbols(os.path.join(os.path.dirname(__file__),
                                               "data", "SMBasepatch_prebuilt", "sm-basepatch-symbols.json"))
+
+        # gather all player ids and names relevant to this rom, then write player name and player id data tables
+        self.playerIdSet: Set[int] = {0} # 0 is for "Archipelago" server
+        for itemLoc in self.multiworld.get_locations():
+            # add each playerid who has a location containing an item to send to us *or* to an item_link we're part of
+            if itemLoc.item.player == self.player or \
+                    (itemLoc.item.player in self.multiworld.groups and \
+                     self.player in self.multiworld.groups[itemLoc.item.player]['players']):
+                self.playerIdSet |= {itemLoc.player}
+            # add each playerid, including item link ids, that we'll be sending items to
+            if itemLoc.player == self.player:
+                self.playerIdSet |= {itemLoc.item.player}
+        if len(self.playerIdSet) > SM_ROM_PLAYERDATA_COUNT:
+            # max 202 entries, but it's possible for item links to add enough replacement items for us, that are placed
+            # in worlds that otherwise have no relation to us, that the 2*location count limit is exceeded
+            logger.warning(f"SM is interacting with too many players to fit in ROM. " +
+                            "Removing the highest {len(self.playerIdSet) - SM_ROM_PLAYERDATA_COUNT} ids to fit")
+            self.playerIdSet = set(sorted(self.playerIdSet)[:SM_ROM_PLAYERDATA_COUNT])
+        self.otherPlayerIndex : Dict[int, int] = {} # ap player id -> rom-local player index
+        playerNameData = []
+        playerIdData = []
+        # sort all player data by player id so that the game can look up a player's data reasonably quickly when
+        # the client sends an ap playerid to the game
+        for i, playerid in enumerate(sorted(self.playerIdSet)):
+            playername = self.multiworld.player_name[playerid] if playerid != 0 else "Archipelago"
+            playerIdForRom = playerid
+            if playerid > SM_ROM_MAX_PLAYERID:
+                # note, playerIdForRom = 0 is not unique so the game cannot look it up.
+                # instead it will display the player received-from as "Archipelago"
+                playerIdForRom = 0
+                if playerid == self.player:
+                    raise Exception(f"SM rom cannot fit enough bits to represent self player id {playerid}")
+                else:
+                    logger.warning(f"SM rom cannot fit enough bits to represent player id {playerid}, setting to 0 in rom")
+            self.otherPlayerIndex[playerid] = i
+            playerNameData.append({"sym": symbols["rando_player_name_table"],
+                                   "offset": i * 16,
+                                   "values": playername[:16].upper().center(16).encode()})
+            playerIdData.append({"sym": symbols["rando_player_id_table"],
+                                 "offset": i * 2,
+                                 "values": self.getWordArray(playerIdForRom)})
+
         multiWorldLocations = []
         multiWorldItems = []
         idx = 0
-        self.playerIDMap = {}
-        playerIDCount = 0 # 0 is for "Archipelago" server; highest possible = 200 (201 entries)
         vanillaItemTypesCount = 21
         for itemLoc in self.multiworld.get_locations():
             if itemLoc.player == self.player and locationsDict[itemLoc.name].Id != None:
-                # this SM world can find this item: write full item data to tables and assign player data for writing
-                romPlayerID = itemLoc.item.player if itemLoc.item.player <= ROM_PLAYER_LIMIT else 0
+                # item to place in this SM world: write full item data to tables
                 if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items:
                     itemId = ItemManager.Items[itemLoc.item.type].Id
                 else:
-                    itemId = ItemManager.Items['ArchipelagoItem'].Id + idx
+                    itemId = ItemManager.Items["ArchipelagoItem"].Id + idx
                     multiWorldItems.append({"sym": symbols["message_item_names"],
                                             "offset": (vanillaItemTypesCount + idx)*64,
                                             "values": self.convertToROMItemName(itemLoc.item.name)})
                     idx += 1
 
-                if (romPlayerID > 0 and romPlayerID not in self.playerIDMap.keys()):
-                    playerIDCount += 1
-                    self.playerIDMap[romPlayerID] = playerIDCount
+                if itemLoc.item.player == self.player:
+                    itemDestinationType = 0 # dest type 0 means 'regular old SM item' per itemtable.asm
+                elif itemLoc.item.player in self.multiworld.groups and \
+                        self.player in self.multiworld.groups[itemLoc.item.player]['players']:
+                    # dest type 2 means 'SM item link item that sends to the current player and others'
+                    # per itemtable.asm (groups are synonymous with item_links, currently)
+                    itemDestinationType = 2
+                else:
+                    itemDestinationType = 1 # dest type 1 means 'item for entirely someone else' per itemtable.asm
 
-                [w0, w1] = self.getWordArray(0 if itemLoc.item.player == self.player else 1)
+                [w0, w1] = self.getWordArray(itemDestinationType)
                 [w2, w3] = self.getWordArray(itemId)
-                [w4, w5] = self.getWordArray(romPlayerID)
+                [w4, w5] = self.getWordArray(self.otherPlayerIndex[itemLoc.item.player])
                 [w6, w7] = self.getWordArray(0 if itemLoc.item.advancement else 1)
                 multiWorldLocations.append({"sym": symbols["rando_item_table"],
                                             "offset": locationsDict[itemLoc.name].Id*8,
                                             "values": [w0, w1, w2, w3, w4, w5, w6, w7]})
-
-            elif itemLoc.item.player == self.player:
-                # this SM world owns the item: so in case the sending player might not have anything placed in this
-                # world to receive from it, assign them space in playerIDMap so that the ROM can display their name
-                # (SM item name not needed, as SM item type id will be in the message they send to this world live)
-                romPlayerID = itemLoc.player if itemLoc.player <= ROM_PLAYER_LIMIT else 0
-                if (romPlayerID > 0 and romPlayerID not in self.playerIDMap.keys()):
-                    playerIDCount += 1
-                    self.playerIDMap[romPlayerID] = playerIDCount
 
         itemSprites = [{"fileName":          "off_world_prog_item.bin",
                         "paletteSymbolName": "prog_item_eight_palette_indices",
@@ -353,30 +389,14 @@ class SMWorld(World):
                         "offset": 0,
                         "values": self.getWordArray(self.player)}]
 
-        playerNames = []
-        playerNameIDMap = []
-        playerNames.append({"sym": symbols["rando_player_table"],
-                            "offset": 0,
-                            "values": "Archipelago".upper().center(16).encode()})
-        playerNameIDMap.append({"sym": symbols["rando_player_id_table"],
-                                "offset": 0,
-                                "values": self.getWordArray(0)})
-        for key,value in self.playerIDMap.items():
-            playerNames.append({"sym": symbols["rando_player_table"],
-                                "offset": value * 16,
-                                "values": self.multiworld.player_name[key][:16].upper().center(16).encode()})
-            playerNameIDMap.append({"sym": symbols["rando_player_id_table"],
-                                    "offset": value * 2,
-                                    "values": self.getWordArray(key)})
-
         patchDict = {   'MultiWorldLocations': multiWorldLocations,
                         'MultiWorldItems': multiWorldItems,
                         'offworldSprites': offworldSprites,
                         'deathLink': deathLink,
                         'remoteItem': remoteItem,
                         'ownPlayerId': ownPlayerId,
-                        'PlayerName':  playerNames,
-                        'PlayerNameIDMap':  playerNameIDMap}
+                        'playerNameData':  playerNameData,
+                        'playerIdData':  playerIdData}
 
         # convert an array of symbolic byte_edit dicts like {"sym": symobj, "offset": 0, "values": [1, 0]}
         # to a single rom patch dict like {0x438c: [1, 0], 0xa4a5: [0, 0, 0]} which varia will understand and apply
@@ -499,7 +519,7 @@ class SMWorld(World):
 
         itemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.multiworld.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.multiworld.get_locations() if itemLoc.item.player == self.player]
         progItemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name] if itemLoc.name in locationsDict and itemLoc.player == self.player else self.DummyLocation(self.multiworld.get_player_name(itemLoc.player) + " " + itemLoc.name), True) for itemLoc in self.multiworld.get_locations() if itemLoc.item.player == self.player and itemLoc.item.advancement == True]
-        # progItemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == self.player and itemLoc.item.player == self.player and itemLoc.item.advancement == True]
+        # progItemLocs = [ItemLocation(ItemManager.Items[itemLoc.item.type if itemLoc.item.type in ItemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.multiworld.get_locations() if itemLoc.player == self.player and itemLoc.item.player == self.player and itemLoc.item.advancement == True]
         
         # romPatcher.writeSplitLocs(self.variaRando.args.majorsSplit, itemLocs, progItemLocs)
         romPatcher.writeSpoiler(itemLocs, progItemLocs)
