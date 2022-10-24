@@ -175,7 +175,8 @@ class ZillionContext(CommonContext):
                         Color(1, 1, 1, 1)
                         Rectangle(source='worlds/zillion/empty-zillion-map-row-col-labels-281.png',
                                   pos=self.pos,
-                                  size=(ZillionManager.MapPanel.MAP_WIDTH, 409))
+                                  size=(ZillionManager.MapPanel.MAP_WIDTH,
+                                        int(ZillionManager.MapPanel.MAP_WIDTH * 1.456)))  # aspect ratio of that image
                         for y in range(16):
                             for x in range(8):
                                 num = self.rooms[15 - y][x]
@@ -185,8 +186,8 @@ class ZillionContext(CommonContext):
                                     Ellipse(size=[22, 22], pos=pos)
                                     Color(1, 1, 1, 1)
                                     pos = [self.pos[0] + 22 + x * 32, self.pos[1] + 12 + y * 24]
-                                    num = self._number_textures[num]
-                                    Rectangle(texture=num, size=num.size, pos=pos)
+                                    num_texture = self._number_textures[num]
+                                    Rectangle(texture=num_texture, size=num_texture.size, pos=pos)
 
             def build(self) -> Layout:
                 container = super().build()
@@ -351,7 +352,7 @@ def name_seed_from_ram(data: bytes) -> Tuple[str, str]:
         return "", "xxx"
     null_index = data.find(b'\x00')
     if null_index == -1:
-        logger.warning(f"invalid game id in rom {data}")
+        logger.warning(f"invalid game id in rom {repr(data)}")
         null_index = len(data)
     name = data[:null_index].decode()
     null_index_2 = data.find(b'\x00', null_index + 1)
