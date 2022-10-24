@@ -38,8 +38,8 @@ from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts
 from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen, parse_yaml, read_snes_rom
 from worlds.alttp.Items import ItemFactory, item_table, item_name_groups, progression_items
 from worlds.alttp.EntranceShuffle import door_addresses
-from worlds.alttp.Options import SmallKeyShuffle, PrizeShuffle, Counters, WorldState, ItemFunc, Timer, Logic, Goal
-from worlds.alttp.Options import Sprite as SpriteOption
+from worlds.alttp.Options import SmallKeyShuffle, PrizeShuffle, Counters, WorldState, ItemFunc, Timer, Logic, Goal,\
+    SpriteOption
 import Patch
 
 try:
@@ -245,7 +245,9 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
                 sprite = random.choice(sprite_pool.value)
             else:
                 sprite = "Link"
-        sprite = Sprite(sprite) if os.path.isfile(sprite) else Sprite.get_sprite_from_name(sprite, local_random)
+        sprite = Sprite.get_sprite_from_name(sprite.current_key) if isinstance(sprite, SpriteOption)\
+            else Sprite(sprite) if os.path.isfile(sprite)\
+            else Sprite.get_sprite_from_name(sprite, local_random)
 
     # write link sprite if required
     if sprite:
@@ -623,7 +625,6 @@ class Sprite():
     @staticmethod
     def get_sprite_from_name(name: str, local_random=random) -> Optional[Sprite]:
         _populate_sprite_table(_sprite_table)
-        name = name
         if name.startswith('random'):
             sprites = list(set(_sprite_table.values()))
             sprites.sort(key=lambda x: x.name)

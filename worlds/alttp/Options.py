@@ -1,5 +1,4 @@
 import typing
-from functools import lru_cache
 
 from BaseClasses import MultiWorld
 from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, OptionList, PlandoBosses
@@ -607,12 +606,11 @@ class RandomSpriteToggle(Toggle):
 
 
 class Sprites:
-    @lru_cache(None)
-    def __get__(self, instance, owner):
-        from worlds.alttp.Rom import _populate_sprite_table
-        sprite_table = {}
+    def __get__(self, instance, owner) -> typing.Set:
+        from worlds.alttp.Rom import _populate_sprite_table, Sprite
+        sprite_table: typing.Dict[str, Sprite] = {}
         _populate_sprite_table(sprite_table)
-        return {sprite for sprite in sprite_table}
+        return set(sprite_table)
 
 
 class SpritePool(OptionList):
@@ -621,7 +619,7 @@ class SpritePool(OptionList):
     valid_keys = Sprites()
 
 
-class Sprite(TextChoice):
+class SpriteOption(TextChoice):
     """Allows you to either specify which sprite you'd like to use or use a random on event option with the sprite pool."""
     display_name = "Sprite"
     option_link = 0
@@ -635,12 +633,12 @@ class Sprite(TextChoice):
 
     valid_keys = Sprites()
 
-    def verify(self, world, player_name, plando_options) -> None:
+    def verify(self, world, player_name: str, plando_options) -> None:
         if isinstance(self.value, int):
             return
-        if self.value in self.valid_keys:
+        elif self.value in self.valid_keys:
             return
-        raise ValueError(f"{self.value} for {player_name} is not a valid Sprite option.")
+        raise ValueError(f"{self.value} for {player_name} is not a valid Sprite.")
 
 
 class Music(DefaultOnToggle):
@@ -740,7 +738,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "use_random_sprite_events": RandomSpriteToggle,
     "random_sprite_events": RandomSprite,
     "sprite_pool": SpritePool,
-    "sprite": Sprite,
+    "sprite": SpriteOption,
     "ow_palettes": OWPalette,
     "uw_palettes": UWPalette,
     "hud_palettes": HUDPalette,
