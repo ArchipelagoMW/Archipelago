@@ -16,6 +16,7 @@ from worlds.smz3.TotalSMZ3.Config import Config, GameMode, Goal, KeyShuffle, Mor
 from worlds.smz3.TotalSMZ3.Location import LocationType, locations_start_id, Location as TotalSMZ3Location
 from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
 from worlds.smz3.TotalSMZ3.WorldState import WorldState
+from worlds.smz3.TotalSMZ3.Region import IReward, IMedallionAccess
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
@@ -234,7 +235,8 @@ class SMZ3World(World):
         # SM G4 is logically required to access Ganon's Tower in SMZ3
         self.world.completion_condition[self.player] = lambda state: \
             self.smz3World.GetRegion("Ganon's Tower").CanEnter(state.smz3state[self.player]) and \
-            self.smz3World.GetRegion("Ganon's Tower").TowerAscend(state.smz3state[self.player])
+            self.smz3World.GetRegion("Ganon's Tower").TowerAscend(state.smz3state[self.player]) and \
+            self.smz3World.GetRegion("Ganon's Tower").CanComplete(state.smz3state[self.player])
 
         for region in self.smz3World.Regions:
             entrance = self.world.get_entrance('Menu' + "->" + region.Name, self.player)
@@ -526,6 +528,16 @@ class SMZ3World(World):
 
     def write_spoiler(self, spoiler_handle: TextIO):
             self.world.spoiler.unreachables.update(self.unreachable)
+            spoiler_handle.write('\n\nRewards:\n\n')
+            spoiler_handle.write('\n'.join(['%s%s%s%s' % (f'{self.world.get_player_name(self.player)}: '
+                                                            if self.world.players > 1 else '', region.Name,
+                                                            ': ',
+                                                            region.Reward.name) for region in self.smz3World.Regions if isinstance(region, IReward)]))
+            spoiler_handle.write('\n\nMedallions:\n\n')
+            spoiler_handle.write('\n'.join(['%s%s%s%s' % (f'{self.world.get_player_name(self.player)}: '
+                                                            if self.world.players > 1 else '', region.Name,
+                                                            ': ',
+                                                            region.Medallion.name) for region in self.smz3World.Regions if isinstance(region, IMedallionAccess)]))
 
     def JunkFillGT(self, factor):
         poolLength = len(self.world.itempool)
