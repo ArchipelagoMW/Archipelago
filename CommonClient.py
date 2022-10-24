@@ -151,6 +151,11 @@ class CommonContext:
     hint_cost: typing.Optional[int]
     player_names: typing.Dict[int, str]
 
+    finished_game: bool
+    ready: bool
+    auth: typing.Optional[str]
+    seed_name: typing.Optional[str]
+
     # locations
     locations_checked: typing.Set[int]  # local state
     locations_scouted: typing.Set[int]
@@ -274,6 +279,7 @@ class CommonContext:
                 self.auth = await self.console_input()
 
     async def send_connect(self, **kwargs: typing.Any) -> None:
+        """ send `Connect` packet to log in to server """
         payload = {
             'cmd': 'Connect',
             'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
@@ -288,7 +294,8 @@ class CommonContext:
         self.input_requests += 1
         return await self.input_queue.get()
 
-    async def connect(self, address=None):
+    async def connect(self, address: typing.Optional[str] = None) -> None:
+        """ disconnect any previous connection, and open new connection to the server """
         await self.disconnect()
         self.server_task = asyncio.create_task(server_loop(self, address), name="server loop")
 
