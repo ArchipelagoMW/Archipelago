@@ -1,7 +1,7 @@
 import asyncio
 import base64
 import platform
-from typing import Any, Coroutine, Dict, List, Optional, Protocol, Tuple, Type, cast
+from typing import Any, ClassVar, Coroutine, Dict, List, Optional, Protocol, Tuple, Type, cast
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, gui_enabled, \
@@ -10,11 +10,6 @@ from NetUtils import ClientStatus
 import Utils
 
 import colorama  # type: ignore
-
-from kivy.core.text import Label as CoreLabel
-from kivy.uix.layout import Layout
-from kivy.uix.widget import Widget
-from kivy.graphics import Ellipse, Color, Rectangle
 
 from zilliandomizer.zri.memory import Memory
 from zilliandomizer.zri import events
@@ -138,15 +133,20 @@ class ZillionContext(CommonContext):
     # override
     def run_gui(self) -> None:
         from kvui import GameManager
+        from kivy.core.text import Label as CoreLabel
+        from kivy.graphics import Ellipse, Color, Rectangle
+        from kivy.uix.layout import Layout
+        from kivy.uix.widget import Widget
 
         class ZillionManager(GameManager):
             logging_pairs = [
                 ("Client", "Archipelago")
             ]
             base_title = "Archipelago Zillion Client"
-            use_grid_container = True
 
             class MapPanel(Widget):
+                MAP_WIDTH: ClassVar[int] = 281
+
                 _number_textures: List[Any] = []
                 rooms: List[List[int]] = []
 
@@ -175,7 +175,7 @@ class ZillionContext(CommonContext):
                         Color(1, 1, 1, 1)
                         Rectangle(source='worlds/zillion/empty-zillion-map-row-col-labels-281.png',
                                   pos=self.pos,
-                                  size=(281, 409))
+                                  size=(ZillionManager.MapPanel.MAP_WIDTH, 409))
                         for y in range(16):
                             for x in range(8):
                                 num = self.rooms[15 - y][x]
@@ -191,15 +191,15 @@ class ZillionContext(CommonContext):
             def build(self) -> Layout:
                 container = super().build()
                 self.map_widget = ZillionManager.MapPanel(size_hint_x=None, width=0)
-                container.add_widget(self.map_widget)  # type: ignore
+                self.main_area_container.add_widget(self.map_widget)
                 return container
 
             def toggle_map_width(self) -> None:
-                if self.map_widget.width == 0:  # type: ignore
-                    self.map_widget.width = 281
+                if self.map_widget.width == 0:
+                    self.map_widget.width = ZillionManager.MapPanel.MAP_WIDTH
                 else:
                     self.map_widget.width = 0
-                self.container.do_layout()  # type: ignore
+                self.container.do_layout()
 
             def set_rooms(self, rooms: List[List[int]]) -> None:
                 self.map_widget.rooms = rooms

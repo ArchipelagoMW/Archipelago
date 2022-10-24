@@ -299,7 +299,9 @@ class GameManager(App):
     ]
     base_title: str = "Archipelago Client"
     last_autofillable_command: str
-    use_grid_container = False
+
+    main_area_container: GridLayout
+    """ subclasses can add more columns beside the tabs """
 
     def __init__(self, ctx: context_type):
         self.title = self.base_title
@@ -328,14 +330,7 @@ class GameManager(App):
         super(GameManager, self).__init__()
 
     def build(self) -> Layout:
-        if self.use_grid_container:
-            self.container = GridLayout(cols=2)
-            # If the MainLayout grid is the only thing that goes in this container,
-            # then only 1 column will be seen.
-            # A subclass can add another widget to the container
-            # if they want the 2nd column.
-        else:
-            self.container = ContainerLayout()
+        self.container = ContainerLayout()
 
         self.grid = MainLayout()
         self.grid.cols = 1
@@ -367,7 +362,10 @@ class GameManager(App):
             self.log_panels[display_name] = panel.content = UILog(bridge_logger)
             self.tabs.add_widget(panel)
 
-        self.grid.add_widget(self.tabs)
+        self.main_area_container = GridLayout(size_hint_y=1, rows=1)
+        self.main_area_container.add_widget(self.tabs)
+
+        self.grid.add_widget(self.main_area_container)
 
         if len(self.logging_pairs) == 1:
             # Hide Tab selection if only one tab
