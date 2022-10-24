@@ -1,7 +1,7 @@
 import asyncio
 import base64
 import platform
-from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, Type, cast
+from typing import Any, Coroutine, Dict, List, Optional, Protocol, Tuple, Type, cast
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, gui_enabled, \
@@ -11,9 +11,10 @@ import Utils
 
 import colorama  # type: ignore
 
-from kivy.uix.layout import Layout  # type: ignore
-from kivy.uix.widget import Widget  # type: ignore
-from kivy.graphics import Color, Rectangle  # type: ignore
+from kivy.core.text import Label as CoreLabel
+from kivy.uix.layout import Layout
+from kivy.uix.widget import Widget
+from kivy.graphics import Ellipse, Color, Rectangle
 
 from zilliandomizer.zri.memory import Memory
 from zilliandomizer.zri import events
@@ -36,6 +37,14 @@ class ZillionCommandProcessor(ClientCommandProcessor):
     def _cmd_map(self) -> None:
         """ Toggle view of the map tracker. """
         self.ctx.ui_toggle_map()
+
+
+class ToggleCallback(Protocol):
+    def __call__(self) -> None: ...
+
+
+class SetRoomCallback(Protocol):
+    def __call__(self, rooms: List[List[int]]) -> None: ...
 
 
 class ZillionContext(CommonContext):
@@ -69,7 +78,9 @@ class ZillionContext(CommonContext):
     As a workaround, we don't look for RetroArch until this event is set.
     """
 
-    ui_toggle_map: Callable[[], None]
+    ui_toggle_map: ToggleCallback
+    ui_set_rooms: SetRoomCallback
+    """ parameter is y 16 x 8 numbers to show in each room """
 
     def __init__(self,
                  server_address: str,
@@ -80,6 +91,7 @@ class ZillionContext(CommonContext):
         self.got_room_info = asyncio.Event()
         self.got_slot_data = asyncio.Event()
         self.ui_toggle_map = lambda: None
+        self.ui_set_rooms = lambda rooms: None
 
         self.look_for_retroarch = asyncio.Event()
         if platform.system() != "Windows":
@@ -134,24 +146,51 @@ class ZillionContext(CommonContext):
             base_title = "Archipelago Zillion Client"
             use_grid_container = True
 
-            class MapBackground(Widget):
+            class MapPanel(Widget):
+                _number_textures: List[Any] = []
+                rooms: List[List[int]] = []
+
                 def __init__(self, **kwargs: Any) -> None:
                     super().__init__(**kwargs)
-                    with self.canvas:
-                        Color(1, 1, 1, 1)
-                        self.bg = Rectangle(source='worlds/zillion/empty-zillion-map-row-col-labels-281.png', pos=self.pos, size=(281, 409))
-                        # TODO: Why is it dark?
 
-                    self.bind(pos=self.update_bg)
+                    self.rooms = [[0 for _ in range(8)] for _ in range(16)]
+
+                    self._make_numbers()
+                    self.update_map()
+
+                    self.bind(pos=self.update_map)
                     # self.bind(size=self.update_bg)
 
-                def update_bg(self, *args: Any) -> None:
-                    self.bg.pos = self.pos
-                    # self.bg.size = (281, 409)
+                def _make_numbers(self) -> None:
+                    self._number_textures = []
+                    for n in range(10):
+                        label = CoreLabel(text=str(n), font_size=22, color=(0.1, 0.9, 0, 1))
+                        label.refresh()
+                        self._number_textures.append(label.texture)
+
+                def update_map(self, *args: Any) -> None:
+                    self.canvas.clear()
+
+                    with self.canvas:
+                        Color(1, 1, 1, 1)
+                        Rectangle(source='worlds/zillion/empty-zillion-map-row-col-labels-281.png',
+                                  pos=self.pos,
+                                  size=(281, 409))
+                        for y in range(16):
+                            for x in range(8):
+                                num = self.rooms[15 - y][x]
+                                if num > 0:
+                                    Color(0, 0, 0, 0.4)
+                                    pos = [self.pos[0] + 17 + x * 32, self.pos[1] + 14 + y * 24]
+                                    Ellipse(size=[22, 22], pos=pos)
+                                    Color(1, 1, 1, 1)
+                                    pos = [self.pos[0] + 22 + x * 32, self.pos[1] + 12 + y * 24]
+                                    num = self._number_textures[num]
+                                    Rectangle(texture=num, size=num.size, pos=pos)
 
             def build(self) -> Layout:
                 container = super().build()
-                self.map_widget = ZillionManager.MapBackground(size_hint_x=None, width=0)
+                self.map_widget = ZillionManager.MapPanel(size_hint_x=None, width=0)
                 container.add_widget(self.map_widget)  # type: ignore
                 return container
 
@@ -162,13 +201,18 @@ class ZillionContext(CommonContext):
                     self.map_widget.width = 0
                 self.container.do_layout()  # type: ignore
 
+            def set_rooms(self, rooms: List[List[int]]) -> None:
+                self.map_widget.rooms = rooms
+                self.map_widget.update_map()
+
         self.ui = ZillionManager(self)
         self.ui_toggle_map = lambda: self.ui.toggle_map_width()
-        run_co: Coroutine[Any, Any, None] = self.ui.async_run()  # type: ignore
-        # kivy types missing
+        self.ui_set_rooms = lambda rooms: self.ui.set_rooms(rooms)
+        run_co: Coroutine[Any, Any, None] = self.ui.async_run()
         self.ui_task = asyncio.create_task(run_co, name="UI")
 
     def on_package(self, cmd: str, args: Dict[str, Any]) -> None:
+        self.room_item_numbers_to_ui()
         if cmd == "Connected":
             logger.info("logged in to Archipelago server")
             if "slot_data" not in args:
@@ -232,6 +276,21 @@ class ZillionContext(CommonContext):
         elif cmd == "RoomInfo":
             self.seed_name = args["seed_name"]
             self.got_room_info.set()
+
+    def room_item_numbers_to_ui(self) -> None:
+        rooms = [[0 for _ in range(8)] for _ in range(16)]
+        for loc_id in self.missing_locations:
+            loc_id_small = loc_id - base_id
+            loc_name = id_to_loc[loc_id_small]
+            y = ord(loc_name[0]) - 65
+            x = ord(loc_name[2]) - 49
+            if y == 9 and x == 5:
+                # don't show main computer in numbers
+                continue
+            assert (0 <= y < 16) and (0 <= x < 8), f"invalid index from location name {loc_name}"
+            rooms[y][x] += 1
+        # TODO: also add locations with locals lost from loading save state or reset
+        self.ui_set_rooms(rooms)
 
     def process_from_game_queue(self) -> None:
         if self.from_game.qsize():
