@@ -35,14 +35,13 @@ class V6World(World):
     location_name_to_id = location_table
 
     data_version = 1
-    forced_auto_forfeit = False
 
     area_connections: typing.Dict[int, int]
     area_cost_map: typing.Dict[int,int]
 
     music_map: typing.Dict[int,int]
 
-    options = v6_options
+    option_definitions = v6_options
 
     def create_regions(self):
         create_regions(self.world,self.player)
@@ -92,6 +91,6 @@ class V6World(World):
                 }
             }
         }
-        filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_file_safe_player_name(self.player)}.apv6"
+        filename = f"{self.world.get_out_file_name_base(self.player)}.apv6"
         with open(os.path.join(output_directory, filename), 'w') as f:
             json.dump(data, f)

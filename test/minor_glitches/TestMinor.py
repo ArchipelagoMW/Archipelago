@@ -17,16 +17,14 @@ class TestMinor(TestBase):
     def setUp(self):
         self.world = MultiWorld(1)
         args = Namespace()
-        for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].options.items():
+        for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
             setattr(args, name, {1: option.from_any(option.default)})
         self.world.set_options(args)
         self.world.set_default_common_options()
         self.world.logic[1] = "minorglitches"
         self.world.difficulty_requirements[1] = difficulties['normal']
-        create_regions(self.world, 1)
-        create_dungeons(self.world, 1)
-        create_shops(self.world, 1)
-        link_entrances(self.world, 1)
+        self.world.worlds[1].er_seed = 0
+        self.world.worlds[1].create_regions()
         self.world.worlds[1].create_items()
         self.world.required_medallions[1] = ['Ether', 'Quake']
         self.world.itempool.extend(get_dungeon_item_pool(self.world))

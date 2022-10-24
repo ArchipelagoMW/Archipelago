@@ -12,7 +12,7 @@
 - [QUsb2Snes](https://github.com/Skarsnik/QUsb2snes/releases) (Incluido en Multiworld Utilities)
 - Hardware o software capaz de cargar y ejecutar archivos de ROM de SNES
     - Un emulador capaz de ejecutar scripts Lua
-      ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
+      ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
        [BizHawk](http://tasvideos.org/BizHawk.html), o
        [RetroArch](https://retroarch.com?page=platforms) 1.10.1 o más nuevo). O,
     - Un flashcart SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), o otro hardware compatible
@@ -111,13 +111,13 @@ automáticamente el cliente, y ademas creara la rom en el mismo directorio donde
 Cuando el cliente se lance automáticamente, QUsb2Snes debería haberse ejecutado también. Si es la primera vez que lo
 ejecutas, puedes ser que el firewall de Windows te pregunte si le permites la comunicación.
 
-##### snes9x Multitroid
+##### snes9x-rr
 
 1. Carga tu fichero de ROM, si no lo has hecho ya
 2. Abre el menu "File" y situa el raton en **Lua Scripting**
 3. Haz click en **New Lua Script Window...**
 4. En la nueva ventana, haz click en **Browse...**
-5. Navega hacia el directorio donde este situado snes9x Multitroid, entra en el directorio `lua`, y
+5. Navega hacia el directorio donde este situado snes9x-rr, entra en el directorio `lua`, y
    escoge `multibridge.lua`
 6. Observa que se ha asignado un nombre al dispositivo, y el cliente muestra "SNES Device: Connected", con el mismo
    nombre en la esquina superior izquierda.
@@ -144,7 +144,8 @@ Sólo hay que segiur estos pasos una vez.
 2. Ve a Ajustes --> Interfaz de usario. Configura "Mostrar ajustes avanzados" en ON.
 3. Ve a Ajustes --> Red. Configura "Comandos de red" en ON. (Se encuentra bajo Request Device 16.) Deja en 55355 (el
    default) el Puerto de comandos de red.
-![Captura de pantalla del ajuste Comandos de red](/static/assets/tutorial/retroarch-network-commands-en.png)
+
+![Captura de pantalla del ajuste Comandos de red](/static/generated/docs/A%20Link%20to%20the%20Past/retroarch-network-commands-en.png)
 4. Ve a Menú principal --> Actualizador en línea --> Descargador de núcleos. Desplázate y selecciona "Nintendo - SNES /
    SFC (bsnes-mercury Performance)".
 

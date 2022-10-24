@@ -51,20 +51,20 @@ known_logic_tricks = {
                     Can be reached by side-hopping off
                     the watchtower.
                     '''},
-    'Dodongo\'s Cavern Staircase with Bow': {
+    "Dodongo's Cavern Staircase with Bow": {
         'name'    : 'logic_dc_staircase',
         'tags'    : ("Dodongo's Cavern",),
         'tooltip' : '''\
                     The Bow can be used to knock down the stairs
                     with two well-timed shots.
                     '''},
-    'Dodongo\'s Cavern Spike Trap Room Jump without Hover Boots': {
+    "Dodongo's Cavern Spike Trap Room Jump without Hover Boots": {
         'name'    : 'logic_dc_jump',
         'tags'    : ("Dodongo's Cavern",),
         'tooltip' : '''\
                     Jump is adult only.
                     '''},
-    'Dodongo\'s Cavern Vines GS from Below with Longshot': {
+    "Dodongo's Cavern Vines GS from Below with Longshot": {
         'name'    : 'logic_dc_vines_gs',
         'tags'    : ("Dodongo's Cavern", "Skulltulas",),
         'tooltip' : '''\
@@ -73,7 +73,7 @@ known_logic_tricks = {
                     from below, by shooting it through the vines,
                     bypassing the need to lower the staircase.
                     '''},
-    'Thieves\' Hideout "Kitchen" with No Additional Items': {
+    '''Thieves' Hideout "Kitchen" with No Additional Items''': {
         'name'    : 'logic_gerudo_kitchen',
         'tags'    : ("Thieves' Hideout", "Gerudo's Fortress"),
         'tooltip' : '''\
@@ -157,7 +157,7 @@ known_logic_tricks = {
                     Can jump up to the spinning platform from
                     below as adult.
                     '''},
-    'Crater\'s Bean PoH with Hover Boots': {
+    "Crater's Bean PoH with Hover Boots": {
         'name'    : 'logic_crater_bean_poh_with_hovers',
         'tags'    : ("Death Mountain Crater",),
         'tooltip' : '''\
@@ -165,7 +165,7 @@ known_logic_tricks = {
                     near Goron City and walk up the
                     very steep slope.
                     '''},
-    'Zora\'s Domain Entry with Cucco': {
+    "Zora's Domain Entry with Cucco": {
         'name'    : 'logic_zora_with_cucco',
         'tags'    : ("Zora's River",),
         'tooltip' : '''\
@@ -404,7 +404,7 @@ known_logic_tricks = {
                     Longshot can be shot through the ceiling to obtain 
                     the token with two fewer small keys than normal.
                     '''},
-    'Zora\'s River Lower Freestanding PoH as Adult with Nothing': {
+    "Zora's River Lower Freestanding PoH as Adult with Nothing": {
         'name'    : 'logic_zora_river_lower',
         'tags'    : ("Zora's River",),
         'tooltip' : '''\
@@ -502,7 +502,7 @@ known_logic_tricks = {
                     you can get enough of a break to take some time
                     to aim more carefully.
                     '''},
-    'Dodongo\'s Cavern Scarecrow GS with Armos Statue': {
+    "Dodongo's Cavern Scarecrow GS with Armos Statue": {
         'name'    : 'logic_dc_scarecrow_gs',
         'tags'    : ("Dodongo's Cavern", "Skulltulas",),
         'tooltip' : '''\
@@ -541,7 +541,7 @@ known_logic_tricks = {
         'name'    : 'logic_spirit_mq_lower_adult',
         'tags'    : ("Spirit Temple",),
         'tooltip' : '''\
-                    It can be done with Din\'s Fire and Bow.
+                    It can be done with Din's Fire and Bow.
                     Whenever an arrow passes through a lit torch, it
                     resets the timer. It's finicky but it's also
                     possible to stand on the pillar next to the center
@@ -704,13 +704,13 @@ known_logic_tricks = {
                     in the same jump in order to destroy it before you
                     fall into the lava.
                     '''},
-    'Zora\'s Domain Entry with Hover Boots': {
+    "Zora's Domain Entry with Hover Boots": {
         'name'    : 'logic_zora_with_hovers',
         'tags'    : ("Zora's River",),
         'tooltip' : '''\
                     Can hover behind the waterfall as adult.
                     '''},
-    'Zora\'s Domain GS with No Additional Items': {
+    "Zora's Domain GS with No Additional Items": {
         'name'    : 'logic_domain_gs',
         'tags'    : ("Zora's Domain", "Skulltulas",),
         'tooltip' : '''\
@@ -736,7 +736,7 @@ known_logic_tricks = {
                     needing a Bow.
                     Applies in both vanilla and MQ Shadow.
                     '''},
-    'Stop Link the Goron with Din\'s Fire': {
+    "Stop Link the Goron with Din's Fire": {
         'name'    : 'logic_link_goron_dins',
         'tags'    : ("Goron City",),
         'tooltip' : '''\
@@ -825,7 +825,7 @@ known_logic_tricks = {
                     Link will not be expected to do anything at Gerudo's
                     Fortress.
                     '''},
-    'Zora\'s River Upper Freestanding PoH as Adult with Nothing': {
+    "Zora's River Upper Freestanding PoH as Adult with Nothing": {
         'name'    : 'logic_zora_river_upper',
         'tags'    : ("Zora's River",),
         'tooltip' : '''\
@@ -971,7 +971,7 @@ known_logic_tricks = {
                     in the Water Temple are not going to be relevant unless this
                     trick is first enabled.
                     '''},
-    'Water Temple Central Pillar GS with Farore\'s Wind': {
+    "Water Temple Central Pillar GS with Farore's Wind": {
         'name'    : 'logic_water_central_gs_fw',
         'tags'    : ("Water Temple", "Skulltulas",),
         'tooltip' : '''\
@@ -1104,7 +1104,7 @@ known_logic_tricks = {
                     this allows you to obtain the GS on the door frame
                     as adult without Hookshot or Song of Time.
                     '''},
-    'Dodongo\'s Cavern MQ Early Bomb Bag Area as Child': {
+    "Dodongo's Cavern MQ Early Bomb Bag Area as Child": {
         'name'    : 'logic_dc_mq_child_bombs',
         'tags'    : ("Dodongo's Cavern",),
         'tooltip' : '''\
@@ -1113,7 +1113,7 @@ known_logic_tricks = {
                     without needing a Slingshot. You will
                     take fall damage.
                     '''},
-    'Dodongo\'s Cavern Two Scrub Room with Strength': {
+    "Dodongo's Cavern Two Scrub Room with Strength": {
         'name'    : 'logic_dc_scrub_room',
         'tags'    : ("Dodongo's Cavern",),
         'tooltip' : '''\
@@ -1122,7 +1122,7 @@ known_logic_tricks = {
                     destroy the mud wall blocking the room with two
                     Deku Scrubs.
                     '''},
-    'Dodongo\'s Cavern Child Slingshot Skips': {
+    "Dodongo's Cavern Child Slingshot Skips": {
         'name'    : 'logic_dc_slingshot_skip',
         'tags'    : ("Dodongo's Cavern",),
         'tooltip' : '''\
@@ -1132,7 +1132,7 @@ known_logic_tricks = {
                     you also enable the Adult variant: "Dodongo's
                     Cavern Spike Trap Room Jump without Hover Boots".
                     '''},
-    'Dodongo\'s Cavern MQ Light the Eyes with Strength': {
+    "Dodongo's Cavern MQ Light the Eyes with Strength": {
         'name'    : 'logic_dc_mq_eyes',
         'tags'    : ("Dodongo's Cavern",),
         'tooltip' : '''\
@@ -1145,7 +1145,7 @@ known_logic_tricks = {
                     Also, the bombable floor before King Dodongo can be
                     destroyed with Hammer if hit in the very center.
                     '''},
-    'Dodongo\'s Cavern MQ Back Areas as Child without Explosives': {
+    "Dodongo's Cavern MQ Back Areas as Child without Explosives": {
         'name'    : 'logic_dc_mq_child_back',
         'tags'    : ("Dodongo's Cavern",),
         'tooltip' : '''\
@@ -1232,7 +1232,7 @@ known_logic_tricks = {
                     It can also be done as child, using the
                     Slingshot instead of the Bow.
                     '''},
-    'Fire Temple East Tower without Scarecrow\'s Song': {
+    "Fire Temple East Tower without Scarecrow's Song": {
         'name'    : 'logic_fire_scarecrow',
         'tags'    : ("Fire Temple",),
         'tooltip' : '''\
@@ -1277,14 +1277,14 @@ known_logic_tricks = {
                     Removes the requirements for the Lens of Truth
                     in Bottom of the Well.
                     '''},
-    'Ganon\'s Castle MQ without Lens of Truth': {
+    "Ganon's Castle MQ without Lens of Truth": {
         'name'    : 'logic_lens_castle_mq',
         'tags'    : ("Lens of Truth","Ganon's Castle",),
         'tooltip' : '''\
                     Removes the requirements for the Lens of Truth
                     in Ganon's Castle MQ.
                     '''},
-    'Ganon\'s Castle without Lens of Truth': {
+    "Ganon's Castle without Lens of Truth": {
         'name'    : 'logic_lens_castle',
         'tags'    : ("Lens of Truth","Ganon's Castle",),
         'tooltip' : '''\

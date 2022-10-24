@@ -17,7 +17,7 @@ class OriBlindForest(World):
     item_name_to_id = item_table
     location_name_to_id = lookup_name_to_id
 
-    options = options
+    option_definitions = options
 
     hidden = True
 
@@ -62,7 +62,7 @@ class OriBlindForest(World):
 
     def generate_basic(self):
         for item_name, count in default_pool.items():
-            self.world.itempool.extend([self.create_item(item_name)] * count)
+            self.world.itempool.extend([self.create_item(item_name) for _ in range(count)])
 
     def create_item(self, name: str) -> Item:
         return Item(name,

@@ -45,12 +45,11 @@ class MeritousWorld(World):
     item_name_groups = item_groups
 
     data_version = 2
-    forced_auto_forfeit = False
 
     # NOTE: Remember to change this before this game goes live
     required_client_version = (0, 2, 4)
 
-    options = meritous_options
+    option_definitions = meritous_options
 
     def __init__(self, world: MultiWorld, player: int):
         super(MeritousWorld, self).__init__(world, player)

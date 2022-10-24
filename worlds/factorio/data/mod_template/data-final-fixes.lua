@@ -1,6 +1,48 @@
 {% from "macros.lua" import dict_to_recipe %}
 -- this file gets written automatically by the Archipelago Randomizer and is in its raw form a Jinja2 Template
 require('lib')
+data.raw["rocket-silo"]["rocket-silo"].fluid_boxes = {
+    {
+        production_type = "input",
+        pipe_picture = assembler2pipepictures(),
+        pipe_covers = pipecoverspictures(),
+        base_area = 10,
+        base_level = -1,
+        pipe_connections = {
+            { type = "input", position = { 0, 5 } },
+            { type = "input", position = { 0, -5 } },
+            { type = "input", position = { 5, 0 } },
+            { type = "input", position = { -5, 0 } }
+        }
+    },
+    {
+        production_type = "input",
+        pipe_picture = assembler2pipepictures(),
+        pipe_covers = pipecoverspictures(),
+        base_area = 10,
+        base_level = -1,
+        pipe_connections = {
+            { type = "input", position = { -3, 5 } },
+            { type = "input", position = { -3, -5 } },
+            { type = "input", position = { 5, -3 } },
+            { type = "input", position = { -5, -3 } }
+        }
+    },
+    {
+        production_type = "input",
+        pipe_picture = assembler2pipepictures(),
+        pipe_covers = pipecoverspictures(),
+        base_area = 10,
+        base_level = -1,
+        pipe_connections = {
+            { type = "input", position = { 3, 5 } },
+            { type = "input", position = { 3, -5 } },
+            { type = "input", position = { 5, 3 } },
+            { type = "input", position = { -5, 3 } }
+        }
+    },
+    off_when_no_fluid_recipe = true
+}
 
 {%- for recipe_name, recipe in custom_recipes.items() %}
 data.raw["recipe"]["{{recipe_name}}"].category = "{{recipe.category}}"
@@ -141,6 +183,18 @@ end
 data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-2"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-1"].fluid_boxes = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes)
+if mods["factory-levels"] then
+    -- Factory-Levels allows the assembling machines to get faster (and depending on settings), more productive at crafting products, the more the
+    -- assembling machine crafts the product.  If the machine crafts enough, it may auto-upgrade to the next tier.
+    for i = 1, 25, 1 do
+        data.raw["assembling-machine"]["assembling-machine-1-level-" .. i].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
+        data.raw["assembling-machine"]["assembling-machine-1-level-" .. i].fluid_boxes = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes)
+    end
+    for i = 1, 50, 1 do
+        data.raw["assembling-machine"]["assembling-machine-2-level-" .. i].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
+    end
+end
+
 data.raw["ammo"]["artillery-shell"].stack_size = 10
 
 {# each randomized tech gets set to be invisible, with new nodes added that trigger those #}
@@ -169,8 +223,8 @@ copy_factorio_icon(new_tree_copy, "{{ progressive_technology_table[item_name][0]
 {%- endif -%}
 {#- connect Technology  #}
 {%- if original_tech_name in tech_tree_layout_prerequisites %}
-{%- for prerequesite in tech_tree_layout_prerequisites[original_tech_name] %}
-table.insert(new_tree_copy.prerequisites, "ap-{{ tech_table[prerequesite] }}-")
+{%- for prerequisite in tech_tree_layout_prerequisites[original_tech_name] %}
+table.insert(new_tree_copy.prerequisites, "ap-{{ tech_table[prerequisite] }}-")
 {% endfor %}
 {% endif -%}
 {#- add new Technology to game #}

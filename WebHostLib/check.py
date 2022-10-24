@@ -1,7 +1,7 @@
 import zipfile
 from typing import *
 
-from flask import request, flash, redirect, url_for, session, render_template
+from flask import request, flash, redirect, url_for, render_template
 
 from WebHostLib import app
 
@@ -12,7 +12,7 @@ def allowed_file(filename):
     return filename.endswith(('.txt', ".yaml", ".zip"))
 
 
-from Generate import roll_settings
+from Generate import roll_settings, PlandoSettings
 from Utils import parse_yamls
 
 
@@ -65,7 +65,7 @@ def get_yaml_data(file) -> Union[Dict[str, str], str]:
 def roll_options(options: Dict[str, Union[dict, str]],
                  plando_options: Set[str] = frozenset({"bosses", "items", "connections", "texts"})) -> \
         Tuple[Dict[str, Union[str, bool]], Dict[str, dict]]:
-    plando_options = set(plando_options)
+    plando_options = PlandoSettings.from_set(set(plando_options))
     results = {}
     rolled_results = {}
     for filename, text in options.items():

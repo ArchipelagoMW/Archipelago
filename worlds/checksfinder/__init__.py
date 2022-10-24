@@ -27,7 +27,7 @@ class ChecksFinderWorld(World):
     with the mines! You win when you get all your items and beat the board!
     """
     game: str = "ChecksFinder"
-    options = checksfinder_options
+    option_definitions = checksfinder_options
     topology_present = True
     web = ChecksFinderWeb()
 

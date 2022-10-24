@@ -1088,10 +1088,10 @@ def get_pool_core(world):
             placed_items['Hideout Jail Guard (4 Torches)'] = 'Recovery Heart'
             skip_in_spoiler_locations.extend(['Hideout Jail Guard (2 Torches)', 'Hideout Jail Guard (3 Torches)', 'Hideout Jail Guard (4 Torches)'])
         else:
-            placed_items['Hideout Jail Guard (1 Torch)']   = 'Small Key (Gerudo Fortress)'
-            placed_items['Hideout Jail Guard (2 Torches)'] = 'Small Key (Gerudo Fortress)'
-            placed_items['Hideout Jail Guard (3 Torches)'] = 'Small Key (Gerudo Fortress)'
-            placed_items['Hideout Jail Guard (4 Torches)'] = 'Small Key (Gerudo Fortress)'
+            placed_items['Hideout Jail Guard (1 Torch)']   = 'Small Key (Thieves Hideout)'
+            placed_items['Hideout Jail Guard (2 Torches)'] = 'Small Key (Thieves Hideout)'
+            placed_items['Hideout Jail Guard (3 Torches)'] = 'Small Key (Thieves Hideout)'
+            placed_items['Hideout Jail Guard (4 Torches)'] = 'Small Key (Thieves Hideout)'
 
     if world.shuffle_gerudo_card and world.gerudo_fortress != 'open':
         pool.append('Gerudo Membership Card')
@@ -1388,6 +1388,10 @@ def get_pool_core(world):
         remove_junk_pool = list(remove_junk_pool) + ['Recovery Heart', 'Bombs (20)', 'Arrows (30)', 'Ice Trap']
 
         junk_candidates = [item for item in pool if item in remove_junk_pool]
+        if len(pending_junk_pool) > len(junk_candidates):
+            excess = len(pending_junk_pool) - len(junk_candidates)
+            if world.triforce_hunt:
+                raise RuntimeError(f"Items in the pool for player {world.player} exceed locations. Add {excess} location(s) or remove {excess} triforce piece(s).")
         while pending_junk_pool:
             pending_item = pending_junk_pool.pop()
             if not junk_candidates:

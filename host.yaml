@@ -101,7 +101,9 @@ sm_options:
   # Alternatively, a path to a program to open the .sfc file with
   rom_start: true
 factorio_options:
-  executable: "factorio\\bin\\x64\\factorio"
+  executable: "factorio/bin/x64/factorio"
+  # by default, no settings are loaded if this file does not exist.  If this file does exist, then it will be used.
+  # server_settings: "factorio\\data\\server-settings.json"
 minecraft_options: 
   forge_directory: "Minecraft Forge server"
   max_heap_size: "2G"
@@ -127,3 +129,38 @@ smz3_options:
   # True for operating system default program
   # Alternatively, a path to a program to open the .sfc file with
   rom_start: true
+dkc3_options:
+  # File name of the DKC3 US rom
+  rom_file: "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc"
+  # Set this to your SNI folder location if you want the MultiClient to attempt an auto start, does nothing if not found
+  sni: "SNI"
+  # Set this to false to never autostart a rom (such as after patching)
+  # True for operating system default program
+  # Alternatively, a path to a program to open the .sfc file with
+  rom_start: true
+pokemon_rb_options:
+  # File names of the Pokemon Red and Blue roms
+  red_rom_file: "Pokemon Red (UE) [S][!].gb"
+  blue_rom_file: "Pokemon Blue (UE) [S][!].gb"
+  # Set this to false to never autostart a rom (such as after patching)
+  # True for operating system default program
+  # Alternatively, a path to a program to open the .gb file with
+  rom_start: true
+smw_options:
+  # File name of the SMW US rom
+  rom_file: "Super Mario World (USA).sfc"
+  # Set this to your SNI folder location if you want the MultiClient to attempt an auto start, does nothing if not found
+  sni: "SNI"
+  # Set this to false to never autostart a rom (such as after patching)
+  # True for operating system default program
+  # Alternatively, a path to a program to open the .sfc file with
+  rom_start: true
+zillion_options:
+  # File name of the Zillion US rom
+  rom_file: "Zillion (UE) [!].sms"
+  # Set this to false to never autostart a rom (such as after patching)
+  # True for operating system default program
+  # Alternatively, a path to a program to open the .sfc file with
+  # RetroArch doesn't make it easy to launch a game from the command line.
+  # You have to know the path to the emulator core library on the user's computer.
+  rom_start: "retroarch"

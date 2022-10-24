@@ -289,6 +289,7 @@ tmp="${{exe#*/}}"
 if [ ! "${{#tmp}}" -lt "${{#exe}}" ]; then
     exe="{default_exe.parent}/$exe"
 fi
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$APPDIR/{default_exe.parent}/lib"
 $APPDIR/$exe "$@"
 """)
         launcher_filename.chmod(0o755)
