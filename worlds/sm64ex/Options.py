@@ -72,8 +72,8 @@ class AreaRandomizer(Choice):
     display_name = "Entrance Randomizer"
     option_Off = 0
     option_Courses_Only = 1
-    option_Courses_and_Secrets = 2
-    option_Courses_and_Secrets_Separate = 3
+    option_Courses_and_Secrets_Separate = 2
+    option_Courses_and_Secrets = 3
 
 
 class BuddyChecks(Toggle):

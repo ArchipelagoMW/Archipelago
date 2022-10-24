@@ -13,16 +13,14 @@ def set_rules(world, player: int, area_connections):
     destination_regions = list(range(13)) + [12,13,14] + list(range(15,15+len(sm64secrets))) # Two instances of Destination Course THI. Past normal course idx are secret regions
     if world.AreaRandomizer[player].value == 0:
         entrance_ids = list(range(len(sm64paintings + sm64secrets)))
-    if world.AreaRandomizer[player].value >= 1: # Some randomization is happening, randomize Courses
+    if world.AreaRandomizer[player].value >= 1:  # Some randomization is happening, randomize Courses
         entrance_ids = list(range(len(sm64paintings)))
         world.random.shuffle(entrance_ids)
-        if world.AreaRandomizer[player].value == 3: # Shuffle Secret Regions only among themselves
-            secret_entrance_ids = list(range(len(sm64paintings), len(sm64paintings) + len(sm64secrets)))
+        secret_entrance_ids = list(range(len(sm64paintings), len(sm64paintings) + len(sm64secrets)))
+        if world.AreaRandomizer[player].value == 2:  # Randomize Secrets as well
             world.random.shuffle(secret_entrance_ids)
-            entrance_ids += secret_entrance_ids
-        else:
-            entrance_ids += list(range(len(sm64paintings), len(sm64paintings) + len(sm64secrets)))
-    if world.AreaRandomizer[player].value == 2: # Shuffle Secret Regions with courses
+        entrance_ids += secret_entrance_ids
+    if world.AreaRandomizer[player].value == 3:  # Shuffle Secret Regions with courses
         world.random.shuffle(entrance_ids)
         # Guarantee first entrance is a course
         swaplist = list(range(len(entrance_ids)))
