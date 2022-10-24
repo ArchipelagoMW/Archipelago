@@ -1,7 +1,7 @@
 import logging
 import threading
 import copy
-import typing
+from typing import Optional, List, AbstractSet  # remove when 3.8 support is dropped
 from collections import Counter, deque
 from string import printable
 
@@ -813,7 +813,7 @@ class OOTWorld(World):
     @classmethod
     def stage_pre_fill(cls, multiworld: MultiWorld):
 
-        def gather_locations(item_type: str, players: set[int], dungeon: str = '') -> typing.Optional[list[OOTLocation]]:
+        def gather_locations(item_type: str, players: AbstractSet[int], dungeon: str = '') -> Optional[List[OOTLocation]]:
             type_to_setting = {
                 'Song': 'shuffle_song_items',
                 'Map': 'shuffle_mapcompass',
