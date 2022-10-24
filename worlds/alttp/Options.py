@@ -1,4 +1,5 @@
 import typing
+from functools import cache
 
 from BaseClasses import MultiWorld
 from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, OptionList, PlandoBosses
@@ -606,11 +607,16 @@ class RandomSpriteToggle(Toggle):
 
 
 class Sprites:
-    def __get__(self, instance, owner) -> typing.Set:
+    @staticmethod
+    @cache
+    def fill_sprites() -> typing.Set:
         from worlds.alttp.Rom import _populate_sprite_table, Sprite
         sprite_table: typing.Dict[str, Sprite] = {}
         _populate_sprite_table(sprite_table)
         return set(sprite_table)
+
+    def __get__(self, instance, owner) -> typing.Set:
+        return self.fill_sprites()
 
 
 class SpritePool(OptionList):
