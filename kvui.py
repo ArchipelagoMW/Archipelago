@@ -299,6 +299,7 @@ class GameManager(App):
     ]
     base_title: str = "Archipelago Client"
     last_autofillable_command: str
+    use_grid_container = False
 
     def __init__(self, ctx: context_type):
         self.title = self.base_title
@@ -326,8 +327,8 @@ class GameManager(App):
 
         super(GameManager, self).__init__()
 
-    def build(self, use_grid_container: bool = False) -> Layout:
-        if use_grid_container:
+    def build(self) -> Layout:
+        if self.use_grid_container:
             self.container = GridLayout(cols=2)
             # If the MainLayout grid is the only thing that goes in this container,
             # then only 1 column will be seen.
