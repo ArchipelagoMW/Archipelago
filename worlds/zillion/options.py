@@ -276,14 +276,14 @@ def validate(world: "MultiWorld", p: int) -> "Tuple[ZzOptions, Counter[str]]":
     skill = wo.skill[p].value
 
     jump_levels = cast(ZillionJumpLevels, wo.jump_levels[p])
-    jump_option = jump_levels.get_current_option_name().lower()
+    jump_option = jump_levels.current_option_name.lower()
     required_level = char_to_jump["Apple"][cast(ZzVBLR, jump_option)].index(3) + 1
     if skill == 0:
         # because of hp logic on final boss
         required_level = 8
 
     gun_levels = cast(ZillionGunLevels, wo.gun_levels[p])
-    gun_option = gun_levels.get_current_option_name().lower()
+    gun_option = gun_levels.current_option_name.lower()
     guns_required = char_to_gun["Champ"][cast(ZzVBLR, gun_option)].index(3)
 
     floppy_req = cast(ZillionFloppyReq, wo.floppy_req[p])
@@ -348,7 +348,7 @@ def validate(world: "MultiWorld", p: int) -> "Tuple[ZzOptions, Counter[str]]":
     # that should be all of the level requirements met
 
     start_char = cast(ZillionStartChar, wo.start_char[p])
-    start_char_name = start_char.get_current_option_name()
+    start_char_name = start_char.current_option_name
     if start_char_name == "Jj":
         start_char_name = "JJ"
     assert start_char_name in chars
