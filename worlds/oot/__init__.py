@@ -624,6 +624,10 @@ class OOTWorld(World):
             for item in items:
                 yield item.name
 
+        def get_names(items):
+            for item in items:
+                yield item.name
+
         # Place/set rules for dungeon items
         itempools = {
             'dungeon': set(),
