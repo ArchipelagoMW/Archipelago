@@ -11,7 +11,7 @@ import Utils
 
 import colorama  # type: ignore
 
-from kvui import ContainerLayout
+from kivy.uix.layout import Layout  # type: ignore
 from kivy.uix.widget import Widget  # type: ignore
 from kivy.graphics import Color, Rectangle  # type: ignore
 
@@ -148,8 +148,8 @@ class ZillionContext(CommonContext):
                     self.bg.pos = self.pos
                     # self.bg.size = (281, 409)
 
-            def build(self) -> ContainerLayout:
-                container = super().build()
+            def build(self, use_grid_container: bool = True) -> Layout:
+                container = super().build(use_grid_container)
                 self.map_widget = ZillionManager.MapBackground(size_hint_x=None, width=0)
                 container.add_widget(self.map_widget)  # type: ignore
                 return container
