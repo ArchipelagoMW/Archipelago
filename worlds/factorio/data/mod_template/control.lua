@@ -13,6 +13,7 @@ GOAL = {{ goal }}
 ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
 ENERGY_INCREMENT = {{ energy_link * 1000000 }}
 ENERGY_LINK_EFFICIENCY = 0.75
+CUSTOM_DATA_PACKAGE = {{ custom_data_package }}
 
 if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
     DEATH_LINK = 1
@@ -515,6 +516,10 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     local item_name = chunks[1]
     local index = chunks[2]
     local source = chunks[3] or "Archipelago"
+
+    if CUSTOM_DATA_PACKAGE == 1 then
+        item_name = item_id_to_name[item_name] or item_name
+    end
     if index == -1 then -- for coop sync and restoring from an older savegame
         tech = force.technologies[item_name]
         if tech.researched ~= true then
@@ -571,7 +576,8 @@ commands.add_command("ap-rcon-info", "Used by the Archipelago client to get info
         ["slot_name"] = SLOT_NAME,
         ["seed_name"] = SEED_NAME,
         ["death_link"] = DEATH_LINK,
-        ["energy_link"] = ENERGY_INCREMENT
+        ["energy_link"] = ENERGY_INCREMENT,
+        ["custom_data_package"] = CUSTOM_DATA_PACKAGE
     }))
 end)
 
@@ -598,3 +604,4 @@ end)
 
 -- data
 progressive_technologies = {{ dict_to_lua(progressive_technology_table) }}
+item_id_to_name = {{ dict_to_lua(item_id_to_name) }}

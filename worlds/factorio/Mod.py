@@ -16,7 +16,7 @@ import worlds.Files
 from . import Options
 
 from .Technologies import tech_table, recipes, free_sample_exclusions, progressive_technology_table, \
-    base_tech_table, tech_to_progressive_lookup, fluids
+    base_tech_table, tech_to_progressive_lookup, fluids, mods, tech_table, factorio_base_id
 
 template_env: Optional[jinja2.Environment] = None
 
@@ -37,7 +37,8 @@ base_info = {
     "dependencies": [
         "base >= 1.1.0",
         "? science-not-invited",
-        "? factory-levels"
+        "? factory-levels",
+        "! archipelago-extractor"
     ]
 }
 
@@ -119,6 +120,10 @@ def generate_mod(world, output_directory: str):
                 return base - (base - low) * distance
         return random.uniform(low, high)
 
+    all_items = tech_table.copy()
+    all_items["Attack Trap"] = factorio_base_id - 1
+    all_items["Evolution Trap"] = factorio_base_id - 2
+
     template_data = {
         "locations": locations, "player_names": multiworld.player_name, "tech_table": tech_table,
         "base_tech_table": base_tech_table, "tech_to_progressive_lookup": tech_to_progressive_lookup,
@@ -137,11 +142,13 @@ def generate_mod(world, output_directory: str):
         "free_sample_blacklist": {item: 1 for item in free_sample_exclusions},
         "progressive_technology_table": {tech.name: tech.progressive for tech in
                                          progressive_technology_table.values()},
+        "item_id_to_name": {f"{item_id}": item_name for item_name, item_id in all_items.items()},
         "custom_recipes": world.custom_recipes,
         "max_science_pack": multiworld.max_science_pack[player].value,
         "liquids": fluids,
         "goal": multiworld.goal[player].value,
-        "energy_link": multiworld.energy_link[player].value
+        "energy_link": multiworld.energy_link[player].value,
+        "custom_data_package": 1 if mods else 0
     }
 
     for factorio_option in Options.factorio_options:
@@ -194,6 +201,8 @@ def generate_mod(world, output_directory: str):
         f.write(locale_content)
     info = base_info.copy()
     info["name"] = mod_name
+    for mod in mods.values():
+        info["dependencies"].append(f"{mod.name} >= {mod.version}")
     with open(os.path.join(mod_dir, "info.json"), "wt") as f:
         json.dump(info, f, indent=4)
 
