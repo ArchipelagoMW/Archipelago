@@ -1107,10 +1107,10 @@ async def game_watcher(ctx: Context):
             # scout hints for visible shop items and items that might not be reachable
             def create_hint(loc):
                 asyncio.create_task(ctx.send_msgs([{"cmd": "LocationScouts", "locations": [loc], "create_as_hint": 2}]))
+
             def create_hint_player(loc, player):
                 asyncio.create_task(ctx.send_msgs([{"cmd": "LocationScouts", "locations": [loc], "create_as_hint": 2,
                                                     "player": player}]))
-
 
             pos = await snes_read(ctx, WRAM_START + 0x20, 4)
             (x, y) = (pos[3] * 256 + pos[2], pos[1] * 256 + pos[0])

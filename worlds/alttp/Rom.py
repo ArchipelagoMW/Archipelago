@@ -2344,7 +2344,9 @@ def write_strings(rom, world, player):
                 for x in range(min(hint_count, len(locations))):
                     this_location = locations.pop()
                     this_hint = this_location.item.hint_text + ' can be found ' + hint_text(this_location) + '.'
-                    tt[hint_locations.pop(0)] = this_hint
+                    hint_loc = hint_locations.pop(0)
+                    tt[hint_loc] = this_hint
+                    write_hint_data(rom, hint_loc, [this_location])
 
             if hint_locations:
                 # All remaining hint slots are filled with junk hints.
