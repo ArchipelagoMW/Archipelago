@@ -113,6 +113,11 @@ def create_regions(world, player: int, active_locations):
         LocationName.city_escape_pipe_2,
         LocationName.city_escape_pipe_3,
         LocationName.city_escape_pipe_4,
+        LocationName.city_escape_hidden_1,
+        LocationName.city_escape_hidden_2,
+        LocationName.city_escape_hidden_3,
+        LocationName.city_escape_hidden_4,
+        LocationName.city_escape_hidden_5,
         LocationName.city_escape_beetle,
         LocationName.city_escape_upgrade,
     ]
@@ -146,6 +151,10 @@ def create_regions(world, player: int, active_locations):
         LocationName.green_forest_chao_3,
         LocationName.green_forest_pipe_1,
         LocationName.green_forest_pipe_2,
+        LocationName.green_forest_hidden_1,
+        LocationName.green_forest_hidden_2,
+        LocationName.green_forest_hidden_3,
+        LocationName.green_forest_hidden_4,
         LocationName.green_forest_beetle,
         LocationName.green_forest_upgrade,
     ]
@@ -184,6 +193,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.crazy_gadget_pipe_2,
         LocationName.crazy_gadget_pipe_3,
         LocationName.crazy_gadget_pipe_4,
+        LocationName.crazy_gadget_hidden_1,
         LocationName.crazy_gadget_beetle,
         LocationName.crazy_gadget_upgrade,
     ]
@@ -219,6 +229,9 @@ def create_regions(world, player: int, active_locations):
         LocationName.prison_lane_pipe_1,
         LocationName.prison_lane_pipe_2,
         LocationName.prison_lane_pipe_3,
+        LocationName.prison_lane_hidden_1,
+        LocationName.prison_lane_hidden_2,
+        LocationName.prison_lane_hidden_3,
         LocationName.prison_lane_beetle,
         LocationName.prison_lane_upgrade,
     ]
@@ -237,6 +250,9 @@ def create_regions(world, player: int, active_locations):
         LocationName.mission_street_pipe_1,
         LocationName.mission_street_pipe_2,
         LocationName.mission_street_pipe_3,
+        LocationName.mission_street_hidden_1,
+        LocationName.mission_street_hidden_2,
+        LocationName.mission_street_hidden_3,
         LocationName.mission_street_beetle,
         LocationName.mission_street_upgrade,
     ]
@@ -320,6 +336,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.pumpkin_hill_chao_2,
         LocationName.pumpkin_hill_chao_3,
         LocationName.pumpkin_hill_pipe_1,
+        LocationName.pumpkin_hill_hidden_1,
         LocationName.pumpkin_hill_upgrade,
     ]
     pumpkin_hill_region = create_region(world, player, active_locations, LocationName.pumpkin_hill_region,
@@ -355,6 +372,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.death_chamber_pipe_1,
         LocationName.death_chamber_pipe_2,
         LocationName.death_chamber_pipe_3,
+        LocationName.death_chamber_hidden_1,
+        LocationName.death_chamber_hidden_2,
         LocationName.death_chamber_beetle,
         LocationName.death_chamber_upgrade,
     ]
@@ -391,6 +410,9 @@ def create_regions(world, player: int, active_locations):
         LocationName.radical_highway_pipe_1,
         LocationName.radical_highway_pipe_2,
         LocationName.radical_highway_pipe_3,
+        LocationName.radical_highway_hidden_1,
+        LocationName.radical_highway_hidden_2,
+        LocationName.radical_highway_hidden_3,
         LocationName.radical_highway_beetle,
         LocationName.radical_highway_upgrade,
     ]
@@ -410,6 +432,9 @@ def create_regions(world, player: int, active_locations):
         LocationName.white_jungle_pipe_2,
         LocationName.white_jungle_pipe_3,
         LocationName.white_jungle_pipe_4,
+        LocationName.white_jungle_hidden_1,
+        LocationName.white_jungle_hidden_2,
+        LocationName.white_jungle_hidden_3,
         LocationName.white_jungle_beetle,
         LocationName.white_jungle_upgrade,
     ]
@@ -506,6 +531,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.lost_colony_chao_3,
         LocationName.lost_colony_pipe_1,
         LocationName.lost_colony_pipe_2,
+        LocationName.lost_colony_hidden_1,
         LocationName.lost_colony_beetle,
         LocationName.lost_colony_upgrade,
     ]
@@ -561,6 +587,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.dry_lagoon_chao_2,
         LocationName.dry_lagoon_chao_3,
         LocationName.dry_lagoon_pipe_1,
+        LocationName.dry_lagoon_hidden_1,
         LocationName.dry_lagoon_beetle,
         LocationName.dry_lagoon_upgrade,
     ]
@@ -578,6 +605,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.egg_quarters_chao_3,
         LocationName.egg_quarters_pipe_1,
         LocationName.egg_quarters_pipe_2,
+        LocationName.egg_quarters_hidden_1,
+        LocationName.egg_quarters_hidden_2,
         LocationName.egg_quarters_beetle,
         LocationName.egg_quarters_upgrade,
     ]
@@ -594,6 +623,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.security_hall_chao_2,
         LocationName.security_hall_chao_3,
         LocationName.security_hall_pipe_1,
+        LocationName.security_hall_hidden_1,
         LocationName.security_hall_beetle,
         LocationName.security_hall_upgrade,
     ]
@@ -643,6 +673,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.cannon_core_pipe_3,
         LocationName.cannon_core_pipe_4,
         LocationName.cannon_core_pipe_5,
+        LocationName.cannon_core_hidden_1,
         LocationName.cannon_core_beetle,
     ]
     cannon_core_region = create_region(world, player, active_locations, LocationName.cannon_core_region,

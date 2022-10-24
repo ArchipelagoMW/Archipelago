@@ -486,7 +486,7 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
                                state.has(ItemName.sonic_flame_ring, player))
 
     # Pipe Upgrade Requirements
-    if world.pipesanity[player]:
+    if world.whistlesanity[player].value == 1 or world.whistlesanity[player].value == 3:
         add_rule(world.get_location(LocationName.mission_street_pipe_1, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(world.get_location(LocationName.hidden_base_pipe_1, player),
@@ -593,6 +593,23 @@ def set_mission_upgrade_rules(world: MultiWorld, player: int):
                                state.has(ItemName.eggman_jet_engine, player) and
                                state.has(ItemName.knuckles_hammer_gloves, player) and
                                state.has(ItemName.knuckles_air_necklace, player))
+
+    # Hidden Whistle Upgrade Requirements
+    if world.whistlesanity[player].value == 2 or world.whistlesanity[player].value == 3:
+        add_rule(world.get_location(LocationName.mission_street_hidden_3, player),
+                 lambda state: state.has(ItemName.tails_booster, player))
+        add_rule(world.get_location(LocationName.death_chamber_hidden_1, player),
+                 lambda state: state.has(ItemName.knuckles_shovel_claws, player) and
+                               state.has(ItemName.knuckles_hammer_gloves, player))
+        add_rule(world.get_location(LocationName.death_chamber_hidden_2, player),
+                 lambda state: state.has(ItemName.knuckles_hammer_gloves, player))
+        add_rule(world.get_location(LocationName.crazy_gadget_hidden_1, player),
+                 lambda state: state.has(ItemName.sonic_light_shoes, player))
+        add_rule(world.get_location(LocationName.white_jungle_hidden_3, player),
+                 lambda state: state.has(ItemName.shadow_air_shoes, player))
+        add_rule(world.get_location(LocationName.cannon_core_hidden_1, player),
+                 lambda state: state.has(ItemName.tails_booster, player) and
+                               state.has(ItemName.eggman_jet_engine, player))
 
     # Gold Beetle Upgrade Requirements
     if world.beetlesanity[player]:

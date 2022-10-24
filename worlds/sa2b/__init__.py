@@ -72,7 +72,7 @@ class SA2BWorld(World):
             "MusicShuffle": self.world.music_shuffle[self.player].value,
             "RequiredRank": self.world.required_rank[self.player].value,
             "ChaoKeys": self.world.keysanity[self.player].value,
-            "Pipes": self.world.pipesanity[self.player].value,
+            "Whistlesanity": self.world.whistlesanity[self.player].value,
             "GoldBeetles": self.world.beetlesanity[self.player].value,
             "ChaoRaceChecks": self.world.chao_race_checks[self.player].value,
             "ChaoGardenDifficulty": self.world.chao_garden_difficulty[self.player].value,

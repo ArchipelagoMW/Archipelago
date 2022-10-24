@@ -432,6 +432,48 @@ pipe_location_table = {
     LocationName.sky_rail_pipe_6: 0xFF05BA,
 }
 
+hidden_whistle_location_table = {
+    LocationName.city_escape_hidden_1: 0xFF0700,
+    LocationName.prison_lane_hidden_1: 0xFF0702,
+    LocationName.green_forest_hidden_1: 0xFF0704,
+    LocationName.pumpkin_hill_hidden_1: 0xFF0705,
+    LocationName.mission_street_hidden_1: 0xFF0706,
+    LocationName.death_chamber_hidden_1: 0xFF070B,
+    LocationName.crazy_gadget_hidden_1: 0xFF070E,
+
+    LocationName.dry_lagoon_hidden_1: 0xFF0711,
+    LocationName.radical_highway_hidden_1: 0xFF0713,
+    LocationName.egg_quarters_hidden_1: 0xFF0714,
+    LocationName.lost_colony_hidden_1: 0xFF0715,
+    LocationName.security_hall_hidden_1: 0xFF0717,
+    LocationName.white_jungle_hidden_1: 0xFF0718,
+
+    LocationName.cannon_core_hidden_1: 0xFF071E,
+
+    LocationName.city_escape_hidden_2: 0xFF0720,
+    LocationName.prison_lane_hidden_2: 0xFF0722,
+    LocationName.green_forest_hidden_2: 0xFF0724,
+    LocationName.mission_street_hidden_2: 0xFF0726,
+    LocationName.death_chamber_hidden_2: 0xFF072B,
+
+    LocationName.radical_highway_hidden_2: 0xFF0733,
+    LocationName.egg_quarters_hidden_2: 0xFF0734,
+    LocationName.white_jungle_hidden_2: 0xFF0738,
+
+    LocationName.city_escape_hidden_3: 0xFF0740,
+    LocationName.prison_lane_hidden_3: 0xFF0742,
+    LocationName.green_forest_hidden_3: 0xFF0744,
+    LocationName.mission_street_hidden_3: 0xFF0746,
+
+    LocationName.radical_highway_hidden_3: 0xFF0753,
+    LocationName.white_jungle_hidden_3: 0xFF0758,
+
+    LocationName.city_escape_hidden_4: 0xFF0760,
+    LocationName.green_forest_hidden_4: 0xFF0764,
+
+    LocationName.city_escape_hidden_5: 0xFF0780,
+}
+
 beetle_location_table = {
     LocationName.city_escape_beetle: 0xFF0600,
     LocationName.wild_canyon_beetle: 0xFF0601,
@@ -567,6 +609,7 @@ all_locations = {
     **boss_gate_location_table,
     **chao_key_location_table,
     **pipe_location_table,
+    **hidden_whistle_location_table,
     **beetle_location_table,
     **chao_garden_beginner_location_table,
     **chao_garden_intermediate_location_table,
@@ -636,8 +679,13 @@ def setup_locations(world, player: int):
     if world.keysanity[player]:
         location_table.update({**chao_key_location_table})
 
-    if world.pipesanity[player]:
+    if world.whistlesanity[player].value == 1:
         location_table.update({**pipe_location_table})
+    elif world.whistlesanity[player].value == 2:
+        location_table.update({**hidden_whistle_location_table})
+    elif world.whistlesanity[player].value == 3:
+        location_table.update({**pipe_location_table})
+        location_table.update({**hidden_whistle_location_table})
 
     if world.beetlesanity[player]:
         location_table.update({**beetle_location_table})
