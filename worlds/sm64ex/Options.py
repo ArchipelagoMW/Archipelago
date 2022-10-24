@@ -46,7 +46,7 @@ class MIPS1Cost(Range):
 
 
 class MIPS2Cost(Range):
-    """How many stars are required to spawn MIPS the secound time. Must be bigger or equal MIPS1Cost"""
+    """How many stars are required to spawn MIPS the second time."""
     range_start = 0
     range_end = 80
     default = 50
@@ -73,6 +73,7 @@ class AreaRandomizer(Choice):
     option_Off = 0
     option_Courses_Only = 1
     option_Courses_and_Secrets = 2
+    option_Courses_and_Secrets_Separate = 3
 
 
 class BuddyChecks(Toggle):

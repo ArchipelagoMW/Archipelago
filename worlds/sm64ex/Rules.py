@@ -16,8 +16,13 @@ def set_rules(world, player: int, area_connections):
     if world.AreaRandomizer[player].value >= 1: # Some randomization is happening, randomize Courses
         entrance_ids = list(range(len(sm64paintings)))
         world.random.shuffle(entrance_ids)
-        entrance_ids = entrance_ids + list(range(len(sm64paintings), len(sm64paintings) + len(sm64secrets)))
-    if world.AreaRandomizer[player].value == 2: # Secret Regions as well
+        if world.AreaRandomizer[player].value == 3: # Shuffle Secret Regions only among themselves
+            secret_entrance_ids = list(range(len(sm64paintings), len(sm64paintings) + len(sm64secrets)))
+            world.random.shuffle(secret_entrance_ids)
+            entrance_ids += secret_entrance_ids
+        else:
+            entrance_ids += list(range(len(sm64paintings), len(sm64paintings) + len(sm64secrets)))
+    if world.AreaRandomizer[player].value == 2: # Shuffle Secret Regions with courses
         world.random.shuffle(entrance_ids)
         # Guarantee first entrance is a course
         swaplist = list(range(len(entrance_ids)))
@@ -117,7 +122,7 @@ def set_rules(world, player: int, area_connections):
     add_rule(world.get_location("Toad (Third Floor)", player), lambda state: state.can_reach("Third Floor", 'Region', player) and state.has("Power Star", player, 35))
 
     if world.MIPS1Cost[player].value > world.MIPS2Cost[player].value:
-        world.MIPS2Cost[player].value = world.MIPS1Cost[player].value
+        (world.MIPS2Cost[player].value, world.MIPS1Cost[player].value) = (world.MIPS1Cost[player].value, world.MIPS2Cost[player].value)
     add_rule(world.get_location("MIPS 1", player), lambda state: state.can_reach("Basement", 'Region', player) and state.has("Power Star", player, world.MIPS1Cost[player].value))
     add_rule(world.get_location("MIPS 2", player), lambda state: state.can_reach("Basement", 'Region', player) and state.has("Power Star", player, world.MIPS2Cost[player].value))
 
