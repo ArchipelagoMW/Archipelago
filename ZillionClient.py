@@ -18,7 +18,7 @@ from zilliandomizer.options import Chars
 from zilliandomizer.patch import RescueInfo
 
 from worlds.zillion.id_maps import make_id_to_others
-from worlds.zillion.config import base_id
+from worlds.zillion.config import base_id, zillion_map
 
 
 class ZillionCommandProcessor(ClientCommandProcessor):
@@ -173,7 +173,7 @@ class ZillionContext(CommonContext):
 
                     with self.canvas:
                         Color(1, 1, 1, 1)
-                        Rectangle(source='worlds/zillion/empty-zillion-map-row-col-labels-281.png',
+                        Rectangle(source=zillion_map,
                                   pos=self.pos,
                                   size=(ZillionManager.MapPanel.MAP_WIDTH,
                                         int(ZillionManager.MapPanel.MAP_WIDTH * 1.456)))  # aspect ratio of that image
