@@ -1,8 +1,8 @@
-from typing import TYPE_CHECKING, Dict, Callable
+from typing import TYPE_CHECKING, Dict, Callable, Optional
 
 from worlds.generic.Rules import set_rule, add_rule
 from .Locations import location_table, LocationDict
-from .Creatures import all_creatures, aggressive, suffix
+from .Creatures import all_creatures, aggressive, suffix, hatchable, containment
 from .Options import AggressiveScanLogic
 import math
 
@@ -258,6 +258,15 @@ def set_creature_rule(world, player: int, creature_name: str) -> "Location":
     return location
 
 
+def get_aggression_rule(option: AggressiveScanLogic, creature_name: str) -> \
+        Optional[Callable[["CollectionState", int], bool]]:
+    """Get logic rule for a creature scan location."""
+    if creature_name not in hatchable and option != option.option_none:  # can only be done via stasis
+        return has_stasis_rifle
+    # otherwise allow option preference
+    return aggression_rules.get(option.value, None)
+
+
 aggression_rules: Dict[int, Callable[["CollectionState", int], bool]] = {
     AggressiveScanLogic.option_stasis: has_stasis_rifle,
     AggressiveScanLogic.option_containment: has_containment,
@@ -274,14 +283,21 @@ def set_rules(subnautica_world: "SubnauticaWorld"):
         set_location_rule(world, player, loc)
 
     if subnautica_world.creatures_to_scan:
-        aggressive_rule = aggression_rules.get(world.creature_scan_logic[player], None)
+        option = world.creature_scan_logic[player]
+
         for creature_name in subnautica_world.creatures_to_scan:
             location = set_creature_rule(world, player, creature_name)
-            if creature_name in aggressive and aggressive_rule:
-                add_rule(location, lambda state: aggressive_rule(state, player))
+            if creature_name in containment:  # there is no other way, hard-required containment
+                add_rule(location, lambda state: has_containment(state, player))
+            elif creature_name in aggressive:
+                rule = get_aggression_rule(option, creature_name)
+                if rule:
+                    add_rule(location,
+                             lambda state, loc_rule=get_aggression_rule(option, creature_name): loc_rule(state, player))
 
     # Victory locations
-    set_rule(world.get_location("Neptune Launch", player), lambda state:
+    set_rule(world.get_location("Neptune Launch", player),
+             lambda state:
         get_max_depth(state, player) >= 1444 and
         has_mobile_vehicle_bay(state, player) and
         state.has("Neptune Launch Platform", player) and

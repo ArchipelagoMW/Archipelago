@@ -1844,7 +1844,7 @@ def write_rom_item(rom, item_id, item):
 
 
 def get_override_table(world):
-    return list(filter(lambda val: val != None, map(partial(get_override_entry, world.player), world.world.get_filled_locations(world.player))))
+    return list(filter(lambda val: val != None, map(partial(get_override_entry, world), world.world.get_filled_locations(world.player))))
 
 
 override_struct = struct.Struct('>xBBBHBB') # match override_t in get_items.c
@@ -1852,10 +1852,10 @@ def get_override_table_bytes(override_table):
     return b''.join(sorted(itertools.starmap(override_struct.pack, override_table)))
 
 
-def get_override_entry(player_id, location):
+def get_override_entry(ootworld, location):
     scene = location.scene
     default = location.default
-    player_id = 0 if player_id == location.item.player else min(location.item.player, 255)
+    player_id = 0 if ootworld.player == location.item.player else min(location.item.player, 255)
     if location.item.game != 'Ocarina of Time': 
         # This is an AP sendable. It's guaranteed to not be None. 
         if location.item.advancement:
@@ -1869,7 +1869,7 @@ def get_override_entry(player_id, location):
 
     if location.item.trap:
         item_id = 0x7C  # Ice Trap ID, to get "X is a fool" message
-        looks_like_item_id = location.item.looks_like_item.index
+        looks_like_item_id = ootworld.trap_appearances[location.address].index
     else:
         looks_like_item_id = 0
 
@@ -2091,7 +2091,8 @@ def get_locked_doors(rom, world):
                 return [0x00D4 + scene * 0x1C + 0x04 + flag_byte, flag_bits]
 
         # If boss door, set the door's unlock flag
-        if (world.shuffle_bosskeys == 'remove' and scene != 0x0A) or (world.shuffle_ganon_bosskey == 'remove' and scene == 0x0A):
+        if (world.shuffle_bosskeys == 'remove' and scene != 0x0A) or (
+            world.shuffle_ganon_bosskey == 'remove' and scene == 0x0A and not world.triforce_hunt):
             if actor_id == 0x002E and actor_type == 0x05:
                 return [0x00D4 + scene * 0x1C + 0x04 + flag_byte, flag_bits]
 
@@ -2109,23 +2110,20 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
             rom.write_int16(location.address1, location.item.index)
         else:
             if location.item.trap:
-                item_display = location.item.looks_like_item
-            elif location.item.game != "Ocarina of Time": 
-                item_display = location.item
-                if location.item.advancement:
-                    item_display.index = 0xCB
-                else:
-                    item_display.index = 0xCC
-                item_display.special = {}
+                item_display = world.trap_appearances[location.address]
             else:
                 item_display = location.item
 
             # bottles in shops should look like empty bottles
             # so that that are different than normal shop refils
-            if 'shop_object' in item_display.special:
-                rom_item = read_rom_item(rom, item_display.special['shop_object'])
+            if location.item.trap or location.item.game == "Ocarina of Time":
+                if 'shop_object' in item_display.special:
+                    rom_item = read_rom_item(rom, item_display.special['shop_object'])
+                else:
+                    rom_item = read_rom_item(rom, item_display.index)
             else:
-                rom_item = read_rom_item(rom, item_display.index)
+                display_index = 0xCB if location.item.advancement else 0xCC
+                rom_item = read_rom_item(rom, display_index)
 
             shop_objs.add(rom_item['object_id'])
             shop_id = world.current_shop_id

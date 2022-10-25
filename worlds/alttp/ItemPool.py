@@ -480,7 +480,7 @@ def set_up_take_anys(world, player):
     old_man_take_any.shop = TakeAny(old_man_take_any, 0x0112, 0xE2, True, True, total_shop_slots)
     world.shops.append(old_man_take_any.shop)
 
-    swords = [item for item in world.itempool if item.type == 'Sword' and item.player == player]
+    swords = [item for item in world.itempool if item.player == player and item.type == 'Sword']
     if swords:
         sword = world.random.choice(swords)
         world.itempool.remove(sword)

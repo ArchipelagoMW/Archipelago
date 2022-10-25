@@ -11,11 +11,10 @@ from worlds.sm.variaRandomizer.graph.graph_utils import GraphUtils
 
 logger = logging.getLogger("Super Metroid")
 
-from .Locations import lookup_name_to_id as locations_lookup_name_to_id
-from .Items import lookup_name_to_id as items_lookup_name_to_id
 from .Regions import create_regions
 from .Rules import set_rules, add_entrance_rule
 from .Options import sm_options
+from .Client import SMSNIClient
 from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT, SMDeltaPatch, get_sm_symbols
 import Utils
 
@@ -68,6 +67,8 @@ class SMWeb(WebWorld):
         ["Farrak Kilhn"]
     )]
 
+locations_start_id = 82000
+items_start_id = 83000
 
 class SMWorld(World):
     """
@@ -78,12 +79,11 @@ class SMWorld(World):
 
     game: str = "Super Metroid"
     topology_present = True
-    data_version = 1
+    data_version = 2
     option_definitions = sm_options
-    item_names: Set[str] = frozenset(items_lookup_name_to_id)
-    location_names: Set[str] = frozenset(locations_lookup_name_to_id)
-    item_name_to_id = items_lookup_name_to_id
-    location_name_to_id = locations_lookup_name_to_id
+
+    item_name_to_id = {value.Name: items_start_id + value.Id for key, value in ItemManager.Items.items() if value.Id != None}
+    location_name_to_id = {key: locations_start_id + value.Id for key, value in locationsDict.items() if value.Id != None}
     web = SMWeb()
 
     remote_items: bool = False
@@ -506,10 +506,8 @@ class SMWorld(World):
         romPatcher.writeRandoSettings(self.variaRando.randoExec.randoSettings, itemLocs)
 
     def generate_output(self, output_directory: str):
-        outfilebase = 'AP_' + self.world.seed_name
-        outfilepname = f'_P{self.player}'
-        outfilepname += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}"
-        outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
+        outfilebase = self.world.get_out_file_name_base(self.player)
+        outputFilename = os.path.join(output_directory, f"{outfilebase}.sfc")
 
         try:
             self.variaRando.PatchRom(outputFilename, self.APPrePatchRom, self.APPostPatchRom)
@@ -661,13 +659,6 @@ class SMWorld(World):
                 loc.address = loc.item.code = None
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
-                        restitempool, fill_locations):      
-        if world.get_game_players("Super Metroid"):
-            progitempool.sort(
-                key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
-
-    @classmethod
     def stage_post_fill(cls, world):
         new_state = CollectionState(world)
         progitempool = []
@@ -701,8 +692,8 @@ class SMWorld(World):
                                                             dest.Name) for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions if src.Boss]))
 
 def create_locations(self, player: int):
-    for name, id in locations_lookup_name_to_id.items():
-        self.locations[name] = SMLocation(player, name, id)
+    for name in locationsDict:
+        self.locations[name] = SMLocation(player, name, self.location_name_to_id.get(name, None))
 
 
 def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):

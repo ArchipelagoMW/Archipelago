@@ -9,6 +9,7 @@ from .Regions import create_regions, sm64courses, sm64entrances_s, sm64_internal
 from BaseClasses import Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
 
+
 class SM64Web(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -34,8 +35,8 @@ class SM64World(World):
     item_name_to_id = item_table
     location_name_to_id = location_table
 
-    data_version = 7
-    required_client_version = (0, 3, 0)
+    data_version = 8
+    required_client_version = (0, 3, 5)
 
     area_connections: typing.Dict[int, int]
 
@@ -172,7 +173,7 @@ class SM64World(World):
                 }
             }
         }
-        filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_file_safe_player_name(self.player)}.apsm64ex"
+        filename = f"{self.world.get_out_file_name_base(self.player)}.apsm64ex"
         with open(os.path.join(output_directory, filename), 'w') as f:
             json.dump(data, f)
 

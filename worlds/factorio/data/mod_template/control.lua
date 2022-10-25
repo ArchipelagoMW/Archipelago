@@ -249,6 +249,10 @@ script.on_event(defines.events.on_player_main_inventory_changed, update_player_e
 
 function add_samples(force, name, count)
     local function add_to_table(t)
+        if count <= 0 then
+			-- Fixes a bug with single craft, if a recipe gives 0 of a given item.
+			return
+		end
         t[name] = (t[name] or 0) + count
     end
     -- Add to global table of earned samples for future new players

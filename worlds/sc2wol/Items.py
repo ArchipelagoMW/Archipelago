@@ -1,5 +1,6 @@
 from BaseClasses import Item, ItemClassification
 import typing
+from .MissionTables import vanilla_mission_req_table
 
 
 class ItemData(typing.NamedTuple):
@@ -153,12 +154,7 @@ basic_unit: typing.Tuple[str, ...] = (
 item_name_groups = {}
 for item, data in item_table.items():
     item_name_groups.setdefault(data.type, []).append(item)
-item_name_groups["Missions"] = ["Beat Liberation Day", "Beat The Outlaws", "Beat Zero Hour", "Beat Evacuation",
-                         "None Outbreak", "Beat Safe Haven", "Beat Haven's Fall", "Beat Smash and Grab", "Beat The Dig",
-                         "Beat The Moebius Factor", "Beat Supernova", "Beat Maw of the Void", "Beat Devil's Playground",
-                         "Beat Welcome to the Jungle", "Beat Breakout", "Beat Ghost of a Chance",
-                         "Beat The Great Train Robbery", "Beat Cutthroat", "Beat Engine of Destruction",
-                         "Beat Media Blitz", "Beat Piercing the Shroud"]
+item_name_groups["Missions"] = ["Beat " + mission_name for mission_name in vanilla_mission_req_table]
 
 filler_items: typing.Tuple[str, ...] = (
     '+15 Starting Minerals',
@@ -167,3 +163,17 @@ filler_items: typing.Tuple[str, ...] = (
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in get_full_item_list().items() if
                                             data.code}
+# Map type to expected int
+type_flaggroups: typing.Dict[str, int] = {
+    "Unit": 0,
+    "Upgrade": 1,
+    "Armory 1": 2,
+    "Armory 2": 3,
+    "Building": 4,
+    "Mercenary": 5,
+    "Laboratory": 6,
+    "Protoss": 7,
+    "Minerals": 8,
+    "Vespene": 9,
+    "Supply": 10,
+}

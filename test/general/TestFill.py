@@ -4,7 +4,7 @@ from worlds.AutoWorld import World
 from Fill import FillError, balance_multiworld_progression, fill_restrictive, distribute_items_restrictive
 from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, RegionType, Item, Location, \
     ItemClassification
-from worlds.generic.Rules import CollectionRule, locality_rules, set_rule
+from worlds.generic.Rules import CollectionRule, add_item_rule, locality_rules, set_rule
 
 
 def generate_multi_world(players: int = 1) -> MultiWorld:
@@ -359,6 +359,46 @@ class TestFillRestrictive(unittest.TestCase):
         fill_restrictive(multi_world, multi_world.state,
                          locations, player1.prog_items)
 
+    def test_swap_to_earlier_location_with_item_rule(self):
+        # test for PR#1109
+        multi_world = generate_multi_world(1)
+        player1 = generate_player_data(multi_world, 1, 4, 4)
+        locations = player1.locations[:]  # copy required
+        items = player1.prog_items[:]  # copy required
+        # for the test to work, item and location order is relevant: Sphere 1 last, allowed_item not last
+        for location in locations[:-1]:  # Sphere 2
+            # any one provides access to Sphere 2
+            set_rule(location, lambda state: any(state.has(item.name, player1.id) for item in items))
+        # forbid all but 1 item in Sphere 1
+        sphere1_loc = locations[-1]
+        allowed_item = items[1]
+        add_item_rule(sphere1_loc, lambda item_to_place: item_to_place == allowed_item)
+        # test our rules
+        self.assertTrue(location.can_fill(None, allowed_item, False), "Test is flawed")
+        self.assertTrue(location.can_fill(None, items[2], False), "Test is flawed")
+        self.assertTrue(sphere1_loc.can_fill(None, allowed_item, False), "Test is flawed")
+        self.assertFalse(sphere1_loc.can_fill(None, items[2], False), "Test is flawed")
+        # fill has to place items[1] in locations[0] which will result in a swap because of placement order
+        fill_restrictive(multi_world, multi_world.state, player1.locations, player1.prog_items)
+        # assert swap happened
+        self.assertTrue(sphere1_loc.item, "Did not swap required item into Sphere 1")
+        self.assertEqual(sphere1_loc.item, allowed_item, "Wrong item in Sphere 1")
+
+    def test_double_sweep(self):
+        # test for PR1114
+        multi_world = generate_multi_world(1)
+        player1 = generate_player_data(multi_world, 1, 1, 1)
+        location = player1.locations[0]
+        location.address = None
+        location.event = True
+        item = player1.prog_items[0]
+        item.code = None
+        location.place_locked_item(item)
+        multi_world.state.sweep_for_events()
+        multi_world.state.sweep_for_events()
+        self.assertTrue(multi_world.state.prog_items[item.name, item.player], "Sweep did not collect - Test flawed")
+        self.assertEqual(multi_world.state.prog_items[item.name, item.player], 1, "Sweep collected multiple times")
+
 
 class TestDistributeItemsRestrictive(unittest.TestCase):
     def test_basic_distribute(self):
@@ -371,13 +411,13 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
         distribute_items_restrictive(multi_world)
 
-        self.assertEqual(locations[0].item, basic_items[0])
+        self.assertEqual(locations[0].item, basic_items[1])
         self.assertFalse(locations[0].event)
         self.assertEqual(locations[1].item, prog_items[0])
         self.assertTrue(locations[1].event)
         self.assertEqual(locations[2].item, prog_items[1])
         self.assertTrue(locations[2].event)
-        self.assertEqual(locations[3].item, basic_items[1])
+        self.assertEqual(locations[3].item, basic_items[0])
         self.assertFalse(locations[3].event)
 
     def test_excluded_distribute(self):
@@ -500,8 +540,8 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         removed_item: list[Item] = []
         removed_location: list[Location] = []
 
-        def fill_hook(progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool, restitempool, fill_locations):
-            removed_item.append(restitempool.pop(0))
+        def fill_hook(progitempool, usefulitempool, filleritempool, fill_locations):
+            removed_item.append(filleritempool.pop(0))
             removed_location.append(fill_locations.pop(0))
 
         multi_world.worlds[player1.id].fill_hook = fill_hook
@@ -575,8 +615,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
         multi_world.local_items[player1.id].value = set(names(player1.basic_items))
         multi_world.local_items[player2.id].value = set(names(player2.basic_items))
-        locality_rules(multi_world, player1.id)
-        locality_rules(multi_world, player2.id)
+        locality_rules(multi_world)
 
         distribute_items_restrictive(multi_world)
 

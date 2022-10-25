@@ -1,10 +1,11 @@
-from BaseClasses import MultiWorld
-from ..AutoWorld import LogicMixin
-from .Options import EnergyCore
-from typing import Set
-# TODO: Options may preset certain progress steps (i.e. P_ROCK_SKIP), set in generate_early?
+from typing import Protocol, Set
 
+from BaseClasses import MultiWorld
+from worlds.AutoWorld import LogicMixin
 from . import pyevermizer
+from .Options import EnergyCore
+
+# TODO: Options may preset certain progress steps (i.e. P_ROCK_SKIP), set in generate_early?
 
 # TODO: resolve/flatten/expand rules to get rid of recursion below where possible
 # Logic.rules are all rules including locations, excluding those with no progress (i.e. locations that only drop items)
@@ -15,9 +16,16 @@ items = [item for item in filter(lambda item: item.progression, pyevermizer.get_
          if item.name not in item_names and not item_names.add(item.name)]
 
 
+class LogicProtocol(Protocol):
+    def has(self, name: str, player: int) -> bool: ...
+    def item_count(self, name: str, player: int) -> int: ...
+    def soe_has(self, progress: int, world: MultiWorld, player: int, count: int) -> bool: ...
+    def _soe_count(self, progress: int, world: MultiWorld, player: int, max_count: int) -> int: ...
+
+
 # when this module is loaded, this mixin will extend BaseClasses.CollectionState
 class SecretOfEvermoreLogic(LogicMixin):
-    def _soe_count(self, progress: int, world: MultiWorld, player: int, max_count: int = 0) -> int:
+    def _soe_count(self: LogicProtocol, progress: int, world: MultiWorld, player: int, max_count: int = 0) -> int:
         """
         Returns reached count of one of evermizer's progress steps based on collected items.
         i.e. returns 0-3 for P_DE based on items providing CHECK_BOSS,DIAMOND_EYE_DROP
@@ -35,7 +43,7 @@ class SecretOfEvermoreLogic(LogicMixin):
                 if pvd[1] == progress and pvd[0] > 0:
                     has = True
                     for req in rule.requires:
-                        if not self._soe_has(req[1], world, player, req[0]):
+                        if not self.soe_has(req[1], world, player, req[0]):
                             has = False
                             break
                     if has:
@@ -44,7 +52,7 @@ class SecretOfEvermoreLogic(LogicMixin):
                             return n
         return n
 
-    def _soe_has(self, progress: int, world: MultiWorld, player: int, count: int = 1) -> bool:
+    def soe_has(self: LogicProtocol, progress: int, world: MultiWorld, player: int, count: int = 1) -> bool:
         """
         Returns True if count of one of evermizer's progress steps is reached based on collected items. i.e. 2 * P_DE
         """

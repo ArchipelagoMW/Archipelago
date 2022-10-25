@@ -46,7 +46,7 @@ def check_for_impossible_shuffle(shuffled_levels: typing.List[int], gate_0_range
 
 class SA2BWorld(World):
     """
-    Sonic Adventure 2 Battle is an action platforming game. Play as Sonic, Tails, Knuckles, Shadow, Rogue, and Eggman across 31 stages and prevent the destruction of the earth.
+    Sonic Adventure 2 Battle is an action platforming game. Play as Sonic, Tails, Knuckles, Shadow, Rouge, and Eggman across 31 stages and prevent the destruction of the earth.
     """
     game: str = "Sonic Adventure 2 Battle"
     option_definitions = sa2b_options
@@ -86,7 +86,7 @@ class SA2BWorld(World):
 
     def _create_items(self, name: str):
         data = item_table[name]
-        return [self.create_item(name)] * data.quantity
+        return [self.create_item(name) for _ in range(data.quantity)]
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
@@ -198,11 +198,11 @@ class SA2BWorld(World):
         connect_regions(self.world, self.player, gates, self.emblems_for_cannons_core, self.gate_bosses)
 
         max_required_emblems = max(max(emblem_requirement_list), self.emblems_for_cannons_core)
-        itempool += [self.create_item(ItemName.emblem)] * max_required_emblems
+        itempool += [self.create_item(ItemName.emblem) for _ in range(max_required_emblems)]
 
         non_required_emblems = (total_emblem_count - max_required_emblems)
         junk_count = math.floor(non_required_emblems * (self.world.junk_fill_percentage[self.player].value / 100.0))
-        itempool += [self.create_item(ItemName.emblem, True)] * (non_required_emblems - junk_count)
+        itempool += [self.create_item(ItemName.emblem, True) for _ in range(non_required_emblems - junk_count)]
 
         # Carve Traps out of junk_count
         trap_weights = []
@@ -219,14 +219,14 @@ class SA2BWorld(World):
         junk_keys = list(junk_table.keys())
         for i in range(junk_count):
             junk_item = self.world.random.choice(junk_keys)
-            junk_pool += [self.create_item(junk_item)]
+            junk_pool.append(self.create_item(junk_item))
 
         itempool += junk_pool
 
         trap_pool = []
         for i in range(trap_count):
             trap_item = self.world.random.choice(trap_weights)
-            trap_pool += [self.create_item(trap_item)]
+            trap_pool.append(self.create_item(trap_item))
 
         itempool += trap_pool
 
@@ -282,8 +282,7 @@ class SA2BWorld(World):
             spoiler_handle.writelines(text)
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, nonexcludeditempool, localrestitempool, nonlocalrestitempool,
-                        restitempool, fill_locations):
+    def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
         if world.get_game_players("Sonic Adventure 2 Battle"):
             progitempool.sort(
                 key=lambda item: 0 if (item.name != 'Emblem') else 1)

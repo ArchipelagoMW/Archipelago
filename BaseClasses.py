@@ -1,4 +1,5 @@
 from __future__ import annotations
+from argparse import Namespace
 
 import copy
 from enum import unique, IntEnum, IntFlag
@@ -40,6 +41,7 @@ class MultiWorld():
     plando_connections: List
     worlds: Dict[int, auto_world]
     groups: Dict[int, Group]
+    regions: List[Region]
     itempool: List[Item]
     is_race: bool = False
     precollected_items: Dict[int, List[Item]]
@@ -50,6 +52,10 @@ class MultiWorld():
     non_local_items: Dict[int, Options.NonLocalItems]
     progression_balancing: Dict[int, Options.ProgressionBalancing]
     completion_condition: Dict[int, Callable[[CollectionState], bool]]
+    indirect_connections: Dict[Region, Set[Entrance]]
+    exclude_locations: Dict[int, Options.ExcludeLocations]
+
+    game: Dict[int, str]
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -87,6 +93,7 @@ class MultiWorld():
         self.customitemarray = []
         self.shuffle_ganon = True
         self.spoiler = Spoiler(self)
+        self.indirect_connections = {}
         self.fix_trock_doors = self.AttributeProxy(
             lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
         self.fix_skullwoods_exit = self.AttributeProxy(
@@ -195,7 +202,7 @@ class MultiWorld():
         self.slot_seeds = {player: random.Random(self.random.getrandbits(64)) for player in
                            range(1, self.players + 1)}
 
-    def set_options(self, args):
+    def set_options(self, args: Namespace) -> None:
         for option_key in Options.common_options:
             setattr(self, option_key, getattr(args, option_key, {}))
         for option_key in Options.per_game_common_options:
@@ -294,6 +301,13 @@ class MultiWorld():
 
     def get_file_safe_player_name(self, player: int) -> str:
         return ''.join(c for c in self.get_player_name(player) if c not in '<>:"/\\|?*')
+
+    def get_out_file_name_base(self, player: int) -> str:
+        """ the base name (without file extension) for each player's output file for a seed """
+        return f"AP_{self.seed_name}_P{player}" \
+            + (f"_{self.get_file_safe_player_name(player).replace(' ', '_')}"
+               if (self.player_name[player] != f"Player{player}")
+               else '')
 
     def initialize_regions(self, regions=None):
         for region in regions if regions else self.regions:
@@ -403,6 +417,11 @@ class MultiWorld():
 
     def clear_entrance_cache(self):
         self._cached_entrances = None
+
+    def register_indirect_condition(self, region: Region, entrance: Entrance):
+        """Report that access to this Region can result in unlocking this Entrance,
+        state.can_reach(Region) in the Entrance's traversal condition, as opposed to pure transition logic."""
+        self.indirect_connections.setdefault(region, set()).add(entrance)
 
     def get_locations(self) -> List[Location]:
         if self._cached_locations is None:
@@ -529,7 +548,7 @@ class MultiWorld():
 
         beatable_fulfilled = False
 
-        def location_conditition(location: Location):
+        def location_condition(location: Location):
             """Determine if this location has to be accessible, location is already filtered by location_relevant"""
             if location.player in players["minimal"]:
                 return False
@@ -546,7 +565,7 @@ class MultiWorld():
         def all_done():
             """Check if all access rules are fulfilled"""
             if beatable_fulfilled:
-                if any(location_conditition(location) for location in locations):
+                if any(location_condition(location) for location in locations):
                     return False  # still locations required to be collected
                 return True
 
@@ -608,7 +627,6 @@ class CollectionState():
                 self.collect(item, True)
 
     def update_reachable_regions(self, player: int):
-        from worlds.alttp.EntranceShuffle import indirect_connections
         self.stale[player] = False
         rrp = self.reachable_regions[player]
         bc = self.blocked_connections[player]
@@ -616,7 +634,7 @@ class CollectionState():
         start = self.world.get_region('Menu', player)
 
         # init on first call - this can't be done on construction since the regions don't exist yet
-        if not start in rrp:
+        if start not in rrp:
             rrp.add(start)
             bc.update(start.exits)
             queue.extend(start.exits)
@@ -636,8 +654,7 @@ class CollectionState():
                 self.path[new_region] = (new_region.name, self.path.get(connection, None))
 
                 # Retry connections if the new region can unblock them
-                if new_region.name in indirect_connections:
-                    new_entrance = self.world.get_entrance(indirect_connections[new_region.name], player)
+                for new_entrance in self.world.indirect_connections.get(new_region, set()):
                     if new_entrance in bc and new_entrance not in queue:
                         queue.append(new_entrance)
 
@@ -674,14 +691,14 @@ class CollectionState():
     def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
         if locations is None:
             locations = self.world.get_filled_locations()
-        new_locations = True
+        reachable_events = True
         # since the loop has a good chance to run more than once, only filter the events once
-        locations = {location for location in locations if location.event and
+        locations = {location for location in locations if location.event and location not in self.events and
                      not key_only or getattr(location.item, "locked_dungeon_item", False)}
-        while new_locations:
+        while reachable_events:
             reachable_events = {location for location in locations if location.can_reach(self)}
-            new_locations = reachable_events - self.events
-            for event in new_locations:
+            locations -= reachable_events
+            for event in reachable_events:
                 self.events.add(event)
                 assert isinstance(event.item, Item), "tried to collect Event with no Item"
                 self.collect(event.item, True, event)
@@ -955,6 +972,13 @@ class Region:
                 return True
         return False
 
+    def get_connecting_entrance(self, is_main_entrance: typing.Callable[[Entrance], bool]) -> Entrance:
+        for entrance in self.entrances:
+            if is_main_entrance(entrance):
+                return entrance
+        for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
+            return entrance.parent_region.get_connecting_entrance(is_main_entrance)
+
     def __repr__(self):
         return self.__str__()
 
@@ -986,7 +1010,7 @@ class Entrance:
 
         return False
 
-    def connect(self, region: Region, addresses=None, target=None):
+    def connect(self, region: Region, addresses: Any = None, target: Any = None) -> None:
         self.connected_region = region
         self.target = target
         self.addresses = addresses
@@ -1074,7 +1098,7 @@ class Location:
     show_in_spoiler: bool = True
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow = staticmethod(lambda item, state: False)
-    access_rule = staticmethod(lambda state: True)
+    access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
     item: Optional[Item] = None
 
@@ -1422,7 +1446,6 @@ class Spoiler():
                                                "f" in self.world.shop_shuffle[player]))
                     outfile.write('Custom Potion Shop:              %s\n' %
                                   bool_to_text("w" in self.world.shop_shuffle[player]))
-                    outfile.write('Boss shuffle:                    %s\n' % self.world.boss_shuffle[player])
                     outfile.write('Enemy health:                    %s\n' % self.world.enemy_health[player])
                     outfile.write('Enemy damage:                    %s\n' % self.world.enemy_damage[player])
                     outfile.write('Prize shuffle                    %s\n' %

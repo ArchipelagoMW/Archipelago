@@ -49,7 +49,6 @@ class OOTItem(Item):
         self.type = type
         self.index = index
         self.special = special or {}
-        self.looks_like_item = None
         self.price = special.get('price', None) if special else None
         self.internal = False
 

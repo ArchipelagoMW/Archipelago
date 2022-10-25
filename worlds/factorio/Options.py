@@ -137,8 +137,6 @@ class Progressive(Choice):
     option_off = 0
     option_grouped_random = 1
     option_on = 2
-    alias_false = 0
-    alias_true = 2
     default = 2
 
     def want_progressives(self, random):
