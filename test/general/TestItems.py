@@ -15,7 +15,7 @@ class TestBase(unittest.TestCase):
     def testItemNameGroupHasValidItem(self):
         """Test that all item name groups contain valid items. """
         # This cannot test for Event names that you may have declared for logic, only sendable Items.
-        # In such a case, you can add your entries to this Exclusion dict. Game Name -> Group definitions
+        # In such a case, you can add your entries to this Exclusion dict. Game Name -> Group Name
         exclusion_dict = {
             "A Link to the Past":
                 {"Pendants", "Crystals"},
