@@ -9,7 +9,7 @@ class Dungeon(object):
             else:
                 return [obj]
 
-        self.world = world
+        self.multiworld = world
         self.name = name
         self.hint_text = hint
         self.font_color = font_color

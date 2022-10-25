@@ -145,16 +145,16 @@ class WitnessWorld(World):
         set_rules(self.multiworld, self.player, self.player_logic, self.locat)
 
     def fill_slot_data(self) -> dict:
-        hint_amount = get_option_value(self.world, self.player, "hint_amount")
+        hint_amount = get_option_value(self.multiworld, self.player, "hint_amount")
 
         credits_hint = ("This Randomizer", "is brought to you by", "NewSoupVi, Jarno, jbzdarkid, sigma144", -1)
 
         audio_logs = get_audio_logs().copy()
 
         if hint_amount != 0:
-            generated_hints = make_hints(self.world, self.player, hint_amount)
+            generated_hints = make_hints(self.multiworld, self.player, hint_amount)
 
-            self.world.random.shuffle(audio_logs)
+            self.multiworld.random.shuffle(audio_logs)
 
             duplicates = len(audio_logs) // hint_amount
 
@@ -169,7 +169,7 @@ class WitnessWorld(World):
             audio_log = audio_logs.pop()
             self.log_ids_to_hints[int(audio_log, 16)] = credits_hint
 
-        joke_hints = generate_joke_hints(self.world, len(audio_logs))
+        joke_hints = generate_joke_hints(self.multiworld, len(audio_logs))
 
         while audio_logs:
             audio_log = audio_logs.pop()

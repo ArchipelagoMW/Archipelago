@@ -643,11 +643,11 @@ def shuffle_entrance_pool(ootworld, pool_type, entrance_pool, target_entrances, 
     raise EntranceShuffleError(f'Entrance placement attempt count exceeded for world {ootworld.player}')
 
 def shuffle_entrances(ootworld, pool_type, entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state):
-    ootworld.world.random.shuffle(entrances)
+    ootworld.multiworld.random.shuffle(entrances)
     for entrance in entrances:
         if entrance.connected_region != None:
             continue
-        ootworld.world.random.shuffle(target_entrances)
+        ootworld.multiworld.random.shuffle(target_entrances)
         # Here we deliberately introduce bias by prioritizing certain interiors, i.e. the ones most likely to cause problems.
         # success rate over randomization
         if pool_type in {'InteriorSoft', 'MixedSoft'}:
