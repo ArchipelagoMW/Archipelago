@@ -7,13 +7,15 @@ import typing
 import Utils
 from BaseClasses import Item, CollectionState, Tutorial
 from .Dungeons import create_dungeons
-from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect, indirect_connections
+from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect, \
+    indirect_connections, indirect_connections_inverted, indirect_connections_not_inverted
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
 from .Options import alttp_options, smallkey_shuffle
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
     is_main_entrance
+from .Client import ALTTPSNIClient
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
@@ -216,9 +218,15 @@ class ALTTPWorld(World):
         if world.mode[player] != 'inverted':
             link_entrances(world, player)
             mark_light_world_regions(world, player)
+            for region_name, entrance_name in indirect_connections_not_inverted.items():
+                world.register_indirect_condition(self.world.get_region(region_name, player),
+                                                  self.world.get_entrance(entrance_name, player))
         else:
             link_inverted_entrances(world, player)
             mark_dark_world_regions(world, player)
+            for region_name, entrance_name in indirect_connections_inverted.items():
+                world.register_indirect_condition(self.world.get_region(region_name, player),
+                                                  self.world.get_entrance(entrance_name, player))
 
         world.random = old_random
         plando_connect(world, player)
@@ -226,6 +234,7 @@ class ALTTPWorld(World):
         for region_name, entrance_name in indirect_connections.items():
             world.register_indirect_condition(self.multiworld.get_region(region_name, player),
                                               self.multiworld.get_entrance(entrance_name, player))
+
 
     def collect_item(self, state: CollectionState, item: Item, remove=False):
         item_name = item.name
@@ -400,11 +409,7 @@ class ALTTPWorld(World):
                                deathlink=world.death_link[player],
                                allowcollect=world.allow_collect[player])
 
-            outfilepname = f'_P{player}'
-            outfilepname += f"_{world.get_file_safe_player_name(player).replace(' ', '_')}" \
-                if world.player_name[player] != 'Player%d' % player else ''
-
-            rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
+            rompath = os.path.join(output_directory, f"{self.world.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
             patch = LttPDeltaPatch(os.path.splitext(rompath)[0]+LttPDeltaPatch.patch_file_ending, player=player,
                                    player_name=world.player_name[player], patched_path=rompath)
@@ -494,11 +499,15 @@ class ALTTPWorld(World):
 
                 while gtower_locations and filleritempool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
-                    item_to_place = filleritempool.pop()
-                    if spot_to_fill.item_rule(item_to_place):
-                        world.push_item(spot_to_fill, item_to_place, False)
-                        fill_locations.remove(spot_to_fill)  # very slow, unfortunately
-                        trash_count -= 1
+                    for index, item in enumerate(filleritempool):
+                        if spot_to_fill.item_rule(item):
+                            filleritempool.pop(index)  # remove from outer fill
+                            world.push_item(spot_to_fill, item, False)
+                            fill_locations.remove(spot_to_fill)  # very slow, unfortunately
+                            trash_count -= 1
+                            break
+                    else:
+                        logging.warning(f"Could not trash fill Ganon's Tower for player {player}.")
 
     def get_filler_item_name(self) -> str:
         if self.multiworld.goal[self.player] == "icerodhunt":

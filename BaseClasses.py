@@ -1,4 +1,5 @@
 from __future__ import annotations
+from argparse import Namespace
 
 import copy
 from enum import unique, IntEnum, IntFlag
@@ -54,6 +55,7 @@ class MultiWorld():
     indirect_connections: Dict[Region, Set[Entrance]]
     exclude_locations: Dict[int, Options.ExcludeLocations]
 
+    game: Dict[int, str]
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -200,7 +202,7 @@ class MultiWorld():
         self.slot_seeds = {player: random.Random(self.random.getrandbits(64)) for player in
                            range(1, self.players + 1)}
 
-    def set_options(self, args):
+    def set_options(self, args: Namespace) -> None:
         for option_key in Options.common_options:
             setattr(self, option_key, getattr(args, option_key, {}))
         for option_key in Options.per_game_common_options:
@@ -299,6 +301,13 @@ class MultiWorld():
 
     def get_file_safe_player_name(self, player: int) -> str:
         return ''.join(c for c in self.get_player_name(player) if c not in '<>:"/\\|?*')
+
+    def get_out_file_name_base(self, player: int) -> str:
+        """ the base name (without file extension) for each player's output file for a seed """
+        return f"AP_{self.seed_name}_P{player}" \
+            + (f"_{self.get_file_safe_player_name(player).replace(' ', '_')}"
+               if (self.player_name[player] != f"Player{player}")
+               else '')
 
     def initialize_regions(self, regions=None):
         for region in regions if regions else self.regions:
@@ -682,14 +691,14 @@ class CollectionState():
     def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
         if locations is None:
             locations = self.multiworld.get_filled_locations()
-        new_locations = True
+        reachable_events = True
         # since the loop has a good chance to run more than once, only filter the events once
-        locations = {location for location in locations if location.event and
+        locations = {location for location in locations if location.event and location not in self.events and
                      not key_only or getattr(location.item, "locked_dungeon_item", False)}
-        while new_locations:
+        while reachable_events:
             reachable_events = {location for location in locations if location.can_reach(self)}
-            new_locations = reachable_events - self.events
-            for event in new_locations:
+            locations -= reachable_events
+            for event in reachable_events:
                 self.events.add(event)
                 assert isinstance(event.item, Item), "tried to collect Event with no Item"
                 self.collect(event.item, True, event)

@@ -98,37 +98,37 @@ class RaftLogic(LogicMixin):
         return self.raft_can_access_vasagatan(player)
 
     def raft_can_access_balboa_island(self, player):
-        return self.raft_can_drive(player) and self.has("Balboa Island Frequency", player)
+        return self.raft_can_navigate(player) and self.raft_can_drive(player) and self.has("Balboa Island Frequency", player)
 
     def raft_can_complete_balboa_island(self, player):
         return self.raft_can_access_balboa_island(player) and self.raft_can_craft_machete(player)
 
     def raft_can_access_caravan_island(self, player):
-        return self.raft_can_drive(player) and self.has("Caravan Island Frequency", player)
+        return self.raft_can_navigate(player) and self.raft_can_drive(player) and self.has("Caravan Island Frequency", player)
 
     def raft_can_complete_caravan_island(self, player):
         return self.raft_can_access_caravan_island(player) and self.raft_can_craft_ziplineTool(player)
 
     def raft_can_access_tangaroa(self, player):
-        return self.raft_can_drive(player) and self.has("Tangaroa Frequency", player)
+        return self.raft_can_navigate(player) and self.raft_can_drive(player) and self.has("Tangaroa Frequency", player)
 
     def raft_can_complete_tangaroa(self, player):
         return self.raft_can_access_tangaroa(player) and self.raft_can_craft_ziplineTool(player)
 
     def raft_can_access_varuna_point(self, player):
-        return self.raft_can_drive(player) and self.has("Varuna Point Frequency", player)
+        return self.raft_can_navigate(player) and self.raft_can_drive(player) and self.has("Varuna Point Frequency", player)
 
     def raft_can_complete_varuna_point(self, player):
         return self.raft_can_access_varuna_point(player) and self.raft_can_craft_ziplineTool(player)
 
     def raft_can_access_temperance(self, player):
-        return self.raft_can_drive(player) and self.has("Temperance Frequency", player)
+        return self.raft_can_navigate(player) and self.raft_can_drive(player) and self.has("Temperance Frequency", player)
 
     def raft_can_complete_temperance(self, player):
         return self.raft_can_access_temperance(player) # No zipline required on Temperance
 
     def raft_can_access_utopia(self, player):
-        return (self.raft_can_drive(player)
+        return (self.raft_can_navigate(player) and self.raft_can_drive(player)
             # Access checks are to prevent frequencies for other
             # islands from appearing in Utopia
             and self.raft_can_access_radio_tower(player)

@@ -91,6 +91,6 @@ class V6World(World):
                 }
             }
         }
-        filename = f"AP_{self.multiworld.seed_name}_P{self.player}_{self.multiworld.get_file_safe_player_name(self.player)}.apv6"
+        filename = f"{self.multiworld.get_out_file_name_base(self.player)}.apv6"
         with open(os.path.join(output_directory, filename), 'w') as f:
             json.dump(data, f)

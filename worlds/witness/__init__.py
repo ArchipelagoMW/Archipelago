@@ -1,18 +1,20 @@
 """
 Archipelago init file for The Witness
 """
-
 import typing
 
 from BaseClasses import Region, RegionType, Location, MultiWorld, Item, Entrance, Tutorial, ItemClassification
+from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
+    get_priority_hint_items, make_hints, generate_joke_hints
 from ..AutoWorld import World, WebWorld
-from .player_logic import StaticWitnessLogic, WitnessPlayerLogic
+from .player_logic import WitnessPlayerLogic
+from .static_logic import StaticWitnessLogic
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems
 from .rules import set_rules
 from .regions import WitnessRegions
 from .Options import is_option_enabled, the_witness_options, get_option_value
-from .utils import best_junk_to_add_based_on_weights
+from .utils import best_junk_to_add_based_on_weights, get_audio_logs
 from logging import warning
 
 
@@ -36,7 +38,7 @@ class WitnessWorld(World):
     """
     game = "The Witness"
     topology_present = False
-    data_version = 7
+    data_version = 8
 
     static_logic = StaticWitnessLogic()
     static_locat = StaticWitnessLocations()
@@ -57,7 +59,10 @@ class WitnessWorld(World):
             'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID,
             'item_id_to_door_hexes': self.items.ITEM_ID_TO_DOOR_HEX,
             'door_hexes': self.items.DOORS,
-            'symbols_not_in_the_game': self.items.SYMBOLS_NOT_IN_THE_GAME
+            'symbols_not_in_the_game': self.items.SYMBOLS_NOT_IN_THE_GAME,
+            'disabled_panels': self.player_logic.COMPLETELY_DISABLED_CHECKS,
+            'log_ids_to_hints': self.log_ids_to_hints,
+            'progressive_item_lists': self.items.MULTI_LISTS_BY_CODE
         }
 
     def generate_early(self):
@@ -76,6 +81,8 @@ class WitnessWorld(World):
         self.items = WitnessPlayerItems(self.locat, self.multiworld, self.player, self.player_logic)
         self.regio = WitnessRegions(self.locat)
 
+        self.log_ids_to_hints = dict()
+
         self.junk_items_created = {key: 0 for key in self.items.JUNK_WEIGHTS.keys()}
 
     def generate_basic(self):
@@ -83,17 +90,18 @@ class WitnessWorld(World):
         pool = []
         items_by_name = dict()
         for item in self.items.ITEM_TABLE:
-            witness_item = self.create_item(item)
-            if item in self.items.PROGRESSION_TABLE:
-                pool.append(witness_item)
-                items_by_name[item] = witness_item
+            for i in range(0, self.items.PROG_ITEM_AMOUNTS[item]):
+                if item in self.items.PROGRESSION_TABLE:
+                    witness_item = self.create_item(item)
+                    pool.append(witness_item)
+                    items_by_name[item] = witness_item
 
         less_junk = 0
 
         # Put good item on first check if symbol shuffle is on
         symbols = is_option_enabled(self.multiworld, self.player, "shuffle_symbols")
 
-        if symbols:
+        if symbols and get_option_value(self.multiworld, self.player, "puzzle_randomization") != 1:
             random_good_item = self.multiworld.random.choice(self.items.GOOD_ITEMS)
 
             first_check = self.multiworld.get_location(
@@ -109,9 +117,9 @@ class WitnessWorld(World):
             pool.remove(items_by_name[item])
 
         for item in self.items.EXTRA_AMOUNTS:
-            witness_item = self.create_item(item)
             for i in range(0, self.items.EXTRA_AMOUNTS[item]):
                 if len(pool) < len(self.locat.CHECK_LOCATION_TABLE) - len(self.locat.EVENT_LOCATION_TABLE) - less_junk:
+                    witness_item = self.create_item(item)
                     pool.append(witness_item)
 
         # Put in junk items to fill the rest
@@ -137,9 +145,39 @@ class WitnessWorld(World):
         set_rules(self.multiworld, self.player, self.player_logic, self.locat)
 
     def fill_slot_data(self) -> dict:
-        slot_data = self._get_slot_data()
+        hint_amount = get_option_value(self.world, self.player, "hint_amount")
 
-        slot_data["hard_mode"] = False
+        credits_hint = ("This Randomizer", "is brought to you by", "NewSoupVi, Jarno, jbzdarkid, sigma144", -1)
+
+        audio_logs = get_audio_logs().copy()
+
+        if hint_amount != 0:
+            generated_hints = make_hints(self.world, self.player, hint_amount)
+
+            self.world.random.shuffle(audio_logs)
+
+            duplicates = len(audio_logs) // hint_amount
+
+            for _ in range(0, hint_amount):
+                hint = generated_hints.pop()
+
+                for _ in range(0, duplicates):
+                    audio_log = audio_logs.pop()
+                    self.log_ids_to_hints[int(audio_log, 16)] = hint
+
+        if audio_logs:
+            audio_log = audio_logs.pop()
+            self.log_ids_to_hints[int(audio_log, 16)] = credits_hint
+
+        joke_hints = generate_joke_hints(self.world, len(audio_logs))
+
+        while audio_logs:
+            audio_log = audio_logs.pop()
+            self.log_ids_to_hints[int(audio_log, 16)] = joke_hints.pop()
+
+        # generate hints done
+
+        slot_data = self._get_slot_data()
 
         for option_name in the_witness_options:
             slot_data[option_name] = get_option_value(

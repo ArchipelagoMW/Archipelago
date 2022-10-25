@@ -3,7 +3,7 @@ from typing import Optional, Union, List, Tuple, Callable, Dict
 
 from BaseClasses import Boss
 from Fill import FillError
-from .Options import Bosses
+from .Options import LTTPBosses as Bosses
 
 
 def BossFactory(boss: str, player: int) -> Optional[Boss]:
