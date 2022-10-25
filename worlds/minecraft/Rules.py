@@ -173,7 +173,7 @@ def set_advancement_rules(world: MultiWorld, player: int):
                            state.can_reach("Hero of the Village", "Location", player))  # Bad Omen, Hero of the Village
     set_rule(world.get_location("Bullseye", player), lambda state: state.has("Archery", player) and state.has("Progressive Tools", player, 2) and state._mc_has_iron_ingots(player))
     set_rule(world.get_location("Spooky Scary Skeleton", player), lambda state: state._mc_basic_combat(player))
-    set_rule(world.get_location("Two by Two", player), lambda state: state._mc_has_iron_ingots(player) and state._mc_can_adventure(player))  # shears > seagrass > turtles; nether > striders; gold carrots > horses skips ingots
+    set_rule(world.get_location("Two by Two", player), lambda state: state._mc_has_iron_ingots(player) and state.has("Bucket", player) and state._mc_can_adventure(player))  # shears > seagrass > turtles; nether > striders; gold carrots > horses skips ingots; buckets of tropical fish > axolotls
     # set_rule(world.get_location("Stone Age", player), lambda state: True)
     set_rule(world.get_location("Two Birds, One Arrow", player), lambda state: state._mc_craft_crossbow(player) and state._mc_can_enchant(player))
     # set_rule(world.get_location("We Need to Go Deeper", player), lambda state: True)
