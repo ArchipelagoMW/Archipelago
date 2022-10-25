@@ -37,7 +37,7 @@ def set_rules(world: MultiWorld, player: int):
         raise Exception(f"Duplicate values are not allowed in additional_sir_names.")
 
     if not world.allow_default_names[player]:
-        # Check for quantity.
+        # Check for max_quantity.
         name_count = len(world.additional_lady_names[player].value)
         if name_count < int(world.number_of_children[player]):
             raise Exception(f"allow_default_names is off, but not enough names are defined in additional_lady_names. Expected {int(world.number_of_children[player])}, Got {name_count}")

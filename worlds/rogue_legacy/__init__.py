@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import ItemClassification, Tutorial
-from .Items import LegacyItem, ItemData, item_table, vendors_table, static_classes_table, progressive_classes_table, \
+from .Items import LegacyItem, RLItemData, item_table, vendors_table, static_classes_table, progressive_classes_table, \
     skill_unlocks_table, blueprints_table, runes_table, misc_items_table
 from .Locations import LegacyLocation, location_table, base_location_table
 from .Options import legacy_options
@@ -67,7 +67,7 @@ class RLWorld(World):
 
     def _create_items(self, name: str):
         data = item_table[name]
-        return [self.create_item(name)] * data.quantity
+        return [self.create_item(name)] * data.max_quantity
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
