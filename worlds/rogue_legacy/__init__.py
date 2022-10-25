@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import Item, ItemClassification, Tutorial
+from BaseClasses import ItemClassification, Tutorial
 from .Items import LegacyItem, ItemData, item_table, vendors_table, static_classes_table, progressive_classes_table, \
     skill_unlocks_table, blueprints_table, runes_table, misc_items_table
 from .Locations import LegacyLocation, location_table, base_location_table
@@ -11,7 +11,7 @@ from .definitions import ItemNames
 from ..AutoWorld import World, WebWorld
 
 
-class LegacyWeb(WebWorld):
+class RLWeb(WebWorld):
     theme = "stone"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -24,7 +24,7 @@ class LegacyWeb(WebWorld):
     )]
 
 
-class LegacyWorld(World):
+class RLWorld(World):
     """
     Rogue Legacy is a genealogical rogue-"LITE" where anyone can be a hero. Each time you die, your child will succeed
     you. Every child is unique. One child might be colorblind, another might have vertigo-- they could even be a dwarf.
@@ -35,7 +35,7 @@ class LegacyWorld(World):
     topology_present = False
     data_version = 3
     required_client_version = (0, 2, 3)
-    web = LegacyWeb()
+    web = RLWeb()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
