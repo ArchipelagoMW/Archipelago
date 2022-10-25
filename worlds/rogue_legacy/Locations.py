@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import Location
-from .Names import LocationName
+from .definitions import LocationNames
 
 
 class LegacyLocation(Location):

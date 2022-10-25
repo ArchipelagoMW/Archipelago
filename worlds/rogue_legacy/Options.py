@@ -175,19 +175,19 @@ class NumberOfChildren(Range):
 
 class AdditionalNames(OptionList):
     """
-    Set of additional names your potential offspring can have. If Allow Default Names is disabled, this is the only list
+    Set of additional names your potential offspring can have. If Allow Default definitions is disabled, this is the only list
     of names your children can have. The first value will also be your initial character's name depending on Starting
     Gender.
     """
-    display_name = "Additional Names"
+    display_name = "Additional definitions"
 
 
 class AllowDefaultNames(DefaultOnToggle):
     """
     Determines if the default names defined in the vanilla game are allowed to be used. Warning: Your world will not
-    generate if the number of Additional Names defined is less than the Number of Children value.
+    generate if the number of Additional definitions defined is less than the Number of Children value.
     """
-    display_name = "Allow Default Names"
+    display_name = "Allow Default definitions"
 
 
 class CastleScaling(Range):
@@ -336,6 +336,7 @@ class AvailableClasses(OptionSet):
     display_name = "Available Classes"
     default = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
     valid_keys = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
+
 
 legacy_options: typing.Dict[str, type(Option)] = {
     "starting_gender": StartingGender,
