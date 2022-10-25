@@ -51,7 +51,7 @@ class SA2BWorld(World):
     game: str = "Sonic Adventure 2 Battle"
     option_definitions = sa2b_options
     topology_present = False
-    data_version = 2
+    data_version = 3
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
@@ -71,6 +71,9 @@ class SA2BWorld(World):
             "MusicMap": self.music_map,
             "MusicShuffle": self.world.music_shuffle[self.player].value,
             "RequiredRank": self.world.required_rank[self.player].value,
+            "ChaoKeys": self.world.keysanity[self.player].value,
+            "Whistlesanity": self.world.whistlesanity[self.player].value,
+            "GoldBeetles": self.world.beetlesanity[self.player].value,
             "ChaoRaceChecks": self.world.chao_race_checks[self.player].value,
             "ChaoGardenDifficulty": self.world.chao_garden_difficulty[self.player].value,
             "DeathLink": self.world.death_link[self.player].value,
