@@ -66,10 +66,6 @@ class SMWWorld(World):
             "active_levels": self.active_level_dict,
         }
 
-    def _create_items(self, name: str):
-        data = item_table[name]
-        return [self.create_item(name)] * data.quantity
-
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
         for option_name in smw_options:
@@ -106,14 +102,15 @@ class SMWWorld(World):
         itempool += [self.create_item(ItemName.p_switch)]
         itempool += [self.create_item(ItemName.p_balloon)]
         itempool += [self.create_item(ItemName.super_star_active)]
-        itempool += [self.create_item(ItemName.progressive_powerup)] * 3
+        itempool += [self.create_item(ItemName.progressive_powerup) for _ in range(3)]
         itempool += [self.create_item(ItemName.yellow_switch_palace)]
         itempool += [self.create_item(ItemName.green_switch_palace)]
         itempool += [self.create_item(ItemName.red_switch_palace)]
         itempool += [self.create_item(ItemName.blue_switch_palace)]
         
         if self.world.goal[self.player] == "yoshi_egg_hunt":
-            itempool += [self.create_item(ItemName.yoshi_egg)] * self.world.number_of_yoshi_eggs[self.player]
+            itempool += [self.create_item(ItemName.yoshi_egg)
+                         for _ in range(self.world.number_of_yoshi_eggs[self.player])]
             self.world.get_location(LocationName.yoshis_house, self.player).place_locked_item(self.create_item(ItemName.victory))
         else:
             self.world.get_location(LocationName.bowser, self.player).place_locked_item(self.create_item(ItemName.victory))
@@ -129,11 +126,11 @@ class SMWWorld(World):
         trap_pool = []
         for i in range(trap_count):
             trap_item = self.world.random.choice(trap_weights)
-            trap_pool += [self.create_item(trap_item)]
+            trap_pool.append(self.create_item(trap_item))
 
         itempool += trap_pool
 
-        itempool += [self.create_item(ItemName.one_up_mushroom)] * junk_count
+        itempool += [self.create_item(ItemName.one_up_mushroom) for _ in range(junk_count)]
 
         boss_location_names = [LocationName.yoshis_island_koopaling, LocationName.donut_plains_koopaling, LocationName.vanilla_dome_koopaling,
                                LocationName.twin_bridges_koopaling, LocationName.forest_koopaling, LocationName.chocolate_koopaling,
