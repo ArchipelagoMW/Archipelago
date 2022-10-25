@@ -153,7 +153,8 @@ class SubnauticaWorld(World):
         return self.prefill_items
 
     def pre_fill(self) -> None:
-        reachable = self.world.get_reachable_locations(player=self.player)
+        reachable = [location for location in self.world.get_reachable_locations(player=self.player)
+                     if not location.item]
         self.world.random.shuffle(reachable)
         items = self.prefill_items.copy()
         for item in items:
