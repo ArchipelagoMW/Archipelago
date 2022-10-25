@@ -209,7 +209,7 @@ class SoEWorld(World):
 
     def create_regions(self):
         # exclude 'hidden' on easy
-        max_difficulty = 1 if self.world.difficulty[self.player] == Difficulty.option_easy else 256
+        max_difficulty = 1 if self.multiworld.difficulty[self.player] == Difficulty.option_easy else 256
 
         # TODO: generate *some* regions from locations' requirements?
         r = Region('Menu', RegionType.Generic, 'Menu', self.player, self.multiworld)
@@ -262,7 +262,7 @@ class SoEWorld(World):
         late_locations = self.multiworld.random.sample(late_bosses, late_count)
 
         # add locations to the world
-        r = Region('Ingame', RegionType.Generic, 'Ingame', self.player, self.world)
+        r = Region('Ingame', RegionType.Generic, 'Ingame', self.player, self.multiworld)
         for sphere in spheres.values():
             for locations in sphere.values():
                 for location in locations:

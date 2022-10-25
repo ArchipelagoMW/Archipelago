@@ -219,21 +219,21 @@ class ALTTPWorld(World):
             link_entrances(world, player)
             mark_light_world_regions(world, player)
             for region_name, entrance_name in indirect_connections_not_inverted.items():
-                world.register_indirect_condition(self.world.get_region(region_name, player),
-                                                  self.world.get_entrance(entrance_name, player))
+                world.register_indirect_condition(world.get_region(region_name, player),
+                                                  world.get_entrance(entrance_name, player))
         else:
             link_inverted_entrances(world, player)
             mark_dark_world_regions(world, player)
             for region_name, entrance_name in indirect_connections_inverted.items():
-                world.register_indirect_condition(self.world.get_region(region_name, player),
-                                                  self.world.get_entrance(entrance_name, player))
+                world.register_indirect_condition(world.get_region(region_name, player),
+                                                  world.get_entrance(entrance_name, player))
 
         world.random = old_random
         plando_connect(world, player)
 
         for region_name, entrance_name in indirect_connections.items():
-            world.register_indirect_condition(self.multiworld.get_region(region_name, player),
-                                              self.multiworld.get_entrance(entrance_name, player))
+            world.register_indirect_condition(world.get_region(region_name, player),
+                                              world.get_entrance(entrance_name, player))
 
 
     def collect_item(self, state: CollectionState, item: Item, remove=False):
