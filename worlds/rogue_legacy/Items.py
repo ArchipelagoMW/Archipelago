@@ -101,10 +101,14 @@ item_table: Dict[str, RLItemData] = {
     "5000 Gold":                RLItemData("Filler",     90_033),
 }
 
-event_table: Dict[str, RLItemData] = {
-    "Defeat Castle Hamson Boss":         RLItemData("Event", classification=ItemClassification.progression),
-    "Defeat Forest Abkhazia Boss":       RLItemData("Event", classification=ItemClassification.progression),
-    "Defeat The Maya Boss":              RLItemData("Event", classification=ItemClassification.progression),
-    "Defeat The Land of Darkness Boss":  RLItemData("Event", classification=ItemClassification.progression),
-    "Defeat The Fountain":               RLItemData("Event", classification=ItemClassification.progression),
+event_item_table: Dict[str, RLItemData] = {
+    "Defeat Khidr":             RLItemData("Event", classification=ItemClassification.progression),
+    "Defeat Alexander":         RLItemData("Event", classification=ItemClassification.progression),
+    "Defeat Ponce de Leon":     RLItemData("Event", classification=ItemClassification.progression),
+    "Defeat Herodotus":         RLItemData("Event", classification=ItemClassification.progression),
+    "Defeat Neo Khidr":         RLItemData("Event", classification=ItemClassification.progression),
+    "Defeat Alexander IV":      RLItemData("Event", classification=ItemClassification.progression),
+    "Defeat Ponce de Freon":    RLItemData("Event", classification=ItemClassification.progression),
+    "Defeat Astrodotus":        RLItemData("Event", classification=ItemClassification.progression),
+    "Defeat The Fountain":      RLItemData("Event", classification=ItemClassification.progression),
 }
