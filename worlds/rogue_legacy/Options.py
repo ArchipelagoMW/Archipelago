@@ -63,9 +63,9 @@ class FairyChestsPerZone(Range):
     bonuses can be found in Fairy Chests.
     """
     display_name = "Fairy Chests Per Zone"
-    range_start = 5
+    range_start = 0
     range_end = 15
-    default = 5
+    default = 1
 
 
 class ChestsPerZone(Range):
@@ -74,9 +74,9 @@ class ChestsPerZone(Range):
     gold or stat bonuses can be found in Chests.
     """
     display_name = "Chests Per Zone"
-    range_start = 15
-    range_end = 30
-    default = 15
+    range_start = 20
+    range_end = 50
+    default = 20
 
 
 class UniversalFairyChests(Toggle):
