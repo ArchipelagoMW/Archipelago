@@ -132,7 +132,8 @@ This allows you to host your own Factorio game.
 
 For additional client features, issue the `/help` command in the Archipelago Client. Once connected to the AP server,
 you can also issue the `!help` command to learn about additional commands like `!hint`.
-For more information about the commands you can use see the [commands guide](/tutorial/Archipelago/commands/en).
+For more information about the commands you can use, see the [Commands Guide](/tutorial/Archipelago/commands/en) and
+[Other Settings](#other-settings).
 
 ## Allowing Other People to Join Your Game
 
@@ -141,6 +142,19 @@ For more information about the commands you can use see the [commands guide](/tu
 3. Obtain your IP address by visiting whatismyip.com: [WhatIsMyIP Website](https://whatismyip.com/).
 4. Provide your IP address to anyone you want to join your game, and have them follow the steps for
    "Connecting to Someone Else's Factorio Game" above.
+
+## Other Settings
+
+- By default, in-game chat is bridged to Archipelago. If you prefer to be able to speak privately, you can disable this
+  feature by doing one of the following:
+  - Type `/toggle-ap-chat` in-game
+  - Type `/toggle_chat` in the Archipelago Client
+  - In your `host.yaml` set
+    ```
+    factorio_options:
+      bridge_chat_out: false
+    ```
+  Note that this will also disable `!` commands from within the game, and that it will not affect incoming chat.
 
 ## Troubleshooting
 
