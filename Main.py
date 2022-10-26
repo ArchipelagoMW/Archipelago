@@ -80,15 +80,28 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     logger.info("Found World Types:")
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
-    numlength = 9
+
+    max_item = 0
+    max_location = 0
+    for cls in AutoWorld.AutoWorldRegister.world_types.values():
+        if cls.item_id_to_name:
+            max_item = max(max_item, max(cls.item_id_to_name))
+            max_location = max(max_location, max(cls.location_id_to_name))
+
+    item_digits = len(str(max_item))
+    location_digits = len(str(max_location))
+    del max_item, max_location
+
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
         if not cls.hidden and len(cls.item_names) > 0:
             logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} "
-                        f"Items (IDs: {min(cls.item_id_to_name):{numlength}} - "
-                        f"{max(cls.item_id_to_name):{numlength}}) | "
+                        f"Items (IDs: {min(cls.item_id_to_name):{item_digits}} - "
+                        f"{max(cls.item_id_to_name):{item_digits}}) | "
                         f"{len(cls.location_names):3} "
-                        f"Locations (IDs: {min(cls.location_id_to_name):{numlength}} - "
-                        f"{max(cls.location_id_to_name):{numlength}})")
+                        f"Locations (IDs: {min(cls.location_id_to_name):{location_digits}} - "
+                        f"{max(cls.location_id_to_name):{location_digits}})")
+
+    del item_digits, location_digits
 
     AutoWorld.call_stage(world, "assert_generate")
 
