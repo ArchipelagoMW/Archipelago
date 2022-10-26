@@ -79,8 +79,16 @@ def call_single(world: "MultiWorld", method_name: str, player: int, *args: Any) 
 def call_all(world: "MultiWorld", method_name: str, *args: Any) -> None:
     world_types: Set[AutoWorldRegister] = set()
     for player in world.player_ids:
+        prev_item_count = len(world.itempool)
         world_types.add(world.worlds[player].__class__)
         call_single(world, method_name, player, *args)
+        if __debug__:
+            new_items = world.itempool[prev_item_count:]
+            for i, item in enumerate(new_items):
+                for other in new_items[i+1:]:
+                    assert item is not other, (
+                        f"Duplicate item reference of \"{item.name}\" in \"{world.worlds[player].game}\" "
+                        f"of player \"{world.player_name[player]}\". Please make a copy instead.")
 
     for world_type in world_types:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)

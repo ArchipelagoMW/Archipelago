@@ -141,7 +141,7 @@ def user_path(*path: str) -> str:
     return os.path.join(user_path.cached_path, *path)
 
 
-def output_path(*path: str):
+def output_path(*path: str) -> str:
     if hasattr(output_path, 'cached_path'):
         return os.path.join(output_path.cached_path, *path)
     output_path.cached_path = user_path(get_options()["general_options"]["output_path"])
@@ -233,19 +233,18 @@ def get_default_options() -> OptionsType:
             "executable": os.path.join("factorio", "bin", "x64", "factorio"),
             "bridge_chat_out": True,
         },
+        "sni_options": {
+            "sni": "SNI",
+            "snes_rom_start": True,
+        },
         "sm_options": {
             "rom_file": "Super Metroid (JU).sfc",
-            "sni": "SNI",
-            "rom_start": True,
         },
         "soe_options": {
             "rom_file": "Secret of Evermore (USA).sfc",
         },
         "lttp_options": {
             "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
-            "sni": "SNI",
-            "rom_start": True,
-
         },
         "server_options": {
             "host": None,
@@ -288,13 +287,15 @@ def get_default_options() -> OptionsType:
         },
         "dkc3_options": {
             "rom_file": "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc",
-            "sni": "SNI",
-            "rom_start": True,
         },
         "smw_options": {
             "rom_file": "Super Mario World (USA).sfc",
-            "sni": "SNI",
-            "rom_start": True,
+        },
+        "zillion_options": {
+            "rom_file": "Zillion (UE) [!].sms",
+            # RetroArch doesn't make it easy to launch a game from the command line.
+            # You have to know the path to the emulator core library on the user's computer.
+            "rom_start": "retroarch",
         },
         "pokemon_rb_options": {
             "red_rom_file": "Pokemon Red (UE) [S][!].gb",

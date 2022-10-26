@@ -118,7 +118,7 @@ This allows you to host your own Factorio game.
 3. Install the mod into your Factorio Client by copying the zip file into the `mods` folder, which is likely located
    at `C:\Users\YourName\AppData\Roaming\Factorio\mods`.
 4. Obtain the Archipelago Server address from the website's host room, or from the server host.
-5. Run your Archipelago Client, which is named `ArchilepagoFactorioClient.exe`. This was installed along with
+5. Run your Archipelago Client, which is named `ArchipelagoFactorioClient.exe`. This was installed along with
    Archipelago if you chose to include it during the installation process.
 6. Enter `/connect [server-address]` into the input box at the bottom of the Archipelago Client and press "Enter"
 
