@@ -111,8 +111,10 @@ class Architect(Choice):
     """
     display_name = "Architect"
     option_start_unlocked = 0
-    option_normal = 2
+    option_early = 1
+    option_anywhere = 2
     option_disabled = 3
+    alias_normal = 2
     default = 2
 
 

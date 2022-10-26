@@ -54,7 +54,10 @@ class RLWorld(World):
 
     def generate_early(self):
         if self._setting("vendors") == "early":
-            self.prefill_items = [self.create_item("Blacksmith"), self.create_item("Enchantress")]
+            self.prefill_items += [self.create_item("Blacksmith"), self.create_item("Enchantress")]
+
+        if self._setting("architect") == "early":
+            self.prefill_items += self.create_item("Architect")
 
     def generate_basic(self):
         # TODO: Remove hard code value here.
@@ -65,7 +68,7 @@ class RLWorld(World):
         for name, data in item_table.items():
             # Architect
             if name == "Architect":
-                if self._setting("architect") == "disabled":
+                if self._setting("architect") == "disabled" or self._setting("architect") == "early":
                     continue
                 if self._setting("architect") == "start_unlocked":
                     self.world.push_precollected(self.create_item(name))
@@ -77,7 +80,6 @@ class RLWorld(World):
                     self.world.push_precollected(self.create_item(name))
                     continue
                 if self._setting("vendors") == "early":
-                    # Was added in generate_early.
                     continue
 
             # Haggling
