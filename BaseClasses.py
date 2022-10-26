@@ -1,4 +1,5 @@
 from __future__ import annotations
+from argparse import Namespace
 
 import copy
 from enum import unique, IntEnum, IntFlag
@@ -54,6 +55,7 @@ class MultiWorld():
     indirect_connections: Dict[Region, Set[Entrance]]
     exclude_locations: Dict[int, Options.ExcludeLocations]
 
+    game: Dict[int, str]
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -200,7 +202,7 @@ class MultiWorld():
         self.slot_seeds = {player: random.Random(self.random.getrandbits(64)) for player in
                            range(1, self.players + 1)}
 
-    def set_options(self, args):
+    def set_options(self, args: Namespace) -> None:
         for option_key in Options.common_options:
             setattr(self, option_key, getattr(args, option_key, {}))
         for option_key in Options.per_game_common_options:
@@ -691,7 +693,7 @@ class CollectionState():
             locations = self.world.get_filled_locations()
         reachable_events = True
         # since the loop has a good chance to run more than once, only filter the events once
-        locations = {location for location in locations if location.event and
+        locations = {location for location in locations if location.event and location not in self.events and
                      not key_only or getattr(location.item, "locked_dungeon_item", False)}
         while reachable_events:
             reachable_events = {location for location in locations if location.can_reach(self)}

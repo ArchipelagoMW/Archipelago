@@ -17,6 +17,7 @@ from worlds.smz3.TotalSMZ3.Location import LocationType, locations_start_id, Loc
 from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
 from worlds.smz3.TotalSMZ3.WorldState import WorldState
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
+from .Client import SMZ3SNIClient
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
 from .Options import smz3_options

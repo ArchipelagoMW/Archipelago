@@ -927,6 +927,6 @@ Elevator (Mountain Final Room):
 158533 - 0x3C114 (Elevator Entry Right) - 0x3D9A6 | 0x3D9A7 - True
 158534 - 0x3D9AA (Back Wall Left) - 0x3D9A6 | 0x3D9A7 - True
 158535 - 0x3D9A8 (Back Wall Right) - 0x3D9A6 | 0x3D9A7 - True
-158536 - 0x3D9A9 (Elevator Start) - 0x3D9AA | 0x3D9A8 - True
+158536 - 0x3D9A9 (Elevator Start) - 0x3D9AA & 7 Lasers | 0x3D9A8 & 7 Lasers - True
 
 Boat (Boat) - Main Island - TrueOneWay - Swamp Near Boat - TrueOneWay - Treehouse Entry Area - TrueOneWay - Quarry Boathouse Behind Staircase - TrueOneWay - Inside Glass Factory Behind Back Wall - TrueOneWay:
