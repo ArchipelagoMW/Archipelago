@@ -248,6 +248,26 @@ class PokemonRedBlueWorld(World):
                                          [ItemClassification.filler, ItemClassification.trap] and item not in
                                          item_groups["Vending Machine Drinks"]])
 
+    def fill_slot_data(self) -> dict:
+        # for trackers
+        return {
+            "second_fossil_check_condition": self.world.second_fossil_check_condition[self.player].value,
+            "require_item_finder": self.world.require_item_finder[self.player].value,
+            "randomize_hidden_items": self.world.randomize_hidden_items[self.player].value,
+            "badges_needed_for_hm_moves": self.world.badges_needed_for_hm_moves[self.player].value,
+            "extra_badges": self.extra_badges,
+            "oaks_aide_rt_2": self.oaks_aide_rt_2[self.player].value,
+            "oaks_aide_rt_11": self.oaks_aide_rt_11[self.player].value,
+            "oaks_aide_rt_15": self.oaks_aide_rt_15[self.player].value,
+            "extra_key_items": self.extra_key_items[self.player].value,
+            "extra_strength_boulders": self.extra_strength_boulders[self.player].value,
+            "tea": self.tea[self.player].value,
+            "old_man": self.old_man[self.player].value,
+            "elite_four_condition": self.elite_four_condition[self.player].value,
+            "victory_road_condition": self.victory_road_condition[self.player].value,
+            "viridian_gym_condition": self.viridian_gym_condition[self.player].value
+        }
+
 
 class PokemonRBItem(Item):
     game = "Pokemon Red and Blue"
