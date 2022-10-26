@@ -107,15 +107,15 @@ class UndertaleContext(CommonContext):
         self.completed_routes["genocide"] = 0
         self.completed_routes["neutral"] = 0
 
+    def on_package(self, cmd: str, args: dict):
+        if cmd == "Connected":
+            self.game = self.slot_info[self.slot].game
+            
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super().server_auth(password_requested)
         await self.get_username()
         await self.send_connect()
-
-    def on_package(self, cmd: str, args: dict):
-        if cmd == "Connected":
-            self.game = self.slot_info[self.slot].game
 
     def clear_undertale_files(self):
         path = os.path.expandvars(r"%localappdata%/UNDERTALE")
@@ -452,16 +452,6 @@ async def multi_watcher(ctx: UndertaleContext):
                         this_sprite = mine.readline()
                         this_frame = mine.readline()
                         mine.close()
-                    message = [{"cmd": 'Bounce', "tags": ["Online"],
-                                "data": {"player": ctx.slot, "x": this_x, "y": this_y, "room": this_room,
-                                         "spr": this_sprite, "frm": this_frame}}]
-                    await ctx.send_msgs(message)
-                else:
-                    this_x = "-100"
-                    this_y = "-100"
-                    this_room = "room_mysteryman"
-                    this_sprite = "spr_maincharad"
-                    this_frame = "0"
                     message = [{"cmd": 'Bounce', "tags": ["Online"],
                                 "data": {"player": ctx.slot, "x": this_x, "y": this_y, "room": this_room,
                                          "spr": this_sprite, "frm": this_frame}}]
