@@ -4,6 +4,7 @@ import logging
 import json
 import string
 import copy
+import re
 import subprocess
 import time
 import random
@@ -46,6 +47,10 @@ class FactorioCommandProcessor(ClientCommandProcessor):
         """Manually trigger a resync."""
         self.ctx.awaiting_bridge = True
 
+    def _cmd_toggle_send_filter(self):
+        """Toggle filtering of item sends that get displayed in-game to only those that involve you."""
+        self.ctx.toggle_filter_item_sends()
+
 
 class FactorioContext(CommonContext):
     command_processor = FactorioCommandProcessor
@@ -65,6 +70,7 @@ class FactorioContext(CommonContext):
         self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
         self.energy_link_increment = 0
         self.last_deplete = 0
+        self.filter_item_sends: bool = False
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -85,8 +91,11 @@ class FactorioContext(CommonContext):
 
     def on_print_json(self, args: dict):
         if self.rcon_client:
-            text = self.factorio_json_text_parser(copy.deepcopy(args["data"]))
-            self.print_to_game(text)
+            is_uninteresting_item_send: bool = args.get("type", "") == "ItemSend" \
+                                               and args["receiving"] != self.slot and args["item"].player != self.slot
+            if not self.filter_item_sends or not is_uninteresting_item_send:
+                text = self.factorio_json_text_parser(copy.deepcopy(args["data"]))
+                self.print_to_game(text)
         super(FactorioContext, self).on_print_json(args)
 
     @property
@@ -122,6 +131,16 @@ class FactorioContext(CommonContext):
                         logger.debug(f"EnergyLink: Received {gained_text}. "
                                      f"{Utils.format_SI_prefix(args['value'])}J remaining.")
                         self.rcon_client.send_command(f"/ap-energylink {gained}")
+
+    def toggle_filter_item_sends(self) -> None:
+        self.filter_item_sends = not self.filter_item_sends
+        announcement: str
+        if self.filter_item_sends:
+            announcement = "Item sends are now filtered."
+        else:
+            announcement = "Item sends are no longer filtered."
+        logger.info(announcement)
+        self.print_to_game(announcement)
 
     def run_gui(self):
         from kvui import GameManager
@@ -262,6 +281,9 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
                     factorio_server_logger.debug(msg)
+                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-send-filter", msg):
+                    factorio_server_logger.debug(msg)
+                    ctx.toggle_filter_item_sends()
                 else:
                     factorio_server_logger.info(msg)
             if ctx.rcon_client:
@@ -363,6 +385,7 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
 
 async def main(args):
     ctx = FactorioContext(args.connect, args.password)
+    ctx.filter_item_sends = initial_filter_item_sends
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
     if gui_enabled:
@@ -415,6 +438,9 @@ if __name__ == '__main__':
     server_settings = args.server_settings if args.server_settings else options["factorio_options"].get("server_settings", None)
     if server_settings:
         server_settings = os.path.abspath(server_settings)
+    if not isinstance(options["factorio_options"]["filter_item_sends"], bool):
+        logging.warning(f"Warning: Option filter_item_sends should be a bool.")
+    initial_filter_item_sends: bool = bool(options["factorio_options"]["filter_item_sends"])
 
     if not os.path.exists(os.path.dirname(executable)):
         raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")
