@@ -338,7 +338,7 @@ class AvailableClasses(OptionSet):
     valid_keys = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
 
 
-legacy_options: typing.Dict[str, type(Option)] = {
+rl_options: typing.Dict[str, type(Option)] = {
     "starting_gender": StartingGender,
     "starting_class": StartingClass,
     "available_classes": AvailableClasses,

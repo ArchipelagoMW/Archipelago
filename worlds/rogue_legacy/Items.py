@@ -12,6 +12,7 @@ class RLItemData(NamedTuple):
     code: Optional[int] = None
     classification: ItemClassification = ItemClassification.filler
     max_quantity: int = 1
+    weight: int = 1
 
     @property
     def is_event_item(self):
@@ -95,10 +96,10 @@ item_table: Dict[str, RLItemData] = {
     "Balance Runes":            RLItemData("Runes",      90_070, ItemClassification.useful),
 
     # Junk
-    "Triple Stat Increase":     RLItemData("Filler",     90_030),
-    "1000 Gold":                RLItemData("Filler",     90_031),
-    "3000 Gold":                RLItemData("Filler",     90_032),
-    "5000 Gold":                RLItemData("Filler",     90_033),
+    "Triple Stat Increase":     RLItemData("Filler",     90_030, weight=5),
+    "1000 Gold":                RLItemData("Filler",     90_031, weight=3),
+    "3000 Gold":                RLItemData("Filler",     90_032, weight=2),
+    "5000 Gold":                RLItemData("Filler",     90_033, weight=1),
 }
 
 event_item_table: Dict[str, RLItemData] = {
