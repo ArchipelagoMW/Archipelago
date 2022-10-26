@@ -598,7 +598,7 @@ commands.add_command("ap-energylink", "Used by the Archipelago client to manage 
     global.forcedata[force].energy = global.forcedata[force].energy + change
 end)
 
-commands.add_command("toggle-ap-chat", "Toggle sending of chat messages from players on the Factorio server to Archipelago", function(call)
+commands.add_command("toggle-ap-chat", "Toggle sending of chat messages from players on the Factorio server to Archipelago.", function(call)
     log("Player command toggle-ap-chat") -- notifies client
 end)
 
