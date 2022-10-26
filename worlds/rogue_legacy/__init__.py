@@ -75,8 +75,10 @@ class RLWorld(World):
             self.prefill_items += [self.create_item("Architect")]
 
     def generate_basic(self):
+        self.item_pool = []
+
         # TODO: Remove hard code value here.
-        total_required_locations = 64 + (self.world.chests_per_zone[self.player] * 4) + \
+        total_required_locations = 62 + (self.world.chests_per_zone[self.player] * 4) + \
                                         (self.world.fairy_chests_per_zone[self.player] * 4)
 
         # Add items to item pool. Anything with a "continue" will not be added to the item pool.
