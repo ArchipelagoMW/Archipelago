@@ -175,13 +175,13 @@ class NumberOfChildren(Range):
     default = 3
 
 
-class AdditionalNames(OptionList):
+class AdditionalNames(OptionSet):
     """
     Set of additional names your potential offspring can have. If Allow Default definitions is disabled, this is the only list
     of names your children can have. The first value will also be your initial character's name depending on Starting
     Gender.
     """
-    display_name = "Additional definitions"
+    display_name = "Additional Names"
 
 
 class AllowDefaultNames(DefaultOnToggle):
