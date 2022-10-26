@@ -998,7 +998,11 @@ class CommandMeta(type):
         return super(CommandMeta, cls).__new__(cls, name, bases, attrs)
 
 
-def mark_raw(function):
+_Return = typing.TypeVar("_Return")
+# TODO: when python 3.10 is lowest supported, typing.ParamSpec
+
+
+def mark_raw(function: typing.Callable[[typing.Any], _Return]) -> typing.Callable[[typing.Any], _Return]:
     function.raw_text = True
     return function
 
