@@ -90,18 +90,20 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     item_digits = len(str(max_item))
     location_digits = len(str(max_location))
+    item_count = len(str(max(len(cls.item_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
+    location_count = len(str(max(len(cls.location_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
     del max_item, max_location
 
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
         if not cls.hidden and len(cls.item_names) > 0:
-            logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} "
+            logger.info(f" {name:{longest_name}}: {len(cls.item_names):{item_count}} "
                         f"Items (IDs: {min(cls.item_id_to_name):{item_digits}} - "
                         f"{max(cls.item_id_to_name):{item_digits}}) | "
-                        f"{len(cls.location_names):3} "
+                        f"{len(cls.location_names):{location_count}} "
                         f"Locations (IDs: {min(cls.location_id_to_name):{location_digits}} - "
                         f"{max(cls.location_id_to_name):{location_digits}})")
 
-    del item_digits, location_digits
+    del item_digits, location_digits, item_count, location_count
 
     AutoWorld.call_stage(world, "assert_generate")
 
