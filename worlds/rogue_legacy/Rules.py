@@ -29,13 +29,10 @@ class LegacyLogic(LogicMixin):
 
 
 def set_rules(world: MultiWorld, player: int):
-    # # Vendors
-    # if world.vendors[player] == "early":
-    #     set_rule(world.get_location(LocationNames.boss_castle, player),
-    #              lambda state: state.has_all_vendors(player))
-    # elif world.vendors[player] == "normal":
-    #     set_rule(world.get_location(LocationNames.garden, player),
-    #              lambda state: state.has_any_vendors(player))
+    # Vendors
+    if world.vendors[player] == "normal":
+        set_rule(world.get_location("Forest Abkhazia Boss Reward", player),
+                 lambda state: state.has_all_vendors(player))
 
     # Scale each manor location.
     manor_rules = {
