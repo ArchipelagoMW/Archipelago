@@ -72,7 +72,6 @@ def set_rules(world: MultiWorld, player: int):
         for location in locations:
             set_rule(world.get_location(location, player), lambda state: state.has(event, player))
 
-
     # Standard Zone Progression
     world.get_entrance("Forest Abkhazia", player).access_rule = \
         (lambda state: state.has_stat_upgrades(player, 0.15 * state.total_stat_upgrades_count(player)) and

@@ -12,16 +12,16 @@ class RLRegionData(NamedTuple):
 
 def create_regions(world: MultiWorld, player: int):
     regions: Dict[str, RLRegionData] = {
-        "Menu":              RLRegionData(None, ["Castle Hamson"]),
-        "The Manor":         RLRegionData([], []),
-        "Castle Hamson":     RLRegionData([], ["Forest Abkhazia",
-                                               "The Maya",
-                                               "Land of Darkness",
-                                               "The Fountain Room",
-                                               "The Manor"]),
-        "Forest Abkhazia":   RLRegionData([], []),
-        "The Maya":          RLRegionData([], []),
-        "Land of Darkness":  RLRegionData([], []),
+        "Menu": RLRegionData(None, ["Castle Hamson"]),
+        "The Manor": RLRegionData([], []),
+        "Castle Hamson": RLRegionData([], ["Forest Abkhazia",
+                                           "The Maya",
+                                           "Land of Darkness",
+                                           "The Fountain Room",
+                                           "The Manor"]),
+        "Forest Abkhazia": RLRegionData([], []),
+        "The Maya": RLRegionData([], []),
+        "Land of Darkness": RLRegionData([], []),
         "The Fountain Room": RLRegionData([], None),
     }
 
@@ -105,15 +105,22 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
     ret = Region(name, RegionType.Generic, name, player)
     ret.world = world
     if locations:
-        for location in locations:
-            loc_data = location_table.get(location)
-            location = RLLocation(player, location, loc_data.code if loc_data else None, ret)
+        for loc_name in locations:
+            loc_data = location_table.get(loc_name)
+            location = RLLocation(player, loc_name, loc_data.code if loc_data else None, ret)
+
+            # Special rule handling for fairy chests.
+            if "Fairy" in loc_name:
+                location.access_rule = lambda state: state.has("Dragons", player) or (
+                        state.has("Enchantress", player) and (
+                        state.has("Vault Runes", player) or
+                        state.has("Sprint Runes", player) or
+                        state.has("Sky Runes", player)))
             ret.locations.append(location)
     if exits:
         for exit in exits:
             entrance = Entrance(player, exit, ret)
             ret.exits.append(entrance)
-
     return ret
 
 
