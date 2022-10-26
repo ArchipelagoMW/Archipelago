@@ -80,7 +80,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     logger.info("Found World Types:")
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
-    numlength = 8
+    numlength = 9
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
         if not cls.hidden and len(cls.item_names) > 0:
             logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} "
