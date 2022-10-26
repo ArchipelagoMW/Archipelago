@@ -39,6 +39,7 @@ class RLWorld(World):
     location_name_to_id = {name: data.code for name, data in location_table.items()}
 
     item_pool: List[RLItem] = []
+    prefill_items: List[RLItem] = []
 
     def _setting(self, name: str):
         return self.world[name][self.player].value
@@ -50,6 +51,10 @@ class RLWorld(World):
             slot_data[option_name] = option.value
 
         return slot_data
+
+    def generate_early(self):
+        if self._setting("vendors") == "early":
+            self.prefill_items = [self.create_item("Blacksmith"), self.create_item("Enchantress")]
 
     def generate_basic(self):
         # TODO: Remove hard code value here.
@@ -70,6 +75,9 @@ class RLWorld(World):
             if name == "Blacksmith" or name == "Enchantress":
                 if self._setting("vendors") == "start_unlocked":
                     self.world.push_precollected(self.create_item(name))
+                    continue
+                if self._setting("vendors") == "early":
+                    # Was added in generate_early.
                     continue
 
             # Haggling
@@ -115,11 +123,21 @@ class RLWorld(World):
             self.item_pool += [self.create_item(name) for _ in range(0, data.max_quantity)]
 
         # Fill any empty locations with filler items.
-        while len(self.item_pool) < total_required_locations:
+        while len(self.item_pool) + len(self.prefill_items) < total_required_locations:
             self.item_pool.append(self.create_item(self.get_filler_item_name()))
 
         self.__place_event_items()
         self.world.itempool += self.item_pool
+
+    def pre_fill(self) -> None:
+        reachable = [loc for loc in self.world.get_reachable_locations(player=self.player) if not loc.item]
+        self.world.random.shuffle(reachable)
+        items = self.prefill_items.copy()
+        for item in items:
+            reachable.pop().place_locked_item(item)
+
+    def get_pre_fill_items(self) -> List[RLItem]:
+        return self.prefill_items
 
     def get_filler_item_name(self) -> str:
         fillers = get_items_by_category("Filler")
