@@ -3,7 +3,7 @@ from typing import Dict, NamedTuple, Optional
 from BaseClasses import Item, ItemClassification
 
 
-class LegacyItem(Item):
+class RLItem(Item):
     game: str = "Rogue Legacy"
 
 
@@ -14,8 +14,17 @@ class RLItemData(NamedTuple):
     max_quantity: int = 1
 
     @property
-    def is_event(self):
+    def is_event_item(self):
         return self.code is None
+
+
+def get_items_by_category(category: str) -> Dict[str, RLItemData]:
+    item_dict: Dict[str, RLItemData] = {}
+    for name, data in item_table.items():
+        if data.category == category:
+            item_dict.setdefault(name, data)
+
+    return item_dict
 
 
 item_table: Dict[str, RLItemData] = {
@@ -99,5 +108,3 @@ event_table: Dict[str, RLItemData] = {
     "Defeat The Land of Darkness Boss":  RLItemData("Event", classification=ItemClassification.progression),
     "Defeat The Fountain":               RLItemData("Event", classification=ItemClassification.progression),
 }
-
-lookup_id_to_name: Dict[int, str] = {data.code: name for name, data in item_table.items() if data.code}

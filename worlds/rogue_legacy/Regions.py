@@ -1,8 +1,8 @@
 import typing
 
 from BaseClasses import MultiWorld, Region, RegionType, Entrance, ItemClassification
-from .Items import LegacyItem
-from .Locations import LegacyLocation, diary_location_table, location_table, base_location_table
+from .Items import RLItem
+from .Locations import RLLocation, diary_location_table, location_table, base_location_table
 from .definitions import LocationNames, ItemNames
 
 prog = ItemClassification.progression
@@ -49,11 +49,11 @@ def create_regions(world, player: int):
 
     # Connect entrances and set up events.
     world.get_entrance(LocationNames.outside, player).connect(world.get_region(LocationNames.castle, player))
-    world.get_location(LocationNames.castle, player).place_locked_item(LegacyItem(ItemNames.boss_castle, prog, None, player))
-    world.get_location(LocationNames.garden, player).place_locked_item(LegacyItem(ItemNames.boss_forest, prog, None, player))
-    world.get_location(LocationNames.tower, player).place_locked_item(LegacyItem(ItemNames.boss_tower, prog, None, player))
-    world.get_location(LocationNames.dungeon, player).place_locked_item(LegacyItem(ItemNames.boss_dungeon, prog, None, player))
-    world.get_location(LocationNames.fountain, player).place_locked_item(LegacyItem(ItemNames.boss_fountain, prog, None, player))
+    world.get_location(LocationNames.castle, player).place_locked_item(RLItem(ItemNames.boss_castle, prog, None, player))
+    world.get_location(LocationNames.garden, player).place_locked_item(RLItem(ItemNames.boss_forest, prog, None, player))
+    world.get_location(LocationNames.tower, player).place_locked_item(RLItem(ItemNames.boss_tower, prog, None, player))
+    world.get_location(LocationNames.dungeon, player).place_locked_item(RLItem(ItemNames.boss_dungeon, prog, None, player))
+    world.get_location(LocationNames.fountain, player).place_locked_item(RLItem(ItemNames.boss_fountain, prog, None, player))
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
@@ -63,7 +63,7 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
     if locations:
         for location in locations:
             loc_id = location_table.get(location, 0)
-            location = LegacyLocation(player, location, loc_id, ret)
+            location = RLLocation(player, location, loc_id, ret)
             ret.locations.append(location)
     if exits:
         for exit in exits:

@@ -1,9 +1,9 @@
 import typing
 
 from BaseClasses import ItemClassification, Tutorial
-from .Items import LegacyItem, RLItemData, item_table, vendors_table, static_classes_table, progressive_classes_table, \
+from .Items import RLItem, RLItemData, item_table, vendors_table, static_classes_table, progressive_classes_table, \
     skill_unlocks_table, blueprints_table, runes_table, misc_items_table
-from .Locations import LegacyLocation, location_table, base_location_table
+from .Locations import RLLocation, location_table, base_location_table
 from .Options import legacy_options
 from .Regions import create_regions
 from .Rules import set_rules
@@ -78,7 +78,7 @@ class RLWorld(World):
         return slot_data
 
     def generate_basic(self):
-        itempool: typing.List[LegacyItem] = []
+        itempool: typing.List[RLItem] = []
         total_required_locations = 64 + (self.world.chests_per_zone[self.player] * 4) + (self.world.fairy_chests_per_zone[self.player] * 4)
 
         # Fill item pool with all required items
@@ -169,9 +169,9 @@ class RLWorld(World):
     def create_regions(self):
         create_regions(self.world, self.player)
 
-    def create_item(self, name: str) -> LegacyItem:
+    def create_item(self, name: str) -> RLItem:
         data = item_table[name]
-        return LegacyItem(name, ItemClassification.progression if data.progression else ItemClassification.filler, data.code, self.player)
+        return RLItem(name, ItemClassification.progression if data.progression else ItemClassification.filler, data.code, self.player)
 
     def set_rules(self):
         set_rules(self.world, self.player)
