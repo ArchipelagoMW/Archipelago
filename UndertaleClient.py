@@ -46,11 +46,11 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
     def _cmd_auto_patch(self, steaminstall: str):
         """Patch the game automatically."""
         if isinstance(self.ctx, UndertaleContext):
-            if steaminstall == "" or not os.path.exists("C:\\Program Files (x86)\\Steam"):
+            if steaminstall == "" or not os.path.exists(steaminstall):
                 steaminstall = "C:\\Program Files (x86)\\Steam"
                 if not os.path.exists("C:\\Program Files (x86)\\Steam"):
                     steaminstall = "C:\\Program Files\\Steam"
-            if not os.path.exists("C:\\Program Files (x86)\\Steam"):
+            if not os.path.exists(steaminstall):
                 self.output("ERROR: Folder does not exists. Please make sure you put the steam directory in this command. \"/auto_patch (Steam directory)\".")
             for file_name in os.listdir(steaminstall+"\\steamapps\\common\\Undertale\\"):
                 if file_name != "steam_api.dll":
