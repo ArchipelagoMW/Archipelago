@@ -20,6 +20,8 @@ class RLWeb(WebWorld):
         "rogue-legacy/en",
         ["Phar"]
     )]
+    bug_report_page = "https://github.com/ThePhar/RogueLegacyRandomizer/issues/new?assignees=&labels=bug&template=" \
+                      "report-an-issue---.md&title=%5BIssue%5D"
 
 
 class RLWorld(World):
