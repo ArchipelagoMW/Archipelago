@@ -91,9 +91,9 @@ class FactorioContext(CommonContext):
 
     def on_print_json(self, args: dict):
         if self.rcon_client:
-            is_uninteresting_item_send: bool = args.get("type", "") == "ItemSend" \
-                                               and not self.slot_concerns_self(args["receiving"]) \
-                                               and not self.slot_concerns_self(args["item"].player)
+            is_uninteresting_item_send = args.get("type", "") == "ItemSend" \
+                                         and not self.slot_concerns_self(args["receiving"]) \
+                                         and not self.slot_concerns_self(args["item"].player)
             if not self.filter_item_sends or not is_uninteresting_item_send:
                 text = self.factorio_json_text_parser(copy.deepcopy(args["data"]))
                 self.print_to_game(text)
@@ -135,7 +135,6 @@ class FactorioContext(CommonContext):
 
     def toggle_filter_item_sends(self) -> None:
         self.filter_item_sends = not self.filter_item_sends
-        announcement: str
         if self.filter_item_sends:
             announcement = "Item sends are now filtered."
         else:
@@ -441,7 +440,7 @@ if __name__ == '__main__':
         server_settings = os.path.abspath(server_settings)
     if not isinstance(options["factorio_options"]["filter_item_sends"], bool):
         logging.warning(f"Warning: Option filter_item_sends should be a bool.")
-    initial_filter_item_sends: bool = bool(options["factorio_options"]["filter_item_sends"])
+    initial_filter_item_sends = bool(options["factorio_options"]["filter_item_sends"])
 
     if not os.path.exists(os.path.dirname(executable)):
         raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")
