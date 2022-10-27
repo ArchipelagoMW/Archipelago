@@ -59,7 +59,7 @@ class Factorio(World):
     data_version = 6
     required_client_version = (0, 3, 6)
 
-    ordered_science_packs: typing.List[str] = Options.MaxSciencePack.get_ordered_science_packs()
+    ordered_science_packs: typing.List[str] = MaxSciencePack.get_ordered_science_packs()
     tech_mix: int = 0
     skip_silo: bool = False
 
