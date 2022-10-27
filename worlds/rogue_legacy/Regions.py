@@ -98,7 +98,6 @@ def create_regions(world: MultiWorld, player: int):
     world.get_entrance("The Maya", player).connect(world.get_region("The Maya", player))
     world.get_entrance("Land of Darkness", player).connect(world.get_region("Land of Darkness", player))
     world.get_entrance("The Fountain Room", player).connect(world.get_region("The Fountain Room", player))
-    place_events(world, player)
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
@@ -124,39 +123,3 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
     return ret
 
 
-def place_events(multiworld, player):
-    # Fountain
-    multiworld.worlds[player].world.get_location("Fountain Room", player).place_locked_item(
-        multiworld.worlds[player].create_event("Defeat The Fountain"))
-
-    # Khidr / Neo Khidr
-    if multiworld.worlds[player].setting("khidr") == "vanilla":
-        multiworld.worlds[player].world.get_location("Castle Hamson Boss Room", player).place_locked_item(
-            multiworld.worlds[player].create_event("Defeat Khidr"))
-    else:
-        multiworld.worlds[player].world.get_location("Castle Hamson Boss Room", player).place_locked_item(
-            multiworld.worlds[player].create_event("Defeat Neo Khidr"))
-
-    # Alexander / Alexander IV
-    if multiworld.worlds[player].setting("alexander") == "vanilla":
-        multiworld.worlds[player].world.get_location("Forest Abkhazia Boss Room", player).place_locked_item(
-            multiworld.worlds[player].create_event("Defeat Alexander"))
-    else:
-        multiworld.worlds[player].world.get_location("Forest Abkhazia Boss Room", player).place_locked_item(
-            multiworld.worlds[player].create_event("Defeat Alexander IV"))
-
-    # Ponce de Leon / Ponce de Freon
-    if multiworld.worlds[player].setting("leon") == "vanilla":
-        multiworld.worlds[player].world.get_location("The Maya Boss Room", player).place_locked_item(
-            multiworld.worlds[player].create_event("Defeat Ponce de Leon"))
-    else:
-        multiworld.worlds[player].world.get_location("The Maya Boss Room", player).place_locked_item(
-            multiworld.worlds[player].create_event("Defeat Ponce de Freon"))
-
-    # Herodotus / Astrodotus
-    if multiworld.worlds[player].setting("herodotus") == "vanilla":
-        multiworld.worlds[player].world.get_location("Land of Darkness Boss Room", player).place_locked_item(
-            multiworld.worlds[player].create_event("Defeat Herodotus"))
-    else:
-        multiworld.worlds[player].world.get_location("Land of Darkness Boss Room", player).place_locked_item(
-            multiworld.worlds[player].create_event("Defeat Herodotus"))

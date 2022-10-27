@@ -53,6 +53,8 @@ class RLWorld(World):
         return slot_data
 
     def generate_early(self):
+        self.prefill_items = []
+
         # Check validation of names.
         additional_lady_names = len(self.setting("additional_lady_names").value)
         additional_sir_names = len(self.setting("additional_sir_names").value)
@@ -76,9 +78,7 @@ class RLWorld(World):
 
     def generate_basic(self):
         self.item_pool = []
-
-        # TODO: Remove hard code value here.
-        total_required_locations = 62 + (self.world.chests_per_zone[self.player] * 4) + \
+        total_required_locations = 64 + (self.world.chests_per_zone[self.player] * 4) + \
                                         (self.world.fairy_chests_per_zone[self.player] * 4)
 
         # Add items to item pool. Anything with a "continue" will not be added to the item pool.
@@ -116,26 +116,60 @@ class RLWorld(World):
 
             # Classes
             if data.category == "Classes":
-                if name == "Progressive Knights" and "Knight" not in self.setting("available_classes"):
-                    continue
-                if name == "Progressive Mages" and "Mage" not in self.setting("available_classes"):
-                    continue
-                if name == "Progressive Barbarians" and "Barbarian" not in self.setting("available_classes"):
-                    continue
-                if name == "Progressive Knaves" and "Knave" not in self.setting("available_classes"):
-                    continue
-                if name == "Progressive Shinobis" and "Shinobi" not in self.setting("available_classes"):
-                    continue
-                if name == "Progressive Miners" and "Miner" not in self.setting("available_classes"):
-                    continue
-                if name == "Progressive Liches" and "Lich" not in self.setting("available_classes"):
-                    continue
-                if name == "Progressive Spellthieves" and "Spellthief" not in self.setting("available_classes"):
-                    continue
-                if name == "Dragons" and "Dragon" not in self.setting("available_classes"):
-                    continue
-                if name == "Traitors" and "Traitor" not in self.setting("available_classes"):
-                    continue
+                if name == "Progressive Knights":
+                    if "Knight" not in self.setting("available_classes"):
+                        continue
+
+                    if self.setting("starting_class") == "knight":
+                        quantity = 1
+                if name == "Progressive Mages":
+                    if "Mage" not in self.setting("available_classes"):
+                        continue
+
+                    if self.setting("starting_class") == "mage":
+                        quantity = 1
+                if name == "Progressive Barbarians":
+                    if "Barbarian" not in self.setting("available_classes"):
+                        continue
+
+                    if self.setting("starting_class") == "barbarian":
+                        quantity = 1
+                if name == "Progressive Knaves":
+                    if "Knave" not in self.setting("available_classes"):
+                        continue
+
+                    if self.setting("starting_class") == "knave":
+                        quantity = 1
+                if name == "Progressive Miners":
+                    if "Miner" not in self.setting("available_classes"):
+                        continue
+
+                    if self.setting("starting_class") == "miner":
+                        quantity = 1
+                if name == "Progressive Shinobis":
+                    if "Shinobi" not in self.setting("available_classes"):
+                        continue
+
+                    if self.setting("starting_class") == "shinobi":
+                        quantity = 1
+                if name == "Progressive Liches":
+                    if "Lich" not in self.setting("available_classes"):
+                        continue
+
+                    if self.setting("starting_class") == "lich":
+                        quantity = 1
+                if name == "Progressive Spellthieves":
+                    if "Spellthief" not in self.setting("available_classes"):
+                        continue
+
+                    if self.setting("starting_class") == "spellthief":
+                        quantity = 1
+                if name == "Dragons":
+                    if "Dragon" not in self.setting("available_classes"):
+                        continue
+                if name == "Traitors":
+                    if "Traitor" not in self.setting("available_classes"):
+                        continue
 
             # Skills
             if name == "Health Up":
@@ -195,3 +229,41 @@ class RLWorld(World):
 
     def create_regions(self):
         create_regions(self.world, self.player)
+        self.__place_events()
+
+    def __place_events(self):
+        # Fountain
+        self.world.get_location("Fountain Room", self.player).place_locked_item(
+            self.create_event("Defeat The Fountain"))
+
+        # Khidr / Neo Khidr
+        if self.setting("khidr") == "vanilla":
+            self.world.get_location("Castle Hamson Boss Room", self.player).place_locked_item(
+                self.create_event("Defeat Khidr"))
+        else:
+            self.world.get_location("Castle Hamson Boss Room", self.player).place_locked_item(
+                self.create_event("Defeat Neo Khidr"))
+
+        # Alexander / Alexander IV
+        if self.setting("alexander") == "vanilla":
+            self.world.get_location("Forest Abkhazia Boss Room", self.player).place_locked_item(
+                self.create_event("Defeat Alexander"))
+        else:
+            self.world.get_location("Forest Abkhazia Boss Room", self.player).place_locked_item(
+                self.create_event("Defeat Alexander IV"))
+
+        # Ponce de Leon / Ponce de Freon
+        if self.setting("leon") == "vanilla":
+            self.world.get_location("The Maya Boss Room", self.player).place_locked_item(
+                self.create_event("Defeat Ponce de Leon"))
+        else:
+            self.world.get_location("The Maya Boss Room", self.player).place_locked_item(
+                self.create_event("Defeat Ponce de Freon"))
+
+        # Herodotus / Astrodotus
+        if self.setting("herodotus") == "vanilla":
+            self.world.get_location("Land of Darkness Boss Room", self.player).place_locked_item(
+                self.create_event("Defeat Herodotus"))
+        else:
+            self.world.get_location("Land of Darkness Boss Room", self.player).place_locked_item(
+                self.create_event("Defeat Herodotus"))
