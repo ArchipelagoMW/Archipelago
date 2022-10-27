@@ -17,6 +17,7 @@ window.addEventListener('load', () => {
         paging: false,
         info: false,
         dom: "t",
+        stateSave: true,
         columnDefs: [
             {
                 targets: 'hours',
