@@ -699,6 +699,35 @@ def create_regions(world, player: int, active_locations):
                                                 chao_garden_beginner_region_locations, None)
 
     chao_garden_intermediate_region_locations = [
+        LocationName.chao_race_challenge_1,
+        LocationName.chao_race_challenge_2,
+        LocationName.chao_race_challenge_3,
+        LocationName.chao_race_challenge_4,
+        LocationName.chao_race_challenge_5,
+        LocationName.chao_race_challenge_6,
+        LocationName.chao_race_challenge_7,
+        LocationName.chao_race_challenge_8,
+        LocationName.chao_race_challenge_9,
+        LocationName.chao_race_challenge_10,
+        LocationName.chao_race_challenge_11,
+        LocationName.chao_race_challenge_12,
+
+        LocationName.chao_race_hero_1,
+        LocationName.chao_race_hero_2,
+        LocationName.chao_race_hero_3,
+        LocationName.chao_race_hero_4,
+
+        LocationName.chao_race_dark_1,
+        LocationName.chao_race_dark_2,
+        LocationName.chao_race_dark_3,
+        LocationName.chao_race_dark_4,
+
+        LocationName.chao_standard_karate,
+    ]
+    chao_garden_intermediate_region = create_region(world, player, active_locations, LocationName.chao_garden_intermediate_region,
+                                                    chao_garden_intermediate_region_locations, None)
+
+    chao_garden_expert_region_locations = [
         LocationName.chao_race_aquamarine_1,
         LocationName.chao_race_aquamarine_2,
         LocationName.chao_race_aquamarine_3,
@@ -729,35 +758,6 @@ def create_regions(world, player: int, active_locations):
         LocationName.chao_race_diamond_3,
         LocationName.chao_race_diamond_4,
         LocationName.chao_race_diamond_5,
-
-        LocationName.chao_standard_karate,
-    ]
-    chao_garden_intermediate_region = create_region(world, player, active_locations, LocationName.chao_garden_intermediate_region,
-                                                    chao_garden_intermediate_region_locations, None)
-
-    chao_garden_expert_region_locations = [
-        LocationName.chao_race_challenge_1,
-        LocationName.chao_race_challenge_2,
-        LocationName.chao_race_challenge_3,
-        LocationName.chao_race_challenge_4,
-        LocationName.chao_race_challenge_5,
-        LocationName.chao_race_challenge_6,
-        LocationName.chao_race_challenge_7,
-        LocationName.chao_race_challenge_8,
-        LocationName.chao_race_challenge_9,
-        LocationName.chao_race_challenge_10,
-        LocationName.chao_race_challenge_11,
-        LocationName.chao_race_challenge_12,
-
-        LocationName.chao_race_hero_1,
-        LocationName.chao_race_hero_2,
-        LocationName.chao_race_hero_3,
-        LocationName.chao_race_hero_4,
-
-        LocationName.chao_race_dark_1,
-        LocationName.chao_race_dark_2,
-        LocationName.chao_race_dark_3,
-        LocationName.chao_race_dark_4,
 
         LocationName.chao_expert_karate,
         LocationName.chao_super_karate,
