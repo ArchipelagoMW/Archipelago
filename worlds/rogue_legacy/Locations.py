@@ -75,11 +75,11 @@ location_table: Dict[str, RLLocationData] = {
     **{f"Diary {i+1}":                          RLLocationData("Diary",   91_300 + i) for i in range(0,  25)},
 
     # Chests
-    **{f"Castle Hamson - Chest {i+1}":          RLLocationData("Chests",  91_600 + i) for i in range(0,  30)},
-    **{f"Forest Abkhazia - Chest {i+1}":        RLLocationData("Chests",  91_700 + i) for i in range(0,  30)},
-    **{f"The Maya - Chest {i+1}":               RLLocationData("Chests",  91_800 + i) for i in range(0,  30)},
-    **{f"Land of Darkness - Chest {i+1}":       RLLocationData("Chests",  91_900 + i) for i in range(0,  30)},
-    **{f"Chest {i+1}":                          RLLocationData("Chests",  92_000 + i) for i in range(0, 120)},
+    **{f"Castle Hamson - Chest {i+1}":          RLLocationData("Chests",  91_600 + i) for i in range(0,  50)},
+    **{f"Forest Abkhazia - Chest {i+1}":        RLLocationData("Chests",  91_700 + i) for i in range(0,  50)},
+    **{f"The Maya - Chest {i+1}":               RLLocationData("Chests",  91_800 + i) for i in range(0,  50)},
+    **{f"Land of Darkness - Chest {i+1}":       RLLocationData("Chests",  91_900 + i) for i in range(0,  50)},
+    **{f"Chest {i+1}":                          RLLocationData("Chests",  92_000 + i) for i in range(0, 200)},
 
     # Fairy Chests
     **{f"Castle Hamson - Fairy Chest {i+1}":    RLLocationData("Fairies", 91_400 + i) for i in range(0,  15)},
