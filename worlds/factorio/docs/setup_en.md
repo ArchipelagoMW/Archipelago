@@ -150,19 +150,19 @@ For more information about the commands you can use, see the [Commands Guide](/t
   - Type `/toggle-ap-send-filter` in-game
   - Type `/toggle_send_filter` in the Archipelago Client
   - In your `host.yaml` set
-    ```
-    factorio_options:
-      filter_item_sends: true
-    ```
+```
+factorio_options:
+  filter_item_sends: true
+```
 - By default, in-game chat is bridged to Archipelago. If you prefer to be able to speak privately, you can disable this
   feature by doing one of the following:
   - Type `/toggle-ap-chat` in-game
   - Type `/toggle_chat` in the Archipelago Client
   - In your `host.yaml` set
-    ```
-    factorio_options:
-      bridge_chat_out: false
-    ```
+```
+factorio_options:
+  bridge_chat_out: false
+```
   Note that this will also disable `!` commands from within the game, and that it will not affect incoming chat.
 
 ## Troubleshooting
