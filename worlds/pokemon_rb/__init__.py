@@ -268,7 +268,8 @@ class PokemonRedBlueWorld(World):
             "elite_four_condition": self.world.elite_four_condition[self.player].value,
             "victory_road_condition": self.world.victory_road_condition[self.player].value,
             "viridian_gym_condition": self.world.viridian_gym_condition[self.player].value,
-            "free_fly_map": self.fly_map_code
+            "free_fly_map": self.fly_map_code,
+            "extra_badges": self.extra_badges
         }
 
 
