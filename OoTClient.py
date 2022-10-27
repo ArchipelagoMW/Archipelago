@@ -5,7 +5,8 @@ import multiprocessing
 import subprocess
 from asyncio import StreamReader, StreamWriter
 
-from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, \
+# CommonClient import first to trigger ModuleUpdater
+from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
 import Utils
 from worlds import network_data_package

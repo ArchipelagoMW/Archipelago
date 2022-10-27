@@ -101,7 +101,6 @@ class InteriorEntrances(Choice):
     option_off = 0
     option_simple = 1
     option_all = 2
-    alias_false = 0
     alias_true = 2
 
 
@@ -141,7 +140,6 @@ class MixEntrancePools(Choice):
     option_off = 0
     option_indoor = 1
     option_all = 2
-    alias_false = 0
 
 
 class DecoupleEntrances(Toggle):
@@ -308,7 +306,6 @@ class ShopShuffle(Choice):
     option_off = 0
     option_fixed_number = 1
     option_random_number = 2
-    alias_false = 0
 
 
 class ShopSlots(Range):
@@ -326,7 +323,6 @@ class TokenShuffle(Choice):
     option_dungeons = 1
     option_overworld = 2
     option_all = 3
-    alias_false = 0
 
 
 class ScrubShuffle(Choice): 
@@ -336,7 +332,6 @@ class ScrubShuffle(Choice):
     option_low = 1
     option_regular = 2
     option_random_prices = 3
-    alias_false = 0
     alias_affordable = 1
     alias_expensive = 2
 
@@ -569,7 +564,6 @@ class Hints(Choice):
     option_agony = 2
     option_always = 3
     default = 3
-    alias_false = 0
 
 
 class MiscHints(DefaultOnToggle):
@@ -673,8 +667,6 @@ class IceTraps(Choice):
     option_mayhem = 3
     option_onslaught = 4
     default = 1
-    alias_false = 0
-    alias_true = 2
     alias_extra = 2
 
 
@@ -742,7 +734,6 @@ class Music(Choice):
     option_normal = 0
     option_off = 1
     option_randomized = 2
-    alias_false = 1
 
 
 class BackgroundMusic(Music):

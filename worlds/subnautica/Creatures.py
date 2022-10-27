@@ -55,7 +55,6 @@ all_creatures: Dict[str, int] = {
     "Sea Emperor Juvenile": 1700,
 }
 
-# be nice and make these require Stasis Rifle
 aggressive: Set[str] = {
     "Cave Crawler",  # is very easy without Stasis Rifle, but included for consistency
     "Crashfish",
@@ -75,6 +74,8 @@ aggressive: Set[str] = {
     "Lava Lizard",
     "Sea Dragon Leviathan",
     "River Prowler",
+    "Ghost Leviathan Juvenile",
+    "Ghost Leviathan"
 }
 
 containment: Set[str] = {  # creatures that have to be raised from eggs

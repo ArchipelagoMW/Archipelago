@@ -3,9 +3,9 @@ from __future__ import annotations
 import logging
 import sys
 import pathlib
-from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Union, TYPE_CHECKING
+from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Type, Union, TYPE_CHECKING
 
-from Options import Option
+from Options import AssembleOptions
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 
 class AutoWorldRegister(type):
-    world_types: Dict[str, type(World)] = {}
+    world_types: Dict[str, Type[World]] = {}
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -79,8 +79,16 @@ def call_single(world: "MultiWorld", method_name: str, player: int, *args: Any) 
 def call_all(world: "MultiWorld", method_name: str, *args: Any) -> None:
     world_types: Set[AutoWorldRegister] = set()
     for player in world.player_ids:
+        prev_item_count = len(world.itempool)
         world_types.add(world.worlds[player].__class__)
         call_single(world, method_name, player, *args)
+        if __debug__:
+            new_items = world.itempool[prev_item_count:]
+            for i, item in enumerate(new_items):
+                for other in new_items[i+1:]:
+                    assert item is not other, (
+                        f"Duplicate item reference of \"{item.name}\" in \"{world.worlds[player].game}\" "
+                        f"of player \"{world.player_name[player]}\". Please make a copy instead.")
 
     for world_type in world_types:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
@@ -120,7 +128,7 @@ class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    option_definitions: Dict[str, Option[Any]] = {}  # link your Options mapping
+    option_definitions: Dict[str, AssembleOptions] = {}  # link your Options mapping
     game: str  # name the game
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
 
@@ -221,17 +229,16 @@ class World(metaclass=AutoWorldRegister):
     @classmethod
     def fill_hook(cls,
                   progitempool: List["Item"],
-                  nonexcludeditempool: List["Item"],
-                  localrestitempool: Dict[int, List["Item"]],
-                  nonlocalrestitempool: Dict[int, List["Item"]],
-                  restitempool: List["Item"],
+                  usefulitempool: List["Item"],
+                  filleritempool: List["Item"],
                   fill_locations: List["Location"]) -> None:
         """Special method that gets called as part of distribute_items_restrictive (main fill).
         This gets called once per present world type."""
         pass
 
     def post_fill(self) -> None:
-        """Optional Method that is called after regular fill. Can be used to do adjustments before output generation."""
+        """Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
+        This happens before progression balancing, so the items may not be in their final locations yet."""
 
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.
@@ -239,8 +246,15 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
-        """Fill in the slot_data field in the Connected network package."""
+        """Fill in the `slot_data` field in the `Connected` network package.
+        This is a way the generator can give custom data to the client.
+        The client will receive this as JSON in the `Connected` response."""
         return {}
+
+    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+        """Fill in additional entrance information text into locations, which is displayed when hinted.
+        structure is {player_id: {location_id: text}} You will need to insert your own player_id."""
+        pass
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
         """For deeper modification of server multidata."""

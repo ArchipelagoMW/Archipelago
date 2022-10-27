@@ -20,7 +20,7 @@ class TestBase(unittest.TestCase):
                     for location in world.get_locations():
                         if location.name not in excluded:
                             with self.subTest("Location should be reached", location=location):
-                                self.assertTrue(location.can_reach(state))
+                                self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
 
                     with self.subTest("Completion Condition"):
                         self.assertTrue(world.can_beat_game(state))
@@ -28,7 +28,7 @@ class TestBase(unittest.TestCase):
     def testEmptyStateCanReachSomething(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             # Final Fantasy logic is controlled by finalfantasyrandomizer.com
-            if game_name != "Archipelago" and game_name != "Final Fantasy":
+            if game_name not in {"Archipelago", "Final Fantasy", "Sudoku"}:
                 with self.subTest("Game", game=game_name):
                     world = setup_default_world(world_type)
                     state = CollectionState(world)

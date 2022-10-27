@@ -139,7 +139,7 @@ item_table: Dict[int, ItemDict] = {
             'name': 'Power Transmitter Fragment',
             'tech_type': 'PowerTransmitterFragment'},
     35032: {'classification': ItemClassification.progression,
-            'count': 4,
+            'count': 5,
             'name': 'Prawn Suit Fragment',
             'tech_type': 'ExosuitFragment'},
     35033: {'classification': ItemClassification.useful,
@@ -163,7 +163,7 @@ item_table: Dict[int, ItemDict] = {
             'name': 'Scanner Room Fragment',
             'tech_type': 'BaseMapRoomFragment'},
     35038: {'classification': ItemClassification.progression,
-            'count': 5,
+            'count': 4,
             'name': 'Seamoth Fragment',
             'tech_type': 'SeamothFragment'},
     35039: {'classification': ItemClassification.progression,
@@ -175,7 +175,7 @@ item_table: Dict[int, ItemDict] = {
             'name': 'Thermal Plant Fragment',
             'tech_type': 'ThermalPlantFragment'},
     35041: {'classification': ItemClassification.progression,
-            'count': 2,
+            'count': 4,
             'name': 'Seaglide Fragment',
             'tech_type': 'SeaglideFragment'},
     35042: {'classification': ItemClassification.progression,
@@ -203,9 +203,9 @@ item_table: Dict[int, ItemDict] = {
             'name': 'Picture Frame',
             'tech_type': 'PictureFrameFragment'},
     35048: {'classification': ItemClassification.filler,
-            'count': 2,
-            'name': 'Bench Fragment',
-            'tech_type': 'BenchFragment'},
+            'count': 1,
+            'name': 'Bench',
+            'tech_type': 'Bench'},
     35049: {'classification': ItemClassification.filler,
             'count': 1,
             'name': 'Basic Plant Pot',
@@ -333,7 +333,12 @@ item_table: Dict[int, ItemDict] = {
     35080: {'classification': ItemClassification.filler,
             'count': 1,
             'name': 'Water Filtration Machine',
-            'tech_type': 'BaseFiltrationMachine'}}
+            'tech_type': 'BaseFiltrationMachine'},
+    35081: {'classification': ItemClassification.progression,
+            'count': 1,
+            'name': 'Ultra High Capacity Tank',
+            'tech_type': 'HighCapacityTank'},
+}
 
 advancement_item_names: Set[str] = set()
 non_advancement_item_names: Set[str] = set()

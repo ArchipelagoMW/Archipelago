@@ -1,15 +1,15 @@
 import json
 import pickle
-
 from uuid import UUID
 
-from . import api_endpoints
 from flask import request, session, url_for
 from pony.orm import commit
 
-from WebHostLib import app, Generation, STATE_QUEUED, Seed, STATE_ERROR
+from WebHostLib import app
 from WebHostLib.check import get_yaml_data, roll_options
 from WebHostLib.generate import get_meta
+from WebHostLib.models import Generation, STATE_QUEUED, Seed, STATE_ERROR
+from . import api_endpoints
 
 
 @api_endpoints.route('/generate', methods=['POST'])
