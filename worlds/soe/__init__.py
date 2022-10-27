@@ -1,12 +1,12 @@
-from ..AutoWorld import World, WebWorld
-from ..generic.Rules import set_rule
-from BaseClasses import Region, Location, Entrance, Item, RegionType, Tutorial, ItemClassification
-from Utils import output_path
-import typing
+import itertools
 import os
 import os.path
 import threading
-import itertools
+import typing
+from worlds.AutoWorld import WebWorld, World
+from worlds.generic.Rules import add_item_rule, set_rule
+from BaseClasses import Entrance, Item, ItemClassification, Location, LocationProgressType, Region, RegionType, Tutorial
+from Utils import output_path
 
 try:
     import pyevermizer  # from package
@@ -16,7 +16,7 @@ except ImportError:
     from . import pyevermizer  # as part of the source tree
 
 from . import Logic  # load logic mixin
-from .Options import soe_options, EnergyCore, RequiredFragments, AvailableFragments
+from .Options import soe_options, Difficulty, EnergyCore, RequiredFragments, AvailableFragments
 from .Patch import SoEDeltaPatch, get_base_rom_path
 
 """
@@ -154,9 +154,9 @@ class SoEWorld(World):
     option_definitions = soe_options
     topology_present = False
     remote_items = False
-    data_version = 3
+    data_version = 4
     web = SoEWebWorld()
-    required_client_version = (0, 3, 3)
+    required_client_version = (0, 3, 5)
 
     item_name_to_id, item_id_to_raw = _get_item_mapping()
     location_name_to_id, location_id_to_raw = _get_location_mapping()
@@ -188,7 +188,7 @@ class SoEWorld(World):
         return SoEItem(event, ItemClassification.progression, None, self.player)
 
     def create_item(self, item: typing.Union[pyevermizer.Item, str]) -> Item:
-        if type(item) is str:
+        if isinstance(item, str):
             item = self.item_id_to_raw[self.item_name_to_id[item]]
         if item.type == pyevermizer.CHECK_TRAP:
             classification = ItemClassification.trap
@@ -208,14 +208,68 @@ class SoEWorld(World):
             raise FileNotFoundError(rom_file)
 
     def create_regions(self):
+        # exclude 'hidden' on easy
+        max_difficulty = 1 if self.world.difficulty[self.player] == Difficulty.option_easy else 256
+
         # TODO: generate *some* regions from locations' requirements?
         r = Region('Menu', RegionType.Generic, 'Menu', self.player, self.world)
         r.exits = [Entrance(self.player, 'New Game', r)]
         self.world.regions += [r]
 
+        # group locations into spheres (1, 2, 3+ at index 0, 1, 2)
+        spheres: typing.Dict[int, typing.Dict[int, typing.List[SoELocation]]] = {}
+        for loc in _locations:
+            spheres.setdefault(min(2, len(loc.requires)), {}).setdefault(loc.type, []).append(
+                SoELocation(self.player, loc.name, self.location_name_to_id[loc.name], r,
+                            loc.difficulty > max_difficulty))
+
+        # location balancing data
+        trash_fills: typing.Dict[int, typing.Dict[int, typing.Tuple[int, int, int, int]]] = {
+            0: {pyevermizer.CHECK_GOURD: (20, 40, 40, 40)},  # remove up to 40 gourds from sphere 1
+            1: {pyevermizer.CHECK_GOURD: (70, 90, 90, 90)},  # remove up to 90 gourds from sphere 2
+        }
+
+        # mark some as excluded based on numbers above
+        for trash_sphere, fills in trash_fills.items():
+            for typ, counts in fills.items():
+                count = counts[self.world.difficulty[self.player].value]
+                for location in self.world.random.sample(spheres[trash_sphere][typ], count):
+                    location.progress_type = LocationProgressType.EXCLUDED
+                    # TODO: do we need to set an item rule?
+
+        def sphere1_blocked_items_rule(item):
+            if isinstance(item, SoEItem):
+                # disable certain items in sphere 1
+                if item.name in {"Gauge", "Wheel"}:
+                    return False
+                # and some more for non-easy, non-mystery
+                if self.world.difficulty[item.player] not in (Difficulty.option_easy, Difficulty.option_mystery):
+                    if item.name in {"Laser Lance", "Atom Smasher", "Diamond Eye"}:
+                        return False
+            return True
+
+        for locations in spheres[0].values():
+            for location in locations:
+                add_item_rule(location, sphere1_blocked_items_rule)
+
+        # make some logically late(r) bosses priority locations to increase complexity
+        if self.world.difficulty[self.player] == Difficulty.option_mystery:
+            late_count = self.world.random.randint(0, 2)
+        else:
+            late_count = self.world.difficulty[self.player].value
+        late_bosses = ("Tiny", "Aquagoth", "Megataur", "Rimsala",
+                       "Mungola", "Lightning Storm", "Magmar", "Volcano Viper")
+        late_locations = self.world.random.sample(late_bosses, late_count)
+
+        # add locations to the world
         r = Region('Ingame', RegionType.Generic, 'Ingame', self.player, self.world)
-        r.locations = [SoELocation(self.player, loc.name, self.location_name_to_id[loc.name], r)
-                       for loc in _locations]
+        for sphere in spheres.values():
+            for locations in sphere.values():
+                for location in locations:
+                    r.locations.append(location)
+                    if location.name in late_locations:
+                        location.progress_type = LocationProgressType.PRIORITY
+
         r.locations.append(SoELocation(self.player, 'Done', None, r))
         self.world.regions += [r]
 
@@ -269,6 +323,7 @@ class SoEWorld(World):
                 if v < c:
                     return self.create_item(trap_names[t])
                 v -= c
+            assert False, "Bug in create_trap"
 
         for _ in range(trap_count):
             if len(ingredients) < 1:
@@ -289,7 +344,7 @@ class SoEWorld(World):
             location = self.world.get_location(loc.name, self.player)
             set_rule(location, self.make_rule(loc.requires))
 
-    def make_rule(self, requires: typing.List[typing.Tuple[int]]) -> typing.Callable[[typing.Any], bool]:
+    def make_rule(self, requires: typing.List[typing.Tuple[int, int]]) -> typing.Callable[[typing.Any], bool]:
         def rule(state) -> bool:
             for count, progress in requires:
                 if not state.soe_has(progress, self.world, self.player, count):
@@ -321,8 +376,8 @@ class SoEWorld(World):
         while len(self.connect_name.encode('utf-8')) > 32:
             self.connect_name = self.connect_name[:-1]
         self.connect_name_available_event.set()
-        placement_file = None
-        out_file = None
+        placement_file = ""
+        out_file = ""
         try:
             money = self.world.money_modifier[self.player].value
             exp = self.world.exp_modifier[self.player].value
@@ -346,14 +401,15 @@ class SoEWorld(World):
             with open(placement_file, "wb") as f:  # generate placement file
                 for location in filter(lambda l: l.player == self.player, self.world.get_locations()):
                     item = location.item
-                    if item.code is None:
+                    assert item is not None, "Can't handle unfilled location"
+                    if item.code is None or location.address is None:
                         continue  # skip events
                     loc = self.location_id_to_raw[location.address]
                     if item.player != self.player:
                         line = f'{loc.type},{loc.index}:{pyevermizer.CHECK_NONE},{item.code},{item.player}\n'
                     else:
-                        item = self.item_id_to_raw[item.code]
-                        line = f'{loc.type},{loc.index}:{item.type},{item.index}\n'
+                        soe_item = self.item_id_to_raw[item.code]
+                        line = f'{loc.type},{loc.index}:{soe_item.type},{soe_item.index}\n'
                     f.write(line.encode('utf-8'))
 
             if not os.path.exists(rom_file):
@@ -364,14 +420,14 @@ class SoEWorld(World):
             patch = SoEDeltaPatch(patch_file, player=self.player,
                                   player_name=player_name, patched_path=out_file)
             patch.write()
-        except:
+        except Exception:
             raise
         finally:
             try:
                 os.unlink(placement_file)
                 os.unlink(out_file)
                 os.unlink(out_file[:-4] + '_SPOILER.log')
-            except:
+            except FileNotFoundError:
                 pass
 
     def modify_multidata(self, multidata: dict):
@@ -388,11 +444,15 @@ class SoEWorld(World):
 
 class SoEItem(Item):
     game: str = "Secret of Evermore"
+    __slots__ = ()  # disable __dict__
 
 
 class SoELocation(Location):
     game: str = "Secret of Evermore"
+    __slots__ = ()  # disables __dict__ once Location has __slots__
 
-    def __init__(self, player: int, name: str, address: typing.Optional[int], parent):
+    def __init__(self, player: int, name: str, address: typing.Optional[int], parent: Region, exclude: bool = False):
         super().__init__(player, name, address, parent)
+        # unconditional assignments favor a split dict, saving memory
+        self.progress_type = LocationProgressType.EXCLUDED if exclude else LocationProgressType.DEFAULT
         self.event = not address

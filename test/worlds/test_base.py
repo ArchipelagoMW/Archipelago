@@ -19,13 +19,13 @@ class WorldTestBase(unittest.TestCase):
         if self.auto_construct:
             self.world_setup()
 
-    def world_setup(self) -> None:
+    def world_setup(self, seed: typing.Optional[int] = None) -> None:
         if not hasattr(self, "game"):
             raise NotImplementedError("didn't define game name")
         self.world = MultiWorld(1)
         self.world.game[1] = self.game
         self.world.player_name = {1: "Tester"}
-        self.world.set_seed()
+        self.world.set_seed(seed)
         args = Namespace()
         for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].option_definitions.items():
             setattr(args, name, {
