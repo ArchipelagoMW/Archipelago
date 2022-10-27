@@ -2,7 +2,7 @@
 
 ## Where is the settings page?
 
-The [player settings page for this game](../player-settings) is located contains most of the options you need to 
+The [player settings page for this game](../player-settings) contains most of the options you need to 
 configure and export a config file. Some settings can only be made via YAML, but an explaination can be found in the
 [template yaml here](../../../static/generated/configs/Rogue%20Legacy.yaml).
 
