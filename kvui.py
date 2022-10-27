@@ -28,6 +28,7 @@ from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.layout import Layout
 from kivy.uix.textinput import TextInput
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
@@ -299,6 +300,9 @@ class GameManager(App):
     base_title: str = "Archipelago Client"
     last_autofillable_command: str
 
+    main_area_container: GridLayout
+    """ subclasses can add more columns beside the tabs """
+
     def __init__(self, ctx: context_type):
         self.title = self.base_title
         self.ctx = ctx
@@ -325,7 +329,7 @@ class GameManager(App):
 
         super(GameManager, self).__init__()
 
-    def build(self):
+    def build(self) -> Layout:
         self.container = ContainerLayout()
 
         self.grid = MainLayout()
@@ -358,7 +362,10 @@ class GameManager(App):
             self.log_panels[display_name] = panel.content = UILog(bridge_logger)
             self.tabs.add_widget(panel)
 
-        self.grid.add_widget(self.tabs)
+        self.main_area_container = GridLayout(size_hint_y=1, rows=1)
+        self.main_area_container.add_widget(self.tabs)
+
+        self.grid.add_widget(self.main_area_container)
 
         if len(self.logging_pairs) == 1:
             # Hide Tab selection if only one tab

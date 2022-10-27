@@ -106,7 +106,7 @@ settings. If a game can be rolled it **must** have a settings section even if it
 
 Some options in Archipelago can be used by every game but must still be placed within the relevant game's section.
 
-Currently, these options are `start_inventory`, `start_hints`, `local_items`, `non_local_items`, `start_location_hints`
+Currently, these options are `start_inventory`, `early_items`, `start_hints`, `local_items`, `non_local_items`,  `start_location_hints`
 , `exclude_locations`, and various plando options.
 
 See the plando guide for more info on plando options. Plando
@@ -115,6 +115,8 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 * `start_inventory` will give any items defined here to you at the beginning of your game. The format for this must be
   the name as it appears in the game files and the amount you would like to start with. For example `Rupees(5): 6` which
   will give you 30 rupees.
+* `early_items` is formatted in the same way as `start_inventory` and will force the number of each item specified to be
+forced into locations that are reachable from the start, before obtaining any items.
 * `start_hints` gives you free server hints for the defined item/s at the beginning of the game allowing you to hint for
   the location without using any hint points.
 * `local_items` will force any items you want to be in your world instead of being in another world.
@@ -172,6 +174,8 @@ A Link to the Past:
     - Quake
   non_local_items:
     - Moon Pearl
+  early_items:
+    Flute: 1
   start_location_hints:
     - Spike Cave
   priority_locations:
@@ -235,6 +239,9 @@ Timespinner:
 * `local_items` forces the `Bombos`, `Ether`, and `Quake` medallions to all be placed within our own world, meaning we
   have to find it ourselves.
 * `non_local_items` forces the `Moon Pearl` to be placed in someone else's world, meaning we won't be able to find it.
+* `early_items` forces the `Flute` to be placed in a location that is available from the beginning of the game ("Sphere
+1"). Since it is not specified in `local_items` or `non_local_items`, it can be placed one of these locations in any
+world.
 * `start_location_hints` gives us a starting hint for the `Spike Cave` location available at the beginning of the
   multiworld that can be used for no cost.
 * `priority_locations` forces a progression item to be placed on the `Link's House` location.
