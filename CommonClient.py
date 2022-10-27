@@ -312,6 +312,12 @@ class CommonContext:
             return self.slot in self.slot_info[slot].group_members
         return False
 
+    def is_uninteresting_item_send(self, print_json_packet: dict) -> bool:
+        """Helper function for filtering out ItemSend prints that do not concern the local player."""
+        return print_json_packet.get("type", "") == "ItemSend" \
+            and not self.slot_concerns_self(print_json_packet["receiving"]) \
+            and not self.slot_concerns_self(print_json_packet["item"].player)
+
     def on_print(self, args: dict):
         logger.info(args["text"])
 
