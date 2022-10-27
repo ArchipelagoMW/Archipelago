@@ -175,7 +175,7 @@ item_table: Dict[int, ItemDict] = {
             'name': 'Thermal Plant Fragment',
             'tech_type': 'ThermalPlantFragment'},
     35041: {'classification': ItemClassification.progression,
-            'count': 2,
+            'count': 4,
             'name': 'Seaglide Fragment',
             'tech_type': 'SeaglideFragment'},
     35042: {'classification': ItemClassification.progression,
