@@ -206,11 +206,14 @@ class PokemonRedBlueWorld(World):
 
     def create_regions(self):
         if self.world.free_fly_location[self.player].value:
-            fly_map_code = self.world.random.randint(5, 9)
+            if self.world.old_man[self.player].value == 0:
+                fly_map_code = self.world.random.randint(1, 9)
+            else:
+                fly_map_code = self.world.random.randint(5, 9)
+                if fly_map_code == 5:
+                    fly_map_code = 4
             if fly_map_code == 9:
                 fly_map_code = 10
-            if fly_map_code == 5:
-                fly_map_code = 4
         else:
             fly_map_code = 0
         self.fly_map = ["Pallet Town", "Viridian City", "Pewter City", "Cerulean City", "Lavender Town",
@@ -255,17 +258,17 @@ class PokemonRedBlueWorld(World):
             "require_item_finder": self.world.require_item_finder[self.player].value,
             "randomize_hidden_items": self.world.randomize_hidden_items[self.player].value,
             "badges_needed_for_hm_moves": self.world.badges_needed_for_hm_moves[self.player].value,
-            "extra_badges": self.extra_badges,
-            "oaks_aide_rt_2": self.oaks_aide_rt_2[self.player].value,
-            "oaks_aide_rt_11": self.oaks_aide_rt_11[self.player].value,
-            "oaks_aide_rt_15": self.oaks_aide_rt_15[self.player].value,
-            "extra_key_items": self.extra_key_items[self.player].value,
-            "extra_strength_boulders": self.extra_strength_boulders[self.player].value,
-            "tea": self.tea[self.player].value,
-            "old_man": self.old_man[self.player].value,
-            "elite_four_condition": self.elite_four_condition[self.player].value,
-            "victory_road_condition": self.victory_road_condition[self.player].value,
-            "viridian_gym_condition": self.viridian_gym_condition[self.player].value
+            "oaks_aide_rt_2": self.world.oaks_aide_rt_2[self.player].value,
+            "oaks_aide_rt_11": self.world.oaks_aide_rt_11[self.player].value,
+            "oaks_aide_rt_15": self.world.oaks_aide_rt_15[self.player].value,
+            "extra_key_items": self.world.extra_key_items[self.player].value,
+            "extra_strength_boulders": self.world.extra_strength_boulders[self.player].value,
+            "tea": self.world.tea[self.player].value,
+            "old_man": self.world.old_man[self.player].value,
+            "elite_four_condition": self.world.elite_four_condition[self.player].value,
+            "victory_road_condition": self.world.victory_road_condition[self.player].value,
+            "viridian_gym_condition": self.world.viridian_gym_condition[self.player].value,
+            "free_fly_map": self.fly_map_code
         }
 
 
