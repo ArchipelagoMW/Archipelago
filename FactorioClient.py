@@ -146,9 +146,8 @@ class FactorioContext(CommonContext):
             await self.send_msgs([{"cmd": "Say", "text": message}])
             return
 
-        # Remove local coordinates
-        message = re.sub(r"\[gps=[^\]]*\]", "", message).strip()
-        if not message:
+        # Omit messages that contain local coordinates
+        if "[gps=" in message:
             return
 
         prefix = f"({user}) " if self.multiplayer else ""
