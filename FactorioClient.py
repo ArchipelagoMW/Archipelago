@@ -92,7 +92,8 @@ class FactorioContext(CommonContext):
     def on_print_json(self, args: dict):
         if self.rcon_client:
             is_uninteresting_item_send: bool = args.get("type", "") == "ItemSend" \
-                                               and args["receiving"] != self.slot and args["item"].player != self.slot
+                                               and not self.slot_concerns_self(args["receiving"]) \
+                                               and not self.slot_concerns_self(args["item"].player)
             if not self.filter_item_sends or not is_uninteresting_item_send:
                 text = self.factorio_json_text_parser(copy.deepcopy(args["data"]))
                 self.print_to_game(text)
