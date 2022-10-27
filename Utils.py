@@ -232,6 +232,7 @@ def get_default_options() -> OptionsType:
         "factorio_options": {
             "executable": os.path.join("factorio", "bin", "x64", "factorio"),
             "filter_item_sends": False,
+            "bridge_chat_out": True,
         },
         "sni_options": {
             "sni": "SNI",

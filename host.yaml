@@ -101,6 +101,8 @@ factorio_options:
   # server_settings: "factorio\\data\\server-settings.json"
   # Whether to filter item send messages displayed in-game to only those that involve you.
   filter_item_sends: false
+  # Whether to send chat messages from players on the Factorio server to Archipelago.
+  bridge_chat_out: true
 minecraft_options: 
   forge_directory: "Minecraft Forge server"
   max_heap_size: "2G"

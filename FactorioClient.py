@@ -8,6 +8,7 @@ import re
 import subprocess
 import time
 import random
+import typing
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -51,6 +52,9 @@ class FactorioCommandProcessor(ClientCommandProcessor):
         """Toggle filtering of item sends that get displayed in-game to only those that involve you."""
         self.ctx.toggle_filter_item_sends()
 
+    def _cmd_toggle_chat(self):
+        """Toggle sending of chat messages from players on the Factorio server to Archipelago."""
+        self.ctx.toggle_bridge_chat_out()
 
 class FactorioContext(CommonContext):
     command_processor = FactorioCommandProcessor
@@ -71,6 +75,8 @@ class FactorioContext(CommonContext):
         self.energy_link_increment = 0
         self.last_deplete = 0
         self.filter_item_sends: bool = False
+        self.multiplayer: bool = False  # whether multiple different players have connected
+        self.bridge_chat_out: bool = True
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -87,13 +93,15 @@ class FactorioContext(CommonContext):
     def on_print(self, args: dict):
         super(FactorioContext, self).on_print(args)
         if self.rcon_client:
-            self.print_to_game(args['text'])
+            if not args['text'].startswith(self.player_names[self.slot] + ":"):
+                self.print_to_game(args['text'])
 
     def on_print_json(self, args: dict):
         if self.rcon_client:
             if not self.filter_item_sends or not self.is_uninteresting_item_send(args):
                 text = self.factorio_json_text_parser(copy.deepcopy(args["data"]))
-                self.print_to_game(text)
+                if not text.startswith(self.player_names[self.slot] + ":"):
+                    self.print_to_game(text)
         super(FactorioContext, self).on_print_json(args)
 
     @property
@@ -130,12 +138,42 @@ class FactorioContext(CommonContext):
                                      f"{Utils.format_SI_prefix(args['value'])}J remaining.")
                         self.rcon_client.send_command(f"/ap-energylink {gained}")
 
+    def on_user_say(self, text: str) -> typing.Optional[str]:
+        # Mirror chat sent from the UI to the Factorio server.
+        self.print_to_game(f"{self.player_names[self.slot]}: {text}")
+        return text
+
+    async def chat_from_factorio(self, user: str, message: str) -> None:
+        if not self.bridge_chat_out:
+            return
+
+        # Pass through commands
+        if message.startswith("!"):
+            await self.send_msgs([{"cmd": "Say", "text": message}])
+            return
+
+        # Omit messages that contain local coordinates
+        if "[gps=" in message:
+            return
+
+        prefix = f"({user}) " if self.multiplayer else ""
+        await self.send_msgs([{"cmd": "Say", "text": f"{prefix}{message}"}])
+
     def toggle_filter_item_sends(self) -> None:
         self.filter_item_sends = not self.filter_item_sends
         if self.filter_item_sends:
             announcement = "Item sends are now filtered."
         else:
             announcement = "Item sends are no longer filtered."
+        logger.info(announcement)
+        self.print_to_game(announcement)
+
+    def toggle_bridge_chat_out(self) -> None:
+        self.bridge_chat_out = not self.bridge_chat_out
+        if self.bridge_chat_out:
+            announcement = "Chat is now bridged to Archipelago."
+        else:
+            announcement = "Chat is no longer bridged to Archipelago."
         logger.info(announcement)
         self.print_to_game(announcement)
 
@@ -178,6 +216,7 @@ async def game_watcher(ctx: FactorioContext):
                     research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
                     victory = data["victory"]
                     await ctx.update_death_link(data["death_link"])
+                    ctx.multiplayer = data.get("multiplayer", False)
 
                     if not ctx.finished_game and victory:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -281,8 +320,14 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-send-filter", msg):
                     factorio_server_logger.debug(msg)
                     ctx.toggle_filter_item_sends()
+                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-chat$", msg):
+                    factorio_server_logger.debug(msg)
+                    ctx.toggle_bridge_chat_out()
                 else:
                     factorio_server_logger.info(msg)
+                    match = re.match(r"^\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d \[CHAT\] ([^:]+): (.*)$", msg)
+                    if match:
+                        await ctx.chat_from_factorio(match.group(1), match.group(2))
             if ctx.rcon_client:
                 commands = {}
                 while ctx.send_index < len(ctx.items_received):
@@ -383,6 +428,7 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
 async def main(args):
     ctx = FactorioContext(args.connect, args.password)
     ctx.filter_item_sends = initial_filter_item_sends
+    ctx.bridge_chat_out = initial_bridge_chat_out
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
     if gui_enabled:
@@ -438,6 +484,9 @@ if __name__ == '__main__':
     if not isinstance(options["factorio_options"]["filter_item_sends"], bool):
         logging.warning(f"Warning: Option filter_item_sends should be a bool.")
     initial_filter_item_sends = bool(options["factorio_options"]["filter_item_sends"])
+    if not isinstance(options["factorio_options"]["bridge_chat_out"], bool):
+        logging.warning(f"Warning: Option bridge_chat_out should be a bool.")
+    initial_bridge_chat_out = bool(options["factorio_options"]["bridge_chat_out"])
 
     if not os.path.exists(os.path.dirname(executable)):
         raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")
