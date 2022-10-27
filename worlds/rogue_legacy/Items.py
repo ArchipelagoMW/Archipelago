@@ -52,9 +52,9 @@ item_table: Dict[str, RLItemData] = {
     "Attack Up":                RLItemData("Skills",     90_015, ItemClassification.progression_skip_balancing, 15),
     "Magic Damage Up":          RLItemData("Skills",     90_016, ItemClassification.progression_skip_balancing, 15),
     "Armor Up":                 RLItemData("Skills",     90_017, ItemClassification.useful,                     15),
-    "Equip Up":                 RLItemData("Skills",     90_018, ItemClassification.useful,                     5),
-    "Crit Chance Up":           RLItemData("Skills",     90_019, ItemClassification.useful,                     5),
-    "Crit Damage Up":           RLItemData("Skills",     90_020, ItemClassification.useful,                     5),
+    "Equip Up":                 RLItemData("Skills",     90_018, ItemClassification.useful,                      5),
+    "Crit Chance Up":           RLItemData("Skills",     90_019, ItemClassification.useful,                      5),
+    "Crit Damage Up":           RLItemData("Skills",     90_020, ItemClassification.useful,                      5),
     "Down Strike Up":           RLItemData("Skills",     90_021),
     "Gold Gain Up":             RLItemData("Skills",     90_022),
     "Potion Efficiency Up":     RLItemData("Skills",     90_023),
@@ -96,7 +96,7 @@ item_table: Dict[str, RLItemData] = {
     "Balance Runes":            RLItemData("Runes",      90_070, ItemClassification.useful),
 
     # Junk
-    "Triple Stat Increase":     RLItemData("Filler",     90_030, weight=5),
+    "Triple Stat Increase":     RLItemData("Filler",     90_030, weight=6),
     "1000 Gold":                RLItemData("Filler",     90_031, weight=3),
     "3000 Gold":                RLItemData("Filler",     90_032, weight=2),
     "5000 Gold":                RLItemData("Filler",     90_033, weight=1),
