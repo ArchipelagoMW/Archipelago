@@ -596,5 +596,9 @@ commands.add_command("ap-energylink", "Used by the Archipelago client to manage 
     global.forcedata[force].energy = global.forcedata[force].energy + change
 end)
 
+commands.add_command("toggle-ap-send-filter", "Toggle filtering of item sends that get displayed in-game to only those that involve you.", function(call)
+    log("Player command toggle-ap-send-filter") -- notifies client
+end)
+
 -- data
 progressive_technologies = {{ dict_to_lua(progressive_technology_table) }}

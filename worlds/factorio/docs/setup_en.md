@@ -141,6 +141,18 @@ you can also issue the `!help` command to learn about additional commands like `
 4. Provide your IP address to anyone you want to join your game, and have them follow the steps for
    "Connecting to Someone Else's Factorio Game" above.
 
+## Other Settings
+
+- By default, all item sends are displayed in-game. In larger async seeds this may become overly spammy.
+  To hide all item sends that are not to or from your factory, do one of the following:
+  - Type `/toggle-ap-send-filter` in-game
+  - Type `/toggle_send_filter` in the Archipelago Client
+  - In your `host.yaml` set
+    ```
+    factorio_options:
+      filter_item_sends: true
+    ```
+
 ## Troubleshooting
 
 In case any problems should occur, the Archipelago Client will create a file `FactorioClient.txt` in the `/logs`. The
