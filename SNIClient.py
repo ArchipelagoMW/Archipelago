@@ -18,7 +18,7 @@ from json import loads, dumps
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 
 import Utils
-
+from Utils import AsyncStarter as AS
 from MultiServer import mark_raw
 if typing.TYPE_CHECKING:
     from worlds.AutoSNIClient import SNIClient
@@ -84,7 +84,7 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         """Close connection to a currently connected snes"""
         self.ctx.snes_reconnect_address = None
         if self.ctx.snes_socket is not None and not self.ctx.snes_socket.closed:
-            asyncio.create_task(self.ctx.snes_socket.close())
+            AS.start(self.ctx.snes_socket.close())
             return True
         else:
             return False
@@ -96,7 +96,7 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
     #         self.output("No attached SNES Device.")
     #         return False
     #     snes_buffered_write(self.ctx, int(address, 16), bytes([int(data)]))
-    #     asyncio.create_task(snes_flush_writes(self.ctx))
+    #     AS.start(snes_flush_writes(self.ctx))
     #     self.output("Data Sent")
     #     return True
 
@@ -167,7 +167,7 @@ class SNIContext(CommonContext):
 
     def event_invalid_slot(self) -> typing.NoReturn:
         if self.snes_socket is not None and not self.snes_socket.closed:
-            asyncio.create_task(self.snes_socket.close())
+            AS.start(self.snes_socket.close())
         raise Exception("Invalid ROM detected, "
                         "please verify that you have loaded the correct rom and reconnect your snes (/snes)")
 
@@ -230,7 +230,7 @@ class SNIContext(CommonContext):
                 # since the player will likely need that item.
                 # Once the games handled by SNIClient gets made to be remote items,
                 # this will no longer be needed.
-                asyncio.create_task(self.send_msgs([{"cmd": "LocationScouts", "locations": list(new_locations)}]))
+                AS.start(self.send_msgs([{"cmd": "LocationScouts", "locations": list(new_locations)}]))
 
     def run_gui(self) -> None:
         from kvui import GameManager
@@ -443,7 +443,7 @@ async def snes_connect(ctx: SNIContext, address: str, deviceIndex: int = -1) -> 
             snes_logger.error("Error connecting to snes (%s)" % e)
         else:
             snes_logger.error(f"Error connecting to snes, attempt again in {_global_snes_reconnect_delay}s")
-            asyncio.create_task(snes_autoreconnect(ctx))
+            AS.start(snes_autoreconnect(ctx))
         _global_snes_reconnect_delay *= 2
 
     else:
@@ -488,7 +488,7 @@ async def snes_recv_loop(ctx: SNIContext) -> None:
 
         if ctx.snes_reconnect_address:
             snes_logger.info(f"...reconnecting in {_global_snes_reconnect_delay}s")
-            asyncio.create_task(snes_autoreconnect(ctx))
+            AS.start(snes_autoreconnect(ctx))
 
 
 async def snes_read(ctx: SNIContext, address: int, size: int) -> typing.Optional[bytes]:
@@ -674,9 +674,9 @@ async def main() -> None:
         elif args.diff_file.endswith(".aplttp"):
             from worlds.alttp.Client import get_alttp_settings
             adjustedromfile, adjusted = get_alttp_settings(romfile)
-            asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
+            AS.start(run_game(adjustedromfile if adjusted else romfile))
         else:
-            asyncio.create_task(run_game(romfile))
+            AS.start(run_game(romfile))
 
     ctx = SNIContext(args.snes, args.connect, args.password)
     if ctx.server_task is None:

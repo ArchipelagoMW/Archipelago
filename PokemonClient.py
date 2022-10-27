@@ -11,6 +11,7 @@ from typing import List
 
 
 import Utils
+from Utils import AsyncStarter
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
 
@@ -185,7 +186,7 @@ async def gb_sync_task(ctx: GBContext):
                     if 'locations' in data_decoded and ctx.game and ctx.gb_status == CONNECTION_CONNECTED_STATUS \
                             and not error_status and ctx.auth:
                         # Not just a keep alive ping, parse
-                        asyncio.create_task(parse_locations(data_decoded['locations'], ctx))
+                        AsyncStarter.start(parse_locations(data_decoded['locations'], ctx))
                 except asyncio.TimeoutError:
                     logger.debug("Read Timed Out, Reconnecting")
                     error_status = CONNECTION_TIMING_OUT_STATUS
@@ -265,7 +266,7 @@ async def patch_and_run_game(game_version, patch_file, ctx):
         with open(comp_path, "wb") as patched_rom_file:
             patched_rom_file.write(patched_rom_data)
 
-        asyncio.create_task(run_game(comp_path))
+        AsyncStarter.start(run_game(comp_path))
     else:
         msg = "Patch supplied was not generated with the same base patch version as this client. Patching failed."
         logger.warning(msg)
@@ -295,10 +296,10 @@ if __name__ == '__main__':
             ext = args.patch_file.split(".")[len(args.patch_file.split(".")) - 1].lower()
             if ext == "apred":
                 logger.info("APRED file supplied, beginning patching process...")
-                asyncio.create_task(patch_and_run_game("red", args.patch_file, ctx))
+                AsyncStarter.start(patch_and_run_game("red", args.patch_file, ctx))
             elif ext == "apblue":
                 logger.info("APBLUE file supplied, beginning patching process...")
-                asyncio.create_task(patch_and_run_game("blue", args.patch_file, ctx))
+                AsyncStarter.start(patch_and_run_game("blue", args.patch_file, ctx))
             else:
                 logger.warning(f"Unknown patch file extension {ext}")
 

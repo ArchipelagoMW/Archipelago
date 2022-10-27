@@ -31,7 +31,7 @@ except ImportError:
 
 import NetUtils
 import Utils
-from Utils import version_tuple, restricted_loads, Version
+from Utils import version_tuple, restricted_loads, Version, AsyncStarter as AS
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
     SlotType
 
@@ -273,16 +273,16 @@ class Context:
     def broadcast_all(self, msgs: typing.List[dict]):
         msgs = self.dumper(msgs)
         endpoints = (endpoint for endpoint in self.endpoints if endpoint.auth)
-        asyncio.create_task(self.broadcast_send_encoded_msgs(endpoints, msgs))
+        AS.start(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
     def broadcast_team(self, team: int, msgs: typing.List[dict]):
         msgs = self.dumper(msgs)
         endpoints = (endpoint for endpoint in itertools.chain.from_iterable(self.clients[team].values()))
-        asyncio.create_task(self.broadcast_send_encoded_msgs(endpoints, msgs))
+        AS.start(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
     def broadcast(self, endpoints: typing.Iterable[Client], msgs: typing.List[dict]):
         msgs = self.dumper(msgs)
-        asyncio.create_task(self.broadcast_send_encoded_msgs(endpoints, msgs))
+        AS.start(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
     async def disconnect(self, endpoint: Client):
         if endpoint in self.endpoints:
@@ -302,18 +302,18 @@ class Context:
             return
         logging.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
         if client.version >= print_command_compatability_threshold:
-            asyncio.create_task(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }]}]))
+            AS.start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }]}]))
         else:
-            asyncio.create_task(self.send_msgs(client, [{"cmd": "Print", "text": text}]))
+            AS.start(self.send_msgs(client, [{"cmd": "Print", "text": text}]))
 
     def notify_client_multiple(self, client: Client, texts: typing.List[str]):
         if not client.auth:
             return
         if client.version >= print_command_compatability_threshold:
-            asyncio.create_task(self.send_msgs(client, 
+            AS.start(self.send_msgs(client, 
                 [{"cmd": "PrintJSON", "data": [{ "text": text }]} for text in texts]))
         else:
-            asyncio.create_task(self.send_msgs(client, [{"cmd": "Print", "text": text} for text in texts]))
+            AS.start(self.send_msgs(client, [{"cmd": "Print", "text": text} for text in texts]))
 
     # loading
 
@@ -627,7 +627,7 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], onl
             continue
         client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
         for client in clients:
-            asyncio.create_task(ctx.send_msgs(client, client_hints))
+            AS.start(ctx.send_msgs(client, client_hints))
 
 
 def update_aliases(ctx: Context, team: int):
@@ -636,7 +636,7 @@ def update_aliases(ctx: Context, team: int):
 
     for clients in ctx.clients[team].values():
         for client in clients:
-            asyncio.create_task(ctx.send_encoded_msgs(client, cmd))
+            AS.start(ctx.send_encoded_msgs(client, cmd))
 
 
 async def server(websocket, path: str = "/", ctx: Context = None):
@@ -814,7 +814,7 @@ def send_new_items(ctx: Context):
                 items = get_received_items(ctx, team, slot, client.remote_items)
                 if len(start_inventory) + len(items) > client.send_index:
                     first_new_item = max(0, client.send_index - len(start_inventory))
-                    asyncio.create_task(ctx.send_msgs(client, [{
+                    AS.start(ctx.send_msgs(client, [{
                         "cmd": "ReceivedItems",
                         "index": client.send_index,
                         "items": start_inventory[client.send_index:] + items[first_new_item:]}]))
@@ -1090,7 +1090,7 @@ class CommonCommandProcessor(CommandProcessor):
             timer = int(seconds, 10)
         except ValueError:
             timer = 10
-        asyncio.create_task(countdown(self.ctx, timer))
+        AS.start(countdown(self.ctx, timer))
         return True
 
     def _cmd_options(self):
@@ -1765,7 +1765,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
-        asyncio.create_task(self.ctx.server.ws_server._close())
+        AS.start(self.ctx.server.ws_server._close())
         if self.ctx.shutdown_task:
             self.ctx.shutdown_task.cancel()
         self.ctx.exit_event.set()
@@ -2060,7 +2060,7 @@ async def auto_shutdown(ctx, to_cancel=None):
     await asyncio.sleep(ctx.auto_shutdown)
     while not ctx.exit_event.is_set():
         if not ctx.client_activity_timers.values():
-            asyncio.create_task(ctx.server.ws_server._close())
+            AS.start(ctx.server.ws_server._close())
             ctx.exit_event.set()
             if to_cancel:
                 for task in to_cancel:
@@ -2071,7 +2071,7 @@ async def auto_shutdown(ctx, to_cancel=None):
             delta = datetime.datetime.now(datetime.timezone.utc) - newest_activity
             seconds = ctx.auto_shutdown - delta.total_seconds()
             if seconds < 0:
-                asyncio.create_task(ctx.server.ws_server._close())
+                AS.start(ctx.server.ws_server._close())
                 ctx.exit_event.set()
                 if to_cancel:
                     for task in to_cancel:

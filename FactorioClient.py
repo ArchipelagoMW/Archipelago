@@ -23,6 +23,7 @@ if __name__ == "__main__":
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, logger, gui_enabled, get_base_parser
 from MultiServer import mark_raw
 from NetUtils import NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePart
+from Utils import AsyncStarter as AS
 
 from worlds.factorio import Factorio
 
@@ -109,7 +110,7 @@ class FactorioContext(CommonContext):
                 self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
                                                 item_name in args["checked_locations"]})
             if cmd == "Connected" and self.energy_link_increment:
-                asyncio.create_task(self.send_msgs([{
+                AS.start(self.send_msgs([{
                     "cmd": "SetNotify", "keys": ["EnergyLink"]
                 }]))
         elif cmd == "SetReply":
@@ -177,7 +178,7 @@ async def game_watcher(ctx: FactorioContext):
                     if death_link_tick != ctx.death_link_tick:
                         ctx.death_link_tick = death_link_tick
                         if "DeathLink" in ctx.tags:
-                            asyncio.create_task(ctx.send_death())
+                            AS.start(ctx.send_death())
                     if ctx.energy_link_increment:
                         in_world_bridges = data["energy_bridges"]
                         if in_world_bridges:
@@ -185,7 +186,7 @@ async def game_watcher(ctx: FactorioContext):
                             if in_world_energy < (ctx.energy_link_increment * in_world_bridges):
                                 # attempt to refill
                                 ctx.last_deplete = time.time()
-                                asyncio.create_task(ctx.send_msgs([{
+                                AS.start(ctx.send_msgs([{
                                     "cmd": "Set", "key": "EnergyLink", "operations":
                                         [{"operation": "add", "value": -ctx.energy_link_increment * in_world_bridges},
                                          {"operation": "max", "value": 0}],
@@ -195,7 +196,7 @@ async def game_watcher(ctx: FactorioContext):
                             elif in_world_energy > (in_world_bridges * ctx.energy_link_increment * 5) - \
                                 ctx.energy_link_increment*in_world_bridges:
                                 value = ctx.energy_link_increment * in_world_bridges
-                                asyncio.create_task(ctx.send_msgs([{
+                                AS.start(ctx.send_msgs([{
                                     "cmd": "Set", "key": "EnergyLink", "operations":
                                         [{"operation": "add", "value": value}]
                                 }]))

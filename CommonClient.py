@@ -20,7 +20,7 @@ if __name__ == "__main__":
 from MultiServer import CommandProcessor
 from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, \
     ClientStatus, Permission, NetworkSlot, RawJSONtoTextParser
-from Utils import Version, stream_input
+from Utils import Version, stream_input, AsyncStarter as AS
 from worlds import network_data_package, AutoWorldRegister
 import os
 
@@ -46,14 +46,14 @@ class ClientCommandProcessor(CommandProcessor):
         """Connect to a MultiWorld Server"""
         self.ctx.server_address = None
         self.ctx.username = None
-        asyncio.create_task(self.ctx.connect(address if address else None), name="connecting")
+        AS.start(self.ctx.connect(address if address else None), name="connecting")
         return True
 
     def _cmd_disconnect(self) -> bool:
         """Disconnect from a MultiWorld Server"""
         self.ctx.server_address = None
         self.ctx.username = None
-        asyncio.create_task(self.ctx.disconnect(), name="disconnecting")
+        AS.start(self.ctx.disconnect(), name="disconnecting")
         return True
 
     def _cmd_received(self) -> bool:
@@ -116,12 +116,12 @@ class ClientCommandProcessor(CommandProcessor):
         else:
             state = ClientStatus.CLIENT_CONNECTED
             self.output("Unreadied.")
-        asyncio.create_task(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]), name="send StatusUpdate")
+        AS.start(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]), name="send StatusUpdate")
 
     def default(self, raw: str):
         raw = self.ctx.on_user_say(raw)
         if raw:
-            asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]), name="send Say")
+            AS.start(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]), name="send Say")
 
 
 class CommonContext:
@@ -548,7 +548,7 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
         await ctx.connection_closed()
         if ctx.server_address:
             logger.info(f"... reconnecting in {ctx.current_reconnect_delay}s")
-            asyncio.create_task(server_autoreconnect(ctx), name="server auto reconnect")
+            AS.start(server_autoreconnect(ctx), name="server auto reconnect")
         ctx.current_reconnect_delay *= 2
 
 

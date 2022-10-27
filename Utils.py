@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import typing
 import builtins
 import os
@@ -11,7 +12,7 @@ import io
 import collections
 import importlib
 import logging
-from typing import BinaryIO
+from typing import BinaryIO, ClassVar, Coroutine, Optional, Set
 
 from yaml import load, load_all, dump, SafeLoader
 
@@ -648,3 +649,25 @@ def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
     if strip_header and len(buffer) % 0x400 == 0x200:
         return buffer[0x200:]
     return buffer
+
+
+class AsyncStarter:
+    """
+    https://docs.python.org/3.10/library/asyncio-task.html#asyncio.create_task
+
+    Python docs:
+    ```
+    Important: Save a reference to the result of [asyncio.create_task],
+    to avoid a task disappearing mid-execution.
+    ```
+    """
+    # implementation follows the pattern given in that documentation
+
+    _tasks: "ClassVar[Set[asyncio.Task[None]]]" = set()
+
+    @staticmethod
+    def start(co: Coroutine[None, None, None], name: Optional[str] = None) -> None:
+        """ Use this to start an async function running without waiting for it. """
+        task = asyncio.create_task(co, name=name)
+        AsyncStarter._tasks.add(task)
+        task.add_done_callback(AsyncStarter._tasks.discard)
