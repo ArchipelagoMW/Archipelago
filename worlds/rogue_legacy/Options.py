@@ -1,6 +1,6 @@
-import typing
+from typing import Dict
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList, OptionSet
+from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet
 
 
 class StartingGender(Choice):
@@ -340,7 +340,7 @@ class AvailableClasses(OptionSet):
     valid_keys = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
 
 
-rl_options: typing.Dict[str, type(Option)] = {
+rl_options: Dict[str, type(Option)] = {
     "starting_gender": StartingGender,
     "starting_class": StartingClass,
     "available_classes": AvailableClasses,
