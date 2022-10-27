@@ -151,12 +151,11 @@ class FactorioContext(CommonContext):
         if not message:
             return
 
-        prefix: str = f"({user}) " if self.multiplayer else ""
+        prefix = f"({user}) " if self.multiplayer else ""
         await self.send_msgs([{"cmd": "Say", "text": f"{prefix}{message}"}])
 
     def toggle_bridge_chat_out(self) -> None:
         self.bridge_chat_out = not self.bridge_chat_out
-        announcement: str
         if self.bridge_chat_out:
             announcement = "Chat is now bridged to Archipelago."
         else:
@@ -309,7 +308,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     ctx.toggle_bridge_chat_out()
                 else:
                     factorio_server_logger.info(msg)
-                    match: typing.Optional[re.Match] = re.match(r"^\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d \[CHAT\] ([^:]+): (.*)$", msg)
+                    match = re.match(r"^\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d \[CHAT\] ([^:]+): (.*)$", msg)
                     if match:
                         await ctx.chat_from_factorio(match.group(1), match.group(2))
             if ctx.rcon_client:
@@ -466,7 +465,7 @@ if __name__ == '__main__':
         server_settings = os.path.abspath(server_settings)
     if not isinstance(options["factorio_options"]["bridge_chat_out"], bool):
         logging.warning(f"Warning: Option bridge_chat_out should be a bool.")
-    initial_bridge_chat_out: bool = bool(options["factorio_options"]["bridge_chat_out"])
+    initial_bridge_chat_out = bool(options["factorio_options"]["bridge_chat_out"])
 
     if not os.path.exists(os.path.dirname(executable)):
         raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")
