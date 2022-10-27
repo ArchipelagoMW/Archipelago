@@ -15,7 +15,7 @@ funnel_slice_sizes = {TechTreeLayout.option_small_funnels: 6,
                       TechTreeLayout.option_large_funnels: 15}
 
 
-def _sorter(location: "FactorioLocation"):
+def _sorter(location: "FactorioScienceLocation"):
     return location.complexity, location.rel_cost
 
 
