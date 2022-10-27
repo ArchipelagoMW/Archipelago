@@ -145,6 +145,15 @@ For more information about the commands you can use, see the [Commands Guide](/t
 
 ## Other Settings
 
+- By default, all item sends are displayed in-game. In larger async seeds this may become overly spammy.
+  To hide all item sends that are not to or from your factory, do one of the following:
+  - Type `/toggle-ap-send-filter` in-game
+  - Type `/toggle_send_filter` in the Archipelago Client
+  - In your `host.yaml` set
+    ```
+    factorio_options:
+      filter_item_sends: true
+    ```
 - By default, in-game chat is bridged to Archipelago. If you prefer to be able to speak privately, you can disable this
   feature by doing one of the following:
   - Type `/toggle-ap-chat` in-game

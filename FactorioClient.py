@@ -48,6 +48,10 @@ class FactorioCommandProcessor(ClientCommandProcessor):
         """Manually trigger a resync."""
         self.ctx.awaiting_bridge = True
 
+    def _cmd_toggle_send_filter(self):
+        """Toggle filtering of item sends that get displayed in-game to only those that involve you."""
+        self.ctx.toggle_filter_item_sends()
+
     def _cmd_toggle_chat(self):
         """Toggle sending of chat messages from players on the Factorio server to Archipelago."""
         self.ctx.toggle_bridge_chat_out()
@@ -70,6 +74,7 @@ class FactorioContext(CommonContext):
         self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
         self.energy_link_increment = 0
         self.last_deplete = 0
+        self.filter_item_sends: bool = False
         self.multiplayer: bool = False  # whether multiple different players have connected
         self.bridge_chat_out: bool = True
 
@@ -93,9 +98,10 @@ class FactorioContext(CommonContext):
 
     def on_print_json(self, args: dict):
         if self.rcon_client:
-            text = self.factorio_json_text_parser(copy.deepcopy(args["data"]))
-            if not text.startswith(self.player_names[self.slot] + ":"):
-                self.print_to_game(text)
+            if not self.filter_item_sends or not self.is_uninteresting_item_send(args):
+                text = self.factorio_json_text_parser(copy.deepcopy(args["data"]))
+                if not text.startswith(self.player_names[self.slot] + ":"):
+                    self.print_to_game(text)
         super(FactorioContext, self).on_print_json(args)
 
     @property
@@ -152,6 +158,15 @@ class FactorioContext(CommonContext):
 
         prefix = f"({user}) " if self.multiplayer else ""
         await self.send_msgs([{"cmd": "Say", "text": f"{prefix}{message}"}])
+
+    def toggle_filter_item_sends(self) -> None:
+        self.filter_item_sends = not self.filter_item_sends
+        if self.filter_item_sends:
+            announcement = "Item sends are now filtered."
+        else:
+            announcement = "Item sends are no longer filtered."
+        logger.info(announcement)
+        self.print_to_game(announcement)
 
     def toggle_bridge_chat_out(self) -> None:
         self.bridge_chat_out = not self.bridge_chat_out
@@ -302,6 +317,9 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
                     factorio_server_logger.debug(msg)
+                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-send-filter", msg):
+                    factorio_server_logger.debug(msg)
+                    ctx.toggle_filter_item_sends()
                 elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-chat$", msg):
                     factorio_server_logger.debug(msg)
                     ctx.toggle_bridge_chat_out()
@@ -409,6 +427,7 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
 
 async def main(args):
     ctx = FactorioContext(args.connect, args.password)
+    ctx.filter_item_sends = initial_filter_item_sends
     ctx.bridge_chat_out = initial_bridge_chat_out
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
@@ -462,6 +481,9 @@ if __name__ == '__main__':
     server_settings = args.server_settings if args.server_settings else options["factorio_options"].get("server_settings", None)
     if server_settings:
         server_settings = os.path.abspath(server_settings)
+    if not isinstance(options["factorio_options"]["filter_item_sends"], bool):
+        logging.warning(f"Warning: Option filter_item_sends should be a bool.")
+    initial_filter_item_sends = bool(options["factorio_options"]["filter_item_sends"])
     if not isinstance(options["factorio_options"]["bridge_chat_out"], bool):
         logging.warning(f"Warning: Option bridge_chat_out should be a bool.")
     initial_bridge_chat_out = bool(options["factorio_options"]["bridge_chat_out"])
