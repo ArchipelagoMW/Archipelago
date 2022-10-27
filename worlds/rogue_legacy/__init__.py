@@ -268,4 +268,4 @@ class RLWorld(World):
                 self.create_event("Defeat Herodotus"))
         else:
             self.world.get_location("Land of Darkness Boss Room", self.player).place_locked_item(
-                self.create_event("Defeat Herodotus"))
+                self.create_event("Defeat Astrodotus"))
