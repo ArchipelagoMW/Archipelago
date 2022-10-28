@@ -48,6 +48,7 @@ class MultiWorld():
     state: CollectionState
 
     accessibility: Dict[int, Options.Accessibility]
+    early_items: Dict[int, Options.EarlyItems]
     local_items: Dict[int, Options.LocalItems]
     non_local_items: Dict[int, Options.NonLocalItems]
     progression_balancing: Dict[int, Options.ProgressionBalancing]
