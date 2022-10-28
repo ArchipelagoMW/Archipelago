@@ -6,7 +6,7 @@
 - [SNI](https://github.com/alttpo/sni/releases) (Integriert in Archipelago)
 - Hardware oder Software zum Laden und Abspielen von SNES Rom-Dateien fähig zu einer Internetverbindung
     - Ein Emulator, der mit SNI verbinden kann
-      ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
+      ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
       [BizHawk](http://tasvideos.org/BizHawk.html))
     - Ein SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), oder andere kompatible Hardware
 - Die Japanische Zelda 1.0 ROM-Datei, mit folgendem Namen: `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
@@ -93,7 +93,7 @@ Wenn der client den Emulator automatisch gestartet hat, wird SNI ebenfalls im Hi
 Mal ist, wird möglicherweise ein Fenster angezeigt, wo man bestätigen muss, dass das Programm durch die Windows Firewall
 kommunizieren darf.
 
-##### snes9x Multitroid
+##### snes9x-rr
 
 1. Lade die Entsprechende ROM-Datei, wenn sie nicht schon automatisch geladen wurde.
 2. Klicke auf den Reiter "File" oben im Menü und wähle **Lua Scripting**

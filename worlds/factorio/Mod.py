@@ -11,6 +11,8 @@ import shutil
 
 import Utils
 import Patch
+import worlds.AutoWorld
+import worlds.Files
 from . import Options
 
 from .Technologies import tech_table, recipes, free_sample_exclusions, progressive_technology_table, \
@@ -34,7 +36,8 @@ base_info = {
     "factorio_version": "1.1",
     "dependencies": [
         "base >= 1.1.0",
-        "? science-not-invited"
+        "? science-not-invited",
+        "? factory-levels"
     ]
 }
 
@@ -56,7 +59,7 @@ recipe_time_ranges = {
 }
 
 
-class FactorioModFile(Patch.APContainer):
+class FactorioModFile(worlds.Files.APContainer):
     game = "Factorio"
     compression_method = zipfile.ZIP_DEFLATED  # Factorio can't load LZMA archives
 

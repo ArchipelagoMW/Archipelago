@@ -14,6 +14,7 @@ logger = logging.getLogger("Super Metroid")
 from .Regions import create_regions
 from .Rules import set_rules, add_entrance_rule
 from .Options import sm_options
+from .Client import SMSNIClient
 from .Rom import get_base_rom_path, ROM_PLAYER_LIMIT, SMDeltaPatch, get_sm_symbols
 import Utils
 
@@ -505,10 +506,8 @@ class SMWorld(World):
         romPatcher.writeRandoSettings(self.variaRando.randoExec.randoSettings, itemLocs)
 
     def generate_output(self, output_directory: str):
-        outfilebase = 'AP_' + self.world.seed_name
-        outfilepname = f'_P{self.player}'
-        outfilepname += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}"
-        outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
+        outfilebase = self.world.get_out_file_name_base(self.player)
+        outputFilename = os.path.join(output_directory, f"{outfilebase}.sfc")
 
         try:
             self.variaRando.PatchRom(outputFilename, self.APPrePatchRom, self.APPostPatchRom)
@@ -658,12 +657,6 @@ class SMWorld(World):
             for item, loc in zip(self.NothingPool, locations):
                 loc.place_locked_item(item)
                 loc.address = loc.item.code = None
-
-    @classmethod
-    def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
-        if world.get_game_players("Super Metroid"):
-            progitempool.sort(
-                key=lambda item: 1 if (item.name == 'Morph Ball') else 0)
 
     @classmethod
     def stage_post_fill(cls, world):

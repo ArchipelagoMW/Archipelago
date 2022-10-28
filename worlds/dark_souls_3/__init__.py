@@ -3,9 +3,11 @@ import json
 import os
 from typing import Dict
 
+from .Items import DarkSouls3Item
+from .Locations import DarkSouls3Location
 from .Options import dark_souls_options
-from .data.items_data import weapons_upgrade_5_table, weapons_upgrade_10_table, item_dictionary_table, key_items_list
-from .data.locations_data import location_dictionary_table, cemetery_of_ash_table, fire_link_shrine_table, \
+from .data.items_data import weapons_upgrade_5_table, weapons_upgrade_10_table, item_dictionary, key_items_list
+from .data.locations_data import location_dictionary, fire_link_shrine_table, \
     high_wall_of_lothric, \
     undead_settlement_table, road_of_sacrifice_table, consumed_king_garden_table, cathedral_of_the_deep_table, \
     farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table, \
@@ -52,10 +54,11 @@ class DarkSouls3World(World):
     remote_items: bool = False
     remote_start_inventory: bool = False
     web = DarkSouls3Web()
-    data_version = 2
+    data_version = 3
     base_id = 100000
-    item_name_to_id = {name: id for id, name in enumerate(item_dictionary_table, base_id)}
-    location_name_to_id = {name: id for id, name in enumerate(location_dictionary_table, base_id)}
+    required_client_version = (0, 3, 6)
+    item_name_to_id = DarkSouls3Item.get_name_to_id()
+    location_name_to_id = DarkSouls3Location.get_name_to_id()
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -79,7 +82,6 @@ class DarkSouls3World(World):
         menu_region = self.create_region("Menu", progressive_locations)
 
         # Create all Vanilla regions of Dark Souls III
-        cemetery_of_ash_region = self.create_region("Cemetery Of Ash", cemetery_of_ash_table)
         firelink_shrine_region = self.create_region("Firelink Shrine", fire_link_shrine_table)
         firelink_shrine_bell_tower_region = self.create_region("Firelink Shrine Bell Tower",
                                                                firelink_shrine_bell_tower_table)
@@ -104,9 +106,7 @@ class DarkSouls3World(World):
 
         # Create the entrance to connect those regions
         menu_region.exits.append(Entrance(self.player, "New Game", menu_region))
-        self.world.get_entrance("New Game", self.player).connect(cemetery_of_ash_region)
-        cemetery_of_ash_region.exits.append(Entrance(self.player, "Goto Firelink Shrine", cemetery_of_ash_region))
-        self.world.get_entrance("Goto Firelink Shrine", self.player).connect(firelink_shrine_region)
+        self.world.get_entrance("New Game", self.player).connect(firelink_shrine_region)
         firelink_shrine_region.exits.append(Entrance(self.player, "Goto High Wall of Lothric",
                                                      firelink_shrine_region))
         firelink_shrine_region.exits.append(Entrance(self.player, "Goto Kiln Of The First Flame",
@@ -212,7 +212,7 @@ class DarkSouls3World(World):
         set_rule(self.world.get_location("ID: Covetous Gold Serpent Ring", self.player),
                  lambda state: state.has("Old Cell Key", self.player))
         set_rule(self.world.get_location("ID: Karla's Ashes", self.player),
-                 lambda state: state.has("Jailers Key Ring", self.player))
+                 lambda state: state.has("Jailer's Key Ring", self.player))
         black_hand_gotthard_corpse_rule = lambda state: \
             (state.can_reach("AL: Cinders of a Lord - Aldrich", "Location", self.player) and
              state.can_reach("PC: Cinders of a Lord - Yhorm the Giant", "Location", self.player))
@@ -243,18 +243,18 @@ class DarkSouls3World(World):
         slot_data: Dict[str, object] = {}
 
         # Depending on the specified option, modify items hexadecimal value to add an upgrade level
-        item_dictionary = item_dictionary_table.copy()
+        item_dictionary_copy = item_dictionary.copy()
         if self.world.randomize_weapons_level[self.player]:
             # Randomize some weapons upgrades
             for name in weapons_upgrade_5_table.keys():
                 if self.world.random.randint(0, 100) < 33:
                     value = self.world.random.randint(1, 5)
-                    item_dictionary[name] += value
+                    item_dictionary_copy[name] += value
 
             for name in weapons_upgrade_10_table.keys():
                 if self.world.random.randint(0, 100) < 33:
                     value = self.world.random.randint(1, 10)
-                    item_dictionary[name] += value
+                    item_dictionary_copy[name] += value
 
         # Create the mandatory lists to generate the player's output file
         items_id = []
@@ -268,7 +268,7 @@ class DarkSouls3World(World):
                 items_address.append(item_dictionary[location.item.name])
 
             if location.player == self.player:
-                locations_address.append(location_dictionary_table[location.name])
+                locations_address.append(location_dictionary[location.name])
                 locations_id.append(location.address)
                 if location.item.player == self.player:
                     locations_target.append(item_dictionary[location.item.name])
@@ -298,11 +298,3 @@ class DarkSouls3World(World):
 
     def generate_output(self, output_directory: str):
         pass
-
-
-class DarkSouls3Location(Location):
-    game: str = "Dark Souls III"
-
-
-class DarkSouls3Item(Item):
-    game: str = "Dark Souls III"

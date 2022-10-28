@@ -23,3 +23,10 @@ No metadata is specified yet.
 ## Extra Data
 
 The zip can contain arbitrary files in addition what was specified above.
+
+
+## Caveats
+
+Imports from other files inside the apworld have to use relative imports.
+
+Imports from AP base have to use absolute imports, e.g. Options.py and worlds/AutoWorld.py.

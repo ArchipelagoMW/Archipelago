@@ -3834,14 +3834,21 @@ inverted_default_dungeon_connections = [('Desert Palace Entrance (South)', 'Dese
 
 # Regions that can be required to access entrances through rules, not paths
 indirect_connections = {
-    'Turtle Rock (Top)': 'Turtle Rock',
-    'East Dark World': 'Pyramid Fairy',
-    'Big Bomb Shop': 'Pyramid Fairy',
-    'Dark Desert': 'Pyramid Fairy',
-    'West Dark World': 'Pyramid Fairy',
-    'South Dark World': 'Pyramid Fairy',
-    'Light World': 'Pyramid Fairy',
-    'Old Man Cave': 'Old Man S&Q'
+    "Turtle Rock (Top)": "Turtle Rock",
+    "East Dark World": "Pyramid Fairy",
+    "Dark Desert": "Pyramid Fairy",
+    "West Dark World": "Pyramid Fairy",
+    "South Dark World": "Pyramid Fairy",
+    "Light World": "Pyramid Fairy",
+    "Old Man Cave": "Old Man S&Q"
+}
+
+indirect_connections_inverted = {
+    "Inverted Big Bomb Shop": "Pyramid Fairy",
+}
+
+indirect_connections_not_inverted = {
+    "Big Bomb Shop": "Pyramid Fairy",
 }
 
 # format:

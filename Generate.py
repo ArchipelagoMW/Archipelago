@@ -154,11 +154,12 @@ def main(args=None, callback=ERmain):
     # sort dict for consistent results across platforms:
     weights_cache = {key: value for key, value in sorted(weights_cache.items())}
     for filename, yaml_data in weights_cache.items():
-        for yaml in yaml_data:
-            print(f"P{player_id} Weights: {filename} >> "
-                  f"{get_choice('description', yaml, 'No description specified')}")
-            player_files[player_id] = filename
-            player_id += 1
+        if filename not in {args.meta_file_path, args.weights_file_path}:
+            for yaml in yaml_data:
+                print(f"P{player_id} Weights: {filename} >> "
+                      f"{get_choice('description', yaml, 'No description specified')}")
+                player_files[player_id] = filename
+                player_id += 1
 
     args.multi = max(player_id - 1, args.multi)
     print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed} with plando: "
@@ -377,7 +378,7 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
         if option_key in options:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
-            return options[option_key]
+            return category_dict[option_key]
     if game == "A Link to the Past":  # TODO wow i hate this
         if option_key in {"glitches_required", "dark_room_logic", "entrance_shuffle", "goals", "triforce_pieces_mode",
                           "triforce_pieces_percentage", "triforce_pieces_available", "triforce_pieces_extra",
@@ -455,7 +456,7 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
         else:
             player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
     else:
-        setattr(ret, option_key, option(option.default))
+        setattr(ret, option_key, option.from_any(option.default))  # call the from_any here to support default "random"
 
 
 def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings.bosses):
