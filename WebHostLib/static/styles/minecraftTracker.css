@@ -15,7 +15,7 @@
 
 #inventory-table td{
     width: 40px;
-    height: 40px;
+    height: 60px;
     text-align: center;
     vertical-align: middle;
 }
@@ -23,7 +23,7 @@
 #inventory-table img{
     height: 100%;
     max-width: 40px;
-    max-height: 40px;
+    max-height: 60px;
     filter: grayscale(100%) contrast(75%) brightness(30%);
 }
 
