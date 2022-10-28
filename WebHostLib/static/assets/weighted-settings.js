@@ -78,13 +78,16 @@ const createDefaultSettings = (settingData) => {
             break;
           case 'range':
           case 'special_range':
-            for (let i = setting.min; i <= setting.max; ++i){
-              newSettings[game][gameSetting][i] =
-                (setting.hasOwnProperty('defaultValue') && setting.defaultValue === i) ? 25 : 0;
-            }
+            newSettings[game][gameSetting][setting.min] = 0;
+            newSettings[game][gameSetting][setting.max] = 0;
             newSettings[game][gameSetting]['random'] = 0;
             newSettings[game][gameSetting]['random-low'] = 0;
             newSettings[game][gameSetting]['random-high'] = 0;
+            if (setting.hasOwnProperty('defaultValue')) {
+              newSettings[game][gameSetting][setting.defaultValue] = 25;
+            } else {
+              newSettings[game][gameSetting][setting.min] = 25;
+            }
             break;
 
           case 'items-list':
@@ -401,11 +404,17 @@ const buildWeightedSettingsDiv = (game, settings) => {
             tr.appendChild(tdDelete);
 
             rangeTbody.appendChild(tr);
+
+            // Save new option to settings
+            range.dispatchEvent(new Event('change'));
           });
 
           Object.keys(currentSettings[game][settingName]).forEach((option) => {
-            if (currentSettings[game][settingName][option] > 0) {
-              const tr = document.createElement('tr');
+            // These options are statically generated below, and should always appear even if they are deleted
+            // from localStorage
+            if (['random-low', 'random', 'random-high'].includes(option)) { return; }
+
+            const tr = document.createElement('tr');
               const tdLeft = document.createElement('td');
               tdLeft.classList.add('td-left');
               tdLeft.innerText = option;
@@ -439,14 +448,15 @@ const buildWeightedSettingsDiv = (game, settings) => {
               deleteButton.innerText = '❌';
               deleteButton.addEventListener('click', () => {
                 range.value = 0;
-                range.dispatchEvent(new Event('change'));
+                const changeEvent = new Event('change');
+                changeEvent.action = 'rangeDelete';
+                range.dispatchEvent(changeEvent);
                 rangeTbody.removeChild(tr);
               });
               tdDelete.appendChild(deleteButton);
               tr.appendChild(tdDelete);
 
               rangeTbody.appendChild(tr);
-            }
           });
         }
 
@@ -904,8 +914,12 @@ const updateGameSetting = (evt) => {
   const setting = evt.target.getAttribute('data-setting');
   const option = evt.target.getAttribute('data-option');
   document.getElementById(`${game}-${setting}-${option}`).innerText = evt.target.value;
-  options[game][setting][option] = isNaN(evt.target.value) ?
-      evt.target.value : parseInt(evt.target.value, 10);
+  console.log(event);
+  if (evt.action && evt.action === 'rangeDelete') {
+    delete options[game][setting][option];
+  } else {
+    options[game][setting][option] = parseInt(evt.target.value, 10);
+  }
   localStorage.setItem('weighted-settings', JSON.stringify(options));
 };
 
