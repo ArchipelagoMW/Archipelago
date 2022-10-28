@@ -62,10 +62,9 @@ class MaxTechCost(TechCost):
 class TechCostMix(Range):
     """Percent chance that a preceding Science Pack is also required.
     Chance is rolled per preceding pack."""
+    display_name = "Science Pack Cost Mix"
     range_end = 100
     default = 70
-    display_name = "Science Pack Cost Mix"
-
 
 
 class Silo(Choice):

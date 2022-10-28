@@ -125,7 +125,6 @@ def generate_mod(world: "Factorio", output_directory: str):
         "slot_player": player,
         "starting_items": multiworld.starting_items[player], "recipes": recipes,
         "random": random, "flop_random": flop_random,
-        "static_nodes": multiworld.worlds[player].special_nodes,
         "recipe_time_scale": recipe_time_scales.get(multiworld.recipe_time[player].value, None),
         "recipe_time_range": recipe_time_ranges.get(multiworld.recipe_time[player].value, None),
         "free_sample_blacklist": {item: 1 for item in free_sample_exclusions},
