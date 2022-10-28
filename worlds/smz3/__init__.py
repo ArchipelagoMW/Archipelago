@@ -527,17 +527,20 @@ class SMZ3World(World):
         return self.world.random.choice(self.junkItemsNames)
 
     def write_spoiler(self, spoiler_handle: TextIO):
-            self.world.spoiler.unreachables.update(self.unreachable)
-            spoiler_handle.write('\n\nRewards:\n\n')
-            spoiler_handle.write('\n'.join(['%s%s%s%s' % (f'{self.world.get_player_name(self.player)}: '
-                                                            if self.world.players > 1 else '', region.Name,
-                                                            ': ',
-                                                            region.Reward.name) for region in self.smz3World.Regions if isinstance(region, IReward)]))
-            spoiler_handle.write('\n\nMedallions:\n\n')
-            spoiler_handle.write('\n'.join(['%s%s%s%s' % (f'{self.world.get_player_name(self.player)}: '
-                                                            if self.world.players > 1 else '', region.Name,
-                                                            ': ',
-                                                            region.Medallion.name) for region in self.smz3World.Regions if isinstance(region, IMedallionAccess)]))
+        self.world.spoiler.unreachables.update(self.unreachable)
+        player_name = f'{self.world.get_player_name(self.player)}: ' if self.world.players > 1 else ''
+        spoiler_handle.write('\n\nRewards:\n\n')
+        spoiler_handle.write('\n'.join([
+            f"{player_name}{region.Name}: {region.Reward.name}"
+            for region in self.smz3World.Regions
+            if isinstance(region, IReward)
+        ]))
+        spoiler_handle.write('\n\nMedallions:\n\n')
+        spoiler_handle.write('\n'.join([
+            f"{player_name}{region.Name}: {region.Medallion.name}"
+            for region in self.smz3World.Regions
+            if isinstance(region, IMedallionAccess)
+        ]))
 
     def JunkFillGT(self, factor):
         poolLength = len(self.world.itempool)
