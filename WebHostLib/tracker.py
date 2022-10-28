@@ -443,6 +443,15 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
         "Campfire": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/91/Campfire_JE2_BE2.gif",
         "Water Bottle": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/75/Water_Bottle_JE2_BE2.png",
         "Spyglass": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c1/Spyglass_JE2_BE1.png",
+        "Dragon Egg Shard": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/38/Dragon_Egg_JE4.png",
+        "Lead": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/1f/Lead_JE2_BE2.png", 
+        "Saddle": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/0/01/SaddleNew.png", //Cambiar
+        "Channeling Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/55/Enchanted_Book.gif", //Cambiar
+        "Silk Touch Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/55/Enchanted_Book.gif", //Cambiar
+        "Piercing IV Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/55/Enchanted_Book.gif", //Cambiar
+        "Sharpness III Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/55/Enchanted_Book.gif", //Cambiar
+        "Looting III Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/55/Enchanted_Book.gif", //Cambiar
+        "Infinity Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/55/Enchanted_Book.gif", //Cambiar
     }
 
     minecraft_location_ids = {
@@ -482,7 +491,8 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
     # Multi-items
     multi_items = {
         "3 Ender Pearls": 45029,
-        "8 Netherite Scrap": 45015
+        "8 Netherite Scrap": 45015,
+        "Dragon Egg Shard": 45043
     }
     for item_name, item_id in multi_items.items():
         base_name = item_name.split()[-1].lower()
