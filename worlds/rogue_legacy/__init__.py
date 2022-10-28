@@ -49,7 +49,7 @@ class RLWorld(World):
     def fill_slot_data(self) -> dict:
         slot_data = {}
         for option_name in rl_options:
-            option = getattr(self.world, option_name)[self.player]
+            option = self.setting(option_name)
             slot_data[option_name] = option.value
 
         return slot_data
@@ -80,8 +80,7 @@ class RLWorld(World):
 
     def generate_basic(self):
         self.item_pool = []
-        total_required_locations = 64 + (self.world.chests_per_zone[self.player] * 4) + \
-                                        (self.world.fairy_chests_per_zone[self.player] * 4)
+        total_locations = 64 + (self.setting("chests_per_zone") * 4) + (self.setting("fairy_chests_per_zone") * 4)
 
         # Add items to item pool. Anything with a "continue" will not be added to the item pool.
         for name, data in item_table.items():
@@ -198,7 +197,7 @@ class RLWorld(World):
             self.item_pool += [self.create_item(name) for _ in range(0, quantity)]
 
         # Fill any empty locations with filler items.
-        while len(self.item_pool) + len(self.prefill_items) < total_required_locations:
+        while len(self.item_pool) + len(self.prefill_items) < total_locations:
             self.item_pool.append(self.create_item(self.get_filler_item_name()))
 
         self.world.itempool += self.item_pool
