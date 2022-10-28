@@ -830,8 +830,21 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
     connect(world, player, names, LocationName.gate_0_region, LocationName.cannon_core_region,
             lambda state: (state.has(ItemName.emblem, player, cannon_core_emblems)))
 
+    required_mission_name = LocationName.cannon_core_1
+
+    if world.required_cannons_core_missions[player].value == 1:
+        cannon_core_missions = [
+            LocationName.cannon_core_1,
+            LocationName.cannon_core_2,
+            LocationName.cannon_core_3,
+            LocationName.cannon_core_4,
+            LocationName.cannon_core_5
+        ]
+
+        required_mission_name = cannon_core_missions[world.include_missions[player].value - 1]
+
     connect(world, player, names, LocationName.cannon_core_region, LocationName.biolizard_region,
-            lambda state: (state.can_reach(LocationName.cannon_core_1, "Location", player)))
+            lambda state: (state.can_reach(required_mission_name, "Location", player)))
 
     for i in range(len(gates[0].gate_levels)):
         connect(world, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])
