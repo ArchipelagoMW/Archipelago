@@ -1332,6 +1332,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     def get_hints(self, input_text: str, for_location: bool = False) -> bool:
         points_available = get_client_points(self.ctx, self.client)
+        cost = self.ctx.get_hint_cost(self.client.slot)
+
         if not input_text:
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
@@ -1386,7 +1388,6 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 return False
 
         if hints:
-            cost = self.ctx.get_hint_cost(self.client.slot)
             new_hints = set(hints) - self.ctx.hints[self.client.team, self.client.slot]
             old_hints = set(hints) - new_hints
             if old_hints:
@@ -1436,7 +1437,12 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 return True
 
         else:
-            self.output("Nothing found. Item/Location may not exist.")
+            if points_available >= cost:
+                self.output("Nothing found. Item/Location may not exist.")
+            else:
+                self.output(f"You can't afford the hint. "
+                            f"You have {points_available} points and need at least "
+                            f"{self.ctx.get_hint_cost(self.client.slot)}.")
             return False
 
     @mark_raw
