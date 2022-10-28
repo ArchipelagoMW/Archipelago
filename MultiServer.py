@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+from dataclasses import dataclass
 import functools
 import logging
 import zlib
@@ -1802,14 +1803,46 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(response)
             return False
 
+    def resolve_player(self, input_name: str) -> typing.Optional[typing.Tuple[int, int, str]]:
+        """ returns (team, slot, player name) """
+        # first match case
+        for (team, slot), name in self.ctx.player_names.items():
+            if name == input_name:
+                return team, slot, name
+        
+        @dataclass
+        class TSNC:
+            """ team, slot, name, (count without case) """
+            team: int
+            slot: int
+            name: str
+            count: int = 1
+
+        # if no case-sensitive match, then match without case only if there's only 1 match
+        lowered_data: typing.Dict[str, TSNC] = {}
+        for (team, slot), name in self.ctx.player_names.items():
+            lowered = name.lower()
+            if lowered in lowered_data:
+                lowered_data[lowered].count += 1
+            else:
+                lowered_data[lowered] = TSNC(team, slot, name)
+
+        input_lower = input_name.lower()
+        if input_lower in lowered_data and lowered_data[input_lower].count == 1:
+            match = lowered_data[input_lower]
+            return match.team, match.slot, match.name
+
+        # else no case match and no unique match without case
+        return None
+
     @mark_raw
     def _cmd_collect(self, player_name: str) -> bool:
         """Send out the remaining items to player."""
-        seeked_player = player_name.lower()
-        for (team, slot), name in self.ctx.player_names.items():
-            if name.lower() == seeked_player:
-                collect_player(self.ctx, team, slot)
-                return True
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, _ = player
+            collect_player(self.ctx, team, slot)
+            return True
 
         self.output(f"Could not find player {player_name} to collect")
         return False
@@ -1822,11 +1855,11 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_forfeit(self, player_name: str) -> bool:
         """Send out the remaining items from a player to their intended recipients."""
-        seeked_player = player_name.lower()
-        for (team, slot), name in self.ctx.player_names.items():
-            if name.lower() == seeked_player:
-                forfeit_player(self.ctx, team, slot)
-                return True
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, _ = player
+            forfeit_player(self.ctx, team, slot)
+            return True
 
         self.output(f"Could not find player {player_name} to release")
         return False
@@ -1834,12 +1867,12 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_allow_forfeit(self, player_name: str) -> bool:
         """Allow the specified player to use the !release command."""
-        seeked_player = player_name.lower()
-        for (team, slot), name in self.ctx.player_names.items():
-            if name.lower() == seeked_player:
-                self.ctx.allow_forfeits[(team, slot)] = True
-                self.output(f"Player {player_name} is now allowed to use the !release command at any time.")
-                return True
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, name = player
+            self.ctx.allow_forfeits[(team, slot)] = True
+            self.output(f"Player {name} is now allowed to use the !release command at any time.")
+            return True
 
         self.output(f"Could not find player {player_name} to allow the !release command for.")
         return False
@@ -1847,13 +1880,12 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_forbid_forfeit(self, player_name: str) -> bool:
         """"Disallow the specified player from using the !release command."""
-        seeked_player = player_name.lower()
-        for (team, slot), name in self.ctx.player_names.items():
-            if name.lower() == seeked_player:
-                self.ctx.allow_forfeits[(team, slot)] = False
-                self.output(
-                    f"Player {player_name} has to follow the server restrictions on use of the !release command.")
-                return True
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, name = player
+            self.ctx.allow_forfeits[(team, slot)] = False
+            self.output(f"Player {name} has to follow the server restrictions on use of the !release command.")
+            return True
 
         self.output(f"Could not find player {player_name} to forbid the !release command for.")
         return False
