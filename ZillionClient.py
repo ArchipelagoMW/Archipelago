@@ -1,7 +1,7 @@
 import asyncio
 import base64
 import platform
-from typing import Any, Coroutine, Dict, Optional, Type, cast
+from typing import Any, ClassVar, Coroutine, Dict, List, Optional, Protocol, Tuple, Type, cast
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, gui_enabled, \
@@ -18,7 +18,7 @@ from zilliandomizer.options import Chars
 from zilliandomizer.patch import RescueInfo
 
 from worlds.zillion.id_maps import make_id_to_others
-from worlds.zillion.config import base_id
+from worlds.zillion.config import base_id, zillion_map
 
 
 class ZillionCommandProcessor(ClientCommandProcessor):
@@ -28,6 +28,18 @@ class ZillionCommandProcessor(ClientCommandProcessor):
         """ Tell the client that Zillion is running in RetroArch. """
         logger.info("ready to look for game")
         self.ctx.look_for_retroarch.set()
+
+    def _cmd_map(self) -> None:
+        """ Toggle view of the map tracker. """
+        self.ctx.ui_toggle_map()
+
+
+class ToggleCallback(Protocol):
+    def __call__(self) -> None: ...
+
+
+class SetRoomCallback(Protocol):
+    def __call__(self, rooms: List[List[int]]) -> None: ...
 
 
 class ZillionContext(CommonContext):
@@ -46,6 +58,8 @@ class ZillionContext(CommonContext):
     start_char: Chars = "JJ"
     rescues: Dict[int, RescueInfo] = {}
     loc_mem_to_id: Dict[int, int] = {}
+    got_room_info: asyncio.Event
+    """ flag for connected to server """
     got_slot_data: asyncio.Event
     """ serves as a flag for whether I am logged in to the server """
 
@@ -59,13 +73,20 @@ class ZillionContext(CommonContext):
     As a workaround, we don't look for RetroArch until this event is set.
     """
 
+    ui_toggle_map: ToggleCallback
+    ui_set_rooms: SetRoomCallback
+    """ parameter is y 16 x 8 numbers to show in each room """
+
     def __init__(self,
                  server_address: str,
                  password: str) -> None:
         super().__init__(server_address, password)
         self.from_game = asyncio.Queue()
         self.to_game = asyncio.Queue()
+        self.got_room_info = asyncio.Event()
         self.got_slot_data = asyncio.Event()
+        self.ui_toggle_map = lambda: None
+        self.ui_set_rooms = lambda rooms: None
 
         self.look_for_retroarch = asyncio.Event()
         if platform.system() != "Windows":
@@ -112,6 +133,10 @@ class ZillionContext(CommonContext):
     # override
     def run_gui(self) -> None:
         from kvui import GameManager
+        from kivy.core.text import Label as CoreLabel
+        from kivy.graphics import Ellipse, Color, Rectangle
+        from kivy.uix.layout import Layout
+        from kivy.uix.widget import Widget
 
         class ZillionManager(GameManager):
             logging_pairs = [
@@ -119,12 +144,76 @@ class ZillionContext(CommonContext):
             ]
             base_title = "Archipelago Zillion Client"
 
+            class MapPanel(Widget):
+                MAP_WIDTH: ClassVar[int] = 281
+
+                _number_textures: List[Any] = []
+                rooms: List[List[int]] = []
+
+                def __init__(self, **kwargs: Any) -> None:
+                    super().__init__(**kwargs)
+
+                    self.rooms = [[0 for _ in range(8)] for _ in range(16)]
+
+                    self._make_numbers()
+                    self.update_map()
+
+                    self.bind(pos=self.update_map)
+                    # self.bind(size=self.update_bg)
+
+                def _make_numbers(self) -> None:
+                    self._number_textures = []
+                    for n in range(10):
+                        label = CoreLabel(text=str(n), font_size=22, color=(0.1, 0.9, 0, 1))
+                        label.refresh()
+                        self._number_textures.append(label.texture)
+
+                def update_map(self, *args: Any) -> None:
+                    self.canvas.clear()
+
+                    with self.canvas:
+                        Color(1, 1, 1, 1)
+                        Rectangle(source=zillion_map,
+                                  pos=self.pos,
+                                  size=(ZillionManager.MapPanel.MAP_WIDTH,
+                                        int(ZillionManager.MapPanel.MAP_WIDTH * 1.456)))  # aspect ratio of that image
+                        for y in range(16):
+                            for x in range(8):
+                                num = self.rooms[15 - y][x]
+                                if num > 0:
+                                    Color(0, 0, 0, 0.4)
+                                    pos = [self.pos[0] + 17 + x * 32, self.pos[1] + 14 + y * 24]
+                                    Ellipse(size=[22, 22], pos=pos)
+                                    Color(1, 1, 1, 1)
+                                    pos = [self.pos[0] + 22 + x * 32, self.pos[1] + 12 + y * 24]
+                                    num_texture = self._number_textures[num]
+                                    Rectangle(texture=num_texture, size=num_texture.size, pos=pos)
+
+            def build(self) -> Layout:
+                container = super().build()
+                self.map_widget = ZillionManager.MapPanel(size_hint_x=None, width=0)
+                self.main_area_container.add_widget(self.map_widget)
+                return container
+
+            def toggle_map_width(self) -> None:
+                if self.map_widget.width == 0:
+                    self.map_widget.width = ZillionManager.MapPanel.MAP_WIDTH
+                else:
+                    self.map_widget.width = 0
+                self.container.do_layout()
+
+            def set_rooms(self, rooms: List[List[int]]) -> None:
+                self.map_widget.rooms = rooms
+                self.map_widget.update_map()
+
         self.ui = ZillionManager(self)
-        run_co: Coroutine[Any, Any, None] = self.ui.async_run()  # type: ignore
-        # kivy types missing
+        self.ui_toggle_map = lambda: self.ui.toggle_map_width()
+        self.ui_set_rooms = lambda rooms: self.ui.set_rooms(rooms)
+        run_co: Coroutine[Any, Any, None] = self.ui.async_run()
         self.ui_task = asyncio.create_task(run_co, name="UI")
 
     def on_package(self, cmd: str, args: Dict[str, Any]) -> None:
+        self.room_item_numbers_to_ui()
         if cmd == "Connected":
             logger.info("logged in to Archipelago server")
             if "slot_data" not in args:
@@ -185,6 +274,24 @@ class ZillionContext(CommonContext):
                 logger.info("received door data from server")
                 doors = base64.b64decode(doors_b64)
                 self.to_game.put_nowait(events.DoorEventToGame(doors))
+        elif cmd == "RoomInfo":
+            self.seed_name = args["seed_name"]
+            self.got_room_info.set()
+
+    def room_item_numbers_to_ui(self) -> None:
+        rooms = [[0 for _ in range(8)] for _ in range(16)]
+        for loc_id in self.missing_locations:
+            loc_id_small = loc_id - base_id
+            loc_name = id_to_loc[loc_id_small]
+            y = ord(loc_name[0]) - 65
+            x = ord(loc_name[2]) - 49
+            if y == 9 and x == 5:
+                # don't show main computer in numbers
+                continue
+            assert (0 <= y < 16) and (0 <= x < 8), f"invalid index from location name {loc_name}"
+            rooms[y][x] += 1
+        # TODO: also add locations with locals lost from loading save state or reset
+        self.ui_set_rooms(rooms)
 
     def process_from_game_queue(self) -> None:
         if self.from_game.qsize():
@@ -238,6 +345,24 @@ class ZillionContext(CommonContext):
             self.next_item = len(self.items_received)
 
 
+def name_seed_from_ram(data: bytes) -> Tuple[str, str]:
+    """ returns player name, and end of seed string """
+    if len(data) == 0:
+        # no connection to game
+        return "", "xxx"
+    null_index = data.find(b'\x00')
+    if null_index == -1:
+        logger.warning(f"invalid game id in rom {repr(data)}")
+        null_index = len(data)
+    name = data[:null_index].decode()
+    null_index_2 = data.find(b'\x00', null_index + 1)
+    if null_index_2 == -1:
+        null_index_2 = len(data)
+    seed_name = data[null_index + 1:null_index_2].decode()
+
+    return name, seed_name
+
+
 async def zillion_sync_task(ctx: ZillionContext) -> None:
     logger.info("started zillion sync task")
 
@@ -263,47 +388,58 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
     with Memory(ctx.from_game, ctx.to_game) as memory:
         while not ctx.exit_event.is_set():
             ram = await memory.read()
-            name = memory.get_player_name(ram).decode()
+            game_id = memory.get_rom_to_ram_data(ram)
+            name, seed_end = name_seed_from_ram(game_id)
             if len(name):
                 if name == ctx.auth:
                     # this is the name we know
                     if ctx.server and ctx.server.socket:  # type: ignore
-                        if memory.have_generation_info():
-                            log_no_spam("everything connected")
-                            await memory.process_ram(ram)
-                            ctx.process_from_game_queue()
-                            ctx.process_items_received()
-                        else:  # no generation info
-                            if ctx.got_slot_data.is_set():
-                                memory.set_generation_info(ctx.rescues, ctx.loc_mem_to_id)
-                                ctx.ap_id_to_name, ctx.ap_id_to_zz_id, _ap_id_to_zz_item = \
-                                    make_id_to_others(ctx.start_char)
-                                ctx.next_item = 0
-                                ctx.ap_local_count = len(ctx.checked_locations)
-                            else:  # no slot data yet
-                                asyncio.create_task(ctx.send_connect())
-                                log_no_spam("logging in to server...")
-                                await asyncio.wait((
-                                    ctx.got_slot_data.wait(),
-                                    ctx.exit_event.wait(),
-                                    asyncio.sleep(6)
-                                ), return_when=asyncio.FIRST_COMPLETED)  # to not spam connect packets
+                        if ctx.got_room_info.is_set():
+                            if ctx.seed_name and ctx.seed_name.endswith(seed_end):
+                                # correct seed
+                                if memory.have_generation_info():
+                                    log_no_spam("everything connected")
+                                    await memory.process_ram(ram)
+                                    ctx.process_from_game_queue()
+                                    ctx.process_items_received()
+                                else:  # no generation info
+                                    if ctx.got_slot_data.is_set():
+                                        memory.set_generation_info(ctx.rescues, ctx.loc_mem_to_id)
+                                        ctx.ap_id_to_name, ctx.ap_id_to_zz_id, _ap_id_to_zz_item = \
+                                            make_id_to_others(ctx.start_char)
+                                        ctx.next_item = 0
+                                        ctx.ap_local_count = len(ctx.checked_locations)
+                                    else:  # no slot data yet
+                                        asyncio.create_task(ctx.send_connect())
+                                        log_no_spam("logging in to server...")
+                                        await asyncio.wait((
+                                            ctx.got_slot_data.wait(),
+                                            ctx.exit_event.wait(),
+                                            asyncio.sleep(6)
+                                        ), return_when=asyncio.FIRST_COMPLETED)  # to not spam connect packets
+                            else:  # not correct seed name
+                                log_no_spam("incorrect seed - did you mix up roms?")
+                        else:  # no room info
+                            # If we get here, it looks like `RoomInfo` packet got lost
+                            log_no_spam("waiting for room info from server...")
                     else:  # server not connected
                         log_no_spam("waiting for server connection...")
                 else:  # new game
                     log_no_spam("connected to new game")
                     await ctx.disconnect()
                     ctx.reset_server_state()
+                    ctx.seed_name = None
+                    ctx.got_room_info.clear()
                     ctx.reset_game_state()
                     memory.reset_game_state()
 
                     ctx.auth = name
                     asyncio.create_task(ctx.connect())
                     await asyncio.wait((
-                        ctx.got_slot_data.wait(),
+                        ctx.got_room_info.wait(),
                         ctx.exit_event.wait(),
                         asyncio.sleep(6)
-                    ), return_when=asyncio.FIRST_COMPLETED)  # to not spam connect packets
+                    ), return_when=asyncio.FIRST_COMPLETED)
             else:  # no name found in game
                 if not help_message_shown:
                     logger.info('In RetroArch, make sure "Settings > Network > Network Commands" is on.')

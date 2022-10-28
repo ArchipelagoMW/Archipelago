@@ -12,6 +12,7 @@ from .Levels import full_level_list, generate_level_list, location_id_to_level_i
 from .Rules import set_rules
 from ..generic.Rules import add_rule
 from .Names import ItemName, LocationName
+from .Client import SMWSNIClient
 from ..AutoWorld import WebWorld, World
 from .Rom import LocalRom, patch_rom, get_base_rom_path, SMWDeltaPatch
 
