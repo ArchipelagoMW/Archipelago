@@ -52,7 +52,8 @@ class Factorio(World):
     web = FactorioWeb()
 
     item_name_to_id = all_items
-    location_name_to_id = location_table
+    # TODO: remove base_tech_table ~ 0.3.7
+    location_name_to_id = {**base_tech_table, **location_table}
     item_name_groups = {
         "Progressive": set(progressive_tech_table.keys()),
     }

@@ -1,12 +1,13 @@
 from typing import Dict, List
 
-from .Technologies import factorio_base_id
+from .Technologies import factorio_base_id, factorio_id
 from .Options import MaxSciencePack
 
 boundary: int = 0xff
 total_locations: int = 0xff
 
 assert total_locations <= boundary
+assert factorio_base_id != factorio_id
 
 
 def make_pools() -> Dict[str, List[str]]:
@@ -22,10 +23,10 @@ def make_pools() -> Dict[str, List[str]]:
 location_pools: Dict[str, List[str]] = make_pools()
 
 location_table: Dict[str, int] = {}
-end_id: int = factorio_base_id
+end_id: int = factorio_id
 for pool in location_pools.values():
     location_table.update({name: ap_id for ap_id, name in enumerate(pool, start=end_id)})
     end_id += len(pool)
 
-assert end_id - len(location_table) == factorio_base_id
+assert end_id - len(location_table) == factorio_id
 del pool
