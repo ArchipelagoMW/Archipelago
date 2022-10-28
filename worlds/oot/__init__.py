@@ -29,10 +29,10 @@ from .HintList import getRequiredHints
 from .SaveContext import SaveContext
 
 from Utils import get_options, output_path
-from BaseClasses import MultiWorld, CollectionState, RegionType, Tutorial
+from BaseClasses import MultiWorld, CollectionState, RegionType, Tutorial, LocationProgressType
 from Options import Range, Toggle, OptionList
 from Fill import fill_restrictive, fast_fill, FillError
-from worlds.generic.Rules import exclusion_rules
+from worlds.generic.Rules import exclusion_rules, add_item_rule
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
 
 location_id_offset = 67000
@@ -870,6 +870,15 @@ class OOTWorld(World):
                         multiworld.random.shuffle(locations)
                         fill_restrictive(multiworld, multiworld.get_all_state(False), locations, group_stage_items,
                             single_player_placement=False, lock=True)
+                        if fill_stage == 'Song':
+                            # We don't want song locations to contain progression unless it's a song
+                            # or it was marked as priority.
+                            # We do this manually because we'd otherwise have to either
+                            # iterate twice or do many function calls.
+                            for loc in locations:
+                                if loc.progress_type == LocationProgressType.DEFAULT:
+                                    loc.progress_type = LocationProgressType.EXCLUDED
+                                    add_item_rule(location, lambda i: not (i.advancement or i.useful))
                 else:
                     # Perform the fill task once per dungeon
                     for dungeon_info in dungeon_table:
