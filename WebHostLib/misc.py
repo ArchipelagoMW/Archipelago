@@ -3,10 +3,11 @@ import os
 
 import jinja2.exceptions
 from flask import request, redirect, url_for, render_template, Response, session, abort, send_from_directory
+from pony.orm import count, commit, db_session
 
-from .models import count, Seed, commit, Room, db_session, Command, UUID, uuid4
 from worlds.AutoWorld import AutoWorldRegister
 from . import app, cache
+from .models import Seed, Room, Command, UUID, uuid4
 
 
 def get_world_theme(game_name: str):
@@ -151,7 +152,7 @@ def favicon():
 
 @app.route('/discord')
 def discord():
-    return redirect("https://discord.gg/archipelago")
+    return redirect("https://discord.gg/8Z65BR2")
 
 
 @app.route('/datapackage')

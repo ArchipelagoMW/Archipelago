@@ -4,9 +4,10 @@ import collections
 import itertools
 from collections import Counter, deque
 
-from BaseClasses import CollectionState, Location, LocationProgressType, MultiWorld, Item
+from BaseClasses import CollectionState, Location, LocationProgressType, MultiWorld, Item, ItemClassification
 
 from worlds.AutoWorld import call_all
+from worlds.generic.Rules import add_item_rule
 
 
 class FillError(RuntimeError):
@@ -22,7 +23,8 @@ def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item]
 
 
 def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
-                     itempool: typing.List[Item], single_player_placement: bool = False, lock: bool = False) -> None:
+                     itempool: typing.List[Item], single_player_placement: bool = False, lock: bool = False,
+                     swap: bool = True, on_place: typing.Optional[typing.Callable[[Location], None]] = None) -> None:
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
 
@@ -69,60 +71,66 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
             else:
                 # we filled all reachable spots.
-                # try swapping this item with previously placed items
-                for (i, location) in enumerate(placements):
-                    placed_item = location.item
-                    # Unplaceable items can sometimes be swapped infinitely. Limit the
-                    # number of times we will swap an individual item to prevent this
-                    swap_count = swapped_items[placed_item.player,
-                                               placed_item.name]
-                    if swap_count > 1:
+                if swap:
+                    # try swapping this item with previously placed items
+                    for (i, location) in enumerate(placements):
+                        placed_item = location.item
+                        # Unplaceable items can sometimes be swapped infinitely. Limit the
+                        # number of times we will swap an individual item to prevent this
+                        swap_count = swapped_items[placed_item.player,
+                                                   placed_item.name]
+                        if swap_count > 1:
+                            continue
+
+                        location.item = None
+                        placed_item.location = None
+                        swap_state = sweep_from_pool(base_state, [placed_item])
+                        # swap_state assumes we can collect placed item before item_to_place
+                        if (not single_player_placement or location.player == item_to_place.player) \
+                                and location.can_fill(swap_state, item_to_place, perform_access_check):
+
+                            # Verify that placing this item won't reduce available locations, which could happen with rules
+                            # that want to not have both items. Left in until removal is proven useful.
+                            prev_state = swap_state.copy()
+                            prev_loc_count = len(
+                                world.get_reachable_locations(prev_state))
+
+                            swap_state.collect(item_to_place, True)
+                            new_loc_count = len(
+                                world.get_reachable_locations(swap_state))
+
+                            if new_loc_count >= prev_loc_count:
+                                # Add this item to the existing placement, and
+                                # add the old item to the back of the queue
+                                spot_to_fill = placements.pop(i)
+
+                                swap_count += 1
+                                swapped_items[placed_item.player,
+                                              placed_item.name] = swap_count
+
+                                reachable_items[placed_item.player].appendleft(
+                                    placed_item)
+                                itempool.append(placed_item)
+
+                                break
+
+                        # Item can't be placed here, restore original item
+                        location.item = placed_item
+                        placed_item.location = location
+
+                    if spot_to_fill is None:
+                        # Can't place this item, move on to the next
+                        unplaced_items.append(item_to_place)
                         continue
-
-                    location.item = None
-                    placed_item.location = None
-                    swap_state = sweep_from_pool(base_state)
-                    if (not single_player_placement or location.player == item_to_place.player) \
-                            and location.can_fill(swap_state, item_to_place, perform_access_check):
-
-                        # Verify that placing this item won't reduce available locations
-                        prev_state = swap_state.copy()
-                        prev_state.collect(placed_item)
-                        prev_loc_count = len(
-                            world.get_reachable_locations(prev_state))
-
-                        swap_state.collect(item_to_place, True)
-                        new_loc_count = len(
-                            world.get_reachable_locations(swap_state))
-
-                        if new_loc_count >= prev_loc_count:
-                            # Add this item to the existing placement, and
-                            # add the old item to the back of the queue
-                            spot_to_fill = placements.pop(i)
-
-                            swap_count += 1
-                            swapped_items[placed_item.player,
-                                          placed_item.name] = swap_count
-
-                            reachable_items[placed_item.player].appendleft(
-                                placed_item)
-                            itempool.append(placed_item)
-
-                            break
-
-                    # Item can't be placed here, restore original item
-                    location.item = placed_item
-                    placed_item.location = location
-
-                if spot_to_fill is None:
-                    # Can't place this item, move on to the next
+                else:
                     unplaced_items.append(item_to_place)
                     continue
-
             world.push_item(spot_to_fill, item_to_place, False)
             spot_to_fill.locked = lock
             placements.append(spot_to_fill)
             spot_to_fill.event = item_to_place.advancement
+            if on_place:
+                on_place(spot_to_fill)
 
     if len(unplaced_items) > 0 and len(locations) > 0:
         # There are leftover unplaceable items and locations that won't accept them
@@ -209,6 +217,37 @@ def fast_fill(world: MultiWorld,
     return item_pool[placing:], fill_locations[placing:]
 
 
+def accessibility_corrections(world: MultiWorld, state: CollectionState, locations, pool=[]):
+    maximum_exploration_state = sweep_from_pool(state, pool)
+    minimal_players = {player for player in world.player_ids if world.accessibility[player] == "minimal"}
+    unreachable_locations = [location for location in world.get_locations() if location.player in minimal_players and
+                             not location.can_reach(maximum_exploration_state)]
+    for location in unreachable_locations:
+        if (location.item is not None and location.item.advancement and location.address is not None and not
+                location.locked and location.item.player not in minimal_players):
+            pool.append(location.item)
+            state.remove(location.item)
+            location.item = None
+            location.event = False
+            if location in state.events:
+                state.events.remove(location)
+            locations.append(location)
+    if pool and locations:
+        locations.sort(key=lambda loc: loc.progress_type != LocationProgressType.PRIORITY)
+        fill_restrictive(world, state, locations, pool)
+
+
+def inaccessible_location_rules(world: MultiWorld, state: CollectionState, locations):
+    maximum_exploration_state = sweep_from_pool(state)
+    unreachable_locations = [location for location in locations if not location.can_reach(maximum_exploration_state)]
+    if unreachable_locations:
+        def forbid_important_item_rule(item: Item):
+            return not ((item.classification & 0b0011) and world.accessibility[item.player] != 'minimal')
+
+        for location in unreachable_locations:
+            add_item_rule(location, forbid_important_item_rule)
+
+
 def distribute_items_restrictive(world: MultiWorld) -> None:
     fill_locations = sorted(world.get_unfilled_locations())
     world.random.shuffle(fill_locations)
@@ -218,6 +257,45 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     progitempool: typing.List[Item] = []
     usefulitempool: typing.List[Item] = []
     filleritempool: typing.List[Item] = []
+
+    early_items_count: typing.Dict[typing.Tuple[str, int], int] = {}
+    for player in world.player_ids:
+        for item, count in world.early_items[player].value.items():
+            early_items_count[(item, player)] = count
+    if early_items_count:
+        early_locations: typing.List[Location] = []
+        early_priority_locations: typing.List[Location] = []
+        for loc in reversed(fill_locations):
+            if loc.can_reach(world.state):
+                if loc.progress_type == LocationProgressType.PRIORITY:
+                    early_priority_locations.append(loc)
+                else:
+                    early_locations.append(loc)
+                fill_locations.remove(loc)
+
+        early_prog_items: typing.List[Item] = []
+        early_rest_items: typing.List[Item] = []
+        for item in reversed(itempool):
+            if (item.name, item.player) in early_items_count:
+                if item.advancement:
+                    early_prog_items.append(item)
+                else:
+                    early_rest_items.append(item)
+                itempool.remove(item)
+                early_items_count[(item.name, item.player)] -= 1
+                if early_items_count[(item.name, item.player)] == 0:
+                    del early_items_count[(item.name, item.player)]
+        fill_restrictive(world, world.state, early_locations, early_rest_items, lock=True)
+        early_locations += early_priority_locations
+        fill_restrictive(world, world.state, early_locations, early_prog_items, lock=True)
+        unplaced_early_items = early_rest_items + early_prog_items
+        if unplaced_early_items:
+            logging.warning(f"Ran out of early locations for early items. Failed to place \
+                            {len(unplaced_early_items)} items early.")
+            itempool += unplaced_early_items
+
+        fill_locations += early_locations + early_priority_locations
+        world.random.shuffle(fill_locations)
 
     for item in itempool:
         if item.advancement:
@@ -239,15 +317,33 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     defaultlocations = locations[LocationProgressType.DEFAULT]
     excludedlocations = locations[LocationProgressType.EXCLUDED]
 
-    fill_restrictive(world, world.state, prioritylocations, progitempool, lock=True)
+    # can't lock due to accessibility corrections touching things, so we remember which ones got placed and lock later
+    lock_later = []
+
+    def mark_for_locking(location: Location):
+        nonlocal lock_later
+        lock_later.append(location)
+
     if prioritylocations:
+        # "priority fill"
+        fill_restrictive(world, world.state, prioritylocations, progitempool, swap=False, on_place=mark_for_locking)
+        accessibility_corrections(world, world.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
+        # "progression fill"
         fill_restrictive(world, world.state, defaultlocations, progitempool)
         if progitempool:
             raise FillError(
                 f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
+        accessibility_corrections(world, world.state, defaultlocations)
+
+    for location in lock_later:
+        if location.item:
+            location.locked = True
+    del mark_for_locking, lock_later
+
+    inaccessible_location_rules(world, world.state, defaultlocations)
 
     remaining_fill(world, excludedlocations, filleritempool)
     if excludedlocations:

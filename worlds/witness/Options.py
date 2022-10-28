@@ -7,7 +7,7 @@ from Options import Toggle, DefaultOnToggle, Option, Range, Choice
 #    "Play the randomizer in hardmode"
 #    display_name = "Hard Mode"
 
-class DisableNonRandomizedPuzzles(DefaultOnToggle):
+class DisableNonRandomizedPuzzles(Toggle):
     """Disables puzzles that cannot be randomized.
     This includes many puzzles that heavily involve the environment, such as Shadows, Monastery or Orchard.
     The lasers for those areas will be activated as you solve optional puzzles throughout the island."""
@@ -15,9 +15,9 @@ class DisableNonRandomizedPuzzles(DefaultOnToggle):
 
 
 class EarlySecretArea(Toggle):
-    """Opens the Mountainside shortcut to the Mountain Secret Area from the start.
+    """Opens the Mountainside shortcut to the Caves from the start.
     (Otherwise known as "UTM", "Caves" or the "Challenge Area")"""
-    display_name = "Early Secret Area"
+    display_name = "Early Caves"
 
 
 class ShuffleSymbols(DefaultOnToggle):
@@ -58,15 +58,10 @@ class ShuffleVaultBoxes(Toggle):
     display_name = "Shuffle Vault Boxes"
 
 
-class ShuffleUncommonLocations(Toggle):
-    """Adds some optional puzzles that are somewhat difficult or out of the way.
-    Examples: Mountaintop River Shape, Tutorial Patio Floor, Theater Videos"""
-    display_name = "Shuffle Uncommon Locations"
-
-
 class ShufflePostgame(Toggle):
-    """Adds locations into the pool that are guaranteed to be locked behind your goal. Use this if you don't play with
-    forfeit on victory."""
+    """Adds locations into the pool that are guaranteed to become accessible after or at the same time as your goal.
+    Use this if you don't play with forfeit on victory. IMPORTANT NOTE: The possibility of your second
+    "Progressive Dots" showing up in the Caves is ignored, they will still be considered "postgame" in base settings."""
     display_name = "Shuffle Postgame"
 
 
@@ -81,6 +76,13 @@ class VictoryCondition(Choice):
     option_mountain_box_long = 3
 
 
+class PuzzleRandomization(Choice):
+    """Puzzles in this randomizer are randomly generated. This setting changes the difficulty/types of puzzles."""
+    display_name = "Puzzle Randomization"
+    option_sigma_normal = 0
+    option_sigma_expert = 1
+
+
 class MountainLasers(Range):
     """Sets the amount of beams required to enter the final area."""
     display_name = "Required Lasers for Mountain Entry"
@@ -90,7 +92,7 @@ class MountainLasers(Range):
 
 
 class ChallengeLasers(Range):
-    """Sets the amount of beams required to enter the secret area through the Mountain Bottom Layer Discard."""
+    """Sets the amount of beams required to enter the Caves through the Mountain Bottom Floor Discard."""
     display_name = "Required Lasers for Challenge"
     range_start = 1
     range_end = 11
@@ -110,19 +112,27 @@ class PuzzleSkipAmount(Range):
     Works on most panels in the game - The only big exception is The Challenge."""
     display_name = "Puzzle Skips"
     range_start = 0
-    range_end = 20
-    default = 5
+    range_end = 30
+    default = 10
+
+
+class HintAmount(Range):
+    """Adds hints to Audio Logs. Hints will have the same number of duplicates, as many as will fit. Remaining Audio
+    Logs will have junk hints."""
+    display_name = "Hints on Audio Logs"
+    range_start = 0
+    range_end = 49
+    default = 10
 
 
 the_witness_options: Dict[str, type] = {
-    # "hard_mode": HardMode,
+    "puzzle_randomization": PuzzleRandomization,
     "shuffle_symbols": ShuffleSymbols,
     "shuffle_doors": ShuffleDoors,
     "shuffle_lasers": ShuffleLasers,
     "disable_non_randomized_puzzles": DisableNonRandomizedPuzzles,
     "shuffle_discarded_panels": ShuffleDiscardedPanels,
     "shuffle_vault_boxes": ShuffleVaultBoxes,
-    "shuffle_uncommon": ShuffleUncommonLocations,
     "shuffle_postgame": ShufflePostgame,
     "victory_condition": VictoryCondition,
     "mountain_lasers": MountainLasers,
@@ -130,6 +140,7 @@ the_witness_options: Dict[str, type] = {
     "early_secret_area": EarlySecretArea,
     "trap_percentage": TrapPercentage,
     "puzzle_skip_amount": PuzzleSkipAmount,
+    "hint_amount": HintAmount,
 }
 
 
