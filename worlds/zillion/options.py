@@ -26,11 +26,6 @@ class ZillionContinues(SpecialRange):
     }
 
 
-class ZillionEarlyScope(Toggle):
-    """ whether to make sure there is a scope available early """
-    display_name = "early scope"
-
-
 class ZillionFloppyReq(Range):
     """ how many floppy disks are required """
     range_start = 0
@@ -227,7 +222,6 @@ class ZillionRoomGen(Toggle):
 
 zillion_options: Dict[str, AssembleOptions] = {
     "continues": ZillionContinues,
-    # "early_scope": ZillionEarlyScope,  # TODO: implement
     "floppy_req": ZillionFloppyReq,
     "gun_levels": ZillionGunLevels,
     "jump_levels": ZillionJumpLevels,
@@ -371,7 +365,7 @@ def validate(world: "MultiWorld", p: int) -> "Tuple[ZzOptions, Counter[str]]":
         floppy_req.value,
         wo.continues[p].value,
         wo.randomize_alarms[p].value,
-        False,  # wo.early_scope[p].value,
+        False,  # early scope can be done with AP early_items
         True,  # balance defense
         starting_cards.value,
         bool(room_gen.value)

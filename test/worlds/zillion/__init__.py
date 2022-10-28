@@ -1,13 +1,20 @@
+from typing import cast
 from test.worlds.test_base import WorldTestBase
-from worlds.zillion.region import ZillionLocation
+from worlds.zillion import ZillionWorld
 
 
 class ZillionTestBase(WorldTestBase):
     game = "Zillion"
 
-    def world_setup(self) -> None:
-        super().world_setup()
-        # make sure game requires gun 3 for tests
-        for location in self.world.get_locations():
-            if isinstance(location, ZillionLocation) and location.name.startswith("O-7"):
-                location.zz_loc.req.gun = 3
+    def ensure_gun_3_requirement(self) -> None:
+        """
+        There's a low probability that gun 3 is not required.
+
+        This makes sure that gun 3 is required by making all the canisters
+        in O-7 (including key word canisters) require gun 3.
+        """
+        zz_world = cast(ZillionWorld, self.world.worlds[1])
+        assert zz_world.zz_system.randomizer
+        for zz_loc_name, zz_loc in zz_world.zz_system.randomizer.locations.items():
+            if zz_loc_name.startswith("r15c6"):
+                zz_loc.req.gun = 3
