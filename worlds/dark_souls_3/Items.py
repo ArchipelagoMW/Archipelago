@@ -11,9 +11,7 @@ class DarkSouls3Item(Item):
         table_offset = 100
 
         output = {}
-        i = 0
-        for table in item_tables:
+        for i, table in enumerate(item_tables):
             output.update({name: id for id, name in enumerate(table, base_id + (table_offset * i))})
-            i += 1
 
         return output
