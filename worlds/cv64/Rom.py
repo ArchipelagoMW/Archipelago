@@ -296,6 +296,7 @@ rom_item_bytes = {
     "Clocktower Key3": 0x29,
 }
 
+warp_scene_offsets = [0xADFD3, 0xADFE3, 0xADFF3, 0xAE003, 0xAE017, 0xAE027, 0xAE03B]
 
 class LocalRom(object):
 
@@ -341,13 +342,13 @@ class LocalRom(object):
 def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     # local_random = world.slot_seeds[player]
 
-    w1 = world.special1s_per_warp[player]
-    w2 = world.special1s_per_warp[player] * 2
-    w3 = world.special1s_per_warp[player] * 3
-    w4 = world.special1s_per_warp[player] * 4
-    w5 = world.special1s_per_warp[player] * 5
-    w6 = world.special1s_per_warp[player] * 6
-    w7 = world.special1s_per_warp[player] * 7
+    w1 = str(world.special1s_per_warp[player]).zfill(2)
+    w2 = str(world.special1s_per_warp[player] * 2).zfill(2)
+    w3 = str(world.special1s_per_warp[player] * 3).zfill(2)
+    w4 = str(world.special1s_per_warp[player] * 4).zfill(2)
+    w5 = str(world.special1s_per_warp[player] * 5).zfill(2)
+    w6 = str(world.special1s_per_warp[player] * 6).zfill(2)
+    w7 = str(world.special1s_per_warp[player] * 7).zfill(2)
 
 
     # NOP out the CRC BNEs
@@ -422,38 +423,22 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     rom.write_bytes(0xEFE4E, cv64_text_converter("Sent"))
 
     # Change the Stage Select menu options
-    rom.write_byte(0xADF03, 0x00)
-    rom.write_byte(0xADF33, 0x05)
-    rom.write_bytes(0xADF34, [0xA0, 0x78, 0x64, 0x2B])
-    rom.write_bytes(0xADF44, [0x00, 0x00, 0x00, 0x00])
-    rom.write_byte(0xADF63, 0x03)
-    rom.write_byte(0xADF67, 0x07)
-    rom.write_bytes(0xADF6C, [0x00, 0x00, 0x00, 0x00])
-    rom.write_bytes(0xADF70, [0xA0, 0x6A, 0x64, 0x2B])
-    rom.write_bytes(0xADF80, [0x00, 0x00, 0x00, 0x00])
-    rom.write_byte(0xADF97, 0x03)
-    rom.write_byte(0xADF9B, 0x08)
-    rom.write_bytes(0xADFA4, [0xA0, 0x62, 0x64, 0x2B])
-    rom.write_bytes(0xADFA8, [0x00, 0x00, 0x00, 0x00])
-    rom.write_byte(0xADFBF, 0x03)
-    rom.write_byte(0xADFC3, 0x0E)
-    rom.write_bytes(0xADFCC, [0xA0, 0x62, 0x64, 0x2B])
-    rom.write_bytes(0xADFD0, [0x00, 0x00, 0x00, 0x00])
-    rom.write_byte(0xADFEB, 0x12)
-    rom.write_byte(0xAE017, 0x10)
-    rom.write_byte(0xAE03B, 0x03)
-    rom.write_byte(0xAE03F, 0x17)
-    rom.write_bytes(0xAE048, [0xA0, 0x62, 0x64, 0x2B])
-    rom.write_bytes(0xAE04C, [0x00, 0x00, 0x00, 0x00])
+    rom.write_bytes(0xADFC0, PatchName.warp_menu_rewrite)
+    rom.write_bytes(0x10E0C8, PatchName.warp_menu_addresses)
+    rom.write_byte(0xADFC3, level_dict[active_level_list[0]].startSceneID)
+    for i in range(len(warp_list)):
+        rom.write_byte(warp_scene_offsets[i], level_dict[warp_list[i]].midSceneID)
+        rom.write_byte(warp_scene_offsets[i] + 4, level_dict[warp_list[i]].midSpawnID)
 
-    rom.write_bytes(0xEFAD0, cv64_text_converter("Where to...?\tForest of Silence\t"
-                                                 + str(w1).zfill(2) + "` Villa\t"
-                                                 + str(w2).zfill(2) + "` Tunnel\t"
-                                                 + str(w3).zfill(2) + "` Underground Waterway\t"
-                                                 + str(w4).zfill(2) + "` Castle Center\t"
-                                                 + str(w5).zfill(2) + "` Tower of Science\t"
-                                                 + str(w6).zfill(2) + "` Tower of Execution\t"
-                                                 + str(w7).zfill(2) + "` Clock Tower"))
+    # Change the Stage Select menu's text to reflect its new purpose
+    rom.write_bytes(0xEFAD0, cv64_text_converter(f"Where to...?\t{active_level_list[0]}\t"
+                                                 f"`{w1} {warp_list[0]}\t"
+                                                 f"`{w2} {warp_list[1]}\t"
+                                                 f"`{w3} {warp_list[2]}\t"
+                                                 f"`{w4} {warp_list[3]}\t"
+                                                 f"`{w5} {warp_list[4]}\t"
+                                                 f"`{w6} {warp_list[5]}\t"
+                                                 f"`{w7} {warp_list[6]}"))
 
     # Disable or guarantee vampire Vincent's fight
     if world.fight_vincent[player] == "never":
@@ -568,6 +553,9 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
 
     # Write the new scene/spawn IDs for Stage Shuffle
     if world.stage_shuffle[player]:
+        rom.write_byte(0xB73308, level_dict[active_level_list[0]].startSceneID)
+        rom.write_byte(0xD9DAB, level_dict[active_level_list[active_level_list.index(LocationName.villa) + 2]].startSceneID)
+        rom.write_byte(0x109CCF, level_dict[active_level_list[active_level_list.index(LocationName.castle_center) + 3]].startSceneID)
         for i in range(len(active_level_list) - 1):
             if active_level_list[i - 1] == LocationName.villa:
                 rom.write_byte(level_dict[active_level_list[i]].endzoneSceneOffset,
