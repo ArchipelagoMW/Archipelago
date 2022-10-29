@@ -11,7 +11,7 @@ from BaseClasses import ItemClassification, LocationProgressType, \
 from Options import AssembleOptions
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
-from .options import zillion_options, validate
+from .options import ZillionStartChar, zillion_options, validate
 from .id_maps import item_name_to_id as _item_name_to_id, \
     loc_name_to_id as _loc_name_to_id, make_id_to_others, \
     zz_reg_name_to_reg_name, base_id
@@ -241,6 +241,42 @@ class ZillionWorld(World):
             .place_locked_item(self.create_item("Win"))
         self.world.completion_condition[self.player] = \
             lambda state: state.has("Win", self.player)
+
+    @staticmethod
+    def stage_generate_basic(multiworld: MultiWorld, *args: Any) -> None:
+        # item link pools are about to be created in main
+        # JJ can't be an item link unless all the players share the same start_char
+        # (The reason for this is that the JJ ZillionItem will have a different ZzItem depending
+        #  on whether the start char is Apple or Champ, and the logic depends on that ZzItem.)
+        for group in multiworld.groups.values():
+            # TODO: remove asserts on group when we can specify which members of TypedDict are optional
+            assert "game" in group
+            if group["game"] == "Zillion":
+                assert "item_pool" in group
+                item_pool = group["item_pool"]
+                to_stay = "JJ"
+                if "JJ" in item_pool:
+                    assert "players" in group
+                    group_players = group["players"]
+                    start_chars = cast(Dict[int, ZillionStartChar], getattr(multiworld, "start_char"))
+                    players_start_chars = [
+                        (player, start_chars[player].get_current_option_name())
+                        for player in group_players
+                    ]
+                    start_char_counts = Counter(sc for _, sc in players_start_chars)
+                    # majority rules
+                    if start_char_counts["Apple"] > start_char_counts["Champ"]:
+                        to_stay = "Apple"
+                    elif start_char_counts["Champ"] > start_char_counts["Apple"]:
+                        to_stay = "Champ"
+                    else:  # equal
+                        to_stay = multiworld.random.choice(("Apple", "Champ"))
+
+                    for p, sc in players_start_chars:
+                        if sc != to_stay:
+                            group_players.remove(p)
+                assert "world" in group
+                cast(ZillionWorld, group["world"])._make_item_maps(to_stay)
 
     def post_fill(self) -> None:
         """Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
