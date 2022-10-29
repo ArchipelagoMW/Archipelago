@@ -155,7 +155,9 @@ class SC2Context(CommonContext):
     items_handling = 0b111
     difficulty = -1
     all_in_choice = 0
+    mission_order = 0
     mission_req_table: typing.Dict[str, MissionInfo] = {}
+    final_mission: int = 29
     announcements = queue.Queue()
     sc2_run_task: typing.Optional[asyncio.Task] = None
     missions_unlocked: bool = False  # allow launching missions ignoring requirements
@@ -180,9 +182,15 @@ class SC2Context(CommonContext):
             self.difficulty = args["slot_data"]["game_difficulty"]
             self.all_in_choice = args["slot_data"]["all_in_map"]
             slot_req_table = args["slot_data"]["mission_req"]
+            # Maintaining backwards compatibility with older slot data
             self.mission_req_table = {
-                mission: MissionInfo(**slot_req_table[mission]) for mission in slot_req_table
+                mission: MissionInfo(
+                    **{field: value for field, value in mission_info.items() if field in MissionInfo._fields}
+                )
+                for mission, mission_info in slot_req_table.items()
             }
+            self.mission_order = args["slot_data"].get("mission_order", 0)
+            self.final_mission = args["slot_data"].get("final_mission", 29)
 
             self.build_location_to_mission_mapping()
 
@@ -304,7 +312,6 @@ class SC2Context(CommonContext):
                     self.refresh_from_launching = True
 
                     self.mission_panel.clear_widgets()
-
                     if self.ctx.mission_req_table:
                         self.last_checked_locations = self.ctx.checked_locations.copy()
                         self.first_check = False
@@ -322,17 +329,20 @@ class SC2Context(CommonContext):
 
                         for category in categories:
                             category_panel = MissionCategory()
+                            if category.startswith('_'):
+                                category_display_name = ''
+                            else:
+                                category_display_name = category
                             category_panel.add_widget(
-                                Label(text=category, size_hint_y=None, height=50, outline_width=1))
+                                Label(text=category_display_name, size_hint_y=None, height=50, outline_width=1))
 
                             for mission in categories[category]:
                                 text: str = mission
                                 tooltip: str = ""
-
+                                mission_id: int = self.ctx.mission_req_table[mission].id
                                 # Map has uncollected locations
                                 if mission in unfinished_missions:
                                     text = f"[color=6495ED]{text}[/color]"
-
                                 elif mission in available_missions:
                                     text = f"[color=FFFFFF]{text}[/color]"
                                 # Map requirements not met
@@ -351,6 +361,16 @@ class SC2Context(CommonContext):
                                 remaining_location_names: typing.List[str] = [
                                     self.ctx.location_names[loc] for loc in self.ctx.locations_for_mission(mission)
                                     if loc in self.ctx.missing_locations]
+
+                                if mission_id == self.ctx.final_mission:
+                                    if mission in available_missions:
+                                        text = f"[color=FFBC95]{mission}[/color]"
+                                    else:
+                                        text = f"[color=D0C0BE]{mission}[/color]"
+                                    if tooltip:
+                                        tooltip += "\n"
+                                    tooltip += "Final Mission"
+
                                 if remaining_location_names:
                                     if tooltip:
                                         tooltip += "\n"
@@ -360,7 +380,7 @@ class SC2Context(CommonContext):
                                 mission_button = MissionButton(text=text, size_hint_y=None, height=50)
                                 mission_button.tooltip_text = tooltip
                                 mission_button.bind(on_press=self.mission_callback)
-                                self.mission_id_to_button[self.ctx.mission_req_table[mission].id] = mission_button
+                                self.mission_id_to_button[mission_id] = mission_button
                                 category_panel.add_widget(mission_button)
 
                             category_panel.add_widget(Label(text=""))
@@ -468,6 +488,9 @@ wol_default_categories = [
     "Artifact", "Artifact", "Artifact", "Artifact", "Artifact", "Covert", "Covert", "Covert", "Covert",
     "Rebellion", "Rebellion", "Rebellion", "Rebellion", "Rebellion", "Prophecy", "Prophecy", "Prophecy", "Prophecy",
     "Char", "Char", "Char", "Char"
+]
+wol_default_category_names = [
+    "Mar Sara", "Colonist", "Artifact", "Covert", "Rebellion", "Prophecy", "Char"
 ]
 
 
@@ -586,7 +609,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
 
                 if self.can_read_game:
                     if game_state & (1 << 1) and not self.mission_completed:
-                        if self.mission_id != 29:
+                        if self.mission_id != self.ctx.final_mission:
                             print("Mission Completed")
                             await self.ctx.send_msgs(
                                 [{"cmd": 'LocationChecks',
@@ -742,13 +765,14 @@ def calc_available_missions(ctx: SC2Context, unlocks=None):
     return available_missions
 
 
-def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete):
+def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete: int):
     """Returns a bool signifying if the mission has all requirements complete and can be done
 
     Arguments:
     ctx -- instance of SC2Context
     locations_to_check -- the mission string name to check
     missions_complete -- an int of how many missions have been completed
+    mission_path -- a list of missions that have already been checked
 """
     if len(ctx.mission_req_table[mission_name].required_world) >= 1:
         # A check for when the requirements are being or'd
@@ -766,7 +790,18 @@ def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete
                 else:
                     req_success = False
 
+            # Grid-specific logic (to avoid long path checks and infinite recursion)
+            if ctx.mission_order in (3, 4):
+                if req_success:
+                    return True
+                else:
+                    if req_mission is ctx.mission_req_table[mission_name].required_world[-1]:
+                        return False
+                    else:
+                        continue
+
             # Recursively check required mission to see if it's requirements are met, in case !collect has been done
+            # Skipping recursive check on Grid settings to speed up checks and avoid infinite recursion
             if not mission_reqs_completed(ctx, list(ctx.mission_req_table)[req_mission - 1], missions_complete):
                 if not ctx.mission_req_table[mission_name].or_requirements:
                     return False
