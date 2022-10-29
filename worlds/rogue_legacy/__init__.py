@@ -225,9 +225,9 @@ class RLWorld(World):
 
     def create_regions(self):
         create_regions(self.world, self.player)
-        self.__place_events()
+        self._place_events()
 
-    def __place_events(self):
+    def _place_events(self):
         # Fountain
         self.world.get_location("Fountain Room", self.player).place_locked_item(
             self.create_event("Defeat The Fountain"))
