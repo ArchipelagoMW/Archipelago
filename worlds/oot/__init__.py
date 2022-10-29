@@ -878,7 +878,7 @@ class OOTWorld(World):
                             for loc in locations:
                                 if loc.progress_type == LocationProgressType.DEFAULT:
                                     loc.progress_type = LocationProgressType.EXCLUDED
-                                    add_item_rule(location, lambda i: not (i.advancement or i.useful))
+                                    add_item_rule(loc, lambda i: not (i.advancement or i.useful))
                 else:
                     # Perform the fill task once per dungeon
                     for dungeon_info in dungeon_table:
