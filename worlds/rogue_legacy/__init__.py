@@ -47,12 +47,7 @@ class RLWorld(World):
         return getattr(self.world, name)[self.player]
 
     def fill_slot_data(self) -> dict:
-        slot_data = {}
-        for option_name in rl_options:
-            option = self.setting(option_name)
-            slot_data[option_name] = option.value
-
-        return slot_data
+        return {option_name: self.setting(option_name).value for option_name in rl_options}
 
     def generate_early(self):
         self.prefill_items = []
