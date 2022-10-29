@@ -31,5 +31,5 @@ you're off to start your legacy!
 ## Recommended Installation Instructions
 
 Please read the README file on the 
-[Rogue Legacy Randomizer GitHub](https://github.com/ThePhar/RogueLegacyRandomizer/blob/master/README.md) page for upto
+[Rogue Legacy Randomizer GitHub](https://github.com/ThePhar/RogueLegacyRandomizer/blob/master/README.md) page for up to
 date installation instructions.
