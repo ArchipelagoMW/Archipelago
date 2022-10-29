@@ -90,7 +90,7 @@ Now you are ready to start your adventure in Kanto.
 
 ## Auto-Tracking
 
-The Witness has a fully functional map tracker that supports auto-tracking.
+Pokémon Red and Blue has a fully functional map tracker that supports auto-tracking.
 
 1. Download [Pokémon Red and Blue Archipelago Map Tracker](https://github.com/j-imbo/pkmnrb_jim/releases/latest) and [PopTracker](https://github.com/black-sliver/PopTracker/releases).
 2. Open PopTracker, and load the Pokémon Red and Blue pack. 
