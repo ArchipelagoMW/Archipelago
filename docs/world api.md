@@ -85,7 +85,7 @@ inside a World object.
 ### Player Options
 
 Players provide customized settings for their World in the form of yamls.
-Those are accessible through `self.world.options["<option_name>"]`. A dict
+Those are accessible through `self.options["<option_name>"]`. A dict
 of valid options has to be provided in `self.option_definitions`. Options are automatically
 added to the `World` object for easy access.
 
@@ -456,7 +456,7 @@ In addition, the following methods can be implemented and attributes can be set
 ```python
 def generate_early(self) -> None:
     # read player settings to world instance
-    self.final_boss_hp = self.world.options["final_boss_hp"].value
+    self.final_boss_hp = self.options["final_boss_hp"].value
 ```
 
 #### create_item
@@ -676,9 +676,9 @@ def generate_output(self, output_directory: str):
                           in self.world.precollected_items[self.player]],
         "final_boss_hp": self.final_boss_hp,
         # store option name "easy", "normal" or "hard" for difficuly
-        "difficulty": self.world.difficulty[self.player].current_key,
+        "difficulty": self.options["difficulty"].current_key,
         # store option value True or False for fixing a glitch
-        "fix_xyz_glitch": self.world.fix_xyz_glitch[self.player].value
+        "fix_xyz_glitch": self.options["fix_xyz_glitch"].value
     }
     # point to a ROM specified by the installation
     src = Utils.get_options()["mygame_options"]["rom_file"]
