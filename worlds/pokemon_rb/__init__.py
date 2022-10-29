@@ -124,8 +124,7 @@ class PokemonRedBlueWorld(World):
 
         self.world.itempool += item_pool
 
-
-    def pre_fill(self):
+    def generate_basic(self) -> None:
 
         process_wild_pokemon(self)
         process_static_pokemon(self)
@@ -178,7 +177,7 @@ class PokemonRedBlueWorld(World):
             unplaced_items = []
             if loc.name in self.world.priority_locations[self.player].value:
                 add_item_rule(loc, lambda i: i.advancement)
-            for item in self.world.itempool:
+            for item in reversed(self.world.itempool):
                 if item.player == self.player and loc.item_rule(item):
                     self.world.itempool.remove(item)
                     state = sweep_from_pool(self.world.state, self.world.itempool + unplaced_items)
