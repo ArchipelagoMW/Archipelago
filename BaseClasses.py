@@ -1,4 +1,5 @@
 from __future__ import annotations
+from argparse import Namespace
 
 import copy
 import itertools
@@ -49,6 +50,7 @@ class MultiWorld():
     state: CollectionState
 
     accessibility: Dict[int, Options.Accessibility]
+    early_items: Dict[int, Options.EarlyItems]
     local_items: Dict[int, Options.LocalItems]
     non_local_items: Dict[int, Options.NonLocalItems]
     progression_balancing: Dict[int, Options.ProgressionBalancing]
@@ -56,6 +58,7 @@ class MultiWorld():
     indirect_connections: Dict[Region, Set[Entrance]]
     exclude_locations: Dict[int, Options.ExcludeLocations]
 
+    game: Dict[int, str]
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -202,7 +205,7 @@ class MultiWorld():
         self.slot_seeds = {player: random.Random(self.random.getrandbits(64)) for player in
                            range(1, self.players + 1)}
 
-    def set_options(self, args):
+    def set_options(self, args: Namespace) -> None:
         for player in self.player_ids:
             self.custom_data[player] = {}
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]

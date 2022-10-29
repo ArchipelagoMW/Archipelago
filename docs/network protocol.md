@@ -25,6 +25,7 @@ There are also a number of community-supported libraries available that implemen
 |                               | [APCpp](https://github.com/N00byKing/APCpp)                                                        | CMake                                                                           |
 | JavaScript / TypeScript       | [archipelago.js](https://www.npmjs.com/package/archipelago.js)                                     | Browser and Node.js Supported                                                   |
 | Haxe                          | [hxArchipelago](https://lib.haxe.org/p/hxArchipelago)                                              |                                                                                 |
+| Rust                          | [ArchipelagoRS](https://github.com/ryanisaacg/archipelago_rs)                                      |                                                                                 |
 
 ## Synchronizing Items
 When the client receives a [ReceivedItems](#ReceivedItems) packet, if the `index` argument does not match the next index that the client expects then it is expected that the client will re-sync items with the server. This can be accomplished by sending the server a [Sync](#Sync) packet and then a [LocationChecks](#LocationChecks) packet.

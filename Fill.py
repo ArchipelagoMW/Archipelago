@@ -233,13 +233,13 @@ def accessibility_corrections(world: MultiWorld, state: CollectionState, locatio
             if location in state.events:
                 state.events.remove(location)
             locations.append(location)
-
-    if pool:
+    if pool and locations:
+        locations.sort(key=lambda loc: loc.progress_type != LocationProgressType.PRIORITY)
         fill_restrictive(world, state, locations, pool)
 
 
 def inaccessible_location_rules(world: MultiWorld, state: CollectionState, locations):
-    maximum_exploration_state = sweep_from_pool(state, [])
+    maximum_exploration_state = sweep_from_pool(state)
     unreachable_locations = [location for location in locations if not location.can_reach(maximum_exploration_state)]
     if unreachable_locations:
         def forbid_important_item_rule(item: Item):
@@ -258,6 +258,45 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     progitempool: typing.List[Item] = []
     usefulitempool: typing.List[Item] = []
     filleritempool: typing.List[Item] = []
+
+    early_items_count: typing.Dict[typing.Tuple[str, int], int] = {}
+    for player in world.player_ids:
+        for item, count in world.early_items[player].value.items():
+            early_items_count[(item, player)] = count
+    if early_items_count:
+        early_locations: typing.List[Location] = []
+        early_priority_locations: typing.List[Location] = []
+        for loc in reversed(fill_locations):
+            if loc.can_reach(world.state):
+                if loc.progress_type == LocationProgressType.PRIORITY:
+                    early_priority_locations.append(loc)
+                else:
+                    early_locations.append(loc)
+                fill_locations.remove(loc)
+
+        early_prog_items: typing.List[Item] = []
+        early_rest_items: typing.List[Item] = []
+        for item in reversed(itempool):
+            if (item.name, item.player) in early_items_count:
+                if item.advancement:
+                    early_prog_items.append(item)
+                else:
+                    early_rest_items.append(item)
+                itempool.remove(item)
+                early_items_count[(item.name, item.player)] -= 1
+                if early_items_count[(item.name, item.player)] == 0:
+                    del early_items_count[(item.name, item.player)]
+        fill_restrictive(world, world.state, early_locations, early_rest_items, lock=True)
+        early_locations += early_priority_locations
+        fill_restrictive(world, world.state, early_locations, early_prog_items, lock=True)
+        unplaced_early_items = early_rest_items + early_prog_items
+        if unplaced_early_items:
+            logging.warning(f"Ran out of early locations for early items. Failed to place \
+                            {len(unplaced_early_items)} items early.")
+            itempool += unplaced_early_items
+
+        fill_locations += early_locations + early_priority_locations
+        world.random.shuffle(fill_locations)
 
     for item in itempool:
         if item.advancement:
@@ -286,15 +325,10 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
         nonlocal lock_later
         lock_later.append(location)
 
-    # "priority fill"
-    fill_restrictive(world, world.state, prioritylocations, progitempool, swap=False, on_place=mark_for_locking)
-    accessibility_corrections(world, world.state, prioritylocations, progitempool)
-
-    for location in lock_later:
-        location.locked = True
-    del mark_for_locking, lock_later
-
     if prioritylocations:
+        # "priority fill"
+        fill_restrictive(world, world.state, prioritylocations, progitempool, swap=False, on_place=mark_for_locking)
+        accessibility_corrections(world, world.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
@@ -304,6 +338,11 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
             raise FillError(
                 f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
         accessibility_corrections(world, world.state, defaultlocations)
+
+    for location in lock_later:
+        if location.item:
+            location.locked = True
+    del mark_for_locking, lock_later
 
     inaccessible_location_rules(world, world.state, defaultlocations)
 
