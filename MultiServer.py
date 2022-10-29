@@ -1809,31 +1809,17 @@ class ServerCommandProcessor(CommonCommandProcessor):
         for (team, slot), name in self.ctx.player_names.items():
             if name == input_name:
                 return team, slot, name
-        
-        @dataclass
-        class TSNC:
-            """ team, slot, name, (count without case) """
-            team: int
-            slot: int
-            name: str
-            count: int = 1
 
         # if no case-sensitive match, then match without case only if there's only 1 match
-        lowered_data: typing.Dict[str, TSNC] = {}
+        input_lower = input_name.lower()
+        match: typing.Optional[typing.Tuple[int, int, str]] = None
         for (team, slot), name in self.ctx.player_names.items():
             lowered = name.lower()
-            if lowered in lowered_data:
-                lowered_data[lowered].count += 1
-            else:
-                lowered_data[lowered] = TSNC(team, slot, name)
-
-        input_lower = input_name.lower()
-        if input_lower in lowered_data and lowered_data[input_lower].count == 1:
-            match = lowered_data[input_lower]
-            return match.team, match.slot, match.name
-
-        # else no case match and no unique match without case
-        return None
+            if lowered == input_lower:
+                if match:
+                    return None  # ambiguous input_name
+                match = (team, slot, name)
+        return match
 
     @mark_raw
     def _cmd_collect(self, player_name: str) -> bool:
