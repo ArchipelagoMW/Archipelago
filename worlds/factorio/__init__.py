@@ -91,8 +91,9 @@ class Factorio(World):
 
         location_pool = []
 
-        for pack in self.world.max_science_pack[self.player].get_allowed_packs():
+        for pack in sorted(self.world.max_science_pack[self.player].get_allowed_packs()):
             location_pool.extend(location_pools[pack])
+
         location_names = self.world.random.sample(location_pool, location_count)
         self.locations = [FactorioScienceLocation(player, loc_name, self.location_name_to_id[loc_name], nauvis)
                           for loc_name in location_names]
@@ -107,7 +108,7 @@ class Factorio(World):
         event = FactorioItem("Victory", ItemClassification.progression, None, player)
         location.place_locked_item(event)
 
-        for ingredient in self.world.max_science_pack[self.player].get_allowed_packs():
+        for ingredient in sorted(self.world.max_science_pack[self.player].get_allowed_packs()):
             location = FactorioLocation(player, f"Automate {ingredient}", None, nauvis)
             nauvis.locations.append(location)
             event = FactorioItem(f"Automated {ingredient}", ItemClassification.progression, None, player)
