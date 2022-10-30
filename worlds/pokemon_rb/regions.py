@@ -14,7 +14,6 @@ def create_region(world: MultiWorld, player: int, name: str, locations_per_regio
             ret.locations.append(location)
             if world.randomize_hidden_items[player].value == 2 and "Hidden" in location.name:
                 location.progress_type = LocationProgressType.EXCLUDED
-                add_item_rule(location, lambda i: not (i.advancement or i.useful))
     if exits:
         for exit in exits:
             ret.exits.append(Entrance(player, exit, ret))

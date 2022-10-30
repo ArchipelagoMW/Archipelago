@@ -102,13 +102,17 @@ Locations are places where items can be located in your game. This may be chests
 or boss drops for RPG-like games but could also be progress in a research tree.
 
 Each location has a `name` and an `id` (a.k.a. "code" or "address"), is placed
-in a Region and has access rules.
+in a Region, has access rules and a classification.
 The name needs to be unique in each game and must not be numeric (has to
 contain least 1 letter or symbol). The ID needs to be unique across all games
 and is best in the same range as the item IDs.
 World-specific IDs are 1 to 2<sup>53</sup>-1, IDs ≤ 0 are global and reserved.
 
 Special locations with ID `None` can hold events.
+
+Classification is one of `LocationProgressType.DEFAULT`, `PRIORITY` or `EXCLUDED`.
+The Fill algorithm will fill priority first, giving higher chance of it being
+required, and not place progression or useful items in excluded locations.
 
 ### Items
 

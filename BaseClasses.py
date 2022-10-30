@@ -1115,13 +1115,15 @@ class Location:
         self.parent_region = parent
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
+        return (self.always_allow(state, item)
+                or ((self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
+                    and self.item_rule(item)
+                    and (not check_access or self.can_reach(state))))
 
     def can_reach(self, state: CollectionState) -> bool:
         # self.access_rule computes faster on average, so placing it first for faster abort
-        if self.access_rule(state) and self.parent_region.can_reach(state):
-            return True
-        return False
+        assert self.parent_region, "Can't reach location without region"
+        return self.access_rule(state) and self.parent_region.can_reach(state)
 
     def place_locked_item(self, item: Item):
         if self.item:
