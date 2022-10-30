@@ -242,7 +242,6 @@ class SoEWorld(World):
                 for location in self.multiworld.random.sample(spheres[trash_sphere][typ], count):
                     assert location.name != "Energy Core #285", "Error in sphere generation"
                     location.progress_type = LocationProgressType.EXCLUDED
-                    # TODO: do we need to set an item rule?
 
         def sphere1_blocked_items_rule(item):
             if isinstance(item, SoEItem):
