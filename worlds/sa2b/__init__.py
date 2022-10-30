@@ -195,10 +195,10 @@ class SA2BWorld(World):
 
         self.region_emblem_map = dict(zip(shuffled_region_list, emblem_requirement_list))
 
-        connect_regions(self.world, self.player, gates, self.emblems_for_cannons_core, self.gate_bosses)
-
         max_required_emblems = max(max(emblem_requirement_list), self.emblems_for_cannons_core)
         itempool += [self.create_item(ItemName.emblem) for _ in range(max_required_emblems)]
+
+        connect_regions(self.world, self.player, gates, max_required_emblems, self.gate_bosses)
 
         non_required_emblems = (total_emblem_count - max_required_emblems)
         junk_count = math.floor(non_required_emblems * (self.world.junk_fill_percentage[self.player].value / 100.0))
