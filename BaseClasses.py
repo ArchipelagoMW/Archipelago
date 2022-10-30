@@ -541,9 +541,11 @@ class MultiWorld():
         """Check if accessibility rules are fulfilled with current or supplied state."""
         if not state:
             state = CollectionState(self)
-        players = {"minimal": set(),
-                   "items": set(),
-                   "locations": set()}
+        players: Dict[str, Set[int]] = {
+            "minimal": set(),
+            "items": set(),
+            "locations": set()
+        }
         for player, access in self.accessibility.items():
             players[access.current_key].add(player)
 
@@ -563,20 +565,22 @@ class MultiWorld():
                 return True
             return False
 
-        def all_done():
+        def all_done() -> bool:
             """Check if all access rules are fulfilled"""
-            if beatable_fulfilled:
-                if any(location_condition(location) for location in locations):
-                    return False  # still locations required to be collected
-                return True
+            if not beatable_fulfilled:
+                return False
+            if any(location_condition(location) for location in locations):
+                return False  # still locations required to be collected
+            return True
 
-        locations = {location for location in self.get_locations() if location_relevant(location)}
+        locations = [location for location in self.get_locations() if location_relevant(location)]
 
         while locations:
-            sphere = set()
+            sphere: List[Location] = []
             for location in locations:
                 if location.can_reach(state):
-                    sphere.add(location)
+                    assert location not in sphere
+                    sphere.append(location)
 
             if not sphere:
                 # ran out of places and did not finish yet, quit
@@ -586,7 +590,8 @@ class MultiWorld():
 
             for location in sphere:
                 locations.remove(location)
-                state.collect(location.item, True, location)
+                if location.item:
+                    state.collect(location.item, True, location)
 
             if self.has_beaten_game(state):
                 beatable_fulfilled = True
