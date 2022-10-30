@@ -318,7 +318,7 @@ location_data = [
     LocationData("Viridian Gym", "Giovanni 1", "Earth Badge", rom_addresses['Badge_Viridian_Gym'], EventFlag(0x8A7)),
 
     LocationData("Viridian Forest", "Hidden Item Northwest by Trainer", "Potion", rom_addresses['Hidden_Item_Viridian_Forest_1'], Hidden(0)),
-    LocationData("Viridian Forest", "Hidden Item Entrance Cuttable Tree", "Antidote", rom_addresses['Hidden_Item_Viridian_Forest_2'], Hidden(1)),
+    LocationData("Viridian Forest", "Hidden Item Entrance Tree", "Antidote", rom_addresses['Hidden_Item_Viridian_Forest_2'], Hidden(1)),
     LocationData("Mt Moon B2F", "Hidden Item Dead End Before Fossils", "Moon Stone", rom_addresses['Hidden_Item_MtMoonB2F_1'], Hidden(2)),
     LocationData("Route 25", "Hidden Item Fence Outside Bill's House", "Ether", rom_addresses['Hidden_Item_Route_25_1'], Hidden(3)),
     LocationData("Route 9", "Hidden Item Bush By Grass", "Ether", rom_addresses['Hidden_Item_Route_9'], Hidden(4)),

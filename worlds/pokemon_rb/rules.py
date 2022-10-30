@@ -99,7 +99,7 @@ def set_rules(world, player):
         "Route 9 - Hidden Item Bush By Grass": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "S.S. Anne 1F - Hidden Item Kitchen Trash": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "S.S. Anne B1F - Hidden Item Under Pillow": lambda state: state.pokemon_rb_can_get_hidden_items(player),
-        "Route 10 - Hidden Item Behind Rock Tunnel Entrance Tree": lambda
+        "Route 10 - Hidden Item Behind Rock Tunnel Entrance Cuttable Tree": lambda
             state: state.pokemon_rb_can_get_hidden_items(player),
         "Route 10 - Hidden Item Rock": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Rocket Hideout B1F - Hidden Item Pot Plant": lambda state: state.pokemon_rb_can_get_hidden_items(player),
@@ -128,15 +128,15 @@ def set_rules(world, player):
         "Pokemon Mansion 3F - Hidden Item Behind Burglar": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Route 23 - Hidden Item Rocks Before Final Guard": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
-        "Route 23 - Hidden Item East Tree After Water": lambda state: state.pokemon_rb_can_get_hidden_items(
+        "Route 23 - Hidden Item East Bush After Water": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
         "Route 23 - Hidden Item On Island": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Victory Road 2F - Hidden Item Rock Before Moltres": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
         "Victory Road 2F - Hidden Item Rock In Final Room": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Viridian City - Hidden Item Cuttable Tree": lambda state: state.pokemon_rb_can_get_hidden_items(player),
-        "Route 11 - Hidden Item Isolated Tree Near Gate": lambda state: state.pokemon_rb_can_get_hidden_items(player),
-        "Route 12 - Hidden Item Tree Near Gate": lambda state: state.pokemon_rb_can_get_hidden_items(player),
+        "Route 11 - Hidden Item Isolated Bush Near Gate": lambda state: state.pokemon_rb_can_get_hidden_items(player),
+        "Route 12 - Hidden Item Bush Near Gate": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Route 17 - Hidden Item In Grass": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Route 17 - Hidden Item Near Northernmost Sign": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Route 17 - Hidden Item East Center": lambda state: state.pokemon_rb_can_get_hidden_items(player),
