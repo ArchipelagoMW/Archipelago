@@ -18,14 +18,11 @@ class LegacyLogic(LogicMixin):
         return int(self.world.health_pool[player]) + \
                int(self.world.mana_pool[player]) + \
                int(self.world.attack_pool[player]) + \
-               int(self.world.magic_damage_pool[player]) + \
-               int(self.world.armor_pool[player]) + \
-               int(self.world.equip_pool[player])
+               int(self.world.magic_damage_pool[player])
 
     def stat_upgrade_count(self: CollectionState, player: int) -> int:
         return self.item_count("Health Up", player) + self.item_count("Mana Up", player) + \
-               self.item_count("Attack Up", player) + self.item_count("Magic Damage Up", player) + \
-               self.item_count("Armor Up", player) + self.item_count("Equip Up", player)
+               self.item_count("Attack Up", player) + self.item_count("Magic Damage Up", player)
 
 
 def set_rules(world: MultiWorld, player: int):
@@ -74,16 +71,16 @@ def set_rules(world: MultiWorld, player: int):
 
     # Standard Zone Progression
     world.get_entrance("Forest Abkhazia", player).access_rule = \
-        (lambda state: state.has_stat_upgrades(player, 0.15 * state.total_stat_upgrades_count(player)) and
+        (lambda state: state.has_stat_upgrades(player, 0.125 * state.total_stat_upgrades_count(player)) and
                        (state.has("Defeat Khidr", player) or state.has("Defeat Neo Khidr", player)))
     world.get_entrance("The Maya", player).access_rule = \
-        (lambda state: state.has_stat_upgrades(player, 0.3 * state.total_stat_upgrades_count(player)) and
+        (lambda state: state.has_stat_upgrades(player, 0.25 * state.total_stat_upgrades_count(player)) and
                            (state.has("Defeat Alexander", player) or state.has("Defeat Alexander IV", player)))
     world.get_entrance("Land of Darkness", player).access_rule = \
-        (lambda state: state.has_stat_upgrades(player, 0.45 * state.total_stat_upgrades_count(player)) and
+        (lambda state: state.has_stat_upgrades(player, 0.375 * state.total_stat_upgrades_count(player)) and
                            (state.has("Defeat Ponce de Leon", player) or state.has("Defeat Ponce de Freon", player)))
     world.get_entrance("The Fountain Room", player).access_rule = \
-        (lambda state: state.has_stat_upgrades(player, 0.6 * state.total_stat_upgrades_count(player)) and
+        (lambda state: state.has_stat_upgrades(player, 0.5 * state.total_stat_upgrades_count(player)) and
                            (state.has("Defeat Herodotus", player) or state.has("Defeat Astrodotus", player)))
 
     world.completion_condition[player] = lambda state: state.has("Defeat The Fountain", player)
