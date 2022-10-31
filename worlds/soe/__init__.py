@@ -216,10 +216,16 @@ class SoEWorld(World):
         r.exits = [Entrance(self.player, 'New Game', r)]
         self.world.regions += [r]
 
+        def get_sphere_index(evermizer_loc):
+            """Returns 0, 1 or 2 for locations in spheres 1, 2, 3+"""
+            if len(evermizer_loc.requires) == 1 and evermizer_loc.requires[0][1] != pyevermizer.P_WEAPON:
+                return 2
+            return min(2, len(evermizer_loc.requires))
+
         # group locations into spheres (1, 2, 3+ at index 0, 1, 2)
         spheres: typing.Dict[int, typing.Dict[int, typing.List[SoELocation]]] = {}
         for loc in _locations:
-            spheres.setdefault(min(2, len(loc.requires)), {}).setdefault(loc.type, []).append(
+            spheres.setdefault(get_sphere_index(loc), {}).setdefault(loc.type, []).append(
                 SoELocation(self.player, loc.name, self.location_name_to_id[loc.name], r,
                             loc.difficulty > max_difficulty))
 
@@ -234,6 +240,7 @@ class SoEWorld(World):
             for typ, counts in fills.items():
                 count = counts[self.world.difficulty[self.player].value]
                 for location in self.world.random.sample(spheres[trash_sphere][typ], count):
+                    assert location.name != "Energy Core #285", "Error in sphere generation"
                     location.progress_type = LocationProgressType.EXCLUDED
                     # TODO: do we need to set an item rule?
 
