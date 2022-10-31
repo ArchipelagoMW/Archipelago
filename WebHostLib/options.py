@@ -92,7 +92,7 @@ def create():
             if option_name in handled_in_js:
                 pass
 
-            elif option.options:
+            elif isinstance(option, (Options.Toggle, Options.Choice)):
                 game_options[option_name] = this_option = {
                     "type": "select",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
@@ -107,18 +107,14 @@ def create():
                         "value": sub_option_name,
                     })
 
-                    if sub_option_id == option.default:
-                        this_option["defaultValue"] = sub_option_name
-
                 this_option["options"].append({
                     "name": "Random",
                     "value": "random",
                 })
 
-                if option.default == "random":
-                    this_option["defaultValue"] = "random"
+                this_option["defaultValue"] = option.default
 
-            elif issubclass(option, Options.Range):
+            elif isinstance(option, Options.Range):
                 game_options[option_name] = {
                     "type": "range",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
@@ -129,7 +125,7 @@ def create():
                     "max": option.range_end,
                 }
 
-                if issubclass(option, Options.SpecialRange):
+                if isinstance(option, Options.SpecialRange):
                     game_options[option_name]["type"] = 'special_range'
                     game_options[option_name]["value_names"] = {}
                     for key, val in option.special_range_names.items():
@@ -149,7 +145,7 @@ def create():
                     "description": get_html_doc(option),
                 }
 
-            elif issubclass(option, Options.OptionList) or issubclass(option, Options.OptionSet):
+            elif isinstance(option, (Options.OptionList, Options.OptionSet)):
                 if option.valid_keys:
                     game_options[option_name] = {
                         "type": "custom-list",
