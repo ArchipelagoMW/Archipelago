@@ -48,11 +48,19 @@ def create():
             if number in data:
                 data[name] = data[number]
                 if number in notes:
-                    notes[name] = f"{number} {notes[number]}"
+                    notes[name] = f"equivalent to {number}"
                     del notes[number]
+                else:
+                    notes[name] = f"equivalent to {number}"
+                if number == option.range_start:
+                    notes[number] = f"minimum value is {number}"
+                elif number == option.range_end:
+                    notes[number] = f"maximum value is {number}"
                 del data[number]
             else:
                 data[name] = 0
+        if None in notes:
+            del notes[None]
 
         return data, notes
 

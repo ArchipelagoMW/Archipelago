@@ -31,8 +31,10 @@ requires:
 # Shared Options supported by all games:
 
 {%- macro range_option(option) %}
-    # you can add additional values between minimum and maximum
+    # You can add additional values between minimum and maximum
     {%- set data, notes = dictify_range(option) %}
+    {%- for note in notes %}{% if not data[note] is defined %}
+    # {{ notes[note] }}{% endif %}{% endfor %}
     {%- for entry, default in data.items() %}
     {{ entry }}: {{ default }}{% if notes[entry] %} # {{ notes[entry] }}{% endif %}
     {%- endfor -%}
