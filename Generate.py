@@ -186,17 +186,22 @@ def main(args=None, callback=ERmain):
         for category_name, category_dict in meta_weights.items():
             for key in category_dict:
                 option = roll_meta_option(key, category_name, category_dict)
-                if option is not None:
-                    for path in weights_cache:
-                        for yaml in weights_cache[path]:
-                            if category_name is None:
-                                for category in yaml:
-                                    if category in AutoWorldRegister.world_types and key in Options.common_options:
-                                        yaml[category][key] = option
-                            elif category_name not in yaml:
-                                logging.warning(f"Meta: Category {category_name} is not present in {path}.")
-                            else:
-                                yaml[category_name][key] = option
+                if option is None:
+                    continue
+                for path in weights_cache:
+                    for yaml in weights_cache[path]:
+                        if category_name is None:
+                            if key == "game":
+                                yaml[key] = option
+                                yaml.setdefault(option, {})
+                                continue
+                            for category in yaml:
+                                if key in Options.common_options and category in AutoWorldRegister.world_types:
+                                    yaml[category][key] = option
+                        elif category_name not in yaml:
+                            logging.warning(f"Meta: Category {category_name} is not present in {path}.")
+                        else:
+                            yaml[category_name][key] = option
 
     player_path_cache = {}
     for player in range(1, args.multi + 1):
