@@ -62,7 +62,7 @@ class SMWWorld(World):
 
     def _get_slot_data(self):
         return {
-            #"death_link": self.world.death_link[self.player].value,
+            #"death_link": self.multiworld.death_link[self.player].value,
             "active_levels": self.active_level_dict,
         }
 
@@ -110,7 +110,7 @@ class SMWWorld(World):
         
         if self.multiworld.goal[self.player] == "yoshi_egg_hunt":
             itempool += [self.create_item(ItemName.yoshi_egg)
-                         for _ in range(self.world.number_of_yoshi_eggs[self.player])]
+                         for _ in range(self.multiworld.number_of_yoshi_eggs[self.player])]
             self.multiworld.get_location(LocationName.yoshis_house, self.player).place_locked_item(self.create_item(ItemName.victory))
         else:
             self.multiworld.get_location(LocationName.bowser, self.player).place_locked_item(self.create_item(ItemName.victory))
@@ -151,7 +151,7 @@ class SMWWorld(World):
             rom = LocalRom(get_base_rom_path())
             patch_rom(self.multiworld, rom, self.player, self.active_level_dict)
 
-            rompath = os.path.join(output_directory, f"{self.world.get_out_file_name_base(self.player)}.sfc")
+            rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 
