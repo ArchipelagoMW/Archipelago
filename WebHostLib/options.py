@@ -47,6 +47,9 @@ def create():
         for name, number in getattr(option, "special_range_names", {}).items():
             if number in data:
                 data[name] = data[number]
+                if number in notes:
+                    notes[name] = f"{number} {notes[number]}"
+                    del notes[number]
                 del data[number]
             else:
                 data[name] = 0
