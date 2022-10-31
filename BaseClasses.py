@@ -577,10 +577,9 @@ class MultiWorld():
 
         while locations:
             sphere: List[Location] = []
-            for location in locations:
-                if location.can_reach(state):
-                    assert location not in sphere
-                    sphere.append(location)
+            for n in range(len(locations) - 1, -1, -1):
+                if locations[n].can_reach(state):
+                    sphere.append(locations.pop(n))
 
             if not sphere:
                 # ran out of places and did not finish yet, quit
@@ -589,7 +588,6 @@ class MultiWorld():
                 return False
 
             for location in sphere:
-                locations.remove(location)
                 if location.item:
                     state.collect(location.item, True, location)
 
