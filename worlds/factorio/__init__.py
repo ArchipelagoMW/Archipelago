@@ -448,10 +448,10 @@ class FactorioScienceLocation(FactorioLocation):
 
         self.ingredients = {Factorio.ordered_science_packs[self.complexity]: 1}
         for complexity in range(self.complexity):
-            if parent.world.tech_cost_mix[self.player] > parent.world.random.randint(0, 99):
+            if parent.multiworld.tech_cost_mix[self.player] > parent.multiworld.random.randint(0, 99):
                 self.ingredients[Factorio.ordered_science_packs[complexity]] = 1
-        self.count = parent.world.random.randint(parent.world.min_tech_cost[self.player],
-                                                 parent.world.max_tech_cost[self.player])
+        self.count = parent.multiworld.random.randint(parent.multiworld.min_tech_cost[self.player],
+                                                      parent.multiworld.max_tech_cost[self.player])
 
     @property
     def factorio_ingredients(self) -> typing.List[typing.Tuple[str, int]]:
