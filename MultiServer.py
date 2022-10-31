@@ -1332,6 +1332,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     def get_hints(self, input_text: str, for_location: bool = False) -> bool:
         points_available = get_client_points(self.ctx, self.client)
+        cost = self.ctx.get_hint_cost(self.client.slot)
+
         if not input_text:
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
@@ -1386,7 +1388,6 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 return False
 
         if hints:
-            cost = self.ctx.get_hint_cost(self.client.slot)
             new_hints = set(hints) - self.ctx.hints[self.client.team, self.client.slot]
             old_hints = set(hints) - new_hints
             if old_hints:
@@ -1436,7 +1437,12 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 return True
 
         else:
-            self.output("Nothing found. Item/Location may not exist.")
+            if points_available >= cost:
+                self.output("Nothing found. Item/Location may not exist.")
+            else:
+                self.output(f"You can't afford the hint. "
+                            f"You have {points_available} points and need at least "
+                            f"{self.ctx.get_hint_cost(self.client.slot)}.")
             return False
 
     @mark_raw
@@ -1796,14 +1802,33 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(response)
             return False
 
+    def resolve_player(self, input_name: str) -> typing.Optional[typing.Tuple[int, int, str]]:
+        """ returns (team, slot, player name) """
+        # TODO: clean up once we disallow multidata < 0.3.6, which has CI unique names
+        # first match case
+        for (team, slot), name in self.ctx.player_names.items():
+            if name == input_name:
+                return team, slot, name
+
+        # if no case-sensitive match, then match without case only if there's only 1 match
+        input_lower = input_name.lower()
+        match: typing.Optional[typing.Tuple[int, int, str]] = None
+        for (team, slot), name in self.ctx.player_names.items():
+            lowered = name.lower()
+            if lowered == input_lower:
+                if match:
+                    return None  # ambiguous input_name
+                match = (team, slot, name)
+        return match
+
     @mark_raw
     def _cmd_collect(self, player_name: str) -> bool:
         """Send out the remaining items to player."""
-        seeked_player = player_name.lower()
-        for (team, slot), name in self.ctx.player_names.items():
-            if name.lower() == seeked_player:
-                collect_player(self.ctx, team, slot)
-                return True
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, _ = player
+            collect_player(self.ctx, team, slot)
+            return True
 
         self.output(f"Could not find player {player_name} to collect")
         return False
@@ -1816,11 +1841,11 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_forfeit(self, player_name: str) -> bool:
         """Send out the remaining items from a player to their intended recipients."""
-        seeked_player = player_name.lower()
-        for (team, slot), name in self.ctx.player_names.items():
-            if name.lower() == seeked_player:
-                forfeit_player(self.ctx, team, slot)
-                return True
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, _ = player
+            forfeit_player(self.ctx, team, slot)
+            return True
 
         self.output(f"Could not find player {player_name} to release")
         return False
@@ -1828,12 +1853,12 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_allow_forfeit(self, player_name: str) -> bool:
         """Allow the specified player to use the !release command."""
-        seeked_player = player_name.lower()
-        for (team, slot), name in self.ctx.player_names.items():
-            if name.lower() == seeked_player:
-                self.ctx.allow_forfeits[(team, slot)] = True
-                self.output(f"Player {player_name} is now allowed to use the !release command at any time.")
-                return True
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, name = player
+            self.ctx.allow_forfeits[(team, slot)] = True
+            self.output(f"Player {name} is now allowed to use the !release command at any time.")
+            return True
 
         self.output(f"Could not find player {player_name} to allow the !release command for.")
         return False
@@ -1841,13 +1866,12 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_forbid_forfeit(self, player_name: str) -> bool:
         """"Disallow the specified player from using the !release command."""
-        seeked_player = player_name.lower()
-        for (team, slot), name in self.ctx.player_names.items():
-            if name.lower() == seeked_player:
-                self.ctx.allow_forfeits[(team, slot)] = False
-                self.output(
-                    f"Player {player_name} has to follow the server restrictions on use of the !release command.")
-                return True
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, name = player
+            self.ctx.allow_forfeits[(team, slot)] = False
+            self.output(f"Player {name} has to follow the server restrictions on use of the !release command.")
+            return True
 
         self.output(f"Could not find player {player_name} to forbid the !release command for.")
         return False
