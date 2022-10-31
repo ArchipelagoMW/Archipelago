@@ -25,19 +25,13 @@ def create():
             os.unlink(full_path)
 
     def dictify_range(option: typing.Union[Options.Range, Options.SpecialRange]):
-        data = {}
-        special = getattr(option, "special_range_cutoff", None)
-        if special is not None:
-            data[special] = 0
-        data.update({
-            option.default: 50
-        })
+        data = {option.default: 50}
+
         for sub_option in {"random", "random-low", "random-high"}:
             if sub_option != option.default:
                 data[sub_option] = 0
 
         notes = {
-            special: "minimum value without special meaning",
             option.range_start: f"minimum value is {option.range_start}",
             option.range_end: f"maximum value is {option.range_end}"
         }
@@ -45,20 +39,9 @@ def create():
         for name, number in getattr(option, "special_range_names", {}).items():
             if number in data:
                 data[name] = data[number]
-                if number in notes:
-                    notes[name] = f"equivalent to {number}"
-                    del notes[number]
-                else:
-                    notes[name] = f"equivalent to {number}"
-                if number == option.range_start:
-                    notes[number] = f"minimum value is {number}"
-                elif number == option.range_end:
-                    notes[number] = f"maximum value is {number}"
-                del data[number]
+                notes[name] = f"equivalent to {number}"
             else:
                 data[name] = 0
-        if None in notes:
-            del notes[None]
 
         return data, notes
 
