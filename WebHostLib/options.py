@@ -30,8 +30,6 @@ def create():
         if special is not None:
             data[special] = 0
         data.update({
-            option.range_start: 0,
-            option.range_end: 0,
             option.default: 50
         })
         for sub_option in {"random", "random-low", "random-high"}:
@@ -40,8 +38,8 @@ def create():
 
         notes = {
             special: "minimum value without special meaning",
-            option.range_start: "minimum value",
-            option.range_end: "maximum value"
+            option.range_start: f"minimum value is {option.range_start}",
+            option.range_end: f"maximum value is {option.range_end}"
         }
 
         for name, number in getattr(option, "special_range_names", {}).items():

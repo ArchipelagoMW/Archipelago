@@ -28,7 +28,6 @@ game:
   {{ game }}: 1
 requires:
   version: {{ __version__ }} # Version of Archipelago required for this yaml to work as expected.
-# Shared Options supported by all games:
 
 {%- macro range_option(option) %}
     # You can add additional values between minimum and maximum
