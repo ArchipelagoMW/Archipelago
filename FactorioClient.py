@@ -301,7 +301,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
     stream_factorio_output(factorio_process.stderr, factorio_queue, factorio_process)
     try:
         while not ctx.exit_event.is_set():
-            if factorio_process.poll():
+            if factorio_process.poll() is not None:
                 factorio_server_logger.info("Factorio server has exited.")
                 ctx.exit_event.set()
 
@@ -349,12 +349,34 @@ async def factorio_server_watcher(ctx: FactorioContext):
     except Exception as e:
         logging.exception(e)
         logging.error("Aborted Factorio Server Bridge")
-        ctx.rcon_client = None
         ctx.exit_event.set()
 
     finally:
-        factorio_process.terminate()
-        factorio_process.wait(5)
+        if factorio_process.poll() is not None:
+            if ctx.rcon_client:
+                ctx.rcon_client.close()
+                ctx.rcon_client = None
+            return
+
+        sent_quit = False
+        if ctx.rcon_client:
+            # Attempt clean quit through RCON.
+            try:
+                ctx.rcon_client.send_command("/quit")
+            except factorio_rcon.RCONNetworkError:
+                pass
+            else:
+                sent_quit = True
+            ctx.rcon_client.close()
+            ctx.rcon_client = None
+        if not sent_quit:
+            # Attempt clean quit using SIGTERM. (Note that on Windows this kills the process instead.)
+            factorio_process.terminate()
+
+        try:
+            factorio_process.wait(10)
+        except subprocess.TimeoutExpired:
+            factorio_process.kill()
 
 
 async def get_info(ctx: FactorioContext, rcon_client: factorio_rcon.RCONClient):
