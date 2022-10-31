@@ -5,7 +5,7 @@ import logging
 import random
 import urllib.request
 import urllib.parse
-from typing import Set, Dict, Tuple, Callable, Any, Union
+from typing import Set, Dict, Tuple, Callable, Any, Union, Optional
 import os
 from collections import Counter, ChainMap
 import string
@@ -374,7 +374,7 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
     return weights
 
 
-def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
+def roll_meta_option(option_key: str, game: Optional[str], category_dict: Dict) -> Any:
     if not game:
         return get_choice(option_key, category_dict)
     if game in AutoWorldRegister.world_types:
@@ -393,7 +393,7 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
                           "misery_mire_medallion", "turtle_rock_medallion", "sprite_pool", "sprite",
                           "random_sprite_on_event"}:
             return get_choice(option_key, category_dict)
-    raise Exception(f"Error generating meta option {option_key} for {game}.")
+    raise ValueError(f"Error generating meta option {option_key} for {game}.")
 
 
 def roll_linked_options(weights: dict) -> dict:
