@@ -33,6 +33,10 @@ from worlds.factorio import Factorio
 class FactorioCommandProcessor(ClientCommandProcessor):
     ctx: FactorioContext
 
+    def _cmd_energy_link(self):
+        """Print the status of the energy link."""
+        self.output(f"Energy Link: {self.ctx.energy_link_status}")
+
     @mark_raw
     def _cmd_factorio(self, text: str) -> bool:
         """Send the following command to the bound Factorio Server."""
@@ -112,6 +116,15 @@ class FactorioContext(CommonContext):
     def print_to_game(self, text):
         self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
                                       f"{text}")
+
+    @property
+    def energy_link_status(self) -> str:
+        if not self.energy_link_increment:
+            return "Disabled"
+        elif self.current_energy_link_value is None:
+            return "Standby"
+        else:
+            return f"{Utils.format_SI_prefix(self.current_energy_link_value)}J"
 
     def on_deathlink(self, data: dict):
         if self.rcon_client:
@@ -318,7 +331,10 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
                     factorio_server_logger.debug(msg)
-                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-send-filter", msg):
+                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command energy-link$", msg):
+                    factorio_server_logger.debug(msg)
+                    ctx.print_to_game(f"Energy Link: {ctx.energy_link_status}")
+                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-send-filter$", msg):
                     factorio_server_logger.debug(msg)
                     ctx.toggle_filter_item_sends()
                 elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-chat$", msg):

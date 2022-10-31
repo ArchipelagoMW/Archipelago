@@ -146,7 +146,7 @@ class CommonContext:
     server_task: typing.Optional["asyncio.Task[None]"] = None
     server: typing.Optional[Endpoint] = None
     server_version: Version = Version(0, 0, 0)
-    current_energy_link_value: int = 0  # to display in UI, gets set by server
+    current_energy_link_value: typing.Optional[int] = None  # to display in UI, gets set by server
 
     last_death_link: float = time.time()  # last send/received death link on AP layer
 
