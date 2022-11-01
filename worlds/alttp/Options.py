@@ -598,6 +598,7 @@ class RandomSprite(OptionList):
     """Allows different random sprite events to be simultaneously enabled."""
     display_name = "Random Sprite Events"
     valid_keys = {"on_hit", "on_enter", "on_exit", "on_slash", "on_item", "on_bonk"}
+    default = list(valid_keys)
 
 
 class RandomSpriteToggle(Toggle):
