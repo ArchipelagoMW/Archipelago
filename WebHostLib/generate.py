@@ -1,23 +1,23 @@
-import os
-import tempfile
-import random
 import json
+import os
+import pickle
+import random
+import tempfile
 import zipfile
 from collections import Counter
 from typing import Dict, Optional, Any
-from Utils import __version__
 
 from flask import request, flash, redirect, url_for, session, render_template
+from pony.orm import commit, db_session
 
-from worlds.alttp.EntranceRandomizer import parse_arguments
-from Main import main as ERmain
 from BaseClasses import seeddigits, get_seed
 from Generate import handle_name, PlandoSettings
-import pickle
-
-from .models import Generation, STATE_ERROR, STATE_QUEUED, commit, db_session, Seed, UUID
+from Main import main as ERmain
+from Utils import __version__
 from WebHostLib import app
+from worlds.alttp.EntranceRandomizer import parse_arguments
 from .check import get_yaml_data, roll_options
+from .models import Generation, STATE_ERROR, STATE_QUEUED, Seed, UUID
 from .upload import upload_zip_to_db
 
 

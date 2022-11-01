@@ -91,12 +91,18 @@ class ClientCommandProcessor(CommandProcessor):
 
     def _cmd_items(self):
         """List all item names for the currently running game."""
+        if not self.ctx.game:
+            self.output("No game set, cannot determine existing items.")
+            return False
         self.output(f"Item Names for {self.ctx.game}")
         for item_name in AutoWorldRegister.world_types[self.ctx.game].item_name_to_id:
             self.output(item_name)
 
     def _cmd_locations(self):
         """List all location names for the currently running game."""
+        if not self.ctx.game:
+            self.output("No game set, cannot determine existing locations.")
+            return False
         self.output(f"Location Names for {self.ctx.game}")
         for location_name in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id:
             self.output(location_name)
@@ -150,6 +156,11 @@ class CommonContext:
     password: typing.Optional[str]
     hint_cost: typing.Optional[int]
     player_names: typing.Dict[int, str]
+
+    finished_game: bool
+    ready: bool
+    auth: typing.Optional[str]
+    seed_name: typing.Optional[str]
 
     # locations
     locations_checked: typing.Set[int]  # local state
@@ -207,6 +218,12 @@ class CommonContext:
         # execution
         self.keep_alive_task = asyncio.create_task(keep_alive(self), name="Bouncy")
 
+    @property
+    def suggested_address(self) -> str:
+        if self.server_address:
+            return self.server_address
+        return Utils.persistent_load().get("client", {}).get("last_server_address", "")
+
     @functools.cached_property
     def raw_text_parser(self) -> RawJSONtoTextParser:
         return RawJSONtoTextParser(self)
@@ -218,9 +235,9 @@ class CommonContext:
             return len(self.checked_locations | self.missing_locations)
 
     async def connection_closed(self):
-        self.reset_server_state()
         if self.server and self.server.socket is not None:
             await self.server.socket.close()
+        self.reset_server_state()
 
     def reset_server_state(self):
         self.auth = None
@@ -274,6 +291,7 @@ class CommonContext:
                 self.auth = await self.console_input()
 
     async def send_connect(self, **kwargs: typing.Any) -> None:
+        """ send `Connect` packet to log in to server """
         payload = {
             'cmd': 'Connect',
             'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
@@ -285,10 +303,13 @@ class CommonContext:
         await self.send_msgs([payload])
 
     async def console_input(self) -> str:
+        if self.ui:
+            self.ui.focus_textinput()
         self.input_requests += 1
         return await self.input_queue.get()
 
-    async def connect(self, address=None):
+    async def connect(self, address: typing.Optional[str] = None) -> None:
+        """ disconnect any previous connection, and open new connection to the server """
         await self.disconnect()
         self.server_task = asyncio.create_task(server_loop(self, address), name="server loop")
 
@@ -298,6 +319,12 @@ class CommonContext:
         if slot in self.slot_info:
             return self.slot in self.slot_info[slot].group_members
         return False
+
+    def is_uninteresting_item_send(self, print_json_packet: dict) -> bool:
+        """Helper function for filtering out ItemSend prints that do not concern the local player."""
+        return print_json_packet.get("type", "") == "ItemSend" \
+            and not self.slot_concerns_self(print_json_packet["receiving"]) \
+            and not self.slot_concerns_self(print_json_packet["item"].player)
 
     def on_print(self, args: dict):
         logger.info(args["text"])
@@ -646,6 +673,9 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.checked_locations = set(args["checked_locations"])
         ctx.server_locations = ctx.missing_locations | ctx. checked_locations
 
+        server_url = urllib.parse.urlparse(ctx.server_address)
+        Utils.persistent_store("client", "last_server_address", server_url.netloc)
+
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
 
@@ -756,7 +786,6 @@ if __name__ == '__main__':
     async def main(args):
         ctx = TextContext(args.connect, args.password)
         ctx.auth = args.name
-        ctx.server_address = args.connect
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
         if gui_enabled:
