@@ -81,7 +81,7 @@ def KholdstareDefeatRule(state, player: int) -> bool:
                     state.has('Fire Rod', player) or
                     (
                             state.has('Bombos', player) and
-                            (state.has_sword(player) or state.world.swordless[player])
+                            (state.has_sword(player) or state.multiworld.swordless[player])
                     )
             ) and
             (
@@ -90,7 +90,7 @@ def KholdstareDefeatRule(state, player: int) -> bool:
                     (
                             state.has('Fire Rod', player) and
                             state.has('Bombos', player) and
-                            state.world.swordless[player] and
+                            state.multiworld.swordless[player] and
                             state.can_extend_magic(player, 16)
                     )
             )
@@ -114,7 +114,7 @@ def AgahnimDefeatRule(state, player: int) -> bool:
 
 
 def GanonDefeatRule(state, player: int) -> bool:
-    if state.world.swordless[player]:
+    if state.multiworld.swordless[player]:
         return state.has('Hammer', player) and \
                state.has_fire_source(player) and \
                state.has('Silver Bow', player) and \
@@ -123,7 +123,7 @@ def GanonDefeatRule(state, player: int) -> bool:
     can_hurt = state.has_beam_sword(player)
     common = can_hurt and state.has_fire_source(player)
     # silverless ganon may be needed in anything higher than no glitches
-    if state.world.logic[player] != 'noglitches':
+    if state.multiworld.logic[player] != 'noglitches':
         # need to light torch a sufficient amount of times
         return common and (state.has('Tempered Sword', player) or state.has('Golden Sword', player) or (
                 state.has('Silver Bow', player) and state.can_shoot_arrows(player)) or

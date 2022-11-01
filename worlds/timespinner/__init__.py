@@ -64,47 +64,47 @@ class TimespinnerWorld(World):
 
     def generate_early(self):
         # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
-        if self.world.start_inventory[self.player].value.pop('Meyef', 0) > 0:
-            self.world.StartWithMeyef[self.player].value = self.world.StartWithMeyef[self.player].option_true
-        if self.world.start_inventory[self.player].value.pop('Talaria Attachment', 0) > 0:
-            self.world.QuickSeed[self.player].value = self.world.QuickSeed[self.player].option_true
-        if self.world.start_inventory[self.player].value.pop('Jewelry Box', 0) > 0:
-            self.world.StartWithJewelryBox[self.player].value = self.world.StartWithJewelryBox[self.player].option_true
+        if self.multiworld.start_inventory[self.player].value.pop('Meyef', 0) > 0:
+            self.multiworld.StartWithMeyef[self.player].value = self.multiworld.StartWithMeyef[self.player].option_true
+        if self.multiworld.start_inventory[self.player].value.pop('Talaria Attachment', 0) > 0:
+            self.multiworld.QuickSeed[self.player].value = self.multiworld.QuickSeed[self.player].option_true
+        if self.multiworld.start_inventory[self.player].value.pop('Jewelry Box', 0) > 0:
+            self.multiworld.StartWithJewelryBox[self.player].value = self.multiworld.StartWithJewelryBox[self.player].option_true
 
     def create_regions(self):
-        create_regions(self.world, self.player, get_locations(self.world, self.player),
-                        self.location_cache, self.pyramid_keys_unlock)
+        create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player),
+                       self.location_cache, self.pyramid_keys_unlock)
 
     def create_item(self, name: str) -> Item:
-        return create_item_with_correct_settings(self.world, self.player, name)
+        return create_item_with_correct_settings(self.multiworld, self.player, name)
 
     def get_filler_item_name(self) -> str:
-        return self.world.random.choice(filler_items)
+        return self.multiworld.random.choice(filler_items)
 
     def set_rules(self):
         setup_events(self.player, self.locked_locations, self.location_cache)
 
-        self.world.completion_condition[self.player] = lambda state: state.has('Killed Nightmare', self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has('Killed Nightmare', self.player)
 
     def generate_basic(self):
-        excluded_items = get_excluded_items(self, self.world, self.player)
+        excluded_items = get_excluded_items(self, self.multiworld, self.player)
 
-        assign_starter_items(self.world, self.player, excluded_items, self.locked_locations)
+        assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations)
 
-        if not is_option_enabled(self.world, self.player, "QuickSeed") and not is_option_enabled(self.world, self.player, "Inverted"):
-            place_first_progression_item(self.world, self.player, excluded_items, self.locked_locations)
+        if not is_option_enabled(self.multiworld, self.player, "QuickSeed") and not is_option_enabled(self.multiworld, self.player, "Inverted"):
+            place_first_progression_item(self.multiworld, self.player, excluded_items, self.locked_locations)
 
-        pool = get_item_pool(self.world, self.player, excluded_items)
+        pool = get_item_pool(self.multiworld, self.player, excluded_items)
 
-        fill_item_pool_with_dummy_items(self, self.world, self.player, self.locked_locations, self.location_cache, pool)
+        fill_item_pool_with_dummy_items(self, self.multiworld, self.player, self.locked_locations, self.location_cache, pool)
 
-        self.world.itempool += pool
+        self.multiworld.itempool += pool
 
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
 
         for option_name in timespinner_options:
-            slot_data[option_name] = get_option_value(self.world, self.player, option_name)
+            slot_data[option_name] = get_option_value(self.multiworld, self.player, option_name)
 
         slot_data["StinkyMaw"] = True
         slot_data["ProgressiveVerticalMovement"] = False

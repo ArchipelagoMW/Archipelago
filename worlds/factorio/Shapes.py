@@ -1,7 +1,10 @@
-from typing import Dict, List, Set
+from typing import Dict, List, Set, TYPE_CHECKING
 from collections import deque
 
 from .Options import TechTreeLayout
+
+if TYPE_CHECKING:
+    from . import Factorio, FactorioScienceLocation
 
 funnel_layers = {TechTreeLayout.option_small_funnels: 3,
                  TechTreeLayout.option_medium_funnels: 4,
@@ -12,24 +15,26 @@ funnel_slice_sizes = {TechTreeLayout.option_small_funnels: 6,
                       TechTreeLayout.option_large_funnels: 15}
 
 
-def get_shapes(factorio_world) -> Dict[str, List[str]]:
-    world = factorio_world.world
+def _sorter(location: "FactorioScienceLocation"):
+    return location.complexity, location.rel_cost
+
+
+def get_shapes(factorio_world: "Factorio") -> Dict["FactorioScienceLocation", Set["FactorioScienceLocation"]]:
+    world = factorio_world.multiworld
     player = factorio_world.player
-    prerequisites: Dict[str, Set[str]] = {}
+    prerequisites: Dict["FactorioScienceLocation", Set["FactorioScienceLocation"]] = {}
     layout = world.tech_tree_layout[player].value
-    custom_technologies = factorio_world.custom_technologies
-    tech_names: List[str] = list(set(custom_technologies) - world.worlds[player].static_nodes)
-    tech_names.sort()
-    world.random.shuffle(tech_names)
+    locations: List["FactorioScienceLocation"] = sorted(factorio_world.locations, key=lambda loc: loc.name)
+    world.random.shuffle(locations)
 
     if layout == TechTreeLayout.option_single:
         pass
     elif layout == TechTreeLayout.option_small_diamonds:
         slice_size = 4
-        while len(tech_names) > slice_size:
-            slice = tech_names[:slice_size]
-            tech_names = tech_names[slice_size:]
-            slice.sort(key=lambda tech_name: len(custom_technologies[tech_name].get_prior_technologies()))
+        while len(locations) > slice_size:
+            slice = locations[:slice_size]
+            locations = locations[slice_size:]
+            slice.sort(key=_sorter)
             diamond_0, diamond_1, diamond_2, diamond_3 = slice
 
             #   0    |
@@ -40,10 +45,10 @@ def get_shapes(factorio_world) -> Dict[str, List[str]]:
 
     elif layout == TechTreeLayout.option_medium_diamonds:
         slice_size = 9
-        while len(tech_names) > slice_size:
-            slice = tech_names[:slice_size]
-            tech_names = tech_names[slice_size:]
-            slice.sort(key=lambda tech_name: len(custom_technologies[tech_name].get_prior_technologies()))
+        while len(locations) > slice_size:
+            slice = locations[:slice_size]
+            locations = locations[slice_size:]
+            slice.sort(key=_sorter)
 
             #     0     |
             #   1   2   |
@@ -65,10 +70,10 @@ def get_shapes(factorio_world) -> Dict[str, List[str]]:
 
     elif layout == TechTreeLayout.option_large_diamonds:
         slice_size = 16
-        while len(tech_names) > slice_size:
-            slice = tech_names[:slice_size]
-            tech_names = tech_names[slice_size:]
-            slice.sort(key=lambda tech_name: len(custom_technologies[tech_name].get_prior_technologies()))
+        while len(locations) > slice_size:
+            slice = locations[:slice_size]
+            locations = locations[slice_size:]
+            slice.sort(key=_sorter)
 
             #       0       |
             #     1   2     |
@@ -101,10 +106,10 @@ def get_shapes(factorio_world) -> Dict[str, List[str]]:
 
     elif layout == TechTreeLayout.option_small_pyramids:
         slice_size = 6
-        while len(tech_names) > slice_size:
-            slice = tech_names[:slice_size]
-            tech_names = tech_names[slice_size:]
-            slice.sort(key=lambda tech_name: len(custom_technologies[tech_name].get_prior_technologies()))
+        while len(locations) > slice_size:
+            slice = locations[:slice_size]
+            locations = locations[slice_size:]
+            slice.sort(key=_sorter)
 
             #        0       |
             #      1   2     |
@@ -119,10 +124,10 @@ def get_shapes(factorio_world) -> Dict[str, List[str]]:
 
     elif layout == TechTreeLayout.option_medium_pyramids:
         slice_size = 10
-        while len(tech_names) > slice_size:
-            slice = tech_names[:slice_size]
-            tech_names = tech_names[slice_size:]
-            slice.sort(key=lambda tech_name: len(custom_technologies[tech_name].get_prior_technologies()))
+        while len(locations) > slice_size:
+            slice = locations[:slice_size]
+            locations = locations[slice_size:]
+            slice.sort(key=_sorter)
 
             #        0       |
             #      1   2     |
@@ -144,10 +149,10 @@ def get_shapes(factorio_world) -> Dict[str, List[str]]:
 
     elif layout == TechTreeLayout.option_large_pyramids:
         slice_size = 15
-        while len(tech_names) > slice_size:
-            slice = tech_names[:slice_size]
-            tech_names = tech_names[slice_size:]
-            slice.sort(key=lambda tech_name: len(custom_technologies[tech_name].get_prior_technologies()))
+        while len(locations) > slice_size:
+            slice = locations[:slice_size]
+            locations = locations[slice_size:]
+            slice.sort(key=_sorter)
 
             #         0          |
             #       1   2        |
@@ -176,17 +181,17 @@ def get_shapes(factorio_world) -> Dict[str, List[str]]:
 
     elif layout in funnel_layers:
         slice_size = funnel_slice_sizes[layout]
-        world.random.shuffle(tech_names)
+        world.random.shuffle(locations)
 
-        while len(tech_names) > slice_size:
-            tech_names = tech_names[slice_size:]
-            current_tech_names = tech_names[:slice_size]
+        while len(locations) > slice_size:
+            locations = locations[slice_size:]
+            current_locations = locations[:slice_size]
             layer_size = funnel_layers[layout]
             previous_slice = []
-            current_tech_names.sort(key=lambda tech_name: len(custom_technologies[tech_name].get_prior_technologies()))
+            current_locations.sort(key=_sorter)
             for layer in range(funnel_layers[layout]):
-                slice = current_tech_names[:layer_size]
-                current_tech_names = current_tech_names[layer_size:]
+                slice = current_locations[:layer_size]
+                current_locations = current_locations[layer_size:]
                 if previous_slice:
                     for i, tech_name in enumerate(slice):
                         prerequisites.setdefault(tech_name, set()).update(previous_slice[i:i+2])
@@ -202,10 +207,10 @@ def get_shapes(factorio_world) -> Dict[str, List[str]]:
         #              15             |
         #              16             |
         slice_size = 17
-        while len(tech_names) > slice_size:
-            slice = tech_names[:slice_size]
-            tech_names = tech_names[slice_size:]
-            slice.sort(key=lambda tech_name: len(custom_technologies[tech_name].get_prior_technologies()))
+        while len(locations) > slice_size:
+            slice = locations[:slice_size]
+            locations = locations[slice_size:]
+            slice.sort(key=_sorter)
 
             prerequisites[slice[1]] = {slice[0]}
             prerequisites[slice[2]] = {slice[0]}
@@ -229,13 +234,13 @@ def get_shapes(factorio_world) -> Dict[str, List[str]]:
             prerequisites[slice[15]] = {slice[9], slice[10], slice[11], slice[12], slice[13], slice[14]}
             prerequisites[slice[16]] = {slice[15]}
     elif layout == TechTreeLayout.option_choices:
-        tech_names.sort(key=lambda tech_name: len(custom_technologies[tech_name].get_prior_technologies()))
-        current_choices = deque([tech_names[0]])
-        tech_names = tech_names[1:]
-        while len(tech_names) > 1:
+        locations.sort(key=_sorter)
+        current_choices = deque([locations[0]])
+        locations = locations[1:]
+        while len(locations) > 1:
             source = current_choices.pop()
-            choices = tech_names[:2]
-            tech_names = tech_names[2:]
+            choices = locations[:2]
+            locations = locations[2:]
             for choice in choices:
                 prerequisites[choice] = {source}
             current_choices.extendleft(choices)
