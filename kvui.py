@@ -49,7 +49,7 @@ fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, dura
 
 
 from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
-from Utils import AsyncStarter
+from Utils import async_start
 
 if typing.TYPE_CHECKING:
     import CommonClient
@@ -428,9 +428,9 @@ class GameManager(App):
         if self.ctx.server:
             self.ctx.server_address = None
             self.ctx.username = None
-            AsyncStarter.start(self.ctx.disconnect())
+            async_start(self.ctx.disconnect())
         else:
-            AsyncStarter.start(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
+            async_start(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
 
     def on_stop(self):
         # "kill" input tasks

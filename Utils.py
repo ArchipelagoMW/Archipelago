@@ -653,23 +653,19 @@ def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
     return buffer
 
 
-class AsyncStarter:
-    """
-    https://docs.python.org/3.10/library/asyncio-task.html#asyncio.create_task
+_faf_tasks: "Set[asyncio.Task[None]]" = set()
 
-    Python docs:
-    ```
-    Important: Save a reference to the result of [asyncio.create_task],
-    to avoid a task disappearing mid-execution.
-    ```
-    """
-    # implementation follows the pattern given in that documentation
 
-    _tasks: "ClassVar[Set[asyncio.Task[None]]]" = set()
+def async_start(co: Coroutine[None, None, None], name: Optional[str] = None) -> None:
+    """ Use this to start an async function running without waiting for it. "fire-and-forget" """
+    # https://docs.python.org/3.10/library/asyncio-task.html#asyncio.create_task
+    # Python docs:
+    # ```
+    # Important: Save a reference to the result of [asyncio.create_task],
+    # to avoid a task disappearing mid-execution.
+    # ```
+    # This implementation follows the pattern given in that documentation.
 
-    @staticmethod
-    def start(co: Coroutine[None, None, None], name: Optional[str] = None) -> None:
-        """ Use this to start an async function running without waiting for it. """
-        task = asyncio.create_task(co, name=name)
-        AsyncStarter._tasks.add(task)
-        task.add_done_callback(AsyncStarter._tasks.discard)
+    task = asyncio.create_task(co, name=name)
+    _faf_tasks.add(task)
+    task.add_done_callback(_faf_tasks.discard)
