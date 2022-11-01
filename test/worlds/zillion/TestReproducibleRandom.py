@@ -9,7 +9,7 @@ class SeedTest(ZillionTestBase):
 
     def test_reproduce_seed(self) -> None:
         self.world_setup(42)
-        z_world = cast(ZillionWorld, self.world.worlds[1])
+        z_world = cast(ZillionWorld, self.multiworld.worlds[1])
         r = z_world.zz_system.randomizer
         assert r
         randomized_requirements_first = tuple(
@@ -18,7 +18,7 @@ class SeedTest(ZillionTestBase):
         )
 
         self.world_setup(42)
-        z_world = cast(ZillionWorld, self.world.worlds[1])
+        z_world = cast(ZillionWorld, self.multiworld.worlds[1])
         r = z_world.zz_system.randomizer
         assert r
         randomized_requirements_second = tuple(

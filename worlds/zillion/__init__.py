@@ -133,7 +133,7 @@ class ZillionWorld(World):
             self.zz_system.make_patcher(rom_dir_name)
             self.zz_system.make_randomizer(zz_op)
 
-            self.zz_system.seed(self.world.seed)
+            self.zz_system.seed(self.multiworld.seed)
             self.zz_system.make_map()
 
         # just in case the options changed anything (I don't think they do)

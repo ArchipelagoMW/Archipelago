@@ -9,7 +9,7 @@ from worlds.AutoWorld import call_all
 
 class WorldTestBase(unittest.TestCase):
     options: typing.Dict[str, typing.Any] = {}
-    world: MultiWorld
+    multiworld: MultiWorld
 
     game: typing.ClassVar[str]  # define game name in subclass, example "Secret of Evermore"
     auto_construct: typing.ClassVar[bool] = True
