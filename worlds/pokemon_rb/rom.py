@@ -409,6 +409,8 @@ def generate_output(self, output_directory: str):
     data[rom_addresses["Starting_Money_High"]] = int(money[:2], 16)
     data[rom_addresses["Starting_Money_Middle"]] = int(money[2:4], 16)
     data[rom_addresses["Starting_Money_Low"]] = int(money[4:], 16)
+    data[rom_addresses["Text_Badges_Needed_Viridian_Gym"]] = encode_text(
+        str(self.multiworld.viridian_gym_condition[self.player].value))[0]
     data[rom_addresses["Text_Badges_Needed"]] = encode_text(
         str(max(self.multiworld.victory_road_condition[self.player].value,
                 self.multiworld.elite_four_condition[self.player].value)))[0]
@@ -545,7 +547,7 @@ def generate_output(self, output_directory: str):
         mons.sort(key=lambda mon: 0 if mon == self.multiworld.get_location("Pallet Town - Starter 2", self.player).item.name
                   else 1 if mon == self.multiworld.get_location("Pallet Town - Starter 1", self.player).item.name else
                   2 if mon == self.multiworld.get_location("Pallet Town - Starter 3", self.player).item.name else 3)
-    write_bytes(data, encode_text(self.multiworld.seed_name, 20, True), rom_addresses['Title_Seed'])
+    write_bytes(data, encode_text(self.multiworld.seed_name[-20:], 20, True), rom_addresses['Title_Seed'])
 
     slot_name = self.multiworld.player_name[self.player]
     slot_name.replace("@", " ")
@@ -556,8 +558,8 @@ def generate_output(self, output_directory: str):
     write_bytes(data, self.trainer_name, rom_addresses['Player_Name'])
     write_bytes(data, self.rival_name, rom_addresses['Rival_Name'])
 
-    write_bytes(data, basemd5.digest(), 0xFFCC)
-    write_bytes(data, self.multiworld.seed_name.encode(), 0xFFDC)
+    write_bytes(data, basemd5.digest(), 0xFFCB)
+    write_bytes(data, self.multiworld.seed_name.encode(), 0xFFDB)
     write_bytes(data, self.multiworld.player_name[self.player].encode(), 0xFFF0)
 
 

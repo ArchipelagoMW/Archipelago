@@ -80,6 +80,9 @@ class PokemonRedBlueWorld(World):
         self.trainer_name = encode_name(self.multiworld.trainer_name[self.player].value, "Player")
         self.rival_name = encode_name(self.multiworld.rival_name[self.player].value, "Rival")
 
+        if len(self.multiworld.player_name[self.player].encode()) > 16:
+            raise Exception(f"Player name too long for {self.multiworld.get_player_name(self.player)}. Player name cannot exceed 16 bytes for Pokémon Red and Blue.")
+
         if self.multiworld.badges_needed_for_hm_moves[self.player].value >= 2:
             badges_to_add = ["Marsh Badge", "Volcano Badge", "Earth Badge"]
             if self.multiworld.badges_needed_for_hm_moves[self.player].value == 3:
@@ -96,6 +99,7 @@ class PokemonRedBlueWorld(World):
         process_pokemon_data(self)
 
     def create_items(self) -> None:
+        start_inventory = self.multiworld.start_inventory[self.player].value.copy()
         locations = [location for location in location_data if location.type == "Item"]
         item_pool = []
         for location in locations:
@@ -105,7 +109,12 @@ class PokemonRedBlueWorld(World):
                 continue
             if location.name == "Celadon City - Mansion Lady" and not self.multiworld.tea[self.player].value:
                 continue
-            item = self.create_item(location.original_item)
+            if location.original_item in self.multiworld.start_inventory[self.player].value and \
+                    location.original_item in item_groups["Unique"]:
+                start_inventory[location.original_item] -= 1
+                item = self.create_filler()
+            else:
+                item = self.create_item(location.original_item)
             if location.event:
                 self.multiworld.get_location(location.name, self.player).place_locked_item(item)
             elif ("Badge" not in item.name or self.multiworld.badgesanity[self.player].value) and \
@@ -115,8 +124,7 @@ class PokemonRedBlueWorld(World):
 
         self.multiworld.itempool += item_pool
 
-
-    def pre_fill(self):
+    def generate_basic(self) -> None:
 
         process_wild_pokemon(self)
         process_static_pokemon(self)
@@ -169,7 +177,7 @@ class PokemonRedBlueWorld(World):
             unplaced_items = []
             if loc.name in self.multiworld.priority_locations[self.player].value:
                 add_item_rule(loc, lambda i: i.advancement)
-            for item in self.multiworld.itempool:
+            for item in reversed(self.multiworld.itempool):
                 if item.player == self.player and loc.item_rule(item):
                     self.multiworld.itempool.remove(item)
                     state = sweep_from_pool(self.multiworld.state, self.multiworld.itempool + unplaced_items)
@@ -197,11 +205,14 @@ class PokemonRedBlueWorld(World):
 
     def create_regions(self):
         if self.multiworld.free_fly_location[self.player].value:
-            fly_map_code = self.multiworld.random.randint(5, 9)
+            if self.multiworld.old_man[self.player].value == 0:
+                fly_map_code = self.multiworld.random.randint(1, 9)
+            else:
+                fly_map_code = self.multiworld.random.randint(5, 9)
+                if fly_map_code == 5:
+                    fly_map_code = 4
             if fly_map_code == 9:
                 fly_map_code = 10
-            if fly_map_code == 5:
-                fly_map_code = 4
         else:
             fly_map_code = 0
         self.fly_map = ["Pallet Town", "Viridian City", "Pewter City", "Cerulean City", "Lavender Town",
@@ -236,7 +247,29 @@ class PokemonRedBlueWorld(World):
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice([item for item in item_table if item_table[item].classification in
-                                         [ItemClassification.filler, ItemClassification.trap]])
+                                         [ItemClassification.filler, ItemClassification.trap] and item not in
+                                         item_groups["Vending Machine Drinks"]])
+
+    def fill_slot_data(self) -> dict:
+        # for trackers
+        return {
+            "second_fossil_check_condition": self.multiworld.second_fossil_check_condition[self.player].value,
+            "require_item_finder": self.multiworld.require_item_finder[self.player].value,
+            "randomize_hidden_items": self.multiworld.randomize_hidden_items[self.player].value,
+            "badges_needed_for_hm_moves": self.multiworld.badges_needed_for_hm_moves[self.player].value,
+            "oaks_aide_rt_2": self.multiworld.oaks_aide_rt_2[self.player].value,
+            "oaks_aide_rt_11": self.multiworld.oaks_aide_rt_11[self.player].value,
+            "oaks_aide_rt_15": self.multiworld.oaks_aide_rt_15[self.player].value,
+            "extra_key_items": self.multiworld.extra_key_items[self.player].value,
+            "extra_strength_boulders": self.multiworld.extra_strength_boulders[self.player].value,
+            "tea": self.multiworld.tea[self.player].value,
+            "old_man": self.multiworld.old_man[self.player].value,
+            "elite_four_condition": self.multiworld.elite_four_condition[self.player].value,
+            "victory_road_condition": self.multiworld.victory_road_condition[self.player].value,
+            "viridian_gym_condition": self.multiworld.viridian_gym_condition[self.player].value,
+            "free_fly_map": self.fly_map_code,
+            "extra_badges": self.extra_badges
+        }
 
 
 class PokemonRBItem(Item):
