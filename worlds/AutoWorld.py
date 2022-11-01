@@ -304,6 +304,11 @@ class World(metaclass=AutoWorldRegister):
     def get_pre_fill_items(self) -> List["Item"]:
         return []
 
+    # when an item needs to appear out of nowhere, as they were removed by use of for example item links,
+    # you can specify here how this is handled.
+    def create_filler(self) -> "Item":
+        return self.create_item(self.get_filler_item_name())
+
     # following methods should not need to be overridden.
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         name = self.collect_item(state, item)
@@ -320,9 +325,6 @@ class World(metaclass=AutoWorldRegister):
                 del (state.prog_items[name, self.player])
             return True
         return False
-
-    def create_filler(self) -> "Item":
-        return self.create_item(self.get_filler_item_name())
 
 
 # any methods attached to this can be used as part of CollectionState,
