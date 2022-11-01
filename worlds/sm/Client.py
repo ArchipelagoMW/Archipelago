@@ -4,7 +4,7 @@ import time
 
 from NetUtils import ClientStatus, color
 from worlds.AutoSNIClient import SNIClient
-from .Rom import ROM_PLAYER_LIMIT as SM_ROM_PLAYER_LIMIT
+from .Rom import SM_ROM_MAX_PLAYERID
 
 snes_logger = logging.getLogger("SNES")
 
@@ -143,7 +143,7 @@ class SMSNIClient(SNIClient):
             else:
                 location_id = 0x00 #backward compat
 
-            player_id = item.player if item.player <= SM_ROM_PLAYER_LIMIT else 0
+            player_id = item.player if item.player <= SM_ROM_MAX_PLAYERID else 0
             snes_buffered_write(ctx, SM_RECV_QUEUE_START + item_out_ptr * 4, bytes(
                 [player_id & 0xFF, (player_id >> 8) & 0xFF, item_id & 0xFF, location_id & 0xFF]))
             item_out_ptr += 1

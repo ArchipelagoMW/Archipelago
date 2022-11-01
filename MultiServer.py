@@ -1804,6 +1804,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def resolve_player(self, input_name: str) -> typing.Optional[typing.Tuple[int, int, str]]:
         """ returns (team, slot, player name) """
+        # TODO: clean up once we disallow multidata < 0.3.6, which has CI unique names
         # first match case
         for (team, slot), name in self.ctx.player_names.items():
             if name == input_name:

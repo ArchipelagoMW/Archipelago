@@ -102,7 +102,7 @@ def create_regions(world: MultiWorld, player: int):
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, RegionType.Generic, name, player)
-    ret.world = world
+    ret.multiworld = world
     if locations:
         for loc_name in locations:
             loc_data = location_table.get(loc_name)
