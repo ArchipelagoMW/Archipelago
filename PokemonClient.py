@@ -171,12 +171,12 @@ async def gb_sync_task(ctx: GBContext):
                     data_decoded = json.loads(data.decode())
                     #print(data_decoded)
 
-                    if ctx.seed_name and ctx.seed_name != bytes(data_decoded['seedName']).decode():
+                    if ctx.seed_name and ctx.seed_name != ''.join([chr(i) for i in data_decoded['seedName'] if i != 0]):
                         msg = "The server is running a different multiworld than your client is. (invalid seed_name)"
                         logger.info(msg, extra={'compact_gui': True})
                         ctx.gui_error('Error', msg)
                         error_status = CONNECTION_RESET_STATUS
-                    ctx.seed_name = bytes(data_decoded['seedName']).decode()
+                    ctx.seed_name = ''.join([chr(i) for i in data_decoded['seedName'] if i != 0])
                     if not ctx.auth:
                         ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
                         if ctx.auth == '':
@@ -261,7 +261,7 @@ async def patch_and_run_game(game_version, patch_file, ctx):
             patch = stream.read()
     patched_rom_data = bsdiff4.patch(base_patched_rom_data, patch)
 
-    written_hash = patched_rom_data[0xFFCC:0xFFDC]
+    written_hash = patched_rom_data[0xFFCB:0xFFDB]
     if written_hash == basemd5.digest():
         with open(comp_path, "wb") as patched_rom_file:
             patched_rom_file.write(patched_rom_data)

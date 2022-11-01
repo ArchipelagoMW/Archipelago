@@ -38,7 +38,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.5"
+__version__ = "0.3.6"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -232,6 +232,8 @@ def get_default_options() -> OptionsType:
         },
         "factorio_options": {
             "executable": os.path.join("factorio", "bin", "x64", "factorio"),
+            "filter_item_sends": False,
+            "bridge_chat_out": True,
         },
         "sni_options": {
             "sni": "SNI",

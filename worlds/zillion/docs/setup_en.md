@@ -15,7 +15,9 @@
 RetroArch 1.9.x will not work, as it is older than 1.10.3.
 
 1. Enter the RetroArch main menu screen.
-2. Go to Main Menu --> Online Updater --> Core Downloader. Scroll down and install "Sega - MS/GG (SMS Plus GX)".
+2. Go to Main Menu --> Online Updater --> Core Downloader. Scroll down and install one of these cores:
+   - "Sega - MS/GG (SMS Plus GX)"
+   - "Sega - MS/GG/MD/CD (Genesis Plus GX)
 3. Go to Settings --> User Interface. Set "Show Advanced Settings" to ON.
 4. Go to Settings --> Network. Set "Network Commands" to ON. (It is found below Request Device 16.) Leave the default
    Network Command Port at 55355.
@@ -47,6 +49,15 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 The [player settings page](/games/Zillion/player-settings) on the website allows you to configure your personal settings and export a config file from
 them.
 
+### Advanced settings
+
+The [advanced settings page](/tutorial/Archipelago/advanced_settings/en) describes more options you can put in your configuration file.
+ - A recommended setting for Zillion is:
+```
+  early_items:
+    Scope: 1
+```
+
 ### Verifying your config file
 
 If you would like to validate your config file to make sure it works, you may do so on the [YAML Validator page](/mysterycheck).
@@ -63,7 +74,7 @@ If you would like to validate your config file to make sure it works, you may do
     - Windows
        - Double-click on your patch file.
    The Zillion Client will launch automatically, and create your ROM in the location of the patch file.
-6. Open the ROM in RetroArch using the core "SMS Plus GX".
+6. Open the ROM in RetroArch using the core "SMS Plus GX" or "Genesis Plus GX".
     - For a single player game, any emulator (or a Sega Master System) can be used, but there are additional features with RetroArch and the Zillion Client.
        - If you press reset or restore a save state and return to the surface in the game, the Zillion Client will keep open all the doors that you have opened.
 
@@ -80,7 +91,7 @@ If you would like to validate your config file to make sure it works, you may do
     - This should automatically launch the client, and will also create your ROM in the same place as your patch file.
 3. Connect to the client.
     - Use RetroArch to open the ROM that was generated.
-    - Be sure to select the **SMS Plus GX** core. This core will allow external tools to read RAM data.
+    - Be sure to select the **SMS Plus GX** core or the **Genesis Plus GX** core. These cores will allow external tools to read RAM data.
 4. Connect to the Archipelago Server.
     - The patch file which launched your client should have automatically connected you to the AP Server. There are a few reasons this may not happen however, including if the game is hosted on the website but was generated elsewhere. If the client window shows "Server Status: Not Connected", simply ask the host for the address of the server, and copy/paste it into the "Server" input field then press enter.
     - The client will attempt to reconnect to the new server address, and should momentarily show "Server Status: Connected".
