@@ -11,16 +11,6 @@ if __name__ == "__main__":
 from worlds.Files import AutoPatchRegister, APDeltaPatch
 
 
-GAME_ALTTP = "A Link to the Past"
-GAME_SM = "Super Metroid"
-GAME_SOE = "Secret of Evermore"
-GAME_SMZ3 = "SMZ3"
-GAME_DKC3 = "Donkey Kong Country 3"
-
-GAME_SMW = "Super Mario World"
-
-
-
 class RomMeta(TypedDict):
     server: str
     player: Optional[int]
