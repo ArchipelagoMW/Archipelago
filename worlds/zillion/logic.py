@@ -18,7 +18,7 @@ def set_randomizer_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> int:
 
     returns a hash of the player and of the set locations with their items
     """
-    z_world = cs.world.worlds[p]
+    z_world = cs.multiworld.worlds[p]
     my_locations = cast(List[ZillionLocation], getattr(z_world, "my_locations"))
 
     _hash = p
@@ -50,7 +50,7 @@ def cs_to_zz_locs(cs: CollectionState, p: int, zz_r: Randomizer, id_to_zz_item: 
     returns frozenset of accessible zilliandomizer locations
     """
     # caching this function because it would be slow
-    logic_cache: LogicCacheType = getattr(cs.world, "zillion_logic_cache", {})
+    logic_cache: LogicCacheType = getattr(cs.multiworld, "zillion_logic_cache", {})
     _hash = set_randomizer_locs(cs, p, zz_r)
     counts = item_counts(cs, p)
     _hash += hash(counts)

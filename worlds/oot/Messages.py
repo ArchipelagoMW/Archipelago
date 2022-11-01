@@ -882,7 +882,7 @@ def make_player_message(text):
 def update_item_messages(messages, world):
     new_item_messages = {**ITEM_MESSAGES, **KEYSANITY_MESSAGES}
     for id, text in new_item_messages.items():
-        if len(world.world.worlds) > 1:
+        if len(world.multiworld.worlds) > 1:
             update_message_by_id(messages, id, make_player_message(text), 0x23)
         else:
             update_message_by_id(messages, id, text, 0x23)
@@ -1020,7 +1020,7 @@ def update_warp_song_text(messages, ootworld):
     }
 
     for id, entr in msg_list.items():
-        destination = ootworld.world.get_entrance(entr, ootworld.player).connected_region
+        destination = ootworld.multiworld.get_entrance(entr, ootworld.player).connected_region
 
         if destination.pretty_name:
             destination_name = destination.pretty_name
