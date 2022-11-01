@@ -130,13 +130,13 @@ class Factorio(World):
             if self.multiworld.recipe_ingredients[self.player]:
                 custom_recipe = self.custom_recipes[ingredient]
 
-            location.access_rule = lambda state, ingredient=ingredient, custom_recipe=custom_recipe: \
-                (ingredient not in technology_table or state.has(ingredient, player)) and \
-                all(state.has(technology.name, player) for sub_ingredient in custom_recipe.ingredients
-                    for technology in required_technologies[sub_ingredient])
-        else:
-            location.access_rule = lambda state, ingredient=ingredient: \
-                all(state.has(technology.name, player) for technology in required_technologies[ingredient])
+                location.access_rule = lambda state, ingredient=ingredient, custom_recipe=custom_recipe: \
+                    (ingredient not in technology_table or state.has(ingredient, player)) and \
+                    all(state.has(technology.name, player) for sub_ingredient in custom_recipe.ingredients
+                        for technology in required_technologies[sub_ingredient])
+            else:
+                location.access_rule = lambda state, ingredient=ingredient: \
+                    all(state.has(technology.name, player) for technology in required_technologies[ingredient])
 
         for location in self.locations:
             Rules.set_rule(location, lambda state, ingredients=location.ingredients:

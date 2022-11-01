@@ -96,9 +96,9 @@ def set_rules(world):
 
     set_trock_key_rules(world, player)
 
-    set_rule(ganons_tower, lambda state: state.has_crystals(state.world.crystals_needed_for_gt[player], player))
+    set_rule(ganons_tower, lambda state: state.has_crystals(state.multiworld.crystals_needed_for_gt[player], player))
     if not world.world_state[player].inverted and player_logic in [major_glitches, hybrid_glitches, no_logic]:
-        add_rule(world.get_entrance('Ganons Tower', player), lambda state: state.world.get_entrance('Ganons Tower Ascent', player).can_reach(state), 'or')
+        add_rule(world.get_entrance('Ganons Tower', player), lambda state: state.multiworld.get_entrance('Ganons Tower Ascent', player).can_reach(state), 'or')
 
     set_bunny_rules(world, player, world.world_state[player].inverted)
 
