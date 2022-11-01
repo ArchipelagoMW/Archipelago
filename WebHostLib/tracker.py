@@ -446,12 +446,6 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
         "Dragon Egg Shard": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/38/Dragon_Egg_JE4.png",
         "Lead": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/1f/Lead_JE2_BE2.png", 
         "Saddle": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7e/Saddle_%28Pig%29_JE2_BE2.png",
-        "Channeling Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/0/02/Enchanted_Trident_%28item%29.gif",
-        "Silk Touch Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/13/Enchanted_Diamond_Pickaxe.gif",
-        "Piercing IV Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/35/Enchanted_Crossbow.gif",
-        "Sharpness III Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/3c/Enchanted_Diamond_Axe.gif",
-        "Infinity Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/4/4c/Enchanted_Bow.gif",
-        "Looting III Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d1/Enchanted_Diamond_Sword.gif",
     }
 
     minecraft_location_ids = {
