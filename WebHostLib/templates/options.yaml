@@ -1,26 +1,24 @@
-#  Q. What is this file?
-#  A. This file contains options which allow you to configure your multiworld experience while allowing
-#     others to play how they want as well.
+# Q. What is this file?
+# A. This file contains options which allow you to configure your multiworld experience while allowing
+#    others to play how they want as well.
 #
-#  Q. How do I use it?
-#  A. The options in this file are weighted. This means the higher number you assign to a value, the
-#     more chances you have for that option to be chosen. For example, an option like this:
+# Q. How do I use it?
+# A. The options in this file are weighted. This means the higher number you assign to a value, the
+#    more chances you have for that option to be chosen. For example, an option like this:
 #
-#     map_shuffle:
-#       on: 5
-#       off: 15
+#    map_shuffle:
+#      on: 5
+#      off: 15
 #
-#     Means you have 5 chances for map shuffle to occur, and 15 chances for map shuffle to be turned
-#     off.
+#    Means you have 5 chances for map shuffle to occur, and 15 chances for map shuffle to be turned
+#    off.
 #
-#  Q. I've never seen a file like this before. What characters am I allowed to use?
-#  A. This is a .yaml file. You are allowed to use most characters.
-#     To test if your yaml is valid or not, you can use this website:
-#         http://www.yamllint.com/
-#     You can also verify your Archipelago settings are valid at this site:
-#         https://archipelago.gg/check
-
-
+# Q. I've never seen a file like this before. What characters am I allowed to use?
+# A. This is a .yaml file. You are allowed to use most characters.
+#    To test if your yaml is valid or not, you can use this website:
+#        http://www.yamllint.com/
+#    You can also verify your Archipelago settings are valid at this site:
+#        https://archipelago.gg/check
 
 # Your name in-game. Spaces will be replaced with underscores and there is a 16-character limit.
 #   {player} will be replaced with the player's slot number.
