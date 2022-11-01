@@ -89,7 +89,7 @@ class Hylics2Logic(LogicMixin):
 
 
 def set_rules(hylics2world):
-    world = hylics2world.world
+    world = hylics2world.multiworld
     player = hylics2world.player
 
     # Afterlife

@@ -258,6 +258,45 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     usefulitempool: typing.List[Item] = []
     filleritempool: typing.List[Item] = []
 
+    early_items_count: typing.Dict[typing.Tuple[str, int], int] = {}
+    for player in world.player_ids:
+        for item, count in world.early_items[player].value.items():
+            early_items_count[(item, player)] = count
+    if early_items_count:
+        early_locations: typing.List[Location] = []
+        early_priority_locations: typing.List[Location] = []
+        for loc in reversed(fill_locations):
+            if loc.can_reach(world.state):
+                if loc.progress_type == LocationProgressType.PRIORITY:
+                    early_priority_locations.append(loc)
+                else:
+                    early_locations.append(loc)
+                fill_locations.remove(loc)
+
+        early_prog_items: typing.List[Item] = []
+        early_rest_items: typing.List[Item] = []
+        for item in reversed(itempool):
+            if (item.name, item.player) in early_items_count:
+                if item.advancement:
+                    early_prog_items.append(item)
+                else:
+                    early_rest_items.append(item)
+                itempool.remove(item)
+                early_items_count[(item.name, item.player)] -= 1
+                if early_items_count[(item.name, item.player)] == 0:
+                    del early_items_count[(item.name, item.player)]
+        fill_restrictive(world, world.state, early_locations, early_rest_items, lock=True)
+        early_locations += early_priority_locations
+        fill_restrictive(world, world.state, early_locations, early_prog_items, lock=True)
+        unplaced_early_items = early_rest_items + early_prog_items
+        if unplaced_early_items:
+            logging.warning(f"Ran out of early locations for early items. Failed to place \
+                            {len(unplaced_early_items)} items early.")
+            itempool += unplaced_early_items
+
+        fill_locations += early_locations
+        world.random.shuffle(fill_locations)
+
     for item in itempool:
         if item.advancement:
             progitempool.append(item)
