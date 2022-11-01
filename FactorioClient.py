@@ -6,6 +6,7 @@ import string
 import copy
 import re
 import subprocess
+import sys
 import time
 import random
 import typing
@@ -19,8 +20,13 @@ import asyncio
 from queue import Queue
 import Utils
 
+def check_stdin() -> None:
+    if Utils.is_windows and sys.stdin:
+        print("WARNING: Console input is not routed reliably on Windows, use the GUI instead.")
+
 if __name__ == "__main__":
     Utils.init_logging("FactorioClient", exception_logger="Client")
+    check_stdin()
 
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, logger, gui_enabled, get_base_parser
 from MultiServer import mark_raw
@@ -326,6 +332,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     if not ctx.server:
                         logger.info("Established bridge to Factorio Server. "
                                     "Ready to connect to Archipelago via /connect")
+                        check_stdin()
 
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
