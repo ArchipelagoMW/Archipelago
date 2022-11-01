@@ -894,6 +894,13 @@ class StartInventory(ItemDict):
     display_name = "Start Inventory"
 
 
+class StartInventoryPool(StartInventory):
+    """Start with these items and don't place them in the world.
+    The game decides what the replacement items will be."""
+    verify_item_name = True
+    display_name = "Start Inventory from Pool"
+
+
 class StartHints(ItemSet):
     """Start with these item's locations prefilled into the !hint command."""
     display_name = "Start Hints"
@@ -988,6 +995,7 @@ per_game_common_options = {
     "non_local_items": NonLocalItems,
     "early_items": EarlyItems,
     "start_inventory": StartInventory,
+    "start_inventory_from_pool": StartInventoryPool,
     "start_hints": StartHints,
     "start_location_hints": StartLocationHints,
     "exclude_locations": ExcludeLocations,
