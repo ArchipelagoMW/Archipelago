@@ -45,7 +45,7 @@ class ArchipIDLEWorld(World):
 
     def generate_basic(self):
         item_table_copy = list(item_table)
-        self.world.random.shuffle(item_table_copy)
+        self.multiworld.random.shuffle(item_table_copy)
         self.prog_items = set()
 
         for i in range(100):
@@ -57,25 +57,25 @@ class ArchipIDLEWorld(World):
             )
             if i < 20:
                 self.prog_items.add(item_table_copy[i])
-            self.world.itempool.append(item)
+            self.multiworld.itempool.append(item)
 
     def set_rules(self):
-        set_rules(self.world, self.player)
+        set_rules(self.multiworld, self.player)
 
     def create_item(self, name: str) -> Item:
         return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
 
     def create_regions(self):
-        menu = create_region(self.world, self.player, 'Menu')
+        menu = create_region(self.multiworld, self.player, 'Menu')
         entrance = Entrance(self.player, 'Entrance to IDLE Zone', menu)
         menu.exits.append(entrance)
-        idle_zone = create_region(self.world, self.player, 'IDLE Zone', self.location_name_to_id)
+        idle_zone = create_region(self.multiworld, self.player, 'IDLE Zone', self.location_name_to_id)
         entrance.connect(idle_zone)
 
         self.world.regions += [menu, idle_zone]
 
     def get_filler_item_name(self) -> str:
-        return self.world.random.choice(item_table)
+        return self.multiworld.random.choice(item_table)
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None):

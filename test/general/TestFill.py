@@ -26,7 +26,7 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
 
 
 class PlayerDefinition(object):
-    world: MultiWorld
+    multiworld: MultiWorld
     id: int
     menu: Region
     locations: List[Location]
@@ -35,7 +35,7 @@ class PlayerDefinition(object):
     regions: List[Region]
 
     def __init__(self, world: MultiWorld, id: int, menu: Region, locations: List[Location] = [], prog_items: List[Item] = [], basic_items: List[Item] = []):
-        self.world = world
+        self.multiworld = world
         self.id = id
         self.menu = menu
         self.locations = locations
@@ -46,9 +46,8 @@ class PlayerDefinition(object):
     def generate_region(self, parent: Region, size: int, access_rule: CollectionRule = lambda state: True) -> Region:
         region_tag = "_region" + str(len(self.regions))
         region_name = "player" + str(self.id) + region_tag
-        region = Region("player" + str(self.id) + region_tag, self.id, self.world)
-        self.locations += generate_locations(size,
-                                             self.id, None, region, region_tag)
+        region = Region("player" + str(self.id) + region_tag, self.id, self.multiworld)
+        self.locations += generate_locations(size, self.id, None, region, region_tag)
 
         entrance = Entrance(self.id, region_name + "_entrance", parent)
         parent.exits.append(entrance)
@@ -56,7 +55,7 @@ class PlayerDefinition(object):
         entrance.access_rule = access_rule
 
         self.regions.append(region)
-        self.world.regions.append(region)
+        self.multiworld.regions.append(region)
 
         return region
 

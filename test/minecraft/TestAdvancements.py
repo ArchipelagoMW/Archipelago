@@ -312,9 +312,10 @@ class TestAdvancements(TestMinecraft):
             ["Two by Two", False, [], ['Flint and Steel']], 
             ["Two by Two", False, [], ['Progressive Tools']], 
             ["Two by Two", False, [], ['Progressive Weapons']],
-            ["Two by Two", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["Two by Two", False, [], ['Bucket']],
+            ["Two by Two", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']],
+            ["Two by Two", False, ['Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons']],
             ["Two by Two", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons']], 
-            ["Two by Two", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons']],
             ])
 
     def test_42023(self):
