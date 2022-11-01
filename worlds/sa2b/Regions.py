@@ -699,6 +699,35 @@ def create_regions(world, player: int, active_locations):
                                                 chao_garden_beginner_region_locations, None)
 
     chao_garden_intermediate_region_locations = [
+        LocationName.chao_race_challenge_1,
+        LocationName.chao_race_challenge_2,
+        LocationName.chao_race_challenge_3,
+        LocationName.chao_race_challenge_4,
+        LocationName.chao_race_challenge_5,
+        LocationName.chao_race_challenge_6,
+        LocationName.chao_race_challenge_7,
+        LocationName.chao_race_challenge_8,
+        LocationName.chao_race_challenge_9,
+        LocationName.chao_race_challenge_10,
+        LocationName.chao_race_challenge_11,
+        LocationName.chao_race_challenge_12,
+
+        LocationName.chao_race_hero_1,
+        LocationName.chao_race_hero_2,
+        LocationName.chao_race_hero_3,
+        LocationName.chao_race_hero_4,
+
+        LocationName.chao_race_dark_1,
+        LocationName.chao_race_dark_2,
+        LocationName.chao_race_dark_3,
+        LocationName.chao_race_dark_4,
+
+        LocationName.chao_standard_karate,
+    ]
+    chao_garden_intermediate_region = create_region(world, player, active_locations, LocationName.chao_garden_intermediate_region,
+                                                    chao_garden_intermediate_region_locations, None)
+
+    chao_garden_expert_region_locations = [
         LocationName.chao_race_aquamarine_1,
         LocationName.chao_race_aquamarine_2,
         LocationName.chao_race_aquamarine_3,
@@ -729,35 +758,6 @@ def create_regions(world, player: int, active_locations):
         LocationName.chao_race_diamond_3,
         LocationName.chao_race_diamond_4,
         LocationName.chao_race_diamond_5,
-
-        LocationName.chao_standard_karate,
-    ]
-    chao_garden_intermediate_region = create_region(world, player, active_locations, LocationName.chao_garden_intermediate_region,
-                                                    chao_garden_intermediate_region_locations, None)
-
-    chao_garden_expert_region_locations = [
-        LocationName.chao_race_challenge_1,
-        LocationName.chao_race_challenge_2,
-        LocationName.chao_race_challenge_3,
-        LocationName.chao_race_challenge_4,
-        LocationName.chao_race_challenge_5,
-        LocationName.chao_race_challenge_6,
-        LocationName.chao_race_challenge_7,
-        LocationName.chao_race_challenge_8,
-        LocationName.chao_race_challenge_9,
-        LocationName.chao_race_challenge_10,
-        LocationName.chao_race_challenge_11,
-        LocationName.chao_race_challenge_12,
-
-        LocationName.chao_race_hero_1,
-        LocationName.chao_race_hero_2,
-        LocationName.chao_race_hero_3,
-        LocationName.chao_race_hero_4,
-
-        LocationName.chao_race_dark_1,
-        LocationName.chao_race_dark_2,
-        LocationName.chao_race_dark_3,
-        LocationName.chao_race_dark_4,
 
         LocationName.chao_expert_karate,
         LocationName.chao_super_karate,
@@ -830,8 +830,21 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
     connect(world, player, names, LocationName.gate_0_region, LocationName.cannon_core_region,
             lambda state: (state.has(ItemName.emblem, player, cannon_core_emblems)))
 
+    required_mission_name = LocationName.cannon_core_1
+
+    if world.required_cannons_core_missions[player].value == 1:
+        cannon_core_missions = [
+            LocationName.cannon_core_1,
+            LocationName.cannon_core_2,
+            LocationName.cannon_core_3,
+            LocationName.cannon_core_4,
+            LocationName.cannon_core_5
+        ]
+
+        required_mission_name = cannon_core_missions[world.include_missions[player].value - 1]
+
     connect(world, player, names, LocationName.cannon_core_region, LocationName.biolizard_region,
-            lambda state: (state.can_reach(LocationName.cannon_core_1, "Location", player)))
+            lambda state: (state.can_reach(required_mission_name, "Location", player)))
 
     for i in range(len(gates[0].gate_levels)):
         connect(world, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])

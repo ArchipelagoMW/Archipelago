@@ -50,7 +50,7 @@ class SA2BWorld(World):
     """
     game: str = "Sonic Adventure 2 Battle"
     option_definitions = sa2b_options
-    topology_present = False
+    topology_present = True
     data_version = 3
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -70,6 +70,7 @@ class SA2BWorld(World):
             "ModVersion": 101,
             "MusicMap": self.music_map,
             "MusicShuffle": self.world.music_shuffle[self.player].value,
+            "Narrator": self.world.narrator[self.player].value,
             "RequiredRank": self.world.required_rank[self.player].value,
             "ChaoKeys": self.world.keysanity[self.player].value,
             "Whistlesanity": self.world.whistlesanity[self.player].value,
@@ -79,6 +80,7 @@ class SA2BWorld(World):
             "DeathLink": self.world.death_link[self.player].value,
             "IncludeMissions": self.world.include_missions[self.player].value,
             "EmblemPercentageForCannonsCore": self.world.emblem_percentage_for_cannons_core[self.player].value,
+            "RequiredCannonsCoreMissions": self.world.required_cannons_core_missions[self.player].value,
             "NumberOfLevelGates": self.world.number_of_level_gates[self.player].value,
             "LevelGateDistribution": self.world.level_gate_distribution[self.player].value,
             "EmblemsForCannonsCore": self.emblems_for_cannons_core,
@@ -322,6 +324,36 @@ class SA2BWorld(World):
             text = "Gate {0} Boss: {1}\n"
             text = text.format((x + 1), get_boss_name(self.gate_bosses[x + 1]))
             spoiler_handle.writelines(text)
+
+    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+        if self.topology_present:
+            gate_names = [
+                LocationName.gate_0_region,
+                LocationName.gate_1_region,
+                LocationName.gate_2_region,
+                LocationName.gate_3_region,
+                LocationName.gate_4_region,
+                LocationName.gate_5_region,
+            ]
+            no_hint_region_names = [
+                LocationName.cannon_core_region,
+                LocationName.chao_garden_beginner_region,
+                LocationName.chao_garden_intermediate_region,
+                LocationName.chao_garden_expert_region,
+            ]
+            er_hint_data = {}
+            for gate_name in gate_names:
+                gate_region = self.world.get_region(gate_name, self.player)
+                if not gate_region:
+                    continue
+                for exit in gate_region.exits:
+                    if exit.connected_region.name in gate_names or exit.connected_region.name in no_hint_region_names:
+                        continue
+                    level_region = exit.connected_region
+                    for location in level_region.locations:
+                        er_hint_data[location.address] = gate_name
+
+            hint_data[self.player] = er_hint_data
 
     @classmethod
     def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):

@@ -201,6 +201,18 @@ class ChaoRaceChecks(Choice):
     default = 0
 
 
+class RequiredCannonsCoreMissions(Choice):
+    """
+    Determines how many Cannon's Core missions must be completed to unlock the Biolizard
+    First: Only the first mission must be completed
+    All Active: All active Cannon's Core missions must be completed
+    """
+    display_name = "Required Cannon's Core Missions"
+    option_first = 0
+    option_all_active = 1
+    default = 0
+
+
 class SADXMusic(Choice):
     """
     Whether the randomizer will include Sonic Adventure DX Music in the music pool
@@ -239,6 +251,25 @@ class MusicShuffle(Choice):
     default = 0
 
 
+class Narrator(Choice):
+    """
+    Which menu narrator is used
+    """
+    display_name = "Narrator"
+    option_default = 0
+    option_shadow = 1
+    option_rouge = 2
+    option_eggman = 3
+    option_maria = 4
+    option_secretary = 5
+    option_omochao = 6
+    option_amy = 7
+    option_tails = 8
+    option_knuckles = 9
+    option_sonic = 10
+    default = 0
+
+
 sa2b_options: typing.Dict[str, type(Option)] = {
     "include_missions": IncludeMissions,
     "keysanity": Keysanity,
@@ -246,6 +277,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "beetlesanity": Beetlesanity,
     "required_rank": RequiredRank,
     "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
+    "required_cannons_core_missions": RequiredCannonsCoreMissions,
     "number_of_level_gates": NumberOfLevelGates,
     "level_gate_distribution": LevelGateDistribution,
     "level_gate_costs": LevelGateCosts,
@@ -260,5 +292,6 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "tiny_trap_weight": TinyTrapWeight,
     "sadx_music": SADXMusic,
     "music_shuffle": MusicShuffle,
+    "narrator": Narrator,
     "death_link": DeathLink,
 }
