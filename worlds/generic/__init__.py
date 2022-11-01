@@ -51,6 +51,9 @@ class GenericWorld(World):
             return Item(name, ItemClassification.filler, -1, self.player)
         raise KeyError(name)
 
+    def get_filler_item_name(self) -> str:
+        return "Nothing"
+
 
 class PlandoItem(NamedTuple):
     item: str
