@@ -89,7 +89,6 @@ def exclusion_rules(world: MultiWorld, player: int, exclude_locations: typing.Se
             if loc_name not in world.worlds[player].location_name_to_id:
                 raise Exception(f"Unable to exclude location {loc_name} in player {player}'s world.") from e
         else:
-            add_item_rule(location, lambda i: not (i.advancement or i.useful))
             location.progress_type = LocationProgressType.EXCLUDED
 
 
@@ -151,7 +150,7 @@ def item_in_locations(state: "BaseClasses.CollectionState", item: str, player: i
 
 def item_name(state: "BaseClasses.CollectionState", location: str, player: int) -> \
         typing.Optional[typing.Tuple[str, int]]:
-    location = state.world.get_location(location, player)
+    location = state.multiworld.get_location(location, player)
     if location.item is None:
         return None
     return location.item.name, location.item.player

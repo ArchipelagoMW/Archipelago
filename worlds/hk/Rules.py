@@ -29,7 +29,7 @@ def hk_set_rule(hk_world: World, location: str, rule):
     locations = hk_world.created_multi_locations.get(location)
     if locations is None:
         try:
-            locations = [hk_world.world.get_location(location, player)]
+            locations = [hk_world.multiworld.get_location(location, player)]
         except KeyError:
             return
 
@@ -39,7 +39,7 @@ def hk_set_rule(hk_world: World, location: str, rule):
 
 def set_rules(hk_world: World):
     player = hk_world.player
-    world = hk_world.world
+    world = hk_world.multiworld
     set_generated_rules(hk_world, hk_set_rule)
 
     # Shop costs

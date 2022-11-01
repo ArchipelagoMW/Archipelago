@@ -233,8 +233,8 @@ def main(args=None, callback=ERmain):
         else:
             raise RuntimeError(f'No weights specified for player {player}')
 
-    if len(set(erargs.name.values())) != len(erargs.name):
-        raise Exception(f"Names have to be unique. Names: {Counter(erargs.name.values())}")
+    if len(set(name.lower() for name in erargs.name.values())) != len(erargs.name):
+        raise Exception(f"Names have to be unique. Names: {Counter(name.lower() for name in erargs.name.values())}")
 
     if args.yaml_output:
         import yaml
@@ -317,11 +317,11 @@ class SafeDict(dict):
 
 
 def handle_name(name: str, player: int, name_counter: Counter):
-    name_counter[name] += 1
+    name_counter[name.lower()] += 1
+    number = name_counter[name.lower()]
     new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
-    new_name = string.Formatter().vformat(new_name, (), SafeDict(number=name_counter[name],
-                                                                 NUMBER=(name_counter[name] if name_counter[
-                                                                                                   name] > 1 else ''),
+    new_name = string.Formatter().vformat(new_name, (), SafeDict(number=number,
+                                                                 NUMBER=(number if number > 1 else ''),
                                                                  player=player,
                                                                  PLAYER=(player if player > 1 else '')))
     new_name = new_name.strip()[:16]
