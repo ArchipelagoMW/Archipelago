@@ -449,12 +449,6 @@ class TextChoice(Choice):
                 return cls(value)
         return cls(text)
 
-    @classmethod
-    def get_option_name(cls, value: T) -> str:
-        if isinstance(value, str):
-            return value
-        return cls.name_lookup[value]
-
     def __eq__(self, other: typing.Any):
         if isinstance(other, self.__class__):
             return other.value == self.value
