@@ -15,10 +15,10 @@ class LegacyLogic(LogicMixin):
         return self.stat_upgrade_count(player) >= amount
 
     def total_stat_upgrades_count(self, player: int) -> int:
-        return int(self.world.health_pool[player]) + \
-               int(self.world.mana_pool[player]) + \
-               int(self.world.attack_pool[player]) + \
-               int(self.world.magic_damage_pool[player])
+        return int(self.multiworld.health_pool[player]) + \
+               int(self.multiworld.mana_pool[player]) + \
+               int(self.multiworld.attack_pool[player]) + \
+               int(self.multiworld.magic_damage_pool[player])
 
     def stat_upgrade_count(self: CollectionState, player: int) -> int:
         return self.item_count("Health Up", player) + self.item_count("Mana Up", player) + \

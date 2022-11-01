@@ -9,7 +9,7 @@ class Dungeon(object):
             else:
                 return [obj]
 
-        self.world = world
+        self.multiworld = world
         self.name = name
         self.hint_text = hint
         self.font_color = font_color
@@ -18,7 +18,7 @@ class Dungeon(object):
         self.small_keys = to_array(small_keys)
         self.dungeon_items = to_array(dungeon_items)
 
-        for region in world.world.regions:
+        for region in world.multiworld.regions:
             if region.player == world.player and region.dungeon == self.name:
                 region.dungeon = self
                 self.regions.append(region)                

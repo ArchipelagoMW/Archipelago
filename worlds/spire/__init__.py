@@ -40,10 +40,10 @@ class SpireWorld(World):
 
     def _get_slot_data(self):
         return {
-            'seed': "".join(self.world.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16)),
-            'character': self.world.character[self.player],
-            'ascension': self.world.ascension[self.player],
-            'heart_run': self.world.heart_run[self.player]
+            'seed': "".join(self.multiworld.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16)),
+            'character': self.multiworld.character[self.player],
+            'ascension': self.multiworld.ascension[self.player],
+            'heart_run': self.multiworld.heart_run[self.player]
         }
 
     def generate_basic(self):
@@ -55,40 +55,40 @@ class SpireWorld(World):
                     item = SpireItem(name, self.player)
                     pool.append(item)
 
-        self.world.itempool += pool
+        self.multiworld.itempool += pool
 
         # Pair up our event locations with our event items
         for event, item in event_item_pairs.items():
             event_item = SpireItem(item, self.player)
-            self.world.get_location(event, self.player).place_locked_item(event_item)
+            self.multiworld.get_location(event, self.player).place_locked_item(event_item)
 
-        if self.world.logic[self.player] != 'no logic':
-            self.world.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        if self.multiworld.logic[self.player] != 'no logic':
+            self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
 
     def set_rules(self):
-        set_rules(self.world, self.player)
+        set_rules(self.multiworld, self.player)
 
     def create_item(self, name: str) -> Item:
         return SpireItem(name, self.player)
 
     def create_regions(self):
-        create_regions(self.world, self.player)
+        create_regions(self.multiworld, self.player)
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
         for option_name in spire_options:
-            option = getattr(self.world, option_name)[self.player]
+            option = getattr(self.multiworld, option_name)[self.player]
             slot_data[option_name] = int(option.value)
         return slot_data
 
     def get_filler_item_name(self) -> str:
-        return self.world.random.choice(["Card Draw", "Card Draw", "Card Draw", "Relic", "Relic"])
+        return self.multiworld.random.choice(["Card Draw", "Card Draw", "Card Draw", "Relic", "Relic"])
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, RegionType.Generic, name, player)
-    ret.world = world
+    ret.multiworld = world
     if locations:
         for location in locations:
             loc_id = location_table.get(location, 0)
