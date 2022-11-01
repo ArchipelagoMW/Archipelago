@@ -75,7 +75,7 @@ class ChecksFinderWorld(World):
         connection = Entrance(self.player, "New Board", menu)
         menu.exits.append(connection)
         connection.connect(board)
-        self.world.regions += [menu, board]
+        self.multiworld.regions += [menu, board]
 
     def fill_slot_data(self):
         slot_data = self._get_checksfinder_data()

@@ -87,7 +87,7 @@ class SpireWorld(World):
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, player, multiworld)
+    ret = Region(name, player, world)
     if locations:
         for location in locations:
             loc_id = location_table.get(location, 0)
