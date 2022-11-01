@@ -26,15 +26,19 @@ def create():
 
     def dictify_range(option: typing.Union[Options.Range, Options.SpecialRange]):
         data = {option.default: 50}
-        for sub_option in {"random", "random-low", "random-high"}:
+        special = getattr(option, "special_range_cutoff", None)
+        if special is not None:
+            data[special] = 0
+        for sub_option in ["random", "random-low", "random-high"]:
             if sub_option != option.default:
                 data[sub_option] = 0
 
         notes = {}
         for name, number in getattr(option, "special_range_names", {}).items():
+            notes[name] = f"equivalent to {number}"
             if number in data:
                 data[name] = data[number]
-                notes[name] = f"equivalent to {number}"
+                del data[number]
             else:
                 data[name] = 0
 
