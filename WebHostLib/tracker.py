@@ -449,9 +449,9 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
         "Channeling Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/0/02/Enchanted_Trident_%28item%29.gif",
         "Silk Touch Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/13/Enchanted_Diamond_Pickaxe.gif",
         "Piercing IV Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/35/Enchanted_Crossbow.gif",
-        "Sharpness III Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d1/Enchanted_Diamond_Sword.gif",
-        "Looting III Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/55/Enchanted_Book.gif",
+        "Sharpness III Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/3c/Enchanted_Diamond_Axe.gif",
         "Infinity Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/4/4c/Enchanted_Bow.gif",
+        "Looting III Book": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d1/Enchanted_Diamond_Sword.gif",
     }
 
     minecraft_location_ids = {
