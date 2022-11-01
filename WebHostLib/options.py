@@ -26,9 +26,6 @@ def create():
 
     def dictify_range(option: typing.Union[Options.Range, Options.SpecialRange]):
         data = {option.default: 50}
-        special = getattr(option, "special_range_cutoff", None)
-        if special is not None:
-            data[special] = 0
         for sub_option in ["random", "random-low", "random-high"]:
             if sub_option != option.default:
                 data[sub_option] = 0
