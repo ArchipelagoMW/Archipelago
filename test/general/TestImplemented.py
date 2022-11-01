@@ -16,8 +16,9 @@ class TestImplemented(unittest.TestCase):
     def testFillerName(self):
         """Worlds need to implement a filler item name for remaining junk fill"""
         for gamename, world_type in AutoWorldRegister.world_types.items():
+            if world_type.hidden and gamename in {"ArchipIDLE", "Final Fantasy", "Sudoku"}:
+                continue
             with self.subTest(game=gamename):
                 world = setup_default_world(world_type)
                 filler = world.worlds[1].get_filler_item_name()
                 self.assertIsInstance(filler, str), f"\"{filler}\" is an invalid filler item name. It must be a string."
-
