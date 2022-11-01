@@ -36,7 +36,7 @@ technology_table: Dict[str, Technology] = {}
 always = lambda state: True
 
 
-class FactorioElement():
+class FactorioElement:
     name: str
 
     def __repr__(self):
@@ -98,7 +98,7 @@ class CustomTechnology(Technology):
                            and ((ingredients & {"chemical-science-pack", "production-science-pack", "utility-science-pack"})
                                 or origin.name == "rocket-silo")
         self.player = player
-        if origin.name not in world.worlds[player].static_nodes:
+        if origin.name not in world.worlds[player].special_nodes:
             if military_allowed:
                 ingredients.add("military-science-pack")
             ingredients = list(ingredients)

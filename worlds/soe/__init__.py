@@ -178,11 +178,11 @@ class SoEWorld(World):
 
     def generate_early(self) -> None:
         # store option values that change logic
-        self.energy_core = self.world.energy_core[self.player].value
-        self.required_fragments = self.world.required_fragments[self.player].value
-        if self.required_fragments > self.world.available_fragments[self.player].value:
-            self.world.available_fragments[self.player].value = self.required_fragments
-        self.available_fragments = self.world.available_fragments[self.player].value
+        self.energy_core = self.multiworld.energy_core[self.player].value
+        self.required_fragments = self.multiworld.required_fragments[self.player].value
+        if self.required_fragments > self.multiworld.available_fragments[self.player].value:
+            self.multiworld.available_fragments[self.player].value = self.required_fragments
+        self.available_fragments = self.multiworld.available_fragments[self.player].value
 
     def create_event(self, event: str) -> Item:
         return SoEItem(event, ItemClassification.progression, None, self.player)
@@ -209,12 +209,12 @@ class SoEWorld(World):
 
     def create_regions(self):
         # exclude 'hidden' on easy
-        max_difficulty = 1 if self.world.difficulty[self.player] == Difficulty.option_easy else 256
+        max_difficulty = 1 if self.multiworld.difficulty[self.player] == Difficulty.option_easy else 256
 
         # TODO: generate *some* regions from locations' requirements?
-        r = Region('Menu', RegionType.Generic, 'Menu', self.player, self.world)
+        r = Region('Menu', RegionType.Generic, 'Menu', self.player, self.multiworld)
         r.exits = [Entrance(self.player, 'New Game', r)]
-        self.world.regions += [r]
+        self.multiworld.regions += [r]
 
         # group locations into spheres (1, 2, 3+ at index 0, 1, 2)
         spheres: typing.Dict[int, typing.Dict[int, typing.List[SoELocation]]] = {}
@@ -232,8 +232,8 @@ class SoEWorld(World):
         # mark some as excluded based on numbers above
         for trash_sphere, fills in trash_fills.items():
             for typ, counts in fills.items():
-                count = counts[self.world.difficulty[self.player].value]
-                for location in self.world.random.sample(spheres[trash_sphere][typ], count):
+                count = counts[self.multiworld.difficulty[self.player].value]
+                for location in self.multiworld.random.sample(spheres[trash_sphere][typ], count):
                     location.progress_type = LocationProgressType.EXCLUDED
                     # TODO: do we need to set an item rule?
 
@@ -243,7 +243,7 @@ class SoEWorld(World):
                 if item.name in {"Gauge", "Wheel"}:
                     return False
                 # and some more for non-easy, non-mystery
-                if self.world.difficulty[item.player] not in (Difficulty.option_easy, Difficulty.option_mystery):
+                if self.multiworld.difficulty[item.player] not in (Difficulty.option_easy, Difficulty.option_mystery):
                     if item.name in {"Laser Lance", "Atom Smasher", "Diamond Eye"}:
                         return False
             return True
@@ -253,16 +253,16 @@ class SoEWorld(World):
                 add_item_rule(location, sphere1_blocked_items_rule)
 
         # make some logically late(r) bosses priority locations to increase complexity
-        if self.world.difficulty[self.player] == Difficulty.option_mystery:
-            late_count = self.world.random.randint(0, 2)
+        if self.multiworld.difficulty[self.player] == Difficulty.option_mystery:
+            late_count = self.multiworld.random.randint(0, 2)
         else:
-            late_count = self.world.difficulty[self.player].value
+            late_count = self.multiworld.difficulty[self.player].value
         late_bosses = ("Tiny", "Aquagoth", "Megataur", "Rimsala",
                        "Mungola", "Lightning Storm", "Magmar", "Volcano Viper")
-        late_locations = self.world.random.sample(late_bosses, late_count)
+        late_locations = self.multiworld.random.sample(late_bosses, late_count)
 
         # add locations to the world
-        r = Region('Ingame', RegionType.Generic, 'Ingame', self.player, self.world)
+        r = Region('Ingame', RegionType.Generic, 'Ingame', self.player, self.multiworld)
         for sphere in spheres.values():
             for locations in sphere.values():
                 for location in locations:
@@ -271,9 +271,9 @@ class SoEWorld(World):
                         location.progress_type = LocationProgressType.PRIORITY
 
         r.locations.append(SoELocation(self.player, 'Done', None, r))
-        self.world.regions += [r]
+        self.multiworld.regions += [r]
 
-        self.world.get_entrance('New Game', self.player).connect(self.world.get_region('Ingame', self.player))
+        self.multiworld.get_entrance('New Game', self.player).connect(self.multiworld.get_region('Ingame', self.player))
 
     def create_items(self):
         # add regular items to the pool
@@ -298,17 +298,17 @@ class SoEWorld(World):
             for _ in range(self.available_fragments - 1):
                 if len(ingredients) < 1:
                     break  # out of ingredients to replace
-                r = self.world.random.choice(ingredients)
+                r = self.multiworld.random.choice(ingredients)
                 ingredients.remove(r)
                 items[r] = self.create_item("Energy Core Fragment")
 
         # add traps to the pool
-        trap_count = self.world.trap_count[self.player].value
+        trap_count = self.multiworld.trap_count[self.player].value
         trap_chances = {}
         trap_names = {}
         if trap_count > 0:
             for trap_type in self.trap_types:
-                trap_option = getattr(self.world, f'trap_chance_{trap_type}')[self.player]
+                trap_option = getattr(self.multiworld, f'trap_chance_{trap_type}')[self.player]
                 trap_chances[trap_type] = trap_option.value
                 trap_names[trap_type] = trap_option.item_name
             trap_chances_total = sum(trap_chances.values())
@@ -318,7 +318,7 @@ class SoEWorld(World):
                 trap_chances_total = len(trap_chances)
 
         def create_trap() -> Item:
-            v = self.world.random.randrange(trap_chances_total)
+            v = self.multiworld.random.randrange(trap_chances_total)
             for t, c in trap_chances.items():
                 if v < c:
                     return self.create_item(trap_names[t])
@@ -328,26 +328,26 @@ class SoEWorld(World):
         for _ in range(trap_count):
             if len(ingredients) < 1:
                 break  # out of ingredients to replace
-            r = self.world.random.choice(ingredients)
+            r = self.multiworld.random.choice(ingredients)
             ingredients.remove(r)
             items[r] = create_trap()
 
-        self.world.itempool += items
+        self.multiworld.itempool += items
 
     def set_rules(self):
-        self.world.completion_condition[self.player] = lambda state: state.has('Victory', self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has('Victory', self.player)
         # set Done from goal option once we have multiple goals
-        set_rule(self.world.get_location('Done', self.player),
-                 lambda state: state.soe_has(pyevermizer.P_FINAL_BOSS, self.world, self.player))
-        set_rule(self.world.get_entrance('New Game', self.player), lambda state: True)
+        set_rule(self.multiworld.get_location('Done', self.player),
+                 lambda state: state.soe_has(pyevermizer.P_FINAL_BOSS, self.multiworld, self.player))
+        set_rule(self.multiworld.get_entrance('New Game', self.player), lambda state: True)
         for loc in _locations:
-            location = self.world.get_location(loc.name, self.player)
+            location = self.multiworld.get_location(loc.name, self.player)
             set_rule(location, self.make_rule(loc.requires))
 
     def make_rule(self, requires: typing.List[typing.Tuple[int, int]]) -> typing.Callable[[typing.Any], bool]:
         def rule(state) -> bool:
             for count, progress in requires:
-                if not state.soe_has(progress, self.world, self.player, count):
+                if not state.soe_has(progress, self.multiworld, self.player, count):
                     return False
             return True
 
@@ -358,20 +358,20 @@ class SoEWorld(World):
 
     def generate_basic(self):
         # place Victory event
-        self.world.get_location('Done', self.player).place_locked_item(self.create_event('Victory'))
+        self.multiworld.get_location('Done', self.player).place_locked_item(self.create_event('Victory'))
         # place wings in halls NE to avoid softlock
-        wings_location = self.world.random.choice(self._halls_ne_chest_names)
+        wings_location = self.multiworld.random.choice(self._halls_ne_chest_names)
         wings_item = self.create_item('Wings')
-        self.world.get_location(wings_location, self.player).place_locked_item(wings_item)
+        self.multiworld.get_location(wings_location, self.player).place_locked_item(wings_item)
         # place energy core at vanilla location for vanilla mode
         if self.energy_core == EnergyCore.option_vanilla:
             energy_core = self.create_item('Energy Core')
-            self.world.get_location('Energy Core #285', self.player).place_locked_item(energy_core)
+            self.multiworld.get_location('Energy Core #285', self.player).place_locked_item(energy_core)
         # generate stuff for later
-        self.evermizer_seed = self.world.random.randint(0, 2 ** 16 - 1)  # TODO: make this an option for "full" plando?
+        self.evermizer_seed = self.multiworld.random.randint(0, 2 ** 16 - 1)  # TODO: make this an option for "full" plando?
 
     def generate_output(self, output_directory: str):
-        player_name = self.world.get_player_name(self.player)
+        player_name = self.multiworld.get_player_name(self.player)
         self.connect_name = player_name[:32]
         while len(self.connect_name.encode('utf-8')) > 32:
             self.connect_name = self.connect_name[:-1]
@@ -379,27 +379,27 @@ class SoEWorld(World):
         placement_file = ""
         out_file = ""
         try:
-            money = self.world.money_modifier[self.player].value
-            exp = self.world.exp_modifier[self.player].value
+            money = self.multiworld.money_modifier[self.player].value
+            exp = self.multiworld.exp_modifier[self.player].value
             switches: typing.List[str] = []
-            if self.world.death_link[self.player].value:
+            if self.multiworld.death_link[self.player].value:
                 switches.append("--death-link")
             if self.energy_core == EnergyCore.option_fragments:
                 switches.extend(('--available-fragments', str(self.available_fragments),
                                  '--required-fragments', str(self.required_fragments)))
             rom_file = get_base_rom_path()
-            out_base = output_path(output_directory, self.world.get_out_file_name_base(self.player))
+            out_base = output_path(output_directory, self.multiworld.get_out_file_name_base(self.player))
             out_file = out_base + '.sfc'
             placement_file = out_base + '.txt'
             patch_file = out_base + '.apsoe'
             flags = 'l'  # spoiler log
             for option_name in self.option_definitions:
-                option = getattr(self.world, option_name)[self.player]
+                option = getattr(self.multiworld, option_name)[self.player]
                 if hasattr(option, 'to_flag'):
                     flags += option.to_flag()
 
             with open(placement_file, "wb") as f:  # generate placement file
-                for location in filter(lambda l: l.player == self.player, self.world.get_locations()):
+                for location in filter(lambda l: l.player == self.player, self.multiworld.get_locations()):
                     item = location.item
                     assert item is not None, "Can't handle unfilled location"
                     if item.code is None or location.address is None:
@@ -414,7 +414,7 @@ class SoEWorld(World):
 
             if not os.path.exists(rom_file):
                 raise FileNotFoundError(rom_file)
-            if (pyevermizer.main(rom_file, out_file, placement_file, self.world.seed_name, self.connect_name,
+            if (pyevermizer.main(rom_file, out_file, placement_file, self.multiworld.seed_name, self.connect_name,
                                  self.evermizer_seed, flags, money, exp, switches)):
                 raise RuntimeError()
             patch = SoEDeltaPatch(patch_file, player=self.player,
@@ -434,12 +434,12 @@ class SoEWorld(World):
         # wait for self.connect_name to be available.
         self.connect_name_available_event.wait()
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
-        if self.connect_name and self.connect_name != self.world.player_name[self.player]:
-            payload = multidata["connect_names"][self.world.player_name[self.player]]
+        if self.connect_name and self.connect_name != self.multiworld.player_name[self.player]:
+            payload = multidata["connect_names"][self.multiworld.player_name[self.player]]
             multidata["connect_names"][self.connect_name] = payload
 
     def get_filler_item_name(self) -> str:
-        return self.world.random.choice(list(self.item_name_groups["Ingredients"]))
+        return self.multiworld.random.choice(list(self.item_name_groups["Ingredients"]))
 
 
 class SoEItem(Item):

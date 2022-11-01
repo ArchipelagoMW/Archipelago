@@ -159,7 +159,7 @@ class Overcooked2Level:
     sublevel: int
 
     def __init__(self):
-        self.world = Overcooked2GameWorld.ONE
+        self.multiworld = Overcooked2GameWorld.ONE
         self.sublevel = 0
 
     def __iter__(self):
@@ -167,21 +167,21 @@ class Overcooked2Level:
 
     def __next__(self):
         self.sublevel += 1
-        if self.sublevel > self.world.sublevel_count:
-            if self.world == Overcooked2GameWorld.KEVIN:
+        if self.sublevel > self.multiworld.sublevel_count:
+            if self.multiworld == Overcooked2GameWorld.KEVIN:
                 raise StopIteration
-            self.world = Overcooked2GameWorld(self.world.value + 1)
+            self.multiworld = Overcooked2GameWorld(self.multiworld.value + 1)
             self.sublevel = 1
 
         return self
 
     @property
     def level_id(self) -> int:
-        return self.world.base_id + (self.sublevel - 1)
+        return self.multiworld.base_id + (self.sublevel - 1)
 
     @property
     def level_name(self) -> str:
-        return self.world.as_str + "-" + str(self.sublevel)
+        return self.multiworld.as_str + "-" + str(self.sublevel)
 
     @property
     def location_name_item(self) -> str:

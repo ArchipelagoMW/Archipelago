@@ -89,7 +89,7 @@ undead_settlement_table = {
     "US: Soul of the Rotted Greatwood": 0x400002D7,
     "US: Hawk Ring": 0x20004F92,
     "US: Warrior of Sunlight Covenant": 0x20002738,
-    "US: Red and White Round Shield": 0x01343A40,
+    "US: Blessed Red and White Shield": 0x01343FB9,
     "US: Irina's Ashes": 0x40000843,
     "US: Cornyx's Ashes": 0x40000841
 }
