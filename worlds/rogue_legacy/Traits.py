@@ -36,4 +36,3 @@ traits = [
     "Glaucoma",
     "Adopted",
 ]
-

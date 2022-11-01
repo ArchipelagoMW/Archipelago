@@ -7,8 +7,8 @@ from Utils import read_snes_rom
 from worlds.Files import APDeltaPatch
 
 SMJUHASH = '21f3e98df4780ee1c667b84e57d88675'
-ROM_PLAYER_LIMIT = 65535 # max archipelago player ID. note, SM ROM itself will only store 201 names+ids max
-
+SM_ROM_MAX_PLAYERID = 65535
+SM_ROM_PLAYERDATA_COUNT = 202
 
 class SMDeltaPatch(APDeltaPatch):
     hash = SMJUHASH
