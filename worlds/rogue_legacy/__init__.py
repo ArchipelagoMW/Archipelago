@@ -44,7 +44,7 @@ class RLWorld(World):
     prefill_items: List[RLItem] = []
 
     def setting(self, name: str):
-        return getattr(self.world, name)[self.player]
+        return getattr(self.multiworld, name)[self.player]
 
     def fill_slot_data(self) -> dict:
         return {option_name: self.setting(option_name).value for option_name in rl_options}
@@ -86,13 +86,13 @@ class RLWorld(World):
                 if self.setting("architect") == "disabled" or self.setting("architect") == "early":
                     continue
                 if self.setting("architect") == "start_unlocked":
-                    self.world.push_precollected(self.create_item(name))
+                    self.multiworld.push_precollected(self.create_item(name))
                     continue
 
             # Blacksmith and Enchantress
             if name == "Blacksmith" or name == "Enchantress":
                 if self.setting("vendors") == "start_unlocked":
-                    self.world.push_precollected(self.create_item(name))
+                    self.multiworld.push_precollected(self.create_item(name))
                     continue
                 if self.setting("vendors") == "early":
                     continue
@@ -195,11 +195,11 @@ class RLWorld(World):
         while len(self.item_pool) + len(self.prefill_items) < total_locations:
             self.item_pool.append(self.create_item(self.get_filler_item_name()))
 
-        self.world.itempool += self.item_pool
+        self.multiworld.itempool += self.item_pool
 
     def pre_fill(self) -> None:
-        reachable = [loc for loc in self.world.get_reachable_locations(player=self.player) if not loc.item]
-        self.world.random.shuffle(reachable)
+        reachable = [loc for loc in self.multiworld.get_reachable_locations(player=self.player) if not loc.item]
+        self.multiworld.random.shuffle(reachable)
         items = self.prefill_items.copy()
         for item in items:
             reachable.pop().place_locked_item(item)
@@ -210,7 +210,7 @@ class RLWorld(World):
     def get_filler_item_name(self) -> str:
         fillers = get_items_by_category("Filler")
         weights = [data.weight for data in fillers.values()]
-        return self.world.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
+        return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
 
     def create_item(self, name: str) -> RLItem:
         data = item_table[name]
@@ -221,45 +221,45 @@ class RLWorld(World):
         return RLItem(name, data.classification, data.code, self.player)
 
     def set_rules(self):
-        set_rules(self.world, self.player)
+        set_rules(self.multiworld, self.player)
 
     def create_regions(self):
-        create_regions(self.world, self.player)
+        create_regions(self.multiworld, self.player)
         self._place_events()
 
     def _place_events(self):
         # Fountain
-        self.world.get_location("Fountain Room", self.player).place_locked_item(
+        self.multiworld.get_location("Fountain Room", self.player).place_locked_item(
             self.create_event("Defeat The Fountain"))
 
         # Khidr / Neo Khidr
         if self.setting("khidr") == "vanilla":
-            self.world.get_location("Castle Hamson Boss Room", self.player).place_locked_item(
+            self.multiworld.get_location("Castle Hamson Boss Room", self.player).place_locked_item(
                 self.create_event("Defeat Khidr"))
         else:
-            self.world.get_location("Castle Hamson Boss Room", self.player).place_locked_item(
+            self.multiworld.get_location("Castle Hamson Boss Room", self.player).place_locked_item(
                 self.create_event("Defeat Neo Khidr"))
 
         # Alexander / Alexander IV
         if self.setting("alexander") == "vanilla":
-            self.world.get_location("Forest Abkhazia Boss Room", self.player).place_locked_item(
+            self.multiworld.get_location("Forest Abkhazia Boss Room", self.player).place_locked_item(
                 self.create_event("Defeat Alexander"))
         else:
-            self.world.get_location("Forest Abkhazia Boss Room", self.player).place_locked_item(
+            self.multiworld.get_location("Forest Abkhazia Boss Room", self.player).place_locked_item(
                 self.create_event("Defeat Alexander IV"))
 
         # Ponce de Leon / Ponce de Freon
         if self.setting("leon") == "vanilla":
-            self.world.get_location("The Maya Boss Room", self.player).place_locked_item(
+            self.multiworld.get_location("The Maya Boss Room", self.player).place_locked_item(
                 self.create_event("Defeat Ponce de Leon"))
         else:
-            self.world.get_location("The Maya Boss Room", self.player).place_locked_item(
+            self.multiworld.get_location("The Maya Boss Room", self.player).place_locked_item(
                 self.create_event("Defeat Ponce de Freon"))
 
         # Herodotus / Astrodotus
         if self.setting("herodotus") == "vanilla":
-            self.world.get_location("Land of Darkness Boss Room", self.player).place_locked_item(
+            self.multiworld.get_location("Land of Darkness Boss Room", self.player).place_locked_item(
                 self.create_event("Defeat Herodotus"))
         else:
-            self.world.get_location("Land of Darkness Boss Room", self.player).place_locked_item(
+            self.multiworld.get_location("Land of Darkness Boss Room", self.player).place_locked_item(
                 self.create_event("Defeat Astrodotus"))
