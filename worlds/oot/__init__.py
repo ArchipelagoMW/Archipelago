@@ -139,7 +139,7 @@ class OOTWorld(World):
         self.starting_items = Counter()
         self.songs_as_items = False
         self.file_hash = [self.multiworld.random.randint(0, 31) for i in range(5)]
-        self.connect_name = ''.join(self.world.random.choices(printable, k=16))
+        self.connect_name = ''.join(self.multiworld.random.choices(printable, k=16))
 
         self.item_name_groups = {
             "medallions": {"Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion",
@@ -194,10 +194,10 @@ class OOTWorld(World):
             local_types.append('BossKey')
         if self.shuffle_ganon_bosskey != 'keysanity':
             local_types.append('GanonBossKey')
-        self.world.local_items[self.player].value |= set(name for name, data in item_table.items() if data[0] in local_types)
+        self.multiworld.local_items[self.player].value |= set(name for name, data in item_table.items() if data[0] in local_types)
 
         # If any songs are itemlinked, set songs_as_items
-        for group in self.world.groups.values():
+        for group in self.multiworld.groups.values():
             if self.songs_as_items or group['game'] != self.game or self.player not in group['players']:
                 continue
             for item_name in group['item_pool']:
@@ -244,8 +244,8 @@ class OOTWorld(World):
 
         # Set internal names used by the OoT generator
         self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld']
-        self.trials_random = self.world.trials[self.player].randomized
-        self.mq_dungeons_random = self.world.mq_dungeons[self.player].randomized
+        self.trials_random = self.multiworld.trials[self.player].randomized
+        self.mq_dungeons_random = self.multiworld.mq_dungeons[self.player].randomized
 
         # Hint stuff
         self.clearer_hints = True  # this is being enforced since non-oot items do not have non-clear hint text
@@ -943,9 +943,9 @@ class OOTWorld(World):
 
     # Gathers hint data for OoT. Loops over all world locations for woth, barren, and major item locations.
     @classmethod
-    def stage_generate_output(cls, world: MultiWorld, output_directory: str):
+    def stage_generate_output(cls, multiworld: MultiWorld, output_directory: str):
         def hint_type_players(hint_type: str) -> set:
-            return {autoworld.player for autoworld in world.get_game_worlds("Ocarina of Time")
+            return {autoworld.player for autoworld in multiworld.get_game_worlds("Ocarina of Time")
                     if autoworld.hints != 'none' and autoworld.hint_dist_user['distribution'][hint_type]['copies'] > 0}
 
         try:
@@ -956,27 +956,27 @@ class OOTWorld(World):
             items_by_region = {}
             for player in barren_hint_players:
                 items_by_region[player] = {}
-                for r in world.worlds[player].regions:
+                for r in multiworld.worlds[player].regions:
                     items_by_region[player][r.hint_text] = {'dungeon': False, 'weight': 0, 'is_barren': True}
-                for d in world.worlds[player].dungeons:
+                for d in multiworld.worlds[player].dungeons:
                     items_by_region[player][d.hint_text] = {'dungeon': True, 'weight': 0, 'is_barren': True}
                 del (items_by_region[player]["Link's Pocket"])
                 del (items_by_region[player][None])
 
             if item_hint_players:  # loop once over all locations to gather major items. Check oot locations for barren/woth if needed
-                for loc in world.get_locations():
+                for loc in multiworld.get_locations():
                     player = loc.item.player
-                    autoworld = world.worlds[player]
+                    autoworld = multiworld.worlds[player]
                     if ((player in item_hint_players and (autoworld.is_major_item(loc.item) or loc.item.name in autoworld.item_added_hint_types['item']))
-                                or (loc.player in item_hint_players and loc.name in world.worlds[loc.player].added_hint_types['item'])):
+                                or (loc.player in item_hint_players and loc.name in multiworld.worlds[loc.player].added_hint_types['item'])):
                         autoworld.major_item_locations.append(loc)
 
                     if loc.game == "Ocarina of Time" and loc.item.code and (not loc.locked or
                         (oot_is_item_of_type(loc.item, 'Song') or
-                            (oot_is_item_of_type(loc.item, 'SmallKey')         and world.worlds[loc.player].shuffle_smallkeys     == 'any_dungeon') or
-                            (oot_is_item_of_type(loc.item, 'HideoutSmallKey')  and world.worlds[loc.player].shuffle_fortresskeys  == 'any_dungeon') or
-                            (oot_is_item_of_type(loc.item, 'BossKey')          and world.worlds[loc.player].shuffle_bosskeys      == 'any_dungeon') or
-                            (oot_is_item_of_type(loc.item, 'GanonBossKey')     and world.worlds[loc.player].shuffle_ganon_bosskey == 'any_dungeon'))):
+                            (oot_is_item_of_type(loc.item, 'SmallKey')         and multiworld.worlds[loc.player].shuffle_smallkeys     == 'any_dungeon') or
+                            (oot_is_item_of_type(loc.item, 'HideoutSmallKey')  and multiworld.worlds[loc.player].shuffle_fortresskeys  == 'any_dungeon') or
+                            (oot_is_item_of_type(loc.item, 'BossKey')          and multiworld.worlds[loc.player].shuffle_bosskeys      == 'any_dungeon') or
+                            (oot_is_item_of_type(loc.item, 'GanonBossKey')     and multiworld.worlds[loc.player].shuffle_ganon_bosskey == 'any_dungeon'))):
                         if loc.player in barren_hint_players:
                             hint_area = get_hint_area(loc)
                             items_by_region[loc.player][hint_area]['weight'] += 1
@@ -984,13 +984,13 @@ class OOTWorld(World):
                                 items_by_region[loc.player][hint_area]['is_barren'] = False
                         if loc.player in woth_hint_players and loc.item.advancement:
                             # Skip item at location and see if game is still beatable
-                            state = CollectionState(world)
+                            state = CollectionState(multiworld)
                             state.locations_checked.add(loc)
-                            if not world.can_beat_game(state):
-                                world.worlds[loc.player].required_locations.append(loc)
+                            if not multiworld.can_beat_game(state):
+                                multiworld.worlds[loc.player].required_locations.append(loc)
             elif barren_hint_players or woth_hint_players:  # Check only relevant oot locations for barren/woth
                 for player in (barren_hint_players | woth_hint_players):
-                    for loc in world.worlds[player].get_locations():
+                    for loc in multiworld.worlds[player].get_locations():
                         if loc.item.code and (not loc.locked or oot_is_item_of_type(loc.item, 'Song')):
                             if player in barren_hint_players:
                                 hint_area = get_hint_area(loc)
@@ -998,23 +998,23 @@ class OOTWorld(World):
                                 if loc.item.advancement or loc.item.useful:
                                     items_by_region[player][hint_area]['is_barren'] = False
                             if player in woth_hint_players and loc.item.advancement:
-                                state = CollectionState(world)
+                                state = CollectionState(multiworld)
                                 state.locations_checked.add(loc)
-                                if not world.can_beat_game(state):
-                                    world.worlds[player].required_locations.append(loc)
+                                if not multiworld.can_beat_game(state):
+                                    multiworld.worlds[player].required_locations.append(loc)
             for player in barren_hint_players:
-                world.worlds[player].empty_areas = {region: info for (region, info) in items_by_region[player].items()
+                multiworld.worlds[player].empty_areas = {region: info for (region, info) in items_by_region[player].items()
                                                     if info['is_barren']}
         except Exception as e:
             raise e
         finally:
-            for autoworld in world.get_game_worlds("Ocarina of Time"):
+            for autoworld in multiworld.get_game_worlds("Ocarina of Time"):
                 autoworld.hint_data_available.set()
 
     def modify_multidata(self, multidata: dict):
 
         # Replace connect name
-        multidata['connect_names'][self.connect_name] = multidata['connect_names'][self.world.player_name[self.player]]
+        multidata['connect_names'][self.connect_name] = multidata['connect_names'][self.multiworld.player_name[self.player]]
 
         hint_entrances = set()
         for entrance in entrance_shuffle_table:

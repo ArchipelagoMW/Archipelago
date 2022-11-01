@@ -1101,7 +1101,7 @@ def get_pool_core(world):
         skip_in_spoiler_locations.append('Hideout Gerudo Membership Card')
     else:
         card = world.create_item('Gerudo Membership Card')
-        world.world.push_precollected(card)
+        world.multiworld.push_precollected(card)
         placed_items['Hideout Gerudo Membership Card'] = 'Gerudo Membership Card'
         skip_in_spoiler_locations.append('Hideout Gerudo Membership Card')
     if world.shuffle_gerudo_card and world.item_pool_value == 'plentiful':
