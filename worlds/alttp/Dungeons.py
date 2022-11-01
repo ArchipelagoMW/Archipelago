@@ -18,7 +18,7 @@ def create_dungeons(world, player):
         dungeon.boss = BossFactory(default_boss, player) if default_boss else None
         for region in dungeon.regions:
             world.get_region(region, player).dungeon = dungeon
-            dungeon.world = world
+            dungeon.multiworld = world
         return dungeon
 
     ES = make_dungeon('Hyrule Castle', None, ['Hyrule Castle', 'Sewers', 'Sewer Drop', 'Sewers (Dark)', 'Sanctuary'],

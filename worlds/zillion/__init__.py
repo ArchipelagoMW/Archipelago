@@ -11,7 +11,7 @@ from BaseClasses import ItemClassification, LocationProgressType, \
 from Options import AssembleOptions
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
-from .options import zillion_options, validate
+from .options import ZillionStartChar, zillion_options, validate
 from .id_maps import item_name_to_id as _item_name_to_id, \
     loc_name_to_id as _loc_name_to_id, make_id_to_others, \
     zz_reg_name_to_reg_name, base_id
@@ -121,10 +121,10 @@ class ZillionWorld(World):
             raise FileNotFoundError(rom_file)
 
     def generate_early(self) -> None:
-        if not hasattr(self.world, "zillion_logic_cache"):
-            setattr(self.world, "zillion_logic_cache", {})
+        if not hasattr(self.multiworld, "zillion_logic_cache"):
+            setattr(self.multiworld, "zillion_logic_cache", {})
 
-        zz_op, item_counts = validate(self.world, self.player)
+        zz_op, item_counts = validate(self.multiworld, self.player)
 
         self._item_counts = item_counts
 
@@ -148,7 +148,7 @@ class ZillionWorld(World):
         assert self.zz_system.randomizer, "generate_early hasn't been called"
         assert self.id_to_zz_item, "generate_early hasn't been called"
         p = self.player
-        w = self.world
+        w = self.multiworld
         self.my_locations = []
 
         self.zz_system.randomizer.place_canister_gun_reqs()
@@ -159,7 +159,7 @@ class ZillionWorld(World):
         for here_zz_name, zz_r in self.zz_system.randomizer.regions.items():
             here_name = "Menu" if here_zz_name == "start" else zz_reg_name_to_reg_name(here_zz_name)
             all[here_name] = ZillionRegion(zz_r, here_name, RegionType.Generic, here_name, p, w)
-            self.world.regions.append(all[here_name])
+            self.multiworld.regions.append(all[here_name])
 
         limited_skill = Req(gun=3, jump=3, skill=self.zz_system.randomizer.options.skill, hp=940, red=1, floppy=126)
         queue = deque([start])
@@ -191,7 +191,7 @@ class ZillionWorld(World):
                     loc.access_rule = access_rule
                     if not (limited_skill >= zz_loc.req):
                         loc.progress_type = LocationProgressType.EXCLUDED
-                        self.world.exclude_locations[p].value.add(loc.name)
+                        self.multiworld.exclude_locations[p].value.add(loc.name)
                     here.locations.append(loc)
                     self.my_locations.append(loc)
 
@@ -222,11 +222,11 @@ class ZillionWorld(World):
                 if item_name in item_counts:
                     count = item_counts[item_name]
                     self.logger.debug(f"Zillion Items: {item_name}  {count}")
-                    self.world.itempool += [self.create_item(item_name) for _ in range(count)]
+                    self.multiworld.itempool += [self.create_item(item_name) for _ in range(count)]
             elif item_id < (3 + base_id) and zz_item.code == RESCUE:
                 # One of the 3 rescues will not be in the pool and its zz_item will be 'empty'.
                 self.logger.debug(f"Zillion Items: {item_name}  1")
-                self.world.itempool.append(self.create_item(item_name))
+                self.multiworld.itempool.append(self.create_item(item_name))
 
     def set_rules(self) -> None:
         # logic for this game is in create_regions
@@ -237,10 +237,46 @@ class ZillionWorld(World):
         # main location name is an alias
         main_loc_name = self.zz_system.randomizer.loc_name_2_pretty[self.zz_system.randomizer.locations['main'].name]
 
-        self.world.get_location(main_loc_name, self.player)\
+        self.multiworld.get_location(main_loc_name, self.player)\
             .place_locked_item(self.create_item("Win"))
-        self.world.completion_condition[self.player] = \
+        self.multiworld.completion_condition[self.player] = \
             lambda state: state.has("Win", self.player)
+
+    @staticmethod
+    def stage_generate_basic(multiworld: MultiWorld, *args: Any) -> None:
+        # item link pools are about to be created in main
+        # JJ can't be an item link unless all the players share the same start_char
+        # (The reason for this is that the JJ ZillionItem will have a different ZzItem depending
+        #  on whether the start char is Apple or Champ, and the logic depends on that ZzItem.)
+        for group in multiworld.groups.values():
+            # TODO: remove asserts on group when we can specify which members of TypedDict are optional
+            assert "game" in group
+            if group["game"] == "Zillion":
+                assert "item_pool" in group
+                item_pool = group["item_pool"]
+                to_stay = "JJ"
+                if "JJ" in item_pool:
+                    assert "players" in group
+                    group_players = group["players"]
+                    start_chars = cast(Dict[int, ZillionStartChar], getattr(multiworld, "start_char"))
+                    players_start_chars = [
+                        (player, start_chars[player].get_current_option_name())
+                        for player in group_players
+                    ]
+                    start_char_counts = Counter(sc for _, sc in players_start_chars)
+                    # majority rules
+                    if start_char_counts["Apple"] > start_char_counts["Champ"]:
+                        to_stay = "Apple"
+                    elif start_char_counts["Champ"] > start_char_counts["Apple"]:
+                        to_stay = "Champ"
+                    else:  # equal
+                        to_stay = multiworld.random.choice(("Apple", "Champ"))
+
+                    for p, sc in players_start_chars:
+                        if sc != to_stay:
+                            group_players.remove(p)
+                assert "world" in group
+                cast(ZillionWorld, group["world"])._make_item_maps(to_stay)
 
     def post_fill(self) -> None:
         """Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
@@ -259,7 +295,7 @@ class ZillionWorld(World):
         empty = zz_items[4]
         multi_item = empty  # a different patcher method differentiates empty from ap multi item
         multi_items: Dict[str, Tuple[str, str]] = {}  # zz_loc_name to (item_name, player_name)
-        for loc in self.world.get_locations():
+        for loc in self.multiworld.get_locations():
             if loc.player == self.player:
                 z_loc = cast(ZillionLocation, loc)
                 # debug_zz_loc_ids[z_loc.zz_loc.name] = id(z_loc.zz_loc)
@@ -274,7 +310,7 @@ class ZillionWorld(World):
                     z_loc.zz_loc.item = multi_item
                     multi_items[z_loc.zz_loc.name] = (
                         z_loc.item.name,
-                        self.world.get_player_name(z_loc.item.player)
+                        self.multiworld.get_player_name(z_loc.item.player)
                     )
         # debug_zz_loc_ids.sort()
         # for name, id_ in debug_zz_loc_ids.items():
@@ -304,7 +340,7 @@ class ZillionWorld(World):
         zz_patcher.all_fixes_and_options(zz_options)
         zz_patcher.set_external_item_interface(zz_options.start_char, zz_options.max_level)
         zz_patcher.set_multiworld_items(multi_items)
-        game_id = self.world.player_name[self.player].encode() + b'\x00' + self.world.seed_name[-6:].encode()
+        game_id = self.multiworld.player_name[self.player].encode() + b'\x00' + self.multiworld.seed_name[-6:].encode()
         zz_patcher.set_rom_to_ram_data(game_id)
 
     def generate_output(self, output_directory: str) -> None:
@@ -316,7 +352,7 @@ class ZillionWorld(World):
         # original_rom_bytes = self.zz_patcher.rom
         patched_rom_bytes = self.zz_system.patcher.get_patched_bytes()
 
-        out_file_base = self.world.get_out_file_name_base(self.player)
+        out_file_base = self.multiworld.get_out_file_name_base(self.player)
 
         filename = os.path.join(
             output_directory,
@@ -327,7 +363,7 @@ class ZillionWorld(World):
         patch = ZillionDeltaPatch(
             os.path.splitext(filename)[0] + ZillionDeltaPatch.patch_file_ending,
             player=self.player,
-            player_name=self.world.player_name[self.player],
+            player_name=self.multiworld.player_name[self.player],
             patched_path=filename
         )
         patch.write()
@@ -365,7 +401,7 @@ class ZillionWorld(World):
     # def modify_multidata(self, multidata: Dict[str, Any]) -> None:
     #     """For deeper modification of server multidata."""
     #     # not modifying multidata, just want to call this at the end of the generation process
-    #     cache = getattr(self.world, "zillion_logic_cache")
+    #     cache = getattr(self.multiworld, "zillion_logic_cache")
     #     import sys
     #     print(sys.getsizeof(cache))
 
@@ -373,7 +409,7 @@ class ZillionWorld(World):
 
     def create_item(self, name: str) -> Item:
         """Create an item for this world type and player.
-        Warning: this may be called with self.world = None, for example by MultiServer"""
+        Warning: this may be called with self.multiworld = None, for example by MultiServer"""
         item_id = _item_name_to_id[name]
 
         if not self.id_to_zz_item:
