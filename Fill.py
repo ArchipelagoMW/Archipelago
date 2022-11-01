@@ -294,7 +294,7 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
                             {len(unplaced_early_items)} items early.")
             itempool += unplaced_early_items
 
-        fill_locations += early_locations + early_priority_locations
+        fill_locations += early_locations
         world.random.shuffle(fill_locations)
 
     for item in itempool:
