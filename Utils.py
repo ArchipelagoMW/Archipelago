@@ -657,7 +657,10 @@ _faf_tasks: "Set[asyncio.Task[None]]" = set()
 
 
 def async_start(co: Coroutine[None, None, None], name: Optional[str] = None) -> None:
-    """ Use this to start an async function running without waiting for it. "fire-and-forget" """
+    """
+    Use this to start a task when you don't keep a reference to it or immediately await it,
+    to prevent early garbage collection. "fire-and-forget"
+    """
     # https://docs.python.org/3.10/library/asyncio-task.html#asyncio.create_task
     # Python docs:
     # ```
