@@ -883,11 +883,6 @@ class NonLocalItems(ItemSet):
     display_name = "Not Local Items"
 
 
-class EarlyItems(ItemDict):
-    """Force the specified items to be in locations that are reachable from the start."""
-    display_name = "Early Items"
-
-
 class StartInventory(ItemDict):
     """Start with these items."""
     verify_item_name = True
@@ -986,7 +981,6 @@ per_game_common_options = {
     **common_options,  # can be overwritten per-game
     "local_items": LocalItems,
     "non_local_items": NonLocalItems,
-    "early_items": EarlyItems,
     "start_inventory": StartInventory,
     "start_hints": StartHints,
     "start_location_hints": StartLocationHints,

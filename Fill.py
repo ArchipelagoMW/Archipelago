@@ -260,7 +260,7 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
 
     early_items_count: typing.Dict[typing.Tuple[str, int], int] = {}
     for player in world.player_ids:
-        for item, count in world.early_items[player].value.items():
+        for item, count in world.early_items[player].items():
             early_items_count[(item, player)] = count
     if early_items_count:
         early_locations: typing.List[Location] = []
