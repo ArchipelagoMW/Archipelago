@@ -1400,7 +1400,7 @@ class Spoiler():
             res = getattr(self.multiworld, option_key)[player]
             display_name = getattr(option_obj, "display_name", option_key)
             try:
-                outfile.write(f'{display_name + ":":33}{res.get_current_option_name()}\n')
+                outfile.write(f'{display_name + ":":33}{res.current_option_name}\n')
             except:
                 raise Exception
 

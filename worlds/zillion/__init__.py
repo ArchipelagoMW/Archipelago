@@ -261,7 +261,7 @@ class ZillionWorld(World):
                     group_players = group["players"]
                     start_chars = cast(Dict[int, ZillionStartChar], getattr(multiworld, "start_char"))
                     players_start_chars = [
-                        (player, start_chars[player].get_current_option_name())
+                        (player, start_chars[player].current_option_name)
                         for player in group_players
                     ]
                     start_char_counts = Counter(sc for _, sc in players_start_chars)
