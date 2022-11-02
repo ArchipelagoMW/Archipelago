@@ -25,15 +25,15 @@ class LegacyLogic(LogicMixin):
                self.item_count("Attack Up", player) + self.item_count("Magic Damage Up", player)
 
 
-def set_rules(world: MultiWorld, player: int):
+def set_rules(multiworld: MultiWorld, player: int):
     # Vendors
-    if world.vendors[player] == "normal":
-        set_rule(world.get_location("Forest Abkhazia Boss Reward", player),
+    if multiworld.vendors[player] == "normal":
+        set_rule(multiworld.get_location("Forest Abkhazia Boss Reward", player),
                  lambda state: state.has_all_vendors(player))
 
     # Scale each manor location.
     manor_rules = {
-        "Defeat Khidr" if world.khidr[player] == "vanilla" else "Defeat Neo Khidr": [
+        "Defeat Khidr" if multiworld.khidr[player] == "vanilla" else "Defeat Neo Khidr": [
             "Manor - Left Wing Window",
             "Manor - Left Wing Rooftop",
             "Manor - Right Wing Window",
@@ -44,7 +44,7 @@ def set_rules(world: MultiWorld, player: int):
             "Manor - Left Tree 2",
             "Manor - Right Tree",
         ],
-        "Defeat Alexander" if world.alexander[player] == "vanilla" else "Defeat Alexander IV": [
+        "Defeat Alexander" if multiworld.alexander[player] == "vanilla" else "Defeat Alexander IV": [
             "Manor - Left Big Upper 1",
             "Manor - Left Big Upper 2",
             "Manor - Left Big Windows",
@@ -56,7 +56,7 @@ def set_rules(world: MultiWorld, player: int):
             "Manor - Right Big Rooftop",
             "Manor - Right Extension",
         ],
-        "Defeat Ponce de Leon" if world.leon[player] == "vanilla" else "Defeat Ponce de Freon": [
+        "Defeat Ponce de Leon" if multiworld.leon[player] == "vanilla" else "Defeat Ponce de Freon": [
             "Manor - Right High Base",
             "Manor - Right High Upper",
             "Manor - Right High Tower",
@@ -67,20 +67,20 @@ def set_rules(world: MultiWorld, player: int):
 
     for event, locations in manor_rules.items():
         for location in locations:
-            set_rule(world.get_location(location, player), lambda state: state.has(event, player))
+            set_rule(multiworld.get_location(location, player), lambda state: state.has(event, player))
 
     # Standard Zone Progression
-    world.get_entrance("Forest Abkhazia", player).access_rule = \
+    multiworld.get_entrance("Forest Abkhazia", player).access_rule = \
         (lambda state: state.has_stat_upgrades(player, 0.125 * state.total_stat_upgrades_count(player)) and
                        (state.has("Defeat Khidr", player) or state.has("Defeat Neo Khidr", player)))
-    world.get_entrance("The Maya", player).access_rule = \
+    multiworld.get_entrance("The Maya", player).access_rule = \
         (lambda state: state.has_stat_upgrades(player, 0.25 * state.total_stat_upgrades_count(player)) and
                            (state.has("Defeat Alexander", player) or state.has("Defeat Alexander IV", player)))
-    world.get_entrance("Land of Darkness", player).access_rule = \
+    multiworld.get_entrance("Land of Darkness", player).access_rule = \
         (lambda state: state.has_stat_upgrades(player, 0.375 * state.total_stat_upgrades_count(player)) and
                            (state.has("Defeat Ponce de Leon", player) or state.has("Defeat Ponce de Freon", player)))
-    world.get_entrance("The Fountain Room", player).access_rule = \
+    multiworld.get_entrance("The Fountain Room", player).access_rule = \
         (lambda state: state.has_stat_upgrades(player, 0.5 * state.total_stat_upgrades_count(player)) and
                            (state.has("Defeat Herodotus", player) or state.has("Defeat Astrodotus", player)))
 
-    world.completion_condition[player] = lambda state: state.has("Defeat The Fountain", player)
+    multiworld.completion_condition[player] = lambda state: state.has("Defeat The Fountain", player)
