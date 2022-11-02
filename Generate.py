@@ -193,7 +193,8 @@ def main(args=None, callback=ERmain):
                         if category_name is None:
                             if key == "game":
                                 yaml[key] = option
-                                yaml.setdefault(option, {})
+                                if option not in yaml:
+                                    raise KeyError(f"Meta: Game: {key} does not exist in {yaml}.")
                                 continue
                             for category in yaml:
                                 if key in Options.common_options and category in AutoWorldRegister.world_types:
