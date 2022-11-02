@@ -62,6 +62,10 @@ class Overcooked2World(World):
     options: Dict[str, Any]
     itempool: List[Overcooked2Item]
 
+    # Required Implementation
+
+    def get_filler_item_name(self) -> str:
+        return "Bonus Star"
 
     # Helper Functions
 
