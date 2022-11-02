@@ -741,9 +741,9 @@ def buildWorldGossipHints(world, checkedLocations=None):
 
     # Add trial hints, only if hint copies > 0
     if hint_dist['trial'][1] > 0:
-        if world.trials == 6:
+        if world.trials_random and world.trials == 6:
             add_hint(world, stoneGroups, GossipText("#Ganon's Tower# is protected by a powerful barrier.", ['Pink']), hint_dist['trial'][1], force_reachable=True)
-        elif world.trials == 0:
+        elif world.trials_random and world.trials == 0:
             add_hint(world, stoneGroups, GossipText("Sheik dispelled the barrier around #Ganon's Tower#.", ['Yellow']), hint_dist['trial'][1], force_reachable=True)
         elif world.trials < 6 and world.trials > 3:
             for trial,skipped in world.skipped_trials.items():
