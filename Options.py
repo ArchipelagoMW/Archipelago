@@ -453,7 +453,7 @@ class TextChoice(Choice):
     @classmethod
     def get_option_name(cls, value: T) -> str:
         if value in cls.name_lookup:
-            return cls.name_lookup[value]
+            return cls.name_lookup[value].replace("_", " ").title()
         return value
 
     def __eq__(self, other: typing.Any):
