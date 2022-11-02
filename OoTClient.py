@@ -134,6 +134,19 @@ def get_payload(ctx: OoTContext):
 
 async def parse_payload(payload: dict, ctx: OoTContext, force: bool):
 
+    # Refuse to do anything if ROM is detected as changed
+    if ctx.auth and payload['playerName'] != ctx.auth:
+        logger.warning("ROM change detected. Disconnecting and reconnecting...")
+        ctx.deathlink_enabled = False
+        ctx.deathlink_client_override = False
+        ctx.finished_game = False
+        ctx.location_table = {}
+        ctx.deathlink_pending = False
+        ctx.deathlink_sent_this_death = False
+        ctx.auth = payload['playerName']
+        await ctx.send_connect()
+        return
+
     # Turn on deathlink if it is on, and if the client hasn't overriden it
     if payload['deathlinkActive'] and not ctx.deathlink_enabled and not ctx.deathlink_client_override:
         await ctx.update_death_link(True)
