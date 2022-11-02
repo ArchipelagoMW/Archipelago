@@ -464,6 +464,12 @@ class TextChoice(Choice):
         else:
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
+    @classmethod
+    def get_option_name(cls, value: T) -> str:
+        if value in cls.name_lookup:
+            return cls.name_lookup[value]
+        return value
+
 
 class BossMeta(AssembleOptions):
     def __new__(mcs, name, bases, attrs):

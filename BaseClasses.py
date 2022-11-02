@@ -1398,6 +1398,7 @@ class Spoiler():
                 if player in self.multiworld.get_game_players("A Link to the Past"):
                     outfile.write('%s%s\n' % ('Hash: ', self.hashes[player]))
 
+                    outfile.write('Goal:                            %s\n' % self.multiworld.goal[player].value)
                     outfile.write('Entrance Shuffle:                %s\n' % self.multiworld.shuffle[player])
                     if self.multiworld.shuffle[player] != "vanilla":
                         outfile.write('Entrance Shuffle Seed            %s\n' % self.multiworld.worlds[player].er_seed)

@@ -331,14 +331,14 @@ def handle_name(name: str, player: int, name_counter: Counter):
 
 from worlds.alttp.Options import Goal
 goals = {
-    'ganon': Goal.option_ganon_and_tower,
-    'crystals': Goal.option_ganon,
-    'bosses': Goal.option_all_bosses,
-    'pedestal': Goal.option_pedestal,
-    'ganon_pedestal': Goal.option_pedestal_ganon,
-    'triforce_hunt': Goal.option_triforce_hunt,
-    'ganon_triforce_hunt': Goal.option_triforce_hunt_ganon,
-    'ice_rod_hunt': Goal.option_ice_rod_hunt,
+    'ganon': Goal.from_any(Goal.option_ganon_and_tower),
+    'crystals': Goal.from_any(Goal.option_ganon),
+    'bosses': Goal.from_any(Goal.option_all_bosses),
+    'pedestal': Goal.from_any(Goal.option_pedestal),
+    'ganon_pedestal': Goal.from_any(Goal.option_pedestal_ganon),
+    'triforce_hunt': Goal.from_any(Goal.option_triforce_hunt),
+    'ganon_triforce_hunt': Goal.from_any(Goal.option_triforce_hunt_ganon),
+    'ice_rod_hunt': Goal.from_any(Goal.option_ice_rod_hunt),
 }
 
 

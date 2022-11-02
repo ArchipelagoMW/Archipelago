@@ -42,6 +42,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     world.shuffle = args.shuffle.copy()
     world.boss_shuffle = args.shufflebosses.copy()
+    world.goal = args.goal.copy()
     world.beemizer_total_chance = args.beemizer_total_chance.copy()
     world.beemizer_trap_chance = args.beemizer_trap_chance.copy()
     world.shop_shuffle = args.shop_shuffle.copy()
