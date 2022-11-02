@@ -172,7 +172,7 @@ class ValidInventory:
                         transient_items += items_to_remove
                         for transient_item in transient_items:
                             if transient_item not in inventory and transient_item not in locked_items:
-                                locked_items += transient_item
+                                locked_items.append(transient_item)
                             if transient_item.classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing):
                                 self.logical_inventory.add(transient_item.name)
                         break
