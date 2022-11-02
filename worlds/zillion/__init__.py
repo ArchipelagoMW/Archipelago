@@ -145,9 +145,6 @@ class ZillionWorld(World):
 
         self._make_item_maps(zz_op.start_char)
 
-        if self.multiworld.early_scope[self.player]:
-            self.multiworld.early_items[self.player]['Scope'] = 1
-
     def create_regions(self) -> None:
         assert self.zz_system.randomizer, "generate_early hasn't been called"
         assert self.id_to_zz_item, "generate_early hasn't been called"
