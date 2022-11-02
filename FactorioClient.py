@@ -195,7 +195,6 @@ class FactorioContext(CommonContext):
 
 async def game_watcher(ctx: FactorioContext):
     bridge_logger = logging.getLogger("FactorioWatcher")
-    from worlds.factorio.Technologies import lookup_id_to_name
     next_bridge = time.perf_counter() + 1
     try:
         while not ctx.exit_event.is_set():
@@ -226,7 +225,7 @@ async def game_watcher(ctx: FactorioContext):
                     if ctx.locations_checked != research_data:
                         bridge_logger.debug(
                             f"New researches done: "
-                            f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
+                            f"{[ctx.location_names[rid] for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
                     death_link_tick = data.get("death_link_tick", 0)
