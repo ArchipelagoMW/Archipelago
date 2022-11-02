@@ -427,6 +427,7 @@ class Choice(NumericOption):
 
 class TextChoice(Choice):
     """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string"""
+    value: typing.Union[str, int]
 
     def __init__(self, value: typing.Union[str, int]):
         assert isinstance(value, str) or isinstance(value, int), \
@@ -435,10 +436,9 @@ class TextChoice(Choice):
 
     @property
     def current_key(self) -> str:
-        if isinstance(self.value, str):
-            return self.value
-        else:
+        if self.value in self.name_lookup:
             return self.name_lookup[self.value]
+        return self.value
 
     @classmethod
     def from_text(cls, text: str) -> TextChoice:
@@ -451,9 +451,9 @@ class TextChoice(Choice):
 
     @classmethod
     def get_option_name(cls, value: T) -> str:
-        if isinstance(value, str):
-            return value
-        return cls.name_lookup[value]
+        if value in cls.name_lookup:
+            return cls.name_lookup[value]
+        return value
 
     def __eq__(self, other: typing.Any):
         if isinstance(other, self.__class__):
