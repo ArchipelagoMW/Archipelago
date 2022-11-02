@@ -88,17 +88,33 @@ gate_0_whitelist_regions = [
 
 def create_regions(world, player: int, active_locations):
     menu_region = create_region(world, player, active_locations, 'Menu', None, None)
+
     gate_0_region = create_region(world, player, active_locations, 'Gate 0', None, None)
-    gate_1_region = create_region(world, player, active_locations, 'Gate 1', None, None)
-    gate_2_region = create_region(world, player, active_locations, 'Gate 2', None, None)
-    gate_3_region = create_region(world, player, active_locations, 'Gate 3', None, None)
-    gate_4_region = create_region(world, player, active_locations, 'Gate 4', None, None)
-    gate_5_region = create_region(world, player, active_locations, 'Gate 5', None, None)
-    gate_1_boss_region = create_region(world, player, active_locations, 'Gate 1 Boss', [LocationName.gate_1_boss], None)
-    gate_2_boss_region = create_region(world, player, active_locations, 'Gate 2 Boss', [LocationName.gate_2_boss], None)
-    gate_3_boss_region = create_region(world, player, active_locations, 'Gate 3 Boss', [LocationName.gate_3_boss], None)
-    gate_4_boss_region = create_region(world, player, active_locations, 'Gate 4 Boss', [LocationName.gate_4_boss], None)
-    gate_5_boss_region = create_region(world, player, active_locations, 'Gate 5 Boss', [LocationName.gate_5_boss], None)
+
+    if world.number_of_level_gates[player].value >= 1:
+        gate_1_boss_region = create_region(world, player, active_locations, 'Gate 1 Boss', [LocationName.gate_1_boss], None)
+        gate_1_region = create_region(world, player, active_locations, 'Gate 1', None, None)
+        world.regions += [gate_1_region, gate_1_boss_region]
+
+    if world.number_of_level_gates[player].value >= 2:
+        gate_2_boss_region = create_region(world, player, active_locations, 'Gate 2 Boss', [LocationName.gate_2_boss], None)
+        gate_2_region = create_region(world, player, active_locations, 'Gate 2', None, None)
+        world.regions += [gate_2_region, gate_2_boss_region]
+
+    if world.number_of_level_gates[player].value >= 3:
+        gate_3_boss_region = create_region(world, player, active_locations, 'Gate 3 Boss', [LocationName.gate_3_boss], None)
+        gate_3_region = create_region(world, player, active_locations, 'Gate 3', None, None)
+        world.regions += [gate_3_region, gate_3_boss_region]
+
+    if world.number_of_level_gates[player].value >= 4:
+        gate_4_boss_region = create_region(world, player, active_locations, 'Gate 4 Boss', [LocationName.gate_4_boss], None)
+        gate_4_region = create_region(world, player, active_locations, 'Gate 4', None, None)
+        world.regions += [gate_4_region, gate_4_boss_region]
+
+    if world.number_of_level_gates[player].value >= 5:
+        gate_5_boss_region = create_region(world, player, active_locations, 'Gate 5 Boss', [LocationName.gate_5_boss], None)
+        gate_5_region = create_region(world, player, active_locations, 'Gate 5', None, None)
+        world.regions += [gate_5_region, gate_5_boss_region]
 
     city_escape_region_locations = [
         LocationName.city_escape_1,
@@ -765,26 +781,27 @@ def create_regions(world, player: int, active_locations):
     chao_garden_expert_region = create_region(world, player, active_locations, LocationName.chao_garden_expert_region,
                                               chao_garden_expert_region_locations, None)
 
-    biolizard_region_locations = [
-        LocationName.biolizard,
-    ]
-    biolizard_region = create_region(world, player, active_locations, LocationName.biolizard_region,
-                                     biolizard_region_locations, None)
+    if world.goal[player] == 0 or world.goal[player] == 2:
+        biolizard_region_locations = [
+            LocationName.finalhazard,
+        ]
+        biolizard_region = create_region(world, player, active_locations, LocationName.biolizard_region,
+                                         biolizard_region_locations, None)
+        world.regions += [biolizard_region]
+
+    if world.goal[player] == 1 or world.goal[player] == 2:
+        green_hill_region_locations = [
+            LocationName.green_hill,
+        ]
+        green_hill_region = create_region(world, player, active_locations, LocationName.green_hill_region,
+                                          green_hill_region_locations, None)
+        world.regions += [green_hill_region]
+
 
     # Set up the regions correctly.
     world.regions += [
         menu_region,
         gate_0_region,
-        gate_1_region,
-        gate_2_region,
-        gate_3_region,
-        gate_4_region,
-        gate_5_region,
-        gate_1_boss_region,
-        gate_2_boss_region,
-        gate_3_boss_region,
-        gate_4_boss_region,
-        gate_5_boss_region,
         city_escape_region,
         metal_harbor_region,
         green_forest_region,
@@ -819,7 +836,6 @@ def create_regions(world, player: int, active_locations):
         chao_garden_beginner_region,
         chao_garden_intermediate_region,
         chao_garden_expert_region,
-        biolizard_region,
     ]
 
 
@@ -830,21 +846,33 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
     connect(world, player, names, LocationName.gate_0_region, LocationName.cannon_core_region,
             lambda state: (state.has(ItemName.emblem, player, cannon_core_emblems)))
 
-    required_mission_name = LocationName.cannon_core_1
+    if world.goal[player] == 0:
+        required_mission_name = LocationName.cannon_core_1
 
-    if world.required_cannons_core_missions[player].value == 1:
-        cannon_core_missions = [
-            LocationName.cannon_core_1,
-            LocationName.cannon_core_2,
-            LocationName.cannon_core_3,
-            LocationName.cannon_core_4,
-            LocationName.cannon_core_5
-        ]
+        if world.required_cannons_core_missions[player].value == 1:
+            cannon_core_missions = [
+                LocationName.cannon_core_1,
+                LocationName.cannon_core_2,
+                LocationName.cannon_core_3,
+                LocationName.cannon_core_4,
+                LocationName.cannon_core_5
+            ]
 
-        required_mission_name = cannon_core_missions[world.include_missions[player].value - 1]
+            required_mission_name = cannon_core_missions[world.include_missions[player].value - 1]
 
-    connect(world, player, names, LocationName.cannon_core_region, LocationName.biolizard_region,
-            lambda state: (state.can_reach(required_mission_name, "Location", player)))
+        connect(world, player, names, LocationName.cannon_core_region, LocationName.biolizard_region,
+                lambda state: (state.can_reach(required_mission_name, "Location", player)))
+    elif world.goal[player] == 1 or world.goal[player] == 2:
+        connect(world, player, names, 'Menu', LocationName.green_hill_region,
+                lambda state: (state.has(ItemName.white_emerald, player) and
+                               state.has(ItemName.red_emerald, player) and
+                               state.has(ItemName.cyan_emerald, player) and
+                               state.has(ItemName.purple_emerald, player) and
+                               state.has(ItemName.green_emerald, player) and
+                               state.has(ItemName.yellow_emerald, player) and
+                               state.has(ItemName.blue_emerald, player)))
+        if world.goal[player] == 2:
+            connect(world, player, names, LocationName.green_hill_region, LocationName.biolizard_region)
 
     for i in range(len(gates[0].gate_levels)):
         connect(world, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])

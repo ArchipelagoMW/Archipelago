@@ -518,8 +518,9 @@ chao_expert_karate   = "Chao Karate - Expert"
 chao_super_karate    = "Chao Karate - Super"
 
 # Other Definitions
-green_hill = "Green Hill"
-biolizard  = "Biolizard"
+green_hill  = "Green Hill"
+biolizard   = "Biolizard"
+finalhazard = "Finalhazard"
 
 
 # Region Definitions
@@ -576,6 +577,8 @@ mad_space_region     = "Mad Space"
 cannon_core_region = "Cannon Core"
 
 biolizard_region = "Biolizard"
+
+green_hill_region  = "Green Hill"
 
 chao_garden_beginner_region     = "Chao Garden - Beginner"
 chao_garden_intermediate_region = "Chao Garden - Intermediate"

@@ -3,6 +3,20 @@ import typing
 from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList
 
 
+class Goal(Choice):
+    """
+    Determines the goal of the seed
+    Biolizard: Finish Cannon's Core and defeat the Biolizard and Finalhazard
+    Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone
+    Finalhazard Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone, then defeat Finalhazard
+    """
+    display_name = "Goal"
+    option_biolizard = 0
+    option_chaos_emerald_hunt = 1
+    option_finalhazard_chaos_emerald_hunt = 2
+    default = 0
+
+
 class BaseTrapWeight(Choice):
     """
     Base Class for Trap Weights
@@ -112,7 +126,7 @@ class EmblemPercentageForCannonsCore(Range):
     """
     Allows logic to gate the final mission behind a number of Emblems
     """
-    display_name = "Emblem Percentage for Cannons Core"
+    display_name = "Emblem Percentage for Cannon's Core"
     range_start = 0
     range_end = 75
     default = 50
@@ -271,6 +285,7 @@ class Narrator(Choice):
 
 
 sa2b_options: typing.Dict[str, type(Option)] = {
+    "goal": Goal,
     "include_missions": IncludeMissions,
     "keysanity": Keysanity,
     "whistlesanity": Whistlesanity,
