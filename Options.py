@@ -729,7 +729,11 @@ class VerifyKeys:
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
                                 f"Allowed keys: {cls.valid_keys}.")
 
-    def verify(self, world: "World", player_name: str, plando_options: "PlandoOptions") -> None:
+    if typing.TYPE_CHECKING:
+        from Generate import PlandoSettings
+        from worlds.AutoWorld import World
+
+    def verify(self, world: World, player_name: str, plando_options: PlandoSettings) -> None:
         if self.convert_name_groups and self.verify_item_name:
             new_value = type(self.value)()  # empty container of whatever value is
             for item_name in self.value:
