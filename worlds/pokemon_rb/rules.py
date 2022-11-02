@@ -101,7 +101,7 @@ def set_rules(world, player):
         "S.S. Anne B1F - Hidden Item Under Pillow": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Route 10 - Hidden Item Behind Rock Tunnel Entrance Cuttable Tree": lambda
             state: state.pokemon_rb_can_get_hidden_items(player),
-        "Route 10 - Hidden Item Rock": lambda state: state.pokemon_rb_can_get_hidden_items(player),
+        "Route 10 - Hidden Item Bush": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Rocket Hideout B1F - Hidden Item Pot Plant": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Rocket Hideout B3F - Hidden Item Near East Item": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Rocket Hideout B4F - Hidden Item Behind Giovanni": lambda state: state.pokemon_rb_can_get_hidden_items(player),
