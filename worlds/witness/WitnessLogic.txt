@@ -832,7 +832,7 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Path to Challenge - 0x019A5:
 158460 - 0x00973 (Blue Tunnel Left Second 2) - 0x008B8 - Stars & Triangles
 158461 - 0x0097B (Blue Tunnel Left Second 3) - 0x00973 - Stars & Triangles & Stars + Same Colored Symbol
 158462 - 0x0097D (Blue Tunnel Left Second 4) - 0x0097B - Stars & Black/White Squares & Stars + Same Colored Symbol & Triangles
-158463 - 0x0097E (Blue Tunnel Left Second 5) - 0x0097D - Stars & Black/White Squares & Stars + Same Colored Symbol
+158463 - 0x0097E (Blue Tunnel Left Second 5) - 0x0097D - Stars & Black/White Squares & Stars + Same Colored Symbol & Colored Squares
 158464 - 0x00994 (Blue Tunnel Right Second 1) - True - Rotated Shapers & Triangles
 158465 - 0x334D5 (Blue Tunnel Right Second 2) - 0x00994 - Rotated Shapers & Triangles
 158466 - 0x00995 (Blue Tunnel Right Second 3) - 0x334D5 - Rotated Shapers & Triangles
@@ -927,6 +927,6 @@ Elevator (Mountain Final Room):
 158533 - 0x3C114 (Elevator Entry Right) - 0x3D9A6 | 0x3D9A7 - True
 158534 - 0x3D9AA (Back Wall Left) - 0x3D9A6 | 0x3D9A7 - True
 158535 - 0x3D9A8 (Back Wall Right) - 0x3D9A6 | 0x3D9A7 - True
-158536 - 0x3D9A9 (Elevator Start) - 0x3D9AA | 0x3D9A8 - True
+158536 - 0x3D9A9 (Elevator Start) - 0x3D9AA & 7 Lasers | 0x3D9A8 & 7 Lasers - True
 
 Boat (Boat) - Main Island - TrueOneWay - Swamp Near Boat - TrueOneWay - Treehouse Entry Area - TrueOneWay - Quarry Boathouse Behind Staircase - TrueOneWay - Inside Glass Factory Behind Back Wall - TrueOneWay:

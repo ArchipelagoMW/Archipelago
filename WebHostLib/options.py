@@ -1,13 +1,14 @@
+import json
 import logging
 import os
-from Utils import __version__, local_path
-from jinja2 import Template
-import yaml
-import json
 import typing
 
-from worlds.AutoWorld import AutoWorldRegister
+import yaml
+from jinja2 import Template
+
 import Options
+from Utils import __version__, local_path
+from worlds.AutoWorld import AutoWorldRegister
 
 handled_in_js = {"start_inventory", "local_items", "non_local_items", "start_hints", "start_location_hints",
                  "exclude_locations"}
@@ -24,26 +25,14 @@ def create():
             os.unlink(full_path)
 
     def dictify_range(option: typing.Union[Options.Range, Options.SpecialRange]):
-        data = {}
-        special = getattr(option, "special_range_cutoff", None)
-        if special is not None:
-            data[special] = 0
-        data.update({
-            option.range_start: 0,
-            option.range_end: 0,
-            option.default: 50
-        })
-        for sub_option in {"random", "random-low", "random-high"}:
+        data = {option.default: 50}
+        for sub_option in ["random", "random-low", "random-high"]:
             if sub_option != option.default:
                 data[sub_option] = 0
 
-        notes = {
-            special: "minimum value without special meaning",
-            option.range_start: "minimum value",
-            option.range_end: "maximum value"
-        }
-
+        notes = {}
         for name, number in getattr(option, "special_range_names", {}).items():
+            notes[name] = f"equivalent to {number}"
             if number in data:
                 data[name] = data[number]
                 del data[number]

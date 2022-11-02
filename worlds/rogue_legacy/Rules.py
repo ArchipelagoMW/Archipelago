@@ -1,177 +1,86 @@
-from BaseClasses import MultiWorld
-from .Names import LocationName, ItemName
+from BaseClasses import MultiWorld, CollectionState
+
 from ..AutoWorld import LogicMixin
 from ..generic.Rules import set_rule
 
 
 class LegacyLogic(LogicMixin):
-    def _legacy_has_any_vendors(self, player: int) -> bool:
-        return self.has_any({ItemName.blacksmith, ItemName.enchantress}, player)
+    def has_any_vendors(self: CollectionState, player: int) -> bool:
+        return self.has_any({"Blacksmith", "Enchantress"}, player)
 
-    def _legacy_has_all_vendors(self, player: int) -> bool:
-        return self.has_all({ItemName.blacksmith, ItemName.enchantress}, player)
+    def has_all_vendors(self: CollectionState, player: int) -> bool:
+        return self.has_all({"Blacksmith", "Enchantress"}, player)
 
-    def _legacy_has_stat_upgrades(self, player: int, amount: int) -> bool:
-        return self._legacy_stat_upgrade_count(player) >= amount
+    def has_stat_upgrades(self, player: int, amount: int) -> bool:
+        return self.stat_upgrade_count(player) >= amount
 
-    def _legacy_total_stat_upgrades_count(self, player: int) -> int:
-        return int(self.world.health_pool[player]) + \
-               int(self.world.mana_pool[player]) + \
-               int(self.world.attack_pool[player]) + \
-               int(self.world.magic_damage_pool[player]) + \
-               int(self.world.armor_pool[player]) + \
-               int(self.world.equip_pool[player])
+    def total_stat_upgrades_count(self, player: int) -> int:
+        return int(self.multiworld.health_pool[player]) + \
+               int(self.multiworld.mana_pool[player]) + \
+               int(self.multiworld.attack_pool[player]) + \
+               int(self.multiworld.magic_damage_pool[player])
 
-    def _legacy_stat_upgrade_count(self, player: int) -> int:
-        return self.item_count(ItemName.health, player) + self.item_count(ItemName.mana, player) + \
-               self.item_count(ItemName.attack, player) + self.item_count(ItemName.magic_damage, player) + \
-               self.item_count(ItemName.armor, player) + self.item_count(ItemName.equip, player)
+    def stat_upgrade_count(self: CollectionState, player: int) -> int:
+        return self.item_count("Health Up", player) + self.item_count("Mana Up", player) + \
+               self.item_count("Attack Up", player) + self.item_count("Magic Damage Up", player)
 
 
-def set_rules(world: MultiWorld, player: int):
-    # Check for duplicate names.
-    if len(set(world.additional_lady_names[player].value)) != len(world.additional_lady_names[player].value):
-        raise Exception(f"Duplicate values are not allowed in additional_lady_names.")
-    if len(set(world.additional_sir_names[player].value)) != len(world.additional_sir_names[player].value):
-        raise Exception(f"Duplicate values are not allowed in additional_sir_names.")
-
-    if not world.allow_default_names[player]:
-        # Check for quantity.
-        name_count = len(world.additional_lady_names[player].value)
-        if name_count < int(world.number_of_children[player]):
-            raise Exception(f"allow_default_names is off, but not enough names are defined in additional_lady_names. Expected {int(world.number_of_children[player])}, Got {name_count}")
-
-        name_count = len(world.additional_sir_names[player].value)
-        if name_count < int(world.number_of_children[player]):
-            raise Exception(f"allow_default_names is off, but not enough names are defined in additional_sir_names. Expected {int(world.number_of_children[player])}, Got {name_count}")
-
-    # Chests
-    if world.universal_chests[player]:
-        for i in range(0, world.chests_per_zone[player]):
-            set_rule(world.get_location(f"Chest {i + 1 + (world.chests_per_zone[player] * 1)}", player),
-                     lambda state: state.has(ItemName.boss_castle, player))
-            set_rule(world.get_location(f"Chest {i + 1 + (world.chests_per_zone[player] * 2)}", player),
-                     lambda state: state.has(ItemName.boss_forest, player))
-            set_rule(world.get_location(f"Chest {i + 1 + (world.chests_per_zone[player] * 3)}", player),
-                     lambda state: state.has(ItemName.boss_tower, player))
-    else:
-        for i in range(0, world.chests_per_zone[player]):
-            set_rule(world.get_location(f"{LocationName.garden} - Chest {i + 1}", player),
-                     lambda state: state.has(ItemName.boss_castle, player))
-            set_rule(world.get_location(f"{LocationName.tower} - Chest {i + 1}", player),
-                     lambda state: state.has(ItemName.boss_forest, player))
-            set_rule(world.get_location(f"{LocationName.dungeon} - Chest {i + 1}", player),
-                     lambda state: state.has(ItemName.boss_tower, player))
-
-    # Fairy Chests
-    if world.universal_fairy_chests[player]:
-        for i in range(0, world.fairy_chests_per_zone[player]):
-            set_rule(world.get_location(f"Fairy Chest {i + 1 + (world.fairy_chests_per_zone[player] * 1)}", player),
-                     lambda state: state.has(ItemName.boss_castle, player))
-            set_rule(world.get_location(f"Fairy Chest {i + 1 + (world.fairy_chests_per_zone[player] * 2)}", player),
-                     lambda state: state.has(ItemName.boss_forest, player))
-            set_rule(world.get_location(f"Fairy Chest {i + 1 + (world.fairy_chests_per_zone[player] * 3)}", player),
-                     lambda state: state.has(ItemName.boss_tower, player))
-    else:
-        for i in range(0, world.fairy_chests_per_zone[player]):
-            set_rule(world.get_location(f"{LocationName.garden} - Fairy Chest {i + 1}", player),
-                     lambda state: state.has(ItemName.boss_castle, player))
-            set_rule(world.get_location(f"{LocationName.tower} - Fairy Chest {i + 1}", player),
-                     lambda state: state.has(ItemName.boss_forest, player))
-            set_rule(world.get_location(f"{LocationName.dungeon} - Fairy Chest {i + 1}", player),
-                     lambda state: state.has(ItemName.boss_tower, player))
-
+def set_rules(multiworld: MultiWorld, player: int):
     # Vendors
-    if world.vendors[player] == "early":
-        set_rule(world.get_location(LocationName.boss_castle, player),
-                 lambda state: state._legacy_has_all_vendors(player))
-    elif world.vendors[player] == "normal":
-        set_rule(world.get_location(LocationName.garden, player),
-                 lambda state: state._legacy_has_any_vendors(player))
-
-    # Diaries
-    for i in range(0, 5):
-        set_rule(world.get_location(f"Diary {i + 6}", player),
-                 lambda state: state.has(ItemName.boss_castle, player))
-        set_rule(world.get_location(f"Diary {i + 11}", player),
-                 lambda state: state.has(ItemName.boss_forest, player))
-        set_rule(world.get_location(f"Diary {i + 16}", player),
-                 lambda state: state.has(ItemName.boss_tower, player))
-        set_rule(world.get_location(f"Diary {i + 21}", player),
-                 lambda state: state.has(ItemName.boss_dungeon, player))
+    if multiworld.vendors[player] == "normal":
+        set_rule(multiworld.get_location("Forest Abkhazia Boss Reward", player),
+                 lambda state: state.has_all_vendors(player))
 
     # Scale each manor location.
-    set_rule(world.get_location(LocationName.manor_left_wing_window, player),
-             lambda state: state.has(ItemName.boss_castle, player))
-    set_rule(world.get_location(LocationName.manor_left_wing_roof, player),
-             lambda state: state.has(ItemName.boss_castle, player))
-    set_rule(world.get_location(LocationName.manor_right_wing_window, player),
-             lambda state: state.has(ItemName.boss_castle, player))
-    set_rule(world.get_location(LocationName.manor_right_wing_roof, player),
-             lambda state: state.has(ItemName.boss_castle, player))
-    set_rule(world.get_location(LocationName.manor_left_big_base, player),
-             lambda state: state.has(ItemName.boss_castle, player))
-    set_rule(world.get_location(LocationName.manor_right_big_base, player),
-             lambda state: state.has(ItemName.boss_castle, player))
-    set_rule(world.get_location(LocationName.manor_left_tree1, player),
-             lambda state: state.has(ItemName.boss_castle, player))
-    set_rule(world.get_location(LocationName.manor_left_tree2, player),
-             lambda state: state.has(ItemName.boss_castle, player))
-    set_rule(world.get_location(LocationName.manor_right_tree, player),
-             lambda state: state.has(ItemName.boss_castle, player))
-    set_rule(world.get_location(LocationName.manor_left_big_upper1, player),
-             lambda state: state.has(ItemName.boss_forest, player))
-    set_rule(world.get_location(LocationName.manor_left_big_upper2, player),
-             lambda state: state.has(ItemName.boss_forest, player))
-    set_rule(world.get_location(LocationName.manor_left_big_windows, player),
-             lambda state: state.has(ItemName.boss_forest, player))
-    set_rule(world.get_location(LocationName.manor_left_big_roof, player),
-             lambda state: state.has(ItemName.boss_forest, player))
-    set_rule(world.get_location(LocationName.manor_left_far_base, player),
-             lambda state: state.has(ItemName.boss_forest, player))
-    set_rule(world.get_location(LocationName.manor_left_far_roof, player),
-             lambda state: state.has(ItemName.boss_forest, player))
-    set_rule(world.get_location(LocationName.manor_left_extension, player),
-             lambda state: state.has(ItemName.boss_forest, player))
-    set_rule(world.get_location(LocationName.manor_right_big_upper, player),
-             lambda state: state.has(ItemName.boss_forest, player))
-    set_rule(world.get_location(LocationName.manor_right_big_roof, player),
-             lambda state: state.has(ItemName.boss_forest, player))
-    set_rule(world.get_location(LocationName.manor_right_extension, player),
-             lambda state: state.has(ItemName.boss_forest, player))
-    set_rule(world.get_location(LocationName.manor_right_high_base, player),
-             lambda state: state.has(ItemName.boss_tower, player))
-    set_rule(world.get_location(LocationName.manor_right_high_upper, player),
-             lambda state: state.has(ItemName.boss_tower, player))
-    set_rule(world.get_location(LocationName.manor_right_high_tower, player),
-             lambda state: state.has(ItemName.boss_tower, player))
-    set_rule(world.get_location(LocationName.manor_observatory_base, player),
-             lambda state: state.has(ItemName.boss_tower, player))
-    set_rule(world.get_location(LocationName.manor_observatory_scope, player),
-             lambda state: state.has(ItemName.boss_tower, player))
+    manor_rules = {
+        "Defeat Khidr" if multiworld.khidr[player] == "vanilla" else "Defeat Neo Khidr": [
+            "Manor - Left Wing Window",
+            "Manor - Left Wing Rooftop",
+            "Manor - Right Wing Window",
+            "Manor - Right Wing Rooftop",
+            "Manor - Left Big Base",
+            "Manor - Right Big Base",
+            "Manor - Left Tree 1",
+            "Manor - Left Tree 2",
+            "Manor - Right Tree",
+        ],
+        "Defeat Alexander" if multiworld.alexander[player] == "vanilla" else "Defeat Alexander IV": [
+            "Manor - Left Big Upper 1",
+            "Manor - Left Big Upper 2",
+            "Manor - Left Big Windows",
+            "Manor - Left Big Rooftop",
+            "Manor - Left Far Base",
+            "Manor - Left Far Roof",
+            "Manor - Left Extension",
+            "Manor - Right Big Upper",
+            "Manor - Right Big Rooftop",
+            "Manor - Right Extension",
+        ],
+        "Defeat Ponce de Leon" if multiworld.leon[player] == "vanilla" else "Defeat Ponce de Freon": [
+            "Manor - Right High Base",
+            "Manor - Right High Upper",
+            "Manor - Right High Tower",
+            "Manor - Observatory Base",
+            "Manor - Observatory Telescope",
+        ]
+    }
+
+    for event, locations in manor_rules.items():
+        for location in locations:
+            set_rule(multiworld.get_location(location, player), lambda state: state.has(event, player))
 
     # Standard Zone Progression
-    set_rule(world.get_location(LocationName.garden, player),
-             lambda state: state._legacy_has_stat_upgrades(player, 0.125 * state._legacy_total_stat_upgrades_count(player)) and state.has(ItemName.boss_castle, player))
-    set_rule(world.get_location(LocationName.tower, player),
-             lambda state: state._legacy_has_stat_upgrades(player, 0.3125 * state._legacy_total_stat_upgrades_count(player)) and state.has(ItemName.boss_forest, player))
-    set_rule(world.get_location(LocationName.dungeon, player),
-             lambda state: state._legacy_has_stat_upgrades(player, 0.5 * state._legacy_total_stat_upgrades_count(player)) and state.has(ItemName.boss_tower, player))
+    multiworld.get_entrance("Forest Abkhazia", player).access_rule = \
+        (lambda state: state.has_stat_upgrades(player, 0.125 * state.total_stat_upgrades_count(player)) and
+                       (state.has("Defeat Khidr", player) or state.has("Defeat Neo Khidr", player)))
+    multiworld.get_entrance("The Maya", player).access_rule = \
+        (lambda state: state.has_stat_upgrades(player, 0.25 * state.total_stat_upgrades_count(player)) and
+                           (state.has("Defeat Alexander", player) or state.has("Defeat Alexander IV", player)))
+    multiworld.get_entrance("Land of Darkness", player).access_rule = \
+        (lambda state: state.has_stat_upgrades(player, 0.375 * state.total_stat_upgrades_count(player)) and
+                           (state.has("Defeat Ponce de Leon", player) or state.has("Defeat Ponce de Freon", player)))
+    multiworld.get_entrance("The Fountain Room", player).access_rule = \
+        (lambda state: state.has_stat_upgrades(player, 0.5 * state.total_stat_upgrades_count(player)) and
+                           (state.has("Defeat Herodotus", player) or state.has("Defeat Astrodotus", player)))
 
-    # Bosses
-    set_rule(world.get_location(LocationName.boss_castle, player),
-             lambda state: state.has(ItemName.boss_castle, player))
-    set_rule(world.get_location(LocationName.boss_forest, player),
-             lambda state: state.has(ItemName.boss_forest, player))
-    set_rule(world.get_location(LocationName.boss_tower, player),
-             lambda state: state.has(ItemName.boss_tower, player))
-    set_rule(world.get_location(LocationName.boss_dungeon, player),
-             lambda state: state.has(ItemName.boss_dungeon, player))
-    set_rule(world.get_location(LocationName.fountain, player),
-             lambda state: state._legacy_has_stat_upgrades(player, 0.625 * state._legacy_total_stat_upgrades_count(player))
-                and state.has(ItemName.boss_castle, player)
-                and state.has(ItemName.boss_forest, player)
-                and state.has(ItemName.boss_tower, player)
-                and state.has(ItemName.boss_dungeon, player))
-
-    world.completion_condition[player] = lambda state: state.has(ItemName.boss_fountain, player)
+    multiworld.completion_condition[player] = lambda state: state.has("Defeat The Fountain", player)
