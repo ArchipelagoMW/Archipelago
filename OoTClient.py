@@ -9,6 +9,7 @@ from asyncio import StreamReader, StreamWriter
 from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
 import Utils
+from Utils import async_start
 from worlds import network_data_package
 from worlds.oot.Rom import Rom, compress_rom_file
 from worlds.oot.N64Patch import apply_patch_file
@@ -69,7 +70,7 @@ class OoTCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, OoTContext):
             self.ctx.deathlink_client_override = True
             self.ctx.deathlink_enabled = not self.ctx.deathlink_enabled
-            asyncio.create_task(self.ctx.update_death_link(self.ctx.deathlink_enabled), name="Update Deathlink")
+            async_start(self.ctx.update_death_link(self.ctx.deathlink_enabled), name="Update Deathlink")
 
 
 class OoTContext(CommonContext):
@@ -203,7 +204,7 @@ async def n64_sync_task(ctx: OoTContext):
                     if reported_version >= script_version:
                         if ctx.game is not None and 'locations' in data_decoded:
                             # Not just a keep alive ping, parse
-                            asyncio.create_task(parse_payload(data_decoded, ctx, False))
+                            async_start(parse_payload(data_decoded, ctx, False))
                         if not ctx.auth:
                             ctx.auth = data_decoded['playerName']
                             if ctx.awaiting_rom:
@@ -279,7 +280,7 @@ async def patch_and_run_game(apz5_file):
     os.chdir(data_path("Compress"))
     compress_rom_file(decomp_path, comp_path)
     os.remove(decomp_path)
-    asyncio.create_task(run_game(comp_path))
+    async_start(run_game(comp_path))
 
 
 if __name__ == '__main__':
@@ -295,7 +296,7 @@ if __name__ == '__main__':
 
         if args.apz5_file:
             logger.info("APZ5 file supplied, beginning patching process...")
-            asyncio.create_task(patch_and_run_game(args.apz5_file))
+            async_start(patch_and_run_game(args.apz5_file))
 
         ctx = OoTContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="Server Loop")
