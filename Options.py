@@ -79,7 +79,8 @@ class AssembleOptions(abc.ABCMeta):
 
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
-    @abc.abstractclassmethod
+    @classmethod
+    @abc.abstractmethod
     def from_any(cls, value: typing.Any) -> "Option[typing.Any]": ...
 
 
@@ -718,7 +719,7 @@ class VerifyKeys:
     value: typing.Any
 
     @classmethod
-    def verify_keys(cls, data):
+    def verify_keys(cls, data: typing.List[str]):
         if cls.valid_keys:
             data = set(data)
             dataset = set(word.casefold() for word in data) if cls.valid_keys_casefold else set(data)
@@ -727,7 +728,7 @@ class VerifyKeys:
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
                                 f"Allowed keys: {cls.valid_keys}.")
 
-    def verify(self, world, player_name: str, plando_options) -> None:
+    def verify(self, world: "World", player_name: str, plando_options: "PlandoOptions") -> None:
         if self.convert_name_groups and self.verify_item_name:
             new_value = type(self.value)()  # empty container of whatever value is
             for item_name in self.value:
@@ -832,6 +833,11 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
         return item in self.value
 
 
+class ItemSet(OptionSet):
+    verify_item_name = True
+    convert_name_groups = True
+
+
 local_objective = Toggle  # local triforce pieces, local dungeon prizes etc.
 
 
@@ -868,11 +874,6 @@ common_options = {
 }
 
 
-class ItemSet(OptionSet):
-    verify_item_name = True
-    convert_name_groups = True
-
-
 class LocalItems(ItemSet):
     """Forces these items to be in their native world."""
     display_name = "Local Items"
@@ -896,6 +897,7 @@ class StartInventory(ItemDict):
 
 class StartHints(ItemSet):
     """Start with these item's locations prefilled into the !hint command."""
+    verify_item_name = True
     display_name = "Start Hints"
 
 
