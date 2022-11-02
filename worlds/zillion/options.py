@@ -220,6 +220,11 @@ class ZillionRoomGen(Toggle):
     display_name = "room generation"
 
 
+class ZillionEarlyScope(DefaultOnToggle):
+    """ places scope in someone's sphere 1"""
+    display_name = "early scope"
+
+
 zillion_options: Dict[str, AssembleOptions] = {
     "continues": ZillionContinues,
     "floppy_req": ZillionFloppyReq,
@@ -239,6 +244,7 @@ zillion_options: Dict[str, AssembleOptions] = {
     "skill": ZillionSkill,
     "starting_cards": ZillionStartingCards,
     "room_gen": ZillionRoomGen,
+    "early_scope": ZillionEarlyScope,
 }
 
 

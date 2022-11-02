@@ -52,11 +52,6 @@ them.
 ### Advanced settings
 
 The [advanced settings page](/tutorial/Archipelago/advanced_settings/en) describes more options you can put in your configuration file.
- - A recommended setting for Zillion is:
-```
-  early_items:
-    Scope: 1
-```
 
 ### Verifying your config file
 
