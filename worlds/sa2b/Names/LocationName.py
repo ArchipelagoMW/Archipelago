@@ -518,9 +518,10 @@ chao_expert_karate   = "Chao Karate - Expert"
 chao_super_karate    = "Chao Karate - Super"
 
 # Other Definitions
-green_hill  = "Green Hill"
-biolizard   = "Biolizard"
-finalhazard = "Finalhazard"
+green_hill        = "Green Hill"
+green_hill_chao_1 = "Green Hill - Chao Key 1"
+biolizard         = "Biolizard"
+finalhazard       = "Finalhazard"
 
 
 # Region Definitions

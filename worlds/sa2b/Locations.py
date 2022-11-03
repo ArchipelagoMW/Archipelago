@@ -598,6 +598,10 @@ green_hill_location_table = {
     LocationName.green_hill: 0xFF001F,
 }
 
+green_hill_chao_location_table = {
+    LocationName.green_hill_chao_1: 0xFF041F,
+}
+
 other_location_table = {
     # LocationName.biolizard: 0xFF003F,
     LocationName.finalhazard: 0xFF005F,
@@ -619,6 +623,7 @@ all_locations = {
     **chao_garden_intermediate_location_table,
     **chao_garden_expert_location_table,
     **green_hill_location_table,
+    **green_hill_chao_location_table,
     **other_location_table,
 }
 
@@ -700,6 +705,9 @@ def setup_locations(world, player: int):
 
     if world.goal[player].value == 1 or world.goal[player].value == 2:
         location_table.update({**green_hill_location_table})
+
+        if world.keysanity[player]:
+            location_table.update({**green_hill_chao_location_table})
 
     if world.chao_garden_difficulty[player].value >= 1:
         chao_location_table.update({**chao_garden_beginner_location_table})
