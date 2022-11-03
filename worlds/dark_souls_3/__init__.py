@@ -284,10 +284,6 @@ class DarkSouls3World(World):
                 "death_link": self.multiworld.death_link[self.player].value,
                 "no_spell_requirements": self.multiworld.no_spell_requirements[self.player].value,
                 "no_equip_load": self.multiworld.no_equip_load[self.player].value,
-                "auto_equip": self.multiworld.auto_equip[self.player].value,
-                "lock_equip": self.multiworld.lock_equip[self.player].value,
-                "no_weapon_requirements": self.multiworld.no_weapon_requirements[self.player].value,
-
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
