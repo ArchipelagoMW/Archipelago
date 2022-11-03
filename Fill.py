@@ -305,11 +305,12 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     # get items to distribute
     itempool = sorted(world.itempool)
     world.random.shuffle(itempool)
+
+    fill_locations, itempool = distribute_early_items(world, fill_locations, itempool)
+
     progitempool: typing.List[Item] = []
     usefulitempool: typing.List[Item] = []
     filleritempool: typing.List[Item] = []
-
-    fill_locations, itempool = distribute_early_items(world, fill_locations, itempool)
 
     for item in itempool:
         if item.advancement:
