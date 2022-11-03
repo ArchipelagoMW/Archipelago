@@ -99,7 +99,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     supports_weighting = True
 
     # filled by AssembleOptions:
-    name_lookup: typing.Dict[int, str]
+    name_lookup: typing.Dict[T, str]
     options: typing.Dict[str, int]
 
     def __repr__(self) -> str:
@@ -145,7 +145,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
             pass
 
 
-class FreeText(Option):
+class FreeText(Option[str]):
     """Text option that allows users to enter strings.
     Needs to be validated by the world or option definition."""
 
@@ -166,7 +166,7 @@ class FreeText(Option):
         return cls.from_text(str(data))
 
     @classmethod
-    def get_option_name(cls, value: T) -> str:
+    def get_option_name(cls, value: str) -> str:
         return value
 
 
