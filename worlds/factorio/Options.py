@@ -41,17 +41,30 @@ class Goal(Choice):
     default = 0
 
 
-class TechCost(Choice):
-    """How expensive are the technologies."""
-    display_name = "Technology Cost Scale"
-    option_very_easy = 0
-    option_easy = 1
-    option_kind = 2
-    option_normal = 3
-    option_hard = 4
-    option_very_hard = 5
-    option_insane = 6
-    default = 3
+class TechCost(Range):
+    range_start = 1
+    range_end = 10000
+    default = 5
+
+
+class MinTechCost(TechCost):
+    """The cheapest a Technology can be in Science Packs."""
+    display_name = "Minimum Science Pack Cost"
+    default = 5
+
+
+class MaxTechCost(TechCost):
+    """The most expensive a Technology can be in Science Packs."""
+    display_name = "Maximum Science Pack Cost"
+    default = 500
+
+
+class TechCostMix(Range):
+    """Percent chance that a preceding Science Pack is also required.
+    Chance is rolled per preceding pack."""
+    display_name = "Science Pack Cost Mix"
+    range_end = 100
+    default = 70
 
 
 class Silo(Choice):
@@ -137,8 +150,6 @@ class Progressive(Choice):
     option_off = 0
     option_grouped_random = 1
     option_on = 2
-    alias_false = 0
-    alias_true = 2
     default = 2
 
     def want_progressives(self, random):
@@ -170,7 +181,7 @@ class FactorioFreeSampleWhitelist(OptionSet):
 
 
 class TrapCount(Range):
-    range_end = 4
+    range_end = 25
 
 
 class AttackTrapCount(TrapCount):
@@ -345,7 +356,9 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "max_science_pack": MaxSciencePack,
     "goal": Goal,
     "tech_tree_layout": TechTreeLayout,
-    "tech_cost": TechCost,
+    "min_tech_cost": MinTechCost,
+    "max_tech_cost": MaxTechCost,
+    "tech_cost_mix": TechCostMix,
     "silo": Silo,
     "satellite": Satellite,
     "free_samples": FreeSamples,

@@ -16,7 +16,9 @@ from worlds.smz3.TotalSMZ3.Config import Config, GameMode, Goal, KeyShuffle, Mor
 from worlds.smz3.TotalSMZ3.Location import LocationType, locations_start_id, Location as TotalSMZ3Location
 from worlds.smz3.TotalSMZ3.Patch import Patch as TotalSMZ3Patch, getWord, getWordArray
 from worlds.smz3.TotalSMZ3.WorldState import WorldState
+from worlds.smz3.TotalSMZ3.Region import IReward, IMedallionAccess
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
+from .Client import SMZ3SNIClient
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
 from .Options import smz3_options
@@ -25,6 +27,10 @@ from Options import Accessibility
 world_folder = os.path.dirname(__file__)
 logger = logging.getLogger("SMZ3")
 
+# Location IDs in the range 256+196 to 256+202 shifted +34 between 11.2 and 11.3
+# this is required to keep backward compatibility
+def convertLocSMZ3IDToAPID(value):
+    return (value - 34) if value >= 256+230 and value <= 256+236 else value
 
 class SMZ3CollectionState(metaclass=AutoLogicRegister):
     def init_mixin(self, parent: MultiWorld):
@@ -61,12 +67,13 @@ class SMZ3World(World):
     """
     game: str = "SMZ3"
     topology_present = False
-    data_version = 2
+    data_version = 3
     option_definitions = smz3_options
     item_names: Set[str] = frozenset(TotalSMZ3Item.lookup_name_to_id)
     location_names: Set[str]
     item_name_to_id = TotalSMZ3Item.lookup_name_to_id
-    location_name_to_id: Dict[str, int] = {key : locations_start_id + value.Id for key, value in TotalSMZ3World(Config(), "", 0, "").locationLookup.items()}
+    location_name_to_id: Dict[str, int] = {key : locations_start_id + convertLocSMZ3IDToAPID(value.Id)
+        for key, value in TotalSMZ3World(Config(), "", 0, "").locationLookup.items()}
     web = SMZ3Web()
 
     remote_items: bool = False
@@ -184,24 +191,24 @@ class SMZ3World(World):
         self.config = Config()
         self.config.GameMode = GameMode.Multiworld
         self.config.Z3Logic = Z3Logic.Normal
-        self.config.SMLogic = SMLogic(self.world.sm_logic[self.player].value)
-        self.config.SwordLocation = SwordLocation(self.world.sword_location[self.player].value)
-        self.config.MorphLocation = MorphLocation(self.world.morph_location[self.player].value)
-        self.config.Goal = Goal(self.world.goal[self.player].value)
-        self.config.KeyShuffle = KeyShuffle(self.world.key_shuffle[self.player].value)
-        self.config.OpenTower = OpenTower(self.world.open_tower[self.player].value)
-        self.config.GanonVulnerable = GanonVulnerable(self.world.ganon_vulnerable[self.player].value)
-        self.config.OpenTourian = OpenTourian(self.world.open_tourian[self.player].value)
+        self.config.SMLogic = SMLogic(self.multiworld.sm_logic[self.player].value)
+        self.config.SwordLocation = SwordLocation(self.multiworld.sword_location[self.player].value)
+        self.config.MorphLocation = MorphLocation(self.multiworld.morph_location[self.player].value)
+        self.config.Goal = Goal(self.multiworld.goal[self.player].value)
+        self.config.KeyShuffle = KeyShuffle(self.multiworld.key_shuffle[self.player].value)
+        self.config.OpenTower = OpenTower(self.multiworld.open_tower[self.player].value)
+        self.config.GanonVulnerable = GanonVulnerable(self.multiworld.ganon_vulnerable[self.player].value)
+        self.config.OpenTourian = OpenTourian(self.multiworld.open_tourian[self.player].value)
 
-        self.local_random = random.Random(self.world.random.randint(0, 1000))
-        self.smz3World = TotalSMZ3World(self.config, self.world.get_player_name(self.player), self.player, self.world.seed_name)
+        self.local_random = random.Random(self.multiworld.random.randint(0, 1000))
+        self.smz3World = TotalSMZ3World(self.config, self.multiworld.get_player_name(self.player), self.player, self.multiworld.seed_name)
         self.smz3DungeonItems = []
         SMZ3World.location_names = frozenset(self.smz3World.locationLookup.keys())
 
-        self.world.state.smz3state[self.player] = TotalSMZ3Item.Progression([])
+        self.multiworld.state.smz3state[self.player] = TotalSMZ3Item.Progression([])
     
     def generate_basic(self):
-        self.smz3World.Setup(WorldState.Generate(self.config, self.world.random))
+        self.smz3World.Setup(WorldState.Generate(self.config, self.multiworld.random))
         self.dungeon = TotalSMZ3Item.Item.CreateDungeonPool(self.smz3World)
         self.dungeon.reverse()
         self.progression = TotalSMZ3Item.Item.CreateProgressionPool(self.smz3World)
@@ -218,25 +225,26 @@ class SMZ3World(World):
         else:
             progressionItems = self.progression 
             for item in self.keyCardsItems:
-                self.world.push_precollected(SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item))
+                self.multiworld.push_precollected(SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item))
 
         itemPool = [SMZ3Item(item.Type.name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in progressionItems] + \
                     [SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in allJunkItems]
         self.smz3DungeonItems = [SMZ3Item(item.Type.name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in self.dungeon]
-        self.world.itempool += itemPool
+        self.multiworld.itempool += itemPool
 
     def set_rules(self):
         # SM G4 is logically required to access Ganon's Tower in SMZ3
-        self.world.completion_condition[self.player] = lambda state: \
+        self.multiworld.completion_condition[self.player] = lambda state: \
             self.smz3World.GetRegion("Ganon's Tower").CanEnter(state.smz3state[self.player]) and \
-            self.smz3World.GetRegion("Ganon's Tower").TowerAscend(state.smz3state[self.player])
+            self.smz3World.GetRegion("Ganon's Tower").TowerAscend(state.smz3state[self.player]) and \
+            self.smz3World.GetRegion("Ganon's Tower").CanComplete(state.smz3state[self.player])
 
         for region in self.smz3World.Regions:
-            entrance = self.world.get_entrance('Menu' + "->" + region.Name, self.player)
+            entrance = self.multiworld.get_entrance('Menu' + "->" + region.Name, self.player)
             set_rule(entrance, lambda state, region=region: region.CanEnter(state.smz3state[self.player]))
             for loc in region.Locations:
                 l = self.locations[loc.Name]
-                if self.world.accessibility[self.player] != 'locations':
+                if self.multiworld.accessibility[self.player] != 'locations':
                     l.always_allow = lambda state, item, loc=loc: \
                         item.game == "SMZ3" and \
                         loc.alwaysAllow(TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World), state.smz3state[self.player])
@@ -249,13 +257,13 @@ class SMZ3World(World):
 
     def create_regions(self):
         self.create_locations(self.player)
-        startRegion = self.create_region(self.world, self.player, 'Menu')
-        self.world.regions.append(startRegion)
+        startRegion = self.create_region(self.multiworld, self.player, 'Menu')
+        self.multiworld.regions.append(startRegion)
 
         for region in self.smz3World.Regions:
-            currentRegion = self.create_region(self.world, self.player, region.Name, region.locationLookup.keys(), [region.Name + "->" + 'Menu'])
-            self.world.regions.append(currentRegion)
-            entrance = self.world.get_entrance(region.Name + "->" + 'Menu', self.player)
+            currentRegion = self.create_region(self.multiworld, self.player, region.Name, region.locationLookup.keys(), [region.Name + "->" + 'Menu'])
+            self.multiworld.regions.append(currentRegion)
+            entrance = self.multiworld.get_entrance(region.Name + "->" + 'Menu', self.player)
             entrance.connect(startRegion)
             exit = Entrance(self.player, 'Menu' + "->" + region.Name, startRegion)
             startRegion.exits.append(exit)
@@ -341,7 +349,7 @@ class SMZ3World(World):
         sm_remote_idx = 0
         lttp_remote_idx = 0
         for location in self.smz3World.Locations:
-            if self.world.worlds[location.APLocation.item.player].game != self.game:
+            if self.multiworld.worlds[location.APLocation.item.player].game != self.game:
                 if location.Type == LocationType.Visible or location.Type == LocationType.Chozo or location.Type == LocationType.Hidden:
                     patch[0x390000 + sm_remote_idx*64] = self.convert_to_sm_item_name(location.APLocation.item.name)
                     sm_remote_idx += 1
@@ -363,12 +371,12 @@ class SMZ3World(World):
         patch = {}
 
         # smSpinjumps
-        if (self.world.spin_jumps_animation[self.player].value == 1):
+        if (self.multiworld.spin_jumps_animation[self.player].value == 1):
             patch[self.SnesCustomization(0x9B93FE)] = bytearray([0x01])
 
         # z3HeartBeep
         values =    [ 0x00, 0x80, 0x40, 0x20, 0x10]
-        index = self.world.heart_beep_speed[self.player].value
+        index = self.multiworld.heart_beep_speed[self.player].value
         patch[0x400033] = bytearray([values[index if index < len(values) else 2]])
 
         # z3HeartColor
@@ -378,17 +386,17 @@ class SMZ3World(World):
                         [0x2C, [0xC9, 0x69]],
                         [0x28, [0xBC, 0x02]]
                     ]
-        index = self.world.heart_color[self.player].value
+        index = self.multiworld.heart_color[self.player].value
         (hud, fileSelect) = values[index if index < len(values) else 0]
         for i in range(0, 20, 2):
             patch[self.SnesCustomization(0xDFA1E + i)] = bytearray([hud])
         patch[self.SnesCustomization(0x1BD6AA)] = bytearray(fileSelect)
 
         # z3QuickSwap
-        patch[0x40004B] = bytearray([0x01 if self.world.quick_swap[self.player].value else 0x00])
+        patch[0x40004B] = bytearray([0x01 if self.multiworld.quick_swap[self.player].value else 0x00])
 
         # smEnergyBeepOff
-        if (self.world.energy_beep[self.player].value == 0):
+        if (self.multiworld.energy_beep[self.player].value == 0):
             for ([addr, value]) in [
                             [0x90EA9B, 0x80],
                             [0x90F337, 0x80],
@@ -405,12 +413,12 @@ class SMZ3World(World):
             base_combined_rom = basepatch.apply(base_combined_rom)
 
             patcher = TotalSMZ3Patch(self.smz3World,
-                                    [world.smz3World for key, world in self.world.worlds.items() if isinstance(world, SMZ3World) and hasattr(world, "smz3World")],
-                                    self.world.seed_name,
-                                    self.world.seed,
-                                    self.local_random,
-                                    {v: k for k, v in self.world.player_name.items()},
-                                    next(iter(loc.player for loc in self.world.get_locations() if (loc.item.name == "SilverArrows" and loc.item.player == self.player))))
+                                     [world.smz3World for key, world in self.multiworld.worlds.items() if isinstance(world, SMZ3World) and hasattr(world, "smz3World")],
+                                     self.multiworld.seed_name,
+                                     self.multiworld.seed,
+                                     self.local_random,
+                                     {v: k for k, v in self.multiworld.player_name.items()},
+                                     next(iter(loc.player for loc in self.multiworld.get_locations() if (loc.item.name == "SilverArrows" and loc.item.player == self.player))))
             patches = patcher.Create(self.smz3World.Config)
             patches.update(self.apply_sm_custom_sprite())
             patches.update(self.apply_item_names())
@@ -421,15 +429,13 @@ class SMZ3World(World):
                     base_combined_rom[addr + offset] = byte
                     offset += 1
 
-            outfilebase = 'AP_' + self.world.seed_name
-            outfilepname = f'_P{self.player}'
-            outfilepname += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}" \
+            outfilebase = self.multiworld.get_out_file_name_base(self.player)
 
-            filename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
+            filename = os.path.join(output_directory, f"{outfilebase}.sfc")
             with open(filename, "wb") as binary_file:
                 binary_file.write(base_combined_rom)
-            patch = SMZ3DeltaPatch(os.path.splitext(filename)[0]+SMZ3DeltaPatch.patch_file_ending, player=self.player,
-                                   player_name=self.world.player_name[self.player], patched_path=filename)
+            patch = SMZ3DeltaPatch(os.path.splitext(filename)[0] + SMZ3DeltaPatch.patch_file_ending, player=self.player,
+                                   player_name=self.multiworld.player_name[self.player], patched_path=filename)
             patch.write()
             os.remove(filename)
             self.rom_name = bytearray(patcher.title, 'utf8')
@@ -454,7 +460,7 @@ class SMZ3World(World):
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            payload = multidata["connect_names"][self.world.player_name[self.player]]
+            payload = multidata["connect_names"][self.multiworld.player_name[self.player]]
             multidata["connect_names"][new_name] = payload
 
     def fill_slot_data(self): 
@@ -491,18 +497,18 @@ class SMZ3World(World):
 
         if (not self.smz3World.Config.Keysanity):
             locations = [loc for loc in self.locations.values() if loc.item is None]
-            self.world.random.shuffle(locations)
+            self.multiworld.random.shuffle(locations)
 
-            all_state = self.world.get_all_state(False)
+            all_state = self.multiworld.get_all_state(False)
             for item in self.smz3DungeonItems:
                 all_state.remove(item)
 
             all_dungeonItems = self.smz3DungeonItems[:]
-            fill_restrictive(self.world, all_state, locations, all_dungeonItems, True, True)
+            fill_restrictive(self.multiworld, all_state, locations, all_dungeonItems, True, True)
             # some small or big keys (those always_allow) can be unreachable in-game
             # while logic still collects some of them (probably to simulate the player collecting pot keys in the logic), some others don't
             # so we need to remove those exceptions as progression items
-            if self.world.accessibility[self.player] != 'locations':
+            if self.multiworld.accessibility[self.player] != 'locations':
                 exception_item = [TotalSMZ3Item.ItemType.BigKeySW, TotalSMZ3Item.ItemType.BigKeySP, TotalSMZ3Item.ItemType.KeyTH]
                 for item in self.smz3DungeonItems:
                     if item.item.Type in exception_item and item.location.always_allow(all_state, item) and not all_state.can_reach(item.location):
@@ -519,16 +525,31 @@ class SMZ3World(World):
             return []
 
     def get_filler_item_name(self) -> str:
-        return self.world.random.choice(self.junkItemsNames)
+        return self.multiworld.random.choice(self.junkItemsNames)
 
     def write_spoiler(self, spoiler_handle: TextIO):
-            self.world.spoiler.unreachables.update(self.unreachable)
+        self.multiworld.spoiler.unreachables.update(self.unreachable)
+        player_name = f'{self.multiworld.get_player_name(self.player)}: ' if self.multiworld.players > 1 else ''
+        spoiler_handle.write('\n\nRewards:\n\n')
+        spoiler_handle.write('\n'.join([
+            f"{player_name}{region.Name}: {region.Reward.name}"
+            for region in self.smz3World.Regions
+            if isinstance(region, IReward)
+        ]))
+        spoiler_handle.write('\n\nMedallions:\n\n')
+        spoiler_handle.write('\n'.join([
+            f"{player_name}{region.Name}: {region.Medallion.name}"
+            for region in self.smz3World.Regions
+            if isinstance(region, IMedallionAccess)
+        ]))
 
     def JunkFillGT(self, factor):
-        poolLength = len(self.world.itempool)
-        junkPoolIdx = [i for i in range(0, poolLength) 
-                    if self.world.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap) and
-                    self.world.itempool[i].player == self.player]
+        poolLength = len(self.multiworld.itempool)
+        playerGroups = self.multiworld.get_player_groups(self.player)
+        playerGroups.add(self.player)
+        junkPoolIdx = [i for i in range(0, poolLength)
+                    if self.multiworld.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap) and
+                    self.multiworld.itempool[i].player in playerGroups]
         toRemove = []
         for loc in self.locations.values():
             # commenting this for now since doing a partial GT pre fill would allow for non SMZ3 progression in GT
@@ -538,19 +559,19 @@ class SMZ3World(World):
             if loc.name in self.locationNamesGT and loc.item is None:
                 poolLength = len(junkPoolIdx)
                 # start looking at a random starting index and loop at start if no match found
-                start = self.world.random.randint(0, poolLength)
+                start = self.multiworld.random.randint(0, poolLength)
                 for off in range(0, poolLength):
                     i = (start + off) % poolLength
-                    candidate = self.world.itempool[junkPoolIdx[i]]
-                    if junkPoolIdx[i] not in toRemove and loc.can_fill(self.world.state, candidate, False):
+                    candidate = self.multiworld.itempool[junkPoolIdx[i]]
+                    if junkPoolIdx[i] not in toRemove and loc.can_fill(self.multiworld.state, candidate, False):
                         itemFromPool = candidate
                         toRemove.append(junkPoolIdx[i])
                         break
-                self.world.push_item(loc, itemFromPool, False)
+                self.multiworld.push_item(loc, itemFromPool, False)
                 loc.event = False
         toRemove.sort(reverse = True)
         for i in toRemove: 
-            self.world.itempool.pop(i)
+            self.multiworld.itempool.pop(i)
             
     def FillItemAtLocation(self, itemPool, itemType, location):
         itemToPlace = TotalSMZ3Item.Item.Get(itemPool, itemType, self.smz3World)
@@ -558,28 +579,28 @@ class SMZ3World(World):
             raise Exception(f"Tried to place item {itemType} at {location.Name}, but there is no such item in the item pool")
         else:
             location.Item = itemToPlace
-            itemFromPool = next((i for i in self.world.itempool if i.player == self.player and i.name == itemToPlace.Type.name), None)
+            itemFromPool = next((i for i in self.multiworld.itempool if i.player == self.player and i.name == itemToPlace.Type.name), None)
             if itemFromPool is not None:
-                self.world.get_location(location.Name, self.player).place_locked_item(itemFromPool)
-                self.world.itempool.remove(itemFromPool)
+                self.multiworld.get_location(location.Name, self.player).place_locked_item(itemFromPool)
+                self.multiworld.itempool.remove(itemFromPool)
             else:
                 itemFromPool = next((i for i in self.smz3DungeonItems if i.player == self.player and i.name == itemToPlace.Type.name), None)
                 if itemFromPool is not None:
-                    self.world.get_location(location.Name, self.player).place_locked_item(itemFromPool)
+                    self.multiworld.get_location(location.Name, self.player).place_locked_item(itemFromPool)
                     self.smz3DungeonItems.remove(itemFromPool)
         itemPool.remove(itemToPlace)
 
     def FrontFillItemInOwnWorld(self, itemPool, itemType):
         item = TotalSMZ3Item.Item.Get(itemPool, itemType, self.smz3World)
-        location = next(iter(self.world.random.sample(TotalSMZ3Location.AvailableGlobal(TotalSMZ3Location.Empty(self.smz3World.Locations), self.smz3World.Items()), 1)), None)
+        location = next(iter(self.multiworld.random.sample(TotalSMZ3Location.AvailableGlobal(TotalSMZ3Location.Empty(self.smz3World.Locations), self.smz3World.Items()), 1)), None)
         if (location == None):
             raise Exception(f"Tried to front fill {item.Name} in, but no location was available")
         
         location.Item = item
-        itemFromPool = next((i for i in self.world.itempool if i.player == self.player and i.name == item.Type.name and i.advancement == item.Progression), None)
+        itemFromPool = next((i for i in self.multiworld.itempool if i.player == self.player and i.name == item.Type.name and i.advancement == item.Progression), None)
         if itemFromPool is not None:
-            self.world.get_location(location.Name, self.player).place_locked_item(itemFromPool)
-            self.world.itempool.remove(itemFromPool)
+            self.multiworld.get_location(location.Name, self.player).place_locked_item(itemFromPool)
+            self.multiworld.itempool.remove(itemFromPool)
         itemPool.remove(item)
 
     def InitialFillInOwnWorld(self):
@@ -615,7 +636,7 @@ class SMZ3World(World):
 
     def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
         ret = Region(name, RegionType.LightWorld, name, player)
-        ret.world = world
+        ret.multiworld = world
         if locations:
             for loc in locations:
                 location = self.locations[loc]

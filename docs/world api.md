@@ -102,12 +102,17 @@ Locations are places where items can be located in your game. This may be chests
 or boss drops for RPG-like games but could also be progress in a research tree.
 
 Each location has a `name` and an `id` (a.k.a. "code" or "address"), is placed
-in a Region and has access rules.
-The name needs to be unique in each game, the ID needs to be unique across all
-games and is best in the same range as the item IDs.
+in a Region, has access rules and a classification.
+The name needs to be unique in each game and must not be numeric (has to
+contain least 1 letter or symbol). The ID needs to be unique across all games
+and is best in the same range as the item IDs.
 World-specific IDs are 1 to 2<sup>53</sup>-1, IDs ≤ 0 are global and reserved.
 
 Special locations with ID `None` can hold events.
+
+Classification is one of `LocationProgressType.DEFAULT`, `PRIORITY` or `EXCLUDED`.
+The Fill algorithm will fill priority first, giving higher chance of it being
+required, and not place progression or useful items in excluded locations.
 
 ### Items
 
@@ -120,6 +125,9 @@ Progression items are items which a player may require to progress in
 their world. Progression items will be assigned to locations with higher
 priority and moved around to meet defined rules and accomplish progression
 balancing.
+
+The name needs to be unique in each game, meaning a duplicate item has the
+same ID. Name must not be numeric (has to contain at least 1 letter or symbol).
 
 Special items with ID `None` can mark events (read below).
 
@@ -188,15 +196,17 @@ the `/worlds` directory. The starting point for the package is `__init.py__`.
 Conventionally, your world class is placed in that file.
 
 World classes must inherit from the `World` class in `/worlds/AutoWorld.py`,
-which can be imported as `..AutoWorld.World` from your package.
+which can be imported as `worlds.AutoWorld.World` from your package.
 
 AP will pick up your world automatically due to the `AutoWorld` implementation.
 
 ### Requirements
 
 If your world needs specific python packages, they can be listed in
-`world/[world_name]/requirements.txt`.
-See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format)
+`world/[world_name]/requirements.txt`. ModuleUpdate.py will automatically
+pick up and install them.
+
+See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requirements-file-format).
 
 ### Relative Imports
 
@@ -208,6 +218,10 @@ e.g. `from .Options import mygame_options` from your `__init__.py` will load
 
 When imported names pile up it may be easier to use `from . import Options`
 and access the variable as `Options.mygame_options`.
+
+Imports from directories outside your world should use absolute imports.
+Correct use of relative / absolute imports is required for zipped worlds to
+function, see [apworld specification.md](apworld%20specification.md).
 
 ### Your Item Type
 
@@ -274,14 +288,12 @@ Define a property `option_<name> = <number>` per selectable value and
 `default = <number>` to set the default selection. Aliases can be set by
 defining a property `alias_<name> = <same number>`.
 
-One special case where aliases are required is when option name is `yes`, `no`,
-`on` or `off` because they parse to `True` or `False`:
 ```python
 option_off = 0
 option_on = 1
 option_some = 2
-alias_false = 0
-alias_true = 1
+alias_disabled = 0
+alias_enabled = 1
 default = 0
 ```
 
@@ -323,7 +335,7 @@ mygame_options: typing.Dict[str, type(Option)] = {
 ```python
 # __init__.py
 
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 from .Options import mygame_options  # import the options dict
 
 class MyGameWorld(World):
@@ -352,7 +364,7 @@ more natural. These games typically have been edited to 'bake in' the items.
 from .Options import mygame_options  # the options we defined earlier
 from .Items import mygame_items  # data used below to add items to the World
 from .Locations import mygame_locations  # same as above
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 from BaseClasses import Region, Location, Entrance, Item, RegionType, ItemClassification
 from Utils import get_options, output_path
 
@@ -447,7 +459,7 @@ In addition, the following methods can be implemented and attributes can be set
 ```python
 def generate_early(self) -> None:
     # read player settings to world instance
-    self.final_boss_hp = self.world.final_boss_hp[self.player].value
+    self.final_boss_hp = self.multiworld.final_boss_hp[self.player].value
 ```
 
 #### create_item
@@ -482,19 +494,19 @@ def create_items(self) -> None:
     # If an item can't have duplicates it has to be excluded manually.
 
     # List of items to exclude, as a copy since it will be destroyed below
-    exclude = [item for item in self.world.precollected_items[self.player]]
+    exclude = [item for item in self.multiworld.precollected_items[self.player]]
 
     for item in map(self.create_item, mygame_items):
         if item in exclude:
             exclude.remove(item)  # this is destructive. create unique list above
-            self.world.itempool.append(self.create_item("nothing"))
+            self.multiworld.itempool.append(self.create_item("nothing"))
         else:
-            self.world.itempool.append(item)
+            self.multiworld.itempool.append(item)
 
     # itempool and number of locations should match up.
     # If this is not the case we want to fill the itempool with junk.
     junk = 0  # calculate this based on player settings
-    self.world.itempool += [self.create_item("nothing") for _ in range(junk)]
+    self.multiworld.itempool += [self.create_item("nothing") for _ in range(junk)]
 ```
 
 #### create_regions
@@ -503,30 +515,30 @@ def create_items(self) -> None:
 def create_regions(self) -> None:
     # Add regions to the multiworld. "Menu" is the required starting point.
     # Arguments to Region() are name, type, human_readable_name, player, world
-    r = Region("Menu", RegionType.Generic, "Menu", self.player, self.world)
+    r = Region("Menu", RegionType.Generic, "Menu", self.player, self.multiworld)
     # Set Region.exits to a list of entrances that are reachable from region
     r.exits = [Entrance(self.player, "New game", r)]  # or use r.exits.append
     # Append region to MultiWorld's regions
-    self.world.regions.append(r)  # or use += [r...]
+    self.multiworld.regions.append(r)  # or use += [r...]
     
-    r = Region("Main Area", RegionType.Generic, "Main Area", self.player, self.world)
+    r = Region("Main Area", RegionType.Generic, "Main Area", self.player, self.multiworld)
     # Add main area's locations to main area (all but final boss)
     r.locations = [MyGameLocation(self.player, location.name,
                    self.location_name_to_id[location.name], r)]
     r.exits = [Entrance(self.player, "Boss Door", r)]
-    self.world.regions.append(r)
+    self.multiworld.regions.append(r)
     
-    r = Region("Boss Room", RegionType.Generic, "Boss Room", self.player, self.world)
+    r = Region("Boss Room", RegionType.Generic, "Boss Room", self.player, self.multiworld)
     # add event to Boss Room
     r.locations = [MyGameLocation(self.player, "Final Boss", None, r)]
-    self.world.regions.append(r)
+    self.multiworld.regions.append(r)
     
     # If entrances are not randomized, they should be connected here, otherwise
     # they can also be connected at a later stage.
-    self.world.get_entrance("New Game", self.player)\
-        .connect(self.world.get_region("Main Area", self.player))
-    self.world.get_entrance("Boss Door", self.player)\
-        .connect(self.world.get_region("Boss Room", self.player))
+    self.multiworld.get_entrance("New Game", self.player)
+        .connect(self.multiworld.get_region("Main Area", self.player))
+    self.multiworld.get_entrance("Boss Door", self.player)
+        .connect(self.multiworld.get_region("Boss Room", self.player))
     
     # If setting location access rules from data is easier here, set_rules can
     # possibly omitted.
@@ -537,14 +549,14 @@ def create_regions(self) -> None:
 ```python
 def generate_basic(self) -> None:
     # place "Victory" at "Final Boss" and set collection as win condition
-    self.world.get_location("Final Boss", self.player)\
+    self.multiworld.get_location("Final Boss", self.player)
         .place_locked_item(self.create_event("Victory"))
-    self.world.completion_condition[self.player] = \
+    self.multiworld.completion_condition[self.player] =
         lambda state: state.has("Victory", self.player)
 
     # place item Herb into location Chest1 for some reason
     item = self.create_item("Herb")
-    self.world.get_location("Chest1", self.player).place_locked_item(item)
+    self.multiworld.get_location("Chest1", self.player).place_locked_item(item)
     # in most cases it's better to do this at the same time the itempool is
     # filled to avoid accidental duplicates:
     # manually placed and still in the itempool
@@ -553,8 +565,9 @@ def generate_basic(self) -> None:
 ### Setting Rules
 
 ```python
-from ..generic.Rules import add_rule, set_rule, forbid_item
+from worlds.generic.Rules import add_rule, set_rule, forbid_item
 from Items import get_item_type
+
 
 def set_rules(self) -> None:
     # For some worlds this step can be omitted if either a Logic mixin 
@@ -562,35 +575,35 @@ def set_rules(self) -> None:
     # location generation or everything is in generate_basic
 
     # set a simple rule for an region
-    set_rule(self.world.get_entrance("Boss Door", self.player),
+    set_rule(self.multiworld.get_entrance("Boss Door", self.player),
              lambda state: state.has("Boss Key", self.player))
     # combine rules to require two items
-    add_rule(self.world.get_location("Chest2", self.player),
+    add_rule(self.multiworld.get_location("Chest2", self.player),
              lambda state: state.has("Sword", self.player))
-    add_rule(self.world.get_location("Chest2", self.player),
+    add_rule(self.multiworld.get_location("Chest2", self.player),
              lambda state: state.has("Shield", self.player))
     # or simply combine yourself
-    set_rule(self.world.get_location("Chest2", self.player),
+    set_rule(self.multiworld.get_location("Chest2", self.player),
              lambda state: state.has("Sword", self.player) and
                            state.has("Shield", self.player))
     # require two of an item
-    set_rule(self.world.get_location("Chest3", self.player),
+    set_rule(self.multiworld.get_location("Chest3", self.player),
              lambda state: state.has("Key", self.player, 2))
     # require one item from an item group
-    add_rule(self.world.get_location("Chest3", self.player),
+    add_rule(self.multiworld.get_location("Chest3", self.player),
              lambda state: state.has_group("weapons", self.player))
     # state also has .item_count() for items, .has_any() and.has_all() for sets
     # and .count_group() for groups
     # set_rule is likely to be a bit faster than add_rule
 
     # disallow placing a specific local item at a specific location
-    forbid_item(self.world.get_location("Chest4", self.player), "Sword")
+    forbid_item(self.multiworld.get_location("Chest4", self.player), "Sword")
     # disallow placing items with a specific property
-    add_item_rule(self.world.get_location("Chest5", self.player),
+    add_item_rule(self.multiworld.get_location("Chest5", self.player),
                   lambda item: get_item_type(item) == "weapon")
     # get_item_type needs to take player/world into account
     # if MyGameItem has a type property, a more direct implementation would be
-    add_item_rule(self.world.get_location("Chest5", self.player),
+    add_item_rule(self.multiworld.get_location("Chest5", self.player),
                   lambda item: item.player != self.player or\
                                item.my_type == "weapon")
     # location.item_rule = ... is likely to be a bit faster
@@ -603,14 +616,16 @@ implement more complex logic in logic mixins, even if there is no need to add
 properties to the `BaseClasses.CollectionState` state object.
 
 When importing a file that defines a class that inherits from
-`..AutoWorld.LogicMixin` the state object's class is automatically extended by
+`worlds.AutoWorld.LogicMixin` the state object's class is automatically extended by
 the mixin's members. These members should be prefixed with underscore following
 the name of the implementing world. This is due to sharing a namespace with all
 other logic mixins.
 
 Typical uses are defining methods that are used instead of `state.has`
-in lambdas, e.g.`state._mygame_has(custom, world, player)` or recurring checks
-like `state._mygame_can_do_something(world, player)` to simplify lambdas.
+in lambdas, e.g.`state.mygame_has(custom, player)` or recurring checks
+like `state.mygame_can_do_something(player)` to simplify lambdas.
+Private members, only accessible from mixins, should start with `_mygame_`,
+public members with `mygame_`.
 
 More advanced uses could be to add additional variables to the state object,
 override `World.collect(self, state, item)` and `remove(self, state, item)`
@@ -622,25 +637,26 @@ Please do this with caution and only when neccessary.
 ```python
 # Logic.py
 
-from ..AutoWorld import LogicMixin
+from worlds.AutoWorld import LogicMixin
 
 class MyGameLogic(LogicMixin):
-    def _mygame_has_key(self, world: MultiWorld, player: int):
+    def mygame_has_key(self, player: int):
         # Arguments above are free to choose
-        # it may make sense to use World as argument instead of MultiWorld
+        # MultiWorld can be accessed through self.world, explicitly passing in
+        # MyGameWorld instance for easy options access is also a valid approach
         return self.has("key", player)  # or whatever
 ```
 ```python
 # __init__.py
 
-from ..generic.Rules import set_rule
+from worlds.generic.Rules import set_rule
 import .Logic  # apply the mixin by importing its file
 
 class MyGameWorld(World):
     # ...
     def set_rules(self):
         set_rule(self.world.get_location("A Door", self.player),
-                 lamda state: state._mygame_has_key(self.world, self.player))
+                 lamda state: state.mygame_has_key(self.player))
 ```
 
 ### Generate Output
@@ -648,32 +664,33 @@ class MyGameWorld(World):
 ```python
 from .Mod import generate_mod
 
+
 def generate_output(self, output_directory: str):
     # How to generate the mod or ROM highly depends on the game
     # if the mod is written in Lua, Jinja can be used to fill a template
     # if the mod reads a json file, `json.dump()` can be used to generate that
     # code below is a dummy
     data = {
-        "seed": self.world.seed_name,  # to verify the server's multiworld
-        "slot": self.world.player_name[self.player],  # to connect to server
+        "seed": self.multiworld.seed_name,  # to verify the server's multiworld
+        "slot": self.multiworld.player_name[self.player],  # to connect to server
         "items": {location.name: location.item.name
                   if location.item.player == self.player else "Remote"
-                  for location in self.world.get_filled_locations(self.player)},
+                  for location in self.multiworld.get_filled_locations(self.player)},
         # store start_inventory from player's .yaml
         "starter_items": [item.name for item
-                          in self.world.precollected_items[self.player]],
+                          in self.multiworld.precollected_items[self.player]],
         "final_boss_hp": self.final_boss_hp,
         # store option name "easy", "normal" or "hard" for difficuly
-        "difficulty": self.world.difficulty[self.player].current_key,
+        "difficulty": self.multiworld.difficulty[self.player].current_key,
         # store option value True or False for fixing a glitch
-        "fix_xyz_glitch": self.world.fix_xyz_glitch[self.player].value
+        "fix_xyz_glitch": self.multiworld.fix_xyz_glitch[self.player].value
     }
     # point to a ROM specified by the installation
     src = Utils.get_options()["mygame_options"]["rom_file"]
     # or point to worlds/mygame/data/mod_template
     src = os.path.join(os.path.dirname(__file__), "data", "mod_template")
     # generate output path
-    mod_name = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}"
+    mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.player_name[self.player]}"
     out_file = os.path.join(output_directory, mod_name + ".zip")
     # generate the file
     generate_mod(src, out_file, data)

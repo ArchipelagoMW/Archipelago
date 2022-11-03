@@ -23,7 +23,6 @@ from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from BaseClasses import seeddigits, get_seed
 import Options
-from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
 import copy
@@ -63,7 +62,7 @@ class PlandoSettings(enum.IntFlag):
 
     def __str__(self) -> str:
         if self.value:
-            return ", ".join((flag.name for flag in PlandoSettings if self.value & flag.value))
+            return ", ".join(flag.name for flag in PlandoSettings if self.value & flag.value)
         return "Off"
 
 
@@ -84,11 +83,6 @@ def mystery_argparse():
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=defaults["players"], type=lambda value: max(int(value), 1))
     parser.add_argument('--spoiler', type=int, default=defaults["spoiler"])
-    parser.add_argument('--lttp_rom', default=options["lttp_options"]["rom_file"],
-                        help="Path to the 1.0 JP LttP Baserom.")  # absolute, relative to cwd or relative to app path
-    parser.add_argument('--sm_rom', default=options["sm_options"]["rom_file"],
-                        help="Path to the 1.0 JP SM Baserom.")
-    parser.add_argument('--enemizercli', default=resolve_path(defaults["enemizer_path"], local_path))
     parser.add_argument('--outputpath', default=resolve_path(options["general_options"]["output_path"], user_path),
                         help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
     parser.add_argument('--race', action='store_true', default=defaults["race"])
@@ -160,11 +154,12 @@ def main(args=None, callback=ERmain):
     # sort dict for consistent results across platforms:
     weights_cache = {key: value for key, value in sorted(weights_cache.items())}
     for filename, yaml_data in weights_cache.items():
-        for yaml in yaml_data:
-            print(f"P{player_id} Weights: {filename} >> "
-                  f"{get_choice('description', yaml, 'No description specified')}")
-            player_files[player_id] = filename
-            player_id += 1
+        if filename not in {args.meta_file_path, args.weights_file_path}:
+            for yaml in yaml_data:
+                print(f"P{player_id} Weights: {filename} >> "
+                      f"{get_choice('description', yaml, 'No description specified')}")
+                player_files[player_id] = filename
+                player_id += 1
 
     args.multi = max(player_id - 1, args.multi)
     print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed} with plando: "
@@ -182,10 +177,6 @@ def main(args=None, callback=ERmain):
     erargs.outputpath = args.outputpath
 
     Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
-
-    erargs.lttp_rom = args.lttp_rom
-    erargs.sm_rom = args.sm_rom
-    erargs.enemizercli = args.enemizercli
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
@@ -242,8 +233,8 @@ def main(args=None, callback=ERmain):
         else:
             raise RuntimeError(f'No weights specified for player {player}')
 
-    if len(set(erargs.name.values())) != len(erargs.name):
-        raise Exception(f"Names have to be unique. Names: {Counter(erargs.name.values())}")
+    if len(set(name.lower() for name in erargs.name.values())) != len(erargs.name):
+        raise Exception(f"Names have to be unique. Names: {Counter(name.lower() for name in erargs.name.values())}")
 
     if args.yaml_output:
         import yaml
@@ -326,11 +317,11 @@ class SafeDict(dict):
 
 
 def handle_name(name: str, player: int, name_counter: Counter):
-    name_counter[name] += 1
+    name_counter[name.lower()] += 1
+    number = name_counter[name.lower()]
     new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
-    new_name = string.Formatter().vformat(new_name, (), SafeDict(number=name_counter[name],
-                                                                 NUMBER=(name_counter[name] if name_counter[
-                                                                                                   name] > 1 else ''),
+    new_name = string.Formatter().vformat(new_name, (), SafeDict(number=number,
+                                                                 NUMBER=(number if number > 1 else ''),
                                                                  player=player,
                                                                  PLAYER=(player if player > 1 else '')))
     new_name = new_name.strip()[:16]
@@ -345,19 +336,6 @@ def prefer_int(input_data: str) -> Union[str, int]:
     except:
         return input_data
 
-
-available_boss_names: Set[str] = {boss.lower() for boss in Bosses.boss_table if boss not in
-                                         {'Agahnim', 'Agahnim2', 'Ganon'}}
-available_boss_locations: Set[str] = {f"{loc.lower()}{f' {level}' if level else ''}" for loc, level in
-                                             Bosses.boss_location_table}
-
-boss_shuffle_options = {None: 'none',
-                        'none': 'none',
-                        'basic': 'basic',
-                        'full': 'full',
-                        'chaos': 'chaos',
-                        'singularity': 'singularity'
-                        }
 
 goals = {
     'ganon': 'ganon',
@@ -400,7 +378,7 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
         if option_key in options:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
-            return options[option_key]
+            return category_dict[option_key]
     if game == "A Link to the Past":  # TODO wow i hate this
         if option_key in {"glitches_required", "dark_room_logic", "entrance_shuffle", "goals", "triforce_pieces_mode",
                           "triforce_pieces_percentage", "triforce_pieces_available", "triforce_pieces_extra",
@@ -465,42 +443,7 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
     return weights
 
 
-def get_plando_bosses(boss_shuffle: str, plando_options: Set[str]) -> str:
-    if boss_shuffle in boss_shuffle_options:
-        return boss_shuffle_options[boss_shuffle]
-    elif PlandoSettings.bosses in plando_options:
-        options = boss_shuffle.lower().split(";")
-        remainder_shuffle = "none"  # vanilla
-        bosses = []
-        for boss in options:
-            if boss in boss_shuffle_options:
-                remainder_shuffle = boss_shuffle_options[boss]
-            elif "-" in boss:
-                loc, boss_name = boss.split("-")
-                if boss_name not in available_boss_names:
-                    raise ValueError(f"Unknown Boss name {boss_name}")
-                if loc not in available_boss_locations:
-                    raise ValueError(f"Unknown Boss Location {loc}")
-                level = ''
-                if loc.split(" ")[-1] in {"top", "middle", "bottom"}:
-                    # split off level
-                    loc = loc.split(" ")
-                    level = f" {loc[-1]}"
-                    loc = " ".join(loc[:-1])
-                loc = loc.title().replace("Of", "of")
-                if not Bosses.can_place_boss(boss_name.title(), loc, level):
-                    raise ValueError(f"Cannot place {boss_name} at {loc}{level}")
-                bosses.append(boss)
-            elif boss not in available_boss_names:
-                raise ValueError(f"Unknown Boss name or Boss shuffle option {boss}.")
-            else:
-                bosses.append(boss)
-        return ";".join(bosses + [remainder_shuffle])
-    else:
-        raise Exception(f"Boss Shuffle {boss_shuffle} is unknown and boss plando is turned off.")
-
-
-def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option)):
+def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option), plando_options: PlandoSettings):
     if option_key in game_weights:
         try:
             if not option.supports_weighting:
@@ -511,10 +454,9 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
         except Exception as e:
             raise Exception(f"Error generating option {option_key} in {ret.game}") from e
         else:
-            if hasattr(player_option, "verify"):
-                player_option.verify(AutoWorldRegister.world_types[ret.game])
+            player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
     else:
-        setattr(ret, option_key, option(option.default))
+        setattr(ret, option_key, option.from_any(option.default))  # call the from_any here to support default "random"
 
 
 def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings.bosses):
@@ -558,11 +500,11 @@ def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings
 
     if ret.game in AutoWorldRegister.world_types:
         for option_key, option in world_type.option_definitions.items():
-            handle_option(ret, game_weights, option_key, option)
+            handle_option(ret, game_weights, option_key, option, plando_options)
         for option_key, option in Options.per_game_common_options.items():
             # skip setting this option if already set from common_options, defaulting to root option
             if not (option_key in Options.common_options and option_key not in game_weights):
-                handle_option(ret, game_weights, option_key, option)
+                handle_option(ret, game_weights, option_key, option, plando_options)
         if PlandoSettings.items in plando_options:
             ret.plando_items = game_weights.get("plando_items", [])
         if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
@@ -645,8 +587,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     ret.item_functionality = get_choice_legacy('item_functionality', weights)
 
-    boss_shuffle = get_choice_legacy('boss_shuffle', weights)
-    ret.shufflebosses = get_plando_bosses(boss_shuffle, plando_options)
 
     ret.enemy_damage = {None: 'default',
                         'default': 'default',

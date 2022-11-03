@@ -1,7 +1,32 @@
 import typing
+import random
 from Options import Option, DefaultOnToggle, Toggle, Range, OptionList, DeathLink
 from .LogicTricks import normalized_name_tricks
 from .ColorSFXOptions import *
+
+
+class TrackRandomRange(Range):
+    """Overrides normal from_any behavior to track whether the option was randomized at generation time."""
+    supports_weighting = False
+    randomized: bool = False
+
+    @classmethod
+    def from_any(cls, data: typing.Any) -> Range:
+        if type(data) is list:
+            val = random.choices(data)[0]
+            ret = super().from_any(val)
+            if not isinstance(val, int) or len(data) > 1:
+                ret.randomized = True
+            return ret
+        if type(data) is not dict:
+            return super().from_any(data)
+        if any(data.values()):
+            val = random.choices(list(data.keys()), weights=list(map(int, data.values())))[0]
+            ret = super().from_any(val)
+            if not isinstance(val, int) or len(list(filter(bool, map(int, data.values())))) > 1:
+                ret.randomized = True
+            return ret
+        raise RuntimeError(f"All options specified in \"{cls.display_name}\" are weighted as zero.")
 
 
 class Logic(Choice): 
@@ -70,7 +95,7 @@ class Bridge(Choice):
     default = 3
 
 
-class Trials(Range):
+class Trials(TrackRandomRange):
     """Set the number of required trials in Ganon's Castle."""
     display_name = "Ganon's Trials Count"
     range_start = 0
@@ -101,7 +126,6 @@ class InteriorEntrances(Choice):
     option_off = 0
     option_simple = 1
     option_all = 2
-    alias_false = 0
     alias_true = 2
 
 
@@ -141,7 +165,6 @@ class MixEntrancePools(Choice):
     option_off = 0
     option_indoor = 1
     option_all = 2
-    alias_false = 0
 
 
 class DecoupleEntrances(Toggle):
@@ -158,12 +181,12 @@ class TriforceGoal(Range):
     """Number of Triforce pieces required to complete the game."""
     display_name = "Required Triforce Pieces"
     range_start = 1
-    range_end = 100
+    range_end = 80
     default = 20
 
 
 class ExtraTriforces(Range):
-    """Percentage of additional Triforce pieces in the pool, separate from the item pool setting."""
+    """Percentage of additional Triforce pieces in the pool. With high numbers, you may need to randomize additional locations to have enough items."""
     display_name = "Percentage of Extra Triforce Pieces"
     range_start = 0
     range_end = 100
@@ -175,7 +198,7 @@ class LogicalChus(Toggle):
     display_name = "Bombchus Considered in Logic"
 
 
-class MQDungeons(Range):
+class MQDungeons(TrackRandomRange):
     """Number of MQ dungeons. The dungeons to replace are randomly selected."""
     display_name = "Number of MQ Dungeons"
     range_start = 0
@@ -308,7 +331,6 @@ class ShopShuffle(Choice):
     option_off = 0
     option_fixed_number = 1
     option_random_number = 2
-    alias_false = 0
 
 
 class ShopSlots(Range):
@@ -326,7 +348,6 @@ class TokenShuffle(Choice):
     option_dungeons = 1
     option_overworld = 2
     option_all = 3
-    alias_false = 0
 
 
 class ScrubShuffle(Choice): 
@@ -336,7 +357,6 @@ class ScrubShuffle(Choice):
     option_low = 1
     option_regular = 2
     option_random_prices = 3
-    alias_false = 0
     alias_affordable = 1
     alias_expensive = 2
 
@@ -569,7 +589,6 @@ class Hints(Choice):
     option_agony = 2
     option_always = 3
     default = 3
-    alias_false = 0
 
 
 class MiscHints(DefaultOnToggle):
@@ -673,8 +692,6 @@ class IceTraps(Choice):
     option_mayhem = 3
     option_onslaught = 4
     default = 1
-    alias_false = 0
-    alias_true = 2
     alias_extra = 2
 
 
@@ -742,7 +759,6 @@ class Music(Choice):
     option_normal = 0
     option_off = 1
     option_randomized = 2
-    alias_false = 1
 
 
 class BackgroundMusic(Music):

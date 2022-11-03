@@ -36,7 +36,10 @@ class WitnessPlayerLogic:
         Panels outside of the same region will still be checked manually.
         """
 
-        check_obj = StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]
+        if panel_hex in self.COMPLETELY_DISABLED_CHECKS:
+            return frozenset()
+
+        check_obj = self.REFERENCE_LOGIC.CHECKS_BY_HEX[panel_hex]
 
         these_items = frozenset({frozenset()})
 
@@ -44,20 +47,27 @@ class WitnessPlayerLogic:
             these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["items"]
 
         these_items = frozenset({
-            subset.intersection(self.PROG_ITEMS_ACTUALLY_IN_THE_GAME)
+            subset.intersection(self.THEORETICAL_ITEMS_NO_MULTI)
             for subset in these_items
         })
+
+        for subset in these_items:
+            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(subset)
 
         if panel_hex in self.DOOR_ITEMS_BY_ID:
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[panel_hex]})
 
             all_options = set()
 
-            for items_option in these_items:
-                for dependentItem in door_items:
+            for dependentItem in door_items:
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(dependentItem)
+                for items_option in these_items:
                     all_options.add(items_option.union(dependentItem))
 
-            return frozenset(all_options)
+            if panel_hex != "0x28A0D":
+                return frozenset(all_options)
+            else:  # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved
+                these_items = all_options
 
         these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
 
@@ -70,9 +80,11 @@ class WitnessPlayerLogic:
             dependent_items_for_option = frozenset({frozenset()})
 
             for option_panel in option:
-                dep_obj = StaticWitnessLogic.CHECKS_BY_HEX.get(option_panel)
+                dep_obj = self.REFERENCE_LOGIC.CHECKS_BY_HEX.get(option_panel)
 
-                if option_panel in {"7 Lasers", "11 Lasers"}:
+                if option_panel in self.COMPLETELY_DISABLED_CHECKS:
+                    new_items = frozenset()
+                elif option_panel in {"7 Lasers", "11 Lasers", "PP2 Weirdness"}:
                     new_items = frozenset({frozenset([option_panel])})
                 # If a panel turns on when a panel in a different region turns on,
                 # the latter panel will be an "event panel", unless it ends up being
@@ -105,20 +117,26 @@ class WitnessPlayerLogic:
         """Makes a single logic adjustment based on additional logic file"""
 
         if adj_type == "Items":
-            if line not in StaticWitnessItems.ALL_ITEM_TABLE:
-                raise RuntimeError("Item \"" + line + "\" does not exit.")
+            line_split = line.split(" - ")
+            item = line_split[0]
 
-            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(line)
+            if item not in StaticWitnessItems.ALL_ITEM_TABLE:
+                raise RuntimeError("Item \"" + item + "\" does not exit.")
 
-            if line in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
-                panel_hexes = StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[line][2]
+            self.THEORETICAL_ITEMS.add(item)
+            self.THEORETICAL_ITEMS_NO_MULTI.update(StaticWitnessLogic.PROGRESSIVE_TO_ITEMS.get(item, [item]))
+
+            if item in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
+                panel_hexes = StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[item][2]
                 for panel_hex in panel_hexes:
-                    self.DOOR_ITEMS_BY_ID.setdefault(panel_hex, set()).add(line)
+                    self.DOOR_ITEMS_BY_ID.setdefault(panel_hex, set()).add(item)
 
             return
 
         if adj_type == "Remove Items":
-            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.discard(line)
+            self.THEORETICAL_ITEMS.discard(line)
+            for i in StaticWitnessLogic.PROGRESSIVE_TO_ITEMS.get(line, [line]):
+                self.THEORETICAL_ITEMS_NO_MULTI.discard(i)
 
             if line in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
                 panel_hexes = StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[line][2]
@@ -204,9 +222,11 @@ class WitnessPlayerLogic:
         elif get_option_value(world, player, "victory_condition") == 3:
             self.VICTORY_LOCATION = "0xFFF00"
 
-        self.COMPLETELY_DISABLED_CHECKS.add(
-            self.VICTORY_LOCATION
-        )
+        if get_option_value(world, player, "challenge_lasers") <= 7:
+            adjustment_linesets_in_order.append([
+                "Requirement Changes:",
+                "0xFFF00 - 11 Lasers - True",
+            ])
 
         if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
             adjustment_linesets_in_order.append(get_disable_unrandomized_list())
@@ -255,11 +275,22 @@ class WitnessPlayerLogic:
 
             self.REQUIREMENTS_BY_HEX[check_hex] = indep_requirement
 
+        for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI:
+            if item not in self.THEORETICAL_ITEMS:
+                corresponding_multi = StaticWitnessLogic.ITEMS_TO_PROGRESSIVE[item]
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(corresponding_multi)
+                multi_list = StaticWitnessLogic.PROGRESSIVE_TO_ITEMS[StaticWitnessLogic.ITEMS_TO_PROGRESSIVE[item]]
+                multi_list = [item for item in multi_list if item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI]
+                self.MULTI_AMOUNTS[item] = multi_list.index(item) + 1
+                self.MULTI_LISTS[corresponding_multi] = multi_list
+            else:
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
+
     def make_event_item_pair(self, panel):
         """
         Makes a pair of an event panel and its event item
         """
-        name = StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] + " Solved"
+        name = self.REFERENCE_LOGIC.CHECKS_BY_HEX[panel]["checkName"] + " Solved"
         pair = (name, self.EVENT_ITEM_NAMES[panel])
         return pair
 
@@ -277,7 +308,7 @@ class WitnessPlayerLogic:
                         if panel == "TrueOneWay":
                             continue
 
-                        if StaticWitnessLogic.CHECKS_BY_HEX[panel]["region"]["name"] != region_name:
+                        if self.REFERENCE_LOGIC.CHECKS_BY_HEX[panel]["region"]["name"] != region_name:
                             self.EVENT_PANELS_FROM_REGIONS.add(panel)
 
         self.EVENT_PANELS.update(self.EVENT_PANELS_FROM_PANELS)
@@ -296,12 +327,24 @@ class WitnessPlayerLogic:
         self.EVENT_PANELS_FROM_PANELS = set()
         self.EVENT_PANELS_FROM_REGIONS = set()
 
+        self.THEORETICAL_ITEMS = set()
+        self.THEORETICAL_ITEMS_NO_MULTI = set()
+        self.MULTI_AMOUNTS = dict()
+        self.MULTI_LISTS = dict()
+        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = set()
         self.DOOR_ITEMS_BY_ID = dict()
         self.STARTING_INVENTORY = set()
 
-        self.CONNECTIONS_BY_REGION_NAME = copy.copy(StaticWitnessLogic.STATIC_CONNECTIONS_BY_REGION_NAME)
-        self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.copy(StaticWitnessLogic.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
+        self.DIFFICULTY = get_option_value(world, player, "puzzle_randomization")
+
+        if self.DIFFICULTY == 0:
+            self.REFERENCE_LOGIC = StaticWitnessLogic.sigma_normal
+        elif self.DIFFICULTY == 1:
+            self.REFERENCE_LOGIC = StaticWitnessLogic.sigma_expert
+
+        self.CONNECTIONS_BY_REGION_NAME = copy.copy(self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME)
+        self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.copy(self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
         self.REQUIREMENTS_BY_HEX = dict()
 
         # Determining which panels need to be events is a difficult process.
@@ -314,7 +357,7 @@ class WitnessPlayerLogic:
         self.VICTORY_LOCATION = "0x0356B"
         self.EVENT_ITEM_NAMES = {
             "0x01A0F": "Keep Laser Panel (Hedge Mazes) Activates",
-            "0x09D9B": "Monastery Overhead Doors Open",
+            "0x09D9B": "Monastery Shutters Open",
             "0x193A6": "Monastery Laser Panel Activates",
             "0x00037": "Monastery Branch Panels Activate",
             "0x0A079": "Access to Bunker Laser",
@@ -323,26 +366,27 @@ class WitnessPlayerLogic:
             "0x019DC": "Keep Hedges 2 Knowledge",
             "0x019E7": "Keep Hedges 3 Knowledge",
             "0x01D3F": "Keep Laser Panel (Pressure Plates) Activates",
+            "0x01BE9": "Keep Laser Panel (Pressure Plates) Activates",
             "0x09F7F": "Mountain Access",
             "0x0367C": "Quarry Laser Mill Requirement Met",
-            "0x009A1": "Swamp Rotated Shapers 1 Activates",
+            "0x009A1": "Swamp Between Bridges Far 1 Activates",
             "0x00006": "Swamp Cyan Water Drains",
-            "0x00990": "Swamp Broken Shapers 1 Activates",
-            "0x0A8DC": "Lower Avoid 6 Activates",
-            "0x0000A": "Swamp More Rotated Shapers 1 Access",
-            "0x09E86": "Inside Mountain Second Layer Blue Bridge Access",
-            "0x09ED8": "Inside Mountain Second Layer Yellow Bridge Access",
+            "0x00990": "Swamp Between Bridges Near Row 1 Activates",
+            "0x0A8DC": "Intro 6 Activates",
+            "0x0000A": "Swamp Beyond Rotating Bridge 1 Access",
+            "0x09E86": "Mountain Floor 2 Blue Bridge Access",
+            "0x09ED8": "Mountain Floor 2 Yellow Bridge Access",
             "0x0A3D0": "Quarry Laser Boathouse Requirement Met",
             "0x00596": "Swamp Red Water Drains",
             "0x00E3A": "Swamp Purple Water Drains",
             "0x0343A": "Door to Symmetry Island Powers On",
-            "0xFFF00": "Inside Mountain Bottom Layer Discard Turns On",
+            "0xFFF00": "Mountain Bottom Floor Discard Turns On",
             "0x17CA6": "All Boat Panels Turn On",
             "0x17CDF": "All Boat Panels Turn On",
             "0x09DB8": "All Boat Panels Turn On",
             "0x17C95": "All Boat Panels Turn On",
             "0x03BB0": "Town Church Lattice Vision From Outside",
-            "0x28AC1": "Town Shapers & Dots & Eraser Turns On",
+            "0x28AC1": "Town Wooden Rooftop Turns On",
             "0x28A69": "Town Tower 1st Door Opens",
             "0x28ACC": "Town Tower 2nd Door Opens",
             "0x28AD9": "Town Tower 3rd Door Opens",
@@ -350,12 +394,23 @@ class WitnessPlayerLogic:
             "0x03675": "Quarry Mill Ramp Activation From Above",
             "0x03679": "Quarry Mill Lift Lowering While Standing On It",
             "0x2FAF6": "Tutorial Gate Secret Solution Knowledge",
-            "0x079DF": "Town Hexagonal Reflection Turns On",
+            "0x079DF": "Town Tall Hexagonal Turns On",
             "0x17DA2": "Right Orange Bridge Fully Extended",
-            "0x19B24": "Shadows Lower Avoid Patterns Visible",
+            "0x19B24": "Shadows Intro Patterns Visible",
             "0x2700B": "Open Door to Treehouse Laser House",
             "0x00055": "Orchard Apple Trees 4 Turns On",
             "0x17DDB": "Left Orange Bridge Fully Extended",
+            "0x03535": "Shipwreck Video Pattern Knowledge",
+            "0x03542": "Mountain Video Pattern Knowledge",
+            "0x0339E": "Desert Video Pattern Knowledge",
+            "0x03481": "Tutorial Video Pattern Knowledge",
+            "0x03702": "Jungle Video Pattern Knowledge",
+            "0x0356B": "Challenge Video Pattern Knowledge",
+            "0x0A15F": "Desert Laser Panel Shutters Open (1)",
+            "0x012D7": "Desert Laser Panel Shutters Open (2)",
+            "0x03613": "Treehouse Orange Bridge 13 Turns On",
+            "0x17DEC": "Treehouse Laser House Access Requirement",
+            "0x03C08": "Town Church Entry Opens",
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
@@ -371,12 +426,6 @@ class WitnessPlayerLogic:
             "0x0C2B2": "Bunker Laser Activation",
             "0x00BF6": "Swamp Laser Activation",
             "0x028A4": "Treehouse Laser Activation",
-            "0x03535": "Shipwreck Video Pattern Knowledge",
-            "0x03542": "Mountain Video Pattern Knowledge",
-            "0x0339E": "Desert Video Pattern Knowledge",
-            "0x03481": "Tutorial Video Pattern Knowledge",
-            "0x03702": "Jungle Video Pattern Knowledge",
-            "0x0356B": "Challenge Video Pattern Knowledge",
             "0x09F7F": "Mountaintop Trap Door Turns On",
             "0x17C34": "Mountain Access",
         }

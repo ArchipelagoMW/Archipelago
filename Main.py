@@ -8,15 +8,15 @@ import concurrent.futures
 import pickle
 import tempfile
 import zipfile
-from typing import Dict, Tuple, Optional, Set
+from typing import Dict, List, Tuple, Optional, Set
 
-from BaseClasses import MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
+from BaseClasses import Item, MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
 from worlds.alttp.Items import item_name_groups
-from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
+from worlds.alttp.Regions import is_main_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from Utils import output_path, get_options, __version__, version_tuple
-from worlds.generic.Rules import locality_rules, exclusion_rules, group_locality_rules
+from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
 
 ordered_areas = (
@@ -70,7 +70,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
     world.player_name = args.name.copy()
-    world.enemizer = args.enemizercli
     world.sprite = args.sprite.copy()
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
@@ -81,15 +80,30 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     logger.info("Found World Types:")
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
-    numlength = 8
+
+    max_item = 0
+    max_location = 0
+    for cls in AutoWorld.AutoWorldRegister.world_types.values():
+        if cls.item_id_to_name:
+            max_item = max(max_item, max(cls.item_id_to_name))
+            max_location = max(max_location, max(cls.location_id_to_name))
+
+    item_digits = len(str(max_item))
+    location_digits = len(str(max_location))
+    item_count = len(str(max(len(cls.item_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
+    location_count = len(str(max(len(cls.location_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
+    del max_item, max_location
+
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
-        if not cls.hidden:
-            logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} "
-                        f"Items (IDs: {min(cls.item_id_to_name):{numlength}} - "
-                        f"{max(cls.item_id_to_name):{numlength}}) | "
-                        f"{len(cls.location_names):3} "
-                        f"Locations (IDs: {min(cls.location_id_to_name):{numlength}} - "
-                        f"{max(cls.location_id_to_name):{numlength}})")
+        if not cls.hidden and len(cls.item_names) > 0:
+            logger.info(f" {name:{longest_name}}: {len(cls.item_names):{item_count}} "
+                        f"Items (IDs: {min(cls.item_id_to_name):{item_digits}} - "
+                        f"{max(cls.item_id_to_name):{item_digits}}) | "
+                        f"{len(cls.location_names):{location_count}} "
+                        f"Locations (IDs: {min(cls.location_id_to_name):{location_digits}} - "
+                        f"{max(cls.location_id_to_name):{location_digits}})")
+
+    del item_digits, location_digits, item_count, location_count
 
     AutoWorld.call_stage(world, "assert_generate")
 
@@ -108,7 +122,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
                 world.local_items[player].value.add('Triforce Piece')
 
-            # Not possible to place pendants/crystals out side of boss prizes yet.
+            # Not possible to place pendants/crystals outside boss prizes yet.
             world.non_local_items[player].value -= item_name_groups['Pendants']
             world.non_local_items[player].value -= item_name_groups['Crystals']
 
@@ -123,9 +137,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     logger.info('Calculating Access Rules.')
     if world.players > 1:
-        for player in world.player_ids:
-            locality_rules(world, player)
-        group_locality_rules(world)
+        locality_rules(world)
     else:
         world.non_local_items[1].value = set()
         world.local_items[1].value = set()
@@ -142,8 +154,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     # temporary home for item links, should be moved out of Main
     for group_id, group in world.groups.items():
-        def find_common_pool(players: Set[int], shared_pool: Set[str]):
-            classifications = collections.defaultdict(int)
+        def find_common_pool(players: Set[int], shared_pool: Set[str]) -> Tuple[
+            Optional[Dict[int, Dict[str, int]]], Optional[Dict[str, int]]
+        ]:
+            classifications: Dict[str, int] = collections.defaultdict(int)
             counters = {player: {name: 0 for name in shared_pool} for player in players}
             for item in world.itempool:
                 if item.player in counters and item.name in shared_pool:
@@ -153,7 +167,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for player in players.copy():
                 if all([counters[player][item] == 0 for item in shared_pool]):
                     players.remove(player)
-                    del(counters[player])
+                    del (counters[player])
 
             if not players:
                 return None, None
@@ -165,14 +179,14 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         counters[player][item] = count
                 else:
                     for player in players:
-                        del(counters[player][item])
+                        del (counters[player][item])
             return counters, classifications
 
         common_item_count, classifications = find_common_pool(group["players"], group["item_pool"])
         if not common_item_count:
             continue
 
-        new_itempool = []
+        new_itempool: List[Item] = []
         for item_name, item_count in next(iter(common_item_count.values())).items():
             for _ in range(item_count):
                 new_item = group["world"].create_item(item_name)
@@ -250,24 +264,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     output_file_futures.append(
                         pool.submit(AutoWorld.call_single, world, "generate_output", player, temp_dir))
 
-            def get_entrance_to_region(region: Region):
-                for entrance in region.entrances:
-                    if entrance.parent_region.type in (RegionType.DarkWorld, RegionType.LightWorld, RegionType.Generic):
-                        return entrance
-                for entrance in region.entrances:  # BFS might be better here, trying DFS for now.
-                    return get_entrance_to_region(entrance.parent_region)
-
             # collect ER hint info
-            er_hint_data = {player: {} for player in world.get_game_players("A Link to the Past") if
-                            world.shuffle[player] != "vanilla" or world.retro_caves[player]}
-
-            for region in world.regions:
-                if region.player in er_hint_data and region.locations:
-                    main_entrance = get_entrance_to_region(region)
-                    for location in region.locations:
-                        if type(location.address) == int:  # skips events and crystals
-                            if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
-                                er_hint_data[region.player][location.address] = main_entrance.name
+            er_hint_data: Dict[int, Dict[int, str]] = {}
+            AutoWorld.call_all(world, 'extend_hint_information', er_hint_data)
 
             checks_in_area = {player: {area: list() for area in ordered_areas}
                               for player in range(1, world.players + 1)}
@@ -277,22 +276,23 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
             for location in world.get_filled_locations():
                 if type(location.address) is int:
-                    main_entrance = get_entrance_to_region(location.parent_region)
                     if location.game != "A Link to the Past":
                         checks_in_area[location.player]["Light World"].append(location.address)
-                    elif location.parent_region.dungeon:
-                        dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
-                                       'Inverted Ganons Tower': 'Ganons Tower'} \
-                            .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
-                        checks_in_area[location.player][dungeonname].append(location.address)
-                    elif location.parent_region.type == RegionType.LightWorld:
-                        checks_in_area[location.player]["Light World"].append(location.address)
-                    elif location.parent_region.type == RegionType.DarkWorld:
-                        checks_in_area[location.player]["Dark World"].append(location.address)
-                    elif main_entrance.parent_region.type == RegionType.LightWorld:
-                        checks_in_area[location.player]["Light World"].append(location.address)
-                    elif main_entrance.parent_region.type == RegionType.DarkWorld:
-                        checks_in_area[location.player]["Dark World"].append(location.address)
+                    else:
+                        main_entrance = location.parent_region.get_connecting_entrance(is_main_entrance)
+                        if location.parent_region.dungeon:
+                            dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
+                                           'Inverted Ganons Tower': 'Ganons Tower'} \
+                                .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
+                            checks_in_area[location.player][dungeonname].append(location.address)
+                        elif location.parent_region.type == RegionType.LightWorld:
+                            checks_in_area[location.player]["Light World"].append(location.address)
+                        elif location.parent_region.type == RegionType.DarkWorld:
+                            checks_in_area[location.player]["Dark World"].append(location.address)
+                        elif main_entrance.parent_region.type == RegionType.LightWorld:
+                            checks_in_area[location.player]["Light World"].append(location.address)
+                        elif main_entrance.parent_region.type == RegionType.DarkWorld:
+                            checks_in_area[location.player]["Dark World"].append(location.address)
                     checks_in_area[location.player]["Total"] += 1
 
             oldmancaves = []
@@ -306,7 +306,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     player = region.player
                     location_id = SHOP_ID_START + total_shop_slots + index
 
-                    main_entrance = get_entrance_to_region(region)
+                    main_entrance = region.get_connecting_entrance(is_main_entrance)
                     if main_entrance.parent_region.type == RegionType.LightWorld:
                         checks_in_area[player]["Light World"].append(location_id)
                     else:
@@ -340,7 +340,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 precollected_items = {player: [item.code for item in world_precollected if type(item.code) == int]
                                       for player, world_precollected in world.precollected_items.items()}
                 precollected_hints = {player: set() for player in range(1, world.players + 1 + len(world.groups))}
-
 
                 for slot in world.player_ids:
                     slot_data[slot] = world.worlds[slot].fill_slot_data()

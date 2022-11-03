@@ -168,7 +168,7 @@ def patch_rom(world, rom):
     rom.write_bytes(0x1FC0CF8, Block_code)
 
     # songs as items flag
-    songs_as_items = (world.shuffle_song_items != 'song') or world.starting_songs
+    songs_as_items = (world.shuffle_song_items != 'song') or world.songs_as_items
 
     if songs_as_items:
         rom.write_byte(rom.sym('SONGS_AS_ITEMS'), 1)
@@ -1326,7 +1326,7 @@ def patch_rom(world, rom):
     override_table = get_override_table(world)
     rom.write_bytes(rom.sym('cfg_item_overrides'), get_override_table_bytes(override_table))
     rom.write_byte(rom.sym('PLAYER_ID'), min(world.player, 255)) # Write player ID
-    rom.write_bytes(rom.sym('AP_PLAYER_NAME'), bytearray(world.world.get_player_name(world.player), 'ascii'))
+    rom.write_bytes(rom.sym('AP_PLAYER_NAME'), bytearray(world.connect_name, encoding='ascii'))
 
     if world.death_link:
         rom.write_byte(rom.sym('DEATH_LINK'), 0x01)
@@ -1359,7 +1359,7 @@ def patch_rom(world, rom):
         rom.write_byte(rom.sym('CFG_DAMAGE_MULTIPLYER'), 3)
 
     # Patch songs and boss rewards
-    for location in world.world.get_filled_locations(world.player):
+    for location in world.multiworld.get_filled_locations(world.player):
         item = location.item
         special = item.special if item.game == 'Ocarina of Time' else {}  # this shouldn't matter hopefully
         locationaddress = location.address1
@@ -1686,7 +1686,7 @@ def patch_rom(world, rom):
                 pass
             elif dungeon in ['Bottom of the Well', 'Ice Cavern']:
                 dungeon_name, boss_name, compass_id, map_id = dungeon_list[dungeon]
-                if len(world.world.worlds) > 1:
+                if len(world.multiworld.worlds) > 1:
                     map_message = "\x13\x76\x08\x05\x42\x0F\x05\x40 found the \x05\x41Dungeon Map\x05\x40\x01for %s\x05\x40!\x09" % (dungeon_name)
                 else:
                     map_message = "\x13\x76\x08You found the \x05\x41Dungeon Map\x05\x40\x01for %s\x05\x40!\x01It\'s %s!\x09" % (dungeon_name, "masterful" if world.dungeon_mq[dungeon] else "ordinary")
@@ -1696,13 +1696,13 @@ def patch_rom(world, rom):
             else:
                 dungeon_name, boss_name, compass_id, map_id = dungeon_list[dungeon]
                 dungeon_reward = reward_list[world.get_location(boss_name).item.name]
-                if len(world.world.worlds) > 1:
+                if len(world.multiworld.worlds) > 1:
                     compass_message = "\x13\x75\x08\x05\x42\x0F\x05\x40 found the \x05\x41Compass\x05\x40\x01for %s\x05\x40!\x09" % (dungeon_name)
                 else:
                     compass_message = "\x13\x75\x08You found the \x05\x41Compass\x05\x40\x01for %s\x05\x40!\x01It holds the %s!\x09" % (dungeon_name, dungeon_reward)
                 update_message_by_id(messages, compass_id, compass_message)
                 if world.mq_dungeons_random or world.mq_dungeons != 0 and world.mq_dungeons != 12:
-                    if len(world.world.worlds) > 1:
+                    if len(world.multiworld.worlds) > 1:
                         map_message = "\x13\x76\x08\x05\x42\x0F\x05\x40 found the \x05\x41Dungeon Map\x05\x40\x01for %s\x05\x40!\x09" % (dungeon_name)
                     else:
                         map_message = "\x13\x76\x08You found the \x05\x41Dungeon Map\x05\x40\x01for %s\x05\x40!\x01It\'s %s!\x09" % (dungeon_name, "masterful" if world.dungeon_mq[dungeon] else "ordinary")
@@ -1730,7 +1730,7 @@ def patch_rom(world, rom):
     rom.write_int16(0xB6D57E, 0x0003)
     rom.write_int16(0xB6EC52, 999)
     tycoon_message = "\x08\x13\x57You got a \x05\x43Tycoon's Wallet\x05\x40!\x01Now you can hold\x01up to \x05\x46999\x05\x40 \x05\x46Rupees\x05\x40."
-    if len(world.world.worlds) > 1:
+    if len(world.multiworld.worlds) > 1:
        tycoon_message = make_player_message(tycoon_message)
     update_message_by_id(messages, 0x00F8, tycoon_message, 0x23)
 
@@ -1844,7 +1844,7 @@ def write_rom_item(rom, item_id, item):
 
 
 def get_override_table(world):
-    return list(filter(lambda val: val != None, map(partial(get_override_entry, world.player), world.world.get_filled_locations(world.player))))
+    return list(filter(lambda val: val != None, map(partial(get_override_entry, world), world.multiworld.get_filled_locations(world.player))))
 
 
 override_struct = struct.Struct('>xBBBHBB') # match override_t in get_items.c
@@ -1852,10 +1852,10 @@ def get_override_table_bytes(override_table):
     return b''.join(sorted(itertools.starmap(override_struct.pack, override_table)))
 
 
-def get_override_entry(player_id, location):
+def get_override_entry(ootworld, location):
     scene = location.scene
     default = location.default
-    player_id = 0 if player_id == location.item.player else min(location.item.player, 255)
+    player_id = 0 if ootworld.player == location.item.player else min(location.item.player, 255)
     if location.item.game != 'Ocarina of Time': 
         # This is an AP sendable. It's guaranteed to not be None. 
         if location.item.advancement:
@@ -1869,7 +1869,7 @@ def get_override_entry(player_id, location):
 
     if location.item.trap:
         item_id = 0x7C  # Ice Trap ID, to get "X is a fool" message
-        looks_like_item_id = location.item.looks_like_item.index
+        looks_like_item_id = ootworld.trap_appearances[location.address].index
     else:
         looks_like_item_id = 0
 
@@ -2091,7 +2091,8 @@ def get_locked_doors(rom, world):
                 return [0x00D4 + scene * 0x1C + 0x04 + flag_byte, flag_bits]
 
         # If boss door, set the door's unlock flag
-        if (world.shuffle_bosskeys == 'remove' and scene != 0x0A) or (world.shuffle_ganon_bosskey == 'remove' and scene == 0x0A):
+        if (world.shuffle_bosskeys == 'remove' and scene != 0x0A) or (
+            world.shuffle_ganon_bosskey == 'remove' and scene == 0x0A and not world.triforce_hunt):
             if actor_id == 0x002E and actor_type == 0x05:
                 return [0x00D4 + scene * 0x1C + 0x04 + flag_byte, flag_bits]
 
@@ -2109,23 +2110,20 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
             rom.write_int16(location.address1, location.item.index)
         else:
             if location.item.trap:
-                item_display = location.item.looks_like_item
-            elif location.item.game != "Ocarina of Time": 
-                item_display = location.item
-                if location.item.advancement:
-                    item_display.index = 0xCB
-                else:
-                    item_display.index = 0xCC
-                item_display.special = {}
+                item_display = world.trap_appearances[location.address]
             else:
                 item_display = location.item
 
             # bottles in shops should look like empty bottles
             # so that that are different than normal shop refils
-            if 'shop_object' in item_display.special:
-                rom_item = read_rom_item(rom, item_display.special['shop_object'])
+            if location.item.trap or location.item.game == "Ocarina of Time":
+                if 'shop_object' in item_display.special:
+                    rom_item = read_rom_item(rom, item_display.special['shop_object'])
+                else:
+                    rom_item = read_rom_item(rom, item_display.index)
             else:
-                rom_item = read_rom_item(rom, item_display.index)
+                display_index = 0xCB if location.item.advancement else 0xCC
+                rom_item = read_rom_item(rom, display_index)
 
             shop_objs.add(rom_item['object_id'])
             shop_id = world.current_shop_id
@@ -2156,8 +2154,8 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
                 if location.item.name == 'Ice Trap':
                     split_item_name[0] = create_fake_name(split_item_name[0])
 
-                if len(world.world.worlds) > 1: # OOTWorld.MultiWorld.AutoWorld[]
-                    description_text = '\x08\x05\x41%s  %d Rupees\x01%s\x01\x05\x42%s\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (split_item_name[0], location.price, split_item_name[1], world.world.get_player_name(location.item.player))
+                if len(world.multiworld.worlds) > 1: # OOTWorld.MultiWorld.AutoWorld[]
+                    description_text = '\x08\x05\x41%s  %d Rupees\x01%s\x01\x05\x42%s\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (split_item_name[0], location.price, split_item_name[1], world.multiworld.get_player_name(location.item.player))
                 else:
                     description_text = '\x08\x05\x41%s  %d Rupees\x01%s\x01\x05\x40Special deal! ONE LEFT!\x01Get it while it lasts!\x09\x0A\x02' % (split_item_name[0], location.price, split_item_name[1])
                 purchase_text = '\x08%s  %d Rupees\x09\x01%s\x01\x1B\x05\x42Buy\x01Don\'t buy\x05\x40\x02' % (split_item_name[0], location.price, split_item_name[1])
@@ -2170,10 +2168,10 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
                 if location.item.trap:
                     shop_item_name = create_fake_name(shop_item_name)
 
-                if len(world.world.worlds) > 1:
+                if len(world.multiworld.worlds) > 1:
                     shop_item_name = ''.join(filter(lambda char: char in character_table, shop_item_name))
                     do_line_break = sum(character_table[char] for char in f"{shop_item_name}  {location.price} Rupees") > NORMAL_LINE_WIDTH
-                    description_text = '\x08\x05\x41%s%s%d Rupees\x01\x05\x42%s\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (shop_item_name, '\x01' if do_line_break else '  ', location.price, world.world.get_player_name(location.item.player))
+                    description_text = '\x08\x05\x41%s%s%d Rupees\x01\x05\x42%s\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (shop_item_name, '\x01' if do_line_break else '  ', location.price, world.multiworld.get_player_name(location.item.player))
                 else:
                     description_text = '\x08\x05\x41%s  %d Rupees\x01\x05\x40Special deal! ONE LEFT!\x01Get it while it lasts!\x09\x0A\x02' % (shop_item_name, location.price)
                 purchase_text = '\x08%s  %d Rupees\x09\x01\x01\x1B\x05\x42Buy\x01Don\'t buy\x05\x40\x02' % (shop_item_name, location.price)

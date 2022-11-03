@@ -31,7 +31,7 @@ class FF1World(World):
     game = "Final Fantasy"
     topology_present = False
     remote_items = True
-    data_version = 1
+    data_version = 2
     remote_start_inventory = True
 
     ff1_items = FF1Items()
@@ -51,39 +51,42 @@ class FF1World(World):
         return
 
     def create_regions(self):
-        locations = get_options(self.world, 'locations', self.player)
-        rules = get_options(self.world, 'rules', self.player)
+        locations = get_options(self.multiworld, 'locations', self.player)
+        rules = get_options(self.multiworld, 'rules', self.player)
         menu_region = self.ff1_locations.create_menu_region(self.player, locations, rules)
-        menu_region.world = self.world
+        menu_region.multiworld = self.multiworld
         terminated_event = Location(self.player, CHAOS_TERMINATED_EVENT, EventId, menu_region)
         terminated_item = Item(CHAOS_TERMINATED_EVENT, ItemClassification.progression, EventId, self.player)
         terminated_event.place_locked_item(terminated_item)
 
-        items = get_options(self.world, 'items', self.player)
+        items = get_options(self.multiworld, 'items', self.player)
         goal_rule = generate_rule([[name for name in items.keys() if name in FF1_PROGRESSION_LIST and name != "Shard"]],
                                   self.player)
         if "Shard" in items.keys():
             def goal_rule_and_shards(state):
                 return goal_rule(state) and state.has("Shard", self.player, 32)
             terminated_event.access_rule = goal_rule_and_shards
-
+        if "MARK" in items.keys():
+            # Fail generation for Noverworld and provide link to old FFR website
+            raise Exception("FFR Noverworld seeds must be generated on an older version of FFR. Please ensure you generated the settings using "
+                            "4-4-0.finalfantasyrandomizer.com")
         menu_region.locations.append(terminated_event)
-        self.world.regions += [menu_region]
+        self.multiworld.regions += [menu_region]
 
     def create_item(self, name: str) -> Item:
         return self.ff1_items.generate_item(name, self.player)
 
     def set_rules(self):
-        self.world.completion_condition[self.player] = lambda state: state.has(CHAOS_TERMINATED_EVENT, self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(CHAOS_TERMINATED_EVENT, self.player)
 
     def generate_basic(self):
-        items = get_options(self.world, 'items', self.player)
+        items = get_options(self.multiworld, 'items', self.player)
         if FF1_BRIDGE in items.keys():
             self._place_locked_item_in_sphere0(FF1_BRIDGE)
         if items:
             possible_early_items = [name for name in FF1_STARTER_ITEMS if name in items.keys()]
             if possible_early_items:
-                progression_item = self.world.random.choice(possible_early_items)
+                progression_item = self.multiworld.random.choice(possible_early_items)
                 self._place_locked_item_in_sphere0(progression_item)
         else:
             # Fail generation if there are no items in the pool
@@ -93,16 +96,16 @@ class FF1World(World):
         items = [self.create_item(name) for name, data in items.items() for x in range(data['count']) if name not in
                  self.locked_items]
 
-        self.world.itempool += items
+        self.multiworld.itempool += items
 
     def _place_locked_item_in_sphere0(self, progression_item: str):
         if progression_item:
-            rules = get_options(self.world, 'rules', self.player)
+            rules = get_options(self.multiworld, 'rules', self.player)
             sphere_0_locations = [name for name, rules in rules.items()
                                   if rules and len(rules[0]) == 0 and name not in self.locked_locations]
             if sphere_0_locations:
-                initial_location = self.world.random.choice(sphere_0_locations)
-                locked_location = self.world.get_location(initial_location, self.player)
+                initial_location = self.multiworld.random.choice(sphere_0_locations)
+                locked_location = self.multiworld.get_location(initial_location, self.player)
                 locked_location.place_locked_item(self.create_item(progression_item))
                 self.locked_items.append(progression_item)
                 self.locked_locations.append(locked_location.name)
@@ -113,7 +116,7 @@ class FF1World(World):
         return slot_data
 
     def get_filler_item_name(self) -> str:
-        return self.world.random.choice(["Heal", "Pure", "Soft", "Tent", "Cabin", "House"])
+        return self.multiworld.random.choice(["Heal", "Pure", "Soft", "Tent", "Cabin", "House"])
 
 
 def get_options(world: MultiWorld, name: str, player: int):
