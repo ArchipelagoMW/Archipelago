@@ -7,8 +7,8 @@ There are two key steps to incorporating a game into Archipelago:
 - Archipelago Server Integration
 
 Refer to the following documents as well:
-- [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md) for network communication between client and server.
-- [world api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md) for documentation on server side code and creating a world package.
+- [network protocol.md](/docs/network%20protocol.md) for network communication between client and server.
+- [world api.md](/docs/world%20api.md) for documentation on server side code and creating a world package.
 
 
 # Game Modification  
@@ -217,7 +217,7 @@ into more files to improve readability, but all of that information can be impor
   - Your items and locations need a `item_name_to_id` and `location_name_to_id`, respectively, mapping.
     - The IDs that you take must not overlap with another game, but it's ok, and preferred, if your item and location
 mappings overlap with each other.
-    - Each game is able to claim 10000 IDs from their starting ID in the range of `xxxx0000`
+    - Each game is able to claim 10000 IDs from their starting ID in the range of `0xAAAA0000`
   - An `option_definitions` mapping of your game options with the format `{name: Class}`, where `name` uses Python snake_case.
   - You must define your world's `create_item` method, because this may be called by the generator in certain circumstances
   - When creating your world you submit items and regions to the Multiworld.
@@ -228,4 +228,3 @@ for adding to these lists is with either `append` or `extend`, where `append` is
       - Locations are where players will "check" for items and must exist within a region. It's also important for your
 world's submitted items to be the same as its submitted locations count.
     - You must always have a "Menu" Region from which the generation algorithm uses to enter the game and access locations.
-  - 
