@@ -32,7 +32,7 @@ def update_sprites_lttp():
 
     spriteData = []
 
-    for file in os.listdir(input_dir):
+    for file in (file for file in os.listdir(input_dir) if not file.startswith(".")):
         sprite = Sprite(os.path.join(input_dir, file))
 
         if not sprite.name:

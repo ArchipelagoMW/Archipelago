@@ -541,9 +541,11 @@ class MultiWorld():
         """Check if accessibility rules are fulfilled with current or supplied state."""
         if not state:
             state = CollectionState(self)
-        players = {"minimal": set(),
-                   "items": set(),
-                   "locations": set()}
+        players: Dict[str, Set[int]] = {
+            "minimal": set(),
+            "items": set(),
+            "locations": set()
+        }
         for player, access in self.accessibility.items():
             players[access.current_key].add(player)
 
@@ -563,20 +565,21 @@ class MultiWorld():
                 return True
             return False
 
-        def all_done():
+        def all_done() -> bool:
             """Check if all access rules are fulfilled"""
-            if beatable_fulfilled:
-                if any(location_condition(location) for location in locations):
-                    return False  # still locations required to be collected
-                return True
+            if not beatable_fulfilled:
+                return False
+            if any(location_condition(location) for location in locations):
+                return False  # still locations required to be collected
+            return True
 
-        locations = {location for location in self.get_locations() if location_relevant(location)}
+        locations = [location for location in self.get_locations() if location_relevant(location)]
 
         while locations:
-            sphere = set()
-            for location in locations:
-                if location.can_reach(state):
-                    sphere.add(location)
+            sphere: List[Location] = []
+            for n in range(len(locations) - 1, -1, -1):
+                if locations[n].can_reach(state):
+                    sphere.append(locations.pop(n))
 
             if not sphere:
                 # ran out of places and did not finish yet, quit
@@ -585,8 +588,8 @@ class MultiWorld():
                 return False
 
             for location in sphere:
-                locations.remove(location)
-                state.collect(location.item, True, location)
+                if location.item:
+                    state.collect(location.item, True, location)
 
             if self.has_beaten_game(state):
                 beatable_fulfilled = True
@@ -647,7 +650,7 @@ class CollectionState():
             if new_region in rrp:
                 bc.remove(connection)
             elif connection.can_reach(self):
-                assert new_region, "tried to search through an Entrance with no Region"
+                assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
                 rrp.add(new_region)
                 bc.remove(connection)
                 bc.update(new_region.exits)
@@ -1110,13 +1113,15 @@ class Location:
         self.parent_region = parent
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        return self.always_allow(state, item) or (self.item_rule(item) and (not check_access or self.can_reach(state)))
+        return (self.always_allow(state, item)
+                or ((self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
+                    and self.item_rule(item)
+                    and (not check_access or self.can_reach(state))))
 
     def can_reach(self, state: CollectionState) -> bool:
         # self.access_rule computes faster on average, so placing it first for faster abort
-        if self.access_rule(state) and self.parent_region.can_reach(state):
-            return True
-        return False
+        assert self.parent_region, "Can't reach location without region"
+        return self.access_rule(state) and self.parent_region.can_reach(state)
 
     def place_locked_item(self, item: Item):
         if self.item:
