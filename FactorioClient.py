@@ -25,6 +25,7 @@ if __name__ == "__main__":
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, logger, gui_enabled, get_base_parser
 from MultiServer import mark_raw
 from NetUtils import NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePart
+from Utils import async_start
 
 from worlds.factorio import Factorio
 
@@ -124,7 +125,7 @@ class FactorioContext(CommonContext):
                 self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
                                                 item_name in args["checked_locations"]})
             if cmd == "Connected" and self.energy_link_increment:
-                asyncio.create_task(self.send_msgs([{
+                async_start(self.send_msgs([{
                     "cmd": "SetNotify", "keys": ["EnergyLink"]
                 }]))
         elif cmd == "SetReply":
@@ -194,7 +195,6 @@ class FactorioContext(CommonContext):
 
 async def game_watcher(ctx: FactorioContext):
     bridge_logger = logging.getLogger("FactorioWatcher")
-    from worlds.factorio.Technologies import lookup_id_to_name
     next_bridge = time.perf_counter() + 1
     try:
         while not ctx.exit_event.is_set():
@@ -225,14 +225,14 @@ async def game_watcher(ctx: FactorioContext):
                     if ctx.locations_checked != research_data:
                         bridge_logger.debug(
                             f"New researches done: "
-                            f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
+                            f"{[ctx.location_names[rid] for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
                     death_link_tick = data.get("death_link_tick", 0)
                     if death_link_tick != ctx.death_link_tick:
                         ctx.death_link_tick = death_link_tick
                         if "DeathLink" in ctx.tags:
-                            asyncio.create_task(ctx.send_death())
+                            async_start(ctx.send_death())
                     if ctx.energy_link_increment:
                         in_world_bridges = data["energy_bridges"]
                         if in_world_bridges:
@@ -240,7 +240,7 @@ async def game_watcher(ctx: FactorioContext):
                             if in_world_energy < (ctx.energy_link_increment * in_world_bridges):
                                 # attempt to refill
                                 ctx.last_deplete = time.time()
-                                asyncio.create_task(ctx.send_msgs([{
+                                async_start(ctx.send_msgs([{
                                     "cmd": "Set", "key": "EnergyLink", "operations":
                                         [{"operation": "add", "value": -ctx.energy_link_increment * in_world_bridges},
                                          {"operation": "max", "value": 0}],
@@ -250,7 +250,7 @@ async def game_watcher(ctx: FactorioContext):
                             elif in_world_energy > (in_world_bridges * ctx.energy_link_increment * 5) - \
                                 ctx.energy_link_increment*in_world_bridges:
                                 value = ctx.energy_link_increment * in_world_bridges
-                                asyncio.create_task(ctx.send_msgs([{
+                                async_start(ctx.send_msgs([{
                                     "cmd": "Set", "key": "EnergyLink", "operations":
                                         [{"operation": "add", "value": value}]
                                 }]))
@@ -300,7 +300,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
     stream_factorio_output(factorio_process.stderr, factorio_queue, factorio_process)
     try:
         while not ctx.exit_event.is_set():
-            if factorio_process.poll():
+            if factorio_process.poll() is not None:
                 factorio_server_logger.info("Factorio server has exited.")
                 ctx.exit_event.set()
 
@@ -348,12 +348,34 @@ async def factorio_server_watcher(ctx: FactorioContext):
     except Exception as e:
         logging.exception(e)
         logging.error("Aborted Factorio Server Bridge")
-        ctx.rcon_client = None
         ctx.exit_event.set()
 
     finally:
-        factorio_process.terminate()
-        factorio_process.wait(5)
+        if factorio_process.poll() is not None:
+            if ctx.rcon_client:
+                ctx.rcon_client.close()
+                ctx.rcon_client = None
+            return
+
+        sent_quit = False
+        if ctx.rcon_client:
+            # Attempt clean quit through RCON.
+            try:
+                ctx.rcon_client.send_command("/quit")
+            except factorio_rcon.RCONNetworkError:
+                pass
+            else:
+                sent_quit = True
+            ctx.rcon_client.close()
+            ctx.rcon_client = None
+        if not sent_quit:
+            # Attempt clean quit using SIGTERM. (Note that on Windows this kills the process instead.)
+            factorio_process.terminate()
+
+        try:
+            factorio_process.wait(10)
+        except subprocess.TimeoutExpired:
+            factorio_process.kill()
 
 
 async def get_info(ctx: FactorioContext, rcon_client: factorio_rcon.RCONClient):
