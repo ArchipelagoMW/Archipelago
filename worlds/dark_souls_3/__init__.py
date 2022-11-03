@@ -266,13 +266,13 @@ class DarkSouls3World(World):
         for location in self.multiworld.get_filled_locations():
             if location.item.player == self.player:
                 items_id.append(location.item.code)
-                items_address.append(item_dictionary[location.item.name])
+                items_address.append(item_dictionary_copy[location.item.name])
 
             if location.player == self.player:
                 locations_address.append(location_dictionary[location.name])
                 locations_id.append(location.address)
                 if location.item.player == self.player:
-                    locations_target.append(item_dictionary[location.item.name])
+                    locations_target.append(item_dictionary_copy[location.item.name])
                 else:
                     locations_target.append(0)
 
