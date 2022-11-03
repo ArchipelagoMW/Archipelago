@@ -24,6 +24,9 @@ from Utils import Version, stream_input, async_start
 from worlds import network_data_package, AutoWorldRegister
 import os
 
+if typing.TYPE_CHECKING:
+    import kvui
+
 logger = logging.getLogger("Client")
 
 # without terminal, we have to use gui mode
