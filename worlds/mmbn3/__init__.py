@@ -171,57 +171,53 @@ class MMBN3World(World):
         """
         # Set WWW ID requirements
         has_www_id = lambda state: state.has(ItemName.WWW_ID, self.player)
-        set_rule(self.world.get_location(LocationName.ACDC_1_PMD, self.player),
-                 has_www_id)
-        set_rule(self.world.get_location(LocationName.SciLab_1_WWW_BMD, self.player),
-                 has_www_id)
-        set_rule(self.world.get_location(LocationName.Yoka_1_WWW_BMD, self.player),
-                 has_www_id)
-        set_rule(self.world.get_location(LocationName.Undernet_1_WWW_BMD, self.player),
-                 has_www_id)
+        self.world.get_location(LocationName.ACDC_1_PMD, self.player).access_rule = has_www_id
+        self.world.get_location(LocationName.SciLab_1_WWW_BMD, self.player).access_rule = has_www_id
+        self.world.get_location(LocationName.Yoka_1_WWW_BMD, self.player).access_rule = has_www_id
+        self.world.get_location(LocationName.Undernet_1_WWW_BMD, self.player).access_rule = has_www_id
 
         # Set Press Program requirements
         has_press = lambda state: state.has(ItemName.Press, self.player)
-        set_rule(self.world.get_location(LocationName.Yoka_1_PMD, self.player), has_press)
-        set_rule(self.world.get_location(LocationName.Yoka_2_Upper_BMD, self.player), has_press)
-        set_rule(self.world.get_location(LocationName.Beach_2_East_BMD, self.player), has_press)
-        set_rule(self.world.get_location(LocationName.Hades_South_BMD, self.player), has_press)
-        set_rule(self.world.get_location(LocationName.Hades_HadesKey_BMD, self.player), has_press)
-        set_rule(self.world.get_location(LocationName.Secret_3_BugFrag_BMD, self.player), has_press)
-        set_rule(self.world.get_location(LocationName.Secret_3_Island_BMD, self.player), has_press)
-        set_rule(self.world.get_location(LocationName.Catching_gang_members, self.player), has_press)
+        self.world.get_location(LocationName.Yoka_1_PMD, self.player).access_rule = has_press
+        self.world.get_location(LocationName.Yoka_2_Upper_BMD, self.player).access_rule = has_press
+        self.world.get_location(LocationName.Beach_2_East_BMD, self.player).access_rule = has_press
+        self.world.get_location(LocationName.Hades_South_BMD, self.player).access_rule = has_press
+        self.world.get_location(LocationName.Hades_HadesKey_BMD, self.player).access_rule = has_press
+        self.world.get_location(LocationName.Secret_3_BugFrag_BMD, self.player).access_rule = has_press
+        self.world.get_location(LocationName.Secret_3_Island_BMD, self.player).access_rule = has_press
+        self.world.get_location(LocationName.Catching_gang_members, self.player).access_rule = has_press
 
-        set_rule(self.world.get_location(LocationName.Legendary_Tomes, self.player),
-                 lambda state: state.has(ItemName.Press, self.player) and state.has(ItemName.Magnum1_A))
-        set_rule(self.world.get_location(LocationName.Legendary_Tomes_Treasure, self.player),
-                 lambda state: state.has(ItemName.Press, self.player) and state.has(ItemName.Magnum1_A))
+        self.world.get_location(LocationName.Legendary_Tomes, self.player).access_rule =\
+            lambda state: state.has_all([ItemName.Press, ItemName.Magnum1_A], self.player)
+        self.world.get_location(LocationName.Legendary_Tomes_Treasure, self.player).access_rule =\
+            lambda state: state.has_all([ItemName.Press, ItemName.Magnum1_A], self.player)
 
         # Set Job additional area access
         # TODO: Once we find a way to restrict overworld access
-        set_rule(self.world.get_location(LocationName.My_Navi_is_sick, self.player),
-                 lambda state: state.has(ItemName.Recov30_star, self.player))
+        self.world.get_location(LocationName.My_Navi_is_sick, self.player).access_rule =\
+            lambda state: state.has(ItemName.Recov30_star, self.player)
 
         # Set Trade quests
-        set_rule(self.world.get_location(LocationName.ACDC_SonicWav_W_Trade, self.player),
-                 lambda state: state.has(ItemName.SonicWav_W, self.player))
-        set_rule(self.world.get_location(LocationName.ACDC_Bubbler_C_Trade, self.player),
-                 lambda state: state.has(ItemName.Bubbler_C, self.player))
-        set_rule(self.world.get_location(LocationName.ACDC_Recov120_S_Trade, self.player),
-                 lambda state: state.has(ItemName.Recov120_S, self.player))
-        set_rule(self.world.get_location(LocationName.SciLab_Shake1_S_Trade, self.player),
-                 lambda state: state.has(ItemName.Shake1_S, self.player))
-        set_rule(self.world.get_location(LocationName.Yoka_FireSwrd_P_Trade, self.player),
-                 lambda state: state.has(ItemName.FireSwrd_P, self.player))
-        set_rule(self.world.get_location(LocationName.Hospital_DynaWav_V_Trade, self.player),
-                 lambda state: state.has(ItemName.DynaWave_V, self.player))
-        set_rule(self.world.get_location(LocationName.Beach_DNN_WideSwrd_C_Trade, self.player),
-                 lambda state: state.has(ItemName.WideSwrd_C, self.player))
-        set_rule(self.world.get_location(LocationName.Beach_DNN_HoleMetr_H_Trade, self.player),
-                 lambda state: state.has(ItemName.HoleMetr_H, self.player))
-        set_rule(self.world.get_location(LocationName.Beach_DNN_Shadow_J_Trade, self.player),
-                 lambda state: state.has(ItemName.Shadow_J, self.player))
-        set_rule(self.world.get_location(LocationName.Hades_GrabBack_K_Trade, self.player),
-                 lambda state: state.has(ItemName.GrabBack_K, self.player))
+        self.world.get_location(LocationName.ACDC_SonicWav_W_Trade, self.player).access_rule =\
+            lambda state: state.has(ItemName.SonicWav_W, self.player)
+        self.world.get_location(LocationName.ACDC_Bubbler_C_Trade, self.player).access_rule =\
+            lambda state: state.has(ItemName.Bubbler_C, self.player)
+        self.world.get_location(LocationName.ACDC_Recov120_S_Trade, self.player).access_rule =\
+            lambda state: state.has(ItemName.Recov120_S, self.player)
+        self.world.get_location(LocationName.SciLab_Shake1_S_Trade, self.player).access_rule =\
+            lambda state: state.has(ItemName.Shake1_S, self.player)
+        self.world.get_location(LocationName.Yoka_FireSwrd_P_Trade, self.player).access_rule =\
+            lambda state: state.has(ItemName.FireSwrd_P, self.player)
+        self.world.get_location(LocationName.Hospital_DynaWav_V_Trade, self.player).access_rule =\
+            lambda state: state.has(ItemName.DynaWave_V, self.player)
+        self.world.get_location(LocationName.Beach_DNN_WideSwrd_C_Trade, self.player).access_rule =\
+            lambda state: state.has(ItemName.WideSwrd_C, self.player)
+        self.world.get_location(LocationName.Beach_DNN_HoleMetr_H_Trade, self.player).access_rule =\
+            lambda state: state.has(ItemName.HoleMetr_H, self.player)
+        self.world.get_location(LocationName.Beach_DNN_Shadow_J_Trade, self.player).access_rule =\
+            lambda state: state.has(ItemName.Shadow_J, self.player)
+        self.world.get_location(LocationName.Hades_GrabBack_K_Trade, self.player).access_rule =\
+            lambda state: state.has(ItemName.GrabBack_K, self.player)
 
     def generate_basic(self) -> None:
         """

@@ -667,7 +667,7 @@ local process_block = function(block)
             itemQueued = item_queue[loadItemIndexFromRAM()+1]
         end
     elseif itemState == ITEMSTATE_QUEUED then
-        print("QUEUED: There are "..#item_queue.." items in queue. There are "..loadItemIndexFromRAM().." items in RAM")
+        -- print("QUEUED: There are "..#item_queue.." items in queue. There are "..loadItemIndexFromRAM().." items in RAM")
         if (#item_queue <= loadItemIndexFromRAM() and itemQueued ~= nil) then
             --print("  No item queued and pending is empty. Switching to idle")
             itemState = ITEMSTATE_IDLE

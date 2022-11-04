@@ -127,7 +127,7 @@ bmds = [
     LocationData(LocationName.ACDC_School_Blackboard_BMD,   0xb3105f, 0x2000240, 0x8, 0x760B48, 230, 1),
     LocationData(LocationName.SciLab_Vending_Machine_BMD,   0xb31060, 0x2000241, 0x80, 0x760E80, 230, 1),
     LocationData(LocationName.SciLab_Virus_Lab_Door_BMD_1,  0xb31061, 0x2000249, 0x8, 0x763ED8, 230, 1),
-    LocationData(LocationName.SciLab_Virus_Lab_Door_BMD_2,  0xb31061, 0x2000249, 0x4, 0x763ED8, 231, 1),
+    LocationData(LocationName.SciLab_Virus_Lab_Door_BMD_2,  0xb310ed, 0x2000249, 0x4, 0x763ED8, 231, 1),
     LocationData(LocationName.SciLab_Dads_Computer_BMD,     0xb31062, 0x2000241, 0x8, 0x761498, 230, 1),
     LocationData(LocationName.Yoka_Armor_BMD,               0xb31063, 0x2000248, 0x80, 0x763908, 230, 1),
     LocationData(LocationName.Yoka_TV_BMD,                  0xb31064, 0x2000247, 0x8, 0x76377C, 230, 1),
