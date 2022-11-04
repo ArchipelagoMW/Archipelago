@@ -136,7 +136,8 @@ def generate_get_for_item(item) -> bytearray:
 
 
 def generate_item_message(item_data) -> bytearray:
-    byte_list = [0xF8, 0x04, 0x18]
+    byte_list = [0xF8, 0x04, 0x18]  # Play Animation
+    byte_list.extend([0xED, 0x01])  # Hide Mugshot
     byte_list.extend(generate_get_for_item(item_data))
     byte_list.extend([0xF8, 0x0C])
     byte_list.extend([0xEB, 0xE9, 0xF8, 0x08])
@@ -145,8 +146,12 @@ def generate_item_message(item_data) -> bytearray:
 
 
 def generate_external_item_message(item_name, item_recipient) -> bytearray:
-    byte_list = [0xF8, 0x04, 0x18]
-    byte_list.extend(generate_text_bytes("Sending data for\n" + item_name + "\nTo " + item_recipient))
+    byte_list = [0xF8, 0x04, 0x18]  # Play Animation
+    # Item Names can be long. Let's shorten them and also make them fit stylistically by turning them into PascalCase!
+    item_name_pascal = item_name.replace("_", " ").replace("-", " ").title().replace(" ", "")[0:20]
+    byte_list.extend([0xED, 0x01])  # Hide Mugshot
+    byte_list.extend([0xFA, 0x00, 0x85, 0x00])  # Play Sound
+    byte_list.extend(generate_text_bytes("Sending data for\n" + item_name_pascal + "\nTo " + item_recipient))
     byte_list.extend([0xF8, 0x0C])
     byte_list.extend([0xEB, 0xE9, 0xF8, 0x08])
     byte_list.extend([0xF8, 0x10])

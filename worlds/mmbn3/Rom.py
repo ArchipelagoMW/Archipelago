@@ -216,6 +216,11 @@ class LocalRom:
         archive.inject_item_message(location.text_script_index, location.text_box_index,
                                     item_bytes)
 
+    def inject_name(self, player):
+        authname = player
+        authname = authname+('\x00' * (63 - len(player)))
+        self.rom_data[0x7FFFC0:0x7FFFFF] = bytes(authname, 'utf8')
+
     def write_changed_rom(self):
         for archive in self.changed_archives.values():
             self.rom_data = archive.inject_into_rom(self.rom_data)

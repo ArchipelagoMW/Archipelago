@@ -126,7 +126,8 @@ bmds = [
     LocationData(LocationName.ACDC_School_Server_BMD_2,     0xb3105e, 0x2000242, 0x4, 0x761AC0, 231, 1),
     LocationData(LocationName.ACDC_School_Blackboard_BMD,   0xb3105f, 0x2000240, 0x8, 0x760B48, 230, 1),
     LocationData(LocationName.SciLab_Vending_Machine_BMD,   0xb31060, 0x2000241, 0x80, 0x760E80, 230, 1),
-    LocationData(LocationName.SciLab_Virus_Lab_Door_BMD,    0xb31061, 0x2000249, 0x8, 0x763ED8, 230, 1),
+    LocationData(LocationName.SciLab_Virus_Lab_Door_BMD_1,  0xb31061, 0x2000249, 0x8, 0x763ED8, 230, 1),
+    LocationData(LocationName.SciLab_Virus_Lab_Door_BMD_2,  0xb31061, 0x2000249, 0x4, 0x763ED8, 231, 1),
     LocationData(LocationName.SciLab_Dads_Computer_BMD,     0xb31062, 0x2000241, 0x8, 0x761498, 230, 1),
     LocationData(LocationName.Yoka_Armor_BMD,               0xb31063, 0x2000248, 0x80, 0x763908, 230, 1),
     LocationData(LocationName.Yoka_TV_BMD,                  0xb31064, 0x2000247, 0x8, 0x76377C, 230, 1),
@@ -178,7 +179,7 @@ pmds = [
 
 overworlds = [
     LocationData(LocationName.Yoka_Mr_Quiz,                       0xb310ec, 0x200005f, 0x8, 0x7473F8, 197, 0),
-    LocationData(LocationName.Yoka_Quiz_Master,                   0xb3108e, 0x200005f, 0x4, 0x7473F8, 202, 0),
+    LocationData(LocationName.Yoka_Quiz_Master,                   0xb3108e, 0x200005f, 0x4, 0x748894, 202, 0),
     LocationData(LocationName.Hospital_Quiz_Queen,                0xb3108f, 0x200005f, 0x2, 0x757724, 202, 0),
     LocationData(LocationName.Hades_Quiz_King,                    0xb31090, 0x2000164, 0x8, 0x7519B0, 207, 0),
     LocationData(LocationName.ACDC_SonicWav_W_Trade,              0xb31091, 0x2000162, 0x10, 0x73A7F8, 192, 0),
@@ -239,11 +240,11 @@ jobs = [
     LocationData(LocationName.Hide_and_seek_Second_Child, 0xb310c5, 0x2000188, 0x2, 0x75ADA8, 191, 0),
     LocationData(LocationName.Hide_and_seek_Third_Child,  0xb310c6, 0x2000188, 0x1, 0x75B5EC, 191, 0),
     LocationData(LocationName.Hide_and_seek_Fourth_Child, 0xb310c7, 0x2000189, 0x80, 0x75BEB0, 191, 0),
-    LocationData(LocationName.Hide_and_seek_Fifth_Child,  0xb310c8, 0x2000302, 0x8, 0x7406A0, 193, 0),
+    LocationData(LocationName.Hide_and_seek_Completion,   0xb310c8, 0x2000302, 0x8, 0x7406A0, 193, 0),
     LocationData(LocationName.Finding_the_blue_Navi,      0xb310c9, 0x2000302, 0x4, 0x773700, 192, 0),
     LocationData(LocationName.Give_your_support,          0xb310ca, 0x2000302, 0x2, 0x752D80, 192, 0),
     LocationData(LocationName.Stamp_collecting,           0xb310cb, 0x2000302, 0x1, 0x756074, 193, 0),
-    LocationData(LocationName.Help_with_a_will,           0xb310cc, 0x2000303, 0x80, 0x7382B0, 195, 0)
+    LocationData(LocationName.Help_with_a_will,           0xb310cc, 0x2000303, 0x80, 0x7382B0, 197, 0)
 ]
 
 number_traders = [
@@ -281,7 +282,7 @@ number_traders = [
 ]
 
 victory = [
-    LocationData(LocationName.Alpha_Defeated, 0xb310ed, 0x2000433, 0x01, 0x7AE20C, 0, 0)
+    LocationData(LocationName.Alpha_Defeated, None, 0x2000433, 0x01, 0x7AE20C, 0, 0)
 ]
 
 excluded_locations = [
@@ -301,7 +302,7 @@ excluded_locations = [
 ]
 
 
-all_locations: typing.List[LocationData] = bmds + pmds + overworlds + jobs + number_traders + victory
+all_locations: typing.List[LocationData] = bmds + pmds + overworlds + jobs + number_traders
 location_table: typing.Dict[str, int] = {locData.name: locData.id for locData in all_locations}
 location_data_table: typing.Dict[str, LocationData] = {locData.name: locData for locData in all_locations}
 locations_by_id: typing.Dict[int, LocationData] = {locData.id: locData for locData in all_locations}

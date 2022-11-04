@@ -143,7 +143,7 @@ chipList: typing.List[ItemData] = [
     ItemData(0xB3104B, ItemName.Jealousy_J,        ItemClassification.useful,      ItemType.Chip, 214,  ChipCode('J')),
     ItemData(0xB3104C, ItemName.Lance_S,           ItemClassification.useful,      ItemType.Chip,  75,  ChipCode('S')),
     ItemData(0xB3104D, ItemName.LongSwrd_E,        ItemClassification.filler,      ItemType.Chip,  32,  ChipCode('E')),
-    ItemData(0xB3104E, ItemName.Magnum1_V,         ItemClassification.useful,      ItemType.Chip,  81,  ChipCode('V')),
+    ItemData(0xB3104E, ItemName.Magnum1_A,         ItemClassification.useful,      ItemType.Chip,  81,  ChipCode('A')),
     ItemData(0xB3104F, ItemName.Muramasa_M,        ItemClassification.useful,      ItemType.Chip, 202,  ChipCode('M')),
 
     ItemData(0xB31050, ItemName.Navi_plus_40_star, ItemClassification.useful,      ItemType.Chip, 206, ChipCode('*')),

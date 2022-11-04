@@ -73,14 +73,16 @@ class MMBN3World(World):
                 location = world.get_location(location_name, player)
                 ap_item = location.item
                 item_id = ap_item.code
-                if item_id in Items.items_by_id:
-                    item = Items.items_by_id[item_id]
-                else:
-                    item = ItemData(item_id, ap_item.name, ap_item.classification, Items.ItemType.External)
-                    item = item._replace(recipient=self.world.player_name[ap_item.player])
-                location_data = location_data_table[location_name]
-                # print("Placing item "+item.itemName+" at location "+location_data.name)
-                rom.replace_item(location_data, item)
+                if item_id is not None:
+                    if item_id in Items.items_by_id:
+                        item = Items.items_by_id[item_id]
+                    else:
+                        item = ItemData(item_id, ap_item.name, ap_item.classification, Items.ItemType.External)
+                        item = item._replace(recipient=self.world.player_name[ap_item.player])
+                    location_data = location_data_table[location_name]
+                    # print("Placing item "+item.itemName+" at location "+location_data.name)
+                    rom.replace_item(location_data, item)
+            rom.inject_name(world.player_name[player])
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ','_')}"\
@@ -118,7 +120,7 @@ class MMBN3World(World):
             region = Region(region_info.name, RegionType.Generic, region_info.name, self.player, self.world)
             name_to_region[region_info.name] = region
             for location in region_info.locations:
-                loc = MMBN3Location(self.player, location, self.location_name_to_id[location], region)
+                loc = MMBN3Location(self.player, location, self.location_name_to_id.get(location, None), region)
                 if location in excluded_locations:
                     loc.progress_type = LocationProgressType.EXCLUDED
                 region.locations.append(loc)
@@ -187,6 +189,12 @@ class MMBN3World(World):
         set_rule(self.world.get_location(LocationName.Hades_HadesKey_BMD, self.player), has_press)
         set_rule(self.world.get_location(LocationName.Secret_3_BugFrag_BMD, self.player), has_press)
         set_rule(self.world.get_location(LocationName.Secret_3_Island_BMD, self.player), has_press)
+        set_rule(self.world.get_location(LocationName.Catching_gang_members, self.player), has_press)
+
+        set_rule(self.world.get_location(LocationName.Legendary_Tomes, self.player),
+                 lambda state: state.has(ItemName.Press, self.player) and state.has(ItemName.Magnum1_A))
+        set_rule(self.world.get_location(LocationName.Legendary_Tomes_Treasure, self.player),
+                 lambda state: state.has(ItemName.Press, self.player) and state.has(ItemName.Magnum1_A))
 
         # Set Job additional area access
         # TODO: Once we find a way to restrict overworld access

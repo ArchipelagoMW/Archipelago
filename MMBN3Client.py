@@ -1,4 +1,5 @@
 import asyncio
+import base64
 import json
 import os
 import multiprocessing
@@ -51,8 +52,7 @@ class MMBN3CommandProcessor(ClientCommandProcessor):
         """Toggle the Debug Text overlay in ROM"""
         global debugEnabled
         debugEnabled = not debugEnabled
-        logger.info("Debugging is now "+str(debugEnabled))
-
+        logger.info("Debug Overlay Enabled" if debugEnabled else "Debug Overlay Disabled")
 
 class MMBN3Context(CommonContext):
     command_processor = MMBN3CommandProcessor
@@ -67,16 +67,23 @@ class MMBN3Context(CommonContext):
         self.awaiting_rom = False
         self.location_table = {}
         self.version_warning = False
+        self.auth_name = None
+
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(MMBN3Context, self).server_auth(password_requested)
-        if not self.auth:
+
+        if self.auth_name is None:
             self.awaiting_rom = True
-            logger.info('Awaiting conection to Bizhawk')
+            logger.info('No ROM detected, awaiting conection to Bizhawk to authenticate to the multiworld server')
             return
 
-        await self.send_connect()
+        logger.info("Attempting to decode from ROM... ")
+        self.awaiting_rom = False
+        self.auth = self.auth_name.decode('utf8').replace('\x00', '')
+        logger.info("Connecting as "+self.auth)
+        await self.send_connect(name=self.auth)
 
     def run_gui(self):
         from kvui import GameManager
@@ -188,9 +195,10 @@ async def gba_sync_task(ctx: MMBN3Context):
                             # Not just a keep alive ping, parse
                             asyncio.create_task((parse_payload(data_decoded, ctx, False)))
                         if not ctx.auth:
-                            logger.info("Lua connection detected, but no player name was set.")
-                            await ctx.get_username()
+                            ctx.auth_name = bytes(data_decoded["playerName"])
+
                             if ctx.awaiting_rom:
+                                logger.info("Awaiting data from ROM...")
                                 await ctx.server_auth(False)
                     else:
                         if not ctx.version_warning:

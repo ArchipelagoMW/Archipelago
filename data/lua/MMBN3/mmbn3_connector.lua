@@ -109,11 +109,11 @@ local IsOnTitle = function()
 end
 
 local saveItemIndexToRAM = function(newIndex)
-    memory.write_s32_le(0x203fe02,newIndex)
+    memory.write_s16_le(0x20000AE,newIndex)
 end
 
 local loadItemIndexFromRAM = function()
-    last_index = memory.read_s32_le(0x203fe02)
+    last_index = memory.read_s16_le(0x20000AE)
     if (last_index < 0) then
         last_index = 0
         saveItemIndexToRAM(0)
@@ -121,13 +121,8 @@ local loadItemIndexFromRAM = function()
     return last_index
 end
 
-local loadItemIndexFromSave = function()
-    -- As soon as the script loads, read the last received item index from SRAM
-    saveItemIndexToRAM(memory.read_s32_le(0xE0057FC))
-    -- If the last index is negative, it's probably junk data because we haven't save yet. Use 0 instead
-    if loadItemIndexFromRAM() < 0 then
-        saveItemIndexToRAM(0)
-    end
+local loadPlayerNameFromROM = function()
+    return memory.read_bytes_as_array(0x7FFFC0,63,"ROM")
 end
 
 local acdc_bmd_checks = function()
@@ -274,7 +269,8 @@ local misc_bmd_checks = function()
     checks["ACDC School Server BMD 2"] = memory.read_u8(0x2000242)
     checks["ACDC School Blackboard BMD"] = memory.read_u8(0x2000240)
     checks["SciLab Vending Machine BMD"] = memory.read_u8(0x2000241)
-    checks["SciLab Virus Lab Door BMD"] = memory.read_u8(0x2000249)
+    checks["SciLab Virus Lab Door BMD 1"] = memory.read_u8(0x2000249)
+    checks["SciLab Virus Lab Door BMD 2"] = memory.read_u8(0x2000249)
     checks["SciLab Dad's Computer BMD"] = memory.read_u8(0x2000241)
     checks["Yoka Armor BMD"] = memory.read_u8(0x2000248)
     checks["Yoka TV BMD"] = memory.read_u8(0x2000247)
@@ -428,7 +424,7 @@ local jobs_checks = function()
     checks["Job: Hide and seek! Second Child"] = memory.read_u8(0x2000188)
     checks["Job: Hide and seek! Third Child"] = memory.read_u8(0x2000188)
     checks["Job: Hide and seek! Fourth Child"] = memory.read_u8(0x2000189)
-    checks["Job: Hide and seek! Fifth Child"] = memory.read_u8(0x2000302)
+    checks["Job: Hide and seek! Completion"] = memory.read_u8(0x2000302)
     checks["Job: Finding the blue Navi"] = memory.read_u8(0x2000302)
     checks["Job: Give your support"] = memory.read_u8(0x2000302)
     checks["Job: Stamp collecting"] = memory.read_u8(0x2000302)
@@ -569,7 +565,6 @@ local GenerateZennyGet = function(amt)
 end
 
 local GenerateProgramGet = function(program, color, amt)
-    print("Receiving Program "..tostring(program).." Color: "..color)
     bytes = {
         0xF6, 0x40, (program * 4), amt, color,
         charDict['G'], charDict['o'], charDict['t'], charDict[' '], charDict['a'], charDict[' '], charDict['N'], charDict['a'], charDict['v'], charDict['i'], charDict['\n'],
@@ -600,7 +595,7 @@ end
 
 local GenerateGetMessageFromItem = function(item)
     --Special case for progressive undernet
-    if item["type"] == "progressive-undernet" then
+    if item["type"] == "undernet" then
         return GenerateKeyItemGet(Next_Progressive_Undernet_ID(),1)
     elseif item["type"] == "chip" then
         return GenerateChipGet(item["itemID"], item["subItemID"], item["count"])
@@ -665,21 +660,26 @@ local process_block = function(block)
     item_queue = block['items']
 
     if itemState == ITEMSTATE_IDLE then
+        -- print("IDLE: There are "..#item_queue.." items in queue. There are "..loadItemIndexFromRAM().." items in RAM")
         if (#item_queue > loadItemIndexFromRAM()) then
             --print("  Item is pending. Switching to queued state")
             itemState = ITEMSTATE_QUEUED
             itemQueued = item_queue[loadItemIndexFromRAM()+1]
         end
     elseif itemState == ITEMSTATE_QUEUED then
-        --print("Item state queued")
+        print("QUEUED: There are "..#item_queue.." items in queue. There are "..loadItemIndexFromRAM().." items in RAM")
         if (#item_queue <= loadItemIndexFromRAM() and itemQueued ~= nil) then
             --print("  No item queued and pending is empty. Switching to idle")
             itemState = ITEMSTATE_IDLE
         end
         if (not IsItemQueued() and not IsInBattle() and not IsInDialog() and not IsInMenu()) then
             --print("  Game is ready to receive item. Switching to sent")
+
             SendItem(itemQueued)
             itemState = ITEMSTATE_SENT
+        else
+            itemQueued = nil
+            itemState = ITEMSTATE_IDLE
         end
     elseif itemState == ITEMSTATE_SENT then
         --print("Item state sent")
@@ -718,7 +718,7 @@ local receive = function()
 
     -- Determine message to send back
     local retTable = {}
-    retTable["playerName"] = "MegaMan"
+    retTable["playerName"] = loadPlayerNameFromROM()
     retTable["scriptVersion"] = script_version
     retTable["locations"] = check_all_locations()
     retTable["gameComplete"] = is_game_complete()
@@ -774,17 +774,16 @@ function main()
         gui.cleartext()
         if debugEnabled then
             gui.text(0,0,"Item Queued: "..tostring(IsItemQueued()))
-            --gui.text(0,16,"In Battle: "..tostring(IsInBattle()))
-            --gui.text(0,32,"In Dialog: "..tostring(IsInDialog()))
-            --gui.text(0,48,"In Menu: "..tostring(IsInMenu()))
-            gui.text(0,16,itemState)
+            gui.text(0,16,"In Battle: "..tostring(IsInBattle()))
+            gui.text(0,32,"In Dialog: "..tostring(IsInDialog()))
+            gui.text(0,48,"In Menu: "..tostring(IsInMenu()))
+            gui.text(0,64,itemState)
             if itemQueued == nil then
-                gui.text(0,32,"No item queued")
+                gui.text(0,80,"No item queued")
             else
-                gui.text(0,32,itemQueued["type"].." "..itemQueued["itemID"])
+                gui.text(0,80,itemQueued["type"].." "..itemQueued["itemID"])
             end
-            gui.text(0,48,"Item Index: "..loadItemIndexFromRAM())
-            gui.text(0,64,"Saved Index: "..memory.read_s32_le(0xE0057FC))
+            gui.text(0,96,"Item Index: "..loadItemIndexFromRAM())
         end
 
         emu.frameadvance()
