@@ -83,6 +83,7 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
     def _cmd_snes_close(self) -> bool:
         """Close connection to a currently connected snes"""
         self.ctx.snes_reconnect_address = None
+        self.ctx.cancel_snes_autoreconnect()
         if self.ctx.snes_socket is not None and not self.ctx.snes_socket.closed:
             async_start(self.ctx.snes_socket.close())
             return True
@@ -115,6 +116,7 @@ class SNIContext(CommonContext):
     game = None  # set in validate_rom
     items_handling = None  # set in game_watcher
     snes_connect_task: "typing.Optional[asyncio.Task[None]]" = None
+    snes_autoreconnect_task: typing.Optional["asyncio.Task[None]"] = None
 
     snes_address: str
     snes_socket: typing.Optional[WebSocketClientProtocol]
@@ -192,6 +194,13 @@ class SNIContext(CommonContext):
         auth = base64.b64encode(self.rom).decode()
         await self.send_connect(name=auth)
 
+    def cancel_snes_autoreconnect(self) -> bool:
+        if self.snes_autoreconnect_task:
+            self.snes_autoreconnect_task.cancel()
+            self.snes_autoreconnect_task = None
+            return True
+        return False
+
     def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         if not self.killing_player_task or self.killing_player_task.done():
             self.killing_player_task = asyncio.create_task(deathlink_kill_player(self))
@@ -214,6 +223,7 @@ class SNIContext(CommonContext):
 
     async def shutdown(self) -> None:
         await super(SNIContext, self).shutdown()
+        self.cancel_snes_autoreconnect()
         if self.snes_connect_task:
             try:
                 await asyncio.wait_for(self.snes_connect_task, 1)
@@ -379,6 +389,8 @@ async def snes_connect(ctx: SNIContext, address: str, deviceIndex: int = -1) -> 
             snes_logger.error('Already connected to SNI, likely awaiting a device.')
         return
 
+    ctx.cancel_snes_autoreconnect()
+
     device = None
     recv_task = None
     ctx.snes_state = SNESState.SNES_CONNECTING
@@ -442,8 +454,9 @@ async def snes_connect(ctx: SNIContext, address: str, deviceIndex: int = -1) -> 
         if not ctx.snes_reconnect_address:
             snes_logger.error("Error connecting to snes (%s)" % e)
         else:
-            snes_logger.error(f"Error connecting to snes, attempt again in {_global_snes_reconnect_delay}s")
-            async_start(snes_autoreconnect(ctx))
+            snes_logger.error(f"Error connecting to snes, retrying in {_global_snes_reconnect_delay} seconds")
+            assert ctx.snes_autoreconnect_task is None
+            ctx.snes_autoreconnect_task = asyncio.create_task(snes_autoreconnect(ctx), name="snes auto-reconnect")
         _global_snes_reconnect_delay *= 2
 
     else:
@@ -460,8 +473,8 @@ async def snes_disconnect(ctx: SNIContext) -> None:
 
 async def snes_autoreconnect(ctx: SNIContext) -> None:
     await asyncio.sleep(_global_snes_reconnect_delay)
-    if ctx.snes_reconnect_address and ctx.snes_socket is None:
-        await snes_connect(ctx, ctx.snes_reconnect_address)
+    if ctx.snes_reconnect_address and not ctx.snes_socket and not ctx.snes_connect_task:
+        ctx.snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_reconnect_address), name="SNES Connect")
 
 
 async def snes_recv_loop(ctx: SNIContext) -> None:
@@ -487,8 +500,9 @@ async def snes_recv_loop(ctx: SNIContext) -> None:
         ctx.rom = None
 
         if ctx.snes_reconnect_address:
-            snes_logger.info(f"...reconnecting in {_global_snes_reconnect_delay}s")
-            async_start(snes_autoreconnect(ctx))
+            snes_logger.info(f"... automatically reconnecting to snes in {_global_snes_reconnect_delay} seconds")
+            assert ctx.snes_autoreconnect_task is None
+            ctx.snes_autoreconnect_task = asyncio.create_task(snes_autoreconnect(ctx), name="snes auto-reconnect")
 
 
 async def snes_read(ctx: SNIContext, address: int, size: int) -> typing.Optional[bytes]:
@@ -619,7 +633,7 @@ async def game_watcher(ctx: SNIContext) -> None:
 
         if not rom_validated or (ctx.auth and ctx.auth != ctx.rom):
             snes_logger.warning("ROM change detected, please reconnect to the multiworld server")
-            await ctx.disconnect()
+            await ctx.disconnect(allow_autoreconnect=True)
             ctx.client_handler = None
             ctx.rom = None
             ctx.command_processor(ctx).connect_to_snes()
