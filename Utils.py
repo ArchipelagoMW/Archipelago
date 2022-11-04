@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import typing
 import builtins
 import os
@@ -11,7 +12,7 @@ import io
 import collections
 import importlib
 import logging
-from typing import BinaryIO
+from typing import BinaryIO, ClassVar, Coroutine, Optional, Set
 
 from yaml import load, load_all, dump, SafeLoader
 
@@ -37,7 +38,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.5"
+__version__ = "0.3.6"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -231,6 +232,8 @@ def get_default_options() -> OptionsType:
         },
         "factorio_options": {
             "executable": os.path.join("factorio", "bin", "x64", "factorio"),
+            "filter_item_sends": False,
+            "bridge_chat_out": True,
         },
         "sni_options": {
             "sni": "SNI",
@@ -648,3 +651,24 @@ def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
     if strip_header and len(buffer) % 0x400 == 0x200:
         return buffer[0x200:]
     return buffer
+
+
+_faf_tasks: "Set[asyncio.Task[None]]" = set()
+
+
+def async_start(co: Coroutine[None, None, None], name: Optional[str] = None) -> None:
+    """
+    Use this to start a task when you don't keep a reference to it or immediately await it,
+    to prevent early garbage collection. "fire-and-forget"
+    """
+    # https://docs.python.org/3.10/library/asyncio-task.html#asyncio.create_task
+    # Python docs:
+    # ```
+    # Important: Save a reference to the result of [asyncio.create_task],
+    # to avoid a task disappearing mid-execution.
+    # ```
+    # This implementation follows the pattern given in that documentation.
+
+    task = asyncio.create_task(co, name=name)
+    _faf_tasks.add(task)
+    task.add_done_callback(_faf_tasks.discard)

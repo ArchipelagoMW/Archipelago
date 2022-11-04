@@ -2,7 +2,7 @@
 
 ## Required Software
 - [Bk Sudoku](https://github.com/Jarno458/sudoku)
-- [.Net 6](https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net60)
+- Windows 8 or higher
 
 ## General Concept
 

@@ -88,7 +88,7 @@ class MeritousWorld(World):
         return crystal_pool
 
     def get_filler_item_name(self) -> str:
-        rand_crystals = self.world.random.randrange(0, 32)
+        rand_crystals = self.multiworld.random.randrange(0, 32)
         if rand_crystals < 16:
             return "Crystals x500"
         elif rand_crystals < 28:
@@ -97,14 +97,14 @@ class MeritousWorld(World):
             return "Crystals x2000"
 
     def generate_early(self):
-        self.goal = self.world.goal[self.player].value
-        self.include_evolution_traps = self.world.include_evolution_traps[self.player].value
-        self.include_psi_keys = self.world.include_psi_keys[self.player].value
-        self.item_cache_cost = self.world.item_cache_cost[self.player].value
-        self.death_link = self.world.death_link[self.player].value
+        self.goal = self.multiworld.goal[self.player].value
+        self.include_evolution_traps = self.multiworld.include_evolution_traps[self.player].value
+        self.include_psi_keys = self.multiworld.include_psi_keys[self.player].value
+        self.item_cache_cost = self.multiworld.item_cache_cost[self.player].value
+        self.death_link = self.multiworld.death_link[self.player].value
 
     def create_regions(self):
-        create_regions(self.world, self.player)
+        create_regions(self.multiworld, self.player)
 
     def create_items(self):
         frequencies = [0, # Nothing [0]
@@ -133,22 +133,22 @@ class MeritousWorld(World):
         if len(item_pool) < location_count:
             item_pool += self._make_crystals(location_count - len(item_pool))
 
-        self.world.itempool += item_pool
+        self.multiworld.itempool += item_pool
 
     def set_rules(self):
-        set_rules(self.world, self.player)
+        set_rules(self.multiworld, self.player)
 
     def generate_basic(self):
-        self.world.get_location("Place of Power", self.player).place_locked_item(
+        self.multiworld.get_location("Place of Power", self.player).place_locked_item(
             self.create_item("Cursed Seal"))
-        self.world.get_location("The Last Place You'll Look", self.player).place_locked_item(
+        self.multiworld.get_location("The Last Place You'll Look", self.player).place_locked_item(
             self.create_item("Agate Knife"))
-        self.world.get_location("Wervyn Anixil", self.player).place_locked_item(
+        self.multiworld.get_location("Wervyn Anixil", self.player).place_locked_item(
             self.create_event("Victory"))
-        self.world.get_location("Wervyn Anixil?", self.player).place_locked_item(
+        self.multiworld.get_location("Wervyn Anixil?", self.player).place_locked_item(
             self.create_event("Full Victory"))
         for boss in ["Meridian", "Ataraxia", "Merodach"]:
-            self.world.get_location(f"{boss} Defeat", self.player).place_locked_item(
+            self.multiworld.get_location(f"{boss} Defeat", self.player).place_locked_item(
                 self.create_event(f"{boss} Defeated"))
 
         if not self.include_psi_keys:
@@ -156,22 +156,22 @@ class MeritousWorld(World):
             psi_key_storage = []
             for i in range(0, 3):
                 psi_keys += [self.create_item(f"PSI Key {i + 1}")]
-                psi_key_storage += [self.world.get_location(
+                psi_key_storage += [self.multiworld.get_location(
                     f"PSI Key Storage {i + 1}", self.player)]
 
-            fill_restrictive(self.world, self.world.get_all_state(
+            fill_restrictive(self.multiworld, self.multiworld.get_all_state(
                 False), psi_key_storage, psi_keys)
 
         if not self.include_evolution_traps:
             for boss in ["Meridian", "Ataraxia", "Merodach"]:
-                self.world.get_location(boss, self.player).place_locked_item(
+                self.multiworld.get_location(boss, self.player).place_locked_item(
                     self.create_item("Evolution Trap"))
 
         if self.goal == 0:
-            self.world.completion_condition[self.player] = lambda state: state.has_any(
+            self.multiworld.completion_condition[self.player] = lambda state: state.has_any(
                 ["Victory", "Full Victory"], self.player)
         else:
-            self.world.completion_condition[self.player] = lambda state: state.has(
+            self.multiworld.completion_condition[self.player] = lambda state: state.has(
                 "Full Victory", self.player)
 
     def fill_slot_data(self) -> dict:

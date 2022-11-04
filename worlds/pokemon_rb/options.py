@@ -83,9 +83,9 @@ class BadgeSanity(Toggle):
 
 
 class BadgesNeededForHMMoves(Choice):
-    """Off will remove the requirement for badges to use HM moves. Extra will give the Marsh, Volcano, and Earth
-    Badges a random HM move to enable. Extra Plus will additionally pick two random badges to enable a second HM move.
-    A man in Cerulean City will reveal the moves enabled by each Badge."""
+    """Off will remove the requirement for badges to use HM moves. Extra will give the Marsh, Volcano, and Earth Badges
+    a random HM move to enable. Extra Plus will additionally pick two random badges to enable a second HM move.
+    You will only need one of the required badges to use the HM move."""
     display_name = "Badges Needed For HM Moves"
     default = 1
     option_on = 1
