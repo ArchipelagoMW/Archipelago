@@ -14,16 +14,16 @@ from worlds import AutoWorld
 class TestInvertedBombRules(unittest.TestCase):
 
     def setUp(self):
-        self.world = MultiWorld(1)
-        self.world.mode[1] = "inverted"
+        self.multiworld = MultiWorld(1)
+        self.multiworld.mode[1] = "inverted"
         args = Namespace
         for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
             setattr(args, name, {1: option.from_any(option.default)})
-            self.world.set_options(args)
-        self.world.set_default_common_options()
-        self.world.difficulty_requirements[1] = difficulties['normal']
-        create_inverted_regions(self.world, 1)
-        create_dungeons(self.world, 1)
+            self.multiworld.set_options(args)
+        self.multiworld.set_default_common_options()
+        self.multiworld.difficulty_requirements[1] = difficulties['normal']
+        create_inverted_regions(self.multiworld, 1)
+        create_dungeons(self.multiworld, 1)
 
     #TODO: Just making sure I haven't missed an entrance.  It would be good to test the rules make sense as well.
     def testInvertedBombRulesAreComplete(self):
@@ -31,9 +31,9 @@ class TestInvertedBombRules(unittest.TestCase):
         must_exits = list(Inverted_LW_Entrances_Must_Exit + Inverted_LW_Dungeon_Entrances_Must_Exit)
         for entrance_name in (entrances + must_exits):
             if entrance_name not in ['Desert Palace Entrance (East)', 'Spectacle Rock Cave', 'Spectacle Rock Cave (Bottom)']:
-                entrance = self.world.get_entrance(entrance_name, 1)
-                connect_entrance(self.world, entrance_name, 'Inverted Big Bomb Shop', 1)
-                set_inverted_big_bomb_rules(self.world, 1)
+                entrance = self.multiworld.get_entrance(entrance_name, 1)
+                connect_entrance(self.multiworld, entrance_name, 'Inverted Big Bomb Shop', 1)
+                set_inverted_big_bomb_rules(self.multiworld, 1)
                 entrance.connected_region.entrances.remove(entrance)
                 entrance.connected_region = None
 
@@ -45,9 +45,9 @@ class TestInvertedBombRules(unittest.TestCase):
 
     def testInvalidEntrances(self):
         for entrance_name in ['Desert Palace Entrance (East)', 'Spectacle Rock Cave', 'Spectacle Rock Cave (Bottom)']:
-            entrance = self.world.get_entrance(entrance_name, 1)
-            connect_entrance(self.world, entrance_name, 'Inverted Big Bomb Shop', 1)
+            entrance = self.multiworld.get_entrance(entrance_name, 1)
+            connect_entrance(self.multiworld, entrance_name, 'Inverted Big Bomb Shop', 1)
             with self.assertRaises(Exception):
-                set_inverted_big_bomb_rules(self.world, 1)
+                set_inverted_big_bomb_rules(self.multiworld, 1)
             entrance.connected_region.entrances.remove(entrance)
             entrance.connected_region = None

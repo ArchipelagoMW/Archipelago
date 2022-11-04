@@ -157,6 +157,7 @@ function on_player_created(event)
 {%- if silo == 2 %}
     check_spawn_silo(game.players[event.player_index].force)
 {%- endif %}
+    dumpInfo(player.force)
 end
 script.on_event(defines.events.on_player_created, on_player_created)
 
@@ -491,6 +492,7 @@ commands.add_command("ap-sync", "Used by the Archipelago client to get progress 
         ["death_link"] = DEATH_LINK,
         ["energy"] = chain_lookup(forcedata, "energy"),
         ["energy_bridges"] = chain_lookup(forcedata, "energy_bridges"),
+        ["multiplayer"] = #game.players > 1,
     }
 
     for tech_name, tech in pairs(force.technologies) do
@@ -594,6 +596,18 @@ commands.add_command("ap-energylink", "Used by the Archipelago client to manage 
     local change = tonumber(call.parameter or "0")
     local force = "player"
     global.forcedata[force].energy = global.forcedata[force].energy + change
+end)
+
+commands.add_command("energy-link", "Print the status of the Archipelago energy link.", function(call)
+    log("Player command energy-link") -- notifies client
+end)
+
+commands.add_command("toggle-ap-send-filter", "Toggle filtering of item sends that get displayed in-game to only those that involve you.", function(call)
+    log("Player command toggle-ap-send-filter") -- notifies client
+end)
+
+commands.add_command("toggle-ap-chat", "Toggle sending of chat messages from players on the Factorio server to Archipelago.", function(call)
+    log("Player command toggle-ap-chat") -- notifies client
 end)
 
 -- data

@@ -291,6 +291,11 @@ level_logic = {
                 "Progressive Throw/Catch",
             ],
             {  # Additive
+                ("Sharp Knife", 1.0),
+                ("Dish Scrubber", 1.0),
+                ("Clean Dishes", 0.5),
+                ("Guest Patience", 0.25),
+                ("Burn Leniency", 0.25),
             },
         )
     ),

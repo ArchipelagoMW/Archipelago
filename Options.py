@@ -850,7 +850,7 @@ class Accessibility(Choice):
 
 class ProgressionBalancing(SpecialRange):
     """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
-    [0-99, default 50] A lower setting means more getting stuck. A higher setting means less getting stuck."""
+    A lower setting means more getting stuck. A higher setting means less getting stuck."""
     default = 50
     range_start = 0
     range_end = 99
@@ -881,6 +881,11 @@ class LocalItems(ItemSet):
 class NonLocalItems(ItemSet):
     """Forces these items to be outside their native world."""
     display_name = "Not Local Items"
+
+
+class EarlyItems(ItemDict):
+    """Force the specified items to be in locations that are reachable from the start."""
+    display_name = "Early Items"
 
 
 class StartInventory(ItemDict):
@@ -981,6 +986,7 @@ per_game_common_options = {
     **common_options,  # can be overwritten per-game
     "local_items": LocalItems,
     "non_local_items": NonLocalItems,
+    "early_items": EarlyItems,
     "start_inventory": StartInventory,
     "start_hints": StartHints,
     "start_location_hints": StartLocationHints,
