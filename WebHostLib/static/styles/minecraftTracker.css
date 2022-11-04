@@ -14,7 +14,7 @@
 }
 
 #inventory-table td{
-    width: 60px;
+    width: 40px;
     height: 40px;
     text-align: center;
     vertical-align: middle;
@@ -22,7 +22,7 @@
 
 #inventory-table img{
     height: 100%;
-    max-width: 60px;
+    max-width: 40px;
     max-height: 40px;
     filter: grayscale(100%) contrast(75%) brightness(30%);
 }
@@ -45,7 +45,7 @@
 }
 
 #location-table{
-    width: 460px;
+    width: 384px;
     border-left: 2px solid #000000;
     border-right: 2px solid #000000;
     border-bottom: 2px solid #000000;
@@ -72,7 +72,7 @@
 
 #location-table td.counter {
     text-align: right;
-    font-size: 18px;
+    font-size: 14px;
 }
 
 #location-table td.toggle-arrow {
