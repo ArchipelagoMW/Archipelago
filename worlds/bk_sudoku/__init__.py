@@ -12,7 +12,7 @@ class Bk_SudokuWebWorld(WebWorld):
             description='A guide to playing BK Sudoku',
             language='English',
             file_name='setup_en.md',
-            link='guide/en',
+            link='setup/en',
             authors=['Jarno']
         )
     ]
