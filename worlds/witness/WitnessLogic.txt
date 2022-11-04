@@ -832,7 +832,7 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Path to Challenge - 0x019A5:
 158460 - 0x00973 (Blue Tunnel Left Second 2) - 0x008B8 - Stars & Triangles
 158461 - 0x0097B (Blue Tunnel Left Second 3) - 0x00973 - Stars & Triangles & Stars + Same Colored Symbol
 158462 - 0x0097D (Blue Tunnel Left Second 4) - 0x0097B - Stars & Black/White Squares & Stars + Same Colored Symbol & Triangles
-158463 - 0x0097E (Blue Tunnel Left Second 5) - 0x0097D - Stars & Black/White Squares & Stars + Same Colored Symbol
+158463 - 0x0097E (Blue Tunnel Left Second 5) - 0x0097D - Stars & Black/White Squares & Stars + Same Colored Symbol & Colored Squares
 158464 - 0x00994 (Blue Tunnel Right Second 1) - True - Rotated Shapers & Triangles
 158465 - 0x334D5 (Blue Tunnel Right Second 2) - 0x00994 - Rotated Shapers & Triangles
 158466 - 0x00995 (Blue Tunnel Right Second 3) - 0x334D5 - Rotated Shapers & Triangles

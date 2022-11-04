@@ -7,6 +7,7 @@ from typing import List
 
 
 import Utils
+from Utils import async_start
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
 
@@ -69,7 +70,7 @@ class FF1Context(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
-            asyncio.create_task(parse_locations(self.locations_array, self, True))
+            async_start(parse_locations(self.locations_array, self, True))
         elif cmd == 'Print':
             msg = args['text']
             if ': !' not in msg:
@@ -180,7 +181,7 @@ async def nes_sync_task(ctx: FF1Context):
                     # print(data_decoded)
                     if ctx.game is not None and 'locations' in data_decoded:
                         # Not just a keep alive ping, parse
-                        asyncio.create_task(parse_locations(data_decoded['locations'], ctx, False))
+                        async_start(parse_locations(data_decoded['locations'], ctx, False))
                     if not ctx.auth:
                         ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
                         if ctx.auth == '':

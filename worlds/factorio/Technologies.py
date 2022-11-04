@@ -445,8 +445,6 @@ common_tech_table: Dict[str, int] = {tech_name: tech_id for tech_name, tech_id i
 useless_technologies: Set[str] = {tech_name for tech_name in common_tech_table
                                   if not technology_table[tech_name].useful()}
 
-lookup_id_to_name: Dict[int, str] = {item_id: item_name for item_name, item_id in tech_table.items()}
-
 rel_cost = {
     "wood": 10000,
     "iron-ore": 1,
