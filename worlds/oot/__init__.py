@@ -1,7 +1,9 @@
 import logging
 import threading
 import copy
+from typing import Optional, List, AbstractSet  # remove when 3.8 support is dropped
 from collections import Counter, deque
+from string import printable
 
 logger = logging.getLogger("Ocarina of Time")
 
@@ -15,7 +17,7 @@ from .Rules import set_rules, set_shop_rules, set_entrances_based_rules
 from .RuleParser import Rule_AST_Transformer
 from .Options import oot_options
 from .Utils import data_path, read_json
-from .LocationList import business_scrubs, set_drop_location_names
+from .LocationList import business_scrubs, set_drop_location_names, dungeon_song_locations
 from .DungeonList import dungeon_table, create_dungeons
 from .LogicTricks import normalized_name_tricks
 from .Rom import Rom
@@ -27,10 +29,10 @@ from .HintList import getRequiredHints
 from .SaveContext import SaveContext
 
 from Utils import get_options, output_path
-from BaseClasses import MultiWorld, CollectionState, RegionType, Tutorial
+from BaseClasses import MultiWorld, CollectionState, RegionType, Tutorial, LocationProgressType
 from Options import Range, Toggle, OptionList
-from Fill import fill_restrictive, FillError
-from worlds.generic.Rules import exclusion_rules
+from Fill import fill_restrictive, fast_fill, FillError
+from worlds.generic.Rules import exclusion_rules, add_item_rule
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
 
 location_id_offset = 67000
@@ -117,15 +119,10 @@ class OOTWorld(World):
         rom = Rom(file=get_options()['oot_options']['rom_file'])
 
     def generate_early(self):
-        # Player name MUST be at most 16 bytes ascii-encoded, otherwise won't write to ROM correctly
-        if len(bytes(self.world.get_player_name(self.player), 'ascii')) > 16:
-            raise Exception(
-                f"OoT: Player {self.player}'s name ({self.world.get_player_name(self.player)}) must be ASCII-compatible")
-
         self.parser = Rule_AST_Transformer(self, self.player)
 
         for (option_name, option) in oot_options.items():
-            result = getattr(self.world, option_name)[self.player]
+            result = getattr(self.multiworld, option_name)[self.player]
             if isinstance(result, Range):
                 option_value = int(result)
             elif isinstance(result, Toggle):
@@ -140,8 +137,9 @@ class OOTWorld(World):
         self.regions = []  # internal cache of regions for this world, used later
         self.remove_from_start_inventory = []  # some items will be precollected but not in the inventory
         self.starting_items = Counter()
-        self.starting_songs = False  # whether starting_items contains a song
-        self.file_hash = [self.world.random.randint(0, 31) for i in range(5)]
+        self.songs_as_items = False
+        self.file_hash = [self.multiworld.random.randint(0, 31) for i in range(5)]
+        self.connect_name = ''.join(self.multiworld.random.choices(printable, k=16))
 
         self.item_name_groups = {
             "medallions": {"Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion",
@@ -182,16 +180,41 @@ class OOTWorld(World):
         if self.triforce_hunt:
             self.shuffle_ganon_bosskey = 'remove'
 
+        # If songs/keys locked to own world by settings, add them to local_items
+        local_types = []
+        if self.shuffle_song_items != 'any':
+            local_types.append('Song')
+        if self.shuffle_mapcompass != 'keysanity':
+            local_types += ['Map', 'Compass']
+        if self.shuffle_smallkeys != 'keysanity':
+            local_types.append('SmallKey')
+        if self.shuffle_fortresskeys != 'keysanity':
+            local_types.append('HideoutSmallKey')
+        if self.shuffle_bosskeys != 'keysanity':
+            local_types.append('BossKey')
+        if self.shuffle_ganon_bosskey != 'keysanity':
+            local_types.append('GanonBossKey')
+        self.multiworld.local_items[self.player].value |= set(name for name, data in item_table.items() if data[0] in local_types)
+
+        # If any songs are itemlinked, set songs_as_items
+        for group in self.multiworld.groups.values():
+            if self.songs_as_items or group['game'] != self.game or self.player not in group['players']:
+                continue
+            for item_name in group['item_pool']:
+                if oot_is_item_of_type(item_name, 'Song'):
+                    self.songs_as_items = True
+                    break
+
         # Determine skipped trials in GT
         # This needs to be done before the logic rules in GT are parsed
         trial_list = ['Forest', 'Fire', 'Water', 'Spirit', 'Shadow', 'Light']
-        chosen_trials = self.world.random.sample(trial_list, self.trials)  # chooses a list of trials to NOT skip
+        chosen_trials = self.multiworld.random.sample(trial_list, self.trials)  # chooses a list of trials to NOT skip
         self.skipped_trials = {trial: (trial not in chosen_trials) for trial in trial_list}
 
         # Determine which dungeons are MQ
         # Possible future plan: allow user to pick which dungeons are MQ
         if self.logic_rules == 'glitchless':
-            mq_dungeons = self.world.random.sample(dungeon_table, self.mq_dungeons)
+            mq_dungeons = self.multiworld.random.sample(dungeon_table, self.mq_dungeons)
         else:
             self.mq_dungeons = 0
             mq_dungeons = []
@@ -208,8 +231,8 @@ class OOTWorld(World):
 
         # No Logic forces all tricks on, prog balancing off and beatable-only
         elif self.logic_rules == 'no_logic':
-            self.world.progression_balancing[self.player].value = False
-            self.world.accessibility[self.player] = self.world.accessibility[self.player].from_text("minimal")
+            self.multiworld.progression_balancing[self.player].value = False
+            self.multiworld.accessibility[self.player] = self.multiworld.accessibility[self.player].from_text("minimal")
             for trick in normalized_name_tricks.values():
                 setattr(self, trick['name'], True)
 
@@ -221,6 +244,8 @@ class OOTWorld(World):
 
         # Set internal names used by the OoT generator
         self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld']
+        self.trials_random = self.multiworld.trials[self.player].randomized
+        self.mq_dungeons_random = self.multiworld.mq_dungeons[self.player].randomized
 
         # Hint stuff
         self.clearer_hints = True  # this is being enforced since non-oot items do not have non-clear hint text
@@ -310,7 +335,7 @@ class OOTWorld(World):
 
         for region in region_json:
             new_region = OOTRegion(region['region_name'], RegionType.Generic, None, self.player)
-            new_region.world = self.world
+            new_region.multiworld = self.multiworld
             if 'pretty_name' in region:
                 new_region.pretty_name = region['pretty_name']
             if 'font_color' in region:
@@ -355,19 +380,19 @@ class OOTWorld(World):
                         new_location.show_in_spoiler = False
             if 'exits' in region:
                 for exit, rule in region['exits'].items():
-                    new_exit = OOTEntrance(self.player, self.world, '%s -> %s' % (new_region.name, exit), new_region)
+                    new_exit = OOTEntrance(self.player, self.multiworld, '%s -> %s' % (new_region.name, exit), new_region)
                     new_exit.vanilla_connected_region = exit
                     new_exit.rule_string = rule
-                    if self.world.logic_rules != 'none':
+                    if self.multiworld.logic_rules != 'none':
                         self.parser.parse_spot_rule(new_exit)
                     if new_exit.never:
                         logger.debug('Dropping unreachable exit: %s', new_exit.name)
                     else:
                         new_region.exits.append(new_exit)
 
-            self.world.regions.append(new_region)
+            self.multiworld.regions.append(new_region)
             self.regions.append(new_region)
-        self.world._recache()
+        self.multiworld._recache()
 
     def set_scrub_prices(self):
         # Get Deku Scrub Locations
@@ -387,7 +412,7 @@ class OOTWorld(World):
             elif self.shuffle_scrubs == 'random':
                 # this is a random value between 0-99
                 # average value is ~33 rupees
-                price = int(self.world.random.betavariate(1, 2) * 99)
+                price = int(self.multiworld.random.betavariate(1, 2) * 99)
 
             # Set price in the dictionary as well as the location.
             self.scrub_prices[scrub_item] = price
@@ -402,14 +427,14 @@ class OOTWorld(World):
         self.shop_prices = {}
         for region in self.regions:
             if self.shopsanity == 'random':
-                shop_item_count = self.world.random.randint(0, 4)
+                shop_item_count = self.multiworld.random.randint(0, 4)
             else:
                 shop_item_count = int(self.shopsanity)
 
             for location in region.locations:
                 if location.type == 'Shop':
                     if location.name[-1:] in shop_item_indexes[:shop_item_count]:
-                        self.shop_prices[location.name] = int(self.world.random.betavariate(1.5, 2) * 60) * 5
+                        self.shop_prices[location.name] = int(self.multiworld.random.betavariate(1.5, 2) * 60) * 5
 
     def fill_bosses(self, bossCount=9):
         boss_location_names = (
@@ -424,7 +449,7 @@ class OOTWorld(World):
             'Links Pocket'
         )
         boss_rewards = [item for item in self.itempool if item.type == 'DungeonReward']
-        boss_locations = [self.world.get_location(loc, self.player) for loc in boss_location_names]
+        boss_locations = [self.multiworld.get_location(loc, self.player) for loc in boss_location_names]
 
         placed_prizes = [loc.item.name for loc in boss_locations if loc.item is not None]
         prizepool = [item for item in boss_rewards if item.name not in placed_prizes]
@@ -432,12 +457,12 @@ class OOTWorld(World):
 
         while bossCount:
             bossCount -= 1
-            self.world.random.shuffle(prizepool)
-            self.world.random.shuffle(prize_locs)
+            self.multiworld.random.shuffle(prizepool)
+            self.multiworld.random.shuffle(prize_locs)
             item = prizepool.pop()
             loc = prize_locs.pop()
             loc.place_locked_item(item)
-            self.world.itempool.remove(item)
+            self.multiworld.itempool.remove(item)
 
     def create_item(self, name: str):
         if name in item_table:
@@ -449,7 +474,7 @@ class OOTWorld(World):
     def make_event_item(self, name, location, item=None):
         if item is None:
             item = self.create_item(name)
-        self.world.push_item(location, item, collect=False)
+        self.multiworld.push_item(location, item, collect=False)
         location.locked = True
         location.event = True
         if name not in item_table:
@@ -463,11 +488,11 @@ class OOTWorld(World):
             world_type = 'Glitched World'
         overworld_data_path = data_path(world_type, 'Overworld.json')
         menu = OOTRegion('Menu', None, None, self.player)
-        start = OOTEntrance(self.player, self.world, 'New Game', menu)
+        start = OOTEntrance(self.player, self.multiworld, 'New Game', menu)
         menu.exits.append(start)
-        self.world.regions.append(menu)
+        self.multiworld.regions.append(menu)
         self.load_regions_from_json(overworld_data_path)
-        start.connect(self.world.get_region('Root', self.player))
+        start.connect(self.multiworld.get_region('Root', self.player))
         create_dungeons(self)
         self.parser.create_delayed_rules()
 
@@ -478,7 +503,7 @@ class OOTWorld(World):
         # Bind entrances to vanilla
         for region in self.regions:
             for exit in region.exits:
-                exit.connect(self.world.get_region(exit.vanilla_connected_region, self.player))
+                exit.connect(self.multiworld.get_region(exit.vanilla_connected_region, self.player))
 
     def create_items(self):
         # Generate itempool
@@ -491,7 +516,7 @@ class OOTWorld(World):
         junk_pool = get_junk_pool(self)
         removed_items = []
         # Determine starting items
-        for item in self.world.precollected_items[self.player]:
+        for item in self.multiworld.precollected_items[self.player]:
             if item.name in self.remove_from_start_inventory:
                 self.remove_from_start_inventory.remove(item.name)
                 removed_items.append(item.name)
@@ -501,7 +526,7 @@ class OOTWorld(World):
                 else:
                     self.starting_items[item.name] += 1
                     if item.type == 'Song':
-                        self.starting_songs = True
+                        self.songs_as_items = True
                     # Call the junk fill and get a replacement
                     if item in self.itempool:
                         self.itempool.remove(item)
@@ -512,7 +537,7 @@ class OOTWorld(World):
         if self.start_with_rupees:
             self.starting_items['Rupees'] = 999
 
-        self.world.itempool += self.itempool
+        self.multiworld.itempool += self.itempool
         self.remove_from_start_inventory.extend(removed_items)
 
     def set_rules(self):
@@ -533,7 +558,7 @@ class OOTWorld(World):
                     for entrance in self.get_shuffled_entrances():
                         if entrance.connected_region is not None:
                             entrance.disconnect()
-                        entrance.connect(self.world.get_region(entrance.vanilla_connected_region, self.player))
+                        entrance.connect(self.multiworld.get_region(entrance.vanilla_connected_region, self.player))
                         if entrance.assumed:
                             assumed_entrance = entrance.assumed
                             if assumed_entrance.connected_region is not None:
@@ -570,48 +595,30 @@ class OOTWorld(World):
 
         # Kill unreachable events that can't be gotten even with all items
         # Make sure to only kill actual internal events, not in-game "events"
-        all_state = self.world.get_all_state(False)
+        all_state = self.multiworld.get_all_state(False)
         all_locations = self.get_locations()
-        reachable = self.world.get_reachable_locations(all_state, self.player)
+        reachable = self.multiworld.get_reachable_locations(all_state, self.player)
         unreachable = [loc for loc in all_locations if
                        (loc.internal or loc.type == 'Drop') and loc.event and loc.locked and loc not in reachable]
         for loc in unreachable:
             loc.parent_region.locations.remove(loc)
         # Exception: Sell Big Poe is an event which is only reachable if Bottle with Big Poe is in the item pool.
         # We allow it to be removed only if Bottle with Big Poe is not in the itempool.
-        bigpoe = self.world.get_location('Sell Big Poe from Market Guard House', self.player)
+        bigpoe = self.multiworld.get_location('Sell Big Poe from Market Guard House', self.player)
         if not all_state.has('Bottle with Big Poe', self.player) and bigpoe not in reachable:
             bigpoe.parent_region.locations.remove(bigpoe)
-        self.world.clear_location_cache()
+        self.multiworld.clear_location_cache()
 
         # If fast scarecrow then we need to kill the Pierre location as it will be unreachable
         if self.free_scarecrow:
-            loc = self.world.get_location("Pierre", self.player)
+            loc = self.multiworld.get_location("Pierre", self.player)
             loc.parent_region.locations.remove(loc)
         # If open zora's domain then we need to kill Deliver Rutos Letter
         if self.zora_fountain == 'open':
-            loc = self.world.get_location("Deliver Rutos Letter", self.player)
+            loc = self.multiworld.get_location("Deliver Rutos Letter", self.player)
             loc.parent_region.locations.remove(loc)
 
     def pre_fill(self):
-
-        # relevant for both dungeon item fill and song fill
-        dungeon_song_locations = [
-            "Deku Tree Queen Gohma Heart",
-            "Dodongos Cavern King Dodongo Heart",
-            "Jabu Jabus Belly Barinade Heart",
-            "Forest Temple Phantom Ganon Heart",
-            "Fire Temple Volvagia Heart",
-            "Water Temple Morpha Heart",
-            "Shadow Temple Bongo Bongo Heart",
-            "Spirit Temple Twinrova Heart",
-            "Song from Impa",
-            "Sheik in Ice Cavern",
-            # only one exists
-            "Bottom of the Well Lens of Truth Chest", "Bottom of the Well MQ Lens of Truth Chest",
-            # only one exists
-            "Gerudo Training Ground Maze Path Final Chest", "Gerudo Training Ground MQ Ice Arrows Chest",
-        ]
 
         def get_names(items):
             for item in items:
@@ -641,11 +648,11 @@ class OOTWorld(World):
                                  if loc.item is None and (
                                          self.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations)]
             if itempools['dungeon']:  # only do this if there's anything to shuffle
-                dungeon_itempool = [item for item in self.world.itempool if item.player == self.player and item.name in itempools['dungeon']]
+                dungeon_itempool = [item for item in self.multiworld.itempool if item.player == self.player and item.name in itempools['dungeon']]
                 for item in dungeon_itempool:
-                    self.world.itempool.remove(item)
-                self.world.random.shuffle(dungeon_locations)
-                fill_restrictive(self.world, self.world.get_all_state(False), dungeon_locations,
+                    self.multiworld.itempool.remove(item)
+                self.multiworld.random.shuffle(dungeon_locations)
+                fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), dungeon_locations,
                                  dungeon_itempool, True, True)
             any_dungeon_locations.extend(dungeon_locations)  # adds only the unfilled locations
 
@@ -653,22 +660,22 @@ class OOTWorld(World):
         if self.shuffle_fortresskeys == 'any_dungeon':
             itempools['any_dungeon'].add('Small Key (Thieves Hideout)')
         if itempools['any_dungeon']:
-            any_dungeon_itempool = [item for item in self.world.itempool if item.player == self.player and item.name in itempools['any_dungeon']]
+            any_dungeon_itempool = [item for item in self.multiworld.itempool if item.player == self.player and item.name in itempools['any_dungeon']]
             for item in any_dungeon_itempool:
-                self.world.itempool.remove(item)
+                self.multiworld.itempool.remove(item)
             any_dungeon_itempool.sort(key=lambda item:
                 {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'HideoutSmallKey': 1}.get(item.type, 0))
-            self.world.random.shuffle(any_dungeon_locations)
-            fill_restrictive(self.world, self.world.get_all_state(False), any_dungeon_locations,
+            self.multiworld.random.shuffle(any_dungeon_locations)
+            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), any_dungeon_locations,
                              any_dungeon_itempool, True, True)
 
         # If anything is overworld-only, fill into local non-dungeon locations
         if self.shuffle_fortresskeys == 'overworld':
             itempools['overworld'].add('Small Key (Thieves Hideout)')
         if itempools['overworld']:
-            overworld_itempool = [item for item in self.world.itempool if item.player == self.player and item.name in itempools['overworld']]
+            overworld_itempool = [item for item in self.multiworld.itempool if item.player == self.player and item.name in itempools['overworld']]
             for item in overworld_itempool:
-                self.world.itempool.remove(item)
+                self.multiworld.itempool.remove(item)
             overworld_itempool.sort(key=lambda item:
                 {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'HideoutSmallKey': 1}.get(item.type, 0))
             non_dungeon_locations = [loc for loc in self.get_locations() if
@@ -676,8 +683,8 @@ class OOTWorld(World):
                                      (loc.type != 'Shop' or loc.name in self.shop_prices) and
                                      (loc.type != 'Song' or self.shuffle_song_items != 'song') and
                                      (loc.name not in dungeon_song_locations or self.shuffle_song_items != 'dungeon')]
-            self.world.random.shuffle(non_dungeon_locations)
-            fill_restrictive(self.world, self.world.get_all_state(False), non_dungeon_locations,
+            self.multiworld.random.shuffle(non_dungeon_locations)
+            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), non_dungeon_locations,
                              overworld_itempool, True, True)
 
         # Place songs
@@ -686,16 +693,16 @@ class OOTWorld(World):
             tries = 5
             if self.shuffle_song_items == 'song':
                 song_locations = list(filter(lambda location: location.type == 'Song',
-                                             self.world.get_unfilled_locations(player=self.player)))
+                                             self.multiworld.get_unfilled_locations(player=self.player)))
             elif self.shuffle_song_items == 'dungeon':
                 song_locations = list(filter(lambda location: location.name in dungeon_song_locations,
-                                             self.world.get_unfilled_locations(player=self.player)))
+                                             self.multiworld.get_unfilled_locations(player=self.player)))
             else:
                 raise Exception(f"Unknown song shuffle type: {self.shuffle_song_items}")
 
-            songs = list(filter(lambda item: item.player == self.player and item.type == 'Song', self.world.itempool))
+            songs = list(filter(lambda item: item.player == self.player and item.type == 'Song', self.multiworld.itempool))
             for song in songs:
-                self.world.itempool.remove(song)
+                self.multiworld.itempool.remove(song)
 
             important_warps = (self.shuffle_special_interior_entrances or self.shuffle_overworld_entrances or
                                self.warp_songs or self.spawn_positions)
@@ -717,8 +724,8 @@ class OOTWorld(World):
 
             while tries:
                 try:
-                    self.world.random.shuffle(song_locations)
-                    fill_restrictive(self.world, self.world.get_all_state(False), song_locations[:], songs[:],
+                    self.multiworld.random.shuffle(song_locations)
+                    fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), song_locations[:], songs[:],
                                      True, True)
                     logger.debug(f"Successfully placed songs for player {self.player} after {6 - tries} attempt(s)")
                 except FillError as e:
@@ -740,34 +747,38 @@ class OOTWorld(World):
         # Place shop items
         # fast fill will fail because there is some logic on the shop items. we'll gather them up and place the shop items
         if self.shopsanity != 'off':
-            shop_items = list(
-                filter(lambda item: item.player == self.player and item.type == 'Shop', self.world.itempool))
+            shop_prog = list(filter(lambda item: item.player == self.player and item.type == 'Shop' 
+                and item.advancement, self.multiworld.itempool))
+            shop_junk = list(filter(lambda item: item.player == self.player and item.type == 'Shop' 
+                and not item.advancement, self.multiworld.itempool))
             shop_locations = list(
                 filter(lambda location: location.type == 'Shop' and location.name not in self.shop_prices,
-                       self.world.get_unfilled_locations(player=self.player)))
-            shop_items.sort(key=lambda item: {
-                'Buy Deku Shield': 3 * int(self.open_forest == 'closed'),
-                'Buy Goron Tunic': 2,
-                'Buy Zora Tunic': 2
-            }.get(item.name,
-                  int(item.advancement)))  # place Deku Shields if needed, then tunics, then other advancement, then junk
-            self.world.random.shuffle(shop_locations)
-            for item in shop_items:
-                self.world.itempool.remove(item)
-            fill_restrictive(self.world, self.world.get_all_state(False), shop_locations, shop_items, True, True)
+                       self.multiworld.get_unfilled_locations(player=self.player)))
+            shop_prog.sort(key=lambda item: {
+                'Buy Deku Shield': 2 * int(self.open_forest == 'closed'),
+                'Buy Goron Tunic': 1,
+                'Buy Zora Tunic': 1,
+            }.get(item.name, 0))  # place Deku Shields if needed, then tunics, then other advancement
+            self.multiworld.random.shuffle(shop_locations)
+            for item in shop_prog + shop_junk:
+                self.multiworld.itempool.remove(item)
+            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), shop_locations, shop_prog, True, True)
+            fast_fill(self.multiworld, shop_junk, shop_locations)
+            for loc in shop_locations:
+                loc.locked = True
         set_shop_rules(self)  # sets wallet requirements on shop items, must be done after they are filled
 
         # If skip child zelda is active and Song from Impa is unfilled, put a local giveable item into it.
-        impa = self.world.get_location("Song from Impa", self.player)
+        impa = self.multiworld.get_location("Song from Impa", self.player)
         if self.skip_child_zelda:
             if impa.item is None:
-                item_to_place = self.world.random.choice(list(item for item in self.world.itempool if
-                                                              item.player == self.player and item.name in SaveContext.giveable_items))
+                item_to_place = self.multiworld.random.choice(list(item for item in self.multiworld.itempool if
+                                                                   item.player == self.player and item.name in SaveContext.giveable_items))
                 impa.place_locked_item(item_to_place)
-                self.world.itempool.remove(item_to_place)
+                self.multiworld.itempool.remove(item_to_place)
             # Give items to startinventory
-            self.world.push_precollected(impa.item)
-            self.world.push_precollected(self.create_item("Zeldas Letter"))
+            self.multiworld.push_precollected(impa.item)
+            self.multiworld.push_precollected(self.create_item("Zeldas Letter"))
 
         # Exclude locations in Ganon's Castle proportional to the number of items required to make the bridge
         # Check for dungeon ER later
@@ -789,8 +800,8 @@ class OOTWorld(World):
 
             gc = next(filter(lambda dungeon: dungeon.name == 'Ganons Castle', self.dungeons))
             locations = [loc.name for region in gc.regions for loc in region.locations if loc.item is None]
-            junk_fill_locations = self.world.random.sample(locations, round(len(locations) * ganon_junk_fill))
-            exclusion_rules(self.world, self.player, junk_fill_locations)
+            junk_fill_locations = self.multiworld.random.sample(locations, round(len(locations) * ganon_junk_fill))
+            exclusion_rules(self.multiworld, self.player, junk_fill_locations)
 
         # Locations which are not sendable must be converted to events
         # This includes all locations for which show_in_spoiler is false, and shuffled shop items.
@@ -801,8 +812,83 @@ class OOTWorld(World):
                 loc.address = None
 
     # Handle item-linked dungeon items and songs
-    def stage_pre_fill(cls):
-        pass
+    @classmethod
+    def stage_pre_fill(cls, multiworld: MultiWorld):
+
+        def gather_locations(item_type: str, players: AbstractSet[int], dungeon: str = '') -> Optional[List[OOTLocation]]:
+            type_to_setting = {
+                'Song': 'shuffle_song_items',
+                'Map': 'shuffle_mapcompass',
+                'Compass': 'shuffle_mapcompass',
+                'SmallKey': 'shuffle_smallkeys',
+                'BossKey': 'shuffle_bosskeys',
+                'HideoutSmallKey': 'shuffle_fortresskeys',
+                'GanonBossKey': 'shuffle_ganon_bosskey',
+            }
+            fill_opts = {p: getattr(multiworld.worlds[p], type_to_setting[item_type]) for p in players}
+            locations = []
+            if item_type == 'Song':
+                if any(map(lambda v: v == 'any', fill_opts.values())):
+                    return None
+                for player, option in fill_opts.items():
+                    if option == 'song':
+                        condition = lambda location: location.type == 'Song'
+                    elif option == 'dungeon':
+                        condition = lambda location: location.name in dungeon_song_locations
+                    locations += filter(condition, multiworld.get_unfilled_locations(player=player))
+            else:
+                if any(map(lambda v: v == 'keysanity', fill_opts.values())):
+                    return None
+                for player, option in fill_opts.items():
+                    if option == 'dungeon':
+                        condition = lambda location: getattr(location.parent_region.dungeon, 'name', None) == dungeon
+                    elif option == 'overworld':
+                        condition = lambda location: location.parent_region.dungeon is None
+                    elif option == 'any_dungeon':
+                        condition = lambda location: location.parent_region.dungeon is not None
+                    locations += filter(condition, multiworld.get_unfilled_locations(player=player))
+
+            return locations
+
+        special_fill_types = ['Song', 'GanonBossKey', 'BossKey', 'SmallKey', 'HideoutSmallKey', 'Map', 'Compass']
+        for group_id, group in multiworld.groups.items():
+            if group['game'] != cls.game:
+                continue
+            group_items = [item for item in multiworld.itempool if item.player == group_id]
+            for fill_stage in special_fill_types:
+                group_stage_items = list(filter(lambda item: oot_is_item_of_type(item, fill_stage), group_items))
+                if not group_stage_items:
+                    continue
+                if fill_stage in ['Song', 'GanonBossKey', 'HideoutSmallKey']:
+                    # No need to subdivide by dungeon name
+                    locations = gather_locations(fill_stage, group['players'])
+                    if isinstance(locations, list):
+                        for item in group_stage_items:
+                            multiworld.itempool.remove(item)
+                        multiworld.random.shuffle(locations)
+                        fill_restrictive(multiworld, multiworld.get_all_state(False), locations, group_stage_items,
+                            single_player_placement=False, lock=True)
+                        if fill_stage == 'Song':
+                            # We don't want song locations to contain progression unless it's a song
+                            # or it was marked as priority.
+                            # We do this manually because we'd otherwise have to either
+                            # iterate twice or do many function calls.
+                            for loc in locations:
+                                if loc.progress_type == LocationProgressType.DEFAULT:
+                                    loc.progress_type = LocationProgressType.EXCLUDED
+                                    add_item_rule(loc, lambda i: not (i.advancement or i.useful))
+                else:
+                    # Perform the fill task once per dungeon
+                    for dungeon_info in dungeon_table:
+                        dungeon_name = dungeon_info['name']
+                        locations = gather_locations(fill_stage, group['players'], dungeon=dungeon_name)
+                        if isinstance(locations, list):
+                            group_dungeon_items = list(filter(lambda item: dungeon_name in item.name, group_stage_items))
+                            for item in group_dungeon_items:
+                                multiworld.itempool.remove(item)
+                            multiworld.random.shuffle(locations)
+                            fill_restrictive(multiworld, multiworld.get_all_state(False), locations, group_dungeon_items,
+                                single_player_placement=False, lock=True)
 
     def generate_output(self, output_directory: str):
         if self.hints != 'none':
@@ -813,12 +899,12 @@ class OOTWorld(World):
             trap_location_ids = [loc.address for loc in self.get_locations() if loc.item.trap]
             self.trap_appearances = {}
             for loc_id in trap_location_ids:
-                self.trap_appearances[loc_id] = self.create_item(self.world.slot_seeds[self.player].choice(self.fake_items).name)
+                self.trap_appearances[loc_id] = self.create_item(self.multiworld.slot_seeds[self.player].choice(self.fake_items).name)
 
             # Seed hint RNG, used for ganon text lines also
-            self.hint_rng = self.world.slot_seeds[self.player]
+            self.hint_rng = self.multiworld.slot_seeds[self.player]
 
-            outfile_name = self.world.get_out_file_name_base(self.player)
+            outfile_name = self.multiworld.get_out_file_name_base(self.player)
             rom = Rom(file=get_options()['oot_options']['rom_file'])
             if self.hints != 'none':
                 buildWorldGossipHints(self)
@@ -841,23 +927,23 @@ class OOTWorld(World):
                         else:
                             entrance = loadzone.reverse
                         if entrance.reverse is not None:
-                            self.world.spoiler.set_entrance(entrance, entrance.replaces.reverse, 'both', self.player)
+                            self.multiworld.spoiler.set_entrance(entrance, entrance.replaces.reverse, 'both', self.player)
                         else:
-                            self.world.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
+                            self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
                     else:
                         reverse = loadzone.replaces.reverse
                         if reverse in all_entrances:
                             all_entrances.remove(reverse)
-                        self.world.spoiler.set_entrance(loadzone, reverse, 'both', self.player)
+                        self.multiworld.spoiler.set_entrance(loadzone, reverse, 'both', self.player)
             else:
                 for entrance in all_entrances:
-                    self.world.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
+                    self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
 
     # Gathers hint data for OoT. Loops over all world locations for woth, barren, and major item locations.
     @classmethod
-    def stage_generate_output(cls, world: MultiWorld, output_directory: str):
+    def stage_generate_output(cls, multiworld: MultiWorld, output_directory: str):
         def hint_type_players(hint_type: str) -> set:
-            return {autoworld.player for autoworld in world.get_game_worlds("Ocarina of Time")
+            return {autoworld.player for autoworld in multiworld.get_game_worlds("Ocarina of Time")
                     if autoworld.hints != 'none' and autoworld.hint_dist_user['distribution'][hint_type]['copies'] > 0}
 
         try:
@@ -868,27 +954,27 @@ class OOTWorld(World):
             items_by_region = {}
             for player in barren_hint_players:
                 items_by_region[player] = {}
-                for r in world.worlds[player].regions:
+                for r in multiworld.worlds[player].regions:
                     items_by_region[player][r.hint_text] = {'dungeon': False, 'weight': 0, 'is_barren': True}
-                for d in world.worlds[player].dungeons:
+                for d in multiworld.worlds[player].dungeons:
                     items_by_region[player][d.hint_text] = {'dungeon': True, 'weight': 0, 'is_barren': True}
                 del (items_by_region[player]["Link's Pocket"])
                 del (items_by_region[player][None])
 
             if item_hint_players:  # loop once over all locations to gather major items. Check oot locations for barren/woth if needed
-                for loc in world.get_locations():
+                for loc in multiworld.get_locations():
                     player = loc.item.player
-                    autoworld = world.worlds[player]
+                    autoworld = multiworld.worlds[player]
                     if ((player in item_hint_players and (autoworld.is_major_item(loc.item) or loc.item.name in autoworld.item_added_hint_types['item']))
-                                or (loc.player in item_hint_players and loc.name in world.worlds[loc.player].added_hint_types['item'])):
+                                or (loc.player in item_hint_players and loc.name in multiworld.worlds[loc.player].added_hint_types['item'])):
                         autoworld.major_item_locations.append(loc)
 
                     if loc.game == "Ocarina of Time" and loc.item.code and (not loc.locked or
                         (oot_is_item_of_type(loc.item, 'Song') or
-                            (oot_is_item_of_type(loc.item, 'SmallKey')         and world.worlds[loc.player].shuffle_smallkeys     == 'any_dungeon') or
-                            (oot_is_item_of_type(loc.item, 'HideoutSmallKey')  and world.worlds[loc.player].shuffle_fortresskeys  == 'any_dungeon') or
-                            (oot_is_item_of_type(loc.item, 'BossKey')          and world.worlds[loc.player].shuffle_bosskeys      == 'any_dungeon') or
-                            (oot_is_item_of_type(loc.item, 'GanonBossKey')     and world.worlds[loc.player].shuffle_ganon_bosskey == 'any_dungeon'))):
+                            (oot_is_item_of_type(loc.item, 'SmallKey')         and multiworld.worlds[loc.player].shuffle_smallkeys     == 'any_dungeon') or
+                            (oot_is_item_of_type(loc.item, 'HideoutSmallKey')  and multiworld.worlds[loc.player].shuffle_fortresskeys  == 'any_dungeon') or
+                            (oot_is_item_of_type(loc.item, 'BossKey')          and multiworld.worlds[loc.player].shuffle_bosskeys      == 'any_dungeon') or
+                            (oot_is_item_of_type(loc.item, 'GanonBossKey')     and multiworld.worlds[loc.player].shuffle_ganon_bosskey == 'any_dungeon'))):
                         if loc.player in barren_hint_players:
                             hint_area = get_hint_area(loc)
                             items_by_region[loc.player][hint_area]['weight'] += 1
@@ -896,34 +982,37 @@ class OOTWorld(World):
                                 items_by_region[loc.player][hint_area]['is_barren'] = False
                         if loc.player in woth_hint_players and loc.item.advancement:
                             # Skip item at location and see if game is still beatable
-                            state = CollectionState(world)
+                            state = CollectionState(multiworld)
                             state.locations_checked.add(loc)
-                            if not world.can_beat_game(state):
-                                world.worlds[loc.player].required_locations.append(loc)
+                            if not multiworld.can_beat_game(state):
+                                multiworld.worlds[loc.player].required_locations.append(loc)
             elif barren_hint_players or woth_hint_players:  # Check only relevant oot locations for barren/woth
                 for player in (barren_hint_players | woth_hint_players):
-                    for loc in world.worlds[player].get_locations():
+                    for loc in multiworld.worlds[player].get_locations():
                         if loc.item.code and (not loc.locked or oot_is_item_of_type(loc.item, 'Song')):
                             if player in barren_hint_players:
                                 hint_area = get_hint_area(loc)
                                 items_by_region[player][hint_area]['weight'] += 1
-                                if loc.item.advancement:
+                                if loc.item.advancement or loc.item.useful:
                                     items_by_region[player][hint_area]['is_barren'] = False
                             if player in woth_hint_players and loc.item.advancement:
-                                state = CollectionState(world)
+                                state = CollectionState(multiworld)
                                 state.locations_checked.add(loc)
-                                if not world.can_beat_game(state):
-                                    world.worlds[player].required_locations.append(loc)
+                                if not multiworld.can_beat_game(state):
+                                    multiworld.worlds[player].required_locations.append(loc)
             for player in barren_hint_players:
-                world.worlds[player].empty_areas = {region: info for (region, info) in items_by_region[player].items()
+                multiworld.worlds[player].empty_areas = {region: info for (region, info) in items_by_region[player].items()
                                                     if info['is_barren']}
         except Exception as e:
             raise e
         finally:
-            for autoworld in world.get_game_worlds("Ocarina of Time"):
+            for autoworld in multiworld.get_game_worlds("Ocarina of Time"):
                 autoworld.hint_data_available.set()
 
     def modify_multidata(self, multidata: dict):
+
+        # Replace connect name
+        multidata['connect_names'][self.connect_name] = multidata['connect_names'][self.multiworld.player_name[self.player]]
 
         hint_entrances = set()
         for entrance in entrance_shuffle_table:
@@ -979,9 +1068,9 @@ class OOTWorld(World):
 
     # Helper functions
     def get_shufflable_entrances(self, type=None, only_primary=False):
-        return [entrance for entrance in self.world.get_entrances() if (entrance.player == self.player and
-                                                                        (type == None or entrance.type == type) and
-                                                                        (not only_primary or entrance.primary))]
+        return [entrance for entrance in self.multiworld.get_entrances() if (entrance.player == self.player and
+                                                                             (type == None or entrance.type == type) and
+                                                                             (not only_primary or entrance.primary))]
 
     def get_shuffled_entrances(self, type=None, only_primary=False):
         return [entrance for entrance in self.get_shufflable_entrances(type=type, only_primary=only_primary) if
@@ -993,13 +1082,13 @@ class OOTWorld(World):
                 yield loc
 
     def get_location(self, location):
-        return self.world.get_location(location, self.player)
+        return self.multiworld.get_location(location, self.player)
 
     def get_region(self, region):
-        return self.world.get_region(region, self.player)
+        return self.multiworld.get_region(region, self.player)
 
     def get_entrance(self, entrance):
-        return self.world.get_entrance(entrance, self.player)
+        return self.multiworld.get_entrance(entrance, self.player)
 
     def is_major_item(self, item: OOTItem):
         if item.type == 'Token':
@@ -1030,7 +1119,7 @@ class OOTWorld(World):
     # Specifically ensures that only real items are gotten, not any events.
     # In particular, ensures that Time Travel needs to be found.
     def get_state_with_complete_itempool(self):
-        all_state = self.world.get_all_state(use_cache=False)
+        all_state = self.multiworld.get_all_state(use_cache=False)
         # Remove event progression items
         for item, player in all_state.prog_items:
             if player == self.player and (item not in item_table or (item_table[item][2] is None and item_table[item][0] != 'DungeonReward')):
