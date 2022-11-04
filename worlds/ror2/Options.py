@@ -43,14 +43,14 @@ class ScavengersPerEnvironment(Range):
     default = 1
 
 class ScannersPerEnvironment(Range):
-    """EXPLORE: The number of shrine locations per environment."""
+    """EXPLORE: The number of scanners locations per environment."""
     display_name = "Radio Scanners per Environment"
     range_start = 0
     range_end = 1
     default = 1
 
 class AltarsPerEnvironment(Range):
-    """EXPLORE: The number of shrine locations per environment."""
+    """EXPLORE: The number of altars locations per environment."""
     display_name = "Newts Per Environment"
     range_start = 0
     range_end = 2
