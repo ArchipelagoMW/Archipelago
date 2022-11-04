@@ -598,6 +598,10 @@ commands.add_command("ap-energylink", "Used by the Archipelago client to manage 
     global.forcedata[force].energy = global.forcedata[force].energy + change
 end)
 
+commands.add_command("energy-link", "Print the status of the Archipelago energy link.", function(call)
+    log("Player command energy-link") -- notifies client
+end)
+
 commands.add_command("toggle-ap-send-filter", "Toggle filtering of item sends that get displayed in-game to only those that involve you.", function(call)
     log("Player command toggle-ap-send-filter") -- notifies client
 end)

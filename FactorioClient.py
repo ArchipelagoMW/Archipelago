@@ -6,6 +6,7 @@ import string
 import copy
 import re
 import subprocess
+import sys
 import time
 import random
 import typing
@@ -19,8 +20,13 @@ import asyncio
 from queue import Queue
 import Utils
 
+def check_stdin() -> None:
+    if Utils.is_windows and sys.stdin:
+        print("WARNING: Console input is not routed reliably on Windows, use the GUI instead.")
+
 if __name__ == "__main__":
     Utils.init_logging("FactorioClient", exception_logger="Client")
+    check_stdin()
 
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, logger, gui_enabled, get_base_parser
 from MultiServer import mark_raw
@@ -32,6 +38,10 @@ from worlds.factorio import Factorio
 
 class FactorioCommandProcessor(ClientCommandProcessor):
     ctx: FactorioContext
+
+    def _cmd_energy_link(self):
+        """Print the status of the energy link."""
+        self.output(f"Energy Link: {self.ctx.energy_link_status}")
 
     @mark_raw
     def _cmd_factorio(self, text: str) -> bool:
@@ -112,6 +122,15 @@ class FactorioContext(CommonContext):
     def print_to_game(self, text):
         self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
                                       f"{text}")
+
+    @property
+    def energy_link_status(self) -> str:
+        if not self.energy_link_increment:
+            return "Disabled"
+        elif self.current_energy_link_value is None:
+            return "Standby"
+        else:
+            return f"{Utils.format_SI_prefix(self.current_energy_link_value)}J"
 
     def on_deathlink(self, data: dict):
         if self.rcon_client:
@@ -195,7 +214,6 @@ class FactorioContext(CommonContext):
 
 async def game_watcher(ctx: FactorioContext):
     bridge_logger = logging.getLogger("FactorioWatcher")
-    from worlds.factorio.Technologies import lookup_id_to_name
     next_bridge = time.perf_counter() + 1
     try:
         while not ctx.exit_event.is_set():
@@ -226,7 +244,7 @@ async def game_watcher(ctx: FactorioContext):
                     if ctx.locations_checked != research_data:
                         bridge_logger.debug(
                             f"New researches done: "
-                            f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
+                            f"{[ctx.location_names[rid] for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
                     death_link_tick = data.get("death_link_tick", 0)
@@ -314,11 +332,15 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     if not ctx.server:
                         logger.info("Established bridge to Factorio Server. "
                                     "Ready to connect to Archipelago via /connect")
+                        check_stdin()
 
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
                     factorio_server_logger.debug(msg)
-                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-send-filter", msg):
+                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command energy-link$", msg):
+                    factorio_server_logger.debug(msg)
+                    ctx.print_to_game(f"Energy Link: {ctx.energy_link_status}")
+                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-send-filter$", msg):
                     factorio_server_logger.debug(msg)
                     ctx.toggle_filter_item_sends()
                 elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-chat$", msg):
