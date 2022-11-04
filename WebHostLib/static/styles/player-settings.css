@@ -154,11 +154,13 @@ html{
     line-height: 16px;
     padding: 2px 8px;
     margin: 0 0 0 0.25rem;
-    font-size: 12px
+    font-size: 12px;
+    border: 1px solid black;
+    border-radius: 3px;
 }
 
 #player-settings table .randomize-button.active {
-    background-color: yellow;
+    background-color: #ffef00; /* Same as .interactive in globalStyles.css */
 }
 
 #player-settings table label{

@@ -147,7 +147,7 @@ const buildOptionsTable = (settings, romOpts = false) => {
         randomButton.innerText = '🎲';
         randomButton.classList.add('randomize-button');
         randomButton.setAttribute('data-key', setting);
-        randomButton.setAttribute('data-tooltip', 'Randomize this option!');
+        randomButton.setAttribute('data-tooltip', 'Toggle randomization for this option!');
         randomButton.addEventListener('click', (event) => toggleRandomize(event, [select]));
         if (currentSettings[gameName][setting] === 'random') {
           randomButton.classList.add('active');
@@ -184,7 +184,7 @@ const buildOptionsTable = (settings, romOpts = false) => {
         randomButton.innerText = '🎲';
         randomButton.classList.add('randomize-button');
         randomButton.setAttribute('data-key', setting);
-        randomButton.setAttribute('data-tooltip', 'Randomize this option!');
+        randomButton.setAttribute('data-tooltip', 'Toggle randomization for this option!');
         randomButton.addEventListener('click', (event) => toggleRandomize(event, [range]));
         if (currentSettings[gameName][setting] === 'random') {
           randomButton.classList.add('active');
@@ -262,7 +262,7 @@ const buildOptionsTable = (settings, romOpts = false) => {
         randomButton.innerText = '🎲';
         randomButton.classList.add('randomize-button');
         randomButton.setAttribute('data-key', setting);
-        randomButton.setAttribute('data-tooltip', 'Randomize this option!');
+        randomButton.setAttribute('data-tooltip', 'Toggle randomization for this option!');
         randomButton.addEventListener('click', (event) => toggleRandomize(
             event, [specialRange, specialRangeSelect])
         );
