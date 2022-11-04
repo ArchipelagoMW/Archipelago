@@ -118,7 +118,7 @@ This allows you to host your own Factorio game.
 3. Install the mod into your Factorio Client by copying the zip file into the `mods` folder, which is likely located
    at `C:\Users\YourName\AppData\Roaming\Factorio\mods`.
 4. Obtain the Archipelago Server address from the website's host room, or from the server host.
-5. Run your Archipelago Client, which is named `ArchilepagoFactorioClient.exe`. This was installed along with
+5. Run your Archipelago Client, which is named `ArchipelagoFactorioClient.exe`. This was installed along with
    Archipelago if you chose to include it during the installation process.
 6. Enter `/connect [server-address]` into the input box at the bottom of the Archipelago Client and press "Enter"
 
@@ -132,6 +132,8 @@ This allows you to host your own Factorio game.
 
 For additional client features, issue the `/help` command in the Archipelago Client. Once connected to the AP server,
 you can also issue the `!help` command to learn about additional commands like `!hint`.
+For more information about the commands you can use, see the [Commands Guide](/tutorial/Archipelago/commands/en) and
+[Other Settings](#other-settings).
 
 ## Allowing Other People to Join Your Game
 
@@ -141,18 +143,33 @@ you can also issue the `!help` command to learn about additional commands like `
 4. Provide your IP address to anyone you want to join your game, and have them follow the steps for
    "Connecting to Someone Else's Factorio Game" above.
 
+## Other Settings
+
+- By default, all item sends are displayed in-game. In larger async seeds this may become overly spammy.
+  To hide all item sends that are not to or from your factory, do one of the following:
+  - Type `/toggle-ap-send-filter` in-game
+  - Type `/toggle_send_filter` in the Archipelago Client
+  - In your `host.yaml` set
+```
+factorio_options:
+  filter_item_sends: true
+```
+- By default, in-game chat is bridged to Archipelago. If you prefer to be able to speak privately, you can disable this
+  feature by doing one of the following:
+  - Type `/toggle-ap-chat` in-game
+  - Type `/toggle_chat` in the Archipelago Client
+  - In your `host.yaml` set
+```
+factorio_options:
+  bridge_chat_out: false
+```
+  Note that this will also disable `!` commands from within the game, and that it will not affect incoming chat.
+
 ## Troubleshooting
 
 In case any problems should occur, the Archipelago Client will create a file `FactorioClient.txt` in the `/logs`. The
 contents of this file may help you troubleshoot an issue on your own and is vital for requesting help from other people
 in Archipelago.
-
-## Commands in game
-
-Once you have connected to the server successfully using the Archipelago Factorio Client you should see a message
-stating you can get help using Archipelago commands by typing `!help`. Commands cannot currently be sent from within
-the Factorio session, but you can send them from the Archipelago Factorio Client. For more information about the commands
-you can use see the [commands guide](/tutorial/Archipelago/commands/en).
 
 ## Additional Resources
 

@@ -21,10 +21,11 @@ There are also a number of community-supported libraries available that implemen
 |                               | [Archipelago SNIClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/SNIClient.py)       | For Super Nintendo Game Support; Utilizes [SNI](https://github.com/alttpo/sni). |
 | JVM (Java / Kotlin)           | [Archipelago.MultiClient.Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java)      |                                                                                 |
 | .NET (C# / C++ / F# / VB.NET) | [Archipelago.MultiClient.Net](https://www.nuget.org/packages/Archipelago.MultiClient.Net)          |                                                                                 |
-| C++                           | [apclientpp](https://github.com/black-sliver/apclientpp)                                           | almost-header-only                                                              |
+| C++                           | [apclientpp](https://github.com/black-sliver/apclientpp)                                           | header-only                                                                     |
 |                               | [APCpp](https://github.com/N00byKing/APCpp)                                                        | CMake                                                                           |
 | JavaScript / TypeScript       | [archipelago.js](https://www.npmjs.com/package/archipelago.js)                                     | Browser and Node.js Supported                                                   |
 | Haxe                          | [hxArchipelago](https://lib.haxe.org/p/hxArchipelago)                                              |                                                                                 |
+| Rust                          | [ArchipelagoRS](https://github.com/ryanisaacg/archipelago_rs)                                      |                                                                                 |
 
 ## Synchronizing Items
 When the client receives a [ReceivedItems](#ReceivedItems) packet, if the `index` argument does not match the next index that the client expects then it is expected that the client will re-sync items with the server. This can be accomplished by sending the server a [Sync](#Sync) packet and then a [LocationChecks](#LocationChecks) packet.
@@ -234,6 +235,8 @@ Sent to clients as a response the a [Get](#Get) package.
 | ---- | ---- | ----- |
 | keys | dict\[str\, any] | A key-value collection containing all the values for the keys requested in the [Get](#Get) package. |
 
+If a requested key was not present in the server's data, the associated value will be `null`.
+
 Additional arguments added to the [Get](#Get) package that triggered this [Retrieved](#Retrieved) will also be passed along.
 
 ### SetReply
@@ -371,7 +374,7 @@ Used to write data to the server's data storage, that data can then be shared ac
 | ------ | ----- | ------ |
 | key | str | The key to manipulate. |
 | default | any | The default value to use in case the key has no value on the server. |
-| want_reply | bool | If set, the server will send a [SetReply](#SetReply) response back to the client. |
+| want_reply | bool | If true, the server will send a [SetReply](#SetReply) response back to the client. |
 | operations | list\[[DataStorageOperation](#DataStorageOperation)\] | Operations to apply to the value, multiple operations can be present and they will be executed in order of appearance. |
 
 Additional arguments sent in this package will also be added to the [SetReply](#SetReply) package it triggers.

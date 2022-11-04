@@ -70,21 +70,21 @@ class MinecraftWorld(World):
     def _get_mc_data(self):
         exits = [connection[0] for connection in default_connections]
         return {
-            'world_seed': self.world.slot_seeds[self.player].getrandbits(32),
-            'seed_name': self.world.seed_name,
-            'player_name': self.world.get_player_name(self.player),
+            'world_seed': self.multiworld.slot_seeds[self.player].getrandbits(32),
+            'seed_name': self.multiworld.seed_name,
+            'player_name': self.multiworld.get_player_name(self.player),
             'player_id': self.player,
             'client_version': client_version,
-            'structures': {exit: self.world.get_entrance(exit, self.player).connected_region.name for exit in exits},
-            'advancement_goal': self.world.advancement_goal[self.player].value,
-            'egg_shards_required': min(self.world.egg_shards_required[self.player].value,
-                                       self.world.egg_shards_available[self.player].value),
-            'egg_shards_available': self.world.egg_shards_available[self.player].value,
-            'required_bosses': self.world.required_bosses[self.player].current_key,
-            'MC35': bool(self.world.send_defeated_mobs[self.player].value),
-            'death_link': bool(self.world.death_link[self.player].value),
-            'starting_items': str(self.world.starting_items[self.player].value),
-            'race': self.world.is_race,
+            'structures': {exit: self.multiworld.get_entrance(exit, self.player).connected_region.name for exit in exits},
+            'advancement_goal': self.multiworld.advancement_goal[self.player].value,
+            'egg_shards_required': min(self.multiworld.egg_shards_required[self.player].value,
+                                       self.multiworld.egg_shards_available[self.player].value),
+            'egg_shards_available': self.multiworld.egg_shards_available[self.player].value,
+            'required_bosses': self.multiworld.required_bosses[self.player].current_key,
+            'MC35': bool(self.multiworld.send_defeated_mobs[self.player].value),
+            'death_link': bool(self.multiworld.death_link[self.player].value),
+            'starting_items': str(self.multiworld.starting_items[self.player].value),
+            'race': self.multiworld.is_race,
         }
 
     def generate_basic(self):
@@ -96,18 +96,18 @@ class MinecraftWorld(World):
         for (name, num) in required_items.items():
             itempool += [name] * num
         # Add structure compasses if desired
-        if self.world.structure_compasses[self.player]:
+        if self.multiworld.structure_compasses[self.player]:
             structures = [connection[1] for connection in default_connections]
             for struct_name in structures:
                 itempool.append(f"Structure Compass ({struct_name})")
         # Add dragon egg shards
-        if self.world.egg_shards_required[self.player] > 0:
-            itempool += ["Dragon Egg Shard"] * self.world.egg_shards_available[self.player]
+        if self.multiworld.egg_shards_required[self.player] > 0:
+            itempool += ["Dragon Egg Shard"] * self.multiworld.egg_shards_available[self.player]
         # Add bee traps if desired
-        bee_trap_quantity = ceil(self.world.bee_traps[self.player] * (len(self.location_names)-len(itempool)) * 0.01)
+        bee_trap_quantity = ceil(self.multiworld.bee_traps[self.player] * (len(self.location_names) - len(itempool)) * 0.01)
         itempool += ["Bee Trap"] * bee_trap_quantity
         # Fill remaining items with randomly generated junk
-        itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names)-len(itempool))
+        itempool += self.multiworld.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names) - len(itempool))
         # Convert itempool into real items
         itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
 
@@ -115,29 +115,29 @@ class MinecraftWorld(World):
         exclusion_pool = set()
         exclusion_types = ['hard', 'unreasonable']
         for key in exclusion_types:
-            if not getattr(self.world, f"include_{key}_advancements")[self.player]:
+            if not getattr(self.multiworld, f"include_{key}_advancements")[self.player]:
                 exclusion_pool.update(exclusion_table[key])
         # For postgame advancements, check with the boss goal
-        exclusion_pool.update(get_postgame_advancements(self.world.required_bosses[self.player].current_key))
-        exclusion_rules(self.world, self.player, exclusion_pool)
+        exclusion_pool.update(get_postgame_advancements(self.multiworld.required_bosses[self.player].current_key))
+        exclusion_rules(self.multiworld, self.player, exclusion_pool)
 
         # Prefill event locations with their events
-        self.world.get_location("Blaze Spawner", self.player).place_locked_item(self.create_item("Blaze Rods"))
-        self.world.get_location("Ender Dragon", self.player).place_locked_item(self.create_item("Defeat Ender Dragon"))
-        self.world.get_location("Wither", self.player).place_locked_item(self.create_item("Defeat Wither"))
+        self.multiworld.get_location("Blaze Spawner", self.player).place_locked_item(self.create_item("Blaze Rods"))
+        self.multiworld.get_location("Ender Dragon", self.player).place_locked_item(self.create_item("Defeat Ender Dragon"))
+        self.multiworld.get_location("Wither", self.player).place_locked_item(self.create_item("Defeat Wither"))
 
-        self.world.itempool += itempool
+        self.multiworld.itempool += itempool
 
     def get_filler_item_name(self) -> str:
-        return self.world.random.choices(list(junk_weights.keys()), weights=list(junk_weights.values()))[0]
+        return self.multiworld.random.choices(list(junk_weights.keys()), weights=list(junk_weights.values()))[0]
 
     def set_rules(self):
-        set_advancement_rules(self.world, self.player)
-        set_completion_rules(self.world, self.player)
+        set_advancement_rules(self.multiworld, self.player)
+        set_completion_rules(self.multiworld, self.player)
 
     def create_regions(self):
         def MCRegion(region_name: str, exits=[]):
-            ret = Region(region_name, None, region_name, self.player, self.world)
+            ret = Region(region_name, None, region_name, self.player, self.multiworld)
             ret.locations = [MinecraftAdvancement(self.player, loc_name, loc_data.id, ret)
                 for loc_name, loc_data in advancement_table.items()
                 if loc_data.region == region_name]
@@ -145,19 +145,19 @@ class MinecraftWorld(World):
                 ret.exits.append(Entrance(self.player, exit, ret))
             return ret
 
-        self.world.regions += [MCRegion(*r) for r in mc_regions]
-        link_minecraft_structures(self.world, self.player)
+        self.multiworld.regions += [MCRegion(*r) for r in mc_regions]
+        link_minecraft_structures(self.multiworld, self.player)
 
     def generate_output(self, output_directory: str):
         data = self._get_mc_data()
-        filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_file_safe_player_name(self.player)}.apmc"
+        filename = f"AP_{self.multiworld.get_out_file_name_base(self.player)}.apmc"
         with open(os.path.join(output_directory, filename), 'wb') as f:
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 
     def fill_slot_data(self):
         slot_data = self._get_mc_data()
         for option_name in minecraft_options:
-            option = getattr(self.world, option_name)[self.player]
+            option = getattr(self.multiworld, option_name)[self.player]
             if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
         return slot_data

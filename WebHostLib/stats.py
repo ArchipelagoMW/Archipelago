@@ -1,14 +1,14 @@
+import typing
 from collections import Counter, defaultdict
 from colorsys import hsv_to_rgb
 from datetime import datetime, timedelta, date
 from math import tau
-import typing
 
+from bokeh.colors import RGB
 from bokeh.embed import components
 from bokeh.models import HoverTool
 from bokeh.plotting import figure, ColumnDataSource
 from bokeh.resources import INLINE
-from bokeh.colors import RGB
 from flask import render_template
 from pony.orm import select
 
@@ -18,7 +18,8 @@ from .models import Room
 PLOT_WIDTH = 600
 
 
-def get_db_data(known_games: str) -> typing.Tuple[typing.Dict[str, int], typing.Dict[datetime.date, typing.Dict[str, int]]]:
+def get_db_data(known_games: typing.Set[str]) -> typing.Tuple[typing.Counter[str],
+                                                              typing.DefaultDict[datetime.date, typing.Dict[str, int]]]:
     games_played = defaultdict(Counter)
     total_games = Counter()
     cutoff = date.today()-timedelta(days=30)
@@ -93,7 +94,7 @@ def stats():
                   occurences, legend_label=game, line_width=2, color=game_to_color[game])
 
     total = sum(total_games.values())
-    pie = figure(plot_height=350, title=f"Games Played in the Last 30 Days (Total: {total})", toolbar_location=None,
+    pie = figure(title=f"Games Played in the Last 30 Days (Total: {total})", toolbar_location=None,
                  tools="hover", tooltips=[("Game:", "@games"), ("Played:", "@count")],
                  sizing_mode="scale_both", width=PLOT_WIDTH, height=500, x_range=(-0.5, 1.2))
     pie.axis.visible = False
@@ -121,7 +122,8 @@ def stats():
               start_angle="start_angles", end_angle="end_angles", fill_color="colors",
               source=ColumnDataSource(data=data), legend_field="games")
 
-    per_game_charts = [create_game_played_figure(games_played, game, game_to_color[game]) for game in total_games
+    per_game_charts = [create_game_played_figure(games_played, game, game_to_color[game]) for game in
+                       sorted(total_games, key=lambda game: total_games[game])
                        if total_games[game] > 1]
 
     script, charts = components((plot, pie, *per_game_charts))
