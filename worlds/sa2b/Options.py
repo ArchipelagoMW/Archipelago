@@ -217,7 +217,7 @@ class ChaoRaceChecks(Choice):
 
 class RequiredCannonsCoreMissions(Choice):
     """
-    Determines how many Cannon's Core missions must be completed to unlock the Biolizard
+    Determines how many Cannon's Core missions must be completed to unlock the Biolizard (for the "Biolizard" goal)
     First: Only the first mission must be completed
     All Active: All active Cannon's Core missions must be completed
     """
