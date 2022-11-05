@@ -327,9 +327,9 @@ rom_addresses = {
     "Learnset_Bellsprout": 0x3b9dc,
     "Learnset_Weepinbell": 0x3b9f0,
     "Learnset_Victreebel": 0x3ba00,
-    "Type_Chart": 0x3e4b6,
-    "Type_Chart_Divider": 0x3e5ac,
-    "Ghost_Battle3": 0x3efd9,
+    "Type_Chart": 0x3e4b0,
+    "Type_Chart_Divider": 0x3e5a6,
+    "Ghost_Battle3": 0x3efd3,
     "Missable_Pokemon_Mansion_1F_Item_1": 0x443d6,
     "Missable_Pokemon_Mansion_1F_Item_2": 0x443dd,
     "Map_Rock_TunnelF": 0x44676,
@@ -585,4 +585,5 @@ rom_addresses = {
     "Badge_Text_Marsh_Badge": 0x9918c,
     "Badge_Text_Volcano_Badge": 0x991d6,
     "Badge_Text_Earth_Badge": 0x991f3,
+    "Text_Badges_Needed_Viridian_Gym": 0xa49f2,
 }

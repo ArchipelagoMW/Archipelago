@@ -1,7 +1,8 @@
 from typing import List, Iterable
 import unittest
 from worlds.AutoWorld import World
-from Fill import FillError, balance_multiworld_progression, fill_restrictive, distribute_items_restrictive
+from Fill import FillError, balance_multiworld_progression, fill_restrictive, \
+    distribute_early_items, distribute_items_restrictive
 from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, RegionType, Item, Location, \
     ItemClassification
 from worlds.generic.Rules import CollectionRule, add_item_rule, locality_rules, set_rule
@@ -13,7 +14,7 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
     for i in range(players):
         player_id = i+1
         world = World(multi_world, player_id)
-        multi_world.game[player_id] = world
+        multi_world.game[player_id] = f"Game {player_id}"
         multi_world.worlds[player_id] = world
         multi_world.player_name[player_id] = "Test Player " + str(player_id)
         region = Region("Menu", RegionType.Generic,
@@ -27,7 +28,7 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
 
 
 class PlayerDefinition(object):
-    world: MultiWorld
+    multiworld: MultiWorld
     id: int
     menu: Region
     locations: List[Location]
@@ -36,7 +37,7 @@ class PlayerDefinition(object):
     regions: List[Region]
 
     def __init__(self, world: MultiWorld, id: int, menu: Region, locations: List[Location] = [], prog_items: List[Item] = [], basic_items: List[Item] = []):
-        self.world = world
+        self.multiworld = world
         self.id = id
         self.menu = menu
         self.locations = locations
@@ -48,7 +49,7 @@ class PlayerDefinition(object):
         region_tag = "_region" + str(len(self.regions))
         region_name = "player" + str(self.id) + region_tag
         region = Region("player" + str(self.id) + region_tag, RegionType.Generic,
-                        "Region Hint", self.id, self.world)
+                        "Region Hint", self.id, self.multiworld)
         self.locations += generate_locations(size, self.id, None, region, region_tag)
 
         entrance = Entrance(self.id, region_name + "_entrance", parent)
@@ -57,7 +58,7 @@ class PlayerDefinition(object):
         entrance.access_rule = access_rule
 
         self.regions.append(region)
-        self.world.regions.append(region)
+        self.multiworld.regions.append(region)
 
         return region
 
@@ -622,6 +623,55 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         for item in multi_world.get_items():
             self.assertEqual(item.player, item.location.player)
             self.assertFalse(item.location.event, False)
+
+    def test_early_items(self) -> None:
+        mw = generate_multi_world(2)
+        player1 = generate_player_data(mw, 1, location_count=5, basic_item_count=5)
+        player2 = generate_player_data(mw, 2, location_count=5, basic_item_count=5)
+        mw.early_items[1].value[player1.basic_items[0].name] = 1
+        mw.early_items[2].value[player2.basic_items[2].name] = 1
+        mw.early_items[2].value[player2.basic_items[3].name] = 1
+
+        early_items = [
+            player1.basic_items[0],
+            player2.basic_items[2],
+            player2.basic_items[3],
+        ]
+
+        # copied this code from the beginning of `distribute_items_restrictive`
+        # before `distribute_early_items` is called
+        fill_locations = sorted(mw.get_unfilled_locations())
+        mw.random.shuffle(fill_locations)
+        itempool = sorted(mw.itempool)
+        mw.random.shuffle(itempool)
+
+        fill_locations, itempool = distribute_early_items(mw, fill_locations, itempool)
+
+        remaining_p1 = [item for item in itempool if item.player == 1]
+        remaining_p2 = [item for item in itempool if item.player == 2]
+
+        assert len(itempool) == 7, f"number of items remaining after early_items: {len(itempool)}"
+        assert len(remaining_p1) == 4, f"number of p1 items after early_items: {len(remaining_p1)}"
+        assert len(remaining_p2) == 3, f"number of p2 items after early_items: {len(remaining_p1)}"
+        for i in range(5):
+            if i != 0:
+                assert player1.basic_items[i] in itempool, "non-early item to remain in itempool"
+            if i not in {2, 3}:
+                assert player2.basic_items[i] in itempool, "non-early item to remain in itempool"
+        for item in early_items:
+            assert item not in itempool, "early item to be taken out of itempool"
+
+        assert len(fill_locations) == len(mw.get_locations()) - len(early_items), \
+            f"early location count from {mw.get_locations()} to {len(fill_locations)} " \
+            f"after {len(early_items)} early items"
+
+        items_in_locations = {loc.item for loc in mw.get_locations() if loc.item}
+
+        assert len(items_in_locations) == len(early_items), \
+            f"{len(early_items)} early items in {len(items_in_locations)} locations"
+
+        for item in early_items:
+            assert item in items_in_locations, "early item to be placed in location"
 
 
 class TestBalanceMultiworldProgression(unittest.TestCase):

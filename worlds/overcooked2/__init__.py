@@ -79,7 +79,7 @@ class Overcooked2World(World):
 
     def place_event(self, location_name: str, item_name: str,
                     classification: ItemClassification = ItemClassification.progression_skip_balancing):
-        location: Location = self.world.get_location(location_name, self.player)
+        location: Location = self.multiworld.get_location(location_name, self.player)
         location.place_locked_item(self.create_event(item_name, classification))
 
     def add_region(self, region_name: str):
@@ -88,13 +88,13 @@ class Overcooked2World(World):
             RegionType.Generic,
             region_name,
             self.player,
-            self.world,
+            self.multiworld,
         )
-        self.world.regions.append(region)
+        self.multiworld.regions.append(region)
 
     def connect_regions(self, source: str, target: str, rule: Optional[Callable[[CollectionState], bool]] = None):
-        sourceRegion = self.world.get_region(source, self.player)
-        targetRegion = self.world.get_region(target, self.player)
+        sourceRegion = self.multiworld.get_region(source, self.player)
+        targetRegion = self.multiworld.get_region(target, self.player)
 
         connection = Entrance(self.player, '', sourceRegion)
         if rule:
@@ -117,7 +117,7 @@ class Overcooked2World(World):
         else:
             location_id = level_id
 
-        region = self.world.get_region(region_name, self.player)
+        region = self.multiworld.get_region(region_name, self.player)
         location = Overcooked2Location(
             self.player,
             location_name,
@@ -145,8 +145,8 @@ class Overcooked2World(World):
         )
 
     def get_options(self) -> Dict[str, Any]:
-        return OC2Options({option.__name__: getattr(self.world, name)[self.player].result
-                          if issubclass(option, OC2OnToggle) else getattr(self.world, name)[self.player].value
+        return OC2Options({option.__name__: getattr(self.multiworld, name)[self.player].result
+                          if issubclass(option, OC2OnToggle) else getattr(self.multiworld, name)[self.player].value
                            for name, option in overcooked_options.items()})
 
     # Helper Data
@@ -170,7 +170,7 @@ class Overcooked2World(World):
         if self.options["ShuffleLevelOrder"]:
             self.level_mapping = \
                 level_shuffle_factory(
-                    self.world.random,
+                    self.multiworld.random,
                     self.options["PrepLevels"] != PrepLevelMode.excluded.value,
                     self.options["IncludeHordeLevels"],
                 )
@@ -246,7 +246,7 @@ class Overcooked2World(World):
 
         completion_condition: Callable[[CollectionState], bool] = lambda state: \
             state.has("Victory", self.player)
-        self.world.completion_condition[self.player] = completion_condition
+        self.multiworld.completion_condition[self.player] = completion_condition
 
     def create_items(self):
         self.itempool = []
@@ -298,7 +298,7 @@ class Overcooked2World(World):
         while len(self.itempool) < pool_count:
             self.itempool.append(self.create_item("Bonus Star", ItemClassification.useful))
 
-        self.world.itempool += self.itempool
+        self.multiworld.itempool += self.itempool
 
     def set_rules(self):
         pass
@@ -324,7 +324,7 @@ class Overcooked2World(World):
     # Items get distributed to locations
 
     def fill_json_data(self) -> Dict[str, Any]:
-        mod_name = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}"
+        mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.player_name[self.player]}"
 
         # Serialize Level Order
         story_level_order = dict()
@@ -363,7 +363,7 @@ class Overcooked2World(World):
         # Set Kevin Unlock Requirements
         if self.options["KevinLevels"]:
             def kevin_level_to_keyholder_level_id(level_id: int) -> Optional[int]:
-                location = self.world.find_item(f"Kevin-{level_id-36}", self.player)
+                location = self.multiworld.find_item(f"Kevin-{level_id-36}", self.player)
                 if location.player != self.player:
                     return None  # This kevin level will be unlocked by the server at runtime
                 level_id = oc2_location_name_to_id[location.name]
@@ -376,17 +376,14 @@ class Overcooked2World(World):
 
         # Place Items at Level Completion Screens (local only)
         on_level_completed: Dict[str, list[Dict[str, str]]] = dict()
-        regions = self.world.get_regions(self.player)
-        for region in regions:
-            for location in region.locations:
-                if location.item is None:
-                    continue
-                if location.item.code is None:
-                    continue  # it's an event
-                if location.item.player != self.player:
-                    continue  # not for us
-                level_id = str(oc2_location_name_to_id[location.name])
-                on_level_completed[level_id] = [item_to_unlock_event(location.item.name)]
+        locations = self.multiworld.get_filled_locations(self.player)
+        for location in locations:
+            if location.item.code is None:
+                continue  # it's an event
+            if location.item.player != self.player:
+                continue  # not for us
+            level_id = str(oc2_location_name_to_id[location.name])
+            on_level_completed[level_id] = [item_to_unlock_event(location.item.name)]
 
         # Put it all together
         star_threshold_scale = self.options["StarThresholdScale"] / 100

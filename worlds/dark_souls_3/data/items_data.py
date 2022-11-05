@@ -132,7 +132,7 @@ shields_table = {
     "Golden Wing Crest Shield": 0x0143CAA0,
     "Ancient Dragon Greatshield": 0x013599D0,
     "Spirit Tree Crest Shield": 0x014466E0,
-    "Red and White Round Shield": 0x01343A40,
+    "Blessed Red and White Shield": 0x01343FB9,
 }
 
 goods_table = {

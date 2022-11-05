@@ -20,7 +20,7 @@ def _sorter(location: "FactorioScienceLocation"):
 
 
 def get_shapes(factorio_world: "Factorio") -> Dict["FactorioScienceLocation", Set["FactorioScienceLocation"]]:
-    world = factorio_world.world
+    world = factorio_world.multiworld
     player = factorio_world.player
     prerequisites: Dict["FactorioScienceLocation", Set["FactorioScienceLocation"]] = {}
     layout = world.tech_tree_layout[player].value

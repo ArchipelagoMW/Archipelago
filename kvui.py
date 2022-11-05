@@ -49,6 +49,7 @@ fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, dura
 
 
 from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
+from Utils import async_start
 
 if typing.TYPE_CHECKING:
     import CommonClient
@@ -338,9 +339,12 @@ class GameManager(App):
         # top part
         server_label = ServerLabel()
         self.connect_layout.add_widget(server_label)
-        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.server_address or "archipelago.gg", size_hint_y=None,
+        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:", size_hint_y=None,
                                                       height=30, multiline=False, write_tab=False)
-        self.server_connect_bar.bind(on_text_validate=self.connect_button_action)
+        def connect_bar_validate(sender):
+            if not self.ctx.server:
+                self.connect_button_action(sender)
+        self.server_connect_bar.bind(on_text_validate=connect_bar_validate)
         self.connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
         self.server_connect_button.bind(on_press=self.connect_button_action)
@@ -381,17 +385,19 @@ class GameManager(App):
         bottom_layout.add_widget(info_button)
         self.textinput = TextInput(size_hint_y=None, height=30, multiline=False, write_tab=False)
         self.textinput.bind(on_text_validate=self.on_message)
-
-        def text_focus(event):
-            """Needs to be set via delay, as unfocusing happens after on_message"""
-            self.textinput.focus = True
-
-        self.textinput.text_focus = text_focus
+        self.textinput.text_validate_unfocus = False
         bottom_layout.add_widget(self.textinput)
         self.grid.add_widget(bottom_layout)
         self.commandprocessor("/help")
         Clock.schedule_interval(self.update_texts, 1 / 30)
         self.container.add_widget(self.grid)
+
+        self.server_connect_bar.focus = True
+        self.server_connect_bar.select_text(
+            self.server_connect_bar.text.find(":") + 1,
+            len(self.server_connect_bar.text)
+        )
+
         return self.container
 
     def update_texts(self, dt):
@@ -402,10 +408,12 @@ class GameManager(App):
                          f" | Connected to: {self.ctx.server_address} " \
                          f"{'.'.join(str(e) for e in self.ctx.server_version)}"
             self.server_connect_button.text = "Disconnect"
+            self.server_connect_bar.readonly = True
             self.progressbar.max = len(self.ctx.checked_locations) + len(self.ctx.missing_locations)
             self.progressbar.value = len(self.ctx.checked_locations)
         else:
             self.server_connect_button.text = "Connect"
+            self.server_connect_bar.readonly = False
             self.title = self.base_title + " " + Utils.__version__
             self.progressbar.value = 0
 
@@ -418,11 +426,10 @@ class GameManager(App):
 
     def connect_button_action(self, button):
         if self.ctx.server:
-            self.ctx.server_address = None
             self.ctx.username = None
-            asyncio.create_task(self.ctx.disconnect())
+            async_start(self.ctx.disconnect())
         else:
-            asyncio.create_task(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
+            async_start(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
 
     def on_stop(self):
         # "kill" input tasks
@@ -443,8 +450,6 @@ class GameManager(App):
             elif input_text:
                 self.commandprocessor(input_text)
 
-            Clock.schedule_once(textinput.text_focus)
-
         except Exception as e:
             logging.getLogger("Client").exception(e)
 
@@ -452,6 +457,10 @@ class GameManager(App):
         text = self.json_to_kivy_parser(data)
         self.log_panels["Archipelago"].on_message_markup(text)
         self.log_panels["All"].on_message_markup(text)
+
+    def focus_textinput(self):
+        if hasattr(self, "textinput"):
+            self.textinput.focus = True
 
     def update_address_bar(self, text: str):
         if hasattr(self, "server_connect_bar"):
