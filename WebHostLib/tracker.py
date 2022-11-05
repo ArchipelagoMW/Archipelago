@@ -445,7 +445,7 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
         "Spyglass": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c1/Spyglass_JE2_BE1.png",
         "Dragon Egg Shard": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/38/Dragon_Egg_JE4.png",
         "Lead": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/1f/Lead_JE2_BE2.png", 
-        "Saddle": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/7e/Saddle_%28Pig%29_JE2_BE2.png",
+        "Saddle": "https://i.imgur.com/2QtDyR0.png",
         "Channeling Book": "https://i.imgur.com/J3WsYZw.png",
         "Silk Touch Book": "https://i.imgur.com/iqERxHQ.png",
         "Piercing IV Book": "https://i.imgur.com/OzJptGz.png",
