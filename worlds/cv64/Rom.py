@@ -36,7 +36,7 @@ rom_loc_offsets = {
     0xC64013: 0x10C6B3,
     0xC64014: 0x10C72B,
     0xC640A6: 0x7C7F9D,
-    0xC640A7: 0xBFC243,
+    0xC640A7: 0xBFC91B,
 
     0xC64015: 0x10C7F7,  # Castle Wall
     0xC64016: 0x10C7FF,
@@ -85,26 +85,26 @@ rom_loc_offsets = {
     0xC6403E: 0x10CF5B,
     0xC6403F: 0x10C8BF,
     0xC64040: 0x10CF53,
-    0xC640AA: 0xBFC25F,
+    0xC640AA: 0xBFC937,
     0xC640AB: 0x8099CC,
-    0xC640AC: 0xBFC257,
+    0xC640AC: 0xBFC92F,
     0xC640AD: 0x80997D,
     0xC640AE: 0x809956,
     0xC640AF: 0x80992D,
-    0xC640B0: 0xBFC25B,
+    0xC640B0: 0xBFC933,
     0xC640B1: 0x80993C,
     0xC640B2: 0x81F07C,
     0xC640B3: 0x83A5CA,
-    0xC640B4: 0xBFC27B,
+    0xC640B4: 0xBFC953,
     0xC640B5: 0x83A604,
     0xC640B6: 0x83A588,
     0xC640B7: 0x83A593,
     0xC640B8: 0x83A635,
-    0xC640B9: 0xBFC287,
-    0xC640BA: 0xBFC28B,
+    0xC640B9: 0xBFC95F,
+    0xC640BA: 0xBFC963,
     0xC640BB: 0x83A5B1,
     0xC640BC: 0x83A610,
-    0xC640BD: 0xBFC283,
+    0xC640BD: 0xBFC95B,
     0xC640BE: 0x83A61B,
     0xC640BF: 0x850FEC,
 
@@ -131,7 +131,7 @@ rom_loc_offsets = {
     0xC64054: 0x10CA47,
     0xC64055: 0x10CA4F,
     0xC64056: 0x10CAAF,
-    0xC640C0: 0xBFC2AF,
+    0xC640C0: 0xBFC987,
     0xC640C1: 0x86D8E1,
     0xC640C2: 0x86D8FC,
 
@@ -186,8 +186,8 @@ rom_loc_offsets = {
     0xC640C5: 0x8C44D9,
     0xC640C6: 0x8C44E7,
     0xC640C7: 0x8C450A,
-    0xC640C8: 0xBFC2C3,
-    0xC640C9: 0xBFC2C7,
+    0xC640C8: 0xBFC99B,
+    0xC640C9: 0xBFC99F,
     0xC640CA: 0x8C451C,
     0xC640CB: 0x8C44fD,
     0xC640CC: 0x8C44F5,
@@ -246,7 +246,7 @@ rom_loc_offsets = {
     0xC640A4: 0x10CE9B,  # Castle Keep
     0xC640A5: 0x10CEA3,
     0xC640DA: 0x9778C8,
-    0xC640DB: 0xBFC30F,
+    0xC640DB: 0xBFCA1F,
 }
 
 npc_items = {0xC6402E, 0xC6407D, 0xC6407E, 0xC6406A}
@@ -467,6 +467,39 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     # Prevent the vanilla Magical Nitro transport's "can explode" flag from setting
     rom.write_bytes(0xB5D7AA, [0x00, 0x00, 0x00, 0x00])
 
+    # Add data for White Jewel #22 (the new Duel Tower savepoint) at the end of the White Jewel ID data list
+    rom.write_bytes(0x104AC8, [0x00, 0x00, 0x00, 0x06,
+                               0x00, 0x13, 0x00, 0x15])
+
+    # Spawn coordinates list extension
+    rom.write_bytes(0xD5BF4, [0x08, 0x0F, 0xF1, 0x03])  # J	0x803FC40C
+    rom.write_bytes(0xBFC40C, PatchName.spawn_coordinates_extension)
+    rom.write_bytes(0x108A5E, PatchName.waterway_end_coordinates)
+
+    # Change the File Select stage numbers to match the new stage order. Also fix a vanilla issue wherein saving in a
+    # character-exclusive stage as the other character would incorrectly display the name of that character's equivalent
+    # stage on the save file instead of the one they're actually in.
+    rom.write_byte(0xC9FE3, 0xD4)
+    rom.write_byte(0xCA055, 0x08)
+    rom.write_byte(0xCA066, 0x40)
+    rom.write_bytes(0xCA068, [0x86, 0x0C, 0x17, 0xD0])  # LH T4, 0x17D0 (S0)
+    rom.write_byte(0xCA06D, 0x08)
+    rom.write_byte(0x104A31, 0x01)
+    rom.write_byte(0x104A39, 0x01)
+    rom.write_byte(0x104A89, 0x01)
+    rom.write_byte(0x104A91, 0x01)
+    rom.write_byte(0x104A99, 0x01)
+    rom.write_byte(0x104AA1, 0x01)
+
+    stage_number = 0x01
+    for i in range(len(active_level_list) - 1):
+        for offset in level_dict[active_level_list[i]].stageNumberOffsetList:
+            rom.write_byte(offset, stage_number)
+        if active_level_list[i - 2] == LocationName.castle_center:
+            stage_number -= 1
+        elif active_level_list[i - 1] != LocationName.villa:
+            stage_number += 1
+
     # Custom data-loading code
     rom.write_bytes(0x6B5028, [0x08, 0x06, 0x0D, 0x74])  # J 0x801835D0
     rom.write_bytes(0x1067C0, PatchName.custom_code_loader)
@@ -508,9 +541,9 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     rom.write_bytes(0xBFC700, PatchName.tlb_modifiers)
 
     # On-the-fly scene object data modifier hook
-    rom.write_bytes(0xEAAC8, [0x0C, 0x0F, 0xF0, 0x8A])  # JAL 0x803FC228
+    rom.write_bytes(0xEAAC8, [0x0C, 0x0F, 0xF2, 0x40])  # JAL 0x803FC900
     rom.write_bytes(0xEAACC, [0xAC, 0xC2, 0x00, 0x00])  # SW V0, 0x0000 (A2)
-    rom.write_bytes(0xBFC228, PatchName.scene_data_modifiers)
+    rom.write_bytes(0xBFC900, PatchName.scene_data_modifiers)
 
     # Fix locked doors to check the key counters instead of their vanilla key locations' flags
     # Pickup flag check modifications:
