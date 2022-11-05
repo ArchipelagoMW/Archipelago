@@ -121,7 +121,8 @@ class StartingAge(Choice):
 
 
 class InteriorEntrances(Choice): 
-    """Shuffles interior entrances. "Simple" shuffles houses and Great Fairies; "All" includes Windmill, Link's House, Temple of Time, and Kak potion shop."""
+    """Shuffles interior entrances. "Simple" shuffles houses and Great Fairies; "All" includes Windmill, Link's House,
+    Temple of Time, and Kak potion shop."""
     display_name = "Shuffle Interior Entrances"
     option_off = 0
     option_simple = 1
@@ -160,7 +161,8 @@ class SpawnPositions(Toggle):
 
 
 class MixEntrancePools(Choice):
-    """Shuffles entrances into a mixed pool instead of separate ones. "indoor" keeps overworld entrances separate; "all" mixes them in."""
+    """Shuffles entrances into a mixed pool instead of separate ones. "indoor" keeps overworld entrances separate; "all"
+     mixes them in."""
     display_name = "Mix Entrance Pools"
     option_off = 0
     option_indoor = 1
@@ -168,7 +170,8 @@ class MixEntrancePools(Choice):
 
 
 class DecoupleEntrances(Toggle):
-    """Decouple entrances when shuffling them. Also adds the one-way entrance from Gerudo Valley to Lake Hylia if overworld is shuffled."""
+    """Decouple entrances when shuffling them. Also adds the one-way entrance from Gerudo Valley to Lake Hylia if
+    overworld is shuffled."""
     display_name = "Decouple Entrances"
 
 
@@ -186,7 +189,8 @@ class TriforceGoal(Range):
 
 
 class ExtraTriforces(Range):
-    """Percentage of additional Triforce pieces in the pool. With high numbers, you may need to randomize additional locations to have enough items."""
+    """Percentage of additional Triforce pieces in the pool. With high numbers, you may need to randomize additional
+    locations to have enough items."""
     display_name = "Percentage of Extra Triforce Pieces"
     range_start = 0
     range_end = 100
@@ -194,7 +198,8 @@ class ExtraTriforces(Range):
 
 
 class LogicalChus(Toggle):
-    """Bombchus are properly considered in logic. The first found pack will have 20 chus; Kokiri Shop and Bazaar sell refills; bombchus open Bombchu Bowling."""
+    """Bombchus are properly considered in logic. The first found pack will have 20 chus; Kokiri Shop and Bazaar sell
+    refills; bombchus open Bombchu Bowling."""
     display_name = "Bombchus Considered in Logic"
 
 
@@ -525,7 +530,8 @@ class CompleteMaskQuest(Toggle):
 
 
 class UsefulCutscenes(Toggle):
-    """Reenables the Poe cutscene in Forest Temple, Darunia in Fire Temple, and Twinrova introduction. Mostly useful for glitched."""
+    """Reenables the Poe cutscene in Forest Temple, Darunia in Fire Temple, and Twinrova introduction. Mostly useful for
+     glitched."""
     display_name = "Enable Useful Cutscenes"
 
 
@@ -846,8 +852,10 @@ sfx_options: typing.Dict[str, type(Option)] = {
 
 class LogicTricks(OptionList):
     """Set various tricks for logic in Ocarina of Time. 
-Format as a comma-separated list of "nice" names: ["Fewer Tunic Requirements", "Hidden Grottos without Stone of Agony"].
-A full list of supported tricks can be found at https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LogicTricks.py"""
+    Format as a comma-separated list of "nice" names: ["Fewer Tunic Requirements", "Hidden Grottos without Stone of Agony"].
+    A full list of supported tricks can be found at:
+    https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LogicTricks.py
+    """
     display_name = "Logic Tricks"
     valid_keys = frozenset(normalized_name_tricks)
     valid_keys_casefold = True

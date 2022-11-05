@@ -50,8 +50,6 @@ requires:
     {%- if option.__doc__ %}
     # {{ option.__doc__
         | trim
-        | replace('    ', '')
-        | wordwrap(117, wrapstring="\n#   ")
         | replace('\n    ', '\n# ')
         | indent(4, first=False)
       }}
