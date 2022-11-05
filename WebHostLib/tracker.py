@@ -443,17 +443,23 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
         "Campfire": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/91/Campfire_JE2_BE2.gif",
         "Water Bottle": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/75/Water_Bottle_JE2_BE2.png",
         "Spyglass": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c1/Spyglass_JE2_BE1.png",
+        "Dragon Egg Shard": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/38/Dragon_Egg_JE4.png",
+        "Lead": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/1f/Lead_JE2_BE2.png", 
+        "Saddle": "https://i.imgur.com/2QtDyR0.png",
+        "Channeling Book": "https://i.imgur.com/J3WsYZw.png",
+        "Silk Touch Book": "https://i.imgur.com/iqERxHQ.png",
+        "Piercing IV Book": "https://i.imgur.com/OzJptGz.png",
     }
 
     minecraft_location_ids = {
         "Story": [42073, 42023, 42027, 42039, 42002, 42009, 42010, 42070, 
                   42041, 42049, 42004, 42031, 42025, 42029, 42051, 42077],
         "Nether": [42017, 42044, 42069, 42058, 42034, 42060, 42066, 42076, 42064, 42071, 42021,
-                   42062, 42008, 42061, 42033, 42011, 42006, 42019, 42000, 42040, 42001, 42015, 42014],
+                   42062, 42008, 42061, 42033, 42011, 42006, 42019, 42000, 42040, 42001, 42015, 42104, 42014],
         "The End": [42052, 42005, 42012, 42032, 42030, 42042, 42018, 42038, 42046],
-        "Adventure": [42047, 42050, 42096, 42097, 42098, 42059, 42055, 42072, 42003, 42035, 42016, 42020,
-                      42048, 42054, 42068, 42043, 42074, 42075, 42024, 42026, 42037, 42045, 42056, 42099, 42100],
-        "Husbandry": [42065, 42067, 42078, 42022, 42007, 42079, 42013, 42028, 42036, 
+        "Adventure": [42047, 42050, 42096, 42097, 42098, 42059, 42055, 42072, 42003, 42109, 42035, 42016, 42020,
+                      42048, 42054, 42068, 42043, 42106, 42074, 42075, 42024, 42026, 42037, 42045, 42056, 42105, 42099, 42103, 42110, 42100],
+        "Husbandry": [42065, 42067, 42078, 42022, 42113, 42107, 42007, 42079, 42013, 42028, 42036, 42108, 42111, 42112,
                       42057, 42063, 42053, 42102, 42101, 42092, 42093, 42094, 42095],
         "Archipelago": [42080, 42081, 42082, 42083, 42084, 42085, 42086, 42087, 42088, 42089, 42090, 42091],
     }
@@ -482,7 +488,8 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
     # Multi-items
     multi_items = {
         "3 Ender Pearls": 45029,
-        "8 Netherite Scrap": 45015
+        "8 Netherite Scrap": 45015,
+        "Dragon Egg Shard": 45043
     }
     for item_name, item_id in multi_items.items():
         base_name = item_name.split()[-1].lower()

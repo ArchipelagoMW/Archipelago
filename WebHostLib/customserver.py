@@ -184,4 +184,12 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict):
 
     from .autolauncher import Locker
     with Locker(room_id):
-        asyncio.run(main())
+        try:
+            asyncio.run(main())
+        except:
+            with db_session:
+                room = Room.get(id=room_id)
+                room.last_port = -1
+                # ensure the Room does not spin up again on its own, minute of safety buffer
+                room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
+            raise
