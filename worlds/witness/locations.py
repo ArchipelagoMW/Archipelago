@@ -242,9 +242,7 @@ class WitnessPlayerLocations:
         """Defines locations AFTER logic changes due to options"""
 
         self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}
-        self.CHECK_LOCATIONS = (
-            StaticWitnessLocations.GENERAL_LOCATIONS
-        )
+        self.CHECK_LOCATIONS = StaticWitnessLocations.GENERAL_LOCATIONS.copy()
 
         if get_option_value(world, player, "puzzle_randomization") == 1:
             self.CHECK_LOCATIONS.remove("Keep Pressure Plates 4")
