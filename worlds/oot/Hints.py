@@ -131,13 +131,13 @@ def getItemGenericName(item):
 def isRestrictedDungeonItem(dungeon, item):
     if not isinstance(item, OOTItem):
         return False
-    if (item.map or item.compass) and dungeon.world.shuffle_mapcompass == 'dungeon':
+    if (item.map or item.compass) and dungeon.multiworld.shuffle_mapcompass == 'dungeon':
         return item in dungeon.dungeon_items
-    if item.type == 'SmallKey' and dungeon.world.shuffle_smallkeys == 'dungeon':
+    if item.type == 'SmallKey' and dungeon.multiworld.shuffle_smallkeys == 'dungeon':
         return item in dungeon.small_keys
-    if item.type == 'BossKey' and dungeon.world.shuffle_bosskeys == 'dungeon':
+    if item.type == 'BossKey' and dungeon.multiworld.shuffle_bosskeys == 'dungeon':
         return item in dungeon.boss_key
-    if item.type == 'GanonBossKey' and dungeon.world.shuffle_ganon_bosskey == 'dungeon':
+    if item.type == 'GanonBossKey' and dungeon.multiworld.shuffle_ganon_bosskey == 'dungeon':
         return item in dungeon.boss_key
     return False
 
@@ -148,7 +148,7 @@ def isRestrictedDungeonItem(dungeon, item):
 def attach_name(text, hinted_object, world):
     if hinted_object.player == world.player:
         return text
-    return f"{text} for {world.world.get_player_name(hinted_object.player)}"
+    return f"{text} for {world.multiworld.get_player_name(hinted_object.player)}"
 
 
 def add_hint(world, groups, gossip_text, count, location=None, force_reachable=False):
@@ -439,7 +439,7 @@ def get_specific_item_hint(world, checked):
         itemname = world.named_item_pool.pop(0)
         if itemname == "Bottle" and world.hint_dist == "bingo":
             locations = [
-                location for location in world.world.get_filled_locations()
+                location for location in world.multiworld.get_filled_locations()
                 if (is_not_checked(location, checked)
                     and location.name not in world.hint_exclusions
                     and location.item.name in bingoBottlesForHints
@@ -448,7 +448,7 @@ def get_specific_item_hint(world, checked):
             ]
         else:
             locations = [
-                location for location in world.world.get_filled_locations()
+                location for location in world.multiworld.get_filled_locations()
                 if (is_not_checked(location, checked)
                     and location.name not in world.hint_exclusions
                     and location.item.name == itemname
@@ -489,7 +489,7 @@ def get_random_location_hint(world, checked):
         and location.name not in world.hint_exclusions
         and location.name not in world.hint_type_overrides['item']
         and location.item.name not in world.item_hint_type_overrides['item'],
-        world.world.get_filled_locations(world.player)))
+                            world.multiworld.get_filled_locations(world.player)))
     if not locations:
         return None
 
@@ -639,13 +639,13 @@ def buildWorldGossipHints(world, checkedLocations=None):
     world.woth_dungeon = 0
 
     if checkedLocations is None:
-        checkedLocations = {player: set() for player in world.world.get_all_ids()}
+        checkedLocations = {player: set() for player in world.multiworld.get_all_ids()}
 
     # If Ganondorf hints Light Arrows and is reachable without them, add to checkedLocations to prevent extra hinting
     # Can only be forced with vanilla bridge or trials
     if world.bridge != 'vanilla' and world.trials == 0 and world.misc_hints:
         try:
-            light_arrow_location = world.world.find_item("Light Arrows", world.player)
+            light_arrow_location = world.multiworld.find_item("Light Arrows", world.player)
             checkedLocations[light_arrow_location.player].add(light_arrow_location.name)
         except StopIteration: # start with them
             pass
@@ -741,9 +741,9 @@ def buildWorldGossipHints(world, checkedLocations=None):
 
     # Add trial hints, only if hint copies > 0
     if hint_dist['trial'][1] > 0:
-        if world.trials == 6:
+        if world.trials_random and world.trials == 6:
             add_hint(world, stoneGroups, GossipText("#Ganon's Tower# is protected by a powerful barrier.", ['Pink']), hint_dist['trial'][1], force_reachable=True)
-        elif world.trials == 0:
+        elif world.trials_random and world.trials == 0:
             add_hint(world, stoneGroups, GossipText("Sheik dispelled the barrier around #Ganon's Tower#.", ['Yellow']), hint_dist['trial'][1], force_reachable=True)
         elif world.trials < 6 and world.trials > 3:
             for trial,skipped in world.skipped_trials.items():
@@ -885,7 +885,7 @@ def buildAltarHints(world, messages, include_rewards=True, include_wincons=True)
 
 # pulls text string from hintlist for reward after sending the location to hintlist.
 def buildBossString(reward, color, world):
-    for location in world.world.get_filled_locations(world.player):
+    for location in world.multiworld.get_filled_locations(world.player):
         if location.item.name == reward:
             item_icon = chr(location.item.special['item_id'])
             location_text = getHint(location.name, world.clearer_hints).text
@@ -956,18 +956,18 @@ def buildGanonText(world, messages):
         text += "\x05\x42your pocket\x05\x40"
     else:
         try:
-            find_light_arrows = world.world.find_item('Light Arrows', world.player)
+            find_light_arrows = world.multiworld.find_item('Light Arrows', world.player)
             text = get_raw_text(getHint('Light Arrow Location', world.clearer_hints).text)
             location = find_light_arrows
             location_hint = get_hint_area(location)
             if world.player != location.player:
-                text += "\x05\x42%s's\x05\x40 %s" % (world.world.get_player_name(location.player), get_raw_text(location_hint))
+                text += "\x05\x42%s's\x05\x40 %s" % (world.multiworld.get_player_name(location.player), get_raw_text(location_hint))
             else:
                 location_hint = location_hint.replace('Ganon\'s Castle', 'my castle')
                 text += get_raw_text(location_hint)
         except StopIteration:
             text = get_raw_text(getHint('Validation Line', world.clearer_hints).text)
-            for location in world.world.get_filled_locations(world.player):
+            for location in world.multiworld.get_filled_locations(world.player):
                 if location.name == 'Ganons Tower Boss Key Chest':
                     text += get_raw_text(getHint(getItemGenericName(location.item), world.clearer_hints).text)
                     break

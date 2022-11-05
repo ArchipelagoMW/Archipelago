@@ -31,7 +31,7 @@ except ImportError:
 
 import NetUtils
 import Utils
-from Utils import version_tuple, restricted_loads, Version
+from Utils import version_tuple, restricted_loads, Version, async_start
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
     SlotType
 
@@ -273,16 +273,16 @@ class Context:
     def broadcast_all(self, msgs: typing.List[dict]):
         msgs = self.dumper(msgs)
         endpoints = (endpoint for endpoint in self.endpoints if endpoint.auth)
-        asyncio.create_task(self.broadcast_send_encoded_msgs(endpoints, msgs))
+        async_start(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
     def broadcast_team(self, team: int, msgs: typing.List[dict]):
         msgs = self.dumper(msgs)
         endpoints = (endpoint for endpoint in itertools.chain.from_iterable(self.clients[team].values()))
-        asyncio.create_task(self.broadcast_send_encoded_msgs(endpoints, msgs))
+        async_start(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
     def broadcast(self, endpoints: typing.Iterable[Client], msgs: typing.List[dict]):
         msgs = self.dumper(msgs)
-        asyncio.create_task(self.broadcast_send_encoded_msgs(endpoints, msgs))
+        async_start(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
     async def disconnect(self, endpoint: Client):
         if endpoint in self.endpoints:
@@ -302,18 +302,18 @@ class Context:
             return
         logging.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
         if client.version >= print_command_compatability_threshold:
-            asyncio.create_task(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }]}]))
+            async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }]}]))
         else:
-            asyncio.create_task(self.send_msgs(client, [{"cmd": "Print", "text": text}]))
+            async_start(self.send_msgs(client, [{"cmd": "Print", "text": text}]))
 
     def notify_client_multiple(self, client: Client, texts: typing.List[str]):
         if not client.auth:
             return
         if client.version >= print_command_compatability_threshold:
-            asyncio.create_task(self.send_msgs(client, 
+            async_start(self.send_msgs(client, 
                 [{"cmd": "PrintJSON", "data": [{ "text": text }]} for text in texts]))
         else:
-            asyncio.create_task(self.send_msgs(client, [{"cmd": "Print", "text": text} for text in texts]))
+            async_start(self.send_msgs(client, [{"cmd": "Print", "text": text} for text in texts]))
 
     # loading
 
@@ -627,7 +627,7 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], onl
             continue
         client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
         for client in clients:
-            asyncio.create_task(ctx.send_msgs(client, client_hints))
+            async_start(ctx.send_msgs(client, client_hints))
 
 
 def update_aliases(ctx: Context, team: int):
@@ -636,7 +636,7 @@ def update_aliases(ctx: Context, team: int):
 
     for clients in ctx.clients[team].values():
         for client in clients:
-            asyncio.create_task(ctx.send_encoded_msgs(client, cmd))
+            async_start(ctx.send_encoded_msgs(client, cmd))
 
 
 async def server(websocket, path: str = "/", ctx: Context = None):
@@ -814,7 +814,7 @@ def send_new_items(ctx: Context):
                 items = get_received_items(ctx, team, slot, client.remote_items)
                 if len(start_inventory) + len(items) > client.send_index:
                     first_new_item = max(0, client.send_index - len(start_inventory))
-                    asyncio.create_task(ctx.send_msgs(client, [{
+                    async_start(ctx.send_msgs(client, [{
                         "cmd": "ReceivedItems",
                         "index": client.send_index,
                         "items": start_inventory[client.send_index:] + items[first_new_item:]}]))
@@ -998,7 +998,11 @@ class CommandMeta(type):
         return super(CommandMeta, cls).__new__(cls, name, bases, attrs)
 
 
-def mark_raw(function):
+_Return = typing.TypeVar("_Return")
+# TODO: when python 3.10 is lowest supported, typing.ParamSpec
+
+
+def mark_raw(function: typing.Callable[[typing.Any], _Return]) -> typing.Callable[[typing.Any], _Return]:
     function.raw_text = True
     return function
 
@@ -1086,7 +1090,7 @@ class CommonCommandProcessor(CommandProcessor):
             timer = int(seconds, 10)
         except ValueError:
             timer = 10
-        asyncio.create_task(countdown(self.ctx, timer))
+        async_start(countdown(self.ctx, timer))
         return True
 
     def _cmd_options(self):
@@ -1328,6 +1332,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     def get_hints(self, input_text: str, for_location: bool = False) -> bool:
         points_available = get_client_points(self.ctx, self.client)
+        cost = self.ctx.get_hint_cost(self.client.slot)
+
         if not input_text:
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
@@ -1382,7 +1388,6 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 return False
 
         if hints:
-            cost = self.ctx.get_hint_cost(self.client.slot)
             new_hints = set(hints) - self.ctx.hints[self.client.team, self.client.slot]
             old_hints = set(hints) - new_hints
             if old_hints:
@@ -1432,7 +1437,12 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 return True
 
         else:
-            self.output("Nothing found. Item/Location may not exist.")
+            if points_available >= cost:
+                self.output("Nothing found. Item/Location may not exist.")
+            else:
+                self.output(f"You can't afford the hint. "
+                            f"You have {points_available} points and need at least "
+                            f"{self.ctx.get_hint_cost(self.client.slot)}.")
             return False
 
     @mark_raw
@@ -1761,7 +1771,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
-        asyncio.create_task(self.ctx.server.ws_server._close())
+        async_start(self.ctx.server.ws_server._close())
         if self.ctx.shutdown_task:
             self.ctx.shutdown_task.cancel()
         self.ctx.exit_event.set()
@@ -1792,14 +1802,33 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(response)
             return False
 
+    def resolve_player(self, input_name: str) -> typing.Optional[typing.Tuple[int, int, str]]:
+        """ returns (team, slot, player name) """
+        # TODO: clean up once we disallow multidata < 0.3.6, which has CI unique names
+        # first match case
+        for (team, slot), name in self.ctx.player_names.items():
+            if name == input_name:
+                return team, slot, name
+
+        # if no case-sensitive match, then match without case only if there's only 1 match
+        input_lower = input_name.lower()
+        match: typing.Optional[typing.Tuple[int, int, str]] = None
+        for (team, slot), name in self.ctx.player_names.items():
+            lowered = name.lower()
+            if lowered == input_lower:
+                if match:
+                    return None  # ambiguous input_name
+                match = (team, slot, name)
+        return match
+
     @mark_raw
     def _cmd_collect(self, player_name: str) -> bool:
         """Send out the remaining items to player."""
-        seeked_player = player_name.lower()
-        for (team, slot), name in self.ctx.player_names.items():
-            if name.lower() == seeked_player:
-                collect_player(self.ctx, team, slot)
-                return True
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, _ = player
+            collect_player(self.ctx, team, slot)
+            return True
 
         self.output(f"Could not find player {player_name} to collect")
         return False
@@ -1812,11 +1841,11 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_forfeit(self, player_name: str) -> bool:
         """Send out the remaining items from a player to their intended recipients."""
-        seeked_player = player_name.lower()
-        for (team, slot), name in self.ctx.player_names.items():
-            if name.lower() == seeked_player:
-                forfeit_player(self.ctx, team, slot)
-                return True
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, _ = player
+            forfeit_player(self.ctx, team, slot)
+            return True
 
         self.output(f"Could not find player {player_name} to release")
         return False
@@ -1824,12 +1853,12 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_allow_forfeit(self, player_name: str) -> bool:
         """Allow the specified player to use the !release command."""
-        seeked_player = player_name.lower()
-        for (team, slot), name in self.ctx.player_names.items():
-            if name.lower() == seeked_player:
-                self.ctx.allow_forfeits[(team, slot)] = True
-                self.output(f"Player {player_name} is now allowed to use the !release command at any time.")
-                return True
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, name = player
+            self.ctx.allow_forfeits[(team, slot)] = True
+            self.output(f"Player {name} is now allowed to use the !release command at any time.")
+            return True
 
         self.output(f"Could not find player {player_name} to allow the !release command for.")
         return False
@@ -1837,13 +1866,12 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_forbid_forfeit(self, player_name: str) -> bool:
         """"Disallow the specified player from using the !release command."""
-        seeked_player = player_name.lower()
-        for (team, slot), name in self.ctx.player_names.items():
-            if name.lower() == seeked_player:
-                self.ctx.allow_forfeits[(team, slot)] = False
-                self.output(
-                    f"Player {player_name} has to follow the server restrictions on use of the !release command.")
-                return True
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, name = player
+            self.ctx.allow_forfeits[(team, slot)] = False
+            self.output(f"Player {name} has to follow the server restrictions on use of the !release command.")
+            return True
 
         self.output(f"Could not find player {player_name} to forbid the !release command for.")
         return False
@@ -2056,7 +2084,7 @@ async def auto_shutdown(ctx, to_cancel=None):
     await asyncio.sleep(ctx.auto_shutdown)
     while not ctx.exit_event.is_set():
         if not ctx.client_activity_timers.values():
-            asyncio.create_task(ctx.server.ws_server._close())
+            async_start(ctx.server.ws_server._close())
             ctx.exit_event.set()
             if to_cancel:
                 for task in to_cancel:
@@ -2067,7 +2095,7 @@ async def auto_shutdown(ctx, to_cancel=None):
             delta = datetime.datetime.now(datetime.timezone.utc) - newest_activity
             seconds = ctx.auto_shutdown - delta.total_seconds()
             if seconds < 0:
-                asyncio.create_task(ctx.server.ws_server._close())
+                async_start(ctx.server.ws_server._close())
                 ctx.exit_event.set()
                 if to_cancel:
                     for task in to_cancel:

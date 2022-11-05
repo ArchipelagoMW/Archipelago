@@ -30,7 +30,9 @@ Currently, the following games are supported:
 * Dark Souls 3
 * Super Mario World
 * Pokémon Red and Blue
+* Hylics 2
 * Overcooked! 2
+* Zillion
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

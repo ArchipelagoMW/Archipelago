@@ -1,7 +1,32 @@
 import typing
+import random
 from Options import Option, DefaultOnToggle, Toggle, Range, OptionList, DeathLink
 from .LogicTricks import normalized_name_tricks
 from .ColorSFXOptions import *
+
+
+class TrackRandomRange(Range):
+    """Overrides normal from_any behavior to track whether the option was randomized at generation time."""
+    supports_weighting = False
+    randomized: bool = False
+
+    @classmethod
+    def from_any(cls, data: typing.Any) -> Range:
+        if type(data) is list:
+            val = random.choices(data)[0]
+            ret = super().from_any(val)
+            if not isinstance(val, int) or len(data) > 1:
+                ret.randomized = True
+            return ret
+        if type(data) is not dict:
+            return super().from_any(data)
+        if any(data.values()):
+            val = random.choices(list(data.keys()), weights=list(map(int, data.values())))[0]
+            ret = super().from_any(val)
+            if not isinstance(val, int) or len(list(filter(bool, map(int, data.values())))) > 1:
+                ret.randomized = True
+            return ret
+        raise RuntimeError(f"All options specified in \"{cls.display_name}\" are weighted as zero.")
 
 
 class Logic(Choice): 
@@ -70,7 +95,7 @@ class Bridge(Choice):
     default = 3
 
 
-class Trials(Range):
+class Trials(TrackRandomRange):
     """Set the number of required trials in Ganon's Castle."""
     display_name = "Ganon's Trials Count"
     range_start = 0
@@ -173,7 +198,7 @@ class LogicalChus(Toggle):
     display_name = "Bombchus Considered in Logic"
 
 
-class MQDungeons(Range):
+class MQDungeons(TrackRandomRange):
     """Number of MQ dungeons. The dungeons to replace are randomly selected."""
     display_name = "Number of MQ Dungeons"
     range_start = 0

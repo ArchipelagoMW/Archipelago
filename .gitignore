@@ -13,6 +13,7 @@
 *.z64
 *.n64
 *.nes
+*.sms
 *.gb
 *.gbc
 *.gba
@@ -129,7 +130,7 @@ ipython_config.py
 
 # Environments
 .env
-.venv
+.venv*
 env/
 venv/
 ENV/

@@ -3,20 +3,16 @@ import asyncio
 import time
 
 from NetUtils import ClientStatus, color
-from worlds import AutoWorldRegister
-from SNIClient import Context, snes_buffered_write, snes_flush_writes, snes_read
+from worlds.AutoSNIClient import SNIClient
 from .Names.TextBox import generate_received_text
-from Patch import GAME_SMW
 
 snes_logger = logging.getLogger("SNES")
 
+# FXPAK Pro protocol memory mapping used by SNI
 ROM_START = 0x000000
 WRAM_START = 0xF50000
 WRAM_SIZE = 0x20000
 SRAM_START = 0xE00000
-
-SAVEDATA_START = WRAM_START + 0xF000
-SAVEDATA_SIZE = 0x500
 
 SMW_ROMHASH_START = 0x7FC0
 ROMHASH_SIZE = 0x15
@@ -58,8 +54,12 @@ SMW_BAD_TEXT_BOX_LEVELS  = [0x26, 0x02, 0x4B]
 SMW_BOSS_STATES          = [0x80, 0xC0, 0xC1]
 SMW_UNCOLLECTABLE_LEVELS = [0x25, 0x07, 0x0B, 0x40, 0x0E, 0x1F, 0x20, 0x1B, 0x1A, 0x35, 0x34, 0x31, 0x32]
 
-async def deathlink_kill_player(ctx: Context):
-    if ctx.game == GAME_SMW:
+
+class SMWSNIClient(SNIClient):
+    game = "Super Mario World"
+
+    async def deathlink_kill_player(self, ctx):
+        from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
         game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
         if game_state[0] != 0x14:
             return
@@ -88,25 +88,19 @@ async def deathlink_kill_player(ctx: Context):
 
         await snes_flush_writes(ctx)
 
-        from SNIClient import DeathState
         ctx.death_state = DeathState.dead
         ctx.last_death_link = time.time()
 
-        return
 
+    async def validate_rom(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
-async def smw_rom_init(ctx: Context):
-    if not ctx.rom:
-        ctx.finished_game = False
-        ctx.death_link_allow_survive = False
-        game_hash = await snes_read(ctx, SMW_ROMHASH_START, ROMHASH_SIZE)
-        if game_hash is None or game_hash == bytes([0] * ROMHASH_SIZE) or game_hash[:3] != b"SMW":
+        rom_name = await snes_read(ctx, SMW_ROMHASH_START, ROMHASH_SIZE)
+        if rom_name is None or rom_name == bytes([0] * ROMHASH_SIZE) or rom_name[:3] != b"SMW":
             return False
-        else:
-            ctx.game = GAME_SMW
-            ctx.items_handling = 0b111  # remote items
 
-        ctx.rom = game_hash
+        ctx.game = self.game
+        ctx.items_handling = 0b111  # remote items
 
         receive_option = await snes_read(ctx, SMW_RECEIVE_MSG_DATA, 0x1)
         send_option = await snes_read(ctx, SMW_SEND_MSG_DATA, 0x1)
@@ -114,73 +108,73 @@ async def smw_rom_init(ctx: Context):
         ctx.receive_option = receive_option[0]
         ctx.send_option = send_option[0]
 
-        ctx.message_queue = []
-
         ctx.allow_collect = True
 
         death_link = await snes_read(ctx, SMW_DEATH_LINK_ACTIVE_ADDR, 1)
         if death_link:
             await ctx.update_death_link(bool(death_link[0] & 0b1))
-    return True
+
+        ctx.rom = rom_name
+
+        return True
 
 
-def add_message_to_queue(ctx: Context, new_message):
+    def add_message_to_queue(self, new_message):
 
-    if not hasattr(ctx, "message_queue"):
-        ctx.message_queue = []
+        if not hasattr(self, "message_queue"):
+            self.message_queue = []
 
-    ctx.message_queue.append(new_message)
-
-    return
+        self.message_queue.append(new_message)
 
 
-async def handle_message_queue(ctx: Context):
+    async def handle_message_queue(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
-    game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
-    if game_state[0] != 0x14:
+        if not hasattr(self, "message_queue") or len(self.message_queue) == 0:
+            return
+
+        game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
+        if game_state[0] != 0x14:
+            return
+
+        mario_state = await snes_read(ctx, SMW_MARIO_STATE_ADDR, 0x1)
+        if mario_state[0] != 0x00:
+            return
+
+        message_box = await snes_read(ctx, SMW_MESSAGE_BOX_ADDR, 0x1)
+        if message_box[0] != 0x00:
+            return
+
+        pause_state = await snes_read(ctx, SMW_PAUSE_ADDR, 0x1)
+        if pause_state[0] != 0x00:
+            return
+
+        current_level = await snes_read(ctx, SMW_CURRENT_LEVEL_ADDR, 0x1)
+        if current_level[0] in SMW_BAD_TEXT_BOX_LEVELS:
+            return
+
+        boss_state = await snes_read(ctx, SMW_BOSS_STATE_ADDR, 0x1)
+        if boss_state[0] in SMW_BOSS_STATES:
+            return
+
+        active_boss = await snes_read(ctx, SMW_ACTIVE_BOSS_ADDR, 0x1)
+        if active_boss[0] != 0x00:
+            return
+
+        next_message = self.message_queue.pop(0)
+
+        snes_buffered_write(ctx, SMW_MESSAGE_QUEUE_ADDR, bytes(next_message))
+        snes_buffered_write(ctx, SMW_MESSAGE_BOX_ADDR, bytes([0x03]))
+        snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([0x22]))
+
+        await snes_flush_writes(ctx)
+
         return
 
-    mario_state = await snes_read(ctx, SMW_MARIO_STATE_ADDR, 0x1)
-    if mario_state[0] != 0x00:
-        return
 
-    message_box = await snes_read(ctx, SMW_MESSAGE_BOX_ADDR, 0x1)
-    if message_box[0] != 0x00:
-        return
+    async def game_watcher(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
-    pause_state = await snes_read(ctx, SMW_PAUSE_ADDR, 0x1)
-    if pause_state[0] != 0x00:
-        return
-
-    current_level = await snes_read(ctx, SMW_CURRENT_LEVEL_ADDR, 0x1)
-    if current_level[0] in SMW_BAD_TEXT_BOX_LEVELS:
-        return
-
-    boss_state = await snes_read(ctx, SMW_BOSS_STATE_ADDR, 0x1)
-    if boss_state[0] in SMW_BOSS_STATES:
-        return
-
-    active_boss = await snes_read(ctx, SMW_ACTIVE_BOSS_ADDR, 0x1)
-    if active_boss[0] != 0x00:
-        return
-
-    if not hasattr(ctx, "message_queue") or len(ctx.message_queue) == 0:
-        return
-
-    next_message = ctx.message_queue.pop(0)
-
-    snes_buffered_write(ctx, SMW_MESSAGE_QUEUE_ADDR, bytes(next_message))
-    snes_buffered_write(ctx, SMW_MESSAGE_BOX_ADDR, bytes([0x03]))
-    snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([0x22]))
-
-    await snes_flush_writes(ctx)
-
-    return
-
-
-async def smw_game_watcher(ctx: Context):
-    if ctx.game == GAME_SMW:
-        # SMW_TODO: Handle Deathlink
         game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
         mario_state = await snes_read(ctx, SMW_MARIO_STATE_ADDR, 0x1)
         if game_state is None:
@@ -234,7 +228,7 @@ async def smw_game_watcher(ctx: Context):
             snes_buffered_write(ctx, SMW_BONUS_STAR_ADDR, bytes([egg_count[0]]))
             await snes_flush_writes(ctx)
 
-        await handle_message_queue(ctx)
+        await self.handle_message_queue(ctx)
 
         new_checks = []
         event_data = await snes_read(ctx, SMW_EVENT_ROM_DATA, 0x60)
@@ -243,6 +237,7 @@ async def smw_game_watcher(ctx: Context):
         dragon_coins_active = await snes_read(ctx, SMW_DRAGON_COINS_ACTIVE_ADDR, 0x1)
         from worlds.smw.Rom import item_rom_data, ability_rom_data
         from worlds.smw.Levels import location_id_to_level_id, level_info_dict
+        from worlds import AutoWorldRegister
         for loc_name, level_data in location_id_to_level_id.items():
             loc_id = AutoWorldRegister.world_types[ctx.game].location_name_to_id[loc_name]
             if loc_id not in ctx.locations_checked:
@@ -262,7 +257,6 @@ async def smw_game_watcher(ctx: Context):
                     bit_set = (masked_data != 0)
 
                     if bit_set:
-                        # SMW_TODO: Handle non-included checks
                         new_checks.append(loc_id)
                 else:
                     event_id_value = event_id + level_data[1]
@@ -275,7 +269,6 @@ async def smw_game_watcher(ctx: Context):
                     bit_set = (masked_data != 0)
 
                     if bit_set:
-                        # SMW_TODO: Handle non-included checks
                         new_checks.append(loc_id)
 
         verify_game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
@@ -320,7 +313,7 @@ async def smw_game_watcher(ctx: Context):
                     player_name = ctx.player_names[item.player]
 
                     receive_message = generate_received_text(item_name, player_name)
-                    add_message_to_queue(ctx, receive_message)
+                    self.add_message_to_queue(receive_message)
 
             snes_buffered_write(ctx, SMW_RECV_PROGRESS_ADDR, bytes([recv_index]))
             if item.item in item_rom_data:
@@ -372,7 +365,7 @@ async def smw_game_watcher(ctx: Context):
                 rand_trap = random.choice(lit_trap_text_list)
 
                 for message in rand_trap:
-                    add_message_to_queue(ctx, message)
+                    self.add_message_to_queue(message)
 
             await snes_flush_writes(ctx)
 
