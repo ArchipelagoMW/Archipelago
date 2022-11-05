@@ -6,7 +6,9 @@ import os
 import hashlib
 import bsdiff4
 
-from .BN3RomUtils import *  # We are literally going to use every single function from this
+from .BN3RomUtils import ArchiveToReferences, read_u16_le, int16_to_byte_list_le, int32_to_byte_list_le,\
+    generate_progressive_undernet, CompressedArchives, ArchiveToSizeComp, ArchiveToSizeUncomp, generate_item_message, \
+    generate_external_item_message
 
 from .Items import ItemType
 

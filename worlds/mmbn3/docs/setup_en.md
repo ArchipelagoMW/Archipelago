@@ -1,4 +1,4 @@
-# Setup Guide for Ocarina of Time Archipelago
+# Setup Guide for Mega Man Battle Network 3 Archipelago
 
 ## Important
 
