@@ -67,9 +67,11 @@ class RLWorld(World):
         if self.setting("vendors") == "early":
             self.multiworld.early_items[self.player]["Blacksmith"] = 1
             self.multiworld.early_items[self.player]["Enchantress"] = 1
+            self.multiworld.local_items[self.player].value |= {"Blacksmith", "Enchantress"}
 
         if self.setting("architect") == "early":
             self.multiworld.early_items[self.player]["Architect"] = 1
+            self.multiworld.local_items[self.player].value.add("Architect")
 
     def generate_basic(self):
         self.item_pool = []
