@@ -52,6 +52,8 @@ class WitnessWorld(World):
     location_name_to_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID
     item_name_groups = StaticWitnessItems.ITEM_NAME_GROUPS
 
+    required_client_version = (0, 3, 6)
+
     def _get_slot_data(self):
         return {
             'seed': self.multiworld.random.randint(0, 1000000),
