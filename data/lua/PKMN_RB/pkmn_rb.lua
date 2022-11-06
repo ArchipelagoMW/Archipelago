@@ -161,7 +161,7 @@ function receive()
     -- Determine Message to send back
     memDomain.rom()
     newPlayerName = uRange(0xFFF0, 0x10)
-    newSeedName = uRange(0xFFDC, 20)
+    newSeedName = uRange(0xFFDB, 21)
     if (playerName ~= nil and not arrayEqual(playerName, newPlayerName)) or (seedName ~= nil and not arrayEqual(seedName, newSeedName)) then
         print("ROM changed, quitting")
         curstate = STATE_UNINITIALIZED
