@@ -8,6 +8,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
 from NetUtils import ClientStatus
 import Utils
+from Utils import async_start
 
 import colorama  # type: ignore
 
@@ -263,7 +264,7 @@ class ZillionContext(CommonContext):
                 "cmd": "Get",
                 "keys": [f"zillion-{self.auth}-doors"]
             }
-            asyncio.create_task(self.send_msgs([payload]))
+            async_start(self.send_msgs([payload]))
         elif cmd == "Retrieved":
             if "keys" not in args:
                 logger.warning(f"invalid Retrieved packet to ZillionClient: {args}")
@@ -304,7 +305,7 @@ class ZillionContext(CommonContext):
                     self.ap_local_count += 1
                     n_locations = len(self.missing_locations) + len(self.checked_locations) - 1  # -1 to ignore win
                     logger.info(f'New Check: {loc_name} ({self.ap_local_count}/{n_locations})')
-                    asyncio.create_task(self.send_msgs([
+                    async_start(self.send_msgs([
                         {"cmd": 'LocationChecks', "locations": [server_id]}
                     ]))
                 else:
@@ -312,10 +313,10 @@ class ZillionContext(CommonContext):
                     # because all the key words are local and unwatched by the server.
                     logger.debug(f"DEBUG: {loc_name} not in missing")
             elif isinstance(event_from_game, events.DeathEventFromGame):
-                asyncio.create_task(self.send_death())
+                async_start(self.send_death())
             elif isinstance(event_from_game, events.WinEventFromGame):
                 if not self.finished_game:
-                    asyncio.create_task(self.send_msgs([
+                    async_start(self.send_msgs([
                         {"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}
                     ]))
                     self.finished_game = True
@@ -327,7 +328,7 @@ class ZillionContext(CommonContext):
                         "key": f"zillion-{self.auth}-doors",
                         "operations": [{"operation": "replace", "value": doors_b64}]
                     }
-                    asyncio.create_task(self.send_msgs([payload]))
+                    async_start(self.send_msgs([payload]))
             else:
                 logger.warning(f"WARNING: unhandled event from game {event_from_game}")
 
@@ -410,7 +411,7 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
                                         ctx.next_item = 0
                                         ctx.ap_local_count = len(ctx.checked_locations)
                                     else:  # no slot data yet
-                                        asyncio.create_task(ctx.send_connect())
+                                        async_start(ctx.send_connect())
                                         log_no_spam("logging in to server...")
                                         await asyncio.wait((
                                             ctx.got_slot_data.wait(),
@@ -434,7 +435,7 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
                     memory.reset_game_state()
 
                     ctx.auth = name
-                    asyncio.create_task(ctx.connect())
+                    async_start(ctx.connect())
                     await asyncio.wait((
                         ctx.got_room_info.wait(),
                         ctx.exit_event.wait(),
