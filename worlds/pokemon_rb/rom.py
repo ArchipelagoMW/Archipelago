@@ -348,11 +348,14 @@ def process_pokemon_data(self):
     self.learnsets = learnsets
 
 
-
 def generate_output(self, output_directory: str):
     random = self.multiworld.slot_seeds[self.player]
     game_version = self.multiworld.game_version[self.player].current_key
-    data = bytearray(get_base_rom_bytes(game_version))
+    data = bytes(get_base_rom_bytes(game_version))
+
+    with open(os.path.join(os.path.dirname(__file__), f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
+        base_patch = bytes(stream.read())
+    data = bytearray(bsdiff4.patch(data, base_patch))
 
     basemd5 = hashlib.md5()
     basemd5.update(data)
@@ -558,11 +561,8 @@ def generate_output(self, output_directory: str):
     write_bytes(data, self.trainer_name, rom_addresses['Player_Name'])
     write_bytes(data, self.rival_name, rom_addresses['Rival_Name'])
 
-    write_bytes(data, basemd5.digest(), 0xFFCB)
     write_bytes(data, self.multiworld.seed_name.encode(), 0xFFDB)
     write_bytes(data, self.multiworld.player_name[self.player].encode(), 0xFFF0)
-
-
 
     outfilepname = f'_P{self.player}'
     outfilepname += f"_{self.multiworld.get_file_safe_player_name(self.player).replace(' ', '_')}" \
@@ -597,9 +597,6 @@ def get_base_rom_bytes(game_version: str, hash: str="") -> bytes:
         if hash != basemd5.hexdigest():
             raise Exception('Supplied Base Rom does not match known MD5 for US(1.0) release. '
                             'Get the correct game and version, then dump it')
-    with open(os.path.join(os.path.dirname(__file__), f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
-        base_patch = bytes(stream.read())
-    base_rom_bytes = bsdiff4.patch(base_rom_bytes, base_patch)
     return base_rom_bytes
 
 
