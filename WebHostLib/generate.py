@@ -4,6 +4,7 @@ import pickle
 import random
 import tempfile
 import zipfile
+import concurrent.futures
 from collections import Counter
 from typing import Dict, Optional, Any
 
@@ -98,7 +99,7 @@ def gen_game(gen_options, meta: Optional[Dict[str, Any]] = None, owner=None, sid
     meta.setdefault("server_options", {}).setdefault("hint_cost", 10)
     race = meta.setdefault("race", False)
 
-    try:
+    def task():
         target = tempfile.TemporaryDirectory()
         playercount = len(gen_options)
         seed = get_seed()
@@ -138,6 +139,23 @@ def gen_game(gen_options, meta: Optional[Dict[str, Any]] = None, owner=None, sid
         ERmain(erargs, seed, baked_server_options=meta["server_options"])
 
         return upload_to_db(target.name, sid, owner, race)
+    thread_pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+    thread = thread_pool.submit(task)
+
+    try:
+        return thread.result(app.config["JOB_TIME"])
+    except concurrent.futures.TimeoutError as e:
+        if sid:
+            with db_session:
+                gen = Generation.get(id=sid)
+                if gen is not None:
+                    gen.state = STATE_ERROR
+                    meta = json.loads(gen.meta)
+                    meta["error"] = (
+                            "Allowed time for Generation exceeded, please consider generating locally instead. " +
+                            e.__class__.__name__ + ": " + str(e))
+                    gen.meta = json.dumps(meta)
+                    commit()
     except BaseException as e:
         if sid:
             with db_session:
