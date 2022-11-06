@@ -5,7 +5,6 @@ import os
 import bsdiff4
 import subprocess
 import zipfile
-import hashlib
 from asyncio import StreamReader, StreamWriter
 from typing import List
 
