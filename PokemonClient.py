@@ -5,12 +5,12 @@ import os
 import bsdiff4
 import subprocess
 import zipfile
-import hashlib
 from asyncio import StreamReader, StreamWriter
 from typing import List
 
 
 import Utils
+from Utils import async_start
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
 
@@ -170,12 +170,12 @@ async def gb_sync_task(ctx: GBContext):
                     data_decoded = json.loads(data.decode())
                     #print(data_decoded)
 
-                    if ctx.seed_name and ctx.seed_name != bytes(data_decoded['seedName']).decode():
+                    if ctx.seed_name and ctx.seed_name != ''.join([chr(i) for i in data_decoded['seedName'] if i != 0]):
                         msg = "The server is running a different multiworld than your client is. (invalid seed_name)"
                         logger.info(msg, extra={'compact_gui': True})
                         ctx.gui_error('Error', msg)
                         error_status = CONNECTION_RESET_STATUS
-                    ctx.seed_name = bytes(data_decoded['seedName']).decode()
+                    ctx.seed_name = ''.join([chr(i) for i in data_decoded['seedName'] if i != 0])
                     if not ctx.auth:
                         ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
                         if ctx.auth == '':
@@ -185,7 +185,7 @@ async def gb_sync_task(ctx: GBContext):
                     if 'locations' in data_decoded and ctx.game and ctx.gb_status == CONNECTION_CONNECTED_STATUS \
                             and not error_status and ctx.auth:
                         # Not just a keep alive ping, parse
-                        asyncio.create_task(parse_locations(data_decoded['locations'], ctx))
+                        async_start(parse_locations(data_decoded['locations'], ctx))
                 except asyncio.TimeoutError:
                     logger.debug("Read Timed Out, Reconnecting")
                     error_status = CONNECTION_TIMING_OUT_STATUS
@@ -245,31 +245,16 @@ async def patch_and_run_game(game_version, patch_file, ctx):
     comp_path = base_name + '.gb'
     with open(Utils.local_path(Utils.get_options()["pokemon_rb_options"][f"{game_version}_rom_file"]), "rb") as stream:
         base_rom = bytes(stream.read())
-    try:
-        with open(Utils.local_path('lib', 'worlds', 'pokemon_rb', f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
-            base_patch = bytes(stream.read())
-    except FileNotFoundError:
-        with open(Utils.local_path('worlds', 'pokemon_rb', f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
-            base_patch = bytes(stream.read())
-    base_patched_rom_data = bsdiff4.patch(base_rom, base_patch)
-    basemd5 = hashlib.md5()
-    basemd5.update(base_patched_rom_data)
 
     with zipfile.ZipFile(patch_file, 'r') as patch_archive:
         with patch_archive.open('delta.bsdiff4', 'r') as stream:
             patch = stream.read()
-    patched_rom_data = bsdiff4.patch(base_patched_rom_data, patch)
+    patched_rom_data = bsdiff4.patch(base_rom, patch)
 
-    written_hash = patched_rom_data[0xFFCC:0xFFDC]
-    if written_hash == basemd5.digest():
-        with open(comp_path, "wb") as patched_rom_file:
-            patched_rom_file.write(patched_rom_data)
+    with open(comp_path, "wb") as patched_rom_file:
+        patched_rom_file.write(patched_rom_data)
 
-        asyncio.create_task(run_game(comp_path))
-    else:
-        msg = "Patch supplied was not generated with the same base patch version as this client. Patching failed."
-        logger.warning(msg)
-        ctx.gui_error('Error', msg)
+    async_start(run_game(comp_path))
 
 
 if __name__ == '__main__':
@@ -295,10 +280,10 @@ if __name__ == '__main__':
             ext = args.patch_file.split(".")[len(args.patch_file.split(".")) - 1].lower()
             if ext == "apred":
                 logger.info("APRED file supplied, beginning patching process...")
-                asyncio.create_task(patch_and_run_game("red", args.patch_file, ctx))
+                async_start(patch_and_run_game("red", args.patch_file, ctx))
             elif ext == "apblue":
                 logger.info("APBLUE file supplied, beginning patching process...")
-                asyncio.create_task(patch_and_run_game("blue", args.patch_file, ctx))
+                async_start(patch_and_run_game("blue", args.patch_file, ctx))
             else:
                 logger.warning(f"Unknown patch file extension {ext}")
 
