@@ -313,7 +313,7 @@ Keep (Keep) - Main Island - True - Keep 2nd Maze - 0x01954 - Keep 2nd Pressure P
 Door - 0x01954 (Hedge Maze 1 Exit) - 0x00139
 Door - 0x01BEC (Pressure Plates 1 Exit) - 0x033EA
 
-Keep 2nd Maze (Keep) - Keep - 0x018CE - Keep 3rd Maze - True:
+Keep 2nd Maze (Keep) - Keep - 0x018CE - Keep 3rd Maze - 0x019D8:
 Door - 0x018CE (Hedge Maze 2 Shortcut) - 0x00139
 158194 - 0x019DC (Hedge Maze 2) - True - Environment
 Door - 0x019D8 (Hedge Maze 2 Exit) - 0x019DC
@@ -927,6 +927,6 @@ Elevator (Mountain Final Room):
 158533 - 0x3C114 (Elevator Entry Right) - 0x3D9A6 | 0x3D9A7 - True
 158534 - 0x3D9AA (Back Wall Left) - 0x3D9A6 | 0x3D9A7 - True
 158535 - 0x3D9A8 (Back Wall Right) - 0x3D9A6 | 0x3D9A7 - True
-158536 - 0x3D9A9 (Elevator Start) - 0x3D9AA | 0x3D9A8 - True
+158536 - 0x3D9A9 (Elevator Start) - 0x3D9AA & 7 Lasers | 0x3D9A8 & 7 Lasers - True
 
 Boat (Boat) - Main Island - TrueOneWay - Swamp Near Boat - TrueOneWay - Treehouse Entry Area - TrueOneWay - Quarry Boathouse Behind Staircase - TrueOneWay - Inside Glass Factory Behind Back Wall - TrueOneWay:

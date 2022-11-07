@@ -1,5 +1,6 @@
 from __future__ import annotations
 import abc
+from copy import deepcopy
 import math
 import numbers
 import typing
@@ -753,7 +754,7 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys):
     supports_weighting = False
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
-        self.value = value
+        self.value = deepcopy(value)
 
     @classmethod
     def from_any(cls, data: typing.Dict[str, typing.Any]) -> OptionDict:
@@ -784,7 +785,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     supports_weighting = False
 
     def __init__(self, value: typing.List[typing.Any]):
-        self.value = value or []
+        self.value = deepcopy(value)
         super(OptionList, self).__init__()
 
     @classmethod
@@ -806,11 +807,11 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
 
 class OptionSet(Option[typing.Set[str]], VerifyKeys):
-    default = frozenset()
+    default: typing.Union[typing.Set[str], typing.FrozenSet[str]] = frozenset()
     supports_weighting = False
 
-    def __init__(self, value: typing.Union[typing.Set[str, typing.Any], typing.List[str, typing.Any]]):
-        self.value = set(value)
+    def __init__(self, value: typing.Iterable[str]):
+        self.value = set(deepcopy(value))
         super(OptionSet, self).__init__()
 
     @classmethod
@@ -849,7 +850,7 @@ class Accessibility(Choice):
 
 class ProgressionBalancing(SpecialRange):
     """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
-    [0-99, default 50] A lower setting means more getting stuck. A higher setting means less getting stuck."""
+    A lower setting means more getting stuck. A higher setting means less getting stuck."""
     default = 50
     range_start = 0
     range_end = 99
@@ -880,6 +881,11 @@ class LocalItems(ItemSet):
 class NonLocalItems(ItemSet):
     """Forces these items to be outside their native world."""
     display_name = "Not Local Items"
+
+
+class EarlyItems(ItemDict):
+    """Force the specified items to be in locations that are reachable from the start."""
+    display_name = "Early Items"
 
 
 class StartInventory(ItemDict):
@@ -980,6 +986,7 @@ per_game_common_options = {
     **common_options,  # can be overwritten per-game
     "local_items": LocalItems,
     "non_local_items": NonLocalItems,
+    "early_items": EarlyItems,
     "start_inventory": StartInventory,
     "start_hints": StartHints,
     "start_location_hints": StartLocationHints,

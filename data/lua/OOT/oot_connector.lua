@@ -77,12 +77,13 @@ local scrub_sanity_check = function(scene_offset, bit_to_check)
     return scene_check(scene_offset, bit_to_check, 0x10)
 end
 
+-- Why is there an extra offset of 3 for temp context checks? Who knows.
 local cow_check = function(scene_offset, bit_to_check)
     return scene_check(scene_offset, bit_to_check, 0xC)
-        or check_temp_context({scene_offset, 0x00, bit_to_check})
+        or check_temp_context({scene_offset, 0x00, bit_to_check - 0x03})
 end
 
--- Haven't been able to get DMT and DMC fairy to send instantly
+-- DMT and DMC fairies are weird, their temp context check is special-coded for them
 local great_fairy_magic_check = function(scene_offset, bit_to_check)
     return scene_check(scene_offset, bit_to_check, 0x4)
         or check_temp_context({scene_offset, 0x05, bit_to_check})
@@ -98,6 +99,18 @@ end
 local bean_sale_check = function(scene_offset, bit_to_check)
     return scene_check(scene_offset, bit_to_check, 0xC)
         or check_temp_context({scene_offset, 0x00, 0x16})
+end
+
+-- Medigoron reports 0x00620028 to 0x40002C
+local medigoron_check = function(scene_offset, bit_to_check)
+    return scene_check(scene_offset, bit_to_check, 0xC)
+        or check_temp_context({scene_offset, 0x00, 0x28})
+end
+
+-- Bombchu salesman reports 0x005E0003 to 0x40002C
+local salesman_check = function(scene_offset, bit_to_check)
+    return scene_check(scene_offset, bit_to_check, 0xC)
+        or check_temp_context({scene_offset, 0x00, 0x03})
 end
 
 --Helper method to resolve skulltula lookup location
@@ -575,7 +588,7 @@ local read_death_mountain_trail_checks = function()
     checks["DMT Freestanding PoH"] = on_the_ground_check(0x60, 0x1E)
     checks["DMT Chest"] = chest_check(0x60, 0x01)
     checks["DMT Storms Grotto Chest"] = chest_check(0x3E, 0x17)
-    checks["DMT Great Fairy Reward"] = great_fairy_magic_check(0x3B, 0x18)
+    checks["DMT Great Fairy Reward"] = great_fairy_magic_check(0x3B, 0x18) or check_temp_context({0xFF, 0x05, 0x13})
     checks["DMT Biggoron"] = big_goron_sword_check()
     checks["DMT Cow Grotto Cow"] = cow_check(0x3E, 0x18)
 
@@ -592,7 +605,7 @@ local read_goron_city_checks = function()
     checks["GC Pot Freestanding PoH"] = on_the_ground_check(0x62, 0x1F)
     checks["GC Rolling Goron as Child"] = info_table_check(0x22, 0x6)
     checks["GC Rolling Goron as Adult"] = info_table_check(0x20, 0x1)
-    checks["GC Medigoron"] = on_the_ground_check(0x62, 0x1)
+    checks["GC Medigoron"] = medigoron_check(0x62, 0x1)
     checks["GC Maze Left Chest"] = chest_check(0x62, 0x00)
     checks["GC Maze Right Chest"] = chest_check(0x62, 0x01)
     checks["GC Maze Center Chest"] = chest_check(0x62, 0x02)
@@ -614,7 +627,7 @@ local read_death_mountain_crater_checks = function()
     checks["DMC Volcano Freestanding PoH"] = on_the_ground_check(0x61, 0x08)
     checks["DMC Wall Freestanding PoH"] = on_the_ground_check(0x61, 0x02)
     checks["DMC Upper Grotto Chest"] = chest_check(0x3E, 0x1A)
-    checks["DMC Great Fairy Reward"] = great_fairy_magic_check(0x3B, 0x10)
+    checks["DMC Great Fairy Reward"] = great_fairy_magic_check(0x3B, 0x10) or check_temp_context({0xFF, 0x05, 0x14})
 
     checks["DMC Deku Scrub"] = scrub_sanity_check(0x61, 0x6)
     checks["DMC Deku Scrub Grotto Left"] = scrub_sanity_check(0x23, 0x1)
@@ -961,7 +974,7 @@ end
 
 local read_haunted_wasteland_checks = function()
     local checks = {}
-    checks["Wasteland Bombchu Salesman"] = on_the_ground_check(0x5E, 0x01)
+    checks["Wasteland Bombchu Salesman"] = salesman_check(0x5E, 0x01)
     checks["Wasteland Chest"] = chest_check(0x5E, 0x00)
     checks["Wasteland GS"] = skulltula_check(0x15, 0x1)
     return checks

@@ -8,9 +8,9 @@ import concurrent.futures
 import pickle
 import tempfile
 import zipfile
-from typing import Dict, Tuple, Optional, Set
+from typing import Dict, List, Tuple, Optional, Set
 
-from BaseClasses import MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
+from BaseClasses import Item, MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
 from worlds.alttp.Items import item_name_groups
 from worlds.alttp.Regions import is_main_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
@@ -80,15 +80,30 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     logger.info("Found World Types:")
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
-    numlength = 8
+
+    max_item = 0
+    max_location = 0
+    for cls in AutoWorld.AutoWorldRegister.world_types.values():
+        if cls.item_id_to_name:
+            max_item = max(max_item, max(cls.item_id_to_name))
+            max_location = max(max_location, max(cls.location_id_to_name))
+
+    item_digits = len(str(max_item))
+    location_digits = len(str(max_location))
+    item_count = len(str(max(len(cls.item_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
+    location_count = len(str(max(len(cls.location_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
+    del max_item, max_location
+
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
         if not cls.hidden and len(cls.item_names) > 0:
-            logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} "
-                        f"Items (IDs: {min(cls.item_id_to_name):{numlength}} - "
-                        f"{max(cls.item_id_to_name):{numlength}}) | "
-                        f"{len(cls.location_names):3} "
-                        f"Locations (IDs: {min(cls.location_id_to_name):{numlength}} - "
-                        f"{max(cls.location_id_to_name):{numlength}})")
+            logger.info(f" {name:{longest_name}}: {len(cls.item_names):{item_count}} "
+                        f"Items (IDs: {min(cls.item_id_to_name):{item_digits}} - "
+                        f"{max(cls.item_id_to_name):{item_digits}}) | "
+                        f"{len(cls.location_names):{location_count}} "
+                        f"Locations (IDs: {min(cls.location_id_to_name):{location_digits}} - "
+                        f"{max(cls.location_id_to_name):{location_digits}})")
+
+    del item_digits, location_digits, item_count, location_count
 
     AutoWorld.call_stage(world, "assert_generate")
 
@@ -139,8 +154,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     # temporary home for item links, should be moved out of Main
     for group_id, group in world.groups.items():
-        def find_common_pool(players: Set[int], shared_pool: Set[str]):
-            classifications = collections.defaultdict(int)
+        def find_common_pool(players: Set[int], shared_pool: Set[str]) -> Tuple[
+            Optional[Dict[int, Dict[str, int]]], Optional[Dict[str, int]]
+        ]:
+            classifications: Dict[str, int] = collections.defaultdict(int)
             counters = {player: {name: 0 for name in shared_pool} for player in players}
             for item in world.itempool:
                 if item.player in counters and item.name in shared_pool:
@@ -150,7 +167,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for player in players.copy():
                 if all([counters[player][item] == 0 for item in shared_pool]):
                     players.remove(player)
-                    del(counters[player])
+                    del (counters[player])
 
             if not players:
                 return None, None
@@ -162,14 +179,14 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         counters[player][item] = count
                 else:
                     for player in players:
-                        del(counters[player][item])
+                        del (counters[player][item])
             return counters, classifications
 
         common_item_count, classifications = find_common_pool(group["players"], group["item_pool"])
         if not common_item_count:
             continue
 
-        new_itempool = []
+        new_itempool: List[Item] = []
         for item_name, item_count in next(iter(common_item_count.values())).items():
             for _ in range(item_count):
                 new_item = group["world"].create_item(item_name)
