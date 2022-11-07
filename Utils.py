@@ -256,7 +256,7 @@ def get_default_options() -> OptionsType:
             "savefile": None,
             "disable_save": False,
             "loglevel": "info",
-            "server_password": None,
+            "admin_password": None,
             "disable_item_cheat": False,
             "location_check_points": 1,
             "hint_cost": 10,

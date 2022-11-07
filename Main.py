@@ -29,6 +29,16 @@ ordered_areas = (
 def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = None):
     if not baked_server_options:
         baked_server_options = get_options()["server_options"]
+
+        # TODO: Remove fallback for old settings files some day
+        if "server_password" in baked_server_options:
+            logging.warning("WARNING: Server option `server_password` is deprecated, use `admin_password` instead.")
+            if not baked_server_options["admin_password"]:
+                baked_server_options["admin_password"] = baked_server_options["server_password"]
+
+    # TODO: Remove backwards-compatibility some day
+    baked_server_options["server_password"] = baked_server_options["admin_password"]
+
     if args.outputpath:
         os.makedirs(args.outputpath, exist_ok=True)
         output_path.cached_path = args.outputpath

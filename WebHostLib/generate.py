@@ -37,7 +37,7 @@ def get_meta(options_source: dict) -> dict:
         "remaining_mode": options_source.get("remaining_mode", "disabled"),
         "collect_mode": options_source.get("collect_mode", "disabled"),
         "item_cheat": bool(int(options_source.get("item_cheat", 1))),
-        "server_password": options_source.get("server_password", None),
+        "admin_password": options_source.get("admin_password", None),
     }
     return {"server_options": server_options, "plando_options": list(plando_options)}
 

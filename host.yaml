@@ -13,7 +13,7 @@ server_options:
   disable_save: false
   loglevel: "info"
   # Allows for clients to log on and manage the server.  If this is null, no remote administration is possible.
-  server_password: null
+  admin_password: null
   # Disallow !getitem.
   disable_item_cheat: false
   # Client hint system

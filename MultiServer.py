@@ -107,7 +107,7 @@ class Context:
 
     simple_options = {"hint_cost": int,
                       "location_check_points": int,
-                      "server_password": str,
+                      "admin_password": str,
                       "password": str,
                       "forfeit_mode": str,
                       "remaining_mode": str,
@@ -128,7 +128,7 @@ class Context:
     forced_auto_forfeits: typing.Dict[str, bool]
     non_hintable_names: typing.Dict[str, typing.Set[str]]
 
-    def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
+    def __init__(self, host: str, port: int, admin_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
                  remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2,
                  log_network: bool = False):
@@ -152,7 +152,7 @@ class Context:
         self.locations = {}
         self.host = host
         self.port = port
-        self.server_password = server_password
+        self.admin_password = admin_password
         self.password = password
         self.server = None
         self.countdown_timer = 0
@@ -404,6 +404,10 @@ class Context:
 
         if use_embedded_server_options:
             server_options = decoded_obj.get("server_options", {})
+            if "server_password" in server_options:
+                # TODO: Remove fallback for old archipelago files some day
+                server_options["admin_password"] = server_options["server_password"]
+                del server_options["server_password"]
             self._set_options(server_options)
 
     # saving
@@ -488,9 +492,11 @@ class Context:
             "group_collected": dict(self.group_collected),
             "stored_data": self.stored_data,
             "game_options": {"hint_cost": self.hint_cost, "location_check_points": self.location_check_points,
-                             "server_password": self.server_password, "password": self.password, "forfeit_mode":
+                             "admin_password": self.admin_password, "password": self.password, "forfeit_mode":
                              self.forfeit_mode, "remaining_mode": self.remaining_mode, "collect_mode":
-                             self.collect_mode, "item_cheat": self.item_cheat, "compatibility": self.compatibility}
+                             self.collect_mode, "item_cheat": self.item_cheat, "compatibility": self.compatibility,
+                             "server_password": self.admin_password  # TODO: Remove backwards-compatibility some day
+                             }
 
         }
 
@@ -519,7 +525,11 @@ class Context:
         if "game_options" in savedata:
             self.hint_cost = savedata["game_options"]["hint_cost"]
             self.location_check_points = savedata["game_options"]["location_check_points"]
-            self.server_password = savedata["game_options"]["server_password"]
+            if "admin_password" in savedata["game_options"]:
+                self.admin_password = savedata["game_options"]["admin_password"]
+            else:
+                # TODO: Remove fallback for old save files some day
+                self.admin_password = savedata["game_options"]["server_password"]
             self.password = savedata["game_options"]["password"]
             self.forfeit_mode = savedata["game_options"]["forfeit_mode"]
             self.remaining_mode = savedata["game_options"]["remaining_mode"]
@@ -1097,8 +1107,8 @@ class CommonCommandProcessor(CommandProcessor):
         """List all current options. Warning: lists password."""
         self.output("Current options:")
         for option in self.ctx.simple_options:
-            if option == "server_password" and self.marker == "!":  # Do not display the server password to the client.
-                self.output(f"Option server_password is set to {('*' * random.randint(4, 16))}")
+            if option == "admin_password" and self.marker == "!":  # Do not display the server password to the client.
+                self.output(f"Option admin_password is set to {('*' * random.randint(4, 16))}")
             else:
                 self.output(f"Option {option} is set to {getattr(self.ctx, option)}")
 
@@ -1136,12 +1146,12 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 "!admin login"):  # disallow others from seeing the supplied password, whether or not it is correct.
             output = f"!admin login {('*' * random.randint(4, 16))}"
         elif output.lower().startswith(
-                "!admin /option server_password"):  # disallow others from knowing what the new remote administration password is.
-            output = f"!admin /option server_password {('*' * random.randint(4, 16))}"
+                "!admin /option admin_password"):  # disallow others from knowing what the new remote administration password is.
+            output = f"!admin /option admin_password {('*' * random.randint(4, 16))}"
         self.ctx.notify_all(self.ctx.get_aliased_name(self.client.team,
                                                       self.client.slot) + ': ' + output)  # Otherwise notify the others what is happening.
 
-        if not self.ctx.server_password:
+        if not self.ctx.admin_password:
             self.output("Sorry, Remote administration is disabled")
             return False
 
@@ -1154,7 +1164,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return True
 
         if command.startswith("login "):
-            if command == f"login {self.ctx.server_password}":
+            if command == f"login {self.ctx.admin_password}":
                 self.output("Login successful. You can now issue server side commands.")
                 self.ctx.commandprocessor.client = self.client
                 return True
@@ -2026,10 +2036,15 @@ async def console(ctx: Context):
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     defaults = Utils.get_options()["server_options"]
+    if "server_password" in defaults:
+        # TODO: Remove fallback for old settings files some day
+        logging.warning("Server option `server_password` is deprecated, use `admin_password` instead.")
+        if not defaults["admin_password"]:
+            defaults["admin_password"] = defaults["server_password"]
     parser.add_argument('multidata', nargs="?", default=defaults["multidata"])
     parser.add_argument('--host', default=defaults["host"])
     parser.add_argument('--port', default=defaults["port"], type=int)
-    parser.add_argument('--server_password', default=defaults["server_password"])
+    parser.add_argument('--admin_password', default=defaults["admin_password"])
     parser.add_argument('--password', default=defaults["password"])
     parser.add_argument('--savefile', default=defaults["savefile"])
     parser.add_argument('--disable_save', default=defaults["disable_save"], action='store_true')
@@ -2076,7 +2091,19 @@ def parse_args() -> argparse.Namespace:
     #0 -> recommended for tournaments to force a level playing field, only allow an exact version match
     """)
     parser.add_argument('--log_network', default=defaults["log_network"], action="store_true")
+
+    # TODO: Remove fallback for old command-line option some day
+    parser.add_argument('--server_password', default=argparse.SUPPRESS)
+
     args = parser.parse_args()
+
+    # TODO: Remove fallback for old command-line option some day
+    if "server_password" in args:
+        logging.warning("Option `--server_password` is deprecated, use `--admin_password` instead.")
+        if not args.admin_password:
+            args.admin_password = args.server_password
+        del args.server_password
+
     return args
 
 
@@ -2108,7 +2135,7 @@ async def auto_shutdown(ctx, to_cancel=None):
 async def main(args: argparse.Namespace):
     Utils.init_logging("Server", loglevel=args.loglevel.lower())
 
-    ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
+    ctx = Context(args.host, args.port, args.admin_password, args.password, args.location_check_points,
                   args.hint_cost, not args.disable_item_cheat, args.forfeit_mode, args.collect_mode,
                   args.remaining_mode,
                   args.auto_shutdown, args.compatibility, args.log_network)
