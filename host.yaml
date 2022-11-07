@@ -135,6 +135,12 @@ pokemon_rb_options:
   # True for operating system default program
   # Alternatively, a path to a program to open the .gb file with
   rom_start: true
+
+wargroove_options:
+  # Locate the Wargroove executable on your system.
+  # This is used by the Wargroove client, so it knows where to send communication files to
+  executable: "steamapps/common/Wargroove"
+
 zillion_options:
   # File name of the Zillion US rom
   rom_file: "Zillion (UE) [!].sms"

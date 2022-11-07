@@ -1,4 +1,6 @@
+import os
 import string
+import json
 
 from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification, RegionType
 from .Items import item_table, item_pool
@@ -41,8 +43,8 @@ class WargrooveWorld(World):
     def _get_slot_data(self):
         return {
             'seed': "".join(self.multiworld.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16)),
-            'income_boost': self.multiworld.character[self.player],
-            'co_defense_boost': self.multiworld.ascension[self.player]
+            'income_boost': self.multiworld.income_boost[self.player],
+            'co_defense_boost': self.multiworld.co_defense_boost[self.player]
         }
 
     def generate_basic(self):
@@ -80,6 +82,14 @@ class WargrooveWorld(World):
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(["Card Draw", "Card Draw", "Card Draw", "Relic", "Relic"])
+
+    def fill_slot_data(self):
+        return {
+            "player_id": self.player,
+            "players": {player_id : self.multiworld.player_name[player_id] for player_id in self.multiworld.player_name},
+            'income_boost': self.multiworld.income_boost[self.player].value,
+            'co_defense_boost': self.multiworld.co_defense_boost[self.player].value
+        }
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
