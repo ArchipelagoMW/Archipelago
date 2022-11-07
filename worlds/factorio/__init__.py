@@ -425,7 +425,7 @@ class Factorio(World):
                                 tech_table[name], self.player)
 
         item = FactorioItem(name,
-                            ItemClassification.trap if "Trap" in name else ItemClassification.filler,
+                            ItemClassification.trap_consumable if "Trap" in name else ItemClassification.filler,
                             all_items[name], self.player)
         return item
 

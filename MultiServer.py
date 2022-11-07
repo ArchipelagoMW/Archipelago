@@ -34,6 +34,7 @@ import Utils
 from Utils import version_tuple, restricted_loads, Version, async_start
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
     SlotType
+from BaseClasses import ItemClassification
 
 min_client_version = Version(0, 1, 6)
 print_command_compatability_threshold = Version(0, 3, 5) # Remove backwards compatibility around 0.3.7
@@ -886,7 +887,8 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
 
             total = sum(item.item == item_id for item in get_received_items(ctx, team, target_player, True))
             logging.info('(Team #%d) %s sent %s%s to %s (%s)' % (
-                team + 1, ctx.player_names[(team, slot)], ctx.item_names[item_id], ' #%i' % total if total > 1 else '',
+                team + 1, ctx.player_names[(team, slot)], ctx.item_names[item_id],
+                ' #%i' % total if total > 1 and not flags & ItemClassification.consumable else '',
                 ctx.player_names[(team, target_player)], ctx.location_names[location]))
             info_text = json_format_send_event(new_item, target_player, total)
             ctx.broadcast_team(team, [info_text])
@@ -954,12 +956,12 @@ def json_format_send_event(net_item: NetworkItem, receiving_player: int, total: 
     if net_item.player == receiving_player:
         NetUtils.add_json_text(parts, " found their ")
         NetUtils.add_json_item(parts, net_item.item, net_item.player, net_item.flags)
-        if total > 1:
+        if total > 1 and not net_item.flags & ItemClassification.consumable:
             NetUtils.add_json_item_total(parts, total)
     else:
         NetUtils.add_json_text(parts, " sent ")
         NetUtils.add_json_item(parts, net_item.item, receiving_player, net_item.flags)
-        if total > 1:
+        if total > 1 and not net_item.flags & ItemClassification.consumable:
             NetUtils.add_json_item_total(parts, total)
         NetUtils.add_json_text(parts, " to ")
         NetUtils.add_json_text(parts, receiving_player, type=NetUtils.JSONTypes.player_id)

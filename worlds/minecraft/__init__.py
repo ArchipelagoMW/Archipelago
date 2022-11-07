@@ -173,6 +173,8 @@ class MinecraftWorld(World):
             classification = ItemClassification.progression
         else:
             classification = ItemClassification.filler
+        if item_data.consumable:
+            classification |= ItemClassification.consumable
         item = MinecraftItem(name, classification, item_data.code, self.player)
 
         return item

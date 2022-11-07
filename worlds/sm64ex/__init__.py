@@ -62,7 +62,7 @@ class SM64World(World):
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
         if name == "1Up Mushroom":
-            classification = ItemClassification.filler
+            classification = ItemClassification.filler_consumable
         elif name == "Power Star":
             classification = ItemClassification.progression_skip_balancing
         else:

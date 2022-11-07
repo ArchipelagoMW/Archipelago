@@ -40,13 +40,15 @@ class OOTItem(Item):
         if force_not_advancement:
             classification = ItemClassification.useful
         elif name == "Ice Trap":
-            classification = ItemClassification.trap
+            classification = ItemClassification.trap_consumable
         elif name == 'Gold Skulltula Token':
             classification = ItemClassification.progression_skip_balancing
         elif advancement:
             classification = ItemClassification.progression
         else:
             classification = ItemClassification.filler
+        if type == "Refill" or (type == "Item" and any(name.endswith(suffix) for suffix in ("0)", "1)", "5)"))):
+            classification |= ItemClassification.consumable
         super(OOTItem, self).__init__(name, classification, oot_data_to_ap_id(data, event), player)
         self.type = type
         self.index = index

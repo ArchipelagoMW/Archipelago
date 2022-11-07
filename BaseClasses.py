@@ -1162,14 +1162,23 @@ class ItemClassification(IntFlag):
     progression = 0b0001  # Item that is logically relevant
     useful = 0b0010  # Item that is generally quite useful, but not required for anything logical
     trap = 0b0100  # detrimental or entirely useless (nothing) item
-    skip_balancing = 0b1000  # should technically never occur on its own
+
+    # Non-permanent item (does not affect logic, only whether the amount received is shown in ItemSend messages)
+    consumable = 0b1000
+    filler_consumable = filler | consumable
+    progression_consumable = progression | consumable
+    useful_consumable = useful | consumable
+    trap_consumable = trap | consumable
+
     # Item that is logically relevant, but progression balancing should not touch.
     # Typically currency or other counted items.
-    progression_skip_balancing = 0b1001  # only progression gets balanced
+    # Should technically never occur on its own.
+    skip_balancing = 0b10000
+    progression_skip_balancing = progression | skip_balancing
 
     def as_flag(self) -> int:
         """As Network API flag int."""
-        return int(self & 0b0111)
+        return int(self & 0b1111)
 
 
 class Item:
