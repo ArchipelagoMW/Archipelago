@@ -5,7 +5,6 @@ import os
 import bsdiff4
 import subprocess
 import zipfile
-import hashlib
 from asyncio import StreamReader, StreamWriter
 from typing import List
 
@@ -246,31 +245,16 @@ async def patch_and_run_game(game_version, patch_file, ctx):
     comp_path = base_name + '.gb'
     with open(Utils.local_path(Utils.get_options()["pokemon_rb_options"][f"{game_version}_rom_file"]), "rb") as stream:
         base_rom = bytes(stream.read())
-    try:
-        with open(Utils.local_path('lib', 'worlds', 'pokemon_rb', f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
-            base_patch = bytes(stream.read())
-    except FileNotFoundError:
-        with open(Utils.local_path('worlds', 'pokemon_rb', f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
-            base_patch = bytes(stream.read())
-    base_patched_rom_data = bsdiff4.patch(base_rom, base_patch)
-    basemd5 = hashlib.md5()
-    basemd5.update(base_patched_rom_data)
 
     with zipfile.ZipFile(patch_file, 'r') as patch_archive:
         with patch_archive.open('delta.bsdiff4', 'r') as stream:
             patch = stream.read()
-    patched_rom_data = bsdiff4.patch(base_patched_rom_data, patch)
+    patched_rom_data = bsdiff4.patch(base_rom, patch)
 
-    written_hash = patched_rom_data[0xFFCB:0xFFDB]
-    if written_hash == basemd5.digest():
-        with open(comp_path, "wb") as patched_rom_file:
-            patched_rom_file.write(patched_rom_data)
+    with open(comp_path, "wb") as patched_rom_file:
+        patched_rom_file.write(patched_rom_data)
 
-        async_start(run_game(comp_path))
-    else:
-        msg = "Patch supplied was not generated with the same base patch version as this client. Patching failed."
-        logger.warning(msg)
-        ctx.gui_error('Error', msg)
+    async_start(run_game(comp_path))
 
 
 if __name__ == '__main__':

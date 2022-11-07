@@ -163,7 +163,8 @@ class ChaoRaceChecks(Choice):
     """
     Determines which Chao Races grant checks
     All: Each individual race grants a check
-    Prize: Only the races which grant Chao Toys grant checks (final race of each Beginner and Jewel cup, 4th, 8th, and 12th Challenge Races, 2nd and 4th Hero and Dark Races)
+    Prize: Only the races which grant Chao Toys grant checks (final race of each Beginner and Jewel cup, 4th, 8th, and
+           12th Challenge Races, 2nd and 4th Hero and Dark Races)
     """
     display_name = "Chao Race Checks"
     option_all = 0
