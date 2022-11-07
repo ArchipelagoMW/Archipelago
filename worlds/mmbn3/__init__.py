@@ -7,8 +7,8 @@ from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, 
     LocationProgressType
 from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
 from ..AutoWorld import WebWorld, World
-from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequences
-from .Locations import MMBN3Location, all_locations, setup_locations, location_table, location_data_table, \
+from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequences, items_by_id, ItemType
+from .Locations import Location, MMBN3Location, all_locations, setup_locations, location_table, location_data_table, \
     excluded_locations
 from .Options import MMBN3Options
 from .Regions import regions
@@ -56,7 +56,7 @@ class MMBN3World(World):
         super().__init__(world, player)
 
     def create_item(self, name: str) -> "Item":
-        item = Items.item_table[name]
+        item = item_table[name]
         return MMBN3Item(item.itemName, item.progression, item.code, self.player)
 
     def create_event(self, event: str):
@@ -74,10 +74,10 @@ class MMBN3World(World):
                 ap_item = location.item
                 item_id = ap_item.code
                 if item_id is not None:
-                    if item_id in Items.items_by_id:
-                        item = Items.items_by_id[item_id]
+                    if item_id in items_by_id:
+                        item = items_by_id[item_id]
                     else:
-                        item = ItemData(item_id, ap_item.name, ap_item.classification, Items.ItemType.External)
+                        item = ItemData(item_id, ap_item.name, ap_item.classification, ItemType.External)
                         item = item._replace(recipient=self.multiworld.player_name[ap_item.player])
                     location_data = location_data_table[location_name]
                     # print("Placing item "+item.itemName+" at location "+location_data.name)
