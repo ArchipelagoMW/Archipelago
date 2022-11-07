@@ -18,6 +18,12 @@ window.addEventListener('load', () => {
         info: false,
         dom: "t",
         stateSave: true,
+        stateSaveCallback: function(settings,data) {
+            localStorage.setItem(`DataTables_${settings.sInstance}_/tracker`, JSON.stringify(data));
+        },
+        stateLoadCallback: function(settings) {
+            return JSON.parse(localStorage.getItem(`DataTables_${settings.sInstance}_/tracker`));
+        },
         columnDefs: [
             {
                 targets: 'hours',
