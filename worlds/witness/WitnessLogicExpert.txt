@@ -313,7 +313,7 @@ Keep (Keep) - Main Island - True - Keep 2nd Maze - 0x01954 - Keep 2nd Pressure P
 Door - 0x01954 (Hedge Maze 1 Exit) - 0x00139
 Door - 0x01BEC (Pressure Plates 1 Exit) - 0x033EA
 
-Keep 2nd Maze (Keep) - Keep - 0x018CE - Keep 3rd Maze - True:
+Keep 2nd Maze (Keep) - Keep - 0x018CE - Keep 3rd Maze - 0x019D8:
 Door - 0x018CE (Hedge Maze 2 Shortcut) - 0x00139
 158194 - 0x019DC (Hedge Maze 2) - True - Environment
 Door - 0x019D8 (Hedge Maze 2 Exit) - 0x019DC

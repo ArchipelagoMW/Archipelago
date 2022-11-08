@@ -112,6 +112,9 @@ function on_force_created(event)
 {%- if silo == 2 %}
     check_spawn_silo(force)
 {%- endif %}
+{%- for tech_name in useless_technologies %}
+    force.technologies.{{ tech_name }}.researched = true
+{%- endfor %}
 end
 script.on_event(defines.events.on_force_created, on_force_created)
 
