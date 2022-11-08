@@ -217,3 +217,45 @@ alt_final_mission_locations = {
     "Gates of Hell": "Gates of Hell: Victory",
     "Shatter the Sky": "Shatter the Sky: Victory"
 }
+
+no_build_starting_mission_locations = {
+    "Liberation Day": "Liberation Day: Victory",
+    "Breakout": "Breakout: Victory",
+    "Ghost of a Chance": "Ghost of a Chance: Victory",
+    "Piercing the Shroud": "Piercing the Shroud: Victory",
+    "Whispers of Doom": "Whispers of Doom: Victory",
+    "Belly of the Beast": "Belly of the Beast: Victory",
+}
+
+build_starting_mission_locations = {
+    "Zero Hour": "Zero Hour: First Group Rescued",
+    "Evacuation": "Evacuation: First Chysalis",
+    "Devil's Playground": "Devil's Playground: Tosh's Miners"
+}
+
+advanced_starting_mission_locations = {
+    "Smash and Grab": "Smash and Grab: First Relic",
+    "The Great Train Robbery": "The Great Train Robbery: North Defiler"
+}
+
+
+def get_starting_mission_locations(world: MultiWorld, player: int) -> Set[str]:
+    if get_option_value(world, player, 'shuffle_no_build') or get_option_value(world, player, 'mission_order') < 2:
+        # Always start with a no-build mission unless explicitly relegating them
+        # Vanilla and Vanilla Shuffled always start with a no-build even when relegated
+        return no_build_starting_mission_locations
+    elif get_option_value(world, player, 'required_tactics') > 0:
+        # Advanced Tactics/No Logic add more starting missions to the pool
+        return {**build_starting_mission_locations, **advanced_starting_mission_locations}
+    else:
+        # Standard starting missions when relegate is on
+        return build_starting_mission_locations
+
+
+alt_final_mission_locations = {
+    "Maw of the Void": "Maw of the Void: Victory",
+    "Engine of Destruction": "Engine of Destruction: Victory",
+    "Supernova": "Supernova: Victory",
+    "Gates of Hell": "Gates of Hell: Victory",
+    "Shatter the Sky": "Shatter the Sky: Victory"
+}

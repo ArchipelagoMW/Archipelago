@@ -458,3 +458,33 @@ class FactorioScienceLocation(FactorioLocation):
     @property
     def factorio_ingredients(self) -> typing.List[typing.Tuple[str, int]]:
         return [(name, count) for name, count in self.ingredients.items()]
+
+
+class FactorioLocation(Location):
+    game: str = Factorio.game
+
+
+class FactorioScienceLocation(FactorioLocation):
+    complexity: int
+    revealed: bool = False
+
+    # Factorio technology properties:
+    ingredients: typing.Dict[str, int]
+    count: int
+
+    def __init__(self, player: int, name: str, address: int, parent: Region):
+        super(FactorioScienceLocation, self).__init__(player, name, address, parent)
+        # "AP-{Complexity}-{Cost}"
+        self.complexity = int(self.name[3]) - 1
+        self.rel_cost = int(self.name[5:], 16)
+
+        self.ingredients = {Factorio.ordered_science_packs[self.complexity]: 1}
+        for complexity in range(self.complexity):
+            if parent.world.tech_cost_mix[self.player] > parent.world.random.randint(0, 99):
+                self.ingredients[Factorio.ordered_science_packs[complexity]] = 1
+        self.count = parent.world.random.randint(parent.world.min_tech_cost[self.player],
+                                                 parent.world.max_tech_cost[self.player])
+
+    @property
+    def factorio_ingredients(self) -> typing.List[typing.Tuple[str, int]]:
+        return [(name, count) for name, count in self.ingredients.items()]
