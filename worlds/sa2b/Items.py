@@ -78,6 +78,16 @@ trap_table = {
     ItemName.tiny_trap:     ItemData(0xFF0033, False, True),
 }
 
+emeralds_table = {
+    ItemName.white_emerald:  ItemData(0xFF0040, True),
+    ItemName.red_emerald:    ItemData(0xFF0041, True),
+    ItemName.cyan_emerald:   ItemData(0xFF0042, True),
+    ItemName.purple_emerald: ItemData(0xFF0043, True),
+    ItemName.green_emerald:  ItemData(0xFF0044, True),
+    ItemName.yellow_emerald: ItemData(0xFF0045, True),
+    ItemName.blue_emerald:   ItemData(0xFF0046, True),
+}
+
 event_table = {
     ItemName.maria: ItemData(0xFF001D, True),
 }
@@ -88,10 +98,13 @@ item_table = {
     **upgrades_table,
     **junk_table,
     **trap_table,
+    **emeralds_table,
     **event_table,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
+
+item_groups: typing.Dict[str, str] = {"Chaos Emeralds": [item_name for item_name, data in emeralds_table.items()]}
 
 ALTTPWorld.pedestal_credit_texts[item_table[ItemName.sonic_light_shoes].code] = "and the Soap Shoes"
 ALTTPWorld.pedestal_credit_texts[item_table[ItemName.shadow_air_shoes].code] = "and the Soap Shoes"

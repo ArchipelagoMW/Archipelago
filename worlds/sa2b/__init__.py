@@ -2,7 +2,7 @@ import typing
 import math
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from .Items import SA2BItem, ItemData, item_table, upgrades_table, junk_table, trap_table
+from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, trap_table, item_groups
 from .Locations import SA2BLocation, all_locations, setup_locations
 from .Options import sa2b_options
 from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
@@ -53,6 +53,7 @@ class SA2BWorld(World):
     topology_present = True
     data_version = 3
 
+    item_name_groups = item_groups
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
 
@@ -68,6 +69,7 @@ class SA2BWorld(World):
     def _get_slot_data(self):
         return {
             "ModVersion": 101,
+            "Goal": self.multiworld.goal[self.player].value,
             "MusicMap": self.music_map,
             "MusicShuffle": self.multiworld.music_shuffle[self.player].value,
             "Narrator": self.multiworld.narrator[self.player].value,
@@ -142,7 +144,10 @@ class SA2BWorld(World):
         self.gate_bosses = get_gate_bosses(self.multiworld, self.player)
 
     def generate_basic(self):
-        self.multiworld.get_location(LocationName.biolizard, self.player).place_locked_item(self.create_item(ItemName.maria))
+        if self.multiworld.goal[self.player].value == 0 or self.multiworld.goal[self.player].value == 2:
+            self.multiworld.get_location(LocationName.finalhazard, self.player).place_locked_item(self.create_item(ItemName.maria))
+        elif self.multiworld.goal[self.player].value == 1:
+            self.multiworld.get_location(LocationName.green_hill, self.player).place_locked_item(self.create_item(ItemName.maria))
 
         itempool: typing.List[SA2BItem] = []
 
@@ -153,6 +158,11 @@ class SA2BWorld(World):
         # Fill item pool with all required items
         for item in {**upgrades_table}:
             itempool += self._create_items(item)
+
+        if self.multiworld.goal[self.player].value == 1 or self.multiworld.goal[self.player].value == 2:
+            # Some flavor of Chaos Emerald Hunt
+            for item in {**emeralds_table}:
+                itempool += self._create_items(item)
 
         # Cap at 180 Emblems
         raw_emblem_count = total_required_locations - len(itempool)
@@ -316,14 +326,15 @@ class SA2BWorld(World):
         set_rules(self.multiworld, self.player, self.gate_bosses)
 
     def write_spoiler(self, spoiler_handle: typing.TextIO):
-        spoiler_handle.write("\n")
-        header_text = "Sonic Adventure 2 Bosses for {}:\n"
-        header_text = header_text.format(self.multiworld.player_name[self.player])
-        spoiler_handle.write(header_text)
-        for x in range(len(self.gate_bosses.values())):
-            text = "Gate {0} Boss: {1}\n"
-            text = text.format((x + 1), get_boss_name(self.gate_bosses[x + 1]))
-            spoiler_handle.writelines(text)
+        if self.multiworld.number_of_level_gates[self.player].value > 0:
+            spoiler_handle.write("\n")
+            header_text = "Sonic Adventure 2 Bosses for {}:\n"
+            header_text = header_text.format(self.multiworld.player_name[self.player])
+            spoiler_handle.write(header_text)
+            for x in range(len(self.gate_bosses.values())):
+                text = "Gate {0} Boss: {1}\n"
+                text = text.format((x + 1), get_boss_name(self.gate_bosses[x + 1]))
+                spoiler_handle.writelines(text)
 
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
         if self.topology_present:
@@ -342,7 +353,8 @@ class SA2BWorld(World):
                 LocationName.chao_garden_expert_region,
             ]
             er_hint_data = {}
-            for gate_name in gate_names:
+            for i in range(self.multiworld.number_of_level_gates[self.player].value):
+                gate_name = gate_names[i]
                 gate_region = self.multiworld.get_region(gate_name, self.player)
                 if not gate_region:
                     continue

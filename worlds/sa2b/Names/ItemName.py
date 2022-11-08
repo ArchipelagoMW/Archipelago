@@ -49,4 +49,12 @@ timestop_trap = "Chaos Control Trap"
 confuse_trap  = "Confusion Trap"
 tiny_trap     = "Tiny Trap"
 
+white_emerald  = "White Chaos Emerald"
+red_emerald    = "Red Chaos Emerald"
+cyan_emerald   = "Cyan Chaos Emerald"
+purple_emerald = "Purple Chaos Emerald"
+green_emerald  = "Green Chaos Emerald"
+yellow_emerald = "Yellow Chaos Emerald"
+blue_emerald   = "Blue Chaos Emerald"
+
 maria = "What Maria Wanted"

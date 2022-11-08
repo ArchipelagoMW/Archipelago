@@ -350,9 +350,9 @@ cosmic_wall_2        = "Cosmic Wall - 2"
 cosmic_wall_3        = "Cosmic Wall - 3"
 cosmic_wall_4        = "Cosmic Wall - 4"
 cosmic_wall_5        = "Cosmic Wall - 5"
-cosmic_wall_chao_1   = "Cosmic Wall - Chao 1"
-cosmic_wall_chao_2   = "Cosmic Wall - Chao 2"
-cosmic_wall_chao_3   = "Cosmic Wall - Chao 3"
+cosmic_wall_chao_1   = "Cosmic Wall - Chao Key 1"
+cosmic_wall_chao_2   = "Cosmic Wall - Chao Key 2"
+cosmic_wall_chao_3   = "Cosmic Wall - Chao Key 3"
 cosmic_wall_pipe_1   = "Cosmic Wall - Pipe 1"
 cosmic_wall_pipe_2   = "Cosmic Wall - Pipe 2"
 cosmic_wall_pipe_3   = "Cosmic Wall - Pipe 3"
@@ -518,8 +518,10 @@ chao_expert_karate   = "Chao Karate - Expert"
 chao_super_karate    = "Chao Karate - Super"
 
 # Other Definitions
-green_hill = "Green Hill"
-biolizard  = "Biolizard"
+green_hill        = "Green Hill"
+green_hill_chao_1 = "Green Hill - Chao Key 1"
+biolizard         = "Biolizard"
+finalhazard       = "Finalhazard"
 
 
 # Region Definitions
@@ -576,6 +578,8 @@ mad_space_region     = "Mad Space"
 cannon_core_region = "Cannon Core"
 
 biolizard_region = "Biolizard"
+
+green_hill_region  = "Green Hill"
 
 chao_garden_beginner_region     = "Chao Garden - Beginner"
 chao_garden_intermediate_region = "Chao Garden - Intermediate"
