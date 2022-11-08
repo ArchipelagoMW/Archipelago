@@ -47,7 +47,8 @@ class StructureCompasses(DefaultOnToggle):
 
 
 class BeeTraps(Range): 
-    """Replaces a percentage of junk items with bee traps, which spawn multiple angered bees around every player when received."""
+    """Replaces a percentage of junk items with bee traps, which spawn multiple angered bees around every player when
+    received."""
     display_name = "Bee Trap Percentage"
     range_start = 0
     range_end = 100

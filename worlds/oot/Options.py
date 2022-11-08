@@ -1,7 +1,32 @@
 import typing
+import random
 from Options import Option, DefaultOnToggle, Toggle, Range, OptionList, DeathLink
 from .LogicTricks import normalized_name_tricks
 from .ColorSFXOptions import *
+
+
+class TrackRandomRange(Range):
+    """Overrides normal from_any behavior to track whether the option was randomized at generation time."""
+    supports_weighting = False
+    randomized: bool = False
+
+    @classmethod
+    def from_any(cls, data: typing.Any) -> Range:
+        if type(data) is list:
+            val = random.choices(data)[0]
+            ret = super().from_any(val)
+            if not isinstance(val, int) or len(data) > 1:
+                ret.randomized = True
+            return ret
+        if type(data) is not dict:
+            return super().from_any(data)
+        if any(data.values()):
+            val = random.choices(list(data.keys()), weights=list(map(int, data.values())))[0]
+            ret = super().from_any(val)
+            if not isinstance(val, int) or len(list(filter(bool, map(int, data.values())))) > 1:
+                ret.randomized = True
+            return ret
+        raise RuntimeError(f"All options specified in \"{cls.display_name}\" are weighted as zero.")
 
 
 class Logic(Choice): 
@@ -70,7 +95,7 @@ class Bridge(Choice):
     default = 3
 
 
-class Trials(Range):
+class Trials(TrackRandomRange):
     """Set the number of required trials in Ganon's Castle."""
     display_name = "Ganon's Trials Count"
     range_start = 0
@@ -96,7 +121,8 @@ class StartingAge(Choice):
 
 
 class InteriorEntrances(Choice): 
-    """Shuffles interior entrances. "Simple" shuffles houses and Great Fairies; "All" includes Windmill, Link's House, Temple of Time, and Kak potion shop."""
+    """Shuffles interior entrances. "Simple" shuffles houses and Great Fairies; "All" includes Windmill, Link's House,
+    Temple of Time, and Kak potion shop."""
     display_name = "Shuffle Interior Entrances"
     option_off = 0
     option_simple = 1
@@ -135,7 +161,8 @@ class SpawnPositions(Toggle):
 
 
 class MixEntrancePools(Choice):
-    """Shuffles entrances into a mixed pool instead of separate ones. "indoor" keeps overworld entrances separate; "all" mixes them in."""
+    """Shuffles entrances into a mixed pool instead of separate ones. "indoor" keeps overworld entrances separate; "all"
+     mixes them in."""
     display_name = "Mix Entrance Pools"
     option_off = 0
     option_indoor = 1
@@ -143,7 +170,8 @@ class MixEntrancePools(Choice):
 
 
 class DecoupleEntrances(Toggle):
-    """Decouple entrances when shuffling them. Also adds the one-way entrance from Gerudo Valley to Lake Hylia if overworld is shuffled."""
+    """Decouple entrances when shuffling them. Also adds the one-way entrance from Gerudo Valley to Lake Hylia if
+    overworld is shuffled."""
     display_name = "Decouple Entrances"
 
 
@@ -161,7 +189,8 @@ class TriforceGoal(Range):
 
 
 class ExtraTriforces(Range):
-    """Percentage of additional Triforce pieces in the pool. With high numbers, you may need to randomize additional locations to have enough items."""
+    """Percentage of additional Triforce pieces in the pool. With high numbers, you may need to randomize additional
+    locations to have enough items."""
     display_name = "Percentage of Extra Triforce Pieces"
     range_start = 0
     range_end = 100
@@ -169,11 +198,12 @@ class ExtraTriforces(Range):
 
 
 class LogicalChus(Toggle):
-    """Bombchus are properly considered in logic. The first found pack will have 20 chus; Kokiri Shop and Bazaar sell refills; bombchus open Bombchu Bowling."""
+    """Bombchus are properly considered in logic. The first found pack will have 20 chus; Kokiri Shop and Bazaar sell
+    refills; bombchus open Bombchu Bowling."""
     display_name = "Bombchus Considered in Logic"
 
 
-class MQDungeons(Range):
+class MQDungeons(TrackRandomRange):
     """Number of MQ dungeons. The dungeons to replace are randomly selected."""
     display_name = "Number of MQ Dungeons"
     range_start = 0
@@ -500,7 +530,8 @@ class CompleteMaskQuest(Toggle):
 
 
 class UsefulCutscenes(Toggle):
-    """Reenables the Poe cutscene in Forest Temple, Darunia in Fire Temple, and Twinrova introduction. Mostly useful for glitched."""
+    """Reenables the Poe cutscene in Forest Temple, Darunia in Fire Temple, and Twinrova introduction. Mostly useful for
+     glitched."""
     display_name = "Enable Useful Cutscenes"
 
 
@@ -821,8 +852,10 @@ sfx_options: typing.Dict[str, type(Option)] = {
 
 class LogicTricks(OptionList):
     """Set various tricks for logic in Ocarina of Time. 
-Format as a comma-separated list of "nice" names: ["Fewer Tunic Requirements", "Hidden Grottos without Stone of Agony"].
-A full list of supported tricks can be found at https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LogicTricks.py"""
+    Format as a comma-separated list of "nice" names: ["Fewer Tunic Requirements", "Hidden Grottos without Stone of Agony"].
+    A full list of supported tricks can be found at:
+    https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LogicTricks.py
+    """
     display_name = "Logic Tricks"
     valid_keys = frozenset(normalized_name_tricks)
     valid_keys_casefold = True
