@@ -49,6 +49,7 @@ class MultiWorld():
 
     accessibility: Dict[int, Options.Accessibility]
     early_items: Dict[int, Dict[str, int]]
+    local_early_items: Dict[int, Dict[str, int]]
     local_items: Dict[int, Options.LocalItems]
     non_local_items: Dict[int, Options.NonLocalItems]
     progression_balancing: Dict[int, Options.ProgressionBalancing]
@@ -95,6 +96,7 @@ class MultiWorld():
         self.shuffle_ganon = True
         self.spoiler = Spoiler(self)
         self.early_items = {player: {} for player in self.player_ids}
+        self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
         self.fix_trock_doors = self.AttributeProxy(
             lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')

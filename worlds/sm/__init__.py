@@ -127,8 +127,7 @@ class SMWorld(World):
         self.multiworld.local_items[self.player].value.add('No Energy')
 
         if (self.variaRando.args.morphPlacement == "early"):
-            self.multiworld.local_items[self.player].value.add('Morph Ball')
-            self.multiworld.early_items[self.player]['Morph Ball'] = 1
+            self.multiworld.local_early_items[self.player]['Morph Ball'] = 1
 
         self.remote_items = self.multiworld.remote_items[self.player]
 

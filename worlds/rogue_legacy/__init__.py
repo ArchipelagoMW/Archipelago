@@ -65,13 +65,11 @@ class RLWorld(World):
                     f"Expected {int(self.setting('number_of_children'))}, Got {additional_sir_names}")
 
         if self.setting("vendors") == "early":
-            self.multiworld.early_items[self.player]["Blacksmith"] = 1
-            self.multiworld.early_items[self.player]["Enchantress"] = 1
-            self.multiworld.local_items[self.player].value |= {"Blacksmith", "Enchantress"}
+            self.multiworld.local_early_items[self.player]["Blacksmith"] = 1
+            self.multiworld.local_early_items[self.player]["Enchantress"] = 1
 
         if self.setting("architect") == "early":
-            self.multiworld.early_items[self.player]["Architect"] = 1
-            self.multiworld.local_items[self.player].value.add("Architect")
+            self.multiworld.local_early_items[self.player]["Architect"] = 1
 
     def generate_basic(self):
         self.item_pool = []
