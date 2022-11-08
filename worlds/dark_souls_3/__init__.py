@@ -15,7 +15,7 @@ from .data.locations_data import location_dictionary, fire_link_shrine_table, \
     untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table, progressive_locations
 from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
-from ..generic.Rules import set_rule
+from ..generic.Rules import set_rule, add_item_rule
 
 
 class DarkSouls3Web(WebWorld):
@@ -164,7 +164,7 @@ class DarkSouls3World(World):
             for name, address in location_table.items():
                 location = DarkSouls3Location(self.player, name, self.location_name_to_id[name], new_region)
                 if region_name == "Menu":
-                    location.item_rule = staticmethod(lambda item: not item.advancement)
+                    add_item_rule(location, lambda item: not item.advancement)
                 new_region.locations.append(location)
         self.multiworld.regions.append(new_region)
         return new_region
