@@ -32,7 +32,7 @@ AllowNoIcons=yes
 SetupIconFile={#MyAppIcon}
 UninstallDisplayIcon={app}\{#MyAppExeName}
 ; you will likely have to remove the following signtool line when testing/debugging locally. Don't include that change in PRs.
-SignTool= signtool
+
 LicenseFile= LICENSE
 WizardStyle= modern
 SetupLogging=yes
@@ -451,13 +451,10 @@ begin
     Result := not (SoEROMFilePage.Values[0] = '')
   else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
     Result := not (OoTROMFilePage.Values[0] = '')
-<<<<<<< HEAD
   else if (assigned(BN3ROMFilePage)) and (CurPageID = BN3ROMFilePage.ID) then
     Result := not (BN3ROMFilePage.Values[0] = '')
-=======
   else if (assigned(ZlROMFilePage)) and (CurPageID = ZlROMFilePage.ID) then
     Result := not (ZlROMFilePage.Values[0] = '')
->>>>>>> upstream/main
   else
     Result := True;
 end;
