@@ -15,6 +15,13 @@ class WargrooveLogic(LogicMixin):
 
 
 def set_rules(world: MultiWorld, player: int):
+
+    # Final Level
+    set_rule(world.get_location('Wargroove Finale: Victory', player),
+             lambda state: state._wargroove_has_item(player, "Final Bridges") and
+                           state._wargroove_has_item(player, "Final Walls") and
+                           state._wargroove_has_item(player, "Final Sickle") and
+                           state._wargroove_has_item(player, 'Knight'))
     # Level 1
     set_rule(world.get_location('Humble Beginnings: Caesar', player), lambda state: True)
     set_rule(world.get_location('Humble Beginnings: Chest 1', player), lambda state: True)
@@ -68,9 +75,9 @@ def set_rules(world: MultiWorld, player: int):
              lambda state: state._wargroove_has_item(player, 'Knight'))
 
     # Levels 4AA-4AC
-    set_rule(world.get_location('Surrounded: Victory 1', player),
+    set_rule(world.get_location('Surrounded: Caesar', player),
              lambda state: state._wargroove_has_region(player, 'Surrounded'))
-    set_rule(world.get_location('Surrounded: Victory 2', player),
+    set_rule(world.get_location('Surrounded: Victory', player),
              lambda state: state._wargroove_has_region(player, 'Surrounded'))
     set_rule(world.get_location('Darkest Knight: Victory', player),
              lambda state: state._wargroove_has_item_and_region(player, 'Spearman', 'Darkest Knight'))

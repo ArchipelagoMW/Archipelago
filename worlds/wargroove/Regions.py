@@ -68,8 +68,8 @@ def create_regions(world, player: int):
         ], ['Rebel Village']),
 
         create_region(world, player, 'Surrounded', [
-            'Surrounded: Victory 1',
-            'Surrounded: Victory 2',
+            'Surrounded: Caesar',
+            'Surrounded: Victory',
         ]),
 
         create_region(world, player, 'Darkest Knight', [
