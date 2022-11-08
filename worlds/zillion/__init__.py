@@ -424,6 +424,9 @@ class ZillionWorld(World):
             classification = ItemClassification.progression
             if not zz_item.is_progression:
                 classification = ItemClassification.progression_skip_balancing
+        if name in {"Empty", "ID Card", "Red ID Card", "Bread"}:
+            # Red ID Card is not consumable, but there's no reason to care about more than 1
+            classification |= ItemClassification.consumable
 
         z_item = ZillionItem(name, classification, item_id, self.player, zz_item)
         return z_item
