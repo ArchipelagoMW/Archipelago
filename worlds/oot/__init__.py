@@ -764,6 +764,8 @@ class OOTWorld(World):
                 self.multiworld.itempool.remove(item)
             fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), shop_locations, shop_prog, True, True)
             fast_fill(self.multiworld, shop_junk, shop_locations)
+            for loc in shop_locations:
+                loc.locked = True
         set_shop_rules(self)  # sets wallet requirements on shop items, must be done after they are filled
 
         # If skip child zelda is active and Song from Impa is unfilled, put a local giveable item into it.
