@@ -118,6 +118,8 @@ class SMWSNIClient(SNIClient):
 
         return True
 
+    async def validate_rom(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
     def add_message_to_queue(self, new_message):
 

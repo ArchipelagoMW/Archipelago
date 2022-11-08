@@ -541,9 +541,8 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     rom.write_bytes(0xBFC700, PatchName.tlb_modifiers)
 
     # On-the-fly scene object data modifier hook
-    rom.write_bytes(0xEAAC8, [0x0C, 0x0F, 0xF2, 0x40])  # JAL 0x803FC900
-    rom.write_bytes(0xEAACC, [0xAC, 0xC2, 0x00, 0x00])  # SW V0, 0x0000 (A2)
-    rom.write_bytes(0xBFC900, PatchName.scene_data_modifiers)
+    rom.write_bytes(0xEAB04, [0x08, 0x0F, 0xF2, 0x40])  # J 0x803FC900
+    rom.write_bytes(0xBFC8F8, PatchName.scene_data_modifiers)
 
     # Fix locked doors to check the key counters instead of their vanilla key locations' flags
     # Pickup flag check modifications:

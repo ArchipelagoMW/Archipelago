@@ -64,14 +64,14 @@ class CV64World(World):
 
     def _get_slot_data(self):
         return {
-            "death_link": self.world.death_link[self.player].value,
+            "death_link": self.multiworld.death_link[self.player].value,
             "active_levels": self.active_level_list,
             "active_warps": self.active_warp_list
         }
 
     def create_regions(self):
-        location_table = setup_locations(self.world, self.player)
-        create_regions(self.world, self.player, location_table)
+        location_table = setup_locations(self.multiworld, self.player)
+        create_regions(self.multiworld, self.player, location_table)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
@@ -97,7 +97,7 @@ class CV64World(World):
         return [self.create_item(name)] * data.quantity
 
     def set_rules(self):
-        set_rules(self.world, self.player)
+        set_rules(self.multiworld, self.player)
 
     def generate_basic(self):
         itempool: typing.List[CV64Item] = []
@@ -106,35 +106,35 @@ class CV64World(World):
         total_required_locations = 212
 
         # number_of_specials = 0
-        self.world.get_location(LocationName.the_end, self.player).place_locked_item(self.create_item(ItemName.victory))
+        self.multiworld.get_location(LocationName.the_end, self.player).place_locked_item(self.create_item(ItemName.victory))
 
-        self.world.get_location(LocationName.forest_boss_one, self.player)\
+        self.multiworld.get_location(LocationName.forest_boss_one, self.player)\
             .place_locked_item(self.create_item(ItemName.bone_mom_one))
-        self.world.get_location(LocationName.forest_boss_two, self.player)\
+        self.multiworld.get_location(LocationName.forest_boss_two, self.player)\
             .place_locked_item(self.create_item(ItemName.forest_weretiger))
-        self.world.get_location(LocationName.forest_boss_three, self.player)\
+        self.multiworld.get_location(LocationName.forest_boss_three, self.player)\
             .place_locked_item(self.create_item(ItemName.bone_mom_two))
-        self.world.get_location(LocationName.cw_boss, self.player)\
+        self.multiworld.get_location(LocationName.cw_boss, self.player)\
             .place_locked_item(self.create_item(ItemName.w_dragons))
-        self.world.get_location(LocationName.villa_boss, self.player)\
+        self.multiworld.get_location(LocationName.villa_boss, self.player)\
             .place_locked_item(self.create_item(ItemName.vamp_couple))
-        self.world.get_location(LocationName.cc_boss_one, self.player)\
+        self.multiworld.get_location(LocationName.cc_boss_one, self.player)\
             .place_locked_item(self.create_item(ItemName.behemoth))
-        self.world.get_location(LocationName.cc_boss_two, self.player)\
+        self.multiworld.get_location(LocationName.cc_boss_two, self.player)\
             .place_locked_item(self.create_item(ItemName.rosamilla))
-        self.world.get_location(LocationName.dt_boss_one, self.player)\
+        self.multiworld.get_location(LocationName.dt_boss_one, self.player)\
             .place_locked_item(self.create_item(ItemName.werejaguar))
-        self.world.get_location(LocationName.dt_boss_two, self.player)\
+        self.multiworld.get_location(LocationName.dt_boss_two, self.player)\
             .place_locked_item(self.create_item(ItemName.werewolf))
-        self.world.get_location(LocationName.dt_boss_three, self.player)\
+        self.multiworld.get_location(LocationName.dt_boss_three, self.player)\
             .place_locked_item(self.create_item(ItemName.werebull))
-        self.world.get_location(LocationName.dt_boss_four, self.player)\
+        self.multiworld.get_location(LocationName.dt_boss_four, self.player)\
             .place_locked_item(self.create_item(ItemName.weretiger))
-        self.world.get_location(LocationName.roc_boss, self.player)\
+        self.multiworld.get_location(LocationName.roc_boss, self.player)\
             .place_locked_item(self.create_item(ItemName.deathtrice))
 
-        number_of_special1s = self.world.total_special1s[self.player].value
-        number_of_special2s = self.world.total_special2s[self.player].value
+        number_of_special1s = self.multiworld.total_special1s[self.player].value
+        number_of_special2s = self.multiworld.total_special2s[self.player].value
 
         itempool += [self.create_item(ItemName.special_one) for _ in range(number_of_special1s)]
         itempool += [self.create_item(ItemName.roast_chicken) for _ in range(21)]
@@ -161,15 +161,15 @@ class CV64World(World):
         itempool += [self.create_item(ItemName.clocktower_key_two)]
         itempool += [self.create_item(ItemName.clocktower_key_three)]
 
-        if self.world.draculas_condition[self.player].value == 3:
+        if self.multiworld.draculas_condition[self.player].value == 3:
             itempool += [self.create_item(ItemName.special_two) for _ in range(number_of_special2s)]
 
-        if self.world.carrie_logic[self.player]:
+        if self.multiworld.carrie_logic[self.player]:
             itempool += [self.create_item(ItemName.roast_beef)]
             itempool += [self.create_item(ItemName.moon_card)]
             total_required_locations += 2
 
-        if self.world.lizard_generator_items[self.player]:
+        if self.multiworld.lizard_generator_items[self.player]:
             itempool += [self.create_item(ItemName.powerup)]
             itempool += [self.create_item(ItemName.sun_card)]
             total_required_locations += 6
@@ -177,20 +177,20 @@ class CV64World(World):
         total_junk_count = total_required_locations - len(itempool)
 
         junk_pool = []
-        for item_name in self.world.random.choices(list(junk_table.keys()), k=total_junk_count):
+        for item_name in self.multiworld.random.choices(list(junk_table.keys()), k=total_junk_count):
             junk_pool += [self.create_item(item_name)]
 
         itempool += junk_pool
 
         self.active_level_list = level_list.copy()
-        self.active_warp_list = self.world.random.sample(self.active_level_list, 7)
+        self.active_warp_list = self.multiworld.random.sample(self.active_level_list, 7)
 
-        if self.world.stage_shuffle[self.player]:
+        if self.multiworld.stage_shuffle[self.player]:
             self.active_level_list.remove(LocationName.villa)
             self.active_level_list.remove(LocationName.castle_center)
             self.active_level_list.remove(LocationName.castle_keep)
-            self.world.random.shuffle(self.active_level_list)
-            self.villa_cc_ids = self.world.random.sample(range(0, 6), 2)
+            self.multiworld.random.shuffle(self.active_level_list)
+            self.villa_cc_ids = self.multiworld.random.sample(range(0, 6), 2)
             if self.villa_cc_ids[0] < self.villa_cc_ids[1]:
                 self.active_level_list.insert(self.villa_cc_ids[0], LocationName.villa)
                 self.active_level_list.insert(self.villa_cc_ids[1] + 2, LocationName.castle_center)
@@ -199,33 +199,33 @@ class CV64World(World):
                 self.active_level_list.insert(self.villa_cc_ids[0] + 4, LocationName.villa)
             self.active_level_list.append(LocationName.castle_keep)
 
-        if self.world.warp_shuffle[self.player].value == 0:
+        if self.multiworld.warp_shuffle[self.player].value == 0:
             new_list = self.active_level_list.copy()
             for warp in self.active_level_list:
                 if warp not in self.active_warp_list:
                     new_list.remove(warp)
             self.active_warp_list = new_list
-        elif self.world.warp_shuffle[self.player].value == 2:
+        elif self.multiworld.warp_shuffle[self.player].value == 2:
             new_list = level_list.copy()
             for warp in level_list:
                 if warp not in self.active_warp_list:
                     new_list.remove(warp)
             self.active_warp_list = new_list
 
-        connect_regions(self.world, self.player, self.active_level_list, self.active_warp_list)
+        connect_regions(self.multiworld, self.player, self.active_level_list, self.active_warp_list)
 
-        self.world.itempool += itempool
+        self.multiworld.itempool += itempool
 
     def generate_output(self, output_directory: str):
         try:
-            world = self.world
+            world = self.multiworld
             player = self.player
 
             rom = LocalRom(get_base_rom_path())
 
             offsets_to_ids = {}
             for location_name in self.location_name_to_id:
-                loc = self.world.get_location(location_name, self.player)
+                loc = self.multiworld.get_location(location_name, self.player)
                 if loc.item.name in rom_item_bytes or loc.item.game != "Castlevania 64":
                     if loc.item.player == self.player:
                         offsets_to_ids[loc.rom_offset] = loc.item.item_byte
@@ -240,7 +240,7 @@ class CV64World(World):
                         else:
                             offsets_to_ids[loc.rom_offset] = 0x12
 
-            patch_rom(self.world, rom, self.player, offsets_to_ids, self.active_level_list, self.active_warp_list)
+            patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.active_level_list, self.active_warp_list)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
@@ -264,7 +264,7 @@ class CV64World(World):
         stagecounts = {"Main": 1, "Reinhardt": 1, "Carrie": 1}
         spoiler_handle.write("\n")
         header_text = "Castlevania 64 stage order:\n"
-        header_text = header_text.format(self.world.player_name[self.player])
+        header_text = header_text.format(self.multiworld.player_name[self.player])
         spoiler_handle.write(header_text)
         for x in range(len(self.active_level_list)):
             if self.active_level_list[x - 1] == LocationName.villa or self.active_level_list[x - 1] \
@@ -293,7 +293,7 @@ class CV64World(World):
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
         for option_name in cv64_options:
-            option = getattr(self.world, option_name)[self.player]
+            option = getattr(self.multiworld, option_name)[self.player]
             slot_data[option_name] = option.value
 
         return slot_data
@@ -306,4 +306,4 @@ class CV64World(World):
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
