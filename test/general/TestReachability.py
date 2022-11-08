@@ -16,7 +16,7 @@ class TestBase(unittest.TestCase):
                 with self.subTest("Game", game=game_name):
                     world = setup_default_world(world_type)
                     excluded = world.exclude_locations[1].value
-                    state = world.get_all_state(False)
+                    state = world.get_all_state(False, sweep=True)
                     for location in world.get_locations():
                         if location.name not in excluded:
                             with self.subTest("Location should be reached", location=location):
