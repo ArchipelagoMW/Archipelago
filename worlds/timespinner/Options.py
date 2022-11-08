@@ -93,7 +93,8 @@ class DamageRando(Choice):
 
 
 class DamageRandoOverrides(OptionDict):
-    "Manual +/-/normal odds for an orb. Put 0 if you don't want a certain nerf or buff to be a possibility. Orbs that you don't specify will roll with 1/1/1 as odds"
+    """Manual +/-/normal odds for an orb. Put 0 if you don't want a certain nerf or buff to be a possibility. Orbs that
+    you don't specify will roll with 1/1/1 as odds"""
     schema = Schema({
         Optional("Blue"): { 
             "MinusOdds": And(int, lambda n: n >= 0), 
