@@ -595,7 +595,7 @@ class OOTWorld(World):
 
         # Kill unreachable events that can't be gotten even with all items
         # Make sure to only kill actual internal events, not in-game "events"
-        all_state = self.multiworld.get_all_state(False)
+        all_state = self.multiworld.get_all_state(False, sweep=True)
         all_locations = self.get_locations()
         reachable = self.multiworld.get_reachable_locations(all_state, self.player)
         unreachable = [loc for loc in all_locations if
@@ -1119,7 +1119,7 @@ class OOTWorld(World):
     # Specifically ensures that only real items are gotten, not any events.
     # In particular, ensures that Time Travel needs to be found.
     def get_state_with_complete_itempool(self):
-        all_state = self.multiworld.get_all_state(use_cache=False)
+        all_state = self.multiworld.get_all_state(use_cache=False, sweep=True)
         # Remove event progression items
         for item, player in all_state.prog_items:
             if player == self.player and (item not in item_table or (item_table[item][2] is None and item_table[item][0] != 'DungeonReward')):

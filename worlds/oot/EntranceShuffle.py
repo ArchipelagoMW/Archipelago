@@ -373,7 +373,7 @@ def shuffle_random_entrances(ootworld):
     player = ootworld.player
 
     # Gather locations to keep reachable for validation
-    all_state = world.get_all_state(use_cache=True)
+    all_state = world.get_all_state(use_cache=True, sweep=True)
     locations_to_ensure_reachable = {loc for loc in world.get_reachable_locations(all_state, player) if not (loc.type == 'Drop' or (loc.type == 'Event' and 'Subrule' in loc.name))}
 
     # Set entrance data for all entrances
@@ -545,7 +545,7 @@ def shuffle_random_entrances(ootworld):
             logging.getLogger('').error(f'Root Exit: {exit} -> {exit.connected_region}')
         logging.getLogger('').error(f'Root has too many entrances left after shuffling entrances')
     # Game is beatable
-    new_all_state = world.get_all_state(use_cache=False)
+    new_all_state = world.get_all_state(use_cache=False, sweep=True)
     if not world.has_beaten_game(new_all_state, player):
         raise EntranceShuffleError('Cannot beat game')
     # Validate world
@@ -672,7 +672,7 @@ def split_entrances_by_requirements(ootworld, entrances_to_split, assumed_entran
         if entrance.connected_region:
             original_connected_regions[entrance] = entrance.disconnect()
 
-    all_state = world.get_all_state(use_cache=False)
+    all_state = world.get_all_state(use_cache=False, sweep=True)
 
     restrictive_entrances = []
     soft_entrances = []

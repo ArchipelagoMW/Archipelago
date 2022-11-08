@@ -659,8 +659,6 @@ def distribute_planned(world: MultiWorld) -> None:
         else:
             warn(warning, force)
 
-    # TODO: remove. Preferably by implementing key drop
-    from worlds.alttp.Regions import key_drop_data
     world_name_lookup = world.world_name_lookup
 
     block_value = typing.Union[typing.List[str], typing.Dict[str, typing.Any], str]
@@ -671,8 +669,6 @@ def distribute_planned(world: MultiWorld) -> None:
             block['player'] = player
             if 'force' not in block:
                 block['force'] = 'silent'
-            if 'from_pool' not in block:
-                block['from_pool'] = True
             if 'world' not in block:
                 block['world'] = False
             items: block_value = []
@@ -731,7 +727,8 @@ def distribute_planned(world: MultiWorld) -> None:
                 count = block['count']
                 failed(f"Plando count {count} greater than locations specified", block['force'])
                 block['count'] = len(block['locations'])
-            block['count']['target'] = world.random.randint(block['count']['min'], block['count']['max'])
+            if 'target' not in block['count']:
+                block['count']['target'] = world.random.randint(block['count']['min'], block['count']['max'])
 
             if block['count']['target'] > 0:
                 plando_blocks.append(block)
@@ -743,14 +740,25 @@ def distribute_planned(world: MultiWorld) -> None:
                                           if len(block['locations']) > 0
                                           else len(world.get_unfilled_locations(player)) - block['count']['target']))
 
+    swept_state = world.state.copy()
+    swept_state.sweep_for_events()
+    early_locations = {}
+    non_early_locations = {}
+    for player in world.player_ids:
+        reachable_locations = world.get_reachable_locations(swept_state, player)
+        unfilled_locations = world.get_unfilled_locations(player)
+        early_locations[player] = [loc.name for loc in reachable_locations if loc in unfilled_locations]
+        non_early_locations[player] = [loc.name for loc in unfilled_locations if loc not in reachable_locations]
+
     for placement in plando_blocks:
         player = placement['player']
         try:
             target_world = placement['world']
             locations = placement['locations']
             items = placement['items']
-            maxcount = placement['count']['target']
-            from_pool = placement['from_pool']
+            count = placement['count']['target']
+            min_count = placement['count']['min']
+            force = placement['force']
             if target_world is False or world.players == 1:  # target own world
                 worlds: typing.Set[int] = {player}
             elif target_world is True:  # target any worlds besides own
@@ -775,56 +783,38 @@ def distribute_planned(world: MultiWorld) -> None:
             else:  # target world by slot name
                 if target_world not in world_name_lookup:
                     failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
-                           placement['force'])
+                           force)
                     continue
                 worlds = {world_name_lookup[target_world]}
-
+            if "early_locations" in locations:
+                locations.remove("early_locations")
+                for player in worlds:
+                    locations += early_locations[player]
+            if "non_early_locations" in locations:
+                locations.remove("non_early_locations")
+                for player in worlds:
+                    locations += non_early_locations[player]
             candidates = list(location for location in world.get_unfilled_locations_for_players(locations,
                                                                                                 worlds))
-            world.random.shuffle(candidates)
             world.random.shuffle(items)
-            count = 0
-            err: typing.List[str] = []
-            successful_pairs: typing.List[typing.Tuple[Item, Location]] = []
-            for item_name in items:
-                item = world.worlds[player].create_item(item_name)
-                for location in reversed(candidates):
-                    if location in key_drop_data:
-                        warn(
-                            f"Can't place '{item_name}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
-                        continue
-                    if not location.item:
-                        if location.item_rule(item):
-                            if location.can_fill(world.state, item, False):
-                                successful_pairs.append((item, location))
-                                candidates.remove(location)
-                                count = count + 1
-                                break
-                            else:
-                                err.append(f"Can't place item at {location} due to fill condition not met.")
-                        else:
-                            err.append(f"{item_name} not allowed at {location}.")
-                    else:
-                        err.append(f"Cannot place {item_name} into already filled location {location}.")
-                if count == maxcount:
-                    break
-            if count < placement['count']['min']:
-                m = placement['count']['min']
-                failed(
-                    f"Plando block failed to place {m - count} of {m} item(s) for {world.player_name[player]}, error(s): {' '.join(err)}",
-                    placement['force'])
-            for (item, location) in successful_pairs:
-                world.push_item(location, item, collect=False)
-                location.event = True  # flag location to be checked during fill
-                location.locked = True
-                logging.debug(f"Plando placed {item} at {location}")
-                if from_pool:
-                    try:
-                        world.itempool.remove(item)
-                    except ValueError:
-                        warn(
-                            f"Could not remove {item} from pool for {world.player_name[player]} as it's already missing from it.",
-                            placement['force'])
+            placement_items = [world.worlds[player].create_item(item) for item in items]
+            for item in reversed(placement_items):
+                if item in world.itempool:
+                    world.itempool.remove(item)
+                else:
+                    placement_items.remove(item)
+            if len(placement_items) < min_count:
+                failed(f"Failed to place all plando items for {world.player_name[player]}, not enough items exist in the item pool",
+                       force)
+            world.itempool.extend(placement_items[count:])
+            placement_items = placement_items[:count]
+            all_state = world.get_all_state(False)
+            try:
+                fill_restrictive(world, all_state, candidates, placement_items, lock=True, on_place=lambda loc: print(f"loc: {loc.name}, item: {loc.item.name}"))
+            except FillError:
+                if len(placement_items) > count - min_count:
+                    failed(f"Failed to place all plando items for {world.player_name[player]}", force)
+            world.itempool.extend(placement_items)
 
         except Exception as e:
             raise Exception(
