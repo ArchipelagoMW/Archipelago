@@ -146,12 +146,3 @@ def get_option_set_value(world: MultiWorld, player: int, name: str) -> set:
         return set()
 
     return option[player].value
-
-
-def get_option_set_value(world: MultiWorld, player: int, name: str) -> set:
-    option = getattr(world, name, None)
-
-    if option is None:
-        return set()
-
-    return option[player].value
