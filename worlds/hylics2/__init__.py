@@ -173,24 +173,24 @@ class Hylics2World(World):
     def create_regions(self) -> None:
 
         region_table: Dict[int, Region] = {
-            0: Region("Menu", RegionType.Generic, "Menu", self.player, self.world),
-            1: Region("Afterlife", RegionType.Generic, "Afterlife", self.player, self.world),
-            2: Region("Waynehouse", RegionType.Generic, "Waynehouse", self.player, self.world),
-            3: Region("World", RegionType.Generic, "World", self.player, self.world),
-            4: Region("New Muldul", RegionType.Generic, "New Muldul", self.player, self.world),
-            5: Region("New Muldul Vault", RegionType.Generic, "New Muldul Vault", self.player, self.world),
-            6: Region("Viewax", RegionType.Generic, "Viewax's Edifice", self.player, self.world),
-            7: Region("Airship", RegionType.Generic, "Airship", self.player, self.world),
-            8: Region("Arcade Island", RegionType.Generic, "Arcade Island", self.player, self.world),
-            9: Region("TV Island", RegionType.Generic, "TV Island", self.player, self.world),
-            10: Region("Juice Ranch", RegionType.Generic, "Juice Ranch", self.player, self.world),
-            11: Region("Shield Facility", RegionType.Generic, "Shield Facility", self.player, self.world),
-            12: Region("Worm Pod", RegionType.Generic, "Worm Pod", self.player, self.world),
-            13: Region("Foglast", RegionType.Generic, "Foglast", self.player, self.world),
-            14: Region("Drill Castle", RegionType.Generic, "Drill Castle", self.player, self.world),
-            15: Region("Sage Labyrinth", RegionType.Generic, "Sage Labyrinth", self.player, self.world),
-            16: Region("Sage Airship", RegionType.Generic, "Sage Airship", self.player, self.world),
-            17: Region("Hylemxylem", RegionType.Generic, "Hylemxylem", self.player, self.world)
+            0: Region("Menu", RegionType.Generic, "Menu", self.player, self.multiworld),
+            1: Region("Afterlife", RegionType.Generic, "Afterlife", self.player, self.multiworld),
+            2: Region("Waynehouse", RegionType.Generic, "Waynehouse", self.player, self.multiworld),
+            3: Region("World", RegionType.Generic, "World", self.player, self.multiworld),
+            4: Region("New Muldul", RegionType.Generic, "New Muldul", self.player, self.multiworld),
+            5: Region("New Muldul Vault", RegionType.Generic, "New Muldul Vault", self.player, self.multiworld),
+            6: Region("Viewax", RegionType.Generic, "Viewax's Edifice", self.player, self.multiworld),
+            7: Region("Airship", RegionType.Generic, "Airship", self.player, self.multiworld),
+            8: Region("Arcade Island", RegionType.Generic, "Arcade Island", self.player, self.multiworld),
+            9: Region("TV Island", RegionType.Generic, "TV Island", self.player, self.multiworld),
+            10: Region("Juice Ranch", RegionType.Generic, "Juice Ranch", self.player, self.multiworld),
+            11: Region("Shield Facility", RegionType.Generic, "Shield Facility", self.player, self.multiworld),
+            12: Region("Worm Pod", RegionType.Generic, "Worm Pod", self.player, self.multiworld),
+            13: Region("Foglast", RegionType.Generic, "Foglast", self.player, self.multiworld),
+            14: Region("Drill Castle", RegionType.Generic, "Drill Castle", self.player, self.multiworld),
+            15: Region("Sage Labyrinth", RegionType.Generic, "Sage Labyrinth", self.player, self.multiworld),
+            16: Region("Sage Airship", RegionType.Generic, "Sage Airship", self.player, self.multiworld),
+            17: Region("Hylemxylem", RegionType.Generic, "Hylemxylem", self.player, self.multiworld)
         }
         
         # create regions from table
