@@ -12,10 +12,10 @@ from .data.locations_data import location_dictionary, fire_link_shrine_table, \
     undead_settlement_table, road_of_sacrifice_table, consumed_king_garden_table, cathedral_of_the_deep_table, \
     farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table, \
     irithyll_dungeon_table, profaned_capital_table, anor_londo_table, lothric_castle_table, grand_archives_table, \
-    untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table
+    untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table, progressive_locations
 from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
-from ..generic.Rules import set_rule
+from ..generic.Rules import set_rule, add_item_rule
 
 
 class DarkSouls3Web(WebWorld):
@@ -54,7 +54,7 @@ class DarkSouls3World(World):
     remote_items: bool = False
     remote_start_inventory: bool = False
     web = DarkSouls3Web()
-    data_version = 3
+    data_version = 4
     base_id = 100000
     required_client_version = (0, 3, 6)
     item_name_to_id = DarkSouls3Item.get_name_to_id()
@@ -79,8 +79,8 @@ class DarkSouls3World(World):
         return DarkSouls3Item(name, item_classification, data, self.player)
 
     def create_regions(self):
-        menu_region = Region("Menu", RegionType.Generic, "Menu", self.player)
-        self.multiworld.regions.append(menu_region)
+
+        menu_region = self.create_region("Menu", progressive_locations)
 
         # Create all Vanilla regions of Dark Souls III
         firelink_shrine_region = self.create_region("Firelink Shrine", fire_link_shrine_table)
@@ -163,6 +163,8 @@ class DarkSouls3World(World):
         if location_table:
             for name, address in location_table.items():
                 location = DarkSouls3Location(self.player, name, self.location_name_to_id[name], new_region)
+                if region_name == "Menu":
+                    add_item_rule(location, lambda item: not item.advancement)
                 new_region.locations.append(location)
         self.multiworld.regions.append(new_region)
         return new_region
@@ -264,13 +266,13 @@ class DarkSouls3World(World):
         for location in self.multiworld.get_filled_locations():
             if location.item.player == self.player:
                 items_id.append(location.item.code)
-                items_address.append(item_dictionary[location.item.name])
+                items_address.append(item_dictionary_copy[location.item.name])
 
             if location.player == self.player:
                 locations_address.append(location_dictionary[location.name])
                 locations_id.append(location.address)
                 if location.item.player == self.player:
-                    locations_target.append(item_dictionary[location.item.name])
+                    locations_target.append(item_dictionary_copy[location.item.name])
                 else:
                     locations_target.append(0)
 
@@ -279,6 +281,9 @@ class DarkSouls3World(World):
                 "auto_equip": self.multiworld.auto_equip[self.player].value,
                 "lock_equip": self.multiworld.lock_equip[self.player].value,
                 "no_weapon_requirements": self.multiworld.no_weapon_requirements[self.player].value,
+                "death_link": self.multiworld.death_link[self.player].value,
+                "no_spell_requirements": self.multiworld.no_spell_requirements[self.player].value,
+                "no_equip_load": self.multiworld.no_equip_load[self.player].value,
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server

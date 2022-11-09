@@ -160,22 +160,30 @@ class ValidInventory:
             if item in cascade_keys:
                 items_to_remove = self.cascade_removal_map[item]
                 transient_items = []
+                cascade_failure = False
                 while len(items_to_remove) > 0:
                     item_to_remove = items_to_remove.pop()
+                    transient_items.append(item_to_remove)
                     if item_to_remove not in inventory:
-                        continue
+                        if units_always_have_upgrades and item_to_remove in locked_items:
+                            cascade_failure = True
+                            break
+                        else:
+                            continue
                     success = attempt_removal(item_to_remove)
-                    if success:
-                        transient_items.append(item_to_remove)
-                    elif units_always_have_upgrades:
-                        # Lock all associated items if any of them cannot be removed
+                    if not success and units_always_have_upgrades:
+                        cascade_failure = True
                         transient_items += items_to_remove
-                        for transient_item in transient_items:
-                            if transient_item not in inventory and transient_item not in locked_items:
-                                locked_items.append(transient_item)
-                            if transient_item.classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing):
-                                self.logical_inventory.add(transient_item.name)
                         break
+                # Lock all associated items if any of them cannot be removed on Units Always Have Upgrades
+                if cascade_failure:
+                    for transient_item in transient_items:
+                        if transient_item in inventory:
+                            inventory.remove(transient_item)
+                        if transient_item not in locked_items:
+                            locked_items.append(transient_item)
+                        if transient_item.classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing):
+                            self.logical_inventory.add(transient_item.name)
             else:
                 attempt_removal(item)
 
