@@ -459,7 +459,7 @@ progressive_locations = {
     **{"Large Soul of an Unknown Traveler #" + str(i): 0x40000194 for i in range(1, 6)},
 
     ##Added by Br00ty
-    # Misc Items - 1 extra locations at the moment
+    # Misc Items - 0 extra locations at the moment
     "HWL: Gold Pine Resin": 0x4000014B,
     "US: Charcoal Pine Resin": 0x4000014A,
     "FK: Gold Pine Bundle": 0x40000155,
