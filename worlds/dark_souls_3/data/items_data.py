@@ -217,8 +217,6 @@ goods_table = {
     "Soul of the Demon Prince": 0x400002EA,
     "Soul of Darkeater Midir": 0x400002EB,
     "Soul of Slave Knight Gael": 0x400002E9,
-
-    **{"Ember #"+str(i): 0x400001F4 for i in range(1, 4)},
 }
 
 armor_table = {
@@ -367,10 +365,6 @@ armor_table = {
     "Ordained Hood": 0x135E1F20,
     "Ordained Dress": 0x135E2308,
     "Ordained Trousers": 0x135E2AD8,
-    "Antiquated Plain Garb": 0x11B2E408,
-    "Violet Wrappings": 0x11B2E7F0,
-    "White Preacher Head": 0x14153A20,
-    "Blindfold Mask": 0x15095E20,
     "Black Witch Veil": 0x14FA1BE0,
     "Black Witch Hat": 0x14EAD9A0,
     "Black Witch Garb": 0x14EADD88,
