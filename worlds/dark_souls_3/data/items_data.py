@@ -200,7 +200,6 @@ goods_table = {
     **{"Large Titanite Shard #"+str(i): 0x400003E9 for i in range(1, 11)},
     **{"Titanite Chunk #"+str(i): 0x400003EA for i in range(1, 6)},
     **{"Titanite Slab #"+str(i): 0x400003EB for i in range(1, 4)},
-    **{"Ember #"+str(i): 0x400001F4 for i in range(1, 2)},
 
     # Healing
     **{"Estus Shard #"+str(i): 0x4000085D for i in range(1, 16)},
@@ -216,7 +215,9 @@ goods_table = {
     "Soul of Sister Friede": 0x400002E8,
     "Soul of the Demon Prince": 0x400002EA,
     "Soul of Darkeater Midir": 0x400002EB,
-    "Soul of Slave Knight Gael": 0x400002E9
+    "Soul of Slave Knight Gael": 0x400002E9,
+    
+    **{"Ember #"+str(i): 0x400001F4 for i in range(1, 2)},
 }
 
 armor_table = {
