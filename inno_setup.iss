@@ -57,7 +57,7 @@ Name: "generator/sm";     Description: "Super Metroid ROM Setup"; Types: full ho
 Name: "generator/dkc3";   Description: "Donkey Kong Country 3 ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/smw";    Description: "Super Mario World ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/soe";    Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
-Name: "generator/l2ac";   Description: "Lufia II Ancient Cave ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
+Name: "generator/l2ac";   Description: "Lufia II Ancient Cave ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 2621440; Flags: disablenouninstallwarning
 Name: "generator/lttp";   Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
 Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296; Flags: disablenouninstallwarning
 Name: "generator/zl";     Description: "Zillion ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 150000; Flags: disablenouninstallwarning

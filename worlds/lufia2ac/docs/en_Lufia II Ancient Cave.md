@@ -10,8 +10,8 @@ config file.
 As you may or may not know, randomization was already a core feature of the Ancient Cave in Lufia II, basically being a
 whole game within a game. The Ancient Cave has 99 floors with increasingly hard enemies, red chests and blue chests. At
 the end of the Ancient Cave you get to fight the Royal Jelly... if you make it that far. You cannot lose the Royal
-Jelly fight as it kills itself after giving you three rounds to try and kill it (or kill yourself, whichever one you can
-manage).
+Jelly fight as it kills itself after giving you three rounds to try and kill it (or manage to vanquish your own party, 
+whichever one you can manage).
 
 The Randomizer allows you to set four different goals (Kill the Boss, Iris Treasure Hunt, Treasure hunt + Boss, Reach 
 final floor), and modify the game in several other ways (define where the last floor is, start with providence, choose
@@ -25,7 +25,7 @@ always in your local game.
 
 ## Which items can be in another player's world?
 
-Any of the items which can be shuffled may also be placed into another player's world.
+Any of the blue chest items from the vanilla game may be placed into another player's world.
 
 ## What does another world's item look like in Lufia II?
 
@@ -33,4 +33,4 @@ Items belonging to other worlds are represented by an AP icon and are called AP 
 
 ## When the player receives an item, what happens?
 
-Your Party Leader will hold up the item they received when not in a fight or in a menu.
+Your Party Leader will hold up the item they received when not in a fight or in a menu. 

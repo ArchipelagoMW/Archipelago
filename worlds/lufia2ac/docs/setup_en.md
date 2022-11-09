@@ -7,7 +7,7 @@
     - An emulator capable of connecting to SNI
       ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
        [BizHawk](http://tasvideos.org/BizHawk.html), or
-       [RetroArch](https://retroarch.com?page=platforms) 1.10.1 or newer). Or,
+       [RetroArch](https://retroarch.com?page=platforms) 1.10.3 or newer). Or,
     - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware. **note: 
 modded SNES minis are currently not supported by SNI**
 - Your American ROM file, probably named `Lufia II - Rise of the Sinistrals (USA).sfc`
