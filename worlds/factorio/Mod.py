@@ -13,7 +13,7 @@ import Utils
 import worlds.Files
 from . import Options
 from .Technologies import tech_table, recipes, free_sample_exclusions, progressive_technology_table, \
-    base_tech_table, tech_to_progressive_lookup, fluids
+    base_tech_table, tech_to_progressive_lookup, fluids, useless_technologies
 
 if TYPE_CHECKING:
     from . import Factorio
@@ -135,6 +135,7 @@ def generate_mod(world: "Factorio", output_directory: str):
         "liquids": fluids,
         "goal": multiworld.goal[player].value,
         "energy_link": multiworld.energy_link[player].value,
+        "useless_technologies": useless_technologies,
     }
 
     for factorio_option in Options.factorio_options:
