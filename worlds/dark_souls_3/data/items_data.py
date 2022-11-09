@@ -54,7 +54,7 @@ weapons_upgrade_5_table = {
     "Sage's Crystal Staff": 0x00C8CE40,
     "Irithyll Rapier": 0x002E8A10,
 
-    ##Added by Br00ty
+    # Added by Br00ty
     "Friede's Great Scythe": 0x009B55A0,
     "Rose of Ariandel": 0x00B82C70,
     "Demon's Scar": 0x003F04D0,
@@ -130,7 +130,7 @@ weapons_upgrade_10_table = {
     "Claw": 0x00A7D8C0,
     "Drang Twinspears": 0x00F5AAA0,
 
-    ##Added by Br00ty
+    # Added by Br00ty
     "Follower Sabre": 0x003EDDC0,
     "Millwood Battle Axe": 0x006D67D0,
     "Follower Javelin": 0x008CD6B0,
@@ -170,7 +170,8 @@ shields_table = {
     "Spirit Tree Crest Shield": 0x014466E0,
     "Blessed Red and White Shield": 0x01343FB9,
 
-    ##Added by Br00ty
+    # Added by Br00ty
+    "Followers Shield": 0x0135C0E0,
     "Ethereal Oak Shield": 0x01450320,
     "Great Door Twinshields": 0x00F5F8C0,
     "Dragonhead Shield": 0x0135E7F0,
@@ -211,13 +212,13 @@ goods_table = {
     **{"Soul of a Venerable Old Hand #"+str(i): 0x400001A2 for i in range(1, 5)},
     **{"Soul of a Crestfallen Knight #"+str(i): 0x40000199 for i in range(1, 11)},
 
-    ##Added by Br00ty
+    # Added by Br00ty
     "Soul of Sister Friede": 0x400002E8,
     "Soul of the Demon Prince": 0x400002EA,
     "Soul of Darkeater Midir": 0x400002EB,
     "Soul of Slave Knight Gael": 0x400002E9,
-    
-    **{"Ember #"+str(i): 0x400001F4 for i in range(1, 2)},
+
+    **{"Ember #"+str(i): 0x400001F4 for i in range(1, 4)},
 }
 
 armor_table = {
@@ -316,7 +317,7 @@ armor_table = {
     "Outrider Knight Gauntlets": 0x1328BF10,
     "Outrider Knight Leggings": 0x1328C2F8,
 
-    ##Added by Br00ty
+    # Added by Br00ty (all DLC)
     "Slave Knight Hood": 0x134EDCE0,
     "Slave Knight Armor": 0x134EE0C8,
     "Slave Knight Gauntlets": 0x134EE4B0,
@@ -329,7 +330,7 @@ armor_table = {
     "Millwood Knight Armor": 0x139B2C08,
     "Millwood Knight Gauntlets": 0x139B2FF0,
     "Millwood Knight Leggings": 0x139B33D8,
- 
+
     "Shira's Crown": 0x11C22260,
     "Shira's Armor": 0x11C22648,
     "Shira's Gloves": 0x11C22A30,
@@ -358,6 +359,23 @@ armor_table = {
     "Desert Pyromancer Garb": 0x14DB9B48,
     "Desert Pyromancer Gloves": 0x14DB9F30,
     "Desert Pyromancer Skirt": 0x14DBA318,
+
+    "Follower Helm": 0x137CA3A0,
+    "Follower Armor": 0x137CA788,
+    "Follower Gloves": 0x137CAB70,
+    "Follower Boots": 0x137CAF58,
+    "Ordained Hood": 0x135E1F20,
+    "Ordained Dress": 0x135E2308,
+    "Ordained Trousers": 0x135E2AD8,
+    "Antiquated Plain Garb": 0x11B2E408,
+    "Violet Wrappings": 0x11B2E7F0,
+    "White Preacher Head": 0x14153A20,
+    "Blindfold Mask": 0x15095E20,
+    "Black Witch Veil": 0x14FA1BE0,
+    "Black Witch Hat": 0x14EAD9A0,
+    "Black Witch Garb": 0x14EADD88,
+    "Black Witch Wrappings": 0x14EAE170,
+    "Black Witch Trousers": 0x14EAE558,
 }
 
 rings_table = {
@@ -408,7 +426,7 @@ rings_table = {
     "Knight Slayer's Ring": 0x20005000,
     "Magic Stoneplate Ring": 0x20004E66,
 
-    ##Added by Br00ty
+    # Added by Br00ty
     "Havel's Ring": 0x20004E34,
     "Chillbite Ring": 0x20005208
 }
@@ -434,7 +452,7 @@ spells_table = {
     "Great Magic Shield": 0x40144F38,
     "Crystal Scroll": 0x40000856,
 
-    ##Added by Br00ty
+    # Added by Br00ty
     "Boulder Heave": 0x40282170,
     "Seething Chaos": 0x402896A0,
     "Old Moonlight": 0x4014FF00,
@@ -457,7 +475,7 @@ misc_items_table = {
     "Braille Divine Tome of Carim": 0x40000847,  # Shop
     "Great Swamp Pyromancy Tome": 0x4000084F,  # Shop
     "Farron Coal ": 0x40000837,  # Shop
-    "Paladin's Ashes": 0x4000083D,      #Shop
+    "Paladin's Ashes": 0x4000083D,  # Shop
     "Deep Braille Divine Tome": 0x40000860,  # Shop
     "Small Doll": 0x400007D5,
     "Golden Scroll": 0x4000085C,
@@ -517,6 +535,8 @@ key_items_list = {
     "Jailer's Key Ring",
 }
 
-item_tables = [weapons_upgrade_5_table, weapons_upgrade_10_table, shields_table, armor_table, rings_table, spells_table, misc_items_table, goods_table]
+item_tables = [weapons_upgrade_5_table, weapons_upgrade_10_table, shields_table,
+               armor_table, rings_table, spells_table, misc_items_table, goods_table]
 
-item_dictionary = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table, **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table}
+item_dictionary = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table,
+                   **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table}

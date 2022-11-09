@@ -459,7 +459,7 @@ progressive_locations = {
     **{"Large Soul of an Unknown Traveler #" + str(i): 0x40000194 for i in range(1, 6)},
 
     ##Added by Br00ty
-    # Misc Items - 0 extra locations at the moment
+    # Misc Items - 1 extra locations at the moment
     "HWL: Gold Pine Resin": 0x4000014B,
     "US: Charcoal Pine Resin": 0x4000014A,
     "FK: Gold Pine Bundle": 0x40000155,
@@ -474,6 +474,12 @@ progressive_locations = {
     **{"Charcoal Pine Bundle #"+str(i): 0x40000154 for i in range(1, 2)},
     **{"Rotten Pine Resin #"+str(i): 0x40000157 for i in range(1, 2)},
     **{"Pale Tongue #"+str(i): 0x40000175 for i in range(1, 3)},
+    **{"Black Firebomb #"+str(i): 0x40000124 for i in range(1, 2)},
+    **{"Alluring Skull #"+str(i): 0x40000126 for i in range(1, 3)},
+    **{"Undead Hunter Charm #"+str(i): 0x40000128 for i in range(1, 2)},
+    **{"Duel Charm #"+str(i): 0x40000130 for i in range(1, 2)},
+    **{"Rusted Coin #"+str(i): 0x400001C7 for i in range(1, 3)},
+    **{"Rusted Gold Coin #"+str(i): 0x400001C9 for i in range(1, 4)},
 }
 
 location_tables = [fire_link_shrine_table, firelink_shrine_bell_tower_table, high_wall_of_lothric, undead_settlement_table, road_of_sacrifice_table,
