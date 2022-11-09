@@ -92,7 +92,7 @@ def generate(race=False):
     return render_template("generate.html", race=race, version=__version__)
 
 
-def gen_game(gen_options, meta: Optional[Dict[str, Any]] = None, owner=None, sid=None):
+def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=None, sid=None):
     if not meta:
         meta: Dict[str, Any] = {}
 
