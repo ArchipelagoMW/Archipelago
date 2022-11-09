@@ -49,10 +49,6 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 The [player settings page](/games/Zillion/player-settings) on the website allows you to configure your personal settings and export a config file from
 them.
 
-### Advanced settings
-
-The [advanced settings page](/tutorial/Archipelago/advanced_settings/en) describes more options you can put in your configuration file.
-
 ### Verifying your config file
 
 If you would like to validate your config file to make sure it works, you may do so on the [YAML Validator page](/mysterycheck).
