@@ -457,6 +457,24 @@ progressive_locations = {
     **{"Large Soul of a Deserted Corpse #" + str(i): 0x40000192 for i in range(1, 6)},
     **{"Soul of an Unknown Traveler #" + str(i): 0x40000193 for i in range(1, 6)},
     **{"Large Soul of an Unknown Traveler #" + str(i): 0x40000194 for i in range(1, 6)},
+
+    ##Added by Br00ty
+    # Misc Items - 0 extra locations at the moment
+    **{"Fading Soul #" + str(i): 0x40000191 for i in range(1, 4)},
+    **{"Soul of a Deserted Corpse #" + str(i): 0x40000191 for i in range(1, 9)},
+    **{"Ring of Sacrifice #"+str(i): 0x20004EF2 for i in range(1, 4)},
+    **{"Homeward Bone #"+str(i): 0x4000015E for i in range(1, 17)},
+    **{"Ember #"+str(i): 0x400001F4 for i in range(1, 46)},
+    **{"Green Blossom #"+str(i): 0x40000104 for i in range(1, 7)},
+    **{"Charcoal Pine Resin #"+str(i): 0x4000014A for i in range(1, 1)},
+    **{"Gold Pine Resin #"+str(i): 0x4000014B for i in range(1, 1)},
+    **{"Human Pine Resin #"+str(i): 0x4000014E for i in range(1, 3)},
+    **{"Carthus Rouge #"+str(i): 0x4000014F for i in range(1, 1)},
+    **{"Pale Pine Resin #"+str(i): 0x40000150 for i in range(1, 1)},
+    **{"Charcoal Pine Bundle #"+str(i): 0x40000154 for i in range(1, 2)},
+    **{"Gold Pine Bundle #"+str(i): 0x40000155 for i in range(1, 1)},
+    **{"Rotten Pine Resin #"+str(i): 0x40000157 for i in range(1, 2)},
+    **{"Pale Tongue #"+str(i): 0x40000175 for i in range(1, 3)},
 }
 
 location_tables = [fire_link_shrine_table, firelink_shrine_bell_tower_table, high_wall_of_lothric, undead_settlement_table, road_of_sacrifice_table,
