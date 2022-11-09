@@ -54,7 +54,7 @@ class DarkSouls3World(World):
     remote_items: bool = False
     remote_start_inventory: bool = False
     web = DarkSouls3Web()
-    data_version = 3
+    data_version = 4
     base_id = 100000
     required_client_version = (0, 3, 6)
     item_name_to_id = DarkSouls3Item.get_name_to_id()
