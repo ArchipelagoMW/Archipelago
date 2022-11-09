@@ -39,8 +39,11 @@ class WargrooveContext(CommonContext):
         if "appdata" in os.environ:
             options = Utils.get_options()
             executable = options["wargroove_options"]["executable"].replace("/", "\\")
-            if not os.path.exists(os.path.dirname(executable)):
-                raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")
+            if not os.path.isfile(executable + "\\win64_bin\\wargroove64.exe"):
+                msg = "WargrooveClient couldn't find wargroove64.exe. Unable to infer required game_communication_path"
+                logger.error("Error: " + msg)
+                Utils.messagebox("Error", msg, error=True)
+                sys.exit(1)
             self.game_communication_path = executable + "\\AP"
         else:
             msg = "WargrooveClient couldn't detect system type. Unable to infer required game_communication_path"
