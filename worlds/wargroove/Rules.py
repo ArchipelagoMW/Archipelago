@@ -44,7 +44,9 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location('Deep Thicket: Victory', player),
              lambda state: state._wargroove_has_item(player, 'Mage'))
     set_rule(world.get_location('Corrupted Inlet: Victory', player),
-             lambda state: state._wargroove_has_item(player, 'Barge'))
+             lambda state: state._wargroove_has_item(player, 'Barge') or
+                           state._wargroove_has_item(player, 'Merfolk') or
+                           state._wargroove_has_item(player, 'Warship'))
 
     # Levels 3BA-3BC
     set_rule(world.get_location('Mage Mayhem: Caesar', player),
@@ -52,8 +54,8 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location('Mage Mayhem: Victory', player),
              lambda state: state._wargroove_has_item(player, 'Harpy'))
     set_rule(world.get_location('Endless Knight: Victory', player),
-             lambda state: state._wargroove_has_item(player, 'Eastern Bridges') and state._wargroove_has_item(player,
-                                                                                                              'Spearman'))
+             lambda state: state._wargroove_has_item(player, 'Eastern Bridges') and
+                           state._wargroove_has_item(player, 'Spearman'))
     set_rule(world.get_location('Ambushed in the Middle: Victory 1', player),
              lambda state: state._wargroove_has_item(player, 'Spearman'))
     set_rule(world.get_location('Ambushed in the Middle: Victory 1', player),
@@ -61,12 +63,12 @@ def set_rules(world: MultiWorld, player: int):
 
     # Levels 3CA-3CC
     set_rule(world.get_location('The Churning Sea: Victory', player),
-             lambda state: state._wargroove_has_item(player, 'Merfolk') and state._wargroove_has_item(player,
-                                                                                                      'Turtle') and state._wargroove_has_item(
-                 player, 'Harpoon Ship'))
+             lambda state: state._wargroove_has_item(player, 'Merfolk') and
+                           state._wargroove_has_item(player, 'Turtle') and
+                           state._wargroove_has_item(player, 'Harpoon Ship'))
     set_rule(world.get_location('Frigid Archery: Light the Torch', player),
-             lambda state: state._wargroove_has_item(player, 'Archer') and state._wargroove_has_item(player,
-                                                                                                     'Southern Walls'))
+             lambda state: state._wargroove_has_item(player, 'Archer') and
+                           state._wargroove_has_item(player, 'Southern Walls'))
     set_rule(world.get_location('Frigid Archery: Victory', player),
              lambda state: state._wargroove_has_item(player, 'Archer'))
     set_rule(world.get_location('Archery Lessons: Chest', player),
@@ -102,10 +104,8 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location('A Ballista\'s Revenge: Victory', player),
              lambda state: state._wargroove_has_item_and_region(player, 'Ballista', 'A Ballista\'s Revenge'))
     set_rule(world.get_location('Rebel Village: Victory 1', player),
-             lambda state: state._wargroove_has_item_and_region(player, 'Spearman',
-                                                                'Rebel Village') and state._wargroove_has_item(player,
-                                                                                                               'Mage'))
+             lambda state: state._wargroove_has_item_and_region(player, 'Spearman', 'Rebel Village') and
+                           state._wargroove_has_item(player, 'Mage'))
     set_rule(world.get_location('Rebel Village: Victory 2', player),
-             lambda state: state._wargroove_has_item_and_region(player, 'Spearman',
-                                                                'Rebel Village') and state._wargroove_has_item(player,
-                                                                                                               'Mage'))
+             lambda state: state._wargroove_has_item_and_region(player, 'Spearman', 'Rebel Village') and
+                           state._wargroove_has_item(player, 'Mage'))

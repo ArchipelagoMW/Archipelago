@@ -137,7 +137,7 @@ pokemon_rb_options:
   rom_start: true
 
 wargroove_options:
-  # Locate the Wargroove executable on your system.
+  # Locate the Wargroove root directory on your system.
   # This is used by the Wargroove client, so it knows where to send communication files to
   executable: "steamapps/common/Wargroove"
 
