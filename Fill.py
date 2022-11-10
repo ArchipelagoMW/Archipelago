@@ -659,6 +659,16 @@ def distribute_planned(world: MultiWorld) -> None:
         else:
             warn(warning, force)
 
+    swept_state = world.state.copy()
+    swept_state.sweep_for_events()
+    early_locations = {}
+    non_early_locations = {}
+    for player in world.player_ids:
+        reachable_locations = world.get_reachable_locations(swept_state, player)
+        unfilled_locations = world.get_unfilled_locations(player)
+        early_locations[player] = [loc.name for loc in reachable_locations if loc in unfilled_locations]
+        non_early_locations[player] = [loc.name for loc in unfilled_locations if loc not in reachable_locations]
+
     # TODO: remove. Preferably by implementing key drop
     from worlds.alttp.Regions import key_drop_data
     world_name_lookup = world.world_name_lookup
@@ -674,7 +684,39 @@ def distribute_planned(world: MultiWorld) -> None:
             if 'from_pool' not in block:
                 block['from_pool'] = True
             if 'world' not in block:
-                block['world'] = False
+                target_world = False
+            else:
+                target_world = block['world']
+
+            if target_world is False or world.players == 1:  # target own world
+                worlds: typing.Set[int] = {player}
+            elif target_world is True:  # target any worlds besides own
+                worlds = set(world.player_ids) - {player}
+            elif target_world is None:  # target all worlds
+                worlds = set(world.player_ids)
+            elif type(target_world) == list:  # list of target worlds
+                worlds = set()
+                for listed_world in target_world:
+                    if listed_world not in world_name_lookup:
+                        failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
+                               block['force'])
+                        continue
+                    worlds.add(world_name_lookup[listed_world])
+            elif type(target_world) == int:  # target world by slot number
+                if target_world not in range(1, world.players + 1):
+                    failed(
+                        f"Cannot place item in world {target_world} as it is not in range of (1, {world.players})",
+                        block['force'])
+                    continue
+                worlds = {target_world}
+            else:  # target world by slot name
+                if target_world not in world_name_lookup:
+                    failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
+                           block['force'])
+                    continue
+                worlds = {world_name_lookup[target_world]}
+            block['world'] = worlds
+
             items: block_value = []
             if "items" in block:
                 items = block["items"]
@@ -711,6 +753,17 @@ def distribute_planned(world: MultiWorld) -> None:
                 for key, value in locations.items():
                     location_list += [key] * value
                 locations = location_list
+
+            if "early_locations" in locations:
+                locations.remove("early_locations")
+                for player in worlds:
+                    locations += early_locations[player]
+            if "non_early_locations" in locations:
+                locations.remove("non_early_locations")
+                for player in worlds:
+                    locations += non_early_locations[player]
+
+
             block['locations'] = locations
 
             if not block['count']:
@@ -746,38 +799,11 @@ def distribute_planned(world: MultiWorld) -> None:
     for placement in plando_blocks:
         player = placement['player']
         try:
-            target_world = placement['world']
+            worlds = placement['world']
             locations = placement['locations']
             items = placement['items']
             maxcount = placement['count']['target']
             from_pool = placement['from_pool']
-            if target_world is False or world.players == 1:  # target own world
-                worlds: typing.Set[int] = {player}
-            elif target_world is True:  # target any worlds besides own
-                worlds = set(world.player_ids) - {player}
-            elif target_world is None:  # target all worlds
-                worlds = set(world.player_ids)
-            elif type(target_world) == list:  # list of target worlds
-                worlds = set()
-                for listed_world in target_world:
-                    if listed_world not in world_name_lookup:
-                        failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
-                               placement['force'])
-                        continue
-                    worlds.add(world_name_lookup[listed_world])
-            elif type(target_world) == int:  # target world by slot number
-                if target_world not in range(1, world.players + 1):
-                    failed(
-                        f"Cannot place item in world {target_world} as it is not in range of (1, {world.players})",
-                        placement['force'])
-                    continue
-                worlds = {target_world}
-            else:  # target world by slot name
-                if target_world not in world_name_lookup:
-                    failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
-                           placement['force'])
-                    continue
-                worlds = {world_name_lookup[target_world]}
 
             candidates = list(location for location in world.get_unfilled_locations_for_players(locations,
                                                                                                 worlds))
