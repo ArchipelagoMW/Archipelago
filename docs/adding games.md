@@ -27,7 +27,7 @@ This is a good way to make the modding process much easier. Being able to identi
 Examples are provided below.
   
 ### Creepy Castle
-![Creepy Castle Root Directory in Window's Explorer](./img/creepy-castle-directory.png)  
+![Creepy Castle Root Directory in Window's Explorer](/docs/img/creepy-castle-directory.png)  
   
 This is the delightful title Creepy Castle, which is a fantastic game that I highly recommend. It’s also your worst-case
 scenario as a modder. All that’s present here is an executable file and some meta-information that Steam uses. You have 
@@ -36,7 +36,7 @@ disassembly and reverse engineering work, which is outside the scope of this tut
 of game releases.  
 
 ### Heavy Bullets
-![Heavy Bullets Root Directory in Window's Explorer](./img/heavy-bullets-directory.png)  
+![Heavy Bullets Root Directory in Window's Explorer](/docs/img/heavy-bullets-directory.png)  
   
 Here’s the release files for another game, Heavy Bullets. We see a .exe file, like expected, and a few more files. 
 “hello.txt” is a text file, which we can quickly skim in any text editor. Many games have them in some form, usually 
@@ -46,7 +46,7 @@ hurts to check. In this case, it contains some credits and a changelog for the g
 “steam_api.dll” is a file you can safely ignore, it’s just some code used to interface with Steam. 
 The directory “HEAVY_BULLETS_Data”, however, has some good news.  
   
-![Heavy Bullets Data Directory in Window's Explorer](./img/heavy-bullets-data-directory.png)  
+![Heavy Bullets Data Directory in Window's Explorer](/docs/img/heavy-bullets-data-directory.png)  
   
 Jackpot! It might not be obvious what you’re looking at here, but I can instantly tell from this folder’s contents that 
 what we have is a game made in the Unity Engine. If you look in the sub-folders, you’ll seem some .dll files which affirm 
@@ -56,14 +56,14 @@ to help you on your journey can be found at this [Unity Game Hacking guide.](htt
 
 
 ### Stardew Valley
-![Stardew Valley Root Directory in Window's Explorer](./img/stardew-valley-directory.png)  
+![Stardew Valley Root Directory in Window's Explorer](/docs/img/stardew-valley-directory.png)  
   
 This is the game contents of Stardew Valley. A lot more to look at here, but some key takeaways. 
 Notice the .dll files which include “CSharp” in their name. This tells us that the game was made in C#, which is good news. 
 More on that later.  
 
 ### Gato Roboto
-![Gato Roboto Root Directory in Window's Explorer](./img/gato-roboto-directory.png)  
+![Gato Roboto Root Directory in Window's Explorer](/docs/img/gato-roboto-directory.png)  
   
 Our last example is the game Gato Roboto. This game is made in GameMaker, which is another green flag to look out for. 
 The giveaway is the file titled "data.win". This immediately tips us off that this game was made in GameMaker. For
@@ -121,7 +121,7 @@ The next step is to know what you need to make the game do now that you can modi
 - Add interface for connecting to the Archipelago server with passwords and sessions
 - Add commands for manually rewarding, re-syncing, forfeiting, and other actions
   
-Refer to the [Network Protocol documentation](./network%20protocol.md) for how to communicate with Archipelago's servers.  
+Refer to the [Network Protocol documentation](/docs/network%20protocol.md) for how to communicate with Archipelago's servers.  
   
 ## But my Game is a console game. Can I still add it?  
 That depends – what console?  
@@ -203,28 +203,39 @@ integration into the Webhost by inheriting from `worlds.Files.APContainer`.
 ## Archipelago Integration
 In order for your game to communicate with the Archipelago server and generate the necessary randomized information,
 you must create a world package in the main Archipelago repo. This section will cover the requisites and expectations
-and show the basics of a world. More in depth documentation on the available API can be read in the [world api doc.](./world%20api.md)
-For setting up your working environment with Archipelago refer to [running from source](./running%20from%20source.md)
-and the [style guide](./style.md).
+and show the basics of a world. More in depth documentation on the available API can be read in the [world api doc.](/docs/world%20api.md)
+For setting up your working environment with Archipelago refer to [running from source](/docs/running%20from%20source.md)
+and the [style guide](/docs/style.md).
 
 ### Requirements
 A world implementation requires a few key things from its implementation
 - A folder within `worlds` that contains an `__init__.py`
-  - This is what defines it as a Python package and how it's able to be imported into Archipelago's generation system.
-During generation time only code that is defined within this file will be run. It's suggested to split up your information
-into more files to improve readability, but all of that information can be imported at its base level within your world.
-- A `World` subclass where you create your world and define all of its rules and the following requirements:
-  - Your items and locations need a `item_name_to_id` and `location_name_to_id`, respectively, mapping.
-    - The IDs that you take must not overlap with another game, but it's ok, and preferred, if your item and location
-mappings overlap with each other.
-    - Each game is able to claim 10000 IDs from their starting ID in the range of `0xAAAA0000`
-  - An `option_definitions` mapping of your game options with the format `{name: Class}`, where `name` uses Python snake_case.
-  - You must define your world's `create_item` method, because this may be called by the generator in certain circumstances
+  - This is what defines it as a Python package and how it's able to be imported
+into Archipelago's generation system. During generation time only code that is
+defined within this file will be run. It's suggested to split up your information
+into more files to improve readability, but all of that information can be
+imported at its base level within your world.
+- A `World` subclass where you create your world and define all of its rules
+and the following requirements:
+  - Your items and locations need a `item_name_to_id` and `location_name_to_id`,
+respectively, mapping.
+    - The IDs that you take must not overlap with another game, but it's ok,
+and preferred, if your item and location mappings overlap with each other.
+    - Each game is able to claim 0x10000 IDs from their starting ID in the range
+of `0xAAAA0000`
+  - An `option_definitions` mapping of your game options with the format
+`{name: Class}`, where `name` uses Python snake_case.
+  - You must define your world's `create_item` method, because this may be called
+by the generator in certain circumstances
   - When creating your world you submit items and regions to the Multiworld.
-    - These are lists of said objects which you can access at `self.world.itempool` and `self.world.regions`. Best practice
-for adding to these lists is with either `append` or `extend`, where `append` is a single object and `extend` is a list.
+    - These are lists of said objects which you can access at
+`self.multiworld.itempool` and `self.multiworld.regions`. Best practice for
+adding to these lists is with either `append` or `extend`, where `append` is a
+single object and `extend` is a list.
     - Do not use `=` as this will delete other worlds' items and regions.
     - Regions are containers for holding your world's Locations.
-      - Locations are where players will "check" for items and must exist within a region. It's also important for your
-world's submitted items to be the same as its submitted locations count.
-    - You must always have a "Menu" Region from which the generation algorithm uses to enter the game and access locations.
+      - Locations are where players will "check" for items and must exist within
+a region. It's also important for your world's submitted items to be the same as
+its submitted locations count.
+    - You must always have a "Menu" Region from which the generation algorithm
+uses to enter the game and access locations.
