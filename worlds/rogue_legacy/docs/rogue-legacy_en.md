@@ -28,25 +28,8 @@ provides an alternative one to the default values.
 Once you have entered the required values, you go to Connect and then select Confirm on the "Ready to Start" screen. Now
 you're off to start your legacy!
 
-## Manual Installation
+## Recommended Installation Instructions
 
-In order to run Rogue Legacy Randomizer you will need to have Rogue Legacy installed on your local machine. Extract the
-Randomizer release into a desired folder **outside** of your Rogue Legacy install. Copy the following files from your
-Rogue Legacy install into the main directory of your Rogue Legacy Randomizer install:
-
-- DS2DEngine.dll
-- InputSystem.dll
-- Nuclex.Input.dll
-- SpriteSystem.dll
-- Tweener.dll
-
-And copy the directory from your Rogue Legacy install as well into the main directory of your Rogue Legacy Randomizer
-install:
-
-- Content/
-
-Then copy the contents of the CustomContent directory in your Rogue Legacy Randomizer into the newly copied Content
-directory and overwrite all files.
-
-**BE SURE YOU ARE REPLACING THE COPIED FILES IN YOUR ROGUE LEGACY RANDOMIZER DIRECTORY AND NOT REPLACING YOUR ROGUE
-LEGACY FILES!**
+Please read the README file on the 
+[Rogue Legacy Randomizer GitHub](https://github.com/ThePhar/RogueLegacyRandomizer/blob/master/README.md) page for up to
+date installation instructions.

@@ -14,6 +14,11 @@
       compatible hardware
 - Your legally obtained Super Mario World ROM file, probably named `Super Mario World (USA).sfc`
 
+## Optional Software
+- Super Mario World Tracker
+	- PopTracker from: [PopTracker Releases Page](https://github.com/black-sliver/PopTracker/releases/)
+	- Super Mario World Archipelago PopTracker pack from: [SMW AP Tracker Releases Page](https://github.com/PoryGone/SMW_AP_Tracker/releases/)
+
 ## Installation Procedures
 
 ### Windows Setup
