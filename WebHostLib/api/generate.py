@@ -21,7 +21,9 @@ def generate_api():
         if 'file' in request.files:
             file = request.files['file']
             options = get_yaml_data(file)
-            if isinstance(options, (str, Markup)):
+            if isinstance(options, Markup):
+                return {"text": options.striptags()}, 400
+            if isinstance(options, str):
                 return {"text": options}, 400
             if "race" in request.form:
                 race = bool(0 if request.form["race"] in {"false"} else int(request.form["race"]))
