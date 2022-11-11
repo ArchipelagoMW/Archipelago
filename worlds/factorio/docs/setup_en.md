@@ -143,6 +143,27 @@ For more information about the commands you can use, see the [Commands Guide](/t
 4. Provide your IP address to anyone you want to join your game, and have them follow the steps for
    "Connecting to Someone Else's Factorio Game" above.
 
+## Enabling Peaceful Mode
+
+By default, peaceful mode is disabled. There are two methods to enable peaceful mode:
+
+### By config file
+You can specify Factorio game settings such as peaceful mode and terrain and resource generation parameters in your
+config .yaml file by including the `world_gen` setting. This setting is currently not supported by the web UI, so you'll
+have to manually create or edit your config file with a text editor of your choice.
+The [template file](/static/generated/configs/Factorio.yaml) is a good starting point and contains the default value of
+the `world_gen` setting. If you already have a config file you may also just copy that setting over from the template.
+Finally, to enable peaceful mode, replace `peaceful_mode: false` with `peaceful_mode: true`.
+
+### After starting
+If you have already submitted your config file, generated the seed, or even started playing, you can retroactively
+enable peaceful mode by entering the following commands into your Archipelago Factorio Client:
+```
+/factorio /c game.surfaces[1].peaceful_mode=true
+/factorio /c game.forces["enemy"].kill_all_units()
+```
+(If this warns you that these commands may disable achievements, you may need to repeat them for them to take effect.)
+
 ## Other Settings
 
 - By default, all item sends are displayed in-game. In larger async seeds this may become overly spammy.
