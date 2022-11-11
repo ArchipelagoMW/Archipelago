@@ -435,26 +435,24 @@ class MultiWorld():
         self._cached_locations = None
 
     def get_unfilled_locations(self, player: Optional[int] = None) -> List[Location]:
-        return [location for location in self.get_locations(player) if not location.item]
+        return [location for location in self.get_locations(player) if location.item is None]
 
     def get_filled_locations(self, player: Optional[int] = None) -> List[Location]:
         return [location for location in self.get_locations(player) if location.item is not None]
 
     def get_reachable_locations(self, state: Optional[CollectionState] = None, player: Optional[int] = None) -> List[Location]:
-        if state is None:
-            state = self.state
+        state: CollectionState = state if state else self.state
         return [location for location in self.get_locations(player) if location.can_reach(state)]
 
     def get_placeable_locations(self, state=None, player=None) -> List[Location]:
-        if state is None:
-            state = self.state
+        state: CollectionState = state if state else self.state
         return [location for location in self.get_locations(player) if location.item is None and location.can_reach(state)]
 
-    def get_unfilled_locations_for_players(self, locations: List[str], players: Iterable[int]):
+    def get_unfilled_locations_for_players(self, location_names: List[str], players: Iterable[int]):
         for player in players:
-            if len(locations) == 0:
-                locations = [location.name for location in self.get_unfilled_locations(player)]
-            for location_name in locations:
+            if not location_names:
+                location_names = [location.name for location in self.get_unfilled_locations(player)]
+            for location_name in location_names:
                 location = self._location_cache.get((location_name, player), None)
                 if location is not None and location.item is None:
                     yield location
