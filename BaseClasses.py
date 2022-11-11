@@ -157,7 +157,7 @@ class MultiWorld():
         self.worlds = {}
         self.slot_seeds = {}
 
-    def get_all_ids(self):
+    def get_all_ids(self) -> Tuple[int, ...]:
         return self.player_ids + tuple(self.groups)
 
     def add_group(self, name: str, game: str, players: Set[int] = frozenset()) -> Tuple[int, Group]:
@@ -282,11 +282,11 @@ class MultiWorld():
         self.is_race = True
 
     @functools.cached_property
-    def player_ids(self):
+    def player_ids(self) -> Tuple[int, ...]:
         return tuple(range(1, self.players + 1))
 
     @functools.lru_cache()
-    def get_game_players(self, game_name: str):
+    def get_game_players(self, game_name: str) -> Tuple[int, ...]:
         return tuple(player for player in self.player_ids if self.game[player] == game_name)
 
     @functools.lru_cache()
@@ -424,40 +424,31 @@ class MultiWorld():
         state.can_reach(Region) in the Entrance's traversal condition, as opposed to pure transition logic."""
         self.indirect_connections.setdefault(region, set()).add(entrance)
 
-    def get_locations(self) -> List[Location]:
+    def get_locations(self, player: Optional[int] = None) -> List[Location]:
         if self._cached_locations is None:
             self._cached_locations = [location for region in self.regions for location in region.locations]
+        if player is not None:
+            return [location for location in self._cached_locations if location.player == player]
         return self._cached_locations
 
     def clear_location_cache(self):
         self._cached_locations = None
 
     def get_unfilled_locations(self, player: Optional[int] = None) -> List[Location]:
-        if player is not None:
-            return [location for location in self.get_locations() if
-                    location.player == player and not location.item]
-        return [location for location in self.get_locations() if not location.item]
-
-    def get_unfilled_dungeon_locations(self):
-        return [location for location in self.get_locations() if not location.item and location.parent_region.dungeon]
+        return [location for location in self.get_locations(player) if not location.item]
 
     def get_filled_locations(self, player: Optional[int] = None) -> List[Location]:
-        if player is not None:
-            return [location for location in self.get_locations() if
-                    location.player == player and location.item is not None]
-        return [location for location in self.get_locations() if location.item is not None]
+        return [location for location in self.get_locations(player) if location.item is not None]
 
     def get_reachable_locations(self, state: Optional[CollectionState] = None, player: Optional[int] = None) -> List[Location]:
         if state is None:
             state = self.state
-        return [location for location in self.get_locations() if
-                (player is None or location.player == player) and location.can_reach(state)]
+        return [location for location in self.get_locations(player) if location.can_reach(state)]
 
     def get_placeable_locations(self, state=None, player=None) -> List[Location]:
         if state is None:
             state = self.state
-        return [location for location in self.get_locations() if
-                (player is None or location.player == player) and location.item is None and location.can_reach(state)]
+        return [location for location in self.get_locations(player) if location.item is None and location.can_reach(state)]
 
     def get_unfilled_locations_for_players(self, locations: List[str], players: Iterable[int]):
         for player in players:
