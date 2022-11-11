@@ -30,28 +30,28 @@ def MCItemFactory(items, player: int):
 class TestMinecraft(TestBase):
 
     def setUp(self):
-        self.world = MultiWorld(1)
-        self.world.game[1] = "Minecraft"
-        self.world.worlds[1] = MinecraftWorld(self.world, 1)
+        self.multiworld = MultiWorld(1)
+        self.multiworld.game[1] = "Minecraft"
+        self.multiworld.worlds[1] = MinecraftWorld(self.multiworld, 1)
         exclusion_pools = ['hard', 'unreasonable', 'postgame']
         for pool in exclusion_pools:
-            setattr(self.world, f"include_{pool}_advancements", {1: False})
-        setattr(self.world, "advancement_goal", {1: AdvancementGoal(30)})
-        setattr(self.world, "egg_shards_required", {1: EggShardsRequired(0)})
-        setattr(self.world, "egg_shards_available", {1: EggShardsAvailable(0)})
-        setattr(self.world, "required_bosses", {1: BossGoal(1)}) # ender dragon
-        setattr(self.world, "shuffle_structures", {1: ShuffleStructures(False)})
-        setattr(self.world, "bee_traps", {1: BeeTraps(0)})
-        setattr(self.world, "combat_difficulty", {1: CombatDifficulty(1)}) # normal
-        setattr(self.world, "structure_compasses", {1: Toggle(False)})
-        setattr(self.world, "death_link", {1: Toggle(False)})
-        AutoWorld.call_single(self.world, "create_regions", 1)
-        AutoWorld.call_single(self.world, "generate_basic", 1)
-        AutoWorld.call_single(self.world, "set_rules", 1)
+            setattr(self.multiworld, f"include_{pool}_advancements", {1: False})
+        setattr(self.multiworld, "advancement_goal", {1: AdvancementGoal(30)})
+        setattr(self.multiworld, "egg_shards_required", {1: EggShardsRequired(0)})
+        setattr(self.multiworld, "egg_shards_available", {1: EggShardsAvailable(0)})
+        setattr(self.multiworld, "required_bosses", {1: BossGoal(1)}) # ender dragon
+        setattr(self.multiworld, "shuffle_structures", {1: ShuffleStructures(False)})
+        setattr(self.multiworld, "bee_traps", {1: BeeTraps(0)})
+        setattr(self.multiworld, "combat_difficulty", {1: CombatDifficulty(1)}) # normal
+        setattr(self.multiworld, "structure_compasses", {1: Toggle(False)})
+        setattr(self.multiworld, "death_link", {1: Toggle(False)})
+        AutoWorld.call_single(self.multiworld, "create_regions", 1)
+        AutoWorld.call_single(self.multiworld, "generate_basic", 1)
+        AutoWorld.call_single(self.multiworld, "set_rules", 1)
 
     def _get_items(self, item_pool, all_except):
         if all_except and len(all_except) > 0:
-            items = self.world.itempool[:]
+            items = self.multiworld.itempool[:]
             items = [item for item in items if
                      item.name not in all_except and not ("Bottle" in item.name and "AnyBottle" in all_except)]
             items.extend(MCItemFactory(item_pool[0], 1))

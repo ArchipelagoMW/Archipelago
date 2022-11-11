@@ -919,6 +919,24 @@ location_groups = {
     'Dungeon': [name for (name, data) in location_table.items() if data[5] is not None and any(dungeon in data[5] for dungeon in dungeons)],
 }
 
+# relevant for both dungeon item fill and song fill
+dungeon_song_locations = [
+    "Deku Tree Queen Gohma Heart",
+    "Dodongos Cavern King Dodongo Heart",
+    "Jabu Jabus Belly Barinade Heart",
+    "Forest Temple Phantom Ganon Heart",
+    "Fire Temple Volvagia Heart",
+    "Water Temple Morpha Heart",
+    "Shadow Temple Bongo Bongo Heart",
+    "Spirit Temple Twinrova Heart",
+    "Song from Impa",
+    "Sheik in Ice Cavern",
+    # only one exists
+    "Bottom of the Well Lens of Truth Chest", "Bottom of the Well MQ Lens of Truth Chest",
+    # only one exists
+    "Gerudo Training Ground Maze Path Final Chest", "Gerudo Training Ground MQ Ice Arrows Chest",
+]
+
 
 def location_is_viewable(loc_name, correct_chest_sizes):
     return correct_chest_sizes and loc_name in location_groups['Chest'] or loc_name in location_groups['CanSee']
