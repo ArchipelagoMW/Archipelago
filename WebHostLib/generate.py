@@ -8,7 +8,7 @@ import concurrent.futures
 from collections import Counter
 from typing import Dict, Optional, Any
 
-from flask import request, flash, redirect, url_for, session, render_template, Markup
+from flask import request, flash, redirect, url_for, session, render_template
 from pony.orm import commit, db_session
 
 from BaseClasses import seeddigits, get_seed
@@ -52,7 +52,7 @@ def generate(race=False):
         else:
             file = request.files['file']
             options = get_yaml_data(file)
-            if isinstance(options, (str, Markup)):
+            if isinstance(options, str):
                 flash(options)
             else:
                 meta = get_meta(request.form)

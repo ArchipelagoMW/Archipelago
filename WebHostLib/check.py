@@ -25,7 +25,7 @@ def check():
         else:
             file = request.files['file']
             options = get_yaml_data(file)
-            if isinstance(options, (str, Markup)):
+            if isinstance(options, str):
                 flash(options)
             else:
                 results, _ = roll_options(options)
