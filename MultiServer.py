@@ -1330,7 +1330,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output("Cheating is disabled.")
             return False
 
-    def get_hints(self, input_text: str, for_location: bool = False) -> bool:
+    def get_hints(self, input_text: str, for_location: bool = False, hint_all: bool = False) -> bool:
         points_available = get_client_points(self.ctx, self.client)
         cost = self.ctx.get_hint_cost(self.client.slot)
 
@@ -1401,7 +1401,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 if not not_found_hints:  # everything's been found, no need to pay
                     can_pay = 1000
                 elif cost:
-                    can_pay = int((points_available // cost) > 0)  # limit to 1 new hint per call
+                    if hint_all:
+                        can_pay = int(points_available // cost)
+                    else:
+                        can_pay = int((points_available // cost) > 0)  # limit to 1 new hint per call
                 else:
                     can_pay = 1000
 
@@ -1452,12 +1455,20 @@ class ClientMessageProcessor(CommonCommandProcessor):
         If hint costs are on, this will only give you one new result,
         you can rerun the command to get more in that case."""
         return self.get_hints(item_name)
+    
+    @mark_raw
+    def _cmd_hint_all(self, item_name: str = "") -> bool:
+        """Use !hint_all {item_name},
+        for example !hint Lamp to get a spoiler peek for that item.
+        If hint costs are on, this will give you every result that
+        you can afford to pay for."""
+        return self.get_hints(item_name, hint_all=True)
 
     @mark_raw
     def _cmd_hint_location(self, location: str = "") -> bool:
         """Use !hint_location {location_name},
         for example !hint_location atomic-bomb to get a spoiler peek for that location."""
-        return self.get_hints(location, True)
+        return self.get_hints(location, for_location=True)
 
 
 def get_checked_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
