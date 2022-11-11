@@ -661,13 +661,14 @@ def distribute_planned(world: MultiWorld) -> None:
 
     swept_state = world.state.copy()
     swept_state.sweep_for_events()
-    early_locations = {}
-    non_early_locations = {}
-    for player in world.player_ids:
-        reachable_locations = world.get_reachable_locations(swept_state, player)
-        unfilled_locations = world.get_unfilled_locations(player)
-        early_locations[player] = [loc.name for loc in reachable_locations if loc in unfilled_locations]
-        non_early_locations[player] = [loc.name for loc in unfilled_locations if loc not in reachable_locations]
+    reachable = frozenset(world.get_reachable_locations(swept_state))
+    early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
+    non_early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
+    for loc in world.get_unfilled_locations():
+        if loc in reachable:
+            early_locations[loc.player].append(loc.name)
+        else:  # not reachable with swept state
+            non_early_locations[loc.player].append(loc.name)
 
     # TODO: remove. Preferably by implementing key drop
     from worlds.alttp.Regions import key_drop_data
