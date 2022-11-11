@@ -60,7 +60,7 @@ class AggressiveScanLogic(Choice):
 
     def get_pool(self) -> typing.List[str]:
         if self == self.option_removed:
-            return Definitions.all_creatures_presorted_without_aggressive
+            return Definitions.all_creatures_presorted_without_aggressive_and_containment
         elif self == self.option_stasis:
             return Definitions.all_creatures_presorted_without_containment
         elif self == self.option_containment:

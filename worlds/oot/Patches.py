@@ -168,7 +168,7 @@ def patch_rom(world, rom):
     rom.write_bytes(0x1FC0CF8, Block_code)
 
     # songs as items flag
-    songs_as_items = (world.shuffle_song_items != 'song') or world.starting_songs
+    songs_as_items = (world.shuffle_song_items != 'song') or world.songs_as_items
 
     if songs_as_items:
         rom.write_byte(rom.sym('SONGS_AS_ITEMS'), 1)
@@ -1326,7 +1326,7 @@ def patch_rom(world, rom):
     override_table = get_override_table(world)
     rom.write_bytes(rom.sym('cfg_item_overrides'), get_override_table_bytes(override_table))
     rom.write_byte(rom.sym('PLAYER_ID'), min(world.player, 255)) # Write player ID
-    rom.write_bytes(rom.sym('AP_PLAYER_NAME'), bytearray(world.multiworld.get_player_name(world.player), 'ascii'))
+    rom.write_bytes(rom.sym('AP_PLAYER_NAME'), bytearray(world.connect_name, encoding='ascii'))
 
     if world.death_link:
         rom.write_byte(rom.sym('DEATH_LINK'), 0x01)

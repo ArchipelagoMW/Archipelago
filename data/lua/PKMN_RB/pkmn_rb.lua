@@ -28,22 +28,9 @@ local u8 = nil
 local wU8 = nil
 local u16
 
---Sets correct memory access functions based on whether NesHawk or QuickNES is loaded
 local function defineMemoryFunctions()
 	local memDomain = {}
 	local domains = memory.getmemorydomainlist()
-	--if domains[1] == "System Bus" then
-	--	--NesHawk
-	--	isNesHawk = true
-	--	memDomain["systembus"] = function() memory.usememorydomain("System Bus") end
-	--	memDomain["saveram"]   = function() memory.usememorydomain("Battery RAM") end
-	--	memDomain["rom"]       = function() memory.usememorydomain("PRG ROM") end
-	--elseif domains[1] == "WRAM" then
-	--	--QuickNES
-	--	memDomain["systembus"] = function() memory.usememorydomain("System Bus") end
-	--	memDomain["saveram"]   = function() memory.usememorydomain("WRAM") end
-	--	memDomain["rom"]       = function() memory.usememorydomain("PRG ROM") end
-	--end
 	memDomain["rom"] = function() memory.usememorydomain("ROM") end
 	memDomain["wram"] = function() memory.usememorydomain("WRAM") end
 	return memDomain
@@ -148,7 +135,7 @@ function receive()
         curstate = STATE_UNINITIALIZED
         return
     elseif e == 'timeout' then
-        --print("timeout") -- this keeps happening for some reason? just hide it
+        print("timeout")
         return
     elseif e ~= nil then
         print(e)
@@ -200,14 +187,15 @@ function main()
     server, error = socket.bind('localhost', 17242)
 
     while true do
+        frame = frame + 1
         if not (curstate == prevstate) then
             print("Current state: "..curstate)
             prevstate = curstate
         end
         if (curstate == STATE_OK) or (curstate == STATE_INITIAL_CONNECTION_MADE) or (curstate == STATE_TENTATIVELY_CONNECTED) then
-            if (frame % 60 == 0) then
+            if (frame % 5 == 0) then
                 receive()
-                if u8(InGame) == 0xAC then
+                if u8(InGame) == 0xAC and u8(APItemAddress) == 0x00 then
                     ItemIndex = u16(APIndex)
                     if ItemsReceived[ItemIndex + 1] ~= nil then
                         wU8(APItemAddress, ItemsReceived[ItemIndex + 1] - 172000000)
