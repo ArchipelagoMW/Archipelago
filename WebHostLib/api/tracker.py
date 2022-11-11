@@ -66,12 +66,15 @@ def tracker_data(tracker: UUID):
     for team, names in enumerate(names):
         for player, name in enumerate(names, 1):
             player_names[team] = {player: name}
+
+    aliases = {}
     for (team, player), alias in multisave.get("name_aliases", {}).items():
-        player_names[team][player] = alias
+        aliases[team][player] = alias
 
     return jsonify({
         "groups": groups,
         "player_names": player_names,
+        "aliases": aliases,
         "checks_done": checks_done,
         "total_checks": locations,
         "hints": hints,
