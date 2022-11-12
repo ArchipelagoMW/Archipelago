@@ -224,7 +224,7 @@ for diff in {'easy', 'normal', 'hard', 'expert'}:
 
 def generate_itempool(world):
     player = world.player
-    world = world.world
+    world = world.multiworld
 
     if world.difficulty[player] not in difficulties:
         raise NotImplementedError(f"Diffulty {world.difficulty[player]}")
@@ -286,7 +286,7 @@ def generate_itempool(world):
         region = world.get_region('Light World', player)
 
         loc = ALttPLocation(player, "Murahdahla", parent=region)
-        loc.access_rule = lambda state: state.has_triforce_pieces(state.world.treasure_hunt_count[player], player)
+        loc.access_rule = lambda state: state.has_triforce_pieces(state.multiworld.treasure_hunt_count[player], player)
 
         region.locations.append(loc)
         world.clear_location_cache()
@@ -415,7 +415,7 @@ def generate_itempool(world):
         if additional_triforce_pieces > len(nonprogressionitems):
             raise FillError(f"Not enough non-progression items to replace with Triforce pieces found for player "
                             f"{world.get_player_name(player)}.")
-        progressionitems += [ItemFactory("Triforce Piece", player)] * additional_triforce_pieces
+        progressionitems += [ItemFactory("Triforce Piece", player) for _ in range(additional_triforce_pieces)]
         nonprogressionitems.sort(key=lambda item: int("Heart" in item.name))  # try to keep hearts in the pool
         nonprogressionitems = nonprogressionitems[additional_triforce_pieces:]
         world.random.shuffle(nonprogressionitems)
@@ -480,7 +480,7 @@ def set_up_take_anys(world, player):
     old_man_take_any.shop = TakeAny(old_man_take_any, 0x0112, 0xE2, True, True, total_shop_slots)
     world.shops.append(old_man_take_any.shop)
 
-    swords = [item for item in world.itempool if item.type == 'Sword' and item.player == player]
+    swords = [item for item in world.itempool if item.player == player and item.type == 'Sword']
     if swords:
         sword = world.random.choice(swords)
         world.itempool.remove(sword)

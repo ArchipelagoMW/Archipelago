@@ -1,20 +1,22 @@
 """Outputs a Factorio Mod to facilitate integration with Archipelago"""
 
-import os
-import zipfile
-from typing import Optional
-import threading
 import json
+import os
+import shutil
+import threading
+import zipfile
+from typing import Optional, TYPE_CHECKING
 
 import jinja2
-import shutil
 
 import Utils
-import Patch
+import worlds.Files
 from . import Options
-
 from .Technologies import tech_table, recipes, free_sample_exclusions, progressive_technology_table, \
-    base_tech_table, tech_to_progressive_lookup, fluids
+    base_tech_table, tech_to_progressive_lookup, fluids, useless_technologies
+
+if TYPE_CHECKING:
+    from . import Factorio
 
 template_env: Optional[jinja2.Environment] = None
 
@@ -34,7 +36,8 @@ base_info = {
     "factorio_version": "1.1",
     "dependencies": [
         "base >= 1.1.0",
-        "? science-not-invited"
+        "? science-not-invited",
+        "? factory-levels"
     ]
 }
 
@@ -56,7 +59,7 @@ recipe_time_ranges = {
 }
 
 
-class FactorioModFile(Patch.APContainer):
+class FactorioModFile(worlds.Files.APContainer):
     game = "Factorio"
     compression_method = zipfile.ZIP_DEFLATED  # Factorio can't load LZMA archives
 
@@ -72,9 +75,9 @@ class FactorioModFile(Patch.APContainer):
         super(FactorioModFile, self).write_contents(opened_zipfile)
 
 
-def generate_mod(world, output_directory: str):
+def generate_mod(world: "Factorio", output_directory: str):
     player = world.player
-    multiworld = world.world
+    multiworld = world.multiworld
     global data_final_template, locale_template, control_template, data_template, settings_template
     with template_load_lock:
         if not data_final_template:
@@ -92,18 +95,10 @@ def generate_mod(world, output_directory: str):
             control_template = template_env.get_template("control.lua")
             settings_template = template_env.get_template("settings.lua")
     # get data for templates
-    locations = []
-    for location in multiworld.get_filled_locations(player):
-        if location.address:
-            locations.append((location.name, location.item.name, location.item.player, location.item.advancement))
+    locations = [(location, location.item)
+                 for location in world.locations]
     mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
-    tech_cost_scale = {0: 0.1,
-                       1: 0.25,
-                       2: 0.5,
-                       3: 1,
-                       4: 2,
-                       5: 5,
-                       6: 10}[multiworld.tech_cost[player].value]
+
     random = multiworld.slot_seeds[player]
 
     def flop_random(low, high, base=None):
@@ -117,18 +112,19 @@ def generate_mod(world, output_directory: str):
         return random.uniform(low, high)
 
     template_data = {
-        "locations": locations, "player_names": multiworld.player_name, "tech_table": tech_table,
-        "base_tech_table": base_tech_table, "tech_to_progressive_lookup": tech_to_progressive_lookup,
+        "locations": locations,
+        "player_names": multiworld.player_name,
+        "tech_table": tech_table,
+        "base_tech_table": base_tech_table,
+        "tech_to_progressive_lookup": tech_to_progressive_lookup,
         "mod_name": mod_name,
         "allowed_science_packs": multiworld.max_science_pack[player].get_allowed_packs(),
-        "tech_cost_scale": tech_cost_scale,
         "custom_technologies": multiworld.worlds[player].custom_technologies,
         "tech_tree_layout_prerequisites": multiworld.tech_tree_layout_prerequisites[player],
         "slot_name": multiworld.player_name[player], "seed_name": multiworld.seed_name,
         "slot_player": player,
         "starting_items": multiworld.starting_items[player], "recipes": recipes,
         "random": random, "flop_random": flop_random,
-        "static_nodes": multiworld.worlds[player].static_nodes,
         "recipe_time_scale": recipe_time_scales.get(multiworld.recipe_time[player].value, None),
         "recipe_time_range": recipe_time_ranges.get(multiworld.recipe_time[player].value, None),
         "free_sample_blacklist": {item: 1 for item in free_sample_exclusions},
@@ -138,7 +134,8 @@ def generate_mod(world, output_directory: str):
         "max_science_pack": multiworld.max_science_pack[player].value,
         "liquids": fluids,
         "goal": multiworld.goal[player].value,
-        "energy_link": multiworld.energy_link[player].value
+        "energy_link": multiworld.energy_link[player].value,
+        "useless_technologies": useless_technologies,
     }
 
     for factorio_option in Options.factorio_options:

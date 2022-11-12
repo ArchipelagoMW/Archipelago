@@ -15,7 +15,7 @@ missions. When you receive items, they will immediately become available, even d
 notified via a text box in the top-right corner of the game screen. (The text client for StarCraft 2 also records all
 items in all worlds.)
 
-Missions are launched only through the text client. The Hyperion is never visited. Aditionally, credits are not used.
+Missions are launched only through the text client. The Hyperion is never visited. Additionally, credits are not used.
 
 ## What is the goal of this game when randomized?
 

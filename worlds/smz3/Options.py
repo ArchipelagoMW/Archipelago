@@ -107,7 +107,6 @@ class HeartBeepSpeed(Choice):
     option_Half = 2
     option_Normal = 3
     option_Double = 4
-    alias_false = 0
     default = 3
 
 class HeartColor(Choice):

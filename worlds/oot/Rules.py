@@ -22,11 +22,11 @@ class OOTLogic(LogicMixin):
         return self.has_group("rewards", player, count)
 
     def _oot_has_bottle(self, player): 
-        return self.has_group("bottles", player)
+        return self.has_group("logic_bottles", player)
 
     # Used for fall damage and other situations where damage is unavoidable
     def _oot_can_live_dmg(self, player, hearts):
-        mult = self.world.worlds[player].damage_multiplier
+        mult = self.multiworld.worlds[player].damage_multiplier
         if hearts*4 >= 3:
             return mult != 'ohko' and mult != 'quadruple'
         else:
@@ -39,7 +39,7 @@ class OOTLogic(LogicMixin):
     def _oot_reach_as_age(self, regionname, age, player): 
         if self.age[player] is None: 
             self.age[player] = age
-            can_reach = self.world.get_region(regionname, player).can_reach(self)
+            can_reach = self.multiworld.get_region(regionname, player).can_reach(self)
             self.age[player] = None
             return can_reach
         return self.age[player] == age
@@ -52,7 +52,7 @@ class OOTLogic(LogicMixin):
         }
         if regionname in name_map[tod]:
             return True
-        region = self.world.get_region(regionname, player)
+        region = self.multiworld.get_region(regionname, player)
         if region.provides_time == TimeOfDay.ALL or regionname == 'Root':
             self.day_reachable_regions[player].add(regionname)
             self.dampe_reachable_regions[player].add(regionname)
@@ -82,7 +82,7 @@ class OOTLogic(LogicMixin):
             rrp = getattr(self, f'{age}_reachable_regions')[player]
             bc = getattr(self, f'{age}_blocked_connections')[player]
             queue = deque(getattr(self, f'{age}_blocked_connections')[player])
-            start = self.world.get_region('Menu', player)
+            start = self.multiworld.get_region('Menu', player)
 
             # init on first call - this can't be done on construction since the regions don't exist yet
             if not start in rrp:
@@ -110,7 +110,7 @@ class OOTLogic(LogicMixin):
 def set_rules(ootworld):
     logger = logging.getLogger('')
 
-    world = ootworld.world
+    world = ootworld.multiworld
     player = ootworld.player
 
     if ootworld.logic_rules != 'no_logic': 
@@ -135,7 +135,7 @@ def set_rules(ootworld):
         location = world.get_location('Forest Temple MQ First Room Chest', player)
         forbid_item(location, 'Boss Key (Forest Temple)', ootworld.player)
 
-    if ootworld.shuffle_song_items == 'song' and not ootworld.starting_songs:
+    if ootworld.shuffle_song_items == 'song' and not ootworld.songs_as_items:
         # Sheik in Ice Cavern is the only song location in a dungeon; need to ensure that it cannot be anything else.
         # This is required if map/compass included, or any_dungeon shuffle.
         location = world.get_location('Sheik in Ice Cavern', player)
@@ -213,10 +213,10 @@ def set_shop_rules(ootworld):
 # The goal is to automatically set item rules based on age requirements in case entrances were shuffled
 def set_entrances_based_rules(ootworld):
 
-    if ootworld.world.accessibility == 'beatable': 
+    if ootworld.multiworld.accessibility == 'beatable': 
         return
 
-    all_state = ootworld.world.get_all_state(False)
+    all_state = ootworld.multiworld.get_all_state(False)
 
     for location in filter(lambda location: location.type == 'Shop', ootworld.get_locations()):
         # If a shop is not reachable as adult, it can't have Goron Tunic or Zora Tunic as child can't buy these

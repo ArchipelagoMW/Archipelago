@@ -453,7 +453,7 @@ A Link to the Past:
   death_link:
     false: 50
     true: 0
-    
+
   allow_collect: # Allows for !collect / co-op to auto-open chests containing items for other players.
     #    Off by default, because it currently crashes on real hardware.
     false: 50

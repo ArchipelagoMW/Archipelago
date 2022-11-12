@@ -1,21 +1,23 @@
 from __future__ import annotations
 
-import functools
-import websockets
 import asyncio
+import collections
+import datetime
+import functools
+import logging
+import pickle
+import random
 import socket
 import threading
 import time
-import random
-import pickle
-import logging
-import datetime
+
+import websockets
+from pony.orm import db_session, commit, select
 
 import Utils
-from .models import db_session, Room, select, commit, Command, db
-
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor
 from Utils import get_public_ipv4, get_public_ipv6, restricted_loads, cache_argsless
+from .models import Room, Command, db
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
@@ -49,6 +51,8 @@ class DBCommandProcessor(ServerCommandProcessor):
 
 
 class WebHostContext(Context):
+    room_id: int
+
     def __init__(self, static_server_data: dict):
         # static server data is used during _load_game_data to load required data,
         # without needing to import worlds system, which takes quite a bit of memory
@@ -62,6 +66,8 @@ class WebHostContext(Context):
     def _load_game_data(self):
         for key, value in self.static_server_data.items():
             setattr(self, key, value)
+        self.forced_auto_forfeits = collections.defaultdict(lambda: False, self.forced_auto_forfeits)
+        self.non_hintable_names = collections.defaultdict(frozenset, self.non_hintable_names)
 
     def listen_to_db_commands(self):
         cmdprocessor = DBCommandProcessor(self)
@@ -178,4 +184,12 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict):
 
     from .autolauncher import Locker
     with Locker(room_id):
-        asyncio.run(main())
+        try:
+            asyncio.run(main())
+        except:
+            with db_session:
+                room = Room.get(id=room_id)
+                room.last_port = -1
+                # ensure the Room does not spin up again on its own, minute of safety buffer
+                room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
+            raise

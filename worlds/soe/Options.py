@@ -1,18 +1,33 @@
 import typing
-from Options import Option, Range, Choice, Toggle, DefaultOnToggle, AssembleOptions, DeathLink, ProgressionBalancing
+
+from Options import Range, Choice, Toggle, DefaultOnToggle, AssembleOptions, DeathLink, ProgressionBalancing
 
 
+# typing boilerplate
+class FlagsProtocol(typing.Protocol):
+    value: int
+    default: int
+    flags: typing.List[str]
+
+
+class FlagProtocol(typing.Protocol):
+    value: int
+    default: int
+    flag: str
+
+
+# meta options
 class EvermizerFlags:
     flags: typing.List[str]
 
-    def to_flag(self) -> str:
+    def to_flag(self: FlagsProtocol) -> str:
         return self.flags[self.value]
 
 
 class EvermizerFlag:
     flag: str
 
-    def to_flag(self) -> str:
+    def to_flag(self: FlagProtocol) -> str:
         return self.flag if self.value != self.default else ''
 
 
@@ -21,10 +36,9 @@ class OffOnFullChoice(Choice):
     option_on = 1
     option_full = 2
     alias_chaos = 2
-    alias_false = 0
-    alias_true = 1
 
 
+# actual options
 class Difficulty(EvermizerFlags, Choice):
     """Changes relative spell cost and stuff"""
     display_name = "Difficulty"
@@ -170,6 +184,7 @@ class TrapCount(Range):
     default = 0
 
 
+# more meta options
 class ItemChanceMeta(AssembleOptions):
     def __new__(mcs, name, bases, attrs):
         if 'item_name' in attrs:
@@ -185,6 +200,7 @@ class TrapChance(Range, metaclass=ItemChanceMeta):
     default = 20
 
 
+# more actual options
 class TrapChanceQuake(TrapChance):
     """Sets the chance/ratio of quake traps"""
     item_name = "Quake Trap"
@@ -212,11 +228,12 @@ class TrapChanceOHKO(TrapChance):
 
 class SoEProgressionBalancing(ProgressionBalancing):
     default = 30
-    __doc__ = ProgressionBalancing.__doc__.replace(f"default {ProgressionBalancing.default}", f"default {default}")
+    __doc__ = ProgressionBalancing.__doc__.replace(f"default {ProgressionBalancing.default}", f"default {default}") \
+        if ProgressionBalancing.__doc__ else None
     special_range_names = {**ProgressionBalancing.special_range_names, "normal": default}
 
 
-soe_options: typing.Dict[str, type(Option)] = {
+soe_options: typing.Dict[str, AssembleOptions] = {
     "difficulty":            Difficulty,
     "energy_core":           EnergyCore,
     "required_fragments":    RequiredFragments,

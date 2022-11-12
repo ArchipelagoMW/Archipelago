@@ -11,13 +11,14 @@ def fix_reg(entrance_ids, reg, invalidspot, swaplist, world):
 
 def set_rules(world, player: int, area_connections):
     destination_regions = list(range(13)) + [12,13,14] + list(range(15,15+len(sm64secrets))) # Two instances of Destination Course THI. Past normal course idx are secret regions
-    if world.AreaRandomizer[player].value == 0:
-        entrance_ids = list(range(len(sm64paintings + sm64secrets)))
-    if world.AreaRandomizer[player].value >= 1: # Some randomization is happening, randomize Courses
-        entrance_ids = list(range(len(sm64paintings)))
-        world.random.shuffle(entrance_ids)
-        entrance_ids = entrance_ids + list(range(len(sm64paintings), len(sm64paintings) + len(sm64secrets)))
-    if world.AreaRandomizer[player].value == 2: # Secret Regions as well
+    secret_entrance_ids = list(range(len(sm64paintings), len(sm64paintings) + len(sm64secrets)))
+    course_entrance_ids = list(range(len(sm64paintings)))
+    if world.AreaRandomizer[player].value >= 1:  # Some randomization is happening, randomize Courses
+        world.random.shuffle(course_entrance_ids)
+    if world.AreaRandomizer[player].value == 2:  # Randomize Secrets as well
+        world.random.shuffle(secret_entrance_ids)
+    entrance_ids = course_entrance_ids + secret_entrance_ids
+    if world.AreaRandomizer[player].value == 3:  # Randomize Courses and Secrets in one pool
         world.random.shuffle(entrance_ids)
         # Guarantee first entrance is a course
         swaplist = list(range(len(entrance_ids)))
@@ -86,6 +87,7 @@ def set_rules(world, player: int, area_connections):
         # which would make it impossible to reach downtown area without the cannon.
         add_rule(world.get_location("WDW: Quick Race Through Downtown!", player), lambda state: state.has("Cannon Unlock WDW", player))
         add_rule(world.get_location("WDW: Go to Town for Red Coins", player), lambda state: state.has("Cannon Unlock WDW", player))
+        add_rule(world.get_location("WDW: 1Up Block in Downtown", player), lambda state: state.has("Cannon Unlock WDW", player))
 
     if world.StrictCapRequirements[player]:
         add_rule(world.get_location("BoB: Mario Wings to the Sky", player), lambda state: state.has("Wing Cap", player))
@@ -116,7 +118,7 @@ def set_rules(world, player: int, area_connections):
     add_rule(world.get_location("Toad (Third Floor)", player), lambda state: state.can_reach("Third Floor", 'Region', player) and state.has("Power Star", player, 35))
 
     if world.MIPS1Cost[player].value > world.MIPS2Cost[player].value:
-        world.MIPS2Cost[player].value = world.MIPS1Cost[player].value
+        (world.MIPS2Cost[player].value, world.MIPS1Cost[player].value) = (world.MIPS1Cost[player].value, world.MIPS2Cost[player].value)
     add_rule(world.get_location("MIPS 1", player), lambda state: state.can_reach("Basement", 'Region', player) and state.has("Power Star", player, world.MIPS1Cost[player].value))
     add_rule(world.get_location("MIPS 2", player), lambda state: state.can_reach("Basement", 'Region', player) and state.has("Power Star", player, world.MIPS2Cost[player].value))
 

@@ -1,7 +1,9 @@
 import importlib
-import zipimport
 import os
+import sys
 import typing
+import warnings
+import zipimport
 
 folder = os.path.dirname(__file__)
 
@@ -27,7 +29,8 @@ class WorldSource(typing.NamedTuple):
 world_sources: typing.List[WorldSource] = []
 file: os.DirEntry  # for me (Berserker) at least, PyCharm doesn't seem to infer the type correctly
 for file in os.scandir(folder):
-    if not file.name.startswith("_"):  # prevent explicitly loading __pycache__ and allow _* names for non-world folders
+    # prevent loading of __pycache__ and allow _* for non-world folders, disable files/folders starting with "."
+    if not file.name.startswith(("_", ".")):
         if file.is_dir():
             world_sources.append(WorldSource(file.name))
         elif file.is_file() and file.name.endswith(".apworld"):
@@ -38,7 +41,14 @@ world_sources.sort()
 for world_source in world_sources:
     if world_source.is_zip:
         importer = zipimport.zipimporter(os.path.join(folder, world_source.path))
-        importer.load_module(world_source.path.split(".", 1)[0])
+        spec = importer.find_spec(world_source.path.split(".", 1)[0])
+        mod = importlib.util.module_from_spec(spec)
+        mod.__package__ = f"worlds.{mod.__package__}"
+        mod.__name__ = f"worlds.{mod.__name__}"
+        sys.modules[mod.__name__] = mod
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", message="__package__ != __spec__.parent")
+            importer.exec_module(mod)
     else:
         importlib.import_module(f".{world_source.path}", "worlds")
 

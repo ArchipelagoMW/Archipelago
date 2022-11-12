@@ -12,20 +12,9 @@ import typing
 import queue
 from pathlib import Path
 
-import nest_asyncio
-import sc2
-from sc2.bot_ai import BotAI
-from sc2.data import Race
-from sc2.main import run_game
-from sc2.player import Bot
-
-from MultiServer import mark_raw
+# CommonClient import first to trigger ModuleUpdater
+from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows
-from worlds.sc2wol import SC2WoLWorld
-from worlds.sc2wol.Items import lookup_id_to_name, item_table
-from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
-from worlds.sc2wol.MissionTables import lookup_id_to_mission
-from worlds.sc2wol.Regions import MissionInfo
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -33,10 +22,21 @@ if __name__ == "__main__":
 logger = logging.getLogger("Client")
 sc2_logger = logging.getLogger("Starcraft2")
 
-import colorama
+import nest_asyncio
+import sc2
+from sc2.bot_ai import BotAI
+from sc2.data import Race
+from sc2.main import run_game
+from sc2.player import Bot
+from worlds.sc2wol import SC2WoLWorld
+from worlds.sc2wol.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups
+from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
+from worlds.sc2wol.MissionTables import lookup_id_to_mission
+from worlds.sc2wol.Regions import MissionInfo
 
-from NetUtils import ClientStatus, RawJSONtoTextParser
-from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
+import colorama
+from NetUtils import ClientStatus, NetworkItem, RawJSONtoTextParser
+from MultiServer import mark_raw
 
 nest_asyncio.apply()
 max_bonus: int = 8
@@ -114,11 +114,39 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         """Manually set the SC2 install directory (if the automatic detection fails)."""
         if path:
             os.environ["SC2PATH"] = path
-            check_mod_install()
+            is_mod_installed_correctly()
             return True
         else:
             sc2_logger.warning("When using set_path, you must type the path to your SC2 install directory.")
         return False
+
+    def _cmd_download_data(self, force: bool = False) -> bool:
+        """Download the most recent release of the necessary files for playing SC2 with
+        Archipelago. force should be True or False. force=True will overwrite your files."""
+        if "SC2PATH" not in os.environ:
+            check_game_install_path()
+
+        if os.path.exists(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt"):
+            with open(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt", "r") as f:
+                current_ver = f.read()
+        else:
+            current_ver = None
+
+        tempzip, version = download_latest_release_zip('TheCondor07', 'Starcraft2ArchipelagoData', current_version=current_ver, force_download=force)
+
+        if tempzip != '':
+            try:
+                import zipfile
+                zipfile.ZipFile(tempzip).extractall(path=os.environ["SC2PATH"])
+                sc2_logger.info(f"Download complete. Version {version} installed.")
+                with open(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt", "w") as f:
+                    f.write(version)
+            finally:
+                os.remove(tempzip)
+        else:
+            sc2_logger.warning("Download aborted/failed. Read the log for more information.")
+            return False
+        return True
 
 
 class SC2Context(CommonContext):
@@ -127,7 +155,9 @@ class SC2Context(CommonContext):
     items_handling = 0b111
     difficulty = -1
     all_in_choice = 0
+    mission_order = 0
     mission_req_table: typing.Dict[str, MissionInfo] = {}
+    final_mission: int = 29
     announcements = queue.Queue()
     sc2_run_task: typing.Optional[asyncio.Task] = None
     missions_unlocked: bool = False  # allow launching missions ignoring requirements
@@ -135,7 +165,7 @@ class SC2Context(CommonContext):
     last_loc_list = None
     difficulty_override = -1
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
-    raw_text_parser: RawJSONtoTextParser
+    last_bot: typing.Optional[ArchipelagoBot] = None
 
     def __init__(self, *args, **kwargs):
         super(SC2Context, self).__init__(*args, **kwargs)
@@ -152,22 +182,34 @@ class SC2Context(CommonContext):
             self.difficulty = args["slot_data"]["game_difficulty"]
             self.all_in_choice = args["slot_data"]["all_in_map"]
             slot_req_table = args["slot_data"]["mission_req"]
+            # Maintaining backwards compatibility with older slot data
             self.mission_req_table = {
-                mission: MissionInfo(**slot_req_table[mission]) for mission in slot_req_table
+                mission: MissionInfo(
+                    **{field: value for field, value in mission_info.items() if field in MissionInfo._fields}
+                )
+                for mission, mission_info in slot_req_table.items()
             }
+            self.mission_order = args["slot_data"].get("mission_order", 0)
+            self.final_mission = args["slot_data"].get("final_mission", 29)
 
             self.build_location_to_mission_mapping()
 
-            # Look for and set SC2PATH.
-            # check_game_install_path() returns True if and only if it finds + sets SC2PATH.
-            if "SC2PATH" not in os.environ and check_game_install_path():
-                check_mod_install()
+            # Looks for the required maps and mods for SC2. Runs check_game_install_path.
+            is_mod_installed_correctly()
+            if os.path.exists(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt"):
+                with open(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt", "r") as f:
+                    current_ver = f.read()
+                if is_mod_update_available("TheCondor07", "Starcraft2ArchipelagoData", current_ver):
+                    sc2_logger.info("NOTICE: Update for required files found. Run /download_data to install.")
 
     def on_print_json(self, args: dict):
+        # goes to this world
         if "receiving" in args and self.slot_concerns_self(args["receiving"]):
             relevant = True
+        # found in this world
         elif "item" in args and self.slot_concerns_self(args["item"].player):
             relevant = True
+        # not related
         else:
             relevant = False
 
@@ -270,7 +312,6 @@ class SC2Context(CommonContext):
                     self.refresh_from_launching = True
 
                     self.mission_panel.clear_widgets()
-
                     if self.ctx.mission_req_table:
                         self.last_checked_locations = self.ctx.checked_locations.copy()
                         self.first_check = False
@@ -288,42 +329,58 @@ class SC2Context(CommonContext):
 
                         for category in categories:
                             category_panel = MissionCategory()
+                            if category.startswith('_'):
+                                category_display_name = ''
+                            else:
+                                category_display_name = category
                             category_panel.add_widget(
-                                Label(text=category, size_hint_y=None, height=50, outline_width=1))
+                                Label(text=category_display_name, size_hint_y=None, height=50, outline_width=1))
 
-                            # Map is completed
                             for mission in categories[category]:
-                                text = mission
-                                tooltip = ""
-
+                                text: str = mission
+                                tooltip: str = ""
+                                mission_id: int = self.ctx.mission_req_table[mission].id
                                 # Map has uncollected locations
                                 if mission in unfinished_missions:
                                     text = f"[color=6495ED]{text}[/color]"
-
-                                    tooltip = f"Uncollected locations:\n"
-                                    tooltip += "\n".join([self.ctx.location_names[loc] for loc in
-                                                          self.ctx.locations_for_mission(mission)
-                                                          if loc in self.ctx.missing_locations])
                                 elif mission in available_missions:
                                     text = f"[color=FFFFFF]{text}[/color]"
                                 # Map requirements not met
                                 else:
                                     text = f"[color=a9a9a9]{text}[/color]"
                                     tooltip = f"Requires: "
-                                    if len(self.ctx.mission_req_table[mission].required_world) > 0:
+                                    if self.ctx.mission_req_table[mission].required_world:
                                         tooltip += ", ".join(list(self.ctx.mission_req_table)[req_mission - 1] for
                                                              req_mission in
                                                              self.ctx.mission_req_table[mission].required_world)
 
-                                        if self.ctx.mission_req_table[mission].number > 0:
+                                        if self.ctx.mission_req_table[mission].number:
                                             tooltip += " and "
-                                    if self.ctx.mission_req_table[mission].number > 0:
+                                    if self.ctx.mission_req_table[mission].number:
                                         tooltip += f"{self.ctx.mission_req_table[mission].number} missions completed"
+                                remaining_location_names: typing.List[str] = [
+                                    self.ctx.location_names[loc] for loc in self.ctx.locations_for_mission(mission)
+                                    if loc in self.ctx.missing_locations]
+
+                                if mission_id == self.ctx.final_mission:
+                                    if mission in available_missions:
+                                        text = f"[color=FFBC95]{mission}[/color]"
+                                    else:
+                                        text = f"[color=D0C0BE]{mission}[/color]"
+                                    if tooltip:
+                                        tooltip += "\n"
+                                    tooltip += "Final Mission"
+
+                                if remaining_location_names:
+                                    if tooltip:
+                                        tooltip += "\n"
+                                    tooltip += f"Uncollected locations:\n"
+                                    tooltip += "\n".join(remaining_location_names)
 
                                 mission_button = MissionButton(text=text, size_hint_y=None, height=50)
                                 mission_button.tooltip_text = tooltip
                                 mission_button.bind(on_press=self.mission_callback)
-                                self.mission_id_to_button[self.ctx.mission_req_table[mission].id] = mission_button
+                                self.mission_id_to_button[mission_id] = mission_button
                                 category_panel.add_widget(mission_button)
 
                             category_panel.add_widget(Label(text=""))
@@ -350,11 +407,14 @@ class SC2Context(CommonContext):
 
         self.ui = SC2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
-
-        Builder.load_file(Utils.local_path(os.path.dirname(SC2WoLWorld.__file__), "Starcraft2.kv"))
+        import pkgutil
+        data = pkgutil.get_data(SC2WoLWorld.__module__, "Starcraft2.kv").decode()
+        Builder.load_string(data)
 
     async def shutdown(self):
         await super(SC2Context, self).shutdown()
+        if self.last_bot:
+            self.last_bot.want_close = True
         if self.sc2_run_task:
             self.sc2_run_task.cancel()
 
@@ -429,49 +489,32 @@ wol_default_categories = [
     "Rebellion", "Rebellion", "Rebellion", "Rebellion", "Rebellion", "Prophecy", "Prophecy", "Prophecy", "Prophecy",
     "Char", "Char", "Char", "Char"
 ]
+wol_default_category_names = [
+    "Mar Sara", "Colonist", "Artifact", "Covert", "Rebellion", "Prophecy", "Char"
+]
 
 
-def calculate_items(items):
-    unit_unlocks = 0
-    armory1_unlocks = 0
-    armory2_unlocks = 0
-    upgrade_unlocks = 0
-    building_unlocks = 0
-    merc_unlocks = 0
-    lab_unlocks = 0
-    protoss_unlock = 0
-    minerals = 0
-    vespene = 0
-    supply = 0
+def calculate_items(items: typing.List[NetworkItem]) -> typing.List[int]:
+    network_item: NetworkItem
+    accumulators: typing.List[int] = [0 for _ in type_flaggroups]
 
-    for item in items:
-        data = lookup_id_to_name[item.item]
+    for network_item in items:
+        name: str = lookup_id_to_name[network_item.item]
+        item_data: ItemData = item_table[name]
 
-        if item_table[data].type == "Unit":
-            unit_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Upgrade":
-            upgrade_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Armory 1":
-            armory1_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Armory 2":
-            armory2_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Building":
-            building_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Mercenary":
-            merc_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Laboratory":
-            lab_unlocks += (1 << item_table[data].number)
-        elif item_table[data].type == "Protoss":
-            protoss_unlock += (1 << item_table[data].number)
-        elif item_table[data].type == "Minerals":
-            minerals += item_table[data].number
-        elif item_table[data].type == "Vespene":
-            vespene += item_table[data].number
-        elif item_table[data].type == "Supply":
-            supply += item_table[data].number
+        # exists exactly once
+        if item_data.quantity == 1:
+            accumulators[type_flaggroups[item_data.type]] |= 1 << item_data.number
 
-    return [unit_unlocks, upgrade_unlocks, armory1_unlocks, armory2_unlocks, building_unlocks, merc_unlocks,
-            lab_unlocks, protoss_unlock, minerals, vespene, supply]
+        # exists multiple times
+        elif item_data.type == "Upgrade":
+            accumulators[type_flaggroups[item_data.type]] += 1 << item_data.number
+
+        # sum
+        else:
+            accumulators[type_flaggroups[item_data.type]] += item_data.number
+
+    return accumulators
 
 
 def calc_difficulty(difficulty):
@@ -502,7 +545,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     setup_done: bool
     ctx: SC2Context
     mission_id: int
-
+    want_close: bool = False
     can_read_game = False
 
     last_received_update: int = 0
@@ -510,12 +553,17 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
     def __init__(self, ctx: SC2Context, mission_id):
         self.setup_done = False
         self.ctx = ctx
+        self.ctx.last_bot = self
         self.mission_id = mission_id
         self.boni = [False for _ in range(max_bonus)]
 
         super(ArchipelagoBot, self).__init__()
 
     async def on_step(self, iteration: int):
+        if self.want_close:
+            self.want_close = False
+            await self._client.leave()
+            return
         game_state = 0
         if not self.setup_done:
             self.setup_done = True
@@ -561,7 +609,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
 
                 if self.can_read_game:
                     if game_state & (1 << 1) and not self.mission_completed:
-                        if self.mission_id != 29:
+                        if self.mission_id != self.ctx.final_mission:
                             print("Mission Completed")
                             await self.ctx.send_msgs(
                                 [{"cmd": 'LocationChecks',
@@ -717,13 +765,14 @@ def calc_available_missions(ctx: SC2Context, unlocks=None):
     return available_missions
 
 
-def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete):
+def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete: int):
     """Returns a bool signifying if the mission has all requirements complete and can be done
 
     Arguments:
     ctx -- instance of SC2Context
     locations_to_check -- the mission string name to check
     missions_complete -- an int of how many missions have been completed
+    mission_path -- a list of missions that have already been checked
 """
     if len(ctx.mission_req_table[mission_name].required_world) >= 1:
         # A check for when the requirements are being or'd
@@ -741,7 +790,18 @@ def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete
                 else:
                     req_success = False
 
+            # Grid-specific logic (to avoid long path checks and infinite recursion)
+            if ctx.mission_order in (3, 4):
+                if req_success:
+                    return True
+                else:
+                    if req_mission is ctx.mission_req_table[mission_name].required_world[-1]:
+                        return False
+                    else:
+                        continue
+
             # Recursively check required mission to see if it's requirements are met, in case !collect has been done
+            # Skipping recursive check on Grid settings to speed up checks and avoid infinite recursion
             if not mission_reqs_completed(ctx, list(ctx.mission_req_table)[req_mission - 1], missions_complete):
                 if not ctx.mission_req_table[mission_name].or_requirements:
                     return False
@@ -799,7 +859,12 @@ def check_game_install_path() -> bool:
         with open(einfo) as f:
             content = f.read()
         if content:
-            base = re.search(r" = (.*)Versions", content).group(1)
+            try:
+                base = re.search(r" = (.*)Versions", content).group(1)
+            except AttributeError:
+                sc2_logger.warning(f"Found {einfo}, but it was empty. Run SC2 through the Blizzard launcher, then "
+                                   f"try again.")
+                return False
             if os.path.exists(base):
                 executable = sc2.paths.latest_executeble(Path(base).expanduser() / "Versions")
 
@@ -816,22 +881,58 @@ def check_game_install_path() -> bool:
             else:
                 sc2_logger.warning(f"{einfo} pointed to {base}, but we could not find an SC2 install there.")
     else:
-        sc2_logger.warning(f"Couldn't find {einfo}. Please run /set_path with your SC2 install directory.")
+        sc2_logger.warning(f"Couldn't find {einfo}. Run SC2 through the Blizzard launcher, then try again. "
+                           f"If that fails, please run /set_path with your SC2 install directory.")
     return False
 
 
-def check_mod_install() -> bool:
-    # Pull up the SC2PATH if set. If not, encourage the user to manually run /set_path.
-    try:
-        # Check inside the Mods folder for Archipelago.SC2Mod. If found, tell user. If not, tell user.
-        if os.path.isfile(modfile := (os.environ["SC2PATH"] / Path("Mods") / Path("Archipelago.SC2Mod"))):
-            sc2_logger.info(f"Archipelago mod found at {modfile}.")
-            return True
-        else:
-            sc2_logger.warning(f"Archipelago mod could not be found at {modfile}. Please install the mod file there.")
-    except KeyError:
-        sc2_logger.warning(f"SC2PATH isn't set. Please run /set_path with the path to your SC2 install.")
-    return False
+def is_mod_installed_correctly() -> bool:
+    """Searches for all required files."""
+    if "SC2PATH" not in os.environ:
+        check_game_install_path()
+
+    mapdir = os.environ['SC2PATH'] / Path('Maps/ArchipelagoCampaign')
+    modfile = os.environ["SC2PATH"] / Path("Mods/Archipelago.SC2Mod")
+    wol_required_maps = [
+        "ap_thanson01.SC2Map", "ap_thanson02.SC2Map", "ap_thanson03a.SC2Map", "ap_thanson03b.SC2Map",
+        "ap_thorner01.SC2Map", "ap_thorner02.SC2Map", "ap_thorner03.SC2Map", "ap_thorner04.SC2Map", "ap_thorner05s.SC2Map",
+        "ap_traynor01.SC2Map", "ap_traynor02.SC2Map", "ap_traynor03.SC2Map",
+        "ap_ttosh01.SC2Map", "ap_ttosh02.SC2Map", "ap_ttosh03a.SC2Map", "ap_ttosh03b.SC2Map",
+        "ap_ttychus01.SC2Map", "ap_ttychus02.SC2Map", "ap_ttychus03.SC2Map", "ap_ttychus04.SC2Map", "ap_ttychus05.SC2Map",
+        "ap_tvalerian01.SC2Map", "ap_tvalerian02a.SC2Map", "ap_tvalerian02b.SC2Map", "ap_tvalerian03.SC2Map",
+        "ap_tzeratul01.SC2Map", "ap_tzeratul02.SC2Map", "ap_tzeratul03.SC2Map", "ap_tzeratul04.SC2Map"
+    ]
+    needs_files = False
+
+    # Check for maps.
+    missing_maps = []
+    for mapfile in wol_required_maps:
+        if not os.path.isfile(mapdir / mapfile):
+            missing_maps.append(mapfile)
+    if len(missing_maps) >= 19:
+        sc2_logger.warning(f"All map files missing from {mapdir}.")
+        needs_files = True
+    elif len(missing_maps) > 0:
+        for map in missing_maps:
+            sc2_logger.debug(f"Missing {map} from {mapdir}.")
+            sc2_logger.warning(f"Missing {len(missing_maps)} map files.")
+        needs_files = True
+    else:  # Must be no maps missing
+        sc2_logger.info(f"All maps found in {mapdir}.")
+
+    # Check for mods.
+    if os.path.isfile(modfile):
+        sc2_logger.info(f"Archipelago mod found at {modfile}.")
+    else:
+        sc2_logger.warning(f"Archipelago mod could not be found at {modfile}.")
+        needs_files = True
+
+    # Final verdict.
+    if needs_files:
+        sc2_logger.warning(f"Required files are missing. Run /download_data to acquire them.")
+        return False
+    else:
+        return True
 
 
 class DllDirectory:
@@ -867,6 +968,64 @@ class DllDirectory:
         if sys.platform == "win32":
             return ctypes.windll.kernel32.SetDllDirectoryW(s) != 0
         # NOTE: other OS may support os.environ["LD_LIBRARY_PATH"], but this fix is windows-specific
+        return False
+
+
+def download_latest_release_zip(owner: str, repo: str, current_version: str = None, force_download=False) -> (str, str):
+    """Downloads the latest release of a GitHub repo to the current directory as a .zip file."""
+    import requests
+
+    headers = {"Accept": 'application/vnd.github.v3+json'}
+    url = f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
+
+    r1 = requests.get(url, headers=headers)
+    if r1.status_code == 200:
+        latest_version = r1.json()["tag_name"]
+        sc2_logger.info(f"Latest version: {latest_version}.")
+    else:
+        sc2_logger.warning(f"Status code: {r1.status_code}")
+        sc2_logger.warning(f"Failed to reach GitHub. Could not find download link.")
+        sc2_logger.warning(f"text: {r1.text}")
+        return "", current_version
+
+    if (force_download is False) and (current_version == latest_version):
+        sc2_logger.info("Latest version already installed.")
+        return "", current_version
+
+    sc2_logger.info(f"Attempting to download version {latest_version} of {repo}.")
+    download_url = r1.json()["assets"][0]["browser_download_url"]
+
+    r2 = requests.get(download_url, headers=headers)
+    if r2.status_code == 200:
+        with open(f"{repo}.zip", "wb") as fh:
+            fh.write(r2.content)
+        sc2_logger.info(f"Successfully downloaded {repo}.zip.")
+        return f"{repo}.zip", latest_version
+    else:
+        sc2_logger.warning(f"Status code: {r2.status_code}")
+        sc2_logger.warning("Download failed.")
+        sc2_logger.warning(f"text: {r2.text}")
+        return "", current_version
+
+
+def is_mod_update_available(owner: str, repo: str, current_version: str) -> bool:
+    import requests
+
+    headers = {"Accept": 'application/vnd.github.v3+json'}
+    url = f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
+
+    r1 = requests.get(url, headers=headers)
+    if r1.status_code == 200:
+        latest_version = r1.json()["tag_name"]
+        if current_version != latest_version:
+            return True
+        else:
+            return False
+
+    else:
+        sc2_logger.warning(f"Failed to reach GitHub while checking for updates.")
+        sc2_logger.warning(f"Status code: {r1.status_code}")
+        sc2_logger.warning(f"text: {r1.text}")
         return False
 
 

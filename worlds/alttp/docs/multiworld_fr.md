@@ -12,7 +12,7 @@
 - [QUsb2Snes](https://github.com/Skarsnik/QUsb2snes/releases) (Inclus dans les utilitaires précédents)
 - Une solution logicielle ou matérielle capable de charger et de lancer des fichiers ROM de SNES
     - Un émulateur capable d'éxécuter des scripts Lua
-      ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
+      ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
       [BizHawk](http://tasvideos.org/BizHawk.html))
     - Un SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), ou une autre solution matérielle
       compatible
@@ -112,13 +112,13 @@ Quand le client se lance automatiquement, QUsb2Snes devrait se lancer automatiqu
 c'est la première fois qu'il démarre, il vous sera peut-être demandé de l'autoriser à communiquer à travers le pare-feu
 Windows.
 
-##### snes9x Multitroid
+##### snes9x-rr
 
 1. Chargez votre ROM si ce n'est pas déjà fait.
 2. Cliquez sur le menu "File" et survolez l'option **Lua Scripting**
 3. Cliquez alors sur **New Lua Script Window...**
 4. Dans la nouvelle fenêtre, sélectionnez **Browse...**
-5. Dirigez vous vers le dossier où vous avez extrait snes9x Multitroid, allez dans le dossier `lua`, puis
+5. Dirigez vous vers le dossier où vous avez extrait snes9x-rr, allez dans le dossier `lua`, puis
    choisissez `multibridge.lua`
 6. Remarquez qu'un nom vous a été assigné, et que l'interface Web affiche "SNES Device: Connected", avec ce même nom
    dans le coin en haut à gauche.

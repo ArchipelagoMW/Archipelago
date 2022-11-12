@@ -23,11 +23,11 @@ option_docstrings = {
     "RandomizeDreamers": "Allow for Dreamers to be randomized into the item pool and opens their locations for "
                          "randomization.",
     "RandomizeSkills": "Allow for Skills, such as Mantis Claw or Shade Soul, to be randomized into the item pool. "
-                       "Also opens their locations for receiving randomized items.",
+                       "Also opens their locations\n    for receiving randomized items.",
     "RandomizeFocus": "Removes the ability to focus and randomizes it into the item pool.",
     "RandomizeSwim": "Removes the ability to swim in water and randomizes it into the item pool.",
     "RandomizeCharms": "Allow for Charms to be randomized into the item pool and open their locations for "
-                       "randomization. Includes Charms sold in shops.",
+                       "randomization. Includes Charms\n    sold in shops.",
     "RandomizeKeys": "Allow for Keys to be randomized into the item pool. Includes those sold in shops.",
     "RandomizeMaskShards": "Allow for Mask Shard to be randomized into the item pool and open their locations for"
                            " randomization.",
@@ -44,15 +44,15 @@ option_docstrings = {
     "RandomizeRelics": "Randomize Relics (King's Idol, et al.) into the item pool and open their locations for"
                        " randomization.",
     "RandomizeWhisperingRoots": "Randomize the essence rewards from Whispering Roots into the item pool. Whispering "
-                                "Roots will now grant a randomized item when completed. This can be previewed by "
+                                "Roots will now grant a randomized\n    item when completed. This can be previewed by "
                                 "standing on the root.",
     "RandomizeBossEssence": "Randomize boss essence drops, such as those for defeating Warrior Dreams, into the item "
-                            "pool and open their locations for randomization.",
+                            "pool and open their locations\n    for randomization.",
     "RandomizeGrubs": "Randomize Grubs into the item pool and open their locations for randomization.",
     "RandomizeMimics": "Randomize Mimic Grubs into the item pool and open their locations for randomization."
-                       "Mimic Grubs are always placed in your own game.",
+                       "Mimic Grubs are always placed\n    in your own game.",
     "RandomizeMaps": "Randomize Maps into the item pool. This causes Cornifer to give you a message allowing you to see"
-                     " and buy an item that is randomized into that location as well.",
+                     " and buy an item\n    that is randomized into that location as well.",
     "RandomizeStags": "Randomize Stag Stations unlocks into the item pool as well as placing randomized items "
                       "on the stag station bell/toll.",
     "RandomizeLifebloodCocoons": "Randomize Lifeblood Cocoon grants into the item pool and open their locations"
@@ -60,7 +60,7 @@ option_docstrings = {
     "RandomizeGrimmkinFlames": "Randomize Grimmkin Flames into the item pool and open their locations for "
                                "randomization.",
     "RandomizeJournalEntries": "Randomize the Hunter's Journal as well as the findable journal entries into the item "
-                               "pool, and open their locations for randomization. Does not include journal entries "
+                               "pool, and open their locations\n    for randomization. Does not include journal entries "
                                "gained by killing enemies.",
     "RandomizeNail": "Removes the ability to swing the nail left, right and up, and shuffles these into the item pool.",
     "RandomizeGeoRocks": "Randomize Geo Rock rewards into the item pool and open their locations for randomization.",
@@ -68,9 +68,9 @@ option_docstrings = {
     "RandomizeSoulTotems": "Randomize Soul Refill items into the item pool and open the Soul Totem locations for"
                            " randomization.",
     "RandomizeLoreTablets": "Randomize Lore items into the itempool, one per Lore Tablet, and place randomized item "
-                            "grants on the tablets themselves. You must still read the tablet to get the item.",
+                            "grants on the tablets themselves.\n    You must still read the tablet to get the item.",
     "PreciseMovement": "Places skips into logic which require extremely precise player movement, possibly without "
-                       "movement skills such as dash or hook.",
+                       "movement skills such as\n    dash or hook.",
     "ProficientCombat": "Places skips into logic which require proficient combat, possibly with limited items.",
     "BackgroundObjectPogos": "Places skips into logic for locations which are reachable via pogoing off of "
                              "background objects.",
@@ -299,7 +299,8 @@ class SlyShopSlots(Range):
 
 
 class SlyKeyShopSlots(Range):
-    """For each extra slot, add a location to the Sly Shop (requiring Shopkeeper's Key) and a filler item to the item pool."""
+    """For each extra slot, add a location to the Sly Shop (requiring Shopkeeper's Key) and a filler item to the item
+    pool."""
 
     display_name = "Sly Key Shop Slots"
     default = 6
@@ -324,7 +325,8 @@ class SalubraShopSlots(Range):
 
 
 class SalubraCharmShopSlots(Range):
-    """For each extra slot, add a location to the Salubra Shop (requiring Charms), and a filler item to the item pool."""
+    """For each extra slot, add a location to the Salubra Shop (requiring Charms), and a filler item to the item
+    pool."""
 
     display_name = "Salubra Charm Shop Slots"
     default = 5
@@ -409,7 +411,6 @@ class DeathLink(Choice):
     shade: DeathLink functions like a normal death if you do not already have a shade, shadeless otherwise.
     """
     option_off = 0
-    alias_false = 0
     alias_no = 0
     alias_true = 1
     alias_on = 1
@@ -435,10 +436,8 @@ class CostSanity(Choice):
     These costs can be in Geo (except Grubfather, Seer and Eggshop), Grubs, Charms, Essence and/or Rancid Eggs
     """
     option_off = 0
-    alias_false = 0
     alias_no = 0
     option_on = 1
-    alias_true = 1
     alias_yes = 1
     option_shopsonly = 2
     option_notshops = 3
