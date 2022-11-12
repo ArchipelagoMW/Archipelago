@@ -11,9 +11,9 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_rule, set_rule
 from .Client import L2ACSNIClient  # noqa: F401
 from .Items import ItemData, ItemType, l2ac_item_name_to_id, l2ac_item_table, L2ACItem, start_id as items_start_id
-from .Locations import l2ac_location_name_to_id, l2ac_location_table, L2ACLocation
-from .Options import Boss, CapsuleMonstersAvailable, CapsuleStartingForm, CapsuleStartingLevel, Goal, \
-    l2ac_option_definitions, MasterHp, PartyMembersAvailable, PartyStartingLevel, StartingParty
+from .Locations import l2ac_location_name_to_id, L2ACLocation
+from .Options import Boss, CapsuleStartingForm, CapsuleStartingLevel, Goal, l2ac_option_definitions, MasterHp, \
+    PartyStartingLevel, ShuffleCapsuleMonsters, ShufflePartyMembers, StartingParty
 from .Rom import get_base_rom_bytes, get_base_rom_path, L2ACDeltaPatch
 from .basepatch import apply_basepatch
 
@@ -51,8 +51,7 @@ class L2ACWorld(World):
         "Party members": {name for name, data in l2ac_item_table.items() if data.type is ItemType.PARTY_MEMBER},
     }
     data_version: int = 1
-    required_client_version: Tuple[int, int, int] = (0, 1, 6)
-    required_server_version: Tuple[int, int, int] = (0, 2, 4)
+    required_client_version: Tuple[int, int, int] = (0, 3, 6)
 
     # L2ACWorld specific properties
     rom_name: Optional[bytearray]
@@ -61,7 +60,6 @@ class L2ACWorld(World):
     blue_chest_count: Optional[int]
     boss: Optional[Boss]
     capsule_cravings_jp_style: Optional[int]
-    capsule_monsters_available: Optional[int]
     capsule_starting_form: Optional[CapsuleStartingForm]
     capsule_starting_level: Optional[CapsuleStartingLevel]
     crowded_floor_chance: Optional[int]
@@ -74,14 +72,12 @@ class L2ACWorld(World):
     iris_floor_chance: Optional[int]
     iris_treasures_required: Optional[int]
     master_hp: Optional[int]
-    party_members_available: Optional[int]
     party_starting_level: Optional[PartyStartingLevel]
     run_speed: Optional[int]
+    shuffle_capsule_monsters: Optional[ShuffleCapsuleMonsters]
+    shuffle_party_members: Optional[ShufflePartyMembers]
     starting_capsule: Optional[int]
     starting_party: Optional[StartingParty]
-
-    def __init__(self, multiworld: MultiWorld, player: int):
-        super().__init__(multiworld, player)
 
     @classmethod
     def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
@@ -90,7 +86,7 @@ class L2ACWorld(World):
             raise FileNotFoundError(f"Could not find base ROM for {cls.game}: {rom_file}")
 
         # # uncomment this section to recreate the basepatch
-        # # (you will need to provide "asar-x64.dll" and "asar.py" in the basepatch directory)
+        # # (you will need to provide "asar.py" as well as an Asar library in the basepatch directory)
         # from .basepatch import create_basepatch
         # create_basepatch()
 
@@ -103,7 +99,6 @@ class L2ACWorld(World):
         self.blue_chest_count = self.multiworld.blue_chest_count[self.player].value
         self.boss = self.multiworld.boss[self.player]
         self.capsule_cravings_jp_style = self.multiworld.capsule_cravings_jp_style[self.player].value
-        self.capsule_monsters_available = self.multiworld.capsule_monsters_available[self.player].value
         self.capsule_starting_form = self.multiworld.capsule_starting_form[self.player]
         self.capsule_starting_level = self.multiworld.capsule_starting_level[self.player]
         self.crowded_floor_chance = self.multiworld.crowded_floor_chance[self.player].value
@@ -116,9 +111,10 @@ class L2ACWorld(World):
         self.iris_floor_chance = self.multiworld.iris_floor_chance[self.player].value
         self.iris_treasures_required = self.multiworld.iris_treasures_required[self.player].value
         self.master_hp = self.multiworld.master_hp[self.player].value
-        self.party_members_available = self.multiworld.party_members_available[self.player].value
         self.party_starting_level = self.multiworld.party_starting_level[self.player]
         self.run_speed = self.multiworld.run_speed[self.player].value
+        self.shuffle_capsule_monsters = self.multiworld.shuffle_capsule_monsters[self.player]
+        self.shuffle_party_members = self.multiworld.shuffle_party_members[self.player]
         self.starting_capsule = self.multiworld.starting_capsule[self.player].value
         self.starting_party = self.multiworld.starting_party[self.player]
 
@@ -128,7 +124,7 @@ class L2ACWorld(World):
             self.initial_floor = self.final_floor - 1
         if self.master_hp == MasterHp.special_range_names["scale"]:
             self.master_hp = MasterHp.scale(self.final_floor)
-        if self.party_members_available == PartyMembersAvailable.option_shuffled_into_multiworld:
+        if self.shuffle_party_members:
             self.starting_party.value = 0x00000001
 
     def create_regions(self) -> None:
@@ -139,13 +135,12 @@ class L2ACWorld(World):
         ancient_dungeon = Region("AncientDungeon", RegionType.Generic, "Ancient Dungeon", self.player, self.multiworld)
         ancient_dungeon.exits.append(Entrance(self.player, "FinalFloorEntrance", menu))
         item_count: int = self.blue_chest_count
-        if self.capsule_monsters_available == CapsuleMonstersAvailable.option_shuffled_into_multiworld:
+        if self.shuffle_capsule_monsters:
             item_count += len(self.item_name_groups["Capsule monsters"])
-        if self.party_members_available == PartyMembersAvailable.option_shuffled_into_multiworld:
+        if self.shuffle_party_members:
             item_count += len(self.item_name_groups["Party members"])
-        for location in l2ac_location_table[:item_count]:
-            location_id: int = self.location_name_to_id[location.name]
-            ancient_dungeon.locations.append(L2ACLocation(self.player, location.name, location_id, ancient_dungeon))
+        for location_name, location_id in itertools.islice(l2ac_location_name_to_id.items(), item_count):
+            ancient_dungeon.locations.append(L2ACLocation(self.player, location_name, location_id, ancient_dungeon))
         prog_chest_access = L2ACItem("Progressive chest access", ItemClassification.progression, None, self.player)
         for i in range(CHESTS_PER_SPHERE, item_count, CHESTS_PER_SPHERE):
             chest_access = \
@@ -158,6 +153,9 @@ class L2ACWorld(World):
         self.multiworld.regions.append(ancient_dungeon)
 
         final_floor = Region("FinalFloor", RegionType.Generic, "Ancient Cave Final Floor", self.player, self.multiworld)
+        ff_reached = L2ACLocation(self.player, "Final Floor reached", None, final_floor)
+        ff_reached.place_locked_item(L2ACItem("Final Floor access", ItemClassification.progression, None, self.player))
+        final_floor.locations.append(ff_reached)
         boss = L2ACLocation(self.player, "Boss", None, final_floor)
         boss.place_locked_item(L2ACItem("Boss victory", ItemClassification.progression, None, self.player))
         final_floor.locations.append(boss)
@@ -171,10 +169,10 @@ class L2ACWorld(World):
     def create_items(self) -> None:
         item_pool: List[str] = \
             self.multiworld.random.choices(sorted(self.item_name_groups["Blue chest items"]), k=self.blue_chest_count)
-        if self.capsule_monsters_available == CapsuleMonstersAvailable.option_shuffled_into_multiworld:
+        if self.shuffle_capsule_monsters:
             item_pool += self.item_name_groups["Capsule monsters"]
             self.blue_chest_count += len(self.item_name_groups["Capsule monsters"])
-        if self.party_members_available == PartyMembersAvailable.option_shuffled_into_multiworld:
+        if self.shuffle_party_members:
             item_pool += self.item_name_groups["Party members"]
             self.blue_chest_count += len(self.item_name_groups["Party members"])
         for item_name in item_pool:
@@ -199,15 +197,15 @@ class L2ACWorld(World):
                  lambda state: state.can_reach(f"Blue chest {self.blue_chest_count}", "Location", self.player))
         set_rule(self.multiworld.get_location("Boss", self.player),
                  lambda state: state.can_reach(f"Blue chest {self.blue_chest_count}", "Location", self.player))
-        if self.capsule_monsters_available == CapsuleMonstersAvailable.option_shuffled_into_multiworld:
+        if self.shuffle_capsule_monsters:
             add_rule(self.multiworld.get_location("Boss", self.player), lambda state: state.has("DARBI", self.player))
-        if self.party_members_available == PartyMembersAvailable.option_shuffled_into_multiworld:
+        if self.shuffle_party_members:
             add_rule(self.multiworld.get_location("Boss", self.player), lambda state: state.has("Dekar", self.player)
                      and state.has("Guy", self.player) and state.has("Arty", self.player))
 
         if self.goal == Goal.option_final_floor:
             self.multiworld.completion_condition[self.player] = \
-                lambda state: state.can_reach("FinalFloor", "Region", self.player)
+                lambda state: state.has("Final Floor access", self.player)
         elif self.goal == Goal.option_iris_treasure_hunt:
             self.multiworld.completion_condition[self.player] = \
                 lambda state: state.has("Treasures collected", self.player)
@@ -218,45 +216,42 @@ class L2ACWorld(World):
             self.multiworld.completion_condition[self.player] = \
                 lambda state: state.has("Boss victory", self.player) and state.has("Treasures collected", self.player)
 
-    def generate_basic(self) -> None:
-        pass
-
     def generate_output(self, output_directory: str) -> None:
         rom_path: str = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
 
         try:
             rom_bytearray = bytearray(apply_basepatch(get_base_rom_bytes()))
-
+            # start and stop indices are offsets in the ROM file, not LoROM mapped SNES addresses
             rom_bytearray[0x007FC0:0x007FC0 + 21] = self.rom_name
-            rom_bytearray[0x019176] = 0x38 if self.gear_variety_after_b9 else 0x18
             rom_bytearray[0x014308:0x014308 + 1] = self.capsule_starting_level.value.to_bytes(1, "little")
-            rom_bytearray[0x01432F:0x01432F + 1] = self.capsule_starting_form.unlock().to_bytes(1, "little")
+            rom_bytearray[0x01432F:0x01432F + 1] = self.capsule_starting_form.unlock.to_bytes(1, "little")
             rom_bytearray[0x01433C:0x01433C + 1] = self.capsule_starting_form.value.to_bytes(1, "little")
             rom_bytearray[0x0190D5:0x0190D5 + 1] = self.iris_floor_chance.to_bytes(1, "little")
             rom_bytearray[0x019153:0x019153 + 1] = (0x63 - self.blue_chest_chance).to_bytes(1, "little")
+            rom_bytearray[0x019176] = 0x38 if self.gear_variety_after_b9 else 0x18
             rom_bytearray[0x019477:0x019477 + 1] = self.healing_floor_chance.to_bytes(1, "little")
             rom_bytearray[0x0194A2:0x0194A2 + 1] = self.crowded_floor_chance.to_bytes(1, "little")
             rom_bytearray[0x019E82:0x019E82 + 1] = self.final_floor.to_bytes(1, "little")
             rom_bytearray[0x01FC75:0x01FC75 + 1] = self.run_speed.to_bytes(1, "little")
             rom_bytearray[0x01FC81:0x01FC81 + 1] = self.run_speed.to_bytes(1, "little")
-            rom_bytearray[0x02B2A1:0x02B2A1 + 5] = self.starting_party.roster()
+            rom_bytearray[0x02B2A1:0x02B2A1 + 5] = self.starting_party.roster
             for offset in range(0x02B395, 0x02B452, 0x1B):
                 rom_bytearray[offset:offset + 1] = self.party_starting_level.value.to_bytes(1, "little")
             for offset in range(0x02B39A, 0x02B457, 0x1B):
-                rom_bytearray[offset:offset + 3] = self.party_starting_level.to_xp().to_bytes(3, "little")
+                rom_bytearray[offset:offset + 3] = self.party_starting_level.xp.to_bytes(3, "little")
             rom_bytearray[0x05699E:0x05699E + 147] = self.get_goal_text_bytes()
-            rom_bytearray[0x056AA3:0x056AA3 + 24] = self.starting_party.event_script()
+            rom_bytearray[0x056AA3:0x056AA3 + 24] = self.starting_party.event_script
             rom_bytearray[0x072742:0x072742 + 1] = self.boss.value.to_bytes(1, "little")
-            rom_bytearray[0x072748:0x072748 + 1] = self.boss.flag().to_bytes(1, "little")
+            rom_bytearray[0x072748:0x072748 + 1] = self.boss.flag.to_bytes(1, "little")
             rom_bytearray[0x09D59B:0x09D59B + 256] = self.get_node_connection_table()
             rom_bytearray[0x0B4F02:0x0B4F02 + 2] = self.master_hp.to_bytes(2, "little")
             rom_bytearray[0x280010:0x280010 + 2] = self.blue_chest_count.to_bytes(2, "little")
-            rom_bytearray[0x280012:0x280012 + 3] = self.capsule_starting_level.to_xp().to_bytes(3, "little")
+            rom_bytearray[0x280012:0x280012 + 3] = self.capsule_starting_level.xp.to_bytes(3, "little")
             rom_bytearray[0x280015:0x280015 + 1] = self.initial_floor.to_bytes(1, "little")
             rom_bytearray[0x280016:0x280016 + 1] = self.starting_capsule.to_bytes(1, "little")
             rom_bytearray[0x280017:0x280017 + 1] = self.iris_treasures_required.to_bytes(1, "little")
-            rom_bytearray[0x280018:0x280018 + 1] = self.party_members_available.to_bytes(1, "little")
-            rom_bytearray[0x280019:0x280019 + 1] = self.capsule_monsters_available.to_bytes(1, "little")
+            rom_bytearray[0x280018:0x280018 + 1] = self.shuffle_party_members.unlock.to_bytes(1, "little")
+            rom_bytearray[0x280019:0x280019 + 1] = self.shuffle_capsule_monsters.unlock.to_bytes(1, "little")
             rom_bytearray[0x280030:0x280030 + 1] = self.goal.to_bytes(1, "little")
             rom_bytearray[0x28003D:0x28003D + 1] = self.death_link.to_bytes(1, "little")
             rom_bytearray[0x281200:0x281200 + 470] = self.get_capsule_cravings_table()
@@ -273,9 +268,6 @@ class L2ACWorld(World):
         finally:
             if os.path.exists(rom_path):
                 os.unlink(rom_path)
-
-    def fill_slot_data(self) -> Dict[str, Any]:
-        return {}
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:
         b64_name: str = base64.b64encode(bytes(self.rom_name)).decode()

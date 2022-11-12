@@ -79,9 +79,10 @@ class BlueChestChance(Range):
 
 
 class BlueChestCount(Range):
-    """The number of blue chests that will be counted as multiworld location checks.
+    """The number of blue chest items that will be in your item pool.
 
-    An equal number of blue chest items belonging to you will be shuffled into the multiworld.
+    The number of blue chests in your world that count as multiworld location checks will be equal this amount plus one
+    more for each party member or capsule monster if you have shuffle_party_members/shuffle_capsule_monsters enabled.
     (You will still encounter blue chests in your world after all the multiworld location checks have been exhausted,
     but these chests will then generate items for yourself only.)
     Supported values: 10 – 75
@@ -158,6 +159,7 @@ class Boss(RandomGroupsChoice):
     }
     extra_options = frozenset(random_groups)
 
+    @property
     def flag(self) -> int:
         return 0xFE if self.value == Boss.option_master else 0xFF
 
@@ -182,22 +184,6 @@ class CapsuleCravingsJPStyle(Toggle):
     display_name = "Capsule cravings JP style"
 
 
-class CapsuleMonstersAvailable(Choice):
-    """How capsule monsters are made available to you.
-
-    Supported values:
-    all — all 7 capsule monsters are available in the menu and can be selected right away
-    shuffled_into_multiworld — you start without capsule monster; 7 new "items" are added to your pool and shuffled into
-        the multiworld; when one of these items is found, the corresponding capsule monster is unlocked for you to use
-    Default value: all (same as in an unmodified game)
-    """
-
-    display_name = "Capsule monsters available"
-    option_all = 0b01111111
-    option_shuffled_into_multiworld = 0b00000000
-    default = option_all
-
-
 class CapsuleStartingForm(SpecialRange):
     """The starting form of your capsule monsters.
 
@@ -215,6 +201,7 @@ class CapsuleStartingForm(SpecialRange):
         "m": 5,
     }
 
+    @property
     def unlock(self) -> int:
         if self.value == self.special_range_names["m"]:
             return 0x0B
@@ -240,7 +227,8 @@ class CapsuleStartingLevel(LevelMixin, SpecialRange):
         "party_starting_level": 0,
     }
 
-    def to_xp(self) -> int:
+    @property
+    def xp(self) -> int:
         return self._to_xp(self.value, capsule=True)
 
 
@@ -390,22 +378,6 @@ class MasterHp(SpecialRange):
         return final_floor * 100 + 80
 
 
-class PartyMembersAvailable(Choice):
-    """How party members are made available to you.
-
-    Supported values:
-    all — all 6 optional party members are present in the cafe and can be recruited right away
-    shuffled_into_multiworld — only Maxim is available from the start; 6 new "items" are added to your pool and shuffled
-        into the multiworld; when one of these items is found, the corresponding party member is unlocked for you to use
-    Default value: all (same as in an unmodified game)
-    """
-
-    display_name = "Party members available"
-    option_all = 0b11111100
-    option_shuffled_into_multiworld = 0b00000000
-    default = option_all
-
-
 class PartyStartingLevel(LevelMixin, Range):
     """The starting level of your party members.
 
@@ -418,7 +390,8 @@ class PartyStartingLevel(LevelMixin, Range):
     range_end = 99
     default = 1
 
-    def to_xp(self) -> int:
+    @property
+    def xp(self) -> int:
         return self._to_xp(self.value, capsule=False)
 
 
@@ -437,10 +410,44 @@ class RunSpeed(Choice):
     default = option_disabled
 
 
+class ShuffleCapsuleMonsters(Toggle):
+    """Shuffle the capsule monsters into the multiworld.
+
+    Supported values:
+    false — all 7 capsule monsters are available in the menu and can be selected right away
+    true — you start without capsule monster; 7 new "items" are added to your pool and shuffled into the multiworld;
+        when one of these items is found, the corresponding capsule monster is unlocked for you to use
+    Default value: false (same as in an unmodified game)
+    """
+
+    display_name = "Shuffle capsule monsters"
+
+    @property
+    def unlock(self) -> int:
+        return 0b00000000 if self.value else 0b01111111
+
+
+class ShufflePartyMembers(Toggle):
+    """Shuffle the party members into the multiworld.
+
+    Supported values:
+    false — all 6 optional party members are present in the cafe and can be recruited right away
+    true — only Maxim is available from the start; 6 new "items" are added to your pool and shuffled into the
+        multiworld; when one of these items is found, the corresponding party member is unlocked for you to use
+    Default value: false (same as in an unmodified game)
+    """
+
+    display_name = "Shuffle party members"
+
+    @property
+    def unlock(self) -> int:
+        return 0b00000000 if self.value else 0b11111100
+
+
 class StartingCapsule(Choice):
     """The capsule monster you start the game with.
 
-    Only has an effect if capsule_monsters_available is set to "all".
+    Only has an effect if shuffle_capsule_monsters is set to false.
     Supported values: jelze, flash, gusto, zeppy, darbi, sully, blaze
     Default value: jelze
     """
@@ -459,7 +466,7 @@ class StartingCapsule(Choice):
 class StartingParty(RandomGroupsChoice):
     """The party you start the game with.
 
-    Only has an effect if party_members_available is set to "all".
+    Only has an effect if shuffle_party_members is set to false.
     Supported values:
     Can be set to any valid combination of up to 4 party member initials, e.g.:
     m — start with Maxim
@@ -486,20 +493,22 @@ class StartingParty(RandomGroupsChoice):
                      {"".join(p) for n in range(1, 5) for p in combinations("msgatdl", n)}
 
     @staticmethod
-    def flip(i: int) -> int:
+    def _flip(i: int) -> int:
         return {5: 6, 6: 5}.get(i, i)
 
-    def byte_length(self) -> int:
+    def _byte_length(self) -> int:
         return (self.value.bit_length() + 7) // 8
 
+    @property
     def event_script(self) -> bytes:
-        party: bytes = self.value.to_bytes(self.byte_length(), "big")
-        return bytes((*(b for i in party if i != 1 for b in (0x2B, i - 1, 0x2E, i + 0x64, 0x1A, self.flip(i))),
+        party: bytes = self.value.to_bytes(self._byte_length(), "big")
+        return bytes((*(b for i in party if i != 1 for b in (0x2B, i - 1, 0x2E, i + 0x64, 0x1A, self._flip(i))),
                       0x1E, 0x0B, len(party) - 1, 0x1C, 0x86, 0x03, *(0x00,) * (6 * (4 - len(party)))))
 
+    @property
     def roster(self) -> bytes:
-        party: bytes = self.value.to_bytes(self.byte_length(), "big")
-        return bytes((len(party), *(i - 1 for i in party), *(0xFF,) * (4 - len(party))))
+        party: bytes = self.value.to_bytes(self._byte_length(), "big")
+        return bytes((len(party), *((i - 1) for i in party), *(0xFF,) * (4 - len(party))))
 
 
 l2ac_option_definitions: Dict[str, type(Option)] = {
@@ -507,7 +516,6 @@ l2ac_option_definitions: Dict[str, type(Option)] = {
     "blue_chest_count": BlueChestCount,
     "boss": Boss,
     "capsule_cravings_jp_style": CapsuleCravingsJPStyle,
-    "capsule_monsters_available": CapsuleMonstersAvailable,
     "capsule_starting_form": CapsuleStartingForm,
     "capsule_starting_level": CapsuleStartingLevel,
     "crowded_floor_chance": CrowdedFloorChance,
@@ -520,9 +528,10 @@ l2ac_option_definitions: Dict[str, type(Option)] = {
     "iris_floor_chance": IrisFloorChance,
     "iris_treasures_required": IrisTreasuresRequired,
     "master_hp": MasterHp,
-    "party_members_available": PartyMembersAvailable,
     "party_starting_level": PartyStartingLevel,
     "run_speed": RunSpeed,
+    "shuffle_capsule_monsters": ShuffleCapsuleMonsters,
+    "shuffle_party_members": ShufflePartyMembers,
     "starting_capsule": StartingCapsule,
     "starting_party": StartingParty,
 }

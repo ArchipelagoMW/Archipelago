@@ -83,17 +83,13 @@ org $D09800  ; start of expanded code area
 
 ; initialize
 pushpc
-org $808000
-    JSL Init                ; overwrites SEI : CLD : CLC : XCE
+org $808046
+    ; DB=$80, x=1, m=1
+    JSL Init                ; overwrites JSL $809037
 pullpc
 
 Init:
-    SEI                     ; (overwritten instruction) standard SNES initialization
-    CLD                     ; (overwritten instruction) standard SNES initialization
-    CLC                     ; (overwritten instruction) standard SNES initialization
-    XCE                     ; (overwritten instruction) standard SNES initialization
 ; check signature
-    SEP #$30
     LDX.b #$0F
 -:  LDA $D08000,X
     CMP $F02000,X
@@ -116,11 +112,15 @@ Init:
     LDA.b #$01
     STA $420B               ; start DMA channel 1
 ; sign expanded SRAM
+    PHB
     LDA.b #$3F
     LDX.w #$8000
     LDY.w #$2000
     MVN $F0,$D0             ; copy 64B from $D08000 to $F02000
-++: RTL
+    PLB
+++: SEP #$30
+    JSL $809037             ; (overwritten instruction)
+    RTL
 
 
 
@@ -248,6 +248,7 @@ LearnSpell:
 ; use items
 pushpc
 org $82AE6F
+    ; DB=$83, x=0, m=1
     JSL SpecialItemUse      ; overwrites JSL $81EFDF
 org $8EFD2E  ; unused region at the end of bank $8E
     DB $1E,$0B,$01,$2B,$01,$1A,$02,$00  ; add selan
@@ -293,6 +294,7 @@ SpecialItemUse:
 ; main loop
 pushpc
 org $83BC16
+    ; DB=$83, x=0, m=1
     JSL MainLoop            ; overwrites LDA $09A7 : BIT.b #$01
     NOP
 pullpc
@@ -432,6 +434,7 @@ pullpc
 ; receive death link
 pushpc
 org $83BC91
+    ; DB=$83, x=0, m=1
     JSL DeathLinkRX         ; overwrites LDA $7FD0AE
 pullpc
 
@@ -481,6 +484,7 @@ DeathLinkTX:
 ; clear receiving counters when starting new game; force "GIFT" mode
 pushpc
 org $83AD83
+    ; DB=$83, x=0, m=1
     JSL ClearRX             ; overwrites BIT #$02 : BEQ $83ADAB
 pullpc
 
@@ -498,6 +502,7 @@ ClearRX:
 ; store receiving counters when saving game
 pushpc
 org $82EB61
+    ; DB=$8A, x=0, m=1
     JSL SaveRX              ; overwrites JSL $8090C9
 pullpc
 
@@ -521,6 +526,7 @@ SaveRX:
 ; restore receiving counters when loading game
 pushpc
 org $82EAD5
+    ; DB=$83, x=0, m=1
     JSL LoadRX              ; overwrites JSL $809099
 pullpc
 
@@ -544,6 +550,7 @@ LoadRX:
 ; keep inventory after defeat
 pushpc
 org $848B9C
+    ; DB=$7E, x=0, m=1
     NOP #5                  ; overwrites LDA.b #$FF : STA $7FE759 : JSR $8888
     JSL DeathLinkTX
 pullpc
@@ -582,6 +589,7 @@ FinalFloor:
 ; start with Providence
 pushpc
 org $8488BB
+    ; DB=$84, x=0, m=0
     SEC                     ; {carry clear = disable this feature, carry set = enable this feature}
     JSL Providence          ; overwrites LDX.w #$1402 : STX $0A8D
     NOP                     ;
@@ -600,6 +608,7 @@ Providence:
 ; start inventory
 pushpc
 org $848901
+    ; DB=$84, x=0, m=1
     JSL StartInventory      ; overwrites JSL $81ED35
 pullpc
 
@@ -637,9 +646,11 @@ StartInventory:
 ; increase variety of red chest gear after B9
 pushpc
 org $839176
+    ; DB=$7F, x=0, m=1
     CLC                     ; {carry clear = disable this feature, carry set = enable this feature}
     JSL RedChestGear        ; overwrites LDX.w #$1000 : LDA $60
 org $83917D
+    ; DB=$7F, x=0, m=1
     JSL RunEquipmentRNG     ; overwrites LSR : JSR $9E11
 pullpc
 
@@ -697,6 +708,7 @@ pullpc
 ; set capsule monster starting xp
 pushpc
 org $82C313
+    ; DB=$84, x=0, m=1
     JSL CapsuleStartingXp   ; overwrites LDX.w #$0000 : LDA.b #$00 : STA $7FF1AA,X : INX : CPX.w #$0015 : BNE $82C318
     NOP #11
 pullpc
@@ -722,6 +734,7 @@ CapsuleStartingXp:
 ; set starting capsule monster
 pushpc
 org $82C36A
+    ; DB=$83, x=0, m=1
     JSL StartingCapsule     ; overwrites STZ $11A3 : LDA.b #$01
     NOP
 pullpc
@@ -737,6 +750,7 @@ StartingCapsule:
 ; enter ancient cave as if coming from the world map
 pushpc
 org $83B773
+    ; DB=$7E, x=0, m=1
     JSL CaveEntrance        ; overwrites LDA $05AC : STA $05B4
     NOP #2
 pullpc
@@ -797,12 +811,15 @@ PoisonDeathFix:
 ; single-node room fix
 pushpc
 org $839C64
+    ; DB=$7F, x=0, m=1
     BNE +                   ; overwrites BNE $17
 org $839C7B
-    BRL $FF69               ; overwrites BRA $22 : LDX.w #$00FF
+    ; DB=$7F, x=0, m=1
+    JMP $9BE7               ; overwrites BRA $22 : LDX.w #$00FF
 +:  TDC
     TAX
 org $839C99
+    ; DB=$7F, x=0, m=1
     INX                     ; overwrites DEX : CPX.w #$0010 : BCS $E1
     CPX.w #$0100
     BCC $E1
@@ -813,6 +830,7 @@ pullpc
 ; equipment text fix
 pushpc
 org $81F2E3
+    ; DB=$9E, x=0, m=1
     NOP #2                  ; overwrites BPL $81F2D6
 pullpc
 
@@ -821,6 +839,7 @@ pullpc
 ; music menu fix
 pushpc
 org $82BF44
+    ; DB=$83, x=0, m=1
     BNE $12                 ; overwrites BNE $06
 pullpc
 
@@ -829,6 +848,7 @@ pullpc
 ; logo skip
 pushpc
 org $80929A
+    ; DB=$80, x=0, m=1
     LDA.b #$00              ; overwrites LDA.b #$80
 pullpc
 
@@ -837,6 +857,7 @@ pullpc
 ; intro skip
 pushpc
 org $8080CF
+    ; DB=$80, x=1, m=1
     JML $8383BD             ; overwrites JML $808281
 pullpc
 

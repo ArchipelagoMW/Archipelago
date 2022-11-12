@@ -549,4 +549,4 @@ l2ac_item_table: Dict[str, ItemData] = {
     # 0x8027: "Light"
 }
 
-l2ac_item_name_to_id: Dict[str, int] = {name: start_id + data.code for name, data in l2ac_item_table.items()}
+l2ac_item_name_to_id: Dict[str, int] = {name: (start_id + data.code) for name, data in l2ac_item_table.items()}

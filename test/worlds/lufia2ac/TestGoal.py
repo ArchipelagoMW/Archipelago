@@ -14,7 +14,7 @@ class TestDefault(L2ACTestBase):
 
 class TestShuffleCapsuleMonsters(L2ACTestBase):
     options = {
-        "capsule_monsters_available": "shuffled_into_multiworld",
+        "shuffle_capsule_monsters": True,
     }
 
     def testEverything(self):
@@ -32,7 +32,7 @@ class TestShuffleCapsuleMonsters(L2ACTestBase):
 
 class TestShufflePartyMembers(L2ACTestBase):
     options = {
-        "party_members_available": "shuffled_into_multiworld",
+        "shuffle_party_members": True,
     }
 
     def testEverything(self):
@@ -58,8 +58,8 @@ class TestShufflePartyMembers(L2ACTestBase):
 
 class TestShuffleBoth(L2ACTestBase):
     options = {
-        "capsule_monsters_available": "shuffled_into_multiworld",
-        "party_members_available": "shuffled_into_multiworld",
+        "shuffle_capsule_monsters": True,
+        "shuffle_party_members": True,
     }
 
     def testEverything(self):

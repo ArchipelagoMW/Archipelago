@@ -16,8 +16,8 @@ def create_basepatch() -> None:
         getwarnings as asar_warnings, init as asar_init, patch as asar_patch
 
     os.add_dll_directory(os.path.dirname(__file__))
-    print("Initializing Asar DLL")
-    asar_init("asar-x64.dll")
+    print("Initializing Asar library")
+    asar_init()
 
     print("Opening base ROM")
     old_rom_data: bytes = get_base_rom_bytes()
