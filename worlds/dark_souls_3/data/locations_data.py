@@ -465,7 +465,6 @@ progressive_locations = {
     "FK: Gold Pine Bundle": 0x40000155,
     "CC: Carthus Rouge": 0x4000014F,
     "ID: Pale Pine Resin": 0x40000150,
-    **{"Fading Soul #" + str(i): 0x40000191 for i in range(1, 4)},
     **{"Ring of Sacrifice #"+str(i): 0x20004EF2 for i in range(1, 4)},
     **{"Homeward Bone #"+str(i): 0x4000015E for i in range(1, 17)},
     **{"Ember #"+str(i): 0x400001F4 for i in range(1, 46)},
