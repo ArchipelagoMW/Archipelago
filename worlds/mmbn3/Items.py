@@ -74,12 +74,17 @@ keyItemList: typing.List[ItemData] = [
 
     ItemData(0xB31010, ItemName.SpinPurple,                ItemClassification.useful,      ItemType.KeyItem,  78),
     ItemData(0xB31011, ItemName.SpinDark,                  ItemClassification.useful,      ItemType.KeyItem,  79),
-    ItemData(0xB31012, ItemName.HPMemory,                  ItemClassification.progression, ItemType.KeyItem,  96),
+    ItemData(0xB31012, ItemName.HPMemory,                  ItemClassification.useful,      ItemType.KeyItem,  96),
     ItemData(0xB31013, ItemName.RegUP1,                    ItemClassification.useful,      ItemType.KeyItem,  98),
     ItemData(0xB31014, ItemName.RegUP2,                    ItemClassification.useful,      ItemType.KeyItem,  99),
     ItemData(0xB31015, ItemName.RegUP3,                    ItemClassification.useful,      ItemType.KeyItem, 100),
     ItemData(0xB31016, ItemName.Mr_Famous_Wristband,       ItemClassification.filler,      ItemType.KeyItem,  57),
-    ItemData(0xB31017, ItemName.SubMem,                    ItemClassification.useful,      ItemType.KeyItem, 101)
+    ItemData(0xB31017, ItemName.SubMem,                    ItemClassification.useful,      ItemType.KeyItem, 101),
+
+    ItemData(0xB310B1, ItemName.SubPET, ItemClassification.progression, ItemType.KeyItem, 10),
+    ItemData(0xB310B2, ItemName.Needle, ItemClassification.progression, ItemType.KeyItem, 14),
+    ItemData(0xB310B3, ItemName.PETCase, ItemClassification.progression, ItemType.KeyItem, 16)
+    # ItemData(0xB310B4, ItemName.Parasol, ItemClassification.progression, ItemType.KeyItem, 3),
 ]
 
 subChipList: typing.List[ItemData] = [
@@ -237,27 +242,27 @@ programList: typing.List[ItemData] = [
 ]
 
 zennyList: typing.List[ItemData] = [
-    ItemData(0x0B3109B, ItemName.zenny_200z,   ItemClassification.filler, ItemType.Zenny, count=200),
-    ItemData(0x0B3109C, ItemName.zenny_500z,   ItemClassification.filler, ItemType.Zenny, count=500),
-    ItemData(0x0B3109D, ItemName.zenny_600z,   ItemClassification.filler, ItemType.Zenny, count=600),
-    ItemData(0x0B3109E, ItemName.zenny_800z,   ItemClassification.filler, ItemType.Zenny, count=800),
-    ItemData(0x0B3109F, ItemName.zenny_900z,   ItemClassification.filler, ItemType.Zenny, count=900),
+    ItemData(0xB3109B, ItemName.zenny_200z,   ItemClassification.filler, ItemType.Zenny, count=200),
+    ItemData(0xB3109C, ItemName.zenny_500z,   ItemClassification.filler, ItemType.Zenny, count=500),
+    ItemData(0xB3109D, ItemName.zenny_600z,   ItemClassification.filler, ItemType.Zenny, count=600),
+    ItemData(0xB3109E, ItemName.zenny_800z,   ItemClassification.filler, ItemType.Zenny, count=800),
+    ItemData(0xB3109F, ItemName.zenny_900z,   ItemClassification.filler, ItemType.Zenny, count=900),
 
-    ItemData(0x0B310A0, ItemName.zenny_1000z,  ItemClassification.filler, ItemType.Zenny, count=1000),
-    ItemData(0x0B310A1, ItemName.zenny_1200z,  ItemClassification.filler, ItemType.Zenny, count=1200),
-    ItemData(0x0B310A2, ItemName.zenny_1400z,  ItemClassification.filler, ItemType.Zenny, count=1400),
-    ItemData(0x0B310A3, ItemName.zenny_1600z,  ItemClassification.filler, ItemType.Zenny, count=1600),
-    ItemData(0x0B310A4, ItemName.zenny_1800z,  ItemClassification.filler, ItemType.Zenny, count=1800),
-    ItemData(0x0B310A5, ItemName.zenny_2000z,  ItemClassification.filler, ItemType.Zenny, count=2000),
-    ItemData(0x0B310A6, ItemName.zenny_3000z,  ItemClassification.filler, ItemType.Zenny, count=3000),
-    ItemData(0x0B310A7, ItemName.zenny_9000z,  ItemClassification.filler, ItemType.Zenny, count=9000),
-    ItemData(0x0B310A8, ItemName.zenny_10000z, ItemClassification.useful, ItemType.Zenny, count=10000),
-    ItemData(0x0B310A9, ItemName.zenny_30000z, ItemClassification.useful, ItemType.Zenny, count=30000),
-    ItemData(0x0B310AA, ItemName.zenny_50000z, ItemClassification.useful, ItemType.Zenny, count=50000)
+    ItemData(0xB310A0, ItemName.zenny_1000z,  ItemClassification.filler, ItemType.Zenny, count=1000),
+    ItemData(0xB310A1, ItemName.zenny_1200z,  ItemClassification.filler, ItemType.Zenny, count=1200),
+    ItemData(0xB310A2, ItemName.zenny_1400z,  ItemClassification.filler, ItemType.Zenny, count=1400),
+    ItemData(0xB310A3, ItemName.zenny_1600z,  ItemClassification.filler, ItemType.Zenny, count=1600),
+    ItemData(0xB310A4, ItemName.zenny_1800z,  ItemClassification.filler, ItemType.Zenny, count=1800),
+    ItemData(0xB310A5, ItemName.zenny_2000z,  ItemClassification.filler, ItemType.Zenny, count=2000),
+    ItemData(0xB310A6, ItemName.zenny_3000z,  ItemClassification.filler, ItemType.Zenny, count=3000),
+    ItemData(0xB310A7, ItemName.zenny_9000z,  ItemClassification.filler, ItemType.Zenny, count=9000),
+    ItemData(0xB310A8, ItemName.zenny_10000z, ItemClassification.useful, ItemType.Zenny, count=10000),
+    ItemData(0xB310A9, ItemName.zenny_30000z, ItemClassification.useful, ItemType.Zenny, count=30000),
+    ItemData(0xB310AA, ItemName.zenny_50000z, ItemClassification.useful, ItemType.Zenny, count=50000)
 ]
 
 bugFragList: typing.List[ItemData] = [
-    ItemData(0x0B310AB, ItemName.bugfrag_30, ItemClassification.filler, ItemType.BugFrag, count=30)
+    ItemData(0xB310AB, ItemName.bugfrag_30, ItemClassification.filler, ItemType.BugFrag, count=30)
 ]
 
 item_frequences = {

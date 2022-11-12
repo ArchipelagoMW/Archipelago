@@ -6,7 +6,7 @@ import os
 import hashlib
 import bsdiff4
 
-from .BN3RomUtils import ArchiveToReferences, read_u16_le, int16_to_byte_list_le, int32_to_byte_list_le,\
+from .BN3RomUtils import ArchiveToReferences, read_u16_le, read_u32_le, int16_to_byte_list_le, int32_to_byte_list_le,\
     generate_progressive_undernet, CompressedArchives, ArchiveToSizeComp, ArchiveToSizeUncomp, generate_item_message, \
     generate_external_item_message
 
@@ -181,6 +181,8 @@ class LocalRom:
         self.rom_data = bytearray(get_patched_rom_bytes(file))
 
     def get_data_chunk(self, start_offset, size):
+        if start_offset+size > len(self.rom_data):
+            print("Attempting to get data chunk beyond the size of the ROM: "+hex(start_offset)+", ROM size ends at: "+hex(len(self.rom_data)))
         return self.rom_data[start_offset:start_offset + size]
 
     def replace_item(self, location, item):
@@ -193,6 +195,18 @@ class LocalRom:
             size = ArchiveToSizeComp[offset] if is_compressed\
                 else ArchiveToSizeUncomp[offset]
             data = self.get_data_chunk(offset, size)
+            # Check if the archive we want to load has been moved by the patch. This is indicated by a 0xFF 0xFF
+            # as the first two bytes of the chunk
+
+            if data[0] == 0xFF and data[1] == 0xFF:
+                new_size_bytes = data[2:4]
+                new_address_le = data[4:8]
+                # Last byte should be zero since we're dealing with purely ROM address space
+                new_address_le[3] = 0x0
+                size = read_u16_le(new_size_bytes, 0)
+                data = self.get_data_chunk(read_u32_le(new_address_le, 0), size)
+
+
             archive = TextArchive(data, offset, size, is_compressed)
             self.changed_archives[offset] = archive
 
