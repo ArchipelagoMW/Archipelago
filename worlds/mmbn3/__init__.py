@@ -157,7 +157,8 @@ class MMBN3World(World):
                             state.has(ItemName.Press, self.player)
                         )
                 if connection == RegionName.Beach_Cyberworld:
-                    entrance.access_rule = lambda state: state.has(ItemName.CBeacPas, self.player)
+                    entrance.access_rule = lambda state: state.has(ItemName.CBeacPas, self.player) and\
+                        state.can_reach(RegionName.Yoka_Overworld, "Region", self.player)
 
                 if connection == RegionName.Undernet:
                     entrance.access_rule = lambda state: self.explore_score(state) > 8 and\
