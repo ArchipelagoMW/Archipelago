@@ -110,6 +110,29 @@ class OOTWorld(World):
 
     required_client_version = (0, 3, 2)
 
+    item_name_groups = {
+        # internal groups
+        "medallions": {"Light Medallion", "Forest Medallion", "Fire Medallion",
+            "Water Medallion", "Shadow Medallion", "Spirit Medallion"},
+        "stones": {"Kokiri Emerald", "Goron Ruby", "Zora Sapphire"},
+        "rewards": {"Light Medallion", "Forest Medallion", "Fire Medallion",
+            "Water Medallion", "Shadow Medallion", "Spirit Medallion",
+            "Kokiri Emerald", "Goron Ruby", "Zora Sapphire"},
+        "logic_bottles": {"Bottle", "Bottle with Milk", "Deliver Letter",
+            "Sell Big Poe", "Bottle with Red Potion", "Bottle with Green Potion", 
+            "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish", 
+            "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"},
+
+        # hint groups
+        "Bottles": {"Bottle", "Bottle with Milk", "Rutos Letter",
+            "Bottle with Big Poe", "Bottle with Red Potion", "Bottle with Green Potion", 
+            "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish", 
+            "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"},
+        "Adult Trade Item": {"Pocket Egg", "Pocket Cucco", "Odd Mushroom",
+            "Odd Potion", "Poachers Saw", "Broken Sword", "Prescription",
+            "Eyeball Frog", "Eyedrops", "Claim Check"}
+    }
+
     def __init__(self, world, player):
         self.hint_data_available = threading.Event()
         super(OOTWorld, self).__init__(world, player)
@@ -140,19 +163,6 @@ class OOTWorld(World):
         self.songs_as_items = False
         self.file_hash = [self.multiworld.random.randint(0, 31) for i in range(5)]
         self.connect_name = ''.join(self.multiworld.random.choices(printable, k=16))
-
-        self.item_name_groups = {
-            "medallions": {"Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion",
-                           "Shadow Medallion", "Spirit Medallion"},
-            "stones": {"Kokiri Emerald", "Goron Ruby", "Zora Sapphire"},
-            "rewards": {"Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion", "Shadow Medallion",
-                        "Spirit Medallion", \
-                        "Kokiri Emerald", "Goron Ruby", "Zora Sapphire"},
-            "bottles": {"Bottle", "Bottle with Milk", "Deliver Letter", "Sell Big Poe", "Bottle with Red Potion",
-                        "Bottle with Green Potion", \
-                        "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish", "Bottle with Blue Fire",
-                        "Bottle with Bugs", "Bottle with Poe"}
-        }
 
         # Incompatible option handling
         # ER and glitched logic are not compatible; glitched takes priority

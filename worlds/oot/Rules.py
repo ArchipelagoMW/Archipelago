@@ -22,7 +22,7 @@ class OOTLogic(LogicMixin):
         return self.has_group("rewards", player, count)
 
     def _oot_has_bottle(self, player): 
-        return self.has_group("bottles", player)
+        return self.has_group("logic_bottles", player)
 
     # Used for fall damage and other situations where damage is unavoidable
     def _oot_can_live_dmg(self, player, hearts):
