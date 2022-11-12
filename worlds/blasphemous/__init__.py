@@ -2,7 +2,7 @@ from typing import Dict, Set
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, RegionType
 from worlds.generic.Rules import set_rule
 from ..AutoWorld import World, WebWorld
-from .Items import item_table, group_table
+from .Items import item_table, group_table, tears_set
 from .Locations import location_table
 from .Exits import region_exit_table, exit_lookup_table
 from .Rules import rules
@@ -28,10 +28,11 @@ class BlasphemousWorld(World):
 
     game: str = "Blasphemous"
     web = BlasphemousWeb()
+    base_id = 1909000
     data_version: 0
 
-    item_name_to_id = {data["name"]: item_id for item_id, data in item_table.items()}
-    location_name_to_id = {data["name"]: loc_id for loc_id, data in location_table.items()}
+    item_name_to_id = {item["name"]: (1909000 + item_table.index(item)) for item in item_table}
+    location_name_to_id = {loc["name"]: (1909000 + location_table.index(loc)) for loc in location_table}
     item_name_groups = group_table
     option_definitions = blasphemous_options
 
@@ -42,8 +43,9 @@ class BlasphemousWorld(World):
 
     def create_item(self, name: str) -> "BlasphemousItem":
         item_id: int = self.item_name_to_id[name]
+        id = item_id - self.base_id
 
-        return BlasphemousItem(name, item_table[item_id]["classification"], item_id, player=self.player)
+        return BlasphemousItem(name, item_table[id]["classification"], item_id, player=self.player)
 
 
     def create_event(self, event: str):
@@ -55,16 +57,16 @@ class BlasphemousWorld(World):
 
 
     def get_filler_item_name(self) -> str:
-        i = self.multiworld.random.randint(1909172, 1909185)
-        return item_table[i]["name"]
+        return self.multiworld.random.choice(tears_set)
 
     
     def generate_basic(self):
         pool = []
 
-        for i, data in item_table.items():
-            for j in range(data["count"]):
-                pool.append(self.add_item(data["name"], data["classification"], i))
+        for item in item_table:
+            id = self.base_id + item_table.index(item)
+            for i in range(item["count"]):
+                pool.append(self.add_item(item["name"], item["classification"], id))
 
         while len(self.multiworld.get_locations()) > len(pool):
             pool.append(self.create_item(self.get_filler_item_name()))
@@ -154,9 +156,10 @@ class BlasphemousWorld(World):
                             if i == e:
                                 ent.connect(region_table[r])
 
-        for i, data in location_table.items():
-            region_table[data["region"]].locations\
-                .append(BlasphemousLocation(self.player, data["name"], i, region_table[data["region"]]))
+        for loc in location_table:
+            id = self.base_id + location_table.index(loc)
+            region_table[loc["region"]].locations\
+                .append(BlasphemousLocation(self.player, loc["name"], id, region_table[loc["region"]]))
 
 
 class BlasphemousItem(Item):

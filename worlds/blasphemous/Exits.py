@@ -6,7 +6,8 @@ region_exit_table: Dict[str, List[str]] = {
 
     "albero"   : ["To The Holy Line",
                   "To Desecrated Cistern",
-                  "To Wasteland of the Buried Churches"],
+                  "To Wasteland of the Buried Churches",
+                  "To Dungeons"],
 
     "attots"   : ["To Mother of Mothers"],
 
@@ -129,5 +130,6 @@ exit_lookup_table: Dict[str, str] = {
     "To The Sleeping Canvases": "tsc",
     "To Wall of the Holy Prohibitions": "wothp",
     "To Wasteland of the Buried Churches": "wotbc",
-    "To Where Olive Trees Wither": "wotw"
+    "To Where Olive Trees Wither": "wotw",
+    "To Dungeons": "dungeon"
 }
