@@ -11,6 +11,7 @@ from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, 
 from .Options import ror2_options, ItemWeights
 from worlds.AutoWorld import World, WebWorld
 
+# TODO update required client version
 client_version = 1
 
 
@@ -38,7 +39,7 @@ class RiskOfRainWorld(World):
     item_name_to_id = item_table
     location_name_to_id = item_pickups
 
-    data_version = 4
+    data_version = 5
     forced_auto_forfeit = True
     web = RiskOfWeb()
     total_revivals: int
