@@ -263,7 +263,7 @@ number_traders = [
     LocationData(LocationName.Numberman_Code_13, 0xb310d9, 0x2000431, 0x08, 0x735734, 42, 0),
     LocationData(LocationName.Numberman_Code_14, 0xb310da, 0x2000431, 0x04, 0x735734, 43, 0),
     LocationData(LocationName.Numberman_Code_15, 0xb310db, 0x2000431, 0x02, 0x735734, 44, 0),
-    LocationData(LocationName.Numberman_Code_16, 0xb310dc, 0x2000432, 0x01, 0x735734, 45, 0),
+    LocationData(LocationName.Numberman_Code_16, 0xb310dc, 0x2000431, 0x01, 0x735734, 45, 0),
     LocationData(LocationName.Numberman_Code_17, 0xb310dd, 0x2000432, 0x80, 0x735734, 46, 0),
     LocationData(LocationName.Numberman_Code_18, 0xb310de, 0x2000432, 0x40, 0x735734, 47, 0),
     LocationData(LocationName.Numberman_Code_19, 0xb310df, 0x2000432, 0x20, 0x735734, 48, 0),
