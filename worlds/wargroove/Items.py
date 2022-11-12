@@ -51,6 +51,6 @@ item_table: Dict[str, ItemData] = {
 item_pool: Dict[str, int] = {
 
     # Player Buffs
-    'Income Boost': 8,
+    'Income Boost': 7,
     'CO Defense Boost': 7,
 }

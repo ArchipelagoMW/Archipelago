@@ -4,6 +4,7 @@ def create_regions(world, player: int):
 
     world.regions += [
         create_region(world, player, 'Menu', None, ['Humble Beginnings']),
+        # Level 1
         create_region(world, player, 'Humble Beginnings', [
             'Humble Beginnings: Caesar',
             'Humble Beginnings: Chest 1',
@@ -11,6 +12,7 @@ def create_regions(world, player: int):
             'Humble Beginnings: Victory',
         ], ['Best Friendssss', 'A Knight\'s Folly', 'Denrunaway', 'Wargroove Finale']),
 
+        # Levels 2A-2C
         create_region(world, player, 'Best Friendssss', [
             'Best Friendssss: Find Sedge',
             'Best Friendssss: Victory'
@@ -26,6 +28,7 @@ def create_regions(world, player: int):
             'Denrunaway: Victory'
         ], ['The Churning Sea', 'Frigid Archery', 'Archery Lessons']),
 
+        # Levels 3AA-3AC
         create_region(world, player, 'Dragon Freeway', [
             'Dragon Freeway: Victory',
         ], ['Surrounded']),
@@ -39,6 +42,7 @@ def create_regions(world, player: int):
             'Corrupted Inlet: Victory',
         ], ['Robbed']),
 
+        # Levels 3BA-3BC
         create_region(world, player, 'Mage Mayhem', [
             'Mage Mayhem: Caesar',
             'Mage Mayhem: Victory',
@@ -53,6 +57,7 @@ def create_regions(world, player: int):
             'Ambushed in the Middle: Victory 2',
         ], ['Tenri\'s Fall']),
 
+        # Levels 3CA-3CC
         create_region(world, player, 'The Churning Sea', [
             'The Churning Sea: Victory',
         ], ['Master of the Lake']),
@@ -67,6 +72,7 @@ def create_regions(world, player: int):
             'Archery Lessons: Victory',
         ], ['Rebel Village']),
 
+        # Levels 4AA-4AC
         create_region(world, player, 'Surrounded', [
             'Surrounded: Caesar',
             'Surrounded: Victory',
@@ -80,6 +86,7 @@ def create_regions(world, player: int):
             'Robbed: Victory',
         ]),
 
+        # Levels 4BA-4BC
         create_region(world, player, 'Open Season', [
             'Open Season: Caesar',
             'Open Season: Victory',
@@ -94,6 +101,7 @@ def create_regions(world, player: int):
             'Tenri\'s Fall: Victory',
         ]),
 
+        # Levels 4CA-4CC
         create_region(world, player, 'Master of the Lake', [
             'Master of the Lake: Victory',
         ]),
@@ -107,6 +115,7 @@ def create_regions(world, player: int):
             'Rebel Village: Victory 2',
         ]),
 
+        # Final Level
         create_region(world, player, 'Wargroove Finale', [
             'Wargroove Finale: Victory'
         ]),

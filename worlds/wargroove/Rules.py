@@ -84,8 +84,7 @@ def set_rules(world: MultiWorld, player: int):
              lambda state: state._wargroove_has_item(player, 'Spearman'))
     set_region_exit_rules(world.get_region('Ambushed in the Middle', player),
                           [world.get_location('Ambushed in the Middle: Victory 1', player),
-                        world.get_location('Ambushed in the Middle: Victory 2', player)],
-                          operator="or")
+                        world.get_location('Ambushed in the Middle: Victory 2', player)])
 
     # Levels 3CA-3CC
     set_rule(world.get_location('The Churning Sea: Victory', player),
@@ -145,10 +144,10 @@ def set_rules(world: MultiWorld, player: int):
                            state._wargroove_has_item(player, 'Mage'))
 
 
-def set_region_exit_rules(region: Region, locations: List[Location], operator: str = "and"):
-    if operator == "and":
-        exit_rule = lambda state: all(state.access_rule(location) for location in locations)
-    else:
+def set_region_exit_rules(region: Region, locations: List[Location], operator: str = "or"):
+    if operator == "or":
         exit_rule = lambda state: any(location.access_rule(state) for location in locations)
+    else:
+        exit_rule = lambda state: all(location.access_rule(state) for location in locations)
     for region_exit in region.exits:
         region_exit.access_rule = exit_rule

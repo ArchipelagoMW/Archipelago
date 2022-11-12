@@ -3,7 +3,7 @@ from Options import Choice, Option, Range, Toggle
 
 
 class IncomeBoost(Range):
-    """How much extra income the player gets per turn per boost received (There are 8 total boosts)."""
+    """How much extra income the player gets per turn per boost received (There are 7 total boosts)."""
     display_name = "Income Boost"
     range_start = 0
     range_end = 100
