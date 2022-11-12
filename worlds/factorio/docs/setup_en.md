@@ -153,7 +153,8 @@ config .yaml file by including the `world_gen` setting. This setting is currentl
 have to manually create or edit your config file with a text editor of your choice.
 The [template file](/static/generated/configs/Factorio.yaml) is a good starting point and contains the default value of
 the `world_gen` setting. If you already have a config file you may also just copy that setting over from the template.
-Finally, to enable peaceful mode, replace `peaceful_mode: false` with `peaceful_mode: true`.
+To enable peaceful mode, simply replace `peaceful_mode: false` with `peaceful_mode: true`. Finally, use the
+[.yaml checker](/check) to ensure your file is valid.
 
 ### After starting
 If you have already submitted your config file, generated the seed, or even started playing, you can retroactively
