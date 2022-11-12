@@ -178,6 +178,10 @@ SpinGrn = "SpinGrn"
 SpinRed = "SpinRed"
 SpinWht = "SpinWht"
 SpinYllw = "SpinYllw"
+Parasol = "Parasol"
+SubPET = "SubPET"
+Needle = "Needle"
+PETCase = "PETCase"
 
 ## Upgrades
 HPMemory = "HPMemory"

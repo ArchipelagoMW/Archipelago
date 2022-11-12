@@ -157,7 +157,6 @@ async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
     # Locations handling
     if ctx.location_table != payload['locations']:
         ctx.location_table = payload['locations']
-
         await ctx.send_msgs([{
             "cmd": "LocationChecks",
             "locations": [mmbn3_loc_name_to_id[loc] for loc in ctx.location_table

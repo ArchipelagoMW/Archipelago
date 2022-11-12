@@ -29,6 +29,14 @@ def read_u16_le(data, offset) -> int:
     return (high_byte << 8) + low_byte
 
 
+def read_u32_le(data, offset) -> int:
+    low_byte = data[offset]
+    high_byte = data[offset+1]
+    higher_byte = data[offset+2]
+    highest_byte = data[offset+3]
+    return (highest_byte << 24) + (higher_byte << 16) +(high_byte << 8) + low_byte
+
+
 def int32_to_byte_list_le(x) -> bytearray:
     byte32_string = "{:08x}".format(x)
     data = bytearray.fromhex(byte32_string)
