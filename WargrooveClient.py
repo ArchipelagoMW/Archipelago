@@ -2,7 +2,7 @@ from __future__ import annotations
 import os
 import sys
 import asyncio
-import shutil
+import random
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -90,14 +90,25 @@ class WargrooveContext(CommonContext):
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
+
+        if cmd in {"RoomInfo"}:
+            seed_name = args["seed_name"]
+            random.seed(seed_name)
+            # Lua indexes start at 1 and we have 23 levels
+            for i in range(1, 24):
+                filename = f"seed{i}"
+                with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                    f.write(str(random.randint(0, sys.maxsize)))
+                    f.close()
+
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
             if start_index != len(self.items_received):
                 for item in args['items']:
-                    filename = f"AP_{str(NetworkItem(*item).item)}.item"
-                    if NetworkItem(*item).item == 52023:
-                        pass
+                    network_item = NetworkItem(*item)
+                    filename = f"AP_{str(network_item.item)}.item"
                     path = os.path.join(self.game_communication_path, filename)
+
                     if not os.path.isfile(path):
                         open(path, 'w').close()
 
@@ -112,6 +123,17 @@ class WargrooveContext(CommonContext):
                             f.truncate(0)
                             f.seek(0)
                             f.write(f"{itemCount}")
+                        f.close()
+
+                    print_filename = f"AP_{str(network_item.item)}.item.print"
+                    print_path = os.path.join(self.game_communication_path, print_filename)
+                    if not os.path.isfile(print_path):
+                        open(print_path, 'w').close()
+                    with open(print_path, 'w') as f:
+                        f.write("Received " +
+                                self.item_names[network_item.item] +
+                                " from " +
+                                self.player_names[network_item.player])
                         f.close()
 
         if cmd in {"RoomUpdate"}:
