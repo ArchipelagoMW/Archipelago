@@ -473,7 +473,7 @@ progressive_locations = {
     **{"Charcoal Pine Bundle #"+str(i): 0x40000154 for i in range(1, 2)},
     **{"Rotten Pine Resin #"+str(i): 0x40000157 for i in range(1, 2)},
     **{"Pale Tongue #"+str(i): 0x40000175 for i in range(1, 3)},
-    **{"Black Firebomb #"+str(i): 0x40000124 for i in range(1, 2)},
+    #**{"Black Firebomb #"+str(i): 0x40000124 for i in range(1, 2)}, CANT RANDOMIZE THEY DONT WORK
     **{"Alluring Skull #"+str(i): 0x40000126 for i in range(1, 3)},
     **{"Undead Hunter Charm #"+str(i): 0x40000128 for i in range(1, 2)},
     **{"Duel Charm #"+str(i): 0x40000130 for i in range(1, 2)},
