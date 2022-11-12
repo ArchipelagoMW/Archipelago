@@ -65,10 +65,24 @@ class TotalRevivals(Range):
 
 
 class ItemPickupStep(Range):
-    """Number of items to pick up before an AP Check is completed.
+    """
+    Number of items to pick up before an AP Check is completed.
     Setting to 1 means every other pickup.
-    Setting to 2 means every third pickup. So on..."""
+    Setting to 2 means every third pickup. So on...
+    """
     display_name = "Item Pickup Step"
+    range_start = 0
+    range_end = 5
+    default = 2
+
+class ShrineUseStep(Range):
+    """
+    EXPLORE:
+    Number of shrines to use up before an AP Check is completed.
+    Setting to 1 means every other pickup.
+    Setting to 2 means every third pickup. So on...
+    """
+    display_name = "Shrine use Step"
     range_start = 0
     range_end = 5
     default = 2
@@ -99,6 +113,13 @@ class BeginWithLoop(Toggle):
 class DLC_SOTV(Toggle):
     """Enable if you are using SOTV DLC. Affects environment availability for Explore Mode and EnvironmentsAsItems."""
     display_name = "SOTV"
+
+class DLC_SOTV_Simulacrum(Toggle):
+    """
+    Enable if you want to add the simulacrum environments to the pool of items.
+    Only has an effect with EnvironmentsAsItems
+    """
+    display_name = "Simulacrum Environments"
 
 class GreenScrap(Range):
     """Weight of Green Scraps in the item pool. (Ignored unless Item Weight Presets is 'No')"""
@@ -235,9 +256,10 @@ ror2_options: Dict[str, type(Option)] = {
     "environments_as_items":    EnvironmentsAsItems,
     "begin_with_loop":          BeginWithLoop,
     "dlc_sotv":                 DLC_SOTV,
+    "dlc_sotv_simulacrum":      DLC_SOTV_Simulacrum,
     "death_link":               DeathLink,
-    # TODO add an option for whether simulacrum environments should exist in the pool
     "item_pickup_step":         ItemPickupStep,
+    "shrine_use_step":          ShrineUseStep,
     "enable_lunar":             AllowLunarItems,
     "item_weights":             ItemWeights,
     "item_pool_presets":        ItemPoolPresetToggle,

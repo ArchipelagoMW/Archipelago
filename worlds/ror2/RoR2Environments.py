@@ -97,11 +97,14 @@ def collapse_dict_list_vertical(list_of_dict1: List[Dict[X, Y]], *args: List[Dic
 
     return collapsed
 
+# TODO potentially these should only be created when they are directly referenced (unsure of the space/time cost of creating these initially)
+
 environment_vanilla_orderedstages_table = [ environment_vanilla_orderedstage_1_table, environment_vanilla_orderedstage_2_table, environment_vanilla_orderedstage_3_table, environment_vanilla_orderedstage_4_table, environment_vanilla_orderedstage_5_table ]
 environment_vanilla_table = compress_dict_list_horizontal(environment_vanilla_orderedstages_table) | environment_vanilla_hidden_realm_table | environment_vanilla_special_table
 
 environment_sotv_orderedstages_table = [ environment_sotv_orderedstage_1_table, environment_sotv_orderedstage_2_table, environment_sotv_orderedstage_3_table, environment_sotv_orderedstage_4_table, environment_sotv_orderedstage_5_table ]
-environment_sotv_table = compress_dict_list_horizontal(environment_sotv_orderedstages_table) | environment_sotv_simulacrum_table | environment_sotv_special_table
+environment_sotv_non_simulacrum_table = compress_dict_list_horizontal(environment_sotv_orderedstages_table) | environment_sotv_special_table
+environment_sotv_table = environment_sotv_non_simulacrum_table | environment_sotv_simulacrum_table
 
 environment_non_orderedstages_table = environment_vanilla_hidden_realm_table | environment_vanilla_special_table | environment_sotv_simulacrum_table | environment_sotv_special_table
 environment_orderedstages_table = collapse_dict_list_vertical(environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table)
