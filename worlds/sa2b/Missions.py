@@ -132,6 +132,52 @@ level_styles: typing.List[int] = [
 ]
 
 
+def get_mission_count_table(multiworld: MultiWorld, player: int):
+    speed_active_missions = 1
+    mech_active_missions = 1
+    hunt_active_missions = 1
+    kart_active_missions = 1
+    cannons_core_active_missions = 1
+
+    for i in range(2,6):
+        if getattr(multiworld, "speed_mission_" + str(i), None)[player]:
+            speed_active_missions += 1
+
+        if getattr(multiworld, "mech_mission_" + str(i), None)[player]:
+            mech_active_missions += 1
+
+        if getattr(multiworld, "hunt_mission_" + str(i), None)[player]:
+            hunt_active_missions += 1
+
+        if getattr(multiworld, "kart_mission_" + str(i), None)[player]:
+            kart_active_missions += 1
+
+        if getattr(multiworld, "cannons_core_mission_" + str(i), None)[player]:
+            cannons_core_active_missions += 1
+
+    speed_active_missions        = min(speed_active_missions, multiworld.speed_mission_count[player].value)
+    mech_active_missions         = min(mech_active_missions, multiworld.mech_mission_count[player].value)
+    hunt_active_missions         = min(hunt_active_missions, multiworld.hunt_mission_count[player].value)
+    kart_active_missions         = min(kart_active_missions, multiworld.kart_mission_count[player].value)
+    cannons_core_active_missions = min(cannons_core_active_missions, multiworld.cannons_core_mission_count[player].value)
+
+    active_missions: typing.List[typing.List[int]] = [
+        speed_active_missions,
+        mech_active_missions,
+        hunt_active_missions,
+        kart_active_missions,
+        cannons_core_active_missions
+    ]
+
+    mission_count_table: typing.Dict[int, int] = {}
+
+    for level in range(31):
+        level_style = level_styles[level]
+        level_mission_count = active_missions[level_style]
+        mission_count_table[level] = level_mission_count
+
+    return mission_count_table
+
 
 def get_mission_table(multiworld: MultiWorld, player: int):
     mission_table: typing.Dict[int, int] = {}

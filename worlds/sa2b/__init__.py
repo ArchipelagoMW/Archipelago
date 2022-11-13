@@ -11,7 +11,7 @@ from .Rules import set_rules
 from .Names import ItemName, LocationName
 from ..AutoWorld import WebWorld, World
 from .GateBosses import get_gate_bosses, get_boss_name
-from .Missions import get_mission_table
+from .Missions import get_mission_table, get_mission_count_table
 import Patch
 
 
@@ -62,6 +62,7 @@ class SA2BWorld(World):
 
     music_map: typing.Dict[int, int]
     mission_map: typing.Dict[int, int]
+    mission_count_map: typing.Dict[int, int]
     emblems_for_cannons_core: int
     region_emblem_map: typing.Dict[int, int]
     gate_costs: typing.Dict[int, int]
@@ -74,6 +75,7 @@ class SA2BWorld(World):
             "Goal": self.multiworld.goal[self.player].value,
             "MusicMap": self.music_map,
             "MissionMap": self.mission_map,
+            "MissionCountMap": self.mission_count_map,
             "MusicShuffle": self.multiworld.music_shuffle[self.player].value,
             "Narrator": self.multiworld.narrator[self.player].value,
             "RequiredRank": self.multiworld.required_rank[self.player].value,
@@ -304,7 +306,9 @@ class SA2BWorld(World):
             self.music_map = dict(zip(musiclist_o, musiclist_s))
 
     def create_regions(self):
-        self.mission_map = get_mission_table(self.multiworld, self.player)
+        self.mission_map       = get_mission_table(self.multiworld, self.player)
+        self.mission_count_map = get_mission_count_table(self.multiworld, self.player)
+
         self.location_table = setup_locations(self.multiworld, self.player)
         create_regions(self.multiworld, self.player, self.location_table)
 
