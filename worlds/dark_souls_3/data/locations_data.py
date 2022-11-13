@@ -437,12 +437,34 @@ archdragon_peak_table = {
     "AP: Havel's Greatshield": 0x013376F0,
 }
 
+progressive_locations = {
+    # Upgrade materials
+    **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(1, 11)},
+    **{"Large Titanite Shard #"+str(i): 0x400003E9 for i in range(1, 11)},
+    **{"Titanite Chunk #"+str(i): 0x400003EA for i in range(1, 6)},
+    **{"Titanite Slab #"+str(i): 0x400003EB for i in range(1, 4)},
+
+    # Healing
+    **{"Estus Shard #"+str(i): 0x4000085D for i in range(1, 16)},
+    **{"Undead Bone Shard #"+str(i): 0x4000085F for i in range(1, 6)},
+
+    # Items
+    **{"Firebomb #"+str(i): 0x40000124 for i in range(1, 5)},
+    **{"Throwing Knife #"+str(i): 0x40000136 for i in range(1, 3)},
+
+    # Souls
+    **{"Soul of a Deserted Corpse #" + str(i): 0x40000191 for i in range(1, 6)},
+    **{"Large Soul of a Deserted Corpse #" + str(i): 0x40000192 for i in range(1, 6)},
+    **{"Soul of an Unknown Traveler #" + str(i): 0x40000193 for i in range(1, 6)},
+    **{"Large Soul of an Unknown Traveler #" + str(i): 0x40000194 for i in range(1, 6)},
+}
+
 location_tables = [fire_link_shrine_table, firelink_shrine_bell_tower_table, high_wall_of_lothric, undead_settlement_table, road_of_sacrifice_table,
                              cathedral_of_the_deep_table, farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table,
                              irithyll_dungeon_table, profaned_capital_table, anor_londo_table, lothric_castle_table, consumed_king_garden_table,
-                             grand_archives_table, untended_graves_table, archdragon_peak_table]
+                             grand_archives_table, untended_graves_table, archdragon_peak_table, progressive_locations]
 
 location_dictionary = {**fire_link_shrine_table, **firelink_shrine_bell_tower_table, **high_wall_of_lothric, **undead_settlement_table, **road_of_sacrifice_table,
                        **cathedral_of_the_deep_table, **farron_keep_table, **catacombs_of_carthus_table, **smouldering_lake_table, **irithyll_of_the_boreal_valley_table,
                        **irithyll_dungeon_table, **profaned_capital_table, **anor_londo_table, **lothric_castle_table, **consumed_king_garden_table,
-                       **grand_archives_table, **untended_graves_table, **archdragon_peak_table}
+                       **grand_archives_table, **untended_graves_table, **archdragon_peak_table, **progressive_locations}
