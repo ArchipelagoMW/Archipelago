@@ -459,24 +459,25 @@ progressive_locations = {
     **{"Large Soul of an Unknown Traveler #" + str(i): 0x40000194 for i in range(1, 6)},
 
     ##Added by Br00ty
-    # Misc Items - 0 extra locations at the moment
     "HWL: Gold Pine Resin": 0x4000014B,
     "US: Charcoal Pine Resin": 0x4000014A,
     "FK: Gold Pine Bundle": 0x40000155,
     "CC: Carthus Rouge": 0x4000014F,
     "ID: Pale Pine Resin": 0x40000150,
-    **{"Ring of Sacrifice #"+str(i): 0x20004EF2 for i in range(1, 4)},
+    **{"Fading Soul #" + str(i): 0x40000190 for i in range(1, 4)},
+    **{"Soul of a Deserted Corpse #" + str(i): 0x40000191 for i in range(1, 6)},
+    **{"Ring of Sacrifice #"+str(i): 0x20004EF2 for i in range(1, 5)},
     **{"Homeward Bone #"+str(i): 0x4000015E for i in range(1, 17)},
     **{"Ember #"+str(i): 0x400001F4 for i in range(1, 46)},
     **{"Green Blossom #"+str(i): 0x40000104 for i in range(1, 7)},
     **{"Human Pine Resin #"+str(i): 0x4000014E for i in range(1, 3)},
-    **{"Charcoal Pine Bundle #"+str(i): 0x40000154 for i in range(1, 2)},
-    **{"Rotten Pine Resin #"+str(i): 0x40000157 for i in range(1, 2)},
+    **{"Charcoal Pine Bundle #"+str(i): 0x40000154 for i in range(1, 3)},
+    **{"Rotten Pine Resin #"+str(i): 0x40000157 for i in range(1, 3)},
     **{"Pale Tongue #"+str(i): 0x40000175 for i in range(1, 3)},
-    #**{"Black Firebomb #"+str(i): 0x40000124 for i in range(1, 2)}, CANT RANDOMIZE THEY DONT WORK
+    **{"Black Firebomb #"+str(i): 0x40000124 for i in range(1, 3)},
     **{"Alluring Skull #"+str(i): 0x40000126 for i in range(1, 3)},
-    **{"Undead Hunter Charm #"+str(i): 0x40000128 for i in range(1, 2)},
-    **{"Duel Charm #"+str(i): 0x40000130 for i in range(1, 2)},
+    **{"Undead Hunter Charm #"+str(i): 0x40000128 for i in range(1, 3)},
+    **{"Duel Charm #"+str(i): 0x40000130 for i in range(1, 3)},
     **{"Rusted Coin #"+str(i): 0x400001C7 for i in range(1, 3)},
     **{"Rusted Gold Coin #"+str(i): 0x400001C9 for i in range(1, 4)},
 }
