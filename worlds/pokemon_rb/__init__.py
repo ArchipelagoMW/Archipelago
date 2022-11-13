@@ -124,7 +124,7 @@ class PokemonRedBlueWorld(World):
 
         self.multiworld.itempool += item_pool
 
-    def generate_basic(self) -> None:
+    def pre_fill(self) -> None:
 
         process_wild_pokemon(self)
         process_static_pokemon(self)
