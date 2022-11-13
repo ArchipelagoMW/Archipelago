@@ -38,13 +38,15 @@ class WargrooveContext(CommonContext):
         # self.game_communication_path: files go in this path to pass data between us and the actual game
         if "appdata" in os.environ:
             options = Utils.get_options()
-            executable = options["wargroove_options"]["executable"].replace("/", "\\")
-            if not os.path.isfile(executable + "\\win64_bin\\wargroove64.exe"):
+            root_directory = options["wargroove_options"]["root_directory"].replace("/", "\\")
+            if not os.path.isfile(root_directory + "\\win64_bin\\wargroove64.exe"):
                 msg = "WargrooveClient couldn't find wargroove64.exe. Unable to infer required game_communication_path"
                 logger.error("Error: " + msg)
                 Utils.messagebox("Error", msg, error=True)
                 sys.exit(1)
-            self.game_communication_path = executable + "\\AP"
+            self.game_communication_path = root_directory + "\\AP"
+            if not os.path.exists(self.game_communication_path):
+                os.makedirs(self.game_communication_path)
         else:
             msg = "WargrooveClient couldn't detect system type. Unable to infer required game_communication_path"
             logger.error("Error: " + msg)
@@ -80,8 +82,6 @@ class WargrooveContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
-            if not os.path.exists(self.game_communication_path):
-                os.makedirs(self.game_communication_path)
             filename = f"AP_settings.json"
             with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                 json.dump(args["slot_data"], f)
@@ -91,15 +91,16 @@ class WargrooveContext(CommonContext):
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
 
-        if cmd in {"RoomInfo"}:
-            seed_name = args["seed_name"]
-            random.seed(seed_name)
+            random.seed(self.seed_name + str(self.slot))
             # Our indexes start at 1 and we have 23 levels
             for i in range(1, 24):
                 filename = f"seed{i}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.write(str(random.randint(0, 4294967295)))
                     f.close()
+
+        if cmd in {"RoomInfo"}:
+            self.seed_name = args["seed_name"]
 
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
