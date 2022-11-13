@@ -69,7 +69,7 @@ class KH2World(World):
             itempool += [self.create_item(ItemName.Ether)]
         for x in range(4):
             itempool += [self.create_item(ItemName.MagicBoost)]
-        for x in range(10):
+        for x in range(35):
             itempool += [self.create_item(ItemName.DefenseBoost)]
             itempool += [self.create_item(ItemName.DriveRecovery)]
             itempool += [self.create_item(ItemName.PowerBoost)]
