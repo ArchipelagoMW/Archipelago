@@ -33,11 +33,11 @@ Outside Tutorial (Outside Tutorial) - Outside Tutorial Path To Outpost - 0x03BA2
 Door - 0x03BA2 (Outpost Path) - 0x0A3B5
 
 Outside Tutorial Path To Outpost (Outside Tutorial) - Outside Tutorial Outpost - 0x0A170:
-158011 - 0x0A171 (Outpost Entry Panel) - True - Dots
+158011 - 0x0A171 (Outpost Entry Panel) - True - Dots & Full Dots
 Door - 0x0A170 (Outpost Entry) - 0x0A171
 
 Outside Tutorial Outpost (Outside Tutorial) - Outside Tutorial - 0x04CA3:
-158012 - 0x04CA4 (Outpost Exit Panel) - True - Dots & Black/White Squares
+158012 - 0x04CA4 (Outpost Exit Panel) - True - Dots & Black/White Squares & Full Dots
 Door - 0x04CA3 (Outpost Exit) - 0x04CA4
 158600 - 0x17CFB (Discard) - True - Triangles
 
