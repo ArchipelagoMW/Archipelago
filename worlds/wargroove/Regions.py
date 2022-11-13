@@ -53,8 +53,8 @@ def create_regions(world, player: int):
         ], ['Doggo Mountain']),
 
         create_region(world, player, 'Ambushed in the Middle', [
-            'Ambushed in the Middle: Victory 1',
-            'Ambushed in the Middle: Victory 2',
+            'Ambushed in the Middle: Victory (Blue)',
+            'Ambushed in the Middle: Victory (Green)',
         ], ['Tenri\'s Fall']),
 
         # Levels 3CA-3CC
@@ -111,8 +111,8 @@ def create_regions(world, player: int):
         ]),
 
         create_region(world, player, 'Rebel Village', [
-            'Rebel Village: Victory 1',
-            'Rebel Village: Victory 2',
+            'Rebel Village: Victory (Pink)',
+            'Rebel Village: Victory (Red)',
         ]),
 
         # Final Level

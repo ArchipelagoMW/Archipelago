@@ -94,11 +94,11 @@ class WargrooveContext(CommonContext):
         if cmd in {"RoomInfo"}:
             seed_name = args["seed_name"]
             random.seed(seed_name)
-            # Lua indexes start at 1 and we have 23 levels
+            # Our indexes start at 1 and we have 23 levels
             for i in range(1, 24):
                 filename = f"seed{i}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                    f.write(str(random.randint(0, sys.maxsize)))
+                    f.write(str(random.randint(0, 4294967295)))
                     f.close()
 
         if cmd in {"ReceivedItems"}:

@@ -78,13 +78,13 @@ def set_rules(world: MultiWorld, player: int):
     set_region_exit_rules(world.get_region('Endless Knight', player),
                           [world.get_location('Endless Knight: Victory', player)])
 
-    set_rule(world.get_location('Ambushed in the Middle: Victory 1', player),
+    set_rule(world.get_location('Ambushed in the Middle: Victory (Blue)', player),
              lambda state: state._wargroove_has_item(player, 'Spearman'))
-    set_rule(world.get_location('Ambushed in the Middle: Victory 2', player),
+    set_rule(world.get_location('Ambushed in the Middle: Victory (Green)', player),
              lambda state: state._wargroove_has_item(player, 'Spearman'))
     set_region_exit_rules(world.get_region('Ambushed in the Middle', player),
-                          [world.get_location('Ambushed in the Middle: Victory 1', player),
-                        world.get_location('Ambushed in the Middle: Victory 2', player)])
+                          [world.get_location('Ambushed in the Middle: Victory (Blue)', player),
+                        world.get_location('Ambushed in the Middle: Victory (Green)', player)])
 
     # Levels 3CA-3CC
     set_rule(world.get_location('The Churning Sea: Victory', player),
@@ -136,10 +136,10 @@ def set_rules(world: MultiWorld, player: int):
              lambda state: state._wargroove_has_item_and_region(player, 'Warship', 'Master of the Lake'))
     set_rule(world.get_location('A Ballista\'s Revenge: Victory', player),
              lambda state: state._wargroove_has_item_and_region(player, 'Ballista', 'A Ballista\'s Revenge'))
-    set_rule(world.get_location('Rebel Village: Victory 1', player),
+    set_rule(world.get_location('Rebel Village: Victory (Pink)', player),
              lambda state: state._wargroove_has_item_and_region(player, 'Spearman', 'Rebel Village') and
                            state._wargroove_has_item(player, 'Mage'))
-    set_rule(world.get_location('Rebel Village: Victory 2', player),
+    set_rule(world.get_location('Rebel Village: Victory (Red)', player),
              lambda state: state._wargroove_has_item_and_region(player, 'Spearman', 'Rebel Village') and
                            state._wargroove_has_item(player, 'Mage'))
 
