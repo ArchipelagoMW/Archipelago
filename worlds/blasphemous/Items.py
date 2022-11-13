@@ -100,7 +100,7 @@ item_table: List[ItemDict] = [
     {'name': "Calcified Eye of Erudition", #RB37
         'count': 1,
         'classification': ItemClassification.useful},
-    {'name': "Immaculate Bead", #RB38-41
+    {'name': "Weight of True Guilt", #RB38-41
         'count': 1,
         'classification': ItemClassification.progression},
     {'name': "Reliquary of the Fervent Heart", #RB101
@@ -298,7 +298,7 @@ item_table: List[ItemDict] = [
         'count': 1,
         'classification': ItemClassification.progression},
     {'name': "Thorn", #QI31-35, QI79-81
-        'count': 1,
+        'count': 8,
         'classification': ItemClassification.progression},
     {'name': "Olive Seeds", #QI37
         'count': 1,
@@ -318,9 +318,9 @@ item_table: List[ItemDict] = [
     {'name': "Knot of Rosary Rope", #QI44, QI52-56
         'count': 6,
         'classification': ItemClassification.useful},
-    #{'name': "Golden Thimble Filled with Burning Oil", #QI57
-    #    'count': 1,
-    #    'classification': ItemClassification.progression},
+    {'name': "Golden Thimble Filled with Burning Oil", #QI57
+        'count': 1,
+        'classification': ItemClassification.progression},
     {'name': "Key to the Chamber of the Eldest Brother", #QI58
         'count': 1,
         'classification': ItemClassification.progression},
