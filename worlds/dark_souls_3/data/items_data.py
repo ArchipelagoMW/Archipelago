@@ -197,8 +197,8 @@ goods_table = {
     "Soul of a Demon": 0x400002E3,
 
     # Upgrade materials
-    **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(1, 11)},
-    **{"Large Titanite Shard #"+str(i): 0x400003E9 for i in range(1, 11)},
+    **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(1, 16)},
+    **{"Large Titanite Shard #"+str(i): 0x400003E9 for i in range(1, 16)},
     **{"Titanite Chunk #"+str(i): 0x400003EA for i in range(1, 6)},
     **{"Titanite Slab #"+str(i): 0x400003EB for i in range(1, 4)},
 
@@ -217,7 +217,8 @@ goods_table = {
     "Soul of the Demon Prince": 0x400002EA,
     "Soul of Darkeater Midir": 0x400002EB,
     "Soul of Slave Knight Gael": 0x400002E9,
-    **{"Ember #"+str(i): 0x400001F4 for i in range(1, 4)}
+    **{"Ember #"+str(i): 0x400001F4 for i in range(1, 7)},
+    **{"Titanite Scale #" + str(i): 0x400003FC for i in range(1, 15)}
 }
 
 armor_table = {
@@ -314,9 +315,10 @@ armor_table = {
     "Outrider Knight Helm": 0x1328B740,
     "Outrider Knight Armor": 0x1328BB28,
     "Outrider Knight Gauntlets": 0x1328BF10,
-    "Outrider Knight Leggings": 0x1328C2F8,
+    "Outrider Knight Leggings": 0x1328C2F8
+}
 
-    # Added by Br00ty (all DLC)
+armor_2_table = { #DLC ARMORS HERE
     "Slave Knight Hood": 0x134EDCE0,
     "Slave Knight Armor": 0x134EE0C8,
     "Slave Knight Gauntlets": 0x134EE4B0,
@@ -531,7 +533,7 @@ key_items_list = {
 }
 
 item_tables = [weapons_upgrade_5_table, weapons_upgrade_10_table, shields_table,
-               armor_table, rings_table, spells_table, misc_items_table, goods_table]
+               armor_table, armor_2_table, rings_table, spells_table, misc_items_table, goods_table]
 
 item_dictionary = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table,
-                   **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table}
+                   **armor_table, **armor_2_table, **rings_table, **spells_table, **misc_items_table, **goods_table}

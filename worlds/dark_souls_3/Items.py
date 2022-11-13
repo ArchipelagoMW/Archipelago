@@ -8,7 +8,7 @@ class DarkSouls3Item(Item):
     @staticmethod
     def get_name_to_id() -> dict:
         base_id = 100000
-        table_offset = 1000
+        table_offset = 100
 
         output = {}
         for i, table in enumerate(item_tables):
