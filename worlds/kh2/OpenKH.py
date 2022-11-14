@@ -5,12 +5,12 @@ import shutil
 
 from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
 from .Items import KH2Item, ItemData, item_dictionary_table,lookup_kh2id_to_name
-from .Locations import all_locations, setup_locations,LocationName,getBonus
+from .Locations import all_locations, setup_locations,LocationName
 from .Options import FinalEXP, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement,Kingdom_Hearts2_Options
 from .modYml import modYml
 from .Names import ItemName
-from .ItemId import id
-from .LocationId import popid, roxasId, trsrId
+from .ItemId import itemId
+
 
 #import Utils
 #import Patch
@@ -20,25 +20,26 @@ from .LocationId import popid, roxasId, trsrId
 def noop(self, *args, **kw):
     pass
 def patch_kh2(world,player,self,output_directory):
-    itemName= [location.item.name
-              for location in self.world.get_filled_locations(self.player)]
-    locName=[
-             location.name
+    itemName= {location.name: location.item.code.kh2id
+                for location in self.world.get_filled_locations(self.player)}
+    locName=[location.item.code.kh2id
              for location in self.world.get_filled_locations(self.player)
-            ]    
-    self.formattedTrsr = {}         
-    for i in range(len(locName)):
-         if locName[i] in getBonus:
-             print(locName[i])
-             print(itemName[i])
-             print(trsrId[(locName[i])])
-             print({"ItemId":id[str(itemName[i])]})
-    key=frozenset(popid.items())
-    mod_name="yourmom.yml"
-    mod_dir = os.path.join(output_directory,mod_name)
-    filename = f"trsr.yml"
+            ]  
+    self.formattedTrsr = {}
+    print(itemName)
+    print(locName[5])
+    #for i in range(len(locName)):
+    #     if locName[i] in getBonus:
+    #         print(locName[i])
+    #         print(itemName[i])
+    #         #print({"ItemId":trsrId(locName[i])})
+    #         print({"ItemId":itemId[str(itemName[i])]})
+    #key=frozenset(popid.items())
+    #mod_name="yourmom.yml"
+    #mod_dir = os.path.join(output_directory,mod_name)
+    #filename = f"trsr.yml"
         
-    os.makedirs(mod_dir, exist_ok=True)
+    #os.makedirs(mod_dir, exist_ok=True)
      #trsrLocations=[loc for location in kh3id]
     #shutil.copytree(os.path.join(os.path.dirname(__file__)), mod_dir, dirs_exist_ok=True)
     #for i in range(5):
@@ -81,3 +82,8 @@ def patch_kh2(world,player,self,output_directory):
 
 
 
+    #for loop
+       #if yml=0 then bonus item =id of that item
+       #else bonus item=0
+
+       #if dummy14=true then id =dummy14 else 

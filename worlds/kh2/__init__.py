@@ -35,7 +35,7 @@ class KH2World(World):
     remote_items: bool = False 
     remote_start_inventory: bool = False
     item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
-    location_name_to_id = all_locations
+    location_name_to_id={item_name: data.code for item_name, data in all_locations.items() if data.code}
     item_name_to_kh2id={name:data.kh2id for name,data in item_dictionary_table.items()}
 
 

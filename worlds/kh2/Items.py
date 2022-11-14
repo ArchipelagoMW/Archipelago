@@ -12,6 +12,8 @@ class ItemData(typing.NamedTuple):
     kh2id:int
     quantity: int = 1
     event: bool = False
+    
+     
 
 #itemname.readfromfile.kh2id
     
