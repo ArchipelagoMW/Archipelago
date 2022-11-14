@@ -261,8 +261,10 @@ def distribute_early_items(world: MultiWorld,
         early_locations: typing.List[Location] = []
         early_priority_locations: typing.List[Location] = []
         loc_indexes_to_remove: typing.Set[int] = set()
+        base_state = world.state.copy()
+        base_state.sweep_for_events(locations=(loc for loc in world.get_filled_locations() if loc.address is None))
         for i, loc in enumerate(fill_locations):
-            if loc.can_reach(world.state):
+            if loc.can_reach(base_state):
                 if loc.progress_type == LocationProgressType.PRIORITY:
                     early_priority_locations.append(loc)
                 else:
@@ -298,22 +300,22 @@ def distribute_early_items(world: MultiWorld,
                         break
         itempool = [item for i, item in enumerate(itempool) if i not in item_indexes_to_remove]
         for player in world.player_ids:
-            fill_restrictive(world, world.state,
+            fill_restrictive(world, base_state,
                 [loc for loc in early_locations if loc.player == player],
                 early_local_rest_items[player], lock=True)
         early_locations = [loc for loc in early_locations if not loc.item]
-        fill_restrictive(world, world.state, early_locations, early_rest_items, lock=True)
+        fill_restrictive(world, base_state, early_locations, early_rest_items, lock=True)
         early_locations += early_priority_locations
         for player in world.player_ids:
-            fill_restrictive(world, world.state,
+            fill_restrictive(world, base_state,
                 [loc for loc in early_locations if loc.player == player],
                 early_local_prog_items[player], lock=True)
         early_locations = [loc for loc in early_locations if not loc.item]
-        fill_restrictive(world, world.state, early_locations, early_prog_items, lock=True)
+        fill_restrictive(world, base_state, early_locations, early_prog_items, lock=True)
         unplaced_early_items = early_rest_items + early_prog_items
         if unplaced_early_items:
-            logging.warning(f"Ran out of early locations for early items. Failed to place \
-                            {len(unplaced_early_items)} items early.")
+            logging.warning("Ran out of early locations for early items. Failed to place "
+                            f"{len(unplaced_early_items)} items early.")
             itempool += unplaced_early_items
 
         fill_locations.extend(early_locations)
