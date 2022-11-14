@@ -1,4 +1,4 @@
-from typing import Dict, Set
+from typing import Dict, TypedDict, List, Set, Any
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, RegionType
 from worlds.generic.Rules import set_rule
 from ..AutoWorld import World, WebWorld
@@ -8,6 +8,9 @@ from .Exits import region_exit_table, exit_lookup_table
 from .Rules import rules
 from .Options import blasphemous_options
 from . import Vanilla
+
+import json
+import os
 
 
 class BlasphemousWeb(WebWorld):
@@ -34,6 +37,10 @@ class BlasphemousWorld(World):
 
     item_name_to_id = {item["name"]: (1909000 + item_table.index(item)) for item in item_table}
     location_name_to_id = {loc["name"]: (1909000 + location_table.index(loc)) for loc in location_table}
+
+    item_name_to_game_id = {item["name"]: item["game_id"] for item in item_table}
+    location_name_to_game_id = {loc["name"]: loc["game_id"] for loc in location_table}
+
     item_name_groups = group_table
     option_definitions = blasphemous_options
 
@@ -326,9 +333,80 @@ class BlasphemousWorld(World):
                 .append(BlasphemousLocation(self.player, loc["name"], id, region_table[loc["region"]]))
 
 
+    def generate_output(self, output_directory: str):
+        slot_data: Dict[str, Any] = {}
+        locations: List[APLocationData] = []
+
+        red_wax_count = 0
+        blue_wax_count = 0
+        thorn_count = 0
+        vessel_count = 0
+        knot_count = 0
+        quicksilver_count = 0
+        verses_count = 0
+
+        for loc in self.multiworld.get_filled_locations():
+            if loc.game == "Blasphemous":
+                data: APLocationData = {
+                    "id": self.location_name_to_game_id[loc.name],
+                    "ap_id": loc.address,
+                    "item": "",
+                    "name": loc.item.name,
+                    "player_id": loc.item.player,
+                    "player_name": self.multiworld.player_name[loc.item.player]
+                }
+
+                if loc.item.game == "Blasphemous":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][0]
+                else:
+                    data["item"] = "AP"
+
+                if loc.item.name == "Bead of Red Wax":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][red_wax_count]
+                    red_wax_count += 1
+                elif loc.item.name == "Bead of Blue Wax":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][blue_wax_count]
+                    blue_wax_count += 1
+                elif loc.item.name == "Thorn":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][thorn_count]
+                    thorn_count += 1
+                elif loc.item.name == "Empty Bile Vessel":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][vessel_count]
+                    vessel_count += 1
+                elif loc.item.name == "Knot of Rosary Rope":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][knot_count]
+                    knot_count += 1
+                elif loc.item.name == "Quicksilver":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][quicksilver_count]
+                    quicksilver_count += 1
+                elif loc.item.name == "Verses Spun from Gold":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][verses_count]
+                    verses_count += 1
+
+                locations.append(data)
+    
+        slot_data = {
+            "locations": locations,
+            "slot": self.multiworld.player_name[self.player]
+        }
+    
+        filename = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.player_name[self.player]}.json"
+        with open(os.path.join(output_directory, filename), 'w') as outfile:
+            json.dump(slot_data, outfile)
+
+
 class BlasphemousItem(Item):
     game: str = "Blasphemous"
 
 
 class BlasphemousLocation(Location):
     game: str = "Blasphemous"
+
+
+class APLocationData(TypedDict):
+    id: str
+    ap_id: int
+    item: str
+    name: str
+    player_id: int
+    player_name: str
