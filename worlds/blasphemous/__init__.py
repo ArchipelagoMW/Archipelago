@@ -346,7 +346,7 @@ class BlasphemousWorld(World):
         verses_count = 0
 
         for loc in self.multiworld.get_filled_locations():
-            if loc.game == "Blasphemous":
+            if loc.game == "Blasphemous" and loc.player == self.player:
                 data: APLocationData = {
                     "id": self.location_name_to_game_id[loc.name],
                     "ap_id": loc.address,
