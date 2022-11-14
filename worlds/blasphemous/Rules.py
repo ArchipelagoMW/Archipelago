@@ -297,8 +297,7 @@ def rules(blasphemousworld):
         set_rule(i, lambda state: state._blasphemous_3_wounds(player) and \
             state._blasphemous_blood_relic(player))
     for i in world.get_region("The Resting Place of the Sister", player).entrances:
-        set_rule(i, lambda state: state._blasphemous_blood_relic(player) or \
-            state.can_reach(world.get_region("Mother of Mothers", player)))
+        set_rule(i, lambda state: state._blasphemous_blood_relic(player))
     for i in world.get_region("The Sleeping Canvases", player).entrances:
         set_rule(i, lambda state: state._blasphemous_3_wounds(player) and \
             state._blasphemous_blood_relic(player))
@@ -546,7 +545,7 @@ def rules(blasphemousworld):
             state._blasphemous_cherub_20(player))
     set_rule(world.get_location("GA: Altasgracias gift", player),
         lambda state: state._blasphemous_altasgracias_3(player))
-    set_rule(world.get_location("GA: Altasgracias cocoon", player),
+    set_rule(world.get_location("GA: Altasgracias cacoon", player),
         lambda state: state._blasphemous_altasgracias_3(player) and \
             state._blasphemous_egg(player))
 
@@ -568,7 +567,6 @@ def rules(blasphemousworld):
         lambda state: state._blasphemous_root_relic(player))
 
     # Knot of the Three Words
-    # to do: do you actually need the scapular for this??
     set_rule(world.get_location("KotTW: Fourth Visage gift", player),
         lambda state: state._blasphemous_wood_key(player) and \
             state._blasphemous_eyes(player))
@@ -586,10 +584,9 @@ def rules(blasphemousworld):
     set_rule(world.get_location("LotNW: Platform puzzle chest", player),
         lambda state: state._blasphemous_blood_relic(player))
     set_rule(world.get_location("LotNW: Elevator cherub", player),
-        lambda state: state._blasphemous_blood_relic(player) and \
-            ((state._blasphemous_cherub_22_23_31_32(player) and \
+        lambda state: (state._blasphemous_cherub_22_23_31_32(player) and \
                 state._blasphemous_dawn_heart(player)) or \
-                    state._blasphemous_root_relic(player)))
+                    state._blasphemous_root_relic(player))
     set_rule(world.get_location("LotNW: Red candle", player),
         lambda state: state._blasphemous_red_wax(player))
     set_rule(world.get_location("LotNW: Diosdado gift", player),

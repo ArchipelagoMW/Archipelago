@@ -59,20 +59,20 @@ item_table: List[ItemDict] = [
         'count': 1,
         'classification': ItemClassification.useful},
     {'name': "Bead of Red Wax", #RB17-19
-        'count': 1,
-        'classification': ItemClassification.useful},
+        'count': 3,
+        'classification': ItemClassification.progression},
     {'name': "Little Toe made of Limestone", #RB20
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
     {'name': "Big Toe made of Limestone", #RB21
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
     {'name': "Fourth Toe made of Limestone", #RB22
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
     {'name': "Bead of Blue Wax", #RB24-26
-        'count': 1,
-        'classification': ItemClassification.useful},
+        'count': 3,
+        'classification': ItemClassification.progression},
     {'name': "Pelican Effigy", #RB28
         'count': 1,
         'classification': ItemClassification.useful},
@@ -117,7 +117,7 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.useful},
     {'name': "Cloistered Ruby", #RB105
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
     {'name': "Bead of Gold Thread", #RB106
         'count': 1,
         'classification': ItemClassification.useful},
@@ -161,7 +161,7 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.progression},
     {'name': "Zarabanda of the Safe Haven", #PR08
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
     {'name': "Taranto to my Sister", #PR09
         'count': 1,
         'classification': ItemClassification.progression},
@@ -176,7 +176,7 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.progression},
     {'name': "Verdiales of the Forsaken Hamlet", #PR14
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
     {'name': "Romance to the Crimson Mist", #PR15
         'count': 1,
         'classification': ItemClassification.useful},
@@ -185,16 +185,16 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.useful},
     {'name': "Aubade of the Nameless Guardian", #PR101
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
     {'name': "Cantina of the Blue Rose", #PR201
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
     {'name': "Mirabras of the Return to Port", #PR202
         'count': 1,
         'classification': ItemClassification.useful},
     {'name': "Tirana of the Celestial Bastion", #PR203
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
 
     # Relics
     {'name': "Blood Perpetuated in Sand", #RE01
@@ -214,10 +214,10 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.progression},
     {'name': "Silvered Lung of Dolphos", #RE07
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
     {'name': "Three Gnarled Tongues", #RE10
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
 
     # Mea Culpa Hearts
     {'name': "Smoking Heart of Incense", #HE01
@@ -252,21 +252,21 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.useful},
     {'name': "Apodictic Heart of Mea Culpa", #HE201
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
 
     # Quest Items
     {'name': "Cord of the True Burying", #QI01
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
     {'name': "Mark of the First Refuge", #QI02
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
     {'name': "Mark of the Second Refuge", #QI03
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
     {'name': "Mark of the Third Refuge", #QI04
         'count': 1,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
     {'name': "Tentudia's Carnal Remains", #QI06
         'count': 1,
         'classification': ItemClassification.progression},
@@ -544,8 +544,14 @@ item_table: List[ItemDict] = [
     {'name': "Tears of Atonement (250)",
         'count': 1,
         'classification': ItemClassification.filler},
+    {'name': "Tears of Atonement (300)",
+        'count': 1,
+        'classification': ItemClassification.filler},
     {'name': "Tears of Atonement (500)",
         'count': 3,
+        'classification': ItemClassification.filler},
+    {'name': "Tears of Atonement (625)",
+        'count': 1,
         'classification': ItemClassification.filler},
     {'name': "Tears of Atonement (750)",
         'count': 1,
@@ -565,20 +571,38 @@ item_table: List[ItemDict] = [
     {'name': "Tears of Atonement (2000)",
         'count': 2,
         'classification': ItemClassification.filler},
+    {'name': "Tears of Atonement (2100)",
+        'count': 1,
+        'classification': ItemClassification.filler},
     {'name': "Tears of Atonement (2500)",
+        'count': 1,
+        'classification': ItemClassification.filler},
+    {'name': "Tears of Atonement (2600)",
         'count': 1,
         'classification': ItemClassification.filler},
     {'name': "Tears of Atonement (3000)",
         'count': 2,
         'classification': ItemClassification.filler},
+    {'name': "Tears of Atonement (4300)",
+        'count': 1,
+        'classification': ItemClassification.filler},
     {'name': "Tears of Atonement (5000)",
         'count': 4,
+        'classification': ItemClassification.filler},
+    {'name': "Tears of Atonement (5500)",
+        'count': 1,
+        'classification': ItemClassification.filler},
+    {'name': "Tears of Atonement (9000)",
+        'count': 1,
         'classification': ItemClassification.filler},
     {'name': "Tears of Atonement (10000)",
         'count': 1,
         'classification': ItemClassification.filler},
+    {'name': "Tears of Atonement (11250)",
+        'count': 1,
+        'classification': ItemClassification.filler},
     {'name': "Tears of Atonement (18000)",
-        'count': 4,
+        'count': 5,
         'classification': ItemClassification.filler},
     {'name': "Tears of Atonement (30000)",
         'count': 1,
@@ -657,17 +681,25 @@ group_table: Dict[str, Set[str]] = {
 
 tears_set: Set[str] = [
     "Tears of Atonement (250)",
+    "Tears of Atonement (300)",
     "Tears of Atonement (500)",
+    "Tears of Atonement (625)",
     "Tears of Atonement (750)",
     "Tears of Atonement (1000)",
     "Tears of Atonement (1250)",
     "Tears of Atonement (1500)",
     "Tears of Atonement (1750)",
     "Tears of Atonement (2000)",
+    "Tears of Atonement (2100)",
     "Tears of Atonement (2500)",
+    "Tears of Atonement (2600)",
     "Tears of Atonement (3000)",
+    "Tears of Atonement (4300)",
     "Tears of Atonement (5000)",
+    "Tears of Atonement (5500)",
+    "Tears of Atonement (9000)",
     "Tears of Atonement (10000)",
+    "Tears of Atonement (11250)",
     "Tears of Atonement (18000)",
     "Tears of Atonement (30000)"
 ]
