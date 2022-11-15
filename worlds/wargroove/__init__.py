@@ -45,15 +45,15 @@ class WargrooveWorld(World):
             'seed': "".join(self.multiworld.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16)),
             'income_boost': self.multiworld.income_boost[self.player],
             'commander_defense_boost': self.multiworld.commander_defense_boost[self.player],
-            'commander_choice': self.multiworld.commander_choice[self.player],
-            'starting_groove_multiplier': 2  # Backwards compatibility in case this ever becomes an option
+            'can_choose_commander': self.multiworld.commander_choice[self.player] != 0,
+            'starting_groove_multiplier': 20  # Backwards compatibility in case this ever becomes an option
         }
 
     def generate_early(self):
         # Selecting a random starting faction
         if self.multiworld.commander_choice[self.player] == 2:
             factions = [faction for faction in faction_table.keys() if faction != "Starter"]
-            starting_faction = WargrooveItem(self.multiworld.random.choice(factions), self.player)
+            starting_faction = WargrooveItem(self.multiworld.random.choice(factions) + ' Commanders', self.player)
             self.multiworld.push_precollected(starting_faction)
 
     def generate_basic(self):

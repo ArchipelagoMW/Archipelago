@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import Item
-from typing import Dict
+from typing import Dict, List
 
 
 class ItemData(typing.NamedTuple):
@@ -59,42 +59,41 @@ item_table: Dict[str, ItemData] = {
 
 class CommanderData(typing.NamedTuple):
     name: str
-    charge_rate: int
     internal_name: str
     alt_name: str = None
 
 
-faction_table = {
+faction_table: Dict[str, List[CommanderData]] = {
     'Starter': [
-        CommanderData('Mercival', 7, 'commander_mercival')
+        CommanderData('Mercival', 'commander_mercival')
     ],
     'Cherrystone': [
-        CommanderData('Mercia', 10, 'commander_mercia'),
-        CommanderData('Emeric', 10, 'commander_emeric'),
-        CommanderData('Caesar', 7, 'commander_caesar'),
+        CommanderData('Mercia', 'commander_mercia'),
+        CommanderData('Emeric', 'commander_emeric'),
+        CommanderData('Caesar', 'commander_caesar'),
     ],
     'Felheim': [
-        CommanderData('Valder', 20, 'commander_valder'),
-        CommanderData('Ragna', 5, 'commander_ragna'),
-        CommanderData('Sigrid', 7, 'commander_sigrid')
+        CommanderData('Valder', 'commander_valder'),
+        CommanderData('Ragna', 'commander_ragna'),
+        CommanderData('Sigrid', 'commander_sigrid')
     ],
     'Floran': [
-        CommanderData('Greenfinger', 7, 'commander_greenfinger'),
-        CommanderData('Sedge', 5, 'commander_sedge'),
-        CommanderData('Nuru', 7, 'commander_nuru')
+        CommanderData('Greenfinger', 'commander_greenfinger'),
+        CommanderData('Sedge', 'commander_sedge'),
+        CommanderData('Nuru', 'commander_nuru')
     ],
     'Heavensong': [
-        CommanderData('Tenri', 5, 'commander_tenri'),
-        CommanderData('Koji', 5, 'commander_koji'),
-        CommanderData('Ryota', 10, 'commander_ryota')
+        CommanderData('Tenri', 'commander_tenri'),
+        CommanderData('Koji', 'commander_koji'),
+        CommanderData('Ryota', 'commander_ryota')
     ],
     'Requiem': [
-        CommanderData('Elodie', 5, 'commander_elodie'),
-        CommanderData('Dark Mercia', 5, 'commander_darkmercia')
+        CommanderData('Elodie', 'commander_elodie'),
+        CommanderData('Dark Mercia', 'commander_darkmercia')
     ],
     'Outlaw': [
-        CommanderData('Wulfar', 10, 'commander_wulfar'),
-        CommanderData('Twins', 7, 'commander_twins', 'Errol & Orla'),
-        CommanderData('Vesper', 5, 'commander_vesper')
+        CommanderData('Wulfar', 'commander_wulfar'),
+        CommanderData('Twins', 'commander_twins', 'Errol & Orla'),
+        CommanderData('Vesper', 'commander_vesper')
     ]
 }
