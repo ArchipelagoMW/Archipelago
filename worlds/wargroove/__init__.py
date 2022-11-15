@@ -3,7 +3,7 @@ import string
 import json
 
 from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification, RegionType
-from .Items import item_table, item_pool
+from .Items import item_table, faction_table
 from .Locations import location_table
 from .Regions import create_regions
 from .Rules import set_rules
@@ -44,25 +44,47 @@ class WargrooveWorld(World):
         return {
             'seed': "".join(self.multiworld.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16)),
             'income_boost': self.multiworld.income_boost[self.player],
-            'co_defense_boost': self.multiworld.co_defense_boost[self.player]
+            'commander_defense_boost': self.multiworld.commander_defense_boost[self.player],
+            'can_choose_commander': self.multiworld.commander_choice[self.player] != 0,
+            'starting_groove_multiplier': 20  # Backwards compatibility in case this ever becomes an option
         }
 
+    def generate_early(self):
+        # Selecting a random starting faction
+        if self.multiworld.commander_choice[self.player] == 2:
+            factions = [faction for faction in faction_table.keys() if faction != "Starter"]
+            starting_faction = WargrooveItem(self.multiworld.random.choice(factions) + ' Commanders', self.player)
+            self.multiworld.push_precollected(starting_faction)
+
     def generate_basic(self):
-        # Fill out our pool with our items from item_pool, assuming 1 item if not present in item_pool
+        # Fill out our pool with our items from the item table
         pool = []
+        precollected_item_names = {item.name for item in self.multiworld.precollected_items[self.player]}
+        ignore_faction_items = self.multiworld.commander_choice[self.player] == 0
         for name, data in item_table.items():
-            if not data.event:
-                for amount in range(item_pool.get(name, 1)):
-                    item = WargrooveItem(name, self.player)
-                    pool.append(item)
+            if data.code is not None and name not in precollected_item_names and not data.filler:
+                if name.endswith(' Commanders') and ignore_faction_items:
+                    continue
+                item = WargrooveItem(name, self.player)
+                pool.append(item)
+
+        # Matching number of unfilled locations with filler items
+        locations_remaining = len(location_table) - 1 - len(pool)
+        while locations_remaining > 0:
+            # Filling the pool equally with both types of filler items
+            pool.append(WargrooveItem("Commander Defense Boost", self.player))
+            locations_remaining -= 1
+            if locations_remaining > 0:
+                pool.append(WargrooveItem("Income Boost", self.player))
+                locations_remaining -= 1
 
         self.multiworld.itempool += pool
 
+        # Placing victory event at final location
         victory = WargrooveItem("Wargroove Victory", self.player)
         self.multiworld.get_location("Wargroove Finale: Victory", self.player).place_locked_item(victory)
 
-        if self.multiworld.logic[self.player] != 'no logic':
-            self.multiworld.completion_condition[self.player] = lambda state: state.has("Wargroove Victory", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Wargroove Victory", self.player)
 
     def set_rules(self):
         set_rules(self.multiworld, self.player)
@@ -81,15 +103,7 @@ class WargrooveWorld(World):
         return slot_data
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(["Card Draw", "Card Draw", "Card Draw", "Relic", "Relic"])
-
-    def fill_slot_data(self):
-        return {
-            "player_id": self.player,
-            "players": {player_id : self.multiworld.player_name[player_id] for player_id in self.multiworld.player_name},
-            'income_boost': self.multiworld.income_boost[self.player].value,
-            'co_defense_boost': self.multiworld.co_defense_boost[self.player].value
-        }
+        return self.multiworld.random.choice(["Commander Defense Boost", "Income Boost"])
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
@@ -124,6 +138,8 @@ class WargrooveItem(Item):
         item_data = item_table[name]
         super(WargrooveItem, self).__init__(
             name,
-            ItemClassification.progression if item_data.progression else ItemClassification.filler,
+            ItemClassification.progression if item_data.progression else
+            ItemClassification.filler if item_data.filler else
+            ItemClassification.useful,
             item_data.code, player
         )

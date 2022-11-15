@@ -3,6 +3,8 @@ import os
 import sys
 import asyncio
 import random
+from typing import Tuple, List, Iterable
+from worlds.wargroove.Items import faction_table, CommanderData
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -24,11 +26,30 @@ class WargrooveClientCommandProcessor(ClientCommandProcessor):
         self.output(f"Syncing items.")
         self.ctx.syncing = True
 
+    def _cmd_commander(self, *commander_name: Iterable[str]):
+        """Set the current commander to the given commander."""
+        if commander_name:
+            self.ctx.set_commander(' '.join(commander_name))
+        else:
+            if self.ctx.can_choose_commander:
+                commanders = self.ctx.get_commanders()
+                logger.info('Unlocked commanders: ' +
+                            ', '.join((commander.name for commander, unlocked in commanders if unlocked))
+                            )
+                logger.info('Locked commanders: ' +
+                            ', '.join((commander.name for commander, unlocked in commanders if not unlocked))
+                            )
+            else:
+                logger.error('Cannot set commanders in this game mode.')
+
 
 class WargrooveContext(CommonContext):
     command_processor: int = WargrooveClientCommandProcessor
     game = "Wargroove"
     items_handling = 0b111  # full remote
+    current_commander: CommanderData = faction_table["Starter"][0]
+    can_choose_commander: bool
+    starting_groove_multiplier: float
 
     def __init__(self, server_address, password):
         super(WargrooveContext, self).__init__(server_address, password)
@@ -84,12 +105,16 @@ class WargrooveContext(CommonContext):
         if cmd in {"Connected"}:
             filename = f"AP_settings.json"
             with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                slot_data = args["slot_data"]
                 json.dump(args["slot_data"], f)
+                self.can_choose_commander = slot_data["can_choose_commander"]
+                self.starting_groove_multiplier = slot_data["starting_groove_multiplier"]
                 f.close()
             for ss in self.checked_locations:
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
+            self.update_commander_data()
 
             random.seed(self.seed_name + str(self.slot))
             # Our indexes start at 1 and we have 23 levels
@@ -110,8 +135,14 @@ class WargrooveContext(CommonContext):
                     filename = f"AP_{str(network_item.item)}.item"
                     path = os.path.join(self.game_communication_path, filename)
 
+                    # Newly-obtained items
                     if not os.path.isfile(path):
                         open(path, 'w').close()
+                        # Announcing commander unlocks
+                        item_name = self.item_names[network_item.item]
+                        if item_name in faction_table.keys():
+                            for commander in faction_table[item_name]:
+                                logger.info(f"{commander.name} has been unlocked!")
 
                     with open(path, 'r+') as f:
                         line = f.readline()
@@ -136,6 +167,7 @@ class WargrooveContext(CommonContext):
                                 " from " +
                                 self.player_names[network_item.player])
                         f.close()
+                self.update_commander_data()
 
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:
@@ -156,6 +188,59 @@ class WargrooveContext(CommonContext):
 
         self.ui = WargrooveManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+
+    def update_commander_data(self):
+        if self.can_choose_commander:
+            faction_items = 0
+            faction_item_names = [faction + ' Commanders' for faction in faction_table.keys()]
+            for network_item in self.items_received:
+                if self.item_names[network_item.item] in faction_item_names:
+                    faction_items += 1
+            starting_groove = (faction_items - 1) * self.starting_groove_multiplier
+            # Must be an integer larger than 0
+            starting_groove = int(max(starting_groove, 0))
+            data = {
+                "commander": self.current_commander.internal_name,
+                "starting_groove": starting_groove
+            }
+        else:
+            data = {
+                "commander": "seed",
+                "starting_groove": 0
+            }
+        filename = 'commander.json'
+        with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+            json.dump(data, f)
+
+    def set_commander(self, commander_name: str) -> bool:
+        """Sets the current commander to the given one, if possible"""
+        if not self.can_choose_commander:
+            logger.error("Cannot set commanders in this game mode.")
+            return
+        match_name = commander_name.lower()
+        for commander, unlocked in self.get_commanders():
+            if commander.name.lower() == match_name or commander.alt_name and commander.alt_name.lower() == match_name:
+                if unlocked:
+                    self.current_commander = commander
+                    self.syncing = True
+                    logger.info(f"Commander set to {commander.name}.")
+                    self.update_commander_data()
+                    return True
+                else:
+                    logger.error(f"Commander {commander.name} has not been unlocked.")
+                    return False
+        else:
+            logger.error(f"{commander_name} is not a recognized Wargroove commander.")
+
+    def get_commanders(self) -> List[Tuple[CommanderData, bool]]:
+        """Gets a list of commanders with their unlocked status"""
+        received_item_names = (self.item_names[network_item.item] for network_item in self.items_received)
+        received_factions = {item_name[:-11] for item_name in received_item_names if item_name.endswith(' Commanders')}
+        commanders = []
+        for faction in faction_table.keys():
+            unlocked = faction == 'Starter' or str(faction) in received_factions
+            commanders += [(commander, unlocked) for commander in faction_table[faction]]
+        return commanders
 
 
 async def game_watcher(ctx: WargrooveContext):
