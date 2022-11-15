@@ -60,8 +60,11 @@ class WargrooveWorld(World):
         # Fill out our pool with our items from the item table
         pool = []
         precollected_item_names = {item.name for item in self.multiworld.precollected_items[self.player]}
+        ignore_faction_items = self.multiworld.commander_choice[self.player] == 0
         for name, data in item_table.items():
             if data.code is not None and name not in precollected_item_names and not data.filler:
+                if name.endswith(' Commanders') and ignore_faction_items:
+                    continue
                 item = WargrooveItem(name, self.player)
                 pool.append(item)
 
