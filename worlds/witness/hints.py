@@ -41,7 +41,7 @@ joke_hints = [
     ("Have you tried Zillion?", "Me neither. But it looks fun.", "So, let's try something new together?"),
     ("Have you tried Hylics 2?", "Stop motion might just be", "the epitome of unique art styles."),
     ("Have you tried Pokemon Red&Blue?", "A cute pet collecting game", "that fascinated an entire generation."),
-    ("Waiting to get you items?", "Try BK Sudoku!", "Make progress even while stuck."),
+    ("Waiting to get your items?", "Try BK Sudoku!", "Make progress even while stuck."),
     ("One day I was fascinated", "by the subject of", "generation of waves by wind"),
     ("I don't like sandwiches", "Why would you think I like sandwiches?", "Have you ever seen me with a sandwich?"),
     ("Where are you right now?", "I'm at soup!", "What do you mean you're at soup?"),
