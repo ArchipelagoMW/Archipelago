@@ -44,14 +44,14 @@ class WargrooveWorld(World):
         return {
             'seed': "".join(self.multiworld.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16)),
             'income_boost': self.multiworld.income_boost[self.player],
-            'co_defense_boost': self.multiworld.co_defense_boost[self.player],
-            'co_select': self.multiworld.co_choice[self.player] != 0,
+            'commander_defense_boost': self.multiworld.commander_defense_boost[self.player],
+            'commander_choice': self.multiworld.commander_choice[self.player],
             'starting_groove_multiplier': 2  # Backwards compatibility in case this ever becomes an option
         }
 
     def generate_early(self):
         # Selecting a random starting faction
-        if self.multiworld.co_choice[self.player] == 2:
+        if self.multiworld.commander_choice[self.player] == 2:
             factions = [faction for faction in faction_table.keys() if faction != "Starter"]
             starting_faction = WargrooveItem(self.multiworld.random.choice(factions), self.player)
             self.multiworld.push_precollected(starting_faction)
@@ -68,7 +68,8 @@ class WargrooveWorld(World):
         # Matching number of unfilled locations with filler items
         locations_remaining = len(location_table) - 1 - len(pool)
         while locations_remaining > 0:
-            pool.append(WargrooveItem("CO Defense Boost", self.player))
+            # Filling the pool equally with both types of filler items
+            pool.append(WargrooveItem("Commander Defense Boost", self.player))
             locations_remaining -= 1
             if locations_remaining > 0:
                 pool.append(WargrooveItem("Income Boost", self.player))
@@ -99,7 +100,7 @@ class WargrooveWorld(World):
         return slot_data
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(["CO Defense Boost", "Income Boost"])
+        return self.multiworld.random.choice(["Commander Defense Boost", "Income Boost"])
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):

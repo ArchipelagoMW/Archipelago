@@ -41,15 +41,15 @@ item_table: Dict[str, ItemData] = {
     # Player Buffs
     'Income Boost': ItemData(52023, False, True),
 
-    'CO Defense Boost': ItemData(52024, False, True),
+    'Commander Defense Boost': ItemData(52024, False, True),
 
     # Factions
-    'Cherrystone': ItemData(52025, False),
-    'Felheim': ItemData(52026, False),
-    'Florans': ItemData(52027, False),
-    'Heavensong': ItemData(52028, False),
-    'Requiem': ItemData(52029, False),
-    'Outlaws': ItemData(52030, False),
+    'Cherrystone Commanders': ItemData(52025, False),
+    'Felheim Commanders': ItemData(52026, False),
+    'Floran Commanders': ItemData(52027, False),
+    'Heavensong Commanders': ItemData(52028, False),
+    'Requiem Commanders': ItemData(52029, False),
+    'Outlaw Commanders': ItemData(52030, False),
 
     # Event Items
     'Wargroove Victory': ItemData(None, True, True)
@@ -78,7 +78,7 @@ faction_table = {
         CommanderData('Ragna', 5, 'commander_ragna'),
         CommanderData('Sigrid', 7, 'commander_sigrid')
     ],
-    'Florans': [
+    'Floran': [
         CommanderData('Greenfinger', 7, 'commander_greenfinger'),
         CommanderData('Sedge', 5, 'commander_sedge'),
         CommanderData('Nuru', 7, 'commander_nuru')
@@ -92,7 +92,7 @@ faction_table = {
         CommanderData('Elodie', 5, 'commander_elodie'),
         CommanderData('Dark Mercia', 5, 'commander_darkmercia')
     ],
-    'Outlaws': [
+    'Outlaw': [
         CommanderData('Wulfar', 10, 'commander_wulfar'),
         CommanderData('Twins', 7, 'commander_twins', 'Errol & Orla'),
         CommanderData('Vesper', 5, 'commander_vesper')
