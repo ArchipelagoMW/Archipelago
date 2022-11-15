@@ -3,7 +3,7 @@ import os
 import sys
 import asyncio
 import random
-from typing import Tuple, List
+from typing import Tuple, List, Iterable
 from worlds.wargroove.Items import faction_table, CommanderData
 
 import ModuleUpdate
@@ -26,18 +26,22 @@ class WargrooveClientCommandProcessor(ClientCommandProcessor):
         self.output(f"Syncing items.")
         self.ctx.syncing = True
 
-    def _cmd_commander(self, commander_name: str = ''):
+    def _cmd_commander(self, *commander_name: Iterable[str]):
         """Set the current commander to the given commander."""
         if commander_name:
-            self.ctx.set_commander(commander_name)
+            self.ctx.set_commander(' '.join(commander_name))
         else:
-            commanders = self.ctx.get_commanders()
-            logger.info('Unlocked commanders: ' +
-                        ', '.join((commander.name for commander, unlocked in commanders if unlocked))
-                        )
-            logger.info('Locked commanders: ' +
-                        ', '.join((commander.name for commander, unlocked in commanders if not unlocked))
-                        )
+            if self.ctx.can_choose_commander:
+                commanders = self.ctx.get_commanders()
+                logger.info('Unlocked commanders: ' +
+                            ', '.join((commander.name for commander, unlocked in commanders if unlocked))
+                            )
+                logger.info('Locked commanders: ' +
+                            ', '.join((commander.name for commander, unlocked in commanders if not unlocked))
+                            )
+            else:
+                logger.error('Cannot set commanders in this game mode.')
+
 
 class WargrooveContext(CommonContext):
     command_processor: int = WargrooveClientCommandProcessor
@@ -186,18 +190,24 @@ class WargrooveContext(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     def update_commander_data(self):
-        faction_items = 0
-        faction_item_names = [faction + ' Commanders' for faction in faction_table.keys()]
-        for network_item in self.items_received:
-            if self.item_names[network_item.item] in faction_item_names:
-                faction_items += 1
-        starting_groove = (faction_items - 1) * self.starting_groove_multiplier
-        # Must be an integer larger than 0
-        starting_groove = int(max(starting_groove, 0))
-        data = {
-            "commander": self.current_commander.internal_name,
-            "starting_groove": starting_groove
-        }
+        if self.can_choose_commander:
+            faction_items = 0
+            faction_item_names = [faction + ' Commanders' for faction in faction_table.keys()]
+            for network_item in self.items_received:
+                if self.item_names[network_item.item] in faction_item_names:
+                    faction_items += 1
+            starting_groove = (faction_items - 1) * self.starting_groove_multiplier
+            # Must be an integer larger than 0
+            starting_groove = int(max(starting_groove, 0))
+            data = {
+                "commander": self.current_commander.internal_name,
+                "starting_groove": starting_groove
+            }
+        else:
+            data = {
+                "commander": "seed",
+                "starting_groove": 0
+            }
         filename = 'commander.json'
         with open(os.path.join(self.game_communication_path, filename), 'w') as f:
             json.dump(data, f)
@@ -226,12 +236,9 @@ class WargrooveContext(CommonContext):
         """Gets a list of commanders with their unlocked status"""
         received_item_names = (self.item_names[network_item.item] for network_item in self.items_received)
         received_factions = {item_name[:-11] for item_name in received_item_names if item_name.endswith(' Commanders')}
-        for faction in received_factions:
-            print('received', faction)
         commanders = []
         for faction in faction_table.keys():
             unlocked = faction == 'Starter' or str(faction) in received_factions
-            print(faction, unlocked)
             commanders += [(commander, unlocked) for commander in faction_table[faction]]
         return commanders
 
