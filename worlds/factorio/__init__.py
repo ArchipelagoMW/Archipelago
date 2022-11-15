@@ -157,6 +157,8 @@ class Factorio(World):
                 satellite_recipe = self.custom_recipes["satellite"] if "satellite" in self.custom_recipes \
                     else next(iter(all_product_sources.get("satellite")))
             victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe, satellite_recipe)
+            if self.multiworld.silo[self.player] != Silo.option_spawn:
+                victory_tech_names.add("rocket-silo")
             world.get_location("Rocket Launch", player).access_rule = lambda state: all(state.has(technology, player)
                                                                                         for technology in
                                                                                         victory_tech_names)

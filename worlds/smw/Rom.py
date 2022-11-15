@@ -213,6 +213,22 @@ def handle_ability_code(rom):
     rom.write_bytes(CLIMB_SUB_ADDR + 0x12, bytearray([0x5C, 0x76, 0xCD, 0x00])) # JML $00CD76
     # End Climb
 
+    # Climb Rope
+    rom.write_bytes(0xDA33, bytearray([0x22, 0x70, 0xBC, 0x03])) # JSL $03BC70
+
+    CLIMB_ROPE_SUB_ADDR = 0x01BC70
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x04, bytearray([0x89, 0x20]))       # BIT #20
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x06, bytearray([0xF0, 0x07]))       # BEQ +0x07
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x08, bytearray([0x28]))             # PLP
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x09, bytearray([0xA9, 0xB0]))       # LDA #B0
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x0B, bytearray([0x85, 0x7D]))       # STA $7D
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x0D, bytearray([0x80, 0x01]))       # BRA +0x01
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x0F, bytearray([0x28]))             # PLP
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x10, bytearray([0x6B]))             # RTL
+    # End Climb Rope
+
     # P-Switch
     rom.write_bytes(0xAB1A, bytearray([0x22, 0xA0, 0xBA, 0x03])) # JSL $03BAA0
     rom.write_bytes(0xAB1E, bytearray([0xEA] * 0x01))
@@ -348,6 +364,9 @@ def handle_ability_code(rom):
     # Baby Yoshi
     rom.write_bytes(0xA2B8, bytearray([0x22, 0x20, 0xBB, 0x03])) # JSL $03BB20
     rom.write_bytes(0xA2BC, bytearray([0xEA] * 0x01))
+
+    rom.write_bytes(0x1C05F, bytearray([0x22, 0x20, 0xBB, 0x03])) # JSL $03BB20
+    rom.write_bytes(0x1C063, bytearray([0xEA] * 0x01))
 
     YOSHI_SUB_ADDR = 0x01BB20
     rom.write_bytes(YOSHI_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
