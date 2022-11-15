@@ -7,7 +7,7 @@ from typing import Dict
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     progression: bool
-    event: bool = False
+    filler: bool = False
 
 
 item_table: Dict[str, ItemData] = {
@@ -39,18 +39,62 @@ item_table: Dict[str, ItemData] = {
     'Final Sickle': ItemData(52022, True),
 
     # Player Buffs
-    'Income Boost': ItemData(52023, False),
+    'Income Boost': ItemData(52023, False, True),
 
-    'CO Defense Boost': ItemData(52024, False),
+    'CO Defense Boost': ItemData(52024, False, True),
+
+    # Factions
+    'Cherrystone': ItemData(52025, False),
+    'Felheim': ItemData(52026, False),
+    'Florans': ItemData(52027, False),
+    'Heavensong': ItemData(52028, False),
+    'Requiem': ItemData(52029, False),
+    'Outlaws': ItemData(52030, False),
 
     # Event Items
-    'Wargroove Victory': ItemData(None, True, True),
+    'Wargroove Victory': ItemData(None, True, True)
 
 }
 
-item_pool: Dict[str, int] = {
 
-    # Player Buffs
-    'Income Boost': 7,
-    'CO Defense Boost': 7,
+class CommanderData(typing.NamedTuple):
+    name: str
+    charge_rate: int
+    internal_name: str
+    alt_name: str = None
+
+
+faction_table = {
+    'Starter': [
+        CommanderData('Mercival', 7, 'commander_mercival')
+    ],
+    'Cherrystone': [
+        CommanderData('Mercia', 10, 'commander_mercia'),
+        CommanderData('Emeric', 10, 'commander_emeric'),
+        CommanderData('Caesar', 7, 'commander_caesar'),
+    ],
+    'Felheim': [
+        CommanderData('Valder', 20, 'commander_valder'),
+        CommanderData('Ragna', 5, 'commander_ragna'),
+        CommanderData('Sigrid', 7, 'commander_sigrid')
+    ],
+    'Florans': [
+        CommanderData('Greenfinger', 7, 'commander_greenfinger'),
+        CommanderData('Sedge', 5, 'commander_sedge'),
+        CommanderData('Nuru', 7, 'commander_nuru')
+    ],
+    'Heavensong': [
+        CommanderData('Tenri', 5, 'commander_tenri'),
+        CommanderData('Koji', 5, 'commander_koji'),
+        CommanderData('Ryota', 10, 'commander_ryota')
+    ],
+    'Requiem': [
+        CommanderData('Elodie', 5, 'commander_elodie'),
+        CommanderData('Dark Mercia', 5, 'commander_darkmercia')
+    ],
+    'Outlaws': [
+        CommanderData('Wulfar', 10, 'commander_wulfar'),
+        CommanderData('Twins', 7, 'commander_twins', 'Errol & Orla'),
+        CommanderData('Vesper', 5, 'commander_vesper')
+    ]
 }
