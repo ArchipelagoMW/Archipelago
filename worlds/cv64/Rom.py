@@ -389,11 +389,6 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     rom.write_bytes(0x6E38F0, [0x0C, 0x0F, 0xF1, 0x57])
     rom.write_bytes(0xBFC55C, PatchName.werebull_flag_unsetter)
 
-    # Special2 boss rewards
-    if world.draculas_condition[player] == 2:
-        rom.write_bytes(0xBBA84, [0x08, 0x0F, 0xF1, 0x8D])  # J	0x803FC634
-        rom.write_bytes(0xBFC634, PatchName.boss_speical2_giver)
-
     # Enable being able to carry multiple Special jewels, Nitros, and Mandragoras simultaneously
     rom.write_bytes(0xBF1F4, [0x3C, 0x03, 0x80, 0x39])  # LUI V1, 0x8039
     # Special1
@@ -525,16 +520,19 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     rom.write_byte(0xADE47, world.special1s_per_warp[player])
 
     # Dracula's chamber condition
+    rom.write_bytes(0xE2FDC, [0x08, 0x04, 0xAB, 0x1E])  # J 0x8012AC78
+    rom.write_bytes(0xADE68, PatchName.special_goal_checker)
     if world.draculas_condition[player] == 1:
-        rom.write_bytes(0xE2FDC, [0x08, 0x04, 0xAB, 0x1E])  # J 0x8012AC78
-        rom.write_bytes(0xADE68, PatchName.crystal_goal_checker)
+        rom.write_byte(0xADE73, 0x01)
+        # Give a Special2 on activating the crystal
     elif world.draculas_condition[player] == 2:
-        rom.write_bytes(0xE2FDC, [0x08, 0x04, 0xAB, 0x1E])  # J 0x8012AC78
-        rom.write_bytes(0xADE68, PatchName.boss_goal_checker)
+        rom.write_bytes(0xBBA84, [0x08, 0x0F, 0xF1, 0x8D])  # J	0x803FC634
+        rom.write_bytes(0xBFC634, PatchName.boss_speical2_giver)
+        rom.write_byte(0xADE73, world.bosses_required[player].value)
     elif world.draculas_condition[player] == 3:
-        rom.write_bytes(0xE2FDC, [0x08, 0x04, 0xAB, 0x1E])  # J 0x8012AC78
-        rom.write_bytes(0xADE68, PatchName.special_goal_checker)
         rom.write_byte(0xADE73, world.special2s_required[player].value)
+    else:
+        rom.write_byte(0xADE73, 0x00)
 
     # On-the-fly TLB script modifier
     rom.write_bytes(0xBFC338, PatchName.double_component_checker)

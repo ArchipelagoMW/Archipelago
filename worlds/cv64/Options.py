@@ -70,6 +70,15 @@ class TotalSpecial2s(Range):
     display_name = "Total Special2 Jewels"
 
 
+class BossesRequired(Range):
+    """Sets how many bosses need to be defeated to enter Dracula's chamber. Only applies if Dracula's Chamber Condition
+    is set to Bosses."""
+    range_start = 1
+    range_end = 16
+    default = 14
+    display_name = "Bosses Required"
+
+
 class CarrieLogic(Toggle):
     """If enabled, the two Underground Waterway checks inside the crawlspace will be included; otherwise, they'll be
     left vanilla. Enable this ONLY if you already know for certain that you (and everyone else if racing the same seed)
@@ -138,6 +147,7 @@ cv64_options: Dict[str, Option] = {
     "draculas_condition": DraculasChamberCondition,
     "special2s_required": Special2sRequired,
     "total_special2s": TotalSpecial2s,
+    "bosses_required": BossesRequired,
     "carrie_logic": CarrieLogic,
     "glitch_logic": GlitchLogic,
     "lizard_generator_items": LizardGeneratorItems,
