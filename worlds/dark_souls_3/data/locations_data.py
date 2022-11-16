@@ -42,6 +42,7 @@ high_wall_of_lothric = {
     "HWL: Soul of the Dancer": 0x400002CA,
     "HWL: Way of Blue Covenant": 0x2000274C,
     "HWL: Greirat's Ashes": 0x4000083F,
+    "HWL: Blue Tearstone Ring": 0x20004ED4 #given/dropped by Greirat
 }
 
 undead_settlement_table = {
@@ -94,7 +95,8 @@ undead_settlement_table = {
     "US: Cornyx's Ashes": 0x40000841,
     "US: Cornyx's Wrap": 0x11946370,
     "US: Cornyx's Garb": 0x11945F88,
-    "US: Cornyx's Skirt": 0x11946758
+    "US: Cornyx's Skirt": 0x11946758,
+    "US: Pyromancy Flame": 0x00CC77C0 #given/dropped by Cornyx
 }
 
 road_of_sacrifice_table = {

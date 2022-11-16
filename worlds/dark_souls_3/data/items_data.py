@@ -142,7 +142,8 @@ weapons_upgrade_10_table = {
     "Herald Curved Greatsword": 0x006159E0,
     "Lothric War Banner": 0x008D24D0,
     "Splitleaf Greatsword": 0x009B2E90,
-    "Murky Longstaff": 0x00CCC5E0
+    "Murky Longstaff": 0x00CCC5E0,
+    "Pyromancy Flame": 0x00CC77C0 #given/dropped by Cornyx
 }
 
 shields_table = {
@@ -429,7 +430,8 @@ rings_table = {
 
     # Added by Br00ty
     "Havel's Ring": 0x20004E34,
-    "Chillbite Ring": 0x20005208
+    "Chillbite Ring": 0x20005208,
+    "Blue Tearstone Ring": 0x20004ED4 #given/dropped by Greirat
 }
 
 spells_table = {
