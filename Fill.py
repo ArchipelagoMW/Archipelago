@@ -254,14 +254,17 @@ def distribute_early_items(world: MultiWorld,
     """ returns new fill_locations and itempool """
     early_items_count: typing.Dict[typing.Tuple[str, int], int] = {}
     for player in world.player_ids:
-        for item, count in world.early_items[player].value.items():
-            early_items_count[(item, player)] = count
+        items = itertools.chain(world.early_items[player], world.local_early_items[player])
+        for item in items:
+            early_items_count[(item, player)] = [world.early_items[player].get(item, 0), world.local_early_items[player].get(item, 0)]
     if early_items_count:
         early_locations: typing.List[Location] = []
         early_priority_locations: typing.List[Location] = []
         loc_indexes_to_remove: typing.Set[int] = set()
+        base_state = world.state.copy()
+        base_state.sweep_for_events(locations=(loc for loc in world.get_filled_locations() if loc.address is None))
         for i, loc in enumerate(fill_locations):
-            if loc.can_reach(world.state):
+            if loc.can_reach(base_state):
                 if loc.progress_type == LocationProgressType.PRIORITY:
                     early_priority_locations.append(loc)
                 else:
@@ -271,27 +274,48 @@ def distribute_early_items(world: MultiWorld,
 
         early_prog_items: typing.List[Item] = []
         early_rest_items: typing.List[Item] = []
+        early_local_prog_items: typing.Dict[int, typing.List[Item]] = {player: [] for player in world.player_ids}
+        early_local_rest_items: typing.Dict[int, typing.List[Item]] = {player: [] for player in world.player_ids}
         item_indexes_to_remove: typing.Set[int] = set()
         for i, item in enumerate(itempool):
             if (item.name, item.player) in early_items_count:
                 if item.advancement:
-                    early_prog_items.append(item)
+                    if early_items_count[(item.name, item.player)][1]:
+                        early_local_prog_items[item.player].append(item)
+                        early_items_count[(item.name, item.player)][1] -= 1
+                    else:
+                        early_prog_items.append(item)
+                        early_items_count[(item.name, item.player)][0] -= 1
                 else:
-                    early_rest_items.append(item)
+                    if early_items_count[(item.name, item.player)][1]:
+                        early_local_rest_items[item.player].append(item)
+                        early_items_count[(item.name, item.player)][1] -= 1
+                    else:
+                        early_rest_items.append(item)
+                        early_items_count[(item.name, item.player)][0] -= 1
                 item_indexes_to_remove.add(i)
-                early_items_count[(item.name, item.player)] -= 1
-                if early_items_count[(item.name, item.player)] == 0:
+                if early_items_count[(item.name, item.player)] == [0, 0]:
                     del early_items_count[(item.name, item.player)]
                     if len(early_items_count) == 0:
                         break
         itempool = [item for i, item in enumerate(itempool) if i not in item_indexes_to_remove]
-        fill_restrictive(world, world.state, early_locations, early_rest_items, lock=True)
+        for player in world.player_ids:
+            fill_restrictive(world, base_state,
+                [loc for loc in early_locations if loc.player == player],
+                early_local_rest_items[player], lock=True)
+        early_locations = [loc for loc in early_locations if not loc.item]
+        fill_restrictive(world, base_state, early_locations, early_rest_items, lock=True)
         early_locations += early_priority_locations
-        fill_restrictive(world, world.state, early_locations, early_prog_items, lock=True)
+        for player in world.player_ids:
+            fill_restrictive(world, base_state,
+                [loc for loc in early_locations if loc.player == player],
+                early_local_prog_items[player], lock=True)
+        early_locations = [loc for loc in early_locations if not loc.item]
+        fill_restrictive(world, base_state, early_locations, early_prog_items, lock=True)
         unplaced_early_items = early_rest_items + early_prog_items
         if unplaced_early_items:
-            logging.warning(f"Ran out of early locations for early items. Failed to place \
-                            {len(unplaced_early_items)} items early.")
+            logging.warning("Ran out of early locations for early items. Failed to place "
+                            f"{len(unplaced_early_items)} items early.")
             itempool += unplaced_early_items
 
         fill_locations.extend(early_locations)
