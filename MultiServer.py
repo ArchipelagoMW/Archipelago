@@ -1905,7 +1905,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         """Sends an item to the specified player"""
         return self._cmd_send_multiple(1, player_name, *item_name)
 
-    def _cmd_check_location(self, player_name: str, *location_name: str) -> bool:
+    def _cmd_send_location(self, player_name: str, *location_name: str) -> bool:
         """Send out item from a player's location as though they checked it"""
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
@@ -1918,7 +1918,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
             elif self.ctx.location_names_for_game(game) is not None:
                 location, usable, response = get_intended_text(full_name, self.ctx.location_names_for_game(game))
             else:
-                self.output("Can't look up location for unknown game. Check by ID instead.")
+                self.output("Can't look up location for unknown game. Send by ID instead.")
                 return False
 
             if usable:
