@@ -309,7 +309,6 @@ def get_mission_table(multiworld: MultiWorld, player: int):
                 level_mission_index = i
                 break
 
-        print("End: ", level_chosen_missions)
         mission_table[level] = level_mission_index
 
     return mission_table

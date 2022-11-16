@@ -216,7 +216,6 @@ class SA2BWorld(World):
 
         final_cannons_core_mission: str = get_final_cannons_core_mission(self.mission_map, self.mission_count_map)
 
-        print("Final CC: ", final_cannons_core_mission)
         connect_regions(self.multiworld, self.player, gates, self.emblems_for_cannons_core, self.gate_bosses, final_cannons_core_mission)
 
         max_required_emblems = max(max(emblem_requirement_list), self.emblems_for_cannons_core)
