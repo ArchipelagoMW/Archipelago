@@ -1210,11 +1210,6 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     " You can ask the server admin for a /release")
                 return False
 
-    def _cmd_forfeit(self) -> None:
-        """Deprecated. Please use release instead."""
-        self.output(
-            "!forfeit has been deprecated. Please use !release instead.")
-
     def _cmd_collect(self) -> bool:
         """Send your remaining items to yourself"""
         if "enabled" in self.ctx.collect_mode:
@@ -1845,11 +1840,6 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
         self.output(f"Could not find player {player_name} to release")
         return False
-
-    @mark_raw
-    def _cmd_forfeit(self, player_name: str) -> None:
-        """Deprecated command. Please use release instead"""
-        self.output("This command has been deprecated. Please use /release instead.")
 
     @mark_raw
     def _cmd_allow_release(self, player_name: str) -> bool:
