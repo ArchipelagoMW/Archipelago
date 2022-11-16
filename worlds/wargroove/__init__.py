@@ -14,8 +14,7 @@ from .Options import wargroove_options
 class WargrooveWeb(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up Slay the Spire for Archipelago. "
-        "This guide covers single-player, multiworld, and related software.",
+        "A guide to setting up Wargroove for Archipelago.",
         "English",
         "wargroove_en.md",
         "wargroove/en",

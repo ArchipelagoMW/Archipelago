@@ -1,36 +1,80 @@
-# Slay the Spire Setup Guide
+# Wargroove Setup Guide
 
-## Required Software
+## Required Files
 
-For steam-based installation, subscribe to the following mods:
+Only the Steam Windows version is supported. MAC, Switch, Xbox, Playstation, are all not supported.
+The custom campaign must be downloaded, the vanilla and Double Trouble campaigns will not work with Archipelago.
 
-- ModTheSpire from the [Slay the Spire Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=1605060445)
-- BaseMod from the [Slay the Spire Workshop](https://steamcommunity.com/workshop/filedetails/?id=1605833019)
-- Archipelago Multiworld Randomizer Mod from
-  the [Slay the Spire Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2596397288)
+- [The most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
+- Download the `ArchipelagoMod.zip`, `(REALLY_LONG_FILENAME).cmp` and 
+`(REALLY_LONG_FILENAME).cmp.bak` files from
+  the latest release in [Fly Sniper's GitHub](https://github.com/FlySniper/WargrooveArchipelagoMod/releases)
 
-## Configuring your YAML file
+## Installing the Archipelago Wargroove Mod and Campaign files
 
-### What is a YAML file and why do I need one?
+1. Open file explorer and type `%appdata%\Chucklefish\Wargroove` in the address bar.
+2. Create a `mods` folder if not already present.
+3. It is strongly recommended to copy your `playerProgress` and `playerProgress.bak` files found in the `save`
+directory to another directory where they can be referenced later. This preserves your save data in case of an 
+emergency.
+4. Copy the `(REALLY_LONG_FILENAME).cmp` and `(REALLY_LONG_FILENAME).cmp.bak` files into the 
+`%appdata%\Chucklefish\Wargroove\save` directory.
+5. Unzip `ArchipelagoMod.zip`. Enter the folder named `ArchipelagoMod`. If there is another folder inside also named 
+`ArchipelagoMod`, then copy the inside folder to `%appdata%\Chucklefish\Wargroove\mods`, otherwise if there are a bunch 
+of `.dat` files inside the `ArchipelagoMod` folder then copy that folder to `%appdata%\Chucklefish\Wargroove\mods`.
+Do not install the `ArchipelagoMod.zip` into the mods folder. Do not install an `ArchipelagoMod` folder that has no
+`.dat` files inside of it. Do install the `ArchipelagoMod` folder that does have `.dat` files in it.
 
-Your YAML file contains a set of configuration options which provide the generator with information about how it should
-generate your game. Each player of a multiworld will provide their own YAML file. This setup allows each player to enjoy
-an experience customized for their taste, and different players in the same multiworld can all have different options.
+## Update host.yaml to include the Wargroove root directory
 
-### Where do I get a YAML file?
+1. Look for your archipelago install files. Typically, they're found in `C:\ProgramData\Archipelago`.
+2. Open the `host.yaml` file in your favorite text editor (Notepad will work).
+3. Put your Wargroove root directory in the `root_directory:` under the `wargroove_options:` section.
+   - The Wargroove root directory can be found by going to 
+   `Steam->Right Click Wargroove->Properties->Local Files->Browse Local Files` and copying the path in the address bar.
+   - Paste the path in between the quotes next to `root_directory:` in the `host.yaml`
+   - You may have to replace all single \\ with \\\\
+4. Start the Wargroove client. It should start with no errors, if it does go back to step 1.
 
-you can customize your settings by visiting
-the [Slay the Spire Settings Page](/games/Slay%20the%20Spire/player-settings).
+## Start Wargroove and verify the campaign can be loaded
+1. Start Wargroove from Steam
+2. Go to `Story->Campaign->Custom->Archipelago` and click play. You should see the first level
 
-### Connect to the MultiServer
+## Starting a Multiworld game
+1. Start the Wargroove Client and connect to the server. Enter your username from your 
+[settings file](/games/Wargroove/player-settings)
+2. Start Wargroove and play the Archipelago campaign by going to `Story->Campaign->Custom->Archipelago`
 
-For Steam-based installations, if you are subscribed to ModTheSpire, when you launch the game, you should have the
-option to launch the game with mods. On the mod loader screen, ensure you only have the following mods enabled and then
-start the game:
+## Ending a Multiworld game
+It is strongly recommended that after finishing a multiworld game to delete campaign progress.
+This can be done by going to the level selection screen in the Archipelago campaign, hitting `ESC` and clicking the 
+`Delete Progress` button. The main menu should now be visible.
 
-- BaseMod
-- Archipelago Multiworld Randomizer
+## Updating to a new version of the Wargroove mod or downloading new campaign files
+Please delete your campaign progress by going to the level selection screen in the Archipelago campaign, 
+hitting `ESC` and clicking the `Delete Progress` button.
 
-Once you are in-game, you will be able to click the **Archipelago** menu option and enter the ip and port (separated by
-a colon) in the hostname field and enter your player slot name in the Slot Name field. Then click connect, and now you
-are ready to climb the spire!
+Follow the `Installing the Archipelago Wargroove Mod and Campaign files` steps again, but look for the latest version
+ to download.
+
+## Troubleshooting
+
+### The mod doesn't load
+Double-check the mod installation under `%appdata%\Chucklefish\Wargroove\mods` there should be 3 `.dat` files in 
+`%appdata%\Chucklefish\Wargroove\mods\ArchipelagoMod`. Otherwise, follow 
+`Installing the Archipelago Wargroove Mod and Campaign files` steps once more.
+
+### Wargroove crashes or there is a lua error
+Wargroove is finicky, but there could be several causes for this. If it happens often or can be reproduced, 
+please submit a bug report.
+
+### Wargroove crashes when trying to run the Archipelago campaign
+This is caused by not deleting campaign progress before updating the mod and campaign files.
+1. Go to `Custom Content->Create->Campaign->Archipelago->Edit` and attempt to update the mod.
+2. Wargroove will give an error message.
+3. Go back to `Custom Content->Create->Campaign->Archipelago->Edit` and attempt to update the mod again.
+4. Wargroove crashes.
+5. Go back to `Custom Content->Create->Campaign->Archipelago->Edit` and attempt to update the mod again.
+6. In the edit menu, hit `ESC` and click `Delete Progress`.
+7. If the above steps do not allow you to start the campaign from `Story->Campaign->Custom->Archipelago` replace 
+`playerProgress` and `playerProgress.bak` with your previously backed up files.

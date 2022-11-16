@@ -1,4 +1,4 @@
-# Slay the Spire (PC)
+# Wargroove (Steam, Windows)
 
 ## Where is the settings page?
 
@@ -7,29 +7,28 @@ config file.
 
 ## What does randomization do to this game?
 
-Every non-boss relic drop, every boss relic and rare card drop, and every other card draw is replaced with an
-archipelago item. In heart runs, the blue key is also disconnected from the Archipelago item, so you can gather both.
+This randomizer features a custom non-linear campaign where the final level and 3 branching paths are available to the 
+player from the start. The player cannot beat the final level without specific items scattered throughout the branching 
+paths. Certain levels on these branching paths may require specific units or items in order to progress.
 
 ## What items and locations get shuffled?
 
-15 card packs, 10 relics, and 3 boss relics and rare card drops are shuffled into the item pool and can be found at any
-location that would normally give you these items, except for card packs, which are found at every other normal enemy
-encounter.
+1. Every buildable unit in the game except for soldiers and dogs which are free.
+2. Commanders available to certain factions. If the player acquires the Floran Commanders, they can select any commander
+from that faction
+3. Income and Commander Defense boosts can provide the player with extra income or extra commander defense.
+4. Special map events like the Eastern Bridges, or the Southern Walls which unlock certain locations in certain levels.
 
 ## Which items can be in another player's world?
 
-Any of the items which can be shuffled may also be placed into another player's world. It is possible to choose to limit
-certain items to your own world.
+Any of the above items can be in another player's world.
 
 ## When the player receives an item, what happens?
 
-When the player receives an item, you will see the counter in the top right corner with the Archipelago symbol increment
-by one. By clicking on this icon, it'll open a menu that lists all the items you received, but have not yet accepted.
-You can take any relics and card packs sent to you and add them to your current run. It is advised that you do not open
-this menu until you are outside an encounter or event to prevent the game from soft-locking.
+When the player receives an item, a message will appear in Wargroove with the item name and sender name, once an action 
+is taken in game.
 
-## What happens if a player dies in a run?
+## What is the goal of this game when randomized?
 
-When a player dies, they will be taken back to the main menu and will need to reconnect to start climbing the spire from
-the beginning, but they will have access to all the items ever sent to them in the Archipelago menu in the top right.
-Any items found in an earlier run will not be sent again if you encounter them in the same location.
+The goal is to beat the level titled `The End` by finding the `Final Bridges`, `Final Walls`, `Final Sickle` and the 
+`knight` unit.
