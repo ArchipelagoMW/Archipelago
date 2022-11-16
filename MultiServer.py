@@ -109,7 +109,7 @@ class Context:
                       "location_check_points": int,
                       "server_password": str,
                       "password": str,
-                      "forfeit_mode": str,
+                      "release_mode": str,
                       "remaining_mode": str,
                       "collect_mode": str,
                       "item_cheat": bool,
@@ -488,7 +488,7 @@ class Context:
             "group_collected": dict(self.group_collected),
             "stored_data": self.stored_data,
             "game_options": {"hint_cost": self.hint_cost, "location_check_points": self.location_check_points,
-                             "server_password": self.server_password, "password": self.password, "forfeit_mode":
+                             "server_password": self.server_password, "password": self.password, "release_mode":
                              self.forfeit_mode, "remaining_mode": self.remaining_mode, "collect_mode":
                              self.collect_mode, "item_cheat": self.item_cheat, "compatibility": self.compatibility}
 
@@ -521,7 +521,7 @@ class Context:
             self.location_check_points = savedata["game_options"]["location_check_points"]
             self.server_password = savedata["game_options"]["server_password"]
             self.password = savedata["game_options"]["password"]
-            self.forfeit_mode = savedata["game_options"]["forfeit_mode"]
+            self.forfeit_mode = savedata["game_options"]["release_mode"]
             self.remaining_mode = savedata["game_options"]["remaining_mode"]
             self.collect_mode = savedata["game_options"]["collect_mode"]
             self.item_cheat = savedata["game_options"]["item_cheat"]
@@ -1190,10 +1190,6 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     def _cmd_release(self) -> bool:
         """Sends remaining items in your world to their recipients."""
-        return self._cmd_forfeit()
-
-    def _cmd_forfeit(self) -> bool:
-        """Surrender and send your remaining items out to their recipients. Use release in the future."""
         if self.ctx.allow_forfeits.get((self.client.team, self.client.slot), False):
             forfeit_player(self.ctx, self.client.team, self.client.slot)
             return True
@@ -1213,6 +1209,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     "Sorry, client item releasing requires you to have beaten the game on this server."
                     " You can ask the server admin for a /release")
                 return False
+
+    def _cmd_forfeit(self) -> None:
+        """Deprecated. Please use release instead."""
+        self.output(
+            "!forfeit has been deprecated. Please use !release instead.")
 
     def _cmd_collect(self) -> bool:
         """Send your remaining items to yourself"""
@@ -1836,11 +1837,6 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_release(self, player_name: str) -> bool:
         """Send out the remaining items from a player to their intended recipients."""
-        return self._cmd_forfeit(player_name)
-
-    @mark_raw
-    def _cmd_forfeit(self, player_name: str) -> bool:
-        """Send out the remaining items from a player to their intended recipients."""
         player = self.resolve_player(player_name)
         if player:
             team, slot, _ = player
@@ -1851,7 +1847,12 @@ class ServerCommandProcessor(CommonCommandProcessor):
         return False
 
     @mark_raw
-    def _cmd_allow_forfeit(self, player_name: str) -> bool:
+    def _cmd_forfeit(self, player_name: str) -> None:
+        """Deprecated command. Please use release instead"""
+        self.output("This command has been deprecated. Please use /release instead.")
+
+    @mark_raw
+    def _cmd_allow_release(self, player_name: str) -> bool:
         """Allow the specified player to use the !release command."""
         player = self.resolve_player(player_name)
         if player:
@@ -1864,7 +1865,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         return False
 
     @mark_raw
-    def _cmd_forbid_forfeit(self, player_name: str) -> bool:
+    def _cmd_forbid_release(self, player_name: str) -> bool:
         """"Disallow the specified player from using the !release command."""
         player = self.resolve_player(player_name)
         if player:
@@ -1993,7 +1994,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                     return input_text
             setattr(self.ctx, option_name, attrtype(option))
             self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
-            if option_name in {"forfeit_mode", "remaining_mode", "collect_mode"}:
+            if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
             elif option_name in {"hint_cost", "location_check_points"}:
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
@@ -2038,14 +2039,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--location_check_points', default=defaults["location_check_points"], type=int)
     parser.add_argument('--hint_cost', default=defaults["hint_cost"], type=int)
     parser.add_argument('--disable_item_cheat', default=defaults["disable_item_cheat"], action='store_true')
-    parser.add_argument('--forfeit_mode', default=defaults["forfeit_mode"], nargs='?',
+    parser.add_argument('--release_mode', default=defaults["release_mode"], nargs='?',
                         choices=['auto', 'enabled', 'disabled', "goal", "auto-enabled"], help='''\
-                             Select !forfeit Accessibility. (default: %(default)s)
-                             auto:     Automatic "forfeit" on goal completion
-                             enabled:  !forfeit is always available
-                             disabled: !forfeit is never available
-                             goal:     !forfeit can be used after goal completion
-                             auto-enabled: !forfeit is available and automatically triggered on goal completion
+                             Select !release Accessibility. (default: %(default)s)
+                             auto:     Automatic "release" on goal completion
+                             enabled:  !release is always available
+                             disabled: !release is never available
+                             goal:     !release can be used after goal completion
+                             auto-enabled: !release is available and automatically triggered on goal completion
                              ''')
     parser.add_argument('--collect_mode', default=defaults["collect_mode"], nargs='?',
                         choices=['auto', 'enabled', 'disabled', "goal", "auto-enabled"], help='''\
@@ -2067,7 +2068,7 @@ def parse_args() -> argparse.Namespace:
                         help="automatically shut down the server after this many minutes without new location checks. "
                              "0 to keep running. Not yet implemented.")
     parser.add_argument('--use_embedded_options', action="store_true",
-                        help='retrieve forfeit, remaining and hint options from the multidata file,'
+                        help='retrieve release, remaining and hint options from the multidata file,'
                              ' instead of host.yaml')
     parser.add_argument('--compatibility', default=defaults["compatibility"], type=int,
                         help="""

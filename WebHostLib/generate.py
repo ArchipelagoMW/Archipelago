@@ -33,7 +33,7 @@ def get_meta(options_source: dict) -> dict:
 
     server_options = {
         "hint_cost": int(options_source.get("hint_cost", 10)),
-        "forfeit_mode": options_source.get("forfeit_mode", "goal"),
+        "release_mode": options_source.get("release_mode", "goal"),
         "remaining_mode": options_source.get("remaining_mode", "disabled"),
         "collect_mode": options_source.get("collect_mode", "disabled"),
         "item_cheat": bool(int(options_source.get("item_cheat", 1))),
