@@ -315,7 +315,11 @@ armor_table = {
     "Outrider Knight Helm": 0x1328B740,
     "Outrider Knight Armor": 0x1328BB28,
     "Outrider Knight Gauntlets": 0x1328BF10,
-    "Outrider Knight Leggings": 0x1328C2F8
+    "Outrider Knight Leggings": 0x1328C2F8,
+
+    "Cornyx's Wrap": 0x11946370,
+    "Cornyx's Garb": 0x11945F88,
+    "Cornyx's Skirt": 0x11946758
 }
 
 armor_2_table = { #DLC ARMORS HERE
@@ -533,7 +537,7 @@ key_items_list = {
 }
 
 item_tables = [weapons_upgrade_5_table, weapons_upgrade_10_table, shields_table,
-               armor_table, armor_2_table, rings_table, spells_table, misc_items_table, goods_table]
+               armor_table, rings_table, spells_table, misc_items_table, armor_2_table, goods_table]
 
 item_dictionary = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table,
-                   **armor_table, **armor_2_table, **rings_table, **spells_table, **misc_items_table, **goods_table}
+                   **armor_table, **rings_table, **spells_table, **misc_items_table, **armor_2_table, **goods_table}

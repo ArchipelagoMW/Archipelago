@@ -91,7 +91,10 @@ undead_settlement_table = {
     "US: Warrior of Sunlight Covenant": 0x20002738,
     "US: Blessed Red and White Shield": 0x01343FB9,
     "US: Irina's Ashes": 0x40000843,
-    "US: Cornyx's Ashes": 0x40000841
+    "US: Cornyx's Ashes": 0x40000841,
+    "US: Cornyx's Wrap": 0x11946370,
+    "US: Cornyx's Garb": 0x11945F88,
+    "US: Cornyx's Skirt": 0x11946758
 }
 
 road_of_sacrifice_table = {
@@ -466,7 +469,6 @@ progressive_locations = {
     "ID: Pale Pine Resin": 0x40000150,
     **{"Titanite Scale #" + str(i): 0x400003FC for i in range(1, 27)},
     **{"Fading Soul #" + str(i): 0x40000190 for i in range(1, 4)},
-    **{"Soul of a Deserted Corpse #" + str(i): 0x40000191 for i in range(1, 6)},
     **{"Ring of Sacrifice #"+str(i): 0x20004EF2 for i in range(1, 5)},
     **{"Homeward Bone #"+str(i): 0x4000015E for i in range(1, 17)},
     **{"Ember #"+str(i): 0x400001F4 for i in range(1, 46)},
