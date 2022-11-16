@@ -1,14 +1,15 @@
 import typing
 
-from BaseClasses import Location
+from BaseClasses import Location, MultiWorld
 from .Names import LocationName
+from .Missions import stage_name_prefixes, mission_orders
 
 
 class SA2BLocation(Location):
     game: str = "Sonic Adventure 2: Battle"
 
 
-first_mission_location_table = {
+mission_location_table = {
     LocationName.city_escape_1: 0xFF0000,
     LocationName.wild_canyon_1: 0xFF0001,
     LocationName.prison_lane_1: 0xFF0002,
@@ -42,9 +43,8 @@ first_mission_location_table = {
     LocationName.final_chase_1: 0xFF001D,
 
     LocationName.cannon_core_1: 0xFF001E,
-}
 
-second_mission_location_table = {
+
     LocationName.city_escape_2: 0xFF0020,
     LocationName.wild_canyon_2: 0xFF0021,
     LocationName.prison_lane_2: 0xFF0022,
@@ -78,9 +78,8 @@ second_mission_location_table = {
     LocationName.final_chase_2: 0xFF003D,
 
     LocationName.cannon_core_2: 0xFF003E,
-}
 
-third_mission_location_table = {
+
     LocationName.city_escape_3: 0xFF0040,
     LocationName.wild_canyon_3: 0xFF0041,
     LocationName.prison_lane_3: 0xFF0042,
@@ -114,9 +113,8 @@ third_mission_location_table = {
     LocationName.final_chase_3: 0xFF005D,
 
     LocationName.cannon_core_3: 0xFF005E,
-}
 
-fourth_mission_location_table = {
+
     LocationName.city_escape_4: 0xFF0060,
     LocationName.wild_canyon_4: 0xFF0061,
     LocationName.prison_lane_4: 0xFF0062,
@@ -150,9 +148,8 @@ fourth_mission_location_table = {
     LocationName.final_chase_4: 0xFF007D,
 
     LocationName.cannon_core_4: 0xFF007E,
-}
 
-fifth_mission_location_table = {
+
     LocationName.city_escape_5: 0xFF0080,
     LocationName.wild_canyon_5: 0xFF0081,
     LocationName.prison_lane_5: 0xFF0082,
@@ -608,11 +605,7 @@ final_boss_location_table = {
 }
 
 all_locations = {
-    **first_mission_location_table,
-    **second_mission_location_table,
-    **third_mission_location_table,
-    **fourth_mission_location_table,
-    **fifth_mission_location_table,
+    **mission_location_table,
     **upgrade_location_table,
     **boss_gate_location_table,
     **chao_key_location_table,
@@ -667,22 +660,20 @@ chao_race_prize_set = [
 ]
 
 
-def setup_locations(world, player: int):
+def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int]):
     location_table = {}
     chao_location_table = {}
-    location_table.update({**first_mission_location_table})
 
-    if world.include_missions[player].value >= 2:
-        location_table.update({**second_mission_location_table})
 
-    if world.include_missions[player].value >= 3:
-        location_table.update({**third_mission_location_table})
+    for i in range(31):
+        mission_count = mission_count_map[i]
+        mission_order: typing.List[int] = mission_orders[mission_map[i]]
+        stage_prefix: str = stage_name_prefixes[i]
 
-    if world.include_missions[player].value >= 4:
-        location_table.update({**fourth_mission_location_table})
-
-    if world.include_missions[player].value >= 5:
-        location_table.update({**fifth_mission_location_table})
+        for j in range(mission_count):
+            mission_number = mission_order[j]
+            location_name: str = stage_prefix + str(mission_number)
+            location_table[location_name] = mission_location_table[location_name]
 
     location_table.update({**upgrade_location_table})
 

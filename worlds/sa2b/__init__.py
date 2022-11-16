@@ -11,7 +11,7 @@ from .Rules import set_rules
 from .Names import ItemName, LocationName
 from ..AutoWorld import WebWorld, World
 from .GateBosses import get_gate_bosses, get_boss_name
-from .Missions import get_mission_table, get_mission_count_table
+from .Missions import get_mission_table, get_mission_count_table, get_final_cannons_core_mission
 import Patch
 
 
@@ -85,7 +85,6 @@ class SA2BWorld(World):
             "ChaoRaceChecks": self.multiworld.chao_race_checks[self.player].value,
             "ChaoGardenDifficulty": self.multiworld.chao_garden_difficulty[self.player].value,
             "DeathLink": self.multiworld.death_link[self.player].value,
-            "IncludeMissions": self.multiworld.include_missions[self.player].value,
             "EmblemPercentageForCannonsCore": self.multiworld.emblem_percentage_for_cannons_core[self.player].value,
             "RequiredCannonsCoreMissions": self.multiworld.required_cannons_core_missions[self.player].value,
             "NumberOfLevelGates": self.multiworld.number_of_level_gates[self.player].value,
@@ -215,7 +214,10 @@ class SA2BWorld(World):
 
         self.region_emblem_map = dict(zip(shuffled_region_list, emblem_requirement_list))
 
-        connect_regions(self.multiworld, self.player, gates, self.emblems_for_cannons_core, self.gate_bosses)
+        final_cannons_core_mission: str = get_final_cannons_core_mission(self.mission_map, self.mission_count_map)
+
+        print("Final CC: ", final_cannons_core_mission)
+        connect_regions(self.multiworld, self.player, gates, self.emblems_for_cannons_core, self.gate_bosses, final_cannons_core_mission)
 
         max_required_emblems = max(max(emblem_requirement_list), self.emblems_for_cannons_core)
         itempool += [self.create_item(ItemName.emblem) for _ in range(max_required_emblems)]
@@ -309,7 +311,7 @@ class SA2BWorld(World):
         self.mission_map       = get_mission_table(self.multiworld, self.player)
         self.mission_count_map = get_mission_count_table(self.multiworld, self.player)
 
-        self.location_table = setup_locations(self.multiworld, self.player)
+        self.location_table = setup_locations(self.multiworld, self.player, self.mission_map, self.mission_count_map)
         create_regions(self.multiworld, self.player, self.location_table)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
@@ -331,7 +333,7 @@ class SA2BWorld(World):
         return created_item
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.gate_bosses)
+        set_rules(self.multiworld, self.player, self.gate_bosses, self.mission_map, self.mission_count_map)
 
     def write_spoiler(self, spoiler_handle: typing.TextIO):
         if self.multiworld.number_of_level_gates[self.player].value > 0:

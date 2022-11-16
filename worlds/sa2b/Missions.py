@@ -61,6 +61,34 @@ mission_orders: typing.List[typing.List[int]] = [
     [2, 5, 4, 1, 3],
     [2, 5, 4, 3, 1],
 
+    [3, 1, 2, 4, 5],
+    [3, 1, 2, 5, 4],
+    [3, 1, 4, 2, 5],
+    [3, 1, 4, 5, 2],
+    [3, 1, 5, 4, 2],
+    [3, 1, 5, 2, 4],
+
+    [3, 2, 1, 4, 5],
+    [3, 2, 1, 5, 4],
+    [3, 2, 4, 1, 5],
+    [3, 2, 4, 5, 1],
+    [3, 2, 5, 1, 4],
+    [3, 2, 5, 4, 1],
+
+    [3, 4, 1, 2, 5],
+    [3, 4, 1, 5, 2],
+    [3, 4, 2, 1, 5],
+    [3, 4, 2, 5, 1],
+    [3, 4, 5, 1, 2],
+    [3, 4, 5, 2, 1],
+
+    [3, 5, 1, 4, 2],
+    [3, 5, 1, 2, 4],
+    [3, 5, 2, 1, 4],
+    [3, 5, 2, 4, 1],
+    [3, 5, 4, 1, 2],
+    [3, 5, 4, 2, 1],
+
     [4, 1, 2, 3, 5],
     [4, 1, 2, 5, 3],
     [4, 1, 3, 2, 5],
@@ -68,19 +96,19 @@ mission_orders: typing.List[typing.List[int]] = [
     [4, 1, 5, 3, 2],
     [4, 1, 5, 2, 3],
 
-    [4, 3, 1, 2, 5],
-    [4, 3, 1, 5, 2],
-    [4, 3, 2, 1, 5],
-    [4, 3, 2, 5, 1],
-    [4, 3, 5, 1, 2],
-    [4, 3, 5, 2, 1],
-
     [4, 2, 1, 3, 5],
     [4, 2, 1, 5, 3],
     [4, 2, 3, 1, 5],
     [4, 2, 3, 5, 1],
     [4, 2, 5, 1, 3],
     [4, 2, 5, 3, 1],
+
+    [4, 3, 1, 2, 5],
+    [4, 3, 1, 5, 2],
+    [4, 3, 2, 1, 5],
+    [4, 3, 2, 5, 1],
+    [4, 3, 5, 1, 2],
+    [4, 3, 5, 2, 1],
 
     [4, 5, 1, 3, 2],
     [4, 5, 1, 2, 3],
@@ -131,6 +159,39 @@ level_styles: typing.List[int] = [
     4,
 ]
 
+stage_name_prefixes: typing.List[str] = [
+    "City Escape - ",
+    "Wild Canyon - ",
+    "Prison Lane - ",
+    "Metal Harbor - ",
+    "Green Forest - ",
+    "Pumpkin Hill - ",
+    "Mission Street - ",
+    "Aquatic Mine - ",
+    "Route 101 - ",
+    "Hidden Base - ",
+    "Pyramid Cave - ",
+    "Death Chamber - ",
+    "Eternal Engine - ",
+    "Meteor Herd - ",
+    "Crazy Gadget - ",
+    "Final Rush - ",
+    "Iron Gate - ",
+    "Dry Lagoon - ",
+    "Sand Ocean - ",
+    "Radical Highway - ",
+    "Egg Quarters - ",
+    "Lost Colony - ",
+    "Weapons Bed - ",
+    "Security Hall - ",
+    "White Jungle - ",
+    "Route 280 - ",
+    "Sky Rail - ",
+    "Mad Space - ",
+    "Cosmic Wall - ",
+    "Final Chase - ",
+    "Cannon Core - ",
+]
 
 def get_mission_count_table(multiworld: MultiWorld, player: int):
     speed_active_missions = 1
@@ -223,7 +284,7 @@ def get_mission_table(multiworld: MultiWorld, player: int):
         first_mission = 1
 
         if multiworld.mission_shuffle[player]:
-            first_mission = multiworld.random.choice([mission for mission in level_active_missions if mission in [1, 2, 4]])
+            first_mission = multiworld.random.choice([mission for mission in level_active_missions if mission in [1, 2, 3, 4]])
 
         level_active_missions.remove(first_mission)
 
@@ -252,3 +313,14 @@ def get_mission_table(multiworld: MultiWorld, player: int):
         mission_table[level] = level_mission_index
 
     return mission_table
+
+
+def get_final_cannons_core_mission(mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int]):
+        mission_count = mission_count_map[30]
+        mission_order: typing.List[int] = mission_orders[mission_map[30]]
+        stage_prefix: str = stage_name_prefixes[30]
+
+        mission_number = mission_order[mission_count - 1]
+        location_name: str = stage_prefix + str(mission_number)
+
+        return location_name

@@ -477,7 +477,6 @@ class Narrator(Choice):
 
 sa2b_options: typing.Dict[str, type(Option)] = {
     "goal": Goal,
-    "include_missions": IncludeMissions,
     "mission_shuffle": MissionShuffle,
     "keysanity": Keysanity,
     "whistlesanity": Whistlesanity,
