@@ -7,9 +7,10 @@ config file.
 
 ## What does randomization do to this game?
 
-This randomizer features a custom non-linear campaign where the final level and 3 branching paths are available to the 
-player from the start. The player cannot beat the final level without specific items scattered throughout the branching 
-paths. Certain levels on these branching paths may require specific units or items in order to progress.
+This randomizer wil shuffle units, map events, factions and boosts. It features a custom non-linear campaign where the 
+final level and 3 branching paths are available to the player from the start. The player cannot beat the final level 
+without specific items scattered throughout the branching paths. Certain levels on these branching paths may require 
+specific units or items in order to progress.
 
 ## What items and locations get shuffled?
 
