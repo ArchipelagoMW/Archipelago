@@ -21,8 +21,8 @@ class Ascension(Range):
 
 
 class HeartRun(Toggle):
-    """Whether or not you will need to collect they 3 keys to unlock the final act
-     and beat the heart to finish the game."""
+    """Whether or not you will need to collect the 3 keys and enter the final act to
+    complete the game. The Heart does not need to be defeated."""
     display_name = "Heart Run"
     option_true = 1
     option_false = 0

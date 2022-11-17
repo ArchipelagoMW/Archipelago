@@ -1,5 +1,5 @@
 import typing
-from Options import Toggle, Option
+from Options import Toggle, Option, DeathLink
 
 
 class AutoEquipOption(Toggle):
@@ -17,6 +17,16 @@ class NoWeaponRequirementsOption(Toggle):
     """Disable the weapon requirements by removing any movement or damage penalties.
     Permitting you to use any weapon early"""
     display_name = "No Weapon Requirements"
+
+
+class NoSpellRequirementsOption(Toggle):
+    """Disable the spell requirements permitting you to use any spell"""
+    display_name = "No Spell Requirements"
+
+
+class NoEquipLoadOption(Toggle):
+    """Disable the equip load constraint from the game"""
+    display_name = "No Equip load"
 
 
 class RandomizeWeaponsLevelOption(Toggle):
@@ -37,5 +47,8 @@ dark_souls_options: typing.Dict[str, type(Option)] = {
     "no_weapon_requirements": NoWeaponRequirementsOption,
     "randomize_weapons_level": RandomizeWeaponsLevelOption,
     "late_basin_of_vows": LateBasinOfVowsOption,
+    "no_spell_requirements": NoSpellRequirementsOption,
+    "no_equip_load": NoEquipLoadOption,
+    "death_link": DeathLink,
 }
 
