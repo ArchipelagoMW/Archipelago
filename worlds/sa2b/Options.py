@@ -17,6 +17,13 @@ class Goal(Choice):
     default = 0
 
 
+class MissionShuffle(Toggle):
+    """
+    Determines whether missions order will be shuffled per level
+    """
+    display_name = "Mission Shuffle"
+
+
 class BaseTrapWeight(Choice):
     """
     Base Class for Trap Weights
@@ -227,6 +234,190 @@ class RequiredCannonsCoreMissions(Choice):
     default = 0
 
 
+class BaseMissionCount(Range):
+    """
+    Base class for mission count options
+    """
+    range_start = 1
+    range_end = 5
+    default = 2
+
+
+class SpeedMissionCount(BaseMissionCount):
+    """
+    The number of active missions to include for Sonic and Shadow stages
+    """
+    display_name = "Speed Mission Count"
+
+
+class SpeedMission2(DefaultOnToggle):
+    """
+    Determines if the Sonic and Shadow 100 rings missions should be included
+    """
+    display_name = "Speed Mission 2"
+
+
+class SpeedMission3(DefaultOnToggle):
+    """
+    Determines if the Sonic and Shadow lost chao missions should be included
+    """
+    display_name = "Speed Mission 3"
+
+
+class SpeedMission4(DefaultOnToggle):
+    """
+    Determines if the Sonic and Shadow time trial missions should be included
+    """
+    display_name = "Speed Mission 4"
+
+
+class SpeedMission5(DefaultOnToggle):
+    """
+    Determines if the Sonic and Shadow hard missions should be included
+    """
+    display_name = "Speed Mission 5"
+
+
+class MechMissionCount(BaseMissionCount):
+    """
+    The number of active missions to include for Tails and Eggman stages
+    """
+    display_name = "Mech Mission Count"
+
+
+class MechMission2(DefaultOnToggle):
+    """
+    Determines if the Tails and Eggman 100 rings missions should be included
+    """
+    display_name = "Mech Mission 2"
+
+
+class MechMission3(DefaultOnToggle):
+    """
+    Determines if the Tails and Eggman lost chao missions should be included
+    """
+    display_name = "Mech Mission 3"
+
+
+class MechMission4(DefaultOnToggle):
+    """
+    Determines if the Tails and Eggman time trial missions should be included
+    """
+    display_name = "Mech Mission 4"
+
+
+class MechMission5(DefaultOnToggle):
+    """
+    Determines if the Tails and Eggman hard missions should be included
+    """
+    display_name = "Mech Mission 5"
+
+
+class HuntMissionCount(BaseMissionCount):
+    """
+    The number of active missions to include for Knuckles and Rouge stages
+    """
+    display_name = "Hunt Mission Count"
+
+
+class HuntMission2(DefaultOnToggle):
+    """
+    Determines if the Knuckles and Rouge 100 rings missions should be included
+    """
+    display_name = "Hunt Mission 2"
+
+
+class HuntMission3(DefaultOnToggle):
+    """
+    Determines if the Knuckles and Rouge lost chao missions should be included
+    """
+    display_name = "Hunt Mission 3"
+
+
+class HuntMission4(DefaultOnToggle):
+    """
+    Determines if the Knuckles and Rouge time trial missions should be included
+    """
+    display_name = "Hunt Mission 4"
+
+
+class HuntMission5(DefaultOnToggle):
+    """
+    Determines if the Knuckles and Rouge hard missions should be included
+    """
+    display_name = "Hunt Mission 5"
+
+
+class KartMissionCount(BaseMissionCount):
+    """
+    The number of active missions to include for Route 101 and 280
+    """
+    display_name = "Kart Mission Count"
+
+
+class KartMission2(DefaultOnToggle):
+    """
+    Determines if the Route 101 and 280 100 rings missions should be included
+    """
+    display_name = "Kart Mission 2"
+
+
+class KartMission3(DefaultOnToggle):
+    """
+    Determines if the Route 101 and 280 avoid cars missions should be included
+    """
+    display_name = "Kart Mission 3"
+
+
+class KartMission4(DefaultOnToggle):
+    """
+    Determines if the Route 101 and 280 avoid walls missions should be included
+    """
+    display_name = "Kart Mission 4"
+
+
+class KartMission5(DefaultOnToggle):
+    """
+    Determines if the Route 101 and 280 hard missions should be included
+    """
+    display_name = "Kart Mission 5"
+
+
+class CannonsCoreMissionCount(BaseMissionCount):
+    """
+    The number of active missions to include for Cannon's Core
+    """
+    display_name = "Cannon's Core Mission Count"
+
+
+class CannonsCoreMission2(DefaultOnToggle):
+    """
+    Determines if the Cannon's Core 100 rings mission should be included
+    """
+    display_name = "Cannon's Core Mission 2"
+
+
+class CannonsCoreMission3(DefaultOnToggle):
+    """
+    Determines if the Cannon's Core lost chao mission should be included
+    """
+    display_name = "Cannon's Core Mission 3"
+
+
+class CannonsCoreMission4(DefaultOnToggle):
+    """
+    Determines if the Cannon's Core time trial mission should be included
+    """
+    display_name = "Cannon's Core Mission 4"
+
+
+class CannonsCoreMission5(DefaultOnToggle):
+    """
+    Determines if the Cannon's Core hard mission should be included
+    """
+    display_name = "Cannon's Core Mission 5"
+
+
 class SADXMusic(Choice):
     """
     Whether the randomizer will include Sonic Adventure DX Music in the music pool
@@ -286,7 +477,7 @@ class Narrator(Choice):
 
 sa2b_options: typing.Dict[str, type(Option)] = {
     "goal": Goal,
-    "include_missions": IncludeMissions,
+    "mission_shuffle": MissionShuffle,
     "keysanity": Keysanity,
     "whistlesanity": Whistlesanity,
     "beetlesanity": Beetlesanity,
@@ -308,5 +499,30 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "sadx_music": SADXMusic,
     "music_shuffle": MusicShuffle,
     "narrator": Narrator,
+    "speed_mission_count": SpeedMissionCount,
+    "speed_mission_2": SpeedMission2,
+    "speed_mission_3": SpeedMission3,
+    "speed_mission_4": SpeedMission4,
+    "speed_mission_5": SpeedMission5,
+    "mech_mission_count": MechMissionCount,
+    "mech_mission_2": MechMission2,
+    "mech_mission_3": MechMission3,
+    "mech_mission_4": MechMission4,
+    "mech_mission_5": MechMission5,
+    "hunt_mission_count": HuntMissionCount,
+    "hunt_mission_2": HuntMission2,
+    "hunt_mission_3": HuntMission3,
+    "hunt_mission_4": HuntMission4,
+    "hunt_mission_5": HuntMission5,
+    "kart_mission_count": KartMissionCount,
+    "kart_mission_2": KartMission2,
+    "kart_mission_3": KartMission3,
+    "kart_mission_4": KartMission4,
+    "kart_mission_5": KartMission5,
+    "cannons_core_mission_count": CannonsCoreMissionCount,
+    "cannons_core_mission_2": CannonsCoreMission2,
+    "cannons_core_mission_3": CannonsCoreMission3,
+    "cannons_core_mission_4": CannonsCoreMission4,
+    "cannons_core_mission_5": CannonsCoreMission5,
     "death_link": DeathLink,
 }
