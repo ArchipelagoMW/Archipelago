@@ -170,6 +170,7 @@ def main(args=None, callback=ERmain):
                         f"A mix is also permitted.")
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
+    erargs.plando_settings = args.plando
     erargs.glitch_triforce = options["generator"]["glitch_triforce_room"]
     erargs.spoiler = args.spoiler
     erargs.race = args.race

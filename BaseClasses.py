@@ -15,6 +15,8 @@ import random
 import Options
 import Utils
 import NetUtils
+if typing.TYPE_CHECKING:
+    from Generate import PlandoSettings
 
 
 class Group(TypedDict, total=False):
@@ -1243,6 +1245,7 @@ class Item:
 class Spoiler():
     multiworld: MultiWorld
     unreachables: Set[Location]
+    plando_settings: PlandoSettings
 
     def __init__(self, world):
         self.multiworld = world
@@ -1413,6 +1416,7 @@ class Spoiler():
                     Utils.__version__, self.multiworld.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.multiworld.algorithm)
             outfile.write('Players:                         %d\n' % self.multiworld.players)
+            outfile.write(f'Plandomizer Settings:            {self.plando_settings}\n')
             AutoWorld.call_stage(self.multiworld, "write_spoiler_header", outfile)
 
             for player in range(1, self.multiworld.players + 1):
