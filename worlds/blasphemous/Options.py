@@ -116,6 +116,18 @@ class CandleShuffle(DefaultOnToggle):
     display_name = "Shuffle Candles"
 
 
+class EnemyRando(Choice):
+    """Randomizes the enemies that appear in each room.
+    By default, enemies are put into groups of similar strength and shuffled.
+    Enemy health and damage will be increased or decreased depending on the area they are found in.
+    Certain enemies will never be randomized."""
+    display_name = "Randomize Enemies"
+    option_off = 0
+    option_shuffle_by_group = 1
+    option_shuffle_all_enemies = 2
+    default = 0
+
+
 blasphemous_options = {
     "cherub_shuffle" : CherubShuffle,
     "life_shuffle" : LifeShuffle,
@@ -139,5 +151,6 @@ blasphemous_options = {
     "church_shuffle" : ChurchShuffle,
     "shop_shuffle" : ShopShuffle,
     "thorn_shuffle" : ThornShuffle,
-    "candle_shuffle" : CandleShuffle
+    "candle_shuffle" : CandleShuffle,
+    "enemy_randomizer": EnemyRando
 }

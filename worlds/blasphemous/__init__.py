@@ -65,6 +65,12 @@ class BlasphemousWorld(World):
 
     
     def generate_basic(self):
+        victory = Location(self.player, "His Holiness Escribar", None, self.multiworld.get_region("Deambulatory of His Holiness", self.player))
+        victory.place_locked_item(self.create_event("Victory"))
+        self.multiworld.get_region("Deambulatory of His Holiness", self.player).locations.append(victory)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+
+
         pool = []
 
         for item in item_table:
@@ -314,6 +320,10 @@ class BlasphemousWorld(World):
                             "Dungeons", player, world)
         }
 
+        room_table: Dict[str, Region] = {
+
+        }
+
         for rname, reg in region_table.items():
             world.regions.append(reg)
 
@@ -387,7 +397,8 @@ class BlasphemousWorld(World):
     
         slot_data = {
             "locations": locations,
-            "slot": self.multiworld.player_name[self.player]
+            "enemy_randomizer": self.multiworld.enemy_randomizer[self.player].value,
+            "seed": self.multiworld.seed
         }
     
         filename = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.player_name[self.player]}.json"
