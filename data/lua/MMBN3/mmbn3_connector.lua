@@ -2,8 +2,8 @@ local socket = require("socket")
 local json = require('json')
 local math = require('math')
 
-local last_modified_date = '2022-08-21' -- Should be the last modified date
-local script_version = 1
+local last_modified_date = '2022-11-19' -- Should be the last modified date
+local script_version = 2
 
 local STATE_OK = "Ok"
 local STATE_TENTATIVELY_CONNECTED = "Tentatively Connected"
@@ -16,15 +16,19 @@ local mmbn3Socket = nil
 local frame = 0
 
 -- States
+local ITEMSTATE_NONINITIALIZED = "Game Not Yet Started" -- Game has not yet started
+local ITEMSTATE_NONITEM = "Non-Itemable State" -- Do not send item now. RAM is not capable of holding
 local ITEMSTATE_IDLE = "Item State Ready" -- Ready for the next item if there are any
-local ITEMSTATE_QUEUED = "Item Queued Not Sent" -- There are items to be sent but the ItemBit is not set, usually due to the game being in a non-receivable state
 local ITEMSTATE_SENT = "Item Sent Not Claimed" -- The ItemBit is set, but the dialog has not been closed yet
-local itemState = ITEMSTATE_IDLE
+local itemState = ITEMSTATE_NONINITIALIZED
 
 local itemQueued = nil
-
 local debugEnabled = false
 local game_complete = false
+
+local backup_bytes = nil
+
+local itemsReceived  = {}
 
 local charDict = {
     [' ']=0x00,['0']=0x01,['1']=0x02,['2']=0x03,['3']=0x04,['4']=0x05,['5']=0x06,['6']=0x07,['7']=0x08,['8']=0x09,['9']=0x0A,
@@ -49,7 +53,6 @@ local TableConcat = function(t1,t2)
    end
    return t1
 end
-
 local int32ToByteList_le = function(x)
     bytes = {}
     hexString = string.format("%08x", x)
@@ -59,7 +62,6 @@ local int32ToByteList_le = function(x)
     end
     return bytes
 end
-
 local int16ToByteList_le = function(x)
     bytes = {}
     hexString = string.format("%04x", x)
@@ -69,7 +71,6 @@ local int16ToByteList_le = function(x)
     end
     return bytes
 end
-
 --It boils my parsnips that this needs a whole ass function to do this
 local bitand = function(a, b)
     local result = 0
@@ -89,24 +90,40 @@ end
 local IsInMenu = function()
     return bitand(memory.read_u8(0x0200027A),0x10) ~= 0
 end
-
 local IsInDialog = function()
     return bitand(memory.read_u8(0x02009480),0x01) ~= 0
 end
-
 local IsInBattle = function()
     return memory.read_u8(0x02177270) ~= 0x00
 end
-
 local IsItemQueued = function()
     return memory.read_u8(0x203fe00) == 0x01
 end
-
 -- This function actually determines when you're on ANY full-screen menu (navi cust, link battle, etc.) but we
 -- don't want to check any locations there either so it's fine.
 local IsOnTitle = function()
     return bitand(memory.read_u8(0x020097F8),0x04) == 0
 end
+local IsItemable = function()
+    return not IsInMenu() and not IsInDialog() and not IsInBattle() and not IsOnTitle() and not IsItemQueued()
+end
+
+local is_game_complete = function()
+    if IsOnTitle() or itemState == ITEMSTATE_NONINITIALIZED then return game_complete end
+
+    -- If the game is already marked complete, do not read memory
+    if game_complete then return true end
+    local is_alpha_defeated = bitand(memory.read_u8(0x2000433), 0x01) ~= 0
+
+    if (is_alpha_defeated) then
+        game_complete = true
+        return true
+    end
+
+    -- Game is still ongoing
+    return false
+end
+
 
 local saveItemIndexToRAM = function(newIndex)
     memory.write_s16_le(0x20000AE,newIndex)
@@ -125,6 +142,7 @@ local loadPlayerNameFromROM = function()
     return memory.read_bytes_as_array(0x7FFFC0,63,"ROM")
 end
 
+-- TODO pass the whole chunk of data and check locations on the other end
 local acdc_bmd_checks = function()
     local checks ={}
     checks["ACDC 1 Southwest BMD"] = memory.read_u8(0x020001d0)
@@ -434,7 +452,7 @@ end
 local check_all_locations = function()
     local location_checks = {}
     -- Title Screen should not check items
-    if IsOnTitle() then return location_checks end
+    if itemState == ITEMSTATE_NONINITIALIZED then return location_checks end
     for name,checked in pairs(acdc_bmd_checks()) do location_checks[name] = checked end
     for name,checked in pairs(sci_bmd_checks()) do location_checks[name] = checked end
     for name,checked in pairs(yoka_bmd_checks()) do location_checks[name] = checked end
@@ -455,16 +473,7 @@ local check_all_locations = function()
     return location_checks
 end
 
-local game_modes = {
-    [-1]={name="Unknown", loaded=false},
-    [0]={name="GBA Logo", loaded=false},
-    [1]={name="Title Screen", loaded=false},
-    [2]={name="Normal Gameplay", loaded=true},
-    [3]={name="Battle Gameplay", loaded=true},
-    [4]={name="Cutscene", loaded=true},
-    [5]={name="Paused", loaded=true}
-}
-
+-- Item Message Generation functions
 local Next_Progressive_Undernet_ID = function()
     ordered_offsets = { 0x020019DB,0x020019DC,0x020019DD,0x020019DE,0x020019DF,0x020019E0,0x020019FA,0x020019E2 }
 
@@ -480,23 +489,6 @@ local Next_Progressive_Undernet_ID = function()
     --It shouldn't reach this point, but if it does, just give another GigFreez I guess
     return 34
 end
-
-local is_game_complete = function()
-    if IsOnTitle() then return game_complete end
-
-    -- If the game is complete, do not read memory
-    if game_complete then return true end
-    local is_alpha_defeated = bitand(memory.read_u8(0x2000433), 0x01) ~= 0
-
-    if (is_alpha_defeated) then
-        game_complete = true
-        return true
-    end
-
-    -- Game is still ongoing
-    return false
-end
-
 local GenerateTextBytes = function(message)
     bytes = {}
     for i = 1, #message do
@@ -505,7 +497,6 @@ local GenerateTextBytes = function(message)
     end
     return bytes
 end
-
 local GenerateChipGet = function(chip, code, amt)
     chipBytes = int16ToByteList_le(chip)
     bytes = {
@@ -524,7 +515,6 @@ local GenerateChipGet = function(chip, code, amt)
     end
     return bytes
 end
-
 local GenerateKeyItemGet = function(item, amt)
     bytes = {
         0xF6, 0x00, item, amt,
@@ -533,7 +523,6 @@ local GenerateKeyItemGet = function(item, amt)
     }
     return bytes
 end
-
 local GenerateSubChipGet = function(subchip, amt)
     -- SubChips have an extra bit of trouble. If you have too many, they're supposed to skip to another text bank that doesn't give you the item
     -- Instead, I'm going to just let it get eaten
@@ -545,7 +534,6 @@ local GenerateSubChipGet = function(subchip, amt)
     }
     return bytes
 end
-
 local GenerateZennyGet = function(amt)
     zennyBytes = int32ToByteList_le(amt)
     bytes = {
@@ -563,7 +551,6 @@ local GenerateZennyGet = function(amt)
     })
     return bytes
 end
-
 local GenerateProgramGet = function(program, color, amt)
     bytes = {
         0xF6, 0x40, (program * 4), amt, color,
@@ -574,7 +561,6 @@ local GenerateProgramGet = function(program, color, amt)
 
     return bytes
 end
-
 local GenerateBugfragGet = function(amt)
     fragBytes = int32ToByteList_le(amt)
     bytes = {
@@ -592,7 +578,6 @@ local GenerateBugfragGet = function(amt)
     })
     return bytes
 end
-
 local GenerateGetMessageFromItem = function(item)
     --Special case for progressive undernet
     if item["type"] == "undernet" then
@@ -619,7 +604,7 @@ local GetMessage = function(item)
     playerLockBytes = {0xF8,0x00, 0xF8, 0x10}
     msgOpenBytes = {0xF1, 0x00}
     textBytes = GenerateTextBytes("Receiving\ndata from\n"..item["sender"]..".")
-    dotdotWaitBytes = {0xEA,0x00,0x0A,0x00,0x4D,0xEA,0x00,0x0A,0x00,0x4D,0xEA,0x00,0x0A,0x00}
+    dotdotWaitBytes = {0xEA,0x00,0x0A,0x00,0x4D,0xEA,0x00,0x0A,0x00,0x4D}
     continueBytes = {0xEB, 0xE9}
     playReceiveAnimationBytes = {0xF8,0x04,0x18}
     chipGiveBytes = GenerateGetMessageFromItem(item)
@@ -643,10 +628,20 @@ local GetMessage = function(item)
 end
 
 local SendItem = function(item)
+    message = GetMessage(item)
+    -- Store previous
+    backup_bytes = memory.read_bytes_as_array(0x203fe10, #message)
     -- Write the item message to RAM
-    memory.write_bytes_as_array(0x203fe10, GetMessage(item))
+    memory.write_bytes_as_array(0x203fe10, message)
     -- Signal that the item is ready to be read
     memory.write_u32_le(0x203fe00,0x00000001)
+end
+
+local RestoreItemRam = function()
+    if backup_bytes ~= nil then
+        memory.write_bytes_as_array(0x203fe10, backup_bytes)
+    end
+    backup_bytes = nil
 end
 
 local process_block = function(block)
@@ -657,44 +652,48 @@ local process_block = function(block)
     debugEnabled = block['debug']
 
     -- Queue item for receiving, if one exists
-    item_queue = block['items']
-
-    if itemState == ITEMSTATE_IDLE then
-        -- print("IDLE: There are "..#item_queue.." items in queue. There are "..loadItemIndexFromRAM().." items in RAM")
-        if (#item_queue > loadItemIndexFromRAM()) then
-            --print("  Item is pending. Switching to queued state")
-            itemState = ITEMSTATE_QUEUED
-            itemQueued = item_queue[loadItemIndexFromRAM()+1]
-        end
-    elseif itemState == ITEMSTATE_QUEUED then
-        -- print("QUEUED: There are "..#item_queue.." items in queue. There are "..loadItemIndexFromRAM().." items in RAM")
-        if (#item_queue <= loadItemIndexFromRAM() and itemQueued ~= nil) then
-            --print("  No item queued and pending is empty. Switching to idle")
-            itemState = ITEMSTATE_IDLE
-        end
-        if (not IsItemQueued() and not IsInBattle() and not IsInDialog() and not IsInMenu()) then
-            --print("  Game is ready to receive item. Switching to sent")
-
-            SendItem(itemQueued)
-            itemState = ITEMSTATE_SENT
-        else
-            itemQueued = nil
-            itemState = ITEMSTATE_IDLE
-        end
-    elseif itemState == ITEMSTATE_SENT then
-        --print("Item state sent")
-        if (not IsInDialog() and not IsItemQueued()) then
-            --print("  Dialog cleared and item claimed. Switching to idle")
-            saveItemIndexToRAM(itemQueued["itemIndex"])
-            itemQueued = nil
-            itemState = ITEMSTATE_IDLE
-        end
+    if (itemsReceived ~= block['items']) then
+        itemsReceived = block['items']
     end
 
 
     return
 end
 
+local itemStateMachineProcess = function()
+    if itemState == ITEMSTATE_NONINITIALIZED then
+        -- Only exit this state the first time a dialog window pops up. This way we know for sure that we're ready to receive
+        if IsInDialog() and not IsInMenu() then
+            itemState = ITEMSTATE_NONITEM
+        end
+    elseif itemState == ITEMSTATE_NONITEM then
+        -- Always attempt to restore the previously stored memory in this state
+        RestoreItemRam()
+        -- Exit this state whenever the game is in an itemable status
+        if IsItemable() then
+            itemState = ITEMSTATE_IDLE
+        end
+    elseif itemState == ITEMSTATE_IDLE then
+        -- Remain Idle until an item is sent or we enter a non itemable status
+        if not IsItemable() then
+            itemState = ITEMSTATE_NONITEM
+        end
+        if #itemsReceived > loadItemIndexFromRAM() then
+            itemQueued = itemsReceived[loadItemIndexFromRAM()+1]
+            SendItem(itemQueued)
+            itemState = ITEMSTATE_SENT
+        end
+
+    elseif itemState == ITEMSTATE_SENT then
+        -- Once the item is sent, wait for the dialog to close. Then clear the item bit and be ready for the next item.
+        if not IsInDialog() then
+            itemState = ITEMSTATE_IDLE
+            saveItemIndexToRAM(itemQueued["itemIndex"])
+            itemQueued = nil
+            RestoreItemRam()
+        end
+    end
+end
 local receive = function()
     l, e = mmbn3Socket:receive()
 
@@ -714,8 +713,9 @@ local receive = function()
         return
     end
     process_block(json.decode(l))
+end
 
-
+local send = function()
     -- Determine message to send back
     local retTable = {}
     retTable["playerName"] = loadPlayerNameFromROM()
@@ -744,19 +744,24 @@ function main()
     end
     server, error = socket.bind('localhost', 28922)
 
-    --loadItemIndexFromSave()
-
     while true do
         frame = frame + 1
 
         if not (curstate == prevstate) then
             prevstate = curstate
         end
+
+
+        itemStateMachineProcess()
+
         if (curstate == STATE_OK) or (curstate == STATE_INITIAL_CONNECTION_MADE) or (curstate == STATE_TENTATIVELY_CONNECTED) then
+            -- If we're connected and everything's fine, receive and send data from the network
             if (frame % 60 == 0) then
                 receive()
+                send()
             end
         elseif (curstate == STATE_UNINITIALIZED) then
+            -- If we're uninitialized, attempt to make the connection.
             if (frame % 120 == 0) then
                 server:settimeout(2)
                 local client, timeout = server:accept()
@@ -771,12 +776,14 @@ function main()
                 end
             end
         end
+
+        -- Handle the debug data display
         gui.cleartext()
         if debugEnabled then
-            gui.text(0,0,"Item Queued: "..tostring(IsItemQueued()))
-            gui.text(0,16,"In Battle: "..tostring(IsInBattle()))
-            gui.text(0,32,"In Dialog: "..tostring(IsInDialog()))
-            gui.text(0,48,"In Menu: "..tostring(IsInMenu()))
+            -- gui.text(0,0,"Item Queued: "..tostring(IsItemQueued()))
+            -- gui.text(0,16,"In Battle: "..tostring(IsInBattle()))
+            -- gui.text(0,32,"In Dialog: "..tostring(IsInDialog()))
+            -- gui.text(0,48,"In Menu: "..tostring(IsInMenu()))
             gui.text(0,64,itemState)
             if itemQueued == nil then
                 gui.text(0,80,"No item queued")
@@ -787,7 +794,6 @@ function main()
         end
 
         emu.frameadvance()
-
     end
 end
 
