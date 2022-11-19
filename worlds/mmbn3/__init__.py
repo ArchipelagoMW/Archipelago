@@ -74,11 +74,12 @@ class MMBN3World(World):
                 ap_item = location.item
                 item_id = ap_item.code
                 if item_id is not None:
-                    if item_id in items_by_id:
-                        item = items_by_id[item_id]
-                    else:
+                    if ap_item.player != player or item_id not in items_by_id:
                         item = ItemData(item_id, ap_item.name, ap_item.classification, ItemType.External)
                         item = item._replace(recipient=self.multiworld.player_name[ap_item.player])
+                    else:
+                        item = items_by_id[item_id]
+
                     location_data = location_data_table[location_name]
                     # print("Placing item "+item.itemName+" at location "+location_data.name)
                     rom.replace_item(location_data, item)
