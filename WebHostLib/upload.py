@@ -24,7 +24,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
     infolist = zfile.infolist()
     slots: typing.Set[Slot] = set()
     spoiler = ""
-    patches = {}
+    files = {}
     multidata = None
 
     # Load files.
@@ -39,7 +39,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
             data = zfile.open(file, "r").read()
             patch = handler(BytesIO(data))
             patch.read()
-            patches[patch.player] = data
+            files[patch.player] = data
 
         # Spoiler
         elif file.filename.endswith(".txt"):
@@ -57,19 +57,19 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         elif file.filename.endswith(".apmc"):
             data = zfile.open(file, "r").read()
             metadata = json.loads(base64.b64decode(data).decode("utf-8"))
-            patches[metadata["player_id"]] = data
+            files[metadata["player_id"]] = data
 
         # Factorio
         elif file.filename.endswith(".zip"):
             _, _, slot_id, *_ = file.filename.split('_')[0].split('-', 3)
             data = zfile.open(file, "r").read()
-            patches[int(slot_id[1:])] = data
+            files[int(slot_id[1:])] = data
 
         # All other patch files using the standard MultiWorld.get_out_file_name_base method
         else:
             _, _, slot_id, *_ = file.filename.split('.')[0].split('_', 3)
             data = zfile.open(file, "r").read()
-            patches[int(slot_id[1:])] = data
+            files[int(slot_id[1:])] = data
 
     # Load multi data.
     if multidata:
@@ -79,7 +79,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
                 # Ignore Player Groups (e.g. item links)
                 if slot_info.type == SlotType.group:
                     continue
-                slots.add(Slot(data=patches.get(slot, None),
+                slots.add(Slot(data=files.get(slot, None),
                                player_name=slot_info.name,
                                player_id=slot,
                                game=slot_info.game))
