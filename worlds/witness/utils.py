@@ -155,3 +155,7 @@ def get_laser_shuffle():
 @cache_argsless
 def get_audio_logs():
     return get_adjustment_file("settings/Audio_Logs.txt")
+
+@cache_argsless
+def get_ep_all_individual():
+    return get_adjustment_file("settings/EP_Shuffle/EP_All.txt")

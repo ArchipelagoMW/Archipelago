@@ -298,6 +298,8 @@ class WitnessPlayerLocations:
             for check_hex in player_logic.COMPLETELY_DISABLED_CHECKS
         }
 
+        print(StaticWitnessLocations.ALL_LOCATIONS_TO_ID)
+
         self.CHECK_PANELHEX_TO_ID = {
             StaticWitnessLogic.CHECKS_BY_NAME[ch]["checkHex"]: StaticWitnessLocations.ALL_LOCATIONS_TO_ID[ch]
             for ch in self.CHECK_LOCATIONS

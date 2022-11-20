@@ -16,11 +16,13 @@ When the world has parsed its options, a second function is called to finalize t
 """
 
 import copy
+from logging import warning
+
 from BaseClasses import MultiWorld
 from .static_logic import StaticWitnessLogic
 from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda, get_early_utm_list, \
     get_symbol_shuffle_list, get_door_panel_shuffle_list, get_doors_complex_list, get_doors_max_list, \
-    get_doors_simple_list, get_laser_shuffle
+    get_doors_simple_list, get_laser_shuffle, get_ep_all_individual
 from .Options import is_option_enabled, get_option_value, the_witness_options
 
 
@@ -84,7 +86,7 @@ class WitnessPlayerLogic:
 
                 if option_panel in self.COMPLETELY_DISABLED_CHECKS:
                     new_items = frozenset()
-                elif option_panel in {"7 Lasers", "11 Lasers", "PP2 Weirdness"}:
+                elif option_panel in {"7 Lasers", "11 Lasers", "PP2 Weirdness", "Theater to Tunnels"}:
                     new_items = frozenset({frozenset([option_panel])})
                 # If a panel turns on when a panel in a different region turns on,
                 # the latter panel will be an "event panel", unless it ends up being
@@ -207,6 +209,8 @@ class WitnessPlayerLogic:
             return
 
         if adj_type == "Added Locations":
+            if "0x" in line:
+                line = StaticWitnessLogic.CHECKS_BY_HEX[line]["checkName"]
             self.ADDED_CHECKS.add(line)
 
     def make_options_adjustments(self, world, player):
@@ -233,6 +237,9 @@ class WitnessPlayerLogic:
 
         if is_option_enabled(world, player, "shuffle_symbols") or "shuffle_symbols" not in the_witness_options.keys():
             adjustment_linesets_in_order.append(get_symbol_shuffle_list())
+
+        if True:  # TODO
+            adjustment_linesets_in_order.append(get_ep_all_individual())
 
         if get_option_value(world, player, "shuffle_doors") == 1:
             adjustment_linesets_in_order.append(get_door_panel_shuffle_list())
@@ -291,6 +298,9 @@ class WitnessPlayerLogic:
         Makes a pair of an event panel and its event item
         """
         name = self.REFERENCE_LOGIC.CHECKS_BY_HEX[panel]["checkName"] + " Solved"
+        if panel not in self.EVENT_ITEM_NAMES:
+            warning("Panel \"" + name + "\" does not have an associated event name.")
+            self.EVENT_ITEM_NAMES[panel] = name + " Event"
         pair = (name, self.EVENT_ITEM_NAMES[panel])
         return pair
 
@@ -366,7 +376,7 @@ class WitnessPlayerLogic:
             "0x019DC": "Keep Hedges 2 Knowledge",
             "0x019E7": "Keep Hedges 3 Knowledge",
             "0x01D3F": "Keep Laser Panel (Pressure Plates) Activates",
-            "0x01BE9": "Keep Laser Panel (Pressure Plates) Activates",
+            "0x01BE9": "Keep Laser Panel (Pressure Plates) Activates - Expert",
             "0x09F7F": "Mountain Access",
             "0x0367C": "Quarry Laser Mill Requirement Met",
             "0x009A1": "Swamp Between Bridges Far 1 Activates",
