@@ -63,6 +63,27 @@ class TinyTrapWeight(BaseTrapWeight):
     display_name = "Tiny Trap Weight"
 
 
+class GravityTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which increases gravity
+    """
+    display_name = "Gravity Trap Weight"
+
+
+class ExpositionTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which tells you the story
+    """
+    display_name = "Exposition Trap Weight"
+
+
+class DarknessTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which makes the world dark
+    """
+    display_name = "Darkness Trap Weight"
+
+
 class JunkFillPercentage(Range):
     """
     Replace a percentage of non-required emblems in the item pool with random junk items
@@ -496,6 +517,9 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "timestop_trap_weight": TimestopTrapWeight,
     "confusion_trap_weight": ConfusionTrapWeight,
     "tiny_trap_weight": TinyTrapWeight,
+    "gravity_trap_weight": GravityTrapWeight,
+    "exposition_trap_weight": ExpositionTrapWeight,
+    "darkness_trap_weight": DarknessTrapWeight,
     "sadx_music": SADXMusic,
     "music_shuffle": MusicShuffle,
     "narrator": Narrator,
