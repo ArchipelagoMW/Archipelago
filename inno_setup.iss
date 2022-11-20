@@ -129,7 +129,7 @@ Name: "{group}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\Archipelag
 Name: "{group}\{#MyAppName} Pokemon Client"; Filename: "{app}\ArchipelagoPokemonClient.exe"; Components: client/pkmn
 Name: "{group}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Components: client/cf
 Name: "{group}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Components: client/sc2
-Name: "{group}\{#MyAppName} Dark Souls III Client"; Filename: "{app}\DarkSouls3Client.exe"; Components: client/ds3
+Name: "{group}\{#MyAppName} Dark Souls III Client"; Filename: "{app}\ArchipelagoDarkSouls3Client.exe"; Components: client/ds3
 
 Name: "{commondesktop}\{#MyAppName} Folder"; Filename: "{app}"; Tasks: desktopicon
 Name: "{commondesktop}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; Components: server
