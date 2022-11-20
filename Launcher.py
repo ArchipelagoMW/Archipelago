@@ -151,6 +151,8 @@ components: Iterable[Component] = (
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
     Component('Starcraft 2 Client', 'Starcraft2Client'),
+    # Dark Souls III
+    Component('Dark Souls III Client', 'DarkSouls3Client'),
     # Zillion
     Component('Zillion Client', 'ZillionClient',
               file_identifier=SuffixIdentifier('.apzl')),
