@@ -1,6 +1,6 @@
 First Hallway Tunnel (First Hallway) - Entry - True - First Hallway Room - 0x00064:
 158000 - 0x00064 (Straight) - True - True
-159510 - 0x01848 (EP) - 0x00064
+159510 - 0x01848 (EP) - 0x00064 - True
 
 First Hallway Room (First Hallway) - Tutorial - 0x00182:
 158001 - 0x00182 (Bend) - 0x00064 - True
@@ -15,9 +15,9 @@ Tutorial (Tutorial) - Outside Tutorial - 0x03629:
 158008 - 0x03505 (Gate Close) - 0x2FAF6 - True
 158009 - 0x0C335 (Pillar) - True - Triangles - True
 158010 - 0x0C373 (Patio Floor) - 0x0C335 - Dots
-159512 - 0x33530 (Cloud EP)
-159513 - 0x33600 (Patio Flowers EP) - 0x0C373
-159517 - 0x3352F (Gate EP) - 0x03505
+159512 - 0x33530 (Cloud EP) - True - True
+159513 - 0x33600 (Patio Flowers EP) - 0x0C373 - True
+159517 - 0x3352F (Gate EP) - 0x03505 - True
 
 Outside Tutorial (Outside Tutorial) - Outside Tutorial Path To Outpost - 0x03BA2:
 158650 - 0x033D4 (Vault) - True - Dots & Black/White Squares
@@ -37,10 +37,10 @@ Outside Tutorial (Outside Tutorial) - Outside Tutorial Path To Outpost - 0x03BA2
 158025 - 0x00020 (Tree Row 8) - 0x0001F - Black/White Squares
 158026 - 0x00021 (Tree Row 9) - 0x00020 - Black/White Squares
 Door - 0x03BA2 (Outpost Path) - 0x0A3B5
-159511 - 0x03D06 (Garden EP) - True
-159514 - 0x28A2F (Town Sewer EP)
-159516 - 0x334A3 (Path EP)
-159500 - 0x035C7 (Tractor EP)
+159511 - 0x03D06 (Garden EP) - True - True
+159514 - 0x28A2F (Town Sewer EP) - True - True
+159516 - 0x334A3 (Path EP) - True - True
+159500 - 0x035C7 (Tractor EP) - True - True
 
 Outside Tutorial Path To Outpost (Outside Tutorial) - Outside Tutorial Outpost - 0x0A170:
 158011 - 0x0A171 (Outpost Entry Panel) - True - Dots & Full Dots
@@ -52,7 +52,7 @@ Door - 0x04CA3 (Outpost Exit) - 0x04CA4
 158600 - 0x17CFB (Discard) - True - Triangles
 
 Main Island (Main Island) - Outside Tutorial - True:
-159550 - 0x28B91 (Thundercloud EP) - 0x09F98
+159550 - 0x28B91 (Thundercloud EP) - 0x09F98 - True
 
 Outside Glass Factory (Glass Factory) - Main Island - True - Inside Glass Factory - 0x01A29:
 158027 - 0x01A54 (Entry Panel) - True - Symmetry
@@ -152,14 +152,14 @@ Door - 0x09FEE (Light Room Entry) - 0x0C339 - True
 158701 - 0x03608 (Laser Panel) - 0x012D7 & 0x0A15F - True
 Laser - 0x012FB (Laser) - 0x03608
 159020 - 0x3351D (Sand Snake EP) - True - True
-159030 - 0x0053C (Facade Right EP) - True
-159031 - 0x00771 (Facade Left EP) - True
-159032 - 0x335C8 (Stairs Left EP) - True
-159033 - 0x335C9 (Stairs Right EP) - True
-159036 - 0x220E4 (Broken Wall Straight EP) - True
-159037 - 0x220E5 (Broken Wall Bend EP) - True
-159040 - 0x334B9 (Shore EP) - True
-159041 - 0x334BC (Island EP) - True
+159030 - 0x0053C (Facade Right EP) - True - True
+159031 - 0x00771 (Facade Left EP) - True - True
+159032 - 0x335C8 (Stairs Left EP) - True - True
+159033 - 0x335C9 (Stairs Right EP) - True - True
+159036 - 0x220E4 (Broken Wall Straight EP) - True - True
+159037 - 0x220E5 (Broken Wall Bend EP) - True - True
+159040 - 0x334B9 (Shore EP) - True - True
+159041 - 0x334BC (Island EP) - True - True
 
 Desert Floodlight Room (Desert) - Desert Pond Room - 0x0C2C3:
 158087 - 0x09FAA (Light Control) - True - True
@@ -176,8 +176,8 @@ Desert Pond Room (Desert) - Desert Water Levels Room - 0x0A24B:
 158095 - 0x18313 (Pond Room 5) - 0x0078D - True
 158096 - 0x0A249 (Flood Room Entry Panel) - 0x18313 - True
 Door - 0x0A24B (Flood Room Entry) - 0x0A249
-159043 - 0x0A14C (Pond Room Near Reflection EP) - True
-159044 - 0x0A14D (Pond Room Far Reflection EP) - True
+159043 - 0x0A14C (Pond Room Near Reflection EP) - True - True
+159044 - 0x0A14D (Pond Room Far Reflection EP) - True - True
 
 Desert Water Levels Room (Desert) - Desert Elevator Room - 0x0C316:
 158097 - 0x1C2DF (Reduce Water Level Far Left) - True - True
@@ -214,11 +214,11 @@ Outside Quarry (Quarry) - Main Island - True - Quarry Between Entrys - 0x09D6F -
 158702 - 0x03612 (Laser Panel) - 0x0A3D0 & 0x0367C - Eraser & Shapers
 Laser - 0x01539 (Laser) - 0x03612
 Door - 0x09D6F (Entry 1) - 0x09E57
-159404 - 0x28A4A (Shore EP)
-159410 - 0x334B6 (Entrance Pipe EP)
-159412 - 0x28A4C (Sand Pile EP)
-159420 - 0x289CF (Rock Line EP)
-159421 - 0x289D1 (Rock Line Reflection EP)
+159404 - 0x28A4A (Shore EP) - True - True
+159410 - 0x334B6 (Entrance Pipe EP) - True - True
+159412 - 0x28A4C (Sand Pile EP) - True - True
+159420 - 0x289CF (Rock Line EP) - True - True
+159421 - 0x289D1 (Rock Line Reflection EP) - True - True
 
 Quarry Elevator (Quarry):
 158120 - 0x17CC4 (Elevator Control) - 0x0367C - Dots & Eraser
@@ -328,7 +328,7 @@ Door - 0x194B2 (Laser Entry Right) - 0x1972F
 158185 - 0x197E8 (Near 4) - 0x197E0 - True
 158186 - 0x197E5 (Near 5) - 0x197E8 - True
 Door - 0x19665 (Laser Entry Left) - 0x197E5
-159400 - 0x28A7B (Quarry Mill Rooftop Vent EP)
+159400 - 0x28A7B (Quarry Mill Rooftop Vent EP) - True - True
 
 Shadows Ledge (Shadows) - Shadows - 0x1855B - Quarry - 0x19865 & 0x0A2DF:
 158187 - 0x334DC (Door Timer Inside) - True - True
@@ -347,8 +347,8 @@ Shadows Laser Room (Shadows):
 Laser - 0x181B3 (Laser) - 0x19650
 
 Treehouse Beach (Treehouse Beach) - Main Island - True:
-159200 - 0x0053D (Rock Shadow EP)
-159201 - 0x0053E (Sand Shadow EP)
+159200 - 0x0053D (Rock Shadow EP) - True - True
+159201 - 0x0053E (Sand Shadow EP) - True - True
 159212 - 0x220BD (Both Orange Bridges EP) - 0x17DA2 & 0x17DDB
 
 Keep (Keep) - Main Island - True - Keep 2nd Maze - 0x01954 - Keep 2nd Pressure Plate - 0x01BEC:
@@ -357,8 +357,8 @@ Keep (Keep) - Main Island - True - Keep 2nd Maze - 0x01954 - Keep 2nd Pressure P
 158198 - 0x033EA (Pressure Plates 1) - 0x0A3A8 - Dots
 Door - 0x01954 (Hedge Maze 1 Exit) - 0x00139
 Door - 0x01BEC (Pressure Plates 1 Exit) - 0x033EA
-159430 - 0x03E77 (Red Flowers EP)
-159431 - 0x03E7C (Purple Flowers EP)
+159430 - 0x03E77 (Red Flowers EP) - True - True
+159431 - 0x03E7C (Purple Flowers EP) - True - True
 
 Keep 2nd Maze (Keep) - Keep - 0x018CE - Keep 3rd Maze - 0x019D8:
 Door - 0x018CE (Hedge Maze 2 Shortcut) - 0x00139
@@ -397,12 +397,12 @@ Shipwreck (Shipwreck) - Keep 3rd Pressure Plate - True:
 158654 - 0x00AFB (Vault) - True - Symmetry & Sound Dots & Colored Dots
 158655 - 0x03535 (Vault Box) - 0x00AFB - True
 158605 - 0x17D28 (Discard) - True - Triangles
-159220 - 0x03B22 (Circle Near EP)
-159221 - 0x03B23 (Circle Left EP)
-159222 - 0x03B24 (Circle Far EP)
-159224 - 0x03A79 (Stern EP)
-159225 - 0x28ABD (Rope Inner EP)
-159226 - 0x28ABE (Rope Outer EP)
+159220 - 0x03B22 (Circle Near EP) - True - True
+159221 - 0x03B23 (Circle Left EP) - True - True
+159222 - 0x03B24 (Circle Far EP) - True - True
+159224 - 0x03A79 (Stern EP) - True - True
+159225 - 0x28ABD (Rope Inner EP) - True - True
+159226 - 0x28ABE (Rope Outer EP) - True - True
 159230 - 0x3388F (Couch EP) - 0x17CDF | 0x0A054
 
 Keep Tower (Keep) - Keep - 0x04F8F:
@@ -416,8 +416,8 @@ Laser - 0x014BB (Laser) - 0x0360E | 0x03317
 159242 - 0x033BF (Pressure Plates 3 EP) - 0x01CD3
 159243 - 0x033DD (Pressure Plates 4 First EP) - 0x01D3F
 159242 - 0x033E5 (Pressure Plates 4 Second EP) - 0x01D3F
-159250 - 0x28AE9 (Path EP)
-159251 - 0x3348F (Hedges EP)
+159250 - 0x28AE9 (Path EP) - True - True
+159251 - 0x3348F (Hedges EP) - True - True
 
 Outside Monastery (Monastery) - Main Island - True - Inside Monastery - 0x0C128 & 0x0C153 - Monastery Garden - 0x03750:
 158207 - 0x03713 (Shortcut Panel) - True - True
@@ -432,13 +432,13 @@ Door - 0x0C153 (Entry Outer) - 0x00C92
 Door - 0x03750 (Garden Entry) - 0x00037
 158706 - 0x17CA4 (Laser Panel) - 0x193A6 - True
 Laser - 0x17C65 (Laser) - 0x17CA4
-159130 - 0x006E5 (Facade Left Near EP)
-159131 - 0x006E6 (Facade Left Far Short EP)
-159132 - 0x006E7 (Facade Left Far Long EP)
-159136 - 0x03DAB (Facade Right Near EP)
-159137 - 0x03DAC (Facade Left Stairs EP)
-159138 - 0x03DAD (Facade Right Stairs EP)
-159140 - 0x03E01 (Grass Stairs EP)
+159130 - 0x006E5 (Facade Left Near EP) - True - True
+159131 - 0x006E6 (Facade Left Far Short EP) - True - True
+159132 - 0x006E7 (Facade Left Far Long EP) - True - True
+159136 - 0x03DAB (Facade Right Near EP) - True - True
+159137 - 0x03DAC (Facade Left Stairs EP) - True - True
+159138 - 0x03DAD (Facade Right Stairs EP) - True - True
+159140 - 0x03E01 (Grass Stairs EP) - True - True
 
 Inside Monastery (Monastery):
 158213 - 0x09D9B (Shutters Control) - True - Dots
@@ -478,14 +478,14 @@ Door - 0x1845B (Windmill Entry) - 0x17F5F
 159010 - 0x037B6 (Windmill First Blade EP) - 0x17D02 - True
 159011 - 0x037B2 (Windmill Second Blade EP) - 0x17D02 - True
 159012 - 0x000F7 (Windmill Third Blade EP) - 0x17D02 - True
-159540 - 0x03335 (Tower Underside First EP)
-159541 - 0x03412 (Tower Underside Second EP)
-159542 - 0x038A6 (Tower Underside Third EP)
-159543 - 0x038AA (Tower Underside Fourth EP)
+159540 - 0x03335 (Tower Underside First EP) - True - True
+159541 - 0x03412 (Tower Underside Second EP) - True - True
+159542 - 0x038A6 (Tower Underside Third EP) - True - True
+159543 - 0x038AA (Tower Underside Fourth EP) - True - True
 159544 - 0x03E3F (RGB House Red EP) - 0x334D8
 159545 - 0x03E40 (RGB House Green EP) - 0x334D8
 159546 - 0x28B8E (Maze Bridge Underside EP) - 0x2896A
-159552 - 0x03BCF (Black Line Redirect EP)
+159552 - 0x03BCF (Black Line Redirect EP) - True - True
 
 Town Inside Cargo Box (Town):
 158606 - 0x17D01 (Cargo Box Discard) - True - Triangles
@@ -507,7 +507,7 @@ Town Wooden Rooftop (Town):
 
 Town Church (Town):
 158227 - 0x28A69 (Church Lattice) - 0x03BB0 - True
-159552 - 0x03BD1 (Black Line Church EP)
+159552 - 0x03BD1 (Black Line Church EP) - True - True
 
 RGB House (Town) - RGB Room - 0x2897B:
 158242 - 0x034E4 (Sound Room Left) - True - True
@@ -528,8 +528,8 @@ Door - 0x2779A (Fourth Door) - 0x28B39
 Town Tower Top (Town):
 158708 - 0x032F5 (Laser Panel) - True - True
 Laser - 0x032F9 (Laser) - 0x032F5
-159422 - 0x33692 (Brown Bridge EP)
-159551 - 0x03BCE (Black Line Tower EP)
+159422 - 0x33692 (Brown Bridge EP) - True - True
+159551 - 0x03BCE (Black Line Tower EP) - True - True
 
 Windmill Interior (Windmill) - Theater - 0x17F88:
 158247 - 0x17D02 (Turn Control) - True - Dots
@@ -576,24 +576,24 @@ Door - 0x1475B (Popup Wall) - 0x17CAB
 Laser - 0x00274 (Laser) - 0x03616
 158266 - 0x337FA (Laser Shortcut Panel) - True - True
 Door - 0x3873B (Laser Shortcut) - 0x337FA
-159100 - 0x03ABC (Long Arch Moss EP) - True
-159101 - 0x03ABE (Straight Left Moss EP) - True
-159102 - 0x03AC0 (Pop-up Wall Moss EP) - True
-159103 - 0x03AC4 (Short Arch Moss EP) - True
-159150 - 0x289F4 (Entrance EP)
-159151 - 0x289F5 (Tree Halo EP)
-159350 - 0x035CB (Bamboo CCW EP)
-159351 - 0x035CF (Bamboo CW EP)
+159100 - 0x03ABC (Long Arch Moss EP) - True - True
+159101 - 0x03ABE (Straight Left Moss EP) - True - True
+159102 - 0x03AC0 (Pop-up Wall Moss EP) - True - True
+159103 - 0x03AC4 (Short Arch Moss EP) - True - True
+159150 - 0x289F4 (Entrance EP) - True - True
+159151 - 0x289F5 (Tree Halo EP) - True - True
+159350 - 0x035CB (Bamboo CCW EP) - True - True
+159351 - 0x035CF (Bamboo CW EP) - True - True
 
 Outside Jungle River (River) - Main Island - True - Monastery Garden - 0x0CF2A:
 158267 - 0x17CAA (Monastery Shortcut Panel) - True - True
 Door - 0x0CF2A (Monastery Shortcut) - 0x17CAA
 158663 - 0x15ADD (Vault) - True - Black/White Squares & Dots
 158664 - 0x03702 (Vault Box) - 0x15ADD - True
-159110 - 0x03AC5 (Green Leaf Moss EP) - True
+159110 - 0x03AC5 (Green Leaf Moss EP) - True - True
 159120 - 0x03BE2 (Monastery Garden Left EP) - 0x03750
-159121 - 0x03BE3 (Monastery Garden Right EP) - True
-159122 - 0x0A409 (Monastery Wall EP) - True
+159121 - 0x03BE3 (Monastery Garden Right EP) - True - True
+159122 - 0x0A409 (Monastery Wall EP) - True - True
 
 Outside Bunker (Bunker) - Main Island - True - Bunker - 0x0C2A4:
 158268 - 0x17C2E (Entry Panel) - True - Black/White Squares & Colored Squares
@@ -632,7 +632,7 @@ Bunker Elevator (Bunker) - Bunker Laser Platform - 0x0A079 - Bunker Green Room -
 158286 - 0x0A079 (Elevator Control) - True - Colored Squares & Black/White Squares
 
 Bunker Green Room (Bunker) - Bunker Elevator - TrueOneWay:
-159310 - 0x000D3 (Green Room Flowers EP) - True
+159310 - 0x000D3 (Green Room Flowers EP) - True - True
 
 Bunker Laser Platform (Bunker) - Bunker Elevator - TrueOneWay:
 158710 - 0x09DE0 (Laser Panel) - True - True
@@ -643,7 +643,7 @@ Outside Swamp (Swamp) - Swamp Entry Area - 0x00C1C - Main Island - True:
 Door - 0x00C1C (Entry) - 0x0056E
 159321 - 0x03603 (Purple Sand Middle EP) - 0x17E2B
 159322 - 0x03601 (Purple Sand Top EP) - 0x17E2B
-159327 - 0x035DE (Purple Sand Bottom EP) - True
+159327 - 0x035DE (Purple Sand Bottom EP) - True - True
 
 Swamp Entry Area (Swamp) - Swamp Sliding Bridge - TrueOneWay:
 158288 - 0x00469 (Intro Front 1) - True - Shapers
@@ -728,8 +728,8 @@ Door - 0x0A1D6 (Purple Water Pump) - 0x00E3A
 
 Swamp Purple Underwater (Swamp):
 158333 - 0x009A6 (Purple Underwater) - True - Shapers
-159330 - 0x03A9E (Purple Underwater Right EP) - True
-159336 - 0x03A93 (Purple Underwater Left EP) - True
+159330 - 0x03A9E (Purple Underwater Right EP) - True - True
+159336 - 0x03A93 (Purple Underwater Left EP) - True - True
 
 Swamp Blue Underwater (Swamp):
 158334 - 0x009AB (Blue Underwater 1) - True - Shapers & Negative Shapers
@@ -850,7 +850,7 @@ Treehouse Laser Room Back Platform (Treehouse):
 158611 - 0x17FA0 (Laser Discard) - True - Triangles
 
 Treehouse Burned House (Treehouse):
-159202 - 0x17DDB (Burned House Beach EP)
+159202 - 0x17DDB (Burned House Beach EP) - True - True
 
 Treehouse Laser Room (Treehouse):
 158712 - 0x03613 (Laser Panel) - True - True
@@ -861,19 +861,19 @@ Mountainside (Mountainside) - Main Island - True - Mountaintop - True:
 158612 - 0x17C42 (Discard) - True - Triangles
 158665 - 0x002A6 (Vault) - True - Symmetry & Colored Dots & Black/White Squares & Dots
 158666 - 0x03542 (Vault Box) - 0x002A6 - True
-159301 - 0x335AE (Cloud Cycle EP)
-159325 - 0x33505 (Bush EP)
-159335 - 0x03C07 (Apparent River EP) - True
+159301 - 0x335AE (Cloud Cycle EP) - True - True
+159325 - 0x33505 (Bush EP) - True - True
+159335 - 0x03C07 (Apparent River EP) - True - True
 
 Mountaintop (Mountaintop) - Mountain Top Layer - 0x17C34:
 158405 - 0x0042D (River Shape) - True - True
 158406 - 0x09F7F (Box Short) - 7 Lasers - True
 158407 - 0x17C34 (Trap Door Triple Exit) - 0x09F7F - Stars & Black/White Squares & Stars + Same Colored Symbol
 158800 - 0xFFF00 (Box Long) - 7 Lasers & 11 Lasers & 0x17C34 - True
-159300 - 0x001A3 (River Shape EP) - True
-159320 - 0x3370E (Arch Black EP) - True
-159324 - 0x336C8 (Arch White Right EP) - True
-159326 - 0x3369A (Arch White Left EP) - True
+159300 - 0x001A3 (River Shape EP) - True - True
+159320 - 0x3370E (Arch Black EP) - True - True
+159324 - 0x336C8 (Arch White Right EP) - True - True
+159326 - 0x3369A (Arch White Left EP) - True - True
 
 Mountain Top Layer (Mountain Floor 1) - Mountain Top Layer Bridge - 0x09E39:
 158408 - 0x09E39 (Light Bridge Controller) - True - Black/White Squares & Colored Squares & Eraser
@@ -952,7 +952,7 @@ Mountain Pink Bridge EP (Mountain Floor 2):
 159312 - 0x09D63 (Pink Bridge EP) - 0x09E39
 
 Mountain Bottom Floor Rock (Mountain Bottom Floor) - Mountain Bottom Floor - 0x17F33 - Mountain Path to Caves - 0x17F33:
-Door - 0x17F33 (Rock Open) - True
+Door - 0x17F33 (Rock Open) - True - True
 
 Mountain Path to Caves (Mountain Bottom Floor) - Mountain Bottom Floor Rock - 0x334E1 - Caves - 0x2D77D:
 158447 - 0x00FF8 (Caves Entry Panel) - True - Triangles & Black/White Squares
@@ -1012,7 +1012,7 @@ Door - 0x019A5 (Pillar Door) - 0x09DD5
 Door - 0x2D73F (Mountain Shortcut Door) - 0x021D7
 158450 - 0x17CF2 (Swamp Shortcut Panel) - True - Triangles
 Door - 0x2D859 (Swamp Shortcut Door) - 0x17CF2
-159341 - 0x3397C (Skylight EP)
+159341 - 0x3397C (Skylight EP) - True - True
 
 Path to Challenge (Caves) - Challenge - 0x0A19A:
 158477 - 0x0A16E (Challenge Entry Panel) - True - Stars & Shapers & Stars + Same Colored Symbol
@@ -1041,7 +1041,7 @@ Challenge (Challenge) - Tunnels - 0x0348A:
 158667 - 0x0356B (Vault Box) - 0x1C31A & 0x1C319 - True
 158518 - 0x039B4 (Tunnels Entry Panel) - True - Triangles
 Door - 0x0348A (Tunnels Entry) - 0x039B4
-159530 - 0x28B30 (Water EP)
+159530 - 0x28B30 (Water EP) - True - True
 
 Tunnels (Tunnels) - Windmill Interior - 0x27739 - Desert Lowest Level Inbetween Shortcuts - 0x27263 - Town - 0x09E87:
 158668 - 0x2FAF6 (Vault Box) - True - True
@@ -1073,16 +1073,16 @@ Elevator (Mountain Final Room):
 158536 - 0x3D9A9 (Elevator Start) - 0x3D9AA & 7 Lasers | 0x3D9A8 & 7 Lasers - True
 
 Boat (Boat) - Main Island - TrueOneWay - Swamp Near Boat - TrueOneWay - Treehouse Entry Area - TrueOneWay - Quarry Boathouse Behind Staircase - TrueOneWay - Inside Glass Factory Behind Back Wall - TrueOneWay:
-159042 - 0x22106 (Desert EP) - True
-159223 - 0x03B25 (Shipwreck CCW Underside EP)
-159231 - 0x28B29 (Shipwreck Green EP)
-159232 - 0x28B2A (Shipwreck CW Underside EP)
-159323 - 0x03D0D (Bunker Yellow Line EP) - True
-159515 - 0x28A37 (Town Long Sewer EP)
-159520 - 0x33857 (Tutorial EP)
-159521 - 0x33879 (Tutorial Reflection EP)
-159522 - 0x03C19 (Tutorial Moss EP)
-159531 - 0x035C9 (Cargo Box EP) - 0x0A0C9
+159042 - 0x22106 (Desert EP) - True - True
+159223 - 0x03B25 (Shipwreck CCW Underside EP) - True - True
+159231 - 0x28B29 (Shipwreck Green EP) - True - True
+159232 - 0x28B2A (Shipwreck CW Underside EP) - True - True
+159323 - 0x03D0D (Bunker Yellow Line EP) - True - True
+159515 - 0x28A37 (Town Long Sewer EP) - True - True
+159520 - 0x33857 (Tutorial EP) - True - True
+159521 - 0x33879 (Tutorial Reflection EP) - True - True
+159522 - 0x03C19 (Tutorial Moss EP) - True - True
+159531 - 0x035C9 (Cargo Box EP) - 0x0A0C9 - True
 
 Obelisks (EPs) - Entry - True:
 159700 - 0xFFE00 (Desert Obelisk Side 1) - 0x0332B & 0x03367 & 0x28B8A
