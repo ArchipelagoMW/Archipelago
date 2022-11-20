@@ -50,14 +50,14 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         elif file.filename.endswith(".apv6"):
             # TODO: Don't omit the player name in Multiworld.get_out_file_name_base so this "fix" can be removed.
             _, seed_name, slot_id, *slot_name = file.filename.split('.')[0].split('_', 3)
-            slot_name = "".join(slot_name) or f"Player{slot_id[1:]}"
+            slot_name = slot_name[0] if slot_name else f"Player{slot_id[1:]}"
             slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
                            player_id=int(slot_id[1:]), game="VVVVVV"))
 
         elif file.filename.endswith(".apsm64ex"):
             # TODO: Don't omit the player name in Multiworld.get_out_file_name_base so this "fix" can be removed.
             _, seed_name, slot_id, *slot_name = file.filename.split('.')[0].split('_', 3)
-            slot_name = "".join(slot_name) or f"Player{slot_id[1:]}"
+            slot_name = slot_name[0] if slot_name else f"Player{slot_id[1:]}"
             slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
                            player_id=int(slot_id[1:]), game="Super Mario 64"))
 
@@ -65,7 +65,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
             # Factorio mods need a specific name or they do not function
             # TODO: Don't omit the player name in Multiworld.get_out_file_name_base so this "fix" can be removed.
             _, seed_name, slot_id, *slot_name = file.filename.rsplit("_", 1)[0].split("-", 3)
-            slot_name = "".join(slot_name) or f"Player{slot_id[1:]}"
+            slot_name = slot_name[0] if slot_name else f"Player{slot_id[1:]}"
             slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
                            player_id=int(slot_id[1:]), game="Factorio"))
 
@@ -73,14 +73,14 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
             # .apz5 must be named specifically since they don't contain any metadata
             # TODO: Don't omit the player name in Multiworld.get_out_file_name_base so this "fix" can be removed.
             _, seed_name, slot_id, *slot_name = file.filename.split('.')[0].split('_', 3)
-            slot_name = "".join(slot_name) or f"Player{slot_id[1:]}"
+            slot_name = slot_name[0] if slot_name else f"Player{slot_id[1:]}"
             slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
                            player_id=int(slot_id[1:]), game="Ocarina of Time"))
 
         elif file.filename.endswith(".json"):
             # TODO: Don't omit the player name in Multiworld.get_out_file_name_base so this "fix" can be removed.
             _, seed_name, slot_id, *slot_name = file.filename.split('.')[0].split('-', 3)
-            slot_name = "".join(slot_name) or f"Player{slot_id[1:]}"
+            slot_name = slot_name[0] if slot_name else f"Player{slot_id[1:]}"
             slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
                            player_id=int(slot_id[1:]), game="Dark Souls III"))
 
