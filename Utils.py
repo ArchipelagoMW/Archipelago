@@ -236,7 +236,7 @@ def get_default_options() -> OptionsType:
             "bridge_chat_out": True,
         },
         "sni_options": {
-            "sni": "SNI",
+            "sni_path": "SNI",
             "snes_rom_start": True,
         },
         "sm_options": {
