@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import Utils
-import worlds.AutoWorld
 import worlds.Files
 
 LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
@@ -17,7 +16,6 @@ import random
 import struct
 import subprocess
 import threading
-import xxtea
 import concurrent.futures
 import bsdiff4
 from typing import Optional, List
@@ -39,13 +37,17 @@ from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to
 from worlds.alttp.Items import ItemFactory, item_table, item_name_groups, progression_items
 from worlds.alttp.EntranceShuffle import door_addresses
 from worlds.alttp.Options import smallkey_shuffle
-import Patch
 
 try:
     from maseya import z3pr
     from maseya.z3pr.palette_randomizer import build_offset_collections
 except:
     z3pr = None
+
+try:
+    import xxtea
+except:
+    xxtea = None
 
 enemizer_logger = logging.getLogger("Enemizer")
 
@@ -85,6 +87,11 @@ class LocalRom(object):
             self.write_bytes(startaddress + i, bytearray(data))
 
     def encrypt(self, world, player):
+        global xxtea
+        if xxtea is None:
+            # cause crash to provide traceback
+            import xxtea
+
         local_random = world.slot_seeds[player]
         key = bytes(local_random.getrandbits(8 * 16).to_bytes(16, 'big'))
         self.write_bytes(0x1800B0, bytearray(key))
