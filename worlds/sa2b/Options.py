@@ -496,6 +496,18 @@ class Narrator(Choice):
     default = 0
 
 
+class LogicDifficulty(Choice):
+    """
+    What set of Upgrade Requirement logic to use
+    Standard: The logic assumes the "intended" usage of Upgrades to progress through levels
+    Hard: Some simple skips or sequence breaks may be required
+    """
+    display_name = "Logic Difficulty"
+    option_standard = 0
+    option_hard = 1
+    default = 0
+
+
 sa2b_options: typing.Dict[str, type(Option)] = {
     "goal": Goal,
     "mission_shuffle": MissionShuffle,
@@ -523,6 +535,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "sadx_music": SADXMusic,
     "music_shuffle": MusicShuffle,
     "narrator": Narrator,
+    "logic_difficulty": LogicDifficulty,
     "speed_mission_count": SpeedMissionCount,
     "speed_mission_2": SpeedMission2,
     "speed_mission_3": SpeedMission3,
