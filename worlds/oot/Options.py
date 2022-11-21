@@ -697,7 +697,7 @@ class GanonBKRewards(Range):
     default = 9
 
 
-class GanonBKMedallions(Range):
+class GanonBKTokens(Range):
     """Set how many Gold Skulltula Tokens are required to receive Ganon BK."""
     display_name = "Tokens Required for Ganon's BK"
     range_start = 1
@@ -705,7 +705,7 @@ class GanonBKMedallions(Range):
     default = 40
 
 
-class GanonBKMedallions(Range):
+class GanonBKHearts(Range):
     """Set how many hearts are required to receive Ganon BK."""
     display_name = "Hearts Required for Ganon's BK"
     range_start = 4

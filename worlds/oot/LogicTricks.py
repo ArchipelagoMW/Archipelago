@@ -404,7 +404,7 @@ known_logic_tricks = {
                     PoH without needing Longshot. You will take 
                     fall damage.
                     '''},
-    "Thieves' Hideout "Kitchen" with No Additional Items": {
+    '''Thieves' Hideout "Kitchen" with No Additional Items''': {
         'name'    : 'logic_gerudo_kitchen',
         'tags'    : ("Thieves' Hideout", "Gerudo's Fortress",),
         'tooltip' : '''\
