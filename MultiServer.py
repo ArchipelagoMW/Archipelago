@@ -109,6 +109,7 @@ class Context:
                       "location_check_points": int,
                       "server_password": str,
                       "password": str,
+                      "forfeit_mode": str,  # TODO remove around 0.4
                       "release_mode": str,
                       "remaining_mode": str,
                       "collect_mode": str,
@@ -488,9 +489,10 @@ class Context:
             "group_collected": dict(self.group_collected),
             "stored_data": self.stored_data,
             "game_options": {"hint_cost": self.hint_cost, "location_check_points": self.location_check_points,
-                             "server_password": self.server_password, "password": self.password, "release_mode":
-                             self.release_mode, "remaining_mode": self.remaining_mode, "collect_mode":
-                             self.collect_mode, "item_cheat": self.item_cheat, "compatibility": self.compatibility}
+                             "server_password": self.server_password, "password": self.password,
+                             "forfeit_mode": self.release_mode, "release_mode": self.release_mode,  # TODO remove forfeit_mode around 0.4
+                             "remaining_mode": self.remaining_mode, "collect_mode": self.collect_mode,
+                             "item_cheat": self.item_cheat, "compatibility": self.compatibility}
 
         }
 
@@ -698,6 +700,7 @@ async def on_client_connected(ctx: Context, client: Client):
 
 def get_permissions(ctx) -> typing.Dict[str, Permission]:
     return {
+        "forfeit": Permission.from_text(ctx.release_mode),  # TODO remove around 0.4
         "release": Permission.from_text(ctx.release_mode),
         "remaining": Permission.from_text(ctx.remaining_mode),
         "collect": Permission.from_text(ctx.collect_mode)
@@ -1984,7 +1987,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                     return input_text
             setattr(self.ctx, option_name, attrtype(option))
             self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
-            if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
+            if option_name in {"forfeit_mode", "release_mode", "remaining_mode", "collect_mode"}:  # TODO remove forfeit_mode with 0.4
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
             elif option_name in {"hint_cost", "location_check_points"}:
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
