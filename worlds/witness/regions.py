@@ -86,9 +86,6 @@ class WitnessRegions:
 
         for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
-                if connection[0] == "Entry":
-                    continue
-
                 if connection[1] == frozenset({frozenset(["TrueOneWay"])}):
                     self.connect(world, player, region_name, connection[0], player_logic, frozenset({frozenset()}))
                     continue

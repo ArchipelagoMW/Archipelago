@@ -1,3 +1,5 @@
+Entry (Entry):
+
 First Hallway (First Hallway) - Entry - True - First Hallway Room - 0x00064:
 158000 - 0x00064 (Straight) - True - True
 159510 - 0x01848 (EP) - 0x00064 - True

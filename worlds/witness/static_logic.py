@@ -74,17 +74,23 @@ class StaticWitnessLogicObj:
                     location_type = "Vault"
                 elif check_name in laser_names:
                     location_type = "Laser"
+                elif "Obelisk Side" in check_name:
+                    location_type = "Obelisk Side"
                 else:
                     location_type = "General"
 
                 required_items = parse_lambda(required_item_lambda)
+                required_panels = parse_lambda(required_panel_lambda)
 
                 required_items = frozenset(required_items)
 
                 requirement = {
-                    "panels": parse_lambda(required_panel_lambda),
+                    "panels": required_panels,
                     "items": required_items
                 }
+
+                if location_type == "Obelisk Side":
+                    self.OBELISK_SIDE_ID_TO_EP_HEXES[int(location_id)] = [required_panels][0]
 
                 self.CHECKS_BY_HEX[check_hex] = {
                     "checkName": current_region["shortName"] + " " + check_name,
@@ -108,6 +114,8 @@ class StaticWitnessLogicObj:
         self.CHECKS_BY_NAME = dict()
         self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX = dict()
 
+        self.OBELISK_SIDE_ID_TO_EP_HEXES = dict()
+
         self.read_logic_file(file_path)
 
 
@@ -124,6 +132,8 @@ class StaticWitnessLogic:
 
     ALL_REGIONS_BY_NAME = dict()
     STATIC_CONNECTIONS_BY_REGION_NAME = dict()
+
+    OBELISK_SIDE_ID_TO_EP_HEXES = dict()
 
     CHECKS_BY_HEX = dict()
     CHECKS_BY_NAME = dict()
@@ -194,4 +204,6 @@ class StaticWitnessLogic:
         self.CHECKS_BY_HEX.update(self.sigma_normal.CHECKS_BY_HEX)
         self.CHECKS_BY_NAME.update(self.sigma_normal.CHECKS_BY_NAME)
         self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX.update(self.sigma_normal.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
+
+        self.OBELISK_SIDE_ID_TO_EP_HEXES.update(self.sigma_normal.OBELISK_SIDE_ID_TO_EP_HEXES)
 

@@ -64,7 +64,9 @@ class WitnessWorld(World):
             'symbols_not_in_the_game': self.items.SYMBOLS_NOT_IN_THE_GAME,
             'disabled_panels': self.player_logic.COMPLETELY_DISABLED_CHECKS,
             'log_ids_to_hints': self.log_ids_to_hints,
-            'progressive_item_lists': self.items.MULTI_LISTS_BY_CODE
+            'progressive_item_lists': self.items.MULTI_LISTS_BY_CODE,
+            'obelisk_side_id_to_EPs': self.static_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
+            'precompleted_puzzles': self.player_logic.PRECOMPLETED_LOCATIONS
         }
 
     def generate_early(self):

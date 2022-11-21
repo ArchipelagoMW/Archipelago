@@ -22,7 +22,8 @@ from BaseClasses import MultiWorld
 from .static_logic import StaticWitnessLogic
 from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda, get_early_utm_list, \
     get_symbol_shuffle_list, get_door_panel_shuffle_list, get_doors_complex_list, get_doors_max_list, \
-    get_doors_simple_list, get_laser_shuffle, get_ep_all_individual
+    get_doors_simple_list, get_laser_shuffle, get_ep_all_individual, get_ep_obelisks, get_ep_easy, get_ep_no_eclipse, \
+    get_ep_no_caves, get_ep_no_mountain, get_ep_no_videos
 from .Options import is_option_enabled, get_option_value, the_witness_options
 
 
@@ -72,6 +73,8 @@ class WitnessPlayerLogic:
                 these_items = all_options
 
         these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
+
+        these_panels = frozenset({panels - self.PRECOMPLETED_LOCATIONS for panels in these_panels})
 
         if these_panels == frozenset({frozenset()}):
             return these_items
@@ -213,6 +216,9 @@ class WitnessPlayerLogic:
                 line = StaticWitnessLogic.CHECKS_BY_HEX[line]["checkName"]
             self.ADDED_CHECKS.add(line)
 
+        if adj_type == "Precompleted Locations":
+            self.PRECOMPLETED_LOCATIONS.add(line)
+
     def make_options_adjustments(self, world, player):
         """Makes logic adjustments based on options"""
         adjustment_linesets_in_order = []
@@ -238,8 +244,31 @@ class WitnessPlayerLogic:
         if is_option_enabled(world, player, "shuffle_symbols") or "shuffle_symbols" not in the_witness_options.keys():
             adjustment_linesets_in_order.append(get_symbol_shuffle_list())
 
-        if True:  # TODO
+        if get_option_value(world, player, "shuffle_EPs") == 1:
             adjustment_linesets_in_order.append(get_ep_all_individual())
+        elif get_option_value(world, player, "shuffle_EPs") == 2:
+            adjustment_linesets_in_order.append(get_ep_obelisks())
+
+        if get_option_value(world, player, "EP_difficulty") == 0:
+            adjustment_linesets_in_order.append(get_ep_easy())
+        elif get_option_value((world, player, "EP_difficulty") == 1):
+            adjustment_linesets_in_order.append(get_ep_no_eclipse())
+
+        if not is_option_enabled(world, player, "shuffle_vaults"):
+            adjustment_linesets_in_order.append(get_ep_no_videos())
+
+        doors = get_option_value(world, player, "shuffle_doors") >= 2
+        earlyutm = is_option_enabled(world, player, "early_secret_area")
+        victory = get_option_value(world, player, "victory_condition")
+        mount_lasers = get_option_value(world, player, "mountain_lasers")
+        chal_lasers = get_option_value(world, player, "challenge_lasers")
+
+        if not (earlyutm or doors):
+            adjustment_linesets_in_order.append(get_ep_no_caves())
+
+        mountain_enterable_from_top = victory == 0 or victory == 1 or (victory == 3 and chal_lasers > mount_lasers)
+        if not mountain_enterable_from_top:
+            adjustment_linesets_in_order.append(get_ep_no_mountain())
 
         if get_option_value(world, player, "shuffle_doors") == 1:
             adjustment_linesets_in_order.append(get_door_panel_shuffle_list())
@@ -363,6 +392,7 @@ class WitnessPlayerLogic:
         self.EVENT_ITEM_PAIRS = dict()
         self.ALWAYS_EVENT_HEX_CODES = set()
         self.COMPLETELY_DISABLED_CHECKS = set()
+        self.PRECOMPLETED_LOCATIONS = set()
         self.ADDED_CHECKS = set()
         self.VICTORY_LOCATION = "0x0356B"
         self.EVENT_ITEM_NAMES = {
