@@ -13,13 +13,6 @@ class StaticWitnessLocations:
     """
     ID_START = 158000
 
-    TYPE_OFFSETS = {
-        "General": 0,
-        "Discard": 600,
-        "Vault": 650,
-        "Laser": 700,
-    }
-
     EXTRA_LOCATIONS = {
         "Tutorial Front Left",
         "Tutorial Back Left",

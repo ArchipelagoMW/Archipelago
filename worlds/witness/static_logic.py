@@ -76,6 +76,8 @@ class StaticWitnessLogicObj:
                     location_type = "Laser"
                 elif "Obelisk Side" in check_name:
                     location_type = "Obelisk Side"
+                elif "EP" in check_name:
+                    location_type = "EP"
                 else:
                     location_type = "General"
 
