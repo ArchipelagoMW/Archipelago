@@ -6,53 +6,54 @@ from typing import Dict, List
 
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
+    type: str
     progression: bool
     filler: bool = False
 
 
 item_table: Dict[str, ItemData] = {
     # Units
-    'Spearman': ItemData(52000, True),
-    'Wagon': ItemData(52001, False),
-    'Mage': ItemData(52002, True),
-    'Archer': ItemData(52003, True),
-    'Knight': ItemData(52004, True),
-    'Ballista': ItemData(52005, True),
-    'Golem': ItemData(52006, False),
-    'Harpy': ItemData(52007, True),
-    'Witch': ItemData(52008, False),
-    'Dragon': ItemData(52009, False),
-    'Balloon': ItemData(52010, False),
-    'Barge': ItemData(52011, True),
-    'Merfolk': ItemData(52012, True),
-    'Turtle': ItemData(52013, True),
-    'Harpoon Ship': ItemData(52014, True),
-    'Warship': ItemData(52015, True),
-    'Thief': ItemData(52016, True),
-    'Rifleman': ItemData(52017, False),
+    'Spearman': ItemData(52000, 'Unit', True),
+    'Wagon': ItemData(52001, 'Unit', False),
+    'Mage': ItemData(52002, 'Unit', True),
+    'Archer': ItemData(52003, 'Unit', True),
+    'Knight': ItemData(52004, 'Unit', True),
+    'Ballista': ItemData(52005, 'Unit', True),
+    'Golem': ItemData(52006, 'Unit', False),
+    'Harpy': ItemData(52007, 'Unit', True),
+    'Witch': ItemData(52008, 'Unit', False),
+    'Dragon': ItemData(52009, 'Unit', False),
+    'Balloon': ItemData(52010, 'Unit', False),
+    'Barge': ItemData(52011, 'Unit', True),
+    'Merfolk': ItemData(52012, 'Unit', True),
+    'Turtle': ItemData(52013, 'Unit', True),
+    'Harpoon Ship': ItemData(52014, 'Unit', True),
+    'Warship': ItemData(52015, 'Unit', True),
+    'Thief': ItemData(52016, 'Unit', True),
+    'Rifleman': ItemData(52017, 'Unit', False),
 
     # Map Triggers
-    'Eastern Bridges': ItemData(52018, True),
-    'Southern Walls': ItemData(52019, True),
-    'Final Bridges': ItemData(52020, True),
-    'Final Walls': ItemData(52021, True),
-    'Final Sickle': ItemData(52022, True),
+    'Eastern Bridges': ItemData(52018, 'Trigger', True),
+    'Southern Walls': ItemData(52019, 'Trigger', True),
+    'Final Bridges': ItemData(52020, 'Trigger', True),
+    'Final Walls': ItemData(52021, 'Trigger', True),
+    'Final Sickle': ItemData(52022, 'Trigger', True),
 
     # Player Buffs
-    'Income Boost': ItemData(52023, False, True),
+    'Income Boost': ItemData(52023, 'Boost', False, True),
 
-    'Commander Defense Boost': ItemData(52024, False, True),
+    'Commander Defense Boost': ItemData(52024, 'Boost', False, True),
 
     # Factions
-    'Cherrystone Commanders': ItemData(52025, False),
-    'Felheim Commanders': ItemData(52026, False),
-    'Floran Commanders': ItemData(52027, False),
-    'Heavensong Commanders': ItemData(52028, False),
-    'Requiem Commanders': ItemData(52029, False),
-    'Outlaw Commanders': ItemData(52030, False),
+    'Cherrystone Commanders': ItemData(52025, 'Faction', False),
+    'Felheim Commanders': ItemData(52026, 'Faction', False),
+    'Floran Commanders': ItemData(52027, 'Faction', False),
+    'Heavensong Commanders': ItemData(52028, 'Faction', False),
+    'Requiem Commanders': ItemData(52029, 'Faction', False),
+    'Outlaw Commanders': ItemData(52030, 'Faction', False),
 
     # Event Items
-    'Wargroove Victory': ItemData(None, True, True)
+    'Wargroove Victory': ItemData(None, 'Goal', True)
 
 }
 
