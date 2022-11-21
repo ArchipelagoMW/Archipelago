@@ -192,6 +192,11 @@ class ZillionRedIDCardCount(Range):
     display_name = "Red ID Card count"
 
 
+class ZillionEarlyScope(Toggle):
+    """ make sure Scope is available early """
+    display_name = "early scope"
+
+
 class ZillionSkill(Range):
     """ the difficulty level of the game """
     range_start = 0
@@ -236,6 +241,7 @@ zillion_options: Dict[str, AssembleOptions] = {
     "floppy_disk_count": ZillionFloppyDiskCount,
     "scope_count": ZillionScopeCount,
     "red_id_card_count": ZillionRedIDCardCount,
+    "early_scope": ZillionEarlyScope,
     "skill": ZillionSkill,
     "starting_cards": ZillionStartingCards,
     "room_gen": ZillionRoomGen,
@@ -352,6 +358,10 @@ def validate(world: "MultiWorld", p: int) -> "Tuple[ZzOptions, Counter[str]]":
 
     room_gen = cast(ZillionRoomGen, wo.room_gen[p])
 
+    early_scope = cast(ZillionEarlyScope, wo.early_scope[p])
+    if early_scope:
+        world.early_items[p]["Scope"] = 1
+
     zz_item_counts = convert_item_counts(item_counts)
     zz_op = ZzOptions(
         zz_item_counts,
@@ -365,7 +375,7 @@ def validate(world: "MultiWorld", p: int) -> "Tuple[ZzOptions, Counter[str]]":
         floppy_req.value,
         wo.continues[p].value,
         wo.randomize_alarms[p].value,
-        False,  # early scope can be done with AP early_items
+        False,  # early scope is done with AP early_items API
         True,  # balance defense
         starting_cards.value,
         bool(room_gen.value)
