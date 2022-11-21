@@ -236,7 +236,7 @@ def get_default_options() -> OptionsType:
             "bridge_chat_out": True,
         },
         "sni_options": {
-            "sni": "SNI",
+            "sni_path": "SNI",
             "snes_rom_start": True,
         },
         "sm_options": {
@@ -452,6 +452,7 @@ loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': log
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
                  log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
                  exception_logger: typing.Optional[str] = None):
+    import datetime
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = user_path("logs")
     os.makedirs(log_folder, exist_ok=True)
@@ -460,6 +461,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         root_logger.removeHandler(handler)
         handler.close()
     root_logger.setLevel(loglevel)
+    if "a" not in write_mode:
+        name += f"_{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}"
     file_handler = logging.FileHandler(
         os.path.join(log_folder, f"{name}.txt"),
         write_mode,
@@ -487,6 +490,19 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
 
         sys.excepthook = handle_exception
 
+    def _cleanup():
+        for file in os.scandir(log_folder):
+            if file.name.endswith(".txt"):
+                last_change = datetime.datetime.fromtimestamp(file.stat().st_mtime)
+                if datetime.datetime.now() - last_change > datetime.timedelta(days=7):
+                    try:
+                        os.unlink(file.path)
+                    except Exception as e:
+                        logging.exception(e)
+                    else:
+                        logging.info(f"Deleted old logfile {file.path}")
+    import threading
+    threading.Thread(target=_cleanup, name="LogCleaner").start()
     logging.info(f"Archipelago ({__version__}) logging initialized.")
 
 

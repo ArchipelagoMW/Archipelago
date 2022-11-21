@@ -157,6 +157,8 @@ class ALTTPWorld(World):
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
+        if world.is_race:
+            import xxtea
 
     def generate_early(self):
         if self.use_enemizer():
