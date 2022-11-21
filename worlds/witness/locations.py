@@ -234,7 +234,7 @@ class WitnessPlayerLocations:
     def __init__(self, world, player, player_logic: WitnessPlayerLogic):
         """Defines locations AFTER logic changes due to options"""
 
-        self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser", "EP"}
+        self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser", "EP", "Obelisk Side"}
         self.CHECK_LOCATIONS = StaticWitnessLocations.GENERAL_LOCATIONS.copy()
 
         if get_option_value(world, player, "puzzle_randomization") == 1:
