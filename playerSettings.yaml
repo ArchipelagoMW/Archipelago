@@ -118,10 +118,10 @@ A Link to the Past:
     local_ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
     ice_rod_hunt: 0 # You start with everything needed to 216 the seed. Find the Ice rod, then kill Trinexx at Turtle rock.
   open_pyramid:
-    goal: 0 # Opens the pyramid if the goal requires you to kill Ganon, unless the goal is Slow Ganon or All Dungeons
+    goal: 50 # Opens the pyramid if the goal requires you to kill Ganon, unless the goal is Slow Ganon or All Dungeons
     auto: 0 # Same as Goal, but also is closed if holes are shuffled and ganon is part of the shuffle pool
     open: 0 # Pyramid hole is always open. Ganon's vulnerable condition is still required before he can he hurt
-    closed: 50 # Pyramid hole is always closed until you defeat Agahnim atop Ganon's Tower
+    closed: 0 # Pyramid hole is always closed until you defeat Agahnim atop Ganon's Tower
   triforce_pieces_mode: #Determine how to calculate the extra available triforce pieces.
     extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
     percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required
