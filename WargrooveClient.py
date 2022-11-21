@@ -3,21 +3,27 @@ import os
 import sys
 import asyncio
 import random
-from typing import Tuple, List, Iterable
-from worlds.wargroove.Items import faction_table, CommanderData
+from typing import Tuple, List, Iterable, Dict
+
+from worlds.wargroove import WargrooveWorld
+from worlds.wargroove.Items import item_table, faction_table, CommanderData, ItemData
 
 import ModuleUpdate
 ModuleUpdate.update()
 
 import Utils
 import json
+import logging
 
 if __name__ == "__main__":
     Utils.init_logging("WargrooveClient", exception_logger="Client")
+    Utils.init_logging("WG", exception_logger="Client")
 
 from NetUtils import NetworkItem, ClientStatus
 from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
     CommonContext, server_loop
+
+wg_logger = logging.getLogger("WG")
 
 
 class WargrooveClientCommandProcessor(ClientCommandProcessor):
@@ -33,14 +39,12 @@ class WargrooveClientCommandProcessor(ClientCommandProcessor):
         else:
             if self.ctx.can_choose_commander:
                 commanders = self.ctx.get_commanders()
-                logger.info('Unlocked commanders: ' +
-                            ', '.join((commander.name for commander, unlocked in commanders if unlocked))
-                            )
-                logger.info('Locked commanders: ' +
-                            ', '.join((commander.name for commander, unlocked in commanders if not unlocked))
-                            )
+                wg_logger.info('Unlocked commanders: ' +
+                               ', '.join((commander.name for commander, unlocked in commanders if unlocked)))
+                wg_logger.info('Locked commanders: ' +
+                               ', '.join((commander.name for commander, unlocked in commanders if not unlocked)))
             else:
-                logger.error('Cannot set commanders in this game mode.')
+                wg_logger.error('Cannot set commanders in this game mode.')
 
 
 class WargrooveContext(CommonContext):
@@ -48,8 +52,19 @@ class WargrooveContext(CommonContext):
     game = "Wargroove"
     items_handling = 0b111  # full remote
     current_commander: CommanderData = faction_table["Starter"][0]
-    can_choose_commander: bool
+    can_choose_commander: bool = False
+    commander_defense_boost_multiplier: int = 0
+    income_boost_multiplier: int = 0
     starting_groove_multiplier: float
+    faction_item_ids = {
+        'Starter': 0,
+        'Cherrystone': 52025,
+        'Felheim': 52026,
+        'Floran': 52027,
+        'Heavensong': 52028,
+        'Requiem': 52029,
+        'Outlaw': 52030
+    }
 
     def __init__(self, server_address, password):
         super(WargrooveContext, self).__init__(server_address, password)
@@ -108,13 +123,17 @@ class WargrooveContext(CommonContext):
                 slot_data = args["slot_data"]
                 json.dump(args["slot_data"], f)
                 self.can_choose_commander = slot_data["can_choose_commander"]
+                print('can choose commander:', self.can_choose_commander)
                 self.starting_groove_multiplier = slot_data["starting_groove_multiplier"]
+                self.income_boost_multiplier = slot_data["income_boost"]
+                self.commander_defense_boost_multiplier = slot_data["commander_defense_boost"]
                 f.close()
             for ss in self.checked_locations:
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
             self.update_commander_data()
+            self.ui.update_tracker()
 
             random.seed(self.seed_name + str(self.slot))
             # Our indexes start at 1 and we have 23 levels
@@ -168,6 +187,7 @@ class WargrooveContext(CommonContext):
                                 self.player_names[network_item.player])
                         f.close()
                 self.update_commander_data()
+                self.ui.update_tracker()
 
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:
@@ -178,15 +198,128 @@ class WargrooveContext(CommonContext):
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
-        from kvui import GameManager
+        from kvui import GameManager, HoverBehavior, ServerToolTip
+        from kivy.uix.tabbedpanel import TabbedPanelItem
+        from kivy.lang import Builder
+        from kivy.uix.button import Button
+        from kivy.uix.togglebutton import ToggleButton
+        from kivy.uix.boxlayout import BoxLayout
+        from kivy.uix.gridlayout import GridLayout
+        from kivy.uix.image import AsyncImage, Image
+        from kivy.uix.stacklayout import StackLayout
+        from kivy.uix.label import Label
+        from kivy.properties import ColorProperty
+        from kivy.uix.image import Image
+        import pkgutil
+
+        class TrackerLayout(BoxLayout):
+            pass
+
+        class CommanderSelect(BoxLayout):
+            pass
+
+        class CommanderButton(ToggleButton):
+            pass
+
+        class FactionBox(BoxLayout):
+            pass
+
+        class CommanderGroup(BoxLayout):
+            pass
+
+        class ItemTracker(BoxLayout):
+            pass
+
+        class ItemLabel(Label):
+            pass
 
         class WargrooveManager(GameManager):
             logging_pairs = [
-                ("Client", "Archipelago")
+                ("Client", "Archipelago"),
+                ("WG", "WG Console"),
             ]
             base_title = "Archipelago Wargroove Client"
+            ctx: WargrooveContext
+            unit_tracker: ItemTracker
+            trigger_tracker: BoxLayout
+            boost_tracker: BoxLayout
+            commander_buttons: Dict[int, List[CommanderButton]]
+            tracker_items = {
+                "Swordsman": ItemData(None, "Unit", False),
+                "Dog": ItemData(None, "Unit", False),
+                **item_table
+            }
+
+            def build(self):
+                container = super().build()
+                panel = TabbedPanelItem(text="Wargroove")
+                panel.content = self.build_tracker()
+                self.tabs.add_widget(panel)
+                return container
+
+            def build_tracker(self) -> TrackerLayout:
+                try:
+                    tracker = TrackerLayout(orientation="horizontal")
+                    commander_select = CommanderSelect(orientation="vertical")
+                    self.commander_buttons = {}
+
+                    for faction, commanders in faction_table.items():
+                        faction_box = FactionBox(size_hint=(None, None), width=100 * len(commanders), height=70)
+                        commander_group = CommanderGroup()
+                        commander_buttons = []
+                        for commander in commanders:
+                            commander_button = CommanderButton(text=commander.name, group="commanders")
+                            if faction == "Starter":
+                                commander_button.disabled = False
+                            commander_button.bind(on_press=lambda instance: self.ctx.set_commander(instance.text))
+                            commander_buttons.append(commander_button)
+                            commander_group.add_widget(commander_button)
+                        self.commander_buttons[faction] = commander_buttons
+                        faction_box.add_widget(Label(text=faction, size_hint_x=None, pos_hint={'left': 1}, size_hint_y=None, height=10))
+                        faction_box.add_widget(commander_group)
+                        commander_select.add_widget(faction_box)
+                    item_tracker = ItemTracker(padding=[0,20])
+                    self.unit_tracker = BoxLayout(orientation="vertical")
+                    other_tracker = BoxLayout(orientation="vertical")
+                    self.trigger_tracker = BoxLayout(orientation="vertical")
+                    self.boost_tracker = BoxLayout(orientation="vertical")
+                    other_tracker.add_widget(self.trigger_tracker)
+                    other_tracker.add_widget(self.boost_tracker)
+                    item_tracker.add_widget(self.unit_tracker)
+                    item_tracker.add_widget(other_tracker)
+                    tracker.add_widget(commander_select)
+                    tracker.add_widget(item_tracker)
+                    self.update_tracker()
+                    return tracker
+                except Exception as e:
+                    print(e)
+
+            def update_tracker(self):
+                received_ids = [item.item for item in self.ctx.items_received]
+                for faction, item_id in self.ctx.faction_item_ids.items():
+                    for commander_button in self.commander_buttons[faction]:
+                        commander_button.disabled = not (faction == "Starter" or item_id in received_ids)
+                self.unit_tracker.clear_widgets()
+                self.trigger_tracker.clear_widgets()
+                for name, item in self.tracker_items.items():
+                    if item.type in ("Unit", "Trigger"):
+                        status_color = (1, 1, 1, 1) if item.code is None or item.code in received_ids else (0.6, 0.2, 0.2, 1)
+                        label = ItemLabel(text=name, color=status_color)
+                        if item.type == "Unit":
+                            self.unit_tracker.add_widget(label)
+                        else:
+                            self.trigger_tracker.add_widget(label)
+                self.boost_tracker.clear_widgets()
+                extra_income = received_ids.count(52023) * self.ctx.income_boost_multiplier
+                extra_defense = received_ids.count(52024) * self.ctx.commander_defense_boost_multiplier
+                income_boost = ItemLabel(text="Extra Income: " + str(extra_income))
+                defense_boost = ItemLabel(text="Comm Defense: " + str(100 + extra_defense))
+                self.boost_tracker.add_widget(income_boost)
+                self.boost_tracker.add_widget(defense_boost)
 
         self.ui = WargrooveManager(self)
+        data = pkgutil.get_data(WargrooveWorld.__module__, "Wargroove.kv").decode()
+        Builder.load_string(data)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     def update_commander_data(self):
@@ -211,11 +344,13 @@ class WargrooveContext(CommonContext):
         filename = 'commander.json'
         with open(os.path.join(self.game_communication_path, filename), 'w') as f:
             json.dump(data, f)
+        if self.ui:
+            self.ui.update_tracker()
 
     def set_commander(self, commander_name: str) -> bool:
         """Sets the current commander to the given one, if possible"""
         if not self.can_choose_commander:
-            logger.error("Cannot set commanders in this game mode.")
+            wg_logger.error("Cannot set commanders in this game mode.")
             return
         match_name = commander_name.lower()
         for commander, unlocked in self.get_commanders():
@@ -223,22 +358,21 @@ class WargrooveContext(CommonContext):
                 if unlocked:
                     self.current_commander = commander
                     self.syncing = True
-                    logger.info(f"Commander set to {commander.name}.")
+                    wg_logger.info(f"Commander set to {commander.name}.")
                     self.update_commander_data()
                     return True
                 else:
-                    logger.error(f"Commander {commander.name} has not been unlocked.")
+                    wg_logger.error(f"Commander {commander.name} has not been unlocked.")
                     return False
         else:
-            logger.error(f"{commander_name} is not a recognized Wargroove commander.")
+            wg_logger.error(f"{commander_name} is not a recognized Wargroove commander.")
 
     def get_commanders(self) -> List[Tuple[CommanderData, bool]]:
         """Gets a list of commanders with their unlocked status"""
-        received_item_names = (self.item_names[network_item.item] for network_item in self.items_received)
-        received_factions = {item_name[:-11] for item_name in received_item_names if item_name.endswith(' Commanders')}
         commanders = []
+        received_ids = [item.item for item in self.items_received]
         for faction in faction_table.keys():
-            unlocked = faction == 'Starter' or str(faction) in received_factions
+            unlocked = faction == 'Starter' or self.faction_item_ids[faction] in received_ids
             commanders += [(commander, unlocked) for commander in faction_table[faction]]
         return commanders
 
