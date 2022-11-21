@@ -17,7 +17,7 @@ from Launcher import components, icon_paths
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 import subprocess
 import pkg_resources
-requirement = 'cx-Freeze>=6.11'
+requirement = 'cx-Freeze>=6.13.1'
 try:
     pkg_resources.require(requirement)
     import cx_Freeze
@@ -289,6 +289,7 @@ tmp="${{exe#*/}}"
 if [ ! "${{#tmp}}" -lt "${{#exe}}" ]; then
     exe="{default_exe.parent}/$exe"
 fi
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$APPDIR/{default_exe.parent}/lib"
 $APPDIR/$exe "$@"
 """)
         launcher_filename.chmod(0o755)
