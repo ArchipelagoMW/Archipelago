@@ -947,8 +947,8 @@ Mountain Bottom Floor (Mountain Bottom Floor) - Mountain Bottom Floor Rock - 0x1
 158445 - 0x01983 (Final Room Entry Left) - True - Shapers & Stars
 158446 - 0x01987 (Final Room Entry Right) - True - Colored Squares & Dots
 Door - 0x0C141 (Final Room Entry) - 0x01983 & 0x01987
-159313 - 0x09D5D (Yellow Bridge EP) - 0x09E86 - True
-159314 - 0x09D5E (Blue Bridge EP) - 0x09ED8 - True
+159313 - 0x09D5D (Yellow Bridge EP) - 0x09E86 & 0x09ED8 - True
+159314 - 0x09D5E (Blue Bridge EP) - 0x09E86 & 0x09ED8 - True
 
 Mountain Pink Bridge EP (Mountain Floor 2):
 159312 - 0x09D63 (Pink Bridge EP) - 0x09E39 - True
