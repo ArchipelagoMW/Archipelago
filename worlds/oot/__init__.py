@@ -106,9 +106,9 @@ class OOTWorld(World):
     remote_start_inventory: bool = False
     web = OOTWeb()
 
-    data_version = 2
+    data_version = 3
 
-    required_client_version = (0, 3, 2)
+    required_client_version = (0, 3, 7)
 
     item_name_groups = {
         # internal groups

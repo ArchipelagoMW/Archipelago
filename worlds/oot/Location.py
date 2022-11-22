@@ -2,8 +2,22 @@ from .LocationList import location_table
 from BaseClasses import Location
 
 location_id_offset = 67000
-location_name_to_id = {name: (location_id_offset + index) for (index, name) in enumerate(location_table) 
-    if location_table[name][0] not in ['Boss', 'Event', 'Drop', 'HintStone', 'Hint']}
+locnames_pre_70 = {
+    "Gift from Sages",
+    "ZR Frogs Zeldas Lullaby",
+    "ZR Frogs Eponas Song",
+    "ZR Frogs Sarias Song",
+    "ZR Frogs Suns Song",
+    "ZR Frogs Song of Time",
+}
+loctypes_70 = {'Beehive', 'Pot', 'FlyingPot', 'Crate', 'SmallCrate', 'RupeeTower', 'Freestanding', 'ActorOverride'}
+new_name_order = sorted(location_table.keys(),
+    key=lambda name: 2 if location_table[name][0] in loctypes_70
+                else 1 if name in locnames_pre_70
+                else 0)
+
+location_name_to_id = {name: (location_id_offset + index) for (index, name) in enumerate(new_name_order) 
+    if location_table[name][0] not in {'Boss', 'Event', 'Drop', 'HintStone', 'Hint'}}
 
 class OOTLocation(Location): 
     game: str = 'Ocarina of Time'

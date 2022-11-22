@@ -306,6 +306,18 @@ item_table = {
                                                 'item_id': 0x65,
                                             }),
 
+    # add these after the songs to avoid disrupting datapackage
+    'Small Key Ring (Forest Temple)':                  ('SmallKey', True,  0xCB, {'alias': ('Small Key (Forest Temple)', 10), 'progressive': float('Inf')}),
+    'Small Key Ring (Fire Temple)':                    ('SmallKey', True,  0xCC, {'alias': ('Small Key (Fire Temple)', 10), 'progressive': float('Inf')}),
+    'Small Key Ring (Water Temple)':                   ('SmallKey', True,  0xCD, {'alias': ('Small Key (Water Temple)', 10), 'progressive': float('Inf')}),
+    'Small Key Ring (Spirit Temple)':                  ('SmallKey', True,  0xCE, {'alias': ('Small Key (Spirit Temple)', 10), 'progressive': float('Inf')}),
+    'Small Key Ring (Shadow Temple)':                  ('SmallKey', True,  0xCF, {'alias': ('Small Key (Shadow Temple)', 10), 'progressive': float('Inf')}),
+    'Small Key Ring (Bottom of the Well)':             ('SmallKey', True,  0xD0, {'alias': ('Small Key (Bottom of the Well)', 10), 'progressive': float('Inf')}),
+    'Small Key Ring (Gerudo Training Ground)':         ('SmallKey', True,  0xD1, {'alias': ('Small Key (Gerudo Training Ground)', 10), 'progressive': float('Inf')}),
+    'Small Key Ring (Thieves Hideout)':         ('HideoutSmallKey', True,  0xD2, {'alias': ('Small Key (Thieves Hideout)', 10), 'progressive': float('Inf')}),
+    'Small Key Ring (Ganons Castle)':                  ('SmallKey', True,  0xD3, {'alias': ('Small Key (Ganons Castle)', 10), 'progressive': float('Inf')}),
+
+
     'Buy Deku Nut (5)':                 ('Shop',     True,  0x00, {'object': 0x00BB, 'price': 15}),
     'Buy Arrows (30)':                  ('Shop',     False, 0x01, {'object': 0x00D8, 'price': 60}),
     'Buy Arrows (50)':                  ('Shop',     False, 0x02, {'object': 0x00D8, 'price': 90}),
