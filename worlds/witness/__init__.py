@@ -66,7 +66,7 @@ class WitnessWorld(World):
             'log_ids_to_hints': self.log_ids_to_hints,
             'progressive_item_lists': self.items.MULTI_LISTS_BY_CODE,
             'obelisk_side_id_to_EPs': self.static_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
-            'precompleted_puzzles': self.player_logic.PRECOMPLETED_LOCATIONS
+            'precompleted_puzzles': {int(h, 16) for h in self.player_logic.PRECOMPLETED_LOCATIONS}
         }
 
     def generate_early(self):

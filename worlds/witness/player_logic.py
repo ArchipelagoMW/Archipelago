@@ -244,11 +244,6 @@ class WitnessPlayerLogic:
         if is_option_enabled(world, player, "shuffle_symbols") or "shuffle_symbols" not in the_witness_options.keys():
             adjustment_linesets_in_order.append(get_symbol_shuffle_list())
 
-        if get_option_value(world, player, "shuffle_EPs") == 1:
-            adjustment_linesets_in_order.append(get_ep_all_individual())
-        elif get_option_value(world, player, "shuffle_EPs") == 2:
-            adjustment_linesets_in_order.append(get_ep_obelisks())
-
         if get_option_value(world, player, "EP_difficulty") == 0:
             adjustment_linesets_in_order.append(get_ep_easy())
         elif get_option_value((world, player, "EP_difficulty") == 1):
@@ -326,10 +321,16 @@ class WitnessPlayerLogic:
         """
         Makes a pair of an event panel and its event item
         """
-        name = self.REFERENCE_LOGIC.CHECKS_BY_HEX[panel]["checkName"] + " Solved"
+        name = StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] + " Solved"
         if panel not in self.EVENT_ITEM_NAMES:
-            warning("Panel \"" + name + "\" does not have an associated event name.")
-            self.EVENT_ITEM_NAMES[panel] = name + " Event"
+            if StaticWitnessLogic.CHECKS_BY_HEX[panel]["panelType"] == "EP":
+                obelisk = StaticWitnessLogic.CHECKS_BY_HEX[StaticWitnessLogic.EP_TO_OBELISK_SIDE[panel]]["checkName"]
+
+                self.EVENT_ITEM_NAMES[panel] = obelisk + " - " + StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"]
+
+            else:
+                warning("Panel \"" + name + "\" does not have an associated event name.")
+                self.EVENT_ITEM_NAMES[panel] = name + " Event"
         pair = (name, self.EVENT_ITEM_NAMES[panel])
         return pair
 

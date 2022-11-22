@@ -40,9 +40,11 @@ class StaticWitnessLogicObj:
 
                 required_panel_lambda = line_split.pop(0)
 
+                full_check_name = current_region["shortName"] + " " + check_name
+
                 if location_id == "Door" or location_id == "Laser":
                     self.CHECKS_BY_HEX[check_hex] = {
-                        "checkName": current_region["shortName"] + " " + check_name,
+                        "checkName": full_check_name,
                         "checkHex": check_hex,
                         "region": current_region,
                         "id": None,
@@ -76,6 +78,7 @@ class StaticWitnessLogicObj:
                     location_type = "Laser"
                 elif "Obelisk Side" in check_name:
                     location_type = "Obelisk Side"
+                    full_check_name = check_name
                 elif "EP" in check_name:
                     location_type = "EP"
                 else:
@@ -92,10 +95,17 @@ class StaticWitnessLogicObj:
                 }
 
                 if location_type == "Obelisk Side":
-                    self.OBELISK_SIDE_ID_TO_EP_HEXES[int(location_id)] = [required_panels][0]
+                    eps = set(list(required_panels)[0])
+                    eps -= {"Theater to Tunnels"}
+
+                    eps_ints = {int(h, 16) for h in eps}
+
+                    self.OBELISK_SIDE_ID_TO_EP_HEXES[int(check_hex, 16)] = eps_ints
+                    for ep_hex in eps:
+                        self.EP_TO_OBELISK_SIDE[ep_hex] = check_hex
 
                 self.CHECKS_BY_HEX[check_hex] = {
-                    "checkName": current_region["shortName"] + " " + check_name,
+                    "checkName": full_check_name,
                     "checkHex": check_hex,
                     "region": current_region,
                     "id": int(location_id),
@@ -117,6 +127,8 @@ class StaticWitnessLogicObj:
         self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX = dict()
 
         self.OBELISK_SIDE_ID_TO_EP_HEXES = dict()
+
+        self.EP_TO_OBELISK_SIDE = dict()
 
         self.read_logic_file(file_path)
 
@@ -140,6 +152,8 @@ class StaticWitnessLogic:
     CHECKS_BY_HEX = dict()
     CHECKS_BY_NAME = dict()
     STATIC_DEPENDENT_REQUIREMENTS_BY_HEX = dict()
+
+    EP_TO_OBELISK_SIDE = dict()
 
     def parse_items(self):
         """
@@ -209,3 +223,4 @@ class StaticWitnessLogic:
 
         self.OBELISK_SIDE_ID_TO_EP_HEXES.update(self.sigma_normal.OBELISK_SIDE_ID_TO_EP_HEXES)
 
+        self.EP_TO_OBELISK_SIDE.update(self.sigma_normal.EP_TO_OBELISK_SIDE)

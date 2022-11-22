@@ -509,7 +509,7 @@ Town Wooden Rooftop (Town):
 
 Town Church (Town):
 158227 - 0x28A69 (Church Lattice) - 0x03BB0 - True
-159552 - 0x03BD1 (Black Line Church EP) - True - True
+159553 - 0x03BD1 (Black Line Church EP) - True - True
 
 RGB House (Town) - RGB Room - 0x2897B:
 158242 - 0x034E4 (Sound Room Left) - True - True
