@@ -413,11 +413,11 @@ Door - 0x04F8F (Tower Shortcut) - 0x0361B
 158704 - 0x0360E (Laser Panel Hedges) - 0x01A0F & 0x019E7 & 0x019DC & 0x00139 - True
 158705 - 0x03317 (Laser Panel Pressure Plates) - 0x01D3F - Shapers & Black/White Squares & Colored Squares & Stars & Stars + Same Colored Symbol & Dots
 Laser - 0x014BB (Laser) - 0x0360E | 0x03317
-159240 - 0x018B6 (Pressure Plates 1 EP) - 0x033EA - True
-159241 - 0x033BE (Pressure Plates 2 EP) - 0x01BE9 - True
-159242 - 0x033BF (Pressure Plates 3 EP) - 0x01CD3 - True
-159243 - 0x033DD (Pressure Plates 4 First EP) - 0x01D3F - True
-159242 - 0x033E5 (Pressure Plates 4 Second EP) - 0x01D3F - True
+159240 - 0x033BE (Pressure Plates 1 EP) - 0x033EA - True
+159241 - 0x033BF (Pressure Plates 2 EP) - 0x01BE9 - True
+159242 - 0x033DD (Pressure Plates 3 EP) - 0x01CD3 - True
+159243 - 0x033E5 (Pressure Plates 4 First EP) - 0x01D3F - True
+159242 - 0x018B6 (Pressure Plates 4 Second EP) - 0x01D3F - True
 159250 - 0x28AE9 (Path EP) - True - True
 159251 - 0x3348F (Hedges EP) - True - True
 
