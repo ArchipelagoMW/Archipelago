@@ -3,7 +3,7 @@ from Options import Choice, Option, Range
 
 
 class IncomeBoost(Range):
-    """How much extra income the player gets per turn per boost received (There are 7 total boosts)."""
+    """How much extra income the player gets per turn per boost received."""
     display_name = "Income Boost"
     range_start = 0
     range_end = 100
@@ -11,7 +11,7 @@ class IncomeBoost(Range):
 
 
 class CommanderDefenseBoost(Range):
-    """How much extra defense the player's commander gets per boost received (There are 7 total boosts)."""
+    """How much extra defense the player's commander gets per boost received."""
     display_name = "Commander Defense Boost"
     range_start = 0
     range_end = 8

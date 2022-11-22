@@ -56,7 +56,8 @@ def set_rules(world: MultiWorld, player: int):
              lambda state: state._wargroove_has_item(player, 'Mage'))
     set_rule(world.get_location('Deep Thicket: Victory', player),
              lambda state: state._wargroove_has_item(player, 'Mage'))
-    set_region_exit_rules(world.get_region('Deep Thicket', player), [world.get_location('Deep Thicket: Victory', player)])
+    set_region_exit_rules(world.get_region('Deep Thicket', player),
+                          [world.get_location('Deep Thicket: Victory', player)])
 
     set_rule(world.get_location('Corrupted Inlet: Victory', player),
              lambda state: state._wargroove_has_item(player, 'Barge') or
@@ -67,9 +68,9 @@ def set_rules(world: MultiWorld, player: int):
 
     # Levels 3BA-3BC
     set_rule(world.get_location('Mage Mayhem: Caesar', player),
-             lambda state: state._wargroove_has_item(player, 'Harpy'))
+             lambda state: state._wargroove_has_item(player, 'Harpy') or state._wargroove_has_item(player, 'Dragon'))
     set_rule(world.get_location('Mage Mayhem: Victory', player),
-             lambda state: state._wargroove_has_item(player, 'Harpy'))
+             lambda state: state._wargroove_has_item(player, 'Harpy') or state._wargroove_has_item(player, 'Dragon'))
     set_region_exit_rules(world.get_region('Mage Mayhem', player), [world.get_location('Mage Mayhem: Victory', player)])
 
     set_rule(world.get_location('Endless Knight: Victory', player),
@@ -84,13 +85,12 @@ def set_rules(world: MultiWorld, player: int):
              lambda state: state._wargroove_has_item(player, 'Spearman'))
     set_region_exit_rules(world.get_region('Ambushed in the Middle', player),
                           [world.get_location('Ambushed in the Middle: Victory (Blue)', player),
-                        world.get_location('Ambushed in the Middle: Victory (Green)', player)])
+                           world.get_location('Ambushed in the Middle: Victory (Green)', player)])
 
     # Levels 3CA-3CC
     set_rule(world.get_location('The Churning Sea: Victory', player),
-             lambda state: state._wargroove_has_item(player, 'Merfolk') and
-                           state._wargroove_has_item(player, 'Turtle') and
-                           state._wargroove_has_item(player, 'Harpoon Ship'))
+             lambda state: (state._wargroove_has_item(player, 'Merfolk') or state._wargroove_has_item(player, 'Turtle'))
+                           and state._wargroove_has_item(player, 'Harpoon Ship'))
     set_region_exit_rules(world.get_region('The Churning Sea', player),
                           [world.get_location('The Churning Sea: Victory', player)])
 
@@ -103,9 +103,9 @@ def set_rules(world: MultiWorld, player: int):
                           [world.get_location('Frigid Archery: Victory', player)])
 
     set_rule(world.get_location('Archery Lessons: Chest', player),
-             lambda state: state._wargroove_has_item(player, 'Knight'))
+             lambda state: state._wargroove_has_item_and_region(player, 'Knight', 'Southern Walls'))
     set_rule(world.get_location('Archery Lessons: Victory', player),
-             lambda state: state._wargroove_has_item(player, 'Knight'))
+             lambda state: state._wargroove_has_item_and_region(player, 'Knight', 'Southern Walls'))
     set_region_exit_rules(world.get_region('Archery Lessons', player),
                           [world.get_location('Archery Lessons: Victory', player)])
 
@@ -130,6 +130,9 @@ def set_rules(world: MultiWorld, player: int):
              lambda state: state._wargroove_has_item_and_region(player, 'Knight', 'Doggo Mountain'))
     set_rule(world.get_location('Tenri\'s Fall: Victory', player),
              lambda state: state._wargroove_has_item_and_region(player, 'Mage', 'Tenri\'s Fall'))
+    set_rule(world.get_location('Foolish Canal: Victory', player),
+             lambda state: state._wargroove_has_item_and_region(player, 'Mage', 'Foolish Canal') and
+                           state._wargroove_has_item(player, 'Spearman'))
 
     # Levels 4CA-4CC
     set_rule(world.get_location('Master of the Lake: Victory', player),

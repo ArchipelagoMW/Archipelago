@@ -22,7 +22,7 @@ item_table: Dict[str, ItemData] = {
     'Golem': ItemData(52006, 'Unit', False),
     'Harpy': ItemData(52007, 'Unit', True),
     'Witch': ItemData(52008, 'Unit', False),
-    'Dragon': ItemData(52009, 'Unit', False),
+    'Dragon': ItemData(52009, 'Unit', True),
     'Balloon': ItemData(52010, 'Unit', False),
     'Barge': ItemData(52011, 'Unit', True),
     'Merfolk': ItemData(52012, 'Unit', True),

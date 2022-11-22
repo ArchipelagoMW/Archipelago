@@ -46,11 +46,11 @@ def create_regions(world, player: int):
         create_region(world, player, 'Mage Mayhem', [
             'Mage Mayhem: Caesar',
             'Mage Mayhem: Victory',
-        ], ['Open Season']),
+        ], ['Open Season', 'Foolish Canal: Mage Mayhem Entrance']),
 
         create_region(world, player, 'Endless Knight', [
             'Endless Knight: Victory',
-        ], ['Doggo Mountain']),
+        ], ['Doggo Mountain', 'Foolish Canal: Endless Knight Entrance']),
 
         create_region(world, player, 'Ambushed in the Middle', [
             'Ambushed in the Middle: Victory (Blue)',
@@ -60,7 +60,7 @@ def create_regions(world, player: int):
         # Levels 3CA-3CC
         create_region(world, player, 'The Churning Sea', [
             'The Churning Sea: Victory',
-        ], ['Master of the Lake']),
+        ], ['Rebel Village']),
 
         create_region(world, player, 'Frigid Archery', [
             'Frigid Archery: Light the Torch',
@@ -70,7 +70,7 @@ def create_regions(world, player: int):
         create_region(world, player, 'Archery Lessons', [
             'Archery Lessons: Chest',
             'Archery Lessons: Victory',
-        ], ['Rebel Village']),
+        ], ['Master of the Lake']),
 
         # Levels 4AA-4AC
         create_region(world, player, 'Surrounded', [
@@ -86,7 +86,7 @@ def create_regions(world, player: int):
             'Robbed: Victory',
         ]),
 
-        # Levels 4BA-4BC
+        # Levels 4BAA-4BCA
         create_region(world, player, 'Open Season', [
             'Open Season: Caesar',
             'Open Season: Victory',
@@ -99,6 +99,11 @@ def create_regions(world, player: int):
 
         create_region(world, player, 'Tenri\'s Fall', [
             'Tenri\'s Fall: Victory',
+        ]),
+
+        #  Level 4BAB
+        create_region(world, player, 'Foolish Canal', [
+            'Foolish Canal: Victory',
         ]),
 
         # Levels 4CA-4CC
@@ -151,6 +156,11 @@ def create_regions(world, player: int):
     world.get_entrance('Doggo Mountain', player).connect(world.get_region('Doggo Mountain', player))
 
     world.get_entrance('Tenri\'s Fall', player).connect(world.get_region('Tenri\'s Fall', player))
+
+    world.get_entrance('Foolish Canal: Mage Mayhem Entrance', player).connect(world.get_region('Foolish Canal', player))
+    world.get_entrance('Foolish Canal: Endless Knight Entrance', player).connect(
+        world.get_region('Foolish Canal', player)
+    )
 
     world.get_entrance('Master of the Lake', player).connect(world.get_region('Master of the Lake', player))
 

@@ -36,5 +36,6 @@ location_table = {
     'A Ballista\'s Revenge: Victory': 53035,
     'Rebel Village: Victory (Pink)': 53036,
     'Rebel Village: Victory (Red)': 53037,
+    'Foolish Canal: Victory': 53038,
     'Wargroove Finale: Victory': None,
 }
