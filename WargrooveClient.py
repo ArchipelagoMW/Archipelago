@@ -65,6 +65,10 @@ class WargrooveContext(CommonContext):
         'Requiem': 52029,
         'Outlaw': 52030
     }
+    buff_item_ids = {
+        'Income Boost': 52023,
+        'Commander Defense Boost': 52024,
+    }
 
     def __init__(self, server_address, password):
         super(WargrooveContext, self).__init__(server_address, password)
@@ -147,47 +151,42 @@ class WargrooveContext(CommonContext):
             self.seed_name = args["seed_name"]
 
         if cmd in {"ReceivedItems"}:
-            start_index = args["index"]
-            if start_index != len(self.items_received):
-                for item in args['items']:
-                    network_item = NetworkItem(*item)
-                    filename = f"AP_{str(network_item.item)}.item"
-                    path = os.path.join(self.game_communication_path, filename)
+            received_ids = [item.item for item in self.items_received]
+            for network_item in self.items_received:
+                filename = f"AP_{str(network_item.item)}.item"
+                path = os.path.join(self.game_communication_path, filename)
 
-                    # Newly-obtained items
-                    if not os.path.isfile(path):
-                        open(path, 'w').close()
-                        # Announcing commander unlocks
-                        item_name = self.item_names[network_item.item]
-                        if item_name in faction_table.keys():
-                            for commander in faction_table[item_name]:
-                                logger.info(f"{commander.name} has been unlocked!")
+                # Newly-obtained items
+                if not os.path.isfile(path):
+                    open(path, 'w').close()
+                    # Announcing commander unlocks
+                    item_name = self.item_names[network_item.item]
+                    if item_name in faction_table.keys():
+                        for commander in faction_table[item_name]:
+                            logger.info(f"{commander.name} has been unlocked!")
 
-                    with open(path, 'r+') as f:
-                        line = f.readline()
-                        if line is None or line == "" or not line.isnumeric():
-                            f.truncate(0)
-                            f.seek(0)
-                            f.write("1")
-                        else:
-                            itemCount = int(line) + 1
-                            f.truncate(0)
-                            f.seek(0)
-                            f.write(f"{itemCount}")
-                        f.close()
+                with open(path, 'w') as f:
+                    item_count = received_ids.count(network_item.item)
+                    if self.buff_item_ids["Income Boost"] == network_item.item:
+                        f.write(f"{item_count * self.income_boost_multiplier}")
+                    elif self.buff_item_ids["Commander Defense Boost"] == network_item.item:
+                        f.write(f"{item_count * self.commander_defense_boost_multiplier}")
+                    else:
+                        f.write(f"{item_count}")
+                    f.close()
 
-                    print_filename = f"AP_{str(network_item.item)}.item.print"
-                    print_path = os.path.join(self.game_communication_path, print_filename)
-                    if not os.path.isfile(print_path):
-                        open(print_path, 'w').close()
+                print_filename = f"AP_{str(network_item.item)}.item.print"
+                print_path = os.path.join(self.game_communication_path, print_filename)
+                if not os.path.isfile(print_path):
+                    open(print_path, 'w').close()
                     with open(print_path, 'w') as f:
                         f.write("Received " +
                                 self.item_names[network_item.item] +
                                 " from " +
                                 self.player_names[network_item.player])
                         f.close()
-                self.update_commander_data()
-                self.ui.update_tracker()
+            self.update_commander_data()
+            self.ui.update_tracker()
 
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:

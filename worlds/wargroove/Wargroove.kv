@@ -1,20 +1,19 @@
 <FactionBox>:
     orientation: 'vertical'
     padding: [10,5,10,5]
+    size_hint_y: 0.14
 
 <CommanderGroup>:
     orientation: 'horizontal'
 
 <CommanderButton>:
     text_size: self.size
-    size_hint: (None, None)
-    height: 40
+    size_hint: (None, 0.8)
     width: 100
     markup: True
     halign: 'center'
     valign: 'middle'
     padding_x: 5
-    markup: True
     outline_width: 1
     disabled: True
     on_release: setattr(self, 'state', 'down')
