@@ -6,7 +6,7 @@ and connects them with the proper requirements
 from BaseClasses import MultiWorld, Entrance
 from .static_logic import StaticWitnessLogic
 from .Options import get_option_value
-from .locations import WitnessPlayerLocations
+from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .player_logic import WitnessPlayerLogic
 
 
@@ -74,8 +74,8 @@ class WitnessRegions:
                 if reference_logic.CHECKS_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
             ]
             locations_for_this_region += [
-                reference_logic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" for panel in region["panels"]
-                if reference_logic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" in self.locat.EVENT_LOCATION_TABLE
+                StaticWitnessLocations.get_event_name(panel) for panel in region["panels"]
+                if StaticWitnessLocations.get_event_name(panel) in self.locat.EVENT_LOCATION_TABLE
             ]
 
             all_locations = all_locations | set(locations_for_this_region)

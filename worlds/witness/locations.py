@@ -385,10 +385,11 @@ class StaticWitnessLocations:
     def get_event_name(panel_hex):
         """
         Returns the event name of any given panel.
-        Currently this is always "Panelname Solved"
         """
 
-        return StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]["checkName"] + " Solved"
+        action = " Opened" if StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]["panelType"] == "Door" else " Solved"
+
+        return StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]["checkName"] + action
 
     def __init__(self):
         all_loc_to_id = {

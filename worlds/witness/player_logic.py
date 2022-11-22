@@ -321,7 +321,9 @@ class WitnessPlayerLogic:
         """
         Makes a pair of an event panel and its event item
         """
-        name = StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] + " Solved"
+        action = " Opened" if StaticWitnessLogic.CHECKS_BY_HEX[panel]["panelType"] == "Door" else " Solved"
+
+        name = StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] + action
         if panel not in self.EVENT_ITEM_NAMES:
             if StaticWitnessLogic.CHECKS_BY_HEX[panel]["panelType"] == "EP":
                 obelisk = StaticWitnessLogic.CHECKS_BY_HEX[StaticWitnessLogic.EP_TO_OBELISK_SIDE[panel]]["checkName"]
@@ -426,6 +428,7 @@ class WitnessPlayerLogic:
             "0x17CDF": "All Boat Panels Turn On",
             "0x09DB8": "All Boat Panels Turn On",
             "0x17C95": "All Boat Panels Turn On",
+            "0x0A054": "Couch EP solvable",
             "0x03BB0": "Town Church Lattice Vision From Outside",
             "0x28AC1": "Town Wooden Rooftop Turns On",
             "0x28A69": "Town Tower 1st Door Opens",
@@ -452,6 +455,21 @@ class WitnessPlayerLogic:
             "0x03613": "Treehouse Orange Bridge 13 Turns On",
             "0x17DEC": "Treehouse Laser House Access Requirement",
             "0x03C08": "Town Church Entry Opens",
+            "0x17D02": "Windmill Blades Spinning",
+            "0x0A0C9": "Cargo Box EP completable",
+            "0x09E39": "Pink Light Bridge Extended",
+            "0x01CD3": "Pressure Plates 3 EP available",
+            "0x17CC4": "Rails EP available",
+            "0x2896A": "Bridge Underside EP available",
+            "0x00064": "First Tunnel EP visible",
+            "0x033EA": "Pressure Plates 1 EP available",
+            "0x03553": "Tutorial Video EPs availble",
+            "0x17C79": "Bunker Door EP available",
+            "0x275FF": "Mill Light EPs available",
+            "0x17E2B": "Remaining Purple Sand EPs available",
+            "0x03852": "Ramp EPs available",
+            "0x334D8": "RGB panels & EPs solvable",
+            "0x03750": "Left Garden EP available",
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {

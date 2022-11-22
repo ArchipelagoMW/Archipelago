@@ -840,7 +840,7 @@ Treehouse Green Bridge (Treehouse) - Treehouse Green Bridge Front House - 0x17E6
 158375 - 0x17E61 (Green Bridge 7) - 0x17E5F - Stars & Shapers & Rotated Shapers
 
 Treehouse Green Bridge Front House (Treehouse):
-158610 - 0x17FA9 (Green Bridge Discard) - 0x17E61 - Triangles
+158610 - 0x17FA9 (Green Bridge Discard) - True - Triangles
 
 Treehouse Green Bridge Left House (Treehouse):
 159211 - 0x220A7 (Right Orange Bridge EP) - 0x17DA2 - True
