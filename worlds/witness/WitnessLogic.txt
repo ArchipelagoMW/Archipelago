@@ -54,7 +54,7 @@ Door - 0x04CA3 (Outpost Exit) - 0x04CA4
 158600 - 0x17CFB (Discard) - True - Triangles
 
 Main Island (Main Island) - Outside Tutorial - True:
-159550 - 0x28B91 (Thundercloud EP) - 0x09F98 - True
+159550 - 0x28B91 (Thundercloud EP) - 0x09F98 & 0x012FB - True
 
 Outside Glass Factory (Glass Factory) - Main Island - True - Inside Glass Factory - 0x01A29:
 158027 - 0x01A54 (Entry Panel) - True - Symmetry
