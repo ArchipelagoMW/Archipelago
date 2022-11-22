@@ -526,8 +526,9 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
         rom.write_byte(0xADE73, 0x01)
         # Give a Special2 on activating the crystal
     elif world.draculas_condition[player] == 2:
-        rom.write_bytes(0xBBA84, [0x08, 0x0F, 0xF1, 0x8D])  # J	0x803FC634
+        rom.write_bytes(0xBBD50, [0x08, 0x0F, 0xF1, 0x8D])  # J	0x803FC634
         rom.write_bytes(0xBFC634, PatchName.boss_speical2_giver)
+        rom.write_bytes(0xBFC55C, PatchName.werebull_flag_unsetter_special2_electric_boogaloo)
         rom.write_byte(0xADE73, world.bosses_required[player].value)
     elif world.draculas_condition[player] == 3:
         rom.write_byte(0xADE73, world.special2s_required[player].value)
