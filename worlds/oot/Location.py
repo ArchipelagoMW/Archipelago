@@ -1,3 +1,4 @@
+from enum import Enum
 from .LocationList import location_table
 from BaseClasses import Location
 
@@ -19,6 +20,11 @@ new_name_order = sorted(location_table.keys(),
 location_name_to_id = {name: (location_id_offset + index) for (index, name) in enumerate(new_name_order) 
     if location_table[name][0] not in {'Boss', 'Event', 'Drop', 'HintStone', 'Hint'}}
 
+class DisableType(Enum):
+    ENABLED  = 0
+    PENDING = 1
+    DISABLED = 2
+
 class OOTLocation(Location): 
     game: str = 'Ocarina of Time'
 
@@ -35,6 +41,7 @@ class OOTLocation(Location):
         else: 
             self.filter_tags = list(filter_tags)
         self.never = False # no idea what this does
+        self.disabled = DisableType.ENABLED
 
         if type == 'Event': 
             self.event = True
