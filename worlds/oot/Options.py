@@ -741,7 +741,7 @@ class KeyRingList(OptionSet):
 dungeon_items_options: typing.Dict[str, type(Option)] = {
     "shuffle_mapcompass": ShuffleMapCompass, 
     "shuffle_smallkeys": ShuffleKeys, 
-    "shuffle_fortresskeys": ShuffleGerudoKeys, 
+    "shuffle_hideoutkeys": ShuffleGerudoKeys,
     "shuffle_bosskeys": ShuffleBossKeys,
     "enhance_map_compass": EnhanceMC,
     "shuffle_ganon_bosskey": ShuffleGanonBK,

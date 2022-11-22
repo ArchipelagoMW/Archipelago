@@ -198,7 +198,7 @@ class OOTWorld(World):
             local_types += ['Map', 'Compass']
         if self.shuffle_smallkeys != 'keysanity':
             local_types.append('SmallKey')
-        if self.shuffle_fortresskeys != 'keysanity':
+        if self.shuffle_hideoutkeys != 'keysanity':
             local_types.append('HideoutSmallKey')
         if self.shuffle_bosskeys != 'keysanity':
             local_types.append('BossKey')
@@ -667,7 +667,7 @@ class OOTWorld(World):
             any_dungeon_locations.extend(dungeon_locations)  # adds only the unfilled locations
 
         # Now fill items that can go into any dungeon. Retrieve the Gerudo Fortress keys from the pool if necessary
-        if self.shuffle_fortresskeys == 'any_dungeon':
+        if self.shuffle_hideoutkeys == 'any_dungeon':
             itempools['any_dungeon'].add('Small Key (Thieves Hideout)')
         if itempools['any_dungeon']:
             any_dungeon_itempool = [item for item in self.multiworld.itempool if item.player == self.player and item.name in itempools['any_dungeon']]
@@ -680,7 +680,7 @@ class OOTWorld(World):
                              any_dungeon_itempool, True, True)
 
         # If anything is overworld-only, fill into local non-dungeon locations
-        if self.shuffle_fortresskeys == 'overworld':
+        if self.shuffle_hideoutkeys == 'overworld':
             itempools['overworld'].add('Small Key (Thieves Hideout)')
         if itempools['overworld']:
             overworld_itempool = [item for item in self.multiworld.itempool if item.player == self.player and item.name in itempools['overworld']]
@@ -832,7 +832,7 @@ class OOTWorld(World):
                 'Compass': 'shuffle_mapcompass',
                 'SmallKey': 'shuffle_smallkeys',
                 'BossKey': 'shuffle_bosskeys',
-                'HideoutSmallKey': 'shuffle_fortresskeys',
+                'HideoutSmallKey': 'shuffle_hideoutkeys',
                 'GanonBossKey': 'shuffle_ganon_bosskey',
             }
             fill_opts = {p: getattr(multiworld.worlds[p], type_to_setting[item_type]) for p in players}
@@ -982,7 +982,7 @@ class OOTWorld(World):
                     if loc.game == "Ocarina of Time" and loc.item.code and (not loc.locked or
                         (oot_is_item_of_type(loc.item, 'Song') or
                             (oot_is_item_of_type(loc.item, 'SmallKey')         and multiworld.worlds[loc.player].shuffle_smallkeys     == 'any_dungeon') or
-                            (oot_is_item_of_type(loc.item, 'HideoutSmallKey')  and multiworld.worlds[loc.player].shuffle_fortresskeys  == 'any_dungeon') or
+                            (oot_is_item_of_type(loc.item, 'HideoutSmallKey')  and multiworld.worlds[loc.player].shuffle_hideoutkeys  == 'any_dungeon') or
                             (oot_is_item_of_type(loc.item, 'BossKey')          and multiworld.worlds[loc.player].shuffle_bosskeys      == 'any_dungeon') or
                             (oot_is_item_of_type(loc.item, 'GanonBossKey')     and multiworld.worlds[loc.player].shuffle_ganon_bosskey == 'any_dungeon'))):
                         if loc.player in barren_hint_players:
@@ -1117,7 +1117,7 @@ class OOTWorld(World):
             return False
         if item.type == 'SmallKey' and self.shuffle_smallkeys in ['dungeon', 'vanilla']:
             return False
-        if item.type == 'HideoutSmallKey' and self.shuffle_fortresskeys == 'vanilla':
+        if item.type == 'HideoutSmallKey' and self.shuffle_hideoutkeys == 'vanilla':
             return False
         if item.type == 'BossKey' and self.shuffle_bosskeys in ['dungeon', 'vanilla']:
             return False
