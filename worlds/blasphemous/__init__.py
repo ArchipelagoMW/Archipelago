@@ -795,7 +795,7 @@ class BlasphemousWorld(World):
     
         slot_data = {
             "locations": locations,
-            "enemy_randomizer": self.multiworld.enemy_randomizer[self.player],
+            "enemy_randomizer": self.multiworld.enemy_randomizer[self.player].value,
             "seed": self.multiworld.seed
         }
     
