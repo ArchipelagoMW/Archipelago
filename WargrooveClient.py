@@ -140,8 +140,8 @@ class WargrooveContext(CommonContext):
             self.ui.update_tracker()
 
             random.seed(self.seed_name + str(self.slot))
-            # Our indexes start at 1 and we have 23 levels
-            for i in range(1, 24):
+            # Our indexes start at 1 and we have 24 levels
+            for i in range(1, 25):
                 filename = f"seed{i}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.write(str(random.randint(0, 4294967295)))
