@@ -824,7 +824,10 @@ def patch_rom(world, rom, player, active_level_dict):
 
     # Store all relevant option results in ROM
     rom.write_byte(0x01BFA0, world.goal[player].value)
-    rom.write_byte(0x01BFA1, world.bosses_required[player].value)
+    if world.goal[player].value == 0:
+        rom.write_byte(0x01BFA1, world.bosses_required[player].value)
+    else:
+        rom.write_byte(0x01BFA1, 0x7F)
     required_yoshi_eggs = max(math.floor(
         world.number_of_yoshi_eggs[player].value * (world.percentage_of_yoshi_eggs[player].value / 100.0)), 1)
     rom.write_byte(0x01BFA2, required_yoshi_eggs)

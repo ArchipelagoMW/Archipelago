@@ -254,14 +254,17 @@ def distribute_early_items(world: MultiWorld,
     """ returns new fill_locations and itempool """
     early_items_count: typing.Dict[typing.Tuple[str, int], int] = {}
     for player in world.player_ids:
-        for item, count in world.early_items[player].value.items():
-            early_items_count[(item, player)] = count
+        items = itertools.chain(world.early_items[player], world.local_early_items[player])
+        for item in items:
+            early_items_count[(item, player)] = [world.early_items[player].get(item, 0), world.local_early_items[player].get(item, 0)]
     if early_items_count:
         early_locations: typing.List[Location] = []
         early_priority_locations: typing.List[Location] = []
         loc_indexes_to_remove: typing.Set[int] = set()
+        base_state = world.state.copy()
+        base_state.sweep_for_events(locations=(loc for loc in world.get_filled_locations() if loc.address is None))
         for i, loc in enumerate(fill_locations):
-            if loc.can_reach(world.state):
+            if loc.can_reach(base_state):
                 if loc.progress_type == LocationProgressType.PRIORITY:
                     early_priority_locations.append(loc)
                 else:
@@ -271,27 +274,48 @@ def distribute_early_items(world: MultiWorld,
 
         early_prog_items: typing.List[Item] = []
         early_rest_items: typing.List[Item] = []
+        early_local_prog_items: typing.Dict[int, typing.List[Item]] = {player: [] for player in world.player_ids}
+        early_local_rest_items: typing.Dict[int, typing.List[Item]] = {player: [] for player in world.player_ids}
         item_indexes_to_remove: typing.Set[int] = set()
         for i, item in enumerate(itempool):
             if (item.name, item.player) in early_items_count:
                 if item.advancement:
-                    early_prog_items.append(item)
+                    if early_items_count[(item.name, item.player)][1]:
+                        early_local_prog_items[item.player].append(item)
+                        early_items_count[(item.name, item.player)][1] -= 1
+                    else:
+                        early_prog_items.append(item)
+                        early_items_count[(item.name, item.player)][0] -= 1
                 else:
-                    early_rest_items.append(item)
+                    if early_items_count[(item.name, item.player)][1]:
+                        early_local_rest_items[item.player].append(item)
+                        early_items_count[(item.name, item.player)][1] -= 1
+                    else:
+                        early_rest_items.append(item)
+                        early_items_count[(item.name, item.player)][0] -= 1
                 item_indexes_to_remove.add(i)
-                early_items_count[(item.name, item.player)] -= 1
-                if early_items_count[(item.name, item.player)] == 0:
+                if early_items_count[(item.name, item.player)] == [0, 0]:
                     del early_items_count[(item.name, item.player)]
                     if len(early_items_count) == 0:
                         break
         itempool = [item for i, item in enumerate(itempool) if i not in item_indexes_to_remove]
-        fill_restrictive(world, world.state, early_locations, early_rest_items, lock=True)
+        for player in world.player_ids:
+            fill_restrictive(world, base_state,
+                [loc for loc in early_locations if loc.player == player],
+                early_local_rest_items[player], lock=True)
+        early_locations = [loc for loc in early_locations if not loc.item]
+        fill_restrictive(world, base_state, early_locations, early_rest_items, lock=True)
         early_locations += early_priority_locations
-        fill_restrictive(world, world.state, early_locations, early_prog_items, lock=True)
+        for player in world.player_ids:
+            fill_restrictive(world, base_state,
+                [loc for loc in early_locations if loc.player == player],
+                early_local_prog_items[player], lock=True)
+        early_locations = [loc for loc in early_locations if not loc.item]
+        fill_restrictive(world, base_state, early_locations, early_prog_items, lock=True)
         unplaced_early_items = early_rest_items + early_prog_items
         if unplaced_early_items:
-            logging.warning(f"Ran out of early locations for early items. Failed to place \
-                            {len(unplaced_early_items)} items early.")
+            logging.warning("Ran out of early locations for early items. Failed to place "
+                            f"{len(unplaced_early_items)} items early.")
             itempool += unplaced_early_items
 
         fill_locations.extend(early_locations)
@@ -659,6 +683,17 @@ def distribute_planned(world: MultiWorld) -> None:
         else:
             warn(warning, force)
 
+    swept_state = world.state.copy()
+    swept_state.sweep_for_events()
+    reachable = frozenset(world.get_reachable_locations(swept_state))
+    early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
+    non_early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
+    for loc in world.get_unfilled_locations():
+        if loc in reachable:
+            early_locations[loc.player].append(loc.name)
+        else:  # not reachable with swept state
+            non_early_locations[loc.player].append(loc.name)
+
     # TODO: remove. Preferably by implementing key drop
     from worlds.alttp.Regions import key_drop_data
     world_name_lookup = world.world_name_lookup
@@ -674,7 +709,39 @@ def distribute_planned(world: MultiWorld) -> None:
             if 'from_pool' not in block:
                 block['from_pool'] = True
             if 'world' not in block:
-                block['world'] = False
+                target_world = False
+            else:
+                target_world = block['world']
+
+            if target_world is False or world.players == 1:  # target own world
+                worlds: typing.Set[int] = {player}
+            elif target_world is True:  # target any worlds besides own
+                worlds = set(world.player_ids) - {player}
+            elif target_world is None:  # target all worlds
+                worlds = set(world.player_ids)
+            elif type(target_world) == list:  # list of target worlds
+                worlds = set()
+                for listed_world in target_world:
+                    if listed_world not in world_name_lookup:
+                        failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
+                               block['force'])
+                        continue
+                    worlds.add(world_name_lookup[listed_world])
+            elif type(target_world) == int:  # target world by slot number
+                if target_world not in range(1, world.players + 1):
+                    failed(
+                        f"Cannot place item in world {target_world} as it is not in range of (1, {world.players})",
+                        block['force'])
+                    continue
+                worlds = {target_world}
+            else:  # target world by slot name
+                if target_world not in world_name_lookup:
+                    failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
+                           block['force'])
+                    continue
+                worlds = {world_name_lookup[target_world]}
+            block['world'] = worlds
+
             items: block_value = []
             if "items" in block:
                 items = block["items"]
@@ -711,6 +778,17 @@ def distribute_planned(world: MultiWorld) -> None:
                 for key, value in locations.items():
                     location_list += [key] * value
                 locations = location_list
+
+            if "early_locations" in locations:
+                locations.remove("early_locations")
+                for player in worlds:
+                    locations += early_locations[player]
+            if "non_early_locations" in locations:
+                locations.remove("non_early_locations")
+                for player in worlds:
+                    locations += non_early_locations[player]
+
+
             block['locations'] = locations
 
             if not block['count']:
@@ -746,38 +824,11 @@ def distribute_planned(world: MultiWorld) -> None:
     for placement in plando_blocks:
         player = placement['player']
         try:
-            target_world = placement['world']
+            worlds = placement['world']
             locations = placement['locations']
             items = placement['items']
             maxcount = placement['count']['target']
             from_pool = placement['from_pool']
-            if target_world is False or world.players == 1:  # target own world
-                worlds: typing.Set[int] = {player}
-            elif target_world is True:  # target any worlds besides own
-                worlds = set(world.player_ids) - {player}
-            elif target_world is None:  # target all worlds
-                worlds = set(world.player_ids)
-            elif type(target_world) == list:  # list of target worlds
-                worlds = set()
-                for listed_world in target_world:
-                    if listed_world not in world_name_lookup:
-                        failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
-                               placement['force'])
-                        continue
-                    worlds.add(world_name_lookup[listed_world])
-            elif type(target_world) == int:  # target world by slot number
-                if target_world not in range(1, world.players + 1):
-                    failed(
-                        f"Cannot place item in world {target_world} as it is not in range of (1, {world.players})",
-                        placement['force'])
-                    continue
-                worlds = {target_world}
-            else:  # target world by slot name
-                if target_world not in world_name_lookup:
-                    failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
-                           placement['force'])
-                    continue
-                worlds = {world_name_lookup[target_world]}
 
             candidates = list(location for location in world.get_unfilled_locations_for_players(locations,
                                                                                                 worlds))
