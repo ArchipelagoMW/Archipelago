@@ -6,7 +6,7 @@ unrandomized_dict: Dict[str, str] = {
     "DoHH: Complete Penitence 3": "Reliquary of the Sorrowful Heart",
     "CoOLotCV: Burning oil fountain": "Golden Thimble Filled with Burning Oil",
     "MotED: Egg hatching": "Hatched Egg of Deformity",
-    "Viridiana gift": "Zarabanda of the Safe Haven",
+    "DoHH: Viridiana gift": "Zarabanda of the Safe Haven",
     "Albero: Cleofas gift initial": "Cord of the True Burying",
     "Albero: Cleofas gift final": "Tiento to your Thorned Hairs",
     "Ossuary: Isidora reward main": "Severed Right Eye of the Traitor",

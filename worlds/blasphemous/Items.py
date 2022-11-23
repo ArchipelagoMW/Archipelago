@@ -413,11 +413,11 @@ item_table: List[ItemDict] = [
         'game_id': ["QI40"]},
     {'name': "Empty Bile Vessel", #QI41, QI45-51
         'count': 8,
-        'classification': ItemClassification.useful,
+        'classification': ItemClassification.progression,
         'game_id': ["QI41", "QI45", "QI46", "QI47", "QI48", "QI49", "QI50", "QI51"]},
     {'name': "Knot of Rosary Rope", #QI44, QI52-56
         'count': 6,
-        'classification': ItemClassification.useful,
+        'classification': ItemClassification.progression,
         'game_id': ["QI44", "QI52", "QI53", "QI54", "QI55", "QI56"]},
     {'name': "Golden Thimble Filled with Burning Oil",
         'count': 1,
@@ -705,15 +705,15 @@ item_table: List[ItemDict] = [
         'game_id': ["CH"]},
     {'name': "Life Upgrade",
         'count': 6,
-        'classification': ItemClassification.useful,
+        'classification': ItemClassification.progression,
         'game_id': ["LU"]},
     {'name': "Fervour Upgrade",
         'count': 6,
-        'classification': ItemClassification.useful,
+        'classification': ItemClassification.progression,
         'game_id': ["FU"]},
     {'name': "Mea Culpa Upgrade",
         'count': 7,
-        'classification': ItemClassification.useful,
+        'classification': ItemClassification.progression,
         'game_id': ["SU"]},
     {'name': "Tears of Atonement (250)",
         'count': 1,
@@ -872,7 +872,13 @@ group_table: Dict[str, Set[str]] = {
                  "Scaphoid of Fiece, the Leper",
                  "Anklebone of Weston, the Pilgrim",
                  "Calcaneum of Persian, the Bandit",
-                 "Navicular of Kahnnyhoo, the Murderer"]
+                 "Navicular of Kahnnyhoo, the Murderer"],
+    
+    "power"   : ["Life Upgrade",
+                 "Fervour Upgrade",
+                 "Mea Culpa Upgrade",
+                 "Empty Bile Vessel",
+                 "Quicksilver"]
 }
 
 tears_set: Set[str] = [
