@@ -1,4 +1,4 @@
-from typing import List, TypedDict
+from typing import List, Set, TypedDict
 
 
 class LocationDict(TypedDict):
@@ -1232,4 +1232,16 @@ location_table: List[LocationDict] = [
         'region': "dungeon",
         'game_id': "PR101",
         'room': "dungeon"}
+]
+
+shop_set: Set[str] = [
+    "GotP: Shop left",
+    "GotP: Shop middle",
+    "GotP: Shop right",
+    "MD: Shop left",
+    "MD: Shop middle",
+    "MD: Shop right",
+    "TSC: Shop left",
+    "TSC: Shop middle",
+    "TSC: Shop right"
 ]

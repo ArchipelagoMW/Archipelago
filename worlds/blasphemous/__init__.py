@@ -3,7 +3,7 @@ from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassifi
 from worlds.generic.Rules import set_rule
 from ..AutoWorld import World, WebWorld
 from .Items import item_table, group_table, tears_set
-from .Locations import location_table
+from .Locations import location_table, shop_set
 from .Exits import region_exit_table, exit_lookup_table
 from .Rules import rules
 from .Options import blasphemous_options
@@ -753,9 +753,9 @@ class BlasphemousWorld(World):
         quicksilver_count = 0
         verses_count = 0
 
-        for loc in self.multiworld.get_filled_locations():
-            if loc.game == "Blasphemous" and loc.player == self.player:
-                data: APLocationData = {
+        for loc in self.multiworld.get_filled_locations(self.player):
+            if loc.game == "Blasphemous":
+                data = {
                     "id": self.location_name_to_game_id[loc.name],
                     "ap_id": loc.address,
                     "item": "",
@@ -763,6 +763,9 @@ class BlasphemousWorld(World):
                     "player_id": loc.item.player,
                     "player_name": self.multiworld.player_name[loc.item.player]
                 }
+
+                if loc.name in shop_set:
+                    data["type"] = loc.item.classification.name
 
                 if loc.item.game == "Blasphemous":
                     data["item"] = self.item_name_to_game_id[loc.item.name][0]
@@ -810,12 +813,3 @@ class BlasphemousItem(Item):
 
 class BlasphemousLocation(Location):
     game: str = "Blasphemous"
-
-
-class APLocationData(TypedDict):
-    id: str
-    ap_id: int
-    item: str
-    name: str
-    player_id: int
-    player_name: str
