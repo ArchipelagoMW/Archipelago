@@ -470,6 +470,7 @@ class WitnessPlayerLogic:
             "0x03852": "Ramp EPs available",
             "0x334D8": "RGB panels & EPs solvable",
             "0x03750": "Left Garden EP available",
+            "0x03C0C": "RGB Flowers EP requirement",
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
