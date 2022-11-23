@@ -743,7 +743,7 @@ class BlasphemousWorld(World):
 
     def generate_output(self, output_directory: str):
         slot_data: Dict[str, Any] = {}
-        locations: List[APLocationData] = []
+        locations = []
 
         red_wax_count = 0
         blue_wax_count = 0
