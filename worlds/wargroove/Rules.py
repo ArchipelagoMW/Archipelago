@@ -21,8 +21,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location('Wargroove Finale: Victory', player),
              lambda state: state._wargroove_has_item(player, "Final Bridges") and
                            state._wargroove_has_item(player, "Final Walls") and
-                           state._wargroove_has_item(player, "Final Sickle") and
-                           state._wargroove_has_item(player, 'Knight'))
+                           state._wargroove_has_item(player, "Final Sickle"))
     # Level 1
     set_rule(world.get_location('Humble Beginnings: Caesar', player), lambda state: True)
     set_rule(world.get_location('Humble Beginnings: Chest 1', player), lambda state: True)
@@ -103,9 +102,11 @@ def set_rules(world: MultiWorld, player: int):
                           [world.get_location('Frigid Archery: Victory', player)])
 
     set_rule(world.get_location('Archery Lessons: Chest', player),
-             lambda state: state._wargroove_has_item_and_region(player, 'Knight', 'Southern Walls'))
+             lambda state: state._wargroove_has_item(player, 'Knight') and
+                           state._wargroove_has_item(player, 'Southern Walls'))
     set_rule(world.get_location('Archery Lessons: Victory', player),
-             lambda state: state._wargroove_has_item_and_region(player, 'Knight', 'Southern Walls'))
+             lambda state: state._wargroove_has_item(player, 'Knight') and
+                           state._wargroove_has_item(player, 'Southern Walls'))
     set_region_exit_rules(world.get_region('Archery Lessons', player),
                           [world.get_location('Archery Lessons: Victory', player)])
 
