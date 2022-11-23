@@ -740,6 +740,72 @@ class BlasphemousWorld(World):
             region_table[loc["region"]].locations\
                 .append(BlasphemousLocation(self.player, loc["name"], id, region_table[loc["region"]]))
 
+    
+    def fill_slot_data(self) -> Dict[str, Any]:
+        slot_data: Dict[str, Any] = {}
+        locations = []
+
+        red_wax_count = 0
+        blue_wax_count = 0
+        thorn_count = 0
+        vessel_count = 0
+        knot_count = 0
+        quicksilver_count = 0
+        verses_count = 0
+
+        for loc in self.multiworld.get_filled_locations(self.player):
+            if loc.name == "His Holiness Escribar":
+                continue
+            else:
+                data = {
+                    "id": self.location_name_to_game_id[loc.name],
+                    "ap_id": loc.address,
+                    "item": "",
+                    "name": loc.item.name,
+                    "player_id": loc.item.player,
+                    "player_name": self.multiworld.player_name[loc.item.player]
+                }
+
+                if loc.name in shop_set:
+                    data["type"] = loc.item.classification.name
+
+                if loc.item.game == "Blasphemous":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][0]
+                else:
+                    data["item"] = "AP"
+
+                if loc.item.name == "Bead of Red Wax":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][red_wax_count]
+                    red_wax_count += 1
+                elif loc.item.name == "Bead of Blue Wax":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][blue_wax_count]
+                    blue_wax_count += 1
+                elif loc.item.name == "Thorn":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][thorn_count]
+                    thorn_count += 1
+                elif loc.item.name == "Empty Bile Vessel":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][vessel_count]
+                    vessel_count += 1
+                elif loc.item.name == "Knot of Rosary Rope":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][knot_count]
+                    knot_count += 1
+                elif loc.item.name == "Quicksilver":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][quicksilver_count]
+                    quicksilver_count += 1
+                elif loc.item.name == "Verses Spun from Gold":
+                    data["item"] = self.item_name_to_game_id[loc.item.name][verses_count]
+                    verses_count += 1
+
+                locations.append(data)
+    
+        slot_data = {
+            "locations": locations,
+            "enemy_randomizer": self.multiworld.enemy_randomizer[self.player].value,
+            "seed": self.multiworld.seed
+        }
+    
+        return slot_data
+
 
     def generate_output(self, output_directory: str):
         slot_data: Dict[str, Any] = {}
@@ -754,7 +820,9 @@ class BlasphemousWorld(World):
         verses_count = 0
 
         for loc in self.multiworld.get_filled_locations(self.player):
-            if loc.game == "Blasphemous":
+            if loc.name == "His Holiness Escribar":
+                continue
+            else:
                 data = {
                     "id": self.location_name_to_game_id[loc.name],
                     "ap_id": loc.address,
