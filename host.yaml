@@ -139,7 +139,7 @@ pokemon_rb_options:
 wargroove_options:
   # Locate the Wargroove root directory on your system.
   # This is used by the Wargroove client, so it knows where to send communication files to
-  root_directory: "D:/Games/Steam/steamapps/common/Wargroove"
+  root_directory: "C:/Program Files (x86)/Steam/steamapps/common/Wargroove"
 
 zillion_options:
   # File name of the Zillion US rom
