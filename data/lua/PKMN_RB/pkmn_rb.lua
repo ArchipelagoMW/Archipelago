@@ -8,6 +8,7 @@ local STATE_INITIAL_CONNECTION_MADE = "Initial Connection Made"
 local STATE_UNINITIALIZED = "Uninitialized"
 
 local APIndex = 0x1A6E
+local APDeathLinkAddress = 0x00FD
 local APItemAddress = 0x00FF
 local EventFlagAddress = 0x1735
 local MissableAddress = 0x161A
@@ -18,6 +19,9 @@ local InGame = 0x1A71
 local ItemsReceived = nil
 local playerName = nil
 local seedName = nil
+
+local deathlink_rec = nil
+local deathlink_send = false
 
 local prevstate = ""
 local curstate =  STATE_UNINITIALIZED
@@ -71,8 +75,11 @@ function processBlock(block)
     memDomain.wram()
     if itemsBlock ~= nil then-- and u8(0x116B) ~= 0x00 then
 	--	print(itemsBlock)
-	ItemsReceived = itemsBlock
-
+	    ItemsReceived = itemsBlock
+   end
+   deathlink_rec = block["deathlink"]
+   if deathlink_rec == true then
+     print("REC DL")
    end
 end
 
@@ -135,7 +142,6 @@ function receive()
         curstate = STATE_UNINITIALIZED
         return
     elseif e == 'timeout' then
-        print("timeout")
         return
     elseif e ~= nil then
         print(e)
@@ -167,6 +173,11 @@ function receive()
         retTable["serial"] = serialData
         end
     end
+    retTable["deathLink"] = deathlink_send
+    if deathlink_send == true then
+        print("sending DL to client")
+    end
+    deathlink_send = false
     msg = json.encode(retTable).."\n"
     local ret, error = gbSocket:send(msg)
     if ret == nil then
@@ -197,6 +208,14 @@ function main()
                 receive()
                 if u8(InGame) == 0xAC and u8(APItemAddress) == 0x00 then
                     ItemIndex = u16(APIndex)
+                    if deathlink_rec == true then
+                        wU8(APDeathLinkAddress, 1)
+                        print("send DL to game")
+                    elseif u8(APDeathLinkAddress) == 3 then
+                        wU8(APDeathLinkAddress, 0)
+                        deathlink_send = true
+                        print("DL triggered from game")
+                    end
                     if ItemsReceived[ItemIndex + 1] ~= nil then
                         wU8(APItemAddress, ItemsReceived[ItemIndex + 1] - 172000000)
                     end

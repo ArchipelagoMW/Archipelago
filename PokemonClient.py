@@ -64,6 +64,8 @@ class GBContext(CommonContext):
         self.gb_status = CONNECTION_INITIAL_STATUS
         self.awaiting_rom = False
         self.display_msgs = True
+        self.deathlink_pending = False
+        self.set_deathlink = False
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -82,6 +84,8 @@ class GBContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
             self.locations_array = None
+            if args['slot_data']['death_link']:
+                self.set_deathlink = True
         elif cmd == "RoomInfo":
             self.seed_name = args['seed_name']
         elif cmd == 'Print':
@@ -91,6 +95,10 @@ class GBContext(CommonContext):
         elif cmd == "ReceivedItems":
             msg = f"Received {', '.join([self.item_names[item.item] for item in args['items']])}"
             self._set_message(msg, SYSTEM_MESSAGE_ID)
+
+    def on_deathlink(self, data: dict):
+        self.deathlink_pending = True
+        super().on_deathlink(data)
 
     def run_gui(self):
         from kvui import GameManager
@@ -107,13 +115,16 @@ class GBContext(CommonContext):
 
 def get_payload(ctx: GBContext):
     current_time = time.time()
-    return json.dumps(
+    ret = json.dumps(
         {
             "items": [item.item for item in ctx.items_received],
             "messages": {f'{key[0]}:{key[1]}': value for key, value in ctx.messages.items()
-                         if key[0] > current_time - 10}
+                         if key[0] > current_time - 10},
+            "deathlink": ctx.deathlink_pending
         }
     )
+    ctx.deathlink_pending = False
+    return ret
 
 
 async def parse_locations(data: List, ctx: GBContext):
@@ -186,6 +197,10 @@ async def gb_sync_task(ctx: GBContext):
                             and not error_status and ctx.auth:
                         # Not just a keep alive ping, parse
                         async_start(parse_locations(data_decoded['locations'], ctx))
+                    if 'deathLink' in data_decoded and data_decoded['deathLink'] and 'DeathLink' in ctx.tags:
+                        await ctx.send_death(ctx.auth + " is out of usable Pokémon! " + ctx.auth + " blacked out!")
+                    if ctx.set_deathlink:
+                        await ctx.update_death_link(True)
                 except asyncio.TimeoutError:
                     logger.debug("Read Timed Out, Reconnecting")
                     error_status = CONNECTION_TIMING_OUT_STATUS

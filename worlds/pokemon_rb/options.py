@@ -1,5 +1,5 @@
 
-from Options import Toggle, Choice, Range, SpecialRange, FreeText, TextChoice
+from Options import Toggle, Choice, Range, SpecialRange, FreeText, TextChoice, DeathLink
 
 
 class GameVersion(Choice):
@@ -480,4 +480,5 @@ pokemon_rb_options = {
     "normalize_encounter_chances": NormalizeEncounterChances,
     "reusable_tms": ReusableTMs,
     "starting_money": StartingMoney,
+    "death_link": DeathLink
 }

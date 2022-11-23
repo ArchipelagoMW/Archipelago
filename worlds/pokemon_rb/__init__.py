@@ -251,7 +251,7 @@ class PokemonRedBlueWorld(World):
                                          item_groups["Vending Machine Drinks"]])
 
     def fill_slot_data(self) -> dict:
-        # for trackers
+        # for trackers, except death link
         return {
             "second_fossil_check_condition": self.multiworld.second_fossil_check_condition[self.player].value,
             "require_item_finder": self.multiworld.require_item_finder[self.player].value,
@@ -268,7 +268,8 @@ class PokemonRedBlueWorld(World):
             "victory_road_condition": self.multiworld.victory_road_condition[self.player].value,
             "viridian_gym_condition": self.multiworld.viridian_gym_condition[self.player].value,
             "free_fly_map": self.fly_map_code,
-            "extra_badges": self.extra_badges
+            "extra_badges": self.extra_badges,
+            "death_link": self.multiworld.death_link[self.player].value
         }
 
 
