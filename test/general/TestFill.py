@@ -628,9 +628,9 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         mw = generate_multi_world(2)
         player1 = generate_player_data(mw, 1, location_count=5, basic_item_count=5)
         player2 = generate_player_data(mw, 2, location_count=5, basic_item_count=5)
-        mw.early_items[1].value[player1.basic_items[0].name] = 1
-        mw.early_items[2].value[player2.basic_items[2].name] = 1
-        mw.early_items[2].value[player2.basic_items[3].name] = 1
+        mw.early_items[1][player1.basic_items[0].name] = 1
+        mw.early_items[2][player2.basic_items[2].name] = 1
+        mw.early_items[2][player2.basic_items[3].name] = 1
 
         early_items = [
             player1.basic_items[0],
