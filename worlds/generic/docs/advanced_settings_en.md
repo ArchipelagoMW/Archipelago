@@ -106,7 +106,7 @@ settings. If a game can be rolled it **must** have a settings section even if it
 
 Some options in Archipelago can be used by every game but must still be placed within the relevant game's section.
 
-Currently, these options are `start_inventory`, `start_hints`, `local_items`, `non_local_items`, `start_location_hints`
+Currently, these options are `start_inventory`, `start_hints`, `local_items`, `non_local_items`,  `start_location_hints`
 , `exclude_locations`, and various plando options.
 
 See the plando guide for more info on plando options. Plando
