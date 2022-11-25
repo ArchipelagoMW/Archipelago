@@ -894,7 +894,7 @@ class HintDistribution(Choice):
     option_balanced = 0
     option_ddr = 1
     option_league = 2
-    option_mw2 = 3
+    option_mw3 = 3
     option_scrubs = 4
     option_strong = 5
     option_tournament = 6
