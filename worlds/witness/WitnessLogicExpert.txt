@@ -914,7 +914,7 @@ Final Room (Mountain Final Room) - Elevator - 0x339BB & 0x33961:
 158522 - 0x0383A (Right Pillar 1) - True - Stars & Eraser & Triangles & Stars + Same Colored Symbol
 158523 - 0x09E56 (Right Pillar 2) - 0x0383A - Dots & Full Dots & Triangles & Symmetry
 158524 - 0x09E5A (Right Pillar 3) - 0x09E56 - Dots & Shapers & Stars & Negative Shapers & Stars + Same Colored Symbol & Symmetry
-158525 - 0x33961 (Right Pillar 4) - 0x09E5A - Eraser & Symmetry & Stars & Stars + Same Colored Symbols & Negative Shapers & Shapers
+158525 - 0x33961 (Right Pillar 4) - 0x09E5A - Eraser & Symmetry & Stars & Stars + Same Colored Symbol & Negative Shapers & Shapers
 158526 - 0x0383D (Left Pillar 1) - True - Stars & Black/White Squares & Stars + Same Colored Symbol
 158527 - 0x0383F (Left Pillar 2) - 0x0383D - Triangles & Symmetry
 158528 - 0x03859 (Left Pillar 3) - 0x0383F - Symmetry & Shapers & Black/White Squares
