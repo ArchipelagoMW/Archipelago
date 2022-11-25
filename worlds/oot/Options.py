@@ -329,9 +329,9 @@ world_options: typing.Dict[str, type(Option)] = {
     "mq_dungeons_list": MQDungeonList,
     "mq_dungeons_count": MQDungeonCount,
 
-    "empty_dungeons_mode": EmptyDungeons,
-    "empty_dungeons_list": EmptyDungeonList,
-    "empty_dungeon_count": EmptyDungeonCount,
+    # "empty_dungeons_mode": EmptyDungeons,
+    # "empty_dungeons_list": EmptyDungeonList,
+    # "empty_dungeon_count": EmptyDungeonCount,
 }
 
 

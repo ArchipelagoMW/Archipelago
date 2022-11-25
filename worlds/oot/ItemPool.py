@@ -632,7 +632,7 @@ def get_pool_core(world):
                 dungeon_collection.append(world.create_item(item))
                 if shuffle_setting in ['remove', 'startwith']:
                     world.multiworld.push_precollected(dungeon_collection[-1])
-                    world.remove_from_start_inventory(dungeon_collection[-1].name)
+                    world.remove_from_start_inventory.append(dungeon_collection[-1].name)
                     item = get_junk_item()[0]
                     shuffle_item = True
                 elif shuffle_setting in ['any_dungeon', 'overworld', 'regional']:
@@ -648,6 +648,9 @@ def get_pool_core(world):
         elif shuffle_item is not None:
             placed_items[location.name] = item
     # End of Locations loop.
+
+    # add unrestricted dungeon items to main item pool
+    pool.extend([item.name for item in get_unrestricted_dungeon_items(world)])
 
     if world.shopsanity != 'off':
         pool.extend(min_shop_items)
@@ -709,6 +712,7 @@ def get_pool_core(world):
         pool.extend(get_junk_item())
     else:
         placed_items['Gift from Sages'] = IGNORE_LOCATION
+        skip_in_spoiler_locations.append('Gift from Sages')
 
     if world.junk_ice_traps == 'off':
         replace_max_item(pool, 'Ice Trap', 0)
