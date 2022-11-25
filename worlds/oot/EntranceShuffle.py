@@ -95,6 +95,8 @@ entrance_shuffle_table = [
                         ('Ice Cavern Beginning -> ZF Ice Ledge',                            { 'index': 0x03D4 })),
     ('Dungeon',         ('Gerudo Fortress -> Gerudo Training Ground Lobby',                 { 'index': 0x0008 }),
                         ('Gerudo Training Ground Lobby -> Gerudo Fortress',                 { 'index': 0x03A8 })),
+    ('DungeonSpecial',  ('Ganons Castle Grounds -> Ganons Castle Lobby',                    { 'index': 0x0467 }),
+                        ('Ganons Castle Lobby -> Castle Grounds From Ganons Castle',        { 'index': 0x023D })),
 
     ('Interior',        ('Kokiri Forest -> KF Midos House',                                 { 'index': 0x0433 }),
                         ('KF Midos House -> Kokiri Forest',                                 { 'index': 0x0443 })),
@@ -238,8 +240,8 @@ entrance_shuffle_table = [
                         ('KF Storms Grotto -> Kokiri Forest',                               { 'grotto_id': 0x1B })),
     ('Grotto',          ('Zoras Domain -> ZD Storms Grotto',                                { 'grotto_id': 0x1C, 'entrance': 0x036D, 'content': 0xFF, 'scene': 0x58 }),
                         ('ZD Storms Grotto -> Zoras Domain',                                { 'grotto_id': 0x1C })),
-    ('Grotto',          ('Gerudo Fortress -> GF Storms Grotto',                             { 'grotto_id': 0x1D, 'entrance': 0x036D, 'content': 0xFF, 'scene': 0x5D }),
-                        ('GF Storms Grotto -> Gerudo Fortress',                             { 'grotto_id': 0x1D })),
+    ('Grotto',          ('GF Entrances Behind Crates -> GF Storms Grotto',                  { 'grotto_id': 0x1D, 'entrance': 0x036D, 'content': 0xFF, 'scene': 0x5D }),
+                        ('GF Storms Grotto -> GF Entrances Behind Crates',                  { 'grotto_id': 0x1D })),
     ('Grotto',          ('GV Fortress Side -> GV Storms Grotto',                            { 'grotto_id': 0x1E, 'entrance': 0x05BC, 'content': 0xF0, 'scene': 0x5A }),
                         ('GV Storms Grotto -> GV Fortress Side',                            { 'grotto_id': 0x1E })),
     ('Grotto',          ('GV Grotto Ledge -> GV Octorok Grotto',                            { 'grotto_id': 0x1F, 'entrance': 0x05AC, 'content': 0xF2, 'scene': 0x5A }),
@@ -263,7 +265,7 @@ entrance_shuffle_table = [
     ('Overworld',       ('Lost Woods -> GC Woods Warp',                                     { 'index': 0x04E2 }),
                         ('GC Woods Warp -> Lost Woods',                                     { 'index': 0x04D6 })),
     ('Overworld',       ('Lost Woods -> Zora River',                                        { 'index': 0x01DD }),
-                        ('Zora River -> Lost Woods',                                        { 'index': 0x04DA })),
+                        ('Zora River -> LW Underwater Entrance',                            { 'index': 0x04DA })),
     ('Overworld',       ('LW Beyond Mido -> SFM Entryway',                                  { 'index': 0x00FC }),
                         ('SFM Entryway -> LW Beyond Mido',                                  { 'index': 0x01A9 })),
     ('Overworld',       ('LW Bridge -> Hyrule Field',                                       { 'index': 0x0185 }),
@@ -309,8 +311,6 @@ entrance_shuffle_table = [
     ('Overworld',       ('ZD Behind King Zora -> Zoras Fountain',                           { 'index': 0x0225 }),
                         ('Zoras Fountain -> ZD Behind King Zora',                           { 'index': 0x01A1 })),
 
-    ('Overworld',       ('GV Lower Stream -> Lake Hylia',                                   { 'index': 0x0219 })),
-
     ('OwlDrop',         ('LH Owl Flight -> Hyrule Field',                                   { 'index': 0x027E, 'addresses': [0xAC9F26] })),
     ('OwlDrop',         ('DMT Owl Flight -> Kak Impas Rooftop',                             { 'index': 0x0554, 'addresses': [0xAC9EF2] })),
 
@@ -327,6 +327,74 @@ entrance_shuffle_table = [
     ('Extra',           ('ZD Eyeball Frog Timeout -> Zoras Domain',                         { 'index': 0x0153 })),
     ('Extra',           ('ZR Top of Waterfall -> Zora River',                               { 'index': 0x0199 })),
 ]
+
+
+def _add_boss_entrances():
+    # Compute this at load time to save a lot of duplication
+    dungeon_data = {}
+    for type, forward, *reverse in entrance_shuffle_table:
+        if type != 'Dungeon':
+            continue
+        if not reverse:
+            continue
+        name, forward = forward
+        reverse = reverse[0][1]
+        if 'blue_warp' not in reverse:
+            continue
+        dungeon_data[name] = {
+            'dungeon_index': forward['index'],
+            'exit_index': reverse['index'],
+            'exit_blue_warp': reverse['blue_warp']
+        }
+
+    for type, source, target, dungeon, index, rindex, addresses in [
+        (
+            'ChildBoss', 'Deku Tree Boss Door', 'Queen Gohma Boss Room',
+            'KF Outside Deku Tree -> Deku Tree Lobby',
+            0x040f, 0x0252, [ 0xB06292, 0xBC6162, 0xBC60AE ]
+        ),
+        (
+            'ChildBoss', 'Dodongos Cavern Boss Door', 'King Dodongo Boss Room',
+            'Death Mountain -> Dodongos Cavern Beginning',
+            0x040b, 0x00c5, [ 0xB062B6, 0xBC616E ]
+        ),
+        (
+            'ChildBoss', 'Jabu Jabus Belly Boss Door', 'Barinade Boss Room',
+            'Zoras Fountain -> Jabu Jabus Belly Beginning',
+            0x0301, 0x0407, [ 0xB062C2, 0xBC60C2 ]
+        ),
+        (
+            'AdultBoss', 'Forest Temple Boss Door', 'Phantom Ganon Boss Room',
+            'SFM Forest Temple Entrance Ledge -> Forest Temple Lobby',
+            0x000c, 0x024E, [ 0xB062CE, 0xBC6182 ]
+        ),
+        (
+            'AdultBoss', 'Fire Temple Boss Door', 'Volvagia Boss Room',
+            'DMC Fire Temple Entrance -> Fire Temple Lower',
+            0x0305, 0x0175, [ 0xB062DA, 0xBC60CE ]
+        ),
+        (
+            'AdultBoss', 'Water Temple Boss Door', 'Morpha Boss Room',
+            'Lake Hylia -> Water Temple Lobby',
+            0x0417, 0x0423, [ 0xB062E6, 0xBC6196 ]
+        ),
+        (
+            'AdultBoss', 'Spirit Temple Boss Door', 'Twinrova Boss Room',
+            'Desert Colossus -> Spirit Temple Lobby',
+            0x008D, 0x02F5, [ 0xB062F2, 0xBC6122 ]
+        ),
+        (
+            'AdultBoss', 'Shadow Temple Boss Door', 'Bongo Bongo Boss Room',
+            'Graveyard Warp Pad Region -> Shadow Temple Entryway',
+            0x0413, 0x02B2, [ 0xB062FE, 0xBC61AA ]
+        )
+    ]:
+        d = {'index': index, 'patch_addresses': addresses}
+        d.update(dungeon_data[dungeon])
+        entrance_shuffle_table.append(
+            (type, (f"{source} -> {target}", d), (f"{target} -> {source}", {'index': rindex}))
+        )
+_add_boss_entrances()
 
 
 # Basically, the entrances in the list above that go to:
@@ -396,10 +464,19 @@ def shuffle_random_entrances(ootworld):
     if ootworld.spawn_positions:
         one_way_entrance_pools['Spawn'] = ootworld.get_shufflable_entrances(type='Spawn')
 
-    if ootworld.shuffle_dungeon_entrances:
+    if world.shuffle_bosses == 'full':
+        entrance_pools['Boss'] = world.get_shufflable_entrances(type='ChildBoss', only_primary=True)
+        entrance_pools['Boss'] += world.get_shufflable_entrances(type='AdultBoss', only_primary=True)
+    elif world.shuffle_bosses == 'limited':
+        entrance_pools['ChildBoss'] = world.get_shufflable_entrances(type='ChildBoss', only_primary=True)
+        entrance_pools['AdultBoss'] = world.get_shufflable_entrances(type='AdultBoss', only_primary=True)
+
+    if ootworld.shuffle_dungeon_entrances != 'off':
         entrance_pools['Dungeon'] = ootworld.get_shufflable_entrances(type='Dungeon', only_primary=True)
         if ootworld.open_forest == 'closed':
             entrance_pools['Dungeon'].remove(world.get_entrance('KF Outside Deku Tree -> Deku Tree Lobby', player))
+        if ootworld.shuffle_special_dungeon_entrances:
+            entrance_pools['Dungeon'] += world.get_shufflable_entrances(type='DungeonSpecial', only_primary=True)
         if ootworld.decouple_entrances:
             entrance_pools['DungeonReverse'] = [entrance.reverse for entrance in entrance_pools['Dungeon']]
     if ootworld.shuffle_interior_entrances != 'off':

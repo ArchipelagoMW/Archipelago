@@ -223,11 +223,17 @@ trade_items = (
     "Claim Check",
 )
 
-normal_bottles = [k for k, v in item_table.items() if v[3].get('bottle', False) and k not in {'Deliver Letter', 'Sell Big Poe'}]
+def get_spec(tup, key, default):
+    special = tup[3]
+    if special is None:
+        return default
+    return special.get(key, default)
+
+normal_bottles = [k for k, v in item_table.items() if get_spec(v, 'bottle', False) and k not in {'Deliver Letter', 'Sell Big Poe'}]
 normal_bottles.append('Bottle with Big Poe')
 song_list = [k for k, v in item_table.items() if v[0] == 'Song']
-junk_pool_base = [(k, v[3]['junk']) for k, v in item_table.items() if v[3].get('junk', -1) > 0]
-remove_junk_items = [k for k, v in item_table.items() if v[3].get('junk', -1) >= 0]
+junk_pool_base = [(k, v[3]['junk']) for k, v in item_table.items() if get_spec(v, 'junk', -1) > 0]
+remove_junk_items = [k for k, v in item_table.items() if get_spec(v, 'junk', -1) >= 0]
 
 remove_junk_ludicrous_items = [
     'Ice Arrows',
@@ -273,7 +279,8 @@ item_groups = {
     'HealthUpgrade': ('Heart Container', 'Piece of Heart', 'Piece of Heart (Treasure Chest Game)'),
     'ProgressItem': sorted([name for name, item in item_table.items() if item[0] == 'Item' and item[1]]),
     'MajorItem': sorted([name for name, item in item_table.items() if item[0] in ['Item', 'Song'] and item[1] and name not in exclude_from_major]),
-    'DungeonReward': [item.name for item in sorted([i for n, i in item_table.items() if i[0] == 'DungeonReward'], key=lambda x: x.special['item_id'])],
+    'DungeonReward': [name for name in sorted([n for n, i in item_table.items() if i[0] == 'DungeonReward'],
+        key=lambda x: item_table[x][3]['item_id'])],
     'Map': sorted([name for name, item in item_table.items() if item[0] == 'Map']),
     'Compass': sorted([name for name, item in item_table.items() if item[0] == 'Compass']),
     'BossKey': sorted([name for name, item in item_table.items() if item[0] == 'BossKey']),
@@ -338,16 +345,6 @@ def generate_itempool(ootworld):
 
     junk_pool = get_junk_pool(ootworld)
 
-    fixed_locations = filter(lambda loc: loc.name in fixedlocations, ootworld.get_locations())
-    for location in fixed_locations:
-        item = fixedlocations[location.name]
-        location.place_locked_item(ootworld.create_item(item))
-
-    drop_locations = filter(lambda loc: loc.type == 'Drop', ootworld.get_locations())
-    for drop_location in drop_locations:
-        item = droplocations[drop_location.name]
-        drop_location.place_locked_item(ootworld.create_item(item))
-
     # set up item pool
     (pool, placed_items, skip_in_spoiler_locations) = get_pool_core(ootworld)
     ootworld.itempool = [ootworld.create_item(item) for item in pool]
@@ -357,42 +354,6 @@ def generate_itempool(ootworld):
         if location_name in skip_in_spoiler_locations:
             location.show_in_spoiler = False
 
-
-
-# def try_collect_heart_container(world, pool):
-#     if 'Heart Container' in pool:
-#         pool.remove('Heart Container')
-#         pool.extend(get_junk_item())
-#         world.state.collect(ItemFactory('Heart Container'))
-#         return True
-#     return False
-
-
-# def try_collect_pieces_of_heart(world, pool):
-#     n = pool.count('Piece of Heart') + pool.count('Piece of Heart (Treasure Chest Game)')
-#     if n >= 4:
-#         for i in range(4):
-#             if 'Piece of Heart' in pool:
-#                 pool.remove('Piece of Heart')
-#                 world.state.collect(ItemFactory('Piece of Heart'))
-#             else:
-#                 pool.remove('Piece of Heart (Treasure Chest Game)')
-#                 world.state.collect(ItemFactory('Piece of Heart (Treasure Chest Game)'))
-#             pool.extend(get_junk_item())
-#         return True
-#     return False
-
-
-# def collect_pieces_of_heart(world, pool):
-#     success = try_collect_pieces_of_heart(world, pool)
-#     if not success:
-#         try_collect_heart_container(world, pool)
-
-
-# def collect_heart_container(world, pool):
-#     success = try_collect_heart_container(world, pool)
-#     if not success:
-#         try_collect_pieces_of_heart(world, pool)
 
 def get_pool_core(world):
     global random
@@ -462,6 +423,8 @@ def get_pool_core(world):
                                       'Deliver Letter', 'Time Travel', 'Bombchu Drop']
                 or location.type == 'Drop'):
             shuffle_item = False
+            if location.vanilla_item != 'Zeldas Letter':
+                skip_in_spoiler_locations.append(location)
 
         # Gold Skulltula Tokens
         elif location.vanilla_item == 'Gold Skulltula Token':
@@ -504,6 +467,7 @@ def get_pool_core(world):
                 shuffle_item = False
                 skip_in_spoiler_locations.append(location)
                 world.multiworld.push_precollected(world.create_item('Weird Egg'))
+                world.remove_from_start_inventory.append('Weird Egg')
             else:
                 shuffle_item = world.shuffle_child_trade != 'vanilla'
 
@@ -530,7 +494,7 @@ def get_pool_core(world):
             if world.shuffle_cows:
                 item = get_junk_item()[0]
             shuffle_item = world.shuffle_cows
-            if not shuffle_items:
+            if not shuffle_item:
                 skip_in_spoiler_locations.append(location)
 
         # Gerudo Card
@@ -567,7 +531,7 @@ def get_pool_core(world):
         # Adult Trade Item
         elif location.vanilla_item == 'Pocket Egg':
             potential_trade_items = world.adult_trade_start if world.adult_trade_start else trade_items
-            item = random.choice(potential_trade_items)
+            item = random.choice(sorted(potential_trade_items))
             world.selected_adult_trade_item = item
             shuffle_item = True
 
@@ -665,9 +629,10 @@ def get_pool_core(world):
 
             # Handle dungeon item.
             if shuffle_setting is not None and not shuffle_item:
-                dungeon_collection.append(ItemFactory(item))
+                dungeon_collection.append(world.create_item(item))
                 if shuffle_setting in ['remove', 'startwith']:
-                    world.state.collect(dungeon_collection[-1])
+                    world.multiworld.push_precollected(dungeon_collection[-1])
+                    world.remove_from_start_inventory(dungeon_collection[-1].name)
                     item = get_junk_item()[0]
                     shuffle_item = True
                 elif shuffle_setting in ['any_dungeon', 'overworld', 'regional']:
@@ -683,9 +648,6 @@ def get_pool_core(world):
         elif shuffle_item is not None:
             placed_items[location.name] = item
     # End of Locations loop.
-
-    # add unrestricted dungeon items to main item pool
-    pool.extend([item.name for item in world.get_unrestricted_dungeon_items()])
 
     if world.shopsanity != 'off':
         pool.extend(min_shop_items)
@@ -710,9 +672,11 @@ def get_pool_core(world):
 
     if world.free_scarecrow:
         world.multiworld.push_precollected(world.create_item('Scarecrow Song'))
+        world.remove_from_start_inventory.append('Scarecrow Song')
     
     if world.no_epona_race:
         world.multiworld.push_precollected(world.create_item('Epona'))
+        world.remove_from_start_inventory.append('Epona')
 
     if world.shuffle_smallkeys == 'vanilla':
         # Logic cannot handle vanilla key layout in some dungeons
@@ -721,17 +685,21 @@ def get_pool_core(world):
         # We can resolve this by starting with some extra keys
         if world.dungeon_mq['Spirit Temple']:
             # Yes somehow you need 3 keys. This dungeon is bonkers
-            world.multiworld.push_precollected(world.create_item('Small Key (Spirit Temple)'))
-            world.multiworld.push_precollected(world.create_item('Small Key (Spirit Temple)'))
-            world.multiworld.push_precollected(world.create_item('Small Key (Spirit Temple)'))
+            keys = [world.create_item('Small Key (Spirit Temple)') for _ in range(3)]
+            for k in keys:
+                world.multiworld.push_precollected(k)
+                world.remove_from_start_inventory.append(k.name)
         if 'Shadow Temple' in world.dungeon_shortcuts:
             # Reverse Shadow is broken with vanilla keys in both vanilla/MQ
-            world.multiworld.push_precollected(world.create_item('Small Key (Shadow Temple)'))
-            world.multiworld.push_precollected(world.create_item('Small Key (Shadow Temple)'))
+            keys = [world.create_item('Small Key (Shadow Temple)') for _ in range(2)]
+            for k in keys:
+                world.multiworld.push_precollected(k)
+                world.remove_from_start_inventory.append(k.name)
 
     if (not world.keysanity or (world.empty_dungeons['Fire Temple'].empty and world.shuffle_smallkeys != 'remove'))\
         and not world.dungeon_mq['Fire Temple']:
         world.multiworld.push_precollected(world.create_item('Small Key (Fire Temple)'))
+        world.remove_from_start_inventory.append('Small Key (Fire Temple)')
 
     if world.shuffle_ganon_bosskey == 'on_lacs':
         placed_items['ToT Light Arrows Cutscene'] = 'Boss Key (Ganons Castle)'
@@ -787,15 +755,17 @@ def get_pool_core(world):
     return pool, placed_items, skip_in_spoiler_locations
 
 
-def add_dungeon_items(ootworld):
+def get_unrestricted_dungeon_items(ootworld):
     """Adds maps, compasses, small keys, boss keys, and Ganon boss key into item pool if they are not placed."""
-    skip_add_settings = {'remove', 'startwith', 'vanilla', 'on_lacs'}
+    unrestricted_dungeon_items = []
+    add_settings = {'dungeon', 'any_dungeon', 'overworld', 'keysanity', 'regional'}
     for dungeon in ootworld.dungeons:
-        if ootworld.shuffle_mapcompass not in skip_add_settings:
-            ootworld.itempool.extend(dungeon.dungeon_items)
-        if ootworld.shuffle_smallkeys not in skip_add_settings:
-            ootworld.itempool.extend(dungeon.small_keys)
-        if dungeon.name != 'Ganons Castle' and ootworld.shuffle_bosskeys not in skip_add_settings:
-            ootworld.itempool.extend(dungeon.boss_key)
-        if dungeon.name == 'Ganons Castle' and ootworld.shuffle_ganon_bosskey not in skip_add_settings:
-            ootworld.itempool.extend(dungeon.boss_key)
+        if ootworld.shuffle_mapcompass in add_settings:
+            unrestricted_dungeon_items.extend(dungeon.dungeon_items)
+        if ootworld.shuffle_smallkeys in add_settings:
+            unrestricted_dungeon_items.extend(dungeon.small_keys)
+        if dungeon.name != 'Ganons Castle' and ootworld.shuffle_bosskeys in add_settings:
+            unrestricted_dungeon_items.extend(dungeon.boss_key)
+        if dungeon.name == 'Ganons Castle' and ootworld.shuffle_ganon_bosskey in add_settings:
+            unrestricted_dungeon_items.extend(dungeon.boss_key)
+    return unrestricted_dungeon_items

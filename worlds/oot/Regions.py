@@ -1,6 +1,7 @@
 from enum import unique, Enum
 
 from BaseClasses import Region
+from .Hints import HintArea
 
 
 # copied from OoT-Randomizer/Region.py
@@ -31,8 +32,9 @@ class TimeOfDay(object):
 class OOTRegion(Region):
     game: str = "Ocarina of Time"
 
-    def __init__(self, name: str, type, hint, player: int): 
+    def __init__(self, name: str, type, hint, player: int):
         super(OOTRegion, self).__init__(name, type, hint, player)
+        self._oot_hint = None
         self.price = None
         self.time_passes = False
         self.provides_time = TimeOfDay.NONE
@@ -61,3 +63,15 @@ class OOTRegion(Region):
         else: # we don't care about age
             return self in state.child_reachable_regions[self.player] or self in state.adult_reachable_regions[self.player]
 
+    def set_hint_data(self, hint):
+        if self.dungeon:
+            self._oot_hint = HintArea.for_dungeon(self.dungeon)
+        else:
+            self._oot_hint = HintArea[hint]
+        self.hint_text = str(self._oot_hint)
+
+    # This is too generic of a name to risk not breaking in the future.
+    # This lets us possibly switch it out later if AP starts using it.
+    @property
+    def hint(self):
+        return self._oot_hint

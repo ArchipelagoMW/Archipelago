@@ -246,7 +246,6 @@ class MQDungeons(Choice):
     option_mq = 1
     option_specific = 2
     option_count = 3
-    option_random_dungeons = 4
 
 
 class MQDungeonList(OptionSet):
@@ -311,11 +310,11 @@ world_options: typing.Dict[str, type(Option)] = {
     "shuffle_interior_entrances": InteriorEntrances,
     "shuffle_grotto_entrances": GrottoEntrances,
     "shuffle_dungeon_entrances": DungeonEntrances,
-    "shuffle_boss_entrances": BossEntrances,
     "shuffle_overworld_entrances": OverworldEntrances,
     "owl_drops": OwlDrops,
     "warp_songs": WarpSongs,
     "spawn_positions": SpawnPositions,
+    "shuffle_bosses": BossEntrances,
     # "mix_entrance_pools": MixEntrancePools,
     # "decouple_entrances": DecoupleEntrances,
     "triforce_hunt": TriforceHunt, 
@@ -801,6 +800,11 @@ class FastBunny(Toggle):
     display_name = "Fast Bunny Hood"
 
 
+class PlantBeans(Toggle):
+    """Pre-plants all 10 magic beans in the soft soil spots."""
+    display_name = "Plant Magic Beans"
+
+
 class ChickenCount(Range):
     """Controls the number of Cuccos for Anju to give an item as child."""
     display_name = "Cucco Count"
@@ -835,6 +839,7 @@ timesavers_options: typing.Dict[str, type(Option)] = {
     "fast_chests": FastChests, 
     "free_scarecrow": FreeScarecrow, 
     "fast_bunny_hood": FastBunny,
+    "plant_beans": PlantBeans,
     "chicken_count": ChickenCount,
     "big_poe_count": BigPoeCount,
     "fae_torch_count": FAETorchCount,
@@ -1056,6 +1061,11 @@ class DisplayDpad(DefaultOnToggle):
     display_name = "Display D-Pad HUD"
 
 
+class DpadDungeonMenu(DefaultOnToggle):
+    """Show separated menus on the pause screen for dungeon keys, rewards, and Vanilla/MQ info."""
+    display_name = "Display D-Pad Dungeon Info"
+
+
 class CorrectColors(DefaultOnToggle):
     """Makes in-game models match their HUD element colors."""
     display_name = "Item Model Colors Match Cosmetics"
@@ -1093,6 +1103,7 @@ class SwordTrailDuration(Range):
 cosmetic_options: typing.Dict[str, type(Option)] = {
     "default_targeting": Targeting,
     "display_dpad": DisplayDpad,
+    "dpad_dungeon_menu": DpadDungeonMenu,
     "correct_model_colors": CorrectColors,
     "background_music": BackgroundMusic,
     "fanfares": Fanfares,

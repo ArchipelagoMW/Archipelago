@@ -48,6 +48,10 @@ class Dungeon(object):
         return item.name in [dungeon_item.name for dungeon_item in self.all_items]
 
 
+    def item_name(self, name):
+        return f"{self.name} {name}"
+
+
     def __str__(self):
         return str(self.__unicode__())
 

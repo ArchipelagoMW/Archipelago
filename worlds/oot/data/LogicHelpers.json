@@ -49,7 +49,7 @@
     "can_summon_gossip_fairy": "Ocarina and (Zeldas_Lullaby or Eponas_Song or Song_of_Time or Suns_Song)",
     "can_summon_gossip_fairy_without_suns": "Ocarina and (Zeldas_Lullaby or Eponas_Song or Song_of_Time)",
     "can_take_damage": "damage_multiplier != 'ohko' or Fairy or can_use(Nayrus_Love)",
-    "can_plant_bean": "plant_beans or (is_child and (Magic_Bean, 10))",
+    "can_plant_bean": "plant_beans or (is_child and _oot_has_beans)",
     "can_play(song)": "Ocarina and song",
     "can_open_bomb_grotto": "can_blast_or_smash and (Stone_of_Agony or logic_grottos_without_agony)",
     "can_open_storm_grotto": "can_play(Song_of_Storms) and (Stone_of_Agony or logic_grottos_without_agony)",
@@ -107,24 +107,24 @@
     "can_build_rainbow_bridge": "(
         (bridge == 'open') or
         (bridge == 'vanilla' and Shadow_Medallion and Spirit_Medallion and Light_Arrows) or
-        (bridge == 'stones' and has_stones(bridge_stones)) or
-        (bridge == 'medallions' and has_medallions(bridge_medallions)) or
-        (bridge == 'dungeons' and has_dungeon_rewards(bridge_rewards)) or
+        (bridge == 'stones' and _oot_has_stones(bridge_stones)) or
+        (bridge == 'medallions' and _oot_has_medallions(bridge_medallions)) or
+        (bridge == 'dungeons' and _oot_has_dungeon_rewards(bridge_rewards)) or
         (bridge == 'tokens' and (Gold_Skulltula_Token, bridge_tokens)) or
-        (bridge == 'hearts' and has_hearts(bridge_hearts)))",
+        (bridge == 'hearts' and _oot_has_hearts(bridge_hearts)))",
     "can_trigger_lacs": "(
         (lacs_condition == 'vanilla' and Shadow_Medallion and Spirit_Medallion) or
-        (lacs_condition == 'stones' and has_stones(lacs_stones)) or
-        (lacs_condition == 'medallions' and has_medallions(lacs_medallions)) or
-        (lacs_condition == 'dungeons' and has_dungeon_rewards(lacs_rewards)) or
+        (lacs_condition == 'stones' and _oot_has_stones(lacs_stones)) or
+        (lacs_condition == 'medallions' and _oot_has_medallions(lacs_medallions)) or
+        (lacs_condition == 'dungeons' and _oot_has_dungeon_rewards(lacs_rewards)) or
         (lacs_condition == 'tokens' and (Gold_Skulltula_Token, lacs_tokens)) or
-        (lacs_condition == 'hearts' and has_hearts(lacs_hearts)))",
+        (lacs_condition == 'hearts' and _oot_has_hearts(lacs_hearts)))",
     "can_receive_ganon_bosskey": "(
-        (shuffle_ganon_bosskey == 'stones' and has_stones(ganon_bosskey_stones)) or
-        (shuffle_ganon_bosskey == 'medallions' and has_medallions(ganon_bosskey_medallions)) or
-        (shuffle_ganon_bosskey == 'dungeons' and has_dungeon_rewards(ganon_bosskey_rewards)) or
+        (shuffle_ganon_bosskey == 'stones' and _oot_has_stones(ganon_bosskey_stones)) or
+        (shuffle_ganon_bosskey == 'medallions' and _oot_has_medallions(ganon_bosskey_medallions)) or
+        (shuffle_ganon_bosskey == 'dungeons' and _oot_has_dungeon_rewards(ganon_bosskey_rewards)) or
         (shuffle_ganon_bosskey == 'tokens' and (Gold_Skulltula_Token, ganon_bosskey_tokens)) or
-        (shuffle_ganon_bosskey == 'hearts' and has_hearts(ganon_bosskey_hearts))) or
+        (shuffle_ganon_bosskey == 'hearts' and _oot_has_hearts(ganon_bosskey_hearts))) or
         (shuffle_ganon_bosskey == 'triforce' and (Triforce_Piece, triforce_goal_per_world)) or
         (shuffle_ganon_bosskey != 'stones' and shuffle_ganon_bosskey != 'medallions' and
         shuffle_ganon_bosskey != 'dungeons' and shuffle_ganon_bosskey != 'tokens' and
