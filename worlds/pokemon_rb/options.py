@@ -144,6 +144,14 @@ class RandomizeHiddenItems(Choice):
     default = 0
 
 
+class TrainerSanity(Toggle):
+    """Add a location check to every trainer in the game, which can be obtained by talking to a trainer after defeating
+    them. Does not affect gym leaders and some scripted event battles (including all Rival, Giovanni, and
+    Cinnabar Gym battles)."""
+    display_name = "Trainersanity"
+    default = 0
+
+
 class FreeFlyLocation(Toggle):
     """One random fly destination will be unlocked by default."""
     display_name = "Free Fly Location"
@@ -450,6 +458,7 @@ pokemon_rb_options = {
     "extra_strength_boulders": ExtraStrengthBoulders,
     "require_item_finder": RequireItemFinder,
     "randomize_hidden_items": RandomizeHiddenItems,
+    "trainersanity": TrainerSanity,
     "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
     "free_fly_location": FreeFlyLocation,
     "oaks_aide_rt_2": OaksAidRt2,

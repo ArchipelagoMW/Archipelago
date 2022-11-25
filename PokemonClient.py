@@ -132,13 +132,7 @@ async def parse_locations(data: List, ctx: GBContext):
     flags = {"EventFlag": data[:0x140], "Missable": data[0x140:0x140 + 0x20],
              "Hidden": data[0x140 + 0x20: 0x140 + 0x20 + 0x0E], "Rod": data[0x140 + 0x20 + 0x0E:]}
 
-    # Check for clear problems
     if len(flags['Rod']) > 1:
-        return
-    if flags["EventFlag"][1] + flags["EventFlag"][8] + flags["EventFlag"][9] + flags["EventFlag"][12] \
-            + flags["EventFlag"][61] + flags["EventFlag"][62] + flags["EventFlag"][63] + flags["EventFlag"][64] \
-            + flags["EventFlag"][65] + flags["EventFlag"][66] + flags["EventFlag"][67] + flags["EventFlag"][68] \
-            + flags["EventFlag"][69] + flags["EventFlag"][70] != 0:
         return
 
     for flag_type, loc_map in location_map.items():

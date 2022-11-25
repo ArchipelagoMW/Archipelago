@@ -417,6 +417,10 @@ def generate_output(self, output_directory: str):
     data[rom_addresses["Text_Badges_Needed"]] = encode_text(
         str(max(self.multiworld.victory_road_condition[self.player].value,
                 self.multiworld.elite_four_condition[self.player].value)))[0]
+    write_bytes(data, encode_text(
+        self.multiworld.get_location("Route 3 - Pokemon For Sale", self.player).item.name.upper()),
+                rom_addresses["Text_Magikarp_Salesman"])
+
     if self.multiworld.badges_needed_for_hm_moves[self.player].value == 0:
         for hm_move in poke_data.hm_moves:
             write_bytes(data, bytearray([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
@@ -525,15 +529,18 @@ def generate_output(self, output_directory: str):
             for i, move in enumerate(self.learnsets[mon]):
                 data[(address + 1) + i * 2] = poke_data.moves[move]["id"]
 
-    data[rom_addresses["Option_Aide_Rt2"]] = self.multiworld.oaks_aide_rt_2[self.player]
-    data[rom_addresses["Option_Aide_Rt11"]] = self.multiworld.oaks_aide_rt_11[self.player]
-    data[rom_addresses["Option_Aide_Rt15"]] = self.multiworld.oaks_aide_rt_15[self.player]
+    data[rom_addresses["Option_Aide_Rt2"]] = self.multiworld.oaks_aide_rt_2[self.player].value
+    data[rom_addresses["Option_Aide_Rt11"]] = self.multiworld.oaks_aide_rt_11[self.player].value
+    data[rom_addresses["Option_Aide_Rt15"]] = self.multiworld.oaks_aide_rt_15[self.player].value
 
     if self.multiworld.safari_zone_normal_battles[self.player].value == 1:
         data[rom_addresses["Option_Safari_Zone_Battle_Type"]] = 255
 
     if self.multiworld.reusable_tms[self.player].value:
         data[rom_addresses["Option_Reusable_TMs"]] = 0xC9
+
+    data[rom_addresses["Option_Trainersanity"]] = self.multiworld.trainersanity[self.player].value
+    data[rom_addresses["Option_Trainersanity2"]] = self.multiworld.trainersanity[self.player].value
 
     process_trainer_data(self, data)
 

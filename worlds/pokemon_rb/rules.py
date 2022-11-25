@@ -87,7 +87,14 @@ def set_rules(world, player):
         "Seafoam Islands B4F - Legendary Pokemon": lambda state: state.pokemon_rb_can_strength(player),
         "Vermilion City - Legendary Pokemon": lambda state: state.pokemon_rb_can_surf(player) and state.has("S.S. Ticket", player)
     }
-
+    trainersanity_access_rules = {
+        "Route 4 - Lass": lambda state: state.pokemon_rb_can_surf(player),
+        "Route 15 - Jr. Trainer F 1": lambda state: state.pokemon_rb_can_cut(player),
+        "Silph Co 11F - Rocket 2 (Card Key)": lambda state: state.has("Card Key", player),
+        "Silph Co 9F - Rocket 2 (Card Key)": lambda state: state.has("Card Key", player),
+        "Silph Co 3F - Scientist (Card Key)": lambda state: state.has("Card Key", player),
+        "Route 10 - Pokemaniac": lambda state: state.pokemon_rb_can_surf(player),
+    }
     hidden_item_access_rules = {
         "Viridian Forest - Hidden Item Northwest by Trainer": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),

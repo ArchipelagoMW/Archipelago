@@ -103,15 +103,13 @@ class PokemonRedBlueWorld(World):
         locations = [location for location in location_data if location.type == "Item"]
         item_pool = []
         for location in locations:
-            if "Hidden" in location.name and not self.multiworld.randomize_hidden_items[self.player].value:
-                continue
-            if "Rock Tunnel B1F" in location.region and not self.multiworld.extra_key_items[self.player].value:
-                continue
-            if location.name == "Celadon City - Mansion Lady" and not self.multiworld.tea[self.player].value:
+            if not location.inclusion(self.multiworld, self.player):
                 continue
             if location.original_item in self.multiworld.start_inventory[self.player].value and \
                     location.original_item in item_groups["Unique"]:
                 start_inventory[location.original_item] -= 1
+                item = self.create_filler()
+            elif location.original_item is None:
                 item = self.create_filler()
             else:
                 item = self.create_item(location.original_item)
@@ -132,9 +130,8 @@ class PokemonRedBlueWorld(World):
         if self.multiworld.old_man[self.player].value == 1:
             item = self.create_item("Oak's Parcel")
             locations = []
-            for location in self.multiworld.get_locations():
-                if location.player == self.player and location.item is None and location.can_reach(self.multiworld.state) \
-                        and location.item_rule(item):
+            for location in self.multiworld.get_unfilled_locations(self.player):
+                if location.can_fill(self.multiworld.state, item, True):
                     locations.append(location)
             self.multiworld.random.choice(locations).place_locked_item(item)
 
@@ -178,7 +175,7 @@ class PokemonRedBlueWorld(World):
             if loc.name in self.multiworld.priority_locations[self.player].value:
                 add_item_rule(loc, lambda i: i.advancement)
             for item in reversed(self.multiworld.itempool):
-                if item.player == self.player and loc.item_rule(item):
+                if item.player == self.player and loc.can_fill(self.multiworld.state, item, False):
                     self.multiworld.itempool.remove(item)
                     state = sweep_from_pool(self.multiworld.state, self.multiworld.itempool + unplaced_items)
                     if state.can_reach(loc, "Location", self.player):
@@ -248,7 +245,7 @@ class PokemonRedBlueWorld(World):
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice([item for item in item_table if item_table[item].classification in
                                          [ItemClassification.filler, ItemClassification.trap] and item not in
-                                         item_groups["Vending Machine Drinks"]])
+                                         item_groups["Vending Machine Drinks"] + item_groups["Unique"]])
 
     def fill_slot_data(self) -> dict:
         # for trackers, except death link
