@@ -4,7 +4,7 @@ import subprocess
 import Utils
 from functools import lru_cache
 
-__version__ = '6.1.0 f.LUM'
+__version__ = '7.0.0'
 
 
 def data_path(*args):

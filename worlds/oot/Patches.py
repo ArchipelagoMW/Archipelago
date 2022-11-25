@@ -2,6 +2,7 @@ import struct
 import itertools
 import re
 import zlib
+import datetime
 from collections import defaultdict
 from functools import partial
 
@@ -22,6 +23,9 @@ from .SaveContext import SaveContext
 from .SceneFlags import get_alt_list_bytes, get_collectible_flag_table, get_collectible_flag_table_bytes
 from .TextBox import character_table, NORMAL_LINE_WIDTH
 from .texture_util import ci4_rgba16patch_to_ci8, rgba16_patch
+from .Utils import __version__
+
+from Utils import __version__ as ap_version
 
 AP_PROGRESSION = 0xD4
 AP_JUNK = 0xD5
@@ -223,6 +227,40 @@ def patch_rom(world, rom):
 
     if world.bombchus_in_logic:
         rom.write_int32(rom.sym('BOMBCHUS_IN_LOGIC'), 1)
+
+    # show seed info on file select screen
+    def makebytes(txt, size):
+        _bytes = list(ord(c) for c in txt[:size-1]) + [0] * size
+        return _bytes[:size]
+
+    def truncstr(txt, size):
+        if len(txt) > size:
+            txt = txt[:size-3] + "..."
+        return txt
+
+    line_len = 21
+    version_str = "version " + __version__
+    if len(version_str) > line_len:
+        version_str = "ver. " + __version__
+    rom.write_bytes(rom.sym('VERSION_STRING_TXT'), makebytes(version_str, 25))
+
+    if world.multiworld.players > 1:
+        world_str = f"{world.player} of {world.multiworld.players}"
+    else:
+        world_str = ""
+    rom.write_bytes(rom.sym('WORLD_STRING_TXT'), makebytes(world_str, 12))
+
+    time_str = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M") + " UTC"
+    rom.write_bytes(rom.sym('TIME_STRING_TXT'), makebytes(time_str, 25))
+
+    rom.write_byte(rom.sym('CFG_SHOW_SETTING_INFO'), 0x01)
+
+    msg = [f"Archipelago {ap_version}", ""]
+    for idx,part in enumerate(msg):
+        part_bytes = list(ord(c) for c in part) + [0] * (line_len+1)
+        part_bytes = part_bytes[:(line_len+1)]
+        symbol = rom.sym('CFG_CUSTOM_MESSAGE_{}'.format(idx+1))
+        rom.write_bytes(symbol, part_bytes)
 
     # Change graveyard graves to not allow grabbing on to the ledge
     rom.write_byte(0x0202039D, 0x20)
