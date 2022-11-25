@@ -1,6 +1,6 @@
 import string
 from typing import Dict, List
-from .Items import NoitaItem, item_table, item_pool_weights
+from .Items import NoitaItem, item_table, item_pool_weights, required_items
 from .Locations import NoitaLocation, item_pickups
 
 from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
@@ -25,7 +25,7 @@ class NoitaWeb(WebWorld):
 class NoitaWorld(World):
     """
     Noita is a magical action roguelite set in a world where every pixel is physically simulated. Fight, explore, melt,
-    burn, freeze and evaporate your way through the procedurally generated world using spells you've created yourself.
+    burn, freeze, and evaporate your way through the procedurally generated world using wands you've created yourself.
     """
     game: str = "Noita"
     option_definitions = noita_options
@@ -45,7 +45,8 @@ class NoitaWorld(World):
         junk_pool = item_pool_weights[pool_option].copy()
         # Generate item pool
         itempool: List = []
-
+        for (name, num) in required_items.items():
+            itempool += [name] * num
         for i in range(1, 1 + self.world.total_locations[self.player].value):
             itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()))
 
@@ -76,7 +77,7 @@ class NoitaWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
-        if name == "Heart":
+        if name == "Heart" or name.startswith("Perk"):
             classification = ItemClassification.progression
         elif name.startswith("Wand"):
             classification = ItemClassification.useful
