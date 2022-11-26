@@ -133,6 +133,10 @@ def has_ultra_high_capacity_tank(state: "CollectionState", player: int) -> bool:
 def has_lightweight_high_capacity_tank(state: "CollectionState", player: int) -> bool:
     return has_modification_station(state, player) and state.has("Lightweight High Capacity Tank", player)
 
+
+def has_ultra_glide_fins(state: "CollectionState", player: int) -> bool:
+    return has_modification_station(state, player) and state.has("Ultra Glide Fins", player)
+
 # Swim depth rules:
 # Rebreather, high capacity tank and fins are available from the start.
 # All tests for those were done without inventory for light weight.
@@ -151,7 +155,7 @@ def get_max_swim_depth(state: "CollectionState", player: int) -> int:
             else:
                 depth += 200  # It's about 650m. Give some room
         # seaglide and fins cannot be used together
-        elif state.has("Ultra Glide Fins", player):
+        elif has_ultra_glide_fins(state, player):
             if has_ultra_high_capacity_tank(state, player):
                 depth += 150
             elif has_lightweight_high_capacity_tank(state, player):
