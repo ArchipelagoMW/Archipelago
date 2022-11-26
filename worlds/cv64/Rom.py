@@ -463,6 +463,15 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     # Prevent the vanilla Magical Nitro transport's "can explode" flag from setting
     rom.write_bytes(0xB5D7AA, [0x00, 0x00, 0x00, 0x00])
 
+    # Enable the Game Over's "Continue" menu starting the cursor on whichever checkpoint is most recent
+    rom.write_bytes(0xB4DDC, [0x0C, 0x06, 0x0D, 0x58])  # JAL 0x80183560
+    rom.write_bytes(0x106750, PatchName.continue_cursor_start_checker)
+    rom.write_bytes(0x1C444, [0x08, 0x0F, 0xF0, 0x90])  # J   0x803FC240
+    rom.write_bytes(0xBFC240, PatchName.savepoint_cursor_updater)
+    rom.write_bytes(0x1C2D0, [0x08, 0x0F, 0xF0, 0x94])  # J   0x803FC250
+    rom.write_bytes(0xBFC250, PatchName.stage_start_cursor_updater)
+    rom.write_byte(0xB585C8, 0xFF)
+
     # Add data for White Jewel #22 (the new Duel Tower savepoint) at the end of the White Jewel ID data list
     rom.write_bytes(0x104AC8, [0x00, 0x00, 0x00, 0x06,
                                0x00, 0x13, 0x00, 0x15])
