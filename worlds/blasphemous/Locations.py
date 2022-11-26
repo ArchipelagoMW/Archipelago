@@ -766,7 +766,7 @@ location_table: List[LocationDict] = [
         'room': "D01Z04S16"}, 
     {'name': "MD: SlC entrance ledge",
         'region': "md",
-        'game_id': "CO03",
+        'game_id': "CO21",
         'room': "D01Z04S13"},
 
     # Mother of Mothers (14)
@@ -1128,7 +1128,7 @@ location_table: List[LocationDict] = [
         'room': "D02Z01S08"},
     {'name': "WOTW: White lady cave cherub",
         'region': "wotw",
-        'game_id': "RESCUED_CHERUB_17",
+        'game_id': "RESCUED_CHERUB_27",
         'room': "D02Z01S06"},
     {'name': "WOTW: White lady cave ledge",
         'region': "wotw",
