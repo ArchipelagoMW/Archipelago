@@ -24,8 +24,7 @@ class WargrooveWeb(WebWorld):
 
 class WargrooveWorld(World):
     """
-    Command an army, customize battlefields, and challenge your friends,
-    in this richly detailed return to retro turn-based combat!
+    Command an army, in this retro style turn based strategy game!
     """
 
     option_definitions = wargroove_options
