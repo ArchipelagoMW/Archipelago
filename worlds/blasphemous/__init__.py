@@ -800,8 +800,15 @@ class BlasphemousWorld(World):
     
         slot_data = {
             "locations": locations,
+            "local_wax_red": red_wax_count,
+            "local_wax_blue": blue_wax_count,
+            "local_thorns": thorn_count,
+            "local_vessels": vessel_count,
+            "local_knots": knot_count,
+            "local_quicksilver": quicksilver_count,
+            "local_verses": verses_count,
             "enemy_randomizer": self.multiworld.enemy_randomizer[self.player].value,
-            "seed": self.multiworld.seed
+            "enemy_seed": self.multiworld.random.randint(100000, 999999)
         }
     
         return slot_data
@@ -866,8 +873,15 @@ class BlasphemousWorld(World):
     
         slot_data = {
             "locations": locations,
+            "local_wax_red": red_wax_count,
+            "local_wax_blue": blue_wax_count,
+            "local_thorns": thorn_count,
+            "local_vessels": vessel_count,
+            "local_knots": knot_count,
+            "local_quicksilver": quicksilver_count,
+            "local_verses": verses_count,
             "enemy_randomizer": self.multiworld.enemy_randomizer[self.player].value,
-            "seed": self.multiworld.seed
+            "enemy_seed": self.multiworld.random.randint(100000, 999999)
         }
     
         filename = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.player_name[self.player]}.json"
