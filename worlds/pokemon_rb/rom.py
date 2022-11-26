@@ -542,8 +542,10 @@ def generate_output(self, output_directory: str):
     data[rom_addresses["Option_Trainersanity"]] = self.multiworld.trainersanity[self.player].value
     data[rom_addresses["Option_Trainersanity2"]] = self.multiworld.trainersanity[self.player].value
 
-    for item in self.multiworld.precollected_items[self.player]:
-        data[rom_addresses["Start_Inventory"] + item.code - 172000000] += 1
+    for item in reversed(self.multiworld.precollected_items[self.player]):
+        if data[rom_addresses["Start_Inventory"] + item.code - 172000000] < 99:
+            data[rom_addresses["Start_Inventory"] + item.code - 172000000] += 1
+            self.multiworld.precollected_items[self.player].remove(item)
 
     process_trainer_data(self, data)
 

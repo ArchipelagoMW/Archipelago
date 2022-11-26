@@ -100,6 +100,9 @@ class PokemonRedBlueWorld(World):
 
     def create_items(self) -> None:
         start_inventory = self.multiworld.start_inventory[self.player].value.copy()
+        if self.multiworld.randomize_pokedex[self.player].value == 2:
+            start_inventory["Pokedex"] = 1
+            self.multiworld.push_precollected(self.create_item("Pokedex"))
         locations = [location for location in location_data if location.type == "Item"]
         item_pool = []
         for location in locations:

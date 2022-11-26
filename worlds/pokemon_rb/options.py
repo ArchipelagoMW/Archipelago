@@ -106,6 +106,14 @@ class OldMan(Choice):
     default = 1
 
 
+class RandomizePokedex(Choice):
+    """Randomize the location of the Pokedex, or start with it. It is required to receive items from Oak's Aides."""
+    display_name = "Randomize Pokedex"
+    option_vanilla = 0
+    option_randomize = 1
+    option_start_with = 2
+
+
 class Tea(Toggle):
     """Adds a Tea item to the item pool which the Saffron guards require instead of the vending machine drinks.
     Adds a location check to the Celadon Mansion 1F, where Tea is acquired in FireRed and LeafGreen."""
@@ -453,6 +461,7 @@ pokemon_rb_options = {
     "second_fossil_check_condition": SecondFossilCheckCondition,
     "badgesanity": BadgeSanity,
     "old_man": OldMan,
+    "randomize_pokedex": RandomizePokedex,
     "tea": Tea,
     "extra_key_items": ExtraKeyItems,
     "extra_strength_boulders": ExtraStrengthBoulders,

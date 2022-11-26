@@ -20,6 +20,10 @@ def extra_key_items(multiworld, player):
     return multiworld.extra_key_items[player].value == 1
 
 
+def pokedex(multiworld, player):
+    return multiworld.randomize_pokedex[player].value > 0
+
+
 def always_on(multiworld, player):
     return True
 
@@ -393,6 +397,8 @@ location_data = [
     LocationData("Vermilion City", "Hidden Item In Water Near Fan Club", "Max Ether", rom_addresses['Hidden_Item_Vermilion_City'], Hidden(51), inclusion=hidden_items),
     LocationData("Cerulean City", "Hidden Item Gym Badge Guy's Backyard", "Rare Candy", rom_addresses['Hidden_Item_Cerulean_City'], Hidden(52), inclusion=hidden_items),
     LocationData("Route 4", "Hidden Item Plateau East Of Mt Moon", "Great Ball", rom_addresses['Hidden_Item_Route_4'], Hidden(53), inclusion=hidden_items),
+
+    LocationData("Pallet Town", "Oak's Parcel Reward", "Pokedex", rom_addresses["Event_Pokedex"], EventFlag(0x38), inclusion=pokedex),
 
     LocationData("Pokemon Mansion 1F", "Scientist", None, rom_addresses["Trainersanity_EVENT_BEAT_MANSION_1_TRAINER_0_ITEM"], EventFlag(376), inclusion=trainersanity),
     LocationData("Pokemon Mansion 2F", "Burglar", None, rom_addresses["Trainersanity_EVENT_BEAT_MANSION_2_TRAINER_0_ITEM"], EventFlag(43), inclusion=trainersanity),
