@@ -53,7 +53,7 @@ class GBCommandProcessor(ClientCommandProcessor):
 class GBContext(CommonContext):
     command_processor = GBCommandProcessor
     game = 'Pokemon Red and Blue'
-    items_handling = 0b101
+    items_handling = 0b001
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
