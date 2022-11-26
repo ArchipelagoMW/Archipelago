@@ -152,6 +152,7 @@ Type: dirifempty; Name: "{app}"
 [InstallDelete]
 Type: files; Name: "{app}\ArchipelagoLttPClient.exe"
 Type: filesandordirs; Name: "{app}\lib\worlds\rogue-legacy*"
+#include "installdelete.iss"
 
 [Registry]
 
