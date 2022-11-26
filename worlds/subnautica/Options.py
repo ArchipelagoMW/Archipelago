@@ -8,21 +8,26 @@ class SwimRule(Choice):
     """What logic considers ok swimming distances.
     Easy: +200 depth from any max vehicle depth.
     Normal: +400 depth from any max vehicle depth.
-    Items: Expected depth is extended by items like seaglide, ultra glide fins and ultra high capacity tank.
+    Warning: Normal can expect you to death run to a location (No viable return trip).
+    Hard: +600 depth from any max vehicle depth.
+    Warning: Hard may require bases, deaths, glitches, multi-tank inventory or other depth extending means.
+    Items: Expected depth is extended by items like seaglide, ultra glide fins and capacity tanks.
     """
     display_name = "Swim Rule"
     option_easy = 0
     option_normal = 1
-    option_items_easy = 2
-    option_items_normal = 3
+    option_hard = 2
+    option_items_easy = 3
+    option_items_normal = 4
+    option_items_hard = 5
 
     @property
     def base_depth(self) -> int:
-        return 400 if self.value % 2 else 200
+        return [200, 400, 600][self.value % 3]
 
     @property
     def consider_items(self) -> bool:
-        return self.value > 1
+        return self.value > 2
 
 
 class ItemPool(Choice):
