@@ -774,25 +774,25 @@ class BlasphemousWorld(World):
                 else:
                     data["item"] = "AP"
 
-                if loc.item.name == "Bead of Red Wax":
+                if loc.item.name == "Bead of Red Wax" and loc.item.player == self.player:
                     data["item"] = self.item_name_to_game_id[loc.item.name][red_wax_count]
                     red_wax_count += 1
-                elif loc.item.name == "Bead of Blue Wax":
+                elif loc.item.name == "Bead of Blue Wax" and loc.item.player == self.player:
                     data["item"] = self.item_name_to_game_id[loc.item.name][blue_wax_count]
                     blue_wax_count += 1
-                elif loc.item.name == "Thorn":
+                elif loc.item.name == "Thorn" and loc.item.player == self.player:
                     data["item"] = self.item_name_to_game_id[loc.item.name][thorn_count]
                     thorn_count += 1
-                elif loc.item.name == "Empty Bile Vessel":
+                elif loc.item.name == "Empty Bile Vessel" and loc.item.player == self.player:
                     data["item"] = self.item_name_to_game_id[loc.item.name][vessel_count]
                     vessel_count += 1
-                elif loc.item.name == "Knot of Rosary Rope":
+                elif loc.item.name == "Knot of Rosary Rope" and loc.item.player == self.player:
                     data["item"] = self.item_name_to_game_id[loc.item.name][knot_count]
                     knot_count += 1
-                elif loc.item.name == "Quicksilver":
+                elif loc.item.name == "Quicksilver" and loc.item.player == self.player:
                     data["item"] = self.item_name_to_game_id[loc.item.name][quicksilver_count]
                     quicksilver_count += 1
-                elif loc.item.name == "Verses Spun from Gold":
+                elif loc.item.name == "Verses Spun from Gold" and loc.item.player == self.player:
                     data["item"] = self.item_name_to_game_id[loc.item.name][verses_count]
                     verses_count += 1
 
@@ -840,25 +840,25 @@ class BlasphemousWorld(World):
                 else:
                     data["item"] = "AP"
 
-                if loc.item.name == "Bead of Red Wax":
+                if loc.item.name == "Bead of Red Wax" and loc.item.player == self.player:
                     data["item"] = self.item_name_to_game_id[loc.item.name][red_wax_count]
                     red_wax_count += 1
-                elif loc.item.name == "Bead of Blue Wax":
+                elif loc.item.name == "Bead of Blue Wax" and loc.item.player == self.player:
                     data["item"] = self.item_name_to_game_id[loc.item.name][blue_wax_count]
                     blue_wax_count += 1
-                elif loc.item.name == "Thorn":
+                elif loc.item.name == "Thorn" and loc.item.player == self.player:
                     data["item"] = self.item_name_to_game_id[loc.item.name][thorn_count]
                     thorn_count += 1
-                elif loc.item.name == "Empty Bile Vessel":
+                elif loc.item.name == "Empty Bile Vessel" and loc.item.player == self.player:
                     data["item"] = self.item_name_to_game_id[loc.item.name][vessel_count]
                     vessel_count += 1
-                elif loc.item.name == "Knot of Rosary Rope":
+                elif loc.item.name == "Knot of Rosary Rope" and loc.item.player == self.player:
                     data["item"] = self.item_name_to_game_id[loc.item.name][knot_count]
                     knot_count += 1
-                elif loc.item.name == "Quicksilver":
+                elif loc.item.name == "Quicksilver" and loc.item.player == self.player:
                     data["item"] = self.item_name_to_game_id[loc.item.name][quicksilver_count]
                     quicksilver_count += 1
-                elif loc.item.name == "Verses Spun from Gold":
+                elif loc.item.name == "Verses Spun from Gold" and loc.item.player == self.player:
                     data["item"] = self.item_name_to_game_id[loc.item.name][verses_count]
                     verses_count += 1
 
