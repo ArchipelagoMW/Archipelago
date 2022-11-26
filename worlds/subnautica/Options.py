@@ -4,6 +4,27 @@ from Options import Choice, Range, DeathLink
 from .Creatures import all_creatures, Definitions
 
 
+class SwimRule(Choice):
+    """What logic considers ok swimming distances.
+    Easy: +200 depth from any max vehicle depth.
+    Normal: +400 depth from any max vehicle depth.
+    Items: Expected depth is extended by items like seaglide, ultra glide fins and ultra high capacity tank.
+    """
+    display_name = "Swim Rule"
+    option_easy = 0
+    option_normal = 1
+    option_items_easy = 2
+    option_items_normal = 3
+
+    @property
+    def base_depth(self) -> int:
+        return 400 if self.value % 2 else 200
+
+    @property
+    def consider_items(self) -> bool:
+        return self.value > 1
+
+
 class ItemPool(Choice):
     """Valuable item pool leaves all filler items in their vanilla locations and
     creates random duplicates of important items into freed spots."""
@@ -75,6 +96,7 @@ class SubnauticaDeathLink(DeathLink):
 
 
 options = {
+    "swim_rule": SwimRule,
     "item_pool": ItemPool,
     "goal": Goal,
     "creature_scans": CreatureScans,
