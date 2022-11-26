@@ -30,7 +30,7 @@ item_table: Dict[str, ItemData] = {
     'Harpoon Ship': ItemData(52014, 'Unit', True),
     'Warship': ItemData(52015, 'Unit', True),
     'Thief': ItemData(52016, 'Unit', True),
-    'Rifleman': ItemData(52017, 'Unit', False),
+    'Rifleman': ItemData(52017, 'Unit', True),
 
     # Map Triggers
     'Eastern Bridges': ItemData(52018, 'Trigger', True),

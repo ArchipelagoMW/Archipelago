@@ -112,25 +112,29 @@ def set_rules(world: MultiWorld, player: int):
 
     # Levels 4AA-4AC
     set_rule(world.get_location('Surrounded: Caesar', player),
-             lambda state: state._wargroove_has_region(player, 'Surrounded'))
+             lambda state: state._wargroove_has_item_and_region(player, 'Knight', 'Surrounded'))
     set_rule(world.get_location('Surrounded: Victory', player),
-             lambda state: state._wargroove_has_region(player, 'Surrounded'))
+             lambda state: state._wargroove_has_item_and_region(player, 'Knight', 'Surrounded'))
     set_rule(world.get_location('Darkest Knight: Victory', player),
              lambda state: state._wargroove_has_item_and_region(player, 'Spearman', 'Darkest Knight'))
     set_rule(world.get_location('Robbed: Victory', player),
-             lambda state: state._wargroove_has_item_and_region(player, 'Thief', 'Robbed'))
+             lambda state: state._wargroove_has_item_and_region(player, 'Thief', 'Robbed') and
+                           state._wargroove_has_item(player, 'Rifleman'))
 
     # Levels 4BA-4BC
     set_rule(world.get_location('Open Season: Caesar', player),
-             lambda state: state._wargroove_has_item_and_region(player, 'Mage', 'Open Season'))
+             lambda state: state._wargroove_has_item_and_region(player, 'Mage', 'Open Season') and
+                           state._wargroove_has_item(player, 'Knight'))
     set_rule(world.get_location('Open Season: Victory', player),
-             lambda state: state._wargroove_has_item_and_region(player, 'Mage', 'Open Season'))
+             lambda state: state._wargroove_has_item_and_region(player, 'Mage', 'Open Season') and
+                           state._wargroove_has_item(player, 'Knight'))
     set_rule(world.get_location('Doggo Mountain: Find all the Dogs', player),
              lambda state: state._wargroove_has_item_and_region(player, 'Knight', 'Doggo Mountain'))
     set_rule(world.get_location('Doggo Mountain: Victory', player),
              lambda state: state._wargroove_has_item_and_region(player, 'Knight', 'Doggo Mountain'))
     set_rule(world.get_location('Tenri\'s Fall: Victory', player),
-             lambda state: state._wargroove_has_item_and_region(player, 'Mage', 'Tenri\'s Fall'))
+             lambda state: state._wargroove_has_item_and_region(player, 'Mage', 'Tenri\'s Fall') and
+                           state._wargroove_has_item(player, 'Thief'))
     set_rule(world.get_location('Foolish Canal: Victory', player),
              lambda state: state._wargroove_has_item_and_region(player, 'Mage', 'Foolish Canal') and
                            state._wargroove_has_item(player, 'Spearman'))
@@ -141,11 +145,9 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location('A Ballista\'s Revenge: Victory', player),
              lambda state: state._wargroove_has_item_and_region(player, 'Ballista', 'A Ballista\'s Revenge'))
     set_rule(world.get_location('Rebel Village: Victory (Pink)', player),
-             lambda state: state._wargroove_has_item_and_region(player, 'Spearman', 'Rebel Village') and
-                           state._wargroove_has_item(player, 'Mage'))
+             lambda state: state._wargroove_has_item_and_region(player, 'Spearman', 'Rebel Village'))
     set_rule(world.get_location('Rebel Village: Victory (Red)', player),
-             lambda state: state._wargroove_has_item_and_region(player, 'Spearman', 'Rebel Village') and
-                           state._wargroove_has_item(player, 'Mage'))
+             lambda state: state._wargroove_has_item_and_region(player, 'Spearman', 'Rebel Village'))
 
 
 def set_region_exit_rules(region: Region, locations: List[Location], operator: str = "or"):
