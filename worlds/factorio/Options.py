@@ -10,7 +10,9 @@ LuaBool = Or(bool, And(int, lambda n: n in (0, 1)))
 
 
 class MaxSciencePack(Choice):
-    """Maximum level of science pack required to complete the game."""
+    """Maximum level of science pack required to complete the game.
+    This also affects the relative cost of silo and satellite recipes if they are randomized.
+    That is the only thing in which the Utility Science Pack and Space Science Pack settings differ."""
     display_name = "Maximum Required Science Pack"
     option_automation_science_pack = 0
     option_logistic_science_pack = 1
@@ -95,7 +97,14 @@ class FreeSamples(Choice):
 
 
 class TechTreeLayout(Choice):
-    """Selects how the tech tree nodes are interwoven."""
+    """Selects how the tech tree nodes are interwoven.
+    Single: No dependencies
+    Diamonds: Several grid graphs (4/9/16 nodes each)
+    Pyramids: Several top halves of diamonds (6/10/15 nodes each)
+    Funnels: Several bottom halves of diamonds (6/10/15 nodes each)
+    Trees: Several trees
+    Choices: A single balanced binary tree
+    """
     display_name = "Technology Tree Layout"
     option_single = 0
     option_small_diamonds = 1
@@ -113,7 +122,11 @@ class TechTreeLayout(Choice):
 
 
 class TechTreeInformation(Choice):
-    """How much information should be displayed in the tech tree."""
+    """How much information should be displayed in the tech tree.
+    None: No indication what a research unlocks
+    Advancement: Indicators which researches unlock items that are considered logical advancements
+    Full: Labels with exact names and recipients of unlocked items; all researches are prefilled into the !hint command.
+    """
     display_name = "Technology Tree Information"
     option_none = 0
     option_advancement = 1
