@@ -88,26 +88,26 @@ class TLoZWorld(World):
         return return_location
 
     def create_regions(self):
-        menu = Region("Menu", None, "Menu", self.player, self.world)
-        overworld = Region("Overworld", None, "Overworld", self.player, self.world)
+        menu = Region("Menu", None, "Menu", self.player, self.multiworld)
+        overworld = Region("Overworld", None, "Overworld", self.player, self.multiworld)
         self.levels = [None]  # Yes I'm making a one-indexed array in a zero-indexed language. I hate me too.
         for i in range(1, 10):
-            level = Region(f"Level {i}", None, f"Level {i}", self.player, self.world)
+            level = Region(f"Level {i}", None, f"Level {i}", self.player, self.multiworld)
             self.levels.append(level)
             new_entrance = Entrance(self.player, f"Level {i}", overworld)
             new_entrance.connect(level)
             overworld.exits.append(new_entrance)
-            self.world.regions.append(level)
+            self.multiworld.regions.append(level)
 
         for i, level in enumerate(level_locations):
             for location in level:
-                if self.world.ExpandedPool[self.player] or "Drop" not in location:
+                if self.multiworld.ExpandedPool[self.player] or "Drop" not in location:
                     self.levels[i + 1].locations.append(
                         self.create_location(location, self.location_name_to_id[location], self.levels[i + 1]))
 
         for level in range(1, 9):
             boss_event = self.create_location(f"Level {level} Boss Status", None,
-                                 self.world.get_region(f"Level {i}", self.player),
+                                 self.multiworld.get_region(f"Level {i}", self.player),
                                  True)
             boss_event.show_in_spoiler = False
             self.levels[level].locations.append(boss_event)
@@ -120,90 +120,90 @@ class TLoZWorld(World):
             overworld.locations.append(
                 self.create_location(location, self.location_name_to_id[location], overworld))
 
-        ganon = self.create_location("Ganon", None, self.world.get_region("Level 9", self.player))
-        zelda = self.create_location("Zelda", None, self.world.get_region("Level 9", self.player))
+        ganon = self.create_location("Ganon", None, self.multiworld.get_region("Level 9", self.player))
+        zelda = self.create_location("Zelda", None, self.multiworld.get_region("Level 9", self.player))
         self.levels[9].locations.append(ganon)
         self.levels[9].locations.append(zelda)
         begin_game = Entrance(self.player, "Begin Game", menu)
         menu.exits.append(begin_game)
         begin_game.connect(overworld)
-        self.world.regions.append(menu)
-        self.world.regions.append(overworld)
+        self.multiworld.regions.append(menu)
+        self.multiworld.regions.append(overworld)
 
     def create_items(self):
         # We guarantee that there will always be a key, bomb, and potion in an ungated shop.
         reserved_store_slots = random.sample(shop_locations[0:-3], 3)
-        self.world.get_location(
+        self.multiworld.get_location(
             reserved_store_slots[0],
             self.player
         ).place_locked_item(
-            self.world.create_item(
+            self.multiworld.create_item(
                 "Small Key", self.player)
         )
-        self.world.get_location(
+        self.multiworld.get_location(
             reserved_store_slots[1],
             self.player
         ).place_locked_item(
-            self.world.create_item("Bomb", self.player))
-        self.world.get_location(
+            self.multiworld.create_item("Bomb", self.player))
+        self.multiworld.get_location(
             reserved_store_slots[2],
             self.player
         ).place_locked_item(
-            self.world.create_item("Water of Life (Red)", self.player))
+            self.multiworld.create_item("Water of Life (Red)", self.player))
 
         item_amounts = item_amounts_all
-        if not self.world.ExpandedPool[self.player]:
+        if not self.multiworld.ExpandedPool[self.player]:
             item_amounts = item_amounts_standard
-            self.world.get_location(
+            self.multiworld.get_location(
                 "Take Any Item Left",
                 self.player
-            ).place_locked_item(self.world.create_item("Water of Life (Red)", self.player))
-            self.world.get_location(
+            ).place_locked_item(self.multiworld.create_item("Water of Life (Red)", self.player))
+            self.multiworld.get_location(
                 "Take Any Item Right",
                 self.player
-            ).place_locked_item(self.world.create_item("Heart Container", self.player))
+            ).place_locked_item(self.multiworld.create_item("Heart Container", self.player))
         for item in map(self.create_item, self.item_name_to_id):
             if item.name in item_amounts.keys():
-                if self.world.TriforceLocations[self.player] > 0 or item.name != "Triforce Fragment":
+                if self.multiworld.TriforceLocations[self.player] > 0 or item.name != "Triforce Fragment":
                     i = 0
                     for i in range(0, item_amounts[item.name]):
-                        self.world.itempool.append(item)
+                        self.multiworld.itempool.append(item)
                 else:
                     level = 1
                     for i in range(0, item_amounts[item.name]):
-                        self.world.get_location(
+                        self.multiworld.get_location(
                             f"Level {level} Triforce",
                             self.player
-                        ).place_locked_item(self.world.create_item(item.name, self.player))
+                        ).place_locked_item(self.multiworld.create_item(item.name, self.player))
                         level = level + 1
             else:
-                self.world.itempool.append(item)
+                self.multiworld.itempool.append(item)
 
     def set_rules(self):
         # Boss events for a nicer spoiler log playthrough
         for level in range(1, 9):
-            boss = self.world.get_location(f"Level {level} Boss", self.player)
-            boss_event = self.world.get_location(f"Level {level} Boss Status", self.player)
+            boss = self.multiworld.get_location(f"Level {level} Boss", self.player)
+            boss_event = self.multiworld.get_location(f"Level {level} Boss Status", self.player)
             status = self.create_event(f"Boss {level} Defeated")
             boss_event.place_locked_item(status)
             add_rule(boss_event, lambda state: state.can_reach(boss, "Location", self.player))
 
         # If we're doing a safe start, everything past the starting screen requires a weapon.
-        if self.world.StartingPosition[self.player] == 0:
+        if self.multiworld.StartingPosition[self.player] == 0:
             for location in cave_locations:
-                add_rule(self.world.get_location(location, self.player),
+                add_rule(self.multiworld.get_location(location, self.player),
                          lambda state: state.has_group("weapons", self.player))
             for location in major_locations:
                 if location != "Starting Sword Cave":
-                    add_rule(self.world.get_location(location, self.player),
+                    add_rule(self.multiworld.get_location(location, self.player),
                              lambda state: state.has_group("weapons", self.player))
 
         # No dungeons without weapons, no unsafe dungeons
         for i, level in enumerate(self.levels[1:10]):
             for location in level.locations:
-                add_rule(self.world.get_location(location.name, self.player),
+                add_rule(self.multiworld.get_location(location.name, self.player),
                          lambda state: state.has_group("weapons", self.player))
-                add_rule(self.world.get_location(location.name, self.player),
+                add_rule(self.multiworld.get_location(location.name, self.player),
                          lambda state: state.has("Heart Container", self.player, 3 + i) or
                                        (state.has("Blue Ring", self.player) and
                                         state.has("Heart Container", self.player, int(i / 2))) or
@@ -214,138 +214,138 @@ class TLoZWorld(World):
         # No requiring anything in a shop until we can farm for money
         # Unless someone likes to live dangerously, of course
         for location in shop_locations:
-            if self.world.StartingPosition[self.player] != 2:
-                add_rule(self.world.get_location(location, self.player),
+            if self.multiworld.StartingPosition[self.player] != 2:
+                add_rule(self.multiworld.get_location(location, self.player),
                          lambda state: state.has_group("weapons", self.player))
 
         # Everything from 4 on up has dark rooms
         for level in self.levels[4:]:
             for location in level.locations:
-                add_rule(self.world.get_location(location.name, self.player),
+                add_rule(self.multiworld.get_location(location.name, self.player),
                          lambda state: state.has_group("candles", self.player)
                                        or (state.has("Magical Rod", self.player) and state.has("Book", self.player)))
 
         # Everything from 5 on up has gaps
         for level in self.levels[5:]:
             for location in level.locations:
-                add_rule(self.world.get_location(location.name, self.player),
+                add_rule(self.multiworld.get_location(location.name, self.player),
                          lambda state: state.has("Stepladder", self.player))
 
-        add_rule(self.world.get_location("Level 5 Boss", self.player),
+        add_rule(self.multiworld.get_location("Level 5 Boss", self.player),
                  lambda state: state.has("Recorder", self.player))
 
-        add_rule(self.world.get_location("Level 6 Boss", self.player),
+        add_rule(self.multiworld.get_location("Level 6 Boss", self.player),
                  lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
 
-        add_rule(self.world.get_location("Level 7 Item (Red Candle)", self.player),
+        add_rule(self.multiworld.get_location("Level 7 Item (Red Candle)", self.player),
                  lambda state: state.has("Recorder", self.player))
-        add_rule(self.world.get_location("Level 7 Boss", self.player),
+        add_rule(self.multiworld.get_location("Level 7 Boss", self.player),
                  lambda state: state.has("Recorder", self.player))
-        add_rule(self.world.get_location("Level 7 Key Drop (Stalfos)", self.player),
+        add_rule(self.multiworld.get_location("Level 7 Key Drop (Stalfos)", self.player),
                  lambda state: state.has("Recorder", self.player))
-        add_rule(self.world.get_location("Level 7 Bomb Drop (Digdogger)", self.player),
+        add_rule(self.multiworld.get_location("Level 7 Bomb Drop (Digdogger)", self.player),
                  lambda state: state.has("Recorder", self.player))
-        add_rule(self.world.get_location("Level 7 Rupee Drop (Dodongos)", self.player),
+        add_rule(self.multiworld.get_location("Level 7 Rupee Drop (Dodongos)", self.player),
                  lambda state: state.has("Recorder", self.player))
 
         for location in food_locations:
-            add_rule(self.world.get_location(location, self.player),
+            add_rule(self.multiworld.get_location(location, self.player),
                      lambda state: state.has("Food", self.player))
 
-        add_rule(self.world.get_location("Level 8 Item (Magical Key)", self.player),
+        add_rule(self.multiworld.get_location("Level 8 Item (Magical Key)", self.player),
                  lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
-        add_rule(self.world.get_location("Level 8 Bomb Drop (Darknuts North)", self.player),
+        add_rule(self.multiworld.get_location("Level 8 Bomb Drop (Darknuts North)", self.player),
                  lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
 
         for location in self.levels[9].locations:
-            add_rule(self.world.get_location(location.name, self.player),
+            add_rule(self.multiworld.get_location(location.name, self.player),
                      lambda state: state.has("Triforce Fragment", self.player, 8) and
                                    state.has_group("swords", self.player))
 
         #for level in range(1, 9):
-        #    location = self.world.get_location(f"Level {level} Triforce", self.player)
+        #    location = self.multiworld.get_location(f"Level {level} Triforce", self.player)
         #    boss_status = f"Boss {level} Defeated"
         #    add_rule(location, lambda state: state.has(boss_status, self.player))
 
-        add_rule(self.world.get_location("Level 1 Triforce", self.player),
+        add_rule(self.multiworld.get_location("Level 1 Triforce", self.player),
                  lambda state: state.has("Boss 1 Defeated", self.player))
 
-        add_rule(self.world.get_location("Level 2 Triforce", self.player),
+        add_rule(self.multiworld.get_location("Level 2 Triforce", self.player),
                  lambda state: state.has("Boss 2 Defeated", self.player))
 
-        add_rule(self.world.get_location("Level 3 Triforce", self.player),
+        add_rule(self.multiworld.get_location("Level 3 Triforce", self.player),
                  lambda state: state.has("Boss 3 Defeated", self.player))
 
-        add_rule(self.world.get_location("Level 4 Triforce", self.player),
+        add_rule(self.multiworld.get_location("Level 4 Triforce", self.player),
                  lambda state: state.has("Boss 4 Defeated", self.player))
 
-        add_rule(self.world.get_location("Level 5 Triforce", self.player),
+        add_rule(self.multiworld.get_location("Level 5 Triforce", self.player),
                  lambda state: state.has("Boss 5 Defeated", self.player))
 
-        add_rule(self.world.get_location("Level 6 Triforce", self.player),
+        add_rule(self.multiworld.get_location("Level 6 Triforce", self.player),
                  lambda state: state.has("Boss 6 Defeated", self.player))
 
-        add_rule(self.world.get_location("Level 7 Triforce", self.player),
+        add_rule(self.multiworld.get_location("Level 7 Triforce", self.player),
                  lambda state: state.has("Boss 7 Defeated", self.player))
 
-        add_rule(self.world.get_location("Level 8 Triforce", self.player),
+        add_rule(self.multiworld.get_location("Level 8 Triforce", self.player),
                  lambda state: state.has("Boss 8 Defeated", self.player))
 
 
 
         # Sword, raft, and ladder spots
-        add_rule(self.world.get_location("White Sword Pond", self.player),
+        add_rule(self.multiworld.get_location("White Sword Pond", self.player),
                  lambda state: state.has("Heart Container", self.player, 2))
-        add_rule(self.world.get_location("Magical Sword Grave", self.player),
+        add_rule(self.multiworld.get_location("Magical Sword Grave", self.player),
                  lambda state: state.has("Heart Container", self.player, 9))
-        add_rule(self.world.get_location("Ocean Heart Container", self.player),
+        add_rule(self.multiworld.get_location("Ocean Heart Container", self.player),
                  lambda state: state.has("Stepladder", self.player))
-        if self.world.StartingPosition[self.player] != 2:
+        if self.multiworld.StartingPosition[self.player] != 2:
             # Don't allow Take Any Items until we can actually get in one
-            add_rule(self.world.get_location("Take Any Item Left", self.player),
+            add_rule(self.multiworld.get_location("Take Any Item Left", self.player),
                      lambda state: state.has_group("candles", self.player) or
                                    state.has("Raft", self.player))
-            add_rule(self.world.get_location("Take Any Item Middle", self.player),
+            add_rule(self.multiworld.get_location("Take Any Item Middle", self.player),
                      lambda state: state.has_group("candles", self.player) or
                                    state.has("Raft", self.player))
-            add_rule(self.world.get_location("Take Any Item Right", self.player),
+            add_rule(self.multiworld.get_location("Take Any Item Right", self.player),
                      lambda state: state.has_group("candles", self.player) or
                                    state.has("Raft", self.player))
         for location in self.levels[4].locations:
-            add_rule(self.world.get_location(location.name, self.player),
+            add_rule(self.multiworld.get_location(location.name, self.player),
                      lambda state: state.has("Raft", self.player) or state.has("Recorder", self.player))
         for location in self.levels[7].locations:
-            add_rule(self.world.get_location(location.name, self.player),
+            add_rule(self.multiworld.get_location(location.name, self.player),
                      lambda state: state.has("Recorder", self.player))
         for location in self.levels[8].locations:
-            add_rule(self.world.get_location(location.name, self.player),
+            add_rule(self.multiworld.get_location(location.name, self.player),
                      lambda state: state.has("Bow", self.player))
 
-        if self.world.TriforceLocations[self.player] == 1:
+        if self.multiworld.TriforceLocations[self.player] == 1:
             for location in location_table.keys():
                 if location  not in all_level_locations:
-                    forbid_item(self.world.get_location(location, self.player), "Triforce Fragment", self.player)
+                    forbid_item(self.multiworld.get_location(location, self.player), "Triforce Fragment", self.player)
 
-        add_rule(self.world.get_location("Potion Shop Item Left", self.player),
+        add_rule(self.multiworld.get_location("Potion Shop Item Left", self.player),
                  lambda state: state.has("Letter", self.player))
-        add_rule(self.world.get_location("Potion Shop Item Middle", self.player),
+        add_rule(self.multiworld.get_location("Potion Shop Item Middle", self.player),
                  lambda state: state.has("Letter", self.player))
-        add_rule(self.world.get_location("Potion Shop Item Right", self.player),
+        add_rule(self.multiworld.get_location("Potion Shop Item Right", self.player),
                  lambda state: state.has("Letter", self.player))
 
-        set_rule(self.world.get_region("Menu", self.player), lambda state: True)
-        set_rule(self.world.get_region("Overworld", self.player), lambda state: True)
+        set_rule(self.multiworld.get_region("Menu", self.player), lambda state: True)
+        set_rule(self.multiworld.get_region("Overworld", self.player), lambda state: True)
 
     def generate_basic(self):
-        ganon = self.world.get_location("Ganon", self.player)
+        ganon = self.multiworld.get_location("Ganon", self.player)
         ganon.place_locked_item(self.create_event("Triforce of Power"))
         add_rule(ganon, lambda state: state.has("Silver Arrow", self.player) and state.has("Bow", self.player))
 
-        self.world.get_location("Zelda", self.player).place_locked_item(self.create_event("Rescued Zelda!"))
-        add_rule(self.world.get_location("Zelda", self.player),
+        self.multiworld.get_location("Zelda", self.player).place_locked_item(self.create_event("Rescued Zelda!"))
+        add_rule(self.multiworld.get_location("Zelda", self.player),
                  lambda state: ganon in state.locations_checked)
 
-        self.world.completion_condition[self.player] = lambda state: state.has("Rescued Zelda!", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Rescued Zelda!", self.player)
 
     def apply_base_patch(self, rom_data):
         # Remove Triforce check for recorder so you can always warp.
@@ -389,7 +389,7 @@ class TLoZWorld(World):
             self.apply_base_patch(rom_data)
 
             # Write each location's new data in
-            for location in self.world.get_filled_locations():
+            for location in self.multiworld.get_filled_locations():
                 # Zelda and Ganon aren't real locations
                 if location.name == "Ganon" or location.name == "Zelda":
                     continue
@@ -454,18 +454,18 @@ class TLoZWorld(World):
 
     def generate_output(self, output_directory: str):
         patched_rom = self.apply_randomizer()
-        outfilebase = 'AP_' + self.world.seed_name
+        outfilebase = 'AP_' + self.multiworld.seed_name
         outfilepname = f'_P{self.player}'
-        outfilepname += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}"
+        outfilepname += f"_{self.multiworld.get_file_safe_player_name(self.player).replace(' ', '_')}"
         outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.nes')
 
-        self.rom_name_text = f'LOZ{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.world.seed:11}\0'
+        self.rom_name_text = f'LOZ{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0'
         self.romName = bytearray(self.rom_name_text, 'utf8')[:0x20]
         self.romName.extend([0] * (0x20 - len(self.romName)))
         self.rom_name = self.romName
         patched_rom[0x10:0x30] = self.romName
 
-        self.playerName = bytearray(self.world.player_name[self.player], 'utf8')[:0x20]
+        self.playerName = bytearray(self.multiworld.player_name[self.player], 'utf8')[:0x20]
         self.playerName.extend([0] * (0x20 - len(self.playerName)))
         patched_rom[0x30:0x50] = self.playerName
 
@@ -477,7 +477,7 @@ class TLoZWorld(World):
 
         patch = TLoZDeltaPatch(os.path.splitext(outputFilename)[0] + TLoZDeltaPatch.patch_file_ending,
                                player=self.player,
-                               player_name=self.world.player_name[self.player], patched_path=outputFilename)
+                               player_name=self.multiworld.player_name[self.player], patched_path=outputFilename)
         self.rom_name_available_event.set()
         patch.write()
 
@@ -486,7 +486,7 @@ class TLoZWorld(World):
         rom_name = getattr(self, "rom_name", None)
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
 
 class TLoZItem(Item):
