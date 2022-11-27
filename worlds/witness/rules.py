@@ -123,13 +123,15 @@ class WitnessLogic(LogicMixin):
                             or hedge_access
                         )
                     )
+                    
+                    shadows_shortcut = (
+                        self.can_reach("Main Island", "Region", player)
+                        and self.can_reach("Keep 4th Pressure Plate to Shadows", "Entrance", player)
+                    )
 
                     backwards_access = (
                         self.can_reach("Keep 3rd Pressure Plate to Keep 4th Pressure Plate", "Entrance", player)
-                        and backwards_to_fourth
-
-                        or self.can_reach("Main Island", "Region", player)
-                        and self.can_reach("Keep 4th Pressure Plate to Shadows", "Entrance", player)
+                        and (backwards_to_fourth or shadows_shortcut)
                     )
 
                     front_access = (
