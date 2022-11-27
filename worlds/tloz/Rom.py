@@ -53,7 +53,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
         file_name = get_base_rom_path(file_name)
-        base_rom_bytes = bytes((open(file_name, "rb")))
+        base_rom_bytes = bytes(Utils.read_snes_rom(open(file_name, "rb")))
 
         basechecksum = str(hex(zlib.crc32(base_rom_bytes))).upper()[2:]
         if NA10CHECKSUM != basechecksum:
