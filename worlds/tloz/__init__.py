@@ -1,6 +1,5 @@
 import logging
 import os
-import random
 import threading
 from typing import NamedTuple, Union
 
@@ -132,7 +131,7 @@ class TLoZWorld(World):
 
     def create_items(self):
         # We guarantee that there will always be a key, bomb, and potion in an ungated shop.
-        reserved_store_slots = random.sample(shop_locations[0:-3], 3)
+        reserved_store_slots = self.multiworld.random.sample(shop_locations[0:-3], 3)
         self.multiworld.get_location(
             reserved_store_slots[0],
             self.player
@@ -442,11 +441,11 @@ class TLoZWorld(World):
                 rom_data[location_id] = item_id
 
             # We shuffle the tiers of rupee caves. Caves that shared a value before still will.
-            secret_caves = random.sample(sorted(secret_money_ids), 3)
+            secret_caves = self.multiworld.random.sample(sorted(secret_money_ids), 3)
             secret_cave_money_amounts = [20, 50, 100]
             for i, amount in enumerate(secret_cave_money_amounts):
                 # Giving approximately double the money to keep grinding down
-                amount = amount * random.triangular(1.5, 2.5)
+                amount = amount * self.multiworld.random.triangular(1.5, 2.5)
                 secret_cave_money_amounts[i] = int(amount)
             for i, cave in enumerate(secret_caves):
                 rom_data[secret_money_ids[cave]] = secret_cave_money_amounts[i]
