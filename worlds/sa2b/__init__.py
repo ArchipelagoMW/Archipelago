@@ -334,6 +334,9 @@ class SA2BWorld(World):
 
         return created_item
 
+    def get_filler_item_name(self) -> str:
+        self.multiworld.random.choice(junk_table.keys())
+
     def set_rules(self):
         set_rules(self.multiworld, self.player, self.gate_bosses, self.mission_map, self.mission_count_map)
 
