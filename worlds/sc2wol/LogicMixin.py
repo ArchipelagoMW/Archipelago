@@ -63,7 +63,7 @@ class SC2WoLLogic(LogicMixin):
                or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any({'High Templar', 'Dark Templar'}, player)
 
     def _sc2wol_beats_protoss_deathball(self, multiworld: MultiWorld, player: int) -> bool:
-        return self.has_any({'Banshee', 'Battlecruiser'}, player) and self._sc2wol_has_competent_anti_air or \
+        return self.has_any({'Banshee', 'Battlecruiser'}, player) and self._sc2wol_has_competent_anti_air(multiworld, player) or \
                self._sc2wol_has_competent_comp(multiworld, player) and self._sc2wol_has_air_anti_air(multiworld, player)
 
     def _sc2wol_has_mm_upgrade(self, multiworld: MultiWorld, player: int) -> bool:
@@ -79,15 +79,16 @@ class SC2WoLLogic(LogicMixin):
         return get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any({'Ghost', 'Spectre'}, player)
 
     def _sc2wol_final_mission_requirements(self, multiworld: MultiWorld, player: int):
-        defense_rating = self._sc2wol_defense_rating(multiworld, player, True)
         beats_kerrigan = self.has_any({'Marine', 'Banshee', 'Ghost'}, player) or get_option_value(multiworld, player, 'required_tactics') > 0
         if get_option_value(multiworld, player, 'all_in_map') == 0:
             # Ground
+            defense_rating = self._sc2wol_defense_rating(multiworld, player, True, False)
             if self.has_any({'Battlecruiser', 'Banshee'}, player):
                 defense_rating += 3
             return defense_rating >= 12 and beats_kerrigan
         else:
             # Air
+            defense_rating = self._sc2wol_defense_rating(multiworld, player, True, True)
             return defense_rating >= 8 and beats_kerrigan \
                 and self.has_any({'Viking', 'Battlecruiser'}, player) \
                 and self.has_any({'Hive Mind Emulator', 'Psi Disruptor', 'Missile Turret'}, player)

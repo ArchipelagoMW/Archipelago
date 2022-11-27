@@ -193,7 +193,7 @@ defense_ratings = {
 }
 zerg_defense_ratings = {
     "Perdition Turret": 2,
-    # Bunker w/ Firebat
+    # Bunker w/ Firebat: 2
     "Hive Mind Emulator": 3,
     "Psi Disruptor": 3
 }
