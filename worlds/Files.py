@@ -9,8 +9,8 @@ import bsdiff4
 
 
 class AutoPatchRegister(type):
-    patch_types: ClassVar[Dict[str, AutoPatchRegister]] = {}
-    file_endings: ClassVar[Dict[str, AutoPatchRegister]] = {}
+    patch_types: ClassVar[Dict[str, APDeltaPatch]] = {}
+    file_endings: ClassVar[Dict[str, APDeltaPatch]] = {}
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoPatchRegister:
         # construct class
@@ -23,7 +23,7 @@ class AutoPatchRegister(type):
         return new_class
 
     @staticmethod
-    def get_handler(file: str) -> Optional[AutoPatchRegister]:
+    def get_handler(file: str) -> Optional[APDeltaPatch]:
         for file_ending, handler in AutoPatchRegister.file_endings.items():
             if file.endswith(file_ending):
                 return handler

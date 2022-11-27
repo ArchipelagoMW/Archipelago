@@ -218,6 +218,17 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         self.create_manifest()
 
         if is_windows:
+            from worlds.AutoSNIClient import AutoSNIClientRegister
+            from worlds.Files import AutoPatchRegister, APDeltaPatch
+            with open("registry.iss", "w") as f:
+                for game_name in AutoSNIClientRegister.game_handlers:
+                    patch_handler: APDeltaPatch = AutoPatchRegister.patch_types[game_name]
+                    f.write(f""";{patch_handler.game} handling
+Root: HKCR; Subkey: "{patch_handler.patch_file_ending}"; ValueData: "{{#MyAppName}} {patch_handler.game} patch"; Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{{#MyAppName}} {patch_handler.game} patch"; ValueData: "Archipelago {patch_handler.game} Patch"; Flags: uninsdeletekey; ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{{#MyAppName}} {patch_handler.game} patch\\DefaultIcon"; ValueData: "{{app}}\\ArchipelagoSNIClient.exe,0"; ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{{#MyAppName}} {patch_handler.game} patch\\shell\\open\\command"; ValueData: \"""{{app}}\\ArchipelagoSNIClient.exe"" ""%1\"""; ValueType: string;  ValueName: ""; Components: client/sni
+""")
             with open("setup.ini", "w") as f:
                 min_supported_windows = "6.2.9200" if sys.version_info > (3, 9) else "6.0.6000"
                 f.write(f"[Data]\nsource_path={self.buildfolder}\nmin_windows={min_supported_windows}\n")

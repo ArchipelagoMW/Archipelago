@@ -451,7 +451,6 @@ async def track_locations(ctx, roomid, roomdata):
             if misc_data_changed:
                 snes_buffered_write(ctx, SAVEDATA_START + 0x3c6, bytes(misc_data))
 
-
     if new_locations:
         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": new_locations}])
     await snes_flush_writes(ctx)
@@ -609,7 +608,6 @@ class ALTTPSNIClient(SNIClient):
         if not gamemode or gamemode[0] in DEATH_MODES:
             ctx.death_state = DeathState.dead
 
-
     async def validate_rom(self, ctx):
         from SNIClient import snes_read, snes_buffered_write, snes_flush_writes
 
@@ -630,7 +628,6 @@ class ALTTPSNIClient(SNIClient):
             await ctx.update_death_link(bool(death_link[0] & 0b1))
 
         return True
-
 
     async def game_watcher(self, ctx):
         from SNIClient import snes_read, snes_buffered_write, snes_flush_writes
