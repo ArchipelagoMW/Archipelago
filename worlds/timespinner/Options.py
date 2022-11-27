@@ -278,7 +278,7 @@ class ShowDrops(Toggle):
 
 
 class EnterSandman(Toggle):
-    "Ancient Pyramid is unlocked by the Twin Pyramid Keys, but the final boss door opens if you have all 5 Timespinner pieces"
+    "The Ancient Pyramid is unlocked by the Twin Pyramid Keys, but the final boss door opens if you have all 5 Timespinner pieces"
     display_name = "Enter Sandman"
 
 
