@@ -150,7 +150,7 @@ class WitnessWorld(World):
         hint_amount = get_option_value(self.multiworld, self.player, "hint_amount")
 
         credits_hint = (
-            "This Randomizer", "is brought to you by", "NewSoupVi, Jarno, jbzdarkid, sigma144, IHNN, blastron", -1
+            "This Randomizer is brought to you by", "NewSoupVi, Jarno, blastron,", "jbzdarkid, sigma144, IHNN, oddGarrett.", -1
         )
 
         audio_logs = get_audio_logs().copy()
