@@ -280,7 +280,8 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
     for i, location_data in enumerate(location_table):
         # Removing all item-based logic on No Logic
         if logic_level == 2:
-            location_table[i] = location_data._replace(rule=Location.access_rule)
+            location_data = location_data._replace(rule=Location.access_rule)
+            location_table[i] = location_data
         # Generating Beat event locations
         if location_data.name.endswith((": Victory", ": Defeat")):
             beat_events.append(
