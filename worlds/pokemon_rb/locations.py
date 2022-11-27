@@ -1,7 +1,7 @@
 
 from BaseClasses import Location
 from .rom_addresses import rom_addresses
-loc_id_start = 17200000
+loc_id_start = 172000000
 
 class LocationData:
     def __init__(self, region, name, original_item, rom_address=None, ram_address=None, event=False, type="Item"):
@@ -42,7 +42,6 @@ class Rod:
         self.bit = flag
         self.flag = flag
 
-# def get_locations(player=None):
 location_data = [
 
     LocationData("Vermilion City", "Fishing Guru", "Old Rod", rom_addresses["Rod_Vermilion_City_Fishing_Guru"], Rod(3)),

@@ -43,7 +43,7 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-You can generate a yaml or download a template by visiting the [Pokemon Red and Blue Player Settings Page](/games/Pokemon Red and Blue/player-settings)
+You can generate a yaml or download a template by visiting the [Pokemon Red and Blue Player Settings Page](/games/Pokemon%20Red%20and%20Blue/player-settings)
 
 It is important to note that the `game_version` option determines the ROM file that will be patched.
 Both the player and the person generating (if they are generating locally) will need the corresponding ROM file.
