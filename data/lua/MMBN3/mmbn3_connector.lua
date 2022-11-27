@@ -23,12 +23,15 @@ local ITEMSTATE_SENT = "Item Sent Not Claimed" -- The ItemBit is set, but the di
 local itemState = ITEMSTATE_NONINITIALIZED
 
 local itemQueued = nil
+local itemQueueCounter = 120
+
 local debugEnabled = false
 local game_complete = false
 
 local backup_bytes = nil
 
 local itemsReceived  = {}
+local previousMessageBit = 0x00
 
 local charDict = {
     [' ']=0x00,['0']=0x01,['1']=0x02,['2']=0x03,['3']=0x04,['4']=0x05,['5']=0x06,['6']=0x07,['7']=0x08,['8']=0x09,['9']=0x0A,
@@ -662,13 +665,14 @@ end
 
 local itemStateMachineProcess = function()
     if itemState == ITEMSTATE_NONINITIALIZED then
+        itemQueueCounter = 120
         -- Only exit this state the first time a dialog window pops up. This way we know for sure that we're ready to receive
         if IsInDialog() and not IsInMenu() then
             itemState = ITEMSTATE_NONITEM
         end
     elseif itemState == ITEMSTATE_NONITEM then
+        itemQueueCounter = 120
         -- Always attempt to restore the previously stored memory in this state
-        RestoreItemRam()
         -- Exit this state whenever the game is in an itemable status
         if IsItemable() then
             itemState = ITEMSTATE_IDLE
@@ -678,12 +682,15 @@ local itemStateMachineProcess = function()
         if not IsItemable() then
             itemState = ITEMSTATE_NONITEM
         end
-        if #itemsReceived > loadItemIndexFromRAM() then
-            itemQueued = itemsReceived[loadItemIndexFromRAM()+1]
-            SendItem(itemQueued)
-            itemState = ITEMSTATE_SENT
+        if itemQueueCounter == 0 then
+            if #itemsReceived > loadItemIndexFromRAM() and not IsItemQueued() then
+                itemQueued = itemsReceived[loadItemIndexFromRAM()+1]
+                SendItem(itemQueued)
+                itemState = ITEMSTATE_SENT
+            end
+        else
+            itemQueueCounter = itemQueueCounter - 1
         end
-
     elseif itemState == ITEMSTATE_SENT then
         -- Once the item is sent, wait for the dialog to close. Then clear the item bit and be ready for the next item.
         if not IsInDialog() then
@@ -751,6 +758,10 @@ function main()
             prevstate = curstate
         end
 
+        currentMessageBit = memory.read_u8(0x203fe00);
+        if (currentMessageBit ~= previousMessageBit) then
+            print("Message bit "..previousMessageBit.." -> "..currentMessageBit)
+        end
 
         itemStateMachineProcess()
 
@@ -784,6 +795,7 @@ function main()
             -- gui.text(0,16,"In Battle: "..tostring(IsInBattle()))
             -- gui.text(0,32,"In Dialog: "..tostring(IsInDialog()))
             -- gui.text(0,48,"In Menu: "..tostring(IsInMenu()))
+            gui.text(0,48,"Item Wait Time: "..tostring(itemQueueCounter))
             gui.text(0,64,itemState)
             if itemQueued == nil then
                 gui.text(0,80,"No item queued")
