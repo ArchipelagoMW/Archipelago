@@ -161,22 +161,23 @@ class TLoZWorld(World):
                 "Take Any Item Right",
                 self.player
             ).place_locked_item(self.multiworld.create_item("Heart Container", self.player))
-        for item in map(self.create_item, self.item_name_to_id):
-            if item.name in item_amounts.keys():
-                if self.multiworld.TriforceLocations[self.player] > 0 or item.name != "Triforce Fragment":
+
+        for item_name in self.item_name_to_id:
+            if item_name in item_amounts.keys():
+                if self.multiworld.TriforceLocations[self.player] > 0 or item_name != "Triforce Fragment":
                     i = 0
-                    for i in range(0, item_amounts[item.name]):
-                        self.multiworld.itempool.append(item)
+                    for i in range(0, item_amounts[item_name]):
+                        self.multiworld.itempool.append(self.create_item(item_name))
                 else:
                     level = 1
-                    for i in range(0, item_amounts[item.name]):
+                    for i in range(0, item_amounts[item_name]):
                         self.multiworld.get_location(
                             f"Level {level} Triforce",
                             self.player
-                        ).place_locked_item(self.multiworld.create_item(item.name, self.player))
+                        ).place_locked_item(self.multiworld.create_item(item_name, self.player))
                         level = level + 1
             else:
-                self.multiworld.itempool.append(item)
+                self.multiworld.itempool.append(self.create_item(item_name))
 
     def set_rules(self):
         # Boss events for a nicer spoiler log playthrough
