@@ -397,6 +397,7 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
             name, seed_end = name_seed_from_ram(game_id)
             if len(name):
                 if name == ctx.known_name:
+                    ctx.auth = name
                     # this is the name we know
                     if ctx.server and ctx.server.socket:  # type: ignore
                         if ctx.got_room_info.is_set():
