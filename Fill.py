@@ -282,22 +282,22 @@ def distribute_early_items(world: MultiWorld,
         for i, item in enumerate(itempool):
             if (item.name, item.player) in early_items_count:
                 if item.advancement:
-                    if early_items_count[(item.name, item.player)][1]:
+                    if early_items_count[item.name, item.player][1]:
                         early_local_prog_items[item.player].append(item)
-                        early_items_count[(item.name, item.player)][1] -= 1
+                        early_items_count[item.name, item.player][1] -= 1
                     else:
                         early_prog_items.append(item)
-                        early_items_count[(item.name, item.player)][0] -= 1
+                        early_items_count[item.name, item.player][0] -= 1
                 else:
-                    if early_items_count[(item.name, item.player)][1]:
+                    if early_items_count[item.name, item.player][1]:
                         early_local_rest_items[item.player].append(item)
-                        early_items_count[(item.name, item.player)][1] -= 1
+                        early_items_count[item.name, item.player][1] -= 1
                     else:
                         early_rest_items.append(item)
-                        early_items_count[(item.name, item.player)][0] -= 1
+                        early_items_count[item.name, item.player][0] -= 1
                 item_indexes_to_remove.add(i)
-                if early_items_count[(item.name, item.player)] == [0, 0]:
-                    del early_items_count[(item.name, item.player)]
+                if early_items_count[item.name, item.player] == [0, 0]:
+                    del early_items_count[item.name, item.player]
                     if len(early_items_count) == 0:
                         break
         itempool = [item for i, item in enumerate(itempool) if i not in item_indexes_to_remove]
@@ -307,7 +307,7 @@ def distribute_early_items(world: MultiWorld,
                              [loc for loc in early_locations if loc.player == player],
                              player_local, lock=True, allow_partial=True)
             if player_local:
-                logging.warning(f"Could not fulfill locality of early items: {player_local}")
+                logging.warning(f"Could not fulfill rules of early items: {player_local}")
                 early_rest_items.extend(early_local_rest_items[player])
         early_locations = [loc for loc in early_locations if not loc.item]
         fill_restrictive(world, base_state, early_locations, early_rest_items, lock=True, allow_partial=True)
@@ -318,14 +318,14 @@ def distribute_early_items(world: MultiWorld,
                              [loc for loc in early_locations if loc.player == player],
                              player_local, lock=True, allow_partial=True)
             if player_local:
-                logging.warning(f"Could not fulfill locality of early items: {player_local}")
+                logging.warning(f"Could not fulfill rules of early items: {player_local}")
                 early_prog_items.extend(player_local)
         early_locations = [loc for loc in early_locations if not loc.item]
         fill_restrictive(world, base_state, early_locations, early_prog_items, lock=True, allow_partial=True)
         unplaced_early_items = early_rest_items + early_prog_items
         if unplaced_early_items:
             logging.warning("Ran out of early locations for early items. Failed to place "
-                            f"{len(unplaced_early_items)} items early.")
+                            f"{unplaced_early_items} early.")
             itempool += unplaced_early_items
 
         fill_locations.extend(early_locations)
