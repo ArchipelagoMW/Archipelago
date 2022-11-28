@@ -150,7 +150,7 @@ class ALTTPWorld(World):
         self.dungeon_specific_item_names = set()
         self.rom_name_available_event = threading.Event()
         self.has_progressive_bows = False
-        super(ALTTPWorld, self).__init__(*args, **kwargs)
+        super(ALTTPWorld, self).__init__(**kwargs)
 
     @classmethod
     def stage_assert_generate(cls, world):
