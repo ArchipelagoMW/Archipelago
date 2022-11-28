@@ -176,7 +176,15 @@ class OOTWorld(World):
             self.shuffle_overworld_entrances = False
             self.owl_drops = False
             self.warp_songs = False
-            self.spawn_positions = False
+            self.spawn_positions = 'off'
+
+        # Fix spawn positions option
+        new_sp = []
+        if self.spawn_positions in {'child', 'both'}:
+            new_sp.append('child')
+        if self.spawn_positions in {'adult', 'both'}:
+            new_sp.append('adult')
+        self.spawn_positions = new_sp
 
         # Closed forest and adult start are not compatible; closed forest takes priority
         if self.open_forest == 'closed':
@@ -268,12 +276,13 @@ class OOTWorld(World):
         self.major_item_locations = []
 
         # ER names
+        self.shuffle_special_dungeon_entrances = self.shuffle_dungeon_entrances == 'all'
+        self.shuffle_dungeon_entrances = self.shuffle_dungeon_entrances != 'off'
         self.ensure_tod_access = (self.shuffle_interior_entrances != 'off') or self.shuffle_overworld_entrances or self.spawn_positions
         self.entrance_shuffle = (self.shuffle_interior_entrances != 'off') or self.shuffle_grotto_entrances or self.shuffle_dungeon_entrances or \
                                 self.shuffle_overworld_entrances or self.owl_drops or self.warp_songs or self.spawn_positions
         self.disable_trade_revert = (self.shuffle_interior_entrances != 'off') or self.shuffle_overworld_entrances
         self.shuffle_special_interior_entrances = self.shuffle_interior_entrances == 'all'
-        self.shuffle_special_dungeon_entrances = self.shuffle_dungeon_entrances == 'all'
 
         # Convert the double option used by shopsanity into a single option
         if self.shopsanity == 'random_number':

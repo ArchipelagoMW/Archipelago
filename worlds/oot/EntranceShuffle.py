@@ -463,6 +463,10 @@ def shuffle_random_entrances(ootworld):
                 one_way_priorities['Requiem'] = priority_entrance_table['Requiem']
     if ootworld.spawn_positions:
         one_way_entrance_pools['Spawn'] = ootworld.get_shufflable_entrances(type='Spawn')
+        if 'child' not in ootworld.spawn_positions:
+            one_way_entrance_pools['Spawn'].remove(world.get_entrance('Child Spawn -> KF Links House'))
+        if 'adult' not in ootworld.spawn_positions:
+            one_way_entrance_pools['Spawn'].remove(world.get_entrance('Adult Spawn -> Temple of Time'))
 
     if world.shuffle_bosses == 'full':
         entrance_pools['Boss'] = world.get_shufflable_entrances(type='ChildBoss', only_primary=True)
@@ -471,7 +475,7 @@ def shuffle_random_entrances(ootworld):
         entrance_pools['ChildBoss'] = world.get_shufflable_entrances(type='ChildBoss', only_primary=True)
         entrance_pools['AdultBoss'] = world.get_shufflable_entrances(type='AdultBoss', only_primary=True)
 
-    if ootworld.shuffle_dungeon_entrances != 'off':
+    if ootworld.shuffle_dungeon_entrances:
         entrance_pools['Dungeon'] = ootworld.get_shufflable_entrances(type='Dungeon', only_primary=True)
         if ootworld.open_forest == 'closed':
             entrance_pools['Dungeon'].remove(world.get_entrance('KF Outside Deku Tree -> Deku Tree Lobby', player))

@@ -142,6 +142,7 @@ class DungeonEntrances(Choice):
     option_off = 0
     option_simple = 1
     option_all = 2
+    alias_true = 1
 
 
 class BossEntrances(Choice):
@@ -167,9 +168,14 @@ class WarpSongs(Toggle):
     display_name = "Randomize Warp Songs"
 
 
-class SpawnPositions(Toggle):
+class SpawnPositions(Choice):
     """Randomizes the starting position on loading a save. Consistent between savewarps."""
     display_name = "Randomize Spawn Positions"
+    option_off = 0
+    option_child = 1
+    option_adult = 2
+    option_both = 3
+    alias_true = 3
 
 
 class MixEntrancePools(Choice):
