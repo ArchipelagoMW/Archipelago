@@ -29,6 +29,7 @@ from .Cosmetics import patch_cosmetics
 from .Hints import hint_dist_keys, get_hint_area, buildWorldGossipHints
 from .HintList import getRequiredHints
 from .SaveContext import SaveContext
+from .SceneFlags import *
 
 from Utils import get_options, output_path
 from BaseClasses import MultiWorld, CollectionState, RegionType, Tutorial, LocationProgressType
@@ -108,7 +109,7 @@ class OOTWorld(World):
 
     data_version = 3
 
-    required_client_version = (0, 3, 7)
+    required_client_version = (0, 3, 6)
 
     item_name_groups = {
         # internal groups
@@ -135,6 +136,7 @@ class OOTWorld(World):
 
     def __init__(self, world, player):
         self.hint_data_available = threading.Event()
+        self.collectible_flags_available = threading.Event()
         super(OOTWorld, self).__init__(world, player)
 
     @classmethod
@@ -163,6 +165,7 @@ class OOTWorld(World):
         self.songs_as_items = False
         self.file_hash = [self.multiworld.random.randint(0, 31) for i in range(5)]
         self.connect_name = ''.join(self.multiworld.random.choices(printable, k=16))
+        self.collectible_flag_addresses = {}
 
         # Incompatible option handling
         # ER and glitched logic are not compatible; glitched takes priority
@@ -284,7 +287,7 @@ class OOTWorld(World):
             self.dungeon_shortcuts_choice = 'random'
         self.dungeon_shortcuts       = {s.replace("'", "") for s in self.dungeon_shortcuts_list}
         self.mq_dungeons_specific    = {s.replace("'", "") for s in self.mq_dungeons_list}
-        self.empty_dungeons_specific = {s.replace("'", "") for s in self.empty_dungeons_list}
+        # self.empty_dungeons_specific = {s.replace("'", "") for s in self.empty_dungeons_list}
 
         # Determine which dungeons are MQ. Not compatible with glitched logic.
         mq_dungeons = set()
@@ -299,6 +302,9 @@ class OOTWorld(World):
             self.mq_dungeons_mode = 'count'
             self.mq_dungeons_count = 0
         self.dungeon_mq = {item['name']: (item['name'] in mq_dungeons) for item in dungeon_table}
+
+        # Empty dungeon placeholder for the moment
+        self.empty_dungeons = {name: False for name in self.dungeon_mq}
 
         # Determine which dungeons have shortcuts. Not compatible with glitched logic.
         shortcut_dungeons = ['Deku Tree', 'Dodongos Cavern', \
@@ -1009,10 +1015,28 @@ class OOTWorld(World):
             for autoworld in multiworld.get_game_worlds("Ocarina of Time"):
                 autoworld.hint_data_available.set()
 
+    def fill_slot_data(self):
+        self.collectible_flags_available.wait()
+        return {
+            'collectible_override_flags': self.collectible_override_flags,
+            'collectible_flag_offsets': self.collectible_flag_offsets
+        }
+
     def modify_multidata(self, multidata: dict):
 
         # Replace connect name
         multidata['connect_names'][self.connect_name] = multidata['connect_names'][self.multiworld.player_name[self.player]]
+
+        # Remove undesired items from start_inventory
+        # This is because we don't want them to show up in the autotracker,
+        # they just don't exist in-game.
+        for item_name in self.remove_from_start_inventory:
+            item_id = self.item_name_to_id.get(item_name, None)
+            if item_id is None:
+                continue
+            multidata["precollected_items"][self.player].remove(item_id)
+
+    def extend_hint_information(self, er_hint_data: dict):
 
         hint_entrances = set()
         for entrance in entrance_shuffle_table:
@@ -1044,18 +1068,7 @@ class OOTWorld(World):
                 return get_entrance_to_region(region.entrances[0].parent_region)
             return None
 
-        # Remove undesired items from start_inventory
-        # This is because we don't want them to show up in the autotracker,
-        # they just don't exist in-game.
-        for item_name in self.remove_from_start_inventory:
-            item_id = self.item_name_to_id.get(item_name, None)
-            if item_id is None:
-                continue
-            multidata["precollected_items"][self.player].remove(item_id)
-
-        # Add ER hint data
         if self.shuffle_interior_entrances != 'off' or self.shuffle_dungeon_entrances or self.shuffle_grotto_entrances:
-            er_hint_data = {}
             for region in self.regions:
                 if not any(bool(loc.address) for loc in region.locations): # check if region has any non-event locations
                     continue
@@ -1064,7 +1077,7 @@ class OOTWorld(World):
                     for location in region.locations:
                         if type(location.address) == int:
                             er_hint_data[location.address] = main_entrance.name
-            multidata['er_hint_data'][self.player] = er_hint_data
+
 
     # Helper functions
     def region_has_shortcuts(self, regionname):

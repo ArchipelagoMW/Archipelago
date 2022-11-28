@@ -346,13 +346,11 @@ def generate_itempool(ootworld):
     junk_pool = get_junk_pool(ootworld)
 
     # set up item pool
-    (pool, placed_items, skip_in_spoiler_locations) = get_pool_core(ootworld)
+    (pool, placed_items) = get_pool_core(ootworld)
     ootworld.itempool = [ootworld.create_item(item) for item in pool]
     for (location_name, item) in placed_items.items():
         location = world.get_location(location_name, player)
         location.place_locked_item(ootworld.create_item(item))
-        if location_name in skip_in_spoiler_locations:
-            location.show_in_spoiler = False
 
 
 def get_pool_core(world):
@@ -361,7 +359,6 @@ def get_pool_core(world):
     pool = []
     placed_items = {}
     remain_shop_items = []
-    skip_in_spoiler_locations = []
     ruto_bottles = 1
 
     if world.zora_fountain == 'open':
@@ -424,14 +421,14 @@ def get_pool_core(world):
                 or location.type == 'Drop'):
             shuffle_item = False
             if location.vanilla_item != 'Zeldas Letter':
-                skip_in_spoiler_locations.append(location)
+                location.show_in_spoiler = False
 
         # Gold Skulltula Tokens
         elif location.vanilla_item == 'Gold Skulltula Token':
             shuffle_item = (world.tokensanity == 'all'
                             or (world.tokensanity == 'dungeons' and location.dungeon)
                             or (world.tokensanity == 'overworld' and not location.dungeon))
-            skip_in_spoiler_locations.append(location)
+            location.show_in_spoiler = False
 
         # Shops
         elif location.type == "Shop":
@@ -439,7 +436,7 @@ def get_pool_core(world):
                 if world.bombchus_in_logic and location.name in ['KF Shop Item 8', 'Market Bazaar Item 4', 'Kak Bazaar Item 4']:
                     item = 'Buy Bombchu (5)'
                 shuffle_item = False
-                skip_in_spoiler_locations.append(location)
+                location.show_in_spoiler = False
             else:
                 remain_shop_items.append(item)
 
@@ -449,7 +446,7 @@ def get_pool_core(world):
                 shuffle_item = True
             elif world.shuffle_scrubs == 'off':
                 shuffle_item = False
-                skip_in_spoiler_locations.append(location)
+                location.show_in_spoiler = False
             else:
                 item = deku_scrubs_items[location.vanilla_item]
                 if isinstance(item, list):
@@ -465,7 +462,7 @@ def get_pool_core(world):
             if world.shuffle_child_trade == 'skip_child_zelda':
                 item = IGNORE_LOCATION
                 shuffle_item = False
-                skip_in_spoiler_locations.append(location)
+                location.show_in_spoiler = False
                 world.multiworld.push_precollected(world.create_item('Weird Egg'))
                 world.remove_from_start_inventory.append('Weird Egg')
             else:
@@ -479,7 +476,7 @@ def get_pool_core(world):
         elif location.vanilla_item == 'Giants Knife':
             shuffle_item = world.shuffle_medigoron_carpet_salesman
             if not shuffle_item:
-                skip_in_spoiler_locations.append(location)
+                location.show_in_spoiler = False
 
         # Bombchus
         elif location.vanilla_item in ['Bombchus', 'Bombchus (5)', 'Bombchus (10)', 'Bombchus (20)']:
@@ -487,7 +484,7 @@ def get_pool_core(world):
                 item = 'Bombchus'
             shuffle_item = location.name != 'Wasteland Bombchu Salesman' or world.shuffle_medigoron_carpet_salesman
             if not shuffle_item:
-                skip_in_spoiler_locations.append(location)
+                location.show_in_spoiler = False
 
         # Cows
         elif location.vanilla_item == 'Milk':
@@ -495,7 +492,7 @@ def get_pool_core(world):
                 item = get_junk_item()[0]
             shuffle_item = world.shuffle_cows
             if not shuffle_item:
-                skip_in_spoiler_locations.append(location)
+                location.show_in_spoiler = False
 
         # Gerudo Card
         elif location.vanilla_item == 'Gerudo Membership Card':
@@ -503,7 +500,7 @@ def get_pool_core(world):
             if world.shuffle_gerudo_card and world.gerudo_fortress == 'open':
                 pending_junk_pool.append(item)
                 item = IGNORE_LOCATION
-                skip_in_spoiler_locations.append(location)
+                location.show_in_spoiler = False
 
         # Bottles
         elif location.vanilla_item in ['Bottle', 'Bottle with Milk', 'Rutos Letter']:
@@ -520,13 +517,13 @@ def get_pool_core(world):
                 item = 'Magic Bean Pack' if world.multiworld.start_inventory[world.player].value.get('Magic Bean Pack', 0) else get_junk_item()[0]
             shuffle_item = world.shuffle_beans
             if not shuffle_item:
-                skip_in_spoiler_locations.append(location)
+                location.show_in_spoiler = False
 
         # Frogs Purple Rupees
         elif location.scene == 0x54 and location.vanilla_item == 'Rupees (50)':
             shuffle_item = world.shuffle_frog_song_rupees
             if not shuffle_item:
-                skip_in_spoiler_locations.append(location)
+                location.show_in_spoiler = False
 
         # Adult Trade Item
         elif location.vanilla_item == 'Pocket Egg':
@@ -542,7 +539,7 @@ def get_pool_core(world):
                     or world.gerudo_fortress == 'fast' and location.name != 'Hideout 1 Torch Jail Gerudo Key'):
                 item = IGNORE_LOCATION
                 shuffle_item = False
-                skip_in_spoiler_locations.append(location)
+                location.show_in_spoiler = False
             if shuffle_item and world.gerudo_fortress == 'normal' and 'Thieves Hideout' in world.key_rings:
                 item = get_junk_item()[0] if location.name != 'Hideout 1 Torch Jail Gerudo Key' else 'Small Key Ring (Thieves Hideout)'
 
@@ -557,7 +554,7 @@ def get_pool_core(world):
             else:
                 shuffle_item = False
                 location.disabled = DisableType.DISABLED
-                skip_in_spoiler_locations.append(location)
+                location.show_in_spoiler = False
 
         # Pots
         elif location.type in ['Pot', 'FlyingPot']:
@@ -570,7 +567,7 @@ def get_pool_core(world):
             else:
                 shuffle_item = False
                 location.disabled = DisableType.DISABLED
-                skip_in_spoiler_locations.append(location)
+                location.show_in_spoiler = False
 
         # Crates
         elif location.type in ['Crate', 'SmallCrate']:
@@ -583,7 +580,7 @@ def get_pool_core(world):
             else:
                 shuffle_item = False
                 location.disabled = DisableType.DISABLED
-                skip_in_spoiler_locations.append(location)
+                location.show_in_spoiler = False
 
         # Beehives
         elif location.type == 'Beehive':
@@ -592,7 +589,7 @@ def get_pool_core(world):
             else:
                 shuffle_item = False
                 location.disabled = DisableType.DISABLED
-                skip_in_spoiler_locations.append(location)
+                location.show_in_spoiler = False
 
         # Dungeon Items
         elif location.dungeon is not None:
@@ -699,7 +696,7 @@ def get_pool_core(world):
                 world.multiworld.push_precollected(k)
                 world.remove_from_start_inventory.append(k.name)
 
-    if (not world.keysanity or (world.empty_dungeons['Fire Temple'].empty and world.shuffle_smallkeys != 'remove'))\
+    if (not world.keysanity or (world.empty_dungeons['Fire Temple'] and world.shuffle_smallkeys != 'remove'))\
         and not world.dungeon_mq['Fire Temple']:
         world.multiworld.push_precollected(world.create_item('Small Key (Fire Temple)'))
         world.remove_from_start_inventory.append('Small Key (Fire Temple)')
@@ -712,7 +709,7 @@ def get_pool_core(world):
         pool.extend(get_junk_item())
     else:
         placed_items['Gift from Sages'] = IGNORE_LOCATION
-        skip_in_spoiler_locations.append('Gift from Sages')
+        world.get_location('Gift from Sages').show_in_spoiler = False
 
     if world.junk_ice_traps == 'off':
         replace_max_item(pool, 'Ice Trap', 0)
@@ -756,7 +753,7 @@ def get_pool_core(world):
             pool.remove(junk_item)
             pool.append(pending_item)
 
-    return pool, placed_items, skip_in_spoiler_locations
+    return pool, placed_items
 
 
 def get_unrestricted_dungeon_items(ootworld):

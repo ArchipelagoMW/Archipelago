@@ -20,7 +20,8 @@ from .Messages import read_messages, update_message_by_id, read_shop_items, upda
 from .MQ import patch_files, File, update_dmadata, insert_space, add_relocations
 from .Rom import Rom
 from .SaveContext import SaveContext
-from .SceneFlags import get_alt_list_bytes, get_collectible_flag_table, get_collectible_flag_table_bytes
+from .SceneFlags import get_alt_list_bytes, get_collectible_flag_table, get_collectible_flag_table_bytes, \
+        get_collectible_flag_addresses
 from .TextBox import character_table, NORMAL_LINE_WIDTH
 from .texture_util import ci4_rgba16patch_to_ci8, rgba16_patch
 from .Utils import __version__
@@ -1088,10 +1089,7 @@ def patch_rom(world, rom):
 
     configure_dungeon_info(rom, world)
 
-    hash_icons = 0
-    for i,icon in enumerate(world.file_hash):
-        hash_icons |= (icon << (5 * i))
-    rom.write_int32(rom.sym('CFG_FILE_SELECT_HASH'), hash_icons)
+    rom.write_bytes(rom.sym('CFG_FILE_SELECT_HASH'), world.file_hash)
 
     save_context = SaveContext()
 
@@ -1718,6 +1716,11 @@ def patch_rom(world, rom):
         raise(RuntimeError(f'Exceeded alt override table size: {len(alt_list)}'))
     rom.write_bytes(rom.sym('alt_overrides'), alt_list_bytes)
 
+    # Gather addresses and bitflags for client
+    world.collectible_override_flags = rom.sym('collectible_override_flags') - rom.sym('RANDO_CONTEXT')
+    world.collectible_flag_offsets = get_collectible_flag_addresses(world, collectible_flag_table_bytes)
+    world.collectible_flags_available.set()
+
     # Write item overrides
     # check_location_dupes(world)
     override_table = get_override_table(world)
@@ -1730,8 +1733,7 @@ def patch_rom(world, rom):
     if world.death_link:
         rom.write_byte(rom.sym('DEATH_LINK'), 0x01)
 
-    if world.multiworld.players > 1:
-        rom.write_byte(rom.sym('MW_SEND_OWN_ITEMS'), 0x01)
+    rom.write_byte(rom.sym('MW_SEND_OWN_ITEMS'), 0x01)
 
     # Revert Song Get Override Injection
     if not songs_as_items:
@@ -2408,7 +2410,7 @@ def get_override_table(world):
     return list(filter(lambda val: val != None, map(partial(get_override_entry, world), world.multiworld.get_filled_locations(world.player))))
 
 
-override_struct = struct.Struct('>BBBHBB') # match override_t in get_items.c
+override_struct = struct.Struct('>BBHHBB') # match override_t in get_items.c
 def get_override_table_bytes(override_table):
     return b''.join(sorted(itertools.starmap(override_struct.pack, override_table)))
 
@@ -2821,7 +2823,7 @@ def configure_dungeon_info(rom, world):
 
 # Overwrite an actor in rom w/ the actor data from LocationList
 def patch_actor_override(location, rom: Rom):
-    addresses = location.address
+    addresses = location.address1
     patch = location.address2
     if addresses is not None and patch is not None:
         for address in addresses:
@@ -2836,8 +2838,8 @@ def patch_rupee_tower(location, rom: Rom):
     elif isinstance(location.default, list):
         room, scene_setup, flag = location.default[0]
     flag = flag + (room << 8)
-    if location.address:
-        for address in location.address:
+    if location.address1:
+        for address in location.address1:
             rom.write_bytes(address + 12, flag.to_bytes(2, byteorder='big'))
 
 # Patch the first boss key door in ganons tower that leads to the room w/ the pots
