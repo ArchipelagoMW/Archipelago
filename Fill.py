@@ -253,11 +253,12 @@ def distribute_early_items(world: MultiWorld,
                            fill_locations: typing.List[Location],
                            itempool: typing.List[Item]) -> typing.Tuple[typing.List[Location], typing.List[Item]]:
     """ returns new fill_locations and itempool """
-    early_items_count: typing.Dict[typing.Tuple[str, int], int] = {}
+    early_items_count: typing.Dict[typing.Tuple[str, int], typing.List[int]] = {}
     for player in world.player_ids:
         items = itertools.chain(world.early_items[player], world.local_early_items[player])
         for item in items:
-            early_items_count[(item, player)] = [world.early_items[player].get(item, 0), world.local_early_items[player].get(item, 0)]
+            early_items_count[item, player] = [world.early_items[player].get(item, 0),
+                                               world.local_early_items[player].get(item, 0)]
     if early_items_count:
         early_locations: typing.List[Location] = []
         early_priority_locations: typing.List[Location] = []
