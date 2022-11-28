@@ -338,6 +338,8 @@ def set_mission_upgrade_rules_standard(world: MultiWorld, player: int):
     add_rule_safe(world, LocationName.white_jungle_5, player,
                   lambda state: state.has(ItemName.shadow_air_shoes, player) and
                                 state.has(ItemName.shadow_flame_ring, player))
+    add_rule_safe(world, LocationName.mad_space_5, player,
+                  lambda state: state.has(ItemName.rouge_iron_boots, player))
     add_rule_safe(world, LocationName.cosmic_wall_5, player,
                   lambda state: state.has(ItemName.eggman_jet_engine, player))
 
@@ -836,6 +838,8 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
     add_rule_safe(world, LocationName.security_hall_5, player,
                   lambda state: state.has(ItemName.rouge_treasure_scope, player))
+    add_rule_safe(world, LocationName.mad_space_5, player,
+                  lambda state: state.has(ItemName.rouge_iron_boots, player))
     add_rule_safe(world, LocationName.cosmic_wall_5, player,
                   lambda state: state.has(ItemName.eggman_jet_engine, player))
 
