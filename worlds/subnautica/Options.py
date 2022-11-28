@@ -1,6 +1,6 @@
 import typing
 
-from Options import Choice, Range, DeathLink
+from Options import Choice, Range, DeathLink, DefaultOnToggle
 from .Creatures import all_creatures, Definitions
 
 
@@ -28,6 +28,10 @@ class SwimRule(Choice):
     @property
     def consider_items(self) -> bool:
         return self.value > 2
+
+
+class EarlySeaglide(DefaultOnToggle):
+    """Make sure 2 of the Seaglide Fragments are available in or near the Safe Shallows (Sphere 1 Locations)."""
 
 
 class ItemPool(Choice):
@@ -102,6 +106,7 @@ class SubnauticaDeathLink(DeathLink):
 
 options = {
     "swim_rule": SwimRule,
+    "early_seaglide": EarlySeaglide,
     "item_pool": ItemPool,
     "goal": Goal,
     "creature_scans": CreatureScans,
