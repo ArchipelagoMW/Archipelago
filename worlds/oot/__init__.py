@@ -101,7 +101,7 @@ class OOTWorld(World):
     option_definitions: dict = oot_options
     topology_present: bool = True
     item_name_to_id = {item_name: oot_data_to_ap_id(data, False) for item_name, data in item_table.items() if
-                       data[2] is not None}
+                       data[2] is not None and item_name != 'Magic Bean'}  # two items have get id 0x16
     location_name_to_id = location_name_to_id
     remote_items: bool = False
     remote_start_inventory: bool = False
