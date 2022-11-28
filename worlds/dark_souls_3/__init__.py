@@ -80,7 +80,6 @@ class DarkSouls3World(World):
 
     def create_regions(self):
         menu_region = self.create_region("Menu", progressive_locations)
-        self.multiworld.regions.append(menu_region)
 
         # Create all Vanilla regions of Dark Souls III
         firelink_shrine_region = self.create_region("Firelink Shrine", fire_link_shrine_table)
