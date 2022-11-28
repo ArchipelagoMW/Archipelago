@@ -750,6 +750,12 @@ local read_zoras_river_checks = function()
     checks["ZR Deku Scrub Grotto Front"] = scrub_sanity_check(0x15, 0x9)
     checks["ZR Deku Scrub Grotto Rear"] = scrub_sanity_check(0x15, 0x8)
 
+    checks["ZR Frogs Zeldas Lullaby"] = event_check(0xD, 0x1)
+    checks["ZR Frogs Eponas Song"] = event_check(0xD, 0x2)
+    checks["ZR Frogs Suns Song"] = event_check(0xD, 0x3)
+    checks["ZR Frogs Sarias Song"] = event_check(0xD, 0x4)
+    checks["ZR Frogs Song of Time"] = event_check(0xD, 0x5)
+
     checks["ZR GS Tree"] = skulltula_check(0x11, 0x1)
     --NOTE: There is no GS in the soft soil. It's the only one that doesn't have one.
     checks["ZR GS Ladder"] = skulltula_check(0x11, 0x0)
