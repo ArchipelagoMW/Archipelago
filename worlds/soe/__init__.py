@@ -174,7 +174,7 @@ class SoEWorld(World):
 
     def __init__(self, *args, **kwargs):
         self.connect_name_available_event = threading.Event()
-        super(SoEWorld, self).__init__(**kwargs)
+        super(SoEWorld, self).__init__(*args, **kwargs)
 
     def generate_early(self) -> None:
         # store option values that change logic
