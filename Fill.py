@@ -301,18 +301,24 @@ def distribute_early_items(world: MultiWorld,
                         break
         itempool = [item for i, item in enumerate(itempool) if i not in item_indexes_to_remove]
         for player in world.player_ids:
+            player_local = early_local_rest_items[player]
             fill_restrictive(world, base_state,
-                [loc for loc in early_locations if loc.player == player],
-                early_local_rest_items[player], lock=True, allow_partial=True)
-            early_rest_items.extend(early_local_rest_items[player])
+                             [loc for loc in early_locations if loc.player == player],
+                             player_local, lock=True, allow_partial=True)
+            if player_local:
+                logging.warning(f"Could not fulfill locality of early items: {player_local}")
+                early_rest_items.extend(early_local_rest_items[player])
         early_locations = [loc for loc in early_locations if not loc.item]
         fill_restrictive(world, base_state, early_locations, early_rest_items, lock=True, allow_partial=True)
         early_locations += early_priority_locations
         for player in world.player_ids:
+            player_local = early_local_prog_items[player]
             fill_restrictive(world, base_state,
-                [loc for loc in early_locations if loc.player == player],
-                early_local_prog_items[player], lock=True, allow_partial=True)
-            early_prog_items.extend(early_local_prog_items[player])
+                             [loc for loc in early_locations if loc.player == player],
+                             player_local, lock=True, allow_partial=True)
+            if player_local:
+                logging.warning(f"Could not fulfill locality of early items: {player_local}")
+                early_prog_items.extend(player_local)
         early_locations = [loc for loc in early_locations if not loc.item]
         fill_restrictive(world, base_state, early_locations, early_prog_items, lock=True, allow_partial=True)
         unplaced_early_items = early_rest_items + early_prog_items
