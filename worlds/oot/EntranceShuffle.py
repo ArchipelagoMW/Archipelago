@@ -464,23 +464,23 @@ def shuffle_random_entrances(ootworld):
     if ootworld.spawn_positions:
         one_way_entrance_pools['Spawn'] = ootworld.get_shufflable_entrances(type='Spawn')
         if 'child' not in ootworld.spawn_positions:
-            one_way_entrance_pools['Spawn'].remove(world.get_entrance('Child Spawn -> KF Links House'))
+            one_way_entrance_pools['Spawn'].remove(ootworld.get_entrance('Child Spawn -> KF Links House'))
         if 'adult' not in ootworld.spawn_positions:
-            one_way_entrance_pools['Spawn'].remove(world.get_entrance('Adult Spawn -> Temple of Time'))
+            one_way_entrance_pools['Spawn'].remove(ootworld.get_entrance('Adult Spawn -> Temple of Time'))
 
     if world.shuffle_bosses == 'full':
-        entrance_pools['Boss'] = world.get_shufflable_entrances(type='ChildBoss', only_primary=True)
-        entrance_pools['Boss'] += world.get_shufflable_entrances(type='AdultBoss', only_primary=True)
+        entrance_pools['Boss'] = ootworld.get_shufflable_entrances(type='ChildBoss', only_primary=True)
+        entrance_pools['Boss'] += ootworld.get_shufflable_entrances(type='AdultBoss', only_primary=True)
     elif world.shuffle_bosses == 'limited':
-        entrance_pools['ChildBoss'] = world.get_shufflable_entrances(type='ChildBoss', only_primary=True)
-        entrance_pools['AdultBoss'] = world.get_shufflable_entrances(type='AdultBoss', only_primary=True)
+        entrance_pools['ChildBoss'] = ootworld.get_shufflable_entrances(type='ChildBoss', only_primary=True)
+        entrance_pools['AdultBoss'] = ootworld.get_shufflable_entrances(type='AdultBoss', only_primary=True)
 
     if ootworld.shuffle_dungeon_entrances:
         entrance_pools['Dungeon'] = ootworld.get_shufflable_entrances(type='Dungeon', only_primary=True)
         if ootworld.open_forest == 'closed':
-            entrance_pools['Dungeon'].remove(world.get_entrance('KF Outside Deku Tree -> Deku Tree Lobby', player))
+            entrance_pools['Dungeon'].remove(ootworld.get_entrance('KF Outside Deku Tree -> Deku Tree Lobby', player))
         if ootworld.shuffle_special_dungeon_entrances:
-            entrance_pools['Dungeon'] += world.get_shufflable_entrances(type='DungeonSpecial', only_primary=True)
+            entrance_pools['Dungeon'] += ootworld.get_shufflable_entrances(type='DungeonSpecial', only_primary=True)
         if ootworld.decouple_entrances:
             entrance_pools['DungeonReverse'] = [entrance.reverse for entrance in entrance_pools['Dungeon']]
     if ootworld.shuffle_interior_entrances != 'off':
