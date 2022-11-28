@@ -318,14 +318,15 @@ class HKWorld(World):
             if not self.multiworld.EggShopSlots[self.player].value:  # No eggshop, so don't place items there
                 shops.remove('Egg_Shop')
 
-            for _ in range(additional_shop_items):
-                shop = self.multiworld.random.choice(shops)
-                loc = self.create_location(shop)
-                unfilled_locations += 1
-                if len(self.created_multi_locations[shop]) >= 16:
-                    shops.remove(shop)
-                    if not shops:
-                        break
+            if shops:
+                for _ in range(additional_shop_items):
+                    shop = self.multiworld.random.choice(shops)
+                    loc = self.create_location(shop)
+                    unfilled_locations += 1
+                    if len(self.created_multi_locations[shop]) >= 16:
+                        shops.remove(shop)
+                        if not shops:
+                            break
 
         # Create filler items, if needed
         if item_count < unfilled_locations:

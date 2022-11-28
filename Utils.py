@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import typing
 import builtins
 import os
@@ -11,7 +12,7 @@ import io
 import collections
 import importlib
 import logging
-from typing import BinaryIO
+from typing import BinaryIO, ClassVar, Coroutine, Optional, Set
 
 from yaml import load, load_all, dump, SafeLoader
 
@@ -235,7 +236,7 @@ def get_default_options() -> OptionsType:
             "bridge_chat_out": True,
         },
         "sni_options": {
-            "sni": "SNI",
+            "sni_path": "SNI",
             "snes_rom_start": True,
         },
         "sm_options": {
@@ -451,6 +452,7 @@ loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': log
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
                  log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
                  exception_logger: typing.Optional[str] = None):
+    import datetime
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = user_path("logs")
     os.makedirs(log_folder, exist_ok=True)
@@ -459,6 +461,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         root_logger.removeHandler(handler)
         handler.close()
     root_logger.setLevel(loglevel)
+    if "a" not in write_mode:
+        name += f"_{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}"
     file_handler = logging.FileHandler(
         os.path.join(log_folder, f"{name}.txt"),
         write_mode,
@@ -486,6 +490,19 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
 
         sys.excepthook = handle_exception
 
+    def _cleanup():
+        for file in os.scandir(log_folder):
+            if file.name.endswith(".txt"):
+                last_change = datetime.datetime.fromtimestamp(file.stat().st_mtime)
+                if datetime.datetime.now() - last_change > datetime.timedelta(days=7):
+                    try:
+                        os.unlink(file.path)
+                    except Exception as e:
+                        logging.exception(e)
+                    else:
+                        logging.info(f"Deleted old logfile {file.path}")
+    import threading
+    threading.Thread(target=_cleanup, name="LogCleaner").start()
     logging.info(f"Archipelago ({__version__}) logging initialized.")
 
 
@@ -650,3 +667,24 @@ def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
     if strip_header and len(buffer) % 0x400 == 0x200:
         return buffer[0x200:]
     return buffer
+
+
+_faf_tasks: "Set[asyncio.Task[None]]" = set()
+
+
+def async_start(co: Coroutine[None, None, None], name: Optional[str] = None) -> None:
+    """
+    Use this to start a task when you don't keep a reference to it or immediately await it,
+    to prevent early garbage collection. "fire-and-forget"
+    """
+    # https://docs.python.org/3.10/library/asyncio-task.html#asyncio.create_task
+    # Python docs:
+    # ```
+    # Important: Save a reference to the result of [asyncio.create_task],
+    # to avoid a task disappearing mid-execution.
+    # ```
+    # This implementation follows the pattern given in that documentation.
+
+    task = asyncio.create_task(co, name=name)
+    _faf_tasks.add(task)
+    task.add_done_callback(_faf_tasks.discard)

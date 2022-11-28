@@ -415,7 +415,7 @@ def generate_itempool(world):
         if additional_triforce_pieces > len(nonprogressionitems):
             raise FillError(f"Not enough non-progression items to replace with Triforce pieces found for player "
                             f"{world.get_player_name(player)}.")
-        progressionitems += [ItemFactory("Triforce Piece", player)] * additional_triforce_pieces
+        progressionitems += [ItemFactory("Triforce Piece", player) for _ in range(additional_triforce_pieces)]
         nonprogressionitems.sort(key=lambda item: int("Heart" in item.name))  # try to keep hearts in the pool
         nonprogressionitems = nonprogressionitems[additional_triforce_pieces:]
         world.random.shuffle(nonprogressionitems)

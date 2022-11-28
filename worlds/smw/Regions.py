@@ -968,7 +968,7 @@ def connect_regions(world, player, level_to_tile_dict):
             lambda state: (state.has(ItemName.mario_carry, player) or
                            state.has(ItemName.yoshi_activate, player)))
     connect(world, player, names, LocationName.forest_of_illusion_3_region, LocationName.forest_of_illusion_3_exit_2,
-            lambda state: (state.has(ItemName.mario_swim, player) and
+            lambda state: (state.has(ItemName.mario_spin_jump, player) and
                            state.has(ItemName.mario_carry, player) and
                            state.has(ItemName.progressive_powerup, player, 1)))
     connect(world, player, names, LocationName.forest_of_illusion_4_region, LocationName.forest_of_illusion_4_exit_1)

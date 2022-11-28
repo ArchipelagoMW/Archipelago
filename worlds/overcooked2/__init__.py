@@ -35,7 +35,7 @@ class PrepLevelMode(Enum):
 
 class Overcooked2World(World):
     """
-    Overcooked! 2 is a franticly paced arcade cooking game where
+    Overcooked! 2 is a frantically paced arcade cooking game where
     players race against the clock to complete orders for points. Bring
     peace to the Onion Kingdom once again by recovering lost items and abilities,
     earning stars to unlock levels, and defeating the unbread horde. Levels are
@@ -374,17 +374,14 @@ class Overcooked2World(World):
 
         # Place Items at Level Completion Screens (local only)
         on_level_completed: Dict[str, list[Dict[str, str]]] = dict()
-        regions = self.multiworld.get_regions(self.player)
-        for region in regions:
-            for location in region.locations:
-                if location.item is None:
-                    continue
-                if location.item.code is None:
-                    continue  # it's an event
-                if location.item.player != self.player:
-                    continue  # not for us
-                level_id = str(oc2_location_name_to_id[location.name])
-                on_level_completed[level_id] = [item_to_unlock_event(location.item.name)]
+        locations = self.multiworld.get_filled_locations(self.player)
+        for location in locations:
+            if location.item.code is None:
+                continue  # it's an event
+            if location.item.player != self.player:
+                continue  # not for us
+            level_id = str(oc2_location_name_to_id[location.name])
+            on_level_completed[level_id] = [item_to_unlock_event(location.item.name)]
 
         # Put it all together
         star_threshold_scale = self.options["StarThresholdScale"] / 100
