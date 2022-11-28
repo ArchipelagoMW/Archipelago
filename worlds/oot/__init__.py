@@ -519,13 +519,13 @@ class OOTWorld(World):
                         elif self.shopsanity_prices == 'affordable':
                             self.shop_prices[location.name] = 10
                         elif self.shopsanity_prices == 'starting_wallet':
-                            self.shop_prices[location.name] = random.randrange(0,100,5)
+                            self.shop_prices[location.name] = self.multiworld.random.randrange(0,100,5)
                         elif self.shopsanity_prices == 'adults_wallet':
-                            self.shop_prices[location.name] = random.randrange(0,201,5)
+                            self.shop_prices[location.name] = self.multiworld.random.randrange(0,201,5)
                         elif self.shopsanity_prices == 'giants_wallet':
-                            self.shop_prices[location.name] = random.randrange(0,501,5)
+                            self.shop_prices[location.name] = self.multiworld.random.randrange(0,501,5)
                         elif self.shopsanity_prices == 'tycoons_wallet':
-                            self.shop_prices[location.name] = random.randrange(0,1000,5)
+                            self.shop_prices[location.name] = self.multiworld.random.randrange(0,1000,5)
 
     def fill_bosses(self, bossCount=9):
         boss_location_names = (
