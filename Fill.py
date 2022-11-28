@@ -24,7 +24,8 @@ def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item]
 
 def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
                      itempool: typing.List[Item], single_player_placement: bool = False, lock: bool = False,
-                     swap: bool = True, on_place: typing.Optional[typing.Callable[[Location], None]] = None) -> None:
+                     swap: bool = True, on_place: typing.Optional[typing.Callable[[Location], None]] = None,
+                     allow_partial: bool = False) -> None:
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
 
@@ -132,7 +133,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             if on_place:
                 on_place(spot_to_fill)
 
-    if len(unplaced_items) > 0 and len(locations) > 0:
+    if not allow_partial and len(unplaced_items) > 0 and len(locations) > 0:
         # There are leftover unplaceable items and locations that won't accept them
         if world.can_beat_game():
             logging.warning(
@@ -302,16 +303,18 @@ def distribute_early_items(world: MultiWorld,
         for player in world.player_ids:
             fill_restrictive(world, base_state,
                 [loc for loc in early_locations if loc.player == player],
-                early_local_rest_items[player], lock=True)
+                early_local_rest_items[player], lock=True, allow_partial=True)
+            early_rest_items.extend(early_local_rest_items[player])
         early_locations = [loc for loc in early_locations if not loc.item]
-        fill_restrictive(world, base_state, early_locations, early_rest_items, lock=True)
+        fill_restrictive(world, base_state, early_locations, early_rest_items, lock=True, allow_partial=True)
         early_locations += early_priority_locations
         for player in world.player_ids:
             fill_restrictive(world, base_state,
                 [loc for loc in early_locations if loc.player == player],
-                early_local_prog_items[player], lock=True)
+                early_local_prog_items[player], lock=True, allow_partial=True)
+            early_prog_items.extend(early_local_prog_items[player])
         early_locations = [loc for loc in early_locations if not loc.item]
-        fill_restrictive(world, base_state, early_locations, early_prog_items, lock=True)
+        fill_restrictive(world, base_state, early_locations, early_prog_items, lock=True, allow_partial=True)
         unplaced_early_items = early_rest_items + early_prog_items
         if unplaced_early_items:
             logging.warning("Ran out of early locations for early items. Failed to place "
