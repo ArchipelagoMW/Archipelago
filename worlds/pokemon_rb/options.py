@@ -347,6 +347,13 @@ class StartWithFourMoves(Toggle):
     default = 0
 
 
+class SameTypeAttackBonus(Toggle):
+    """Here you can disable Same Type Attack Bonus, so that a move matching a Pokemon's type has no benefit.
+    If disabled, all moves will gain 25% extra damage, instead of same type moves gaining 50% extra damage."""
+    display_name = "Same Type Attack Bonus"
+    default = 1
+
+
 class TMCompatibility(Choice):
     """Randomize which Pokemon can learn each TM. prefer_types: 90% chance if Pokemon's type matches the move,
     50% chance if move is Normal type and the Pokemon is not, and 25% chance otherwise. Pokemon will retain the same
@@ -512,6 +519,7 @@ pokemon_rb_options = {
     "trainer_legendaries": TrainerLegendaries,
     "randomize_pokemon_movesets": RandomizePokemonMovesets,
     "start_with_four_moves": StartWithFourMoves,
+    "same_type_attack_bonus": SameTypeAttackBonus,
     "tm_compatibility": TMCompatibility,
     "hm_compatibility": HMCompatibility,
     "randomize_pokemon_types": RandomizePokemonTypes,
