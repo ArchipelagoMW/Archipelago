@@ -112,6 +112,7 @@ class RandomizePokedex(Choice):
     option_vanilla = 0
     option_randomize = 1
     option_start_with = 2
+    default = 0
 
 
 class Tea(Toggle):
@@ -395,31 +396,54 @@ class SecondaryTypeChance(SpecialRange):
     }
 
 
-class RandomizeTypeChartTypes(Choice):
-    """The game's type chart consists of 3 columns: attacking type, defending type, and type effectiveness.
-       Matchups that have regular type effectiveness are not in the chart. Shuffle will shuffle the attacking types
-       across the attacking type column and the defending types across the defending type column (so for example Normal
-       type will still have exactly 2 types that it receives non-regular damage from, and 2 types it deals non-regular
-       damage to). Randomize will randomize each type in both columns to any random type."""
-    display_name = "Randomize Type Chart Types"
+class RandomizeTypeChart(Choice):
+    """Randomize the type chart. If 'randomize' is chosen, the matchup weight options will determine the weights.
+    If the numbers chosen across the 4 settings add up to exactly 225, they will be the exact numbers of those matchups.
+    Otherwise, the normal super effective, and not very effective matchup settings will be used as weights.
+    The immunities option will always be the exact amount of immunity matchups.
+    If 'chaos' is chosen, the matchup settings will be ignored and every type matchup will be given a random damage
+    modifier anywhere between 0 to 200% damage, in 10% increments."""
+    display_name = "Randomize Type Chart"
     option_vanilla = 0
-    option_shuffle = 1
-    option_randomize = 2
+    option_randomize = 1
+    option_chaos = 2
     default = 0
 
 
-class RandomizeTypeChartTypeEffectiveness(Choice):
-    """The game's type chart consists of 3 columns: attacking type, defending type, and type effectiveness.
-       Matchups that have regular type effectiveness are not in the chart. Shuffle will shuffle the type effectiveness
-       across the type effectiveness column (so for example there will always be 6 type immunities). Randomize will
-       randomize each entry in the table to no effect, not very effective, or super effective; with no effect occurring
-       at a low chance. Chaos will randomize the values to anywhere between 0% and 200% damage, in 10% increments."""
-    display_name = "Randomize Type Chart Type Effectiveness"
-    option_vanilla = 0
-    option_shuffle = 1
-    option_randomize = 2
-    option_chaos = 3
-    default = 0
+class NormalMatchups(Range):
+    """If 'randomize' is chosen for randomize_type_chart, this will be the weight for neutral matchups.
+    No effect if 'chaos' is chosen"""
+    display_name = "Normal Matchups"
+    default = 143
+    range_start = 0
+    range_end = 225
+
+
+class SuperEffectiveMatchups(Range):
+    """If 'randomize' is chosen for randomize_type_chart, this will be the weight for super effective matchups.
+    No effect if 'chaos' is chosen"""
+    display_name = "Super Effective Matchups"
+    default = 38
+    range_start = 0
+    range_end = 225
+
+
+class NotVeryEffectiveMatchups(Range):
+    """If 'randomize' is chosen for randomize_type_chart, this will be the weight for not very effective matchups.
+    No effect if 'chaos' is chosen"""
+    display_name = "Not Very Effective Matchups"
+    default = 38
+    range_start = 0
+    range_end = 225
+
+
+class ImmunityMatchups(Range):
+    """If 'randomize' is chosen for randomize_type_chart, this will be the exact number of immunities.
+    No effect if 'chaos' is chosen"""
+    display_name = "Immunity Matchups"
+    default = 6
+    range_start = 0
+    range_end = 100
 
 
 class SafariZoneNormalBattles(Toggle):
@@ -492,8 +516,11 @@ pokemon_rb_options = {
     "hm_compatibility": HMCompatibility,
     "randomize_pokemon_types": RandomizePokemonTypes,
     "secondary_type_chance": SecondaryTypeChance,
-    "randomize_type_matchup_types": RandomizeTypeChartTypes,
-    "randomize_type_matchup_type_effectiveness": RandomizeTypeChartTypeEffectiveness,
+    "randomize_type_chart": RandomizeTypeChart,
+    "normal_matchups": NormalMatchups,
+    "super_effective_matchups": SuperEffectiveMatchups,
+    "not_very_effective_matchups": NotVeryEffectiveMatchups,
+    "immunity_matchups": ImmunityMatchups,
     "safari_zone_normal_battles": SafariZoneNormalBattles,
     "normalize_encounter_chances": NormalizeEncounterChances,
     "reusable_tms": ReusableTMs,

@@ -445,61 +445,80 @@ def generate_output(self, output_directory: str):
             if badge not in written_badges:
                 write_bytes(data, encode_text("Nothing"), rom_addresses["Badge_Text_" + badge.replace(" ", "_")])
 
-    chart = deepcopy(poke_data.type_chart)
-    if self.multiworld.randomize_type_matchup_types[self.player].value == 1:
-        attacking_types = []
-        defending_types = []
-        for matchup in chart:
-            attacking_types.append(matchup[0])
-            defending_types.append(matchup[1])
-        random.shuffle(attacking_types)
-        random.shuffle(defending_types)
+    if self.multiworld.randomize_type_chart[self.player].value == 0:
+        chart = deepcopy(poke_data.type_chart)
+    elif self.multiworld.randomize_type_chart[self.player].value == 1:
+        types = poke_data.type_names.values()
         matchups = []
-        while len(attacking_types) > 0:
-            if [attacking_types[0], defending_types[0]] not in matchups:
-                matchups.append([attacking_types.pop(0), defending_types.pop(0)])
-            else:
-                matchup = matchups.pop(0)
-                attacking_types.append(matchup[0])
-                defending_types.append(matchup[1])
-            random.shuffle(attacking_types)
-            random.shuffle(defending_types)
-        for matchup, chart_row in zip(matchups, chart):
-            chart_row[0] = matchup[0]
-            chart_row[1] = matchup[1]
-    elif self.multiworld.randomize_type_matchup_types[self.player].value == 2:
-        used_matchups = []
-        for matchup in chart:
-            matchup[0] = random.choice(list(poke_data.type_names.values()))
-            matchup[1] = random.choice(list(poke_data.type_names.values()))
-            while [matchup[0], matchup[1]] in used_matchups:
-                matchup[0] = random.choice(list(poke_data.type_names.values()))
-                matchup[1] = random.choice(list(poke_data.type_names.values()))
-            used_matchups.append([matchup[0], matchup[1]])
-    if self.multiworld.randomize_type_matchup_type_effectiveness[self.player].value == 1:
-        effectiveness_list = []
-        for matchup in chart:
-            effectiveness_list.append(matchup[2])
-        random.shuffle(effectiveness_list)
-        for (matchup, effectiveness) in zip(chart, effectiveness_list):
-            matchup[2] = effectiveness
-    elif self.multiworld.randomize_type_matchup_type_effectiveness[self.player].value == 2:
-        for matchup in chart:
-            matchup[2] = random.choice([0] + ([5, 20] * 5))
-    elif self.multiworld.randomize_type_matchup_type_effectiveness[self.player].value == 3:
-        for matchup in chart:
-            matchup[2] = random.choice([i for i in range(0, 21) if i != 10])
-    type_loc = rom_addresses["Type_Chart"]
-    for matchup in chart:
-        data[type_loc] = poke_data.type_ids[matchup[0]]
-        data[type_loc + 1] = poke_data.type_ids[matchup[1]]
-        data[type_loc + 2] = matchup[2]
-        type_loc += 3
+        for type1 in types:
+            for type2 in types:
+                matchups.append([type1, type2])
+        self.multiworld.random.shuffle(matchups)
+        immunities = self.multiworld.immunity_matchups[self.player].value
+        super_effectives = self.multiworld.super_effective_matchups[self.player].value
+        not_very_effectives = self.multiworld.not_very_effective_matchups[self.player].value
+        normals = self.multiworld.normal_matchups[self.player].value
+        while super_effectives + not_very_effectives + normals < 225 - immunities:
+            super_effectives += self.multiworld.super_effective_matchups[self.player].value
+            not_very_effectives += self.multiworld.not_very_effective_matchups[self.player].value
+            normals += self.multiworld.normal_matchups[self.player].value
+        if super_effectives + not_very_effectives + normals > 225 - immunities:
+            total = super_effectives + not_very_effectives + normals
+            excess = total - (225 - immunities)
+            subtract_amounts = (int((excess / (super_effectives + not_very_effectives + normals)) * super_effectives),
+                        int((excess / (super_effectives + not_very_effectives + normals)) * not_very_effectives),
+                        int((excess / (super_effectives + not_very_effectives + normals)) * normals))
+            super_effectives -= subtract_amounts[0]
+            not_very_effectives -= subtract_amounts[1]
+            normals -= subtract_amounts[2]
+            while super_effectives + not_very_effectives + normals > 225 - immunities:
+                r = self.multiworld.random.randint(0, 2)
+                if r == 0:
+                    super_effectives -= 1
+                elif r == 1:
+                    not_very_effectives -= 1
+                else:
+                    normals -= 1
+        chart = []
+        for matchup_list, matchup_value in zip([immunities, normals, super_effectives, not_very_effectives],
+                                               [0, 10, 20, 5]):
+            for _ in range(matchup_list):
+                matchup = matchups.pop()
+                matchup.append(matchup_value)
+                chart.append(matchup)
+    elif self.multiworld.randomize_type_chart[self.player].value == 2:
+        types = poke_data.type_names.values()
+        matchups = []
+        for type1 in types:
+            for type2 in types:
+                matchups.append([type1, type2])
+        chart = []
+        values = list(range(21))
+        self.multiworld.random.shuffle(matchups)
+        self.multiworld.random.shuffle(values)
+        for matchup in matchups:
+            value = values.pop(0)
+            values.append(value)
+            matchup.append(value)
+            chart.append(matchup)
     # sort so that super-effective matchups occur first, to prevent dual "not very effective" / "super effective"
     # matchups from leading to damage being ultimately divided by 2 and then multiplied by 2, which can lead to
     # damage being reduced by 1 which leads to a "not very effective" message appearing due to my changes
     # to the way effectiveness messages are generated.
-    self.type_chart = sorted(chart, key=lambda matchup: 0 - matchup[2])
+    chart = sorted(chart, key=lambda matchup: 0 - matchup[2])
+
+    type_loc = rom_addresses["Type_Chart"]
+    for matchup in chart:
+        if matchup[2] != 10:  # don't needlessly divide damage by 10 and multiply by 10
+            data[type_loc] = poke_data.type_ids[matchup[0]]
+            data[type_loc + 1] = poke_data.type_ids[matchup[1]]
+            data[type_loc + 2] = matchup[2]
+            type_loc += 3
+    data[type_loc] = 0xFF
+    data[type_loc + 1] = 0xFF
+    data[type_loc + 2] = 0xFF
+
+    self.type_chart = chart
 
     if self.multiworld.normalize_encounter_chances[self.player].value:
         chances = [25, 51, 77, 103, 129, 155, 180, 205, 230, 255]
