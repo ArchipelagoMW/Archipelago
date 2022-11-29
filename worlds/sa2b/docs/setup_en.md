@@ -105,7 +105,7 @@ If you wish to use the `SADX Music` option of the Randomizer, you must own a cop
 	- If you enabled an `SADX Music` option, then most likely the music data was not copied properly into the mod folder (See Additional Options for instructions).
 	
 - Mission 1 is missing a texture in the stage select UI.
-	- Most likely another mod is conflicting and overwriting the texture pack. It is reccommeded to have the SA2B Archipelago mod load last in the mod loader.
+	- Most likely another mod is conflicting and overwriting the texture pack. It is recommeded to have the SA2B Archipelago mod load last in the mod loader.
 
 ## Save File Safeguard (Advanced Option)
 
