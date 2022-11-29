@@ -472,6 +472,23 @@ class ReusableTMs(Toggle):
     default = 0
 
 
+class BetterShops(Choice):
+    """Change every town's Pokemart to contain all normal Pokemart items. Additionally, you can add the Master Ball
+    to these shops."""
+    display_name = "Better Shops"
+    option_off = 0
+    option_on = 1
+    option_add_master_ball = 2
+    default = 0
+
+
+class MasterBallPrice(Range):
+    """Price for Master Balls. Can only be bought if better_shops is set to add_master_ball, but this will affect the
+    sell price regardless. Vanilla is 0"""
+    range_end = 999999
+    default = 5000
+
+
 class StartingMoney(Range):
     """The amount of money you start with."""
     display_name = "Starting Money"
@@ -532,6 +549,8 @@ pokemon_rb_options = {
     "safari_zone_normal_battles": SafariZoneNormalBattles,
     "normalize_encounter_chances": NormalizeEncounterChances,
     "reusable_tms": ReusableTMs,
+    "better_shops": BetterShops,
+    "master_ball_price": MasterBallPrice,
     "starting_money": StartingMoney,
     "death_link": DeathLink
 }

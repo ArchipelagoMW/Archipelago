@@ -7,6 +7,7 @@ from Patch import APDeltaPatch
 from .text import encode_text
 from .rom_addresses import rom_addresses
 from .locations import location_data
+from .items import item_table
 import worlds.pokemon_rb.poke_data as poke_data
 
 
@@ -406,9 +407,7 @@ def generate_output(self, output_directory: str):
     if self.multiworld.old_man[self.player].value == 2:
         data[rom_addresses['Option_Old_Man']] = 0x11
         data[rom_addresses['Option_Old_Man_Lying']] = 0x15
-    money = str(self.multiworld.starting_money[self.player].value)
-    while len(money) < 6:
-        money = "0" + money
+    money = str(self.multiworld.starting_money[self.player].value).zfill(6)
     data[rom_addresses["Starting_Money_High"]] = int(money[:2], 16)
     data[rom_addresses["Starting_Money_Middle"]] = int(money[2:4], 16)
     data[rom_addresses["Starting_Money_Low"]] = int(money[4:], 16)
@@ -562,6 +561,22 @@ def generate_output(self, output_directory: str):
     data[rom_addresses["Option_Trainersanity2"]] = self.multiworld.trainersanity[self.player].value
 
     data[rom_addresses["Option_Always_Half_STAB"]] = int(not self.multiworld.same_type_attack_bonus[self.player].value)
+
+    if self.multiworld.better_shops[self.player].value:
+        inventory = ["Poke Ball", "Great Ball", "Ultra Ball"]
+        if self.multiworld.better_shops[self.player].value == 2:
+            inventory.append("Master Ball")
+        inventory += ["Potion", "Super Potion", "Hyper Potion", "Max Potion", "Full Restore", "Antidote", "Awakening",
+                      "Burn Heal", "Ice Heal", "Paralyze Heal", "Full Heal", "Repel", "Super Repel", "Max Repel",
+                      "Escape Rope"]
+        shop_data = bytearray([0xFE, len(inventory)])
+        shop_data += bytearray([item_table[item].id - 172000000 for item in inventory])
+        shop_data.append(0xFF)
+        for shop in range(1, 10):
+            write_bytes(data, shop_data, rom_addresses[f"Shop{shop}"])
+    price = str(self.multiworld.master_ball_price[self.player].value).zfill(6)
+    price = bytearray([int(price[:2], 16), int(price[2:4], 16), int(price[4:], 16)])
+    write_bytes(data, price, rom_addresses["Price_Master_Ball"])  # Money values in Red and Blue are weird
 
     for item in reversed(self.multiworld.precollected_items[self.player]):
         if data[rom_addresses["Start_Inventory"] + item.code - 172000000] < 99:
