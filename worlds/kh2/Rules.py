@@ -2,62 +2,82 @@ from ast import Import
 import typing
 from ..AutoWorld import LogicMixin
 from BaseClasses import MultiWorld
+#from .Regions import HundredAcre1_Region
 from .Names import LocationName, ItemName
-from .Items import item_dictionary_table
+from .Items import item_dictionary_table, ItemData,get_item_type,exclusionItem_table
 from ..AutoWorld import LogicMixin
-from worlds.generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations
-from .Locations import all_locations,exclusion_table
-from .Options import FinalEXP, Kingdom_Hearts2_Options, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement,Visitlocking
+from ..generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations
+from .Locations import all_locations,exclusion_table,getBonus
+from .Options import FinalEXP, KH2_Options, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement,Visitlocking
 
 
-def set_rules(world: MultiWorld, player: int):
-    def global_rules(world,player,self):
-        #Nothingness is a Potion
-        add_item_rule(world.get_location("Final Xemnas", player), lambda item: item.name == 'Potion' and item.player == player)
-        #Locks forms out of ag because im too lazy to make logic for it
-        forbid_item(self.world.get_entrance(all_locations.AG2_Checks,self.player, "Wisdom Form"))
-        forbid_item(self.world.get_entrance(all_locations.AG2_Checks,self.player, "Final Form"))
-        forbid_item(self.world.get_entrance(all_locations.AG2_Checks,self.player, "Limit Form"))
-        forbid_item(self.world.get_entrance(all_locations.AG2_Checks,self.player, "Valor Form"))
-        forbid_item(self.world.get_entrance(all_locations.AG2_Checks,self.player, "Master Form"))
-        forbid_item(self.world.get_entrance(all_locations.AG2_Checks,self.player, "Torn Page"))
-        #locks forms and torn pages from cor
-        forbid_item(self.world.get_entrance(all_locations.FirstHalf_Checks, self.player, "Torn Page"))
-        forbid_item(self.world.get_entrance(all_locations.FirstHalf_Checks, self.player, "Wisdom Form"))
-        forbid_item(self.world.get_entrance(all_locations.FirstHalf_Checks, self.player, "Final Form"))
-        forbid_item(self.world.get_entrance(all_locations.FirstHalf_Checks, self.player, "Limit Form"))
-        forbid_item(self.world.get_entrance(all_locations.FirstHalf_Checks, self.player, "Valor Form"))
-        forbid_item(self.world.get_entrance(all_locations.FirstHalf_Checks, self.player, "Master Form"))
-        forbid_item(self.world.get_entrance(all_locations.SecondHalf_Checks, self.player, "Torn Page"))
-        forbid_item(self.world.get_entrance(all_locations.SecondHalf_Checks, self.player, "Wisdom Form"))
-        forbid_item(self.world.get_entrance(all_locations.SecondHalf_Checks, self.player, "Final Form"))
-        forbid_item(self.world.get_entrance(all_locations.SecondHalf_Checks, self.player, "Limit Form"))
-        forbid_item(self.world.get_entrance(all_locations.SecondHalf_Checks, self.player, "Valor Form"))
-        forbid_item(self.world.get_entrance(all_locations.SecondHalf_Checks, self.player, "Master Form"))
-        #forbid forms on forms
-        forbid_item(self.world.get_entrance(all_locations.form_checks, self.player, "Wisdom Form"))
-        forbid_item(self.world.get_entrance(all_locations.form_checks, self.player, "Final Form"))
-        forbid_item(self.world.get_entrance(all_locations.form_checks, self.player, "Limit Form"))
-        forbid_item(self.world.get_entrance(all_locations.form_checks, self.player, "Valor Form"))
-        forbid_item(self.world.get_entrance(all_locations.form_checks, self.player, "Master Form"))
-        forbid_item(self.world.get_entrance(all_locations.form_checks, self.player, "Torn Page"))
+def set_rules(world: MultiWorld, player: int,self):
+        ##Locks forms out of ag because im too lazy to make logic for it
+        #add_item_rule(self.world.get_location(LocationName.RuinedChamberTornPages, self.player),
+        #          lambda item: get_item_type(item) == "Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,Forms_Table.name)
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),player,"Wisdom Form")
+        #forbid_item(self.world.get_entrance(all_locations.AG2_Checks,self.player,player, "Final Form"))
+        #forbid_item(self.world.get_entrance(all_locations.AG2_Checks,self.player,player, "Limit Form"))
+        #forbid_item(self.world.get_entrance(all_locations.AG2_Checks,self.player,player, "Valor Form"))
+        #forbid_item(self.world.get_entrance(all_locations.AG2_Checks,self.player,player, "Master Form"))
+        #forbid_item(self.world.get_entrance(all_locations.AG2_Checks,self.player,player, "Torn Page"))
+        ##locks forms and torn pages from cor
+        #forbid_item(self.world.get_entrance(all_locations.FirstHalf_Checks, self.player, "Torn Page"))
+        #forbid_item(self.world.get_entrance(all_locations.FirstHalf_Checks, self.player, "Wisdom Form"))
+        #forbid_item(self.world.get_entrance(all_locations.FirstHalf_Checks, self.player, "Final Form"))
+        #forbid_item(self.world.get_entrance(all_locations.FirstHalf_Checks, self.player, "Limit Form"))
+        #forbid_item(self.world.get_entrance(all_locations.FirstHalf_Checks, self.player, "Valor Form"))
+        #forbid_item(self.world.get_entrance(all_locations.FirstHalf_Checks, self.player, "Master Form"))
+        #forbid_item(self.world.get_entrance(all_locations.SecondHalf_Checks, self.player, "Torn Page"))
+        #forbid_item(self.world.get_entrance(all_locations.SecondHalf_Checks, self.player, "Wisdom Form"))
+        #forbid_item(self.world.get_entrance(all_locations.SecondHalf_Checks, self.player, "Final Form"))
+        #forbid_item(self.world.get_entrance(all_locations.SecondHalf_Checks, self.player, "Limit Form"))
+        #forbid_item(self.world.get_entrance(all_locations.SecondHalf_Checks, self.player, "Valor Form"))
+        #forbid_item(self.world.get_entrance(all_locations.SecondHalf_Checks, self.player, "Master Form"))
+        ##forbid forms on forms
+        #forbid_item(self.world.get_entrance(all_locations.form_checks, self.player, "Wisdom Form"))
+        #forbid_item(self.world.get_entrance(all_locations.form_checks, self.player, "Final Form"))
+        #forbid_item(self.world.get_entrance(all_locations.form_checks, self.player, "Limit Form"))
+        #forbid_item(self.world.get_entrance(all_locations.form_checks, self.player, "Valor Form"))
+        #forbid_item(self.world.get_entrance(all_locations.form_checks, self.player, "Master Form"))
+        #forbid_item(self.world.get_entrance(all_locations.form_checks, self.player, "Torn Page"))
         #Forbit ablitys on popups due to game limitations
-        forbid_item(self.world.get_location(exclusion_table.Popups,self.player,all_locations.SupportAbility_Table))
-        forbid_item(self.world.get_location(exclusion_table.Popups,self.player,all_locations.LvlAbility_Table))
-        forbid_item(self.world.get_location(exclusion_table.Popups,self.player,all_locations.ActionAbility_Table))
-        #No proof of connection or peace on terra and same for 13 mushrooms
-        forbid_item(self.world.get_location("Lingering Will Bonus",self.player,"Proof of Peace"))
-        forbid_item(self.world.get_location("Lingering Will Bonus",self.player,"Proof of Connection"))
-        forbid_item(self.world.get_location("Lingering Will Proof of Connection",self.player,"Proof of Peace"))
-        forbid_item(self.world.get_location("Lingering Will Proof of Connection",self.player,"Proof of Connection"))
-        forbid_item(self.world.get_location("Lingering Will Manifest Illusion",self.player,"Proof of Peace"))
-        forbid_item(self.world.get_location("Lingering Will Manifest Illusion",self.player,"Proof of Connection"))
-        forbid_item(self.world.get_location("Winner's Proof",self.player,"Proof of Peace"))
-        forbid_item(self.world.get_location("Proof of Peace Location",self.player,"Proof of Peace"))
-    
-        world.completion_condition[player] = lambda state:state._kh_FinalFights_Unlocked(self,player)
+        #forbid_item(self.world.get_location(LocationName.RuinedChamberTornPages,self.player),self.player,exclusionItem_table["SupportAbility"])
+        #forbid_item(self.world.get_location(exclusion_table.Popups,self.player,all_locations.LvlAbility_Table))
+        #forbid_item(self.world.get_location(exclusion_table.Popups,self.player,all_locations.ActionAbility_Table))
+        ##No proof of connection or peace on terra and same for 13 mushrooms
+        #forbid_item(self.world.get_location("Lingering Will Bonus",self.player,"Proof of Peace"))
+        #forbid_item(self.world.get_location("Lingering Will Bonus",self.player,"Proof of Connection"))
+        #forbid_item(self.world.get_location("Lingering Will Proof of Connection",self.player,"Proof of Peace"))
+        #forbid_item(self.world.get_location("Lingering Will Proof of Connection",self.player,"Proof of Connection"))
+        #forbid_item(self.world.get_location("Lingering Will Manifest Illusion",self.player,"Proof of Peace"))
+        #forbid_item(self.world.get_location("Lingering Will Manifest Illusion",self.player,"Proof of Connection"))
+        #forbid_item(self.world.get_location("Winner's Proof",self.player,"Proof of Peace"))
+        #forbid_item(self.world.get_location("Proof of Peace Location",self.player,"Proof of Peace"))
+        #
+        #world.completion_condition[player] = lambda state:state._kh_FinalFights_Unlocked(self,player)
     #sets torn page requirements
-        set_rule(world.get_entrance(all_locations.HundredAcre2_Checks,player),lambda state:state._kh_torn_page_1(player,1))
+
+    #LOOK AT THIS YOU STUPID
+        set_rule(world.get_entrance(LocationName.TT_Region,self.player),lambda state:state._kh_torn_page_1(player,1))
         set_rule(world.get_entrance(all_locations.HundredAcre3_Checks,player),lambda state:state._kh_torn_page_2(player,2))
         set_rule(world.get_entrance(all_locations.HundredAcre4_Checks,player),lambda state:state._kh_torn_page_3(player,3))
         set_rule(world.get_entrance(all_locations.HundredAcre5_Checks,player),lambda state:state._kh_torn_page_4(player,4))
@@ -81,7 +101,7 @@ def set_rules(world: MultiWorld, player: int):
             add_rule(world.get_entrance(all_locations.ShitCups,player),lambda state:state._kh_oc_unlocked(player))
             add_rule(world.get_entrance(all_locations.BetterCups,player),lambda state:state._kh_oc_unlocked(player))
             add_rule(world.get_entrance(all_locations.HundredAcre1_Checks,player),lambda state:state._kh_oc_unlocked(player))
-            add_rule(world.get_entrance(all_locations.AG2_Checks,player),lambda state:state._kh_ag_unlocked(player,1))
+            #add_rule(world.get_entrance(all_locations.AG2_Checks,player),lambda state:state._kh_ag_unlocked(player,1))
         
             if Visitlocking.value==3:
                add_rule(world.get_entrance(all_locations.LoD_Checks, player),lambda state:state._kh_lod_unlocked(player))

@@ -1,4 +1,4 @@
-from .Options import FinalEXP, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement,Kingdom_Hearts2_Options
+from .Options import FinalEXP, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement,KH2_Options,Stats
 from Utils import get_options, output_path
 import json
 import os
@@ -7,9 +7,9 @@ import typing
 from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
 from .Items import KH2Item, ItemData, item_dictionary_table
-from .Locations import all_locations, setup_locations
+from .Locations import all_locations, setup_locations,exclusion_table
 from .Rules import set_rules
-from .Names import ItemName
+from .Names import ItemName , LocationName
 from .Regions import create_regions,connect_regions
 from .OpenKH import patch_kh2
 
@@ -27,7 +27,7 @@ class KH2World(World):
 
 
     game: str="Kingdom Hearts 2"
-    options = Kingdom_Hearts2_Options
+    option_definitions = KH2_Options
     data_version = 0
     ItemName = {}
     ChestLocation = {}
@@ -37,6 +37,26 @@ class KH2World(World):
     item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
     location_name_to_id={item_name: data.code for item_name, data in all_locations.items() if data.code}
     item_name_to_kh2id={name:data.kh2id for name,data in item_dictionary_table.items()}
+    def _get_slot_data(self):
+        return {
+            "FinalEXP": self.world.Final_Form_Level[self.player].value,
+            "MasterEXP": self.world.Master_Form_Level[self.player].value,
+            "WisdomEXP": self.world.Wisdom_Form_Level[self.player].value,
+            "ValorEXP": self.world.Valor_Form_Level[self.player].value,
+            "LimitEXP": self.world.Limit_Form_Level[self.player].value,
+            "Schmovement":self.world.Schmovement[self.player].value,
+            "Keyblade_Stats":self.world.Keyblade[self.player].value,
+            "Visit_locking":self.world.Visit_locking[self.player].value,
+            "Super_Bosses":self.world.Super_Bosses[self.player].value,
+            "Level_Depth":self.world.Level_Depth[self.player].value,
+        }
+    def fill_slot_data(self) -> dict:
+        slot_data = self._get_slot_data()
+        for option_name in KH2_Options:
+            option = getattr(self.world, option_name)[self.player]
+            slot_data[option_name] = option.value
+        print(slot_data)
+        return slot_data
 
 
     def _create_items(self, name: str):
@@ -61,11 +81,14 @@ class KH2World(World):
 
     def generate_basic(self):
         itempool: typing.List[KH2Item] = []
-        
+        #print(exclusion_table.Level50)
+        #if self.world.Level_Depth[self.player].value==1:
+        #    for x in range(len(exclusion_table.popups)):
+        #        self.world.get_location(exclusion_table.level50, self.player).place_locked_item(self.create_item(ItemName.Potion))
         
         for x in range(46):
             itempool+=[self.create_item(ItemName.Potion)]
-        for x in range(42):
+        for x in range(2):
             itempool += [self.create_item(ItemName.Ether)]
         for x in range(4):
             itempool += [self.create_item(ItemName.MagicBoost)]
@@ -99,20 +122,23 @@ class KH2World(World):
         for item in item_dictionary_table:
             itempool += self._create_items(item)
 
-            
-        connect_regions(self.world, self.player,self)
+        
+        
 
         self.world.itempool += itempool
-        #connect_visits (world: MultiWorld, player: int, self)
             
 
     def create_regions(self):
         location_table = setup_locations(self.world, self.player)
         create_regions(self.world, self.player, location_table)
+        connect_regions(self.world, self.player,self)
+        region=self.world.get_region(LocationName.Ag2_Region,self.player)
+        #print(self.world.get_entrance("Twlight Town",self.player))
+
 
     def set_rules(self):
-        set_rules(self.world, self.player)
-    
+        set_rules(self.world, self.player,self)
+        
     def generate_output(self, output_directory: str):
             world = self.world
             player = self.player

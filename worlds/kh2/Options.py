@@ -4,9 +4,9 @@ import typing
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 
 class FinalEXP(Range):
-    """Range of EXP for the forms"""
+    """Range of EXP for the Final form"""
     display_name = "Final Form Level"
-    range_start = 1
+    range_start = 1 
     range_end = 10
     default = 3
 class MasterEXP(Range):
@@ -37,12 +37,12 @@ class ValorEXP(Range):
 class Schmovement(Toggle):
     """Start with lvl 1 growth"""
     display_name = "Schmovement"
-    default = True
+
 
 class Stats(Range):
     #Keyblade stats 
     display_name="Keyblade"
-    range_start = 1
+    range_start = 0
     range_end = 10
     default=5
 
@@ -50,7 +50,7 @@ class Visitlocking(Range):
     #What is locked being on
     #if 1 then no visit locking   if 2 then second visits if 3 then first and second visits with one item
     display_name="Visit locking"
-    range_start=1
+    range_start=0
     range_end=3
     default=1
 
@@ -65,8 +65,12 @@ class KH2StartItems(ItemDict):
     verify_item_name = False
     default = {"Way to the Dawn": 1, "Beast's Claw": 1}
 
+class Level_Depth(Toggle):
+    display_name="Level Depth"
+    default=True
 
-Kingdom_Hearts2_Options: typing.Dict[str, type(Option)] = {
+
+KH2_Options: typing.Dict[str, type(Option)] = {
     "Final_Form_Level": FinalEXP,
     "Master_Form_Level": MasterEXP,
     "Limit_Form_Level": LimitEXP,
@@ -77,4 +81,5 @@ Kingdom_Hearts2_Options: typing.Dict[str, type(Option)] = {
     "Visit_locking":Visitlocking,
     "Super_Bosses":SuperBosses,
     "KH2StartingItems":KH2StartItems,
+    "Level_Depth":Level_Depth,
     }

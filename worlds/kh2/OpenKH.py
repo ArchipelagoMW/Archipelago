@@ -1,16 +1,17 @@
+from sre_constants import MAGIC
 import zipfile
 import yaml
 import os
 import shutil
-
+import random
 from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
 from .Items import KH2Item, ItemData, item_dictionary_table,lookup_kh2id_to_name
 from .Locations import all_locations, setup_locations,LocationName
-from .Options import FinalEXP, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement,Kingdom_Hearts2_Options
+from .Options import FinalEXP, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement,KH2_Options
 from .modYml import modYml
 from .Names import ItemName
 from .ItemId import itemId
-
+from .XPValues import lvlStats,formExp,soraExp
 
 #import Utils
 #import Patch
@@ -20,14 +21,103 @@ from .ItemId import itemId
 def noop(self, *args, **kw):
     pass
 def patch_kh2(world,player,self,output_directory):
-    itemName= {location.name: location.item.code.kh2id
-                for location in self.world.get_filled_locations(self.player)}
+    #itemName= {location.address.locid: location.item.code.kh2id
+    #            for location in self.world.get_filled_locations(self.player)}
     locName=[location.item.code.kh2id
-             for location in self.world.get_filled_locations(self.player)
-            ]  
+             for location in self.world.get_filled_locations(self.player)]
+    #        ]  
+
+
+    #if 3 then dbbl bonus = thing break
+    #if 0 print things
+    #reset double bns to 0
     self.formattedTrsr = {}
-    print(itemName)
-    print(locName[5])
+    self.formattedBons = []
+    self.formattedLvup = {"Sora":{}}
+    self.formattedBons = {}
+    self.formattedFmlv = {}
+    self.formattedItem = {"Stats":[]}
+    self.formattedPlrp = []
+    lvlablitity=0
+    lvlcntr=1
+    strength=0
+    magic   =0
+    defense =0
+    ap=     50
+    dblbonus=0
+    def getStat(i):
+        if lvlStats[i]=="str":
+            strength=+2
+        if lvlStats[i]=="mag":
+            magic=+2
+        if lvlStats[i]=="def":
+            defense=+2
+        if lvlStats[i]=="ap":
+            ap=+2
+    statcntr=0
+    charName="Sora"
+    for location in self.world.get_filled_locations(self.player):
+        #print(location.name)
+        
+            
+        
+
+        if location.address.yml==1:
+            #print(location.address.locid)
+            #print(location.item.code.kh2id)
+            self.formattedTrsr[location.address.locid] = {"ItemId":location.item.code.kh2id}
+            continue
+        if location.address.yml==4: 
+            getStat(random.randint(0,3))
+            lvlablitity=location.item.code.kh2id
+            if location.item.code.kh2id==1:
+                lvlability=0
+                getStat(random.randint(0,3))
+            self.formattedLvup["Sora"][location.address.locid] = {
+                    "Exp": int(soraExp[location.address.locid]/5),
+                    "Strength":strength,
+                    "Magic": magic ,
+                    "Defense":defense,
+                    "Ap":ap,
+                    "SwordAbility": lvlablitity,
+                    "ShieldAbility":lvlablitity,
+                    "StaffAbility": lvlablitity,
+                    "Padding": 0,
+                    "Character": "Sora",
+                    "Level": location.address.locid
+                }
+        if location.address.yml==2 or location.address.yml==3 or location.address.yml==0:
+                #print(location.address.yml)
+                if location.address.yml==2:
+                    #print(location.address.locid)
+                    dblbonus=0
+                if location.address.yml==3:
+                    dblbonus=location.item.code.kh2id
+                if location.address.yml==0:
+                    charName="sora"
+                    #print(dblbonus)
+                    #print(location.item.code.kh2id)
+                self.formattedBons[location.address.locid] = {}
+                self.formattedBons[location.address.locid] [charName]= {
+                "RewardId": location.address.locid,
+                "CharacterId": 1,
+                "HpIncrease": 0,
+                "MpIncrease": 0,
+                "DriveGaugeUpgrade": 0,
+                "ItemSlotUpgrade": 0,
+                "AccessorySlotUpgrade": 0,
+                "ArmorSlotUpgrade": 0,
+                "BonusItem1": location.item.code.kh2id,
+                "BonusItem2": dblbonus,
+                "Padding": 0
+            }
+                continue
+         
+   
+            #lvlcntr+=1        
+    #print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
+    print(yaml.dump(self.formattedLvup, line_break="\r\n"))
+    #print(yaml.dump(self.formattedBons, line_break="\r\n"))
     #for i in range(len(locName)):
     #     if locName[i] in getBonus:
     #         print(locName[i])
@@ -74,11 +164,7 @@ def patch_kh2(world,player,self,output_directory):
     #  outfile.write(yaml.dump(self.formattedTrsr, line_break="\r\n"))
     #  print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
     #  #print(self.trsrLocation)
-    # #self.formattedLvup = {"Sora":{}}
-    # #self.formattedBons = {}
-    # #self.formattedFmlv = {}
-    # #self.formattedItem = {"Stats":[]}
-    # #self.formattedPlrp = []
+
 
 
 

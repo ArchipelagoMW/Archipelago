@@ -7,20 +7,7 @@ from .Options import FinalEXP, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmove
 from .Locations import HadesCups, LocationName, Oc2Cups,setup_locations,KH2Location
 from .Names import LocationName, ItemName
 
-def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):
-    # Shamelessly stolen from the SA2B definition that stole from ROR2 definition
-    ret = Region(name, None, name, player)
-    ret.world = world
-    if locations:
-        for location in locations:
-            loc_id = active_locations.get(location, 0)
-            if loc_id:
-                location = KH2Location(player, location, loc_id, ret)
-                ret.locations.append(location)
-    if exits:
-        for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
-    return ret
+
 
 def create_regions(world, player: int, active_locations):
     menu_region = create_region(world, player, active_locations, 'Menu', None, None)
@@ -142,6 +129,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.WindowofTimeMap               :[0x50061,8],
         LocationName.BoatPete                      :[0x50062,9],
         LocationName.FuturePete                    :[0x50063,10],
+        #This is out of order because I forgot it
+        LocationName.FuturePeteGetBonus            :[0x5022C,10],
         LocationName.Monochrome                    :[0x50064,11],
         LocationName.WisdomForm                    :[0x50065,12],
         LocationName.MarluxiaGetBonus              :[0x50066,13],
@@ -718,29 +707,105 @@ def create_regions(world, player: int, active_locations):
                                Forms_Region_locations,None)
 
     Level_Region_locations={
-            LocationName.lvl2 :[0x50215,1],
-            LocationName.lvl4 :[0x50216,2],
-            LocationName.lvl7 :[0x50217,3],
-            LocationName.lvl9 :[0x50218,4],
-            LocationName.lvl10:[0x50219,5],
-            LocationName.lvl12:[0x5021A,6],
-            LocationName.lvl14:[0x5021B,7],
-            LocationName.lvl15:[0x5021C,8],
-            LocationName.lvl17:[0x5021D,9],
-            LocationName.lvl20:[0x5021E,10],
-            LocationName.lvl23:[0x5021F,11],
-            LocationName.lvl25:[0x50220,12],
-            LocationName.lvl28:[0x50221,13],
-            LocationName.lvl30:[0x50222,14],
-            LocationName.lvl32:[0x50223,15],
-            LocationName.lvl34:[0x50224,16],
-            LocationName.lvl36:[0x50225,17],
-            LocationName.lvl39:[0x50226,18],
-            LocationName.lvl41:[0x50227,19],
-            LocationName.lvl44:[0x50228,20],
-            LocationName.lvl46:[0x50229,21],
-            LocationName.lvl48:[0x5022A,22],
-            LocationName.lvl50:[0x5022B,23],
+            LocationName.Lvl1   :[0x50214,1],
+            LocationName.Lvl2   :[0x50215,2],
+            LocationName.Lvl3   :[0x50216,3],
+            LocationName.Lvl4   :[0x50217,4],
+            LocationName.Lvl5   :[0x50218,5],
+            LocationName.Lvl6   :[0x50219,6],
+            LocationName.Lvl7   :[0x5021A,7],
+            LocationName.Lvl8   :[0x5021B,8],
+            LocationName.Lvl9   :[0x5021C,9],
+            LocationName.Lvl10  :[0x5021D,10],
+            LocationName.Lvl11  :[0x5021E,11],
+            LocationName.Lvl12  :[0x5021F,12],
+            LocationName.Lvl13  :[0x50220,13],
+            LocationName.Lvl14  :[0x50221,14],
+            LocationName.Lvl15  :[0x50222,15],
+            LocationName.Lvl16  :[0x50223,16],
+            LocationName.Lvl17  :[0x50224,17],
+            LocationName.Lvl18  :[0x50225,18],
+            LocationName.Lvl19  :[0x50226,19],
+            LocationName.Lvl20  :[0x50227,20],
+            LocationName.Lvl21  :[0x50228,21],
+            LocationName.Lvl22  :[0x50229,22],
+            LocationName.Lvl23  :[0x5022A,23],
+            LocationName.Lvl24  :[0x5022B,24],
+            LocationName.Lvl25  :[0x5022C,25],
+            LocationName.Lvl26  :[0x5022D,26],
+            LocationName.Lvl27  :[0x5022E,27],
+            LocationName.Lvl28  :[0x5022F,28],
+            LocationName.Lvl29  :[0x50230,29],
+            LocationName.Lvl30  :[0x50231,30],
+            LocationName.Lvl31  :[0x50232,31],
+            LocationName.Lvl32  :[0x50233,32],
+            LocationName.Lvl33  :[0x50234,33],
+            LocationName.Lvl34  :[0x50235,34],
+            LocationName.Lvl35  :[0x50236,35],
+            LocationName.Lvl36  :[0x50237,36],
+            LocationName.Lvl37  :[0x50238,37],
+            LocationName.Lvl38  :[0x50239,38],
+            LocationName.Lvl39  :[0x5023A,39],
+            LocationName.Lvl40  :[0x5023B,40],
+            LocationName.Lvl41  :[0x5023C,41],
+            LocationName.Lvl42  :[0x5023D,42],
+            LocationName.Lvl43  :[0x5023E,43],
+            LocationName.Lvl44  :[0x5023F,44],
+            LocationName.Lvl45  :[0x50240,45],
+            LocationName.Lvl46  :[0x50241,46],
+            LocationName.Lvl47  :[0x50242,47],
+            LocationName.Lvl48  :[0x50243,48],
+            LocationName.Lvl49  :[0x50244,49],
+            LocationName.Lvl50  :[0x50245,50],
+            LocationName.Lvl51  :[0x50246,51],
+            LocationName.Lvl52  :[0x50247,52],
+            LocationName.Lvl53  :[0x50248,53],
+            LocationName.Lvl54  :[0x50249,54],
+            LocationName.Lvl55  :[0x5024A,55],
+            LocationName.Lvl56  :[0x5024B,56],
+            LocationName.Lvl57  :[0x5024C,57],
+            LocationName.Lvl58  :[0x5024D,58],
+            LocationName.Lvl59  :[0x5024E,59],
+            LocationName.Lvl60  :[0x5024F,60],
+            LocationName.Lvl61  :[0x50250,61],
+            LocationName.Lvl62  :[0x50251,62],
+            LocationName.Lvl63  :[0x50252,63],
+            LocationName.Lvl64  :[0x50253,64],
+            LocationName.Lvl65  :[0x50254,65],
+            LocationName.Lvl66  :[0x50255,66],
+            LocationName.Lvl67  :[0x50256,67],
+            LocationName.Lvl68  :[0x50257,68],
+            LocationName.Lvl69  :[0x50258,69],
+            LocationName.Lvl70  :[0x50259,70],
+            LocationName.Lvl71  :[0x5025A,71],
+            LocationName.Lvl72  :[0x5025B,72],
+            LocationName.Lvl73  :[0x5025C,73],
+            LocationName.Lvl74  :[0x5025D,74],
+            LocationName.Lvl75  :[0x5025E,75],
+            LocationName.Lvl76  :[0x5025F,76],
+            LocationName.Lvl77  :[0x50260,77],
+            LocationName.Lvl78  :[0x50261,78],
+            LocationName.Lvl79  :[0x50262,79],
+            LocationName.Lvl80  :[0x50263,80],
+            LocationName.Lvl81  :[0x50264,81],
+            LocationName.Lvl82  :[0x50265,82],
+            LocationName.Lvl83  :[0x50266,83],
+            LocationName.Lvl84  :[0x50267,84],
+            LocationName.Lvl85  :[0x50268,85],
+            LocationName.Lvl86  :[0x50269,86],
+            LocationName.Lvl87  :[0x5026A,87],
+            LocationName.Lvl88  :[0x5026B,88],
+            LocationName.Lvl89  :[0x5026C,89],
+            LocationName.Lvl90  :[0x5026D,90],
+            LocationName.Lvl91  :[0x5026E,91],
+            LocationName.Lvl92  :[0x5026F,92],
+            LocationName.Lvl93  :[0x50270,93],
+            LocationName.Lvl94  :[0x50271,94],
+            LocationName.Lvl95  :[0x50272,95],
+            LocationName.Lvl96  :[0x50273,96],
+            LocationName.Lvl97  :[0x50274,97],
+            LocationName.Lvl98  :[0x50275,98],
+            LocationName.Lvl99  :[0x50276,99],
             }                   
     Level_Region=create_region(world,player,active_locations,LocationName.SoraLevels_Region,
                                Level_Region_locations,None)
@@ -848,3 +913,18 @@ def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], s
 
     source_region.exits.append(connection)
     connection.connect(target_region)
+
+def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):
+    # Shamelessly stolen from the SA2B definition that stole from ROR2 definition
+    ret = Region(name, None, name, player)
+    ret.world = world
+    if locations:
+        for location in locations:
+            loc_id = active_locations.get(location, 0)
+            if loc_id:
+                location = KH2Location(player, location, loc_id, ret)
+                ret.locations.append(location)
+    if exits:
+        for exit in exits:
+            ret.exits.append(Entrance(player, exit, ret))
+    return ret

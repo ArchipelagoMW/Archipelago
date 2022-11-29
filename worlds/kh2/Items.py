@@ -13,7 +13,8 @@ class ItemData(typing.NamedTuple):
     quantity: int = 1
     event: bool = False
     
-     
+def get_item_type(Item):
+    return Item.name
 
 #itemname.readfromfile.kh2id
     
@@ -59,13 +60,15 @@ ItemName.TornPages                          : ItemData(0x1320052,False,32),
 ItemName.TornPages                          : ItemData(0x1320053,False,32),
 ItemName.TornPages                          : ItemData(0x1320054,False,32),
 ItemName.TornPages                          : ItemData(0x1320055,False,32),
+
+}
+Forms_Table={
 ItemName.ValorForm                          : ItemData(0x1320056,False,26),
 ItemName.WisdomForm                         : ItemData(0x1320057,False,27),
 ItemName.LimitForm                          : ItemData(0x1320058,False,29),
 ItemName.MasterForm                         : ItemData(0x1320059,False,31),
 ItemName.FinalForm                          : ItemData(0x132005a,False,563),
-}
-
+    }
 Magic_Table={
 ItemName.FireElement                              : ItemData(0x132005b,False,21),
 #ItemName.FireElement                              : ItemData(0x132005c,False),
@@ -478,6 +481,60 @@ required_items = {
 #there are 541 locations and 379 items
 #This means we need to add some filler
 #some numbers are taken from vanilla kh2 some are just out of my ass
+exclusionItem_table={
+    "SupportAbility":{
+        ItemName.Scan,
+        ItemName.Scan2           ,
+        ItemName.AerialRecovery  ,
+        ItemName.ComboMaster     ,
+        ItemName.ComboPlus       ,
+        ItemName.ComboPlus2      ,
+        ItemName.ComboPlus3      ,
+        ItemName.AirComboPlus    ,
+        ItemName.AirComboPlus2   ,
+        ItemName.AirComboPlus3   ,
+        ItemName.ComboBoost      ,
+        ItemName.AirComboBoost   ,
+        ItemName.ReactionBoost   ,
+        ItemName.ReactionBoost2  ,
+        ItemName.FinishingPlus   ,
+        ItemName.FinishingPlus2  ,
+        ItemName.NegativeCombo   ,
+        ItemName.BerserkCharge   ,
+        ItemName.DamageDrive     ,
+        ItemName.DriveBoost      ,
+        ItemName.FormBoost       ,
+        ItemName.FormBoost2      ,
+        ItemName.FormBoost3      ,
+        ItemName.SummonBoost     ,
+        ItemName.ExperienceBoost ,
+        ItemName.Draw            ,
+        ItemName.Draw2           ,
+        ItemName.Draw3           ,
+        ItemName.Jackpot         ,
+        ItemName.LuckyLucky      ,
+        ItemName.LuckyLucky2     ,
+        ItemName.LuckyLucky3     ,
+        ItemName.DriveConverter  ,
+        ItemName.FireBoost       ,
+        ItemName.BlizzardBoost   ,
+        ItemName.ThunderBoost    ,
+        ItemName.ItemBoost       ,
+        ItemName.MPRage          ,
+        ItemName.MPRage2         ,
+        ItemName.MPHaste         ,
+        ItemName.MPHaste2        ,
+        ItemName.MPHastera       ,
+        ItemName.MPHastera2      ,
+        ItemName.MPHastega       ,
+        ItemName.Defender        ,
+        ItemName.DamageControl   ,
+        ItemName.NoExperience    ,
+        ItemName.NoExperience2   ,
+        ItemName.LightDarkness   ,
+    }
+    }
+
 
 junk_weights = {
     ItemName.Potion:34,
@@ -500,7 +557,8 @@ junk_weights = {
 }
 
 item_dictionary_table = {**Reports_Table, 
-                         **Progression_Table, 
+                         **Progression_Table,
+                         **Forms_Table,
                          **Magic_Table, 
                          **Armor_Table , 
                          **Movement_Table,  
