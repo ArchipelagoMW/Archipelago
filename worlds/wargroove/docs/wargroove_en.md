@@ -55,7 +55,8 @@ Please delete your campaign progress by going to the level selection screen in t
 hitting `ESC` and clicking the `Delete Progress` button.
 
 Follow the `Installing the Archipelago Wargroove Mod and Campaign files` steps again, but look for the latest version
- to download.
+ to download. In addition, follow the steps outlined in `Wargroove crashes when trying to run the Archipelago campaign`
+when attempting to update the campaign files and the mod.
 
 ## Troubleshooting
 
