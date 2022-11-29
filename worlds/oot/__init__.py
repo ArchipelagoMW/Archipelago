@@ -634,6 +634,9 @@ class OOTWorld(World):
         self.multiworld.itempool += self.itempool
         self.remove_from_start_inventory.extend(removed_items)
 
+        # Fill boss prizes. needs to happen before entrance shuffle
+        self.fill_bosses()
+
     def set_rules(self):
         # This has to run AFTER creating items but BEFORE set_entrances_based_rules
         if self.entrance_shuffle:
@@ -672,9 +675,6 @@ class OOTWorld(World):
         set_entrances_based_rules(self)
 
     def generate_basic(self):  # mostly killing locations that shouldn't exist by settings
-
-        # Fill boss prizes. needs to happen before killing unreachable locations
-        self.fill_bosses()
 
         # Gather items for ice trap appearances
         self.fake_items = []
@@ -1151,7 +1151,7 @@ class OOTWorld(World):
         all_state = self.multiworld.get_all_state(use_cache=False)
         # Remove event progression items
         for item, player in all_state.prog_items:
-            if player == self.player and (item not in item_table or (item_table[item][2] is None and item_table[item][0] != 'DungeonReward')):
+            if player == self.player and (item not in item_table or item_table[item][2] is None):
                 all_state.prog_items[(item, player)] = 0
         # Remove all events and checked locations
         all_state.locations_checked = {loc for loc in all_state.locations_checked if loc.player != self.player}
