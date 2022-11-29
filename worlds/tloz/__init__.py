@@ -480,6 +480,7 @@ class TLoZWorld(World):
                                player_name=self.multiworld.player_name[self.player], patched_path=outputFilename)
         self.rom_name_available_event.set()
         patch.write()
+        os.unlink(outputFilename)
 
     def modify_multidata(self, multidata: dict):
         import base64
