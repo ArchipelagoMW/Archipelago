@@ -128,6 +128,8 @@ tloz_options:
   #             true  for operating system default program
   # Alternatively, a path to a program to open the .nes file with
   rom_start: true
+  # Display message inside of Bizhawk
+  display_msgs: true
 smz3_options:
   # Set this to your SNI folder location if you want the MultiClient to attempt an auto start, does nothing if not found
   sni: "SNI"

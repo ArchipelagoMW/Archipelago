@@ -279,7 +279,7 @@ if __name__ == '__main__':
     Utils.init_logging("ZeldaClient")
 
     options = Utils.get_options()
-    DISPLAY_MSGS = options["ffr_options"]["display_msgs"]
+    DISPLAY_MSGS = options["tloz_options"]["display_msgs"]
 
 
     async def run_game(romfile: str) -> None:
