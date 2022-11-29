@@ -121,7 +121,27 @@ def set_rules(hylics2world):
         lambda state: state._hylics2_enter_foglast(player) and state._hylics2_has_bridge_key(player))
     add_rule(world.get_location("New Muldul: Vault Bomb", player), 
         lambda state: state._hylics2_enter_foglast(player) and state._hylics2_has_bridge_key(player))
-
+    
+    # Juice Ranch
+    add_rule(world.get_location("Juice Ranch: Juice 1", player),
+        lambda state: (state._hylics2_has_airship(player))
+    add_rule(world.get_location("Juice Ranch: Juice 2", player),
+        lambda state: (state._hylics2_has_airship(player))
+    add_rule(world.get_location("Juice Ranch: Juice 3", player),
+        lambda state: (state._hylics2_has_airship(player))
+    add_rule(world.get_location("Juice Ranch: Ledge Rancher", player),
+        lambda state: (state._hylics2_has_airship(player))
+    add_rule(world.get_location("Juice Ranch: Battle with Somsnosa", player),
+        lambda state: (state._hylics2_has_airship(player))
+    add_rule(world.get_location("Juice Ranch: Fridge", player),
+        lambda state: (state._hylics2_has_airship(player))
+    add_rule(world.get_location("Juice Ranch: TV", player),
+        lambda state: (state._hylics2_has_airship(player))
+             
+    # Worm Room
+    add_rule(world.get_location("Worm Pod: Key", player),
+        lambda state: (state._hylics2_has_airship(player) and\ state._hylics2_has_worm_room_key(player))
+    
     # Viewax's Edifice
     add_rule(world.get_location("Viewax's Edifice: Canopic Jar", player), 
         lambda state: state._hylics2_has_paddle(player))
