@@ -138,7 +138,7 @@ def set_rules(hylics2world):
     add_rule(world.get_location("Juice Ranch: TV", player),
         lambda state: state._hylics2_has_airship(player))
 
-    # Worm Room
+    # Worm Pod
     add_rule(world.get_location("Worm Pod: Key", player),
         lambda state: state._hylics2_has_airship(player) and state._hylics2_has_worm_room_key(player))
 
