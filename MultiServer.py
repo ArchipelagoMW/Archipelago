@@ -1905,6 +1905,37 @@ class ServerCommandProcessor(CommonCommandProcessor):
         """Sends an item to the specified player"""
         return self._cmd_send_multiple(1, player_name, *item_name)
 
+    def _cmd_send_location(self, player_name: str, *location_name: str) -> bool:
+        """Send out item from a player's location as though they checked it"""
+        seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
+        if usable:
+            team, slot = self.ctx.player_name_lookup[seeked_player]
+            game = self.ctx.games[slot]
+            full_name = " ".join(location_name)
+
+            if full_name.isnumeric():
+                location, usable, response = int(full_name), True, None
+            elif self.ctx.location_names_for_game(game) is not None:
+                location, usable, response = get_intended_text(full_name, self.ctx.location_names_for_game(game))
+            else:
+                self.output("Can't look up location for unknown game. Send by ID instead.")
+                return False
+
+            if usable:
+                if isinstance(location, int):
+                    register_location_checks(self.ctx, team, slot, [location])
+                else:
+                    seeked_location: int = self.ctx.location_names_for_game(self.ctx.games[slot])[location]
+                    register_location_checks(self.ctx, team, slot, [seeked_location])
+                return True
+            else:
+                self.output(response)
+                return False
+
+        else:
+            self.output(response)
+            return False
+
     def _cmd_hint(self, player_name: str, *item_name: str) -> bool:
         """Send out a hint for a player's item to their team"""
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
