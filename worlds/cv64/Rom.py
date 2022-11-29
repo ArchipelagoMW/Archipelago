@@ -509,9 +509,13 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     rom.write_bytes(0x6B5028, [0x08, 0x06, 0x0D, 0x74])  # J 0x801835D0
     rom.write_bytes(0x1067C0, PatchName.custom_code_loader)
 
-    # Custom warp menu, remote item rewarding, and DeathLink code injection
+    # Custom remote item rewarding and DeathLink receiving code
     rom.write_bytes(0x19B98, [0x08, 0x0F, 0xF0, 0x00])  # J 0x803FC000
-    rom.write_bytes(0xBFC000, PatchName.remote_item_and_warp)
+    rom.write_bytes(0xBFC000, PatchName.remote_item_giver)
+
+    # Warp menu-opening code
+    rom.write_bytes(0xB9BA8, [0x08, 0x0F, 0xF0, 0x9B])  # J	0x803FC26C
+    rom.write_bytes(0xBFC26C, PatchName.warp_menu_opener)
 
     # NPC item textbox hack hook
     rom.write_bytes(0xBF1DC, [0x08, 0x0F, 0xF0, 0x67])  # J 0x803FC19C
@@ -523,7 +527,7 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     rom.write_bytes(0xBF330, [0x08, 0x0F, 0xF0, 0x5D])  # J	0x803FC174
     rom.write_bytes(0xBFC174, PatchName.give_subweapon_stopper)
 
-    # Custom warp menu code
+    # Warp menu Special1 restriction
     rom.write_bytes(0xADD68, [0x0C, 0x04, 0xAB, 0x12])  # JAL 0x8012AC48
     rom.write_bytes(0xADE28, PatchName.stage_select_overwrite)
     rom.write_byte(0xADE47, world.special1s_per_warp[player])
