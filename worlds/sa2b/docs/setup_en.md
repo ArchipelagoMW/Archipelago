@@ -100,6 +100,12 @@ If you wish to use the `SADX Music` option of the Randomizer, you must own a cop
 		
 - No resolution options in the Launcher.exe.
 	- In the `Graphics device` dropdown, select the device and display you plan to run the game on. The `Resolution` dropdown should populate once a graphics device is selected.
+	
+- No music is playing in the game.
+	- If you enabled an `SADX Music` option, then most likely the music data was not copied properly into the mod folder (See Additional Options for instructions).
+	
+- Mission 1 is missing a texture in the stage select UI.
+	- Most likely another mod is conflicting and overwriting the texture pack. It is reccommeded to have the SA2B Archipelago mod load last in the mod loader.
 
 ## Save File Safeguard (Advanced Option)
 
