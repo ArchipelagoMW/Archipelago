@@ -1290,13 +1290,13 @@ def patch_rom(world, rom):
         save_context.give_item(world, 'Zeldas Letter')
         # Archipelago forces this item to be local so it can always be given to the player. Usually it's a song so it's no problem.
         item = world.get_location('Song from Impa').item
-        save_context.give_raw_item(item.name)
+        save_context.give_item(world, item.name)
         if item.name == 'Slingshot':
-            save_context.give_raw_item("Deku Seeds (30)")
+            save_context.give_item(world, "Deku Seeds (30)")
         elif item.name == 'Bow': 
-            save_context.give_raw_item("Arrows (30)")
+            save_context.give_item(world, "Arrows (30)")
         elif item.name == 'Bomb Bag': 
-            save_context.give_raw_item("Bombs (20)")
+            save_context.give_item(world, "Bombs (20)")
         save_context.write_bits(0x0ED7, 0x04) # "Obtained Malon's Item"
         save_context.write_bits(0x0ED7, 0x08) # "Woke Talon in castle"
         save_context.write_bits(0x0ED7, 0x10) # "Talon has fled castle"
