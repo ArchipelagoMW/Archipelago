@@ -612,7 +612,7 @@ rom_addresses = {
     "Prize_Mon_D": 0x529b6,
     "Prize_Mon_E": 0x529b8,
     "Prize_Mon_F": 0x529ba,
-    "Start_Inventory": 0x52ade,
+    "Start_Inventory": 0x52add,
     "Missable_Route_2_Item_1": 0x5404a,
     "Missable_Route_2_Item_2": 0x54051,
     "Missable_Route_4_Item": 0x543df,
