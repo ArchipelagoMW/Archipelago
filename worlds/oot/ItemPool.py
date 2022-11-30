@@ -514,7 +514,7 @@ def get_pool_core(world):
         # Magic Beans
         elif location.vanilla_item == 'Buy Magic Bean':
             if world.shuffle_beans:
-                item = 'Magic Bean Pack' if world.multiworld.start_inventory[world.player].value.get('Magic Bean Pack', 0) else get_junk_item()[0]
+                item = 'Magic Bean Pack' if not world.multiworld.start_inventory[world.player].value.get('Magic Bean Pack', 0) else get_junk_item()[0]
             shuffle_item = world.shuffle_beans
             if not shuffle_item:
                 location.show_in_spoiler = False
