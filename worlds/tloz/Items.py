@@ -191,3 +191,7 @@ item_prices = {
     "Clock": 0,
     "Fairy": 10
 }
+
+starting_weapons = [
+    "Sword", "White Sword", "Magical Sword", "Magical Rod", "Red Candle"
+]

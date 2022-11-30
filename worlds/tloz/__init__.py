@@ -5,7 +5,7 @@ from typing import NamedTuple, Union
 
 import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
-from .Items import item_table, item_amounts_all, item_amounts_standard, item_prices, item_game_ids
+from .Items import item_table, item_amounts_all, item_amounts_standard, item_prices, item_game_ids, starting_weapons
 from .Locations import location_table, level_locations, major_locations, shop_locations, cave_locations, \
     all_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations
 from .Options import tloz_options
@@ -45,9 +45,7 @@ class TLoZWorld(World):
     location_name_to_id = location_table
 
     item_name_groups = {
-        'weapons': {
-            "Sword", "White Sword", "Magical Sword", "Magical Rod", "Red Candle"
-        },
+        'weapons': starting_weapons,
         'swords': {
             "Sword", "White Sword", "Magical Sword"
         },
@@ -162,8 +160,18 @@ class TLoZWorld(World):
                 self.player
             ).place_locked_item(self.multiworld.create_item("Heart Container", self.player))
 
+        starting_weapon = self.multiworld.random.choice(starting_weapons)
+
         for item_name in self.item_name_to_id:
+            if self.multiworld.StartingPosition[self.player] == 0 and item_name == starting_weapon and \
+                   not self.multiworld.get_location("Starting Sword Cave", self.player).locked:
+                self.multiworld.get_location("Starting Sword Cave", self.player).place_locked_item(
+                    self.multiworld.create_item(item_name, self.player)
+                )
+                if item_name in item_amounts.keys():
+                    item_amounts[item_name] -= 1
             if item_name in item_amounts.keys():
+
                 if self.multiworld.TriforceLocations[self.player] > 0 or item_name != "Triforce Fragment":
                     i = 0
                     for i in range(0, item_amounts[item_name]):
@@ -187,16 +195,6 @@ class TLoZWorld(World):
             status = self.create_event(f"Boss {level} Defeated")
             boss_event.place_locked_item(status)
             add_rule(boss_event, lambda state: state.can_reach(boss, "Location", self.player))
-
-        # If we're doing a safe start, everything past the starting screen requires a weapon.
-        if self.multiworld.StartingPosition[self.player] == 0:
-            for location in cave_locations:
-                add_rule(self.multiworld.get_location(location, self.player),
-                         lambda state: state.has_group("weapons", self.player))
-            for location in major_locations:
-                if location != "Starting Sword Cave":
-                    add_rule(self.multiworld.get_location(location, self.player),
-                             lambda state: state.has_group("weapons", self.player))
 
         # No dungeons without weapons, no unsafe dungeons
         for i, level in enumerate(self.levels[1:10]):
