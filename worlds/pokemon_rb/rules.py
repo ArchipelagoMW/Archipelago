@@ -173,4 +173,3 @@ def set_rules(world, player):
     for loc in world.get_locations(player):
         if loc.name in access_rules:
             add_rule(loc, access_rules[loc.name])
-            print(loc)
