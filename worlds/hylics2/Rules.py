@@ -74,11 +74,11 @@ class Hylics2Logic(LogicMixin):
 
     def _hylics2_enter_wormpod(self, player):
         return self._hylics2_has_airship(player) and self._hylics2_has_worm_room_key(player) and\
-        self._hylics2_has_paddle(player)
+            self._hylics2_has_paddle(player)
 
     def _hylics2_enter_sageship(self, player):
         return self._hylics2_has_skull_bomb(player) and self._hylics2_has_airship(player) and\
-        self._hylics2_has_paddle(player)
+            self._hylics2_has_paddle(player)
 
     def _hylics2_enter_foglast(self, player):
         return self._hylics2_enter_wormpod(player)
