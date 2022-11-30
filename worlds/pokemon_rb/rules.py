@@ -86,17 +86,20 @@ def set_rules(world, player):
         "Route 12 - Sleeping Pokemon": lambda state: state.has("Poke Flute", player),
         "Route 16 - Sleeping Pokemon": lambda state: state.has("Poke Flute", player),
         "Seafoam Islands B4F - Legendary Pokemon": lambda state: state.pokemon_rb_can_strength(player),
-        "Vermilion City - Legendary Pokemon": lambda state: state.pokemon_rb_can_surf(player) and state.has("S.S. Ticket", player)
-    }
-    trainersanity_access_rules = {
-        "Route 4 - Lass": lambda state: state.pokemon_rb_can_surf(player),
+        "Vermilion City - Legendary Pokemon": lambda state: state.pokemon_rb_can_surf(player) and state.has("S.S. Ticket", player),
+
+        # trainers
+        "Route 4 - Cooltrainer F": lambda state: state.pokemon_rb_can_surf(player),
         "Route 15 - Jr. Trainer F 1": lambda state: state.pokemon_rb_can_cut(player),
         "Silph Co 11F - Rocket 2 (Card Key)": lambda state: state.has("Card Key", player),
         "Silph Co 9F - Rocket 2 (Card Key)": lambda state: state.has("Card Key", player),
         "Silph Co 3F - Scientist (Card Key)": lambda state: state.has("Card Key", player),
-        "Route 10 - Pokemaniac": lambda state: state.pokemon_rb_can_surf(player),
-    }
-    hidden_item_access_rules = {
+        "Route 10 North - Pokemaniac": lambda state: state.pokemon_rb_can_surf(player),
+        "Rocket Hideout B1F - Rocket 5 (Lift Key)": lambda state: state.has("Lift Key", player),
+        "Rocket Hideout B4F - Rocket 2 (Lift Key)": lambda state: state.has("Lift Key", player),
+        "Rocket Hideout B4F - Rocket 3 (Lift Key)": lambda state: state.has("Lift Key", player),
+
+        # hidden items
         "Viridian Forest - Hidden Item Northwest by Trainer": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
         "Viridian Forest - Hidden Item Entrance Tree": lambda state: state.pokemon_rb_can_get_hidden_items(player),
@@ -167,8 +170,7 @@ def set_rules(world, player):
             player),
         "Route 4 - Hidden Item Plateau East Of Mt Moon": lambda state: state.pokemon_rb_can_get_hidden_items(player),
     }
-    for loc, rule in access_rules.items():
-        add_rule(world.get_location(loc, player), rule)
-    if world.randomize_hidden_items[player].value != 0:
-        for loc, rule in hidden_item_access_rules.items():
-            add_rule(world.get_location(loc, player), rule)
+    for loc in world.get_locations(player):
+        if loc.name in access_rules:
+            add_rule(loc, access_rules[loc.name])
+            print(loc)
