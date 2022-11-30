@@ -51,6 +51,8 @@ class StaticWitnessItems:
 
     ALL_JUNK_ITEMS = set(BONUS_WEIGHTS.keys()) | set(TRAP_WEIGHTS.keys())
 
+    ITEM_ID_TO_DOOR_HEX_ALL = dict()
+
     def __init__(self):
         item_tab = dict()
 
@@ -91,6 +93,8 @@ class StaticWitnessItems:
         for key, item in item_tab.items():
             self.ALL_ITEM_TABLE[key] = item
 
+        for door in StaticWitnessLogic.ALL_DOOR_ITEMS:
+            self.ITEM_ID_TO_DOOR_HEX_ALL[door[1] + 158000] = {int(door_hex, 16) for door_hex in door[2]}
 
 class WitnessPlayerItems:
     """
