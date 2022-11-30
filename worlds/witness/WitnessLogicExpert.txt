@@ -467,7 +467,7 @@ Door - 0x3CCDF (Exit Right) - 0x33AB2
 
 Jungle (Jungle) - Main Island - True - Outside Jungle River - 0x3873B - Boat - 0x17CDF:
 158251 - 0x17CDF (Shore Boat Spawn) - True - Boat
-158609 - 0x17F9B (Discard) - True - Triangles
+158609 - 0x17F9B (Discard) - True - Arrows
 158252 - 0x002C4 (First Row 1) - True - Sound
 158253 - 0x00767 (First Row 2) - 0x002C4 - Sound
 158254 - 0x002C6 (First Row 3) - 0x00767 - Sound
