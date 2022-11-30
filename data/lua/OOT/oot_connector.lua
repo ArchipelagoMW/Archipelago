@@ -233,6 +233,8 @@ local read_kokiri_forest_checks = function()
     checks["KF Shop Item 6"] = shop_check(0x6, 0x1)
     checks["KF Shop Item 7"] = shop_check(0x6, 0x2)
     checks["KF Shop Item 8"] = shop_check(0x6, 0x3)
+
+    checks["KF Shop Blue Rupee"] = on_the_ground_check(0x2D, 0x1)
     return checks
 end
 
