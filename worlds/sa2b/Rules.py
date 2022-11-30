@@ -309,8 +309,7 @@ def set_mission_upgrade_rules_standard(world: MultiWorld, player: int):
                   lambda state: state.has(ItemName.tails_booster, player) and
                                 state.has(ItemName.tails_bazooka, player))
     add_rule_safe(world, LocationName.meteor_herd_5, player,
-                  lambda state: state.has(ItemName.knuckles_hammer_gloves, player) and
-                                state.has(ItemName.knuckles_sunglasses, player))
+                  lambda state: state.has(ItemName.knuckles_sunglasses, player))
     add_rule_safe(world, LocationName.crazy_gadget_5, player,
                   lambda state: state.has(ItemName.sonic_light_shoes, player) and
                                 state.has(ItemName.sonic_bounce_bracelet, player) and
@@ -797,8 +796,7 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
     add_rule_safe(world, LocationName.city_escape_5, player,
                   lambda state: state.has(ItemName.sonic_flame_ring, player))
     add_rule_safe(world, LocationName.wild_canyon_5, player,
-                  lambda state: state.has(ItemName.knuckles_shovel_claws, player) and
-                                state.has(ItemName.knuckles_sunglasses, player))
+                  lambda state: state.has(ItemName.knuckles_shovel_claws, player))
     add_rule_safe(world, LocationName.pumpkin_hill_5, player,
                   lambda state: state.has(ItemName.knuckles_shovel_claws, player))
     add_rule_safe(world, LocationName.mission_street_5, player,
@@ -814,9 +812,6 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
     add_rule_safe(world, LocationName.eternal_engine_5, player,
                   lambda state: state.has(ItemName.tails_booster, player) and
                                 state.has(ItemName.tails_bazooka, player))
-    add_rule_safe(world, LocationName.meteor_herd_5, player,
-                  lambda state: state.has(ItemName.knuckles_hammer_gloves, player) and
-                                state.has(ItemName.knuckles_sunglasses, player))
     add_rule_safe(world, LocationName.crazy_gadget_5, player,
                   lambda state: state.has(ItemName.sonic_light_shoes, player) and
                                 state.has(ItemName.sonic_bounce_bracelet, player) and
