@@ -4,12 +4,16 @@ import asyncio
 import copy
 import json
 import logging
+import os
+import subprocess
 import time
+import typing
 from asyncio import StreamReader, StreamWriter
 from typing import List
 
 
 import Utils
+from Utils import async_start
 from worlds import lookup_any_location_id_to_name
 from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, ClientCommandProcessor, logger, \
     get_base_parser
@@ -275,8 +279,18 @@ if __name__ == '__main__':
     Utils.init_logging("ZeldaClient")
 
     options = Utils.get_options()
-    DISPLAY_MSGS = options["ffr_options"]["display_msgs"]
+    DISPLAY_MSGS = options["tloz_options"]["display_msgs"]
 
+
+    async def run_game(romfile: str) -> None:
+        auto_start = typing.cast(typing.Union[bool, str],
+                                 Utils.get_options()["tloz_options"].get("rom_start", True))
+        if auto_start is True:
+            import webbrowser
+            webbrowser.open(romfile)
+        elif isinstance(auto_start, str) and os.path.isfile(auto_start):
+            subprocess.Popen([auto_start, romfile],
+                             stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     async def main(args):
         print(args)
@@ -287,6 +301,7 @@ if __name__ == '__main__':
             if "server" in meta:
                 args.connect = meta["server"]
             logging.info(f"Wrote rom file to {romfile}")
+        async_start(run_game(romfile))
         ctx = ZeldaContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
         if gui_enabled:
