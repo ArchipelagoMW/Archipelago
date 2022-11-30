@@ -383,6 +383,8 @@ local function gotItem(item)
     if itemName == "Bomb" then gotBomb() end
     if itemName == "Recovery Heart" then gotRecoveryHeart() end
     if itemName == "Five Rupees" then gotFiveRupees() end
+    if itemName == "Fairy" then gotFairy() end
+    if itemName == "Clock" then gotClock() end
 end
 
 
