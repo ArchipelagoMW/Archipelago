@@ -289,7 +289,7 @@ Door - 0x17C50 (First Barrier) - 0x021AE
 
 Quarry Boathouse Upper Middle (Quarry Boathouse) - Quarry Boathouse Upper Back - 0x03858:
 158154 - 0x03858 (Ramp Horizontal Control) - True - Shapers & Eraser
-158402 - 0x00859 (Moving Ramp EP) - 0x03858 & 0x03852 & 0x3865F - True
+159402 - 0x00859 (Moving Ramp EP) - 0x03858 & 0x03852 & 0x3865F - True
 
 Quarry Boathouse Upper Back (Quarry Boathouse) - Quarry Boathouse Upper Middle - 0x3865F:
 158155 - 0x38663 (Second Barrier Panel) - True - True
