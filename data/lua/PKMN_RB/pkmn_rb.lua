@@ -73,14 +73,10 @@ function processBlock(block)
     end
     local itemsBlock = block["items"]
     memDomain.wram()
-    if itemsBlock ~= nil then-- and u8(0x116B) ~= 0x00 then
-	--	print(itemsBlock)
+    if itemsBlock ~= nil then
 	    ItemsReceived = itemsBlock
    end
    deathlink_rec = block["deathlink"]
-   if deathlink_rec == true then
-     print("REC DL")
-   end
 end
 
 function difference(a, b)
@@ -174,9 +170,6 @@ function receive()
         end
     end
     retTable["deathLink"] = deathlink_send
-    if deathlink_send == true then
-        print("sending DL to client")
-    end
     deathlink_send = false
     msg = json.encode(retTable).."\n"
     local ret, error = gbSocket:send(msg)
@@ -210,11 +203,9 @@ function main()
                     ItemIndex = u16(APIndex)
                     if deathlink_rec == true then
                         wU8(APDeathLinkAddress, 1)
-                        print("send DL to game")
                     elseif u8(APDeathLinkAddress) == 3 then
                         wU8(APDeathLinkAddress, 0)
                         deathlink_send = true
-                        print("DL triggered from game")
                     end
                     if ItemsReceived[ItemIndex + 1] ~= nil then
                         wU8(APItemAddress, ItemsReceived[ItemIndex + 1] - 172000000)
@@ -231,7 +222,6 @@ function main()
                 print("Attempting to connect")
                 local client, timeout = server:accept()
                 if timeout == nil then
-                    -- print('Initial Connection Made')
                     curstate = STATE_INITIAL_CONNECTION_MADE
                     gbSocket = client
                     gbSocket:settimeout(0)
