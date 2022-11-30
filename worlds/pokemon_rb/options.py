@@ -10,18 +10,20 @@ class GameVersion(Choice):
     default = "random"
 
 
-class TrainerName(FreeText):
-    """Your trainer name. Cannot exceed 7 characters.
+class TrainerName(TextChoice):
+    """Your trainer name. If not set to choose_in_game, must be a string not exceeding 7 characters.
     See the setup guide on archipelago.gg for a list of allowed characters."""
     display_name = "Trainer Name"
-    default = "ASH"
+    option_choose_in_game = -1
+    default = -1
 
 
-class RivalName(FreeText):
-    """Your rival's name. Cannot exceed 7 characters.
+class RivalName(TextChoice):
+    """Your rival's name. If not set to choose_in_game, must be a string not exceeding 7 characters.
     See the setup guide on archipelago.gg for a list of allowed characters."""
     display_name = "Rival's Name"
-    default = "GARY"
+    option_choose_in_game = -1
+    default = -1
 
 
 class Goal(Choice):
