@@ -497,6 +497,15 @@ class StartingMoney(Range):
     range_end = 999999
 
 
+class TrapPercentage(Range):
+    """Chance for each filler item to be replaced with trap items: Poison Trap, Paralyze Trap, Ice Trap, and
+    Fire Trap. These traps apply the status to your entire party! Keep in mind that trainersanity vastly increases the
+    number of filler items. Make sure to stock up on Ice Heals!"""
+    display_name = "Trap Percentage"
+    range_end = 100
+    default = 0
+
+
 pokemon_rb_options = {
     "game_version": GameVersion,
     "trainer_name": TrainerName,
@@ -552,5 +561,6 @@ pokemon_rb_options = {
     "better_shops": BetterShops,
     "master_ball_price": MasterBallPrice,
     "starting_money": StartingMoney,
+    "trap_percentage": TrapPercentage,
     "death_link": DeathLink
 }
