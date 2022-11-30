@@ -28,7 +28,6 @@ from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
 from .Hints import hint_dist_keys, get_hint_area, buildWorldGossipHints
 from .HintList import getRequiredHints
-from .SaveContext import SaveContext
 
 from Utils import get_options
 from BaseClasses import MultiWorld, CollectionState, RegionType, Tutorial, LocationProgressType
@@ -100,7 +99,12 @@ class OOTWorld(World):
     option_definitions: dict = oot_options
     topology_present: bool = True
     item_name_to_id = {item_name: oot_data_to_ap_id(data, False) for item_name, data in item_table.items() if
-                       data[2] is not None and item_name != 'Magic Bean'}  # two items have get id 0x16
+                       data[2] is not None and item_name not in {
+                        'Keaton Mask', 'Skull Mask', 'Spooky Mask', 'Bunny Hood',
+                        'Mask of Truth', 'Goron Mask', 'Zora Mask', 'Gerudo Mask',
+                        'Buy Magic Bean', 'Milk',
+                        'Small Key', 'Map', 'Compass', 'Boss Key',
+                       }}  # These are items which aren't used, but have get-item values
     location_name_to_id = location_name_to_id
     remote_items: bool = False
     remote_start_inventory: bool = False
@@ -616,16 +620,13 @@ class OOTWorld(World):
                 self.remove_from_start_inventory.remove(item.name)
                 removed_items.append(item.name)
             else:
-                if item.name not in SaveContext.giveable_items:
-                    raise Exception(f"Invalid OoT starting item: {item.name}")
-                else:
-                    self.starting_items[item.name] += 1
-                    if item.type == 'Song':
-                        self.songs_as_items = True
-                    # Call the junk fill and get a replacement
-                    if item in self.itempool:
-                        self.itempool.remove(item)
-                        self.itempool.append(self.create_item(*get_junk_item(pool=junk_pool)))
+                self.starting_items[item.name] += 1
+                if item.type == 'Song':
+                    self.songs_as_items = True
+                # Call the junk fill and get a replacement
+                if item in self.itempool:
+                    self.itempool.remove(item)
+                    self.itempool.append(self.create_item(*get_junk_item(pool=junk_pool)))
         if self.start_with_consumables:
             self.starting_items['Deku Sticks'] = 30
             self.starting_items['Deku Nuts'] = 40
@@ -824,8 +825,8 @@ class OOTWorld(World):
         impa = self.multiworld.get_location("Song from Impa", self.player)
         if self.shuffle_child_trade == 'skip_child_zelda':
             if impa.item is None:
-                item_to_place = self.multiworld.random.choice(list(item for item in self.multiworld.itempool if
-                                                                   item.player == self.player and item.name in SaveContext.giveable_items))
+                item_to_place = self.multiworld.random.choice(
+                    list(item for item in self.multiworld.itempool if item.player == self.player))
                 impa.place_locked_item(item_to_place)
                 self.multiworld.itempool.remove(item_to_place)
             # Give items to startinventory

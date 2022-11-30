@@ -21,7 +21,7 @@ from .Messages import read_messages, update_message_by_id, read_shop_items, upda
         get_message_by_id, Text_Code
 from .MQ import patch_files, File, update_dmadata, insert_space, add_relocations
 from .Rom import Rom
-from .SaveContext import SaveContext
+from .SaveContext import SaveContext, Scenes, FlagType
 from .SceneFlags import get_alt_list_bytes, get_collectible_flag_table, get_collectible_flag_table_bytes, \
         get_collectible_flag_addresses
 from .TextBox import character_table, NORMAL_LINE_WIDTH
@@ -1287,7 +1287,7 @@ def patch_rom(world, rom):
         rom.write_byte(rom.sym('COMPLETE_MASK_QUEST'), 1)
 
     if world.shuffle_child_trade == 'skip_child_zelda':
-        save_context.give_item('Zeldas Letter')
+        save_context.give_item(world, 'Zeldas Letter')
         # Archipelago forces this item to be local so it can always be given to the player. Usually it's a song so it's no problem.
         item = world.get_location('Song from Impa').item
         save_context.give_raw_item(item.name)
@@ -1841,7 +1841,7 @@ def patch_rom(world, rom):
                 rom.write_byte(0x218C589, special['text_id']) #Fix text box
         elif location.type == 'Boss':
             if location.name == 'Links Pocket':
-                save_context.give_item(item.name)
+                save_context.give_item(world, item.name)
             else:
                 rom.write_byte(locationaddress, special['item_id'])
                 rom.write_byte(secondaryaddress, special['addr2_data'])
@@ -2267,7 +2267,7 @@ def patch_rom(world, rom):
         rom.write_byte(0xDB3927, 0x5A)
 
         bfa_message = "\x08\x13\x0CYou got the \x05\x43Blue Fire Arrow\x05\x40!\x01This is a cool arrow you can\x01use on red ice."
-        if world.world_count > 1:
+        if world.multiworld.players > 1:
             bfa_message = make_player_message(bfa_message)
         update_message_by_id(messages, 0x0071, bfa_message, 0x23)
 
@@ -2301,7 +2301,7 @@ def patch_rom(world, rom):
     for (name, count) in world.starting_items.items():
         if count == 0:
             continue
-        save_context.give_item(name, count)
+        save_context.give_item(world, name, count)
 
     if world.fix_broken_drops:
         symbol = rom.sym('FIX_BROKEN_DROPS')

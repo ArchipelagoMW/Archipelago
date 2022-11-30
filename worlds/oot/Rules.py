@@ -1,7 +1,6 @@
 from collections import deque
 import logging
 
-from .SaveContext import SaveContext
 from .Regions import TimeOfDay
 from .Items import oot_is_item_of_type
 
@@ -31,7 +30,7 @@ class OOTLogic(LogicMixin):
         return self.has_group("logic_bottles", player)
 
     def _oot_has_beans(self, player):
-        return self.has("Magic Bean Pack", player) or self.has("Buy Magic Bean", player)
+        return self.has("Magic Bean Pack", player) or self.has("Buy Magic Bean", player) or self.has("Magic Bean", player, 10)
 
     # Used for fall damage and other situations where damage is unavoidable
     def _oot_can_live_dmg(self, player, hearts):
@@ -156,11 +155,6 @@ def set_rules(ootworld):
         # This is required if map/compass included, or any_dungeon shuffle.
         location = world.get_location('Sheik in Ice Cavern', player)
         add_item_rule(location, lambda item: item.player == player and oot_is_item_of_type(item, 'Song'))
-
-    if ootworld.shuffle_child_trade == 'skip_child_zelda':
-        # If skip child zelda is on, the item at Song from Impa must be giveable by the save context. 
-        location = world.get_location('Song from Impa', player)
-        add_item_rule(location, lambda item: item.name in SaveContext.giveable_items)
 
     for name in ootworld.always_hints:
         add_rule(world.get_location(name, player), guarantee_hint)
