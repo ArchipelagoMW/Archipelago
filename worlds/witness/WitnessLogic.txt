@@ -289,7 +289,7 @@ Door - 0x17C50 (First Barrier) - 0x021AE
 
 Quarry Boathouse Upper Middle (Quarry Boathouse) - Quarry Boathouse Upper Back - 0x03858:
 158154 - 0x03858 (Ramp Horizontal Control) - True - Shapers & Eraser
-158402 - 0x00859 (Moving Ramp EP) - 0x03858 & 0x03852 - True
+158402 - 0x00859 (Moving Ramp EP) - 0x03858 & 0x03852 & 0x3865F - True
 
 Quarry Boathouse Upper Back (Quarry Boathouse) - Quarry Boathouse Upper Middle - 0x3865F:
 158155 - 0x38663 (Second Barrier Panel) - True - True
@@ -307,7 +307,7 @@ Door - 0x3865F (Second Barrier) - 0x38663
 158167 - 0x0A3CB (Back Second Row 1) - 0x09DB4 - Stars & Eraser & Shapers
 158168 - 0x0A3CC (Back Second Row 2) - 0x0A3CB - Stars & Eraser & Shapers
 158169 - 0x0A3D0 (Back Second Row 3) - 0x0A3CC - Stars & Eraser & Shapers
-159401 - 0x005F6 (Hook EP) - 0x275FA & 0x03852 - True
+159401 - 0x005F6 (Hook EP) - 0x275FA & 0x03852 & 0x3865F - True
 
 Shadows (Shadows) - Main Island - True - Shadows Ledge - 0x19B24 - Shadows Laser Room - 0x194B2 & 0x19665:
 158170 - 0x334DB (Door Timer Outside) - True - True
