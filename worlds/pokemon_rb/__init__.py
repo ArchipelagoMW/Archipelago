@@ -116,6 +116,10 @@ class PokemonRedBlueWorld(World):
                 item = self.create_filler()
             else:
                 item = self.create_item(location.original_item)
+                if (item.classification == ItemClassification.filler and self.multiworld.random.randint(1, 100)
+                        <= self.multiworld.trap_percentage[self.player].value):
+                    item = self.create_item(self.multiworld.random.choice([item for item in item_table if
+                                            item_table[item].classification == ItemClassification.trap]))
             if location.event:
                 self.multiworld.get_location(location.name, self.player).place_locked_item(item)
             elif ("Badge" not in item.name or self.multiworld.badgesanity[self.player].value) and \
@@ -245,12 +249,15 @@ class PokemonRedBlueWorld(World):
                 spoiler_handle.write(f"{matchup[0]} deals {matchup[2] * 10}% damage to {matchup[1]}\n")
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice([item for item in item_table if item_table[item].classification in
-                                         [ItemClassification.filler, ItemClassification.trap] and item not in
-                                         item_groups["Vending Machine Drinks"] + item_groups["Unique"]])
+        if self.multiworld.random.randint(1, 100) <= self.multiworld.trap_percentage[self.player].value:
+            return self.multiworld.random.choice([item for item in item_table if
+                                            item_table[item].classification == ItemClassification.trap])
+
+        return self.multiworld.random.choice([item for item in item_table if item_table[
+            item].classification == ItemClassification.filler and item not in item_groups["Vending Machine Drinks"] +
+                                              item_groups["Unique"]])
 
     def fill_slot_data(self) -> dict:
-        # for trackers, except death link
         return {
             "second_fossil_check_condition": self.multiworld.second_fossil_check_condition[self.player].value,
             "require_item_finder": self.multiworld.require_item_finder[self.player].value,
@@ -268,6 +275,7 @@ class PokemonRedBlueWorld(World):
             "viridian_gym_condition": self.multiworld.viridian_gym_condition[self.player].value,
             "free_fly_map": self.fly_map_code,
             "extra_badges": self.extra_badges,
+            "type_chart": self.type_chart,
             "death_link": self.multiworld.death_link[self.player].value
         }
 
