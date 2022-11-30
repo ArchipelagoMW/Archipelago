@@ -2,6 +2,8 @@ import struct
 import itertools
 import re
 import zlib
+import zipfile
+import os
 import datetime
 from collections import defaultdict
 from functools import partial
@@ -26,10 +28,27 @@ from .TextBox import character_table, NORMAL_LINE_WIDTH
 from .texture_util import ci4_rgba16patch_to_ci8, rgba16_patch
 from .Utils import __version__
 
+from worlds.Files import APContainer
 from Utils import __version__ as ap_version
 
 AP_PROGRESSION = 0xD4
 AP_JUNK = 0xD5
+
+
+class OoTContainer(APContainer):
+    game: str = 'Ocarina of Time'
+
+    def __init__(self, patch_data: bytes, base_path: str, output_directory: str,
+                 player = None, player_name: str = "", server: str = ""):
+        self.patch_data = patch_data
+        self.zpf_path = base_path + ".zpf"
+        container_path = os.path.join(output_directory, base_path + ".apz5")
+        super().__init__(container_path, player, player_name, server)
+
+    def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
+        opened_zipfile.writestr(self.zpf_path, self.patch_data)
+        super().write_contents(opened_zipfile)
+
 
 # "Spoiler" argument deleted; can probably be replaced with calls to world.world
 def patch_rom(world, rom):

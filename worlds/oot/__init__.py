@@ -23,15 +23,14 @@ from .LocationList import business_scrubs, set_drop_location_names, dungeon_song
 from .DungeonList import dungeon_table, create_dungeons
 from .LogicTricks import normalized_name_tricks
 from .Rom import Rom
-from .Patches import patch_rom
+from .Patches import OoTContainer, patch_rom
 from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
 from .Hints import hint_dist_keys, get_hint_area, buildWorldGossipHints
 from .HintList import getRequiredHints
 from .SaveContext import SaveContext
-from .SceneFlags import *
 
-from Utils import get_options, output_path
+from Utils import get_options
 from BaseClasses import MultiWorld, CollectionState, RegionType, Tutorial, LocationProgressType
 from Options import Range, Toggle, VerifyKeys
 from Fill import fill_restrictive, fast_fill, FillError
@@ -926,8 +925,13 @@ class OOTWorld(World):
             patch_rom(self, rom)
             patch_cosmetics(self, rom)
             rom.update_header()
-            create_patch_file(rom, output_path(output_directory, outfile_name + '.apz5'))
+            patch_data = create_patch_file(rom)
             rom.restore()
+
+            apz5 = OoTContainer(patch_data, outfile_name, output_directory,
+                player=self.player,
+                player_name=self.multiworld.get_player_name(self.player))
+            apz5.write()
 
             # Write entrances to spoiler log
             all_entrances = self.get_shuffled_entrances()

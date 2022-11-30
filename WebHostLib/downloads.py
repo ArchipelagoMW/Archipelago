@@ -72,7 +72,10 @@ def download_slot_file(room_id, player_id: int):
                     if name.endswith("info.json"):
                         fname = name.rsplit("/", 1)[0] + ".zip"
         elif slot_data.game == "Ocarina of Time":
-            fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_P{slot_data.player_id}_{slot_data.player_name}.apz5"
+            with zipfile.ZipFile(io.BytesIO(slot_data.data)) as zf:
+                for name in zf.namelist():
+                    if name.endswith(".zpf"):
+                        fname = name.rsplit(".", 1)[0] + ".apz5"
         elif slot_data.game == "VVVVVV":
             fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_SP.apv6"
         elif slot_data.game == "Zillion":

@@ -3,6 +3,7 @@ import json
 import os
 import multiprocessing
 import subprocess
+import zipfile
 from asyncio import StreamReader, StreamWriter
 
 # CommonClient import first to trigger ModuleUpdater
@@ -288,7 +289,10 @@ async def patch_and_run_game(apz5_file):
     comp_path = base_name + '.z64'
     # Load vanilla ROM, patch file, compress ROM
     rom = Rom(Utils.local_path(Utils.get_options()["oot_options"]["rom_file"]))
-    apply_patch_file(rom, apz5_file)
+    apply_patch_file(rom, apz5_file,
+        sub_file=(os.path.basename(base_name) + '.zpf'
+            if zipfile.is_zipfile(apz5_file)
+            else None))
     rom.write_to_file(decomp_path)
     os.chdir(data_path("Compress"))
     compress_rom_file(decomp_path, comp_path)
