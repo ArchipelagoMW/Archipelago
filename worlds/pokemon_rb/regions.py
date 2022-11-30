@@ -106,6 +106,7 @@ def create_regions(multiworld: MultiWorld, player: int):
         create_region(multiworld, player, "Route 14", locations_per_region),
         create_region(multiworld, player, "Route 14 Grass", locations_per_region),
         create_region(multiworld, player, "Route 13", locations_per_region),
+        create_region(multiworld, player, "Route 13 East", locations_per_region),
         create_region(multiworld, player, "Route 19", locations_per_region),
         create_region(multiworld, player, "Route 20 East", locations_per_region),
         create_region(multiworld, player, "Route 20 West", locations_per_region),
@@ -236,7 +237,8 @@ def create_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Route 15", "Route 14")
     connect(multiworld, player, "Route 14", "Route 14 Grass", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
     connect(multiworld, player, "Route 14", "Route 13")
-    connect(multiworld, player, "Route 13", "Route 12 South", lambda state: state.pokemon_rb_can_strength(player) or state.pokemon_rb_can_surf(player) or not state.multiworld.extra_strength_boulders[player].value)
+    connect(multiworld, player, "Route 13", "Route 13 East", lambda state: state.pokemon_rb_can_strength(player) or state.pokemon_rb_can_surf(player) or not state.multiworld.extra_strength_boulders[player].value)
+    connect(multiworld, player, "Route 12 South", "Route 13 East")
     connect(multiworld, player, "Fuchsia City", "Route 19", lambda state: state.pokemon_rb_can_surf(player))
     connect(multiworld, player, "Route 20 East", "Route 19")
     connect(multiworld, player, "Route 20 West", "Cinnabar Island", lambda state: state.pokemon_rb_can_surf(player))
