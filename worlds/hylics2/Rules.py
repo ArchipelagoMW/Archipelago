@@ -74,17 +74,17 @@ class Hylics2Logic(LogicMixin):
 
     def _hylics2_enter_wormpod(self, player):
         return self._hylics2_has_airship(player) and self._hylics2_has_worm_room_key(player) and\
-            self._hylics2_has_paddle(player)
+        self._hylics2_has_paddle(player)
 
     def _hylics2_enter_sageship(self, player):
         return self._hylics2_has_skull_bomb(player) and self._hylics2_has_airship(player) and\
-            self._hylics2_has_paddle(player)
+        self._hylics2_has_paddle(player)
 
     def _hylics2_enter_foglast(self, player):
         return self._hylics2_enter_wormpod(player)
 
     def _hylics2_enter_hylemxylem(self, player):
-        return self._hylics2_can_air_dash(player) and self._hylics2_enter_wormpod(player) and\
+        return self._hylics2_can_air_dash(player) and self._hylics2_enter_foglast(player) and\
             self._hylics2_has_bridge_key(player)
 
 
@@ -108,39 +108,19 @@ def set_rules(hylics2world):
 
     # New Muldul Vault
     add_rule(world.get_location("New Muldul: Rescued Blerol 1", player),
-        lambda state: (state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player)) and\
-            ((state._hylics2_has_jail_key(player) and state._hylics2_has_paddle(player)) or\
-                (state._hylics2_has_bridge_key(player) and state._hylics2_has_worm_room_key(player))))
+        lambda state: ((state._hylics2_has_jail_key(player) and state._hylics2_has_paddle(player)) and\
+            (state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player))) or\
+                state._hylics2_enter_hylemxylem(player))
     add_rule(world.get_location("New Muldul: Rescued Blerol 2", player),
-        lambda state: (state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player)) and\
-            ((state._hylics2_has_jail_key(player) and state._hylics2_has_paddle(player)) or\
-                (state._hylics2_has_bridge_key(player) and state._hylics2_has_worm_room_key(player))))
+        lambda state: ((state._hylics2_has_jail_key(player) and state._hylics2_has_paddle(player)) and\
+            (state._hylics2_can_air_dash(player) or state._hylics2_has_airship(player))) or\
+                state._hylics2_enter_hylemxylem(player))
     add_rule(world.get_location("New Muldul: Vault Left Chest", player),
-        lambda state: state._hylics2_enter_foglast(player) and state._hylics2_has_bridge_key(player))
+        lambda state: state._hylics2_enter_hylemxylem(player))
     add_rule(world.get_location("New Muldul: Vault Right Chest", player),
-        lambda state: state._hylics2_enter_foglast(player) and state._hylics2_has_bridge_key(player))
+        lambda state: state._hylics2_enter_hylemxylem(player))
     add_rule(world.get_location("New Muldul: Vault Bomb", player),
-        lambda state: state._hylics2_enter_foglast(player) and state._hylics2_has_bridge_key(player))
-
-    # Juice Ranch
-    add_rule(world.get_location("Juice Ranch: Juice 1", player),
-        lambda state: state._hylics2_has_airship(player))
-    add_rule(world.get_location("Juice Ranch: Juice 2", player),
-        lambda state: state._hylics2_has_airship(player))
-    add_rule(world.get_location("Juice Ranch: Juice 3", player),
-        lambda state: state._hylics2_has_airship(player))
-    add_rule(world.get_location("Juice Ranch: Ledge Rancher", player),
-        lambda state: state._hylics2_has_airship(player))
-    add_rule(world.get_location("Juice Ranch: Battle with Somsnosa", player),
-        lambda state: state._hylics2_has_airship(player))
-    add_rule(world.get_location("Juice Ranch: Fridge", player),
-        lambda state: state._hylics2_has_airship(player))
-    add_rule(world.get_location("Juice Ranch: TV", player),
-        lambda state: state._hylics2_has_airship(player))
-
-    # Worm Pod
-    add_rule(world.get_location("Worm Pod: Key", player),
-        lambda state: state._hylics2_has_airship(player) and state._hylics2_has_worm_room_key(player))
+        lambda state: state._hylics2_enter_hylemxylem(player))
 
     # Viewax's Edifice
     add_rule(world.get_location("Viewax's Edifice: Canopic Jar", player),
@@ -312,10 +292,12 @@ def set_rules(hylics2world):
         add_rule(world.get_location("New Muldul: Vault Right Chest", player),
             lambda state: state._hylics2_has_3_members(player))
         add_rule(world.get_location("New Muldul: Vault Bomb", player),
-            lambda state: state._hylics2_has_2_members(player))
+            lambda state: state._hylics2_has_3_members(player))
         add_rule(world.get_location("Juice Ranch: Battle with Somsnosa", player),
             lambda state: state._hylics2_has_2_members(player))
         add_rule(world.get_location("Juice Ranch: Somsnosa Joins", player),
+            lambda state: state._hylics2_has_2_members(player))
+        add_rule(world.get_location("Juice Ranch: Fridge", player),
             lambda state: state._hylics2_has_2_members(player))
         add_rule(world.get_location("Airship: Talk to Somsnosa", player),
             lambda state: state._hylics2_has_3_members(player))
@@ -358,15 +340,15 @@ def set_rules(hylics2world):
     # extra rules is Shuffle Red Medallions and Party Shuffle are enabled
     if world.party_shuffle[player] and world.medallion_shuffle[player]:
         add_rule(world.get_location("New Muldul: Vault Rear Left Medallion", player),
-            lambda state: state._hylics2_has_jail_key(player))
+            lambda state: state._hylics2_has_3_members(player))
         add_rule(world.get_location("New Muldul: Vault Rear Right Medallion", player),
-            lambda state: state._hylics2_has_jail_key(player))
+            lambda state: state._hylics2_has_3_members(player))
         add_rule(world.get_location("New Muldul: Vault Center Medallion", player),
-            lambda state: state._hylics2_has_jail_key(player))
+            lambda state: state._hylics2_has_3_members(player))
         add_rule(world.get_location("New Muldul: Vault Front Left Medallion", player),
-            lambda state: state._hylics2_has_jail_key(player))
+            lambda state: state._hylics2_has_3_members(player))
         add_rule(world.get_location("New Muldul: Vault Front Right Medallion", player),
-            lambda state: state._hylics2_has_jail_key(player))
+            lambda state: state._hylics2_has_3_members(player))
 
     # entrances
     for i in world.get_region("Airship", player).entrances:
