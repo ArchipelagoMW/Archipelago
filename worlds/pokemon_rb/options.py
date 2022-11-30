@@ -499,6 +499,12 @@ class StartingMoney(Range):
     range_end = 999999
 
 
+class LoseMoneyOnBlackout(Toggle):
+    """Lose half your money when blacking out, as in vanilla."""
+    display_name = "Lose Money on Blackout"
+    default = 1
+
+
 class TrapPercentage(Range):
     """Chance for each filler item to be replaced with trap items: Poison Trap, Paralyze Trap, Ice Trap, and
     Fire Trap. These traps apply the status to your entire party! Keep in mind that trainersanity vastly increases the
@@ -563,6 +569,7 @@ pokemon_rb_options = {
     "better_shops": BetterShops,
     "master_ball_price": MasterBallPrice,
     "starting_money": StartingMoney,
+    "lose_money_on_blackout": LoseMoneyOnBlackout,
     "trap_percentage": TrapPercentage,
     "death_link": DeathLink
 }
