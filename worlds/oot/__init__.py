@@ -255,6 +255,8 @@ class OOTWorld(World):
         self.lacs_rewards = 9
         self.lacs_tokens = 100
         self.lacs_hearts = 20
+        # RuleParser hack
+        self.triforce_goal_per_world = self.triforce_goal
 
         # Set internal names used by the OoT generator
         self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld']
