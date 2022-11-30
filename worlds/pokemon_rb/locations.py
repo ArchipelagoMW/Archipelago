@@ -710,16 +710,6 @@ location_data = [
     LocationData("Indigo Plateau", "Bruno", None, rom_addresses["Trainersanity_EVENT_BEAT_BRUNOS_ROOM_TRAINER_0_ITEM"], EventFlag(20), inclusion=trainersanity),
     LocationData("Indigo Plateau", "Agatha", None, rom_addresses["Trainersanity_EVENT_BEAT_AGATHAS_ROOM_TRAINER_0_ITEM"], EventFlag(19), inclusion=trainersanity),
     LocationData("Indigo Plateau", "Lance", None, rom_addresses["Trainersanity_EVENT_BEAT_LANCES_ROOM_TRAINER_0_ITEM"], EventFlag(18), inclusion=trainersanity),
-    # LocationData("Cinnabar Gym", "1", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_6_ITEM"], EventFlag(368), inclusion=trainersanity),
-    # LocationData("Cinnabar Gym", "2", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_5_ITEM"], EventFlag(369), inclusion=trainersanity),
-    # LocationData("Cinnabar Gym", "3", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_4_ITEM"], EventFlag(370), inclusion=trainersanity),
-    # LocationData("Cinnabar Gym", "4", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_3_ITEM"], EventFlag(371), inclusion=trainersanity),
-    # LocationData("Cinnabar Gym", "5", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_2_ITEM"], EventFlag(372), inclusion=trainersanity),
-    # LocationData("Cinnabar Gym", "6", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_1_ITEM"], EventFlag(373), inclusion=trainersanity),
-    # LocationData("Cinnabar Gym", "7", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_0_ITEM"], EventFlag(374), inclusion=trainersanity),
-
-
-
 
     LocationData("Indigo Plateau", "Become Champion", "Become Champion", event=True),
     LocationData("Pokemon Tower 7F", "Fuji Saved", "Fuji Saved", event=True),
@@ -2048,10 +2038,6 @@ location_data = [
                  None, event=True, type="Legendary Pokemon"),
     LocationData("Vermilion City", "Legendary Pokemon", "Mew", rom_addresses["Static_Encounter_Mew"],
                  None, event=True, type="Legendary Pokemon"),
-
-
-
-
 
 ]
 
