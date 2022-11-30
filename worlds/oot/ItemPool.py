@@ -709,7 +709,7 @@ def get_pool_core(world):
         pool.extend(get_junk_item())
     else:
         placed_items['Gift from Sages'] = IGNORE_LOCATION
-        world.get_location('Gift from Sages').show_in_spoiler = False
+    world.get_location('Gift from Sages').show_in_spoiler = False
 
     if world.junk_ice_traps == 'off':
         replace_max_item(pool, 'Ice Trap', 0)
