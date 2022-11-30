@@ -69,10 +69,8 @@ function processBlock(block)
     end
     local itemsBlock = block["items"]
     memDomain.wram()
-    if itemsBlock ~= nil then-- and u8(0x116B) ~= 0x00 then
-	--	print(itemsBlock)
-	ItemsReceived = itemsBlock
-
+    if itemsBlock ~= nil then
+	    ItemsReceived = itemsBlock
    end
 end
 
@@ -135,7 +133,6 @@ function receive()
         curstate = STATE_UNINITIALIZED
         return
     elseif e == 'timeout' then
-        print("timeout")
         return
     elseif e ~= nil then
         print(e)
@@ -212,7 +209,6 @@ function main()
                 print("Attempting to connect")
                 local client, timeout = server:accept()
                 if timeout == nil then
-                    -- print('Initial Connection Made')
                     curstate = STATE_INITIAL_CONNECTION_MADE
                     gbSocket = client
                     gbSocket:settimeout(0)
