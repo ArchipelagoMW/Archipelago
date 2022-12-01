@@ -417,7 +417,7 @@ def generate_output(self, output_directory: str):
         str(max(self.multiworld.victory_road_condition[self.player].value,
                 self.multiworld.elite_four_condition[self.player].value)))[0]
     write_bytes(data, encode_text(
-        self.multiworld.get_location("Route 3 - Pokemon For Sale", self.player).item.name.upper()),
+        " ".join(self.multiworld.get_location("Route 3 - Pokemon For Sale", self.player).item.name.upper().split()[1:])),
                 rom_addresses["Text_Magikarp_Salesman"])
 
     if self.multiworld.badges_needed_for_hm_moves[self.player].value == 0:
