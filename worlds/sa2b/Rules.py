@@ -511,6 +511,8 @@ def set_mission_upgrade_rules_standard(world: MultiWorld, player: int):
 
         add_rule(world.get_location(LocationName.sand_ocean_pipe_2, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
+        add_rule(world.get_location(LocationName.lost_colony_pipe_2, player),
+                 lambda state: state.has(ItemName.eggman_jet_engine, player))
         add_rule(world.get_location(LocationName.cosmic_wall_pipe_2, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
 
@@ -966,6 +968,8 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
         add_rule(world.get_location(LocationName.eternal_engine_pipe_2, player),
                  lambda state: state.has(ItemName.tails_booster, player))
 
+        add_rule(world.get_location(LocationName.lost_colony_pipe_2, player),
+                 lambda state: state.has(ItemName.eggman_jet_engine, player))
         add_rule(world.get_location(LocationName.cosmic_wall_pipe_2, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
 
