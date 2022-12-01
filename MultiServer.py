@@ -1605,6 +1605,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': cmd,
                                               "original_cmd": cmd}])
                 return
+            elif "tags" in args and any(tag in args["tags"] for tag in ctx.disabled_client_tags):
+                await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments", 
+                    "text": f"The following tags arent allowed: {set(args['tags']) & set(ctx.disabled_client_tags)}", 
+                    "original_cmd": cmd}])
+                return
 
             if args.get('items_handling', None) is not None and client.items_handling != args['items_handling']:
                 try:
