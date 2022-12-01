@@ -237,40 +237,40 @@ class BlasphemousLogic(LogicMixin):
         return self.has("Child of Moonlight", player, 38)
 
     def _blasphemous_bones_4(self, player):
-        return self.has_group("bones", player, 4)
+        return self.has("Collectible", player, 4)
 
     def _blasphemous_bones_8(self, player):
-        return self.has_group("bones", player, 8)
+        return self.has("Collectible", player, 8)
 
     def _blasphemous_bones_12(self, player):
-        return self.has_group("bones", player, 12)
+        return self.has("Collectible", player, 12)
     
     def _blasphemous_bones_16(self, player):
-        return self.has_group("bones", player, 16)
+        return self.has("Collectible", player, 16)
 
     def _blasphemous_bones_20(self, player):
-        return self.has_group("bones", player, 20)
+        return self.has("Collectible", player, 20)
 
     def _blasphemous_bones_24(self, player):
-        return self.has_group("bones", player, 24)
+        return self.has("Collectible", player, 24)
 
     def _blasphemous_bones_28(self, player):
-        return self.has_group("bones", player, 28)
+        return self.has("Collectible", player, 28)
 
     def _blasphemous_bones_30(self, player):
-        return self.has_group("bones", player, 30)
+        return self.has("Collectible", player, 30)
 
     def _blasphemous_bones_32(self, player):
-        return self.has_group("bones", player, 32)
+        return self.has("Collectible", player, 32)
 
     def _blasphemous_bones_36(self, player):
-        return self.has_group("bones", player, 36)
+        return self.has("Collectible", player, 36)
 
     def _blasphemous_bones_40(self, player):
-        return self.has_group("bones", player, 40)
+        return self.has("Collectible", player, 40)
 
     def _blasphemous_bones_44(self, player):
-        return self.has_group("bones", player, 44)
+        return self.has("Collectible", player, 44)
 
     def _blasphemous_3_wounds(self, player):
         return self.has_group("wounds", player, 3)
