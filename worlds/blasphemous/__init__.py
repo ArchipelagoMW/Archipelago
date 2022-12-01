@@ -33,8 +33,6 @@ class BlasphemousWorld(World):
 
     item_name_to_id = {item["name"]: (1909000 + item_table.index(item)) for item in item_table}
     location_name_to_id = {loc["name"]: (1909000 + location_table.index(loc)) for loc in location_table}
-
-    item_name_to_game_id = {item["name"]: item["game_id"] for item in item_table}
     location_name_to_game_id = {loc["name"]: loc["game_id"] for loc in location_table}
 
     item_name_groups = group_table
