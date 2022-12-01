@@ -16,7 +16,7 @@ item_table = {
     "Bicycle": ItemData(6, ItemClassification.progression, ["Unique", "Key Items"]),
     # "Flippers": ItemData(7, ItemClassification.progression),
     #"Safari Ball": ItemData(8, ItemClassification.filler),
-    "Pokedex": ItemData(9, ItemClassification.filler, ["Unique", "Key Items"]),
+    "Pokedex": ItemData(9, ItemClassification.progression, ["Unique", "Key Items"]),
     "Moon Stone": ItemData(10, ItemClassification.useful, ["Unique", "Evolution Stones"]),
     "Antidote": ItemData(11, ItemClassification.filler, ["Consumables"]),
     "Burn Heal": ItemData(12, ItemClassification.filler, ["Consumables"]),
