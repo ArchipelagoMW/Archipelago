@@ -131,10 +131,11 @@ class Context:
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", collect_mode="disabled",
                  remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2,
-                 log_network: bool = False):
+                 log_network: bool = False, disabled_client_tags: typing.List[str] = []):
         super(Context, self).__init__()
         self.slot_info: typing.Dict[int, NetworkSlot] = {}
         self.log_network = log_network
+        self.disabled_client_tags = disabled_client_tags
         self.endpoints = []
         self.clients = {}
         self.compatibility: int = compatibility
@@ -1507,6 +1508,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         if ctx.password and args['password'] != ctx.password:
             errors.add('InvalidPassword')
 
+        if any(tag in args["tags"] for tag in ctx.disabled_client_tags):
+            errors.add('TagNotAllowed')
+
         if args['name'] not in ctx.connect_names:
             errors.add('InvalidSlot')
         else:
@@ -1619,7 +1623,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                                   'original_cmd': cmd}])
                     return
 
-            if "tags" in args:
+            if "tags" in args and not any(tag in args["tags"] for tag in ctx.disabled_client_tags):
                 old_tags = client.tags
                 client.tags = args["tags"]
                 if set(old_tags) != set(client.tags):
@@ -2107,6 +2111,12 @@ def parse_args() -> argparse.Namespace:
     #0 -> recommended for tournaments to force a level playing field, only allow an exact version match
     """)
     parser.add_argument('--log_network', default=defaults["log_network"], action="store_true")
+    parser.add_argument('--disabled_client_tags', default=defaults["disabled_client_tags"], nargs='*',
+                        help='''\
+                             A list of tags that clients are not allowed to use, e.g:
+                             DeathLink -> clients cant enable Deathlink
+                             Tracker -> External tracker clients cant connect
+                             ''')
     args = parser.parse_args()
     return args
 
@@ -2142,7 +2152,7 @@ async def main(args: argparse.Namespace):
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
                   args.hint_cost, not args.disable_item_cheat, args.forfeit_mode, args.collect_mode,
                   args.remaining_mode,
-                  args.auto_shutdown, args.compatibility, args.log_network)
+                  args.auto_shutdown, args.compatibility, args.log_network, args.disabled_client_tags)
     data_filename = args.multidata
 
     if not data_filename:

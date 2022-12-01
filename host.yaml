@@ -53,6 +53,10 @@ server_options:
   compatibility: 2
   # log all server traffic, mostly for dev use
   log_network: 0
+  # A list of tags that clients are not allowed to use, e.g:
+  # DeathLink -> Clients cant enable Deathlink
+  # Tracker -> External tracker clients cant connect
+  disabled_client_tags: []
 # Options for Generation
 generator:
   # Location of your Enemizer CLI, available here: https://github.com/Ijwu/Enemizer/releases
