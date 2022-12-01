@@ -532,7 +532,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "tiny_trap_weight": TinyTrapWeight,
     "gravity_trap_weight": GravityTrapWeight,
     "exposition_trap_weight": ExpositionTrapWeight,
-    "darkness_trap_weight": DarknessTrapWeight,
+    #"darkness_trap_weight": DarknessTrapWeight,
     "sadx_music": SADXMusic,
     "music_shuffle": MusicShuffle,
     "narrator": Narrator,

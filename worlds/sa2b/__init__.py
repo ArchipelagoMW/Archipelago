@@ -233,7 +233,7 @@ class SA2BWorld(World):
         trap_weights += ([ItemName.tiny_trap] * self.multiworld.tiny_trap_weight[self.player].value)
         trap_weights += ([ItemName.gravity_trap] * self.multiworld.gravity_trap_weight[self.player].value)
         trap_weights += ([ItemName.exposition_trap] * self.multiworld.exposition_trap_weight[self.player].value)
-        trap_weights += ([ItemName.darkness_trap] * self.multiworld.darkness_trap_weight[self.player].value)
+        #trap_weights += ([ItemName.darkness_trap] * self.multiworld.darkness_trap_weight[self.player].value)
 
         junk_count += extra_junk_count
         trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.multiworld.trap_fill_percentage[self.player].value / 100.0))
