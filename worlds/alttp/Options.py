@@ -39,8 +39,8 @@ class OpenPyramid(Choice):
     option_auto = 3
     default = option_goal
 
-    alias_yes = option_open
-    alias_no = option_closed
+    alias_true = option_open
+    alias_false = option_closed
 
     def to_bool(self, world: MultiWorld, player: int) -> bool:
         if self.value == self.option_goal:
