@@ -88,7 +88,7 @@ itemAPids = {
     ["Bomb"] = 7127,
     ["Recovery Heart"] = 7128,
     ["Five Rupees"] = 7129,
-    ["Rupee"] = 7129,
+    ["Rupee"] = 7130,
     ["Clock"] = 7131,
     ["Fairy"] = 7132
 }
