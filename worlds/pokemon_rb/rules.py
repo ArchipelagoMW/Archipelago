@@ -3,7 +3,8 @@ from ..generic.Rules import add_item_rule, add_rule
 def set_rules(world, player):
 
     add_item_rule(world.get_location("Pallet Town - Player's PC", player),
-                  lambda i: i.player == player and "Badge" not in i.name)
+                  lambda i: i.player == player and "Badge" not in i.name and "Trap" not in i.name and
+                            i.name != "Pokedex")
 
     access_rules = {
 
