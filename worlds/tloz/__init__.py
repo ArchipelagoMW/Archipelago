@@ -239,21 +239,24 @@ class TLoZWorld(World):
                  lambda state: state.has("Recorder", self.player))
         add_rule(self.multiworld.get_location("Level 7 Boss", self.player),
                  lambda state: state.has("Recorder", self.player))
-        add_rule(self.multiworld.get_location("Level 7 Key Drop (Stalfos)", self.player),
-                 lambda state: state.has("Recorder", self.player))
-        add_rule(self.multiworld.get_location("Level 7 Bomb Drop (Digdogger)", self.player),
-                 lambda state: state.has("Recorder", self.player))
-        add_rule(self.multiworld.get_location("Level 7 Rupee Drop (Dodongos)", self.player),
-                 lambda state: state.has("Recorder", self.player))
+        if self.multiworld.ExpandedPool[self.player]:
+            add_rule(self.multiworld.get_location("Level 7 Key Drop (Stalfos)", self.player),
+                    lambda state: state.has("Recorder", self.player))
+            add_rule(self.multiworld.get_location("Level 7 Bomb Drop (Digdogger)", self.player),
+                    lambda state: state.has("Recorder", self.player))
+            add_rule(self.multiworld.get_location("Level 7 Rupee Drop (Dodongos)", self.player),
+                    lambda state: state.has("Recorder", self.player))
 
         for location in food_locations:
-            add_rule(self.multiworld.get_location(location, self.player),
-                     lambda state: state.has("Food", self.player))
+            if self.multiworld.ExpandedPool[self.player] or "Drop" not in location:
+                add_rule(self.multiworld.get_location(location, self.player),
+                        lambda state: state.has("Food", self.player))
 
         add_rule(self.multiworld.get_location("Level 8 Item (Magical Key)", self.player),
                  lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
-        add_rule(self.multiworld.get_location("Level 8 Bomb Drop (Darknuts North)", self.player),
-                 lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
+        if self.multiworld.ExpandedPool[self.player]:
+            add_rule(self.multiworld.get_location("Level 8 Bomb Drop (Darknuts North)", self.player),
+                     lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
 
         for location in self.levels[9].locations:
             add_rule(self.multiworld.get_location(location.name, self.player),

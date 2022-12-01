@@ -82,13 +82,13 @@ item_amounts_all = {
 # Take Any caves are out, so we only get one extra slot to add in.
 item_amounts_standard = {
     "Heart Container": 9,
-    "Magical Shield": 1,
+    #"Magical Shield": 1, - Why is this here?
     "Food": 2,
     "Small Key": 4,
     "Five Rupees": 2,
     "Bomb": 3,
     "Triforce Fragment": 8,
-    "Silver Arrow": 2,
+    #"Silver Arrow": 2, - Apparently item pool is 1 too many so removing the second silver arrow
     "Rupee": 0,
     "Fairy": 6,
     "Clock": 3,
