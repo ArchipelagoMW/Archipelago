@@ -1,6 +1,5 @@
-from typing import Dict, TypedDict, List, Set, Any
+from typing import Dict, Set, Any
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, RegionType
-from worlds.generic.Rules import set_rule
 from ..AutoWorld import World, WebWorld
 from .Items import item_table, group_table, tears_set
 from .Locations import location_table, shop_set
@@ -8,9 +7,6 @@ from .Exits import region_exit_table, exit_lookup_table
 from .Rules import rules
 from .Options import blasphemous_options
 from . import Vanilla
-
-import json
-import os
 
 
 class BlasphemousWeb(WebWorld):
@@ -764,36 +760,6 @@ class BlasphemousWorld(World):
         }
     
         return slot_data
-
-
-    def generate_output(self, output_directory: str):
-        slot_data: Dict[str, Any] = {}
-        locations = []
-
-        for loc in self.multiworld.get_filled_locations(self.player):
-            if loc.name == "His Holiness Escribar":
-                continue
-            else:
-                data = {
-                    "id": self.location_name_to_game_id[loc.name],
-                    "ap_id": loc.address,
-                    "name": loc.item.name,
-                    "player_name": self.multiworld.player_name[loc.item.player]
-                }
-
-                if loc.name in shop_set:
-                    data["type"] = loc.item.classification.name
-
-                locations.append(data)
-    
-        slot_data = {
-            "locations": locations,
-            "enemy_randomizer": self.multiworld.enemy_randomizer[self.player].value
-        }
-    
-        filename = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.player_name[self.player]}.json"
-        with open(os.path.join(output_directory, filename), 'w') as outfile:
-            json.dump(slot_data, outfile)
 
 
 class BlasphemousItem(Item):
