@@ -211,8 +211,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             items_to_add = []
             for player in group["players"]:
                 if group["replacement_items"][player]:
-                    items_to_add.append(AutoWorld.call_single(world, "create_item", player,
-                                                                group["replacement_items"][player]))
+                    items_to_add.append(
+                        AutoWorld.call_single(world, "create_item", player, group["replacement_items"][player]))
                 else:
                     items_to_add.append(AutoWorld.call_single(world, "create_filler", player))
             world.random.shuffle(items_to_add)
