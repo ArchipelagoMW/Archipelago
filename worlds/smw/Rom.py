@@ -687,7 +687,7 @@ def handle_vertical_scroll(rom):
     rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x03, bytearray([0x4A]))       # LSR
     rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x04, bytearray([0x08]))       # PHP
     rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x05, bytearray([0xC9, 0x02])) # CMP #02
-    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x07, bytearray([0xD0, 0x07])) # BNE +0x07
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x07, bytearray([0xD0, 0x02])) # BNE +0x02
     rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x09, bytearray([0xA9, 0x01])) # LDA #01
     rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x0B, bytearray([0x28]))       # PLP
     rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x0C, bytearray([0x6B]))       # RTL
