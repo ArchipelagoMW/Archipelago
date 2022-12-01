@@ -6,7 +6,7 @@ from .Items import KH2Item
 from .Options import FinalEXP, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement,SuperBosses
 from .Locations import HadesCups, LocationName, Oc2Cups,setup_locations,KH2Location
 from .Names import LocationName, ItemName
-
+from ..AutoWorld import LogicMixin
 
 
 def create_regions(world, player: int, active_locations):
@@ -890,7 +890,8 @@ def connect_regions (world: MultiWorld, player: int, self):
           lambda state: (state.has(ItemName.WaytotheDawn, player)))
       connect(world, player, names,LocationName.GoA_Region, LocationName.HundredAcre1_Region,
           lambda state: (state.has(ItemName.TornPages, player)))
-      
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Form_Region)
+
 
 
 #shamelessly stolen from the sa2b
@@ -928,3 +929,8 @@ def create_region(world: MultiWorld, player: int, active_locations, name: str, l
         for exit in exits:
             ret.exits.append(Entrance(player, exit, ret))
     return ret
+
+  
+
+
+    

@@ -55,4 +55,19 @@ class KH2Logic(LogicMixin):
         return self.has("Beast's Claw",player)
     def _kh_FinalFights_Unlocked(self,player):
             return self.has('Proof of Connection',player,1)and('Proof of Nonexistence',player,1)and('Proof of Peace',player,1)
+    def _kh_FormLevel_Unlocked(self,player):
+        formlevel=0
+        if self.has("Valor Form",player,1):
+            formlevel=+1
+        if self.has("Wisdom Form",player,1):
+            formlevel=+1
+        if self.has("Limit Form",player,1):
+            formlevel=+1
+        if self.has("Master Form",player,1):
+            formlevel=+1
+        if self.has("Final Form",player,1):
+            formlevel=+1
+        return formlevel
+
+
     
