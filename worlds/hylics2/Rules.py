@@ -297,8 +297,6 @@ def set_rules(hylics2world):
             lambda state: state._hylics2_has_2_members(player))
         add_rule(world.get_location("Juice Ranch: Somsnosa Joins", player),
             lambda state: state._hylics2_has_2_members(player))
-        add_rule(world.get_location("Juice Ranch: Fridge", player),
-            lambda state: state._hylics2_has_2_members(player))
         add_rule(world.get_location("Airship: Talk to Somsnosa", player),
             lambda state: state._hylics2_has_3_members(player))
         add_rule(world.get_location("Sage Labyrinth: Motor Hunter Sarcophagus", player),
