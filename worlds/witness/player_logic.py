@@ -249,7 +249,7 @@ class WitnessPlayerLogic:
         elif get_option_value((world, player, "EP_difficulty") == 1):
             adjustment_linesets_in_order.append(get_ep_no_eclipse())
 
-        if not is_option_enabled(world, player, "shuffle_vaults"):
+        if not is_option_enabled(world, player, "shuffle_vault_boxes"):
             adjustment_linesets_in_order.append(get_ep_no_videos())
 
         doors = get_option_value(world, player, "shuffle_doors") >= 2
