@@ -93,6 +93,9 @@ end
 local IsInMenu = function()
     return bitand(memory.read_u8(0x0200027A),0x10) ~= 0
 end
+local IsInTransition = function()
+    return bitand(memory.read_u8(0x02001880), 0x10) ~= 0
+end
 local IsInDialog = function()
     return bitand(memory.read_u8(0x02009480),0x01) ~= 0
 end
@@ -102,13 +105,14 @@ end
 local IsItemQueued = function()
     return memory.read_u8(0x203fe00) == 0x01
 end
+
 -- This function actually determines when you're on ANY full-screen menu (navi cust, link battle, etc.) but we
 -- don't want to check any locations there either so it's fine.
 local IsOnTitle = function()
     return bitand(memory.read_u8(0x020097F8),0x04) == 0
 end
 local IsItemable = function()
-    return not IsInMenu() and not IsInDialog() and not IsInBattle() and not IsOnTitle() and not IsItemQueued()
+    return not IsInMenu() and not IsInTransition() and not IsInDialog() and not IsInBattle() and not IsOnTitle() and not IsItemQueued()
 end
 
 local is_game_complete = function()
@@ -364,7 +368,7 @@ local overworld_checks = function()
     checks["Comedian"] = memory.read_u8(0x200024d)
     checks["Villain"] = memory.read_u8(0x200024d)
     --checks["Mod Tools Guy"] = memory.read_u8(
-    checks["ACDC School Desk"] = memory.read_u8(0x200024c)
+    --checks["ACDC School Desk"] = memory.read_u8(0x200024c)
     checks["ACDC Class 5B Bookshelf"] = memory.read_u8(0x200024c)
     checks["SciLab Garbage Can"] = memory.read_u8(0x200024c)
     checks["Yoka Inn Jars"] = memory.read_u8(0x200024c)
@@ -455,7 +459,7 @@ end
 local check_all_locations = function()
     local location_checks = {}
     -- Title Screen should not check items
-    if itemState == ITEMSTATE_NONINITIALIZED then return location_checks end
+    if itemState == ITEMSTATE_NONINITIALIZED or IsInTransition() then return location_checks end
     for name,checked in pairs(acdc_bmd_checks()) do location_checks[name] = checked end
     for name,checked in pairs(sci_bmd_checks()) do location_checks[name] = checked end
     for name,checked in pairs(yoka_bmd_checks()) do location_checks[name] = checked end
@@ -605,14 +609,16 @@ end
 local GetMessage = function(item)
     startBytes = {0x02, 0x00}
     playerLockBytes = {0xF8,0x00, 0xF8, 0x10}
-    msgOpenBytes = {0xF1, 0x00}
+    msgOpenBytes = {0xF1, 0x02}
     textBytes = GenerateTextBytes("Receiving\ndata from\n"..item["sender"]..".")
     dotdotWaitBytes = {0xEA,0x00,0x0A,0x00,0x4D,0xEA,0x00,0x0A,0x00,0x4D}
     continueBytes = {0xEB, 0xE9}
+    -- continueBytes = {0xE9}
     playReceiveAnimationBytes = {0xF8,0x04,0x18}
     chipGiveBytes = GenerateGetMessageFromItem(item)
     playerFinishBytes = {0xF8, 0x0C}
     playerUnlockBytes={0xEB, 0xF8, 0x08}
+    -- playerUnlockBytes={0xF8, 0x08}
     endMessageBytes = {0xF8, 0x10, 0xE7}
 
     bytes = {}
@@ -667,7 +673,7 @@ local itemStateMachineProcess = function()
     if itemState == ITEMSTATE_NONINITIALIZED then
         itemQueueCounter = 120
         -- Only exit this state the first time a dialog window pops up. This way we know for sure that we're ready to receive
-        if IsInDialog() and not IsInMenu() then
+        if not IsInMenu() and (IsInDialog() or IsInTransition()) then
             itemState = ITEMSTATE_NONITEM
         end
     elseif itemState == ITEMSTATE_NONITEM then
@@ -693,7 +699,11 @@ local itemStateMachineProcess = function()
         end
     elseif itemState == ITEMSTATE_SENT then
         -- Once the item is sent, wait for the dialog to close. Then clear the item bit and be ready for the next item.
-        if not IsInDialog() then
+        if IsInTransition() or IsInMenu() or IsOnTitle() then
+            itemState = ITEMSTATE_NONITEM
+            itemQueued = nil
+            RestoreItemRam()
+        elseif not IsInDialog() then
             itemState = ITEMSTATE_IDLE
             saveItemIndexToRAM(itemQueued["itemIndex"])
             itemQueued = nil
