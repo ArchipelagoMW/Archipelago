@@ -39,6 +39,8 @@ CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 
 DISPLAY_MSGS = True
 
+SCRIPT_VERSION = 1
+
 
 class GBCommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx: CommonContext):
@@ -53,7 +55,6 @@ class GBCommandProcessor(ClientCommandProcessor):
 class GBContext(CommonContext):
     command_processor = GBCommandProcessor
     game = 'Pokemon Red and Blue'
-    items_handling = 0b101
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -66,6 +67,8 @@ class GBContext(CommonContext):
         self.display_msgs = True
         self.deathlink_pending = False
         self.set_deathlink = False
+        self.client_compatibility_mode = 0
+        self.items_handling = 0b001
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -84,7 +87,7 @@ class GBContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
             self.locations_array = None
-            if args['slot_data']['death_link']:
+            if 'death_link' in args and args['slot_data']['death_link']:
                 self.set_deathlink = True
         elif cmd == "RoomInfo":
             self.seed_name = args['seed_name']
@@ -173,8 +176,15 @@ async def gb_sync_task(ctx: GBContext):
                     # 2. An array representing the memory values of the locations area (if in game)
                     data = await asyncio.wait_for(reader.readline(), timeout=5)
                     data_decoded = json.loads(data.decode())
-                    #print(data_decoded)
-
+                    if 'scriptVersion' not in data_decoded or data_decoded['scriptVersion'] != SCRIPT_VERSION:
+                        msg = "You are connecting with an incompatible Lua script version. Ensure your connector Lua " \
+                            "and PokemonClient are from the same Archipelago installation."
+                        logger.info(msg, extra={'compact_gui': True})
+                        ctx.gui_error('Error', msg)
+                        error_status = CONNECTION_RESET_STATUS
+                    ctx.client_compatibility_mode = data_decoded['clientCompatibilityVersion']
+                    if ctx.client_compatibility_mode == 0:
+                        ctx.items_handling = 0b101  # old patches will not have local start inventory, must be requested
                     if ctx.seed_name and ctx.seed_name != ''.join([chr(i) for i in data_decoded['seedName'] if i != 0]):
                         msg = "The server is running a different multiworld than your client is. (invalid seed_name)"
                         logger.info(msg, extra={'compact_gui': True})
@@ -184,7 +194,10 @@ async def gb_sync_task(ctx: GBContext):
                     if not ctx.auth:
                         ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
                         if ctx.auth == '':
-                            logger.info("Invalid ROM detected. No player name built into the ROM.")
+                            msg = "Invalid ROM detected. No player name built into the ROM."
+                            logger.info(msg, extra={'compact_gui': True})
+                            ctx.gui_error('Error', msg)
+                            error_status = CONNECTION_RESET_STATUS
                         if ctx.awaiting_rom:
                             await ctx.server_auth(False)
                     if 'locations' in data_decoded and ctx.game and ctx.gb_status == CONNECTION_CONNECTED_STATUS \

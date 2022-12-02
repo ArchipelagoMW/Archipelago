@@ -7,6 +7,8 @@ local STATE_TENTATIVELY_CONNECTED = "Tentatively Connected"
 local STATE_INITIAL_CONNECTION_MADE = "Initial Connection Made"
 local STATE_UNINITIALIZED = "Uninitialized"
 
+local SCRIPT_VERSION = 1
+
 local APIndex = 0x1A6E
 local APDeathLinkAddress = 0x00FD
 local APItemAddress = 0x00FF
@@ -15,6 +17,7 @@ local MissableAddress = 0x161A
 local HiddenItemsAddress = 0x16DE
 local RodAddress = 0x1716
 local InGame = 0x1A71
+local ClientCompatibilityAddress = 0xFF00
 
 local ItemsReceived = nil
 local playerName = nil
@@ -107,14 +110,7 @@ function generateLocationsChecked()
 
     return data
 end
-function generateSerialData()
-    memDomain.wram()
-	status = u8(0x1A73)
-    if status == 0 then
-      return nil
-    end
-    return uRange(0x1A76, u8(0x1A74))
-end
+
 local function arrayEqual(a1, a2)
   if #a1 ~= #a2 then
     return false
@@ -159,15 +155,13 @@ function receive()
     playerName = newPlayerName
     seedName = newSeedName
     local retTable = {}
+    retTable["scriptVersion"] = SCRIPT_VERSION
+    retTable["clientCompatibilityVersion"] = u8(ClientCompatibilityAddress)
     retTable["playerName"] = playerName
     retTable["seedName"] = seedName
     memDomain.wram()
     if u8(InGame) == 0xAC then
         retTable["locations"] = generateLocationsChecked()
-        serialData = generateSerialData()
-        if serialData ~= nil then
-        retTable["serial"] = serialData
-        end
     end
     retTable["deathLink"] = deathlink_send
     deathlink_send = false

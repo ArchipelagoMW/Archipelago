@@ -579,9 +579,8 @@ def generate_output(self, output_directory: str):
     write_bytes(data, price, rom_addresses["Price_Master_Ball"])  # Money values in Red and Blue are weird
 
     for item in reversed(self.multiworld.precollected_items[self.player]):
-        if data[rom_addresses["Start_Inventory"] + item.code - 172000000] < 99:
+        if data[rom_addresses["Start_Inventory"] + item.code - 172000000] < 255:
             data[rom_addresses["Start_Inventory"] + item.code - 172000000] += 1
-            self.multiworld.precollected_items[self.player].remove(item)
 
     process_trainer_data(self, data)
 
@@ -615,6 +614,7 @@ def generate_output(self, output_directory: str):
     else:
         write_bytes(data, self.rival_name, rom_addresses['Rival_Name'])
 
+    data[0xFF00] = 1 # client compatibility version
     write_bytes(data, self.multiworld.seed_name.encode(), 0xFFDB)
     write_bytes(data, self.multiworld.player_name[self.player].encode(), 0xFFF0)
 
