@@ -109,7 +109,37 @@ class MMBN3World(World):
         called per player before any items or locations are created. You can set properties on your world here.
         Already has access to player options and RNG.
         """
-        pass
+        if self.multiworld.ExtraRanks[self.player] > 0:
+            item_frequences[ItemName.Progressive_Undernet_Rank] = 8 + self.multiworld.ExtraRanks[self.player]
+        if not self.multiworld.IncludeJobs[self.player]:
+            excluded_locations.extend([
+                LocationName.Please_deliver_this,
+                LocationName.My_Navi_is_sick,
+                LocationName.Help_me_with_my_son,
+                LocationName.Transmission_error,
+                LocationName.Chip_Prices,
+                LocationName.Im_broke,
+                LocationName.Rare_chips_for_cheap,
+                LocationName.Be_my_boyfriend,
+                LocationName.Will_you_deliver,
+                LocationName.Somebody_please_help,
+                LocationName.Looking_for_condor,
+                LocationName.Help_with_rehab,
+                LocationName.Old_Master,
+                LocationName.Catching_gang_members,
+                LocationName.Please_adopt_a_virus,
+                LocationName.Legendary_Tomes,
+                LocationName.Legendary_Tomes_Treasure,
+                LocationName.Hide_and_seek_First_Child,
+                LocationName.Hide_and_seek_Second_Child,
+                LocationName.Hide_and_seek_Third_Child,
+                LocationName.Hide_and_seek_Fourth_Child,
+                LocationName.Hide_and_seek_Completion,
+                LocationName.Finding_the_blue_Navi,
+                LocationName.Give_your_support,
+                LocationName.Stamp_collecting,
+                LocationName.Help_with_a_will
+            ])
 
     def create_regions(self) -> None:
         """

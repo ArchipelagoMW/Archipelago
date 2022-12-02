@@ -664,8 +664,6 @@ local process_block = function(block)
     if (itemsReceived ~= block['items']) then
         itemsReceived = block['items']
     end
-
-
     return
 end
 
