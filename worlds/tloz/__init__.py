@@ -373,9 +373,9 @@ class TLoZWorld(World):
         # of bit 5 or else former boss roar rooms will get items they shouldn't.
         for i in range(0, 0x7F):
             item = rom_data[first_quest_dungeon_items_early + i]
-            rom_data[first_quest_dungeon_items_early] = item & 0b11011111
+            rom_data[first_quest_dungeon_items_early + i] = item & 0b11011111
             item = rom_data[first_quest_dungeon_items_late + i]
-            rom_data[first_quest_dungeon_items_late] = item & 0b11011111
+            rom_data[first_quest_dungeon_items_late + i] = item & 0b11011111
 
     def apply_randomizer(self):
         with open(get_base_rom_path(), 'rb') as rom:

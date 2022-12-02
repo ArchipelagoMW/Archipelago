@@ -344,12 +344,12 @@ end
 
 local function gotItem(item)
     --Write itemCode to itemToLift
-    --Write 128 to itemLiftTimer
+    --Write 120 to itemLiftTimer
     --Write 4 to sound effect queue
     itemName = itemIDNames[item]
     itemCode = itemCodes[itemName]
     wU8(0x505, itemCode)
-    wU8(0x506, 128)
+    wU8(0x506, 120)
     wU8(0x602, 4)
     numberObtained = u8(itemsObtained) + 1
     wU8(itemsObtained, numberObtained)
@@ -405,7 +405,7 @@ local function checkCaveItemObtained()
     if bit.band(gameMode, 0x0B) then -- if we're in a cave
         local itemLift = u8(0x506)
         local xPosition = u8(0x70)
-        if itemLift > 0 then
+        if itemLift > 120 then
             itemSlot = u8(0x438)
             returnTable["itemSlot"] = u8(0x438) + 1
             if itemSlot == 0 then
