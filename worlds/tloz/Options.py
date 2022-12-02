@@ -15,14 +15,18 @@ class TriforceLocations(Choice):
     option_anywhere = 2
 
 class StartingPosition(Choice):
-    """How easy is the start of the game. Safe means a weapon is guaranteed in Starting Sword Cave.
-    Unsafe means that progression is guaranteed between Starting Sword Cave, Letter Cave, and Armos Knight
-    as well as any locations they unlock. Dangerous can require seeking out money and gambling caves in order
-    to purchase initial progression."""
+    """How easy is the start of the game.
+    Safe means a weapon is guaranteed in Starting Sword Cave.
+    Unsafe means that a weapon is guaranteed between Starting Sword Cave, Letter Cave, and Armos Knight.
+    Dangerous can require seeking out money and gambling caves in order to purchase an initial weapon.
+    Very_Dangerous is the same as dangerous except it doesn't guarantee a weapon. It will only mean progression
+    will be there in single player seeds. In multiworlds, however, this means all bets are off and after checking
+    the unsafe spots, you could be stuck until someone sends you a weapon"""
     display_name = "Starting Position"
     option_safe = 0
     option_unsafe = 1
     option_dangerous = 2
+    option_very_dangerous = 3
 
 tloz_options: typing.Dict[str, type(Option)] = {
     "ExpandedPool": ExpandedPool,

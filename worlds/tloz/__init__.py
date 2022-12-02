@@ -146,17 +146,24 @@ class TLoZWorld(World):
             item_amounts = item_amounts_standard
 
         starting_weapon = self.multiworld.random.choice(starting_weapons)
+        starting_weapon_locations = ["Starting Sword Cave", "Letter Cave", "Armos Knights"]
 
         for item_name in self.item_name_to_id:
-            if self.multiworld.StartingPosition[self.player] == 0 and item_name == starting_weapon and \
-                   not self.multiworld.get_location("Starting Sword Cave", self.player).locked:
-                self.multiworld.get_location("Starting Sword Cave", self.player).place_locked_item(
-                    self.multiworld.create_item(item_name, self.player)
-                )
-                if item_name in item_amounts.keys():
-                    item_amounts[item_name] -= 1
+            if item_name == starting_weapon:
+                if self.multiworld.StartingPosition[self.player] == 0:
+                    self.multiworld.get_location(starting_weapon_locations[0], self.player).place_locked_item(
+                        self.multiworld.create_item(item_name, self.player))
+                elif self.multiworld.StartingPosition[self.player] == 1:
+                    self.multiworld.get_location(self.multiworld.random.choice(starting_weapon_locations), self.player)\
+                        .place_locked_item(self.multiworld.create_item(item_name, self.player))
+                elif self.multiworld.StartingPosition[self.player] == 2:
+                    available_shop_locations = [location for location in shop_locations[0:-6] if location not in reserved_store_slots]
+                    dangerous_weapon_locations = starting_weapon_locations + available_shop_locations
+                    self.multiworld.get_location(self.multiworld.random.choice(dangerous_weapon_locations), self.player)\
+                        .place_locked_item(self.multiworld.create_item(item_name, self.player))
             if item_name in item_amounts.keys():
-
+                if item_name == starting_weapon:  # To remove the extra Sword if that's our weapon
+                    item_amounts[item_name] -= 1
                 if self.multiworld.TriforceLocations[self.player] > 0 or item_name != "Triforce Fragment":
                     i = 0
                     for i in range(0, item_amounts[item_name]):
@@ -197,7 +204,7 @@ class TLoZWorld(World):
         # No requiring anything in a shop until we can farm for money
         # Unless someone likes to live dangerously, of course
         for location in shop_locations:
-            if self.multiworld.StartingPosition[self.player] != 2:
+            if self.multiworld.StartingPosition[self.player] < 2:
                 add_rule(self.multiworld.get_location(location, self.player),
                          lambda state: state.has_group("weapons", self.player))
 
@@ -319,6 +326,17 @@ class TLoZWorld(World):
                  lambda state: state.has("Letter", self.player))
         add_rule(self.multiworld.get_location("Potion Shop Item Right", self.player),
                  lambda state: state.has("Letter", self.player))
+
+        add_rule(self.multiworld.get_location("Shield Shop Item Left", self.player),
+                 lambda state: state.has_group("candles", self.player) or
+                               state.has("Bomb", self.player))
+        add_rule(self.multiworld.get_location("Shield Shop Item Middle", self.player),
+                 lambda state: state.has_group("candles", self.player) or
+                               state.has("Bomb", self.player))
+        add_rule(self.multiworld.get_location("Shield Shop Item Right", self.player),
+                 lambda state: state.has_group("candles", self.player) or
+                               state.has("Bomb", self.player))
+
 
         set_rule(self.multiworld.get_region("Menu", self.player), lambda state: True)
         set_rule(self.multiworld.get_region("Overworld", self.player), lambda state: True)
