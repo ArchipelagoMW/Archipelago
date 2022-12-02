@@ -277,6 +277,8 @@ class PokemonRedBlueWorld(World):
             "free_fly_map": self.fly_map_code,
             "extra_badges": self.extra_badges,
             "type_chart": self.type_chart,
+            "randomize_pokedex": self.multiworld.randomize_pokedex[self.player].value,
+            "trainersanity": self.multiworld.trainersanity[self.player].value,
             "death_link": self.multiworld.death_link[self.player].value
         }
 
