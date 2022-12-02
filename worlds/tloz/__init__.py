@@ -110,8 +110,9 @@ class TLoZWorld(World):
             self.levels[level].locations.append(boss_event)
 
         for location in major_locations:
-            overworld.locations.append(
-                self.create_location(location, self.location_name_to_id[location], overworld))
+            if self.multiworld.ExpandedPool[self.player] or "Take Any" not in location:
+                overworld.locations.append(
+                    self.create_location(location, self.location_name_to_id[location], overworld))
 
         for location in shop_locations:
             overworld.locations.append(
@@ -151,14 +152,6 @@ class TLoZWorld(World):
         item_amounts = item_amounts_all
         if not self.multiworld.ExpandedPool[self.player]:
             item_amounts = item_amounts_standard
-            self.multiworld.get_location(
-                "Take Any Item Left",
-                self.player
-            ).place_locked_item(self.multiworld.create_item("Water of Life (Red)", self.player))
-            self.multiworld.get_location(
-                "Take Any Item Right",
-                self.player
-            ).place_locked_item(self.multiworld.create_item("Heart Container", self.player))
 
         starting_weapon = self.multiworld.random.choice(starting_weapons)
 
@@ -303,15 +296,16 @@ class TLoZWorld(World):
                  lambda state: state.has("Stepladder", self.player))
         if self.multiworld.StartingPosition[self.player] != 2:
             # Don't allow Take Any Items until we can actually get in one
-            add_rule(self.multiworld.get_location("Take Any Item Left", self.player),
-                     lambda state: state.has_group("candles", self.player) or
-                                   state.has("Raft", self.player))
-            add_rule(self.multiworld.get_location("Take Any Item Middle", self.player),
-                     lambda state: state.has_group("candles", self.player) or
-                                   state.has("Raft", self.player))
-            add_rule(self.multiworld.get_location("Take Any Item Right", self.player),
-                     lambda state: state.has_group("candles", self.player) or
-                                   state.has("Raft", self.player))
+            if self.multiworld.ExpandedPool[self.player]:
+                add_rule(self.multiworld.get_location("Take Any Item Left", self.player),
+                         lambda state: state.has_group("candles", self.player) or
+                                       state.has("Raft", self.player))
+                add_rule(self.multiworld.get_location("Take Any Item Middle", self.player),
+                         lambda state: state.has_group("candles", self.player) or
+                                       state.has("Raft", self.player))
+                add_rule(self.multiworld.get_location("Take Any Item Right", self.player),
+                         lambda state: state.has_group("candles", self.player) or
+                                       state.has("Raft", self.player))
         for location in self.levels[4].locations:
             add_rule(self.multiworld.get_location(location.name, self.player),
                      lambda state: state.has("Raft", self.player) or state.has("Recorder", self.player))

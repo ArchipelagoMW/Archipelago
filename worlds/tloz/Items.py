@@ -50,6 +50,8 @@ item_table: Dict[str, ItemData] = {
 
 }
 
+# TODO reevaluate the item pools
+
 # Map/Compasses: 18
 # 6 Fairies
 # 3 Clocks
@@ -85,7 +87,7 @@ item_amounts_standard = {
     #"Magical Shield": 1, - Why is this here?
     "Food": 2,
     "Small Key": 4,
-    "Five Rupees": 2,
+    #"Five Rupees": 2,
     "Bomb": 3,
     "Triforce Fragment": 8,
     #"Silver Arrow": 2, - Apparently item pool is 1 too many so removing the second silver arrow
