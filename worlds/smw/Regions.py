@@ -834,7 +834,8 @@ def create_regions(world, player: int, active_locations):
                                               state.has(ItemName.super_star_active, player) and
                                               state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(world, player, active_locations, LocationName.valley_of_bowser_1_region, LocationName.valley_of_bowser_1_dragon)
-        add_location_to_region(world, player, active_locations, LocationName.valley_of_bowser_2_region, LocationName.valley_of_bowser_2_dragon)
+        add_location_to_region(world, player, active_locations, LocationName.valley_of_bowser_2_region, LocationName.valley_of_bowser_2_dragon,
+                               lambda state: state.has(ItemName.yoshi_activate, player))
         add_location_to_region(world, player, active_locations, LocationName.valley_of_bowser_3_region, LocationName.valley_of_bowser_3_dragon)
         add_location_to_region(world, player, active_locations, LocationName.valley_ghost_house_region, LocationName.valley_ghost_house_dragon,
                                lambda state: state.has(ItemName.p_switch, player))
