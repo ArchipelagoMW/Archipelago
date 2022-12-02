@@ -72,39 +72,39 @@ class AutoLogicRegister(type):
         return new_class
 
 
-def call_single(world: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
-    method = getattr(world.worlds[player], method_name)
+def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
+    method = getattr(multiworld.worlds[player], method_name)
     return method(*args)
 
 
-def call_all(world: "MultiWorld", method_name: str, *args: Any) -> None:
+def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
     world_types: Set[AutoWorldRegister] = set()
-    for player in world.player_ids:
-        prev_item_count = len(world.itempool)
-        world_types.add(world.worlds[player].__class__)
-        call_single(world, method_name, player, *args)
+    for player in multiworld.player_ids:
+        prev_item_count = len(multiworld.itempool)
+        world_types.add(multiworld.worlds[player].__class__)
+        call_single(multiworld, method_name, player, *args)
         if __debug__:
-            new_items = world.itempool[prev_item_count:]
+            new_items = multiworld.itempool[prev_item_count:]
             for i, item in enumerate(new_items):
                 for other in new_items[i+1:]:
                     assert item is not other, (
-                        f"Duplicate item reference of \"{item.name}\" in \"{world.worlds[player].game}\" "
-                        f"of player \"{world.player_name[player]}\". Please make a copy instead.")
+                        f"Duplicate item reference of \"{item.name}\" in \"{multiworld.worlds[player].game}\" "
+                        f"of player \"{multiworld.player_name[player]}\". Please make a copy instead.")
 
     # TODO: investigate: Iterating through a set is not a deterministic order.
     # If any random is used, this could make unreproducible seed.
     for world_type in world_types:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
-            stage_callable(world, *args)
+            stage_callable(multiworld, *args)
 
 
-def call_stage(world: "MultiWorld", method_name: str, *args: Any) -> None:
-    world_types = {world.worlds[player].__class__ for player in world.player_ids}
+def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
+    world_types = {multiworld.worlds[player].__class__ for player in multiworld.player_ids}
     for world_type in world_types:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
-            stage_callable(world, *args)
+            stage_callable(multiworld, *args)
 
 
 class WebWorld:
@@ -196,8 +196,8 @@ class World(metaclass=AutoWorldRegister):
     zip_path: ClassVar[Optional[pathlib.Path]] = None  # If loaded from a .apworld, this is the Path to it.
     __file__: ClassVar[str]  # path it was loaded from
 
-    def __init__(self, world: "MultiWorld", player: int):
-        self.multiworld = world
+    def __init__(self, multiworld: "MultiWorld", player: int):
+        self.multiworld = multiworld
         self.player = player
 
     # overridable methods that get called by Main.py, sorted by execution order
