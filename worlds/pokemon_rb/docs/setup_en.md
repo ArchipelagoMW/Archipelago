@@ -25,8 +25,8 @@ Once Bizhawk has been installed, open Bizhawk and change the following settings:
 
 - Under Config > Customize > Advanced, make sure the box for AutoSaveRAM is checked, and click the 5s button.
   This reduces the possibility of losing save data in emulator crashes.
-- Under Config > Customize, check the "Run in background" and "Accept background input" boxes. This will allow you to
-  continue playing in the background, even if another window is selected.
+- Under Config > Customize, check the "Run in background" box. This will prevent disconnecting from the client while
+BizHawk is running in the background.
 
 It is strongly recommended to associate GB rom extensions (\*.gb) to the Bizhawk we've just installed.
 To do so, we simply have to search any Gameboy rom we happened to own, right click and select "Open with...", unfold
