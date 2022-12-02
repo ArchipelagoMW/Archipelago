@@ -89,6 +89,9 @@ def set_rules(world, player):
         "Seafoam Islands B4F - Legendary Pokemon": lambda state: state.pokemon_rb_can_strength(player),
         "Vermilion City - Legendary Pokemon": lambda state: state.pokemon_rb_can_surf(player) and state.has("S.S. Ticket", player),
 
+        # Pokédex check
+        "Pallet Town - Oak's Parcel Reward": lambda state: state.has("Oak's Parcel", player),
+
         # trainers
         "Route 4 - Cooltrainer F": lambda state: state.pokemon_rb_can_surf(player),
         "Route 15 - Jr. Trainer F 1": lambda state: state.pokemon_rb_can_cut(player),
