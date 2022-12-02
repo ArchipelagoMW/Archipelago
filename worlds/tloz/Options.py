@@ -21,7 +21,7 @@ class StartingPosition(Choice):
     Dangerous can require seeking out money and gambling caves in order to purchase an initial weapon.
     Very_Dangerous is the same as dangerous except it doesn't guarantee a weapon. It will only mean progression
     will be there in single player seeds. In multiworlds, however, this means all bets are off and after checking
-    the unsafe spots, you could be stuck until someone sends you a weapon"""
+    the dangerous spots, you could be stuck until someone sends you a weapon"""
     display_name = "Starting Position"
     option_safe = 0
     option_unsafe = 1
