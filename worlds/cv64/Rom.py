@@ -513,11 +513,20 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     rom.write_bytes(0x19B98, [0x08, 0x0F, 0xF0, 0x00])  # J 0x803FC000
     rom.write_bytes(0xBFC000, PatchName.remote_item_giver)
 
+    # DeathLink counter decrementer code
+    rom.write_bytes(0x1C2A0, [0x08, 0x0F, 0xF0, 0x50])  # J 0x803FC140
+    rom.write_bytes(0x1C340, [0x08, 0x0F, 0xF0, 0x50])  # J 0x803FC140
+    rom.write_bytes(0xBFC140, PatchName.deathlink_counter_decrementer)
+
+    # Death flag un-setter on "Beginning of stage" state overwrite code
+    rom.write_bytes(0x1C2B0, [0x08, 0x0F, 0xF0, 0x47])  # J 0x803FC11C
+    rom.write_bytes(0xBFC11C, PatchName.death_flag_unsetter)
+
     # Warp menu-opening code
     rom.write_bytes(0xB9BA8, [0x08, 0x0F, 0xF0, 0x9B])  # J	0x803FC26C
     rom.write_bytes(0xBFC26C, PatchName.warp_menu_opener)
 
-    # NPC item textbox hack hook
+    # NPC item textbox hack
     rom.write_bytes(0xBF1DC, [0x08, 0x0F, 0xF0, 0x67])  # J 0x803FC19C
     rom.write_bytes(0xBF1E0, [0x27, 0xBD, 0xFF, 0xE0])  # ADDIU SP, SP, -0x20
     rom.write_bytes(0xBFC19C, PatchName.npc_item_hack)
