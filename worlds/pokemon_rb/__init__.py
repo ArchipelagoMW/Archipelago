@@ -117,8 +117,7 @@ class PokemonRedBlueWorld(World):
                 item = self.create_item(location.original_item)
             if location.event:
                 self.multiworld.get_location(location.name, self.player).place_locked_item(item)
-            elif ("Badge" not in item.name or self.multiworld.badgesanity[self.player].value) and \
-                    (item.name != "Oak's Parcel" or self.multiworld.old_man[self.player].value != 1):
+            elif "Badge" not in item.name or self.multiworld.badgesanity[self.player].value:
                 item_pool.append(item)
         self.multiworld.random.shuffle(item_pool)
 
@@ -130,13 +129,7 @@ class PokemonRedBlueWorld(World):
         process_static_pokemon(self)
 
         if self.multiworld.old_man[self.player].value == 1:
-            item = self.create_item("Oak's Parcel")
-            locations = []
-            for location in self.multiworld.get_locations():
-                if location.player == self.player and location.item is None and location.can_reach(self.multiworld.state) \
-                        and location.item_rule(item):
-                    locations.append(location)
-            self.multiworld.random.choice(locations).place_locked_item(item)
+            self.multiworld.local_early_items[self.player]["Oak's Parcel"] = 1
 
         if not self.multiworld.badgesanity[self.player].value:
             self.multiworld.non_local_items[self.player].value -= self.item_name_groups["Badges"]
