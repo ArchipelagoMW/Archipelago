@@ -50,8 +50,6 @@ item_table: Dict[str, ItemData] = {
 
 }
 
-# TODO reevaluate the item pools
-
 # Map/Compasses: 18
 # 6 Fairies
 # 3 Clocks
@@ -62,6 +60,8 @@ item_table: Dict[str, ItemData] = {
 # 2 Five Rupees
 # Reasoning: Adding some variety to the vanilla game.
 
+# Remove 1 Bomb, Small Key, Water of Life (Red), and Arrow because we guarantee those
+
 # With Take Any caves and the Potion Shop, we have two empty slots.
 # They"ll be used for anti-frustration: an extra Sword and Silver Arrow
 item_amounts_all = {
@@ -71,33 +71,33 @@ item_amounts_all = {
     "Arrow": 0,
     "Food": 2,
     "Triforce Fragment": 8,
-    "Small Key": 46,
-    "Bomb": 20,
-    "Five Rupees": 20,
-    "Water of Life (Red)": 5,
+    "Small Key": 45,
+    "Bomb": 24,
+    "Five Rupees": 19,
     "Silver Arrow": 2,
     "Rupee": 0,
     "Fairy": 6,
     "Clock": 3,
-    "Water of Life (Blue)": 3,
+    "Water of Life (Red)": 4,
+    "Water of Life (Blue)": 2,
 }
 
-# Take Any caves are out, so we only get one extra slot to add in.
+# Take Any caves are out, so we only get one extra slot to add in. Choosing Silver Arrow
 item_amounts_standard = {
     "Heart Container": 9,
-    #"Magical Shield": 1, - Why is this here?
+    "Magical Shield": 3,
     "Arrow": 0,
     "Food": 2,
-    "Small Key": 4,
-    #"Five Rupees": 2,
-    "Bomb": 3,
     "Triforce Fragment": 8,
-    #"Silver Arrow": 2, - Apparently item pool is 1 too many so removing the second silver arrow
+    "Small Key": 4,
+    "Bomb": 2,
+    "Five Rupees": 2,
+    "Silver Arrow": 2,
     "Rupee": 0,
     "Fairy": 6,
     "Clock": 3,
-    "Water of Life (Blue)": 3,
-    "Water of Life (Red)": 2,
+    "Water of Life (Red)": 0,
+    "Water of Life (Blue)": 2,
 }
 
 item_game_ids = {
