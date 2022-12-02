@@ -129,25 +129,17 @@ class TLoZWorld(World):
         self.multiworld.regions.append(overworld)
 
     def create_items(self):
-        # We guarantee that there will always be a key, bomb, and potion in an ungated shop.
-        reserved_store_slots = self.multiworld.random.sample(shop_locations[0:-3], 3)
-        self.multiworld.get_location(
-            reserved_store_slots[0],
-            self.player
-        ).place_locked_item(
-            self.multiworld.create_item(
-                "Small Key", self.player)
-        )
-        self.multiworld.get_location(
-            reserved_store_slots[1],
-            self.player
-        ).place_locked_item(
-            self.multiworld.create_item("Bomb", self.player))
-        self.multiworld.get_location(
-            reserved_store_slots[2],
-            self.player
-        ).place_locked_item(
-            self.multiworld.create_item("Water of Life (Red)", self.player))
+        # We guarantee that there will always be a key, bomb, potion, and arrow in an ungated shop.
+        reserved_store_slots = self.multiworld.random.sample(shop_locations[0:-6], 4)
+        guaranteed_shop_items = ["Small Key", "Bomb", "Water of Life (Red)", "Arrow"]
+        for i in range(0, len(guaranteed_shop_items)):
+            self.multiworld.get_location(
+                reserved_store_slots[i],
+                self.player
+            ).place_locked_item(
+                self.multiworld.create_item(
+                    guaranteed_shop_items[i], self.player)
+            )
 
         item_amounts = item_amounts_all
         if not self.multiworld.ExpandedPool[self.player]:

@@ -95,8 +95,8 @@ for level in level_locations:
 shop_locations = [
     "Arrow Shop Item Left", "Arrow Shop Item Middle", "Arrow Shop Item Right",
     "Candle Shop Item Left", "Candle Shop Item Middle", "Candle Shop Item Right",
-    "Shield Shop Item Left", "Shield Shop Item Middle", "Shield Shop Item Right",
     "Blue Ring Shop Item Left", "Blue Ring Shop Item Middle", "Blue Ring Shop Item Right",
+    "Shield Shop Item Left", "Shield Shop Item Middle", "Shield Shop Item Right",
     "Potion Shop Item Left", "Potion Shop Item Middle", "Potion Shop Item Right"
 ]
 

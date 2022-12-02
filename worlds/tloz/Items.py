@@ -68,6 +68,7 @@ item_amounts_all = {
     "Sword": 2,
     "Heart Container": 13,
     "Magical Shield": 3,
+    "Arrow": 0,
     "Food": 2,
     "Triforce Fragment": 8,
     "Small Key": 46,
@@ -85,6 +86,7 @@ item_amounts_all = {
 item_amounts_standard = {
     "Heart Container": 9,
     #"Magical Shield": 1, - Why is this here?
+    "Arrow": 0,
     "Food": 2,
     "Small Key": 4,
     #"Five Rupees": 2,
