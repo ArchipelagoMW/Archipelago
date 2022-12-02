@@ -322,18 +322,6 @@ location_table: List[LocationDict] = [
         'region': "dohh",
         'game_id': "PR08",
         'room': "D07Z01S01"},
-    {'name': "DoHH: Complete Penitence 1",
-        'region': "dohh",
-        'game_id': "RB101",
-        'room': "D07Z01S03"},
-    {'name': "DoHH: Complete Penitence 2",
-        'region': "dohh",
-        'game_id': "RB102",
-        'room': "D07Z01S03"},
-    {'name': "DoHH: Complete Penitence 3",
-        'region': "dohh",
-        'game_id': "RB103",
-        'room': "D07Z01S03"},
 
     # Desecrated Cistern (20)
     {'name': "DC: MeD lady room",
