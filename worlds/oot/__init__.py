@@ -330,7 +330,7 @@ class OOTWorld(World):
             elif self.dungeon_shortcuts_choice == 'all':
                 self.dungeon_shortcuts = set(shortcut_dungeons)
             elif self.dungeon_shortcuts_choice == 'random':
-                self.dungeon_shortcuts = self.multiworld.random.sample(dungeons, 
+                self.dungeon_shortcuts = self.multiworld.random.sample(shortcut_dungeons, 
                     self.multiworld.random.randint(0, len(shortcut_dungeons)))
             # == 'choice', leave as previous
         else:
