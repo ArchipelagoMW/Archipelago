@@ -165,6 +165,7 @@ class TLoZWorld(World):
             if item_name in item_amounts.keys():
                 if item_name == starting_weapon:  # To remove the extra Sword if that's our weapon
                     item_amounts[item_name] -= 1
+                    self.multiworld.itempool.append(self.create_filler())
                 if self.multiworld.TriforceLocations[self.player] > 0 or item_name != "Triforce Fragment":
                     for i in range(0, item_amounts[item_name]):
                         self.multiworld.itempool.append(self.create_item(item_name))
@@ -493,6 +494,9 @@ class TLoZWorld(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
+    def get_filler_item_name(self) -> str:
+        filler_items = [item for item in item_table if item_table[item].classification == ItemClassification.filler]
+        return self.multiworld.random.choice(filler_items)
 
 class TLoZItem(Item):
     game = 'The Legend of Zelda'
