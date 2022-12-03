@@ -598,7 +598,7 @@ class Context:
     def notify_hints(self, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False):
         """Send and remember hints."""
         if only_new:
-            hints = [hint for hint in hints if hint not in ctx.hints[team, hint.finding_player]]
+            hints = [hint for hint in hints if hint not in self.hints[team, hint.finding_player]]
         if not hints:
             return
         new_hint_events: typing.Set[int] = set()
