@@ -372,7 +372,7 @@ Some special keys exist with specific return data:
 | Name                       | Type                  | Notes                                        |
 |----------------------------|-----------------------|----------------------------------------------|
 | \_read_hints_{team}_{slot} | list\[[Hint](#Hint)\] | All Hints belonging to the requested Player. |
-| \_read_slot_data_{slot]    | any                   | slot_data belonging to the requested slot.   |
+| \_read_slot_data_{slot}    | any                   | slot_data belonging to the requested slot.   |
 
 
 ### Set
