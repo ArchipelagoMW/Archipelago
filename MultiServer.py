@@ -371,7 +371,7 @@ class Context:
         self.locations = decoded_obj['locations']
         self.slot_data = decoded_obj['slot_data']
         for slot, data in self.slot_data.items():
-            self.read_data["_slot_data"] = lambda: data
+            self.read_data[f"slot_data_{slot}"] = lambda data=data: data
         self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
                              for player, loc_data in decoded_obj["er_hint_data"].items()}
 
