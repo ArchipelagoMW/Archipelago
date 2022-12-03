@@ -646,7 +646,7 @@ class Context:
         self.save()  # save goal completion flag
 
     def on_new_hint(self, team: int, slot: int):
-        key: str = f"hints_{team}_{slot}"
+        key: str = f"_read_hints_{team}_{slot}"
         targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
         if targets:
             self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.hints[team, slot]}])
