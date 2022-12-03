@@ -1719,7 +1719,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             args["cmd"] = "Retrieved"
             keys = args["keys"]
             args["keys"] = {
-                key: ctx.read_data.get(key[5:], lambda: None)() if key.startswith("_read") else
+                key: ctx.read_data.get(key[6:], lambda: None)() if key.startswith("_read_") else
                      ctx.stored_data.get(key, None)
                 for key in keys
             }
