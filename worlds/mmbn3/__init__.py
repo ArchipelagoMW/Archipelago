@@ -425,6 +425,20 @@ class MMBN3World(World):
         self.multiworld.get_location(LocationName.Numberman_Code_31, self.player).access_rule =\
             lambda state: self.explore_score(state) > 10
 
+        def not_undernet(item):  return item.code != item_table[ItemName.Progressive_Undernet_Rank].code or item.player != self.player
+        self.multiworld.get_location(LocationName.WWW_1_Central_BMD, self.player).item_rule = not_undernet
+        self.multiworld.get_location(LocationName.WWW_1_East_BMD, self.player).item_rule = not_undernet
+        self.multiworld.get_location(LocationName.WWW_2_East_BMD, self.player).item_rule = not_undernet
+        self.multiworld.get_location(LocationName.WWW_2_Northwest_BMD, self.player).item_rule = not_undernet
+        self.multiworld.get_location(LocationName.WWW_3_East_BMD, self.player).item_rule = not_undernet
+        self.multiworld.get_location(LocationName.WWW_3_North_BMD, self.player).item_rule = not_undernet
+        self.multiworld.get_location(LocationName.WWW_4_Northwest_BMD, self.player).item_rule = not_undernet
+        self.multiworld.get_location(LocationName.WWW_4_Central_BMD, self.player).item_rule = not_undernet
+        self.multiworld.get_location(LocationName.WWW_Wall_BMD, self.player).item_rule = not_undernet
+        self.multiworld.get_location(LocationName.WWW_Control_Room_1_Screen, self.player).item_rule = not_undernet
+        self.multiworld.get_location(LocationName.WWW_Wilys_Desk, self.player).item_rule = not_undernet
+
+
     def generate_basic(self) -> None:
         """
         called after the previous steps. Some placement and player specific randomizations can be done here. After this
