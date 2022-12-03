@@ -87,7 +87,7 @@ class GBContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
             self.locations_array = None
-            if 'death_link' in args and args['slot_data']['death_link']:
+            if 'death_link' in args['slot_data'] and args['slot_data']['death_link']:
                 self.set_deathlink = True
         elif cmd == "RoomInfo":
             self.seed_name = args['seed_name']
