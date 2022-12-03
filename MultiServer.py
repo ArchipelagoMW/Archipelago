@@ -1726,7 +1726,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, [args])
 
         elif cmd == "Set":
-            if "key" not in args or args["key"].startswith("_read") or \
+            if "key" not in args or args["key"].startswith("_read_") or \
                     "operations" not in args or not type(args["operations"]) == list:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
                                               "text": 'Set', "original_cmd": cmd}])
