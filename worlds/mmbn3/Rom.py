@@ -169,12 +169,12 @@ class TextArchive:
             # Every script I've looked at has dozens of unused indices, so finding 9 (8 plus one "ending" script)
             # should be no problem. We re-use these so we don't have to worry about an area getting tons of these
             raise "Error in generation -- not enough room for progressive undernet in archive "+self.startOffset
-        for i in range(8): # There are 8 progressive undernet ranks
+        for i in range(9):  # There are 8 progressive undernet ranks
             new_script_index = self.unused_indices[i]
             new_script = ArchiveScript(new_script_index, generate_progressive_undernet(i, self.unused_indices[i+1]))
             self.scripts[new_script_index] = new_script
             self.progressive_undernet_indices.append(new_script_index)
-        self.unused_indices = self.unused_indices[8:]  # Remove the first eight elements
+        self.unused_indices = self.unused_indices[9:]  # Remove the first eight elements
 
 
 class LocalRom:

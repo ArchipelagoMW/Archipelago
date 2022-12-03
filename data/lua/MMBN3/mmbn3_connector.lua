@@ -480,21 +480,16 @@ local check_all_locations = function()
     return location_checks
 end
 
--- Item Message Generation functions
-local Next_Progressive_Undernet_ID = function()
+local Check_Progressive_Undernet_ID = function()
     ordered_offsets = { 0x020019DB,0x020019DC,0x020019DD,0x020019DE,0x020019DF,0x020019E0,0x020019FA,0x020019E2 }
-
-    ordered_IDs = { 27,28,29,30,31,32,58,34 }
     for i=1,#ordered_offsets do
         offset=ordered_offsets[i]
-        index=ordered_IDs[i]
+
         if memory.read_u8(offset) == 0 then
-            return index
+            return i
         end
     end
-
-    --It shouldn't reach this point, but if it does, just give another GigFreez I guess
-    return 34
+    return 9
 end
 local GenerateTextBytes = function(message)
     bytes = {}
@@ -504,6 +499,26 @@ local GenerateTextBytes = function(message)
     end
     return bytes
 end
+
+-- Item Message Generation functions
+local Next_Progressive_Undernet_ID = function(index)
+    ordered_IDs = { 27,28,29,30,31,32,58,34}
+    if index > #ordered_IDs then
+        --It shouldn't reach this point, but if it does, just give another GigFreez I guess
+        return 34
+    end
+    item_index=ordered_IDs[index]
+    return item_index
+end
+local Extra_Progressive_Undernet = function()
+    fragBytes = int32ToByteList_le(20)
+    bytes = {
+        0xF6, 0x50, fragBytes[1], fragBytes[2], fragBytes[3], fragBytes[4], 0xFF, 0xFF, 0xFF
+    }
+    bytes = TableConcat(bytes, GenerateTextBytes("The extra data\ndecompiles into:\n\"20 BugFrags\"!!"))
+    return bytes
+end
+
 local GenerateChipGet = function(chip, code, amt)
     chipBytes = int16ToByteList_le(chip)
     bytes = {
@@ -588,7 +603,11 @@ end
 local GenerateGetMessageFromItem = function(item)
     --Special case for progressive undernet
     if item["type"] == "undernet" then
-        return GenerateKeyItemGet(Next_Progressive_Undernet_ID(),1)
+        undernet_id = Check_Progressive_Undernet_ID()
+        if undernet_id > 8 then
+            return Extra_Progressive_Undernet()
+        end
+        return GenerateKeyItemGet(Next_Progressive_Undernet_ID(undernet_id),1)
     elseif item["type"] == "chip" then
         return GenerateChipGet(item["itemID"], item["subItemID"], item["count"])
     elseif item["type"] == "key" then
