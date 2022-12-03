@@ -165,7 +165,6 @@ class TLoZWorld(World):
             if item_name in item_amounts.keys():
                 if item_name == starting_weapon:  # To remove the extra Sword if that's our weapon
                     item_amounts[item_name] -= 1
-                    self.multiworld.itempool.append(self.create_filler())
                 if self.multiworld.TriforceLocations[self.player] > 0 or item_name != "Triforce Fragment":
                     for i in range(0, item_amounts[item_name]):
                         self.multiworld.itempool.append(self.create_item(item_name))
@@ -180,7 +179,8 @@ class TLoZWorld(World):
                         ).place_locked_item(self.multiworld.create_item(item_name, self.player))
                         level = level + 1
             else:
-                self.multiworld.itempool.append(self.create_item(item_name))
+                if item_name != starting_weapon:
+                    self.multiworld.itempool.append(self.create_item(item_name))
 
     def set_rules(self):
         # Boss events for a nicer spoiler log playthrough
