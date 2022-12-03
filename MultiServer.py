@@ -120,6 +120,7 @@ class Context:
     groups: typing.Dict[int, typing.Set[int]]
     save_version = 2
     stored_data: typing.Dict[str, object]
+    read_data: typing.Dict[str, object]
     stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
 
     item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
@@ -191,6 +192,7 @@ class Context:
         self.random = random.Random()
         self.stored_data = {}
         self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
+        self.read_data = {}
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
@@ -342,7 +344,7 @@ class Context:
         return restricted_loads(zlib.decompress(data[1:]))
 
     def _load(self, decoded_obj: dict, use_embedded_server_options: bool):
-
+        self.read_data = {}
         mdata_ver = decoded_obj["minimum_versions"]["server"]
         if mdata_ver > Utils.version_tuple:
             raise RuntimeError(f"Supplied Multidata (.archipelago) requires a server of at least version {mdata_ver},"
@@ -359,6 +361,8 @@ class Context:
                 self.clients[team][player] = []
                 self.player_names[team, player] = name
                 self.player_name_lookup[name] = team, player
+                self.read_data[f"_hints_{team}_{player}"] = lambda local_team=team, local_player=player: \
+                    list(self.get_rechecked_hints(local_team, local_player))
         self.seed_name = decoded_obj["seed_name"]
         self.random.seed(self.seed_name)
         self.connect_names = decoded_obj['connect_names']
@@ -366,6 +370,8 @@ class Context:
         self.remote_start_inventory = decoded_obj.get('remote_start_inventory', decoded_obj['remote_items'])
         self.locations = decoded_obj['locations']
         self.slot_data = decoded_obj['slot_data']
+        for slot, data in self.slot_data.items():
+            self.read_data["_slot_data"] = lambda: data
         self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
                              for player, loc_data in decoded_obj["er_hint_data"].items()}
 
@@ -544,12 +550,17 @@ class Context:
             return max(0, int(self.hint_cost * 0.01 * len(self.locations[slot])))
         return 0
 
-    def recheck_hints(self):
-        for team, slot in self.hints:
-            self.hints[team, slot] = {
-                hint.re_check(self, team) for hint in
-                self.hints[team, slot]
-            }
+    def recheck_hints(self, team: typing.Optional[int] = None, slot: typing.Optional[int] = None):
+        for hint_team, hint_slot in self.hints:
+            if (team is None or team == hint_team) and (slot is None or slot == hint_slot):
+                self.hints[hint_team, hint_slot] = {
+                    hint.re_check(self, hint_team) for hint in
+                    self.hints[hint_team, hint_slot]
+                }
+
+    def get_rechecked_hints(self, team: int, slot: int):
+        self.recheck_hints(team, slot)
+        return self.hints[team, slot]
 
     def get_players_package(self):
         return [NetworkPlayer(t, p, self.get_aliased_name(t, p), n) for (t, p), n in self.player_names.items()]
@@ -1554,15 +1565,15 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             client.version = args['version']
             client.tags = args['tags']
             client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
-            reply = [{
+            connected_packet = {
                 "cmd": "Connected",
                 "team": client.team, "slot": client.slot,
                 "players": ctx.get_players_package(),
                 "missing_locations": get_missing_checks(ctx, team, slot),
                 "checked_locations": get_checked_checks(ctx, team, slot),
-                "slot_data": ctx.slot_data[client.slot],
                 "slot_info": ctx.slot_info
-            }]
+            }
+            reply = [connected_packet]
             start_inventory = get_start_inventory(ctx, slot, client.remote_start_inventory)
             items = get_received_items(ctx, client.team, client.slot, client.remote_items)
             if (start_inventory or items) and not client.no_items:
@@ -1571,7 +1582,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             if not client.auth:  # if this was a Re-Connect, don't print to console
                 client.auth = True
                 await on_client_joined(ctx, client)
-
+            if args.get("slot_data", True):
+                connected_packet["slot_data"] = ctx.slot_data[client.slot]
             await ctx.send_msgs(client, reply)
 
     elif cmd == "GetDataPackage":
@@ -1693,11 +1705,15 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 return
             args["cmd"] = "Retrieved"
             keys = args["keys"]
-            args["keys"] = {key: ctx.stored_data.get(key, None) for key in keys}
+            args["keys"] = {
+                key: ctx.read_data.get(key[5:], lambda: None)() if key.startswith("_read") else
+                     ctx.stored_data.get(key, None)
+                for key in keys
+            }
             await ctx.send_msgs(client, [args])
 
         elif cmd == "Set":
-            if "key" not in args or \
+            if "key" not in args or args["key"].startswith("_read") or \
                     "operations" not in args or not type(args["operations"]) == list:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
                                               "text": 'Set', "original_cmd": cmd}])
