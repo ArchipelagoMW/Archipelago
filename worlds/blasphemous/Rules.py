@@ -125,15 +125,15 @@ class BlasphemousLogic(LogicMixin):
                     self.has("Tirana of the Celestial Bastion", player) or \
                         self.has("Cloistered Ruby", player)
 
-    # assumed true until random skills are added. needs throwing blood
+    # to do: needs throwing blood
     def _blasphemous_cherub_13(self, player):
-        return True
-        #return self.has("Debla of the Lights", player) or \
-        #    self.has("Taranto to my Sister", player) or \
-        #        self.has("Cante Jondo of the Three Sisters", player) or \
-        #            self.has("Aubade of the Nameless Guardian", player) or \
-        #                self.has("Tirana of the Celestial Bastion", player) or \
-        #                    self.has("Cloistered Ruby", player)
+        return self.has("Mea Culpa Upgrade", player, 2) or \
+            (self.has("Debla of the Lights", player) or \
+                self.has("Taranto to my Sister", player) or \
+                    self.has("Cante Jondo of the Three Sisters", player) or \
+                        self.has("Aubade of the Nameless Guardian", player) or \
+                            self.has("Tirana of the Celestial Bastion", player) or \
+                                self.has("Cloistered Ruby", player))
     
     def _blasphemous_cherub_20(self, player):
         return self.has("Debla of the Lights", player) or \
@@ -175,27 +175,27 @@ class BlasphemousLogic(LogicMixin):
                                 self.has("Cantina of the Blue Rose", player) or \
                                     self.has("Cloistered Ruby", player)
 
-    # assumed true until random skills are added. needs throwing blood
+    # to do: needs throwing blood
     def _blasphemous_cherub_27(self, player):
-        return True
-        #return self.has("Debla of the Lights", player) or \
-        #    self.has("Lorquiana", player) or \
-        #        self.has("Taranto to my Sister", player) or \
-        #            self.has("Cante Jondo of the Three Sisters", player) or \
-        #                self.has("Aubade of the Nameless Guardian", player) or \
-        #                    self.has("Cantina of the Blue Rose", player) or \
-        #                        self.has("Cloistered Ruby", player)
+        return self.has("Mea Culpa Upgrade", player, 2) or \
+            (self.has("Debla of the Lights", player) or \
+                self.has("Lorquiana", player) or \
+                    self.has("Taranto to my Sister", player) or \
+                        self.has("Cante Jondo of the Three Sisters", player) or \
+                            self.has("Aubade of the Nameless Guardian", player) or \
+                                self.has("Cantina of the Blue Rose", player) or \
+                                    self.has("Cloistered Ruby", player))
 
-    # assumed true until random skills are added. needs throwing blood
+    # to do: needs throwing blood
     def _blasphemous_cherub_38(self, player):
-        return True
-        #return self.has("Lorquiana", player) or \
-        #    self.has("Cante Jondo of the Three Sisters", player) or \
-        #        self.has("Aubade of the Nameless Guardian", player) or \
-        #            self.has("Cantina of the Blue Rose", player) or \
-        #                self.has("Cloistered Ruby", player) or \
-        #                    (self.has("The Young Mason's Wheel", player) and \
-        #                        self.has("Brilliant Heart of Dawn", player))
+        return self.has("Mea Culpa Upgrade", player, 2) or \
+            (self.has("Lorquiana", player) or \
+                self.has("Cante Jondo of the Three Sisters", player) or \
+                    self.has("Aubade of the Nameless Guardian", player) or \
+                        self.has("Cantina of the Blue Rose", player) or \
+                            self.has("Cloistered Ruby", player) or \
+                                (self.has("The Young Mason's Wheel", player) and \
+                                    self.has("Brilliant Heart of Dawn", player)))
 
     def _blasphemous_wheel(self, player):
         return self.has("The Young Mason's Wheel", player)
