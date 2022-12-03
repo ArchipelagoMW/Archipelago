@@ -1,6 +1,17 @@
 from Options import Choice, Toggle, DefaultOnToggle, DeathLink
 
 
+class Difficulty(Choice):
+    """Adjusts the logic required to defeat bosses.
+    Impossible removes all logic requirements for bosses. Good luck."""
+    display_name = "Difficulty"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    option_impossible = 3
+    default = 1
+
+
 class CherubShuffle(DefaultOnToggle):
     """Shuffles Children of Moonlight into the item pool."""
     display_name = "Shuffle Children of Moonlight"
@@ -129,6 +140,7 @@ class EnemyRando(Choice):
 
 
 blasphemous_options = {
+    "difficulty": Difficulty,
     "cherub_shuffle" : CherubShuffle,
     "life_shuffle" : LifeShuffle,
     "fervour_shuffle" : FervourShuffle,

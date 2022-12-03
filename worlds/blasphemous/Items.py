@@ -498,14 +498,11 @@ group_table: Dict[str, Set[str]] = {
     
     "power"   : ["Life Upgrade",
                  "Fervour Upgrade",
-                 "Mea Culpa Upgrade",
                  "Empty Bile Vessel",
                  "Quicksilver"]
 }
 
 tears_set: Set[str] = [
-    "Tears of Atonement (250)",
-    "Tears of Atonement (300)",
     "Tears of Atonement (500)",
     "Tears of Atonement (625)",
     "Tears of Atonement (750)",

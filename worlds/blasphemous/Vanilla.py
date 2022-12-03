@@ -1,9 +1,6 @@
 from typing import Set, Dict
 
 unrandomized_dict: Dict[str, str] = {
-    "DoHH: Complete Penitence 1": "Reliquary of the Fervent Heart",
-    "DoHH: Complete Penitence 2": "Reliquary of the Suffering Heart",
-    "DoHH: Complete Penitence 3": "Reliquary of the Sorrowful Heart",
     "CoOLotCV: Burning oil fountain": "Golden Thimble Filled with Burning Oil",
     "MotED: Egg hatching": "Hatched Egg of Deformity",
     "DoHH: Viridiana gift": "Zarabanda of the Safe Haven",
