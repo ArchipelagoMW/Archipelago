@@ -361,7 +361,7 @@ class Context:
                 self.clients[team][player] = []
                 self.player_names[team, player] = name
                 self.player_name_lookup[name] = team, player
-                self.read_data[f"_hints_{team}_{player}"] = lambda local_team=team, local_player=player: \
+                self.read_data[f"hints_{team}_{player}"] = lambda local_team=team, local_player=player: \
                     list(self.get_rechecked_hints(local_team, local_player))
         self.seed_name = decoded_obj["seed_name"]
         self.random.seed(self.seed_name)
