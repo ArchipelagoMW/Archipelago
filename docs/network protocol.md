@@ -369,10 +369,10 @@ Used to request a single or multiple values from the server's data storage, see 
 Additional arguments sent in this package will also be added to the [Retrieved](#Retrieved) package it triggers.
 Some special keys exist with specific return data:
 
-| Name                       | Type         | Notes                                        |
-|----------------------------|--------------|----------------------------------------------|
-| \_read_hints_{team}_{slot} | list\[Hint\] | All Hints belonging to the requested Player. |
-| \_read_slot_data_{slot]    | any          | slot_data belonging to the requested slot.   |
+| Name                       | Type                  | Notes                                        |
+|----------------------------|-----------------------|----------------------------------------------|
+| \_read_hints_{team}_{slot} | list\[[Hint](#Hint)\] | All Hints belonging to the requested Player. |
+| \_read_slot_data_{slot]    | any                   | slot_data belonging to the requested slot.   |
 
 
 ### Set
@@ -597,6 +597,20 @@ class Permission(enum.IntEnum):
     goal = 0b010  # 2, allows manual use after goal completion
     auto = 0b110  # 6, forces use after goal completion, only works for forfeit and collect
     auto_enabled = 0b111  # 7, forces use after goal completion, allows manual use any time
+```
+
+### Hint
+An object representing a Hint.
+```python
+import typing
+class Hint(typing.NamedTuple):
+    receiving_player: int
+    finding_player: int
+    location: int
+    item: int
+    found: bool
+    entrance: str = ""
+    item_flags: int = 0
 ```
 
 ### Data Package Contents
