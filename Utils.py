@@ -503,7 +503,12 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
                         logging.info(f"Deleted old logfile {file.path}")
     import threading
     threading.Thread(target=_cleanup, name="LogCleaner").start()
-    logging.info(f"Archipelago ({__version__}) logging initialized.")
+    import platform
+    logging.info(
+        f"Archipelago ({__version__}) logging initialized"
+        f" on {platform.platform()}"
+        f" running Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    )
 
 
 def stream_input(stream, queue):
