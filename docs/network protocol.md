@@ -242,11 +242,11 @@ Additional arguments added to the [Get](#Get) package that triggered this [Retri
 ### SetReply
 Sent to clients in response to a [Set](#Set) package if want_reply was set to true, or if the client has registered to receive updates for a certain key using the [SetNotify](#SetNotify) package. SetReply packages are sent even if a [Set](#Set) package did not alter the value for the key.
 #### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| key | str | The key that was updated. |
-| value | any | The new value for the key. |
-| original_value | any | The value the key had before it was updated. |
+| Name           | Type | Notes                                                                                      |
+|----------------|------|--------------------------------------------------------------------------------------------|
+| key            | str  | The key that was updated.                                                                  |
+| value          | any  | The new value for the key.                                                                 |
+| original_value | any  | The value the key had before it was updated. Not present on "_read" prefixed special keys. |
 
 Additional arguments added to the [Set](#Set) package that triggered this [SetReply](#SetReply) will also be passed along.
 
