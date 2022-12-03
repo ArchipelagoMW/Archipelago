@@ -1111,7 +1111,7 @@ Obelisks (EPs) - Entry - True:
 159734 - 0xFFE34 (River Obelisk Side 5) - 0x03AA6 & 0x3397C & 0x0105D & 0x0A304 - True
 159735 - 0xFFE35 (River Obelisk Side 6) - 0x035CB & 0x035CF - True
 159740 - 0xFFE40 (Quarry Obelisk Side 1) - 0x28A7B & 0x005F6 & 0x00859 & 0x17CB9 & 0x28A4A - True
-159741 - 0xFFE41 (Quarry Obelisk Side 2) - 0x334B6 & 0x0069D & 0x28A4C - True
+159741 - 0xFFE41 (Quarry Obelisk Side 2) - 0x334B6 & 0x00614 & 0x0069D & 0x28A4C - True
 159742 - 0xFFE42 (Quarry Obelisk Side 3) - 0x289CF & 0x289D1 & 0x33692 - True
 159743 - 0xFFE43 (Quarry Obelisk Side 4) - 0x03E77 & 0x03E7C - True
 159750 - 0xFFE50 (Town Obelisk Side 1) - 0x035C7 - True
