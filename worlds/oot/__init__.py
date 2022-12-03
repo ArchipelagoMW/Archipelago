@@ -429,6 +429,8 @@ class OOTWorld(World):
                 new_region.scene = region['scene']
             if 'dungeon' in region:
                 new_region.dungeon = region['dungeon']
+            if 'is_boss_room' in region:
+                new_region.is_boss_room = region['is_boss_room']
             if 'hint' in region:
                 new_region.set_hint_data(region['hint'])
             if 'time_passes' in region:
@@ -1054,6 +1056,8 @@ class OOTWorld(World):
 
     def extend_hint_information(self, er_hint_data: dict):
 
+        er_hint_data[self.player] = {}
+
         hint_entrances = set()
         for entrance in entrance_shuffle_table:
             hint_entrances.add(entrance[1][0])
@@ -1092,7 +1096,7 @@ class OOTWorld(World):
                 if main_entrance is not None and main_entrance.shuffled:
                     for location in region.locations:
                         if type(location.address) == int:
-                            er_hint_data[location.address] = main_entrance.name
+                            er_hint_data[self.player][location.address] = main_entrance.name
 
 
     # Helper functions

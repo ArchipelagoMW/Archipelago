@@ -284,6 +284,7 @@ async def run_game(romfile):
 
 
 async def patch_and_run_game(apz5_file):
+    apz5_file = os.path.abspath(apz5_file)
     base_name = os.path.splitext(apz5_file)[0]
     decomp_path = base_name + '-decomp.z64'
     comp_path = base_name + '.z64'

@@ -42,6 +42,7 @@ class OOTRegion(Region):
         self.dungeon = None
         self.pretty_name = None
         self.font_color = None
+        self.is_boss_room = False
 
     def get_scene(self): 
         if self.scene: 
