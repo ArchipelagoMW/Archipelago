@@ -78,8 +78,8 @@ class BlasphemousLogic(LogicMixin):
         return self.has("Bead of Blue Wax", player)
 
     def _blasphemous_both_wax(self, player):
-        return self.has("Bead of Red Wax", player) and \
-            self.has("Bead of Blue Wax", player)
+        return self.has("Bead of Red Wax", player, 3) and \
+            self.has("Bead of Blue Wax", player, 3)
 
     def _blasphemous_elder_key(self, player):
         return self.has("Key to the Chamber of the Eldest Brother", player)
