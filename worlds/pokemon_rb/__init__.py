@@ -39,7 +39,7 @@ class PokemonRedBlueWorld(World):
     game = "Pokemon Red and Blue"
     option_definitions = pokemon_rb_options
     remote_items = False
-    data_version = 2
+    data_version = 3
     required_client_version = (0, 3, 7)
     topology_present = False
 
