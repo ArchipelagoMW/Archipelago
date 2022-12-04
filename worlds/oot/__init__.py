@@ -300,6 +300,7 @@ class OOTWorld(World):
         self.dungeon_shortcuts_choice = self.dungeon_shortcuts
         if self.dungeon_shortcuts_choice == 'random_dungeons':
             self.dungeon_shortcuts_choice = 'random'
+        self.key_rings_list          = {s.replace("'", "") for s in self.key_rings_list}
         self.dungeon_shortcuts       = {s.replace("'", "") for s in self.dungeon_shortcuts_list}
         self.mq_dungeons_specific    = {s.replace("'", "") for s in self.mq_dungeons_list}
         # self.empty_dungeons_specific = {s.replace("'", "") for s in self.empty_dungeons_list}
