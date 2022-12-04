@@ -890,7 +890,7 @@ class Hints(Choice):
 
 
 class MiscHints(DefaultOnToggle):
-    """Controls whether the Temple of Time altar gives dungeon prize info and whether Ganondorf hints the Light Arrows."""
+    """The Temple of Time altar hints dungeon rewards, bridge info, and Ganon BK info; Ganondorf hints the Light Arrows; Dampe's diary hints a local Hookshot if one exists; Skulltula House locations hint their item."""
     display_name = "Misc Hints"
 
 

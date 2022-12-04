@@ -279,6 +279,7 @@ class OOTWorld(World):
         self.required_locations = []
         self.empty_areas = {}
         self.major_item_locations = []
+        self.hinted_dungeon_reward_locations = {}
 
         # ER names
         self.shuffle_special_dungeon_entrances = self.shuffle_dungeon_entrances == 'all'
@@ -573,6 +574,7 @@ class OOTWorld(World):
             loc = prize_locs.pop()
             loc.place_locked_item(item)
             self.multiworld.itempool.remove(item)
+            self.hinted_dungeon_reward_locations[item.name] = loc
 
     def create_item(self, name: str):
         if name in item_table:

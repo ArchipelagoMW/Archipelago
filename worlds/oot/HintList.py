@@ -148,9 +148,19 @@ conditional_always = {
     'HF Ocarina of Time Item':      lambda world: stones_required_by_settings(world) < 2,
     'Sheik in Kakariko':            lambda world: medallions_required_by_settings(world) < 5,
     'DMT Biggoron':                 lambda world: world.adult_trade_start != {'Claim Check'},
-    'Kak 30 Gold Skulltula Reward': lambda world: tokens_required_by_settings(world) < 30,
-    'Kak 40 Gold Skulltula Reward': lambda world: tokens_required_by_settings(world) < 40,
-    'Kak 50 Gold Skulltula Reward': lambda world: tokens_required_by_settings(world) < 50,
+    'Kak 30 Gold Skulltula Reward': lambda world: tokens_required_by_settings(world) < 30 and '30_skulltulas' not in world.misc_hints,
+    'Kak 40 Gold Skulltula Reward': lambda world: tokens_required_by_settings(world) < 40 and '40_skulltulas' not in world.misc_hints,
+    'Kak 50 Gold Skulltula Reward': lambda world: tokens_required_by_settings(world) < 50 and '50_skulltulas' not in world.misc_hints,
+}
+
+# Entrance hints required under certain settings
+conditional_entrance_always = {
+    'Ganons Castle Grounds -> Ganons Castle Lobby': lambda world: (world.bridge != 'open'
+        and (world.bridge != 'stones' or world.bridge_stones > 1)
+        and (world.bridge != 'medallions' or world.bridge_medallions > 1)
+        and (world.bridge != 'dungeons' or world.bridge_rewards > 2)
+        and (world.bridge != 'tokens' or world.bridge_tokens > 20)
+        and (world.bridge != 'hearts' or world.bridge_hearts > world.starting_hearts + 1)),
 }
 
 
@@ -1591,6 +1601,7 @@ misc_item_hint_table = {
             "enter #your pocket#. I will let you have": "check #your pocket#. You will find",
         },
         'use_alt_hint': False,
+        'local_only': True,
     },
     'ganondorf': {
         'id': 0x70CC,
@@ -1604,6 +1615,7 @@ misc_item_hint_table = {
             "from #Ganondorf's Chamber#": "from #those pots over there#",
         },
         'use_alt_hint': True,
+        'local_only': False,
     },
 }
 
@@ -1680,10 +1692,13 @@ def hintExclusions(world, clear_cache=False):
         hint = getHint(name, world.clearer_hints)
         if any(item in hint.type for item in 
                 ['always',
+                 'dual_always',
                  'sometimes',
                  'overworld',
                  'dungeon',
-                 'song']):
+                 'song',
+                 'dual',
+                 'exclude']):
             location_hints.append(hint)
 
     for hint in location_hints:
@@ -1695,9 +1710,9 @@ def hintExclusions(world, clear_cache=False):
 def nameIsLocation(name, hint_type, world):
     if isinstance(hint_type, (list, tuple)):
         for htype in hint_type:
-            if htype in ['sometimes', 'song', 'overworld', 'dungeon', 'always'] and name not in hintExclusions(world):
+            if htype in ['sometimes', 'song', 'overworld', 'dungeon', 'always', 'exclude'] and name not in hintExclusions(world):
                 return True
-    elif hint_type in ['sometimes', 'song', 'overworld', 'dungeon', 'always'] and name not in hintExclusions(world):
+    elif hint_type in ['sometimes', 'song', 'overworld', 'dungeon', 'always', 'exclude'] and name not in hintExclusions(world):
         return True
     return False
 

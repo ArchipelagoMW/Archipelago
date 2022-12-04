@@ -12,7 +12,8 @@ from enum import Enum
 
 from BaseClasses import Region
 from .Items import OOTItem
-from .HintList import getHint, getHintGroup, Hint, hintExclusions
+from .HintList import getHint, getHintGroup, Hint, hintExclusions, \
+    misc_item_hint_table, misc_location_hint_table
 from .Messages import COLOR_MAP, update_message_by_id
 from .TextBox import line_wrap
 from .Utils import data_path, read_json
@@ -25,7 +26,10 @@ bingoBottlesForHints = (
 )
 
 defaultHintDists = [
-    'balanced.json', 'bingo.json', 'ddr.json', 'scrubs.json', 'strong.json', 'tournament.json', 'useless.json', 'very_strong.json'
+    'async.json', 'balanced.json', 'bingo.json', 'chaos.json', 'coop2.json',
+    'ddr.json', 'league.json', 'mw3.json', 'scrubs.json', 'strong.json',
+    'tournament.json', 'useless.json', 'very_strong.json',
+    'very_strong_magic.json', 'weekly.json'
 ]
 
 class RegionRestriction(Enum):
@@ -1031,12 +1035,17 @@ def buildAltarHints(world, messages, include_rewards=True, include_wincons=True)
 
 # pulls text string from hintlist for reward after sending the location to hintlist.
 def buildBossString(reward, color, world):
-    for location in world.multiworld.get_filled_locations(world.player):
-        if location.item.name == reward:
-            item_icon = chr(location.item.special['item_id'])
-            location_text = getHint(location.name, world.clearer_hints).text
-            return str(GossipText("\x08\x13%s%s" % (item_icon, location_text), [color], prefix='')) + '\x04'
-    return ''
+    item_icon = chr(Item(reward).special['item_id'])
+    if world.multiworld.state.has(reward, world.player):
+        if world.clearer_hints:
+            text = GossipText(f"\x08\x13{item_icon}One #@ already has#...", [color], prefix='')
+        else:
+            text = GossipText(f"\x08\x13{item_icon}One in #@'s pocket#...", [color], prefix='')
+    else:
+        location = world.hinted_dungeon_reward_locations[reward]
+        location_text = HintArea.at(location).text(world.clearer_hints, preposition=True)
+        text = GossipText(f"\x08\x13{item_icon}One {location_text}...", [color], prefix='')
+    return str(text) + '\x04'
 
 
 def buildBridgeReqsString(world):
@@ -1053,6 +1062,8 @@ def buildBridgeReqsString(world):
             item_req_string = str(world.bridge_rewards) + ' ' + item_req_string
         elif world.bridge == 'tokens':
             item_req_string = str(world.bridge_tokens) + ' ' + item_req_string
+        elif world.bridge == 'hearts':
+            item_req_string = str(world.bridge_hearts) + ' ' + item_req_string
         if '#' not in item_req_string:
             item_req_string = '#%s#' % item_req_string
         string += "The awakened ones will await for the Hero to collect %s." % item_req_string
@@ -1074,9 +1085,26 @@ def buildGanonBossKeyString(world):
                 item_req_string = str(world.lacs_rewards) + ' ' + item_req_string
             elif world.lacs_condition == 'tokens':
                 item_req_string = str(world.lacs_tokens) + ' ' + item_req_string
+            elif world.lacs_condition == 'hearts':
+                item_req_string = str(world.lacs_hearts) + ' ' + item_req_string
             if '#' not in item_req_string:
                 item_req_string = '#%s#' % item_req_string
             bk_location_string = "provided by Zelda once %s are retrieved" % item_req_string
+        elif world.shuffle_ganon_bosskey in ['stones', 'medallions', 'dungeons', 'tokens', 'hearts']:
+            item_req_string = getHint('ganonBK_' + world.shuffle_ganon_bosskey, world.clearer_hints).text
+            if world.shuffle_ganon_bosskey == 'medallions':
+                item_req_string = str(world.ganon_bosskey_medallions) + ' ' + item_req_string
+            elif world.shuffle_ganon_bosskey == 'stones':
+                item_req_string = str(world.ganon_bosskey_stones) + ' ' + item_req_string
+            elif world.shuffle_ganon_bosskey == 'dungeons':
+                item_req_string = str(world.ganon_bosskey_rewards) + ' ' + item_req_string
+            elif world.shuffle_ganon_bosskey == 'tokens':
+                item_req_string = str(world.ganon_bosskey_tokens) + ' ' + item_req_string
+            elif world.shuffle_ganon_bosskey == 'hearts':
+                item_req_string = str(world.ganon_bosskey_hearts) + ' ' + item_req_string
+            if '#' not in item_req_string:
+                item_req_string = '#%s#' % item_req_string
+            bk_location_string = "automatically granted once %s are retrieved" % item_req_string
         else:
             bk_location_string = getHint('ganonBK_' + world.shuffle_ganon_bosskey, world.clearer_hints).text
         string += "And the \x05\x41evil one\x05\x40's key will be %s." % bk_location_string
@@ -1096,30 +1124,49 @@ def buildGanonText(world, messages):
     text = get_raw_text(ganonLines.pop().text)
     update_message_by_id(messages, 0x70CB, text)
 
-    # light arrow hint or validation chest item
-    if world.starting_items['Light Arrows'] > 0:
-        text = get_raw_text(getHint('Light Arrow Location', world.clearer_hints).text)
-        text += "\x05\x42your pocket\x05\x40"
-    else:
-        try:
-            find_light_arrows = world.multiworld.find_item('Light Arrows', world.player)
-            text = get_raw_text(getHint('Light Arrow Location', world.clearer_hints).text)
-            location = find_light_arrows
-            location_hint = get_hint_area(location)
-            if world.player != location.player:
-                text += "\x05\x42%s's\x05\x40 %s" % (world.multiworld.get_player_name(location.player), get_raw_text(location_hint))
-            else:
-                location_hint = location_hint.replace('Ganon\'s Castle', 'my castle')
-                text += get_raw_text(location_hint)
-        except StopIteration:
-            text = get_raw_text(getHint('Validation Line', world.clearer_hints).text)
-            for location in world.multiworld.get_filled_locations(world.player):
-                if location.name == 'Ganons Tower Boss Key Chest':
-                    text += get_raw_text(getHint(getItemGenericName(location.item), world.clearer_hints).text)
-                    break
-    text += '!'
 
-    update_message_by_id(messages, 0x70CC, text)
+# Modified from original. Uses optimized AP methods, no support for custom items. 
+def buildMiscItemHints(world, messages):
+    for hint_type, data in misc_item_hint_table.items():
+        if hint_type in world.misc_hints:
+            item_locations = world.multiworld.find_item_locations(data['default_item'], world.player)
+            if data['local_only']:
+                item_locations = [loc for loc in item_locations if loc.player == world.player]
+
+            if world.multiworld.state.has(data['default_item'], world.player) > 0:
+                text = data['default_item_text'].format(area='#your pocket#')
+            elif item_locations:
+                location = item_locations[0]
+                area = HintArea.at(location, use_alt_hint=data['use_alt_hint']).text(world.clearer_hints, world=None if location.player == world.player else location.world.player)
+                # if item == data['default_item']:
+                text = data['default_item_text'].format(area=area)
+                # else:
+                #     text = data['custom_item_text'].format(area=area, item=getHint(getItemGenericName(location.item), world.clearer_hints).text)
+            elif 'custom_item_fallback' in data:
+                # if 'default_item_fallback' in data and item == data['default_item']:
+                text = data['default_item_fallback']
+                # else:
+                #     text = data['custom_item_fallback'].format(item=item)
+            else:
+                text = getHint('Validation Line', world.clearer_hints).text
+                location = world.get_location('Ganons Tower Boss Key Chest')
+                text += f"#{getHint(getItemGenericName(location.item), world.clearer_hints).text}#"
+            for find, replace in data.get('replace', {}).items():
+                text = text.replace(find, replace)
+
+            update_message_by_id(messages, data['id'], str(GossipText(text, ['Green'], prefix='')))
+
+
+# Modified from original to use optimized AP methods
+def buildMiscLocationHints(world, messages):
+    for hint_type, data in misc_location_hint_table.items():
+        text = data['location_fallback']
+        if hint_type in world.misc_hints:
+            location = world.get_location(data['item_location'])
+            item = location.item
+            text = data['location_text'].format(item=getHint(getItemGenericName(item), world.clearer_hints).text)
+
+        update_message_by_id(messages, data['id'], str(GossipText(text, ['Green'], prefix='')), 0x23)
 
 
 def get_raw_text(string):
