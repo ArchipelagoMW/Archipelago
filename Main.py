@@ -11,7 +11,7 @@ import zipfile
 from typing import Dict, List, Tuple, Optional, Set
 
 from BaseClasses import Item, MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
-from worlds.alttp.Items import item_name_groups
+import worlds
 from worlds.alttp.Regions import is_main_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
@@ -364,6 +364,12 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                                   for player in world.groups.get(location.item.player, {}).get("players", [])]):
                             precollect_hint(location)
 
+                # custom datapackage
+                datapackage = {}
+                for game_world in world.worlds.values():
+                    if game_world.data_version == 0 and game_world.game not in datapackage:
+                        datapackage[game_world.game] = worlds.network_data_package["games"][game_world.game]
+
                 multidata = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
@@ -383,7 +389,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "version": tuple(version_tuple),
                     "tags": ["AP"],
                     "minimum_versions": minimum_versions,
-                    "seed_name": world.seed_name
+                    "seed_name": world.seed_name,
+                    "datapackage": datapackage,
                 }
                 AutoWorld.call_all(world, "modify_multidata", multidata)
 

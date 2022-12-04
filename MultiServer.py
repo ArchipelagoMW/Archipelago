@@ -202,7 +202,6 @@ class Context:
         self.non_hintable_names = collections.defaultdict(frozenset)
 
         self._load_game_data()
-        self._init_game_data()
 
     # Datapackage retrieval
     def _load_game_data(self):
@@ -411,6 +410,12 @@ class Context:
         if use_embedded_server_options:
             server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
+
+        # custom datapackage
+        for game_name, data in decoded_obj.get("datapackage", {}).items():
+            logging.info(f"Loading custom datapackage for game {game_name}")
+            self.gamespackage[game_name] = data
+        self._init_game_data()
 
     # saving
 
