@@ -552,7 +552,7 @@ class ShufflePots(Choice):
     option_off = 0
     option_all = 1
     option_overworld = 2
-    option_dungeon = 3
+    option_dungeons = 3
 
 
 class ShuffleCrates(Choice):
@@ -561,11 +561,11 @@ class ShuffleCrates(Choice):
     option_off = 0
     option_all = 1
     option_overworld = 2
-    option_dungeon = 3
+    option_dungeons = 3
 
 
 class ShuffleBeehives(Toggle):
-    """Beehives drop items when struck."""
+    """Beehives drop an item when destroyed by an explosion, the Hookshot, or the Boomerang."""
     display_name = "Shuffle Beehives"
 
 
