@@ -303,6 +303,18 @@ class OOTWorld(World):
         self.mq_dungeons_specific    = {s.replace("'", "") for s in self.mq_dungeons_list}
         # self.empty_dungeons_specific = {s.replace("'", "") for s in self.empty_dungeons_list}
 
+        # Determine which dungeons have key rings.
+        keyring_dungeons = [d['name'] for d in dungeon_table if d['small_key']] + ['Thieves Hideout']
+        if self.key_rings == 'off':
+            self.key_rings = []
+        elif self.key_rings == 'all':
+            self.key_rings = keyring_dungeons
+        elif self.key_rings == 'choose':
+            self.key_rings = self.key_rings_list
+        elif self.key_rings == 'random_dungeons':
+            self.key_rings = self.multiworld.random.sample(keyring_dungeons,
+                self.multiworld.random.randint(0, len(keyring_dungeons)))
+
         # Determine which dungeons are MQ. Not compatible with glitched logic.
         mq_dungeons = set()
         if self.logic_rules != 'glitched':
@@ -1097,6 +1109,26 @@ class OOTWorld(World):
                     for location in region.locations:
                         if type(location.address) == int:
                             er_hint_data[self.player][location.address] = main_entrance.name
+
+    # Key ring handling: 
+    # Key rings are multiple items glued together into one, so we need to give
+    # the appropriate number of keys in the collection state when they are
+    # picked up.
+    def collect(self, state: "CollectionState", item: "Item") -> bool:
+        if item.advancement and item.special and item.special.get('alias', False):
+            alt_item_name, count = item.special.get('alias')
+            state.prog_items[alt_item_name, self.player] += count
+            return True
+        return super().collect(state, item)
+
+    def remove(self, state: "CollectionState", item: "Item") -> bool:
+        if item.advancement and item.special and item.special.get('alias', False):
+            alt_item_name, count = item.special.get('alias')
+            state.prog_items[alt_item_name, self.player] -= count
+            if state.prog_items[alt_item_name, self.player] < 1:
+                del (state.prog_items[alt_item_name, self.player])
+            return True
+        return super().remove(state, item)
 
 
     # Helper functions
