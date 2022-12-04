@@ -470,10 +470,10 @@ def shuffle_random_entrances(ootworld):
         if 'adult' not in ootworld.spawn_positions:
             one_way_entrance_pools['Spawn'].remove(ootworld.get_entrance('Adult Spawn -> Temple of Time'))
 
-    if world.shuffle_bosses == 'full':
+    if ootworld.shuffle_bosses == 'full':
         entrance_pools['Boss'] = ootworld.get_shufflable_entrances(type='ChildBoss', only_primary=True)
         entrance_pools['Boss'] += ootworld.get_shufflable_entrances(type='AdultBoss', only_primary=True)
-    elif world.shuffle_bosses == 'limited':
+    elif ootworld.shuffle_bosses == 'limited':
         entrance_pools['ChildBoss'] = ootworld.get_shufflable_entrances(type='ChildBoss', only_primary=True)
         entrance_pools['AdultBoss'] = ootworld.get_shufflable_entrances(type='AdultBoss', only_primary=True)
 
