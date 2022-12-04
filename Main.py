@@ -116,19 +116,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
 
-    for player in world.player_ids:
-        if player in world.get_game_players("A Link to the Past"):
-            # enforce pre-defined local items.
-            if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
-                world.local_items[player].value.add('Triforce Piece')
-
-            # Not possible to place pendants/crystals outside boss prizes yet.
-            world.non_local_items[player].value -= item_name_groups['Pendants']
-            world.non_local_items[player].value -= item_name_groups['Crystals']
-
-        # items can't be both local and non-local, prefer local
-        world.non_local_items[player].value -= world.local_items[player].value
-
     logger.info('Creating World.')
     AutoWorld.call_all(world, "create_regions")
 
@@ -136,6 +123,12 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     AutoWorld.call_all(world, "create_items")
 
     logger.info('Calculating Access Rules.')
+
+    for player in world.player_ids:
+        # items can't be both local and non-local, prefer local
+        world.non_local_items[player].value -= world.local_items[player].value
+        world.non_local_items[player].value -= set(world.local_early_items[player])
+
     if world.players > 1:
         locality_rules(world)
     else:
@@ -218,8 +211,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             items_to_add = []
             for player in group["players"]:
                 if group["replacement_items"][player]:
-                    items_to_add.append(AutoWorld.call_single(world, "create_item", player,
-                                                                group["replacement_items"][player]))
+                    items_to_add.append(
+                        AutoWorld.call_single(world, "create_item", player, group["replacement_items"][player]))
                 else:
                     items_to_add.append(AutoWorld.call_single(world, "create_filler", player))
             world.random.shuffle(items_to_add)

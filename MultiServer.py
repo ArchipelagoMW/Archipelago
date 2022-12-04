@@ -120,6 +120,7 @@ class Context:
     groups: typing.Dict[int, typing.Set[int]]
     save_version = 2
     stored_data: typing.Dict[str, object]
+    read_data: typing.Dict[str, object]
     stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
 
     item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
@@ -191,6 +192,7 @@ class Context:
         self.random = random.Random()
         self.stored_data = {}
         self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
+        self.read_data = {}
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
@@ -342,7 +344,7 @@ class Context:
         return restricted_loads(zlib.decompress(data[1:]))
 
     def _load(self, decoded_obj: dict, use_embedded_server_options: bool):
-
+        self.read_data = {}
         mdata_ver = decoded_obj["minimum_versions"]["server"]
         if mdata_ver > Utils.version_tuple:
             raise RuntimeError(f"Supplied Multidata (.archipelago) requires a server of at least version {mdata_ver},"
@@ -359,6 +361,8 @@ class Context:
                 self.clients[team][player] = []
                 self.player_names[team, player] = name
                 self.player_name_lookup[name] = team, player
+                self.read_data[f"hints_{team}_{player}"] = lambda local_team=team, local_player=player: \
+                    list(self.get_rechecked_hints(local_team, local_player))
         self.seed_name = decoded_obj["seed_name"]
         self.random.seed(self.seed_name)
         self.connect_names = decoded_obj['connect_names']
@@ -366,6 +370,8 @@ class Context:
         self.remote_start_inventory = decoded_obj.get('remote_start_inventory', decoded_obj['remote_items'])
         self.locations = decoded_obj['locations']
         self.slot_data = decoded_obj['slot_data']
+        for slot, data in self.slot_data.items():
+            self.read_data[f"slot_data_{slot}"] = lambda data=data: data
         self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
                              for player, loc_data in decoded_obj["er_hint_data"].items()}
 
@@ -544,12 +550,17 @@ class Context:
             return max(0, int(self.hint_cost * 0.01 * len(self.locations[slot])))
         return 0
 
-    def recheck_hints(self):
-        for team, slot in self.hints:
-            self.hints[team, slot] = {
-                hint.re_check(self, team) for hint in
-                self.hints[team, slot]
-            }
+    def recheck_hints(self, team: typing.Optional[int] = None, slot: typing.Optional[int] = None):
+        for hint_team, hint_slot in self.hints:
+            if (team is None or team == hint_team) and (slot is None or slot == hint_slot):
+                self.hints[hint_team, hint_slot] = {
+                    hint.re_check(self, hint_team) for hint in
+                    self.hints[hint_team, hint_slot]
+                }
+
+    def get_rechecked_hints(self, team: int, slot: int):
+        self.recheck_hints(team, slot)
+        return self.hints[team, slot]
 
     def get_players_package(self):
         return [NetworkPlayer(t, p, self.get_aliased_name(t, p), n) for (t, p), n in self.player_names.items()]
@@ -584,6 +595,44 @@ class Context:
         else:
             return self.player_names[team, slot]
 
+    def notify_hints(self, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False):
+        """Send and remember hints."""
+        if only_new:
+            hints = [hint for hint in hints if hint not in self.hints[team, hint.finding_player]]
+        if not hints:
+            return
+        new_hint_events: typing.Set[int] = set()
+        concerns = collections.defaultdict(list)
+        for hint in sorted(hints, key=operator.attrgetter('found'), reverse=True):
+            data = (hint, hint.as_network_message())
+            for player in self.slot_set(hint.receiving_player):
+                concerns[player].append(data)
+            if not hint.local and data not in concerns[hint.finding_player]:
+                concerns[hint.finding_player].append(data)
+            # remember hints in all cases
+            if not hint.found:
+                # since hints are bidirectional, finding player and receiving player,
+                # we can check once if hint already exists
+                if hint not in self.hints[team, hint.finding_player]:
+                    self.hints[team, hint.finding_player].add(hint)
+                    new_hint_events.add(hint.finding_player)
+                    for player in self.slot_set(hint.receiving_player):
+                        self.hints[team, player].add(hint)
+                        new_hint_events.add(player)
+
+            logging.info("Notice (Team #%d): %s" % (team + 1, format_hint(self, team, hint)))
+        for slot in new_hint_events:
+            self.on_new_hint(team, slot)
+        for slot, hint_data in concerns.items():
+            clients = self.clients[team].get(slot)
+            if not clients:
+                continue
+            client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
+            for client in clients:
+                async_start(self.send_msgs(client, client_hints))
+
+    # "events"
+
     def on_goal_achieved(self, client: Client):
         finished_msg = f'{self.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1})' \
                        f' has completed their goal.'
@@ -596,38 +645,11 @@ class Context:
             forfeit_player(self, client.team, client.slot)
         self.save()  # save goal completion flag
 
-
-def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False):
-    """Send and remember hints."""
-    if only_new:
-        hints = [hint for hint in hints if hint not in ctx.hints[team, hint.finding_player]]
-    if not hints:
-        return
-    concerns = collections.defaultdict(list)
-    for hint in sorted(hints, key=operator.attrgetter('found'), reverse=True):
-        data = (hint, hint.as_network_message())
-        for player in ctx.slot_set(hint.receiving_player):
-            concerns[player].append(data)
-        if not hint.local and data not in concerns[hint.finding_player]:
-            concerns[hint.finding_player].append(data)
-        # remember hints in all cases
-        if not hint.found:
-            # since hints are bidirectional, finding player and receiving player,
-            # we can check once if hint already exists
-            if hint not in ctx.hints[team, hint.finding_player]:
-                ctx.hints[team, hint.finding_player].add(hint)
-                for player in ctx.slot_set(hint.receiving_player):
-                    ctx.hints[team, player].add(hint)
-
-        logging.info("Notice (Team #%d): %s" % (team + 1, format_hint(ctx, team, hint)))
-
-    for slot, hint_data in concerns.items():
-        clients = ctx.clients[team].get(slot)
-        if not clients:
-            continue
-        client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
-        for client in clients:
-            async_start(ctx.send_msgs(client, client_hints))
+    def on_new_hint(self, team: int, slot: int):
+        key: str = f"_read_hints_{team}_{slot}"
+        targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
+        if targets:
+            self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.hints[team, slot]}])
 
 
 def update_aliases(ctx: Context, team: int):
@@ -1133,13 +1155,15 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
         output = f"!admin {command}"
         if output.lower().startswith(
-                "!admin login"):  # disallow others from seeing the supplied password, whether or not it is correct.
+                "!admin login"):  # disallow others from seeing the supplied password, whether it is correct.
             output = f"!admin login {('*' * random.randint(4, 16))}"
         elif output.lower().startswith(
-                "!admin /option server_password"):  # disallow others from knowing what the new remote administration password is.
+                # disallow others from knowing what the new remote administration password is.
+                "!admin /option server_password"):
             output = f"!admin /option server_password {('*' * random.randint(4, 16))}"
+        # Otherwise notify the others what is happening.
         self.ctx.notify_all(self.ctx.get_aliased_name(self.client.team,
-                                                      self.client.slot) + ': ' + output)  # Otherwise notify the others what is happening.
+                                                      self.client.slot) + ': ' + output)
 
         if not self.ctx.server_password:
             self.output("Sorry, Remote administration is disabled")
@@ -1147,8 +1171,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
         if not command:
             if self.is_authenticated():
-                self.output(
-                    "Usage: !admin [Server command].\nUse !admin /help for help.\nUse !admin logout to log out of the current session.")
+                self.output("Usage: !admin [Server command].\nUse !admin /help for help.\n"
+                            "Use !admin logout to log out of the current session.")
             else:
                 self.output("Usage: !admin login [password]")
             return True
@@ -1338,7 +1362,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
             self.ctx.hints[self.client.team, self.client.slot] = hints
-            notify_hints(self.ctx, self.client.team, list(hints))
+            self.ctx.notify_hints(self.client.team, list(hints))
             self.output(f"A hint costs {self.ctx.get_hint_cost(self.client.slot)} points. "
                         f"You have {points_available} points.")
             return True
@@ -1391,7 +1415,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             new_hints = set(hints) - self.ctx.hints[self.client.team, self.client.slot]
             old_hints = set(hints) - new_hints
             if old_hints:
-                notify_hints(self.ctx, self.client.team, list(old_hints))
+                self.ctx.notify_hints(self.client.team, list(old_hints))
                 if not new_hints:
                     self.output("Hint was previously used, no points deducted.")
             if new_hints:
@@ -1432,7 +1456,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                         self.output(f"You can't afford the hint. "
                                     f"You have {points_available} points and need at least "
                                     f"{self.ctx.get_hint_cost(self.client.slot)}.")
-                notify_hints(self.ctx, self.client.team, hints)
+                self.ctx.notify_hints(self.client.team, hints)
                 self.ctx.save()
                 return True
 
@@ -1554,15 +1578,15 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             client.version = args['version']
             client.tags = args['tags']
             client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
-            reply = [{
+            connected_packet = {
                 "cmd": "Connected",
                 "team": client.team, "slot": client.slot,
                 "players": ctx.get_players_package(),
                 "missing_locations": get_missing_checks(ctx, team, slot),
                 "checked_locations": get_checked_checks(ctx, team, slot),
-                "slot_data": ctx.slot_data[client.slot],
                 "slot_info": ctx.slot_info
-            }]
+            }
+            reply = [connected_packet]
             start_inventory = get_start_inventory(ctx, slot, client.remote_start_inventory)
             items = get_received_items(ctx, client.team, client.slot, client.remote_items)
             if (start_inventory or items) and not client.no_items:
@@ -1571,7 +1595,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             if not client.auth:  # if this was a Re-Connect, don't print to console
                 client.auth = True
                 await on_client_joined(ctx, client)
-
+            if args.get("slot_data", True):
+                connected_packet["slot_data"] = ctx.slot_data[client.slot]
             await ctx.send_msgs(client, reply)
 
     elif cmd == "GetDataPackage":
@@ -1659,7 +1684,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 if create_as_hint:
                     hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
-            notify_hints(ctx, client.team, hints, only_new=create_as_hint == 2)
+            ctx.notify_hints(client.team, hints, only_new=create_as_hint == 2)
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
 
         elif cmd == 'StatusUpdate':
@@ -1693,11 +1718,15 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 return
             args["cmd"] = "Retrieved"
             keys = args["keys"]
-            args["keys"] = {key: ctx.stored_data.get(key, None) for key in keys}
+            args["keys"] = {
+                key: ctx.read_data.get(key[6:], lambda: None)() if key.startswith("_read_") else
+                     ctx.stored_data.get(key, None)
+                for key in keys
+            }
             await ctx.send_msgs(client, [args])
 
         elif cmd == "Set":
-            if "key" not in args or \
+            if "key" not in args or args["key"].startswith("_read_") or \
                     "operations" not in args or not type(args["operations"]) == list:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
                                               "text": 'Set', "original_cmd": cmd}])
@@ -1905,6 +1934,37 @@ class ServerCommandProcessor(CommonCommandProcessor):
         """Sends an item to the specified player"""
         return self._cmd_send_multiple(1, player_name, *item_name)
 
+    def _cmd_send_location(self, player_name: str, *location_name: str) -> bool:
+        """Send out item from a player's location as though they checked it"""
+        seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
+        if usable:
+            team, slot = self.ctx.player_name_lookup[seeked_player]
+            game = self.ctx.games[slot]
+            full_name = " ".join(location_name)
+
+            if full_name.isnumeric():
+                location, usable, response = int(full_name), True, None
+            elif self.ctx.location_names_for_game(game) is not None:
+                location, usable, response = get_intended_text(full_name, self.ctx.location_names_for_game(game))
+            else:
+                self.output("Can't look up location for unknown game. Send by ID instead.")
+                return False
+
+            if usable:
+                if isinstance(location, int):
+                    register_location_checks(self.ctx, team, slot, [location])
+                else:
+                    seeked_location: int = self.ctx.location_names_for_game(self.ctx.games[slot])[location]
+                    register_location_checks(self.ctx, team, slot, [seeked_location])
+                return True
+            else:
+                self.output(response)
+                return False
+
+        else:
+            self.output(response)
+            return False
+
     def _cmd_hint(self, player_name: str, *item_name: str) -> bool:
         """Send out a hint for a player's item to their team"""
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
@@ -1931,7 +1991,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                     hints = collect_hints(self.ctx, team, slot, item)
 
                 if hints:
-                    notify_hints(self.ctx, team, hints)
+                    self.ctx.notify_hints(team, hints)
 
                 else:
                     self.output("No hints found.")
@@ -1966,7 +2026,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 else:
                     hints = collect_hint_location_name(self.ctx, team, slot, location)
                 if hints:
-                    notify_hints(self.ctx, team, hints)
+                    self.ctx.notify_hints(team, hints)
                 else:
                     self.output("No hints found.")
                 return True
