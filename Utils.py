@@ -38,7 +38,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.6"
+__version__ = "0.3.7"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
