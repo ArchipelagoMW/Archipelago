@@ -428,7 +428,7 @@ def get_pool_core(world):
             shuffle_item = (world.tokensanity == 'all'
                             or (world.tokensanity == 'dungeons' and location.dungeon)
                             or (world.tokensanity == 'overworld' and not location.dungeon))
-            location.show_in_spoiler = False
+            location.show_in_spoiler = shuffle_item
 
         # Shops
         elif location.type == "Shop":
