@@ -543,7 +543,7 @@ class ShuffleFreestanding(Choice):
     option_off = 0
     option_all = 1
     option_overworld = 2
-    option_dungeon = 3
+    option_dungeons = 3
 
 
 class ShufflePots(Choice):
