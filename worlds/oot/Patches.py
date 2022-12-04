@@ -2737,7 +2737,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
                 else:
                     rom_item = read_rom_item(rom, item_display.index)
             else:
-                display_index = 0xCB if location.item.advancement else 0xCC
+                display_index = AP_PROGRESSION if location.item.advancement else AP_JUNK
                 rom_item = read_rom_item(rom, display_index)
 
             shop_objs.add(rom_item['object_id'])
