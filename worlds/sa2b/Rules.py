@@ -286,6 +286,8 @@ def set_mission_upgrade_rules_standard(world: MultiWorld, player: int):
                                 state.has(ItemName.knuckles_sunglasses, player))
     add_rule_safe(world, LocationName.metal_harbor_5, player,
                   lambda state: state.has(ItemName.sonic_light_shoes, player))
+    add_rule_safe(world, LocationName.green_forest_5, player,
+                  lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
     add_rule_safe(world, LocationName.pumpkin_hill_5, player,
                   lambda state: state.has(ItemName.knuckles_shovel_claws, player) and
                                 state.has(ItemName.knuckles_sunglasses, player))
@@ -321,6 +323,8 @@ def set_mission_upgrade_rules_standard(world: MultiWorld, player: int):
                   lambda state: state.has(ItemName.eggman_large_cannon, player))
     add_rule_safe(world, LocationName.dry_lagoon_5, player,
                   lambda state: state.has(ItemName.rouge_treasure_scope, player))
+    add_rule_safe(world, LocationName.sand_ocean_5, player,
+                  lambda state: state.has(ItemName.eggman_jet_engine, player))
     add_rule_safe(world, LocationName.egg_quarters_5, player,
                   lambda state: state.has(ItemName.rouge_pick_nails, player) and
                                 state.has(ItemName.rouge_treasure_scope, player))
@@ -825,8 +829,10 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
                   lambda state: state.has(ItemName.eggman_large_cannon, player))
     add_rule_safe(world, LocationName.dry_lagoon_5, player,
                   lambda state: state.has(ItemName.rouge_treasure_scope, player))
+    add_rule_safe(world, LocationName.sand_ocean_5, player,
+                  lambda state: state.has(ItemName.eggman_jet_engine, player))
     add_rule_safe(world, LocationName.egg_quarters_5, player,
-                  lambda state: state.has(ItemName.eggman_jet_engine, player) and
+                  lambda state: state.has(ItemName.rouge_pick_nails, player) and
                                 state.has(ItemName.rouge_treasure_scope, player))
     add_rule_safe(world, LocationName.lost_colony_5, player,
                   lambda state: state.has(ItemName.eggman_jet_engine, player) and
@@ -855,7 +861,7 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
              lambda state: state.has(ItemName.tails_bazooka, player))
     add_rule(world.get_location(LocationName.hidden_base_upgrade, player),
              lambda state: state.has(ItemName.tails_booster, player) and
-                           state.has(ItemName.tails_bazooka, player))
+                           (state.has(ItemName.tails_bazooka, player) or state.has(ItemName.tails_mystic_melody, player)))
     add_rule(world.get_location(LocationName.eternal_engine_upgrade, player),
              lambda state: state.has(ItemName.tails_booster, player))
     add_rule(world.get_location(LocationName.meteor_herd_upgrade, player),
