@@ -863,11 +863,14 @@ class OOTWorld(World):
                 ganon_junk_fill = 2 / 9
             elif self.bridge == 'tokens':
                 ganon_junk_fill = self.bridge_tokens / 100
+            elif self.bridge == 'hearts':
+                ganon_junk_fill = self.bridge_hearts / 20
             elif self.bridge == 'open':
                 ganon_junk_fill = 0
             else:
                 raise Exception("Unexpected bridge setting")
 
+            ganon_junk_fill = min(1, ganon_junk_fill)
             gc = next(filter(lambda dungeon: dungeon.name == 'Ganons Castle', self.dungeons))
             locations = [loc.name for region in gc.regions for loc in region.locations if loc.item is None]
             junk_fill_locations = self.multiworld.random.sample(locations, round(len(locations) * ganon_junk_fill))
