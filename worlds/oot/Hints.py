@@ -1035,7 +1035,7 @@ def buildAltarHints(world, messages, include_rewards=True, include_wincons=True)
 
 # pulls text string from hintlist for reward after sending the location to hintlist.
 def buildBossString(reward, color, world):
-    item_icon = chr(Item(reward).special['item_id'])
+    item_icon = chr(world.create_item(reward).special['item_id'])
     if world.multiworld.state.has(reward, world.player):
         if world.clearer_hints:
             text = GossipText(f"\x08\x13{item_icon}One #@ already has#...", [color], prefix='')
