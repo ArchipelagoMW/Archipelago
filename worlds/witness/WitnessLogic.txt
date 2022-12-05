@@ -551,7 +551,7 @@ Theater (Theater) - Town - 0x0A16D | 0x3CCDF:
 Door - 0x0A16D (Exit Left) - 0x0A168
 Door - 0x3CCDF (Exit Right) - 0x33AB2
 158608 - 0x17CF7 (Discard) - True - Triangles
-159554 - 0x339B6 (Eclipse EP) - 0x03549 - True
+159554 - 0x339B6 (Eclipse EP) - 0x03549 & 0x0A16D & 0x3CCDF - True
 159555 - 0x33A29 (Window EP) - 0x03553 - True
 159556 - 0x33A2A (Door EP) - 0x03553 - True
 159558 - 0x33B06 (Church EP) - 0x0354E - True

@@ -289,7 +289,7 @@ Door - 0x17C50 (First Barrier) - 0x021AE
 
 Quarry Boathouse Upper Middle (Quarry Boathouse) - Quarry Boathouse Upper Back - 0x03858:
 158154 - 0x03858 (Ramp Horizontal Control) - True - Shapers & Eraser
-158402 - 0x00859 (Moving Ramp EP) - 0x03858 & 0x03852 & 0x3865F - True
+159402 - 0x00859 (Moving Ramp EP) - 0x03858 & 0x03852 & 0x3865F - True
 
 Quarry Boathouse Upper Back (Quarry Boathouse) - Quarry Boathouse Upper Middle - 0x3865F:
 158155 - 0x38663 (Second Barrier Panel) - True - True
@@ -415,9 +415,9 @@ Door - 0x04F8F (Tower Shortcut) - 0x0361B
 Laser - 0x014BB (Laser) - 0x0360E | 0x03317
 159240 - 0x033BE (Pressure Plates 1 EP) - 0x033EA - True
 159241 - 0x033BF (Pressure Plates 2 EP) - 0x01BE9 - True
-159242 - 0x033DD (Pressure Plates 3 EP) - 0x01CD3 - True
+159242 - 0x033DD (Pressure Plates 3 EP) - 0x01CD3 & 0x01CD5 - True
 159243 - 0x033E5 (Pressure Plates 4 First EP) - 0x01D3F - True
-159242 - 0x018B6 (Pressure Plates 4 Second EP) - 0x01D3F - True
+159244 - 0x018B6 (Pressure Plates 4 Second EP) - 0x01D3F - True
 159250 - 0x28AE9 (Path EP) - True - True
 159251 - 0x3348F (Hedges EP) - True - True
 
@@ -551,7 +551,7 @@ Theater (Theater) - Town - 0x0A16D | 0x3CCDF:
 Door - 0x0A16D (Exit Left) - 0x0A168
 Door - 0x3CCDF (Exit Right) - 0x33AB2
 158608 - 0x17CF7 (Discard) - True - Arrows
-159554 - 0x339B6 (Eclipse EP) - 0x03549 - True
+159554 - 0x339B6 (Eclipse EP) - 0x03549 & 0x0A16D & 0x3CCDF - True
 159555 - 0x33A29 (Window EP) - 0x03553 - True
 159556 - 0x33A2A (Door EP) - 0x03553 - True
 159558 - 0x33B06 (Church EP) - 0x0354E - True
@@ -1111,7 +1111,7 @@ Obelisks (EPs) - Entry - True:
 159734 - 0xFFE34 (River Obelisk Side 5) - 0x03AA6 & 0x3397C & 0x0105D & 0x0A304 - True
 159735 - 0xFFE35 (River Obelisk Side 6) - 0x035CB & 0x035CF - True
 159740 - 0xFFE40 (Quarry Obelisk Side 1) - 0x28A7B & 0x005F6 & 0x00859 & 0x17CB9 & 0x28A4A - True
-159741 - 0xFFE41 (Quarry Obelisk Side 2) - 0x334B6 & 0x0069D & 0x28A4C - True
+159741 - 0xFFE41 (Quarry Obelisk Side 2) - 0x334B6 & 0x00614 & 0x0069D & 0x28A4C - True
 159742 - 0xFFE42 (Quarry Obelisk Side 3) - 0x289CF & 0x289D1 & 0x33692 - True
 159743 - 0xFFE43 (Quarry Obelisk Side 4) - 0x03E77 & 0x03E7C - True
 159750 - 0xFFE50 (Town Obelisk Side 1) - 0x035C7 - True
