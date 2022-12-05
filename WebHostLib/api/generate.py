@@ -2,7 +2,7 @@ import json
 import pickle
 from uuid import UUID
 
-from flask import request, session, url_for
+from flask import request, session, url_for, Markup
 from pony.orm import commit
 
 from WebHostLib import app
@@ -21,7 +21,9 @@ def generate_api():
         if 'file' in request.files:
             file = request.files['file']
             options = get_yaml_data(file)
-            if type(options) == str:
+            if isinstance(options, Markup):
+                return {"text": options.striptags()}, 400
+            if isinstance(options, str):
                 return {"text": options}, 400
             if "race" in request.form:
                 race = bool(0 if request.form["race"] in {"false"} else int(request.form["race"]))
