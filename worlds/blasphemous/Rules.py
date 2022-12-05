@@ -21,8 +21,9 @@ class BlasphemousLogic(LogicMixin):
     def _blasphemous_root_relic(self, player):
         return self.has("Three Gnarled Tongues", player)
 
-    def _blasphemous_unlock_skills(self, player):
-        return self.has("Mea Culpa Upgrade", player, 1)
+    def _blasphemous_open_holes(self, player):
+        return self.has("Mea Culpa Upgrade", player, 1) or \
+            self.has_group("prayer", player, 1)
 
     def _blasphemous_bell(self, player):
         return self.has("Petrified Bell", player)
@@ -571,7 +572,7 @@ def rules(blasphemousworld):
     # to do: or dive
     set_rule(world.get_location("GotP: Shop cave hidden hole", player),
         lambda state: state._blasphemous_blood_relic(player) or \
-            state._blasphemous_unlock_skills(player))
+            state._blasphemous_open_holes(player))
     set_rule(world.get_location("GotP: Upper east shaft", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             state._blasphemous_root_relic(player))
@@ -589,7 +590,7 @@ def rules(blasphemousworld):
         lambda state: state._blasphemous_bell(player) and \
             state._blasphemous_blood_relic(player) and \
                 state._blasphemous_root_relic(player) and \
-                    state._blasphemous_unlock_skills(player))
+                    state._blasphemous_open_holes(player))
 
     # Grievance Ascends
     set_rule(world.get_location("GA: Lower west ledge", player),
@@ -640,7 +641,7 @@ def rules(blasphemousworld):
         lambda state: state._blasphemous_root_relic(player))
     # to do: requires dive (sometimes opens with other skills?)
     set_rule(world.get_location("LotNW: Hidden floor", player),
-        lambda state: state._blasphemous_unlock_skills(player))
+        lambda state: state._blasphemous_open_holes(player))
     set_rule(world.get_location("LotNW: Miasma hallway chest", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             state._blasphemous_root_relic(player) and \
@@ -687,7 +688,7 @@ def rules(blasphemousworld):
     # to do: requires dive
     set_rule(world.get_location("MotED: Amanecida of the Golden Blades", player),
         lambda state: state._blasphemous_bell(player) and \
-            state._blasphemous_unlock_skills(player))
+            state._blasphemous_open_holes(player))
     
     # Mourning and Havoc
     set_rule(world.get_location("MaH: Upper east chest", player),
@@ -715,12 +716,12 @@ def rules(blasphemousworld):
     # to do: requires dive
     set_rule(world.get_location("PotSS: Amanecida of the Chiselled Steel", player),
         lambda state: state._blasphemous_bell(player) and \
-            state._blasphemous_unlock_skills(player))
+            state._blasphemous_open_holes(player))
     
     # Petrous
     # to do: requires dive
     set_rule(world.get_location("Petrous: Temple entrance", player),
-        lambda state: state._blasphemous_unlock_skills(player))
+        lambda state: state._blasphemous_open_holes(player))
 
     # The Sleeping Canvases
     set_rule(world.get_location("TSC: Candle wax puzzle", player),
@@ -737,7 +738,7 @@ def rules(blasphemousworld):
         lambda state: state._blasphemous_blood_relic(player))
     # to do: requires dive
     set_rule(world.get_location("THL: Underground ledge", player),
-        lambda state: state._blasphemous_unlock_skills(player))
+        lambda state: state._blasphemous_open_holes(player))
     set_rule(world.get_location("THL: Underground chest", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             state._blasphemous_water_relic(player))
@@ -870,16 +871,16 @@ def rules(blasphemousworld):
     # to do: requires dive
     set_rule(world.get_location("Defeat 1 Amanecida", player),
         lambda state: state._blasphemous_bell(player) and \
-            state._blasphemous_unlock_skills(player))
+            state._blasphemous_open_holes(player))
     set_rule(world.get_location("Defeat 2 Amanecidas", player),
         lambda state: state._blasphemous_bell(player) and \
-            state._blasphemous_unlock_skills(player) and \
+            state._blasphemous_open_holes(player) and \
                 state._blasphemous_blood_relic(player) and \
                     (state._blasphemous_root_relic(player) or \
                         state._blasphemous_3_wounds(player)))
     set_rule(world.get_location("Defeat 3 Amanecidas", player),
         lambda state: state._blasphemous_bell(player) and \
-            state._blasphemous_unlock_skills(player) and \
+            state._blasphemous_open_holes(player) and \
                 state._blasphemous_3_wounds(player) and \
                     state._blasphemous_blood_relic(player) and \
                         (state._blasphemous_root_relic(player) or \
@@ -888,7 +889,7 @@ def rules(blasphemousworld):
                                     state._blasphemous_silver_key(player))))
     set_rule(world.get_location("Defeat 4 Amanecidas", player),
         lambda state: state._blasphemous_bell(player) and \
-            state._blasphemous_unlock_skills(player) and \
+            state._blasphemous_open_holes(player) and \
                 state._blasphemous_3_wounds(player) and \
                     state._blasphemous_1_mask(player) and \
                         state._blasphemous_blood_relic(player) and \
@@ -897,7 +898,7 @@ def rules(blasphemousworld):
                                     state._blasphemous_silver_key(player))
     set_rule(world.get_location("Defeat all Amanecidas", player),
         lambda state: state._blasphemous_bell(player) and \
-            state._blasphemous_unlock_skills(player) and \
+            state._blasphemous_open_holes(player) and \
                 state._blasphemous_3_wounds(player) and \
                     state._blasphemous_1_mask(player) and \
                         state._blasphemous_blood_relic(player) and \
