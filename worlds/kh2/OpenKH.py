@@ -112,11 +112,12 @@ def patch_kh2(world,player,self,output_directory):
                 "Padding": 0
             }
                 continue
-         
+        if location.address.yml==5:
+            print(location.item)
    
             #lvlcntr+=1        
     #print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
-    print(yaml.dump(self.formattedLvup, line_break="\r\n"))
+    #print(yaml.dump(self.formattedLvup, line_break="\r\n"))
     #print(yaml.dump(self.formattedBons, line_break="\r\n"))
     #for i in range(len(locName)):
     #     if locName[i] in getBonus:

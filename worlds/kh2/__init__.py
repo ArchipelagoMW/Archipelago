@@ -6,9 +6,11 @@ from msilib import Table
 import typing
 from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
+from ..generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations
 from .Items import KH2Item, ItemData, item_dictionary_table
 from .Locations import all_locations, setup_locations,exclusion_table
 from .Rules import set_rules
+from .logic import KH2Logic
 from .Names import ItemName , LocationName
 from .Regions import create_regions,connect_regions
 from .OpenKH import patch_kh2
@@ -25,7 +27,7 @@ class KingdomHearts2Web(WebWorld):
 
 class KH2World(World):
 
-
+    
     game: str="Kingdom Hearts 2"
     option_definitions = KH2_Options
     data_version = 0
@@ -68,7 +70,7 @@ class KH2World(World):
     def create_item(self, name: str,) -> Item:
        data = item_dictionary_table[name]
 
-       if name in Items.Progression_Table or name in Items.Movement_Table:
+       if name in Items.Progression_Table or name in Items.Movement_Table or name in Items.Forms_Table:
             item_classification = ItemClassification.progression
        elif name in Items.Items_Table or name in Items.Reports_Table:
            item_classification = ItemClassification.filler
@@ -76,7 +78,9 @@ class KH2World(World):
             item_classification = ItemClassification.filler
 
        created_item = KH2Item(name, item_classification, data, self.player)
+
        return  created_item
+    
     
 
     def generate_basic(self):
@@ -85,7 +89,7 @@ class KH2World(World):
         #if self.world.Level_Depth[self.player].value==1:
         #    for x in range(len(exclusion_table.popups)):
         #        self.world.get_location(exclusion_table.level50, self.player).place_locked_item(self.create_item(ItemName.Potion))
-        
+        #self.world.get_location(LocationName.Valorlvl7,self.player).place_located_item(self.create_item(ItemName.ProofofPeace))
         for x in range(46):
             itempool+=[self.create_item(ItemName.Potion)]
         for x in range(2):
@@ -124,20 +128,20 @@ class KH2World(World):
 
         
         
-
+        
         self.world.itempool += itempool
-            
+     
 
     def create_regions(self):
         location_table = setup_locations(self.world, self.player)
         create_regions(self.world, self.player, location_table)
         connect_regions(self.world, self.player,self)
-        region=self.world.get_region(LocationName.Ag2_Region,self.player)
+        #region=self.world.get_region(LocationName.Ag2_Region,self.player)
         #print(self.world.get_entrance("Twlight Town",self.player))
 
 
     def set_rules(self):
-        set_rules(self.world, self.player,self)
+        set_rules(self.world, self.player)
         
     def generate_output(self, output_directory: str):
             world = self.world

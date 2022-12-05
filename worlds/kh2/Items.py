@@ -65,9 +65,9 @@ ItemName.TornPages                          : ItemData(0x1320055,False,32),
 Forms_Table={
 ItemName.ValorForm                          : ItemData(0x1320056,False,26),
 ItemName.WisdomForm                         : ItemData(0x1320057,False,27),
-ItemName.LimitForm                          : ItemData(0x1320058,False,29),
+ItemName.LimitForm                          : ItemData(0x1320058,False,563),
 ItemName.MasterForm                         : ItemData(0x1320059,False,31),
-ItemName.FinalForm                          : ItemData(0x132005a,False,563),
+ItemName.FinalForm                          : ItemData(0x132005a,False,29),
     }
 Magic_Table={
 ItemName.FireElement                              : ItemData(0x132005b,False,21),
@@ -482,7 +482,7 @@ required_items = {
 #This means we need to add some filler
 #some numbers are taken from vanilla kh2 some are just out of my ass
 exclusionItem_table={
-    "SupportAbility":{
+    "Ability":{
         ItemName.Scan,
         ItemName.Scan2           ,
         ItemName.AerialRecovery  ,
@@ -531,10 +531,64 @@ exclusionItem_table={
         ItemName.DamageControl   ,
         ItemName.NoExperience    ,
         ItemName.NoExperience2   ,
-        ItemName.LightDarkness   ,
-    }
-    }
-
+        ItemName.LightDarkness   ,        
+        ItemName.ComboBoost2     , 
+        ItemName.ExperienceBoost2, 
+        ItemName.MagicLock       , 
+        ItemName.ReactionBoost3  , 
+        ItemName.ItemBoost2      , 
+        ItemName.LeafBracer      , 
+        ItemName.FireBoost2      , 
+        ItemName.DriveBoost2     , 
+        ItemName.Draw4           , 
+        ItemName.CombinationBoost, 
+        ItemName.DamageDrive     , 
+        ItemName.AirComboBoost2  , 
+        ItemName.BlizzardBoost2  , 
+        ItemName.DriveConverter2 , 
+        ItemName.NegativeCombo2  , 
+        ItemName.OnceMore        , 
+        ItemName.FinishingPlus3  , 
+        ItemName.ThunderBoost2   , 
+        ItemName.Defender2       , 
+        ItemName.BerserkCharge2  , 
+        ItemName.Jackpot2        , 
+        ItemName.SecondChance    , 
+        ItemName.DamageControl2  ,                            
+        ItemName.Guard           , 
+        ItemName.UpperSlash      , 
+        ItemName.HorizontalSlash , 
+        ItemName.FinishingLeap   , 
+        ItemName.RetaliatingSlash, 
+        ItemName.Slapshot        , 
+        ItemName.DodgeSlash      , 
+        ItemName.FlashStep       , 
+        ItemName.SlideDash       , 
+        ItemName.VicinityBreak   , 
+        ItemName.GuardBreak      , 
+        ItemName.Explosion       , 
+        ItemName.AerialSweep     , 
+        ItemName.AerialDive      , 
+        ItemName.AerialSpiral    , 
+        ItemName.AerialFinish    , 
+        ItemName.MagnetBurst     , 
+        ItemName.Counterguard    , 
+        ItemName.AutoValor       , 
+        ItemName.AutoWisdom      , 
+        ItemName.AutoLimit       , 
+        ItemName.AutoMaster      , 
+        ItemName.AutoFinal       , 
+        ItemName.AutoSummon      , 
+        ItemName.TrinityLimit    , 
+    },
+    "Forms":{
+        ItemName.ValorForm,
+        ItemName.WisdomForm,
+        ItemName.LimitForm,
+        ItemName.MasterForm,
+        ItemName.FinalForm,
+        }
+}
 
 junk_weights = {
     ItemName.Potion:34,

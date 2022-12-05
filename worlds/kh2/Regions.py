@@ -1,4 +1,3 @@
-from pickle import TRUE
 import typing
 
 from BaseClasses import MultiWorld, Region, Entrance
@@ -671,41 +670,57 @@ def create_regions(world, player: int, active_locations):
         }                                                       
     Twtnw2_Region = create_region(world, player, active_locations, LocationName.Twtnw2_Region,
                                        Twtnw2_Region_locations, None)
-    Forms_Region_locations={
-            LocationName.Valorlvl2 :[0x501F7,1],
-            LocationName.Valorlvl3 :[0x501F8,2],
-            LocationName.Valorlvl4 :[0x501F9,3],
-            LocationName.Valorlvl5 :[0x501FA,4],
-            LocationName.Valorlvl6 :[0x501FB,5],
-            LocationName.Valorlvl7 :[0x501FC,6],
-            LocationName.Wisdomlvl2:[0x501FD,7],
-            LocationName.Wisdomlvl3:[0x501FE,8],
-            LocationName.Wisdomlvl4:[0x501FF,9],
-            LocationName.Wisdomlvl5:[0x50200,10],
-            LocationName.Wisdomlvl6:[0x50201,11],
-            LocationName.Wisdomlvl7:[0x50202,12],
-            LocationName.Limitlvl2 :[0x50203,13],
-            LocationName.Limitlvl3 :[0x50204,14],
-            LocationName.Limitlvl4 :[0x50205,15],
-            LocationName.Limitlvl5 :[0x50206,16],
-            LocationName.Limitlvl6 :[0x50207,17],
-            LocationName.Limitlvl7 :[0x50208,18],
-            LocationName.Masterlvl2:[0x50209,19],
-            LocationName.Masterlvl3:[0x5020A,20],
-            LocationName.Masterlvl4:[0x5020B,21],
-            LocationName.Masterlvl5:[0x5020C,22],
-            LocationName.Masterlvl6:[0x5020D,23],
-            LocationName.Masterlvl7:[0x5020E,24],
-            LocationName.Finallvl2 :[0x5020F,25],
-            LocationName.Finallvl3 :[0x50210,26],
-            LocationName.Finallvl4 :[0x50211,27],
-            LocationName.Finallvl5 :[0x50212,28],
-            LocationName.Finallvl6 :[0x50213,29],
-            LocationName.Finallvl7 :[0x50214,30],
-        }
-    Forms_Region=create_region(world,player,active_locations,LocationName.Form_Region,
-                               Forms_Region_locations,None)
 
+    Valor_Region_locations={
+         LocationName.Valorlvl2 :[0x501F7,1],
+         LocationName.Valorlvl3 :[0x501F8,2],
+         LocationName.Valorlvl4 :[0x501F9,3],
+         LocationName.Valorlvl5 :[0x501FA,4],
+         LocationName.Valorlvl6 :[0x501FB,5],
+         LocationName.Valorlvl7 :[0x501FC,6],
+        }
+    Valor_Region=create_region(world,player,active_locations,LocationName.ValorForm,
+                               Valor_Region_locations,None)
+    Wisdom_Region_locations={
+        LocationName.Wisdomlvl2:[0x501FD,7],
+        LocationName.Wisdomlvl3:[0x501FE,8],
+        LocationName.Wisdomlvl4:[0x501FF,9],
+        LocationName.Wisdomlvl5:[0x50200,10],
+        LocationName.Wisdomlvl6:[0x50201,11],
+        LocationName.Wisdomlvl7:[0x50202,12],
+        }
+    Wisdom_Region=create_region(world,player,active_locations,LocationName.WisdomForm,
+                               Wisdom_Region_locations,None)
+    Limit_Region_locations={
+        LocationName.Limitlvl2 :[0x50203,13],
+        LocationName.Limitlvl3 :[0x50204,14],
+        LocationName.Limitlvl4 :[0x50205,15],
+        LocationName.Limitlvl5 :[0x50206,16],
+        LocationName.Limitlvl6 :[0x50207,17],
+        LocationName.Limitlvl7 :[0x50208,18],
+        }
+    Limit_Region=create_region(world,player,active_locations,LocationName.LimitForm,
+                               Limit_Region_locations,None)
+    Master_Region_locations={
+        LocationName.Masterlvl2:[0x50209,19],
+        LocationName.Masterlvl3:[0x5020A,20],
+        LocationName.Masterlvl4:[0x5020B,21],
+        LocationName.Masterlvl5:[0x5020C,22],
+        LocationName.Masterlvl6:[0x5020D,23],
+        LocationName.Masterlvl7:[0x5020E,24],
+        }
+    Master_Region=create_region(world,player,active_locations,LocationName.MasterForm,
+                               Master_Region_locations,None)
+    Final_Region_locations={
+        LocationName.Finallvl2 :[0x5020F,25],
+        LocationName.Finallvl3 :[0x50210,26],
+        LocationName.Finallvl4 :[0x50211,27],
+        LocationName.Finallvl5 :[0x50212,28],
+        LocationName.Finallvl6 :[0x50213,29],
+        LocationName.Finallvl7 :[0x50214,30],
+        }
+    Final_Region=create_region(world,player,active_locations,LocationName.FinalForm,
+                               Final_Region_locations,None)
     Level_Region_locations={
             LocationName.Lvl1   :[0x50214,1],
             LocationName.Lvl2   :[0x50215,2],
@@ -853,44 +868,122 @@ def create_regions(world, player: int, active_locations):
     Twtnw2_Region      ,
     GoA_Region          ,
     menu_region         ,
-    Forms_Region,
+    Valor_Region       ,
+    Wisdom_Region      ,
+    Limit_Region       ,
+    Master_Region      ,
+    Final_Region       ,
     Level_Region,
     ]
 
 
 def connect_regions (world: MultiWorld, player: int, self):
       #connecting every first visit to the GoA 
+      #2 Visit locking and is going to be turned off mabybe
       names: typing.Dict[str, int] = {}
       connect(world, player, names, 'Menu', LocationName.GoA_Region)
       connect(world, player, names,LocationName.GoA_Region, LocationName.LoD_Region,
           lambda state: (state.has(ItemName.SwordoftheAncestor, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.LoD2_Region,
+          lambda state: (state.has(ItemName.SwordoftheAncestor, player)))
+      
       connect(world, player, names,LocationName.GoA_Region, LocationName.Oc_Region,
           lambda state: (state.has(ItemName.BattlefieldsofWar, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Oc2_Region,
+          lambda state: (state.has(ItemName.BattlefieldsofWar, player)))
+      
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Oc2Cups_Region,
+          lambda state: (state.has(ItemName.BattlefieldsofWar, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.HadesCups_Region,
+          lambda state: (state.has(ItemName.BattlefieldsofWar, player)))      
+
       connect(world, player, names,LocationName.GoA_Region, LocationName.Ag_Region,
           lambda state: (state.has(ItemName.Scimitar, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Ag2_Region,
+          lambda state: (state.has(ItemName.Scimitar, player)))
+      
       connect(world, player, names,LocationName.GoA_Region, LocationName.Dc_Region,
           lambda state: (state.has(ItemName.CastleKey, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Tr_Region,
+          lambda state: (state.has(ItemName.CastleKey, player)))
+      
       connect(world, player, names,LocationName.GoA_Region, LocationName.Pr_Region,
           lambda state: (state.has(ItemName.SkillandCrossbones, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Pr2_Region,
+          lambda state: (state.has(ItemName.SkillandCrossbones, player)))
+      
       connect(world, player, names,LocationName.GoA_Region, LocationName.Bc_Region,
           lambda state: (state.has(ItemName.BeastsClaw, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Bc2_Region,
+          lambda state: (state.has(ItemName.BeastsClaw, player)))
+      
       connect(world, player, names,LocationName.GoA_Region, LocationName.Sp_Region,
           lambda state: (state.has(ItemName.IdentityDisk, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Sp2_Region,
+          lambda state: (state.has(ItemName.IdentityDisk, player)))
+      
       connect(world, player, names,LocationName.GoA_Region, LocationName.Ht_Region,
           lambda state: (state.has(ItemName.BoneFist, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Ht2_Region,
+          lambda state: (state.has(ItemName.BoneFist, player)))
+      
       connect(world, player, names,LocationName.GoA_Region, LocationName.Hb_Region,
           lambda state: (state.has(ItemName.MembershipCard, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Hb2_Region,
+          lambda state: (state.has(ItemName.MembershipCard, player)))
+
+      connect(world, player, names,LocationName.GoA_Region, LocationName.CoR_Region,
+          lambda state: (state.has(ItemName.MembershipCard, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.FirstHalf_Region,
+          lambda state: (state.has(ItemName.MembershipCard, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.SecondHalf_Region,
+          lambda state: (state.has(ItemName.MembershipCard, player)))
+      
       connect(world, player, names,LocationName.GoA_Region, LocationName.Pl_Region,
           lambda state: (state.has(ItemName.ProudFang, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Pl2_Region,
+          lambda state: (state.has(ItemName.ProudFang, player)))
+      
       connect(world, player, names,LocationName.GoA_Region, LocationName.STT_Region,
           lambda state: (state.has(ItemName.NamineSketches, player)))
+      
       connect(world, player, names,LocationName.GoA_Region, LocationName.TT_Region,
           lambda state: (state.has(ItemName.Poster, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.TT2_Region,
+          lambda state: (state.has(ItemName.Picture, player) 
+                         and state.has(ItemName.Poster,player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.TT3_Region,
+          lambda state: (state.has(ItemName.Picture, player) 
+                         and state.has(ItemName.Poster,player)
+                         and state.has(ItemName.IceCream,player)))  
+      
       connect(world, player, names,LocationName.GoA_Region, LocationName.Twtnw_Region,
           lambda state: (state.has(ItemName.WaytotheDawn, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Twtnw2_Region,
+          lambda state: (state.has(ItemName.WaytotheDawn, player)))
+      
       connect(world, player, names,LocationName.GoA_Region, LocationName.HundredAcre1_Region,
-          lambda state: (state.has(ItemName.TornPages, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Form_Region)
+          lambda state: (state.has(ItemName.TornPages, player,1)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.HundredAcre2_Region,
+          lambda state: (state.has(ItemName.TornPages, player,2)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.HundredAcre3_Region,
+          lambda state: (state.has(ItemName.TornPages, player,3)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.HundredAcre4_Region,
+          lambda state: (state.has(ItemName.TornPages, player,4)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.HundredAcre5_Region,
+          lambda state: (state.has(ItemName.TornPages, player,5)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Valor_Region,
+              lambda state: state.has(ItemName.ValorForm,player))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Wisdom_Region,
+              lambda state: state.has(ItemName.WisdomForm,player))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Limit_Region,
+              lambda state: state.has(ItemName.LimitForm,player))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Master_Region,
+              lambda state: state.has(ItemName.MasterForm,player))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Final_Region,
+              lambda state: state.has(ItemName.FinalForm,player))
+      
+      connect(world, player, names,LocationName.GoA_Region, LocationName.SoraLevels_Region)
 
 
 
