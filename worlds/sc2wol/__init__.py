@@ -46,7 +46,7 @@ class SC2WoLWorld(World):
     mission_req_table = {}
     final_mission_id: int
     victory_item: str
-    required_client_version = 0, 3, 5
+    required_client_version = 0, 3, 6
 
     def __init__(self, world: MultiWorld, player: int):
         super(SC2WoLWorld, self).__init__(world, player)
@@ -131,7 +131,7 @@ def get_excluded_items(self: SC2WoLWorld, world: MultiWorld, player: int) -> Set
 def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]) -> List[Item]:
     non_local_items = world.non_local_items[player].value
     if get_option_value(world, player, "early_unit"):
-        local_basic_unit = tuple(item for item in get_basic_units(world, player) if item not in non_local_items)
+        local_basic_unit = tuple(item for item in get_basic_units(world, player) if item not in non_local_items and item not in excluded_items)
         if not local_basic_unit:
             raise Exception("At least one basic unit must be local")
 

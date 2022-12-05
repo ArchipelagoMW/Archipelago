@@ -41,7 +41,7 @@ class SMWWorld(World):
     game: str = "Super Mario World"
     option_definitions = smw_options
     topology_present = False
-    data_version = 1
+    data_version = 2
     required_client_version = (0, 3, 5)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
