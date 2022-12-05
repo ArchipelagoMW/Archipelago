@@ -1462,7 +1462,12 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
         else:
             if points_available >= cost:
-                self.output("Nothing found. Item/Location may not exist.")
+                if for_location:
+                    self.output(f"Nothing found for recognized location name \"{hint_name}\". "
+                                f"Location appears to not exist in this multiworld.")
+                else:
+                    self.output(f"Nothing found for recognized item name \"{hint_name}\". "
+                                f"Item appears to not exist in this multiworld.")
             else:
                 self.output(f"You can't afford the hint. "
                             f"You have {points_available} points and need at least "
