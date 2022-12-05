@@ -370,8 +370,8 @@ Additional arguments sent in this package will also be added to the [Retrieved](
 
 Some special keys exist with specific return data, all of them have the prefix `_read_`, so `hints_{team}_{slot}` is `_read_hints_{team}_{slot}`.
 
-| Name                                 | Type                   | Notes                                             |
-|--------------------------------------|------------------------|---------------------------------------------------|
+| Name                          | Type                   | Notes                                             |
+|-------------------------------|------------------------|---------------------------------------------------|
 | hints_{team}_{slot}           | list\[[Hint](#Hint)\]  | All Hints belonging to the requested Player.      |
 | slot_data_{slot}              | any                    | slot_data belonging to the requested slot.        |
 | item_name_groups_{game_name}  | dict\[str, list\[str]] | item_name_groups belonging to the requested game. |
