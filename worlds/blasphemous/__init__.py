@@ -59,12 +59,6 @@ class BlasphemousWorld(World):
 
     
     def generate_basic(self):
-        victory = Location(self.player, "His Holiness Escribar", None, self.multiworld.get_region("Deambulatory of His Holiness", self.player))
-        victory.place_locked_item(self.create_event("Victory"))
-        self.multiworld.get_region("Deambulatory of His Holiness", self.player).locations.append(victory)
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
-
-
         pool = []
 
         for item in item_table:
@@ -730,6 +724,11 @@ class BlasphemousWorld(World):
             id = self.base_id + location_table.index(loc)
             region_table[loc["region"]].locations\
                 .append(BlasphemousLocation(self.player, loc["name"], id, region_table[loc["region"]]))
+        
+        victory = Location(self.player, "His Holiness Escribar", None, self.multiworld.get_region("Deambulatory of His Holiness", self.player))
+        victory.place_locked_item(self.create_event("Victory"))
+        self.multiworld.get_region("Deambulatory of His Holiness", self.player).locations.append(victory)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     
     def fill_slot_data(self) -> Dict[str, Any]:
