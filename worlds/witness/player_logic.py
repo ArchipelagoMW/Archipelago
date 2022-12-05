@@ -246,7 +246,7 @@ class WitnessPlayerLogic:
 
         if get_option_value(world, player, "EP_difficulty") == 0:
             adjustment_linesets_in_order.append(get_ep_easy())
-        elif get_option_value((world, player, "EP_difficulty") == 1):
+        elif get_option_value(world, player, "EP_difficulty") == 1:
             adjustment_linesets_in_order.append(get_ep_no_eclipse())
 
         if not is_option_enabled(world, player, "shuffle_vault_boxes"):
@@ -258,11 +258,13 @@ class WitnessPlayerLogic:
         mount_lasers = get_option_value(world, player, "mountain_lasers")
         chal_lasers = get_option_value(world, player, "challenge_lasers")
 
-        if not (earlyutm or doors):
+        excluse_postgame = not is_option_enabled(world, player, "shuffle_postgame")
+
+        if excluse_postgame and not (earlyutm or doors):
             adjustment_linesets_in_order.append(get_ep_no_caves())
 
         mountain_enterable_from_top = victory == 0 or victory == 1 or (victory == 3 and chal_lasers > mount_lasers)
-        if not mountain_enterable_from_top:
+        if excluse_postgame and not mountain_enterable_from_top:
             adjustment_linesets_in_order.append(get_ep_no_mountain())
 
         if get_option_value(world, player, "shuffle_doors") == 1:
