@@ -27,7 +27,10 @@ def generate_api():
                 race = bool(0 if request.form["race"] in {"false"} else int(request.form["race"]))
             meta_options_source = request.form
 
-        json_data = request.get_json()
+        # json_data is optional, we can have it silently fall to None as it used to do.
+        # See https://flask.palletsprojects.com/en/2.2.x/api/#flask.Request.get_json -> Changelog -> 2.1
+        json_data = request.get_json(silent=True)
+
         if json_data:
             meta_options_source = json_data
             if 'weights' in json_data:
