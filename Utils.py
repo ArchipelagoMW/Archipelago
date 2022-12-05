@@ -677,7 +677,7 @@ def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
 _faf_tasks: "Set[asyncio.Task[None]]" = set()
 
 
-def async_start(co: Coroutine[None, None, None], name: Optional[str] = None) -> None:
+def async_start(co: Coroutine[typing.Any, typing.Any, bool], name: Optional[str] = None) -> None:
     """
     Use this to start a task when you don't keep a reference to it or immediately await it,
     to prevent early garbage collection. "fire-and-forget"
