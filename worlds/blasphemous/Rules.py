@@ -367,69 +367,69 @@ def rules(blasphemousworld):
                 state._blasphemous_blood_relic(player))
 
     # Albero
-    set_rule(world.get_location("Albero: Bless cloth", player), 
+    set_rule(world.get_location("Albero: Bless Linen Cloth", player), 
         lambda state: state._blasphemous_cloth(player))
-    set_rule(world.get_location("Albero: Bless egg", player),
+    set_rule(world.get_location("Albero: Bless Hatched Egg", player),
         lambda state: state._blasphemous_egg(player))
-    set_rule(world.get_location("Albero: Bless hand", player),
+    set_rule(world.get_location("Albero: Bless Severed Hand", player),
         lambda state: state._blasphemous_hand(player))
-    set_rule(world.get_location("Albero: Cleofas gift initial", player),
+    set_rule(world.get_location("Albero: First gift for Cleofas", player),
         lambda state: state.can_reach(world.get_region("Mother of Mothers", player)) and \
             state._blasphemous_marks(player))
-    set_rule(world.get_location("Albero: Cleofas gift final", player),
+    set_rule(world.get_location("Albero: Final gift for Cleofas", player),
         lambda state: state.can_reach(world.get_region("Mother of Mothers", player)) and \
             state._blasphemous_marks(player) and \
                 state._blasphemous_cord(player))
-    set_rule(world.get_location("Albero: Tirso reward 1", player),
+    set_rule(world.get_location("Albero: Tirso's 1st reward", player),
         lambda state: state._blasphemous_tirso_1(player))
-    set_rule(world.get_location("Albero: Tirso reward 2", player),
+    set_rule(world.get_location("Albero: Tirso's 2nd reward", player),
         lambda state: state._blasphemous_tirso_2(player))
-    set_rule(world.get_location("Albero: Tirso reward 3", player),
+    set_rule(world.get_location("Albero: Tirso's 3rd reward", player),
         lambda state: state._blasphemous_tirso_3(player))
-    set_rule(world.get_location("Albero: Tirso reward 4", player),
+    set_rule(world.get_location("Albero: Tirso's 4th reward", player),
         lambda state: state._blasphemous_tirso_4(player))
-    set_rule(world.get_location("Albero: Tirso reward 5", player),
+    set_rule(world.get_location("Albero: Tirso's 5th reward", player),
         lambda state: state._blasphemous_tirso_5(player))
-    set_rule(world.get_location("Albero: Tirso reward 6", player),
+    set_rule(world.get_location("Albero: Tirso's 6th reward", player),
         lambda state: state._blasphemous_tirso_6(player))
-    set_rule(world.get_location("Albero: Tirso reward final", player),
+    set_rule(world.get_location("Albero: Tirso's final reward", player),
         lambda state: state._blasphemous_tirso_6(player) and \
             state.can_reach(world.get_region("Wall of the Holy Prohibitions", player)) and \
                 state._blasphemous_silver_key(player) and \
                     state._blasphemous_bronze_key(player))
-    set_rule(world.get_location("Albero: Tentudia reward 1", player),
+    set_rule(world.get_location("Albero: Lvdovico's 1st reward", player),
         lambda state: state._blasphemous_tentudia_1(player))
-    set_rule(world.get_location("Albero: Tentudia reward 2", player),
+    set_rule(world.get_location("Albero: Lvdovico's 2nd reward", player),
         lambda state: state._blasphemous_tentudia_2(player))
-    set_rule(world.get_location("Albero: Tentudia reward 3", player),
+    set_rule(world.get_location("Albero: Lvdovico's 3rd reward", player),
         lambda state: state._blasphemous_tentudia_3(player))
-    set_rule(world.get_location("Ossuary: Isidora reward main", player),
+    set_rule(world.get_location("Ossuary: Isidora, Voice of the Dead", player),
         lambda state: state._blasphemous_bones_30(player))
-    set_rule(world.get_location("Ossuary: Reward 1", player),
+    set_rule(world.get_location("Ossuary: 1st reward", player),
         lambda state: state._blasphemous_bones_4(player))
-    set_rule(world.get_location("Ossuary: Reward 2", player),
+    set_rule(world.get_location("Ossuary: 2nd reward", player),
         lambda state: state._blasphemous_bones_8(player))
-    set_rule(world.get_location("Ossuary: Reward 3", player),
+    set_rule(world.get_location("Ossuary: 3rd reward", player),
         lambda state: state._blasphemous_bones_12(player))
-    set_rule(world.get_location("Ossuary: Reward 4", player),
+    set_rule(world.get_location("Ossuary: 4th reward", player),
         lambda state: state._blasphemous_bones_16(player))
-    set_rule(world.get_location("Ossuary: Reward 5", player),
+    set_rule(world.get_location("Ossuary: 5th reward", player),
         lambda state: state._blasphemous_bones_20(player))
-    set_rule(world.get_location("Ossuary: Reward 6", player),
+    set_rule(world.get_location("Ossuary: 6th reward", player),
         lambda state: state._blasphemous_bones_24(player))
-    set_rule(world.get_location("Ossuary: Reward 7", player),
+    set_rule(world.get_location("Ossuary: 7th reward", player),
         lambda state: state._blasphemous_bones_28(player))
-    set_rule(world.get_location("Ossuary: Reward 8", player),
+    set_rule(world.get_location("Ossuary: 8th reward", player),
         lambda state: state._blasphemous_bones_32(player))
-    set_rule(world.get_location("Ossuary: Reward 9", player),
+    set_rule(world.get_location("Ossuary: 9th reward", player),
         lambda state: state._blasphemous_bones_36(player))
-    set_rule(world.get_location("Ossuary: Reward 10", player),
+    set_rule(world.get_location("Ossuary: 10th reward", player),
         lambda state: state._blasphemous_bones_40(player))
-    set_rule(world.get_location("Ossuary: Reward 11", player),
+    set_rule(world.get_location("Ossuary: 11th reward", player),
         lambda state: state._blasphemous_bones_44(player))
 
     # All the Tears of the Sea
-    set_rule(world.get_location("AtTotS: Miriam gift", player),
+    set_rule(world.get_location("AtTotS: Miriam's gift", player),
         lambda state: state._blasphemous_2_masks(player) and \
             state._blasphemous_fall_relic(player) and \
                 state._blasphemous_blood_relic(player) and \
@@ -437,46 +437,46 @@ def rules(blasphemousworld):
                         state._blasphemous_miasma_relic(player))
 
     # Archcathedral Rooftops
-    set_rule(world.get_location("AR: Bridge fight 2", player),
+    set_rule(world.get_location("AR: Second soldier fight", player),
         lambda state: state._blasphemous_1_mask(player))
-    set_rule(world.get_location("AR: Bridge fight 3", player),
+    set_rule(world.get_location("AR: Third soldier fight", player),
         lambda state: state._blasphemous_2_masks(player))
-    set_rule(world.get_location("AR: Western shaft cherub", player),
+    set_rule(world.get_location("AR: Upper west shaft Child of Moonlight", player),
         lambda state: state._blasphemous_1_mask(player))
-    set_rule(world.get_location("AR: Western shaft chest", player),
+    set_rule(world.get_location("AR: Upper west shaft chest", player),
         lambda state: state._blasphemous_2_masks(player) and \
             state._blasphemous_fall_relic(player) and \
                 state._blasphemous_root_relic(player))
-    set_rule(world.get_location("AR: Lady room", player),
+    set_rule(world.get_location("AR: Lady of the Six Sorrows", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             state._blasphemous_miasma_relic(player) and \
                 state._blasphemous_root_relic(player))
-    set_rule(world.get_location("AR: Second checkpoint ledge", player),
+    set_rule(world.get_location("AR: Upper east shaft ledge", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             state._blasphemous_miasma_relic(player) and \
                 state._blasphemous_root_relic(player) and \
                     state._blasphemous_1_mask(player))
-    set_rule(world.get_location("AR: Sword room", player),
+    set_rule(world.get_location("AR: Mea Culpa altar", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             state._blasphemous_miasma_relic(player) and \
                     state._blasphemous_2_masks(player))
-    set_rule(world.get_location("AR: Crisanta", player),
+    set_rule(world.get_location("AR: Crisanta of the Wrapped Agony", player),
         lambda state: state._blasphemous_3_masks(player) and \
             state._blasphemous_heart_c(player))
     
     # Bridge of the Three Cavalries
-    set_rule(world.get_location("BotTC: Esdras", player),
+    set_rule(world.get_location("BotTC: Esdras, of the Anointed Legion", player),
         lambda state: state._blasphemous_3_wounds(player) and \
             state._blasphemous_blood_relic(player))
-    set_rule(world.get_location("BotTC: Esdras gift initial", player),
+    set_rule(world.get_location("BotTC: Esdras' gift", player),
         lambda state: state._blasphemous_3_wounds(player) and \
             state._blasphemous_blood_relic(player))
-    set_rule(world.get_location("BotTC: Amanecida core", player),
+    set_rule(world.get_location("BotTC: Inside giant statue", player),
         lambda state: state._blasphemous_3_wounds(player) and \
             state._blasphemous_verses(player))
     
     # Brotherhood of the Silent Sorrow
-    set_rule(world.get_location("BotSS: Initial room cherub", player),
+    set_rule(world.get_location("BotSS: Starting room Child of Moonlight", player),
         lambda state: (state._blasphemous_blood_relic(player) and \
             (state._blasphemous_root_relic(player)) or \
                 (state._blasphemous_fall_relic(player))) or \
@@ -484,20 +484,20 @@ def rules(blasphemousworld):
                         state._blasphemous_cherub_6(player)) or \
                             (state._blasphemous_debla(player) or \
                                 state._blasphemous_taranto(player)))
-    set_rule(world.get_location("BotSS: Initial room ledge", player),
+    set_rule(world.get_location("BotSS: Starting room ledge", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             state._blasphemous_fall_relic(player))
-    set_rule(world.get_location("BotSS: Elder Brother's room", player),
+    set_rule(world.get_location("BotSS: Chamber of the Eldest Brother", player),
         lambda state: state._blasphemous_elder_key(player))
     set_rule(world.get_location("BotSS: Blue candle", player),
         lambda state: state._blasphemous_blue_wax(player))
-    set_rule(world.get_location("BotSS: Church entrance", player),
+    set_rule(world.get_location("BotSS: Outside church", player),
         lambda state: state._blasphemous_blood_relic(player))
-    set_rule(world.get_location("BotSS: Esdras gift final", player),
+    set_rule(world.get_location("BotSS: Esdras' final gift", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             state._blasphemous_scapular(player) and \
                 state._blasphemous_3_wounds(player))
-    set_rule(world.get_location("BotSS: Crisanta gift", player),
+    set_rule(world.get_location("BotSS: Crisanta's gift", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             state._blasphemous_scapular(player) and \
                 state._blasphemous_heart_c(player) and \
@@ -505,9 +505,9 @@ def rules(blasphemousworld):
                         state._blasphemous_3_wounds(player))
     
     # Convent of our Lady of the Charred Visage
-    set_rule(world.get_location("CoOLotCV: Southwest lung room", player),
+    set_rule(world.get_location("CoOLotCV: Lower west statue", player),
         lambda state: state._blasphemous_miasma_relic(player))
-    set_rule(world.get_location("CoOLotCV: Lady room", player),
+    set_rule(world.get_location("CoOLotCV: Lady of the Six Sorrows", player),
         lambda state: state._blasphemous_3_wounds(player) and \
             state._blasphemous_1_mask(player) and \
                 state._blasphemous_bronze_key(player) and \
@@ -515,7 +515,7 @@ def rules(blasphemousworld):
                         state._blasphemous_high_key(player))
     set_rule(world.get_location("CoOLotCV: Red candle", player),
         lambda state: state._blasphemous_red_wax(player))
-    set_rule(world.get_location("CoOLotCV: Burning oil fountain", player),
+    set_rule(world.get_location("CoOLotCV: Fountain of burning oil", player),
         lambda state: state._blasphemous_thimble(player))
     set_rule(world.get_location("CoOLotCV: Mask room", player),
         lambda state: state._blasphemous_3_wounds(player) and \
@@ -525,14 +525,14 @@ def rules(blasphemousworld):
                         state._blasphemous_high_key(player))
 
     # Desecrated Cistern
-    set_rule(world.get_location("DC: Eastern upper tunnel chest", player),
+    set_rule(world.get_location("DC: Upper east tunnel chest", player),
         lambda state: state._blasphemous_water_relic(player) or \
             state._blasphemous_fall_relic(player))
-    set_rule(world.get_location("DC: Eastern upper tunnel cherub", player),
+    set_rule(world.get_location("DC: Upper east Child of Moonlight", player),
         lambda state: state._blasphemous_water_relic(player) or \
             state._blasphemous_fall_relic(player) or \
                 state._blasphemous_cherub_13(player))
-    set_rule(world.get_location("DC: Hidden hand room", player),
+    set_rule(world.get_location("DC: Hidden alcove near fountain", player),
         lambda state: state._blasphemous_water_relic(player))
     set_rule(world.get_location("DC: Shroud puzzle", player),
         lambda state: state._blasphemous_corpse_relic(player))
@@ -540,7 +540,7 @@ def rules(blasphemousworld):
         lambda state: state._blasphemous_blood_relic(player) and \
             (state._blasphemous_root_relic(player) or \
                 state._blasphemous_fall_relic(player)))
-    set_rule(world.get_location("DC: Sword room", player),
+    set_rule(world.get_location("DC: Mea Culpa altar", player),
         lambda state: state._blasphemous_chalice(player) and \
             state._blasphemous_3_wounds(player) and \
                 state._blasphemous_1_mask(player) and \
@@ -549,13 +549,13 @@ def rules(blasphemousworld):
                             state._blasphemous_water_relic(player) and \
                                 state._blasphemous_root_relic(player)) or \
                                     state._blasphemous_fall_relic(player)))
-    set_rule(world.get_location("DC: Lung tunnel cherub", player),
+    set_rule(world.get_location("DC: Child of Moonlight, behind pillar", player),
         lambda state: state._blasphemous_miasma_relic(player) and \
             state._blasphemous_water_relic(player))
-    set_rule(world.get_location("DC: Lung tunnel ledge", player),
+    set_rule(world.get_location("DC: High ledge near elevator shaft", player),
         lambda state: state._blasphemous_miasma_relic(player) and \
             state._blasphemous_water_relic(player))
-    set_rule(world.get_location("DC: Elevator shaft cherub", player),
+    set_rule(world.get_location("DC: Elevator shaft Child of Moonlight", player),
         lambda state: state._blasphemous_fall_relic(player) or \
             (state._blasphemous_miasma_relic(player) and \
                 state._blasphemous_water_relic(player) and \
@@ -564,57 +564,57 @@ def rules(blasphemousworld):
         lambda state: state._blasphemous_fall_relic(player))
 
     # Graveyard of the Peaks
-    set_rule(world.get_location("GotP: Shop cave cherub", player),
+    set_rule(world.get_location("GotP: Shop cave Child of Moonlight", player),
         lambda state: state._blasphemous_blood_relic(player) or \
             state._blasphemous_fall_relic(player) or \
                 state._blasphemous_cherub_22_23_31_32(player))
     # to do: or dive
-    set_rule(world.get_location("GotP: Shop cave hole", player),
+    set_rule(world.get_location("GotP: Shop cave hidden hole", player),
         lambda state: state._blasphemous_blood_relic(player) or \
             state._blasphemous_unlock_skills(player))
-    set_rule(world.get_location("GotP: Eastern shaft upper", player),
+    set_rule(world.get_location("GotP: Upper east shaft", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             state._blasphemous_root_relic(player))
-    set_rule(world.get_location("GotP: Amanecida ledge", player),
+    set_rule(world.get_location("GotP: East cliffside", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             state._blasphemous_root_relic(player))
-    set_rule(world.get_location("GotP: Western shaft cherub", player),
+    set_rule(world.get_location("GotP: West shaft Child of Moonlight", player),
         lambda state: state._blasphemous_blood_relic(player) or \
             state._blasphemous_cherub_25(player))
-    set_rule(world.get_location("GotP: Center shaft cherub", player),
+    set_rule(world.get_location("GotP: Center shaft Child of Moonlight", player),
         lambda state: state._blasphemous_fall_relic(player) or \
             state._blasphemous_cherub_24_33(player))
     # to do: requires dive
-    set_rule(world.get_location("GotP: Bow Amanecida", player),
+    set_rule(world.get_location("GotP: Amanecida of the Bejeweled Arrow", player),
         lambda state: state._blasphemous_bell(player) and \
             state._blasphemous_blood_relic(player) and \
                 state._blasphemous_root_relic(player) and \
                     state._blasphemous_unlock_skills(player))
 
     # Grievance Ascends
-    set_rule(world.get_location("GA: Western lung ledge", player),
+    set_rule(world.get_location("GA: Lower west ledge", player),
         lambda state: state._blasphemous_miasma_relic(player))
-    set_rule(world.get_location("GA: Lung room lower", player),
+    set_rule(world.get_location("GA: Miasma room floor", player),
         lambda state: state._blasphemous_miasma_relic(player))
-    set_rule(world.get_location("GA: Oil room", player),
+    set_rule(world.get_location("GA: Oil of the Pilgrims", player),
         lambda state: state._blasphemous_blood_relic(player))
-    set_rule(world.get_location("GA: Blood tunnel ledge", player),
+    set_rule(world.get_location("GA: End of blood bridge", player),
         lambda state: state._blasphemous_blood_relic(player))
-    set_rule(world.get_location("GA: Blood tunnel cherub", player),
+    set_rule(world.get_location("GA: Blood bridge Child of Moonlight", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             (state._blasphemous_aubade(player) or \
                 state._blasphemous_cherub_21(player)))
-    set_rule(world.get_location("GA: Altasgracias cherub", player),
+    set_rule(world.get_location("GA: Lower east Child of Moonlight", player),
         lambda state: state._blasphemous_root_relic(player) or \
             state._blasphemous_cherub_20(player))
-    set_rule(world.get_location("GA: Altasgracias gift", player),
+    set_rule(world.get_location("GA: Altasgracias' gift", player),
         lambda state: state._blasphemous_altasgracias_3(player))
-    set_rule(world.get_location("GA: Altasgracias cacoon", player),
+    set_rule(world.get_location("GA: Empty giant egg", player),
         lambda state: state._blasphemous_altasgracias_3(player) and \
             state._blasphemous_egg(player))
 
     # Hall of the Dawning
-    set_rule(world.get_location("HotD: Laudes", player),
+    set_rule(world.get_location("HotD: Laudes, the First of the Amanecidas", player),
         lambda state: state._blasphemous_bell(player) and \
             state._blasphemous_1_mask(player) and \
                 state._blasphemous_blood_relic(player) and \
@@ -624,78 +624,76 @@ def rules(blasphemousworld):
                                 state._blasphemous_verses(player))
 
     # Jondo
-    set_rule(world.get_location("Jondo: Eastern entrance chest", player),
+    set_rule(world.get_location("Jondo: Upper east chest", player),
         lambda state: state._blasphemous_fall_relic(player) or \
             state._blasphemous_root_relic(player))
-    set_rule(world.get_location("Jondo: Western shaft root puzzle", player),
+    set_rule(world.get_location("Jondo: Upper west tree root", player),
         lambda state: state._blasphemous_root_relic(player))
 
     # Knot of the Three Words
-    set_rule(world.get_location("KotTW: Fourth Visage gift", player),
+    set_rule(world.get_location("KotTW: Gift from the Traitor", player),
         lambda state: state._blasphemous_wood_key(player) and \
             state._blasphemous_eyes(player))
     
     # Library of the Negated Words
-    set_rule(world.get_location("LotNW: Upper cathedral ledge", player),
+    set_rule(world.get_location("LotNW: Root ceiling platform", player),
         lambda state: state._blasphemous_root_relic(player))
     # to do: requires dive (sometimes opens with other skills?)
     set_rule(world.get_location("LotNW: Hidden floor", player),
         lambda state: state._blasphemous_unlock_skills(player))
-    set_rule(world.get_location("LotNW: Lung ambush chest", player),
+    set_rule(world.get_location("LotNW: Miasma hallway chest", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             state._blasphemous_root_relic(player) and \
                 state._blasphemous_miasma_relic(player))
     set_rule(world.get_location("LotNW: Platform puzzle chest", player),
         lambda state: state._blasphemous_blood_relic(player))
-    set_rule(world.get_location("LotNW: Elevator cherub", player),
+    set_rule(world.get_location("LotNW: Elevator Child of Moonlight", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             (state._blasphemous_cherub_22_23_31_32(player) and \
                 state._blasphemous_dawn_heart(player)) or \
                     state._blasphemous_root_relic(player))
     set_rule(world.get_location("LotNW: Red candle", player),
         lambda state: state._blasphemous_red_wax(player))
-    set_rule(world.get_location("LotNW: Diosdado gift", player),
-        lambda state: state._blasphemous_corpse_relic(player))
-    set_rule(world.get_location("LotNW: Fourth Visage hidden wall", player),
+    set_rule(world.get_location("LotNW: Twisted wood hidden wall", player),
         lambda state: state._blasphemous_wood_key(player))
 
     # Mercy Dreams
     set_rule(world.get_location("MD: Blue candle", player),
         lambda state: state._blasphemous_3_wounds(player) and \
             state._blasphemous_blue_wax(player))
-    set_rule(world.get_location("MD: SlC entrance cherub", player),
+    set_rule(world.get_location("MD: Cave Child of Moonlight", player),
         lambda state: state._blasphemous_3_wounds(player) and \
             state._blasphemous_cherub_24_33(player))
-    set_rule(world.get_location("MD: SlC entrance ledge", player),
+    set_rule(world.get_location("MD: Behind gate to TSC", player),
         lambda state: state._blasphemous_3_wounds(player))
     
     # Mother of Mothers
-    set_rule(world.get_location("MoM: Eastern room lower", player),
+    set_rule(world.get_location("MoM: East chandelier platform", player),
         lambda state: state._blasphemous_blood_relic(player))
-    set_rule(world.get_location("MoM: Redento prayer room", player),
+    set_rule(world.get_location("MoM: Redento's treasure", player),
         lambda state: state._blasphemous_redento(player))
-    set_rule(world.get_location("MoM: Redento corpse", player),
+    set_rule(world.get_location("MoM: Final meeting with Redento", player),
         lambda state: state._blasphemous_redento(player))
-    set_rule(world.get_location("MoM: Blood incense shaft", player),
+    set_rule(world.get_location("MoM: Giant chandelier statue", player),
         lambda state: state._blasphemous_blood_relic(player))
 
     # Mountains of the Endless Dusk
-    set_rule(world.get_location("MotED: Bell gap ledge", player),
+    set_rule(world.get_location("MotED: Platform above chasm", player),
         lambda state: state._blasphemous_blood_relic(player))
-    set_rule(world.get_location("MotED: Blood platform", player),
+    set_rule(world.get_location("MotED: Blood platform alcove", player),
         lambda state: state._blasphemous_blood_relic(player))
     set_rule(world.get_location("MotED: Egg hatching", player),
         lambda state: state._blasphemous_pre_egg(player))
     # to do: requires dive
-    set_rule(world.get_location("MotED: Axe Amanecida", player),
+    set_rule(world.get_location("MotED: Amanecida of the Golden Blades", player),
         lambda state: state._blasphemous_bell(player) and \
             state._blasphemous_unlock_skills(player))
     
     # Mourning and Havoc
-    set_rule(world.get_location("MaH: Eastern chest", player),
+    set_rule(world.get_location("MaH: Upper east chest", player),
         lambda state: state._blasphemous_root_relic(player) and \
             state.can_reach(world.get_region("Mother of Mothers", player)))
-    set_rule(world.get_location("MaH: Sierpes reward", player),
+    set_rule(world.get_location("MaH: Sierpes' eye", player),
         lambda state: state.can_reach(world.get_region("Mother of Mothers", player)) and \
             state._blasphemous_root_relic(player))
     set_rule(world.get_location("MaH: Sierpes", player),
@@ -703,166 +701,166 @@ def rules(blasphemousworld):
             state._blasphemous_root_relic(player))
 
     # Patio of the Silent Steps
-    set_rule(world.get_location("PotSS: Garden 2 ledge", player),
+    set_rule(world.get_location("PotSS: Second area ledge", player),
         lambda state: state._blasphemous_root_relic(player))
-    set_rule(world.get_location("PotSS: Garden 3 upper ledge", player),
+    set_rule(world.get_location("PotSS: Third area upper ledge", player),
         lambda state: state._blasphemous_root_relic(player) or \
             (state._blasphemous_wheel(player) and \
                 state._blasphemous_dawn_heart(player)))
-    set_rule(world.get_location("PotSS: Northern shaft", player),
+    set_rule(world.get_location("PotSS: Climb to WotHP", player),
         lambda state: (state._blasphemous_blood_relic(player) and \
             state._blasphemous_root_relic(player)) or \
                 (state.can_reach(world.get_region("Wall of the Holy Prohibitions", player)) and \
                     state._blasphemous_bronze_key(player)))
     # to do: requires dive
-    set_rule(world.get_location("PotSS: Falcata Amanecida", player),
+    set_rule(world.get_location("PotSS: Amanecida of the Chiselled Steel", player),
         lambda state: state._blasphemous_bell(player) and \
             state._blasphemous_unlock_skills(player))
     
     # Petrous
     # to do: requires dive
-    set_rule(world.get_location("Petrous: Entrance room", player),
+    set_rule(world.get_location("Petrous: Temple entrance", player),
         lambda state: state._blasphemous_unlock_skills(player))
 
     # The Sleeping Canvases
-    set_rule(world.get_location("TSC: Wax bleed puzzle", player),
+    set_rule(world.get_location("TSC: Candle wax puzzle", player),
         lambda state: state._blasphemous_both_wax(player))
-    set_rule(world.get_location("TSC: Linen drop room", player),
+    set_rule(world.get_location("TSC: Under elevator shaft", player),
         lambda state: state._blasphemous_fall_relic(player))
-    set_rule(world.get_location("TSC: Jocinero gift initial", player),
+    set_rule(world.get_location("TSC: Jocinero's 1st reward", player),
         lambda state: state._blasphemous_cherubs_20(player))
-    set_rule(world.get_location("TSC: Jocinero gift final", player),
+    set_rule(world.get_location("TSC: Jocinero's final reward", player),
         lambda state: state._blasphemous_cherubs_all(player))
     
     # The Holy Line
-    set_rule(world.get_location("THL: Mud ledge upper", player),
+    set_rule(world.get_location("THL: Across blood platforms", player),
         lambda state: state._blasphemous_blood_relic(player))
     # to do: requires dive
-    set_rule(world.get_location("THL: Cave ledge", player),
+    set_rule(world.get_location("THL: Underground ledge", player),
         lambda state: state._blasphemous_unlock_skills(player))
-    set_rule(world.get_location("THL: Cave chest", player),
+    set_rule(world.get_location("THL: Underground chest", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             state._blasphemous_water_relic(player))
     
     # Wall of the Holy Prohibitions
-    set_rule(world.get_location("WotHP: Q1 upper bronze door", player),
+    set_rule(world.get_location("WotHP: Upper east room, top bronze cell", player),
         lambda state: state._blasphemous_bronze_key(player))
-    set_rule(world.get_location("WotHP: Q1 upper silver door", player),
+    set_rule(world.get_location("WotHP: Upper east room, top silver cell", player),
         lambda state: state._blasphemous_silver_key(player))
-    set_rule(world.get_location("WotHP: Q1 middle gold door", player),
+    set_rule(world.get_location("WotHP: Upper east room, center gold cell", player),
         lambda state: state._blasphemous_gold_key(player))
-    set_rule(world.get_location("WotHP: Q2 middle gold door", player),
+    set_rule(world.get_location("WotHP: Upper west room, center gold cell", player),
         lambda state: state._blasphemous_gold_key(player) and \
             state._blasphemous_bronze_key(player))
-    set_rule(world.get_location("WotHP: Q3 lower gold door", player),
+    set_rule(world.get_location("WotHP: Lower west room, bottom gold cell", player),
         lambda state: state._blasphemous_gold_key(player) and \
             state._blasphemous_bronze_key(player))
-    set_rule(world.get_location("WotHP: Q3 upper silver door", player),
+    set_rule(world.get_location("WotHP: Upper west room, top silver cell", player),
         lambda state: state._blasphemous_silver_key(player) and \
             state._blasphemous_bronze_key(player))
-    set_rule(world.get_location("WotHP: Q3 upper ledge", player),
+    set_rule(world.get_location("WotHP: Lower west room, top ledge", player),
         lambda state: state._blasphemous_silver_key(player) and \
             state._blasphemous_bronze_key(player))
-    set_rule(world.get_location("WotHP: Q4 hidden ledge", player),
+    set_rule(world.get_location("WotHP: Lower east room, hidden ledge", player),
         lambda state: state._blasphemous_bronze_key(player))
-    set_rule(world.get_location("WotHP: Q4 lower silver door", player),
+    set_rule(world.get_location("WotHP: Lower east room, bottom silver cell", player),
         lambda state: state._blasphemous_silver_key(player) and \
             state._blasphemous_bronze_key(player))
-    set_rule(world.get_location("WotHP: Q4 upper bronze door", player),
+    set_rule(world.get_location("WotHP: Lower east room, top bronze cell", player),
         lambda state: state._blasphemous_bronze_key(player))
-    set_rule(world.get_location("WotHP: Q4 upper silver door", player),
+    set_rule(world.get_location("WotHP: Lower east room, top silver cell", player),
         lambda state: state._blasphemous_silver_key(player))
-    set_rule(world.get_location("WotHP: CoLCV entrance", player),
+    set_rule(world.get_location("WotHP: Outside Child of Moonlight", player),
         lambda state: state._blasphemous_silver_key(player) and \
             state._blasphemous_bronze_key(player))
-    set_rule(world.get_location("WotHP: Oil room", player),
+    set_rule(world.get_location("WotHP: Oil of the Pilgrims", player),
         lambda state: state._blasphemous_silver_key(player) and \
             state._blasphemous_bronze_key(player))
-    set_rule(world.get_location("WotHP: Quirce", player),
+    set_rule(world.get_location("WotHP: Quirce, Returned By The Flames", player),
         lambda state: state._blasphemous_silver_key(player) and \
             state._blasphemous_bronze_key(player))
-    set_rule(world.get_location("WotHP: Quirce room", player),
+    set_rule(world.get_location("WotHP: Collapsing floor ledge", player),
         lambda state: state._blasphemous_silver_key(player) and \
             state._blasphemous_bronze_key(player))
-    set_rule(world.get_location("WotHP: Lance Amanecida", player),
+    set_rule(world.get_location("WotHP: Amanecida of the Molten Thorn", player),
         lambda state: state._blasphemous_bell(player) and \
             state._blasphemous_silver_key(player) and \
                 state._blasphemous_bronze_key(player))
 
     # Wasteland of the Buried Churches
-    set_rule(world.get_location("WotBC: Underneath MeD bridge", player),
+    set_rule(world.get_location("WotBC: Under broken bridge", player),
         lambda state: state._blasphemous_blood_relic(player))
-    set_rule(world.get_location("WotBC: Cliffside cherub", player),
+    set_rule(world.get_location("WotBC: Cliffside Child of Moonlight", player),
         lambda state: state._blasphemous_cherub_38(player))
 
     # Where Olive Trees Wither
-    set_rule(world.get_location("WOTW: White lady flower", player),
+    set_rule(world.get_location("WOTW: Gift for the tomb", player),
         lambda state: state._blasphemous_full_thimble(player))
-    set_rule(world.get_location("WOTW: White lady tomb", player),
+    set_rule(world.get_location("WOTW: Underground tomb", player),
         lambda state: state._blasphemous_flowers(player) and \
             (state._blasphemous_full_thimble(player) or \
                 state._blasphemous_fall_relic(player)))
-    set_rule(world.get_location("WOTW: White lady cave cherub", player),
+    set_rule(world.get_location("WOTW: Underground Child of Moonlight", player),
         lambda state: (state._blasphemous_full_thimble(player) or \
             state._blasphemous_fall_relic(player)) and \
                 state._blasphemous_cherub_27(player))
-    set_rule(world.get_location("WOTW: White lady cave ledge", player),
+    set_rule(world.get_location("WOTW: Underground ledge", player),
         lambda state: (state._blasphemous_full_thimble(player) or \
             state._blasphemous_fall_relic(player)) and \
                 state._blasphemous_blood_relic(player))
-    set_rule(world.get_location("WOTW: Eastern root cherub", player),
+    set_rule(world.get_location("WOTW: Upper east Child of Moonlight", player),
         lambda state: state._blasphemous_root_relic(player) or \
             state._blasphemous_cherub_22_23_31_32(player))
-    set_rule(world.get_location("WOTW: Eastern root ledge", player),
+    set_rule(world.get_location("WOTW: Upper east statue", player),
         lambda state: state._blasphemous_root_relic(player))
-    set_rule(world.get_location("WOTW: Gemino gift final", player),
+    set_rule(world.get_location("WOTW: Gemino's reward", player),
         lambda state: state._blasphemous_full_thimble(player))
 
     # Various
-    set_rule(world.get_location("Guilt arena 1 extra", player),
+    set_rule(world.get_location("Confessor Dungeon 1 extra", player),
         lambda state: state._blasphemous_bead(player))
-    set_rule(world.get_location("Guilt arena 1 main", player),
+    set_rule(world.get_location("Confessor Dungeon 1 main", player),
         lambda state: state._blasphemous_bead(player))
-    set_rule(world.get_location("Guilt arena 2 extra", player),
+    set_rule(world.get_location("Confessor Dungeon 2 extra", player),
         lambda state: state._blasphemous_bead(player))
-    set_rule(world.get_location("Guilt arena 2 main", player),
+    set_rule(world.get_location("Confessor Dungeon 2 main", player),
         lambda state: state._blasphemous_bead(player))
-    set_rule(world.get_location("Guilt arena 3 extra", player),
+    set_rule(world.get_location("Confessor Dungeon 3 extra", player),
         lambda state: state._blasphemous_bead(player))
-    set_rule(world.get_location("Guilt arena 3 main", player),
+    set_rule(world.get_location("Confessor Dungeon 3 main", player),
         lambda state: state._blasphemous_bead(player))
-    set_rule(world.get_location("Guilt arena 4 extra", player),
+    set_rule(world.get_location("Confessor Dungeon 4 extra", player),
         lambda state: state._blasphemous_bead(player))
-    set_rule(world.get_location("Guilt arena 4 main", player),
+    set_rule(world.get_location("Confessor Dungeon 4 main", player),
         lambda state: state._blasphemous_bead(player))
-    set_rule(world.get_location("Guilt arena 5 extra", player),
+    set_rule(world.get_location("Confessor Dungeon 5 extra", player),
         lambda state: state._blasphemous_bead(player) and \
             state._blasphemous_3_wounds(player))
-    set_rule(world.get_location("Guilt arena 5 main", player),
+    set_rule(world.get_location("Confessor Dungeon 5 main", player),
         lambda state: state._blasphemous_bead(player) and \
             state._blasphemous_3_wounds(player))
-    set_rule(world.get_location("Guilt arena 6 extra", player),
+    set_rule(world.get_location("Confessor Dungeon 6 extra", player),
         lambda state: state._blasphemous_bead(player) and \
             state._blasphemous_3_wounds(player) and \
                 (state._blasphemous_1_mask(player) or \
                     state._blasphemous_blood_relic(player) and \
                         state._blasphemous_silver_key(player) and \
                             state._blasphemous_bronze_key(player)))
-    set_rule(world.get_location("Guilt arena 6 main", player),
+    set_rule(world.get_location("Confessor Dungeon 6 main", player),
         lambda state: state._blasphemous_bead(player) and \
             state._blasphemous_3_wounds(player) and \
                 (state._blasphemous_1_mask(player) or \
                     state._blasphemous_blood_relic(player) and \
                         state._blasphemous_silver_key(player) and \
                             state._blasphemous_bronze_key(player)))
-    set_rule(world.get_location("Guilt arena 7 extra", player),
+    set_rule(world.get_location("Confessor Dungeon 7 extra", player),
         lambda state: state._blasphemous_bead(player) and \
             state._blasphemous_3_wounds(player) and \
                 state._blasphemous_1_mask(player) and \
                     state._blasphemous_bronze_key(player) and \
                         state._blasphemous_silver_key(player) and \
                             state._blasphemous_blood_relic(player))
-    set_rule(world.get_location("Guilt arena 7 main", player),
+    set_rule(world.get_location("Confessor Dungeon 7 main", player),
         lambda state: state._blasphemous_bead(player) and \
             state._blasphemous_3_wounds(player) and \
                 state._blasphemous_1_mask(player) and \
@@ -870,16 +868,16 @@ def rules(blasphemousworld):
                         state._blasphemous_silver_key(player) and \
                             state._blasphemous_blood_relic(player))
     # to do: requires dive
-    set_rule(world.get_location("Amanecida 1", player),
+    set_rule(world.get_location("Defeat 1 Amanecida", player),
         lambda state: state._blasphemous_bell(player) and \
             state._blasphemous_unlock_skills(player))
-    set_rule(world.get_location("Amanecida 2", player),
+    set_rule(world.get_location("Defeat 2 Amanecidas", player),
         lambda state: state._blasphemous_bell(player) and \
             state._blasphemous_unlock_skills(player) and \
                 state._blasphemous_blood_relic(player) and \
                     (state._blasphemous_root_relic(player) or \
                         state._blasphemous_3_wounds(player)))
-    set_rule(world.get_location("Amanecida 3", player),
+    set_rule(world.get_location("Defeat 3 Amanecidas", player),
         lambda state: state._blasphemous_bell(player) and \
             state._blasphemous_unlock_skills(player) and \
                 state._blasphemous_3_wounds(player) and \
@@ -888,7 +886,7 @@ def rules(blasphemousworld):
                             (state._blasphemous_1_mask(player) and \
                                 state._blasphemous_bronze_key(player) and \
                                     state._blasphemous_silver_key(player))))
-    set_rule(world.get_location("Amanecida 4", player),
+    set_rule(world.get_location("Defeat 4 Amanecidas", player),
         lambda state: state._blasphemous_bell(player) and \
             state._blasphemous_unlock_skills(player) and \
                 state._blasphemous_3_wounds(player) and \
@@ -897,7 +895,7 @@ def rules(blasphemousworld):
                             state._blasphemous_root_relic(player) and \
                                 state._blasphemous_bronze_key(player) and \
                                     state._blasphemous_silver_key(player))
-    set_rule(world.get_location("All amanecidas reward", player),
+    set_rule(world.get_location("Defeat all Amanecidas", player),
         lambda state: state._blasphemous_bell(player) and \
             state._blasphemous_unlock_skills(player) and \
                 state._blasphemous_3_wounds(player) and \
@@ -919,93 +917,93 @@ def rules(blasphemousworld):
             add_rule(i, lambda state: state._blasphemous_esdras_boss_easy(player))
         for i in world.get_region("Deambulatory of His Holiness", player).entrances:
             add_rule(i, lambda state: state._blasphemous_endgame_boss_easy(player))
-        add_rule(world.get_location("Albero: Church donation 1", player),
+        add_rule(world.get_location("Albero: Donate 5000 Tears", player),
             lambda state: state._blasphemous_wound_boss_easy(player))
-        add_rule(world.get_location("Albero: Church donation 2", player),
+        add_rule(world.get_location("Albero: Donate 50000 Tears", player),
             lambda state: state._blasphemous_wound_boss_easy(player))
-        add_rule(world.get_location("Albero: Tirso reward final", player),
+        add_rule(world.get_location("Albero: Tirso's final reward", player),
             lambda state: state._blasphemous_mask_boss_easy(player))
-        add_rule(world.get_location("Ossuary: Isidora reward main", player),
+        add_rule(world.get_location("Ossuary: Isidora, Voice of the Dead", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
-        add_rule(world.get_location("AR: Crisanta", player),
+        add_rule(world.get_location("AR: Crisanta of the Wrapped Agony", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
-        add_rule(world.get_location("BotTC: Esdras", player),
+        add_rule(world.get_location("BotTC: Esdras, of the Anointed Legion", player),
             lambda state: state._blasphemous_esdras_boss_easy(player))
-        add_rule(world.get_location("BotTC: Esdras gift initial", player),
+        add_rule(world.get_location("BotTC: Esdras' gift", player),
             lambda state: state._blasphemous_esdras_boss_easy(player))
-        add_rule(world.get_location("BotTC: Amanecida core", player),
+        add_rule(world.get_location("BotTC: Inside giant statue", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
-        add_rule(world.get_location("BotSS: Crisanta gift", player),
+        add_rule(world.get_location("BotSS: Crisanta's gift", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
-        add_rule(world.get_location("CoOLotCV: Lady room", player),
+        add_rule(world.get_location("CoOLotCV: Lady of the Six Sorrows", player),
             lambda state: state._blasphemous_mask_boss_easy(player))
         add_rule(world.get_location("CoOLotCV: Mask room", player),
             lambda state: state._blasphemous_mask_boss_easy(player))
-        add_rule(world.get_location("GotP: Bow Amanecida", player),
+        add_rule(world.get_location("GotP: Amanecida of the Bejeweled Arrow", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
-        add_rule(world.get_location("HotD: Laudes", player),
+        add_rule(world.get_location("HotD: Laudes, the First of the Amanecidas", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
-        add_rule(world.get_location("LotNW: Elevator cherub", player),
+        add_rule(world.get_location("LotNW: Elevator Child of Moonlight", player),
             lambda state: state._blasphemous_mask_boss_easy(player))
         add_rule(world.get_location("LotNW: Mask room", player),
             lambda state: state._blasphemous_mask_boss_easy(player))
-        add_rule(world.get_location("LotNW: Sword room", player),
+        add_rule(world.get_location("LotNW: Mea Culpa altar", player),
             lambda state: state._blasphemous_mask_boss_easy(player))
         add_rule(world.get_location("LotNW: Red candle", player),
             lambda state: state._blasphemous_mask_boss_easy(player))
         add_rule(world.get_location("MD: Blue candle", player),
             lambda state: state._blasphemous_wound_boss_easy(player))
-        add_rule(world.get_location("MD: SlC entrance cherub", player),
+        add_rule(world.get_location("MD: Cave Child of Moonlight", player),
             lambda state: state._blasphemous_wound_boss_easy(player))
-        add_rule(world.get_location("MD: SlC entrance ledge", player),
+        add_rule(world.get_location("MD: Behind gate to TSC", player),
             lambda state: state._blasphemous_wound_boss_easy(player))
-        add_rule(world.get_location("MoM: Melquiades", player),
+        add_rule(world.get_location("MoM: Melquiades, The Exhumed Archbishop", player),
             lambda state: state._blasphemous_mask_boss_easy(player))
         add_rule(world.get_location("MoM: Mask room", player),
             lambda state: state._blasphemous_mask_boss_easy(player))
-        add_rule(world.get_location("MotED: Axe Amanecida", player),
+        add_rule(world.get_location("MotED: Amanecida of the Golden Blades", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
-        add_rule(world.get_location("MaH: Sierpes reward", player),
+        add_rule(world.get_location("MaH: Sierpes' eye", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
         add_rule(world.get_location("MaH: Sierpes", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
-        add_rule(world.get_location("PotSS: Falcata Amanecida", player),
+        add_rule(world.get_location("PotSS: Amanecida of the Chiselled Steel", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
-        add_rule(world.get_location("TSC: Linen drop room", player),
+        add_rule(world.get_location("TSC: Under elevator shaft", player),
             lambda state: state._blasphemous_mask_boss_easy(player))
-        add_rule(world.get_location("TSC: Exposito", player),
+        add_rule(world.get_location("TSC: Exposito, Scion of Abjuration", player),
             lambda state: state._blasphemous_mask_boss_easy(player))
-        add_rule(world.get_location("WotHP: Quirce", player),
+        add_rule(world.get_location("WotHP: Quirce, Returned By The Flames", player),
             lambda state: state._blasphemous_mask_boss_easy(player))
-        add_rule(world.get_location("WotHP: Quirce room", player),
+        add_rule(world.get_location("WotHP: Collapsing floor ledge", player),
             lambda state: state._blasphemous_mask_boss_easy(player))
-        add_rule(world.get_location("WotHP: Lance Amanecida", player),
+        add_rule(world.get_location("WotHP: Amanecida of the Molten Thorn", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
-        add_rule(world.get_location("Guilt arena 4 extra", player),
+        add_rule(world.get_location("Confessor Dungeon 4 extra", player),
             lambda state: state._blasphemous_wound_boss_easy(player))
-        add_rule(world.get_location("Guilt arena 4 main", player),
+        add_rule(world.get_location("Confessor Dungeon 4 main", player),
             lambda state: state._blasphemous_wound_boss_easy(player))
-        add_rule(world.get_location("Guilt arena 5 extra", player),
+        add_rule(world.get_location("Confessor Dungeon 5 extra", player),
             lambda state: state._blasphemous_wound_boss_easy(player))
-        add_rule(world.get_location("Guilt arena 5 main", player),
+        add_rule(world.get_location("Confessor Dungeon 5 main", player),
             lambda state: state._blasphemous_wound_boss_easy(player))
-        add_rule(world.get_location("Guilt arena 6 extra", player),
+        add_rule(world.get_location("Confessor Dungeon 6 extra", player),
             lambda state: state._blasphemous_wound_boss_easy(player))
-        add_rule(world.get_location("Guilt arena 6 main", player),
+        add_rule(world.get_location("Confessor Dungeon 6 main", player),
             lambda state: state._blasphemous_wound_boss_easy(player))
-        add_rule(world.get_location("Guilt arena 7 extra", player),
+        add_rule(world.get_location("Confessor Dungeon 7 extra", player),
             lambda state: state._blasphemous_wound_boss_easy(player))
-        add_rule(world.get_location("Guilt arena 7 main", player),
+        add_rule(world.get_location("Confessor Dungeon 7 main", player),
             lambda state: state._blasphemous_wound_boss_easy(player))
-        add_rule(world.get_location("Amanecida 1", player),
+        add_rule(world.get_location("Defeat 1 Amanecida", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
-        add_rule(world.get_location("Amanecida 2", player),
+        add_rule(world.get_location("Defeat 2 Amanecidas", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
-        add_rule(world.get_location("Amanecida 3", player),
+        add_rule(world.get_location("Defeat 3 Amanecidas", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
-        add_rule(world.get_location("Amanecida 4", player),
+        add_rule(world.get_location("Defeat 4 Amanecidas", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
-        add_rule(world.get_location("All amanecidas reward", player),
+        add_rule(world.get_location("Defeat all Amanecidas", player),
             lambda state: state._blasphemous_endgame_boss_easy(player))
 
     # difficulty (normal)
@@ -1020,93 +1018,93 @@ def rules(blasphemousworld):
             add_rule(i, lambda state: state._blasphemous_esdras_boss_normal(player))
         for i in world.get_region("Deambulatory of His Holiness", player).entrances:
             add_rule(i, lambda state: state._blasphemous_endgame_boss_normal(player))
-        add_rule(world.get_location("Albero: Church donation 1", player),
+        add_rule(world.get_location("Albero: Donate 5000 Tears", player),
             lambda state: state._blasphemous_wound_boss_normal(player))
-        add_rule(world.get_location("Albero: Church donation 2", player),
+        add_rule(world.get_location("Albero: Donate 50000 Tears", player),
             lambda state: state._blasphemous_wound_boss_normal(player))
-        add_rule(world.get_location("Albero: Tirso reward final", player),
+        add_rule(world.get_location("Albero: Tirso's final reward", player),
             lambda state: state._blasphemous_mask_boss_normal(player))
-        add_rule(world.get_location("Ossuary: Isidora reward main", player),
+        add_rule(world.get_location("Ossuary: Isidora, Voice of the Dead", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
-        add_rule(world.get_location("AR: Crisanta", player),
+        add_rule(world.get_location("AR: Crisanta of the Wrapped Agony", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
-        add_rule(world.get_location("BotTC: Esdras", player),
+        add_rule(world.get_location("BotTC: Esdras, of the Anointed Legion", player),
             lambda state: state._blasphemous_esdras_boss_normal(player))
-        add_rule(world.get_location("BotTC: Esdras gift initial", player),
+        add_rule(world.get_location("BotTC: Esdras' gift", player),
             lambda state: state._blasphemous_esdras_boss_normal(player))
-        add_rule(world.get_location("BotTC: Amanecida core", player),
+        add_rule(world.get_location("BotTC: Inside giant statue", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
-        add_rule(world.get_location("BotSS: Crisanta gift", player),
+        add_rule(world.get_location("BotSS: Crisanta's gift", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
-        add_rule(world.get_location("CoOLotCV: Lady room", player),
+        add_rule(world.get_location("CoOLotCV: Lady of the Six Sorrows", player),
             lambda state: state._blasphemous_mask_boss_normal(player))
         add_rule(world.get_location("CoOLotCV: Mask room", player),
             lambda state: state._blasphemous_mask_boss_normal(player))
-        add_rule(world.get_location("GotP: Bow Amanecida", player),
+        add_rule(world.get_location("GotP: Amanecida of the Bejeweled Arrow", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
-        add_rule(world.get_location("HotD: Laudes", player),
+        add_rule(world.get_location("HotD: Laudes, the First of the Amanecidas", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
-        add_rule(world.get_location("LotNW: Elevator cherub", player),
+        add_rule(world.get_location("LotNW: Elevator Child of Moonlight", player),
             lambda state: state._blasphemous_mask_boss_normal(player))
         add_rule(world.get_location("LotNW: Mask room", player),
             lambda state: state._blasphemous_mask_boss_normal(player))
-        add_rule(world.get_location("LotNW: Sword room", player),
+        add_rule(world.get_location("LotNW: Mea Culpa altar", player),
             lambda state: state._blasphemous_mask_boss_normal(player))
         add_rule(world.get_location("LotNW: Red candle", player),
             lambda state: state._blasphemous_mask_boss_normal(player))
         add_rule(world.get_location("MD: Blue candle", player),
             lambda state: state._blasphemous_wound_boss_normal(player))
-        add_rule(world.get_location("MD: SlC entrance cherub", player),
+        add_rule(world.get_location("MD: Cave Child of Moonlight", player),
             lambda state: state._blasphemous_wound_boss_normal(player))
-        add_rule(world.get_location("MD: SlC entrance ledge", player),
+        add_rule(world.get_location("MD: Behind gate to TSC", player),
             lambda state: state._blasphemous_wound_boss_normal(player))
-        add_rule(world.get_location("MoM: Melquiades", player),
+        add_rule(world.get_location("MoM: Melquiades, The Exhumed Archbishop", player),
             lambda state: state._blasphemous_mask_boss_normal(player))
         add_rule(world.get_location("MoM: Mask room", player),
             lambda state: state._blasphemous_mask_boss_normal(player))
-        add_rule(world.get_location("MotED: Axe Amanecida", player),
+        add_rule(world.get_location("MotED: Amanecida of the Golden Blades", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
-        add_rule(world.get_location("MaH: Sierpes reward", player),
+        add_rule(world.get_location("MaH: Sierpes' eye", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
         add_rule(world.get_location("MaH: Sierpes", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
-        add_rule(world.get_location("PotSS: Falcata Amanecida", player),
+        add_rule(world.get_location("PotSS: Amanecida of the Chiselled Steel", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
-        add_rule(world.get_location("TSC: Linen drop room", player),
+        add_rule(world.get_location("TSC: Under elevator shaft", player),
             lambda state: state._blasphemous_mask_boss_normal(player))
-        add_rule(world.get_location("TSC: Exposito", player),
+        add_rule(world.get_location("TSC: Exposito, Scion of Abjuration", player),
             lambda state: state._blasphemous_mask_boss_normal(player))
-        add_rule(world.get_location("WotHP: Quirce", player),
+        add_rule(world.get_location("WotHP: Quirce, Returned By The Flames", player),
             lambda state: state._blasphemous_mask_boss_normal(player))
-        add_rule(world.get_location("WotHP: Quirce room", player),
+        add_rule(world.get_location("WotHP: Collapsing floor ledge", player),
             lambda state: state._blasphemous_mask_boss_normal(player))
-        add_rule(world.get_location("WotHP: Lance Amanecida", player),
+        add_rule(world.get_location("WotHP: Amanecida of the Molten Thorn", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
-        add_rule(world.get_location("Guilt arena 4 extra", player),
+        add_rule(world.get_location("Confessor Dungeon 4 extra", player),
             lambda state: state._blasphemous_wound_boss_normal(player))
-        add_rule(world.get_location("Guilt arena 4 main", player),
+        add_rule(world.get_location("Confessor Dungeon 4 main", player),
             lambda state: state._blasphemous_wound_boss_normal(player))
-        add_rule(world.get_location("Guilt arena 5 extra", player),
+        add_rule(world.get_location("Confessor Dungeon 5 extra", player),
             lambda state: state._blasphemous_wound_boss_normal(player))
-        add_rule(world.get_location("Guilt arena 5 main", player),
+        add_rule(world.get_location("Confessor Dungeon 5 main", player),
             lambda state: state._blasphemous_wound_boss_normal(player))
-        add_rule(world.get_location("Guilt arena 6 extra", player),
+        add_rule(world.get_location("Confessor Dungeon 6 extra", player),
             lambda state: state._blasphemous_wound_boss_normal(player))
-        add_rule(world.get_location("Guilt arena 6 main", player),
+        add_rule(world.get_location("Confessor Dungeon 6 main", player),
             lambda state: state._blasphemous_wound_boss_normal(player))
-        add_rule(world.get_location("Guilt arena 7 extra", player),
+        add_rule(world.get_location("Confessor Dungeon 7 extra", player),
             lambda state: state._blasphemous_wound_boss_normal(player))
-        add_rule(world.get_location("Guilt arena 7 main", player),
+        add_rule(world.get_location("Confessor Dungeon 7 main", player),
             lambda state: state._blasphemous_wound_boss_normal(player))
-        add_rule(world.get_location("Amanecida 1", player),
+        add_rule(world.get_location("Defeat 1 Amanecida", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
-        add_rule(world.get_location("Amanecida 2", player),
+        add_rule(world.get_location("Defeat 2 Amanecidas", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
-        add_rule(world.get_location("Amanecida 3", player),
+        add_rule(world.get_location("Defeat 3 Amanecidas", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
-        add_rule(world.get_location("Amanecida 4", player),
+        add_rule(world.get_location("Defeat 4 Amanecidas", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
-        add_rule(world.get_location("All amanecidas reward", player),
+        add_rule(world.get_location("Defeat all Amanecidas", player),
             lambda state: state._blasphemous_endgame_boss_normal(player))
 
     # difficulty (hard)
@@ -1121,91 +1119,91 @@ def rules(blasphemousworld):
             add_rule(i, lambda state: state._blasphemous_esdras_boss_hard(player))
         for i in world.get_region("Deambulatory of His Holiness", player).entrances:
             add_rule(i, lambda state: state._blasphemous_endgame_boss_hard(player))
-        add_rule(world.get_location("Albero: Church donation 1", player),
+        add_rule(world.get_location("Albero: Donate 5000 Tears", player),
             lambda state: state._blasphemous_wound_boss_hard(player))
-        add_rule(world.get_location("Albero: Church donation 2", player),
+        add_rule(world.get_location("Albero: Donate 50000 Tears", player),
             lambda state: state._blasphemous_wound_boss_hard(player))
-        add_rule(world.get_location("Albero: Tirso reward final", player),
+        add_rule(world.get_location("Albero: Tirso's final reward", player),
             lambda state: state._blasphemous_mask_boss_hard(player))
-        add_rule(world.get_location("Ossuary: Isidora reward main", player),
+        add_rule(world.get_location("Ossuary: Isidora, Voice of the Dead", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))
-        add_rule(world.get_location("AR: Crisanta", player),
+        add_rule(world.get_location("AR: Crisanta of the Wrapped Agony", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))
-        add_rule(world.get_location("BotTC: Esdras", player),
+        add_rule(world.get_location("BotTC: Esdras, of the Anointed Legion", player),
             lambda state: state._blasphemous_esdras_boss_hard(player))
-        add_rule(world.get_location("BotTC: Esdras gift initial", player),
+        add_rule(world.get_location("BotTC: Esdras' gift", player),
             lambda state: state._blasphemous_esdras_boss_hard(player))
-        add_rule(world.get_location("BotTC: Amanecida core", player),
+        add_rule(world.get_location("BotTC: Inside giant statue", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))
-        add_rule(world.get_location("BotSS: Crisanta gift", player),
+        add_rule(world.get_location("BotSS: Crisanta's gift", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))
-        add_rule(world.get_location("CoOLotCV: Lady room", player),
+        add_rule(world.get_location("CoOLotCV: Lady of the Six Sorrows", player),
             lambda state: state._blasphemous_mask_boss_hard(player))
         add_rule(world.get_location("CoOLotCV: Mask room", player),
             lambda state: state._blasphemous_mask_boss_hard(player))
-        add_rule(world.get_location("GotP: Bow Amanecida", player),
+        add_rule(world.get_location("GotP: Amanecida of the Bejeweled Arrow", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))
-        add_rule(world.get_location("HotD: Laudes", player),
+        add_rule(world.get_location("HotD: Laudes, the First of the Amanecidas", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))
-        add_rule(world.get_location("LotNW: Elevator cherub", player),
+        add_rule(world.get_location("LotNW: Elevator Child of Moonlight", player),
             lambda state: state._blasphemous_mask_boss_hard(player))
         add_rule(world.get_location("LotNW: Mask room", player),
             lambda state: state._blasphemous_mask_boss_hard(player))
-        add_rule(world.get_location("LotNW: Sword room", player),
+        add_rule(world.get_location("LotNW: Mea Culpa altar", player),
             lambda state: state._blasphemous_mask_boss_hard(player))
         add_rule(world.get_location("LotNW: Red candle", player),
             lambda state: state._blasphemous_mask_boss_hard(player))
         add_rule(world.get_location("MD: Blue candle", player),
             lambda state: state._blasphemous_wound_boss_hard(player))
-        add_rule(world.get_location("MD: SlC entrance cherub", player),
+        add_rule(world.get_location("MD: Cave Child of Moonlight", player),
             lambda state: state._blasphemous_wound_boss_hard(player))
-        add_rule(world.get_location("MD: SlC entrance ledge", player),
+        add_rule(world.get_location("MD: Behind gate to TSC", player),
             lambda state: state._blasphemous_wound_boss_hard(player))
-        add_rule(world.get_location("MoM: Melquiades", player),
+        add_rule(world.get_location("MoM: Melquiades, The Exhumed Archbishop", player),
             lambda state: state._blasphemous_mask_boss_hard(player))
         add_rule(world.get_location("MoM: Mask room", player),
             lambda state: state._blasphemous_mask_boss_hard(player))
-        add_rule(world.get_location("MotED: Axe Amanecida", player),
+        add_rule(world.get_location("MotED: Amanecida of the Golden Blades", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))
-        add_rule(world.get_location("MaH: Sierpes reward", player),
+        add_rule(world.get_location("MaH: Sierpes' eye", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))
         add_rule(world.get_location("MaH: Sierpes", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))
-        add_rule(world.get_location("PotSS: Falcata Amanecida", player),
+        add_rule(world.get_location("PotSS: Amanecida of the Chiselled Steel", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))
-        add_rule(world.get_location("TSC: Linen drop room", player),
+        add_rule(world.get_location("TSC: Under elevator shaft", player),
             lambda state: state._blasphemous_mask_boss_hard(player))
-        add_rule(world.get_location("TSC: Exposito", player),
+        add_rule(world.get_location("TSC: Exposito, Scion of Abjuration", player),
             lambda state: state._blasphemous_mask_boss_hard(player))
-        add_rule(world.get_location("WotHP: Quirce", player),
+        add_rule(world.get_location("WotHP: Quirce, Returned By The Flames", player),
             lambda state: state._blasphemous_mask_boss_hard(player))
-        add_rule(world.get_location("WotHP: Quirce room", player),
+        add_rule(world.get_location("WotHP: Collapsing floor ledge", player),
             lambda state: state._blasphemous_mask_boss_hard(player))
-        add_rule(world.get_location("WotHP: Lance Amanecida", player),
+        add_rule(world.get_location("WotHP: Amanecida of the Molten Thorn", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))
-        add_rule(world.get_location("Guilt arena 4 extra", player),
+        add_rule(world.get_location("Confessor Dungeon 4 extra", player),
             lambda state: state._blasphemous_wound_boss_hard(player))
-        add_rule(world.get_location("Guilt arena 4 main", player),
+        add_rule(world.get_location("Confessor Dungeon 4 main", player),
             lambda state: state._blasphemous_wound_boss_hard(player))
-        add_rule(world.get_location("Guilt arena 5 extra", player),
+        add_rule(world.get_location("Confessor Dungeon 5 extra", player),
             lambda state: state._blasphemous_wound_boss_hard(player))
-        add_rule(world.get_location("Guilt arena 5 main", player),
+        add_rule(world.get_location("Confessor Dungeon 5 main", player),
             lambda state: state._blasphemous_wound_boss_hard(player))
-        add_rule(world.get_location("Guilt arena 6 extra", player),
+        add_rule(world.get_location("Confessor Dungeon 6 extra", player),
             lambda state: state._blasphemous_wound_boss_hard(player))
-        add_rule(world.get_location("Guilt arena 6 main", player),
+        add_rule(world.get_location("Confessor Dungeon 6 main", player),
             lambda state: state._blasphemous_wound_boss_hard(player))
-        add_rule(world.get_location("Guilt arena 7 extra", player),
+        add_rule(world.get_location("Confessor Dungeon 7 extra", player),
             lambda state: state._blasphemous_wound_boss_hard(player))
-        add_rule(world.get_location("Guilt arena 7 main", player),
+        add_rule(world.get_location("Confessor Dungeon 7 main", player),
             lambda state: state._blasphemous_wound_boss_hard(player))
-        add_rule(world.get_location("Amanecida 1", player),
+        add_rule(world.get_location("Defeat 1 Amanecida", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))
-        add_rule(world.get_location("Amanecida 2", player),
+        add_rule(world.get_location("Defeat 2 Amanecidas", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))
-        add_rule(world.get_location("Amanecida 3", player),
+        add_rule(world.get_location("Defeat 3 Amanecidas", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))
-        add_rule(world.get_location("Amanecida 4", player),
+        add_rule(world.get_location("Defeat 4 Amanecidas", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))
-        add_rule(world.get_location("All amanecidas reward", player),
+        add_rule(world.get_location("Defeat all Amanecidas", player),
             lambda state: state._blasphemous_endgame_boss_hard(player))

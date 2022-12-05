@@ -171,7 +171,7 @@ class BlasphemousWorld(World):
             self.place_items_from_dict(Vanilla.tirso_dict)
 
         if not self.multiworld.miriam_shuffle[self.player]:
-            self.multiworld.get_location("AtTotS: Miriam gift", self.player)\
+            self.multiworld.get_location("AtTotS: Miriam's gift", self.player)\
                 .place_locked_item(self.create_item("Cantina of the Blue Rose"))
 
         if not self.multiworld.redento_shuffle[self.player]:
@@ -190,7 +190,7 @@ class BlasphemousWorld(World):
             self.place_items_from_dict(Vanilla.gemino_dict)
 
         if not self.multiworld.guilt_shuffle[self.player]:
-            self.multiworld.get_location("GotP: Guilt room", self.player)\
+            self.multiworld.get_location("GotP: Confessor Dungeon room", self.player)\
                 .place_locked_item(self.create_item("Weight of True Guilt"))
 
         if not self.multiworld.ossuary_shuffle[self.player]:
