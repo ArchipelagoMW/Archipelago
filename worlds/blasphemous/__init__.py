@@ -10,7 +10,7 @@ from . import Vanilla
 
 
 class BlasphemousWeb(WebWorld):
-    theme = ""
+    theme = "stone"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Blasphemous randomizer connected to an Archipelago Multiworld",
@@ -23,7 +23,9 @@ class BlasphemousWeb(WebWorld):
 
 class BlasphemousWorld(World):
     """
-    description
+    Blasphemous is a challenging Metroidvania set in the cursed land of Cvstodia. Play as the Penitent One, trapped
+    in an endless cycle of death and rebirth, and free the world from it's terrible fate in your quest to break
+    your eternal damnation!
     """
 
     game: str = "Blasphemous"
