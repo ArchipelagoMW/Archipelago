@@ -193,12 +193,16 @@ class TLoZWorld(World):
             for location in level.locations:
                 add_rule(self.multiworld.get_location(location.name, self.player),
                          lambda state: state.has_group("weapons", self.player))
-                add_rule(self.multiworld.get_location(location.name, self.player),
-                         lambda state: state.has("Heart Container", self.player, 3 + i) or
-                                       (state.has("Blue Ring", self.player) and
-                                        state.has("Heart Container", self.player, int(i / 2))) or
-                                       (state.has("Red Ring", self.player) and
-                                        state.has("Heart Container", self.player, int(i / 4)))
+                if i > 0:  # Don't need an extra heart for Level 1
+                    y = i
+                    if not self.multiworld.ExpandedPool[self.player]:
+                        y = max(y - 4, 0)  # Account for Take Any Item hearts that AP doesn't see that can be obtained
+                    add_rule(self.multiworld.get_location(location.name, self.player),
+                             lambda state: state.has("Heart Container", self.player, 3 + y) or
+                                           (state.has("Blue Ring", self.player) and
+                                            state.has("Heart Container", self.player, int(y / 2))) or
+                                           (state.has("Red Ring", self.player) and
+                                            state.has("Heart Container", self.player, int(y / 4)))
 
                          )
         # No requiring anything in a shop until we can farm for money
