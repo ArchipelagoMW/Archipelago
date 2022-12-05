@@ -741,7 +741,8 @@ def rules(blasphemousworld):
         lambda state: state._blasphemous_open_holes(player))
     set_rule(world.get_location("THL: Underground chest", player),
         lambda state: state._blasphemous_blood_relic(player) and \
-            state._blasphemous_water_relic(player))
+            state._blasphemous_water_relic(player) and \
+                state._blasphemous_open_holes(player))
     
     # Wall of the Holy Prohibitions
     set_rule(world.get_location("WotHP: Upper east room, top bronze cell", player),
