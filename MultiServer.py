@@ -593,9 +593,9 @@ class Context:
         if "auto" in self.collect_mode:
             collect_player(self, client.team, client.slot)
         if "auto" in self.release_mode:
-            forfeit_player(self, client.team, client.slot)
+            release_player(self, client.team, client.slot)
         elif self.forced_auto_forfeits[self.games[client.slot]]:
-            forfeit_player(self, client.team, client.slot)
+            release_player(self, client.team, client.slot)
         self.save()  # save goal completion flag
 
 
@@ -829,7 +829,7 @@ def update_checked_locations(ctx: Context, team: int, slot: int):
                   [{"cmd": "RoomUpdate", "checked_locations": get_checked_checks(ctx, team, slot)}])
 
 
-def forfeit_player(ctx: Context, team: int, slot: int):
+def release_player(ctx: Context, team: int, slot: int):
     """register any locations that are in the multidata"""
     all_locations = set(ctx.locations[slot])
     ctx.notify_all("%s (Team #%d) has released all remaining items from their world." % (ctx.player_names[(team, slot)], team + 1))
@@ -1194,10 +1194,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def _cmd_release(self) -> bool:
         """Sends remaining items in your world to their recipients."""
         if self.ctx.allow_forfeits.get((self.client.team, self.client.slot), False):
-            forfeit_player(self.ctx, self.client.team, self.client.slot)
+            release_player(self.ctx, self.client.team, self.client.slot)
             return True
         if "enabled" in self.ctx.release_mode:
-            forfeit_player(self.ctx, self.client.team, self.client.slot)
+            release_player(self.ctx, self.client.team, self.client.slot)
             return True
         elif "disabled" in self.ctx.release_mode:
             self.output("Sorry, client item releasing has been disabled on this server. "
@@ -1205,7 +1205,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return False
         else:  # is auto or goal
             if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
-                forfeit_player(self.ctx, self.client.team, self.client.slot)
+                release_player(self.ctx, self.client.team, self.client.slot)
                 return True
             else:
                 self.output(
@@ -1838,7 +1838,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         player = self.resolve_player(player_name)
         if player:
             team, slot, _ = player
-            forfeit_player(self.ctx, team, slot)
+            release_player(self.ctx, team, slot)
             return True
 
         self.output(f"Could not find player {player_name} to release")
