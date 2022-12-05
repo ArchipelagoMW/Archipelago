@@ -840,7 +840,7 @@ def create_regions(world, player: int, active_locations):
     ]
 
 
-def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_emblems, gate_bosses, final_cannons_core_mission: str):
+def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_emblems, gate_bosses, first_cannons_core_mission: str, final_cannons_core_mission: str):
     names: typing.Dict[str, int] = {}
 
     connect(world, player, names, 'Menu', LocationName.gate_0_region)
@@ -848,7 +848,7 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
             lambda state: (state.has(ItemName.emblem, player, cannon_core_emblems)))
 
     if world.goal[player] == 0:
-        required_mission_name = LocationName.cannon_core_1
+        required_mission_name = first_cannons_core_mission
 
         if world.required_cannons_core_missions[player].value == 1:
             required_mission_name = final_cannons_core_mission

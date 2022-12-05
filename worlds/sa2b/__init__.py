@@ -11,7 +11,7 @@ from .Rules import set_rules
 from .Names import ItemName, LocationName
 from ..AutoWorld import WebWorld, World
 from .GateBosses import get_gate_bosses, get_boss_name
-from .Missions import get_mission_table, get_mission_count_table, get_final_cannons_core_mission
+from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions
 import Patch
 
 
@@ -214,9 +214,9 @@ class SA2BWorld(World):
 
         self.region_emblem_map = dict(zip(shuffled_region_list, emblem_requirement_list))
 
-        final_cannons_core_mission: str = get_final_cannons_core_mission(self.mission_map, self.mission_count_map)
+        first_cannons_core_mission, final_cannons_core_mission = get_first_and_last_cannons_core_missions(self.mission_map, self.mission_count_map)
 
-        connect_regions(self.multiworld, self.player, gates, self.emblems_for_cannons_core, self.gate_bosses, final_cannons_core_mission)
+        connect_regions(self.multiworld, self.player, gates, self.emblems_for_cannons_core, self.gate_bosses, first_cannons_core_mission, final_cannons_core_mission)
 
         max_required_emblems = max(max(emblem_requirement_list), self.emblems_for_cannons_core)
         itempool += [self.create_item(ItemName.emblem) for _ in range(max_required_emblems)]

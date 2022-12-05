@@ -314,12 +314,14 @@ def get_mission_table(multiworld: MultiWorld, player: int):
     return mission_table
 
 
-def get_final_cannons_core_mission(mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int]):
+def get_first_and_last_cannons_core_missions(mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int]):
         mission_count = mission_count_map[30]
         mission_order: typing.List[int] = mission_orders[mission_map[30]]
         stage_prefix: str = stage_name_prefixes[30]
 
-        mission_number = mission_order[mission_count - 1]
-        location_name: str = stage_prefix + str(mission_number)
+        first_mission_number = mission_order[0]
+        last_mission_number = mission_order[mission_count - 1]
+        first_location_name: str = stage_prefix + str(first_mission_number)
+        last_location_name: str = stage_prefix + str(last_mission_number)
 
-        return location_name
+        return first_location_name, last_location_name
