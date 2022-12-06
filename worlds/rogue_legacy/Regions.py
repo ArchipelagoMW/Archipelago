@@ -95,7 +95,7 @@ def create_regions(multiworld: MultiWorld, player: int):
     multiworld.get_entrance("The Fountain Room", player).connect(multiworld.get_region("The Fountain Room", player))
 
 
-def create_region(multiworld: MultiWorld, player: int, name: str, locations=None, exits=None):
+def create_region(multiworld: MultiWorld, player: int, name: str, locations=None, region_exits=None):
     ret = Region(name, RegionType.Generic, name, player)
     ret.multiworld = multiworld
     if locations:
@@ -104,8 +104,8 @@ def create_region(multiworld: MultiWorld, player: int, name: str, locations=None
             location = RLLocation(player, loc_name, loc_data.code if loc_data else None, ret)
             ret.locations.append(location)
 
-    if exits:
-        for exit in exits:
+    if region_exits:
+        for exit in region_exits:
             entrance = Entrance(player, exit, ret)
             ret.exits.append(entrance)
 
