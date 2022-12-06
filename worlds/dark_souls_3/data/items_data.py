@@ -198,8 +198,8 @@ goods_table = {
     "Soul of a Demon": 0x400002E3,
 
     # Upgrade materials
-    **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(1, 16)},
-    **{"Large Titanite Shard #"+str(i): 0x400003E9 for i in range(1, 16)},
+    **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(1, 11)},
+    **{"Large Titanite Shard #"+str(i): 0x400003E9 for i in range(1, 11)},
     **{"Titanite Chunk #"+str(i): 0x400003EA for i in range(1, 6)},
     **{"Titanite Slab #"+str(i): 0x400003EB for i in range(1, 4)},
 
@@ -219,7 +219,9 @@ goods_table = {
     "Soul of Darkeater Midir": 0x400002EB,
     "Soul of Slave Knight Gael": 0x400002E9,
     **{"Ember #"+str(i): 0x400001F4 for i in range(1, 7)},
-    **{"Titanite Scale #" + str(i): 0x400003FC for i in range(1, 15)}
+    **{"Titanite Scale #"+str(i): 0x400003FC for i in range(1, 15)},
+    **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(11, 16)},
+    **{"Large Titanite Shard #"+str(i): 0x400003E9 for i in range(11, 16)}
 }
 
 armor_table = {
