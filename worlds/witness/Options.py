@@ -100,6 +100,7 @@ class PuzzleRandomization(Choice):
     display_name = "Puzzle Randomization"
     option_sigma_normal = 0
     option_sigma_expert = 1
+    option_none = 2
 
 
 class MountainLasers(Range):

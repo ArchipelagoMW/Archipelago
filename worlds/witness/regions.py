@@ -63,8 +63,10 @@ class WitnessRegions:
 
         if difficulty == 1:
             reference_logic = StaticWitnessLogic.sigma_expert
-        else:
+        elif difficulty == 0:
             reference_logic = StaticWitnessLogic.sigma_normal
+        else:
+            reference_logic = StaticWitnessLogic.vanilla
 
         all_locations = set()
 

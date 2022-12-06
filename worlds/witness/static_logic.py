@@ -211,6 +211,10 @@ class StaticWitnessLogic:
     def sigma_normal(self) -> StaticWitnessLogicObj:
         return StaticWitnessLogicObj("WitnessLogic.txt")
 
+    @lazy
+    def vanilla(self) -> StaticWitnessLogicObj:
+        return StaticWitnessLogicObj("WitnessLogicVanilla.txt")
+
     def __init__(self):
         self.parse_items()
 

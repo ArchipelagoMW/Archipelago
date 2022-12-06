@@ -386,6 +386,8 @@ class WitnessPlayerLogic:
             self.REFERENCE_LOGIC = StaticWitnessLogic.sigma_normal
         elif self.DIFFICULTY == 1:
             self.REFERENCE_LOGIC = StaticWitnessLogic.sigma_expert
+        elif self.DIFFICULTY == 2:
+            self.REFERENCE_LOGIC = StaticWitnessLogic.vanilla
 
         self.CONNECTIONS_BY_REGION_NAME = copy.copy(self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME)
         self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.copy(self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
