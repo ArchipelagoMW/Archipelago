@@ -64,14 +64,6 @@ class RLWorld(World):
                     f"allow_default_names is off, but not enough names are defined in additional_sir_names. "
                     f"Expected {int(self.get_setting('number_of_children'))}, Got {additional_sir_names}")
 
-        # Place early items dependent on settings.
-        if self.get_setting("vendors") == "early":
-            self.multiworld.local_early_items[self.player]["Blacksmith"] = 1
-            self.multiworld.local_early_items[self.player]["Enchantress"] = 1
-
-        if self.get_setting("architect") == "early":
-            self.multiworld.local_early_items[self.player]["Architect"] = 1
-
     def create_items(self):
         self.item_pool = []
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
@@ -85,11 +77,18 @@ class RLWorld(World):
                 if self.get_setting("architect") == "start_unlocked":
                     self.multiworld.push_precollected(self.create_item(name))
                     continue
+                if self.get_setting("architect") == "early":
+                    self.multiworld.local_early_items[self.player]["Architect"] = 1
+                    continue
 
             # Blacksmith and Enchantress
             if name == "Blacksmith" or name == "Enchantress":
                 if self.get_setting("vendors") == "start_unlocked":
                     self.multiworld.push_precollected(self.create_item(name))
+                    continue
+                if self.get_setting("vendors") == "early":
+                    self.multiworld.local_early_items[self.player]["Blacksmith"] = 1
+                    self.multiworld.local_early_items[self.player]["Enchantress"] = 1
                     continue
 
             # Haggling
