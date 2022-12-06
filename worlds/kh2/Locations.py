@@ -602,7 +602,6 @@ LocationName.FinalXemnas                            : LocationData(0x132205,Fals
 LocationName.XemnasDataPowerBoost                   : LocationData(0x132206,False,554,1),
 }                                                                  
 SoraLevels={                                                       
-    LocationName.Lvl1                               : LocationData(0x132207,False,1,4),
     LocationName.Lvl2                               : LocationData(0x132208,False,2,4),
     LocationName.Lvl3                               : LocationData(0x132209,False,3,4),
     LocationName.Lvl4                               : LocationData(0x13220A,False,4,4),
@@ -862,16 +861,22 @@ exclusion_table = {
         LocationName.Lvl98,
         LocationName.Lvl99,
         },
-    "agrabah_checks":{
-    "RuinedChamberTornPages         "
-    "RuinedChamberRuinsMap          "
-    "GenieJafar                     "
-    "WishingLamp                    "
-    "LexaeusBonus                   "
-    "LexaeusASStrengthBeyondStrength"
-    "LexaeusDataLostIllusion        "
-    }
 }
+firstVisits=[
+        LocationName.LoD_Region         ,        
+        LocationName.Ag_Region          ,
+        LocationName.Dc_Region          , 
+        LocationName.Pr_Region          ,        
+        LocationName.Oc_Region          ,             
+        LocationName.Bc_Region          ,         
+        LocationName.Sp_Region          ,
+        LocationName.Ht_Region          , 
+        LocationName.Hb_Region          , 
+        LocationName.Pl_Region          ,  
+        LocationName.STT_Region         , 
+        LocationName.TT_Region          , 
+        LocationName.Twtnw_Region       ,
+]
 corChecks=[
     LocationName.CoRDepthsUpperLevelRemembranceGem ,
     LocationName.CoRMiningAreaSerenityGem          ,

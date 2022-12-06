@@ -7,7 +7,7 @@ import typing
 from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
 from ..generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations
-from .Items import KH2Item, ItemData, item_dictionary_table
+from .Items import ActionAbility_Table, KH2Item, ItemData, item_dictionary_table
 from .Locations import all_locations, setup_locations,exclusion_table
 from .Rules import set_rules
 from .logic import KH2Logic
@@ -70,7 +70,7 @@ class KH2World(World):
     def create_item(self, name: str,) -> Item:
        data = item_dictionary_table[name]
 
-       if name in Items.Progression_Table or name in Items.Movement_Table or name in Items.Forms_Table:
+       if name in Items.Progression_Table or name in Items.Movement_Table or name in Items.Forms_Table or name in Items.Magic_Table:
             item_classification = ItemClassification.progression
        elif name in Items.Items_Table or name in Items.Reports_Table:
            item_classification = ItemClassification.filler
@@ -86,6 +86,7 @@ class KH2World(World):
     def generate_basic(self):
         itempool: typing.List[KH2Item] = []
         #print(exclusion_table.Level50)
+        print(self.world.Visit_locking[self.player].value)
         #if self.world.Level_Depth[self.player].value==1:
         #    for x in range(len(exclusion_table.popups)):
         #        self.world.get_location(exclusion_table.level50, self.player).place_locked_item(self.create_item(ItemName.Potion))
@@ -123,6 +124,8 @@ class KH2World(World):
             itempool +=[self.create_item(ItemName.CureElement)]
             itempool +=[self.create_item(ItemName.MagnetElement)]
             itempool +=[self.create_item(ItemName.ReflectElement)]     
+        
+            
         for item in item_dictionary_table:
             itempool += self._create_items(item)
 

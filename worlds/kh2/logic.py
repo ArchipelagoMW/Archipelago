@@ -1,17 +1,7 @@
 from ..AutoWorld import LogicMixin
 from .Names import LocationName,ItemName
 class KH2Logic(LogicMixin):
-
-    #def kh_FormLevel_Unlocked(self,player,amount):
-    #    count: int = self.item_count("Valor Form", player) + self.item_count("Wisdom Form", player)+ self.item_count("Master Form", player)+ \
-    #        self.item_count("Limit Form", player)+ self.item_count("Final Form", player)
-    #    if(count!=0):
-    #       print("yas")
-    #    return count >= amount
-       
-
-
-        #piglets house
+    #piglets house
     def kh_torn_page_1(self, player: int):
         return self.has('Torn Page', player, 1)
     #rabbits
@@ -36,7 +26,9 @@ class KH2Logic(LogicMixin):
     def kh_oc_unlocked(self,player):
         return self.has('Battlefields of War',player)
     def kh_twtnw_unlocked(self,player):
-        return self.has('Way to the Dawn',player)or self.has('Quick Run',player,1)
+        return self.has('Way to the Dawn',player)and self.has('Quick Run',player,1)
+    def kh_twtnw_unlocked(self,player):
+        return self.has('Final Form',player)and self.has('Quick Run',player,2)
     def kh_ht_unlocked(self,player):
         return self.has('Bone Fist',player)
     def kh_tt_unlocked(self,player):
@@ -44,7 +36,7 @@ class KH2Logic(LogicMixin):
     def kh_tt2_unlocked(self,player):
         return self.has('Ice Cream',player)
     def kh_tt3_unlocked(self,player):
-        return self.has('Picture',player) and self.has('Ice Cream',player)
+        return self.has('Picture',player)
     def kh_pr_unlocked(self,player):
         return self.has('Skill and Crossbones',player)
     def kh_sp_unlocked(self,player):
@@ -61,8 +53,7 @@ class KH2Logic(LogicMixin):
     def kh_ag_unlocked(self,player):
         return self.has('Scimitar',player)
     def kh_ag_unlocked(self,player:int):
-        #RE SPELL THESE
-        return self.has('Scimitar',player)and self.has('fire element',player,1)and self.has('blizzard element',player,1)and self.has('thunder element',1)
+        return self.has('Scimitar',player)
     def kh_bc_unlocked(self,player):
         return self.has("Beast's Claw",player)
     def kh_FormLevel_Unlocked(self,player,amount):
@@ -70,8 +61,6 @@ class KH2Logic(LogicMixin):
         for form in {ItemName.ValorForm,ItemName.WisdomForm,ItemName.LimitForm,ItemName.MasterForm,ItemName.FinalForm}:
           if self.has(form, player):
             level += 1
-        if(level!=0):
-             print("yas")
         return level>=amount
     def kh_FinalFights_Unlocked(self,player):
         return self.has('Proof of Connection',player,1)and self.has('Proof of Nonexistence',player,1)and self.has('Proof of Peace',player,1)

@@ -3,7 +3,7 @@ import typing
 from BaseClasses import MultiWorld, Region, Entrance
 from .Items import KH2Item
 from .Options import FinalEXP, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement,SuperBosses
-from .Locations import HadesCups, LocationName, Oc2Cups,setup_locations,KH2Location
+from .Locations import HadesCups, LocationName, Oc2Cups,setup_locations, KH2Location,firstVisits
 from .Names import LocationName, ItemName
 from ..AutoWorld import LogicMixin
 
@@ -277,22 +277,18 @@ def create_regions(world, player: int, active_locations):
     Oc2_Region = create_region(world, player, active_locations, LocationName.Oc2_Region,
                                        Oc2_Region_locations, None)
     Oc2Cups_Region_locations = {
-            LocationName.ProtectBeltPainandPanicCup    :[0x500CD,1],
-            LocationName.SerenityGemPainandPanicCup    :[0x500CE,3],
-            LocationName.RisingDragonCerberusCup       :[0x500CF,4],
-            LocationName.SerenityCrystalCerberusCup    :[0x500D0,5],
-            LocationName.GenjiShieldTitanCup           :[0x500D1,6],
-            LocationName.SkillfulRingTitanCup          :[0x500D2,7],
-            LocationName.FatalCrestGoddessofFateCup    :[0x500D3,8],
-            LocationName.OrichalcumPlusGoddessofFateCup:[0x500D4,9],
-        }                                                
+         LocationName.ProtectBeltPainandPanicCup    :[0x500CD,1],
+         LocationName.SerenityGemPainandPanicCup    :[0x500CE,3],
+         LocationName.RisingDragonCerberusCup       :[0x500CF,4],
+         LocationName.SerenityCrystalCerberusCup    :[0x500D0,5],
+         LocationName.GenjiShieldTitanCup           :[0x500D1,6],
+         LocationName.SkillfulRingTitanCup          :[0x500D2,7],
+         LocationName.FatalCrestGoddessofFateCup    :[0x500D3,8],
+         LocationName.OrichalcumPlusGoddessofFateCup:[0x500D4,9],
+         LocationName.HadesCupTrophyParadoxCups     :[0x500D5,10],
+     }                                                
     Oc2Cups_Region = create_region(world, player, active_locations, LocationName.Oc2Cups_Region,
                                        Oc2Cups_Region_locations, None)
-    HadesCups_Region_locations = {
-            LocationName.HadesCupTrophyParadoxCups :[0x500D5,1],
-        }
-    HadesCups_Region = create_region(world, player, active_locations, LocationName.HadesCups_Region,
-                                       HadesCups_Region_locations, None)
     Bc_Region_locations = {
                 LocationName.BCCourtyardAPBoost                :[0x500D6,1],
                 LocationName.BCCourtyardHiPotion               :[0x500D7,2],
@@ -826,8 +822,6 @@ def create_regions(world, player: int, active_locations):
                                Level_Region_locations,None)
                                 
 
-
-
     world.regions += [
     LoD_Region         ,  
     LoD2_Region        ,
@@ -845,8 +839,7 @@ def create_regions(world, player: int, active_locations):
     Pr2_Region         ,         
     Oc_Region          ,   
     Oc2_Region         ,
-    Oc2Cups_Region  ,                 
-    HadesCups_Region    ,               
+    Oc2Cups_Region  ,                              
     Bc_Region          ,        
     Bc2_Region         , 
     Sp_Region          ,
@@ -875,92 +868,59 @@ def create_regions(world, player: int, active_locations):
     Final_Region       ,
     Level_Region,
     ]
-
-
 def connect_regions (world: MultiWorld, player: int, self):
       #connecting every first visit to the GoA 
       #2 Visit locking and is going to be turned off mabybe
+      
       names: typing.Dict[str, int] = {}
       connect(world, player, names, 'Menu', LocationName.GoA_Region)
-      connect(world, player, names,LocationName.GoA_Region, LocationName.LoD_Region,
-          lambda state: (state.has(ItemName.SwordoftheAncestor, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.LoD2_Region,
-          lambda state: (state.has(ItemName.SwordoftheAncestor, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.LoD_Region)
+      connect(world, player, names,LocationName.LoD_Region, LocationName.LoD2_Region)
       
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Oc_Region,
-          lambda state: (state.has(ItemName.BattlefieldsofWar, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Oc2_Region,
-          lambda state: (state.has(ItemName.BattlefieldsofWar, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Oc_Region)
+      connect(world, player, names,LocationName.Oc_Region, LocationName.Oc2_Region)
       
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Oc2Cups_Region,
-          lambda state: (state.has(ItemName.BattlefieldsofWar, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.HadesCups_Region,
-          lambda state: (state.has(ItemName.BattlefieldsofWar, player)))      
+      connect(world, player, names,LocationName.Oc2_Region, LocationName.Oc2Cups_Region)   
 
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Ag_Region,
-          lambda state: (state.has(ItemName.Scimitar, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Ag2_Region,
-          lambda state: (state.has(ItemName.Scimitar, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Ag_Region)
+      connect(world, player, names,LocationName.Ag_Region, LocationName.Ag2_Region,
+              lambda state: (state.has(ItemName.FireElement, player) 
+                             and state.has(ItemName.BlizzardElement,player)
+                             and state.has(ItemName.ThunderElement,player)))
       
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Dc_Region,
-          lambda state: (state.has(ItemName.CastleKey, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Tr_Region,
-          lambda state: (state.has(ItemName.CastleKey, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Dc_Region)
+      connect(world, player, names,LocationName.Dc_Region, LocationName.Tr_Region)
       
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Pr_Region,
-          lambda state: (state.has(ItemName.SkillandCrossbones, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Pr2_Region,
-          lambda state: (state.has(ItemName.SkillandCrossbones, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Pr_Region)
+      connect(world, player, names,LocationName.Pr_Region, LocationName.Pr2_Region)
       
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Bc_Region,
-          lambda state: (state.has(ItemName.BeastsClaw, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Bc2_Region,
-          lambda state: (state.has(ItemName.BeastsClaw, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Bc_Region,)
+      connect(world, player, names,LocationName.Bc_Region, LocationName.Bc2_Region)
       
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Sp_Region,
-          lambda state: (state.has(ItemName.IdentityDisk, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Sp2_Region,
-          lambda state: (state.has(ItemName.IdentityDisk, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Sp_Region)
+      connect(world, player, names,LocationName.Sp_Region, LocationName.Sp2_Region)
       
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Ht_Region,
-          lambda state: (state.has(ItemName.BoneFist, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Ht2_Region,
-          lambda state: (state.has(ItemName.BoneFist, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Ht_Region)
+      connect(world, player, names,LocationName.Ht_Region, LocationName.Ht2_Region)
       
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Hb_Region,
-          lambda state: (state.has(ItemName.MembershipCard, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Hb2_Region,
-          lambda state: (state.has(ItemName.MembershipCard, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Hb_Region)
+      connect(world, player, names,LocationName.Hb_Region, LocationName.Hb2_Region)
 
-      connect(world, player, names,LocationName.GoA_Region, LocationName.CoR_Region,
-          lambda state: (state.has(ItemName.MembershipCard, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.FirstHalf_Region,
-          lambda state: (state.has(ItemName.MembershipCard, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.SecondHalf_Region,
-          lambda state: (state.has(ItemName.MembershipCard, player)))
+      connect(world, player, names,LocationName.Hb2_Region, LocationName.CoR_Region)
+      connect(world, player, names,LocationName.CoR_Region, LocationName.FirstHalf_Region)
+      connect(world, player, names,LocationName.FirstHalf_Region, LocationName.SecondHalf_Region)
       
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Pl_Region,
-          lambda state: (state.has(ItemName.ProudFang, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Pl2_Region,
-          lambda state: (state.has(ItemName.ProudFang, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Pl_Region)
+      connect(world, player, names,LocationName.Pl_Region, LocationName.Pl2_Region)
       
-      connect(world, player, names,LocationName.GoA_Region, LocationName.STT_Region,
-          lambda state: (state.has(ItemName.NamineSketches, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.STT_Region)
       
-      connect(world, player, names,LocationName.GoA_Region, LocationName.TT_Region,
-          lambda state: (state.has(ItemName.Poster, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.TT2_Region,
-          lambda state: (state.has(ItemName.Picture, player) 
-                         and state.has(ItemName.Poster,player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.TT3_Region,
-          lambda state: (state.has(ItemName.Picture, player) 
-                         and state.has(ItemName.Poster,player)
-                         and state.has(ItemName.IceCream,player)))  
+      connect(world, player, names,LocationName.GoA_Region, LocationName.TT_Region)
+      connect(world, player, names,LocationName.TT_Region, LocationName.TT2_Region) 
+      connect(world, player, names,LocationName.TT2_Region, LocationName.TT3_Region)
       
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Twtnw_Region,
-          lambda state: (state.has(ItemName.WaytotheDawn, player)))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Twtnw2_Region,
-          lambda state: (state.has(ItemName.WaytotheDawn, player)))
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Twtnw_Region)
+      connect(world, player, names,LocationName.Twtnw_Region, LocationName.Twtnw2_Region)
       
       connect(world, player, names,LocationName.GoA_Region, LocationName.HundredAcre1_Region,
           lambda state: (state.has(ItemName.TornPages, player,1)))
@@ -982,23 +942,29 @@ def connect_regions (world: MultiWorld, player: int, self):
               lambda state: state.has(ItemName.MasterForm,player))
       connect(world, player, names,LocationName.GoA_Region, LocationName.Final_Region,
               lambda state: state.has(ItemName.FinalForm,player))
-      
-      connect(world, player, names,LocationName.GoA_Region, LocationName.SoraLevels_Region)
 
-
-
+      for region in(firstVisits):
+          connect(world, player, names, region,LocationName.SoraLevels_Region)
+      #connect(world, player, names,LocationName.LoD_Region, LocationName.SoraLevels_Region)
+      #
+      #connect(world, player, names,LocationName.Ag_Region, LocationName.SoraLevels_Region)
+      itest=world.get_region(LocationName.SoraLevels_Region, player)
+      print(itest)
+      irest=world.get_region(LocationName.TT_Region, player)
+      print(irest)
+      irest=world.get_region(LocationName.TT2_Region, player)
+      print(irest)
 #shamelessly stolen from the sa2b
 def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], source: str, target: str,
     rule: typing.Optional[typing.Callable] = None):
     source_region = world.get_region(source, player)
     target_region = world.get_region(target, player)
-
     if target not in used_names:
         used_names[target] = 1
         name = target
     else:
         used_names[target] += 1
-        name = target + (' ' * used_names[target])
+        name = target + (' ' * used_names[source])
 
     connection = Entrance(player, name, source_region)
 
@@ -1022,8 +988,3 @@ def create_region(world: MultiWorld, player: int, active_locations, name: str, l
         for exit in exits:
             ret.exits.append(Entrance(player, exit, ret))
     return ret
-
-  
-
-
-    

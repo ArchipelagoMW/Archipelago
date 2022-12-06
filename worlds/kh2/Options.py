@@ -46,13 +46,14 @@ class Stats(Range):
     range_end = 10
     default=5
 
-class Visitlocking(Range):
+class Visitlocking(Choice):
     #What is locked being on
-    #if 1 then no visit locking   if 2 then second visits if 3 then first and second visits with one item
+    #if 0 then no visit locking  if 1 then second visits if 2 then first and second visits with one item
     display_name="Visit locking"
-    range_start=0
-    range_end=3
-    default=1
+    option_novisitlocking=0
+    option_secondvisitlocking=1
+    option_firstvisitlocking=2
+    default=0
 
 class SuperBosses(Toggle):
     #Terra,Datas and Sephiroath
