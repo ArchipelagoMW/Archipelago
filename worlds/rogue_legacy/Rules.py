@@ -22,6 +22,10 @@ class LegacyLogic(LogicMixin):
         return self.get_upgrade_count(player) >= amount
 
     def has_upgrade_quota(self, player: int, percentage: int) -> bool:
+        # Should never happen, but let's avoid dividing by 0.
+        if percentage <= 0:
+            return True
+
         return self.has_upgrade_amount(player, self.get_upgrade_total(player) * (percentage // 100))
 
     def has_movement_rune(self, player: int) -> bool:
