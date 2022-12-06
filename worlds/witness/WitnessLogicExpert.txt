@@ -120,13 +120,13 @@ Symmetry Island Upper (Symmetry Island):
 158070 - 0x00A68 (Blue 3) - 0x00A64 & 0x00A57 - Symmetry & Colored Dots
 158700 - 0x0360D (Laser Panel) - 0x00A68 - True
 Laser - 0x00509 (Laser) - 0x0360D
+159001 - 0x03367 (Glass Factory Black Line EP) - True - True
 
 Orchard (Orchard) - Main Island - True - Orchard Beyond First Gate - 0x03307:
 158071 - 0x00143 (Apple Tree 1) - True - True
 158072 - 0x0003B (Apple Tree 2) - 0x00143 - True
 158073 - 0x00055 (Apple Tree 3) - 0x0003B - True
 Door - 0x03307 (First Gate) - 0x00055
-159001 - 0x03367 (Glass Factory Black Line EP) - True - True
 
 Orchard Beyond First Gate (Orchard) - Orchard End - 0x03313:
 158074 - 0x032F7 (Apple Tree 4) - 0x00055 - True
