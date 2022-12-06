@@ -40,8 +40,6 @@ class RLWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
 
-    item_pool: List[RLItem] = []
-
     # TODO: Replace calls to this function with "options-dict", once that PR is completed and merged.
     def get_setting(self, name: str):
         return getattr(self.multiworld, name)[self.player]
@@ -65,7 +63,7 @@ class RLWorld(World):
                     f"Expected {int(self.get_setting('number_of_children'))}, Got {additional_sir_names}")
 
     def create_items(self):
-        self.item_pool = []
+        item_pool: List[RLItem] = []
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
         for name, data in item_table.items():
             quantity = data.max_quantity
@@ -183,13 +181,13 @@ class RLWorld(World):
             if data.category == "Filler":
                 continue
 
-            self.item_pool += [self.create_item(name) for _ in range(0, quantity)]
+            item_pool += [self.create_item(name) for _ in range(0, quantity)]
 
         # Fill any empty locations with filler items.
-        while len(self.item_pool) < total_locations:
-            self.item_pool.append(self.create_item(self.get_filler_item_name()))
+        while len(item_pool) < total_locations:
+            item_pool.append(self.create_item(self.get_filler_item_name()))
 
-        self.multiworld.itempool += self.item_pool
+        self.multiworld.itempool += item_pool
 
     def get_filler_item_name(self) -> str:
         fillers = get_items_by_category("Filler")

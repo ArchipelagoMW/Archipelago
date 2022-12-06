@@ -100,7 +100,7 @@ def create_region(multiworld: MultiWorld, player: int, name: str, data: RLRegion
     if data.locations:
         for loc_name in data.locations:
             loc_data = location_table.get(loc_name)
-            location = RLLocation(player, loc_name, loc_data.code, region)
+            location = RLLocation(player, loc_name, loc_data.code if loc_data else None, region)
             region.locations.append(location)
 
     if data.region_exits:
