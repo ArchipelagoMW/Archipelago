@@ -301,7 +301,7 @@ if __name__ == '__main__':
             if "server" in meta:
                 args.connect = meta["server"]
             logging.info(f"Wrote rom file to {romfile}")
-        async_start(run_game(romfile))
+            async_start(run_game(romfile))
         ctx = ZeldaContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
         if gui_enabled:
