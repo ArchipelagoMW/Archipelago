@@ -23,6 +23,7 @@ def set_rules(world, player):
         "Route 12 - Island Item": lambda state: state.pokemon_rb_can_surf(player),
         "Route 12 - Item Behind Cuttable Tree": lambda state: state.pokemon_rb_can_cut(player),
         "Route 15 - Item": lambda state: state.pokemon_rb_can_cut(player),
+        "Route 15 - Oak's Aide": lambda state: state.pokemon_rb_has_pokemon(state.multiworld.oaks_aide_rt_15[player].value + 5, player),
         "Route 25 - Item": lambda state: state.pokemon_rb_can_cut(player),
         "Fuchsia City - Warden's House Item": lambda state: state.pokemon_rb_can_strength(player),
         "Rocket Hideout B4F - Southwest Item (Lift Key)": lambda state: state.has("Lift Key", player),
