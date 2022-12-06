@@ -58,6 +58,25 @@ class ShuffleVaultBoxes(Toggle):
     display_name = "Shuffle Vault Boxes"
 
 
+class ShuffleEnvironmentalPuzzles(Choice):
+    """
+    Add Environmental/Obelisk Puzzles into the location pool.
+    In "individual", every Environmental Puzzle sends an item.
+    In "obelisk_sides", completing every puzzle on one side of an Obelisk sends an item.
+    """
+    display_name = "Shuffle Environmental Puzzles"
+    option_off = 0
+    option_individual = 1
+    option_obelisk_sides = 2
+
+
+class EnvironmentalPuzzlesDifficulty(Choice):
+    display_name = "Environmental Puzzles Difficulty"
+    option_normal = 0
+    option_tedious = 1
+    option_eclipse = 2
+
+
 class ShufflePostgame(Toggle):
     """Adds locations into the pool that are guaranteed to become accessible after or at the same time as your goal.
     Use this if you don't play with forfeit on victory. IMPORTANT NOTE: The possibility of your second
@@ -133,6 +152,8 @@ the_witness_options: Dict[str, type] = {
     "disable_non_randomized_puzzles": DisableNonRandomizedPuzzles,
     "shuffle_discarded_panels": ShuffleDiscardedPanels,
     "shuffle_vault_boxes": ShuffleVaultBoxes,
+    "shuffle_EPs": ShuffleEnvironmentalPuzzles,
+    "EP_difficulty": EnvironmentalPuzzlesDifficulty,
     "shuffle_postgame": ShufflePostgame,
     "victory_condition": VictoryCondition,
     "mountain_lasers": MountainLasers,

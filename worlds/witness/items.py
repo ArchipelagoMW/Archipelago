@@ -64,6 +64,13 @@ class StaticWitnessItems:
 
             self.ITEM_NAME_GROUPS.setdefault("Symbols", set()).add(item[0])
 
+        for progressive, item_list in StaticWitnessLogic.PROGRESSIVE_TO_ITEMS.items():
+            if not item_list:
+                continue
+
+            if item_list[0] in self.ITEM_NAME_GROUPS.setdefault("Symbols", set()):
+                self.ITEM_NAME_GROUPS.setdefault("Symbols", set()).add(progressive)
+
         for item in StaticWitnessLogic.ALL_DOOR_ITEMS:
             item_tab[item[0]] = ItemData(158000 + item[1], True, False)
 
