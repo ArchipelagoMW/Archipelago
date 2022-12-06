@@ -91,4 +91,4 @@ noita_connections: Dict[str, Set[str]] = {
     "The Laboratory": {"Holy Mountain 7 (To The Laboratory)", "The Work"},
 }
 
-noita_regions: Set[str] = set(noita_connections.keys()) + set.union(*noita_connections.values())
+noita_regions: Set[str] = set(noita_connections.keys()).union(*noita_connections.values())

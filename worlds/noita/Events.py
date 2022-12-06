@@ -1,4 +1,4 @@
-from BaseClasses import Item, MultiWorld, Region, Location
+from BaseClasses import Item, MultiWorld, Region, Location, ItemClassification
 from . import Items, Locations
 
 
