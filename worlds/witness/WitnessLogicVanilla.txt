@@ -664,7 +664,7 @@ Swamp Entry Area (Swamp) - Swamp Sliding Bridge - TrueOneWay:
 158301 - 0x181A9 (Intro Back 8) - 0x00987 - Shapers
 
 Swamp Sliding Bridge (Swamp) - Swamp Entry Area - 0x00609 - Swamp Near Platform - 0x00609:
-158302 - 0x00609 (Sliding Bridge) - 0x00987 - Shapers
+158302 - 0x00609 (Sliding Bridge) - True - Shapers
 159342 - 0x0105D (Sliding Bridge Left EP) - 0x00609 - True
 159343 - 0x0A304 (Sliding Bridge Right EP) - 0x00609 - True
 
