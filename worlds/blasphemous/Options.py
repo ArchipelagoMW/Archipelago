@@ -21,6 +21,15 @@ class Ending(Choice):
     default = 0
 
 
+class ThornShuffle(Choice):
+    """Shuffles the Thorn given by Deogracias and all Thorn upgrades into the item pool."""
+    display_name = "Shuffle Thorn"
+    option_anywhere = 0
+    option_local_only = 1
+    option_vanilla = 2
+    default = 0
+
+
 class CherubShuffle(DefaultOnToggle):
     """Shuffles Children of Moonlight into the item pool."""
     display_name = "Shuffle Children of Moonlight"
@@ -126,15 +135,6 @@ class ShopShuffle(DefaultOnToggle):
     display_name = "Shuffle Shop Items"
 
 
-class ThornShuffle(Choice):
-    """Shuffles the Thorn given by Deogracias and all Thorn upgrades into the item pool."""
-    display_name = "Shuffle Thorn"
-    option_anywhere = 0
-    option_local_only = 1
-    option_vanilla = 2
-    default = 0
-
-
 class CandleShuffle(DefaultOnToggle):
     """Shuffles the Beads of Wax and their upgrades into the item pool."""
     display_name = "Shuffle Candles"
@@ -155,6 +155,7 @@ class EnemyRando(Choice):
 blasphemous_options = {
     "difficulty": Difficulty,
     "ending": Ending,
+    "thorn_shuffle" : ThornShuffle,
     "cherub_shuffle" : CherubShuffle,
     "life_shuffle" : LifeShuffle,
     "fervour_shuffle" : FervourShuffle,
@@ -176,7 +177,6 @@ blasphemous_options = {
     "herb_shuffle" : HerbShuffle,
     "church_shuffle" : ChurchShuffle,
     "shop_shuffle" : ShopShuffle,
-    "thorn_shuffle" : ThornShuffle,
     "candle_shuffle" : CandleShuffle,
     "enemy_randomizer": EnemyRando
 }
