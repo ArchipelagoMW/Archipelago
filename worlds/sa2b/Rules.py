@@ -11,10 +11,12 @@ from .Missions import stage_name_prefixes, mission_orders
 
 def add_rule_safe(multiworld: MultiWorld, spot_name: str, player: int, rule: CollectionRule):
     try:
-        add_rule(multiworld.get_location(spot_name, player), rule)
+        location = multiworld.get_location(spot_name, player)
     except KeyError:
         # Do nothing for mission locations that do not exist
-        return
+        pass
+    else:
+        add_rule(location, rule)
 
 
 def set_mission_progress_rules(world: MultiWorld, player: int, mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int]):
