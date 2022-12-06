@@ -96,17 +96,17 @@ def create_regions(multiworld: MultiWorld, player: int):
 
 
 def create_region(multiworld: MultiWorld, player: int, name: str, locations=None, region_exits=None):
-    ret = Region(name, RegionType.Generic, name, player)
-    ret.multiworld = multiworld
+    region = Region(name, RegionType.Generic, name, player)
+    region.multiworld = multiworld
     if locations:
         for loc_name in locations:
             loc_data = location_table.get(loc_name)
-            location = RLLocation(player, loc_name, loc_data.code if loc_data else None, ret)
-            ret.locations.append(location)
+            location = RLLocation(player, loc_name, loc_data.code if loc_data else None, region)
+            region.locations.append(location)
 
     if region_exits:
         for exit in region_exits:
-            entrance = Entrance(player, exit, ret)
-            ret.exits.append(entrance)
+            entrance = Entrance(player, exit, region)
+            region.exits.append(entrance)
 
-    return ret
+    return region
