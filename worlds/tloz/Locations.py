@@ -92,6 +92,12 @@ for level in level_locations:
     for location in level:
         all_level_locations.append(location)
 
+standard_level_locations = []
+for level in level_locations:
+    for location in level:
+        if "Drop" not in location:
+            standard_level_locations.append(location)
+
 shop_locations = [
     "Arrow Shop Item Left", "Arrow Shop Item Middle", "Arrow Shop Item Right",
     "Candle Shop Item Left", "Candle Shop Item Middle", "Candle Shop Item Right",

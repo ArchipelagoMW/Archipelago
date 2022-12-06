@@ -7,7 +7,8 @@ import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
 from .Items import item_table, item_amounts_all, item_amounts_standard, item_prices, item_game_ids, starting_weapons
 from .Locations import location_table, level_locations, major_locations, shop_locations, cave_locations, \
-    all_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations
+    all_level_locations, standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, \
+    food_locations
 from .Options import tloz_options
 from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_early, first_quest_dungeon_items_late
 from worlds.AutoWorld import World, WebWorld
@@ -74,7 +75,7 @@ class TLoZWorld(World):
         self.levels = None
 
     def create_item(self, name: str):
-        return TLoZItem(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
+        return TLoZItem(name, item_table[name].classification, self.item_name_to_id[name], self.player)
 
     def create_event(self, event: str):
         return TLoZItem(event, ItemClassification.progression, None, self.player)
@@ -162,20 +163,31 @@ class TLoZWorld(World):
                     self.multiworld.get_location(self.multiworld.random.choice(dangerous_weapon_locations), self.player)\
                         .place_locked_item(self.multiworld.create_item(item_name, self.player))
             if item_name in item_amounts.keys():
-                if item_name == starting_weapon:  # To remove the extra Sword if that's our weapon
-                    item_amounts[item_name] -= 1
-                if self.multiworld.TriforceLocations[self.player] > 0 or item_name != "Triforce Fragment":
+                if self.multiworld.TriforceLocations[self.player] > 1 or item_name != "Triforce Fragment":
                     i = 0
                     for i in range(0, item_amounts[item_name]):
                         self.multiworld.itempool.append(self.create_item(item_name))
-                else:
+                elif self.multiworld.TriforceLocations[self.player] == 0:
                     level = 1
                     for i in range(0, item_amounts[item_name]):
                         self.multiworld.get_location(
                             f"Level {level} Triforce",
                             self.player
                         ).place_locked_item(self.multiworld.create_item(item_name, self.player))
-                        level = level + 1
+                        level += 1
+                else:
+                    if self.multiworld.ExpandedPool[self.player]:
+                        possible_level_locations = [location for location in all_level_locations
+                                                    if location not in level_locations[8]]
+                    else:
+                        possible_level_locations = [location for location in standard_level_locations
+                                                    if location not in level_locations[8]]
+                    for i in range(0, item_amounts[item_name]):
+                        self.multiworld.get_location(
+                            possible_level_locations.pop(
+                                self.multiworld.random.randint(0, len(possible_level_locations) - 1)),
+                            self.player
+                        ).place_locked_item(self.multiworld.create_item(item_name, self.player))
             else:
                 self.multiworld.itempool.append(self.create_item(item_name))
 
@@ -259,11 +271,6 @@ class TLoZWorld(World):
                      lambda state: state.has("Triforce Fragment", self.player, 8) and
                                    state.has_group("swords", self.player))
 
-        #for level in range(1, 9):
-        #    location = self.multiworld.get_location(f"Level {level} Triforce", self.player)
-        #    boss_status = f"Boss {level} Defeated"
-        #    add_rule(location, lambda state: state.has(boss_status, self.player))
-
         add_rule(self.multiworld.get_location("Level 1 Triforce", self.player),
                  lambda state: state.has("Boss 1 Defeated", self.player))
 
@@ -318,11 +325,6 @@ class TLoZWorld(World):
         for location in self.levels[8].locations:
             add_rule(self.multiworld.get_location(location.name, self.player),
                      lambda state: state.has("Bow", self.player))
-
-        if self.multiworld.TriforceLocations[self.player] == 1:
-            for location in location_table.keys():
-                if location  not in all_level_locations:
-                    forbid_item(self.multiworld.get_location(location, self.player), "Triforce Fragment", self.player)
 
         add_rule(self.multiworld.get_location("Potion Shop Item Left", self.player),
                  lambda state: state.has("Letter", self.player))
