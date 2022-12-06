@@ -35,6 +35,7 @@ class OOTRegion(Region):
     def __init__(self, name: str, type, hint, player: int):
         super(OOTRegion, self).__init__(name, type, hint, player)
         self._oot_hint = None
+        self.alt_hint = None
         self.price = None
         self.time_passes = False
         self.provides_time = TimeOfDay.NONE

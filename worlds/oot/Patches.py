@@ -13,7 +13,8 @@ from .Location import DisableType
 from .LocationList import business_scrubs
 from .HintList import getHint
 from .Hints import writeGossipStoneHints, buildAltarHints, \
-        buildGanonText, getSimpleHintNoPrefix, HintArea, getItemGenericName
+        buildGanonText, getSimpleHintNoPrefix, HintArea, getItemGenericName, \
+        buildMiscItemHints, buildMiscLocationHints
 from .Utils import data_path
 from .Messages import read_messages, update_message_by_id, read_shop_items, update_warp_song_text, \
         write_shop_items, remove_unused_messages, make_player_message, \
@@ -1706,10 +1707,10 @@ def patch_rom(world, rom):
         buildGanonText(world, messages)
 
     # build misc. item hints
-    # buildMiscItemHints(world, messages)
+    buildMiscItemHints(world, messages)
 
     # build misc. location hints
-    # buildMiscLocationHints(world, messages)
+    buildMiscLocationHints(world, messages)
 
     # Patch freestanding items
     if world.shuffle_freestanding_items:

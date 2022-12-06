@@ -269,7 +269,8 @@ class OOTWorld(World):
         self.easier_fire_arrow_entry = self.fae_torch_count < 24
 
         if self.misc_hints:
-            self.misc_hints = ['ganondorf', 'altar', 'warp_songs']
+            self.misc_hints = ['ganondorf', 'altar', 'warp_songs', 'dampe_diary',
+                '10_skulltulas', '20_skulltulas', '30_skulltulas', '40_skulltulas', '50_skulltulas']
         else:
             self.misc_hints = []
 
@@ -447,6 +448,8 @@ class OOTWorld(World):
                 new_region.is_boss_room = region['is_boss_room']
             if 'hint' in region:
                 new_region.set_hint_data(region['hint'])
+            if 'alt_hint' in region:
+                new_region.alt_hint = HintArea[region['alt_hint']]
             if 'time_passes' in region:
                 new_region.time_passes = region['time_passes']
                 new_region.provides_time = TimeOfDay.ALL
@@ -945,7 +948,10 @@ class OOTWorld(World):
             rom = Rom(file=get_options()['oot_options']['rom_file'])
             if self.hints != 'none':
                 buildWorldGossipHints(self)
+            # try:
             patch_rom(self, rom)
+            # except Exception as e:
+            #     print(e)
             patch_cosmetics(self, rom)
             rom.update_header()
             patch_data = create_patch_file(rom)

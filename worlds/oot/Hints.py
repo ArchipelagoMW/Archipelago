@@ -1137,16 +1137,16 @@ def buildMiscItemHints(world, messages):
                 text = data['default_item_text'].format(area='#your pocket#')
             elif item_locations:
                 location = item_locations[0]
-                area = HintArea.at(location, use_alt_hint=data['use_alt_hint']).text(world.clearer_hints, world=None if location.player == world.player else location.world.player)
-                # if item == data['default_item']:
-                text = data['default_item_text'].format(area=area)
-                # else:
-                #     text = data['custom_item_text'].format(area=area, item=getHint(getItemGenericName(location.item), world.clearer_hints).text)
-            elif 'custom_item_fallback' in data:
-                # if 'default_item_fallback' in data and item == data['default_item']:
+                player_text = ''
+                if location.player != world.player:
+                    player_text = world.multiworld.get_player_name(location.player) + "'s "
+                if location.game == 'Ocarina of Time':
+                    area = HintArea.at(location, use_alt_hint=data['use_alt_hint']).text(world.clearer_hints, world=None)
+                else:
+                    area = location.name    
+                text = data['default_item_text'].format(area=(player_text + area))
+            elif 'default_item_fallback' in data:
                 text = data['default_item_fallback']
-                # else:
-                #     text = data['custom_item_fallback'].format(item=item)
             else:
                 text = getHint('Validation Line', world.clearer_hints).text
                 location = world.get_location('Ganons Tower Boss Key Chest')
@@ -1164,7 +1164,10 @@ def buildMiscLocationHints(world, messages):
         if hint_type in world.misc_hints:
             location = world.get_location(data['item_location'])
             item = location.item
-            text = data['location_text'].format(item=getHint(getItemGenericName(item), world.clearer_hints).text)
+            item_text = getHint(getItemGenericName(item), world.clearer_hints).text
+            if item.player != world.player:
+                item_text += f' for {world.multiworld.get_player_name(item.player)}'
+            text = data['location_text'].format(item=item_text)
 
         update_message_by_id(messages, data['id'], str(GossipText(text, ['Green'], prefix='')), 0x23)
 
