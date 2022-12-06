@@ -386,6 +386,9 @@ def generate_output(self, output_directory: str):
         data[rom_addresses["Guard_Drink_List"] + 1] = 0
         data[rom_addresses["Guard_Drink_List"] + 2] = 0
 
+    data[rom_addresses["Fossils_Needed_For_Second_Item"]] = (
+        self.multiworld.second_fossil_check_condition[self.player].value)
+
     if self.multiworld.extra_key_items[self.player].value:
         data[rom_addresses['Options']] |= 4
     data[rom_addresses["Option_Blind_Trainers"]] = round(self.multiworld.blind_trainers[self.player].value * 2.55)
