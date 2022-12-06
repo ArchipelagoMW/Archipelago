@@ -261,8 +261,8 @@ class SA2BWorld(World):
             musiclist_o = list(range(0, 47))
             musiclist_s = musiclist_o.copy()
             self.multiworld.random.shuffle(musiclist_s)
-            musiclist_o.extend(list(range(47, 78)))
-            musiclist_s.extend(list(range(47, 78)))
+            musiclist_o.extend(range(47, 78))
+            musiclist_s.extend(range(47, 78))
 
             if self.multiworld.sadx_music[self.player].value == 1:
                 musiclist_s = [x+100 for x in musiclist_s]
