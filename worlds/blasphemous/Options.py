@@ -12,6 +12,15 @@ class Difficulty(Choice):
     default = 1
 
 
+class Ending(Choice):
+    """Choose which ending is required to complete the game."""
+    display_name = "Ending"
+    option_any_ending = 0
+    option_ending_b = 1
+    option_ending_c = 2
+    default = 0
+
+
 class CherubShuffle(DefaultOnToggle):
     """Shuffles Children of Moonlight into the item pool."""
     display_name = "Shuffle Children of Moonlight"
@@ -117,9 +126,13 @@ class ShopShuffle(DefaultOnToggle):
     display_name = "Shuffle Shop Items"
 
 
-class ThornShuffle(DefaultOnToggle):
+class ThornShuffle(Choice):
     """Shuffles the Thorn given by Deogracias and all Thorn upgrades into the item pool."""
     display_name = "Shuffle Thorn"
+    option_anywhere = 0
+    option_local_only = 1
+    option_vanilla = 2
+    default = 0
 
 
 class CandleShuffle(DefaultOnToggle):
@@ -141,6 +154,7 @@ class EnemyRando(Choice):
 
 blasphemous_options = {
     "difficulty": Difficulty,
+    "ending": Ending,
     "cherub_shuffle" : CherubShuffle,
     "life_shuffle" : LifeShuffle,
     "fervour_shuffle" : FervourShuffle,

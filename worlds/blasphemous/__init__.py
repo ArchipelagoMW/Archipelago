@@ -5,6 +5,7 @@ from .Items import item_table, group_table, tears_set
 from .Locations import location_table, shop_set
 from .Exits import region_exit_table, exit_lookup_table
 from .Rules import rules
+from worlds.generic.Rules import set_rule
 from .Options import blasphemous_options
 from . import Vanilla
 
@@ -136,7 +137,7 @@ class BlasphemousWorld(World):
             if not self.multiworld.shop_shuffle[self.player] and \
                 item["name"] in list(Vanilla.shop_dict.values()):
                     count -= 1
-            if not self.multiworld.thorn_shuffle[self.player] and \
+            if self.multiworld.thorn_shuffle[self.player].value == 2 and \
                 item["name"] == "Thorn":
                     count = 0
             if not self.multiworld.candle_shuffle[self.player] and \
@@ -148,6 +149,8 @@ class BlasphemousWorld(World):
             else:
                 for i in range(count):
                     pool.append(self.create_item(item["name"]))
+                if item["name"] == "Thorn Upgrade" and self.multiworld.thorn_shuffle[self.player].value == 1:
+                    self.multiworld.local_items[self.player].value.add("Thorn Upgrade")
 
         self.place_items_from_dict(Vanilla.unrandomized_dict)
 
@@ -216,15 +219,14 @@ class BlasphemousWorld(World):
         if not self.multiworld.shop_shuffle[self.player]:
             self.place_items_from_dict(Vanilla.shop_dict)
 
-        if not self.multiworld.thorn_shuffle[self.player]:
+        if self.multiworld.thorn_shuffle[self.player].value == 2:
             self.place_items_from_set(Vanilla.thorn_set, "Thorn Upgrade")
 
         if not self.multiworld.candle_shuffle[self.player]:
             self.place_items_from_dict(Vanilla.candle_dict)
 
         self.multiworld.itempool += pool
-        #for x in (range(len(self.multiworld.itempool))):
-        #    print(self.multiworld.itempool[x])
+        
 
     def place_items_from_set(self, location_set: Set[str], name: str):
         for loc in location_set:
@@ -730,6 +732,10 @@ class BlasphemousWorld(World):
         victory = Location(self.player, "His Holiness Escribar", None, self.multiworld.get_region("Deambulatory of His Holiness", self.player))
         victory.place_locked_item(self.create_event("Victory"))
         self.multiworld.get_region("Deambulatory of His Holiness", self.player).locations.append(victory)
+
+        if self.multiworld.ending[self.player].value != 0:
+            set_rule(victory, lambda state: state.has("Thorn Upgrade", player, 8))
+
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     
@@ -755,6 +761,7 @@ class BlasphemousWorld(World):
     
         slot_data = {
             "locations": locations,
+            "ending": self.multiworld.ending[self.player].value,
             "enemy_randomizer": self.multiworld.enemy_randomizer[self.player].value
         }
     
