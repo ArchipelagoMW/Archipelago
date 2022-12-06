@@ -14,6 +14,7 @@ from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_ea
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule, set_rule, forbid_item
 
+
 class TLoZWeb(WebWorld):
     theme = "stone"
     setup = Tutorial(
@@ -167,7 +168,9 @@ class TLoZWorld(World):
                     i = 0
                     for i in range(0, item_amounts[item_name]):
                         self.multiworld.itempool.append(self.create_item(item_name))
-                elif self.multiworld.TriforceLocations[self.player] == 0:
+                    if item_name == "Bomb":
+                        self.multiworld.itempool[-1].classification = ItemClassification.progression
+                else:
                     level = 1
                     for i in range(0, item_amounts[item_name]):
                         self.multiworld.get_location(
@@ -189,7 +192,8 @@ class TLoZWorld(World):
                             self.player
                         ).place_locked_item(self.multiworld.create_item(item_name, self.player))
             else:
-                self.multiworld.itempool.append(self.create_item(item_name))
+                if item_name != starting_weapon:
+                    self.multiworld.itempool.append(self.create_item(item_name))
 
     def set_rules(self):
         # Boss events for a nicer spoiler log playthrough
@@ -326,6 +330,11 @@ class TLoZWorld(World):
             add_rule(self.multiworld.get_location(location.name, self.player),
                      lambda state: state.has("Bow", self.player))
 
+        if self.multiworld.TriforceLocations[self.player] == 1:
+            for location in location_table.keys():
+                if location  not in all_level_locations:
+                    forbid_item(self.multiworld.get_location(location, self.player), "Triforce Fragment", self.player)
+
         add_rule(self.multiworld.get_location("Potion Shop Item Left", self.player),
                  lambda state: state.has("Letter", self.player))
         add_rule(self.multiworld.get_location("Potion Shop Item Middle", self.player),
@@ -342,10 +351,6 @@ class TLoZWorld(World):
         add_rule(self.multiworld.get_location("Shield Shop Item Right", self.player),
                  lambda state: state.has_group("candles", self.player) or
                                state.has("Bomb", self.player))
-
-
-        set_rule(self.multiworld.get_region("Menu", self.player), lambda state: True)
-        set_rule(self.multiworld.get_region("Overworld", self.player), lambda state: True)
 
     def generate_basic(self):
         ganon = self.multiworld.get_location("Ganon", self.player)
@@ -500,6 +505,9 @@ class TLoZWorld(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
+    def get_filler_item_name(self) -> str:
+        filler_items = [item for item in item_table if item_table[item].classification == ItemClassification.filler]
+        return self.multiworld.random.choice(filler_items)
 
 class TLoZItem(Item):
     game = 'The Legend of Zelda'
