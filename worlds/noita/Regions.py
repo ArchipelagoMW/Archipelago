@@ -1,7 +1,8 @@
 # Regions are areas in your game that you travel to.
 import itertools
-from Typing import Dict, List
-from BaseClasses import Region, Entrance, LocationProgressType
+from typing import Dict, List
+from BaseClasses import Region, Entrance, LocationProgressType, RegionType
+from . import Locations
 
 
 # Creates a new Region with the locations found in `location_region_mapping`
@@ -13,6 +14,7 @@ def create_region(world, player: int, region_name: str):
   for location_name, location_id in Locations.location_region_mapping.get(region_name, {}).items():
     location = Locations.NoitaLocation(player, location_name, location_id, new_region)
 
+    # TODO this is a hack.
     # If it's not the region with all the shitty chests, increases the priority of important items.
     # This way people know they can find their items by checking fixed locations instead of
     # leaving it up to chance.
@@ -21,7 +23,6 @@ def create_region(world, player: int, region_name: str):
 
     new_region.locations.append(location)
 
-  world.regions.append(new_region)
   return new_region
 
 
@@ -36,13 +37,16 @@ def create_connections(player, regions):
       entrance.connect(regions[destination])
       new_entrances.append(entrance)
 
-    created_regions[source].exits = new_entrances
+    regions[source].exits = new_entrances
 
 
 # Creates all regions and connections. Called from NoitaWorld.
 def create_all_regions(world, player: int):
   created_regions = { name: create_region(world, player, name) for name in noita_regions }
   create_connections(player, created_regions)
+  
+  world.regions += created_regions.values()
+
 
 
 noita_regions = {
@@ -69,6 +73,8 @@ noita_regions = {
   "Holy Mountain 3 (To Hiisi Base)",
   "Holy Mountain 4 (To Underground Jungle)",
   "Holy Mountain 5 (To The Vault)",
+  "Holy Mountain 6 (To Temple of the Art)",
+  "Holy Mountain 7 (To The Laboratory)"
 }
 
 noita_connections: Dict[str, List[str]] = {

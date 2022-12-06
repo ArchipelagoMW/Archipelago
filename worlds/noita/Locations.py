@@ -68,4 +68,6 @@ location_region_mapping: Dict[str, Dict[str, int]] = {
     }
 }
 
-location_name_to_id = functools.reduce(Dict.update, location_region_mapping.values(), {})
+location_name_to_id = {}
+for location_group in location_region_mapping.values():
+    location_name_to_id.update(location_group)

@@ -1,12 +1,13 @@
 import itertools
-from typing import Dict
+from typing import Dict, NamedTuple, Optional, List, Set
 from BaseClasses import Item, ItemClassification
 
-class ItemData(typing.NamedTuple):
-    code: typing.Optional[int]
+class ItemData(NamedTuple):
+    code: Optional[int]
     group: str
+    classification: ItemClassification = ItemClassification.progression
     required_num: int = 0
-    classification: ItemClassification = item_group_classification[group]
+
 
 class NoitaItem(Item):
     game: str = "Noita"
@@ -32,44 +33,36 @@ def create_all_items(world, player: int) -> None:
         itempool += world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()))
 
     # Convert itempool into real items
-    world.itempool += [create_item(name) for name in itempool]
+    world.itempool += [create_item(player, name) for name in itempool]
 
-
-item_group_classification: Dict[str, ItemClassification] = {
-    "Traps": ItemClassification.trap,
-    "Pickups": ItemClassification.useful,
-    "Gold": ItemClassification.filler,
-    "Items": ItemClassification.filler,
-    "Wands": ItemClassification.useful,
-    "Perks": ItemClassification.progression,
-    "Repeatable Perks": ItemClassification.useful,
-}
 
 # 110000 - 110021
 item_table: Dict[str, ItemData] = {
-    "Bad":              ItemData(110000, "Traps"),
-    "Heart":            ItemData(110001, "Pickups"),
-    "Refresh":          ItemData(110002, "Pickups"),
-    "Potion":           ItemData(110003, "Items"),
-    "Gold (10)":        ItemData(110004, "Gold"),
-    "Gold (50)":        ItemData(110005, "Gold"),
-    "Gold (200)":       ItemData(110006, "Gold"),
-    "Gold (1000)":      ItemData(110007, "Gold"),
-    "Wand (Tier 1)":    ItemData(110008, "Wands"),
-    "Wand (Tier 2)":    ItemData(110009, "Wands"),
-    "Wand (Tier 3)":    ItemData(110010, "Wands"),
-    "Wand (Tier 4)":    ItemData(110011, "Wands"),
-    "Wand (Tier 5)":    ItemData(110012, "Wands"),
-    "Wand (Tier 6)":    ItemData(110013, "Wands"),
-    "Perk (Fire Immunity)":                 ItemData(110014, "Perks", 1),
-    "Perk (Toxic Immunity)":                ItemData(110015, "Perks", 1),
-    "Perk (Explosion Immunity)":            ItemData(110016, "Perks", 1),
-    "Perk (Melee Immunity)":                ItemData(110017, "Perks", 1),
-    "Perk (Electricity Immunity)":          ItemData(110018, "Perks", 1),
-    "Perk (Tinker With Wands Everywhere)":  ItemData(110019, "Perks", 1),
-    "Perk (All-Seeing Eye)":                ItemData(110020, "Perks", 1),
-    "Perk (Extra Life)":                    ItemData(110021, "Repeatable Perks"),
+    "Bad":                                  ItemData(110000, "Traps", ItemClassification.trap),
+    "Heart":                                ItemData(110001, "Pickups", ItemClassification.useful),
+    "Refresh":                              ItemData(110002, "Pickups", ItemClassification.filler),
+    "Potion":                               ItemData(110003, "Items", ItemClassification.filler),
+    "Gold (10)":                            ItemData(110004, "Gold", ItemClassification.filler),
+    "Gold (50)":                            ItemData(110005, "Gold", ItemClassification.filler),
+    "Gold (200)":                           ItemData(110006, "Gold", ItemClassification.filler),
+    "Gold (1000)":                          ItemData(110007, "Gold", ItemClassification.filler),
+    "Wand (Tier 1)":                        ItemData(110008, "Wands", ItemClassification.useful),
+    "Wand (Tier 2)":                        ItemData(110009, "Wands", ItemClassification.useful),
+    "Wand (Tier 3)":                        ItemData(110010, "Wands", ItemClassification.useful),
+    "Wand (Tier 4)":                        ItemData(110011, "Wands", ItemClassification.useful),
+    "Wand (Tier 5)":                        ItemData(110012, "Wands", ItemClassification.useful),
+    "Wand (Tier 6)":                        ItemData(110013, "Wands", ItemClassification.useful),
+    "Perk (Fire Immunity)":                 ItemData(110014, "Perks", ItemClassification.progression, 1),
+    "Perk (Toxic Immunity)":                ItemData(110015, "Perks", ItemClassification.progression, 1),
+    "Perk (Explosion Immunity)":            ItemData(110016, "Perks", ItemClassification.progression, 1),
+    "Perk (Melee Immunity)":                ItemData(110017, "Perks", ItemClassification.progression, 1),
+    "Perk (Electricity Immunity)":          ItemData(110018, "Perks", ItemClassification.progression, 1),
+    "Perk (Tinker With Wands Everywhere)":  ItemData(110019, "Perks", ItemClassification.progression, 1),
+    "Perk (All-Seeing Eye)":                ItemData(110020, "Perks", ItemClassification.progression, 1),
+    "Perk (Extra Life)":                    ItemData(110021, "Repeatable Perks", ItemClassification.useful),
 }
+
+
 
 default_weights: Dict[str, int] = {
     "Wand (Tier 1)":    10,
@@ -109,8 +102,16 @@ item_pool_weights: Dict[int, Dict[str, int]] = {
 }
 
 
-filler_items = [name for name, data in item_table.items() if data.classification == ItemClassification.filler]
+# These helper functions make the comprehensions below more readable
+def get_item_group(item_name: str) -> str:
+    return item_table[item_name].group
+
+def item_is_filler(item_name: str) -> bool:
+    return item_table[item_name].classification == ItemClassification.filler
+
+
+filler_items = filter(item_is_filler, item_table.keys())
 item_name_to_id = { name: data.code for name, data in item_table.items() }
-item_name_groups = { group: set(item_names) for group, item_names in itertools.groupby(item_data, key = lambda v: v.classification) }
+item_name_groups = { group: set(item_names) for group, item_names in itertools.groupby(item_table, get_item_group) }
 
 required_items = { name: data.required_num for name, data in item_table.items() }
