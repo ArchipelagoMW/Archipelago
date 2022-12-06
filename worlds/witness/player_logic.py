@@ -469,10 +469,12 @@ class WitnessPlayerLogic:
             "0x17C79": "Bunker Door EP available",
             "0x275FF": "Mill Light EPs available",
             "0x17E2B": "Remaining Purple Sand EPs available",
-            "0x03852": "Ramp EPs available",
+            "0x03852": "Ramp EPs requirement",
             "0x334D8": "RGB panels & EPs solvable",
             "0x03750": "Left Garden EP available",
             "0x03C0C": "RGB Flowers EP requirement",
+            "0x01CD5": "Pressure Plates 3 EP requirement",
+            "0x3865F": "Ramp EPs access requirement",
         }
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
