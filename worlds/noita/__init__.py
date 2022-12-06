@@ -1,13 +1,10 @@
+import functools
 import string
-from typing import Dict, List
-from .Items import NoitaItem, item_table, item_pool_weights, required_items
-from .Locations import NoitaLocation, item_pickups
 
-from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
-from .Options import noita_options
+from BaseClasses import Tutorial, ItemClassification, Item
 from worlds.AutoWorld import World, WebWorld
 
-client_version = 1
+client_version = 1 # TODO: Do we need this random variable??
 
 
 class NoitaWeb(WebWorld):
@@ -22,50 +19,61 @@ class NoitaWeb(WebWorld):
     theme = "partyTime"
 
 
+# Keeping World slim so that it's easier to comprehend
 class NoitaWorld(World):
     """
     Noita is a magical action roguelite set in a world where every pixel is physically simulated. Fight, explore, melt,
     burn, freeze, and evaporate your way through the procedurally generated world using wands you've created yourself.
     """
     game: str = "Noita"
-    option_definitions = noita_options
-    topology_present = False
+    option_definitions = Options.noita_options
+    topology_present = True
 
-    item_name_to_id = item_table
-    location_name_to_id = item_pickups
+    item_name_to_id = Items.item_name_to_id
+    location_name_to_id = Locations.location_name_to_id
+    
+    item_name_groups = Items.item_name_groups
 
     data_version = 1
     forced_auto_forfeit = False
     web = NoitaWeb()
 
-    def generate_basic(self):
-
-        pool_option = self.world.bad_effects[self.player].value
-        junk_pool: Dict[str, int] = {}
-        junk_pool = item_pool_weights[pool_option].copy()
-        # Generate item pool
-        itempool: List = []
-        for (name, num) in required_items.items():
-            itempool += [name] * num
-        for i in range(1, 1 + self.world.total_locations[self.player].value):
-            itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()))
-
-        # Convert itempool into real items
-        itempool = list(map(lambda name: self.create_item(name), itempool))
-        self.world.itempool += itempool
 
     def create_regions(self) -> None:
-        menu = create_region(self.world, self.player, "Menu")
-        mines = create_region(self.world, self.player, "Mines",
-                                  [f"Chest{i + 1}" for i in range(self.world.total_locations[self.player].value)])
+        Regions.create_all_regions(self.world, self.player)
 
-        connection = Entrance(self.player, "Lobby", menu)
-        menu.exits.append(connection)
-        connection.connect(mines)
 
-        self.world.regions += [menu, mines]
+    def create_items(self) -> None:
+        Items.create_all_items(self.world, self.player)
 
-        create_events(self.world, self.player)
+
+    def set_rules(self) -> None:
+        "" #TODO
+
+
+    # Generate victory conditions and other shenanigans
+    def generate_basic(self) -> None:
+        self.world.get_location("The Work", self.player).place_locked_item(self.create_event("Victory"))
+        self.completion_condition[self.player] = lambda state: state.has("Victory")
+
+
+    def get_filler_item_name(self) -> str:
+        return self.world.random.choice(Items.filler_items)
+
+
+    def create_event(self, name: str) -> Item:
+        return Items.NoitaItem(name, ItemClassification.progression, None, self.player)
+
+
+    #def create_events(world: MultiWorld, player: int) -> None:
+    #    total_locations = world.total_locations[player].value
+    #    world_region = world.get_region("Mines", player)
+    #    for i in range(1, 1 + total_locations):
+    #        event_loc = NoitaLocation(player, f"Pickup{(i + 1)}", None, world_region)
+    #        event_loc.place_locked_item(NoitaItem(f"Pickup{(i + 1)}", ItemClassification.progression, None, player))
+    #        event_loc.access_rule(lambda state, i=i: state.can_reach(f"Chest{(i + 1) - 1}", player))
+    #        world_region.locations.append(event_loc)
+
 
     def fill_slot_data(self):
         return {
@@ -74,36 +82,3 @@ class NoitaWorld(World):
             "badEffects": self.world.bad_effects[self.player].value,
             "deathLink": self.world.death_link[self.player].value,
         }
-
-    def create_item(self, name: str) -> Item:
-        item_id = item_table[name]
-        if name == "Heart" or name.startswith("Perk"):
-            classification = ItemClassification.progression
-        elif name.startswith("Wand"):
-            classification = ItemClassification.useful
-        elif name == "Bad":
-            classification = ItemClassification.trap
-        else:
-            classification = ItemClassification.filler
-        item = NoitaItem(name, classification, item_id, self.player)
-        return item
-
-
-def create_events(world: MultiWorld, player: int) -> None:
-    total_locations = world.total_locations[player].value
-    world_region = world.get_region("Mines", player)
-    for i in range(1, 1 + total_locations):
-        event_loc = NoitaLocation(player, f"Pickup{(i + 1)}", None, world_region)
-        event_loc.place_locked_item(NoitaItem(f"Pickup{(i + 1)}", ItemClassification.progression, None, player))
-        event_loc.access_rule(lambda state, i=i: state.can_reach(f"Chest{(i + 1) - 1}", player))
-        world_region.locations.append(event_loc)
-
-
-def create_region(world: MultiWorld, player: int, name: str, locations: List[str] = None) -> Region:
-    ret = Region(name, RegionType.Generic, name, player, world)
-    if locations:
-        for location in locations:
-            loc_id = item_pickups[location]
-            location = NoitaLocation(player, location, loc_id, ret)
-            ret.locations.append(location)
-    return ret
