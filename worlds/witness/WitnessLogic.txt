@@ -399,9 +399,9 @@ Shipwreck (Shipwreck) - Keep 3rd Pressure Plate - True:
 158654 - 0x00AFB (Vault) - True - Symmetry & Sound Dots & Colored Dots
 158655 - 0x03535 (Vault Box) - 0x00AFB - True
 158605 - 0x17D28 (Discard) - True - Triangles
-159220 - 0x03B22 (Circle Near EP) - True - True
+159220 - 0x03B22 (Circle Far EP) - True - True
 159221 - 0x03B23 (Circle Left EP) - True - True
-159222 - 0x03B24 (Circle Far EP) - True - True
+159222 - 0x03B24 (Circle Near EP) - True - True
 159224 - 0x03A79 (Stern EP) - True - True
 159225 - 0x28ABD (Rope Inner EP) - True - True
 159226 - 0x28ABE (Rope Outer EP) - True - True
