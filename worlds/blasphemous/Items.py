@@ -395,7 +395,7 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.progression},
 
     # Other
-    {'name': "Collectible",
+    {'name': "Ossuary Remains",
         'count': 44,
         'classification': ItemClassification.progression},
     {'name': "Child of Moonlight",
