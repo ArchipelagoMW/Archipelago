@@ -276,7 +276,7 @@ def patch_rom(world, rom):
 
     rom.write_byte(rom.sym('CFG_SHOW_SETTING_INFO'), 0x01)
 
-    msg = [f"Archipelago {ap_version}", ""]
+    msg = [f"Archipelago {ap_version}", world.multiworld.get_player_name(world.player)]
     for idx,part in enumerate(msg):
         part_bytes = list(ord(c) for c in part) + [0] * (line_len+1)
         part_bytes = part_bytes[:(line_len+1)]
