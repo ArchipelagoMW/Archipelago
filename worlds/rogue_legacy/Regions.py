@@ -9,7 +9,6 @@ class RLRegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-
 def create_regions(multiworld: MultiWorld, player: int):
     regions: Dict[str, RLRegionData] = {
         "Menu":              RLRegionData(None, ["Castle Hamson"]),
