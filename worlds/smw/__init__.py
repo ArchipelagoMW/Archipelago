@@ -175,7 +175,11 @@ class SMWWorld(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
-    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+    def extend_hint_information(
+            self,
+            entrance_hint_data: typing.Dict[int, typing.Dict[int, str]],
+            extra_hint_data: typing.Dict[int, typing.Dict[int, str]]
+    ):
         if self.topology_present:
             world_names = [
                 LocationName.yoshis_island_region,
@@ -219,7 +223,7 @@ class SMWWorld(World):
                     er_hint_data[location.address] = world_names[i]
                     break
 
-            hint_data[self.player] = er_hint_data
+            entrance_hint_data[self.player] = er_hint_data
 
     def create_regions(self):
         location_table = setup_locations(self.multiworld, self.player)

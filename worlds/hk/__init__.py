@@ -584,6 +584,22 @@ class HKWorld(World):
             self.cached_filler_items[self.player] = fillers
         return self.multiworld.random.choice(self.cached_filler_items[self.player])
 
+    def extend_hint_information(
+            self,
+            entrance_hint_data: typing.Dict[int, typing.Dict[int, str]],
+            extra_hint_data: typing.Dict[int, typing.Dict[int, str]]
+    ):
+        data = {}
+        location: HKLocation
+        for location in sorted(
+            (
+                loc for loc in itertools.chain(*(region.locations for region in self.multiworld.get_regions(self.player)))
+                if loc.costs and loc.address
+            ), key=operator.attrgetter('name')
+        ):
+            data[location.address] = "for " + location.cost_text()
+        extra_hint_data[self.player] = data
+
 
 def create_region(world: MultiWorld, player: int, name: str, location_names=None, exits=None) -> Region:
     ret = Region(name, RegionType.Generic, name, player)

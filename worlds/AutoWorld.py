@@ -253,7 +253,11 @@ class World(metaclass=AutoWorldRegister):
         The client will receive this as JSON in the `Connected` response."""
         return {}
 
-    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+    def extend_hint_information(
+            self,
+            entrance_hint_data: Dict[int, Dict[int, str]],
+            extra_hint_data: Dict[int, Dict[int, str]]
+    ):
         """Fill in additional entrance information text into locations, which is displayed when hinted.
         structure is {player_id: {location_id: text}} You will need to insert your own player_id."""
         pass

@@ -266,7 +266,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
             # collect ER hint info
             er_hint_data: Dict[int, Dict[int, str]] = {}
-            AutoWorld.call_all(world, 'extend_hint_information', er_hint_data)
+            extra_hint_data: Dict[int, Dict[int, str]] = {}
+            AutoWorld.call_all(world, 'extend_hint_information', er_hint_data, extra_hint_data)
 
             checks_in_area = {player: {area: list() for area in ordered_areas}
                               for player in range(1, world.players + 1)}
@@ -346,8 +347,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
                 def precollect_hint(location):
                     entrance = er_hint_data.get(location.player, {}).get(location.address, "")
+                    details = extra_hint_data.get(location.player, {}).get(location.address, "")
                     hint = NetUtils.Hint(location.item.player, location.player, location.address,
-                                         location.item.code, False, entrance, location.item.flags)
+                                         location.item.code, False, entrance, location.item.flags, details)
                     precollected_hints[location.player].add(hint)
                     if location.item.player not in world.groups:
                         precollected_hints[location.item.player].add(hint)
@@ -385,6 +387,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "checks_in_area": checks_in_area,
                     "server_options": baked_server_options,
                     "er_hint_data": er_hint_data,
+                    "extra_hint_data": extra_hint_data,
                     "precollected_items": precollected_items,
                     "precollected_hints": precollected_hints,
                     "version": tuple(version_tuple),

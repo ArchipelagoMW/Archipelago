@@ -175,6 +175,7 @@ class Context:
             team_slot, datetime.datetime] = {}  # datetime of last connection
         self.client_game_state: typing.Dict[team_slot, int] = collections.defaultdict(int)
         self.er_hint_data: typing.Dict[int, typing.Dict[int, str]] = {}
+        self.extra_hint_data: typing.Dict[int, typing.Dict[int, str]] = {}
         self.auto_shutdown = auto_shutdown
         self.commandprocessor = ServerCommandProcessor(self)
         self.embedded_blacklist = {"host", "port"}
@@ -368,6 +369,8 @@ class Context:
         self.slot_data = decoded_obj['slot_data']
         self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
                              for player, loc_data in decoded_obj["er_hint_data"].items()}
+        self.extra_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
+                             for player, loc_data in decoded_obj["extra_hint_data"].items()}
 
         # load start inventory:
         for slot, item_codes in decoded_obj["precollected_items"].items():
@@ -914,8 +917,9 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
             if receiving_player in slots and item_id == seeked_item_id:
                 found = location_id in ctx.location_checks[team, finding_player]
                 entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
+                details = ctx.extra_hint_data.get(finding_player, {}).get(location_id, "")
                 hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
-                                           item_flags))
+                                           item_flags, details))
 
     return hints
 
@@ -932,7 +936,8 @@ def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location
 
         found = seeked_location in ctx.location_checks[team, slot]
         entrance = ctx.er_hint_data.get(slot, {}).get(seeked_location, "")
-        return [NetUtils.Hint(receiving_player, slot, seeked_location, item_id, found, entrance, item_flags)]
+        details = ctx.extra_hint_data.get(slot, {}).get(seeked_location, "")
+        return [NetUtils.Hint(receiving_player, slot, seeked_location, item_id, found, entrance, item_flags, details)]
     return []
 
 
@@ -944,6 +949,8 @@ def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
 
     if hint.entrance:
         text += f" at {hint.entrance}"
+    if hint.details:
+        text += f" {hint.details}"
     return text + (". (found)" if hint.found else ".")
 
 

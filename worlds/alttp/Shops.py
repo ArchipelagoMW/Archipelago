@@ -266,8 +266,14 @@ def ShopSlotFill(world):
                     shop.push_inventory(location.shop_slot, item_name,
                                         min(int(price * world.shop_price_modifier[location.player] / 100) * 5, 9999), 1,
                                         location.item.player if location.item.player != location.player else 0)
+                    shop_item = shop.inventory[location.shop_slot]
                     if 'P' in world.shop_shuffle[location.player]:
-                        price_to_funny_price(world, shop.inventory[location.shop_slot], location.player)
+                        price_to_funny_price(world, shop_item, location.player)
+                    price_type = price_type_display_name[shop_item['price_type']]
+                    price = shop_item['price']
+                    if price == 1:
+                        price_type = price_type[:-1]  # Delete trailing "s", works for all implemented price types.
+                    world.worlds[location.player].shop_prices[location.address] = f"{price} {price_type}"
 
 
 def create_shops(world, player: int):

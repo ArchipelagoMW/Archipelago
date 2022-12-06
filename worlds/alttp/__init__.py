@@ -116,6 +116,7 @@ class ALTTPWorld(World):
     topology_present = True
     item_name_groups = item_name_groups
     hint_blacklist = {"Triforce"}
+    shop_prices: typing.Dict[int, str]  # address: cost; cost is str because might not be rupees.
 
     item_name_to_id = {name: data.item_code for name, data in item_table.items() if type(data.item_code) == int}
     location_name_to_id = lookup_name_to_id
@@ -150,6 +151,7 @@ class ALTTPWorld(World):
         self.dungeon_specific_item_names = set()
         self.rom_name_available_event = threading.Event()
         self.has_progressive_bows = False
+        self.shop_prices = {}
         super(ALTTPWorld, self).__init__(*args, **kwargs)
 
     @classmethod
@@ -421,8 +423,26 @@ class ALTTPWorld(World):
         finally:
             self.rom_name_available_event.set() # make sure threading continues and errors are collected
 
+
+    def extend_hint_information(
+            self,
+            entrance_hint_data: typing.Dict[int, typing.Dict[int, str]],
+            extra_hint_data: typing.Dict[int, typing.Dict[int, str]]
+    ):
+        if self.shop_prices:
+            extra_hint_data[self.player] = {
+                location: f"for {cost}"
+                for location, cost in self.shop_prices.items()
+            }
+
+
     @classmethod
-    def stage_extend_hint_information(cls, world, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+    def stage_extend_hint_information(
+            cls,
+            world,
+            entrance_hint_data: typing.Dict[int, typing.Dict[int, str]],
+            extra_hint_data: typing.Dict[int, typing.Dict[int, str]]
+    ):
         er_hint_data = {player: {} for player in world.get_game_players("A Link to the Past") if
                         world.shuffle[player] != "vanilla" or world.retro_caves[player]}
 
@@ -433,7 +453,8 @@ class ALTTPWorld(World):
                     if type(location.address) == int:  # skips events and crystals
                         if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
                             er_hint_data[region.player][location.address] = main_entrance.name
-        hint_data.update(er_hint_data)
+        entrance_hint_data.update(er_hint_data)
+
 
     def modify_multidata(self, multidata: dict):
         import base64
