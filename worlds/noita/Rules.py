@@ -1,6 +1,5 @@
+from BaseClasses import MultiWorld
 
 
-
-def create_all_rules(world, player: int) -> None:
-  "" #TODO
-
+def create_all_rules(world: MultiWorld, player: int) -> None:
+    ""  # TODO

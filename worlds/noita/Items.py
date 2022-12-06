@@ -1,6 +1,7 @@
 import itertools
 from typing import Dict, NamedTuple, Optional, List, Set
-from BaseClasses import Item, ItemClassification
+from BaseClasses import Item, ItemClassification, MultiWorld
+
 
 class ItemData(NamedTuple):
     code: Optional[int]
@@ -18,7 +19,7 @@ def create_item(player: int, name: str) -> Item:
     return NoitaItem(name, item_data.classification, item_data.code, player)
 
 
-def create_all_items(world, player: int) -> None:
+def create_all_items(world: MultiWorld, player: int) -> None:
     pool_option = world.bad_effects[player].value
     total_locations = world.total_locations[player].value
 
@@ -63,7 +64,6 @@ item_table: Dict[str, ItemData] = {
 }
 
 
-
 default_weights: Dict[str, int] = {
     "Wand (Tier 1)":    10,
     "Potion":           35,
@@ -106,12 +106,20 @@ item_pool_weights: Dict[int, Dict[str, int]] = {
 def get_item_group(item_name: str) -> str:
     return item_table[item_name].group
 
+
 def item_is_filler(item_name: str) -> bool:
     return item_table[item_name].classification == ItemClassification.filler
 
 
-filler_items = filter(item_is_filler, item_table.keys())
-item_name_to_id = { name: data.code for name, data in item_table.items() }
-item_name_groups = { group: set(item_names) for group, item_names in itertools.groupby(item_table, get_item_group) }
+filler_items: List[str] = list(filter(item_is_filler, item_table.keys()))
+item_name_to_id: Dict[str, int] = {name: data.code for name, data in item_table.items()}
 
-required_items = { name: data.required_num for name, data in item_table.items() }
+item_name_groups: Dict[set, Set[str]] = {
+    group: set(item_names)
+    for group, item_names in itertools.groupby(item_table, get_item_group)
+}
+
+required_items: Dict[str, int] = {
+    name: data.required_num
+    for name, data in item_table.items() if data.required_num > 0
+}
