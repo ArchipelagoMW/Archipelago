@@ -842,10 +842,10 @@ location_table = OrderedDict([
    #("Dodongos Cavern Last Block Pot 4",                             ("Pot",          0x01,  0x21, None,                            'Rupee (1)',                             ("Dodongo's Cavern", "Vanilla", "Pot"))),
     ("Dodongos Cavern Blade Room Pot 1",                             ("Pot",          0x01,  (9,0,15), None,                        'Recovery Heart',                        ("Dodongo's Cavern", "Vanilla", "Pot"))),
     ("Dodongos Cavern Blade Room Pot 2",                             ("Pot",          0x01,  (9,0,16), None,                        'Recovery Heart',                        ("Dodongo's Cavern", "Vanilla", "Pot"))),
-    ("Dodongos Cavern Single Eye Switch Room Pot 1",                 ("Pot",          0x01,  (12,0,6), None,                        'Recovery Heart',                        ("Dodongo's Cavern", "Vanilla", "Pot"))),
-    ("Dodongos Cavern Single Eye Switch Room Pot 2",                 ("Pot",          0x01,  (12,0,7), None,                        'Rupees (5)',                            ("Dodongo's Cavern", "Vanilla", "Pot"))),
-    ("Dodongos Cavern Double Eye Switch Room Pot 1",                 ("Pot",          0x01,  (10,0,7), None,                        'Recovery Heart',                        ("Dodongo's Cavern", "Vanilla", "Pot"))),
-    ("Dodongos Cavern Double Eye Switch Room Pot 2",                 ("Pot",          0x01,  (10,0,8), None,                        'Rupees (5)',                            ("Dodongo's Cavern", "Vanilla", "Pot"))),
+    ("Dodongos Cavern Single Eye Switch Room Pot 1",                 ("Pot",          0x01,  (10,0,7), None,                        'Recovery Heart',                        ("Dodongo's Cavern", "Vanilla", "Pot"))),
+    ("Dodongos Cavern Single Eye Switch Room Pot 2",                 ("Pot",          0x01,  (10,0,8), None,                        'Rupees (5)',                            ("Dodongo's Cavern", "Vanilla", "Pot"))),
+    ("Dodongos Cavern Double Eye Switch Room Pot 1",                 ("Pot",          0x01,  (12,0,6), None,                        'Recovery Heart',                        ("Dodongo's Cavern", "Vanilla", "Pot"))),
+    ("Dodongos Cavern Double Eye Switch Room Pot 2",                 ("Pot",          0x01,  (12,0,7), None,                        'Rupees (5)',                            ("Dodongo's Cavern", "Vanilla", "Pot"))),
 
     # Dodongo's Cavern MQ
     ("Dodongos Cavern MQ Map Chest",                                 ("Chest",        0x01,  0x00, None,                            'Map (Dodongos Cavern)',                 ("Dodongo's Cavern", "Master Quest"))),
