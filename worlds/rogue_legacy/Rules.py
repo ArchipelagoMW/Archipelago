@@ -21,7 +21,7 @@ class LegacyLogic(LogicMixin):
     def has_upgrade_amount(self, player: int, amount: int) -> bool:
         return self.get_upgrade_count(player) >= amount
 
-    def has_upgrade_quota(self, player: int, percentage: int) -> bool:
+    def has_upgrades_percentage(self, player: int, percentage: int) -> bool:
         return self.has_upgrade_amount(player, self.get_upgrade_total(player) * (percentage // 100))
 
     def has_movement_rune(self, player: int) -> bool:
@@ -94,16 +94,16 @@ def set_rules(multiworld: MultiWorld, player: int):
 
     # Region rules.
     multiworld.get_entrance("Forest Abkhazia", player).access_rule = \
-        lambda state: state.has_upgrade_quota(player, 12.5) and state.has_defeated_castle(player)
+        lambda state: state.has_upgrades_percentage(player, 12.5) and state.has_defeated_castle(player)
 
     multiworld.get_entrance("The Maya", player).access_rule = \
-        lambda state: state.has_upgrade_quota(player, 25) and state.has_defeated_forest(player)
+        lambda state: state.has_upgrades_percentage(player, 25) and state.has_defeated_forest(player)
 
     multiworld.get_entrance("Land of Darkness", player).access_rule = \
-        lambda state: state.has_upgrade_quota(player, 37.5) and state.has_defeated_tower(player)
+        lambda state: state.has_upgrades_percentage(player, 37.5) and state.has_defeated_tower(player)
 
     multiworld.get_entrance("The Fountain Room", player).access_rule = \
-        lambda state: state.has_upgrade_quota(player, 50) and state.has_defeated_dungeon(player)
+        lambda state: state.has_upgrades_percentage(player, 50) and state.has_defeated_dungeon(player)
 
     # Win condition.
     multiworld.completion_condition[player] = lambda state: state.has("Defeat The Fountain", player)
