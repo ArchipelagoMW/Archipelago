@@ -5,7 +5,7 @@ import uuid
 import zipfile
 from io import BytesIO
 
-from flask import request, flash, redirect, url_for, session, render_template
+from flask import request, flash, redirect, url_for, session, render_template, Markup
 from pony.orm import flush, select
 
 import MultiServer
@@ -22,6 +22,10 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
     if not owner:
         owner = session["_id"]
     infolist = zfile.infolist()
+    if all(file.filename.endswith((".yaml", ".yml")) or file.is_dir() for file in infolist):
+        flash(Markup("Error: Your .zip file only contains .yaml files. "
+                     'Did you mean to <a href="/generate">generate a game</a>?'))
+        return
     slots: typing.Set[Slot] = set()
     spoiler = ""
     files = {}

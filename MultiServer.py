@@ -1462,7 +1462,12 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
         else:
             if points_available >= cost:
-                self.output("Nothing found. Item/Location may not exist.")
+                if for_location:
+                    self.output(f"Nothing found for recognized location name \"{hint_name}\". "
+                                f"Location appears to not exist in this multiworld.")
+                else:
+                    self.output(f"Nothing found for recognized item name \"{hint_name}\". "
+                                f"Item appears to not exist in this multiworld.")
             else:
                 self.output(f"You can't afford the hint. "
                             f"You have {points_available} points and need at least "
@@ -1536,8 +1541,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             team, slot = ctx.connect_names[args['name']]
             game = ctx.games[slot]
-            ignore_game = "IgnoreGame" in args["tags"] or (  # IgnoreGame is deprecated. TODO: remove after 0.3.3?
-                          ("TextOnly" in args["tags"] or "Tracker" in args["tags"]) and not args.get("game"))
+            ignore_game = ("TextOnly" in args["tags"] or "Tracker" in args["tags"]) and not args.get("game")
             if not ignore_game and args['game'] != game:
                 errors.add('InvalidGame')
             minver = min_client_version if ignore_game else ctx.minimum_client_versions[slot]
