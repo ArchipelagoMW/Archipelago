@@ -4,14 +4,14 @@ from ..AutoWorld import LogicMixin
 from ..generic.Rules import set_rule
 
 
-class LegacyLogic(LogicMixin):
-    def get_upgrade_total(self, player: int) -> int:
+class RLLogic(LogicMixin):
+    def _get_upgrade_total(self, player: int) -> int:
         return int(self.multiworld.health_pool[player]) + \
                int(self.multiworld.mana_pool[player]) + \
                int(self.multiworld.attack_pool[player]) + \
                int(self.multiworld.magic_damage_pool[player])
 
-    def get_upgrade_count(self, player: int) -> int:
+    def _get_upgrade_count(self, player: int) -> int:
         return self.item_count("Health Up", player) + self.item_count("Mana Up", player) + \
                self.item_count("Attack Up", player) + self.item_count("Magic Damage Up", player)
 
@@ -19,10 +19,10 @@ class LegacyLogic(LogicMixin):
         return self.has_all({"Blacksmith", "Enchantress"}, player)
 
     def has_upgrade_amount(self, player: int, amount: int) -> bool:
-        return self.get_upgrade_count(player) >= amount
+        return self._get_upgrade_count(player) >= amount
 
     def has_upgrades_percentage(self, player: int, percentage: int) -> bool:
-        return self.has_upgrade_amount(player, self.get_upgrade_total(player) * (percentage // 100))
+        return self.has_upgrade_amount(player, self._get_upgrade_total(player) * (percentage // 100))
 
     def has_movement_rune(self, player: int) -> bool:
         return self.has("Vault Runes", player) or self.has("Sprint Runes", player) or self.has("Sky Runes", player)
