@@ -51,7 +51,7 @@ class SA2BWorld(World):
     """
     game: str = "Sonic Adventure 2 Battle"
     option_definitions = sa2b_options
-    topology_present = True
+    topology_present = False
     data_version = 3
 
     item_name_groups = item_groups
@@ -352,35 +352,34 @@ class SA2BWorld(World):
                 spoiler_handle.writelines(text)
 
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
-        if self.topology_present:
-            gate_names = [
-                LocationName.gate_0_region,
-                LocationName.gate_1_region,
-                LocationName.gate_2_region,
-                LocationName.gate_3_region,
-                LocationName.gate_4_region,
-                LocationName.gate_5_region,
-            ]
-            no_hint_region_names = [
-                LocationName.cannon_core_region,
-                LocationName.chao_garden_beginner_region,
-                LocationName.chao_garden_intermediate_region,
-                LocationName.chao_garden_expert_region,
-            ]
-            er_hint_data = {}
-            for i in range(self.multiworld.number_of_level_gates[self.player].value):
-                gate_name = gate_names[i]
-                gate_region = self.multiworld.get_region(gate_name, self.player)
-                if not gate_region:
+        gate_names = [
+            LocationName.gate_0_region,
+            LocationName.gate_1_region,
+            LocationName.gate_2_region,
+            LocationName.gate_3_region,
+            LocationName.gate_4_region,
+            LocationName.gate_5_region,
+        ]
+        no_hint_region_names = [
+            LocationName.cannon_core_region,
+            LocationName.chao_garden_beginner_region,
+            LocationName.chao_garden_intermediate_region,
+            LocationName.chao_garden_expert_region,
+        ]
+        er_hint_data = {}
+        for i in range(self.multiworld.number_of_level_gates[self.player].value + 1):
+            gate_name = gate_names[i]
+            gate_region = self.multiworld.get_region(gate_name, self.player)
+            if not gate_region:
+                continue
+            for exit in gate_region.exits:
+                if exit.connected_region.name in gate_names or exit.connected_region.name in no_hint_region_names:
                     continue
-                for exit in gate_region.exits:
-                    if exit.connected_region.name in gate_names or exit.connected_region.name in no_hint_region_names:
-                        continue
-                    level_region = exit.connected_region
-                    for location in level_region.locations:
-                        er_hint_data[location.address] = gate_name
+                level_region = exit.connected_region
+                for location in level_region.locations:
+                    er_hint_data[location.address] = gate_name
 
-            hint_data[self.player] = er_hint_data
+        hint_data[self.player] = er_hint_data
 
     @classmethod
     def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
