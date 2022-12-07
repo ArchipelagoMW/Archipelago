@@ -25,7 +25,7 @@
         },
         "exits": {
             "Ice Cavern Map Room": "is_adult",
-            "Ice Cavern Behind Ice Walls": "Blue_Fire"
+            "Ice Cavern Behind Ice Walls": "here(Blue_Fire)"
         }
     },
     {

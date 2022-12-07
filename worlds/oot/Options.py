@@ -872,8 +872,8 @@ class InvisibleChests(Toggle):
 
 
 class CorrectPotCrateAppearance(Choice):
-    """textures_content changes appearance to match their content. textures_unchecked changes appearance only if the item isn't obtained yet."""
-    display_name = "Pot & Crate Appearance Matches Contents"
+    """Unchecked pots and crates have a different texture; unchecked beehives will wiggle. With textures_content, pots and crates have an appearance based on their contents; with textures_unchecked, all unchecked pots/crates have the same appearance."""
+    display_name = "Pot, Crate, and Beehive Appearance"
     option_off = 0
     option_textures_content = 1
     option_textures_unchecked = 2
