@@ -1,9 +1,12 @@
 from BaseClasses import Location
 
+
 class V6Location(Location):
     game: str = "VVVVVV"
 
-location_table = { # Correspond to 2515000 + index in collect array of game code
+
+location_table = {
+    # Corresponds to 2515000 + index in collect array of game code
     "It's a Secret to Nobody": 2515000,
     "Trench Warfare": 2515001,
     "One Way Room": 2515002,

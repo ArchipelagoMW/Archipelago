@@ -1,7 +1,9 @@
 from BaseClasses import Item
 
+
 class V6Item(Item):
     game: str = "VVVVVV"
+
 
 item_table = {
     "Trinket 01": 2515000,

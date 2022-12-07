@@ -1,11 +1,13 @@
+import json
+import os
 import typing
-import os, json
+
+from BaseClasses import ItemClassification, Tutorial
 from .Items import item_table, V6Item
 from .Locations import location_table, V6Location
 from .Options import v6_options
+from .Regions import create_regions, v6_areas
 from .Rules import set_rules
-from .Regions import create_regions
-from BaseClasses import Item, ItemClassification, Tutorial
 from ..AutoWorld import World, WebWorld
 
 client_version = 1
@@ -51,8 +53,14 @@ class V6World(World):
         self.area_cost_map = {}
         set_rules(self.multiworld, self.player, self.area_connections, self.area_cost_map)
 
-    def create_item(self, name: str) -> Item:
+    def create_item(self, name: str) -> V6Item:
         return V6Item(name, ItemClassification.progression, item_table[name], self.player)
+
+    def generate_early(self):
+        # Area randomization logic.
+        if self.multiworld.AreaRandomizer[self.player]:
+            area_shuffle = v6_areas
+            self.multiworld.random.shuffle(area_shuffle)
 
     def generate_basic(self):
         trinkets = [self.create_item("Trinket " + str(i+1).zfill(2)) for i in range(0,20)]
