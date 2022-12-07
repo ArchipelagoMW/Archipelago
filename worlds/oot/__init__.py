@@ -1084,15 +1084,15 @@ class OOTWorld(World):
 
         hint_entrances = set()
         for entrance in entrance_shuffle_table:
-            hint_entrances.add(entrance[1][0])
-            if len(entrance) > 2:
-                hint_entrances.add(entrance[2][0])
+            if entrance[0] in {'Dungeon', 'DungeonSpecial', 'Interior', 'SpecialInterior', 'Grotto', 'Grave'}:
+                hint_entrances.add(entrance[1][0])
 
         # Get main hint entrance to region.
         # If the region is directly adjacent to a hint-entrance, we return that one.
         # If it's in a dungeon, scan all the entrances for all the regions in the dungeon.
         #   This should terminate on the first region anyway, but we scan everything to be safe.
         # If it's one of the special cases, go one level deeper.
+        # If it's a boss room, go one level deeper to the boss door region, which is in a dungeon. 
         # Otherwise return None.
         def get_entrance_to_region(region):
             special_case_regions = {
@@ -1108,19 +1108,21 @@ class OOTWorld(World):
                     for e in r.entrances:
                         if e.name in hint_entrances:
                             return e
-            if region.name in special_case_regions:
+            if region.is_boss_room or region.name in special_case_regions:
                 return get_entrance_to_region(region.entrances[0].parent_region)
             return None
 
-        if self.shuffle_interior_entrances != 'off' or self.shuffle_dungeon_entrances or self.shuffle_grotto_entrances:
+        if (self.shuffle_interior_entrances != 'off' or self.shuffle_dungeon_entrances
+            or self.shuffle_grotto_entrances or self.shuffle_bosses != 'off'):
             for region in self.regions:
                 if not any(bool(loc.address) for loc in region.locations): # check if region has any non-event locations
                     continue
                 main_entrance = get_entrance_to_region(region)
-                if main_entrance is not None and main_entrance.shuffled:
+                if main_entrance is not None and (main_entrance.shuffled or (region.is_boss_room and self.shuffle_bosses != 'off')):
                     for location in region.locations:
                         if type(location.address) == int:
                             er_hint_data[self.player][location.address] = main_entrance.name
+                            logger.debug(f"Set {location.name} hint data to {main_entrance.name}")
 
     # Key ring handling: 
     # Key rings are multiple items glued together into one, so we need to give
