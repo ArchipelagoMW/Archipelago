@@ -6,7 +6,7 @@ from Options import Option, DeathLink, Range, Toggle
 class DoorCost(Range):
     """Amount of Trinkets required to enter Areas. Set to 0 to disable artificial locks."""
     range_start = 0
-    range_end = 3
+    range_end = 5
     default = 3
 
 

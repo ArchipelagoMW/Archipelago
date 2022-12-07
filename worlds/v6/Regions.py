@@ -1,6 +1,7 @@
 from typing import NamedTuple, List, Dict
 
 from BaseClasses import MultiWorld, Region, Entrance, RegionType
+from . import V6Location, location_table
 
 v6_areas = ["Laboratory", "The Tower", "Space Station 2", "Warp Zone"]
 
@@ -35,7 +36,9 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions: List[Region] = []
     for region_name, region_data in regions_table.items():
         region = Region(region_name, RegionType.Generic, region_name, player, multiworld)
-        region.locations = region_data.locations
+        for location in region_data.locations:
+            region.locations.append(V6Location(player, location, location_table[location], region))
+
         for region_exit in region_data.exits:
             region.exits.append(Entrance(player, region_exit, region))
 

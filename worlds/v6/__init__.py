@@ -10,8 +10,6 @@ from .Regions import create_regions, v6_areas
 from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
 
-client_version = 1
-
 
 class V6Web(WebWorld):
     tutorials = [Tutorial(
@@ -25,52 +23,58 @@ class V6Web(WebWorld):
 
 
 class V6World(World):
-    """ 
+    """
      VVVVVV is a platform game all about exploring one simple mechanical idea - what if you reversed gravity instead of jumping?
-    """ #Lifted from Store Page
+    """
 
-    game: str = "VVVVVV"
-    topology_present = False
-    web = V6Web()
-
+    game = "VVVVVV"
+    topology_present = True
     item_name_to_id = item_table
     location_name_to_id = location_table
-
-    data_version = 1
-
-    area_connections: typing.Dict[int, int]
-    area_cost_map: typing.Dict[int,int]
-
-    music_map: typing.Dict[int,int]
-
     option_definitions = v6_options
+    data_version = 1
+    web = V6Web()
+    area_connections: typing.Dict[int, int]
+    area_cost_map: typing.Dict[int, int]
+    music_map: typing.Dict[int, int]
 
     def create_regions(self):
         create_regions(self.multiworld, self.player)
 
     def set_rules(self):
-        self.area_connections = {}
-        self.area_cost_map = {}
-        set_rules(self.multiworld, self.player, self.area_connections, self.area_cost_map)
+        set_rules(self.multiworld, self.player)
 
     def create_item(self, name: str) -> V6Item:
-        return V6Item(name, ItemClassification.progression, item_table[name], self.player)
+        trinket = int(name.removeprefix("Trinket "))
+        if trinket <= self.multiworld.DoorCost[self.player] * 4:
+            return V6Item(name, ItemClassification.progression, item_table[name], self.player)
+        else:
+            return V6Item(name, ItemClassification.filler, item_table[name], self.player)
 
     def generate_early(self):
-        # Area randomization logic.
+        self.area_connections = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4}
+        self.area_cost_map = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4}
+
+        # Area Randomization
         if self.multiworld.AreaRandomizer[self.player]:
-            area_shuffle = v6_areas
-            self.multiworld.random.shuffle(area_shuffle)
+            shuffled_areas = list(range(len(v6_areas)))
+            self.multiworld.random.shuffle(shuffled_areas)
+            self.area_connections.update({(index + 1): (value + 1) for index, value in enumerate(shuffled_areas)})
 
-    def generate_basic(self):
-        trinkets = [self.create_item("Trinket " + str(i+1).zfill(2)) for i in range(0,20)]
-        self.multiworld.itempool += trinkets
+            if self.multiworld.AreaCostRandomizer[self.player]:
+                self.multiworld.random.shuffle(shuffled_areas)
+                self.area_cost_map.update({(index + 1): (value + 1) for index, value in enumerate(shuffled_areas)})
 
-        musiclist_o = [1,2,3,4,9,12]
-        musiclist_s = musiclist_o.copy()
-        if self.multiworld.MusicRandomizer[self.player].value:
-            self.multiworld.random.shuffle(musiclist_s)
-        self.music_map = dict(zip(musiclist_o, musiclist_s))
+        # Music Randomization
+        music_list_o = [1, 2, 3, 4, 9, 12]
+        music_list_s = music_list_o.copy()
+        if self.multiworld.MusicRandomizer[self.player]:
+            self.multiworld.random.shuffle(music_list_s)
+
+        self.music_map = dict(zip(music_list_o, music_list_s))
+
+    def create_items(self):
+        self.multiworld.itempool += [self.create_item(f"Trinket {str(i + 1).zfill(2)}") for i in range(20)]
 
     def fill_slot_data(self):
         return {
@@ -85,9 +89,11 @@ class V6World(World):
     def generate_output(self, output_directory: str):
         if self.multiworld.players != 1:
             return
+
         data = {
             "slot_data": self.fill_slot_data(),
-            "location_to_item": {self.location_name_to_id[i.name] : item_table[i.item.name] for i in self.multiworld.get_locations()},
+            "location_to_item": {self.location_name_to_id[location.name]: item_table[location.item.name]
+                                 for location in self.multiworld.get_locations()},
             "data_package": {
                 "data": {
                     "games": {
@@ -100,5 +106,5 @@ class V6World(World):
             }
         }
         filename = f"{self.multiworld.get_out_file_name_base(self.player)}.apv6"
-        with open(os.path.join(output_directory, filename), 'w') as f:
-            json.dump(data, f)
+        with open(os.path.join(output_directory, filename), 'w') as file:
+            json.dump(data, file)
