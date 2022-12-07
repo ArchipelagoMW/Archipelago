@@ -213,6 +213,22 @@ def handle_ability_code(rom):
     rom.write_bytes(CLIMB_SUB_ADDR + 0x12, bytearray([0x5C, 0x76, 0xCD, 0x00])) # JML $00CD76
     # End Climb
 
+    # Climb Rope
+    rom.write_bytes(0xDA33, bytearray([0x22, 0x70, 0xBC, 0x03])) # JSL $03BC70
+
+    CLIMB_ROPE_SUB_ADDR = 0x01BC70
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x04, bytearray([0x89, 0x20]))       # BIT #20
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x06, bytearray([0xF0, 0x07]))       # BEQ +0x07
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x08, bytearray([0x28]))             # PLP
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x09, bytearray([0xA9, 0xB0]))       # LDA #B0
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x0B, bytearray([0x85, 0x7D]))       # STA $7D
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x0D, bytearray([0x80, 0x01]))       # BRA +0x01
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x0F, bytearray([0x28]))             # PLP
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x10, bytearray([0x6B]))             # RTL
+    # End Climb Rope
+
     # P-Switch
     rom.write_bytes(0xAB1A, bytearray([0x22, 0xA0, 0xBA, 0x03])) # JSL $03BAA0
     rom.write_bytes(0xAB1E, bytearray([0xEA] * 0x01))
@@ -348,6 +364,9 @@ def handle_ability_code(rom):
     # Baby Yoshi
     rom.write_bytes(0xA2B8, bytearray([0x22, 0x20, 0xBB, 0x03])) # JSL $03BB20
     rom.write_bytes(0xA2BC, bytearray([0xEA] * 0x01))
+
+    rom.write_bytes(0x1C05F, bytearray([0x22, 0x20, 0xBB, 0x03])) # JSL $03BB20
+    rom.write_bytes(0x1C063, bytearray([0xEA] * 0x01))
 
     YOSHI_SUB_ADDR = 0x01BB20
     rom.write_bytes(YOSHI_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
@@ -658,6 +677,22 @@ def handle_collected_paths(rom):
     rom.write_bytes(COLLECTED_PATHS_SUB_ADDR + 0x13, bytearray([0x6B]))                   # RTL
 
 
+def handle_vertical_scroll(rom):
+    rom.write_bytes(0x285BA, bytearray([0x22, 0x90, 0xBC, 0x03])) # JSL $03BC90
+
+    VERTICAL_SCROLL_SUB_ADDR = 0x01BC90
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x00, bytearray([0x4A]))       # LSR
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x01, bytearray([0x4A]))       # LSR
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x02, bytearray([0x4A]))       # LSR
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x03, bytearray([0x4A]))       # LSR
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x04, bytearray([0x08]))       # PHP
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x05, bytearray([0xC9, 0x02])) # CMP #02
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x07, bytearray([0xD0, 0x02])) # BNE +0x02
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x09, bytearray([0xA9, 0x01])) # LDA #01
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x0B, bytearray([0x28]))       # PLP
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x0C, bytearray([0x6B]))       # RTL
+
+
 def handle_music_shuffle(rom, world, player):
     from .Aesthetics import generate_shuffled_level_music, generate_shuffled_ow_music, level_music_address_data, ow_music_address_data
 
@@ -789,6 +824,8 @@ def patch_rom(world, rom, player, active_level_dict):
 
     handle_collected_paths(rom)
 
+    handle_vertical_scroll(rom)
+
     # Handle Level Shuffle
     handle_level_shuffle(rom, active_level_dict)
 
@@ -805,7 +842,10 @@ def patch_rom(world, rom, player, active_level_dict):
 
     # Store all relevant option results in ROM
     rom.write_byte(0x01BFA0, world.goal[player].value)
-    rom.write_byte(0x01BFA1, world.bosses_required[player].value)
+    if world.goal[player].value == 0:
+        rom.write_byte(0x01BFA1, world.bosses_required[player].value)
+    else:
+        rom.write_byte(0x01BFA1, 0x7F)
     required_yoshi_eggs = max(math.floor(
         world.number_of_yoshi_eggs[player].value * (world.percentage_of_yoshi_eggs[player].value / 100.0)), 1)
     rom.write_byte(0x01BFA2, required_yoshi_eggs)

@@ -49,8 +49,8 @@ Doors:
 1169 - Windmill Entry (Panel) - 0x17F5F
 1200 - Treehouse First & Second Doors (Panel) - 0x0288C,0x02886
 1202 - Treehouse Third Door (Panel) - 0x0A182
-1205 - Treehouse Laser House Door Timer (Panel) - 0x2700B,0x334DC
-1208 - Treehouse Drawbridge (Panel) - 0x17CBC
+1205 - Treehouse Laser House Door Timer (Panel) - 0x2700B,0x17CBC
+1208 - Treehouse Drawbridge (Panel) - 0x037FF
 1175 - Jungle Popup Wall (Panel) - 0x17CAB
 1180 - Bunker Entry (Panel) - 0x17C2E
 1183 - Bunker Tinted Glass Door (Panel) - 0x0A099

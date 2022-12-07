@@ -84,3 +84,14 @@ In addition to shuffling items, the following changes are applied to the game:
     - 1-Star/2-Star scores are much closer to the 3-Star Score
 - Significantly reduced the time allotted to beat the final level
 - Reduced penalty for expired order
+
+## Difficulty Table
+
+Before generating your first seed, you can use the following table to determine what difficulty is appropriate for your personal Overcooked! journey.
+
+| Vanilla Game | Star Difficulty % |
+| ----------- | ----------- |
+| First Playthrough | 10-25% |
+| 3-Star | 25-40% |
+| 4-Star | 40-55% |
+| Community-Optimized Strats | 55%+ |
