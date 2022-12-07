@@ -81,11 +81,11 @@ class PokemonRedBlueWorld(World):
             except KeyError as e:
                 raise KeyError(f"Invalid character(s) in {t} name for player {self.multiworld.player_name[self.player]}") from e
         if self.multiworld.trainer_name[self.player] == "choose_in_game":
-            self.trainer_name = -1
+            self.trainer_name = "choose_in_game"
         else:
             self.trainer_name = encode_name(self.multiworld.trainer_name[self.player].value, "Player")
-        if self.multiworld.rival_name[self.player].value == -1:
-            self.rival_name = -1
+        if self.multiworld.rival_name[self.player].value == "choose_in_game":
+            self.rival_name = "choose_in_game"
         else:
             self.rival_name = encode_name(self.multiworld.rival_name[self.player].value, "Rival")
 

@@ -608,11 +608,11 @@ def generate_output(self, output_directory: str):
     slot_name.replace(">", " ")
     write_bytes(data, encode_text(slot_name, 16, True, True), rom_addresses['Title_Slot_Name'])
 
-    if self.trainer_name == -1:
+    if self.trainer_name == "choose_in_game":
         data[rom_addresses["Skip_Player_Name"]] = 0
     else:
         write_bytes(data, self.trainer_name, rom_addresses['Player_Name'])
-    if self.rival_name == -1:
+    if self.rival_name == "choose_in_game":
         data[rom_addresses["Skip_Rival_Name"]] = 0
     else:
         write_bytes(data, self.rival_name, rom_addresses['Rival_Name'])

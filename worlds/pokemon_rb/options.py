@@ -1,5 +1,5 @@
 
-from Options import Toggle, Choice, Range, SpecialRange, FreeText, TextChoice, DeathLink
+from Options import Toggle, Choice, Range, SpecialRange, TextChoice, DeathLink
 
 
 class GameVersion(Choice):
@@ -11,24 +11,24 @@ class GameVersion(Choice):
 
 
 class TrainerName(TextChoice):
-    """Your trainer name. If not set to choose_in_game, must be a string not exceeding 7 characters.
-    See the setup guide on archipelago.gg for a list of allowed characters."""
+    """Your trainer name. If not set to choose_in_game, must be a name not exceeding 7 characters, and the prompt to
+    name your character in-game will be skipped. See the setup guide on archipelago.gg for a list of allowed characters."""
     display_name = "Trainer Name"
     option_choose_in_game = -1
     default = -1
 
 
 class RivalName(TextChoice):
-    """Your rival's name. If not set to choose_in_game, must be a string not exceeding 7 characters.
-    See the setup guide on archipelago.gg for a list of allowed characters."""
+    """Your rival's name. If not set to choose_in_game, must be a name not exceeding 7 characters, and the prompt to
+    name your rival in-game will be skipped. See the setup guide on archipelago.gg for a list of allowed characters."""
     display_name = "Rival's Name"
     option_choose_in_game = -1
     default = -1
 
 
 class Goal(Choice):
-    """If Professor Oak is selected, your victory condition will require challenging and defeating Oak after becoming"""
-    """Champion and defeating or capturing the Pokemon at the end of Cerulean Cave."""
+    """If Professor Oak is selected, your victory condition will require challenging and defeating Oak after becoming
+    Champion and defeating or capturing the Pokemon at the end of Cerulean Cave."""
     display_name = "Goal"
     option_pokemon_league = 0
     option_professor_oak = 1
@@ -61,8 +61,8 @@ class ViridianGymCondition(Range):
 
 
 class CeruleanCaveCondition(Range):
-    """Number of badges, HMs, and key items (not counting items you can lose) required to access Cerulean Cave."""
-    """If extra_key_items is turned on, the number chosen will be increased by 4."""
+    """Number of badges, HMs, and key items (not counting items you can lose) required to access Cerulean Cave.
+    If extra_key_items is turned on, the number chosen will be increased by 4."""
     display_name = "Cerulean Cave Condition"
     range_start = 0
     range_end = 25
@@ -99,8 +99,8 @@ class BadgesNeededForHMMoves(Choice):
 
 
 class OldMan(Choice):
-    """With Open Viridian City, the Old Man will let you through without needing to turn in Oak's Parcel."""
-    """Early Parcel will ensure Oak's Parcel is available at the beginning of your game."""
+    """With Open Viridian City, the Old Man will let you through without needing to turn in Oak's Parcel.
+    Early Parcel will ensure Oak's Parcel is available at the beginning of your game."""
     display_name = "Old Man"
     option_vanilla = 0
     option_early_parcel = 1
@@ -199,7 +199,7 @@ class OaksAidRt15(Range):
 class ExpModifier(SpecialRange):
     """Modifier for EXP gained. When specifying a number, exp is multiplied by this amount and divided by 16."""
     display_name = "Exp Modifier"
-    range_start = 0
+    range_start = 1
     range_end = 255
     default = 16
     special_range_names = {
