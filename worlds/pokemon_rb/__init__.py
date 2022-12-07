@@ -38,7 +38,6 @@ class PokemonRedBlueWorld(World):
     # -MuffinJets#4559
     game = "Pokemon Red and Blue"
     option_definitions = pokemon_rb_options
-    remote_items = False
     data_version = 1
     topology_present = False
 
