@@ -128,7 +128,7 @@ Sent to clients when the connection handshake is successfully completed.
 | players           | list\[[NetworkPlayer](#NetworkPlayer)\]  | List denoting other players in the multiworld, whether connected or not.                                                                            |
 | missing_locations | list\[int\]                              | Contains ids of remaining locations that need to be checked. Useful for trackers, among other things.                                               |
 | checked_locations | list\[int\]                              | Contains ids of all locations that have been checked. Useful for trackers, among other things. Location ids are in the range of ± 2<sup>53</sup>-1. |
-| slot_data         | dict                                     | Contains a json object for slot related data, differs per game. Empty if not required. Not present if slot_data in [Connect](#Connect) is false.    |
+| slot_data         | dict[str, any]                           | Contains a json object for slot related data, differs per game. Empty if not required. Not present if slot_data in [Connect](#Connect) is false.    |
 | slot_info         | dict\[int, [NetworkSlot](#NetworkSlot)\] | maps each slot to a [NetworkSlot](#NetworkSlot) information                                                                                         |
 
 ### ReceivedItems
@@ -372,7 +372,7 @@ Some special keys exist with specific return data:
 | Name                       | Type                  | Notes                                        |
 |----------------------------|-----------------------|----------------------------------------------|
 | \_read_hints_{team}_{slot} | list\[[Hint](#Hint)\] | All Hints belonging to the requested Player. |
-| \_read_slot_data_{slot}    | any                   | slot_data belonging to the requested slot.   |
+| \_read_slot_data_{slot}    | dict[str, any]        | slot_data belonging to the requested slot.   |
 
 
 ### Set
