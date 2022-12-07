@@ -15,7 +15,9 @@
 * Strings in worlds should use double quotes as well, but imported code may differ.
 * Prefer [format string literals](https://peps.python.org/pep-0498/) over string concatenation,
   use single quotes inside them: `f"Like {dct['key']}"`
-* Use type annotation where possible.
+* Use type annotations where possible for function signatures and class members.
+* Use type annotations where appropriate for local variables (e.g. `var: List[int] = []`, or when the
+  type is hard or impossible to deduce.) Clear annotations help developers look up and validate API calls.
 
 
 ## Markdown

@@ -14,6 +14,11 @@ As we are using Bizhawk, this guide is only applicable to Windows and Linux syst
   (select `Pokemon Client` during installation).
 - Pokémon Red and/or Blue ROM files. The Archipelago community cannot provide these.
 
+## Optional Software
+
+- [Pokémon Red and Blue Archipelago Map Tracker](https://github.com/j-imbo/pkmnrb_jim/releases/latest), for use with [PopTracker](https://github.com/black-sliver/PopTracker/releases)
+
+
 ## Configuring Bizhawk
 
 Once Bizhawk has been installed, open Bizhawk and change the following settings:
@@ -38,7 +43,7 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-You can generate a yaml or download a template by visiting the [Pokemon Red and Blue Player Settings Page](/games/Pokemon Red and Blue/player-settings)
+You can generate a yaml or download a template by visiting the [Pokemon Red and Blue Player Settings Page](/games/Pokemon%20Red%20and%20Blue/player-settings)
 
 It is important to note that the `game_version` option determines the ROM file that will be patched.
 Both the player and the person generating (if they are generating locally) will need the corresponding ROM file.
@@ -82,3 +87,14 @@ To connect the client to the multiserver simply put `<address>:<port>` on the te
 server uses password, type in the bottom textfield `/connect <address>:<port> [password]`)
 
 Now you are ready to start your adventure in Kanto.
+
+## Auto-Tracking
+
+Pokémon Red and Blue has a fully functional map tracker that supports auto-tracking.
+
+1. Download [Pokémon Red and Blue Archipelago Map Tracker](https://github.com/j-imbo/pkmnrb_jim/releases/latest) and [PopTracker](https://github.com/black-sliver/PopTracker/releases).
+2. Open PopTracker, and load the Pokémon Red and Blue pack. 
+3. Click on the "AP" symbol at the top.
+4. Enter the AP address, slot name and password. 
+
+The rest should take care of itself! Items and checks will be marked automatically, and it even knows your settings - It will hide checks & adjust logic accordingly.
