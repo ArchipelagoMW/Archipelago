@@ -13,7 +13,6 @@ weapons_upgrade_5_table = {
     "Izalith Staff": 0x00C96A80,
     "Fume Ultra Greatsword": 0x0060E4B0,
     "Black Knight Sword": 0x005F5E10,
-
     "Yorshka's Spear": 0x008C3A70,
     "Smough's Great Hammer": 0x007E30B0,
     "Dragonslayer Greatbow": 0x00CF8500,
@@ -25,7 +24,6 @@ weapons_upgrade_5_table = {
     "Dragonslayer Spear": 0x008CAFA0,
     "Caitha's Chime": 0x00CA06C0,
     "Sunlight Straight Sword": 0x00203230,
-
     "Firelink Greatsword": 0x0060BDA0,
     "Hollowslayer Greatsword": 0x00604870,
     "Arstor's Spear": 0x008BEC50,
@@ -37,7 +35,6 @@ weapons_upgrade_5_table = {
     "Wolnir's Holy Sword": 0x005FFA50,
     "Demon's Greataxe": 0x006CA480,
     "Demon's Fist": 0x00A84DF0,
-
     "Old King's Great Hammer": 0x007CF830,
     "Greatsword of Judgment": 0x005E2590,
     "Profaned Greatsword": 0x005E4CA0,
@@ -95,7 +92,6 @@ weapons_upgrade_10_table = {
     "Red Hilted Halberd": 0x009AB960,
     "Saint's Talisman": 0x00CACA10,
     "Large Club": 0x007AFC60,
-
     "Brigand Twindaggers": 0x00F50E60,
     "Butcher Knife": 0x006BE130,
     "Brigand Axe": 0x006B1DE0,
@@ -126,7 +122,6 @@ weapons_upgrade_10_table = {
     "Drakeblood Greatsword": 0x00609690,
     "Greatlance": 0x008A8CC0,
     "Sniper Crossbow": 0x00D83790,
-
     "Claw": 0x00A7D8C0,
     "Drang Twinspears": 0x00F5AAA0,
 
@@ -213,6 +208,10 @@ goods_table = {
     **{"Soul of a Venerable Old Hand #"+str(i): 0x400001A2 for i in range(1, 5)},
     **{"Soul of a Crestfallen Knight #"+str(i): 0x40000199 for i in range(1, 11)},
 
+
+}
+
+goods_table_2 = {
     # Added by Br00ty
     "Soul of Sister Friede": 0x400002E8,
     "Soul of the Demon Prince": 0x400002EA,
@@ -541,7 +540,7 @@ key_items_list = {
 }
 
 item_tables = [weapons_upgrade_5_table, weapons_upgrade_10_table, shields_table,
-               armor_table, rings_table, spells_table, misc_items_table, goods_table, armor_2_table]
+               armor_table, rings_table, spells_table, misc_items_table, goods_table, armor_2_table, goods_table_2]
 
 item_dictionary = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table,
-                   **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table, **armor_2_table}
+                   **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table, **armor_2_table, **goods_table_2}
