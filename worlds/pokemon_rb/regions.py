@@ -8,7 +8,7 @@ def create_region(world: MultiWorld, player: int, name: str, locations_per_regio
     for location in locations_per_region.get(name, []):
         location.parent_region = ret
         ret.locations.append(location)
-        if world.randomize_hidden_items[player].value == 2 and "Hidden" in location.name:
+        if world.randomize_hidden_items[player] == "exclude" and "Hidden" in location.name:
             location.progress_type = LocationProgressType.EXCLUDED
     if exits:
         for exit in exits:

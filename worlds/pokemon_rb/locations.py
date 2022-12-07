@@ -5,7 +5,7 @@ loc_id_start = 172000000
 
 
 def trainersanity(multiworld, player):
-    return multiworld.trainersanity[player].value == 1
+    return multiworld.trainersanity[player]
 
 
 def hidden_items(multiworld, player):
@@ -13,11 +13,11 @@ def hidden_items(multiworld, player):
 
 
 def tea(multiworld, player):
-    return multiworld.tea[player].value == 1
+    return multiworld.tea[player]
 
 
 def extra_key_items(multiworld, player):
-    return multiworld.extra_key_items[player].value == 1
+    return multiworld.extra_key_items[player]
 
 
 def pokedex(multiworld, player):
