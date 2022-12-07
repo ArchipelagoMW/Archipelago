@@ -84,7 +84,7 @@ class PokemonRedBlueWorld(World):
             self.trainer_name = "choose_in_game"
         else:
             self.trainer_name = encode_name(self.multiworld.trainer_name[self.player].value, "Player")
-        if self.multiworld.rival_name[self.player].value == "choose_in_game":
+        if self.multiworld.rival_name[self.player] == "choose_in_game":
             self.rival_name = "choose_in_game"
         else:
             self.rival_name = encode_name(self.multiworld.rival_name[self.player].value, "Rival")
