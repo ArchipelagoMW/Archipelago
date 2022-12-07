@@ -210,11 +210,15 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         while itemcount > len(world.itempool):
             items_to_add = []
             for player in group["players"]:
-                if group["replacement_items"][player]:
-                    items_to_add.append(
-                        AutoWorld.call_single(world, "create_item", player, group["replacement_items"][player]))
+                if group["link_replacement"]:
+                    item_player = group_id
                 else:
-                    items_to_add.append(AutoWorld.call_single(world, "create_filler", player))
+                    item_player = player
+                if group["replacement_items"][player]:
+                    items_to_add.append(AutoWorld.call_single(world, "create_item", item_player,
+                                                                group["replacement_items"][player]))
+                else:
+                    items_to_add.append(AutoWorld.call_single(world, "create_filler", item_player))
             world.random.shuffle(items_to_add)
             world.itempool.extend(items_to_add[:itemcount - len(world.itempool)])
 
