@@ -281,7 +281,7 @@ class SA2BWorld(World):
                 musiclist_s = [x+100 for x in musiclist_s]
             elif self.multiworld.sadx_music[self.player].value == 2:
                 for i in range(len(musiclist_s)):
-                    if self.multiworld.random.choice([True, False]):
+                    if self.multiworld.random.randint(0,1):
                         musiclist_s[i] += 100
 
             self.music_map = dict(zip(musiclist_o, musiclist_s))
@@ -292,7 +292,7 @@ class SA2BWorld(World):
             if self.multiworld.sadx_music[self.player].value == 1:
                 musiclist_s = [x+100 for x in musiclist_s]
             elif self.multiworld.sadx_music[self.player].value == 2:
-                if self.multiworld.random.choice([True, False]):
+                if self.multiworld.random.randint(0,1):
                     musiclist_s = [x+100 for x in musiclist_s]
 
             self.music_map = dict(zip(musiclist_o, musiclist_s))
@@ -304,7 +304,7 @@ class SA2BWorld(World):
                 musiclist_s = [x+100 for x in musiclist_s]
             elif self.multiworld.sadx_music[self.player].value == 2:
                 for i in range(len(musiclist_s)):
-                    if self.multiworld.random.choice([True, False]):
+                    if self.multiworld.random.randint(0,1):
                         musiclist_s[i] += 100
 
             self.music_map = dict(zip(musiclist_o, musiclist_s))
