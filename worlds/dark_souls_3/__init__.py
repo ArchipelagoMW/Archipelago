@@ -54,7 +54,7 @@ class DarkSouls3World(World):
     remote_items: bool = False
     remote_start_inventory: bool = False
     web = DarkSouls3Web()
-    data_version = 4
+    data_version = 5
     base_id = 100000
     required_client_version = (0, 3, 6)
     item_name_to_id = DarkSouls3Item.get_name_to_id()
@@ -205,6 +205,8 @@ class DarkSouls3World(World):
         set_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
                  lambda state: state.has("Basin of Vows", self.player))
         set_rule(self.multiworld.get_location("HWL: Greirat's Ashes", self.player),
+                 lambda state: state.has("Cell Key", self.player))
+        set_rule(self.multiworld.get_location("HWL: Blue Tearstone Ring", self.player),
                  lambda state: state.has("Cell Key", self.player))
         set_rule(self.multiworld.get_location("ID: Bellowing Dragoncrest Ring", self.player),
                  lambda state: state.has("Jailbreaker's Key", self.player))
