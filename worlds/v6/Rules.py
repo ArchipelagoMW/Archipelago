@@ -23,8 +23,7 @@ def can_reach_npc_trinket(state: CollectionState, player: int) -> bool:
 
 
 def set_rules(multiworld: MultiWorld, player: int):
-    for index, region in enumerate(v6_areas):
-        index += 1
+    for index, region in enumerate(v6_areas, start=1):
         multiworld.get_entrance(region, player).access_rule = lambda state: has_trinket_range(
             state,
             player,

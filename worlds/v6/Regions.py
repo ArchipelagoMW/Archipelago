@@ -3,13 +3,13 @@ from typing import NamedTuple, List, Dict
 from BaseClasses import MultiWorld, Region, Entrance, RegionType
 from . import V6Location, location_table
 
-v6_areas = ["Laboratory", "The Tower", "Space Station 2", "Warp Zone"]
-
 
 class V6RegionData(NamedTuple):
     exits: List[str]
     locations: List[str]
 
+
+v6_areas = ["Laboratory", "The Tower", "Space Station 2", "Warp Zone"]
 
 regions_table: Dict[str, V6RegionData] = {
     "Menu": V6RegionData(["Dimension VVVVVV"], []),
@@ -38,11 +38,8 @@ def create_regions(multiworld: MultiWorld, player: int):
         region = Region(region_name, RegionType.Generic, region_name, player, multiworld)
         for location in region_data.locations:
             region.locations.append(V6Location(player, location, location_table[location], region))
-
         for region_exit in region_data.exits:
-            print(region_exit)
             region.exits.append(Entrance(player, region_exit, region))
-
         regions.append(region)
 
     # Assign regions.
