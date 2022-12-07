@@ -503,7 +503,8 @@ def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings
             handle_option(ret, game_weights, option_key, option, plando_options)
         for option_key, option in Options.per_game_common_options.items():
             # skip setting this option if already set from common_options, defaulting to root option
-            if not (option_key in Options.common_options and option_key not in game_weights):
+            if option_key not in world_type.option_definitions and \
+                    (option_key not in Options.common_options or option_key in game_weights):
                 handle_option(ret, game_weights, option_key, option, plando_options)
         if PlandoSettings.items in plando_options:
             ret.plando_items = game_weights.get("plando_items", [])

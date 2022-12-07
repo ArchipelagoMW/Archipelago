@@ -48,7 +48,7 @@ Output Logs/
 /freeze_requirements.txt
 /Archipelago.zip
 /setup.ini
-
+/installdelete.iss
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
