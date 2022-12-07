@@ -39,4 +39,7 @@ def set_rules(multiworld: MultiWorld, player: int):
     add_rule(multiworld.get_location("NPC Trinket", player), lambda state: can_reach_npc_trinket(state, player))
 
     # Victory condition
-    multiworld.completion_condition[player] = lambda state: state.can_reach("V", "Location", player)
+    if multiworld.DoorCost[player] == 0:
+        multiworld.completion_condition[player] = lambda state: True
+    else:
+        multiworld.completion_condition[player] = lambda state: state.can_reach("V", "Location", player)
