@@ -447,9 +447,9 @@ def generate_output(self, output_directory: str):
             if badge not in written_badges:
                 write_bytes(data, encode_text("Nothing"), rom_addresses["Badge_Text_" + badge.replace(" ", "_")])
 
-    if self.multiworld.randomize_type_chart[self.player].value == 0:
+    if self.multiworld.randomize_type_chart[self.player] == "vanilla":
         chart = deepcopy(poke_data.type_chart)
-    elif self.multiworld.randomize_type_chart[self.player].value == 1:
+    elif self.multiworld.randomize_type_chart[self.player] == "randomize":
         types = poke_data.type_names.values()
         matchups = []
         for type1 in types:
@@ -488,7 +488,7 @@ def generate_output(self, output_directory: str):
                 matchup = matchups.pop()
                 matchup.append(matchup_value)
                 chart.append(matchup)
-    elif self.multiworld.randomize_type_chart[self.player].value == 2:
+    elif self.multiworld.randomize_type_chart[self.player] == "chaos":
         types = poke_data.type_names.values()
         matchups = []
         for type1 in types:
@@ -507,7 +507,7 @@ def generate_output(self, output_directory: str):
     # matchups from leading to damage being ultimately divided by 2 and then multiplied by 2, which can lead to
     # damage being reduced by 1 which leads to a "not very effective" message appearing due to my changes
     # to the way effectiveness messages are generated.
-    chart = sorted(chart, key=lambda matchup: 0 - matchup[2])
+    chart = sorted(chart, key=lambda matchup: -matchup[2])
 
     type_loc = rom_addresses["Type_Chart"]
     for matchup in chart:

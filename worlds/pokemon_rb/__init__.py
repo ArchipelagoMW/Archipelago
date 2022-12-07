@@ -80,7 +80,7 @@ class PokemonRedBlueWorld(World):
                 return encode_text(name, length=8, whitespace="@", safety=True)
             except KeyError as e:
                 raise KeyError(f"Invalid character(s) in {t} name for player {self.multiworld.player_name[self.player]}") from e
-        if self.multiworld.trainer_name[self.player].value == -1:
+        if self.multiworld.trainer_name[self.player] == "choose_in_game":
             self.trainer_name = -1
         else:
             self.trainer_name = encode_name(self.multiworld.trainer_name[self.player].value, "Player")
@@ -109,7 +109,7 @@ class PokemonRedBlueWorld(World):
 
     def create_items(self) -> None:
         start_inventory = self.multiworld.start_inventory[self.player].value.copy()
-        if self.multiworld.randomize_pokedex[self.player].value == 2:
+        if self.multiworld.randomize_pokedex[self.player] == "start_with":
             start_inventory["Pokedex"] = 1
             self.multiworld.push_precollected(self.create_item("Pokedex"))
         locations = [location for location in location_data if location.type == "Item"]
