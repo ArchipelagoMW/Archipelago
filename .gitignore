@@ -13,6 +13,10 @@
 *.z64
 *.n64
 *.nes
+*.sms
+*.gb
+*.gbc
+*.gba
 *.wixobj
 *.lck
 *.db3
@@ -44,7 +48,7 @@ Output Logs/
 /freeze_requirements.txt
 /Archipelago.zip
 /setup.ini
-
+/installdelete.iss
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -125,7 +129,7 @@ ipython_config.py
 
 # Environments
 .env
-.venv
+.venv*
 env/
 venv/
 ENV/

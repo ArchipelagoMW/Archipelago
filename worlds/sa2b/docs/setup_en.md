@@ -54,6 +54,14 @@ Some additional settings related to the Archipelago messages in game can be adju
 - Message Display Duration: This dictates how long Archipelago messages are displayed on screen (in seconds).
 - Message Font Size: The is the size of the font used to display the messages from Archipelago.
 
+If you wish to use the `SADX Music` option of the Randomizer, you must own a copy of `Sonic Adventure DX` on Steam, and follow these steps:
+
+1. Find the folder on your PC where `Sonic Adventure DX` is installed.
+
+2. Enter the `SoundData` folder in the `Sonic Adventure DX` installation folder, and copy the `bgm` folder.
+
+3. Paste the `bgm` folder into the `ADX` folder which exists within the `gd_PC` folder in your `SA2B_Archipelago` mod folder.
+
 ## Troubleshooting
 
 - "The following mods didn't load correctly: SA2B_Archipelago: DLL error - The specified module could not be found."
@@ -92,6 +100,12 @@ Some additional settings related to the Archipelago messages in game can be adju
 		
 - No resolution options in the Launcher.exe.
 	- In the `Graphics device` dropdown, select the device and display you plan to run the game on. The `Resolution` dropdown should populate once a graphics device is selected.
+	
+- No music is playing in the game.
+	- If you enabled an `SADX Music` option, then most likely the music data was not copied properly into the mod folder (See Additional Options for instructions).
+	
+- Mission 1 is missing a texture in the stage select UI.
+	- Most likely another mod is conflicting and overwriting the texture pack. It is recommeded to have the SA2B Archipelago mod load last in the mod loader.
 
 ## Save File Safeguard (Advanced Option)
 

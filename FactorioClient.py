@@ -4,9 +4,12 @@ import logging
 import json
 import string
 import copy
+import re
 import subprocess
+import sys
 import time
 import random
+import typing
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -17,18 +20,28 @@ import asyncio
 from queue import Queue
 import Utils
 
+def check_stdin() -> None:
+    if Utils.is_windows and sys.stdin:
+        print("WARNING: Console input is not routed reliably on Windows, use the GUI instead.")
+
 if __name__ == "__main__":
     Utils.init_logging("FactorioClient", exception_logger="Client")
+    check_stdin()
 
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, logger, gui_enabled, get_base_parser
 from MultiServer import mark_raw
 from NetUtils import NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePart
+from Utils import async_start
 
 from worlds.factorio import Factorio
 
 
 class FactorioCommandProcessor(ClientCommandProcessor):
     ctx: FactorioContext
+
+    def _cmd_energy_link(self):
+        """Print the status of the energy link."""
+        self.output(f"Energy Link: {self.ctx.energy_link_status}")
 
     @mark_raw
     def _cmd_factorio(self, text: str) -> bool:
@@ -46,6 +59,13 @@ class FactorioCommandProcessor(ClientCommandProcessor):
         """Manually trigger a resync."""
         self.ctx.awaiting_bridge = True
 
+    def _cmd_toggle_send_filter(self):
+        """Toggle filtering of item sends that get displayed in-game to only those that involve you."""
+        self.ctx.toggle_filter_item_sends()
+
+    def _cmd_toggle_chat(self):
+        """Toggle sending of chat messages from players on the Factorio server to Archipelago."""
+        self.ctx.toggle_bridge_chat_out()
 
 class FactorioContext(CommonContext):
     command_processor = FactorioCommandProcessor
@@ -65,6 +85,9 @@ class FactorioContext(CommonContext):
         self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
         self.energy_link_increment = 0
         self.last_deplete = 0
+        self.filter_item_sends: bool = False
+        self.multiplayer: bool = False  # whether multiple different players have connected
+        self.bridge_chat_out: bool = True
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -81,12 +104,15 @@ class FactorioContext(CommonContext):
     def on_print(self, args: dict):
         super(FactorioContext, self).on_print(args)
         if self.rcon_client:
-            self.print_to_game(args['text'])
+            if not args['text'].startswith(self.player_names[self.slot] + ":"):
+                self.print_to_game(args['text'])
 
     def on_print_json(self, args: dict):
         if self.rcon_client:
-            text = self.factorio_json_text_parser(copy.deepcopy(args["data"]))
-            self.print_to_game(text)
+            if not self.filter_item_sends or not self.is_uninteresting_item_send(args):
+                text = self.factorio_json_text_parser(copy.deepcopy(args["data"]))
+                if not text.startswith(self.player_names[self.slot] + ":"):
+                    self.print_to_game(text)
         super(FactorioContext, self).on_print_json(args)
 
     @property
@@ -96,6 +122,15 @@ class FactorioContext(CommonContext):
     def print_to_game(self, text):
         self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
                                       f"{text}")
+
+    @property
+    def energy_link_status(self) -> str:
+        if not self.energy_link_increment:
+            return "Disabled"
+        elif self.current_energy_link_value is None:
+            return "Standby"
+        else:
+            return f"{Utils.format_SI_prefix(self.current_energy_link_value)}J"
 
     def on_deathlink(self, data: dict):
         if self.rcon_client:
@@ -109,7 +144,7 @@ class FactorioContext(CommonContext):
                 self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
                                                 item_name in args["checked_locations"]})
             if cmd == "Connected" and self.energy_link_increment:
-                asyncio.create_task(self.send_msgs([{
+                async_start(self.send_msgs([{
                     "cmd": "SetNotify", "keys": ["EnergyLink"]
                 }]))
         elif cmd == "SetReply":
@@ -122,6 +157,45 @@ class FactorioContext(CommonContext):
                         logger.debug(f"EnergyLink: Received {gained_text}. "
                                      f"{Utils.format_SI_prefix(args['value'])}J remaining.")
                         self.rcon_client.send_command(f"/ap-energylink {gained}")
+
+    def on_user_say(self, text: str) -> typing.Optional[str]:
+        # Mirror chat sent from the UI to the Factorio server.
+        self.print_to_game(f"{self.player_names[self.slot]}: {text}")
+        return text
+
+    async def chat_from_factorio(self, user: str, message: str) -> None:
+        if not self.bridge_chat_out:
+            return
+
+        # Pass through commands
+        if message.startswith("!"):
+            await self.send_msgs([{"cmd": "Say", "text": message}])
+            return
+
+        # Omit messages that contain local coordinates
+        if "[gps=" in message:
+            return
+
+        prefix = f"({user}) " if self.multiplayer else ""
+        await self.send_msgs([{"cmd": "Say", "text": f"{prefix}{message}"}])
+
+    def toggle_filter_item_sends(self) -> None:
+        self.filter_item_sends = not self.filter_item_sends
+        if self.filter_item_sends:
+            announcement = "Item sends are now filtered."
+        else:
+            announcement = "Item sends are no longer filtered."
+        logger.info(announcement)
+        self.print_to_game(announcement)
+
+    def toggle_bridge_chat_out(self) -> None:
+        self.bridge_chat_out = not self.bridge_chat_out
+        if self.bridge_chat_out:
+            announcement = "Chat is now bridged to Archipelago."
+        else:
+            announcement = "Chat is no longer bridged to Archipelago."
+        logger.info(announcement)
+        self.print_to_game(announcement)
 
     def run_gui(self):
         from kvui import GameManager
@@ -140,7 +214,6 @@ class FactorioContext(CommonContext):
 
 async def game_watcher(ctx: FactorioContext):
     bridge_logger = logging.getLogger("FactorioWatcher")
-    from worlds.factorio.Technologies import lookup_id_to_name
     next_bridge = time.perf_counter() + 1
     try:
         while not ctx.exit_event.is_set():
@@ -162,6 +235,7 @@ async def game_watcher(ctx: FactorioContext):
                     research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
                     victory = data["victory"]
                     await ctx.update_death_link(data["death_link"])
+                    ctx.multiplayer = data.get("multiplayer", False)
 
                     if not ctx.finished_game and victory:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -170,14 +244,14 @@ async def game_watcher(ctx: FactorioContext):
                     if ctx.locations_checked != research_data:
                         bridge_logger.debug(
                             f"New researches done: "
-                            f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
+                            f"{[ctx.location_names[rid] for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
                     death_link_tick = data.get("death_link_tick", 0)
                     if death_link_tick != ctx.death_link_tick:
                         ctx.death_link_tick = death_link_tick
                         if "DeathLink" in ctx.tags:
-                            asyncio.create_task(ctx.send_death())
+                            async_start(ctx.send_death())
                     if ctx.energy_link_increment:
                         in_world_bridges = data["energy_bridges"]
                         if in_world_bridges:
@@ -185,7 +259,7 @@ async def game_watcher(ctx: FactorioContext):
                             if in_world_energy < (ctx.energy_link_increment * in_world_bridges):
                                 # attempt to refill
                                 ctx.last_deplete = time.time()
-                                asyncio.create_task(ctx.send_msgs([{
+                                async_start(ctx.send_msgs([{
                                     "cmd": "Set", "key": "EnergyLink", "operations":
                                         [{"operation": "add", "value": -ctx.energy_link_increment * in_world_bridges},
                                          {"operation": "max", "value": 0}],
@@ -195,7 +269,7 @@ async def game_watcher(ctx: FactorioContext):
                             elif in_world_energy > (in_world_bridges * ctx.energy_link_increment * 5) - \
                                 ctx.energy_link_increment*in_world_bridges:
                                 value = ctx.energy_link_increment * in_world_bridges
-                                asyncio.create_task(ctx.send_msgs([{
+                                async_start(ctx.send_msgs([{
                                     "cmd": "Set", "key": "EnergyLink", "operations":
                                         [{"operation": "add", "value": value}]
                                 }]))
@@ -211,6 +285,8 @@ async def game_watcher(ctx: FactorioContext):
 
 
 def stream_factorio_output(pipe, queue, process):
+    pipe.reconfigure(errors="replace")
+
     def queuer():
         while process.poll() is None:
             text = pipe.readline().strip()
@@ -243,7 +319,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
     stream_factorio_output(factorio_process.stderr, factorio_queue, factorio_process)
     try:
         while not ctx.exit_event.is_set():
-            if factorio_process.poll():
+            if factorio_process.poll() is not None:
                 factorio_server_logger.info("Factorio server has exited.")
                 ctx.exit_event.set()
 
@@ -256,12 +332,25 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     if not ctx.server:
                         logger.info("Established bridge to Factorio Server. "
                                     "Ready to connect to Archipelago via /connect")
+                        check_stdin()
 
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
                     factorio_server_logger.debug(msg)
+                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command energy-link$", msg):
+                    factorio_server_logger.debug(msg)
+                    ctx.print_to_game(f"Energy Link: {ctx.energy_link_status}")
+                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-send-filter$", msg):
+                    factorio_server_logger.debug(msg)
+                    ctx.toggle_filter_item_sends()
+                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-chat$", msg):
+                    factorio_server_logger.debug(msg)
+                    ctx.toggle_bridge_chat_out()
                 else:
                     factorio_server_logger.info(msg)
+                    match = re.match(r"^\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d \[CHAT\] ([^:]+): (.*)$", msg)
+                    if match:
+                        await ctx.chat_from_factorio(match.group(1), match.group(2))
             if ctx.rcon_client:
                 commands = {}
                 while ctx.send_index < len(ctx.items_received):
@@ -282,12 +371,34 @@ async def factorio_server_watcher(ctx: FactorioContext):
     except Exception as e:
         logging.exception(e)
         logging.error("Aborted Factorio Server Bridge")
-        ctx.rcon_client = None
         ctx.exit_event.set()
 
     finally:
-        factorio_process.terminate()
-        factorio_process.wait(5)
+        if factorio_process.poll() is not None:
+            if ctx.rcon_client:
+                ctx.rcon_client.close()
+                ctx.rcon_client = None
+            return
+
+        sent_quit = False
+        if ctx.rcon_client:
+            # Attempt clean quit through RCON.
+            try:
+                ctx.rcon_client.send_command("/quit")
+            except factorio_rcon.RCONNetworkError:
+                pass
+            else:
+                sent_quit = True
+            ctx.rcon_client.close()
+            ctx.rcon_client = None
+        if not sent_quit:
+            # Attempt clean quit using SIGTERM. (Note that on Windows this kills the process instead.)
+            factorio_process.terminate()
+
+        try:
+            factorio_process.wait(10)
+        except subprocess.TimeoutExpired:
+            factorio_process.kill()
 
 
 async def get_info(ctx: FactorioContext, rcon_client: factorio_rcon.RCONClient):
@@ -361,6 +472,8 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
 
 async def main(args):
     ctx = FactorioContext(args.connect, args.password)
+    ctx.filter_item_sends = initial_filter_item_sends
+    ctx.bridge_chat_out = initial_bridge_chat_out
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
     if gui_enabled:
@@ -413,6 +526,12 @@ if __name__ == '__main__':
     server_settings = args.server_settings if args.server_settings else options["factorio_options"].get("server_settings", None)
     if server_settings:
         server_settings = os.path.abspath(server_settings)
+    if not isinstance(options["factorio_options"]["filter_item_sends"], bool):
+        logging.warning(f"Warning: Option filter_item_sends should be a bool.")
+    initial_filter_item_sends = bool(options["factorio_options"]["filter_item_sends"])
+    if not isinstance(options["factorio_options"]["bridge_chat_out"], bool):
+        logging.warning(f"Warning: Option bridge_chat_out should be a bool.")
+    initial_bridge_chat_out = bool(options["factorio_options"]["bridge_chat_out"])
 
     if not os.path.exists(os.path.dirname(executable)):
         raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")

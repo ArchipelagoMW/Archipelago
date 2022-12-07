@@ -91,13 +91,66 @@ class WitnessLogic(LogicMixin):
                     if not self._witness_has_lasers(world, player, get_option_value(world, player, "challenge_lasers")):
                         valid_option = False
                         break
+                elif item == "PP2 Weirdness":
+                    hedge_2_access = (
+                        self.can_reach("Keep 2nd Maze to Keep", "Entrance", player)
+                        or self.can_reach("Keep to Keep 2nd Maze", "Entrance", player)
+                    )
+
+                    hedge_3_access = (
+                        self.can_reach("Keep 3rd Maze to Keep", "Entrance", player)
+                        or self.can_reach("Keep 2nd Maze to Keep 3rd Maze", "Entrance", player)
+                        and hedge_2_access
+                    )
+
+                    hedge_4_access = (
+                        self.can_reach("Keep 4th Maze to Keep", "Entrance", player)
+                        or self.can_reach("Keep 3rd Maze to Keep 4th Maze", "Entrance", player)
+                        and hedge_3_access
+                    )
+
+                    hedge_access = (
+                        self.can_reach("Keep 4th Maze to Keep Tower", "Entrance", player)
+                        and self.can_reach("Keep", "Region", player)
+                        and hedge_4_access
+                    )
+
+                    backwards_to_fourth = (
+                        self.can_reach("Keep", "Region", player)
+                        and self.can_reach("Keep 4th Pressure Plate to Keep Tower", "Entrance", player)
+                        and (
+                            self.can_reach("Keep Tower to Keep", "Entrance", player)
+                            or hedge_access
+                        )
+                    )
+                    
+                    shadows_shortcut = (
+                        self.can_reach("Main Island", "Region", player)
+                        and self.can_reach("Keep 4th Pressure Plate to Shadows", "Entrance", player)
+                    )
+
+                    backwards_access = (
+                        self.can_reach("Keep 3rd Pressure Plate to Keep 4th Pressure Plate", "Entrance", player)
+                        and (backwards_to_fourth or shadows_shortcut)
+                    )
+
+                    front_access = (
+                        self.can_reach("Keep to Keep 2nd Pressure Plate", 'Entrance', player)
+                        and self.can_reach("Keep", "Region", player)
+                    )
+
+                    if not (front_access and backwards_access):
+                        valid_option = False
+                        break
                 elif item in player_logic.EVENT_PANELS:
                     if not self._witness_can_solve_panel(item, world, player, player_logic, locat):
                         valid_option = False
                         break
                 elif not self.has(item, player):
-                    valid_option = False
-                    break
+                    prog_dict = StaticWitnessLogic.ITEMS_TO_PROGRESSIVE
+                    if not (item in prog_dict and self.has(prog_dict[item], player, player_logic.MULTI_AMOUNTS[item])):
+                        valid_option = False
+                        break
 
             if valid_option:
                 return True

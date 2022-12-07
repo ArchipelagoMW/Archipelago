@@ -22,6 +22,16 @@ Solving the last panel in a row of panels or an important standalone panel will 
 Every puzzle symbol and many other puzzle mechanics are items.
 This includes symbols such as "Dots", "Black/White Squares", "Colored Squares", "Stars", "Symmetry", "Shapers" (coll. "Tetris Pieces"), "Erasers" and many more.
 
+Alternatively (or additionally), you can play "Door shuffle", where some doors won't open until you receive their "key".
+
+Receiving lasers as items is also a possible setting.
+
+## What else can I find in the world?
+
+By default, the audio logs scattered around the world will have 10 hints for your locations or items on them. 
+
+Example: "Shipwreck Vault contains Triangles".
+
 ## The Jungle, Orchard, Forest and Color House aren't randomized. What gives?
 
 There are limitations to what can currently be randomized in The Witness.
