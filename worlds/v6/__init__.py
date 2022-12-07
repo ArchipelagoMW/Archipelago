@@ -44,12 +44,12 @@ class V6World(World):
     def set_rules(self):
         set_rules(self.multiworld, self.player)
 
-    def create_item(self, name: str) -> V6Item:
-        trinket = int(name.removeprefix("Trinket "))
-        if trinket <= self.multiworld.DoorCost[self.player] * 4:
-            return V6Item(name, ItemClassification.progression, item_table[name], self.player)
-        else:
-            return V6Item(name, ItemClassification.filler, item_table[name], self.player)
+    def create_item(self, name: str, progression: bool = False) -> V6Item:
+        return V6Item(
+            name,
+            ItemClassification.progression if progression else ItemClassification.filler,
+            item_table[name],
+            self.player)
 
     def generate_early(self):
         self.area_connections = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4}
@@ -74,7 +74,11 @@ class V6World(World):
         self.music_map = dict(zip(music_list_o, music_list_s))
 
     def create_items(self):
-        self.multiworld.itempool += [self.create_item(f"Trinket {str(i + 1).zfill(2)}") for i in range(20)]
+        for i in range(20):
+            trinket = self.create_item(f"Trinket {str(i + 1).zfill(2)}",
+                                       i + 1 <= (self.multiworld.DoorCost[self.player] * 4))
+            self.multiworld.itempool.append(trinket)
+
 
     def fill_slot_data(self):
         return {

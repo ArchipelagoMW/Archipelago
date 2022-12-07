@@ -40,6 +40,7 @@ def create_regions(multiworld: MultiWorld, player: int):
             region.locations.append(V6Location(player, location, location_table[location], region))
 
         for region_exit in region_data.exits:
+            print(region_exit)
             region.exits.append(Entrance(player, region_exit, region))
 
         regions.append(region)
@@ -52,5 +53,4 @@ def create_regions(multiworld: MultiWorld, player: int):
     multiworld.get_entrance("Laboratory", player).connect(multiworld.get_region("Laboratory", player))
     multiworld.get_entrance("The Tower", player).connect(multiworld.get_region("The Tower", player))
     multiworld.get_entrance("Space Station 2", player).connect(multiworld.get_region("Space Station 2", player))
-    multiworld.get_entrance("Dimension VVVVVV", player).connect(multiworld.get_region("Dimension VVVVVV", player))
     multiworld.get_entrance("Warp Zone", player).connect(multiworld.get_region("Warp Zone", player))

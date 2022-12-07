@@ -9,17 +9,17 @@ def has_trinket_range(state: CollectionState, player: int, start: int, end: int)
 
 
 def can_reach_all_areas(state: CollectionState, player: int) -> bool:
-    return state.can_reach("Laboratory", player=player) and \
-           state.can_reach("The Tower", player=player) and \
-           state.can_reach("Space Station 2", player=player) and \
-           state.can_reach("Warp Zone", player=player)
+    return state.can_reach("Laboratory", "Entrance", player) and \
+           state.can_reach("The Tower", "Entrance", player) and \
+           state.can_reach("Space Station 2", "Entrance", player) and \
+           state.can_reach("Warp Zone", "Entrance", player)
 
 
 def can_reach_npc_trinket(state: CollectionState, player: int) -> bool:
-    return state.can_reach("Laboratory", player=player) or (
-           state.can_reach("The Tower", player=player) and
-           state.can_reach("Space Station 2", player=player) and
-           state.can_reach("Warp Zone", player=player))
+    return state.can_reach("Laboratory", "Entrance", player) or (
+           state.can_reach("The Tower", "Entrance", player) and
+           state.can_reach("Space Station 2", "Entrance", player) and
+           state.can_reach("Warp Zone", "Entrance", player))
 
 
 def set_rules(multiworld: MultiWorld, player: int):
@@ -28,8 +28,8 @@ def set_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance(region, player).access_rule = lambda state: has_trinket_range(
             state,
             player,
-            multiworld.DoorCost[player].value * (multiworld.worlds[player].area_cost_map[index] - 1),
-            multiworld.DoorCost[player].value * multiworld.worlds[player].area_cost_map[index],
+            multiworld.DoorCost[player] * (multiworld.worlds[player].area_cost_map[index] - 1),
+            multiworld.DoorCost[player] * multiworld.worlds[player].area_cost_map[index],
         )
 
     # Special Rule for V
