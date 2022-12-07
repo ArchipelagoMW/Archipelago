@@ -503,7 +503,12 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
                         logging.info(f"Deleted old logfile {file.path}")
     import threading
     threading.Thread(target=_cleanup, name="LogCleaner").start()
-    logging.info(f"Archipelago ({__version__}) logging initialized.")
+    import platform
+    logging.info(
+        f"Archipelago ({__version__}) logging initialized"
+        f" on {platform.platform()}"
+        f" running Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    )
 
 
 def stream_input(stream, queue):
@@ -672,7 +677,7 @@ def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
 _faf_tasks: "Set[asyncio.Task[None]]" = set()
 
 
-def async_start(co: Coroutine[None, None, None], name: Optional[str] = None) -> None:
+def async_start(co: Coroutine[typing.Any, typing.Any, bool], name: Optional[str] = None) -> None:
     """
     Use this to start a task when you don't keep a reference to it or immediately await it,
     to prevent early garbage collection. "fire-and-forget"
