@@ -106,11 +106,6 @@ def create():
                     if sub_option_id == option.default:
                         this_option["defaultValue"] = sub_option_name
 
-                this_option["options"].append({
-                    "name": "Random",
-                    "value": "random",
-                })
-
                 if option.default == "random":
                     this_option["defaultValue"] = "random"
 
