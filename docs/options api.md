@@ -4,7 +4,7 @@ This document covers some of the generic options available using Archipelago's
 options handling system.
 
 For more information on where these options go in your world please refer to:
- - [world api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md)
+ - [world api.md](/docs/world%20api.md)
 
 Archipelago will be abbreviated as "AP" from now on.
 
@@ -27,13 +27,13 @@ If I want to create an option that will let the user decide if they want to star
 with a sword, for instance, I must do the following:
 
 ```python
-class StartSword(Toggle):
+class StartingSword(Toggle):
     """Adds a sword to your starting inventory."""
     display_name = "Start With Sword"
 
 
 options = {
-    "starting_sword": StartSword
+    "starting_sword": StartingSword
 }
 ```
 
@@ -42,13 +42,13 @@ submit this to the multiworld I can add it to my world's `__init__.py` as such:
 
 ```python
 from worlds.AutoWorld import World
-from worlds.example.options import options
+from .options import options
 class ExampleWorld(World):
     option_definitions = options
 ```
 
 ### Option Checking
-Options are parse by `Generate.py` before the worlds are created, and then the
+Options are parsed by `Generate.py` before the worlds are created, and then the
 option classes are created shortly after world instantiation. These are created
 as attributes on the MultiWorld and can be accessed with
 `self.multiworld.my_option_name[self.player]`. This is the option class, which
@@ -128,7 +128,7 @@ if self.multiworld.sword_availability[self.player] == "early_sword":
 
 or:
 ```python
-from world.example.options import SwordAvailability
+from .options import SwordAvailability
 if self.multiworld.sword_availability[self.player] == SwordAvailability.option_early_sword:
     do_early_sword_things()
 ```
