@@ -17,6 +17,8 @@ import Utils
 import NetUtils
 if typing.TYPE_CHECKING:
     from Generate import PlandoSettings
+else:
+    PlandoSettings = object
 
 
 class Group(TypedDict, total=False):
@@ -50,6 +52,7 @@ class MultiWorld():
     precollected_items: Dict[int, List[Item]]
     state: CollectionState
 
+    plando_settings: PlandoSettings
     accessibility: Dict[int, Options.Accessibility]
     early_items: Dict[int, Dict[str, int]]
     local_early_items: Dict[int, Dict[str, int]]
@@ -1239,7 +1242,6 @@ class Item:
 class Spoiler():
     multiworld: MultiWorld
     unreachables: Set[Location]
-    plando_settings: PlandoSettings
 
     def __init__(self, world):
         self.multiworld = world
@@ -1410,7 +1412,7 @@ class Spoiler():
                     Utils.__version__, self.multiworld.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.multiworld.algorithm)
             outfile.write('Players:                         %d\n' % self.multiworld.players)
-            outfile.write(f'Plando Options Enabled:          {self.plando_settings}\n')
+            outfile.write(f'Plando Options:                  {self.multiworld.plando_settings}\n')
             AutoWorld.call_stage(self.multiworld, "write_spoiler_header", outfile)
 
             for player in range(1, self.multiworld.players + 1):
