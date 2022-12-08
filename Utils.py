@@ -303,7 +303,10 @@ def get_default_options() -> OptionsType:
             "red_rom_file": "Pokemon Red (UE) [S][!].gb",
             "blue_rom_file": "Pokemon Blue (UE) [S][!].gb",
             "rom_start": True
-        }
+        },
+        "lufia2ac_options": {
+            "rom_file": "Lufia II - Rise of the Sinistrals (USA).sfc",
+        },
     }
 
     return options
