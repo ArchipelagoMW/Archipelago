@@ -416,8 +416,8 @@ Laser - 0x014BB (Laser) - 0x0360E | 0x03317
 159240 - 0x033BE (Pressure Plates 1 EP) - 0x033EA - True
 159241 - 0x033BF (Pressure Plates 2 EP) - 0x01BE9 - True
 159242 - 0x033DD (Pressure Plates 3 EP) - 0x01CD3 & 0x01CD5 - True
-159243 - 0x033E5 (Pressure Plates 4 First EP) - 0x01D3F - True
-159244 - 0x018B6 (Pressure Plates 4 Second EP) - 0x01D3F - True
+159243 - 0x033E5 (Pressure Plates 4 Left Exit EP) - 0x01D3F - True
+159244 - 0x018B6 (Pressure Plates 4 Right Exit EP) - 0x01D3F - True
 159250 - 0x28AE9 (Path EP) - True - True
 159251 - 0x3348F (Hedges EP) - True - True
 
@@ -686,7 +686,7 @@ Swamp Cyan Underwater (Swamp):
 158310 - 0x013E6 (Cyan Underwater 4) - 0x00005 - Shapers & Negative Shapers
 158311 - 0x00596 (Cyan Underwater 5) - 0x013E6 - Shapers & Negative Shapers
 158312 - 0x18488 (Cyan Underwater Sliding Bridge Control) - True - Shapers
-159340 - 0x03AA6 (Sliding Bridge EP) - 0x18488 - True
+159340 - 0x03AA6 (Cyan Underwater Sliding Bridge EP) - 0x18488 - True
 
 Swamp Between Bridges Near (Swamp) - Swamp Between Bridges Far - 0x18507:
 158303 - 0x00999 (Between Bridges Near Row 1) - 0x00990 - Shapers
