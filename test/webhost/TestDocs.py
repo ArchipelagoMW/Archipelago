@@ -7,11 +7,8 @@ from worlds.AutoWorld import AutoWorldRegister
 
 
 class TestDocs(unittest.TestCase):
-    def setUp(self) -> None:
-        self.tutorials_data = WebHost.create_ordered_tutorials_file()
-
     def testHasTutorial(self):
-        games_with_tutorial = set(entry["gameTitle"] for entry in self.tutorials_data)
+        games_with_tutorial = set(entry["gameTitle"] for entry in WebHost.create_ordered_tutorials_file())
         for game_name, world_type in AutoWorldRegister.world_types.items():
             if not world_type.hidden:
                 with self.subTest(game_name):

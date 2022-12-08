@@ -268,7 +268,6 @@ def get_default_options() -> OptionsType:
             "log_network": 0
         },
         "generator": {
-            "teams": 1,
             "enemizer_path": os.path.join("EnemizerCLI", "EnemizerCLI.Core"),
             "player_files_path": "Players",
             "players": 0,
@@ -286,6 +285,7 @@ def get_default_options() -> OptionsType:
         },
         "oot_options": {
             "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
+            "rom_start": True
         },
         "dkc3_options": {
             "rom_file": "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc",
@@ -303,9 +303,11 @@ def get_default_options() -> OptionsType:
             "red_rom_file": "Pokemon Red (UE) [S][!].gb",
             "blue_rom_file": "Pokemon Blue (UE) [S][!].gb",
             "rom_start": True
-        }
+        },
+        "ffr_options": {
+            "display_msgs": True,
+        },
     }
-
     return options
 
 
