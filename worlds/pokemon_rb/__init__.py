@@ -39,8 +39,11 @@ class PokemonRedBlueWorld(World):
     game = "Pokemon Red and Blue"
     option_definitions = pokemon_rb_options
     remote_items = False
-    data_version = 1
+    data_version = 3
+    required_client_version = (0, 3, 7)
     topology_present = False
+
+
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = {location.name: location.address for location in location_data if location.type == "Item"}
@@ -77,8 +80,14 @@ class PokemonRedBlueWorld(World):
                 return encode_text(name, length=8, whitespace="@", safety=True)
             except KeyError as e:
                 raise KeyError(f"Invalid character(s) in {t} name for player {self.multiworld.player_name[self.player]}") from e
-        self.trainer_name = encode_name(self.multiworld.trainer_name[self.player].value, "Player")
-        self.rival_name = encode_name(self.multiworld.rival_name[self.player].value, "Rival")
+        if self.multiworld.trainer_name[self.player] == "choose_in_game":
+            self.trainer_name = "choose_in_game"
+        else:
+            self.trainer_name = encode_name(self.multiworld.trainer_name[self.player].value, "Player")
+        if self.multiworld.rival_name[self.player] == "choose_in_game":
+            self.rival_name = "choose_in_game"
+        else:
+            self.rival_name = encode_name(self.multiworld.rival_name[self.player].value, "Rival")
 
         if len(self.multiworld.player_name[self.player].encode()) > 16:
             raise Exception(f"Player name too long for {self.multiworld.get_player_name(self.player)}. Player name cannot exceed 16 bytes for Pokémon Red and Blue.")
@@ -100,26 +109,31 @@ class PokemonRedBlueWorld(World):
 
     def create_items(self) -> None:
         start_inventory = self.multiworld.start_inventory[self.player].value.copy()
+        if self.multiworld.randomize_pokedex[self.player] == "start_with":
+            start_inventory["Pokedex"] = 1
+            self.multiworld.push_precollected(self.create_item("Pokedex"))
         locations = [location for location in location_data if location.type == "Item"]
         item_pool = []
         for location in locations:
-            if "Hidden" in location.name and not self.multiworld.randomize_hidden_items[self.player].value:
-                continue
-            if "Rock Tunnel B1F" in location.region and not self.multiworld.extra_key_items[self.player].value:
-                continue
-            if location.name == "Celadon City - Mansion Lady" and not self.multiworld.tea[self.player].value:
+            if not location.inclusion(self.multiworld, self.player):
                 continue
             if location.original_item in self.multiworld.start_inventory[self.player].value and \
                     location.original_item in item_groups["Unique"]:
                 start_inventory[location.original_item] -= 1
                 item = self.create_filler()
+            elif location.original_item is None:
+                item = self.create_filler()
             else:
                 item = self.create_item(location.original_item)
+                if (item.classification == ItemClassification.filler and self.multiworld.random.randint(1, 100)
+                        <= self.multiworld.trap_percentage[self.player].value):
+                    item = self.create_item(self.multiworld.random.choice([item for item in item_table if
+                                            item_table[item].classification == ItemClassification.trap]))
             if location.event:
                 self.multiworld.get_location(location.name, self.player).place_locked_item(item)
-            elif ("Badge" not in item.name or self.multiworld.badgesanity[self.player].value) and \
-                    (item.name != "Oak's Parcel" or self.multiworld.old_man[self.player].value != 1):
+            elif "Badge" not in item.name or self.multiworld.badgesanity[self.player].value:
                 item_pool.append(item)
+
         self.multiworld.random.shuffle(item_pool)
 
         self.multiworld.itempool += item_pool
@@ -130,13 +144,7 @@ class PokemonRedBlueWorld(World):
         process_static_pokemon(self)
 
         if self.multiworld.old_man[self.player].value == 1:
-            item = self.create_item("Oak's Parcel")
-            locations = []
-            for location in self.multiworld.get_locations():
-                if location.player == self.player and location.item is None and location.can_reach(self.multiworld.state) \
-                        and location.item_rule(item):
-                    locations.append(location)
-            self.multiworld.random.choice(locations).place_locked_item(item)
+            self.multiworld.local_early_items[self.player]["Oak's Parcel"] = 1
 
         if not self.multiworld.badgesanity[self.player].value:
             self.multiworld.non_local_items[self.player].value -= self.item_name_groups["Badges"]
@@ -178,7 +186,7 @@ class PokemonRedBlueWorld(World):
             if loc.name in self.multiworld.priority_locations[self.player].value:
                 add_item_rule(loc, lambda i: i.advancement)
             for item in reversed(self.multiworld.itempool):
-                if item.player == self.player and loc.item_rule(item):
+                if item.player == self.player and loc.can_fill(self.multiworld.state, item, False):
                     self.multiworld.itempool.remove(item)
                     state = sweep_from_pool(self.multiworld.state, self.multiworld.itempool + unplaced_items)
                     if state.can_reach(loc, "Location", self.player):
@@ -239,19 +247,21 @@ class PokemonRedBlueWorld(World):
                 spoiler_handle.write(hm_move + " enabled by: " + (" " * 20)[:20 - len(hm_move)] + badge + "\n")
 
     def write_spoiler(self, spoiler_handle):
-        if self.multiworld.randomize_type_matchup_types[self.player].value or \
-                self.multiworld.randomize_type_matchup_type_effectiveness[self.player].value:
+        if self.multiworld.randomize_type_chart[self.player].value:
             spoiler_handle.write(f"\n\nType matchups ({self.multiworld.player_name[self.player]}):\n\n")
             for matchup in self.type_chart:
                 spoiler_handle.write(f"{matchup[0]} deals {matchup[2] * 10}% damage to {matchup[1]}\n")
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice([item for item in item_table if item_table[item].classification in
-                                         [ItemClassification.filler, ItemClassification.trap] and item not in
-                                         item_groups["Vending Machine Drinks"]])
+        if self.multiworld.random.randint(1, 100) <= self.multiworld.trap_percentage[self.player].value:
+            return self.multiworld.random.choice([item for item in item_table if
+                                            item_table[item].classification == ItemClassification.trap])
+
+        return self.multiworld.random.choice([item for item in item_table if item_table[
+            item].classification == ItemClassification.filler and item not in item_groups["Vending Machine Drinks"] +
+                                              item_groups["Unique"]])
 
     def fill_slot_data(self) -> dict:
-        # for trackers
         return {
             "second_fossil_check_condition": self.multiworld.second_fossil_check_condition[self.player].value,
             "require_item_finder": self.multiworld.require_item_finder[self.player].value,
@@ -268,7 +278,11 @@ class PokemonRedBlueWorld(World):
             "victory_road_condition": self.multiworld.victory_road_condition[self.player].value,
             "viridian_gym_condition": self.multiworld.viridian_gym_condition[self.player].value,
             "free_fly_map": self.fly_map_code,
-            "extra_badges": self.extra_badges
+            "extra_badges": self.extra_badges,
+            "type_chart": self.type_chart,
+            "randomize_pokedex": self.multiworld.randomize_pokedex[self.player].value,
+            "trainersanity": self.multiworld.trainersanity[self.player].value,
+            "death_link": self.multiworld.death_link[self.player].value
         }
 
 
