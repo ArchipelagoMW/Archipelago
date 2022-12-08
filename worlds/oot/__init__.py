@@ -1128,14 +1128,14 @@ class OOTWorld(World):
     # Key rings are multiple items glued together into one, so we need to give
     # the appropriate number of keys in the collection state when they are
     # picked up.
-    def collect(self, state: "CollectionState", item: "Item") -> bool:
+    def collect(self, state: CollectionState, item: OOTItem) -> bool:
         if item.advancement and item.special and item.special.get('alias', False):
             alt_item_name, count = item.special.get('alias')
             state.prog_items[alt_item_name, self.player] += count
             return True
         return super().collect(state, item)
 
-    def remove(self, state: "CollectionState", item: "Item") -> bool:
+    def remove(self, state: CollectionState, item: OOTItem) -> bool:
         if item.advancement and item.special and item.special.get('alias', False):
             alt_item_name, count = item.special.get('alias')
             state.prog_items[alt_item_name, self.player] -= count
