@@ -1,12 +1,12 @@
 from typing import List
 
 from BaseClasses import Tutorial
+from worlds.AutoWorld import World, WebWorld
 from .Items import RLItem, RLItemData, event_item_table, item_table, get_items_by_category
 from .Locations import RLLocation, location_table
 from .Options import rl_options
 from .Regions import create_regions
 from .Rules import set_rules
-from ..AutoWorld import World, WebWorld
 
 
 class RLWeb(WebWorld):
