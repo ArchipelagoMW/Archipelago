@@ -54,16 +54,17 @@ class V6World(World):
     def generate_early(self):
         self.area_connections = {i: i for i in range(5)}
         self.area_cost_map = {i: i for i in range(5)}
+        shuffled_areas = list(range(len(v6_areas)))
 
         # Area Randomization
         if self.multiworld.AreaRandomizer[self.player]:
-            shuffled_areas = list(range(len(v6_areas)))
             self.multiworld.random.shuffle(shuffled_areas)
             self.area_connections.update({(index + 1): (value + 1) for index, value in enumerate(shuffled_areas)})
 
-            if self.multiworld.AreaCostRandomizer[self.player]:
-                self.multiworld.random.shuffle(shuffled_areas)
-                self.area_cost_map.update({(index + 1): (value + 1) for index, value in enumerate(shuffled_areas)})
+        # Area Cost Randomizer
+        if self.multiworld.AreaCostRandomizer[self.player]:
+            self.multiworld.random.shuffle(shuffled_areas)
+            self.area_cost_map.update({(index + 1): (value + 1) for index, value in enumerate(shuffled_areas)})
 
         # Music Randomization
         music_list_o = [1, 2, 3, 4, 9, 12]
