@@ -33,7 +33,7 @@ def create_chest_events(world: MultiWorld, player: int) -> None:
     # logical order (?) TODO: Revisit and confirm this
     for i in range(1, 1 + total_locations):
         event_loc = create_locked_location_event(world, player, "Forest", f"Pickup{(i + 1)}")
-        event_loc.access_rule(lambda state, i=i: state.can_reach(f"Chest{i}", "Location", player))
+        event_loc.access_rule = lambda state, i=i: state.can_reach(f"Chest{i}", "Location", player)
 
 
 def create_all_events(world: MultiWorld, player: int) -> None:

@@ -37,7 +37,6 @@ class NoitaWorld(World):
     item_name_groups = Items.item_name_groups
 
     data_version = 1
-    forced_auto_forfeit = False
     web = NoitaWeb()
 
     def create_regions(self) -> None:

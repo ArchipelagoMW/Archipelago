@@ -23,15 +23,18 @@ def create_all_items(world: MultiWorld, player: int) -> None:
     pool_option = world.bad_effects[player].value
     total_locations = world.total_locations[player].value
 
-    # Generate item pool
+    # Generate fixed item pool
     itempool: List = []
     for item_name, count in required_items.items():
         itempool += [item_name] * count
 
-    # Add other junk to the pool
+    # Add non-fixed junk to the pool to meet quota
     junk_pool = item_pool_weights[pool_option]
-    for i in range(1, total_locations + 1):
-        itempool += world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()))
+    itempool += world.random.choices(
+        population=list(junk_pool.keys()),
+        weights=list(junk_pool.values()),
+        k=total_locations - len(itempool)
+    )
 
     # Convert itempool into real items
     world.itempool += [create_item(player, name) for name in itempool]
