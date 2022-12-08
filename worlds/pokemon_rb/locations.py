@@ -28,6 +28,7 @@ def always_on(multiworld, player):
     return True
 
 
+
 class LocationData:
 
     def __init__(self, region, name, original_item, rom_address=None, ram_address=None, event=False, type="Item", inclusion=always_on):
@@ -41,6 +42,7 @@ class LocationData:
         self.event = event
         self.type = type
         self.inclusion = inclusion
+
 
 class EventFlag:
     def __init__(self, flag):
