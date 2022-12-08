@@ -417,7 +417,7 @@ class Context:
             logging.info(f"Loading custom datapackage for game {game_name}")
             self.gamespackage[game_name] = data
             self.item_name_groups[game_name] = data["item_name_groups"]
-            del data["item_name_groups"]
+            del data["item_name_groups"]  # remove from datapackage, but keep in self.item_name_groups
         self._init_game_data()
         for game_name, data in self.item_name_groups.items():
             self.read_data[f"item_name_groups_{game_name}"] = lambda lgame=game_name: self.item_name_groups[lgame]
