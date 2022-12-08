@@ -5,14 +5,14 @@ from typing import NamedTuple, Union
 
 import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
-from .Items import item_table, item_amounts_all, item_amounts_standard, item_prices, item_game_ids, starting_weapons
-from .Locations import location_table, level_locations, major_locations, shop_locations, cave_locations, \
-    all_level_locations, standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, \
-    food_locations
+from .ItemPool import generate_itempool, starting_weapons
+from .Items import item_table, item_prices, item_game_ids
+from .Locations import location_table, level_locations, major_locations, shop_locations, all_level_locations, \
+    standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations
 from .Options import tloz_options
 from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_early, first_quest_dungeon_items_late
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import add_rule, set_rule, forbid_item
+from worlds.generic.Rules import add_rule
 
 
 class TLoZWeb(WebWorld):
@@ -33,7 +33,7 @@ class TLoZWorld(World):
     """
     The Legend of Zelda needs almost no introduction. Gather the eight fragments of the
     Triforce of Courage, enter Death Mountain, defeat Ganon, and rescue Princess Zelda.
-    This randomizer shuffles all of the items in the game around, leading to a new adventure
+    This randomizer shuffles all the items in the game around, leading to a new adventure
     every time.
     """
     option_definitions = tloz_options
@@ -50,9 +50,6 @@ class TLoZWorld(World):
         'weapons': starting_weapons,
         'swords': {
             "Sword", "White Sword", "Magical Sword"
-        },
-        'good swords': {
-          "White Sword", "Magical Sword"
         },
         "candles": {
             "Candle", "Red Candle"
@@ -106,15 +103,15 @@ class TLoZWorld(World):
 
         for level in range(1, 9):
             boss_event = self.create_location(f"Level {level} Boss Status", None,
-                                 self.multiworld.get_region(f"Level {i}", self.player),
-                                 True)
+                                              self.multiworld.get_region(f"Level {level}", self.player),
+                                              True)
             boss_event.show_in_spoiler = False
             self.levels[level].locations.append(boss_event)
 
         for location in major_locations:
-            if self.multiworld.ExpandedPool[self.player] or "Take Any" not in location:
-                overworld.locations.append(
-                    self.create_location(location, self.location_name_to_id[location], overworld))
+            # if self.multiworld.ExpandedPool[self.player] or "Take Any" not in location:
+            overworld.locations.append(
+                self.create_location(location, self.location_name_to_id[location], overworld))
 
         for location in shop_locations:
             overworld.locations.append(
@@ -131,72 +128,10 @@ class TLoZWorld(World):
         self.multiworld.regions.append(overworld)
 
     def create_items(self):
-        # We guarantee that there will always be a key, bomb, potion, and arrow in an ungated shop.
-        reserved_store_slots = self.multiworld.random.sample(shop_locations[0:-6], 4)
-        guaranteed_shop_items = ["Small Key", "Bomb", "Water of Life (Red)", "Arrow"]
-        for i in range(0, len(guaranteed_shop_items)):
-            self.multiworld.get_location(
-                reserved_store_slots[i],
-                self.player
-            ).place_locked_item(
-                self.multiworld.create_item(
-                    guaranteed_shop_items[i], self.player)
-            )
-
-        item_amounts = item_amounts_all
-        if not self.multiworld.ExpandedPool[self.player]:
-            item_amounts = item_amounts_standard
-
-        starting_weapon = self.multiworld.random.choice(starting_weapons)
-        starting_weapon_locations = ["Starting Sword Cave", "Letter Cave", "Armos Knights"]
-
-        for item_name in self.item_name_to_id:
-            if item_name == starting_weapon:
-                if self.multiworld.StartingPosition[self.player] == 0:
-                    self.multiworld.get_location(starting_weapon_locations[0], self.player).place_locked_item(
-                        self.multiworld.create_item(item_name, self.player))
-                elif self.multiworld.StartingPosition[self.player] == 1:
-                    self.multiworld.get_location(self.multiworld.random.choice(starting_weapon_locations), self.player)\
-                        .place_locked_item(self.multiworld.create_item(item_name, self.player))
-                elif self.multiworld.StartingPosition[self.player] == 2:
-                    available_shop_locations = [location for location in shop_locations[0:-6] if location not in reserved_store_slots]
-                    dangerous_weapon_locations = starting_weapon_locations + available_shop_locations
-                    self.multiworld.get_location(self.multiworld.random.choice(dangerous_weapon_locations), self.player)\
-                        .place_locked_item(self.multiworld.create_item(item_name, self.player))
-            if item_name in item_amounts.keys():
-                if self.multiworld.TriforceLocations[self.player] > 1 or item_name != "Triforce Fragment":
-                    i = 0
-                    for i in range(0, item_amounts[item_name]):
-                        self.multiworld.itempool.append(self.create_item(item_name))
-                    if item_name == "Bomb":
-                        self.multiworld.itempool[-1].classification = ItemClassification.progression
-                else:
-                    level = 1
-                    for i in range(0, item_amounts[item_name]):
-                        self.multiworld.get_location(
-                            f"Level {level} Triforce",
-                            self.player
-                        ).place_locked_item(self.multiworld.create_item(item_name, self.player))
-                        level += 1
-                else:
-                    if self.multiworld.ExpandedPool[self.player]:
-                        possible_level_locations = [location for location in all_level_locations
-                                                    if location not in level_locations[8]]
-                    else:
-                        possible_level_locations = [location for location in standard_level_locations
-                                                    if location not in level_locations[8]]
-                    for i in range(0, item_amounts[item_name]):
-                        self.multiworld.get_location(
-                            possible_level_locations.pop(
-                                self.multiworld.random.randint(0, len(possible_level_locations) - 1)),
-                            self.player
-                        ).place_locked_item(self.multiworld.create_item(item_name, self.player))
-            else:
-                if item_name != starting_weapon:
-                    self.multiworld.itempool.append(self.create_item(item_name))
+        generate_itempool(self)
 
     def set_rules(self):
-        # Boss events for a nicer spoiler log playthrough
+        # Boss events for a nicer spoiler log play through
         for level in range(1, 9):
             boss = self.multiworld.get_location(f"Level {level} Boss", self.player)
             boss_event = self.multiworld.get_location(f"Level {level} Boss Status", self.player)
@@ -210,17 +145,14 @@ class TLoZWorld(World):
                 add_rule(self.multiworld.get_location(location.name, self.player),
                          lambda state: state.has_group("weapons", self.player))
                 if i > 0:  # Don't need an extra heart for Level 1
-                    y = i
-                    if not self.multiworld.ExpandedPool[self.player]:
-                        y = max(y - 4, 0)  # Account for Take Any Item hearts that AP doesn't see that can be obtained
                     add_rule(self.multiworld.get_location(location.name, self.player),
-                             lambda state: state.has("Heart Container", self.player, 3 + y) or
+                             lambda state: state.has("Heart Container", self.player, i) or
                                            (state.has("Blue Ring", self.player) and
-                                            state.has("Heart Container", self.player, int(y / 2))) or
+                                            state.has("Heart Container", self.player, int(i / 2))) or
                                            (state.has("Red Ring", self.player) and
-                                            state.has("Heart Container", self.player, int(y / 4)))
+                                            state.has("Heart Container", self.player, int(i / 4)))
 
-                         )
+                             )
         # No requiring anything in a shop until we can farm for money
         # Unless someone likes to live dangerously, of course
         for location in shop_locations:
@@ -253,16 +185,16 @@ class TLoZWorld(World):
                  lambda state: state.has("Recorder", self.player))
         if self.multiworld.ExpandedPool[self.player]:
             add_rule(self.multiworld.get_location("Level 7 Key Drop (Stalfos)", self.player),
-                    lambda state: state.has("Recorder", self.player))
+                     lambda state: state.has("Recorder", self.player))
             add_rule(self.multiworld.get_location("Level 7 Bomb Drop (Digdogger)", self.player),
-                    lambda state: state.has("Recorder", self.player))
+                     lambda state: state.has("Recorder", self.player))
             add_rule(self.multiworld.get_location("Level 7 Rupee Drop (Dodongos)", self.player),
-                    lambda state: state.has("Recorder", self.player))
+                     lambda state: state.has("Recorder", self.player))
 
         for location in food_locations:
             if self.multiworld.ExpandedPool[self.player] or "Drop" not in location:
                 add_rule(self.multiworld.get_location(location, self.player),
-                        lambda state: state.has("Food", self.player))
+                         lambda state: state.has("Food", self.player))
 
         add_rule(self.multiworld.get_location("Level 8 Item (Magical Key)", self.player),
                  lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
@@ -299,8 +231,6 @@ class TLoZWorld(World):
         add_rule(self.multiworld.get_location("Level 8 Triforce", self.player),
                  lambda state: state.has("Boss 8 Defeated", self.player))
 
-
-
         # Sword, raft, and ladder spots
         add_rule(self.multiworld.get_location("White Sword Pond", self.player),
                  lambda state: state.has("Heart Container", self.player, 2))
@@ -308,18 +238,18 @@ class TLoZWorld(World):
                  lambda state: state.has("Heart Container", self.player, 9))
         add_rule(self.multiworld.get_location("Ocean Heart Container", self.player),
                  lambda state: state.has("Stepladder", self.player))
-        if self.multiworld.StartingPosition[self.player] != 2:
-            # Don't allow Take Any Items until we can actually get in one
-            if self.multiworld.ExpandedPool[self.player]:
-                add_rule(self.multiworld.get_location("Take Any Item Left", self.player),
-                         lambda state: state.has_group("candles", self.player) or
-                                       state.has("Raft", self.player))
-                add_rule(self.multiworld.get_location("Take Any Item Middle", self.player),
-                         lambda state: state.has_group("candles", self.player) or
-                                       state.has("Raft", self.player))
-                add_rule(self.multiworld.get_location("Take Any Item Right", self.player),
-                         lambda state: state.has_group("candles", self.player) or
-                                       state.has("Raft", self.player))
+        # if self.multiworld.StartingPosition[self.player] != 2:
+        #     # Don't allow Take Any Items until we can actually get in one
+        #     if self.multiworld.ExpandedPool[self.player]:
+        #         add_rule(self.multiworld.get_location("Take Any Item Left", self.player),
+        #                  lambda state: state.has_group("candles", self.player) or
+        #                                state.has("Raft", self.player))
+        #         add_rule(self.multiworld.get_location("Take Any Item Middle", self.player),
+        #                  lambda state: state.has_group("candles", self.player) or
+        #                                state.has("Raft", self.player))
+        #         add_rule(self.multiworld.get_location("Take Any Item Right", self.player),
+        #                  lambda state: state.has_group("candles", self.player) or
+        #                                state.has("Raft", self.player))
         for location in self.levels[4].locations:
             add_rule(self.multiworld.get_location(location.name, self.player),
                      lambda state: state.has("Raft", self.player) or state.has("Recorder", self.player))
@@ -330,15 +260,10 @@ class TLoZWorld(World):
             add_rule(self.multiworld.get_location(location.name, self.player),
                      lambda state: state.has("Bow", self.player))
 
-        if self.multiworld.TriforceLocations[self.player] == 1:
-            for location in location_table.keys():
-                if location  not in all_level_locations:
-                    forbid_item(self.multiworld.get_location(location, self.player), "Triforce Fragment", self.player)
-
         add_rule(self.multiworld.get_location("Potion Shop Item Left", self.player),
                  lambda state: state.has("Letter", self.player))
-        add_rule(self.multiworld.get_location("Potion Shop Item Middle", self.player),
-                 lambda state: state.has("Letter", self.player))
+        # add_rule(self.multiworld.get_location("Potion Shop Item Middle", self.player),
+        #          lambda state: state.has("Letter", self.player))
         add_rule(self.multiworld.get_location("Potion Shop Item Right", self.player),
                  lambda state: state.has("Letter", self.player))
 
@@ -364,7 +289,7 @@ class TLoZWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Rescued Zelda!", self.player)
 
     def apply_base_patch(self, rom_data):
-        # Remove Triforce check for recorder so you can always warp.
+        # Remove Triforce check for recorder, so you can always warp.
         rom_data[0x60CC:0x60CF] = bytearray([0xA9, 0xFF, 0xEA])
 
         # Remove level check for Triforce Fragments (and maps and compasses, but this won't matter)
@@ -386,7 +311,7 @@ class TLoZWorld(World):
         # Remove map/compass check so they're always on
         rom_data[0x17614:0x17617] = bytearray([0xA9, 0xA1, 0x60])
 
-        # Stealing a bit from the boss roars flag so we can have more dungeon items. This allows us to
+        # Stealing a bit from the boss roars flag, so we can have more dungeon items. This allows us to
         # go past 0x1F items for dungeon drops.
         rom_data[0x1785D] = 0x3F
 
@@ -419,7 +344,7 @@ class TLoZWorld(World):
                     continue
 
                 item = location.item.name
-                # Remote items are always gonna look like Rupees.
+                # Remote items are always going to look like Rupees.
                 if location.item.player != self.player:
                     item = "Rupee"
 
@@ -444,9 +369,9 @@ class TLoZWorld(World):
                         elif item_class == ItemClassification.trap:
                             item_price = item_price * 2
                     rom_data[price_location] = item_price
-                if location.name == "Take Any Item Right":
-                    # Same story as above: bit 6 is what makes this a Take Any cave
-                    item_id = item_id | 0b01000000
+                # if location.name == "Take Any Item Right":
+                #     # Same story as above: bit 6 is what makes this a Take Any cave
+                #     item_id = item_id | 0b01000000
                 if location.name in all_level_locations:
                     # We want to preserve room flags: darkness and boss roars
                     room_flags = rom_data[location_id]
@@ -485,7 +410,6 @@ class TLoZWorld(World):
         self.playerName.extend([0] * (0x20 - len(self.playerName)))
         patched_rom[0x30:0x50] = self.playerName
 
-
         patched_filename = os.path.join(output_directory, outputFilename)
 
         with open(patched_filename, 'wb') as patched_rom_file:
@@ -509,6 +433,7 @@ class TLoZWorld(World):
         filler_items = [item for item in item_table if item_table[item].classification == ItemClassification.filler]
         return self.multiworld.random.choice(filler_items)
 
+
 class TLoZItem(Item):
     game = 'The Legend of Zelda'
 
@@ -522,7 +447,7 @@ class PlandoItem(NamedTuple):
     location: str
     world: Union[bool, str] = False  # False -> own world, True -> not own world
     from_pool: bool = True  # if item should be removed from item pool
-    force: str = 'silent'  # false -> warns if item not successfully placed. true -> errors out on failure to place item.
+    force: str = 'silent'  # false -> warns if item not successfully placed. true -> errors out on failure to place item
 
     def warn(self, warning: str):
         if self.force in ['true', 'fail', 'failure', 'none', 'false', 'warn', 'warning']:

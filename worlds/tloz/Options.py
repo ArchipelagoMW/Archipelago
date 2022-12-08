@@ -1,9 +1,11 @@
 import typing
-from Options import Option, DefaultOnToggle, Range, Toggle, DeathLink, Choice
+from Options import Option, DefaultOnToggle, Choice
+
 
 class ExpandedPool(DefaultOnToggle):
-    """Puts room clear drops and Take Any caves into the pool of items and locations."""
+    """Puts room clear drops into the pool of items and locations."""
     display_name = "Expanded Item Pool"
+
 
 class TriforceLocations(Choice):
     """Where Triforce fragments can be located. Note that Triforce pieces
@@ -14,19 +16,22 @@ class TriforceLocations(Choice):
     option_dungeons = 1
     option_anywhere = 2
 
+
 class StartingPosition(Choice):
     """How easy is the start of the game.
     Safe means a weapon is guaranteed in Starting Sword Cave.
     Unsafe means that a weapon is guaranteed between Starting Sword Cave, Letter Cave, and Armos Knight.
-    Dangerous can require seeking out money and gambling caves in order to purchase an initial weapon.
-    Very_Dangerous is the same as dangerous except it doesn't guarantee a weapon. It will only mean progression
-    will be there in single player seeds. In multiworlds, however, this means all bets are off and after checking
+    Dangerous adds these level locations to the unsafe pool (if they exist):
+#       Level 1 Compass, Level 2 Bomb Drop (Keese), Level 3 Key Drop (Zols Entrance), Level 3 Compass
+    Very Dangerous is the same as dangerous except it doesn't guarantee a weapon. It will only mean progression
+    will be there in single player seeds. In multi worlds, however, this means all bets are off and after checking
     the dangerous spots, you could be stuck until someone sends you a weapon"""
     display_name = "Starting Position"
     option_safe = 0
     option_unsafe = 1
     option_dangerous = 2
     option_very_dangerous = 3
+
 
 tloz_options: typing.Dict[str, type(Option)] = {
     "ExpandedPool": ExpandedPool,

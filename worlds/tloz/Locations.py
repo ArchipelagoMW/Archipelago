@@ -4,9 +4,9 @@ major_locations = [
     "Starting Sword Cave",
     "White Sword Pond",
     "Magical Sword Grave",
-    "Take Any Item Left",
-    "Take Any Item Middle",
-    "Take Any Item Right",
+    # "Take Any Item Left",
+    # "Take Any Item Middle",
+    # "Take Any Item Right",
     "Armos Knights",
     "Ocean Heart Container",
     "Letter Cave",
@@ -103,7 +103,8 @@ shop_locations = [
     "Candle Shop Item Left", "Candle Shop Item Middle", "Candle Shop Item Right",
     "Blue Ring Shop Item Left", "Blue Ring Shop Item Middle", "Blue Ring Shop Item Right",
     "Shield Shop Item Left", "Shield Shop Item Middle", "Shield Shop Item Right",
-    "Potion Shop Item Left", "Potion Shop Item Middle", "Potion Shop Item Right"
+    # "Potion Shop Item Left", "Potion Shop Item Middle", "Potion Shop Item Right"
+    "Potion Shop Item Left", "Potion Shop Item Right"
 ]
 
 food_locations = [
@@ -273,7 +274,7 @@ shop_location_ids = {
     "Blue Ring Shop Item Middle": 0x18641,
     "Blue Ring Shop Item Right": 0x18642,
     "Potion Shop Item Left": 0x1862E,
-    "Potion Shop Item Middle": 0x1862F,
+    # "Potion Shop Item Middle": 0x1862F,
     "Potion Shop Item Right": 0x18630
 }
 
@@ -291,7 +292,7 @@ shop_price_location_ids = {
     "Blue Ring Shop Item Middle": 0x1867D,
     "Blue Ring Shop Item Right": 0x1867E,
     "Potion Shop Item Left": 0x1866A,
-    "Potion Shop Item Middle": 0x1866B,
+    # "Potion Shop Item Middle": 0x1866B,
     "Potion Shop Item Right": 0x1866C
 }
 
@@ -306,9 +307,9 @@ major_location_ids = {
     "White Sword Pond": 0x18617,
     "Magical Sword Grave": 0x1861A,
     "Letter Cave": 0x18629,
-    "Take Any Item Left": 0x18613,
-    "Take Any Item Middle": 0x18614,
-    "Take Any Item Right": 0x18615,
+    # "Take Any Item Left": 0x18613,
+    # "Take Any Item Middle": 0x18614,
+    # "Take Any Item Right": 0x18615,
     "Armos Knights": 0x10D05,
     "Ocean Heart Container": 0x1789A
 }
@@ -318,9 +319,9 @@ major_location_offsets = {
     "White Sword Pond": 0x0A,
     "Magical Sword Grave": 0x21,
     "Letter Cave": 0x0E,
-    "Take Any Item Left": 0x7B,
-    "Take Any Item Middle": 0x2C,
-    "Take Any Item Right": 0x47,
+    # "Take Any Item Left": 0x7B,
+    # "Take Any Item Middle": 0x2C,
+    # "Take Any Item Right": 0x47,
     "Armos Knights": 0x24,
     "Ocean Heart Container": 0x5F
 }
@@ -338,7 +339,7 @@ underworld1_locations = [*floor_location_game_offsets_early.keys()]
 
 underworld2_locations = [*floor_location_game_offsets_late.keys()]
 
-cave_locations = ["Take Any Item Left", "Take Any Item Middle", "Take Any Item Right"] + [*shop_locations]
+#cave_locations = ["Take Any Item Left", "Take Any Item Middle", "Take Any Item Right"] + [*shop_locations]
 
 location_table_base = [x for x in major_locations] + \
                       [y for y in all_level_locations] + \

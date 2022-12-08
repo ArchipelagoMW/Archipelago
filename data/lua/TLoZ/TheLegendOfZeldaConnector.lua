@@ -53,6 +53,7 @@ local boomerang             = 0x0674
 local magicalBoomerang      = 0x0675
 local magicalShield         = 0x0676
 local rupeesToAdd           = 0x067D
+local rupeesToSubtract      = 0x067E
 local itemsObtained         = 0x0677
 local remoteTriforce        = 0x0678
 local localTriforce         = 0x0679
@@ -403,9 +404,9 @@ local function checkCaveItemObtained()
     local screen = u8(0xEB)
     returnTable["screen"] = screen
     if bit.band(gameMode, 0x0B) then -- if we're in a cave
-        local itemLift = u8(0x506)
-        local xPosition = u8(0x70)
-        if itemLift > 0 then
+        --local itemLift = u8(0x506)
+        --local xPosition = u8(0x70)
+        if rupeesToSubtract > 0 then
             itemSlot = u8(0x438)
             returnTable["itemSlot"] = u8(0x438) + 1
             if itemSlot == 0 then
@@ -436,9 +437,9 @@ local function checkCaveItemObtained()
             if caveType == 0x0D then
                 returnTable["caveType"] = "Arrow Shop"
             end
-            if caveType == 0x01 then
-                returnTable["caveType"] = "Take Any"
-            end
+            --if caveType == 0x01 then
+            --    returnTable["caveType"] = "Take Any"
+            --end
         end
     end
     return returnTable

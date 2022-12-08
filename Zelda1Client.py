@@ -171,7 +171,7 @@ async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone=
                 if status & 0x10:
                     ctx.locations_checked.add(location)
                     locations_checked.append(location)
-            elif location_name in  Locations.cave_locations and zone == "caves":
+            elif location_name in Locations.shop_locations and zone == "caves":
                 caveType = "None"
                 if "caveType" in locations_array.keys():
                     caveType = locations_array["caveType"]
