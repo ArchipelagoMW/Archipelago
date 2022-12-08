@@ -52,7 +52,7 @@ def generate(race=False):
         else:
             file = request.files['file']
             options = get_yaml_data(file)
-            if type(options) == str:
+            if isinstance(options, str):
                 flash(options)
             else:
                 meta = get_meta(request.form)
