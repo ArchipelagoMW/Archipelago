@@ -165,6 +165,7 @@ class MultiWorld():
         self.custom_data = {}
         self.worlds = {}
         self.slot_seeds = {}
+        self.plando_settings = PlandoSettings()
 
     def get_all_ids(self) -> Tuple[int, ...]:
         return self.player_ids + tuple(self.groups)
