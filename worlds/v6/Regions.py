@@ -1,7 +1,7 @@
 from typing import NamedTuple, List, Dict
 
 from BaseClasses import MultiWorld, Region, Entrance, RegionType
-from . import V6Location, location_table
+from .Locations import V6Location, location_table
 
 
 class V6RegionData(NamedTuple):

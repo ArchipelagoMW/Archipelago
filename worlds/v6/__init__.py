@@ -3,12 +3,12 @@ import os
 import typing
 
 from BaseClasses import ItemClassification, Tutorial
+from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, V6Item
 from .Locations import location_table, V6Location
 from .Options import v6_options
 from .Regions import create_regions, v6_areas
 from .Rules import set_rules
-from ..AutoWorld import World, WebWorld
 
 
 class V6Web(WebWorld):
@@ -52,8 +52,8 @@ class V6World(World):
             self.player)
 
     def generate_early(self):
-        self.area_connections = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4}
-        self.area_cost_map = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4}
+        self.area_connections = {i: i for i in range(5)}
+        self.area_cost_map = {i: i for i in range(5)}
 
         # Area Randomization
         if self.multiworld.AreaRandomizer[self.player]:
