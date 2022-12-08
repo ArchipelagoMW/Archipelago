@@ -1,24 +1,20 @@
 from __future__ import annotations
-from argparse import Namespace
 
 import copy
-from enum import unique, IntEnum, IntFlag
-import logging
-import json
 import functools
-from collections import OrderedDict, Counter, deque
-from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, NamedTuple
-import typing  # this can go away when Python 3.8 support is dropped
-import secrets
+import json
+import logging
 import random
+import secrets
+import typing  # this can go away when Python 3.8 support is dropped
+from argparse import Namespace
+from collections import OrderedDict, Counter, deque
+from enum import unique, IntEnum, IntFlag
+from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, NamedTuple
 
+import NetUtils
 import Options
 import Utils
-import NetUtils
-if typing.TYPE_CHECKING:
-    from Generate import PlandoSettings
-else:
-    PlandoSettings = object
 
 
 class Group(TypedDict, total=False):
@@ -165,7 +161,7 @@ class MultiWorld():
         self.custom_data = {}
         self.worlds = {}
         self.slot_seeds = {}
-        self.plando_settings = PlandoSettings()
+        self.plando_settings = PlandoSettings.none
 
     def get_all_ids(self) -> Tuple[int, ...]:
         return self.player_ids + tuple(self.groups)
@@ -1528,6 +1524,45 @@ class Tutorial(NamedTuple):
     file_name: str
     link: str
     authors: List[str]
+
+
+class PlandoSettings(IntFlag):
+    none = 0b0000
+    items = 0b0001
+    connections = 0b0010
+    texts = 0b0100
+    bosses = 0b1000
+
+    @classmethod
+    def from_option_string(cls, option_string: str) -> PlandoSettings:
+        result = cls(0)
+        for part in option_string.split(","):
+            part = part.strip().lower()
+            if part:
+                result = cls._handle_part(part, result)
+        return result
+
+    @classmethod
+    def from_set(cls, option_set: Set[str]) -> PlandoSettings:
+        result = cls(0)
+        for part in option_set:
+            result = cls._handle_part(part, result)
+        return result
+
+    @classmethod
+    def _handle_part(cls, part: str, base: PlandoSettings) -> PlandoSettings:
+        try:
+            part = cls[part]
+        except Exception as e:
+            raise KeyError(f"{part} is not a recognized name for a plando module. "
+                           f"Known options: {', '.join(flag.name for flag in cls)}") from e
+        else:
+            return base | part
+
+    def __str__(self) -> str:
+        if self.value:
+            return ", ".join(flag.name for flag in PlandoSettings if self.value & flag.value)
+        return "None"
 
 
 seeddigits = 20
