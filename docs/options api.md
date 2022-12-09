@@ -182,21 +182,20 @@ False by default, and will reject duplicate boss names from the user. For an
 example of using this class refer to `worlds.alttp.options.py`
 
 ### OptionDict
-This option allows you to build a dictionary in `default` if you wish, which
-can be accessed with `self.multiworld.my_option[self.player].value`. Setting
-the default here is recommended as it will output the dictionary to the template.
+This option returns a dictionary. Setting a default here is recommended as it
+will output the dictionary to the template.
 
 ### ItemDict
 Like OptionDict, except will verify that every key in the dictionary is a valid
 name for an item for your world.
 
 ### OptionList
-This option defines a List object as its value, where the user can add any number
-of names to the list. Can define a set if keys in `valid_keys` and a default
-list if you want certain options to be available without editing for this.
-`valid_keys_casefold` to true will make the verification case insensitive,
-`verify_item_name` will check that each value is a valid item name, and
-`verify_location_name` will check that each value is a valid location name.
+This option defines a List, where the user can add any number of strings to said
+list, allowing duplicate values. You can define a set of keys in `valid_keys`,
+and a default list if you want certain options to be available without editing
+for this. `valid_keys_casefold` to true will make the verification
+case-insensitive, `verify_item_name` will check that each value is a valid item
+name, and`verify_location_name` will check that each value is a valid location name.
 
 ### OptionSet
 Like OptionList, but returns a set, preventing duplicates.
