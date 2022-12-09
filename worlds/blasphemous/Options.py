@@ -12,6 +12,11 @@ class Difficulty(Choice):
     default = 1
 
 
+class ExpertLogic(Toggle):
+    """Expands the logic used by the randomizer to allow for some difficult and/or lesser known tricks."""
+    display_name = "Expert Logic"
+
+
 class Ending(Choice):
     """Choose which ending is required to complete the game."""
     display_name = "Ending"
@@ -164,6 +169,7 @@ class EnemyRando(Choice):
 
 blasphemous_options = {
     "difficulty": Difficulty,
+    "expert_logic": ExpertLogic,
     "ending": Ending,
     "thorn_shuffle" : ThornShuffle,
     "reliquary_shuffle": ReliquaryShuffle,
