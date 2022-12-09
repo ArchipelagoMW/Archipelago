@@ -74,7 +74,7 @@ local on_the_ground_check = function(scene_offset, bit_to_check)
 end
 
 local boss_item_check = function(scene_offset)
-    return chest_check(scene_offset, 0x1F)
+    return on_the_ground_check(scene_offset, 0x1F)
         or check_temp_context({scene_offset, 0x00, 0x4F})
 end
 
