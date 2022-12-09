@@ -410,8 +410,14 @@ item_table: List[ItemDict] = [
     {'name': "Mea Culpa Upgrade",
         'count': 7,
         'classification': ItemClassification.progression},
+    {'name': "Tears of Atonement (250)",
+        'count': 1,
+        'classification': ItemClassification.filler},
+    {'name': "Tears of Atonement (300)",
+        'count': 1,
+        'classification': ItemClassification.filler},
     {'name': "Tears of Atonement (500)",
-        'count': 2,
+        'count': 3,
         'classification': ItemClassification.filler},
     {'name': "Tears of Atonement (625)",
         'count': 1,
@@ -541,4 +547,10 @@ tears_set: Set[str] = [
     "Tears of Atonement (11250)",
     "Tears of Atonement (18000)",
     "Tears of Atonement (30000)"
+]
+
+reliquary_set: Set[str] = [
+    "Reliquary of the Fervent Heart",
+    "Reliquary of the Suffering Heart",
+    "Reliquary of the Sorrowful Heart"
 ]

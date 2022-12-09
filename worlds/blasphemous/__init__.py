@@ -1,7 +1,7 @@
 from typing import Dict, Set, Any
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, RegionType
 from ..AutoWorld import World, WebWorld
-from .Items import item_table, group_table, tears_set
+from .Items import item_table, group_table, tears_set, reliquary_set
 from .Locations import location_table, shop_set
 from .Exits import region_exit_table, exit_lookup_table
 from .Rules import rules
@@ -70,6 +70,15 @@ class BlasphemousWorld(World):
                 if item["name"] == "Verses Spun from Gold":
                     count -= 4
                 else:
+                    count -= 1
+            if not self.multiworld.reliquary_shuffle[self.player] and \
+                item["name"] in reliquary_set:
+                    count = 0
+            elif self.multiworld.reliquary_shuffle[self.player] and \
+                (item["name"] == "Tears of Atonement (250)" or item["name"] == "Tears of Atonement (300)"):
+                    count = 0
+            elif self.multiworld.reliquary_shuffle[self.player] and \
+                item["name"] == "Tears of Atonement (500)":
                     count -= 1
             if not self.multiworld.cherub_shuffle[self.player] and \
                 item["name"] == "Child of Moonlight":
@@ -143,6 +152,9 @@ class BlasphemousWorld(World):
             if not self.multiworld.candle_shuffle[self.player] and \
                 item["name"] in list(Vanilla.candle_dict.values()):
                     count = 0
+            if self.multiworld.start_wheel[self.player] and \
+                item["name"] == "The Young Mason's Wheel":
+                count = 0
 
             if count <= 0:
                 continue
@@ -224,6 +236,10 @@ class BlasphemousWorld(World):
 
         if not self.multiworld.candle_shuffle[self.player]:
             self.place_items_from_dict(Vanilla.candle_dict)
+
+        if self.multiworld.start_wheel[self.player]:
+            self.multiworld.get_location("BotSS: Beginning gift", self.player)\
+                .place_locked_item(self.create_item("The Young Mason's Wheel"))
 
         self.multiworld.itempool += pool
         

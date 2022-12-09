@@ -30,6 +30,11 @@ class ThornShuffle(Choice):
     default = 0
 
 
+class ReliquaryShuffle(DefaultOnToggle):
+    """Adds the True Torment exclusive Reliquary rosary beads into the item pool."""
+    display_name = "Shuffle Penitence Rewards"
+
+
 class CherubShuffle(DefaultOnToggle):
     """Shuffles Children of Moonlight into the item pool."""
     display_name = "Shuffle Children of Moonlight"
@@ -140,6 +145,11 @@ class CandleShuffle(DefaultOnToggle):
     display_name = "Shuffle Candles"
 
 
+class StartWheel(Toggle):
+    """Changes the beginning gift to The Young Mason's Wheel."""
+    display_name = "Start with Wheel"
+
+
 class EnemyRando(Choice):
     """Randomizes the enemies that appear in each room.
     By default, enemies are put into groups of similar strength and shuffled.
@@ -156,6 +166,7 @@ blasphemous_options = {
     "difficulty": Difficulty,
     "ending": Ending,
     "thorn_shuffle" : ThornShuffle,
+    "reliquary_shuffle": ReliquaryShuffle,
     "cherub_shuffle" : CherubShuffle,
     "life_shuffle" : LifeShuffle,
     "fervour_shuffle" : FervourShuffle,
@@ -178,5 +189,6 @@ blasphemous_options = {
     "church_shuffle" : ChurchShuffle,
     "shop_shuffle" : ShopShuffle,
     "candle_shuffle" : CandleShuffle,
+    "start_wheel": StartWheel,
     "enemy_randomizer": EnemyRando
 }
