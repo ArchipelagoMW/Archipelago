@@ -269,6 +269,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.mission_street_hidden_1,
         LocationName.mission_street_hidden_2,
         LocationName.mission_street_hidden_3,
+        LocationName.mission_street_hidden_4,
         LocationName.mission_street_beetle,
         LocationName.mission_street_upgrade,
     ]
