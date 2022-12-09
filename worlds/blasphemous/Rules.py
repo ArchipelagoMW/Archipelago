@@ -381,8 +381,7 @@ def rules(blasphemousworld):
     set_rule(world.get_location("Albero: Bless Severed Hand", player),
         lambda state: state._blasphemous_hand(player))
     set_rule(world.get_location("Albero: First gift for Cleofas", player),
-        lambda state: state.can_reach(world.get_region("Mother of Mothers", player)) and \
-            state._blasphemous_marks(player))
+        lambda state: state.can_reach(world.get_region("Mother of Mothers", player)))
     set_rule(world.get_location("Albero: Final gift for Cleofas", player),
         lambda state: state.can_reach(world.get_region("Mother of Mothers", player)) and \
             state._blasphemous_marks(player) and \
@@ -468,13 +467,11 @@ def rules(blasphemousworld):
             state._blasphemous_miasma_relic(player) and \
                     state._blasphemous_2_masks(player))
     set_rule(world.get_location("AR: Crisanta of the Wrapped Agony", player),
-        lambda state: state._blasphemous_3_masks(player) and \
-            state._blasphemous_heart_c(player))
+        lambda state: state._blasphemous_3_masks(player))
     
     # Bridge of the Three Cavalries
     set_rule(world.get_location("BotTC: Esdras, of the Anointed Legion", player),
-        lambda state: state._blasphemous_3_wounds(player) and \
-            state._blasphemous_blood_relic(player))
+        lambda state: state._blasphemous_3_wounds(player))
     set_rule(world.get_location("BotTC: Esdras' gift", player),
         lambda state: state._blasphemous_3_wounds(player) and \
             state._blasphemous_blood_relic(player) and \
@@ -543,11 +540,17 @@ def rules(blasphemousworld):
     set_rule(world.get_location("DC: Hidden alcove near fountain", player),
         lambda state: state._blasphemous_water_relic(player))
     set_rule(world.get_location("DC: Shroud puzzle", player),
-        lambda state: state._blasphemous_corpse_relic(player))
+        lambda state: state._blasphemous_corpse_relic(player) and \
+            state._blasphemous_miasma_relic(player) and \
+                state._blasphemous_water_relic(player))
     set_rule(world.get_location("DC: Chalice room", player),
-        lambda state: state._blasphemous_blood_relic(player) and \
-            (state._blasphemous_root_relic(player) or \
-                state._blasphemous_fall_relic(player)))
+        lambda state: (state._blasphemous_miasma_relic(player) and \
+            state._blasphemous_water_relic(player) and \
+                (state._blasphemous_root_relic(player) or \
+                    (state._blasphemous_wheel(player) or \
+                        state._blasphemous_dawn_heart(player)))) or \
+                            (state._blasphemous_fall_relic(player) and \
+                                state.has("Mea Culpa Upgrade", player, 2)))
     set_rule(world.get_location("DC: Mea Culpa altar", player),
         lambda state: state._blasphemous_chalice(player) and \
             state._blasphemous_3_wounds(player) and \
@@ -610,8 +613,9 @@ def rules(blasphemousworld):
         lambda state: state._blasphemous_blood_relic(player))
     set_rule(world.get_location("GA: Blood bridge Child of Moonlight", player),
         lambda state: state._blasphemous_blood_relic(player) and \
-            (state._blasphemous_aubade(player) or \
-                state._blasphemous_cherub_21(player)))
+            ((state._blasphemous_aubade(player) and \
+                state.has("Mea Culpa Upgrade", player, 2)) or \
+                    state._blasphemous_cherub_21(player)))
     set_rule(world.get_location("GA: Lower east Child of Moonlight", player),
         lambda state: state._blasphemous_root_relic(player) or \
             state._blasphemous_cherub_20(player))
@@ -700,18 +704,25 @@ def rules(blasphemousworld):
     
     # Mourning and Havoc
     set_rule(world.get_location("MaH: Upper east chest", player),
-        lambda state: state._blasphemous_root_relic(player) and \
-            state.can_reach(world.get_region("Mother of Mothers", player)))
+        lambda state: (state.can_reach(world.get_region("Mother of Mothers", player)) and \
+            state._blasphemous_root_relic(player)) or \
+                state._blasphemous_dawn_heart(player) or \
+                    state._blasphemous_water_relic(player))
     set_rule(world.get_location("MaH: Sierpes' eye", player),
-        lambda state: state.can_reach(world.get_region("Mother of Mothers", player)) and \
-            state._blasphemous_root_relic(player))
+        lambda state: (state.can_reach(world.get_region("Mother of Mothers", player)) and \
+            state._blasphemous_root_relic(player)) or \
+                state._blasphemous_dawn_heart(player) or \
+                    state._blasphemous_water_relic(player))
     set_rule(world.get_location("MaH: Sierpes", player),
-        lambda state: state.can_reach(world.get_region("Mother of Mothers", player)) and \
-            state._blasphemous_root_relic(player))
+        lambda state: (state.can_reach(world.get_region("Mother of Mothers", player)) and \
+            state._blasphemous_root_relic(player)) or \
+                state._blasphemous_dawn_heart(player) or \
+                    state._blasphemous_water_relic(player))
 
     # Patio of the Silent Steps
     set_rule(world.get_location("PotSS: Second area ledge", player),
-        lambda state: state._blasphemous_root_relic(player))
+        lambda state: state._blasphemous_root_relic(player) or \
+            state._blasphemous_dawn_heart(player))
     set_rule(world.get_location("PotSS: Third area upper ledge", player),
         lambda state: state._blasphemous_root_relic(player) or \
             (state._blasphemous_wheel(player) and \
@@ -744,13 +755,9 @@ def rules(blasphemousworld):
     # The Holy Line
     set_rule(world.get_location("THL: Across blood platforms", player),
         lambda state: state._blasphemous_blood_relic(player))
-    # to do: requires dive
-    set_rule(world.get_location("THL: Underground ledge", player),
-        lambda state: state._blasphemous_open_holes(player))
     set_rule(world.get_location("THL: Underground chest", player),
         lambda state: state._blasphemous_blood_relic(player) and \
-            state._blasphemous_water_relic(player) and \
-                state._blasphemous_open_holes(player))
+            state._blasphemous_water_relic(player))
     
     # Wall of the Holy Prohibitions
     set_rule(world.get_location("WotHP: Upper east room, top bronze cell", player),
@@ -799,7 +806,10 @@ def rules(blasphemousworld):
 
     # Wasteland of the Buried Churches
     set_rule(world.get_location("WotBC: Under broken bridge", player),
-        lambda state: state._blasphemous_blood_relic(player))
+        lambda state: state._blasphemous_blood_relic(player) or \
+            state._blasphemous_dawn_heart(player) or \
+                (state._blasphemous_wheel(player) and \
+                    state.has("Mea Culpa Upgrade", player, 2)))
     set_rule(world.get_location("WotBC: Cliffside Child of Moonlight", player),
         lambda state: state._blasphemous_cherub_38(player))
 
