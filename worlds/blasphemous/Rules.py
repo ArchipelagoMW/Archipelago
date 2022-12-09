@@ -471,7 +471,8 @@ def rules(blasphemousworld):
             state._blasphemous_blood_relic(player))
     set_rule(world.get_location("BotTC: Esdras' gift", player),
         lambda state: state._blasphemous_3_wounds(player) and \
-            state._blasphemous_blood_relic(player))
+            state._blasphemous_blood_relic(player) and \
+                state._blasphemous_scapular(player))
     set_rule(world.get_location("BotTC: Inside giant statue", player),
         lambda state: state._blasphemous_3_wounds(player) and \
             state._blasphemous_verses(player))
@@ -629,7 +630,8 @@ def rules(blasphemousworld):
         lambda state: state._blasphemous_fall_relic(player) or \
             state._blasphemous_root_relic(player))
     set_rule(world.get_location("Jondo: Upper west tree root", player),
-        lambda state: state._blasphemous_root_relic(player))
+        lambda state: state._blasphemous_root_relic(player) or \
+            state._blasphemous_dawn_heart(player))
 
     # Knot of the Three Words
     set_rule(world.get_location("KotTW: Gift from the Traitor", player),
