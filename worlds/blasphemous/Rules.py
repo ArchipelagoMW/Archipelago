@@ -478,9 +478,7 @@ def rules(blasphemousworld):
     set_rule(world.get_location("BotTC: Esdras, of the Anointed Legion", player),
         lambda state: state._blasphemous_3_wounds(player))
     set_rule(world.get_location("BotTC: Esdras' gift", player),
-        lambda state: state._blasphemous_3_wounds(player) and \
-            state._blasphemous_blood_relic(player) and \
-                state._blasphemous_scapular(player))
+        lambda state: state._blasphemous_3_wounds(player))
     set_rule(world.get_location("BotTC: Inside giant statue", player),
         lambda state: state._blasphemous_3_wounds(player) and \
             state._blasphemous_verses(player))
