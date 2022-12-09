@@ -1185,6 +1185,9 @@ local check_all_locations = function(mq_table_address)
     for k,v in pairs(read_ganons_castle_checks(mq_table_address)) do location_checks[k] = v end
     for k,v in pairs(read_outside_ganons_castle_checks()) do location_checks[k] = v end
     for k,v in pairs(read_song_checks()) do location_checks[k] = v end
+    -- write 0 to temp context values
+    mainmemory.write_u32_be(0x40002C, 0)
+    mainmemory.write_u32_be(0x400030, 0)
     return location_checks
 end
 
