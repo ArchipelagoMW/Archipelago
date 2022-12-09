@@ -1469,7 +1469,7 @@ hintTable = {
     '1227':                                                     ("Did you know that Barinade is allergic to bananas?", None, 'junk'),
     '1228':                                                     ("Have you seen my dodongo? Very large, eats everything, responds to \"King\".^Call Darunia in Goron City if found. Huge rupee reward!", None, 'junk'),
     '1229':                                                     ("Having trouble breathing underwater?^Have you tried wearing more BLUE?", None, 'junk'),
-    '1230':                                                     ("Hi! I'm currently on an exchange program from Termina.^They say that East Clock Town is on the way of the hero.", None, 'junk'), # ref: Majora's Mask
+    # '1230':                                                     ("Hi! I'm currently on an exchange program from Termina.^They say that East Clock Town is on the way of the hero.", None, 'junk'), # ref: Majora's Mask
     '1231':                                                     ("Why are you asking me? I don't have any answers! I'm just as confused as you are!", None, 'junk'),
     '1232':                                                     ("What do you call a group of Gorons?^${12 39 C7}A rock band.", None, 'junk'), # sfx: Ganondorf laugh
     '1233':                                                     ("When the moon hits Termina like a big pizza pie that's game over.", None, 'junk'), # ref: That's Amore by Dean Martin + Majora's Mask
