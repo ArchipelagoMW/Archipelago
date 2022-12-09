@@ -636,43 +636,47 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
 
     # Gather dungeon locations
     area_id_ranges = {
-        "Overworld":                (67000, 67280),
-        "Deku Tree":                (67281, 67303),
-        "Dodongo's Cavern":         (67304, 67334),
-        "Jabu Jabu's Belly":        (67335, 67359),
-        "Bottom of the Well":       (67360, 67384),
-        "Forest Temple":            (67385, 67420),
-        "Fire Temple":              (67421, 67457),
-        "Water Temple":             (67458, 67484),
-        "Shadow Temple":            (67485, 67532),
-        "Spirit Temple":            (67533, 67582),
-        "Ice Cavern":               (67583, 67596),
-        "Gerudo Training Ground":   (67597, 67635),
-        "Thieves' Hideout":         (67259, 67263),
-        "Ganon's Castle":           (67636, 67673),
+        "Overworld":                ((67000, 67258), (67264, 67280), (67747, 68024), (68054, 68062)),
+        "Deku Tree":                ((67281, 67303), (68063, 68077)),
+        "Dodongo's Cavern":         ((67304, 67334), (68078, 68160)),
+        "Jabu Jabu's Belly":        ((67335, 67359), (68161, 68188)),
+        "Bottom of the Well":       ((67360, 67384), (68189, 68230)),
+        "Forest Temple":            ((67385, 67420), (68231, 68281)),
+        "Fire Temple":              ((67421, 67457), (68282, 68350)),
+        "Water Temple":             ((67458, 67484), (68351, 68483)),
+        "Shadow Temple":            ((67485, 67532), (68484, 68565)),
+        "Spirit Temple":            ((67533, 67582), (68566, 68625)),
+        "Ice Cavern":               ((67583, 67596), (68626, 68649)),
+        "Gerudo Training Ground":   ((67597, 67635), (68650, 68656)),
+        "Thieves' Hideout":         ((67259, 67263), (68025, 68053)),
+        "Ganon's Castle":           ((67636, 67673), (68657, 68705)),
     }
 
     def lookup_and_trim(id, area):
         full_name = lookup_any_location_id_to_name[id]
-        if id == 67673:
-            return full_name[13:]  # Ganons Tower Boss Key Chest
+        if 'Ganons Tower' in full_name:
+            return full_name
         if area not in ["Overworld", "Thieves' Hideout"]:
             # trim dungeon name. leaves an extra space that doesn't display, or trims fully for DC/Jabu/GC
             return full_name[len(area):]
         return full_name
 
     checked_locations = multisave.get("location_checks", {}).get((team, player), set()).intersection(set(locations[player]))
-    location_info = {area: {lookup_and_trim(id, area): id in checked_locations for id in range(min_id, max_id+1) if id in locations[player]} 
-        for area, (min_id, max_id) in area_id_ranges.items()}
-    checks_done = {area: len(list(filter(lambda x: x, location_info[area].values()))) for area in area_id_ranges}
-    checks_in_area = {area: len([id for id in range(min_id, max_id+1) if id in locations[player]]) 
-        for area, (min_id, max_id) in area_id_ranges.items()}
-
-    # Remove Thieves' Hideout checks from Overworld, since it's in the middle of the range
-    checks_in_area["Overworld"] -= checks_in_area["Thieves' Hideout"]
-    checks_done["Overworld"] -= checks_done["Thieves' Hideout"]
-    for loc in location_info["Thieves' Hideout"]:
-        del location_info["Overworld"][loc]
+    location_info = {}
+    checks_done = {}
+    checks_in_area = {}
+    for area, ranges in area_id_ranges.items():
+        location_info[area] = {}
+        checks_done[area] = 0
+        checks_in_area[area] = 0
+        for r in ranges:
+            min_id, max_id = r
+            for id in range(min_id, max_id+1):
+                if id in locations[player]:
+                    checked = id in checked_locations
+                    location_info[area][lookup_and_trim(id, area)] = checked
+                    checks_in_area[area] += 1
+                    checks_done[area] += checked
 
     checks_done['Total'] = sum(checks_done.values())
     checks_in_area['Total'] = sum(checks_in_area.values())
