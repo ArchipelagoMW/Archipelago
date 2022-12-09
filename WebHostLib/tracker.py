@@ -687,25 +687,28 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
         if "GS" in lookup_and_trim(id, ''):
             display_data["token_count"] += 1
 
+    oot_y = '✔'
+    oot_x = '✕'
+
     # Gather small and boss key info
     small_key_counts = {
-        "Forest Temple":            inventory[66175],
-        "Fire Temple":              inventory[66176],
-        "Water Temple":             inventory[66177],
-        "Spirit Temple":            inventory[66178],
-        "Shadow Temple":            inventory[66179],
-        "Bottom of the Well":       inventory[66180],
-        "Gerudo Training Ground":   inventory[66181],
-        "Thieves' Hideout":         inventory[66182],
-        "Ganon's Castle":           inventory[66183],
+        "Forest Temple":            oot_y if inventory[66203] else inventory[66175],
+        "Fire Temple":              oot_y if inventory[66204] else inventory[66176],
+        "Water Temple":             oot_y if inventory[66205] else inventory[66177],
+        "Spirit Temple":            oot_y if inventory[66206] else inventory[66178],
+        "Shadow Temple":            oot_y if inventory[66207] else inventory[66179],
+        "Bottom of the Well":       oot_y if inventory[66208] else inventory[66180],
+        "Gerudo Training Ground":   oot_y if inventory[66209] else inventory[66181],
+        "Thieves' Hideout":         oot_y if inventory[66210] else inventory[66182],
+        "Ganon's Castle":           oot_y if inventory[66211] else inventory[66183],
     }
     boss_key_counts = {
-        "Forest Temple":            '✔' if inventory[66149] else '✕',
-        "Fire Temple":              '✔' if inventory[66150] else '✕',
-        "Water Temple":             '✔' if inventory[66151] else '✕',
-        "Spirit Temple":            '✔' if inventory[66152] else '✕',
-        "Shadow Temple":            '✔' if inventory[66153] else '✕',
-        "Ganon's Castle":           '✔' if inventory[66154] else '✕',
+        "Forest Temple":            oot_y if inventory[66149] else oot_x,
+        "Fire Temple":              oot_y if inventory[66150] else oot_x,
+        "Water Temple":             oot_y if inventory[66151] else oot_x,
+        "Spirit Temple":            oot_y if inventory[66152] else oot_x,
+        "Shadow Temple":            oot_y if inventory[66153] else oot_x,
+        "Ganon's Castle":           oot_y if inventory[66154] else oot_x,
     }
 
     # Victory condition
