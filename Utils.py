@@ -307,6 +307,11 @@ def get_default_options() -> OptionsType:
         "ffr_options": {
             "display_msgs": True,
         },
+        "cv64_options": {
+            "rom_file": "Castlevania (USA).z64",
+            "sni": "SNI",
+            "rom_start": True,
+        },
     }
     return options
 
