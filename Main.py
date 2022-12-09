@@ -11,7 +11,7 @@ import zipfile
 from typing import Dict, List, Tuple, Optional, Set
 
 from BaseClasses import Item, MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
-from worlds.alttp.Items import item_name_groups
+import worlds
 from worlds.alttp.Regions import is_main_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
@@ -116,19 +116,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
 
-    for player in world.player_ids:
-        if player in world.get_game_players("A Link to the Past"):
-            # enforce pre-defined local items.
-            if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
-                world.local_items[player].value.add('Triforce Piece')
-
-            # Not possible to place pendants/crystals outside boss prizes yet.
-            world.non_local_items[player].value -= item_name_groups['Pendants']
-            world.non_local_items[player].value -= item_name_groups['Crystals']
-
-        # items can't be both local and non-local, prefer local
-        world.non_local_items[player].value -= world.local_items[player].value
-
     logger.info('Creating World.')
     AutoWorld.call_all(world, "create_regions")
 
@@ -136,6 +123,12 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     AutoWorld.call_all(world, "create_items")
 
     logger.info('Calculating Access Rules.')
+
+    for player in world.player_ids:
+        # items can't be both local and non-local, prefer local
+        world.non_local_items[player].value -= world.local_items[player].value
+        world.non_local_items[player].value -= set(world.local_early_items[player])
+
     if world.players > 1:
         locality_rules(world)
     else:
@@ -217,11 +210,15 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         while itemcount > len(world.itempool):
             items_to_add = []
             for player in group["players"]:
+                if group["link_replacement"]:
+                    item_player = group_id
+                else:
+                    item_player = player
                 if group["replacement_items"][player]:
-                    items_to_add.append(AutoWorld.call_single(world, "create_item", player,
+                    items_to_add.append(AutoWorld.call_single(world, "create_item", item_player,
                                                                 group["replacement_items"][player]))
                 else:
-                    items_to_add.append(AutoWorld.call_single(world, "create_filler", player))
+                    items_to_add.append(AutoWorld.call_single(world, "create_filler", item_player))
             world.random.shuffle(items_to_add)
             world.itempool.extend(items_to_add[:itemcount - len(world.itempool)])
 
@@ -371,6 +368,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                                   for player in world.groups.get(location.item.player, {}).get("players", [])]):
                             precollect_hint(location)
 
+                # custom datapackage
+                datapackage = {}
+                for game_world in world.worlds.values():
+                    if game_world.data_version == 0 and game_world.game not in datapackage:
+                        datapackage[game_world.game] = worlds.network_data_package["games"][game_world.game]
+                        datapackage[game_world.game]["item_name_groups"] = game_world.item_name_groups
+
                 multidata = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
@@ -390,7 +394,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "version": tuple(version_tuple),
                     "tags": ["AP"],
                     "minimum_versions": minimum_versions,
-                    "seed_name": world.seed_name
+                    "seed_name": world.seed_name,
+                    "datapackage": datapackage,
                 }
                 AutoWorld.call_all(world, "modify_multidata", multidata)
 

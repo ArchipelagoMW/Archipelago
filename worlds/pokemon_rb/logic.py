@@ -59,6 +59,15 @@ class PokemonLogic(LogicMixin):
         return len([item for item in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Marsh Badge",
                                       "Soul Badge", "Volcano Badge", "Earth Badge"] if self.has(item, player)]) >= count
 
+    def pokemon_rb_oaks_aide(self, count, player):
+        if self.multiworld.randomize_pokedex[player].value > 0:
+            if not self.has("Pokedex", player):
+                return False
+        else:
+            if not self.has("Oak's Parcel", player):
+                return False
+        return self.pokemon_rb_has_pokemon(count, player)
+
     def pokemon_rb_has_pokemon(self, count, player):
         obtained_pokemon = set()
         for pokemon in poke_data.pokemon_data.keys():

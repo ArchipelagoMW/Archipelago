@@ -20,6 +20,17 @@ if typing.TYPE_CHECKING:
     from .AutoWorld import World
 
 
+class GamesPackage(typing.TypedDict):
+    item_name_to_id: typing.Dict[str, int]
+    location_name_to_id: typing.Dict[str, int]
+    version: int
+
+
+class DataPackage(typing.TypedDict):
+    version: int
+    games: typing.Dict[str, GamesPackage]
+
+
 class WorldSource(typing.NamedTuple):
     path: str  # typically relative path from this module
     is_zip: bool = False
@@ -54,7 +65,7 @@ for world_source in world_sources:
 
 lookup_any_item_id_to_name = {}
 lookup_any_location_id_to_name = {}
-games = {}
+games: typing.Dict[str, GamesPackage] = {}
 
 from .AutoWorld import AutoWorldRegister
 
@@ -69,7 +80,7 @@ for world_name, world in AutoWorldRegister.world_types.items():
     lookup_any_item_id_to_name.update(world.item_id_to_name)
     lookup_any_location_id_to_name.update(world.location_id_to_name)
 
-network_data_package = {
+network_data_package: DataPackage = {
     "version": sum(world.data_version for world in AutoWorldRegister.world_types.values()),
     "games": games,
 }
