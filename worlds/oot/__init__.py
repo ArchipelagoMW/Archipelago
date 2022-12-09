@@ -1149,9 +1149,8 @@ class OOTWorld(World):
     def region_has_shortcuts(self, regionname):
         region = self.get_region(regionname)
         if not region.dungeon:
-            return False
-        parent_region = region.entrances[0].parent_region
-        return parent_region.dungeon.name in self.dungeon_shortcuts
+            region = region.entrances[0].parent_region
+        return region.dungeon.name in self.dungeon_shortcuts
 
     def get_shufflable_entrances(self, type=None, only_primary=False):
         return [entrance for entrance in self.multiworld.get_entrances() if (entrance.player == self.player and
