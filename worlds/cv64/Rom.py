@@ -296,7 +296,8 @@ rom_item_bytes = {
     "Clocktower Key3": 0x29,
 }
 
-warp_scene_offsets = [0xADFD3, 0xADFE3, 0xADFF3, 0xAE003, 0xAE017, 0xAE027, 0xAE03B]
+warp_scene_offsets = [0xADF79, 0xADF87, 0xADF97, 0xADFA7, 0xADFBB, 0xADFCB, 0xADFDF]
+
 
 class LocalRom(object):
 
@@ -349,7 +350,6 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     w5 = str(world.special1s_per_warp[player] * 5).zfill(2)
     w6 = str(world.special1s_per_warp[player] * 6).zfill(2)
     w7 = str(world.special1s_per_warp[player] * 7).zfill(2)
-
 
     # NOP out the CRC BNEs
     rom.write_bytes(0x66C, [0x00, 0x00, 0x00, 0x00])
@@ -419,12 +419,16 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     rom.write_bytes(0xEFE4E, cv64_text_converter("Sent"))
 
     # Change the Stage Select menu options
-    rom.write_bytes(0xADFC0, PatchName.warp_menu_rewrite)
-    rom.write_bytes(0x10E0C8, PatchName.warp_menu_addresses)
-    rom.write_byte(0xADFC3, level_dict[active_level_list[0]].startSceneID)
+    rom.write_bytes(0xADF64, PatchName.warp_menu_rewrite)
+    rom.write_bytes(0x10E0C8, PatchName.warp_pointer_table)
+    rom.write_byte(0xADF67, level_dict[active_level_list[0]].startSceneID)
     for i in range(len(warp_list)):
         rom.write_byte(warp_scene_offsets[i], level_dict[warp_list[i]].midSceneID)
         rom.write_byte(warp_scene_offsets[i] + 4, level_dict[warp_list[i]].midSpawnID)
+
+    # Play the "teleportation" sound effect when teleporting
+    rom.write_bytes(0xAE088, [0x08, 0x00, 0x4F, 0xAB,   # J 0x80013EAC
+                              0x24, 0x04, 0x01, 0x9E])  # ADDIU A0, R0, 0x019E
 
     # Change the Stage Select menu's text to reflect its new purpose
     rom.write_bytes(0xEFAD0, cv64_text_converter(f"Where to...?\t{active_level_list[0]}\t"
@@ -435,6 +439,10 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
                                                  f"`{w5} {warp_list[4]}\t"
                                                  f"`{w6} {warp_list[5]}\t"
                                                  f"`{w7} {warp_list[6]}"))
+
+    # Lizard-man save proofing
+    rom.write_bytes(0xA99AC, [0x08, 0x0F, 0xF0, 0xB8])  # J 0x803FC2E0
+    rom.write_bytes(0xBFC2E0, PatchName.boss_save_stopper)
 
     # Disable or guarantee vampire Vincent's fight
     if world.fight_vincent[player] == "never":
@@ -505,6 +513,25 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
         elif active_level_list[i - 1] != LocationName.villa:
             stage_number += 1
 
+    # Top elevator switch check
+    rom.write_bytes(0x6CF0A0, [0x0C, 0x0F, 0xF0, 0xAF])  # JAL 0x803FC2BC
+    rom.write_bytes(0xBFC2BC, PatchName.elevator_flag_checker)
+
+    # Waterway brick platforms skip
+    if world.skip_waterway_platforms[player]:
+        rom.write_bytes(0x6C7E2C, [0x00, 0x00, 0x00, 0x00])  # NOP
+
+    # Disable time restrictions
+    if world.disable_time_restrictions[player]:
+        rom.write_bytes(0x6C2340, [0x00, 0x00, 0x00, 0x00])  # NOP
+        rom.write_bytes(0x6C257C, [0x10, 0x00, 0x00, 0x23])  # B [forward 0x23]
+        rom.write_bytes(0xAB09C, [0x00, 0x00, 0x00, 0x00])  # NOP
+        rom.write_bytes(0xAB0A4, [0x00, 0x00, 0x00, 0x00])  # NOP
+        rom.write_bytes(0xDC3E0, [0x00, 0x00, 0x00, 0x00])  # NOP
+        rom.write_bytes(0xDC3E8, [0x00, 0x00, 0x00, 0x00])  # NOP
+        rom.write_bytes(0xDC410, [0x00, 0x00, 0x00, 0x00])  # NOP
+        rom.write_bytes(0xDC418, [0x00, 0x00, 0x00, 0x00])  # NOP
+
     # Custom data-loading code
     rom.write_bytes(0x6B5028, [0x08, 0x06, 0x0D, 0x74])  # J 0x801835D0
     rom.write_bytes(0x1067C0, PatchName.custom_code_loader)
@@ -514,9 +541,9 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     rom.write_bytes(0xBFC000, PatchName.remote_item_giver)
 
     # DeathLink counter decrementer code
-    rom.write_bytes(0x1C2A0, [0x08, 0x0F, 0xF0, 0x50])  # J 0x803FC140
-    rom.write_bytes(0x1C340, [0x08, 0x0F, 0xF0, 0x50])  # J 0x803FC140
-    rom.write_bytes(0xBFC140, PatchName.deathlink_counter_decrementer)
+    rom.write_bytes(0x1C2A0, [0x08, 0x0F, 0xF0, 0x52])  # J 0x803FC148
+    rom.write_bytes(0x1C340, [0x08, 0x0F, 0xF0, 0x52])  # J 0x803FC148
+    rom.write_bytes(0xBFC148, PatchName.deathlink_counter_decrementer)
 
     # Death flag un-setter on "Beginning of stage" state overwrite code
     rom.write_bytes(0x1C2B0, [0x08, 0x0F, 0xF0, 0x47])  # J 0x803FC11C
@@ -545,8 +572,9 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     rom.write_bytes(0xE2FDC, [0x08, 0x04, 0xAB, 0x1E])  # J 0x8012AC78
     rom.write_bytes(0xADE68, PatchName.special_goal_checker)
     if world.draculas_condition[player] == 1:
+        rom.write_bytes(0x6C8A54, [0x0C, 0x0F, 0xF0, 0x89])  # JAL 0x803FC224
+        rom.write_bytes(0xBFC224, [PatchName.crystal_special2_giver])
         rom.write_byte(0xADE73, 0x01)
-        # Give a Special2 on activating the crystal
     elif world.draculas_condition[player] == 2:
         rom.write_bytes(0xBBD50, [0x08, 0x0F, 0xF1, 0x8D])  # J	0x803FC634
         rom.write_bytes(0xBFC634, PatchName.boss_speical2_giver)
@@ -596,7 +624,8 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     rom.write_bytes(0xEDADC, [0x00, 0x00, 0x00, 0x0C])   # CT Door 2
     rom.write_bytes(0xEDAE4, [0x00, 0x00, 0x00, 0x0D])   # CT Door 3
 
-    rom.write_bytes(0x10AB2C, [0x80, 0x15, 0xFB, 0xD4])  # Maze Gate check code pointer adjustment
+    rom.write_bytes(0x10AB2C, [0x80, 0x15, 0xFB, 0xD4])  # Maze Gates' check code pointer adjustments
+    rom.write_bytes(0x10AB40, [0x80, 0x15, 0xFB, 0xD4])
     rom.write_bytes(0xE2E14, PatchName.normal_door_hook)
     rom.write_bytes(0xBFC5D0, PatchName.normal_door_code)
     rom.write_bytes(0x6EF298, PatchName.ct_door_hook)

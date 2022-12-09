@@ -4,15 +4,14 @@ from Options import Option, Choice, DefaultOnToggle, Range, Toggle, DeathLink
 
 
 class StageShuffle(Toggle):
-    """Shuffles which stages appear in which stage slots. Villa and Castle Center cannot appear in any character stage
-    slots, only on the main path. Castle Keep will always be at the end of the line. See the FAQ for more details."""
+    """Shuffles which stages appear in which stage slots. Villa and Castle Center will never appear in any character
+    stage slots; they can only be somewhere on the main path. Castle Keep will always be at the end of the line."""
     display_name = "Stage Shuffle"
 
 
 class WarpShuffle(Choice):
-    """Shuffles the order of the stages on the warp menu and thus the order they're unlocked in. Vanilla and Off only
-    make a difference if Stage Shuffle is on; Vanilla giving a warp list closer to the vanilla game's stage arrangement
-    and Off giving a list resembling the seed's shuffled stage arrangement."""
+    """Shuffles the order of the stages on the warp menu and thus the order they're unlocked in. Vanilla gives a warp
+    list resembling the vanilla game's stage order even if the seed's stage order is shuffled."""
     display_name = "Warp Shuffle"
     option_off = 0
     option_on = 1
@@ -21,7 +20,7 @@ class WarpShuffle(Choice):
 
 
 class SubweaponShuffle(DefaultOnToggle):
-    """Shuffles all the sub-weapons within their own pool."""
+    """Shuffles all sub-weapons within their own pool."""
     display_name = "Sub-weapon Shuffle"
 
 
@@ -34,17 +33,16 @@ class Special1sPerWarp(Range):
 
 
 class TotalSpecial1s(Range):
-    """Sets how many Speical1 jewels are in the pool in total. This cannot be less than 'Special1 Jewels Per Warp' times
-    7."""
+    """Sets how many Speical1 jewels are in the pool in total. This cannot be less than Special1s Per Warp x 7."""
     range_start = 1
     range_end = 40
     default = 7
     display_name = "Total Special1 Jewels"
 
 
-class DraculasChamberCondition(Choice):
+class DraculasCondition(Choice):
     """Sets the requirements for opening the door to Dracula's chamber."""
-    display_name = "Dracula's Chamber Condition"
+    display_name = "Dracula's Condition"
     option_none = 0
     option_crystal = 1
     option_bosses = 2
@@ -62,7 +60,7 @@ class Special2sRequired(Range):
 
 
 class TotalSpecial2s(Range):
-    """Sets how many Speical2 jewels are in the pool in total. This cannot be less than 'Special2 Jewels Required'. Only
+    """Sets how many Speical2 jewels are in the pool in total. This cannot be less than 'Special2s Required'. Only
     applies if Dracula's Chamber Condition is set to Special2s."""
     range_start = 1
     range_end = 40
@@ -72,7 +70,7 @@ class TotalSpecial2s(Range):
 
 class BossesRequired(Range):
     """Sets how many bosses need to be defeated to enter Dracula's chamber. Only applies if Dracula's Chamber Condition
-    is set to Bosses."""
+    is set to Bosses. Completely disabling the Renon and/or Vincent fights will decrease this number if above 14."""
     range_start = 1
     range_end = 16
     default = 14
@@ -80,21 +78,21 @@ class BossesRequired(Range):
 
 
 class CarrieLogic(Toggle):
-    """If enabled, the two Underground Waterway checks inside the crawlspace will be included; otherwise, they'll be
-    left vanilla. Enable this ONLY if you already know for certain that you (and everyone else if racing the same seed)
-    will be playing as Carrie! Can be combined with 'Glitch Logic' to include Carrie-only skips."""
+    """Adds the two checks inside Underground Waterway's crawlspace to the pool. If you are not yet certain that you
+    (and everyone else if racing the same seed) will be playing as Carrie, don't enable this. Can be combined with
+    Glitch Logic to include Carrie-only tricks."""
     display_name = "Carrie Logic"
 
 
-class GlitchLogic(Toggle):
-    """If enabled, sequence break glitches will be properly considered in logic (i.e. Left Tower Skip). Can be combined
-    with 'Carrie Logic' to include Carrie-only glitches."""
-    display_name = "Glitch Logic"
+class HardLogic(Toggle):
+    """Properly considers sequence break tricks in logic (i.e. Left Tower skip). Can be combined with Carrie Logic to
+    include Carrie-only skips. See the FAQ for a full list of tricks and glitches that may be logically required."""
+    display_name = "Hard Logic"
 
 
 class LizardGeneratorItems(Toggle):
-    """If enabled, the checks inside the Lizard-man generators in Castle Center will be included; otherwise, they'll be
-    left vanilla. WARNING: picking all of these up can be a very frustrating and time-consuming process!"""
+    """Adds the items inside Castle Center 2F's Lizard-man generators to the pool. Picking up all of these can
+    be a very time-consuming and luck-based process, so they are excluded by default."""
     display_name = "Lizard-man Generator Items"
 
 
@@ -129,13 +127,25 @@ class BadEndingCondition(Choice):
 
 
 class IncreaseItemLimit(DefaultOnToggle):
-    """If enabled, the use item-holding limit will be increased from 10 to 99 of each item."""
+    """Increases the holding limit of usable items from 10 to 100 of each item."""
     display_name = "Increase Item Limit"
 
 
 class RevealInvisibleItems(DefaultOnToggle):
-    """If enabled, all invisible pickups will be made visible."""
+    """Makes all invisible freestanding items visible."""
     display_name = "Reveal Invisible Items"
+
+
+class DisableTimeRestrictions(Toggle):
+    """Disables the time restriction on every event and door that requires the current time to be something specific
+     (sun/moon doors, meeting Rosa, and the Villa fountain). The Villa coffin is not affected by this."""
+    display_name = "Disable Time Requirements"
+
+
+class SkipWaterwayPlatforms(Toggle):
+    """Opens the door to the third switch in Underground Waterway from the start so that the jumping across floating
+    brick platforms won't have to be done."""
+    display_name = "Skip Waterway Platforms"
 
 
 cv64_options: Dict[str, Option] = {
@@ -144,17 +154,19 @@ cv64_options: Dict[str, Option] = {
     "subweapon_shuffle": SubweaponShuffle,
     "special1s_per_warp": Special1sPerWarp,
     "total_special1s": TotalSpecial1s,
-    "draculas_condition": DraculasChamberCondition,
+    "draculas_condition": DraculasCondition,
     "special2s_required": Special2sRequired,
     "total_special2s": TotalSpecial2s,
     "bosses_required": BossesRequired,
     "carrie_logic": CarrieLogic,
-    "glitch_logic": GlitchLogic,
+    "hard_logic": HardLogic,
     "lizard_generator_items": LizardGeneratorItems,
     "fight_renon": FightRenon,
     "fight_vincent": FightVincent,
     "bad_ending_condition": BadEndingCondition,
     "increase_item_limit": IncreaseItemLimit,
     "reveal_invisible_items": RevealInvisibleItems,
+    "disable_time_restrictions": DisableTimeRestrictions,
+    "skip_waterway_platforms": SkipWaterwayPlatforms,
     "death_link": DeathLink,
 }

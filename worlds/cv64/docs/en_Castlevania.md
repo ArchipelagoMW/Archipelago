@@ -1,4 +1,4 @@
-# Castlevania
+# Castlevania 64
 
 ## Where is the settings page?
 
@@ -11,52 +11,77 @@ Items which the player would normally acquire throughout the game have been move
 always able to be completed, but because of the item shuffle the player may need to access certain areas before they
 would in the vanilla game.
 
-Which stage the Villa coffin sends you to depends on whether it is day or night and both bridges at the top of Castle
-Center's elevator are intact regardless of who you are. Because of these changes in game behavior, every stage can be
-accessed with either character.
+## How do I return to previous stages? You cannot do that in vanilla Castlevania 64.
 
-Instant travel to an earlier or later stage is also possible through a menu that can be pulled up when not off the
-ground or in a boss fight by holding Z + R + Start. By finding Special2 jewels, more destinations can be selected on
-this menu. The destinations are randomized per seed, and the first one on the list will always be the player's
+Instant travel to an earlier or later stage is made possible through a menu that can be pulled up while not in a boss
+fight by pressing START while holding Z and R. By finding Special1 jewels, more destinations can be selected on
+this menu. The destinations on this list are randomized per seed and the first one will always be the player's
 starting location.
 
-## What is the goal of Castlevania when randomized?
+## Do I need to do separate playthroughs with each character to check everything?
 
-The goal is to find Castle Keep, enter Dracula's chamber, and kill him to win! Which ending you get does not matter;
-your world's goal will complete regardless.
+Nope! Which character stage slot the Villa coffin sends you to depends on the time of day and both bridges at the top of Castle
+Center's elevator are intact regardless of who you are. Because of these changes in game behavior, every stage can be
+accessed by any character in a single playthrough.
 
-The door into the chamber is locked initially until whichever of the following objectives that was specified on the
-player's YAML is completed:
-- `Activate Crystal`: Activate the big crystal in Castle Center's basement bull room. 
+## What is the goal of Castlevania 64 when randomized?
+
+Make it to Castle Keep, enter Dracula's chamber, and defeat him to complete your goal. Which ending you get does **not**
+matter.
+
+The chamber's entrance door is initially locked until whichever of the following objectives that was specified on the
+player's YAML under `Dracula's Condition` is completed:
+- `Activate Crystal`: Activate the big crystal in Castle Center basement's bull room.
+- `Kill Bosses`: Kill the specified number of bosses with health meters on the player's YAML.
+- `Special2 Hunt`: Collect the amount of Special2 jewels specified on the player's YAML.
+
+If `None` was specified, then there is no objective; the chamber door is unlocked from the start.
 
 ## What items and locations get shuffled?
 
-All main inventory items, jewels, PowerUps, and sub weapons can be shuffled, and all locations in the game which could
-contain any of those items may have their contents changed.
+Inventory items, jewels, moneybags, and PowerUps are all placed in the item pool. Location checks include freestanding
+items, items from one-hit breakables, and items given through text. Items from three-hit breakables and the salesman
+Renon are unchanged. Sub-weapons can optionally be shuffled in their own separate pool.
 
-The infamous Nitro transport challenge is cut out entirely in this randomizer. Instead, two Magical Nitro jars and two
-Mandragora jars are shuffled into the item pool for blowing up the cracked walls in Castle Center. The randomized
-Magical Nitro will **NOT** kill you upon jumping or taking damage, so don't be alarmed when you receive one!
+The infamous Nitro transport sequence has been reworked. Two Magical Nitro jars and two Mandragora jars are placed into
+the item pool for blowing up the cracked walls in Castle Center and a randomized item is placed on both of their
+shelves. The randomized Magical Nitro will **NOT** kill you upon landing or taking damage, so don't panic when you
+receive one! Hazardous Waste Dispoal bins are disabled and the bull room crack will not let you set anything until its
+seal is removed so none of the limited ingredients can be wasted.
 
 ## Which items can be in another player's world?
 
 Any of the items which can be shuffled may also be placed into another player's world. It is possible to choose to limit
 sub weapons to your own world.
 
-## What does another world's item look like in Castlevania?
+## What does another world's item look like in Castlevania 64?
 
-Items belonging to other worlds are represented as large orange jewels if the item is something classified as
-progression or small purple jewels if it is not.
+An item belonging to another world is represented as a Wooden Stake if it is important or a Rose if it is not. These are
+unused sub-weapons in the vanilla game that, in the randomizer, were modified to not change your current sub-weapon.
 
-For color-blind people, pay attention to the size and speed at which the jewel spins
-to tell exactly which one it is:
-- No spin - Either a Special1 or 2, if it's small or large respectively.
-- Slow spin - Ordinary sub weapon jewel or save jewel. Save jewels will always only ever be in their vanilla spots.
-- Fast spin - Item from another world. It will be large if it is possibly progress for someone else or small if it is
-- not.
 
 ## When the player receives an item, what happens?
 
-When the player receives an item, that item's popup will be displayed in-game as when you would normally pick up the
-item.
+When the player receives an item, a textbox containing that item's name will pop up on-screen as when an item would
+normally be picked up.
 
+## What tricks and glitches do I need to know for Hard Logic?
+
+The following tricks always have a chance to be required:
+- Left Tower skip in Castle Wall
+- Maze (Copper Key) skip in Villa
+- Waterfall skip in reverse Underground Waterway
+- Slope Jump to Room of Clocks from Castle Keep
+- Jump to the gated ledge in Tower of Execution
+
+Enabling Carrie Logic will also expect these tricks:
+
+- Sniping dogs through the front gates in Villa
+- Library jump in Castle Center
+
+Note that the downstairs hallway crack will always logically expect two Nitros and two Mandragoras even with these
+settings on due to the possibility of wasting a pair on the upper wall.
+
+## How do I set Nitro/Mandragora?
+
+C-right.

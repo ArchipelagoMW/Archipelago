@@ -658,7 +658,7 @@ def connect_regions(world, player, level_list, warp_list):
     connect(world, player, names, LocationName.cw_rtower, LocationName.castle_wall)
     connect(world, player, names, LocationName.cw_rtower, LocationName.cw_bd_switch)
     connect(world, player, names, LocationName.cw_bd_switch, LocationName.cw_descent)
-    if world.glitch_logic[player]:
+    if world.hard_logic[player]:
         connect(world, player, names, LocationName.cw_bd_switch, get_next_stage_start(LocationName.castle_wall))
     connect(world, player, names, LocationName.cw_descent, LocationName.castle_wall)
     connect(world, player, names, LocationName.castle_wall, LocationName.cw_rtower)
@@ -673,7 +673,7 @@ def connect_regions(world, player, level_list, warp_list):
     connect(world, player, names, LocationName.cw_drac_switch, LocationName.cw_descent)
 
     connect(world, player, names, LocationName.villa, LocationName.villa_fy_fountain)
-    if world.glitch_logic[player] and world.carrie_logic[player]:
+    if world.hard_logic[player] and world.carrie_logic[player]:
         connect(world, player, names, LocationName.villa_fy_fountain, LocationName.villa)
     connect(world, player, names, LocationName.villa_fy_fountain, LocationName.villa_foyer_main)
     connect(world, player, names, LocationName.villa_foyer_main, LocationName.villa_fy_fountain)
@@ -690,7 +690,7 @@ def connect_regions(world, player, level_list, warp_list):
             lambda state: (state.has(ItemName.garden_key, player)))
     connect(world, player, names, LocationName.villa_maze_main, LocationName.villa_maze_front,
             lambda state: (state.has(ItemName.garden_key, player)))
-    if world.glitch_logic[player]:
+    if world.hard_logic[player]:
         connect(world, player, names, LocationName.villa_maze_main, LocationName.villa_maze_crypt)
     else:
         connect(world, player, names, LocationName.villa_maze_main, LocationName.villa_maze_crypt,
@@ -709,7 +709,7 @@ def connect_regions(world, player, level_list, warp_list):
     connect(world, player, names, LocationName.tunnel_end, get_next_stage_start(LocationName.tunnel))
 
     connect(world, player, names, LocationName.underground_waterway, LocationName.uw_end)
-    if world.glitch_logic[player]:
+    if world.hard_logic[player]:
         connect(world, player, names, LocationName.uw_end, LocationName.underground_waterway)
     connect(world, player, names, LocationName.uw_end, get_next_stage_start(LocationName.underground_waterway))
 
@@ -724,7 +724,7 @@ def connect_regions(world, player, level_list, warp_list):
     connect(world, player, names, LocationName.cc_factory, LocationName.cc_elev_bottom)
     connect(world, player, names, LocationName.cc_factory, LocationName.cc_invention_main)
     connect(world, player, names, LocationName.cc_factory, LocationName.cc_lizard_main)
-    if world.glitch_logic[player] and world.carrie_logic[player]:
+    if world.hard_logic[player] and world.carrie_logic[player]:
         connect(world, player, names, LocationName.cc_lizard_main, LocationName.cc_lizard_wall)
     else:
         connect(world, player, names, LocationName.cc_lizard_main, LocationName.cc_lizard_wall,
@@ -734,7 +734,7 @@ def connect_regions(world, player, level_list, warp_list):
     connect(world, player, names, LocationName.cc_lizard_main, LocationName.cc_invention_lizard_exit)
     connect(world, player, names, LocationName.cc_invention_lizard_exit, LocationName.cc_lizard_main)
     connect(world, player, names, LocationName.cc_invention_lizard_exit, LocationName.cc_nitro)
-    if world.glitch_logic[player]:
+    if world.hard_logic[player]:
         connect(world, player, names, LocationName.cc_invention_lizard_exit, LocationName.cc_invention_main)
         connect(world, player, names, LocationName.cc_invention_main, LocationName.cc_invention_lizard_exit)
     connect(world, player, names, LocationName.cc_invention_main, LocationName.cc_nitro)
