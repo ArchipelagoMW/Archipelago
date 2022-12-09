@@ -3,5 +3,5 @@ pony>=0.7.16
 waitress>=2.1.2
 Flask-Caching>=2.0.1
 Flask-Compress>=1.13
-Flask-Limiter>=2.7.0
-bokeh>=3.0.0
+Flask-Limiter>=2.8.1
+bokeh>=3.0.2

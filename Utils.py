@@ -38,7 +38,7 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.6"
+__version__ = "0.3.7"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -268,7 +268,6 @@ def get_default_options() -> OptionsType:
             "log_network": 0
         },
         "generator": {
-            "teams": 1,
             "enemizer_path": os.path.join("EnemizerCLI", "EnemizerCLI.Core"),
             "player_files_path": "Players",
             "players": 0,
@@ -286,6 +285,7 @@ def get_default_options() -> OptionsType:
         },
         "oot_options": {
             "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
+            "rom_start": True
         },
         "dkc3_options": {
             "rom_file": "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc",
@@ -299,25 +299,15 @@ def get_default_options() -> OptionsType:
             # You have to know the path to the emulator core library on the user's computer.
             "rom_start": "retroarch",
         },
-        "zillion_options": {
-            "rom_file": "Zillion (UE) [!].sms",
-            # RetroArch doesn't make it easy to launch a game from the command line.
-            # You have to know the path to the emulator core library on the user's computer.
-            "rom_start": "retroarch",
-        },
         "pokemon_rb_options": {
             "red_rom_file": "Pokemon Red (UE) [S][!].gb",
             "blue_rom_file": "Pokemon Blue (UE) [S][!].gb",
             "rom_start": True
         },
-        "cv64_options": {
-            "rom_file": "Castlevania (USA).z64",
-            "sni": "SNI",
-            "rom_start": True,
+        "ffr_options": {
+            "display_msgs": True,
         },
-
     }
-
     return options
 
 
@@ -689,7 +679,7 @@ def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
 _faf_tasks: "Set[asyncio.Task[None]]" = set()
 
 
-def async_start(co: Coroutine[None, None, None], name: Optional[str] = None) -> None:
+def async_start(co: Coroutine[typing.Any, typing.Any, bool], name: Optional[str] = None) -> None:
     """
     Use this to start a task when you don't keep a reference to it or immediately await it,
     to prevent early garbage collection. "fire-and-forget"

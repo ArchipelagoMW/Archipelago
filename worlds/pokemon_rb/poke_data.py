@@ -1205,8 +1205,6 @@ tm_moves = [
     'Thunder Wave', 'Psywave', 'Explosion', 'Rock Slide', 'Tri Attack', 'Substitute'
 ]
 
-
-
 first_stage_pokemon = [pokemon for pokemon in pokemon_data.keys() if pokemon not in evolves_from]
 legendary_pokemon = ["Articuno", "Zapdos", "Moltres", "Mewtwo", "Mew"]
 
