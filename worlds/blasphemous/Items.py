@@ -520,10 +520,8 @@ group_table: Dict[str, Set[str]] = {
                  "Verdiales of the Forsaken Hamlet",
                  "Romance to the Crimson Mist",
                  "Zambra to the Resplendent Crown",
-                 "Aubade of the Nameless Guardian",
                  "Cantina of the Blue Rose",
-                 "Mirabras of the Return to Port",
-                 "Tirana of the Celestial Bastion"]
+                 "Mirabras of the Return to Port"]
 }
 
 tears_set: Set[str] = [

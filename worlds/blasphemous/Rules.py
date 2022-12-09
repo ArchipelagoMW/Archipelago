@@ -23,7 +23,10 @@ class BlasphemousLogic(LogicMixin):
 
     def _blasphemous_open_holes(self, player):
         return self.has("Mea Culpa Upgrade", player, 1) or \
-            self.has_group("prayer", player, 1)
+            self.has_group("prayer", player, 1) or \
+                ((self.has("Tirana of the Celestial Bastion", player) or \
+                    self.has("Aubade of the Nameless Guardian", player)) and \
+                        self.has("Fervour Upgrade", player, 2))
 
     def _blasphemous_bell(self, player):
         return self.has("Petrified Bell", player)
@@ -115,6 +118,9 @@ class BlasphemousLogic(LogicMixin):
 
     def _blasphemous_taranto(self, player):
         return self.has("Taranto to my Sister", player)
+
+    def _blasphemous_tirana(self, player):
+        return self.has("Tirana of the Celestial Bastion", player)
 
     def _blasphemous_aubade(self, player):
         return self.has("Aubade of the Nameless Guardian", player)
