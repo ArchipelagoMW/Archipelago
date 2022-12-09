@@ -283,7 +283,12 @@ class BlasphemousLogic(LogicMixin):
         return self.has("Ossuary Remains", player, 44)
 
     def _blasphemous_3_wounds(self, player):
-        return self.has_group("wounds", player, 3)
+        return self.has_group("wounds", player, 3) or \
+            (self.has("Blood Perpetuated in Sand", player) and \
+                self.has("Brilliant Heart of Dawn", player) and \
+                    self.has("Mea Culpa Upgrade", player, 2)) or \
+                        (self.has("Blood Perpetuated in Sand", player) and \
+                            self.has("Tirana of the Celestial Bastion", player))
 
     def _blasphemous_1_mask(self, player):
         return self.has_group("masks", player, 1)
@@ -706,8 +711,7 @@ def rules(blasphemousworld):
     set_rule(world.get_location("MaH: Upper east chest", player),
         lambda state: (state.can_reach(world.get_region("Mother of Mothers", player)) and \
             state._blasphemous_root_relic(player)) or \
-                state._blasphemous_dawn_heart(player) or \
-                    state._blasphemous_water_relic(player))
+                state._blasphemous_dawn_heart(player))
     set_rule(world.get_location("MaH: Sierpes' eye", player),
         lambda state: (state.can_reach(world.get_region("Mother of Mothers", player)) and \
             state._blasphemous_root_relic(player)) or \
