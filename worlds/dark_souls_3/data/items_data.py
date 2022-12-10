@@ -128,7 +128,7 @@ weapons_upgrade_10_table = {
     "Pyromancy Flame": 0x00CC77C0 #given/dropped by Cornyx
 }
 
-dlc_weapons_upgrade_10_table = { #NOT USED YET
+dlc_weapons_upgrade_10_table = {
     "Follower Sabre": 0x003EDDC0,
     "Millwood Battle Axe": 0x006D67D0,
     "Follower Javelin": 0x008CD6B0,
@@ -169,7 +169,7 @@ shields_table = {
     "Blessed Red and White Shield": 0x01343FB9
 }
 
-dlc_shields_table = { #NOT USED YET
+dlc_shields_table = {
     "Followers Shield": 0x0135C0E0,
     "Ethereal Oak Shield": 0x01450320,
     "Great Door Twinshields": 0x00F5F8C0,
@@ -240,7 +240,7 @@ goods_3_table = { # Added by Br00ty
     **{"Rusted Gold Coin #"+str(i): 0x400001C9 for i in range(1, 3)},
 }
 
-dlc_goods_table = { #NOT USED YET
+dlc_goods_table = {
     "Soul of Sister Friede": 0x400002E8,
     "Soul of the Demon Prince": 0x400002EA,
     "Soul of Darkeater Midir": 0x400002EB,
@@ -348,7 +348,7 @@ armor_table = {
     "Cornyx's Skirt": 0x11946758
 }
 
-dlc_armor_table = { #NOT USED YET
+dlc_armor_table = {
     "Slave Knight Hood": 0x134EDCE0,
     "Slave Knight Armor": 0x134EE0C8,
     "Slave Knight Gauntlets": 0x134EE4B0,
@@ -479,7 +479,7 @@ spells_table = {
     "Crystal Scroll": 0x40000856
 }
 
-dlc_spells_table = { #NOT USED YET
+dlc_spells_table = {
     "Boulder Heave": 0x40282170,
     "Seething Chaos": 0x402896A0,
     "Old Moonlight": 0x4014FF00,
@@ -563,8 +563,12 @@ key_items_list = {
 }
 
 item_tables = [weapons_upgrade_5_table, weapons_upgrade_10_table, shields_table,
-               armor_table, rings_table, spells_table, misc_items_table, goods_table, goods_2_table, goods_3_table]
+               armor_table, rings_table, spells_table, misc_items_table, goods_table, goods_2_table, goods_3_table,
+               dlc_weapons_upgrade_5_table, dlc_weapons_upgrade_10_table, dlc_shields_table, dlc_goods_table,
+               dlc_armor_table, dlc_spells_table]
 
 item_dictionary = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table,
-                   **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table, **goods_2_table, **goods_3_table}
+                   **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table, **goods_2_table,
+                   **goods_3_table, **dlc_weapons_upgrade_5_table, **dlc_weapons_upgrade_10_table, **dlc_shields_table,
+                   **dlc_goods_table, **dlc_armor_table, **dlc_spells_table}
 

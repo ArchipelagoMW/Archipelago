@@ -5,7 +5,8 @@ from BaseClasses import MultiWorld, Region, Item, RegionType, Entrance, Tutorial
 from .Items import DarkSouls3Item
 from .Locations import DarkSouls3Location
 from .Options import dark_souls_options
-from .data.items_data import weapons_upgrade_5_table, weapons_upgrade_10_table, item_dictionary, key_items_list
+from .data.items_data import weapons_upgrade_5_table, weapons_upgrade_10_table, item_dictionary, key_items_list, \
+    dlc_weapons_upgrade_5_table, dlc_weapons_upgrade_10_table
 from .data.locations_data import location_dictionary, fire_link_shrine_table, \
     high_wall_of_lothric, \
     undead_settlement_table, road_of_sacrifice_table, consumed_king_garden_table, cathedral_of_the_deep_table, \
@@ -179,7 +180,10 @@ class DarkSouls3World(World):
             if name == "Basin of Vows":
                 continue
             # Do not add progressive_items ( containing "#" ) to the itempool if the option is disabled
-            if (not self.multiworld.enable_progressive_locations[self.player].value) and "#" in name:
+            if (not self.multiworld.enable_progressive_locations[self.player]) and "#" in name:
+                continue
+            # Do not add DLC items if the option is disabled
+            if (not self.multiworld.enable_dlc[self.player]) and DarkSouls3Item.is_dlc_item(name):
                 continue
             self.multiworld.itempool += [self.create_item(name)]
 
@@ -267,6 +271,17 @@ class DarkSouls3World(World):
                     value = self.multiworld.random.randint(1, 10)
                     item_dictionary_copy[name] += value
 
+            if self.multiworld.enable_dlc[self.player]:
+                for name in dlc_weapons_upgrade_5_table.keys():
+                    if self.multiworld.random.randint(0, 100) < 33:
+                        value = self.multiworld.random.randint(1, 5)
+                        item_dictionary_copy[name] += value
+
+                for name in dlc_weapons_upgrade_10_table.keys():
+                    if self.multiworld.random.randint(0, 100) < 33:
+                        value = self.multiworld.random.randint(1, 10)
+                        item_dictionary_copy[name] += value
+
         # Create the mandatory lists to generate the player's output file
         items_id = []
         items_address = []
@@ -294,6 +309,7 @@ class DarkSouls3World(World):
                 "death_link": self.multiworld.death_link[self.player].value,
                 "no_spell_requirements": self.multiworld.no_spell_requirements[self.player].value,
                 "no_equip_load": self.multiworld.no_equip_load[self.player].value,
+                "enable_dlc": self.multiworld.enable_dlc[self.player].value
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server

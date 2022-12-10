@@ -1,7 +1,8 @@
 import sys
 
 from BaseClasses import Item
-from worlds.dark_souls_3.data.items_data import item_tables
+from worlds.dark_souls_3.data.items_data import item_tables, dlc_shields_table, dlc_weapons_upgrade_10_table, \
+    dlc_weapons_upgrade_5_table, dlc_goods_table, dlc_spells_table, dlc_armor_table
 
 
 class DarkSouls3Item(Item):
@@ -20,3 +21,14 @@ class DarkSouls3Item(Item):
             output.update({name: id for id, name in enumerate(table, base_id + (table_offset * i))})
 
         return output
+
+    @staticmethod
+    def is_dlc_item(name) -> bool:
+        return name in dlc_shields_table \
+            or name in dlc_weapons_upgrade_10_table \
+            or name in dlc_weapons_upgrade_5_table \
+            or name in dlc_goods_table \
+            or name in dlc_spells_table \
+            or name in dlc_armor_table
+
+
