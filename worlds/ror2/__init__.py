@@ -35,8 +35,9 @@ class RiskOfRainWorld(World):
     item_name_to_id = item_table
     location_name_to_id = item_pickups
 
+    # Change this for PR
     data_version = 4
-    forced_auto_forfeit = True
+    # forced_auto_forfeit = True
     web = RiskOfWeb()
     total_revivals: int
 
@@ -71,12 +72,16 @@ class RiskOfRainWorld(World):
                 "Legendary Item": self.multiworld.legendary_item[self.player].value,
                 "Boss Item": self.multiworld.boss_item[self.player].value,
                 "Lunar Item": self.multiworld.lunar_item[self.player].value,
+                "Void Item": self.multiworld.void_item[self.player].value,
                 "Equipment": self.multiworld.equipment[self.player].value
             }
 
         # remove lunar items from the pool if they're disabled in the yaml unless lunartic is rolled
         if not (self.multiworld.enable_lunar[self.player] or pool_option == ItemWeights.option_lunartic):
             junk_pool.pop("Lunar Item")
+        # remove void items from the pool
+        if not (self.multiworld.enable_dlc[self.player] or pool_option == ItemWeights.option_void):
+            junk_pool.pop("Void Item")
 
         # Generate item pool
         itempool: List = []

@@ -1,5 +1,5 @@
 from typing import Dict
-from Options import Option, DefaultOnToggle, Range, Choice
+from Options import Option, DefaultOnToggle, Range, Choice, Toggle
 
 
 class TotalLocations(Range):
@@ -16,6 +16,10 @@ class TotalRevivals(Range):
     range_start = 0
     range_end = 10
     default = 4
+
+
+class EnableDlc(Toggle):
+    display_name = "Enable DLC"
 
 
 class ItemPickupStep(Range):
@@ -115,6 +119,13 @@ class LunarItem(Range):
     default = 16
 
 
+class VoidItem(Range):
+    display_name = "Void Items"
+    range_start = 0
+    range_end = 100
+    default = 16
+
+
 class Equipment(Range):
     """Weight of equipment items in the item pool. (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Equipment"
@@ -148,6 +159,7 @@ class ItemWeights(Choice):
     option_no_scraps = 6
     option_even = 7
     option_scraps_only = 8
+    option_void = 9
 
 
 # define a dictionary for the weights of the generated item pool.
@@ -161,6 +173,7 @@ ror2_weights: Dict[str, type(Option)] = {
     "legendary_item":       LegendaryItem,
     "boss_item":            BossItem,
     "lunar_item":           LunarItem,
+    "void_item":            VoidItem,
     "equipment":            Equipment
 }
 
@@ -173,5 +186,6 @@ ror2_options: Dict[str, type(Option)] = {
     "enable_lunar":         AllowLunarItems,
     "item_weights":         ItemWeights,
     "item_pool_presets":    ItemPoolPresetToggle,
+    "enable_dlc":           EnableDlc,
     **ror2_weights
 }
