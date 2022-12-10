@@ -7,6 +7,10 @@ import sys
 import sysconfig
 import typing
 import zipfile
+import urllib.request
+import io
+import json
+import threading
 from collections.abc import Iterable
 from hashlib import sha3_512
 from pathlib import Path
@@ -35,6 +39,28 @@ except pkg_resources.ResolutionError:
     subprocess.call([sys.executable, '-m', 'pip', 'install', requirement, '--upgrade'])
     import cx_Freeze
 
+
+def download_SNI():
+    import platform
+    sni_platform_name: str = f"{platform.system()}-{platform.machine()}".lower()
+    with urllib.request.urlopen("https://api.github.com/repos/alttpo/sni/releases/latest") as request:
+        data = json.load(request)
+        files = data["assets"]
+
+        for file in files:
+            if file["browser_download_url"].endswith(f"-{sni_platform_name}.zip"):
+                with urllib.request.urlopen(file["browser_download_url"]) as download:
+                    with zipfile.ZipFile(io.BytesIO(download.read()), "r") as zf:
+                        for member in zf.infolist():
+                            zf.extract(member, path="SNI")
+                print("Downloaded SNI")
+                break
+        else:
+            print(f"No SNI found for system spec {sni_platform_name}")
+
+
+sni_thread = threading.Thread(target=download_SNI, name="SNI Downloader")
+sni_thread.start()
 
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
@@ -430,6 +456,8 @@ def find_libs(*args: str) -> typing.Sequence[typing.Tuple[str, str]]:
                 file = os.path.join(dirname, file)
     return res
 
+
+sni_thread.join()
 
 cx_Freeze.setup(
     name="Archipelago",
