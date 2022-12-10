@@ -61,7 +61,7 @@ basic_pool = {
 starting_weapons = ["Sword", "White Sword", "Magical Sword", "Magical Rod", "Red Candle"]
 guaranteed_shop_items = ["Small Key", "Bomb", "Water of Life (Red)", "Arrow"]
 starting_weapon_locations = ["Starting Sword Cave", "Letter Cave", "Armos Knights"]
-dangerous_weapon_locations = starting_weapon_locations + [
+dangerous_weapon_locations = [
     "Level 1 Compass", "Level 2 Bomb Drop (Keese)", "Level 3 Key Drop (Zols Entrance)", "Level 3 Compass"]
 
 def generate_itempool(tlozworld):
@@ -79,25 +79,25 @@ def get_pool_core(world):
     pool = []
     placed_items = {}
 
-    reserved_store_slots = random.sample(shop_locations[0:9], 4)
-
     # Guaranteed Shop Items
+    reserved_store_slots = random.sample(shop_locations[0:9], 4)
     for location, item in zip(reserved_store_slots, guaranteed_shop_items):
         placed_items[location] = item
 
     # Starting Weapon
-    starting_weapon = random.choice(starting_weapons)
+    starting_weapon = starting_weapons.pop(random.randint(0, len(starting_weapons) - 1))
     if world.multiworld.StartingPosition[world.player] == 0:
         placed_items[starting_weapon_locations[0]] = starting_weapon
-    elif world.multiworld.StartingPosition[world.player] == 1:
+    elif world.multiworld.StartingPosition[world.player] in [1, 2]:
+        if world.multiworld.StartingPosition[world.player] == 2:
+            for location in dangerous_weapon_locations:
+                if world.multiworld.ExpandedPool[world.player] or "Drop" not in location:
+                    starting_weapon_locations.append(location)
         placed_items[random.choice(starting_weapon_locations)] = starting_weapon
-    elif world.multiworld.StartingPosition[world.player] == 2:
-        placed_items[random.choice(dangerous_weapon_locations)] = starting_weapon
     else:
         pool.append(starting_weapon)
     for other_weapons in starting_weapons:
-        if other_weapons != starting_weapon:
-            pool.append(other_weapons)
+        pool.append(other_weapons)
 
     # Triforce Fragments
     fragment = "Triforce Fragment"
@@ -115,6 +115,7 @@ def get_pool_core(world):
         else:
             pool.append(fragment)
 
+    # Finish Pool
     final_pool = basic_pool
     if world.multiworld.ExpandedPool[world.player]:
         final_pool = {

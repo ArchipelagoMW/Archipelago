@@ -5,7 +5,7 @@ from typing import NamedTuple, Union
 
 import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
-from .ItemPool import generate_itempool, starting_weapons
+from .ItemPool import generate_itempool, starting_weapons, dangerous_weapon_locations
 from .Items import item_table, item_prices, item_game_ids
 from .Locations import location_table, level_locations, major_locations, shop_locations, all_level_locations, \
     standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations
@@ -119,6 +119,8 @@ class TLoZWorld(World):
 
         ganon = self.create_location("Ganon", None, self.multiworld.get_region("Level 9", self.player))
         zelda = self.create_location("Zelda", None, self.multiworld.get_region("Level 9", self.player))
+        ganon.show_in_spoiler = False
+        zelda.show_in_spoiler = False
         self.levels[9].locations.append(ganon)
         self.levels[9].locations.append(zelda)
         begin_game = Entrance(self.player, "Begin Game", menu)
@@ -127,8 +129,8 @@ class TLoZWorld(World):
         self.multiworld.regions.append(menu)
         self.multiworld.regions.append(overworld)
 
-    def create_items(self):
-        generate_itempool(self)
+#    def create_items(self):
+
 
     def set_rules(self):
         # Boss events for a nicer spoiler log play through
@@ -139,11 +141,12 @@ class TLoZWorld(World):
             boss_event.place_locked_item(status)
             add_rule(boss_event, lambda state: state.can_reach(boss, "Location", self.player))
 
-        # No dungeons without weapons, no unsafe dungeons
+        # No dungeons without weapons except for the dangerous weapon locations if we're dangerous, no unsafe dungeons
         for i, level in enumerate(self.levels[1:10]):
             for location in level.locations:
-                add_rule(self.multiworld.get_location(location.name, self.player),
-                         lambda state: state.has_group("weapons", self.player))
+                if self.multiworld.StartingPosition[self.player] < 1 or location.name not in dangerous_weapon_locations:
+                    add_rule(self.multiworld.get_location(location.name, self.player),
+                             lambda state: state.has_group("weapons", self.player))
                 if i > 0:  # Don't need an extra heart for Level 1
                     add_rule(self.multiworld.get_location(location.name, self.player),
                              lambda state: state.has("Heart Container", self.player, i) or
@@ -154,11 +157,9 @@ class TLoZWorld(World):
 
                              )
         # No requiring anything in a shop until we can farm for money
-        # Unless someone likes to live dangerously, of course
         for location in shop_locations:
-            if self.multiworld.StartingPosition[self.player] < 2:
-                add_rule(self.multiworld.get_location(location, self.player),
-                         lambda state: state.has_group("weapons", self.player))
+            add_rule(self.multiworld.get_location(location, self.player),
+                     lambda state: state.has_group("weapons", self.player))
 
         # Everything from 4 on up has dark rooms
         for level in self.levels[4:]:
@@ -287,6 +288,7 @@ class TLoZWorld(World):
                  lambda state: ganon in state.locations_checked)
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Rescued Zelda!", self.player)
+        generate_itempool(self)
 
     def apply_base_patch(self, rom_data):
         # Remove Triforce check for recorder, so you can always warp.
