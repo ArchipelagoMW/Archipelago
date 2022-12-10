@@ -402,8 +402,7 @@ dlc_armor_table = {
     "Black Witch Hat": 0x14EAD9A0,
     "Black Witch Garb": 0x14EADD88,
     "Black Witch Wrappings": 0x14EAE170,
-    "Black Witch Trousers": 0x14EAE558,
-    "Chillbite Ring": 0x20005208 #Actually a ring but its the only DLC Ring
+    "Black Witch Trousers": 0x14EAE558
 }
 
 rings_table = {
@@ -453,8 +452,12 @@ rings_table = {
     "Dragonscale Ring": 0x2000515E,
     "Knight Slayer's Ring": 0x20005000,
     "Magic Stoneplate Ring": 0x20004E66,
-    "Havel's Ring": 0x20004E34,
     "Blue Tearstone Ring": 0x20004ED4 #given/dropped by Greirat
+}
+
+dlc_ring_table = {
+    "Havel's Ring": 0x20004E34,
+    "Chillbite Ring": 0x20005208
 }
 
 spells_table = {
