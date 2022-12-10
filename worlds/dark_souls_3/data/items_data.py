@@ -568,10 +568,10 @@ key_items_list = {
 item_tables = [weapons_upgrade_5_table, weapons_upgrade_10_table, shields_table,
                armor_table, rings_table, spells_table, misc_items_table, goods_table, goods_2_table, goods_3_table,
                dlc_weapons_upgrade_5_table, dlc_weapons_upgrade_10_table, dlc_shields_table, dlc_goods_table,
-               dlc_armor_table, dlc_spells_table]
+               dlc_armor_table, dlc_spells_table, dlc_ring_table]
 
 item_dictionary = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table,
                    **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table, **goods_2_table,
                    **goods_3_table, **dlc_weapons_upgrade_5_table, **dlc_weapons_upgrade_10_table, **dlc_shields_table,
-                   **dlc_goods_table, **dlc_armor_table, **dlc_spells_table}
+                   **dlc_goods_table, **dlc_armor_table, **dlc_spells_table, **dlc_ring_table}
 

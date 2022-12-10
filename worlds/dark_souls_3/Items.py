@@ -2,7 +2,7 @@ import sys
 
 from BaseClasses import Item
 from worlds.dark_souls_3.data.items_data import item_tables, dlc_shields_table, dlc_weapons_upgrade_10_table, \
-    dlc_weapons_upgrade_5_table, dlc_goods_table, dlc_spells_table, dlc_armor_table
+    dlc_weapons_upgrade_5_table, dlc_goods_table, dlc_spells_table, dlc_armor_table, dlc_ring_table
 
 
 class DarkSouls3Item(Item):
@@ -29,6 +29,7 @@ class DarkSouls3Item(Item):
             or name in dlc_weapons_upgrade_5_table \
             or name in dlc_goods_table \
             or name in dlc_spells_table \
-            or name in dlc_armor_table
+            or name in dlc_armor_table \
+            or name in dlc_ring_table
 
 
