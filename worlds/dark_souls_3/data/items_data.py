@@ -49,9 +49,10 @@ weapons_upgrade_5_table = {
     "Storm Curved Sword": 0x003E4180,
     "Dragonslayer Swordspear": 0x008BC540,
     "Sage's Crystal Staff": 0x00C8CE40,
-    "Irithyll Rapier": 0x002E8A10,
+    "Irithyll Rapier": 0x002E8A10
+}
 
-    # Added by Br00ty
+dlc_weapons_upgrade_5_table = {
     "Friede's Great Scythe": 0x009B55A0,
     "Rose of Ariandel": 0x00B82C70,
     "Demon's Scar": 0x003F04D0,
@@ -124,8 +125,10 @@ weapons_upgrade_10_table = {
     "Sniper Crossbow": 0x00D83790,
     "Claw": 0x00A7D8C0,
     "Drang Twinspears": 0x00F5AAA0,
+    "Pyromancy Flame": 0x00CC77C0 #given/dropped by Cornyx
+}
 
-    # Added by Br00ty
+dlc_weapons_upgrade_10_table = { #NOT USED YET
     "Follower Sabre": 0x003EDDC0,
     "Millwood Battle Axe": 0x006D67D0,
     "Follower Javelin": 0x008CD6B0,
@@ -138,7 +141,6 @@ weapons_upgrade_10_table = {
     "Lothric War Banner": 0x008D24D0,
     "Splitleaf Greatsword": 0x009B2E90,
     "Murky Longstaff": 0x00CCC5E0,
-    "Pyromancy Flame": 0x00CC77C0 #given/dropped by Cornyx
 }
 
 shields_table = {
@@ -164,9 +166,10 @@ shields_table = {
     "Golden Wing Crest Shield": 0x0143CAA0,
     "Ancient Dragon Greatshield": 0x013599D0,
     "Spirit Tree Crest Shield": 0x014466E0,
-    "Blessed Red and White Shield": 0x01343FB9,
+    "Blessed Red and White Shield": 0x01343FB9
+}
 
-    # Added by Br00ty
+dlc_shields_table = { #NOT USED YET
     "Followers Shield": 0x0135C0E0,
     "Ethereal Oak Shield": 0x01450320,
     "Great Door Twinshields": 0x00F5F8C0,
@@ -206,21 +209,42 @@ goods_table = {
     **{"Soul of a Great Champion #"+str(i): 0x400001A4 for i in range(1, 3)},
     **{"Soul of a Champion #"+str(i): 0x400001A3 for i in range(1, 5)},
     **{"Soul of a Venerable Old Hand #"+str(i): 0x400001A2 for i in range(1, 5)},
-    **{"Soul of a Crestfallen Knight #"+str(i): 0x40000199 for i in range(1, 11)},
-
-
+    **{"Soul of a Crestfallen Knight #"+str(i): 0x40000199 for i in range(1, 11)}
 }
 
-goods_table_2 = {
-    # Added by Br00ty
+goods_2_table = { # Added by Br00ty
+    "HWL: Gold Pine Resin": 0x4000014B,
+    "US: Charcoal Pine Resin": 0x4000014A,
+    "FK: Gold Pine Bundle": 0x40000155,
+    "CC: Carthus Rouge": 0x4000014F,
+    "ID: Pale Pine Resin": 0x40000150,
+    **{"Ember #"+str(i): 0x400001F4 for i in range(1, 46)},
+    **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(11, 16)},
+    **{"Large Titanite Shard #"+str(i): 0x400003E9 for i in range(11, 16)},
+    **{"Titanite Scale #" + str(i): 0x400003FC for i in range(1, 27)}
+}
+
+goods_3_table = { # Added by Br00ty
+    **{"Fading Soul #" + str(i): 0x40000190 for i in range(1, 4)},
+    **{"Ring of Sacrifice #"+str(i): 0x20004EF2 for i in range(1, 5)},
+    **{"Homeward Bone #"+str(i): 0x4000015E for i in range(1, 17)},
+    **{"Green Blossom #"+str(i): 0x40000104 for i in range(1, 7)},
+    **{"Human Pine Resin #"+str(i): 0x4000014E for i in range(1, 3)},
+    **{"Charcoal Pine Bundle #"+str(i): 0x40000154 for i in range(1, 3)},
+    **{"Rotten Pine Resin #"+str(i): 0x40000157 for i in range(1, 3)},
+    **{"Pale Tongue #"+str(i): 0x40000175 for i in range(1, 3)},
+    **{"Alluring Skull #"+str(i): 0x40000126 for i in range(1, 3)},
+    **{"Undead Hunter Charm #"+str(i): 0x40000128 for i in range(1, 3)},
+    **{"Duel Charm #"+str(i): 0x40000130 for i in range(1, 3)},
+    **{"Rusted Coin #"+str(i): 0x400001C7 for i in range(1, 3)},
+    **{"Rusted Gold Coin #"+str(i): 0x400001C9 for i in range(1, 3)},
+}
+
+dlc_goods_table = { #NOT USED YET
     "Soul of Sister Friede": 0x400002E8,
     "Soul of the Demon Prince": 0x400002EA,
     "Soul of Darkeater Midir": 0x400002EB,
-    "Soul of Slave Knight Gael": 0x400002E9,
-    **{"Ember #"+str(i): 0x400001F4 for i in range(1, 7)},
-    **{"Titanite Scale #"+str(i): 0x400003FC for i in range(1, 15)},
-    **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(11, 16)},
-    **{"Large Titanite Shard #"+str(i): 0x400003E9 for i in range(11, 16)}
+    "Soul of Slave Knight Gael": 0x400002E9
 }
 
 armor_table = {
@@ -324,7 +348,7 @@ armor_table = {
     "Cornyx's Skirt": 0x11946758
 }
 
-armor_2_table = { #DLC ARMORS HERE
+dlc_armor_table = { #NOT USED YET
     "Slave Knight Hood": 0x134EDCE0,
     "Slave Knight Armor": 0x134EE0C8,
     "Slave Knight Gauntlets": 0x134EE4B0,
@@ -378,7 +402,8 @@ armor_2_table = { #DLC ARMORS HERE
     "Black Witch Hat": 0x14EAD9A0,
     "Black Witch Garb": 0x14EADD88,
     "Black Witch Wrappings": 0x14EAE170,
-    "Black Witch Trousers": 0x14EAE558
+    "Black Witch Trousers": 0x14EAE558,
+    "Chillbite Ring": 0x20005208 #Actually a ring but its the only DLC Ring
 }
 
 rings_table = {
@@ -428,10 +453,7 @@ rings_table = {
     "Dragonscale Ring": 0x2000515E,
     "Knight Slayer's Ring": 0x20005000,
     "Magic Stoneplate Ring": 0x20004E66,
-
-    # Added by Br00ty
     "Havel's Ring": 0x20004E34,
-    "Chillbite Ring": 0x20005208,
     "Blue Tearstone Ring": 0x20004ED4 #given/dropped by Greirat
 }
 
@@ -454,9 +476,10 @@ spells_table = {
     "Divine Pillars of Light": 0x4038C340,
     "Great Magic Barrier": 0x40365628,
     "Great Magic Shield": 0x40144F38,
-    "Crystal Scroll": 0x40000856,
+    "Crystal Scroll": 0x40000856
+}
 
-    # Added by Br00ty
+dlc_spells_table = { #NOT USED YET
     "Boulder Heave": 0x40282170,
     "Seething Chaos": 0x402896A0,
     "Old Moonlight": 0x4014FF00,
@@ -540,7 +563,8 @@ key_items_list = {
 }
 
 item_tables = [weapons_upgrade_5_table, weapons_upgrade_10_table, shields_table,
-               armor_table, rings_table, spells_table, misc_items_table, goods_table, armor_2_table, goods_table_2]
+               armor_table, rings_table, spells_table, misc_items_table, goods_table, goods_2_table, goods_3_table]
 
 item_dictionary = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table,
-                   **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table, **armor_2_table, **goods_table_2}
+                   **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table, **goods_2_table, **goods_3_table}
+
