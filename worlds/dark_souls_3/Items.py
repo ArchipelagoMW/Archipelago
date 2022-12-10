@@ -1,3 +1,5 @@
+import sys
+
 from BaseClasses import Item
 from worlds.dark_souls_3.data.items_data import item_tables
 
@@ -12,6 +14,9 @@ class DarkSouls3Item(Item):
 
         output = {}
         for i, table in enumerate(item_tables):
+            if table.__len__() > table_offset:
+                print("An item table contains {} entries, that is more than {} entries ({})".format(table.__len__(), table_offset, i))
+                sys.exit(1)
             output.update({name: id for id, name in enumerate(table, base_id + (table_offset * i))})
 
         return output

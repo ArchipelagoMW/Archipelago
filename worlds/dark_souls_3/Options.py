@@ -41,6 +41,11 @@ class LateBasinOfVowsOption(Toggle):
     display_name = "Late Basin of Vows"
 
 
+class EnableProgressiveLocationsOption(Toggle):
+    """Randomize upgrade materials such as the titanite shards, the estus shards and the consumables"""
+    display_name = "Randomize materials, Estus shards and consumables"
+
+
 dark_souls_options: typing.Dict[str, type(Option)] = {
     "auto_equip": AutoEquipOption,
     "lock_equip": LockEquipOption,
@@ -50,5 +55,6 @@ dark_souls_options: typing.Dict[str, type(Option)] = {
     "no_spell_requirements": NoSpellRequirementsOption,
     "no_equip_load": NoEquipLoadOption,
     "death_link": DeathLink,
+    "enable_progressive_locations": EnableProgressiveLocationsOption,
 }
 

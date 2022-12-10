@@ -1,8 +1,7 @@
 # world/dark_souls_3/__init__.py
-import json
-import os
 from typing import Dict
 
+from BaseClasses import MultiWorld, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
 from .Items import DarkSouls3Item
 from .Locations import DarkSouls3Location
 from .Options import dark_souls_options
@@ -12,9 +11,9 @@ from .data.locations_data import location_dictionary, fire_link_shrine_table, \
     undead_settlement_table, road_of_sacrifice_table, consumed_king_garden_table, cathedral_of_the_deep_table, \
     farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table, \
     irithyll_dungeon_table, profaned_capital_table, anor_londo_table, lothric_castle_table, grand_archives_table, \
-    untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table, progressive_locations
+    untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table, progressive_locations, \
+    progressive_locations_2, progressive_locations_3
 from ..AutoWorld import World, WebWorld
-from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
 from ..generic.Rules import set_rule, add_item_rule
 
 
@@ -56,7 +55,7 @@ class DarkSouls3World(World):
     web = DarkSouls3Web()
     data_version = 5
     base_id = 100000
-    required_client_version = (0, 3, 6)
+    required_client_version = (0, 3, 7)
     item_name_to_id = DarkSouls3Item.get_name_to_id()
     location_name_to_id = DarkSouls3Location.get_name_to_id()
 
@@ -80,7 +79,11 @@ class DarkSouls3World(World):
 
     def create_regions(self):
 
-        menu_region = self.create_region("Menu", progressive_locations)
+        if self.multiworld.enable_progressive_locations[self.player].value:
+            menu_region = self.create_region("Menu", {**progressive_locations, **progressive_locations_2,
+                                                      **progressive_locations_3})
+        else:
+            menu_region = self.create_region("Menu", None)
 
         # Create all Vanilla regions of Dark Souls III
         firelink_shrine_region = self.create_region("Firelink Shrine", fire_link_shrine_table)
@@ -115,7 +118,8 @@ class DarkSouls3World(World):
         firelink_shrine_region.exits.append(Entrance(self.player, "Goto Bell Tower",
                                                      firelink_shrine_region))
         self.multiworld.get_entrance("Goto High Wall of Lothric", self.player).connect(high_wall_of_lothric_region)
-        self.multiworld.get_entrance("Goto Kiln Of The First Flame", self.player).connect(kiln_of_the_first_flame_region)
+        self.multiworld.get_entrance("Goto Kiln Of The First Flame", self.player).connect(
+            kiln_of_the_first_flame_region)
         self.multiworld.get_entrance("Goto Bell Tower", self.player).connect(firelink_shrine_bell_tower_region)
         high_wall_of_lothric_region.exits.append(Entrance(self.player, "Goto Undead Settlement",
                                                           high_wall_of_lothric_region))
@@ -136,7 +140,7 @@ class DarkSouls3World(World):
                                                           catacombs_of_carthus_region))
         catacombs_of_carthus_region.exits.append(Entrance(self.player, "Goto Smouldering Lake",
                                                           catacombs_of_carthus_region))
-        self.multiworld.get_entrance("Goto Irithyll of the boreal", self.player).\
+        self.multiworld.get_entrance("Goto Irithyll of the boreal", self.player). \
             connect(irithyll_of_the_boreal_valley_region)
         self.multiworld.get_entrance("Goto Smouldering Lake", self.player).connect(smouldering_lake_region)
         irithyll_of_the_boreal_valley_region.exits.append(Entrance(self.player, "Goto Irithyll dungeon",
@@ -172,8 +176,12 @@ class DarkSouls3World(World):
     def create_items(self):
         for name, address in self.item_name_to_id.items():
             # Specific items will be included in the item pool under certain conditions. See generate_basic
-            if name != "Basin of Vows":
-                self.multiworld.itempool += [self.create_item(name)]
+            if name == "Basin of Vows":
+                continue
+            # Do not add progressive_items ( containing "#" ) to the itempool if the option is disabled
+            if (not self.multiworld.enable_progressive_locations[self.player].value) and "#" in name:
+                continue
+            self.multiworld.itempool += [self.create_item(name)]
 
     def generate_early(self):
         pass
@@ -197,9 +205,9 @@ class DarkSouls3World(World):
                  lambda state: state.has("Grand Archives Key", self.player))
         set_rule(self.multiworld.get_entrance("Goto Kiln Of The First Flame", self.player),
                  lambda state: state.has("Cinders of a Lord - Abyss Watcher", self.player) and
-                 state.has("Cinders of a Lord - Yhorm the Giant", self.player) and
-                 state.has("Cinders of a Lord - Aldrich", self.player) and
-                 state.has("Cinders of a Lord - Lothric Prince", self.player))
+                               state.has("Cinders of a Lord - Yhorm the Giant", self.player) and
+                               state.has("Cinders of a Lord - Aldrich", self.player) and
+                               state.has("Cinders of a Lord - Lothric Prince", self.player))
 
         # Define the access rules to some specific locations
         set_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
