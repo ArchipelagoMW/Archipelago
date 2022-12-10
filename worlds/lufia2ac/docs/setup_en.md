@@ -142,18 +142,3 @@ The client will attempt to reconnect to the new server address, and should momen
 When the client shows both SNES Device and Server as connected, you're ready to begin playing. Congratulations on
 successfully joining a multiworld game! You can execute various commands in your client. For more information regarding
 these commands you can use `/help` for local client commands and `!help` for server commands.
-
-## Hosting a MultiWorld game
-
-The recommended way to host a game is to use our [hosting service](/generate). The process is relatively simple:
-
-1. Collect config files from your players.
-2. Create a zip file containing your players' config files.
-3. Upload that zip file to the website linked above.
-4. Wait a moment while the seed is generated.
-5. When the seed is generated, you will be redirected to a "Seed Info" page.
-6. Click "Create New Room". This will take you to the server page. Provide the link to this page to your players, so
-   they may download their patch files from there.
-7. Note that a link to a MultiWorld Tracker is at the top of the room page. The tracker shows the progress of all
-   players in the game. Any observers may also be given the link to this page.
-8. Once all players have joined, you may begin playing.
