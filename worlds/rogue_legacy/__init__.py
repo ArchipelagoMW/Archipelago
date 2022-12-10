@@ -1,8 +1,8 @@
 from typing import List
 
 from BaseClasses import Tutorial
-from worlds.AutoWorld import World, WebWorld
-from .Items import RLItem, RLItemData, event_item_table, item_table, get_items_by_category
+from worlds.AutoWorld import WebWorld, World
+from .Items import RLItem, RLItemData, event_item_table, get_items_by_category, item_table
 from .Locations import RLLocation, location_table
 from .Options import rl_options
 from .Regions import create_regions
@@ -77,7 +77,6 @@ class RLWorld(World):
                     continue
                 if self.get_setting("architect") == "early":
                     self.multiworld.local_early_items[self.player]["Architect"] = 1
-                    continue
 
             # Blacksmith and Enchantress
             if name == "Blacksmith" or name == "Enchantress":
@@ -87,7 +86,6 @@ class RLWorld(World):
                 if self.get_setting("vendors") == "early":
                     self.multiworld.local_early_items[self.player]["Blacksmith"] = 1
                     self.multiworld.local_early_items[self.player]["Enchantress"] = 1
-                    continue
 
             # Haggling
             if name == "Haggling" and self.get_setting("disable_charon"):
