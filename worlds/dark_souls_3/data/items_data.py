@@ -242,7 +242,7 @@ goods_3_table = { # Added by Br00ty
     **{"Undead Hunter Charm #"+str(i): 0x40000128 for i in range(1, 3)},
     **{"Duel Charm #"+str(i): 0x40000130 for i in range(1, 3)},
     **{"Rusted Coin #"+str(i): 0x400001C7 for i in range(1, 3)},
-    **{"Rusted Gold Coin #"+str(i): 0x400001C9 for i in range(1, 4)},
+    **{"Rusted Gold Coin #"+str(i): 0x400001C9 for i in range(1, 3)},
 }
 
 dlc_goods_table = { #NOT USED YET
