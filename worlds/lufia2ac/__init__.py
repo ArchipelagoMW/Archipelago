@@ -125,7 +125,7 @@ class L2ACWorld(World):
         if self.master_hp == MasterHp.special_range_names["scale"]:
             self.master_hp = MasterHp.scale(self.final_floor)
         if self.shuffle_party_members:
-            self.starting_party.value = 0x00000001
+            self.starting_party.value = StartingParty.default
 
     def create_regions(self) -> None:
         menu = Region("Menu", RegionType.Generic, "Menu", self.player, self.multiworld)

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import random
-from itertools import combinations, permutations
+from itertools import chain, combinations
 from typing import Any, cast, Dict, List, Optional, Set, Tuple
 
-from Options import AssembleOptions, Choice, DeathLink, Option, Range, SpecialRange, Toggle
+from Options import AssembleOptions, Choice, DeathLink, Option, Range, SpecialRange, TextChoice, Toggle
 
 
 class AssembleCustomizableChoices(AssembleOptions):
@@ -13,16 +13,11 @@ class AssembleCustomizableChoices(AssembleOptions):
 
         if "extra_options" in attrs:
             cls.name_lookup.update(enumerate(attrs["extra_options"], start=max(cls.name_lookup) + 1))
-        if "hidden_options" in attrs:
-            for o in attrs["hidden_options"]:
-                if o in cls.options and cls.options[o] in cls.name_lookup:
-                    del cls.name_lookup[cls.options[o]]
         return cast(AssembleCustomizableChoices, cls)
 
 
 class RandomGroupsChoice(Choice, metaclass=AssembleCustomizableChoices):
     extra_options: Optional[Set[str]]
-    hidden_options: Optional[Set[str]]
     random_groups: Dict[str, List[str]]
 
     @classmethod
@@ -36,7 +31,7 @@ class RandomGroupsChoice(Choice, metaclass=AssembleCustomizableChoices):
     def from_text(cls, text: str) -> Choice:
         key: str = text.lower()
         if key == "random":
-            text = random.choice(list(cls.options))
+            text = random.choice([o for o in cls.options if o not in cls.random_groups])
         elif key in cls.random_groups:
             text = random.choice(cls.random_groups[key])
         return super().from_text(text)
@@ -463,52 +458,60 @@ class StartingCapsule(Choice):
     default = option_jelze
 
 
-class StartingParty(RandomGroupsChoice):
+class StartingParty(RandomGroupsChoice, TextChoice):
     """The party you start the game with.
 
     Only has an effect if shuffle_party_members is set to false.
     Supported values:
     Can be set to any valid combination of up to 4 party member initials, e.g.:
-    m — start with Maxim
-    dgma — start with Dekar, Guy, Maxim, and Arty
-    mstl — start with Maxim, Selan, Tia, and Lexis
+    M — start with Maxim
+    DGMA — start with Dekar, Guy, Maxim, and Arty
+    MSTL — start with Maxim, Selan, Tia, and Lexis
     random-2p — a random 2-person party
     random-3p — a random 3-person party
     random-4p — a random 4-person party
-    Default value: m
+    Default value: M
     """
 
     display_name = "Starting party"
-    vars().update({"option_" + "".join(" msgatdl"[i] for i in p): int.from_bytes(bytes(p), "big")
-                   for n in range(1, 5) for p in permutations(range(1, 8), n) if 1 in p})
-    default = 0x00000001
+    default = "M"
 
     random_groups = {
-        "random-2p": ["".join(p) for p in combinations("msgatdl", 2) if "m" in p],
-        "random-3p": ["".join(p) for p in combinations("msgatdl", 3) if "m" in p],
-        "random-4p": ["".join(p) for p in combinations("msgatdl", 4) if "m" in p],
+        "random-2p": ["M" + "".join(p) for p in combinations("ADGLST", 1)],
+        "random-3p": ["M" + "".join(p) for p in combinations("ADGLST", 2)],
+        "random-4p": ["M" + "".join(p) for p in combinations("ADGLST", 3)],
     }
-    extra_options = frozenset(random_groups)
-    hidden_options = {"".join(p) for n in range(1, 5) for p in permutations("msgatdl", n)} - \
-                     {"".join(p) for n in range(1, 5) for p in combinations("msgatdl", n)}
+    vars().update({f"option_{party}": party for party in (*random_groups, "M", *chain(*random_groups.values()))})
+    _valid_sorted_parties: List[List[str]] = [sorted(party) for party in ("M", *chain(*random_groups.values()))]
+    _members_to_bytes: bytes = bytes.maketrans(b"MSGATDL", bytes(range(7)))
+
+    def verify(self, *args, **kwargs) -> None:
+        if str(self.value).lower() in self.random_groups:
+            return
+        if sorted(str(self.value).upper()) in self._valid_sorted_parties:
+            return
+        raise ValueError(f"Could not find option '{self.value}' for '{self.__class__.__name__}', known options are:\n"
+                         f"{', '.join(self.random_groups)}, {', '.join(('M', *chain(*self.random_groups.values())))} "
+                         "as well as all permutations of these.")
 
     @staticmethod
     def _flip(i: int) -> int:
-        return {5: 6, 6: 5}.get(i, i)
-
-    def _byte_length(self) -> int:
-        return (self.value.bit_length() + 7) // 8
+        return {4: 5, 5: 4}.get(i, i)
 
     @property
     def event_script(self) -> bytes:
-        party: bytes = self.value.to_bytes(self._byte_length(), "big")
-        return bytes((*(b for i in party if i != 1 for b in (0x2B, i - 1, 0x2E, i + 0x64, 0x1A, self._flip(i))),
-                      0x1E, 0x0B, len(party) - 1, 0x1C, 0x86, 0x03, *(0x00,) * (6 * (4 - len(party)))))
+        return bytes((*(b for i in bytes(self) if i != 0 for b in (0x2B, i, 0x2E, i + 0x65, 0x1A, self._flip(i) + 1)),
+                      0x1E, 0x0B, len(self) - 1, 0x1C, 0x86, 0x03, *(0x00,) * (6 * (4 - len(self)))))
 
     @property
     def roster(self) -> bytes:
-        party: bytes = self.value.to_bytes(self._byte_length(), "big")
-        return bytes((len(party), *((i - 1) for i in party), *(0xFF,) * (4 - len(party))))
+        return bytes((len(self), *bytes(self), *(0xFF,) * (4 - len(self))))
+
+    def __bytes__(self) -> bytes:
+        return str(self.value).upper().encode("ASCII").translate(self._members_to_bytes)
+
+    def __len__(self) -> int:
+        return len(str(self.value))
 
 
 l2ac_option_definitions: Dict[str, type(Option)] = {
