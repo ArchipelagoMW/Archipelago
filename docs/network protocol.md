@@ -128,7 +128,7 @@ Sent to clients when the connection handshake is successfully completed.
 | players           | list\[[NetworkPlayer](#NetworkPlayer)\]  | List denoting other players in the multiworld, whether connected or not.                                                                            |
 | missing_locations | list\[int\]                              | Contains ids of remaining locations that need to be checked. Useful for trackers, among other things.                                               |
 | checked_locations | list\[int\]                              | Contains ids of all locations that have been checked. Useful for trackers, among other things. Location ids are in the range of ± 2<sup>53</sup>-1. |
-| slot_data         | dict                                     | Contains a json object for slot related data, differs per game. Empty if not required. Not present if slot_data in [Connect](#Connect) is false.    |
+| slot_data         | dict\[str, any\]                         | Contains a json object for slot related data, differs per game. Empty if not required. Not present if slot_data in [Connect](#Connect) is false.    |
 | slot_info         | dict\[int, [NetworkSlot](#NetworkSlot)\] | maps each slot to a [NetworkSlot](#NetworkSlot) information                                                                                         |
 
 ### ReceivedItems
@@ -367,16 +367,18 @@ Used to request a single or multiple values from the server's data storage, see 
 | keys | list\[str\] | Keys to retrieve the values for. |
 
 Additional arguments sent in this package will also be added to the [Retrieved](#Retrieved) package it triggers.
-Some special keys exist with specific return data:
 
-| Name                       | Type                  | Notes                                        |
-|----------------------------|-----------------------|----------------------------------------------|
-| \_read_hints_{team}_{slot} | list\[[Hint](#Hint)\] | All Hints belonging to the requested Player. |
-| \_read_slot_data_{slot}    | any                   | slot_data belonging to the requested slot.   |
+Some special keys exist with specific return data, all of them have the prefix `_read_`, so `hints_{team}_{slot}` is `_read_hints_{team}_{slot}`.
 
+| Name                          | Type                     | Notes                                             |
+|-------------------------------|--------------------------|---------------------------------------------------|
+| hints_{team}_{slot}           | list\[[Hint](#Hint)\]    | All Hints belonging to the requested Player.      |
+| slot_data_{slot}              | dict\[str, any\]         | slot_data belonging to the requested slot.        |
+| item_name_groups_{game_name}  | dict\[str, list\[str\]\] | item_name_groups belonging to the requested game. |
 
 ### Set
 Used to write data to the server's data storage, that data can then be shared across worlds or just saved for later. Values for keys in the data storage can be retrieved with a [Get](#Get) package, or monitored with a [SetNotify](#SetNotify) package.
+Keys that start with `_read_` cannot be set.
 #### Arguments
 | Name       | Type                                                  | Notes                                                                                                                  |
 |------------|-------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
@@ -644,7 +646,6 @@ Tags are represented as a list of strings, the common Client tags follow:
 | Name       | Notes                                                                                                                                                                                                              |
 |------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | AP         | Signifies that this client is a reference client, its usefulness is mostly in debugging to compare client behaviours more easily.                                                                                  |
-| IgnoreGame | Deprecated. See Tracker and TextOnly. Tells the server to ignore the "game" attribute in the [Connect](#Connect) packet.                                                                                           |
 | DeathLink  | Client participates in the DeathLink mechanic, therefore will send and receive DeathLink bounce packets                                                                                                            |
 | Tracker    | Tells the server that this client will not send locations and is actually a Tracker. When specified and used with empty or null `game` in [Connect](#connect), game and game's version validation will be skipped. |
 | TextOnly   | Tells the server that this client will not send locations and is intended for chat. When specified and used with empty or null `game` in [Connect](#connect), game and game's version validation will be skipped.  |

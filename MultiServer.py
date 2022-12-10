@@ -124,6 +124,7 @@ class Context:
     stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
 
     item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
+    item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
     location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     forced_auto_forfeits: typing.Dict[str, bool]
@@ -202,7 +203,6 @@ class Context:
         self.non_hintable_names = collections.defaultdict(frozenset)
 
         self._load_game_data()
-        self._init_game_data()
 
     # Datapackage retrieval
     def _load_game_data(self):
@@ -411,6 +411,16 @@ class Context:
         if use_embedded_server_options:
             server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
+
+        # custom datapackage
+        for game_name, data in decoded_obj.get("datapackage", {}).items():
+            logging.info(f"Loading custom datapackage for game {game_name}")
+            self.gamespackage[game_name] = data
+            self.item_name_groups[game_name] = data["item_name_groups"]
+            del data["item_name_groups"]  # remove from datapackage, but keep in self.item_name_groups
+        self._init_game_data()
+        for game_name, data in self.item_name_groups.items():
+            self.read_data[f"item_name_groups_{game_name}"] = lambda lgame=game_name: self.item_name_groups[lgame]
 
     # saving
 
@@ -1541,8 +1551,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             team, slot = ctx.connect_names[args['name']]
             game = ctx.games[slot]
-            ignore_game = "IgnoreGame" in args["tags"] or (  # IgnoreGame is deprecated. TODO: remove after 0.3.3?
-                          ("TextOnly" in args["tags"] or "Tracker" in args["tags"]) and not args.get("game"))
+            ignore_game = ("TextOnly" in args["tags"] or "Tracker" in args["tags"]) and not args.get("game")
             if not ignore_game and args['game'] != game:
                 errors.add('InvalidGame')
             minver = min_client_version if ignore_game else ctx.minimum_client_versions[slot]
