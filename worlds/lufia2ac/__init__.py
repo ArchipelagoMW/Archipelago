@@ -2,11 +2,11 @@ import base64
 import itertools
 import os
 from enum import IntFlag
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, ClassVar, Dict, List, Optional, Set, Tuple
 
 from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, RegionType, Tutorial
 from Main import __version__
-from Options import Option
+from Options import AssembleOptions
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_rule, set_rule
 from .Client import L2ACSNIClient  # noqa: F401
@@ -39,18 +39,18 @@ class L2ACWorld(World):
     random items and find new companions on the way to face the Royal
     Jelly in the end. Can you beat it?
     """
-    game: str = "Lufia II Ancient Cave"
-    web = L2ACWeb()
+    game: ClassVar[str] = "Lufia II Ancient Cave"
+    web: ClassVar[WebWorld] = L2ACWeb()
 
-    option_definitions: Dict[str, Option[Any]] = l2ac_option_definitions
-    item_name_to_id: Dict[str, int] = l2ac_item_name_to_id
-    location_name_to_id: Dict[str, int] = l2ac_location_name_to_id
-    item_name_groups: Dict[str, Set[str]] = {
+    option_definitions: ClassVar[Dict[str, AssembleOptions]] = l2ac_option_definitions
+    item_name_to_id: ClassVar[Dict[str, int]] = l2ac_item_name_to_id
+    location_name_to_id: ClassVar[Dict[str, int]] = l2ac_location_name_to_id
+    item_name_groups: ClassVar[Dict[str, Set[str]]] = {
         "Blue chest items": {name for name, data in l2ac_item_table.items() if data.type is ItemType.BLUE_CHEST},
         "Capsule monsters": {name for name, data in l2ac_item_table.items() if data.type is ItemType.CAPSULE_MONSTER},
         "Party members": {name for name, data in l2ac_item_table.items() if data.type is ItemType.PARTY_MEMBER},
     }
-    data_version: int = 1
+    data_version: ClassVar[int] = 1
     required_client_version: Tuple[int, int, int] = (0, 3, 6)
 
     # L2ACWorld specific properties
