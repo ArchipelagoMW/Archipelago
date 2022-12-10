@@ -251,7 +251,10 @@ class World(metaclass=AutoWorldRegister):
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
         """Fill in the `slot_data` field in the `Connected` network package.
         This is a way the generator can give custom data to the client.
-        The client will receive this as JSON in the `Connected` response."""
+        The client will receive this as JSON in the `Connected` response.
+
+        The generation does not wait for `generate_output` to complete before calling this.
+        `threading.Event` can be used if you need to wait for something from `generate_output`."""
         return {}
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
