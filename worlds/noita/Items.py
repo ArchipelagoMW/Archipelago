@@ -1,50 +1,71 @@
-from typing import Dict
-from BaseClasses import Item
+import itertools
+from typing import Dict, NamedTuple, Optional, List, Set
+from BaseClasses import Item, ItemClassification, MultiWorld
+
+
+class ItemData(NamedTuple):
+    code: Optional[int]
+    group: str
+    classification: ItemClassification = ItemClassification.progression
+    required_num: int = 0
+
 
 class NoitaItem(Item):
     game: str = "Noita"
 
-# 110000 - 110013
-item_table: Dict[str, int] = {
-    "Bad":              110000,
-    "Heart":            110001,
-    "Refresh":          110002,
-    "Potion":           110003,
-    "Gold (10)":        110004,
-    "Gold (50)":        110005,
-    "Gold (200)":       110006,
-    "Gold (1000)":      110007,
-    "Wand (Tier 1)":    110008,
-    "Wand (Tier 2)":    110009,
-    "Wand (Tier 3)":    110010,
-    "Wand (Tier 4)":    110011,
-    "Wand (Tier 5)":    110012,
-    "Wand (Tier 6)":    110013,
-    "Perk (Fire Immunity)": 110014,
-    "Perk (Toxic Immunity)":    110015,
-    "Perk (Explosion Immunity)":    110016,
-    "Perk (Melee Immunity)":    110017,
-    "Perk (Electricity Immunity)":  110018,
-    "Perk (Tinker With Wands Everywhere)":  110019,
-    "Perk (All-Seeing Eye)":    110020,
-    "Perk (Extra Life)":    110021
+
+def create_item(player: int, name: str) -> Item:
+    item_data = item_table[name]
+    return NoitaItem(name, item_data.classification, item_data.code, player)
+
+
+def create_all_items(world: MultiWorld, player: int) -> None:
+    pool_option = world.bad_effects[player].value
+    total_locations = world.total_locations[player].value
+
+    # Generate fixed item pool
+    itempool: List = []
+    for item_name, count in required_items.items():
+        itempool += [item_name] * count
+
+    # Add non-fixed junk to the pool to meet quota
+    junk_pool = item_pool_weights[pool_option]
+    itempool += world.random.choices(
+        population=list(junk_pool.keys()),
+        weights=list(junk_pool.values()),
+        k=total_locations - len(itempool)
+    )
+
+    # Convert itempool into real items
+    world.itempool += [create_item(player, name) for name in itempool]
+
+
+# 110000 - 110021
+item_table: Dict[str, ItemData] = {
+    "Bad":                                  ItemData(110000, "Traps", ItemClassification.trap),
+    "Heart":                                ItemData(110001, "Pickups", ItemClassification.useful),
+    "Refresh":                              ItemData(110002, "Pickups", ItemClassification.filler),
+    "Potion":                               ItemData(110003, "Items", ItemClassification.filler),
+    "Gold (10)":                            ItemData(110004, "Gold", ItemClassification.filler),
+    "Gold (50)":                            ItemData(110005, "Gold", ItemClassification.filler),
+    "Gold (200)":                           ItemData(110006, "Gold", ItemClassification.filler),
+    "Gold (1000)":                          ItemData(110007, "Gold", ItemClassification.filler),
+    "Wand (Tier 1)":                        ItemData(110008, "Wands", ItemClassification.useful),
+    "Wand (Tier 2)":                        ItemData(110009, "Wands", ItemClassification.useful),
+    "Wand (Tier 3)":                        ItemData(110010, "Wands", ItemClassification.useful),
+    "Wand (Tier 4)":                        ItemData(110011, "Wands", ItemClassification.useful),
+    "Wand (Tier 5)":                        ItemData(110012, "Wands", ItemClassification.useful),
+    "Wand (Tier 6)":                        ItemData(110013, "Wands", ItemClassification.useful),
+    "Perk (Fire Immunity)":                 ItemData(110014, "Perks", ItemClassification.progression, 1),
+    "Perk (Toxic Immunity)":                ItemData(110015, "Perks", ItemClassification.progression, 1),
+    "Perk (Explosion Immunity)":            ItemData(110016, "Perks", ItemClassification.progression, 1),
+    "Perk (Melee Immunity)":                ItemData(110017, "Perks", ItemClassification.progression, 1),
+    "Perk (Electricity Immunity)":          ItemData(110018, "Perks", ItemClassification.progression, 1),
+    "Perk (Tinker With Wands Everywhere)":  ItemData(110019, "Perks", ItemClassification.progression, 1),
+    "Perk (All-Seeing Eye)":                ItemData(110020, "Perks", ItemClassification.progression, 1),
+    "Perk (Extra Life)":                    ItemData(110021, "Repeatable Perks", ItemClassification.useful),
 }
 
-required_items: Dict[str, int] = {
-    "Perk (Fire Immunity)":                 1,
-    "Perk (Toxic Immunity)":                1,
-    "Perk (Explosion Immunity)":            1,
-    "Perk (Melee Immunity)":                1,
-    "Perk (Electricity Immunity)":          1,
-    "Perk (Tinker With Wands Everywhere)":  1,
-    "Perk (All-Seeing Eye)":                1
-}
-
-#optional_pool_items: Dict[str, int] ={
-#    "Heart": 1,
-#the 1 is a placeholder until I figure out how to make it controlled by the yaml
-#probably going to have a specific number of hearts in the pool? idk yet, might leave it as random
-#}
 
 default_weights: Dict[str, int] = {
     "Wand (Tier 1)":    10,
@@ -81,4 +102,27 @@ no_bad_weights: Dict[str, int] = {
 item_pool_weights: Dict[int, Dict[str, int]] = {
     0:      no_bad_weights,
     1:      default_weights
+}
+
+
+# These helper functions make the comprehensions below more readable
+def get_item_group(item_name: str) -> str:
+    return item_table[item_name].group
+
+
+def item_is_filler(item_name: str) -> bool:
+    return item_table[item_name].classification == ItemClassification.filler
+
+
+filler_items: List[str] = list(filter(item_is_filler, item_table.keys()))
+item_name_to_id: Dict[str, int] = {name: data.code for name, data in item_table.items()}
+
+item_name_groups: Dict[set, Set[str]] = {
+    group: set(item_names)
+    for group, item_names in itertools.groupby(item_table, get_item_group)
+}
+
+required_items: Dict[str, int] = {
+    name: data.required_num
+    for name, data in item_table.items() if data.required_num > 0
 }
