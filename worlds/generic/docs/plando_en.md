@@ -56,6 +56,9 @@ list of specific locations both in their own game or in another player's game.
     * Multi Placement uses a plando block to place multiple items in multiple locations until either list is exhausted.
         * `items` defines the items to use, each with a number for the amount. Using `true` instead of a number uses however many of that item are in your item pool.
         * `locations` is a list of possible locations those items can be placed in.
+            * Some special location group names can be specified:
+                * `early_locations` will add all sphere 1 locations (locations logically reachable only with your starting inventory)
+                * `non_early_locations` will add all locations beyond sphere 1 (locations that require finding at least one item before they become logically reachable)
         * Using the multi placement method, placements are picked randomly.
 
     * `count` can be used to set the maximum number of items placed from the block. The default is 1 if using `item` and False if using `items`

@@ -157,6 +157,8 @@ class ALTTPWorld(World):
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
+        if world.is_race:
+            import xxtea
 
     def generate_early(self):
         if self.use_enemizer():
@@ -192,6 +194,14 @@ class ALTTPWorld(World):
                     self.dungeon_specific_item_names |= self.item_name_groups[option.item_name_group]
 
         world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
+
+        # enforce pre-defined local items.
+        if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
+            world.local_items[player].value.add('Triforce Piece')
+
+        # Not possible to place crystals outside boss prizes yet (might as well make it consistent with pendants too).
+        world.non_local_items[player].value -= item_name_groups['Pendants']
+        world.non_local_items[player].value -= item_name_groups['Crystals']
 
     def create_regions(self):
         player = self.player
