@@ -42,21 +42,32 @@ except pkg_resources.ResolutionError:
 
 def download_SNI():
     import platform
-    sni_platform_name: str = f"{platform.system()}-{platform.machine()}".lower()
+    platform_name = platform.system().lower()
+    machine_name = platform.machine().lower()
+
     with urllib.request.urlopen("https://api.github.com/repos/alttpo/sni/releases/latest") as request:
         data = json.load(request)
-        files = data["assets"]
+    files = data["assets"]
 
-        for file in files:
-            if file["browser_download_url"].endswith(f"-{sni_platform_name}.zip"):
-                with urllib.request.urlopen(file["browser_download_url"]) as download:
-                    with zipfile.ZipFile(io.BytesIO(download.read()), "r") as zf:
-                        for member in zf.infolist():
-                            zf.extract(member, path="SNI")
-                print("Downloaded SNI")
+    source_url = None
+
+    for file in files:
+        download_url = file["browser_download_url"]
+        if platform_name in download_url and machine_name in download_url:
+            # prefer "many" builds
+            if "many" in download_url:
+                source_url = download_url
                 break
-        else:
-            print(f"No SNI found for system spec {sni_platform_name}")
+            source_url = download_url
+
+    if source_url:
+        with urllib.request.urlopen(source_url) as download:
+            with zipfile.ZipFile(io.BytesIO(download.read()), "r") as zf:
+                for member in zf.infolist():
+                    zf.extract(member, path="SNI")
+        print(f"Downloaded SNI from {source_url}")
+    else:
+        print(f"No SNI found for system spec {platform_name} {machine_name}")
 
 
 sni_thread = threading.Thread(target=download_SNI, name="SNI Downloader")
