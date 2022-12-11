@@ -588,8 +588,8 @@ def get_base_rom_bytes(game_version: str, hash: str="") -> bytes:
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if hash != basemd5.hexdigest():
-            raise Exception('Supplied Base Rom does not match known MD5 for US(1.0) release. '
-                            'Get the correct game and version, then dump it')
+            raise Exception(f"Supplied Base Rom does not match known MD5 for Pokémon {game_version.title()} UE "
+                            "release. Get the correct game and version, then dump it")
     return base_rom_bytes
 
 
