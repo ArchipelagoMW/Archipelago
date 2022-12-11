@@ -80,7 +80,9 @@ class WitnessWorld(World):
                 raise Exception("This Witness world doesn't have any progression items. Please turn on Symbol Shuffle,"
                                 " Door Shuffle or Laser Shuffle.")
 
-        self.player_logic = WitnessPlayerLogic(self.multiworld, self.player)
+        disabled_locations = self.multiworld.exclude_locations[self.player].value
+
+        self.player_logic = WitnessPlayerLogic(self.multiworld, self.player, disabled_locations)
 
         self.locat = WitnessPlayerLocations(self.multiworld, self.player, self.player_logic)
         self.items = WitnessPlayerItems(self.locat, self.multiworld, self.player, self.player_logic)

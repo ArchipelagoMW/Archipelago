@@ -16,6 +16,7 @@ When the world has parsed its options, a second function is called to finalize t
 """
 
 import copy
+from typing import Set
 from logging import warning
 
 from BaseClasses import MultiWorld
@@ -285,6 +286,22 @@ class WitnessPlayerLogic:
         if is_option_enabled(world, player, "shuffle_lasers"):
             adjustment_linesets_in_order.append(get_laser_shuffle())
 
+        if get_option_value(world, player, "shuffle_EPs") == 2:
+            yaml_disabled_eps = []
+
+            for yaml_disabled_location in self.YAML_DISABLED_LOCATIONS:
+                if yaml_disabled_location not in StaticWitnessLogic.CHECKS_BY_NAME:
+                    continue
+
+                loc_obj = StaticWitnessLogic.CHECKS_BY_NAME[yaml_disabled_location]
+
+                if loc_obj["panelType"] != "EP":
+                    continue
+
+                yaml_disabled_eps.append(loc_obj["checkHex"])
+
+            adjustment_linesets_in_order.append(["Precompleted Locations:"] + yaml_disabled_eps)
+
         for adjustment_lineset in adjustment_linesets_in_order:
             current_adjustment_type = None
 
@@ -381,7 +398,9 @@ class WitnessPlayerLogic:
             self.DEPENDENT_REQUIREMENTS_BY_HEX[door_hex]["panels"] = frozenset({frozenset()})
             self.REQUIREMENTS_BY_HEX[door_hex] = self.reduce_req_within_region(door_hex)
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, world: MultiWorld, player: int, disabled_locations: Set[str]):
+        self.YAML_DISABLED_LOCATIONS = disabled_locations
+
         self.EVENT_PANELS_FROM_PANELS = set()
         self.EVENT_PANELS_FROM_REGIONS = set()
 
