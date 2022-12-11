@@ -42,6 +42,7 @@ high_wall_of_lothric = {
     "HWL: Soul of the Dancer": 0x400002CA,
     "HWL: Way of Blue Covenant": 0x2000274C,
     "HWL: Greirat's Ashes": 0x4000083F,
+    "HWL: Blue Tearstone Ring": 0x20004ED4 #given/dropped by Greirat
 }
 
 undead_settlement_table = {
@@ -91,7 +92,11 @@ undead_settlement_table = {
     "US: Warrior of Sunlight Covenant": 0x20002738,
     "US: Blessed Red and White Shield": 0x01343FB9,
     "US: Irina's Ashes": 0x40000843,
-    "US: Cornyx's Ashes": 0x40000841
+    "US: Cornyx's Ashes": 0x40000841,
+    "US: Cornyx's Wrap": 0x11946370,
+    "US: Cornyx's Garb": 0x11945F88,
+    "US: Cornyx's Skirt": 0x11946758,
+    "US: Pyromancy Flame": 0x00CC77C0 #given/dropped by Cornyx
 }
 
 road_of_sacrifice_table = {
@@ -456,15 +461,43 @@ progressive_locations = {
     **{"Soul of a Deserted Corpse #" + str(i): 0x40000191 for i in range(1, 6)},
     **{"Large Soul of a Deserted Corpse #" + str(i): 0x40000192 for i in range(1, 6)},
     **{"Soul of an Unknown Traveler #" + str(i): 0x40000193 for i in range(1, 6)},
-    **{"Large Soul of an Unknown Traveler #" + str(i): 0x40000194 for i in range(1, 6)},
+    **{"Large Soul of an Unknown Traveler #" + str(i): 0x40000194 for i in range(1, 6)}
 }
+
+progressive_locations_2 = {
+    ##Added by Br00ty
+    "HWL: Gold Pine Resin": 0x4000014B,
+    "US: Charcoal Pine Resin": 0x4000014A,
+    "FK: Gold Pine Bundle": 0x40000155,
+    "CC: Carthus Rouge": 0x4000014F,
+    "ID: Pale Pine Resin": 0x40000150,
+    **{"Titanite Scale #" + str(i): 0x400003FC for i in range(1, 27)},
+    **{"Fading Soul #" + str(i): 0x40000190 for i in range(1, 4)},
+    **{"Ring of Sacrifice #"+str(i): 0x20004EF2 for i in range(1, 5)},
+    **{"Homeward Bone #"+str(i): 0x4000015E for i in range(1, 17)},
+    **{"Ember #"+str(i): 0x400001F4 for i in range(1, 46)},
+}
+
+progressive_locations_3 = {
+    **{"Green Blossom #" + str(i): 0x40000104 for i in range(1, 7)},
+    **{"Human Pine Resin #" + str(i): 0x4000014E for i in range(1, 3)},
+    **{"Charcoal Pine Bundle #" + str(i): 0x40000154 for i in range(1, 3)},
+    **{"Rotten Pine Resin #" + str(i): 0x40000157 for i in range(1, 3)},
+    **{"Pale Tongue #" + str(i): 0x40000175 for i in range(1, 3)},
+    **{"Alluring Skull #" + str(i): 0x40000126 for i in range(1, 3)},
+    **{"Undead Hunter Charm #" + str(i): 0x40000128 for i in range(1, 3)},
+    **{"Duel Charm #" + str(i): 0x40000130 for i in range(1, 3)},
+    **{"Rusted Coin #" + str(i): 0x400001C7 for i in range(1, 3)},
+    **{"Rusted Gold Coin #" + str(i): 0x400001C9 for i in range(1, 4)},
+}
+
 
 location_tables = [fire_link_shrine_table, firelink_shrine_bell_tower_table, high_wall_of_lothric, undead_settlement_table, road_of_sacrifice_table,
                              cathedral_of_the_deep_table, farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table,
                              irithyll_dungeon_table, profaned_capital_table, anor_londo_table, lothric_castle_table, consumed_king_garden_table,
-                             grand_archives_table, untended_graves_table, archdragon_peak_table, progressive_locations]
+                             grand_archives_table, untended_graves_table, archdragon_peak_table, progressive_locations, progressive_locations_2, progressive_locations_3]
 
 location_dictionary = {**fire_link_shrine_table, **firelink_shrine_bell_tower_table, **high_wall_of_lothric, **undead_settlement_table, **road_of_sacrifice_table,
                        **cathedral_of_the_deep_table, **farron_keep_table, **catacombs_of_carthus_table, **smouldering_lake_table, **irithyll_of_the_boreal_valley_table,
                        **irithyll_dungeon_table, **profaned_capital_table, **anor_londo_table, **lothric_castle_table, **consumed_king_garden_table,
-                       **grand_archives_table, **untended_graves_table, **archdragon_peak_table, **progressive_locations}
+                       **grand_archives_table, **untended_graves_table, **archdragon_peak_table, **progressive_locations, **progressive_locations_2, **progressive_locations_3}
