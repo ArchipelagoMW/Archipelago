@@ -114,7 +114,6 @@ class WitnessWorld(World):
 
             # elif because logic should only change if the item is not already in the pool
             elif precol_item.name in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
-                print("Test")
                 self.player_logic.pre_opened_door(precol_item.name)
 
         # Put good item on first check if there are any of the designated "good items" in the pool
