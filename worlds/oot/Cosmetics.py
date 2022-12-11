@@ -39,6 +39,13 @@ def patch_dpad(rom, ootworld, symbols):
         rom.write_byte(symbols['CFG_DISPLAY_DPAD'], 0x00)
 
 
+def patch_dpad_info(rom, ootworld, symbols):
+    # Display D-Pad HUD in pause menu for either dungeon info or equips
+    if ootworld.dpad_dungeon_menu:
+        rom.write_byte(symbols['CFG_DPAD_DUNGEON_INFO_ENABLE'], 0x01)
+    else:
+        rom.write_byte(symbols['CFG_DPAD_DUNGEON_INFO_ENABLE'], 0x00)
+
 
 def patch_music(rom, ootworld, symbols):
     # patch music
@@ -648,6 +655,7 @@ legacy_cosmetic_data_headers = [
     0x03480810,
 ]
 
+patch_sets = {}
 global_patch_sets = [
     patch_targeting,
     patch_music,
@@ -656,113 +664,106 @@ global_patch_sets = [
     patch_sword_trails,
     patch_gauntlet_colors,
     patch_shield_frame_colors,
+    # patch_voices,
     patch_sfx,
     patch_instrument,
 ]
 
-patch_sets = {
-    0x1F04FA62: {
-        "patches": [
-            patch_dpad,
-            patch_sword_trails,
-        ],
-        "symbols": {
-            "CFG_DISPLAY_DPAD": 0x0004,
-            "CFG_RAINBOW_SWORD_INNER_ENABLED": 0x0005,
-            "CFG_RAINBOW_SWORD_OUTER_ENABLED": 0x0006,
-        },
+# 3.14.1
+patch_sets[0x1F04FA62] = {
+    "patches": [
+        patch_dpad,
+        patch_sword_trails,
+    ],
+    "symbols": {
+        "CFG_DISPLAY_DPAD": 0x0004,
+        "CFG_RAINBOW_SWORD_INNER_ENABLED": 0x0005,
+        "CFG_RAINBOW_SWORD_OUTER_ENABLED": 0x0006,
     },
-    0x1F05D3F9: {
-        "patches": [
-            patch_dpad,
-            patch_sword_trails,
-        ],
-        "symbols": {
-            "CFG_DISPLAY_DPAD": 0x0004,
-            "CFG_RAINBOW_SWORD_INNER_ENABLED": 0x0005,
-            "CFG_RAINBOW_SWORD_OUTER_ENABLED": 0x0006,
-        },
-    },
-    0x1F0693FB: {
-        "patches": [
-            patch_dpad,
-            patch_sword_trails,
-            patch_heart_colors,
-            patch_magic_colors,
-        ],
-        "symbols": {
-            "CFG_MAGIC_COLOR": 0x0004,
-            "CFG_HEART_COLOR": 0x000A,
-            "CFG_DISPLAY_DPAD": 0x0010,
-            "CFG_RAINBOW_SWORD_INNER_ENABLED": 0x0011,
-            "CFG_RAINBOW_SWORD_OUTER_ENABLED": 0x0012,
-        }
-    },
-    0x1F073FC9: {
-        "patches": [
-            patch_dpad,
-            patch_sword_trails,
-            patch_heart_colors,
-            patch_magic_colors,
-            patch_button_colors,
-        ],
-        "symbols": {
-            "CFG_MAGIC_COLOR": 0x0004,
-            "CFG_HEART_COLOR": 0x000A,
-            "CFG_A_BUTTON_COLOR": 0x0010,
-            "CFG_B_BUTTON_COLOR": 0x0016,
-            "CFG_C_BUTTON_COLOR": 0x001C,
-            "CFG_TEXT_CURSOR_COLOR": 0x0022,
-            "CFG_SHOP_CURSOR_COLOR": 0x0028,
-            "CFG_A_NOTE_COLOR": 0x002E,
-            "CFG_C_NOTE_COLOR": 0x0034,
-            "CFG_DISPLAY_DPAD": 0x003A,
-            "CFG_RAINBOW_SWORD_INNER_ENABLED": 0x003B,
-            "CFG_RAINBOW_SWORD_OUTER_ENABLED": 0x003C,
-        }
-    },
-    0x1F073FD8: {
-        "patches": [
-            patch_dpad,
-            patch_navi_colors,
-            patch_sword_trails,
-            patch_heart_colors,
-            patch_magic_colors,
-            patch_button_colors,
-            patch_boomerang_trails,
-            patch_bombchu_trails,
-        ],
-        "symbols": {
-            "CFG_MAGIC_COLOR": 0x0004,
-            "CFG_HEART_COLOR": 0x000A,
-            "CFG_A_BUTTON_COLOR": 0x0010,
-            "CFG_B_BUTTON_COLOR": 0x0016,
-            "CFG_C_BUTTON_COLOR": 0x001C,
-            "CFG_TEXT_CURSOR_COLOR": 0x0022,
-            "CFG_SHOP_CURSOR_COLOR": 0x0028,
-            "CFG_A_NOTE_COLOR": 0x002E,
-            "CFG_C_NOTE_COLOR": 0x0034,
-            "CFG_BOOM_TRAIL_INNER_COLOR": 0x003A,
-            "CFG_BOOM_TRAIL_OUTER_COLOR": 0x003D,
-            "CFG_BOMBCHU_TRAIL_INNER_COLOR": 0x0040,
-            "CFG_BOMBCHU_TRAIL_OUTER_COLOR": 0x0043,
-            "CFG_DISPLAY_DPAD": 0x0046,
-            "CFG_RAINBOW_SWORD_INNER_ENABLED": 0x0047,
-            "CFG_RAINBOW_SWORD_OUTER_ENABLED": 0x0048,
-            "CFG_RAINBOW_BOOM_TRAIL_INNER_ENABLED": 0x0049,
-            "CFG_RAINBOW_BOOM_TRAIL_OUTER_ENABLED": 0x004A,
-            "CFG_RAINBOW_BOMBCHU_TRAIL_INNER_ENABLED": 0x004B,
-            "CFG_RAINBOW_BOMBCHU_TRAIL_OUTER_ENABLED": 0x004C,
-            "CFG_RAINBOW_NAVI_IDLE_INNER_ENABLED": 0x004D,
-            "CFG_RAINBOW_NAVI_IDLE_OUTER_ENABLED": 0x004E,
-            "CFG_RAINBOW_NAVI_ENEMY_INNER_ENABLED": 0x004F,
-            "CFG_RAINBOW_NAVI_ENEMY_OUTER_ENABLED": 0x0050,
-            "CFG_RAINBOW_NAVI_NPC_INNER_ENABLED": 0x0051,
-            "CFG_RAINBOW_NAVI_NPC_OUTER_ENABLED": 0x0052,
-            "CFG_RAINBOW_NAVI_PROP_INNER_ENABLED": 0x0053,
-            "CFG_RAINBOW_NAVI_PROP_OUTER_ENABLED": 0x0054,
-        }
-    },
+}
+
+# 3.14.11
+patch_sets[0x1F05D3F9] = {
+    "patches": patch_sets[0x1F04FA62]["patches"] + [],
+    "symbols": {**patch_sets[0x1F04FA62]["symbols"]},
+}
+
+# 4.5.7
+patch_sets[0x1F0693FB] = {
+    "patches": patch_sets[0x1F05D3F9]["patches"] + [
+        patch_heart_colors,
+        patch_magic_colors,
+    ],
+    "symbols": {
+        "CFG_MAGIC_COLOR": 0x0004,
+        "CFG_HEART_COLOR": 0x000A,
+        "CFG_DISPLAY_DPAD": 0x0010,
+        "CFG_RAINBOW_SWORD_INNER_ENABLED": 0x0011,
+        "CFG_RAINBOW_SWORD_OUTER_ENABLED": 0x0012,
+    }
+}
+
+# 5.2.6
+patch_sets[0x1F073FC9] = {
+    "patches": patch_sets[0x1F0693FB]["patches"] + [
+        patch_button_colors,
+    ],
+    "symbols": {
+        "CFG_MAGIC_COLOR": 0x0004,
+        "CFG_HEART_COLOR": 0x000A,
+        "CFG_A_BUTTON_COLOR": 0x0010,
+        "CFG_B_BUTTON_COLOR": 0x0016,
+        "CFG_C_BUTTON_COLOR": 0x001C,
+        "CFG_TEXT_CURSOR_COLOR": 0x0022,
+        "CFG_SHOP_CURSOR_COLOR": 0x0028,
+        "CFG_A_NOTE_COLOR": 0x002E,
+        "CFG_C_NOTE_COLOR": 0x0034,
+        "CFG_DISPLAY_DPAD": 0x003A,
+        "CFG_RAINBOW_SWORD_INNER_ENABLED": 0x003B,
+        "CFG_RAINBOW_SWORD_OUTER_ENABLED": 0x003C,
+    }
+}
+
+# 5.2.76
+patch_sets[0x1F073FD8] = {
+    "patches": patch_sets[0x1F073FC9]["patches"] + [
+        patch_navi_colors,
+        patch_boomerang_trails,
+        patch_bombchu_trails,
+    ],
+    "symbols": {
+        **patch_sets[0x1F073FC9]["symbols"],
+        "CFG_BOOM_TRAIL_INNER_COLOR": 0x003A,
+        "CFG_BOOM_TRAIL_OUTER_COLOR": 0x003D,
+        "CFG_BOMBCHU_TRAIL_INNER_COLOR": 0x0040,
+        "CFG_BOMBCHU_TRAIL_OUTER_COLOR": 0x0043,
+        "CFG_DISPLAY_DPAD": 0x0046,
+        "CFG_RAINBOW_SWORD_INNER_ENABLED": 0x0047,
+        "CFG_RAINBOW_SWORD_OUTER_ENABLED": 0x0048,
+        "CFG_RAINBOW_BOOM_TRAIL_INNER_ENABLED": 0x0049,
+        "CFG_RAINBOW_BOOM_TRAIL_OUTER_ENABLED": 0x004A,
+        "CFG_RAINBOW_BOMBCHU_TRAIL_INNER_ENABLED": 0x004B,
+        "CFG_RAINBOW_BOMBCHU_TRAIL_OUTER_ENABLED": 0x004C,
+        "CFG_RAINBOW_NAVI_IDLE_INNER_ENABLED": 0x004D,
+        "CFG_RAINBOW_NAVI_IDLE_OUTER_ENABLED": 0x004E,
+        "CFG_RAINBOW_NAVI_ENEMY_INNER_ENABLED": 0x004F,
+        "CFG_RAINBOW_NAVI_ENEMY_OUTER_ENABLED": 0x0050,
+        "CFG_RAINBOW_NAVI_NPC_INNER_ENABLED": 0x0051,
+        "CFG_RAINBOW_NAVI_NPC_OUTER_ENABLED": 0x0052,
+        "CFG_RAINBOW_NAVI_PROP_INNER_ENABLED": 0x0053,
+        "CFG_RAINBOW_NAVI_PROP_OUTER_ENABLED": 0x0054,
+    }
+}
+
+# 6.2.218
+patch_sets[0x1F073FD9] = {
+    "patches": patch_sets[0x1F073FD8]["patches"] + [
+        patch_dpad_info,
+    ],
+    "symbols": {
+        **patch_sets[0x1F073FD8]["symbols"],
+        "CFG_DPAD_DUNGEON_INFO_ENABLE": 0x0055,
+    }
 }
 
 

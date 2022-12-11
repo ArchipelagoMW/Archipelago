@@ -447,70 +447,8 @@ def generate_output(self, output_directory: str):
             if badge not in written_badges:
                 write_bytes(data, encode_text("Nothing"), rom_addresses["Badge_Text_" + badge.replace(" ", "_")])
 
-    if self.multiworld.randomize_type_chart[self.player] == "vanilla":
-        chart = deepcopy(poke_data.type_chart)
-    elif self.multiworld.randomize_type_chart[self.player] == "randomize":
-        types = poke_data.type_names.values()
-        matchups = []
-        for type1 in types:
-            for type2 in types:
-                matchups.append([type1, type2])
-        self.multiworld.random.shuffle(matchups)
-        immunities = self.multiworld.immunity_matchups[self.player].value
-        super_effectives = self.multiworld.super_effective_matchups[self.player].value
-        not_very_effectives = self.multiworld.not_very_effective_matchups[self.player].value
-        normals = self.multiworld.normal_matchups[self.player].value
-        while super_effectives + not_very_effectives + normals < 225 - immunities:
-            super_effectives += self.multiworld.super_effective_matchups[self.player].value
-            not_very_effectives += self.multiworld.not_very_effective_matchups[self.player].value
-            normals += self.multiworld.normal_matchups[self.player].value
-        if super_effectives + not_very_effectives + normals > 225 - immunities:
-            total = super_effectives + not_very_effectives + normals
-            excess = total - (225 - immunities)
-            subtract_amounts = (int((excess / (super_effectives + not_very_effectives + normals)) * super_effectives),
-                        int((excess / (super_effectives + not_very_effectives + normals)) * not_very_effectives),
-                        int((excess / (super_effectives + not_very_effectives + normals)) * normals))
-            super_effectives -= subtract_amounts[0]
-            not_very_effectives -= subtract_amounts[1]
-            normals -= subtract_amounts[2]
-            while super_effectives + not_very_effectives + normals > 225 - immunities:
-                r = self.multiworld.random.randint(0, 2)
-                if r == 0:
-                    super_effectives -= 1
-                elif r == 1:
-                    not_very_effectives -= 1
-                else:
-                    normals -= 1
-        chart = []
-        for matchup_list, matchup_value in zip([immunities, normals, super_effectives, not_very_effectives],
-                                               [0, 10, 20, 5]):
-            for _ in range(matchup_list):
-                matchup = matchups.pop()
-                matchup.append(matchup_value)
-                chart.append(matchup)
-    elif self.multiworld.randomize_type_chart[self.player] == "chaos":
-        types = poke_data.type_names.values()
-        matchups = []
-        for type1 in types:
-            for type2 in types:
-                matchups.append([type1, type2])
-        chart = []
-        values = list(range(21))
-        self.multiworld.random.shuffle(matchups)
-        self.multiworld.random.shuffle(values)
-        for matchup in matchups:
-            value = values.pop(0)
-            values.append(value)
-            matchup.append(value)
-            chart.append(matchup)
-    # sort so that super-effective matchups occur first, to prevent dual "not very effective" / "super effective"
-    # matchups from leading to damage being ultimately divided by 2 and then multiplied by 2, which can lead to
-    # damage being reduced by 1 which leads to a "not very effective" message appearing due to my changes
-    # to the way effectiveness messages are generated.
-    chart = sorted(chart, key=lambda matchup: -matchup[2])
-
     type_loc = rom_addresses["Type_Chart"]
-    for matchup in chart:
+    for matchup in self.type_chart:
         if matchup[2] != 10:  # don't needlessly divide damage by 10 and multiply by 10
             data[type_loc] = poke_data.type_ids[matchup[0]]
             data[type_loc + 1] = poke_data.type_ids[matchup[1]]
@@ -519,8 +457,6 @@ def generate_output(self, output_directory: str):
     data[type_loc] = 0xFF
     data[type_loc + 1] = 0xFF
     data[type_loc + 2] = 0xFF
-
-    self.type_chart = chart
 
     if self.multiworld.normalize_encounter_chances[self.player].value:
         chances = [25, 51, 77, 103, 129, 155, 180, 205, 230, 255]
@@ -652,8 +588,8 @@ def get_base_rom_bytes(game_version: str, hash: str="") -> bytes:
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if hash != basemd5.hexdigest():
-            raise Exception('Supplied Base Rom does not match known MD5 for US(1.0) release. '
-                            'Get the correct game and version, then dump it')
+            raise Exception(f"Supplied Base Rom does not match known MD5 for Pokémon {game_version.title()} UE "
+                            "release. Get the correct game and version, then dump it")
     return base_rom_bytes
 
 
