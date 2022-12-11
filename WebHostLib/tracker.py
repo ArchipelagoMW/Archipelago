@@ -945,8 +945,9 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
                             **display_data)
 
 def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
-                             inventory: Counter, team: int, player: int, playerName: str,
-                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
+                          inventory: Counter, team: int, player: int, playerName: str,
+                          seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int],
+                          slot_data: Dict, saving_second: int) -> str:
 
     SC2WOL_LOC_ID_OFFSET = 1000
     SC2WOL_ITEM_ID_OFFSET = 1000
