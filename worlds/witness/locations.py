@@ -309,6 +309,42 @@ class StaticWitnessLocations:
         "Town Obelisk Side 6",
     }
 
+    OBELISK_SIDES = {
+        "Desert Obelisk Side 1",
+        "Desert Obelisk Side 2",
+        "Desert Obelisk Side 3",
+        "Desert Obelisk Side 4",
+        "Desert Obelisk Side 5",
+        "Monastery Obelisk Side 1",
+        "Monastery Obelisk Side 2",
+        "Monastery Obelisk Side 3",
+        "Monastery Obelisk Side 4",
+        "Monastery Obelisk Side 5",
+        "Monastery Obelisk Side 6",
+        "Treehouse Obelisk Side 1",
+        "Treehouse Obelisk Side 2",
+        "Treehouse Obelisk Side 3",
+        "Treehouse Obelisk Side 4",
+        "Treehouse Obelisk Side 5",
+        "Treehouse Obelisk Side 6",
+        "River Obelisk Side 1",
+        "River Obelisk Side 2",
+        "River Obelisk Side 3",
+        "River Obelisk Side 4",
+        "River Obelisk Side 5",
+        "River Obelisk Side 6",
+        "Quarry Obelisk Side 1",
+        "Quarry Obelisk Side 2",
+        "Quarry Obelisk Side 3",
+        "Quarry Obelisk Side 4",
+        "Town Obelisk Side 1",
+        "Town Obelisk Side 2",
+        "Town Obelisk Side 3",
+        "Town Obelisk Side 4",
+        "Town Obelisk Side 5",
+        "Town Obelisk Side 6",
+    }
+
     CAVES_LOCATIONS = {
         "Caves Blue Tunnel Right First 4",
         "Caves Blue Tunnel Left First 1",
@@ -463,6 +499,11 @@ class WitnessPlayerLocations:
             self.PANEL_TYPES_TO_SHUFFLE.add("EP")
         elif get_option_value(world, player, "shuffle_EPs") == 2:
             self.PANEL_TYPES_TO_SHUFFLE.add("Obelisk Side")
+
+            for obelisk_loc in StaticWitnessLocations.OBELISK_SIDES:
+                obelisk_loc_hex = StaticWitnessLogic.CHECKS_BY_NAME[obelisk_loc]["checkHex"]
+                if player_logic.REQUIREMENTS_BY_HEX[obelisk_loc_hex] == frozenset({frozenset()}):
+                    self.CHECK_LOCATIONS.discard(obelisk_loc)
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | player_logic.ADDED_CHECKS
 
