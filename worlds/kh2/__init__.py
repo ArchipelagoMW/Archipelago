@@ -124,10 +124,15 @@ class KH2World(World):
             itempool +=[self.create_item(ItemName.CureElement)]
             itempool +=[self.create_item(ItemName.MagnetElement)]
             itempool +=[self.create_item(ItemName.ReflectElement)]     
-        
-            
         for item in item_dictionary_table:
-            itempool += self._create_items(item)
+            if item =="Victory":
+                #self.multiworld.get_location(LocationName.AbuEscort, self.player).place_locked_item(self.create_item(item))
+                print(item)
+            else:
+                itempool += self._create_items(item)
+            
+        #for item in item_dictionary_table:
+        #    itempool += self._create_items(item)
 
         
         

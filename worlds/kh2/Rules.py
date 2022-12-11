@@ -12,11 +12,9 @@ from .Options import FinalEXP, KH2_Options, MasterEXP, LimitEXP, WisdomEXP, Valo
 
 def set_rules(world: MultiWorld, player: int):
         ##Locks forms out of ag because im too lazy to make logic for it
-<<<<<<< HEAD
        # print(lambda state:state._kh_FormLevel_unlocked(self,player).value)
         #print(countForms(self))
         #set_rule(world.get_entrance(LocationName.TT_Region, player),lambda state:state.kh_tt_unlocked(player))
-=======
        # print(lambda state:state._kh_FormLevel_Unlocked(self,player).value)
         #print(countForms(self))
         set_rule(world.get_entrance(LocationName.TT_Region, player),lambda state:state.kh_tt_unlocked(player))
@@ -24,7 +22,6 @@ def set_rules(world: MultiWorld, player: int):
         #          lambda item: get_item_type(item) == "Wisdom Form")
         #set_rule(world.get_location("Valor level 2",player), lambda state: (state.has(ItemName.NamineSketches, player))
          #"Route 11 - Oak's Aide": lambda state: state.pokemon_rb_has_pokemon(state.world.oaks_aide_rt_11[player].value + 5, player),
-<<<<<<< HEAD
         #print(lambda state:(state.kh_FormLevel_unlocked(state,player)==1))
         add_rule(world.get_location(LocationName.FinalXemnas,player),lambda state:state.kh_FinalFights_unlocked(player))
 
@@ -98,7 +95,6 @@ def set_rules(world: MultiWorld, player: int):
         #add_rule(world.get_location("Final level 5",player),lambda state:(state.kh_FormLevel_unlocked(player,3)))
         #add_rule(world.get_location("Final level 6",player),lambda state:(state.kh_FormLevel_unlocked(player,4)))
         #add_rule(world.get_location("Final level 7",player),lambda state:(state.kh_FormLevel_unlocked(player,5)))
-=======
         print(lambda state:(state.kh_FormLevel_Unlocked(state,player)==1))
         
         
@@ -168,7 +164,6 @@ def set_rules(world: MultiWorld, player: int):
         #add_rule(world.get_location("Final level 5",player),lambda state:(state.kh_FormLevel_Unlocked(player,3)))
         #add_rule(world.get_location("Final level 6",player),lambda state:(state.kh_FormLevel_Unlocked(player,4)))
         #add_rule(world.get_location("Final level 7",player),lambda state:(state.kh_FormLevel_Unlocked(player,5)))
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
         for x in range(len(corChecks)):
             forbid_item(world.get_location(corChecks[x],player),player, exclusionItem_table["Forms"] and "Torn Page")
         #forbid forms and torn pages in ag2 to prevent softlock
@@ -209,19 +204,14 @@ def set_rules(world: MultiWorld, player: int):
             add_rule(world.get_entrance(LocationName.Oc2_Region,player),lambda state:state.kh_oc_unlocked(player))
             add_rule(world.get_entrance(LocationName.Ht2_Region,player),lambda state:state.kh_ht_unlocked(player))
             add_rule(world.get_entrance(LocationName.LoD2_Region,player),lambda state:state.kh_lod_unlocked(player))
-<<<<<<< HEAD
             add_rule(world.get_entrance(LocationName.Twtnw2_Region,player),lambda state:state.kh_twtnw_unlocked(player))
-=======
             add_rule(world.get_entrance(LocationName.Twtnw2_Region,player),lambda state:state.kh_twtnw_unlocked(player) and state.kh_twtnw2_unlocked(player))
             add_rule(world.get_entrance(LocationName.Bc2_Region,player),lambda state:state.kh_bc_unlocked(player))
             add_rule(world.get_entrance(LocationName.Ag2_Region,player),lambda state:state.kh_ag_unlocked(player))
             add_rule(world.get_entrance(LocationName.Pl2_Region,player),lambda state:state.kh_pl_unlocked(player))
             add_rule(world.get_entrance(LocationName.Hb2_Region,player),lambda state:state.kh_hb_unlocked(player))
             add_rule(world.get_entrance(LocationName.Tr_Region,player),lambda state:state.kh_dc_unlocked(player))
-<<<<<<< HEAD
             add_rule(world.get_entrance(LocationName.STT_Region,player),lambda state:state.kh_stt_unlocked(player))
-=======
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
         elif(world.Visit_locking[player].value==2):
             add_rule(world.get_entrance(LocationName.Sp_Region,player),lambda state:state.kh_sp_unlocked(player))
             add_rule(world.get_entrance(LocationName.Pr_Region,player),lambda state:state.kh_pr_unlocked(player))
@@ -231,19 +221,15 @@ def set_rules(world: MultiWorld, player: int):
             add_rule(world.get_entrance(LocationName.Oc_Region,player),lambda state:state.kh_oc_unlocked(player))
             add_rule(world.get_entrance(LocationName.Ht_Region,player),lambda state:state.kh_ht_unlocked(player))
             add_rule(world.get_entrance(LocationName.LoD_Region,player),lambda state:state.kh_lod_unlocked(player))
-<<<<<<< HEAD
             add_rule(world.get_entrance(LocationName.Twtnw_Region,player),lambda state:state.kh_twtnw_unlocked(player))
-=======
             add_rule(world.get_entrance(LocationName.Twtnw_Region,player),lambda state:state.kh_twtnw_unlocked(player) and state.kh_twtnw_unlocked(player))
             add_rule(world.get_entrance(LocationName.Bc_Region,player),lambda state:state.kh_bc_unlocked(player))
             add_rule(world.get_entrance(LocationName.Ag_Region,player),lambda state:state.kh_ag_unlocked(player))
             add_rule(world.get_entrance(LocationName.Pl_Region,player),lambda state:state.kh_pl_unlocked(player))
             add_rule(world.get_entrance(LocationName.Hb_Region,player),lambda state:state.kh_hb_unlocked(player))
             add_rule(world.get_entrance(LocationName.Dc_Region,player),lambda state:state.kh_dc_unlocked(player))
-<<<<<<< HEAD
             add_rule(world.get_entrance(LocationName.STT_Region,player),lambda state:state.kh_stt_unlocked(player))
 
-=======
 
             #add_rule(world.get_entrance(LocationName.TT_Region,player),lambda state:state.kh_tt_unlocked)
             
@@ -268,8 +254,7 @@ def set_rules(world: MultiWorld, player: int):
         #    add_rule(world.get_entrance(all_locations.ShitCups,player),lambda state:state._kh_oc_unlocked(player))
         #    add_rule(world.get_entrance(all_locations.BetterCups,player),lambda state:state._kh_oc_unlocked(player))
         #    add_rule(world.get_entrance(all_locations.HundredAcre1_Checks,player),lambda state:state._kh_oc_unlocked(player))
-        #    #add_rule(world.get_entrance(all_locations.AG2_Checks,player),lambda state:state._kh_ag_unlocked(player)>=1))
-        #
+        #    #add_rule(world.get_entrance(all_locations.AG2_Checks,player),lambda state:state._kh_ag_unlocked(player)        #
         #    if Visitlocking.value==3:
         #       add_rule(world.get_entrance(all_locations.LoD_Checks, player),lambda state:state._kh_lod_unlocked(self,player))
         #       add_rule(world.get_entrance(all_locations.TWTNW_Checks,player),lambda state:state._kh_twtnw_unlocked(player))
@@ -338,11 +323,9 @@ def set_rules(world: MultiWorld, player: int):
 #    return has('Scimitar',player)and ('fire element',player,1)and('blizzard element',player,1)and('thunder element',1)
 #def _kh_bc_unlocked(self,player):
 #    return has("Beast's Claw",player)
-<<<<<<< HEAD
 #def _kh_FinalFights_unlocked(self,player):
 #        return has('Proof of Connection',player,1)and('Proof of Nonexistence',player,1)and('Proof of Peace',player,1)
 #def _kh_FormLevel_unlocked(self,player):
-=======
 #def _kh_FinalFights_Unlocked(self,player):
 #        return has('Proof of Connection',player,1)and('Proof of Nonexistence',player,1)and('Proof of Peace',player,1)
 #def _kh_FormLevel_Unlocked(self,player):
