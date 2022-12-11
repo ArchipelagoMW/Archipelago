@@ -19,7 +19,7 @@
             "Forest Temple Block Push Room": "(Small_Key_Forest_Temple, 1)",
             "Forest Temple Basement": "(Forest_Temple_Jo_and_Beth and Forest_Temple_Amy_and_Meg) or (can_use(Hover_Boots) and can_mega)",
             "Forest Temple Falling Room": "can_hover or (can_use(Hover_Boots) and Bombs and can_live_dmg(0.5))",
-            "Forest Temple Boss Room": "is_adult"
+            "Forest Temple Boss Door": "is_adult"
         }
     },
     {
@@ -34,10 +34,10 @@
             "Forest Temple Outdoors High Balconies": "
                 is_adult or 
                 (has_explosives or
-                 ((can_use(Boomerang) or Nuts or Buy_Deku_Shield) and
+                 ((can_use(Boomerang) or Nuts or Deku_Shield) and
                   (Sticks or Kokiri_Sword or can_use(Slingshot))))",
             "Forest Temple Outside Upper Ledge": "can_hover or (can_use(Hover_Boots) and has_explosives and can_live_dmg(0.5))",
-            "Forest Temple Boss Room": "is_child and can_live_dmg(0.5)"
+            "Forest Temple Boss Door": "is_child and can_live_dmg(0.5)"
         }
     },
     {
@@ -147,11 +147,19 @@
             "Forest Temple GS Basement": "can_use(Hookshot) or can_use(Boomerang) or can_hover"
         },
         "exits":{
-            "Forest Temple Boss Room": "Boss_Key_Forest_Temple"
+            "Forest Temple Boss Door": "Boss_Key_Forest_Temple"
         }
     },
     {
-        "region_name": "Forest Temple Boss Room",
+        "region_name": "Forest Temple Boss Door",
+        "scene": "Forest Temple",
+        "dungeon": "Forest Temple",
+        "exits": {
+            "Phantom Ganon Boss Room": "True"
+        }
+    },
+    {
+        "region_name": "Phantom Ganon Boss Room",
         "dungeon": "Forest Temple",
         "locations": {
             "Forest Temple Phantom Ganon Heart": "(can_use(Hookshot) or can_use(Bow)) or 

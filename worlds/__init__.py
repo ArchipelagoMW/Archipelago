@@ -81,13 +81,11 @@ for world_name, world in AutoWorldRegister.world_types.items():
     lookup_any_location_id_to_name.update(world.location_id_to_name)
 
 network_data_package: DataPackage = {
-    "version": sum(world.data_version for world in AutoWorldRegister.world_types.values()),
     "games": games,
 }
 
 # Set entire datapackage to version 0 if any of them are set to 0
 if any(not world.data_version for world in AutoWorldRegister.world_types.values()):
-    network_data_package["version"] = 0
     import logging
 
     logging.warning(f"Datapackage is in custom mode. Custom Worlds: "
