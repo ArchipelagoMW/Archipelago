@@ -11,6 +11,7 @@ import urllib.request
 import io
 import json
 import threading
+import platform
 from collections.abc import Iterable
 from hashlib import sha3_512
 from pathlib import Path
@@ -41,10 +42,8 @@ except pkg_resources.ResolutionError:
 
 
 def download_SNI():
-    import platform
     platform_name = platform.system().lower()
-    machine_name = platform.machine().lower()
-
+    is_64bits = sys.maxsize > 2 ** 32
     with urllib.request.urlopen("https://api.github.com/repos/alttpo/sni/releases/latest") as request:
         data = json.load(request)
     files = data["assets"]
@@ -52,8 +51,10 @@ def download_SNI():
     source_url = None
 
     for file in files:
-        download_url = file["browser_download_url"]
-        if platform_name in download_url and machine_name in download_url:
+        download_url: str = file["browser_download_url"]
+        # make sure to ignore a 64 in a version number
+        download_is_64bit = "64" in download_url.rsplit("-", 1)[1]
+        if platform_name in download_url and download_is_64bit == is_64bits:
             # prefer "many" builds
             if "many" in download_url:
                 source_url = download_url
