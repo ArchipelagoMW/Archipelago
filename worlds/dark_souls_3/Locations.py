@@ -20,3 +20,9 @@ class DarkSouls3Location(Location):
             output.update({name: id for id, name in enumerate(table, base_id + (table_offset * i))})
 
         return output
+
+        @staticmethod
+    def is_dlc_location(name) -> bool:
+        return name in painted_world_table \
+            or name in dreg_heap_table \
+            or name in ringed_city_table
