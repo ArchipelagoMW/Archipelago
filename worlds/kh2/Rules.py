@@ -116,6 +116,7 @@ def set_rules(world: MultiWorld, player: int):
             add_rule(world.get_entrance(LocationName.Hb2_Region,player),lambda state:state.kh_hb_unlocked(player))
             add_rule(world.get_entrance(LocationName.Tr_Region,player),lambda state:state.kh_dc_unlocked(player))
             add_rule(world.get_entrance(LocationName.STT_Region,player),lambda state:state.kh_stt_unlocked(player))
+>>>>>>>>> Temporary merge branch 2
         elif(world.Visit_locking[player].value==2):
             add_rule(world.get_entrance(LocationName.Sp_Region,player),lambda state:state.kh_sp_unlocked(player))
             add_rule(world.get_entrance(LocationName.Pr_Region,player),lambda state:state.kh_pr_unlocked(player))
@@ -124,14 +125,14 @@ def set_rules(world: MultiWorld, player: int):
             add_rule(world.get_entrance(LocationName.TT3_Region,player),lambda state:state.kh_tt3_unlocked(player))
             add_rule(world.get_entrance(LocationName.Oc_Region,player),lambda state:state.kh_oc_unlocked(player))
             add_rule(world.get_entrance(LocationName.Ht_Region,player),lambda state:state.kh_ht_unlocked(player))
-            add_rule(world.get_entrance(LocationName.LoD_Region,player),lambda state:state.kh_lod_unlocked(player))
-            add_rule(world.get_entrance(LocationName.Twtnw_Region,player),lambda state:state.kh_twtnw_unlocked(player))
+<<<<<<< HEAD
             #add_rule(world.get_entrance(LocationName.Twtnw_Region,player),lambda state:state.kh_twtnw_unlocked(player) and state.kh_twtnw_unlocked(player))
+>>>>>>>>> Temporary merge branch 2
             add_rule(world.get_entrance(LocationName.Bc_Region,player),lambda state:state.kh_bc_unlocked(player))
             add_rule(world.get_entrance(LocationName.Ag_Region,player),lambda state:state.kh_ag_unlocked(player))
             add_rule(world.get_entrance(LocationName.Pl_Region,player),lambda state:state.kh_pl_unlocked(player))
             add_rule(world.get_entrance(LocationName.Hb_Region,player),lambda state:state.kh_hb_unlocked(player))
-            add_rule(world.get_entrance(LocationName.Dc_Region,player),lambda state:state.kh_dc_unlocked(player))
+<<<<<<< HEAD
             add_rule(world.get_entrance(LocationName.STT_Region,player),lambda state:state.kh_stt_unlocked(player))
 
 
@@ -226,13 +227,13 @@ def set_rules(world: MultiWorld, player: int):
 #def _kh_ag_unlocked(self,player:int):
 #    return has('Scimitar',player)and ('fire element',player,1)and('blizzard element',player,1)and('thunder element',1)
 #def _kh_bc_unlocked(self,player):
-#    return has("Beast's Claw",player)
+<<<<<<< HEAD
 #def _kh_FinalFights_unlocked(self,player):
 #        return has('Proof of Connection',player,1)and('Proof of Nonexistence',player,1)and('Proof of Peace',player,1)
 #def _kh_FormLevel_unlocked(self,player):
 #def _kh_FinalFights_Unlocked(self,player):
-#        return has('Proof of Connection',player,1)and('Proof of Nonexistence',player,1)and('Proof of Peace',player,1)
 #def _kh_FormLevel_unlocked(self,player):
+>>>>>>>>> Temporary merge branch 2
 #    formlevel=0
 #    if has("Valor Form",player,1):
 #        formlevel=+1
