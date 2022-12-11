@@ -258,6 +258,10 @@ class ZillionContext(CommonContext):
                 assert id_ in id_to_loc
                 self.loc_mem_to_id[mem] = id_
 
+            if len(self.loc_mem_to_id) != 394:
+                logger.warn("invalid Zillion `Connected` packet, "
+                            f"`slot_data` missing locations in `loc_mem_to_id` - len {len(self.loc_mem_to_id)}")
+
             self.got_slot_data.set()
 
             payload = {

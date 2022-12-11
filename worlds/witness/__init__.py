@@ -52,6 +52,8 @@ class WitnessWorld(World):
     location_name_to_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID
     item_name_groups = StaticWitnessItems.ITEM_NAME_GROUPS
 
+    required_client_version = (0, 3, 6)
+
     def _get_slot_data(self):
         return {
             'seed': self.multiworld.random.randint(0, 1000000),
@@ -147,7 +149,9 @@ class WitnessWorld(World):
     def fill_slot_data(self) -> dict:
         hint_amount = get_option_value(self.multiworld, self.player, "hint_amount")
 
-        credits_hint = ("This Randomizer", "is brought to you by", "NewSoupVi, Jarno, jbzdarkid, sigma144", -1)
+        credits_hint = (
+            "This Randomizer", "is brought to you by", "NewSoupVi, Jarno, jbzdarkid, sigma144, IHNN, blastron", -1
+        )
 
         audio_logs = get_audio_logs().copy()
 

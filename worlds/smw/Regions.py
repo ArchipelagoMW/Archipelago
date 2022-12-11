@@ -834,7 +834,8 @@ def create_regions(world, player: int, active_locations):
                                               state.has(ItemName.super_star_active, player) and
                                               state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(world, player, active_locations, LocationName.valley_of_bowser_1_region, LocationName.valley_of_bowser_1_dragon)
-        add_location_to_region(world, player, active_locations, LocationName.valley_of_bowser_2_region, LocationName.valley_of_bowser_2_dragon)
+        add_location_to_region(world, player, active_locations, LocationName.valley_of_bowser_2_region, LocationName.valley_of_bowser_2_dragon,
+                               lambda state: state.has(ItemName.yoshi_activate, player))
         add_location_to_region(world, player, active_locations, LocationName.valley_of_bowser_3_region, LocationName.valley_of_bowser_3_dragon)
         add_location_to_region(world, player, active_locations, LocationName.valley_ghost_house_region, LocationName.valley_ghost_house_dragon,
                                lambda state: state.has(ItemName.p_switch, player))
@@ -968,7 +969,7 @@ def connect_regions(world, player, level_to_tile_dict):
             lambda state: (state.has(ItemName.mario_carry, player) or
                            state.has(ItemName.yoshi_activate, player)))
     connect(world, player, names, LocationName.forest_of_illusion_3_region, LocationName.forest_of_illusion_3_exit_2,
-            lambda state: (state.has(ItemName.mario_swim, player) and
+            lambda state: (state.has(ItemName.mario_spin_jump, player) and
                            state.has(ItemName.mario_carry, player) and
                            state.has(ItemName.progressive_powerup, player, 1)))
     connect(world, player, names, LocationName.forest_of_illusion_4_region, LocationName.forest_of_illusion_4_exit_1)
