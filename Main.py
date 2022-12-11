@@ -11,7 +11,7 @@ import zipfile
 from typing import Dict, List, Tuple, Optional, Set
 
 from BaseClasses import Item, MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
-from worlds.alttp.Items import item_name_groups
+import worlds
 from worlds.alttp.Regions import is_main_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
@@ -210,11 +210,15 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         while itemcount > len(world.itempool):
             items_to_add = []
             for player in group["players"]:
-                if group["replacement_items"][player]:
-                    items_to_add.append(
-                        AutoWorld.call_single(world, "create_item", player, group["replacement_items"][player]))
+                if group["link_replacement"]:
+                    item_player = group_id
                 else:
-                    items_to_add.append(AutoWorld.call_single(world, "create_filler", player))
+                    item_player = player
+                if group["replacement_items"][player]:
+                    items_to_add.append(AutoWorld.call_single(world, "create_item", item_player,
+                                                                group["replacement_items"][player]))
+                else:
+                    items_to_add.append(AutoWorld.call_single(world, "create_filler", item_player))
             world.random.shuffle(items_to_add)
             world.itempool.extend(items_to_add[:itemcount - len(world.itempool)])
 
@@ -364,16 +368,19 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                                   for player in world.groups.get(location.item.player, {}).get("players", [])]):
                             precollect_hint(location)
 
+                # custom datapackage
+                datapackage = {}
+                for game_world in world.worlds.values():
+                    if game_world.data_version == 0 and game_world.game not in datapackage:
+                        datapackage[game_world.game] = worlds.network_data_package["games"][game_world.game]
+                        datapackage[game_world.game]["item_name_groups"] = game_world.item_name_groups
+
                 multidata = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
                     "names": names,  # TODO: remove around 0.2.5 in favor of slot_info
                     "games": games,  # TODO: remove around 0.2.5 in favor of slot_info
                     "connect_names": {name: (0, player) for player, name in world.player_name.items()},
-                    "remote_items": {player for player in world.player_ids if
-                                     world.worlds[player].remote_items},
-                    "remote_start_inventory": {player for player in world.player_ids if
-                                               world.worlds[player].remote_start_inventory},
                     "locations": locations_data,
                     "checks_in_area": checks_in_area,
                     "server_options": baked_server_options,
@@ -383,7 +390,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "version": tuple(version_tuple),
                     "tags": ["AP"],
                     "minimum_versions": minimum_versions,
-                    "seed_name": world.seed_name
+                    "seed_name": world.seed_name,
+                    "datapackage": datapackage,
                 }
                 AutoWorld.call_all(world, "modify_multidata", multidata)
 

@@ -43,7 +43,6 @@ class TimespinnerWorld(World):
     option_definitions = timespinner_options
     game = "Timespinner"
     topology_present = True
-    remote_items = False
     data_version = 10
     web = TimespinnerWebWorld()
 
