@@ -64,10 +64,7 @@ class KH2StartItems(ItemDict):
     """Mapping of Factorio internal item-name to amount granted on start."""
     display_name = "KH2StartingItems"
     verify_item_name = False
-<<<<<<< HEAD
     default = {}
-=======
-    default = {"Way to the Dawn": 1, "Beast's Claw": 1}
 
 class Level_Depth(Toggle):
     display_name="Level Depth"

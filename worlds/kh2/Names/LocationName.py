@@ -679,7 +679,6 @@ Valor_Region                                 ="Valor Form"
 Wisdom_Region                                ="Wisdom Form"
 Limit_Region                                 ="Limit Form"
 Master_Region                                ="Master Form"
-<<<<<<< HEAD
 Final_Region                                 ="Final Form"                                            
 #Crit_1                                       ="Critical Starting Ability 1"
 #Crit_2                                       ="Critical Starting Ability 2"
@@ -725,5 +724,4 @@ FenrirSlot                ="Fenrir (Slot)"
 UltimaWeaponSlot          ="Ultima Weapon (Slot)"
 WinnersProofSlot          ="Winner's Proof (Slot)"
                                      
-=======
-Final_Region                                 ="Final Form"
+#Final_Region                                 ="Final Form"

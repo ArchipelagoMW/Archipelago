@@ -23,12 +23,11 @@ def noop(self, *args, **kw):
 def patch_kh2(world,player,self,output_directory):
     #itemName= {location.address.locid: location.item.code.kh2id
     #            for location in self.world.get_filled_locations(self.player)}
-<<<<<<< HEAD
+
     #locName=[location.item.code.kh2id
     #         for location in self.multiworld.get_filled_locations(self.player)]
-=======
     locName=[location.item.code.kh2id
-             for location in self.world.get_filled_locations(self.player)]
+             for location in self.multiworld.get_filled_locations(self.player)]
     #        ]  
 
 
@@ -44,41 +43,28 @@ def patch_kh2(world,player,self,output_directory):
     self.formattedPlrp = []
     lvlablitity=0
     lvlcntr=1
-    strength=0
-    magic   =0
-    defense =0
-    ap=     50
-    dblbonus=0
+    self.strength=0
+    self.magic   =0
+    self.defense =0
+    self.ap=     50
+    self.dblbonus=0
     def getStat(i):
         if lvlStats[i]=="str":
-            strength=+2
+            self.strength+=2
         if lvlStats[i]=="mag":
-            magic=+2
+            self.magic+=2
         if lvlStats[i]=="def":
-            defense=+2
+            self.defense+=2
         if lvlStats[i]=="ap":
-            ap=+2
+            self.ap+=2
     statcntr=0
     charName="Sora"
-<<<<<<< HEAD
-    for location in self.multiworld.get_filled_locations(self.player):
-        if location.address.yml==1:
-            self.formattedTrsr[location.address.locid] = {"ItemId":location.item.code.kh2id}
-        
-        elif location.address.yml==4: 
-=======
-    for location in self.world.get_filled_locations(self.player):
-        #print(location.name)
-        
-            
-        
 
+    for location in self.multiworld.get_filled_locations(self.player):
+        #if location is chest
         if location.address.yml==1:
-            #print(location.address.locid)
-            #print(location.item.code.kh2id)
             self.formattedTrsr[location.address.locid] = {"ItemId":location.item.code.kh2id}
-            continue
-        if location.address.yml==4: 
+        elif location.address.yml==4: 
             getStat(random.randint(0,3))
             lvlablitity=location.item.code.kh2id
             if location.item.code.kh2id==1:
@@ -86,10 +72,10 @@ def patch_kh2(world,player,self,output_directory):
                 getStat(random.randint(0,3))
             self.formattedLvup["Sora"][location.address.locid] = {
                     "Exp": int(soraExp[location.address.locid]/5),
-                    "Strength":strength,
-                    "Magic": magic ,
-                    "Defense":defense,
-                    "Ap":ap,
+                    "Strength":self.strength,
+                    "Magic": self.magic ,
+                    "Defense":self.defense,
+                    "Ap":self.ap,
                     "SwordAbility": lvlablitity,
                     "ShieldAbility":lvlablitity,
                     "StaffAbility": lvlablitity,
@@ -97,10 +83,8 @@ def patch_kh2(world,player,self,output_directory):
                     "Character": "Sora",
                     "Level": location.address.locid
                 }
-<<<<<<< HEAD
+
         elif location.address.yml==2 or location.address.yml==3 or location.address.yml==0:
-=======
-        if location.address.yml==2 or location.address.yml==3 or location.address.yml==0:
                 #print(location.address.yml)
                 if location.address.yml==2:
                     #print(location.address.locid)
@@ -125,16 +109,15 @@ def patch_kh2(world,player,self,output_directory):
                 "BonusItem2": dblbonus,
                 "Padding": 0
             }
-                continue
         if location.address.yml==5:
             print(location.item)
    
             #lvlcntr+=1        
-<<<<<<< HEAD
+
     print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
     print(yaml.dump(self.formattedLvup, line_break="\r\n"))
     print(yaml.dump(self.formattedBons, line_break="\r\n"))
-=======
+    print(yaml.dump(self.formattedLvup,line_break="\r\n"))
     #print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
     #print(yaml.dump(self.formattedLvup, line_break="\r\n"))
     #print(yaml.dump(self.formattedBons, line_break="\r\n"))
@@ -181,9 +164,9 @@ def patch_kh2(world,player,self,output_directory):
     ##not in trsr.location.LocationTypes and locationType.SYNTH not in trsr.location.LocationTypes]
     #
     #with open(os.path.join(output_directory, filename), 'w') as outfile:
-<<<<<<< HEAD
+
     #outfile.write(yaml.dump(self.formattedTrsr, line_break="\r\n"))
-=======
+
     #  outfile.write(yaml.dump(self.formattedTrsr, line_break="\r\n"))
     #  print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
     #  #print(self.trsrLocation)

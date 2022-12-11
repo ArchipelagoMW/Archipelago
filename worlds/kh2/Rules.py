@@ -15,7 +15,7 @@ def set_rules(world: MultiWorld, player: int):
        # print(lambda state:state._kh_FormLevel_unlocked(self,player).value)
         #print(countForms(self))
         #set_rule(world.get_entrance(LocationName.TT_Region, player),lambda state:state.kh_tt_unlocked(player))
-       # print(lambda state:state._kh_FormLevel_Unlocked(self,player).value)
+       # print(lambda state:state._kh_FormLevel_unlocked(self,player).value)
         #print(countForms(self))
         set_rule(world.get_entrance(LocationName.TT_Region, player),lambda state:state.kh_tt_unlocked(player))
         #add_item_rule(world.get_location(LocationName.RuinedChamberTornPages, player),
@@ -68,102 +68,6 @@ def set_rules(world: MultiWorld, player: int):
         add_rule(world.get_location(LocationName.Finallvl6,player),lambda state:  state.kh_FormLevel_unlocked(player,4))
         add_rule(world.get_location(LocationName.Finallvl7,player),lambda state:  state.kh_FormLevel_unlocked(player,5))
         
-        #add_rule(world.get_location(LocationName.Valorlvl2,player),lambda state:state.kh_FormLevel_unlocked(player,1))
-        #add_rule(world.get_location(LocationName.Valorlvl3,player),lambda state:(state.kh_FormLevel_unlocked(self)==1 and state.has("Wisdom Form",player)))
-        #add_rule(world.get_location(LocationName.Valorlvl4,player),lambda state:(state.kh_FormLevel_unlocked(player,2)))
-        #add_rule(world.get_location(LocationName.Valorlvl5,player),lambda state:(state.kh_FormLevel_unlocked(player,3)))
-        #add_rule(world.get_location(LocationName.Valorlvl6,player),lambda state:(state.kh_FormLevel_unlocked(player,4)))
-        #add_rule(world.get_location(LocationName.Valorlvl7,player),lambda state:(state.kh_FormLevel_unlocked(player,5)))
-        #                                                                                                                   
-        #add_rule(world.get_location("Limit level 2",player),lambda state:(state.kh_FormLevel_unlocked(self)==1 and state.has("Limit Form",player)))
-        #add_rule(world.get_location("Limit level 3",player),lambda state:(state.kh_FormLevel_unlocked(self)==1 and state.has("Limit Form",player)))
-        #add_rule(world.get_location("Limit level 4",player),lambda state:(state.kh_FormLevel_unlocked(player,2)))
-        #add_rule(world.get_location("Limit level 5",player),lambda state:(state.kh_FormLevel_unlocked(player,3)))
-        #add_rule(world.get_location("Limit level 6",player),lambda state:(state.kh_FormLevel_unlocked(player,4)))
-        #add_rule(world.get_location("Limit level 7",player),lambda state:(state.kh_FormLevel_unlocked(player,5)))
-        ##                                                                                                                   
-        ##add_rule(world.get_location("Master level 2",player),lambda state:(state.kh_FormLevel_unlocked(self)==1 and state.has("Master Form",player)))
-        ##add_rule(world.get_location("Master level 3",player),lambda state:(state.kh_FormLevel_unlocked(self)==1 and state.has("Master Form",player)))
-        #add_rule(world.get_location("Master level 4",player),lambda state:(state.kh_FormLevel_unlocked(player,2)))
-        #add_rule(world.get_location("Master level 5",player),lambda state:(state.kh_FormLevel_unlocked(player,3)))
-        #add_rule(world.get_location("Master level 6",player),lambda state:(state.kh_FormLevel_unlocked(player,4)))
-        #add_rule(world.get_location("Master level 7",player),lambda state:(state.kh_FormLevel_unlocked(player,5)))
-        ##                                                                                                                   
-        ##add_rule(world.get_location("Final level 2",player),lambda state:(state.kh_FormLevel_unlocked(self)==1 and state.has("Final Form",player)))
-        ##add_rule(world.get_location("Final level 3",player),lambda state:(state.kh_FormLevel_unlocked(self)==1 and state.has("Final Form",player)))
-        #add_rule(world.get_location("Final level 4",player),lambda state:(state.kh_FormLevel_unlocked(player,2)))
-        #add_rule(world.get_location("Final level 5",player),lambda state:(state.kh_FormLevel_unlocked(player,3)))
-        #add_rule(world.get_location("Final level 6",player),lambda state:(state.kh_FormLevel_unlocked(player,4)))
-        #add_rule(world.get_location("Final level 7",player),lambda state:(state.kh_FormLevel_unlocked(player,5)))
-        print(lambda state:(state.kh_FormLevel_Unlocked(state,player)==1))
-        
-        
-        
-        
-        
-        
-        set_rule(world.get_location(LocationName.Valorlvl2,player),lambda state: state.kh_FormLevel_Unlocked(player,1))
-        add_rule(world.get_location(LocationName.Valorlvl3,player),lambda state: state.kh_FormLevel_Unlocked(player,1))
-        add_rule(world.get_location(LocationName.Valorlvl4,player),lambda state: state.kh_FormLevel_Unlocked(player,2))
-        add_rule(world.get_location(LocationName.Valorlvl5,player),lambda state: state.kh_FormLevel_Unlocked(player,3))
-        add_rule(world.get_location(LocationName.Valorlvl6,player),lambda state: state.kh_FormLevel_Unlocked(player,4))
-        set_rule(world.get_location(LocationName.Valorlvl7,player),lambda state: state.kh_FormLevel_Unlocked(player,5))
-        
-        add_rule(world.get_location(LocationName.Wisdomlvl2,player),lambda state: state.kh_FormLevel_Unlocked(player,1))
-        add_rule(world.get_location(LocationName.Wisdomlvl3,player),lambda state: state.kh_FormLevel_Unlocked(player,1))
-        add_rule(world.get_location(LocationName.Wisdomlvl4,player),lambda state: state.kh_FormLevel_Unlocked(player,2))
-        add_rule(world.get_location(LocationName.Wisdomlvl5,player),lambda state: state.kh_FormLevel_Unlocked(player,3))
-        add_rule(world.get_location(LocationName.Wisdomlvl6,player),lambda state: state.kh_FormLevel_Unlocked(player,4))
-        add_rule(world.get_location(LocationName.Wisdomlvl7,player),lambda state: state.kh_FormLevel_Unlocked(player,5))
-        
-        add_rule(world.get_location(LocationName.Limitlvl2,player),lambda state:  state.kh_FormLevel_Unlocked(player,1))
-        add_rule(world.get_location(LocationName.Limitlvl3,player),lambda state:  state.kh_FormLevel_Unlocked(player,1))
-        add_rule(world.get_location(LocationName.Limitlvl4,player),lambda state:  state.kh_FormLevel_Unlocked(player,2))
-        add_rule(world.get_location(LocationName.Limitlvl5,player),lambda state:  state.kh_FormLevel_Unlocked(player,3))
-        add_rule(world.get_location(LocationName.Limitlvl6,player),lambda state:  state.kh_FormLevel_Unlocked(player,4))
-        add_rule(world.get_location(LocationName.Limitlvl7,player),lambda state:  state.kh_FormLevel_Unlocked(player,5))
-        
-        add_rule(world.get_location(LocationName.Masterlvl2,player),lambda state: state.kh_FormLevel_Unlocked(player,1))
-        add_rule(world.get_location(LocationName.Masterlvl3,player),lambda state: state.kh_FormLevel_Unlocked(player,1))
-        add_rule(world.get_location(LocationName.Masterlvl4,player),lambda state: state.kh_FormLevel_Unlocked(player,2))
-        add_rule(world.get_location(LocationName.Masterlvl5,player),lambda state: state.kh_FormLevel_Unlocked(player,3))
-        add_rule(world.get_location(LocationName.Masterlvl6,player),lambda state: state.kh_FormLevel_Unlocked(player,4))
-        add_rule(world.get_location(LocationName.Masterlvl7,player),lambda state: state.kh_FormLevel_Unlocked(player,5))
-        
-        add_rule(world.get_location(LocationName.Finallvl2,player),lambda state:  state.kh_FormLevel_Unlocked(player,1))
-        add_rule(world.get_location(LocationName.Finallvl3,player),lambda state:  state.kh_FormLevel_Unlocked(player,1))
-        add_rule(world.get_location(LocationName.Finallvl4,player),lambda state:  state.kh_FormLevel_Unlocked(player,2))
-        add_rule(world.get_location(LocationName.Finallvl5,player),lambda state:  state.kh_FormLevel_Unlocked(player,3))
-        add_rule(world.get_location(LocationName.Finallvl6,player),lambda state:  state.kh_FormLevel_Unlocked(player,4))
-        add_rule(world.get_location(LocationName.Finallvl7,player),lambda state:  state.kh_FormLevel_Unlocked(player,5))
-        
-        #add_rule(world.get_location(LocationName.Valorlvl2,player),lambda state:state.kh_FormLevel_Unlocked(player,1))
-        #add_rule(world.get_location(LocationName.Valorlvl3,player),lambda state:(state.kh_FormLevel_Unlocked(self)==1 and state.has("Wisdom Form",player)))
-        #add_rule(world.get_location(LocationName.Valorlvl4,player),lambda state:(state.kh_FormLevel_Unlocked(player,2)))
-        #add_rule(world.get_location(LocationName.Valorlvl5,player),lambda state:(state.kh_FormLevel_Unlocked(player,3)))
-        #add_rule(world.get_location(LocationName.Valorlvl6,player),lambda state:(state.kh_FormLevel_Unlocked(player,4)))
-        #add_rule(world.get_location(LocationName.Valorlvl7,player),lambda state:(state.kh_FormLevel_Unlocked(player,5)))
-        #                                                                                                                   
-        #add_rule(world.get_location("Limit level 2",player),lambda state:(state.kh_FormLevel_Unlocked(self)==1 and state.has("Limit Form",player)))
-        #add_rule(world.get_location("Limit level 3",player),lambda state:(state.kh_FormLevel_Unlocked(self)==1 and state.has("Limit Form",player)))
-        #add_rule(world.get_location("Limit level 4",player),lambda state:(state.kh_FormLevel_Unlocked(player,2)))
-        #add_rule(world.get_location("Limit level 5",player),lambda state:(state.kh_FormLevel_Unlocked(player,3)))
-        #add_rule(world.get_location("Limit level 6",player),lambda state:(state.kh_FormLevel_Unlocked(player,4)))
-        #add_rule(world.get_location("Limit level 7",player),lambda state:(state.kh_FormLevel_Unlocked(player,5)))
-        ##                                                                                                                   
-        ##add_rule(world.get_location("Master level 2",player),lambda state:(state.kh_FormLevel_Unlocked(self)==1 and state.has("Master Form",player)))
-        ##add_rule(world.get_location("Master level 3",player),lambda state:(state.kh_FormLevel_Unlocked(self)==1 and state.has("Master Form",player)))
-        #add_rule(world.get_location("Master level 4",player),lambda state:(state.kh_FormLevel_Unlocked(player,2)))
-        #add_rule(world.get_location("Master level 5",player),lambda state:(state.kh_FormLevel_Unlocked(player,3)))
-        #add_rule(world.get_location("Master level 6",player),lambda state:(state.kh_FormLevel_Unlocked(player,4)))
-        #add_rule(world.get_location("Master level 7",player),lambda state:(state.kh_FormLevel_Unlocked(player,5)))
-        ##                                                                                                                   
-        ##add_rule(world.get_location("Final level 2",player),lambda state:(state.kh_FormLevel_Unlocked(self)==1 and state.has("Final Form",player)))
-        ##add_rule(world.get_location("Final level 3",player),lambda state:(state.kh_FormLevel_Unlocked(self)==1 and state.has("Final Form",player)))
-        #add_rule(world.get_location("Final level 4",player),lambda state:(state.kh_FormLevel_Unlocked(player,2)))
-        #add_rule(world.get_location("Final level 5",player),lambda state:(state.kh_FormLevel_Unlocked(player,3)))
-        #add_rule(world.get_location("Final level 6",player),lambda state:(state.kh_FormLevel_Unlocked(player,4)))
-        #add_rule(world.get_location("Final level 7",player),lambda state:(state.kh_FormLevel_Unlocked(player,5)))
         for x in range(len(corChecks)):
             forbid_item(world.get_location(corChecks[x],player),player, exclusionItem_table["Forms"] and "Torn Page")
         #forbid forms and torn pages in ag2 to prevent softlock
@@ -186,7 +90,7 @@ def set_rules(world: MultiWorld, player: int):
         forbid_item(world.get_location("Winner's Proof",player),player,"Proof of Peace")
         forbid_item(world.get_location("Proof of Peace",player),player,"Proof of Peace")
         #
-        world.completion_condition[player] = lambda state:state.kh_FinalFights_Unlocked(player)
+       
     #sets torn page requirements
 
     ##LOOK AT THIS YOU STUPID
@@ -222,7 +126,7 @@ def set_rules(world: MultiWorld, player: int):
             add_rule(world.get_entrance(LocationName.Ht_Region,player),lambda state:state.kh_ht_unlocked(player))
             add_rule(world.get_entrance(LocationName.LoD_Region,player),lambda state:state.kh_lod_unlocked(player))
             add_rule(world.get_entrance(LocationName.Twtnw_Region,player),lambda state:state.kh_twtnw_unlocked(player))
-            add_rule(world.get_entrance(LocationName.Twtnw_Region,player),lambda state:state.kh_twtnw_unlocked(player) and state.kh_twtnw_unlocked(player))
+            #add_rule(world.get_entrance(LocationName.Twtnw_Region,player),lambda state:state.kh_twtnw_unlocked(player) and state.kh_twtnw_unlocked(player))
             add_rule(world.get_entrance(LocationName.Bc_Region,player),lambda state:state.kh_bc_unlocked(player))
             add_rule(world.get_entrance(LocationName.Ag_Region,player),lambda state:state.kh_ag_unlocked(player))
             add_rule(world.get_entrance(LocationName.Pl_Region,player),lambda state:state.kh_pl_unlocked(player))
@@ -328,7 +232,7 @@ def set_rules(world: MultiWorld, player: int):
 #def _kh_FormLevel_unlocked(self,player):
 #def _kh_FinalFights_Unlocked(self,player):
 #        return has('Proof of Connection',player,1)and('Proof of Nonexistence',player,1)and('Proof of Peace',player,1)
-#def _kh_FormLevel_Unlocked(self,player):
+#def _kh_FormLevel_unlocked(self,player):
 #    formlevel=0
 #    if has("Valor Form",player,1):
 #        formlevel=+1

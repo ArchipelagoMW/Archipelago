@@ -41,21 +41,21 @@ class KH2World(World):
     item_name_to_kh2id={name:data.kh2id for name,data in item_dictionary_table.items()}
     def _get_slot_data(self):
         return {
-            "FinalEXP": self.world.Final_Form_Level[self.player].value,
-            "MasterEXP": self.world.Master_Form_Level[self.player].value,
-            "WisdomEXP": self.world.Wisdom_Form_Level[self.player].value,
-            "ValorEXP": self.world.Valor_Form_Level[self.player].value,
-            "LimitEXP": self.world.Limit_Form_Level[self.player].value,
-            "Schmovement":self.world.Schmovement[self.player].value,
-            "Keyblade_Stats":self.world.Keyblade[self.player].value,
-            "Visit_locking":self.world.Visit_locking[self.player].value,
-            "Super_Bosses":self.world.Super_Bosses[self.player].value,
-            "Level_Depth":self.world.Level_Depth[self.player].value,
+            "FinalEXP": self.multiworld.Final_Form_Level[self.player].value,
+            "MasterEXP": self.multiworld.Master_Form_Level[self.player].value,
+            "WisdomEXP": self.multiworld.Wisdom_Form_Level[self.player].value,
+            "ValorEXP": self.multiworld.Valor_Form_Level[self.player].value,
+            "LimitEXP": self.multiworld.Limit_Form_Level[self.player].value,
+            "Schmovement":self.multiworld.Schmovement[self.player].value,
+            "Keyblade_Stats":self.multiworld.Keyblade[self.player].value,
+            "Visit_locking":self.multiworld.Visit_locking[self.player].value,
+            "Super_Bosses":self.multiworld.Super_Bosses[self.player].value,
+            "Level_Depth":self.multiworld.Level_Depth[self.player].value,
         }
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
         for option_name in KH2_Options:
-            option = getattr(self.world, option_name)[self.player]
+            option = getattr(self.multiworld, option_name)[self.player]
             slot_data[option_name] = option.value
         print(slot_data)
         return slot_data
@@ -70,7 +70,7 @@ class KH2World(World):
     def create_item(self, name: str,) -> Item:
        data = item_dictionary_table[name]
 
-       if name in Items.Progression_Table or name in Items.Movement_Table or name in Items.Forms_Table or name in Items.Magic_Table:
+       if name in Items.Progression_Table or name in Items.Movement_Table or name in Items.Forms_Table or name in Items.Magic_Table or name==ItemName.Victory:
             item_classification = ItemClassification.progression
        elif name in Items.Items_Table or name in Items.Reports_Table:
            item_classification = ItemClassification.filler
@@ -86,11 +86,12 @@ class KH2World(World):
     def generate_basic(self):
         itempool: typing.List[KH2Item] = []
         #print(exclusion_table.Level50)
-        print(self.world.Visit_locking[self.player].value)
+        print(self.multiworld.Visit_locking[self.player].value)
         #if self.world.Level_Depth[self.player].value==1:
         #    for x in range(len(exclusion_table.popups)):
         #        self.world.get_location(exclusion_table.level50, self.player).place_locked_item(self.create_item(ItemName.Potion))
         #self.world.get_location(LocationName.Valorlvl7,self.player).place_located_item(self.create_item(ItemName.ProofofPeace))
+        self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(self.create_item(ItemName.Victory))
         for x in range(46):
             itempool+=[self.create_item(ItemName.Potion)]
         for x in range(2):
@@ -124,6 +125,7 @@ class KH2World(World):
             itempool +=[self.create_item(ItemName.CureElement)]
             itempool +=[self.create_item(ItemName.MagnetElement)]
             itempool +=[self.create_item(ItemName.ReflectElement)]     
+        
         for item in item_dictionary_table:
             if item =="Victory":
                 #self.multiworld.get_location(LocationName.AbuEscort, self.player).place_locked_item(self.create_item(item))
@@ -137,25 +139,25 @@ class KH2World(World):
         
         
         
-        self.world.itempool += itempool
+        self.multiworld.itempool += itempool
      
 
     def create_regions(self):
-        location_table = setup_locations(self.world, self.player)
-        create_regions(self.world, self.player, location_table)
-        connect_regions(self.world, self.player,self)
+        location_table = setup_locations(self.multiworld, self.player)
+        create_regions(self.multiworld, self.player, location_table)
+        connect_regions(self.multiworld, self.player,self)
         #region=self.world.get_region(LocationName.Ag2_Region,self.player)
         #print(self.world.get_entrance("Twlight Town",self.player))
 
 
     def set_rules(self):
-        set_rules(self.world, self.player)
+        set_rules(self.multiworld, self.player)
         
     def generate_output(self, output_directory: str):
-            world = self.world
+            world = self.multiworld
             player = self.player
 
-            patch_kh2(self.world, self.player,self,output_directory)   
+            patch_kh2(self.multiworld, self.player,self,output_directory)   
             
 
         #except:

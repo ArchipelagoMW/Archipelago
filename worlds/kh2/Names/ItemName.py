@@ -426,13 +426,13 @@ Protect        ="Protect"
 Protera        ="Protera" 
 Protega        ="Protega" 
 
-<<<<<<< HEAD
+
 
 
 
 Victory                   ="Victory"
 Nothing                   ="Nothing"
-=======
+
 #Keyblade Slots
 FAKESlot                  ="FAKE (Slot)"
 DetectionSaberSlot        ="Detection Saber (Slot)"

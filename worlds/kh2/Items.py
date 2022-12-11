@@ -378,12 +378,12 @@ ItemName.MagicBoost                              : ItemData(0x1320169,False,277)
 ItemName.DefenseBoost                            : ItemData(0x132016a,False,278),
 ItemName.APBoost                                 : ItemData(0x132016b,False,279),
 }
-<<<<<<< HEAD
+
 Misc_Table={
 ItemName.Nothing                                 : ItemData(0x132016c,False,1),
 ItemName.Victory                                 : ItemData(0x132016d,False,1,True),
     }
-=======
+
 
 #These items cannot be in other games so these are done locally in kh2
 #DonaldAbility_Table={                                  
@@ -593,7 +593,7 @@ exclusionItem_table={
         ItemName.LimitForm,
         ItemName.MasterForm,
         ItemName.FinalForm,
-<<<<<<< HEAD
+
     },
     "Schmovement":{
         ItemName.HighJump,
@@ -601,8 +601,7 @@ exclusionItem_table={
         ItemName.DodgeRoll,
         ItemName.AerialDodge,
         ItemName.Glide,
-=======
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
+
         }
 }
 
@@ -639,10 +638,8 @@ item_dictionary_table = {**Reports_Table,
                          **SupportAbility_Table, 
                          **LvlAbility_Table, 
                          **ActionAbility_Table, 
-<<<<<<< HEAD
                          **Items_Table,
-                         **Misc_Table
-=======
+                         **Misc_Table,
                          **Items_Table, 
                             }
 

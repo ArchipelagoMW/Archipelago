@@ -442,7 +442,6 @@ def create_regions(world, player: int, active_locations):
             LocationName.WinnersProof                       :[0x5014D,28],
             LocationName.ProofofPeace                       :[0x5014E,29],
             LocationName.DemyxDataAPBoost                   :[0x5014F,30],
-<<<<<<< HEAD
              LocationName.CoRDepthsAPBoost                           :[0x50150,31],
             LocationName.CoRDepthsPowerCrystal                       :[0x50151,32],
             LocationName.CoRDepthsFrostCrystal                       :[0x50152,33],
@@ -450,24 +449,11 @@ def create_regions(world, player: int, active_locations):
             LocationName.CoRDepthsAPBoost2                           :[0x50154,35],
             LocationName.CoRMineshaftLowerLevelDepthsofRemembranceMap:[0x50155,36],
             LocationName.CoRMineshaftLowerLevelAPBoost               :[0x50156,37],
-=======
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
         }
     Hb2_Region = create_region(world, player, active_locations, LocationName.Hb2_Region,
                                        Hb2_Region_locations, None)
 
     CoR_Region_locations = {
-            LocationName.CoRDepthsAPBoost                            :[0x50150,1],
-            LocationName.CoRDepthsPowerCrystal                       :[0x50151,2],
-            LocationName.CoRDepthsFrostCrystal                       :[0x50152,3],
-            LocationName.CoRDepthsManifestIllusion                   :[0x50153,4],
-            LocationName.CoRDepthsAPBoost2                           :[0x50154,5],
-            LocationName.CoRMineshaftLowerLevelDepthsofRemembranceMap:[0x50155,6],
-            LocationName.CoRMineshaftLowerLevelAPBoost               :[0x50156,7],
-        }                                                              
-    CoR_Region = create_region(world, player, active_locations, LocationName.CoR_Region,
-                                       CoR_Region_locations, None)
-    FirstHalf_Region_locations = {
             LocationName.CoRDepthsUpperLevelRemembranceGem:[0x50157,1],
             LocationName.CoRMiningAreaSerenityGem         :[0x50158,2],
             LocationName.CoRMiningAreaAPBoost             :[0x50159,3],
@@ -481,23 +467,13 @@ def create_regions(world, player: int, active_locations):
             LocationName.CoREngineChamberAPBoost          :[0x50161,11],
             LocationName.CoREngineChamberManifestIllusion :[0x50162,12],
             LocationName.CoRMineshaftUpperLevelMagicBoost :[0x50163,13],
-<<<<<<< HEAD
-            LocationName.CoRMineshaftUpperLevelAPBoost:[0x50164,14],
-            LocationName.TransporttoRemembrance       :[0x50165,15],
-        }
+            LocationName.CoRMineshaftUpperLevelAPBoost    :[0x50164,14],
+            LocationName.TransporttoRemembrance           :[0x50165,15],
+            LocationName.CoRMineshaftUpperLevelAPBoost    :[0x50164,16],
+            LocationName.TransporttoRemembrance           :[0x50165,17],
+        }                                                              
     CoR_Region = create_region(world, player, active_locations, LocationName.CoR_Region,
                                        CoR_Region_locations, None)
-=======
-        }
-    FirstHalf_Region = create_region(world, player, active_locations, LocationName.FirstHalf_Region,
-                                       FirstHalf_Region_locations, None)
-    SecondHalf_Region_locations = {
-            LocationName.CoRMineshaftUpperLevelAPBoost:[0x50164,1],
-            LocationName.TransporttoRemembrance       :[0x50165,2],
-        }
-    SecondHalf_Region = create_region(world, player, active_locations, LocationName.SecondHalf_Region,
-                                       SecondHalf_Region_locations, None)
-
     Pl_Region_locations = {
             LocationName.GorgeSavannahMap             :[0x50166,1],
             LocationName.GorgeDarkGem                 :[0x50167,2],
@@ -839,9 +815,6 @@ def create_regions(world, player: int, active_locations):
                                Level_Region_locations,None)
                                 
 
-<<<<<<< HEAD
-    world.multiworld.regions += [
-=======
     world.regions += [
     LoD_Region         ,  
     LoD2_Region        ,
@@ -868,11 +841,7 @@ def create_regions(world, player: int, active_locations):
     Ht2_Region         ,
     Hb_Region          ,        
     Hb2_Region         ,          
-    CoR_Region         ,          
-=======
-    CoR_Region         ,          
-    FirstHalf_Region   ,                
-    SecondHalf_Region  ,                
+    CoR_Region         ,                         
     Pl_Region          ,        
     Pl2_Region         ,          
     STT_Region         ,         
@@ -928,14 +897,9 @@ def connect_regions (world: MultiWorld, player: int, self):
       connect(world, player, names,LocationName.GoA_Region, LocationName.Hb_Region)
       connect(world, player, names,LocationName.Hb_Region, LocationName.Hb2_Region)
 
-<<<<<<< HEAD
       connect(world, player, names,LocationName.Hb2_Region, LocationName.CoR_Region,
               lambda state:state.kh_QuickRun_level(player,2)
               and state.kh_AerialDodge_level(player,2))
-=======
-      connect(world, player, names,LocationName.Hb2_Region, LocationName.CoR_Region)
-      connect(world, player, names,LocationName.CoR_Region, LocationName.FirstHalf_Region)
-      connect(world, player, names,LocationName.FirstHalf_Region, LocationName.SecondHalf_Region)
       
       connect(world, player, names,LocationName.GoA_Region, LocationName.Pl_Region)
       connect(world, player, names,LocationName.Pl_Region, LocationName.Pl2_Region)
@@ -959,7 +923,6 @@ def connect_regions (world: MultiWorld, player: int, self):
           lambda state: (state.has(ItemName.TornPages, player,4)))
       connect(world, player, names,LocationName.GoA_Region, LocationName.HundredAcre5_Region,
           lambda state: (state.has(ItemName.TornPages, player,5)))
-<<<<<<< HEAD
       
 
       for region in(firstVisits):
@@ -975,34 +938,7 @@ def connect_regions (world: MultiWorld, player: int, self):
                   lambda state: state.has(ItemName.MasterForm,player))
           connect(world, player, names,region, LocationName.Final_Region,
                   lambda state: state.has(ItemName.FinalForm,player))
-#shamelessly stolen from the sa2b
-def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], source: str, target: str,
-    rule: typing.Optional[typing.Callable] = None):
-    source_region = world.multiworld.get_region(source, player)
-    target_region = world.multiworld.get_region(target, player)
-=======
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Valor_Region,
-              lambda state: state.has(ItemName.ValorForm,player))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Wisdom_Region,
-              lambda state: state.has(ItemName.WisdomForm,player))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Limit_Region,
-              lambda state: state.has(ItemName.LimitForm,player))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Master_Region,
-              lambda state: state.has(ItemName.MasterForm,player))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Final_Region,
-              lambda state: state.has(ItemName.FinalForm,player))
 
-      for region in(firstVisits):
-          connect(world, player, names, region,LocationName.SoraLevels_Region)
-      #connect(world, player, names,LocationName.LoD_Region, LocationName.SoraLevels_Region)
-      #
-      #connect(world, player, names,LocationName.Ag_Region, LocationName.SoraLevels_Region)
-      itest=world.get_region(LocationName.SoraLevels_Region, player)
-      print(itest)
-      irest=world.get_region(LocationName.TT_Region, player)
-      print(irest)
-      irest=world.get_region(LocationName.TT2_Region, player)
-      print(irest)
 #shamelessly stolen from the sa2b
 def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], source: str, target: str,
     rule: typing.Optional[typing.Callable] = None):
