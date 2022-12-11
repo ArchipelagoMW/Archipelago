@@ -9,7 +9,6 @@ import os
 import ModuleUpdate
 ModuleUpdate.update_ran = True  # don't upgrade
 import Generate
-import Utils
 
 
 class TestGenerateMain(unittest.TestCase):
@@ -32,8 +31,8 @@ class TestGenerateMain(unittest.TestCase):
     def setUp(self):
         self.original_argv = sys.argv.copy()
         self.original_cwd = os.getcwd()
-        self.original_cached_path = Utils.local_path.cached_path
-        Utils.local_path.cached_path = str(self.generate_dir)
+        self.original_cached_path = Generate.Utils.local_path.cached_path
+        Generate.Utils.local_path.cached_path = str(self.generate_dir)
         os.chdir(self.run_dir)
         self.output_tempdir = TemporaryDirectory(prefix='AP_out_')
 
@@ -41,7 +40,7 @@ class TestGenerateMain(unittest.TestCase):
         self.output_tempdir.cleanup()
         os.chdir(self.original_cwd)
         sys.argv = self.original_argv
-        Utils.local_path.cached_path = self.original_cached_path
+        Generate.Utils.local_path.cached_path = self.original_cached_path
 
     def test_paths(self):
         self.assertTrue(os.path.exists(self.generate_dir))
@@ -70,7 +69,7 @@ class TestGenerateMain(unittest.TestCase):
 
     def test_generate_yaml(self):
         # override host.yaml
-        defaults = Utils.get_options()["generator"]
+        defaults = Generate.Utils.get_options()["generator"]
         defaults["player_files_path"] = os.path.abspath(self.yaml_input_dir)
         defaults["players"] = 0
 
