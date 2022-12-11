@@ -76,9 +76,6 @@ class SMZ3World(World):
         for key, value in TotalSMZ3World(Config(), "", 0, "").locationLookup.items()}
     web = SMZ3Web()
 
-    remote_items: bool = False
-    remote_start_inventory: bool = False
-
     locationNamesGT: Set[str] = {loc.Name for loc in GanonsTower(None, None).Locations}
 
     # first added for 0.2.6
@@ -485,9 +482,9 @@ class SMZ3World(World):
         return False
 
     def create_item(self, name: str) -> Item:
-        return SMZ3Item(name, 
+        return SMZ3Item(name,
                         ItemClassification.progression if SMZ3World.isProgression(TotalSMZ3Item.ItemType[name]) else ItemClassification.filler,
-                        TotalSMZ3Item.ItemType[name], self.item_name_to_id[name], 
+                        TotalSMZ3Item.ItemType[name], self.item_name_to_id[name],
                         self.player,
                         TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[name], self))
 
