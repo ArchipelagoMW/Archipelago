@@ -81,6 +81,7 @@ class WitnessWorld(World):
                                 " Door Shuffle or Laser Shuffle.")
 
         self.player_logic = WitnessPlayerLogic(self.multiworld, self.player)
+
         self.locat = WitnessPlayerLocations(self.multiworld, self.player, self.player_logic)
         self.items = WitnessPlayerItems(self.locat, self.multiworld, self.player, self.player_logic)
         self.regio = WitnessRegions(self.locat)
@@ -102,11 +103,26 @@ class WitnessWorld(World):
 
         less_junk = 0
 
-        # Put good item on first check if symbol shuffle is on
-        symbols = is_option_enabled(self.multiworld, self.player, "shuffle_symbols")
+        for precol_item in self.multiworld.precollected_items[self.player]:
+            if precol_item.name in items_by_name:  # if item is in the pool, remove 1 instance.
+                item_obj = items_by_name[precol_item.name]
 
-        if symbols and get_option_value(self.multiworld, self.player, "puzzle_randomization") != 1:
-            random_good_item = self.multiworld.random.choice(self.items.GOOD_ITEMS)
+                if item_obj in pool:
+                    pool.remove(item_obj) # remove one instance of this pre-collected item if it exists
+
+            # elif because logic should only change if the item is not already in the pool
+            elif precol_item.name in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
+                self.player_logic.pre_opened_door(precol_item.name)
+
+        # Put good item on first check if there are any of the designated "good items" in the pool
+        good_items_in_the_game = []
+
+        for symbol in self.items.GOOD_ITEMS:
+            if items_by_name[symbol] in pool:
+                good_items_in_the_game.append(symbol)
+
+        if good_items_in_the_game:
+            random_good_item = self.multiworld.random.choice(good_items_in_the_game)
 
             first_check = self.multiworld.get_location(
                 "Tutorial Gate Open", self.player
@@ -194,7 +210,7 @@ class WitnessWorld(World):
 
     def create_item(self, name: str) -> Item:
         # this conditional is purely for unit tests, which need to be able to create an item before generate_early
-        if hasattr(self, 'items'):
+        if hasattr(self, 'items') and name in self.items.ITEM_TABLE:
             item = self.items.ITEM_TABLE[name]
         else:
             item = StaticWitnessItems.ALL_ITEM_TABLE[name]
