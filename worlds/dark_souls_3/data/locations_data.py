@@ -442,6 +442,99 @@ archdragon_peak_table = {
     "AP: Havel's Greatshield": 0x013376F0,
 }
 
+painted_world_table = { # DLC
+    "PW: Follower Javelin": 0x008CD6B0,
+    "PW: Frozen Weapon": 0x401408E8,
+    "PW: Millwood Greatbow": 0x00D85EA0,
+    "PW: Captains Ashes": 0x4000086A,
+    "PW: Millwood Battle Axe": 0x006D67D0,
+    "PW: Ethereal Oak Shield": 0x01450320,
+    "PW: Crow Quills": 0x00F66DF0,
+    "PW: Slave Knight Hood": 0x134EDCE0,
+    "PW: Slave Knight Armor": 0x134EE0C8,
+    "PW: Slave Knight Gauntlets": 0x134EE4B0,
+    "PW: Slave Knight Leggings": 0x134EE898,
+    "PW: Way of White Corona": 0x403642A0,
+    "PW: Crow Talons": 0x00A89C10,
+    "PW: Quakestone Hammer": 0x007ECCF0,
+    "PW: Earth Seeker": 0x006D8EE0,
+    "PW: Follower Torch": 0x015F1AD0,
+    "PW: Follower Shield": 0x0135C0E0,
+    "PW: Follower Sabre": 0x003EDDC0,
+    "PW: Snap Freeze": 0x401A90C8,
+    "PW: Floating Chaos": 0x40257DA8,
+    "PW: Pyromancer's Parting Flame": 0x00CC9ED0,
+    "PW: Vilhelm's Helm": 0x11312D00,
+    "PW: Vilhelm's Armor": 0x113130E8,
+    "PW: Vilhelm's Gauntlets": 0x113134D0,
+    "PW: Vilhelm's Leggings": 0x113138B8,
+    "PW: Vilhelm's Leggings": 0x113138B8,
+    "PW: Valorheart": 0x00F646E0, # GRAVETENDER FIGHT
+    "PW: Champions Bones": 0x40000869, # GRAVETENDER FIGHT
+    "PW: Onyx Blade": 0x00222E00, # VILHELM FIGHT
+    "PW: Soul of Sister Friede": 0x400002E8,
+    "PW: Titanite Slab": 0x400003EB,
+    "PW: Chillbite Ring": 0x20005208,
+}
+
+dreg_heap_table = { # DLC
+    "DH: Loincloth": 0x11B2EBD8,
+    "DH: Aquamarine Dagger": 0x00116520,
+    "DH: Murky Hand Scythe": 0x00118C30,
+    "DH: Murky Longstaff": 0x00CCC5E0,
+    "DH: Great Soul Dregs": 0x401879A0,
+    "DH: Lothric War Banner": 0x00CCC5E0,
+    "DH: Projected Heal": 0x40364688,
+    "DH: Desert Pyromancer Hood": 0x14DB9760,
+    "DH: Desert Pyromancer Garb": 0x14DB9B48,
+    "DH: Desert Pyromancer Gloves": 0x14DB9F30,
+    "DH: Desert Pyromancer Skirt": 0x14DBA318,
+    "DH: Giant Door Shield": 0x00F5F8C0,
+    "DH: Herald Curved Greatsword": 0x006159E0,
+    "DH: Flame Fan": 0x40258190,
+    "DH: Soul of the Demon Prince": 0x400002EA,
+}
+
+ringed_city_table = { # DLC
+    "RC: Ruin Sentinel Helm": 0x14CC5520,
+    "RC: Ruin Sentinel Armor": 0x14CC5908,
+    "RC: Ruin Sentinel Gauntlets": 0x14CC5CF0,
+    "RC: Ruin Sentinel Leggings": 0x14CC60D8,
+    "RC: Black Witch Veil": 0x14FA1BE0,
+    "RC: Black Witch Hat": 0x14EAD9A0,
+    "RC: Black Witch Garb": 0x14EADD88,
+    "RC: Black Witch Wrappings": 0x14EAE170,
+    "RC: Black Witch Trousers": 0x14EAE558,
+    "RC: White Preacher Head": 0x14153A20,
+    "RC: Havel's Ring": 0x20004E34,
+    "RC: Ringed Knight Spear": 0x008CFDC0,
+    "RC: Dragonhead Shield": 0x0135E7F0,
+    "RC: Ringed Knight Straight Sword": 0x00225510,
+    "RC: Preacher's Right Arm": 0x00CD1400,
+    "RC: White Birch Bow": 0x00D77440,
+    "RC: Church Guardian Shiv": 0x4000013B, # Assigned to "Demon's Scar"
+    "RC: Dragonhead Greatshield": 0x01452A30,
+    "RC: Ringed Knight Paired Greatswords": 0x00F69500,
+    "RC: Shira's Crown": 0x11C22260,
+    "RC: Shira's Armor": 0x11C22648,
+    "RC: Shira's Gloves": 0x11C22A30,
+    "RC: Shira's Trousers": 0x11C22E18,
+    "RC: Titanite Slab": 0x400003EB, # SHIRA DROP
+    "RC: Crucifix of the Mad King": 0x008D4BE0, # SHIRA DROP
+    "RC: Sacred Chime of Filianore": 0x00CCECF0, # SHIRA DROP
+    "RC: Iron Dragonslayer Helm": 0x1405F7E0,
+    "RC: Iron Dragonslayer Armor": 0x1405FBC8,
+    "RC: Iron Dragonslayer Gauntlets": 0x1405FFB0,
+    "RC: Iron Dragonslayer Leggings": 0x14060398,
+    "RC: Lightning Arrow": 0x40358B08,
+    "RC: Ritual Spear Fragment": 0x4000028A, # Assigned to "Frayed Blade"
+    "RC: Antiquated Plain Garb": 0x11B2E408,
+    "RC: Violet Wrappings": 0x11B2E7F0, # Assigned to "Gael's Greatsword"
+    "RC: Soul of Darkeater Midir": 0x400002EB,
+    "RC: Soul of Slave Knight Gael": 0x400002E9,
+    "RC: Blood of the Dark Souls": 0x4000086E, # Assigned to "Repeating Crossbow"
+}
+
 progressive_locations = {
     # Upgrade materials
     **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(1, 11)},
@@ -495,9 +588,9 @@ progressive_locations_3 = {
 location_tables = [fire_link_shrine_table, firelink_shrine_bell_tower_table, high_wall_of_lothric, undead_settlement_table, road_of_sacrifice_table,
                              cathedral_of_the_deep_table, farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table,
                              irithyll_dungeon_table, profaned_capital_table, anor_londo_table, lothric_castle_table, consumed_king_garden_table,
-                             grand_archives_table, untended_graves_table, archdragon_peak_table, progressive_locations, progressive_locations_2, progressive_locations_3]
+                             grand_archives_table, untended_graves_table, archdragon_peak_table, progressive_locations, progressive_locations_2, progressive_locations_3, painted_world_table, dreg_heap_table, ringed_city_table]
 
 location_dictionary = {**fire_link_shrine_table, **firelink_shrine_bell_tower_table, **high_wall_of_lothric, **undead_settlement_table, **road_of_sacrifice_table,
                        **cathedral_of_the_deep_table, **farron_keep_table, **catacombs_of_carthus_table, **smouldering_lake_table, **irithyll_of_the_boreal_valley_table,
                        **irithyll_dungeon_table, **profaned_capital_table, **anor_londo_table, **lothric_castle_table, **consumed_king_garden_table,
-                       **grand_archives_table, **untended_graves_table, **archdragon_peak_table, **progressive_locations, **progressive_locations_2, **progressive_locations_3}
+                       **grand_archives_table, **untended_graves_table, **archdragon_peak_table, **progressive_locations, **progressive_locations_2, **progressive_locations_3, **painted_world_table, **dreg_heap_table, **ringed_city_table}
