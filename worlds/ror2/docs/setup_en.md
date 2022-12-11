@@ -12,7 +12,7 @@ Head on over to the r2modman page on Thunderstore and follow the installation in
 
 You can install the Archipelago mod using r2modman in one of two ways.
 
-[Archipelago Mod Download Page](https://thunderstore.io/package/ArchipelagoMW/Archipelago/)
+[Archipelago Mod Download Page](https://thunderstore.io/package/Sneaki/Archipelago/)
 
 One, you can use the Thunderstore website and click on the "Install with Mod Manager" link.
 
