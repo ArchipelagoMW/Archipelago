@@ -68,7 +68,7 @@ def download_SNI():
                     zf.extract(member, path="SNI")
         print(f"Downloaded SNI from {source_url}")
     else:
-        print(f"No SNI found for system spec {platform_name} {machine_name}")
+        print(f"No SNI found for system spec {platform_name}. 64Bit: {is_64bits}")
 
 
 sni_thread = threading.Thread(target=download_SNI, name="SNI Downloader")
