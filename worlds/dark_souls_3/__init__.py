@@ -106,6 +106,10 @@ class DarkSouls3World(World):
         untended_graves_region = self.create_region("Untended Graves", untended_graves_table)
         archdragon_peak_region = self.create_region("Archdragon Peak", archdragon_peak_table)
         kiln_of_the_first_flame_region = self.create_region("Kiln Of The First Flame", None)
+        # DLC Down here
+        painted_world_of_ariandel_region = self.create_region("Painted World of Ariandel", painted_world_table)
+        dreg_heap_region = self.create_region("Dreg Heap", dreg_heap_table)
+        ringed_city_region = self.create_region("Ringed City", ringed_city_table)
 
         # Create the entrance to connect those regions
         menu_region.exits.append(Entrance(self.player, "New Game", menu_region))
@@ -159,6 +163,13 @@ class DarkSouls3World(World):
         consumed_king_garden_region.exits.append(Entrance(self.player, "Goto Untended Graves",
                                                           consumed_king_garden_region))
         self.multiworld.get_entrance("Goto Untended Graves", self.player).connect(untended_graves_region)
+        # DLC Connectors Below
+        cathedral_of_the_deep_region.exits.append(Entrance(self.player, "Goto Painted World of Ariandel", cathedral_of_the_deep_region))
+        self.multiworld.get_entrance("Goto Painted World of Ariandel", self.player).connect(painted_world_region)
+        painted_world_region.exits.append(Entrance(self.player, "Goto Dreg Heap", painted_world_region))
+        self.multiworld.get_entrance("Goto Dreg Heap", self.player).connect(dreg_heap_region)
+        dreg_heap_region.exits.append(Entrance(self.player, "Goto Ringed City", dreg_heap_region))
+        self.multiworld.get_entrance("Goto Ringed City", self.player).connect(ringed_city_region)
 
     # For each region, add the associated locations retrieved from the corresponding location_table
     def create_region(self, region_name, location_table) -> Region:
@@ -181,7 +192,7 @@ class DarkSouls3World(World):
             if (not self.multiworld.enable_progressive_locations[self.player]) and "#" in name:
                 continue
             # Do not add DLC items if the option is disabled
-            if (not self.multiworld.enable_dlc[self.player]) and DarkSouls3Item.is_dlc_item(name):
+            if (not self.multiworld.enable_dlc[self.player]) and DarkSouls3Item.is_dlc_item(name) and DarkSouls3Location.is_dlc_location(name):
                 continue
             self.multiworld.itempool += [self.create_item(name)]
 
