@@ -467,6 +467,7 @@ hidden_whistle_location_table = {
 
     LocationName.city_escape_hidden_4: 0xFF0760,
     LocationName.green_forest_hidden_4: 0xFF0764,
+    LocationName.mission_street_hidden_4: 0xFF0766,
 
     LocationName.city_escape_hidden_5: 0xFF0780,
 }
