@@ -68,7 +68,6 @@ class KH2StartItems(ItemDict):
     default = {}
 =======
     default = {"Way to the Dawn": 1, "Beast's Claw": 1}
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
 
 class Level_Depth(Toggle):
     display_name="Level Depth"

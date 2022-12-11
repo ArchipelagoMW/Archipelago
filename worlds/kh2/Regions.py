@@ -457,8 +457,6 @@ def create_regions(world, player: int, active_locations):
                                        Hb2_Region_locations, None)
 
     CoR_Region_locations = {
-<<<<<<< HEAD
-=======
             LocationName.CoRDepthsAPBoost                            :[0x50150,1],
             LocationName.CoRDepthsPowerCrystal                       :[0x50151,2],
             LocationName.CoRDepthsFrostCrystal                       :[0x50152,3],
@@ -470,7 +468,6 @@ def create_regions(world, player: int, active_locations):
     CoR_Region = create_region(world, player, active_locations, LocationName.CoR_Region,
                                        CoR_Region_locations, None)
     FirstHalf_Region_locations = {
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
             LocationName.CoRDepthsUpperLevelRemembranceGem:[0x50157,1],
             LocationName.CoRMiningAreaSerenityGem         :[0x50158,2],
             LocationName.CoRMiningAreaAPBoost             :[0x50159,3],
@@ -487,7 +484,7 @@ def create_regions(world, player: int, active_locations):
 <<<<<<< HEAD
             LocationName.CoRMineshaftUpperLevelAPBoost:[0x50164,14],
             LocationName.TransporttoRemembrance       :[0x50165,15],
-        }                                                              
+        }
     CoR_Region = create_region(world, player, active_locations, LocationName.CoR_Region,
                                        CoR_Region_locations, None)
 =======
@@ -500,7 +497,6 @@ def create_regions(world, player: int, active_locations):
         }
     SecondHalf_Region = create_region(world, player, active_locations, LocationName.SecondHalf_Region,
                                        SecondHalf_Region_locations, None)
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
 
     Pl_Region_locations = {
             LocationName.GorgeSavannahMap             :[0x50166,1],
@@ -847,7 +843,6 @@ def create_regions(world, player: int, active_locations):
     world.multiworld.regions += [
 =======
     world.regions += [
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
     LoD_Region         ,  
     LoD2_Region        ,
     Ag_Region          ,
@@ -873,13 +868,11 @@ def create_regions(world, player: int, active_locations):
     Ht2_Region         ,
     Hb_Region          ,        
     Hb2_Region         ,          
-<<<<<<< HEAD
-    CoR_Region         ,                         
+    CoR_Region         ,          
 =======
     CoR_Region         ,          
     FirstHalf_Region   ,                
     SecondHalf_Region  ,                
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
     Pl_Region          ,        
     Pl2_Region         ,          
     STT_Region         ,         
@@ -943,7 +936,6 @@ def connect_regions (world: MultiWorld, player: int, self):
       connect(world, player, names,LocationName.Hb2_Region, LocationName.CoR_Region)
       connect(world, player, names,LocationName.CoR_Region, LocationName.FirstHalf_Region)
       connect(world, player, names,LocationName.FirstHalf_Region, LocationName.SecondHalf_Region)
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
       
       connect(world, player, names,LocationName.GoA_Region, LocationName.Pl_Region)
       connect(world, player, names,LocationName.Pl_Region, LocationName.Pl2_Region)
@@ -1016,7 +1008,6 @@ def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], s
     rule: typing.Optional[typing.Callable] = None):
     source_region = world.get_region(source, player)
     target_region = world.get_region(target, player)
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
     if target not in used_names:
         used_names[target] = 1
         name = target

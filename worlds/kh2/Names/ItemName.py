@@ -461,4 +461,3 @@ FatalCrestSlot            ="Fatal Crest (Slot)"
 FenrirSlot                ="Fenrir (Slot)"
 UltimaWeaponSlot          ="Ultima Weapon (Slot)"
 WinnersProofSlot          ="Winner's Proof (Slot)"
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a

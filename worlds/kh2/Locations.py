@@ -598,11 +598,7 @@ LocationName.RuinandCreationsPassageOrichalcum      : LocationData(0x132201,Fals
 LocationName.Xemnas1                                : LocationData(0x132202,False,26,3),
 LocationName.Xemnas1GetBonus                        : LocationData(0x132203,False,26,0),
 LocationName.Xemnas1SecretAnsemReport13             : LocationData(0x132204,False,537,1),
-<<<<<<< HEAD
-LocationName.FinalXemnas                            : LocationData(0x132205,False,71,6),
-=======
 LocationName.FinalXemnas                            : LocationData(0x132205,False,71,2),
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
 LocationName.XemnasDataPowerBoost                   : LocationData(0x132206,False,554,1),
 }                                                                  
 SoraLevels={                                                       
@@ -770,12 +766,7 @@ GoA_Checks={
 #    LocationName.FenrirSlot                         :LocationData(0x1322A3),
 #    LocationName.UltimaWeaponSlot                   :LocationData(0x1322A4),
 #    LocationName.WinnersProofSlot                   :LocationData(0x1322A5),
-<<<<<<< HEAD
-#    }
-                                                          
-=======
 #    }                                                             
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
 exclusion_table = {                                                
     "Datas": {                                                     
         LocationName.XemnasDataPowerBoost,                         
@@ -801,11 +792,7 @@ exclusion_table = {
         },
     
     
-<<<<<<< HEAD
-    #These levels when level 50 is turned on should have Nothing
-=======
     #These levels when level 50 is turned on should have Potion for yml writing reasons
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
     "Level50":{
         LocationName.Lvl7,
         LocationName.Lvl9,

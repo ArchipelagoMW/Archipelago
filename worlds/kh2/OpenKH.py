@@ -29,7 +29,6 @@ def patch_kh2(world,player,self,output_directory):
 =======
     locName=[location.item.code.kh2id
              for location in self.world.get_filled_locations(self.player)]
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
     #        ]  
 
 
@@ -80,7 +79,6 @@ def patch_kh2(world,player,self,output_directory):
             self.formattedTrsr[location.address.locid] = {"ItemId":location.item.code.kh2id}
             continue
         if location.address.yml==4: 
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
             getStat(random.randint(0,3))
             lvlablitity=location.item.code.kh2id
             if location.item.code.kh2id==1:
@@ -103,7 +101,6 @@ def patch_kh2(world,player,self,output_directory):
         elif location.address.yml==2 or location.address.yml==3 or location.address.yml==0:
 =======
         if location.address.yml==2 or location.address.yml==3 or location.address.yml==0:
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
                 #print(location.address.yml)
                 if location.address.yml==2:
                     #print(location.address.locid)
@@ -141,7 +138,6 @@ def patch_kh2(world,player,self,output_directory):
     #print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
     #print(yaml.dump(self.formattedLvup, line_break="\r\n"))
     #print(yaml.dump(self.formattedBons, line_break="\r\n"))
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
     #for i in range(len(locName)):
     #     if locName[i] in getBonus:
     #         print(locName[i])
@@ -189,7 +185,6 @@ def patch_kh2(world,player,self,output_directory):
     #outfile.write(yaml.dump(self.formattedTrsr, line_break="\r\n"))
 =======
     #  outfile.write(yaml.dump(self.formattedTrsr, line_break="\r\n"))
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
     #  print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
     #  #print(self.trsrLocation)
 

@@ -385,7 +385,6 @@ ItemName.Victory                                 : ItemData(0x132016d,False,1,Tr
     }
 =======
 
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
 #These items cannot be in other games so these are done locally in kh2
 #DonaldAbility_Table={                                  
 #ItemName.DonaldFire                              : ItemData(0x132016c,False),
@@ -645,7 +644,6 @@ item_dictionary_table = {**Reports_Table,
                          **Misc_Table
 =======
                          **Items_Table, 
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
                             }
 
 lookup_id_to_name: typing.Dict[int,str] = {data.code: item_name for item_name, data in item_dictionary_table.items() if data.code}
