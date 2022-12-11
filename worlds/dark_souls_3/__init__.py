@@ -165,8 +165,8 @@ class DarkSouls3World(World):
         self.multiworld.get_entrance("Goto Untended Graves", self.player).connect(untended_graves_region)
         # DLC Connectors Below
         cathedral_of_the_deep_region.exits.append(Entrance(self.player, "Goto Painted World of Ariandel", cathedral_of_the_deep_region))
-        self.multiworld.get_entrance("Goto Painted World of Ariandel", self.player).connect(painted_world_region)
-        painted_world_region.exits.append(Entrance(self.player, "Goto Dreg Heap", painted_world_region))
+        self.multiworld.get_entrance("Goto Painted World of Ariandel", self.player).connect(painted_world_of_ariandel_region)
+        painted_world_of_ariandel_region.exits.append(Entrance(self.player, "Goto Dreg Heap", painted_world_of_ariandel_region))
         self.multiworld.get_entrance("Goto Dreg Heap", self.player).connect(dreg_heap_region)
         dreg_heap_region.exits.append(Entrance(self.player, "Goto Ringed City", dreg_heap_region))
         self.multiworld.get_entrance("Goto Ringed City", self.player).connect(ringed_city_region)
