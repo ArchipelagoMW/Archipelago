@@ -1,4 +1,4 @@
-from test.worlds.test_base import WorldTestBase
+from test.TestBase import WorldTestBase
 
 
 class L2ACTestBase(WorldTestBase):
