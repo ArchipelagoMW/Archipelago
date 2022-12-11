@@ -2,8 +2,8 @@ local socket = require("socket")
 local json = require('json')
 local math = require('math')
 
-local last_modified_date = '2022-07-24' -- Should be the last modified date
-local script_version = 2
+local last_modified_date = '2022-11-27' -- Should be the last modified date
+local script_version = 3
 
 --------------------------------------------------
 -- Heavily modified form of RiptideSage's tracker
@@ -25,6 +25,9 @@ local inf_table_offset = save_context_offset + 0xEF8 -- 0x11B4C8
 
 local temp_context = nil
 
+local collectibles_overrides = nil
+local collectible_offsets = nil
+
 -- Offsets for scenes can be found here
 -- https://wiki.cloudmodding.com/oot/Scene_Table/NTSC_1.0
 -- Each scene is 0x1c bits long, chests at 0x0, switches at 0x4, collectibles at 0xc
@@ -40,12 +43,16 @@ end
 -- [1] is the scene id
 -- [2] is the location type, which varies as input to the function
 -- [3] is the location id within the scene, and represents the bit which was checked
+-- REORDERED IN 7.0 TO scene id - location type - 0x00 - location id
 -- Note that temp_context is 0-indexed and expected_values is 1-indexed, because consistency.
 local check_temp_context = function(expected_values)
-    if temp_context[0] ~= 0x00 then return false end
-    for i=1,3 do
-        if temp_context[i] ~= expected_values[i] then return false end
-    end
+    -- if temp_context[0] ~= 0x00 then return false end
+    -- for i=1,3 do
+    --     if temp_context[i] ~= expected_values[i] then return false end
+    -- end
+    if temp_context[0] ~= expected_values[1] then return false end
+    if temp_context[1] ~= expected_values[2] then return false end
+    if temp_context[3] ~= expected_values[3] then return false end
     return true
 end
 
@@ -67,7 +74,7 @@ local on_the_ground_check = function(scene_offset, bit_to_check)
 end
 
 local boss_item_check = function(scene_offset)
-    return chest_check(scene_offset, 0x1F)
+    return on_the_ground_check(scene_offset, 0x1F)
         or check_temp_context({scene_offset, 0x00, 0x4F})
 end
 
@@ -226,6 +233,8 @@ local read_kokiri_forest_checks = function()
     checks["KF Shop Item 6"] = shop_check(0x6, 0x1)
     checks["KF Shop Item 7"] = shop_check(0x6, 0x2)
     checks["KF Shop Item 8"] = shop_check(0x6, 0x3)
+
+    checks["KF Shop Blue Rupee"] = on_the_ground_check(0x2D, 0x1)
     return checks
 end
 
@@ -454,7 +463,7 @@ local read_kakariko_village_checks = function()
     checks["Kak Impas House Cow"] = cow_check(0x37, 0x18)
 
     checks["Kak GS Tree"] = skulltula_check(0x10, 0x5)
-    checks["Kak GS Guards House"] = skulltula_check(0x10, 0x1)
+    checks["Kak GS Near Gate Guard"] = skulltula_check(0x10, 0x1)
     checks["Kak GS Watchtower"] = skulltula_check(0x10, 0x2)
     checks["Kak GS Skulltula House"] = skulltula_check(0x10, 0x4)
     checks["Kak GS House Under Construction"] = skulltula_check(0x10, 0x3)
@@ -480,7 +489,7 @@ local read_graveyard_checks = function()
     checks["Graveyard Royal Familys Tomb Chest"] = chest_check(0x41, 0x00)
     checks["Graveyard Freestanding PoH"] = on_the_ground_check(0x53, 0x4)
     checks["Graveyard Dampe Gravedigging Tour"] = on_the_ground_check(0x53, 0x8)
-    checks["Graveyard Hookshot Chest"] = chest_check(0x48, 0x00)
+    checks["Graveyard Dampe Race Hookshot Chest"] = chest_check(0x48, 0x00)
     checks["Graveyard Dampe Race Freestanding PoH"] = on_the_ground_check(0x48, 0x7)
 
     checks["Graveyard GS Bean Patch"] = skulltula_check(0x10, 0x0)
@@ -545,7 +554,7 @@ local read_shadow_temple_checks = function(mq_table_address)
         checks["Shadow Temple Boss Key Chest"] = chest_check(0x07, 0x0B)
         checks["Shadow Temple Invisible Floormaster Chest"] = chest_check(0x07, 0x0D)
 
-        checks["Shadow Temple GS Like Like Room"] = skulltula_check(0x07, 0x3)
+        checks["Shadow Temple GS Invisible Blades Room"] = skulltula_check(0x07, 0x3)
         checks["Shadow Temple GS Falling Spikes Room"] = skulltula_check(0x07, 0x1)
         checks["Shadow Temple GS Single Giant Pot"] = skulltula_check(0x07, 0x0)
         checks["Shadow Temple GS Near Ship"] = skulltula_check(0x07, 0x4)
@@ -723,9 +732,9 @@ local read_fire_temple_checks = function(mq_table_address)
 
         checks["Fire Temple MQ GS Big Lava Room Open Door"] = skulltula_check(0x4, 0x0)
         checks["Fire Temple MQ GS Skull On Fire"] = skulltula_check(0x4, 0x2)
-        checks["Fire Temple MQ GS Fire Wall Maze Center"] = skulltula_check(0x4, 0x3)
-        checks["Fire Temple MQ GS Fire Wall Maze Side Room"] = skulltula_check(0x4, 0x4)
-        checks["Fire Temple MQ GS Above Fire Wall Maze"] = skulltula_check(0x4, 0x1)
+        checks["Fire Temple MQ GS Flame Maze Center"] = skulltula_check(0x4, 0x3)
+        checks["Fire Temple MQ GS Flame Maze Side Room"] = skulltula_check(0x4, 0x4)
+        checks["Fire Temple MQ GS Above Flame Maze"] = skulltula_check(0x4, 0x1)
     end
 
     checks["Fire Temple Volvagia Heart"] = boss_item_check(0x15)
@@ -742,6 +751,12 @@ local read_zoras_river_checks = function()
     checks["ZR Near Domain Freestanding PoH"] = on_the_ground_check(0x54, 0x0B)
     checks["ZR Deku Scrub Grotto Front"] = scrub_sanity_check(0x15, 0x9)
     checks["ZR Deku Scrub Grotto Rear"] = scrub_sanity_check(0x15, 0x8)
+
+    checks["ZR Frogs Zeldas Lullaby"] = event_check(0xD, 0x1)
+    checks["ZR Frogs Eponas Song"] = event_check(0xD, 0x2)
+    checks["ZR Frogs Suns Song"] = event_check(0xD, 0x3)
+    checks["ZR Frogs Sarias Song"] = event_check(0xD, 0x4)
+    checks["ZR Frogs Song of Time"] = event_check(0xD, 0x5)
 
     checks["ZR GS Tree"] = skulltula_check(0x11, 0x1)
     --NOTE: There is no GS in the soft soil. It's the only one that doesn't have one.
@@ -912,10 +927,10 @@ end
 
 local read_gerudo_fortress_checks = function()
     local checks = {}
-    checks["Hideout Jail Guard (1 Torch)"] = on_the_ground_check(0xC, 0xC)
-    checks["Hideout Jail Guard (2 Torches)"] = on_the_ground_check(0xC, 0xF)
-    checks["Hideout Jail Guard (3 Torches)"] = on_the_ground_check(0xC, 0xA)
-    checks["Hideout Jail Guard (4 Torches)"] = on_the_ground_check(0xC, 0xE)
+    checks["Hideout 1 Torch Jail Gerudo Key"] = on_the_ground_check(0xC, 0xC)
+    checks["Hideout 2 Torches Jail Gerudo Key"] = on_the_ground_check(0xC, 0xF)
+    checks["Hideout 3 Torches Jail Gerudo Key"] = on_the_ground_check(0xC, 0xA)
+    checks["Hideout 4 Torches Jail Gerudo Key"] = on_the_ground_check(0xC, 0xE)
     checks["Hideout Gerudo Membership Card"] = membership_card_check(0xC, 0x2)
     checks["GF Chest"] = chest_check(0x5D, 0x0)
     checks["GF HBA 1000 Points"] = info_table_check(0x33, 0x0)
@@ -1170,9 +1185,22 @@ local check_all_locations = function(mq_table_address)
     for k,v in pairs(read_ganons_castle_checks(mq_table_address)) do location_checks[k] = v end
     for k,v in pairs(read_outside_ganons_castle_checks()) do location_checks[k] = v end
     for k,v in pairs(read_song_checks()) do location_checks[k] = v end
+    -- write 0 to temp context values
+    mainmemory.write_u32_be(0x40002C, 0)
+    mainmemory.write_u32_be(0x400030, 0)
     return location_checks
 end
 
+local check_collectibles = function()
+    local retval = {}
+    if collectible_offsets ~= nil then
+        for id, data in pairs(collectible_offsets) do
+            local mem = mainmemory.readbyte(collectible_overrides + data[1] + bit.rshift(data[2], 3))
+            retval[id] = bit.check(mem, data[2] % 8)
+        end
+    end
+    return retval
+end
 
 -- convenience functions
 
@@ -1557,9 +1585,10 @@ local outgoing_player_addr  = coop_context + 18
 
 local player_names_address  = coop_context + 20
 local player_name_length    = 8 -- 8 bytes
-local rom_name_location     = player_names_address + 0x800
+local rom_name_location     = player_names_address + 0x800 + 0x5 -- 0x800 player names, 0x5 CFG_FILE_SELECT_HASH
 
-local master_quest_table_address = rando_context + (mainmemory.read_u32_be(rando_context + 0x0CE0) - 0x03480000)
+-- TODO: load dynamically from slot data
+local master_quest_table_address = rando_context + (mainmemory.read_u32_be(rando_context + 0x0E9F) - 0x03480000)
 
 local save_context_addr = 0x11A5D0
 local internal_count_addr = save_context_addr + 0x90
@@ -1568,7 +1597,7 @@ local item_queue = {}
 local first_connect = true
 local game_complete = false
 
-NUM_BIG_POES_REQUIRED = mainmemory.read_u8(rando_context + 0x0CEE)
+NUM_BIG_POES_REQUIRED = mainmemory.read_u8(rando_context + 0x0EAD)
 
 local bytes_to_string = function(bytes)
     local string = ''
@@ -1718,7 +1747,7 @@ function is_game_complete()
 end
 
 function deathlink_enabled()
-    local death_link_flag = mainmemory.read_u16_be(coop_context + 0xA)
+    local death_link_flag = mainmemory.readbyte(coop_context + 0xB)
     return death_link_flag > 0
 end
 
@@ -1774,6 +1803,13 @@ function process_block(block)
             mainmemory.write_u16_be(incoming_item_addr, item_queue[received_items_count+1])
         end
     end
+    -- Record collectible data if necessary
+    if collectible_overrides == nil and block['collectibleOverrides'] ~= 0 then
+        collectible_overrides = mainmemory.read_u32_be(rando_context + block['collectibleOverrides']) - 0x80000000
+    end
+    if collectible_offsets ~= block['collectibleOffsets'] then
+        collectible_offsets = block['collectibleOffsets']
+    end
     return
 end
 
@@ -1805,6 +1841,7 @@ function receive()
     retTable["deathlinkActive"] = deathlink_enabled()
     if InSafeState() then
         retTable["locations"] = check_all_locations(master_quest_table_address)
+        retTable["collectibles"] = check_collectibles()
         retTable["isDead"] = get_death_state()
         retTable["gameComplete"] = is_game_complete()
     end
