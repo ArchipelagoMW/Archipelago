@@ -167,6 +167,9 @@ class WitnessPlayerItems:
             self.GOOD_ITEMS = [
                 "Progressive Dots", "Black/White Squares", "Symmetry"
             ]
+
+            if is_option_enabled(world, player, "shuffle_discarded_panels"):
+                self.GOOD_ITEMS.append("Triangles")
         elif symbols:
             self.GOOD_ITEMS = [
                 "Progressive Dots", "Black/White Squares", "Progressive Stars",

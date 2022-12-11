@@ -102,10 +102,11 @@ def get_always_hint_items(world: MultiWorld, player: int):
         "Caves Mountain Shortcut (Door)",
         "Caves Swamp Shortcut (Door)",
         "Caves Exits to Main Island",
+        "Progressive Dots",
     ]
 
     difficulty = get_option_value(world, player, "puzzle_randomization")
-    discards = is_option_enabled(world, player, "shuffle_discards")
+    discards = is_option_enabled(world, player, "shuffle_discarded_panels")
 
     if discards:
         if difficulty == 1:
@@ -122,6 +123,9 @@ def get_always_hint_locations(world: MultiWorld, player: int):
         "Shipwreck Vault Box",
         "Challenge Vault Box",
         "Mountain Bottom Floor Discard",
+        "Theater Eclipse EP",
+        "Shipwreck Couch EP",
+        "Mountainside Cloud Cycle EP",
     }
 
 
@@ -171,6 +175,8 @@ def get_priority_hint_locations(world: MultiWorld, player: int):
         "Desert Vault Box",
         "Mountainside Vault Box",
         "Mountainside Discard",
+        "Tunnels Theater Flowers EP",
+        "Boat Shipwreck Green EP",
     }
 
 
@@ -202,7 +208,7 @@ def make_hints(world: MultiWorld, player: int, hint_amount: int):
     }
     loc_in_this_world = {
         location.name for location in world.get_locations()
-        if location.player == player and not location.event
+        if location.player == player and location.address
     }
 
     always_locations = [
@@ -226,6 +232,10 @@ def make_hints(world: MultiWorld, player: int, hint_amount: int):
 
     for item in always_items:
         hint_pair = make_hint_from_item(world, player, item)
+
+        if hint_pair[2] == 158007:
+            continue
+
         always_hint_pairs[hint_pair[0]] = (hint_pair[1], True, hint_pair[2])
 
     for location in always_locations:
@@ -236,6 +246,10 @@ def make_hints(world: MultiWorld, player: int, hint_amount: int):
 
     for item in priority_items:
         hint_pair = make_hint_from_item(world, player, item)
+
+        if hint_pair[2] == 158007:
+            continue
+
         priority_hint_pairs[hint_pair[0]] = (hint_pair[1], True, hint_pair[2])
 
     for location in priority_locations:
@@ -247,6 +261,8 @@ def make_hints(world: MultiWorld, player: int, hint_amount: int):
             hints.append((item[0], "can be found at", loc, item[2]))
         else:
             hints.append((loc, "contains", item[0], item[2]))
+
+    world.random.shuffle(hints)  # shuffle always hint order in case of low hint amount
 
     next_random_hint_is_item = world.random.randint(0, 2)
 

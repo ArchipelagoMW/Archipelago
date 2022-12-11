@@ -183,7 +183,7 @@ class WitnessWorld(World):
             duplicates = len(audio_logs) // hint_amount
 
             for _ in range(0, hint_amount):
-                hint = generated_hints.pop()
+                hint = generated_hints.pop(0)
 
                 for _ in range(0, duplicates):
                     audio_log = audio_logs.pop()
