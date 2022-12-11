@@ -387,7 +387,7 @@ class WitnessPlayerLogic:
     def pre_opened_door(self, door_name):
         for door_hex in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[door_name][2]:
             if StaticWitnessLogic.CHECKS_BY_HEX[door_hex]["panelType"] in ("Door", "Laser"):
-                self.REQUIREMENTS_BY_HEX[door_hex] = frozenset({frozenset()})
+                self.REQUIREMENTS_BY_HEX[door_hex] = frozenset({frozenset([door_name])})
                 return
 
             # is a panel. Remove dependency on other panels

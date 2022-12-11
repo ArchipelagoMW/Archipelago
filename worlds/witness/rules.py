@@ -20,35 +20,24 @@ class WitnessLogic(LogicMixin):
     """
 
     def _witness_has_lasers(self, world, player: int, amount: int) -> bool:
+        regular_lasers = not is_option_enabled(world, player, "shuffle_lasers")
+
         lasers = 0
 
-        if is_option_enabled(world, player, "shuffle_lasers"):
-            lasers += int(self.has("Symmetry Laser", player))
-            lasers += int(self.has("Desert Laser", player)
-                          and self.has("Desert Laser Redirection", player))
-            lasers += int(self.has("Town Laser", player))
-            lasers += int(self.has("Monastery Laser", player))
-            lasers += int(self.has("Keep Laser", player))
-            lasers += int(self.has("Quarry Laser", player))
-            lasers += int(self.has("Treehouse Laser", player))
-            lasers += int(self.has("Jungle Laser", player))
-            lasers += int(self.has("Bunker Laser", player))
-            lasers += int(self.has("Swamp Laser", player))
-            lasers += int(self.has("Shadows Laser", player))
-            return lasers >= amount
+        place_names = [
+            "Symmetry", "Desert", "Town", "Monastery", "Keep",
+            "Quarry", "Treehouse", "Jungle", "Bunker", "Swamp", "Shadows"
+        ]
 
-        lasers += int(self.has("Symmetry Laser Activation", player))
-        lasers += int(self.has("Desert Laser Activation", player)
-                      and self.has("Desert Laser Redirection", player))
-        lasers += int(self.has("Town Laser Activation", player))
-        lasers += int(self.has("Monastery Laser Activation", player))
-        lasers += int(self.has("Keep Laser Activation", player))
-        lasers += int(self.has("Quarry Laser Activation", player))
-        lasers += int(self.has("Treehouse Laser Activation", player))
-        lasers += int(self.has("Jungle Laser Activation", player))
-        lasers += int(self.has("Bunker Laser Activation", player))
-        lasers += int(self.has("Swamp Laser Activation", player))
-        lasers += int(self.has("Shadows Laser Activation", player))
+        for place in place_names:
+            has_laser = self.has(place + " Laser", player)
+
+            has_laser = has_laser or (regular_lasers and self.has(place + " Laser Activation", player))
+
+            if place == "Desert":
+                has_laser = has_laser and self.has("Desert Laser Redirection", player)
+
+            lasers += int(has_laser)
 
         return lasers >= amount
 
@@ -84,11 +73,15 @@ class WitnessLogic(LogicMixin):
 
             for item in option:
                 if item == "7 Lasers":
-                    if not self._witness_has_lasers(world, player, get_option_value(world, player, "mountain_lasers")):
+                    laser_req = get_option_value(world, player, "mountain_lasers")
+
+                    if not self._witness_has_lasers(world, player, laser_req):
                         valid_option = False
                         break
                 elif item == "11 Lasers":
-                    if not self._witness_has_lasers(world, player, get_option_value(world, player, "challenge_lasers")):
+                    laser_req = get_option_value(world, player, "mountain_lasers")
+
+                    if not self._witness_has_lasers(world, player, laser_req):
                         valid_option = False
                         break
                 elif item == "PP2 Weirdness":
