@@ -343,18 +343,6 @@ class MyGameWorld(World):
     option_definitions = mygame_options  # assign the options dict to the world
     #...
 ```
-    
-### Local or Remote
-
-A world with `remote_items` set to `True` gets all items items from the server
-and no item from the local game. So for an RPG opening a chest would not add
-any item to your inventory, instead the server will send you what was in that
-chest. The advantage is that a generic mod can be used that does not need to
-know anything about the seed.
-
-A world with `remote_items` set to `False` will locally reward its local items.
-For console games this can remove delay and make script/animation/dialog flow
-more natural. These games typically have been edited to 'bake in' the items.
 
 ### A World Class Skeleton
 
