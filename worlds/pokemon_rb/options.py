@@ -487,6 +487,7 @@ class BetterShops(Choice):
 class MasterBallPrice(Range):
     """Price for Master Balls. Can only be bought if better_shops is set to add_master_ball, but this will affect the
     sell price regardless. Vanilla is 0"""
+    display_name = "Master Ball Price"
     range_end = 999999
     default = 5000
 
@@ -506,11 +507,39 @@ class LoseMoneyOnBlackout(Toggle):
 
 
 class TrapPercentage(Range):
-    """Chance for each filler item to be replaced with trap items: Poison Trap, Paralyze Trap, Ice Trap, and
-    Fire Trap. These traps apply the status to your entire party! Keep in mind that trainersanity vastly increases the
-    number of filler items. Make sure to stock up on Ice Heals!"""
+    """Chance for each filler item to be replaced with trap items. Keep in mind that trainersanity vastly increases the
+    number of filler items. The trap weight options will determine which traps can be chosen from and at what likelihood."""
     display_name = "Trap Percentage"
     range_end = 100
+    default = 0
+
+
+class TrapWeight(Choice):
+    option_low = 1
+    option_medium = 3
+    option_high = 5
+    default = 3
+
+
+class PoisonTrapWeight(TrapWeight):
+    """Weights for Poison Traps. These apply the Poison status to all your party members."""
+    display_name = "Poison Trap Weight"
+
+
+class FireTrapWeight(TrapWeight):
+    """Weights for Fire Traps. These apply the Burn status to all your party members."""
+    display_name = "Fire Trap Weight"
+
+
+class ParalyzeTrapWeight(TrapWeight):
+    """Weights for Paralyze Traps. These apply the Paralyze status to all your party members."""
+    display_name = "Paralyze Trap Weight"
+
+
+class IceTrapWeight(TrapWeight):
+    """Weights for Ice Traps. These apply the Ice status to all your party members. Don't forget to buy Ice Heals!"""
+    display_name = "Ice Trap Weight"
+    option_disabled = 0
     default = 0
 
 
@@ -571,5 +600,9 @@ pokemon_rb_options = {
     "starting_money": StartingMoney,
     "lose_money_on_blackout": LoseMoneyOnBlackout,
     "trap_percentage": TrapPercentage,
+    "poison_trap_weight": PoisonTrapWeight,
+    "fire_trap_weight": FireTrapWeight,
+    "paralyze_trap_weight": ParalyzeTrapWeight,
+    "ice_trap_weight": IceTrapWeight,
     "death_link": DeathLink
 }
