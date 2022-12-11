@@ -55,18 +55,18 @@ weapons_upgrade_5_table = {
 dlc_weapons_upgrade_5_table = {
     "Friede's Great Scythe": 0x009B55A0,
     "Rose of Ariandel": 0x00B82C70,
-    "Demon's Scar": 0x003F04D0,
-    "Frayed Blade": 0x004D35A0,
-    "Gael's Greatsword": 0x00227C20,
-    "Repeating Crossbow": 0x00D885B0,
-    "Onyx Blade": 0x00222E00,
+    "Demon's Scar": 0x003F04D0, # Assigned to "RC: Church Guardian Shiv"
+    "Frayed Blade": 0x004D35A0, # Assigned to "RC: Ritual Spear Fragment"
+    "Gael's Greatsword": 0x00227C20, # Assigned to "RC: Violet Wrappings"
+    "Repeating Crossbow": 0x00D885B0, # Assigned to "RC: Blood of the Dark Souls"
+    "Onyx Blade": 0x00222E00, # VILHELM FIGHT
     "Earth Seeker": 0x006D8EE0,
     "Quakestone Hammer": 0x007ECCF0,
     "Millwood Greatbow": 0x00D85EA0,
     "Valorheart": 0x00F646E0,
     "Aquamarine Dagger": 0x00116520,
     "Ringed Knight Straight Sword": 0x00225510,
-    "Ledo's Great Hammer": 0x007EF400,
+    #"Ledo's Great Hammer": 0x007EF400, # INVADER FIGHT
     "Ringed Knight Spear": 0x008CFDC0,
     "Crucifix of the Mad King": 0x008D4BE0,
     "Sacred Chime of Filianore": 0x00CCECF0,
@@ -139,7 +139,7 @@ dlc_weapons_upgrade_10_table = {
     "Murky Hand Scythe": 0x00118C30,
     "Herald Curved Greatsword": 0x006159E0,
     "Lothric War Banner": 0x008D24D0,
-    "Splitleaf Greatsword": 0x009B2E90,
+    #"Splitleaf Greatsword": 0x009B2E90, # SHOP ITEM
     "Murky Longstaff": 0x00CCC5E0,
 }
 
@@ -172,7 +172,7 @@ shields_table = {
 dlc_shields_table = {
     "Followers Shield": 0x0135C0E0,
     "Ethereal Oak Shield": 0x01450320,
-    "Great Door Twinshields": 0x00F5F8C0,
+    "Giant Door Shield": 0x00F5F8C0,
     "Dragonhead Shield": 0x0135E7F0,
     "Dragonhead Greatshield": 0x01452A30
 }
@@ -227,7 +227,7 @@ goods_2_table = { # Added by Br00ty
 goods_3_table = { # Added by Br00ty
     **{"Fading Soul #" + str(i): 0x40000190 for i in range(1, 4)},
     **{"Ring of Sacrifice #"+str(i): 0x20004EF2 for i in range(1, 5)},
-    **{"Homeward Bone #"+str(i): 0x4000015E for i in range(1, 17)},
+    **{"Homeward Bone #"+str(i): 0x4000015E for i in range(1, 18)},
     **{"Green Blossom #"+str(i): 0x40000104 for i in range(1, 7)},
     **{"Human Pine Resin #"+str(i): 0x4000014E for i in range(1, 3)},
     **{"Charcoal Pine Bundle #"+str(i): 0x40000154 for i in range(1, 3)},
@@ -348,7 +348,7 @@ armor_table = {
     "Cornyx's Skirt": 0x11946758
 }
 
-dlc_armor_table = {
+dlc_armor_table = { 
     "Slave Knight Hood": 0x134EDCE0,
     "Slave Knight Armor": 0x134EE0C8,
     "Slave Knight Gauntlets": 0x134EE4B0,
@@ -357,26 +357,26 @@ dlc_armor_table = {
     "Vilhelm's Armor": 0x113130E8,
     "Vilhelm's Gauntlets": 0x113134D0,
     "Vilhelm's Leggings": 0x113138B8,
-    "Millwood Knight Helm": 0x139B2820,
-    "Millwood Knight Armor": 0x139B2C08,
-    "Millwood Knight Gauntlets": 0x139B2FF0,
-    "Millwood Knight Leggings": 0x139B33D8,
+    #"Millwood Knight Helm": 0x139B2820, # SHOP ITEM
+    #"Millwood Knight Armor": 0x139B2C08, # SHOP ITEM
+    #"Millwood Knight Gauntlets": 0x139B2FF0, # SHOP ITEM
+    #"Millwood Knight Leggings": 0x139B33D8, # SHOP ITEM
 
     "Shira's Crown": 0x11C22260,
     "Shira's Armor": 0x11C22648,
     "Shira's Gloves": 0x11C22A30,
     "Shira's Trousers": 0x11C22E18,
-    "Lapp's Helm": 0x11E84800,
-    "Lapp's Armor": 0x11E84BE8,
-    "Lapp's Gauntlets": 0x11E84FD0,
-    "Lapp's Leggings": 0x11E853B8,
-    "Ringed Knight Hood": 0x13C8EEE0,
-    "Ringed Knight Armor": 0x13C8F2C8,
-    "Ringed Knight Gauntlets": 0x13C8F6B0,
-    "Ringed Knight Leggings": 0x13C8FA98,
-    "Harald Legion Armor": 0x13D83508,
-    "Harald Legion Gauntlets": 0x13D838F0,
-    "Harald Legion Leggings": 0x13D83CD8,
+    #"Lapp's Helm": 0x11E84800, # SHOP ITEM
+    #"Lapp's Armor": 0x11E84BE8, # SHOP ITEM
+    #"Lapp's Gauntlets": 0x11E84FD0, # SHOP ITEM
+    #"Lapp's Leggings": 0x11E853B8, # SHOP ITEM
+    #"Ringed Knight Hood": 0x13C8EEE0, # RANDOM ENEMY DROP
+    #"Ringed Knight Armor": 0x13C8F2C8, # RANDOM ENEMY DROP
+    #"Ringed Knight Gauntlets": 0x13C8F6B0, # RANDOM ENEMY DROP
+    #"Ringed Knight Leggings": 0x13C8FA98, # RANDOM ENEMY DROP
+    #"Harald Legion Armor": 0x13D83508, # RANDOM ENEMY DROP
+    #"Harald Legion Gauntlets": 0x13D838F0, # RANDOM ENEMY DROP
+    #"Harald Legion Leggings": 0x13D83CD8, # RANDOM ENEMY DROP
     "Iron Dragonslayer Helm": 0x1405F7E0,
     "Iron Dragonslayer Armor": 0x1405FBC8,
     "Iron Dragonslayer Gauntlets": 0x1405FFB0,
@@ -391,18 +391,20 @@ dlc_armor_table = {
     "Desert Pyromancer Gloves": 0x14DB9F30,
     "Desert Pyromancer Skirt": 0x14DBA318,
 
-    "Follower Helm": 0x137CA3A0,
-    "Follower Armor": 0x137CA788,
-    "Follower Gloves": 0x137CAB70,
-    "Follower Boots": 0x137CAF58,
-    "Ordained Hood": 0x135E1F20,
-    "Ordained Dress": 0x135E2308,
-    "Ordained Trousers": 0x135E2AD8,
+    #"Follower Helm": 0x137CA3A0, # RANDOM ENEMY DROP
+    #"Follower Armor": 0x137CA788, # RANDOM ENEMY DROP
+    #"Follower Gloves": 0x137CAB70, # RANDOM ENEMY DROP
+    #"Follower Boots": 0x137CAF58, # RANDOM ENEMY DROP
+    #"Ordained Hood": 0x135E1F20, # SHOP ITEM
+    #"Ordained Dress": 0x135E2308, # SHOP ITEM
+    #"Ordained Trousers": 0x135E2AD8, # SHOP ITEM
     "Black Witch Veil": 0x14FA1BE0,
     "Black Witch Hat": 0x14EAD9A0,
     "Black Witch Garb": 0x14EADD88,
     "Black Witch Wrappings": 0x14EAE170,
-    "Black Witch Trousers": 0x14EAE558
+    "Black Witch Trousers": 0x14EAE558,
+    "White Preacher Head": 0x14153A20,
+    "Antiquated Plain Garb": 0x11B2E408
 }
 
 rings_table = {
@@ -482,18 +484,18 @@ spells_table = {
     "Crystal Scroll": 0x40000856
 }
 
-dlc_spells_table = {
-    "Boulder Heave": 0x40282170,
-    "Seething Chaos": 0x402896A0,
-    "Old Moonlight": 0x4014FF00,
+dlc_spells_table = { 
+    #"Boulder Heave": 0x40282170, # KILN STRAY DEMON
+    #"Seething Chaos": 0x402896A0, # KILN DEMON PRINCES
+    #"Old Moonlight": 0x4014FF00, # KILN MIDIR
     "Frozen Weapon": 0x401408E8,
     "Snap Freeze": 0x401A90C8,
     "Great Soul Dregs": 0x401879A0,
     "Flame Fan": 0x40258190,
     "Lightning Arrow": 0x40358B08,
     "Way of White Corona": 0x403642A0,
-    "Great Soul Dregs": 0x401879A0,
-    "Projected Heal": 0x40364688
+    "Projected Heal": 0x40364688,
+    "Floating Chaos": 0x40257DA8
 }
 
 misc_items_table = {
@@ -546,6 +548,10 @@ misc_items_table = {
     "Orbeck's Ashes": 0x40000840
 }
 
+dlc_misc_table = {
+    "Captains Ashes": 0x4000086A
+}
+
 key_items_list = {
     "Small Lothric Banner",
     "Basin of Vows",
@@ -568,10 +574,10 @@ key_items_list = {
 item_tables = [weapons_upgrade_5_table, weapons_upgrade_10_table, shields_table,
                armor_table, rings_table, spells_table, misc_items_table, goods_table, goods_2_table, goods_3_table,
                dlc_weapons_upgrade_5_table, dlc_weapons_upgrade_10_table, dlc_shields_table, dlc_goods_table,
-               dlc_armor_table, dlc_spells_table, dlc_ring_table]
+               dlc_armor_table, dlc_spells_table, dlc_ring_table, dlc_misc_table]
 
 item_dictionary = {**weapons_upgrade_5_table, **weapons_upgrade_10_table, **shields_table,
                    **armor_table, **rings_table, **spells_table, **misc_items_table, **goods_table, **goods_2_table,
                    **goods_3_table, **dlc_weapons_upgrade_5_table, **dlc_weapons_upgrade_10_table, **dlc_shields_table,
-                   **dlc_goods_table, **dlc_armor_table, **dlc_spells_table, **dlc_ring_table}
+                   **dlc_goods_table, **dlc_armor_table, **dlc_spells_table, **dlc_ring_table, **dlc_misc_table}
 
