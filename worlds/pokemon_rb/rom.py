@@ -40,7 +40,7 @@ def get_move(moves, chances, random, starting_move=False):
 
 
 def get_encounter_slots(self):
-    encounter_slots = [location for location in location_data if location.type == "Wild Encounter"]
+    encounter_slots = deepcopy([location for location in location_data if location.type == "Wild Encounter"])
 
     for location in encounter_slots:
         if isinstance(location.original_item, list):
@@ -107,11 +107,11 @@ def process_trainer_data(self, data):
 
 
 def process_static_pokemon(self):
-    starter_slots = [location for location in location_data if location.type == "Starter Pokemon"]
-    legendary_slots = [location for location in location_data if location.type == "Legendary Pokemon"]
-    static_slots = [location for location in location_data if location.type in
-                    ["Static Pokemon", "Missable Pokemon"]]
-    legendary_mons = [slot.original_item for slot in legendary_slots]
+    starter_slots = deepcopy([location for location in location_data if location.type == "Starter Pokemon"])
+    legendary_slots = deepcopy([location for location in location_data if location.type == "Legendary Pokemon"])
+    static_slots = deepcopy([location for location in location_data if location.type in
+                    ["Static Pokemon", "Missable Pokemon"]])
+    legendary_mons = deepcopy([slot.original_item for slot in legendary_slots])
 
     tower_6F_mons = set()
     for i in range(1, 11):
@@ -224,7 +224,7 @@ def process_wild_pokemon(self):
                     poke_data.pokemon_data[slot.original_item]["type2"] in [self.local_poke_data[mon]["type1"],
                                                                           self.local_poke_data[mon]["type2"]]])]
             if not candidate_locations:
-                candidate_locations = location_data
+                candidate_locations = get_encounter_slots(self)
             candidate_locations = [self.multiworld.get_location(location.name, self.player) for location in candidate_locations]
             candidate_locations.sort(key=lambda slot: abs(get_base_stat_total(slot.item.name) - stat_base))
             for location in candidate_locations:

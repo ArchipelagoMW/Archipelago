@@ -51,8 +51,6 @@ class DarkSouls3World(World):
     game: str = "Dark Souls III"
     option_definitions = dark_souls_options
     topology_present: bool = True
-    remote_items: bool = False
-    remote_start_inventory: bool = False
     web = DarkSouls3Web()
     data_version = 4
     base_id = 100000
