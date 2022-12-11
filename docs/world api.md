@@ -659,6 +659,10 @@ def generate_output(self, output_directory: str):
         "items": {location.name: location.item.name
                   if location.item.player == self.player else "Remote"
                   for location in self.multiworld.get_filled_locations(self.player)},
+        # store start_inventory from player's .yaml
+        # make sure to mark as not remote_start_inventory when connecting if stored in rom/mod
+        "starter_items": [item.name for item
+                          in self.multiworld.precollected_items[self.player]],
         "final_boss_hp": self.final_boss_hp,
         # store option name "easy", "normal" or "hard" for difficuly
         "difficulty": self.multiworld.difficulty[self.player].current_key,
