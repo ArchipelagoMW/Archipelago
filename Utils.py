@@ -273,7 +273,7 @@ def get_default_options() -> OptionsType:
             "players": 0,
             "weights_file_path": "weights.yaml",
             "meta_file_path": "meta.yaml",
-            "spoiler": 2,
+            "spoiler": 3,
             "glitch_triforce_room": 1,
             "race": 0,
             "plando_options": "bosses",
