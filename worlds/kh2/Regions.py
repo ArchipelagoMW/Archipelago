@@ -471,13 +471,9 @@ def create_regions(world, player: int, active_locations):
             LocationName.TransporttoRemembrance           :[0x50165,15],
             LocationName.CoRMineshaftUpperLevelAPBoost    :[0x50164,16],
             LocationName.TransporttoRemembrance           :[0x50165,17],
-        }                                                              
-        }                                                              
+        }                                                                             
     CoR_Region = create_region(world, player, active_locations, LocationName.CoR_Region,
-<<<<<<<<< Temporary merge branch 1
-=========
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
->>>>>>>>> Temporary merge branch 2
+                               CoR_Region_locations,None)
 
 
     Pl_Region_locations = {
@@ -815,23 +811,10 @@ def create_regions(world, player: int, active_locations):
             LocationName.Lvl96  :[0x50273,96],
             LocationName.Lvl97  :[0x50274,97],
             LocationName.Lvl98  :[0x50275,98],
+    }
+    Level_Region=create_region(world,player,active_locations,LocationName.SoraLevels_Region,
+                               Level_Region_locations,None)
     world.regions += [
-    world.multiworld.regions += [
-=======
-    world.regions += [
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
->>>>>>>>> Temporary merge branch 2
-    world.multiworld.regions += [
-=======
-    world.regions += [
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
->>>>>>>>> Temporary merge branch 2
-<<<<<<< HEAD
-    world.multiworld.regions += [
-=======
-    world.regions += [
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
->>>>>>>>> Temporary merge branch 2
     LoD_Region         ,  
     LoD2_Region        ,
     Ag_Region          ,
@@ -841,23 +824,23 @@ def create_regions(world, player: int, active_locations):
     HundredAcre1_Region,         
     HundredAcre2_Region,
     HundredAcre3_Region,
-    CoR_Region         ,                         
+    HundredAcre4_Region,
+    HundredAcre5_Region,
+    HundredAcre6_Region,                 
+    Pr_Region          ,         
+    Pr2_Region         ,         
+    Oc_Region          ,   
+    Oc2_Region         ,
+    Oc2Cups_Region  ,                              
+    Bc_Region          ,        
+    Bc2_Region         , 
+    Sp_Region          ,
+    Sp2_Region         ,
+    Ht_Region          ,        
     Ht2_Region         ,
     Hb_Region          ,        
     Hb2_Region         ,          
-<<<<<<<<< Temporary merge branch 1
-    CoR_Region         ,          
-    FirstHalf_Region   ,                
-    SecondHalf_Region  ,                
-=========
-<<<<<<< HEAD
     CoR_Region         ,                         
-=======
-    CoR_Region         ,          
-    FirstHalf_Region   ,                
-    SecondHalf_Region  ,                
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
->>>>>>>>> Temporary merge branch 2
     Pl_Region          ,        
     Pl2_Region         ,          
     STT_Region         ,         
@@ -883,10 +866,10 @@ def connect_regions (world: MultiWorld, player: int, self):
       connect(world, player, names, 'Menu', LocationName.GoA_Region)
       connect(world, player, names,LocationName.GoA_Region, LocationName.LoD_Region)
       connect(world, player, names,LocationName.LoD_Region, LocationName.LoD2_Region)
-      
+
       connect(world, player, names,LocationName.GoA_Region, LocationName.Oc_Region)
       connect(world, player, names,LocationName.Oc_Region, LocationName.Oc2_Region)
-      
+
       connect(world, player, names,LocationName.Oc2_Region, LocationName.Oc2Cups_Region)   
 
       connect(world, player, names,LocationName.GoA_Region, LocationName.Ag_Region)
@@ -894,38 +877,40 @@ def connect_regions (world: MultiWorld, player: int, self):
               lambda state: (state.has(ItemName.FireElement, player) 
                              and state.has(ItemName.BlizzardElement,player)
                              and state.has(ItemName.ThunderElement,player)))
-      
+
       connect(world, player, names,LocationName.GoA_Region, LocationName.Dc_Region)
       connect(world, player, names,LocationName.Dc_Region, LocationName.Tr_Region)
-      
+
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Pr_Region)
+      connect(world, player, names,LocationName.Pr_Region, LocationName.Pr2_Region)
+
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Bc_Region,)
+      connect(world, player, names,LocationName.Bc_Region, LocationName.Bc2_Region)
+
       connect(world, player, names,LocationName.GoA_Region, LocationName.Sp_Region)
       connect(world, player, names,LocationName.Sp_Region, LocationName.Sp2_Region)
 
-<<<<<<<<< Temporary merge branch 1
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Ht_Region)
+      connect(world, player, names,LocationName.Ht_Region, LocationName.Ht2_Region)
+
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Hb_Region)
+      connect(world, player, names,LocationName.Hb_Region, LocationName.Hb2_Region)
+
       connect(world, player, names,LocationName.Hb2_Region, LocationName.CoR_Region)
-      connect(world, player, names,LocationName.CoR_Region, LocationName.FirstHalf_Region)
-      connect(world, player, names,LocationName.FirstHalf_Region, LocationName.SecondHalf_Region)
-=========
-<<<<<<< HEAD
-      connect(world, player, names,LocationName.Hb2_Region, LocationName.CoR_Region,
-              lambda state:state.kh_QuickRun_level(player,2)
-              and state.kh_AerialDodge_level(player,2))
-=======
-      connect(world, player, names,LocationName.Hb2_Region, LocationName.CoR_Region)
-      connect(world, player, names,LocationName.CoR_Region, LocationName.FirstHalf_Region)
-      connect(world, player, names,LocationName.FirstHalf_Region, LocationName.SecondHalf_Region)
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
->>>>>>>>> Temporary merge branch 2
-      
+
+
       connect(world, player, names,LocationName.GoA_Region, LocationName.Pl_Region)
       connect(world, player, names,LocationName.Pl_Region, LocationName.Pl2_Region)
-      
+
       connect(world, player, names,LocationName.GoA_Region, LocationName.STT_Region)
-      
+
       connect(world, player, names,LocationName.GoA_Region, LocationName.TT_Region)
+      connect(world, player, names,LocationName.TT_Region, LocationName.TT2_Region) 
+      connect(world, player, names,LocationName.TT2_Region, LocationName.TT3_Region)
+
       connect(world, player, names,LocationName.GoA_Region, LocationName.Twtnw_Region)
       connect(world, player, names,LocationName.Twtnw_Region, LocationName.Twtnw2_Region)
-      
+
       connect(world, player, names,LocationName.GoA_Region, LocationName.HundredAcre1_Region,
           lambda state: (state.has(ItemName.TornPages, player,1)))
       connect(world, player, names,LocationName.GoA_Region, LocationName.HundredAcre2_Region,
@@ -936,24 +921,27 @@ def connect_regions (world: MultiWorld, player: int, self):
           lambda state: (state.has(ItemName.TornPages, player,4)))
       connect(world, player, names,LocationName.GoA_Region, LocationName.HundredAcre5_Region,
           lambda state: (state.has(ItemName.TornPages, player,5)))
-<<<<<<<<< Temporary merge branch 1
-=========
+      
+      
+
+      for region in(firstVisits):
+          connect(world, player, names, region,LocationName.SoraLevels_Region)
+          
+          connect(world, player, names,region, LocationName.Valor_Region,
+              lambda state: state.has(ItemName.ValorForm,player))
+          connect(world, player, names,region, LocationName.Wisdom_Region,
+                  lambda state: state.has(ItemName.WisdomForm,player))
+          connect(world, player, names,region, LocationName.Limit_Region,
+                  lambda state: state.has(ItemName.LimitForm,player))
+          connect(world, player, names,region, LocationName.Master_Region,
+                  lambda state: state.has(ItemName.MasterForm,player))
+          connect(world, player, names,region, LocationName.Final_Region,
+                  lambda state: state.has(ItemName.FinalForm,player))
 def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], source: str, target: str,
     rule: typing.Optional[typing.Callable] = None):
     source_region = world.multiworld.get_region(source, player)
     target_region = world.multiworld.get_region(target, player)
-=======
->>>>>>>>> Temporary merge branch 2
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Valor_Region,
-              lambda state: state.has(ItemName.ValorForm,player))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Wisdom_Region,
-              lambda state: state.has(ItemName.WisdomForm,player))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Limit_Region,
-              lambda state: state.has(ItemName.LimitForm,player))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Master_Region,
-              lambda state: state.has(ItemName.MasterForm,player))
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Final_Region,
-              lambda state: state.has(ItemName.FinalForm,player))
+
 
 #shamelessly stolen from the sa2b
 def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], source: str, target: str,

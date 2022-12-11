@@ -23,9 +23,9 @@ def noop(self, *args, **kw):
 def patch_kh2(world,player,self,output_directory):
     #itemName= {location.address.locid: location.item.code.kh2id
     #            for location in self.world.get_filled_locations(self.player)}
-
     #locName=[location.item.code.kh2id
     #         for location in self.multiworld.get_filled_locations(self.player)]
+
     locName=[location.item.code.kh2id
              for location in self.multiworld.get_filled_locations(self.player)]
     #        ]  
@@ -47,85 +47,59 @@ def patch_kh2(world,player,self,output_directory):
     self.magic   =0
     self.defense =0
     self.ap=     50
-    self.dblbonus=0
+    dblbonus=0
     def getStat(i):
         if lvlStats[i]=="str":
-            self.strength+=2
+            self.strength=+2
         if lvlStats[i]=="mag":
-            self.magic+=2
+            self.magic=+2
         if lvlStats[i]=="def":
-            self.defense+=2
+            self.defense=+2
         if lvlStats[i]=="ap":
-            self.ap+=2
+            self.ap=+2
     statcntr=0
     charName="Sora"
-
     for location in self.multiworld.get_filled_locations(self.player):
-        #if location is chest
         if location.address.yml==1:
+            #print(location.address.locid)
+            #print(location.item.code.kh2id)
             self.formattedTrsr[location.address.locid] = {"ItemId":location.item.code.kh2id}
-        elif location.address.yml==4: 
+            continue
         if location.address.yml==4: 
-<<<<<<<<< Temporary merge branch 1
-=========
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
->>>>>>>>> Temporary merge branch 2
-        if location.address.yml==4: 
-<<<<<<<<< Temporary merge branch 1
-=========
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
->>>>>>>>> Temporary merge branch 2
-        if location.address.yml==4: 
-<<<<<<<<< Temporary merge branch 1
-                    "Strength":strength,
-                    "Magic": magic ,
-                    "Defense":defense,
-                    "Ap":ap,
+            getStat(random.randint(0,3))
             lvlablitity=location.item.code.kh2id
             if location.item.code.kh2id==1:
-
-        if location.address.yml==2 or location.address.yml==3 or location.address.yml==0:
-=========
-<<<<<<< HEAD
+                lvlability=0
                 getStat(random.randint(0,3))
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
->>>>>>>>> Temporary merge branch 2
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
->>>>>>>>> Temporary merge branch 2
             self.formattedLvup["Sora"][location.address.locid] = {
                     "Exp": int(soraExp[location.address.locid]/5),
                     "Strength":self.strength,
-
-        if location.address.yml==2 or location.address.yml==3 or location.address.yml==0:
+                    "Magic": self.magic ,
+                    "Defense":self.defense,
+                    "Ap":self.ap,
+                    "SwordAbility": lvlablitity,
                     "ShieldAbility":lvlablitity,
-=======
-        if location.address.yml==2 or location.address.yml==3 or location.address.yml==0:
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
->>>>>>>>> Temporary merge branch 2
+                    "StaffAbility": lvlablitity,
+                    "Padding": 0,
+                    "Character": "Sora",
+                    "Level": location.address.locid
                 }
-<<<<<<<<< Temporary merge branch 1
-        if location.address.yml==2 or location.address.yml==3 or location.address.yml==0:
-=========
-<<<<<<< HEAD
         elif location.address.yml==2 or location.address.yml==3 or location.address.yml==0:
-=======
-        if location.address.yml==2 or location.address.yml==3 or location.address.yml==0:
->>>>>>> afa4bd2938ef788289864842bbffb250d8ac4b0a
->>>>>>>>> Temporary merge branch 2
+
                 #print(location.address.yml)
                 if location.address.yml==2:
                     #print(location.address.locid)
                     dblbonus=0
                 if location.address.yml==3:
-    print(yaml.dump(self.formattedLvup,line_break="\r\n"))
+                    dblbonus=location.item.code.kh2id
                 if location.address.yml==0:
                     charName="sora"
-
-    #print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
-    #print(yaml.dump(self.formattedLvup, line_break="\r\n"))
-    #print(yaml.dump(self.formattedBons, line_break="\r\n"))
-    print(yaml.dump(self.formattedLvup,line_break="\r\n"))
-<<<<<<< HEAD
+                    #print(dblbonus)
+                    #print(location.item.code.kh2id)
+                self.formattedBons[location.address.locid] = {}
+                self.formattedBons[location.address.locid] [charName]= {
+                "RewardId": location.address.locid,
+                "CharacterId": 1,
                 "HpIncrease": 0,
                 "MpIncrease": 0,
                 "DriveGaugeUpgrade": 0,
@@ -136,20 +110,15 @@ def patch_kh2(world,player,self,output_directory):
                 "BonusItem2": dblbonus,
                 "Padding": 0
             }
+                continue
         if location.address.yml==5:
             print(location.item)
    
             #lvlcntr+=1        
-<<<<<<<<< Temporary merge branch 1
-    #print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
-    #print(yaml.dump(self.formattedLvup, line_break="\r\n"))
-    #print(yaml.dump(self.formattedBons, line_break="\r\n"))
-=========
-<<<<<<< HEAD
     print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
     print(yaml.dump(self.formattedLvup, line_break="\r\n"))
     print(yaml.dump(self.formattedBons, line_break="\r\n"))
-    print(yaml.dump(self.formattedLvup,line_break="\r\n"))
+
     #print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
     #print(yaml.dump(self.formattedLvup, line_break="\r\n"))
     #print(yaml.dump(self.formattedBons, line_break="\r\n"))
@@ -164,7 +133,10 @@ def patch_kh2(world,player,self,output_directory):
     #mod_dir = os.path.join(output_directory,mod_name)
     #filename = f"trsr.yml"
         
-
+    #os.makedirs(mod_dir, exist_ok=True)
+     #trsrLocations=[loc for location in kh3id]
+    #shutil.copytree(os.path.join(os.path.dirname(__file__)), mod_dir, dirs_exist_ok=True)
+    #for i in range(5):
     #    kh2id=([loc.item for loc in self.world.get_filled_locations(self.player)])
     #    locationId=([location.name for location in self.world.get_filled_locations(self.player)])
     ##kh2id=dict.fromkeys(kh2id)
@@ -193,10 +165,6 @@ def patch_kh2(world,player,self,output_directory):
     ##not in trsr.location.LocationTypes and locationType.SYNTH not in trsr.location.LocationTypes]
     #
     #with open(os.path.join(output_directory, filename), 'w') as outfile:
-<<<<<<<<< Temporary merge branch 1
-    #  outfile.write(yaml.dump(self.formattedTrsr, line_break="\r\n"))
-=========
-<<<<<<< HEAD
     #outfile.write(yaml.dump(self.formattedTrsr, line_break="\r\n"))
 
     #  outfile.write(yaml.dump(self.formattedTrsr, line_break="\r\n"))
