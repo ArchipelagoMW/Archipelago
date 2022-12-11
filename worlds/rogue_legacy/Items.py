@@ -14,10 +14,6 @@ class RLItemData(NamedTuple):
     max_quantity: int = 1
     weight: int = 1
 
-    @property
-    def is_event_item(self):
-        return self.code is None
-
 
 def get_items_by_category(category: str) -> Dict[str, RLItemData]:
     item_dict: Dict[str, RLItemData] = {}
@@ -30,7 +26,7 @@ def get_items_by_category(category: str) -> Dict[str, RLItemData]:
 
 item_table: Dict[str, RLItemData] = {
     # Vendors
-    "Blacksmith":               RLItemData("Vendors",    90_000, ItemClassification.useful),
+    "Blacksmith":               RLItemData("Vendors",    90_000, ItemClassification.progression),
     "Enchantress":              RLItemData("Vendors",    90_001, ItemClassification.progression),
     "Architect":                RLItemData("Vendors",    90_002, ItemClassification.useful),
 

@@ -25,7 +25,7 @@
         <div id="tables-container">
             {% for team, players in inventory.items() %}
                 <div class="table-wrapper">
-                    <table class="table unique-item-table">
+                    <table id="inventory-table" class="table unique-item-table">
                         <thead>
                         <tr>
                             <th>#</th>
@@ -78,7 +78,7 @@
 
             {% for team, players in checks_done.items() %}
                 <div class="table-wrapper">
-                    <table class="table non-unique-item-table">
+                    <table id="checks-table" class="table non-unique-item-table">
                         <thead>
                             <tr>
                                 <th rowspan="2">#</th>
@@ -153,7 +153,7 @@
             {% endfor %}
             {% for team, hints in hints.items() %}
                 <div class="table-wrapper">
-                    <table class="table non-unique-item-table" data-order='[[5, "asc"], [0, "asc"]]'>
+                    <table id="hints-table" class="table non-unique-item-table" data-order='[[5, "asc"], [0, "asc"]]'>
                         <thead>
                         <tr>
                             <th>Finder</th>
