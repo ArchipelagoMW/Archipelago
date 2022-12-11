@@ -31,7 +31,7 @@ Generate a game by going to the site and performing the following steps:
 1. Select the randomization options (also known as `Flags` in the community) of your choice. If you do not know what you
    prefer, or it is your first time we suggest starting with the 'Shard Hunt' preset (which requires you to collect a
    number of shards to go to the end dungeon) or the 'Beginner' preset if you prefer to kill the original fiends.
-2. Go to the `Beta` tab and ensure `Archipelago` is enabled. Set your player name to any name that represents you.
+2. Go to the `Goal` tab and ensure `Archipelago` is enabled. Set your player name to any name that represents you.
 3. Upload you `Final Fantasy(USA).nes` (and click `Remember ROM` for the future!)
 4. Press the `NEW` button beside `Seed` a few times
 5. Click `GENERATE ROM`

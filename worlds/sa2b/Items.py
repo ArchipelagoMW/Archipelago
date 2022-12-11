@@ -2,6 +2,7 @@ import typing
 
 from BaseClasses import Item, ItemClassification
 from .Names import ItemName
+from worlds.alttp import ALTTPWorld
 
 
 class ItemData(typing.NamedTuple):
@@ -17,9 +18,6 @@ class SA2BItem(Item):
 
     def __init__(self, name, classification: ItemClassification, code: int = None, player: int = None):
         super(SA2BItem, self).__init__(name, classification, code, player)
-
-        if self.name == ItemName.sonic_light_shoes or self.name == ItemName.shadow_air_shoes:
-            self.pedestal_credit_text = "and the Soap Shoes"
 
 
 # Separate tables for each type of item.
@@ -74,10 +72,23 @@ junk_table = {
 }
 
 trap_table = {
-    ItemName.omochao_trap:  ItemData(0xFF0030, False, True),
-    ItemName.timestop_trap: ItemData(0xFF0031, False, True),
-    ItemName.confuse_trap:  ItemData(0xFF0032, False, True),
-    ItemName.tiny_trap:     ItemData(0xFF0033, False, True),
+    ItemName.omochao_trap:    ItemData(0xFF0030, False, True),
+    ItemName.timestop_trap:   ItemData(0xFF0031, False, True),
+    ItemName.confuse_trap:    ItemData(0xFF0032, False, True),
+    ItemName.tiny_trap:       ItemData(0xFF0033, False, True),
+    ItemName.gravity_trap:    ItemData(0xFF0034, False, True),
+    ItemName.exposition_trap: ItemData(0xFF0035, False, True),
+    #ItemName.darkness_trap:   ItemData(0xFF0036, False, True),
+}
+
+emeralds_table = {
+    ItemName.white_emerald:  ItemData(0xFF0040, True),
+    ItemName.red_emerald:    ItemData(0xFF0041, True),
+    ItemName.cyan_emerald:   ItemData(0xFF0042, True),
+    ItemName.purple_emerald: ItemData(0xFF0043, True),
+    ItemName.green_emerald:  ItemData(0xFF0044, True),
+    ItemName.yellow_emerald: ItemData(0xFF0045, True),
+    ItemName.blue_emerald:   ItemData(0xFF0046, True),
 }
 
 event_table = {
@@ -90,7 +101,13 @@ item_table = {
     **upgrades_table,
     **junk_table,
     **trap_table,
+    **emeralds_table,
     **event_table,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
+
+item_groups: typing.Dict[str, str] = {"Chaos Emeralds": [item_name for item_name, data in emeralds_table.items()]}
+
+ALTTPWorld.pedestal_credit_texts[item_table[ItemName.sonic_light_shoes].code] = "and the Soap Shoes"
+ALTTPWorld.pedestal_credit_texts[item_table[ItemName.shadow_air_shoes].code] = "and the Soap Shoes"

@@ -1,8 +1,8 @@
 from collections import deque
 import logging
 
-from .SaveContext import SaveContext
 from .Regions import TimeOfDay
+from .Items import oot_is_item_of_type
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_item
@@ -20,16 +20,30 @@ class OOTLogic(LogicMixin):
     def _oot_has_dungeon_rewards(self, count, player): 
         return self.has_group("rewards", player, count)
 
+    def _oot_has_hearts(self, count, player):
+        containers = self.count("Heart Container", player)
+        pieces = self.count("Piece of Heart", player) + self.count("Piece of Heart (Treasure Chest Game)", player)
+        total_hearts = 3 + containers + int(pieces / 4)
+        return total_hearts >= count
+
     def _oot_has_bottle(self, player): 
-        return self.has_group("bottles", player)
+        return self.has_group("logic_bottles", player)
+
+    def _oot_has_beans(self, player):
+        return self.has("Magic Bean Pack", player) or self.has("Buy Magic Bean", player) or self.has("Magic Bean", player, 10)
 
     # Used for fall damage and other situations where damage is unavoidable
     def _oot_can_live_dmg(self, player, hearts):
-        mult = self.world.worlds[player].damage_multiplier
+        mult = self.multiworld.worlds[player].damage_multiplier
         if hearts*4 >= 3:
             return mult != 'ohko' and mult != 'quadruple'
         else:
             return mult != 'ohko'
+
+    # Figure out if the given region's parent dungeon has shortcuts enabled
+    def _oot_region_has_shortcuts(self, player, regionname):
+        return self.multiworld.worlds[player].region_has_shortcuts(regionname)
+
 
     # This function operates by assuming different behavior based on the "level of recursion", handled manually. 
     # If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region. 
@@ -38,7 +52,7 @@ class OOTLogic(LogicMixin):
     def _oot_reach_as_age(self, regionname, age, player): 
         if self.age[player] is None: 
             self.age[player] = age
-            can_reach = self.world.get_region(regionname, player).can_reach(self)
+            can_reach = self.multiworld.get_region(regionname, player).can_reach(self)
             self.age[player] = None
             return can_reach
         return self.age[player] == age
@@ -51,7 +65,7 @@ class OOTLogic(LogicMixin):
         }
         if regionname in name_map[tod]:
             return True
-        region = self.world.get_region(regionname, player)
+        region = self.multiworld.get_region(regionname, player)
         if region.provides_time == TimeOfDay.ALL or regionname == 'Root':
             self.day_reachable_regions[player].add(regionname)
             self.dampe_reachable_regions[player].add(regionname)
@@ -81,7 +95,7 @@ class OOTLogic(LogicMixin):
             rrp = getattr(self, f'{age}_reachable_regions')[player]
             bc = getattr(self, f'{age}_blocked_connections')[player]
             queue = deque(getattr(self, f'{age}_blocked_connections')[player])
-            start = self.world.get_region('Menu', player)
+            start = self.multiworld.get_region('Menu', player)
 
             # init on first call - this can't be done on construction since the regions don't exist yet
             if not start in rrp:
@@ -109,7 +123,7 @@ class OOTLogic(LogicMixin):
 def set_rules(ootworld):
     logger = logging.getLogger('')
 
-    world = ootworld.world
+    world = ootworld.multiworld
     player = ootworld.player
 
     if ootworld.logic_rules != 'no_logic': 
@@ -124,26 +138,23 @@ def set_rules(ootworld):
     # is_child = ootworld.parser.parse_rule('is_child')
     guarantee_hint = ootworld.parser.parse_rule('guarantee_hint')
 
-    for location in filter(lambda location: location.name in ootworld.shop_prices or 'Deku Scrub' in location.name, ootworld.get_locations()):
+    for location in filter(lambda location: location.name in ootworld.shop_prices
+        or location.type in {'Scrub', 'GrottoScrub'}, ootworld.get_locations()):
         if location.type == 'Shop':
             location.price = ootworld.shop_prices[location.name]
         add_rule(location, create_shop_rule(location, ootworld.parser))
 
-    if ootworld.dungeon_mq['Forest Temple'] and ootworld.shuffle_bosskeys == 'dungeon' and ootworld.shuffle_smallkeys == 'dungeon' and ootworld.tokensanity == 'off':
+    if (ootworld.dungeon_mq['Forest Temple'] and ootworld.shuffle_bosskeys == 'dungeon'
+        and ootworld.shuffle_smallkeys == 'dungeon' and ootworld.tokensanity == 'off'):
         # First room chest needs to be a small key. Make sure the boss key isn't placed here.
         location = world.get_location('Forest Temple MQ First Room Chest', player)
         forbid_item(location, 'Boss Key (Forest Temple)', ootworld.player)
 
-    if ootworld.shuffle_song_items == 'song' and not ootworld.starting_songs:
+    if ootworld.shuffle_song_items == 'song' and not ootworld.songs_as_items:
         # Sheik in Ice Cavern is the only song location in a dungeon; need to ensure that it cannot be anything else.
         # This is required if map/compass included, or any_dungeon shuffle.
         location = world.get_location('Sheik in Ice Cavern', player)
-        add_item_rule(location, lambda item: item.player == player and item.type == 'Song')
-
-    if ootworld.skip_child_zelda:
-        # If skip child zelda is on, the item at Song from Impa must be giveable by the save context. 
-        location = world.get_location('Song from Impa', player)
-        add_item_rule(location, lambda item: item.name in SaveContext.giveable_items)
+        add_item_rule(location, lambda item: item.player == player and oot_is_item_of_type(item, 'Song'))
 
     for name in ootworld.always_hints:
         add_rule(world.get_location(name, player), guarantee_hint)
@@ -181,7 +192,7 @@ def set_shop_rules(ootworld):
     wallet = ootworld.parser.parse_rule('Progressive_Wallet')
     wallet2 = ootworld.parser.parse_rule('(Progressive_Wallet, 2)')
 
-    for location in filter(lambda location: location.item and location.item.type == 'Shop', ootworld.get_locations()):
+    for location in filter(lambda location: location.item and oot_is_item_of_type(location.item, 'Shop'), ootworld.get_locations()):
         # Add wallet requirements
         if location.item.name in ['Buy Arrows (50)', 'Buy Fish', 'Buy Goron Tunic', 'Buy Bombchu (20)', 'Buy Bombs (30)']:
             add_rule(location, wallet)
@@ -212,10 +223,10 @@ def set_shop_rules(ootworld):
 # The goal is to automatically set item rules based on age requirements in case entrances were shuffled
 def set_entrances_based_rules(ootworld):
 
-    if ootworld.world.accessibility == 'beatable': 
+    if ootworld.multiworld.accessibility == 'beatable': 
         return
 
-    all_state = ootworld.world.get_all_state(False)
+    all_state = ootworld.multiworld.get_all_state(False)
 
     for location in filter(lambda location: location.type == 'Shop', ootworld.get_locations()):
         # If a shop is not reachable as adult, it can't have Goron Tunic or Zora Tunic as child can't buy these

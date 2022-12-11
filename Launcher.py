@@ -10,16 +10,21 @@ Scroll down to components= to add components to the launcher as well as setup.py
 
 
 import argparse
-from os.path import isfile
-import sys
-from typing import Iterable, Sequence, Callable, Union, Optional
-import subprocess
 import itertools
-from Utils import is_frozen, user_path, local_path, init_logging, open_filename, messagebox,\
-    is_windows, is_macos, is_linux
-from shutil import which
 import shlex
+import subprocess
+import sys
 from enum import Enum, auto
+from os.path import isfile
+from shutil import which
+from typing import Iterable, Sequence, Callable, Union, Optional
+
+if __name__ == "__main__":
+    import ModuleUpdate
+    ModuleUpdate.update()
+
+from Utils import is_frozen, user_path, local_path, init_logging, open_filename, messagebox, \
+    is_windows, is_macos, is_linux
 
 
 def open_host_yaml():
@@ -65,6 +70,7 @@ def browse_files():
         webbrowser.open(file)
 
 
+# noinspection PyArgumentList
 class Type(Enum):
     TOOL = auto()
     FUNC = auto()  # not a real component
@@ -126,7 +132,7 @@ components: Iterable[Component] = (
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient'),
     # SNI
     Component('SNI Client', 'SNIClient',
-              file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3', '.apdkc3')),
+              file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3', '.apdkc3', '.apsmw')),
     Component('LttP Adjuster', 'LttPAdjuster'),
     # Factorio
     Component('Factorio Client', 'FactorioClient'),
@@ -139,10 +145,15 @@ components: Iterable[Component] = (
     Component('OoT Adjuster', 'OoTAdjuster'),
     # FF1
     Component('FF1 Client', 'FF1Client'),
+    # Pokémon
+    Component('Pokemon Client', 'PokemonClient', file_identifier=SuffixIdentifier('.apred', '.apblue')),
     # ChecksFinder
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
     Component('Starcraft 2 Client', 'Starcraft2Client'),
+    # Zillion
+    Component('Zillion Client', 'ZillionClient',
+              file_identifier=SuffixIdentifier('.apzl')),
     # Functions
     Component('Open host.yaml', func=open_host_yaml),
     Component('Open Patch', func=open_patch),

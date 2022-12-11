@@ -6,7 +6,7 @@ from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, O
 class Goal(Choice):
     """
     Determines the goal of the seed
-    Knautilus: Reach the Knautilus and defeat Baron K. Roolenstein
+    Knautilus: Scuttle the Knautilus in Krematoa and defeat Baron K. Roolenstein
     Banana Bird Hunt: Find a certain number of Banana Birds and rescue their mother
     """
     display_name = "Goal"
@@ -75,11 +75,53 @@ class PercentageOfBananaBirds(Range):
     default = 100
 
 
+class KONGsanity(Toggle):
+    """
+    Whether collecting all four KONG letters in each level grants a check
+    """
+    display_name = "KONGsanity"
+
+
 class LevelShuffle(Toggle):
     """
     Whether levels are shuffled
     """
     display_name = "Level Shuffle"
+
+
+class Difficulty(Choice):
+    """
+    Which Difficulty Level to use
+    NORML: The Normal Difficulty
+    HARDR: Many DK Barrels are removed
+    TUFST: Most DK Barrels and all Midway Barrels are removed
+    """
+    display_name = "Difficulty"
+    option_norml = 0
+    option_hardr = 1
+    option_tufst = 2
+    default = 0
+
+    @classmethod
+    def get_option_name(cls, value) -> str:
+        if cls.auto_display_name:
+            return cls.name_lookup[value].upper()
+        else:
+            return cls.name_lookup[value]
+
+
+class Autosave(DefaultOnToggle):
+    """
+    Whether the game should autosave after each level
+    """
+    display_name = "Autosave"
+
+
+class MERRY(Toggle):
+    """
+    Whether the Bonus Barrels will be Christmas-themed
+    """
+    display_name = "MERRY"
 
 
 class MusicShuffle(Toggle):
@@ -125,7 +167,11 @@ dkc3_options: typing.Dict[str, type(Option)] = {
     "percentage_of_extra_bonus_coins": PercentageOfExtraBonusCoins,
     "number_of_banana_birds": NumberOfBananaBirds,
     "percentage_of_banana_birds": PercentageOfBananaBirds,
+    "kongsanity": KONGsanity,
     "level_shuffle": LevelShuffle,
+    "difficulty": Difficulty,
+    "autosave": Autosave,
+    "merry": MERRY,
     "music_shuffle": MusicShuffle,
     "kong_palette_swap": KongPaletteSwap,
     "starting_life_count": StartingLifeCount,

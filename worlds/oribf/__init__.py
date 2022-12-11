@@ -17,24 +17,24 @@ class OriBlindForest(World):
     item_name_to_id = item_table
     location_name_to_id = lookup_name_to_id
 
-    options = options
+    option_definitions = options
 
     hidden = True
 
     def generate_early(self):
         logic_sets = {"casual-core"}
         for logic_set in location_rules:
-            if logic_set != "casual-core" and getattr(self.world, logic_set.replace("-", "_")):
+            if logic_set != "casual-core" and getattr(self.multiworld, logic_set.replace("-", "_")):
                 logic_sets.add(logic_set)
         self.logic_sets = logic_sets
 
     set_rules = set_rules
 
     def create_region(self, name: str):
-        return Region(name, RegionType.Generic, name, self.player, self.world)
+        return Region(name, RegionType.Generic, name, self.player, self.multiworld)
 
     def create_regions(self):
-        world = self.world
+        world = self.multiworld
         menu = self.create_region("Menu")
         world.regions.append(menu)
         start = Entrance(self.player, "Start Game", menu)
@@ -62,7 +62,7 @@ class OriBlindForest(World):
 
     def generate_basic(self):
         for item_name, count in default_pool.items():
-            self.world.itempool.extend([self.create_item(item_name)] * count)
+            self.multiworld.itempool.extend([self.create_item(item_name) for _ in range(count)])
 
     def create_item(self, name: str) -> Item:
         return Item(name,

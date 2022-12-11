@@ -190,5 +190,7 @@
   "Ship": 480,
   "Bridge": 488,
   "Canal": 492,
-  "Canoe": 498
+  "Canoe": 498,
+  "Sigil": 499,
+  "Mark": 500
 }

@@ -20,7 +20,7 @@ FF1_STARTER_ITEMS = [
 
 FF1_PROGRESSION_LIST = [
     "Rod", "Cube", "Lute", "Key", "Chime", "Oxyale",
-    "Ship", "Canoe", "Floater", "Canal",
+    "Ship", "Canoe", "Floater", "Mark", "Sigil", "Canal",
     "Crown", "Crystal", "Herb", "Tnt", "Adamant", "Slab", "Ruby", "Bottle",
     "Shard",
     "EarthOrb", "FireOrb", "WaterOrb", "AirOrb"

@@ -1,18 +1,19 @@
 import collections
+import datetime
 import typing
 from typing import Counter, Optional, Dict, Any, Tuple
+from uuid import UUID
 
 from flask import render_template
 from werkzeug.exceptions import abort
-import datetime
-from uuid import UUID
 
-from worlds.alttp import Items
-from WebHostLib import app, cache, Room
+from MultiServer import Context
+from NetUtils import SlotType
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
-from MultiServer import get_item_name_from_id, Context
-from NetUtils import SlotType
+from worlds.alttp import Items
+from . import app, cache
+from .models import Room
 
 alttp_icons = {
     "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
@@ -442,17 +443,23 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
         "Campfire": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/91/Campfire_JE2_BE2.gif",
         "Water Bottle": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/75/Water_Bottle_JE2_BE2.png",
         "Spyglass": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c1/Spyglass_JE2_BE1.png",
+        "Dragon Egg Shard": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/38/Dragon_Egg_JE4.png",
+        "Lead": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/1f/Lead_JE2_BE2.png", 
+        "Saddle": "https://i.imgur.com/2QtDyR0.png",
+        "Channeling Book": "https://i.imgur.com/J3WsYZw.png",
+        "Silk Touch Book": "https://i.imgur.com/iqERxHQ.png",
+        "Piercing IV Book": "https://i.imgur.com/OzJptGz.png",
     }
 
     minecraft_location_ids = {
         "Story": [42073, 42023, 42027, 42039, 42002, 42009, 42010, 42070, 
                   42041, 42049, 42004, 42031, 42025, 42029, 42051, 42077],
         "Nether": [42017, 42044, 42069, 42058, 42034, 42060, 42066, 42076, 42064, 42071, 42021,
-                   42062, 42008, 42061, 42033, 42011, 42006, 42019, 42000, 42040, 42001, 42015, 42014],
+                   42062, 42008, 42061, 42033, 42011, 42006, 42019, 42000, 42040, 42001, 42015, 42104, 42014],
         "The End": [42052, 42005, 42012, 42032, 42030, 42042, 42018, 42038, 42046],
-        "Adventure": [42047, 42050, 42096, 42097, 42098, 42059, 42055, 42072, 42003, 42035, 42016, 42020,
-                      42048, 42054, 42068, 42043, 42074, 42075, 42024, 42026, 42037, 42045, 42056, 42099, 42100],
-        "Husbandry": [42065, 42067, 42078, 42022, 42007, 42079, 42013, 42028, 42036, 
+        "Adventure": [42047, 42050, 42096, 42097, 42098, 42059, 42055, 42072, 42003, 42109, 42035, 42016, 42020,
+                      42048, 42054, 42068, 42043, 42106, 42074, 42075, 42024, 42026, 42037, 42045, 42056, 42105, 42099, 42103, 42110, 42100],
+        "Husbandry": [42065, 42067, 42078, 42022, 42113, 42107, 42007, 42079, 42013, 42028, 42036, 42108, 42111, 42112,
                       42057, 42063, 42053, 42102, 42101, 42092, 42093, 42094, 42095],
         "Archipelago": [42080, 42081, 42082, 42083, 42084, 42085, 42086, 42087, 42088, 42089, 42090, 42091],
     }
@@ -481,7 +488,8 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
     # Multi-items
     multi_items = {
         "3 Ender Pearls": 45029,
-        "8 Netherite Scrap": 45015
+        "8 Netherite Scrap": 45015,
+        "Dragon Egg Shard": 45043
     }
     for item_name, item_id in multi_items.items():
         base_name = item_name.split()[-1].lower()
@@ -628,43 +636,47 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
 
     # Gather dungeon locations
     area_id_ranges = {
-        "Overworld":                (67000, 67280),
-        "Deku Tree":                (67281, 67303),
-        "Dodongo's Cavern":         (67304, 67334),
-        "Jabu Jabu's Belly":        (67335, 67359),
-        "Bottom of the Well":       (67360, 67384),
-        "Forest Temple":            (67385, 67420),
-        "Fire Temple":              (67421, 67457),
-        "Water Temple":             (67458, 67484),
-        "Shadow Temple":            (67485, 67532),
-        "Spirit Temple":            (67533, 67582),
-        "Ice Cavern":               (67583, 67596),
-        "Gerudo Training Ground":   (67597, 67635),
-        "Thieves' Hideout":         (67259, 67263),
-        "Ganon's Castle":           (67636, 67673),
+        "Overworld":                ((67000, 67258), (67264, 67280), (67747, 68024), (68054, 68062)),
+        "Deku Tree":                ((67281, 67303), (68063, 68077)),
+        "Dodongo's Cavern":         ((67304, 67334), (68078, 68160)),
+        "Jabu Jabu's Belly":        ((67335, 67359), (68161, 68188)),
+        "Bottom of the Well":       ((67360, 67384), (68189, 68230)),
+        "Forest Temple":            ((67385, 67420), (68231, 68281)),
+        "Fire Temple":              ((67421, 67457), (68282, 68350)),
+        "Water Temple":             ((67458, 67484), (68351, 68483)),
+        "Shadow Temple":            ((67485, 67532), (68484, 68565)),
+        "Spirit Temple":            ((67533, 67582), (68566, 68625)),
+        "Ice Cavern":               ((67583, 67596), (68626, 68649)),
+        "Gerudo Training Ground":   ((67597, 67635), (68650, 68656)),
+        "Thieves' Hideout":         ((67259, 67263), (68025, 68053)),
+        "Ganon's Castle":           ((67636, 67673), (68657, 68705)),
     }
 
     def lookup_and_trim(id, area):
         full_name = lookup_any_location_id_to_name[id]
-        if id == 67673:
-            return full_name[13:]  # Ganons Tower Boss Key Chest
+        if 'Ganons Tower' in full_name:
+            return full_name
         if area not in ["Overworld", "Thieves' Hideout"]:
             # trim dungeon name. leaves an extra space that doesn't display, or trims fully for DC/Jabu/GC
             return full_name[len(area):]
         return full_name
 
     checked_locations = multisave.get("location_checks", {}).get((team, player), set()).intersection(set(locations[player]))
-    location_info = {area: {lookup_and_trim(id, area): id in checked_locations for id in range(min_id, max_id+1) if id in locations[player]} 
-        for area, (min_id, max_id) in area_id_ranges.items()}
-    checks_done = {area: len(list(filter(lambda x: x, location_info[area].values()))) for area in area_id_ranges}
-    checks_in_area = {area: len([id for id in range(min_id, max_id+1) if id in locations[player]]) 
-        for area, (min_id, max_id) in area_id_ranges.items()}
-
-    # Remove Thieves' Hideout checks from Overworld, since it's in the middle of the range
-    checks_in_area["Overworld"] -= checks_in_area["Thieves' Hideout"]
-    checks_done["Overworld"] -= checks_done["Thieves' Hideout"]
-    for loc in location_info["Thieves' Hideout"]:
-        del location_info["Overworld"][loc]
+    location_info = {}
+    checks_done = {}
+    checks_in_area = {}
+    for area, ranges in area_id_ranges.items():
+        location_info[area] = {}
+        checks_done[area] = 0
+        checks_in_area[area] = 0
+        for r in ranges:
+            min_id, max_id = r
+            for id in range(min_id, max_id+1):
+                if id in locations[player]:
+                    checked = id in checked_locations
+                    location_info[area][lookup_and_trim(id, area)] = checked
+                    checks_in_area[area] += 1
+                    checks_done[area] += checked
 
     checks_done['Total'] = sum(checks_done.values())
     checks_in_area['Total'] = sum(checks_in_area.values())
@@ -675,25 +687,28 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
         if "GS" in lookup_and_trim(id, ''):
             display_data["token_count"] += 1
 
+    oot_y = '✔'
+    oot_x = '✕'
+
     # Gather small and boss key info
     small_key_counts = {
-        "Forest Temple":            inventory[66175],
-        "Fire Temple":              inventory[66176],
-        "Water Temple":             inventory[66177],
-        "Spirit Temple":            inventory[66178],
-        "Shadow Temple":            inventory[66179],
-        "Bottom of the Well":       inventory[66180],
-        "Gerudo Training Ground":   inventory[66181],
-        "Thieves' Hideout":         inventory[66182],
-        "Ganon's Castle":           inventory[66183],
+        "Forest Temple":            oot_y if inventory[66203] else inventory[66175],
+        "Fire Temple":              oot_y if inventory[66204] else inventory[66176],
+        "Water Temple":             oot_y if inventory[66205] else inventory[66177],
+        "Spirit Temple":            oot_y if inventory[66206] else inventory[66178],
+        "Shadow Temple":            oot_y if inventory[66207] else inventory[66179],
+        "Bottom of the Well":       oot_y if inventory[66208] else inventory[66180],
+        "Gerudo Training Ground":   oot_y if inventory[66209] else inventory[66181],
+        "Thieves' Hideout":         oot_y if inventory[66210] else inventory[66182],
+        "Ganon's Castle":           oot_y if inventory[66211] else inventory[66183],
     }
     boss_key_counts = {
-        "Forest Temple":            '✔' if inventory[66149] else '✕',
-        "Fire Temple":              '✔' if inventory[66150] else '✕',
-        "Water Temple":             '✔' if inventory[66151] else '✕',
-        "Spirit Temple":            '✔' if inventory[66152] else '✕',
-        "Shadow Temple":            '✔' if inventory[66153] else '✕',
-        "Ganon's Castle":           '✔' if inventory[66154] else '✕',
+        "Forest Temple":            oot_y if inventory[66149] else oot_x,
+        "Fire Temple":              oot_y if inventory[66150] else oot_x,
+        "Water Temple":             oot_y if inventory[66151] else oot_x,
+        "Spirit Temple":            oot_y if inventory[66152] else oot_x,
+        "Shadow Temple":            oot_y if inventory[66153] else oot_x,
+        "Ganon's Castle":           oot_y if inventory[66154] else oot_x,
     }
 
     # Victory condition
@@ -819,27 +834,27 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
                                 seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
 
     icons = {
-        "Energy Tank":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/ETank.png",
-        "Missile":          "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Missile.png",
-        "Super Missile":    "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Super.png",
-        "Power Bomb":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/PowerBomb.png",
-        "Bomb":             "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Bomb.png",
-        "Charge Beam":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Charge.png",
-        "Ice Beam":         "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Ice.png",
-        "Hi-Jump Boots":    "https://randommetroidsolver.pythonanywhere.com/solver/static/images/HiJump.png",
-        "Speed Booster":    "https://randommetroidsolver.pythonanywhere.com/solver/static/images/SpeedBooster.png",
-        "Wave Beam":        "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Wave.png",
-        "Spazer":           "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Spazer.png",
-        "Spring Ball":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/SpringBall.png",
-        "Varia Suit":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Varia.png",
-        "Plasma Beam":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Plasma.png",
-        "Grappling Beam":   "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Grapple.png",
-        "Morph Ball":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Morph.png",
-        "Reserve Tank":     "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Reserve.png",
-        "Gravity Suit":     "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Gravity.png",
-        "X-Ray Scope":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/XRayScope.png",
-        "Space Jump":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/SpaceJump.png",
-        "Screw Attack":     "https://randommetroidsolver.pythonanywhere.com/solver/static/images/ScrewAttack.png",
+        "Energy Tank":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/ETank.png",
+        "Missile":          "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Missile.png",
+        "Super Missile":    "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Super.png",
+        "Power Bomb":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/PowerBomb.png",
+        "Bomb":             "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Bomb.png",
+        "Charge Beam":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Charge.png",
+        "Ice Beam":         "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Ice.png",
+        "Hi-Jump Boots":    "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/HiJump.png",
+        "Speed Booster":    "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/SpeedBooster.png",
+        "Wave Beam":        "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Wave.png",
+        "Spazer":           "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Spazer.png",
+        "Spring Ball":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/SpringBall.png",
+        "Varia Suit":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Varia.png",
+        "Plasma Beam":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Plasma.png",
+        "Grappling Beam":   "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Grapple.png",
+        "Morph Ball":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Morph.png",
+        "Reserve Tank":     "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Reserve.png",
+        "Gravity Suit":     "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Gravity.png",
+        "X-Ray Scope":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/XRayScope.png",
+        "Space Jump":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/SpaceJump.png",
+        "Screw Attack":     "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/ScrewAttack.png",
         "Nothing":          "",
         "No Energy":        "",
         "Kraid":            "",
@@ -987,10 +1002,10 @@ def getTracker(tracker: UUID):
         if game_state == 30:
             inventory[team][player][106] = 1  # Triforce
 
-    player_big_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1) if playernumber not in groups}
-    player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1) if playernumber not in groups}
+    player_big_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
+    player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
     for loc_data in locations.values():
-         for values in loc_data.values():
+        for values in loc_data.values():
             item_id, item_player, flags = values
 
             if item_id in ids_big_key:
@@ -1021,7 +1036,7 @@ def getTracker(tracker: UUID):
     for (team, player), data in multisave.get("video", []):
         video[(team, player)] = data
 
-    return render_template("tracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
+    return render_template("tracker.html", inventory=inventory, get_item_name_from_id=lookup_any_item_id_to_name,
                            lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
                            tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=alttp_icons,
                            multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,

@@ -1,93 +1,55 @@
-import typing
-import zipfile
-import lzma
-import json
 import base64
-import MultiServer
+import json
+import typing
 import uuid
+import zipfile
 from io import BytesIO
 
-from flask import request, flash, redirect, url_for, session, render_template
+from flask import request, flash, redirect, url_for, session, render_template, Markup
 from pony.orm import flush, select
 
-from WebHostLib import app, Seed, Room, Slot
-from Utils import parse_yaml, VersionException, __version__
-from Patch import preferred_endings, AutoPatchRegister
+import MultiServer
 from NetUtils import NetworkSlot, SlotType
+from Utils import VersionException, __version__
+from worlds.Files import AutoPatchRegister
+from . import app
+from .models import Seed, Room, Slot
 
-banned_zip_contents = (".sfc",)
+banned_zip_contents = (".sfc", ".z64", ".n64", ".sms", ".gb")
 
 
 def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, sid=None):
     if not owner:
         owner = session["_id"]
     infolist = zfile.infolist()
-    slots = set()
+    if all(file.filename.endswith((".yaml", ".yml")) or file.is_dir() for file in infolist):
+        flash(Markup("Error: Your .zip file only contains .yaml files. "
+                     'Did you mean to <a href="/generate">generate a game</a>?'))
+        return
+    slots: typing.Set[Slot] = set()
     spoiler = ""
+    files = {}
     multidata = None
+
+    # Load files.
     for file in infolist:
         handler = AutoPatchRegister.get_handler(file.filename)
         if file.filename.endswith(banned_zip_contents):
             return "Uploaded data contained a rom file, which is likely to contain copyrighted material. " \
                    "Your file was deleted."
+
+        # AP Container
         elif handler:
-            raw = zfile.open(file, "r").read()
-            patch = handler(BytesIO(raw))
+            data = zfile.open(file, "r").read()
+            patch = handler(BytesIO(data))
             patch.read()
-            slots.add(Slot(data=raw,
-                           player_name=patch.player_name,
-                           player_id=patch.player,
-                           game=patch.game))
-        elif file.filename.endswith(tuple(preferred_endings.values())):
-            data = zfile.open(file, "r").read()
-            yaml_data = parse_yaml(lzma.decompress(data).decode("utf-8-sig"))
-            if yaml_data["version"] < 2:
-                return "Old format cannot be uploaded (outdated .apbp)"
-            metadata = yaml_data["meta"]
+            files[patch.player] = data
 
-            slots.add(Slot(data=data,
-                           player_name=metadata["player_name"],
-                           player_id=metadata["player_id"],
-                           game=yaml_data["game"]))
-
-        elif file.filename.endswith(".apmc"):
-            data = zfile.open(file, "r").read()
-            metadata = json.loads(base64.b64decode(data).decode("utf-8"))
-            slots.add(Slot(data=data,
-                           player_name=metadata["player_name"],
-                           player_id=metadata["player_id"],
-                           game="Minecraft"))
-
-        elif file.filename.endswith(".apv6"):
-            _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)
-            slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
-                           player_id=int(slot_id[1:]), game="VVVVVV"))
-
-        elif file.filename.endswith(".apsm64ex"):
-            _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)
-            slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
-                           player_id=int(slot_id[1:]), game="Super Mario 64"))
-
-        elif file.filename.endswith(".zip"):
-            # Factorio mods need a specific name or they do not function
-            _, seed_name, slot_id, slot_name = file.filename.rsplit("_", 1)[0].split("-", 3)
-            slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
-                           player_id=int(slot_id[1:]), game="Factorio"))
-
-        elif file.filename.endswith(".apz5"):
-            # .apz5 must be named specifically since they don't contain any metadata
-            _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)
-            slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
-                           player_id=int(slot_id[1:]), game="Ocarina of Time"))
-
-        elif file.filename.endswith(".json"):
-            _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('-', 3)
-            slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
-                           player_id=int(slot_id[1:]), game="Dark Souls III"))
-
+        # Spoiler
         elif file.filename.endswith(".txt"):
             spoiler = zfile.open(file, "r").read().decode("utf-8-sig")
 
+        # Multi-data
         elif file.filename.endswith(".archipelago"):
             try:
                 multidata = zfile.open(file).read()
@@ -95,17 +57,36 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
                 flash("Could not load multidata. File may be corrupted or incompatible.")
                 multidata = None
 
+        # Minecraft
+        elif file.filename.endswith(".apmc"):
+            data = zfile.open(file, "r").read()
+            metadata = json.loads(base64.b64decode(data).decode("utf-8"))
+            files[metadata["player_id"]] = data
+
+        # Factorio
+        elif file.filename.endswith(".zip"):
+            _, _, slot_id, *_ = file.filename.split('_')[0].split('-', 3)
+            data = zfile.open(file, "r").read()
+            files[int(slot_id[1:])] = data
+
+        # All other files using the standard MultiWorld.get_out_file_name_base method
+        else:
+            _, _, slot_id, *_ = file.filename.split('.')[0].split('_', 3)
+            data = zfile.open(file, "r").read()
+            files[int(slot_id[1:])] = data
+
+    # Load multi data.
     if multidata:
         decompressed_multidata = MultiServer.Context.decompress(multidata)
         if "slot_info" in decompressed_multidata:
-            player_names = {slot.player_name for slot in slots}
-            leftover_names: typing.Dict[int, NetworkSlot] = {
-                slot_id: slot_info for slot_id, slot_info in decompressed_multidata["slot_info"].items()
-                if slot_info.name not in player_names and slot_info.type != SlotType.group}
-            newslots = [(Slot(data=None, player_name=slot_info.name, player_id=slot, game=slot_info.game))
-                        for slot, slot_info in leftover_names.items()]
-            for slot in newslots:
-                slots.add(slot)
+            for slot, slot_info in decompressed_multidata["slot_info"].items():
+                # Ignore Player Groups (e.g. item links)
+                if slot_info.type == SlotType.group:
+                    continue
+                slots.add(Slot(data=files.get(slot, None),
+                               player_name=slot_info.name,
+                               player_id=slot,
+                               game=slot_info.game))
 
             flush()  # commit slots
 

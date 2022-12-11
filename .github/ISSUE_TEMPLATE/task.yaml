@@ -1,0 +1,10 @@
+name: Task
+description: Submit a task to be done. If this is not targeting core, it should likely be elsewhere.
+title: "Core: "
+labels:
+  - core
+  - enhancement
+body:
+  - type: textarea
+    attributes:
+      label: What task needs to be completed?

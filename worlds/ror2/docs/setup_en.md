@@ -12,7 +12,7 @@ Head on over to the r2modman page on Thunderstore and follow the installation in
 
 You can install the Archipelago mod using r2modman in one of two ways.
 
-[Archipelago Mod Download Page](https://thunderstore.io/package/ArchipelagoMW/Archipelago/)
+[Archipelago Mod Download Page](https://thunderstore.io/package/Sneaki/Archipelago/)
 
 One, you can use the Thunderstore website and click on the "Install with Mod Manager" link.
 
@@ -29,7 +29,7 @@ You can see the [basic multiworld setup guide](/tutorial/Archipelago/setup/en) h
 about why Archipelago uses YAML files and what they're for.
 
 ### Where do I get a YAML?
-You can use the [game settings page for Hollow Knight](/games/Hollow%20Knight/player-settings) here on the Archipelago 
+You can use the [game settings page](/games/Risk%20of%20Rain%202/player-settings) here on the Archipelago 
 website to generate a YAML using a graphical interface.
 
 

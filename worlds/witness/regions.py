@@ -4,7 +4,8 @@ and connects them with the proper requirements
 """
 
 from BaseClasses import MultiWorld, Entrance
-from . import StaticWitnessLogic
+from .static_logic import StaticWitnessLogic
+from .Options import get_option_value
 from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 
@@ -39,7 +40,7 @@ class WitnessRegions:
 
         connection = Entrance(
             player,
-            source + " to " + target + " via " + str(panel_hex_to_solve_set),
+            source + " to " + target,
             source_region
         )
 
@@ -58,25 +59,32 @@ class WitnessRegions:
             create_region(world, player, 'Menu', self.locat, None, ["The Splashscreen?"]),
         ]
 
+        difficulty = get_option_value(world, player, "puzzle_randomization")
+
+        if difficulty == 1:
+            reference_logic = StaticWitnessLogic.sigma_expert
+        else:
+            reference_logic = StaticWitnessLogic.sigma_normal
+
         all_locations = set()
 
-        for region_name, region in StaticWitnessLogic.ALL_REGIONS_BY_NAME.items():
+        for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
             locations_for_this_region = [
-                StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] for panel in region["panels"]
-                if StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
+                reference_logic.CHECKS_BY_HEX[panel]["checkName"] for panel in region["panels"]
+                if reference_logic.CHECKS_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
             ]
             locations_for_this_region += [
-                StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" for panel in region["panels"]
-                if StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" in self.locat.EVENT_LOCATION_TABLE
+                reference_logic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" for panel in region["panels"]
+                if reference_logic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" in self.locat.EVENT_LOCATION_TABLE
             ]
 
             all_locations = all_locations | set(locations_for_this_region)
 
             world.regions += [
-                create_region(world, player, region_name, self.locat,locations_for_this_region)
+                create_region(world, player, region_name, self.locat, locations_for_this_region)
             ]
 
-        for region_name, region in StaticWitnessLogic.ALL_REGIONS_BY_NAME.items():
+        for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
                 if connection[0] == "Entry":
                     continue
@@ -87,7 +95,7 @@ class WitnessRegions:
 
                 for subset in connection[1]:
                     if all({panel in player_logic.DOOR_ITEMS_BY_ID for panel in subset}):
-                        if all({StaticWitnessLogic.CHECKS_BY_HEX[panel]["id"] is None for panel in subset}):
+                        if all({reference_logic.CHECKS_BY_HEX[panel]["id"] is None for panel in subset}):
                             self.connect(world, player, connection[0], region_name, player_logic, frozenset({subset}))
 
                 self.connect(world, player, region_name, connection[0], player_logic, connection[1])

@@ -1,14 +1,14 @@
 from __future__ import annotations
-import logging
-import json
-import multiprocessing
-import threading
-from datetime import timedelta, datetime
 
-import sys
-import typing
-import time
+import json
+import logging
+import multiprocessing
 import os
+import sys
+import threading
+import time
+import typing
+from datetime import timedelta, datetime
 
 from pony.orm import db_session, select, commit
 
@@ -184,7 +184,7 @@ class MultiworldInstance():
 
         logging.info(f"Spinning up {self.room_id}")
         process = multiprocessing.Process(group=None, target=run_server_process,
-                                          args=(self.room_id, self.ponyconfig),
+                                          args=(self.room_id, self.ponyconfig, get_static_server_data()),
                                           name="MultiHost")
         process.start()
         # bind after start to prevent thread sync issues with guardian.
@@ -238,5 +238,5 @@ def run_guardian():
 
 
 from .models import Room, Generation, STATE_QUEUED, STATE_STARTED, STATE_ERROR, db, Seed
-from .customserver import run_server_process
+from .customserver import run_server_process, get_static_server_data
 from .generate import gen_game

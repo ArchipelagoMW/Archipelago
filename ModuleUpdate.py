@@ -13,10 +13,12 @@ update_ran = getattr(sys, "frozen", False)  # don't run update if environment is
 
 if not update_ran:
     for entry in os.scandir(os.path.join(local_dir, "worlds")):
-        if entry.is_dir():
-            req_file = os.path.join(entry.path, "requirements.txt")
-            if os.path.exists(req_file):
-                requirements_files.add(req_file)
+        # skip .* (hidden / disabled) folders
+        if not entry.name.startswith("."):
+            if entry.is_dir():
+                req_file = os.path.join(entry.path, "requirements.txt")
+                if os.path.exists(req_file):
+                    requirements_files.add(req_file)
 
 
 def update_command():
@@ -37,11 +39,25 @@ def update(yes=False, force=False):
                 path = os.path.join(os.path.dirname(__file__), req_file)
             with open(path) as requirementsfile:
                 for line in requirementsfile:
-                    if line.startswith('https://'):
-                        # extract name and version from url
-                        wheel = line.split('/')[-1]
-                        name, version, _ = wheel.split('-', 2)
-                        line = f'{name}=={version}'
+                    if line.startswith(("https://", "git+https://")):
+                        # extract name and version for url
+                        rest = line.split('/')[-1]
+                        line = ""
+                        if "#egg=" in rest:
+                            # from egg info
+                            rest, egg = rest.split("#egg=", 1)
+                            egg = egg.split(";", 1)[0]
+                            if any(compare in egg for compare in ("==", ">=", ">", "<", "<=", "!=")):
+                                line = egg
+                        else:
+                            egg = ""
+                        if "@" in rest and not line:
+                            raise ValueError("Can't deduce version from requirement")
+                        elif not line:
+                            # from filename
+                            rest = rest.replace(".zip", "-").replace(".tar.gz", "-")
+                            name, version, _ = rest.split("-", 2)
+                            line = f'{egg or name}=={version}'
                     requirements = pkg_resources.parse_requirements(line)
                     for requirement in requirements:
                         requirement = str(requirement)

@@ -1,6 +1,6 @@
 from datetime import datetime
 from uuid import UUID, uuid4
-from pony.orm import *
+from pony.orm import Database, PrimaryKey, Required, Set, Optional, buffer, LongStr
 
 db = Database()
 
@@ -29,6 +29,7 @@ class Room(db.Entity):
     show_spoiler = Required(int, default=0)  # 0 -> never, 1 -> after completion, -> 2 always
     timeout = Required(int, default=lambda: 2 * 60 * 60)  # seconds since last activity to shutdown
     tracker = Optional(UUID, index=True)
+    # Port special value -1 means the server errored out. Another attempt can be made with a page refresh
     last_port = Optional(int, default=lambda: 0)
 
 

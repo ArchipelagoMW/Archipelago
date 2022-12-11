@@ -106,7 +106,7 @@ settings. If a game can be rolled it **must** have a settings section even if it
 
 Some options in Archipelago can be used by every game but must still be placed within the relevant game's section.
 
-Currently, these options are `start_inventory`, `start_hints`, `local_items`, `non_local_items`, `start_location_hints`
+Currently, these options are `start_inventory`, `start_hints`, `local_items`, `non_local_items`,  `start_location_hints`
 , `exclude_locations`, and various plando options.
 
 See the plando guide for more info on plando options. Plando
@@ -184,6 +184,7 @@ A Link to the Past:
         - Fire Rod
         - Ice Rod
       replacement_item: "Rupee (1)"
+      link_replacement: true
 triggers:
   - option_category: A Link to the Past
     option_name: smallkey_shuffle
@@ -241,7 +242,7 @@ Timespinner:
 * `exclude_locations` forces a not important item to be placed on the `Cave 45` location.
 * `item_links` 
   * For `A Link to the Past` all players in the `rods` item link group will share their fire and ice rods and the player
-    items will be replaced with single rupees.
+    items will be replaced with single rupees. The rupee will also be shared among those players.
   * For `Timespinner` all players in the `TSAll` item link group will share their entire item pool and the `Twin Pyramid 
     Key` and `Timespinner Wheel` will be forced among the worlds of those in the group. The `null` replacement item will, 
     instead of forcing a specific chosen item, allow the generator to randomly pick a filler item to replace the player items.

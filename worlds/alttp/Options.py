@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, PlandoBosses
 
 
 class Logic(Choice):
@@ -41,8 +41,6 @@ class OpenPyramid(Choice):
 
     alias_true = option_open
     alias_false = option_closed
-    alias_yes = option_open
-    alias_no = option_closed
 
     def to_bool(self, world: MultiWorld, player: int) -> bool:
         if self.value == self.option_goal:
@@ -140,12 +138,61 @@ class WorldState(Choice):
     option_inverted = 2
 
 
-class Bosses(Choice):
-    option_vanilla = 0
-    option_simple = 1
+class LTTPBosses(PlandoBosses):
+    """Shuffles bosses around to different locations.
+    Basic will shuffle all bosses except Ganon and Agahnim anywhere they can be placed.
+    Full chooses 3 bosses at random to be placed twice instead of Lanmolas, Moldorm, and Helmasaur.
+    Chaos allows any boss to appear any number of times.
+    Singularity places a single boss in as many places as possible, and a second boss in any remaining locations.
+    Supports plando placement. Formatting here: https://archipelago.gg/tutorial/A%20Link%20to%20the%20Past/plando/en"""
+    display_name = "Boss Shuffle"
+    option_none = 0
+    option_basic = 1
     option_full = 2
     option_chaos = 3
     option_singularity = 4
+
+    duplicate_bosses = True
+
+    bosses = {
+        "Armos Knights",
+        "Lanmolas",
+        "Moldorm",
+        "Helmasaur King",
+        "Arrghus",
+        "Mothula",
+        "Blind",
+        "Kholdstare",
+        "Vitreous",
+        "Trinexx",
+    }
+
+    locations = {
+        "Ganons Tower Top",
+        "Tower of Hera",
+        "Skull Woods",
+        "Ganons Tower Middle",
+        "Eastern Palace",
+        "Desert Palace",
+        "Palace of Darkness",
+        "Swamp Palace",
+        "Thieves Town",
+        "Ice Palace",
+        "Misery Mire",
+        "Turtle Rock",
+        "Ganons Tower Bottom"
+    }
+
+    @classmethod
+    def can_place_boss(cls, boss: str, location: str) -> bool:
+        from worlds.alttp.Bosses import can_place_boss
+        level = ''
+        words = location.split(" ")
+        if words[-1] in ("top", "middle", "bottom"):
+            level = words[-1]
+            location = " ".join(words[:-1])
+        location = location.title().replace("Of", "of")
+        return can_place_boss(boss.title(), location, level)
 
 
 class Enemies(Choice):
@@ -159,8 +206,6 @@ class Progressive(Choice):
     option_off = 0
     option_grouped_random = 1
     option_on = 2
-    alias_false = 0
-    alias_true = 2
     default = 2
 
     def want_progressives(self, random):
@@ -168,8 +213,8 @@ class Progressive(Choice):
 
 
 class Swordless(Toggle):
-    """No swords. Curtains in Skull Woods and Agahnim\'s
-    Tower are removed, Agahnim\'s Tower barrier can be
+    """No swords. Curtains in Skull Woods and Agahnim's
+    Tower are removed, Agahnim's Tower barrier can be
     destroyed with hammer. Misery Mire and Turtle Rock
     can be opened without a sword. Hammer damages Ganon.
     Ether and Bombos Tablet can be activated with Hammer
@@ -202,8 +247,6 @@ class Hints(Choice):
     option_on = 2
     option_full = 3
     default = 2
-    alias_false = 0
-    alias_true = 2
 
 
 class Scams(Choice):
@@ -213,7 +256,6 @@ class Scams(Choice):
     option_king_zora = 1
     option_bottle_merchant = 2
     option_all = 3
-    alias_false = 0
 
     @property
     def gives_king_zora_hint(self):
@@ -282,8 +324,8 @@ class ShieldPalette(Palette):
     display_name = "Shield Palette"
 
 
-class LinkPalette(Palette):
-    display_name = "Link Palette"
+# class LinkPalette(Palette):
+#     display_name = "Link Palette"
 
 
 class HeartBeep(Choice):
@@ -293,7 +335,6 @@ class HeartBeep(Choice):
     option_half = 2
     option_quarter = 3
     option_off = 4
-    alias_false = 4
 
 
 class HeartColor(Choice):
@@ -375,6 +416,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "hints": Hints,
     "scams": Scams,
     "restrict_dungeon_item_on_boss": RestrictBossItem,
+    "boss_shuffle": LTTPBosses,
     "pot_shuffle": PotShuffle,
     "enemy_shuffle": EnemyShuffle,
     "killable_thieves": KillableThieves,
@@ -387,7 +429,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "hud_palettes": HUDPalette,
     "sword_palettes": SwordPalette,
     "shield_palettes": ShieldPalette,
-    "link_palettes": LinkPalette,
+    # "link_palettes": LinkPalette,
     "heartbeep": HeartBeep,
     "heartcolor": HeartColor,
     "quickswap": QuickSwap,

@@ -7,13 +7,17 @@
 
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI such as:
-        - snes9x Multitroid
-          from: [snes9x Multitroid Download](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
+        - snes9x-rr from: [snes9x rr](https://github.com/gocha/snes9x-rr/releases),
         - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html)
         - RetroArch 1.10.3 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
     - An SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
       compatible hardware
 - Your legally obtained Donkey Kong Country 3 ROM file, probably named `Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc`
+
+## Optional Software
+- Donkey Kong Country 3 Tracker
+	- PopTracker from: [PopTracker Releases Page](https://github.com/black-sliver/PopTracker/releases/)
+	- Donkey Kong Country 3 Archipelago PopTracker pack from: [DKC3 AP Tracker Releases Page](https://github.com/PoryGone/DKC3_AP_Tracker/releases/)
 
 ## Installation Procedures
 
@@ -57,7 +61,6 @@ validator page: [YAML Validation page](/mysterycheck)
 4. You will be presented with a server page, from which you can download your patch file.
 5. Double-click on your patch file, and the Donkey Kong Country 3 Client will launch automatically, create your ROM from the
    patch file, and open your emulator for you.
-6. Since this is a single-player game, you will no longer need the client, so feel free to close it.
 
 ## Joining a MultiWorld Game
 
@@ -65,7 +68,7 @@ validator page: [YAML Validation page](/mysterycheck)
 
 When you join a multiworld game, you will be asked to provide your config file to whoever is hosting. Once that is done,
 the host will provide you with either a link to download your patch file, or with a zip file containing everyone's patch
-files. Your patch file should have a `.apsm` extension.
+files. Your patch file should have a `.apdkc3` extension.
 
 Put your patch file on your desktop or somewhere convenient, and double click it. This should automatically launch the
 client, and will also create your ROM in the same place as your patch file.
@@ -77,7 +80,7 @@ client, and will also create your ROM in the same place as your patch file.
 When the client launched automatically, SNI should have also automatically launched in the background. If this is its
 first time launching, you may be prompted to allow it to communicate through the Windows Firewall.
 
-##### snes9x Multitroid
+##### snes9x-rr
 
 1. Load your ROM file if it hasn't already been loaded.
 2. Click on the File menu and hover on **Lua Scripting**
