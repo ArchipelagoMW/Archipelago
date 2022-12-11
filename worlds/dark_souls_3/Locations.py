@@ -21,7 +21,7 @@ class DarkSouls3Location(Location):
 
         return output
 
-        @staticmethod
+    @staticmethod
     def is_dlc_location(name) -> bool:
         return name in painted_world_table \
             or name in dreg_heap_table \
