@@ -57,8 +57,12 @@ noita_connections: Dict[str, Set[str]] = {
 
     "Mines": {"Collapsed Mines", "Holy Mountain 1 (To Coal Pits)", "Lava Lake", "Forest"},
     "Collapsed Mines": {"Mines", "Holy Mountain 1 (To Coal Pits)", "Dark Cave"},
-    "Lava Lake": {"Mines", "Shaft"},
-    "Shaft": {"Lava Lake", "Snowy Depths"},
+    "Lava Lake": {"Mines", "Shaft", "Orb Room", "Below Lava Lake"},
+    "Shaft": {"Lava Lake", "Snowy Depths", "Orb Room", "Below Lava Lake"},
+    "Orb Room": {"Lava Lake", "Shaft"},
+    "Below Lava Lake": {"Lava Lake", "Shaft"},
+    "Dark Cave": {"Ancient Laboratory", "Collapsed Mines"},
+    "Ancient Laboratory": {"Dark Cave"},
 
     ###
     "Holy Mountain 1 (To Coal Pits)": {"Coal Pits"},
@@ -67,7 +71,8 @@ noita_connections: Dict[str, Set[str]] = {
 
     ###
     "Holy Mountain 2 (To Snowy Depths)": {"Snowy Depths"},
-    "Snowy Depths": {"Shaft", "Holy Mountain 2 (To Snowy Depths)", "Holy Mountain 3 (To Hiisi Base)"},
+    "Snowy Depths": {"Shaft", "Holy Mountain 2 (To Snowy Depths)", "Holy Mountain 3 (To Hiisi Base)", "Magical Temple"},
+    "Magical Temple": {"Snowy Depths"},
 
     ###
     "Holy Mountain 3 (To Hiisi Base)": {"Hiisi Base"},
@@ -76,15 +81,18 @@ noita_connections: Dict[str, Set[str]] = {
     ###
     "Holy Mountain 4 (To Underground Jungle)": {"Underground Jungle"},
     "Dragoncave": {"Underground Jungle"},
-    "Underground Jungle": {"Holy Mountain 4 (To Underground Jungle)", "Dragoncave", "Holy Mountain 5 (To The Vault)"},
+    "Underground Jungle": {"Holy Mountain 4 (To Underground Jungle)", "Dragoncave", "Holy Mountain 5 (To The Vault)",
+                           "Lukki Lair"},
+    "Lukki Lair": {"Underground Jungle", "The Vault"},
 
     ###
     "Holy Mountain 5 (To The Vault)": {"The Vault"},
-    "The Vault": {"Holy Mountain 5 (To The Vault)", "Holy Mountain 6 (To Temple of the Art)"},
+    "The Vault": {"Holy Mountain 5 (To The Vault)", "Holy Mountain 6 (To Temple of the Art)", "Lukki Lair"},
 
     ###
     "Holy Mountain 6 (To Temple of the Art)": {"Temple of the Art"},
-    "Temple of the Art": {"Holy Mountain 6 (To Temple of the Art)", "Holy Mountain 7 (To The Laboratory)"},
+    "Temple of the Art": {"Holy Mountain 6 (To Temple of the Art)", "Holy Mountain 7 (To The Laboratory)", "The Tower"},
+    "The Tower": {"Forest"},
 
     ###
     "Holy Mountain 7 (To The Laboratory)": {"The Laboratory"},
