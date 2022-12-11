@@ -7,7 +7,7 @@ from uuid import UUID
 from flask import render_template
 from werkzeug.exceptions import abort
 
-from MultiServer import Context
+from MultiServer import Context, get_saving_second
 from NetUtils import SlotType
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
@@ -280,16 +280,25 @@ def get_static_room_data(room: Room):
     player_location_to_area = {playernumber: get_location_table(multidata["checks_in_area"][playernumber])
                                for playernumber in range(1, len(names[0]) + 1)
                                if playernumber not in groups}
-
+    saving_second = get_saving_second(multidata["seed_name"])
     result = locations, names, use_door_tracker, player_checks_in_area, player_location_to_area, \
-             multidata["precollected_items"], multidata["games"], multidata["slot_data"], groups
+             multidata["precollected_items"], multidata["games"], multidata["slot_data"], groups, saving_second
     _multidata_cache[room.seed.id] = result
     return result
 
 
 @app.route('/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
-@cache.memoize(timeout=60)  # multisave is currently created at most every minute
-def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want_generic: bool = False):
+def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, want_generic: bool = False):
+    key = f"{tracker}_{tracked_team}_{tracked_player}_{want_generic}"
+    tracker_page = cache.get(key)
+    if tracker_page:
+        return tracker_page
+    timeout, tracker_page = _get_player_tracker(tracker, tracked_team, tracked_player, want_generic)
+    cache.set(key, tracker_page, timeout)
+    return tracker_page
+
+
+def _get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, want_generic: bool):
     # Team and player must be positive and greater than zero
     if tracked_team < 0 or tracked_player < 1:
         abort(404)
@@ -300,7 +309,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
 
     # Collect seed information and pare it down to a single player
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
-        precollected_items, games, slot_data, groups = get_static_room_data(room)
+        precollected_items, games, slot_data, groups, saving_second = get_static_room_data(room)
     player_name = names[tracked_team][tracked_player - 1]
     location_to_area = player_location_to_area[tracked_player]
     inventory = collections.Counter()
@@ -338,16 +347,18 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
                         checks_done["Total"] += 1
     specific_tracker = game_specific_trackers.get(games[tracked_player], None)
     if specific_tracker and not want_generic:
-        return specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                seed_checks_in_area, checks_done, slot_data[tracked_player])
+        tracker =  specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
+                                seed_checks_in_area, checks_done, slot_data[tracked_player], saving_second)
     else:
-        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                      seed_checks_in_area, checks_done)
+        tracker =  __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
+                                      seed_checks_in_area, checks_done, saving_second)
+
+    return (saving_second - datetime.datetime.now().second) % 60 or 60, tracker
 
 
 @app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
 def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
-    return getPlayerTracker(tracker, tracked_team, tracked_player, True)
+    return get_player_tracker(tracker, tracked_team, tracked_player, True)
 
 
 def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
@@ -414,7 +425,8 @@ def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[
 
 def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                              inventory: Counter, team: int, player: int, playerName: str,
-                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
+                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict,
+                             saving_second: int) -> str:
 
     icons = {
         "Wooden Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d2/Wooden_Pickaxe_JE3_BE3.png",
@@ -516,14 +528,15 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
                             inventory=inventory, icons=icons,
                             acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
                                             id in lookup_any_item_id_to_name},
-                            player=player, team=team, room=room, player_name=playerName,
+                            player=player, team=team, room=room, player_name=playerName, saving_second = saving_second,
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             **display_data)
 
 
 def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                        inventory: Counter, team: int, player: int, playerName: str,
-                       seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
+                       seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict,
+                       saving_second: int) -> str:
 
     icons = {
         "Fairy Ocarina":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/97/OoT_Fairy_Ocarina_Icon.png",
@@ -725,7 +738,8 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
 
 def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                                inventory: Counter, team: int, player: int, playerName: str,
-                               seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict[str, Any]) -> str:
+                               seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int],
+                               slot_data: Dict[str, Any], saving_second: int) -> str:
 
     icons = {
         "Timespinner Wheel":    "https://timespinnerwiki.com/mediawiki/images/7/76/Timespinner_Wheel.png",
@@ -831,7 +845,8 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
 
 def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                                 inventory: Counter, team: int, player: int, playerName: str,
-                                seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
+                                seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict,
+                                saving_second: int) -> str:
 
     icons = {
         "Energy Tank":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/ETank.png",
@@ -930,8 +945,9 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
                             **display_data)
 
 def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
-                             inventory: Counter, team: int, player: int, playerName: str,
-                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
+                          inventory: Counter, team: int, player: int, playerName: str,
+                          seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int],
+                          slot_data: Dict, saving_second: int) -> str:
 
     SC2WOL_LOC_ID_OFFSET = 1000
     SC2WOL_ITEM_ID_OFFSET = 1000
@@ -1173,37 +1189,40 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             **display_data)
 
+
 def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                            inventory: Counter, team: int, player: int, playerName: str,
-                           seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
+                           seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int],
+                           saving_second: int) -> str:
 
     checked_locations = multisave.get("location_checks", {}).get((team, player), set())
     player_received_items = {}
     if multisave.get('version', 0) > 0:
-        # add numbering to all items but starter_inventory
         ordered_items = multisave.get('received_items', {}).get((team, player, True), [])
     else:
         ordered_items = multisave.get('received_items', {}).get((team, player), [])
 
+    # add numbering to all items but starter_inventory
     for order_index, networkItem in enumerate(ordered_items, start=1):
         player_received_items[networkItem.item] = order_index
 
     return render_template("genericTracker.html",
-                            inventory=inventory,
-                            player=player, team=team, room=room, player_name=playerName,
-                            checked_locations=checked_locations,
-                            not_checked_locations=set(locations[player]) - checked_locations,
-                            received_items=player_received_items)
+                           inventory=inventory,
+                           player=player, team=team, room=room, player_name=playerName,
+                           checked_locations=checked_locations,
+                           not_checked_locations=set(locations[player]) - checked_locations,
+                           received_items=player_received_items,
+                           saving_second=saving_second)
 
 
 @app.route('/tracker/<suuid:tracker>')
-@cache.memoize(timeout=60)  # multisave is currently created at most every minute
+@cache.memoize(timeout=1)  # multisave is currently created at most every minute
 def getTracker(tracker: UUID):
     room: Room = Room.get(tracker=tracker)
     if not room:
         abort(404)
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
-        precollected_items, games, slot_data, groups = get_static_room_data(room)
+        precollected_items, games, slot_data, groups, saving_second = get_static_room_data(room)
 
     inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1) if playernumber not in groups}
                  for teamnumber, team in enumerate(names)}

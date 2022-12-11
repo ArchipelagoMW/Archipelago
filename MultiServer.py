@@ -16,6 +16,7 @@ import pickle
 import itertools
 import time
 import operator
+import hashlib
 
 import ModuleUpdate
 
@@ -56,6 +57,12 @@ modify_functions = {
     "left_shift": operator.lshift,
     "right_shift": operator.rshift,
 }
+
+
+def get_saving_second(seed_name: str, interval: int = 60) -> int:
+    # save at expected times so other systems using savegame can expect it
+    # represents the target second of the auto_save_interval at which to save
+    return int(hashlib.sha256(seed_name.encode()).hexdigest(), 16) % interval
 
 
 class Client(Endpoint):
@@ -463,10 +470,16 @@ class Context:
     def _start_async_saving(self):
         if not self.auto_saver_thread:
             def save_regularly():
-                import time
+                # time.time() is platform dependent, so using the expensive datetime method instead
+                def get_datetime_second():
+                    now = datetime.datetime.now()
+                    return now.second + now.microsecond * 0.000001
+
+                second = get_saving_second(self.seed_name, self.auto_save_interval)
                 while not self.exit_event.is_set():
                     try:
-                        time.sleep(self.auto_save_interval)
+                        next_wakeup = (second - get_datetime_second()) % self.auto_save_interval
+                        time.sleep(max(1.0, next_wakeup))
                         if self.save_dirty:
                             logging.debug("Saving via thread.")
                             self._save()
