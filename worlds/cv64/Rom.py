@@ -296,7 +296,7 @@ rom_item_bytes = {
     "Clocktower Key3": 0x29,
 }
 
-warp_scene_offsets = [0xADF79, 0xADF87, 0xADF97, 0xADFA7, 0xADFBB, 0xADFCB, 0xADFDF]
+warp_scene_offsets = [0xADF77, 0xADF87, 0xADF97, 0xADFA7, 0xADFBB, 0xADFCB, 0xADFDF]
 
 
 class LocalRom(object):
@@ -523,12 +523,16 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
 
     # Disable time restrictions
     if world.disable_time_restrictions[player]:
+        # Fountain
         rom.write_bytes(0x6C2340, [0x00, 0x00, 0x00, 0x00])  # NOP
         rom.write_bytes(0x6C257C, [0x10, 0x00, 0x00, 0x23])  # B [forward 0x23]
-        rom.write_bytes(0xAB09C, [0x00, 0x00, 0x00, 0x00])  # NOP
-        rom.write_bytes(0xAB0A4, [0x00, 0x00, 0x00, 0x00])  # NOP
+        # Rosa
+        rom.write_byte(0xEEAAB, 0x00)
+        rom.write_byte(0xEEAAD, 0x18)
+        # Moon doors
         rom.write_bytes(0xDC3E0, [0x00, 0x00, 0x00, 0x00])  # NOP
         rom.write_bytes(0xDC3E8, [0x00, 0x00, 0x00, 0x00])  # NOP
+        # Sun doors
         rom.write_bytes(0xDC410, [0x00, 0x00, 0x00, 0x00])  # NOP
         rom.write_bytes(0xDC418, [0x00, 0x00, 0x00, 0x00])  # NOP
 
@@ -569,21 +573,21 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     rom.write_byte(0xADE47, world.special1s_per_warp[player])
 
     # Dracula's chamber condition
-    rom.write_bytes(0xE2FDC, [0x08, 0x04, 0xAB, 0x1E])  # J 0x8012AC78
-    rom.write_bytes(0xADE68, PatchName.special_goal_checker)
+    rom.write_bytes(0xE2FDC, [0x08, 0x04, 0xAB, 0x25])  # J 0x8012AC78
+    rom.write_bytes(0xADE84, PatchName.special_goal_checker)
     if world.draculas_condition[player] == 1:
         rom.write_bytes(0x6C8A54, [0x0C, 0x0F, 0xF0, 0x89])  # JAL 0x803FC224
         rom.write_bytes(0xBFC224, [PatchName.crystal_special2_giver])
-        rom.write_byte(0xADE73, 0x01)
+        rom.write_byte(0xADE8F, 0x01)
     elif world.draculas_condition[player] == 2:
         rom.write_bytes(0xBBD50, [0x08, 0x0F, 0xF1, 0x8D])  # J	0x803FC634
         rom.write_bytes(0xBFC634, PatchName.boss_speical2_giver)
         rom.write_bytes(0xBFC55C, PatchName.werebull_flag_unsetter_special2_electric_boogaloo)
-        rom.write_byte(0xADE73, world.bosses_required[player].value)
+        rom.write_byte(0xADE8F, world.bosses_required[player].value)
     elif world.draculas_condition[player] == 3:
-        rom.write_byte(0xADE73, world.special2s_required[player].value)
+        rom.write_byte(0xADE8F, world.special2s_required[player].value)
     else:
-        rom.write_byte(0xADE73, 0x00)
+        rom.write_byte(0xADE8F, 0x00)
 
     # On-the-fly TLB script modifier
     rom.write_bytes(0xBFC338, PatchName.double_component_checker)

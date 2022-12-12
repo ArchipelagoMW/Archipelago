@@ -7,16 +7,19 @@ config file.
 
 ## What does randomization do to this game?
 
-Items which the player would normally acquire throughout the game have been moved around. Logic remains, so the game is
-always able to be completed, but because of the item shuffle the player may need to access certain areas before they
-would in the vanilla game.
+Items which the player would normally acquire throughout the game have been moved around. Because of the item shuffle,
+instead of simply playing through each of the stages as they come, the player will most likely be required to hop around
+them via a new menu. Logic remains so that the game is beatable under these new conditions.
 
-## How do I return to previous stages? You cannot do that in vanilla Castlevania 64.
+## How do I return to a previous stage?
 
 Instant travel to an earlier or later stage is made possible through a menu that can be pulled up while not in a boss
 fight by pressing START while holding Z and R. By finding Special1 jewels, more destinations can be selected on
 this menu. The destinations on this list are randomized per seed and the first one will always be the player's
 starting location.
+
+Regardless of which option you have selected, you can hold Z or R while making your selection to return to Villa's crypt
+or Castle Center's top elevator room respectively, provided you've already been in there at least once.
 
 ## Do I need to do separate playthroughs with each character to check everything?
 
@@ -65,7 +68,7 @@ unused sub-weapons in the vanilla game that, in the randomizer, were modified to
 When the player receives an item, a textbox containing that item's name will pop up on-screen as when an item would
 normally be picked up.
 
-## What tricks and glitches do I need to know for Hard Logic?
+## What tricks and glitches should I know for Hard Logic?
 
 The following tricks always have a chance to be required:
 - Left Tower skip in Castle Wall
