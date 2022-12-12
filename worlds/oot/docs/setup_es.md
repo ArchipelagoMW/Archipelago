@@ -152,7 +152,7 @@ Ocarina of Time:
     overworld: 0
     any_dungeon: 0
     keysanity: 0
-  shuffle_fortresskeys: # Controla donde pueden aparecer las llaves de la fortaleza Gerudo.
+  shuffle_hideoutkeys: # Controla donde pueden aparecer las llaves de la fortaleza Gerudo.
     vanilla: 50
     overworld: 0
     any_dungeon: 0

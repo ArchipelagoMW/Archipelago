@@ -49,8 +49,6 @@ class Overcooked2World(World):
     required_client_version = (0, 3, 4)
     option_definitions = overcooked_options
     topology_present: bool = False
-    remote_items: bool = True
-    remote_start_inventory: bool = False
     data_version = 2
 
     item_name_to_id = item_name_to_id

@@ -1,6 +1,7 @@
 from collections import deque, Counter
 from contextlib import redirect_stdout
 import functools
+import threading
 from typing import Any, Dict, List, Set, Tuple, Optional, cast
 import os
 import logging
@@ -60,14 +61,6 @@ class ZillionWorld(World):
     # retrieved by clients on every connection.
     data_version: int = 1
 
-    # NOTE: remote_items and remote_start_inventory are now available in the network protocol for the client to set.
-    # These values will be removed.
-    # if a world is set to remote_items, then it just needs to send location checks to the server and the server
-    # sends back the items
-    # if a world is set to remote_items = False, then the server never sends an item where receiver == finder,
-    # the client finds its own items in its own world.
-    remote_items: bool = False
-
     logger: logging.Logger
 
     class LogStreamInterface:
@@ -101,12 +94,15 @@ class ZillionWorld(World):
     """
     my_locations: List[ZillionLocation] = []
     """ This is kind of a cache to avoid iterating through all the multiworld locations in logic. """
+    slot_data_ready: threading.Event
+    """ This event is set in `generate_output` when the data is ready for `fill_slot_data` """
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.logger = logging.getLogger("Zillion")
         self.lsi = ZillionWorld.LogStreamInterface(self.logger)
         self.zz_system = System()
+        self.slot_data_ready = threading.Event()
 
     def _make_item_maps(self, start_char: Chars) -> None:
         _id_to_name, _id_to_zz_id, id_to_zz_item = make_id_to_others(start_char)
@@ -338,6 +334,7 @@ class ZillionWorld(World):
         zz_patcher.write_locations(self.zz_system.randomizer.regions,
                                    zz_options.start_char,
                                    self.zz_system.randomizer.loc_name_2_pretty)
+        self.slot_data_ready.set()
         zz_patcher.all_fixes_and_options(zz_options)
         zz_patcher.set_external_item_interface(zz_options.start_char, zz_options.max_level)
         zz_patcher.set_multiworld_items(multi_items)
@@ -385,6 +382,7 @@ class ZillionWorld(World):
         assert self.zz_system.randomizer, "didn't get randomizer from generate_early"
 
         rescues: Dict[str, Any] = {}
+        self.slot_data_ready.wait()
         for i in (0, 1):
             if i in zz_patcher.rescue_locations:
                 ri = zz_patcher.rescue_locations[i]

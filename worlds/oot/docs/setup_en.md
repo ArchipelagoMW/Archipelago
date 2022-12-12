@@ -176,7 +176,7 @@ Ocarina of Time:
     overworld: 0
     any_dungeon: 0
     keysanity: 0
-  shuffle_fortresskeys: # Control where to shuffle the Gerudo Fortress small keys.
+  shuffle_hideoutkeys: # Control where to shuffle the Gerudo Fortress small keys.
     vanilla: 50
     overworld: 0
     any_dungeon: 0
