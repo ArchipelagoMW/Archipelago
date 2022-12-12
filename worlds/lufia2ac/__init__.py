@@ -233,6 +233,12 @@ class L2ACWorld(World):
         item_data: ItemData = l2ac_item_table[name]
         return L2ACItem(name, item_data.classification, items_start_id + item_data.code, self.player)
 
+    def get_filler_item_name(self) -> str:
+        return ["Potion", "Hi-Magic", "Miracle", "Hi-Potion", "Potion", "Ex-Potion", "Regain", "Ex-Magic", "Hi-Magic"][
+            (self.multiworld.random.randrange(9) + self.multiworld.random.randrange(9)) // 2]
+
+    # end of overridden AutoWorld.py methods
+
     def get_capsule_cravings_table(self) -> bytes:
         rom: bytes = get_base_rom_bytes()
 
