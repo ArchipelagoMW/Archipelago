@@ -93,6 +93,9 @@ sni_options:
 lttp_options:
   # File name of the v1.0 J rom
   rom_file: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
+lufia2ac_options:
+  # File name of the US rom
+  rom_file: "Lufia II - Rise of the Sinistrals (USA).sfc"
 sm_options:
   # File name of the v1.0 J rom
   rom_file: "Super Metroid (JU).sfc"
