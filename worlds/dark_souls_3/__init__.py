@@ -264,8 +264,6 @@ class DarkSouls3World(World):
         # Fill item pool with additional items
         item_pool_len = self.item_name_to_id.__len__()
         total_required_locations = self.location_name_to_id.__len__()
-        print("blblblblb")
-        print((total_required_locations - item_pool_len))
         for i in range(item_pool_len, total_required_locations):
             self.multiworld.itempool += [self.create_item("Soul of an Intrepid Hero")]
 

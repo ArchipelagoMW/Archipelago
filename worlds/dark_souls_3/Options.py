@@ -43,12 +43,12 @@ class LateBasinOfVowsOption(Toggle):
 
 class EnableProgressiveLocationsOption(Toggle):
     """Randomize upgrade materials such as the titanite shards, the estus shards and the consumables"""
-    display_name = "Randomize materials, Estus shards and consumables"
+    display_name = "Randomize materials, Estus shards and consumables (+196 checks/items)"
 
 
 class EnableDLCOption(Toggle):
     """To use this option, you must own both the ASHES OF ARIANDEL and the RINGED CITY DLC"""
-    display_name = "Add the DLC Weapons and Armor to the item pool"
+    display_name = "Add the DLC Items and Locations to the pool (+81 checks/items)"
 
 
 dark_souls_options: typing.Dict[str, type(Option)] = {
