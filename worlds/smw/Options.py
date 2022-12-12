@@ -58,7 +58,7 @@ class BowserCastleDoors(Choice):
     Vanilla: Front and Back Doors behave as vanilla
     Fast: Both doors behave as the Back Door
     Slow: Both doors behave as the Front Door
-    "Front Door" requires beating all 8 Rooms
+    "Front Door" rooms depend on the `bowser_castle_rooms` option
     "Back Door" only requires going through the dark hallway to Bowser
     """
     display_name = "Bowser Castle Doors"
@@ -66,6 +66,24 @@ class BowserCastleDoors(Choice):
     option_fast = 1
     option_slow = 2
     default = 0
+
+
+class BowserCastleRooms(Choice):
+    """
+    How the rooms of Bowser's Castle Front Door behave
+    Vanilla: You can choose which rooms to enter, as in vanilla
+    Random Two Room: Two random rooms are chosen
+    Random Five Room: Five random rooms are chosen
+    Gauntlet: All eight rooms must be cleared
+    Labyrinth: Which room leads to Bowser?
+    """
+    display_name = "Bowser Castle Rooms"
+    option_vanilla = 0
+    option_random_two_room = 1
+    option_random_five_room = 2
+    option_gauntlet = 3
+    option_labyrinth = 4
+    default = 1
 
 
 class LevelShuffle(Toggle):
@@ -220,6 +238,7 @@ smw_options: typing.Dict[str, type(Option)] = {
     "percentage_of_yoshi_eggs": PercentageOfYoshiEggs,
     "dragon_coin_checks": DragonCoinChecks,
     "bowser_castle_doors": BowserCastleDoors,
+    "bowser_castle_rooms": BowserCastleRooms,
     "level_shuffle": LevelShuffle,
     "swap_donut_gh_exits": SwapDonutGhostHouseExits,
     #"display_sent_item_popups": DisplaySentItemPopups,

@@ -1,7 +1,7 @@
 import Utils
 from worlds.Files import APDeltaPatch
 from .Aesthetics import generate_shuffled_header_data
-from .Levels import level_info_dict
+from .Levels import level_info_dict, full_bowser_rooms, standard_bowser_rooms
 from .Names.TextBox import generate_goal_text, title_text_mapping, generate_text_box
 
 USHASH = 'cdd3c8c37322978ca8669b34bc89c804'
@@ -728,6 +728,60 @@ def handle_swap_donut_gh_exits(rom):
     rom.write_bytes(0x26371, bytes([0x32]))
 
 
+def handle_bowser_rooms(rom, world, player):
+    if world.bowser_castle_rooms[player] == "random_two_room":
+        chosen_rooms = world.random.sample(standard_bowser_rooms, 2)
+
+        rom.write_byte(0x3A680, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A684, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A688, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A68C, chosen_rooms[0].roomID)
+
+        for i in range(1, len(chosen_rooms)):
+            rom.write_byte(chosen_rooms[i-1].exitAddress, chosen_rooms[i].roomID)
+
+        rom.write_byte(chosen_rooms[len(chosen_rooms)-1].exitAddress, 0xBD)
+
+    elif world.bowser_castle_rooms[player] == "random_five_room":
+        chosen_rooms = world.random.sample(standard_bowser_rooms)
+
+        rom.write_byte(0x3A680, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A684, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A688, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A68C, chosen_rooms[0].roomID)
+
+        for i in range(1, len(chosen_rooms)):
+            rom.write_byte(chosen_rooms[i-1].exitAddress, chosen_rooms[i].roomID)
+
+        rom.write_byte(chosen_rooms[len(chosen_rooms)-1].exitAddress, 0xBD)
+
+    elif world.bowser_castle_rooms[player] == "gauntlet":
+        chosen_rooms = standard_bowser_rooms.copy()
+        world.random.shuffle(chosen_rooms)
+
+        rom.write_byte(0x3A680, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A684, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A688, chosen_rooms[0].roomID)
+        rom.write_byte(0x3A68C, chosen_rooms[0].roomID)
+
+        for i in range(1, len(chosen_rooms)):
+            rom.write_byte(chosen_rooms[i-1].exitAddress, chosen_rooms[i].roomID)
+
+        rom.write_byte(chosen_rooms[len(chosen_rooms)-1].exitAddress, 0xBD)
+    elif world.bowser_castle_rooms[player] == "labyrinth":
+        bowser_rooms_copy = full_bowser_rooms.copy()
+
+        entrance_point = bowser_rooms_copy.pop(0)
+
+        world.random.shuffle(bowser_rooms_copy)
+
+        rom.write_byte(entrance_point.exitAddress, bowser_rooms_copy[0].roomID)
+        for i in range(0, len(bowser_rooms_copy) - 1):
+            rom.write_byte(bowser_rooms_copy[i].exitAddress, bowser_rooms_copy[i+1].roomID)
+
+        rom.write_byte(chosen_rooms[len(chosen_rooms)-1].exitAddress, 0xBD)
+
+
 def patch_rom(world, rom, player, active_level_dict):
     local_random = world.slot_seeds[player]
 
@@ -739,18 +793,7 @@ def patch_rom(world, rom, player, active_level_dict):
     intro_text = generate_text_box("Bowser has stolen all of Mario's abilities. Can you help Mario travel across Dinosaur land to get them back and save the Princess from him?")
     rom.write_bytes(0x2A5D9, intro_text)
 
-    # Force all 8 Bowser's Castle Rooms
-    rom.write_byte(0x3A680, 0xD4)
-    rom.write_byte(0x3A684, 0xD4)
-    rom.write_byte(0x3A688, 0xD4)
-    rom.write_byte(0x3A68C, 0xD4)
-    rom.write_byte(0x3A705, 0xD3)
-    rom.write_byte(0x3A763, 0xD2)
-    rom.write_byte(0x3A800, 0xD1)
-    rom.write_byte(0x3A83D, 0xCF)
-    rom.write_byte(0x3A932, 0xCE)
-    rom.write_byte(0x3A9E1, 0xCD)
-    rom.write_byte(0x3AA75, 0xCC)
+    handle_bowser_rooms(rom, world, player)
 
     # Prevent Title Screen Deaths
     rom.write_byte(0x1C6A, 0x80)

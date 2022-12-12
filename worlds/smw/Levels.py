@@ -1,6 +1,48 @@
 
 from .Names import LocationName
 
+
+class BowserRoom():
+    name: str
+    exitAddress: int
+    roomID: int
+
+    def __init__(self, name: str, exitAddress: int, roomID: int):
+        self.name        = name
+        self.exitAddress = exitAddress
+        self.roomID      = roomID
+
+full_bowser_rooms = [
+    BowserRoom("Hallway 1 - Door 1", 0x3A680, 0x0D),
+    BowserRoom("Hallway 1 - Door 2", 0x3A684, 0x0D),
+    BowserRoom("Hallway 1 - Door 3", 0x3A688, 0x0D),
+    BowserRoom("Hallway 1 - Door 4", 0x3A68C, 0x0D),
+    BowserRoom("Hallway 2 - Door 1", 0x3A8CB, 0xD0),
+    BowserRoom("Hallway 2 - Door 2", 0x3A8CF, 0xD0),
+    BowserRoom("Hallway 2 - Door 3", 0x3A8D3, 0xD0),
+    BowserRoom("Hallway 2 - Door 4", 0x3A8D7, 0xD0),
+
+    BowserRoom("Room 1", 0x3A705, 0xD4),
+    BowserRoom("Room 2", 0x3A763, 0xD3),
+    BowserRoom("Room 3", 0x3A800, 0xD2),
+    BowserRoom("Room 4", 0x3A83D, 0xD1),
+    BowserRoom("Room 5", 0x3A932, 0xCF),
+    BowserRoom("Room 6", 0x3A9E1, 0xCE),
+    BowserRoom("Room 7", 0x3AA75, 0xCD),
+    BowserRoom("Room 8", 0x3AAC7, 0xCC),
+]
+
+standard_bowser_rooms = [
+    BowserRoom("Room 1", 0x3A705, 0xD4),
+    BowserRoom("Room 2", 0x3A763, 0xD3),
+    BowserRoom("Room 3", 0x3A800, 0xD2),
+    BowserRoom("Room 4", 0x3A83D, 0xD1),
+    BowserRoom("Room 5", 0x3A932, 0xCF),
+    BowserRoom("Room 6", 0x3A9E1, 0xCE),
+    BowserRoom("Room 7", 0x3AA75, 0xCD),
+    BowserRoom("Room 8", 0x3AAC7, 0xCC),
+]
+
 class SMWPath():
     thisEndDirection: int
     otherLevelID: int
@@ -30,7 +72,7 @@ class SMWLevel():
         #self.progressByte   = progressByte # Inferred from EventIDValue: (ID / 8) + $1F02
         #self.progressBit    = progressBit  # Inferred from EventIDValue: 1 << (7 - (ID % 8))
         self.exit1Path   = exit1Path
-        self.exit2Path   = exit2Path
+        self.exit2Path   = exit2Path 
 
 
 level_info_dict = {
