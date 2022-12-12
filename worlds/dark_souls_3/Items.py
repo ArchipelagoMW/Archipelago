@@ -30,6 +30,7 @@ class DarkSouls3Item(Item):
             or name in dlc_goods_table \
             or name in dlc_spells_table \
             or name in dlc_armor_table \
-            or name in dlc_ring_table
+            or name in dlc_ring_table \
+            or name in dlc_misc_table
 
 

@@ -810,7 +810,9 @@ def patch_rom(world, rom, player, active_level_dict):
 
     # Repurpose Bonus Stars counter for Boss Token or Yoshi Eggs
     rom.write_bytes(0x3F1AA, bytearray([0x00] * 0x20))
-    rom.write_bytes(0x20F9F, bytearray([0xEA] * 0x3B))
+
+     # Delete Routine that would copy Mario position data over repurposed Luigi save data
+    rom.write_bytes(0x20F9F, bytearray([0xEA] * 0x3D))
 
     # Prevent Switch Palaces setting the Switch Palace flags
     rom.write_bytes(0x6EC9A, bytearray([0xEA, 0xEA]))

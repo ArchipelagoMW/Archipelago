@@ -36,8 +36,6 @@ class Hylics2World(World):
     option_definitions = Options.hylics2_options
 
     topology_present: bool = True
-    remote_items: bool = True
-    remote_start_inventory: bool = True
 
     data_version: 1
 

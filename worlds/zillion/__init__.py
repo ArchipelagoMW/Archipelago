@@ -61,14 +61,6 @@ class ZillionWorld(World):
     # retrieved by clients on every connection.
     data_version: int = 1
 
-    # NOTE: remote_items and remote_start_inventory are now available in the network protocol for the client to set.
-    # These values will be removed.
-    # if a world is set to remote_items, then it just needs to send location checks to the server and the server
-    # sends back the items
-    # if a world is set to remote_items = False, then the server never sends an item where receiver == finder,
-    # the client finds its own items in its own world.
-    remote_items: bool = False
-
     logger: logging.Logger
 
     class LogStreamInterface:
