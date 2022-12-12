@@ -4,7 +4,7 @@ from ..AutoWorld import LogicMixin
 from BaseClasses import MultiWorld
 from .Names import LocationName, ItemName
 from .logic import KH2Logic
-from .Items import item_dictionary_table, ItemData,get_item_type,exclusionItem_table
+from .Items import item_dictionary_table, ItemData,exclusionItem_table
 from ..generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations
 from .Locations import all_locations,exclusion_table,getBonus,popupChecks,formChecks,ag2Checks,corChecks
 from .Options import FinalEXP, KH2_Options, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement,Visitlocking

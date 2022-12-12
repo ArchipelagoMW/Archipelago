@@ -50,13 +50,13 @@ def patch_kh2(world,player,self,output_directory):
     dblbonus=0
     def getStat(i):
         if lvlStats[i]=="str":
-            self.strength=+2
+            self.strength+=2
         if lvlStats[i]=="mag":
-            self.magic=+2
+            self.magic+=2
         if lvlStats[i]=="def":
-            self.defense=+2
+            self.defense+=2
         if lvlStats[i]=="ap":
-            self.ap=+2
+            self.ap+=2
     statcntr=0
     charName="Sora"
     for location in self.multiworld.get_filled_locations(self.player):
@@ -65,25 +65,6 @@ def patch_kh2(world,player,self,output_directory):
             #print(location.item.code.kh2id)
             self.formattedTrsr[location.address.locid] = {"ItemId":location.item.code.kh2id}
             continue
-        if location.address.yml==4: 
-            getStat(random.randint(0,3))
-            lvlablitity=location.item.code.kh2id
-            if location.item.code.kh2id==1:
-                lvlability=0
-                getStat(random.randint(0,3))
-            self.formattedLvup["Sora"][location.address.locid] = {
-                    "Exp": int(soraExp[location.address.locid]/5),
-                    "Strength":self.strength,
-                    "Magic": self.magic ,
-                    "Defense":self.defense,
-                    "Ap":self.ap,
-                    "SwordAbility": lvlablitity,
-                    "ShieldAbility":lvlablitity,
-                    "StaffAbility": lvlablitity,
-                    "Padding": 0,
-                    "Character": "Sora",
-                    "Level": location.address.locid
-                }
         elif location.address.yml==2 or location.address.yml==3 or location.address.yml==0:
 
                 #print(location.address.yml)
@@ -111,6 +92,25 @@ def patch_kh2(world,player,self,output_directory):
                 "Padding": 0
             }
                 continue
+        elif location.address.yml==4: 
+            getStat(random.randint(0,3))
+            lvlablitity=location.item.code.kh2id
+            if location.item.code.kh2id==1:
+                lvlability=0
+                getStat(random.randint(0,3))
+            self.formattedLvup["Sora"][location.address.locid] = {
+                "Exp": int(soraExp[location.address.locid]/5),
+                "Strength":self.strength,
+                "Magic": self.magic ,
+                "Defense":self.defense,
+                "Ap":self.ap,
+                "SwordAbility": lvlablitity,
+                "ShieldAbility":lvlablitity,
+                "StaffAbility": lvlablitity,
+                "Padding": 0,
+                "Character": "Sora",
+                "Level": location.address.locid
+               }
         if location.address.yml==5:
             print(location.item)
    
@@ -118,7 +118,7 @@ def patch_kh2(world,player,self,output_directory):
     print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
     print(yaml.dump(self.formattedLvup, line_break="\r\n"))
     print(yaml.dump(self.formattedBons, line_break="\r\n"))
-
+    print(yaml.dump(self.formattedLvup,line_break="\r\n"))
     #print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
     #print(yaml.dump(self.formattedLvup, line_break="\r\n"))
     #print(yaml.dump(self.formattedBons, line_break="\r\n"))

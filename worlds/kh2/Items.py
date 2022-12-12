@@ -13,8 +13,7 @@ class ItemData(typing.NamedTuple):
     quantity: int = 1
     event: bool = False
     
-def get_item_type(Item):
-    return Item.name
+
 
 #itemname.readfromfile.kh2id
     

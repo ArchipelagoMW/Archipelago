@@ -37,7 +37,7 @@ class ValorEXP(Range):
 class Schmovement(Toggle):
     """Start with lvl 1 growth"""
     display_name = "Schmovement"
-
+    default = True
 
 class Stats(Range):
     #Keyblade stats 
@@ -61,12 +61,13 @@ class SuperBosses(Toggle):
     default = False
 
 class KH2StartItems(ItemDict):
-    """Mapping of Factorio internal item-name to amount granted on start."""
+    """Choose your strating Items(currently limited on what)"""
     display_name = "KH2StartingItems"
     verify_item_name = False
     default = {}
 
 class Level_Depth(Toggle):
+    """Levels capped at 50 or 99 (true 50 false 99)"""
     display_name="Level Depth"
     default=True
 

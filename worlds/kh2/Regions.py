@@ -811,6 +811,7 @@ def create_regions(world, player: int, active_locations):
             LocationName.Lvl96  :[0x50273,96],
             LocationName.Lvl97  :[0x50274,97],
             LocationName.Lvl98  :[0x50275,98],
+            LocationName.Lvl99  :[0x50276,90],
     }
     Level_Region=create_region(world,player,active_locations,LocationName.SoraLevels_Region,
                                Level_Region_locations,None)
