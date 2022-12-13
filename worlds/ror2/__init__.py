@@ -2,24 +2,26 @@ import string
 from typing import Dict, List
 from .Items import RiskOfRainItem, item_table, item_pool_weights
 from .Locations import RiskOfRainLocation, item_pickups
-from .Rules import set_rules
 
 from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from .Options import ror2_options, ItemWeights
 from worlds.AutoWorld import World, WebWorld
+from worlds.generic.Rules import set_rule, add_rule
 
 client_version = 1
 
 
 class RiskOfWeb(WebWorld):
-    tutorials = [Tutorial(
+    tutorial_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Risk of Rain 2 integration for Archipelago multiworld games.",
         "English",
         "setup_en.md",
         "setup/en",
         ["Ijwu"]
-    )]
+    )
+
+    tutorials = [tutorial_en]
 
 
 class RiskOfRainWorld(World):
@@ -28,7 +30,7 @@ class RiskOfRainWorld(World):
      Combine loot in surprising ways and master each character until you become the havoc you feared upon your
      first crash landing.
     """
-    game: str = "Risk of Rain 2"
+    game = "Risk of Rain 2"
     option_definitions = ror2_options
     topology_present = False
 
@@ -45,9 +47,9 @@ class RiskOfRainWorld(World):
         self.total_revivals = int(self.multiworld.total_revivals[self.player].value / 100 *
                                   self.multiworld.total_locations[self.player].value)
 
-    def generate_basic(self) -> None:
+    def create_items(self) -> None:
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
-        if self.multiworld.start_with_revive[self.player].value:
+        if self.multiworld.start_with_revive[self.player]:
             self.multiworld.push_precollected(self.multiworld.create_item("Dio's Best Friend", self.player))
 
         # if presets are enabled generate junk_pool from the selected preset
@@ -88,12 +90,39 @@ class RiskOfRainWorld(World):
                                               k=self.multiworld.total_locations[self.player].value - self.total_revivals)
 
         # Convert itempool into real items
-        itempool = list(map(lambda name: self.create_item(name), itempool))
-
-        self.multiworld.itempool += itempool
+        self.multiworld.itempool += [map(lambda name: self.create_item(name), itempool)]
 
     def set_rules(self) -> None:
-        set_rules(self.multiworld, self.player)
+        total_locations = self.multiworld.total_locations[self.player].value  # total locations for current player
+        event_location_step = 25  # set an event location at these locations for "spheres"
+        divisions = total_locations // event_location_step
+        total_revivals = self.multiworld.worlds[self.player].total_revivals  # pulling this info we calculated in generate_basic
+
+        if divisions:
+            for i in range(1, divisions):  # since divisions is the floor of total_locations / 25
+                event_loc = self.multiworld.get_location(f"Pickup{i * event_location_step}", self.player)
+                set_rule(event_loc,
+                         lambda state, i=i: state.can_reach(f"ItemPickup{i * event_location_step - 1}", "Location",
+                                                            self.player))
+                for n in range(i * event_location_step, (
+                                                                i + 1) * event_location_step):  # we want to create a rule for each of the 25 locations per division
+                    if n == i * event_location_step:
+                        set_rule(self.multiworld.get_location(f"ItemPickup{n}", self.player),
+                                 lambda state, event_item=event_loc.item.name: state.has(event_item, self.player))
+                    else:
+                        set_rule(self.multiworld.get_location(f"ItemPickup{n}", self.player),
+                                 lambda state, n=n: state.can_reach(f"ItemPickup{n - 1}", "Location", self.player))
+            for i in range(divisions * event_location_step, total_locations + 1):
+                set_rule(self.multiworld.get_location(f"ItemPickup{i}", self.player),
+                         lambda state, i=i: state.can_reach(f"ItemPickup{i - 1}", "Location", self.player))
+        set_rule(self.multiworld.get_location("Victory", self.player),
+                 lambda state: state.can_reach(f"ItemPickup{total_locations}", "Location", self.player))
+        if total_revivals or self.multiworld.start_with_revive[self.player].value:
+            add_rule(self.multiworld.get_location("Victory", self.player),
+                     lambda state: state.has("Dio's Best Friend", self.player,
+                                             total_revivals + self.multiworld.start_with_revive[self.player]))
+
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def create_regions(self) -> None:
         menu = create_region(self.multiworld, self.player, "Menu")
@@ -130,17 +159,17 @@ class RiskOfRainWorld(World):
         return item
 
 
-def create_events(world: MultiWorld, player: int) -> None:
-    total_locations = world.total_locations[player].value
+def create_events(multiworld: MultiWorld, player: int) -> None:
+    total_locations = multiworld.total_locations[player].value
     num_of_events = total_locations // 25
     if total_locations / 25 == num_of_events:
         num_of_events -= 1
-    world_region = world.get_region("Petrichor V", player)
+    world_region = multiworld.get_region("Petrichor V", player)
 
     for i in range(num_of_events):
         event_loc = RiskOfRainLocation(player, f"Pickup{(i + 1) * 25}", None, world_region)
         event_loc.place_locked_item(RiskOfRainItem(f"Pickup{(i + 1) * 25}", ItemClassification.progression, None, player))
-        event_loc.access_rule(lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", player))
+        event_loc.access_rule = lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", player)
         world_region.locations.append(event_loc)
 
     victory_event = RiskOfRainLocation(player, "Victory", None, world_region)
@@ -148,8 +177,8 @@ def create_events(world: MultiWorld, player: int) -> None:
     world_region.locations.append(victory_event)
 
 
-def create_region(world: MultiWorld, player: int, name: str, locations: List[str] = None) -> Region:
-    ret = Region(name, RegionType.Generic, name, player, world)
+def create_region(multiworld: MultiWorld, player: int, name: str, locations: List[str] = None) -> Region:
+    ret = Region(name, RegionType.Generic, name, player, multiworld)
     if locations:
         for location in locations:
             loc_id = item_pickups[location]
