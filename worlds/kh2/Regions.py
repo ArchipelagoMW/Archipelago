@@ -908,9 +908,12 @@ def connect_regions (world: MultiWorld, player: int, self):
       connect(world, player, names,LocationName.GoA_Region, LocationName.TT_Region)
       connect(world, player, names,LocationName.TT_Region, LocationName.TT2_Region) 
       connect(world, player, names,LocationName.TT2_Region, LocationName.TT3_Region)
-
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Twtnw_Region)
-      connect(world, player, names,LocationName.Twtnw_Region, LocationName.Twtnw2_Region)
+      #Adding qol progression for bosses that are hard
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Twtnw_Region,
+              lambda state:state.kh_QuickRun_level(player,1))
+      connect(world, player, names,LocationName.Twtnw_Region, LocationName.Twtnw2_Region,
+              lambda state:state.kh_QuickRun_level(player,2)
+              and state.has(ItemName.FinalForm,player))
 
       connect(world, player, names,LocationName.GoA_Region, LocationName.HundredAcre1_Region,
           lambda state: (state.has(ItemName.TornPages, player,1)))

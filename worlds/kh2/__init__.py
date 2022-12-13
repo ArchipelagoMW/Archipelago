@@ -30,10 +30,9 @@ class KH2World(World):
 
     
     game: str="Kingdom Hearts 2"
-    option_definitions = KH2_Options
+
     data_version = 0
-    ItemName = {}
-    ChestLocation = {}
+    option_definitions = KH2_Options
     topology_present: bool = True  # show path to required location checks in spoiler
     remote_items: bool = False 
     remote_start_inventory: bool = False
@@ -41,7 +40,27 @@ class KH2World(World):
     location_name_to_id={item_name: data.code for item_name, data in all_locations.items() if data.code}
     item_name_to_kh2id={name:data.kh2id for name,data in item_dictionary_table.items()}
 
+    def _get_slot_data(self):
+        return {
+            "FinalEXP": self.multiworld.Final_Form_Level[self.player].value,
+            "MasterEXP": self.multiworld.Master_Form_Level[self.player].value,
+            "WisdomEXP": self.multiworld.Wisdom_Form_Level[self.player].value,
+            "ValorEXP": self.multiworld.Valor_Form_Level[self.player].value,
+            "LimitEXP": self.multiworld.Limit_Form_Level[self.player].value,
+            "Schmovement":self.multiworld.Schmovement[self.player].value,
+            "Keyblade_Stats":self.multiworld.Keyblade[self.player].value,
+            "Visit_locking":self.multiworld.Visit_locking[self.player].value,
+            "Super_Bosses":self.multiworld.Super_Bosses[self.player].value,
+            "Level_Depth":self.multiworld.Level_Depth[self.player].value,
+            "Max_Logic":self.multiworld.Max_Logic[self.player].value,
+        }
 
+    def fill_slot_data(self) -> dict:
+        slot_data = self._get_slot_data()
+        for option_name in KH2_Options:
+            option = getattr(self.multiworld, option_name)[self.player]
+            slot_data[option_name] = option.value
+        return slot_data
 
     def _create_items(self, name: str):
         
@@ -61,31 +80,29 @@ class KH2World(World):
 
        return  created_item
     
-    def pre_fill(self):
-        self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(self.create_item(ItemName.Victory))
-        
+
+        #for name in exclusionItem_table["Ability"]:
+        #        self.multiworld.get_location(name, self.player).place_locked_item(self.create_item(ItemName.Nothing))
     def generate_basic(self):
         itempool: typing.List[KH2Item] = []
-        exclude={"Victory","Nothing"}
-        #print(exclusion_table.Level50)
-        print(self.multiworld.Visit_locking[self.player].value)
         #normally 626 but with Final Xemnas having Victory it is 625 
         #for some reason I have 2 to minus 2 so later I do not have surplus items
         totallocations=623
+
+
+        self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(self.create_item(ItemName.Victory))
+        self.exclude={"Victory","Nothing"}
         if self.multiworld.Schmovement[self.player].value==1:
             for name in{ItemName.HighJump,ItemName.QuickRun,ItemName.DodgeRoll,ItemName.AerialDodge,ItemName.Glide}:
-                exclude.add(name)
-        fillerItems=[ItemName.Potion,ItemName.HiPotion,ItemName.Ether,ItemName.Elixir,ItemName.MegaPotion,
-            ItemName.MegaEther,ItemName.Megalixir,ItemName.Tent,ItemName.DriveRecovery,ItemName.HighDriveRecovery,ItemName.PowerBoost,
-            ItemName.MagicBoost,ItemName.DefenseBoost,ItemName.APBoost] 
-        
-        print(exclude)
-        #print(exclusion_table["Level50"])
+                self.exclude.add(name)
+
+
+        #if option to have level checks up to level 50 place nothing on checks past 50
         if self.multiworld.Level_Depth[self.player]:
             for name in exclusion_table["Level50"]:
                 self.multiworld.get_location(name, self.player).place_locked_item(self.create_item(ItemName.Nothing))
                 totallocations-=1
-        
+        #Creating the progression/ stat increases
         for x in range(5):
             itempool += [self.create_item(ItemName.ItemSlotUp)]
         for x in range(20):
@@ -105,11 +122,13 @@ class KH2World(World):
             itempool +=[self.create_item(ItemName.ReflectElement)]     
         
         for item in item_dictionary_table:
-            if item not in exclude:
+            if item not in self.exclude:
                 itempool += self._create_items(item)
             
-
-
+        fillerItems=[ItemName.Potion,ItemName.HiPotion,ItemName.Ether,ItemName.Elixir,ItemName.MegaPotion,
+            ItemName.MegaEther,ItemName.Megalixir,ItemName.Tent,ItemName.DriveRecovery,ItemName.HighDriveRecovery,ItemName.PowerBoost,
+            ItemName.MagicBoost,ItemName.DefenseBoost,ItemName.APBoost]
+        #Creating filler for unfilled locations
         while len(itempool)<=totallocations:
             item=random.choice(fillerItems)
             itempool+=[self.create_item(item)] 
@@ -120,47 +139,19 @@ class KH2World(World):
         location_table = setup_locations(self.multiworld, self.player)
         create_regions(self.multiworld, self.player, location_table)
         connect_regions(self.multiworld, self.player,self)
-        #region=self.world.get_region(LocationName.Ag2_Region,self.player)
-        #print(self.world.get_entrance("Twlight Town",self.player))
+
 
 
     def set_rules(self):
         set_rules(self.multiworld, self.player)
         
     def generate_output(self, output_directory: str):
-            world = self.multiworld
-            player = self.player
-
-            patch_kh2(self.multiworld, self.player,self,output_directory)   
+        patch_kh2(self.multiworld, self.player,self,output_directory)   
             
 
-        #except:
-        #    raise
-        #finally:
-        #    if os.path.exists(rompath):
-        #        os.unlink(rompath)
-        #    self.rom_name_available_event.set() # make sure threading continues and errors are collected
+
          
         
-    def _get_slot_data(self):
-        return {
-            "FinalEXP": self.multiworld.Final_Form_Level[self.player].value,
-            "MasterEXP": self.multiworld.Master_Form_Level[self.player].value,
-            "WisdomEXP": self.multiworld.Wisdom_Form_Level[self.player].value,
-            "ValorEXP": self.multiworld.Valor_Form_Level[self.player].value,
-            "LimitEXP": self.multiworld.Limit_Form_Level[self.player].value,
-            "Schmovement":self.multiworld.Schmovement[self.player].value,
-            "Keyblade_Stats":self.multiworld.Keyblade[self.player].value,
-            "Visit_locking":self.multiworld.Visit_locking[self.player].value,
-            "Super_Bosses":self.multiworld.Super_Bosses[self.player].value,
-            "Level_Depth":self.multiworld.Level_Depth[self.player].value,
-        }
-    def fill_slot_data(self) -> dict:
-        slot_data = self._get_slot_data()
-        for option_name in KH2_Options:
-            option = getattr(self.multiworld, option_name)[self.player]
-            slot_data[option_name] = option.value
-        print(slot_data)
-        return slot_data
+
 
     

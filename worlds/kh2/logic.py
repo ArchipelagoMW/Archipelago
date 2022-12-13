@@ -17,15 +17,15 @@ class KH2Logic(LogicMixin):
     def kh_torn_page_5(self, player: int):
         return self.has('Torn Page', player, 5)
     def kh_lod_unlocked(self,player):
-            return self.has('Sword of the Ancestor',player)
+        return self.has('Sword of the Ancestor',player)
     def kh_oc_unlocked(self,player):
         return self.has('Battlefields of War',player)
     def kh_twtnw_unlocked(self,player):
-        return self.has('Final Form',player)and self.kh_QuickRun_level(player,2)
+        return self.has('Way to the Dawn',player)
     def kh_ht_unlocked(self,player):
         return self.has('Bone Fist',player)
     def kh_tt_unlocked(self,player):
-       return (((self.has('Poster',player))))
+       return  self.has('Poster',player)
     def kh_tt2_unlocked(self,player):
         return self.has('Ice Cream',player)
     def kh_tt3_unlocked(self,player):

@@ -40,45 +40,24 @@ def patch_kh2(world,player,self,output_directory):
     self.formattedBons = {}
     self.formattedFmlv = {}
     self.formattedItem = {"Stats":[]}
-    self.formattedPlrp = []
-    lvlablitity=0
-    lvlcntr=1
     self.strength=0
     self.magic   =0
     self.defense =0
     self.ap=     50
-    dblbonus=0
-    def getStat(i):
-        if lvlStats[i]=="str":
-            self.strength+=2
-        if lvlStats[i]=="mag":
-            self.magic+=2
-        if lvlStats[i]=="def":
-            self.defense+=2
-        if lvlStats[i]=="ap":
-            self.ap+=2
-    statcntr=0
-    charName="Sora"
     for location in self.multiworld.get_filled_locations(self.player):
-        if location.address.yml==1:
-            #print(location.address.locid)
-            #print(location.item.code.kh2id)
+        if location.game=="Kingdom Hearts 2":
+            itemcode=location.item.code.kh2id
+        if location.address.yml=="Chest":
             self.formattedTrsr[location.address.locid] = {"ItemId":location.item.code.kh2id}
-            continue
-        elif location.address.yml==2 or location.address.yml==3 or location.address.yml==0:
-
-                #print(location.address.yml)
-                if location.address.yml==2:
-                    #print(location.address.locid)
+        elif location.address.yml in["Get Bonus","Double Get Bonus","Second Get Bonus"]:
+                if location.address.yml=="Get Bonus":
                     dblbonus=0
-                if location.address.yml==3:
+                #if double bonus then addresses dbl bonus so the next check gets 2 items on it
+                if location.address.yml=="Double Get Bonus":
                     dblbonus=location.item.code.kh2id
-                if location.address.yml==0:
-                    charName="sora"
-                    #print(dblbonus)
-                    #print(location.item.code.kh2id)
+                    continue
                 self.formattedBons[location.address.locid] = {}
-                self.formattedBons[location.address.locid] [charName]= {
+                self.formattedBons[location.address.locid] [location.address.charName]= {
                 "RewardId": location.address.locid,
                 "CharacterId": 1,
                 "HpIncrease": 0,
@@ -91,13 +70,14 @@ def patch_kh2(world,player,self,output_directory):
                 "BonusItem2": dblbonus,
                 "Padding": 0
             }
-                continue
+                #putting dbl bonus at 0 again so we dont have the same item placed multiple time
+                dblbonus=0
         elif location.address.yml==4: 
-            getStat(random.randint(0,3))
+            increaseStat(random.randint(0,3))
             lvlablitity=location.item.code.kh2id
             if location.item.code.kh2id==1:
                 lvlability=0
-                getStat(random.randint(0,3))
+                increaseStat(random.randint(0,3))
             self.formattedLvup["Sora"][location.address.locid] = {
                 "Exp": int(soraExp[location.address.locid]/5),
                 "Strength":self.strength,
@@ -114,11 +94,22 @@ def patch_kh2(world,player,self,output_directory):
         if location.address.yml==5:
             print(location.item)
    
-            #lvlcntr+=1        
+       
     print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
     print(yaml.dump(self.formattedLvup, line_break="\r\n"))
     print(yaml.dump(self.formattedBons, line_break="\r\n"))
     print(yaml.dump(self.formattedLvup,line_break="\r\n"))
+
+
+    def increaseStat(i):
+        if lvlStats[i]=="str":
+            self.strength+=2
+        if lvlStats[i]=="mag":
+            self.magic+=2
+        if lvlStats[i]=="def":
+            self.defense+=2
+        if lvlStats[i]=="ap":
+            self.ap+=2
     #print(yaml.dump(self.formattedTrsr, line_break="\r\n"))
     #print(yaml.dump(self.formattedLvup, line_break="\r\n"))
     #print(yaml.dump(self.formattedBons, line_break="\r\n"))

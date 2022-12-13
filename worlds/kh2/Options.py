@@ -71,6 +71,10 @@ class Level_Depth(Toggle):
     display_name="Level Depth"
     default=True
 
+class Max_Logic(Toggle):
+    """Forms on forms and torn pages in cor/ag"""
+    display_name="Max Logic"
+    default=True
 
 KH2_Options: typing.Dict[str, type(Option)] = {
     "Final_Form_Level": FinalEXP,
@@ -84,4 +88,5 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "Super_Bosses":SuperBosses,
     "KH2StartingItems":KH2StartItems,
     "Level_Depth":Level_Depth,
+    "Max_Logic":Max_Logic
     }
