@@ -90,7 +90,7 @@ class RiskOfRainWorld(World):
                                               k=self.multiworld.total_locations[self.player].value - self.total_revivals)
 
         # Convert itempool into real items
-        self.multiworld.itempool += [map(lambda name: self.create_item(name), itempool)]
+        self.multiworld.itempool += list(map(lambda name: self.create_item(name), itempool))
 
     def set_rules(self) -> None:
         total_locations = self.multiworld.total_locations[self.player].value  # total locations for current player
