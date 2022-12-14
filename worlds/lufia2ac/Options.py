@@ -6,6 +6,7 @@ from itertools import chain, combinations
 from typing import Any, cast, Dict, List, Optional, Set, Tuple, Type, TYPE_CHECKING, Union
 
 from Options import AssembleOptions, Choice, DeathLink, Range, SpecialRange, TextChoice, Toggle
+from .Enemies import enemy_name_to_sprite
 
 if TYPE_CHECKING:
     from BaseClasses import PlandoOptions
@@ -40,6 +41,22 @@ class RandomGroupsChoice(Choice, metaclass=AssembleCustomizableChoices):
         elif key in cls.random_groups:
             text = random.choice(cls.random_groups[key])
         return super().from_text(text)
+
+
+class EnemyChoice(TextChoice):
+    _valid_sprites: Dict[str, int] = {enemy_name.lower(): sprite for enemy_name, sprite in enemy_name_to_sprite.items()}
+
+    def verify(self, world: Type[World], player_name: str, plando_options: PlandoOptions) -> None:
+        if isinstance(self.value, int):
+            return
+        if str(self.value).lower() in self._valid_sprites:
+            return
+        raise ValueError(f"Could not find option '{self.value}' for '{self.__class__.__name__}', known options are:\n"
+                         f"{', '.join(self.options)}, {', '.join(enemy_name_to_sprite)}.")
+
+    @property
+    def sprite(self) -> Optional[int]:
+        return self._valid_sprites.get(str(self.value).lower())
 
 
 class LevelMixin:
@@ -323,6 +340,78 @@ class DefaultParty(RandomGroupsChoice, TextChoice):
         return len(str(self.value))
 
 
+class EnemyFloorNumbers(Choice):
+    """Change which enemy types are encountered at which floor numbers.
+
+    Supported values:
+    vanilla
+        Ninja, e.g., is allowed to appear on the 3 floors B44-B46
+    shuffle — The existing enemy types are redistributed among nearby floors. Shifts by up to 6 floors are possible.
+        Ninja, e.g., will be allowed to appear on exactly 3 consecutive floors somewhere from B38-B40 to B50-B52
+    randomize — For each floor, new enemy types are chosen randomly from the set usually possible on floors [-6, +6].
+        Ninja, e.g., is among the various possible selections for any enemy slot affecting the floors from B38 to B52
+    Default value: vanilla (same as in an unmodified game)
+    """
+
+    display_name = "Enemy floor numbers"
+    option_vanilla = 0
+    option_shuffle = 1
+    option_randomize = 2
+    default = option_vanilla
+
+
+class EnemyMovementPatterns(EnemyChoice):
+    """Change the movement patterns of enemies.
+
+    Supported values:
+    vanilla
+    shuffle_by_pattern — The existing movement patterns are redistributed among each other.
+        Sprites that usually share a movement pattern will still share movement patterns after shuffling
+    randomize_by_pattern — For each movement pattern, a new one is chosen randomly from the set of existing patterns.
+        Sprites that usually share a movement pattern will still share movement patterns after randomizing
+    shuffle_by_sprite — The existing movement patterns of sprites are redistributed among the enemy sprites.
+        Sprites that usually share a movement pattern can end up with different movement patterns after shuffling
+    randomize_by_sprite — For each sprite, a new movement is chosen randomly from the set of existing patterns.
+        Sprites that usually share a movement pattern can end up with different movement patterns after randomizing
+    singularity — All enemy sprites use the same, randomly selected movement pattern
+    Alternatively, you can directly specify an enemy name such as "Red Jelly" as the value of this option.
+        In that case, the movement pattern usually associated with this sprite will be used by all enemy sprites
+    Default value: vanilla (same as in an unmodified game)
+    """
+
+    display_name = "Enemy movement patterns"
+    option_vanilla = 0
+    option_shuffle_by_pattern = 1
+    option_randomize_by_pattern = 2
+    option_shuffle_by_sprite = 3
+    option_randomize_by_sprite = 4
+    option_singularity = 5
+    default = option_vanilla
+
+
+class EnemySprites(EnemyChoice):
+    """Change the appearance of enemies.
+
+    Supported values:
+    vanilla
+    shuffle — The existing sprites are redistributed among the enemy types.
+        This means that, after shuffling, exactly 1 enemy type will be dressing up as the "Red Jelly" sprite
+    randomize — For each enemy type, a new sprite is chosen randomly from the set of existing sprites.
+        This means that, after randomizing, any number of enemy types could end up using the "Red Jelly" sprite
+    singularity — All enemies use the same, randomly selected sprite
+    Alternatively, you can directly specify an enemy name such as "Red Jelly" as the value of this option.
+        In this case, the sprite usually associated with that enemy will be used by all enemies
+    Default value: vanilla (same as in an unmodified game)
+    """
+
+    display_name = "Enemy sprites"
+    option_vanilla = 0
+    option_shuffle = 1
+    option_randomize = 2
+    option_singularity = 3
+    default = option_vanilla
+
+
 class FinalFloor(Range):
     """The final floor, where the boss resides.
 
@@ -522,6 +611,9 @@ class L2ACOptions:
     death_link: DeathLink
     default_capsule: DefaultCapsule
     default_party: DefaultParty
+    enemy_floor_numbers: EnemyFloorNumbers
+    enemy_movement_patterns: EnemyMovementPatterns
+    enemy_sprites: EnemySprites
     final_floor: FinalFloor
     gear_variety_after_b9: GearVarietyAfterB9
     goal: Goal

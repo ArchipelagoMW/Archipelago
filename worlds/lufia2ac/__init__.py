@@ -2,7 +2,8 @@ import base64
 import itertools
 import os
 from enum import IntFlag
-from typing import Any, ClassVar, Dict, get_type_hints, List, Set, Tuple
+from random import Random
+from typing import Any, ClassVar, Dict, get_type_hints, Iterator, List, Set, Tuple
 
 from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, Tutorial
 from Options import AssembleOptions
@@ -12,8 +13,10 @@ from worlds.generic.Rules import add_rule, set_rule
 from .Client import L2ACSNIClient  # noqa: F401
 from .Items import ItemData, ItemType, l2ac_item_name_to_id, l2ac_item_table, L2ACItem, start_id as items_start_id
 from .Locations import l2ac_location_name_to_id, L2ACLocation
-from .Options import CapsuleStartingLevel, DefaultParty, Goal, L2ACOptions
+from .Options import CapsuleStartingLevel, DefaultParty, EnemyFloorNumbers, EnemyMovementPatterns, EnemySprites, Goal, \
+    L2ACOptions
 from .Rom import get_base_rom_bytes, get_base_rom_path, L2ACDeltaPatch
+from .Utils import constrained_choices, constrained_shuffle
 from .basepatch import apply_basepatch
 
 CHESTS_PER_SPHERE: int = 5
@@ -210,6 +213,11 @@ class L2ACWorld(World):
             rom_bytearray[0x28003D:0x28003D + 1] = self.o.death_link.value.to_bytes(1, "little")
             rom_bytearray[0x281200:0x281200 + 470] = self.get_capsule_cravings_table()
 
+            (rom_bytearray[0x08A1D4:0x08A1D4 + 128],
+             rom_bytearray[0x0A595C:0x0A595C + 200],
+             rom_bytearray[0x0A5DF6:0x0A5DF6 + 192],
+             rom_bytearray[0x27F6B5:0x27F6B5 + 113]) = self.get_enemy_floors_sprites_and_movement_patterns()
+
             with open(rom_path, "wb") as f:
                 f.write(rom_bytearray)
         except Exception as e:
@@ -266,6 +274,67 @@ class L2ACWorld(World):
             return cravings_table
         else:
             return rom[0x0AFF16:0x0AFF16 + 470]
+
+    def get_enemy_floors_sprites_and_movement_patterns(self) -> Tuple[bytes, bytes, bytes, bytes]:
+        rom: bytes = get_base_rom_bytes()
+
+        if self.o.enemy_floor_numbers == EnemyFloorNumbers.default \
+                and self.o.enemy_sprites == EnemySprites.default \
+                and self.o.enemy_movement_patterns == EnemyMovementPatterns.default:
+            return rom[0x08A1D4:0x08A1D4 + 128], rom[0x0A595C:0x0A595C + 200], \
+                rom[0x0A5DF6:0x0A5DF6 + 192], rom[0x27F6B5:0x27F6B5 + 113]
+
+        formations: bytes = rom[0x0A595C:0x0A595C + 200]
+        sprites: bytes = rom[0x0A5DF6:0x0A5DF6 + 192]
+        indices: bytes = rom[0x27F6B5:0x27F6B5 + 113]
+        pointers: List[bytes] = [rom[0x08A1D4 + 2 * index:0x08A1D4 + 2 * index + 2] for index in range(64)]
+
+        used_formations: List[int] = list(formations)
+        formation_set: Set[int] = set(used_formations)
+        used_sprites: List[int] = [sprite for formation, sprite in enumerate(sprites) if formation in formation_set]
+        sprite_set: Set[int] = set(used_sprites)
+        used_indices: List[int] = [index for sprite, index in enumerate(indices, 128) if sprite in sprite_set]
+        index_set: Set[int] = set(used_indices)
+        used_pointers: List[bytes] = [pointer for index, pointer in enumerate(pointers) if index in index_set]
+
+        slot_random: Random = self.multiworld.per_slot_randoms[self.player]
+
+        d: int = 2 * 6
+        if self.o.enemy_floor_numbers == EnemyFloorNumbers.option_shuffle:
+            constrained_shuffle(used_formations, d, random=slot_random)
+        elif self.o.enemy_floor_numbers == EnemyFloorNumbers.option_randomize:
+            used_formations = constrained_choices(used_formations, d, k=len(used_formations), random=slot_random)
+
+        if self.o.enemy_sprites == EnemySprites.option_shuffle:
+            slot_random.shuffle(used_sprites)
+        elif self.o.enemy_sprites == EnemySprites.option_randomize:
+            used_sprites = slot_random.choices(tuple(dict.fromkeys(used_sprites)), k=len(used_sprites))
+        elif self.o.enemy_sprites == EnemySprites.option_singularity:
+            used_sprites = [slot_random.choice(tuple(dict.fromkeys(used_sprites)))] * len(used_sprites)
+        elif self.o.enemy_sprites.sprite:
+            used_sprites = [self.o.enemy_sprites.sprite] * len(used_sprites)
+
+        if self.o.enemy_movement_patterns == EnemyMovementPatterns.option_shuffle_by_pattern:
+            slot_random.shuffle(used_pointers)
+        elif self.o.enemy_movement_patterns == EnemyMovementPatterns.option_randomize_by_pattern:
+            used_pointers = slot_random.choices(tuple(dict.fromkeys(used_pointers)), k=len(used_pointers))
+        elif self.o.enemy_movement_patterns == EnemyMovementPatterns.option_shuffle_by_sprite:
+            slot_random.shuffle(used_indices)
+        elif self.o.enemy_movement_patterns == EnemyMovementPatterns.option_randomize_by_sprite:
+            used_indices = slot_random.choices(tuple(dict.fromkeys(used_indices)), k=len(used_indices))
+        elif self.o.enemy_movement_patterns == EnemyMovementPatterns.option_singularity:
+            used_indices = [slot_random.choice(tuple(dict.fromkeys(used_indices)))] * len(used_indices)
+        elif self.o.enemy_movement_patterns.sprite:
+            used_indices = [indices[self.o.enemy_movement_patterns.sprite - 128]] * len(used_indices)
+
+        sprite_iter: Iterator[int] = iter(used_sprites)
+        index_iter: Iterator[int] = iter(used_indices)
+        pointer_iter: Iterator[bytes] = iter(used_pointers)
+        formations = bytes(used_formations)
+        sprites = bytes(next(sprite_iter) if form in formation_set else sprite for form, sprite in enumerate(sprites))
+        indices = bytes(next(index_iter) if sprite in sprite_set else idx for sprite, idx in enumerate(indices, 128))
+        pointers = [next(pointer_iter) if idx in index_set else pointer for idx, pointer in enumerate(pointers)]
+        return b"".join(pointers), formations, sprites, indices
 
     def get_goal_text_bytes(self) -> bytes:
         goal_text: List[str] = []

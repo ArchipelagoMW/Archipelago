@@ -47,6 +47,7 @@ Your Party Leader will hold up the item they received when not in a fight or in 
 - Customize the initial and final floor numbers
 - Customize the boss that resides on the final floor
 - Customize start inventory, i.e., begin every run with certain items or spells of your choice
+- Randomize enemy movement patterns, enemy sprites, and which enemy types can appear at which floor numbers
 - Option to shuffle your party members and/or capsule monsters into the multiworld, meaning that someone will have to
   find them in order to unlock them for you to use
 
