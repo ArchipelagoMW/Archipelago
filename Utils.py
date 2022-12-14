@@ -307,6 +307,9 @@ def get_default_options() -> OptionsType:
         "ffr_options": {
             "display_msgs": True,
         },
+        "lufia2ac_options": {
+            "rom_file": "Lufia II - Rise of the Sinistrals (USA).sfc",
+        },
     }
     return options
 
