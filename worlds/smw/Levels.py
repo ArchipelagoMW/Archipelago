@@ -43,6 +43,38 @@ standard_bowser_rooms = [
     BowserRoom("Room 8", 0x3AAC7, 0xCC),
 ]
 
+
+class BossRoom():
+    name: str
+    exitAddress: int
+    exitAddressAlt: int
+    roomID: int
+
+    def __init__(self, name: str, exitAddress: int, roomID: int, exitAddressAlt=None):
+        self.name           = name
+        self.exitAddress    = exitAddress
+        self.roomID         = roomID
+        self.exitAddressAlt = exitAddressAlt
+
+
+submap_boss_rooms = [
+    BossRoom("#1 Lemmy Koopa", 0x311E3, 0xF6), # Submap 0x1F6
+    BossRoom("#3 Lemmy Koopa", 0x33749, 0xF2), # Submap 0x1F2
+    BossRoom("Valley Reznor", 0x3A132, 0xDE),  # Submap 0x1DE
+    BossRoom("#7 Larry Koopa", 0x3A026, 0xEB), # Submap 0x1EB
+]
+
+ow_boss_rooms = [
+    BossRoom("#2 Morton Koopa Jr.", 0x3209B, 0xE5),    # OW 0x0E5
+    BossRoom("Vanilla Reznor", 0x33EAB, 0xDF),         # OW 0x0DF
+    BossRoom("#4 Ludwig von Koopa", 0x346EA, 0xD9),    # OW 0x0D9
+    BossRoom("Forest Reznor", 0x3643E, 0xD5, 0x36442), # OW 0x0D5
+    BossRoom("#5 Roy Koopa", 0x35ABC, 0xCC),           # OW 0x0CC
+    BossRoom("Chocolate Reznor", 0x3705B, 0xE2),       # OW 0x0E2
+    BossRoom("#6 Wendy O. Koopa", 0x38BB5, 0xD3),      # OW 0x0D3
+]
+
+
 class SMWPath():
     thisEndDirection: int
     otherLevelID: int

@@ -86,6 +86,22 @@ class BowserCastleRooms(Choice):
     default = 1
 
 
+class BossShuffle(Choice):
+    """
+    How the rooms of Bowser's Castle Front Door behave
+    None: Bosses are not shuffled
+    Simple: Four Reznors and the seven Koopalings are shuffled around
+    Full: Each boss location gets a fully random boss
+    Singularity: One or two bosses are chosen and placed at every boss location
+    """
+    display_name = "Boss Shuffle"
+    option_none = 0
+    option_simple = 1
+    option_full = 2
+    option_singularity = 3
+    default = 0
+
+
 class LevelShuffle(Toggle):
     """
     Whether levels are shuffled
@@ -240,6 +256,7 @@ smw_options: typing.Dict[str, type(Option)] = {
     "bowser_castle_doors": BowserCastleDoors,
     "bowser_castle_rooms": BowserCastleRooms,
     "level_shuffle": LevelShuffle,
+    "boss_shuffle": BossShuffle,
     "swap_donut_gh_exits": SwapDonutGhostHouseExits,
     #"display_sent_item_popups": DisplaySentItemPopups,
     "display_received_item_popups": DisplayReceivedItemPopups,
