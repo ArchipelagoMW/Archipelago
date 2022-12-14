@@ -2,7 +2,7 @@
 import itertools
 from typing import Dict, List, Set
 from BaseClasses import Region, Entrance, LocationProgressType, RegionType, MultiWorld
-from . import Locations
+from . import Locations, Items
 
 
 # Creates a new Region with the locations found in `location_region_mapping`
@@ -10,17 +10,23 @@ from . import Locations
 def create_region(world: MultiWorld, player: int, region_name: str) -> Region:
     new_region = Region(region_name, RegionType.Generic, region_name, player, world)
 
-    # Here we create and assign locations to the region
-    for location_name, location_id in Locations.location_region_mapping.get(region_name, {}).items():
-        location = Locations.NoitaLocation(player, location_name, location_id, new_region)
+    # Chests hack, don't add more locations than we requested
+    if region_name == "Forest":
+        total_locations = world.total_locations[player].value - Locations.num_static_locations
 
-        # TODO this is a hack.
-        # If it's not the region with all the shitty chests, increases the priority of important items.
-        # This way people know they can find their items by checking fixed locations instead of leaving it up to chance.
-        if region_name != "Forest":
-            location.progress_type = LocationProgressType.PRIORITY
+        for i in range(total_locations):
+            location_name = f"Chest{i+1}"
+            location_id = 110000+i 
 
-        new_region.locations.append(location)
+            location = Locations.NoitaLocation(player, location_name, location_id, new_region)
+            location.progress_type = LocationProgressType.EXCLUDED
+
+            new_region.locations.append(location)
+    else:
+        # Here we create and assign locations to the region
+        for location_name, location_id in Locations.location_region_mapping.get(region_name, {}).items():
+            location = Locations.NoitaLocation(player, location_name, location_id, new_region)
+            new_region.locations.append(location)
 
     return new_region
 

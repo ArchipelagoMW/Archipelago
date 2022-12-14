@@ -122,6 +122,8 @@ location_region_mapping: Dict[str, Dict[str, int]] = {
     },
 }
 
+num_static_locations = sum([len(locs) for locs in location_region_mapping.values()]) - TotalLocations.range_end
+
 location_name_to_id: Dict[str, int] = {}
 for location_group in location_region_mapping.values():
     location_name_to_id.update(location_group)
