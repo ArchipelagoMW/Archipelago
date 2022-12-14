@@ -10,11 +10,11 @@ def create_location(player: int, name: str, region: Region) -> Location:
     return Locations.NoitaLocation(player, name, None, region)
 
 
-def create_locked_location_event(world: MultiWorld, player: int, region_name: str, event_name: str) -> Location:
+def create_locked_location_event(world: MultiWorld, player: int, region_name: str, item: str) -> Location:
     region = world.get_region(region_name, player)
 
-    new_location = create_location(player, event_name, region)
-    new_location.place_locked_item(create_event(player, event_name))
+    new_location = create_location(player, item, region)
+    new_location.place_locked_item(create_event(player, item))
 
     region.locations.append(new_location)
     return new_location

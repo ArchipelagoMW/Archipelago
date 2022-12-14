@@ -9,6 +9,8 @@ class NoitaLocation(Location):
     game: str = "Noita"
 
 
+# TODO: It gets weird about filling locations, always giving an unfilled locations error
+
 # 111000 - 111034
 # Mapping of items in each region
 location_region_mapping: Dict[str, Dict[str, int]] = {
@@ -16,6 +18,7 @@ location_region_mapping: Dict[str, Dict[str, int]] = {
         # 110000 - 110500
         # Just putting these here for now
         f"Chest{i+1}": 110000+i for i in range(TotalLocations.range_end)
+        # TODO: Figure out the best way to subtract out the locations occupied by shops, orbs, etc.
     },
     "Holy Mountain 1 (To Coal Pits)": {
         "Holy Mountain 1 (To Coal Pits) Shop Item 1": 111000,
@@ -65,7 +68,58 @@ location_region_mapping: Dict[str, Dict[str, int]] = {
         "Holy Mountain 7 (To The Laboratory) Shop Item 3": 111032,
         "Holy Mountain 7 (To The Laboratory) Shop Item 4": 111033,
         "Holy Mountain 7 (To The Laboratory) Shop Item 5": 111034,
-    }
+    },
+    "Orbs": {
+        # TODO: place the orbs in their regions, figure out what to do with the lava lake orbs, hook into Noita mod
+        "Pyramid Orb": 110501,
+        "Floating Island Orb": 110502,
+        "Frozen Vault Orb": 110503,
+        "Lava Lake Orb": 110504,
+        "Sandcave Orb": 110505,
+        "Magical Temple Orb": 110506,
+        "Lukki Lair Orb": 110507,
+        "Abyss Orb": 110508,  # this is the orb room to the right of the lava lake, rename probably
+        "The Work (Hell) Orb": 110509,
+        "Snow Chasm Orb": 110510,
+        "Wizard's Den Orb": 110511,
+        "West Pyramid Orb": 110512,
+        "West Floating Island Orb": 110513,
+        "West Frozen Vault Orb": 110514,
+        "West Lava Lake Orb": 110515,  # does not spawn in new game not plus
+        "West Sandcave Orb": 110516,
+        "West Magical Temple Orb": 110517,
+        "West Lukki Lair Orb": 110518,
+        "West Abyss Orb": 110519,
+        "West The Work (Hell) Orb": 110520,
+        "West Snow Chasm Orb": 110521,
+        "West Wizard's Den Orb": 110522,
+        "East Pyramid Orb": 110523,
+        "East Floating Island Orb": 110524,
+        "East Frozen Vault Orb": 110525,
+        "East Lava Lake Orb": 110526,  # does not spawn in new game not plus
+        "East Sandcave Orb": 110527,
+        "East Magical Temple Orb": 110528,
+        "East Lukki Lair Orb": 110529,
+        "East Abyss Orb": 110530,
+        "East The Work (Hell) Orb": 110531,
+        "East Snow Chasm Orb": 110532,
+        "East Wizard's Den Orb": 110533,
+    },
+    "Bosses": {
+        # TODO: place the bosses at their spots, hook it into the noita mod
+        "Kolmisilma": 110600,  # the final boss
+        "Limatoukka": 110610,  # the underground slime maggot
+        "Suomuhauki": 110620,  # the dragon, the thing in the egg
+        "Kolmisilman Koipi": 110630,  # the green eye thing in the pyramid
+        "Sauvojen Tuntija": 110640,  # squidward, the guy to the right of the lava lake
+        "Syvaolento": 110650,  # the lake boss
+        "Gate Guardian": 110660,  # the triangle that you have to throw eggs at
+        "Unohdettu": 110670,  # the skull at the bottom of the icy place that you need paha silma for
+        "Toveri": 110680,  # one of our best friends in the world why would you kill him you monster
+        "Mestarien mestari": 110690,  # the dark souls lookin' dude
+        "Ylialkemisi": 110700,  # the alchemist to the left of the dark cave
+        "Kolmisilman silma": 110710  # mecha kolmi
+    },
 }
 
 location_name_to_id: Dict[str, int] = {}

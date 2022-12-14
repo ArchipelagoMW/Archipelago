@@ -4,6 +4,7 @@ from BaseClasses import Tutorial
 from worlds.AutoWorld import World, WebWorld
 
 from . import Options, Items, Locations, Regions, Rules, Events
+from .Options import noita_options
 
 # TODO: Ban higher tier wands from appearing in earlier locations
 # TODO: Gate holy mountain access behind an event that triggers when you visit the same holy mountain?
@@ -62,4 +63,7 @@ class NoitaWorld(World):
             "totalLocations": self.world.total_locations[self.player].value,
             "badEffects": self.world.bad_effects[self.player].value,
             "deathLink": self.world.death_link[self.player].value,
+            "victoryCondition": self.world.victory_condition[self.player].value,
+            "orbsAsChecks": self.world.orbs_as_checks[self.player].value,
+            "bossesAsChecks": self.world.bosses_as_checks[self.player].value,
         }

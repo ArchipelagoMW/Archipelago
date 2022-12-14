@@ -64,6 +64,8 @@ item_table: Dict[str, ItemData] = {
     "Perk (Tinker With Wands Everywhere)":  ItemData(110019, "Perks", ItemClassification.progression, 1),
     "Perk (All-Seeing Eye)":                ItemData(110020, "Perks", ItemClassification.progression, 1),
     "Perk (Extra Life)":                    ItemData(110021, "Repeatable Perks", ItemClassification.useful),
+    "Orb":                                  ItemData(110022, "Orbs", ItemClassification.progression, 11)
+    # todo: update orbs count to an orb_count variable that takes from options
 }
 
 
