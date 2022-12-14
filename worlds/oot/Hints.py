@@ -365,9 +365,9 @@ class HintArea(Enum):
                     return parent_region.alt_hint
                 return parent_region.hint
 
-            spot_queue.extend(list(filter(lambda ent: ent not in already_checked, parent_region.entrances)))
+            spot_queue.extend(filter(lambda ent: ent not in already_checked, parent_region.entrances))
 
-        raise HintAreaNotFound('No hint area could be found for %s [World %d]' % (spot, spot.world.player))
+        raise HintAreaNotFound('No hint area could be found for %s [World %d]' % (spot, spot.player))
 
     @classmethod
     def for_dungeon(cls, dungeon_name: str):
