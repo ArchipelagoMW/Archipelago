@@ -57,6 +57,9 @@ Your Party Leader will hold up the item they received when not in a fight or in 
 ###### Quality of life:
 
 - Various streamlining tweaks (removed cutscenes, dialogue, transitions)
+- You can elect to lock the cave layout for the next run, giving you exactly the same floors and red chest contents as
+  on your previous attempt. This functionality is accessed via the bald NPC behind the counter at the Ancient Cave
+  Entrance
 - Always start with Providence already in your inventory. (It is no longer obtained from red chests)
 - (optional) Run button that allows you to move at faster than normal speed
 
