@@ -423,7 +423,7 @@ class Overcooked2World(World):
             # Game Modifications
             "LevelPurchaseRequirements": level_purchase_requirements,
             "Custom66TimerScale": max(0.4, 0.25 + (1.0 - star_threshold_scale)*0.6),
-
+            "ShortHordeLevels": self.options["ShortHordeLevels"],
             "CustomLevelOrder": custom_level_order,
 
             # Items (Starting Inventory)
