@@ -8,6 +8,9 @@ from worlds.dark_souls_3.data.items_data import item_tables, dlc_shields_table, 
 class DarkSouls3Item(Item):
     game: str = "Dark Souls III"
 
+    dlc_set = {**dlc_shields_table, **dlc_weapons_upgrade_10_table, **dlc_weapons_upgrade_5_table,
+               **dlc_goods_table, **dlc_spells_table, **dlc_armor_table, **dlc_ring_table, **dlc_misc_table}
+
     @staticmethod
     def get_name_to_id() -> dict:
         base_id = 100000
@@ -15,8 +18,8 @@ class DarkSouls3Item(Item):
 
         output = {}
         for i, table in enumerate(item_tables):
-            if table.__len__() > table_offset:
-                print("An item table contains {} entries, that is more than {} entries ({})".format(table.__len__(), table_offset, i))
+            if len(table) > table_offset:
+                print("An item table has {} entries, that is more than {} entries ({})".format(len(table), table_offset, i))
                 sys.exit(1)
             output.update({name: id for id, name in enumerate(table, base_id + (table_offset * i))})
 
@@ -24,13 +27,6 @@ class DarkSouls3Item(Item):
 
     @staticmethod
     def is_dlc_item(name) -> bool:
-        return name in dlc_shields_table \
-            or name in dlc_weapons_upgrade_10_table \
-            or name in dlc_weapons_upgrade_5_table \
-            or name in dlc_goods_table \
-            or name in dlc_spells_table \
-            or name in dlc_armor_table \
-            or name in dlc_ring_table \
-            or name in dlc_misc_table
+        return name in DarkSouls3Item.dlc_set
 
 
