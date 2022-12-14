@@ -27,7 +27,7 @@ def create_victory_events(world: MultiWorld, player: int) -> None:
 
 
 def create_chest_events(world: MultiWorld, player: int) -> None:
-    total_locations = world.total_locations[player].value
+    total_locations = world.total_locations[player].value - Locations.num_static_locations
 
     # Iterates all our generated chests and makes sure that they are accessible in a specific
     # logical order (?) TODO: Revisit and confirm this
