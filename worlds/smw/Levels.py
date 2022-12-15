@@ -104,7 +104,7 @@ class SMWLevel():
         #self.progressByte   = progressByte # Inferred from EventIDValue: (ID / 8) + $1F02
         #self.progressBit    = progressBit  # Inferred from EventIDValue: 1 << (7 - (ID % 8))
         self.exit1Path   = exit1Path
-        self.exit2Path   = exit2Path 
+        self.exit2Path   = exit2Path
 
 
 level_info_dict = {
