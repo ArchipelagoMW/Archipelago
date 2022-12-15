@@ -225,6 +225,12 @@ class DarkSouls3World(World):
                                state.has("Cinders of a Lord - Yhorm the Giant", self.player) and
                                state.has("Cinders of a Lord - Aldrich", self.player) and
                                state.has("Cinders of a Lord - Lothric Prince", self.player))
+        # DLC Access Rules Below
+        if self.multiworld.enable_dlc[self.player]:
+            set_rule(self.multiworld.get_entrance("Goto Painted World of Ariandel", self.player),
+                     lambda state: state.has("Contraption Key", self.player))
+            set_rule(self.multiworld.get_entrance("Goto Ringed City", self.player),
+                     lambda state: state.has("Small Envoy Banner", self.player))
 
         # Define the access rules to some specific locations
         set_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
