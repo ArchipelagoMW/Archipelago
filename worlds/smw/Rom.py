@@ -1,6 +1,6 @@
 import Utils
 from worlds.Files import APDeltaPatch
-from .Aesthetics import generate_shuffled_header_data
+from .Aesthetics import generate_shuffled_header_data, generate_shuffled_ow_palettes
 from .Levels import level_info_dict, full_bowser_rooms, standard_bowser_rooms, submap_boss_rooms, ow_boss_rooms
 from .Names.TextBox import generate_goal_text, title_text_mapping, generate_text_box
 
@@ -921,6 +921,8 @@ def patch_rom(world, rom, player, active_level_dict):
     # Handle Music Shuffle
     if world.music_shuffle[player] != "none":
         handle_music_shuffle(rom, world, player)
+
+    generate_shuffled_ow_palettes(rom, world, player)
 
     generate_shuffled_header_data(rom, world, player)
 

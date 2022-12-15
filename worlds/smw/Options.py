@@ -235,6 +235,13 @@ class BackgroundPaletteShuffle(Toggle):
     display_name = "Background Palette Shuffle"
 
 
+class OverworldPaletteShuffle(Toggle):
+    """
+    Whether to shuffle overworld palettes
+    """
+    display_name = "Overworld Palette Shuffle"
+
+
 class StartingLifeCount(Range):
     """
     How many extra lives to start the game with
@@ -269,5 +276,6 @@ smw_options: typing.Dict[str, type(Option)] = {
     "mario_palette": MarioPalette,
     "foreground_palette_shuffle": ForegroundPaletteShuffle,
     "background_palette_shuffle": BackgroundPaletteShuffle,
+    "overworld_palette_shuffle": OverworldPaletteShuffle,
     "starting_life_count": StartingLifeCount,
 }
