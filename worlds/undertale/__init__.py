@@ -48,39 +48,39 @@ class UndertaleWorld(World):
 
     def _get_undertale_data(self):
         return {
-            'world_seed': self.world.slot_seeds[self.player].getrandbits(32),
-            'seed_name': self.world.seed_name,
-            'player_name': self.world.get_player_name(self.player),
+            'world_seed': self.multiworld.slot_seeds[self.player].getrandbits(32),
+            'seed_name': self.multiworld.seed_name,
+            'player_name': self.multiworld.get_player_name(self.player),
             'player_id': self.player,
             'client_version': client_version,
-            'race': self.world.is_race,
-            'route': self.world.route_required[self.player].current_key,
-            'temy_armor_include': bool(self.world.temy_include[self.player].value),
-            'only_flakes': bool(self.world.only_flakes[self.player].value),
-            'no_equips': bool(self.world.no_equips[self.player].value),
-            'key_hunt': bool(self.world.key_hunt[self.player].value),
-            'key_pieces': self.world.key_pieces[self.player].value,
-            'prog_plot': bool(self.world.prog_plot[self.player].value),
-            'rando_love': bool(self.world.rando_love[self.player].value),
-            'rando_area': bool(self.world.rando_area[self.player].value),
-            'rando_stats': bool(self.world.rando_stats[self.player].value),
-            'prog_armor': bool(self.world.prog_armor[self.player].value),
-            'prog_weapons': bool(self.world.prog_weapons[self.player].value)
+            'race': self.multiworld.is_race,
+            'route': self.multiworld.route_required[self.player].current_key,
+            'temy_armor_include': bool(self.multiworld.temy_include[self.player].value),
+            'only_flakes': bool(self.multiworld.only_flakes[self.player].value),
+            'no_equips': bool(self.multiworld.no_equips[self.player].value),
+            'key_hunt': bool(self.multiworld.key_hunt[self.player].value),
+            'key_pieces': self.multiworld.key_pieces[self.player].value,
+            'prog_plot': bool(self.multiworld.prog_plot[self.player].value),
+            'rando_love': bool(self.multiworld.rando_love[self.player].value),
+            'rando_area': bool(self.multiworld.rando_area[self.player].value),
+            'rando_stats': bool(self.multiworld.rando_stats[self.player].value),
+            'prog_armor': bool(self.multiworld.prog_armor[self.player].value),
+            'prog_weapons': bool(self.multiworld.prog_weapons[self.player].value)
         }
 
     def generate_basic(self):
-        self.world.get_location("Undyne Date", self.player).place_locked_item(self.create_item("Undyne Date"))
-        self.world.get_location("Alphys Date", self.player).place_locked_item(self.create_item("Alphys Date"))
-        self.world.get_location("Papyrus Date", self.player).place_locked_item(self.create_item("Papyrus Date"))
+        self.multiworld.get_location("Undyne Date", self.player).place_locked_item(self.create_item("Undyne Date"))
+        self.multiworld.get_location("Alphys Date", self.player).place_locked_item(self.create_item("Alphys Date"))
+        self.multiworld.get_location("Papyrus Date", self.player).place_locked_item(self.create_item("Papyrus Date"))
         # Generate item pool
         itempool = []
-        if self.world.route_required[self.player].current_key == "all_routes":
+        if self.multiworld.route_required[self.player].current_key == "all_routes":
             junk_pool = junk_weights_all.copy()
-        elif self.world.route_required[self.player].current_key == "genocide":
+        elif self.multiworld.route_required[self.player].current_key == "genocide":
             junk_pool = junk_weights_genocide.copy()
-        elif self.world.route_required[self.player].current_key == "neutral":
+        elif self.multiworld.route_required[self.player].current_key == "neutral":
             junk_pool = junk_weights_neutral.copy()
-        elif self.world.route_required[self.player].current_key == "pacifist":
+        elif self.multiworld.route_required[self.player].current_key == "pacifist":
             junk_pool = junk_weights_pacifist.copy()
         else:
             junk_pool = junk_weights_all.copy()
@@ -91,102 +91,102 @@ class UndertaleWorld(World):
             itempool += [name] * num
         for (name, num) in required_weapons.items():
             itempool += [name] * num
-        if not self.world.temy_include[self.player]:
+        if not self.multiworld.temy_include[self.player]:
             if "temy armor" in itempool:
                 itempool.remove("temy armor")
         for (name, num) in non_key_items.items():
             itempool += [name] * num
-        if self.world.route_required[self.player].current_key == "genocide":
+        if self.multiworld.route_required[self.player].current_key == "genocide":
             itempool = [item for item in itempool if item != "Popato Chisps" and item != "Stained Apron" and item != "Nice Cream" and item != "Hot Cat" and item != "Hot Dog...?" and item != "Punch Card"]
-        elif self.world.route_required[self.player].current_key == "neutral":
+        elif self.multiworld.route_required[self.player].current_key == "neutral":
             itempool = [item for item in itempool if item != "Popato Chisps" and item != "Hot Cat" and item != "Hot Dog...?"]
-        if self.world.route_required[self.player].current_key == "pacifist" or self.world.route_required[self.player].current_key == "all_routes":
+        if self.multiworld.route_required[self.player].current_key == "pacifist" or self.multiworld.route_required[self.player].current_key == "all_routes":
             itempool += ["Undyne Letter EX"]
         else:
             itempool.remove("Complete Skeleton")
             itempool.remove("Fish")
             itempool.remove("DT Extractor")
             itempool.remove("Hush Puppy")
-        if self.world.route_required[self.player].current_key == "genocide":
+        if self.multiworld.route_required[self.player].current_key == "genocide":
             itempool.remove("Cooking Set")
             itempool.remove("Microphone")
-        if self.world.key_hunt[self.player]:
-            itempool += ["Key Piece"] * self.world.key_pieces[self.player].value
+        if self.multiworld.key_hunt[self.player]:
+            itempool += ["Key Piece"] * self.multiworld.key_pieces[self.player].value
         else:
             itempool += ["Left Home Key"]
             itempool += ["Right Home Key"]
-        if not self.world.rando_love[self.player] or (self.world.route_required[self.player].current_key != "genocide" and self.world.route_required[self.player].current_key != "all_routes"):
+        if not self.multiworld.rando_love[self.player] or (self.multiworld.route_required[self.player].current_key != "genocide" and self.multiworld.route_required[self.player].current_key != "all_routes"):
             itempool = [item for item in itempool if not item == "LOVE"]
-        if not self.world.rando_stats[self.player] or (self.world.route_required[self.player].current_key != "genocide" and self.world.route_required[self.player].current_key != "all_routes"):
+        if not self.multiworld.rando_stats[self.player] or (self.multiworld.route_required[self.player].current_key != "genocide" and self.multiworld.route_required[self.player].current_key != "all_routes"):
             itempool = [item for item in itempool if not (item == "ATK Up" or item == "DEF Up" or item == "HP Up")]
-        if self.world.prog_plot[self.player]:
+        if self.multiworld.prog_plot[self.player]:
             itempool = [item if item not in plot_items else "Progressive Plot" for item in itempool]
-        if self.world.prog_armor[self.player]:
-            itempool = [item if item not in required_armor else "Progressive Armor" for item in itempool]
-        if self.world.prog_weapons[self.player]:
-            itempool = [item if item not in required_weapons else "Progressive Weapons" for item in itempool]
-        if self.world.route_required[self.player].current_key == "genocide" or self.world.route_required[self.player].current_key == "all_routes":
-            if not self.world.only_flakes[self.player]:
-                itempool += ["Snowman Piece"] * 2
-            if not self.world.no_equips[self.player]:
-                itempool = ["Real Knife" if item == "Worn Dagger" else "The Locket" if item == "Heart Locket" else item for item in itempool]
-        if self.world.only_flakes[self.player]:
-            itempool = [item for item in itempool if item not in non_key_items]
-        if self.world.no_equips[self.player]:
+        if self.multiworld.no_equips[self.player]:
             itempool = [item for item in itempool if item not in required_armor and item not in required_weapons]
+        if self.multiworld.prog_armor[self.player]:
+            itempool = [item if item not in required_armor else "Progressive Armor" for item in itempool]
+        if self.multiworld.prog_weapons[self.player]:
+            itempool = [item if item not in required_weapons else "Progressive Weapons" for item in itempool]
+        if self.multiworld.route_required[self.player].current_key == "genocide" or self.multiworld.route_required[self.player].current_key == "all_routes":
+            if not self.multiworld.only_flakes[self.player]:
+                itempool += ["Snowman Piece"] * 2
+            if not self.multiworld.no_equips[self.player]:
+                itempool = ["Real Knife" if item == "Worn Dagger" else "The Locket" if item == "Heart Locket" else item for item in itempool]
+        if self.multiworld.only_flakes[self.player]:
+            itempool = [item for item in itempool if item not in non_key_items]
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
-        exclusion_pool.update(exclusion_table[self.world.route_required[self.player].current_key])
-        if not self.world.rando_love[self.player] or (self.world.route_required[self.player].current_key != "genocide" and self.world.route_required[self.player].current_key != "all_routes"):
+        exclusion_pool.update(exclusion_table[self.multiworld.route_required[self.player].current_key])
+        if not self.multiworld.rando_love[self.player] or (self.multiworld.route_required[self.player].current_key != "genocide" and self.multiworld.route_required[self.player].current_key != "all_routes"):
             exclusion_pool.update(exclusion_table["NoLove"])
-        if not self.world.rando_stats[self.player] or (self.world.route_required[self.player].current_key != "genocide" and self.world.route_required[self.player].current_key != "all_routes"):
+        if not self.multiworld.rando_stats[self.player] or (self.multiworld.route_required[self.player].current_key != "genocide" and self.multiworld.route_required[self.player].current_key != "all_routes"):
             exclusion_pool.update(exclusion_table["NoStats"])
 
         # Choose locations to automatically exclude based on settings
         exclusion_checks = set()
         exclusion_checks.update(["Nicecream Punch Card", "Hush Trade"])
-        exclusion_rules(self.world, self.player, exclusion_checks)
+        exclusion_rules(self.multiworld, self.player, exclusion_checks)
 
         # Fill remaining items with randomly generated junk or Temmie Flakes
-        if not self.world.only_flakes[self.player]:
-            itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names)-len(itempool)-len(exclusion_pool))
+        if not self.multiworld.only_flakes[self.player]:
+            itempool += self.multiworld.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()), k=len(self.location_names)-len(itempool)-len(exclusion_pool))
         else:
             itempool += ["Temmie Flakes"] * (len(self.location_names) - len(itempool) - len(exclusion_pool))
         # Convert itempool into real items
         itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
 
-        self.world.random.shuffle(itempool)
+        self.multiworld.random.shuffle(itempool)
 
-        self.world.itempool += itempool
+        self.multiworld.itempool += itempool
 
     def set_rules(self):
-        set_rules(self.world, self.player)
-        set_completion_rules(self.world, self.player)
+        set_rules(self.multiworld, self.player)
+        set_completion_rules(self.multiworld, self.player)
 
     def create_regions(self):
         def UndertaleRegion(region_name: str, exits=[]):
-            ret = Region(region_name, None, region_name, self.player, self.world)
+            ret = Region(region_name, None, region_name, self.player, self.multiworld)
             ret.locations = [UndertaleAdvancement(self.player, loc_name, loc_data.id, ret)
                 for loc_name, loc_data in advancement_table.items()
-                if loc_data.region == region_name and (loc_name not in exclusion_table["NoStats"] or (self.world.rando_stats[self.player] and (self.world.route_required[self.player].current_key == "genocide" or self.world.route_required[self.player].current_key == "all_routes"))) and (loc_name not in exclusion_table["NoLove"] or (self.world.rando_love[self.player] and (self.world.route_required[self.player].current_key == "genocide" or self.world.route_required[self.player].current_key == "all_routes"))) and not loc_name in exclusion_table[self.world.route_required[self.player].current_key]]
+                if loc_data.region == region_name and (loc_name not in exclusion_table["NoStats"] or (self.multiworld.rando_stats[self.player] and (self.multiworld.route_required[self.player].current_key == "genocide" or self.multiworld.route_required[self.player].current_key == "all_routes"))) and (loc_name not in exclusion_table["NoLove"] or (self.multiworld.rando_love[self.player] and (self.multiworld.route_required[self.player].current_key == "genocide" or self.multiworld.route_required[self.player].current_key == "all_routes"))) and not loc_name in exclusion_table[self.multiworld.route_required[self.player].current_key]]
             for exit in exits:
                 ret.exits.append(Entrance(self.player, exit, ret))
             return ret
 
-        self.world.regions += [UndertaleRegion(*r) for r in undertale_regions]
-        link_undertale_areas(self.world, self.player)
+        self.multiworld.regions += [UndertaleRegion(*r) for r in undertale_regions]
+        link_undertale_areas(self.multiworld, self.player)
 
     def fill_slot_data(self):
         slot_data = self._get_undertale_data()
         for option_name in undertale_options:
-            option = getattr(self.world, option_name)[self.player]
-            if (option_name == "rando_love" or option_name == "rando_stats") and self.world.route_required[self.player].current_key != "genocide" and self.world.route_required[self.player].current_key != "all_routes":
+            option = getattr(self.multiworld, option_name)[self.player]
+            if (option_name == "rando_love" or option_name == "rando_stats") and self.multiworld.route_required[self.player].current_key != "genocide" and self.multiworld.route_required[self.player].current_key != "all_routes":
                 option.value = False
             if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
         for (exit, region) in randomized_connections:
-            slot_data[exit] = self.world.get_entrance(exit, self.player).connected_region.name
-            slot_data[region] = self.world.get_region(region, self.player).entrances[0].name
+            slot_data[exit] = self.multiworld.get_entrance(exit, self.player).connected_region.name
+            slot_data[region] = self.multiworld.get_region(region, self.player).entrances[0].name
         return slot_data
 
     def create_item(self, name: str) -> Item:

@@ -17,13 +17,18 @@ import Utils
 
 if __name__ == "__main__":
     Utils.init_logging("UndertaleClient", exception_logger="Client")
-
-from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot
+    
+from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, \
+    ClientStatus, Permission, NetworkSlot, RawJSONtoTextParser
 from worlds import network_data_package, AutoWorldRegister, undertale
-from MultiServer import mark_raw
+from MultiServer import CommandProcessor, mark_raw
 from CommonClient import gui_enabled, get_base_parser, ClientCommandProcessor, CommonContext, server_loop, \
     gui_enabled, console_loop, ClientCommandProcessor, logger, get_base_parser, keep_alive, server_autoreconnect, \
     process_server_cmd
+from Utils import Version, stream_input, async_start
+
+if typing.TYPE_CHECKING:
+    import kvui
 
 
 class UndertaleCommandProcessor(ClientCommandProcessor):
@@ -88,7 +93,6 @@ class UndertaleContext(CommonContext):
     items_handling = 0b111
     route = None
     pieces_needed = None
-    progkeys = None
     completed_routes = None
     completed_count = 0
 
@@ -100,7 +104,6 @@ class UndertaleContext(CommonContext):
         self.syncing = False
         self.deathlink_status = False
         self.tem_armor = False
-        self.progkeys = []
         self.completed_count = 0
         self.completed_routes = {}
         self.completed_routes["pacifist"] = 0
@@ -138,8 +141,6 @@ class UndertaleContext(CommonContext):
                     os.remove(root+"/"+file)
                 elif file.find(".LV") > -1:
                     os.remove(root+"/"+file)
-                elif file.find("area") > -1:
-                    os.remove(root+"/"+file)
                 elif file.find(".mine") > -1:
                     os.remove(root+"/"+file)
                 elif file.find(".flag") > -1:
@@ -150,12 +151,12 @@ class UndertaleContext(CommonContext):
                     os.remove(root+"/"+file)
 
     async def connection_closed(self):
-        await super().connection_closed()
         self.clear_undertale_files()
+        await super().connection_closed()
 
     async def shutdown(self):
-        await super().shutdown()
         self.clear_undertale_files()
+        await super().shutdown()
 
     def update_online_mode(self, online):
         old_tags = self.tags.copy()
@@ -164,10 +165,10 @@ class UndertaleContext(CommonContext):
         else:
             self.tags -= {"Online"}
         if old_tags != self.tags and self.server and not self.server.socket.closed:
-            asyncio.create_task(self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}]))
+            async_start(self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}]))
 
     def on_package(self, cmd: str, args: dict):
-        asyncio.create_task(process_undertale_cmd(self, cmd, args))
+       async_start(process_undertale_cmd(self, cmd, args))
 
     def run_gui(self):
         from kvui import GameManager
@@ -181,7 +182,7 @@ class UndertaleContext(CommonContext):
         self.ui = UTManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
-    def on_deathlink(self, data: dict):
+    def on_deathlink(self, data: typing.Dict[str, typing.Any]):
         self.got_deathlink = True
         super().on_deathlink(data)
 
@@ -268,30 +269,6 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
             f.write(to_room_name(args["slot_data"]["Core"]))
             f.close()
-        place = "Old Home Exit"
-        ctx.progkeys.append(77777)
-        while place != "Core Exit":
-            if args["slot_data"][place] == "Snowdin Forest":
-                if ctx.route == "pacifist" or ctx.route == "all_routes":
-                    ctx.progkeys.append(77779)
-                ctx.progkeys.append(77778)
-                place = "Snowdin Town Exit"
-            elif args["slot_data"][place] == "Waterfall":
-                if ctx.route == "pacifist" or ctx.route == "all_routes":
-                    ctx.progkeys.append(77780)
-                ctx.progkeys.append(77781)
-                place = "Waterfall Exit"
-            elif args["slot_data"][place] == "Hotland":
-                if ctx.route != "genocide":
-                    ctx.progkeys.append(77783)
-                    ctx.progkeys.append(77784)
-                ctx.progkeys.append(77785)
-                place = "Hotland Exit"
-            elif args["slot_data"][place] == "Core":
-                ctx.progkeys.append(77786)
-                if ctx.route == "pacifist" or ctx.route == "all_routes":
-                    ctx.progkeys.append(77782)
-                place = "Core Exit"
     elif cmd == 'LocationInfo':
         locationid = args["locations"][0].location
         filename = f"{str(locationid-12000)}.hint"
@@ -350,10 +327,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                     id -= 1
                 filename = f"{str(id)}PLR{str(NetworkItem(*item).player)}.item"
                 with open(os.path.expandvars(r"%localappdata%/UNDERTALE/"+filename), 'w') as f:
-                    if NetworkItem(*item).item == 77700:
-                        f.write(str(int(ctx.progkeys[placedPlot])-11000))
-                        placedPlot += 1
-                    elif NetworkItem(*item).item == 77701:
+                    if NetworkItem(*item).item == 77701:
                         if placedWeapon == 0:
                             f.write(str(77013-11000))
                         elif placedWeapon == 1:
@@ -427,9 +401,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
 
     elif cmd == "Bounced":
         tags = args.get("tags", [])
-        if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
-            ctx.on_deathlink(args["data"])
-        elif "Online" in tags:
+        if "Online" in tags:
             data = args.get("data", [])
             if data["player"] != ctx.slot and data["player"] != None:
                 filename = f"FRISK" + str(data["player"]) + ".playerspot"
@@ -543,7 +515,6 @@ if __name__ == '__main__':
     async def main(args):
         ctx = UndertaleContext(args.connect, args.password)
         ctx.auth = args.name
-        ctx.server_address = args.connect
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
         progression_watcher = asyncio.create_task(
             game_watcher(ctx), name="UndertaleProgressionWatcher")

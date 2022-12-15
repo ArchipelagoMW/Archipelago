@@ -11,8 +11,8 @@ class UndertaleLogic(LogicMixin):
         temp_data = {}
         progkeys = []
         for (exit, region) in randomized_connections:
-            temp_data[exit] = self.world.get_entrance(exit, player).connected_region.name
-            temp_data[region] = self.world.get_region(region, player).entrances[0].name
+            temp_data[exit] = self.multiworld.get_entrance(exit, player).connected_region.name
+            temp_data[region] = self.multiworld.get_region(region, player).entrances[0].name
         place = "Old Home Exit"
         progkeys.append("Goat Plush")
         while place != "Core Exit":
@@ -41,25 +41,25 @@ class UndertaleLogic(LogicMixin):
 
     def _undertale_prev_area(self, player: int, area: int):
         if area == 1:
-            return self.world.get_region("Snowdin Forest", player).entrances[0].parent_region.name
+            return self.multiworld.get_region("Snowdin Forest", player).entrances[0].parent_region.name
         elif area == 2:
-            return self.world.get_region("Waterfall", player).entrances[0].parent_region.name
+            return self.multiworld.get_region("Waterfall", player).entrances[0].parent_region.name
         elif area == 3:
-            return self.world.get_region("Hotland", player).entrances[0].parent_region.name
+            return self.multiworld.get_region("Hotland", player).entrances[0].parent_region.name
         elif area == 4:
-            return self.world.get_region("Core", player).entrances[0].parent_region.name
+            return self.multiworld.get_region("Core", player).entrances[0].parent_region.name
 
     def _undertale_is_route(self, player: int, route: int):
         if route == 3:
-            return (self.world.route_required[player].current_key == "all_routes")
-        if self.world.route_required[player].current_key == "all_routes":
+            return (self.multiworld.route_required[player].current_key == "all_routes")
+        if self.multiworld.route_required[player].current_key == "all_routes":
             return True
         if route == 0:
-            return (self.world.route_required[player].current_key == "neutral")
+            return (self.multiworld.route_required[player].current_key == "neutral")
         if route == 1:
-            return (self.world.route_required[player].current_key == "pacifist")
+            return (self.multiworld.route_required[player].current_key == "pacifist")
         if route == 2:
-            return (self.world.route_required[player].current_key == "genocide")
+            return (self.multiworld.route_required[player].current_key == "genocide")
         return False
 
     def _undertale_has_plot(self, player: int, item: str):
@@ -135,7 +135,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_entrance("News Show Entrance", player), lambda state: state._undertale_has_plot(player, "Microphone"))
     set_rule(world.get_entrance("Hotland Exit", player), lambda state: state._undertale_has_plot(player, "Bridge Tools"))
     set_rule(world.get_entrance("Core Exit", player), lambda state: state._undertale_has_plot(player, "Mettaton Plush"))
-    set_rule(world.get_entrance("New Home Exit", player), lambda state: (state.has("Left Home Key", player) and state.has("Right Home Key", player)) or state.has("Key Piece", player, state.world.key_pieces[player]))
+    set_rule(world.get_entrance("New Home Exit", player), lambda state: (state.has("Left Home Key", player) and state.has("Right Home Key", player)) or state.has("Key Piece", player, state.multiworld.key_pieces[player]))
     if world.state._undertale_is_route(player, 1):
         set_rule(world.get_entrance("Papyrus\' Home Entrance", player), lambda state: state._undertale_has_plot(player, "Complete Skeleton"))
         set_rule(world.get_entrance("Undyne\'s Home Entrance", player), lambda state: state._undertale_has_plot(player, "Fish") and state.has('Papyrus Date', player))
