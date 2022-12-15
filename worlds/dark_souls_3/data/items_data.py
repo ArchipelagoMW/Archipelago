@@ -66,7 +66,7 @@ dlc_weapons_upgrade_5_table = {
     "Valorheart": 0x00F646E0,
     "Aquamarine Dagger": 0x00116520,
     "Ringed Knight Straight Sword": 0x00225510,
-    #"Ledo's Great Hammer": 0x007EF400, # INVADER FIGHT
+    "Ledo's Great Hammer": 0x007EF400, # INVADER FIGHT
     "Ringed Knight Spear": 0x008CFDC0,
     "Crucifix of the Mad King": 0x008D4BE0,
     "Sacred Chime of Filianore": 0x00CCECF0,
@@ -76,7 +76,7 @@ dlc_weapons_upgrade_5_table = {
 }
 
 weapons_upgrade_10_table = {
-    #"Broken Straight Sword": 0x001EF9B0, # Removed to match location count 12/14-Brooty
+    "Broken Straight Sword": 0x001EF9B0, # Removed to match location count 12/14-Brooty
     "Deep Battle Axe": 0x0006AFA54,
     "Club": 0x007A1200,
     "Claymore": 0x005BDBA0,
@@ -139,7 +139,7 @@ dlc_weapons_upgrade_10_table = {
     "Murky Hand Scythe": 0x00118C30,
     "Herald Curved Greatsword": 0x006159E0,
     "Lothric War Banner": 0x008D24D0,
-    #"Splitleaf Greatsword": 0x009B2E90, # SHOP ITEM
+    "Splitleaf Greatsword": 0x009B2E90, # SHOP ITEM
     "Murky Longstaff": 0x00CCC5E0,
 }
 
@@ -218,16 +218,16 @@ goods_2_table = { # Added by Br00ty
     "FK: Gold Pine Bundle #": 0x40000155,
     "CC: Carthus Rouge #": 0x4000014F,
     "ID: Pale Pine Resin #": 0x40000150,
-    **{"Ember #"+str(i): 0x400001F4 for i in range(1, 46)},
+    **{"Ember #"+str(i): 0x400001F4 for i in range(1, 45)},
     **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(11, 16)},
     **{"Large Titanite Shard #"+str(i): 0x400003E9 for i in range(11, 16)},
-    **{"Titanite Scale #" + str(i): 0x400003FC for i in range(1, 27)}
+    **{"Titanite Scale #" + str(i): 0x400003FC for i in range(1, 25)}
 }
 
 goods_3_table = { # Added by Br00ty
     **{"Fading Soul #" + str(i): 0x40000190 for i in range(1, 4)},
     **{"Ring of Sacrifice #"+str(i): 0x20004EF2 for i in range(1, 5)},
-    **{"Homeward Bone #"+str(i): 0x4000015E for i in range(1, 18)},
+    **{"Homeward Bone #"+str(i): 0x4000015E for i in range(1, 17)},
     **{"Green Blossom #"+str(i): 0x40000104 for i in range(1, 7)},
     **{"Human Pine Resin #"+str(i): 0x4000014E for i in range(1, 3)},
     **{"Charcoal Pine Bundle #"+str(i): 0x40000154 for i in range(1, 3)},
@@ -403,7 +403,7 @@ dlc_armor_table = {
     "Black Witch Garb": 0x14EADD88,
     "Black Witch Wrappings": 0x14EAE170,
     "Black Witch Trousers": 0x14EAE558,
-    #"White Preacher Head": 0x14153A20, # Removed to match DLC location count 12/14-Brooty
+    "White Preacher Head": 0x14153A20,
     "Antiquated Plain Garb": 0x11B2E408
 }
 
