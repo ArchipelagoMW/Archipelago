@@ -20,6 +20,27 @@ location_region_mapping: Dict[str, Dict[str, int]] = {
         f"Chest{i+1}": 110000+i for i in range(TotalLocations.range_end)
         # TODO: Figure out the best way to subtract out the locations occupied by shops, orbs, etc.
     },
+    "Floating Island": {
+        "Floating Island Orb": 110502,
+    },
+    "Lake": {
+        "Syvaolento": 110650,
+    },
+    "Pyramid": {  # includes the sandcave, as you can get from one to the other easy
+        "Pyramid Orb": 110501,
+        "Sandcave Orb": 110504,
+        "Kolmisilman Koipi": 110630,
+    },
+    "Below Lava Lake": {
+        "Lava Lake Orb": 110504,
+    },
+    "Abyss Orb Room": {
+        "Abyss Orb": 110508,
+        "Sauvojen Tuntija": 110640,
+    },
+    "Abandoned Alchemy Lab": {
+        "Ylialkemisti": 110700,
+    },
     "Holy Mountain 1 (To Coal Pits)": {
         "Holy Mountain 1 (To Coal Pits) Shop Item 1": 111000,
         "Holy Mountain 1 (To Coal Pits) Shop Item 2": 111001,
@@ -48,6 +69,12 @@ location_region_mapping: Dict[str, Dict[str, int]] = {
         "Holy Mountain 4 (To Underground Jungle) Shop Item 4": 111018,
         "Holy Mountain 4 (To Underground Jungle) Shop Item 5": 111019,
     },
+    "Underground Jungle": {
+        "Suomuhauki": 110620,
+    },
+    "Lukki Lair": {
+        "Lukki Lair Orb": 110507,
+    },
     "Holy Mountain 5 (To The Vault)": {
         "Holy Mountain 5 (To The Vault) Shop Item 1": 111020,
         "Holy Mountain 5 (To The Vault) Shop Item 2": 111021,
@@ -62,6 +89,9 @@ location_region_mapping: Dict[str, Dict[str, int]] = {
         "Holy Mountain 6 (To Temple of the Art) Shop Item 4": 111028,
         "Holy Mountain 6 (To Temple of the Art) Shop Item 5": 111029,
     },
+    "Temple of the Art": {
+        "Gate Guardian": 110660,
+    },
     "Holy Mountain 7 (To The Laboratory)": {
         "Holy Mountain 7 (To The Laboratory) Shop Item 1": 111030,
         "Holy Mountain 7 (To The Laboratory) Shop Item 2": 111031,
@@ -69,8 +99,37 @@ location_region_mapping: Dict[str, Dict[str, int]] = {
         "Holy Mountain 7 (To The Laboratory) Shop Item 4": 111033,
         "Holy Mountain 7 (To The Laboratory) Shop Item 5": 111034,
     },
+    "The Laboratory": {
+        "Kolmisilma": 110600,
+    },
+    "Frozen Vault": {
+        "Frozen Vault Orb": 110503,
+    },
+    "Magical Tample": {
+        "Magical Temple Orb": 110506,
+    },
+    "The Work (Hell)": {
+        "The Work (Hell) Orb": 110509,
+    },
+    "Snow Chasm": {
+        "Snow Chasm Orb": 110510,
+        "Unohdettu": 110670,
+    },
+    "Wizard's Den": {
+        "Wizard's Den Orb": 110511,
+        "Mestarien mestari": 110700,
+    },
+    "Powerplant": {
+        "Kolmisilman silma": 110710,
+    },
+    "Deep Underground": {
+        "Limatoukka": 110610,
+    },
+    "Friend Cave": {
+        "Toveri": 110680,
+    },
     "Orbs": {
-        # TODO: place the orbs in their regions, figure out what to do with the lava lake orbs, hook into Noita mod
+        # This is just a list of the orbs, don't turn this into a region
         "Pyramid Orb": 110501,
         "Floating Island Orb": 110502,
         "Frozen Vault Orb": 110503,
@@ -107,6 +166,7 @@ location_region_mapping: Dict[str, Dict[str, int]] = {
     },
     "Bosses": {
         # TODO: place the bosses at their spots, hook it into the noita mod
+        # This is just a list of bosses, don't turn it into a region
         "Kolmisilma": 110600,  # the final boss
         "Limatoukka": 110610,  # the underground slime maggot
         "Suomuhauki": 110620,  # the dragon, the thing in the egg
