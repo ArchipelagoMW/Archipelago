@@ -5,7 +5,6 @@ unrandomized_dict: Dict[str, str] = {
     "MotED: Egg hatching": "Hatched Egg of Deformity",
     "BotSS: Crisanta's gift": "Holy Wound of Abnegation",
     "DC: Chalice room": "Chalice of Inverted Verses",
-    "BotTC: Esdras, of the Anointed Legion": "Tears of Atonement (4300)",
     "Defeat 1 Amanecida": "Verses Spun from Gold",
     "Defeat 2 Amanecidas": "Verses Spun from Gold",
     "Defeat 3 Amanecidas": "Verses Spun from Gold",
