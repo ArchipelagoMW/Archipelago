@@ -4,6 +4,7 @@ import pickle
 import random
 import tempfile
 import zipfile
+import concurrent.futures
 from collections import Counter
 from typing import Dict, Optional, Any
 
@@ -51,7 +52,7 @@ def generate(race=False):
         else:
             file = request.files['file']
             options = get_yaml_data(file)
-            if type(options) == str:
+            if isinstance(options, str):
                 flash(options)
             else:
                 meta = get_meta(request.form)
@@ -91,14 +92,14 @@ def generate(race=False):
     return render_template("generate.html", race=race, version=__version__)
 
 
-def gen_game(gen_options, meta: Optional[Dict[str, Any]] = None, owner=None, sid=None):
+def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=None, sid=None):
     if not meta:
         meta: Dict[str, Any] = {}
 
     meta.setdefault("server_options", {}).setdefault("hint_cost", 10)
     race = meta.setdefault("race", False)
 
-    try:
+    def task():
         target = tempfile.TemporaryDirectory()
         playercount = len(gen_options)
         seed = get_seed()
@@ -113,7 +114,7 @@ def gen_game(gen_options, meta: Optional[Dict[str, Any]] = None, owner=None, sid
         erargs = parse_arguments(['--multi', str(playercount)])
         erargs.seed = seed
         erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
-        erargs.spoiler = 0 if race else 2
+        erargs.spoiler = 0 if race else 3
         erargs.race = race
         erargs.outputname = seedname
         erargs.outputpath = target.name
@@ -138,6 +139,23 @@ def gen_game(gen_options, meta: Optional[Dict[str, Any]] = None, owner=None, sid
         ERmain(erargs, seed, baked_server_options=meta["server_options"])
 
         return upload_to_db(target.name, sid, owner, race)
+    thread_pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+    thread = thread_pool.submit(task)
+
+    try:
+        return thread.result(app.config["JOB_TIME"])
+    except concurrent.futures.TimeoutError as e:
+        if sid:
+            with db_session:
+                gen = Generation.get(id=sid)
+                if gen is not None:
+                    gen.state = STATE_ERROR
+                    meta = json.loads(gen.meta)
+                    meta["error"] = (
+                            "Allowed time for Generation exceeded, please consider generating locally instead. " +
+                            e.__class__.__name__ + ": " + str(e))
+                    gen.meta = json.dumps(meta)
+                    commit()
     except BaseException as e:
         if sid:
             with db_session:

@@ -68,9 +68,10 @@ generator:
   meta_file_path: "meta.yaml"
   # Create a spoiler file
   # 0 -> None
-  # 1 -> Spoiler without playthrough
-  # 2 -> Full spoiler
-  spoiler: 2
+  # 1 -> Spoiler without playthrough or paths to playthrough required items
+  # 2 -> Spoiler with playthrough (viable solution to goals)
+  # 3 -> Spoiler with playthrough and traversal paths towards items
+  spoiler: 3
   # Glitch to Triforce room from Ganon
   # When disabled, you have to have a weapon that can hurt ganon (master sword or swordless/easy item functionality + hammer)
   # and have completed the goal required for killing ganon to be able to access the triforce room.
@@ -92,6 +93,9 @@ sni_options:
 lttp_options:
   # File name of the v1.0 J rom
   rom_file: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
+lufia2ac_options:
+  # File name of the US rom
+  rom_file: "Lufia II - Rise of the Sinistrals (USA).sfc"
 sm_options:
   # File name of the v1.0 J rom
   rom_file: "Super Metroid (JU).sfc"
@@ -99,6 +103,10 @@ factorio_options:
   executable: "factorio/bin/x64/factorio"
   # by default, no settings are loaded if this file does not exist.  If this file does exist, then it will be used.
   # server_settings: "factorio\\data\\server-settings.json"
+  # Whether to filter item send messages displayed in-game to only those that involve you.
+  filter_item_sends: false
+  # Whether to send chat messages from players on the Factorio server to Archipelago.
+  bridge_chat_out: true
 minecraft_options: 
   forge_directory: "Minecraft Forge server"
   max_heap_size: "2G"

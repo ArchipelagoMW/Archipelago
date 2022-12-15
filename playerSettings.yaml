@@ -120,8 +120,8 @@ A Link to the Past:
   open_pyramid:
     goal: 50 # Opens the pyramid if the goal requires you to kill Ganon, unless the goal is Slow Ganon or All Dungeons
     auto: 0 # Same as Goal, but also is closed if holes are shuffled and ganon is part of the shuffle pool
-    yes: 0 # Pyramid hole is always open. Ganon's vulnerable condition is still required before he can he hurt
-    no: 0 # Pyramid hole is always closed until you defeat Agahnim atop Ganon's Tower
+    open: 0 # Pyramid hole is always open. Ganon's vulnerable condition is still required before he can he hurt
+    closed: 0 # Pyramid hole is always closed until you defeat Agahnim atop Ganon's Tower
   triforce_pieces_mode: #Determine how to calculate the extra available triforce pieces.
     extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
     percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required
@@ -453,7 +453,7 @@ A Link to the Past:
   death_link:
     false: 50
     true: 0
-    
+
   allow_collect: # Allows for !collect / co-op to auto-open chests containing items for other players.
     #    Off by default, because it currently crashes on real hardware.
     false: 50
