@@ -561,11 +561,11 @@ progressive_locations = {
 
 progressive_locations_2 = {
     ##Added by Br00ty
-    "HWL: Gold Pine Resin": 0x4000014B,
-    "US: Charcoal Pine Resin": 0x4000014A,
-    "FK: Gold Pine Bundle": 0x40000155,
-    "CC: Carthus Rouge": 0x4000014F,
-    "ID: Pale Pine Resin": 0x40000150,
+    "HWL: Gold Pine Resin #": 0x4000014B,
+    "US: Charcoal Pine Resin #": 0x4000014A,
+    "FK: Gold Pine Bundle #": 0x40000155,
+    "CC: Carthus Rouge #": 0x4000014F,
+    "ID: Pale Pine Resin #": 0x40000150,
     **{"Titanite Scale #" + str(i): 0x400003FC for i in range(1, 27)},
     **{"Fading Soul #" + str(i): 0x40000190 for i in range(1, 4)},
     **{"Ring of Sacrifice #"+str(i): 0x20004EF2 for i in range(1, 5)},
