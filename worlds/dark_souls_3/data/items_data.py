@@ -572,7 +572,9 @@ key_items_list = {
     "Jailbreaker's Key",
     "Prisoner Chief's Ashes",
     "Old Cell Key",
-    "Jailer's Key Ring"
+    "Jailer's Key Ring",
+    "Contraption Key",
+    "Small Envoy Banner"
 }
 
 item_tables = [weapons_upgrade_5_table, weapons_upgrade_10_table, shields_table,
