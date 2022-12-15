@@ -238,6 +238,8 @@ goods_3_table = { # Added by Br00ty
     **{"Duel Charm #"+str(i): 0x40000130 for i in range(1, 3)},
     **{"Rusted Coin #"+str(i): 0x400001C7 for i in range(1, 3)},
     **{"Rusted Gold Coin #"+str(i): 0x400001C9 for i in range(1, 3)},
+    **{"Titanite Chunk #"+str(i): 0x400003EA for i in range(1, 17)},
+    **{"Twinkling Titanite #"+str(i): 0x40000406 for i in range(1, 8)}
 }
 
 dlc_goods_table = {
