@@ -6,6 +6,7 @@ from Utils import get_options, output_path
 next_id = 0x7E0000
 
 items = [
+    "Nothing",
     "Bound Goblin",
     "Dryad",
     "Progressive Old One's Army",
@@ -65,6 +66,12 @@ locations = [
     "Pumpkin Moon",
 ]
 
+precollected = [
+    "Hallow",
+    "Hardmode",
+    "Underground Evil",
+]
+
 item_name_to_id: dict[str, int] = {}
 location_name_to_id: dict[str, int] = {}
 
@@ -103,6 +110,8 @@ class TerrariaWorld(World):
         classification = ItemClassification.useful
         if name == "Cultists" or name == "Win":
             classification = ItemClassification.progression
+        if name == "Nothing":
+            classification = ItemClassification.filler
         return TerrariaItem(name, classification, item_name_to_id[name], self.player)
 
     def create_regions(self) -> None:
@@ -115,7 +124,12 @@ class TerrariaWorld(World):
         items_to_create = items.copy()
         for _ in range(2):
             items_to_create.append("Progressive Old One's Army")
+        for item in precollected:
+            items_to_create.remove(item)
         items_to_create.remove("Win")
+        items_to_create.remove("Nothing")
+        for _ in range(len(precollected)):
+            items_to_create.append("Nothing")
         for item in map(self.create_item, items_to_create):
             self.multiworld.itempool.append(item)
 
@@ -141,5 +155,7 @@ class TerrariaWorld(World):
         add_rule(self.multiworld.get_location("Pumpkin Moon", self.player), lambda state: state.has_all({"Hardmode", "Dryad", "Post-Plantera Dungeon"}, self.player) and (state.has_any({"Hallow", "Underground Evil"}, self.player)))
 
     def generate_basic(self) -> None:
+        for item in precollected:
+            self.multiworld.push_precollected(self.create_item(item))
         self.multiworld.get_location("Moon Lord", self.player).place_locked_item(self.create_item("Win"))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Win", self.player)
