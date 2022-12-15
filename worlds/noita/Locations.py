@@ -38,7 +38,7 @@ location_region_mapping: Dict[str, Dict[str, int]] = {
         "Abyss Orb": 110508,
         "Sauvojen Tuntija": 110640,
     },
-    "Abandoned Alchemy Lab": {
+    "Ancient Laboratory": {
         "Ylialkemisti": 110700,
     },
     "Holy Mountain 1 (To Coal Pits)": {
