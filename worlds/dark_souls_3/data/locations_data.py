@@ -475,6 +475,7 @@ painted_world_table = { # DLC
     "PW: Soul of Sister Friede": 0x400002E8,
     "PW: Titanite Slab": 0x400003EB,
     "PW: Chillbite Ring": 0x20005208,
+    "PW: Contraption Key": 0x4000086B # VILHELM FIGHT/NEEDED TO PROGRESS THROUGH PW
 }
 
 dreg_heap_table = { # DLC
@@ -493,6 +494,7 @@ dreg_heap_table = { # DLC
     "DH: Herald Curved Greatsword": 0x006159E0,
     "DH: Flame Fan": 0x40258190,
     "DH: Soul of the Demon Prince": 0x400002EA,
+    "DH: Small Envoy Banner": 0x4000086C # NEEDED TO TRAVEL TO RINGED CITY
 }
 
 ringed_city_table = { # DLC
