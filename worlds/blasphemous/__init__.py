@@ -749,8 +749,11 @@ class BlasphemousWorld(World):
         victory.place_locked_item(self.create_event("Victory"))
         self.multiworld.get_region("Deambulatory of His Holiness", self.player).locations.append(victory)
 
-        if self.multiworld.ending[self.player].value != 0:
+        if self.multiworld.ending[self.player].value == 1:
             set_rule(victory, lambda state: state.has("Thorn Upgrade", player, 8))
+        elif self.multiworld.ending[self.player].value == 2:
+            set_rule(victory, lambda state: state.has("Thorn Upgrage", player, 8) and \
+                state.has("Holy Wound of Abnegation", player))
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
