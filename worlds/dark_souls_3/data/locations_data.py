@@ -545,7 +545,7 @@ progressive_locations = {
     **{"Titanite Slab #"+str(i): 0x400003EB for i in range(1, 4)},
 
     # Healing
-    **{"Estus Shard #"+str(i): 0x4000085D for i in range(1, 16)},
+    **{"Estus Shard #"+str(i): 0x4000085D for i in range(1, 12)},
     **{"Undead Bone Shard #"+str(i): 0x4000085F for i in range(1, 6)},
 
     # Items
