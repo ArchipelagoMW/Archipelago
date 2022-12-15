@@ -213,11 +213,11 @@ goods_table = {
 }
 
 goods_2_table = { # Added by Br00ty
-    "HWL: Gold Pine Resin": 0x4000014B,
-    "US: Charcoal Pine Resin": 0x4000014A,
-    "FK: Gold Pine Bundle": 0x40000155,
-    "CC: Carthus Rouge": 0x4000014F,
-    "ID: Pale Pine Resin": 0x40000150,
+    "HWL: Gold Pine Resin #": 0x4000014B,
+    "US: Charcoal Pine Resin #": 0x4000014A,
+    "FK: Gold Pine Bundle #": 0x40000155,
+    "CC: Carthus Rouge #": 0x4000014F,
+    "ID: Pale Pine Resin #": 0x40000150,
     **{"Ember #"+str(i): 0x400001F4 for i in range(1, 46)},
     **{"Titanite Shard #"+str(i): 0x400003E8 for i in range(11, 16)},
     **{"Large Titanite Shard #"+str(i): 0x400003E9 for i in range(11, 16)},
