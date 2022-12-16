@@ -76,7 +76,7 @@ dlc_weapons_upgrade_5_table = {
 }
 
 weapons_upgrade_10_table = {
-    "Broken Straight Sword": 0x001EF9B0, # Removed to match location count 12/14-Brooty
+    "Broken Straight Sword": 0x001EF9B0,
     "Deep Battle Axe": 0x0006AFA54,
     "Club": 0x007A1200,
     "Claymore": 0x005BDBA0,
@@ -300,7 +300,7 @@ armor_table = {
     "Antiquated Dress": 0x15D76068,
     "Antiquated Gloves": 0x15D76450,
     "Antiquated Skirt": 0x15D76838,
-    #"Ragged Mask": 0x148F4C20, # Removed to match location count 12/14-Brooty
+    "Ragged Mask": 0x148F4C20,
     "Crown of Dusk": 0x15D75C80,
     "Pharis's Hat": 0x1487AB00,
     "Old Sage's Blindfold": 0x11945BA0,
