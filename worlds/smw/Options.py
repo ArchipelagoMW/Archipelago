@@ -182,6 +182,13 @@ class LiteratureTrapWeight(BaseTrapWeight):
     display_name = "Literature Trap Weight"
 
 
+class TimerTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the timer to run low
+    """
+    display_name = "Literature Trap Weight"
+
+
 class Autosave(DefaultOnToggle):
     """
     Whether a save prompt will appear after every level
@@ -271,6 +278,7 @@ smw_options: typing.Dict[str, type(Option)] = {
     "ice_trap_weight": IceTrapWeight,
     "stun_trap_weight": StunTrapWeight,
     "literature_trap_weight": LiteratureTrapWeight,
+    "timer_trap_weight": TimerTrapWeight,
     "autosave": Autosave,
     "music_shuffle": MusicShuffle,
     "mario_palette": MarioPalette,
