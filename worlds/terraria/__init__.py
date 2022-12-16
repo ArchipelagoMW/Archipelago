@@ -66,11 +66,7 @@ locations = [
     "Pumpkin Moon",
 ]
 
-precollected = [
-    "Hallow",
-    "Hardmode",
-    "Underground Evil",
-]
+precollected = []
 
 item_name_to_id: dict[str, int] = {}
 location_name_to_id: dict[str, int] = {}
@@ -107,9 +103,22 @@ class TerrariaWorld(World):
     location_name_to_id = location_name_to_id
 
     def create_item(self, name: str) -> TerrariaItem:
-        classification = ItemClassification.useful
-        if name == "Cultists" or name == "Win":
-            classification = ItemClassification.progression
+        classification = ItemClassification.progression
+        if name in [
+            "Bound Goblin",
+            "Witch Doctor",
+            "Wizard",
+            "Truffle",
+            "Hardmode Fishing",
+            "Steampunker",
+            "Life Fruit",
+            "Solar Eclipse",
+            "Cyborg",
+            "Autohammer",
+            "Biome Chests",
+            "Post-Plantera Eclipse",
+        ]:
+            classification = ItemClassification.useful
         if name == "Nothing":
             classification = ItemClassification.filler
         return TerrariaItem(name, classification, item_name_to_id[name], self.player)
