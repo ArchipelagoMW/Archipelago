@@ -475,6 +475,7 @@ painted_world_table = { # DLC
     "PW: Soul of Sister Friede": 0x400002E8,
     "PW: Titanite Slab": 0x400003EB,
     "PW: Chillbite Ring": 0x20005208,
+    "PW: Contraption Key": 0x4000086B # VILHELM FIGHT/NEEDED TO PROGRESS THROUGH PW
 }
 
 dreg_heap_table = { # DLC
@@ -493,6 +494,7 @@ dreg_heap_table = { # DLC
     "DH: Herald Curved Greatsword": 0x006159E0,
     "DH: Flame Fan": 0x40258190,
     "DH: Soul of the Demon Prince": 0x400002EA,
+    "DH: Small Envoy Banner": 0x4000086C # NEEDED TO TRAVEL TO RINGED CITY
 }
 
 ringed_city_table = { # DLC
@@ -559,11 +561,11 @@ progressive_locations = {
 
 progressive_locations_2 = {
     ##Added by Br00ty
-    "HWL: Gold Pine Resin": 0x4000014B,
-    "US: Charcoal Pine Resin": 0x4000014A,
-    "FK: Gold Pine Bundle": 0x40000155,
-    "CC: Carthus Rouge": 0x4000014F,
-    "ID: Pale Pine Resin": 0x40000150,
+    "HWL: Gold Pine Resin #": 0x4000014B,
+    "US: Charcoal Pine Resin #": 0x4000014A,
+    "FK: Gold Pine Bundle #": 0x40000155,
+    "CC: Carthus Rouge #": 0x4000014F,
+    "ID: Pale Pine Resin #": 0x40000150,
     **{"Titanite Scale #" + str(i): 0x400003FC for i in range(1, 27)},
     **{"Fading Soul #" + str(i): 0x40000190 for i in range(1, 4)},
     **{"Ring of Sacrifice #"+str(i): 0x20004EF2 for i in range(1, 5)},
@@ -582,6 +584,8 @@ progressive_locations_3 = {
     **{"Duel Charm #" + str(i): 0x40000130 for i in range(1, 3)},
     **{"Rusted Coin #" + str(i): 0x400001C7 for i in range(1, 3)},
     **{"Rusted Gold Coin #" + str(i): 0x400001C9 for i in range(1, 4)},
+    **{"Titanite Chunk #"+str(i): 0x400003EA for i in range(1, 17)},
+    **{"Twinkling Titanite #"+str(i): 0x40000406 for i in range(1, 8)}
 }
 
 
