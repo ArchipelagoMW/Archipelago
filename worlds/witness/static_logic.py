@@ -81,6 +81,8 @@ class StaticWitnessLogicObj:
                     full_check_name = check_name
                 elif "EP" in check_name:
                     location_type = "EP"
+
+                    self.EP_ID_TO_NAME[check_hex] = full_check_name
                 else:
                     location_type = "General"
 
@@ -130,6 +132,8 @@ class StaticWitnessLogicObj:
 
         self.EP_TO_OBELISK_SIDE = dict()
 
+        self.EP_ID_TO_NAME = dict()
+
         self.read_logic_file(file_path)
 
 
@@ -154,6 +158,8 @@ class StaticWitnessLogic:
     STATIC_DEPENDENT_REQUIREMENTS_BY_HEX = dict()
 
     EP_TO_OBELISK_SIDE = dict()
+
+    EP_ID_TO_NAME = dict()
 
     def parse_items(self):
         """
@@ -228,3 +234,5 @@ class StaticWitnessLogic:
         self.OBELISK_SIDE_ID_TO_EP_HEXES.update(self.sigma_normal.OBELISK_SIDE_ID_TO_EP_HEXES)
 
         self.EP_TO_OBELISK_SIDE.update(self.sigma_normal.EP_TO_OBELISK_SIDE)
+
+        self.EP_ID_TO_NAME.update(self.sigma_normal.EP_ID_TO_NAME)
