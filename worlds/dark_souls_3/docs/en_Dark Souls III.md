@@ -18,8 +18,8 @@ and kill the final boss "Soul of Cinder"
 
 ## What Dark Souls III items can appear in other players' worlds?
 
-Every unique items from Dark Souls III can appear in other player's worlds, such as a piece of armor, an upgraded weapon
-a key item.
+Every unique item from Dark Souls III can appear in other player's worlds, such as a piece of armor, an upgraded weapon,
+or a key item.
 
 ## What does another world's item look like in Dark Souls III?
 
