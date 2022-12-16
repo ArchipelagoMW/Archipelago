@@ -363,7 +363,8 @@ def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
 
 def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                          inventory: Counter, team: int, player: int, player_name: str,
-                         seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
+                         seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict,
+                         saving_second: int) -> str:
 
     # Note the presence of the triforce item
     game_state = multisave.get("client_game_state", {}).get((team, player), 0)
