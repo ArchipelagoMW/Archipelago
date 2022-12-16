@@ -1,15 +1,30 @@
 from Options import Choice, Toggle, DefaultOnToggle, DeathLink
 
 
+class PrieDieuWarp(DefaultOnToggle):
+    """Automatically unlocks the ability to warp between Prie Dieu shrines."""
+    display_name = "Unlock Fast Travel"
+
+
+class SkipCutscenes(DefaultOnToggle):
+    """Automatically skips most cutscenes."""
+    display_name = "Auto Skip Cutscenes"
+
+
 class Difficulty(Choice):
     """Adjusts the logic required to defeat bosses.
-    Impossible removes all logic requirements for bosses. Good luck."""
+    Impossible: Removes all logic requirements for bosses. Good luck."""
     display_name = "Difficulty"
     option_easy = 0
     option_normal = 1
     option_hard = 2
     option_impossible = 3
     default = 1
+
+
+class Penitence(Toggle):
+    """Allows one of the three Penitences to be chosen at the beginning of the game."""
+    display_name = "Penitence"
 
 
 class ExpertLogic(Toggle):
@@ -157,18 +172,34 @@ class StartWheel(Toggle):
 
 class EnemyRando(Choice):
     """Randomizes the enemies that appear in each room.
-    By default, enemies are put into groups of similar strength and shuffled.
-    Enemy health and damage will be increased or decreased depending on the area they are found in.
-    Certain enemies will never be randomized."""
-    display_name = "Randomize Enemies"
-    option_off = 0
-    option_shuffle_by_group = 1
-    option_shuffle_all_enemies = 2
+    Simple: Enemy types will be shuffled with each other.
+    Full: Every enemy will be shuffled into a new enemy.
+    Some enemies will never be randomized."""
+    display_name = "Enemy Randomizer"
+    option_disabled = 0
+    option_simple = 1
+    option_full = 2
     default = 0
 
 
+class EnemyGroups(DefaultOnToggle):
+    """Randomized enemies will chosen from sets of specific groups. 
+    (Weak, normal, large, flying)
+    Has no effect if Enemy Randomizer is disabled."""
+    display_name = "Enemy Groups"
+
+
+class EnemyScaling(DefaultOnToggle):
+    """Randomized enemies will have their stats increased or decreased depending on the area they appear in.
+    Has no effect if Enemy Randomizer is disabled."""
+    display_name = "Enemy Scaling"
+
+
 blasphemous_options = {
+    "prie_dieu_warp": PrieDieuWarp,
+    "skip_cutscenes": SkipCutscenes,
     "difficulty": Difficulty,
+    "penitence": Penitence,
     "expert_logic": ExpertLogic,
     "ending": Ending,
     "thorn_shuffle" : ThornShuffle,
@@ -196,5 +227,7 @@ blasphemous_options = {
     "shop_shuffle" : ShopShuffle,
     "candle_shuffle" : CandleShuffle,
     "start_wheel": StartWheel,
-    "enemy_randomizer": EnemyRando
+    "enemy_randomizer": EnemyRando,
+    "enemy_groups": EnemyGroups,
+    "enemy_scaling": EnemyScaling
 }

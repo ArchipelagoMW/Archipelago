@@ -777,11 +777,44 @@ class BlasphemousWorld(World):
                     data["type"] = loc.item.classification.name
 
                 locations.append(data)
+
+        config = {
+            "versionCreated": "AP",
+            "general": {
+                "teleportationAlwaysUnlocked": bool(self.multiworld.prie_dieu_warp[self.player].value),
+                "skipCutscenes": bool(self.multiworld.skip_cutscenes[self.player].value),
+                "enablePenitence": bool(self.multiworld.penitence[self.player].value),
+                "hardMode": False,
+                "customSeed": 0
+            },
+            "items": {
+                "type": 1,
+                "lungDamage": False,
+                "disableNPCDeath": True,
+                "startWithWheel": bool(self.multiworld.start_wheel[self.player].value),
+                "shuffleReliquaries": bool(self.multiworld.reliquary_shuffle[self.player].value)
+            },
+            "enemies": {
+                "type": self.multiworld.enemy_randomizer[self.player].value,
+                "maintainClass": bool(self.multiworld.enemy_groups[self.player].value),
+                "areaScaling": bool(self.multiworld.enemy_scaling[self.player].value)
+            },
+            "prayers": {
+                "type": 0,
+                "removeMirabis": False
+            },
+            "doors": {
+                "type": 0
+            },
+            "debug": {
+                "type": 0
+            }
+        }
     
         slot_data = {
             "locations": locations,
+            "cfg": config,
             "ending": self.multiworld.ending[self.player].value,
-            "enemy_randomizer": self.multiworld.enemy_randomizer[self.player].value
         }
     
         return slot_data
