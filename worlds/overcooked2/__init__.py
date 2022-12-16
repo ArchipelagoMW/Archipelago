@@ -46,7 +46,7 @@ class Overcooked2World(World):
 
     game = "Overcooked! 2"
     web = Overcooked2Web()
-    required_client_version = (0, 3, 4)
+    required_client_version = (0, 3, 7)
     option_definitions = overcooked_options
     topology_present: bool = False
     data_version = 2
@@ -215,16 +215,21 @@ class Overcooked2World(World):
                     is_event=True,
                 )
 
-            # Add Locations to house star aquisition events, except for horde levels
-            if not self.is_level_horde(level.level_id):
-                for n in [1, 2, 3]:
-                    self.add_level_location(
-                        level.level_name,
-                        level.location_name_star_event(n),
-                        level.level_id,
-                        n,
-                        is_event=True,
-                    )
+            # Add Locations to house star aquisition events
+            if self.is_level_horde(level.level_id):
+                # in randomizer, horde levels grant a single star
+                star_counts = [1]
+            else:
+                star_counts = [1, 2, 3]
+
+            for n in star_counts:
+                self.add_level_location(
+                    level.level_name,
+                    level.location_name_star_event(n),
+                    level.level_id,
+                    n,
+                    is_event=True,
+                )
 
             # Overworld -> Level
             required_star_count: int = self.level_unlock_counts[level.level_id]
@@ -311,9 +316,12 @@ class Overcooked2World(World):
                 self.place_event(level.location_name_level_complete, level.event_name_level_complete)
 
             if self.is_level_horde(level.level_id):
-                continue  # horde levels don't have star rewards
+                # in randomizer, horde levels grant a single star
+                star_counts = [1]
+            else:
+                star_counts = [1, 2, 3]
 
-            for n in [1, 2, 3]:
+            for n in star_counts:
                 self.place_event(level.location_name_star_event(n), "Star")
 
         # Add Victory Condition
