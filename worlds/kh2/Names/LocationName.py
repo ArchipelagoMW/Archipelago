@@ -723,5 +723,5 @@ FatalCrestSlot            ="Fatal Crest (Slot)"
 FenrirSlot                ="Fenrir (Slot)"
 UltimaWeaponSlot          ="Ultima Weapon (Slot)"
 WinnersProofSlot          ="Winner's Proof (Slot)"
-                                     
+Keyblade_Region           ="Keyblade Slots"                                     
 #Final_Region                                 ="Final Form"

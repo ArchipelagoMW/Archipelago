@@ -14,19 +14,8 @@ class LocationData(typing.NamedTuple):
     locid:int
     yml:str
     charName: str="Sora"
+    charNumber: int=1
 
-
-    #sort list from 1-5 to what the location is and what id is there
-    #0=the second check of the getbonus
-    #1 =treasure chest(trsr yml)
-    #2 =1 get Bonus(bons)
-    #3 =2 get bons (bons)
-    #4 =Level up check 
-    #5 = form check
-
-    #if 3 use the id for both
-    #if 2 then use one
-    #If statement in the for loop
 
 LoD_Checks={
 LocationName.BambooGroveDarkShard                   : LocationData(0x13201B,False,245,"Chest"),
@@ -401,9 +390,7 @@ LocationName.SephirothBonus                         : LocationData(0x132157,Fals
 LocationName.SephirothFenrir                        : LocationData(0x132158,False,282,"Chest"),
 LocationName.WinnersProof                           : LocationData(0x132159,False,560,"Chest"),
 LocationName.ProofofPeace                           : LocationData(0x13215A,False,588,"Chest"),
-LocationName.DemyxDataAPBoost                       : LocationData(0x13215B,False,589,"Chest"),
-}                                                                  
-CoR_Checks={                                                       
+LocationName.DemyxDataAPBoost                       : LocationData(0x13215B,False,589,"Chest"),                                                       
 LocationName.CoRDepthsAPBoost                               : LocationData(0x13215C,False,562,"Chest"),
 LocationName.CoRDepthsPowerCrystal                          : LocationData(0x13215D,False,563,"Chest"),
 LocationName.CoRDepthsFrostCrystal                          : LocationData(0x13215E,False,564,"Chest"),
@@ -411,9 +398,8 @@ LocationName.CoRDepthsManifestIllusion                      : LocationData(0x132
 LocationName.CoRDepthsAPBoost2                              : LocationData(0x132160,False,566,"Chest"),
 LocationName.CoRMineshaftLowerLevelDepthsofRemembranceMap   : LocationData(0x132161,False,580,"Chest"),
 LocationName.CoRMineshaftLowerLevelAPBoost                  : LocationData(0x132162,False,578,"Chest"),
-}
-#Need quickrun 2 aerial dodge 2 
-FirstHalf_Checks={
+} 
+CoR_Checks={
 LocationName.CoRDepthsUpperLevelRemembranceGem      : LocationData(0x132163,False,567,"Chest"),
 LocationName.CoRMiningAreaSerenityGem               : LocationData(0x132164,False,568,"Chest"),
 LocationName.CoRMiningAreaAPBoost                   : LocationData(0x132165,False,569,"Chest"),
@@ -426,10 +412,7 @@ LocationName.CoREngineChamberSerenityCrystal        : LocationData(0x13216B,Fals
 LocationName.CoREngineChamberRemembranceCrystal     : LocationData(0x13216C,False,575,"Chest"),
 LocationName.CoREngineChamberAPBoost                : LocationData(0x13216D,False,576,"Chest"),
 LocationName.CoREngineChamberManifestIllusion       : LocationData(0x13216E,False,577,"Chest"),
-LocationName.CoRMineshaftUpperLevelMagicBoost       : LocationData(0x13216F,False,582,"Chest"),
-}#glide 3 highjump somthem        
- #missed these in putting the hex but it shouldnt cause a issue
-SecondHalf_Checks={                                                
+LocationName.CoRMineshaftUpperLevelMagicBoost       : LocationData(0x13216F,False,582,"Chest"),                                               
 LocationName.CoRMineshaftUpperLevelAPBoost          : LocationData(0x13225C,False,570,"Chest"),
 LocationName.TransporttoRemembrance                 : LocationData(0x13225D,False,72,"Get Bonus"),
 }                                                                  
@@ -471,13 +454,13 @@ LocationName.GroundshakerGetBonus                   : LocationData(0x13218F,Fals
 LocationName.SaixDataDefenseBoost                   : LocationData(0x132190,False,556,"Chest"),
 }                                                                  
 STT_Checks={                                                       
-LocationName.TwilightTownMap                        : LocationData(0x132191,False,319,1,"Roxas"),
-LocationName.MunnyPouchOlette                       : LocationData(0x132192,False,288,1,"Roxas"),
-LocationName.StationDusks                           : LocationData(0x132193,False,54,"Get Bonus","Roxas"),
+LocationName.TwilightTownMap                        : LocationData(0x132191,False,319,"Chest"),
+LocationName.MunnyPouchOlette                       : LocationData(0x132192,False,288,"Chest"),
+LocationName.StationDusks                           : LocationData(0x132193,False,54,"Get Bonus","Roxas",14),
 LocationName.StationofSerenityPotion                : LocationData(0x132194,False,315,"Chest"),
 LocationName.StationofCallingPotion                 : LocationData(0x132195,False,472,"Chest"),
-LocationName.TwilightThorn                          : LocationData(0x132196,False,33,"Get Bonus","Roxas"),
-LocationName.Axel1                                  : LocationData(0x132197,False,73,"Get Bonus","Roxas"),
+LocationName.TwilightThorn                          : LocationData(0x132196,False,33,"Get Bonus","Roxas",14),
+LocationName.Axel1                                  : LocationData(0x132197,False,73,"Get Bonus","Roxas",14),
 LocationName.JunkChampionBelt                       : LocationData(0x132198,False,389,"Chest"),
 LocationName.JunkMedal                              : LocationData(0x132199,False,390,"Chest"),
 LocationName.TheStruggleTrophy                      : LocationData(0x13219A,False,519,"Chest"),
@@ -700,72 +683,78 @@ SoraLevels={
     LocationName.Lvl98                              : LocationData(0x132268,False,98,"Levels"),
     LocationName.Lvl99                              : LocationData(0x132269,False,99,"Levels"),
 }                                                                  
-Form_Checks={                                                      
-    LocationName.Valorlvl2                          : LocationData(0x13226A,False,2,"Forms"),
-    LocationName.Valorlvl3                          : LocationData(0x13226B,False,3,"Forms"),
-    LocationName.Valorlvl4                          : LocationData(0x13226C,False,4,"Forms"),
-    LocationName.Valorlvl5                          : LocationData(0x13226D,False,5,"Forms"),
-    LocationName.Valorlvl6                          : LocationData(0x13226E,False,6,"Forms"),
-    LocationName.Valorlvl7                          : LocationData(0x13226F,False,7,"Forms"),
-    LocationName.Wisdomlvl2                         : LocationData(0x132270,False,2,"Forms"),
-    LocationName.Wisdomlvl3                         : LocationData(0x132271,False,3,"Forms"),
-    LocationName.Wisdomlvl4                         : LocationData(0x132272,False,4,"Forms"),
-    LocationName.Wisdomlvl5                         : LocationData(0x132273,False,5,"Forms"),
-    LocationName.Wisdomlvl6                         : LocationData(0x132274,False,6,"Forms"),
-    LocationName.Wisdomlvl7                         : LocationData(0x132275,False,7,"Forms"),
-    LocationName.Limitlvl2                          : LocationData(0x132276,False,2,"Forms"),
-    LocationName.Limitlvl3                          : LocationData(0x132277,False,3,"Forms"),
-    LocationName.Limitlvl4                          : LocationData(0x132278,False,4,"Forms"),
-    LocationName.Limitlvl5                          : LocationData(0x132279,False,5,"Forms"),
-    LocationName.Limitlvl6                          : LocationData(0x13227A,False,6,"Forms"),
-    LocationName.Limitlvl7                          : LocationData(0x13227B,False,7,"Forms"),
-    LocationName.Masterlvl2                         : LocationData(0x13227C,False,2,"Forms"),
-    LocationName.Masterlvl3                         : LocationData(0x13227D,False,3,"Forms"),
-    LocationName.Masterlvl4                         : LocationData(0x13227E,False,4,"Forms"),
-    LocationName.Masterlvl5                         : LocationData(0x13227F,False,5,"Forms"),
-    LocationName.Masterlvl6                         : LocationData(0x132280,False,6,"Forms"),
-    LocationName.Masterlvl7                         : LocationData(0x132281,False,7,"Forms"),
-    LocationName.Finallvl2                          : LocationData(0x132282,False,2,"Forms"),
-    LocationName.Finallvl3                          : LocationData(0x132283,False,3,"Forms"),
-    LocationName.Finallvl4                          : LocationData(0x132284,False,4,"Forms"),
-    LocationName.Finallvl5                          : LocationData(0x132285,False,5,"Forms"),
-    LocationName.Finallvl6                          : LocationData(0x132286,False,6,"Forms"),
-    LocationName.Finallvl7                          : LocationData(0x132287,False,7,"Forms"),
+Form_Checks={
+    #Levels 1 are used for exp modification and nothing else. TODO# Reupdate the location data to me logical 
+    LocationName.Valorlvl1                          : LocationData(0x1322A5,False,1,"Forms",1),
+    LocationName.Valorlvl2                          : LocationData(0x13226A,False,2,"Forms",1),
+    LocationName.Valorlvl3                          : LocationData(0x13226B,False,3,"Forms",1),
+    LocationName.Valorlvl4                          : LocationData(0x13226C,False,4,"Forms",1),
+    LocationName.Valorlvl5                          : LocationData(0x13226D,False,5,"Forms",1),
+    LocationName.Valorlvl6                          : LocationData(0x13226E,False,6,"Forms",1),
+    LocationName.Valorlvl7                          : LocationData(0x13226F,False,7,"Forms",1),
+    LocationName.Wisdomlvl1                         : LocationData(0x1322A5,False,1,"Forms",2),
+    LocationName.Wisdomlvl2                         : LocationData(0x132270,False,2,"Forms",2),
+    LocationName.Wisdomlvl3                         : LocationData(0x132271,False,3,"Forms",2),
+    LocationName.Wisdomlvl4                         : LocationData(0x132272,False,4,"Forms",2),
+    LocationName.Wisdomlvl5                         : LocationData(0x132273,False,5,"Forms",2),
+    LocationName.Wisdomlvl6                         : LocationData(0x132274,False,6,"Forms",2),
+    LocationName.Wisdomlvl7                         : LocationData(0x132275,False,7,"Forms",2),
+    LocationName.Limitlvl1                          : LocationData(0x1322A5,False,1,"Forms",3),
+    LocationName.Limitlvl2                          : LocationData(0x132276,False,2,"Forms",3),
+    LocationName.Limitlvl3                          : LocationData(0x132277,False,3,"Forms",3),
+    LocationName.Limitlvl4                          : LocationData(0x132278,False,4,"Forms",3),
+    LocationName.Limitlvl5                          : LocationData(0x132279,False,5,"Forms",3),
+    LocationName.Limitlvl6                          : LocationData(0x13227A,False,6,"Forms",3),
+    LocationName.Limitlvl7                          : LocationData(0x13227B,False,7,"Forms",3),
+    LocationName.Masterlvl1                         : LocationData(0x1322A5,False,1,"Forms",4),
+    LocationName.Masterlvl2                         : LocationData(0x13227C,False,2,"Forms",4),
+    LocationName.Masterlvl3                         : LocationData(0x13227D,False,3,"Forms",4),
+    LocationName.Masterlvl4                         : LocationData(0x13227E,False,4,"Forms",4),
+    LocationName.Masterlvl5                         : LocationData(0x13227F,False,5,"Forms",4),
+    LocationName.Masterlvl6                         : LocationData(0x132280,False,6,"Forms",4),
+    LocationName.Masterlvl7                         : LocationData(0x132281,False,7,"Forms",4),
+    LocationName.Finallvl1                          : LocationData(0x132282,False,1,"Forms",5),
+    LocationName.Finallvl2                          : LocationData(0x132282,False,2,"Forms",5),
+    LocationName.Finallvl3                          : LocationData(0x132283,False,3,"Forms",5),
+    LocationName.Finallvl4                          : LocationData(0x132284,False,4,"Forms",5),
+    LocationName.Finallvl5                          : LocationData(0x132285,False,5,"Forms",5),
+    LocationName.Finallvl6                          : LocationData(0x132286,False,6,"Forms",5),
+    LocationName.Finallvl7                          : LocationData(0x132287,False,7,"Forms",5),
 }                                                                  
 GoA_Checks={                                                       
     LocationName.GardenofAssemblageMap              : LocationData(0x132288,False,585,"Chest"),
     LocationName.GoALostIllusion                    : LocationData(0x132289,False,586,"Chest"),        
     LocationName.ProofofNonexistence                : LocationData(0x13228A,False,590,"Chest"),
     }
-#Keyblade_Slots={
-#    LocationName.FAKESlot                           :LocationData(0x13228B),
-#    LocationName.DetectionSaberSlot                 :LocationData(0x13228C),
-#    LocationName.EdgeofUltimaSlot                   :LocationData(0x13228D),
-#    LocationName.KingdomKeySlot                     :LocationData(0x13228E),
-#    LocationName.OathkeeperSlot                     :LocationData(0x13228F),
-#    LocationName.OblivionSlot                       :LocationData(0x13229"Second Get Bonus"),
-#    LocationName.StarSeekerSlot                     :LocationData(0x13229"Chest"),
-#    LocationName.HiddenDragonSlot                   :LocationData(0x13229"Get Bonus"),
-#    LocationName.HerosCrestSlot                     :LocationData(0x13229"Double Get Bonus"),
-#    LocationName.MonochromeSlot                     :LocationData(0x13229"Levels"),
-#    LocationName.FollowtheWindSlot                  :LocationData(0x13229"Forms"),
-#    LocationName.CircleofLifeSlot                   :LocationData(0x132296),
-#    LocationName.PhotonDebuggerSlot                 :LocationData(0x132297),
-#    LocationName.GullWingSlot                       :LocationData(0x132298),
-#    LocationName.RumblingRoseSlot                   :LocationData(0x132299),
-#    LocationName.GuardianSoulSlot                   :LocationData(0x13229A),
-#    LocationName.WishingLampSlot                    :LocationData(0x13229B),
-#    LocationName.DecisivePumpkinSlot                :LocationData(0x13229C),
-#    LocationName.SweetMemoriesSlot                  :LocationData(0x13229D),
-#    LocationName.MysteriousAbyssSlot                :LocationData(0x13229E),
-#    LocationName.SleepingLionSlot                   :LocationData(0x13229F),
-#    LocationName.BondofFlameSlot                    :LocationData(0x1322A"Second Get Bonus"),
-#    LocationName.TwoBecomeOneSlot                   :LocationData(0x1322A"Chest"),
-#    LocationName.FatalCrestSlot                     :LocationData(0x1322A"Get Bonus"),
-#    LocationName.FenrirSlot                         :LocationData(0x1322A"Double Get Bonus"),
-#    LocationName.UltimaWeaponSlot                   :LocationData(0x1322A"Levels"),
-#    LocationName.WinnersProofSlot                   :LocationData(0x1322A"Forms"),
-#    }                                                             
+Keyblade_Slots={
+    LocationName.FAKESlot                       :LocationData(0x13228B,False,116,"Keyblade"),
+    LocationName.DetectionSaberSlot             :LocationData(0x13228C,False,83,"Keyblade"),
+    LocationName.EdgeofUltimaSlot               :LocationData(0x13228D,False,84,"Keyblade"),
+    LocationName.KingdomKeySlot                 :LocationData(0x13228E,False,80,"Keyblade"),
+    LocationName.OathkeeperSlot                 :LocationData(0x13228F,False,81,"Keyblade"),
+    LocationName.OblivionSlot                   :LocationData(0x132290,False,82,"Keyblade"),
+    LocationName.StarSeekerSlot                 :LocationData(0x132291,False,123,"Keyblade"),
+    LocationName.HiddenDragonSlot               :LocationData(0x132292,False,124,"Keyblade"),
+    LocationName.HerosCrestSlot                 :LocationData(0x132293,False,127,"Keyblade"),
+    LocationName.MonochromeSlot                 :LocationData(0x132294,False,128,"Keyblade"),
+    LocationName.FollowtheWindSlot              :LocationData(0x132295,False,129,"Keyblade"),
+    LocationName.CircleofLifeSlot               :LocationData(0x132296,False,130,"Keyblade"),
+    LocationName.PhotonDebuggerSlot             :LocationData(0x132297,False,131,"Keyblade"),
+    LocationName.GullWingSlot                   :LocationData(0x132298,False,132,"Keyblade"),
+    LocationName.RumblingRoseSlot               :LocationData(0x132299,False,133,"Keyblade"),
+    LocationName.GuardianSoulSlot               :LocationData(0x13229A,False,134,"Keyblade"),
+    LocationName.WishingLampSlot                :LocationData(0x13229B,False,135,"Keyblade"),
+    LocationName.DecisivePumpkinSlot            :LocationData(0x13229C,False,136,"Keyblade"),
+    LocationName.SweetMemoriesSlot              :LocationData(0x13229D,False,138,"Keyblade"),
+    LocationName.MysteriousAbyssSlot            :LocationData(0x13229E,False,139,"Keyblade"),
+    LocationName.SleepingLionSlot               :LocationData(0x13229F,False,137,"Keyblade"),
+    LocationName.BondofFlameSlot                :LocationData(0x1322A0,False,141,"Keyblade"),
+    LocationName.TwoBecomeOneSlot               :LocationData(0x1322A1,False,148,"Keyblade"),
+    LocationName.FatalCrestSlot                 :LocationData(0x1322A2,False,140,"Keyblade"),
+    LocationName.FenrirSlot                     :LocationData(0x1322A3,False,142,"Keyblade"),
+    LocationName.UltimaWeaponSlot               :LocationData(0x1322A4,False,143,"Keyblade"),
+    LocationName.WinnersProofSlot               :LocationData(0x1322A5,False,149,"Keyblade"),
+    }                                                             
 exclusion_table = {                                                
     "Datas": {                                                     
         LocationName.XemnasDataPowerBoost,                         
@@ -860,6 +849,35 @@ exclusion_table = {
         LocationName.Lvl98,
         LocationName.Lvl99,
         },
+   "KeybladeSlot":{
+    LocationName.FAKESlot           ,
+    LocationName.DetectionSaberSlot ,
+    LocationName.EdgeofUltimaSlot   ,
+    LocationName.KingdomKeySlot     ,
+    LocationName.OathkeeperSlot     ,
+    LocationName.OblivionSlot       ,
+    LocationName.StarSeekerSlot     ,
+    LocationName.HiddenDragonSlot   ,
+    LocationName.HerosCrestSlot     ,
+    LocationName.MonochromeSlot     ,
+    LocationName.FollowtheWindSlot  ,
+    LocationName.CircleofLifeSlot   ,
+    LocationName.PhotonDebuggerSlot ,
+    LocationName.GullWingSlot       ,
+    LocationName.RumblingRoseSlot   ,
+    LocationName.GuardianSoulSlot   ,
+    LocationName.WishingLampSlot    ,
+    LocationName.DecisivePumpkinSlot,
+    LocationName.SweetMemoriesSlot  ,
+    LocationName.MysteriousAbyssSlot,
+    LocationName.SleepingLionSlot   ,
+    LocationName.BondofFlameSlot    ,
+    LocationName.TwoBecomeOneSlot   ,
+    LocationName.FatalCrestSlot     ,
+    LocationName.FenrirSlot         ,
+    LocationName.UltimaWeaponSlot   ,
+    LocationName.WinnersProofSlot   ,
+    }
 }
 firstVisits=[
         LocationName.LoD_Region         ,        
@@ -903,31 +921,6 @@ ag2Checks=[
     LocationName.LexaeusASStrengthBeyondStrength,
     LocationName.LexaeusDataLostIllusion        ,
     ]
-lvl50Checks=[
-    LocationName.Lvl2,
-    LocationName.Lvl4,
-    LocationName.Lvl7,
-    LocationName.Lvl9,
-    LocationName.Lvl10,
-    LocationName.Lvl12,
-    LocationName.Lvl14,
-    LocationName.Lvl15,
-    LocationName.Lvl17,
-    LocationName.Lvl20,
-    LocationName.Lvl23,
-    LocationName.Lvl25,
-    LocationName.Lvl28,
-    LocationName.Lvl30,
-    LocationName.Lvl32,
-    LocationName.Lvl34,
-    LocationName.Lvl36,
-    LocationName.Lvl39,
-    LocationName.Lvl41,
-    LocationName.Lvl44,
-    LocationName.Lvl46,
-    LocationName.Lvl48,
-    LocationName.Lvl50,
-]
 formChecks=[
     LocationName.Valorlvl2,
     LocationName.Valorlvl3,
@@ -1064,66 +1057,7 @@ popupChecks=[
         LocationName.LexaeusASStrengthBeyondStrength,
         LocationName.MarluxiaASEternalBlossom
     ]
-getBonus=[
-   "Xemnas 1 Bonus",
-   "Thresholder",
-   "Dark Thorn Bonus",
-   "Xaldin Bonus",
-   "Cerberus",
-   "Pete (OC)",
-   "Hydra",
-   "Hades",
-   "Shan-Yu",
-   "Beast",
-   "Storm Rider",
-   "Bailey",
-   "Boat Pete",
-   "Village Cave",
-   "Future Pete",
-   "Prison Keeper",
-   "Oogie Boogie",
-   "Experiment",
-   "Barbossa",
-   "Grim Reaper 2",
-   "Xigbar",
-   "Luxord",
-   "Saix",
-   "Demyx (Hollow Bastion)",
-   "Scar",
-   "Groundshaker",
-   "Hostile Program",
-   "MCP",
-   "Sephiroth Bonus",
-   "Elemental Lords",
-   "Minnie Escort",
-   "Interceptor Barrels",
-   "Lock, Shock, and Barrel",
-   "Abu Escort",
-   "Screens",
-   "Treasure Room",
-   "Genie Jafar",
-   "Hyenas 1",
-   "Hyenas 2",
-   "Mansion Nobodies",
-   "Urns",
-   "Demyx OC",
-   "Grim Reaper 1",
-   "1000 Heartless",
-   "Solar Sailer",
-   "Boat Fight",
-   "Betwixt and Between",
-   "Vexen Bonus",
-   "Lexaeus Bonus",
-   "Zexion Bonus",
-   "Marluxia Bonus",
-   "Larxene Bonus",
-   "Roxas",
-   "Lingering Will Bonus",
-   "Final Xemnas",
-   "Transport to Remembrance", 
-   
 
-]
 
 all_locations={
     **TWTNW_Checks,
@@ -1135,8 +1069,6 @@ all_locations={
     **PL_Checks,
     **PL2_Checks,
     **CoR_Checks,
-    **FirstHalf_Checks,
-    **SecondHalf_Checks,
     **HB_Checks,
     **HB2_Checks,
     **HT_Checks,
@@ -1168,16 +1100,17 @@ all_locations={
     **SoraLevels,
     **Form_Checks,
     **GoA_Checks,
+    **Keyblade_Slots,
     }
 
 location_table={}
 
 def setup_locations(world,player:int):
     location_table={**TWTNW_Checks,**TWTNW2_Checks,**TT_Checks,**TT2_Checks,**TT3_Checks,**STT_Checks,
-                    **PL_Checks,**PL2_Checks,**CoR_Checks,**FirstHalf_Checks,**SecondHalf_Checks,**HB_Checks,**HB2_Checks,
+                    **PL_Checks,**PL2_Checks,**CoR_Checks,**HB_Checks,**HB2_Checks,
                     **PR_Checks,**PR2_Checks,**PR_Checks,**PR2_Checks,**SP_Checks,**SP2_Checks,**BC_Checks,**BC2_Checks,**HT_Checks,**HT2_Checks,
                     **Oc_Checks,**Oc2_Checks,**HadesCups,**Oc2Cups,
                     **HundredAcre1_Checks,**HundredAcre2_Checks,**HundredAcre3_Checks,**HundredAcre4_Checks,**HundredAcre5_Checks,**HundredAcre6_Checks,
-                    **DC_Checks,**TR_Checks,**AG_Checks,**AG2_Checks,**LoD_Checks,**LoD2_Checks,**SoraLevels,**Form_Checks,**GoA_Checks}
+                    **DC_Checks,**TR_Checks,**AG_Checks,**AG2_Checks,**LoD_Checks,**LoD2_Checks,**SoraLevels,**Form_Checks,**GoA_Checks,**Keyblade_Slots}
     return location_table
 lookup_id_to_Location: typing.Dict[int,str] = {data.code: item_name for item_name, data in location_table.items() if data.code}

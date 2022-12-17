@@ -663,6 +663,7 @@ def create_regions(world, player: int, active_locations):
                                        Twtnw2_Region_locations, None)
 
     Valor_Region_locations={
+         LocationName.Valorlvl1 :[0x501F7,0],
          LocationName.Valorlvl2 :[0x501F7,1],
          LocationName.Valorlvl3 :[0x501F8,2],
          LocationName.Valorlvl4 :[0x501F9,3],
@@ -673,6 +674,7 @@ def create_regions(world, player: int, active_locations):
     Valor_Region=create_region(world,player,active_locations,LocationName.ValorForm,
                                Valor_Region_locations,None)
     Wisdom_Region_locations={
+        LocationName.Wisdomlvl1:[0x501F7,0],
         LocationName.Wisdomlvl2:[0x501FD,7],
         LocationName.Wisdomlvl3:[0x501FE,8],
         LocationName.Wisdomlvl4:[0x501FF,9],
@@ -683,6 +685,7 @@ def create_regions(world, player: int, active_locations):
     Wisdom_Region=create_region(world,player,active_locations,LocationName.WisdomForm,
                                Wisdom_Region_locations,None)
     Limit_Region_locations={
+        LocationName.Limitlvl1 :[0x501F5,0],
         LocationName.Limitlvl2 :[0x50203,13],
         LocationName.Limitlvl3 :[0x50204,14],
         LocationName.Limitlvl4 :[0x50205,15],
@@ -693,6 +696,7 @@ def create_regions(world, player: int, active_locations):
     Limit_Region=create_region(world,player,active_locations,LocationName.LimitForm,
                                Limit_Region_locations,None)
     Master_Region_locations={
+        LocationName.Masterlvl1:[0x501f5,0],
         LocationName.Masterlvl2:[0x50209,19],
         LocationName.Masterlvl3:[0x5020A,20],
         LocationName.Masterlvl4:[0x5020B,21],
@@ -703,6 +707,7 @@ def create_regions(world, player: int, active_locations):
     Master_Region=create_region(world,player,active_locations,LocationName.MasterForm,
                                Master_Region_locations,None)
     Final_Region_locations={
+        LocationName.Finallvl1 :[0x5020F,25],
         LocationName.Finallvl2 :[0x5020F,25],
         LocationName.Finallvl3 :[0x50210,26],
         LocationName.Finallvl4 :[0x50211,27],
@@ -815,6 +820,37 @@ def create_regions(world, player: int, active_locations):
     }
     Level_Region=create_region(world,player,active_locations,LocationName.SoraLevels_Region,
                                Level_Region_locations,None)
+    Keyblade_Region_locations={
+    LocationName.FAKESlot             :[0x50276,1],
+    LocationName.DetectionSaberSlot   :[0x50277,2],
+    LocationName.EdgeofUltimaSlot     :[0x50278,3],
+    LocationName.KingdomKeySlot       :[0x50279,4],
+    LocationName.OathkeeperSlot       :[0x5027A,5],
+    LocationName.OblivionSlot         :[0x5027B,6],
+    LocationName.StarSeekerSlot       :[0x5027C,7],
+    LocationName.HiddenDragonSlot     :[0x5027D,8],
+    LocationName.HerosCrestSlot       :[0x5027E,9],
+    LocationName.MonochromeSlot       :[0x5027F,10],
+    LocationName.FollowtheWindSlot    :[0x50280,11],
+    LocationName.CircleofLifeSlot     :[0x50281,12],
+    LocationName.PhotonDebuggerSlot   :[0x50282,13],
+    LocationName.GullWingSlot         :[0x50283,14],
+    LocationName.RumblingRoseSlot     :[0x50284,15],
+    LocationName.GuardianSoulSlot     :[0x50285,16],
+    LocationName.WishingLampSlot      :[0x50286,17],
+    LocationName.DecisivePumpkinSlot  :[0x50287,18],
+    LocationName.SweetMemoriesSlot    :[0x50288,19],
+    LocationName.MysteriousAbyssSlot  :[0x50289,20],
+    LocationName.SleepingLionSlot     :[0x5028A,21],
+    LocationName.BondofFlameSlot      :[0x5028B,22],
+    LocationName.TwoBecomeOneSlot     :[0x5028C,23],
+    LocationName.FatalCrestSlot       :[0x5028D,24],
+    LocationName.FenrirSlot           :[0x5028E,25],
+    LocationName.UltimaWeaponSlot     :[0x5028F,26],
+    LocationName.WinnersProofSlot     :[0x50290,27],
+    }
+    Keyblade_Region=create_region(world,player,active_locations,LocationName.Keyblade_Region,
+                               Keyblade_Region_locations,None)
     world.regions += [
     LoD_Region         ,  
     LoD2_Region        ,
@@ -857,7 +893,8 @@ def create_regions(world, player: int, active_locations):
     Limit_Region       ,
     Master_Region      ,
     Final_Region       ,
-    Level_Region,
+    Level_Region       ,
+    Keyblade_Region     ,
     ]
 def connect_regions (world: MultiWorld, player: int, self):
       #connecting every first visit to the GoA 
@@ -865,6 +902,7 @@ def connect_regions (world: MultiWorld, player: int, self):
       
       names: typing.Dict[str, int] = {}
       connect(world, player, names, 'Menu', LocationName.GoA_Region)
+      connect(world, player, names, "Menu", LocationName.Keyblade_Region)
       connect(world, player, names,LocationName.GoA_Region, LocationName.LoD_Region)
       connect(world, player, names,LocationName.LoD_Region, LocationName.LoD2_Region)
 
@@ -908,12 +946,10 @@ def connect_regions (world: MultiWorld, player: int, self):
       connect(world, player, names,LocationName.GoA_Region, LocationName.TT_Region)
       connect(world, player, names,LocationName.TT_Region, LocationName.TT2_Region) 
       connect(world, player, names,LocationName.TT2_Region, LocationName.TT3_Region)
-      #Adding qol progression for bosses that are hard
-      connect(world, player, names,LocationName.GoA_Region, LocationName.Twtnw_Region,
-              lambda state:state.kh_QuickRun_level(player,1))
-      connect(world, player, names,LocationName.Twtnw_Region, LocationName.Twtnw2_Region,
-              lambda state:state.kh_QuickRun_level(player,2)
-              and state.has(ItemName.FinalForm,player))
+ 
+      connect(world, player, names,LocationName.GoA_Region, LocationName.Twtnw_Region)
+      connect(world, player, names,LocationName.Twtnw_Region, LocationName.Twtnw2_Region)
+      
 
       connect(world, player, names,LocationName.GoA_Region, LocationName.HundredAcre1_Region,
           lambda state: (state.has(ItemName.TornPages, player,1)))

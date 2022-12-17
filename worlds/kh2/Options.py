@@ -4,47 +4,58 @@ import typing
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 
 class FinalEXP(Range):
-    """Range of EXP for the Final form"""
-    display_name = "Final Form Level"
+    """Final Form exp Multiplier"""
+    display_name = "Final Form EXP"
     range_start = 1 
     range_end = 10
     default = 3
 class MasterEXP(Range):
-    """Range of EXP for the forms"""
-    display_name = "Master Form Level"
+    """Master Form exp Multiplier"""
+    display_name = "Master Form EXP"
     range_start = 1 
     range_end = 10
     default = 3
 class LimitEXP(Range):
-    """Range of EXP for the forms"""
-    display_name = "Limit Form Level"
+    """Limit Form exp Multiplier"""
+    display_name = "Limit Form EXP"
     range_start = 1
     range_end = 10
     default = 3
 class WisdomEXP(Range):
-    """Range of EXP for the forms"""
-    display_name = "Wisdom Form Level"
+    """WIsdom Form exp Multiplier"""
+    display_name = "Wisdom Form EXP"
     range_start = 1
     range_end = 10
     default = 3
 class ValorEXP(Range):
-    """Range of EXP for the forms"""
-    display_name = "Valor Form Level"
+    """Valor Form exp Multiplier"""
+    display_name = "Valor Form EXP"
     range_start = 1
     range_end = 10
     default = 3
-
+class SummonEXP(Range):
+    display_name = "Summon level EXP"
+    range_start = 1
+    range_end = 10
+    default = 5
 class Schmovement(Toggle):
-    """Start with lvl 1 growth"""
+    """Start with lvl 1 of all growth"""
     display_name = "Schmovement"
     default = True
 
-class Stats(Range):
-    #Keyblade stats 
-    display_name="Keyblade"
+class KeybladeMin(Range):
+    """Minimum Stats for the Keyblade""" 
+    display_name="Keyblade Minimum Stats"
     range_start = 0
-    range_end = 10
-    default=5
+    range_end = 20
+    default=3
+
+class KeybladeMax(Range):
+    """Maximum Stats for the Keyblade"""
+    display_name="Keyblade Max Stats"
+    range_start = 0
+    range_end = 20
+    default = 7
 
 class Visitlocking(Choice):
     #What is locked being on
@@ -56,7 +67,7 @@ class Visitlocking(Choice):
     default=0
 
 class SuperBosses(Toggle):
-    #Terra,Datas and Sephiroath
+    """Terra, Sephiroth and Data Fights Toggle"""
     display_name="Super Bosses"
     default = False
 
@@ -77,16 +88,18 @@ class Max_Logic(Toggle):
     default=True
 
 KH2_Options: typing.Dict[str, type(Option)] = {
-    "Final_Form_Level": FinalEXP,
-    "Master_Form_Level": MasterEXP,
-    "Limit_Form_Level": LimitEXP,
-    "Wisdom_Form_Level": WisdomEXP,
-    "Valor_Form_Level": ValorEXP,
+    "Final_Form_EXP": FinalEXP,
+    "Master_Form_EXP": MasterEXP,
+    "Limit_Form_EXP": LimitEXP,
+    "Wisdom_Form_EXP": WisdomEXP,
+    "Valor_Form_EXP": ValorEXP,
+    "Summon_EXP":SummonEXP,
     "Schmovement":Schmovement,
-    "Keyblade":Stats,
+    "Keyblade_Minimum":KeybladeMin,
+    "Keyblade_Maximum":KeybladeMax,
     "Visit_locking":Visitlocking,
     "Super_Bosses":SuperBosses,
-    "KH2StartingItems":KH2StartItems,
+    "Starting_Items":KH2StartItems,
     "Level_Depth":Level_Depth,
     "Max_Logic":Max_Logic
     }

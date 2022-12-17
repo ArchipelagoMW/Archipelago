@@ -1,46 +1,35 @@
-from ast import Import
-import typing
-from ..AutoWorld import LogicMixin
 from BaseClasses import MultiWorld
 from .Names import LocationName, ItemName
-from .logic import KH2Logic
-from .Items import item_dictionary_table, ItemData,exclusionItem_table
-from ..generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations
-from .Locations import all_locations,exclusion_table,getBonus,popupChecks,formChecks,ag2Checks,corChecks
-from .Options import FinalEXP, KH2_Options, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement,Visitlocking
+from .Items import exclusionItem_table
+from ..generic.Rules import add_rule, forbid_item
+from .Locations import popupChecks,formChecks,ag2Checks,corChecks
 
 
 def set_rules(world: MultiWorld, player: int):
-        ##Locks forms out of ag because im too lazy to make logic for it
-       # print(lambda state:state._kh_FormLevel_unlocked(self,player).value)
-        #print(countForms(self))
-        #set_rule(world.get_entrance(LocationName.TT_Region, player),lambda state:state.kh_tt_unlocked(player))
-       # print(lambda state:state._kh_FormLevel_unlocked(self,player).value)
-        #print(countForms(self))
-        set_rule(world.get_entrance(LocationName.TT_Region, player),lambda state:state.kh_tt_unlocked(player))
-        #add_item_rule(world.get_location(LocationName.RuinedChamberTornPages, player),
-        #          lambda item: get_item_type(item) == "Wisdom Form")
-        #set_rule(world.get_location("Valor level 2",player), lambda state: (state.has(ItemName.NamineSketches, player))
-         #"Route 11 - Oak's Aide": lambda state: state.pokemon_rb_has_pokemon(state.world.oaks_aide_rt_11[player].value + 5, player),
-        #print(lambda state:(state.kh_FormLevel_unlocked(state,player)==1))
+        world.completion_condition[player] = lambda state:state.has("Victory",player)
         add_rule(world.get_location(LocationName.FinalXemnas,player),lambda state:state.kh_FinalFights_unlocked(player))
 
-        world.completion_condition[player] = lambda state:state.has("Victory",player)
-            #Forbit ablitys on popups due to game limitations
+        #Forbid Ablilites on popups due to game limitations
         for location in popupChecks:
              forbid_item(world.get_location(location,player),player,exclusionItem_table["Ability"])        
         
-        set_rule(world.get_location(LocationName.CoRMineshaftUpperLevelAPBoost,player),lambda state:
+        #Final checks of cor requires more locks than other checks in cor
+        add_rule(world.get_location(LocationName.CoRMineshaftUpperLevelAPBoost,player),lambda state:
+                     state.kh_HighJump_level(player,3)
+                 and state.kh_AerialDodge_level(player,3)
+                 and state.kh_Glide_level(player,3))
+        add_rule(world.get_location(LocationName.TransporttoRemembrance,player),lambda state:
                      state.kh_HighJump_level(player,3)
                  and state.kh_AerialDodge_level(player,3)
                  and state.kh_Glide_level(player,3))
 
-        set_rule(world.get_location(LocationName.Valorlvl2,player),lambda state: state.kh_FormLevel_unlocked(player,1))
+
+        add_rule(world.get_location(LocationName.Valorlvl2,player),lambda state: state.kh_FormLevel_unlocked(player,1))
         add_rule(world.get_location(LocationName.Valorlvl3,player),lambda state: state.kh_FormLevel_unlocked(player,1))
         add_rule(world.get_location(LocationName.Valorlvl4,player),lambda state: state.kh_FormLevel_unlocked(player,2))
         add_rule(world.get_location(LocationName.Valorlvl5,player),lambda state: state.kh_FormLevel_unlocked(player,3))
         add_rule(world.get_location(LocationName.Valorlvl6,player),lambda state: state.kh_FormLevel_unlocked(player,4))
-        set_rule(world.get_location(LocationName.Valorlvl7,player),lambda state: state.kh_FormLevel_unlocked(player,5))
+        add_rule(world.get_location(LocationName.Valorlvl7,player),lambda state: state.kh_FormLevel_unlocked(player,5))
         
         add_rule(world.get_location(LocationName.Wisdomlvl2,player),lambda state: state.kh_FormLevel_unlocked(player,1))
         add_rule(world.get_location(LocationName.Wisdomlvl3,player),lambda state: state.kh_FormLevel_unlocked(player,1))
@@ -69,6 +58,8 @@ def set_rules(world: MultiWorld, player: int):
         add_rule(world.get_location(LocationName.Finallvl5,player),lambda state:  state.kh_FormLevel_unlocked(player,3))
         add_rule(world.get_location(LocationName.Finallvl6,player),lambda state:  state.kh_FormLevel_unlocked(player,4))
         add_rule(world.get_location(LocationName.Finallvl7,player),lambda state:  state.kh_FormLevel_unlocked(player,5))
+        
+        #Option to be more in line of the current KH2 Randomizer
         if world.Max_Logic[player].value==0:
             for location in corChecks:
                 forbid_item(world.get_location(location,player),player, exclusionItem_table["Forms"] and "Torn Page")
@@ -77,6 +68,7 @@ def set_rules(world: MultiWorld, player: int):
             #forbid forms on forms
             for location in formChecks:
                 forbid_item(world.get_location(formChecks[x],player),player, exclusionItem_table["Forms"] and "Torn Page")
+
         #Creating Accsess rules for terra and mushroom 13 checks
         add_rule(world.get_location(LocationName.LingeringWillBonus,player),lambda state: state.has(ItemName.ProofofConnection,player))
         add_rule(world.get_location(LocationName.LingeringWillProofofConnection,player),lambda state: state.has(ItemName.ProofofConnection,player))
@@ -101,6 +93,7 @@ def set_rules(world: MultiWorld, player: int):
             add_rule(world.get_entrance(LocationName.Tr_Region,player),lambda state:state.kh_dc_unlocked(player))
             add_rule(world.get_entrance(LocationName.STT_Region,player),lambda state:state.kh_stt_unlocked(player))
         elif(world.Visit_locking[player].value==2):
+            add_rule(world.get_entrance(LocationName.LoD_Region,player),lambda state:state.kh_lod_unlocked(player))
             add_rule(world.get_entrance(LocationName.Sp_Region,player),lambda state:state.kh_sp_unlocked(player))
             add_rule(world.get_entrance(LocationName.Pr_Region,player),lambda state:state.kh_pr_unlocked(player))
             add_rule(world.get_entrance(LocationName.TT_Region,player),lambda state:state.kh_tt_unlocked(player))
@@ -116,5 +109,4 @@ def set_rules(world: MultiWorld, player: int):
             add_rule(world.get_entrance(LocationName.STT_Region,player),lambda state:state.kh_stt_unlocked(player))
 
 
-            #add_rule(world.get_entrance(LocationName.TT_Region,player),lambda state:state.kh_tt_unlocked)
             
