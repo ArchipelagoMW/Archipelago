@@ -124,7 +124,6 @@ required_armor = {
     "Heart Locket": 1,
     "Faded Ribbon": 1,
     "Cowboy Hat": 1,
-    "temy armor": 1,
 }
 
 required_weapons = {

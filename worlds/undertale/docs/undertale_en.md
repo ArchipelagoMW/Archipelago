@@ -24,14 +24,15 @@ Once that is done, you will be able to connect to the server.
 
 ### First time setup
 
-Start the Undertale client, and in the bottom text box, input `/auto_patch (Input your Steam directory here)`, usually 
-your steam directory is usually it is `C:\Program Files (x86)\Steam`, it will then patch your installation of 
-Undertale in the Undertale folder that will be created in the Archipelago install location. That is the Undertale 
-installation you will use for Archipelago.
+Start the Undertale client, and in the bottom text box, input `/auto_patch (Input your Steam directory here)` (Your
+steam directory is usually at `C:\Program Files\Steam`, but it can be different, you can more easily find the directory
+by opening the Undertale directory through Steam), it will then make an Undertale folder that will be created in the
+Archipelago install location. That contains the version of Undertale you will use for Archipelago.
 
 ### Connect to the MultiServer
 
-Make sure both Undertale and its client are running.
+Make sure both Undertale and its client are running. (Undertale will ask for a saveslot, it can be 1 through 99, none of the slots will
+overwrite your vanilla save, although you may want to make a backup just in case.)
 
 In the top text box of the client, type the 
 `Ip Address` and `Port` separated with a `:` symbol.

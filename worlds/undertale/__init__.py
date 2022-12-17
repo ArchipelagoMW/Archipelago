@@ -91,9 +91,6 @@ class UndertaleWorld(World):
             itempool += [name] * num
         for (name, num) in required_weapons.items():
             itempool += [name] * num
-        if not self.multiworld.temy_include[self.player]:
-            if "temy armor" in itempool:
-                itempool.remove("temy armor")
         for (name, num) in non_key_items.items():
             itempool += [name] * num
         if self.multiworld.route_required[self.player].current_key == "genocide":
@@ -121,12 +118,15 @@ class UndertaleWorld(World):
             itempool = [item for item in itempool if not (item == "ATK Up" or item == "DEF Up" or item == "HP Up")]
         if self.multiworld.prog_plot[self.player]:
             itempool = [item if item not in plot_items else "Progressive Plot" for item in itempool]
+        if self.multiworld.temy_include[self.player]:
+            itempool += ["temy armor"]
         if self.multiworld.no_equips[self.player]:
             itempool = [item for item in itempool if item not in required_armor and item not in required_weapons]
-        if self.multiworld.prog_armor[self.player]:
-            itempool = [item if item not in required_armor else "Progressive Armor" for item in itempool]
-        if self.multiworld.prog_weapons[self.player]:
-            itempool = [item if item not in required_weapons else "Progressive Weapons" for item in itempool]
+        else:
+            if self.multiworld.prog_armor[self.player]:
+                itempool = [item if (item not in required_armor or not item == "temy armor" ) else "Progressive Armor" for item in itempool]
+            if self.multiworld.prog_weapons[self.player]:
+                itempool = [item if item not in required_weapons else "Progressive Weapons" for item in itempool]
         if self.multiworld.route_required[self.player].current_key == "genocide" or self.multiworld.route_required[self.player].current_key == "all_routes":
             if not self.multiworld.only_flakes[self.player]:
                 itempool += ["Snowman Piece"] * 2
