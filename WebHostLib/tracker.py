@@ -809,7 +809,7 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
         timespinner_location_ids["Past"].append(1337176)
     if(slot_data["LoreChecks"]):
         timespinner_location_ids["Present"] += [
-                                                                           1337177, 1337178, 1337179, 
+                                                                           1337177, 1337178, 1337179,
             1337180, 1337181, 1337182, 1337183, 1337184, 1337185, 1337186, 1337187]
         timespinner_location_ids["Past"] += [
                                                                                     1337188, 1337189,
@@ -1192,7 +1192,7 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
 
 def __renderChecksfinder(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                              inventory: Counter, team: int, player: int, playerName: str,
-                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
+                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict, saving_second: int) -> str:
 
     icons = {
         "Checks Available": "https://0rganics.org/archipelago/cf/spr_tiles_3.png",
