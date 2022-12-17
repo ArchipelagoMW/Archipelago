@@ -124,7 +124,7 @@ class UndertaleWorld(World):
             itempool = [item for item in itempool if item not in required_armor and item not in required_weapons]
         else:
             if self.multiworld.prog_armor[self.player]:
-                itempool = [item if (item not in required_armor or not item == "temy armor" ) else "Progressive Armor" for item in itempool]
+                itempool = [item if (item not in required_armor and not item == "temy armor" ) else "Progressive Armor" for item in itempool]
             if self.multiworld.prog_weapons[self.player]:
                 itempool = [item if item not in required_weapons else "Progressive Weapons" for item in itempool]
         if self.multiworld.route_required[self.player].current_key == "genocide" or self.multiworld.route_required[self.player].current_key == "all_routes":
