@@ -14,8 +14,6 @@ class ItemData(typing.NamedTuple):
     event: bool = False
     
 
-
-#itemname.readfromfile.kh2id
     
 
 Reports_Table={

@@ -11,7 +11,9 @@ def set_rules(world: MultiWorld, player: int):
 
         #Forbid Ablilites on popups due to game limitations
         for location in popupChecks:
-             forbid_item(world.get_location(location,player),player,exclusionItem_table["Ability"])        
+            if location==LocationName.EncampmentAreaMap:
+                print("your momma")
+            forbid_item(world.get_location(location,player),player,exclusionItem_table["Ability"])        
         
         #Final checks of cor requires more locks than other checks in cor
         add_rule(world.get_location(LocationName.CoRMineshaftUpperLevelAPBoost,player),lambda state:

@@ -3,7 +3,7 @@ import typing
 from BaseClasses import MultiWorld, Region, Entrance
 from .Items import KH2Item
 from .Options import FinalEXP, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement,SuperBosses
-from .Locations import HadesCups, LocationName, Oc2Cups,setup_locations, KH2Location,firstVisits
+from .Locations import LocationName, Oc2Cups,setup_locations, KH2Location,firstVisits
 from .Names import LocationName, ItemName
 from ..AutoWorld import LogicMixin
 
@@ -128,7 +128,6 @@ def create_regions(world, player: int, active_locations):
         LocationName.WindowofTimeMap               :[0x50061,8],
         LocationName.BoatPete                      :[0x50062,9],
         LocationName.FuturePete                    :[0x50063,10],
-        #This is out of order because I forgot it
         LocationName.FuturePeteGetBonus            :[0x5022C,10],
         LocationName.Monochrome                    :[0x50064,11],
         LocationName.WisdomForm                    :[0x50065,12],
@@ -718,7 +717,7 @@ def create_regions(world, player: int, active_locations):
     Final_Region=create_region(world,player,active_locations,LocationName.FinalForm,
                                Final_Region_locations,None)
     Level_Region_locations={
-            LocationName.Lvl1   :[0x50214,1],
+            LocationName.Lvl1   :[0x99999,1],
             LocationName.Lvl2   :[0x50215,2],
             LocationName.Lvl3   :[0x50216,3],
             LocationName.Lvl4   :[0x50217,4],

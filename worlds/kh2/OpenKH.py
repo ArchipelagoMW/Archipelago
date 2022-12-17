@@ -53,8 +53,8 @@ def patch_kh2(world,player,self,output_directory):
     self.formattedBons = {}
     self.formattedFmlv = {}
     self.formattedItem = {"Stats":[]}
-    self.strength=0
-    self.magic   =0
+    self.strength=2
+    self.magic   =6
     self.defense =0
     self.ap=     50
     mod_name = "RandoSeed"
@@ -98,11 +98,12 @@ def patch_kh2(world,player,self,output_directory):
         elif location.address.yml=="Levels": 
             increaseStat(random.randint(0,3))
             #this means if Item Nothing or potion
+            print(self.multiworld.Sora_Level_EXP[self.player].value)
             if itemcode==1:
                 itemcode=0
                 increaseStat(random.randint(0,3))
             self.formattedLvup["Sora"][location.address.locid] = {
-                "Exp": int(soraExp[location.address.locid]/5),
+                "Exp": int(soraExp[location.address.locid]/self.multiworld.Sora_Level_EXP[self.player].value),
                 "Strength":self.strength,
                 "Magic": self.magic ,
                 "Defense":self.defense,
@@ -114,7 +115,7 @@ def patch_kh2(world,player,self,output_directory):
                 "Character": "Sora",
                 "Level": location.address.locid
                }
-
+            print(self.formattedLvup)
 
 
         elif location.address.yml=="Keyblade":
@@ -160,7 +161,7 @@ def patch_kh2(world,player,self,output_directory):
     self.formattedFmlv["Summon"]=[]
     for x in range(1,7):
          self.formattedFmlv["Summon"].append({
-              "Ability": 461,
+              "Ability": 123,
               "Experience": int(formExp[0][x]/self.multiworld.Summon_EXP[self.player].value),
               "FormId": 0,
               "FormLevel": x,
@@ -174,17 +175,19 @@ def patch_kh2(world,player,self,output_directory):
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__,)
     os.makedirs(mod_dir, exist_ok=False)
     with open(os.path.join(mod_dir, "Trsrlist.yml"), "wt") as f:
-        f.write(yaml.dump(self.formattedTrsr,line_break="\r\n"))
+        f.write(yaml.dump(self.formattedTrsr,line_break="\n"))
     with open(os.path.join(mod_dir, "LvupList.yml"), "wt") as f:
-        f.write(yaml.dump(self.formattedLvup,line_break="\r\n"))
+        f.write(yaml.dump(self.formattedLvup,line_break="\n"))
     with open(os.path.join(mod_dir, "BonList.yml"), "wt") as f:
-        f.write(yaml.dump(self.formattedBons,line_break="\r\n"))
+        f.write(yaml.dump(self.formattedBons,line_break="\n"))
     with open(os.path.join(mod_dir, "ItemList.yml"), "wt") as f:
-        f.write(yaml.dump(self.formattedItem,line_break="\r\n"))
+        f.write(yaml.dump(self.formattedItem,line_break="\n"))
     with open(os.path.join(mod_dir, "FmlvList.yml"), "wt") as f:
-        f.write(yaml.dump(self.formattedFmlv,line_break="\r\n"))
-    #with open(os.path.join(mod_dir, "Trsrlist.yml"), "wt") as f:
-    #    f.write(yaml.dump(self.formattedTrsr,line_break="\r\n"))
+        f.write(yaml.dump(self.formattedFmlv,line_break="\n"))
+    with open(os.path.join(mod_dir, "jm.yml"), "wt") as f:
+        f.write(yaml.dump(modYml.getJMYAML(), line_break="\n"))
+    with open(os.path.join(mod_dir, "mod.yml"), "wt") as f:
+        f.write(yaml.dump(modYml.getDefaultMod(), line_break="\n"))
     shutil.make_archive(mod_dir,'zip',mod_dir)
     shutil.rmtree(mod_dir)
     

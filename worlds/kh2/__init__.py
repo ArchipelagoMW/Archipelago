@@ -44,6 +44,7 @@ class KH2World(World):
    
     def _get_slot_data(self):
         return {
+            "SoraEXP": self.multiworld.Sora_Level_EXP[self.player].value,
             "FinalEXP": self.multiworld.Final_Form_EXP[self.player].value,
             "MasterEXP": self.multiworld.Master_Form_EXP[self.player].value,
             "WisdomEXP": self.multiworld.Wisdom_Form_EXP[self.player].value,
@@ -94,10 +95,12 @@ class KH2World(World):
         fillerItems=[ItemName.Potion,ItemName.HiPotion,ItemName.Ether,ItemName.Elixir,ItemName.MegaPotion,
             ItemName.MegaEther,ItemName.Megalixir,ItemName.Tent,ItemName.DriveRecovery,ItemName.HighDriveRecovery,ItemName.PowerBoost,
             ItemName.MagicBoost,ItemName.DefenseBoost,ItemName.APBoost]
+
+
         self.exclude={"Victory","Nothing"}
         self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(self.create_item(ItemName.Victory))
         totallocations-=1
-
+        
         for keyblade in exclusion_table["KeybladeSlot"]:
             randomAbility=abilities[random.randint(0, len(abilities)-1)]
             self.multiworld.get_location(keyblade, self.player).place_locked_item(self.create_item(randomAbility))
@@ -105,10 +108,11 @@ class KH2World(World):
             abilities.remove(randomAbility)
             totallocations-=1
 
-        #there is no such thing as lvl 1 on forms but there needs to be a "location" for mod writing reasons
-        for formlvl in {LocationName.Valorlvl1,LocationName.Wisdomlvl1,LocationName.Limitlvl1,LocationName.Masterlvl1,LocationName.Finallvl1}:
-            self.multiworld.get_location(formlvl, self.player).place_locked_item(self.create_item(random.choice(fillerItems)))
+        #there is no such thing as lvl 1 but there needs to be a "location" for mod writing reasons
+        for lvl in {LocationName.Valorlvl1,LocationName.Wisdomlvl1,LocationName.Limitlvl1,LocationName.Masterlvl1,LocationName.Finallvl1}:
+            self.multiworld.get_location(lvl, self.player).place_locked_item(self.create_item(ItemName.Nothing))
             totallocations-=1
+
 
         if self.multiworld.Super_Bosses[self.player].value==0:
             for superboss in exclusion_table["SuperBosses"] and exclusion_table["Datas"]:
@@ -119,11 +123,16 @@ class KH2World(World):
             for name in{ItemName.HighJump,ItemName.QuickRun,ItemName.DodgeRoll,ItemName.AerialDodge,ItemName.Glide}:
                 self.exclude.add(name)
 
+
+        if self.multiworld.Level_Depth[self.player].value==1:             
+            exclustiontbl=exclusion_table["Level50"]
+        else:
+            exclustiontbl=exclusion_table["Level99"]
         #if option to have level checks up to level 50 place nothing on checks past 50
-        if self.multiworld.Level_Depth[self.player]:
-            for name in exclusion_table["Level50"]:
-                self.multiworld.get_location(name, self.player).place_locked_item(self.create_item(random.choice(fillerItems)))
-                totallocations-=1
+        for name in Locations.SoraLevels:
+            if name not in exclustiontbl:
+               self.multiworld.get_location(name, self.player).place_locked_item(self.create_item(ItemName.Nothing))
+               totallocations-=1
 
 
 

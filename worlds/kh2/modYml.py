@@ -7,31 +7,6 @@ class modYml:
             "title": "Randomizer Seed",
             "assets": [
                 {
-                    "name": "msg/jp/sys.bar",
-                    "multi": [
-                        {
-                            "name": "msg/us/sys.bar"
-                        },
-                        {
-                            "name": "msg/uk/sys.bar"
-                        }
-                    ],
-                    "method": "binarc",
-                    "source": [
-                        {
-                            "name": "sys",
-                            "type": "list",
-                            "method": "kh2msg",
-                            "source": [
-                                {
-                                    "name": "sys.yml",
-                                    "language": "en"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
                     "name": "msg/jp/jm.bar",
                     "multi": [
                         {
@@ -73,7 +48,7 @@ class modYml:
                         },
                         {
                             "name": "lvup",
-                            "method": "listpatch",
+                            "method": "           listpatch",
                             "type": "List",
                             "source": [
                                 {
@@ -93,17 +68,6 @@ class modYml:
                                 }
                             ]
                         },
-                        {
-                            "name": "plrp",
-                            "method": "listpatch",
-                            "type": "List",
-                            "source": [
-                                {
-                                    "name": "PlrpList.yml",
-                                    "type": "plrp"
-                                }
-                            ]
-                        }
                     ]
                 },
                 {

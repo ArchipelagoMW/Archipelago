@@ -3,6 +3,12 @@ from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnTo
 import typing
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 
+class SoraEXP(Range):
+    """Sora Level exp Multiplier"""
+    display = "Sora Level EXP"
+    range_start = 1
+    range_end = 10
+    default = 5
 class FinalEXP(Range):
     """Final Form exp Multiplier"""
     display_name = "Final Form EXP"
@@ -88,6 +94,7 @@ class Max_Logic(Toggle):
     default=True
 
 KH2_Options: typing.Dict[str, type(Option)] = {
+    "Sora_Level_EXP":SoraEXP,
     "Final_Form_EXP": FinalEXP,
     "Master_Form_EXP": MasterEXP,
     "Limit_Form_EXP": LimitEXP,
