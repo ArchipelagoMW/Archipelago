@@ -369,7 +369,6 @@ class StaticWitnessLocations:
         "Caves Left Upstairs Left Row 5",
 
         "Tunnels Vault Box",
-        "Mountain Bottom Floor Discard",
         "Theater Challenge Video",
 
         "Caves Skylight EP",
