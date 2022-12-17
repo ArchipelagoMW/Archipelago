@@ -186,7 +186,7 @@ class TimerTrapWeight(BaseTrapWeight):
     """
     Likelihood of a receiving a trap which causes the timer to run low
     """
-    display_name = "Literature Trap Weight"
+    display_name = "Timer Trap Weight"
 
 
 class Autosave(DefaultOnToggle):

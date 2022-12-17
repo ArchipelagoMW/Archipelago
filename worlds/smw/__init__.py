@@ -120,6 +120,7 @@ class SMWWorld(World):
         trap_weights += ([ItemName.ice_trap] * self.multiworld.ice_trap_weight[self.player].value)
         trap_weights += ([ItemName.stun_trap] * self.multiworld.stun_trap_weight[self.player].value)
         trap_weights += ([ItemName.literature_trap] * self.multiworld.literature_trap_weight[self.player].value)
+        trap_weights += ([ItemName.timer_trap] * self.multiworld.timer_trap_weight[self.player].value)
         trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.multiworld.trap_fill_percentage[self.player].value / 100.0))
         junk_count -= trap_count
 
