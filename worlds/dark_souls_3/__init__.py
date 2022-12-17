@@ -54,7 +54,7 @@ class DarkSouls3World(World):
     web = DarkSouls3Web()
     data_version = 5
     base_id = 100000
-    required_client_version = (0, 3, 7)
+    required_client_version = (0, 3, 6)
     item_name_to_id = DarkSouls3Item.get_name_to_id()
     location_name_to_id = DarkSouls3Location.get_name_to_id()
 
