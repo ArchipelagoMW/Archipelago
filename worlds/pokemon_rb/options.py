@@ -199,7 +199,7 @@ class OaksAidRt15(Range):
 class ExpModifier(SpecialRange):
     """Modifier for EXP gained. When specifying a number, exp is multiplied by this amount and divided by 16."""
     display_name = "Exp Modifier"
-    range_start = 1
+    range_start = 0
     range_end = 255
     default = 16
     special_range_names = {
