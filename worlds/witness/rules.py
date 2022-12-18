@@ -79,7 +79,7 @@ class WitnessLogic(LogicMixin):
                         valid_option = False
                         break
                 elif item == "11 Lasers":
-                    laser_req = get_option_value(world, player, "mountain_lasers")
+                    laser_req = get_option_value(world, player, "challenge_lasers")
 
                     if not self._witness_has_lasers(world, player, laser_req):
                         valid_option = False
