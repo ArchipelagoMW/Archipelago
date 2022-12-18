@@ -83,5 +83,10 @@ class PokemonLogic(LogicMixin):
 
     def pokemon_rb_cinnabar_gym(self, player):
         # ensures higher level Pokémon are obtainable before Cinnabar Gym is in logic
-        return ((not self.multiworld.extra_key_items[player]) or self.has("Mansion Key", player)
-                or self.has("Oak's Parcel", player) or self.pokemon_rb_can_surf(player))
+        return ((self.multiworld.old_man[player] != "vanilla") or (not self.multiworld.extra_key_items[player]) or
+                self.has("Mansion Key", player) or self.has("Oak's Parcel", player) or self.pokemon_rb_can_surf(player))
+
+    def pokemon_rb_dojo(self, player):
+        # ensures higher level Pokémon are obtainable before Fighting Dojo is in logic
+        return (self.pokemon_rb_can_pass_guards(player) or self.has("Oak's Parcel", player) or
+                self.pokemon_rb_can_surf(player))
