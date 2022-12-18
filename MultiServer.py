@@ -16,6 +16,7 @@ import pickle
 import itertools
 import time
 import operator
+import hashlib
 
 import ModuleUpdate
 
@@ -56,6 +57,12 @@ modify_functions = {
     "left_shift": operator.lshift,
     "right_shift": operator.rshift,
 }
+
+
+def get_saving_second(seed_name: str, interval: int = 60) -> int:
+    # save at expected times so other systems using savegame can expect it
+    # represents the target second of the auto_save_interval at which to save
+    return int(hashlib.sha256(seed_name.encode()).hexdigest(), 16) % interval
 
 
 class Client(Endpoint):
@@ -124,6 +131,7 @@ class Context:
     stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
 
     item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
+    item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
     location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     forced_auto_forfeits: typing.Dict[str, bool]
@@ -147,8 +155,6 @@ class Context:
         self.player_name_lookup: typing.Dict[str, team_slot] = {}
         self.connect_names = {}  # names of slots clients can connect to
         self.allow_forfeits = {}
-        self.remote_items = set()
-        self.remote_start_inventory = set()
         #                          player          location_id     item_id  target_player_id
         self.locations = {}
         self.host = host
@@ -202,7 +208,6 @@ class Context:
         self.non_hintable_names = collections.defaultdict(frozenset)
 
         self._load_game_data()
-        self._init_game_data()
 
     # Datapackage retrieval
     def _load_game_data(self):
@@ -366,8 +371,6 @@ class Context:
         self.seed_name = decoded_obj["seed_name"]
         self.random.seed(self.seed_name)
         self.connect_names = decoded_obj['connect_names']
-        self.remote_items = decoded_obj['remote_items']
-        self.remote_start_inventory = decoded_obj.get('remote_start_inventory', decoded_obj['remote_items'])
         self.locations = decoded_obj['locations']
         self.slot_data = decoded_obj['slot_data']
         for slot, data in self.slot_data.items():
@@ -411,6 +414,16 @@ class Context:
         if use_embedded_server_options:
             server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
+
+        # custom datapackage
+        for game_name, data in decoded_obj.get("datapackage", {}).items():
+            logging.info(f"Loading custom datapackage for game {game_name}")
+            self.gamespackage[game_name] = data
+            self.item_name_groups[game_name] = data["item_name_groups"]
+            del data["item_name_groups"]  # remove from datapackage, but keep in self.item_name_groups
+        self._init_game_data()
+        for game_name, data in self.item_name_groups.items():
+            self.read_data[f"item_name_groups_{game_name}"] = lambda lgame=game_name: self.item_name_groups[lgame]
 
     # saving
 
@@ -457,10 +470,16 @@ class Context:
     def _start_async_saving(self):
         if not self.auto_saver_thread:
             def save_regularly():
-                import time
+                # time.time() is platform dependent, so using the expensive datetime method instead
+                def get_datetime_second():
+                    now = datetime.datetime.now()
+                    return now.second + now.microsecond * 0.000001
+
+                second = get_saving_second(self.seed_name, self.auto_save_interval)
                 while not self.exit_event.is_set():
                     try:
-                        time.sleep(self.auto_save_interval)
+                        next_wakeup = (second - get_datetime_second()) % self.auto_save_interval
+                        time.sleep(max(1.0, next_wakeup))
                         if self.save_dirty:
                             logging.debug("Saving via thread.")
                             self._save()
@@ -538,7 +557,7 @@ class Context:
 
         if "stored_data" in savedata:
             self.stored_data = savedata["stored_data"]
-        # count items and slots from lists for item_handling = remote
+        # count items and slots from lists for items_handling = remote
         logging.info(
             f'Loaded save file with {sum([len(v) for k, v in self.received_items.items() if k[2]])} received items '
             f'for {sum(k[2] for k in self.received_items)} players')
@@ -698,10 +717,7 @@ async def on_client_connected(ctx: Context, client: Client):
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
         'password': bool(ctx.password),
-        # TODO remove around 0.4
-        'players': players,
-        # TODO convert to list of games present in 0.4
-        'games': [ctx.games[x] for x in range(1, len(ctx.games) + 1)],
+        'games': {ctx.games[x] for x in range(1, len(ctx.games) + 1)},
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
@@ -709,8 +725,6 @@ async def on_client_connected(ctx: Context, client: Client):
         'permissions': get_permissions(ctx),
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
-        'datapackage_version': sum(game_data["version"] for game_data in ctx.gamespackage.values())
-        if all(game_data["version"] for game_data in ctx.gamespackage.values()) else 0,
         'datapackage_versions': {game: game_data["version"] for game, game_data
                                  in ctx.gamespackage.items()},
         'seed_name': ctx.seed_name,
@@ -1547,20 +1561,10 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             minver = min_client_version if ignore_game else ctx.minimum_client_versions[slot]
             if minver > args['version']:
                 errors.add('IncompatibleVersion')
-            if args.get('items_handling', None) is None:
-                # fall back to load from multidata
-                client.no_items = False
-                client.remote_items = slot in ctx.remote_items
-                client.remote_start_inventory = slot in ctx.remote_start_inventory
-                await ctx.send_msgs(client, [{
-                    "cmd": "Print", "text":
-                        "Warning: Client is not sending items_handling flags, "
-                        "which will not be supported in the future."}])
-            else:
-                try:
-                    client.items_handling = args['items_handling']
-                except (ValueError, TypeError):
-                    errors.add('InvalidItemsHandling')
+            try:
+                client.items_handling = args['items_handling']
+            except (ValueError, TypeError):
+                errors.add('InvalidItemsHandling')
 
         # only exact version match allowed
         if ctx.compatibility == 0 and args['version'] != version_tuple:

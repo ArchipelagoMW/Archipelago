@@ -75,10 +75,18 @@ window.addEventListener('load', () => {
         console.info(tables.search());
         tables.draw();
     });
+    const tracker = document.getElementById('tracker-wrapper').getAttribute('data-tracker');
+    const target_second = document.getElementById('tracker-wrapper').getAttribute('data-second') + 3;
+
+    function getSleepTimeSeconds(){
+        // -40 % 60 is -40, which is absolutely wrong and should burn
+        var sleepSeconds = (((target_second - new Date().getSeconds()) % 60) + 60) % 60;
+        return sleepSeconds || 60;
+    }
 
     const update = () => {
         const target = $("<div></div>");
-        const tracker = document.getElementById('tracker-wrapper').getAttribute('data-tracker');
+        console.log("Updating Tracker...");
         target.load("/tracker/" + tracker, function (response, status) {
             if (status === "success") {
                 target.find(".table").each(function (i, new_table) {
@@ -97,9 +105,9 @@ window.addEventListener('load', () => {
                 console.log(response);
             }
         })
+        setTimeout(update, getSleepTimeSeconds()*1000);
     }
-
-    setInterval(update, 30000);
+    setTimeout(update, getSleepTimeSeconds()*1000);
 
     window.addEventListener('resize', () => {
         adjustTableHeight();

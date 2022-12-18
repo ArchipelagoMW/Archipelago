@@ -31,6 +31,7 @@ class SwimRule(Choice):
 
 
 class EarlySeaglide(DefaultOnToggle):
+    display_name = "Early Seaglide"
     """Make sure 2 of the Seaglide Fragments are available in or near the Safe Shallows (Sphere 1 Locations)."""
 
 

@@ -4,6 +4,7 @@
 *_Spoiler.txt
 *.bmbp
 *.apbp
+*.apl2ac
 *.apm3
 *.apmc
 *.apz5
@@ -137,6 +138,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.code-workspace
 
 # Spyder project settings
 .spyderproject

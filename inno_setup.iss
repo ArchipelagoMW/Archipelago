@@ -57,6 +57,7 @@ Name: "generator/sm";     Description: "Super Metroid ROM Setup"; Types: full ho
 Name: "generator/dkc3";   Description: "Donkey Kong Country 3 ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/smw";    Description: "Super Mario World ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/soe";    Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
+Name: "generator/l2ac";   Description: "Lufia II Ancient Cave ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 2621440; Flags: disablenouninstallwarning
 Name: "generator/lttp";   Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
 Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296; Flags: disablenouninstallwarning
 Name: "generator/zl";     Description: "Zillion ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 150000; Flags: disablenouninstallwarning
@@ -69,6 +70,7 @@ Name: "client/sni/lttp";  Description: "SNI Client - A Link to the Past Patch Se
 Name: "client/sni/sm";    Description: "SNI Client - Super Metroid Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/sni/dkc3";  Description: "SNI Client - Donkey Kong Country 3 Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/sni/smw";   Description: "SNI Client - Super Mario World Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/sni/l2ac";  Description: "SNI Client - Lufia II Ancient Cave Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/factorio";  Description: "Factorio"; Types: full playing
 Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDiskSpaceRequired: 226894278
 Name: "client/oot";       Description: "Ocarina of Time"; Types: full playing
@@ -90,6 +92,7 @@ Source: "{code:GetSMROMPath}"; DestDir: "{app}"; DestName: "Super Metroid (JU).s
 Source: "{code:GetDKC3ROMPath}"; DestDir: "{app}"; DestName: "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc"; Flags: external; Components: client/sni/dkc3 or generator/dkc3
 Source: "{code:GetSMWROMPath}"; DestDir: "{app}"; DestName: "Super Mario World (USA).sfc"; Flags: external; Components: client/sni/smw or generator/smw
 Source: "{code:GetSoEROMPath}"; DestDir: "{app}"; DestName: "Secret of Evermore (USA).sfc"; Flags: external; Components: generator/soe
+Source: "{code:GetL2ACROMPath}"; DestDir: "{app}"; DestName: "Lufia II - Rise of the Sinistrals (USA).sfc"; Flags: external; Components: generator/l2ac
 Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: client/oot or generator/oot
 Source: "{code:GetZlROMPath}"; DestDir: "{app}"; DestName: "Zillion (UE) [!].sms"; Flags: external; Components: client/zl or generator/zl
 Source: "{code:GetRedROMPath}"; DestDir: "{app}"; DestName: "Pokemon Red (UE) [S][!].gb"; Flags: external; Components: client/pkmn/red or generator/pkmn_r
@@ -234,6 +237,9 @@ var SMWRomFilePage: TInputFileWizardPage;
 
 var soerom: string;
 var SoERomFilePage: TInputFileWizardPage;
+
+var l2acrom: string;
+var L2ACROMFilePage: TInputFileWizardPage;
 
 var ootrom: string;
 var OoTROMFilePage: TInputFileWizardPage;
@@ -395,6 +401,8 @@ begin
     Result := not (SMWROMFilePage.Values[0] = '')
   else if (assigned(SoEROMFilePage)) and (CurPageID = SoEROMFilePage.ID) then
     Result := not (SoEROMFilePage.Values[0] = '')
+  else if (assigned(L2ACROMFilePage)) and (CurPageID = L2ACROMFilePage.ID) then
+    Result := not (L2ACROMFilePage.Values[0] = '')
   else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
     Result := not (OoTROMFilePage.Values[0] = '')
   else if (assigned(ZlROMFilePage)) and (CurPageID = ZlROMFilePage.ID) then
@@ -499,6 +507,22 @@ begin
     Result := '';
 end;
 
+function GetL2ACROMPath(Param: string): string;
+begin
+  if Length(l2acrom) > 0 then
+    Result := l2acrom
+  else if Assigned(L2ACROMFilePage) then
+    begin
+      R := CompareStr(GetSNESMD5OfFile(L2ACROMFilePage.Values[0]), '6efc477d6203ed2b3b9133c1cd9e9c5d')
+      if R <> 0 then
+        MsgBox('Lufia II ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := L2ACROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+end;
+
 function GetZlROMPath(Param: string): string;
 begin
   if Length(zlrom) > 0 then
@@ -582,6 +606,10 @@ begin
   bluerom := CheckRom('Pokemon Blue (UE) [S][!].gb','50927e843568814f7ed45ec4f944bd8b');
   if Length(bluerom) = 0 then
     BlueROMFilePage:= AddGBRomPage('Pokemon Blue (UE) [S][!].gb');
+
+  l2acrom := CheckRom('Lufia II - Rise of the Sinistrals (USA).sfc', '6efc477d6203ed2b3b9133c1cd9e9c5d');
+  if Length(l2acrom) = 0 then
+    L2ACROMFilePage:= AddRomPage('Lufia II - Rise of the Sinistrals (USA).sfc');
 end;
 
 
@@ -596,6 +624,8 @@ begin
     Result := not (WizardIsComponentSelected('client/sni/dkc3') or WizardIsComponentSelected('generator/dkc3'));
   if (assigned(SMWROMFilePage)) and (PageID = SMWROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('client/sni/smw') or WizardIsComponentSelected('generator/smw'));
+  if (assigned(L2ACROMFilePage)) and (PageID = L2ACROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('client/sni/l2ac') or WizardIsComponentSelected('generator/l2ac'));
   if (assigned(SoEROMFilePage)) and (PageID = SoEROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/soe'));
   if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then
