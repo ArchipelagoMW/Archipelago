@@ -1,4 +1,4 @@
-from typing import List, Set, Dict, Tuple, Optional, Callable
+from typing import List, Dict, Tuple, Optional, Callable
 from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Locations import LocationData
 from .Options import get_option_value
@@ -14,34 +14,18 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
     mission_order = mission_orders[mission_order_type]
 
     mission_pools = filter_missions(multiworld, player)
-    final_mission = mission_pools['all_in'][0]
 
-    used_regions = [mission for mission_pool in mission_pools.values() for mission in mission_pool]
     regions = [create_region(multiworld, player, locations_per_region, location_cache, "Menu")]
-    for region_name in used_regions:
-        regions.append(create_region(multiworld, player, locations_per_region, location_cache, region_name))
-    # Changing the completion condition for alternate final missions into an event
-    if final_mission != 'All-In':
-        final_location = alt_final_mission_locations[final_mission]
-        # Final location should be near the end of the cache
-        for i in range(len(location_cache) - 1, -1, -1):
-            if location_cache[i].name == final_location:
-                location_cache[i].locked = True
-                location_cache[i].event = True
-                location_cache[i].address = None
-                break
-    else:
-        final_location = 'All-In: Victory'
-
-    if __debug__:
-        if mission_order_type in (0, 1):
-            throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region.keys())
-
-    multiworld.regions += regions
 
     names: Dict[str, int] = {}
 
     if mission_order_type == 0:
+
+        # Generating all regions and locations
+        for region_name in vanilla_mission_req_table.keys():
+            regions.append(create_region(multiworld, player, locations_per_region, location_cache, region_name))
+        multiworld.regions += regions
+
         connect(multiworld, player, names, 'Menu', 'Liberation Day'),
         connect(multiworld, player, names, 'Liberation Day', 'The Outlaws',
                 lambda state: state.has("Beat Liberation Day", player)),
@@ -110,10 +94,12 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
                 lambda state: state.has('Beat Gates of Hell', player) and (
                         state.has('Beat Shatter the Sky', player) or state.has('Beat Belly of the Beast', player)))
 
-        return vanilla_mission_req_table, 29, final_location
+        return vanilla_mission_req_table, 29, 'All-In: Victory'
 
     else:
         missions = []
+
+        final_mission = mission_pools['all_in'][0]
 
         # Initial fill out of mission list and marking all-in mission
         for mission in mission_order:
@@ -181,6 +167,11 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
 
             missions[slot] = missions_to_add.pop(filler)
 
+        # Generating regions and locations from selected missions
+        for region_name in missions:
+            regions.append(create_region(multiworld, player, locations_per_region, location_cache, region_name))
+        multiworld.regions += regions
+
         # Loop through missions to create requirements table and connect regions
         # TODO: Handle 'and' connections
         mission_req_table = {}
@@ -204,19 +195,21 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
                 or_requirements=mission_order[i].or_requirements)})
 
         final_mission_id = vanilla_mission_req_table[final_mission].id
-        return mission_req_table, final_mission_id, final_mission + ': Victory'
 
+        # Changing the completion condition for alternate final missions into an event
+        if final_mission != 'All-In':
+            final_location = alt_final_mission_locations[final_mission]
+            # Final location should be near the end of the cache
+            for i in range(len(location_cache) - 1, -1, -1):
+                if location_cache[i].name == final_location:
+                    location_cache[i].locked = True
+                    location_cache[i].event = True
+                    location_cache[i].address = None
+                    break
+        else:
+            final_location = 'All-In: Victory'
 
-def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionNames: Set[str]):
-    existingRegions = set()
-
-    for region in regions:
-        existingRegions.add(region.name)
-
-    if (regionNames - existingRegions):
-        raise Exception("Starcraft: the following regions are used in locations: {}, but no such region exists".format(
-            regionNames - existingRegions))
-
+        return mission_req_table, final_mission_id, final_location
 
 def create_location(player: int, location_data: LocationData, region: Region,
                     location_cache: List[Location]) -> Location:

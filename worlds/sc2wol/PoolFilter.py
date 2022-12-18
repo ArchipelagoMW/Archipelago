@@ -72,24 +72,9 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[str, List[str]]
         if "The Great Train Robbery" in mission_pools[2]:
             mission_pools[2].remove("The Great Train Robbery")
             mission_pools[1].append("The Great Train Robbery")
-    # Removing random missions from each difficulty set in a cycle
-    set_cycle = 0
     current_count = sum(len(mission_pool) for mission_pool in mission_pools)
-
     if current_count < mission_count:
         raise Exception("Not enough missions available to fill the campaign on current settings.  Please exclude fewer missions.")
-    while current_count > mission_count:
-        if set_cycle == 4:
-            set_cycle = 0
-        # Must contain at least one mission per set
-        mission_pool = mission_pools[set_cycle]
-        if len(mission_pool) <= 1:
-            if all(len(mission_pool) <= 1 for mission_pool in mission_pools):
-                raise Exception("Not enough missions available to fill the campaign on current settings.  Please exclude fewer missions.")
-        else:
-            mission_pool.remove(multiworld.random.choice(mission_pool))
-            current_count -= 1
-        set_cycle += 1
 
     return {
         "no_build": mission_pools[0],
