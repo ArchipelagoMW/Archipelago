@@ -48,7 +48,8 @@ class FinalStageDeath(DefaultOnToggle):
 
 
 class GreenScrap(Range):
-    """Weight of Green Scraps in the item pool. (Ignored unless Item Weight Presets is 'No')"""
+    """Weight of Green Scraps in the item pool.
+    (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Green Scraps"
     range_start = 0
     range_end = 100
@@ -56,7 +57,8 @@ class GreenScrap(Range):
 
 
 class RedScrap(Range):
-    """Weight of Red Scraps in the item pool. (Ignored unless Item Weight Presets is 'No')"""
+    """Weight of Red Scraps in the item pool.
+    (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Red Scraps"
     range_start = 0
     range_end = 100
@@ -64,7 +66,8 @@ class RedScrap(Range):
 
 
 class YellowScrap(Range):
-    """Weight of yellow scraps in the item pool. (Ignored unless Item Weight Presets is 'No')"""
+    """Weight of yellow scraps in the item pool.
+    (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Yellow Scraps"
     range_start = 0
     range_end = 100
@@ -72,7 +75,8 @@ class YellowScrap(Range):
 
 
 class WhiteScrap(Range):
-    """Weight of white scraps in the item pool. (Ignored unless Item Weight Presets is 'No')"""
+    """Weight of white scraps in the item pool.
+    (Ignored unless Item Weight Presets is 'No')"""
     display_name = "White Scraps"
     range_start = 0
     range_end = 100
@@ -80,7 +84,8 @@ class WhiteScrap(Range):
 
 
 class CommonItem(Range):
-    """Weight of common items in the item pool. (Ignored unless Item Weight Presets is 'No')"""
+    """Weight of common items in the item pool.
+    (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Common Items"
     range_start = 0
     range_end = 100
@@ -88,7 +93,8 @@ class CommonItem(Range):
 
 
 class UncommonItem(Range):
-    """Weight of uncommon items in the item pool. (Ignored unless Item Weight Presets is 'No')"""
+    """Weight of uncommon items in the item pool.
+    (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Uncommon Items"
     range_start = 0
     range_end = 100
@@ -96,7 +102,8 @@ class UncommonItem(Range):
 
 
 class LegendaryItem(Range):
-    """Weight of legendary items in the item pool. (Ignored unless Item Weight Presets is 'No')"""
+    """Weight of legendary items in the item pool.
+    (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Legendary Items"
     range_start = 0
     range_end = 100
@@ -104,7 +111,8 @@ class LegendaryItem(Range):
 
 
 class BossItem(Range):
-    """Weight of boss items in the item pool. (Ignored unless Item Weight Presets is 'No')"""
+    """Weight of boss items in the item pool.
+    (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Boss Items"
     range_start = 0
     range_end = 100
@@ -112,7 +120,8 @@ class BossItem(Range):
 
 
 class LunarItem(Range):
-    """Weight of lunar items in the item pool. (Ignored unless Item Weight Presets is 'No')"""
+    """Weight of lunar items in the item pool.
+    (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Lunar Items"
     range_start = 0
     range_end = 100
@@ -120,6 +129,11 @@ class LunarItem(Range):
 
 
 class VoidItem(Range):
+    """Weight of void items in the item pool.
+
+    (Ignored unless Item Weight Presets is 'No')
+
+    (Ignored if Enable DLC is 'No') """
     display_name = "Void Items"
     range_start = 0
     range_end = 100
