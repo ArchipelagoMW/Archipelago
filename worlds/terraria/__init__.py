@@ -1,7 +1,6 @@
 from worlds.AutoWorld import World
 from worlds.generic.Rules import add_rule
-from BaseClasses import Region, Location, Entrance, Item, RegionType, ItemClassification
-from Utils import get_options, output_path
+from BaseClasses import Region, Location, Item, RegionType, ItemClassification
 
 next_id = 0x7E0000
 
@@ -11,7 +10,7 @@ items = [
     "Dryad",
     "Progressive Old One's Army",
     "Witch Doctor",
-    "Dungeon",
+    "Progressive Dungeon",
     "Hardmode",
     "Underground Evil",
     "Hallow",
@@ -25,7 +24,6 @@ items = [
     "Plantera's Bulb",
     "Cyborg",
     "Autohammer",
-    "Post-Plantera Dungeon",
     "Biome Chests",
     "Post-Plantera Eclipse",
     "Lihzahrd Altar",
@@ -133,6 +131,7 @@ class TerrariaWorld(World):
         items_to_create = items.copy()
         for _ in range(2):
             items_to_create.append("Progressive Old One's Army")
+        items_to_create.append("Progressive Dungeon")
         for item in precollected:
             items_to_create.remove(item)
         items_to_create.remove("Win")
@@ -146,7 +145,7 @@ class TerrariaWorld(World):
         add_rule(self.multiworld.get_location("Queen Slime", self.player), lambda state: state.has("Hallow", self.player))
         add_rule(self.multiworld.get_location("The Twins", self.player), lambda state: state.has_all({"Hardmode", "Hallow"}, self.player))
         add_rule(self.multiworld.get_location("The Destroyer", self.player), lambda state: state.has_all({"Hardmode", "Underground Evil"}, self.player))
-        add_rule(self.multiworld.get_location("Skeletron Prime", self.player), lambda state: state.has_all({"Dungeon", "Hardmode", "Hallow", "Underground Evil"}, self.player))
+        add_rule(self.multiworld.get_location("Skeletron Prime", self.player), lambda state: state.has_all({"Progressive Dungeon", "Hardmode", "Hallow", "Underground Evil"}, self.player))
         add_rule(self.multiworld.get_location("Plantera", self.player), lambda state: state.has("Plantera's Bulb", self.player))
         # Golem can be accessed with HOIKing or Luminite Pickaxe instead of Plantera's Bulb, which could be relevant for some goals / settings
         add_rule(self.multiworld.get_location("Golem", self.player), lambda state: state.has_all({"Plantera's Bulb", "Lihzahrd Altar"}, self.player))
@@ -157,12 +156,12 @@ class TerrariaWorld(World):
         add_rule(self.multiworld.get_location("Old One's Army Tier 1", self.player), lambda state: state.has("Progressive Old One's Army", self.player))
         add_rule(self.multiworld.get_location("Old One's Army Tier 2", self.player), lambda state: state.has("Progressive Old One's Army", self.player, 2))
         add_rule(self.multiworld.get_location("Old One's Army Tier 3", self.player), lambda state: state.has("Progressive Old One's Army", self.player, 3))
-        add_rule(self.multiworld.get_location("Frost Legion", self.player), lambda state: state.has_all({"Dungeon", "Hardmode", "Hallow", "Underground Evil", "Post-Plantera Dungeon"}, self.player))
-        add_rule(self.multiworld.get_location("Frost Moon", self.player), lambda state: state.has_all({"Dungeon", "Hardmode", "Hallow", "Underground Evil", "Post-Plantera Dungeon"}, self.player))
+        add_rule(self.multiworld.get_location("Frost Legion", self.player), lambda state: state.has("Progressive Dungeon", self.player, 2) and state.has_all({"Hardmode", "Hallow", "Underground Evil"}, self.player))
+        add_rule(self.multiworld.get_location("Frost Moon", self.player), lambda state: state.has("Progressive Dungeon", self.player, 2) and state.has_all({"Hardmode", "Hallow", "Underground Evil"}, self.player))
         add_rule(self.multiworld.get_location("Lunar Events", self.player), lambda state: state.has("Cultists", self.player))
         add_rule(self.multiworld.get_location("Martian Madness", self.player), lambda state: state.has("Martian Probe", self.player))
         add_rule(self.multiworld.get_location("Pirate Invasion", self.player), lambda state: state.has("Hardmode", self.player))
-        add_rule(self.multiworld.get_location("Pumpkin Moon", self.player), lambda state: state.has_all({"Dungeon", "Hardmode", "Dryad", "Post-Plantera Dungeon"}, self.player) and (state.has_any({"Hallow", "Underground Evil"}, self.player)))
+        add_rule(self.multiworld.get_location("Pumpkin Moon", self.player), lambda state: state.has("Progressive Dungeon", self.player, 2) and state.has_all({"Hardmode", "Dryad"}, self.player) and (state.has_any({"Hallow", "Underground Evil"}, self.player)))
 
     def generate_basic(self) -> None:
         for item in precollected:
