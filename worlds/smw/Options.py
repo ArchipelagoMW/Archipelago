@@ -196,6 +196,24 @@ class Autosave(DefaultOnToggle):
     display_name = "Autosave"
 
 
+class EarlyClimb(Toggle):
+    """
+    Whether a save prompt will appear after every level
+    """
+    display_name = "Early Climb"
+
+
+class OverworldSpeed(Choice):
+    """
+    How Fast Mario moves on the overworld
+    """
+    display_name = "Overworld Speed"
+    option_slow = 0
+    option_vanilla = 1
+    option_fast = 2
+    default = 1
+
+
 class MusicShuffle(Choice):
     """
     Music shuffle type
@@ -280,6 +298,8 @@ smw_options: typing.Dict[str, type(Option)] = {
     "literature_trap_weight": LiteratureTrapWeight,
     "timer_trap_weight": TimerTrapWeight,
     "autosave": Autosave,
+    "early_climb": EarlyClimb,
+    "overworld_speed": OverworldSpeed,
     "music_shuffle": MusicShuffle,
     "mario_palette": MarioPalette,
     "foreground_palette_shuffle": ForegroundPaletteShuffle,

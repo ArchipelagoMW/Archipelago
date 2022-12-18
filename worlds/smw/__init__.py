@@ -74,6 +74,10 @@ class SMWWorld(World):
 
         return slot_data
 
+    def generate_early(self):
+        if self.multiworld.early_climb[self.player]:
+            self.multiworld.local_early_items[self.player][ItemName.mario_climb] = 1
+
     def generate_basic(self):
         itempool: typing.List[SMWItem] = []
 

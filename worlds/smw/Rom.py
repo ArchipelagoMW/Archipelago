@@ -887,6 +887,11 @@ def patch_rom(world, rom, player, active_level_dict):
     if world.autosave[player]:
         rom.write_bytes(0x20F93, bytearray([0x00]))
 
+    if world.overworld_speed[player] == "fast":
+        rom.write_bytes(0x21414, bytearray([0x20, 0x10]))
+    elif world.overworld_speed[player] == "slow":
+        rom.write_bytes(0x21414, bytearray([0x05, 0x05]))
+
     # Starting Life Count
     rom.write_bytes(0x1E25, bytearray([world.starting_life_count[player].value - 1]))
 
