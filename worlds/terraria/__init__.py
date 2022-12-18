@@ -148,6 +148,7 @@ class TerrariaWorld(World):
         add_rule(self.multiworld.get_location("The Destroyer", self.player), lambda state: state.has_all({"Hardmode", "Underground Evil"}, self.player))
         add_rule(self.multiworld.get_location("Skeletron Prime", self.player), lambda state: state.has_all({"Dungeon", "Hardmode", "Hallow", "Underground Evil"}, self.player))
         add_rule(self.multiworld.get_location("Plantera", self.player), lambda state: state.has("Plantera's Bulb", self.player))
+        # Golem can be accessed with HOIKing or Luminite Pickaxe instead of Plantera's Bulb, which could be relevant for some goals / settings
         add_rule(self.multiworld.get_location("Golem", self.player), lambda state: state.has_all({"Plantera's Bulb", "Lihzahrd Altar"}, self.player))
         add_rule(self.multiworld.get_location("Empress of Light", self.player), lambda state: state.has_all({"Hallow", "Prismatic Lacewing"}, self.player))
         add_rule(self.multiworld.get_location("Duke Fishron", self.player), lambda state: state.has("Truffle Worm", self.player))
@@ -161,7 +162,7 @@ class TerrariaWorld(World):
         add_rule(self.multiworld.get_location("Lunar Events", self.player), lambda state: state.has("Cultists", self.player))
         add_rule(self.multiworld.get_location("Martian Madness", self.player), lambda state: state.has("Martian Probe", self.player))
         add_rule(self.multiworld.get_location("Pirate Invasion", self.player), lambda state: state.has("Hardmode", self.player))
-        add_rule(self.multiworld.get_location("Pumpkin Moon", self.player), lambda state: state.has_all({"Hardmode", "Dryad", "Post-Plantera Dungeon"}, self.player) and (state.has_any({"Hallow", "Underground Evil"}, self.player)))
+        add_rule(self.multiworld.get_location("Pumpkin Moon", self.player), lambda state: state.has_all({"Dungeon", "Hardmode", "Dryad", "Post-Plantera Dungeon"}, self.player) and (state.has_any({"Hallow", "Underground Evil"}, self.player)))
 
     def generate_basic(self) -> None:
         for item in precollected:
