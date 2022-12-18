@@ -148,7 +148,7 @@ class TerrariaWorld(World):
         add_rule(self.multiworld.get_location("The Destroyer", self.player), lambda state: state.has_all({"Hardmode", "Underground Evil"}, self.player))
         add_rule(self.multiworld.get_location("Skeletron Prime", self.player), lambda state: state.has_all({"Dungeon", "Hardmode", "Hallow", "Underground Evil"}, self.player))
         add_rule(self.multiworld.get_location("Plantera", self.player), lambda state: state.has("Plantera's Bulb", self.player))
-        add_rule(self.multiworld.get_location("Golem", self.player), lambda state: state.has("Lihzahrd Altar", self.player))
+        add_rule(self.multiworld.get_location("Golem", self.player), lambda state: state.has_all({"Plantera's Bulb", "Lihzahrd Altar"}, self.player))
         add_rule(self.multiworld.get_location("Empress of Light", self.player), lambda state: state.has_all({"Hallow", "Prismatic Lacewing"}, self.player))
         add_rule(self.multiworld.get_location("Duke Fishron", self.player), lambda state: state.has("Truffle Worm", self.player))
         add_rule(self.multiworld.get_location("Lunatic Cultist", self.player), lambda state: state.has("Cultists", self.player))
