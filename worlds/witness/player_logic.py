@@ -391,19 +391,20 @@ class WitnessPlayerLogic:
             pair = self.make_event_item_pair(panel)
             self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
 
-    def pre_opened_door(self, door_name):
-        for door_hex in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[door_name][2]:
-            if StaticWitnessLogic.CHECKS_BY_HEX[door_hex]["panelType"] in ("Door", "Laser"):
-                self.REQUIREMENTS_BY_HEX[door_hex] = frozenset({frozenset([door_name])})
-                return
+    def pre_opened_doors(self, door_names):
+        for door_name in door_names:
+            for door_hex in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[door_name][2]:
+                if StaticWitnessLogic.CHECKS_BY_HEX[door_hex]["panelType"] in ("Door", "Laser"):
+                    self.REQUIREMENTS_BY_HEX[door_hex] = frozenset({frozenset([door_name])})
+                    return
 
-            # is a panel. Remove dependency on other panels
+                # is a panel. Remove dependency on other panels
 
-            if door_hex == "0x28A0D":  # Town Church Entry (Panel) needs to stay the same
-                return
+                if door_hex == "0x28A0D":  # Town Church Entry (Panel) needs to stay the same
+                    return
 
-            self.DEPENDENT_REQUIREMENTS_BY_HEX[door_hex]["panels"] = frozenset({frozenset()})
-            self.REQUIREMENTS_BY_HEX[door_hex] = self.reduce_req_within_region(door_hex)
+                self.DEPENDENT_REQUIREMENTS_BY_HEX[door_hex]["panels"] = frozenset({frozenset()})
+                self.REQUIREMENTS_BY_HEX[door_hex] = self.reduce_req_within_region(door_hex)
 
     def __init__(self, world: MultiWorld, player: int, disabled_locations: Set[str]):
         self.YAML_DISABLED_LOCATIONS = disabled_locations

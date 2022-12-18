@@ -106,6 +106,8 @@ class WitnessWorld(World):
 
         less_junk = 0
 
+        new_preopened_doors = set()
+
         for precol_item in self.multiworld.precollected_items[self.player]:
             if precol_item.name in items_by_name:  # if item is in the pool, remove 1 instance.
                 item_obj = items_by_name[precol_item.name]
@@ -115,7 +117,11 @@ class WitnessWorld(World):
 
             # elif because logic should only change if the item is not already in the pool
             elif precol_item.name in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
-                self.player_logic.pre_opened_door(precol_item.name)
+                new_preopened_doors.add(precol_item.name)
+
+        if new_preopened_doors:
+            self.player_logic.pre_opened_doors(new_preopened_doors)
+            self.regio.pre_opened_doors(self.multiworld, self.player, self.player_logic, new_preopened_doors)
 
         # Put good item on first check if there are any of the designated "good items" in the pool
         good_items_in_the_game = []
