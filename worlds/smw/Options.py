@@ -198,7 +198,8 @@ class Autosave(DefaultOnToggle):
 
 class EarlyClimb(Toggle):
     """
-    Whether a save prompt will appear after every level
+    Force Climb to appear early in the seed as a local item.
+    This is particularly useful to prevent BK when Level Shuffle is disabled
     """
     display_name = "Early Climb"
 
