@@ -1,7 +1,7 @@
 from BaseClasses import MultiWorld
 from .Names import LocationName, ItemName
 from .Items import exclusionItem_table
-from ..generic.Rules import add_rule, forbid_item
+from ..generic.Rules import add_rule, forbid_items,add_item_rule
 from .Locations import popupChecks,formChecks,ag2Checks,corChecks
 
 
@@ -11,9 +11,8 @@ def set_rules(world: MultiWorld, player: int):
 
         #Forbid Ablilites on popups due to game limitations
         for location in popupChecks:
-            if location==LocationName.EncampmentAreaMap:
-                print("your momma")
-            forbid_item(world.get_location(location,player),player,exclusionItem_table["Ability"])        
+            forbid_items(world.get_location(location,player),exclusionItem_table["Ability"]) 
+
         
         #Final checks of cor requires more locks than other checks in cor
         add_rule(world.get_location(LocationName.CoRMineshaftUpperLevelAPBoost,player),lambda state:
@@ -25,6 +24,8 @@ def set_rules(world: MultiWorld, player: int):
                  and state.kh_AerialDodge_level(player,3)
                  and state.kh_Glide_level(player,3))
 
+
+        
 
         add_rule(world.get_location(LocationName.Valorlvl2,player),lambda state: state.kh_FormLevel_unlocked(player,1))
         add_rule(world.get_location(LocationName.Valorlvl3,player),lambda state: state.kh_FormLevel_unlocked(player,1))
@@ -64,12 +65,12 @@ def set_rules(world: MultiWorld, player: int):
         #Option to be more in line of the current KH2 Randomizer
         if world.Max_Logic[player].value==0:
             for location in corChecks:
-                forbid_item(world.get_location(location,player),player, exclusionItem_table["Forms"] and "Torn Page")
+                forbid_items(world.get_location(location,player),player, exclusionItem_table["Forms"] and "Torn Page")
             for location in ag2Checks:
-                forbid_item(world.get_location(location,player),player, exclusionItem_table["Forms"] and "Torn Page")
+                forbid_items(world.get_location(location,player),player, exclusionItem_table["Forms"] and "Torn Page")
             #forbid forms on forms
             for location in formChecks:
-                forbid_item(world.get_location(formChecks[x],player),player, exclusionItem_table["Forms"] and "Torn Page")
+                forbid_items(world.get_location(location,player),player, exclusionItem_table["Forms"] and "Torn Page")
 
         #Creating Accsess rules for terra and mushroom 13 checks
         add_rule(world.get_location(LocationName.LingeringWillBonus,player),lambda state: state.has(ItemName.ProofofConnection,player))

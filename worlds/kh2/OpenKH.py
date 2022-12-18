@@ -12,9 +12,10 @@ import zipfile
 import jinja2
 import Utils
 import worlds.Files
+
 from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
-from .Items import KH2Item, ItemData, item_dictionary_table,lookup_kh2id_to_name
-from .Locations import all_locations, setup_locations,LocationName
+from .Items import KH2Item, ItemData, item_dictionary_table,lookup_kh2id_to_name, exclusionItem_table
+from .Locations import all_locations, setup_locations,LocationName, popupChecks
 from .Options import FinalEXP, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement,KH2_Options
 from .modYml import modYml
 from .Names import ItemName
@@ -40,7 +41,7 @@ def patch_kh2(world,player,self,output_directory):
         if lvlStats[i]=="mag":
             self.magic+=2
         if lvlStats[i]=="def":
-            self.defense+=2
+            self.defense+=1
         if lvlStats[i]=="ap":
             self.ap+=2
 
@@ -55,7 +56,7 @@ def patch_kh2(world,player,self,output_directory):
     self.formattedItem = {"Stats":[]}
     self.strength=2
     self.magic   =6
-    self.defense =0
+    self.defense =2
     self.ap=     50
     mod_name = "RandoSeed"
 
@@ -66,7 +67,12 @@ def patch_kh2(world,player,self,output_directory):
             itemcode=location.item.code.kh2id
         else:
             itemcode= 461
+        
         if location.address.yml=="Chest":
+            if location.name in popupChecks:
+
+                 if location.item.name in exclusionItem_table["Ability"]:
+                     print("uh oh")
             self.formattedTrsr[location.address.locid] = {"ItemId":itemcode}
 
 
@@ -98,7 +104,6 @@ def patch_kh2(world,player,self,output_directory):
         elif location.address.yml=="Levels": 
             increaseStat(random.randint(0,3))
             #this means if Item Nothing or potion
-            print(self.multiworld.Sora_Level_EXP[self.player].value)
             if itemcode==1:
                 itemcode=0
                 increaseStat(random.randint(0,3))
@@ -115,7 +120,6 @@ def patch_kh2(world,player,self,output_directory):
                 "Character": "Sora",
                 "Level": location.address.locid
                }
-            print(self.formattedLvup)
 
 
         elif location.address.yml=="Keyblade":
@@ -170,15 +174,20 @@ def patch_kh2(world,player,self,output_directory):
 
 
 
-
-
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__,)
+    
+    #mod_dirs = worlds.Files.APContainer.path[:-4]
+    #for files in os.walk(mod_dirs):
+    #    print(files)
     os.makedirs(mod_dir, exist_ok=False)
+    print(os.path.join(os.path.dirname(__file__), "mod_template"))
+    bossrndo = os.path.join(mod_dir, "Cum")
+    os.makedirs(bossrndo,exist_ok=True)
     with open(os.path.join(mod_dir, "Trsrlist.yml"), "wt") as f:
         f.write(yaml.dump(self.formattedTrsr,line_break="\n"))
     with open(os.path.join(mod_dir, "LvupList.yml"), "wt") as f:
         f.write(yaml.dump(self.formattedLvup,line_break="\n"))
-    with open(os.path.join(mod_dir, "BonList.yml"), "wt") as f:
+    with open(os.path.join(mod_dir, "BonsList.yml"), "wt") as f:
         f.write(yaml.dump(self.formattedBons,line_break="\n"))
     with open(os.path.join(mod_dir, "ItemList.yml"), "wt") as f:
         f.write(yaml.dump(self.formattedItem,line_break="\n"))
@@ -186,11 +195,9 @@ def patch_kh2(world,player,self,output_directory):
         f.write(yaml.dump(self.formattedFmlv,line_break="\n"))
     with open(os.path.join(mod_dir, "jm.yml"), "wt") as f:
         f.write(yaml.dump(modYml.getJMYAML(), line_break="\n"))
-    with open(os.path.join(mod_dir, "mod.yml"), "wt") as f:
-        f.write(yaml.dump(modYml.getDefaultMod(), line_break="\n"))
+    shutil.copytree(os.path.join(os.path.dirname(__file__), "mod_template"),mod_dir,dirs_exist_ok=True)
     shutil.make_archive(mod_dir,'zip',mod_dir)
     shutil.rmtree(mod_dir)
-    
 
     #mod_dir = os.path.join(output_directory, "Randoseed.zip")
     #os.makedirs(mod_dir, exist_ok=True)

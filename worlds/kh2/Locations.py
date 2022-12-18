@@ -29,15 +29,15 @@ LocationName.MountainTrailLightningShard            : LocationData(0x130007,Fals
 LocationName.MountainTrailRecoveryRecipe            : LocationData(0x130008,False,23,"Chest"),
 LocationName.MountainTrailEther                     : LocationData(0x130009,False,122,"Chest"),
 LocationName.MountainTrailMythrilShard              : LocationData(0x13000A,False,123,"Chest"),
-LocationName.VillageCaveAreaMap                     : LocationData(0x13000B,False,124,"Chest"),
+LocationName.VillageCaveAreaMap                     : LocationData(0x13000B,False,495,"Chest"),
 LocationName.VillageCaveAPBoost                     : LocationData(0x13000C,False,125,"Chest"),
-LocationName.VillageCaveDarkShard                   : LocationData(0x13000D,False,495,"Chest"),
+LocationName.VillageCaveDarkShard                   : LocationData(0x13000D,False,124,"Chest"),
 LocationName.VillageCaveBonus                       : LocationData(0x13000E,False,43,"Get Bonus"),
 LocationName.RidgeFrostShard                        : LocationData(0x13000F,False,24,"Chest"),
 LocationName.RidgeAPBoost                           : LocationData(0x130010,False,126,"Chest"),
 LocationName.ShanYu                                 : LocationData(0x130011,False,9,"Double Get Bonus"),
 LocationName.ShanYuGetBonus                         : LocationData(0x130012,False,9,"Second Get Bonus"),
-LocationName.HiddenDragon                           : LocationData(0x130013,False,357,"Chest"),
+LocationName.HiddenDragon                           : LocationData(0x130013,False,257,"Chest"),
 }                                                                  
 LoD2_Checks={
 LocationName.ThroneRoomTornPages                    : LocationData(0x130014,False,25,"Chest"),
@@ -119,7 +119,7 @@ LocationName.FuturePeteGetBonus                     : LocationData(0x130057,Fals
 LocationName.Monochrome                             : LocationData(0x130058,False,261,"Chest"),
 LocationName.WisdomForm                             : LocationData(0x130059,False,262,"Chest"),
 LocationName.MarluxiaGetBonus                       : LocationData(0x13005A,False,67,"Get Bonus"),
-LocationName.MarluxiaASEternalBlossom               : LocationData(0x13005B,False,584,"Chest"),
+LocationName.MarluxiaASEternalBlossom               : LocationData(0x13005B,False,548,"Chest"),
 LocationName.MarluxiaDataLostIllusion               : LocationData(0x13005C,False,553,"Chest"),
 LocationName.LingeringWillBonus                     : LocationData(0x13005D,False,70,"Get Bonus"),
 LocationName.LingeringWillProofofConnection         : LocationData(0x13005E,False,587,"Chest"),
@@ -274,7 +274,7 @@ LocationName.CentralComputerCoreCosmicArts          : LocationData(0x1300D8,Fals
 LocationName.CentralComputerCoreMap                 : LocationData(0x1300D9,False,488,"Chest"),
 LocationName.MCP                                    : LocationData(0x1300DA,False,32,"Double Get Bonus"),
 LocationName.MCPGetBonus                            : LocationData(0x1300DB,False,32,"Second Get Bonus"),
-LocationName.LarxeneBonus                           : LocationData(0x1300DC,False,68,"Chest"),
+LocationName.LarxeneBonus                           : LocationData(0x1300DC,False,68,"Get Bonus"),
 LocationName.LarxeneASCloakedThunder                : LocationData(0x1300DD,False,547,"Chest"),
 LocationName.LarxeneDataLostIllusion                : LocationData(0x1300DE,False,552,"Chest"),
 }                                                                  
@@ -294,16 +294,16 @@ LocationName.CandyCaneLaneMythrilStone              : LocationData(0x1300EA,Fals
 LocationName.SantasHouseChristmasTownMap            : LocationData(0x1300EB,False,57,"Chest"),
 LocationName.SantasHouseAPBoost                     : LocationData(0x1300EC,False,58,"Chest"),
 LocationName.PrisonKeeper                           : LocationData(0x1300ED,False,18,"Get Bonus"),
-LocationName.OogieBoogie                            : LocationData(0x1300EE,False,19,"Chest"),
+LocationName.OogieBoogie                            : LocationData(0x1300EE,False,19,"Get Bonus"),
 LocationName.OogieBoogieMagnetElement               : LocationData(0x1300EF,False,301,"Chest"),
 }                                                                  
 HT2_Checks={                                                       
-LocationName.Lock                                   : LocationData(0x1300F0,False,40,"Chest"),
+LocationName.Lock                                   : LocationData(0x1300F0,False,40,"Get Bonus"),
 LocationName.Present                                : LocationData(0x1300F1,False,297,"Chest"),
 LocationName.DecoyPresents                          : LocationData(0x1300F2,False,298,"Chest"),
 LocationName.Experiment                             : LocationData(0x1300F3,False,20,"Get Bonus"),
 LocationName.DecisivePumpkin                        : LocationData(0x1300F4,False,275,"Chest"),
-LocationName.VexenBonus                             : LocationData(0x1300F5,False,64,"Chest"),
+LocationName.VexenBonus                             : LocationData(0x1300F5,False,64,"Get Bonus"),
 LocationName.VexenASRoadtoDiscovery                 : LocationData(0x1300F6,False,544,"Chest"),
 LocationName.VexenDataLostIllusion                  : LocationData(0x1300F7,False,549,"Chest"),
 }                                                                  
@@ -442,7 +442,7 @@ LocationName.OasisTornPages                         : LocationData(0x130170,Fals
 LocationName.OasisAPBoost                           : LocationData(0x130171,False,413,"Chest"),
 LocationName.CircleofLife                           : LocationData(0x130172,False,264,"Chest"),
 LocationName.Hyenas1                                : LocationData(0x130173,False,49,"Get Bonus"),
-LocationName.Scar                                   : LocationData(0x130174,False,29,"Chest"),
+LocationName.Scar                                   : LocationData(0x130174,False,29,"Get Bonus"),
 LocationName.ScarFireElement                        : LocationData(0x130175,False,302,"Chest"),
 }                                                                  
 PL2_Checks={                                                       
@@ -582,7 +582,7 @@ LocationName.FinalXemnas                            : LocationData(0x1301EE,Fals
 LocationName.XemnasDataPowerBoost                   : LocationData(0x1301EF,False,554,"Chest"),
 }                                                                  
 SoraLevels={                                                       
-    LocationName.Lvl1                               : LocationData(0x1301F0,False,2,"Levels"),
+    LocationName.Lvl1                               : LocationData(0x1301F0,False,1,"Levels"),
     LocationName.Lvl2                               : LocationData(0x1301F1,False,2,"Levels"),
     LocationName.Lvl3                               : LocationData(0x1301F2,False,3,"Levels"),
     LocationName.Lvl4                               : LocationData(0x1301F3,False,4,"Levels"),
@@ -753,7 +753,10 @@ Keyblade_Slots={
     LocationName.FenrirSlot                     :LocationData(0x130291,False,142,"Keyblade"),
     LocationName.UltimaWeaponSlot               :LocationData(0x130292,False,143,"Keyblade"),
     LocationName.WinnersProofSlot               :LocationData(0x130293,False,149,"Keyblade"),
-    }                                                             
+    }                     
+Critical_Checks={
+    
+    }
 exclusion_table = {                                                
     "Datas": {                                                     
         LocationName.XemnasDataPowerBoost,                         
@@ -961,6 +964,7 @@ popupChecks=[
         LocationName.MarketplaceMap,
         LocationName.MerlinsHouseMembershipCard,
         LocationName.MerlinsHouseBlizzardElement,
+        LocationName.BaileySecretAnsemReport7,
         LocationName.BaseballCharm,
         LocationName.AnsemsStudyMasterForm,  
         LocationName.AnsemsStudySleepingLion,
@@ -991,6 +995,7 @@ popupChecks=[
         LocationName.HadesCupTrophyParadoxCups,
         LocationName.IsladeMuertaMap,
         LocationName.FollowtheWind,
+        LocationName.SeadriftRowCursedMedallion,
         LocationName.SeadriftRowShipGraveyardMap,
         LocationName.SecretAnsemReport6,
         LocationName.CircleofLife,

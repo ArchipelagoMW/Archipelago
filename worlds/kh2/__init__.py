@@ -137,15 +137,17 @@ class KH2World(World):
 
 
         #Creating the progression/ stat increases
-        for x in range(7):
-            itempool += [self.create_item(ItemName.ItemSlotUp)]
-        for x in range(20):
-            itempool += [self.create_item(ItemName.MaxHPUp)]     
         for x in range(4):
-            itempool += [self.create_item(ItemName.MaxMPUp)]     
-        for x in range(6):
-            itempool += [self.create_item(ItemName.DriveGaugeUp)]  
+            itempool+=[self.create_item(ItemName.TornPages)]
+        for x in range(4):
+            itempool += [self.create_item(ItemName.ItemSlotUp)]
+        for x in range(19):
+            itempool += [self.create_item(ItemName.MaxHPUp)]     
         for x in range(3):
+            itempool += [self.create_item(ItemName.MaxMPUp)]     
+        for x in range(5):
+            itempool += [self.create_item(ItemName.DriveGaugeUp)]  
+        for x in range(2):
             itempool +=[self.create_item(ItemName.ArmorSlotUp)]  
             itempool +=[self.create_item(ItemName.AccessorySlotUp)]
         for x in range(2):
@@ -164,7 +166,7 @@ class KH2World(World):
 
         #Creating filler for unfilled locations
         
-        while len(itempool)-1<totallocations:
+        while len(itempool)-1<=totallocations:
             item=random.choice(fillerItems)
             itempool+=[self.create_item(item)]
         self.multiworld.itempool += itempool
