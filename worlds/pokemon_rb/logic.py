@@ -80,3 +80,8 @@ class PokemonLogic(LogicMixin):
         return (self.can_reach('Mt Moon 1F - Southwest Item', 'Location', player) and
                 self.can_reach('Cinnabar Island - Lab Scientist', 'Location', player) and len(
             [item for item in ["Dome Fossil", "Helix Fossil", "Old Amber"] if self.has(item, player)]) >= count)
+
+    def pokemon_rb_cinnabar_gym(self, player):
+        # ensures higher level Pokémon are obtainable before Cinnabar Gym is in logic
+        return ((not self.multiworld.extra_key_items[player]) or self.has("Mansion Key", player)
+                or self.has("Oak's Parcel", player) or self.pokemon_rb_can_surf(player))

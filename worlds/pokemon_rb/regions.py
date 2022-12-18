@@ -248,7 +248,7 @@ def create_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Viridian City", "Viridian City North", lambda state: state.has("Oak's Parcel", player) or state.multiworld.old_man[player].value == 2 or state.pokemon_rb_can_cut(player))
     connect(multiworld, player, "Route 3", "Mt Moon 1F", one_way=True)
     connect(multiworld, player, "Route 11", "Route 11 East", lambda state: state.pokemon_rb_can_strength(player))
-    connect(multiworld, player, "Cinnabar Island", "Cinnabar Gym", lambda state: state.has("Secret Key", player), one_way=True)
+    connect(multiworld, player, "Cinnabar Island", "Cinnabar Gym", lambda state: state.has("Secret Key", player) and state.pokemon_rb_cinnabar_gym(player), one_way=True)
     connect(multiworld, player, "Cinnabar Island", "Pokemon Mansion 1F", lambda state: state.has("Mansion Key", player) or not state.multiworld.extra_key_items[player].value, one_way=True)
     connect(multiworld, player, "Seafoam Islands 1F", "Seafoam Islands B1F", one_way=True)
     connect(multiworld, player, "Seafoam Islands B1F", "Seafoam Islands B2F", one_way=True)
