@@ -26,6 +26,7 @@ class Group(TypedDict, total=False):
     replacement_items: Dict[int, Optional[str]]
     local_items: Set[str]
     non_local_items: Set[str]
+    link_replacement: bool
 
 
 class MultiWorld():
@@ -222,27 +223,32 @@ class MultiWorld():
 
     def set_item_links(self):
         item_links = {}
-
+        replacement_prio = [False, True, None]
         for player in self.player_ids:
             for item_link in self.item_links[player].value:
                 if item_link["name"] in item_links:
                     if item_links[item_link["name"]]["game"] != self.game[player]:
                         raise Exception(f"Cannot ItemLink across games. Link: {item_link['name']}")
-                    item_links[item_link["name"]]["players"][player] = item_link["replacement_item"]
-                    item_links[item_link["name"]]["item_pool"] &= set(item_link["item_pool"])
-                    item_links[item_link["name"]]["exclude"] |= set(item_link.get("exclude", []))
-                    item_links[item_link["name"]]["local_items"] &= set(item_link.get("local_items", []))
-                    item_links[item_link["name"]]["non_local_items"] &= set(item_link.get("non_local_items", []))
+                    current_link = item_links[item_link["name"]]
+                    current_link["players"][player] = item_link["replacement_item"]
+                    current_link["item_pool"] &= set(item_link["item_pool"])
+                    current_link["exclude"] |= set(item_link.get("exclude", []))
+                    current_link["local_items"] &= set(item_link.get("local_items", []))
+                    current_link["non_local_items"] &= set(item_link.get("non_local_items", []))
+                    current_link["link_replacement"] = min(current_link["link_replacement"],
+                                                           replacement_prio.index(item_link["link_replacement"]))
                 else:
                     if item_link["name"] in self.player_name.values():
-                        raise Exception(f"Cannot name a ItemLink group the same as a player ({item_link['name']}) ({self.get_player_name(player)}).")
+                        raise Exception(f"Cannot name a ItemLink group the same as a player ({item_link['name']}) "
+                                        f"({self.get_player_name(player)}).")
                     item_links[item_link["name"]] = {
                         "players": {player: item_link["replacement_item"]},
                         "item_pool": set(item_link["item_pool"]),
                         "exclude": set(item_link.get("exclude", [])),
                         "game": self.game[player],
                         "local_items": set(item_link.get("local_items", [])),
-                        "non_local_items": set(item_link.get("non_local_items", []))
+                        "non_local_items": set(item_link.get("non_local_items", [])),
+                        "link_replacement": replacement_prio.index(item_link["link_replacement"]),
                     }
 
         for name, item_link in item_links.items():
@@ -267,10 +273,12 @@ class MultiWorld():
         for group_name, item_link in item_links.items():
             game = item_link["game"]
             group_id, group = self.add_group(group_name, game, set(item_link["players"]))
+
             group["item_pool"] = item_link["item_pool"]
             group["replacement_items"] = item_link["players"]
             group["local_items"] = item_link["local_items"]
             group["non_local_items"] = item_link["non_local_items"]
+            group["link_replacement"] = replacement_prio[item_link["link_replacement"]]
 
     # intended for unittests
     def set_default_common_options(self):

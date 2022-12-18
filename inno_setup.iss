@@ -152,6 +152,7 @@ Type: dirifempty; Name: "{app}"
 [InstallDelete]
 Type: files; Name: "{app}\ArchipelagoLttPClient.exe"
 Type: filesandordirs; Name: "{app}\lib\worlds\rogue-legacy*"
+#include "installdelete.iss"
 
 [Registry]
 
@@ -200,15 +201,15 @@ Root: HKCR; Subkey: "{#MyAppName}n64zpf";                     ValueData: "Archip
 Root: HKCR; Subkey: "{#MyAppName}n64zpf\DefaultIcon";         ValueData: "{app}\ArchipelagoOoTClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/oot
 Root: HKCR; Subkey: "{#MyAppName}n64zpf\shell\open\command";  ValueData: """{app}\ArchipelagoOoTClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/oot
 
-Root: HKCR; Subkey: ".apred";                                    ValueData: "{#MyAppName}pkmnrpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/pkmn/red
-Root: HKCR; Subkey: "{#MyAppName}pkmnrpatch";                     ValueData: "Archipelago Pokemon Red Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/pkmn/red
-Root: HKCR; Subkey: "{#MyAppName}pkmnrpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoPokemonClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/pkmn/red
-Root: HKCR; Subkey: "{#MyAppName}pkmnrpatch\shell\open\command";  ValueData: """{app}\ArchipelagoPokemonClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/pkmn/red
+Root: HKCR; Subkey: ".apred";                                    ValueData: "{#MyAppName}pkmnrpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/pkmn
+Root: HKCR; Subkey: "{#MyAppName}pkmnrpatch";                     ValueData: "Archipelago Pokemon Red Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/pkmn
+Root: HKCR; Subkey: "{#MyAppName}pkmnrpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoPokemonClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/pkmn
+Root: HKCR; Subkey: "{#MyAppName}pkmnrpatch\shell\open\command";  ValueData: """{app}\ArchipelagoPokemonClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/pkmn
 
-Root: HKCR; Subkey: ".apblue";                                    ValueData: "{#MyAppName}pkmnbpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/pkmn/blue
-Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch";                     ValueData: "Archipelago Pokemon Blue Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/pkmn/blue
-Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoPokemonClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/pkmn/blue
-Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\shell\open\command";  ValueData: """{app}\ArchipelagoPokemonClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/pkmn/blue
+Root: HKCR; Subkey: ".apblue";                                    ValueData: "{#MyAppName}pkmnbpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/pkmn
+Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch";                     ValueData: "Archipelago Pokemon Blue Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/pkmn
+Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoPokemonClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/pkmn
+Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\shell\open\command";  ValueData: """{app}\ArchipelagoPokemonClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/pkmn
 
 Root: HKCR; Subkey: ".archipelago";                              ValueData: "{#MyAppName}multidata";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: server
 Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Archipelago Server Data";       Flags: uninsdeletekey;  ValueType: string;  ValueName: ""; Components: server
