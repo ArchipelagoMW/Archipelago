@@ -190,7 +190,7 @@ def create_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Pokemon Tower 6F", "Pokemon Tower 7F", lambda state: state.has("Silph Scope", player))
     connect(multiworld, player, "Cerulean City", "Route 5")
     connect(multiworld, player, "Route 5", "Saffron City", lambda state: state.pokemon_rb_can_pass_guards(player))
-    connect(multiworld, player, "Saffron City", "Fighting Dojo", one_way=True)
+    connect(multiworld, player, "Saffron City", "Fighting Dojo", lambda state: state.pokemon_rb_dojo(player), one_way=True)
     connect(multiworld, player, "Route 5", "Underground Tunnel North-South")
     connect(multiworld, player, "Route 6", "Underground Tunnel North-South")
     connect(multiworld, player, "Route 6", "Saffron City", lambda state: state.pokemon_rb_can_pass_guards(player))
