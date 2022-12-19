@@ -9,16 +9,6 @@ class StartWithJewelryBox(Toggle):
     display_name = "Start with Jewelry Box"
 
 
-#class ProgressiveVerticalMovement(Toggle):
-#    "Always find vertical movement in the following order Succubus Hairpin -> Light Wall -> Celestial Sash"
-#    display_name = "Progressive vertical movement"
-
-
-#class ProgressiveKeycards(Toggle):
-#    "Always find Security Keycard's in the following order D -> C -> B -> A"
-#    display_name = "Progressive keycards"
-
-
 class DownloadableItems(DefaultOnToggle):
     "With the tablet you will be able to download items at terminals"
     display_name = "Downloadable items"
@@ -47,11 +37,6 @@ class SpecificKeycards(Toggle):
 class Inverted(Toggle):
     "Start in the past"
     display_name = "Inverted"
-
-
-#class StinkyMaw(Toggle):
-#    "Require gasmask for Maw"
-#    display_name = "Stinky Maw"
 
 
 class GyreArchives(Toggle):
@@ -292,18 +277,20 @@ class ShowDrops(Toggle):
     display_name = "Show Bestiary Item Drops"
 
 
+class EnterSandman(Toggle):
+    "The Ancient Pyramid is unlocked by the Twin Pyramid Keys, but the final boss door opens if you have all 5 Timespinner pieces"
+    display_name = "Enter Sandman"
+
+
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Option] = {
     "StartWithJewelryBox": StartWithJewelryBox,
-    #"ProgressiveVerticalMovement": ProgressiveVerticalMovement,
-    #"ProgressiveKeycards": ProgressiveKeycards,
     "DownloadableItems": DownloadableItems,
     "EyeSpy": EyeSpy,
     "StartWithMeyef": StartWithMeyef,
     "QuickSeed": QuickSeed,
     "SpecificKeycards": SpecificKeycards,
     "Inverted": Inverted,
-    #"StinkyMaw": StinkyMaw,
     "GyreArchives": GyreArchives,
     "Cantoran": Cantoran,
     "LoreChecks": LoreChecks,
@@ -322,6 +309,7 @@ timespinner_options: Dict[str, Option] = {
     "LootTierDistro": LootTierDistro,
     "ShowBestiary": ShowBestiary,
     "ShowDrops": ShowDrops,
+    "EnterSandman": EnterSandman,
     "DeathLink": DeathLink,
 }
 

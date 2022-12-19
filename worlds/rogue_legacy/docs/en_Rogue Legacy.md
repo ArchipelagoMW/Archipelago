@@ -3,7 +3,7 @@
 ## Where is the settings page?
 
 The [player settings page for this game](../player-settings) contains most of the options you need to 
-configure and export a config file. Some settings can only be made via YAML, but an explaination can be found in the
+configure and export a config file. Some settings can only be made in YAML, but an explanation can be found in the
 [template yaml here](../../../static/generated/configs/Rogue%20Legacy.yaml).
 
 ## What does randomization do to this game?
@@ -13,7 +13,6 @@ upgrade screen, bosses, and some special individual locations. The goal is to be
 zone bosses and then defeat The Fountain.
 
 ## What items and locations get shuffled?
-
 All the skill upgrades, class upgrades, runes packs, and equipment packs are shuffled in the manor upgrade screen, diary
 checks, chests and fairy chests, and boss rewards. Skill upgrades are also grouped in packs of 5 to make the finding of
 stats less of a chore. Runes and Equipment are also grouped together.
@@ -24,7 +23,6 @@ Some additional locations that can contain items are the Jukebox, the Portraits,
 
 Any of the items which can be shuffled may also be placed into another player's world. It is possible to choose to limit
 certain items to your own world.
-
 ## When the player receives an item, what happens?
 
 When the player receives an item, your character will hold the item above their head and display it to the world. It's

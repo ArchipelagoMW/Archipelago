@@ -60,6 +60,13 @@ class ShorterLevelDuration(OC2OnToggle):
     display_name = "Shorter Level Duration"
 
 
+class ShortHordeLevels(OC2OnToggle):
+    """Modifies horde levels to contain roughly 1/3rd fewer waves than in the original game.
+
+    The kitchen's health is sacled appropriately to preserve the same approximate difficulty."""
+    display_name = "Shorter Horde Levels"
+
+
 class PrepLevels(Choice):
     """Choose How "Prep Levels" are handled (levels where the timer does not start until the first order is served):
 
@@ -107,6 +114,7 @@ overcooked_options = {
     # quality of life options
     "fix_bugs": FixBugs,
     "shorter_level_duration": ShorterLevelDuration,
+    "short_horde_levels": ShortHordeLevels,
     "always_preserve_cooking_progress": AlwaysPreserveCookingProgress,
     "always_serve_oldest_order": AlwaysServeOldestOrder,
     "display_leaderboard_scores": DisplayLeaderboardScores,
