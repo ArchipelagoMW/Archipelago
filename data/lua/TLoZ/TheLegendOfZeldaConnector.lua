@@ -26,6 +26,18 @@ local wU8 = nil
 local isNesHawk = false
 
 local shopsChecked = {}
+local shopSlotLeft       = 0x0628
+local shopSlotMiddle     = 0x0629
+local shopSlotRight      = 0x062A
+
+--N.B.: you won't find these in a RAM map. They're flag values that the base patch derives from the cave ID.
+local blueRingShopBit       = 0x40
+local potionShopBit         = 0x02
+local arrowShopBit          = 0x08
+local candleShopBit         = 0x10
+local shieldShopBit         = 0x20
+local takeAnyCaveBit        = 0x01
+
 
 local sword                 = 0x0657
 local bombs                 = 0x0658
@@ -396,52 +408,11 @@ local function StateOKForMainLoop()
 end
 
 local function checkCaveItemObtained()
-    memDomain.ram()
-    local gameMode = u8(0x12)
+    memDomain.ram() 
     local returnTable = {}
-    returnTable["itemSlot"] = -1
-    returnTable["caveType"] = "None"
-    local screen = u8(0xEB)
-    returnTable["screen"] = screen
-    if bit.band(gameMode, 0x0B) then -- if we're in a cave
-        --local itemLift = u8(0x506)
-        --local xPosition = u8(0x70)
-        if rupeesToSubtract > 0 then
-            itemSlot = u8(0x438)
-            returnTable["itemSlot"] = u8(0x438) + 1
-            if itemSlot == 0 then
-                returnTable["itemSlot"] = "Left"
-            end
-            if itemSlot == 1 then
-                returnTable["itemSlot"] = "Middle"
-            end
-            if itemSlot == 2 then
-                returnTable["itemSlot"] = "Right"
-            end
-            memDomain.rom()
-            local caveType = u8(0x18480 + screen)
-            caveType = caveType - 0x40
-            caveType = math.floor(caveType / 4)
-            if caveType == 0x10 then
-                returnTable["caveType"] = "Blue Ring Shop"
-            end
-            if caveType == 0x0A then
-                returnTable["caveType"] = "Potion Shop"
-            end
-            if caveType == 0x0E then
-                returnTable["caveType"] = "Candle Shop"
-            end
-            if caveType == 0x0F then
-                returnTable["caveType"] = "Shield Shop"
-            end
-            if caveType == 0x0D then
-                returnTable["caveType"] = "Arrow Shop"
-            end
-            --if caveType == 0x01 then
-            --    returnTable["caveType"] = "Take Any"
-            --end
-        end
-    end
+    returnTable["slot1"] = u8(shopSlotLeft)
+    returnTable["slot2"] = u8(shopSlotMiddle)
+    returnTable["slot3"] = u8(shopSlotRight)
     return returnTable
 end
 
@@ -591,6 +562,13 @@ function processBlock(block)
                     end
                 end
             end
+        end
+        local shopsBlock = block["shops"]
+        if shopsBlock ~= nil then
+            print(shopsBlock)
+            wU8(shopSlotLeft, bit.bor(u8(shopSlotLeft), shopsBlock["left"]))
+            wU8(shopSlotMiddle, bit.bor(u8(shopSlotMiddle), shopsBlock["middle"]))
+            wU8(shopSlotRight, bit.bor(u8(shopSlotRight), shopsBlock["right"]))
         end
     end
 end

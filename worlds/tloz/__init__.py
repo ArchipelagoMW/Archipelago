@@ -3,6 +3,8 @@ import os
 import threading
 from typing import NamedTuple, Union
 
+import bsdiff4
+
 import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
 from .ItemPool import generate_itempool, starting_weapons, dangerous_weapon_locations
@@ -23,7 +25,7 @@ class TLoZWeb(WebWorld):
         "English",
         "multiworld_en.md",
         "multiworld/en",
-        ["Rosalie"]
+        ["Rosalie and Figment"]
     )
 
     tutorials = [setup]
@@ -290,47 +292,44 @@ class TLoZWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Rescued Zelda!", self.player)
         generate_itempool(self)
 
-    def apply_base_patch(self, rom_data):
+    def apply_base_patch(self, rom):
         # Remove Triforce check for recorder, so you can always warp.
-        rom_data[0x60CC:0x60CF] = bytearray([0xA9, 0xFF, 0xEA])
-
         # Remove level check for Triforce Fragments (and maps and compasses, but this won't matter)
-        rom_data[0x6C9B:0x6C9D] = bytearray([0xEA, 0xEA])
-
         # Replace AND #07 TAY with a JSR to free space later in the bank
-        rom_data[0x6CB5:0x6CB8] = bytearray([0x20, 0xF0, 0x7E])
-
         # Check if we're picking up a Triforce Fragment. If so, increment the local count
         # In either case, we do the instructions we overwrote with the JSR and then RTS to normal flow
         # N.B.: the location of these instructions in the PRG ROM and where the bank is mapped to
         # do not correspond to each other: while it is not an error that we're jumping to 7EF0,
         # this was calculated by hand, and so if any errors arise it'll likely be here.
-        rom_data[0x7770:0x777B] = bytearray([0xE0, 0x1B, 0xD0, 0x03, 0xEE, 0x79, 0x06, 0x29, 0x07, 0xAA, 0x60])
-
         # Reduce variety of boss roars in order to make room for additional dungeon items
-        rom_data[0x1534C] = 0x40
-
         # Remove map/compass check so they're always on
-        rom_data[0x17614:0x17617] = bytearray([0xA9, 0xA1, 0x60])
-
         # Stealing a bit from the boss roars flag, so we can have more dungeon items. This allows us to
         # go past 0x1F items for dungeon drops.
-        rom_data[0x1785D] = 0x3F
-
-        # Since we're stealing a bit from the boss roars, we need to cleanse all the item data
-        # of bit 5 or else former boss roar rooms will get items they shouldn't.
+        rom_data = None
+        with open("worlds/tloz/z1_base_patch.bsdiff4", "rb") as base_patch:
+            rom_data = bsdiff4.patch(rom.read(), base_patch.read())
+        rom_data = bytearray(rom_data)
+        # Set every item to the new nothing value, but keep room flags. Type 2 boss roars should
+        # become type 1 boss roars, so we at least keep the sound of roaring where it should be.
         for i in range(0, 0x7F):
             item = rom_data[first_quest_dungeon_items_early + i]
-            rom_data[first_quest_dungeon_items_early + i] = item & 0b11011111
+            if item & 0b00100000:
+                rom_data[first_quest_dungeon_items_early + i] = item | 0b01000000
+            if item & 0b0000011: # Change all Item 03s to Item 3F, the proper "nothing"
+                rom_data[first_quest_dungeon_items_early + i] = item | 0b00111111
+            rom_data[first_quest_dungeon_items_early + i] = item & 0b11000000
+
             item = rom_data[first_quest_dungeon_items_late + i]
-            rom_data[first_quest_dungeon_items_late + i] = item & 0b11011111
+            if item & 0b00100000:
+                rom_data[first_quest_dungeon_items_late + i] = item | 0b01000000
+            if item & 0b00000011:
+                rom_data[first_quest_dungeon_items_late + i] = item | 0b00111111
+            rom_data[first_quest_dungeon_items_late + i] = item & 0b11000000
+        return rom_data
 
     def apply_randomizer(self):
         with open(get_base_rom_path(), 'rb') as rom:
-            rom_data = bytearray(rom.read())
-
-            self.apply_base_patch(rom_data)
-
+            rom_data = self.apply_base_patch(rom)
             # Write each location's new data in
             for location in self.multiworld.get_filled_locations():
                 # Zelda and Ganon aren't real locations
@@ -374,14 +373,6 @@ class TLoZWorld(World):
                 # if location.name == "Take Any Item Right":
                 #     # Same story as above: bit 6 is what makes this a Take Any cave
                 #     item_id = item_id | 0b01000000
-                if location.name in all_level_locations:
-                    # We want to preserve room flags: darkness and boss roars
-                    room_flags = rom_data[location_id]
-                    # Since we're stealing a bit for more items, we need to change any bit 6 boss roars to bit 7.
-                    if room_flags & 0b00100000 > 0:
-                        room_flags = room_flags | 0b01000000
-                    item_flags = room_flags & 0b11000000
-                    item_id = item_id | item_flags
                 rom_data[location_id] = item_id
 
             # We shuffle the tiers of rupee caves. Caves that shared a value before still will.
