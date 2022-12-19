@@ -278,17 +278,26 @@ class DarkSouls3World(World):
 
         # Depending on the specified option, modify items hexadecimal value to add an upgrade level
         item_dictionary_copy = item_dictionary.copy()
-        if self.multiworld.randomize_weapons_level[self.player]:
-            # Randomize some weapons upgrades
-            for name in weapons_upgrade_5_table.keys():
-                if self.multiworld.random.randint(0, 100) < 33:
-                    value = self.multiworld.random.randint(1, 5)
-                    item_dictionary_copy[name] += value
+        if self.multiworld.randomize_weapons_level[self.player] > 0:
+            # if the user made an error and set a min higher than the max we default to the max
+            max_5 = self.multiworld.max_levels_in_5[self.player]
+            min_5 = min(self.multiworld.min_levels_in_5[self.player], max_5)
+            max_10 = self.multiworld.max_levels_in_10[self.player]
+            min_10 = min(self.multiworld.min_levels_in_10[self.player], max_10)
+            weapons_percentage = self.multiworld.randomize_weapons_percentage[self.player]
 
-            for name in weapons_upgrade_10_table.keys():
-                if self.multiworld.random.randint(0, 100) < 33:
-                    value = self.multiworld.random.randint(1, 10)
-                    item_dictionary_copy[name] += value
+            # Randomize some weapons upgrades
+            if self.multiworld.randomize_weapons_level[self.player] in [1, 3]:  # Options are either all or +5
+                for name in weapons_upgrade_5_table.keys():
+                    if self.multiworld.random.randint(1, 100) <= weapons_percentage:
+                        value = self.multiworld.random.randint(min_5, max_5)
+                        item_dictionary_copy[name] += value
+
+            if self.multiworld.randomize_weapons_level[self.player] in [1, 2]:  # Options are either all or +10
+                for name in weapons_upgrade_10_table.keys():
+                    if self.multiworld.random.randint(1, 100) <= weapons_percentage:
+                        value = self.multiworld.random.randint(min_10, max_10)
+                        item_dictionary_copy[name] += value
 
             if self.multiworld.enable_dlc[self.player]:
                 for name in dlc_weapons_upgrade_5_table.keys():
