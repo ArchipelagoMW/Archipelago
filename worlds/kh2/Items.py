@@ -142,12 +142,12 @@ Staffs_Table={
 ItemName.Centurion2                               : ItemData(0x132009d,False,546),
 ItemName.MeteorStaff                              : ItemData(0x132009e,False,150),
 ItemName.NobodyLance                              : ItemData(0x132009f,False,155),
-ItemName.PreciousMuroom                           : ItemData(0x13200a0,False,549),
-ItemName.PreciousMuroom2                          : ItemData(0x13200a1,False,550),
-ItemName.PremiumMusroom                           : ItemData(0x13200a2,False,551),
-ItemName.RisingDraggon                            : ItemData(0x13200a3,False,154),
-ItemName.SaveTheQuueen2                           : ItemData(0x13200a4,False,503),
-ItemName.ShamansReelic                            : ItemData(0x13200a5,False,156),
+ItemName.PreciousMushroom                           : ItemData(0x13200a0,False,549),
+ItemName.PreciousMushroom2                          : ItemData(0x13200a1,False,550),
+ItemName.PremiumMushroom                           : ItemData(0x13200a2,False,551),
+ItemName.RisingDragon                            : ItemData(0x13200a3,False,154),
+ItemName.SaveTheQueen2                           : ItemData(0x13200a4,False,503),
+ItemName.ShamansRelic                            : ItemData(0x13200a5,False,156),
 }                                                      
 Shields_Table={                                        
 ItemName.AkashicRecord                            : ItemData(0x13200a6,False,146),

@@ -93,6 +93,9 @@ class Max_Logic(Toggle):
     display_name="Max Logic"
     default=True
 
+class Critical_Mode(Toggle):
+    display_name="Critical Mode"
+    default= True
 KH2_Options: typing.Dict[str, type(Option)] = {
     "Sora_Level_EXP":SoraEXP,
     "Final_Form_EXP": FinalEXP,

@@ -91,7 +91,7 @@ class KH2World(World):
     def generate_basic(self):
         itempool: typing.List[KH2Item] = []
 
-        totallocations=656
+        totallocations=663
         fillerItems=[ItemName.Potion,ItemName.HiPotion,ItemName.Ether,ItemName.Elixir,ItemName.MegaPotion,
             ItemName.MegaEther,ItemName.Megalixir,ItemName.Tent,ItemName.DriveRecovery,ItemName.HighDriveRecovery,ItemName.PowerBoost,
             ItemName.MagicBoost,ItemName.DefenseBoost,ItemName.APBoost]
@@ -120,8 +120,14 @@ class KH2World(World):
                 totallocations-=1
 
         if self.multiworld.Schmovement[self.player].value==1:
+            self.multiworld.get_location(LocationName.Crit_1, self.player).place_locked_item(self.create_item(ItemName.HighJump))   
+            self.multiworld.get_location(LocationName.Crit_2, self.player).place_locked_item(self.create_item(ItemName.QuickRun))                  
+            self.multiworld.get_location(LocationName.Crit_3, self.player).place_locked_item(self.create_item(ItemName.DodgeRoll))   
+            self.multiworld.get_location(LocationName.Crit_4, self.player).place_locked_item(self.create_item(ItemName.AerialDodge))   
+            self.multiworld.get_location(LocationName.Crit_5, self.player).place_locked_item(self.create_item(ItemName.Glide))   
             for name in{ItemName.HighJump,ItemName.QuickRun,ItemName.DodgeRoll,ItemName.AerialDodge,ItemName.Glide}:
                 self.exclude.add(name)
+                totallocations-=1
 
 
         if self.multiworld.Level_Depth[self.player].value==1:             

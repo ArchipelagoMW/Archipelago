@@ -54,10 +54,12 @@ def patch_kh2(world,player,self,output_directory):
     self.formattedBons = {}
     self.formattedFmlv = {}
     self.formattedItem = {"Stats":[]}
+    self.formattedPlrp = []
     self.strength=2
     self.magic   =6
     self.defense =2
-    self.ap=     50
+    self.ap      =50
+    soraStartingItems=[]
     mod_name = "RandoSeed"
 
 
@@ -161,7 +163,22 @@ def patch_kh2(world,player,self,output_directory):
                   "GrowthAbilityLevel": 0,
             })
 
+        elif location.address.yml=="Critical":
+            soraStartingItems.append(itemcode)
+         
     #Summons have no checks on them so done fully locally
+    self.formattedPlrp.append({
+            "Character": 1, # Sora Starting Items (Crit)
+            "Id": 7, # crit difficulty
+            "Hp": 20,
+            "Mp": 100,
+            "Ap": 50,
+            "ArmorSlotMax": 1,
+            "AccessorySlotMax": 1,
+            "ItemSlotMax": 3,
+            "Items": soraStartingItems,
+            "Padding": [0] * 52
+        })
     self.formattedFmlv["Summon"]=[]
     for x in range(1,7):
          self.formattedFmlv["Summon"].append({
@@ -193,6 +210,8 @@ def patch_kh2(world,player,self,output_directory):
         f.write(yaml.dump(self.formattedItem,line_break="\n"))
     with open(os.path.join(mod_dir, "FmlvList.yml"), "wt") as f:
         f.write(yaml.dump(self.formattedFmlv,line_break="\n"))
+    with open(os.path.join(mod_dir,"PlrpList.yml"),"wt") as f:
+        f.write(yaml.dump(self.formattedPlrp,line_break="\n"))
     with open(os.path.join(mod_dir, "jm.yml"), "wt") as f:
         f.write(yaml.dump(modYml.getJMYAML(), line_break="\n"))
     shutil.copytree(os.path.join(os.path.dirname(__file__), "mod_template"),mod_dir,dirs_exist_ok=True)

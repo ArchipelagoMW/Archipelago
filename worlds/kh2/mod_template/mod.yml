@@ -32,6 +32,12 @@ assets:
     - name: BonsList.yml
       type: bons
     type: List
+  - method: listpatch
+    name: plrp
+    source:
+    - name: PlrpList.yml
+      type: plrp  
+    type: List
 - method: binarc
   name: 03system.bin
   source:

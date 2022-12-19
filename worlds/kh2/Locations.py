@@ -3,7 +3,7 @@ from tokenize import String
 import typing
 
 from BaseClasses import Location
-from .Names import LocationName
+from .Names import LocationName, ItemName
 
 class KH2Location(Location):
     game: str = "Kingdom Hearts 2"
@@ -755,7 +755,86 @@ Keyblade_Slots={
     LocationName.WinnersProofSlot               :LocationData(0x130293,False,149,"Keyblade"),
     }                     
 Critical_Checks={
+     LocationName.Crit_1                        :LocationData(0x130294,False,1,"Critical"),
+     LocationName.Crit_2                        :LocationData(0x130295,False,1,"Critical"),
+     LocationName.Crit_3                        :LocationData(0x130296,False,1,"Critical"),
+     LocationName.Crit_4                        :LocationData(0x130297,False,1,"Critical"),
+     LocationName.Crit_5                        :LocationData(0x130298,False,1,"Critical"),
+     LocationName.Crit_6                        :LocationData(0x130299,False,1,"Critical"),
+     LocationName.Crit_7                        :LocationData(0x13029A,False,1,"Critical"),
+    }
+#the locations for donald abilites
+#These checks are only for donald and only done through ap because of hinting reasons 
+Donald_Checks={
     
+    LocationName.DonaldScreens                        :LocationData(0x13029B,False,45,"Get Bonus"),
+    LocationName.DonaldDemyxHBGetBonus                :LocationData(0x13029C,False,28,"Get Bonus"),
+    LocationName.DonaldDemyxOC                        :LocationData(0x13029D,False,58,"Get Bonus"),
+    LocationName.DonaldBoatPete                       :LocationData(0x13029E,False,16,"Double Get Bonus"),
+    LocationName.DonaldBoatPeteGetBonus               :LocationData(0x13029F,False,16,"Second Get Bonus"),
+    LocationName.DonaldPrisonKeeper                   :LocationData(0x130210,False,18,"Get Bonus"),
+    LocationName.DonaldScar                           :LocationData(0x130211,False,29,"Get Bonus"),
+    LocationName.DonaldSolarSailer                    :LocationData(0x130212,False,61,"Get Bonus"),
+    LocationName.DonaldExperiment                     :LocationData(0x130213,False,20,"Get Bonus"),
+    LocationName.DonaldBoatFight                      :LocationData(0x130214,False,62,"Get Bonus"),
+    LocationName.DonaldMansionNobodies                :LocationData(0x130215,False,56,"Get Bonus"),
+    LocationName.DonaldThresholder                    :LocationData(0x130216,False,2,"Get Bonus"),
+    LocationName.DonaldXaldinGetBonus                 :LocationData(0x130217,False,4,"Get Bonus"),
+    #Most of these staffs are plandoed into goa by the goa mod so they are not items
+    ItemName.Centurion2                         :LocationData(0x130218,False,151,"Keyblade"),
+    ItemName.CometStaff                         :LocationData(0x130219,False,90,"Keyblade"),
+    ItemName.HammerStaff                        :LocationData(0x13021A,False,87,"Keyblade"),
+    ItemName.LordsBroom                         :LocationData(0x13021B,False,91,"Keyblade"),
+    ItemName.MagesStaff                         :LocationData(0x13021C,False,86,"Keyblade"),
+    ItemName.MeteorStaff                        :LocationData(0x13021D,False,89,"Keyblade"),
+    ItemName.NobodyLance                        :LocationData(0x13021E,False,94,"Keyblade"),
+    ItemName.PreciousMushroom                   :LocationData(0x13021F,False,154,"Keyblade"),
+    ItemName.PreciousMushroom2                  :LocationData(0x130220,False,155,"Keyblade"),
+    ItemName.PremiumMushroom                    :LocationData(0x130221,False,156,"Keyblade"),
+    ItemName.RisingDragon                       :LocationData(0x130222,False,93,"Keyblade"),
+    ItemName.SaveTheQueen2                      :LocationData(0x130223,False,146,"Keyblade"),
+    ItemName.ShamansRelic                       :LocationData(0x130224,False,95,"Keyblade"),
+    ItemName.VictoryBell                        :LocationData(0x130225,False,88,"Keyblade"),
+    ItemName.WisdomWand                         :LocationData(0x130226,False,92,"Keyblade"),
+    LocationName.DonaldStarting1                :LocationData(0x130227,False,2,"Critical"),
+    LocationName.DonaldStarting2                :LocationData(0x130228,False,2,"Critical"),
+    }
+#the locations for goofy abilites
+#These checks are only for goofy and only done through ap because of hinting reasons
+Goofy_Checks={
+LocationName.GoofyBarbossa                           :LocationData(0x130228,False,21,"Double Get Bonus"),
+LocationName.GoofyBarbossaGetBonus                   :LocationData(0x130229,False,21,"Second Get Bonus"),
+LocationName.GoofyGrimReaper1                        :LocationData(0x13022A,False,59,"Get Bonus"),
+LocationName.GoofyHostileProgram                     :LocationData(0x13022B,False,31,"Get Bonus"),
+LocationName.GoofyHyenas1                            :LocationData(0x13022C,False,49,"Get Bonus"),
+LocationName.GoofyHyenas2                            :LocationData(0x13022D,False,50,"Get Bonus"),
+LocationName.GoofyLock                               :LocationData(0x13022E,False,40,"Get Bonus"),
+LocationName.GoofyOogieBoogie                        :LocationData(0x13022F,False,19,"Get Bonus"),
+LocationName.GoofyPeteOC                             :LocationData(0x130230,False,6 ,"Get Bonus"),
+LocationName.GoofyFuturePete                         :LocationData(0x130231,False,17,"Get Bonus"),
+LocationName.GoofyShanYu                             :LocationData(0x130232,False,9 ,"Get Bonus"),
+LocationName.GoofyStormRider                         :LocationData(0x130233,False,10,"Get Bonus"),
+LocationName.GoofyBeast                              :LocationData(0x130234,False,12,"Get Bonus"),
+LocationName.GoofyInterceptorBarrels                 :LocationData(0x130235,False,39,"Get Bonus"),
+LocationName.GoofyTreasureRoom                       :LocationData(0x130236,False,46,"Get Bonus"),
+LocationName.GoofyZexion                             :LocationData(0x130237,False,66,"Get Bonus"),
+
+LocationName.AdamantShield                           :LocationData(0x130238,False,100,"Keyblade"),
+LocationName.AkashicRecord                           :LocationData(0x130239,False,107,"Keyblade"),
+LocationName.ChainGear                               :LocationData(0x13023A,False,101,"Keyblade"),
+LocationName.DreamCloud                              :LocationData(0x13023B,False,104,"Keyblade"),
+LocationName.FallingStar                             :LocationData(0x13023C,False,103,"Keyblade"),
+LocationName.FrozenPride2                            :LocationData(0x13023D,False,158,"Keyblade"),
+LocationName.GenjiShield                             :LocationData(0x13023E,False,106,"Keyblade"),
+LocationName.KnightDefender                          :LocationData(0x13023F,False,105,"Keyblade"),
+LocationName.KnightsShield                           :LocationData(0x130240,False,99 ,"Keyblade"),
+LocationName.MajesticMushroom                        :LocationData(0x130241,False,161,"Keyblade"),
+LocationName.MajesticMushroom2                       :LocationData(0x130242,False,162,"Keyblade"),
+LocationName.NobodyGuard                             :LocationData(0x130243,False,108,"Keyblade"),
+LocationName.OgreShield                              :LocationData(0x130244,False,102,"Keyblade"),
+LocationName.SaveTheKing2                            :LocationData(0x130245,False,147,"Keyblade"),
+LocationName.UltimateMushroom                        :LocationData(0x130246,False,163,"Keyblade"),
+
     }
 exclusion_table = {                                                
     "Datas": {                                                     
@@ -836,34 +915,43 @@ exclusion_table = {
         },
 
    "KeybladeSlot":{
-    LocationName.FAKESlot           ,
-    LocationName.DetectionSaberSlot ,
-    LocationName.EdgeofUltimaSlot   ,
-    LocationName.KingdomKeySlot     ,
-    LocationName.OathkeeperSlot     ,
-    LocationName.OblivionSlot       ,
-    LocationName.StarSeekerSlot     ,
-    LocationName.HiddenDragonSlot   ,
-    LocationName.HerosCrestSlot     ,
-    LocationName.MonochromeSlot     ,
-    LocationName.FollowtheWindSlot  ,
-    LocationName.CircleofLifeSlot   ,
-    LocationName.PhotonDebuggerSlot ,
-    LocationName.GullWingSlot       ,
-    LocationName.RumblingRoseSlot   ,
-    LocationName.GuardianSoulSlot   ,
-    LocationName.WishingLampSlot    ,
-    LocationName.DecisivePumpkinSlot,
-    LocationName.SweetMemoriesSlot  ,
-    LocationName.MysteriousAbyssSlot,
-    LocationName.SleepingLionSlot   ,
-    LocationName.BondofFlameSlot    ,
-    LocationName.TwoBecomeOneSlot   ,
-    LocationName.FatalCrestSlot     ,
-    LocationName.FenrirSlot         ,
-    LocationName.UltimaWeaponSlot   ,
-    LocationName.WinnersProofSlot   ,
-    }
+        LocationName.FAKESlot           ,
+        LocationName.DetectionSaberSlot ,
+        LocationName.EdgeofUltimaSlot   ,
+        LocationName.KingdomKeySlot     ,
+        LocationName.OathkeeperSlot     ,
+        LocationName.OblivionSlot       ,
+        LocationName.StarSeekerSlot     ,
+        LocationName.HiddenDragonSlot   ,
+        LocationName.HerosCrestSlot     ,
+        LocationName.MonochromeSlot     ,
+        LocationName.FollowtheWindSlot  ,
+        LocationName.CircleofLifeSlot   ,
+        LocationName.PhotonDebuggerSlot ,
+        LocationName.GullWingSlot       ,
+        LocationName.RumblingRoseSlot   ,
+        LocationName.GuardianSoulSlot   ,
+        LocationName.WishingLampSlot    ,
+        LocationName.DecisivePumpkinSlot,
+        LocationName.SweetMemoriesSlot  ,
+        LocationName.MysteriousAbyssSlot,
+        LocationName.SleepingLionSlot   ,
+        LocationName.BondofFlameSlot    ,
+        LocationName.TwoBecomeOneSlot   ,
+        LocationName.FatalCrestSlot     ,
+        LocationName.FenrirSlot         ,
+        LocationName.UltimaWeaponSlot   ,
+        LocationName.WinnersProofSlot   ,
+    },
+   "Critical":{
+       LocationName.Crit_1,
+       LocationName.Crit_2,
+       LocationName.Crit_3,
+       LocationName.Crit_4,
+       LocationName.Crit_5,
+       LocationName.Crit_6,
+       LocationName.Crit_7,
+       }
 }
 firstVisits=[
         LocationName.LoD_Region         ,        
@@ -1088,6 +1176,8 @@ all_locations={
     **Form_Checks,
     **GoA_Checks,
     **Keyblade_Slots,
+    **Critical_Checks,
+    **Donald_Checks
     }
 
 location_table={}
@@ -1096,7 +1186,7 @@ def setup_locations(world,player:int):
     location_table={**TWTNW_Checks,**TWTNW2_Checks,**TT_Checks,**TT2_Checks,**TT3_Checks,**STT_Checks,
                     **PL_Checks,**PL2_Checks,**CoR_Checks,**HB_Checks,**HB2_Checks,
                     **PR_Checks,**PR2_Checks,**PR_Checks,**PR2_Checks,**SP_Checks,**SP2_Checks,**BC_Checks,**BC2_Checks,**HT_Checks,**HT2_Checks,
-                    **Oc_Checks,**Oc2_Checks,**Oc2Cups,
+                    **Oc_Checks,**Oc2_Checks,**Oc2Cups,**Critical_Checks,**Donald_Checks,
                     **HundredAcre1_Checks,**HundredAcre2_Checks,**HundredAcre3_Checks,**HundredAcre4_Checks,**HundredAcre5_Checks,**HundredAcre6_Checks,
                     **DC_Checks,**TR_Checks,**AG_Checks,**AG2_Checks,**LoD_Checks,**LoD2_Checks,**SoraLevels,**Form_Checks,**GoA_Checks,**Keyblade_Slots}
     return location_table
