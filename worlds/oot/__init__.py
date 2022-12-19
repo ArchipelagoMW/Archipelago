@@ -949,6 +949,7 @@ class OOTWorld(World):
                 patch_rom(self, rom)
                 patch_cosmetics(self, rom)
             except Exception as e:
+                logger.error(e)
                 raise e
             finally:
                 self.collectible_flags_available.set()
