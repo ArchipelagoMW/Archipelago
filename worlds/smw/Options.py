@@ -206,7 +206,7 @@ class EarlyClimb(Toggle):
 
 class OverworldSpeed(Choice):
     """
-    How Fast Mario moves on the overworld
+    How fast Mario moves on the overworld
     """
     display_name = "Overworld Speed"
     option_slow = 0
