@@ -103,7 +103,7 @@ local IsInBattle = function()
     return memory.read_u8(0x02177270) ~= 0x00
 end
 local IsItemQueued = function()
-    return memory.read_u8(0x203fe00) == 0x01
+    return memory.read_u8(0x2000224) == 0x01
 end
 
 -- This function actually determines when you're on ANY full-screen menu (navi cust, link battle, etc.) but we
@@ -662,7 +662,7 @@ local SendItem = function(item)
     -- Write the item message to RAM
     memory.write_bytes_as_array(0x203fe10, message)
     -- Signal that the item is ready to be read
-    memory.write_u32_le(0x203fe00,0x00000001)
+    memory.write_u32_le(0x2000224,0x00000001)
 end
 
 local RestoreItemRam = function()
@@ -785,9 +785,9 @@ function main()
             prevstate = curstate
         end
 
-        currentMessageBit = memory.read_u8(0x203fe00);
+        currentMessageBit = memory.read_u8(0x2000224);
         if (currentMessageBit ~= previousMessageBit) then
-            print("Message bit "..previousMessageBit.." -> "..currentMessageBit)
+            -- print("Message bit "..previousMessageBit.." -> "..currentMessageBit)
         end
 
         itemStateMachineProcess()
