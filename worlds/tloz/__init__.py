@@ -111,9 +111,9 @@ class TLoZWorld(World):
             self.levels[level].locations.append(boss_event)
 
         for location in major_locations:
-            # if self.multiworld.ExpandedPool[self.player] or "Take Any" not in location:
-            overworld.locations.append(
-                self.create_location(location, self.location_name_to_id[location], overworld))
+            if self.multiworld.ExpandedPool[self.player] or "Take Any" not in location:
+                overworld.locations.append(
+                    self.create_location(location, self.location_name_to_id[location], overworld))
 
         for location in shop_locations:
             overworld.locations.append(
@@ -370,9 +370,9 @@ class TLoZWorld(World):
                         elif item_class == ItemClassification.trap:
                             item_price = item_price * 2
                     rom_data[price_location] = item_price
-                # if location.name == "Take Any Item Right":
-                #     # Same story as above: bit 6 is what makes this a Take Any cave
-                #     item_id = item_id | 0b01000000
+                if location.name == "Take Any Item Right":
+                    # Same story as above: bit 6 is what makes this a Take Any cave
+                    item_id = item_id | 0b01000000
                 rom_data[location_id] = item_id
 
             # We shuffle the tiers of rupee caves. Caves that shared a value before still will.

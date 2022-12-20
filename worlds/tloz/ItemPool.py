@@ -5,7 +5,8 @@ from .Locations import level_locations, all_level_locations, standard_level_loca
 overworld_items = {
     "Letter": 1,
     "Power Bracelet": 1,
-    "Heart Container": 1
+    "Heart Container": 1,
+    "Sword": 1
 }
 
 # Bomb, Arrow, 1 Small Key and Red Water of Life are in guaranteed_shop_items
@@ -38,6 +39,10 @@ minor_dungeon_items = {
     "Bomb": 23,
     "Small Key": 45,
     "Five Rupees": 17
+}
+
+take_any_items = {
+    "Heart Container": 4
 }
 
 # Map/Compasses: 18
@@ -119,9 +124,10 @@ def get_pool_core(world):
     final_pool = basic_pool
     if world.multiworld.ExpandedPool[world.player]:
         final_pool = {
-            item: basic_pool.get(item, 0) + minor_dungeon_items.get(item, 0)
-            for item in set(basic_pool) | set(minor_dungeon_items)
+            item: basic_pool.get(item, 0) + minor_dungeon_items.get(item, 0) + take_any_items.get(item, 0)
+            for item in set(basic_pool) | set(minor_dungeon_items) | set(take_any_items)
         }
+        final_pool["Five Rupees"] -= 1
     for item in final_pool.keys():
         for i in range(0, final_pool[item]):
             pool.append(item)
