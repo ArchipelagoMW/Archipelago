@@ -791,7 +791,7 @@ def create_regions(world, player: int, active_locations):
                                lambda state: state.has(ItemName.mario_climb, player))
         add_location_to_region(world, player, active_locations, LocationName.butter_bridge_1_region, LocationName.butter_bridge_1_dragon)
         add_location_to_region(world, player, active_locations, LocationName.butter_bridge_2_region, LocationName.butter_bridge_2_dragon,
-                               lambda state: (state.has(ItemName.yoshi_activate, player) or
+                               lambda state: (state.has(ItemName.mario_run, player) and
                                               state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(world, player, active_locations, LocationName.cheese_bridge_region, LocationName.cheese_bridge_dragon,
                                lambda state: (state.has(ItemName.yoshi_activate, player) or

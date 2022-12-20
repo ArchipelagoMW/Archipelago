@@ -3,7 +3,7 @@ import unittest
 from random import Random
 
 from worlds.overcooked2.Items import *
-from worlds.overcooked2.Overcooked2Levels import Overcooked2Level, level_id_to_shortname
+from worlds.overcooked2.Overcooked2Levels import Overcooked2Dlc, Overcooked2Level, level_id_to_shortname, ITEMS_TO_EXCLUDE_IF_NO_DLC
 from worlds.overcooked2.Logic import level_logic, level_shuffle_factory
 from worlds.overcooked2.Locations import oc2_location_name_to_id
 
@@ -139,3 +139,11 @@ class Overcooked2Test(unittest.TestCase):
                 number_of_items += 1
 
         self.assertLessEqual(number_of_items, len(oc2_location_name_to_id), "Too many items (before fillers placed)")
+
+    def testExclusiveItems(self):
+        for dlc in Overcooked2Dlc:
+            for item in dlc.exclusive_items():
+                self.assertIn(item, item_table.keys())
+
+        for item in ITEMS_TO_EXCLUDE_IF_NO_DLC:
+            self.assertIn(item, item_table.keys())
