@@ -296,6 +296,47 @@ rom_item_bytes = {
     "Clocktower Key3": 0x29,
 }
 
+rom_sub_weapon_offsets = {
+    0x10C6EB: 0x10,  # Forest
+    0x10C6F3: 0x0F,
+    0x10C6FB: 0x0E,
+    0x10C703: 0x0D,
+
+    0x10C81F: 0x0F,  # Castle Wall
+    0x10C827: 0x10,
+    0x10C82F: 0x0E,
+    0x7F9A0F: 0x0D,
+
+    0x83A5D9: 0x0E,  # Villa
+    0x83A5E5: 0x0D,
+    0x83A5F1: 0x0F,
+    0xBFC983: 0x10,
+    0x10C987: 0x10,
+    0x10C98F: 0x0D,
+    0x10C997: 0x0F,
+
+    0x10CA57: 0x0D,  # Tunnel
+    0x10CA5F: 0x0E,
+    0x10CA67: 0x10,
+    0x10CA6F: 0x0D,
+    0x10CA77: 0x0F,
+    0x10CA7F: 0x0E,
+
+    0x10CBC7: 0x0E,  # Castle Center
+    0x10CC0F: 0x0D,
+    0x10CC5B: 0x0F,
+
+    0x10CD3F: 0x0E,  # Character towers
+    0x10CE2B: 0x0E,
+    0x10CE83: 0x10,
+
+    0x99BC5A: 0x0D,  # Clock Tower
+    0x10CECB: 0x10,
+    0x10CED3: 0x0F,
+    0x10CEDB: 0x0E,
+    0x10CEE3: 0x0D,
+}
+
 rom_invis_item_bytes = {
     "White jewel": 0x7E,
     "Red jewel(S)": 0x38,
@@ -384,7 +425,7 @@ class LocalRom(object):
             self.buffer = bytearray(stream.read())
 
 
-def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
+def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, sub_weapon_dict):
     # local_random = world.slot_seeds[player]
 
     w1 = str(world.special1s_per_warp[player]).zfill(2)
@@ -770,6 +811,11 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list):
     # Write the new item bytes
     for offset, item_id in offsets_to_ids.items():
         rom.write_byte(offset, item_id)
+
+    # Write the new sub-weapon bytes (if Sub-weapon Shuffle is on)
+    if world.sub_weapon_shuffle[player]:
+        for offset, sub_id in sub_weapon_dict.items():
+            rom.write_byte(offset, sub_id)
 
 
 class CV64DeltaPatch(APDeltaPatch):

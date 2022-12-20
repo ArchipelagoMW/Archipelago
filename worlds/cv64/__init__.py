@@ -12,7 +12,7 @@ from .Levels import level_list
 from .Rules import set_rules
 from .Names import ItemName, LocationName
 from ..AutoWorld import WebWorld, World
-from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch, rom_item_bytes
+from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch, rom_item_bytes, rom_sub_weapon_offsets
 # import math
 
 
@@ -50,6 +50,8 @@ class CV64World(World):
     active_level_list: typing.List[str]
     villa_cc_ids = [2, 3]
     active_warp_list: typing.List[str]
+    sub_weapon_dict: typing.Dict[int, int]
+    music_dict: typing.Dict[int, int]
     web = CV64Web()
 
     def __init__(self, world: MultiWorld, player: int):
@@ -66,7 +68,7 @@ class CV64World(World):
         return {
             "death_link": self.multiworld.death_link[self.player].value,
             "active_levels": self.active_level_list,
-            "active_warps": self.active_warp_list
+            "active_warps": self.active_warp_list,
         }
 
     def create_regions(self):
@@ -184,6 +186,7 @@ class CV64World(World):
 
         self.active_level_list = level_list.copy()
         self.active_warp_list = self.multiworld.random.sample(self.active_level_list, 7)
+        self.sub_weapon_dict = rom_sub_weapon_offsets.copy()
 
         if self.multiworld.stage_shuffle[self.player]:
             self.active_level_list.remove(LocationName.villa)
@@ -216,6 +219,11 @@ class CV64World(World):
 
         self.multiworld.itempool += itempool
 
+        if self.multiworld.sub_weapon_shuffle[self.player]:
+            sub_bytes = list(self.sub_weapon_dict.values())
+            self.multiworld.random.shuffle(sub_bytes)
+            self.sub_weapon_dict = dict(zip(self.sub_weapon_dict, sub_bytes))
+
     def generate_output(self, output_directory: str):
         try:
             world = self.multiworld
@@ -240,7 +248,8 @@ class CV64World(World):
                         else:
                             offsets_to_ids[loc.rom_offset] = 0x12
 
-            patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.active_level_list, self.active_warp_list)
+            patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.active_level_list, self.active_warp_list,
+                      self.sub_weapon_dict)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \

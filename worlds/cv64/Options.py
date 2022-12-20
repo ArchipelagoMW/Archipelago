@@ -19,8 +19,8 @@ class WarpShuffle(Choice):
     default = 0
 
 
-class SubweaponShuffle(DefaultOnToggle):
-    """Shuffles all sub-weapons within their own pool."""
+class SubWeaponShuffle(Toggle):
+    """Shuffles all sub-weapons in the game within their own pool."""
     display_name = "Sub-weapon Shuffle"
 
 
@@ -151,7 +151,7 @@ class SkipWaterwayPlatforms(Toggle):
 cv64_options: Dict[str, Option] = {
     "stage_shuffle": StageShuffle,
     "warp_shuffle": WarpShuffle,
-    "subweapon_shuffle": SubweaponShuffle,
+    "sub_weapon_shuffle": SubWeaponShuffle,
     "special1s_per_warp": Special1sPerWarp,
     "total_special1s": TotalSpecial1s,
     "draculas_condition": DraculasCondition,
