@@ -580,6 +580,10 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
             for msg in decode(data):
                 await process_server_cmd(ctx, msg)
         logger.warning(f"Disconnected from multiworld server{reconnect_hint()}")
+    except websockets.InvalidMessage:
+        # probably encrypted
+        if address.startswith("ws://"):
+            await server_loop(ctx, "ws" + address[1:])
     except ConnectionRefusedError:
         ctx._handle_connection_loss("Connection refused by the server. May not be running Archipelago on that address or port.")
     except websockets.InvalidURI:
