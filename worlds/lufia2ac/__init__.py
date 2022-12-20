@@ -189,7 +189,7 @@ class L2ACWorld(World):
             rom_bytearray[0x01432F:0x01432F + 1] = self.o.capsule_starting_form.unlock.to_bytes(1, "little")
             rom_bytearray[0x01433C:0x01433C + 1] = self.o.capsule_starting_form.value.to_bytes(1, "little")
             rom_bytearray[0x0190D5:0x0190D5 + 1] = self.o.iris_floor_chance.value.to_bytes(1, "little")
-            rom_bytearray[0x019153:0x019153 + 1] = (0x63 - self.o.blue_chest_chance).to_bytes(1, "little")
+            rom_bytearray[0x019147:0x019157 + 1:4] = self.o.blue_chest_chance.chest_type_thresholds
             rom_bytearray[0x019176] = 0x38 if self.o.gear_variety_after_b9 else 0x18
             rom_bytearray[0x019477:0x019477 + 1] = self.o.healing_floor_chance.value.to_bytes(1, "little")
             rom_bytearray[0x0194A2:0x0194A2 + 1] = self.o.crowded_floor_chance.value.to_bytes(1, "little")

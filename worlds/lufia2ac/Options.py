@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import random
 from dataclasses import dataclass
-from itertools import chain, combinations
+from itertools import accumulate, chain, combinations
 from typing import Any, cast, Dict, Iterator, List, Mapping, Optional, Set, Tuple, Type, TYPE_CHECKING, Union
 
 from Options import AssembleOptions, Choice, DeathLink, ItemDict, Range, SpecialRange, TextChoice, Toggle
@@ -83,8 +83,7 @@ class BlueChestChance(Range):
     """The chance of a chest being a blue chest.
 
     It is given in units of 1/256, i.e., a value of 25 corresponds to 25/256 ~ 9.77%.
-    If you increase the blue chest chance, then the chance of finding consumables is decreased in return.
-    The chance of finding red chest equipment or spells is unaffected.
+    If you increase the blue chest chance, then the red chest chance is decreased in return.
     Supported values: 5 – 75
     Default value: 25 (five times as much as in an unmodified game)
     """
@@ -93,6 +92,14 @@ class BlueChestChance(Range):
     range_start = 5
     range_end = 75
     default = 25
+
+    @property
+    def chest_type_thresholds(self) -> bytes:
+        ratio: float = (256 - self.value) / (256 - 5)
+        # unmodified chances are: consumable (mostly non-restorative) = 36/256, consumable (restorative) = 58/256,
+        # blue chest = 5/256, spell = 30/256, gear = 45/256 (and the remaining part, weapon = 82/256)
+        chest_type_chances: List[float] = [36 * ratio, 58 * ratio, float(self.value), 30 * ratio, 45 * ratio]
+        return bytes(round(threshold) for threshold in reversed(tuple(accumulate(chest_type_chances))))
 
 
 class BlueChestCount(Range):
