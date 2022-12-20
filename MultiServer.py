@@ -22,6 +22,9 @@ import ModuleUpdate
 
 ModuleUpdate.update()
 
+if typing.TYPE_CHECKING:
+    import ssl
+
 import websockets
 import colorama
 try:
@@ -2101,6 +2104,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--password', default=defaults["password"])
     parser.add_argument('--savefile', default=defaults["savefile"])
     parser.add_argument('--disable_save', default=defaults["disable_save"], action='store_true')
+    parser.add_argument('--cert', help="Path to a SSL Certificate for encryption.")
     parser.add_argument('--loglevel', default=defaults["loglevel"],
                         choices=['debug', 'info', 'warning', 'error', 'critical'])
     parser.add_argument('--location_check_points', default=defaults["location_check_points"], type=int)
@@ -2173,6 +2177,14 @@ async def auto_shutdown(ctx, to_cancel=None):
                 await asyncio.sleep(seconds)
 
 
+def load_server_cert(path) -> "ssl.SSLContext":
+    import ssl
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    ssl_context.load_default_certs()
+    ssl_context.load_cert_chain(path, path)
+    return ssl_context
+
+
 async def main(args: argparse.Namespace):
     Utils.init_logging("Server", loglevel=args.loglevel.lower())
 
@@ -2208,8 +2220,10 @@ async def main(args: argparse.Namespace):
 
     ctx.init_save(not args.disable_save)
 
+    ssl_context = load_server_cert(args.cert) if args.cert else None
+
     ctx.server = websockets.serve(functools.partial(server, ctx=ctx), host=ctx.host, port=ctx.port, ping_timeout=None,
-                                  ping_interval=None)
+                                  ping_interval=None, ssl=ssl_context)
     ip = args.host if args.host else Utils.get_public_ipv4()
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,
                                                  'No password' if not ctx.password else 'Password: %s' % ctx.password))
