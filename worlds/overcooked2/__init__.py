@@ -4,7 +4,7 @@ from typing import Callable, Dict, Any, List, Optional
 from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, RegionType, Tutorial
 from worlds.AutoWorld import World, WebWorld
 
-from .Overcooked2Levels import Overcooked2Level, Overcooked2GenericLevel
+from .Overcooked2Levels import Overcooked2Level, Overcooked2GenericLevel, ITEMS_TO_EXCLUDE_IF_NO_DLC
 from .Locations import Overcooked2Location, oc2_location_name_to_id, oc2_location_id_to_name
 from .Options import overcooked_options, OC2Options, OC2OnToggle
 from .Items import item_table, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies
@@ -46,11 +46,9 @@ class Overcooked2World(World):
 
     game = "Overcooked! 2"
     web = Overcooked2Web()
-    required_client_version = (0, 3, 4)
+    required_client_version = (0, 3, 7)
     option_definitions = overcooked_options
     topology_present: bool = False
-    remote_items: bool = True
-    remote_start_inventory: bool = False
     data_version = 2
 
     item_name_to_id = item_name_to_id
@@ -217,16 +215,21 @@ class Overcooked2World(World):
                     is_event=True,
                 )
 
-            # Add Locations to house star aquisition events, except for horde levels
-            if not self.is_level_horde(level.level_id):
-                for n in [1, 2, 3]:
-                    self.add_level_location(
-                        level.level_name,
-                        level.location_name_star_event(n),
-                        level.level_id,
-                        n,
-                        is_event=True,
-                    )
+            # Add Locations to house star aquisition events
+            if self.is_level_horde(level.level_id):
+                # in randomizer, horde levels grant a single star
+                star_counts = [1]
+            else:
+                star_counts = [1, 2, 3]
+
+            for n in star_counts:
+                self.add_level_location(
+                    level.level_name,
+                    level.location_name_star_event(n),
+                    level.level_id,
+                    n,
+                    is_event=True,
+                )
 
             # Overworld -> Level
             required_star_count: int = self.level_unlock_counts[level.level_id]
@@ -256,11 +259,16 @@ class Overcooked2World(World):
         # filler = list()
         # progression = list()
         for item_name in item_table:
+            if not self.options["ShuffleLevelOrder"] and item_name in ITEMS_TO_EXCLUDE_IF_NO_DLC:
+                # skip DLC items if no DLC
+                continue
+
             if not self.options["IncludeHordeLevels"] and item_name in ["Calmer Unbread", "Coin Purse"]:
-                # skip items which are irrelevant to the seed
+                # skip horde-specific items if no horde levels
                 continue
             
             if not self.options["KevinLevels"] and item_name.startswith("Kevin"):
+                # skip kevin items if no kevin levels
                 continue
 
             if is_item_progression(item_name, self.level_mapping, self.options["KevinLevels"]):
@@ -313,9 +321,12 @@ class Overcooked2World(World):
                 self.place_event(level.location_name_level_complete, level.event_name_level_complete)
 
             if self.is_level_horde(level.level_id):
-                continue  # horde levels don't have star rewards
+                # in randomizer, horde levels grant a single star
+                star_counts = [1]
+            else:
+                star_counts = [1, 2, 3]
 
-            for n in [1, 2, 3]:
+            for n in star_counts:
                 self.place_event(level.location_name_star_event(n), "Star")
 
         # Add Victory Condition
@@ -411,8 +422,8 @@ class Overcooked2World(World):
 
             # Game Modifications
             "LevelPurchaseRequirements": level_purchase_requirements,
-            "Custom66TimerScale": max(0.4, (1.0 - star_threshold_scale)),
-
+            "Custom66TimerScale": max(0.4, 0.25 + (1.0 - star_threshold_scale)*0.6),
+            "ShortHordeLevels": self.options["ShortHordeLevels"],
             "CustomLevelOrder": custom_level_order,
 
             # Items (Starting Inventory)

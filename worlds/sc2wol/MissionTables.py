@@ -197,12 +197,12 @@ advanced_starting_mission_locations = {
 }
 
 
-def get_starting_mission_locations(world: MultiWorld, player: int) -> Set[str]:
-    if get_option_value(world, player, 'shuffle_no_build') or get_option_value(world, player, 'mission_order') < 2:
+def get_starting_mission_locations(multiworld: MultiWorld, player: int) -> Set[str]:
+    if get_option_value(multiworld, player, 'shuffle_no_build') or get_option_value(multiworld, player, 'mission_order') < 2:
         # Always start with a no-build mission unless explicitly relegating them
         # Vanilla and Vanilla Shuffled always start with a no-build even when relegated
         return no_build_starting_mission_locations
-    elif get_option_value(world, player, 'required_tactics') > 0:
+    elif get_option_value(multiworld, player, 'required_tactics') > 0:
         # Advanced Tactics/No Logic add more starting missions to the pool
         return {**build_starting_mission_locations, **advanced_starting_mission_locations}
     else:

@@ -52,7 +52,7 @@ def generate(race=False):
         else:
             file = request.files['file']
             options = get_yaml_data(file)
-            if type(options) == str:
+            if isinstance(options, str):
                 flash(options)
             else:
                 meta = get_meta(request.form)
@@ -92,7 +92,7 @@ def generate(race=False):
     return render_template("generate.html", race=race, version=__version__)
 
 
-def gen_game(gen_options, meta: Optional[Dict[str, Any]] = None, owner=None, sid=None):
+def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=None, sid=None):
     if not meta:
         meta: Dict[str, Any] = {}
 
@@ -114,7 +114,7 @@ def gen_game(gen_options, meta: Optional[Dict[str, Any]] = None, owner=None, sid
         erargs = parse_arguments(['--multi', str(playercount)])
         erargs.seed = seed
         erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
-        erargs.spoiler = 0 if race else 2
+        erargs.spoiler = 0 if race else 3
         erargs.race = race
         erargs.outputname = seedname
         erargs.outputpath = target.name

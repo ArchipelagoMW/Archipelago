@@ -1,31 +1,27 @@
 from typing import Dict, List, NamedTuple, Optional
 
 from BaseClasses import MultiWorld, Region, RegionType, Entrance
-from .Items import RLItem
 from .Locations import RLLocation, location_table, get_locations_by_category
 
 
 class RLRegionData(NamedTuple):
     locations: Optional[List[str]]
-    exits: Optional[List[str]]
+    region_exits: Optional[List[str]]
 
 
 def create_regions(multiworld: MultiWorld, player: int):
     regions: Dict[str, RLRegionData] = {
-        "Menu": RLRegionData(None, ["Castle Hamson"]),
-        "The Manor": RLRegionData([], []),
-        "Castle Hamson": RLRegionData([], ["Forest Abkhazia",
-                                           "The Maya",
-                                           "Land of Darkness",
-                                           "The Fountain Room",
-                                           "The Manor"]),
-        "Forest Abkhazia": RLRegionData([], []),
-        "The Maya": RLRegionData([], []),
-        "Land of Darkness": RLRegionData([], []),
-        "The Fountain Room": RLRegionData([], None),
+        "Menu":              RLRegionData(None, ["Castle Hamson"]),
+        "The Manor":         RLRegionData([],   []),
+        "Castle Hamson":     RLRegionData([],   ["Forest Abkhazia", "The Maya", "Land of Darkness",
+                                                 "The Fountain Room", "The Manor"]),
+        "Forest Abkhazia":   RLRegionData([],   []),
+        "The Maya":          RLRegionData([],   []),
+        "Land of Darkness":  RLRegionData([],   []),
+        "The Fountain Room": RLRegionData([],   None),
     }
 
-    # Diaries
+    # Artificially stagger diary spheres for progression.
     for diary in range(0, 25):
         region: str
         if 0 <= diary < 6:
@@ -38,7 +34,6 @@ def create_regions(multiworld: MultiWorld, player: int):
             region = "Land of Darkness"
         else:
             region = "The Fountain Room"
-
         regions[region].locations.append(f"Diary {diary + 1}")
 
     # Manor & Special
@@ -90,7 +85,7 @@ def create_regions(multiworld: MultiWorld, player: int):
 
     # Set up the regions correctly.
     for name, data in regions.items():
-        multiworld.regions.append(create_region(multiworld, player, name, data.locations, data.exits))
+        multiworld.regions.append(create_region(multiworld, player, name, data))
 
     multiworld.get_entrance("Castle Hamson", player).connect(multiworld.get_region("Castle Hamson", player))
     multiworld.get_entrance("The Manor", player).connect(multiworld.get_region("The Manor", player))
@@ -100,24 +95,17 @@ def create_regions(multiworld: MultiWorld, player: int):
     multiworld.get_entrance("The Fountain Room", player).connect(multiworld.get_region("The Fountain Room", player))
 
 
-def create_region(multiworld: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, RegionType.Generic, name, player)
-    ret.multiworld = multiworld
-    if locations:
-        for loc_name in locations:
+def create_region(multiworld: MultiWorld, player: int, name: str, data: RLRegionData):
+    region = Region(name, RegionType.Generic, name, player, multiworld)
+    if data.locations:
+        for loc_name in data.locations:
             loc_data = location_table.get(loc_name)
-            location = RLLocation(player, loc_name, loc_data.code if loc_data else None, ret)
+            location = RLLocation(player, loc_name, loc_data.code if loc_data else None, region)
+            region.locations.append(location)
 
-            # Special rule handling for fairy chests.
-            if "Fairy" in loc_name:
-                location.access_rule = lambda state: state.has("Dragons", player) or (
-                        state.has("Enchantress", player) and (
-                        state.has("Vault Runes", player) or
-                        state.has("Sprint Runes", player) or
-                        state.has("Sky Runes", player)))
-            ret.locations.append(location)
-    if exits:
-        for exit in exits:
-            entrance = Entrance(player, exit, ret)
-            ret.exits.append(entrance)
-    return ret
+    if data.region_exits:
+        for exit in data.region_exits:
+            entrance = Entrance(player, exit, region)
+            region.exits.append(entrance)
+
+    return region
