@@ -11,6 +11,11 @@ class SkipCutscenes(DefaultOnToggle):
     display_name = "Auto Skip Cutscenes"
 
 
+class CorpseHints(DefaultOnToggle):
+    """Changes the 32 corpses in game to give various hints about item locations."""
+    display_name = "Corpse Hints"
+
+
 class Difficulty(Choice):
     """Adjusts the logic required to defeat bosses.
     Impossible: Removes all logic requirements for bosses. Good luck."""
@@ -198,6 +203,7 @@ class EnemyScaling(DefaultOnToggle):
 blasphemous_options = {
     "prie_dieu_warp": PrieDieuWarp,
     "skip_cutscenes": SkipCutscenes,
+    "corpse_hints": CorpseHints,
     "difficulty": Difficulty,
     "penitence": Penitence,
     "expert_logic": ExpertLogic,

@@ -785,7 +785,8 @@ class BlasphemousWorld(World):
                 "skipCutscenes": bool(self.multiworld.skip_cutscenes[self.player].value),
                 "enablePenitence": bool(self.multiworld.penitence[self.player].value),
                 "hardMode": False,
-                "customSeed": 0
+                "customSeed": 0,
+                "corpseHints": bool(self.multiworld.corpse_hints[self.player].value)
             },
             "items": {
                 "type": 1,
