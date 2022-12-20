@@ -2105,6 +2105,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--savefile', default=defaults["savefile"])
     parser.add_argument('--disable_save', default=defaults["disable_save"], action='store_true')
     parser.add_argument('--cert', help="Path to a SSL Certificate for encryption.")
+    parser.add_argument('--cert_key', help="Path to SSL Certificate Key file")
     parser.add_argument('--loglevel', default=defaults["loglevel"],
                         choices=['debug', 'info', 'warning', 'error', 'critical'])
     parser.add_argument('--location_check_points', default=defaults["location_check_points"], type=int)
@@ -2177,11 +2178,11 @@ async def auto_shutdown(ctx, to_cancel=None):
                 await asyncio.sleep(seconds)
 
 
-def load_server_cert(path) -> "ssl.SSLContext":
+def load_server_cert(path: str, cert_key: typing.Optional[str]) -> "ssl.SSLContext":
     import ssl
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     ssl_context.load_default_certs()
-    ssl_context.load_cert_chain(path, path)
+    ssl_context.load_cert_chain(path, cert_key if cert_key else path)
     return ssl_context
 
 
@@ -2220,7 +2221,7 @@ async def main(args: argparse.Namespace):
 
     ctx.init_save(not args.disable_save)
 
-    ssl_context = load_server_cert(args.cert) if args.cert else None
+    ssl_context = load_server_cert(args.cert, args.cert_key) if args.cert else None
 
     ctx.server = websockets.serve(functools.partial(server, ctx=ctx), host=ctx.host, port=ctx.port, ping_timeout=None,
                                   ping_interval=None, ssl=ssl_context)

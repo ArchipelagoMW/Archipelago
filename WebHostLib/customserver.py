@@ -141,7 +141,8 @@ def get_static_server_data() -> dict:
     return data
 
 
-def run_server_process(room_id, ponyconfig: dict, static_server_data: dict, cert_file: typing.Optional[str]):
+def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
+                       cert_file: typing.Optional[str], cert_key_file: typing.Optional[str]):
     # establish DB connection for multidata and multisave
     db.bind(**ponyconfig)
     db.generate_mapping(check_tables=False)
@@ -151,7 +152,7 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict, cert
         ctx = WebHostContext(static_server_data)
         ctx.load(room_id)
         ctx.init_save()
-        ssl_context = load_server_cert(cert_file) if cert_file else None
+        ssl_context = load_server_cert(cert_file, cert_key_file) if cert_file else None
         try:
             ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ping_timeout=None,
                                           ping_interval=None, ssl=ssl_context)

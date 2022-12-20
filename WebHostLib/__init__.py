@@ -25,6 +25,7 @@ app.config["SELFHOST"] = True  # application process is in charge of running the
 app.config["GENERATORS"] = 8  # maximum concurrent world gens
 app.config["SELFLAUNCH"] = True  # application process is in charge of launching Rooms.
 app.config["SELFLAUNCHCERT"] = None  # can point to a SSL Certificate to encrypt Room websocket connections
+app.config["SELFLAUNCHKEY"] = None  # can point to a SSL Certificate Key to encrypt Room websocket connections
 app.config["SELFGEN"] = True  # application process is in charge of scheduling Generations.
 app.config["DEBUG"] = False
 app.config["PORT"] = 80
