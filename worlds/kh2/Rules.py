@@ -1,8 +1,8 @@
 from BaseClasses import MultiWorld
 from .Names import LocationName, ItemName
 from .Items import exclusionItem_table
-from ..generic.Rules import add_rule, forbid_items,add_item_rule
-from .Locations import popupChecks,formChecks,ag2Checks,corChecks
+from ..generic.Rules import add_rule, forbid_items,add_item_rule,forbid_item
+from .Locations import popupChecks,STT_Checks,CoR_Checks,Form_Checks,AG2_Checks
 
 
 def set_rules(world: MultiWorld, player: int):
@@ -13,7 +13,14 @@ def set_rules(world: MultiWorld, player: int):
         for location in popupChecks:
             forbid_items(world.get_location(location,player),exclusionItem_table["Ability"]) 
 
+        for location in STT_Checks:
+            forbid_items(world.get_location(location,player),exclusionItem_table["Ability"])
         
+                 
+        #Santa's house also breaks with abilities
+        forbid_items(world.get_location(LocationName.SantasHouseChristmasTownMap,player),exclusionItem_table["Ability"])
+        forbid_items(world.get_location(LocationName.SantasHouseAPBoost,player),exclusionItem_table["Ability"])
+
         #Final checks of cor requires more locks than other checks in cor
         add_rule(world.get_location(LocationName.CoRMineshaftUpperLevelAPBoost,player),lambda state:
                      state.kh_HighJump_level(player,3)
@@ -25,52 +32,37 @@ def set_rules(world: MultiWorld, player: int):
                  and state.kh_Glide_level(player,3))
 
 
-        
+        for formlvl2 in {LocationName.Valorlvl2,LocationName.Wisdomlvl2,LocationName.Limitlvl2,LocationName.Masterlvl2,LocationName.Finallvl2}:
+                add_rule(world.get_location(formlvl2,player),lambda state: state.kh_FormLevel_unlocked(player,1))
 
-        add_rule(world.get_location(LocationName.Valorlvl2,player),lambda state: state.kh_FormLevel_unlocked(player,1))
-        add_rule(world.get_location(LocationName.Valorlvl3,player),lambda state: state.kh_FormLevel_unlocked(player,1))
-        add_rule(world.get_location(LocationName.Valorlvl4,player),lambda state: state.kh_FormLevel_unlocked(player,2))
-        add_rule(world.get_location(LocationName.Valorlvl5,player),lambda state: state.kh_FormLevel_unlocked(player,3))
-        add_rule(world.get_location(LocationName.Valorlvl6,player),lambda state: state.kh_FormLevel_unlocked(player,4))
-        add_rule(world.get_location(LocationName.Valorlvl7,player),lambda state: state.kh_FormLevel_unlocked(player,5))
+        for formlvl3 in {LocationName.Valorlvl3,LocationName.Wisdomlvl3,LocationName.Limitlvl3,LocationName.Masterlvl3,LocationName.Finallvl3}:
+                add_rule(world.get_location(formlvl3,player),lambda state: state.kh_FormLevel_unlocked(player,1))
+
+        for formlvl4 in {LocationName.Valorlvl4,LocationName.Wisdomlvl4,LocationName.Limitlvl4,LocationName.Masterlvl4,LocationName.Finallvl4}:
+                add_rule(world.get_location(formlvl4,player),lambda state: state.kh_FormLevel_unlocked(player,2))
+
+        for formlvl5 in {LocationName.Valorlvl5,LocationName.Wisdomlvl5,LocationName.Limitlvl5,LocationName.Masterlvl5,LocationName.Finallvl5}:
+                add_rule(world.get_location(formlvl5,player),lambda state: state.kh_FormLevel_unlocked(player,3))
+
+        for formlvl6 in {LocationName.Valorlvl6,LocationName.Wisdomlvl6,LocationName.Limitlvl6,LocationName.Masterlvl6,LocationName.Finallvl6}:
+                add_rule(world.get_location(formlvl6,player),lambda state: state.kh_FormLevel_unlocked(player,4))
+
+        for formlvl7 in {LocationName.Valorlvl7,LocationName.Wisdomlvl7,LocationName.Limitlvl7,LocationName.Masterlvl7,LocationName.Finallvl7}:
+                add_rule(world.get_location(formlvl7,player),lambda state: state.kh_FormLevel_unlocked(player,5))
         
-        add_rule(world.get_location(LocationName.Wisdomlvl2,player),lambda state: state.kh_FormLevel_unlocked(player,1))
-        add_rule(world.get_location(LocationName.Wisdomlvl3,player),lambda state: state.kh_FormLevel_unlocked(player,1))
-        add_rule(world.get_location(LocationName.Wisdomlvl4,player),lambda state: state.kh_FormLevel_unlocked(player,2))
-        add_rule(world.get_location(LocationName.Wisdomlvl5,player),lambda state: state.kh_FormLevel_unlocked(player,3))
-        add_rule(world.get_location(LocationName.Wisdomlvl6,player),lambda state: state.kh_FormLevel_unlocked(player,4))
-        add_rule(world.get_location(LocationName.Wisdomlvl7,player),lambda state: state.kh_FormLevel_unlocked(player,5))
-        
-        add_rule(world.get_location(LocationName.Limitlvl2,player),lambda state:  state.kh_FormLevel_unlocked(player,1))
-        add_rule(world.get_location(LocationName.Limitlvl3,player),lambda state:  state.kh_FormLevel_unlocked(player,1))
-        add_rule(world.get_location(LocationName.Limitlvl4,player),lambda state:  state.kh_FormLevel_unlocked(player,2))
-        add_rule(world.get_location(LocationName.Limitlvl5,player),lambda state:  state.kh_FormLevel_unlocked(player,3))
-        add_rule(world.get_location(LocationName.Limitlvl6,player),lambda state:  state.kh_FormLevel_unlocked(player,4))
-        add_rule(world.get_location(LocationName.Limitlvl7,player),lambda state:  state.kh_FormLevel_unlocked(player,5))
-        
-        add_rule(world.get_location(LocationName.Masterlvl2,player),lambda state: state.kh_FormLevel_unlocked(player,1))
-        add_rule(world.get_location(LocationName.Masterlvl3,player),lambda state: state.kh_FormLevel_unlocked(player,1))
-        add_rule(world.get_location(LocationName.Masterlvl4,player),lambda state: state.kh_FormLevel_unlocked(player,2))
-        add_rule(world.get_location(LocationName.Masterlvl5,player),lambda state: state.kh_FormLevel_unlocked(player,3))
-        add_rule(world.get_location(LocationName.Masterlvl6,player),lambda state: state.kh_FormLevel_unlocked(player,4))
-        add_rule(world.get_location(LocationName.Masterlvl7,player),lambda state: state.kh_FormLevel_unlocked(player,5))
-        
-        add_rule(world.get_location(LocationName.Finallvl2,player),lambda state:  state.kh_FormLevel_unlocked(player,1))
-        add_rule(world.get_location(LocationName.Finallvl3,player),lambda state:  state.kh_FormLevel_unlocked(player,1))
-        add_rule(world.get_location(LocationName.Finallvl4,player),lambda state:  state.kh_FormLevel_unlocked(player,2))
-        add_rule(world.get_location(LocationName.Finallvl5,player),lambda state:  state.kh_FormLevel_unlocked(player,3))
-        add_rule(world.get_location(LocationName.Finallvl6,player),lambda state:  state.kh_FormLevel_unlocked(player,4))
-        add_rule(world.get_location(LocationName.Finallvl7,player),lambda state:  state.kh_FormLevel_unlocked(player,5))
         
         #Option to be more in line of the current KH2 Randomizer
-        if world.Max_Logic[player].value==0:
-            for location in corChecks:
-                forbid_items(world.get_location(location,player),player, exclusionItem_table["Forms"] and "Torn Page")
-            for location in ag2Checks:
-                forbid_items(world.get_location(location,player),player, exclusionItem_table["Forms"] and "Torn Page")
+        if world.Max_Logic[player].value==1:
+            for location in CoR_Checks:
+                forbid_items(world.get_location(location,player), exclusionItem_table["Forms"])
+                forbid_item(world.get_location(location,player),player, "Torn Page")
+            for location in AG2_Checks:
+                forbid_items(world.get_location(location,player), exclusionItem_table["Forms"])
+                forbid_item(world.get_location(location,player),player, "Torn Page")
             #forbid forms on forms
-            for location in formChecks:
-                forbid_items(world.get_location(location,player),player, exclusionItem_table["Forms"] and "Torn Page")
+            for location in Form_Checks:
+                forbid_items(world.get_location(location,player),exclusionItem_table["Forms"])
+                forbid_item(world.get_location(location,player),player, "Torn Page")
 
         #Creating Accsess rules for terra and mushroom 13 checks
         add_rule(world.get_location(LocationName.LingeringWillBonus,player),lambda state: state.has(ItemName.ProofofConnection,player))

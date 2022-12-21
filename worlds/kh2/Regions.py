@@ -25,7 +25,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.DonaldStarting1       :[11],
         LocationName.DonaldStarting2       :[12],
         LocationName.GoofyStarting1        :[13],
-        LocationName.GoofyStarting1        :[14],
+        LocationName.GoofyStarting2        :[14],             
 }
     GoA_Region = create_region(world, player, active_locations, LocationName.GoA_Region,
                                        GoA_Region_locations, None)
@@ -51,6 +51,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.ShanYu                     :[18],
         LocationName.ShanYuGetBonus             :[19],
         LocationName.HiddenDragon               :[20],
+        LocationName.GoofyShanYu                :[21],
         } 
     LoD_Region = create_region(world, player, active_locations, LocationName.LoD_Region,
                                        LoD_Region_locations, None)
@@ -65,6 +66,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.ThroneRoomOrichalcum    :[8],
         LocationName.StormRider              :[9],
         LocationName.XigbarDataDefenseBoost  :[10],
+        LocationName.GoofyStormRider         :[11],
         }                                      
     LoD2_Region = create_region(world, player, active_locations, LocationName.LoD2_Region,
                                        LoD2_Region_locations, None)
@@ -98,6 +100,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.TreasureRoomSerenityGem          :[27],
         LocationName.ElementalLords                   :[28],
         LocationName.LampCharm                        :[29],
+        LocationName.GoofyTreasureRoom                :[30],
         }
     Ag_Region = create_region(world, player, active_locations, LocationName.Ag_Region,
                                        Ag_Region_locations, None)
@@ -150,6 +153,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.LingeringWillManifestIllusion :[18],
         LocationName.DonaldBoatPete               :[19],
         LocationName.DonaldBoatPeteGetBonus        :[20],
+        LocationName.GoofyFuturePete                :[21],
         }                                            
     Tr_Region = create_region(world, player, active_locations, LocationName.Tr_Region,
                                        Tr_Region_locations, None)
@@ -223,7 +227,10 @@ def create_regions(world, player: int, active_locations):
             LocationName.Barbossa                 :[18],
             LocationName.BarbossaGetBonus         :[19],
             LocationName.FollowtheWind            :[20],
-            LocationName.DonaldBoatFight          :[21]
+            LocationName.DonaldBoatFight          :[21],
+            LocationName.GoofyBarbossa            :[22],
+            LocationName.GoofyBarbossaGetBonus    :[23],
+            LocationName.GoofyInterceptorBarrels  :[24],
         }
     Pr_Region = create_region(world, player, active_locations, LocationName.Pr_Region,
                                        Pr_Region_locations, None)
@@ -241,6 +248,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.GrimReaper2                 :[11],
         LocationName.SecretAnsemReport6          :[12],
         LocationName.LuxordDataAPBoost           :[13],
+        LocationName.GoofyGrimReaper1            :[14],
         }
     Pr2_Region = create_region(world, player, active_locations, LocationName.Pr2_Region,
                                        Pr2_Region_locations, None)
@@ -276,6 +284,7 @@ def create_regions(world, player: int, active_locations):
             LocationName.HydraGetBonus               :[29],
             LocationName.HerosCrest                  :[30],
             LocationName.DonaldDemyxOC               :[31],
+            LocationName.GoofyPeteOC                 :[32],
         }                                              
     Oc_Region = create_region(world, player, active_locations, LocationName.Oc_Region,
                                        Oc_Region_locations, None)
@@ -287,6 +296,7 @@ def create_regions(world, player: int, active_locations):
             LocationName.ZexionBonus           :[5],
             LocationName.ZexionASBookofShadows :[6],
             LocationName.ZexionDataLostIllusion:[7],
+            LocationName.GoofyZexion           :[8],
         }
     Oc2_Region = create_region(world, player, active_locations, LocationName.Oc2_Region,
                                        Oc2_Region_locations, None)
@@ -330,7 +340,8 @@ def create_regions(world, player: int, active_locations):
                 LocationName.DarkThorn                         :[25],
                 LocationName.DarkThornGetBonus                 :[26],
                 LocationName.DarkThornCureElement              :[27],
-                LocationName.DonaldThresholder                  :[28],
+                LocationName.DonaldThresholder                 :[28],
+                LocationName.GoofyBeast                        :[29],
         
         }                                                        
     Bc_Region = create_region(world, player, active_locations, LocationName.Bc_Region,
@@ -362,6 +373,8 @@ def create_regions(world, player: int, active_locations):
                 LocationName.HostileProgramGetBonus      :[13],
                 LocationName.PhotonDebugger              :[14],
                 LocationName.DonaldScreens               :[15],
+                LocationName.GoofyHostileProgram         :[16],    
+
         }                                                  
     Sp_Region = create_region(world, player, active_locations, LocationName.Sp_Region,
                                        Sp_Region_locations, None)
@@ -399,6 +412,7 @@ def create_regions(world, player: int, active_locations):
             LocationName.OogieBoogie                    :[16],
             LocationName.OogieBoogieMagnetElement       :[17],
             LocationName.DonaldPrisonKeeper             :[18],
+            LocationName.GoofyOogieBoogie               :[19],
         }
     Ht_Region = create_region(world, player, active_locations, LocationName.Ht_Region,
                                        Ht_Region_locations, None)
@@ -412,6 +426,7 @@ def create_regions(world, player: int, active_locations):
             LocationName.VexenASRoadtoDiscovery:[7],
             LocationName.VexenDataLostIllusion :[8],
             LocationName.DonaldExperiment      :[9],
+            LocationName.GoofyLock             :[10],
         }
     Ht2_Region = create_region(world, player, active_locations, LocationName.Ht2_Region,
                                        Ht2_Region_locations, None)
@@ -529,6 +544,8 @@ def create_regions(world, player: int, active_locations):
             LocationName.Scar                         :[28],
             LocationName.ScarFireElement              :[29],
             LocationName.DonaldScar                   :[30],
+            LocationName.GoofyHyenas1                 :[31],
+            
         }
     Pl_Region = create_region(world, player, active_locations, LocationName.Pl_Region,
                                        Pl_Region_locations, None)
@@ -537,6 +554,7 @@ def create_regions(world, player: int, active_locations):
             LocationName.Groundshaker        :[2],
             LocationName.GroundshakerGetBonus:[3],
             LocationName.SaixDataDefenseBoost:[4],
+            LocationName.GoofyHyenas2        :[5],
         }
     Pl2_Region = create_region(world, player, active_locations, LocationName.Pl2_Region,
                                        Pl2_Region_locations, None)
@@ -873,21 +891,38 @@ def create_regions(world, player: int, active_locations):
     LocationName.UltimaWeaponSlot     :[26],
     LocationName.WinnersProofSlot     :[27],
 
-    ItemName.Centurion2               :[28],
-    ItemName.CometStaff               :[29],
-    ItemName.HammerStaff              :[30],
-    ItemName.LordsBroom               :[31],
-    ItemName.MagesStaff               :[32],
-    ItemName.MeteorStaff              :[33],
-    ItemName.NobodyLance              :[34],
-    ItemName.PreciousMushroom         :[35],
-    ItemName.PreciousMushroom2        :[36],
-    ItemName.PremiumMushroom          :[37],
-    ItemName.RisingDragon             :[38],
-    ItemName.SaveTheQueen2            :[39],
-    ItemName.ShamansRelic             :[40],
-    ItemName.VictoryBell              :[41],
-    ItemName.WisdomWand               :[42],
+    LocationName.Centurion2               :[28],
+    LocationName.CometStaff               :[29],
+    LocationName.HammerStaff              :[30],
+    LocationName.LordsBroom               :[31],
+    LocationName.MagesStaff               :[32],
+    LocationName.MeteorStaff              :[33],
+    LocationName.NobodyLance              :[34],
+    LocationName.PreciousMushroom         :[35],
+    LocationName.PreciousMushroom2        :[36],
+    LocationName.PremiumMushroom          :[37],
+    LocationName.RisingDragon             :[38],
+    LocationName.SaveTheQueen2            :[39],
+    LocationName.ShamansRelic             :[40],
+    LocationName.VictoryBell              :[41],
+    LocationName.WisdomWand               :[42],
+
+                                      
+    LocationName.AdamantShield        :[43],
+    LocationName.AkashicRecord        :[44],
+    LocationName.ChainGear            :[45],
+    LocationName.DreamCloud           :[46],
+    LocationName.FallingStar          :[47],
+    LocationName.FrozenPride2         :[48],
+    LocationName.GenjiShield          :[49],
+    LocationName.KnightDefender       :[50],
+    LocationName.KnightsShield        :[51],
+    LocationName.MajesticMushroom     :[52],
+    LocationName.MajesticMushroom2    :[53],
+    LocationName.NobodyGuard          :[54],
+    LocationName.OgreShield           :[55],
+    LocationName.SaveTheKing2         :[56],
+    LocationName.UltimateMushroom     :[57],
     }
     Keyblade_Region=create_region(world,player,active_locations,LocationName.Keyblade_Region,
                                Keyblade_Region_locations,None)

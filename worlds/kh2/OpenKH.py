@@ -60,6 +60,8 @@ def patch_kh2(world,player,self,output_directory):
     self.defense =2
     self.ap      =50
     soraStartingItems=[]
+    goofyStartingItems=[]
+    donaldStartingItems=[]
     mod_name = "RandoSeed"
 
 
@@ -71,10 +73,6 @@ def patch_kh2(world,player,self,output_directory):
             itemcode= 461
         
         if location.address.yml=="Chest":
-            if location.name in popupChecks:
-
-                 if location.item.name in exclusionItem_table["Ability"]:
-                     print("uh oh")
             self.formattedTrsr[location.address.locid] = {"ItemId":itemcode}
 
 
@@ -85,7 +83,8 @@ def patch_kh2(world,player,self,output_directory):
                 if location.address.yml=="Double Get Bonus":
                     dblbonus=itemcode
                     continue
-                self.formattedBons[location.address.locid] = {}
+                if not location.address.locid in self.formattedBons.keys():
+                    self.formattedBons[location.address.locid] = {}
                 self.formattedBons[location.address.locid] [location.address.charName]= {
                 "RewardId": location.address.locid,
                 "CharacterId": location.address.charNumber,
@@ -164,9 +163,16 @@ def patch_kh2(world,player,self,output_directory):
             })
 
         elif location.address.yml=="Critical":
-            soraStartingItems.append(itemcode)
-         
-    #Summons have no checks on them so done fully locally
+            if location.address.charName=="Sora":
+                soraStartingItems.append(itemcode)
+            elif location.address.charName=="Goofy":
+                goofyStartingItems.append(itemcode)
+            else:
+                donaldStartingItems.append(itemcode)
+    if self.multiworld.Schmovement[self.player].value==1:
+        soraStartingItems+=94,98,564,102,106
+
+
     self.formattedPlrp.append({
             "Character": 1, # Sora Starting Items (Crit)
             "Id": 7, # crit difficulty
@@ -179,6 +185,45 @@ def patch_kh2(world,player,self,output_directory):
             "Items": soraStartingItems,
             "Padding": [0] * 52
         })
+    self.formattedPlrp.append({
+            "Character": 1, # Sora Starting Items (Non Crit)
+            "Id": 0,
+            "Hp": 20,
+            "Mp": 100,
+            "Ap": 50,
+            "ArmorSlotMax": 1,
+            "AccessorySlotMax": 1,
+            "ItemSlotMax": 3,
+            "Items": soraStartingItems,
+            "Padding": [0] * 52
+        })
+    self.formattedPlrp.append({
+            "Character": 2, # Donald Starting Items
+            "Id": 0,
+            "Hp": 20,
+            "Mp": 100,
+            "Ap": 45,
+            "ArmorSlotMax": 1,
+            "AccessorySlotMax": 2,
+            "ItemSlotMax": 2,
+            "Items": donaldStartingItems,
+            "Padding": [0] * 52
+        })
+    self.formattedPlrp.append({
+            "Character": 3, # Goofy Starting Items
+            "Id": 0,
+            "Hp": 20,
+            "Mp": 100,
+            "Ap": 45,
+            "ArmorSlotMax": 2,
+            "AccessorySlotMax": 1,
+            "ItemSlotMax": 3,
+            "Items": goofyStartingItems,
+            "Padding": [0] * 52
+        })
+
+
+    #Summons have no checks on them so done fully locally
     self.formattedFmlv["Summon"]=[]
     for x in range(1,7):
          self.formattedFmlv["Summon"].append({

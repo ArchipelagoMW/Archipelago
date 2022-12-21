@@ -8,8 +8,8 @@ import typing
 from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
 from ..generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations
-from .Items import ActionAbility_Table, KH2Item, ItemData, item_dictionary_table ,exclusionItem_table, abilities
-from .Locations import all_locations, setup_locations,exclusion_table
+from .Items import ActionAbility_Table, KH2Item, ItemData, item_dictionary_table ,exclusionItem_table, keybladeAbilities,donaldAbility,goofyAbility
+from .Locations import all_locations, setup_locations,exclusion_table,LoD_Checks
 from .Rules import set_rules
 from .logic import KH2Logic
 from .Names import ItemName , LocationName
@@ -91,7 +91,7 @@ class KH2World(World):
     def generate_basic(self):
         itempool: typing.List[KH2Item] = []
 
-        totallocations=663
+        totallocations=661
         fillerItems=[ItemName.Potion,ItemName.HiPotion,ItemName.Ether,ItemName.Elixir,ItemName.MegaPotion,
             ItemName.MegaEther,ItemName.Megalixir,ItemName.Tent,ItemName.DriveRecovery,ItemName.HighDriveRecovery,ItemName.PowerBoost,
             ItemName.MagicBoost,ItemName.DefenseBoost,ItemName.APBoost]
@@ -101,40 +101,64 @@ class KH2World(World):
         self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(self.create_item(ItemName.Victory))
         totallocations-=1
         
+        #Placing Abilitys on keyblades
+        #Just support abilities not action
         for keyblade in exclusion_table["KeybladeSlot"]:
-            randomAbility=abilities[random.randint(0, len(abilities)-1)]
+            randomAbility=keybladeAbilities[random.randint(0, len(keybladeAbilities)-1)]
             self.multiworld.get_location(keyblade, self.player).place_locked_item(self.create_item(randomAbility))
             self.exclude.add(randomAbility)
-            abilities.remove(randomAbility)
+            keybladeAbilities.remove(randomAbility)
             totallocations-=1
+    
+        #Goofy and Donald locaitons/abilites are static and always local. 
+        #So no Totallocations-=1 for them
+
+        #Placing Donald Abilities on donald locations 
+        for DonaldLoc in exclusion_table["DonaldLoc"]:
+            randomAbility=donaldAbility[random.randint(0, len(donaldAbility)-1)]
+            self.multiworld.get_location(DonaldLoc, self.player).place_locked_item(self.create_item(randomAbility))
+            self.exclude.add(randomAbility)
+            donaldAbility.remove(randomAbility)
+
+            
+        #Placing Goofy Abilites on goofy locaitons
+        for GoofyLoc in exclusion_table["GoofyLoc"]:
+            randomAbility=goofyAbility[random.randint(0,len(goofyAbility)-1)]
+            self.multiworld.get_location(GoofyLoc, self.player).place_locked_item(self.create_item(randomAbility))
+            self.exclude.add(randomAbility)
+            goofyAbility.remove(randomAbility)
+
 
         #there is no such thing as lvl 1 but there needs to be a "location" for mod writing reasons
         for lvl in {LocationName.Valorlvl1,LocationName.Wisdomlvl1,LocationName.Limitlvl1,LocationName.Masterlvl1,LocationName.Finallvl1}:
             self.multiworld.get_location(lvl, self.player).place_locked_item(self.create_item(ItemName.Nothing))
             totallocations-=1
-
-
+        
+        #Option to turn off all superbosses. Can do this individually but its like 20+ checks
         if self.multiworld.Super_Bosses[self.player].value==0:
             for superboss in exclusion_table["SuperBosses"] and exclusion_table["Datas"]:
                 self.multiworld.get_location(superboss, self.player).place_locked_item(self.create_item(random.choice(fillerItems)))   
                 totallocations-=1
 
-        if self.multiworld.Schmovement[self.player].value==1:
-            self.multiworld.get_location(LocationName.Crit_1, self.player).place_locked_item(self.create_item(ItemName.HighJump))   
-            self.multiworld.get_location(LocationName.Crit_2, self.player).place_locked_item(self.create_item(ItemName.QuickRun))                  
-            self.multiworld.get_location(LocationName.Crit_3, self.player).place_locked_item(self.create_item(ItemName.DodgeRoll))   
-            self.multiworld.get_location(LocationName.Crit_4, self.player).place_locked_item(self.create_item(ItemName.AerialDodge))   
-            self.multiworld.get_location(LocationName.Crit_5, self.player).place_locked_item(self.create_item(ItemName.Glide))   
+
+        #Thse checks are missable
+        self.multiworld.get_location(LocationName.JunkChampionBelt, self.player).place_locked_item(self.create_item(random.choice(fillerItems)))
+        self.multiworld.get_location(LocationName.JunkMedal, self.player).place_locked_item(self.create_item(random.choice(fillerItems)))
+               
+        #starting with level 1 of all growth in the starting 
+        if self.multiworld.Schmovement[self.player].value==1:                
             for name in{ItemName.HighJump,ItemName.QuickRun,ItemName.DodgeRoll,ItemName.AerialDodge,ItemName.Glide}:
                 self.exclude.add(name)
-                totallocations-=1
 
 
+        #if option to have level checks up to level 50 place nothing on checks past 50
+        
         if self.multiworld.Level_Depth[self.player].value==1:             
             exclustiontbl=exclusion_table["Level50"]
         else:
             exclustiontbl=exclusion_table["Level99"]
-        #if option to have level checks up to level 50 place nothing on checks past 50
+
+        
         for name in Locations.SoraLevels:
             if name not in exclustiontbl:
                self.multiworld.get_location(name, self.player).place_locked_item(self.create_item(ItemName.Nothing))
