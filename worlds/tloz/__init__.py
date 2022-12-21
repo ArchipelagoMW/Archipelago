@@ -241,18 +241,18 @@ class TLoZWorld(World):
                  lambda state: state.has("Heart Container", self.player, 9))
         add_rule(self.multiworld.get_location("Ocean Heart Container", self.player),
                  lambda state: state.has("Stepladder", self.player))
-        # if self.multiworld.StartingPosition[self.player] != 2:
-        #     # Don't allow Take Any Items until we can actually get in one
-        #     if self.multiworld.ExpandedPool[self.player]:
-        #         add_rule(self.multiworld.get_location("Take Any Item Left", self.player),
-        #                  lambda state: state.has_group("candles", self.player) or
-        #                                state.has("Raft", self.player))
-        #         add_rule(self.multiworld.get_location("Take Any Item Middle", self.player),
-        #                  lambda state: state.has_group("candles", self.player) or
-        #                                state.has("Raft", self.player))
-        #         add_rule(self.multiworld.get_location("Take Any Item Right", self.player),
-        #                  lambda state: state.has_group("candles", self.player) or
-        #                                state.has("Raft", self.player))
+        if self.multiworld.StartingPosition[self.player] != 2:
+            # Don't allow Take Any Items until we can actually get in one
+            if self.multiworld.ExpandedPool[self.player]:
+                add_rule(self.multiworld.get_location("Take Any Item Left", self.player),
+                         lambda state: state.has_group("candles", self.player) or
+                                       state.has("Raft", self.player))
+                add_rule(self.multiworld.get_location("Take Any Item Middle", self.player),
+                         lambda state: state.has_group("candles", self.player) or
+                                       state.has("Raft", self.player))
+                add_rule(self.multiworld.get_location("Take Any Item Right", self.player),
+                         lambda state: state.has_group("candles", self.player) or
+                                       state.has("Raft", self.player))
         for location in self.levels[4].locations:
             add_rule(self.multiworld.get_location(location.name, self.player),
                      lambda state: state.has("Raft", self.player) or state.has("Recorder", self.player))
@@ -265,8 +265,8 @@ class TLoZWorld(World):
 
         add_rule(self.multiworld.get_location("Potion Shop Item Left", self.player),
                  lambda state: state.has("Letter", self.player))
-        # add_rule(self.multiworld.get_location("Potion Shop Item Middle", self.player),
-        #          lambda state: state.has("Letter", self.player))
+        add_rule(self.multiworld.get_location("Potion Shop Item Middle", self.player),
+                 lambda state: state.has("Letter", self.player))
         add_rule(self.multiworld.get_location("Potion Shop Item Right", self.player),
                  lambda state: state.has("Letter", self.player))
 

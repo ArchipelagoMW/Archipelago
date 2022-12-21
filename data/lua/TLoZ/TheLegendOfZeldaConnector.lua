@@ -291,9 +291,11 @@ end
 
 local function gotHeartContainer()
     local currentHeartContainers = bit.rshift(bit.band(u8(heartContainers), 0xF0), 4)
-    currentHeartContainers = math.min(currentHeartContainers + 1, 16)
-    local currentHearts = bit.band(u8(heartContainers), 0x0F) + 1
-    wU8(heartContainers, bit.lshift(currentHeartContainers, 4) + currentHearts)
+    if currentHeartContainers < 16 then
+        currentHeartContainers = math.min(currentHeartContainers + 1, 16)
+        local currentHearts = bit.band(u8(heartContainers), 0x0F) + 1
+        wU8(heartContainers, bit.lshift(currentHeartContainers, 4) + currentHearts)
+    end
 end
 
 local function gotTriforceFragment()
@@ -331,8 +333,8 @@ local function gotFairy()
     local currentHeartContainers = bit.rshift(bit.band(u8(heartContainers), 0xF0), 4)
     if currentHearts < currentHeartContainers then 
         currentHearts = currentHearts + 3
-        if currentHearts >= currentHeartContainers then
-            currentHearts = currentHeartContainers - 1
+        if currentHearts > currentHeartContainers then
+            currentHearts = currentHeartContainers
             wU8(partialHearts, 0xFF)
         end
     else

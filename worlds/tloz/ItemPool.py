@@ -5,8 +5,7 @@ from .Locations import level_locations, all_level_locations, standard_level_loca
 overworld_items = {
     "Letter": 1,
     "Power Bracelet": 1,
-    "Heart Container": 1,
-    "Sword": 1
+    "Heart Container": 1
 }
 
 # Bomb, Arrow, 1 Small Key and Red Water of Life are in guaranteed_shop_items
@@ -71,7 +70,7 @@ dangerous_weapon_locations = [
 
 def generate_itempool(tlozworld):
     (pool, placed_items) = get_pool_core(tlozworld)
-    tlozworld.multiworld.itempool = [tlozworld.multiworld.create_item(item, tlozworld.player) for item in pool]
+    tlozworld.multiworld.itempool.extend([tlozworld.multiworld.create_item(item, tlozworld.player) for item in pool])
     for (location_name, item) in placed_items.items():
         location = tlozworld.multiworld.get_location(location_name, tlozworld.player)
         location.place_locked_item(tlozworld.multiworld.create_item(item, tlozworld.player))
@@ -90,7 +89,7 @@ def get_pool_core(world):
         placed_items[location] = item
 
     # Starting Weapon
-    starting_weapon = starting_weapons.pop(random.randint(0, len(starting_weapons) - 1))
+    starting_weapon = random.choice(starting_weapons)
     if world.multiworld.StartingPosition[world.player] == 0:
         placed_items[starting_weapon_locations[0]] = starting_weapon
     elif world.multiworld.StartingPosition[world.player] in [1, 2]:
