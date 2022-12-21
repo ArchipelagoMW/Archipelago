@@ -99,7 +99,7 @@ def local_path(*path: str) -> str:
             local_path.cached_path = os.path.dirname(os.path.abspath(sys.argv[0]))
     else:
         import __main__
-        if hasattr(__main__, "__file__"):
+        if hasattr(__main__, "__file__") and os.path.isfile(__main__.__file__):
             # we are running in a normal Python environment
             local_path.cached_path = os.path.dirname(os.path.abspath(__main__.__file__))
         else:
@@ -273,7 +273,7 @@ def get_default_options() -> OptionsType:
             "players": 0,
             "weights_file_path": "weights.yaml",
             "meta_file_path": "meta.yaml",
-            "spoiler": 2,
+            "spoiler": 3,
             "glitch_triforce_room": 1,
             "race": 0,
             "plando_options": "bosses",
@@ -306,6 +306,9 @@ def get_default_options() -> OptionsType:
         },
         "ffr_options": {
             "display_msgs": True,
+        },
+        "lufia2ac_options": {
+            "rom_file": "Lufia II - Rise of the Sinistrals (USA).sfc",
         },
     }
     return options
