@@ -67,7 +67,7 @@ local magicalShield         = 0x0676
 local rupeesToAdd           = 0x067D
 local rupeesToSubtract      = 0x067E
 local itemsObtained         = 0x0677
-local remoteTriforce        = 0x0678
+local takeAnyCavesChecked   = 0x0678
 local localTriforce         = 0x0679
 
 itemAPids = {
@@ -298,8 +298,8 @@ end
 
 local function gotTriforceFragment()
     local triforceByte = 0xFF
-    local newTriforceCount = u8(remoteTriforce) + 1
-    wU8(remoteTriforce, newTriforceCount)
+    local newTriforceCount = u8(localTriforce) + 1
+    wU8(localTriforce, newTriforceCount)
 end
 
 local function gotBoomerang()
@@ -413,6 +413,7 @@ local function checkCaveItemObtained()
     returnTable["slot1"] = u8(shopSlotLeft)
     returnTable["slot2"] = u8(shopSlotMiddle)
     returnTable["slot3"] = u8(shopSlotRight)
+    returnTable["takeAnys"] = u8(takeAnyCavesChecked)
     return returnTable
 end
 
@@ -529,7 +530,7 @@ end
 function updateTriforceFragments()
     memDomain.ram()
     local triforceByte = 0xFF
-    totalTriforceCount = u8(remoteTriforce) + u8(localTriforce)
+    totalTriforceCount = u8(localTriforce)
     local currentPieces = bit.rshift(triforceByte, 8 - math.min(8, totalTriforceCount))
     wU8(triforceFragments, currentPieces)
 end

@@ -175,7 +175,7 @@ def get_shop_bit_from_name(location_name):
         return Rom.ring_shop
     elif "Candle" in location_name:
         return Rom.candle_shop
-    return 0
+    return 0  # this should never be hit
 
 
 async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone="None"):
@@ -224,6 +224,9 @@ async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone=
                 if locations_array[slot] & shop_bit > 0:
                     locations_checked.append(location)
                     ctx.shop_slots[context_slot] |= shop_bit
+                if locations_array["takeAnys"] and locations_array["takeAnys"] >= 4:
+                    if "Take Any" in location_name:
+                        locations_checked.append(location)
         if locations_checked:
             print([ctx.location_names[location] for location in locations_checked])
             await ctx.send_msgs([
