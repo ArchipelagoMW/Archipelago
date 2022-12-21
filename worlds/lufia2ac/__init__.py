@@ -2,11 +2,11 @@ import base64
 import itertools
 import os
 from enum import IntFlag
-from typing import Any, ClassVar, Dict, List, Optional, Set, Tuple
+from typing import Any, ClassVar, Dict, List, Set, Tuple
 
 from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, Tutorial
-from Main import __version__
 from Options import AssembleOptions
+from Utils import __version__
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_rule, set_rule
 from .Client import L2ACSNIClient  # noqa: F401
@@ -54,30 +54,30 @@ class L2ACWorld(World):
     required_client_version: Tuple[int, int, int] = (0, 3, 6)
 
     # L2ACWorld specific properties
-    rom_name: Optional[bytearray]
+    rom_name: bytearray
 
-    blue_chest_chance: Optional[int]
-    blue_chest_count: Optional[int]
-    boss: Optional[Boss]
-    capsule_cravings_jp_style: Optional[int]
-    capsule_starting_form: Optional[CapsuleStartingForm]
-    capsule_starting_level: Optional[CapsuleStartingLevel]
-    crowded_floor_chance: Optional[int]
-    death_link: Optional[int]
-    default_capsule: Optional[int]
-    default_party: Optional[DefaultParty]
-    final_floor: Optional[int]
-    gear_variety_after_b9: Optional[int]
-    goal: Optional[int]
-    healing_floor_chance: Optional[int]
-    initial_floor: Optional[int]
-    iris_floor_chance: Optional[int]
-    iris_treasures_required: Optional[int]
-    master_hp: Optional[int]
-    party_starting_level: Optional[PartyStartingLevel]
-    run_speed: Optional[int]
-    shuffle_capsule_monsters: Optional[ShuffleCapsuleMonsters]
-    shuffle_party_members: Optional[ShufflePartyMembers]
+    blue_chest_chance: int
+    blue_chest_count: int
+    boss: Boss
+    capsule_cravings_jp_style: int
+    capsule_starting_form: CapsuleStartingForm
+    capsule_starting_level: CapsuleStartingLevel
+    crowded_floor_chance: int
+    death_link: int
+    default_capsule: int
+    default_party: DefaultParty
+    final_floor: int
+    gear_variety_after_b9: int
+    goal: int
+    healing_floor_chance: int
+    initial_floor: int
+    iris_floor_chance: int
+    iris_treasures_required: int
+    master_hp: int
+    party_starting_level: PartyStartingLevel
+    run_speed: int
+    shuffle_capsule_monsters: ShuffleCapsuleMonsters
+    shuffle_party_members: ShufflePartyMembers
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
@@ -276,7 +276,7 @@ class L2ACWorld(World):
     # end of ordered Main.py calls
 
     def create_item(self, name: str) -> Item:
-        item_data: ItemData = l2ac_item_table.get(name)
+        item_data: ItemData = l2ac_item_table[name]
         return L2ACItem(name, item_data.classification, items_start_id + item_data.code, self.player)
 
     def get_capsule_cravings_table(self) -> bytes:

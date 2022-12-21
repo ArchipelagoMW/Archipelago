@@ -2,9 +2,13 @@ from __future__ import annotations
 
 import random
 from itertools import chain, combinations
-from typing import Any, cast, Dict, List, Optional, Set, Tuple
+from typing import Any, cast, Dict, List, Optional, Set, Tuple, Type, TYPE_CHECKING, Union
 
 from Options import AssembleOptions, Choice, DeathLink, Option, Range, SpecialRange, TextChoice, Toggle
+
+if TYPE_CHECKING:
+    from BaseClasses import PlandoOptions
+    from worlds.AutoWorld import World
 
 
 class AssembleCustomizableChoices(AssembleOptions):
@@ -152,7 +156,7 @@ class Boss(RandomGroupsChoice):
         "random-high": ["venge_ghost", "white_dragon_x3", "fire_dragon", "ghost_ship", "tank"],
         "random-sinistral": ["gades_c", "amon", "erim", "daos"],
     }
-    extra_options = frozenset(random_groups)
+    extra_options = set(random_groups)
 
     @property
     def flag(self) -> int:
@@ -277,7 +281,8 @@ class DefaultParty(RandomGroupsChoice, TextChoice):
     """
 
     display_name = "Default party lineup"
-    default = "M"
+    default: Union[str, int] = "M"
+    value: Union[str, int]
 
     random_groups = {
         "random-2p": ["M" + "".join(p) for p in combinations("ADGLST", 1)],
@@ -288,7 +293,7 @@ class DefaultParty(RandomGroupsChoice, TextChoice):
     _valid_sorted_parties: List[List[str]] = [sorted(party) for party in ("M", *chain(*random_groups.values()))]
     _members_to_bytes: bytes = bytes.maketrans(b"MSGATDL", bytes(range(7)))
 
-    def verify(self, *args, **kwargs) -> None:
+    def verify(self, world: Type[World], player_name: str, plando_options: PlandoOptions) -> None:
         if str(self.value).lower() in self.random_groups:
             return
         if sorted(str(self.value).upper()) in self._valid_sorted_parties:

@@ -2,7 +2,7 @@ import logging
 import time
 import typing
 from logging import Logger
-from typing import Dict
+from typing import Dict, Optional
 
 from NetUtils import ClientStatus, NetworkItem
 from worlds.AutoSNIClient import SNIClient
@@ -258,7 +258,7 @@ class L2ACSNIClient(SNIClient):
     async def validate_rom(self, ctx: SNIContext) -> bool:
         from SNIClient import snes_read
 
-        rom_name: bytes = await snes_read(ctx, L2AC_ROMNAME_START, 0x15)
+        rom_name: Optional[bytes] = await snes_read(ctx, L2AC_ROMNAME_START, 0x15)
         if rom_name is None or rom_name[:4] != b"L2AC":
             return False
 
@@ -272,7 +272,7 @@ class L2ACSNIClient(SNIClient):
     async def game_watcher(self, ctx: SNIContext) -> None:
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
-        rom: bytes = await snes_read(ctx, L2AC_ROMNAME_START, 0x15)
+        rom: Optional[bytes] = await snes_read(ctx, L2AC_ROMNAME_START, 0x15)
         if rom != ctx.rom:
             ctx.rom = None
             return
@@ -281,19 +281,19 @@ class L2ACSNIClient(SNIClient):
             # not successfully connected to a multiworld server, cannot process the game sending items
             return
 
-        signature: bytes = await snes_read(ctx, L2AC_SIGN_ADDR, 16)
+        signature: Optional[bytes] = await snes_read(ctx, L2AC_SIGN_ADDR, 16)
         if signature != b"ArchipelagoLufia":
             return
 
         # Goal
         if not ctx.finished_game:
-            goal_data: bytes = await snes_read(ctx, L2AC_GOAL_ADDR, 10)
+            goal_data: Optional[bytes] = await snes_read(ctx, L2AC_GOAL_ADDR, 10)
             if goal_data is not None and goal_data[goal_data[0]] == 0x01:
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                 ctx.finished_game = True
 
         # DeathLink TX
-        death_data: bytes = await snes_read(ctx, L2AC_DEATH_ADDR, 3)
+        death_data: Optional[bytes] = await snes_read(ctx, L2AC_DEATH_ADDR, 3)
         if death_data is not None:
             await ctx.update_death_link(bool(death_data[0]))
             if death_data[1] != 0x00:
@@ -304,7 +304,7 @@ class L2ACSNIClient(SNIClient):
                     await ctx.send_death(f"{player_name} was totally defeated by {enemy_name}.")
 
         # TX
-        tx_data: bytes = await snes_read(ctx, L2AC_TX_ADDR, 8)
+        tx_data: Optional[bytes] = await snes_read(ctx, L2AC_TX_ADDR, 8)
         if tx_data is not None:
             snes_items_sent = int.from_bytes(tx_data[:2], "little")
             client_items_sent = int.from_bytes(tx_data[2:4], "little")
@@ -316,7 +316,7 @@ class L2ACSNIClient(SNIClient):
                 client_items_sent += 1
 
                 ctx.locations_checked.add(location_id)
-                await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
+                await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [location_id]}])
 
                 snes_logger.info("New Check: %s (%d/%d)" % (
                     location,
@@ -329,7 +329,7 @@ class L2ACSNIClient(SNIClient):
                 snes_buffered_write(ctx, L2AC_TX_ADDR + 4, ap_items_found.to_bytes(2, "little"))
 
         # RX
-        rx_data: bytes = await snes_read(ctx, L2AC_RX_ADDR, 4)
+        rx_data: Optional[bytes] = await snes_read(ctx, L2AC_RX_ADDR, 4)
         if rx_data is not None:
             snes_items_received = int.from_bytes(rx_data[:2], "little")
 
@@ -343,7 +343,7 @@ class L2ACSNIClient(SNIClient):
                     ctx.player_names[item.player],
                     ctx.location_names[item.location],
                     snes_items_received, len(ctx.items_received)))
-                snes_buffered_write(ctx, L2AC_RX_ADDR + 2 * (snes_items_received + 1), item_code.to_bytes(2, 'little'))
+                snes_buffered_write(ctx, L2AC_RX_ADDR + 2 * (snes_items_received + 1), item_code.to_bytes(2, "little"))
                 snes_buffered_write(ctx, L2AC_RX_ADDR, snes_items_received.to_bytes(2, "little"))
 
         await snes_flush_writes(ctx)
