@@ -20,8 +20,8 @@ In general, all item pickups in the game. More formally:
 - Every inventory item.
 - Every item found in the five kinds of shops.
 - Optionally, Triforce Fragments can be shuffled to be within dungeons, or anywhere.
-- Optionally, enemy-held items and room clear items (except maps and compasses) can be included in the shuffle, along 
-with their slots
+- Optionally, enemy-held items and dungeon floor items can be included in the shuffle, along with their slots
+- Maps and compasses have been replaced with bonus items, including Clocks and Fairies.
 
 ## What items from The Legend of Zelda can appear in other players' worlds?
 
@@ -37,9 +37,3 @@ filler and useful items will cost less, and uncategorized items will be in the m
 
 Yes. The map and compass for each dungeon start already acquired, and the Recorder will warp you between all eight
 levels regardless of Triforce count (note: it's possible for this to be your route to level 4!).
-
-## Is the randomized game compatible with any other Zelda 1 hacks?
-
-None have been tested, though in theory minor graphical mods should work without issue. Limited testing has been 
-performed with the Infinite Hyrule program, and the client correctly accounts for this, but nothing is guaranteed;
-should you wish to mix and match hacks, any problems that arise are yours to handle.

@@ -565,7 +565,6 @@ function processBlock(block)
         end
         local shopsBlock = block["shops"]
         if shopsBlock ~= nil then
-            print(shopsBlock)
             wU8(shopSlotLeft, bit.bor(u8(shopSlotLeft), shopsBlock["left"]))
             wU8(shopSlotMiddle, bit.bor(u8(shopSlotMiddle), shopsBlock["middle"]))
             wU8(shopSlotRight, bit.bor(u8(shopSlotRight), shopsBlock["right"]))

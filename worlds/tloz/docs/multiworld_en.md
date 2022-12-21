@@ -93,14 +93,9 @@ All other commands may be found on the [Archipelago Server and Client Commands G
 
 ## Known Issues
 
-- Shop items are not checked retroactively: if you do not have the client connected at the time you purchase a 
-shop item, Archipelago will not be made aware of it.
-- There is no tracking for what shop slots have been purchased. If you don't trust your memory, take notes or use the 
-`!missing` command.
 - Triforce Fragments and Heart Containers may be purchased multiple times. It is up to you if you wish to take advantage
 of this; logic will not account for or require purchasing any slot more than once. Remote items, no matter what they
 are, will always only be sent once.
-- Second Quest is currently unsupported. Naming your file a name that starts Second Quest should not be done.
 - Obtaining a remote item will move the location of any existing item in that room. Should this make an item 
 inaccessible, simply exit and re-enter the room. This can be used to obtain the Ocean Heart Container item without the
 stepladder; logic does not account for this.
