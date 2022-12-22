@@ -5,12 +5,12 @@ import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from .Items import SMWItem, ItemData, item_table
-from .Locations import SMWLocation, all_locations, setup_locations
+from .Locations import SMWLocation, all_locations, setup_locations, special_zone_level_names, special_zone_dragon_coin_names
 from .Options import smw_options
 from .Regions import create_regions, connect_regions
 from .Levels import full_level_list, generate_level_list, location_id_to_level_id
 from .Rules import set_rules
-from ..generic.Rules import add_rule
+from ..generic.Rules import add_rule, exclusion_rules
 from .Names import ItemName, LocationName
 from .Client import SMWSNIClient
 from ..AutoWorld import WebWorld, World
@@ -92,6 +92,15 @@ class SMWWorld(World):
         add_rule(self.multiworld.get_region(LocationName.forest_of_illusion_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 4))
         add_rule(self.multiworld.get_region(LocationName.chocolate_island_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 5))
         add_rule(self.multiworld.get_region(LocationName.valley_of_bowser_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 6))
+
+        if self.multiworld.exclude_special_zone[self.player]:
+            exclusion_pool = set()
+            if self.multiworld.dragon_coin_checks[self.player]:
+                exclusion_pool.update(special_zone_level_names)
+                exclusion_pool.update(special_zone_dragon_coin_names)
+            elif self.multiworld.number_of_yoshi_eggs[self.player].value <= 72:
+                exclusion_pool.update(special_zone_level_names)
+            exclusion_rules(self.multiworld, self.player, exclusion_pool)
 
         total_required_locations = 96
         if self.multiworld.dragon_coin_checks[self.player]:

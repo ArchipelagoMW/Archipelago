@@ -277,6 +277,9 @@ hard_single_levels = [
     0x3B,
     0x3A,
     0x37,
+]
+
+special_zone_levels = [
     0x4E,
     0x4F,
     0x50,
@@ -517,6 +520,7 @@ def generate_level_list(world, player):
     world.random.shuffle(easy_single_levels_copy)
     hard_single_levels_copy = hard_single_levels.copy()
     world.random.shuffle(hard_single_levels_copy)
+    special_zone_levels_copy = special_zone_levels.copy()
     easy_double_levels_copy = easy_double_levels.copy()
     world.random.shuffle(easy_double_levels_copy)
     hard_double_levels_copy = hard_double_levels.copy()
@@ -548,6 +552,8 @@ def generate_level_list(world, player):
     shuffled_level_list.append(0x16)
 
     single_levels_copy = (easy_single_levels_copy.copy() + hard_single_levels_copy.copy())
+    if not world.exclude_special_zone[player]:
+        single_levels_copy.extend(special_zone_levels_copy)
     world.random.shuffle(single_levels_copy)
 
     castle_fortress_levels_copy = (easy_castle_fortress_levels_copy.copy() + hard_castle_fortress_levels_copy.copy())
@@ -640,14 +646,17 @@ def generate_level_list(world, player):
 
     # Special Zone
     shuffled_level_list.append(0x4D)
-    shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(single_levels_copy.pop(0))
+    if not world.exclude_special_zone[player]:
+        shuffled_level_list.append(single_levels_copy.pop(0))
+        shuffled_level_list.append(single_levels_copy.pop(0))
+        shuffled_level_list.append(single_levels_copy.pop(0))
+        shuffled_level_list.append(single_levels_copy.pop(0))
+        shuffled_level_list.append(single_levels_copy.pop(0))
+        shuffled_level_list.append(single_levels_copy.pop(0))
+        shuffled_level_list.append(single_levels_copy.pop(0))
+        shuffled_level_list.append(single_levels_copy.pop(0))
+    else:
+        shuffled_level_list.extend(special_zone_levels_copy)
     shuffled_level_list.append(0x48)
 
     return shuffled_level_list

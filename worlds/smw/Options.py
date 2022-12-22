@@ -109,6 +109,14 @@ class LevelShuffle(Toggle):
     display_name = "Level Shuffle"
 
 
+class ExcludeSpecialZone(Toggle):
+    """
+    If active, this option will prevent any progression items from being placed in Special Zone levels.
+    Additionally, if Level Shuffle is active, Special Zone levels will not be shuffled away from their vanilla tiles.
+    """
+    display_name = "Exclude Special Zone"
+
+
 class SwapDonutGhostHouseExits(Toggle):
     """
     If enabled, this option will swap which overworld direction the two exits of the level at the Donut Ghost House
@@ -289,6 +297,7 @@ smw_options: typing.Dict[str, type(Option)] = {
     "bowser_castle_doors": BowserCastleDoors,
     "bowser_castle_rooms": BowserCastleRooms,
     "level_shuffle": LevelShuffle,
+    "exclude_special_zone": ExcludeSpecialZone,
     "boss_shuffle": BossShuffle,
     "swap_donut_gh_exits": SwapDonutGhostHouseExits,
     #"display_sent_item_popups": DisplaySentItemPopups,
