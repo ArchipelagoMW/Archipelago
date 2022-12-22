@@ -236,7 +236,7 @@ end
 
 local function gotWaterOfLifeBlue()
     local currentWaterOfLife = u8(waterOfLife)
-    wU8(waterOfLife, math.max(waterOfLife, 1))
+    wU8(waterOfLife, math.max(currentWaterOfLife, 1))
 end
 
 local function gotWaterOfLifeRed()

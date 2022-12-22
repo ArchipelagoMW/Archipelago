@@ -175,6 +175,8 @@ def get_shop_bit_from_name(location_name):
         return Rom.ring_shop
     elif "Candle" in location_name:
         return Rom.candle_shop
+    elif "Take" in location_name:
+        return Rom.take_any
     return 0  # this should never be hit
 
 
@@ -208,7 +210,7 @@ async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone=
                 if status & 0x10:
                     ctx.locations_checked.add(location)
                     locations_checked.append(location)
-            elif location_name in Locations.shop_locations and zone == "caves":
+            elif (location_name in Locations.shop_locations or "Take" in location_name) and zone == "caves":
                 shop_bit = get_shop_bit_from_name(location_name)
                 slot = 0
                 context_slot = 0
