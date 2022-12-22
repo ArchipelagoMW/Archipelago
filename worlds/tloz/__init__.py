@@ -315,16 +315,14 @@ class TLoZWorld(World):
             item = rom_data[first_quest_dungeon_items_early + i]
             if item & 0b00100000:
                 rom_data[first_quest_dungeon_items_early + i] = item | 0b01000000
-            if item & 0b0000011: # Change all Item 03s to Item 3F, the proper "nothing"
+            if item & 0b00111111 == 0b00000011: # Change all Item 03s to Item 3F, the proper "nothing"
                 rom_data[first_quest_dungeon_items_early + i] = item | 0b00111111
-            rom_data[first_quest_dungeon_items_early + i] = item & 0b11000000
 
             item = rom_data[first_quest_dungeon_items_late + i]
             if item & 0b00100000:
                 rom_data[first_quest_dungeon_items_late + i] = item | 0b01000000
-            if item & 0b00000011:
+            if item & 0b00111111 == 0b00000011:
                 rom_data[first_quest_dungeon_items_late + i] = item | 0b00111111
-            rom_data[first_quest_dungeon_items_late + i] = item & 0b11000000
         return rom_data
 
     def apply_randomizer(self):
