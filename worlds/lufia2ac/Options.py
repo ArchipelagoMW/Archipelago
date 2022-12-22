@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import random
+from dataclasses import dataclass
 from itertools import chain, combinations
 from typing import Any, cast, Dict, List, Optional, Set, Tuple, Type, TYPE_CHECKING, Union
 
-from Options import AssembleOptions, Choice, DeathLink, Option, Range, SpecialRange, TextChoice, Toggle
+from Options import AssembleOptions, Choice, DeathLink, Range, SpecialRange, TextChoice, Toggle
 
 if TYPE_CHECKING:
     from BaseClasses import PlandoOptions
@@ -509,27 +510,27 @@ class ShufflePartyMembers(Toggle):
         return 0b00000000 if self.value else 0b11111100
 
 
-l2ac_option_definitions: Dict[str, type(Option)] = {
-    "blue_chest_chance": BlueChestChance,
-    "blue_chest_count": BlueChestCount,
-    "boss": Boss,
-    "capsule_cravings_jp_style": CapsuleCravingsJPStyle,
-    "capsule_starting_form": CapsuleStartingForm,
-    "capsule_starting_level": CapsuleStartingLevel,
-    "crowded_floor_chance": CrowdedFloorChance,
-    "death_link": DeathLink,
-    "default_capsule": DefaultCapsule,
-    "default_party": DefaultParty,
-    "final_floor": FinalFloor,
-    "gear_variety_after_b9": GearVarietyAfterB9,
-    "goal": Goal,
-    "healing_floor_chance": HealingFloorChance,
-    "initial_floor": InitialFloor,
-    "iris_floor_chance": IrisFloorChance,
-    "iris_treasures_required": IrisTreasuresRequired,
-    "master_hp": MasterHp,
-    "party_starting_level": PartyStartingLevel,
-    "run_speed": RunSpeed,
-    "shuffle_capsule_monsters": ShuffleCapsuleMonsters,
-    "shuffle_party_members": ShufflePartyMembers,
-}
+@dataclass
+class L2ACOptions:
+    blue_chest_chance: BlueChestChance
+    blue_chest_count: BlueChestCount
+    boss: Boss
+    capsule_cravings_jp_style: CapsuleCravingsJPStyle
+    capsule_starting_form: CapsuleStartingForm
+    capsule_starting_level: CapsuleStartingLevel
+    crowded_floor_chance: CrowdedFloorChance
+    death_link: DeathLink
+    default_capsule: DefaultCapsule
+    default_party: DefaultParty
+    final_floor: FinalFloor
+    gear_variety_after_b9: GearVarietyAfterB9
+    goal: Goal
+    healing_floor_chance: HealingFloorChance
+    initial_floor: InitialFloor
+    iris_floor_chance: IrisFloorChance
+    iris_treasures_required: IrisTreasuresRequired
+    master_hp: MasterHp
+    party_starting_level: PartyStartingLevel
+    run_speed: RunSpeed
+    shuffle_capsule_monsters: ShuffleCapsuleMonsters
+    shuffle_party_members: ShufflePartyMembers
