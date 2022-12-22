@@ -249,8 +249,10 @@ rom_loc_offsets = {
     0xC640DB: 0xBFCA6B,  # Right flame
 }
 
-npc_items = {0xC6402E, 0xC6407D, 0xC6407E, 0xC6406A}
-invis_items = {}
+npc_items = (0xC6402E, 0xC6407D, 0xC6407E, 0xC6406A)
+invis_items = ()
+event_items = (0xC640DC, 0xC640DE, 0xC640DF, 0xC640E0, 0xC640E1, 0xC640E2, 0xC640E3, 0xC640E4, 0xC640E5, 0xC640E6,
+               0xC640E7, 0xC640E8, 0xC640E9, 0xC640EA, 0xC640EB, 0xC640EC, 0xC640ED)
 
 rom_item_bytes = {
     "White jewel": 0x01,
@@ -690,8 +692,8 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
                                                       f"of the basement crystal\n"
                                                       f"to undo the seal.", True))
     elif world.draculas_condition[player] == 2:
-        rom.write_bytes(0xBBD50, [0x08, 0x0F, 0xF1, 0x8D])  # J	0x803FC634
-        rom.write_bytes(0xBFC634, PatchName.boss_speical2_giver)
+        rom.write_bytes(0xBBD50, [0x08, 0x0F, 0xF1, 0x8C])  # J	0x803FC630
+        rom.write_bytes(0xBFC630, PatchName.boss_special2_giver)
         rom.write_bytes(0xBFC55C, PatchName.werebull_flag_unsetter_special2_electric_boogaloo)
         rom.write_byte(0xADE8F, world.bosses_required[player].value)
         rom.write_bytes(0xBFCC62, cv64_text_converter(f"It won't budge!\n"
@@ -748,6 +750,8 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
 
     rom.write_bytes(0x10AB2C, [0x80, 0x15, 0xFB, 0xD4])  # Maze Gates' check code pointer adjustments
     rom.write_bytes(0x10AB40, [0x80, 0x15, 0xFB, 0xD4])
+    rom.write_bytes(0x10AB50, [0x0D, 0x0C, 0x00, 0x00, 0x80, 0x15, 0xFB, 0xD4])
+    rom.write_bytes(0x10AB64, [0x0D, 0x0C, 0x00, 0x00, 0x80, 0x15, 0xFB, 0xD4])
     rom.write_bytes(0xE2E14, PatchName.normal_door_hook)
     rom.write_bytes(0xBFC5D0, PatchName.normal_door_code)
     rom.write_bytes(0x6EF298, PatchName.ct_door_hook)
@@ -757,20 +761,23 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
     rom.write_byte(0x9B518F, 0x01)
 
     # Slightly move some once-invisible freestanding items to be more visible
-    if world.reveal_invisible_items[player]:
-        rom.write_byte(0x7C7F95, 0xEF)  # Forest dirge maiden statue
-        rom.write_byte(0x7C7FA8, 0xAB)  # Forest werewolf statue
-        rom.write_byte(0x8099C4, 0x8C)  # Villa courtyard tombstone
-        rom.write_byte(0x83A626, 0xC2)  # Villa living room painting
-        rom.write_byte(0x83A62F, 0x64)  # Villa living room painting
-        rom.write_byte(0x8985DD, 0xF5)  # CC torture instrument rack
-        rom.write_byte(0x8C44D0, 0x22)  # CC red carpet hallway knight
-        rom.write_byte(0x8DF57C, 0xF1)  # CC cracked wall hallway flamethrower
-        rom.write_byte(0x90FCD6, 0xA5)  # CC nitro hallway flamethrower
-        rom.write_byte(0x90FB9F, 0x9A)  # CC invention room round machine
-        rom.write_byte(0x90FBAF, 0x03)  # CC invention room giant famicart
-        rom.write_byte(0x90FE54, 0x97)  # CC staircase knight (x)
-        rom.write_byte(0x90FE58, 0xFB)  # CC staircase knight (z)
+    # if world.reveal_invisible_items[player]:
+    rom.write_byte(0x7C7F95, 0xEF)  # Forest dirge maiden statue
+    rom.write_byte(0x7C7FA8, 0xAB)  # Forest werewolf statue
+    rom.write_byte(0x8099C4, 0x8C)  # Villa courtyard tombstone
+    rom.write_byte(0x83A626, 0xC2)  # Villa living room painting
+    # rom.write_byte(0x83A62F, 0x64)  # Villa table
+    rom.write_byte(0x8985DD, 0xF5)  # CC torture instrument rack
+    rom.write_byte(0x8C44D5, 0x22)  # CC red carpet hallway knight
+    rom.write_byte(0x8DF57C, 0xF1)  # CC cracked wall hallway flamethrower
+    rom.write_byte(0x90FCD6, 0xA5)  # CC nitro hallway flamethrower
+    rom.write_byte(0x90FB9F, 0x9A)  # CC invention room round machine
+    rom.write_byte(0x90FBAF, 0x03)  # CC invention room giant famicart
+    rom.write_byte(0x90FE54, 0x97)  # CC staircase knight (x)
+    rom.write_byte(0x90FE58, 0xFB)  # CC staircase knight (z)
+
+    # Item property table extension (for the remaining invisible items)
+    # rom.write_bytes(0xBFCD20, PatchName.item_property_list_extension)
 
     # Write the new scene/spawn IDs for Stage Shuffle
     if world.stage_shuffle[player]:
@@ -799,9 +806,19 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
                 elif active_level_list[i - 2] == LocationName.villa:
                     rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset, 0x1A)
                     rom.write_byte(level_dict[active_level_list[i]].startzoneSpawnOffset, 0x03)
+                elif active_level_list[i - 3] == LocationName.villa:
+                    rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset,
+                                   level_dict[active_level_list[i - 2]].endSceneID)
+                    rom.write_byte(level_dict[active_level_list[i]].startzoneSpawnOffset,
+                                   level_dict[active_level_list[i - 2]].endSpawnID)
                 elif active_level_list[i - 3] == LocationName.castle_center:
                     rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset, 0x0F)
                     rom.write_byte(level_dict[active_level_list[i]].startzoneSpawnOffset, 0x03)
+                elif active_level_list[i - 5] == LocationName.castle_center:
+                    rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset,
+                                   level_dict[active_level_list[i - 3]].endSceneID)
+                    rom.write_byte(level_dict[active_level_list[i]].startzoneSpawnOffset,
+                                   level_dict[active_level_list[i - 3]].endSpawnID)
                 else:
                     rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset,
                                    level_dict[active_level_list[i - 1]].endSceneID)

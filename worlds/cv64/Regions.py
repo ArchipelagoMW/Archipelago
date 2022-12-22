@@ -4,7 +4,7 @@ from BaseClasses import MultiWorld, Region, Entrance
 from .Items import CV64Item
 from .Locations import CV64Location
 from .Names import LocationName, ItemName
-from .Rom import rom_loc_offsets, npc_items, invis_items
+from .Rom import rom_loc_offsets, npc_items, invis_items, event_items
 from .Levels import end_regions_dict, mid_regions_dict
 
 
@@ -47,14 +47,12 @@ def create_regions(world, player: int, active_locations):
     forest_start_region_locations = [
         LocationName.forest_pillars_right,
         LocationName.forest_pillars_top,
-        LocationName.forest_boss_one,
         LocationName.forest_bone_mom,
         LocationName.forest_lgaz_in,
         LocationName.forest_lgaz_top,
         LocationName.forest_hgaz_in,
         LocationName.forest_hgaz_top,
         LocationName.forest_weretiger_sw,
-        LocationName.forest_boss_two,
         LocationName.forest_weretiger_gate,
         LocationName.forest_dirge_plaque,
         LocationName.forest_dirge_tomb,
@@ -62,6 +60,9 @@ def create_regions(world, player: int, active_locations):
         LocationName.forest_dbridge_wall,
         LocationName.forest_dbridge_sw,
     ]
+    if world.draculas_condition[player].value == 2:
+        forest_start_region_locations.append(LocationName.forest_boss_two)
+        forest_start_region_locations.insert(3, LocationName.forest_boss_one)
     forest_start_region = create_region(world, player, active_locations, LocationName.forest_of_silence,
                                         forest_start_region_locations, None)
 
@@ -76,38 +77,30 @@ def create_regions(world, player: int, active_locations):
         LocationName.forest_final_sw,
     ]
     forest_mid_region = create_region(world, player, active_locations, LocationName.forest_mid,
-                                          forest_mid_region_locations, None)
+                                      forest_mid_region_locations, None)
 
-    forest_end_region_locations = [
-        LocationName.forest_boss_three,
-    ]
-    forest_end_region = create_region(world, player, active_locations, LocationName.forest_end,
-                                      forest_end_region_locations, None)
+    if world.draculas_condition[player].value == 2:
+        forest_end_region_locations = [
+            LocationName.forest_boss_three,
+        ]
+        forest_end_region = create_region(world, player, active_locations, LocationName.forest_end,
+                                          forest_end_region_locations, None)
+    else:
+        forest_end_region = create_region(world, player, active_locations, LocationName.forest_end, None, None)
 
     # Castle Wall regions
-    cw_start_region = create_region(world, player, active_locations, LocationName.castle_wall, None, None)
-
-    cw_rtower_region_locations = [
+    cw_main_region_locations = [
         LocationName.cwr_bottom,
-    ]
-    cw_rtower_region = create_region(world, player, active_locations, LocationName.cw_rtower,
-                                     cw_rtower_region_locations, None)
-
-    cw_bd_region_locations = [
         LocationName.cw_dragon_sw,
-        LocationName.cw_boss,
-    ]
-    cw_bd_region = create_region(world, player, active_locations, LocationName.cw_bd_switch,
-                                 cw_bd_region_locations, None)
-
-    cw_descent_region_locations = [
         LocationName.cw_rrampart,
         LocationName.cw_lrampart,
         LocationName.cw_shelf_visible,
         LocationName.cw_shelf_sandbags,
     ]
-    cw_descent_region = create_region(world, player, active_locations, LocationName.cw_descent,
-                                      cw_descent_region_locations, None)
+    if world.draculas_condition[player] == "bosses":
+        cw_main_region_locations.insert(2, LocationName.cw_boss)
+    cw_main_region = create_region(world, player, active_locations, LocationName.castle_wall,
+                                   cw_main_region_locations, None)
 
     cw_exit_region_locations = [
         LocationName.cw_ground_middle,
@@ -118,16 +111,12 @@ def create_regions(world, player: int, active_locations):
     cw_ltower_region_locations = [
         LocationName.cwl_bottom,
         LocationName.cwl_bridge,
+        LocationName.cw_drac_sw,
     ]
     cw_ltower_region = create_region(world, player, active_locations, LocationName.cw_ltower,
                                      cw_ltower_region_locations, None)
 
-    cw_drac_region_locations = [
-        LocationName.cw_drac_sw,
-    ]
-    cw_drac_region = create_region(world, player, active_locations, LocationName.cw_drac_switch,
-                                   cw_drac_region_locations, None)
-
+    # Villa regions
     villa_start_region_locations = [
         LocationName.villafy_outer_gate_l,
         LocationName.villafy_outer_gate_r,
@@ -137,7 +126,7 @@ def create_regions(world, player: int, active_locations):
     villa_start_region = create_region(world, player, active_locations, LocationName.villa,
                                        villa_start_region_locations, None)
 
-    villa_fountain_region_locations = [
+    villa_main_region_locations = [
         LocationName.villafy_gate_marker,
         LocationName.villafy_villa_marker,
         LocationName.villafy_tombstone,
@@ -147,11 +136,6 @@ def create_regions(world, player: int, active_locations):
         LocationName.villafy_fountain_mr,
         LocationName.villafy_fountain_rl,
         LocationName.villafy_fountain_rr,
-    ]
-    villa_fountain_region = create_region(world, player, active_locations, LocationName.villa_fy_fountain,
-                                          villa_fountain_region_locations, None)
-
-    villa_foyer_region_locations = [
         LocationName.villafo_front_r,
         LocationName.villafo_front_l,
         # LocationName.villafo_mid_r,
@@ -161,17 +145,6 @@ def create_regions(world, player: int, active_locations):
         LocationName.villafo_pot_r,
         LocationName.villafo_pot_l,
         LocationName.villafo_sofa,
-    ]
-    villa_foyer_region = create_region(world, player, active_locations, LocationName.villa_foyer_main,
-                                       villa_foyer_region_locations, None)
-
-    villa_servant_region_locations = [
-        LocationName.villafo_serv_ent,
-    ]
-    villa_servant_region = create_region(world, player, active_locations, LocationName.villa_servant_entrance,
-                                         villa_servant_region_locations, None)
-
-    villa_living_region_locations = [
         LocationName.villala_hallway_stairs,
         LocationName.villala_bedroom_chairs,
         LocationName.villala_bedroom_bed,
@@ -185,8 +158,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.villala_llivingroom_lion,
         LocationName.villala_exit_knight,
     ]
-    villa_living_region = create_region(world, player, active_locations, LocationName.villa_living_main,
-                                        villa_living_region_locations, None)
+    villa_main_region = create_region(world, player, active_locations, LocationName.villa_main,
+                                      villa_main_region_locations, None)
 
     villa_storeroom_region_locations = [
         LocationName.villala_storeroom_l,
@@ -203,9 +176,7 @@ def create_regions(world, player: int, active_locations):
     villa_archives_region = create_region(world, player, active_locations, LocationName.villa_archives,
                                           villa_archives_region_locations, None)
 
-    villa_maze_front_region = create_region(world, player, active_locations, LocationName.villa_maze_front, None, None)
-
-    villa_maze_main_region_locations = [
+    villa_maze_region_locations = [
         LocationName.villam_malus_torch,
         LocationName.villam_malus_bush,
         LocationName.villam_frankieturf_l,
@@ -217,32 +188,28 @@ def create_regions(world, player: int, active_locations):
         LocationName.villam_rplatform_de,
         LocationName.villam_exit_de,
         LocationName.villam_serv_path,
+    ]
+    villa_maze_region = create_region(world, player, active_locations, LocationName.villa_maze,
+                                      villa_maze_region_locations, None)
+
+    villa_servants_region_location = [
         LocationName.villafo_serv_ent,
     ]
-    villa_maze_main_region = create_region(world, player, active_locations, LocationName.villa_maze_main,
-                                           villa_maze_main_region_locations, None)
-
-    villa_maze_back_region_locations = [
-        LocationName.villam_serv_path,
-    ]
-    villa_maze_back_region = create_region(world, player, active_locations, LocationName.villa_maze_back,
-                                           villa_maze_back_region_locations, None)
-
-    villa_maze_crypt_region_locations = [
-        LocationName.villam_crypt_ent,
-        LocationName.villam_crypt_upstream,
-    ]
-    villa_maze_crypt_region = create_region(world, player, active_locations, LocationName.villa_maze_crypt,
-                                            villa_maze_crypt_region_locations, None)
+    villa_servants_region = create_region(world, player, active_locations, LocationName.villa_servants,
+                                          villa_servants_region_location, None)
 
     villa_crypt_region_locations = [
+        LocationName.villam_crypt_ent,
+        LocationName.villam_crypt_upstream,
         LocationName.villac_ent_l,
         LocationName.villac_ent_r,
         LocationName.villac_wall_l,
         LocationName.villac_wall_r,
         LocationName.villac_coffin_r,
-        LocationName.villa_boss,
     ]
+    if world.draculas_condition[player].value == 2:
+        villa_crypt_region_locations.append(LocationName.villa_boss_one)
+        villa_crypt_region_locations.append(LocationName.villa_boss_two)
     villa_crypt_region = create_region(world, player, active_locations, LocationName.villa_crypt,
                                        villa_crypt_region_locations, None)
 
@@ -292,14 +259,14 @@ def create_regions(world, player: int, active_locations):
     if world.carrie_logic[player]:
         uw_start_region_locations.insert(4, LocationName.uw_carrie1)
         uw_start_region_locations.insert(5, LocationName.uw_carrie2)
+    if world.draculas_condition[player].value == 2:
+        uw_start_region_locations.insert(3, LocationName.uw_boss)
     uw_start_region = create_region(world, player, active_locations, LocationName.underground_waterway,
                                     uw_start_region_locations, None)
 
     uw_end_region = create_region(world, player, active_locations, LocationName.uw_end, None, None)
 
-    fan_meeting_region = create_region(world, player, active_locations, LocationName.fan_meeting_room, None, None)
-
-    cc_start_region_locations = [
+    cc_main_region_locations = [
         LocationName.ccb_skel_hallway_ent,
         LocationName.ccb_skel_hallway_jun,
         LocationName.ccb_skel_hallway_tc,
@@ -311,36 +278,10 @@ def create_regions(world, player: int, active_locations):
         LocationName.ccb_behemoth_r_mf,
         LocationName.ccb_behemoth_r_mr,
         LocationName.ccb_behemoth_r_fr,
-    ]
-    cc_start_region = create_region(world, player, active_locations, LocationName.castle_center,
-                                    cc_start_region_locations, None)
-
-    cc_tc_region_locations = [
-        LocationName.ccb_mandrag_shelf,
-        LocationName.ccb_torture_rack,
-        LocationName.ccb_torture_rafters,
-    ]
-    cc_tc_region = create_region(world, player, active_locations, LocationName.cc_torture_chamber,
-                                 cc_tc_region_locations, None)
-
-    cc_sealed_wall_region_locations = [
-        LocationName.cc_behind_the_seal,
-        LocationName.cc_boss_one,
-        LocationName.cc_boss_two,
-    ]
-    cc_sealed_wall_region = create_region(world, player, active_locations, LocationName.cc_crystal,
-                                          cc_sealed_wall_region_locations, None)
-
-    cc_elev_bottom_region_locations = [
         LocationName.ccelv_near_machine,
         LocationName.ccelv_atop_machine,
         LocationName.ccelv_pipes,
         LocationName.ccelv_staircase,
-    ]
-    cc_elev_bottom_region = create_region(world, player, active_locations, LocationName.cc_elev_bottom,
-                                          cc_elev_bottom_region_locations, None)
-
-    cc_factory_region_locations = [
         LocationName.ccff_redcarpet_knight,
         LocationName.ccff_gears_side,
         LocationName.ccff_gears_mid,
@@ -348,18 +289,6 @@ def create_regions(world, player: int, active_locations):
         LocationName.ccff_lizard_knight,
         LocationName.ccff_lizard_pit,
         LocationName.ccff_lizard_corner,
-    ]
-    if world.lizard_generator_items[player]:
-        cc_factory_region_locations.insert(22, LocationName.ccff_lizard_coffin_nfr)
-        cc_factory_region_locations.insert(23, LocationName.ccff_lizard_coffin_nmr)
-        cc_factory_region_locations.insert(24, LocationName.ccff_lizard_coffin_nml)
-        cc_factory_region_locations.insert(25, LocationName.ccff_lizard_coffin_nfl)
-        cc_factory_region_locations.insert(26, LocationName.ccff_lizard_coffin_fl)
-        cc_factory_region_locations.insert(27, LocationName.ccff_lizard_coffin_fr)
-    cc_factory_region = create_region(world, player, active_locations, LocationName.cc_factory,
-                                      cc_factory_region_locations, None)
-
-    cc_lizard_lab_region_locations = [
         LocationName.ccll_brokenstairs_floor,
         LocationName.ccll_brokenstairs_knight,
         LocationName.ccll_brokenstairs_save,
@@ -371,35 +300,8 @@ def create_regions(world, player: int, active_locations):
         LocationName.ccll_cwhall_flamethrower,
         LocationName.ccll_cwhall_cwflames,
         LocationName.ccll_lizardman,
-    ]
-    cc_lizard_lab_region = create_region(world, player, active_locations, LocationName.cc_lizard_main,
-                                         cc_lizard_lab_region_locations, None)
-
-    cc_lizard_wall_region_locations = [
-        LocationName.ccll_cwhall_wall,
-    ]
-    cc_lizard_wall_region = create_region(world, player, active_locations, LocationName.cc_lizard_wall,
-                                          cc_lizard_wall_region_locations, None)
-
-    cc_library_region_locations = [
-        LocationName.ccl_bookcase,
-    ]
-    cc_library_region = create_region(world, player, active_locations, LocationName.cc_library,
-                                      cc_library_region_locations, None)
-
-    cc_invention_lizard_region_locations = [
         LocationName.ccia_nitro_crates,
-    ]
-    cc_invention_lizard_region = create_region(world, player, active_locations, LocationName.cc_invention_lizard_exit,
-                                               cc_invention_lizard_region_locations, None)
-
-    cc_nitro_shelf_region_locations = [
         LocationName.ccia_nitro_shelf,
-    ]
-    cc_nitro_shelf_region = create_region(world, player, active_locations, LocationName.cc_nitro,
-                                          cc_nitro_shelf_region_locations, None)
-
-    cc_invention_area_region_locations = [
         LocationName.ccia_stairs_knight,
         LocationName.ccia_maids_vase,
         LocationName.ccia_maids_inner,
@@ -412,33 +314,72 @@ def create_regions(world, player: int, active_locations):
         LocationName.ccia_nitrohall_flamethrower,
         LocationName.ccia_nitrohall_torch,
     ]
-    cc_invention_area_region = create_region(world, player, active_locations, LocationName.cc_invention_main,
-                                             cc_invention_area_region_locations, None)
+    if world.lizard_generator_items[player]:
+        cc_main_region_locations.insert(22, LocationName.ccff_lizard_coffin_nfr)
+        cc_main_region_locations.insert(23, LocationName.ccff_lizard_coffin_nmr)
+        cc_main_region_locations.insert(24, LocationName.ccff_lizard_coffin_nml)
+        cc_main_region_locations.insert(25, LocationName.ccff_lizard_coffin_nfl)
+        cc_main_region_locations.insert(26, LocationName.ccff_lizard_coffin_fl)
+        cc_main_region_locations.insert(27, LocationName.ccff_lizard_coffin_fr)
+    cc_main_region = create_region(world, player, active_locations, LocationName.castle_center,
+                                   cc_main_region_locations, None)
+
+    cc_tc_region_locations = [
+        LocationName.ccb_mandrag_shelf,
+        LocationName.ccb_torture_rack,
+        LocationName.ccb_torture_rafters,
+    ]
+    cc_tc_region = create_region(world, player, active_locations, LocationName.cc_torture_chamber,
+                                 cc_tc_region_locations, None)
+
+    if world.draculas_condition[player].value == 1:
+        cc_sealed_wall_region_locations = [
+            LocationName.cc_behind_the_seal
+        ]
+        cc_sealed_wall_region = create_region(world, player, active_locations, LocationName.cc_crystal,
+                                              cc_sealed_wall_region_locations, None)
+    elif world.draculas_condition[player].value == 2:
+        cc_sealed_wall_region_locations = [
+            LocationName.cc_boss_one,
+            LocationName.cc_boss_two,
+        ]
+        cc_sealed_wall_region = create_region(world, player, active_locations, LocationName.cc_crystal,
+                                              cc_sealed_wall_region_locations, None)
+    else:
+        cc_sealed_wall_region = create_region(world, player, active_locations, LocationName.cc_crystal, None, None)
+
+    cc_library_region_locations = [
+        LocationName.ccll_cwhall_wall,
+        LocationName.ccl_bookcase,
+    ]
+    cc_library_region = create_region(world, player, active_locations, LocationName.cc_library,
+                                      cc_library_region_locations, None)
 
     cc_end_region = create_region(world, player, active_locations, LocationName.cc_elev_top, None, None)
 
     dt_region_locations = [
-        LocationName.dt_boss_one,
-        LocationName.dt_boss_two,
         LocationName.dt_ibridge_l,
         LocationName.dt_ibridge_r,
         LocationName.dt_stones_start,
         LocationName.dt_werebull_arena,
-        LocationName.dt_boss_three,
-        LocationName.dt_boss_four,
     ]
+    if world.draculas_condition[player].value == 2:
+        dt_region_locations.append(LocationName.dt_boss_three)
+        dt_region_locations.append(LocationName.dt_boss_four)
+        dt_region_locations.insert(0, LocationName.dt_boss_two)
+        dt_region_locations.insert(0, LocationName.dt_boss_one)
     dt_region = create_region(world, player, active_locations, LocationName.duel_tower,
                               dt_region_locations, None)
 
-    toe_start_region_locations = [
+    toe_main_region_locations = [
         LocationName.toe_midsavespikes_r,
         LocationName.toe_midsavespikes_l,
         LocationName.toe_elec_grate,
         LocationName.toe_ibridge,
         LocationName.toe_top,
     ]
-    toe_start_region = create_region(world, player, active_locations, LocationName.tower_of_execution,
-                                     toe_start_region_locations, None)
+    toe_main_region = create_region(world, player, active_locations, LocationName.tower_of_execution,
+                                    toe_main_region_locations, None)
 
     toe_gate_region_locations = [
         LocationName.toe_keygate_l
@@ -478,28 +419,25 @@ def create_regions(world, player: int, active_locations):
     tosor_region_locations = [
         LocationName.tosor_stained_tower,
         LocationName.tosor_savepoint,
-        LocationName.tosor_trickshot,
         LocationName.tosor_yellow_bubble,
         LocationName.tosor_blue_platforms,
         LocationName.tosor_side_isle,
         LocationName.tosor_ibridge,
     ]
+    if world.carrie_logic[player]:
+        tosor_region_locations.insert(2, LocationName.tosor_trickshot)
     tosor_region = create_region(world, player, active_locations, LocationName.tower_of_sorcery,
                                  tosor_region_locations, None)
 
-    roc_main_region_locations = [
+    roc_region_locations = [
         LocationName.roc_ent_l,
         LocationName.roc_gs_r,
         LocationName.roc_ent_r,
     ]
-    roc_main_region = create_region(world, player, active_locations, LocationName.room_of_clocks,
-                                    roc_main_region_locations, None)
-
-    roc_boss_locations = [
-        LocationName.roc_boss,
-    ]
-    roc_boss_region = create_region(world, player, active_locations, LocationName.roc_boss_tower,
-                                    roc_boss_locations, None)
+    if world.draculas_condition[player].value == 2:
+        roc_region_locations.append(LocationName.roc_boss)
+    roc_region = create_region(world, player, active_locations, LocationName.room_of_clocks,
+                               roc_region_locations, None)
 
     ct_start_region_locations = [
         LocationName.ct_gearclimb_side,
@@ -528,6 +466,11 @@ def create_regions(world, player: int, active_locations):
         LocationName.ck_behind_drac,
         LocationName.ck_cube,
     ]
+    if world.draculas_condition[player].value == 2:
+        if world.fight_vincent[player].value != 0:
+            ck_region_locations.insert(0, LocationName.ck_boss_two)
+        if world.fight_renon[player].value != 0:
+            ck_region_locations.insert(0, LocationName.ck_boss_one)
     ck_region = create_region(world, player, active_locations, LocationName.castle_keep,
                               ck_region_locations, None)
 
@@ -550,52 +493,34 @@ def create_regions(world, player: int, active_locations):
         forest_start_region,
         forest_mid_region,
         forest_end_region,
-        cw_start_region,
-        cw_rtower_region,
-        cw_bd_region,
-        cw_descent_region,
-        cw_exit_region,
+        cw_main_region,
         cw_ltower_region,
-        cw_drac_region,
+        cw_exit_region,
         villa_start_region,
-        villa_fountain_region,
-        villa_foyer_region,
-        villa_servant_region,
-        villa_living_region,
+        villa_main_region,
         villa_storeroom_region,
         villa_archives_region,
-        villa_maze_front_region,
-        villa_maze_main_region,
-        villa_maze_back_region,
-        villa_maze_crypt_region,
+        villa_maze_region,
+        villa_servants_region,
         villa_crypt_region,
         tunnel_start_region,
         tunnel_end_region,
         uw_start_region,
         uw_end_region,
-        fan_meeting_region,
-        cc_start_region,
+        cc_main_region,
         cc_tc_region,
         cc_sealed_wall_region,
-        cc_elev_bottom_region,
-        cc_factory_region,
-        cc_lizard_lab_region,
-        cc_lizard_wall_region,
         cc_library_region,
-        cc_invention_lizard_region,
-        cc_nitro_shelf_region,
-        cc_invention_area_region,
         cc_end_region,
         dt_region,
-        toe_start_region,
+        toe_main_region,
         toe_gate_region,
         tosci_start_region,
         tosci_door_hall_region,
         tosci_end_region,
         tosci_key3_room_region,
         tosor_region,
-        roc_main_region,
-        roc_boss_region,
+        roc_region,
         ct_start_region,
         ct_mid_region,
         ct_end_region,
@@ -604,7 +529,7 @@ def create_regions(world, player: int, active_locations):
     ]
 
 
-def connect_regions(world, player, level_list, warp_list):
+def connect_regions(world, player, level_list, warp_list, required_special2s):
     names: typing.Dict[str, int] = {}
 
     connect(world, player, names, 'Menu', level_list[0])
@@ -645,112 +570,82 @@ def connect_regions(world, player, level_list, warp_list):
                 return LocationName.villa_crypt
             elif level_list[level_list.index(source_stage) - 3] == LocationName.castle_center:
                 return LocationName.cc_elev_top
+            elif level_list[level_list.index(source_stage) - 3] == LocationName.villa:
+                return end_regions_dict[level_list[level_list.index(source_stage) - 2]]
+            elif level_list[level_list.index(source_stage) - 5] == LocationName.castle_center:
+                return end_regions_dict[level_list[level_list.index(source_stage) - 3]]
             else:
                 return end_regions_dict[level_list[level_list.index(source_stage) - 1]]
         else:
             return "Menu"
-
+    # Forest connections
     connect(world, player, names, LocationName.forest_of_silence, LocationName.forest_mid)
     connect(world, player, names, LocationName.forest_mid, LocationName.forest_end)
     connect(world, player, names, LocationName.forest_end, get_next_stage_start(LocationName.forest_of_silence))
-
-    connect(world, player, names, LocationName.castle_wall, LocationName.cw_rtower)
-    connect(world, player, names, LocationName.cw_rtower, LocationName.castle_wall)
-    connect(world, player, names, LocationName.cw_rtower, LocationName.cw_bd_switch)
-    connect(world, player, names, LocationName.cw_bd_switch, LocationName.cw_descent)
+    # Castle Wall connections
+    connect(world, player, names, LocationName.castle_wall, LocationName.cw_exit)
     if world.hard_logic[player]:
-        connect(world, player, names, LocationName.cw_bd_switch, get_next_stage_start(LocationName.castle_wall))
-    connect(world, player, names, LocationName.cw_descent, LocationName.castle_wall)
-    connect(world, player, names, LocationName.castle_wall, LocationName.cw_rtower)
-    connect(world, player, names, LocationName.castle_wall, LocationName.cw_exit,
-            lambda state: (state.can_reach(LocationName.cw_dragon_sw, "Location", player)))
-    connect(world, player, names, LocationName.cw_exit, get_next_stage_start(LocationName.castle_wall),
-            lambda state: (state.can_reach(LocationName.cw_drac_sw, "Location", player)))
+        connect(world, player, names, LocationName.castle_wall, get_next_stage_start(LocationName.castle_wall))
     connect(world, player, names, LocationName.castle_wall, LocationName.cw_ltower,
             lambda state: (state.has(ItemName.left_tower_key, player)))
-    connect(world, player, names, LocationName.cw_ltower, LocationName.castle_wall)
-    connect(world, player, names, LocationName.cw_ltower, LocationName.cw_drac_switch)
-    connect(world, player, names, LocationName.cw_drac_switch, LocationName.cw_descent)
-
-    connect(world, player, names, LocationName.villa, LocationName.villa_fy_fountain)
+    connect(world, player, names, LocationName.cw_ltower, get_next_stage_start(LocationName.castle_wall))
+    # Villa connections
+    connect(world, player, names, LocationName.villa, LocationName.villa_main)
     if world.hard_logic[player] and world.carrie_logic[player]:
-        connect(world, player, names, LocationName.villa_fy_fountain, LocationName.villa)
-    connect(world, player, names, LocationName.villa_fy_fountain, LocationName.villa_foyer_main)
-    connect(world, player, names, LocationName.villa_foyer_main, LocationName.villa_fy_fountain)
-    connect(world, player, names, LocationName.villa_foyer_main, LocationName.villa_living_main)
-    connect(world, player, names, LocationName.villa_living_main, LocationName.villa_foyer_main)
-    connect(world, player, names, LocationName.villa_living_main, LocationName.villa_storeroom,
+        connect(world, player, names, LocationName.villa_main, LocationName.villa)
+    connect(world, player, names, LocationName.villa_main, LocationName.villa_storeroom,
             lambda state: (state.has(ItemName.storeroom_key, player)))
-    connect(world, player, names, LocationName.villa_storeroom, LocationName.villa_living_main,
+    connect(world, player, names, LocationName.villa_storeroom, LocationName.villa_main,
             lambda state: (state.has(ItemName.storeroom_key, player)))
-    connect(world, player, names, LocationName.villa_living_main, LocationName.villa_archives,
+    connect(world, player, names, LocationName.villa_main, LocationName.villa_archives,
             lambda state: (state.has(ItemName.archives_key, player)))
-    connect(world, player, names, LocationName.villa_living_main, LocationName.villa_maze_front)
-    connect(world, player, names, LocationName.villa_maze_front, LocationName.villa_maze_main,
+    connect(world, player, names, LocationName.villa_main, LocationName.villa_maze,
             lambda state: (state.has(ItemName.garden_key, player)))
-    connect(world, player, names, LocationName.villa_maze_main, LocationName.villa_maze_front,
+    connect(world, player, names, LocationName.villa_maze, LocationName.villa_servants,
             lambda state: (state.has(ItemName.garden_key, player)))
+    connect(world, player, names, LocationName.villa_servants, LocationName.villa_main)
     if world.hard_logic[player]:
-        connect(world, player, names, LocationName.villa_maze_main, LocationName.villa_maze_crypt)
+        connect(world, player, names, LocationName.villa_maze, LocationName.villa_crypt)
     else:
-        connect(world, player, names, LocationName.villa_maze_main, LocationName.villa_maze_crypt,
+        connect(world, player, names, LocationName.villa_maze, LocationName.villa_crypt,
                 lambda state: (state.has(ItemName.copper_key, player)))
-    connect(world, player, names, LocationName.villa_maze_crypt, LocationName.villa_maze_main)
-    connect(world, player, names, LocationName.villa_maze_main, LocationName.villa_maze_back)
-    connect(world, player, names, LocationName.villa_maze_back, LocationName.villa_servant_entrance)
-    connect(world, player, names, LocationName.villa_servant_entrance, LocationName.villa_maze_back)
-    connect(world, player, names, LocationName.villa_servant_entrance, LocationName.villa_foyer_main)
-    connect(world, player, names, LocationName.villa_maze_crypt, LocationName.villa_crypt)
-    connect(world, player, names, LocationName.villa_crypt, LocationName.villa_maze_crypt)
+    connect(world, player, names, LocationName.villa_crypt, LocationName.villa_maze)
     connect(world, player, names, LocationName.villa_crypt, level_list[level_list.index(LocationName.villa) + 1])
     connect(world, player, names, LocationName.villa_crypt, level_list[level_list.index(LocationName.villa) + 2])
-
+    # Tunnel connections
     connect(world, player, names, LocationName.tunnel, LocationName.tunnel_end)
     connect(world, player, names, LocationName.tunnel_end, get_next_stage_start(LocationName.tunnel))
-
+    # Waterway connections
     connect(world, player, names, LocationName.underground_waterway, LocationName.uw_end)
     if world.hard_logic[player]:
         connect(world, player, names, LocationName.uw_end, LocationName.underground_waterway)
     connect(world, player, names, LocationName.uw_end, get_next_stage_start(LocationName.underground_waterway))
-
+    # Castle Center connections
     connect(world, player, names, LocationName.castle_center, LocationName.cc_torture_chamber,
             lambda state: (state.has(ItemName.chamber_key, player)))
     connect(world, player, names, LocationName.castle_center, LocationName.cc_crystal,
             lambda state: (state.has(ItemName.magical_nitro, player, 2) and state.has(ItemName.mandragora, player, 2)))
-    connect(world, player, names, LocationName.castle_center, LocationName.cc_elev_bottom)
-    connect(world, player, names, LocationName.cc_elev_bottom, LocationName.cc_elev_top,
+    connect(world, player, names, LocationName.castle_center, LocationName.cc_elev_top,
             lambda state: (state.has(ItemName.magical_nitro, player, 2) and state.has(ItemName.mandragora, player, 2)))
-    connect(world, player, names, LocationName.cc_elev_bottom, LocationName.cc_factory)
-    connect(world, player, names, LocationName.cc_factory, LocationName.cc_elev_bottom)
-    connect(world, player, names, LocationName.cc_factory, LocationName.cc_invention_main)
-    connect(world, player, names, LocationName.cc_factory, LocationName.cc_lizard_main)
-    if world.hard_logic[player] and world.carrie_logic[player]:
-        connect(world, player, names, LocationName.cc_lizard_main, LocationName.cc_lizard_wall)
-    else:
-        connect(world, player, names, LocationName.cc_lizard_main, LocationName.cc_lizard_wall,
-                lambda state: (state.has(ItemName.magical_nitro, player) and state.has(ItemName.mandragora, player)))
-    connect(world, player, names, LocationName.cc_lizard_wall, LocationName.cc_library)
-    connect(world, player, names, LocationName.cc_library, LocationName.cc_lizard_wall)
-    connect(world, player, names, LocationName.cc_lizard_main, LocationName.cc_invention_lizard_exit)
-    connect(world, player, names, LocationName.cc_invention_lizard_exit, LocationName.cc_lizard_main)
-    connect(world, player, names, LocationName.cc_invention_lizard_exit, LocationName.cc_nitro)
-    if world.hard_logic[player]:
-        connect(world, player, names, LocationName.cc_invention_lizard_exit, LocationName.cc_invention_main)
-        connect(world, player, names, LocationName.cc_invention_main, LocationName.cc_invention_lizard_exit)
-    connect(world, player, names, LocationName.cc_invention_main, LocationName.cc_nitro)
-    connect(world, player, names, LocationName.cc_invention_main, LocationName.cc_factory)
-    connect(world, player, names, LocationName.cc_elev_top, LocationName.cc_elev_bottom)
+    # if world.hard_logic[player] and world.carrie_logic[player]:
+    #     connect(world, player, names, LocationName.castle_center, LocationName.cc_library)
+    # else:
+    connect(world, player, names, LocationName.castle_center, LocationName.cc_library,
+            lambda state: (state.has(ItemName.magical_nitro, player) and state.has(ItemName.mandragora, player)))
     connect(world, player, names, LocationName.cc_elev_top, level_list[level_list.index(LocationName.castle_center)+1])
     connect(world, player, names, LocationName.cc_elev_top, level_list[level_list.index(LocationName.castle_center)+3])
-
+    # Duel Tower connections
     connect(world, player, names, LocationName.duel_tower, get_prev_stage_end(LocationName.duel_tower))
     connect(world, player, names, LocationName.duel_tower, get_next_stage_start(LocationName.duel_tower))
-
+    # Tower of Execution connections
     connect(world, player, names, LocationName.tower_of_execution, get_prev_stage_end(LocationName.tower_of_execution))
-    connect(world, player, names, LocationName.tower_of_execution, LocationName.toe_ledge,
-            lambda state: (state.has(ItemName.execution_key, player)))
+    if world.hard_logic[player]:
+        connect(world, player, names, LocationName.tower_of_execution, LocationName.toe_ledge)
+    else:
+        connect(world, player, names, LocationName.tower_of_execution, LocationName.toe_ledge,
+                lambda state: (state.has(ItemName.execution_key, player)))
     connect(world, player, names, LocationName.tower_of_execution, get_next_stage_start(LocationName.tower_of_execution))
-
+    # Tower of Science connections
     connect(world, player, names, LocationName.tower_of_science, get_prev_stage_end(LocationName.tower_of_science))
     connect(world, player, names, LocationName.tower_of_science, LocationName.tosci_key2,
             lambda state: (state.has(ItemName.science_key_one, player)))
@@ -761,39 +656,23 @@ def connect_regions(world, player, level_list, warp_list):
     connect(world, player, names, LocationName.tosci_conveyors, LocationName.tosci_key3,
             lambda state: (state.has(ItemName.science_key_three, player)))
     connect(world, player, names, LocationName.tosci_conveyors, get_next_stage_start(LocationName.tower_of_science))
-
+    # Tower of Sorcery connections
     connect(world, player, names, LocationName.tower_of_sorcery, get_prev_stage_end(LocationName.tower_of_sorcery))
     connect(world, player, names, LocationName.tower_of_sorcery, get_next_stage_start(LocationName.tower_of_sorcery))
-
-    connect(world, player, names, LocationName.room_of_clocks, LocationName.roc_boss_tower)
-    connect(world, player, names, LocationName.roc_boss_tower, LocationName.room_of_clocks)
+    # Room of Clocks connection
     connect(world, player, names, LocationName.room_of_clocks, get_next_stage_start(LocationName.room_of_clocks))
-
+    # Clock Tower connections
     connect(world, player, names, LocationName.clock_tower, LocationName.ct_middle,
             lambda state: (state.has(ItemName.clocktower_key_one, player)))
     connect(world, player, names, LocationName.ct_middle, LocationName.ct_end,
             lambda state: (state.has(ItemName.clocktower_key_two, player)))
     connect(world, player, names, LocationName.ct_end, get_next_stage_start(LocationName.clock_tower),
             lambda state: (state.has(ItemName.clocktower_key_three, player)))
-
-    if world.draculas_condition[player].value == 1:
-        connect(world, player, names, LocationName.castle_keep, LocationName.drac_chamber,
-                lambda state: (state.has(ItemName.behemoth, player)))
-    elif world.draculas_condition[player].value == 2:
-        connect(world, player, names, LocationName.castle_keep, LocationName.drac_chamber,
-                lambda state: (state.has(ItemName.bone_mom_one, player) and state.has(ItemName.bone_mom_two, player) and
-                               state.has(ItemName.forest_weretiger, player) and state.has(ItemName.w_dragons, player)
-                               and state.has(ItemName.vamp_couple, player) and state.has(ItemName.behemoth, player) and
-                               state.has(ItemName.rosamilla, player) and state.has(ItemName.werejaguar, player) and
-                               state.has(ItemName.werewolf, player) and state.has(ItemName.werebull, player) and
-                               state.has(ItemName.weretiger, player) and state.has(ItemName.deathtrice, player)))
-    elif world.draculas_condition[player].value == 3:
-        connect(world, player, names, LocationName.castle_keep, LocationName.drac_chamber,
-                lambda state: (state.has(ItemName.special_two, player, world.special2s_required[player].value)))
-    else:
-        connect(world, player, names, LocationName.castle_keep, LocationName.drac_chamber)
-
-
+    # Castle Keep connections
+    if world.hard_logic[player]:
+        connect(world, player, names, LocationName.castle_keep, LocationName.room_of_clocks)
+    connect(world, player, names, LocationName.castle_keep, LocationName.drac_chamber,
+            lambda state: (state.has(ItemName.special_two, player, required_special2s)))
 
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None, exits=None):
@@ -812,6 +691,8 @@ def create_region(world: MultiWorld, player: int, active_locations, name: str, l
                         location.loc_type = "npc"
                     elif location.address in invis_items:
                         location.loc_type = "invisible"
+                    elif location.address in event_items:
+                        location.loc_type = "event"
                     else:
                         location.loc_type = "normal"
                 ret.locations.append(location)

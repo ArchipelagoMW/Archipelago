@@ -131,9 +131,9 @@ class IncreaseItemLimit(DefaultOnToggle):
     display_name = "Increase Item Limit"
 
 
-class RevealInvisibleItems(DefaultOnToggle):
-    """Makes all invisible freestanding items visible."""
-    display_name = "Reveal Invisible Items"
+# class RevealInvisibleItems(DefaultOnToggle):
+#     """Makes all invisible freestanding items visible."""
+#     display_name = "Reveal Invisible Items"
 
 
 class DisableTimeRestrictions(Toggle):
@@ -165,7 +165,7 @@ cv64_options: Dict[str, Option] = {
     "fight_vincent": FightVincent,
     "bad_ending_condition": BadEndingCondition,
     "increase_item_limit": IncreaseItemLimit,
-    "reveal_invisible_items": RevealInvisibleItems,
+    # "reveal_invisible_items": RevealInvisibleItems,
     "disable_time_restrictions": DisableTimeRestrictions,
     "skip_waterway_platforms": SkipWaterwayPlatforms,
     "death_link": DeathLink,

@@ -80,6 +80,8 @@ class CV64World(World):
 
         if force_non_progression:
             classification = ItemClassification.filler
+        elif name == ItemName.special_two:
+            classification = ItemClassification.progression_skip_balancing
         elif data.progression:
             classification = ItemClassification.progression
         else:
@@ -90,9 +92,6 @@ class CV64World(World):
             created_item.item_byte = rom_item_bytes[name]
 
         return created_item
-
-    def lookup_table(self):
-        pass
 
     def _create_items(self, name: str):
         data = item_table[name]
@@ -105,42 +104,66 @@ class CV64World(World):
         itempool: typing.List[CV64Item] = []
 
         # Levels
-        total_required_locations = 212
+        total_required_locations = 209
 
-        # number_of_specials = 0
         self.multiworld.get_location(LocationName.the_end, self.player).place_locked_item(self.create_item(ItemName.victory))
-
-        self.multiworld.get_location(LocationName.forest_boss_one, self.player)\
-            .place_locked_item(self.create_item(ItemName.bone_mom_one))
-        self.multiworld.get_location(LocationName.forest_boss_two, self.player)\
-            .place_locked_item(self.create_item(ItemName.forest_weretiger))
-        self.multiworld.get_location(LocationName.forest_boss_three, self.player)\
-            .place_locked_item(self.create_item(ItemName.bone_mom_two))
-        self.multiworld.get_location(LocationName.cw_boss, self.player)\
-            .place_locked_item(self.create_item(ItemName.w_dragons))
-        self.multiworld.get_location(LocationName.villa_boss, self.player)\
-            .place_locked_item(self.create_item(ItemName.vamp_couple))
-        self.multiworld.get_location(LocationName.cc_boss_one, self.player)\
-            .place_locked_item(self.create_item(ItemName.behemoth))
-        self.multiworld.get_location(LocationName.cc_boss_two, self.player)\
-            .place_locked_item(self.create_item(ItemName.rosamilla))
-        self.multiworld.get_location(LocationName.dt_boss_one, self.player)\
-            .place_locked_item(self.create_item(ItemName.werejaguar))
-        self.multiworld.get_location(LocationName.dt_boss_two, self.player)\
-            .place_locked_item(self.create_item(ItemName.werewolf))
-        self.multiworld.get_location(LocationName.dt_boss_three, self.player)\
-            .place_locked_item(self.create_item(ItemName.werebull))
-        self.multiworld.get_location(LocationName.dt_boss_four, self.player)\
-            .place_locked_item(self.create_item(ItemName.weretiger))
-        self.multiworld.get_location(LocationName.roc_boss, self.player)\
-            .place_locked_item(self.create_item(ItemName.deathtrice))
 
         number_of_special1s = self.multiworld.total_special1s[self.player].value
         number_of_special2s = self.multiworld.total_special2s[self.player].value
+        total_available_bosses = 16
+
+        required_special2s = 0
+        if self.multiworld.draculas_condition[self.player].value == 1:
+            required_special2s = 1
+            self.multiworld.get_location(LocationName.cc_behind_the_seal, self.player) \
+                .place_locked_item(self.create_item(ItemName.special_two))
+        elif self.multiworld.draculas_condition[self.player].value == 2:
+            required_special2s = self.multiworld.bosses_required[self.player].value
+            self.multiworld.get_location(LocationName.forest_boss_one, self.player) \
+                .place_locked_item(self.create_item(ItemName.special_two))
+            self.multiworld.get_location(LocationName.forest_boss_two, self.player) \
+                .place_locked_item(self.create_item(ItemName.special_two))
+            self.multiworld.get_location(LocationName.forest_boss_three, self.player) \
+                .place_locked_item(self.create_item(ItemName.special_two))
+            self.multiworld.get_location(LocationName.cw_boss, self.player) \
+                .place_locked_item(self.create_item(ItemName.special_two))
+            self.multiworld.get_location(LocationName.villa_boss_one, self.player) \
+                .place_locked_item(self.create_item(ItemName.special_two))
+            self.multiworld.get_location(LocationName.villa_boss_two, self.player) \
+                .place_locked_item(self.create_item(ItemName.special_two))
+            self.multiworld.get_location(LocationName.uw_boss, self.player) \
+                .place_locked_item(self.create_item(ItemName.special_two))
+            self.multiworld.get_location(LocationName.cc_boss_one, self.player) \
+                .place_locked_item(self.create_item(ItemName.special_two))
+            self.multiworld.get_location(LocationName.cc_boss_two, self.player) \
+                .place_locked_item(self.create_item(ItemName.special_two))
+            self.multiworld.get_location(LocationName.dt_boss_one, self.player) \
+                .place_locked_item(self.create_item(ItemName.special_two))
+            self.multiworld.get_location(LocationName.dt_boss_two, self.player) \
+                .place_locked_item(self.create_item(ItemName.special_two))
+            self.multiworld.get_location(LocationName.dt_boss_three, self.player) \
+                .place_locked_item(self.create_item(ItemName.special_two))
+            self.multiworld.get_location(LocationName.dt_boss_four, self.player) \
+                .place_locked_item(self.create_item(ItemName.special_two))
+            self.multiworld.get_location(LocationName.roc_boss, self.player) \
+                .place_locked_item(self.create_item(ItemName.special_two))
+            if self.multiworld.fight_renon[self.player].value != 0:
+                self.multiworld.get_location(LocationName.ck_boss_one, self.player) \
+                    .place_locked_item(self.create_item(ItemName.special_two))
+                total_available_bosses -= 1
+            if self.multiworld.fight_vincent[self.player].value != 0:
+                self.multiworld.get_location(LocationName.ck_boss_two, self.player) \
+                    .place_locked_item(self.create_item(ItemName.special_two))
+                total_available_bosses -= 1
+            if required_special2s > total_available_bosses:
+                required_special2s = total_available_bosses
+        elif self.multiworld.draculas_condition[self.player].value == 3:
+            itempool += [self.create_item(ItemName.special_two) for _ in range(number_of_special2s)]
+            required_special2s = self.multiworld.special2s_required[self.player].value
 
         itempool += [self.create_item(ItemName.special_one) for _ in range(number_of_special1s)]
         itempool += [self.create_item(ItemName.roast_chicken) for _ in range(21)]
-        itempool += [self.create_item(ItemName.roast_beef) for _ in range(24)]
+        itempool += [self.create_item(ItemName.roast_beef) for _ in range(23)]
         itempool += [self.create_item(ItemName.healing_kit) for _ in range(4)]
         itempool += [self.create_item(ItemName.purifying) for _ in range(14)]
         itempool += [self.create_item(ItemName.cure_ampoule) for _ in range(5)]
@@ -163,13 +186,10 @@ class CV64World(World):
         itempool += [self.create_item(ItemName.clocktower_key_two)]
         itempool += [self.create_item(ItemName.clocktower_key_three)]
 
-        if self.multiworld.draculas_condition[self.player].value == 3:
-            itempool += [self.create_item(ItemName.special_two) for _ in range(number_of_special2s)]
-
         if self.multiworld.carrie_logic[self.player]:
-            itempool += [self.create_item(ItemName.roast_beef)]
+            itempool += [self.create_item(ItemName.roast_beef) for _ in range(2)]
             itempool += [self.create_item(ItemName.moon_card)]
-            total_required_locations += 2
+            total_required_locations += 3
 
         if self.multiworld.lizard_generator_items[self.player]:
             itempool += [self.create_item(ItemName.powerup)]
@@ -215,7 +235,7 @@ class CV64World(World):
                     new_list.remove(warp)
             self.active_warp_list = new_list
 
-        connect_regions(self.multiworld, self.player, self.active_level_list, self.active_warp_list)
+        connect_regions(self.multiworld, self.player, self.active_level_list, self.active_warp_list, required_special2s)
 
         self.multiworld.itempool += itempool
 
@@ -231,8 +251,41 @@ class CV64World(World):
 
             rom = LocalRom(get_base_rom_path())
 
+            active_locations = self.location_name_to_id.copy()
+            del active_locations[LocationName.cc_behind_the_seal]
+            del active_locations[LocationName.forest_boss_one]
+            del active_locations[LocationName.forest_boss_two]
+            del active_locations[LocationName.forest_boss_three]
+            del active_locations[LocationName.cw_boss]
+            del active_locations[LocationName.villa_boss_one]
+            del active_locations[LocationName.villa_boss_two]
+            del active_locations[LocationName.uw_boss]
+            del active_locations[LocationName.cc_boss_one]
+            del active_locations[LocationName.cc_boss_two]
+            del active_locations[LocationName.dt_boss_one]
+            del active_locations[LocationName.dt_boss_two]
+            del active_locations[LocationName.dt_boss_three]
+            del active_locations[LocationName.dt_boss_four]
+            del active_locations[LocationName.roc_boss]
+            del active_locations[LocationName.ck_boss_one]
+            del active_locations[LocationName.ck_boss_two]
+            del active_locations[LocationName.the_end]
+
+            if not self.multiworld.carrie_logic[self.player]:
+                del active_locations[LocationName.uw_carrie1]
+                del active_locations[LocationName.uw_carrie2]
+                del active_locations[LocationName.tosor_trickshot]
+
+            if not self.multiworld.lizard_generator_items[self.player]:
+                del active_locations[LocationName.ccff_lizard_coffin_fl]
+                del active_locations[LocationName.ccff_lizard_coffin_fr]
+                del active_locations[LocationName.ccff_lizard_coffin_nfl]
+                del active_locations[LocationName.ccff_lizard_coffin_nfr]
+                del active_locations[LocationName.ccff_lizard_coffin_nml]
+                del active_locations[LocationName.ccff_lizard_coffin_nmr]
+
             offsets_to_ids = {}
-            for location_name in self.location_name_to_id:
+            for location_name in active_locations:
                 loc = self.multiworld.get_location(location_name, self.player)
                 if loc.item.name in rom_item_bytes or loc.item.game != "Castlevania 64":
                     if loc.item.player == self.player:
@@ -263,6 +316,7 @@ class CV64World(World):
                                    player_name=world.player_name[player], patched_path=rompath)
             patch.write()
         except:
+            print("Oh no, something went wrong in CV64's generate_output!")
             raise
         finally:
             if os.path.exists(rompath):
@@ -270,30 +324,32 @@ class CV64World(World):
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
     def write_spoiler(self, spoiler_handle: typing.TextIO):
-        stagecounts = {"Main": 1, "Reinhardt": 1, "Carrie": 1}
+        stage_count = 1
         spoiler_handle.write("\n")
         header_text = "Castlevania 64 stage order:\n"
         header_text = header_text.format(self.multiworld.player_name[self.player])
         spoiler_handle.write(header_text)
         for x in range(len(self.active_level_list)):
-            if self.active_level_list[x - 1] == LocationName.villa or self.active_level_list[x - 1] \
-                    == LocationName.castle_center or self.active_level_list[x - 2] == LocationName.castle_center:
-                stagetype = "Reinhardt"
-            elif self.active_level_list[x - 2] == LocationName.villa or self.active_level_list[x - 3] \
+            if self.active_level_list[x - 2] == LocationName.villa or self.active_level_list[x - 3] \
                     == LocationName.castle_center or self.active_level_list[x - 4] == LocationName.castle_center:
-                stagetype = "Carrie"
+                path = "'"
             else:
-                stagetype = "Main"
+                path = " "
 
-            if stagetype == "Reinhardt":
-                text = "{0} Stage {1}:\t{2}\n"
+            if self.active_level_list[x - 2] == LocationName.villa:
+                stage_count -= 1
+            elif self.active_level_list[x - 3] == LocationName.castle_center:
+                stage_count -= 2
+
+            if stage_count < 10:
+                text = "Stage {0}{1}:\t{2}\n"
             else:
-                text = "{0} Stage {1}:\t\t{2}\n"
-            text = text.format(stagetype, stagecounts[stagetype], self.active_level_list[x])
+                text = "Stage {0}:\t{2}\n"
+            text = text.format(stage_count, path, self.active_level_list[x])
             spoiler_handle.writelines(text)
-            stagecounts[stagetype] += 1
+            stage_count += 1
 
-        spoiler_handle.writelines("\nStart Warp:\t" + self.active_level_list[0])
+        spoiler_handle.writelines("\nStart :\t" + self.active_level_list[0])
         for x in range(len(self.active_warp_list)):
             text = "\nWarp {0}:\t{1}"
             text = text.format(x + 1, self.active_warp_list[x])

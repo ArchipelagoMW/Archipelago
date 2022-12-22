@@ -55,19 +55,6 @@ main_table = {
 
 event_table = {
     ItemName.victory:          ItemData(0xC64000, True),
-    ItemName.bone_mom_one:     ItemData(0xC640B0, True),
-    ItemName.bone_mom_two:     ItemData(0xC640B1, True),
-    ItemName.forest_weretiger: ItemData(0xC640B2, True),
-    ItemName.w_dragons:        ItemData(0xC640B3, True),
-    ItemName.vamp_couple:      ItemData(0xC640B4, True),
-    ItemName.behemoth:         ItemData(0xC640B5, True),
-    ItemName.rosamilla:        ItemData(0xC640B6, True),
-    ItemName.werejaguar:       ItemData(0xC640B7, True),
-    ItemName.werewolf:         ItemData(0xC640B8, True),
-    ItemName.werebull:         ItemData(0xC640B9, True),
-    ItemName.weretiger:        ItemData(0xC640BA, True),
-    ItemName.deathtrice:       ItemData(0xC640BB, True),
-    ItemName.crystal:          ItemData(0xC640C0, True),
 }
 
 # Complete item table.

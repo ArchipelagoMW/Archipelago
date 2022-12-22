@@ -70,11 +70,11 @@ level_dict = {
 
 mid_regions_dict = {
     LocationName.forest_of_silence: LocationName.forest_mid,
-    LocationName.castle_wall: LocationName.cw_descent,
+    LocationName.castle_wall: LocationName.castle_wall,
     LocationName.villa: LocationName.villa_storeroom,
     LocationName.tunnel: LocationName.tunnel_end,
     LocationName.underground_waterway: LocationName.underground_waterway,
-    LocationName.castle_center: LocationName.cc_invention_lizard_exit,
+    LocationName.castle_center: LocationName.castle_center,
     LocationName.duel_tower: LocationName.duel_tower,
     LocationName.tower_of_execution: LocationName.tower_of_execution,
     LocationName.tower_of_science: LocationName.tosci_conveyors,
