@@ -52,7 +52,8 @@ Your Party Leader will hold up the item they received when not in a fight or in 
 - Adjust how much EXP is gained from enemies
 - Randomize enemy movement patterns, enemy sprites, and which enemy types can appear at which floor numbers
 - Option to shuffle your party members and/or capsule monsters into the multiworld, meaning that someone will have to
-  find them in order to unlock them for you to use
+  find them in order to unlock them for you to use. While cave diving, you can add newly unlocked members to your party
+  by using the character items from your inventory
 
 ###### Quality of life:
 

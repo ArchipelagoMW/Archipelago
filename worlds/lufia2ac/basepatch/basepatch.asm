@@ -270,11 +270,15 @@ SpecialItemUse:
     SBC.w #$01B1            ; party member items range from $01B2 to $01B7
     BMI +
     ASL
+    TAX
     ASL
     ASL
     ADC.w #$FD2E
     STA $09B7               ; set pointer to L2SASM join script
     SEP #$20
+    LDA $8ED8C7,X           ; load predefined bitmask with a single bit set
+    BIT $077E               ; check against EV flags $02 to $07 (party member flags)
+    BNE +                   ; abort if character already present
     LDA $07A9               ; load EV register $11 (party counter)
     CMP.b #$03
     BPL +                   ; abort if party full

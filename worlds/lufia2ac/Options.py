@@ -642,7 +642,8 @@ class ShufflePartyMembers(Toggle):
     Supported values:
     false — all 6 optional party members are present in the cafe and can be recruited right away
     true — only Maxim is available from the start; 6 new "items" are added to your pool and shuffled into the
-        multiworld; when one of these items is found, the corresponding party member is unlocked for you to use
+        multiworld; when one of these items is found, the corresponding party member is unlocked for you to use.
+        While cave diving, you can add newly unlocked ones to your party by using the character items from the inventory
     Default value: false (same as in an unmodified game)
     """
 
