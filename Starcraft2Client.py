@@ -202,7 +202,7 @@ class SC2Context(CommonContext):
                 if is_mod_update_available("TheCondor07", "Starcraft2ArchipelagoData", current_ver):
                     sc2_logger.info("NOTICE: Update for required files found. Run /download_data to install.")
             elif maps_present:
-                sc2_logger.info("NOTICE: Your map files may be outdated (version number not found). Run /download_data"
+                sc2_logger.info("NOTICE: Your map files may be outdated (version number not found). Run /download_data "
                                 "to update them.")
 
 
