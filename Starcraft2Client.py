@@ -120,9 +120,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             sc2_logger.warning("When using set_path, you must type the path to your SC2 install directory.")
         return False
 
-    def _cmd_download_data(self, force: bool = False) -> bool:
+    def _cmd_download_data(self) -> bool:
         """Download the most recent release of the necessary files for playing SC2 with
-        Archipelago. force should be True or False. force=True will overwrite your files."""
+        Archipelago. Will overwrite existing files."""
         if "SC2PATH" not in os.environ:
             check_game_install_path()
 
@@ -132,7 +132,8 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         else:
             current_ver = None
 
-        tempzip, version = download_latest_release_zip('TheCondor07', 'Starcraft2ArchipelagoData', current_version=current_ver, force_download=force)
+        tempzip, version = download_latest_release_zip('TheCondor07', 'Starcraft2ArchipelagoData',
+                                                       current_version=current_ver, force_download=True)
 
         if tempzip != '':
             try:
