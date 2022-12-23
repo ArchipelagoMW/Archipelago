@@ -195,12 +195,16 @@ class SC2Context(CommonContext):
             self.build_location_to_mission_mapping()
 
             # Looks for the required maps and mods for SC2. Runs check_game_install_path.
-            is_mod_installed_correctly()
+            maps_present = is_mod_installed_correctly()
             if os.path.exists(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt"):
                 with open(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt", "r") as f:
                     current_ver = f.read()
                 if is_mod_update_available("TheCondor07", "Starcraft2ArchipelagoData", current_ver):
                     sc2_logger.info("NOTICE: Update for required files found. Run /download_data to install.")
+            elif maps_present:
+                sc2_logger.info("NOTICE: Your map files may be outdated (version number not found). Run /download_data"
+                                "to update them.")
+
 
     def on_print_json(self, args: dict):
         # goes to this world
