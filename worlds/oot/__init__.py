@@ -843,8 +843,11 @@ class OOTWorld(World):
         impa = self.multiworld.get_location("Song from Impa", self.player)
         if self.shuffle_child_trade == 'skip_child_zelda':
             if impa.item is None:
-                item_to_place = self.multiworld.random.choice(
-                    list(item for item in self.multiworld.itempool if item.player == self.player))
+                candidate_items = list(item for item in self.multiworld.itempool if item.player == self.player)
+                if candidate_items:
+                    item_to_place = self.multiworld.random.choice(candidate_items)
+                else:
+                    item_to_place = self.create_item("Recovery Heart")
                 impa.place_locked_item(item_to_place)
                 self.multiworld.itempool.remove(item_to_place)
             # Give items to startinventory
