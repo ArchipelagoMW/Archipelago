@@ -134,6 +134,7 @@ class IncreaseItemLimit(DefaultOnToggle):
 # class RevealInvisibleItems(DefaultOnToggle):
 #     """Makes all invisible freestanding items visible."""
 #     display_name = "Reveal Invisible Items"
+# TODO: Extend the item properties table to add invisible variations of every item that lacks one.
 
 
 class DisableTimeRestrictions(Toggle):

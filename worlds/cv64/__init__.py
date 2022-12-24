@@ -51,7 +51,9 @@ class CV64World(World):
     villa_cc_ids = [2, 3]
     active_warp_list: typing.List[str]
     sub_weapon_dict: typing.Dict[int, int]
-    music_dict: typing.Dict[int, int]
+    # music_dict: typing.Dict[int, int]
+    # TODO: Make a list of every instance of the music changing for music rando.
+    required_special2s = 0
     web = CV64Web()
 
     def __init__(self, world: MultiWorld, player: int):
@@ -93,10 +95,6 @@ class CV64World(World):
 
         return created_item
 
-    def _create_items(self, name: str):
-        data = item_table[name]
-        return [self.create_item(name)] * data.quantity
-
     def set_rules(self):
         set_rules(self.multiworld, self.player)
 
@@ -104,21 +102,20 @@ class CV64World(World):
         itempool: typing.List[CV64Item] = []
 
         # Levels
-        total_required_locations = 209
+        total_required_locations = 210
 
         self.multiworld.get_location(LocationName.the_end, self.player).place_locked_item(self.create_item(ItemName.victory))
 
         number_of_special1s = self.multiworld.total_special1s[self.player].value
         number_of_special2s = self.multiworld.total_special2s[self.player].value
-        total_available_bosses = 16
+        total_available_bosses = 14
 
-        required_special2s = 0
         if self.multiworld.draculas_condition[self.player].value == 1:
-            required_special2s = 1
+            self.required_special2s = 1
             self.multiworld.get_location(LocationName.cc_behind_the_seal, self.player) \
                 .place_locked_item(self.create_item(ItemName.special_two))
         elif self.multiworld.draculas_condition[self.player].value == 2:
-            required_special2s = self.multiworld.bosses_required[self.player].value
+            self.required_special2s = self.multiworld.bosses_required[self.player].value
             self.multiworld.get_location(LocationName.forest_boss_one, self.player) \
                 .place_locked_item(self.create_item(ItemName.special_two))
             self.multiworld.get_location(LocationName.forest_boss_two, self.player) \
@@ -150,20 +147,20 @@ class CV64World(World):
             if self.multiworld.fight_renon[self.player].value != 0:
                 self.multiworld.get_location(LocationName.ck_boss_one, self.player) \
                     .place_locked_item(self.create_item(ItemName.special_two))
-                total_available_bosses -= 1
+                total_available_bosses += 1
             if self.multiworld.fight_vincent[self.player].value != 0:
                 self.multiworld.get_location(LocationName.ck_boss_two, self.player) \
                     .place_locked_item(self.create_item(ItemName.special_two))
-                total_available_bosses -= 1
-            if required_special2s > total_available_bosses:
-                required_special2s = total_available_bosses
+                total_available_bosses += 1
+            if self.required_special2s > total_available_bosses:
+                self.required_special2s = total_available_bosses
         elif self.multiworld.draculas_condition[self.player].value == 3:
             itempool += [self.create_item(ItemName.special_two) for _ in range(number_of_special2s)]
-            required_special2s = self.multiworld.special2s_required[self.player].value
+            self.required_special2s = self.multiworld.special2s_required[self.player].value
 
         itempool += [self.create_item(ItemName.special_one) for _ in range(number_of_special1s)]
         itempool += [self.create_item(ItemName.roast_chicken) for _ in range(21)]
-        itempool += [self.create_item(ItemName.roast_beef) for _ in range(23)]
+        itempool += [self.create_item(ItemName.roast_beef) for _ in range(24)]
         itempool += [self.create_item(ItemName.healing_kit) for _ in range(4)]
         itempool += [self.create_item(ItemName.purifying) for _ in range(14)]
         itempool += [self.create_item(ItemName.cure_ampoule) for _ in range(5)]
@@ -187,9 +184,9 @@ class CV64World(World):
         itempool += [self.create_item(ItemName.clocktower_key_three)]
 
         if self.multiworld.carrie_logic[self.player]:
-            itempool += [self.create_item(ItemName.roast_beef) for _ in range(2)]
+            itempool += [self.create_item(ItemName.roast_beef)]
             itempool += [self.create_item(ItemName.moon_card)]
-            total_required_locations += 3
+            total_required_locations += 2
 
         if self.multiworld.lizard_generator_items[self.player]:
             itempool += [self.create_item(ItemName.powerup)]
@@ -199,7 +196,11 @@ class CV64World(World):
         total_junk_count = total_required_locations - len(itempool)
 
         junk_pool = []
-        for item_name in self.multiworld.random.choices(list(junk_table.keys()), k=total_junk_count):
+        for i in range(total_junk_count):
+            item_name = ItemName.five_hundred_gold
+            gold_or_random = self.multiworld.random.randint(1, 5)
+            if gold_or_random > 1:
+                item_name = self.multiworld.random.choice(list(junk_table.keys()))
             junk_pool += [self.create_item(item_name)]
 
         itempool += junk_pool
@@ -235,7 +236,8 @@ class CV64World(World):
                     new_list.remove(warp)
             self.active_warp_list = new_list
 
-        connect_regions(self.multiworld, self.player, self.active_level_list, self.active_warp_list, required_special2s)
+        connect_regions(self.multiworld, self.player, self.active_level_list, self.active_warp_list,
+                        self.required_special2s)
 
         self.multiworld.itempool += itempool
 
@@ -274,7 +276,6 @@ class CV64World(World):
             if not self.multiworld.carrie_logic[self.player]:
                 del active_locations[LocationName.uw_carrie1]
                 del active_locations[LocationName.uw_carrie2]
-                del active_locations[LocationName.tosor_trickshot]
 
             if not self.multiworld.lizard_generator_items[self.player]:
                 del active_locations[LocationName.ccff_lizard_coffin_fl]
@@ -302,13 +303,13 @@ class CV64World(World):
                             offsets_to_ids[loc.rom_offset] = 0x12
 
             patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.active_level_list, self.active_warp_list,
-                      self.sub_weapon_dict)
+                      self.sub_weapon_dict, self.required_special2s)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
                 if world.player_name[player] != 'Player%d' % player else ''
 
-            rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
+            rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.z64')
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 

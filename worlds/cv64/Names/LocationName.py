@@ -440,7 +440,7 @@ tower_of_execution       = "Tower of Execution"
 toe_ledge                = "Tower of Execution - gated ledge"
 
 tower_of_science         = "Tower of Science"
-tosci_key2               = "Tower of Science - key2 hallway"
+tosci_three_doors        = "Tower of Science - three door hallway"
 tosci_conveyors          = "Tower of Science - spiky conveyors"
 tosci_key3               = "Tower of Science - locked key3 room"
 

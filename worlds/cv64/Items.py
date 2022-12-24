@@ -38,6 +38,7 @@ main_table = {
     ItemName.mandragora:           ItemData(0xC64016, True),
     ItemName.sun_card:             ItemData(0xC64017, False),
     ItemName.moon_card:            ItemData(0xC64018, False),
+    ItemName.five_hundred_gold:    ItemData(0xC6401A, False),
     ItemName.archives_key:         ItemData(0xC6401D, True),
     ItemName.left_tower_key:       ItemData(0xC6401E, True),
     ItemName.storeroom_key:        ItemData(0xC6401F, True),

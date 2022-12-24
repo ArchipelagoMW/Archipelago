@@ -427,7 +427,7 @@ class LocalRom(object):
             self.buffer = bytearray(stream.read())
 
 
-def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, sub_weapon_dict):
+def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, sub_weapon_dict, required_special2s):
     # local_random = world.slot_seeds[player]
 
     w1 = str(world.special1s_per_warp[player]).zfill(2)
@@ -698,13 +698,13 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
         rom.write_byte(0xADE8F, world.bosses_required[player].value)
         rom.write_bytes(0xBFCC62, cv64_text_converter(f"It won't budge!\n"
                                                       f"You'll need to defeat\n"
-                                                      f"{world.bosses_required[player].value} powerful monsters\n"
+                                                      f"{required_special2s} powerful monsters\n"
                                                       f"to undo the seal.", True))
     elif world.draculas_condition[player] == 3:
         rom.write_byte(0xADE8F, world.special2s_required[player].value)
         rom.write_bytes(0xBFCC62, cv64_text_converter(f"It won't budge!\n"
                                                       f"You'll need to find\n"
-                                                      f"{world.special2s_required[player].value} Special2 jewels\n"
+                                                      f"{required_special2s} Special2 jewels\n"
                                                       f"to undo the seal.", True))
     else:
         rom.write_byte(0xADE8F, 0x00)
@@ -766,7 +766,7 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
     rom.write_byte(0x7C7FA8, 0xAB)  # Forest werewolf statue
     rom.write_byte(0x8099C4, 0x8C)  # Villa courtyard tombstone
     rom.write_byte(0x83A626, 0xC2)  # Villa living room painting
-    # rom.write_byte(0x83A62F, 0x64)  # Villa table
+    # rom.write_byte(0x83A62F, 0x64)  # Villa Mary's room table
     rom.write_byte(0x8985DD, 0xF5)  # CC torture instrument rack
     rom.write_byte(0x8C44D5, 0x22)  # CC red carpet hallway knight
     rom.write_byte(0x8DF57C, 0xF1)  # CC cracked wall hallway flamethrower
@@ -837,9 +837,10 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
 
 class CV64DeltaPatch(APDeltaPatch):
     hash = USHASH
-    bshash = BSUSHASH
+    patch_file_ending: str = ".apcv64"
+    result_file_ending: str = ".z64"
+
     game = "Castlevania 64"
-    patch_file_ending = ".apcv64"
 
     @classmethod
     def get_source_data(cls) -> bytes:

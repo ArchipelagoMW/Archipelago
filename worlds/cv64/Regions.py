@@ -398,7 +398,7 @@ def create_regions(world, player: int, active_locations):
     tosci_door_hall_region_locations = [
         LocationName.tosci_three_door_hall,
     ]
-    tosci_door_hall_region = create_region(world, player, active_locations, LocationName.tosci_key2,
+    tosci_door_hall_region = create_region(world, player, active_locations, LocationName.tosci_three_doors,
                                            tosci_door_hall_region_locations, None)
 
     tosci_end_region_locations = [
@@ -419,13 +419,12 @@ def create_regions(world, player: int, active_locations):
     tosor_region_locations = [
         LocationName.tosor_stained_tower,
         LocationName.tosor_savepoint,
+        LocationName.tosor_trickshot,
         LocationName.tosor_yellow_bubble,
         LocationName.tosor_blue_platforms,
         LocationName.tosor_side_isle,
         LocationName.tosor_ibridge,
     ]
-    if world.carrie_logic[player]:
-        tosor_region_locations.insert(2, LocationName.tosor_trickshot)
     tosor_region = create_region(world, player, active_locations, LocationName.tower_of_sorcery,
                                  tosor_region_locations, None)
 
@@ -535,17 +534,17 @@ def connect_regions(world, player, level_list, warp_list, required_special2s):
     connect(world, player, names, 'Menu', level_list[0])
     connect(world, player, names, 'Menu', 'Warp 1',
             lambda state: (state.has(ItemName.special_one, player, world.special1s_per_warp[player].value)))
-    connect(world, player, names, 'Warp 1', 'Warp 2',
+    connect(world, player, names, 'Menu', 'Warp 2',
             lambda state: (state.has(ItemName.special_one, player, world.special1s_per_warp[player].value * 2)))
-    connect(world, player, names, 'Warp 2', 'Warp 3',
+    connect(world, player, names, 'Menu', 'Warp 3',
             lambda state: (state.has(ItemName.special_one, player, world.special1s_per_warp[player].value * 3)))
-    connect(world, player, names, 'Warp 3', 'Warp 4',
+    connect(world, player, names, 'Menu', 'Warp 4',
             lambda state: (state.has(ItemName.special_one, player, world.special1s_per_warp[player].value * 4)))
-    connect(world, player, names, 'Warp 4', 'Warp 5',
+    connect(world, player, names, 'Menu', 'Warp 5',
             lambda state: (state.has(ItemName.special_one, player, world.special1s_per_warp[player].value * 5)))
-    connect(world, player, names, 'Warp 5', 'Warp 6',
+    connect(world, player, names, 'Menu', 'Warp 6',
             lambda state: (state.has(ItemName.special_one, player, world.special1s_per_warp[player].value * 6)))
-    connect(world, player, names, 'Warp 6', 'Warp 7',
+    connect(world, player, names, 'Menu', 'Warp 7',
             lambda state: (state.has(ItemName.special_one, player, world.special1s_per_warp[player].value * 7)))
 
     connect(world, player, names, 'Warp 1', mid_regions_dict[warp_list[0]])
@@ -629,7 +628,7 @@ def connect_regions(world, player, level_list, warp_list, required_special2s):
             lambda state: (state.has(ItemName.magical_nitro, player, 2) and state.has(ItemName.mandragora, player, 2)))
     # if world.hard_logic[player] and world.carrie_logic[player]:
     #     connect(world, player, names, LocationName.castle_center, LocationName.cc_library)
-    # else:
+    # else: TODO: Confirm whether library jump is still RNG manipulable after picking up the items in the room or not.
     connect(world, player, names, LocationName.castle_center, LocationName.cc_library,
             lambda state: (state.has(ItemName.magical_nitro, player) and state.has(ItemName.mandragora, player)))
     connect(world, player, names, LocationName.cc_elev_top, level_list[level_list.index(LocationName.castle_center)+1])
@@ -647,7 +646,7 @@ def connect_regions(world, player, level_list, warp_list, required_special2s):
     connect(world, player, names, LocationName.tower_of_execution, get_next_stage_start(LocationName.tower_of_execution))
     # Tower of Science connections
     connect(world, player, names, LocationName.tower_of_science, get_prev_stage_end(LocationName.tower_of_science))
-    connect(world, player, names, LocationName.tower_of_science, LocationName.tosci_key2,
+    connect(world, player, names, LocationName.tower_of_science, LocationName.tosci_three_doors,
             lambda state: (state.has(ItemName.science_key_one, player)))
     connect(world, player, names, LocationName.tower_of_science, LocationName.tosci_conveyors,
             lambda state: (state.has(ItemName.science_key_two, player)))

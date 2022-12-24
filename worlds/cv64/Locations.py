@@ -236,6 +236,7 @@ main_location_table = {
     # Tower Of Sorcery locations
     LocationName.tosor_stained_tower: 0xC64097,
     LocationName.tosor_savepoint: 0xC64098,
+    LocationName.tosor_trickshot: 0xC64099,
     LocationName.tosor_yellow_bubble: 0xC6409A,
     LocationName.tosor_blue_platforms: 0xC6409B,
     LocationName.tosor_side_isle: 0xC6409C,
@@ -262,7 +263,6 @@ main_location_table = {
 carrie_only_location_table = {
     LocationName.uw_carrie1: 0xC6405B,
     LocationName.uw_carrie2: 0xC6405C,
-    LocationName.tosor_trickshot: 0xC64099,
 }
 
 cc_lizard_generator_table = {
