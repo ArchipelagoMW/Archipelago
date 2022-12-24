@@ -1,7 +1,7 @@
 from typing import Dict, Set, Any
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, RegionType
 from ..AutoWorld import World, WebWorld
-from .Items import item_table, group_table, tears_set, reliquary_set
+from .Items import item_table, group_table, tears_set, reliquary_set, skill_set
 from .Locations import location_table, shop_set
 from .Exits import region_exit_table, exit_lookup_table
 from .Rules import rules
@@ -155,6 +155,9 @@ class BlasphemousWorld(World):
             if self.multiworld.start_wheel[self.player] and \
                 item["name"] == "The Young Mason's Wheel":
                 count = 0
+            if not self.multiworld.skill_randomizer[self.player] and \
+                item["name"] in skill_set:
+                count = 0
 
             if count <= 0:
                 continue
@@ -240,6 +243,9 @@ class BlasphemousWorld(World):
         if self.multiworld.start_wheel[self.player]:
             self.multiworld.get_location("BotSS: Beginning gift", self.player)\
                 .place_locked_item(self.create_item("The Young Mason's Wheel"))
+
+        if not self.multiworld.skill_randomizer[self.player]:
+            self.place_items_from_dict(Vanilla.skill_dict)
 
         self.multiworld.itempool += pool
         

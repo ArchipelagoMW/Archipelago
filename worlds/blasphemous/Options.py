@@ -175,6 +175,11 @@ class StartWheel(Toggle):
     display_name = "Start with Wheel"
 
 
+class SkillRando(Toggle):
+    """Randomizes the abilities from the skill tree into the item pool."""
+    display_name = "Skill Randomizer"
+
+
 class EnemyRando(Choice):
     """Randomizes the enemies that appear in each room.
     Simple: Enemy types will be shuffled with each other.
@@ -233,6 +238,7 @@ blasphemous_options = {
     "shop_shuffle" : ShopShuffle,
     "candle_shuffle" : CandleShuffle,
     "start_wheel": StartWheel,
+    "skill_randomizer": SkillRando,
     "enemy_randomizer": EnemyRando,
     "enemy_groups": EnemyGroups,
     "enemy_scaling": EnemyScaling

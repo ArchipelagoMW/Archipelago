@@ -394,6 +394,23 @@ item_table: List[ItemDict] = [
         'count': 1,
         'classification': ItemClassification.progression},
 
+    # Skills
+    {'name': "Combo Skill",
+        'count': 3,
+        'classification': ItemClassification.useful},
+    {'name': "Charged Skill",
+        'count': 3,
+        'classification': ItemClassification.progression},
+    {'name': "Ranged Skill",
+        'count': 3,
+        'classification': ItemClassification.progression},
+    {'name': "Vertical Skill",
+        'count': 3,
+        'classification': ItemClassification.progression},
+    {'name': "Lunge Skill",
+        'count': 3,
+        'classification': ItemClassification.useful},
+
     # Other
     {'name': "Parietal Bone of Lasser, the Inquisitor",
         'count': 1,
@@ -604,7 +621,7 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.filler},
     {'name': "Tears of Atonement (30000)",
         'count': 1,
-        'classification': ItemClassification.filler},
+        'classification': ItemClassification.filler}
 ]
 
 group_table: Dict[str, Set[str]] = {
@@ -725,4 +742,12 @@ reliquary_set: Set[str] = [
     "Reliquary of the Fervent Heart",
     "Reliquary of the Suffering Heart",
     "Reliquary of the Sorrowful Heart"
+]
+
+skill_set: Set[str] = [
+    "Combo Skill",
+    "Charged Skill",
+    "Ranged Skill",
+    "Vertical Skill",
+    "Lunge Skill"
 ]

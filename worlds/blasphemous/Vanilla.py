@@ -226,3 +226,21 @@ candle_dict: Dict[str, str] = {
     "CoOLotCV: Blue candle": "Bead of Blue Wax",
     "MD: Blue candle": "Bead of Blue Wax"
 }
+
+skill_dict: Dict[str, str] = {
+    "Skill 1, Tier 1": "Combo Skill",
+    "Skill 1, Tier 2": "Combo Skill",
+    "Skill 1, Tier 3": "Combo Skill",
+    "Skill 2, Tier 1": "Charged Skill",
+    "Skill 2, Tier 2": "Charged Skill",
+    "Skill 2, Tier 3": "Charged Skill",
+    "Skill 3, Tier 1": "Ranged Skill",
+    "Skill 3, Tier 2": "Ranged Skill",
+    "Skill 3, Tier 3": "Ranged Skill",
+    "Skill 4, Tier 1": "Vertical Skill",
+    "Skill 4, Tier 2": "Vertical Skill",
+    "Skill 4, Tier 3": "Vertical Skill",
+    "Skill 5, Tier 1": "Lunge Skill",
+    "Skill 5, Tier 2": "Lunge Skill",
+    "Skill 5, Tier 3": "Lunge Skill",
+}
