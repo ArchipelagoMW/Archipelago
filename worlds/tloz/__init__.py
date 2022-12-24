@@ -239,8 +239,15 @@ class TLoZWorld(World):
                  lambda state: state.has("Heart Container", self.player, 2))
         add_rule(self.multiworld.get_location("Magical Sword Grave", self.player),
                  lambda state: state.has("Heart Container", self.player, 9))
-        add_rule(self.multiworld.get_location("Ocean Heart Container", self.player),
-                 lambda state: state.has("Stepladder", self.player))
+
+        stepladder_locations = [
+            "Ocean Heart Container", "Level 4 Triforce", "Level 4 Boss",
+            "Level 4 Map", "Level 4 Key Drop (Keese North)"
+        ]
+        for location in stepladder_locations:
+            add_rule(self.multiworld.get_location("Ocean Heart Container", self.player),
+                     lambda state: state.has("Stepladder", self.player))
+
         if self.multiworld.StartingPosition[self.player] != 2:
             # Don't allow Take Any Items until we can actually get in one
             if self.multiworld.ExpandedPool[self.player]:
@@ -305,7 +312,6 @@ class TLoZWorld(World):
         # Remove map/compass check so they're always on
         # Stealing a bit from the boss roars flag, so we can have more dungeon items. This allows us to
         # go past 0x1F items for dungeon drops.
-        rom_data = None
         with open("worlds/tloz/z1_base_patch.bsdiff4", "rb") as base_patch:
             rom_data = bsdiff4.patch(rom.read(), base_patch.read())
         rom_data = bytearray(rom_data)
@@ -314,12 +320,14 @@ class TLoZWorld(World):
         for i in range(0, 0x7F):
             item = rom_data[first_quest_dungeon_items_early + i]
             if item & 0b00100000:
+                rom_data[first_quest_dungeon_items_early + i] = item & 0b11011111
                 rom_data[first_quest_dungeon_items_early + i] = item | 0b01000000
             if item & 0b00111111 == 0b00000011: # Change all Item 03s to Item 3F, the proper "nothing"
                 rom_data[first_quest_dungeon_items_early + i] = item | 0b00111111
 
             item = rom_data[first_quest_dungeon_items_late + i]
             if item & 0b00100000:
+                rom_data[first_quest_dungeon_items_late + i] = item & 0b11011111
                 rom_data[first_quest_dungeon_items_late + i] = item | 0b01000000
             if item & 0b00111111 == 0b00000011:
                 rom_data[first_quest_dungeon_items_late + i] = item | 0b00111111
