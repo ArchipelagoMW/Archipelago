@@ -317,13 +317,14 @@ class OOTWorld(World):
 
         # Determine which dungeons are MQ. Not compatible with glitched logic.
         mq_dungeons = set()
+        all_dungeons = [d['name'] for d in dungeon_table]
         if self.logic_rules != 'glitched':
             if self.mq_dungeons_mode == 'mq':
-                mq_dungeons = dungeon_table.keys()
+                mq_dungeons = all_dungeons
             elif self.mq_dungeons_mode == 'specific':
                 mq_dungeons = self.mq_dungeons_specific
             elif self.mq_dungeons_mode == 'count':
-                mq_dungeons = self.multiworld.random.sample(dungeon_table, self.mq_dungeons_count)
+                mq_dungeons = self.multiworld.random.sample(all_dungeons, self.mq_dungeons_count)
         else:
             self.mq_dungeons_mode = 'count'
             self.mq_dungeons_count = 0
