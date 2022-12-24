@@ -404,7 +404,7 @@ item_table: List[ItemDict] = [
     {'name': "Ranged Skill",
         'count': 3,
         'classification': ItemClassification.progression},
-    {'name': "Vertical Skill",
+    {'name': "Dive Skill",
         'count': 3,
         'classification': ItemClassification.progression},
     {'name': "Lunge Skill",
@@ -748,6 +748,6 @@ skill_set: Set[str] = [
     "Combo Skill",
     "Charged Skill",
     "Ranged Skill",
-    "Vertical Skill",
+    "Dive Skill",
     "Lunge Skill"
 ]
