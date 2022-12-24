@@ -683,7 +683,6 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.slot = args["slot"]
         # int keys get lost in JSON transfer
         ctx.slot_info = {int(pid): data for pid, data in args["slot_info"].items()}
-
         ctx.consume_players_package(args["players"])
         msgs = []
         if ctx.locations_checked:
