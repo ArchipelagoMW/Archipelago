@@ -846,10 +846,10 @@ class OOTWorld(World):
                 candidate_items = list(item for item in self.multiworld.itempool if item.player == self.player)
                 if candidate_items:
                     item_to_place = self.multiworld.random.choice(candidate_items)
+                    self.multiworld.itempool.remove(item_to_place)
                 else:
                     item_to_place = self.create_item("Recovery Heart")
                 impa.place_locked_item(item_to_place)
-                self.multiworld.itempool.remove(item_to_place)
             # Give items to startinventory
             self.multiworld.push_precollected(impa.item)
             self.multiworld.push_precollected(self.create_item("Zeldas Letter"))
