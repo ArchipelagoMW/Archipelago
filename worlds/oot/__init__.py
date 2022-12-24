@@ -109,7 +109,7 @@ class OOTWorld(World):
 
     data_version = 3
 
-    required_client_version = (0, 3, 6)
+    required_client_version = (0, 3, 7)
 
     item_name_groups = {
         # internal groups
