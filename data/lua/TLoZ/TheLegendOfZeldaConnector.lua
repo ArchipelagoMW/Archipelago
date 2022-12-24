@@ -69,6 +69,7 @@ local rupeesToSubtract      = 0x067E
 local itemsObtained         = 0x0677
 local takeAnyCavesChecked   = 0x0678
 local localTriforce         = 0x0679
+local bonusItemsObtained    = 0x067A
 
 itemAPids = {
     ["Boomerang"] = 7100,
@@ -545,6 +546,19 @@ function processBlock(block)
                 if itemMessages[i] == nil then
                     local msg = {TTL=450, message=v, color=0xFFFF0000}
                     itemMessages[i] = msg
+                end
+            end
+        end
+        local bonusItems = block["bonusItems"]
+        if bonusItems ~= nil and isInGame then
+            for i, item in ipairs(bonusItems) do
+                memDomain.ram()
+                if i > u8(bonusItemsObtained) then
+                    if u8(0x505) == 0 then
+                        gotItem(item)
+                        wU8(itemsObtained, u8(itemsObtained) - 1)
+                        wU8(bonusItemsObtained, u8(bonusItemsObtained) + 1)
+                    end
                 end
             end
         end

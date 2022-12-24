@@ -63,6 +63,7 @@ class ZeldaContext(CommonContext):
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
+        self.bonus_items = []
         self.nes_streams: (StreamReader, StreamWriter) = None
         self.nes_sync_task = None
         self.messages = {}
@@ -75,6 +76,7 @@ class ZeldaContext(CommonContext):
         self.shop_slots_middle = 0
         self.shop_slots_right = 0
         self.shop_slots = [self.shop_slots_left, self.shop_slots_middle, self.shop_slots_right]
+        self.slot_data = dict()
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -92,6 +94,8 @@ class ZeldaContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
+            if "slot_data" in args.keys():
+                self.slot_data = args["slot_data"]
             asyncio.create_task(parse_locations(self.locations_array, self, True))
         elif cmd == 'Print':
             msg = args['text']
@@ -136,6 +140,7 @@ class ZeldaContext(CommonContext):
 
 def get_payload(ctx: ZeldaContext):
     current_time = time.time()
+    bonus_items = [item for item in ctx.bonus_items]
     return json.dumps(
         {
             "items": [item.item for item in ctx.items_received],
@@ -145,7 +150,8 @@ def get_payload(ctx: ZeldaContext):
                 "left": ctx.shop_slots_left,
                 "middle": ctx.shop_slots_middle,
                 "right": ctx.shop_slots_right
-            }
+            },
+            "bonusItems": bonus_items
         }
     )
 
@@ -228,7 +234,18 @@ async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone=
                     ctx.shop_slots[context_slot] |= shop_bit
                 if locations_array["takeAnys"] and locations_array["takeAnys"] >= 4:
                     if "Take Any" in location_name:
-                        locations_checked.append(location)
+                        short_name = None
+                        if "Left" in location_name:
+                            short_name = "TakeAnyLeft"
+                        if "Middle" in location_name:
+                            short_name = "TakeAnyMiddle"
+                        if "Right" in location_name:
+                            short_name = "TakeAnyRight"
+                        if short_name is not None:
+                            item_code = ctx.slot_data[short_name]
+                            if item_code > 0:
+                                ctx.bonus_items.append(item_code)
+                            locations_checked.append(location)
         if locations_checked:
             print([ctx.location_names[location] for location in locations_checked])
             await ctx.send_msgs([

@@ -1,7 +1,7 @@
 import logging
 import os
 import threading
-from typing import NamedTuple, Union
+from typing import NamedTuple, Union, Dict, Any
 
 import bsdiff4
 
@@ -431,6 +431,30 @@ class TLoZWorld(World):
     def get_filler_item_name(self) -> str:
         filler_items = [item for item in item_table if item_table[item].classification == ItemClassification.filler]
         return self.multiworld.random.choice(filler_items)
+
+    def fill_slot_data(self) -> Dict[str, Any]:
+        take_any_left = self.multiworld.get_location("Take Any Item Left", self.player).item
+        take_any_middle = self.multiworld.get_location("Take Any Item Middle", self.player).item
+        take_any_right = self.multiworld.get_location("Take Any Item Right", self.player).item
+        if take_any_left.player == self.player:
+            take_any_left = take_any_left.code
+        else:
+            take_any_left = -1
+        if take_any_middle.player == self.player:
+            take_any_middle = take_any_middle.code
+        else:
+            take_any_middle = -1
+        if take_any_right.player == self.player:
+            take_any_right = take_any_right.code
+        else:
+            take_any_right = -1
+
+        slot_data = {
+            "TakeAnyLeft": take_any_left,
+            "TakeAnyMiddle": take_any_middle,
+            "TakeAnyRight": take_any_right
+        }
+        return slot_data
 
 
 class TLoZItem(Item):
