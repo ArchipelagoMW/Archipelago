@@ -3,9 +3,9 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 from itertools import chain, combinations
-from typing import Any, cast, Dict, List, Optional, Set, Tuple, Type, TYPE_CHECKING, Union
+from typing import Any, cast, Dict, Iterator, List, Mapping, Optional, Set, Tuple, Type, TYPE_CHECKING, Union
 
-from Options import AssembleOptions, Choice, DeathLink, Range, SpecialRange, TextChoice, Toggle
+from Options import AssembleOptions, Choice, DeathLink, ItemDict, Range, SpecialRange, TextChoice, Toggle
 from .Enemies import enemy_name_to_sprite
 
 if TYPE_CHECKING:
@@ -262,6 +262,34 @@ class CrowdedFloorChance(Range):
     range_start = 0
     range_end = 255
     default = 16
+
+
+class CustomItemPool(ItemDict, Mapping[str, int]):
+    """Customize your multiworld item pool.
+
+    Using this option you can place any cave item in your multiworld item pool. (By default, the pool is filled with
+    blue chest items.) Here you can add any valid item from the Lufia II Ancient Cave section of the datapackage
+    (see https://archipelago.gg/datapackage). The value of this option has to be a mapping of item name to count,
+    e.g., to add two Deadly rods and one Dekar Blade: {Deadly rod: 2, Dekar blade: 1}
+    The maximum total amount of custom items you can place is limited by the chosen blue_chest_count; any remaining,
+    non-customized space in the pool will be occupied by random blue chest items.
+    """
+
+    display_name = "Custom item pool"
+    value: Dict[str, int]
+
+    @property
+    def count(self) -> int:
+        return sum(self.values())
+
+    def __getitem__(self, key: str) -> int:
+        return self.value.__getitem__(key)
+
+    def __iter__(self) -> Iterator[str]:
+        return self.value.__iter__()
+
+    def __len__(self) -> int:
+        return self.value.__len__()
 
 
 class DefaultCapsule(Choice):
@@ -608,6 +636,7 @@ class L2ACOptions:
     capsule_starting_form: CapsuleStartingForm
     capsule_starting_level: CapsuleStartingLevel
     crowded_floor_chance: CrowdedFloorChance
+    custom_item_pool: CustomItemPool
     death_link: DeathLink
     default_capsule: DefaultCapsule
     default_party: DefaultParty

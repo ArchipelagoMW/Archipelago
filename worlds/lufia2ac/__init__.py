@@ -77,6 +77,9 @@ class L2ACWorld(World):
 
         self.o = L2ACOptions(**{opt: getattr(self.multiworld, opt)[self.player] for opt in self.option_definitions})
 
+        if self.o.blue_chest_count < self.o.custom_item_pool.count:
+            raise ValueError(f"Number of items in custom_item_pool ({self.o.custom_item_pool.count}) is "
+                             f"greater than blue_chest_count ({self.o.blue_chest_count}).")
         if self.o.capsule_starting_level == CapsuleStartingLevel.special_range_names["party_starting_level"]:
             self.o.capsule_starting_level.value = int(self.o.party_starting_level)
         if self.o.initial_floor >= self.o.final_floor:
@@ -125,7 +128,9 @@ class L2ACWorld(World):
 
     def create_items(self) -> None:
         item_pool: List[str] = self.multiworld.random.choices(sorted(self.item_name_groups["Blue chest items"]),
-                                                              k=int(self.o.blue_chest_count))
+                                                              k=self.o.blue_chest_count - self.o.custom_item_pool.count)
+        item_pool += [item_name for item_name, count in self.o.custom_item_pool.items() for _ in range(count)]
+
         if self.o.shuffle_capsule_monsters:
             item_pool += self.item_name_groups["Capsule monsters"]
             self.o.blue_chest_count.value += len(self.item_name_groups["Capsule monsters"])
