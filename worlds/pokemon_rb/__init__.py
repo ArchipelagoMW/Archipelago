@@ -40,12 +40,10 @@ class PokemonRedBlueWorld(World):
     game = "Pokemon Red and Blue"
     option_definitions = pokemon_rb_options
 
-    data_version = 3
+    data_version = 4
     required_client_version = (0, 3, 7)
 
     topology_present = False
-
-
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = {location.name: location.address for location in location_data if location.type == "Item"}
