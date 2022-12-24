@@ -99,3 +99,6 @@ are, will always only be sent once.
 - Obtaining a remote item will move the location of any existing item in that room. Should this make an item 
 inaccessible, simply exit and re-enter the room. This can be used to obtain the Ocean Heart Container item without the
 stepladder; logic does not account for this.
+- Whether you've purchased from a shop is tracked via Archipelago between sessions: if you revisit a single player game,
+none of your shop pruchase statuses will be remembered. If you want them to be, connect to the client and server like 
+you would in a multiplayer game.

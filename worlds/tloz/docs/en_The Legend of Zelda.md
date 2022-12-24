@@ -35,5 +35,9 @@ filler and useful items will cost less, and uncategorized items will be in the m
 
 ## Are there any other changes made?
 
-Yes. The map and compass for each dungeon start already acquired, and the Recorder will warp you between all eight
-levels regardless of Triforce count (note: it's possible for this to be your route to level 4!).
+- The map and compass for each dungeon start already acquired, and other items can be found in their place. 
+- The Recorder will warp you between all eight levels regardless of Triforce count
+    - It's possible for this to be your route to level 4! 
+- Pressing Select will cycle through your inventory.
+- Shop purchases are tracked within sessions, indicated by the item being elevated from its normal position.
+- What slots from a Take Any Cave have been chosen are similarly tracked.
