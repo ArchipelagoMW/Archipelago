@@ -4,12 +4,7 @@ unrandomized_dict: Dict[str, str] = {
     "CoOLotCV: Fountain of burning oil": "Golden Thimble Filled with Burning Oil",
     "MotED: Egg hatching": "Hatched Egg of Deformity",
     "BotSS: Crisanta's gift": "Holy Wound of Abnegation",
-    "DC: Chalice room": "Chalice of Inverted Verses",
-    "Defeat 1 Amanecida": "Verses Spun from Gold",
-    "Defeat 2 Amanecidas": "Verses Spun from Gold",
-    "Defeat 3 Amanecidas": "Verses Spun from Gold",
-    "Defeat 4 Amanecidas": "Verses Spun from Gold",
-    "Defeat all Amanecidas": "Aubade of the Nameless Guardian"
+    "DC: Chalice room": "Chalice of Inverted Verses"
 }
 
 cherub_set: Set[str] = [
