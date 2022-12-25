@@ -440,6 +440,25 @@ class EnemySprites(EnemyChoice):
     default = option_vanilla
 
 
+class ExpModifier(Range):
+    """Percentage modifier for EXP gained from enemies.
+
+    Supported values: 100 – 500
+    Default value: 100 (same as in an unmodified game)
+    """
+
+    display_name = "EXP modifier"
+    range_start = 100
+    range_end = 500
+    default = 100
+
+    def __call__(self, exp: bytes) -> bytes:
+        try:
+            return (int.from_bytes(exp, "little") * self.value // 100).to_bytes(2, "little")
+        except OverflowError:
+            return b"\xFF\xFF"
+
+
 class FinalFloor(Range):
     """The final floor, where the boss resides.
 
@@ -643,6 +662,7 @@ class L2ACOptions:
     enemy_floor_numbers: EnemyFloorNumbers
     enemy_movement_patterns: EnemyMovementPatterns
     enemy_sprites: EnemySprites
+    exp_modifier: ExpModifier
     final_floor: FinalFloor
     gear_variety_after_b9: GearVarietyAfterB9
     goal: Goal

@@ -13,8 +13,8 @@ from worlds.generic.Rules import add_rule, set_rule
 from .Client import L2ACSNIClient  # noqa: F401
 from .Items import ItemData, ItemType, l2ac_item_name_to_id, l2ac_item_table, L2ACItem, start_id as items_start_id
 from .Locations import l2ac_location_name_to_id, L2ACLocation
-from .Options import CapsuleStartingLevel, DefaultParty, EnemyFloorNumbers, EnemyMovementPatterns, EnemySprites, Goal, \
-    L2ACOptions
+from .Options import CapsuleStartingLevel, DefaultParty, EnemyFloorNumbers, EnemyMovementPatterns, EnemySprites, \
+    ExpModifier, Goal, L2ACOptions
 from .Rom import get_base_rom_bytes, get_base_rom_path, L2ACDeltaPatch
 from .Utils import constrained_choices, constrained_shuffle
 from .basepatch import apply_basepatch
@@ -206,6 +206,7 @@ class L2ACWorld(World):
             rom_bytearray[0x072742:0x072742 + 1] = self.o.boss.value.to_bytes(1, "little")
             rom_bytearray[0x072748:0x072748 + 1] = self.o.boss.flag.to_bytes(1, "little")
             rom_bytearray[0x09D59B:0x09D59B + 256] = self.get_node_connection_table()
+            rom_bytearray[0x0B05C0:0x0B05C0 + 18843] = self.get_enemy_stats()
             rom_bytearray[0x0B4F02:0x0B4F02 + 2] = self.o.master_hp.value.to_bytes(2, "little")
             rom_bytearray[0x280010:0x280010 + 2] = self.o.blue_chest_count.value.to_bytes(2, "little")
             rom_bytearray[0x280012:0x280012 + 3] = self.o.capsule_starting_level.xp.to_bytes(3, "little")
@@ -340,6 +341,20 @@ class L2ACWorld(World):
         indices = bytes(next(index_iter) if sprite in sprite_set else idx for sprite, idx in enumerate(indices, 128))
         pointers = [next(pointer_iter) if idx in index_set else pointer for idx, pointer in enumerate(pointers)]
         return b"".join(pointers), formations, sprites, indices
+
+    def get_enemy_stats(self) -> bytes:
+        rom: bytes = get_base_rom_bytes()
+
+        if self.o.exp_modifier == ExpModifier.default:
+            return rom[0x0B05C0:0x0B05C0 + 18843]
+
+        number_of_enemies: int = 224
+        enemy_stats = bytearray(rom[0x0B05C0:0x0B05C0 + 18843])
+
+        for enemy_id in range(number_of_enemies):
+            pointer: int = int.from_bytes(enemy_stats[2 * enemy_id:2 * enemy_id + 2], "little")
+            enemy_stats[pointer + 29:pointer + 31] = self.o.exp_modifier(enemy_stats[pointer + 29:pointer + 31])
+        return enemy_stats
 
     def get_goal_text_bytes(self) -> bytes:
         goal_text: List[str] = []
