@@ -989,7 +989,7 @@ def rules(blasphemousworld):
                                     state.has("Mea Culpa Upgrade", player, 2)))
         set_rule(world.get_location("DC: Mea Culpa altar", player),
         lambda state: state._blasphemous_chalice(player) and \
-            state._blasphemous_bridge_access(player) and \
+            state._blasphemous_ex_bridge_access(player) and \
                 state._blasphemous_1_mask(player) and \
                     state._blasphemous_bronze_key(player) and \
                         ((state._blasphemous_miasma_relic(player) and \
@@ -1104,37 +1104,58 @@ def rules(blasphemousworld):
                                         state._blasphemous_silver_key(player))
 
     # skill rando
-    if world.skill_randomizer[player]:
-        set_rule(world.get_location("Skill 1, Tier 1", player),
-            lambda state: state._blasphemous_sword_1(player))
-        set_rule(world.get_location("Skill 2, Tier 1", player),
-            lambda state: state._blasphemous_sword_1(player))
-        set_rule(world.get_location("Skill 4, Tier 1", player),
-            lambda state: state._blasphemous_sword_1(player))
-        set_rule(world.get_location("Skill 5, Tier 1", player),
-            lambda state: state._blasphemous_sword_1(player))
-        set_rule(world.get_location("Skill 1, Tier 2", player),
-            lambda state: state._blasphemous_sword_2(player))
-        set_rule(world.get_location("Skill 3, Tier 1", player),
-            lambda state: state._blasphemous_sword_2(player))
-        set_rule(world.get_location("Skill 5, Tier 2", player),
-            lambda state: state._blasphemous_sword_2(player))
-        set_rule(world.get_location("Skill 2, Tier 2", player),
-            lambda state: state._blasphemous_sword_3(player))
-        set_rule(world.get_location("Skill 4, Tier 2", player),
-            lambda state: state._blasphemous_sword_3(player))
+    if world.skill_randomizer[player] and not world.expert_logic[player]:
         set_rule(world.get_location("Skill 1, Tier 3", player),
-            lambda state: state._blasphemous_sword_4(player))
+            lambda state: state._blasphemous_bridge_access(player))
         set_rule(world.get_location("Skill 5, Tier 3", player),
-            lambda state: state._blasphemous_sword_4(player))
+            lambda state: state._blasphemous_bridge_access(player))
         set_rule(world.get_location("Skill 3, Tier 2", player),
-            lambda state: state._blasphemous_sword_5(player))
+            lambda state: state._blasphemous_bridge_access(player))
         set_rule(world.get_location("Skill 2, Tier 3", player),
-            lambda state: state._blasphemous_sword_6(player))
+            lambda state: state._blasphemous_blood_relic(player) and \
+            state._blasphemous_miasma_relic(player) and \
+                    state._blasphemous_2_masks(player) and \
+                        state._blasphemous_bridge_access(player))
         set_rule(world.get_location("Skill 4, Tier 3", player),
-            lambda state: state._blasphemous_sword_6(player))
+            lambda state: state._blasphemous_blood_relic(player) and \
+            state._blasphemous_miasma_relic(player) and \
+                    state._blasphemous_2_masks(player) and \
+                        state._blasphemous_bridge_access(player))
         set_rule(world.get_location("Skill 3, Tier 3", player),
-            lambda state: state._blasphemous_sword_7(player))
+            lambda state: state._blasphemous_chalice(player) and \
+                state._blasphemous_bridge_access(player) and \
+                    state._blasphemous_1_mask(player) and \
+                        state._blasphemous_bronze_key(player) and \
+                            state._blasphemous_miasma_relic(player) and \
+                                state._blasphemous_water_relic(player) and \
+                                    state._blasphemous_root_relic(player))
+    elif world.skill_randomizer[player] and world.expert_logic[player]:
+        set_rule(world.get_location("Skill 1, Tier 3", player),
+            lambda state: state._blasphemous_ex_bridge_access(player))
+        set_rule(world.get_location("Skill 5, Tier 3", player),
+            lambda state: state._blasphemous_ex_bridge_access(player))
+        set_rule(world.get_location("Skill 3, Tier 2", player),
+            lambda state: state._blasphemous_ex_bridge_access(player))
+        set_rule(world.get_location("Skill 2, Tier 3", player),
+            lambda state: state._blasphemous_blood_relic(player) and \
+            state._blasphemous_miasma_relic(player) and \
+                    state._blasphemous_2_masks(player) and \
+                        state._blasphemous_ex_bridge_access(player))
+        set_rule(world.get_location("Skill 4, Tier 3", player),
+            lambda state: state._blasphemous_blood_relic(player) and \
+            state._blasphemous_miasma_relic(player) and \
+                    state._blasphemous_2_masks(player) and \
+                        state._blasphemous_ex_bridge_access(player))
+        set_rule(world.get_location("Skill 3, Tier 3", player),
+            lambda state: state._blasphemous_chalice(player) and \
+                state._blasphemous_ex_bridge_access(player) and \
+                    state._blasphemous_1_mask(player) and \
+                        state._blasphemous_bronze_key(player) and \
+                            ((state._blasphemous_miasma_relic(player) and \
+                                state._blasphemous_water_relic(player) and \
+                                    state._blasphemous_root_relic(player)) or \
+                                        (state._blasphemous_fall_relic(player) and \
+                                            state.has("Mea Culpa Upgrade", player, 2))))
 
     # difficulty (easy)
     if world.difficulty[player].value == 0:
