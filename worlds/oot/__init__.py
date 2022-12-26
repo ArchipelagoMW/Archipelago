@@ -11,7 +11,8 @@ logger = logging.getLogger("Ocarina of Time")
 from .Location import OOTLocation, LocationFactory, location_name_to_id
 from .Entrance import OOTEntrance
 from .EntranceShuffle import shuffle_random_entrances, entrance_shuffle_table, EntranceShuffleError
-from .Hints import HintArea
+from .HintList import getRequiredHints
+from .Hints import HintArea, HintAreaNotFound, hint_dist_keys, get_hint_area, buildWorldGossipHints
 from .Items import OOTItem, item_table, oot_data_to_ap_id, oot_is_item_of_type
 from .ItemPool import generate_itempool, get_junk_item, get_junk_pool
 from .Regions import OOTRegion, TimeOfDay
@@ -26,8 +27,6 @@ from .Rom import Rom
 from .Patches import OoTContainer, patch_rom
 from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
-from .Hints import hint_dist_keys, get_hint_area, buildWorldGossipHints
-from .HintList import getRequiredHints
 
 from Utils import get_options
 from BaseClasses import MultiWorld, CollectionState, RegionType, Tutorial, LocationProgressType
@@ -944,13 +943,16 @@ class OOTWorld(World):
 
             outfile_name = self.multiworld.get_out_file_name_base(self.player)
             rom = Rom(file=get_options()['oot_options']['rom_file'])
-            if self.hints != 'none':
-                buildWorldGossipHints(self)
-            # try:
-            patch_rom(self, rom)
-            # except Exception as e:
-            #     print(e)
-            patch_cosmetics(self, rom)
+            try:
+                if self.hints != 'none':
+                    buildWorldGossipHints(self)
+                patch_rom(self, rom)
+                patch_cosmetics(self, rom)
+            except Exception as e:
+                logger.error(e)
+                raise e
+            finally:
+                self.collectible_flags_available.set()
             rom.update_header()
             patch_data = create_patch_file(rom)
             rom.restore()
@@ -1146,9 +1148,11 @@ class OOTWorld(World):
     # Helper functions
     def region_has_shortcuts(self, regionname):
         region = self.get_region(regionname)
-        if not region.dungeon:
-            region = region.entrances[0].parent_region
-        return region.dungeon.name in self.dungeon_shortcuts
+        try:
+            dungeon_name = HintArea.at(region).dungeon_name
+            return dungeon_name in self.dungeon_shortcuts
+        except HintAreaNotFound:
+            return False
 
     def get_shufflable_entrances(self, type=None, only_primary=False):
         return [entrance for entrance in self.multiworld.get_entrances() if (entrance.player == self.player and
