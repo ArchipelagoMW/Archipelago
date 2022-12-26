@@ -729,15 +729,15 @@ def rules(blasphemousworld):
     
     # Mourning and Havoc
     set_rule(world.get_location("MaH: Upper east chest", player),
-        lambda state: state.blasphemous_bridge_access(player) and \
+        lambda state: state._blasphemous_bridge_access(player) and \
             state._blasphemous_root_relic(player))
     set_rule(world.get_location("MaH: Sierpes' eye", player),
-        lambda state: state.blasphemous_bridge_access(player) and \
+        lambda state: state._blasphemous_bridge_access(player) and \
             (state._blasphemous_root_relic(player)) or \
                 state._blasphemous_water_relic(player) or \
                     state._blasphemous_dawn_heart(player))
     set_rule(world.get_location("MaH: Sierpes", player),
-        lambda state: state.blasphemous_bridge_access(player) and \
+        lambda state: state._blasphemous_bridge_access(player) and \
             (state._blasphemous_root_relic(player)) or \
                 state._blasphemous_water_relic(player) or \
                     state._blasphemous_dawn_heart(player))
@@ -1047,19 +1047,19 @@ def rules(blasphemousworld):
                     (state._blasphemous_wheel(player) and \
                         state._blasphemous_ranged(player)))
         set_rule(world.get_location("MaH: Upper east chest", player),
-            lambda state: state.blasphemous_ex_bridge_access(player) and \
+            lambda state: state._blasphemous_ex_bridge_access(player) and \
                 (state._blasphemous_root_relic(player)) or \
                     (state._blasphemous_dawn_heart(player) and \
                         state._blasphemous_ranged(player)))
         set_rule(world.get_location("MaH: Sierpes' eye", player),
-            lambda state: state.blasphemous_ex_bridge_access(player) and \
+            lambda state: state._blasphemous_ex_bridge_access(player) and \
                 (state._blasphemous_root_relic(player)) or \
                     state._blasphemous_dawn_heart(player) or \
                         state._blasphemous_water_relic(player) or \
                             (state._blasphemous_wheel(player) and \
                                 state._blasphemous_ranged(player)))
         set_rule(world.get_location("MaH: Sierpes", player),
-            lambda state: state.blasphemous_ex_bridge_access(player) and \
+            lambda state: state._blasphemous_ex_bridge_access(player) and \
                 (state._blasphemous_root_relic(player)) or \
                     state._blasphemous_dawn_heart(player) or \
                         state._blasphemous_water_relic(player) or \
@@ -1074,7 +1074,7 @@ def rules(blasphemousworld):
             lambda state: state._blasphemous_blood_relic(player) or \
                 state._blasphemous_dawn_heart(player) or \
                     (state._blasphemous_wheel(player) and \
-                        state.blasphemous_ranged(player)))
+                        state._blasphemous_ranged(player)))
         set_rule(world.get_location("Confessor Dungeon 5 extra", player),
             lambda state: state._blasphemous_bead(player) and \
                 state._blasphemous_ex_bridge_access(player))
