@@ -707,7 +707,7 @@ DonaldMansionNobodies                        ="Donald Mansion Nobodies"
 DonaldThresholder                            ="Donald Thresholder"
 DonaldXaldinGetBonus                         ="Donald Xaldin Get Bonus"
 DonaladGrimReaper2                           ="Donald Grim Reaper 2"
-
+DonaldAbuEscort                              ="Donald Abu Escort"
 
 GoofyBarbossa                                ="Goofy Barbossa"
 GoofyBarbossaGetBonus                        ="Goofy Barbossa Get Bonus"

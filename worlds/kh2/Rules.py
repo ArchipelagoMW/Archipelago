@@ -80,7 +80,7 @@ def set_rules(world: MultiWorld, player: int):
              lambda state: state.has(ItemName.ProofofPeace, player))
 
     # if 0 then no visit locking if 1 then second visits if 2 then first and second visits with one item
-    if (world.Visit_locking[player].value == 2):
+    if (world.Visit_locking[player].value == 1):
         add_rule(world.get_entrance(LocationName.Sp2_Region, player), lambda state: state.kh_sp_unlocked(player))
         add_rule(world.get_entrance(LocationName.Pr2_Region, player), lambda state: state.kh_pr_unlocked(player))
         add_rule(world.get_entrance(LocationName.TT2_Region, player), lambda state: state.kh_tt2_unlocked(player))
@@ -95,7 +95,7 @@ def set_rules(world: MultiWorld, player: int):
         add_rule(world.get_entrance(LocationName.Hb2_Region, player), lambda state: state.kh_hb_unlocked(player))
         add_rule(world.get_entrance(LocationName.Tr_Region, player), lambda state: state.kh_dc_unlocked(player))
         add_rule(world.get_entrance(LocationName.STT_Region, player), lambda state: state.kh_stt_unlocked(player))
-    elif (world.Visit_locking[player].value == 1):
+    elif (world.Visit_locking[player].value == 2):
         add_rule(world.get_entrance(LocationName.LoD_Region, player), lambda state: state.kh_lod_unlocked(player))
         add_rule(world.get_entrance(LocationName.Sp_Region, player), lambda state: state.kh_sp_unlocked(player))
         add_rule(world.get_entrance(LocationName.Pr_Region, player), lambda state: state.kh_pr_unlocked(player))

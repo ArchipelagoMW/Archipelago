@@ -249,7 +249,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.SecretAnsemReport6: [12],
         LocationName.LuxordDataAPBoost: [13],
         LocationName.GoofyGrimReaper1: [14],
-        # LocationName.Donald
+        LocationName.DonaladGrimReaper2: [15],
     }
     Pr2_Region = create_region(world, player, active_locations, LocationName.Pr2_Region,
                                Pr2_Region_locations, None)

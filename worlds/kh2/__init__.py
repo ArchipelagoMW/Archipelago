@@ -93,8 +93,8 @@ class KH2World(World):
         itempool: typing.List[KH2Item] = []
 
         totallocations = 661
-        fillerItems = [ItemName.Potion, ItemName.HiPotion, ItemName.Ether, ItemName.Elixir, ItemName.MegaPotion,
-                       ItemName.MegaEther, ItemName.Megalixir, ItemName.Tent, ItemName.DriveRecovery,
+        fillerItems = [ItemName.Potion, ItemName.HiPotion, ItemName.Ether, ItemName.Elixir, 
+                       ItemName.Megalixir, ItemName.Tent, ItemName.DriveRecovery,
                        ItemName.HighDriveRecovery, ItemName.PowerBoost,
                        ItemName.MagicBoost, ItemName.DefenseBoost, ItemName.APBoost]
 

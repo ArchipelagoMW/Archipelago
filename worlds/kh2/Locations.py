@@ -413,7 +413,7 @@ CoR_Checks = {
     LocationName.CoREngineChamberAPBoost: LocationData(0x130154, False, 576, "Chest"),
     LocationName.CoREngineChamberManifestIllusion: LocationData(0x130155, False, 577, "Chest"),
     LocationName.CoRMineshaftUpperLevelMagicBoost: LocationData(0x130156, False, 582, "Chest"),
-    LocationName.CoRMineshaftUpperLevelAPBoost: LocationData(0x130157, False, 570, "Chest"),
+    LocationName.CoRMineshaftUpperLevelAPBoost: LocationData(0x130157, False, 579, "Chest"),
     LocationName.TransporttoRemembrance: LocationData(0x130158, False, 72, "Get Bonus"),
 }
 PL_Checks = {
@@ -799,8 +799,9 @@ Donald_Checks = {
     LocationName.VictoryBell: LocationData(0x130225, False, 88, "Keyblade", "Donald"),
     LocationName.WisdomWand: LocationData(0x130226, False, 92, "Keyblade", "Donald"),
     LocationName.Centurion2: LocationData(0x130227, False, 151, "Keyblade", "Donald"),
-    LocationName.DonaldStarting1: LocationData(0x130228, False, 2, "Critical", "Donald"),
-    LocationName.DonaldStarting2: LocationData(0x130229, False, 2, "Critical", "Donald"),
+    LocationName.DonaldAbuEscort: LocationData(0x130228,False,42,"Get Bonus","Donlad",2),
+    LocationName.DonaldStarting1: LocationData(0x130229, False, 2, "Critical", "Donald"),
+    LocationName.DonaldStarting2: LocationData(0x130230, False, 2, "Critical", "Donald"),
 }
 # the locations for goofy abilites
 # These checks are only for goofy and only done through ap because of hinting reasons
@@ -969,6 +970,7 @@ exclusion_table = {
         LocationName.DonaldMansionNobodies,
         LocationName.DonaldThresholder,
         LocationName.DonaldXaldinGetBonus,
+        LocationName.DonaladGrimReaper2,
         LocationName.Centurion2,
         LocationName.CometStaff,
         LocationName.HammerStaff,

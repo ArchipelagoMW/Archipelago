@@ -232,8 +232,8 @@ Armor_Table = {
     ItemName.GrandRibbon: ItemData(0x13200f1, False, 157),
 }
 Usefull_Table = {
-    ItemName.MunnyPouch: ItemData(0x13200f2, False, 535),
-    ItemName.MunnyPouch: ItemData(0x13200f3, False, 362),
+    ItemName.MickyMunnyPouch : ItemData(0x13200f2, False, 535),
+    ItemName.OletteMunnyPouch : ItemData(0x13200f3, False, 362),
     ItemName.HadesCupTrophy: ItemData(0x13200f4, False, 537),
     ItemName.UnknownDisk: ItemData(0x13200f5, False, 462),
     ItemName.OlympusStone: ItemData(0x13200f6, False, 370),
