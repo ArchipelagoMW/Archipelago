@@ -273,6 +273,9 @@ SpecialItemUse:
     ADC.w #$FD2E
     STA $09B7               ; set pointer to L2SASM join script
     SEP #$20
+    LDA $07A9               ; load EV register $11 (party counter)
+    CMP.b #$03
+    BPL +                   ; abort if party full
     LDA.b #$8E
     STA $09B9
     PHK
