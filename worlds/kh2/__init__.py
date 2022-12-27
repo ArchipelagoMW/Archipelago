@@ -214,3 +214,10 @@ class KH2World(World):
 
     def generate_output(self, output_directory: str):
         patch_kh2(self.multiworld, self.player, self, output_directory)
+
+
+
+#onframe
+
+#loc>0 or whatever
+#if location is picked up and location is in list of dummy14 stuff from slot data then send that check

@@ -68,6 +68,8 @@ def patch_kh2(world, player, self, output_directory):
         if location.item.game == "Kingdom Hearts 2":
             itemcode = location.item.code.kh2id
         else:
+            if location in bonus append bt10 list:
+                else append sys3
             itemcode = 461
 
 
