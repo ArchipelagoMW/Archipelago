@@ -56,6 +56,7 @@ Enemies:
 - The Charging Knell in Mountains of the Endless Dusk
 - The bell ringer in lower east Jondo
 - The first Phalaris, Lionheart, and Sleepless Tomb in their respective areas (Chalice of Inverted Verses quest)
+
 In addition, any enemies that appear in some kind of arena (such as the Confessor Dungeons, or the bridges in Archcathedral Rooftops or Grievance Ascends) will not be randomized to prevent softlocking.
 
 ## What does another world's item look like in Blasphemous?
