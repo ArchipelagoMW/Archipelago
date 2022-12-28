@@ -150,6 +150,11 @@ class MaskShuffle(DefaultOnToggle):
     display_name = "Shuffle Masks"
 
 
+class EyeShuffle(DefaultOnToggle):
+    """Shuffles the Eyes of the Traitor from defeating Isidora and Sierpes into the item pool."""
+    display_name = "Shuffle Traitor's Eyes"
+
+
 class HerbShuffle(DefaultOnToggle):
     """Shuffles the herbs required for Tirso's quest into the item pool."""
     display_name = "Shuffle Herbs"
@@ -205,6 +210,11 @@ class EnemyScaling(DefaultOnToggle):
     display_name = "Enemy Scaling"
 
 
+class BlasphemousDeathLink(DeathLink):
+    """When you die, everyone dies. The reverse is also true.
+    Note that Guilt Fragments will not appear when killed by Death Link."""
+
+
 blasphemous_options = {
     "prie_dieu_warp": PrieDieuWarp,
     "skip_cutscenes": SkipCutscenes,
@@ -233,6 +243,7 @@ blasphemous_options = {
     "boss_shuffle" : BossShuffle,
     "wound_shuffle" : WoundShuffle,
     "mask_shuffle" : MaskShuffle,
+    "eye_shuffle": EyeShuffle,
     "herb_shuffle" : HerbShuffle,
     "church_shuffle" : ChurchShuffle,
     "shop_shuffle" : ShopShuffle,
@@ -241,5 +252,6 @@ blasphemous_options = {
     "skill_randomizer": SkillRando,
     "enemy_randomizer": EnemyRando,
     "enemy_groups": EnemyGroups,
-    "enemy_scaling": EnemyScaling
+    "enemy_scaling": EnemyScaling,
+    "death_link": BlasphemousDeathLink
 }

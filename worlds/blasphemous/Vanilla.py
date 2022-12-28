@@ -176,6 +176,11 @@ mask_dict: Dict[str, str] = {
     "MoM: Mask room": "Deformed Mask of Orestes"
 }
 
+eye_dict: Dict[str, str] = {
+    "Ossuary: Isidora, Voice of the Dead": "Severed Right Eye of the Traitor",
+    "MaH: Sierpes' eye": "Broken Left Eye of the Traitor"
+}
+
 herb_dict: Dict[str, str] = {
     "Albero: Gate of Travel room": "Bouquet of Thyme",
     "Jondo: Lower east bell trap": "Bouquet of Rosemary",

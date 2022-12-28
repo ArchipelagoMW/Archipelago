@@ -137,6 +137,9 @@ class BlasphemousWorld(World):
             if not self.multiworld.mask_shuffle[self.player] and \
                 item["name"] in list(Vanilla.mask_dict.values()):
                     count = 0
+            if not self.multiworld.eye_shuffle[self.player] and \
+                item["name"] in list(Vanilla.eye_dict.values()):
+                    count = 0
             if not self.multiworld.herb_shuffle[self.player] and \
                 item["name"] in list(Vanilla.herb_dict.values()):
                     count = 0
@@ -224,6 +227,9 @@ class BlasphemousWorld(World):
 
         if not self.multiworld.mask_shuffle[self.player]:
             self.place_items_from_dict(Vanilla.mask_dict)
+
+        if not self.multiworld.eye_shuffle[self.player]:
+            self.place_items_from_dict(Vanilla.eye_dict)
 
         if not self.multiworld.herb_shuffle[self.player]:
             self.place_items_from_dict(Vanilla.herb_dict)
@@ -420,6 +426,7 @@ class BlasphemousWorld(World):
             "locations": locations,
             "cfg": config,
             "ending": self.multiworld.ending[self.player].value,
+            "death_link": bool(self.multiworld.death_link[self.player].value)
         }
     
         return slot_data
