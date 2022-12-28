@@ -5,7 +5,8 @@ from .Locations import level_locations, all_level_locations, standard_level_loca
 overworld_items = {
     "Letter": 1,
     "Power Bracelet": 1,
-    "Heart Container": 1
+    "Heart Container": 1,
+    "Sword": 1
 }
 
 # Bomb, Arrow, 1 Small Key and Red Water of Life are in guaranteed_shop_items
@@ -101,7 +102,8 @@ def get_pool_core(world):
     else:
         pool.append(starting_weapon)
     for other_weapons in starting_weapons:
-        pool.append(other_weapons)
+        if other_weapons != starting_weapon:
+            pool.append(other_weapons)
 
     # Triforce Fragments
     fragment = "Triforce Fragment"
