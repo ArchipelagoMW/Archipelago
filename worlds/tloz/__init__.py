@@ -322,14 +322,14 @@ class TLoZWorld(World):
             if item & 0b00100000:
                 rom_data[first_quest_dungeon_items_early + i] = item & 0b11011111
                 rom_data[first_quest_dungeon_items_early + i] = item | 0b01000000
-            if item & 0b00111111 == 0b00000011: # Change all Item 03s to Item 3F, the proper "nothing"
+            if item & 0b00011111 == 0b00000011: # Change all Item 03s to Item 3F, the proper "nothing"
                 rom_data[first_quest_dungeon_items_early + i] = item | 0b00111111
 
             item = rom_data[first_quest_dungeon_items_late + i]
             if item & 0b00100000:
                 rom_data[first_quest_dungeon_items_late + i] = item & 0b11011111
                 rom_data[first_quest_dungeon_items_late + i] = item | 0b01000000
-            if item & 0b00111111 == 0b00000011:
+            if item & 0b00011111 == 0b00000011:
                 rom_data[first_quest_dungeon_items_late + i] = item | 0b00111111
         return rom_data
 
@@ -433,27 +433,34 @@ class TLoZWorld(World):
         return self.multiworld.random.choice(filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        take_any_left = self.multiworld.get_location("Take Any Item Left", self.player).item
-        take_any_middle = self.multiworld.get_location("Take Any Item Middle", self.player).item
-        take_any_right = self.multiworld.get_location("Take Any Item Right", self.player).item
-        if take_any_left.player == self.player:
-            take_any_left = take_any_left.code
-        else:
-            take_any_left = -1
-        if take_any_middle.player == self.player:
-            take_any_middle = take_any_middle.code
-        else:
-            take_any_middle = -1
-        if take_any_right.player == self.player:
-            take_any_right = take_any_right.code
-        else:
-            take_any_right = -1
+        if self.multiworld.ExpandedPool[self.player]:
+            take_any_left = self.multiworld.get_location("Take Any Item Left", self.player).item
+            take_any_middle = self.multiworld.get_location("Take Any Item Middle", self.player).item
+            take_any_right = self.multiworld.get_location("Take Any Item Right", self.player).item
+            if take_any_left.player == self.player:
+                take_any_left = take_any_left.code
+            else:
+                take_any_left = -1
+            if take_any_middle.player == self.player:
+                take_any_middle = take_any_middle.code
+            else:
+                take_any_middle = -1
+            if take_any_right.player == self.player:
+                take_any_right = take_any_right.code
+            else:
+                take_any_right = -1
 
-        slot_data = {
-            "TakeAnyLeft": take_any_left,
-            "TakeAnyMiddle": take_any_middle,
-            "TakeAnyRight": take_any_right
-        }
+            slot_data = {
+                "TakeAnyLeft": take_any_left,
+                "TakeAnyMiddle": take_any_middle,
+                "TakeAnyRight": take_any_right
+            }
+        else:
+            slot_data = {
+                "TakeAnyLeft": -1,
+                "TakeAnyMiddle": -1,
+                "TakeAnyRight": -1
+            }
         return slot_data
 
 
