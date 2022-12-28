@@ -12,7 +12,7 @@ class SkipCutscenes(DefaultOnToggle):
 
 
 class CorpseHints(DefaultOnToggle):
-    """Changes the 32 corpses in game to give various hints about item locations."""
+    """Changes the 34 corpses in game to give various hints about item locations."""
     display_name = "Corpse Hints"
 
 
