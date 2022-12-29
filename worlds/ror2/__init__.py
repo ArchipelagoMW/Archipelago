@@ -109,7 +109,7 @@ class RiskOfRainWorld(World):
         if not (self.multiworld.enable_lunar[self.player] or pool_option == ItemWeights.option_lunartic):
             junk_pool.pop("Lunar Item")
         # remove void items from the pool
-        if not (self.multiworld.enable_dlc[self.player] or pool_option == ItemWeights.option_void):
+        if not (self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void):
             junk_pool.pop("Void Item")
 
         # Generate item pool
