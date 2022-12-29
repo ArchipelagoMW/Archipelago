@@ -1,14 +1,60 @@
 from typing import Dict
-from Options import Option, DefaultOnToggle, Range, Choice, Toggle
+from Options import Option, Toggle, DefaultOnToggle, DeathLink, Range, Choice
 
+
+# NOTE be aware that since the range of item ids that RoR2 uses is based off of the maximums of checks
+# Be careful when changing the range_end values not to go into another game's IDs
+# NOTE that these changes to range_end must also be reflected in the RoR2 client so it understands the same ids.
+
+class ClassicMode(DefaultOnToggle):
+    # TODO change from a Toggle to a Choice
+    """
+    Classic mode: Every Item pickup increases fills a progress bar which gives location checks.
+    Explore mode: Location checks are distributed across environments.
+    """
+    display_name = "Classic Mode"
 
 class TotalLocations(Range):
-    """Number of location checks which are added to the Risk of Rain playthrough."""
+    """CLASSIC: Number of location checks which are added to the Risk of Rain playthrough."""
     display_name = "Total Locations"
     range_start = 10
     range_end = 250
     default = 20
 
+class ChestsPerEnvironment(Range):
+    """EXPLORE: The number of chest locations per environment."""
+    display_name = "Chests per Environment"
+    range_start = 0
+    range_end = 20
+    default = 10
+
+class ShrinesPerEnvironment(Range):
+    """EXPLORE: The number of shrine locations per environment."""
+    display_name = "Shrines per Environment"
+    range_start = 0
+    range_end = 20
+    default = 10
+
+class ScavengersPerEnvironment(Range):
+    """EXPLORE: The number of scavenger locations per environment."""
+    display_name = "Scavenger per Environment"
+    range_start = 0
+    range_end = 1
+    default = 1
+
+class ScannersPerEnvironment(Range):
+    """EXPLORE: The number of scanners locations per environment."""
+    display_name = "Radio Scanners per Environment"
+    range_start = 0
+    range_end = 1
+    default = 1
+
+class AltarsPerEnvironment(Range):
+    """EXPLORE: The number of altars locations per environment."""
+    display_name = "Newts Per Environment"
+    range_start = 0
+    range_end = 2
+    default = 2
 
 class TotalRevivals(Range):
     """Total Percentage of `Dio's Best Friend` item put in the item pool."""
@@ -18,15 +64,25 @@ class TotalRevivals(Range):
     default = 4
 
 
-class EnableDlc(Toggle):
-    display_name = "Enable DLC"
-
-
 class ItemPickupStep(Range):
-    """Number of items to pick up before an AP Check is completed.
+    """
+    Number of items to pick up before an AP Check is completed.
     Setting to 1 means every other pickup.
-    Setting to 2 means every third pickup. So on..."""
+    Setting to 2 means every third pickup. So on...
+    """
     display_name = "Item Pickup Step"
+    range_start = 0
+    range_end = 5
+    default = 2
+
+class ShrineUseStep(Range):
+    """
+    EXPLORE:
+    Number of shrines to use up before an AP Check is completed.
+    Setting to 1 means every other pickup.
+    Setting to 2 means every third pickup. So on...
+    """
+    display_name = "Shrine use Step"
     range_start = 0
     range_end = 5
     default = 2
@@ -46,6 +102,24 @@ class FinalStageDeath(DefaultOnToggle):
     """Death on the final boss stage counts as a win."""
     display_name = "Final Stage Death is Win"
 
+class EnvironmentsAsItems(Toggle):
+    """Enable to add environments into the archipelago item pool."""
+    display_name = "Environments as items"
+
+class BeginWithLoop(Toggle):
+    """Enable to precollect a full loop of environments. Only has an effect with EnvironmentsAsItems"""
+    display_name = "Begin With Loop"
+
+class DLC_SOTV(Toggle):
+    """Enable if you are using SOTV DLC. Affects environment availability for Explore Mode and EnvironmentsAsItems."""
+    display_name = "SOTV"
+
+class DLC_SOTV_Simulacrum(Toggle):
+    """
+    Enable if you want to add the simulacrum environments to the pool of items.
+    Only has an effect with EnvironmentsAsItems
+    """
+    display_name = "Simulacrum Environments"
 
 class GreenScrap(Range):
     """Weight of Green Scraps in the item pool.
@@ -192,14 +266,25 @@ ror2_weights: Dict[str, type(Option)] = {
 }
 
 ror2_options: Dict[str, type(Option)] = {
-    "total_locations":      TotalLocations,
-    "total_revivals":       TotalRevivals,
-    "start_with_revive":    StartWithRevive,
-    "final_stage_death":    FinalStageDeath,
-    "item_pickup_step":     ItemPickupStep,
-    "enable_lunar":         AllowLunarItems,
-    "item_weights":         ItemWeights,
-    "item_pool_presets":    ItemPoolPresetToggle,
-    "enable_dlc":           EnableDlc,
+    "classic_mode":             ClassicMode,
+    "total_locations":          TotalLocations,
+    "chests_per_stage":         ChestsPerEnvironment,
+    "shrines_per_stage":        ShrinesPerEnvironment,
+    "scavengers_per_stage":     ScavengersPerEnvironment,
+    "scanner_per_stage":        ScannersPerEnvironment,
+    "altars_per_stage":         AltarsPerEnvironment,
+    "total_revivals":           TotalRevivals,
+    "start_with_revive":        StartWithRevive,
+    "final_stage_death":        FinalStageDeath,
+    "environments_as_items":    EnvironmentsAsItems,
+    "begin_with_loop":          BeginWithLoop,
+    "dlc_sotv":                 DLC_SOTV,
+    "dlc_sotv_simulacrum":      DLC_SOTV_Simulacrum,
+    "death_link":               DeathLink,
+    "item_pickup_step":         ItemPickupStep,
+    "shrine_use_step":          ShrineUseStep,
+    "enable_lunar":             AllowLunarItems,
+    "item_weights":             ItemWeights,
+    "item_pool_presets":        ItemPoolPresetToggle,
     **ror2_weights
 }

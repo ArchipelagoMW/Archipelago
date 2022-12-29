@@ -1,13 +1,14 @@
 from typing import Dict
 from BaseClasses import Item
 from .Options import ItemWeights
+from .RoR2Environments import *
 
 
 class RiskOfRainItem(Item):
     game: str = "Risk of Rain 2"
 
 
-# 37000 - 38000
+# 37000 - 37699, 38000
 item_table: Dict[str, int] = {
     "Dio's Best Friend":    37001,
     "Common Item":          37002,
@@ -22,6 +23,19 @@ item_table: Dict[str, int] = {
     "Item Scrap, Yellow":   37011,
     "Void Item":            37012
 }
+
+# 37700 - 37699
+##################################################
+# environments
+
+environment_offest = 37700
+
+# add ALL environments into the item table
+item_table|= shift_by_offset(environment_ALL_table, environment_offest)
+# use the sotv dlc in the item table so that all names can be looked up regardless of use
+
+# end of environments
+##################################################
 
 default_weights: Dict[str, int] = {
     "Item Scrap, Green":    16,
