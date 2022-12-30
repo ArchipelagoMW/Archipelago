@@ -442,6 +442,7 @@ class OOTWorld(World):
                 new_region.scene = region['scene']
             if 'dungeon' in region:
                 new_region.dungeon = region['dungeon']
+                new_region.set_hint_data(region['dungeon'])
             if 'is_boss_room' in region:
                 new_region.is_boss_room = region['is_boss_room']
             if 'hint' in region:
