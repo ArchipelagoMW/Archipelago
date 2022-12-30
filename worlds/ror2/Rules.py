@@ -5,7 +5,7 @@ from .Locations import orderedstage_location
 
 def set_rules(world: MultiWorld, player: int) -> None:
 
-    if (world.classic_mode[player].value):
+    if (world.goal[player] == "classic"):
         # classic mode
         total_locations = world.total_locations[player].value  # total locations for current player
     else:
@@ -26,7 +26,7 @@ def set_rules(world: MultiWorld, player: int) -> None:
     total_revivals = world.worlds[player].total_revivals  # pulling this info we calculated in generate_basic
 
 
-    if (world.classic_mode[player].value):
+    if (world.goal[player] == "classic"):
         # classic mode
         if divisions:
             for i in range(1, divisions):  # since divisions is the floor of total_locations / 25

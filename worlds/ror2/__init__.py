@@ -47,8 +47,11 @@ class RiskOfRainWorld(World):
 
     def generate_early(self) -> None:
         # figure out how many revivals should exist in the pool
-        self.total_revivals = int(self.multiworld.total_revivals[self.player].value / 100 *
-                                  self.multiworld.total_locations[self.player].value)
+        # self.total_revivals = int(self.multiworld.total_revivals[self.player].value / 100 *
+                                 # self.multiworld.total_locations[self.player].value)
+        self.total_revivals = self.multiworld.total_revivals[self.player].value
+        if self.multiworld.start_with_revive[self.player].value:
+            self.total_revivals -= 1
 
     def generate_basic(self) -> None:
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
@@ -122,9 +125,9 @@ class RiskOfRainWorld(World):
 
         # precollected environments are popped from the pool so counting like this is valid
         nonjunk_item_count = self.total_revivals + len(environments_pool)
-
-        if (self.multiworld.classic_mode[self.player].value):
+        if (self.multiworld.goal[self.player] == "classic"):
             # classic mode
+            print("entered")
             total_locations = self.multiworld.total_locations[self.player].value
         else:
             # explore mode
@@ -161,7 +164,7 @@ class RiskOfRainWorld(World):
         victory_region = create_region(self.multiworld, self.player, "Victory")
         self.multiworld.regions.append(victory_region)
 
-        if (self.multiworld.classic_mode[self.player].value):
+        if (self.multiworld.goal[self.player] == "classic"):
             # classic mode
             petrichor = create_region(self.multiworld, self.player, "Petrichor V",
                                         get_classic_item_pickups(self.multiworld.total_locations[self.player].value))
@@ -281,7 +284,7 @@ class RiskOfRainWorld(World):
             "itemPickupStep": self.multiworld.item_pickup_step[self.player].value,
             "shrineUseStep": self.multiworld.shrine_use_step[self.player].value,
             "seed": "".join(self.multiworld.slot_seeds[self.player].choice(string.digits) for _ in range(16)),
-            "classic_mode": self.multiworld.classic_mode[self.player].value,
+            "goal": self.multiworld.goal[self.player].value,
             "totalLocations": self.multiworld.total_locations[self.player].value,
             "chests_per_stage": self.multiworld.chests_per_stage[self.player].value,
             "shrines_per_stage": self.multiworld.shrines_per_stage[self.player].value,
@@ -321,8 +324,7 @@ def create_events(world: MultiWorld, player: int) -> None:
     if total_locations / 25 == num_of_events:
         num_of_events -= 1
     world_region = world.get_region("Petrichor V", player)
-
-    if (world.classic_mode[player].value):
+    if (world.goal[player] == "classic"):
         # only setup Pickups when using classic_mode
         for i in range(num_of_events):
             event_loc = RiskOfRainLocation(player, f"Pickup{(i + 1) * 25}", None, world_region)

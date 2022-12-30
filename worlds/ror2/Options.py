@@ -6,32 +6,34 @@ from Options import Option, Toggle, DefaultOnToggle, DeathLink, Range, Choice
 # Be careful when changing the range_end values not to go into another game's IDs
 # NOTE that these changes to range_end must also be reflected in the RoR2 client so it understands the same ids.
 
-class ClassicMode(DefaultOnToggle):
+class Goal(Choice):
     # TODO change from a Toggle to a Choice
     """
     Classic mode: Every Item pickup increases fills a progress bar which gives location checks.
     Explore mode: Location checks are distributed across environments.
     """
-    display_name = "Classic Mode"
+    display_name = "Game Mode"
+    option_classic = 0
+    option_explore = 1
 
 class TotalLocations(Range):
     """CLASSIC: Number of location checks which are added to the Risk of Rain playthrough."""
     display_name = "Total Locations"
-    range_start = 10
-    range_end = 250
-    default = 20
+    range_start = 40
+    range_end = 300
+    default = 40
 
 class ChestsPerEnvironment(Range):
     """EXPLORE: The number of chest locations per environment."""
     display_name = "Chests per Environment"
-    range_start = 0
+    range_start = 2
     range_end = 20
     default = 10
 
 class ShrinesPerEnvironment(Range):
     """EXPLORE: The number of shrine locations per environment."""
     display_name = "Shrines per Environment"
-    range_start = 0
+    range_start = 2
     range_end = 20
     default = 10
 
@@ -57,8 +59,8 @@ class AltarsPerEnvironment(Range):
     default = 2
 
 class TotalRevivals(Range):
-    """Total Percentage of `Dio's Best Friend` item put in the item pool."""
-    display_name = "Total Percentage Revivals Available"
+    """Total Amount of `Dio's Best Friend` item put in the item pool."""
+    display_name = "Total Revives"
     range_start = 0
     range_end = 10
     default = 4
@@ -73,7 +75,7 @@ class ItemPickupStep(Range):
     display_name = "Item Pickup Step"
     range_start = 0
     range_end = 5
-    default = 2
+    default = 1
 
 class ShrineUseStep(Range):
     """
@@ -85,7 +87,7 @@ class ShrineUseStep(Range):
     display_name = "Shrine use Step"
     range_start = 0
     range_end = 5
-    default = 2
+    default = 1
 
 
 class AllowLunarItems(DefaultOnToggle):
@@ -112,7 +114,7 @@ class BeginWithLoop(Toggle):
 
 class DLC_SOTV(Toggle):
     """Enable if you are using SOTV DLC. Affects environment availability for Explore Mode and EnvironmentsAsItems."""
-    display_name = "SOTV"
+    display_name = "Enable DLC - SOTV"
 
 class DLC_SOTV_Simulacrum(Toggle):
     """
@@ -266,7 +268,7 @@ ror2_weights: Dict[str, type(Option)] = {
 }
 
 ror2_options: Dict[str, type(Option)] = {
-    "classic_mode":             ClassicMode,
+    "goal":                     Goal,
     "total_locations":          TotalLocations,
     "chests_per_stage":         ChestsPerEnvironment,
     "shrines_per_stage":        ShrinesPerEnvironment,
