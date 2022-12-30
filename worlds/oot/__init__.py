@@ -1273,6 +1273,13 @@ def gather_locations(multiworld: MultiWorld,
         'HideoutSmallKey': 'shuffle_hideoutkeys',
         'GanonBossKey': 'shuffle_ganon_bosskey',
     }
+
+    # Special handling for atypical item types
+    if item_type == 'HideoutSmallKey':
+        dungeon = 'Thieves Hideout'
+    elif item_type == 'GanonBossKey':
+        dungeon = 'Ganons Castle'
+
     if isinstance(players, int):
         players = {players}
     fill_opts = {p: getattr(multiworld.worlds[p], type_to_setting[item_type]) for p in players}
