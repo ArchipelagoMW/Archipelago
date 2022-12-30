@@ -134,9 +134,6 @@ tloz_options:
   rom_start: true
   # Display message inside of Bizhawk
   display_msgs: true
-smz3_options:
-  # Set this to your SNI folder location if you want the MultiClient to attempt an auto start, does nothing if not found
-  sni: "SNI"
 dkc3_options:
   # File name of the DKC3 US rom
   rom_file: "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc"

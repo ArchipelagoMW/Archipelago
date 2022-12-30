@@ -131,8 +131,6 @@ class TLoZWorld(World):
         self.multiworld.regions.append(menu)
         self.multiworld.regions.append(overworld)
 
-#    def create_items(self):
-
 
     def set_rules(self):
         # Boss events for a nicer spoiler log play through

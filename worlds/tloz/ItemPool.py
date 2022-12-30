@@ -83,6 +83,7 @@ def get_pool_core(world):
 
     pool = []
     placed_items = {}
+    minor_items = dict(minor_dungeon_items)
 
     # Guaranteed Shop Items
     reserved_store_slots = random.sample(shop_locations[0:9], 4)
@@ -121,12 +122,20 @@ def get_pool_core(world):
         else:
             pool.append(fragment)
 
+    # Level 9 junk fill
+    if world.multiworld.ExpandedPool[world.player] > 0:
+        spots = random.sample(level_locations[8], len(level_locations[8]) // 2)
+        for spot in spots:
+            junk = random.choice(list(minor_items.keys()))
+            placed_items[spot] = junk
+            minor_items[junk] -= 1
+
     # Finish Pool
     final_pool = basic_pool
     if world.multiworld.ExpandedPool[world.player]:
         final_pool = {
-            item: basic_pool.get(item, 0) + minor_dungeon_items.get(item, 0) + take_any_items.get(item, 0)
-            for item in set(basic_pool) | set(minor_dungeon_items) | set(take_any_items)
+            item: basic_pool.get(item, 0) + minor_items.get(item, 0) + take_any_items.get(item, 0)
+            for item in set(basic_pool) | set(minor_items) | set(take_any_items)
         }
         final_pool["Five Rupees"] -= 1
     for item in final_pool.keys():
