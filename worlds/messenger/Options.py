@@ -1,4 +1,9 @@
-from Options import Toggle
+from Options import Toggle, DefaultOnToggle
+
+
+class Logic(DefaultOnToggle):
+    """Whether the seed should be guaranteed completable."""
+    display_name = "Use Logic"
 
 
 class PowerSeals(Toggle):
@@ -7,5 +12,6 @@ class PowerSeals(Toggle):
 
 
 messenger_options = {
+    "enable_logic": Logic,
     "shuffle_seals": PowerSeals,
 }

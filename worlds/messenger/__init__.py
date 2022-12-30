@@ -1,6 +1,7 @@
-from typing import Dict, Any, Set
+from typing import Dict, Any, Set, List
 
 from BaseClasses import Item, Location, Region, Entrance, ItemClassification, Tutorial, RegionType
+from Options import Accessibility
 from worlds.AutoWorld import World, WebWorld
 from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS, JUNK, ALWAYS_LOCATIONS, SEALS
 from .Options import messenger_options
@@ -96,16 +97,25 @@ class MessengerWorld(World):
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
-
-    def generate_basic(self) -> None:
-        pass
+        if self.multiworld.enable_logic[self.player]:
+            self.multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
+        else:
+            self.multiworld.accessibility[self.player].value = Accessibility.option_minimal
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        own_locs = {loc.name: loc.item.name
-                    for loc in self.multiworld.get_filled_locations(self.player) if loc.player == self.player}
+        own_items: Dict[str, int] = {}
+        other_items: Dict[str, List[str]] = {}
+        for loc in self.multiworld.get_filled_locations(self.player):
+            if loc.item.code:
+                if loc.item.player == self.player:
+                    own_items[loc.name] = loc.item.code
+                else:
+                    other_items[loc.name] = [loc.item.name, self.multiworld.player_name[loc.item.player]]
+
         return {
-            "locations": own_locs
+            "own_items": own_items,
+            "other_items": other_items,
+            "settings": {"Difficulty": "Basic" if not self.multiworld.shuffle_seals[self.player] else "Advanced"}
         }
 
     def get_filler_item_name(self) -> str:
