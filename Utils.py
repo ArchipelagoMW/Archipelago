@@ -310,6 +310,10 @@ def get_default_options() -> OptionsType:
         "lufia2ac_options": {
             "rom_file": "Lufia II - Rise of the Sinistrals (USA).sfc",
         },
+        "mmbn3_options": {
+            "rom_file": "Mega Man Battle Network 3 - Blue Version (USA).gba",
+            "rom_start": True
+        }
     }
     return options
 

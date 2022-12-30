@@ -283,6 +283,44 @@ number_traders = [
     LocationData(LocationName.Numberman_Code_31, 0xb310eb, 0x2000433, 0x02, 0x735734, 60, [0])
 ]
 
+chocolate_shop = [
+    LocationData(LocationName.Chocolate_Shop_01, 0xb310ee, 0x20001c0, 0x80, 0x73F8FC, 150, [0]),
+    LocationData(LocationName.Chocolate_Shop_02, 0xb310ef, 0x20001c0, 0x40, 0x73F8FC, 151, [0]),
+    LocationData(LocationName.Chocolate_Shop_03, 0xb310f0, 0x20001c0, 0x20, 0x73F8FC, 152, [0]),
+    LocationData(LocationName.Chocolate_Shop_04, 0xb310f1, 0x20001c0, 0x10, 0x73F8FC, 153, [0]),
+    LocationData(LocationName.Chocolate_Shop_05, 0xb310f2, 0x20001c0, 0x08, 0x73F8FC, 154, [0]),
+    LocationData(LocationName.Chocolate_Shop_06, 0xb310f3, 0x20001c0, 0x04, 0x73F8FC, 155, [0]),
+    LocationData(LocationName.Chocolate_Shop_07, 0xb310f4, 0x20001c0, 0x02, 0x73F8FC, 156, [0]),
+    LocationData(LocationName.Chocolate_Shop_08, 0xb310f5, 0x20001c0, 0x01, 0x73F8FC, 157, [0]),
+
+    LocationData(LocationName.Chocolate_Shop_09, 0xb310f6, 0x20001c1, 0x80, 0x73F8FC, 158, [0]),
+    LocationData(LocationName.Chocolate_Shop_10, 0xb310f7, 0x20001c1, 0x40, 0x73F8FC, 159, [0]),
+    LocationData(LocationName.Chocolate_Shop_11, 0xb310f8, 0x20001c1, 0x20, 0x73F8FC, 160, [0]),
+    LocationData(LocationName.Chocolate_Shop_12, 0xb310f9, 0x20001c1, 0x10, 0x73F8FC, 161, [0]),
+    LocationData(LocationName.Chocolate_Shop_13, 0xb310fa, 0x20001c1, 0x08, 0x73F8FC, 162, [0]),
+    LocationData(LocationName.Chocolate_Shop_14, 0xb310fb, 0x20001c1, 0x04, 0x73F8FC, 163, [0]),
+    LocationData(LocationName.Chocolate_Shop_15, 0xb310fc, 0x20001c1, 0x02, 0x73F8FC, 164, [0]),
+    LocationData(LocationName.Chocolate_Shop_16, 0xb310fd, 0x20001c1, 0x01, 0x73F8FC, 165, [0]),
+
+    LocationData(LocationName.Chocolate_Shop_17, 0xb310fe, 0x20001c2, 0x80, 0x73F8FC, 166, [0]),
+    LocationData(LocationName.Chocolate_Shop_18, 0xb310ff, 0x20001c2, 0x40, 0x73F8FC, 167, [0]),
+    LocationData(LocationName.Chocolate_Shop_19, 0xb31100, 0x20001c2, 0x20, 0x73F8FC, 168, [0]),
+    LocationData(LocationName.Chocolate_Shop_20, 0xb31101, 0x20001c2, 0x10, 0x73F8FC, 169, [0]),
+    LocationData(LocationName.Chocolate_Shop_21, 0xb31102, 0x20001c2, 0x08, 0x73F8FC, 170, [0]),
+    LocationData(LocationName.Chocolate_Shop_22, 0xb31103, 0x20001c2, 0x04, 0x73F8FC, 171, [0]),
+    LocationData(LocationName.Chocolate_Shop_23, 0xb31104, 0x20001c2, 0x02, 0x73F8FC, 172, [0]),
+    LocationData(LocationName.Chocolate_Shop_24, 0xb31105, 0x20001c2, 0x01, 0x73F8FC, 173, [0]),
+
+    LocationData(LocationName.Chocolate_Shop_25, 0xb31106, 0x20001c3, 0x80, 0x73F8FC, 174, [0]),
+    LocationData(LocationName.Chocolate_Shop_26, 0xb31107, 0x20001c3, 0x40, 0x73F8FC, 175, [0]),
+    LocationData(LocationName.Chocolate_Shop_27, 0xb31108, 0x20001c3, 0x20, 0x73F8FC, 176, [0]),
+    LocationData(LocationName.Chocolate_Shop_28, 0xb31109, 0x20001c3, 0x10, 0x73F8FC, 177, [0]),
+    LocationData(LocationName.Chocolate_Shop_29, 0xb3110a, 0x20001c3, 0x08, 0x73F8FC, 178, [0]),
+    LocationData(LocationName.Chocolate_Shop_30, 0xb3110b, 0x20001c3, 0x04, 0x73F8FC, 179, [0]),
+    LocationData(LocationName.Chocolate_Shop_31, 0xb3110c, 0x20001c3, 0x02, 0x73F8FC, 180, [0]),
+    LocationData(LocationName.Chocolate_Shop_32, 0xb3110d, 0x20001c3, 0x01, 0x73F8FC, 181, [0]),
+]
+
 victory = [
     LocationData(LocationName.Alpha_Defeated, None, 0x2000433, 0x01, 0x7AE20C, 0, [0])
 ]
@@ -304,7 +342,7 @@ excluded_locations = [
 ]
 
 
-all_locations: typing.List[LocationData] = bmds + pmds + overworlds + jobs + number_traders
+all_locations: typing.List[LocationData] = bmds + pmds + overworlds + jobs + number_traders + chocolate_shop
 location_table: typing.Dict[str, int] = {locData.name: locData.id for locData in all_locations}
 location_data_table: typing.Dict[str, LocationData] = {locData.name: locData for locData in all_locations}
 locations_by_id: typing.Dict[int, LocationData] = {locData.id: locData for locData in all_locations}

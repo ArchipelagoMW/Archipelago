@@ -204,6 +204,7 @@ class MMBN3World(World):
     def create_items(self) -> None:
         # First add in all progression and useful items
         required_items = []
+        x = len(all_items)
         for item in all_items:
             if item.progression != ItemClassification.filler:
                 freq = item_frequences[item.itemName] if item.itemName in item_frequences else 1
@@ -230,14 +231,14 @@ class MMBN3World(World):
         """
 
         # Set WWW ID requirements
-        def has_www_id(state): state.has(ItemName.WWW_ID, self.player)
+        def has_www_id(state): return state.has(ItemName.WWW_ID, self.player)
         self.multiworld.get_location(LocationName.ACDC_1_PMD, self.player).access_rule = has_www_id
         self.multiworld.get_location(LocationName.SciLab_1_WWW_BMD, self.player).access_rule = has_www_id
         self.multiworld.get_location(LocationName.Yoka_1_WWW_BMD, self.player).access_rule = has_www_id
         self.multiworld.get_location(LocationName.Undernet_1_WWW_BMD, self.player).access_rule = has_www_id
 
         # Set Press Program requirements
-        def has_press(state): state.has(ItemName.Press, self.player)
+        def has_press(state): return state.has(ItemName.Press, self.player)
         self.multiworld.get_location(LocationName.Yoka_1_PMD, self.player).access_rule = has_press
         self.multiworld.get_location(LocationName.Yoka_2_Upper_BMD, self.player).access_rule = has_press
         self.multiworld.get_location(LocationName.Beach_2_East_BMD, self.player).access_rule = has_press
@@ -425,7 +426,7 @@ class MMBN3World(World):
         self.multiworld.get_location(LocationName.Numberman_Code_31, self.player).access_rule =\
             lambda state: self.explore_score(state) > 10
 
-        def not_undernet(item):  return item.code != item_table[ItemName.Progressive_Undernet_Rank].code or item.player != self.player
+        def not_undernet(item): return item.code != item_table[ItemName.Progressive_Undernet_Rank].code or item.player != self.player
         self.multiworld.get_location(LocationName.WWW_1_Central_BMD, self.player).item_rule = not_undernet
         self.multiworld.get_location(LocationName.WWW_1_East_BMD, self.player).item_rule = not_undernet
         self.multiworld.get_location(LocationName.WWW_2_East_BMD, self.player).item_rule = not_undernet

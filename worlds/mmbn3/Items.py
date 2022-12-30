@@ -192,7 +192,7 @@ chipList: typing.List[ItemData] = [
     ItemData(0xB31074, ItemName.Team2_star,        ItemClassification.useful,      ItemType.Chip, 169, ChipCode('*')),
     ItemData(0xB31075, ItemName.Thndrblt_star,     ItemClassification.useful,      ItemType.Chip, 275, ChipCode('*')),
     ItemData(0xB31076, ItemName.Tornado_L,         ItemClassification.useful,      ItemType.Chip,  65, ChipCode('L')),
-    ItemData(0xB31077, ItemName.Fountain_star,     ItemClassification.useful, ItemType.Chip, 274, ChipCode('*')),
+    ItemData(0xB31077, ItemName.Fountain_star,     ItemClassification.useful,      ItemType.Chip, 274, ChipCode('*')),
     ItemData(0xB31078, ItemName.VarSword_B,        ItemClassification.useful,      ItemType.Chip,  38, ChipCode('B')),
     ItemData(0xB31079, ItemName.VarSword_F,        ItemClassification.useful,      ItemType.Chip,  38, ChipCode('F')),
     ItemData(0xB3107A, ItemName.WideSwrd_C,        ItemClassification.progression, ItemType.Chip,  31, ChipCode('C')),
@@ -211,7 +211,59 @@ chipList: typing.List[ItemData] = [
     ItemData(0xB310AD, ItemName.Bubbler_C,         ItemClassification.progression, ItemType.Chip, 14, ChipCode('C')),
     ItemData(0xB310AE, ItemName.Shake1_S,          ItemClassification.progression, ItemType.Chip, 110, ChipCode('S')),
     ItemData(0xB310AF, ItemName.HoleMetr_H,        ItemClassification.progression, ItemType.Chip, 88, ChipCode('H')),
-    ItemData(0xB310B0, ItemName.Shadow_J,          ItemClassification.progression, ItemType.Chip, 165, ChipCode('J'))
+    ItemData(0xB310B0, ItemName.Shadow_J,          ItemClassification.progression, ItemType.Chip, 165, ChipCode('J')),
+
+    ItemData(0xB310B8, ItemName.Roll_R,            ItemClassification.useful,      ItemType.Chip, 219, ChipCode('R')),
+    ItemData(0xB310B9, ItemName.RollV2_R,          ItemClassification.useful,      ItemType.Chip, 220, ChipCode('R')),
+    ItemData(0xB310BA, ItemName.RollV3_R,          ItemClassification.useful,      ItemType.Chip, 221, ChipCode('R')),
+
+    ItemData(0xB310BB, ItemName.GutsMan_G,         ItemClassification.useful, ItemType.Chip, 222, ChipCode('G')),
+    ItemData(0xB310BC, ItemName.GutsManV2_G,       ItemClassification.useful, ItemType.Chip, 223, ChipCode('G')),
+    ItemData(0xB310BD, ItemName.GutsManV3_G,       ItemClassification.useful, ItemType.Chip, 224, ChipCode('G')),
+
+    ItemData(0xB310BE, ItemName.ProtoMan_B,        ItemClassification.useful, ItemType.Chip, 227, ChipCode('B')),
+    ItemData(0xB310BF, ItemName.ProtoManV2_B,      ItemClassification.useful, ItemType.Chip, 228, ChipCode('B')),
+    ItemData(0xB310C0, ItemName.ProtoManV3_B,      ItemClassification.useful, ItemType.Chip, 229, ChipCode('B')),
+
+    ItemData(0xB310C1, ItemName.FlashMan_F,        ItemClassification.useful, ItemType.Chip, 232, ChipCode('F')),
+    ItemData(0xB310C2, ItemName.FlashManV2_F,      ItemClassification.useful, ItemType.Chip, 233, ChipCode('F')),
+    ItemData(0xB310C3, ItemName.FlashManV3_F,      ItemClassification.useful, ItemType.Chip, 234, ChipCode('F')),
+
+    ItemData(0xB310C4, ItemName.BeastMan_B,        ItemClassification.useful, ItemType.Chip, 237, ChipCode('B')),
+    ItemData(0xB310C5, ItemName.BeastManV2_B,      ItemClassification.useful, ItemType.Chip, 238, ChipCode('B')),
+    ItemData(0xB310C6, ItemName.BeastManV3_B,      ItemClassification.useful, ItemType.Chip, 239, ChipCode('B')),
+
+    ItemData(0xB310C7, ItemName.BubblMan_B,        ItemClassification.useful, ItemType.Chip, 242, ChipCode('B')),
+    ItemData(0xB310C8, ItemName.BubblManV2_B,      ItemClassification.useful, ItemType.Chip, 243, ChipCode('B')),
+    ItemData(0xB310C9, ItemName.BubblManV3_B,      ItemClassification.useful, ItemType.Chip, 244, ChipCode('B')),
+
+    ItemData(0xB310CA, ItemName.DesertMan_D,       ItemClassification.useful, ItemType.Chip, 247, ChipCode('D')),
+    ItemData(0xB310CB, ItemName.DesertManV2_D,     ItemClassification.useful, ItemType.Chip, 248, ChipCode('D')),
+    ItemData(0xB310CC, ItemName.DesertManV3_D,     ItemClassification.useful, ItemType.Chip, 249, ChipCode('D')),
+
+    ItemData(0xB310CD, ItemName.PlantMan_P,        ItemClassification.useful, ItemType.Chip, 252, ChipCode('P')),
+    ItemData(0xB310CE, ItemName.PlantManV2_P,      ItemClassification.useful, ItemType.Chip, 253, ChipCode('P')),
+    ItemData(0xB310CF, ItemName.PlantManV3_P,      ItemClassification.useful, ItemType.Chip, 254, ChipCode('P')),
+
+    ItemData(0xB310D0, ItemName.FlamMan_F,         ItemClassification.useful, ItemType.Chip, 257, ChipCode('F')),
+    ItemData(0xB310D1, ItemName.FlamManV2_F,       ItemClassification.useful, ItemType.Chip, 258, ChipCode('F')),
+    ItemData(0xB310D2, ItemName.FlamManV3_F,       ItemClassification.useful, ItemType.Chip, 259, ChipCode('F')),
+
+    ItemData(0xB310D3, ItemName.DrillMan_D,        ItemClassification.useful, ItemType.Chip, 262, ChipCode('D')),
+    ItemData(0xB310D4, ItemName.DrillManV2_D,      ItemClassification.useful, ItemType.Chip, 263, ChipCode('D')),
+    ItemData(0xB310D5, ItemName.DrillManV3_D,      ItemClassification.useful, ItemType.Chip, 264, ChipCode('D')),
+
+    ItemData(0xB310D6, ItemName.MetalMan_M,        ItemClassification.useful, ItemType.Chip, 267, ChipCode('M')),
+    ItemData(0xB310D7, ItemName.MetalManV2_M,      ItemClassification.useful, ItemType.Chip, 268, ChipCode('M')),
+    ItemData(0xB310D8, ItemName.MetalManV3_M,      ItemClassification.useful, ItemType.Chip, 269, ChipCode('M')),
+
+    ItemData(0xB310D9, ItemName.KingMan_K,         ItemClassification.useful, ItemType.Chip, 277, ChipCode('K')),
+    ItemData(0xB310DA, ItemName.KingManV2_K,       ItemClassification.useful, ItemType.Chip, 278, ChipCode('K')),
+    ItemData(0xB310DB, ItemName.KingManV3_K,       ItemClassification.useful, ItemType.Chip, 279, ChipCode('K')),
+
+    ItemData(0xB310DC, ItemName.BowlMan_B,         ItemClassification.useful, ItemType.Chip, 287, ChipCode('B')),
+    ItemData(0xB310DD, ItemName.BowlManV2_B,       ItemClassification.useful, ItemType.Chip, 288, ChipCode('B')),
+    ItemData(0xB310DE, ItemName.BowlManV3_B,       ItemClassification.useful, ItemType.Chip, 289, ChipCode('B')),
 ]
 
 programList: typing.List[ItemData] = [
@@ -238,7 +290,9 @@ programList: typing.List[ItemData] = [
     ItemData(0xB31097, ItemName.WpnLV_plus_White,  ItemClassification.useful, ItemType.Program, 35, ProgramColor.White),
     ItemData(0xB31098, ItemName.WpnLV_plus_Pink,   ItemClassification.useful, ItemType.Program, 35, ProgramColor.Pink),
     ItemData(0xB31099, ItemName.WpnLV_plus_Yellow, ItemClassification.useful, ItemType.Program, 35, ProgramColor.Yellow),
-    ItemData(0xB3109A, ItemName.Press,             ItemClassification.progression, ItemType.Program, 20, ProgramColor.White)
+    ItemData(0xB3109A, ItemName.Press,             ItemClassification.progression, ItemType.Program, 20, ProgramColor.White),
+
+    ItemData(0xB310B7, ItemName.UnderSht,          ItemClassification.useful, ItemType.Program, 30, ProgramColor.White)
 ]
 
 zennyList: typing.List[ItemData] = [
@@ -262,13 +316,15 @@ zennyList: typing.List[ItemData] = [
 ]
 
 bugFragList: typing.List[ItemData] = [
-    ItemData(0xB310AB, ItemName.bugfrag_30, ItemClassification.filler, ItemType.BugFrag, count=30)
+    ItemData(0xB310AB, ItemName.bugfrag_30, ItemClassification.filler, ItemType.BugFrag, count=30),
+    ItemData(0xB310B5, ItemName.bugfrag_10, ItemClassification.filler, ItemType.BugFrag, count=10),
+    ItemData(0xB310B6, ItemName.bugfrag_01, ItemClassification.filler, ItemType.BugFrag, count=1)
 ]
 
 item_frequences = {
     ItemName.Progressive_Undernet_Rank: 8,
     ItemName.ExpMem: 2,
-    ItemName.Unlocker: 2,
+    ItemName.Unlocker: 10,
     ItemName.HPMemory: 23,
     ItemName.RegUP1: 4,
     ItemName.RegUP2: 13,
@@ -283,7 +339,8 @@ item_frequences = {
     ItemName.zenny_600z: 2,
     ItemName.zenny_800z: 2,
     ItemName.zenny_1000z: 2,
-    ItemName.zenny_1200z: 2
+    ItemName.zenny_1200z: 2,
+    ItemName.bugfrag_01: 5
 
 }
 all_items: typing.List[ItemData] = keyItemList + subChipList + chipList + programList + zennyList + bugFragList
