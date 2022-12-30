@@ -7,7 +7,6 @@ from Options import Option, Toggle, DefaultOnToggle, DeathLink, Range, Choice
 # NOTE that these changes to range_end must also be reflected in the RoR2 client so it understands the same ids.
 
 class Goal(Choice):
-    # TODO change from a Toggle to a Choice
     """
     Classic mode: Every Item pickup increases fills a progress bar which gives location checks.
     Explore mode: Location checks are distributed across environments.
@@ -15,6 +14,7 @@ class Goal(Choice):
     display_name = "Game Mode"
     option_classic = 0
     option_explore = 1
+    default = 0
 
 class TotalLocations(Range):
     """CLASSIC: Number of location checks which are added to the Risk of Rain playthrough."""
