@@ -3,7 +3,7 @@ from typing import Dict, Any, Set, List
 from BaseClasses import Item, Location, Region, Entrance, ItemClassification, Tutorial, RegionType
 from Options import Accessibility
 from worlds.AutoWorld import World, WebWorld
-from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS, JUNK, ALWAYS_LOCATIONS, SEALS
+from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS, JUNK, ALWAYS_LOCATIONS, SEALS, ALL_ITEMS
 from .Options import messenger_options
 from .Regions import REGIONS, REGION_CONNECTIONS
 from .Rules import MessengerRules
@@ -40,9 +40,9 @@ class MessengerWorld(World):
 
     base_offset = 0xADD_000
     item_name_to_id = {item: item_id
-                       for item_id, item in enumerate({*NOTES, *PROG_ITEMS, *PHOBEKINS, *USEFUL_ITEMS, *JUNK}, base_offset)}
+                       for item_id, item in enumerate(ALL_ITEMS, base_offset)}
     location_name_to_id = {location: location_id
-                           for location_id, location in enumerate({*ALWAYS_LOCATIONS, *SEALS}, base_offset)}
+                           for location_id, location in enumerate([*ALWAYS_LOCATIONS, *SEALS], base_offset)}
 
     data_version = 0
 
@@ -89,7 +89,7 @@ class MessengerWorld(World):
     def create_items(self) -> None:
         itempool = []
         for item in self.item_name_to_id:
-            if item != "Itemshard":  # if we create this with power seal shuffling off we'll have too many items
+            if item != "Time Shard":  # if we create this with power seal shuffling off we'll have too many items
                 itempool.append(self.create_item(item))
         while len(itempool) < len(self.multiworld.get_unfilled_locations(self.player)):
             itempool.append(self.create_filler())
@@ -103,14 +103,14 @@ class MessengerWorld(World):
             self.multiworld.accessibility[self.player].value = Accessibility.option_minimal
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        own_items: Dict[str, int] = {}
-        other_items: Dict[str, List[str]] = {}
+        own_items: Dict[int, int] = {}
+        other_items: Dict[int, List[str]] = {}
         for loc in self.multiworld.get_filled_locations(self.player):
             if loc.item.code:
                 if loc.item.player == self.player:
-                    own_items[loc.name] = loc.item.code
+                    own_items[loc.address] = loc.item.code
                 else:
-                    other_items[loc.name] = [loc.item.name, self.multiworld.player_name[loc.item.player]]
+                    other_items[loc.address] = [loc.item.name, self.multiworld.player_name[loc.item.player]]
 
         return {
             "own_items": own_items,
@@ -119,7 +119,7 @@ class MessengerWorld(World):
         }
 
     def get_filler_item_name(self) -> str:
-        return "Timeshard"
+        return "Time Shard"
 
     def create_item(self, name: str) -> "Item":
         class MessengerItem(Item):

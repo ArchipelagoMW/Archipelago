@@ -1,6 +1,5 @@
 # items
-# order doesn't necessarily matter but since everything is done by ID, any additional items should be added at the end
-# for back compatibility
+# listing individual groups first for easy lookup
 NOTES = {
     "Key of Hope",
     "Key of Chaos",
@@ -34,14 +33,34 @@ USEFUL_ITEMS = {
 }
 
 JUNK = {
-    "Timeshard",  # currently just send in quantity of 1. Need to engineer a way to send this in quantities.
+    "Time Shard",  # currently just send in quantity of 1. Need to engineer a way to send this in quantities.
     "Candle",
     "Seashell",
 }
 
+# item_name_to_id needs to be deterministic and match upstream
+ALL_ITEMS = [
+    *list(NOTES),
+    "Windmill Shuriken",
+    "Wingsuit",
+    "Rope Dart",
+    "Ninja Tabi",
+    "Candle",
+    "Seashell",
+    "Power Thistle",
+    "Demon King Crown",
+    "Ruxxtin Amulet",
+    "Fairy Bottle",
+    "Sun Crest",
+    "Moon Crest",
+    *list(PHOBEKINS),
+    "Time Shard"  # there's 45 separate instances of this in the client lookup, but hopefully we don't care?
+]
+
 # locations
 # the names of these don't actually matter, but using the upstream's names for now
-ALWAYS_LOCATIONS = {
+# order must be exactly the same as upstream
+ALWAYS_LOCATIONS = [
     "Seashell",
     "Ninja Tabi",
     "Rope Dart",
@@ -64,9 +83,9 @@ ALWAYS_LOCATIONS = {
     "Power Thistle",
     "Fairy Bottle",
     "Key of Hope"
-}
+]
 
-SEALS = {
+SEALS = [
     "Ninja Village Seal - Tree House",
 
     "Autumn Hills Seal - Trip Saws",
@@ -91,7 +110,7 @@ SEALS = {
     "Quillshroom Marsh Seal - Do the Spike Wave",
 
     "Searing Crags Seal - Triple Ball Spinner",
-    "Searing Crags Seal - Raining Rocks',"
+    "Searing Crags Seal - Raining Rocks",
     "Searing Crags Seal - Rythym Rocks",
 
     "Glacial Peak Seal - Ice Climbers",
@@ -126,4 +145,4 @@ SEALS = {
     "Elemental Skylands Seal - Air Seal",
     "Elemental Skylands Seal - Water Seal",
     "Elemental Skylands Seal - Fire Seal"
-}
+]
