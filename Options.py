@@ -589,6 +589,7 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
 class Range(NumericOption):
     range_start = 0
     range_end = 1
+    step = 1
 
     def __init__(self, value: int):
         if value < self.range_start:

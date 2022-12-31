@@ -166,6 +166,7 @@ const buildOptionsTable = (settings, romOpts = false) => {
         range.setAttribute('data-key', setting);
         range.setAttribute('min', settings[setting].min);
         range.setAttribute('max', settings[setting].max);
+        range.setAttribute('step', settings[setting].step);
         range.value = currentSettings[gameName][setting];
         range.addEventListener('change', (event) => {
           document.getElementById(`${setting}-value`).innerText = event.target.value;
@@ -229,6 +230,7 @@ const buildOptionsTable = (settings, romOpts = false) => {
         specialRange.setAttribute('data-key', setting);
         specialRange.setAttribute('min', settings[setting].min);
         specialRange.setAttribute('max', settings[setting].max);
+        specialRange.setAttribute('step', settings[setting].step);
         specialRange.value = currentSettings[gameName][setting];
 
         // Build rage value element
