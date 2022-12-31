@@ -456,7 +456,7 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
         rom_name = await snes_read(ctx, ROMNAME_START, ROMNAME_SIZE)
         if rom_name is None or all(byte == b"\x00" for byte in rom_name) or rom_name[:2] != b"AP" or \
                 rom_name != ctx.rom:
-            logging.info(f"Discarding recent {len(new_locations)} checks as ROM Status has changed.")
+            snes_logger.info(f"Discarding recent {len(new_locations)} checks as ROM Status has changed.")
             return False
         else:
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": new_locations}])
