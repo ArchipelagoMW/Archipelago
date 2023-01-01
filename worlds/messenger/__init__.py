@@ -105,18 +105,13 @@ class MessengerWorld(World):
             self.multiworld.accessibility[self.player].value = Accessibility.option_minimal
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        own_items: Dict[int, int] = {}
-        other_items: Dict[int, List[str]] = {}
+        locations: Dict[int, List[str]] = {}
         for loc in self.multiworld.get_filled_locations(self.player):
             if loc.item.code:
-                if loc.item.player == self.player:
-                    own_items[loc.address] = loc.item.code
-                else:
-                    other_items[loc.address] = [loc.item.name, self.multiworld.player_name[loc.item.player]]
+                locations[loc.address] = [loc.item.name, self.multiworld.player_name[loc.item.player]]
 
         return {
-            "own_items": own_items,
-            "other_items": other_items,
+            "locations": locations,
             "settings": {"Difficulty": "Basic" if not self.multiworld.shuffle_seals[self.player] else "Advanced"}
         }
 
