@@ -21,7 +21,7 @@ class TotalLocations(Range):
     """Classic Mode: Number of location checks which are added to the Risk of Rain playthrough."""
     display_name = "Total Locations"
     range_start = 40
-    range_end = 300
+    range_end = 250
     default = 40
 
 class ChestsPerEnvironment(Range):
