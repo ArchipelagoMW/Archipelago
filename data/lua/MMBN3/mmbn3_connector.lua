@@ -456,6 +456,42 @@ local jobs_checks = function()
     checks["Job: Help with a will"] = memory.read_u8(0x2000303)
     return checks
 end
+local chocolate_checks = function()
+    local checks ={}
+    checks["Chocolate Shop 01"] = memory.read_u8(0x20001c0)
+    checks["Chocolate Shop 02"] = memory.read_u8(0x20001c0)
+    checks["Chocolate Shop 03"] = memory.read_u8(0x20001c0)
+    checks["Chocolate Shop 04"] = memory.read_u8(0x20001c0)
+    checks["Chocolate Shop 05"] = memory.read_u8(0x20001c0)
+    checks["Chocolate Shop 06"] = memory.read_u8(0x20001c0)
+    checks["Chocolate Shop 07"] = memory.read_u8(0x20001c0)
+    checks["Chocolate Shop 08"] = memory.read_u8(0x20001c0)
+    checks["Chocolate Shop 09"] = memory.read_u8(0x20001c1)
+    checks["Chocolate Shop 10"] = memory.read_u8(0x20001c1)
+    checks["Chocolate Shop 11"] = memory.read_u8(0x20001c1)
+    checks["Chocolate Shop 12"] = memory.read_u8(0x20001c1)
+    checks["Chocolate Shop 13"] = memory.read_u8(0x20001c1)
+    checks["Chocolate Shop 14"] = memory.read_u8(0x20001c1)
+    checks["Chocolate Shop 15"] = memory.read_u8(0x20001c1)
+    checks["Chocolate Shop 16"] = memory.read_u8(0x20001c1)
+    checks["Chocolate Shop 17"] = memory.read_u8(0x20001c2)
+    checks["Chocolate Shop 18"] = memory.read_u8(0x20001c2)
+    checks["Chocolate Shop 19"] = memory.read_u8(0x20001c2)
+    checks["Chocolate Shop 20"] = memory.read_u8(0x20001c2)
+    checks["Chocolate Shop 21"] = memory.read_u8(0x20001c2)
+    checks["Chocolate Shop 22"] = memory.read_u8(0x20001c2)
+    checks["Chocolate Shop 23"] = memory.read_u8(0x20001c2)
+    checks["Chocolate Shop 24"] = memory.read_u8(0x20001c2)
+    checks["Chocolate Shop 25"] = memory.read_u8(0x20001c3)
+    checks["Chocolate Shop 26"] = memory.read_u8(0x20001c3)
+    checks["Chocolate Shop 27"] = memory.read_u8(0x20001c3)
+    checks["Chocolate Shop 28"] = memory.read_u8(0x20001c3)
+    checks["Chocolate Shop 29"] = memory.read_u8(0x20001c3)
+    checks["Chocolate Shop 30"] = memory.read_u8(0x20001c3)
+    checks["Chocolate Shop 31"] = memory.read_u8(0x20001c3)
+    checks["Chocolate Shop 32"] = memory.read_u8(0x20001c3)
+    return checks
+end
 local check_all_locations = function()
     local location_checks = {}
     -- Title Screen should not check items
@@ -477,6 +513,7 @@ local check_all_locations = function()
     for name,checked in pairs(overworld_checks()) do location_checks[name] = checked end
     for name,checked in pairs(numberman_checks()) do location_checks[name] = checked end
     for name,checked in pairs(jobs_checks()) do location_checks[name] = checked end
+    for name,checked in pairs(chocolate_checks()) do location_checks[name] = checked end
     return location_checks
 end
 
