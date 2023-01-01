@@ -12,6 +12,8 @@ from .Rules import MessengerRules
 class MessengerWeb(WebWorld):
     theme = "ocean"
 
+    bug_report_page = "https://github.com/minous27/TheMessengerRandomizerMod/issues"
+
     tut_en = Tutorial(
         "Multiworld Setup Tutorial",
         "A guide to setting up The Messenger randomizer on your computer.",
