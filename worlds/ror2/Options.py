@@ -8,8 +8,9 @@ from Options import Option, Toggle, DefaultOnToggle, DeathLink, Range, Choice
 
 class Goal(Choice):
     """
-    Classic mode: Every Item pickup increases fills a progress bar which gives location checks.
-    Explore mode: Location checks are distributed across environments.
+    Classic Mode: Every Item pickup increases fills a progress bar which gives location checks.
+
+    Explore Mode: Location checks are distributed across environments.
     """
     display_name = "Game Mode"
     option_classic = 0
@@ -17,42 +18,42 @@ class Goal(Choice):
     default = 0
 
 class TotalLocations(Range):
-    """CLASSIC: Number of location checks which are added to the Risk of Rain playthrough."""
+    """Classic Mode: Number of location checks which are added to the Risk of Rain playthrough."""
     display_name = "Total Locations"
     range_start = 40
     range_end = 300
     default = 40
 
 class ChestsPerEnvironment(Range):
-    """EXPLORE: The number of chest locations per environment."""
+    """Explore Mode: The number of chest locations per environment."""
     display_name = "Chests per Environment"
     range_start = 2
     range_end = 20
     default = 10
 
 class ShrinesPerEnvironment(Range):
-    """EXPLORE: The number of shrine locations per environment."""
+    """Explore Mode: The number of shrine locations per environment."""
     display_name = "Shrines per Environment"
     range_start = 2
     range_end = 20
     default = 10
 
 class ScavengersPerEnvironment(Range):
-    """EXPLORE: The number of scavenger locations per environment."""
+    """Explore Mode: The number of scavenger locations per environment."""
     display_name = "Scavenger per Environment"
     range_start = 0
     range_end = 1
     default = 1
 
 class ScannersPerEnvironment(Range):
-    """EXPLORE: The number of scanners locations per environment."""
+    """Explore Mode: The number of scanners locations per environment."""
     display_name = "Radio Scanners per Environment"
     range_start = 0
     range_end = 1
     default = 1
 
 class AltarsPerEnvironment(Range):
-    """EXPLORE: The number of altars locations per environment."""
+    """Explore Mode: The number of altars locations per environment."""
     display_name = "Newts Per Environment"
     range_start = 0
     range_end = 2
@@ -79,7 +80,7 @@ class ItemPickupStep(Range):
 
 class ShrineUseStep(Range):
     """
-    EXPLORE:
+    Explore Mode:
     Number of shrines to use up before an AP Check is completed.
     Setting to 1 means every other pickup.
     Setting to 2 means every third pickup. So on...
@@ -100,7 +101,7 @@ class StartWithRevive(DefaultOnToggle):
     display_name = "Start with a Revive"
 
 
-class FinalStageDeath(DefaultOnToggle):
+class FinalStageDeath(Toggle):
     """Death on the final boss stage counts as a win."""
     display_name = "Final Stage Death is Win"
 
@@ -109,11 +110,18 @@ class EnvironmentsAsItems(Toggle):
     display_name = "Environments as items"
 
 class BeginWithLoop(Toggle):
-    """Enable to precollect a full loop of environments. Only has an effect with EnvironmentsAsItems"""
+    """
+    Enable to precollect a full loop of environments.
+    Only has an effect with EnvironmentsAsItems
+    """
     display_name = "Begin With Loop"
 
 class DLC_SOTV(Toggle):
-    """Enable if you are using SOTV DLC. Affects environment availability for Explore Mode and EnvironmentsAsItems."""
+    """
+     Enable if you are using SOTV DLC.
+     Affects environment availability for Explore Mode and EnvironmentsAsItems.
+     Adds Void Items into the item pool
+     """
     display_name = "Enable DLC - SOTV"
 
 class DLC_SOTV_Simulacrum(Toggle):
@@ -125,6 +133,7 @@ class DLC_SOTV_Simulacrum(Toggle):
 
 class GreenScrap(Range):
     """Weight of Green Scraps in the item pool.
+
     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Green Scraps"
     range_start = 0
@@ -134,6 +143,7 @@ class GreenScrap(Range):
 
 class RedScrap(Range):
     """Weight of Red Scraps in the item pool.
+
     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Red Scraps"
     range_start = 0
@@ -143,6 +153,7 @@ class RedScrap(Range):
 
 class YellowScrap(Range):
     """Weight of yellow scraps in the item pool.
+
     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Yellow Scraps"
     range_start = 0
@@ -152,6 +163,7 @@ class YellowScrap(Range):
 
 class WhiteScrap(Range):
     """Weight of white scraps in the item pool.
+
     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "White Scraps"
     range_start = 0
@@ -161,6 +173,7 @@ class WhiteScrap(Range):
 
 class CommonItem(Range):
     """Weight of common items in the item pool.
+
     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Common Items"
     range_start = 0
@@ -170,6 +183,7 @@ class CommonItem(Range):
 
 class UncommonItem(Range):
     """Weight of uncommon items in the item pool.
+
     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Uncommon Items"
     range_start = 0
@@ -179,6 +193,7 @@ class UncommonItem(Range):
 
 class LegendaryItem(Range):
     """Weight of legendary items in the item pool.
+
     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Legendary Items"
     range_start = 0
@@ -188,6 +203,7 @@ class LegendaryItem(Range):
 
 class BossItem(Range):
     """Weight of boss items in the item pool.
+
     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Boss Items"
     range_start = 0
@@ -197,6 +213,7 @@ class BossItem(Range):
 
 class LunarItem(Range):
     """Weight of lunar items in the item pool.
+
     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Lunar Items"
     range_start = 0
@@ -209,7 +226,7 @@ class VoidItem(Range):
 
     (Ignored unless Item Weight Presets is 'No')
 
-    (Ignored if Enable DLC is 'No') """
+    (Ignored if Enable DLC - SOTV is 'No') """
     display_name = "Void Items"
     range_start = 0
     range_end = 100
@@ -217,28 +234,32 @@ class VoidItem(Range):
 
 
 class Equipment(Range):
-    """Weight of equipment items in the item pool. (Ignored unless Item Weight Presets is 'No')"""
+    """Weight of equipment items in the item pool.
+
+     (Ignored unless Item Weight Presets is 'No')"""
     display_name = "Equipment"
     range_start = 0
     range_end = 100
     default = 32
 
 
-class ItemPoolPresetToggle(DefaultOnToggle):
+class ItemPoolPresetToggle(Toggle):
     """Will use the item weight presets when set to true, otherwise will use the custom set item pool weights."""
     display_name = "Use Item Weight Presets"
 
 
 class ItemWeights(Choice):
-    """Preset choices for determining the weights of the item pool.
-    New is a test for a potential adjustment to the default weights.
-    Uncommon puts a large number of uncommon items in the pool.
-    Legendary puts a large number of legendary items in the pool.
-    Lunartic makes everything a lunar item.
-    Chaos generates the pool completely at random with rarer items having a slight cap to prevent this option being too easy.
-    No Scraps removes all scrap items from the item pool.
-    Even generates the item pool with every item having an even weight.
-    Scraps Only will be only scrap items in the item pool."""
+    """Set item_pool_presets to true if you want to use one of these presets.
+    Preset choices for determining the weights of the item pool.
+    - New is a test for a potential adjustment to the default weights.
+    - Uncommon puts a large number of uncommon items in the pool.
+    - Legendary puts a large number of legendary items in the pool.
+    - Lunartic makes everything a lunar item.
+    - Chaos generates the pool completely at random with rarer items having a slight cap to prevent this option being too easy.
+    - No Scraps removes all scrap items from the item pool.
+    - Even generates the item pool with every item having an even weight.
+    - Scraps Only will be only scrap items in the item pool.
+    - Void makes evertying a void item."""
     display_name = "Item Weights"
     option_default = 0
     option_new = 1
