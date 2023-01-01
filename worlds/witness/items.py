@@ -163,21 +163,23 @@ class WitnessPlayerItems:
 
         doors = get_option_value(world, player, "shuffle_doors")
 
-        if doors and symbols:
+        if symbols:
             self.GOOD_ITEMS = [
-                "Progressive Dots", "Black/White Squares", "Symmetry"
-            ]
-
-            if is_option_enabled(world, player, "shuffle_discarded_panels"):
-                self.GOOD_ITEMS.append("Triangles")
-        elif symbols:
-            self.GOOD_ITEMS = [
-                "Progressive Dots", "Black/White Squares", "Progressive Stars",
+                "Dots", "Black/White Squares", "Stars",
                 "Shapers", "Symmetry"
             ]
 
+            if doors:
+                self.GOOD_ITEMS = [
+                    "Dots", "Black/White Squares", "Symmetry"
+                ]
+
             if is_option_enabled(world, player, "shuffle_discarded_panels"):
-                self.GOOD_ITEMS.append("Triangles")
+                if is_option_enabled(world, player, "shuffle_discarded_panels"):
+                    if get_option_value(world, player, "puzzle_randomization") == 1:
+                        self.GOOD_ITEMS.append("Arrows")
+                    else:
+                        self.GOOD_ITEMS.append("Triangles")
             if not is_option_enabled(world, player, "disable_non_randomized_puzzles"):
                 self.GOOD_ITEMS.append("Colored Squares")
 
