@@ -1,15 +1,15 @@
 # items
 # listing individual groups first for easy lookup
-NOTES = {
+NOTES = [
     "Key of Hope",
     "Key of Chaos",
     "Key of Courage",
     "Key of Love",
     "Key of Strength",
     "Key of Symbiosis"
-}
+]
 
-PROG_ITEMS = {
+PROG_ITEMS = [
     "Wingsuit",
     "Rope Dart",
     "Ninja Tabi",
@@ -19,28 +19,28 @@ PROG_ITEMS = {
     "Fairy Bottle",
     "Sun Crest",
     "Moon Crest",
-}
+]
 
-PHOBEKINS = {
+PHOBEKINS = [
     "Necro",
     "Pyro",
     "Claustro",
     "Acro"
-}
+]
 
-USEFUL_ITEMS = {
+USEFUL_ITEMS = [
     "Windmill Shuriken"
-}
+]
 
-JUNK = {
+JUNK = [
     "Time Shard",  # currently just send in quantity of 1. Need to engineer a way to send this in quantities.
     "Candle",
     "Seashell",
-}
+]
 
 # item_name_to_id needs to be deterministic and match upstream
 ALL_ITEMS = [
-    *list(NOTES),
+    *NOTES,
     "Windmill Shuriken",
     "Wingsuit",
     "Rope Dart",
@@ -53,7 +53,7 @@ ALL_ITEMS = [
     "Fairy Bottle",
     "Sun Crest",
     "Moon Crest",
-    *list(PHOBEKINS),
+    *PHOBEKINS,
     "Time Shard"  # there's 45 separate instances of this in the client lookup, but hopefully we don't care?
 ]
 
