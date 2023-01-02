@@ -1,173 +1,173 @@
-from ..generic.Rules import set_rule, add_rule
-from BaseClasses import MultiWorld
-from ..AutoWorld import LogicMixin
-import typing
-import math
+from ..generic.Rules import set_rule
+from BaseClasses import MultiWorld, CollectionState
 
 
-class UndertaleLogic:
-    def _undertale_reqplot(self, player: int, plotitem: str):
-        from worlds.undertale.Regions import randomized_connections
-        temp_data = {}
-        progkeys = []
-        for exit, region in randomized_connections:
-            temp_data[exit] = self.multiworld.get_entrance(exit, player).connected_region.name
-            temp_data[region] = self.multiworld.get_region(region, player).entrances[0].name
-        place = "Old Home Exit"
-        progkeys.append("Goat Plush")
-        while place != "Core Exit":
-            if temp_data[place] == "Snowdin Forest":
-                if self._undertale_is_route(player, 1):
-                    progkeys.append("Complete Skeleton")
-                progkeys.append("Snow Shovel")
-                place = "Snowdin Town Exit"
-            elif temp_data[place] == "Waterfall":
-                if self._undertale_is_route(player, 1):
-                    progkeys.append("Fish")
-                progkeys.append("Heat Suit")
-                place = "Waterfall Exit"
-            elif temp_data[place] == "Hotland":
-                if not self._undertale_is_route(player, 2):
-                    progkeys.append("Cooking Set")
-                    progkeys.append("Microphone")
-                progkeys.append("Bridge Tools")
-                place = "Hotland Exit"
-            elif temp_data[place] == "Core":
-                progkeys.append("Mettaton Plush")
-                if self._undertale_is_route(player, 1):
-                    progkeys.append("DT Extractor")
-                place = "Core Exit"
-        return progkeys.index(plotitem)+1
+def _undertale_reqplot(state: CollectionState, player: int, plotitem: str):
+    from worlds.undertale.Regions import randomized_connections
+    temp_data = {}
+    progkeys = []
+    for exit, region in randomized_connections:
+        temp_data[exit] = state.multiworld.get_entrance(exit, player).connected_region.name
+        temp_data[region] = state.multiworld.get_region(region, player).entrances[0].name
+    place = "Old Home Exit"
+    progkeys.append("Goat Plush")
+    while place != "Core Exit":
+        if temp_data[place] == "Snowdin Forest":
+            if _undertale_is_route(state, player, 1):
+                progkeys.append("Complete Skeleton")
+            progkeys.append("Snow Shovel")
+            place = "Snowdin Town Exit"
+        elif temp_data[place] == "Waterfall":
+            if _undertale_is_route(state, player, 1):
+                progkeys.append("Fish")
+            progkeys.append("Heat Suit")
+            place = "Waterfall Exit"
+        elif temp_data[place] == "Hotland":
+            if not _undertale_is_route(state, player, 2):
+                progkeys.append("Cooking Set")
+                progkeys.append("Microphone")
+            progkeys.append("Bridge Tools")
+            place = "Hotland Exit"
+        elif temp_data[place] == "Core":
+            progkeys.append("Mettaton Plush")
+            if _undertale_is_route(state, player, 1):
+                progkeys.append("DT Extractor")
+            place = "Core Exit"
+    return progkeys.index(plotitem)+1
 
-    def _undertale_prev_area(self, player: int, area: int):
-        if area == 1:
-            return self.multiworld.get_region("Snowdin Forest", player).entrances[0].parent_region.name
-        elif area == 2:
-            return self.multiworld.get_region("Waterfall", player).entrances[0].parent_region.name
-        elif area == 3:
-            return self.multiworld.get_region("Hotland", player).entrances[0].parent_region.name
-        elif area == 4:
-            return self.multiworld.get_region("Core", player).entrances[0].parent_region.name
 
-    def _undertale_is_route(self, player: int, route: int):
-        if route == 3:
-            return self.multiworld.route_required[player].current_key == "all_routes"
-        if self.multiworld.route_required[player].current_key == "all_routes":
-            return True
-        if route == 0:
-            return self.multiworld.route_required[player].current_key == "neutral"
-        if route == 1:
-            return self.multiworld.route_required[player].current_key == "pacifist"
-        if route == 2:
-            return self.multiworld.route_required[player].current_key == "genocide"
-        return False
+def _undertale_prev_area(state: CollectionState, player: int, area: int):
+    if area == 1:
+        return state.multiworld.get_region("Snowdin Forest", player).entrances[0].parent_region.name
+    elif area == 2:
+        return state.multiworld.get_region("Waterfall", player).entrances[0].parent_region.name
+    elif area == 3:
+        return state.multiworld.get_region("Hotland", player).entrances[0].parent_region.name
+    elif area == 4:
+        return state.multiworld.get_region("Core", player).entrances[0].parent_region.name
 
-    def _undertale_has_plot(self, player: int, item: str):
-        if item == "Goat Plush":
-            return self.has("Goat Plush", player) or \
-                self.has("Progressive Plot", player, self._undertale_reqplot(player, "Goat Plush"))
-        elif item == "Complete Skeleton":
-            return self.has("Complete Skeleton", player) or \
-                self.has("Progressive Plot", player, self._undertale_reqplot(player, "Complete Skeleton"))
-        elif item == "Snow Shovel":
-            return self.has("Snow Shovel", player) or \
-                self.has("Progressive Plot", player, self._undertale_reqplot(player, "Snow Shovel"))
-        elif item == "Fish":
-            return self.has("Fish", player) or \
-                self.has("Progressive Plot", player, self._undertale_reqplot(player, "Fish"))
-        elif item == "Heat Suit":
-            return self.has("Heat Suit", player) or \
-                self.has("Progressive Plot", player, self._undertale_reqplot(player, "Heat Suit"))
-        elif item == "Cooking Set":
-            return self.has("Cooking Set", player) or \
-                self._undertale_is_route(player, 2) or \
-                self.has("Progressive Plot", player, self._undertale_reqplot(player, "Cooking Set"))
-        elif item == "Microphone":
-            return self.has("Microphone", player) or \
-                self._undertale_is_route(player, 2) or \
-                self.has("Progressive Plot", player, self._undertale_reqplot(player, "Microphone"))
-        elif item == "Bridge Tools":
-            return self.has("Bridge Tools", player) or \
-                self.has("Progressive Plot", player, self._undertale_reqplot(player, "Bridge Tools"))
-        elif item == "Mettaton Plush":
-            return self.has("Mettaton Plush", player) or \
-                self.has("Progressive Plot", player, self._undertale_reqplot(player, "Mettaton Plush"))
-        elif item == "DT Extractor":
-            return self.has("DT Extractor", player) or \
-                self.has("Progressive Plot", player, self._undertale_reqplot(player, "DT Extractor"))
 
-    def _undertale_can_level(self, exp: int, lvl: int):
-        if exp >= 10 and lvl == 1:
-            return True
-        elif exp >= 30 and lvl == 2:
-            return True
-        elif exp >= 70 and lvl == 3:
-            return True
-        elif exp >= 120 and lvl == 4:
-            return True
-        elif exp >= 200 and lvl == 5:
-            return True
-        elif exp >= 300 and lvl == 6:
-            return True
-        elif exp >= 500 and lvl == 7:
-            return True
-        elif exp >= 800 and lvl == 8:
-            return True
-        elif exp >= 1200 and lvl == 9:
-            return True
-        elif exp >= 1700 and lvl == 10:
-            return True
-        elif exp >= 2500 and lvl == 11:
-            return True
-        elif exp >= 3500 and lvl == 12:
-            return True
-        elif exp >= 5000 and lvl == 13:
-            return True
-        elif exp >= 7000 and lvl == 14:
-            return True
-        elif exp >= 10000 and lvl == 15:
-            return True
-        elif exp >= 15000 and lvl == 16:
-            return True
-        elif exp >= 25000 and lvl == 17:
-            return True
-        elif exp >= 50000 and lvl == 18:
-            return True
-        elif exp >= 99999 and lvl == 19:
-            return True
-        return False
+def _undertale_is_route(state: CollectionState, player: int, route: int):
+    if route == 3:
+        return state.multiworld.route_required[player].current_key == "all_routes"
+    if state.multiworld.route_required[player].current_key == "all_routes":
+        return True
+    if route == 0:
+        return state.multiworld.route_required[player].current_key == "neutral"
+    if route == 1:
+        return state.multiworld.route_required[player].current_key == "pacifist"
+    if route == 2:
+        return state.multiworld.route_required[player].current_key == "genocide"
+    return False
+
+
+def _undertale_has_plot(state: CollectionState, player: int, item: str):
+    if item == "Goat Plush":
+        return state.has("Goat Plush", player) or \
+            state.has("Progressive Plot", player, _undertale_reqplot(state, player, "Goat Plush"))
+    elif item == "Complete Skeleton":
+        return state.has("Complete Skeleton", player) or \
+            state.has("Progressive Plot", player, _undertale_reqplot(state, player, "Complete Skeleton"))
+    elif item == "Snow Shovel":
+        return state.has("Snow Shovel", player) or \
+            state.has("Progressive Plot", player, _undertale_reqplot(state, player, "Snow Shovel"))
+    elif item == "Fish":
+        return state.has("Fish", player) or \
+            state.has("Progressive Plot", player, _undertale_reqplot(state, player, "Fish"))
+    elif item == "Heat Suit":
+        return state.has("Heat Suit", player) or \
+            state.has("Progressive Plot", player, _undertale_reqplot(state, player, "Heat Suit"))
+    elif item == "Cooking Set":
+        return state.has("Cooking Set", player) or \
+            _undertale_is_route(state, player, 2) or \
+            state.has("Progressive Plot", player, _undertale_reqplot(state, player, "Cooking Set"))
+    elif item == "Microphone":
+        return state.has("Microphone", player) or \
+            _undertale_is_route(state, player, 2) or \
+            state.has("Progressive Plot", player, _undertale_reqplot(state, player, "Microphone"))
+    elif item == "Bridge Tools":
+        return state.has("Bridge Tools", player) or \
+            state.has("Progressive Plot", player, _undertale_reqplot(state, player, "Bridge Tools"))
+    elif item == "Mettaton Plush":
+        return state.has("Mettaton Plush", player) or \
+            state.has("Progressive Plot", player, _undertale_reqplot(state, player, "Mettaton Plush"))
+    elif item == "DT Extractor":
+        return state.has("DT Extractor", player) or \
+            state.has("Progressive Plot", player, _undertale_reqplot(state, player, "DT Extractor"))
+
+
+def _undertale_can_level(state: CollectionState, exp: int, lvl: int):
+    if exp >= 10 and lvl == 1:
+        return True
+    elif exp >= 30 and lvl == 2:
+        return True
+    elif exp >= 70 and lvl == 3:
+        return True
+    elif exp >= 120 and lvl == 4:
+        return True
+    elif exp >= 200 and lvl == 5:
+        return True
+    elif exp >= 300 and lvl == 6:
+        return True
+    elif exp >= 500 and lvl == 7:
+        return True
+    elif exp >= 800 and lvl == 8:
+        return True
+    elif exp >= 1200 and lvl == 9:
+        return True
+    elif exp >= 1700 and lvl == 10:
+        return True
+    elif exp >= 2500 and lvl == 11:
+        return True
+    elif exp >= 3500 and lvl == 12:
+        return True
+    elif exp >= 5000 and lvl == 13:
+        return True
+    elif exp >= 7000 and lvl == 14:
+        return True
+    elif exp >= 10000 and lvl == 15:
+        return True
+    elif exp >= 15000 and lvl == 16:
+        return True
+    elif exp >= 25000 and lvl == 17:
+        return True
+    elif exp >= 50000 and lvl == 18:
+        return True
+    elif exp >= 99999 and lvl == 19:
+        return True
+    return False
 
 
 # Sets rules on entrances and advancements that are always applied
 def set_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_entrance("Old Home Exit", player),
-             lambda state: state._undertale_has_plot(player, "Goat Plush"))
+             lambda state: _undertale_has_plot(state, player, "Goat Plush"))
     set_rule(multiworld.get_entrance("Snowdin Town Exit", player),
-             lambda state: state._undertale_has_plot(player, "Snow Shovel"))
+             lambda state: _undertale_has_plot(state, player, "Snow Shovel"))
     set_rule(multiworld.get_entrance("Waterfall Exit", player),
-             lambda state: state._undertale_has_plot(player, "Heat Suit"))
+             lambda state: _undertale_has_plot(state, player, "Heat Suit"))
     set_rule(multiworld.get_entrance("Cooking Show Entrance", player),
-             lambda state: state._undertale_has_plot(player, "Cooking Set"))
+             lambda state: _undertale_has_plot(state, player, "Cooking Set"))
     set_rule(multiworld.get_entrance("News Show Entrance", player),
-             lambda state: state._undertale_has_plot(player, "Microphone"))
+             lambda state: _undertale_has_plot(state, player, "Microphone"))
     set_rule(multiworld.get_entrance("Hotland Exit", player),
-             lambda state: state._undertale_has_plot(player, "Bridge Tools"))
+             lambda state: _undertale_has_plot(state, player, "Bridge Tools"))
     set_rule(multiworld.get_entrance("Core Exit", player),
-             lambda state: state._undertale_has_plot(player, "Mettaton Plush"))
+             lambda state: _undertale_has_plot(state, player, "Mettaton Plush"))
     set_rule(multiworld.get_entrance("New Home Exit", player),
              lambda state: (state.has("Left Home Key", player) and
                             state.has("Right Home Key", player)) or
-                           state.has("Key Piece", player, state.multimultiworld.key_pieces[player]))
-    if multiworld.state._undertale_is_route(player, 1):
+                           state.has("Key Piece", player, state.multiworld.key_pieces[player]))
+    if _undertale_is_route(multiworld.state, player, 1):
         set_rule(multiworld.get_entrance("Papyrus\" Home Entrance", player),
-                 lambda state: state._undertale_has_plot(player, "Complete Skeleton"))
+                 lambda state: _undertale_has_plot(state, player, "Complete Skeleton"))
         set_rule(multiworld.get_entrance("Undyne\"s Home Entrance", player),
-                 lambda state: state._undertale_has_plot(player, "Fish") and state.has("Papyrus Date", player))
+                 lambda state: _undertale_has_plot(state, player, "Fish") and state.has("Papyrus Date", player))
         set_rule(multiworld.get_entrance("Lab Elevator", player),
                  lambda state: state.has("Undyne Letter EX", player) and state.has("Undyne Date", player)
                                and state.has("Alphys Date", player)
-                               and state._undertale_has_plot(player, "DT Extractor"))
-    if multiworld.state._undertale_is_route(player, 1):
+                               and _undertale_has_plot(state, player, "DT Extractor"))
+    if _undertale_is_route(multiworld.state, player, 1):
         set_rule(multiworld.get_location("Papyrus Plot", player),
                  lambda state: state.can_reach("Snowdin Town", "Region", player))
         set_rule(multiworld.get_location("Undyne Plot", player),
@@ -191,7 +191,7 @@ def set_rules(multiworld: MultiWorld, player: int):
                  lambda state: state.can_reach("News Show", "Region", player) and state.has("Hot Dog...?", player, 1))
         set_rule(multiworld.get_location("Letter Quest", player),
                  lambda state: state.can_reach("New Home Exit", "Entrance", player))
-    if (not multiworld.state._undertale_is_route(player, 2)) or multiworld.state._undertale_is_route(player, 3):
+    if (not _undertale_is_route(multiworld.state, player, 2)) or _undertale_is_route(multiworld.state, player, 3):
         set_rule(multiworld.get_location("Nicecream Punch Card", player),
                  lambda state: state.has("Punch Card", player, 3) and state.can_reach("Waterfall", "Region", player))
         set_rule(multiworld.get_location("Nicecream Snowdin", player),
@@ -206,28 +206,28 @@ def set_rules(multiworld: MultiWorld, player: int):
                  lambda state: state.can_reach("Cooking Show", "Region", player))
         set_rule(multiworld.get_location("TV Show Plot", player),
                  lambda state: state.can_reach("News Show", "Region", player))
-    if multiworld.state._undertale_is_route(player, 2) and \
+    if _undertale_is_route(multiworld.state, player, 2) and \
             (multiworld.rando_love[player] or multiworld.rando_stats[player]):
         maxlv = 5
         exp = 190
         curarea = "Old Home"
         while maxlv < 20:
-            if multiworld.state._undertale_prev_area(player, 1) == curarea:
+            if _undertale_prev_area(multiworld.state, player, 1) == curarea:
                 curarea = "Snowdin Town"
                 exp += 407
-            elif multiworld.state._undertale_prev_area(player, 2) == curarea:
+            elif _undertale_prev_area(multiworld.state, player, 2) == curarea:
                 curarea = "Waterfall"
                 exp += 1643
-            elif multiworld.state._undertale_prev_area(player, 3) == curarea:
+            elif _undertale_prev_area(multiworld.state, player, 3) == curarea:
                 curarea = "News Show"
                 exp += 3320
-            elif multiworld.state._undertale_prev_area(player, 4) == curarea:
+            elif _undertale_prev_area(multiworld.state, player, 4) == curarea:
                 curarea = "Core"
                 exp = 50000
             elif curarea == "Core":
                 curarea = "Sans"
                 exp = 99999
-            while multiworld.state._undertale_can_level(exp, maxlv):
+            while _undertale_can_level(multiworld.state, exp, maxlv):
                 maxlv += 1
                 if multiworld.rando_stats[player]:
                     if curarea == "Snowdin Town":
@@ -365,7 +365,7 @@ def set_rules(multiworld: MultiWorld, player: int):
 # Sets rules on completion condition
 def set_completion_rules(multiworld: MultiWorld, player: int):
     completion_requirements = lambda state: state.can_reach("New Home Exit", "Entrance", player)
-    if multiworld.state._undertale_is_route(player, 1):
+    if _undertale_is_route(multiworld.state, player, 1):
         completion_requirements = lambda state: state.can_reach("True Lab", "Region", player)
 
     multiworld.completion_condition[player] = lambda state: completion_requirements(state)

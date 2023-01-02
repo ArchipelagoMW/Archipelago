@@ -50,7 +50,7 @@ class UndertaleWorld(World):
             "player_id": self.player,
             "client_version": self.required_client_version,
             "race": self.multiworld.is_race,
-            "route": self.multiworld.route_required[self.player],
+            "route": self.multiworld.route_required[self.player].current_key,
             "temy_armor_include": bool(self.multiworld.temy_include[self.player].value),
             "only_flakes": bool(self.multiworld.only_flakes[self.player].value),
             "no_equips": bool(self.multiworld.no_equips[self.player].value),
@@ -142,7 +142,7 @@ class UndertaleWorld(World):
             itempool = [item for item in itempool if item not in non_key_items]
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
-        exclusion_pool.update(exclusion_table[self.multiworld.route_required[self.player]])
+        exclusion_pool.update(exclusion_table[self.multiworld.route_required[self.player].current_key])
         if not self.multiworld.rando_love[self.player] or \
                 (self.multiworld.route_required[self.player] != "genocide" and
                  self.multiworld.route_required[self.player] != "all_routes"):
@@ -186,7 +186,7 @@ class UndertaleWorld(World):
                               (self.multiworld.rando_love[self.player] and
                                (self.multiworld.route_required[self.player] == "genocide" or
                                 self.multiworld.route_required[self.player] == "all_routes"))) and
-                             loc_name not in exclusion_table[self.multiworld.route_required[self.player]]]
+                             loc_name not in exclusion_table[self.multiworld.route_required[self.player].current_key]]
             for exit in exits:
                 ret.exits.append(Entrance(self.player, exit, ret))
             return ret
