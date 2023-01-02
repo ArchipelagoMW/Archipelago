@@ -746,7 +746,8 @@ async def on_client_disconnected(ctx: Context, client: Client):
 
 
 async def on_client_joined(ctx: Context, client: Client):
-    update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
+    if ctx.client_game_state[client.team, client.slot] not in {ClientStatus.CLIENT_READY, ClientStatus.CLIENT_PLAYING}:
+        update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
     version_str = '.'.join(str(x) for x in client.version)
     verb = "tracking" if "Tracker" in client.tags else "playing"
     ctx.notify_all(
@@ -761,10 +762,11 @@ async def on_client_joined(ctx: Context, client: Client):
 
 
 async def on_client_left(ctx: Context, client: Client):
-    update_client_status(ctx, client, ClientStatus.CLIENT_UNKNOWN)
+    if len(ctx.clients[client.team][client.slot]) > 0:
+        update_client_status(ctx, client, ClientStatus.CLIENT_UNKNOWN)
+        ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
     ctx.notify_all(
         "%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1))
-    ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
 async def countdown(ctx: Context, timer: int):
