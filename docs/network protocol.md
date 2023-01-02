@@ -543,12 +543,16 @@ Color options:
 `flags` contains the [NetworkItem](#NetworkItem) flags that belong to the item
 
 ### Client States
-An enumeration containing the possible client states that may be used to inform the server in [StatusUpdate](#StatusUpdate).
+An enumeration containing the possible client states that may be used to inform
+the server in [StatusUpdate](#StatusUpdate). The MultiServer automatically sets
+the client state to `ClientStatus.CLIENT_CONNECTED` on the first active connection
+to a slot.
 
 ```python
 import enum
 class ClientStatus(enum.IntEnum):
     CLIENT_UNKNOWN = 0
+    CLIENT_CONNECTED = 5
     CLIENT_READY = 10
     CLIENT_PLAYING = 20
     CLIENT_GOAL = 30
