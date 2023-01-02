@@ -62,14 +62,15 @@ def patch_kh2(world, player, self, output_directory):
     soraStartingItems = []
     goofyStartingItems = []
     donaldStartingItems = []
-    mod_name = "RandoSeed"
-
+   #multiworld = world.worlds
+   #mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
+    mod_name="YourMom"
     for location in self.multiworld.get_filled_locations(self.player):
         if location.item.game == "Kingdom Hearts 2":
             itemcode = location.item.code.kh2id
         else:
-            if location in bonus append bt10 list:
-                else append sys3
+            #if location in bonus append bt10 list:
+            #    else append sys3
             itemcode = 461
 
 

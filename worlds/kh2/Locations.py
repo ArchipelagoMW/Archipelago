@@ -23,7 +23,7 @@ class LocationData(typing.NamedTuple):
     charName: str = "Sora"
     charNumber: int = 1
     #Get bonus and forms bt10
-    #popup and chest bt10
+    #popup and chest sys
 
 
    
@@ -107,7 +107,7 @@ AG2_Checks = {
     LocationName.LexaeusASStrengthBeyondStrength: LocationData(0x130040, 0x1574A,0x21, 0x7B, 545, "Chest"),
     LocationName.LexaeusDataLostIllusion: LocationData(0x130041, 0x15786,0x21, 0x7B, 550, "Chest"),
 }
-DC_Checks = {
+DC_Checks = { 
     LocationName.DCCourtyardMythrilShard:   LocationData(0x130042, 0x146B2, 0x23B4, 1, 16, "Chest"),           
     LocationName.DCCourtyardStarRecipe:     LocationData(0x130043, 0x146BE, 0x23B4, 2, 17, "Chest"),           
     LocationName.DCCourtyardAPBoost:        LocationData(0x130044, 0x146CA, 0x23B4, 3, 18, "Chest"),           
@@ -154,9 +154,9 @@ HundredAcre2_Checks = {
     LocationName.PigletsHouseMythrilGem:   LocationData(0x130065, 0x1474E, 0x23B6, 3, 104, "Chest"),
 }
 HundredAcre3_Checks = {
-    LocationName.RabbitsHouseDrawRing:       LocationData(0x130066, 0x1475A, 0x23CA, 314, "Chest"),
-    LocationName.RabbitsHouseMythrilCrystal: LocationData(0x130067, 0x14766, 0x23B5, 100, "Chest"),
-    LocationName.RabbitsHouseAPBoost:        LocationData(0x130068, 0x14772, 0x23B6, 101, "Chest"),
+    LocationName.RabbitsHouseDrawRing:       LocationData(0x130066, 0x1475A, 0x23CA, 0,314, "Chest"),
+    LocationName.RabbitsHouseMythrilCrystal: LocationData(0x130067, 0x14766, 0x23B5, 7,100, "Chest"),
+    LocationName.RabbitsHouseAPBoost:        LocationData(0x130068, 0x14772, 0x23B6, 0,101, "Chest"),
 }
 HundredAcre4_Checks = {
     LocationName.KangasHouseMagicBoost: LocationData(0x130069, 0x1477E, 0x23B6, 5, 108, "Chest"),

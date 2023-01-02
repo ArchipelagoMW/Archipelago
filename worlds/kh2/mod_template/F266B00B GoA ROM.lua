@@ -270,6 +270,15 @@ if Place == 0x1A04 then
 	if ReadByte(Save+0x1D2E) > 0 then --Hollow Bastion Cleared
 		Spawn('Short',0x05,0x25C,0x779) --Radiant Garden
 	end
+	if ReadByte(Save+0x23DF)&0x08 > 0 then
+		print('Proof of nonis')
+	end	
+	if ReadByte(Save+0x23DF)&0x04 > 0 then
+		print('PRoof on left')
+	end	
+	if ReadByte(Save+0x23DF)&0x02 > 0 then
+		print('PRoof on right')
+	end	
 end
 --World Map -> Garden of Assemblage
 if Place == 0x000F then

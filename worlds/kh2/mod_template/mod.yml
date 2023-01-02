@@ -53,4 +53,70 @@ assets:
     - name: ItemList.yml
       type: item
     type: List
+  - method: copy
+    name: cmd
+    source:
+    - name: better_stt/cmd.list
+    type: list
+- method: binarc
+  multi:
+  - name: msg/jp/ca.bar
+  - name: msg/fr/ca.bar
+  - name: msg/gr/ca.bar
+  - name: msg/it/ca.bar
+  - name: msg/sp/ca.bar
+  name: msg/us/ca.bar
+  source:
+  - method: kh2msg
+    name: ca
+    source:
+    - language: en
+      name: map_skip/ca.yml
+    type: list
+- method: copy
+  name: libretto-ca.bar
+  source:
+  - name: map_skip/libretto-ca.bar    
+- method: copy
+  name: obj/N_BB080_BTL.mset
+  source:
+  - name: wardrobe_skip.mset
+- method: copy
+  multi:
+  - name: limit/us/trinity_zz.bar
+  - name: limit/fr/trinity_zz.bar
+  - name: limit/gr/trinity_zz.bar
+  - name: limit/it/trinity_zz.bar
+  - name: limit/sp/trinity_zz.bar
+  name: limit/fm/trinity_zz.bar
+  source:
+  - name: better_stt/trinity_zz.bar
+- method: copy
+  name: obj/B_EX100.mset
+  source:
+  - name: better_stt/B_EX100.mset
+- method: copy
+  name: obj/F_TT010.mset
+  source:
+  - name: better_stt/F_TT010.mset
+- method: copy
+  name: obj/P_EX110.mset
+  source:
+  - name: better_stt/P_EX110.mset
+- method: copy
+  name: obj/W_EX010_RX.mset
+  source:
+  - name: better_stt/W_EX010_RX.mset
+- name: scripts/json.lua
+  method: copy
+  source:
+  - name: clientlua/json.lua
+- name: scripts/socket.lua
+  method: copy
+  source:
+  - name: clientlua/socket.lua
+- name: scripts/core.dll
+  method: copy
+  source:
+  - name: clientlua/core.dll
 title: Randomizer Seed
