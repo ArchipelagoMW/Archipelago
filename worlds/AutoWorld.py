@@ -328,7 +328,7 @@ class World(metaclass=AutoWorldRegister):
             "locations": cls.location_name_to_id,
         }
         dump = json.dumps(datapackage)
-        return hashlib.new("MD5", dump.encode()).hexdigest()
+        return hashlib.sha1(dump.encode()).hexdigest()
 
 
 # any methods attached to this can be used as part of CollectionState,
