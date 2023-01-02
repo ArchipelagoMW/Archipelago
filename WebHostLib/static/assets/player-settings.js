@@ -205,6 +205,11 @@ const buildOptionsTable = (settings, romOpts = false) => {
           let presetOption = document.createElement('option');
           presetOption.innerText = presetName;
           presetOption.value = settings[setting].value_names[presetName];
+          const words = presetOption.innerText.split("_");
+          for (let i = 0; i < words.length; i++) {
+            words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+          }
+          presetOption.innerText = words.join(" ");
           specialRangeSelect.appendChild(presetOption);
         });
         let customOption = document.createElement('option');
