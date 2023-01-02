@@ -6,7 +6,8 @@ class StartItemsRemovesFromPool(Toggle):
     display_name = "StartItems Removes From Item Pool"
 
 class Preset(Choice):
-    """Choose one of the presets or specify "varia_custom" to use varia_custom_preset option or specify "custom" to use custom_preset option."""
+    """Choose one of the presets or specify "varia_custom" to use varia_custom_preset option or specify "custom" to use
+    custom_preset option."""
     display_name = "Preset"
     option_newbie = 0
     option_casual = 1
@@ -57,7 +58,8 @@ class RemoteItems(Toggle):
     display_name = "Remote Items"  
 
 class MaxDifficulty(Choice):
-    """Depending on the perceived difficulties of the techniques, bosses, hell runs etc. from the preset, it will prevent the Randomizer from placing an item in a location too difficult to reach with the current items."""
+    """Depending on the perceived difficulties of the techniques, bosses, hell runs etc. from the preset, it will
+    prevent the Randomizer from placing an item in a location too difficult to reach with the current items."""
     display_name = "Maximum Difficulty"
     option_easy = 0
     option_medium = 1
@@ -76,7 +78,8 @@ class MorphPlacement(Choice):
     default = 0
 
 class StrictMinors(Toggle):
-    """Instead of using the Minors proportions as probabilities, enforce a strict distribution to match the proportions as closely as possible."""
+    """Instead of using the Minors proportions as probabilities, enforce a strict distribution to match the proportions
+    as closely as possible."""
     display_name = "Strict Minors"
 
 class MissileQty(Range):
@@ -108,7 +111,8 @@ class MinorQty(Range):
     default = 100
 
 class EnergyQty(Choice):
-    """Choose how many Energy/Reserve Tanks will be available, from 0-1 in ultra sparse, 4-6 in sparse, 8-12 in medium and 18 in vanilla."""
+    """Choose how many Energy/Reserve Tanks will be available, from 0-1 in ultra sparse, 4-6 in sparse, 8-12 in medium
+    and 18 in vanilla."""
     display_name = "Energy Quantity"
     option_ultra_sparse = 0
     option_sparse = 1
@@ -122,8 +126,6 @@ class AreaRandomization(Choice):
     option_off = 0
     option_light = 1
     option_on = 2
-    alias_false = 0
-    alias_true = 2
     default = 0
 
 class AreaLayout(Toggle):
@@ -131,11 +133,13 @@ class AreaLayout(Toggle):
     display_name = "Area Layout"
 
 class DoorsColorsRando(Toggle):
-    """Randomize the color of Red/Green/Yellow doors. Add four new type of doors which require Ice/Wave/Spazer/Plasma beams to open them."""
+    """Randomize the color of Red/Green/Yellow doors. Add four new type of doors which require Ice/Wave/Spazer/Plasma
+    beams to open them."""
     display_name = "Doors Colors Rando"
 
 class AllowGreyDoors(Toggle):
-    """When randomizing the color of Red/Green/Yellow doors, some doors can be randomized to Grey. Grey doors will never open, you will have to go around them."""
+    """When randomizing the color of Red/Green/Yellow doors, some doors can be randomized to Grey. Grey doors will never
+    open, you will have to go around them."""
     display_name = "Allow Grey Doors"
 
 class BossRandomization(Toggle):
@@ -143,15 +147,18 @@ class BossRandomization(Toggle):
     display_name = "Boss Randomization"
 
 class FunCombat(Toggle):
-    """Forces removal of Plasma Beam and Screw Attack if the preset and settings allow it. In addition, can randomly remove Spazer and Wave Beam from the Combat set. If used, might force 'items' accessibility."""
+    """Forces removal of Plasma Beam and Screw Attack if the preset and settings allow it. In addition, can randomly
+    remove Spazer and Wave Beam from the Combat set. If used, might force 'minimal' accessibility."""
     display_name = "Fun Combat"
 
 class FunMovement(Toggle):
-    """Forces removal of Space Jump if the preset allows it. In addition, can randomly remove High Jump, Grappling Beam, Spring Ball, Speed Booster, and Bombs from the Movement set. If used, might force 'items' accessibility."""
+    """Forces removal of Space Jump if the preset allows it. In addition, can randomly remove High Jump, Grappling Beam,
+    Spring Ball, Speed Booster, and Bombs from the Movement set. If used, might force 'minimal' accessibility."""
     display_name = "Fun Movement"
 
 class FunSuits(Toggle):
-    """If the preset and seed layout allow it, will force removal of at least one of Varia Suit and/or Gravity Suit. If used, might force 'items' accessibility."""
+    """If the preset and seed layout allow it, will force removal of at least one of Varia Suit and/or Gravity Suit. If
+    used, might force 'minimal' accessibility."""
     display_name = "Fun Suits"
 
 class LayoutPatches(DefaultOnToggle):
@@ -163,7 +170,9 @@ class VariaTweaks(Toggle):
     display_name = "Varia Tweaks"
 
 class NerfedCharge(Toggle):
-    """Samus begins with a starter Charge Beam that does one third of charged shot damage that can damage bosses. Pseudo Screws also do one third damage. Special Beam Attacks do normal damage but cost 3 Power Bombs instead of 1. Once the Charge Beam item has been collected, it does full damage and special attacks are back to normal."""
+    """Samus begins with a starter Charge Beam that does one third of charged shot damage that can damage bosses. Pseudo
+    Screws also do one third damage. Special Beam Attacks do normal damage but cost 3 Power Bombs instead of 1. Once the
+    Charge Beam item has been collected, it does full damage and special attacks are back to normal."""
     display_name = "Nerfed Charge"
 
 class GravityBehaviour(Choice):
@@ -182,6 +191,10 @@ class SpinJumpRestart(Toggle):
     """Allows Samus to start spinning in mid air after jumping or falling."""
     display_name = "Spin Jump Restart"
 
+class SpeedKeep(Toggle):
+    """Let Samus keeps her momentum when landing from a fall or from jumping."""
+    display_name = "Momentum conservation (a.k.a. Speedkeep)"
+
 class InfiniteSpaceJump(Toggle):
     """Space jumps can be done quicker and at any time in air, water or lava, even after falling long distances."""
     display_name = "Infinite Space Jump"
@@ -191,7 +204,8 @@ class RefillBeforeSave(Toggle):
     display_name = "Refill Before Save"
 
 class Hud(Toggle):
-    """Displays the current area name and the number of remaining items of selected item split in the HUD for the current area."""
+    """Displays the current area name and the number of remaining items of selected item split in the HUD for the
+    current area."""
     display_name = "Hud"
 
 class Animals(Toggle):
@@ -209,7 +223,8 @@ class RandomMusic(Toggle):
 class CustomPreset(OptionDict):
     """
     see https://randommetroidsolver.pythonanywhere.com/presets for detailed info on each preset settings
-    knows: each skill (know) has a pair [can use, perceived difficulty using one of 1, 5, 10, 25, 50 or 100 each one matching a max_difficulty]
+    knows: each skill (know) has a pair [can use, perceived difficulty using one of 1, 5, 10, 25, 50 or 100 each one
+           matching a max_difficulty]
     settings: hard rooms, hellruns and bosses settings
     controller: predefined controller mapping and moon walk setting
     """
@@ -266,7 +281,7 @@ sm_options: typing.Dict[str, type(Option)] = {
     #"item_sounds": "on",
     "elevators_doors_speed": ElevatorsDoorsSpeed,
     "spin_jump_restart": SpinJumpRestart,
-    #"rando_speed": "off",
+    "rando_speed": SpeedKeep,
     "infinite_space_jump": InfiniteSpaceJump,
     "refill_before_save": RefillBeforeSave,
     "hud": Hud,

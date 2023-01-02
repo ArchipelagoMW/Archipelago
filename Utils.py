@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import shutil
+import asyncio
 import typing
 import builtins
 import os
@@ -12,11 +12,20 @@ import io
 import collections
 import importlib
 import logging
+from typing import BinaryIO, ClassVar, Coroutine, Optional, Set
+
+from yaml import load, load_all, dump, SafeLoader
+
+try:
+    from yaml import CLoader as UnsafeLoader
+    from yaml import CDumper as Dumper
+except ImportError:
+    from yaml import Loader as UnsafeLoader
+    from yaml import Dumper
 
 if typing.TYPE_CHECKING:
-    from tkinter import Tk
-else:
-    Tk = typing.Any
+    import tkinter
+    import pathlib
 
 
 def tuplize_version(version: str) -> Version:
@@ -29,20 +38,12 @@ class Version(typing.NamedTuple):
     build: int
 
 
-__version__ = "0.3.3"
+__version__ = "0.3.7"
 version_tuple = tuplize_version(__version__)
 
-is_linux = sys.platform.startswith('linux')
-is_macos = sys.platform == 'darwin'
+is_linux = sys.platform.startswith("linux")
+is_macos = sys.platform == "darwin"
 is_windows = sys.platform in ("win32", "cygwin", "msys")
-
-import jellyfish
-from yaml import load, load_all, dump, SafeLoader
-
-try:
-    from yaml import CLoader as Loader
-except ImportError:
-    from yaml import Loader
 
 
 def int16_as_bytes(value: int) -> typing.List[int]:
@@ -98,7 +99,7 @@ def local_path(*path: str) -> str:
             local_path.cached_path = os.path.dirname(os.path.abspath(sys.argv[0]))
     else:
         import __main__
-        if hasattr(__main__, "__file__"):
+        if hasattr(__main__, "__file__") and os.path.isfile(__main__.__file__):
             # we are running in a normal Python environment
             local_path.cached_path = os.path.dirname(os.path.abspath(__main__.__file__))
         else:
@@ -124,23 +125,24 @@ def home_path(*path: str) -> str:
 
 def user_path(*path: str) -> str:
     """Returns either local_path or home_path based on write permissions."""
-    if hasattr(user_path, 'cached_path'):
+    if hasattr(user_path, "cached_path"):
         pass
     elif os.access(local_path(), os.W_OK):
         user_path.cached_path = local_path()
     else:
         user_path.cached_path = home_path()
         # populate home from local - TODO: upgrade feature
-        if user_path.cached_path != local_path() and not os.path.exists(user_path('host.yaml')):
-            for dn in ('Players', 'data/sprites'):
+        if user_path.cached_path != local_path() and not os.path.exists(user_path("host.yaml")):
+            import shutil
+            for dn in ("Players", "data/sprites"):
                 shutil.copytree(local_path(dn), user_path(dn), dirs_exist_ok=True)
-            for fn in ('manifest.json', 'host.yaml'):
+            for fn in ("manifest.json", "host.yaml"):
                 shutil.copy2(local_path(fn), user_path(fn))
 
     return os.path.join(user_path.cached_path, *path)
 
 
-def output_path(*path: str):
+def output_path(*path: str) -> str:
     if hasattr(output_path, 'cached_path'):
         return os.path.join(output_path.cached_path, *path)
     output_path.cached_path = user_path(get_options()["general_options"]["output_path"])
@@ -149,11 +151,12 @@ def output_path(*path: str):
     return path
 
 
-def open_file(filename):
-    if sys.platform == 'win32':
+def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
+    if is_windows:
         os.startfile(filename)
     else:
-        open_command = 'open' if sys.platform == 'darwin' else 'xdg-open'
+        from shutil import which
+        open_command = which("open") if is_macos else (which("xdg-open") or which("gnome-open") or which("kde-open"))
         subprocess.call([open_command, filename])
 
 
@@ -172,7 +175,9 @@ class UniqueKeyLoader(SafeLoader):
 
 parse_yaml = functools.partial(load, Loader=UniqueKeyLoader)
 parse_yamls = functools.partial(load_all, Loader=UniqueKeyLoader)
-unsafe_parse_yaml = functools.partial(load, Loader=Loader)
+unsafe_parse_yaml = functools.partial(load, Loader=UnsafeLoader)
+
+del load, load_all  # should not be used. don't leak their names
 
 
 def get_cert_none_ssl_context():
@@ -190,11 +195,12 @@ def get_public_ipv4() -> str:
     ip = socket.gethostbyname(socket.gethostname())
     ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen('https://checkip.amazonaws.com/', context=ctx).read().decode('utf8').strip()
+        ip = urllib.request.urlopen("https://checkip.amazonaws.com/", context=ctx).read().decode("utf8").strip()
     except Exception as e:
+        # noinspection PyBroadException
         try:
-            ip = urllib.request.urlopen('https://v4.ident.me', context=ctx).read().decode('utf8').strip()
-        except:
+            ip = urllib.request.urlopen("https://v4.ident.me", context=ctx).read().decode("utf8").strip()
+        except Exception:
             logging.exception(e)
             pass  # we could be offline, in a local game, so no point in erroring out
     return ip
@@ -207,15 +213,18 @@ def get_public_ipv6() -> str:
     ip = socket.gethostbyname(socket.gethostname())
     ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen('https://v6.ident.me', context=ctx).read().decode('utf8').strip()
+        ip = urllib.request.urlopen("https://v6.ident.me", context=ctx).read().decode("utf8").strip()
     except Exception as e:
         logging.exception(e)
         pass  # we could be offline, in a local game, or ipv6 may not be available
     return ip
 
 
+OptionsType = typing.Dict[str, typing.Dict[str, typing.Any]]
+
+
 @cache_argsless
-def get_default_options() -> dict:
+def get_default_options() -> OptionsType:
     # Refer to host.yaml for comments as to what all these options mean.
     options = {
         "general_options": {
@@ -223,20 +232,21 @@ def get_default_options() -> dict:
         },
         "factorio_options": {
             "executable": os.path.join("factorio", "bin", "x64", "factorio"),
+            "filter_item_sends": False,
+            "bridge_chat_out": True,
+        },
+        "sni_options": {
+            "sni_path": "SNI",
+            "snes_rom_start": True,
         },
         "sm_options": {
             "rom_file": "Super Metroid (JU).sfc",
-            "sni": "SNI",
-            "rom_start": True,
         },
         "soe_options": {
             "rom_file": "Secret of Evermore (USA).sfc",
         },
         "lttp_options": {
             "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
-            "sni": "SNI",
-            "rom_start": True,
-
         },
         "server_options": {
             "host": None,
@@ -258,13 +268,12 @@ def get_default_options() -> dict:
             "log_network": 0
         },
         "generator": {
-            "teams": 1,
             "enemizer_path": os.path.join("EnemizerCLI", "EnemizerCLI.Core"),
             "player_files_path": "Players",
             "players": 0,
             "weights_file_path": "weights.yaml",
             "meta_file_path": "meta.yaml",
-            "spoiler": 2,
+            "spoiler": 3,
             "glitch_triforce_room": 1,
             "race": 0,
             "plando_options": "bosses",
@@ -276,13 +285,36 @@ def get_default_options() -> dict:
         },
         "oot_options": {
             "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
-        }
+            "rom_start": True
+        },
+        "dkc3_options": {
+            "rom_file": "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc",
+        },
+        "smw_options": {
+            "rom_file": "Super Mario World (USA).sfc",
+        },
+        "zillion_options": {
+            "rom_file": "Zillion (UE) [!].sms",
+            # RetroArch doesn't make it easy to launch a game from the command line.
+            # You have to know the path to the emulator core library on the user's computer.
+            "rom_start": "retroarch",
+        },
+        "pokemon_rb_options": {
+            "red_rom_file": "Pokemon Red (UE) [S][!].gb",
+            "blue_rom_file": "Pokemon Blue (UE) [S][!].gb",
+            "rom_start": True
+        },
+        "ffr_options": {
+            "display_msgs": True,
+        },
+        "lufia2ac_options": {
+            "rom_file": "Lufia II - Rise of the Sinistrals (USA).sfc",
+        },
     }
-
     return options
 
 
-def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
+def update_options(src: dict, dest: dict, filename: str, keys: list) -> OptionsType:
     for key, value in src.items():
         new_keys = keys.copy()
         new_keys.append(key)
@@ -302,34 +334,20 @@ def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
 
 
 @cache_argsless
-def get_options() -> dict:
-    if not hasattr(get_options, "options"):
-        filenames = ("options.yaml", "host.yaml")
-        locations = []
-        if os.path.join(os.getcwd()) != local_path():
-            locations += filenames  # use files from cwd only if it's not the local_path
-        locations += [user_path(filename) for filename in filenames]
+def get_options() -> OptionsType:
+    filenames = ("options.yaml", "host.yaml")
+    locations: typing.List[str] = []
+    if os.path.join(os.getcwd()) != local_path():
+        locations += filenames  # use files from cwd only if it's not the local_path
+    locations += [user_path(filename) for filename in filenames]
 
-        for location in locations:
-            if os.path.exists(location):
-                with open(location) as f:
-                    options = parse_yaml(f.read())
+    for location in locations:
+        if os.path.exists(location):
+            with open(location) as f:
+                options = parse_yaml(f.read())
+            return update_options(get_default_options(), options, location, list())
 
-                get_options.options = update_options(get_default_options(), options, location, list())
-                break
-        else:
-            raise FileNotFoundError(f"Could not find {filenames[1]} to load options.")
-    return get_options.options
-
-
-def get_item_name_from_id(code: int) -> str:
-    from worlds import lookup_any_item_id_to_name
-    return lookup_any_item_id_to_name.get(code, f'Unknown item (ID:{code})')
-
-
-def get_location_name_from_id(code: int) -> str:
-    from worlds import lookup_any_location_id_to_name
-    return lookup_any_location_id_to_name.get(code, f'Unknown location (ID:{code})')
+    raise FileNotFoundError(f"Could not find {filenames[1]} to load options.")
 
 
 def persistent_store(category: str, key: typing.Any, value: typing.Any):
@@ -338,10 +356,10 @@ def persistent_store(category: str, key: typing.Any, value: typing.Any):
     category = storage.setdefault(category, {})
     category[key] = value
     with open(path, "wt") as f:
-        f.write(dump(storage))
+        f.write(dump(storage, Dumper=Dumper))
 
 
-def persistent_load() -> typing.Dict[dict]:
+def persistent_load() -> typing.Dict[str, dict]:
     storage = getattr(persistent_load, "storage", None)
     if storage:
         return storage
@@ -359,8 +377,8 @@ def persistent_load() -> typing.Dict[dict]:
     return storage
 
 
-def get_adjuster_settings(gameName: str):
-    adjuster_settings = persistent_load().get("adjuster", {}).get(gameName, {})
+def get_adjuster_settings(game_name: str) -> typing.Dict[str, typing.Any]:
+    adjuster_settings = persistent_load().get("adjuster", {}).get(game_name, {})
     return adjuster_settings
 
 
@@ -376,10 +394,10 @@ def get_unique_identifier():
     return uuid
 
 
-safe_builtins = {
+safe_builtins = frozenset((
     'set',
     'frozenset',
-}
+))
 
 
 class RestrictedUnpickler(pickle.Unpickler):
@@ -398,7 +416,8 @@ class RestrictedUnpickler(pickle.Unpickler):
         # Options and Plando are unpickled by WebHost -> Generate
         if module == "worlds.generic" and name in {"PlandoItem", "PlandoConnection"}:
             return getattr(self.generic_properties_module, name)
-        if module.endswith("Options"):
+        # pep 8 specifies that modules should have "all-lowercase names" (options, not Options)
+        if module.lower().endswith("options"):
             if module == "Options":
                 mod = self.options_module
             else:
@@ -407,8 +426,7 @@ class RestrictedUnpickler(pickle.Unpickler):
             if issubclass(obj, self.options_module.Option):
                 return obj
         # Forbid everything else.
-        raise pickle.UnpicklingError("global '%s.%s' is forbidden" %
-                                     (module, name))
+        raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
 
 
 def restricted_loads(s):
@@ -417,6 +435,9 @@ def restricted_loads(s):
 
 
 class KeyedDefaultDict(collections.defaultdict):
+    """defaultdict variant that uses the missing key as argument to default_factory"""
+    default_factory: typing.Callable[[typing.Any], typing.Any]
+
     def __missing__(self, key):
         self[key] = value = self.default_factory(key)
         return value
@@ -426,12 +447,17 @@ def get_text_between(text: str, start: str, end: str) -> str:
     return text[text.index(start) + len(start): text.rindex(end)]
 
 
+def get_text_after(text: str, start: str) -> str:
+    return text[text.index(start) + len(start):]
+
+
 loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}
 
 
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
                  log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
                  exception_logger: typing.Optional[str] = None):
+    import datetime
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = user_path("logs")
     os.makedirs(log_folder, exist_ok=True)
@@ -440,6 +466,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         root_logger.removeHandler(handler)
         handler.close()
     root_logger.setLevel(loglevel)
+    if "a" not in write_mode:
+        name += f"_{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}"
     file_handler = logging.FileHandler(
         os.path.join(log_folder, f"{name}.txt"),
         write_mode,
@@ -467,15 +495,37 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
 
         sys.excepthook = handle_exception
 
-    logging.info(f"Archipelago ({__version__}) logging initialized.")
+    def _cleanup():
+        for file in os.scandir(log_folder):
+            if file.name.endswith(".txt"):
+                last_change = datetime.datetime.fromtimestamp(file.stat().st_mtime)
+                if datetime.datetime.now() - last_change > datetime.timedelta(days=7):
+                    try:
+                        os.unlink(file.path)
+                    except Exception as e:
+                        logging.exception(e)
+                    else:
+                        logging.info(f"Deleted old logfile {file.path}")
+    import threading
+    threading.Thread(target=_cleanup, name="LogCleaner").start()
+    import platform
+    logging.info(
+        f"Archipelago ({__version__}) logging initialized"
+        f" on {platform.platform()}"
+        f" running Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    )
 
 
 def stream_input(stream, queue):
     def queuer():
         while 1:
-            text = stream.readline().strip()
-            if text:
-                queue.put_nowait(text)
+            try:
+                text = stream.readline().strip()
+            except UnicodeDecodeError as e:
+                logging.exception(e)
+            else:
+                if text:
+                    queue.put_nowait(text)
 
     from threading import Thread
     thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)
@@ -483,37 +533,48 @@ def stream_input(stream, queue):
     return thread
 
 
-def tkinter_center_window(window: Tk):
+def tkinter_center_window(window: "tkinter.Tk") -> None:
     window.update()
-    xPos = int(window.winfo_screenwidth() / 2 - window.winfo_reqwidth() / 2)
-    yPos = int(window.winfo_screenheight() / 2 - window.winfo_reqheight() / 2)
-    window.geometry("+{}+{}".format(xPos, yPos))
+    x = int(window.winfo_screenwidth() / 2 - window.winfo_reqwidth() / 2)
+    y = int(window.winfo_screenheight() / 2 - window.winfo_reqheight() / 2)
+    window.geometry(f"+{x}+{y}")
 
 
 class VersionException(Exception):
     pass
 
 
-# noinspection PyPep8Naming
-def format_SI_prefix(value, power=1000, power_labels=('', 'k', 'M', 'G', 'T', "P", "E", "Z", "Y")) -> str:
-    n = 0
+def chaining_prefix(index: int, labels: typing.Tuple[str]) -> str:
+    text = ""
+    max_label = len(labels) - 1
+    while index > max_label:
+        text += labels[-1]
+        index -= max_label
+    return labels[index] + text
 
-    while value > power:
+
+# noinspection PyPep8Naming
+def format_SI_prefix(value, power=1000, power_labels=("", "k", "M", "G", "T", "P", "E", "Z", "Y")) -> str:
+    """Formats a value into a value + metric/si prefix. More info at https://en.wikipedia.org/wiki/Metric_prefix"""
+    import decimal
+    n = 0
+    value = decimal.Decimal(value)
+    limit = power - decimal.Decimal("0.005")
+    while value >= limit:
         value /= power
         n += 1
-    if type(value) == int:
-        return f"{value} {power_labels[n]}"
-    else:
-        return f"{value:0.3f} {power_labels[n]}"
 
-
-def get_fuzzy_ratio(word1: str, word2: str) -> float:
-    return (1 - jellyfish.damerau_levenshtein_distance(word1.lower(), word2.lower())
-            / max(len(word1), len(word2)))
+    return f"{value.quantize(decimal.Decimal('1.00'))} {chaining_prefix(n, power_labels)}"
 
 
 def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: typing.Optional[int] = None) \
         -> typing.List[typing.Tuple[str, int]]:
+    import jellyfish
+
+    def get_fuzzy_ratio(word1: str, word2: str) -> float:
+        return (1 - jellyfish.damerau_levenshtein_distance(word1.lower(), word2.lower())
+                / max(len(word1), len(word2)))
+
     limit: int = limit if limit else len(wordlist)
     return list(
         map(
@@ -531,18 +592,19 @@ def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: ty
 def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typing.Sequence[str]]]) \
         -> typing.Optional[str]:
     def run(*args: str):
-        return subprocess.run(args, capture_output=True, text=True).stdout.split('\n', 1)[0] or None
+        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
 
     if is_linux:
         # prefer native dialog
-        kdialog = shutil.which('kdialog')
+        from shutil import which
+        kdialog = which("kdialog")
         if kdialog:
             k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
-            return run(kdialog, f'--title={title}', '--getopenfilename', '.', k_filters)
-        zenity = shutil.which('zenity')
+            return run(kdialog, f"--title={title}", "--getopenfilename", ".", k_filters)
+        zenity = which("zenity")
         if zenity:
             z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
-            return run(zenity, f'--title={title}', '--file-selection', *z_filters)
+            return run(zenity, f"--title={title}", "--file-selection", *z_filters)
 
     # fall back to tk
     try:
@@ -559,8 +621,11 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
 
 
 def messagebox(title: str, text: str, error: bool = False) -> None:
+    def run(*args: str):
+        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
+
     def is_kivy_running():
-        if 'kivy' in sys.modules:
+        if "kivy" in sys.modules:
             from kivy.app import App
             return App.get_running_app() is not None
         return False
@@ -569,6 +634,16 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         from kvui import MessageBox
         MessageBox(title, text, error).open()
         return
+
+    if is_linux and "tkinter" not in sys.modules:
+        # prefer native dialog
+        from shutil import which
+        kdialog = which("kdialog")
+        if kdialog:
+            return run(kdialog, f"--title={title}", "--error" if error else "--msgbox", text)
+        zenity = which("zenity")
+        if zenity:
+            return run(zenity, f"--title={title}", f"--text={text}", "--error" if error else "--info")
 
     # fall back to tk
     try:
@@ -583,3 +658,43 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         root.withdraw()
         showerror(title, text) if error else showinfo(title, text)
         root.update()
+
+
+def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset(("a", "the"))):
+    """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
+    def sorter(element: str) -> str:
+        parts = element.split(maxsplit=1)
+        if parts[0].lower() in ignore:
+            return parts[1].lower()
+        else:
+            return element.lower()
+    return sorted(data, key=lambda i: sorter(key(i)) if key else sorter(i))
+
+
+def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
+    """Reads rom into bytearray and optionally strips off any smc header"""
+    buffer = bytearray(stream.read())
+    if strip_header and len(buffer) % 0x400 == 0x200:
+        return buffer[0x200:]
+    return buffer
+
+
+_faf_tasks: "Set[asyncio.Task[None]]" = set()
+
+
+def async_start(co: Coroutine[typing.Any, typing.Any, bool], name: Optional[str] = None) -> None:
+    """
+    Use this to start a task when you don't keep a reference to it or immediately await it,
+    to prevent early garbage collection. "fire-and-forget"
+    """
+    # https://docs.python.org/3.10/library/asyncio-task.html#asyncio.create_task
+    # Python docs:
+    # ```
+    # Important: Save a reference to the result of [asyncio.create_task],
+    # to avoid a task disappearing mid-execution.
+    # ```
+    # This implementation follows the pattern given in that documentation.
+
+    task = asyncio.create_task(co, name=name)
+    _faf_tasks.add(task)
+    task.add_done_callback(_faf_tasks.discard)

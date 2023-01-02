@@ -1,5 +1,6 @@
 from __future__ import annotations
 import abc
+from copy import deepcopy
 import math
 import numbers
 import typing
@@ -26,14 +27,30 @@ class AssembleOptions(abc.ABCMeta):
 
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
         options.update(new_options)
-
         # apply aliases, without name_lookup
         aliases = {name[6:].lower(): option_id for name, option_id in attrs.items() if
                    name.startswith("alias_")}
 
         assert "random" not in aliases, "Choice option 'random' cannot be manually assigned."
 
+        # auto-alias Off and On being parsed as True and False
+        if "off" in options:
+            options["false"] = options["off"]
+        if "on" in options:
+            options["true"] = options["on"]
+
         options.update(aliases)
+
+        if "verify" not in attrs:
+            # not overridden by class -> look up bases
+            verifiers = [f for f in (getattr(base, "verify", None) for base in bases) if f]
+            if len(verifiers) > 1:  # verify multiple bases/mixins
+                def verify(self, *args, **kwargs) -> None:
+                    for f in verifiers:
+                        f(self, *args, **kwargs)
+                attrs["verify"] = verify
+            else:
+                assert verifiers, "class Option is supposed to implement def verify"
 
         # auto-validate schema on __init__
         if "schema" in attrs.keys():
@@ -61,6 +78,9 @@ class AssembleOptions(abc.ABCMeta):
                 return cls
 
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
+
+    @abc.abstractclassmethod
+    def from_any(cls, value: typing.Any) -> "Option[typing.Any]": ...
 
 
 T = typing.TypeVar('T')
@@ -112,8 +132,44 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     def from_any(cls, data: typing.Any) -> Option[T]:
         raise NotImplementedError
 
+    if typing.TYPE_CHECKING:
+        from Generate import PlandoSettings
+        from worlds.AutoWorld import World
+
+        def verify(self, world: World, player_name: str, plando_options: PlandoSettings) -> None:
+            pass
+    else:
+        def verify(self, *args, **kwargs) -> None:
+            pass
+
+
+class FreeText(Option):
+    """Text option that allows users to enter strings.
+    Needs to be validated by the world or option definition."""
+
+    def __init__(self, value: str):
+        assert isinstance(value, str), "value of FreeText must be a string"
+        self.value = value
+
+    @property
+    def current_key(self) -> str:
+        return self.value
+
+    @classmethod
+    def from_text(cls, text: str) -> FreeText:
+        return cls(text)
+
+    @classmethod
+    def from_any(cls, data: typing.Any) -> FreeText:
+        return cls.from_text(str(data))
+
+    @classmethod
+    def get_option_name(cls, value: T) -> str:
+        return value
+
 
 class NumericOption(Option[int], numbers.Integral):
+    default = 0
     # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
     # `int` is not a `numbers.Integral` according to the official typestubs
     # (even though isinstance(5, numbers.Integral) == True)
@@ -298,7 +354,7 @@ class Toggle(NumericOption):
         if type(data) == str:
             return cls.from_text(data)
         else:
-            return cls(data)
+            return cls(int(data))
 
     @classmethod
     def get_option_name(cls, value):
@@ -368,6 +424,170 @@ class Choice(NumericOption):
     __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
 
 
+class TextChoice(Choice):
+    """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string"""
+
+    def __init__(self, value: typing.Union[str, int]):
+        assert isinstance(value, str) or isinstance(value, int), \
+            f"{value} is not a valid option for {self.__class__.__name__}"
+        self.value = value
+
+    @property
+    def current_key(self) -> str:
+        if isinstance(self.value, str):
+            return self.value
+        else:
+            return self.name_lookup[self.value]
+
+    @classmethod
+    def from_text(cls, text: str) -> TextChoice:
+        if text.lower() == "random":  # chooses a random defined option but won't use any free text options
+            return cls(random.choice(list(cls.name_lookup)))
+        for option_name, value in cls.options.items():
+            if option_name.lower() == text.lower():
+                return cls(value)
+        return cls(text)
+
+    @classmethod
+    def get_option_name(cls, value: T) -> str:
+        if isinstance(value, str):
+            return value
+        return cls.name_lookup[value]
+
+    def __eq__(self, other: typing.Any):
+        if isinstance(other, self.__class__):
+            return other.value == self.value
+        elif isinstance(other, str):
+            if other in self.options:
+                return other == self.current_key
+            return other == self.value
+        elif isinstance(other, int):
+            assert other in self.name_lookup, f"compared against an int that could never be equal. {self} == {other}"
+            return other == self.value
+        elif isinstance(other, bool):
+            return other == bool(self.value)
+        else:
+            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
+
+
+class BossMeta(AssembleOptions):
+    def __new__(mcs, name, bases, attrs):
+        if name != "PlandoBosses":
+            assert "bosses" in attrs, f"Please define valid bosses for {name}"
+            attrs["bosses"] = frozenset((boss.lower() for boss in attrs["bosses"]))
+            assert "locations" in attrs, f"Please define valid locations for {name}"
+            attrs["locations"] = frozenset((location.lower() for location in attrs["locations"]))
+        cls = super().__new__(mcs, name, bases, attrs)
+        assert not cls.duplicate_bosses or "singularity" in cls.options, f"Please define option_singularity for {name}"
+        return cls
+
+
+class PlandoBosses(TextChoice, metaclass=BossMeta):
+    """Generic boss shuffle option that supports plando. Format expected is
+    'location1-boss1;location2-boss2;shuffle_mode'.
+    If shuffle_mode is not provided in the string, this will be the default shuffle mode. Must override can_place_boss,
+    which passes a plando boss and location. Check if the placement is valid for your game here."""
+    bosses: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
+    locations: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
+
+    duplicate_bosses: bool = False
+
+    @classmethod
+    def from_text(cls, text: str):
+        # set all of our text to lower case for name checking
+        text = text.lower()
+        if text == "random":
+            return cls(random.choice(list(cls.options.values())))
+        for option_name, value in cls.options.items():
+            if option_name == text:
+                return cls(value)
+        options = text.split(";")
+
+        # since plando exists in the option verify the plando values given are valid
+        cls.validate_plando_bosses(options)
+        return cls.get_shuffle_mode(options)
+
+    @classmethod
+    def get_shuffle_mode(cls, option_list: typing.List[str]):
+        # find out what mode of boss shuffle we should use for placing bosses after plando
+        # and add as a string to look nice in the spoiler
+        if "random" in option_list:
+            shuffle = random.choice(list(cls.options))
+            option_list.remove("random")
+            options = ";".join(option_list) + f";{shuffle}"
+            boss_class = cls(options)
+        else:
+            for option in option_list:
+                if option in cls.options:
+                    options = ";".join(option_list)
+                    break
+            else:
+                if cls.duplicate_bosses and len(option_list) == 1:
+                    if cls.valid_boss_name(option_list[0]):
+                        # this doesn't exist in this class but it's a forced option for classes where this is called
+                        options = option_list[0] + ";singularity"
+                    else:
+                        options = option_list[0] + f";{cls.name_lookup[cls.default]}"
+                else:
+                    options = ";".join(option_list) + f";{cls.name_lookup[cls.default]}"
+            boss_class = cls(options)
+        return boss_class
+
+    @classmethod
+    def validate_plando_bosses(cls, options: typing.List[str]) -> None:
+        used_locations = []
+        used_bosses = []
+        for option in options:
+            # check if a shuffle mode was provided in the incorrect location
+            if option == "random" or option in cls.options:
+                if option != options[-1]:
+                    raise ValueError(f"{option} option must be at the end of the boss_shuffle options!")
+            elif "-" in option:
+                location, boss = option.split("-")
+                if location in used_locations:
+                    raise ValueError(f"Duplicate Boss Location {location} not allowed.")
+                if not cls.duplicate_bosses and boss in used_bosses:
+                    raise ValueError(f"Duplicate Boss {boss} not allowed.")
+                used_locations.append(location)
+                used_bosses.append(boss)
+                if not cls.valid_boss_name(boss):
+                    raise ValueError(f"{boss.title()} is not a valid boss name.")
+                if not cls.valid_location_name(location):
+                    raise ValueError(f"{location.title()} is not a valid boss location name.")
+                if not cls.can_place_boss(boss, location):
+                    raise ValueError(f"{location.title()} is not a valid location for {boss.title()} to be placed.")
+            else:
+                if cls.duplicate_bosses:
+                    if not cls.valid_boss_name(option):
+                        raise ValueError(f"{option} is not a valid boss name.")
+                else:
+                    raise ValueError(f"{option.title()} is not formatted correctly.")
+
+    @classmethod
+    def can_place_boss(cls, boss: str, location: str) -> bool:
+        raise NotImplementedError
+
+    @classmethod
+    def valid_boss_name(cls, value: str) -> bool:
+        return value in cls.bosses
+
+    @classmethod
+    def valid_location_name(cls, value: str) -> bool:
+        return value in cls.locations
+
+    def verify(self, world, player_name: str, plando_options) -> None:
+        if isinstance(self.value, int):
+            return
+        from Generate import PlandoSettings
+        if not(PlandoSettings.bosses & plando_options):
+            import logging
+            # plando is disabled but plando options were given so pull the option and change it to an int
+            option = self.value.split(";")[-1]
+            self.value = self.options[option]
+            logging.warning(f"The plando bosses module is turned off, so {self.name_lookup[self.value].title()} "
+                            f"boss shuffle will be used for player {player_name}.")
+
+
 class Range(NumericOption):
     range_start = 0
     range_end = 1
@@ -385,7 +605,7 @@ class Range(NumericOption):
         if text.startswith("random"):
             return cls.weighted_range(text)
         elif text == "default" and hasattr(cls, "default"):
-            return cls(cls.default)
+            return cls.from_any(cls.default)
         elif text == "high":
             return cls(cls.range_end)
         elif text == "low":
@@ -396,7 +616,7 @@ class Range(NumericOption):
                 and text in ("true", "false"):
             # these are the conditions where "true" and "false" make sense
             if text == "true":
-                return cls(cls.default)
+                return cls.from_any(cls.default)
             else:  # "false"
                 return cls(0)
         return cls(int(text))
@@ -507,7 +727,7 @@ class VerifyKeys:
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
                                 f"Allowed keys: {cls.valid_keys}.")
 
-    def verify(self, world):
+    def verify(self, world, player_name: str, plando_options) -> None:
         if self.convert_name_groups and self.verify_item_name:
             new_value = type(self.value)()  # empty container of whatever value is
             for item_name in self.value:
@@ -530,11 +750,11 @@ class VerifyKeys:
 
 
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys):
-    default = {}
+    default: typing.Dict[str, typing.Any] = {}
     supports_weighting = False
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
-        self.value = value
+        self.value = deepcopy(value)
 
     @classmethod
     def from_any(cls, data: typing.Dict[str, typing.Any]) -> OptionDict:
@@ -561,11 +781,11 @@ class ItemDict(OptionDict):
 
 
 class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
-    default = []
+    default: typing.List[typing.Any] = []
     supports_weighting = False
 
     def __init__(self, value: typing.List[typing.Any]):
-        self.value = value or []
+        self.value = deepcopy(value)
         super(OptionList, self).__init__()
 
     @classmethod
@@ -587,11 +807,11 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
 
 class OptionSet(Option[typing.Set[str]], VerifyKeys):
-    default = frozenset()
+    default: typing.Union[typing.Set[str], typing.FrozenSet[str]] = frozenset()
     supports_weighting = False
 
-    def __init__(self, value: typing.Union[typing.Set[str, typing.Any], typing.List[str, typing.Any]]):
-        self.value = set(value)
+    def __init__(self, value: typing.Iterable[str]):
+        self.value = set(deepcopy(value))
         super(OptionSet, self).__init__()
 
     @classmethod
@@ -600,10 +820,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if type(data) == list:
-            cls.verify_keys(data)
-            return cls(data)
-        elif type(data) == set:
+        if isinstance(data, (list, set, frozenset)):
             cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
@@ -633,7 +850,7 @@ class Accessibility(Choice):
 
 class ProgressionBalancing(SpecialRange):
     """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
-    [0-99, default 50] A lower setting means more getting stuck. A higher setting means less getting stuck."""
+    A lower setting means more getting stuck. A higher setting means less getting stuck."""
     default = 50
     range_start = 0
     range_end = 99
@@ -710,7 +927,8 @@ class ItemLinks(OptionList):
             Optional("exclude"): [And(str, len)],
             "replacement_item": Or(And(str, len), None),
             Optional("local_items"): [And(str, len)],
-            Optional("non_local_items"): [And(str, len)]
+            Optional("non_local_items"): [And(str, len)],
+            Optional("link_replacement"): Or(None, bool),
         }
     ])
 
@@ -732,8 +950,9 @@ class ItemLinks(OptionList):
                 pool |= {item_name}
         return pool
 
-    def verify(self, world):
-        super(ItemLinks, self).verify(world)
+    def verify(self, world, player_name: str, plando_options) -> None:
+        link: dict
+        super(ItemLinks, self).verify(world, player_name, plando_options)
         existing_links = set()
         for link in self.value:
             if link["name"] in existing_links:
@@ -757,7 +976,9 @@ class ItemLinks(OptionList):
 
             intersection = local_items.intersection(non_local_items)
             if intersection:
-                raise Exception(f"item_link {link['name']} has {intersection} items in both its local_items and non_local_items pool.")
+                raise Exception(f"item_link {link['name']} has {intersection} "
+                                f"items in both its local_items and non_local_items pool.")
+            link.setdefault("link_replacement", None)
 
 
 per_game_common_options = {

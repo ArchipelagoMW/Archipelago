@@ -10,9 +10,10 @@ class MiseryMire(Z3Region, IReward, IMedallionAccess):
 
     def __init__(self, world, config: Config):
         super().__init__(world, config)
+        self.Weight = 2
         self.RegionItems = [ ItemType.KeyMM, ItemType.BigKeyMM, ItemType.MapMM, ItemType.CompassMM]
         self.Reward = RewardType.Null
-        self.Medallion = ItemType.Nothing
+        self.Medallion = None
         self.Locations = [
             Location(self, 256+169, 0x1EA5E, LocationType.Regular, "Misery Mire - Main Lobby",
                 lambda items: items.BigKeyMM or items.KeyMM >= 1),
@@ -34,8 +35,9 @@ class MiseryMire(Z3Region, IReward, IMedallionAccess):
 
     # // Need "CanKillManyEnemies" if implementing swordless
     def CanEnter(self, items: Progression):
-        return (items.Bombos if self.Medallion == ItemType.Bombos else (
-                    items.Ether if self.Medallion == ItemType.Ether else items.Quake)) and items.Sword and \
+        from worlds.smz3.TotalSMZ3.WorldState import Medallion
+        return (items.Bombos if self.Medallion == Medallion.Bombos else (
+                    items.Ether if self.Medallion == Medallion.Ether else items.Quake)) and items.Sword and \
             items.MoonPearl and (items.Boots or items.Hookshot) and \
             self.world.CanEnter("Dark World Mire", items)
 

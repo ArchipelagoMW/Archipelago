@@ -27,7 +27,7 @@ class TimespinnerWebWorld(WebWorld):
         setup.description,
         "Deutsch",
         "setup_de.md",
-        "setup/en",
+        "setup/de",
         ["Grrmo", "Fynxes", "Blaze0168"]
     )
 
@@ -40,10 +40,9 @@ class TimespinnerWorld(World):
     Travel back in time to change fate itself. Join timekeeper Lunais on her quest for revenge against the empire that killed her family.
     """
 
-    options = timespinner_options
+    option_definitions = timespinner_options
     game = "Timespinner"
     topology_present = True
-    remote_items = False
     data_version = 10
     web = TimespinnerWebWorld()
 
@@ -64,47 +63,47 @@ class TimespinnerWorld(World):
 
     def generate_early(self):
         # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
-        if self.world.start_inventory[self.player].value.pop('Meyef', 0) > 0:
-            self.world.StartWithMeyef[self.player].value = self.world.StartWithMeyef[self.player].option_true
-        if self.world.start_inventory[self.player].value.pop('Talaria Attachment', 0) > 0:
-            self.world.QuickSeed[self.player].value = self.world.QuickSeed[self.player].option_true
-        if self.world.start_inventory[self.player].value.pop('Jewelry Box', 0) > 0:
-            self.world.StartWithJewelryBox[self.player].value = self.world.StartWithJewelryBox[self.player].option_true
+        if self.multiworld.start_inventory[self.player].value.pop('Meyef', 0) > 0:
+            self.multiworld.StartWithMeyef[self.player].value = self.multiworld.StartWithMeyef[self.player].option_true
+        if self.multiworld.start_inventory[self.player].value.pop('Talaria Attachment', 0) > 0:
+            self.multiworld.QuickSeed[self.player].value = self.multiworld.QuickSeed[self.player].option_true
+        if self.multiworld.start_inventory[self.player].value.pop('Jewelry Box', 0) > 0:
+            self.multiworld.StartWithJewelryBox[self.player].value = self.multiworld.StartWithJewelryBox[self.player].option_true
 
     def create_regions(self):
-        create_regions(self.world, self.player, get_locations(self.world, self.player), 
-                        self.location_cache, self.pyramid_keys_unlock)
+        create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player),
+                       self.location_cache, self.pyramid_keys_unlock)
 
     def create_item(self, name: str) -> Item:
-        return create_item_with_correct_settings(self.world, self.player, name)
+        return create_item_with_correct_settings(self.multiworld, self.player, name)
 
     def get_filler_item_name(self) -> str:
-        return self.world.random.choice(filler_items)
+        return self.multiworld.random.choice(filler_items)
 
     def set_rules(self):
         setup_events(self.player, self.locked_locations, self.location_cache)
 
-        self.world.completion_condition[self.player] = lambda state: state.has('Killed Nightmare', self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has('Killed Nightmare', self.player)
 
     def generate_basic(self):
-        excluded_items = get_excluded_items(self, self.world, self.player)
+        excluded_items = get_excluded_items(self, self.multiworld, self.player)
 
-        assign_starter_items(self.world, self.player, excluded_items, self.locked_locations)
+        assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations)
 
-        if not is_option_enabled(self.world, self.player, "QuickSeed") and not is_option_enabled(self.world, self.player, "Inverted"):
-            place_first_progression_item(self.world, self.player, excluded_items, self.locked_locations)
+        if not is_option_enabled(self.multiworld, self.player, "QuickSeed") and not is_option_enabled(self.multiworld, self.player, "Inverted"):
+            place_first_progression_item(self.multiworld, self.player, excluded_items, self.locked_locations)
 
-        pool = get_item_pool(self.world, self.player, excluded_items)
+        pool = get_item_pool(self.multiworld, self.player, excluded_items)
 
-        fill_item_pool_with_dummy_items(self, self.world, self.player, self.locked_locations, self.location_cache, pool)
+        fill_item_pool_with_dummy_items(self, self.multiworld, self.player, self.locked_locations, self.location_cache, pool)
 
-        self.world.itempool += pool
+        self.multiworld.itempool += pool
 
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
 
         for option_name in timespinner_options:
-            slot_data[option_name] = get_option_value(self.world, self.player, option_name)
+            slot_data[option_name] = get_option_value(self.multiworld, self.player, option_name)
 
         slot_data["StinkyMaw"] = True
         slot_data["ProgressiveVerticalMovement"] = False
@@ -131,7 +130,7 @@ def get_excluded_items(self: TimespinnerWorld, world: MultiWorld, player: int) -
     for item in world.precollected_items[player]:
         if item.name not in self.item_name_groups['UseItem']:
             excluded_items.add(item.name)
-    
+
     return excluded_items
 
 
@@ -156,7 +155,7 @@ def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str
     assign_starter_item(world, player, excluded_items, locked_locations, 'Tutorial: Yo Momma 2', local_starter_spells)
 
 
-def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str], 
+def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str],
         location: str, item_list: Tuple[str, ...]):
 
     item_name = world.random.choice(item_list)
@@ -193,7 +192,7 @@ def place_first_progression_item(world: MultiWorld, player: int, excluded_items:
     for item in world.precollected_items[player]:
         if item.name in starter_progression_items:
             return
-    
+
     local_starter_progression_items = tuple(
         item for item in starter_progression_items if item not in world.non_local_items[player].value)
     non_excluded_starter_progression_locations = tuple(
@@ -228,7 +227,7 @@ def create_item_with_correct_settings(world: MultiWorld, player: int, name: str)
 
     if (name == 'Tablet' or name == 'Library Keycard V') and not is_option_enabled(world, player, "DownloadableItems"):
         item.classification = ItemClassification.filler
-    elif name == 'Oculus Ring' and not is_option_enabled(world, player, "FacebookMode"):
+    elif name == 'Oculus Ring' and not is_option_enabled(world, player, "EyeSpy"):
         item.classification = ItemClassification.filler
     elif (name == 'Kobo' or name == 'Merchant Crow') and not is_option_enabled(world, player, "GyreArchives"):
         item.classification = ItemClassification.filler
@@ -252,5 +251,5 @@ def get_personal_items(player: int, locations: List[Location]) -> Dict[int, int]
     for location in locations:
         if location.address and location.item and location.item.code and location.item.player == player:
             personal_items[location.address] = location.item.code
-    
+
     return personal_items

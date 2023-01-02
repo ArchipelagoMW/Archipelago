@@ -2,8 +2,9 @@
 Defines constants for different types of locations in the game
 """
 
-from .Options import is_option_enabled
-from .player_logic import StaticWitnessLogic, WitnessPlayerLogic
+from .Options import is_option_enabled, get_option_value
+from .player_logic import WitnessPlayerLogic
+from .static_logic import StaticWitnessLogic
 
 
 class StaticWitnessLocations:
@@ -30,94 +31,94 @@ class StaticWitnessLocations:
 
         "Outside Tutorial Vault Box",
         "Outside Tutorial Discard",
-        "Outside Tutorial Dots Introduction 5",
-        "Outside Tutorial Squares Introduction 9",
+        "Outside Tutorial Shed Row 5",
+        "Outside Tutorial Tree Row 9",
 
         "Glass Factory Discard",
-        "Glass Factory Vertical Symmetry 5",
-        "Glass Factory Rotational Symmetry 3",
+        "Glass Factory Back Wall 5",
+        "Glass Factory Front 3",
         "Glass Factory Melting 3",
 
-        "Symmetry Island Black Dots 5",
-        "Symmetry Island Colored Dots 6",
-        "Symmetry Island Fading Lines 7",
+        "Symmetry Island Right 5",
+        "Symmetry Island Back 6",
+        "Symmetry Island Left 7",
         "Symmetry Island Scenery Outlines 5",
-        "Symmetry Island Laser",
+        "Symmetry Island Laser Panel",
 
         "Orchard Apple Tree 5",
 
         "Desert Vault Box",
         "Desert Discard",
-        "Desert Sun Reflection 8",
-        "Desert Artificial Light Reflection 3",
-        "Desert Pond Reflection 5",
-        "Desert Flood Reflection 6",
-        "Desert Laser",
+        "Desert Surface 8",
+        "Desert Light Room 3",
+        "Desert Pond Room 5",
+        "Desert Flood Room 6",
+        "Desert Laser Panel",
 
-        "Quarry Mill Eraser and Dots 6",
-        "Quarry Mill Eraser and Squares 8",
-        "Quarry Mill Small Squares & Dots & Eraser",
-        "Quarry Boathouse Intro Shapers",
-        "Quarry Boathouse Intro Stars",
-        "Quarry Boathouse Eraser and Shapers 5",
-        "Quarry Boathouse Stars & Eraser & Shapers 2",
-        "Quarry Boathouse Stars & Eraser & Shapers 5",
+        "Quarry Mill Lower Row 6",
+        "Quarry Mill Upper Row 8",
+        "Quarry Mill Control Room Right",
+        "Quarry Boathouse Intro Right",
+        "Quarry Boathouse Intro Left",
+        "Quarry Boathouse Front Row 5",
+        "Quarry Boathouse Back First Row 9",
+        "Quarry Boathouse Back Second Row 3",
         "Quarry Discard",
-        "Quarry Laser",
+        "Quarry Laser Panel",
 
-        "Shadows Lower Avoid 8",
-        "Shadows Environmental Avoid 8",
-        "Shadows Follow 5",
-        "Shadows Laser",
+        "Shadows Intro 8",
+        "Shadows Far 8",
+        "Shadows Near 5",
+        "Shadows Laser Panel",
 
         "Keep Hedge Maze 4",
         "Keep Pressure Plates 4",
         "Keep Discard",
-        "Keep Laser Hedges",
-        "Keep Laser Pressure Plates",
+        "Keep Laser Panel Hedges",
+        "Keep Laser Panel Pressure Plates",
 
         "Shipwreck Vault Box",
         "Shipwreck Discard",
 
-        "Monastery Rhombic Avoid 3",
-        "Monastery Branch Follow 2",
-        "Monastery Laser",
+        "Monastery Outside 3",
+        "Monastery Inside 4",
+        "Monastery Laser Panel",
 
         "Town Cargo Box Discard",
-        "Town Hexagonal Reflection",
-        "Town Square Avoid",
+        "Town Tall Hexagonal",
+        "Town Church Lattice",
         "Town Rooftop Discard",
-        "Town Symmetry Squares 5 + Dots",
-        "Town Full Dot Grid Shapers 5",
-        "Town Shapers & Dots & Eraser",
-        "Town Laser",
+        "Town Red Rooftop 5",
+        "Town Wooden Roof Lower Row 5",
+        "Town Wooden Rooftop",
+        "Town Laser Panel",
 
         "Theater Discard",
 
         "Jungle Discard",
-        "Jungle Waves 3",
-        "Jungle Waves 7",
+        "Jungle First Row 3",
+        "Jungle Second Row 4",
         "Jungle Popup Wall 6",
-        "Jungle Laser",
+        "Jungle Laser Panel",
 
         "River Vault Box",
 
-        "Bunker Drawn Squares 5",
-        "Bunker Drawn Squares 9",
-        "Bunker Drawn Squares through Tinted Glass 3",
-        "Bunker Drop-Down Door Squares 2",
-        "Bunker Laser",
+        "Bunker Intro Left 5",
+        "Bunker Intro Back 4",
+        "Bunker Glass Room 3",
+        "Bunker UV Room 2",
+        "Bunker Laser Panel",
 
-        "Swamp Seperatable Shapers 6",
-        "Swamp Combinable Shapers 8",
-        "Swamp Broken Shapers 4",
-        "Swamp Cyan Underwater Negative Shapers 5",
-        "Swamp Platform Shapers 4",
-        "Swamp Rotated Shapers 4",
-        "Swamp Red Underwater Negative Shapers 4",
-        "Swamp More Rotated Shapers 4",
-        "Swamp Blue Underwater Negative Shapers 5",
-        "Swamp Laser",
+        "Swamp Intro Front 6",
+        "Swamp Intro Back 8",
+        "Swamp Between Bridges Near Row 4",
+        "Swamp Cyan Underwater 5",
+        "Swamp Platform Row 4",
+        "Swamp Between Bridges Far Row 4",
+        "Swamp Red Underwater 4",
+        "Swamp Beyond Rotating Bridge 4",
+        "Swamp Blue Underwater 5",
+        "Swamp Laser Panel",
 
         "Treehouse Yellow Bridge 9",
         "Treehouse First Purple Bridge 5",
@@ -125,64 +126,77 @@ class StaticWitnessLocations:
         "Treehouse Green Bridge 7",
         "Treehouse Green Bridge Discard",
         "Treehouse Left Orange Bridge 15",
-        "Treehouse Burned House Discard",
+        "Treehouse Laser Discard",
         "Treehouse Right Orange Bridge 12",
-        "Treehouse Laser",
+        "Treehouse Laser Panel",
 
-        "Mountaintop Discard",
-        "Mountaintop Vault Box",
+        "Mountainside Discard",
+        "Mountainside Vault Box",
 
-        "Inside Mountain Obscured Vision 5",
-        "Inside Mountain Moving Background 7",
-        "Inside Mountain Physically Obstructed 3",
-        "Inside Mountain Angled Inside Trash 2",
-        "Inside Mountain Color Cycle 5",
-        "Inside Mountain Same Solution 6",
-        "Inside Mountain Elevator Discard",
-        "Inside Mountain Giant Puzzle",
-    }
-
-    UNCOMMON_LOCATIONS = {
         "Mountaintop River Shape",
         "Tutorial Patio Floor",
-        "Quarry Mill Big Squares & Dots & Eraser",
+        "Quarry Mill Control Room Left",
         "Theater Tutorial Video",
         "Theater Desert Video",
         "Theater Jungle Video",
         "Theater Shipwreck Video",
         "Theater Mountain Video",
-        "Town RGB Squares",
-        "Town RGB Stars",
-        "Swamp Underwater Back Optional",
+        "Town RGB Room Left",
+        "Town RGB Room Right",
+        "Swamp Purple Underwater",
     }
 
-    HARD_LOCATIONS = {
-        "Inside Mountain Secret Area Dot Grid Triangles 4",
-        "Inside Mountain Secret Area Symmetry Triangles",
-        "Inside Mountain Secret Area Stars & Squares and Triangles 2",
-        "Inside Mountain Secret Area Shapers and Triangles 2",
-        "Inside Mountain Secret Area Symmetry Shapers",
-        "Inside Mountain Secret Area Broken and Negative Shapers",
-        "Inside Mountain Secret Area Broken Shapers",
+    CAVES_LOCATIONS = {
+        "Caves Blue Tunnel Right First 4",
+        "Caves Blue Tunnel Left First 1",
+        "Caves Blue Tunnel Left Second 5",
+        "Caves Blue Tunnel Right Second 5",
+        "Caves Blue Tunnel Right Third 1",
+        "Caves Blue Tunnel Left Fourth 1",
+        "Caves Blue Tunnel Left Third 1",
 
-        "Inside Mountain Secret Area Rainbow Squares",
-        "Inside Mountain Secret Area Squares & Stars and Colored Eraser",
-        "Inside Mountain Secret Area Rotated Broken Shapers",
-        "Inside Mountain Secret Area Stars and Squares",
-        "Inside Mountain Secret Area Lone Pillar",
-        "Inside Mountain Secret Area Wooden Beam Shapers",
-        "Inside Mountain Secret Area Wooden Beam Squares and Shapers",
-        "Inside Mountain Secret Area Wooden Beam Stars and Squares",
-        "Inside Mountain Secret Area Wooden Beam Shapers and Stars",
-        "Inside Mountain Secret Area Upstairs Invisible Dots 8",
-        "Inside Mountain Secret Area Upstairs Invisible Dot Symmetry 3",
-        "Inside Mountain Secret Area Upstairs Dot Grid Negative Shapers",
-        "Inside Mountain Secret Area Upstairs Dot Grid Rotated Shapers",
+        "Caves First Floor Middle",
+        "Caves First Floor Right",
+        "Caves First Floor Left",
+        "Caves First Floor Grounded",
+        "Caves Lone Pillar",
+        "Caves First Wooden Beam",
+        "Caves Second Wooden Beam",
+        "Caves Third Wooden Beam",
+        "Caves Fourth Wooden Beam",
+        "Caves Right Upstairs Left Row 8",
+        "Caves Right Upstairs Right Row 3",
+        "Caves Left Upstairs Single",
+        "Caves Left Upstairs Left Row 5",
 
-        "Challenge Vault Box",
-        "Theater Walkway Vault Box",
-        "Inside Mountain Bottom Layer Discard",
+        "Tunnels Vault Box",
+        "Mountain Bottom Floor Discard",
         "Theater Challenge Video",
+    }
+
+    MOUNTAIN_UNREACHABLE_FROM_BEHIND = {
+        "Mountaintop Trap Door Triple Exit",
+
+        "Mountain Floor 1 Right Row 5",
+        "Mountain Floor 1 Left Row 7",
+        "Mountain Floor 1 Back Row 3",
+        "Mountain Floor 1 Trash Pillar 2",
+        "Mountain Floor 2 Near Row 5",
+        "Mountain Floor 2 Far Row 6",
+    }
+
+    MOUNTAIN_REACHABLE_FROM_BEHIND = {
+        "Mountain Floor 2 Elevator Discard",
+        "Mountain Bottom Floor Giant Puzzle",
+
+        "Mountain Final Room Left Pillar 4",
+        "Mountain Final Room Right Pillar 4",
+    }
+
+    MOUNTAIN_EXTRAS = {
+        "Challenge Vault Box",
+        "Theater Challenge Video",
+        "Mountain Bottom Floor Discard"
     }
 
     ALL_LOCATIONS_TO_ID = dict()
@@ -193,12 +207,7 @@ class StaticWitnessLocations:
         Calculates the location ID for any given location
         """
 
-        panel_offset = StaticWitnessLogic.CHECKS_BY_HEX[chex]["idOffset"]
-        type_offset = StaticWitnessLocations.TYPE_OFFSETS[
-            StaticWitnessLogic.CHECKS_BY_HEX[chex]["panelType"]
-        ]
-
-        return StaticWitnessLocations.ID_START + panel_offset + type_offset
+        return StaticWitnessLogic.CHECKS_BY_HEX[chex]["id"]
 
     @staticmethod
     def get_event_name(panel_hex):
@@ -213,6 +222,7 @@ class StaticWitnessLocations:
         all_loc_to_id = {
             panel_obj["checkName"]: self.get_id(chex)
             for chex, panel_obj in StaticWitnessLogic.CHECKS_BY_HEX.items()
+            if panel_obj["id"]
         }
 
         all_loc_to_id = dict(
@@ -229,12 +239,46 @@ class WitnessPlayerLocations:
     """
 
     def __init__(self, world, player, player_logic: WitnessPlayerLogic):
-        self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}
-        self.CHECK_LOCATIONS = (
-            StaticWitnessLocations.GENERAL_LOCATIONS
-        )
-
         """Defines locations AFTER logic changes due to options"""
+
+        self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}
+        self.CHECK_LOCATIONS = StaticWitnessLocations.GENERAL_LOCATIONS.copy()
+
+        if get_option_value(world, player, "puzzle_randomization") == 1:
+            self.CHECK_LOCATIONS.remove("Keep Pressure Plates 4")
+            self.CHECK_LOCATIONS.add("Keep Pressure Plates 2")
+
+        doors = get_option_value(world, player, "shuffle_doors") >= 2
+        earlyutm = is_option_enabled(world, player, "early_secret_area")
+        victory = get_option_value(world, player, "victory_condition")
+        mount_lasers = get_option_value(world, player, "mountain_lasers")
+        chal_lasers = get_option_value(world, player, "challenge_lasers")
+        laser_shuffle = get_option_value(world, player, "shuffle_lasers")
+
+        postgame = set()
+        postgame = postgame | StaticWitnessLocations.CAVES_LOCATIONS
+        postgame = postgame | StaticWitnessLocations.MOUNTAIN_REACHABLE_FROM_BEHIND
+        postgame = postgame | StaticWitnessLocations.MOUNTAIN_UNREACHABLE_FROM_BEHIND
+        postgame = postgame | StaticWitnessLocations.MOUNTAIN_EXTRAS
+
+        self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | postgame
+
+        mountain_enterable_from_top = victory == 0 or victory == 1 or (victory == 3 and chal_lasers > mount_lasers)
+
+        if earlyutm or doors:  # in non-doors, there is no way to get symbol-locked by the final pillars (currently)
+            postgame -= StaticWitnessLocations.CAVES_LOCATIONS
+
+        if (doors or earlyutm) and (victory == 0 or (victory == 2 and mount_lasers > chal_lasers)):
+            postgame -= {"Challenge Vault Box", "Theater Challenge Video"}
+
+        if doors or mountain_enterable_from_top:
+            postgame -= StaticWitnessLocations.MOUNTAIN_REACHABLE_FROM_BEHIND
+
+        if mountain_enterable_from_top:
+            postgame -= StaticWitnessLocations.MOUNTAIN_UNREACHABLE_FROM_BEHIND
+
+        if (victory == 0 and doors) or victory == 1 or (victory == 2 and mount_lasers > chal_lasers and doors):
+            postgame -= {"Mountain Bottom Floor Discard"}
 
         if is_option_enabled(world, player, "shuffle_discarded_panels"):
             self.PANEL_TYPES_TO_SHUFFLE.add("Discard")
@@ -242,20 +286,12 @@ class WitnessPlayerLocations:
         if is_option_enabled(world, player, "shuffle_vault_boxes"):
             self.PANEL_TYPES_TO_SHUFFLE.add("Vault")
 
-        if is_option_enabled(world, player, "shuffle_uncommon"):
-            self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | StaticWitnessLocations.UNCOMMON_LOCATIONS
-
-        if is_option_enabled(world, player, "shuffle_hard"):
-            self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | StaticWitnessLocations.HARD_LOCATIONS
-
-        if is_option_enabled(world, player, "shuffle_symbols") and is_option_enabled(world, player, "shuffle_doors"):
-            if is_option_enabled(world, player, "disable_non_randomized_puzzles"):
-                # This particular combination of logic settings leads to logic so restrictive that generation can fail
-                # Hence, we add some extra sphere 0 locations
-
-                self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | StaticWitnessLocations.EXTRA_LOCATIONS
-
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | player_logic.ADDED_CHECKS
+
+        if not is_option_enabled(world, player, "shuffle_postgame"):
+            self.CHECK_LOCATIONS -= postgame
+
+        self.CHECK_LOCATIONS.discard(StaticWitnessLogic.CHECKS_BY_HEX[player_logic.VICTORY_LOCATION]["checkName"])
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS - {
             StaticWitnessLogic.CHECKS_BY_HEX[check_hex]["checkName"]
@@ -272,7 +308,7 @@ class WitnessPlayerLocations:
         )
 
         event_locations = {
-            p for p in player_logic.NECESSARY_EVENT_PANELS
+            p for p in player_logic.EVENT_PANELS
         }
 
         self.EVENT_LOCATION_TABLE = {

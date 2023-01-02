@@ -3,6 +3,7 @@ import argparse
 import logging
 import random
 import os
+import zipfile
 from itertools import chain
 
 from BaseClasses import MultiWorld
@@ -217,13 +218,18 @@ def adjust(args):
         # Load up the ROM
         rom = Rom(file=args.rom, force_use=True)
         delete_zootdec = True
-    elif os.path.splitext(args.rom)[-1] == '.apz5':
+    elif os.path.splitext(args.rom)[-1] in ['.apz5', '.zpf']:
         # Load vanilla ROM
         rom = Rom(file=args.vanilla_rom, force_use=True)
+        apz5_file = args.rom
+        base_name = os.path.splitext(apz5_file)[0]
         # Patch file
-        apply_patch_file(rom, args.rom)
+        apply_patch_file(rom, apz5_file,
+            sub_file=(os.path.basename(base_name) + '.zpf'
+                if zipfile.is_zipfile(apz5_file)
+                else None))
     else:
-        raise Exception("Invalid file extension; requires .n64, .z64, .apz5")
+        raise Exception("Invalid file extension; requires .n64, .z64, .apz5, .zpf")
     # Call patch_cosmetics
     try:
         patch_cosmetics(ootworld, rom)

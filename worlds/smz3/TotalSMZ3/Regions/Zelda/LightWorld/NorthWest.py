@@ -11,11 +11,11 @@ class NorthWest(Z3Region):
         sphereOne = -14
         self.Locations = [
             Location(self, 256+14, 0x589B0, LocationType.Pedestal, "Master Sword Pedestal",
-                lambda items: self.world.CanAquireAll(items, RewardType.PendantGreen, RewardType.PendantNonGreen)),
+                lambda items: self.world.CanAcquireAll(items, RewardType.AnyPendant)),
             Location(self, 256+15, 0x308013, LocationType.Regular, "Mushroom").Weighted(sphereOne),
             Location(self, 256+16, 0x308000, LocationType.Regular, "Lost Woods Hideout").Weighted(sphereOne),
             Location(self, 256+17, 0x308001, LocationType.Regular, "Lumberjack Tree",
-                lambda items: self.world.CanAquire(items, RewardType.Agahnim) and items.Boots),
+                lambda items: self.world.CanAcquire(items, RewardType.Agahnim) and items.Boots),
             Location(self, 256+18, 0x1EB3F, LocationType.Regular, "Pegasus Rocks",
                 lambda items: items.Boots),
             Location(self, 256+19, 0x308004, LocationType.Regular, "Graveyard Ledge",

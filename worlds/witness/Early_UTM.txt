@@ -1,5 +1,0 @@
-Event Items:
-Shortcut to Secret Area Opens - 0x0042D
-
-Region Changes:
-Inside Mountain Secret Area (Inside Mountain Secret Area) - Inside Mountain Path to Secret Area - 0x00FF8 - Main Island - 0x021D7 | 0x0042D - Main Island - 0x17CF2
