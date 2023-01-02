@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+import hashlib
+import json
 import logging
-import sys
 import pathlib
-from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Type, Union, TYPE_CHECKING, \
-    ClassVar
+import sys
+from typing import Any, Callable, ClassVar, Dict, FrozenSet, List, Optional, Set, TYPE_CHECKING, TextIO, Tuple, Type, \
+    Union
 
-from Options import AssembleOptions
 from BaseClasses import CollectionState
+from Options import AssembleOptions
 
 if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial
@@ -109,10 +111,10 @@ def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
 
 class WebWorld:
     """Webhost integration"""
-    
+
     settings_page: Union[bool, str] = True
     """display a settings page. Can be a link to a specific page or external tool."""
-    
+
     game_info_languages: List[str] = ['en']
     """docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'"""
 
@@ -318,6 +320,16 @@ class World(metaclass=AutoWorldRegister):
 
     def create_filler(self) -> "Item":
         return self.create_item(self.get_filler_item_name())
+
+    @classmethod
+    def datapackage_checksum(cls) -> str:
+        datapackage = {
+            "items": cls.item_name_to_id,
+            "locations": cls.location_name_to_id,
+        }
+        dump = json.dumps(datapackage)
+        hash = hashlib.new("MD5", dump.encode())
+        return hash.hexdigest()
 
 
 # any methods attached to this can be used as part of CollectionState,

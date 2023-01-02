@@ -2,21 +2,21 @@ from __future__ import annotations
 
 import argparse
 import asyncio
-import functools
-import logging
-import zlib
 import collections
-import typing
-import inspect
-import weakref
 import datetime
-import threading
-import random
-import pickle
-import itertools
-import time
-import operator
+import functools
 import hashlib
+import inspect
+import itertools
+import logging
+import operator
+import pickle
+import random
+import threading
+import time
+import typing
+import weakref
+import zlib
 
 import ModuleUpdate
 
@@ -130,6 +130,7 @@ class Context:
     read_data: typing.Dict[str, object]
     stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
 
+    checksums: typing.Dict[str, str]
     item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
     item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
     location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
@@ -222,6 +223,7 @@ class Context:
 
     def _init_game_data(self):
         for game_name, game_package in self.gamespackage.items():
+            self.checksums[game_name] = game_package["checksum"]
             for item_name, item_id in game_package["item_name_to_id"].items():
                 self.item_names[item_id] = item_name
             for location_name, location_id in game_package["location_name_to_id"].items():
@@ -234,6 +236,9 @@ class Context:
 
     def location_names_for_game(self, game: str) -> typing.Optional[typing.Dict[str, int]]:
         return self.gamespackage[game]["location_name_to_id"] if game in self.gamespackage else None
+
+    def checksum(self, game: str) -> typing.Optional[typing.Dict[str, str]]:
+        return self.gamespackage[game]["checksum"] if game in self.gamespackage else None
 
     # General networking
     async def send_msgs(self, endpoint: Endpoint, msgs: typing.Iterable[dict]) -> bool:
@@ -317,7 +322,7 @@ class Context:
         if not client.auth:
             return
         if client.version >= print_command_compatability_threshold:
-            async_start(self.send_msgs(client, 
+            async_start(self.send_msgs(client,
                 [{"cmd": "PrintJSON", "data": [{ "text": text }]} for text in texts]))
         else:
             async_start(self.send_msgs(client, [{"cmd": "Print", "text": text} for text in texts]))
@@ -725,14 +730,10 @@ async def on_client_connected(ctx: Context, client: Client):
         'permissions': get_permissions(ctx),
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
-        'datapackage_versions': {
-            game: game_data["version"] for {game: game_data["version"] for game, game_data
+        'datapackage_versions': {game: game_data["version"] for game, game_data
                                  in ctx.gamespackage.items()},
-        },
-        'datapackage_checksums': {
-            game: game_data["checksum"] for game, game_data in network_data_package["games"].items()
-        },
-
+        'datapackage_checksums': {game: game_data["checksum"] for game, game_data
+                                 in ctx.gamespackage.items()},
         'seed_name': ctx.seed_name,
         'time': time.time(),
     }])

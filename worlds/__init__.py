@@ -1,8 +1,5 @@
-import base64
-import hashlib
 import importlib
 import os
-import pickle
 import sys
 import typing
 import warnings
@@ -82,7 +79,7 @@ from .AutoWorld import AutoWorldRegister
 for world_name, world in AutoWorldRegister.world_types.items():
     games[world_name] = {
         "version": world.data_version,
-        "checksum": None,
+        "checksum": world.datapackage_checksum(),
         "item_name_to_id": world.item_name_to_id,
         "location_name_to_id": world.location_name_to_id,
         # seems clients don't actually want this. Keeping it here in case someone changes their mind.
@@ -90,10 +87,6 @@ for world_name, world in AutoWorldRegister.world_types.items():
     }
     lookup_any_item_id_to_name.update(world.item_id_to_name)
     lookup_any_location_id_to_name.update(world.location_id_to_name)
-
-    # Calculate a checksum of the datapackage as a base64 encoded string.
-    checksum = base64.urlsafe_b64encode(hashlib.new("sha1", pickle.dumps(games[world_name])).digest()).decode()
-    games[world_name]["checksum"] = checksum.rstrip("=")
 
 network_data_package: DataPackage = {
     "games": games,
