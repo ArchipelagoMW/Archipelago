@@ -1,4 +1,4 @@
-from Options import Toggle, DefaultOnToggle
+from Options import Toggle, DefaultOnToggle, DeathLink
 
 
 class Logic(DefaultOnToggle):
@@ -14,4 +14,5 @@ class PowerSeals(Toggle):
 messenger_options = {
     "enable_logic": Logic,
     "shuffle_seals": PowerSeals,
+    "death_link": DeathLink,
 }

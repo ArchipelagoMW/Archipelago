@@ -111,6 +111,7 @@ class MessengerWorld(World):
                 locations[loc.address] = [loc.item.name, self.multiworld.player_name[loc.item.player]]
 
         return {
+            "deathlink": bool(self.multiworld.death_link[self.player].value),
             "locations": locations,
             "settings": {"Difficulty": "Basic" if not self.multiworld.shuffle_seals[self.player] else "Advanced"}
         }
