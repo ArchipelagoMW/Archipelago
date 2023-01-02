@@ -762,11 +762,10 @@ async def on_client_joined(ctx: Context, client: Client):
 
 
 async def on_client_left(ctx: Context, client: Client):
-    if len(ctx.clients[client.team][client.slot]) > 0:
+    if len(ctx.clients[client.team][client.slot]) <= 0:
         update_client_status(ctx, client, ClientStatus.CLIENT_UNKNOWN)
         ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
-    ctx.notify_all(
-        "%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1))
+    ctx.notify_all(f"{ctx.get_aliased_name(client.team, client.slot)}%s (Team {client.team + 1}) has left the game")
 
 
 async def countdown(ctx: Context, timer: int):
