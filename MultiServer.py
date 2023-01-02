@@ -203,6 +203,7 @@ class Context:
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
+        self.checksums = {}
         self.item_name_groups = {}
         self.all_item_and_group_names = {}
         self.forced_auto_forfeits = collections.defaultdict(lambda: False)
