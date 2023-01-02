@@ -19,6 +19,8 @@ class IncludeTemy(Toggle):
 
 
 class KeyPieces(Range):
+    """How many Key Pieces are added to the pool, only matters with Key Piece Hunt enabled."""
+    display_name = "Key Piece Amount"
     default = 5
     range_start = 1
     range_end = 14

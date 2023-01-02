@@ -6,11 +6,6 @@
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
     - (select `Undertale Client` during installation.)
 
-### Generating an Undertale game
-
-When you join a multiworld game, you will be asked to provide your YAML file to whoever is hosting. 
-Once that is done, you will be able to connect to the server.
-
 ### First time setup
 
 Start the Undertale client, and in the bottom text box, input `/auto_patch (Input your Steam directory here)` (Your
@@ -21,11 +16,11 @@ redo this step when updating Archipelago.)
 
 ### Connect to the MultiServer
 
-Make sure both Undertale and its client are running. (Undertale will ask for a saveslot, it can be 1 through 99, none of the slots will
-overwrite your vanilla save, although you may want to make a backup just in case.)
+Make sure both Undertale and its client are running. (Undertale will ask for a saveslot, it can be 1 through 99, none 
+of the slots will overwrite your vanilla save, although you may want to make a backup just in case.)
 
 In the top text box of the client, type the 
-`Ip Address` and `Port` separated with a `:` symbol. (Ex. `archipelago.gg:38281`)
+`Ip Address` (or `Hostname`) and `Port` separated with a `:` symbol. (Ex. `archipelago.gg:38281`)
 
 The client will then ask for the slot name, input that in the text box at the bottom of the client.
 

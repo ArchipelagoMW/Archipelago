@@ -1,6 +1,5 @@
-from BaseClasses import Item
+from BaseClasses import Item, ItemClassification
 import typing
-from BaseClasses import ItemClassification
 
 
 class ItemData(typing.NamedTuple):
@@ -10,7 +9,6 @@ class ItemData(typing.NamedTuple):
 
 class UndertaleItem(Item):
     game: str = "Undertale"
-
 
 
 item_table = {
@@ -245,5 +243,3 @@ junk_weights_genocide = {
     "100G": 6,
     "500G": 3,
 }
-
-lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
