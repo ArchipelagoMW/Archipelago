@@ -42,7 +42,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[str, List[str]]
         }
 
     mission_pools = [
-        [],
+        no_build_regions_list,
         easy_regions_list,
         medium_regions_list,
         hard_regions_list
@@ -130,6 +130,19 @@ class ValidInventory:
         requirements = mission_requirements
         cascade_keys = self.cascade_removal_map.keys()
         units_always_have_upgrades = get_option_value(self.multiworld, self.player, "units_always_have_upgrades")
+
+        # Locking associated items for items that have already been placed when units_always_have_upgrades is on
+        if units_always_have_upgrades:
+            existing_items = self.existing_items[:]
+            while existing_items:
+                items_to_lock = self.cascade_removal_map[existing_items.pop()]
+                for item in items_to_lock:
+                    if item in inventory:
+                        inventory.remove(item)
+                        locked_items.append(item)
+                    if item in existing_items:
+                        existing_items.remove(item)
+
         if self.min_units_per_structure > 0:
             requirements.append(lambda state: state.has_units_per_structure())
 
