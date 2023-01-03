@@ -1,7 +1,5 @@
-from typing import NamedTuple, Dict, List, Set
+from typing import NamedTuple, Dict, List
 
-from BaseClasses import MultiWorld
-from .Options import get_option_value
 
 no_build_regions_list = ["Liberation Day", "Breakout", "Ghost of a Chance", "Piercing the Shroud", "Whispers of Doom",
                          "Belly of the Beast"]

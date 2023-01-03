@@ -1,6 +1,7 @@
 from typing import Dict
 from BaseClasses import MultiWorld
 from Options import Choice, Option, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range
+from .MissionTables import vanilla_mission_req_table
 
 
 class GameDifficulty(Choice):
@@ -110,6 +111,7 @@ class ExcludedMissions(OptionSet):
     Only applies on shortened mission orders.
     It may be impossible to build a valid campaign if too many missions are excluded."""
     display_name = "Excluded Missions"
+    valid_keys = {mission_name for mission_name in vanilla_mission_req_table.keys() if mission_name != 'All-In'}
 
 
 # noinspection PyTypeChecker

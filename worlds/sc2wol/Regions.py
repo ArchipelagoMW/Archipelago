@@ -141,6 +141,8 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
 
         # Add no_build missions to the pool and fill in no_build slots
         missions_to_add = mission_pools['no_build']
+        if len(no_build_slots) > len(missions_to_add):
+            raise Exception("There are no valid No-Build missions.  Please exclude fewer missions.")
         for slot in no_build_slots:
             filler = multiworld.random.randint(0, len(missions_to_add) - 1)
 
@@ -148,6 +150,8 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
 
         # Add easy missions into pool and fill in easy slots
         missions_to_add = missions_to_add + mission_pools['easy']
+        if len(easy_slots) > len(missions_to_add):
+            raise Exception("There are not enough Easy missions to fill the campaign.  Please exclude fewer missions.")
         for slot in easy_slots:
             filler = multiworld.random.randint(0, len(missions_to_add) - 1)
 
@@ -155,6 +159,8 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
 
         # Add medium missions into pool and fill in medium slots
         missions_to_add = missions_to_add + mission_pools['medium']
+        if len(medium_slots) > len(missions_to_add):
+            raise Exception("There are not enough Easy and Medium missions to fill the campaign.  Please exclude fewer missions.")
         for slot in medium_slots:
             filler = multiworld.random.randint(0, len(missions_to_add) - 1)
 
@@ -162,6 +168,8 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
 
         # Add hard missions into pool and fill in hard slots
         missions_to_add = missions_to_add + mission_pools['hard']
+        if len(hard_slots) > len(missions_to_add):
+            raise Exception("There are not enough missions to fill the campaign.  Please exclude fewer missions.")
         for slot in hard_slots:
             filler = multiworld.random.randint(0, len(missions_to_add) - 1)
 

@@ -30,9 +30,6 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[str, List[str]]
     shuffle_no_build = get_option_value(multiworld, player, "shuffle_no_build")
     shuffle_protoss = get_option_value(multiworld, player, "shuffle_protoss")
     excluded_missions = set(get_option_set_value(multiworld, player, "excluded_missions"))
-    invalid_mission_names = excluded_missions.difference(vanilla_mission_req_table.keys())
-    if invalid_mission_names:
-        raise Exception("Error in locked_missions - the following are not valid mission names: " + ", ".join(invalid_mission_names))
     mission_count = len(mission_orders[mission_order_type]) - 1
     # Vanilla and Vanilla Shuffled use the entire mission pool
     if mission_count == 28:
@@ -88,10 +85,6 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[str, List[str]]
             move_mission("Moebius Factor", 2, 1)
             move_mission("Welcome to the Jungle", 2, 1)
             move_mission("Engine of Destruction", 3, 2)
-
-    current_count = sum(len(mission_pool) for mission_pool in mission_pools)
-    if current_count < mission_count:
-        raise Exception("Not enough missions available to fill the campaign on current settings.  Please exclude fewer missions.")
 
     return {
         "no_build": mission_pools[0],
