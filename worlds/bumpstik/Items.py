@@ -116,11 +116,6 @@ item_table = {
     item: offset + x for x, item in enumerate(LttPCreditsText.keys())
 }
 
-item_groups = {
-    "Board Size": ["Board Width", "Board Height"],
-    "Color": ["Starting Colors Up", "Maximum Colors Up"]
-}
-
 ALTTPWorld.pedestal_credit_texts.update({item_table[name]: f"and the {texts.pedestal}"
                                          for name, texts in LttPCreditsText.items()})
 ALTTPWorld.sickkid_credit_texts.update({item_table[name]: texts.sickkid for name, texts in LttPCreditsText.items()})
