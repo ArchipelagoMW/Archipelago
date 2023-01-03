@@ -12,12 +12,12 @@ import threading
 import time
 
 import websockets
-from pony.orm import db_session, commit, select
+from pony.orm import commit, db_session, select
 
 import Utils
-from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor
-from Utils import get_public_ipv4, get_public_ipv6, restricted_loads, cache_argsless
-from .models import Room, Command, db
+from MultiServer import ClientMessageProcessor, Context, ServerCommandProcessor, auto_shutdown, server
+from Utils import cache_argsless, get_public_ipv4, get_public_ipv6, restricted_loads
+from .models import Command, Room, db
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
@@ -66,7 +66,6 @@ class WebHostContext(Context):
     def _load_game_data(self):
         for key, value in self.static_server_data.items():
             setattr(self, key, value)
-        self.forced_auto_forfeits = collections.defaultdict(lambda: False, self.forced_auto_forfeits)
         self.non_hintable_names = collections.defaultdict(frozenset, self.non_hintable_names)
 
     def listen_to_db_commands(self):
@@ -126,7 +125,6 @@ def get_random_port():
 def get_static_server_data() -> dict:
     import worlds
     data = {
-        "forced_auto_forfeits": {},
         "non_hintable_names": {},
         "gamespackage": worlds.network_data_package["games"],
         "item_name_groups": {world_name: world.item_name_groups for world_name, world in
@@ -134,7 +132,6 @@ def get_static_server_data() -> dict:
     }
 
     for world_name, world in worlds.AutoWorldRegister.world_types.items():
-        data["forced_auto_forfeits"][world_name] = world.forced_auto_forfeit
         data["non_hintable_names"][world_name] = world.hint_blacklist
 
     return data

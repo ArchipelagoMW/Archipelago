@@ -22,14 +22,14 @@ server_options:
   # Relative point cost to receive a hint via !hint for players
   # so for example hint_cost: 20 would mean that for every 20% of available checks, you get the ability to hint, for a total of 5
   hint_cost: 10 # Set to 0 if you want free hints
-  # Forfeit modes
-  # A Forfeit sends out the remaining items *from* a world that forfeits
-  # "disabled" -> clients can't forfeit,
-  # "enabled" -> clients can always forfeit
-  # "auto" -> automatic forfeit on goal completion
-  # "auto-enabled" -> automatic forfeit on goal completion and manual forfeit is also enabled
-  # "goal" -> forfeit is allowed after goal completion
-  forfeit_mode: "goal"
+  # Release modes
+  # A Release sends out the remaining items *from* a world that releases
+  # "disabled" -> clients can't release,
+  # "enabled" -> clients can always release
+  # "auto" -> automatic release on goal completion
+  # "auto-enabled" -> automatic release on goal completion and manual release is also enabled
+  # "goal" -> release is allowed after goal completion
+  release_mode: "goal"
   # Collect modes
   # A Collect sends the remaining items *to* a world that collects
   # "disabled" -> clients can't collect,
