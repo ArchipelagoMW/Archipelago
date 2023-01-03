@@ -1,7 +1,6 @@
 import string
 from typing import Dict, List, Tuple
 
-from worlds.ror2.RoR2Environments import shift_by_offset
 from .Items import RiskOfRainItem, item_table, item_pool_weights, environment_offest
 from .Locations import RiskOfRainLocation, get_classic_item_pickups, item_pickups, orderedstage_location
 from .Rules import set_rules
@@ -58,14 +57,13 @@ class RiskOfRainWorld(World):
         if self.multiworld.start_with_revive[self.player].value:
             self.multiworld.push_precollected(self.multiworld.create_item("Dio's Best Friend", self.player))
 
-
         environments_pool = {}
         # only mess with the environments if they are set as items
-        if (self.multiworld.environments_as_items[self.player].value):
+        if self.multiworld.environments_as_items[self.player].value:
 
             # figure out all available ordered stages for each tier
             environment_available_orderedstages_table = environment_vanilla_orderedstages_table
-            if (self.multiworld.dlc_sotv[self.player].value):
+            if self.multiworld.dlc_sotv[self.player].value:
                 environment_available_orderedstages_table = collapse_dict_list_vertical(environment_available_orderedstages_table, environment_sotv_orderedstages_table)
 
             environments_pool = shift_by_offset(environment_vanilla_table, environment_offest)
@@ -74,6 +72,13 @@ class RiskOfRainWorld(World):
                 environments_pool|= shift_by_offset(environment_sotv_table, environment_offest)
                 self.multiworld.push_precollected(self.create_item("The Simulacrum (Titanic Plains)"))
                 environments_pool.pop("The Simulacrum (Titanic Plains)")
+                if not self.multiworld.dlc_sotv_simulacrum[self.player].value:
+                    environments_pool.pop("The Simulacrum (Aphelian Sanctuary)")
+                    environments_pool.pop("The Simulacrum (Abyssal Depths)")
+                    environments_pool.pop("The Simulacrum (Rallypoint Delta)")
+                    environments_pool.pop("The Simulacrum (Abandoned Aqueduct)")
+                    environments_pool.pop("The Simulacrum (Commencement)")
+                    environments_pool.pop("The Simulacrum (Sky Meadow)")
 
             environments_to_precollect = 5 if self.multiworld.begin_with_loop[self.player].value else 1
             # percollect environments for each stage (or just stage 1)
@@ -109,10 +114,10 @@ class RiskOfRainWorld(World):
             }
 
         # remove lunar items from the pool if they're disabled in the yaml unless lunartic is rolled
-        if not (self.multiworld.enable_lunar[self.player] or pool_option == ItemWeights.option_lunartic):
+        if not self.multiworld.enable_lunar[self.player] or pool_option == ItemWeights.option_lunartic:
             junk_pool.pop("Lunar Item")
         # remove void items from the pool
-        if not (self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void):
+        if not self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void:
             junk_pool.pop("Void Item")
 
         # Generate item pool
@@ -125,7 +130,7 @@ class RiskOfRainWorld(World):
 
         # precollected environments are popped from the pool so counting like this is valid
         nonjunk_item_count = self.total_revivals + len(environments_pool)
-        if (self.multiworld.goal[self.player] == "classic"):
+        if self.multiworld.goal[self.player] == "classic":
             # classic mode
             print("entered")
             total_locations = self.multiworld.total_locations[self.player].value
@@ -141,9 +146,7 @@ class RiskOfRainWorld(World):
                     dlc_sotv=self.multiworld.dlc_sotv[self.player].value
                 )
             )
-
         junk_item_count = total_locations - nonjunk_item_count
-
         # Fill remaining items with randomly generated junk
         itempool += self.multiworld.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
                                               k=junk_item_count)
@@ -203,9 +206,8 @@ class RiskOfRainWorld(World):
 
                 # figure out all available ordered stages for each tier
                 environment_available_orderedstages_table = environment_vanilla_orderedstages_table
-                if (self.multiworld.dlc_sotv[self.player].value):
+                if self.multiworld.dlc_sotv[self.player].value:
                     environment_available_orderedstages_table = collapse_dict_list_vertical(environment_available_orderedstages_table, environment_sotv_orderedstages_table)
-
                 # create 5 regions to represent each of the stages in the loop
                 for n in range(1,6):
                     stage_regions.append(create_region(self.multiworld, self.player, f"OrderedStage_{n}"))
@@ -308,8 +310,8 @@ class RiskOfRainWorld(World):
 
         # Only check for an item to be a environment unlock if those are known to be in the pool.
         # This should shave down comparions.
-        elif self.multiworld.environments_as_items[self.player].value \
-             and name in environment_ALL_table.keys():
+
+        elif name in environment_ALL_table.keys():
 
             classification = ItemClassification.progression
 
@@ -324,14 +326,14 @@ def create_events(world: MultiWorld, player: int) -> None:
     if total_locations / 25 == num_of_events:
         num_of_events -= 1
     world_region = world.get_region("Petrichor V", player)
-    if (world.goal[player] == "classic"):
+    if world.goal[player] == "classic":
         # only setup Pickups when using classic_mode
         for i in range(num_of_events):
             event_loc = RiskOfRainLocation(player, f"Pickup{(i + 1) * 25}", None, world_region)
             event_loc.place_locked_item(RiskOfRainItem(f"Pickup{(i + 1) * 25}", ItemClassification.progression, None, player))
             event_loc.access_rule(lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", player))
             world_region.locations.append(event_loc)
-    elif (world.environments_as_items[player].value):
+    elif world.environments_as_items[player].value:
         # only enforce extra events for explore_mode and environments_as_items
         for n in range(1,6):
             event_region = world.get_region(f"OrderedStage_{n}", player)
