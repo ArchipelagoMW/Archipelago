@@ -2,7 +2,7 @@ from typing import Callable, Dict, List, Set
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import item_table
 from .MissionTables import no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
-    mission_orders, get_starting_mission_locations, MissionInfo, vanilla_mission_req_table, alt_final_mission_locations
+    mission_orders, MissionInfo, vanilla_mission_req_table, alt_final_mission_locations
 from .Options import get_option_value, get_option_set_value
 from .LogicMixin import SC2WoLLogic
 
@@ -27,6 +27,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[str, List[str]]
     """
 
     mission_order_type = get_option_value(multiworld, player, "mission_order")
+    shuffle_no_build = get_option_value(multiworld, player, "shuffle_no_build")
     shuffle_protoss = get_option_value(multiworld, player, "shuffle_protoss")
     excluded_missions = set(get_option_set_value(multiworld, player, "excluded_missions"))
     invalid_mission_names = excluded_missions.difference(vanilla_mission_req_table.keys())
@@ -49,6 +50,9 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[str, List[str]]
         medium_regions_list,
         hard_regions_list
     ]
+    # Omitting No-Build missions if not shuffling no-build
+    if not shuffle_no_build:
+        excluded_missions = excluded_missions.union(no_build_regions_list)
     # Omitting Protoss missions if not shuffling protoss
     if not shuffle_protoss:
         excluded_missions = excluded_missions.union(PROTOSS_REGIONS)
@@ -58,20 +62,33 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[str, List[str]]
         excluded_missions.add(final_mission)
     else:
         final_mission = 'All-In'
-    # Yaml settings determine which missions can be placed in the first slot
-    mission_pools[0] = [mission for mission in get_starting_mission_locations(multiworld, player).keys() if mission not in excluded_missions]
-    # Removing the new no-build missions from their original sets
-    for i in range(1, len(mission_pools)):
-        mission_pools[i] = [mission for mission in mission_pools[i] if mission not in excluded_missions.union(mission_pools[0])]
-    # If the first mission is a build mission, there may not be enough locations to reach Outbreak as a second mission
+    # Excluding missions
+    for i, mission_pool in enumerate(mission_pools):
+        mission_pools[i] = [mission for mission in mission_pool if mission not in excluded_missions]
+    # Mission pool changes on Build-Only
     if not get_option_value(multiworld, player, 'shuffle_no_build'):
-        # Swapping Outbreak and The Great Train Robbery
-        if "Outbreak" in mission_pools[1]:
-            mission_pools[1].remove("Outbreak")
-            mission_pools[2].append("Outbreak")
-        if "The Great Train Robbery" in mission_pools[2]:
-            mission_pools[2].remove("The Great Train Robbery")
-            mission_pools[1].append("The Great Train Robbery")
+        def move_mission(mission_name, current_pool, new_pool):
+            if mission_name in mission_pools[current_pool]:
+                mission_pools[current_pool].remove(mission_name)
+                mission_pools[new_pool].append(mission_name)
+        # Replacing No Build missions with Easy missions
+        move_mission("Zero Hour", 1, 0)
+        move_mission("Evacuation", 1, 0)
+        move_mission("Devil's Playground", 1, 0)
+        # Pushing Outbreak to Normal, as it cannot be placed as the second mission on Build-Only
+        move_mission("Outbreak", 1, 2)
+        # Pushing extra Normal missions to Easy
+        move_mission("The Great Train Robbery", 2, 1)
+        move_mission("Echoes of the Future", 2, 1)
+        move_mission("Cutthroat", 2, 1)
+        # Additional changes on Advanced Tactics
+        if get_option_value(multiworld, player, "required_tactics") > 0:
+            move_mission("The Great Train Robbery", 1, 0)
+            move_mission("Smash and Grab", 1, 0)
+            move_mission("Moebius Factor", 2, 1)
+            move_mission("Welcome to the Jungle", 2, 1)
+            move_mission("Engine of Destruction", 3, 2)
+
     current_count = sum(len(mission_pool) for mission_pool in mission_pools)
     if current_count < mission_count:
         raise Exception("Not enough missions available to fill the campaign on current settings.  Please exclude fewer missions.")
