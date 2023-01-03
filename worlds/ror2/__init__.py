@@ -4,9 +4,9 @@ from .Items import RiskOfRainItem, item_table, item_pool_weights
 from .Locations import RiskOfRainLocation, item_pickups
 
 from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
-from .Options import ror2_options, ItemWeights
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import set_rule, add_rule
+from .Options import ror2_options, ItemWeights
+from .Rules import setup_event_rules
 
 client_version = 1
 
@@ -93,35 +93,7 @@ class RiskOfRainWorld(World):
         self.multiworld.itempool += list(map(lambda name: self.create_item(name), itempool))
 
     def set_rules(self) -> None:
-        total_locations = self.multiworld.total_locations[self.player].value  # total locations for current player
-        event_location_step = 25  # set an event location at these locations for "spheres"
-        divisions = total_locations // event_location_step
-        total_revivals = self.multiworld.worlds[self.player].total_revivals  # pulling this info we calculated in generate_basic
-
-        if divisions:
-            for i in range(1, divisions):  # since divisions is the floor of total_locations / 25
-                event_loc = self.multiworld.get_location(f"Pickup{i * event_location_step}", self.player)
-                set_rule(event_loc,
-                         lambda state, i=i: state.can_reach(f"ItemPickup{i * event_location_step - 1}", "Location",
-                                                            self.player))
-                for n in range(i * event_location_step, (
-                                                                i + 1) * event_location_step):  # we want to create a rule for each of the 25 locations per division
-                    if n == i * event_location_step:
-                        set_rule(self.multiworld.get_location(f"ItemPickup{n}", self.player),
-                                 lambda state, event_item=event_loc.item.name: state.has(event_item, self.player))
-                    else:
-                        set_rule(self.multiworld.get_location(f"ItemPickup{n}", self.player),
-                                 lambda state, n=n: state.can_reach(f"ItemPickup{n - 1}", "Location", self.player))
-            for i in range(divisions * event_location_step, total_locations + 1):
-                set_rule(self.multiworld.get_location(f"ItemPickup{i}", self.player),
-                         lambda state, i=i: state.can_reach(f"ItemPickup{i - 1}", "Location", self.player))
-        set_rule(self.multiworld.get_location("Victory", self.player),
-                 lambda state: state.can_reach(f"ItemPickup{total_locations}", "Location", self.player))
-        if total_revivals or self.multiworld.start_with_revive[self.player].value:
-            add_rule(self.multiworld.get_location("Victory", self.player),
-                     lambda state: state.has("Dio's Best Friend", self.player,
-                                             total_revivals + self.multiworld.start_with_revive[self.player]))
-
+        setup_event_rules(self.multiworld, self.player)
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def create_regions(self) -> None:
