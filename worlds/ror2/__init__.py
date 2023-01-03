@@ -1,5 +1,5 @@
 import string
-from typing import Dict, List
+from typing import Dict, List, Any
 from .Items import RiskOfRainItem, item_table, item_pool_weights
 from .Locations import RiskOfRainLocation, item_pickups
 
@@ -110,14 +110,14 @@ class RiskOfRainWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def fill_slot_data(self):
-        return {
-            "itemPickupStep": self.multiworld.item_pickup_step[self.player].value,
-            "seed": "".join(self.multiworld.slot_seeds[self.player].choice(string.digits) for _ in range(16)),
-            "totalLocations": self.multiworld.total_locations[self.player].value,
-            "totalRevivals": self.multiworld.total_revivals[self.player].value,
-            "startWithDio": self.multiworld.start_with_revive[self.player].value,
-            "FinalStageDeath": self.multiworld.final_stage_death[self.player].value
-        }
+        option_results: Dict[str, Any] = {}
+        for option in ror2_options:
+            split_name = option.split(" ")
+            split_name = [name.title() for name in split_name]
+            split_name[0].lower()
+            option_results["".join(split_name)] = getattr(self.multiworld, option)[self.player].value
+
+        return option_results
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
