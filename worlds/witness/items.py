@@ -163,6 +163,8 @@ class WitnessPlayerItems:
 
         doors = get_option_value(world, player, "shuffle_doors")
 
+        self.GOOD_ITEMS = []
+
         if symbols:
             self.GOOD_ITEMS = [
                 "Dots", "Black/White Squares", "Stars",
