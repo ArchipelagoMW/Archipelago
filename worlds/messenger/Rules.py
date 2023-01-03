@@ -30,7 +30,7 @@ class MessengerRules:
                                                                  and self.has_dart(state, player),
             # searing crags
             "Pyro": lambda state: self.has_tabi(state, player),
-            "Key of Strength": lambda state: state.has("Power Thistle", player),
+            "Key of Strength": lambda state: state.has("Power Thistle", player) and self.has_vertical(state, player),
             # glacial peak
             "Glacial Peak Seal - Ice Climbers": lambda state: self.has_dart(state, player),
             "Glacial Peak Seal - Projectile Spike Pit": lambda state: self.has_vertical(state, player),
