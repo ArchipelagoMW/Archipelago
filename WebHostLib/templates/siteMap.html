@@ -31,14 +31,14 @@
 
         <h2>Game Info Pages</h2>
         <ul>
-            {% for game in games %}
+            {% for game in games | title_sorted %}
                 <li><a href="{{ url_for('game_info', game=game, lang='en') }}">{{ game }}</a></li>
             {% endfor %}
         </ul>
 
         <h2>Game Settings Pages</h2>
         <ul>
-            {% for game in games %}
+            {% for game in games | title_sorted %}
                 <li><a href="{{ url_for('player_settings', game=game) }}">{{ game }}</a></li>
             {% endfor %}
         </ul>

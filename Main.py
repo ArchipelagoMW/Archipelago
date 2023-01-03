@@ -1,5 +1,4 @@
 import collections
-from itertools import zip_longest, chain
 import logging
 import os
 import time
@@ -8,15 +7,15 @@ import concurrent.futures
 import pickle
 import tempfile
 import zipfile
-from typing import Dict, Tuple, Optional, Set
+from typing import Dict, List, Tuple, Optional, Set
 
-from BaseClasses import MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
-from worlds.alttp.Items import item_name_groups
+from BaseClasses import Item, MultiWorld, CollectionState, Region, RegionType, LocationProgressType, Location
+import worlds
 from worlds.alttp.Regions import is_main_entrance
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from Utils import output_path, get_options, __version__, version_tuple
-from worlds.generic.Rules import locality_rules, exclusion_rules, group_locality_rules
+from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
 
 ordered_areas = (
@@ -80,15 +79,30 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     logger.info("Found World Types:")
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
-    numlength = 8
+
+    max_item = 0
+    max_location = 0
+    for cls in AutoWorld.AutoWorldRegister.world_types.values():
+        if cls.item_id_to_name:
+            max_item = max(max_item, max(cls.item_id_to_name))
+            max_location = max(max_location, max(cls.location_id_to_name))
+
+    item_digits = len(str(max_item))
+    location_digits = len(str(max_location))
+    item_count = len(str(max(len(cls.item_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
+    location_count = len(str(max(len(cls.location_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
+    del max_item, max_location
+
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
-        if not cls.hidden:
-            logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} "
-                        f"Items (IDs: {min(cls.item_id_to_name):{numlength}} - "
-                        f"{max(cls.item_id_to_name):{numlength}}) | "
-                        f"{len(cls.location_names):3} "
-                        f"Locations (IDs: {min(cls.location_id_to_name):{numlength}} - "
-                        f"{max(cls.location_id_to_name):{numlength}})")
+        if not cls.hidden and len(cls.item_names) > 0:
+            logger.info(f" {name:{longest_name}}: {len(cls.item_names):{item_count}} "
+                        f"Items (IDs: {min(cls.item_id_to_name):{item_digits}} - "
+                        f"{max(cls.item_id_to_name):{item_digits}}) | "
+                        f"{len(cls.location_names):{location_count}} "
+                        f"Locations (IDs: {min(cls.location_id_to_name):{location_digits}} - "
+                        f"{max(cls.location_id_to_name):{location_digits}})")
+
+    del item_digits, location_digits, item_count, location_count
 
     AutoWorld.call_stage(world, "assert_generate")
 
@@ -101,19 +115,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
 
-    for player in world.player_ids:
-        if player in world.get_game_players("A Link to the Past"):
-            # enforce pre-defined local items.
-            if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
-                world.local_items[player].value.add('Triforce Piece')
-
-            # Not possible to place pendants/crystals out side of boss prizes yet.
-            world.non_local_items[player].value -= item_name_groups['Pendants']
-            world.non_local_items[player].value -= item_name_groups['Crystals']
-
-        # items can't be both local and non-local, prefer local
-        world.non_local_items[player].value -= world.local_items[player].value
-
     logger.info('Creating World.')
     AutoWorld.call_all(world, "create_regions")
 
@@ -121,10 +122,14 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     AutoWorld.call_all(world, "create_items")
 
     logger.info('Calculating Access Rules.')
+
+    for player in world.player_ids:
+        # items can't be both local and non-local, prefer local
+        world.non_local_items[player].value -= world.local_items[player].value
+        world.non_local_items[player].value -= set(world.local_early_items[player])
+
     if world.players > 1:
-        for player in world.player_ids:
-            locality_rules(world, player)
-        group_locality_rules(world)
+        locality_rules(world)
     else:
         world.non_local_items[1].value = set()
         world.local_items[1].value = set()
@@ -141,8 +146,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     # temporary home for item links, should be moved out of Main
     for group_id, group in world.groups.items():
-        def find_common_pool(players: Set[int], shared_pool: Set[str]):
-            classifications = collections.defaultdict(int)
+        def find_common_pool(players: Set[int], shared_pool: Set[str]) -> Tuple[
+            Optional[Dict[int, Dict[str, int]]], Optional[Dict[str, int]]
+        ]:
+            classifications: Dict[str, int] = collections.defaultdict(int)
             counters = {player: {name: 0 for name in shared_pool} for player in players}
             for item in world.itempool:
                 if item.player in counters and item.name in shared_pool:
@@ -152,7 +159,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for player in players.copy():
                 if all([counters[player][item] == 0 for item in shared_pool]):
                     players.remove(player)
-                    del(counters[player])
+                    del (counters[player])
 
             if not players:
                 return None, None
@@ -164,14 +171,14 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         counters[player][item] = count
                 else:
                     for player in players:
-                        del(counters[player][item])
+                        del (counters[player][item])
             return counters, classifications
 
         common_item_count, classifications = find_common_pool(group["players"], group["item_pool"])
         if not common_item_count:
             continue
 
-        new_itempool = []
+        new_itempool: List[Item] = []
         for item_name, item_count in next(iter(common_item_count.values())).items():
             for _ in range(item_count):
                 new_item = group["world"].create_item(item_name)
@@ -202,11 +209,15 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         while itemcount > len(world.itempool):
             items_to_add = []
             for player in group["players"]:
+                if group["link_replacement"]:
+                    item_player = group_id
+                else:
+                    item_player = player
                 if group["replacement_items"][player]:
-                    items_to_add.append(AutoWorld.call_single(world, "create_item", player,
+                    items_to_add.append(AutoWorld.call_single(world, "create_item", item_player,
                                                                 group["replacement_items"][player]))
                 else:
-                    items_to_add.append(AutoWorld.call_single(world, "create_filler", player))
+                    items_to_add.append(AutoWorld.call_single(world, "create_filler", item_player))
             world.random.shuffle(items_to_add)
             world.itempool.extend(items_to_add[:itemcount - len(world.itempool)])
 
@@ -356,16 +367,19 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                                   for player in world.groups.get(location.item.player, {}).get("players", [])]):
                             precollect_hint(location)
 
+                # custom datapackage
+                datapackage = {}
+                for game_world in world.worlds.values():
+                    if game_world.data_version == 0 and game_world.game not in datapackage:
+                        datapackage[game_world.game] = worlds.network_data_package["games"][game_world.game]
+                        datapackage[game_world.game]["item_name_groups"] = game_world.item_name_groups
+
                 multidata = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
                     "names": names,  # TODO: remove around 0.2.5 in favor of slot_info
                     "games": games,  # TODO: remove around 0.2.5 in favor of slot_info
                     "connect_names": {name: (0, player) for player, name in world.player_name.items()},
-                    "remote_items": {player for player in world.player_ids if
-                                     world.worlds[player].remote_items},
-                    "remote_start_inventory": {player for player in world.player_ids if
-                                               world.worlds[player].remote_start_inventory},
                     "locations": locations_data,
                     "checks_in_area": checks_in_area,
                     "server_options": baked_server_options,
@@ -375,7 +389,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "version": tuple(version_tuple),
                     "tags": ["AP"],
                     "minimum_versions": minimum_versions,
-                    "seed_name": world.seed_name
+                    "seed_name": world.seed_name,
+                    "datapackage": datapackage,
                 }
                 AutoWorld.call_all(world, "modify_multidata", multidata)
 
@@ -401,7 +416,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
         if args.spoiler > 1:
             logger.info('Calculating playthrough.')
-            create_playthrough(world)
+            world.spoiler.create_playthrough(create_paths=args.spoiler > 2)
 
         if args.spoiler:
             world.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
@@ -415,143 +430,3 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     logger.info('Done. Enjoy. Total Time: %s', time.perf_counter() - start)
     return world
-
-
-def create_playthrough(world):
-    """Destructive to the world while it is run, damage gets repaired afterwards."""
-    # get locations containing progress items
-    prog_locations = {location for location in world.get_filled_locations() if location.item.advancement}
-    state_cache = [None]
-    collection_spheres = []
-    state = CollectionState(world)
-    sphere_candidates = set(prog_locations)
-    logging.debug('Building up collection spheres.')
-    while sphere_candidates:
-
-        # build up spheres of collection radius.
-        # Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
-
-        sphere = {location for location in sphere_candidates if state.can_reach(location)}
-
-        for location in sphere:
-            state.collect(location.item, True, location)
-
-        sphere_candidates -= sphere
-        collection_spheres.append(sphere)
-        state_cache.append(state.copy())
-
-        logging.debug('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres), len(sphere),
-                      len(prog_locations))
-        if not sphere:
-            logging.debug('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (
-                location.item.name, location.item.player, location.name, location.player) for location in
-                                                                           sphere_candidates])
-            if any([world.accessibility[location.item.player] != 'minimal' for location in sphere_candidates]):
-                raise RuntimeError(f'Not all progression items reachable ({sphere_candidates}). '
-                                   f'Something went terribly wrong here.')
-            else:
-                world.spoiler.unreachables = sphere_candidates
-                break
-
-    # in the second phase, we cull each sphere such that the game is still beatable,
-    # reducing each range of influence to the bare minimum required inside it
-    restore_later = {}
-    for num, sphere in reversed(tuple(enumerate(collection_spheres))):
-        to_delete = set()
-        for location in sphere:
-            # we remove the item at location and check if game is still beatable
-            logging.debug('Checking if %s (Player %d) is required to beat the game.', location.item.name,
-                          location.item.player)
-            old_item = location.item
-            location.item = None
-            if world.can_beat_game(state_cache[num]):
-                to_delete.add(location)
-                restore_later[location] = old_item
-            else:
-                # still required, got to keep it around
-                location.item = old_item
-
-        # cull entries in spheres for spoiler walkthrough at end
-        sphere -= to_delete
-
-    # second phase, sphere 0
-    removed_precollected = []
-    for item in (i for i in chain.from_iterable(world.precollected_items.values()) if i.advancement):
-        logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
-        world.precollected_items[item.player].remove(item)
-        world.state.remove(item)
-        if not world.can_beat_game():
-            world.push_precollected(item)
-        else:
-            removed_precollected.append(item)
-
-    # we are now down to just the required progress items in collection_spheres. Unfortunately
-    # the previous pruning stage could potentially have made certain items dependant on others
-    # in the same or later sphere (because the location had 2 ways to access but the item originally
-    # used to access it was deemed not required.) So we need to do one final sphere collection pass
-    # to build up the correct spheres
-
-    required_locations = {item for sphere in collection_spheres for item in sphere}
-    state = CollectionState(world)
-    collection_spheres = []
-    while required_locations:
-        state.sweep_for_events(key_only=True)
-
-        sphere = set(filter(state.can_reach, required_locations))
-
-        for location in sphere:
-            state.collect(location.item, True, location)
-
-        required_locations -= sphere
-
-        collection_spheres.append(sphere)
-
-        logging.debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres),
-                      len(sphere), len(required_locations))
-        if not sphere:
-            raise RuntimeError(f'Not all required items reachable. Unreachable locations: {required_locations}')
-
-    def flist_to_iter(node):
-        while node:
-            value, node = node
-            yield value
-
-    def get_path(state, region):
-        reversed_path_as_flist = state.path.get(region, (region, None))
-        string_path_flat = reversed(list(map(str, flist_to_iter(reversed_path_as_flist))))
-        # Now we combine the flat string list into (region, exit) pairs
-        pathsiter = iter(string_path_flat)
-        pathpairs = zip_longest(pathsiter, pathsiter)
-        return list(pathpairs)
-
-    world.spoiler.paths = {}
-    topology_worlds = (player for player in world.player_ids if world.worlds[player].topology_present)
-    for player in topology_worlds:
-        world.spoiler.paths.update(
-            {str(location): get_path(state, location.parent_region) for sphere in collection_spheres for location in
-             sphere if location.player == player})
-        if player in world.get_game_players("A Link to the Past"):
-            # If Pyramid Fairy Entrance needs to be reached, also path to Big Bomb Shop
-            # Maybe move the big bomb over to the Event system instead?
-            if any(exit_path == 'Pyramid Fairy' for path in world.spoiler.paths.values() for (_, exit_path) in path):
-                if world.mode[player] != 'inverted':
-                    world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = \
-                        get_path(state, world.get_region('Big Bomb Shop', player))
-                else:
-                    world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = \
-                        get_path(state, world.get_region('Inverted Big Bomb Shop', player))
-
-    # we can finally output our playthrough
-    world.spoiler.playthrough = {"0": sorted([str(item) for item in
-                                              chain.from_iterable(world.precollected_items.values())
-                                              if item.advancement])}
-
-    for i, sphere in enumerate(collection_spheres):
-        world.spoiler.playthrough[str(i + 1)] = {str(location): str(location.item) for location in sorted(sphere)}
-
-    # repair the world again
-    for location, item in restore_later.items():
-        location.item = item
-
-    for item in removed_precollected:
-        world.push_precollected(item)
