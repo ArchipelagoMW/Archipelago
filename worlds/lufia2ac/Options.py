@@ -242,6 +242,81 @@ class CrowdedFloorChance(Range):
     default = 16
 
 
+class DefaultCapsule(Choice):
+    """Preselect the active capsule monster.
+
+    (Only has an effect if shuffle_capsule_monsters is set to false.)
+    Supported values: jelze, flash, gusto, zeppy, darbi, sully, blaze
+    Default value: jelze
+    """
+
+    display_name = "Default capsule monster"
+    option_jelze = 0x00
+    option_flash = 0x01
+    option_gusto = 0x02
+    option_zeppy = 0x03
+    option_darbi = 0x04
+    option_sully = 0x05
+    option_blaze = 0x06
+    default = option_jelze
+
+
+class DefaultParty(RandomGroupsChoice, TextChoice):
+    """Preselect the party lineup.
+
+    (Only has an effect if shuffle_party_members is set to false.)
+    Supported values:
+    Can be set to any valid combination of up to 4 party member initials, e.g.:
+    M — Maxim
+    DGMA — Dekar, Guy, Maxim, and Arty
+    MSTL — Maxim, Selan, Tia, and Lexis
+    random-2p — a random 2-person party
+    random-3p — a random 3-person party
+    random-4p — a random 4-person party
+    Default value: M
+    """
+
+    display_name = "Default party lineup"
+    default = "M"
+
+    random_groups = {
+        "random-2p": ["M" + "".join(p) for p in combinations("ADGLST", 1)],
+        "random-3p": ["M" + "".join(p) for p in combinations("ADGLST", 2)],
+        "random-4p": ["M" + "".join(p) for p in combinations("ADGLST", 3)],
+    }
+    vars().update({f"option_{party}": party for party in (*random_groups, "M", *chain(*random_groups.values()))})
+    _valid_sorted_parties: List[List[str]] = [sorted(party) for party in ("M", *chain(*random_groups.values()))]
+    _members_to_bytes: bytes = bytes.maketrans(b"MSGATDL", bytes(range(7)))
+
+    def verify(self, *args, **kwargs) -> None:
+        if str(self.value).lower() in self.random_groups:
+            return
+        if sorted(str(self.value).upper()) in self._valid_sorted_parties:
+            return
+        raise ValueError(f"Could not find option '{self.value}' for '{self.__class__.__name__}', known options are:\n"
+                         f"{', '.join(self.random_groups)}, {', '.join(('M', *chain(*self.random_groups.values())))} "
+                         "as well as all permutations of these.")
+
+    @staticmethod
+    def _flip(i: int) -> int:
+        return {4: 5, 5: 4}.get(i, i)
+
+    @property
+    def event_script(self) -> bytes:
+        return bytes((*(b for i in bytes(self) if i != 0 for b in (0x2B, i, 0x2E, i + 0x65, 0x1A, self._flip(i) + 1)),
+                      0x1E, 0x0B, len(self) - 1, 0x1C, 0x86, 0x03, *(0x00,) * (6 * (4 - len(self)))))
+
+    @property
+    def roster(self) -> bytes:
+        return bytes((len(self), *bytes(self), *(0xFF,) * (4 - len(self))))
+
+    def __bytes__(self) -> bytes:
+        return str(self.value).upper().encode("ASCII").translate(self._members_to_bytes)
+
+    def __len__(self) -> int:
+        return len(str(self.value))
+
+
 class FinalFloor(Range):
     """The final floor, where the boss resides.
 
@@ -439,81 +514,6 @@ class ShufflePartyMembers(Toggle):
         return 0b00000000 if self.value else 0b11111100
 
 
-class StartingCapsule(Choice):
-    """The capsule monster you start the game with.
-
-    Only has an effect if shuffle_capsule_monsters is set to false.
-    Supported values: jelze, flash, gusto, zeppy, darbi, sully, blaze
-    Default value: jelze
-    """
-
-    display_name = "Starting capsule monster"
-    option_jelze = 0x00
-    option_flash = 0x01
-    option_gusto = 0x02
-    option_zeppy = 0x03
-    option_darbi = 0x04
-    option_sully = 0x05
-    option_blaze = 0x06
-    default = option_jelze
-
-
-class StartingParty(RandomGroupsChoice, TextChoice):
-    """The party you start the game with.
-
-    Only has an effect if shuffle_party_members is set to false.
-    Supported values:
-    Can be set to any valid combination of up to 4 party member initials, e.g.:
-    M — start with Maxim
-    DGMA — start with Dekar, Guy, Maxim, and Arty
-    MSTL — start with Maxim, Selan, Tia, and Lexis
-    random-2p — a random 2-person party
-    random-3p — a random 3-person party
-    random-4p — a random 4-person party
-    Default value: M
-    """
-
-    display_name = "Starting party"
-    default = "M"
-
-    random_groups = {
-        "random-2p": ["M" + "".join(p) for p in combinations("ADGLST", 1)],
-        "random-3p": ["M" + "".join(p) for p in combinations("ADGLST", 2)],
-        "random-4p": ["M" + "".join(p) for p in combinations("ADGLST", 3)],
-    }
-    vars().update({f"option_{party}": party for party in (*random_groups, "M", *chain(*random_groups.values()))})
-    _valid_sorted_parties: List[List[str]] = [sorted(party) for party in ("M", *chain(*random_groups.values()))]
-    _members_to_bytes: bytes = bytes.maketrans(b"MSGATDL", bytes(range(7)))
-
-    def verify(self, *args, **kwargs) -> None:
-        if str(self.value).lower() in self.random_groups:
-            return
-        if sorted(str(self.value).upper()) in self._valid_sorted_parties:
-            return
-        raise ValueError(f"Could not find option '{self.value}' for '{self.__class__.__name__}', known options are:\n"
-                         f"{', '.join(self.random_groups)}, {', '.join(('M', *chain(*self.random_groups.values())))} "
-                         "as well as all permutations of these.")
-
-    @staticmethod
-    def _flip(i: int) -> int:
-        return {4: 5, 5: 4}.get(i, i)
-
-    @property
-    def event_script(self) -> bytes:
-        return bytes((*(b for i in bytes(self) if i != 0 for b in (0x2B, i, 0x2E, i + 0x65, 0x1A, self._flip(i) + 1)),
-                      0x1E, 0x0B, len(self) - 1, 0x1C, 0x86, 0x03, *(0x00,) * (6 * (4 - len(self)))))
-
-    @property
-    def roster(self) -> bytes:
-        return bytes((len(self), *bytes(self), *(0xFF,) * (4 - len(self))))
-
-    def __bytes__(self) -> bytes:
-        return str(self.value).upper().encode("ASCII").translate(self._members_to_bytes)
-
-    def __len__(self) -> int:
-        return len(str(self.value))
-
-
 l2ac_option_definitions: Dict[str, type(Option)] = {
     "blue_chest_chance": BlueChestChance,
     "blue_chest_count": BlueChestCount,
@@ -523,6 +523,8 @@ l2ac_option_definitions: Dict[str, type(Option)] = {
     "capsule_starting_level": CapsuleStartingLevel,
     "crowded_floor_chance": CrowdedFloorChance,
     "death_link": DeathLink,
+    "default_capsule": DefaultCapsule,
+    "default_party": DefaultParty,
     "final_floor": FinalFloor,
     "gear_variety_after_b9": GearVarietyAfterB9,
     "goal": Goal,
@@ -535,6 +537,4 @@ l2ac_option_definitions: Dict[str, type(Option)] = {
     "run_speed": RunSpeed,
     "shuffle_capsule_monsters": ShuffleCapsuleMonsters,
     "shuffle_party_members": ShufflePartyMembers,
-    "starting_capsule": StartingCapsule,
-    "starting_party": StartingParty,
 }

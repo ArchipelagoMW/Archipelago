@@ -390,6 +390,8 @@ def generate_output(self, output_directory: str):
     data[rom_addresses["Fossils_Needed_For_Second_Item"]] = (
         self.multiworld.second_fossil_check_condition[self.player].value)
 
+    data[rom_addresses["Option_Lose_Money"]] = int(not self.multiworld.lose_money_on_blackout[self.player].value)
+
     if self.multiworld.extra_key_items[self.player].value:
         data[rom_addresses['Options']] |= 4
     data[rom_addresses["Option_Blind_Trainers"]] = round(self.multiworld.blind_trainers[self.player].value * 2.55)
@@ -505,9 +507,9 @@ def generate_output(self, output_directory: str):
         inventory = ["Poke Ball", "Great Ball", "Ultra Ball"]
         if self.multiworld.better_shops[self.player].value == 2:
             inventory.append("Master Ball")
-        inventory += ["Potion", "Super Potion", "Hyper Potion", "Max Potion", "Full Restore", "Antidote", "Awakening",
-                      "Burn Heal", "Ice Heal", "Paralyze Heal", "Full Heal", "Repel", "Super Repel", "Max Repel",
-                      "Escape Rope"]
+        inventory += ["Potion", "Super Potion", "Hyper Potion", "Max Potion", "Full Restore", "Revive", "Antidote",
+                      "Awakening", "Burn Heal", "Ice Heal", "Paralyze Heal", "Full Heal", "Repel", "Super Repel",
+                      "Max Repel", "Escape Rope"]
         shop_data = bytearray([0xFE, len(inventory)])
         shop_data += bytearray([item_table[item].id - 172000000 for item in inventory])
         shop_data.append(0xFF)
