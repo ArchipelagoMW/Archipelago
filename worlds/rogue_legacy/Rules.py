@@ -1,4 +1,4 @@
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import CollectionState, MultiWorld
 
 
 def get_upgrade_total(multiworld: MultiWorld, player: int) -> int:
@@ -20,7 +20,7 @@ def has_upgrade_amount(state: CollectionState, player: int, amount: int) -> bool
 
 
 def has_upgrades_percentage(state: CollectionState, player: int, percentage: float) -> bool:
-    return has_upgrade_amount(state, player, get_upgrade_total(state.multiworld, player) * (round(percentage) // 100))
+    return has_upgrade_amount(state, player, round(get_upgrade_total(state.multiworld, player) * (percentage / 100)))
 
 
 def has_movement_rune(state: CollectionState, player: int) -> bool:
