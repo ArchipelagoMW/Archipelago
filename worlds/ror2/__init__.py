@@ -47,6 +47,19 @@ class RiskOfRainWorld(World):
         self.total_revivals = int(self.multiworld.total_revivals[self.player].value / 100 *
                                   self.multiworld.total_locations[self.player].value)
 
+    def create_regions(self) -> None:
+        menu = create_region(self.multiworld, self.player, "Menu")
+        petrichor = create_region(self.multiworld, self.player, "Petrichor V",
+                                  [f"ItemPickup{i + 1}" for i in range(self.multiworld.total_locations[self.player].value)])
+
+        connection = Entrance(self.player, "Lobby", menu)
+        menu.exits.append(connection)
+        connection.connect(petrichor)
+
+        self.multiworld.regions += [menu, petrichor]
+
+        create_events(self.multiworld, self.player)
+
     def create_items(self) -> None:
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
         if self.multiworld.start_with_revive[self.player]:
@@ -95,19 +108,6 @@ class RiskOfRainWorld(World):
     def set_rules(self) -> None:
         setup_event_rules(self.multiworld, self.player)
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
-
-    def create_regions(self) -> None:
-        menu = create_region(self.multiworld, self.player, "Menu")
-        petrichor = create_region(self.multiworld, self.player, "Petrichor V",
-                                  [f"ItemPickup{i + 1}" for i in range(self.multiworld.total_locations[self.player].value)])
-
-        connection = Entrance(self.player, "Lobby", menu)
-        menu.exits.append(connection)
-        connection.connect(petrichor)
-
-        self.multiworld.regions += [menu, petrichor]
-
-        create_events(self.multiworld, self.player)
 
     def fill_slot_data(self):
         return {
