@@ -3,17 +3,14 @@
 ## Required Software
 
 - Subnautica from: [Subnautica Steam Store Page](https://store.steampowered.com/app/264710/Subnautica/)
-- QModManager4 from: [QModManager4 Nexus Mods Page](https://www.nexusmods.com/subnautica/mods/201)
 - Archipelago Mod for Subnautica
   from: [Subnautica Archipelago Mod Releases Page](https://github.com/Berserker66/ArchipelagoSubnauticaModSrc/releases)
 
 ## Installation Procedure
 
-1. Install QModManager4 as per its instructions.
+1. Unpack the Archipelago Mod into your Subnautica folder, so that `Subnautica/BepInEx` is a valid path.
 
-2. The Subnautica game directory should now contain a `QMods` folder. Unpack the Archipelago Mod into this folder, so that `Subnautica/QMods/Archipelago/` is a valid path.
-
-3. Start Subnautica. You should see a connect form with three text boxes in the top left of your main menu.
+2. Start Subnautica. You should see a connect form with three text boxes in the top left of your main menu.
 
 ## Connecting
 
@@ -36,6 +33,7 @@ Warning: Currently it is not checked whether a loaded savegame belongs to the mu
 ## Console Commands
 
 The mod adds the following console commands:
+ - `say` sends the text following it to Archipelago as a chat message. ! is not an allowed character, use / instead.
  - `silent` toggles Archipelago chat messages appearing.
  - `deathlink` toggles death link.
 
@@ -51,6 +49,6 @@ To enter a console command, press `Enter`.
 
 ## Troubleshooting
 
-If you don't see the connect form on the main menu screen, check whether you see a file named `qmodmanager_log-Subnautica.txt` in the Subnautica game directory. If not,
-QModManager4 is not correctly installed, otherwise open it and look for `Loading [Archipelago`. If the file doesn't contain this text, then
-QModManager4 didn't find the Archipelago mod, so check your paths.
+If you don't see the connect form on the main menu screen, check whether you see a file named `LogOutput.txt` in the Subnautica/BepInEx directory. 
+If not, BepInEx is not correctly installed, otherwise open it and look for `Plugin Archipelago is loaded!`. 
+If the file doesn't contain this text, then BepInEx didn't find the Archipelago mod, so check your paths.

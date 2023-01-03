@@ -77,7 +77,8 @@ class LevelShuffle(Toggle):
 
 class SwapDonutGhostHouseExits(Toggle):
     """
-    If enabled, this option will swap which overworld direction the two exits of the level at the Donut Ghost House overworld tile go:
+    If enabled, this option will swap which overworld direction the two exits of the level at the Donut Ghost House
+        overworld tile go:
     False: Normal Exit goes up, Secret Exit goes right.
     True: Normal Exit goes right, Secret Exit goes up.
     """

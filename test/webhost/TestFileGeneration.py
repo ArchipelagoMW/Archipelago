@@ -7,10 +7,11 @@ import WebHost
 
 
 class TestFileGeneration(unittest.TestCase):
-    def setUp(self) -> None:
-        self.correct_path = os.path.join(os.path.dirname(WebHost.__file__), "WebHostLib")
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.correct_path = os.path.join(os.path.dirname(WebHost.__file__), "WebHostLib")
         # should not create the folder *here*
-        self.incorrect_path = os.path.join(os.path.split(os.path.dirname(__file__))[0], "WebHostLib")
+        cls.incorrect_path = os.path.join(os.path.split(os.path.dirname(__file__))[0], "WebHostLib")
 
     def testOptions(self):
         WebHost.create_options_files()

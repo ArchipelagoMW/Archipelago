@@ -4,6 +4,7 @@ window.addEventListener('load', () => {
         "ordering": true,
         "info": false,
         "dom": "t",
+        "stateSave": true,
     });
   console.log(tables);
 });
