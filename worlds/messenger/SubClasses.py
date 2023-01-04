@@ -51,12 +51,10 @@ class MessengerItem(Item):
 
     def __init__(self, name: str, world: "MessengerWorld"):
         item_class = ItemClassification.filler
-        if name in {*NOTES, *PROG_ITEMS, *PHOBEKINS}:
+        item_id = world.item_name_to_id[name] if name in world.item_name_to_id else None
+        if name in {*NOTES, *PROG_ITEMS, *PHOBEKINS} or item_id is None:
             item_class = ItemClassification.progression
         elif name in USEFUL_ITEMS:
             item_class = ItemClassification.useful
-        item_id = world.item_name_to_id[name] if name in world.item_name_to_id else None
-        if item_id is None:
-            item_class = ItemClassification.progression
         super().__init__(name, item_class, item_id, world.player)
 

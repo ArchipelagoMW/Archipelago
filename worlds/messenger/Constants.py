@@ -15,7 +15,7 @@ PROG_ITEMS = [
     "Ninja Tabi",
     "Power Thistle",
     "Demon King Crown",
-    "Ruxxtin Amulet",
+    "Ruxxtin's Amulet",
     "Fairy Bottle",
     "Sun Crest",
     "Moon Crest",
@@ -49,7 +49,7 @@ ALL_ITEMS = [
     "Seashell",
     "Power Thistle",
     "Demon King Crown",
-    "Ruxxtin Amulet",
+    "Ruxxtin's Amulet",
     "Fairy Bottle",
     "Sun Crest",
     "Moon Crest",
@@ -142,7 +142,7 @@ SEALS = [
     "Riviere Turquoise Seal - Launch of Faith",
     "Riviere Turquoise Seal - Flower Power",
 
-    "Elemental Skylands Seal - Air Seal",
-    "Elemental Skylands Seal - Water Seal",
-    "Elemental Skylands Seal - Fire Seal"
+    "Elemental Skylands Seal - Air",
+    "Elemental Skylands Seal - Water",
+    "Elemental Skylands Seal - Fire"
 ]

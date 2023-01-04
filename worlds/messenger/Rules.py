@@ -11,10 +11,10 @@ class MessengerRules:
             "Catacombs": lambda state: self.has_wingsuit(state, player),
             "Bamboo Creek": lambda state: self.has_wingsuit(state, player),
             "Searing Crags Upper": lambda state: self.has_vertical(state, player),
-            "Cloud Ruins": lambda state: self.has_wingsuit(state, player),
+            "Cloud Ruins": lambda state: self.has_wingsuit(state, player) and state.has("Ruxxtin's Amulet", player),
             "Underworld": lambda state: self.has_tabi(state, player),
-            "Forlorn Temple": lambda state: state.has_all(PHOBEKINS, player)
-                                            and self.has_wingsuit(state, player),
+            "Forlorn Temple": lambda state: state.has_all(PHOBEKINS, player) and self.has_wingsuit(state, player),
+            "Glacial Peak": lambda state: self.has_vertical(state, player),
             "Elemental Skylands": lambda state: state.has("Fairy Bottle", player),
             "Music Box": lambda state: state.has_all(NOTES, player)
         }
@@ -40,8 +40,6 @@ class MessengerRules:
             "Tower of Time Seal - Lantern Climb": lambda state: self.has_wingsuit(state, player),
             "Tower of Time Seal - Arcane Orbs": lambda state: self.has_wingsuit(state, player)
                                                               and self.has_dart(state, player),
-            # cloud ruins
-            "Acro": lambda state: state.has("Ruxxtin Amulet", player),
             # underworld
             "Underworld Seal - Sharp and Windy Climb": lambda state: self.has_wingsuit(state, player),
             "Underworld Seal - Fireball Wave": lambda state: self.has_wingsuit(state, player),
