@@ -1,11 +1,11 @@
 import string
 from typing import Dict, List, Any
-from .Items import RiskOfRainItem, item_table, item_pool_weights
-from .Locations import RiskOfRainLocation, item_pickups
 
-from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
-from worlds.AutoWorld import World, WebWorld
-from .Options import ror2_options, ItemWeights
+from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, RegionType, Tutorial
+from worlds.AutoWorld import WebWorld, World
+from .Items import RiskOfRainItem, item_pool_weights, item_table
+from .Locations import RiskOfRainLocation, item_pickups
+from .Options import ItemWeights, ror2_options
 from .Rules import setup_event_rules
 
 client_version = 1
@@ -38,7 +38,6 @@ class RiskOfRainWorld(World):
     location_name_to_id = item_pickups
 
     data_version = 4
-    forced_auto_forfeit = True
     web = RiskOfWeb()
     total_revivals: int
 

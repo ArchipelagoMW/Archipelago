@@ -32,16 +32,16 @@ class Overcooked2Dlc(Enum):
         assert False
 
     # inclusive
+    @property
     def start_level_id(self) -> int:
-        if self == Overcooked2Dlc.STORY:
-            return 1
         return 0
 
     # exclusive
+    @property
     def end_level_id(self) -> int:
         id = None
         if self == Overcooked2Dlc.STORY:
-            id = 6*6 + 8  # world_count*level_count + kevin count
+            id = 1 + 6*6 + 8 # tutorial + world_count*level_count + kevin count
         if self == Overcooked2Dlc.SURF_N_TURF:
             id = 3*4 + 1
         if self == Overcooked2Dlc.CAMPFIRE_COOK_OFF:
@@ -51,9 +51,9 @@ class Overcooked2Dlc(Enum):
         if self == Overcooked2Dlc.CARNIVAL_OF_CHAOS:
             id = 3*4 + 3
         if self == Overcooked2Dlc.SEASONAL:
-            id = 31
+            id = 31 + 1
 
-        return self.start_level_id() + id
+        return self.start_level_id + id
 
     # Tutorial + Horde Levels + Endgame
     def excluded_levels(self) -> List[int]:
