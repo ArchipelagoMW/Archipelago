@@ -60,46 +60,68 @@ class AccessTest(MessengerTestBase):
                      "Underworld Seal - Sharp and Windy Climb", "Underworld Seal - Fireball Wave",
                      "Elemental Skylands Seal - Air", "Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset",
                      "Power Thistle", "Key of Strength", "Glacial Peak Seal - Projectile Spike Pit",
-                     "Glacial Peak Seal - Glacial Air Swag", "Fairy Bottle", "Riviere Turquoise Seal - Flower Power"]
+                     "Glacial Peak Seal - Glacial Air Swag", "Fairy Bottle", "Riviere Turquoise Seal - Flower Power",
+                     "Searing Crags Seal - Triple Ball Spinner", "Searing Crags Seal - Raining Rocks",
+                     "Searing Crags Seal - Rhythm Rocks"]
         items = [["Wingsuit", "Rope Dart"]]
         self.assertAccessDependency(locations, items)
 
-    def testQuests(self):
-        """specific "quest item" turn-in requirements"""
+    def testAmulet(self):
+        """Locations that require Ruxxtin's Amulet"""
         locations = ["Acro", "Cloud Ruins Seal - Ghost Pit", "Cloud Ruins Seal - Toothbrush Alley",
                      "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room"]
         """Cloud Ruins requires Ruxxtin's Amulet"""
         items = [["Ruxxtin's Amulet"]]
         self.assertAccessDependency(locations, items)
 
+    def testBottle(self):
+        """Elemental Skylands and Corrupted Future require the Fairy Bottle"""
         locations = ["Key of Symbiosis", "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Fire",
                      "Elemental Skylands Seal - Water", "Key of Courage"]
-        """Elemental Skylands and Corrupted Future require the Fairy Bottle"""
         items = [["Fairy Bottle"]]
         self.assertAccessDependency(locations, items)
 
+    def testCrests(self):
+        """Test Key of Love nonsense"""
         locations = ["Key of Love"]
         items = [["Sun Crest", "Moon Crest"]]
         self.assertAccessDependency(locations, items)
         self.collect_all_but("Sun Crest")
         self.assertEqual(self.can_reach_location("Key of Love"), False)
-        self.remove("Moon Crest")
+        self.remove(self.get_item_by_name("Moon Crest"))
         self.collect_all_but("Moon Crest")
         self.assertEqual(self.can_reach_location("Key of Love"), False)
 
+    def testThistle(self):
+        """I'm a chuckster!"""
         locations = ["Key of Strength"]
         items = [["Power Thistle"]]
         self.assertAccessDependency(locations, items)
 
+    def testCrown(self):
+        """Crocomire but not"""
         locations = ["Key of Courage"]
         items = [["Demon King Crown"]]
         self.assertAccessDependency(locations, items)
 
     def testGoal(self):
+        """Test some different states to verify goal requires the correct items"""
         self.collect_all_but([*NOTES, "Rescue Phantom"])
         self.assertEqual(self.can_reach_location("Rescue Phantom"), False)
         self.collect_all_but(["Key of Love", "Rescue Phantom"])
         self.assertBeatable(False)
         self.collect_by_name(["Key of Love"])
         self.assertEqual(self.can_reach_location("Rescue Phantom"), True)
+        self.assertBeatable(True)
+
+
+class NoLogicTest(MessengerTestBase):
+    options = {
+        "enable_logic": "false"
+    }
+
+    def testNoLogic(self):
+        """Test some funny locations to make sure they aren't reachable but we can still win"""
+        self.assertEqual(self.can_reach_location("Pyro"), False)
+        self.assertEqual(self.can_reach_location("Rescue Phantom"), False)
         self.assertBeatable(True)

@@ -1,6 +1,6 @@
 from typing import Set
 
-from BaseClasses import Region, RegionType, Location, Item, ItemClassification, Entrance
+from BaseClasses import Region, RegionType, Location, Item, ItemClassification, Entrance, LocationProgressType
 from .Constants import SEALS, NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
 from .Regions import REGIONS
 
@@ -13,17 +13,15 @@ class MessengerRegion(Region):
         self.add_locations()
         world.multiworld.regions.append(self)
 
-    def create_location(self, name: str) -> "Location":
-        loc = MessengerLocation(name, self)
-        return loc
-
     def add_locations(self) -> None:
         for loc in REGIONS[self.name]:
-            self.locations.append(self.create_location(loc))
+            self.locations.append(MessengerLocation(loc, self))
         if self.multiworld.shuffle_seals[self.player]:
-            seal_locs = [loc for loc in SEALS if loc.startswith(self.name)]
+            # putting some dumb special case for searing crags so i can split it into 2 regions
+            seal_locs = [loc for loc in SEALS
+                         if loc.startswith(self.name.split(" ")[0]) and self.name != "Searing Crags"]
             for seal_loc in seal_locs:
-                self.locations.append(self.create_location(seal_loc))
+                self.locations.append(MessengerLocation(seal_loc, self))
 
     def add_exits(self, exits: Set[str]) -> None:
         for exit in exits:

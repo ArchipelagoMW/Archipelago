@@ -33,7 +33,7 @@ USEFUL_ITEMS = [
 ]
 
 JUNK = [
-    "Time Shard",  # currently just send in quantity of 1. Need to engineer a way to send this in quantities.
+    "Time Shard",  # currently just send in quantity of 69. Need to engineer a way to send this in quantities.
     "Candle",
     "Seashell",
 ]
@@ -111,7 +111,7 @@ SEALS = [
 
     "Searing Crags Seal - Triple Ball Spinner",
     "Searing Crags Seal - Raining Rocks",
-    "Searing Crags Seal - Rythym Rocks",
+    "Searing Crags Seal - Rhythm Rocks",
 
     "Glacial Peak Seal - Ice Climbers",
     "Glacial Peak Seal - Projectile Spike Pit",
