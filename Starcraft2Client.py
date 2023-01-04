@@ -639,6 +639,13 @@ def request_unfinished_missions(ctx: SC2Context):
 
         _, unfinished_missions = calc_unfinished_missions(ctx, unlocks=unlocks)
 
+        # Removing All-In from location pool
+        final_mission = lookup_id_to_mission[ctx.final_mission]
+        if final_mission in unfinished_missions.keys():
+            message = f"Final Mission Available: {final_mission}[{ctx.final_mission}]\n" + message
+            if unfinished_missions[final_mission] == -1:
+                unfinished_missions.pop(final_mission)
+
         message += ", ".join(f"{mark_up_mission_name(ctx, mission, unlocks)}[{ctx.mission_req_table[mission].id}] " +
                              mark_up_objectives(
                                  f"[{len(unfinished_missions[mission])}/"

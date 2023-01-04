@@ -677,6 +677,22 @@ def handle_collected_paths(rom):
     rom.write_bytes(COLLECTED_PATHS_SUB_ADDR + 0x13, bytearray([0x6B]))                   # RTL
 
 
+def handle_vertical_scroll(rom):
+    rom.write_bytes(0x285BA, bytearray([0x22, 0x90, 0xBC, 0x03])) # JSL $03BC90
+
+    VERTICAL_SCROLL_SUB_ADDR = 0x01BC90
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x00, bytearray([0x4A]))       # LSR
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x01, bytearray([0x4A]))       # LSR
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x02, bytearray([0x4A]))       # LSR
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x03, bytearray([0x4A]))       # LSR
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x04, bytearray([0x08]))       # PHP
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x05, bytearray([0xC9, 0x02])) # CMP #02
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x07, bytearray([0xD0, 0x02])) # BNE +0x02
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x09, bytearray([0xA9, 0x01])) # LDA #01
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x0B, bytearray([0x28]))       # PLP
+    rom.write_bytes(VERTICAL_SCROLL_SUB_ADDR + 0x0C, bytearray([0x6B]))       # RTL
+
+
 def handle_music_shuffle(rom, world, player):
     from .Aesthetics import generate_shuffled_level_music, generate_shuffled_ow_music, level_music_address_data, ow_music_address_data
 
@@ -794,7 +810,9 @@ def patch_rom(world, rom, player, active_level_dict):
 
     # Repurpose Bonus Stars counter for Boss Token or Yoshi Eggs
     rom.write_bytes(0x3F1AA, bytearray([0x00] * 0x20))
-    rom.write_bytes(0x20F9F, bytearray([0xEA] * 0x3B))
+
+     # Delete Routine that would copy Mario position data over repurposed Luigi save data
+    rom.write_bytes(0x20F9F, bytearray([0xEA] * 0x3D))
 
     # Prevent Switch Palaces setting the Switch Palace flags
     rom.write_bytes(0x6EC9A, bytearray([0xEA, 0xEA]))
@@ -807,6 +825,8 @@ def patch_rom(world, rom, player, active_level_dict):
     handle_bowser_damage(rom)
 
     handle_collected_paths(rom)
+
+    handle_vertical_scroll(rom)
 
     # Handle Level Shuffle
     handle_level_shuffle(rom, active_level_dict)
