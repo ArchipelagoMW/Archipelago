@@ -27,7 +27,7 @@ class MessengerRegion(Region):
 
     def add_exits(self, exits: Set[str]) -> None:
         for exit in exits:
-            ret = Entrance(self.player, exit, self)
+            ret = Entrance(self.player, f"{self.name} -> {exit}", self)
             if exit in self.rules.region_rules:
                 ret.access_rule = self.rules.region_rules[exit]
             self.exits.append(ret)

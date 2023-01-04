@@ -97,8 +97,9 @@ class AccessTest(MessengerTestBase):
 
     def testGoal(self):
         self.collect_all_but([*NOTES, "Rescue Phantom"])
-        self.assertBeatable(False)
+        self.assertEqual(self.can_reach_location("Rescue Phantom"), False)
         self.collect_all_but(["Key of Love", "Rescue Phantom"])
         self.assertBeatable(False)
-        self.collect_by_name(["Key of Love", "Rescue Phantom"])
+        self.collect_by_name(["Key of Love"])
+        self.assertEqual(self.can_reach_location("Rescue Phantom"), True)
         self.assertBeatable(True)

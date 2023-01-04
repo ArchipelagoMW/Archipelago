@@ -26,26 +26,27 @@ REGIONS: Dict[str, Set[str]] = {  # seal locations have the region in their name
 }
 
 
-REGION_CONNECTIONS: Dict[str, Set[str]] = {  # from -> to
+REGION_CONNECTIONS: Dict[str, Set[str]] = {
+    """Vanilla layout mapping with all Tower HQ portals open. from -> to"""
     "Menu": {"Tower HQ"},
     "Tower HQ": {"Autumn Hills", "Howling Grotto", "Searing Crags", "Glacial Peak", "Tower of Time", "Riviere Turquoise",
                  "Sunken Shrine", "Corrupted Future", "The Shop", "Music Box"},
-    "Ninja Village": {"Autumn Hills"},
-    "Autumn Hills": {"Ninja Village", "Forlorn Temple", "Catacombs", "Tower HQ"},
-    "Forlorn Temple": {"Autumn Hills", "Catacombs", "Bamboo Creek"},
-    "Catacombs": {"Autumn Hills", "Forlorn Temple", "Bamboo Creek", "Dark Cave"},
-    "Bamboo Creek": {"Forlorn Temple", "Catacombs", "Howling Grotto"},
-    "Howling Grotto": {"Bamboo Creek", "Quillshroom Marsh", "Sunken Shrine", "Tower HQ"},
+    "Ninja Village": {},
+    "Autumn Hills": {"Ninja Village", "Forlorn Temple", "Catacombs"},
+    "Forlorn Temple": {"Catacombs", "Bamboo Creek"},
+    "Catacombs": {"Autumn Hills""Bamboo Creek", "Dark Cave"},
+    "Bamboo Creek": {"Catacombs", "Howling Grotto"},
+    "Howling Grotto": {"Bamboo Creek", "Quillshroom Marsh", "Sunken Shrine"},
     "Quillshroom Marsh": {"Howling Grotto", "Searing Crags"},
-    "Searing Crags": {"Searing Crags Upper", "Quillshroom Marsh", "Underworld", "Tower HQ"},
+    "Searing Crags": {"Searing Crags Upper", "Quillshroom Marsh", "Underworld"},
     "Searing Crags Upper": {"Searing Crags", "Glacial Peak"},
     "Glacial Peak": {"Searing Crags Upper", "Tower HQ", "Cloud Ruins", "Elemental Skylands"},
-    "Cloud Ruins": {"Glacial Peak", "Underworld"},
-    "Underworld": {"Searing Crags"},
-    "Tower of Time": {"Tower HQ"},
+    "Cloud Ruins": {"Underworld"},
+    "Underworld": {},
+    "Tower of Time": {},
     "Dark Cave": {"Catacombs", "Riviere Turquoise"},
-    "Riviere Turquoise": {"Tower HQ"},
-    "Sunken Shrine": {"Howling Grotto", "Tower HQ"},
-    "Elemental Skylands": {"Glacial Peak"},
+    "Riviere Turquoise": {},
+    "Sunken Shrine": {"Howling Grotto"},
+    "Elemental Skylands": {},
 }
 
