@@ -116,7 +116,8 @@ class Context:
                       "location_check_points": int,
                       "server_password": str,
                       "password": str,
-                      "forfeit_mode": str,
+                      "forfeit_mode": str,  # TODO remove around 0.4
+                      "release_mode": str,
                       "remaining_mode": str,
                       "collect_mode": str,
                       "item_cheat": bool,
@@ -171,7 +172,7 @@ class Context:
         self.location_check_points = location_check_points
         self.hints_used = collections.defaultdict(int)
         self.hints: typing.Dict[team_slot, typing.Set[NetUtils.Hint]] = collections.defaultdict(set)
-        self.forfeit_mode: str = forfeit_mode
+        self.release_mode: str = forfeit_mode
         self.remaining_mode: str = remaining_mode
         self.collect_mode: str = collect_mode
         self.item_cheat = item_cheat
@@ -513,9 +514,10 @@ class Context:
             "group_collected": dict(self.group_collected),
             "stored_data": self.stored_data,
             "game_options": {"hint_cost": self.hint_cost, "location_check_points": self.location_check_points,
-                             "server_password": self.server_password, "password": self.password, "forfeit_mode":
-                             self.forfeit_mode, "remaining_mode": self.remaining_mode, "collect_mode":
-                             self.collect_mode, "item_cheat": self.item_cheat, "compatibility": self.compatibility}
+                             "server_password": self.server_password, "password": self.password,
+                             "forfeit_mode": self.release_mode, "release_mode": self.release_mode,  # TODO remove forfeit_mode around 0.4
+                             "remaining_mode": self.remaining_mode, "collect_mode": self.collect_mode,
+                             "item_cheat": self.item_cheat, "compatibility": self.compatibility}
 
         }
 
@@ -546,7 +548,7 @@ class Context:
             self.location_check_points = savedata["game_options"]["location_check_points"]
             self.server_password = savedata["game_options"]["server_password"]
             self.password = savedata["game_options"]["password"]
-            self.forfeit_mode = savedata["game_options"]["forfeit_mode"]
+            self.release_mode = savedata["game_options"]["release_mode"]
             self.remaining_mode = savedata["game_options"]["remaining_mode"]
             self.collect_mode = savedata["game_options"]["collect_mode"]
             self.item_cheat = savedata["game_options"]["item_cheat"]
@@ -658,10 +660,10 @@ class Context:
         self.notify_all(finished_msg)
         if "auto" in self.collect_mode:
             collect_player(self, client.team, client.slot)
-        if "auto" in self.forfeit_mode:
-            forfeit_player(self, client.team, client.slot)
+        if "auto" in self.release_mode:
+            release_player(self, client.team, client.slot)
         elif self.forced_auto_forfeits[self.games[client.slot]]:
-            forfeit_player(self, client.team, client.slot)
+            release_player(self, client.team, client.slot)
         self.save()  # save goal completion flag
 
     def on_new_hint(self, team: int, slot: int):
@@ -734,7 +736,8 @@ async def on_client_connected(ctx: Context, client: Client):
 
 def get_permissions(ctx) -> typing.Dict[str, Permission]:
     return {
-        "forfeit": Permission.from_text(ctx.forfeit_mode),
+        "forfeit": Permission.from_text(ctx.release_mode),  # TODO remove around 0.4
+        "release": Permission.from_text(ctx.release_mode),
         "remaining": Permission.from_text(ctx.remaining_mode),
         "collect": Permission.from_text(ctx.collect_mode)
     }
@@ -862,7 +865,7 @@ def update_checked_locations(ctx: Context, team: int, slot: int):
                   [{"cmd": "RoomUpdate", "checked_locations": get_checked_checks(ctx, team, slot)}])
 
 
-def forfeit_player(ctx: Context, team: int, slot: int):
+def release_player(ctx: Context, team: int, slot: int):
     """register any locations that are in the multidata"""
     all_locations = set(ctx.locations[slot])
     ctx.notify_all("%s (Team #%d) has released all remaining items from their world." % (ctx.player_names[(team, slot)], team + 1))
@@ -1228,23 +1231,19 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     def _cmd_release(self) -> bool:
         """Sends remaining items in your world to their recipients."""
-        return self._cmd_forfeit()
-
-    def _cmd_forfeit(self) -> bool:
-        """Surrender and send your remaining items out to their recipients. Use release in the future."""
         if self.ctx.allow_forfeits.get((self.client.team, self.client.slot), False):
-            forfeit_player(self.ctx, self.client.team, self.client.slot)
+            release_player(self.ctx, self.client.team, self.client.slot)
             return True
-        if "enabled" in self.ctx.forfeit_mode:
-            forfeit_player(self.ctx, self.client.team, self.client.slot)
+        if "enabled" in self.ctx.release_mode:
+            release_player(self.ctx, self.client.team, self.client.slot)
             return True
-        elif "disabled" in self.ctx.forfeit_mode:
+        elif "disabled" in self.ctx.release_mode:
             self.output("Sorry, client item releasing has been disabled on this server. "
                         "You can ask the server admin for a /release")
             return False
         else:  # is auto or goal
             if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
-                forfeit_player(self.ctx, self.client.team, self.client.slot)
+                release_player(self.ctx, self.client.team, self.client.slot)
                 return True
             else:
                 self.output(
@@ -1873,22 +1872,17 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_release(self, player_name: str) -> bool:
         """Send out the remaining items from a player to their intended recipients."""
-        return self._cmd_forfeit(player_name)
-
-    @mark_raw
-    def _cmd_forfeit(self, player_name: str) -> bool:
-        """Send out the remaining items from a player to their intended recipients."""
         player = self.resolve_player(player_name)
         if player:
             team, slot, _ = player
-            forfeit_player(self.ctx, team, slot)
+            release_player(self.ctx, team, slot)
             return True
 
         self.output(f"Could not find player {player_name} to release")
         return False
 
     @mark_raw
-    def _cmd_allow_forfeit(self, player_name: str) -> bool:
+    def _cmd_allow_release(self, player_name: str) -> bool:
         """Allow the specified player to use the !release command."""
         player = self.resolve_player(player_name)
         if player:
@@ -1901,7 +1895,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         return False
 
     @mark_raw
-    def _cmd_forbid_forfeit(self, player_name: str) -> bool:
+    def _cmd_forbid_release(self, player_name: str) -> bool:
         """"Disallow the specified player from using the !release command."""
         player = self.resolve_player(player_name)
         if player:
@@ -2061,7 +2055,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                     return input_text
             setattr(self.ctx, option_name, attrtype(option))
             self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
-            if option_name in {"forfeit_mode", "remaining_mode", "collect_mode"}:
+            if option_name in {"forfeit_mode", "release_mode", "remaining_mode", "collect_mode"}:  # TODO remove forfeit_mode with 0.4
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
             elif option_name in {"hint_cost", "location_check_points"}:
                 self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
@@ -2106,14 +2100,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--location_check_points', default=defaults["location_check_points"], type=int)
     parser.add_argument('--hint_cost', default=defaults["hint_cost"], type=int)
     parser.add_argument('--disable_item_cheat', default=defaults["disable_item_cheat"], action='store_true')
-    parser.add_argument('--forfeit_mode', default=defaults["forfeit_mode"], nargs='?',
+    parser.add_argument('--release_mode', default=defaults["release_mode"], nargs='?',
                         choices=['auto', 'enabled', 'disabled', "goal", "auto-enabled"], help='''\
-                             Select !forfeit Accessibility. (default: %(default)s)
-                             auto:     Automatic "forfeit" on goal completion
-                             enabled:  !forfeit is always available
-                             disabled: !forfeit is never available
-                             goal:     !forfeit can be used after goal completion
-                             auto-enabled: !forfeit is available and automatically triggered on goal completion
+                             Select !release Accessibility. (default: %(default)s)
+                             auto:     Automatic "release" on goal completion
+                             enabled:  !release is always available
+                             disabled: !release is never available
+                             goal:     !release can be used after goal completion
+                             auto-enabled: !release is available and automatically triggered on goal completion
                              ''')
     parser.add_argument('--collect_mode', default=defaults["collect_mode"], nargs='?',
                         choices=['auto', 'enabled', 'disabled', "goal", "auto-enabled"], help='''\
@@ -2135,7 +2129,7 @@ def parse_args() -> argparse.Namespace:
                         help="automatically shut down the server after this many minutes without new location checks. "
                              "0 to keep running. Not yet implemented.")
     parser.add_argument('--use_embedded_options', action="store_true",
-                        help='retrieve forfeit, remaining and hint options from the multidata file,'
+                        help='retrieve release, remaining and hint options from the multidata file,'
                              ' instead of host.yaml')
     parser.add_argument('--compatibility', default=defaults["compatibility"], type=int,
                         help="""
@@ -2177,7 +2171,7 @@ async def main(args: argparse.Namespace):
     Utils.init_logging("Server", loglevel=args.loglevel.lower())
 
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
-                  args.hint_cost, not args.disable_item_cheat, args.forfeit_mode, args.collect_mode,
+                  args.hint_cost, not args.disable_item_cheat, args.release_mode, args.collect_mode,
                   args.remaining_mode,
                   args.auto_shutdown, args.compatibility, args.log_network)
     data_filename = args.multidata

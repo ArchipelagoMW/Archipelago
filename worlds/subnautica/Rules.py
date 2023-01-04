@@ -113,7 +113,11 @@ def has_stasis_rifle(state: "CollectionState", player: int) -> bool:
 
 
 def has_containment(state: "CollectionState", player: int) -> bool:
-    return state.has("Alien Containment Fragment", player, 2) and state.has("Multipurpose Room", player)
+    return state.has("Alien Containment", player) and has_utility_room(state, player)
+
+
+def has_utility_room(state: "CollectionState", player: int) -> bool:
+    return state.has("Large Room", player) or state.has("Multipurpose Room", player)
 
 
 # Either we have propulsion cannon, or prawn + propulsion cannon arm
