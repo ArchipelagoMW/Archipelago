@@ -179,11 +179,13 @@ class WorldTestBase(unittest.TestCase):
 
         self.collect_all_but(all_items)
         for location in self.multiworld.get_locations():
-            self.assertEqual(self.multiworld.state.can_reach(location), location.name not in locations)
+            self.assertEqual(self.multiworld.state.can_reach(location), location.name not in locations,
+                             f"{location.name} failed accessibility dependency check for {all_items}")
         for item_names in possible_items:
             items = self.collect_by_name(item_names)
             for location in locations:
-                self.assertTrue(self.can_reach_location(location))
+                self.assertTrue(self.can_reach_location(location), f"collected {[item for item in items]} but failed "
+                                                                   f"accessibility check for {location}")
             self.remove(items)
 
     def assertBeatable(self, beatable: bool):
