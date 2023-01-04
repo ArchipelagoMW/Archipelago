@@ -27,14 +27,13 @@ REGIONS: Dict[str, Set[str]] = {  # seal locations have the region in their name
 
 
 REGION_CONNECTIONS: Dict[str, Set[str]] = {
-    """Vanilla layout mapping with all Tower HQ portals open. from -> to"""
     "Menu": {"Tower HQ"},
     "Tower HQ": {"Autumn Hills", "Howling Grotto", "Searing Crags", "Glacial Peak", "Tower of Time", "Riviere Turquoise",
                  "Sunken Shrine", "Corrupted Future", "The Shop", "Music Box"},
     "Ninja Village": {},
     "Autumn Hills": {"Ninja Village", "Forlorn Temple", "Catacombs"},
     "Forlorn Temple": {"Catacombs", "Bamboo Creek"},
-    "Catacombs": {"Autumn Hills""Bamboo Creek", "Dark Cave"},
+    "Catacombs": {"Autumn Hills", "Bamboo Creek", "Dark Cave"},
     "Bamboo Creek": {"Catacombs", "Howling Grotto"},
     "Howling Grotto": {"Bamboo Creek", "Quillshroom Marsh", "Sunken Shrine"},
     "Quillshroom Marsh": {"Howling Grotto", "Searing Crags"},
@@ -49,4 +48,4 @@ REGION_CONNECTIONS: Dict[str, Set[str]] = {
     "Sunken Shrine": {"Howling Grotto"},
     "Elemental Skylands": {},
 }
-
+"""Vanilla layout mapping with all Tower HQ portals open. from -> to"""
