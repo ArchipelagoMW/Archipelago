@@ -112,11 +112,13 @@ class RiskOfRainWorld(World):
     def fill_slot_data(self):
         option_results: Dict[str, Any] = {}
         for option in ror2_options:
-            split_name = option.split(" ")
-            split_name = [name.title() for name in split_name]
-            split_name[0].lower()
+            if "scrap" in option or "item" in option:
+                continue
+            split_name = [name.title() for name in option.split("_")]
+            split_name[0] = split_name[0].lower()
             option_results["".join(split_name)] = getattr(self.multiworld, option)[self.player].value
 
+        print(option_results)
         return option_results
 
     def create_item(self, name: str) -> Item:
