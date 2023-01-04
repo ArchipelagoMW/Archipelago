@@ -39,7 +39,7 @@ class SpireWorld(World):
     def _get_slot_data(self):
         return {
             'seed': "".join(self.multiworld.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16)),
-            'character': self.multiworld.character[self.player],
+            'character': self.multiworld.character[self.player].get_option_name,
             'ascension': self.multiworld.ascension[self.player],
             'heart_run': self.multiworld.heart_run[self.player]
         }
@@ -77,7 +77,7 @@ class SpireWorld(World):
         slot_data = self._get_slot_data()
         for option_name in spire_options:
             option = getattr(self.multiworld, option_name)[self.player]
-            slot_data[option_name] = int(option.value)
+            slot_data[option_name] = option.value
         return slot_data
 
     def get_filler_item_name(self) -> str:

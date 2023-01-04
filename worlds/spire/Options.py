@@ -1,15 +1,20 @@
 import typing
-from Options import Choice, Option, Range, Toggle
+from Options import TextChoice, Option, Range, Toggle
 
 
-class Character(Choice):
-    """Pick What Character you wish to play with."""
+class Character(TextChoice):
+    """Enter the Title of the character you wish to play as, for custom characters this should match exactly the full
+     title that shows up when choosing them in the vanilla character select screen.
+
+     Spire Take the Wheel will have your client pick a random character from the list of all your installed characters
+     including custom ones.
+     """
     display_name = "Character"
-    option_ironclad = 0
-    option_silent = 1
-    option_defect = 2
-    option_watcher = 3
-    default = 0
+    option_the_ironclad = 0
+    option_the_silent = 1
+    option_the_defect = 2
+    option_the_watcher = 3
+    option_spire_take_the_wheel = 4
 
 
 class Ascension(Range):
