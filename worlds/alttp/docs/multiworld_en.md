@@ -11,7 +11,8 @@ and *IS NOT COMPATIBLE WITH (Q)Usb2Snes*
        [BizHawk](http://tasvideos.org/BizHawk.html), or
        [RetroArch](https://retroarch.com?page=platforms) 1.10.1 or newer). Or,
     - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware. **note: 
-modded SNES minis are currently not supported by SNI**
+modded SNES minis are currently not supported by SNI. Some users have claimed success with (Q)Usb2Snes for this system
+but support is not guaranteed.**
 - Your Japanese v1.0 ROM file, probably named `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
 
 ## Installation Procedures
