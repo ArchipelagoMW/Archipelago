@@ -183,7 +183,9 @@ example of using this class refer to `worlds.alttp.options.py`
 
 ### OptionDict
 This option returns a dictionary. Setting a default here is recommended as it
-will output the dictionary to the template.
+will output the dictionary to the template. If you set a [Schema](https://pypi.org/project/schema/) on the class with
+`schema = Schema()`, then the options system will automatically validate the user supplied data against the schema to
+ensure it's in the correct format.
 
 ### ItemDict
 Like OptionDict, except will verify that every key in the dictionary is a valid
