@@ -171,12 +171,13 @@ class OOTWorld(World):
         # ER and glitched logic are not compatible; glitched takes priority
         if self.logic_rules == 'glitched':
             self.shuffle_interior_entrances = 'off'
+            self.shuffle_dungeon_entrances = 'off'
+            self.spawn_positions = 'off'
+            self.shuffle_bosses = 'off'
             self.shuffle_grotto_entrances = False
-            self.shuffle_dungeon_entrances = False
             self.shuffle_overworld_entrances = False
             self.owl_drops = False
             self.warp_songs = False
-            self.spawn_positions = 'off'
 
         # Fix spawn positions option
         new_sp = []
@@ -283,8 +284,17 @@ class OOTWorld(World):
         self.shuffle_special_dungeon_entrances = self.shuffle_dungeon_entrances == 'all'
         self.shuffle_dungeon_entrances = self.shuffle_dungeon_entrances != 'off'
         self.ensure_tod_access = (self.shuffle_interior_entrances != 'off') or self.shuffle_overworld_entrances or self.spawn_positions
-        self.entrance_shuffle = (self.shuffle_interior_entrances != 'off') or self.shuffle_grotto_entrances or self.shuffle_dungeon_entrances or \
-                                self.shuffle_overworld_entrances or self.owl_drops or self.warp_songs or self.spawn_positions
+        self.entrance_shuffle = (
+            self.shuffle_interior_entrances != 'off'
+            or self.shuffle_bosses != 'off'
+            or self.shuffle_dungeon_entrances
+            or self.shuffle_special_dungeon_entrances
+            or self.spawn_positions
+            or self.shuffle_grotto_entrances
+            or self.shuffle_overworld_entrances
+            or self.owl_drops
+            or self.warp_songs
+        )
         self.disable_trade_revert = (self.shuffle_interior_entrances != 'off') or self.shuffle_overworld_entrances
         self.shuffle_special_interior_entrances = self.shuffle_interior_entrances == 'all'
 
