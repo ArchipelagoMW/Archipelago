@@ -46,7 +46,7 @@
 
 6. Unpack the Archipelago Mod into this folder, so that `/mods/SA2B_Archipelago` is a valid path.
 
-7. In the SA2B_Archipelago folder, run the `CopyAPCppDLL.sh` script. You may have to give the file execute permissions to do this.
+7. In the SA2B_Archipelago folder, copy the `APCpp.dll` file and paste it in the Sonic Adventure 2 install folder (where `SA2ModManager.exe` is).
 
 8. Launch the `SA2ModManager.exe` from Steam and make sure the SA2B_Archipelago mod is listed and enabled.
 
