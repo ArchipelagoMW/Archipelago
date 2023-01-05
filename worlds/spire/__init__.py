@@ -32,6 +32,7 @@ class SpireWorld(World):
     topology_present = False
     data_version = 1
     web = SpireWeb()
+    required_client_version = (0, 3, 7)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
@@ -62,7 +63,6 @@ class SpireWorld(World):
 
         if self.multiworld.logic[self.player] != 'no logic':
             self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
-
 
     def set_rules(self):
         set_rules(self.multiworld, self.player)
