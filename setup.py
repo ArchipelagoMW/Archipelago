@@ -16,6 +16,7 @@ import setuptools
 from Launcher import components, icon_paths
 from Utils import version_tuple, is_windows, is_linux
 
+# On  Python < 3.10 LogicMixin is not currently supported.
 apworlds: set = {
     "Subnautica",
     "Factorio",
