@@ -22,7 +22,7 @@ class LocationData(typing.NamedTuple):
     yml: str
     charName: str = "Sora"
     charNumber: int = 1
-    #Get bonus and forms bt10
+    #levels and forms bt10
     #popup and chest sys
 
 
@@ -254,7 +254,7 @@ BC_Checks = {
     LocationName.SecretPassageMythrilShard:              LocationData(0x1300B6, 0x149A6,  0x23BD, 2, 44, "Chest"),           
     LocationName.SecretPassageHiPotion:                  LocationData(0x1300B7, 0x149B2,  0x23BD, 5, 168, "Chest"),          
     LocationName.SecretPassageLucidShard:                LocationData(0x1300B8, 0x149BE,  0x23BD, 3, 45, "Chest"),           
-    LocationName.TheWestHallMythrilShardPostDungeon:     LocationData(0x1300B9, 0x14982,  0x23DB, 0, 208, "Chest"),          
+    LocationName.TheWestHallAPBoostPostDungeon:          LocationData(0x1300B9, 0x14982,  0x23DB, 0, 208, "Chest"),          
     LocationName.TheWestWingMythrilShard:                LocationData(0x1300BA, 0x149CA,  0x23BC, 6, 42, "Chest"),           
     LocationName.TheWestWingTent:                        LocationData(0x1300BB, 0x149D6,  0x23BC, 7, 164, "Chest"),          
     LocationName.Beast:                                  LocationData(0x1300BC, 0x2ABC8,  0x3705, 4, 12, "Get Bonus"),       

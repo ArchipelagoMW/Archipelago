@@ -333,7 +333,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.SecretPassageMythrilShard: [16],
         LocationName.SecretPassageHiPotion: [17],
         LocationName.SecretPassageLucidShard: [18],
-        LocationName.TheWestHallMythrilShardPostDungeon: [19],
+        LocationName.TheWestHallAPBoostPostDungeon: [19],
         LocationName.TheWestWingMythrilShard: [20],
         LocationName.TheWestWingTent: [21],
         LocationName.Beast: [22],

@@ -62,17 +62,21 @@ def patch_kh2(world, player, self, output_directory):
     soraStartingItems = []
     goofyStartingItems = []
     donaldStartingItems = []
+    self.codecode_to_name_to={"Item Code":"Name"}
    #multiworld = world.worlds
    #mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
     mod_name="YourMom"
     for location in self.multiworld.get_filled_locations(self.player):
+        self.codecode_to_name_to[location.address.code]={location.name}
         if location.item.game == "Kingdom Hearts 2":
             itemcode = location.item.code.kh2id
         else:
-            #if location in bonus append bt10 list:
-            #    else append sys3
+            #filling in lists for how to check if a chest is opened
+            if location.address.yml=="Levels" or location.address.yml=="Forms":
+                self.bt10multiworld_locaions.append(location.name)
+            else:
+                self.savemultiworld_locations.append(location.name)
             itemcode = 461
-
 
         if location.address.yml=="Chest":
             self.formattedTrsr[location.address.locid] = {"ItemId":itemcode}
@@ -262,5 +266,7 @@ def patch_kh2(world, player, self, output_directory):
     with open(os.path.join(mod_dir, "jm.yml"), "wt") as f:
         f.write(yaml.dump(modYml.getJMYAML(), line_break="\n"))
     shutil.copytree(os.path.join(os.path.dirname(__file__), "mod_template"),mod_dir,dirs_exist_ok=True)
+    #with open(os.path.join(mod_dir, "IhateAPClient.txt"), "wt") as f:
+    #    f.write(code_to_name)
     shutil.make_archive(mod_dir,'zip',mod_dir)
     shutil.rmtree(mod_dir)

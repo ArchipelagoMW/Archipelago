@@ -9,14 +9,13 @@ from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
 from ..generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations
 from .Items import ActionAbility_Table, KH2Item, ItemData, item_dictionary_table, exclusionItem_table, \
-    keybladeAbilities, donaldAbility, goofyAbility
-from .Locations import all_locations, setup_locations, exclusion_table, LoD_Checks
+    keybladeAbilities, donaldAbility, goofyAbility,lookup_id_to_name
+from .Locations import all_locations, setup_locations, exclusion_table, lookup_id_to_Location
 from .Rules import set_rules
 from .logic import KH2Logic
 from .Names import ItemName, LocationName
 from .Regions import create_regions, connect_regions
 from .OpenKH import patch_kh2
-from .XPValues import formExp
 
 
 class KingdomHearts2Web(WebWorld):
@@ -33,37 +32,26 @@ class KingdomHearts2Web(WebWorld):
 class KH2World(World):
     game: str = "Kingdom Hearts 2"
 
-    data_version = 0
+    data_version  = 0
     option_definitions = KH2_Options
     topology_present: bool = True  # show path to required location checks in spoiler
     remote_items: bool = False
     remote_start_inventory: bool = False
     item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
     location_name_to_id = {item_name: data.code for item_name, data in all_locations.items() if data.code}
-    item_name_to_kh2id = {name: data.kh2id for name, data in item_dictionary_table.items()}
-
+    #multiworld locations that are checked in the client using the B10 anchor
+    bt10multiworld_locaions= list()
+    #multiworld locations that are checked in the client using the save anchor
+    savemultiworld_locations= list()
     # Remove this once down will all the options
     # Will need starting items in the slot data but that should only be about it
 
+#            
     def _get_slot_data(self):
         return {
-            "SoraEXP": self.multiworld.Sora_Level_EXP[self.player].value,
-            "FinalEXP": self.multiworld.Final_Form_EXP[self.player].value,
-            "MasterEXP": self.multiworld.Master_Form_EXP[self.player].value,
-            "WisdomEXP": self.multiworld.Wisdom_Form_EXP[self.player].value,
-            "ValorEXP": self.multiworld.Valor_Form_EXP[self.player].value,
-            "LimitEXP": self.multiworld.Limit_Form_EXP[self.player].value,
-            "SummonEXP": self.multiworld.Summon_EXP[self.player].value,
-            "Schmovement": self.multiworld.Schmovement[self.player].value,
-            "Keyblade_Min": self.multiworld.Keyblade_Minimum[self.player].value,
-            "Keyblade_Max": self.multiworld.Keyblade_Maximum[self.player].value,
-            "Visit_locking": self.multiworld.Visit_locking[self.player].value,
-            "Super_Bosses": self.multiworld.Super_Bosses[self.player].value,
-            "Level_Depth": self.multiworld.Level_Depth[self.player].value,
-            "Max_Logic": self.multiworld.Max_Logic[self.player].value,
-            "Starting_Items": self.multiworld.Starting_Items[self.player].value,
-            "Promise_Charm": self.multiworld.Promise_Charm[self.player].value,
-            "Critical_Mode": self.multiworld.Critical_Mode[self.player].value,
+            "bt10multiworld_locations":self.bt10multiworld_locaions,
+            "sysmultiworld_locations":self.savemultiworld_locations,
+            'data_version': self.data_version
         }
 
     def fill_slot_data(self) -> dict:

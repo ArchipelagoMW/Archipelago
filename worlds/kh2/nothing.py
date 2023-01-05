@@ -40,3 +40,34 @@ def _cmd_autotrack(self):
     #    """Check Gameboy Connection State"""
     #    if isinstance(self.ctx, KH2Context):
     #        logger.info("debussy")
+int Now = 0x0714DB8;
+            int Save = 0x09A70B0;
+            int Sys3 = 0x2A59DF0;
+            int Bt10 = 0x2A74880;
+            int BtlEnd = 0x2A0D3E0;
+            int Slot1 = 0x2A20C98;
+WriteShort(Save+0x2544,
+WriteShort(Save+0x2546,
+WriteShort(Save+0x2548,
+WriteShort(Save+0x254A,
+WriteShort(Save+0x254C,
+WriteShort(Save+0x254E,
+WriteShort(Save+0x2550,
+WriteShort(Save+0x2552,
+WriteShort(Save+0x2554,
+WriteShort(Save+0x2556,
+WriteShort(Save+0x2558,
+WriteShort(Save+0x255A,
+WriteShort(Save+0x255C,
+WriteShort(Save+0x255E,
+WriteShort(Save+0x2560,
+WriteShort(Save+0x2562,
+WriteShort(Save+0x2564,
+WriteShort(Save+0x2566,
+WriteShort(Save+0x2568,
+WriteShort(Save+0x256A,
+WriteShort(Save+0x256C,
+WriteShort(Save+0x256E,
+WriteShort(Save+0x2570,
+WriteShort(Save+0x2572,
+WriteShort(Save+0x2574,
