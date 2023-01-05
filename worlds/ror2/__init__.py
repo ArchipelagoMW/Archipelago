@@ -111,13 +111,13 @@ class RiskOfRainWorld(World):
     def fill_slot_data(self):
         option_results: Dict[str, Any] = {}
         for option in ror2_options:
-            if "scrap" in option or "item" in option:
-                continue
             split_name = [name.title() for name in option.split("_")]
             split_name[0] = split_name[0].lower()
+            name = "".join(split_name)
+            if "Scrap" in name or "Item" in name:
+                continue
             option_results["".join(split_name)] = getattr(self.multiworld, option)[self.player].value
 
-        print(option_results)
         return option_results
 
     def create_item(self, name: str) -> Item:
@@ -142,7 +142,7 @@ def create_events(multiworld: MultiWorld, player: int) -> None:
     for i in range(num_of_events):
         event_loc = RiskOfRainLocation(player, f"Pickup{(i + 1) * 25}", None, world_region)
         event_loc.place_locked_item(RiskOfRainItem(f"Pickup{(i + 1) * 25}", ItemClassification.progression, None, player))
-        event_loc.access_rule = lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", player)
+        event_loc.access_rule = lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", "Location", player)
         world_region.locations.append(event_loc)
 
     victory_event = RiskOfRainLocation(player, "Victory", None, world_region)
