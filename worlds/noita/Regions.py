@@ -16,17 +16,23 @@ def create_region(world: MultiWorld, player: int, region_name: str) -> Region:
 
         for i in range(total_locations):
             location_name = f"Chest{i+1}"
-            location_id = 110000+i 
+            location_id = 110000+i
 
             location = Locations.NoitaLocation(player, location_name, location_id, new_region)
-            location.progress_type = LocationProgressType.EXCLUDED
+            location.progress_type = LocationProgressType.DEFAULT
+            # having this as EXCLUDED caused lots of issues with generation, and I don't know why
 
             new_region.locations.append(location)
     else:
         # Here we create and assign locations to the region
-        for location_name, location_id in Locations.location_region_mapping.get(region_name, {}).items():
-            location = Locations.NoitaLocation(player, location_name, location_id, new_region)
-            new_region.locations.append(location)
+        for location_name, location_data in Locations.location_region_mapping.get(region_name, {}).items():
+            location = Locations.NoitaLocation(player, location_name, location_data.id, new_region)
+            opt_orbs = world.orbs_as_checks[player].value
+            opt_bosses = world.bosses_as_checks[player].value
+            ltype = location_data.ltype
+            flag = location_data.flag
+            if flag == 0 or ltype == "orb" and flag >= opt_orbs or ltype == "boss" and flag >= opt_bosses:
+                new_region.locations.append(location)
 
     return new_region
 
@@ -56,16 +62,21 @@ def create_all_regions_and_connections(world: MultiWorld, player: int) -> None:
 
     world.regions += created_regions.values()
 
-
+# todo: find a graceful way to insert the bosses and orbs in their correct regions
 noita_connections: Dict[str, Set[str]] = {
-    "Menu": {"Forest"},
-    "Forest": {"Mines", "Collapsed Mines"},
+    "Menu": {"Forest", "Bosses Main Path", "Bosses The Rest", "Orbs Main Path", "Orbs The Rest", "Orbs Parallel Worlds",},
+    "Forest": {"Mines", "Floating Island", "Desert", "Snowy Wasteland"},
+    "Snowy Wasteland": {"Frozen Vault", "Lake", "Forest"},
+    "Lake": {"Snowy Wasteland", "Desert"},
+    "Desert": {"Lake", "Pyramid"},
+    "Floating Island": {"Forest"},
+    "Pyramid": {"Desert"},
 
     "Mines": {"Collapsed Mines", "Holy Mountain 1 (To Coal Pits)", "Lava Lake", "Forest"},
     "Collapsed Mines": {"Mines", "Holy Mountain 1 (To Coal Pits)", "Dark Cave"},
-    "Lava Lake": {"Mines", "Shaft", "Orb Room", "Below Lava Lake"},
-    "Shaft": {"Lava Lake", "Snowy Depths", "Orb Room", "Below Lava Lake"},
-    "Orb Room": {"Lava Lake", "Shaft"},
+    "Lava Lake": {"Mines", "Shaft", "Abyss Orb Room", "Below Lava Lake"},
+    "Shaft": {"Lava Lake", "Snowy Depths", "Abyss Orb Room", "Below Lava Lake"},
+    "Abyss Orb Room": {"Lava Lake", "Shaft"},
     "Below Lava Lake": {"Lava Lake", "Shaft"},
     "Dark Cave": {"Ancient Laboratory", "Collapsed Mines"},
     "Ancient Laboratory": {"Dark Cave"},
@@ -83,12 +94,13 @@ noita_connections: Dict[str, Set[str]] = {
     ###
     "Holy Mountain 3 (To Hiisi Base)": {"Hiisi Base"},
     "Hiisi Base": {"Holy Mountain 3 (To Hiisi Base)", "Secret Shop", "Holy Mountain 4 (To Underground Jungle)"},
+    "Secret Shop": {"Hiisi Base"},
 
     ###
     "Holy Mountain 4 (To Underground Jungle)": {"Underground Jungle"},
-    "Dragoncave": {"Underground Jungle"},
     "Underground Jungle": {"Holy Mountain 4 (To Underground Jungle)", "Dragoncave", "Holy Mountain 5 (To The Vault)",
                            "Lukki Lair"},
+    "Dragoncave": {"Underground Jungle"},
     "Lukki Lair": {"Underground Jungle", "The Vault"},
 
     ###
@@ -97,12 +109,22 @@ noita_connections: Dict[str, Set[str]] = {
 
     ###
     "Holy Mountain 6 (To Temple of the Art)": {"Temple of the Art"},
-    "Temple of the Art": {"Holy Mountain 6 (To Temple of the Art)", "Holy Mountain 7 (To The Laboratory)", "The Tower"},
+    "Temple of the Art": {"Holy Mountain 6 (To Temple of the Art)", "Holy Mountain 7 (To The Laboratory)", "The Tower",
+                          "Wizard's Den", "Snow Chasm"},
+    "Wizard's Den": {"Temple of the Art", "Powerplant"},
+    "Powerplant": {"Wizard's Den", "Deep Underground"},
     "The Tower": {"Forest"},
+    "Deep Underground": {},
+    "Snow Chasm": {},
 
     ###
     "Holy Mountain 7 (To The Laboratory)": {"The Laboratory"},
-    "The Laboratory": {"Holy Mountain 7 (To The Laboratory)", "The Work"},
+    "The Laboratory": {"Holy Mountain 7 (To The Laboratory)", "The Work", "Friend Cave", "The Work (Hell)"},
+    "Friend Cave": {},
+    "The Work": {},
+    "The Work (Hell)": {},
+    ###
+
 }
 
 noita_regions: Set[str] = set(noita_connections.keys()).union(*noita_connections.values())

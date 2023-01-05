@@ -24,12 +24,15 @@ wand_tiers: List[str] = [
     "Wand (Tier 6)",
 ]
 
-items_hidden_from_shops: Set[str] = {"Gold (10)", "Gold (50)", "Gold (200)", "Gold (1000)", "Potion"}
+items_hidden_from_shops: Set[str] = {"Gold (10)", "Gold (50)", "Gold (200)", "Gold (1000)", "Potion", "Random Potion",
+                                     "Secret Potion", "Chaos Die", "Greed Die", "Kammi", "Refreshing Gourd", "Sadekivi",
+                                     "Broken Wand", "Powder Pouch"}
 
 
 def forbid_items_at_location(world: MultiWorld, location_name: str, items: Set[str], player: int):
     location = world.get_location(location_name, player)
     GenericRules.forbid_items_for_player(location, items, player)
+
 
 def create_all_rules(world: MultiWorld, player: int) -> None:
 
