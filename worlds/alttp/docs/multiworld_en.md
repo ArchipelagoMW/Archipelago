@@ -3,6 +3,8 @@
 ## Required Software
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `SNI Client - A Link to the Past Patch Setup`
+- [SNI](https://github.com/alttpo/sni/releases). This is automatically included with your Archipelago installation above,
+and *IS NOT COMPATIBLE WITH (Q)Usb2Snes*
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI
       ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
@@ -27,35 +29,13 @@ modded SNES minis are currently not supported by SNI**
     5. Browse for your emulator's `.exe` file and click **Open**. This file should be located inside the folder you
        extracted in step one.
 
-## Create a Config (.yaml) File
-
-### What is a config file and why do I need one?
-
-Your config file contains a set of configuration options which provide the generator with information about how it
-should generate your game. Each player of a multiworld will provide their own config file. This setup allows each player
-to enjoy an experience customized for their taste, and different players in the same multiworld can all have different
-options.
-
-### Where do I get a config file?
-
-The [Player Settings](/games/A%20Link%20to%20the%20Past/player-settings) page on the website allows you to configure
-your personal settings and export a config file from them.
-
-### Verifying your config file
-
-If you would like to validate your config file to make sure it works, you may do so on the
-[YAML Validator](/mysterycheck) page.
-
-## Generating a Single-Player Game
+## Generating a MultiWorld Game
 
 1. Navigate to the [Player Settings](/games/A%20Link%20to%20the%20Past/player-settings) page, configure your options,
-   and click the "Generate Game" button.
-2. You will be presented with a "Seed Info" page.
-3. Click the "Create New Room" link.
-4. You will be presented with a server page, from which you can download your patch file.
-5. Double-click on your patch file, and SNIClient will launch automatically, create your ROM from the patch file, and
-   open your emulator for you.
-6. Since this is a single-player game, you will no longer need the client, so feel free to close it.
+   and click the "Export Settings" button.
+   - For instructions on how to generate an Archipelago game with the settings file, refer to the
+[Archipelago Web Guide](/tutorial/Archipelago/using_website/en).
+   - If you manually edit your config file, you can verify it with our [YAML Validator](/mysterycheck).
 
 ## Joining a MultiWorld Game
 
@@ -141,18 +121,3 @@ The client will attempt to reconnect to the new server address, and should momen
 When the client shows both SNES Device and Server as connected, you're ready to begin playing. Congratulations on
 successfully joining a multiworld game! You can execute various commands in your client. For more information regarding
 these commands you can use `/help` for local client commands and `!help` for server commands.
-
-## Hosting a MultiWorld game
-
-The recommended way to host a game is to use our [hosting service](/generate). The process is relatively simple:
-
-1. Collect config files from your players.
-2. Create a zip file containing your players' config files.
-3. Upload that zip file to the website linked above.
-4. Wait a moment while the seed is generated.
-5. When the seed is generated, you will be redirected to a "Seed Info" page.
-6. Click "Create New Room". This will take you to the server page. Provide the link to this page to your players, so
-   they may download their patch files from there.
-7. Note that a link to a MultiWorld Tracker is at the top of the room page. The tracker shows the progress of all
-   players in the game. Any observers may also be given the link to this page.
-8. Once all players have joined, you may begin playing.
