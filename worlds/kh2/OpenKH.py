@@ -29,7 +29,7 @@ from .XPValues import lvlStats, formExp, soraExp
 # import worlds.Files
 
 
-def patch_kh2(world, player, self, output_directory):
+def patch_kh2(self, output_directory):
     # itemName= {location.address.locid: location.item.code.kh2id
     #            for location in self.world.get_filled_locations(self.player)}
     # locName=[location.item.code.kh2id
@@ -245,12 +245,11 @@ def patch_kh2(world, player, self, output_directory):
         })
 
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__, )
-
+    print(self.multiworld.player_name[self.player])
     os.makedirs(mod_dir, exist_ok=False)
     #print(os.path.join(os.path.dirname(__file__), "mod_template"))
     #bossrndo = os.path.join(mod_dir, "Cum")
     #os.makedirs(bossrndo, exist_ok=True)
-    
     with open(os.path.join(mod_dir, "Trsrlist.yml"), "wt") as f:
         f.write(yaml.dump(self.formattedTrsr,line_break="\n"))
     with open(os.path.join(mod_dir, "LvupList.yml"), "wt") as f:
@@ -265,7 +264,10 @@ def patch_kh2(world, player, self, output_directory):
         f.write(yaml.dump(self.formattedPlrp,line_break="\n"))
     with open(os.path.join(mod_dir, "jm.yml"), "wt") as f:
         f.write(yaml.dump(modYml.getJMYAML(), line_break="\n"))
+    with open(os.path.join(mod_dir, "archipelago.json"), "wt") as f:
+        json.dump({"server": "", "player": self.player, "player_name": self.multiworld.player_name[self.player], "game": "Kingdom Hearts 2", "compatible_version": 0, "version": 0},f,indent=4)
     shutil.copytree(os.path.join(os.path.dirname(__file__), "mod_template"),mod_dir,dirs_exist_ok=True)
+    
     #with open(os.path.join(mod_dir, "IhateAPClient.txt"), "wt") as f:
     #    f.write(code_to_name)
     shutil.make_archive(mod_dir,'zip',mod_dir)

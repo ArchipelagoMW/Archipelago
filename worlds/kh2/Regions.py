@@ -1000,7 +1000,7 @@ def connect_regions(world: MultiWorld, player: int, self):
     connect(world, player, names, LocationName.GoA_Region, LocationName.Pr_Region)
     connect(world, player, names, LocationName.Pr_Region, LocationName.Pr2_Region)
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.Bc_Region, )
+    connect(world, player, names, LocationName.GoA_Region, LocationName.Bc_Region)
     connect(world, player, names, LocationName.Bc_Region, LocationName.Bc2_Region)
 
     connect(world, player, names, LocationName.GoA_Region, LocationName.Sp_Region)
@@ -1026,15 +1026,16 @@ def connect_regions(world: MultiWorld, player: int, self):
     connect(world, player, names, LocationName.GoA_Region, LocationName.Twtnw_Region)
     connect(world, player, names, LocationName.Twtnw_Region, LocationName.Twtnw2_Region)
 
-    connect(world, player, names, LocationName.GoA_Region, LocationName.HundredAcre1_Region,
-            lambda state: (state.has(ItemName.TornPages, player, 1)))
+    connect(world, player, names, LocationName.GoA_Region, LocationName.HundredAcre1_Region)
     connect(world, player, names, LocationName.GoA_Region, LocationName.HundredAcre2_Region,
-            lambda state: (state.has(ItemName.TornPages, player, 2)))
+            lambda state: (state.has(ItemName.TornPages, player, 1)))
     connect(world, player, names, LocationName.GoA_Region, LocationName.HundredAcre3_Region,
-            lambda state: (state.has(ItemName.TornPages, player, 3)))
+            lambda state: (state.has(ItemName.TornPages, player, 2)))
     connect(world, player, names, LocationName.GoA_Region, LocationName.HundredAcre4_Region,
-            lambda state: (state.has(ItemName.TornPages, player, 4)))
+            lambda state: (state.has(ItemName.TornPages, player, 3)))
     connect(world, player, names, LocationName.GoA_Region, LocationName.HundredAcre5_Region,
+            lambda state: (state.has(ItemName.TornPages, player, 4)))
+    connect(world, player, names, LocationName.GoA_Region, LocationName.HundredAcre6_Region,
             lambda state: (state.has(ItemName.TornPages, player, 5)))
 
     for region in (firstVisits):
