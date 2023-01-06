@@ -51,6 +51,10 @@ Output Logs/
 /setup.ini
 /registry.iss
 /installdelete.iss
+/generator_components.iss
+/files.iss
+/sni_components.iss
+/code.iss
 
 
 # Byte-compiled / optimized / DLL files
