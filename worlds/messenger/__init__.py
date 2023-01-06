@@ -69,7 +69,7 @@ class MessengerWorld(World):
     def create_items(self) -> None:
         itempool = []
         for item in self.item_name_to_id:
-            if item != "Time Shard":  # if we create this with power seal shuffling off we'll have too many items
+            if item not in {"Power Seal", "Time Shard"}:  # if we create this with power seal shuffling off we'll have too many items
                 itempool.append(self.create_item(item))
         while len(itempool) < len(self.multiworld.get_unfilled_locations(self.player)):
             itempool.append(self.create_filler())

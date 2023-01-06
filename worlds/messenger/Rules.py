@@ -21,6 +21,7 @@ class MessengerRules:
 
         self.location_rules: Dict[str, Callable] = {
             # ninja village
+            "Candle": lambda state: state.has("Astral Tea Leaves", player),
             "Ninja Village Seal - Tree House": lambda state: self.has_dart(state, player),
             # autumn hills
             "Key of Hope": lambda state: self.has_dart(state, player),
@@ -30,6 +31,7 @@ class MessengerRules:
                                                                  and self.has_dart(state, player),
             # searing crags
             "Key of Strength": lambda state: state.has("Power Thistle", player),
+            "Astral Tea Leaves": lambda state: state.has("Astral Seed", player),
             # glacial peak
             "Glacial Peak Seal - Ice Climbers": lambda state: self.has_dart(state, player),
             "Glacial Peak Seal - Projectile Spike Pit": lambda state: self.has_vertical(state, player),

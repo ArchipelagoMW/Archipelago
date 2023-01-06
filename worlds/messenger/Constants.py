@@ -19,6 +19,8 @@ PROG_ITEMS = [
     "Fairy Bottle",
     "Sun Crest",
     "Moon Crest",
+    "Astral Seed",
+    "Astral Tea Leaves",
 ]
 
 PHOBEKINS = [
@@ -45,6 +47,8 @@ ALL_ITEMS = [
     "Wingsuit",
     "Rope Dart",
     "Ninja Tabi",
+    "Astral Seed",
+    "Astral Tea Leaves",
     "Candle",
     "Seashell",
     "Power Thistle",
@@ -54,6 +58,7 @@ ALL_ITEMS = [
     "Sun Crest",
     "Moon Crest",
     *PHOBEKINS,
+    "Power Seal",
     "Time Shard"  # there's 45 separate instances of this in the client lookup, but hopefully we don't care?
 ]
 
@@ -61,28 +66,34 @@ ALL_ITEMS = [
 # the names of these don't actually matter, but using the upstream's names for now
 # order must be exactly the same as upstream
 ALWAYS_LOCATIONS = [
-    "Seashell",
-    "Ninja Tabi",
-    "Rope Dart",
-    "Wingsuit",
+    # notes
     "Key of Love",
     "Key of Courage",
     "Key of Chaos",
-    "Sun Crest",
-    "Moon Crest",
-    "Pyro",
-    "Acro",
-    "Necro",
-    "Ruxxtin's Amulet",
-    "Candle",
-    "Claustro",
-    "Climbing Claws",
-    "Demon King Crown",
     "Key of Symbiosis",
     "Key of Strength",
+    "Key of Hope",
+    # upgrades
+    "Wingsuit",
+    "Rope Dart",
+    "Ninja Tabi",
+    "Climbing Claws",
+    # quest items
+    "Astral Seed",
+    "Astral Tea Leaves",
+    "Candle",
+    "Seashell",
     "Power Thistle",
+    "Demon King Crown",
+    "Ruxxtin's Amulet",
     "Fairy Bottle",
-    "Key of Hope"
+    "Sun Crest",
+    "Moon Crest",
+    # phobekins
+    "Necro",
+    "Pyro",
+    "Claustro",
+    "Acro",
 ]
 
 SEALS = [

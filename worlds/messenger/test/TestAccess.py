@@ -7,6 +7,14 @@ class AccessTest(MessengerTestBase):
         "shuffle_seals": "true",
     }
 
+    def testTabi(self):
+        """locations that hard require the Ninja Tabi"""
+        locations = ["Pyro", "Key of Chaos", "Underworld Seal - Sharp and Windy Climb", "Underworld Seal - Spike Wall",
+                     "Underworld Seal - Fireball Wave", "Underworld Seal - Rising Fanta", "Sun Crest", "Moon Crest",
+                     "Sunken Shrine Seal - Waterfall Paradise", "Sunken Shrine Seal - Tabi Gauntlet"]
+        items = [["Ninja Tabi"]]
+        self.assertAccessDependency(locations, items)
+
     def testDart(self):
         """locations that hard require the Rope Dart"""
         locations = ["Ninja Village Seal - Tree House", "Key of Hope", "Howling Grotto Seal - Crushing Pits",
@@ -14,14 +22,6 @@ class AccessTest(MessengerTestBase):
                      "Tower of Time Seal - Arcane Orbs", "Underworld Seal - Rising Fanta", "Key of Symbiosis",
                      "Elemental Skylands Seal - Water", "Elemental Skylands Seal - Fire"]
         items = [["Rope Dart"]]
-        self.assertAccessDependency(locations, items)
-
-    def testTabi(self):
-        """locations that hard require the Ninja Tabi"""
-        locations = ["Pyro", "Key of Chaos", "Underworld Seal - Sharp and Windy Climb", "Underworld Seal - Spike Wall",
-                     "Underworld Seal - Fireball Wave", "Underworld Seal - Rising Fanta", "Sun Crest", "Moon Crest",
-                     "Sunken Shrine Seal - Waterfall Paradise", "Sunken Shrine Seal - Tabi Gauntlet"]
-        items = [["Ninja Tabi"]]
         self.assertAccessDependency(locations, items)
 
     def testWingsuit(self):
@@ -37,7 +37,8 @@ class AccessTest(MessengerTestBase):
                      "Cloud Ruins Seal - Toothbrush Alley", "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room",
                      "Tower of Time Seal - Lantern Climb", "Tower of Time Seal - Arcane Orbs",
                      "Underworld Seal - Sharp and Windy Climb", "Underworld Seal - Fireball Wave",
-                     "Elemental Skylands Seal - Air", "Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset"]
+                     "Elemental Skylands Seal - Air", "Forlorn Temple Seal - Rocket Maze",
+                     "Forlorn Temple Seal - Rocket Sunset", "Astral Seed"]
         items = [["Wingsuit"]]
         self.assertAccessDependency(locations, items)
 
@@ -62,7 +63,7 @@ class AccessTest(MessengerTestBase):
                      "Power Thistle", "Key of Strength", "Glacial Peak Seal - Projectile Spike Pit",
                      "Glacial Peak Seal - Glacial Air Swag", "Fairy Bottle", "Riviere Turquoise Seal - Flower Power",
                      "Searing Crags Seal - Triple Ball Spinner", "Searing Crags Seal - Raining Rocks",
-                     "Searing Crags Seal - Rhythm Rocks"]
+                     "Searing Crags Seal - Rhythm Rocks", "Astral Seed", "Astral Tea Leaves"]
         items = [["Wingsuit", "Rope Dart"]]
         self.assertAccessDependency(locations, items)
 
@@ -102,6 +103,18 @@ class AccessTest(MessengerTestBase):
         """Crocomire but not"""
         locations = ["Key of Courage"]
         items = [["Demon King Crown"]]
+        self.assertAccessDependency(locations, items)
+
+    def testSeed(self):
+        """Astral tea leaves requires planting the astral seed"""
+        locations = ["Astral Tea Leaves"]
+        items = [["Astral Seed"]]
+        self.assertAccessDependency(locations, items)
+
+    def testLeaves(self):
+        """Getting the candle requires top tier tea"""
+        locations = ["Candle"]
+        items = [["Astral Tea Leaves"]]
         self.assertAccessDependency(locations, items)
 
     def testGoal(self):
