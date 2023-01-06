@@ -215,6 +215,8 @@ RX:
     JSR SpecialItemGet
     SEP #$20
     JSL $8EC1EF             ; call chest opening routine (but without chest opening animation)
+    STZ $A7                 ; cleanup
+    JSL $83AB4F             ; cleanup
 +:  SEP #$20
     RTS
 
