@@ -19,8 +19,8 @@ PROG_ITEMS = [
     "Fairy Bottle",
     "Sun Crest",
     "Moon Crest",
-    "Astral Seed",
-    "Astral Tea Leaves",
+    # "Astral Seed",
+    # "Astral Tea Leaves",
 ]
 
 PHOBEKINS = [
@@ -47,8 +47,8 @@ ALL_ITEMS = [
     "Wingsuit",
     "Rope Dart",
     "Ninja Tabi",
-    "Astral Seed",
-    "Astral Tea Leaves",
+    # "Astral Seed",
+    # "Astral Tea Leaves",
     "Candle",
     "Seashell",
     "Power Thistle",

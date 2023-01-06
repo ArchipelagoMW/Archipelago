@@ -105,18 +105,6 @@ class AccessTest(MessengerTestBase):
         items = [["Demon King Crown"]]
         self.assertAccessDependency(locations, items)
 
-    def testSeed(self):
-        """Astral tea leaves requires planting the astral seed"""
-        locations = ["Astral Tea Leaves"]
-        items = [["Astral Seed"]]
-        self.assertAccessDependency(locations, items)
-
-    def testLeaves(self):
-        """Getting the candle requires top tier tea"""
-        locations = ["Candle"]
-        items = [["Astral Tea Leaves"]]
-        self.assertAccessDependency(locations, items)
-
     def testGoal(self):
         """Test some different states to verify goal requires the correct items"""
         self.collect_all_but([*NOTES, "Rescue Phantom"])
