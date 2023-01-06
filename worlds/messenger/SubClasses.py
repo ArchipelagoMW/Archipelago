@@ -1,12 +1,17 @@
-from typing import Set
+from typing import Set, TYPE_CHECKING
 
-from BaseClasses import Region, RegionType, Location, Item, ItemClassification, Entrance, LocationProgressType
+from BaseClasses import Region, RegionType, Location, Item, ItemClassification, Entrance
 from .Constants import SEALS, NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
 from .Regions import REGIONS
 
+if TYPE_CHECKING:
+    from . import MessengerWorld
+else:
+    MessengerWorld = object
+
 
 class MessengerRegion(Region):
-    def __init__(self, name: str, world: "MessengerWorld"):
+    def __init__(self, name: str, world: MessengerWorld):
         super().__init__(name, RegionType.Generic, name, world.player, world.multiworld)
         self.rules = world.rules
         self.locations_lookup = self.multiworld.worlds[self.player].location_name_to_id
@@ -47,7 +52,7 @@ class MessengerLocation(Location):
 class MessengerItem(Item):
     game = "The Messenger"
 
-    def __init__(self, name: str, world: "MessengerWorld"):
+    def __init__(self, name: str, player: int, item_id: int = None):
         item_class = ItemClassification.filler
         item_id = world.item_name_to_id[name] if name in world.item_name_to_id else None
         if name in {*NOTES, *PROG_ITEMS, *PHOBEKINS} or item_id is None:

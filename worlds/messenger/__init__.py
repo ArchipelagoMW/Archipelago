@@ -97,6 +97,7 @@ class MessengerWorld(World):
     def get_filler_item_name(self) -> str:
         return "Time Shard"
 
-    def create_item(self, name: str) -> "Item":
-        return MessengerItem(name, self)
+    def create_item(self, name: str) -> MessengerItem:
+        item_id = self.item_name_to_id[name] if name in self.item_name_to_id else None
+        return MessengerItem(name, self.player, item_id)
 
