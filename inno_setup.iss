@@ -52,25 +52,16 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 
 [Components]
 Name: "core";             Description: "Core Files"; Types: full hosting playing custom; Flags: fixed
+Name: "server";           Description: "Server"; Types: full hosting
 Name: "generator";        Description: "Generator"; Types: full hosting
-Name: "generator/sm";     Description: "Super Metroid ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
-Name: "generator/dkc3";   Description: "Donkey Kong Country 3 ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
-Name: "generator/smw";    Description: "Super Mario World ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
-Name: "generator/soe";    Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
-Name: "generator/l2ac";   Description: "Lufia II Ancient Cave ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 2621440; Flags: disablenouninstallwarning
-Name: "generator/lttp";   Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
+#include "generator_components.iss"
 Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296; Flags: disablenouninstallwarning
 Name: "generator/zl";     Description: "Zillion ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 150000; Flags: disablenouninstallwarning
 Name: "generator/pkmn_r"; Description: "Pokemon Red ROM Setup"; Types: full hosting
 Name: "generator/pkmn_b"; Description: "Pokemon Blue ROM Setup"; Types: full hosting
-Name: "server";           Description: "Server"; Types: full hosting
 Name: "client";           Description: "Clients"; Types: full playing
 Name: "client/sni";       Description: "SNI Client"; Types: full playing
-Name: "client/sni/lttp";  Description: "SNI Client - A Link to the Past Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
-Name: "client/sni/sm";    Description: "SNI Client - Super Metroid Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
-Name: "client/sni/dkc3";  Description: "SNI Client - Donkey Kong Country 3 Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
-Name: "client/sni/smw";   Description: "SNI Client - Super Mario World Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
-Name: "client/sni/l2ac";  Description: "SNI Client - Lufia II Ancient Cave Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+#include "sni_components.iss"
 Name: "client/factorio";  Description: "Factorio"; Types: full playing
 Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDiskSpaceRequired: 226894278
 Name: "client/oot";       Description: "Ocarina of Time"; Types: full playing
@@ -87,12 +78,7 @@ Name: "client/text";      Description: "Text, to !command and chat"; Types: full
 NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-modify authusers-modify;
 
 [Files]
-Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"; Flags: external; Components: client/sni/lttp or generator/lttp
-Source: "{code:GetSMROMPath}"; DestDir: "{app}"; DestName: "Super Metroid (JU).sfc"; Flags: external; Components: client/sni/sm or generator/sm
-Source: "{code:GetDKC3ROMPath}"; DestDir: "{app}"; DestName: "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc"; Flags: external; Components: client/sni/dkc3 or generator/dkc3
-Source: "{code:GetSMWROMPath}"; DestDir: "{app}"; DestName: "Super Mario World (USA).sfc"; Flags: external; Components: client/sni/smw or generator/smw
-Source: "{code:GetSoEROMPath}"; DestDir: "{app}"; DestName: "Secret of Evermore (USA).sfc"; Flags: external; Components: generator/soe
-Source: "{code:GetL2ACROMPath}"; DestDir: "{app}"; DestName: "Lufia II - Rise of the Sinistrals (USA).sfc"; Flags: external; Components: generator/l2ac
+#include "files.iss"
 Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda - Ocarina of Time.z64"; Flags: external; Components: client/oot or generator/oot
 Source: "{code:GetZlROMPath}"; DestDir: "{app}"; DestName: "Zillion (UE) [!].sms"; Flags: external; Components: client/zl or generator/zl
 Source: "{code:GetRedROMPath}"; DestDir: "{app}"; DestName: "Pokemon Red (UE) [S][!].gb"; Flags: external; Components: client/pkmn/red or generator/pkmn_r
@@ -223,24 +209,6 @@ end;
 
 var R : longint;
 
-var lttprom: string;
-var LttPROMFilePage: TInputFileWizardPage;
-
-var smrom: string;
-var SMRomFilePage: TInputFileWizardPage;
-
-var dkc3rom: string;
-var DKC3RomFilePage: TInputFileWizardPage;
-
-var smwrom: string;
-var SMWRomFilePage: TInputFileWizardPage;
-
-var soerom: string;
-var SoERomFilePage: TInputFileWizardPage;
-
-var l2acrom: string;
-var L2ACROMFilePage: TInputFileWizardPage;
-
 var ootrom: string;
 var OoTROMFilePage: TInputFileWizardPage;
 
@@ -266,7 +234,7 @@ begin
   end;
 end;
 
-function GetSMSMD5OfFile(const rom: string): string;
+function GetMD5OfFile(const rom: string): string;
 var data: AnsiString;
 begin
   if LoadStringFromFile(rom, data) then
@@ -275,7 +243,7 @@ begin
   end;
 end;
 
-function CheckRom(name: string; hash: string): string;
+function CheckSNESRom(name: string; hash: string): string;
 var rom: string;
 begin
   log('Handling ' + name)
@@ -294,7 +262,7 @@ begin
     end;
 end;
 
-function CheckSMSRom(name: string; hash: string): string;
+function CheckRom(name: string; hash: string): string;
 var rom: string;
 begin
   log('Handling ' + name)
@@ -302,8 +270,8 @@ begin
   if Length(rom) > 0 then
     begin
       log('existing ROM found');
-      log(IntToStr(CompareStr(GetSMSMD5OfFile(rom), hash)));
-      if CompareStr(GetSMSMD5OfFile(rom), hash) = 0 then
+      log(IntToStr(CompareStr(GetMD5OfFile(rom), hash)));
+      if CompareStr(GetMD5OfFile(rom), hash) = 0 then
         begin
         log('existing ROM verified');
         Result := rom;
@@ -389,108 +357,6 @@ begin
     '.z64');
 end;
 
-function NextButtonClick(CurPageID: Integer): Boolean;
-begin
-  if (assigned(LttPROMFilePage)) and (CurPageID = LttPROMFilePage.ID) then
-    Result := not (LttPROMFilePage.Values[0] = '')
-  else if (assigned(SMROMFilePage)) and (CurPageID = SMROMFilePage.ID) then
-    Result := not (SMROMFilePage.Values[0] = '')
-  else if (assigned(DKC3ROMFilePage)) and (CurPageID = DKC3ROMFilePage.ID) then
-    Result := not (DKC3ROMFilePage.Values[0] = '')
-  else if (assigned(SMWROMFilePage)) and (CurPageID = SMWROMFilePage.ID) then
-    Result := not (SMWROMFilePage.Values[0] = '')
-  else if (assigned(SoEROMFilePage)) and (CurPageID = SoEROMFilePage.ID) then
-    Result := not (SoEROMFilePage.Values[0] = '')
-  else if (assigned(L2ACROMFilePage)) and (CurPageID = L2ACROMFilePage.ID) then
-    Result := not (L2ACROMFilePage.Values[0] = '')
-  else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
-    Result := not (OoTROMFilePage.Values[0] = '')
-  else if (assigned(ZlROMFilePage)) and (CurPageID = ZlROMFilePage.ID) then
-    Result := not (ZlROMFilePage.Values[0] = '')
-  else
-    Result := True;
-end;
-
-function GetROMPath(Param: string): string;
-begin
-  if Length(lttprom) > 0 then
-    Result := lttprom
-  else if Assigned(LttPRomFilePage) then
-    begin
-      R := CompareStr(GetSNESMD5OfFile(LttPROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
-      if R <> 0 then
-        MsgBox('ALttP ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
-
-      Result := LttPROMFilePage.Values[0]
-    end
-  else
-    Result := '';
- end;
-
-function GetSMROMPath(Param: string): string;
-begin
-  if Length(smrom) > 0 then
-    Result := smrom
-  else if Assigned(SMRomFilePage) then
-    begin
-      R := CompareStr(GetSNESMD5OfFile(SMROMFilePage.Values[0]), '21f3e98df4780ee1c667b84e57d88675')
-      if R <> 0 then
-        MsgBox('Super Metroid ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
-
-      Result := SMROMFilePage.Values[0]
-    end
-  else
-    Result := '';
- end;
-
-function GetDKC3ROMPath(Param: string): string;
-begin
-  if Length(dkc3rom) > 0 then
-    Result := dkc3rom
-  else if Assigned(DKC3RomFilePage) then
-    begin
-      R := CompareStr(GetSNESMD5OfFile(DKC3ROMFilePage.Values[0]), '120abf304f0c40fe059f6a192ed4f947')
-      if R <> 0 then
-        MsgBox('Donkey Kong Country 3 ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
-
-      Result := DKC3ROMFilePage.Values[0]
-    end
-  else
-    Result := '';
- end;
-
-function GetSMWROMPath(Param: string): string;
-begin
-  if Length(smwrom) > 0 then
-    Result := smwrom
-  else if Assigned(SMWRomFilePage) then
-    begin
-      R := CompareStr(GetSNESMD5OfFile(SMWROMFilePage.Values[0]), 'cdd3c8c37322978ca8669b34bc89c804')
-      if R <> 0 then
-        MsgBox('Super Mario World ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
-
-      Result := SMWROMFilePage.Values[0]
-    end
-  else
-    Result := '';
- end;
-
-function GetSoEROMPath(Param: string): string;
-begin
-  if Length(soerom) > 0 then
-    Result := soerom
-  else if Assigned(SoERomFilePage) then
-    begin
-      R := CompareStr(GetSNESMD5OfFile(SoEROMFilePage.Values[0]), '6e9c94511d04fac6e0a1e582c170be3a')
-      if R <> 0 then
-        MsgBox('Secret of Evermore ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
-
-      Result := SoEROMFilePage.Values[0]
-    end
-  else
-    Result := '';
- end;
-
 function GetOoTROMPath(Param: string): string;
 begin
   if Length(ootrom) > 0 then
@@ -502,22 +368,6 @@ begin
         MsgBox('OoT ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
 
       Result := OoTROMFilePage.Values[0]
-    end
-  else
-    Result := '';
-end;
-
-function GetL2ACROMPath(Param: string): string;
-begin
-  if Length(l2acrom) > 0 then
-    Result := l2acrom
-  else if Assigned(L2ACROMFilePage) then
-    begin
-      R := CompareStr(GetSNESMD5OfFile(L2ACROMFilePage.Values[0]), '6efc477d6203ed2b3b9133c1cd9e9c5d')
-      if R <> 0 then
-        MsgBox('Lufia II ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
-
-      Result := L2ACROMFilePage.Values[0]
     end
   else
     Result := '';
@@ -571,31 +421,13 @@ begin
     Result := '';
  end;
 
+#include "code.iss"
+
 procedure InitializeWizard();
 begin
   AddOoTRomPage();
-
-  lttprom := CheckRom('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', '03a63945398191337e896e5771f77173');
-  if Length(lttprom) = 0 then
-    LttPROMFilePage:= AddRomPage('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc');
-
-  smrom := CheckRom('Super Metroid (JU).sfc', '21f3e98df4780ee1c667b84e57d88675');
-  if Length(smrom) = 0 then
-    SMRomFilePage:= AddRomPage('Super Metroid (JU).sfc');
-
-  dkc3rom := CheckRom('Donkey Kong Country 3 - Dixie Kong''s Double Trouble! (USA) (En,Fr).sfc', '120abf304f0c40fe059f6a192ed4f947');
-  if Length(dkc3rom) = 0 then
-    DKC3RomFilePage:= AddRomPage('Donkey Kong Country 3 - Dixie Kong''s Double Trouble! (USA) (En,Fr).sfc');
-
-  smwrom := CheckRom('Super Mario World (USA).sfc', 'cdd3c8c37322978ca8669b34bc89c804');
-  if Length(smwrom) = 0 then
-    SMWRomFilePage:= AddRomPage('Super Mario World (USA).sfc');
-
-  soerom := CheckRom('Secret of Evermore (USA).sfc', '6e9c94511d04fac6e0a1e582c170be3a');
-  if Length(soerom) = 0 then
-    SoEROMFilePage:= AddRomPage('Secret of Evermore (USA).sfc');
-
-  zlrom := CheckSMSRom('Zillion (UE) [!].sms', 'd4bf9e7bcf9a48da53785d2ae7bc4270');
+  SNESWizard();
+  zlrom := CheckRom('Zillion (UE) [!].sms', 'd4bf9e7bcf9a48da53785d2ae7bc4270');
   if Length(zlrom) = 0 then
     ZlROMFilePage:= AddSMSRomPage('Zillion (UE) [!].sms');
 
@@ -606,28 +438,12 @@ begin
   bluerom := CheckRom('Pokemon Blue (UE) [S][!].gb','50927e843568814f7ed45ec4f944bd8b');
   if Length(bluerom) = 0 then
     BlueROMFilePage:= AddGBRomPage('Pokemon Blue (UE) [S][!].gb');
-
-  l2acrom := CheckRom('Lufia II - Rise of the Sinistrals (USA).sfc', '6efc477d6203ed2b3b9133c1cd9e9c5d');
-  if Length(l2acrom) = 0 then
-    L2ACROMFilePage:= AddRomPage('Lufia II - Rise of the Sinistrals (USA).sfc');
 end;
 
 
 function ShouldSkipPage(PageID: Integer): Boolean;
 begin
-  Result := False;
-  if (assigned(LttPROMFilePage)) and (PageID = LttPROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('client/sni/lttp') or WizardIsComponentSelected('generator/lttp'));
-  if (assigned(SMROMFilePage)) and (PageID = SMROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('client/sni/sm') or WizardIsComponentSelected('generator/sm'));
-  if (assigned(DKC3ROMFilePage)) and (PageID = DKC3ROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('client/sni/dkc3') or WizardIsComponentSelected('generator/dkc3'));
-  if (assigned(SMWROMFilePage)) and (PageID = SMWROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('client/sni/smw') or WizardIsComponentSelected('generator/smw'));
-  if (assigned(L2ACROMFilePage)) and (PageID = L2ACROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('client/sni/l2ac') or WizardIsComponentSelected('generator/l2ac'));
-  if (assigned(SoEROMFilePage)) and (PageID = SoEROMFilePage.ID) then
-    Result := not (WizardIsComponentSelected('generator/soe'));
+  Result := ShouldSkipSNESPage(PageID);
   if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/oot') or WizardIsComponentSelected('client/oot'));
   if (assigned(ZlROMFilePage)) and (PageID = ZlROMFilePage.ID) then
@@ -636,4 +452,15 @@ begin
     Result := not (WizardIsComponentSelected('generator/pkmn_r') or WizardIsComponentSelected('client/pkmn/red'));
   if (assigned(BlueROMFilePage)) and (PageID = BlueROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/pkmn_b') or WizardIsComponentSelected('client/pkmn/blue'));
+end;
+
+
+function NextButtonClick(CurPageID: Integer): Boolean;
+begin
+  if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
+    Result := not (OoTROMFilePage.Values[0] = '')
+  else if (assigned(ZlROMFilePage)) and (CurPageID = ZlROMFilePage.ID) then
+    Result := not (ZlROMFilePage.Values[0] = '')
+  else
+    Result := NextSNESButtonClick(CurPageID);
 end;

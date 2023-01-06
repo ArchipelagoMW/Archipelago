@@ -7,6 +7,7 @@ import sys
 import sysconfig
 import typing
 import zipfile
+import itertools
 from collections.abc import Iterable
 from hashlib import sha3_512
 from pathlib import Path
@@ -240,13 +241,50 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         remove_sprites_from_folder(self.buildfolder / "data" / "sprites" / "alttpr")
 
         self.create_manifest()
-
         if is_windows:
             # Inno setup stuff
+            # did not find a good source to automatically pull these
+            default_rom_file_names: typing.Dict[str, str] = {
+                "A Link to the Past": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
+                "Super Metroid": "Super Metroid (JU).sfc",
+                "Donkey Kong Country 3": "Donkey Kong Country 3 - Dixie Kong''s Double Trouble! (USA) (En,Fr).sfc",
+                "Super Mario World": "Super Mario World (USA).sfc",
+                "Secret of Evermore": "Secret of Evermore (USA).sfc",
+                "Lufia II Ancient Cave": "Lufia II - Rise of the Sinistrals (USA).sfc",
+            }
+
+            snes_md5s: typing.Dict[str, str] = {
+                "A Link to the Past": "03a63945398191337e896e5771f77173",
+                "Super Metroid": "21f3e98df4780ee1c667b84e57d88675",
+                "Donkey Kong Country 3": "120abf304f0c40fe059f6a192ed4f947",
+                "Super Mario World": "cdd3c8c37322978ca8669b34bc89c804",
+                "Secret of Evermore": "6e9c94511d04fac6e0a1e582c170be3a",
+                "Lufia II Ancient Cave": "6efc477d6203ed2b3b9133c1cd9e9c5d",
+            }
+
             from worlds.AutoSNIClient import AutoSNIClientRegister
             from worlds.Files import AutoPatchRegister, APDeltaPatch
-            with open("registry.iss", "w") as f:
+            with open("generator_components.iss", "w") as f_gen:
+                with open("sni_components.iss", "w") as f_sni:
+
+                    for game_name in AutoSNIClientRegister.game_handlers:
+                        patch_handler: APDeltaPatch = AutoPatchRegister.patch_types[game_name]
+                        assert patch_handler.patch_file_ending.startswith(".ap")
+                        short = patch_handler.patch_file_ending[3:]
+                        f_gen.write(f"""
+Name: "generator/{short}";     Description: "{game_name} ROM Setup"; Types: full hosting; Flags: disablenouninstallwarning""")
+                        f_sni.write(f"""
+Name: "client/sni/{short}";  Description: "SNI Client - {game_name} Patch Setup"; Types: full playing; Flags: disablenouninstallwarning""")
+            with open("files.iss", "w") as f:
                 for game_name in AutoSNIClientRegister.game_handlers:
+                    patch_handler: APDeltaPatch = AutoPatchRegister.patch_types[game_name]
+                    short = patch_handler.patch_file_ending[3:]
+                    rom_file_name = default_rom_file_names.get(game_name, None)
+                    if rom_file_name:
+                        f.write(f"""
+Source: "{{code:Get{short}ROMPath}}"; DestDir: "{{app}}"; DestName: "{rom_file_name}"; Flags: external; Components: client/sni/{short} or generator/{short}""")
+            with open("registry.iss", "w") as f:
+                for game_name in itertools.chain(AutoSNIClientRegister.game_handlers, ["Secret of Evermore"]):
                     patch_handler: APDeltaPatch = AutoPatchRegister.patch_types[game_name]
                     f.write(f""";{patch_handler.game} handling
 Root: HKCR; Subkey: "{patch_handler.patch_file_ending}"; ValueData: "{{#MyAppName}} {patch_handler.game} patch"; Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
@@ -254,6 +292,66 @@ Root: HKCR; Subkey: "{{#MyAppName}} {patch_handler.game} patch"; ValueData: "Arc
 Root: HKCR; Subkey: "{{#MyAppName}} {patch_handler.game} patch\\DefaultIcon"; ValueData: "{{app}}\\ArchipelagoSNIClient.exe,0"; ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{{#MyAppName}} {patch_handler.game} patch\\shell\\open\\command"; ValueData: \"""{{app}}\\ArchipelagoSNIClient.exe"" ""%1\"""; ValueType: string;  ValueName: ""; Components: client/sni
 """)
+            with open("code.iss", "w") as f:
+                init_accumulator = "procedure SNESWizard();\nbegin"
+                skip_accumulator =  "function ShouldSkipSNESPage(PageID: Integer): Boolean;\nbegin\n  Result := False;"
+                next_accumulator = "function NextSNESButtonClick(CurPageID: Integer): Boolean;\nbegin\n"
+                for game_name, snes_md5 in snes_md5s.items():
+                    rom_file_name = default_rom_file_names[game_name]
+                    patch_handler: APDeltaPatch = AutoPatchRegister.patch_types[game_name]
+                    short = patch_handler.patch_file_ending[3:]
+                    snes_md5 = snes_md5s[game_name]
+                    init_accumulator += f"""
+  {short}rom := CheckSNESRom('{rom_file_name}', {short}MD5);
+  if Length({short}rom) = 0 then
+    {short}ROMFilePage:= AddRomPage('{rom_file_name}');"""
+
+                    skip_accumulator += f"""
+  if (assigned({short}ROMFilePage)) and (PageID = {short}ROMFilePage.ID) then
+    begin
+      Result := not (WizardIsComponentSelected('client/sni/{short}') or WizardIsComponentSelected('generator/{short}'));
+      Exit;
+    end;
+"""
+
+                    next_accumulator += f"""
+  if (assigned({short}ROMFilePage)) and (CurPageID = {short}ROMFilePage.ID) then
+  begin
+    if Length(CheckSNESRom({short}ROMFilePage.Values[0], '{snes_md5}')) = 0 then
+      begin
+        MsgBox('{game_name} ROM validation failed. Very likely wrong file. ' + 
+          'You can go back and disable the Component that needs this file.', mbInformation, MB_OK);
+        Result := false;
+        Exit;
+      end
+  end;
+"""
+
+                    f.write(f"""//{patch_handler.game} handling
+var {short}rom: string;
+var {short}ROMFilePage: TInputFileWizardPage;
+const {short}MD5 = '{snes_md5}';
+
+function Get{short}ROMPath(Param: string): string;
+begin
+  if Length({short}rom) > 0 then
+    Result := {short}rom
+  else if Assigned({short}RomFilePage) then
+    begin
+      R := CompareStr(GetSNESMD5OfFile({short}ROMFilePage.Values[0]), {short}MD5)
+      if R <> 0 then
+          MsgBox('{game_name} ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+      Result := {short}RomFilePage.Values[0]
+    end
+  else
+    Result := '';
+ end;
+""")
+                init_accumulator += "\nend;\n"
+                skip_accumulator += "\nend;\n"
+                next_accumulator += "  Result := True;\nend;\n"
+                f.writelines([init_accumulator, skip_accumulator, next_accumulator])
+
             with open("setup.ini", "w") as f:
                 min_supported_windows = "6.2.9200" if sys.version_info > (3, 9) else "6.0.6000"
                 f.write(f"[Data]\nsource_path={self.buildfolder}\nmin_windows={min_supported_windows}\n")
