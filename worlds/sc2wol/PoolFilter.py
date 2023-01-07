@@ -31,22 +31,17 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[str, List[str]]
     shuffle_protoss = get_option_value(multiworld, player, "shuffle_protoss")
     excluded_missions = set(get_option_set_value(multiworld, player, "excluded_missions"))
     mission_count = len(mission_orders[mission_order_type]) - 1
+    mission_pools = {
+        "no_build": no_build_regions_list[:],
+        "easy": easy_regions_list[:],
+        "medium": medium_regions_list[:],
+        "hard": hard_regions_list[:],
+        "all_in": ["All-In"]
+    }
     # Vanilla and Vanilla Shuffled use the entire mission pool
     if mission_count == 28:
-        return {
-            "no_build": no_build_regions_list[:],
-            "easy": easy_regions_list[:],
-            "medium": medium_regions_list[:],
-            "hard": hard_regions_list[:],
-            "all_in": ["All-In"]
-        }
+        return mission_pools
 
-    mission_pools = [
-        no_build_regions_list,
-        easy_regions_list,
-        medium_regions_list,
-        hard_regions_list
-    ]
     # Omitting No-Build missions if not shuffling no-build
     if not shuffle_no_build:
         excluded_missions = excluded_missions.union(no_build_regions_list)
@@ -60,8 +55,9 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[str, List[str]]
     else:
         final_mission = 'All-In'
     # Excluding missions
-    for i, mission_pool in enumerate(mission_pools):
-        mission_pools[i] = [mission for mission in mission_pool if mission not in excluded_missions]
+    for difficulty, mission_pool in mission_pools.items():
+        mission_pools[difficulty] = [mission for mission in mission_pool if mission not in excluded_missions]
+    mission_pools["all_in"].append(final_mission)
     # Mission pool changes on Build-Only
     if not get_option_value(multiworld, player, 'shuffle_no_build'):
         def move_mission(mission_name, current_pool, new_pool):
@@ -69,30 +65,24 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[str, List[str]]
                 mission_pools[current_pool].remove(mission_name)
                 mission_pools[new_pool].append(mission_name)
         # Replacing No Build missions with Easy missions
-        move_mission("Zero Hour", 1, 0)
-        move_mission("Evacuation", 1, 0)
-        move_mission("Devil's Playground", 1, 0)
+        move_mission("Zero Hour", "easy", "no_build")
+        move_mission("Evacuation", "easy", "no_build")
+        move_mission("Devil's Playground", "easy", "no_build")
         # Pushing Outbreak to Normal, as it cannot be placed as the second mission on Build-Only
-        move_mission("Outbreak", 1, 2)
+        move_mission("Outbreak", "easy", "medium")
         # Pushing extra Normal missions to Easy
-        move_mission("The Great Train Robbery", 2, 1)
-        move_mission("Echoes of the Future", 2, 1)
-        move_mission("Cutthroat", 2, 1)
+        move_mission("The Great Train Robbery", "medium", "easy")
+        move_mission("Echoes of the Future", "medium", "easy")
+        move_mission("Cutthroat", "medium", "easy")
         # Additional changes on Advanced Tactics
         if get_option_value(multiworld, player, "required_tactics") > 0:
-            move_mission("The Great Train Robbery", 1, 0)
-            move_mission("Smash and Grab", 1, 0)
-            move_mission("Moebius Factor", 2, 1)
-            move_mission("Welcome to the Jungle", 2, 1)
-            move_mission("Engine of Destruction", 3, 2)
+            move_mission("The Great Train Robbery", "easy", "no_build")
+            move_mission("Smash and Grab", "easy", "no_build")
+            move_mission("Moebius Factor", "medium", "easy")
+            move_mission("Welcome to the Jungle", "medium", "easy")
+            move_mission("Engine of Destruction", "hard", "medium")
 
-    return {
-        "no_build": mission_pools[0],
-        "easy": mission_pools[1],
-        "medium": mission_pools[2],
-        "hard": mission_pools[3],
-        "all_in": [final_mission]
-    }
+    return mission_pools
 
 
 def get_item_upgrades(inventory: List[Item], parent_item: Item or str):
