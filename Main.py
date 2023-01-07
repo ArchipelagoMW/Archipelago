@@ -364,14 +364,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                             precollect_hint(location)
                         elif location.item.name in world.start_hints[location.item.player]:
                             received_item = location.item
-                            if received_item.name in collected_hints[received_item.player]:
-                                if collected_hints[received_item.player][received_item.name]\
-                                        < world.start_hints[received_item.player].value[received_item.name]:
-                                    precollect_hint(location)
-                                    collected_hints[received_item.player][received_item.name] += 1
-                            else:
+                            if collected_hints[received_item.player].setdefault(received_item.name, 0)\
+                                    < world.start_hints[received_item.player].value[received_item.name]:
                                 precollect_hint(location)
-                                collected_hints[received_item.player][received_item.name] = 1
+                                collected_hints[received_item.player][received_item.name] += 1
 
                         elif any([location.item.name in world.start_hints[player]
                                   for player in world.groups.get(location.item.player, {}).get("players", [])]):
