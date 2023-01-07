@@ -336,11 +336,12 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 precollected_items = {player: [item.code for item in world_precollected if type(item.code) == int]
                                       for player, world_precollected in world.precollected_items.items()}
                 precollected_hints = {player: set() for player in range(1, world.players + 1 + len(world.groups))}
+                collected_hints = {player: {} for player in range(1, world.players + 1 + len(world.groups))}
 
                 for slot in world.player_ids:
                     slot_data[slot] = world.worlds[slot].fill_slot_data()
 
-                def precollect_hint(location):
+                def precollect_hint(location: Location):
                     entrance = er_hint_data.get(location.player, {}).get(location.address, "")
                     hint = NetUtils.Hint(location.item.player, location.player, location.address,
                                          location.item.code, False, entrance, location.item.flags)
@@ -362,7 +363,16 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         if location.name in world.start_location_hints[location.player]:
                             precollect_hint(location)
                         elif location.item.name in world.start_hints[location.item.player]:
-                            precollect_hint(location)
+                            received_item = location.item
+                            if received_item.name in collected_hints[received_item.player]:
+                                if collected_hints[received_item.player][received_item.name]\
+                                        < world.start_hints[received_item.player].value[received_item.name]:
+                                    precollect_hint(location)
+                                    collected_hints[received_item.player][received_item.name] += 1
+                            else:
+                                precollect_hint(location)
+                                collected_hints[received_item.player][received_item.name] = 1
+
                         elif any([location.item.name in world.start_hints[player]
                                   for player in world.groups.get(location.item.player, {}).get("players", [])]):
                             precollect_hint(location)

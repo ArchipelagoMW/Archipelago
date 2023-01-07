@@ -44,5 +44,5 @@ class TestBase(unittest.TestCase):
                 self.assertGreaterEqual(
                     len(world.itempool),
                     location_count,
-                    f"{game_name} Item count MUST meet or exceede the number of locations",
+                    f"{game_name} Item count MUST meet or exceed the number of locations",
                 )

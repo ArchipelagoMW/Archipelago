@@ -889,8 +889,9 @@ class StartInventory(ItemDict):
     display_name = "Start Inventory"
 
 
-class StartHints(ItemSet):
+class StartHints(ItemDict):
     """Start with these item's locations prefilled into the !hint command."""
+    verify_item_name = True
     display_name = "Start Hints"
 
 
