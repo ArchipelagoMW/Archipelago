@@ -55,6 +55,10 @@ def set_rules(world: MultiWorld, player: int) -> None:
         #   scavengers need to be locked till after a full loop since that is when they are capable of spawning.
         # (While technically the requirement is just beating 5 stages, this will ensure that the player will have
         #   a long enough run to have enough director credits for scavengers and help prevent being stuck in the same stages until that point.)
+
+        # Logic needs to get added if starting with loop so everything doesn't get dumped into sphere 1
+        if world.begin_with_loop[player]:
+            print("something needs to go here")
         for location in world.get_locations():
             if location.player != player: continue # ignore all checks that don't belong to this player
             if ("Scavenger" in location.name):

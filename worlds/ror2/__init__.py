@@ -9,6 +9,7 @@ from .RoR2Environments import *
 from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from .Options import ror2_options, ItemWeights
 from worlds.AutoWorld import World, WebWorld
+from .Regions import create_regions
 
 # TODO update required client version
 client_version = 1
@@ -160,6 +161,7 @@ class RiskOfRainWorld(World):
         set_rules(self.multiworld, self.player)
 
     def create_regions(self) -> None:
+        create_regions(self.multiworld, self.player)
         menu = create_region(self.multiworld, self.player, "Menu")
         self.multiworld.regions.append(menu)
         # By using a victory region, we can define it as being connected to by several regions
