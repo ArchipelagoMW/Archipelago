@@ -47,7 +47,7 @@ class SubnauticaWorld(World):
     creatures_to_scan: List[str]
 
     def generate_early(self) -> None:
-        if self.multiworld.early_seaglide:
+        if self.multiworld.early_seaglide[self.player]:
             self.multiworld.local_early_items[self.player]["Seaglide Fragment"] = 2
 
         scan_option: Options.AggressiveScanLogic = self.multiworld.creature_scan_logic[self.player]
