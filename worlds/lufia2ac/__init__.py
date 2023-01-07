@@ -12,8 +12,8 @@ from worlds.generic.Rules import add_rule, set_rule
 from .Client import L2ACSNIClient  # noqa: F401
 from .Items import ItemData, ItemType, l2ac_item_name_to_id, l2ac_item_table, L2ACItem, start_id as items_start_id
 from .Locations import l2ac_location_name_to_id, L2ACLocation
-from .Options import Boss, CapsuleStartingForm, CapsuleStartingLevel, Goal, l2ac_option_definitions, MasterHp, \
-    PartyStartingLevel, ShuffleCapsuleMonsters, ShufflePartyMembers, StartingParty
+from .Options import Boss, CapsuleStartingForm, CapsuleStartingLevel, DefaultParty, Goal, l2ac_option_definitions, \
+    MasterHp, PartyStartingLevel, ShuffleCapsuleMonsters, ShufflePartyMembers
 from .Rom import get_base_rom_bytes, get_base_rom_path, L2ACDeltaPatch
 from .basepatch import apply_basepatch
 
@@ -64,6 +64,8 @@ class L2ACWorld(World):
     capsule_starting_level: Optional[CapsuleStartingLevel]
     crowded_floor_chance: Optional[int]
     death_link: Optional[int]
+    default_capsule: Optional[int]
+    default_party: Optional[DefaultParty]
     final_floor: Optional[int]
     gear_variety_after_b9: Optional[int]
     goal: Optional[int]
@@ -76,8 +78,6 @@ class L2ACWorld(World):
     run_speed: Optional[int]
     shuffle_capsule_monsters: Optional[ShuffleCapsuleMonsters]
     shuffle_party_members: Optional[ShufflePartyMembers]
-    starting_capsule: Optional[int]
-    starting_party: Optional[StartingParty]
 
     @classmethod
     def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
@@ -103,6 +103,8 @@ class L2ACWorld(World):
         self.capsule_starting_level = self.multiworld.capsule_starting_level[self.player]
         self.crowded_floor_chance = self.multiworld.crowded_floor_chance[self.player].value
         self.death_link = self.multiworld.death_link[self.player].value
+        self.default_capsule = self.multiworld.default_capsule[self.player].value
+        self.default_party = self.multiworld.default_party[self.player]
         self.final_floor = self.multiworld.final_floor[self.player].value
         self.gear_variety_after_b9 = self.multiworld.gear_variety_after_b9[self.player].value
         self.goal = self.multiworld.goal[self.player].value
@@ -115,8 +117,6 @@ class L2ACWorld(World):
         self.run_speed = self.multiworld.run_speed[self.player].value
         self.shuffle_capsule_monsters = self.multiworld.shuffle_capsule_monsters[self.player]
         self.shuffle_party_members = self.multiworld.shuffle_party_members[self.player]
-        self.starting_capsule = self.multiworld.starting_capsule[self.player].value
-        self.starting_party = self.multiworld.starting_party[self.player]
 
         if self.capsule_starting_level.value == CapsuleStartingLevel.special_range_names["party_starting_level"]:
             self.capsule_starting_level.value = self.party_starting_level.value
@@ -125,7 +125,7 @@ class L2ACWorld(World):
         if self.master_hp == MasterHp.special_range_names["scale"]:
             self.master_hp = MasterHp.scale(self.final_floor)
         if self.shuffle_party_members:
-            self.starting_party.value = StartingParty.default
+            self.default_party.value = DefaultParty.default
 
     def create_regions(self) -> None:
         menu = Region("Menu", RegionType.Generic, "Menu", self.player, self.multiworld)
@@ -234,13 +234,13 @@ class L2ACWorld(World):
             rom_bytearray[0x019E82:0x019E82 + 1] = self.final_floor.to_bytes(1, "little")
             rom_bytearray[0x01FC75:0x01FC75 + 1] = self.run_speed.to_bytes(1, "little")
             rom_bytearray[0x01FC81:0x01FC81 + 1] = self.run_speed.to_bytes(1, "little")
-            rom_bytearray[0x02B2A1:0x02B2A1 + 5] = self.starting_party.roster
+            rom_bytearray[0x02B2A1:0x02B2A1 + 5] = self.default_party.roster
             for offset in range(0x02B395, 0x02B452, 0x1B):
                 rom_bytearray[offset:offset + 1] = self.party_starting_level.value.to_bytes(1, "little")
             for offset in range(0x02B39A, 0x02B457, 0x1B):
                 rom_bytearray[offset:offset + 3] = self.party_starting_level.xp.to_bytes(3, "little")
             rom_bytearray[0x05699E:0x05699E + 147] = self.get_goal_text_bytes()
-            rom_bytearray[0x056AA3:0x056AA3 + 24] = self.starting_party.event_script
+            rom_bytearray[0x056AA3:0x056AA3 + 24] = self.default_party.event_script
             rom_bytearray[0x072742:0x072742 + 1] = self.boss.value.to_bytes(1, "little")
             rom_bytearray[0x072748:0x072748 + 1] = self.boss.flag.to_bytes(1, "little")
             rom_bytearray[0x09D59B:0x09D59B + 256] = self.get_node_connection_table()
@@ -248,7 +248,7 @@ class L2ACWorld(World):
             rom_bytearray[0x280010:0x280010 + 2] = self.blue_chest_count.to_bytes(2, "little")
             rom_bytearray[0x280012:0x280012 + 3] = self.capsule_starting_level.xp.to_bytes(3, "little")
             rom_bytearray[0x280015:0x280015 + 1] = self.initial_floor.to_bytes(1, "little")
-            rom_bytearray[0x280016:0x280016 + 1] = self.starting_capsule.to_bytes(1, "little")
+            rom_bytearray[0x280016:0x280016 + 1] = self.default_capsule.to_bytes(1, "little")
             rom_bytearray[0x280017:0x280017 + 1] = self.iris_treasures_required.to_bytes(1, "little")
             rom_bytearray[0x280018:0x280018 + 1] = self.shuffle_party_members.unlock.to_bytes(1, "little")
             rom_bytearray[0x280019:0x280019 + 1] = self.shuffle_capsule_monsters.unlock.to_bytes(1, "little")
