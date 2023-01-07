@@ -19,7 +19,7 @@
 1. Download and install Courier Mod Loader using the instructions on the release page
 2. Download and install the randomizer mod
    * Download the latest `TheMessengerRandomizer.zip`
-   * Place the zip file as is in `TheMessenger/Mods/`
+   * Extract the zip file to `TheMessenger/Mods/` of your game's install location
    * Backup your save game
      1. Press `Windows Key + R` to open run
      2. Type `%appdata%` to access AppData
