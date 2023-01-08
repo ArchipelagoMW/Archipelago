@@ -41,7 +41,9 @@ class SpireWorld(World):
             'seed': "".join(self.multiworld.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16)),
             'character': self.multiworld.character[self.player],
             'ascension': self.multiworld.ascension[self.player],
-            'heart_run': self.multiworld.heart_run[self.player]
+            'heart_run': self.multiworld.heart_run[self.player],
+            'portals': self.multiworld.portals[self.player],
+            'item_distinction': self.multiworld.item_distinction[self.player]
         }
 
     def generate_basic(self):
