@@ -85,6 +85,9 @@ class WitnessWorld(World):
         """
         Doing all of this in create_regions because I want to have access to pre-collected items,
         which influence rules for locations as well as region connections.
+        (Pre-collected items are not available in generate_early, but generate_basic would be too late,
+        as region connection lambdas as well as location access lambdas are created before generate_basic,
+        and these are influenced by starting inventory.)
         """
 
         disabled_locations = self.multiworld.exclude_locations[self.player].value
