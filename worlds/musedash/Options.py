@@ -2,6 +2,11 @@ from typing import Dict, Union
 from BaseClasses import MultiWorld
 from Options import Toggle, DefaultOnToggle, Option, Range, Choice
 
+# Should this be default on or off?
+class AllowJustAsPlannedDLCSongs(Toggle):
+    """Whether or not Just as Planned DLC songs, and all the DLCs along with it, will be included in the randomiser.
+    Note: The newest DLC songs will most likely not be included in any randomisation."""
+    display_name = "Allow Just As Planned DLC Songs"
 
 class StartingSongs(Range):
     """The number of songs that will be automatically unlocked at the start of a run."""
@@ -78,6 +83,7 @@ class SongThreshold(Range):
 
 
 musedash_options: Dict[str, type(Option)] = {
+    "allow_just_as_planned_dlc_songs": AllowJustAsPlannedDLCSongs,
     "starting_song_count": StartingSongs,
     "additional_song_count": AdditionalSongs,
     "extra_items_are_songs": AdditionalItemsAreSongs,

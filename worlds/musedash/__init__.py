@@ -1,72 +1,21 @@
-import os
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule
 from BaseClasses import Region, RegionType, Item, ItemClassification, MultiWorld, Entrance, Tutorial
-from typing import Dict
 
 from .Options import musedash_options
-from .Items import MuseDashItem, MuseDashFixedItem, SongData, AlbumData
+from .Items import MuseDashItem, MuseDashFixedItem
 from .Locations import MuseDashLocation
-
-from math import floor
+from .MuseDashCollection import MuseDashCollections
 
 client_version = 1
 
 
-class MuseDashCollections:
-    AlbumItems: Dict[str, AlbumData] = {}
-    AlbumLocations: Dict[str, int] = {}
-
-    SongItems: Dict[str, SongData] = {}
-    SongLocations: Dict[str, int] = {}
-
-    def __init__(self, startItemID: int, itemsPerLocation: int):
-        currentItemId = startItemID
-        currentLocationID = startItemID
-
-        albumPath = os.path.join(os.path.dirname(__file__), "Albums.txt")
-        with open(albumPath, "r", encoding="utf-8") as file:
-            for line in file.readlines():
-                line = line.strip()
-                self.AlbumItems[line] = AlbumData(currentItemId)
-                currentItemId += 1
-
-        for i in range(0, itemsPerLocation):
-            for name in self.AlbumItems.keys():
-                newName = "%s-%i" % (name, i)
-                self.AlbumLocations[newName] = currentLocationID
-                currentLocationID += 1
-
-        songPath = os.path.join(os.path.dirname(__file__), "Songs.txt")
-        with open(songPath, "r", encoding="utf-8") as file:
-            for line in file.readlines():
-                line = line.strip()
-                sections = line.split("|")
-                self.SongItems[sections[0]] = SongData(
-                    currentItemId, sections[1], sections[2], sections[3], sections[4])
-                currentItemId += 1
-
-        for i in range(0, itemsPerLocation):
-            for name in self.SongItems.keys():
-                newName = "%s-%i" % (name, i)
-                self.SongLocations[newName] = currentLocationID
-                currentLocationID += 1
-
-        self.VictoryItemID = currentItemId
-        self.EmptyItemID = currentItemId + 1
-
-    def create_empty_item(self, player) -> MuseDashFixedItem:
-        return MuseDashFixedItem("Nothing", ItemClassification.filler, player, self.EmptyItemID)
-
-    def create_victory_item(self, player) -> MuseDashFixedItem:
-        return MuseDashFixedItem("Victory", ItemClassification.progression, player, self.VictoryItemID)
-
 class MuseDashWebWorld(WebWorld):
     theme: "partyTime"
 
-    bug_report_page = "https://github.com/DeamonHunter/MuseDashArchipelago/issues"
+    bug_report_page = "https://github.com/DeamonHunter/ArchipelagoMuseDash/issues"
     setup_en = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Mod Setup and Use Guide",
         "A guide to setting up the Muse Dash Archipelago Mod on your computer.",
         "English",
         "setup_en.md",
@@ -77,7 +26,8 @@ class MuseDashWebWorld(WebWorld):
     tutorials = [setup_en]
 
 class MuseDashWorld(World):
-    """Muse Dash. Insert stuff here"""
+    """Muse Dash is a rhythm game, where you hit objects to the beat of one of 400+ songs.
+    Have fun playing as cute girls, while you go through randomly chosen songs, until you reach the goal."""
 
     # World Options
     game: str = "Muse Dash"
@@ -105,7 +55,11 @@ class MuseDashWorld(World):
     included_songs: list[str]
 
     def generate_early(self):
-        available_song_keys = list(self.museDashCollection.SongItems.keys())
+        available_song_keys = list()
+        if (self.multiworld.allow_just_as_planned_dlc_songs[self.player]):
+            available_song_keys.extend(self.museDashCollection.SongItems.keys())
+        else:
+            available_song_keys.extend(self.museDashCollection.BaseSongItems.keys())
 
         self.included_songs = list()
         self.starting_songs = list()
