@@ -353,7 +353,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                             precollected_hints[player].add(hint)
 
                 locations_data: Dict[int, Dict[int, Tuple[int, int, int]]] = {player: {} for player in world.player_ids}
-                for location in world.get_filled_locations():
+                for location in world.random.shuffle(world.get_filled_locations()):
                     if type(location.address) == int:
                         assert location.item.code is not None, "item code None should be event, " \
                                                                "location.address should then also be None. Location: " \

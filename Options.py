@@ -891,7 +891,6 @@ class StartInventory(ItemDict):
 
 class StartHints(ItemDict):
     """Start with these item's locations prefilled into the !hint command."""
-    verify_item_name = True
     display_name = "Start Hints"
 
 
