@@ -22,9 +22,9 @@ class MessengerRegion(Region):
         for loc in REGIONS[self.name]:
             self.locations.append(MessengerLocation(loc, self))
         if self.multiworld.shuffle_seals[self.player]:
-            # putting some dumb special case for searing crags so i can split it into 2 regions
+            # putting some dumb special case for searing crags and ToT so i can split them into 2 regions
             seal_locs = [loc for loc in SEALS
-                         if loc.startswith(self.name.split(" ")[0]) and self.name != "Searing Crags"]
+                         if loc.startswith(self.name.split(" ")[0]) and self.name not in {"Searing Crags", "Tower HQ"}]
             for seal_loc in seal_locs:
                 self.locations.append(MessengerLocation(seal_loc, self))
 
