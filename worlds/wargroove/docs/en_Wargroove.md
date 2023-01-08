@@ -31,5 +31,4 @@ is taken in game.
 
 ## What is the goal of this game when randomized?
 
-The goal is to beat the level titled `The End` by finding the `Final Bridges`, `Final Walls`, `Final Sickle` and the 
-`knight` unit.
+The goal is to beat the level titled `The End` by finding the `Final Bridges`, `Final Walls`, and `Final Sickle`.

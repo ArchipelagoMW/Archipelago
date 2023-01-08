@@ -5,6 +5,7 @@
 Only the Steam Windows version is supported. MAC, Switch, Xbox, Playstation, are all not supported.
 The custom campaign must be downloaded, the vanilla and Double Trouble campaigns will not work with Archipelago.
 
+- Wargroove with the Double Trouble DLC installed through Steam on Windows
 - [The most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
 - Download the `ArchipelagoMod.zip`, `(REALLY_LONG_FILENAME).cmp` and 
 `(REALLY_LONG_FILENAME).cmp.bak` files from
@@ -59,6 +60,9 @@ Follow the `Installing the Archipelago Wargroove Mod and Campaign files` steps a
 when attempting to update the campaign files and the mod.
 
 ## Troubleshooting
+
+### The game is too hard
+`Go to the campaign overview screen->Hit escape on the keyboard->Click adjust difficulty->Adjust the setttings`
 
 ### The mod doesn't load
 Double-check the mod installation under `%appdata%\Chucklefish\Wargroove\mods` there should be 3 `.dat` files in 

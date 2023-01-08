@@ -60,7 +60,7 @@ class WargrooveWorld(World):
         precollected_item_names = {item.name for item in self.multiworld.precollected_items[self.player]}
         ignore_faction_items = self.multiworld.commander_choice[self.player] == 0
         for name, data in item_table.items():
-            if data.code is not None and name not in precollected_item_names and not data.filler:
+            if data.code is not None and name not in precollected_item_names and not data.classification == ItemClassification.filler:
                 if name.endswith(' Commanders') and ignore_faction_items:
                     continue
                 item = WargrooveItem(name, self.player)
@@ -136,8 +136,7 @@ class WargrooveItem(Item):
         item_data = item_table[name]
         super(WargrooveItem, self).__init__(
             name,
-            ItemClassification.progression if item_data.progression else
-            ItemClassification.filler if item_data.filler else
-            ItemClassification.useful,
-            item_data.code, player
+            item_data.classification,
+            item_data.code,
+            player
         )
