@@ -37,14 +37,6 @@ class SpireWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
 
-    def _get_slot_data(self):
-        return {
-            'seed': "".join(self.multiworld.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16)),
-            'character': self.multiworld.character[self.player].get_option_name,
-            'ascension': self.multiworld.ascension[self.player],
-            'heart_run': self.multiworld.heart_run[self.player]
-        }
-
     def generate_basic(self):
         # Fill out our pool with our items from item_pool, assuming 1 item if not present in item_pool
         pool = []
@@ -74,7 +66,9 @@ class SpireWorld(World):
         create_regions(self.multiworld, self.player)
 
     def fill_slot_data(self) -> dict:
-        slot_data = self._get_slot_data()
+        slot_data = {
+            'seed': "".join(self.multiworld.slot_seeds[self.player].choice(string.ascii_letters) for i in range(16))
+        }
         for option_name in spire_options:
             option = getattr(self.multiworld, option_name)[self.player]
             slot_data[option_name] = option.value
