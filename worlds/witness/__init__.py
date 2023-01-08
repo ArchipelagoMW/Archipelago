@@ -81,19 +81,28 @@ class WitnessWorld(World):
                 raise Exception("This Witness world doesn't have any progression items. Please turn on Symbol Shuffle,"
                                 " Door Shuffle or Laser Shuffle.")
 
+    def create_regions(self):
+        """
+        Doing all of this in create_regions because I want to have access to pre-collected items,
+        which influence rules for locations as well as region connections.
+        """
+
         disabled_locations = self.multiworld.exclude_locations[self.player].value
 
-        self.player_logic = WitnessPlayerLogic(self.multiworld, self.player, disabled_locations)
+        self.player_logic = WitnessPlayerLogic(
+            self.multiworld, self.player, disabled_locations, self.multiworld.precollected_items[self.player]
+        )
 
         self.locat = WitnessPlayerLocations(self.multiworld, self.player, self.player_logic)
         self.items = WitnessPlayerItems(self.locat, self.multiworld, self.player, self.player_logic)
         self.regio = WitnessRegions(self.locat)
 
-        self.log_ids_to_hints = dict()
-
-        self.junk_items_created = {key: 0 for key in self.items.JUNK_WEIGHTS.keys()}
+        self.regio.create_regions(self.multiworld, self.player, self.player_logic)
 
     def generate_basic(self):
+        self.log_ids_to_hints = dict()
+        self.junk_items_created = {key: 0 for key in self.items.JUNK_WEIGHTS.keys()}
+
         # Generate item pool
         pool = []
         items_by_name = dict()
@@ -106,22 +115,12 @@ class WitnessWorld(World):
 
         less_junk = 0
 
-        new_preopened_doors = set()
-
         for precol_item in self.multiworld.precollected_items[self.player]:
             if precol_item.name in items_by_name:  # if item is in the pool, remove 1 instance.
                 item_obj = items_by_name[precol_item.name]
 
                 if item_obj in pool:
                     pool.remove(item_obj) # remove one instance of this pre-collected item if it exists
-
-            # elif because logic should only change if the item is not already in the pool
-            elif precol_item.name in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT:
-                new_preopened_doors.add(precol_item.name)
-
-        if new_preopened_doors:
-            self.player_logic.pre_opened_doors(new_preopened_doors)
-            self.regio.pre_opened_doors(self.multiworld, self.player, self.player_logic, new_preopened_doors)
 
         # Put good item on first check if there are any of the designated "good items" in the pool
         good_items_in_the_game = []
@@ -167,9 +166,6 @@ class WitnessWorld(World):
 
         self.multiworld.itempool += pool
 
-    def create_regions(self):
-        self.regio.create_regions(self.multiworld, self.player, self.player_logic)
-
     def set_rules(self):
         set_rules(self.multiworld, self.player, self.player_logic, self.locat)
 
@@ -177,7 +173,9 @@ class WitnessWorld(World):
         hint_amount = get_option_value(self.multiworld, self.player, "hint_amount")
 
         credits_hint = (
-            "This Randomizer is brought to you by", "NewSoupVi, Jarno, blastron,", "jbzdarkid, sigma144, IHNN, oddGarrett.", -1
+            "This Randomizer is brought to you by",
+            "NewSoupVi, Jarno, blastron,",
+            "jbzdarkid, sigma144, IHNN, oddGarrett.", -1
         )
 
         audio_logs = get_audio_logs().copy()

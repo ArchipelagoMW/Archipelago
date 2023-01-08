@@ -103,23 +103,5 @@ class WitnessRegions:
             world.get_region('First Hallway', player)
         )
 
-    def pre_opened_doors(self, world, player: int, player_logic: WitnessPlayerLogic, names):
-        all_pre_opened_twoway_doors = set()
-
-        for door_name in names:
-            for door_hex in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[door_name][2]:
-                if StaticWitnessLogic.CHECKS_BY_HEX[door_hex]["id"] is None:
-                    all_pre_opened_twoway_doors.add(door_hex)
-
-        for reg, con in player_logic.CONNECTIONS_BY_REGION_NAME.items():
-            for connection in con:
-                for subset in connection[1]:
-                    if not subset:
-                        continue
-                    if all({door_hex in all_pre_opened_twoway_doors for door_hex in subset}):
-                        target = connection[0]
-
-                        self.connect(world, player, target, reg, player_logic)
-
     def __init__(self, locat: WitnessPlayerLocations):
         self.locat = locat

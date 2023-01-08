@@ -16,10 +16,10 @@ When the world has parsed its options, a second function is called to finalize t
 """
 
 import copy
-from typing import Set
+from typing import Set, List
 from logging import warning
 
-from BaseClasses import MultiWorld
+from BaseClasses import MultiWorld, Item
 from .static_logic import StaticWitnessLogic
 from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda, get_early_utm_list, \
     get_symbol_shuffle_list, get_door_panel_shuffle_list, get_doors_complex_list, get_doors_max_list, \
@@ -283,6 +283,9 @@ class WitnessPlayerLogic:
         if is_option_enabled(world, player, "early_secret_area"):
             adjustment_linesets_in_order.append(get_early_utm_list())
 
+        for item in self.YAML_ADDED_ITEMS:
+            adjustment_linesets_in_order.append(["Items:", item.name])
+
         if is_option_enabled(world, player, "shuffle_lasers"):
             adjustment_linesets_in_order.append(get_laser_shuffle())
 
@@ -391,23 +394,9 @@ class WitnessPlayerLogic:
             pair = self.make_event_item_pair(panel)
             self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
 
-    def pre_opened_doors(self, door_names):
-        for door_name in door_names:
-            for door_hex in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT[door_name][2]:
-                if StaticWitnessLogic.CHECKS_BY_HEX[door_hex]["panelType"] in ("Door", "Laser"):
-                    self.REQUIREMENTS_BY_HEX[door_hex] = frozenset({frozenset([door_name])})
-                    return
-
-                # is a panel. Remove dependency on other panels
-
-                if door_hex == "0x28A0D":  # Town Church Entry (Panel) needs to stay the same
-                    return
-
-                self.DEPENDENT_REQUIREMENTS_BY_HEX[door_hex]["panels"] = frozenset({frozenset()})
-                self.REQUIREMENTS_BY_HEX[door_hex] = self.reduce_req_within_region(door_hex)
-
-    def __init__(self, world: MultiWorld, player: int, disabled_locations: Set[str]):
+    def __init__(self, world: MultiWorld, player: int, disabled_locations: Set[str], start_inv: List[Item]):
         self.YAML_DISABLED_LOCATIONS = disabled_locations
+        self.YAML_ADDED_ITEMS = start_inv
 
         self.EVENT_PANELS_FROM_PANELS = set()
         self.EVENT_PANELS_FROM_REGIONS = set()
