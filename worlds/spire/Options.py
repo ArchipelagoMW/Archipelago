@@ -27,10 +27,29 @@ class HeartRun(Toggle):
     option_true = 1
     option_false = 0
     default = 0
-
+    
+    
+class Portals(Toggle):
+    """Wether or not you want to have act portals enabled. Reach boss chest of previous act to activate it on future runs."""
+    display_name = "Portals"
+    option_true = 1
+    option_false = 0
+    default = 1
+    
+    
+class ItemDistinction(Choice):
+    """Pick how you wish your items to be distributed per act."""
+    display_name = "Item distribution"
+    option_no_distinction = 0
+    option_distinction_per_act = 1
+    option_distinction_with_backlog = 2
+    default = 0
+    
 
 spire_options: typing.Dict[str, type(Option)] = {
     "character": Character,
     "ascension": Ascension,
-    "heart_run": HeartRun
+    "heart_run": HeartRun,
+    "portals": Portals,
+    "item_distinction": ItemDistinction
 }
