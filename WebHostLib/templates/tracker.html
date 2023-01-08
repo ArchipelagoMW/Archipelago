@@ -98,6 +98,7 @@
                                         <th colspan="{{ colspan }}" class="center-column">{{ area }}</th>
                                     {%- endif -%}
                                 {%- endfor -%}
+                                <th rowspan="2" class="center-column">&percnt;</th>
                                 <th rowspan="2" class="center-column hours">Last<br>Activity</th>
                             </tr>
                             <tr>
@@ -140,6 +141,7 @@
                                             <td class="center-column">{% if inventory[team][player][big_key_ids[area]] %}✔️{% endif %}</td>
                                         {%- endif -%}
                                     {%- endfor -%}
+                                    <td class="center-column">{{ percent_total_checks_done[team][player] }}</td>
                                     {%- if activity_timers[(team, player)] -%}
                                         <td class="center-column">{{ activity_timers[(team, player)].total_seconds() }}</td>
                                     {%- else -%}
