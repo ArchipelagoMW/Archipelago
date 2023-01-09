@@ -88,7 +88,8 @@ Players provide customized settings for their World in the form of yamls.
 A `dataclass` of valid options definitions has to be provided in `self.options_dataclass`.
 (It must be a subclass of `PerGameCommonOptions`.)
 Option results are automatically added to the `World` object for easy access.
-Those are accessible through `self.o.<option_name>`. 
+Those are accessible through `self.o.<option_name>`, and you can get a dictionary of the option values via
+`self.o.as_dict(<option_names>)`, passing the desired options as strings. 
 
 ### World Options
 

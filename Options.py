@@ -868,6 +868,16 @@ class CommonOptions:
     progression_balancing: ProgressionBalancing
     accessibility: Accessibility
 
+    def as_dict(self, *args: str) -> typing.Dict:
+        option_results = {}
+        for option_name in args:
+            if option_name in self.__annotations__:
+                option_results[option_name] = getattr(self, option_name).value
+            else:
+                raise ValueError(f"{option_name} not found in {self.__annotations__}")
+        return option_results
+
+
 common_options = typing.get_type_hints(CommonOptions)
 # TODO - remove this dict once all worlds use options dataclasses
 
