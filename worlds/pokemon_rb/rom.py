@@ -507,9 +507,9 @@ def generate_output(self, output_directory: str):
         inventory = ["Poke Ball", "Great Ball", "Ultra Ball"]
         if self.multiworld.better_shops[self.player].value == 2:
             inventory.append("Master Ball")
-        inventory += ["Potion", "Super Potion", "Hyper Potion", "Max Potion", "Full Restore", "Antidote", "Awakening",
-                      "Burn Heal", "Ice Heal", "Paralyze Heal", "Full Heal", "Repel", "Super Repel", "Max Repel",
-                      "Escape Rope"]
+        inventory += ["Potion", "Super Potion", "Hyper Potion", "Max Potion", "Full Restore", "Revive", "Antidote",
+                      "Awakening", "Burn Heal", "Ice Heal", "Paralyze Heal", "Full Heal", "Repel", "Super Repel",
+                      "Max Repel", "Escape Rope"]
         shop_data = bytearray([0xFE, len(inventory)])
         shop_data += bytearray([item_table[item].id - 172000000 for item in inventory])
         shop_data.append(0xFF)

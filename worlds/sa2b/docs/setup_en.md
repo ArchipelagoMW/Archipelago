@@ -16,7 +16,7 @@
 - Quality of life mods
 	- SA2 Volume Controls from: [SA2 Volume Controls Release Page] (https://gamebanana.com/mods/381193)
 
-## Installation Procedures
+## Installation Procedures (Windows)
 
 1. Install Sonic Adventure 2: Battle from Steam.
 
@@ -32,6 +32,26 @@
 
 7. Launch the `SA2ModManager.exe` and make sure the SA2B_Archipelago mod is listed and enabled.
 
+## Installation Procedures (Linux and Steam Deck)
+
+1. Install Sonic Adventure 2: Battle from Steam.
+
+2. In the properties for Sonic Adventure 2 on Steam, force the use of Proton Experimental as the compatibility tool.
+
+3. Launch the game at least once without mods.
+
+4. Install Sonic Adventure 2 Mod Loader as per its instructions. To launch it, add ``SA2ModManager.exe`` as a non-Steam game. In the properties on Steam for Sonic Adventure 2 Mod Loader, set it to use Proton as the compatibility tool.
+
+5. The folder you installed the Sonic Adventure 2 Mod Loader into will now have a `/mods` directory.
+
+6. Unpack the Archipelago Mod into this folder, so that `/mods/SA2B_Archipelago` is a valid path.
+
+7. In the SA2B_Archipelago folder, copy the `APCpp.dll` file and paste it in the Sonic Adventure 2 install folder (where `SA2ModManager.exe` is).
+
+8. Launch the `SA2ModManager.exe` from Steam and make sure the SA2B_Archipelago mod is listed and enabled.
+
+Note: Ensure that you launch Sonic Adventure 2 from Steam directly on Linux, rather than launching using the `Save & Play` button in Sonic Adventure 2 Mod Loader.
+
 ## Joining a MultiWorld Game
 
 1. Before launching the game, run the `SA2ModManager.exe`, select the SA2B_Archipelago mod, and hit the `Configure...` button.
@@ -42,7 +62,7 @@
 
 4. For the `Password` field under `AP Settings`, enter the server password if one exists, otherwise leave blank.
 
-5. Click The `Save` button then hit `Save & Play` to launch the game.
+5. Click The `Save` button then hit `Save & Play` to launch the game. On Linux, launch Sonic Adventure 2 from Steam directly rather than using `Save & Play`.
 
 6. Create a new save to connect to the MultiWorld game. A "Connected to Archipelago" message will appear if you sucessfully connect. If you close the game during play, you can reconnect to the MultiWorld game by selecting the same save file slot.
 
