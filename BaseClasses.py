@@ -215,7 +215,7 @@ class MultiWorld():
                 option_values = getattr(args, option_key, {})
                 setattr(self, option_key, option_values)
                 # TODO - remove this loop once all worlds use options dataclasses
-            options_dataclass: Type[Options.PerGameCommonOptions] = self.worlds[player].options_dataclass
+            options_dataclass: Type[Options.GameOptions] = self.worlds[player].options_dataclass
             self.worlds[player].o = options_dataclass(**{option_key: getattr(args, option_key)[player]
                                                          for option_key in get_type_hints(options_dataclass)})
 
