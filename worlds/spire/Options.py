@@ -6,15 +6,30 @@ class Character(TextChoice):
     """Enter the Title of the character you wish to play as, for custom characters this should match exactly the full
      title that shows up when choosing them in the vanilla character select screen.
 
+      if you don't know the exact name to enter with the mod installed go to
+     `Mods -> Archipelago Multi-world -> config` to view a list of installed modded character titles.
+
+     the downfall characters will only work if you have downfall installed.
+
      Spire Take the Wheel will have your client pick a random character from the list of all your installed characters
      including custom ones.
+
+     if the chosen character mod is not installed it will default back to 'The Ironclad'
      """
     display_name = "Character"
-    option_the_ironclad = 0
-    option_the_silent = 1
-    option_the_defect = 2
-    option_the_watcher = 3
-    option_spire_take_the_wheel = 4
+    option_The_Ironclad = 0
+    option_The_Silent = 1
+    option_The_Defect = 2
+    option_The_Watcher = 3
+    option_The_Hermit = 4
+    option_The_Slime_Boss = 5
+    option_The_Guardian = 6
+    option_The_Hexaghost = 7
+    option_The_Champ = 8
+    option_The_Gremlins = 9
+    option_The_Automaton = 10
+    option_The_Snecko = 11
+    option_spire_take_the_wheel = 12
 
 
 class Ascension(Range):
@@ -25,10 +40,17 @@ class Ascension(Range):
     default = 0
 
 
-class HeartRun(Toggle):
-    """Whether or not you will need to collect the 3 keys and enter the final act to
-    complete the game. The Heart does not need to be defeated."""
-    display_name = "Heart Run"
+class FinalAct(Toggle):
+    """Whether you will need to collect the 3 keys and beat the final act to complete the game."""
+    display_name = "Final Act"
+    option_true = 1
+    option_false = 0
+    default = 0
+
+
+class Downfall(Toggle):
+    """When Downfall is Installed this will switch the played mode to Downfall"""
+    display_name = "Downfall"
     option_true = 1
     option_false = 0
     default = 0
@@ -37,5 +59,6 @@ class HeartRun(Toggle):
 spire_options: typing.Dict[str, type(Option)] = {
     "character": Character,
     "ascension": Ascension,
-    "heart_run": HeartRun
+    "final_act": FinalAct,
+    "downfall": Downfall,
 }
