@@ -42,8 +42,7 @@ class SpireWorld(World):
             'character': self.multiworld.character[self.player],
             'ascension': self.multiworld.ascension[self.player],
             'heart_run': self.multiworld.heart_run[self.player],
-            'portals': self.multiworld.portals[self.player],
-            'item_distinction': self.multiworld.item_distinction[self.player]
+            'portals': self.multiworld.portals[self.player]
         }
 
     def generate_basic(self):
