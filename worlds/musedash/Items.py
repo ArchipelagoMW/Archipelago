@@ -22,7 +22,7 @@ class MuseDashItem(Item):
     game: str = "Muse Dash"
 
     def __init__(self, name: str, player: int, data: Union[SongData, AlbumData]) -> None:
-        super().__init__(name, ItemClassification.progression_skip_balancing, data.code, player) #Todo: Should these be skip balancing?
+        super().__init__(name, ItemClassification.progression, data.code, player) #Todo: Should these be skip balancing?
 
 class MuseDashFixedItem(Item):
     game: str = "Muse Dash"
