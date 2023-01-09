@@ -1,6 +1,7 @@
 from __future__ import annotations
 import abc
 from copy import deepcopy
+from dataclasses import dataclass
 import math
 import numbers
 import typing
@@ -862,10 +863,13 @@ class ProgressionBalancing(SpecialRange):
     }
 
 
-common_options = {
-    "progression_balancing": ProgressionBalancing,
-    "accessibility": Accessibility
-}
+@dataclass
+class CommonOptions:
+    progression_balancing: ProgressionBalancing
+    accessibility: Accessibility
+
+common_options = typing.get_type_hints(CommonOptions)
+# TODO - remove this dict once all worlds use options dataclasses
 
 
 class ItemSet(OptionSet):
@@ -982,18 +986,24 @@ class ItemLinks(OptionList):
                 raise Exception(f"item_link {link['name']} has {intersection} items in both its local_items and non_local_items pool.")
 
 
-per_game_common_options = {
-    **common_options,  # can be overwritten per-game
-    "local_items": LocalItems,
-    "non_local_items": NonLocalItems,
-    "early_items": EarlyItems,
-    "start_inventory": StartInventory,
-    "start_hints": StartHints,
-    "start_location_hints": StartLocationHints,
-    "exclude_locations": ExcludeLocations,
-    "priority_locations": PriorityLocations,
-    "item_links": ItemLinks
-}
+@dataclass
+class PerGameCommonOptions(CommonOptions):
+    local_items: LocalItems
+    non_local_items: NonLocalItems
+    early_items: EarlyItems
+    start_inventory: StartInventory
+    start_hints: StartHints
+    start_location_hints: StartLocationHints
+    exclude_locations: ExcludeLocations
+    priority_locations: PriorityLocations
+    item_links: ItemLinks
+
+per_game_common_options = typing.get_type_hints(PerGameCommonOptions)
+# TODO - remove this dict once all worlds use options dataclasses
+
+
+GameOptions = typing.TypeVar("GameOptions", bound=PerGameCommonOptions)
+
 
 if __name__ == "__main__":
 

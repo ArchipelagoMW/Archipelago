@@ -5,7 +5,7 @@ import sys
 import pathlib
 from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Type, Union, TYPE_CHECKING
 
-from Options import AssembleOptions, Option
+from Options import AssembleOptions, GameOptions, PerGameCommonOptions
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
@@ -130,8 +130,10 @@ class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    option_definitions: Dict[str, AssembleOptions] = {}  # link your Options mapping
-    options: Dict[str, Option[Any]]  # automatically populated option names to resulting option object
+    option_definitions: Dict[str, AssembleOptions] = {}  # TODO - remove this once all worlds use options dataclasses
+    options_dataclass: Type[GameOptions] = PerGameCommonOptions  # link your Options mapping
+    o: PerGameCommonOptions
+
     game: str  # name the game
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
 
@@ -199,7 +201,6 @@ class World(metaclass=AutoWorldRegister):
     def __init__(self, world: "MultiWorld", player: int):
         self.world = world
         self.player = player
-        self.options = {}
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",

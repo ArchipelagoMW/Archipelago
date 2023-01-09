@@ -1,5 +1,5 @@
-from typing import Dict
-from Options import Option, DefaultOnToggle, Range, Choice
+from dataclasses import dataclass
+from Options import DefaultOnToggle, Range, Choice, PerGameCommonOptions
 
 
 class TotalLocations(Range):
@@ -150,28 +150,28 @@ class ItemWeights(Choice):
     option_scraps_only = 8
 
 
-# define a dictionary for the weights of the generated item pool.
-ror2_weights: Dict[str, type(Option)] = {
-    "green_scrap":          GreenScrap,
-    "red_scrap":            RedScrap,
-    "yellow_scrap":         YellowScrap,
-    "white_scrap":          WhiteScrap,
-    "common_item":          CommonItem,
-    "uncommon_item":        UncommonItem,
-    "legendary_item":       LegendaryItem,
-    "boss_item":            BossItem,
-    "lunar_item":           LunarItem,
-    "equipment":            Equipment
-}
+# define a class for the weights of the generated item pool.
+@dataclass
+class ROR2Weights:
+    green_scrap: GreenScrap
+    red_scrap: RedScrap
+    yellow_scrap: YellowScrap
+    white_scrap: WhiteScrap
+    common_item: CommonItem
+    uncommon_item: UncommonItem
+    legendary_item: LegendaryItem
+    boss_item: BossItem
+    lunar_item: LunarItem
+    equipment: Equipment
 
-ror2_options: Dict[str, type(Option)] = {
-    "total_locations":      TotalLocations,
-    "total_revivals":       TotalRevivals,
-    "start_with_revive":    StartWithRevive,
-    "final_stage_death":    FinalStageDeath,
-    "item_pickup_step":     ItemPickupStep,
-    "enable_lunar":         AllowLunarItems,
-    "item_weights":         ItemWeights,
-    "item_pool_presets":    ItemPoolPresetToggle,
-    **ror2_weights
-}
+
+@dataclass
+class ROR2Options(PerGameCommonOptions, ROR2Weights):
+    total_locations: TotalLocations
+    total_revivals: TotalRevivals
+    start_with_revive: StartWithRevive
+    final_stage_death: FinalStageDeath
+    item_pickup_step: ItemPickupStep
+    enable_lunar: AllowLunarItems
+    item_weights: ItemWeights
+    item_pool_presets: ItemPoolPresetToggle

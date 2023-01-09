@@ -3,13 +3,13 @@ from argparse import Namespace
 
 import copy
 import itertools
-from argparse import Namespace
 from enum import unique, IntEnum, IntFlag
 import logging
 import json
 import functools
 from collections import OrderedDict, Counter, deque
-from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, NamedTuple
+from typing import List, Dict, Optional, Set, Iterable, Union, Any, Tuple, TypedDict, Callable, NamedTuple, Type, \
+    get_type_hints
 import typing  # this can go away when Python 3.8 support is dropped
 import secrets
 import random
@@ -214,8 +214,10 @@ class MultiWorld():
                                               world_type.option_definitions):
                 option_values = getattr(args, option_key, {})
                 setattr(self, option_key, option_values)
-                if player in option_values:
-                    self.worlds[player].options[option_key] = option_values[player]
+                # TODO - remove this loop once all worlds use options dataclasses
+            options_dataclass: Type[Options.GameOptions] = self.worlds[player].options_dataclass
+            self.worlds[player].o = options_dataclass(**{option_key: getattr(args, option_key)[player]
+                                                         for option_key in get_type_hints(options_dataclass)})
 
     def set_item_links(self):
         item_links = {}
