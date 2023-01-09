@@ -15,11 +15,10 @@ from worlds import AutoWorld
 class TestInverted(TestBase):
     def setUp(self):
         self.multiworld = MultiWorld(1)
-        args = Namespace()
+        args = self.multiworld.default_common_options
         for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
             setattr(args, name, {1: option.from_any(option.default)})
         self.multiworld.set_options(args)
-        self.multiworld.set_default_common_options()
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
         self.multiworld.mode[1] = "inverted"
         create_inverted_regions(self.multiworld, 1)

@@ -15,7 +15,7 @@ from worlds import AutoWorld
 class TestDungeon(unittest.TestCase):
     def setUp(self):
         self.multiworld = MultiWorld(1)
-        args = self.world.default_common_options
+        args = self.multiworld.default_common_options
         for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
             setattr(args, name, {1: option.from_any(option.default)})
         self.multiworld.set_options(args)

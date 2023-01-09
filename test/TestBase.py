@@ -118,13 +118,12 @@ class WorldTestBase(unittest.TestCase):
         self.multiworld.game[1] = self.game
         self.multiworld.player_name = {1: "Tester"}
         self.multiworld.set_seed(seed)
-        args = Namespace()
+        args = self.multiworld.default_common_options
         for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].option_definitions.items():
             setattr(args, name, {
                 1: option.from_any(self.options.get(name, getattr(option, "default")))
             })
         self.multiworld.set_options(args)
-        self.multiworld.set_default_common_options()
         for step in gen_steps:
             call_all(self.multiworld, step)
 

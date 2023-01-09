@@ -2,7 +2,7 @@ import string
 from typing import Dict, get_type_hints, List
 from .Items import RiskOfRainItem, item_table, item_pool_weights
 from .Locations import RiskOfRainLocation, item_pickups
-from .Options import ItemWeights, ror2_options
+from .Options import ItemWeights, ROR2Options
 from .Rules import set_rules
 
 from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
@@ -49,7 +49,7 @@ class RiskOfRainWorld(World):
     def generate_basic(self) -> None:
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
         if self.o.start_with_revive.value:
-            self.world.push_precollected(self.world.create_item("Dio's Best Friend", self.player))
+            self.multiworld.push_precollected(self.create_item("Dio's Best Friend"))
 
         # if presets are enabled generate junk_pool from the selected preset
         pool_option = self.o.item_weights.value
@@ -135,7 +135,7 @@ class RiskOfRainWorld(World):
         num_of_events = total_locations // 25
         if total_locations / 25 == num_of_events:
             num_of_events -= 1
-        world_region = self.world.get_region("Petrichor V", self.player)
+        world_region = self.multiworld.get_region("Petrichor V", self.player)
 
         for i in range(num_of_events):
             event_loc = RiskOfRainLocation(self.player, f"Pickup{(i + 1) * 25}", None, world_region)

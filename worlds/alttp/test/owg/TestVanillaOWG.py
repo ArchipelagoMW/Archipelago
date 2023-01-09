@@ -17,11 +17,10 @@ from worlds import AutoWorld
 class TestVanillaOWG(TestBase):
     def setUp(self):
         self.multiworld = MultiWorld(1)
-        args = Namespace()
+        args = self.multiworld.default_common_options
         for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
             setattr(args, name, {1: option.from_any(option.default)})
         self.multiworld.set_options(args)
-        self.multiworld.set_default_common_options()
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
         self.multiworld.logic[1] = "owglitches"
         self.multiworld.worlds[1].er_seed = 0
