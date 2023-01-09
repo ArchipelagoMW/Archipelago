@@ -88,7 +88,7 @@ class MuseDashWorld(World):
         victory_location = self.multiworld.get_location(self.victory_song_name + "-0", self.player)
         victory_location.place_locked_item(self.museDashCollection.create_victory_item(self.player))
         victory_location = self.multiworld.get_location(self.victory_song_name + "-1", self.player)
-        victory_location.place_locked_item(self.museDashCollection.create_victory_item(self.player))
+        victory_location.place_locked_item(self.museDashCollection.create_empty_item(self.player))
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
@@ -110,15 +110,24 @@ class MuseDashWorld(World):
         all_song_item_keys = list(self.included_songs)
         all_song_item_keys.append(self.victory_song_name)
 
-        excludedItemCount = len(self.starting_songs) * 2
-        extra_items_are_songs = self.multiworld.extra_items_are_songs[self.player]
-
+        # Start by adding 2 items for all spaces that have been included
         for itemName in all_song_item_keys:
             self.multiworld.itempool.append(self.create_item(itemName))
             self.multiworld.itempool.append(self.create_item(itemName))
 
-        # Each song that the player starts with is 2 unneeded items. But 2 items are placed on the goal song.
-        for _ in range(0, excludedItemCount - 2):
+        # Next figure out how many extra items that are needed.
+        # - Each song that the player starts add 2 locations to the pool.
+        # - But the victory song cannot have anything other than victory. (-2 locations)
+        excludedItemCount = (len(self.starting_songs) - 1) * 2
+
+        # Get the amount of these extra spaces that should be replaced with the goal song
+        extra_goal_songs = min(excludedItemCount, self.multiworld.extra_goal_song_items[self.player])
+        for _ in range(0, extra_goal_songs):
+            self.multiworld.itempool.append(self.create_item(self.victory_song_name))
+
+        # Determine if the leftover songs are empty items or random songs.
+        extra_items_are_songs = self.multiworld.extra_items_are_songs[self.player]
+        for _ in range(0, excludedItemCount - extra_goal_songs):
             if (extra_items_are_songs):
                 songKey = self.multiworld.random.choice(all_song_item_keys)
                 self.multiworld.itempool.append(self.create_item(songKey))

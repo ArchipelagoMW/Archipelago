@@ -22,7 +22,7 @@ class AdditionalSongs(Range):
     Does not count any starting songs or the final goal.
     //Todo: Correct length suggestions
     Game Length Suggestions:
-    - Short (1-2 hours): 40
+    - Short (1-2 hours): 30
     - Long (4 hours): 80
     """
     range_start = 20
@@ -34,6 +34,17 @@ class AdditionalSongs(Range):
 class AdditionalItemsAreSongs(DefaultOnToggle):
     """2 Extra items are added to the pool per Song that is unlocked at the start. Turning this one means these items will be songs."""
     display_name = "Additional Items Are Songs"
+
+
+class ExtraItemsGoalSong(Range):
+    """The amount of extra items that lead to the goal.
+    The game will randomise 2 + x items into the seed that lead to the goal.
+    Enabled Regardless of 'Additional Items Are Songs'.
+    """
+    range_start = 0
+    range_end = 5  # Todo: Add song count here
+    default = 1
+    display_name = "Extra Goal Items"
 
 # Options Beyond this point are not Implemented
 
@@ -87,4 +98,5 @@ musedash_options: Dict[str, type(Option)] = {
     "starting_song_count": StartingSongs,
     "additional_song_count": AdditionalSongs,
     "extra_items_are_songs": AdditionalItemsAreSongs,
+    "extra_goal_song_items": ExtraItemsGoalSong,
 }
