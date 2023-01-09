@@ -85,9 +85,10 @@ inside a World object.
 ### Player Options
 
 Players provide customized settings for their World in the form of yamls.
-Those are accessible through `self.options["<option_name>"]`. A dict
-of valid options has to be provided in `self.option_definitions`. Options are automatically
-added to the `World` object for easy access.
+A `dataclass` of valid options definitions has to be provided in `self.options_dataclass`.
+(It must be a subclass of `PerGameCommonOptions`.)
+Option results are automatically added to the `World` object for easy access.
+Those are accessible through `self.o.<option_name>`. 
 
 ### World Options
 
@@ -209,11 +210,11 @@ See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requireme
 AP will only import the `__init__.py`. Depending on code size it makes sense to
 use multiple files and use relative imports to access them.
 
-e.g. `from .Options import mygame_options` from your `__init__.py` will load
-`world/[world_name]/Options.py` and make its `mygame_options` accessible.
+e.g. `from .Options import MyGameOptions` from your `__init__.py` will load
+`world/[world_name]/Options.py` and make its `MyGameOptions` accessible.
 
 When imported names pile up it may be easier to use `from . import Options`
-and access the variable as `Options.mygame_options`.
+and access the variable as `Options.MyGameOptions`.
 
 Imports from directories outside your world should use absolute imports.
 Correct use of relative / absolute imports is required for zipped worlds to
@@ -261,9 +262,9 @@ Each option has its own class, inherits from a base option type, has a docstring
 to describe it and a `display_name` property for display on the website and in
 spoiler logs.
 
-The actual name as used in the yaml is defined in a `dict[str, Option]`, that is
-assigned to the world under `self.option_definitions`. By convention, the string
-that defines your option should be in `snake_case`.
+The actual name as used in the yaml is defined via the field names of a `dataclass` that is
+assigned to the world under `self.options_dataclass`. By convention, the strings
+that define your option names should be in `snake_case`.
 
 Common option types are `Toggle`, `DefaultOnToggle`, `Choice`, `Range`.
 For more see `Options.py` in AP's base directory.
@@ -298,8 +299,8 @@ default = 0
 ```python
 # Options.py
 
-from Options import Toggle, Range, Choice, Option
-import typing
+from dataclasses import dataclass
+from Options import Toggle, Range, Choice, PerGameCommonOptions
 
 class Difficulty(Choice):
     """Sets overall game difficulty."""
@@ -322,25 +323,26 @@ class FixXYZGlitch(Toggle):
     """Fixes ABC when you do XYZ"""
     display_name = "Fix XYZ Glitch"
 
-# By convention we call the options dict variable `<world>_options`.
-mygame_options: typing.Dict[str, type(Option)] = {
-    "difficulty": Difficulty,
-    "final_boss_hp": FinalBossHP,
-    "fix_xyz_glitch": FixXYZGlitch
-}
+# By convention, we call the options dataclass `<world>Options`.
+@dataclass
+class MyGameOptions(PerGameCommonOptions):
+    difficulty: Difficulty
+    final_boss_hp: FinalBossHP
+    fix_xyz_glitch: FixXYZGlitch
 ```
 ```python
 # __init__.py
 
 from worlds.AutoWorld import World
-from .Options import mygame_options  # import the options dict
+from .Options import MyGameOptions  # import the options dataclass
 
 class MyGameWorld(World):
     #...
-    option_definitions = mygame_options  # assign the options dict to the world
+    options_dataclass = MyGameOptions  # assign the options dataclass to the world
+    o: MyGameOptions  # typing for option results
     #...
 ```
-    
+
 ### Local or Remote
 
 A world with `remote_items` set to `True` gets all items items from the server
@@ -358,7 +360,7 @@ more natural. These games typically have been edited to 'bake in' the items.
 ```python
 # world/mygame/__init__.py
 
-from .Options import mygame_options  # the options we defined earlier
+from .Options import MyGameOptions  # the options we defined earlier
 from .Items import mygame_items  # data used below to add items to the World
 from .Locations import mygame_locations  # same as above
 from worlds.AutoWorld import World
@@ -374,7 +376,8 @@ class MyGameLocation(Location):  # or from Locations import MyGameLocation
 class MyGameWorld(World):
     """Insert description of the world/game here."""
     game: str = "My Game"  # name of the game/world
-    option_definitions = mygame_options  # options the player can set
+    options_dataclass = MyGameOptions  # options the player can set
+    o: MyGameOptions  # typing for option results
     topology_present: bool = True  # show path to required location checks in spoiler
     remote_items: bool = False  # True if all items come from the server
     remote_start_inventory: bool = False  # True if start inventory comes from the server
@@ -456,7 +459,7 @@ In addition, the following methods can be implemented and attributes can be set
 ```python
 def generate_early(self) -> None:
     # read player settings to world instance
-    self.final_boss_hp = self.options["final_boss_hp"].value
+    self.final_boss_hp = self.o.final_boss_hp.value
 ```
 
 #### create_item
@@ -676,9 +679,9 @@ def generate_output(self, output_directory: str):
                           in self.world.precollected_items[self.player]],
         "final_boss_hp": self.final_boss_hp,
         # store option name "easy", "normal" or "hard" for difficuly
-        "difficulty": self.options["difficulty"].current_key,
+        "difficulty": self.o.difficulty.current_key,
         # store option value True or False for fixing a glitch
-        "fix_xyz_glitch": self.options["fix_xyz_glitch"].value
+        "fix_xyz_glitch": self.o.fix_xyz_glitch.value
     }
     # point to a ROM specified by the installation
     src = Utils.get_options()["mygame_options"]["rom_file"]

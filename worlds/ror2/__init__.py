@@ -1,11 +1,11 @@
 import string
-from typing import Dict, List
+from typing import Dict, get_type_hints, List
 from .Items import RiskOfRainItem, item_table, item_pool_weights
 from .Locations import RiskOfRainLocation, item_pickups
 from .Rules import set_rules
 
 from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
-from .Options import ror2_options, ItemWeights
+from .Options import ItemWeights, ROR2Options
 from worlds.AutoWorld import World, WebWorld
 
 client_version = 1
@@ -29,7 +29,9 @@ class RiskOfRainWorld(World):
      first crash landing.
     """
     game: str = "Risk of Rain 2"
-    option_definitions = ror2_options
+    option_definitions = get_type_hints(ROR2Options)
+    options_dataclass = ROR2Options
+    o: ROR2Options
     topology_present = False
 
     item_name_to_id = item_table
@@ -42,17 +44,17 @@ class RiskOfRainWorld(World):
 
     def generate_early(self) -> None:
         # figure out how many revivals should exist in the pool
-        self.total_revivals = int(self.options["total_revivals"].value // 100 * self.options["total_locations"].value)
+        self.total_revivals = int(self.o.total_revivals.value // 100 * self.o.total_locations.value)
 
     def generate_basic(self) -> None:
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
-        if self.options["start_with_revive"].value:
+        if self.o.start_with_revive.value:
             self.world.push_precollected(self.world.create_item("Dio's Best Friend", self.player))
 
         # if presets are enabled generate junk_pool from the selected preset
-        pool_option = self.options["item_weights"].value
+        pool_option = self.o.item_weights.value
         junk_pool: Dict[str, int] = {}
-        if self.options["item_pool_presets"]:
+        if self.o.item_pool_presets:
             # generate chaos weights if the preset is chosen
             if pool_option == ItemWeights.option_chaos:
                 for name, max_value in item_pool_weights[pool_option].items():
@@ -61,20 +63,20 @@ class RiskOfRainWorld(World):
                 junk_pool = item_pool_weights[pool_option].copy()
         else:  # generate junk pool from user created presets
             junk_pool = {
-                "Item Scrap, Green": self.options["green_scrap"].value,
-                "Item Scrap, Red": self.options["red_scrap"].value,
-                "Item Scrap, Yellow": self.options["yellow_scrap"].value,
-                "Item Scrap, White": self.options["white_scrap"].value,
-                "Common Item": self.options["common_item"].value,
-                "Uncommon Item": self.options["uncommon_item"].value,
-                "Legendary Item": self.options["legendary_item"].value,
-                "Boss Item": self.options["boss_item"].value,
-                "Lunar Item": self.options["lunar_item"].value,
-                "Equipment": self.options["equipment"].value
+                "Item Scrap, Green": self.o.green_scrap.value,
+                "Item Scrap, Red": self.o.red_scrap.value,
+                "Item Scrap, Yellow": self.o.yellow_scrap.value,
+                "Item Scrap, White": self.o.white_scrap.value,
+                "Common Item": self.o.common_item.value,
+                "Uncommon Item": self.o.uncommon_item.value,
+                "Legendary Item": self.o.legendary_item.value,
+                "Boss Item": self.o.boss_item.value,
+                "Lunar Item": self.o.lunar_item.value,
+                "Equipment": self.o.equipment.value
             }
 
         # remove lunar items from the pool if they're disabled in the yaml unless lunartic is rolled
-        if not (self.options["enable_lunar"] or pool_option == ItemWeights.option_lunartic):
+        if not (self.o.enable_lunar or pool_option == ItemWeights.option_lunartic):
             junk_pool.pop("Lunar Item")
 
         # Generate item pool
@@ -84,7 +86,7 @@ class RiskOfRainWorld(World):
 
         # Fill remaining items with randomly generated junk
         itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
-                                              k=self.options["total_locations"].value - self.total_revivals)
+                                              k=self.o.total_locations.value - self.total_revivals)
 
         # Convert itempool into real items
         itempool = list(map(lambda name: self.create_item(name), itempool))
@@ -97,7 +99,7 @@ class RiskOfRainWorld(World):
     def create_regions(self) -> None:
         menu = create_region(self.world, self.player, "Menu")
         petrichor = create_region(self.world, self.player, "Petrichor V",
-                                  [f"ItemPickup{i + 1}" for i in range(self.options["total_locations"].value)])
+                                  [f"ItemPickup{i + 1}" for i in range(self.o.total_locations.value)])
 
         connection = Entrance(self.player, "Lobby", menu)
         menu.exits.append(connection)
@@ -109,12 +111,12 @@ class RiskOfRainWorld(World):
 
     def fill_slot_data(self):
         return {
-            "itemPickupStep": self.options["item_pickup_step"].value,
+            "itemPickupStep": self.o.item_pickup_step.value,
             "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for _ in range(16)),
-            "totalLocations": self.options["total_locations"].value,
-            "totalRevivals": self.options["total_revivals"].value,
-            "startWithDio": self.options["start_with_revive"].value,
-            "FinalStageDeath": self.options["final_stage_death"].value
+            "totalLocations": self.o.total_locations.value,
+            "totalRevivals": self.o.total_revivals.value,
+            "startWithDio": self.o.start_with_revive.value,
+            "FinalStageDeath": self.o.final_stage_death.value
         }
 
     def create_item(self, name: str) -> Item:
@@ -129,7 +131,7 @@ class RiskOfRainWorld(World):
         return item
 
     def create_events(self) -> None:
-        total_locations = self.options["total_locations"].value
+        total_locations = self.o.total_locations.value
         num_of_events = total_locations // 25
         if total_locations / 25 == num_of_events:
             num_of_events -= 1
