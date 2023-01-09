@@ -851,7 +851,7 @@ class Accessibility(Choice):
 
 class ProgressionBalancing(SpecialRange):
     """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
-    [0-99, default 50] A lower setting means more getting stuck. A higher setting means less getting stuck."""
+    A lower setting means more getting stuck. A higher setting means less getting stuck."""
     default = 50
     range_start = 0
     range_end = 99
@@ -895,11 +895,6 @@ class LocalItems(ItemSet):
 class NonLocalItems(ItemSet):
     """Forces these items to be outside their native world."""
     display_name = "Not Local Items"
-
-
-class EarlyItems(ItemDict):
-    """Force the specified items to be in locations that are reachable from the start."""
-    display_name = "Early Items"
 
 
 class StartInventory(ItemDict):
@@ -946,7 +941,8 @@ class ItemLinks(OptionList):
             Optional("exclude"): [And(str, len)],
             "replacement_item": Or(And(str, len), None),
             Optional("local_items"): [And(str, len)],
-            Optional("non_local_items"): [And(str, len)]
+            Optional("non_local_items"): [And(str, len)],
+            Optional("link_replacement"): Or(None, bool),
         }
     ])
 
@@ -969,6 +965,7 @@ class ItemLinks(OptionList):
         return pool
 
     def verify(self, world, player_name: str, plando_options) -> None:
+        link: dict
         super(ItemLinks, self).verify(world, player_name, plando_options)
         existing_links = set()
         for link in self.value:
@@ -993,20 +990,22 @@ class ItemLinks(OptionList):
 
             intersection = local_items.intersection(non_local_items)
             if intersection:
-                raise Exception(f"item_link {link['name']} has {intersection} items in both its local_items and non_local_items pool.")
+                raise Exception(f"item_link {link['name']} has {intersection} "
+                                f"items in both its local_items and non_local_items pool.")
+            link.setdefault("link_replacement", None)
 
 
 @dataclass
 class PerGameCommonOptions(CommonOptions):
     local_items: LocalItems
     non_local_items: NonLocalItems
-    early_items: EarlyItems
     start_inventory: StartInventory
     start_hints: StartHints
     start_location_hints: StartLocationHints
     exclude_locations: ExcludeLocations
     priority_locations: PriorityLocations
     item_links: ItemLinks
+
 
 per_game_common_options = typing.get_type_hints(PerGameCommonOptions)
 # TODO - remove this dict once all worlds use options dataclasses

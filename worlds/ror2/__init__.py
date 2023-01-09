@@ -2,6 +2,7 @@ import string
 from typing import Dict, get_type_hints, List
 from .Items import RiskOfRainItem, item_table, item_pool_weights
 from .Locations import RiskOfRainLocation, item_pickups
+from .Options import ItemWeights, ror2_options
 from .Rules import set_rules
 
 from BaseClasses import Region, RegionType, Entrance, Item, ItemClassification, MultiWorld, Tutorial
@@ -38,7 +39,6 @@ class RiskOfRainWorld(World):
     location_name_to_id = item_pickups
 
     data_version = 4
-    forced_auto_forfeit = True
     web = RiskOfWeb()
     total_revivals: int
 
@@ -58,7 +58,7 @@ class RiskOfRainWorld(World):
             # generate chaos weights if the preset is chosen
             if pool_option == ItemWeights.option_chaos:
                 for name, max_value in item_pool_weights[pool_option].items():
-                    junk_pool[name] = self.world.random.randint(0, max_value)
+                    junk_pool[name] = self.multiworld.random.randint(0, max_value)
             else:
                 junk_pool = item_pool_weights[pool_option].copy()
         else:  # generate junk pool from user created presets
@@ -85,34 +85,34 @@ class RiskOfRainWorld(World):
         itempool += ["Dio's Best Friend"] * self.total_revivals
 
         # Fill remaining items with randomly generated junk
-        itempool += self.world.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
-                                              k=self.o.total_locations.value - self.total_revivals)
+        itempool += self.multiworld.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
+                                              k=self.multiworld.total_locations[self.player].value - self.total_revivals)
 
         # Convert itempool into real items
         itempool = list(map(lambda name: self.create_item(name), itempool))
 
-        self.world.itempool += itempool
+        self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
-        set_rules(self.world, self.player)
+        set_rules(self.multiworld, self.player)
 
     def create_regions(self) -> None:
-        menu = create_region(self.world, self.player, "Menu")
-        petrichor = create_region(self.world, self.player, "Petrichor V",
-                                  [f"ItemPickup{i + 1}" for i in range(self.o.total_locations.value)])
+        menu = create_region(self.multiworld, self.player, "Menu")
+        petrichor = create_region(self.multiworld, self.player, "Petrichor V",
+                                  [f"ItemPickup{i + 1}" for i in range(self.multiworld.total_locations[self.player].value)])
 
         connection = Entrance(self.player, "Lobby", menu)
         menu.exits.append(connection)
         connection.connect(petrichor)
 
-        self.world.regions += [menu, petrichor]
+        self.multiworld.regions += [menu, petrichor]
 
         self.create_events()
 
     def fill_slot_data(self):
         return {
             "itemPickupStep": self.o.item_pickup_step.value,
-            "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for _ in range(16)),
+            "seed": "".join(self.multiworld.slot_seeds[self.player].choice(string.digits) for _ in range(16)),
             "totalLocations": self.o.total_locations.value,
             "totalRevivals": self.o.total_revivals.value,
             "startWithDio": self.o.start_with_revive.value,

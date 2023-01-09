@@ -73,31 +73,32 @@ class Factorio(World):
     generate_output = generate_mod
 
     def generate_early(self) -> None:
-        self.world.max_tech_cost[self.player] = max(self.world.max_tech_cost[self.player],
-                                                    self.world.min_tech_cost[self.player])
-        self.tech_mix = self.world.tech_cost_mix[self.player]
-        self.skip_silo = self.world.silo[self.player].value == Silo.option_spawn
+        self.multiworld.max_tech_cost[self.player] = max(self.multiworld.max_tech_cost[self.player],
+                                                    self.multiworld.min_tech_cost[self.player])
+        self.tech_mix = self.multiworld.tech_cost_mix[self.player]
+        self.skip_silo = self.multiworld.silo[self.player].value == Silo.option_spawn
 
     def create_regions(self):
         player = self.player
-        random = self.world.random
-        menu = Region("Menu", RegionType.Generic, "Menu", player, self.world)
+        random = self.multiworld.random
+        menu = Region("Menu", RegionType.Generic, "Menu", player, self.multiworld)
         crash = Entrance(player, "Crash Land", menu)
         menu.exits.append(crash)
-        nauvis = Region("Nauvis", RegionType.Generic, "Nauvis", player, self.world)
+        nauvis = Region("Nauvis", RegionType.Generic, "Nauvis", player, self.multiworld)
 
         location_count = len(base_tech_table) - len(useless_technologies) - self.skip_silo + \
-                         self.world.evolution_traps[player].value + self.world.attack_traps[player].value
+                         self.multiworld.evolution_traps[player].value + self.multiworld.attack_traps[player].value
 
         location_pool = []
 
-        for pack in self.world.max_science_pack[self.player].get_allowed_packs():
+        for pack in sorted(self.multiworld.max_science_pack[self.player].get_allowed_packs()):
             location_pool.extend(location_pools[pack])
-        location_names = self.world.random.sample(location_pool, location_count)
+
+        location_names = self.multiworld.random.sample(location_pool, location_count)
         self.locations = [FactorioScienceLocation(player, loc_name, self.location_name_to_id[loc_name], nauvis)
                           for loc_name in location_names]
-        rand_values = sorted(random.randint(self.world.min_tech_cost[self.player],
-                                            self.world.max_tech_cost[self.player]) for _ in self.locations)
+        rand_values = sorted(random.randint(self.multiworld.min_tech_cost[self.player],
+                                            self.multiworld.max_tech_cost[self.player]) for _ in self.locations)
         for i, location in enumerate(sorted(self.locations, key=lambda loc: loc.rel_cost)):
             location.count = rand_values[i]
         del rand_values
@@ -107,27 +108,27 @@ class Factorio(World):
         event = FactorioItem("Victory", ItemClassification.progression, None, player)
         location.place_locked_item(event)
 
-        for ingredient in self.world.max_science_pack[self.player].get_allowed_packs():
+        for ingredient in sorted(self.multiworld.max_science_pack[self.player].get_allowed_packs()):
             location = FactorioLocation(player, f"Automate {ingredient}", None, nauvis)
             nauvis.locations.append(location)
             event = FactorioItem(f"Automated {ingredient}", ItemClassification.progression, None, player)
             location.place_locked_item(event)
 
         crash.connect(nauvis)
-        self.world.regions += [menu, nauvis]
+        self.multiworld.regions += [menu, nauvis]
 
     def set_rules(self):
-        world = self.world
+        world = self.multiworld
         player = self.player
         self.custom_technologies = self.set_custom_technologies()
         self.set_custom_recipes()
         shapes = get_shapes(self)
         if world.logic[player] != 'nologic':
             from worlds.generic import Rules
-            for ingredient in self.world.max_science_pack[self.player].get_allowed_packs():
+            for ingredient in self.multiworld.max_science_pack[self.player].get_allowed_packs():
                 location = world.get_location(f"Automate {ingredient}", player)
 
-                if self.world.recipe_ingredients[self.player]:
+                if self.multiworld.recipe_ingredients[self.player]:
                     custom_recipe = self.custom_recipes[ingredient]
 
                     location.access_rule = lambda state, ingredient=ingredient, custom_recipe=custom_recipe: \
@@ -147,15 +148,17 @@ class Factorio(World):
                         prerequisites: all(state.can_reach(loc) for loc in locations))
 
             silo_recipe = None
-            if self.world.silo[self.player] == Silo.option_spawn:
+            if self.multiworld.silo[self.player] == Silo.option_spawn:
                 silo_recipe = self.custom_recipes["rocket-silo"] if "rocket-silo" in self.custom_recipes \
                     else next(iter(all_product_sources.get("rocket-silo")))
             part_recipe = self.custom_recipes["rocket-part"]
             satellite_recipe = None
-            if self.world.goal[self.player] == Goal.option_satellite:
+            if self.multiworld.goal[self.player] == Goal.option_satellite:
                 satellite_recipe = self.custom_recipes["satellite"] if "satellite" in self.custom_recipes \
                     else next(iter(all_product_sources.get("satellite")))
             victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe, satellite_recipe)
+            if self.multiworld.silo[self.player] != Silo.option_spawn:
+                victory_tech_names.add("rocket-silo")
             world.get_location("Rocket Launch", player).access_rule = lambda state: all(state.has(technology, player)
                                                                                         for technology in
                                                                                         victory_tech_names)
@@ -164,18 +167,22 @@ class Factorio(World):
 
     def generate_basic(self):
         player = self.player
-        want_progressives = collections.defaultdict(lambda: self.world.progressive[player].
-                                                    want_progressives(self.world.random))
-        self.world.itempool.extend(self.create_item("Evolution Trap") for _ in
-                                   range(self.world.evolution_traps[player].value))
-        self.world.itempool.extend(self.create_item("Attack Trap") for _ in
-                                   range(self.world.attack_traps[player].value))
+        want_progressives = collections.defaultdict(lambda: self.multiworld.progressive[player].
+                                                    want_progressives(self.multiworld.random))
+        self.multiworld.itempool.extend(self.create_item("Evolution Trap") for _ in
+                                   range(self.multiworld.evolution_traps[player].value))
+        self.multiworld.itempool.extend(self.create_item("Attack Trap") for _ in
+                                   range(self.multiworld.attack_traps[player].value))
 
         cost_sorted_locations = sorted(self.locations, key=lambda location: location.name)
         special_index = {"automation": 0,
                          "logistics": 1,
                          "rocket-silo": -1}
         loc: FactorioScienceLocation
+        if self.multiworld.tech_tree_information[player] == TechTreeInformation.option_full:
+            # mark all locations as pre-hinted
+            for loc in self.locations:
+                loc.revealed = True
         if self.skip_silo:
             removed = useless_technologies | {"rocket-silo"}
         else:
@@ -188,21 +195,25 @@ class Factorio(World):
                 tech_item = self.create_item(item_name)
                 index = special_index.get(tech_name, None)
                 if index is None:
-                    self.world.itempool.append(tech_item)
+                    self.multiworld.itempool.append(tech_item)
                 else:
                     loc = cost_sorted_locations[index]
                     loc.place_locked_item(tech_item)
                     loc.revealed = True
 
-        map_basic_settings = self.world.world_gen[player].value["basic"]
+        map_basic_settings = self.multiworld.world_gen[player].value["basic"]
         if map_basic_settings.get("seed", None) is None:  # allow seed 0
-            map_basic_settings["seed"] = self.world.slot_seeds[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
+            map_basic_settings["seed"] = self.multiworld.slot_seeds[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
 
-        if self.world.tech_tree_information[player] == TechTreeInformation.option_full:
-            # mark all locations as pre-hinted
-            self.world.start_location_hints[self.player].value.update(base_tech_table)
-            for loc in self.locations:
+        start_location_hints: typing.Set[str] = self.multiworld.start_location_hints[self.player].value
+
+        for loc in self.locations:
+            # show start_location_hints ingame
+            if loc.name in start_location_hints:
                 loc.revealed = True
+            # make spoiler match mod info
+            elif loc.revealed:
+                start_location_hints.add(loc.name)
 
     def collect_item(self, state, item, remove=False):
         if item.advancement and item.name in progressive_technology_table:
@@ -258,7 +269,7 @@ class Factorio(World):
         # have to first sort for determinism, while filtering out non-stacking items
         pool: typing.List[str] = sorted(pool & valid_ingredients)
         # then sort with random data to shuffle
-        self.world.random.shuffle(pool)
+        self.multiworld.random.shuffle(pool)
         target_raw = int(sum((count for ingredient, count in original.base_cost.items())) * factor)
         target_energy = original.total_energy * factor
         target_num_ingredients = len(original.ingredients)
@@ -302,7 +313,7 @@ class Factorio(World):
             if min_num > max_num:
                 fallback_pool.append(ingredient)
                 continue  # can't use that ingredient
-            num = self.world.random.randint(min_num, max_num)
+            num = self.multiworld.random.randint(min_num, max_num)
             new_ingredients[ingredient] = num
             remaining_raw -= num * ingredient_raw
             remaining_energy -= num * ingredient_energy
@@ -346,58 +357,58 @@ class Factorio(World):
 
     def set_custom_technologies(self):
         custom_technologies = {}
-        allowed_packs = self.world.max_science_pack[self.player].get_allowed_packs()
+        allowed_packs = self.multiworld.max_science_pack[self.player].get_allowed_packs()
         for technology_name, technology in base_technology_table.items():
-            custom_technologies[technology_name] = technology.get_custom(self.world, allowed_packs, self.player)
+            custom_technologies[technology_name] = technology.get_custom(self.multiworld, allowed_packs, self.player)
         return custom_technologies
 
     def set_custom_recipes(self):
         original_rocket_part = recipes["rocket-part"]
         science_pack_pools = get_science_pack_pools()
-        valid_pool = sorted(science_pack_pools[self.world.max_science_pack[self.player].get_max_pack()] & valid_ingredients)
-        self.world.random.shuffle(valid_pool)
+        valid_pool = sorted(science_pack_pools[self.multiworld.max_science_pack[self.player].get_max_pack()] & valid_ingredients)
+        self.multiworld.random.shuffle(valid_pool)
         self.custom_recipes = {"rocket-part": Recipe("rocket-part", original_rocket_part.category,
                                                      {valid_pool[x]: 10 for x in range(3)},
                                                      original_rocket_part.products,
                                                      original_rocket_part.energy)}
 
-        if self.world.recipe_ingredients[self.player]:
+        if self.multiworld.recipe_ingredients[self.player]:
             valid_pool = []
-            for pack in self.world.max_science_pack[self.player].get_ordered_science_packs():
+            for pack in self.multiworld.max_science_pack[self.player].get_ordered_science_packs():
                 valid_pool += sorted(science_pack_pools[pack])
-                self.world.random.shuffle(valid_pool)
+                self.multiworld.random.shuffle(valid_pool)
                 if pack in recipes:  # skips over space science pack
                     new_recipe = self.make_quick_recipe(recipes[pack], valid_pool)
                     self.custom_recipes[pack] = new_recipe
 
-        if self.world.silo[self.player].value == Silo.option_randomize_recipe \
-                or self.world.satellite[self.player].value == Satellite.option_randomize_recipe:
+        if self.multiworld.silo[self.player].value == Silo.option_randomize_recipe \
+                or self.multiworld.satellite[self.player].value == Satellite.option_randomize_recipe:
             valid_pool = set()
-            for pack in sorted(self.world.max_science_pack[self.player].get_allowed_packs()):
+            for pack in sorted(self.multiworld.max_science_pack[self.player].get_allowed_packs()):
                 valid_pool |= science_pack_pools[pack]
 
-            if self.world.silo[self.player].value == Silo.option_randomize_recipe:
+            if self.multiworld.silo[self.player].value == Silo.option_randomize_recipe:
                 new_recipe = self.make_balanced_recipe(recipes["rocket-silo"], valid_pool,
-                                                       factor=(self.world.max_science_pack[self.player].value + 1) / 7)
+                                                       factor=(self.multiworld.max_science_pack[self.player].value + 1) / 7)
                 self.custom_recipes["rocket-silo"] = new_recipe
 
-            if self.world.satellite[self.player].value == Satellite.option_randomize_recipe:
+            if self.multiworld.satellite[self.player].value == Satellite.option_randomize_recipe:
                 new_recipe = self.make_balanced_recipe(recipes["satellite"], valid_pool,
-                                                       factor=(self.world.max_science_pack[self.player].value + 1) / 7)
+                                                       factor=(self.multiworld.max_science_pack[self.player].value + 1) / 7)
                 self.custom_recipes["satellite"] = new_recipe
         bridge = "ap-energy-bridge"
         new_recipe = self.make_quick_recipe(
             Recipe(bridge, "crafting", {"replace_1": 1, "replace_2": 1, "replace_3": 1},
                    {bridge: 1}, 10),
-            sorted(science_pack_pools[self.world.max_science_pack[self.player].get_ordered_science_packs()[0]]))
+            sorted(science_pack_pools[self.multiworld.max_science_pack[self.player].get_ordered_science_packs()[0]]))
         for ingredient_name in new_recipe.ingredients:
-            new_recipe.ingredients[ingredient_name] = self.world.random.randint(10, 100)
+            new_recipe.ingredients[ingredient_name] = self.multiworld.random.randint(10, 100)
         self.custom_recipes[bridge] = new_recipe
 
-        needed_recipes = self.world.max_science_pack[self.player].get_allowed_packs() | {"rocket-part"}
-        if self.world.silo[self.player] != Silo.option_spawn:
+        needed_recipes = self.multiworld.max_science_pack[self.player].get_allowed_packs() | {"rocket-part"}
+        if self.multiworld.silo[self.player] != Silo.option_spawn:
             needed_recipes |= {"rocket-silo"}
-        if self.world.goal[self.player].value == Goal.option_satellite:
+        if self.multiworld.goal[self.player].value == Goal.option_satellite:
             needed_recipes |= {"satellite"}
 
         for recipe in needed_recipes:
@@ -447,10 +458,10 @@ class FactorioScienceLocation(FactorioLocation):
 
         self.ingredients = {Factorio.ordered_science_packs[self.complexity]: 1}
         for complexity in range(self.complexity):
-            if parent.world.tech_cost_mix[self.player] > parent.world.random.randint(0, 99):
+            if parent.multiworld.tech_cost_mix[self.player] > parent.multiworld.random.randint(0, 99):
                 self.ingredients[Factorio.ordered_science_packs[complexity]] = 1
-        self.count = parent.world.random.randint(parent.world.min_tech_cost[self.player],
-                                                 parent.world.max_tech_cost[self.player])
+        self.count = parent.multiworld.random.randint(parent.multiworld.min_tech_cost[self.player],
+                                                      parent.multiworld.max_tech_cost[self.player])
 
     @property
     def factorio_ingredients(self) -> typing.List[typing.Tuple[str, int]]:
