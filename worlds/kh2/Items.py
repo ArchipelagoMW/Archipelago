@@ -9,7 +9,7 @@ class KH2Item(Item):
     game: str = "Kingdom Hearts 2"
 
 
-class 				ItemData(typing.NamedTuple):
+class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
    
     kh2id: int

@@ -1,7 +1,6 @@
-from email.policy import default
-from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink, Toggle
+from Options import Choice, Option,  Range, Toggle
 import typing
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
+#from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 
 
 class SoraEXP(Range):
@@ -97,11 +96,11 @@ class SuperBosses(Toggle):
     default = False
 
 
-class KH2StartItems(ItemDict):
-    """Choose your strating Items(currently limited on what)"""
-    display_name = "KH2StartingItems"
-    verify_item_name = False
-    default = {}
+#class KH2StartItems(ItemDict):
+#    """Choose your strating Items(currently limited on what)"""
+#    display_name = "KH2StartingItems"
+#    verify_item_name = False
+#    default = {}
 
 
 class Level_Depth(Toggle):
@@ -139,7 +138,7 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "Keyblade_Maximum": KeybladeMax,
     "Visit_locking": Visitlocking,
     "Super_Bosses": SuperBosses,
-    "Starting_Items": KH2StartItems,
+   # "Starting_Items": KH2StartItems,
     "Level_Depth": Level_Depth,
     "Max_Logic": Max_Logic,
     "Critical_Mode": Critical_Mode,

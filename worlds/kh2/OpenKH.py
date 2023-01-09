@@ -13,9 +13,6 @@ import jinja2
 import Utils
 import worlds.Files
 
-from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
-from .Items import KH2Item, ItemData, item_dictionary_table, lookup_kh2id_to_name, exclusionItem_table
-from .Locations import all_locations, setup_locations, LocationName, popupChecks
 from .Options import FinalEXP, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement, KH2_Options
 from .modYml import modYml
 from .Names import ItemName
@@ -62,7 +59,6 @@ def patch_kh2(self, output_directory):
     soraStartingItems = []
     goofyStartingItems = []
     donaldStartingItems = []
-    self.codecode_to_name_to={"Item Code":"Name"}
    #multiworld = world.worlds
    #mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
     mod_name="YourMom"
@@ -264,8 +260,8 @@ def patch_kh2(self, output_directory):
         f.write(yaml.dump(self.formattedPlrp,line_break="\n"))
     with open(os.path.join(mod_dir, "jm.yml"), "wt") as f:
         f.write(yaml.dump(modYml.getJMYAML(), line_break="\n"))
-    with open(os.path.join(mod_dir, "archipelago.json"), "wt") as f:
-        json.dump({"server": "", "player": self.player, "player_name": self.multiworld.player_name[self.player], "game": "Kingdom Hearts 2", "compatible_version": 0, "version": 0},f,indent=4)
+    #with open(os.path.join(mod_dir, "archipelago.json"), "wt") as f:
+    #    json.dump({"server": "", "player": self.player, "player_name": self.multiworld.player_name[self.player], "game": "Kingdom Hearts 2", "compatible_version": 0, "version": 0},f,indent=4)
     shutil.copytree(os.path.join(os.path.dirname(__file__), "mod_template"),mod_dir,dirs_exist_ok=True)
     
     #with open(os.path.join(mod_dir, "IhateAPClient.txt"), "wt") as f:

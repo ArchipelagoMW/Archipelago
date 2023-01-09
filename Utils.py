@@ -425,6 +425,9 @@ class RestrictedUnpickler(pickle.Unpickler):
             obj = getattr(mod, name)
             if issubclass(obj, self.options_module.Option):
                 return obj
+        if module=='worlds.kh2.Items':
+            print("your moms a hoe")
+            return getattr(self.generic_properties_module, "Item")
         # Forbid everything else.
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
 

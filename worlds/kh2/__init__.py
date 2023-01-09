@@ -9,7 +9,7 @@ import worlds.Files
 from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
 from ..generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations
-from .Items import ActionAbility_Table, KH2Item, ItemData, item_dictionary_table, exclusionItem_table, \
+from .Items import ActionAbility_Table, KH2Item, item_dictionary_table, exclusionItem_table, \
     keybladeAbilities, donaldAbility, goofyAbility,lookup_id_to_name
 from .Locations import all_locations, setup_locations, exclusion_table, lookup_id_to_Location
 from .Rules import set_rules
@@ -54,21 +54,11 @@ class KH2World(World):
     bt10multiworld_locaions= list()
     #multiworld locations that are checked in the client using the save anchor
     savemultiworld_locations= list()
-    print(len(exclusion_table["KeybladeSlot"]))
-    print(len(keybladeAbilities))
-    #import collections
-    #def anydup(lookup_id_to_Location):
-    #  seen = set()
-    #  for x in lookup_id_to_Location:
-    #    if x in seen: return True
-    #    seen.add(x)
-    #  return False
-    #print(anydup(lookup_id_to_Location))       
+      
     def _get_slot_data(self):
         return {
-            "bt10multiworld_locations":self.bt10multiworld_locaions,
-            "sysmultiworld_locations":self.savemultiworld_locations,
-            'data_version': self.data_version
+            "bt10multiworld_lociations":self.bt10multiworld_locaions,
+            "sysmultiworld_locaitions":self.savemultiworld_locations,
         }
 
     def fill_slot_data(self) -> dict:
@@ -224,7 +214,7 @@ class KH2World(World):
         set_rules(self.multiworld, self.player)
 
     def generate_output(self, output_directory: str):
-        patch_kh2(self, output_directory)
+        patch_kh2(self,output_directory)
 
 
 
