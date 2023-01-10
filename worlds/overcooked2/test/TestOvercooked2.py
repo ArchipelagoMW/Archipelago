@@ -147,3 +147,26 @@ class Overcooked2Test(unittest.TestCase):
 
         for item in ITEMS_TO_EXCLUDE_IF_NO_DLC:
             self.assertIn(item, item_table.keys())
+
+    def testLevelCounts(self):
+        for dlc in Overcooked2Dlc:
+            level_id_range = range(dlc.start_level_id, dlc.end_level_id)
+            
+            for level_id in dlc.excluded_levels():
+                self.assertIn(level_id, level_id_range, f"Excluded level {dlc.name} - {level_id} out of range")
+            
+            for level_id in dlc.horde_levels():
+                self.assertIn(level_id, level_id_range, f"Horde level {dlc.name} - {level_id} out of range")
+            
+            for level_id in dlc.prep_levels():
+                self.assertIn(level_id, level_id_range, f"Prep level {dlc.name} - {level_id} out of range")
+
+            for level_id in level_id_range:
+                self.assertIn((dlc, level_id), level_id_to_shortname, "A valid level is not represented in level directory")
+            
+            count = 0
+            for (dlc_key, _) in level_id_to_shortname:
+                if dlc == dlc_key:
+                    count += 1
+            
+            self.assertEqual(count, len(level_id_range), f"Number of levels in {dlc.name} has discrepancy between level_id range and directory")

@@ -24,7 +24,7 @@ class SA2BWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["RaspberrySpaceJam", "PoryGone"]
+        ["RaspberrySpaceJam", "PoryGone", "Entiss"]
     )
     
     tutorials = [setup_en]
