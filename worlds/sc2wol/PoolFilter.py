@@ -3,7 +3,7 @@ from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import item_table
 from .MissionTables import no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
     mission_orders, MissionInfo, vanilla_mission_req_table, alt_final_mission_locations
-from .Options import get_option_value, get_option_set_value
+from .Options import get_option_value
 from .LogicMixin import SC2WoLLogic
 
 # Items with associated upgrades
@@ -29,7 +29,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[str, List[str]]
     mission_order_type = get_option_value(multiworld, player, "mission_order")
     shuffle_no_build = get_option_value(multiworld, player, "shuffle_no_build")
     shuffle_protoss = get_option_value(multiworld, player, "shuffle_protoss")
-    excluded_missions = set(get_option_set_value(multiworld, player, "excluded_missions"))
+    excluded_missions = get_option_value(multiworld, player, "excluded_missions")
     mission_count = len(mission_orders[mission_order_type]) - 1
     mission_pools = {
         "no_build": no_build_regions_list[:],
