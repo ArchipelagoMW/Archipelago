@@ -12,7 +12,8 @@ import zipfile
 import jinja2
 import Utils
 import worlds.Files
-
+from .Items import item_dictionary_table
+from .Locations import all_locations
 from .Options import FinalEXP, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement, KH2_Options
 from .modYml import modYml
 from .Names import ItemName
@@ -27,7 +28,7 @@ from .XPValues import lvlStats, formExp, soraExp
 
 
 def patch_kh2(self, output_directory):
-    # itemName= {location.address.locid: location.item.code.kh2id
+    # itemName= {data.locid: location.item.code.kh2id
     #            for location in self.world.get_filled_locations(self.player)}
     # locName=[location.item.code.kh2id
     #         for location in self.multiworld.get_filled_locations(self.player)]
@@ -63,33 +64,34 @@ def patch_kh2(self, output_directory):
    #mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
     mod_name="YourMom"
     for location in self.multiworld.get_filled_locations(self.player):
-        self.codecode_to_name_to[location.address.code]={location.name}
+        data = all_locations[location.name]
         if location.item.game == "Kingdom Hearts 2":
-            itemcode = location.item.code.kh2id
+            
+            itemcode = item_dictionary_table[location.item.name]
         else:
             #filling in lists for how to check if a chest is opened
-            if location.address.yml=="Levels" or location.address.yml=="Forms":
+            if data.yml=="Levels" or data.yml=="Forms":
                 self.bt10multiworld_locaions.append(location.name)
             else:
                 self.savemultiworld_locations.append(location.name)
             itemcode = 461
 
-        if location.address.yml=="Chest":
-            self.formattedTrsr[location.address.locid] = {"ItemId":itemcode}
+        if data.yml=="Chest":
+            self.formattedTrsr[data.locid] = {"ItemId":itemcode}
 
 
-        elif location.address.yml in ["Get Bonus", "Double Get Bonus", "Second Get Bonus"]:
-            if location.address.yml == "Get Bonus":
+        elif data.yml in ["Get Bonus", "Double Get Bonus", "Second Get Bonus"]:
+            if data.yml == "Get Bonus":
                 dblbonus = 0
             # if double bonus then addresses dbl bonus so the next check gets 2 items on it
-            if location.address.yml == "Double Get Bonus":
+            if data.yml == "Double Get Bonus":
                 dblbonus = itemcode
                 continue
-            if not location.address.locid in self.formattedBons.keys():
-                self.formattedBons[location.address.locid] = {}
-            self.formattedBons[location.address.locid][location.address.charName] = {
-                "RewardId": location.address.locid,
-                "CharacterId": location.address.charNumber,
+            if not data.locid in self.formattedBons.keys():
+                self.formattedBons[data.locid] = {}
+            self.formattedBons[data.locid][data.charName] = {
+                "RewardId": data.locid,
+                "CharacterId": data.charNumber,
                 "HpIncrease": 0,
                 "MpIncrease": 0,
                 "DriveGaugeUpgrade": 0,
@@ -104,14 +106,14 @@ def patch_kh2(self, output_directory):
             dblbonus = 0
 
 
-        elif location.address.yml == "Levels":
+        elif data.yml == "Levels":
             increaseStat(random.randint(0, 3))
             # this means if Item Nothing or potion
             if itemcode == 1:
                 itemcode = 0
                 increaseStat(random.randint(0, 3))
-            self.formattedLvup["Sora"][location.address.locid] = {
-                "Exp": int(soraExp[location.address.locid] / self.multiworld.Sora_Level_EXP[self.player].value),
+            self.formattedLvup["Sora"][data.locid] = {
+                "Exp": int(soraExp[data.locid] / self.multiworld.Sora_Level_EXP[self.player].value),
                 "Strength": self.strength,
                 "Magic": self.magic,
                 "Defense": self.defense,
@@ -121,13 +123,13 @@ def patch_kh2(self, output_directory):
                 "StaffAbility": itemcode,
                 "Padding": 0,
                 "Character": "Sora",
-                "Level": location.address.locid
+                "Level": data.locid
             }
 
 
-        elif location.address.yml == "Keyblade":
+        elif data.yml == "Keyblade":
             self.formattedItem["Stats"].append({
-                "Id": location.address.locid,
+                "Id": data.locid,
                 "Attack": random.randint(self.multiworld.Keyblade_Minimum[self.player].value,
                                          self.multiworld.Keyblade_Maximum[self.player].value),
                 "Magic": random.randint(self.multiworld.Keyblade_Minimum[self.player].value,
@@ -145,33 +147,33 @@ def patch_kh2(self, output_directory):
                 "Unknown": 0
             })
 
-        elif location.address.yml == "Forms":
+        elif data.yml == "Forms":
             # loc id is form lvl
             # char name is the form name number :)
-            if (location.address.locid == 1):
+            if (data.locid == 1):
                 formDict = {1: "Valor", 2: "Wisdom", 3: "Limit", 4: "Master", 5: "Final"}
                 formDictExp = {1: self.multiworld.Valor_Form_EXP[self.player].value,
                                2: self.multiworld.Wisdom_Form_EXP[self.player].value
                     , 3: self.multiworld.Limit_Form_EXP[self.player].value,
                                4: self.multiworld.Master_Form_EXP[self.player].value
                     , 5: self.multiworld.Final_Form_EXP[self.player].value}
-                formexp = formDictExp[location.address.charName]
-                formName = formDict[location.address.charName]
+                formexp = formDictExp[data.charName]
+                formName = formDict[data.charName]
                 self.formattedFmlv[formName] = []
             # row is form column is lvl
 
             self.formattedFmlv[formName].append({
                 "Ability": itemcode,
-                "Experience": int(formExp[location.address.charName][location.address.locid] / formexp),
-                "FormId": location.address.charName,
-                "FormLevel": location.address.locid,
+                "Experience": int(formExp[data.charName][data.locid] / formexp),
+                "FormId": data.charName,
+                "FormLevel": data.locid,
                 "GrowthAbilityLevel": 0,
             })
 
-        elif location.address.yml == "Critical":
-            if location.address.charName == "Sora":
+        elif data.yml == "Critical":
+            if data.charName == "Sora":
                 soraStartingItems.append(itemcode)
-            elif location.address.charName == "Goofy":
+            elif data.charName == "Goofy":
                 goofyStartingItems.append(itemcode)
             else:
                 donaldStartingItems.append(itemcode)

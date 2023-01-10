@@ -67,11 +67,11 @@ class KH2World(World):
             option = getattr(self.multiworld, option_name)[self.player]
             slot_data[option_name] = option.value
         return slot_data
-
-    def _create_items(self, name: str):
-
-        data = item_dictionary_table[name]
-        return [self.create_item(name)] * data.quantity
+    #
+    #def _create_items(self, name: str):
+    #
+    #    data = item_dictionary_table[name]
+    #    return [self.create_item(name)] * data.code
 
     def create_item(self, name: str, ) -> Item:
         data = item_dictionary_table[name]
@@ -80,7 +80,7 @@ class KH2World(World):
         else:
             item_classification = ItemClassification.filler
 
-        created_item = KH2Item(name, item_classification, data, self.player)
+        created_item = KH2Item(name, item_classification, data.code, self.player)
 
         return created_item
     def pre_fill(self):
@@ -196,7 +196,7 @@ class KH2World(World):
 
         for item in item_dictionary_table:
             if item not in self.exclude:
-                itempool += self._create_items(item)
+                itempool.append(self.create_item(item)) 
 
         # Creating filler for unfilled locations
 
