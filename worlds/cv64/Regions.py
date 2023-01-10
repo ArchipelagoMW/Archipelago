@@ -69,7 +69,8 @@ def create_regions(world, player: int, active_locations):
     forest_mid_region_locations = [
         LocationName.forest_dbridge_gate_r,
         LocationName.forest_dbridge_tomb,
-        LocationName.forest_bface_tomb,
+        LocationName.forest_bface_tomb_l,
+        LocationName.forest_bface_tomb_u,
         LocationName.forest_ibridge,
         LocationName.forest_werewolf_tomb,
         LocationName.forest_werewolf_plaque,

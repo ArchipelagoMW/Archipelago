@@ -24,6 +24,16 @@ class SubWeaponShuffle(Toggle):
     display_name = "Sub-weapon Shuffle"
 
 
+class ExtraKeys(Choice):
+    """Puts an additional copy of every key item in the pool to ensure fewer specific locations are required.
+    Chance gives each key item a 50% chance of having an additional copy instead of guaranteeing one for all of them."""
+    display_name = "Extra Keys"
+    option_off = 0
+    option_on = 1
+    option_chance = 2
+    default = 0
+
+
 class Special1sPerWarp(Range):
     """Sets how many Special1 jewels are needed per warp menu option unlock."""
     range_start = 1
@@ -153,6 +163,7 @@ cv64_options: Dict[str, Option] = {
     "stage_shuffle": StageShuffle,
     "warp_shuffle": WarpShuffle,
     "sub_weapon_shuffle": SubWeaponShuffle,
+    "extra_keys": ExtraKeys,
     "special1s_per_warp": Special1sPerWarp,
     "total_special1s": TotalSpecial1s,
     "draculas_condition": DraculasCondition,

@@ -31,6 +31,7 @@ rom_loc_offsets = {
     0xC6400E: 0x10C6AB,
     0xC6400F: 0x10C76B,
     0xC64010: 0x10C75B,
+    0xC64025: 0x10C77B,
     0xC64011: 0x10C713,
     0xC64012: 0x10C733,
     0xC64013: 0x10C6B3,
@@ -57,7 +58,6 @@ rom_loc_offsets = {
     0xC64022: 0x10C8AF,
     0xC64023: 0x10C8B7,
     0xC64024: 0x10C8C7,
-    # 0xC64025: 0x10C8CF,
     0xC64026: 0x10C8D7,
     0xC64027: 0x10C8DF,
     0xC64028: 0x10C8E7,
@@ -543,14 +543,19 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
     if world.fight_renon[player] == "never":
         rom.write_byte(0xB804F0, 0x00)
         rom.write_byte(0xB80632, 0x00)
+        rom.write_byte(0xB807E3, 0x00)
         rom.write_byte(0xB80988, 0xB8)
         rom.write_byte(0xB816BD, 0xB8)
+        rom.write_byte(0xB817CF, 0x00)
         rom.write_bytes(0xBFC690, PatchName.renon_cutscene_checker_jr)
     elif world.fight_renon[player] == "always":
         rom.write_byte(0xB804F0, 0x0C)
         rom.write_byte(0xB80632, 0x0C)
+        rom.write_byte(0xB807E3, 0x0C)
         rom.write_byte(0xB80988, 0xC4)
         rom.write_byte(0xB816BD, 0xC4)
+        rom.write_byte(0xB817CF, 0x0C)
+        # rom.write_bytes(0xB816C9, 0x00, 0x00)
         rom.write_bytes(0xBFC690, PatchName.renon_cutscene_checker_jr)
     else:
         rom.write_bytes(0xBFC690, PatchName.renon_cutscene_checker)
@@ -567,7 +572,9 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
 
     # Increase item capacity to 100
     if world.increase_item_limit[player]:
-        rom.write_byte(0xBF30B, 0x64)
+        rom.write_byte(0xBF30B, 0x64)  # Most items
+        rom.write_byte(0xBF3F7, 0x64)  # Sun/Moon cards
+    rom.write_byte(0xBF353, 0x64)  # Keys (increase regardless)
 
     # Prevent the vanilla Magical Nitro transport's "can explode" flag from setting
     rom.write_bytes(0xB5D7AA, [0x00, 0x00, 0x00, 0x00])
@@ -756,6 +763,8 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
     rom.write_bytes(0xBFC5D0, PatchName.normal_door_code)
     rom.write_bytes(0x6EF298, PatchName.ct_door_hook)
     rom.write_bytes(0xBFC608, PatchName.ct_door_code)
+    # Fix key counter not decrementing if 2 or above
+    rom.write_bytes(0xAA0E0, [0x24, 0x02, 0x00, 0x00])  # ADDIU	V0, R0, 0x0000
 
     # Make the Easy-only candle drops in Room of Clocks appear on any difficulty
     rom.write_byte(0x9B518F, 0x01)
@@ -796,8 +805,10 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
                 rom.write_byte(level_dict[active_level_list[i]].endzoneSpawnOffset,
                                level_dict[active_level_list[i + 3]].startSpawnID)
             else:
-                rom.write_byte(level_dict[active_level_list[i]].endzoneSceneOffset, level_dict[active_level_list[i + 1]].startSceneID)
-                rom.write_byte(level_dict[active_level_list[i]].endzoneSpawnOffset, level_dict[active_level_list[i + 1]].startSpawnID)
+                rom.write_byte(level_dict[active_level_list[i]].endzoneSceneOffset,
+                               level_dict[active_level_list[i + 1]].startSceneID)
+                rom.write_byte(level_dict[active_level_list[i]].endzoneSpawnOffset,
+                               level_dict[active_level_list[i + 1]].startSpawnID)
 
             if level_dict[active_level_list[i]].startzoneSceneOffset != 0xFFFFFF:
                 if i - 1 < 0:

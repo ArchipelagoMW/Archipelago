@@ -102,7 +102,7 @@ class CV64World(World):
         itempool: typing.List[CV64Item] = []
 
         # Levels
-        total_required_locations = 210
+        total_required_locations = 211
 
         self.multiworld.get_location(LocationName.the_end, self.player).place_locked_item(self.create_item(ItemName.victory))
 
@@ -158,6 +158,21 @@ class CV64World(World):
             itempool += [self.create_item(ItemName.special_two) for _ in range(number_of_special2s)]
             self.required_special2s = self.multiworld.special2s_required[self.player].value
 
+        extra_keys_dict = {ItemName.left_tower_key: 0, ItemName.storeroom_key: 0, ItemName.archives_key: 0,
+                           ItemName.garden_key: 0, ItemName.copper_key: 0, ItemName.chamber_key: 0,
+                           ItemName.execution_key: 0, ItemName.science_key_one: 0, ItemName.science_key_two: 0,
+                           ItemName.science_key_three: 0, ItemName.clocktower_key_one: 0,
+                           ItemName.clocktower_key_two: 0, ItemName.clocktower_key_three: 0, ItemName.magical_nitro: 0,
+                           ItemName.mandragora: 0}
+
+        if self.multiworld.extra_keys[self.player].value == 1:
+            for item in extra_keys_dict:
+                extra_keys_dict[item] = 1
+        elif self.multiworld.extra_keys[self.player].value == 2:
+            for item in extra_keys_dict:
+                extra_count = self.multiworld.random.randint(0, 1)
+                extra_keys_dict[item] = extra_count
+
         itempool += [self.create_item(ItemName.special_one) for _ in range(number_of_special1s)]
         itempool += [self.create_item(ItemName.roast_chicken) for _ in range(21)]
         itempool += [self.create_item(ItemName.roast_beef) for _ in range(24)]
@@ -165,23 +180,23 @@ class CV64World(World):
         itempool += [self.create_item(ItemName.purifying) for _ in range(14)]
         itempool += [self.create_item(ItemName.cure_ampoule) for _ in range(5)]
         itempool += [self.create_item(ItemName.powerup) for _ in range(10)]
-        itempool += [self.create_item(ItemName.magical_nitro) for _ in range(2)]
-        itempool += [self.create_item(ItemName.mandragora) for _ in range(2)]
+        itempool += [self.create_item(ItemName.magical_nitro) for _ in range(2 + extra_keys_dict[ItemName.magical_nitro])]
+        itempool += [self.create_item(ItemName.mandragora) for _ in range(2 + extra_keys_dict[ItemName.mandragora])]
         itempool += [self.create_item(ItemName.sun_card) for _ in range(9)]
         itempool += [self.create_item(ItemName.moon_card) for _ in range(8)]
-        itempool += [self.create_item(ItemName.left_tower_key)]
-        itempool += [self.create_item(ItemName.storeroom_key)]
-        itempool += [self.create_item(ItemName.archives_key)]
-        itempool += [self.create_item(ItemName.garden_key)]
-        itempool += [self.create_item(ItemName.copper_key)]
-        itempool += [self.create_item(ItemName.chamber_key)]
-        itempool += [self.create_item(ItemName.execution_key)]
-        itempool += [self.create_item(ItemName.science_key_one)]
-        itempool += [self.create_item(ItemName.science_key_two)]
-        itempool += [self.create_item(ItemName.science_key_three)]
-        itempool += [self.create_item(ItemName.clocktower_key_one)]
-        itempool += [self.create_item(ItemName.clocktower_key_two)]
-        itempool += [self.create_item(ItemName.clocktower_key_three)]
+        itempool += [self.create_item(ItemName.left_tower_key) for _ in range(1 + extra_keys_dict[ItemName.left_tower_key])]
+        itempool += [self.create_item(ItemName.storeroom_key) for _ in range(1 + extra_keys_dict[ItemName.storeroom_key])]
+        itempool += [self.create_item(ItemName.archives_key) for _ in range(1 + extra_keys_dict[ItemName.archives_key])]
+        itempool += [self.create_item(ItemName.garden_key) for _ in range(1 + extra_keys_dict[ItemName.garden_key])]
+        itempool += [self.create_item(ItemName.copper_key) for _ in range(1 + extra_keys_dict[ItemName.copper_key])]
+        itempool += [self.create_item(ItemName.chamber_key) for _ in range(1 + extra_keys_dict[ItemName.chamber_key])]
+        itempool += [self.create_item(ItemName.execution_key) for _ in range(1 + extra_keys_dict[ItemName.execution_key])]
+        itempool += [self.create_item(ItemName.science_key_one) for _ in range(1 + extra_keys_dict[ItemName.science_key_one])]
+        itempool += [self.create_item(ItemName.science_key_two) for _ in range(1 + extra_keys_dict[ItemName.science_key_two])]
+        itempool += [self.create_item(ItemName.science_key_three) for _ in range(1 + extra_keys_dict[ItemName.science_key_three])]
+        itempool += [self.create_item(ItemName.clocktower_key_one) for _ in range(1 + extra_keys_dict[ItemName.clocktower_key_one])]
+        itempool += [self.create_item(ItemName.clocktower_key_two) for _ in range(1 + extra_keys_dict[ItemName.clocktower_key_two])]
+        itempool += [self.create_item(ItemName.clocktower_key_three) for _ in range(1 + extra_keys_dict[ItemName.clocktower_key_three])]
 
         if self.multiworld.carrie_logic[self.player]:
             itempool += [self.create_item(ItemName.roast_beef)]
