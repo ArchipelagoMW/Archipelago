@@ -3,6 +3,7 @@ import os
 import sys
 import asyncio
 import random
+import shutil
 from typing import Tuple, List, Iterable, Dict
 
 from worlds.wargroove import WargrooveWorld
@@ -79,19 +80,27 @@ class WargrooveContext(CommonContext):
         if "appdata" in os.environ:
             options = Utils.get_options()
             root_directory = options["wargroove_options"]["root_directory"].replace("/", "\\")
+            data_directory = "lib\\worlds\\wargroove\\data\\"
+            dev_data_directory = "worlds\\wargroove\\data\\"
+            appdata_wargroove = os.path.expandvars("%APPDATA%\\Chucklefish\\Wargroove\\")
             if not os.path.isfile(root_directory + "\\win64_bin\\wargroove64.exe"):
-                msg = "WargrooveClient couldn't find wargroove64.exe. Unable to infer required game_communication_path"
-                logger.error("Error: " + msg)
-                Utils.messagebox("Error", msg, error=True)
-                sys.exit(1)
+                print_error_and_close("WargrooveClient couldn't find wargroove64.exe. "
+                                      "Unable to infer required game_communication_path")
             self.game_communication_path = root_directory + "\\AP"
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
+
+            if not os.path.isdir(appdata_wargroove):
+                print_error_and_close("WargrooveClient couldn't find Wargoove in appdata!"
+                                      "Boot Wargroove and then close it to attempt to fix this error")
+            if not os.path.isdir(data_directory):
+                data_directory = dev_data_directory
+            if not os.path.isdir(data_directory):
+                print_error_and_close("WargrooveClient couldn't find Wargoove mod and save files in install!")
+            shutil.copytree(data_directory, appdata_wargroove, dirs_exist_ok=True)
         else:
-            msg = "WargrooveClient couldn't detect system type. Unable to infer required game_communication_path"
-            logger.error("Error: " + msg)
-            Utils.messagebox("Error", msg, error=True)
-            sys.exit(1)
+            print_error_and_close("WargrooveClient couldn't detect system type. "
+                                  "Unable to infer required game_communication_path")
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -402,6 +411,11 @@ async def game_watcher(ctx: WargrooveContext):
             ctx.finished_game = True
         await asyncio.sleep(0.1)
 
+
+def print_error_and_close(msg):
+    logger.error("Error: " + msg)
+    Utils.messagebox("Error", msg, error=True)
+    sys.exit(1)
 
 if __name__ == '__main__':
     async def main(args):

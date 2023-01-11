@@ -3,28 +3,12 @@
 ## Required Files
 
 Only the Steam Windows version is supported. MAC, Switch, Xbox, Playstation, are all not supported.
-The custom campaign must be downloaded, the vanilla and Double Trouble campaigns will not work with Archipelago.
+A custom campaign is used, the vanilla and Double Trouble campaigns will not work with Archipelago.
 
 - Wargroove with the Double Trouble DLC installed through Steam on Windows
 - [The most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
-- Download the `ArchipelagoMod.zip`, `(REALLY_LONG_FILENAME).cmp` and 
-`(REALLY_LONG_FILENAME).cmp.bak` files from
-  the latest release in [Fly Sniper's GitHub](https://github.com/FlySniper/WargrooveArchipelagoMod/releases)
 
-## Installing the Archipelago Wargroove Mod and Campaign files
 
-1. Open file explorer and type `%appdata%\Chucklefish\Wargroove` in the address bar.
-2. Create a `mods` folder if not already present.
-3. It is strongly recommended to copy your `playerProgress` and `playerProgress.bak` files found in the `save`
-directory to another directory where they can be referenced later. This preserves your save data in case of an 
-emergency.
-4. Copy the `(REALLY_LONG_FILENAME).cmp` and `(REALLY_LONG_FILENAME).cmp.bak` files into the 
-`%appdata%\Chucklefish\Wargroove\save` directory.
-5. Unzip `ArchipelagoMod.zip`. Enter the folder named `ArchipelagoMod`. If there is another folder inside also named 
-`ArchipelagoMod`, then copy the inside folder to `%appdata%\Chucklefish\Wargroove\mods`, otherwise if there are a bunch 
-of `.dat` files inside the `ArchipelagoMod` folder then copy that folder to `%appdata%\Chucklefish\Wargroove\mods`.
-Do not install the `ArchipelagoMod.zip` into the mods folder. Do not install an `ArchipelagoMod` folder that has no
-`.dat` files inside of it. Do install the `ArchipelagoMod` folder that does have `.dat` files in it.
 
 ## Update host.yaml to include the Wargroove root directory
 
@@ -37,11 +21,20 @@ Do not install the `ArchipelagoMod.zip` into the mods folder. Do not install an 
    - You may have to replace all single \\ with \\\\
 4. Start the Wargroove client. It should start with no errors, if it does go back to step 1.
 
-## Start Wargroove and verify the campaign can be loaded
+## Installing the Archipelago Wargroove Mod and Campaign files
+
+1. Shutdown Wargroove if it is open.
+2. Start the ArchipelagoWargrooveClient.exe from the archipelago installation. 
+This should install the mod and campaign for you.
+3. Start Wargroove.
+
+## Verify the campaign can be loaded
+
 1. Start Wargroove from Steam
 2. Go to `Story->Campaign->Custom->Archipelago` and click play. You should see the first level
 
 ## Starting a Multiworld game
+
 1. Start the Wargroove Client and connect to the server. Enter your username from your 
 [settings file](/games/Wargroove/player-settings)
 2. Start Wargroove and play the Archipelago campaign by going to `Story->Campaign->Custom->Archipelago`
