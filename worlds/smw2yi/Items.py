@@ -59,7 +59,7 @@ item_table: Dict[str, ItemData] = {
     #'Flutter Jump': ItemData('Abilities', 16047, progression=True),
     #'Ground Pound': ItemData('Abilities', 16048, progression=True),
     #'Egg Strength Upgrade': ItemData('Abilities', 16049, progression=True),
-    'Secret Lens': ItemData('Abilities', 16050, progression=True),
+    'Secret Lens': ItemData('Abilities', 16050),
     #'Waterskipper Eggs': ItemData('Abilities), 16051, progression=True,
     #'Pushing': ItemData('Abilities'), 160522,
     'World 1 Gate': ItemData('Gates', 16051, progression=True),

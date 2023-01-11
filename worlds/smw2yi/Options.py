@@ -57,7 +57,7 @@ class CastleOpenCon(Choice):
     option_open = 0
     option_castles = 1
     option_bosses = 2
-    option_score = 3
+    #option_score = 3
     default = 1
 
 class CastleDoor(Range):
@@ -73,7 +73,7 @@ class CastleClearCon(Choice):
     option_open = 0
     option_castles = 1
     option_bosses = 2
-    option_score = 3
+    #option_score = 3
     default = 0
 
 class FlagsForCastleOpen(Range):
@@ -88,6 +88,14 @@ class FlagsForCastleClear(Range):
     display_name = "Flags Required for 6-8 Clear"
     range_start = 1
     range_end = 5
+    default = 5
+
+class BossesForCastleOpen(Range):
+    """This will set the minimum number of bosses you need to defeat if the 6-8 goal is set to Bosses."""
+    """You can check which bosses you must defeat in-game by pressing 'Select' in any level."""
+    display_name = "Boss Required for 6-8 Unlock"
+    range_start = 1
+    range_end = 11
     default = 5
 
 class ItemLogic(Toggle):
@@ -150,6 +158,7 @@ yoshi_options: Dict[str, Option] ={
     "castle_clear_condition": CastleClearCon,
     "flags_for_castle_open": FlagsForCastleOpen,
     "flags_for_castle_clear": FlagsForCastleClear,
+    "bosses_for_unlock": BossesForCastleOpen,
     "yoshi_colors": YoshiColors,
     "starting_lives": StartingLives
 

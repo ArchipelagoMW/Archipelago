@@ -1,6 +1,7 @@
 import Utils
 import pdb
-from Patch import read_rom, APDeltaPatch
+from .Options import get_option_value
+from worlds.Files import APDeltaPatch
 USHASH = 'cb472164c5a71ccd3739963390ec6a50'
 ROM_PLAYER_LIMIT = 65535
 
@@ -29,6 +30,16 @@ rom_item_sprites = {
     16012: [[0x707E89, 0x1]], # Train
 }
 
+location_rom_data = {
+    0xDC3000: [0x657, 1], # 1-1
+    0xDC3001: [0x657, 2],
+    0xDC3002: [0x657, 3],
+    0xDC3003: [0x657, 5],
+    0xDC3100: [0x657, 7],
+}
+
+
+
 
 
 class LocalRom(object):
@@ -39,7 +50,7 @@ class LocalRom(object):
         self.orig_buffer = None
 
         with open(file, 'rb') as stream:
-            self.buffer = read_rom(stream)
+            self.buffer = Utils.read_snes_rom(stream)
         
     def read_bit(self, address: int, bit_number: int) -> bool:
         bitflag = (1 << bit_number)
@@ -264,6 +275,7 @@ def handle_sprite_code(rom):
     rom.write_bytes(0x00794B, bytearray([0x5C, 0xBA, 0x82, 0x05]))
     ####################################################################
     #Melon Trio
+    Melon_Sub_Addr = 0x00794F
     rom.write_bytes(0x020031, bytearray([0x5C, 0x4F, 0xF9, 0x00]))
 
     rom.write_bytes(0x00794F, bytearray([0xBD, 0x60, 0x73]))
@@ -433,7 +445,7 @@ def handle_sprite_code(rom):
     rom.write_bytes(0x007AB1, bytearray([0xAF, 0xFC, 0x7F, 0x7F]))
     rom.write_bytes(0x007AB5, bytearray([0xC9, 0xC3]))
     rom.write_bytes(0x007AB7, bytearray([0xD0, 0x04]))
-    rom.write_bytes(0x0121B9, bytearray([0x5C, 0xC7, 0xFA, 0x00]))
+    rom.write_bytes(0x007AB9, bytearray([0x5C, 0xC7, 0xFA, 0x00]))
     rom.write_bytes(0x007ABD, bytearray([0xC2, 0x20]))
     rom.write_bytes(0x007ABF, bytearray([0xBD, 0x82, 0x71]))
     rom.write_bytes(0x007AC2, bytearray([0x38]))
@@ -449,7 +461,7 @@ def handle_sprite_code(rom):
     rom.write_bytes(0x007AD9, bytearray([0x5C, 0x2E, 0xA1, 0x02]))
     ###########################################################################
     #Generic Key
-    rom.write_bytes(0x011FE4, bytearray([0x5C, 0xDD, 0xFA, 0x00]))
+    rom.write_bytes(0x007AED, bytearray([0x5C, 0xDD, 0xFA, 0x00]))
 
     rom.write_bytes(0x007ADD, bytearray([0xE2, 0x20]))
     rom.write_bytes(0x007ADF, bytearray([0xAF, 0x99, 0x7E, 0x70]))
@@ -639,6 +651,249 @@ def set_active_levels(rom):
     return
 
 
+def write_checks_to_rom(rom):
+    #Red Coins
+    rom.write_bytes(0x01B365, bytearray([0x5C, 0x31, 0xFD, 0x00]))
+
+    rom.write_bytes(0x007D31, bytearray([0xAC, 0xB4, 0x03]))
+    rom.write_bytes(0x007D34, bytearray([0xC0, 0x15]))
+    rom.write_bytes(0x007D36, bytearray([0xF0, 0x2C]))
+    rom.write_bytes(0x007D38, bytearray([0xC0, 0x14]))
+    rom.write_bytes(0x007D3A, bytearray([0xD0, 0x24]))
+    rom.write_bytes(0x007D3C, bytearray([0x08]))
+    rom.write_bytes(0x007D3D, bytearray([0xE2, 0x30]))
+    rom.write_bytes(0x007D3F, bytearray([0xAE, 0x1A, 0x02]))
+    rom.write_bytes(0x007D42, bytearray([0x18]))
+    rom.write_bytes(0x007D43, bytearray([0xBF, 0x9F, 0x7E, 0x70]))
+    rom.write_bytes(0x007D47, bytearray([0x89, 0x01]))
+    rom.write_bytes(0x007D49, bytearray([0xD0, 0x0A]))
+    rom.write_bytes(0x007D4B, bytearray([0xA9, 0x01]))
+    rom.write_bytes(0x007D4D, bytearray([0x7F, 0x9F, 0x7E, 0x70]))    
+    rom.write_bytes(0x007D51, bytearray([0x9F, 0x9F, 0x7E, 0x70]))
+    rom.write_bytes(0x007D55, bytearray([0xA9, 0x14]))
+    rom.write_bytes(0x007D57, bytearray([0x8C, 0xB4, 0x03]))
+    rom.write_bytes(0x007D5A, bytearray([0xC2, 0x30]))
+    rom.write_bytes(0x007D5C, bytearray([0x28]))
+    rom.write_bytes(0x007D5D, bytearray([0xA9, 0x94, 0x00]))
+    rom.write_bytes(0x007D60, bytearray([0x5C, 0x6D, 0xB3, 0x03]))
+    rom.write_bytes(0x007D64, bytearray([0x88]))
+    rom.write_bytes(0x007D65, bytearray([0x80, 0xCD]))
+    #####################################################################
+    #Flowers
+    rom.write_bytes(0x0734C6, bytearray([0x5C, 0x67, 0xFD, 0x00]))
+
+    rom.write_bytes(0x007D67, bytearray([0x08]))
+    rom.write_bytes(0x007D68, bytearray([0xE2, 0x30]))
+    rom.write_bytes(0x007D6A, bytearray([0xAE, 0x1A, 0x02]))
+    rom.write_bytes(0x007D6D, bytearray([0x18]))
+    rom.write_bytes(0x007D6E, bytearray([0xBF, 0x9F, 0x7E, 0x70]))
+    rom.write_bytes(0x007D72, bytearray([0x89, 0x02]))
+    rom.write_bytes(0x007D74, bytearray([0xD0, 0x0A]))
+    rom.write_bytes(0x007D76, bytearray([0xA9, 0x02]))
+    rom.write_bytes(0x007D78, bytearray([0x7F, 0x9F, 0x7E, 0x70]))
+    rom.write_bytes(0x007D7C, bytearray([0x9F, 0x9F, 0x7E, 0x70]))
+    rom.write_bytes(0x007D80, bytearray([0x28]))
+    rom.write_bytes(0x007D81, bytearray([0xA0, 0x05]))
+    rom.write_bytes(0x007D83, bytearray([0x8C, 0xB8, 0x03]))
+    rom.write_bytes(0x007D86, bytearray([0x5C, 0xCB, 0xB4, 0x0E]))
+    ######################################################################
+    #Level Clear
+    rom.write_bytes(0x00B580, bytearray([0x5C, 0x8A, 0xFD, 0x00]))
+
+    rom.write_bytes(0x007D8A, bytearray([0xAE, 0x1A, 0x02]))
+    rom.write_bytes(0x007D8D, bytearray([0x18]))
+    rom.write_bytes(0x007D8E, bytearray([0xBF, 0x9F, 0x7E, 0x70]))
+    rom.write_bytes(0x007D92, bytearray([0x89, 0x04]))
+    rom.write_bytes(0x007D94, bytearray([0xD0, 0x0A]))
+    rom.write_bytes(0x007D96, bytearray([0xA9, 0x04]))
+    rom.write_bytes(0x007D98, bytearray([0x7F, 0x9F, 0x7E, 0x70]))
+    rom.write_bytes(0x007D9C, bytearray([0x9F, 0x9F, 0x7E, 0x70]))
+    rom.write_bytes(0x007DA0, bytearray([0xAE, 0x57, 0x0B]))
+    rom.write_bytes(0x007DA3, bytearray([0xE0, 0x0D]))
+    rom.write_bytes(0x007DA5, bytearray([0x5C, 0x85, 0xB5, 0x01]))
+    ######################################################################
+    #Stars
+    rom.write_bytes(0x00C0DE, bytearray([0x5C, 0xA9, 0xFD, 0x00]))
+
+    rom.write_bytes(0x007DA9, bytearray([0xAF, 0x18, 0x01, 0x7E]))
+    rom.write_bytes(0x007DAD, bytearray([0xC9, 0x0F]))
+    rom.write_bytes(0x007DAF, bytearray([0xD0, 0x26]))
+    rom.write_bytes(0x007DB1, bytearray([0xDA]))
+    rom.write_bytes(0x007DB2, bytearray([0xC2, 0x20]))
+    rom.write_bytes(0x007DB4, bytearray([0xAD, 0xB6, 0x03]))
+    rom.write_bytes(0x007DB7, bytearray([0xC9, 0x2C, 0x01]))
+    rom.write_bytes(0x007DBA, bytearray([0xD0, 0x18]))
+    rom.write_bytes(0x007DBC, bytearray([0xE2, 0x20]))
+    rom.write_bytes(0x007DBE, bytearray([0xAE, 0x1A, 0x02]))
+    rom.write_bytes(0x007DC1, bytearray([0xBF, 0x9F, 0x7E, 0x70]))
+    rom.write_bytes(0x007DC5, bytearray([0x89, 0x08]))
+    rom.write_bytes(0x007DC7, bytearray([0xD0, 0x0B]))
+    rom.write_bytes(0x007DC9, bytearray([0x18]))
+    rom.write_bytes(0x007DCA, bytearray([0xA9, 0x08]))
+    rom.write_bytes(0x007DCC, bytearray([0x7F, 0x9F, 0x7E, 0x70]))
+    rom.write_bytes(0x007DD0, bytearray([0x9F, 0x9F, 0x7E, 0x70]))
+    rom.write_bytes(0x007DD4, bytearray([0xE2, 0x20]))
+    rom.write_bytes(0x007DD6, bytearray([0xFA]))
+    rom.write_bytes(0x007DD7, bytearray([0x9C, 0x84, 0x0B]))
+    rom.write_bytes(0x007DDA, bytearray([0xAD, 0x0F, 0x0D]))
+    rom.write_bytes(0x007DDD, bytearray([0x5C, 0xE4, 0xC0, 0x01]))
+    return
+
+
+def reset_and_sync_checks(rom):
+    rom.write_bytes(0x085CC1, bytearray([0x5C, 0xE1, 0xFD, 0x00]))
+
+    rom.write_bytes(0x007DE1, bytearray([0x8B])) #This clears out the memory region used to store check and item data during the intro cutscene. Initializes the file.
+    rom.write_bytes(0x007DE2, bytearray([0xC2, 0x30]))
+    rom.write_bytes(0x007DE4, bytearray([0xA9, 0x81, 0x01]))
+    rom.write_bytes(0x007DE7, bytearray([0xA2, 0x09, 0x14]))
+    rom.write_bytes(0x007DEA, bytearray([0xA0, 0x7E, 0x7E]))
+    rom.write_bytes(0x007DED, bytearray([0x54, 0x70, 0x7E]))
+    rom.write_bytes(0x007DF0, bytearray([0xE2, 0x30]))
+    rom.write_bytes(0x007DF2, bytearray([0xAB]))
+    rom.write_bytes(0x007DF3, bytearray([0x22, 0x28, 0xFD, 0x04]))
+    rom.write_bytes(0x007DF7, bytearray([0x5C, 0xC7, 0xDC, 0x10]))
+    ##############################################################
+    rom.write_bytes(0x00C104, bytearray([0x5C, 0xFB, 0xFD, 0x00])) #Sync checks in ram
+
+    #SyncRamInLevel
+    rom.write_bytes(0x007DFB, bytearray([0x20, 0x06, 0xFE]))
+    rom.write_bytes(0x007DFE, bytearray([0xA5, 0x38]))
+    rom.write_bytes(0x007E00, bytearray([0x29, 0x10]))
+    rom.write_bytes(0x007E02, bytearray([0x5C, 0x08, 0xC1, 0x01]))
+    ##############################################################
+    #MoveSRAMtoCheckRam
+    rom.write_bytes(0x007E06, bytearray([0x8B]))
+    rom.write_bytes(0x007E07, bytearray([0xC2, 0x30]))
+    rom.write_bytes(0x007E09, bytearray([0xA9, 0x81, 0x01]))
+    rom.write_bytes(0x007E0C, bytearray([0xA2, 0x7E, 0x7E]))
+    rom.write_bytes(0x007E0F, bytearray([0xA0, 0x09, 0x14]))
+    rom.write_bytes(0x007E12, bytearray([0x54, 0x7E, 0x70]))
+    rom.write_bytes(0x007E15, bytearray([0xE2, 0x30]))
+    rom.write_bytes(0x007E17, bytearray([0xAB]))
+    rom.write_bytes(0x007E18, bytearray([0x60]))
+    ###############################################################
+    #SyncRamOnMap
+    rom.write_bytes(0x08027C, bytearray([0x5C, 0x19, 0xFE, 0x00]))
+
+    rom.write_bytes(0x007E19, bytearray([0x20, 0x06, 0xFE]))
+    rom.write_bytes(0x007E1C, bytearray([0xA9, 0x70]))
+    rom.write_bytes(0x007E1E, bytearray([0x85, 0x02]))
+    rom.write_bytes(0x007E20, bytearray([0x5C, 0x80, 0x82, 0x10]))
+    return
+
+
+
+
+
+
+
+
+
+
+def set_autosave(rom):
+    rom.write_bytes(0x0BB437, bytearray([0x5C, 0x07, 0xFC, 0x00]))
+
+    rom.write_bytes(0x007C07, bytearray([0x22, 0x79, 0x82, 0x10]))
+    rom.write_bytes(0x007C0B, bytearray([0xA5, 0x38]))
+    rom.write_bytes(0x007C0D, bytearray([0x05, 0x36]))
+    rom.write_bytes(0x007C0F, bytearray([0x5C, 0x3B, 0xB4, 0x17]))
+    return
+
+def set_hidden_objects(rom):
+    #Clouds
+    rom.write_bytes(0x01C08C, bytearray([0x5C, 0xB8, 0xF3, 0x0B]))
+
+    rom.write_bytes(0x05F3B8, bytearray([0xE2, 0x20]))
+    rom.write_bytes(0x05F3BA, bytearray([0xAF, 0x4F, 0xFF, 0x07]))
+    rom.write_bytes(0x05F3BE, bytearray([0xC9, 0x02]))
+    rom.write_bytes(0x05F3C0, bytearray([0xF0, 0x17]))
+    rom.write_bytes(0x05F3C2, bytearray([0xC9, 0x03]))
+    rom.write_bytes(0x05F3C4, bytearray([0xF0, 0x13]))
+    rom.write_bytes(0x05F3C6, bytearray([0xAF, 0xE7, 0x7E, 0x70]))
+    rom.write_bytes(0x05F3CA, bytearray([0xC9, 0x01]))
+    rom.write_bytes(0x05F3CC, bytearray([0xF0, 0x0B]))
+    rom.write_bytes(0x05F3CE, bytearray([0xC2, 0x20]))
+    rom.write_bytes(0x05F3D0, bytearray([0xAD, 0x06, 0x7E]))
+    rom.write_bytes(0x05F3D3, bytearray([0xD0, 0x04]))
+    rom.write_bytes(0x05F3D5, bytearray([0x5C, 0x91, 0xC0, 0x03]))
+
+    rom.write_bytes(0x05F3D9, bytearray([0xC2, 0x20]))
+    rom.write_bytes(0x05F3DB, bytearray([0x5C, 0xCC, 0xC0, 0x03]))
+
+    #Coins
+    rom.write_bytes(0x066A42, bytearray([0x5C, 0xDF, 0xF3, 0x0B]))
+
+    rom.write_bytes(0x05F3DF, bytearray([0xE2, 0x20]))
+    rom.write_bytes(0x05F3E1, bytearray([0xAF, 0x4F, 0xFF, 0x07]))
+    rom.write_bytes(0x05F3E5, bytearray([0xC9, 0x01]))
+    rom.write_bytes(0x05F3E7, bytearray([0xF0, 0x17]))
+    rom.write_bytes(0x05F3E9, bytearray([0xC9, 0x03]))
+    rom.write_bytes(0x05F3EB, bytearray([0xF0, 0x13]))
+    rom.write_bytes(0x05F3ED, bytearray([0xAF, 0xE7, 0x7E, 0x70]))
+    rom.write_bytes(0x05F3F1, bytearray([0xC9, 0x01]))
+    rom.write_bytes(0x05F3F3, bytearray([0xF0, 0x0B]))
+    rom.write_bytes(0x05F3F5, bytearray([0xC2, 0x20]))
+    rom.write_bytes(0x05F3F7, bytearray([0xAD, 0x06, 0x7E]))
+    rom.write_bytes(0x05F3FA, bytearray([0xD0, 0x04]))
+    rom.write_bytes(0x05F3FC, bytearray([0x5C, 0x49, 0xEA, 0x0C]))
+
+    rom.write_bytes(0x05F400, bytearray([0xC2, 0x20]))
+    rom.write_bytes(0x05F402, bytearray([0x5C, 0x47, 0xEA, 0x0C]))
+
+
+def skip_intro(rom):
+    rom.write_bytes(0x080D4C, bytearray([0x5C, 0x06, 0xF4, 0x0B]))
+
+    rom.write_bytes(0x05F406, bytearray([0xAD, 0x1A, 0x02]))
+    rom.write_bytes(0x05F409, bytearray([0xC9, 0x0B]))
+    rom.write_bytes(0x05F40B, bytearray([0xD0, 0x05]))
+    rom.write_bytes(0x05F40D, bytearray([0xA9, 0x1F]))
+    rom.write_bytes(0x05F40F, bytearray([0x8D, 0x18, 0x01]))
+    rom.write_bytes(0x05F412, bytearray([0xA5, 0x8D]))
+    rom.write_bytes(0x05F414, bytearray([0xF0, 0x04]))
+    rom.write_bytes(0x05F416, bytearray([0x5C, 0x50, 0x8D, 0x10]))
+    rom.write_bytes(0x05F41A, bytearray([0x5C, 0x75, 0x8D, 0x10]))
+    return
+
+def refresh_map(rom):
+    rom.write_bytes(0x0BE151, bytearray([0x5C, 0x1E, 0xF4, 0x0B]))
+
+    rom.write_bytes(0x05F41E, bytearray([0xA9, 0x01]))
+    rom.write_bytes(0x05F420, bytearray([0x85, 0x53]))
+    rom.write_bytes(0x05F422, bytearray([0xA9, 0x1F]))
+    rom.write_bytes(0x05F424, bytearray([0x8D, 0x18, 0x01]))
+    rom.write_bytes(0x05F427, bytearray([0xAE, 0x8E, 0x11]))
+    rom.write_bytes(0x05F42A, bytearray([0xC2, 0x20]))
+    rom.write_bytes(0x05F42C, bytearray([0x5C, 0x56, 0xE1, 0x17]))
+
+
+def castle_door_mode_1(rom):
+    rom.write_bytes(0x078923, bytearray([0xB8, 0x05, 0x77, 0x00]))
+    rom.write_bytes(0x078927, bytearray([0xB8, 0x05, 0x77, 0x00]))
+    rom.write_bytes(0x07892B, bytearray([0xB8, 0x05, 0x77, 0x00]))
+    return
+
+def castle_door_mode_2(rom):
+    rom.write_bytes(0x07891F, bytearray([0xC6, 0x07, 0x7A, 0x00]))
+    rom.write_bytes(0x078927, bytearray([0xC6, 0x07, 0x7A, 0x00]))
+    rom.write_bytes(0x07892B, bytearray([0xC6, 0x07, 0x7A, 0x00]))
+    return
+
+def castle_door_mode_3(rom):
+    rom.write_bytes(0x07891F, bytearray([0xCD, 0x05, 0x5B, 0x00]))
+    rom.write_bytes(0x078923, bytearray([0xCD, 0x05, 0x5B, 0x00]))
+    rom.write_bytes(0x07892B, bytearray([0xCD, 0x05, 0x5B, 0x00]))
+    return
+
+def castle_door_mode_4(rom):
+    rom.write_bytes(0x07891F, bytearray([0xD3, 0x00, 0x77, 0x06]))
+    rom.write_bytes(0x078923, bytearray([0xD3, 0x00, 0x77, 0x06]))
+    rom.write_bytes(0x078927, bytearray([0xD3, 0x00, 0x77, 0x06]))
+    return
+
+
+
 def patch_rom(world, rom, player):
     local_random = world.slot_seeds[player]
 
@@ -649,12 +904,36 @@ def patch_rom(world, rom, player):
     #Write chosen starting world to rom
     rom.write_bytes(0x03FF4D, bytearray([world.starting_world[player].value + 1]))
 
+    #Write goal to rom
+    rom.write_bytes(0x03FF4E, bytearray([world.castle_open_condition[player].value]))
+
+    #Write Hidden Visibility to rom
+    rom.write_bytes(0x03FF4F, bytearray([world.hidden_object_visibility[player].value]))
+
     handle_sprite_code(rom)
     set_starting_world(rom)
     set_active_levels(rom)
+    write_checks_to_rom(rom)
+    set_autosave(rom)
+    reset_and_sync_checks(rom)
+    set_hidden_objects(rom)
+    skip_intro(rom)
+    refresh_map(rom)
+
+    if get_option_value(world, player, "castle_door_choice") == 1:
+        castle_door_mode_1(rom)
+
+    elif get_option_value(world, player, "castle_door_choice") == 2:
+        castle_door_mode_2(rom)
+
+    elif get_option_value(world, player, "castle_door_choice") == 3:
+        castle_door_mode_3(rom)
+
+    elif get_option_value(world, player, "castle_door_choice") == 4:
+        castle_door_mode_4(rom)
 
     from Main import __version__
-    rom.name = bytearray(f'YI{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
+    rom.name = bytearray(f'SMW2YI{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
 
@@ -672,11 +951,12 @@ class YIDeltaPatch(APDeltaPatch):
         return get_base_rom_bytes()
 
 
+
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
         file_name = get_base_rom_path(file_name)
-        base_rom_bytes = bytes(read_rom(open(file_name, "rb")))
+        base_rom_bytes = bytes(Utils.read_snes_rom(open(file_name, "rb")))
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)

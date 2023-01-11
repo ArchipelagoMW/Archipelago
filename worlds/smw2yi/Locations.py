@@ -38,7 +38,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Burt The Bashful's Fort", "Burt The Bashful's Fort: Flowers", 160014, lambda state: state.has('Spring Ball', player) and state.world_1_keys and state.has('Egg Capacity Upgrade', player, 3)),
         LocationData("Burt The Bashful's Fort", "Burt The Bashful's Fort: Stars", 160015, lambda state: state.has('Spring Ball', player)),
         LocationData("Burt The Bashful's Fort", "Burt The Bashful's Fort: Level Clear", 160016, lambda state: state.has('Spring Ball', player) and state.world_1_keys and state.has('Egg Plant', player)),
-        LocationData("Burt The Bashful's Fort", "Burt The Bashful Defeated", EventId),
+        LocationData("Burt The Bashful's Fort", "Burt The Bashful Defeated", EventId, lambda state: state.has('Spring Ball', player) and state.world_1_keys and state.has('Egg Plant', player)),
 
         LocationData("Hop! Hop! Donut Lifts", "Hop! Hop! Donut Lifts: Red Coins", 160018),
         LocationData("Hop! Hop! Donut Lifts", "Hop! Hop! Donut Lifts: Flowers", 160019),
@@ -82,7 +82,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Bigger Boo's Fort", "Bigger Boo's Fort: Flowers", 160048, lambda state: state.has('! Switch', player) and state.world_2_keys and state.has('Dashed Stairs', player)),
         LocationData("Bigger Boo's Fort", "Bigger Boo's Fort: Stars", 160049, lambda state: state.has('! Switch', player) and state.has('Dashed Stairs', player) and (state.has('Middle Ring', player) or state.has('Key', player))),
         LocationData("Bigger Boo's Fort", "Bigger Boo's Fort: Level Clear", 160050, lambda state: state.has('! Switch', player) and state.has('Dashed Stairs', player)),
-        LocationData("Bigger Boo's Fort", "Bigger Boo Defeated", EventId),
+        LocationData("Bigger Boo's Fort", "Bigger Boo Defeated", EventId, lambda state: state.has('! Switch', player) and state.has('Dashed Stairs', player)),
 
         LocationData("Watch Out For Lakitu", "Watch Out For Lakitu: Red Coins", 160052),
         LocationData("Watch Out For Lakitu", "Watch Out For Lakitu: Flowers", 160053, lambda state: state.world_2_keys and state.has('Train', player)),
@@ -103,7 +103,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("The Potted Ghost's Castle", "The Potted Ghost's Castle: Flowers", 160065, lambda state: state.has('Arrow Wheel', player) and state.has('Train', player) and state.world_2_keys),
         LocationData("The Potted Ghost's Castle", "The Potted Ghost's Castle: Stars", 160066, lambda state: state.has('Arrow Wheel', player) and state.world_2_keys and state.has('Middle Ring', player)),
         LocationData("The Potted Ghost's Castle", "The Potted Ghost's Castle: Level Clear", 160067, lambda state: state.has('Arrow Wheel', player) and state.world_2_keys),
-        LocationData("The Potted Ghost's Castle", "Roger the Ghost Defeated", EventId),
+        LocationData("The Potted Ghost's Castle", "Roger the Ghost Defeated", EventId, lambda state: state.has('Arrow Wheel', player) and state.world_2_keys),
 
 
         #world 3 starts here
@@ -126,7 +126,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Prince Froggy's Fort", "Prince Froggy's Fort: Flowers", 160082, lambda state: state.has('Egg Capacity Upgrade', player, 5) and state.has('Dashed Platform', player)),
         LocationData("Prince Froggy's Fort", "Prince Froggy's Fort: Stars", 160083, lambda state: (state.has('Dashed Platform', player) or state.has('Middle Ring', player))),
         LocationData("Prince Froggy's Fort", "Prince Froggy's Fort: Level Clear", 160084, lambda state: state.has('Dashed Platform', player) and state.has('Giant Eggs', player)),
-        LocationData("Prince Froggy's Fort", "Prince Froggy Defeated", EventId),
+        LocationData("Prince Froggy's Fort", "Prince Froggy Defeated", EventId, lambda state: state.has('Dashed Platform', player) and state.has('Giant Eggs', player)),
 
         LocationData("Jammin' Through The Trees", "Jammin' Through The Trees: Red Coins", 160086),
         LocationData("Jammin' Through The Trees", "Jammin' Through The Trees: Flowers", 160087, lambda state: state.has('Watermelons', player)),
@@ -147,7 +147,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Naval Piranha's Castle", "Naval Piranha's Castle: Flowers", 160099, lambda state: state.has('Egg Capacity Upgrade', player, 2)),
         LocationData("Naval Piranha's Castle", "Naval Piranha's Castle: Stars", 160100, lambda state: state.has('Egg Capacity Upgrade', player, 2) and state.has('Middle Ring', player) and state.has('Tulip', player)),
         LocationData("Naval Piranha's Castle", "Naval Piranha's Castle: Level Clear", 160101, lambda state: state.has('Egg Capacity Upgrade', player, 2)),
-        LocationData("Naval Piranha's Castle", "Naval Piranha Defeated", EventId),
+        LocationData("Naval Piranha's Castle", "Naval Piranha Defeated", EventId, lambda state: state.has('Egg Capacity Upgrade', player, 2)),
 
 
         #world 4 starts here
@@ -170,7 +170,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Marching Milde's Fort", "Marching Milde's Fort: Flowers", 160116, lambda state: state.has('Dashed Stairs', player) and state.has('Arrow Wheel', player) and state.has('Vanishing Arrow Wheel', player) and state.has('Bucket', player)),
         LocationData("Marching Milde's Fort", "Marching Milde's Fort: Stars", 160117, lambda state: state.has('Dashed Stairs', player)),
         LocationData("Marching Milde's Fort", "Marching Milde's Fort: Level Clear", 160118, lambda state: state.has('Dashed Stairs', player) and state.has('Arrow Wheel', player) and state.has('Vanishing Arrow Wheel', player) and state.has('Bucket', player) and state.has('Key', player)),
-        LocationData("Marching Milde's Fort", "Marching Milde Defeated", EventId),
+        LocationData("Marching Milde's Fort", "Marching Milde Defeated", EventId, lambda state: state.has('Dashed Stairs', player) and state.has('Arrow Wheel', player) and state.has('Vanishing Arrow Wheel', player) and state.has('Bucket', player) and state.has('Key', player)),
 
         LocationData("Chomp Rock Zone", "Chomp Rock Zone: Red Coins", 160120, lambda state: state.has('Large Spring Ball', player)),
         LocationData("Chomp Rock Zone", "Chomp Rock Zone: Flowers", 160121, lambda state: state.has('Chomp Rock', player) and state.has('! Switch', player) and state.has('Dashed Platform', player)),
@@ -191,7 +191,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Hookbill The Koopa's Castle", "Hookbill The Koopa's Castle: Flowers", 160133, lambda state: state.has('Dashed Stairs', player) and state.has('Vanishing Arrow Wheel', player) and state.has('Key', player)),
         LocationData("Hookbill The Koopa's Castle", "Hookbill The Koopa's Castle: Stars", 160134, lambda state: state.has('Middle Ring', player) and (state.has('Dashed Stairs', player) or state.has('Vanishing Arrow Wheel', player))),
         LocationData("Hookbill The Koopa's Castle", "Hookbill The Koopa's Castle: Level Clear", 160135, lambda state: state.has('Vanishing Arrow Wheel', player) and state.has('Key', player) and state.has('Large Spring Ball', player) and state.has('Egg Capacity Upgrade', player, 2)),
-        LocationData("Hookbill The Koopa's Castle", "Hookbill The Koopa Defeated", EventId),
+        LocationData("Hookbill The Koopa's Castle", "Hookbill The Koopa Defeated", EventId, lambda state: state.has('Vanishing Arrow Wheel', player) and state.has('Key', player) and state.has('Large Spring Ball', player) and state.has('Egg Capacity Upgrade', player, 2)),
 
 
         #world 5 starts here
@@ -214,7 +214,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Sluggy The Unshaven's Fort", "Sluggy The Unshaven's Fort: Flowers", 160150, lambda state: state.has('Dashed Stairs', player) and state.has('Dashed Platform', player) and state.has('Platform Ghost', player)),
         LocationData("Sluggy The Unshaven's Fort", "Sluggy The Unshaven's Fort: Stars", 160151, lambda state: state.has('Dashed Stairs', player) and state.has('Dashed Platform', player)),
         LocationData("Sluggy The Unshaven's Fort", "Sluggy The Unshaven's Fort: Level Clear", 160152, lambda state: state.has('Dashed Stairs', player) and state.has('Dashed Platform', player) and (state.has('Egg Plant', player) and state.has('Egg Capacity Upgrade', player, 2) or state.has('Egg Capacity Upgrade', player, 3) and state.has('Middle Ring', player))),
-        LocationData("Sluggy The Unshaven's Fort", "Sluggy The Unshaven Defeated", EventId),
+        LocationData("Sluggy The Unshaven's Fort", "Sluggy The Unshaven Defeated", EventId, lambda state: state.has('Dashed Stairs', player) and state.has('Dashed Platform', player) and (state.has('Egg Plant', player) and state.has('Egg Capacity Upgrade', player, 2) or state.has('Egg Capacity Upgrade', player, 3) and state.has('Middle Ring', player))),
 
         LocationData("Goonie Rides!", "Goonie Rides!: Red Coins", 160154),
         LocationData("Goonie Rides!", "Goonie Rides!: Flowers", 160155, lambda state: state.has('Helicopter', player)),
@@ -235,7 +235,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Raphael The Raven's Castle", "Raphael The Raven's Castle: Flowers", 160167, lambda state: state.has('Arrow Wheel', player) and state.has('Train', player)),
         LocationData("Raphael The Raven's Castle", "Raphael The Raven's Castle: Stars", 160168, lambda state: state.has('Arrow Wheel', player) and state.has('Middle Ring', player)),
         LocationData("Raphael The Raven's Castle", "Raphael The Raven's Castle: Level Clear", 160169, lambda state: state.has('Arrow Wheel', player) and state.has('Large Spring Ball', player)),
-        LocationData("Raphael The Raven's Castle", "Raphael The Raven Defeated", EventId),
+        LocationData("Raphael The Raven's Castle", "Raphael The Raven Defeated", EventId, lambda state: state.has('Arrow Wheel', player) and state.has('Large Spring Ball', player)),
 
 
         #world 6 starts here
@@ -258,7 +258,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("Tap-Tap The Red Nose's Fort", "Tap-Tap The Red Nose's Fort: Flowers", 160184, lambda state: state.has('Spring Ball', player) and state.has('Large Spring Ball', player) and state.has('Egg Plant', player) and state.has('Egg Capacity Upgrade', player, 2) and state.has('Key', player)),
         LocationData("Tap-Tap The Red Nose's Fort", "Tap-Tap The Red Nose's Fort: Stars", 160185, lambda state: state.has('Spring Ball', player) and state.has('Large Spring Ball', player) and state.has('Key', player) and state.has('Egg Plant', player)),
         LocationData("Tap-Tap The Red Nose's Fort", "Tap-Tap The Red Nose's Fort: Level Clear", 160186, lambda state: state.has('Spring Ball', player) and state.has('Large Spring Ball', player) and state.has('Egg Plant', player) and state.has('Egg Capacity Upgrade', player, 2) and state.has('Key', player)),
-        LocationData("Tap-Tap The Red Nose's Fort", "Tap-Tap The Red Nose Defeated", EventId),
+        LocationData("Tap-Tap The Red Nose's Fort", "Tap-Tap The Red Nose Defeated", EventId, lambda state: state.has('Spring Ball', player) and state.has('Large Spring Ball', player) and state.has('Egg Plant', player) and state.has('Egg Capacity Upgrade', player, 2) and state.has('Key', player)),
 
         LocationData("The Very Loooooong Cave", "The Very Loooooong Cave: Red Coins", 160188, lambda state: state.has('Chomp Rock', player)),
         LocationData("The Very Loooooong Cave", "The Very Loooooong Cave: Flowers", 160189, lambda state: state.has('Chomp Rock', player)),
@@ -278,7 +278,9 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData("King Bowser's Castle", "King Bowser's Castle: Red Coins", 160200, lambda state: state.castle_door(world, player) and state.has('Helicopter', player) and state.has('Egg Plant', player)),
         LocationData("King Bowser's Castle", "King Bowser's Castle: Flowers", 160201, lambda state: state.castle_door(world, player) and state.has('Helicopter', player) and state.has('Egg Plant', player)),
         LocationData("King Bowser's Castle", "King Bowser's Castle: Stars", 160202, lambda state: state.castle_door(world, player) and state.has('Helicopter', player) and state.has('Egg Plant', player) and state.has('Middle Ring', player)),
-        LocationData("King Bowser's Castle", "Saved Baby Luigi", EventId, lambda state: state.castle_door(world, player) and state.has('Helicopter', player) and state.has('Egg Plant', player) and state.has('Giant Eggs', player))
+        LocationData("King Bowser's Castle", "Saved Baby Luigi", EventId, lambda state: state.castle_door(world, player) and state.has('Helicopter', player) and state.has('Egg Plant', player) and state.has('Giant Eggs', player)),
+
+        LocationData("Overworld", "Required Bosses", EventId)
     ]
     if not world or is_option_enabled(world, player, "extras_enabled"):
         location_table += ( 
@@ -345,7 +347,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
 
         )
 
-    if not world or get_option_value(world, player, "castle_open_condition") or get_option_value(world, player, "castle_clear_condition")== 2:
+    if not world or get_option_value(world, player, "castle_open_condition") == 1 or get_option_value(world, player, "castle_clear_condition") == 1:
         location_table+= (
             LocationData("Salvo The Slime's Castle", "Salvo The Slime's Castle: Flag", 160247,  lambda state: state.world_1_keys(world, player) and state.has('Arrow Wheel', player)),
             LocationData("The Potted Ghost's Castle", "The Potted Ghost's Castle: Flag", 160248, lambda state: state.has('Arrow Wheel', player) and state.world_2_keys(world, player)),

@@ -1,6 +1,11 @@
 from BaseClasses import MultiWorld
 from ..AutoWorld import LogicMixin
+from .SetRequiredBosses import load_req_bosses
+
 from .Options import get_option_value
+
+import random
+import pdb
 
 class LogicComplex(LogicMixin):
 
@@ -19,12 +24,13 @@ class LogicComplex(LogicMixin):
             return True
         elif get_option_value(world, player, "castle_open_condition") == 1:
             return self.has("World Flag", player, world.flags_for_castle_open[player].value)
+        elif get_option_value(world, player, "castle_open_condition") == 2:
+            return load_req_bosses(world, player)
 
 
 
     def lots_of_stars(self, world: MultiWorld, player: int) -> bool: #This is a check for middle rings or tulips
         return self.has_any({'Middle Ring', 'Tulip'}, player)
-
 
 
     #def castle_clear()
@@ -51,6 +57,7 @@ class LogicComplex(LogicMixin):
                 return self.has('Secret Lens', player)
         else:
             return True
+            
 
     def world_1_keys(self, world: MultiWorld, player: int) -> bool:
         return self.has('Key', player) or self.has('World 1 Key', player, 4)
@@ -108,13 +115,16 @@ class LogicComplex(LogicMixin):
     
     def can_melt_ice(self, world: MultiWorld, player: int) -> bool:
         if get_option_value(world, player, "item_logic") == True:
-            return self.has('Fire Melond', player) or self.can_grind_melons(world, player)
+            return self.has('Fire Melons', player) or self.can_grind_melons(world, player)
         else:
             return self.has('Fire Melons', player)
 
     def castle_clear_logic(self, world: MultiWorld, player: int) -> bool:
-        if get_option_value(world, player, "flags_for_castle_open") == world.SecondFloorStarDoorCost[player].value:
+        if get_option_value(world, player, "flags_for_castle_open") == world.flags_for_castle_clear[player].value:
             return True
+
+
+        
 
 
     #def can_grind_bandit_games

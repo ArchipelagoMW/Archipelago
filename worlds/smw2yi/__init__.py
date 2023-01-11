@@ -10,8 +10,10 @@ from .Items import get_item_names_per_category, item_table, filler_items
 from .Locations import get_locations, EventId
 from .LogicMixin import LogicComplex
 from .Options import is_option_enabled, get_option_value, yoshi_options
+from .SetRequiredBosses import load_req_bosses
 from .Regions import create_regions
 from ..AutoWorld import World, WebWorld
+from .Client import YISNIClient
 from .Rom import LocalRom, patch_rom, get_base_rom_path, YIDeltaPatch
 import Patch
 
@@ -46,6 +48,7 @@ class YIWorld(World):
 
     locked_locations: List[str]
     location_cache: List[Location]
+    set_req_bosses: str
 
 
     def __init__(self, world: MultiWorld, player: int):
@@ -55,61 +58,78 @@ class YIWorld(World):
         self.locked_locations= []
         self.location_cache= []
 
+    @classmethod
+    def stage_assert_generate(cls, world):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
+
+    def _get_slot_data(self):
+        return {
+            #"death_link": self.multiworld.death_link[self.player].value,
+        }
+
+    def fill_slot_data(self) -> dict:
+        slot_data = self._get_slot_data()
+        for option_name in yoshi_options:
+            option = getattr(self.multiworld, option_name)[self.player]
+            slot_data[option_name] = option.value
+
+        return slot_data
+
     def create_item(self, name: str) -> Item:
-        return create_item_with_correct_settings(self.world, self.player, name)
+        return create_item_with_correct_settings(self.multiworld, self.player, name)
 
     def generate_early(self):
         # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
-        if self.world.start_inventory[self.player].value.pop('Middle Ring', 0) > 0:
-            self.world.StartWithMidRings[self.player].value = self.world.StartWithMidRings[self.player].option_true
+        if self.multiworld.start_inventory[self.player].value.pop('Middle Ring', 0) > 0:
+            self.multiworld.StartWithMidRings[self.player].value = self.multiworld.StartWithMidRings[self.player].option_true
 
 
     def create_regions(self):
-        create_regions(self.world, self.player, get_locations(self.world, self.player),
+        create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player),
                         self.location_cache)
 
 
 
+
     def get_filler_item_name(self) -> str:
-        return self.world.random.choice(filler_items)
+        return self.multiworld.random.choice(filler_items)
 
     def set_rules(self):
         setup_events(self.player, self.locked_locations, self.location_cache)
 
-        self.world.completion_condition[self.player] = lambda state: state.has('Saved Baby Luigi', self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has('Saved Baby Luigi', self.player)
 
     def generate_basic(self):
+
         
-        if self.world.castle_open_condition[self.player] == 1 or self.world.castle_clear_condition == 1:
-            self.world.get_location("Salvo The Slime's Castle: Flag", self.player).place_locked_item(self.create_item("World Flag"))
-            self.world.get_location("The Potted Ghost's Castle: Flag", self.player).place_locked_item(self.create_item("World Flag"))
-            self.world.get_location("Naval Piranha's Castle: Flag", self.player).place_locked_item(self.create_item("World Flag"))
-            self.world.get_location("Hookbill The Koopa's Castle: Flag", self.player).place_locked_item(self.create_item("World Flag"))
-            self.world.get_location("Raphael The Raven's Castle: Flag", self.player).place_locked_item(self.create_item("World Flag"))
 
 
-        excluded_items = get_excluded_items(self, self.world, self.player)
+        excluded_items = get_excluded_items(self, self.multiworld, self.player)
 
-        pool = get_item_pool(self.world, self.player, excluded_items)
+        pool = get_item_pool(self.multiworld, self.player, excluded_items)
 
-        fill_item_pool_with_dummy_items(self, self.world, self.player, self.locked_locations, self.location_cache, pool)
+        fill_item_pool_with_dummy_items(self, self.multiworld, self.player, self.locked_locations, self.location_cache, pool)
 
-        self.world.itempool += pool
+        self.multiworld.itempool += pool
+
+        if self.multiworld.castle_open_condition[self.player] == 1 or self.multiworld.castle_clear_condition == 1:
+            self.multiworld.get_location("Salvo The Slime's Castle: Flag", self.player).place_locked_item(self.create_item("World Flag"))
+            self.multiworld.get_location("The Potted Ghost's Castle: Flag", self.player).place_locked_item(self.create_item("World Flag"))
+            self.multiworld.get_location("Naval Piranha's Castle: Flag", self.player).place_locked_item(self.create_item("World Flag"))
+            self.multiworld.get_location("Hookbill The Koopa's Castle: Flag", self.player).place_locked_item(self.create_item("World Flag"))
+            self.multiworld.get_location("Raphael The Raven's Castle: Flag", self.player).place_locked_item(self.create_item("World Flag"))
 
     def generate_output(self, output_directory: str):
+        rompath = ""  # if variable is not declared finally clause may fail
         try:
-            world = self.world
+            world = self.multiworld
             player = self.player
             rom = LocalRom(get_base_rom_path())
-            patch_rom(self.world, rom, self.player)
+            patch_rom(self.multiworld, rom, self.player)
 
-
-
-            outfilepname = f'_P{player}'
-            outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
-                if world.player_name[player] != 'Player%d' % player else ''
-
-            rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.sfc')
+            rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 
@@ -119,9 +139,9 @@ class YIWorld(World):
         except:
             raise
         finally:
+            self.rom_name_available_event.set()  # make sure threading continues and errors are collected
             if os.path.exists(rompath):
                 os.unlink(rompath)
-            self.rom_name_available_event.set() # make sure threading continues and errors are collected
 
     def modify_multidata(self, multidata: dict):
         import base64
@@ -131,7 +151,7 @@ class YIWorld(World):
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
 
 
@@ -231,7 +251,7 @@ def create_item_with_correct_settings(world: MultiWorld, player: int, name: str)
     if not item.advancement:
         return item
 
-    if (name == "Secret Lens" and get_option_value(world, player, "stage_logic") > 1 or get_option_value(world, player, "hidden_object_visibility") >= 2):
+    if (name == "Secret Lens" and get_option_value(world, player, "stage_logic") > 1 or name == "Secret Lens" and get_option_value(world, player, "hidden_object_visibility") > 1):
         item.classification = ItemClassification.filler
 
 
