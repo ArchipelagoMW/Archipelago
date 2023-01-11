@@ -282,6 +282,71 @@ class EnterSandman(Toggle):
     display_name = "Enter Sandman"
 
 
+class DadPercent(Toggle):
+    "The win condition is beating the boss of Emperor's Tower"
+    display_name = "Dad Percent"
+
+
+class RisingTides(Toggle):
+    "Random area's are flooded or drained, can be further specified with RisingTidesOverrides"
+    display_name = "Rising Tides"
+
+
+class RisingTidesOverrides(OptionDict):
+    """Manual odds for specific area's to be flooded or drained, 
+    Areas that you don't specify will roll with the default 33% change of getting flooded or drained"""
+    schema = Schema({
+        Optional("Xarion"): { 
+            "Dry": And(int, lambda n: n >= 0), 
+            "Flooded": And(int, lambda n: n >= 0)
+        },
+        Optional("Maw"): { 
+            "Dry": And(int, lambda n: n >= 0), 
+            "Flooded": And(int, lambda n: n >= 0)
+        },
+        Optional("AncientPyramidShaft"): { 
+            "Dry": And(int, lambda n: n >= 0), 
+            "Flooded": And(int, lambda n: n >= 0)
+        },
+        Optional("Sandman"): { 
+            "Dry": And(int, lambda n: n >= 0), 
+            "Flooded": And(int, lambda n: n >= 0)
+        },
+        Optional("CastleMoat"): { 
+            "Dry": And(int, lambda n: n >= 0), 
+            "Flooded": And(int, lambda n: n >= 0)
+        },
+        Optional("CastleBasement"): { 
+            "Dry": And(int, lambda n: n >= 0), 
+            "FloodedWithSavePointAvailable": And(int, lambda n: n >= 0), 
+            "Flooded": And(int, lambda n: n >= 0) 
+        },
+        Optional("CastleCourtyard"): { 
+            "Dry": And(int, lambda n: n >= 0), 
+            "Flooded": And(int, lambda n: n >= 0)
+        },
+        Optional("LakeDesolation"): { 
+            "Dry": And(int, lambda n: n >= 0), 
+            "Flooded": And(int, lambda n: n >= 0)
+        },
+        Optional("LakeSerene"): { 
+            "Dry": And(int, lambda n: n >= 0), 
+            "Flooded": And(int, lambda n: n >= 0)
+        }
+    })
+    display_name = "Rising Tides Overrides"
+    default = {
+        "Xarion": { "Dry": 67, "Flooded": 33 },
+        "Maw": { "Dry": 67, "Flooded": 33 },
+        "AncientPyramidShaft": { "Dry": 67, "Flooded": 33 },
+        "Sandman": { "Dry": 67, "Flooded": 33 },
+        "CastleMoat": { "Dry": 67, "Flooded": 33 },
+        "CastleBasement": { "Dry": 66, "Flooded": 17, "FloodedWithSavePointAvailable": 17 },
+        "CastleCourtyard": { "Dry": 67, "Flooded": 33 },
+        "LakeDesolation": { "Dry": 67, "Flooded": 33 },
+        "LakeSerene": { "Dry": 67, "Flooded": 33 },
+    }
+
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Option] = {
     "StartWithJewelryBox": StartWithJewelryBox,
@@ -310,6 +375,9 @@ timespinner_options: Dict[str, Option] = {
     "ShowBestiary": ShowBestiary,
     "ShowDrops": ShowDrops,
     "EnterSandman": EnterSandman,
+    "DadPercent": DadPercent,
+    "RisingTides": RisingTides,
+    "RisingTidesOverrides": RisingTidesOverrides,
     "DeathLink": DeathLink,
 }
 
