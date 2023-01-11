@@ -1,5 +1,4 @@
-from sre_constants import MAGIC
-import zipfile
+
 import yaml
 import os
 import shutil
@@ -7,31 +6,16 @@ import random
 import json
 import os
 import shutil
-import threading
-import zipfile
-import jinja2
 import Utils
-import worlds.Files
 from .Items import item_dictionary_table
 from .Locations import all_locations
-from .Options import FinalEXP, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement, KH2_Options
-from .modYml import modYml
-from .Names import ItemName
-from .ItemId import itemId
 from .XPValues import lvlStats, formExp, soraExp
 
 
-# import Utils
-# import Patch
-# import worlds.AutoWorld
-# import worlds.Files
 
 
 def patch_kh2(self, output_directory):
-    # itemName= {data.locid: location.item.code.kh2id
-    #            for location in self.world.get_filled_locations(self.player)}
-    # locName=[location.item.code.kh2id
-    #         for location in self.multiworld.get_filled_locations(self.player)]
+
 
     def increaseStat(i):
         if lvlStats[i] == "str":
@@ -43,9 +27,6 @@ def patch_kh2(self, output_directory):
         if lvlStats[i] == "ap":
             self.ap += 2
 
-    # if 3 then dbbl bonus = thing break
-    # if 0 print things
-    # reset double bns to 0
     self.formattedTrsr = {}
     self.formattedBons = []
     self.formattedLvup = {"Sora": {}}
@@ -60,9 +41,9 @@ def patch_kh2(self, output_directory):
     soraStartingItems = []
     goofyStartingItems = []
     donaldStartingItems = []
-   #multiworld = world.worlds
-   #mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
-    mod_name="YourMom"
+    mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
+
+
     for location in self.multiworld.get_filled_locations(self.player):
         data = all_locations[location.name]
         if location.item.game == "Kingdom Hearts 2":
@@ -70,10 +51,7 @@ def patch_kh2(self, output_directory):
             itemcode = item_dictionary_table[location.item.name]
         else:
             #filling in lists for how to check if a chest is opened
-            if data.yml=="Levels" or data.yml=="Forms":
-                self.bt10multiworld_locaions.append(location.name)
-            else:
-                self.savemultiworld_locations.append(location.name)
+            self.kh2multiworld_locations.append(location.name)
             itemcode = 461
 
         if data.yml=="Chest":
@@ -243,11 +221,7 @@ def patch_kh2(self, output_directory):
         })
 
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__, )
-    print(self.multiworld.player_name[self.player])
     os.makedirs(mod_dir, exist_ok=False)
-    #print(os.path.join(os.path.dirname(__file__), "mod_template"))
-    #bossrndo = os.path.join(mod_dir, "Cum")
-    #os.makedirs(bossrndo, exist_ok=True)
     with open(os.path.join(mod_dir, "Trsrlist.yml"), "wt") as f:
         f.write(yaml.dump(self.formattedTrsr,line_break="\n"))
     with open(os.path.join(mod_dir, "LvupList.yml"), "wt") as f:
@@ -260,13 +234,8 @@ def patch_kh2(self, output_directory):
         f.write(yaml.dump(self.formattedFmlv,line_break="\n"))
     with open(os.path.join(mod_dir,"PlrpList.yml"),"wt") as f:
         f.write(yaml.dump(self.formattedPlrp,line_break="\n"))
-    with open(os.path.join(mod_dir, "jm.yml"), "wt") as f:
-        f.write(yaml.dump(modYml.getJMYAML(), line_break="\n"))
-    #with open(os.path.join(mod_dir, "archipelago.json"), "wt") as f:
-    #    json.dump({"server": "", "player": self.player, "player_name": self.multiworld.player_name[self.player], "game": "Kingdom Hearts 2", "compatible_version": 0, "version": 0},f,indent=4)
+    with open(os.path.join(mod_dir, "archipelago.json"), "wt") as f:
+        json.dump({"server": "", "player": self.player, "player_name": self.multiworld.player_name[self.player], "game": "Kingdom Hearts 2", "compatible_version": 0, "version": 0},f,indent=4)
     shutil.copytree(os.path.join(os.path.dirname(__file__), "mod_template"),mod_dir,dirs_exist_ok=True)
-    
-    #with open(os.path.join(mod_dir, "IhateAPClient.txt"), "wt") as f:
-    #    f.write(code_to_name)
     shutil.make_archive(mod_dir,'zip',mod_dir)
     shutil.rmtree(mod_dir)

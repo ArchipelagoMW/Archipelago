@@ -1,7 +1,6 @@
-from optparse import Option
 import typing
 
-from BaseClasses import Item, ItemClassification
+from BaseClasses import Item
 from .Names import ItemName
 
 
@@ -444,38 +443,7 @@ Misc_Table = {
     ItemName.Nothing: 				    ItemData(0x1320170,  1,0x111 ),
     ItemName.Victory: 				    ItemData(0x1320171,  1, True,0x111 ),
 }   #itemname luckey emblem (0x1320172)    will be unused map
-# Required items for the Rules
-# This is basiccly checking how many of the items you have
-# Thanks for reading this you a homie :)
-required_items = {
-    ItemName.FireElement: 3,
-    ItemName.BlizzardElement: 3,
-    ItemName.ThunderElement: 3,
-    ItemName.CureElement: 3,
-    ItemName.MagnetElement: 3,
-    ItemName.ReflectElement: 3,
-    ItemName.HighJump: 4,
-    ItemName.QuickRun: 4,
-    ItemName.AerialDodge: 4,
-    ItemName.DodgeRoll: 4,
-    ItemName.Glide: 4,
-    ItemName.TornPages: 5,
-    ItemName.BattlefieldsofWar: 1,
-    ItemName.SwordoftheAncestor: 1,
-    ItemName.BeastsClaw: 1,
-    ItemName.BoneFist: 1,
-    ItemName.ProudFang: 1,
-    ItemName.SkillandCrossbones: 1,
-    ItemName.Scimitar: 1,
-    ItemName.MembershipCard: 1,
-    ItemName.IceCream: 1,
-    ItemName.Picture: 1,
-    ItemName.WaytotheDawn: 1,
-    ItemName.IdentityDisk: 1,
-}
-# there are 541 locations and 379 items
-# This means we need to add some filler
-# some numbers are taken from vanilla kh2 some are just out of my ass
+
 exclusionItem_table = {
     "Ability": {
         ItemName.Scan,
@@ -594,13 +562,13 @@ exclusionItem_table = {
         ItemName.DodgeRoll,
         ItemName.DodgeRoll2,
         ItemName.DodgeRoll3,
-        ItemName.DodgeRoll4,
-        # these are not abilitys need to add a lua increase category for forbidding items
+        ItemName.DodgeRoll4, 
+    },
+    "StatUps":{
         ItemName.MaxHPUp,
         ItemName.MaxMPUp,
         ItemName.DriveGaugeUp,
-    },
-
+        },
     "Forms": {
         ItemName.ValorForm,
         ItemName.WisdomForm,
@@ -699,6 +667,7 @@ keybladeAbilities = [
     ItemName.AutoSummon,
 ]
 # donald abiltys that are only donalds
+#these probably dont need to be here but it is simpiler.
 donaldAbility = [
     ItemName.DonaldFire,
     ItemName.DonaldBlizzard,
@@ -792,5 +761,5 @@ item_dictionary_table = {**Reports_Table,
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_dictionary_table.items() if
                                             data.code}
-lookup_kh2id_to_name: typing.Dict[int, str] = {data.kh2id: item_name for item_name, data in
-                                               item_dictionary_table.items() if data.kh2id}
+#lookup_kh2id_to_name: typing.Dict[int, str] = {data.kh2id: item_name for item_name, data in
+#                                               item_dictionary_table.items() if data.kh2id}

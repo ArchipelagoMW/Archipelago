@@ -1,5 +1,5 @@
 from ..AutoWorld import LogicMixin
-from .Names import LocationName, ItemName
+from .Names import ItemName
 
 
 class KH2Logic(LogicMixin):

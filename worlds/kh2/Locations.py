@@ -1,9 +1,7 @@
-from statistics import quantiles
-from tokenize import String
 import typing
 
 from BaseClasses import Location
-from .Names import LocationName, ItemName
+from .Names import LocationName
 
 
 class KH2Location(Location):
@@ -63,7 +61,7 @@ LoD2_Checks = {
     LocationName.ThroneRoomMythrilCrystal:   LocationData(0x13001A, 0x1450E, 0x23AF, 1, 130, "Chest"),  
     LocationName.ThroneRoomOrichalcum:       LocationData(0x13001B, 0x1451A, 0x23AF, 2, 131, "Chest"),  
     LocationName.StormRider:                 LocationData(0x13001C, 0x2AB88, 0x3705, 2, 10, "Get Bonus"),
-    LocationName.XigbarDataDefenseBoost:     LocationData(0x13001D, 0x157E6, 0x0A, 0x6C, 555, "Chest"),               
+    LocationName.XigbarDataDefenseBoost:     LocationData(0x13001D, 0x157E6, 0x64, 0x6C, 555, "Chest"),               
 
 }
 AG_Checks = {
@@ -104,8 +102,8 @@ AG2_Checks = {
     LocationName.GenieJafar:                      LocationData(0x13003D, 0x2ABF8, 0x3705, 7, 15, "Get Bonus"),
     LocationName.WishingLamp:                     LocationData(0x13003E, 0x155B2, 0x1D77, 3, 303, "Chest"),
     LocationName.LexaeusBonus:                    LocationData(0x13003F, 0x2B3A8, 0x370C, 1, 65, "Get Bonus"),
-    LocationName.LexaeusASStrengthBeyondStrength: LocationData(0x130040, 0x1574A,0x21, 0x7B, 545, "Chest"),
-    LocationName.LexaeusDataLostIllusion:         LocationData(0x130041, 0x15786,0x21, 0x7B, 550, "Chest"),
+    LocationName.LexaeusASStrengthBeyondStrength: LocationData(0x130040, 0x1574A,0x8E, 0x7B, 545, "Chest"),
+    LocationName.LexaeusDataLostIllusion:         LocationData(0x130041, 0x15786,0x93, 0x7B, 550, "Chest"),
 }
 DC_Checks = { 
     LocationName.DCCourtyardMythrilShard:   LocationData(0x130042, 0x146B2, 0x23B4, 1, 16, "Chest"),           
@@ -136,8 +134,8 @@ TR_Checks = {
     LocationName.Monochrome:                    LocationData(0x130058, 0x15432, 0x1E33, 2, 261, "Chest"),           
     LocationName.WisdomForm:                    LocationData(0x130059, 0x15462, 0x1E11, 7, 262, "Chest"),           
     LocationName.MarluxiaGetBonus:              LocationData(0x13005A, 0x2B408, 0x370C, 3, 67, "Get Bonus"),                     
-    LocationName.MarluxiaASEternalBlossom:      LocationData(0x13005B, 0x1576E, 0x26, 0x7F, 548, "Chest"),                        
-    LocationName.MarluxiaDataLostIllusion:      LocationData(0x13005C, 0x157AA, 0x26, 0x7F, 553, "Chest"),                        
+    LocationName.MarluxiaASEternalBlossom:      LocationData(0x13005B, 0x1576E, 0x370C, 3, 548, "Chest"),                        
+    LocationName.MarluxiaDataLostIllusion:      LocationData(0x13005C, 0x157AA, 0x96, 0x7F, 553, "Chest"),                        
     LocationName.LingeringWillBonus:            LocationData(0x13005D, 0x2B478, 0x370C, 6, 70, "Get Bonus"),                     
     LocationName.LingeringWillProofofConnection:LocationData(0x13005E, 0x15816, 0x1E14, 2, 587, "Chest"),                         
     LocationName.LingeringWillManifestIllusion: LocationData(0x13005F, 0x15822, 0x1E14, 2, 591, "Chest"),                        
@@ -219,8 +217,8 @@ Oc2_Checks = {
     LocationName.HadesGetBonus:          LocationData(0x130098, 0x2AB0A, 0x3705, 0, 8, "Second Get Bonus"),
     LocationName.GuardianSoul:           LocationData(0x130099, 0x1558E, 0x1D56, 5, 272, "Chest"),
     LocationName.ZexionBonus:            LocationData(0x13009A, 0x2B3D8, 0x370C, 2, 66, "Get Bonus"),
-    LocationName.ZexionASBookofShadows:  LocationData(0x13009B, 0x15756, 0x22, 0x7D, 546, "Chest"),
-    LocationName.ZexionDataLostIllusion: LocationData(0x13009C, 0x15792, 0x22, 0x7D, 551, "Chest"),
+    LocationName.ZexionASBookofShadows:  LocationData(0x13009B, 0x15756, 0x370C, 2, 546, "Chest"),
+    LocationName.ZexionDataLostIllusion: LocationData(0x13009C, 0x15792, 0x98, 0x7D, 551, "Chest"),
 }
 Oc2Cups = {
     LocationName.ProtectBeltPainandPanicCup:     LocationData(0x13009D, 0x1543E, 0x1D57, 6, 513, "Chest"),
@@ -271,7 +269,7 @@ BC2_Checks = {
     LocationName.Xaldin:                  LocationData(0x1300C2, 0x2AA48, 0x3704, 4, 4, "Double Get Bonus"),
     LocationName.XaldinGetBonus:          LocationData(0x1300C3, 0x2AA4A, 0x3704, 4, 4, "Second Get Bonus"),
     LocationName.SecretAnsemReport4:      LocationData(0x1300C4, 0x156C6, 0x1D31, 2, 528, "Chest"),
-    LocationName.XaldinDataDefenseBoost:  LocationData(0x1300C5, 0x157C2, 0x0F, 0x63, 559, "Chest"),
+    LocationName.XaldinDataDefenseBoost:  LocationData(0x1300C5, 0x157C2, 0x61, 0x63, 559, "Chest"),
 }
 SP_Checks = {
     LocationName.PitCellAreaMap:                LocationData(0x1300C6, 0x149EE, 0x23CA, 2, 316, "Chest"),          
@@ -299,8 +297,8 @@ SP2_Checks = {
     LocationName.MCP:                                LocationData(0x1300D9, 0x2AEF8, 0x3708, 0, 32, "Double Get Bonus"),
     LocationName.MCPGetBonus:                        LocationData(0x1300DA, 0x2AEFA, 0x3708, 0, 32, "Second Get Bonus"),
     LocationName.LarxeneBonus:                       LocationData(0x1300DB, 0x2B438, 0x370C, 4, 68, "Get Bonus"),
-    LocationName.LarxeneASCloakedThunder:            LocationData(0x1300DC, 0x15762, 0x21, 0x81, 547, "Chest"),
-    LocationName.LarxeneDataLostIllusion:            LocationData(0x1300DD, 0x1579E, 0x21, 0x81, 552, "Chest"),
+    LocationName.LarxeneASCloakedThunder:            LocationData(0x1300DC, 0x15762, 0x370C, 4, 547, "Chest"),
+    LocationName.LarxeneDataLostIllusion:            LocationData(0x1300DD, 0x1579E, 0x94, 0x81, 552, "Chest"),
 }
 HT_Checks = {
     LocationName.GraveyardMythrilShard:           LocationData(0x1300DE, 0x14A96, 0x23C0, 2, 53, "Chest"),
@@ -328,8 +326,8 @@ HT2_Checks = {
     LocationName.Experiment:             LocationData(0x1300F2, 0x2ACE8, 0x3706, 4, 20, "Get Bonus"),
     LocationName.DecisivePumpkin:        LocationData(0x1300F3, 0x155D6, 0x1E56, 0, 275, "Chest"),
     LocationName.VexenBonus:             LocationData(0x1300F4, 0x2B378, 0x370C, 0, 64, "Get Bonus"),
-    LocationName.VexenASRoadtoDiscovery: LocationData(0x1300F5, 0x1573E, 0x20, 0x79, 544, "Chest"),
-    LocationName.VexenDataLostIllusion:  LocationData(0x1300F6, 0x1577A, 0x20, 0x79, 549, "Chest"),
+    LocationName.VexenASRoadtoDiscovery: LocationData(0x1300F5, 0x1573E, 0x370C, 0, 544, "Chest"),
+    LocationName.VexenDataLostIllusion:  LocationData(0x1300F6, 0x1577A, 0x92, 0x79, 549, "Chest"),
 }
 PR_Checks = {
     LocationName.RampartNavalMap:           LocationData(0x1300F7, 0x14B3E, 0x23C2, 1, 70, "Chest"),           
@@ -367,7 +365,7 @@ PR2_Checks = {
     LocationName.SeadriftRowShipGraveyardMap:   LocationData(0x130114, 0x15576, 0x1E95, 2, 331, "Chest"),
     LocationName.GrimReaper2:                   LocationData(0x130115, 0x2AD68, 0x3706, 6, 22, "Get Bonus"),
     LocationName.SecretAnsemReport6:            LocationData(0x130116, 0x156DE, 0x1E95, 7, 530, "Chest"),
-    LocationName.LuxordDataAPBoost:             LocationData(0x130117, 0x157FE, 0x0E  , 0x70, 557, "Chest"),
+    LocationName.LuxordDataAPBoost:             LocationData(0x130117, 0x157FE, 0x66  , 0x70, 557, "Chest"),
 }
 HB_Checks = {
     LocationName.MarketplaceMap:                LocationData(0x130118, 0x1538A, 0x3DA9, 7, 362, "Chest"),
@@ -413,7 +411,7 @@ HB2_Checks = {
     LocationName.SephirothFenrir:                             LocationData(0x13013E, 0x15642, 0x1D1F, 7, 282, "Chest"),             
     LocationName.WinnersProof:                                LocationData(0x13013F, 0x1582E, 0x1D27, 5, 560, "Chest"),             
     LocationName.ProofofPeace:                                LocationData(0x130140, 0x1583A, 0x1D27, 5, 588, "Chest"),             
-    LocationName.DemyxDataAPBoost:                            LocationData(0x130141, 0x157B6, 0x04, 0x8D, 589, "Chest"),             
+    LocationName.DemyxDataAPBoost:                            LocationData(0x130141, 0x157B6, 0x72, 0x8D, 589, "Chest"),             
     #No denotion for which depths chest is which. Might have to test it             
     LocationName.CoRDepthsAPBoost:                            LocationData(0x130142, 0x151E6, 0x23DC, 2, 562, "Chest"),             
     LocationName.CoRDepthsPowerCrystal:                       LocationData(0x130143, 0x151F2, 0x23DC, 3, 563, "Chest"),             
@@ -477,7 +475,7 @@ PL2_Checks = {
     LocationName.Hyenas2:              LocationData(0x130175, 0x2B158, 0x370A, 2, 50, "Get Bonus"),
     LocationName.Groundshaker:         LocationData(0x130176, 0x2AE98, 0x3707, 6, 30, "Double Get Bonus"),
     LocationName.GroundshakerGetBonus: LocationData(0x130177, 0x2AE9A, 0x3707, 6, 30, "Second Get Bonus"),
-    LocationName.SaixDataDefenseBoost: LocationData(0x130178, 0x157F2,0x0F, 0x6E, 556, "Chest"),
+    LocationName.SaixDataDefenseBoost: LocationData(0x130178, 0x157F2, 0x66,   0x6E, 556, "Chest"),
 }
 STT_Checks = {
     LocationName.TwilightTownMap:                   LocationData(0x130179, 0x15336, 0x1CD6, 3, 319, "Chest"),                 
@@ -507,7 +505,7 @@ STT_Checks = {
     LocationName.MansionLibraryHiPotion:            LocationData(0x130191, 0x14F16, 0x23D5, 4, 459, "Chest"),                 
     LocationName.Axel2:                             LocationData(0x130192, 0x2AF48, 0x3708, 2, 34, "Get Bonus", "Roxas"),     
     LocationName.MansionBasementCorridorHiPotion:   LocationData(0x130193, 0x14F22, 0x23D6, 0, 463, "Chest"),                 
-    LocationName.RoxasDataMagicBoost:               LocationData(0x130194, 0x1580A,0x15, 0x72, 558, "Chest"),                              
+    LocationName.RoxasDataMagicBoost:               LocationData(0x130194, 0x1580A, 0x63, 0x72, 558, "Chest"),                              
 
 }
 TT_Checks = {
@@ -567,7 +565,7 @@ TT3_Checks = {
     LocationName.MansionBasementCorridorUltimateRecipe: LocationData(0x1301C5, 0x14F22, 0x23D6, 0, 464, "Chest"),
     LocationName.BetwixtandBetween:                     LocationData(0x1301C6, 0x2B368, 0x370B, 7, 63, "Get Bonus"),
     LocationName.BetwixtandBetweenBondofFlame:          LocationData(0x1301C7, 0x15666, 0x1CE9, 1, 317, "Chest"),
-    LocationName.AxelDataMagicBoost:                    LocationData(0x1301C8, 0x157CE,0x14, 0xD4, 561, "Chest"),
+    LocationName.AxelDataMagicBoost:                    LocationData(0x1301C8, 0x157CE, 0xD5, 0xD4, 561, "Chest"),
 }
 TWTNW_Checks = {
     LocationName.FragmentCrossingMythrilStone:      LocationData(0x1301C9, 0x15102, 0x23CB, 4, 374, "Chest"),
@@ -610,7 +608,7 @@ TWTNW2_Checks = {
     LocationName.Xemnas1SecretAnsemReport13:            LocationData(0x1301EC, 0x15732, 0x1ED4, 5, 537, "Chest"),
     #Final xemnas is going to be always the wincon. so dummy memory is here so the object doesnt break. Could also put a condition on victory. Memory addresses checked in goa lua
     LocationName.FinalXemnas:                           LocationData(0x1301ED, 0xFFFFF, 0xFFFF,4, 71, "Get Bonus"),
-    LocationName.XemnasDataPowerBoost:                  LocationData(0x1301EE, 0x157DA,0x14, 0x6A, 554, "Chest"),
+    LocationName.XemnasDataPowerBoost:                  LocationData(0x1301EE, 0x157DA, 0x62,  0x6A, 554, "Chest"),
 }
 
     #All levels are done using lua that checks level no the memory address of the level. This is going to be hardcoded in lua without any use of these numbers
@@ -718,42 +716,42 @@ SoraLevels = {
 }
 Form_Checks = {
     # Levels 1 are used for exp modification and nothing else.
-    #0xfffff is save while the actual addressses are bt10
-    LocationName.Valorlvl1:  LocationData(0x130252, 0xFFFFF, 0xFFFFF, 2, 1, "Forms", 1),
-    LocationName.Valorlvl2:  LocationData(0x130253, 0x344AE, 0xFFFFF, 2, 2, "Forms", 1),
-    LocationName.Valorlvl3:  LocationData(0x130254, 0x344B6, 0xFFFFF, 2, 3, "Forms", 1),
-    LocationName.Valorlvl4:  LocationData(0x130255, 0x344BE, 0xFFFFF, 2, 4, "Forms", 1),
-    LocationName.Valorlvl5:  LocationData(0x130256, 0x344C6, 0xFFFFF, 2, 5, "Forms", 1),
-    LocationName.Valorlvl6:  LocationData(0x130257, 0x344CE, 0xFFFFF, 2, 6, "Forms", 1),
-    LocationName.Valorlvl7:  LocationData(0x130258, 0x344D6, 0xFFFFF, 2, 7, "Forms", 1),
-    LocationName.Wisdomlvl1: LocationData(0x130259, 0xFFFFF, 0xFFFFF, 2, 1, "Forms", 2),
-    LocationName.Wisdomlvl2: LocationData(0x13025A, 0x344E6, 0xFFFFF, 2, 2, "Forms", 2),
-    LocationName.Wisdomlvl3: LocationData(0x13025B, 0x344EE, 0xFFFFF, 2, 3, "Forms", 2),
-    LocationName.Wisdomlvl4: LocationData(0x13025C, 0x344F6, 0xFFFFF, 2, 4, "Forms", 2),
-    LocationName.Wisdomlvl5: LocationData(0x13025D, 0x344FE, 0xFFFFF, 2, 5, "Forms", 2),
-    LocationName.Wisdomlvl6: LocationData(0x13025E, 0x34506, 0xFFFFF, 2, 6, "Forms", 2),
-    LocationName.Wisdomlvl7: LocationData(0x13025F, 0x3450E, 0xFFFFF, 2, 7, "Forms", 2),
-    LocationName.Limitlvl1:  LocationData(0x130260, 0xFFFFF, 0xFFFFF, 2, 1, "Forms", 3),
-    LocationName.Limitlvl2:  LocationData(0x130261, 0x3451E, 0xFFFFF, 2, 2, "Forms", 3),
-    LocationName.Limitlvl3:  LocationData(0x130262, 0x34526, 0xFFFFF, 2, 3, "Forms", 3),
-    LocationName.Limitlvl4:  LocationData(0x130263, 0x3452E, 0xFFFFF, 2, 4, "Forms", 3),
-    LocationName.Limitlvl5:  LocationData(0x130264, 0x34536, 0xFFFFF, 2, 5, "Forms", 3),
-    LocationName.Limitlvl6:  LocationData(0x130265, 0x3453E, 0xFFFFF, 2, 6, "Forms", 3),
-    LocationName.Limitlvl7:  LocationData(0x130266, 0x34546, 0xFFFFF, 2, 7, "Forms", 3),
-    LocationName.Masterlvl1: LocationData(0x130267, 0xFFFFF, 0xFFFFF, 2, 1, "Forms", 4),
-    LocationName.Masterlvl2: LocationData(0x130268, 0x34556, 0xFFFFF, 2, 2, "Forms", 4),
-    LocationName.Masterlvl3: LocationData(0x130269, 0x3455E, 0xFFFFF, 2, 3, "Forms", 4),
-    LocationName.Masterlvl4: LocationData(0x13026A, 0x34566, 0xFFFFF, 2, 4, "Forms", 4),
-    LocationName.Masterlvl5: LocationData(0x13026B, 0x3456E, 0xFFFFF, 2, 5, "Forms", 4),
-    LocationName.Masterlvl6: LocationData(0x13026C, 0x34576, 0xFFFFF, 2, 6, "Forms", 4),
-    LocationName.Masterlvl7: LocationData(0x13026D, 0x3457E, 0xFFFFF, 2, 7, "Forms", 4),
-    LocationName.Finallvl1:  LocationData(0x13026E, 0xFFFFF, 0xFFFFF, 2, 1, "Forms", 5),
-    LocationName.Finallvl2:  LocationData(0x13026F, 0x3458E, 0xFFFFF, 2, 2, "Forms", 5),
-    LocationName.Finallvl3:  LocationData(0x130270, 0x34596, 0xFFFFF, 2, 3, "Forms", 5),
-    LocationName.Finallvl4:  LocationData(0x130271, 0x3459E, 0xFFFFF, 2, 4, "Forms", 5),
-    LocationName.Finallvl5:  LocationData(0x130272, 0x345A6, 0xFFFFF, 2, 5, "Forms", 5),
-    LocationName.Finallvl6:  LocationData(0x130273, 0x345AE, 0xFFFFF, 2, 6, "Forms", 5),
-    LocationName.Finallvl7:  LocationData(0x130274, 0x345B6, 0xFFFFF, 2, 7, "Forms", 5),
+    #first address is whats on that level second is if it is obtainted
+    LocationName.Valorlvl1:  LocationData(0x130252, 0xFFFFF, 0x32F6, 2, 1, "Forms", 1),
+    LocationName.Valorlvl2:  LocationData(0x130253, 0x344AE, 0x32F6, 2, 2, "Forms", 1),
+    LocationName.Valorlvl3:  LocationData(0x130254, 0x344B6, 0x32F6, 2, 3, "Forms", 1),
+    LocationName.Valorlvl4:  LocationData(0x130255, 0x344BE, 0x32F6, 2, 4, "Forms", 1),
+    LocationName.Valorlvl5:  LocationData(0x130256, 0x344C6, 0x32F6, 2, 5, "Forms", 1),
+    LocationName.Valorlvl6:  LocationData(0x130257, 0x344CE, 0x32F6, 2, 6, "Forms", 1),
+    LocationName.Valorlvl7:  LocationData(0x130258, 0x344D6, 0x32F6, 2, 7, "Forms", 1),
+    LocationName.Wisdomlvl1: LocationData(0x130259, 0xFFFFF, 0x332E, 2, 1, "Forms", 2),
+    LocationName.Wisdomlvl2: LocationData(0x13025A, 0x344E6, 0x332E, 2, 2, "Forms", 2),
+    LocationName.Wisdomlvl3: LocationData(0x13025B, 0x344EE, 0x332E, 2, 3, "Forms", 2),
+    LocationName.Wisdomlvl4: LocationData(0x13025C, 0x344F6, 0x332E, 2, 4, "Forms", 2),
+    LocationName.Wisdomlvl5: LocationData(0x13025D, 0x344FE, 0x332E, 2, 5, "Forms", 2),
+    LocationName.Wisdomlvl6: LocationData(0x13025E, 0x34506, 0x332E, 2, 6, "Forms", 2),
+    LocationName.Wisdomlvl7: LocationData(0x13025F, 0x3450E, 0x332E, 2, 7, "Forms", 2),
+    LocationName.Limitlvl1:  LocationData(0x130260, 0xFFFFF, 0x3366, 2, 1, "Forms", 3),
+    LocationName.Limitlvl2:  LocationData(0x130261, 0x3451E, 0x3366, 2, 2, "Forms", 3),
+    LocationName.Limitlvl3:  LocationData(0x130262, 0x34526, 0x3366, 2, 3, "Forms", 3),
+    LocationName.Limitlvl4:  LocationData(0x130263, 0x3452E, 0x3366, 2, 4, "Forms", 3),
+    LocationName.Limitlvl5:  LocationData(0x130264, 0x34536, 0x3366, 2, 5, "Forms", 3),
+    LocationName.Limitlvl6:  LocationData(0x130265, 0x3453E, 0x3366, 2, 6, "Forms", 3),
+    LocationName.Limitlvl7:  LocationData(0x130266, 0x34546, 0x3366, 2, 7, "Forms", 3),
+    LocationName.Masterlvl1: LocationData(0x130267, 0xFFFFF, 0x339E, 2, 1, "Forms", 4),
+    LocationName.Masterlvl2: LocationData(0x130268, 0x34556, 0x339E, 2, 2, "Forms", 4),
+    LocationName.Masterlvl3: LocationData(0x130269, 0x3455E, 0x339E, 2, 3, "Forms", 4),
+    LocationName.Masterlvl4: LocationData(0x13026A, 0x34566, 0x339E, 2, 4, "Forms", 4),
+    LocationName.Masterlvl5: LocationData(0x13026B, 0x3456E, 0x339E, 2, 5, "Forms", 4),
+    LocationName.Masterlvl6: LocationData(0x13026C, 0x34576, 0x339E, 2, 6, "Forms", 4),
+    LocationName.Masterlvl7: LocationData(0x13026D, 0x3457E, 0x339E, 2, 7, "Forms", 4),
+    LocationName.Finallvl1:  LocationData(0x13026E, 0xFFFFF, 0x33D6, 2, 1, "Forms", 5),
+    LocationName.Finallvl2:  LocationData(0x13026F, 0x3458E, 0x33D6, 2, 2, "Forms", 5),
+    LocationName.Finallvl3:  LocationData(0x130270, 0x34596, 0x33D6, 2, 3, "Forms", 5),
+    LocationName.Finallvl4:  LocationData(0x130271, 0x3459E, 0x33D6, 2, 4, "Forms", 5),
+    LocationName.Finallvl5:  LocationData(0x130272, 0x345A6, 0x33D6, 2, 5, "Forms", 5),
+    LocationName.Finallvl6:  LocationData(0x130273, 0x345AE, 0x33D6, 2, 6, "Forms", 5),
+    LocationName.Finallvl7:  LocationData(0x130274, 0x345B6, 0x33D6, 2, 7, "Forms", 5),
 }                                                   
 GoA_Checks = {                                      
     LocationName.GardenofAssemblageMap: LocationData(0x130275, 0x152E2, 0x23DF, 1, 585, "Chest"),
@@ -891,7 +889,7 @@ exclusion_table = {
         LocationName.MarluxiaDataLostIllusion,
         LocationName.LexaeusDataLostIllusion,
         LocationName.XigbarDataDefenseBoost,
-
+        LocationName.ZexionDataLostIllusion,
     },
     "SuperBosses": {
         LocationName.LingeringWillBonus,
@@ -953,36 +951,6 @@ exclusion_table = {
         LocationName.Lvl85,
         LocationName.Lvl99,
     },
-
-    "KeybladeSlot": {
-        LocationName.FAKESlot,
-        LocationName.DetectionSaberSlot,
-        LocationName.EdgeofUltimaSlot,
-        LocationName.KingdomKeySlot,
-        LocationName.OathkeeperSlot,
-        LocationName.OblivionSlot,
-        LocationName.StarSeekerSlot,
-        LocationName.HiddenDragonSlot,
-        LocationName.HerosCrestSlot,
-        LocationName.MonochromeSlot,
-        LocationName.FollowtheWindSlot,
-        LocationName.CircleofLifeSlot,
-        LocationName.PhotonDebuggerSlot,
-        LocationName.GullWingSlot,
-        LocationName.RumblingRoseSlot,
-        LocationName.GuardianSoulSlot,
-        LocationName.WishingLampSlot,
-        LocationName.DecisivePumpkinSlot,
-        LocationName.SweetMemoriesSlot,
-        LocationName.MysteriousAbyssSlot,
-        LocationName.SleepingLionSlot,
-        LocationName.BondofFlameSlot,
-        LocationName.TwoBecomeOneSlot,
-        LocationName.FatalCrestSlot,
-        LocationName.FenrirSlot,
-        LocationName.UltimaWeaponSlot,
-        LocationName.WinnersProofSlot,
-    },
     "Critical": {
         LocationName.Crit_1,
         LocationName.Crit_2,
@@ -992,74 +960,6 @@ exclusion_table = {
         LocationName.Crit_6,
         LocationName.Crit_7,
     },
-    "DonaldLoc": {
-        LocationName.DonaldScreens,
-        LocationName.DonaldDemyxHBGetBonus,
-        LocationName.DonaldDemyxOC,
-        LocationName.DonaldBoatPete,
-        LocationName.DonaldBoatPeteGetBonus,
-        LocationName.DonaldPrisonKeeper,
-        LocationName.DonaldScar,
-        LocationName.DonaldSolarSailer,
-        LocationName.DonaldExperiment,
-        LocationName.DonaldBoatFight,
-        LocationName.DonaldMansionNobodies,
-        LocationName.DonaldThresholder,
-        LocationName.DonaldXaldinGetBonus,
-        LocationName.DonaladGrimReaper2,
-        LocationName.Centurion2,
-        LocationName.CometStaff,
-        LocationName.HammerStaff,
-        LocationName.LordsBroom,
-        LocationName.MagesStaff,
-        LocationName.MeteorStaff,
-        LocationName.NobodyLance,
-        LocationName.PreciousMushroom,
-        LocationName.PreciousMushroom2,
-        LocationName.PremiumMushroom,
-        LocationName.RisingDragon,
-        LocationName.SaveTheQueen2,
-        LocationName.ShamansRelic,
-        LocationName.VictoryBell,
-        LocationName.WisdomWand,
-        LocationName.DonaldStarting1,
-        LocationName.DonaldStarting2,
-    },
-    "GoofyLoc": {
-        LocationName.GoofyBarbossa,
-        LocationName.GoofyBarbossaGetBonus,
-        LocationName.GoofyGrimReaper1,
-        LocationName.GoofyHostileProgram,
-        LocationName.GoofyHyenas1,
-        LocationName.GoofyHyenas2,
-        LocationName.GoofyLock,
-        LocationName.GoofyOogieBoogie,
-        LocationName.GoofyPeteOC,
-        LocationName.GoofyFuturePete,
-        LocationName.GoofyShanYu,
-        LocationName.GoofyStormRider,
-        LocationName.GoofyBeast,
-        LocationName.GoofyInterceptorBarrels,
-        LocationName.GoofyTreasureRoom,
-        LocationName.GoofyZexion,
-        LocationName.AdamantShield,
-        LocationName.AkashicRecord,
-        LocationName.ChainGear,
-        LocationName.DreamCloud,
-        LocationName.FallingStar,
-        LocationName.FrozenPride2,
-        LocationName.GenjiShield,
-        LocationName.KnightDefender,
-        LocationName.KnightsShield,
-        LocationName.MajesticMushroom,
-        LocationName.MajesticMushroom2,
-        LocationName.NobodyGuard,
-        LocationName.OgreShield,
-        LocationName.SaveTheKing2,
-        LocationName.UltimateMushroom,
-        LocationName.GoofyStarting1,
-        LocationName.GoofyStarting2,
-    }
 }
 firstVisits = [
     LocationName.LoD_Region,

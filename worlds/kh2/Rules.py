@@ -1,7 +1,7 @@
 from BaseClasses import MultiWorld
 from .Names import LocationName, ItemName
 from .Items import exclusionItem_table
-from ..generic.Rules import add_rule, forbid_items, add_item_rule, forbid_item
+from ..generic.Rules import add_rule, forbid_items, forbid_item
 from .Locations import popupChecks, STT_Checks, CoR_Checks, Form_Checks, AG2_Checks
 
 
@@ -12,13 +12,14 @@ def set_rules(world: MultiWorld, player: int):
     # Forbid Ablilites on popups due to game limitations
     for location in popupChecks:
         forbid_items(world.get_location(location, player), exclusionItem_table["Ability"])
+        forbid_items(world.get_location(location, player), exclusionItem_table["StatUps"])
 
     for location in STT_Checks:
-        forbid_items(world.get_location(location, player), exclusionItem_table["Ability"])
+        forbid_items(world.get_location(location, player), exclusionItem_table["StatUps"])
 
     # Santa's house also breaks with abilities
-    forbid_items(world.get_location(LocationName.SantasHouseChristmasTownMap, player), exclusionItem_table["Ability"])
-    forbid_items(world.get_location(LocationName.SantasHouseAPBoost, player), exclusionItem_table["Ability"])
+    forbid_items(world.get_location(LocationName.SantasHouseChristmasTownMap, player), exclusionItem_table["StatUps"])
+    forbid_items(world.get_location(LocationName.SantasHouseAPBoost, player), exclusionItem_table["StatUps"])
 
     # Final checks of cor requires more locks than other checks in cor
     add_rule(world.get_location(LocationName.CoRMineshaftUpperLevelAPBoost, player), lambda state:

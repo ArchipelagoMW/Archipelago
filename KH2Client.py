@@ -11,7 +11,7 @@ from worlds.kh2 import all_locations, item_dictionary_table
 import Utils
 import subprocess
 import typing
-
+import time
 
 if __name__ == "__main__":
     Utils.init_logging("KH2Client", exception_logger="Client")
@@ -195,55 +195,60 @@ class KH2Context(CommonContext):
 #look into wait functions to wait for address changes
     def give_item(self,itemcode):
         if itemcode.ability:
-            self.ctx.kh2.write_short(self.ctx.kh2.base_address + self.ctx.Save+self.ctx.backofinventory, itemcode.memaddr)
+            self.kh2.write_short(self.kh2.base_address + self.Save+self.backofinventory, itemcode.memaddr)
         elif itemcode.bitmask>0:
-            itemmemory=int.from_bytes( self.ctx.kh2.read_bytes( self.ctx.kh2.base_address+self.ctx.Save+itemmemory,1), "big")
+            itemmemory=int.from_bytes( self.kh2.read_bytes( self.kh2.base_address+self.Save+itemmemory,1), "big")
             #write item into the address of that item. then turn on the bitmask of the item.
-            self.ctx.kh2.write_bytes(self.ctx.kh2.base_address+self.ctx.Save+itemcode.memaddr,(itemmemory|itemcode.bitmask).to_bytes(1,'big'),1)
+            self.kh2.write_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,(itemmemory|itemcode.bitmask).to_bytes(1,'big'),1)
         else:
             #Increasing the memory for item by 1 byte
-            amount=int.from_bytes(self.ctx.kh2.read_bytes(self.ctx.kh2.base_address+self.ctx.Save+itemcode.memaddr,1), "big")
-            self.ctx.kh2.write_bytes(self.ctx.kh2.base_address + self.ctx.Save+itemcode.memaddr,(amount+1).to_bytes(1,'big'),1)
+            amount=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
+            self.kh2.write_bytes(self.kh2.base_address + self.Save+itemcode.memaddr,(amount+1).to_bytes(1,'big'),1)
 
+    async def ItemSafe(self,args,svestate):          
+        await self.roomSave(args,svestate)
+        print("Your Item Is now Safe")
+
+
+    async def roomSave(self,args,svestate):
+        while svestate==self.kh2.read_short(self.kh2.base_address+self.sveroom):
+           deathstate=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.onDeath,2), "big")
+           if deathstate==1024 or deathstate==1280:
+               print("you have died")
+               #cannot give item on death screen so waits untill they are not dead
+               while deathstate==1024 or deathstate==1280:
+                   deathstate=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.onDeath,2), "big")
+                   await asyncio.sleep(1)
+               print("You have been sent you items again")
+               #give item because they have not room saved and are dead
+               for item in args['items']:
+                   itemname=self.lookup_id_to_item[item.item]
+                   itemcode=self.item_name_to_data[itemname]
+                   #default false
+                   self.give_item(itemcode)
+           await asyncio.sleep(1)        
+    
+
+      
 
     def on_package(self, cmd: str, args: dict):
-        if cmd in {"Connected"}:
-            if not os.path.exists(self.game_communication_path):
-                os.makedirs(self.game_communication_path)
-            for ss in self.checked_locations:
-                filename = f"send{ss}"
-                with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                    f.close()
+        #if cmd in {"Connected"}:
+        #    if not os.path.exists(self.game_communication_path):
+        #        os.makedirs(self.game_communication_path)
+        #    for ss in self.checked_locations:
+        #        filename = f"send{ss}"
+        #        with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+        #            f.close()
         if cmd in {"ReceivedItems"}:
-            start_index = args["index"]
-            if start_index != len(self.items_received):
+            #start_index = args["index"]
+            #if start_index != len(self.items_received):
                 for item in args['items']:
-                    self.ctx.ItemIsSafe=False
-                    itemname=self.ctx.lookup_id_to_item(item.item)
-                    itemcode=self.ctx.item_name_to_data(itemname)
+                    itemname=self.lookup_id_to_item[item.item]
+                    itemcode=self.item_name_to_data[itemname]
                     #default false
-                    self.ctx.give_item(self,itemcode)
-                while not self.ctx.ItemIsSafe:
-                    #get the roomid for possible room saves
-                    svestate=self.ctx.kh2.read_short(self.ctx.kh2.base_addressself.ctx.sveroom)  
-                    #if you have room transition
-                    if svestate==self.ctx.kh2.read_short(self.ctx.kh2.base_addressself.ctx.sveroom):
-                        #while you have not room transitioned
-                        while svestate==self.ctx.kh2.read_short(self.ctx.kh2.base_addressself.ctx.sveroom):
-                            #check if you have died
-                            deathstate=int.from_bytes(self.ctx.kh2.read_bytes(self.ctx.kh2.base_address+self.ctx.onDeath,2), "big")
-                            if deathstate==1024 or deathstate==1280:
-                                #cannot give item on death screen so waits untill they are not dead
-                                while deathstate==1024 or deathstate==1280:
-                                    pass
-                                #give item because they have not room saved and are dead
-                                for item in args['items']:
-                                    itemname=self.ctx.lookup_id_to_item(item.item)
-                                    itemcode=self.ctx.item_name_to_data(itemname)
-                                    #default false
-                                    self.ctx.give_item(self,itemcode)
-                    else:
-                        self.ctx.ItemIsSafe=True
+                    self.give_item(itemcode)
+                svestate=self.kh2.read_short(self.kh2.base_address+self.sveroom)  
+                asyncio.create_task(self.ItemSafe(args,svestate))
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:
                 new_locations = set(args["checked_locations"])
@@ -262,50 +267,50 @@ class KH2Context(CommonContext):
         self.ui = KH2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
     
-async def parse_payload(payload: dict, ctx: KH2Context, force: bool):
-
-    # Refuse to do anything if ROM is detected as changed
-    if ctx.auth and payload['playerName'] != ctx.auth:
-        logger.warning("ROM change detected. Disconnecting and reconnecting...")
-        ctx.deathlink_enabled = False
-        ctx.deathlink_client_override = False
-        ctx.finished_game = False
-        ctx.location_table = {}
-        ctx.collectible_table = {}
-        ctx.deathlink_pending = False
-        ctx.deathlink_sent_this_death = False
-        ctx.auth = payload['playerName']
-        await ctx.send_connect()
-        return
-
-    # Turn on deathlink if it is on, and if the client hasn't overriden it
-    if payload['deathlinkActive'] and not ctx.deathlink_enabled and not ctx.deathlink_client_override:
-        await ctx.update_death_link(True)
-        ctx.deathlink_enabled = True
-
-    # Game completion handling
-    if payload['gameComplete'] and not ctx.finished_game:
-        await ctx.send_msgs([{
-            "cmd": "StatusUpdate",
-            "status": 30
-        }])
-        ctx.finished_game = True
-
-    # Locations handling
-    locations = payload['locations']
-    collectibles = payload['collectibles']
-
-    if ctx.location_table != locations or ctx.collectible_table != collectibles:
-        ctx.location_table = locations
-        ctx.collectible_table = collectibles
-        locs1 = [oot_loc_name_to_id[loc] for loc, b in ctx.location_table.items() if b]
-        locs2 = [int(loc) for loc, b in ctx.collectible_table.items() if b]
-        await ctx.send_msgs([{
-            "cmd": "LocationChecks",
-            "locations": locs1 + locs2
-        }])
-
-    # Deathlink handling
+#async def parse_payload(payload: dict, ctx: KH2Context, force: bool):
+#
+#    # Refuse to do anything if ROM is detected as changed
+#    if ctx.auth and payload['playerName'] != ctx.auth:
+#        logger.warning("ROM change detected. Disconnecting and reconnecting...")
+#        ctx.deathlink_enabled = False
+#        ctx.deathlink_client_override = False
+#        ctx.finished_game = False
+#        ctx.location_table = {}
+#        ctx.collectible_table = {}
+#        ctx.deathlink_pending = False
+#        ctx.deathlink_sent_this_death = False
+#        ctx.auth = payload['playerName']
+#        await ctx.send_connect()
+#        return
+#
+#    # Turn on deathlink if it is on, and if the client hasn't overriden it
+#    if payload['deathlinkActive'] and not ctx.deathlink_enabled and not ctx.deathlink_client_override:
+#        await ctx.update_death_link(True)
+#        ctx.deathlink_enabled = True
+#
+#    # Game completion handling
+#    if payload['gameComplete'] and not ctx.finished_game:
+#        await ctx.send_msgs([{
+#            "cmd": "StatusUpdate",
+#            "status": 30
+#        }])
+#        ctx.finished_game = True
+#
+#    # Locations handling
+#    locations = payload['locations']
+#    collectibles = payload['collectibles']
+#
+#    if ctx.location_table != locations or ctx.collectible_table != collectibles:
+#        ctx.location_table = locations
+#        ctx.collectible_table = collectibles
+#        locs1 = [oot_loc_name_to_id[loc] for loc, b in ctx.location_table.items() if b]
+#        locs2 = [int(loc) for loc, b in ctx.collectible_table.items() if b]
+#        await ctx.send_msgs([{
+#            "cmd": "LocationChecks",
+#            "locations": locs1 + locs2
+#        }])
+#
+#    # Deathlink handling
 
 
 #for loop to dictate what world you are in

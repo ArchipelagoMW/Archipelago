@@ -1,27 +1,17 @@
 from .Options import KH2_Options
-from Utils import get_options, output_path
-import json
-import os
-from msilib import Table
 import random
 import typing
-import worlds.Files
 from ..AutoWorld import World, WebWorld
-from BaseClasses import MultiWorld, Location, Region, Item, RegionType, Entrance, Tutorial, ItemClassification
-from ..generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations
-from .Items import ActionAbility_Table, KH2Item, item_dictionary_table, exclusionItem_table, \
-    keybladeAbilities, donaldAbility, goofyAbility,lookup_id_to_name
-from .Locations import all_locations, setup_locations, exclusion_table, lookup_id_to_Location
+from BaseClasses import Item, Tutorial, ItemClassification
+from .Items import  KH2Item, item_dictionary_table, \
+    keybladeAbilities, donaldAbility, goofyAbility
+from .Locations import all_locations, setup_locations, exclusion_table,Donald_Checks,Goofy_Checks,Keyblade_Slots
 from .Rules import set_rules
 from .logic import KH2Logic
 from .Names import ItemName, LocationName
 from .Regions import create_regions, connect_regions
 from .OpenKH import patch_kh2
 
-
-import unittest
-from worlds.AutoWorld import AutoWorldRegister
-from test.general import setup_default_world
 
 class KingdomHearts2Web(WebWorld):
     tutorials = [Tutorial(
@@ -42,23 +32,18 @@ class KH2World(World):
     option_definitions = KH2_Options
     topology_present: bool = True  # show path to required location checks in spoiler
     remote_items: bool = False
-    #player = world.player
-    #multiworld = world.multiworld
     remote_start_inventory: bool = False
     item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
-    lookup_id_to_Location: typing.Dict[int, str] = {data.code: item_name for item_name, data in all_locations.items() if
-                                                data.code}
     location_name_to_id = {item_name: data.code for item_name, data in all_locations.items() if data.code}
-    totallocations=629
-    #multiworld locations that are checked in the client using the B10 anchor
-    bt10multiworld_locaions= list()
+    totallocations=len(all_locations.items())-2
+
     #multiworld locations that are checked in the client using the save anchor
-    savemultiworld_locations= list()
+    kh2multiworld_locations= list()
       
     def _get_slot_data(self):
         return {
-            "bt10multiworld_lociations":self.bt10multiworld_locaions,
-            "sysmultiworld_locaitions":self.savemultiworld_locations,
+            "kh2multiworld_locations":self.kh2multiworld_locations,
+            #todo: add starting invo 
         }
 
     def fill_slot_data(self) -> dict:
@@ -67,11 +52,7 @@ class KH2World(World):
             option = getattr(self.multiworld, option_name)[self.player]
             slot_data[option_name] = option.value
         return slot_data
-    #
-    #def _create_items(self, name: str):
-    #
-    #    data = item_dictionary_table[name]
-    #    return [self.create_item(name)] * data.code
+
 
     def create_item(self, name: str, ) -> Item:
         data = item_dictionary_table[name]
@@ -83,42 +64,8 @@ class KH2World(World):
         created_item = KH2Item(name, item_classification, data.code, self.player)
 
         return created_item
-    def pre_fill(self):
-        # Placing Abilitys on keyblades
-        # Just support abilities not action
-        soraabilitycopy=keybladeAbilities.copy()
-        for keyblade in exclusion_table["KeybladeSlot"]:
-            randomAbility = self.multiworld.random.choice(soraabilitycopy)
-            self.multiworld.get_location(keyblade, self.player).place_locked_item(self.create_item(randomAbility))
-            self.exclude.add(randomAbility)
-            soraabilitycopy.remove(randomAbility)
-            self.totallocations -= 1
 
-         #Goofy and Donald locaitons/abilites are static and always local.
-         #So no self.totallocations-=1 for them
-
-         #Placing Donald Abilities on donald locations
-        donaldabilitycopy=donaldAbility.copy()
-        for DonaldLoc in exclusion_table["DonaldLoc"]:
-            randomAbility = self.multiworld.random.choice(donaldabilitycopy)
-            self.multiworld.get_location(DonaldLoc, self.player).place_locked_item(self.create_item(randomAbility))
-            self.exclude.add(randomAbility)
-            donaldabilitycopy.remove(randomAbility)
-#
-        # Placing Goofy Abilites on goofy locaitons
-        goofyabilitycopy=keybladeAbilities.copy()
-        for GoofyLoc in exclusion_table["GoofyLoc"]:
-            randomAbility = self.multiworld.random.choice(goofyabilitycopy)
-            self.multiworld.get_location(GoofyLoc, self.player).place_locked_item(self.create_item(randomAbility))
-            self.exclude.add(randomAbility)
-            goofyabilitycopy.remove(randomAbility)
-#
-        # there is no such thing as lvl 1 but there needs to be a "location" for mod writing reasons
-        for lvl in {LocationName.Valorlvl1, LocationName.Wisdomlvl1, LocationName.Limitlvl1, LocationName.Masterlvl1,
-                    LocationName.Finallvl1}:
-            self.multiworld.get_location(lvl, self.player).place_locked_item(self.create_item(ItemName.Nothing))
-            self.totallocations -= 1
-            
+        
 
     def generate_basic(self):
         itempool: typing.List[KH2Item] = []
@@ -134,6 +81,40 @@ class KH2World(World):
             self.create_item(ItemName.Victory))
         self.totallocations -= 1
 
+        #probably could add these into generate early but its fine here currently
+        #creats a copy of the lists so the tests are okay with running them twice even though they would never be ran twice 
+        soraabilitycopy=keybladeAbilities.copy()
+        for keyblade in Keyblade_Slots:
+            randomAbility = self.multiworld.random.choice(soraabilitycopy)
+            self.multiworld.get_location(keyblade, self.player).place_locked_item(self.create_item(randomAbility))
+            self.exclude.add(randomAbility)
+            soraabilitycopy.remove(randomAbility)
+            self.totallocations -= 1
+         #Placing Donald Abilities on donald locations
+        donaldabilitycopy=donaldAbility.copy()
+        for DonaldLoc in Donald_Checks:
+            randomAbility = self.multiworld.random.choice(donaldabilitycopy)
+            self.multiworld.get_location(DonaldLoc, self.player).place_locked_item(self.create_item(randomAbility))
+            self.exclude.add(randomAbility)
+            donaldabilitycopy.remove(randomAbility)
+            self.totallocations -= 1
+
+        # Placing Goofy Abilites on goofy locaitons
+        goofyabilitycopy=goofyAbility.copy()
+        for GoofyLoc in Goofy_Checks:
+            randomAbility = self.multiworld.random.choice(goofyabilitycopy)
+            self.multiworld.get_location(GoofyLoc, self.player).place_locked_item(self.create_item(randomAbility))
+            self.exclude.add(randomAbility)
+            goofyabilitycopy.remove(randomAbility)
+            self.totallocations -= 1    
+
+        # there is no such thing as lvl 1 but there needs to be a "location" for mod writing reasons
+        for lvl in {LocationName.Valorlvl1, LocationName.Wisdomlvl1, LocationName.Limitlvl1, LocationName.Masterlvl1,
+                    LocationName.Finallvl1}:
+            self.multiworld.get_location(lvl, self.player).place_locked_item(self.create_item(ItemName.Nothing))
+            self.totallocations -= 1
+            
+
         # Option to turn off Promise Charm Item
         if self.multiworld.Promise_Charm[self.player].value == 0:
             self.exclude.add(ItemName.PromiseCharm)
@@ -147,11 +128,12 @@ class KH2World(World):
                     self.create_item(random.choice(fillerItems)))
                 self.totallocations -= 1
 
-        # Thse checks are missable
+        # These checks are missable
         self.multiworld.get_location(LocationName.JunkChampionBelt, self.player).place_locked_item(
             self.create_item(random.choice(fillerItems)))
         self.multiworld.get_location(LocationName.JunkMedal, self.player).place_locked_item(
             self.create_item(random.choice(fillerItems)))
+        self.totallocations -= 2
 
         # starting with level 1 of all growth in the starting
         if self.multiworld.Schmovement[self.player].value == 1:
@@ -160,8 +142,8 @@ class KH2World(World):
                 self.exclude.add(name)
                 self.multiworld.push_precollected(self.create_item(name))
 
-        # if option to have level checks up to level 50 place nothing on checks past 50
 
+        # if option to have level checks up to level 50 place nothing on checks past 50
         if self.multiworld.Level_Depth[self.player].value == 1:
             exclustiontbl = exclusion_table["Level50"]
         else:
@@ -171,6 +153,7 @@ class KH2World(World):
             if name not in exclustiontbl:
                 self.multiworld.get_location(name, self.player).place_locked_item(self.create_item(ItemName.Nothing))
                 self.totallocations -= 1
+
 
         # Creating the progression/ stat increases
         for x in range(4):
@@ -199,8 +182,7 @@ class KH2World(World):
                 itempool.append(self.create_item(item)) 
 
         # Creating filler for unfilled locations
-
-        while len(itempool) - 1 <= self.totallocations:
+        while len(itempool) <= self.totallocations:
             item = random.choice(fillerItems)
             itempool += [self.create_item(item)]
         self.multiworld.itempool += itempool
@@ -216,9 +198,3 @@ class KH2World(World):
     def generate_output(self, output_directory: str):
         patch_kh2(self,output_directory)
 
-
-
-#onframe
-
-#loc>0 or whatever
-#if location is picked up and location is in list of dummy14 stuff from slot data then send that check

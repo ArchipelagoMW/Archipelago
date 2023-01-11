@@ -1,11 +1,9 @@
 import typing
 
 from BaseClasses import MultiWorld, Region, Entrance
-from .Items import KH2Item
-from .Options import FinalEXP, MasterEXP, LimitEXP, WisdomEXP, ValorEXP, Schmovement, SuperBosses
-from .Locations import LocationName, Oc2Cups, setup_locations, KH2Location, firstVisits
+from .Locations import LocationName, KH2Location, firstVisits
 from .Names import LocationName, ItemName
-from ..AutoWorld import LogicMixin
+
 
 
 def create_regions(world, player: int, active_locations):
@@ -101,6 +99,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.ElementalLords: [28],
         LocationName.LampCharm: [29],
         LocationName.GoofyTreasureRoom: [30],
+        LocationName.DonaldAbuEscort: [31],
     }
     Ag_Region = create_region(world, player, active_locations, LocationName.Ag_Region,
                               Ag_Region_locations, None)
