@@ -105,6 +105,9 @@ h5, h6{
     margin-bottom: 20px;
     background-color: #ffff00;
 }
+.user-message a{
+    color: #ff7700;
+}
 
 .interactive{
     color: #ffef00;

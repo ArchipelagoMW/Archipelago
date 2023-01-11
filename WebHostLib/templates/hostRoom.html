@@ -20,12 +20,16 @@
         The server for this room will be paused after {{ room.timeout//60//60 }} hours of inactivity.
         Should you wish to continue later,
         anyone can simply refresh this page and the server will resume.<br>
-        {% if room.last_port %}
+        {% if room.last_port == -1 %}
+            There was an error hosting this Room. Another attempt will be made on refreshing this page.
+            The most likely failure reason is that the multiworld is too old to be loaded now.
+        {% elif room.last_port %}
             You can connect to this room by using <span class="interactive"
             data-tooltip="This means address/ip is {{ config['PATCH_TARGET'] }} and port is {{ room.last_port }}.">
             '/connect {{ config['PATCH_TARGET'] }}:{{ room.last_port }}'
             </span>
-            in the <a href="{{ url_for("tutorial_landing")}}">client</a>.<br>{% endif %}
+            in the <a href="{{ url_for("tutorial_landing")}}">client</a>.<br>
+        {% endif %}
         {{ macros.list_patches_room(room) }}
         {% if room.owner == session["_id"] %}
             <form method=post>

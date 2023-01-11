@@ -18,7 +18,7 @@ def create_dungeons(world, player):
         dungeon.boss = BossFactory(default_boss, player) if default_boss else None
         for region in dungeon.regions:
             world.get_region(region, player).dungeon = dungeon
-            dungeon.world = world
+            dungeon.multiworld = world
         return dungeon
 
     ES = make_dungeon('Hyrule Castle', None, ['Hyrule Castle', 'Sewers', 'Sewer Drop', 'Sewers (Dark)', 'Sanctuary'],
@@ -118,6 +118,10 @@ def get_dungeon_item_pool_player(world, player) -> typing.List:
     return [item for dungeon in world.dungeons.values() if dungeon.player == player for item in dungeon.all_items]
 
 
+def get_unfilled_dungeon_locations(multiworld) -> typing.List:
+    return [location for location in multiworld.get_locations() if not location.item and location.parent_region.dungeon]
+
+
 def fill_dungeons_restrictive(world):
     """Places dungeon-native items into their dungeons, places nothing if everything is shuffled outside."""
     localized: set = set()
@@ -134,7 +138,7 @@ def fill_dungeons_restrictive(world):
         if in_dungeon_items:
             restricted_players = {player for player, restricted in world.restrict_dungeon_item_on_boss.items() if
                                   restricted}
-            locations = [location for location in world.get_unfilled_dungeon_locations()
+            locations = [location for location in get_unfilled_dungeon_locations(world)
                          # filter boss
                          if not (location.player in restricted_players and location.name in lookup_boss_drops)]
             if dungeon_specific:

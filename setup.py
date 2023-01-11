@@ -1,23 +1,32 @@
+import base64
+import datetime
 import os
+import platform
 import shutil
 import sys
 import sysconfig
-import platform
-from pathlib import Path
-from hashlib import sha3_512
-import base64
-import datetime
-from Utils import version_tuple, is_windows, is_linux
-from collections.abc import Iterable
 import typing
-import setuptools
-from Launcher import components, icon_paths
+import zipfile
+from collections.abc import Iterable
+from hashlib import sha3_512
+from pathlib import Path
 
+import setuptools
+
+from Launcher import components, icon_paths
+from Utils import version_tuple, is_windows, is_linux
+
+# On  Python < 3.10 LogicMixin is not currently supported.
+apworlds: set = {
+    "Subnautica",
+    "Factorio",
+    "Rogue Legacy",
+}
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 import subprocess
 import pkg_resources
-requirement = 'cx-Freeze>=6.11'
+requirement = 'cx-Freeze>=6.13.1'
 try:
     pkg_resources.require(requirement)
     import cx_Freeze
@@ -185,11 +194,26 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         from WebHostLib.options import create
         create()
         from worlds.AutoWorld import AutoWorldRegister
+        assert not apworlds - set(AutoWorldRegister.world_types), "Unknown world designated for .apworld"
+        folders_to_remove: typing.List[str] = []
         for worldname, worldtype in AutoWorldRegister.world_types.items():
             if not worldtype.hidden:
                 file_name = worldname+".yaml"
                 shutil.copyfile(os.path.join("WebHostLib", "static", "generated", "configs", file_name),
                                 self.buildfolder / "Players" / "Templates" / file_name)
+            if worldname in apworlds:
+                file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
+                world_directory = self.libfolder / "worlds" / file_name
+                # this method creates an apworld that cannot be moved to a different OS or minor python version,
+                # which should be ok
+                with zipfile.ZipFile(self.libfolder / "worlds" / (file_name + ".apworld"), "x", zipfile.ZIP_DEFLATED,
+                                     compresslevel=9) as zf:
+                    entry: os.DirEntry
+                    for path in world_directory.rglob("*.*"):
+                        relative_path = os.path.join(*path.parts[path.parts.index("worlds")+1:])
+                        zf.write(path, relative_path)
+                    folders_to_remove.append(file_name)
+                shutil.rmtree(world_directory)
         shutil.copyfile("meta.yaml", self.buildfolder / "Players" / "Templates" / "meta.yaml")
         # TODO: fix LttP options one day
         shutil.copyfile("playerSettings.yaml", self.buildfolder / "Players" / "Templates" / "A Link to the Past.yaml")
@@ -218,9 +242,13 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         self.create_manifest()
 
         if is_windows:
+            # Inno setup stuff
             with open("setup.ini", "w") as f:
                 min_supported_windows = "6.2.9200" if sys.version_info > (3, 9) else "6.0.6000"
                 f.write(f"[Data]\nsource_path={self.buildfolder}\nmin_windows={min_supported_windows}\n")
+            with open("installdelete.iss", "w") as f:
+                f.writelines("Type: filesandordirs; Name: \"{app}\\lib\\worlds\\"+world_directory+"\"\n"
+                             for world_directory in folders_to_remove)
         else:
             # make sure extra programs are executable
             enemizer_exe = self.buildfolder / 'EnemizerCLI/EnemizerCLI.Core'
@@ -289,6 +317,7 @@ tmp="${{exe#*/}}"
 if [ ! "${{#tmp}}" -lt "${{#exe}}" ]; then
     exe="{default_exe.parent}/$exe"
 fi
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$APPDIR/{default_exe.parent}/lib"
 $APPDIR/$exe "$@"
 """)
         launcher_filename.chmod(0o755)

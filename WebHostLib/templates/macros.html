@@ -43,14 +43,14 @@
                         {% elif patch.game | supports_apdeltapatch %}
                         <a href="{{ url_for("download_patch", patch_id=patch.id, room_id=room.id) }}" download>
                             Download Patch File...</a>
-                        {% elif patch.game == "Dark Souls III" %}
+                        {% elif patch.game == "Dark Souls III" and patch.data %}
                         <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
                             Download JSON File...</a>
                         {% else %}
                             No file to download for this game.
                         {% endif %}
                     </td>
-                    <td><a href="{{ url_for("getPlayerTracker", tracker=room.tracker, tracked_team=0, tracked_player=patch.player_id) }}">Tracker</a></td>
+                    <td><a href="{{ url_for("get_player_tracker", tracker=room.tracker, tracked_team=0, tracked_player=patch.player_id) }}">Tracker</a></td>
                 </tr>
             {% endfor %}
             </tbody>
