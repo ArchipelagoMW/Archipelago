@@ -943,13 +943,16 @@ class OOTWorld(World):
 
             outfile_name = self.multiworld.get_out_file_name_base(self.player)
             rom = Rom(file=get_options()['oot_options']['rom_file'])
-            if self.hints != 'none':
-                buildWorldGossipHints(self)
-            # try:
-            patch_rom(self, rom)
-            # except Exception as e:
-            #     print(e)
-            patch_cosmetics(self, rom)
+            try:
+                if self.hints != 'none':
+                    buildWorldGossipHints(self)
+                patch_rom(self, rom)
+                patch_cosmetics(self, rom)
+            except Exception as e:
+                logger.error(e)
+                raise e
+            finally:
+                self.collectible_flags_available.set()
             rom.update_header()
             patch_data = create_patch_file(rom)
             rom.restore()
