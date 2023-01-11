@@ -1,122 +1,43 @@
 from worlds.AutoWorld import World
 from worlds.generic.Rules import add_rule
-from BaseClasses import Region, Location, Item, RegionType, ItemClassification
-
-next_id = 0x7E0000
-
-items = [
-    "Nothing",
-    "Bound Goblin",
-    "Dryad",
-    "Progressive Old One's Army",
-    "Witch Doctor",
-    "Progressive Dungeon",
-    "Hardmode",
-    "Underground Evil",
-    "Hallow",
-    "Wizard",
-    "Truffle",
-    "Hardmode Fishing",
-    "Truffle Worm",
-    "Steampunker",
-    "Life Fruit",
-    "Solar Eclipse",
-    "Plantera's Bulb",
-    "Cyborg",
-    "Autohammer",
-    "Biome Chests",
-    "Post-Plantera Eclipse",
-    "Lihzahrd Altar",
-    "Prismatic Lacewing",
-    "Martian Probe",
-    "Cultists",
-    "Win",
-]
-
-locations = [
-    "King Slime",
-    "Eye of Cthulhu",
-    "Eater of Worlds or Brain of Cthulhu",
-    "Queen Bee",
-    "Skeletron",
-    "Deerclops",
-    "Wall of Flesh",
-    "Queen Slime",
-    "The Twins",
-    "The Destroyer",
-    "Skeletron Prime",
-    "Plantera",
-    "Golem",
-    "Empress of Light",
-    "Duke Fishron",
-    "Lunatic Cultist",
-    "Moon Lord",
-    "Goblin Army",
-    "Old One's Army Tier 1",
-    "Old One's Army Tier 2",
-    "Old One's Army Tier 3",
-    "Torch God",
-    "Frost Legion",
-    "Frost Moon",
-    "Lunar Events",
-    "Martian Madness",
-    "Pirate Invasion",
-    "Pumpkin Moon",
-]
-
-precollected = []
-
-item_name_to_id: dict[str, int] = {}
-location_name_to_id: dict[str, int] = {}
-
-for item in items:
-    item_name_to_id[item] = next_id
-    next_id += 1
-
-for location in locations:
-    location_name_to_id[location] = next_id
-    next_id += 1
-
-class TerrariaItem(Item):  # or from Items import MyGameItem
-    game = "Terraria"  # name of the game/world this item is from
-
-class TerrariaLocation(Location):  # or from Locations import MyGameLocation
-    game = "Terraria"  # name of the game/world this location is in
+from BaseClasses import Region, RegionType, ItemClassification
+from .Checks import item_name_to_id, location_name_to_id, TerrariaItem, locations, TerrariaLocation, items, precollected
+from .Options import options
 
 class TerrariaWorld(World):
     """Terraria is a 2D sandbox video game."""
-    game: str = "Terraria"  # name of the game/world
-    topology_present: bool = True  # show path to required location checks in spoiler
-    option_definitions = {}
+    game: str = "Terraria"
+    topology_present: bool = True
+    option_definitions = options
 
     # data_version is used to signal that items, locations or their names
     # changed. Set this to 0 during development so other games' clients do not
     # cache any texts, then increase by 1 for each release that makes changes.
     data_version = 0
 
-    # The following two dicts are required for the generation to know which
-    # items exist. They could be generated from json or something else. They can
-    # include events, but don't have to since events will be placed manually.
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
 
     def create_item(self, name: str) -> TerrariaItem:
-        classification = ItemClassification.progression
+        classification = ItemClassification.useful
         if name in [
-            "Bound Goblin",
-            "Witch Doctor",
-            "Wizard",
-            "Truffle",
-            "Hardmode Fishing",
-            "Steampunker",
-            "Life Fruit",
-            "Solar Eclipse",
-            "Cyborg",
-            "Autohammer",
-            "Biome Chests",
-            "Post-Plantera Eclipse",
+            "Dryad",
+            "Progressive Old One's Army",
+            "Progressive Dungeon",
+            "Hardmode",
+            "Underground Evil",
+            "Hallow",
+            "Truffle Worm",
+            "Plantera's Bulb",
+            "Lihzahrd Altar",
+            "Prismatic Lacewing",
+            "Martian Probe",
+            "Cultists",
+            # "Post-Plantera Eclipse" # Temp
+            # "Zenith", # Temp
+            "Victory",
         ]:
-            classification = ItemClassification.useful
+            classification = ItemClassification.progression
         if name == "Nothing":
             classification = ItemClassification.filler
         return TerrariaItem(name, classification, item_name_to_id[name], self.player)
@@ -134,37 +55,39 @@ class TerrariaWorld(World):
         items_to_create.append("Progressive Dungeon")
         for item in precollected:
             items_to_create.remove(item)
-        items_to_create.remove("Win")
-        items_to_create.remove("Nothing")
+        items_to_create.remove("Victory")
+        # items_to_create.remove("Nothing")
         for _ in range(len(precollected)):
             items_to_create.append("Nothing")
         for item in map(self.create_item, items_to_create):
             self.multiworld.itempool.append(item)
 
     def set_rules(self) -> None:
+        add_rule(self.multiworld.get_location("Old One's Army Tier 1", self.player), lambda state: state.has("Progressive Old One's Army", self.player))
+        add_rule(self.multiworld.get_location("Pirate Invasion", self.player), lambda state: state.has("Hardmode", self.player))
+        add_rule(self.multiworld.get_location("Frost Legion", self.player), lambda state: state.has("Progressive Dungeon", self.player, 2) and state.has_all({"Hardmode", "Hallow", "Underground Evil"}, self.player))
         add_rule(self.multiworld.get_location("Queen Slime", self.player), lambda state: state.has("Hallow", self.player))
         add_rule(self.multiworld.get_location("The Twins", self.player), lambda state: state.has_all({"Hardmode", "Hallow"}, self.player))
         add_rule(self.multiworld.get_location("The Destroyer", self.player), lambda state: state.has_all({"Hardmode", "Underground Evil"}, self.player))
-        add_rule(self.multiworld.get_location("Skeletron Prime", self.player), lambda state: state.has_all({"Progressive Dungeon", "Hardmode", "Hallow", "Underground Evil"}, self.player))
-        add_rule(self.multiworld.get_location("Plantera", self.player), lambda state: state.has("Plantera's Bulb", self.player))
-        # Golem can be accessed with HOIKing or Luminite Pickaxe instead of Plantera's Bulb, which could be relevant for some goals / settings
-        add_rule(self.multiworld.get_location("Golem", self.player), lambda state: state.has_all({"Plantera's Bulb", "Lihzahrd Altar"}, self.player))
-        add_rule(self.multiworld.get_location("Empress of Light", self.player), lambda state: state.has_all({"Hallow", "Prismatic Lacewing"}, self.player))
-        add_rule(self.multiworld.get_location("Duke Fishron", self.player), lambda state: state.has("Truffle Worm", self.player))
-        add_rule(self.multiworld.get_location("Lunatic Cultist", self.player), lambda state: state.has("Cultists", self.player))
-        add_rule(self.multiworld.get_location("Moon Lord", self.player), lambda state: state.has("Cultists", self.player))
-        add_rule(self.multiworld.get_location("Old One's Army Tier 1", self.player), lambda state: state.has("Progressive Old One's Army", self.player))
+        add_rule(self.multiworld.get_location("Skeletron Prime", self.player), lambda state: state.has_all({"Progressive Dungeon", "Hardmode", "Underground Evil", "Hallow"}, self.player))
         add_rule(self.multiworld.get_location("Old One's Army Tier 2", self.player), lambda state: state.has("Progressive Old One's Army", self.player, 2))
+        add_rule(self.multiworld.get_location("Plantera", self.player), lambda state: state.has("Plantera's Bulb", self.player))
+        # Golem can be accessed with HOIKing, which could be relevant for some goals / settings
+        add_rule(self.multiworld.get_location("Golem", self.player), lambda state: state.has_any({"Plantera's Bulb", "Cultists"}, self.player) and state.has("Lihzahrd Altar", self.player))
         add_rule(self.multiworld.get_location("Old One's Army Tier 3", self.player), lambda state: state.has("Progressive Old One's Army", self.player, 3))
-        add_rule(self.multiworld.get_location("Frost Legion", self.player), lambda state: state.has("Progressive Dungeon", self.player, 2) and state.has_all({"Hardmode", "Hallow", "Underground Evil"}, self.player))
-        add_rule(self.multiworld.get_location("Frost Moon", self.player), lambda state: state.has("Progressive Dungeon", self.player, 2) and state.has_all({"Hardmode", "Hallow", "Underground Evil"}, self.player))
-        add_rule(self.multiworld.get_location("Lunar Events", self.player), lambda state: state.has("Cultists", self.player))
         add_rule(self.multiworld.get_location("Martian Madness", self.player), lambda state: state.has("Martian Probe", self.player))
-        add_rule(self.multiworld.get_location("Pirate Invasion", self.player), lambda state: state.has("Hardmode", self.player))
-        add_rule(self.multiworld.get_location("Pumpkin Moon", self.player), lambda state: state.has("Progressive Dungeon", self.player, 2) and state.has_all({"Hardmode", "Dryad"}, self.player) and (state.has_any({"Hallow", "Underground Evil"}, self.player)))
+        add_rule(self.multiworld.get_location("Duke Fishron", self.player), lambda state: state.has("Truffle Worm", self.player))
+        add_rule(self.multiworld.get_location("Pumpkin Moon", self.player), lambda state: state.has("Progressive Dungeon", self.player, 2) and state.has_all({"Dryad", "Hardmode"}, self.player) and (state.has_any({"Hallow", "Underground Evil"}, self.player)))
+        add_rule(self.multiworld.get_location("Frost Moon", self.player), lambda state: state.has("Progressive Dungeon", self.player, 2) and state.has_all({"Hardmode", "Hallow", "Underground Evil"}, self.player))
+        add_rule(self.multiworld.get_location("Empress of Light", self.player), lambda state: state.has_all({"Hallow", "Prismatic Lacewing"}, self.player))
+        add_rule(self.multiworld.get_location("Lunatic Cultist", self.player), lambda state: state.has("Cultists", self.player))
+        add_rule(self.multiworld.get_location("Lunar Events", self.player), lambda state: state.has("Cultists", self.player))
+        add_rule(self.multiworld.get_location("Moon Lord", self.player), lambda state: state.has("Cultists", self.player))
+        # add_rule(self.multiworld.get_location("Zenith", self.player), lambda state: state.has_all({"Dryad", "Hardmode", "Underground Evil", "Hallow", "Plantera's Bulb", "Post-Plantera Eclipse", "Martian Probe", "Cultists"}, self.player) and state.has("Progressive Dungeon", self.player, 2))
 
     def generate_basic(self) -> None:
         for item in precollected:
             self.multiworld.push_precollected(self.create_item(item))
-        self.multiworld.get_location("Moon Lord", self.player).place_locked_item(self.create_item("Win"))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Win", self.player)
+        self.multiworld.get_location("Moon Lord", self.player).place_locked_item(self.create_item("Victory"))
+        # self.multiworld.get_location("Zenith", self.player).place_locked_item(self.create_item("Victory"))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
