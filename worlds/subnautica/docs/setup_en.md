@@ -12,6 +12,8 @@
 
 2. Start Subnautica. You should see a connect form with three text boxes in the top left of your main menu.
 
+**If using Linux,** add ``WINEDLLOVERRIDES="winhttp=n,b" %command%`` to your Subnautica launch arguments on Steam. If you bought Subnautica elsewhere, you can either add it as a non-steam game and use those launch arguments or use winecfg to set the dll override.
+
 ## Connecting
 
 Use the connect form in Subnautica's main menu to enter your connection information to connect to an Archipelago multiworld.
