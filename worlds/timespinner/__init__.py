@@ -6,7 +6,7 @@ from .Items import get_item_names_per_category, item_table, starter_melee_weapon
 from .Locations import get_locations, starter_progression_locations, EventId
 from .LogicMixin import TimespinnerLogic
 from .Options import is_option_enabled, get_option_value, timespinner_options
-from .PyramidKeys import get_pyramid_keys_unlock
+from .PreCalculatedWeights import PreCalculatedWeights
 from .Regions import create_regions
 from ..AutoWorld import World, WebWorld
 
@@ -43,7 +43,7 @@ class TimespinnerWorld(World):
     option_definitions = timespinner_options
     game = "Timespinner"
     topology_present = True
-    data_version = 10
+    data_version = 11
     web = TimespinnerWebWorld()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -51,15 +51,15 @@ class TimespinnerWorld(World):
     item_name_groups = get_item_names_per_category()
 
     locked_locations: List[str]
-    pyramid_keys_unlock: str
     location_cache: List[Location]
+    precalculated_weights: PreCalculatedWeights
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
 
         self.locked_locations = []
         self.location_cache = []
-        self.pyramid_keys_unlock = get_pyramid_keys_unlock(world, player)
+        self.precalculated_weights = PreCalculatedWeights(world, player)
 
     def generate_early(self):
         # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
@@ -72,7 +72,7 @@ class TimespinnerWorld(World):
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player),
-                       self.location_cache, self.pyramid_keys_unlock)
+                       self.location_cache, self.precalculated_weights)
 
     def create_item(self, name: str) -> Item:
         return create_item_with_correct_settings(self.multiworld, self.player, name)
@@ -83,7 +83,9 @@ class TimespinnerWorld(World):
     def set_rules(self):
         setup_events(self.player, self.locked_locations, self.location_cache)
 
-        self.multiworld.completion_condition[self.player] = lambda state: state.has('Killed Nightmare', self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: \
+            state.has('Killed Nightmare', self.player) if not is_option_enabled(self.multiworld, self.player, "DadPercent") \
+            else state.has('Killed Emperor', self.player)
 
     def generate_basic(self):
         excluded_items = get_excluded_items(self, self.multiworld, self.player)
@@ -103,18 +105,60 @@ class TimespinnerWorld(World):
         slot_data: Dict[str, object] = {}
 
         for option_name in timespinner_options:
-            slot_data[option_name] = get_option_value(self.multiworld, self.player, option_name)
+            if (option_name != "RisingTidesOverrides"):
+                slot_data[option_name] = get_option_value(self.multiworld, self.player, option_name)
 
         slot_data["StinkyMaw"] = True
         slot_data["ProgressiveVerticalMovement"] = False
         slot_data["ProgressiveKeycards"] = False
-        slot_data["PyramidKeysGate"] = self.pyramid_keys_unlock
         slot_data["PersonalItems"] = get_personal_items(self.player, self.location_cache)
+        slot_data["PyramidKeysGate"] = self.precalculated_weights.pyramid_keys_unlock
+        slot_data["Basement"] = int(self.precalculated_weights.flood_basement) + \
+                                int(self.precalculated_weights.flood_basement_high)
+        slot_data["Xarion"] = self.precalculated_weights.flood_xarion
+        slot_data["Maw"] = self.precalculated_weights.flood_maw
+        slot_data["PyramidShaft"] = self.precalculated_weights.flood_pyramid_shaft
+        slot_data["BackPyramid"] = self.precalculated_weights.flood_pyramid_back
+        slot_data["CastleMoat"] = self.precalculated_weights.flood_moat
+        slot_data["CastleCourtyard"] = self.precalculated_weights.flood_courtyard
+        slot_data["LakeDesolation"] = self.precalculated_weights.flood_lake_desolation
+        slot_data["DryLakeSerene"] = self.precalculated_weights.dry_lake_serene
 
         return slot_data
 
     def write_spoiler_header(self, spoiler_handle: TextIO):
         spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % (self.pyramid_keys_unlock))
+       
+        flooded_areas: list[str] = []
+
+        if(self.precalculated_weights.flood_basement):
+            if (self.precalculated_weights.flood_basement_high):
+                flooded_areas.append("Castle Basement")
+            else:
+                flooded_areas.append("Castle Basement (Savepoint available)")
+        if (self.precalculated_weights.flood_xarion):
+            flooded_areas.append("Xarion (boss)")
+        if (self.precalculated_weights.flood_maw):
+            flooded_areas.append("Maw (caves + boss)")
+        if (self.precalculated_weights.flood_pyramid_shaft):
+            flooded_areas.append("Ancient Pyramid Shaft")
+        if (self.precalculated_weights.flood_pyramid_back):
+            flooded_areas.append("Sandman\Nightmare (boss)")
+        if (self.precalculated_weights.flood_moat):
+            flooded_areas.append("Castle Ramparts Moat")
+        if (self.precalculated_weights.flood_courtyard):
+            flooded_areas.append("Castle Courtyard")
+        if (self.precalculated_weights.flood_lake_desolation):
+            flooded_areas.append("Lake Desolation")
+        if (self.precalculated_weights.dry_lake_serene):
+            flooded_areas.append("Dry Lake Serene")
+
+        if (len(flooded_areas) == 0):
+            flooded_areas_string: str = "None"
+        else:
+            flooded_areas_string: str = ", ".join(flooded_areas)
+
+        spoiler_handle.write('Flooded Areas:                   %s\n' % (flooded_areas_string))
 
 
 def get_excluded_items(self: TimespinnerWorld, world: MultiWorld, player: int) -> Set[str]:

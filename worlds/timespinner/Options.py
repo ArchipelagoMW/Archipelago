@@ -293,7 +293,7 @@ class RisingTides(Toggle):
 
 
 class RisingTidesOverrides(OptionDict):
-    """Manual odds for specific area's to be flooded or drained, 
+    """Manual odds for specific area's to be flooded or drained, only has effect when RisingTides is on.
     Areas that you don't specify will roll with the default 33% change of getting flooded or drained"""
     schema = Schema({
         Optional("Xarion"): { 

@@ -2,9 +2,11 @@ from typing import List, Set, Dict, Tuple, Optional, Callable
 from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Options import is_option_enabled
 from .Locations import LocationData
+from .PreCalculatedWeights import PreCalculatedWeights
 
+def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location],
+            precalculated_weights: PreCalculatedWeights):
 
-def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location], pyramid_keys_unlock: str):
     locations_per_region = get_locations_per_region(locations)
 
     regions = [
@@ -60,10 +62,12 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connectStartingRegion(world, player)
 
     names: Dict[str, int] = {}
+    pyramid_keys_unlock: str = precalculated_weights.pyramid_keys_unlock
+    flooded: PreCalculatedWeights = precalculated_weights
 
-    connect(world, player, names, 'Lake desolation', 'Lower lake desolation', lambda state: state._timespinner_has_timestop(world, player) or state.has('Talaria Attachment', player))
+    connect(world, player, names, 'Lake desolation', 'Lower lake desolation', lambda state: state._timespinner_has_timestop(world, player) or state.has('Talaria Attachment', player) or (flooded.flood_lake_desolation))
     connect(world, player, names, 'Lake desolation', 'Upper lake desolation', lambda state: state._timespinner_has_fire(world, player) and state.can_reach('Upper Lake Serene', 'Region', player))
-    connect(world, player, names, 'Lake desolation', 'Skeleton Shaft', lambda state: state._timespinner_has_doublejump(world, player))
+    connect(world, player, names, 'Lake desolation', 'Skeleton Shaft', lambda state: state._timespinner_has_doublejump(world, player) or flooded.flood_lake_desolation)
     connect(world, player, names, 'Lake desolation', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Upper lake desolation', 'Lake desolation')
     connect(world, player, names, 'Upper lake desolation', 'Eastern lake desolation')
@@ -129,17 +133,17 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Forest', 'Castle Ramparts')
     connect(world, player, names, 'Left Side forest Caves', 'Forest')
     connect(world, player, names, 'Left Side forest Caves', 'Upper Lake Serene', lambda state: state._timespinner_has_timestop(world, player))
-    connect(world, player, names, 'Left Side forest Caves', 'Lower Lake Serene', lambda state: state.has('Water Mask', player))
+    connect(world, player, names, 'Left Side forest Caves', 'Lower Lake Serene', lambda state: state.has('Water Mask', player) or flooded.dry_lake_serene)
     connect(world, player, names, 'Left Side forest Caves', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Upper Lake Serene', 'Left Side forest Caves')
     connect(world, player, names, 'Upper Lake Serene', 'Lower Lake Serene', lambda state: state.has('Water Mask', player))
     connect(world, player, names, 'Lower Lake Serene', 'Upper Lake Serene')
     connect(world, player, names, 'Lower Lake Serene', 'Left Side forest Caves')
     connect(world, player, names, 'Lower Lake Serene', 'Caves of Banishment (upper)')
-    connect(world, player, names, 'Caves of Banishment (upper)', 'Upper Lake Serene', lambda state: state.has('Water Mask', player))
+    connect(world, player, names, 'Caves of Banishment (upper)', 'Upper Lake Serene', lambda state: state.has('Water Mask', player) or flooded.dry_lake_serene)
     connect(world, player, names, 'Caves of Banishment (upper)', 'Caves of Banishment (Maw)', lambda state: state.has('Twin Pyramid Key', player) or state._timespinner_has_doublejump(world, player))
     connect(world, player, names, 'Caves of Banishment (upper)', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
-    connect(world, player, names, 'Caves of Banishment (Maw)', 'Caves of Banishment (upper)', lambda state: state._timespinner_has_doublejump(world, player))
+    connect(world, player, names, 'Caves of Banishment (Maw)', 'Caves of Banishment (upper)', lambda state: state._timespinner_has_doublejump(world, player) if not flooded.flood_maw else state.has('Water Mask', player))
     connect(world, player, names, 'Caves of Banishment (Maw)', 'Caves of Banishment (Sirens)', lambda state: state.has('Gas Mask', player))
     connect(world, player, names, 'Caves of Banishment (Maw)', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Caves of Banishment (Sirens)', 'Forest')
@@ -158,9 +162,9 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Ancient Pyramid (entrance)', 'The lab (upper)', lambda state: not is_option_enabled(world, player, "EnterSandman"))
     connect(world, player, names, 'Ancient Pyramid (entrance)', 'Ancient Pyramid (left)', lambda state: state._timespinner_has_doublejump(world, player))
     connect(world, player, names, 'Ancient Pyramid (left)', 'Ancient Pyramid (entrance)')
-    connect(world, player, names, 'Ancient Pyramid (left)', 'Ancient Pyramid (right)', lambda state: state._timespinner_has_upwarddash(world, player))
-    connect(world, player, names, 'Ancient Pyramid (right)', 'Ancient Pyramid (left)', lambda state: state._timespinner_has_upwarddash(world, player))
-    connect(world, player, names, 'Space time continuum', 'Lake desolation', lambda state: pyramid_keys_unlock == "GateLakeDesolation")
+    connect(world, player, names, 'Ancient Pyramid (left)', 'Ancient Pyramid (right)', lambda state: state._timespinner_has_upwarddash(world, player) or flooded.flood_pyramid_shaft)
+    connect(world, player, names, 'Ancient Pyramid (right)', 'Ancient Pyramid (left)', lambda state: state._timespinner_has_upwarddash(world, player) or flooded.flood_pyramid_shaft)
+    connect(world, player, names, 'Space time continuum', 'Lake desolation', lambda state:  pyramid_keys_unlock == "GateLakeDesolation")
     connect(world, player, names, 'Space time continuum', 'Lower lake desolation', lambda state: pyramid_keys_unlock == "GateKittyBoss")
     connect(world, player, names, 'Space time continuum', 'Library', lambda state: pyramid_keys_unlock == "GateLeftLibrary")
     connect(world, player, names, 'Space time continuum', 'Varndagroth tower right (lower)', lambda state: pyramid_keys_unlock == "GateMilitairyGate")
