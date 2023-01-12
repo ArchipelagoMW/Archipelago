@@ -2,7 +2,7 @@ import sys
 
 from BaseClasses import Item
 from worlds.dark_souls_3.data.items_data import item_tables, dlc_shields_table, dlc_weapons_upgrade_10_table, \
-    dlc_weapons_upgrade_5_table, dlc_goods_table, dlc_spells_table, dlc_armor_table, dlc_ring_table, dlc_misc_table
+    dlc_weapons_upgrade_5_table, dlc_goods_table, dlc_spells_table, dlc_armor_table, dlc_ring_table, dlc_misc_table, dlc_goods_2_table
 
 
 class DarkSouls3Item(Item):
@@ -10,6 +10,8 @@ class DarkSouls3Item(Item):
 
     dlc_set = {**dlc_shields_table, **dlc_weapons_upgrade_10_table, **dlc_weapons_upgrade_5_table,
                **dlc_goods_table, **dlc_spells_table, **dlc_armor_table, **dlc_ring_table, **dlc_misc_table}
+
+    dlc_progressive = {**dlc_goods_2_table}
 
     @staticmethod
     def get_name_to_id() -> dict:
@@ -29,4 +31,7 @@ class DarkSouls3Item(Item):
     def is_dlc_item(name) -> bool:
         return name in DarkSouls3Item.dlc_set
 
+    @staticmethod
+    def is_dlc_progressive(name) -> bool:
+        return name in DarkSouls3Item.dlc_progressive
 

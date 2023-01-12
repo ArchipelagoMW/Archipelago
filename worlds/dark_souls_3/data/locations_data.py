@@ -588,13 +588,28 @@ progressive_locations_3 = {
     **{"Twinkling Titanite #"+str(i): 0x40000406 for i in range(1, 8)}
 }
 
+dlc_progressive_locations = { #71
+    **{"Large Soul of an Unknown Traveler $"+str(i): 0x40000194 for i in range(1, 10)},
+    **{"Soul of a Weary Warrior $"+str(i): 0x40000197 for i in range(1, 6)},
+    **{"Large Soul of a Weary Warrior $"+str(i): 0x40000198 for i in range(1, 7)},
+    **{"Soul of a Crestfallen Knight $"+str(i): 0x40000199 for i in range(1, 7)},
+    **{"Large Soul of a Crestfallen Knight $"+str(i): 0x4000019A for i in range(1, 4)},
+    **{"Homeward Bone $"+str(i): 0x4000015E for i in range(1, 7)},
+    **{"Large Titanite Shard $"+str(i): 0x400003E9 for i in range(1, 4)},
+    **{"Titanite Chunk $"+str(i): 0x400003EA for i in range(1, 16)},
+    **{"Twinkling Titanite $"+str(i): 0x40000406 for i in range(1, 6)},
+    **{"Rusted Coin $"+str(i): 0x400001C7 for i in range(1, 4)},
+    **{"Ember $"+str(i): 0x400001F4 for i in range(1, 11)}
+}
 
 location_tables = [fire_link_shrine_table, firelink_shrine_bell_tower_table, high_wall_of_lothric, undead_settlement_table, road_of_sacrifice_table,
                              cathedral_of_the_deep_table, farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table,
                              irithyll_dungeon_table, profaned_capital_table, anor_londo_table, lothric_castle_table, consumed_king_garden_table,
-                             grand_archives_table, untended_graves_table, archdragon_peak_table, progressive_locations, progressive_locations_2, progressive_locations_3, painted_world_table, dreg_heap_table, ringed_city_table]
+                             grand_archives_table, untended_graves_table, archdragon_peak_table, progressive_locations, progressive_locations_2, progressive_locations_3, 
+                             painted_world_table, dreg_heap_table, ringed_city_table, dlc_progressive_locations]
 
 location_dictionary = {**fire_link_shrine_table, **firelink_shrine_bell_tower_table, **high_wall_of_lothric, **undead_settlement_table, **road_of_sacrifice_table,
                        **cathedral_of_the_deep_table, **farron_keep_table, **catacombs_of_carthus_table, **smouldering_lake_table, **irithyll_of_the_boreal_valley_table,
                        **irithyll_dungeon_table, **profaned_capital_table, **anor_londo_table, **lothric_castle_table, **consumed_king_garden_table,
-                       **grand_archives_table, **untended_graves_table, **archdragon_peak_table, **progressive_locations, **progressive_locations_2, **progressive_locations_3, **painted_world_table, **dreg_heap_table, **ringed_city_table}
+                       **grand_archives_table, **untended_graves_table, **archdragon_peak_table, **progressive_locations, **progressive_locations_2, **progressive_locations_3, 
+                       **painted_world_table, **dreg_heap_table, **ringed_city_table, **dlc_progressive_locations}
