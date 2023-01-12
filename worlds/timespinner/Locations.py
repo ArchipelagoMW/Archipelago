@@ -105,7 +105,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int], flooded: P
         LocationData('Emperors tower', 'Emperor\'s Tower: Left tower balcony',  1337083),
         LocationData('Emperors tower', 'Emperor\'s Tower: Emperor\'s Chambers chest',  1337084),
         LocationData('Emperors tower', 'Emperor\'s Tower: Emperor\'s Chambers pedestal',  1337085),
-        LocationData('Emperors tower', 'Killed Emperor', EventId), #TODO verify requirement
+        LocationData('Emperors tower', 'Killed Emperor', EventId),
 
         # Past item locations
         LocationData('Refugee Camp', 'Refugee Camp: Neliste\'s Bra',  1337086),
@@ -174,8 +174,8 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int], flooded: P
         LocationData('Royal towers (lower)', 'Royal Towers: Floor secret',  1337142, lambda state: state._timespinner_has_doublejump(world, player) and state._timespinner_can_break_walls(world, player)),
         LocationData('Royal towers', 'Royal Towers: Pre-climb gap',  1337143),
         LocationData('Royal towers', 'Royal Towers: Long balcony',  1337144, lambda state: state.has('Water Mask', player) if flooded.flood_courtyard else True),
-        LocationData('Royal towers (upper)', 'Royal Towers: Past bottom struggle juggle',  1337145, lambda state: True), #TODO fix me
-        LocationData('Royal towers (upper)', 'Royal Towers: Bottom struggle juggle',  1337146, lambda state: state._timespinner_has_doublejump_of_npc(world, player)),
+        LocationData('Royal towers', 'Royal Towers: Past bottom struggle juggle',  1337145, lambda state: state._timespinner_has_doublejump_of_npc(world, player) if not flooded.flood_courtyard else True),
+        LocationData('Royal towers', 'Royal Towers: Bottom struggle juggle',  1337146, lambda state: state._timespinner_has_doublejump_of_npc(world, player)),
         LocationData('Royal towers (upper)', 'Royal Towers: Top struggle juggle',  1337147, lambda state: state._timespinner_has_doublejump_of_npc(world, player)),
         LocationData('Royal towers (upper)', 'Royal Towers: No struggle required',  1337148, lambda state: state._timespinner_has_doublejump_of_npc(world, player)),
         LocationData('Royal towers', 'Royal Towers: Right tower freebie',  1337149),
@@ -245,7 +245,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int], flooded: P
             LocationData('Royal towers (lower)', 'Royal Towers: Journal - Aelana\'s Room (Diplomatic Missive)',  1337194, lambda state: state._timespinner_has_pink(world, player)),
             LocationData('Royal towers (upper)', 'Royal Towers: Journal - Top Struggle Juggle Base (War of the Sisters)',  1337195),
             LocationData('Royal towers (upper)', 'Royal Towers: Journal - Aelana Boss (Stained Letter)',  1337196),
-            LocationData('Royal towers', 'Royal Towers: Journal - Near Bottom Struggle Juggle (Mission Findings)',  1337197, lambda state: state._timespinner_has_doublejump_of_npc(world, player)), #TODO fix me
+            LocationData('Royal towers', 'Royal Towers: Journal - Near Bottom Struggle Juggle (Mission Findings)',  1337197, lambda state: state._timespinner_has_doublejump_of_npc(world, player) if not flooded.flood_courtyard else True),
             LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Journal - Lower Left Caves (Naivety)',  1337198)
         )
 
