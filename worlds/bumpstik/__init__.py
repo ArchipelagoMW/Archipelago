@@ -6,6 +6,7 @@
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from .Items import BumpStikItem, item_table
 from .Locations import location_table
+from .Options import bumpstik_options, RainbowTrap, SpinnerTrap, KillerTrap
 from .Regions import create_regions
 from ..AutoWorld import World, WebWorld
 from ..generic.Rules import forbid_item
@@ -26,7 +27,7 @@ class BumpStikWeb(WebWorld):
 
 class BumpStikWorld(World):
     """
-        Bumper Stickers is a match-three puzzle game unlike any you've probably seen.
+        Bumper Stickers is a match-three puzzle game unlike any you've seen.
         Launch Bumpers onto the field, and match them in sets of three of the same color.
         How long can you go without getting Jammed?
     """
@@ -36,16 +37,19 @@ class BumpStikWorld(World):
 
     item_name_to_id = item_table
     location_name_to_id = location_table
-    #item_name_groups = item_groups
+    # item_name_groups = item_groups
 
     data_version = 0
 
-    required_client_version = (0, 3, 5)
+    required_client_version = (0, 3, 7)
 
-    # option_definitions = bumpstik_options
+    option_definitions = bumpstik_options
 
     def __init__(self, world: MultiWorld, player: int):
         super(BumpStikWorld, self).__init__(world, player)
+        self.rainbow_traps = RainbowTrap.default
+        self.spinner_traps = SpinnerTrap.default
+        self.killer_traps = KillerTrap.default
 
     def create_item(self, name: str) -> Item:
         return BumpStikItem(name, ItemClassification.filler, item_table[name], self.player)
@@ -59,11 +63,19 @@ class BumpStikWorld(World):
     def get_filler_item_name(self) -> str:
         return "Nothing"
 
+    def generate_early(self):
+        self.rainbow_traps = self.multiworld.rainbow_traps[self.player].value
+        self.spinner_traps = self.multiworld.spinner_traps[self.player].value
+        self.killer_traps = self.multiworld.killer_traps[self.player].value
+
     def create_regions(self):
         create_regions(self.multiworld, self.player)
 
     def create_items(self):
-        frequencies = [0, 0, 0, 0, 0, 4, 5, 25, 33]
+        frequencies = [
+            0, 10, 5, 3, 0, 4, 5, 25, 33,
+            self.rainbow_traps, self.spinner_traps, self.killer_traps
+        ]
         item_pool = []
 
         for i, name in enumerate(item_table):
@@ -73,7 +85,8 @@ class BumpStikWorld(World):
 
         item_delta = len(location_table) - len(item_pool) - 1
         if item_delta > 0:
-            item_pool += self._create_item_in_quantities(self.get_filler_item_name(), item_delta)
+            item_pool += self._create_item_in_quantities(
+                self.get_filler_item_name(), item_delta)
 
         self.multiworld.itempool += item_pool
 
@@ -87,4 +100,4 @@ class BumpStikWorld(World):
 
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.has("Booster Bumper", self.player, 5) and \
-                          state.has("Treasure Bumper", self.player, 32)
+            state.has("Treasure Bumper", self.player, 32)
