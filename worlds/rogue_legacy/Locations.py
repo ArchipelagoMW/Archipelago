@@ -11,10 +11,6 @@ class RLLocationData(NamedTuple):
     category: str
     code: Optional[int] = None
 
-    @property
-    def is_event_location(self):
-        return self.code is None
-
 
 def get_locations_by_category(category: str) -> Dict[str, RLLocationData]:
     location_dict: Dict[str, RLLocationData] = {}

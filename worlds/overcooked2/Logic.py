@@ -135,10 +135,10 @@ def level_shuffle_factory(
     shuffle_horde_levels: bool,
 ) -> Dict[int, Overcooked2GenericLevel]:  # return <story_level_id, level>
     # Create a list of all valid levels for selection
-    # (excludes tutorial, throne, kevin and sometimes horde levels)
+    # (excludes tutorial, throne and sometimes horde/prep levels)
     pool = list()
     for dlc in Overcooked2Dlc:
-        for level_id in range(dlc.start_level_id(), dlc.end_level_id()):
+        for level_id in range(dlc.start_level_id, dlc.end_level_id):
             if level_id in dlc.excluded_levels():
                 continue
 
@@ -165,11 +165,12 @@ def level_shuffle_factory(
         rng.shuffle(pool)
 
         # Return the first 44 levels and assign those to each level
-        for level_id in range(story.start_level_id(), story.end_level_id()):
+        for level_id in range(story.start_level_id, story.end_level_id):
             if level_id not in story.excluded_levels():
                 result[level_id] = pool[level_id-1]
-            else:
-                result[level_id] = Overcooked2GenericLevel(level_id)  # This is just 6-6 right now
+            elif level_id == 36:
+                # Level 6-6 is exempt from shuffling
+                result[level_id] = Overcooked2GenericLevel(level_id)
 
     return result
 
@@ -2599,7 +2600,9 @@ level_logic = {
             {  # Exclusive
 
             },
-            horde_logic
+            {  # Additive
+
+            },
         ),
         (  # 2-star
             {  # Exclusive

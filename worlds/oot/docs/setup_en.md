@@ -19,7 +19,7 @@ As we are using Bizhawk, this guide is only applicable to Windows and Linux syst
 Once Bizhawk has been installed, open Bizhawk and change the following settings:
 
 - Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
-  "Lua+LuaInterface". This is required for the Lua script to function correctly.
+  "Lua+LuaInterface". Then restart Bizhawk. This is required for the Lua script to function correctly.
   **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
   **of newer versions of Bizhawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
   **"NLua+KopiLua" until this step is done.**
@@ -31,11 +31,16 @@ Once Bizhawk has been installed, open Bizhawk and change the following settings:
   to disable most of these, which you can do quickly using `Esc`.
 - If playing with a controller, when you bind controls, disable "P1 A Up", "P1 A Down", "P1 A Left", and "P1 A Right"
   as these interfere with aiming if bound. Set directional input using the Analog tab instead.
+- Under N64 enable "Use Expansion Slot". This is required for savestates to work.
+  (The N64 menu only appears after loading a ROM.)
 
 It is strongly recommended to associate N64 rom extensions (\*.n64, \*.z64) to the Bizhawk we've just installed.
 To do so, we simply have to search any N64 rom we happened to own, right click and select "Open with...", unfold
 the list that appears and select the bottom option "Look for another application", then browse to the Bizhawk folder
 and select EmuHawk.exe.
+
+An alternative Bizhawk setup guide as well as various pieces of troubleshooting advice can be found
+[here](https://wiki.ootrandomizer.com/index.php?title=Bizhawk).
 
 ## Configuring your YAML file
 
@@ -171,7 +176,7 @@ Ocarina of Time:
     overworld: 0
     any_dungeon: 0
     keysanity: 0
-  shuffle_fortresskeys: # Control where to shuffle the Gerudo Fortress small keys.
+  shuffle_hideoutkeys: # Control where to shuffle the Gerudo Fortress small keys.
     vanilla: 50
     overworld: 0
     any_dungeon: 0
