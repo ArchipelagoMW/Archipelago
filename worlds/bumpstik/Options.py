@@ -4,7 +4,7 @@
 # https://opensource.org/licenses/MIT
 
 import typing
-from Options import Range
+from Options import Option, Range
 
 
 class RainbowTrap(Range):
