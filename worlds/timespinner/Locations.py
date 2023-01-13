@@ -192,8 +192,8 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int], flooded: P
         LocationData('Ancient Pyramid (left)', 'Ancient Pyramid: Conviction guarded room',  1337247),
         LocationData('Ancient Pyramid (left)', 'Ancient Pyramid: Pit secret room',  1337248, lambda state: state._timespinner_can_break_walls(world, player) and (state.has('Water Mask', player) if flooded.flood_pyramid_shaft else True)),
         LocationData('Ancient Pyramid (left)', 'Ancient Pyramid: Regret chest',  1337249, lambda state: state._timespinner_can_break_walls(world, player) and (state.has('Water Mask', player) if flooded.flood_pyramid_shaft else True)),
-        LocationData('Ancient Pyramid (right)', 'Ancient Pyramid: Nightmare Door chest',  1337236),
-        LocationData('Ancient Pyramid (right)', 'Killed Nightmare', EventId, lambda state: state.has_all({'Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'}, player))
+        LocationData('Ancient Pyramid (right)', 'Ancient Pyramid: Nightmare Door chest',  1337236, lambda state: state.has('Water Mask', player) if flooded.flood_pyramid_back else True),
+        LocationData('Ancient Pyramid (right)', 'Killed Nightmare', EventId, lambda state: state.has_all({'Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'}, player) and (state.has('Water Mask', player) if flooded.flood_pyramid_back else True))
     ]
 
     # 1337156 - 1337170 Downloads
@@ -246,7 +246,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int], flooded: P
             LocationData('Royal towers (upper)', 'Royal Towers: Journal - Top Struggle Juggle Base (War of the Sisters)',  1337195),
             LocationData('Royal towers (upper)', 'Royal Towers: Journal - Aelana Boss (Stained Letter)',  1337196),
             LocationData('Royal towers', 'Royal Towers: Journal - Near Bottom Struggle Juggle (Mission Findings)',  1337197, lambda state: state._timespinner_has_doublejump_of_npc(world, player) if not flooded.flood_courtyard else True),
-            LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Journal - Lower Left Caves (Naivety)',  1337198)
+            LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Journal - Lower Left Caves (Naivety)',  1337198, lambda state: state.has('Water Mask', player) if flooded.flood_maw else True)
         )
 
     # 1337199 - 1337236 Reserved for future use

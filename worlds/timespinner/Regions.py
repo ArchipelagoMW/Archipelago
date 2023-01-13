@@ -141,7 +141,7 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Lower Lake Serene', 'Left Side forest Caves')
     connect(world, player, names, 'Lower Lake Serene', 'Caves of Banishment (upper)')
     connect(world, player, names, 'Caves of Banishment (upper)', 'Upper Lake Serene', lambda state: state.has('Water Mask', player) or flooded.dry_lake_serene)
-    connect(world, player, names, 'Caves of Banishment (upper)', 'Caves of Banishment (Maw)', lambda state: state.has('Twin Pyramid Key', player) or state._timespinner_has_doublejump(world, player))
+    connect(world, player, names, 'Caves of Banishment (upper)', 'Caves of Banishment (Maw)', lambda state: state._timespinner_has_doublejump(world, player) or state.has('Gas Mask', player))
     connect(world, player, names, 'Caves of Banishment (upper)', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Caves of Banishment (Maw)', 'Caves of Banishment (upper)', lambda state: state._timespinner_has_doublejump(world, player) if not flooded.flood_maw else state.has('Water Mask', player))
     connect(world, player, names, 'Caves of Banishment (Maw)', 'Caves of Banishment (Sirens)', lambda state: state.has('Gas Mask', player))
