@@ -26,6 +26,7 @@ class Group(TypedDict, total=False):
     replacement_items: Dict[int, Optional[str]]
     local_items: Set[str]
     non_local_items: Set[str]
+    link_replacement: bool
 
 
 class MultiWorld():
@@ -48,7 +49,8 @@ class MultiWorld():
     state: CollectionState
 
     accessibility: Dict[int, Options.Accessibility]
-    early_items: Dict[int, Options.EarlyItems]
+    early_items: Dict[int, Dict[str, int]]
+    local_early_items: Dict[int, Dict[str, int]]
     local_items: Dict[int, Options.LocalItems]
     non_local_items: Dict[int, Options.NonLocalItems]
     progression_balancing: Dict[int, Options.ProgressionBalancing]
@@ -94,6 +96,8 @@ class MultiWorld():
         self.customitemarray = []
         self.shuffle_ganon = True
         self.spoiler = Spoiler(self)
+        self.early_items = {player: {} for player in self.player_ids}
+        self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
         self.fix_trock_doors = self.AttributeProxy(
             lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
@@ -157,7 +161,7 @@ class MultiWorld():
         self.worlds = {}
         self.slot_seeds = {}
 
-    def get_all_ids(self):
+    def get_all_ids(self) -> Tuple[int, ...]:
         return self.player_ids + tuple(self.groups)
 
     def add_group(self, name: str, game: str, players: Set[int] = frozenset()) -> Tuple[int, Group]:
@@ -219,27 +223,32 @@ class MultiWorld():
 
     def set_item_links(self):
         item_links = {}
-
+        replacement_prio = [False, True, None]
         for player in self.player_ids:
             for item_link in self.item_links[player].value:
                 if item_link["name"] in item_links:
                     if item_links[item_link["name"]]["game"] != self.game[player]:
                         raise Exception(f"Cannot ItemLink across games. Link: {item_link['name']}")
-                    item_links[item_link["name"]]["players"][player] = item_link["replacement_item"]
-                    item_links[item_link["name"]]["item_pool"] &= set(item_link["item_pool"])
-                    item_links[item_link["name"]]["exclude"] |= set(item_link.get("exclude", []))
-                    item_links[item_link["name"]]["local_items"] &= set(item_link.get("local_items", []))
-                    item_links[item_link["name"]]["non_local_items"] &= set(item_link.get("non_local_items", []))
+                    current_link = item_links[item_link["name"]]
+                    current_link["players"][player] = item_link["replacement_item"]
+                    current_link["item_pool"] &= set(item_link["item_pool"])
+                    current_link["exclude"] |= set(item_link.get("exclude", []))
+                    current_link["local_items"] &= set(item_link.get("local_items", []))
+                    current_link["non_local_items"] &= set(item_link.get("non_local_items", []))
+                    current_link["link_replacement"] = min(current_link["link_replacement"],
+                                                           replacement_prio.index(item_link["link_replacement"]))
                 else:
                     if item_link["name"] in self.player_name.values():
-                        raise Exception(f"Cannot name a ItemLink group the same as a player ({item_link['name']}) ({self.get_player_name(player)}).")
+                        raise Exception(f"Cannot name a ItemLink group the same as a player ({item_link['name']}) "
+                                        f"({self.get_player_name(player)}).")
                     item_links[item_link["name"]] = {
                         "players": {player: item_link["replacement_item"]},
                         "item_pool": set(item_link["item_pool"]),
                         "exclude": set(item_link.get("exclude", [])),
                         "game": self.game[player],
                         "local_items": set(item_link.get("local_items", [])),
-                        "non_local_items": set(item_link.get("non_local_items", []))
+                        "non_local_items": set(item_link.get("non_local_items", [])),
+                        "link_replacement": replacement_prio.index(item_link["link_replacement"]),
                     }
 
         for name, item_link in item_links.items():
@@ -264,10 +273,12 @@ class MultiWorld():
         for group_name, item_link in item_links.items():
             game = item_link["game"]
             group_id, group = self.add_group(group_name, game, set(item_link["players"]))
+
             group["item_pool"] = item_link["item_pool"]
             group["replacement_items"] = item_link["players"]
             group["local_items"] = item_link["local_items"]
             group["non_local_items"] = item_link["non_local_items"]
+            group["link_replacement"] = replacement_prio[item_link["link_replacement"]]
 
     # intended for unittests
     def set_default_common_options(self):
@@ -282,11 +293,11 @@ class MultiWorld():
         self.is_race = True
 
     @functools.cached_property
-    def player_ids(self):
+    def player_ids(self) -> Tuple[int, ...]:
         return tuple(range(1, self.players + 1))
 
     @functools.lru_cache()
-    def get_game_players(self, game_name: str):
+    def get_game_players(self, game_name: str) -> Tuple[int, ...]:
         return tuple(player for player in self.player_ids if self.game[player] == game_name)
 
     @functools.lru_cache()
@@ -305,10 +316,7 @@ class MultiWorld():
 
     def get_out_file_name_base(self, player: int) -> str:
         """ the base name (without file extension) for each player's output file for a seed """
-        return f"AP_{self.seed_name}_P{player}" \
-            + (f"_{self.get_file_safe_player_name(player).replace(' ', '_')}"
-               if (self.player_name[player] != f"Player{player}")
-               else '')
+        return f"AP_{self.seed_name}_P{player}_{self.get_file_safe_player_name(player).replace(' ', '_')}"
 
     def initialize_regions(self, regions=None):
         for region in regions if regions else self.regions:
@@ -424,46 +432,35 @@ class MultiWorld():
         state.can_reach(Region) in the Entrance's traversal condition, as opposed to pure transition logic."""
         self.indirect_connections.setdefault(region, set()).add(entrance)
 
-    def get_locations(self) -> List[Location]:
+    def get_locations(self, player: Optional[int] = None) -> List[Location]:
         if self._cached_locations is None:
             self._cached_locations = [location for region in self.regions for location in region.locations]
+        if player is not None:
+            return [location for location in self._cached_locations if location.player == player]
         return self._cached_locations
 
     def clear_location_cache(self):
         self._cached_locations = None
 
     def get_unfilled_locations(self, player: Optional[int] = None) -> List[Location]:
-        if player is not None:
-            return [location for location in self.get_locations() if
-                    location.player == player and not location.item]
-        return [location for location in self.get_locations() if not location.item]
-
-    def get_unfilled_dungeon_locations(self):
-        return [location for location in self.get_locations() if not location.item and location.parent_region.dungeon]
+        return [location for location in self.get_locations(player) if location.item is None]
 
     def get_filled_locations(self, player: Optional[int] = None) -> List[Location]:
-        if player is not None:
-            return [location for location in self.get_locations() if
-                    location.player == player and location.item is not None]
-        return [location for location in self.get_locations() if location.item is not None]
+        return [location for location in self.get_locations(player) if location.item is not None]
 
     def get_reachable_locations(self, state: Optional[CollectionState] = None, player: Optional[int] = None) -> List[Location]:
-        if state is None:
-            state = self.state
-        return [location for location in self.get_locations() if
-                (player is None or location.player == player) and location.can_reach(state)]
+        state: CollectionState = state if state else self.state
+        return [location for location in self.get_locations(player) if location.can_reach(state)]
 
     def get_placeable_locations(self, state=None, player=None) -> List[Location]:
-        if state is None:
-            state = self.state
-        return [location for location in self.get_locations() if
-                (player is None or location.player == player) and location.item is None and location.can_reach(state)]
+        state: CollectionState = state if state else self.state
+        return [location for location in self.get_locations(player) if location.item is None and location.can_reach(state)]
 
-    def get_unfilled_locations_for_players(self, locations: List[str], players: Iterable[int]):
+    def get_unfilled_locations_for_players(self, location_names: List[str], players: Iterable[int]):
         for player in players:
-            if len(locations) == 0:
-                locations = [location.name for location in self.get_unfilled_locations(player)]
-            for location_name in locations:
+            if not location_names:
+                location_names = [location.name for location in self.get_unfilled_locations(player)]
+            for location_name in location_names:
                 location = self._location_cache.get((location_name, player), None)
                 if location is not None and location.item is None:
                     yield location
@@ -1380,6 +1377,157 @@ class Spoiler():
 
             self.bosses[str(player)]["Ganons Tower"] = "Agahnim 2"
             self.bosses[str(player)]["Ganon"] = "Ganon"
+
+    def create_playthrough(self, create_paths: bool = True):
+        """Destructive to the world while it is run, damage gets repaired afterwards."""
+        from itertools import chain
+        # get locations containing progress items
+        multiworld = self.multiworld
+        prog_locations = {location for location in multiworld.get_filled_locations() if location.item.advancement}
+        state_cache = [None]
+        collection_spheres: List[Set[Location]] = []
+        state = CollectionState(multiworld)
+        sphere_candidates = set(prog_locations)
+        logging.debug('Building up collection spheres.')
+        while sphere_candidates:
+
+            # build up spheres of collection radius.
+            # Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
+
+            sphere = {location for location in sphere_candidates if state.can_reach(location)}
+
+            for location in sphere:
+                state.collect(location.item, True, location)
+
+            sphere_candidates -= sphere
+            collection_spheres.append(sphere)
+            state_cache.append(state.copy())
+
+            logging.debug('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres),
+                          len(sphere),
+                          len(prog_locations))
+            if not sphere:
+                logging.debug('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (
+                    location.item.name, location.item.player, location.name, location.player) for location in
+                                                                               sphere_candidates])
+                if any([multiworld.accessibility[location.item.player] != 'minimal' for location in sphere_candidates]):
+                    raise RuntimeError(f'Not all progression items reachable ({sphere_candidates}). '
+                                       f'Something went terribly wrong here.')
+                else:
+                    self.unreachables = sphere_candidates
+                    break
+
+        # in the second phase, we cull each sphere such that the game is still beatable,
+        # reducing each range of influence to the bare minimum required inside it
+        restore_later = {}
+        for num, sphere in reversed(tuple(enumerate(collection_spheres))):
+            to_delete = set()
+            for location in sphere:
+                # we remove the item at location and check if game is still beatable
+                logging.debug('Checking if %s (Player %d) is required to beat the game.', location.item.name,
+                              location.item.player)
+                old_item = location.item
+                location.item = None
+                if multiworld.can_beat_game(state_cache[num]):
+                    to_delete.add(location)
+                    restore_later[location] = old_item
+                else:
+                    # still required, got to keep it around
+                    location.item = old_item
+
+            # cull entries in spheres for spoiler walkthrough at end
+            sphere -= to_delete
+
+        # second phase, sphere 0
+        removed_precollected = []
+        for item in (i for i in chain.from_iterable(multiworld.precollected_items.values()) if i.advancement):
+            logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
+            multiworld.precollected_items[item.player].remove(item)
+            multiworld.state.remove(item)
+            if not multiworld.can_beat_game():
+                multiworld.push_precollected(item)
+            else:
+                removed_precollected.append(item)
+
+        # we are now down to just the required progress items in collection_spheres. Unfortunately
+        # the previous pruning stage could potentially have made certain items dependant on others
+        # in the same or later sphere (because the location had 2 ways to access but the item originally
+        # used to access it was deemed not required.) So we need to do one final sphere collection pass
+        # to build up the correct spheres
+
+        required_locations = {item for sphere in collection_spheres for item in sphere}
+        state = CollectionState(multiworld)
+        collection_spheres = []
+        while required_locations:
+            state.sweep_for_events(key_only=True)
+
+            sphere = set(filter(state.can_reach, required_locations))
+
+            for location in sphere:
+                state.collect(location.item, True, location)
+
+            required_locations -= sphere
+
+            collection_spheres.append(sphere)
+
+            logging.debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres),
+                          len(sphere), len(required_locations))
+            if not sphere:
+                raise RuntimeError(f'Not all required items reachable. Unreachable locations: {required_locations}')
+
+        # we can finally output our playthrough
+        self.playthrough = {"0": sorted([str(item) for item in
+                                         chain.from_iterable(multiworld.precollected_items.values())
+                                         if item.advancement])}
+
+        for i, sphere in enumerate(collection_spheres):
+            self.playthrough[str(i + 1)] = {
+                str(location): str(location.item) for location in sorted(sphere)}
+        if create_paths:
+            self.create_paths(state, collection_spheres)
+
+        # repair the multiworld again
+        for location, item in restore_later.items():
+            location.item = item
+
+        for item in removed_precollected:
+            multiworld.push_precollected(item)
+
+    def create_paths(self, state: CollectionState, collection_spheres: List[Set[Location]]):
+        from itertools import zip_longest
+        multiworld = self.multiworld
+
+        def flist_to_iter(node):
+            while node:
+                value, node = node
+                yield value
+
+        def get_path(state, region):
+            reversed_path_as_flist = state.path.get(region, (region, None))
+            string_path_flat = reversed(list(map(str, flist_to_iter(reversed_path_as_flist))))
+            # Now we combine the flat string list into (region, exit) pairs
+            pathsiter = iter(string_path_flat)
+            pathpairs = zip_longest(pathsiter, pathsiter)
+            return list(pathpairs)
+
+        self.paths = {}
+        topology_worlds = (player for player in multiworld.player_ids if multiworld.worlds[player].topology_present)
+        for player in topology_worlds:
+            self.paths.update(
+                {str(location): get_path(state, location.parent_region)
+                 for sphere in collection_spheres for location in sphere
+                 if location.player == player})
+            if player in multiworld.get_game_players("A Link to the Past"):
+                # If Pyramid Fairy Entrance needs to be reached, also path to Big Bomb Shop
+                # Maybe move the big bomb over to the Event system instead?
+                if any(exit_path == 'Pyramid Fairy' for path in self.paths.values()
+                       for (_, exit_path) in path):
+                    if multiworld.mode[player] != 'inverted':
+                        self.paths[str(multiworld.get_region('Big Bomb Shop', player))] = \
+                            get_path(state, multiworld.get_region('Big Bomb Shop', player))
+                    else:
+                        self.paths[str(multiworld.get_region('Inverted Big Bomb Shop', player))] = \
+                            get_path(state, multiworld.get_region('Inverted Big Bomb Shop', player))
 
     def to_json(self):
         self.parse_data()

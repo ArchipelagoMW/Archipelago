@@ -93,9 +93,6 @@ class SMWorld(World):
     location_name_to_id = {key: locations_start_id + value.Id for key, value in locationsDict.items() if value.Id != None}
     web = SMWeb()
 
-    remote_items: bool = False
-    remote_start_inventory: bool = False
-
     # changes to client DeathLink handling for 0.2.1
     # changes to client Remote Item handling for 0.2.6
     required_client_version = (0, 2, 6)
@@ -127,7 +124,7 @@ class SMWorld(World):
         self.multiworld.local_items[self.player].value.add('No Energy')
 
         if (self.variaRando.args.morphPlacement == "early"):
-            self.multiworld.local_items[self.player].value.add('Morph')
+            self.multiworld.local_early_items[self.player]['Morph Ball'] = 1
 
         self.remote_items = self.multiworld.remote_items[self.player]
 
@@ -658,21 +655,6 @@ class SMWorld(World):
             return "Nothing"
 
     def pre_fill(self):
-        if (self.variaRando.args.morphPlacement == "early") and next((item for item in self.multiworld.itempool if item.player == self.player and item.name == "Morph Ball"), False):
-            viable = []
-            for location in self.multiworld.get_locations():
-                if location.player == self.player \
-                        and location.item is None \
-                        and location.can_reach(self.multiworld.state):
-                    viable.append(location)
-            self.multiworld.random.shuffle(viable)
-            key = self.multiworld.create_item("Morph Ball", self.player)
-            loc = viable.pop()
-            loc.place_locked_item(key)
-            self.multiworld.itempool[:] = [item for item in self.multiworld.itempool if
-                                           item.player != self.player or
-                                           item.name != "Morph Ball"]
-
         if len(self.NothingPool) > 0:
             nonChozoLoc = []
             chozoLoc = []

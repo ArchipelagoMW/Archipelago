@@ -4,24 +4,24 @@
 
 ### Install r2modman
 
-Head on over to the r2modman page on Thunderstore and follow the installation instructions.
+Head on over to the `r2modman` page on Thunderstore and follow the installation instructions.
 
 [r2modman Page](https://thunderstore.io/package/ebkr/r2modman/)
 
 ### Install Archipelago Mod using r2modman
 
-You can install the Archipelago mod using r2modman in one of two ways.
+You can install the Archipelago mod using `r2modman` in one of two ways.
 
-[Archipelago Mod Download Page](https://thunderstore.io/package/ArchipelagoMW/Archipelago/)
+[Archipelago Mod Download Page](https://thunderstore.io/package/Sneaki/Archipelago/)
 
 One, you can use the Thunderstore website and click on the "Install with Mod Manager" link.
 
-You can also search for the "Archipelago" mod in the r2modman interface. The mod manager should automatically install
+You can also search for the "Archipelago" mod in the `r2modman` interface. The mod manager should automatically install
 all necessary dependencies as well.
 
-### Running the Modded Game
+## Running the Modded Game
 
-Click on the "Start modded" button in the top left in r2modman to start the game with the Archipelago mod installed.
+Click on the `Start modded` button in the top left in `r2modman` to start the game with the Archipelago mod installed.
 
 ## Configuring your YAML File
 ### What is a YAML and why do I need one?
@@ -34,21 +34,25 @@ website to generate a YAML using a graphical interface.
 
 
 ## Joining an Archipelago Session
+### Connecting to server
+Once in game, join whatever lobby you wish, and you should see the AP connection fields which consist of:
+ - Slot Name: your name in the multiworld. This is the name you entered in the YAML.
+ - Password: optional password, leave blank if no password was set.
+ - Server URL: (default: archipelago.gg).
+ - Server Port: (default: 38281).
 
-There will be a menu button on the right side of the screen in the character select menu. Click it in order to bring up
-the in lobby mod config. From here you can expand the Archipelago sections and fill in the relevant info. Keep password
-blank if there is no password on the server.
+Once everything is entered click the Connect to AP button to connect to the server, and you should be connected!
 
-Simply check `Enable Archipelago?` and when you start the run it will automatically connect.
+Start the game whenever you are ready.
 
-## Gameplay
+### Gameplay
 
 The Risk of Rain 2 players send checks by causing items to spawn in-game. That means opening chests or killing bosses,
 generally. An item check is only sent out after a certain number of items are picked up. This count is configurable in
 the player's YAML.
 
-## Commands
-While playing the multiworld you can type `say` then your message to type in the multiworld chat. All other multiworld
+### Chat/Commands
+You can talk to other in the multiworld chat using the RoR2 chat. All other multiworld
 remote commands list in the [commands guide](/tutorial/Archipelago/commands/en) work as well in the RoR2 chat. You can 
 also optionally connect to the multiworld using the text client, which can be found in the 
 [main Archipelago installation](https://github.com/ArchipelagoMW/Archipelago/releases).

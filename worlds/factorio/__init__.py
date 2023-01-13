@@ -179,6 +179,10 @@ class Factorio(World):
                          "logistics": 1,
                          "rocket-silo": -1}
         loc: FactorioScienceLocation
+        if self.multiworld.tech_tree_information[player] == TechTreeInformation.option_full:
+            # mark all locations as pre-hinted
+            for loc in self.locations:
+                loc.revealed = True
         if self.skip_silo:
             removed = useless_technologies | {"rocket-silo"}
         else:
@@ -201,11 +205,15 @@ class Factorio(World):
         if map_basic_settings.get("seed", None) is None:  # allow seed 0
             map_basic_settings["seed"] = self.multiworld.slot_seeds[player].randint(0, 2 ** 32 - 1)  # 32 bit uint
 
-        if self.multiworld.tech_tree_information[player] == TechTreeInformation.option_full:
-            # mark all locations as pre-hinted
-            self.multiworld.start_location_hints[self.player].value.update(base_tech_table)
-            for loc in self.locations:
+        start_location_hints: typing.Set[str] = self.multiworld.start_location_hints[self.player].value
+
+        for loc in self.locations:
+            # show start_location_hints ingame
+            if loc.name in start_location_hints:
                 loc.revealed = True
+            # make spoiler match mod info
+            elif loc.revealed:
+                start_location_hints.add(loc.name)
 
     def collect_item(self, state, item, remove=False):
         if item.advancement and item.name in progressive_technology_table:
