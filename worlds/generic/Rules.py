@@ -157,6 +157,11 @@ def location_item_name(state: "BaseClasses.CollectionState", location: str, play
 
 
 def allow_self_locking_items(spot: typing.Union[Location, Region], *item_names: str) -> None:
+    """This function sets rules on the supplied spot, such that the supplied item_name(s) can possibly be placed there.
+
+    spot: Location or Region that the item(s) are allowed to be placed in
+    item_names: item name or names that are allowed to be placed in the Location or Region
+        """
     def set_always_allow(location: Location, rule: typing.Callable) -> None:
         location.always_allow = rule
 
