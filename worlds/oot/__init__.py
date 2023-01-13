@@ -198,6 +198,17 @@ class OOTWorld(World):
         if self.triforce_hunt:
             self.shuffle_ganon_bosskey = 'triforce'
 
+        # Force itempool to higher settings if it doesn't have enough hearts
+        max_required_hearts = 3
+        if self.bridge == 'hearts':
+            max_required_hearts = max(max_required_hearts, self.bridge_hearts)
+        if self.shuffle_ganon_bosskey == 'hearts':
+            max_required_hearts = max(max_required_hearts, self.ganon_bosskey_hearts)
+        if max_required_hearts > 3 and self.item_pool_value == 'minimal':
+            self.item_pool_value = 'scarce'
+        if max_required_hearts > 12 and self.item_pool_value == 'scarce':
+            self.item_pool_value = 'balanced'
+
         # If songs/keys locked to own world by settings, add them to local_items
         local_types = []
         if self.shuffle_song_items != 'any':
