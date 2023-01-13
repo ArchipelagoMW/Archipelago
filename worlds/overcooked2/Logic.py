@@ -2600,7 +2600,9 @@ level_logic = {
             {  # Exclusive
 
             },
-            horde_logic
+            {  # Additive
+
+            },
         ),
         (  # 2-star
             {  # Exclusive

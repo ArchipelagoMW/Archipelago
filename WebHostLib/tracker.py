@@ -650,7 +650,7 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
 
     # Gather dungeon locations
     area_id_ranges = {
-        "Overworld":                ((67000, 67258), (67264, 67280), (67747, 68024), (68054, 68062)),
+        "Overworld":                ((67000, 67263), (67269, 67280), (67747, 68024), (68054, 68062)),
         "Deku Tree":                ((67281, 67303), (68063, 68077)),
         "Dodongo's Cavern":         ((67304, 67334), (68078, 68160)),
         "Jabu Jabu's Belly":        ((67335, 67359), (68161, 68188)),
@@ -662,7 +662,7 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
         "Spirit Temple":            ((67533, 67582), (68566, 68625)),
         "Ice Cavern":               ((67583, 67596), (68626, 68649)),
         "Gerudo Training Ground":   ((67597, 67635), (68650, 68656)),
-        "Thieves' Hideout":         ((67259, 67263), (68025, 68053)),
+        "Thieves' Hideout":         ((67264, 67268), (68025, 68053)),
         "Ganon's Castle":           ((67636, 67673), (68657, 68705)),
     }
 
