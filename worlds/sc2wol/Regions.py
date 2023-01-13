@@ -2,7 +2,7 @@ from typing import List, Dict, Tuple, Optional, Callable
 from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
 from .Locations import LocationData
 from .Options import get_option_value
-from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, alt_final_mission_locations
+from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, alt_final_mission_locations, Difficulties
 from .PoolFilter import filter_missions
 
 
@@ -99,27 +99,27 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
     else:
         missions = []
 
-        final_mission = mission_pools['all_in'][0]
+        final_mission = mission_pools[Difficulties.FINAL][0]
 
         # Initial fill out of mission list and marking all-in mission
         for mission in mission_order:
             if mission is None:
                 missions.append(None)
-            elif mission.type == "all_in":
+            elif mission.type == Difficulties.FINAL:
                 missions.append(final_mission)
             elif mission.relegate and not get_option_value(multiworld, player, "shuffle_no_build"):
-                missions.append("no_build")
+                missions.append(Difficulties.STARTER)
             else:
                 missions.append(mission.type)
 
         # Place Protoss Missions if we are not using ShuffleProtoss and are in Vanilla Shuffled
         if get_option_value(multiworld, player, "shuffle_protoss") == 0 and mission_order_type == 1:
             missions[22] = "A Sinister Turn"
-            mission_pools['medium'].remove("A Sinister Turn")
+            mission_pools[Difficulties.MEDIUM].remove("A Sinister Turn")
             missions[23] = "Echoes of the Future"
-            mission_pools['medium'].remove("Echoes of the Future")
+            mission_pools[Difficulties.MEDIUM].remove("Echoes of the Future")
             missions[24] = "In Utter Darkness"
-            mission_pools['hard'].remove("In Utter Darkness")
+            mission_pools[Difficulties.HARD].remove("In Utter Darkness")
 
         no_build_slots = []
         easy_slots = []
@@ -130,17 +130,17 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
         for i in range(len(missions)):
             if missions[i] is None:
                 continue
-            if missions[i] == "no_build":
+            if missions[i] == Difficulties.STARTER:
                 no_build_slots.append(i)
-            elif missions[i] == "easy":
+            elif missions[i] == Difficulties.EASY:
                 easy_slots.append(i)
-            elif missions[i] == "medium":
+            elif missions[i] == Difficulties.MEDIUM:
                 medium_slots.append(i)
-            elif missions[i] == "hard":
+            elif missions[i] == Difficulties.HARD:
                 hard_slots.append(i)
 
         # Add no_build missions to the pool and fill in no_build slots
-        missions_to_add = mission_pools['no_build']
+        missions_to_add = mission_pools[Difficulties.STARTER]
         if len(no_build_slots) > len(missions_to_add):
             raise Exception("There are no valid No-Build missions.  Please exclude fewer missions.")
         for slot in no_build_slots:
@@ -149,7 +149,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
             missions[slot] = missions_to_add.pop(filler)
 
         # Add easy missions into pool and fill in easy slots
-        missions_to_add = missions_to_add + mission_pools['easy']
+        missions_to_add = missions_to_add + mission_pools[Difficulties.EASY]
         if len(easy_slots) > len(missions_to_add):
             raise Exception("There are not enough Easy missions to fill the campaign.  Please exclude fewer missions.")
         for slot in easy_slots:
@@ -158,7 +158,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
             missions[slot] = missions_to_add.pop(filler)
 
         # Add medium missions into pool and fill in medium slots
-        missions_to_add = missions_to_add + mission_pools['medium']
+        missions_to_add = missions_to_add + mission_pools[Difficulties.MEDIUM]
         if len(medium_slots) > len(missions_to_add):
             raise Exception("There are not enough Easy and Medium missions to fill the campaign.  Please exclude fewer missions.")
         for slot in medium_slots:
@@ -167,7 +167,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
             missions[slot] = missions_to_add.pop(filler)
 
         # Add hard missions into pool and fill in hard slots
-        missions_to_add = missions_to_add + mission_pools['hard']
+        missions_to_add = missions_to_add + mission_pools[Difficulties.HARD]
         if len(hard_slots) > len(missions_to_add):
             raise Exception("There are not enough missions to fill the campaign.  Please exclude fewer missions.")
         for slot in hard_slots:
