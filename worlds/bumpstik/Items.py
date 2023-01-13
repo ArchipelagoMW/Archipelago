@@ -94,18 +94,12 @@ class BumpStikItem(Item):
         elif "Trap" in name:
             self.type = "Trap"
             self.classification = ItemClassification.trap
-        elif "Board" in name:
-            self.type = "Board Size"
+        elif name in ["Booster Bumper", "Treasure Bumper"]:
+            self.type = "Special"
             self.classification = ItemClassification.progression
-        elif "Color" in name:
-            self.type = "Color"
-            self.classification = ItemClassification.progression
-        elif "Booster" in name:
-            self.type = "Booster"
-            self.classification = ItemClassification.progression
-        elif "Treasure" in name:
-            self.type = "Treasure"
-            self.classification = ItemClassification.progression
+        elif name in ["Starting Turner", "Starting Paint Can", "Task Skip"]:
+            self.type = "Utility"
+            self.classification = ItemClassification.useful
         else:
             self.type = "Other"
 
