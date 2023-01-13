@@ -706,6 +706,8 @@ def distribute_planned(world: MultiWorld) -> None:
 
     # TODO: remove. Preferably by implementing key drop
     from worlds.alttp.Regions import key_drop_data
+    # TODO: remove. Preferably by implementing prize plando
+    from worlds.alttp.SubClasses import ALttPLocation
     world_name_lookup = world.world_name_lookup
 
     block_value = typing.Union[typing.List[str], typing.Dict[str, typing.Any], str]
@@ -851,8 +853,13 @@ def distribute_planned(world: MultiWorld) -> None:
                 item = world.worlds[player].create_item(item_name)
                 for location in reversed(candidates):
                     if location in key_drop_data:
-                        warn(
-                            f"Can't place '{item_name}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
+                        warn(f"Can't place '{item_name}' at '{location}', as "
+                             "key drop shuffle locations are not supported yet.",
+                             placement["force"])
+                        continue
+                    if isinstance(location, ALttPLocation) and location.crystal:
+                        warn(f"Can't place '{item_name}' at '{location}', as prize locations are not supported yet.",
+                             placement["force"])
                         continue
                     if not location.item:
                         if location.item_rule(item):
