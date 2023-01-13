@@ -1,5 +1,5 @@
-from typing import Dict, Callable
-from BaseClasses import CollectionState, MultiWorld, Location
+from typing import Dict, Callable, Union, Iterable
+from BaseClasses import CollectionState, MultiWorld, Location, Region
 from worlds.generic.Rules import add_rule, item_name
 from .Constants import NOTES, PHOBEKINS
 
@@ -79,34 +79,26 @@ def allow_self_locking_items(multiworld: MultiWorld, player: int) -> None:
     def set_always_allow(spot: Location, rule: Callable):
         spot.always_allow = rule
 
+    def set_allowed_items(spot: Union[Location, Region], *items: str) -> None:
+        if isinstance(items, str):
+            items = [items]
+        if isinstance(spot, Region):
+            for entrance in spot.entrances:
+                for item in items:
+                    for location in spot.locations:
+                        add_rule(entrance, lambda state: item_name(state, location.name, player) == (item, player), "or")
+                        set_always_allow(location, lambda state, obj: obj.name == item and obj.player == player)
+        else:
+            for item in items:
+                add_rule(spot, lambda state: item_name(state, spot.name, player) == (item, player), "or")
+                set_always_allow(spot, lambda state, obj: obj.name == item and obj.player == player)
+
     # do the ones for seal shuffle on and off first
-    add_rule(multiworld.get_location("Key of Strength", player),
-             lambda state: item_name(state, "Key of Strength", player) == ("Power Thistle", player), "or")
-    set_always_allow(multiworld.get_location("Key of Strength", player),
-                     lambda state, item: item.name == "Power Thistle" and item.player == player)
-
-    add_rule(multiworld.get_location("Key of Love", player),
-             lambda state: item_name(state, "Key of Love", player) in {"Sun Crest", "Moon Crest"}
-                           and item_name(state, "Key of Love", player)[1] == player, "or")
-    set_always_allow(multiworld.get_location("Key of Love", player),
-                     lambda state, item: item.name in {"Sun Crest", "Moon Crest"} and item.player == player)
-
-    add_rule(multiworld.get_location("Key of Courage", player),
-             lambda state: item_name(state, "Key of Courage", player) == ("Demon King Crown", player), "or")
-    set_always_allow(multiworld.get_location("Key of Courage", player),
-                     lambda state, item: item.name == "Demon King Crown" and item.player == player)
+    set_allowed_items(multiworld.get_location("Key of Strength", player), "Power Thistle")
+    set_allowed_items(multiworld.get_location("Key of Love", player), "Sun Crest", "Moon Crest")
+    set_allowed_items(multiworld.get_location("Key of Courage", player), "Demon King Crown")
 
     # add the locations when seals aren't shuffled
     if not multiworld.shuffle_seals[player]:
-        # cloud ruins
-        for entrance in multiworld.get_region("Cloud Ruins", player).entrances:
-            add_rule(entrance, lambda state: item_name(state, "Acro", player) == ("Ruxxtin's Amulet", player), "or")
-        set_always_allow(multiworld.get_location("Acro", player),
-                         lambda state, item: item.name == "Ruxxtin's Amulet" and item.player == player)
-
-        # forlorn temple
-        for entrance in multiworld.get_region("Forlorn Temple", player).entrances:
-            add_rule(entrance, lambda state: item_name(state, "Demon King Crown", player) in PHOBEKINS
-                                             and item_name(state, "Demon King Crown", player)[1] == player, "or")
-        set_always_allow(multiworld.get_location("Demon King Crown", player),
-                         lambda state, item: item.name in PHOBEKINS and item.player == player)
+        set_allowed_items(multiworld.get_region("Cloud Ruins", player), "Ruxxtin's Amulet")
+        set_allowed_items(multiworld.get_region("Forlorn Temple", player), PHOBEKINS)

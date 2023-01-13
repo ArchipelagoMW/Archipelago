@@ -152,5 +152,5 @@ def item_name(state: "BaseClasses.CollectionState", location: str, player: int) 
         typing.Optional[typing.Tuple[str, int]]:
     location = state.multiworld.get_location(location, player)
     if location.item is None:
-        return None
+        return None, None
     return location.item.name, location.item.player
