@@ -1,6 +1,6 @@
-from typing import Dict, Callable, Union, Iterable
-from BaseClasses import CollectionState, MultiWorld, Location, Region
-from worlds.generic.Rules import add_rule, item_name
+from typing import Dict, Callable
+from BaseClasses import CollectionState, MultiWorld
+from worlds.generic.Rules import allow_self_locking_items
 from .Constants import NOTES, PHOBEKINS
 
 
@@ -75,30 +75,13 @@ class MessengerRules:
         return self.has_wingsuit(state, player) or self.has_dart(state, player)
 
 
-def allow_self_locking_items(multiworld: MultiWorld, player: int) -> None:
-    def set_always_allow(spot: Location, rule: Callable):
-        spot.always_allow = rule
-
-    def set_allowed_items(spot: Union[Location, Region], *items: str) -> None:
-        if isinstance(items, str):
-            items = [items]
-        if isinstance(spot, Region):
-            for entrance in spot.entrances:
-                for item in items:
-                    for location in spot.locations:
-                        add_rule(entrance, lambda state: item_name(state, location.name, player) == (item, player), "or")
-                        set_always_allow(location, lambda state, obj: obj.name == item and obj.player == player)
-        else:
-            for item in items:
-                add_rule(spot, lambda state: item_name(state, spot.name, player) == (item, player), "or")
-                set_always_allow(spot, lambda state, obj: obj.name == item and obj.player == player)
-
+def set_self_locking_items(multiworld: MultiWorld, player: int) -> None:
     # do the ones for seal shuffle on and off first
-    set_allowed_items(multiworld.get_location("Key of Strength", player), "Power Thistle")
-    set_allowed_items(multiworld.get_location("Key of Love", player), "Sun Crest", "Moon Crest")
-    set_allowed_items(multiworld.get_location("Key of Courage", player), "Demon King Crown")
+    allow_self_locking_items(multiworld.get_location("Key of Strength", player), "Power Thistle")
+    allow_self_locking_items(multiworld.get_location("Key of Love", player), "Sun Crest", "Moon Crest")
+    allow_self_locking_items(multiworld.get_location("Key of Courage", player), "Demon King Crown")
 
-    # add the locations when seals aren't shuffled
+    # add these locations when seals aren't shuffled
     if not multiworld.shuffle_seals[player]:
-        set_allowed_items(multiworld.get_region("Cloud Ruins", player), "Ruxxtin's Amulet")
-        set_allowed_items(multiworld.get_region("Forlorn Temple", player), PHOBEKINS)
+        allow_self_locking_items(multiworld.get_region("Cloud Ruins", player), "Ruxxtin's Amulet")
+        allow_self_locking_items(multiworld.get_region("Forlorn Temple", player), PHOBEKINS)
