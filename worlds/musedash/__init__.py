@@ -37,7 +37,7 @@ class MuseDashWorld(World):
     web = MuseDashWebWorld()
 
     # Necessary Data
-    museDashCollection = MuseDashCollections(95000, 2)
+    museDashCollection = MuseDashCollections(290000, 2)
 
     item_name_to_id = {
         name: data.code for name, data in museDashCollection.AlbumItems.items() | museDashCollection.SongItems.items()
@@ -61,13 +61,15 @@ class MuseDashWorld(World):
         else:
             available_song_keys.extend(self.museDashCollection.BaseSongItems.keys())
 
+        #Todo: See what songs Streamer Mode removes
+
         self.included_songs = list()
         self.starting_songs = list()
 
         self.victory_song_name = self.multiworld.random.choice(available_song_keys)
         available_song_keys.remove(self.victory_song_name)
 
-        #Todo: maybe count starting items already taken
+        #Todo: Should starting songs include any items already given?
         startingSongCount = self.multiworld.starting_song_count[self.player]
         for _ in range(0, startingSongCount):
             item = self.multiworld.random.choice(available_song_keys)
@@ -85,6 +87,7 @@ class MuseDashWorld(World):
 
 
     def generate_basic(self):
+        #Set Items on the goal song to be goal song to be basically nothing
         victory_location = self.multiworld.get_location(self.victory_song_name + "-0", self.player)
         victory_location.place_locked_item(self.museDashCollection.create_victory_item(self.player))
         victory_location = self.multiworld.get_location(self.victory_song_name + "-1", self.player)
@@ -155,6 +158,7 @@ class MuseDashWorld(World):
             all_selected_locations.add(item)
         all_selected_locations.add(self.victory_song_name)
 
+        # Make a region per song/album, then adds 2 item locations to them
         for name in all_selected_locations:
             region = Region(name, RegionType.Generic, name, self.player, self.multiworld)
 
