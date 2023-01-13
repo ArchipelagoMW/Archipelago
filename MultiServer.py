@@ -135,7 +135,6 @@ class Context:
     item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
     location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
-    forced_auto_forfeits: typing.Dict[str, bool]
     non_hintable_names: typing.Dict[str, typing.Set[str]]
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
@@ -205,7 +204,6 @@ class Context:
         self.gamespackage = {}
         self.item_name_groups = {}
         self.all_item_and_group_names = {}
-        self.forced_auto_forfeits = collections.defaultdict(lambda: False)
         self.non_hintable_names = collections.defaultdict(frozenset)
 
         self._load_game_data()
@@ -218,7 +216,6 @@ class Context:
         self.item_name_groups = {world_name: world.item_name_groups for world_name, world in
                                  worlds.AutoWorldRegister.world_types.items()}
         for world_name, world in worlds.AutoWorldRegister.world_types.items():
-            self.forced_auto_forfeits[world_name] = world.forced_auto_forfeit
             self.non_hintable_names[world_name] = world.hint_blacklist
 
     def _init_game_data(self):
@@ -318,7 +315,7 @@ class Context:
         if not client.auth:
             return
         if client.version >= print_command_compatability_threshold:
-            async_start(self.send_msgs(client, 
+            async_start(self.send_msgs(client,
                 [{"cmd": "PrintJSON", "data": [{ "text": text }]} for text in texts]))
         else:
             async_start(self.send_msgs(client, [{"cmd": "Print", "text": text} for text in texts]))
@@ -661,8 +658,6 @@ class Context:
         if "auto" in self.collect_mode:
             collect_player(self, client.team, client.slot)
         if "auto" in self.release_mode:
-            release_player(self, client.team, client.slot)
-        elif self.forced_auto_forfeits[self.games[client.slot]]:
             release_player(self, client.team, client.slot)
         self.save()  # save goal completion flag
 
