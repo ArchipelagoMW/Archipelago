@@ -343,18 +343,6 @@ class MyGameWorld(World):
     option_definitions = mygame_options  # assign the options dict to the world
     #...
 ```
-    
-### Local or Remote
-
-A world with `remote_items` set to `True` gets all items items from the server
-and no item from the local game. So for an RPG opening a chest would not add
-any item to your inventory, instead the server will send you what was in that
-chest. The advantage is that a generic mod can be used that does not need to
-know anything about the seed.
-
-A world with `remote_items` set to `False` will locally reward its local items.
-For console games this can remove delay and make script/animation/dialog flow
-more natural. These games typically have been edited to 'bake in' the items.
 
 ### A World Class Skeleton
 
@@ -379,8 +367,6 @@ class MyGameWorld(World):
     game: str = "My Game"  # name of the game/world
     option_definitions = mygame_options  # options the player can set
     topology_present: bool = True  # show path to required location checks in spoiler
-    remote_items: bool = False  # True if all items come from the server
-    remote_start_inventory: bool = False  # True if start inventory comes from the server
 
     # data_version is used to signal that items, locations or their names
     # changed. Set this to 0 during development so other games' clients do not
@@ -415,17 +401,13 @@ The world has to provide the following things for generation
 * additions to the item pool
 * additions to the regions list: at least one called "Menu"
 * locations placed inside those regions
-* a `def create_item(self, item: str) -> MyGameItem` for plando/manual placing
-* applying `self.world.precollected_items` for plando/start inventory
-  if not using a `remote_start_inventory`
+* a `def create_item(self, item: str) -> MyGameItem` to create any item on demand
+* applying `self.world.push_precollected` for start inventory
 * a `def generate_output(self, output_directory: str)` that creates the output
-  if there is output to be generated. If only items are randomized and
-  `remote_items = True` it is possible to have a generic mod and output
-  generation can be skipped. In all other cases this is required. When this is
-  called, `self.world.get_locations()` has all locations for all players, with
-  properties `item` pointing to the item and `player` identifying the player.
-  `self.world.get_filled_locations(self.player)` will filter for this world.
-  `item.player` can be used to see if it's a local item.
+  files if there is output to be generated. When this is
+  called, `self.world.get_locations(self.player)` has all locations for the player, with
+  attribute `item` pointing to the item.
+  `location.item.player` can be used to see if it's a local item.
 
 In addition, the following methods can be implemented and attributes can be set
 
@@ -433,12 +415,13 @@ In addition, the following methods can be implemented and attributes can be set
   called per player before any items or locations are created. You can set
   properties on your world here. Already has access to player options and RNG.
 * `def create_regions(self)`
-  called to place player's regions into the MultiWorld's regions list. If it's
+  called to place player's regions and their locations into the MultiWorld's regions list. If it's
   hard to separate, this can be done during `generate_early` or `basic` as well.
 * `def create_items(self)`
   called to place player's items into the MultiWorld's itempool.
 * `def set_rules(self)`
-  called to set access and item rules on locations and entrances.
+  called to set access and item rules on locations and entrances. 
+  Locations have to be defined before this, or rule application can miss them.
 * `def generate_basic(self)`
   called after the previous steps. Some placement and player specific
   randomizations can be done here. After this step all regions and items have
@@ -677,6 +660,7 @@ def generate_output(self, output_directory: str):
                   if location.item.player == self.player else "Remote"
                   for location in self.multiworld.get_filled_locations(self.player)},
         # store start_inventory from player's .yaml
+        # make sure to mark as not remote_start_inventory when connecting if stored in rom/mod
         "starter_items": [item.name for item
                           in self.multiworld.precollected_items[self.player]],
         "final_boss_hp": self.final_boss_hp,
