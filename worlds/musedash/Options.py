@@ -39,7 +39,7 @@ class MinimumSongDifficulty(Range):
     """All chosen songs will have at least 1 difficulty which is this value or higher."""
     display_name = "Minimum Song Difficulty"
     range_start = 1
-    range_end = 12
+    range_end = 11
     default = 3
 
 
@@ -47,7 +47,7 @@ class MaximumSongDifficulty(Range):
     """All chosen songs will have at least 1 difficulty which is this value or lower."""
     display_name = "Maximum Song Difficulty"
     range_start = 1
-    range_end = 12
+    range_end = 11
     default = 7
 
 
@@ -103,14 +103,6 @@ class MinimumDifficulty(Choice):
     option_Easy_Or_Above = 0
     option_hard = "Hard or Above"
     option_expert = "Expert Only"
-
-
-class SongThreshold(Range):
-    """The maximum difficulty of song which would be allowed to be a part of the main route."""
-    display_name = "Song Threshold"
-    range_start = 1
-    range_end = 13  # Is there anything over this?
-    default = 11
 
 
 musedash_options: Dict[str, type(Option)] = {
