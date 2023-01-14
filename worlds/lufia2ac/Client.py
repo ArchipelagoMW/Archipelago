@@ -126,7 +126,7 @@ class L2ACSNIClient(SNIClient):
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes
 
         # DeathLink RX
-        if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
+        if "DeathLink" in ctx.tags:
             snes_buffered_write(ctx, L2AC_DEATH_ADDR + 2, b"\x01")
         else:
             snes_buffered_write(ctx, L2AC_DEATH_ADDR + 2, b"\x00")
