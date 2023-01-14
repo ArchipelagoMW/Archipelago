@@ -20,23 +20,18 @@ class TerrariaWorld(World):
 
     def create_item(self, name: str) -> TerrariaItem:
         classification = ItemClassification.useful
-        if name in [
-            "Dryad",
-            "Progressive Old One's Army",
-            "Progressive Dungeon",
+        if name in {
+            "Post-Eye of Cthulhu",
+            "Post-Eater of Worlds or Brain of Cthulhu",
+            "Post-Skeletron",
             "Hardmode",
-            "Underground Evil",
-            "Hallow",
-            "Truffle Worm",
-            "Plantera's Bulb",
-            "Lihzahrd Altar",
-            "Prismatic Lacewing",
-            "Martian Probe",
-            "Cultists",
-            # "Post-Plantera Eclipse" # Temp
-            # "Zenith", # Temp
+            "Post-The Twins",
+            "Post-The Destroyer",
+            "Post-Skeletron Prime",
+            "Post-Plantera",
+            "Post-Golem",
             "Victory",
-        ]:
+        }:
             classification = ItemClassification.progression
         if name == "Nothing":
             classification = ItemClassification.filler
@@ -50,40 +45,41 @@ class TerrariaWorld(World):
 
     def create_items(self) -> None:
         items_to_create = items.copy()
-        for _ in range(2):
-            items_to_create.append("Progressive Old One's Army")
-        items_to_create.append("Progressive Dungeon")
         for item in precollected:
             items_to_create.remove(item)
         items_to_create.remove("Victory")
-        # items_to_create.remove("Nothing")
         for _ in range(len(precollected)):
             items_to_create.append("Nothing")
         for item in map(self.create_item, items_to_create):
             self.multiworld.itempool.append(item)
 
     def set_rules(self) -> None:
-        add_rule(self.multiworld.get_location("Old One's Army Tier 1", self.player), lambda state: state.has("Progressive Old One's Army", self.player))
+        # TODO some of these might be wrong ex. Old One's Army might not check for previous bosses
+        add_rule(self.multiworld.get_location("Old One's Army Tier 1", self.player), lambda state: state.has("Post-Eater of Worlds or Brain of Cthulhu", self.player))
         add_rule(self.multiworld.get_location("Pirate Invasion", self.player), lambda state: state.has("Hardmode", self.player))
-        add_rule(self.multiworld.get_location("Frost Legion", self.player), lambda state: state.has("Progressive Dungeon", self.player, 2) and state.has_all({"Hardmode", "Hallow", "Underground Evil"}, self.player))
-        add_rule(self.multiworld.get_location("Queen Slime", self.player), lambda state: state.has("Hallow", self.player))
-        add_rule(self.multiworld.get_location("The Twins", self.player), lambda state: state.has_all({"Hardmode", "Hallow"}, self.player))
-        add_rule(self.multiworld.get_location("The Destroyer", self.player), lambda state: state.has_all({"Hardmode", "Underground Evil"}, self.player))
-        add_rule(self.multiworld.get_location("Skeletron Prime", self.player), lambda state: state.has_all({"Progressive Dungeon", "Hardmode", "Underground Evil", "Hallow"}, self.player))
-        add_rule(self.multiworld.get_location("Old One's Army Tier 2", self.player), lambda state: state.has("Progressive Old One's Army", self.player, 2))
-        add_rule(self.multiworld.get_location("Plantera", self.player), lambda state: state.has("Plantera's Bulb", self.player))
-        # Golem can be accessed with HOIKing, which could be relevant for some goals / settings
-        add_rule(self.multiworld.get_location("Golem", self.player), lambda state: state.has_any({"Plantera's Bulb", "Cultists"}, self.player) and state.has("Lihzahrd Altar", self.player))
-        add_rule(self.multiworld.get_location("Old One's Army Tier 3", self.player), lambda state: state.has("Progressive Old One's Army", self.player, 3))
-        add_rule(self.multiworld.get_location("Martian Madness", self.player), lambda state: state.has("Martian Probe", self.player))
-        add_rule(self.multiworld.get_location("Duke Fishron", self.player), lambda state: state.has("Truffle Worm", self.player))
-        add_rule(self.multiworld.get_location("Pumpkin Moon", self.player), lambda state: state.has("Progressive Dungeon", self.player, 2) and state.has_all({"Dryad", "Hardmode"}, self.player) and (state.has_any({"Hallow", "Underground Evil"}, self.player)))
-        add_rule(self.multiworld.get_location("Frost Moon", self.player), lambda state: state.has("Progressive Dungeon", self.player, 2) and state.has_all({"Hardmode", "Hallow", "Underground Evil"}, self.player))
-        add_rule(self.multiworld.get_location("Empress of Light", self.player), lambda state: state.has_all({"Hallow", "Prismatic Lacewing"}, self.player))
-        add_rule(self.multiworld.get_location("Lunatic Cultist", self.player), lambda state: state.has("Cultists", self.player))
-        add_rule(self.multiworld.get_location("Lunar Events", self.player), lambda state: state.has("Cultists", self.player))
-        add_rule(self.multiworld.get_location("Moon Lord", self.player), lambda state: state.has("Cultists", self.player))
-        # add_rule(self.multiworld.get_location("Zenith", self.player), lambda state: state.has_all({"Dryad", "Hardmode", "Underground Evil", "Hallow", "Plantera's Bulb", "Post-Plantera Eclipse", "Martian Probe", "Cultists"}, self.player) and state.has("Progressive Dungeon", self.player, 2))
+        add_rule(self.multiworld.get_location("Frost Legion", self.player), lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player))
+        add_rule(self.multiworld.get_location("Queen Slime", self.player), lambda state: state.has("Hardmode", self.player))
+        add_rule(self.multiworld.get_location("The Twins", self.player), lambda state: state.has("Hardmode", self.player))
+        add_rule(self.multiworld.get_location("The Destroyer", self.player), lambda state: state.has("Hardmode", self.player))
+        add_rule(self.multiworld.get_location("Skeletron Prime", self.player), lambda state: state.has_all({"Post-Skeletron", "Hardmode"}, self.player))
+        add_rule(self.multiworld.get_location("Old One's Army Tier 2", self.player), lambda state: state.has_any({"Post-The Twins", "Post-The Destroyer", "Post-Skeletron Prime", "Post-Golem"}, self.player) and state.has_all({"Post-Eater of Worlds or Brain of Cthulhu", "Hardmode"}, self.player))
+        add_rule(self.multiworld.get_location("Plantera", self.player), lambda state: state.has_all({"Hardmode", "Post-The Twins", "Post-The Destroyer", "Post-Skeletron Prime"}, self.player))
+        # Golem can be accessed with HOIKing, which could be relevant to settings
+        add_rule(self.multiworld.get_location("Golem", self.player), lambda state: (state.has_all({"Post-The Twins", "Post-The Destroyer", "Post-Skeletron Prime"}, self.player) or state.has("Post-Golem", self.player)) and state.has_all({"Hardmode", "Post-Plantera"}, self.player))
+        add_rule(self.multiworld.get_location("Old One's Army Tier 3", self.player), lambda state: state.has_all({"Post-Eater of Worlds or Brain of Cthulhu", "Hardmode", "Post-Golem"}, self.player))
+        add_rule(self.multiworld.get_location("Martian Madness", self.player), lambda state: state.has_all({"Hardmode", "Post-Golem"}, self.player))
+        add_rule(self.multiworld.get_location("Duke Fishron", self.player), lambda state: state.has("Hardmode", self.player))
+
+        for boss in ["Mourning Wood", "Pumpking"]:
+            add_rule(self.multiworld.get_location(boss, self.player), lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player) and state.has_any({"Post-Eye of Cthulhu", "Post-Eater of Worlds or Brain of Cthulhu", "Post-Skeletron"}, self.player))
+
+        for boss in ["Everscream", "Santa-NK1", "Ice Queen"]:
+            add_rule(self.multiworld.get_location(boss, self.player), lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player))
+
+        add_rule(self.multiworld.get_location("Empress of Light", self.player), lambda state: state.has_all({"Hardmode", "Post-Plantera"}, self.player))
+        add_rule(self.multiworld.get_location("Lunatic Cultist", self.player), lambda state: state.has_all({"Hardmode", "Post-Skeletron", "Post-Golem"}, self.player))
+        add_rule(self.multiworld.get_location("Lunar Events", self.player), lambda state: state.has_all({"Hardmode", "Post-Skeletron", "Post-Golem"}, self.player))
+        add_rule(self.multiworld.get_location("Moon Lord", self.player), lambda state: state.has_all({"Hardmode", "Post-Skeletron", "Post-Golem"}, self.player))
 
     def generate_basic(self) -> None:
         for item in precollected:
