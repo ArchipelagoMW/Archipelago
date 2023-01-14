@@ -1,6 +1,7 @@
 # Locations are specific points that you would obtain an item at.
 import functools
-from typing import Dict
+from enum import IntEnum
+from typing import Dict, List, Union, Set, NamedTuple, Optional
 from BaseClasses import Location
 from .Options import TotalLocations
 
@@ -9,181 +10,156 @@ class NoitaLocation(Location):
     game: str = "Noita"
 
 
-# TODO: It gets weird about filling locations, always giving an unfilled locations error
+class LocationData(NamedTuple):
+    id: int
+    ltype: Optional[str] = ""
+    flag: int = 0
 
+
+# todo: something's wrong here, when it generates it doesn't generate anything on the main path for some reason??
+class Orbs(IntEnum):
+    main_path = 1
+    main_world = 2
+    parallel_worlds = 3
+
+
+class Bosses(IntEnum):
+    main_path = 1
+    main_world = 2
+    parallel_worlds = 3
+# flag 0 = none, flag 1 = main path, flag 2 = main world, flag 3 = parallel worlds
+
+
+# todo: figure out how to add umlauts and stuff
 # 111000 - 111034
 # Mapping of items in each region
-location_region_mapping: Dict[str, Dict[str, int]] = {
+location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     "Forest": {
         # 110000 - 110500
         # Just putting these here for now
-        f"Chest{i+1}": 110000+i for i in range(TotalLocations.range_end)
-        # TODO: Figure out the best way to subtract out the locations occupied by shops, orbs, etc.
-    },
-    "Floating Island": {
-        "Floating Island Orb": 110502,
-    },
-    "Lake": {
-        "Syvaolento": 110650,
-    },
-    "Pyramid": {  # includes the sandcave, as you can get from one to the other easy
-        "Pyramid Orb": 110501,
-        "Sandcave Orb": 110504,
-        "Kolmisilman Koipi": 110630,
-    },
-    "Below Lava Lake": {
-        "Lava Lake Orb": 110504,
-    },
-    "Abyss Orb Room": {
-        "Abyss Orb": 110508,
-        "Sauvojen Tuntija": 110640,
-    },
-    "Ancient Laboratory": {
-        "Ylialkemisti": 110700,
+        f"Chest{i+1}": LocationData(110000+i) for i in range(TotalLocations.range_end)
     },
     "Holy Mountain 1 (To Coal Pits)": {
-        "Holy Mountain 1 (To Coal Pits) Shop Item 1": 111000,
-        "Holy Mountain 1 (To Coal Pits) Shop Item 2": 111001,
-        "Holy Mountain 1 (To Coal Pits) Shop Item 3": 111002,
-        "Holy Mountain 1 (To Coal Pits) Shop Item 4": 111003,
-        "Holy Mountain 1 (To Coal Pits) Shop Item 5": 111004,
+        "Holy Mountain 1 (To Coal Pits) Shop Item 1": LocationData(111000),
+        "Holy Mountain 1 (To Coal Pits) Shop Item 2": LocationData(111001),
+        "Holy Mountain 1 (To Coal Pits) Shop Item 3": LocationData(111002),
+        "Holy Mountain 1 (To Coal Pits) Shop Item 4": LocationData(111003),
+        "Holy Mountain 1 (To Coal Pits) Shop Item 5": LocationData(111004),
     },
     "Holy Mountain 2 (To Snowy Depths)": {
-        "Holy Mountain 2 (To Snowy Depths) Shop Item 1": 111005,
-        "Holy Mountain 2 (To Snowy Depths) Shop Item 2": 111006,
-        "Holy Mountain 2 (To Snowy Depths) Shop Item 3": 111007,
-        "Holy Mountain 2 (To Snowy Depths) Shop Item 4": 111008,
-        "Holy Mountain 2 (To Snowy Depths) Shop Item 5": 111009,
+        "Holy Mountain 2 (To Snowy Depths) Shop Item 1": LocationData(111005),
+        "Holy Mountain 2 (To Snowy Depths) Shop Item 2": LocationData(111006),
+        "Holy Mountain 2 (To Snowy Depths) Shop Item 3": LocationData(111007),
+        "Holy Mountain 2 (To Snowy Depths) Shop Item 4": LocationData(111008),
+        "Holy Mountain 2 (To Snowy Depths) Shop Item 5": LocationData(111009),
     },
     "Holy Mountain 3 (To Hiisi Base)": {
-        "Holy Mountain 3 (To Hiisi Base) Shop Item 1": 111010,
-        "Holy Mountain 3 (To Hiisi Base) Shop Item 2": 111011,
-        "Holy Mountain 3 (To Hiisi Base) Shop Item 3": 111012,
-        "Holy Mountain 3 (To Hiisi Base) Shop Item 4": 111013,
-        "Holy Mountain 3 (To Hiisi Base) Shop Item 5": 111014,
+        "Holy Mountain 3 (To Hiisi Base) Shop Item 1": LocationData(111010),
+        "Holy Mountain 3 (To Hiisi Base) Shop Item 2": LocationData(111011),
+        "Holy Mountain 3 (To Hiisi Base) Shop Item 3": LocationData(111012),
+        "Holy Mountain 3 (To Hiisi Base) Shop Item 4": LocationData(111013),
+        "Holy Mountain 3 (To Hiisi Base) Shop Item 5": LocationData(111014),
     },
     "Holy Mountain 4 (To Underground Jungle)": {
-        "Holy Mountain 4 (To Underground Jungle) Shop Item 1": 111015,
-        "Holy Mountain 4 (To Underground Jungle) Shop Item 2": 111016,
-        "Holy Mountain 4 (To Underground Jungle) Shop Item 3": 111017,
-        "Holy Mountain 4 (To Underground Jungle) Shop Item 4": 111018,
-        "Holy Mountain 4 (To Underground Jungle) Shop Item 5": 111019,
-    },
-    "Underground Jungle": {
-        "Suomuhauki": 110620,
-    },
-    "Lukki Lair": {
-        "Lukki Lair Orb": 110507,
+        "Holy Mountain 4 (To Underground Jungle) Shop Item 1": LocationData(111015),
+        "Holy Mountain 4 (To Underground Jungle) Shop Item 2": LocationData(111016),
+        "Holy Mountain 4 (To Underground Jungle) Shop Item 3": LocationData(111017),
+        "Holy Mountain 4 (To Underground Jungle) Shop Item 4": LocationData(111018),
+        "Holy Mountain 4 (To Underground Jungle) Shop Item 5": LocationData(111019),
     },
     "Holy Mountain 5 (To The Vault)": {
-        "Holy Mountain 5 (To The Vault) Shop Item 1": 111020,
-        "Holy Mountain 5 (To The Vault) Shop Item 2": 111021,
-        "Holy Mountain 5 (To The Vault) Shop Item 3": 111022,
-        "Holy Mountain 5 (To The Vault) Shop Item 4": 111023,
-        "Holy Mountain 5 (To The Vault) Shop Item 5": 111024,
+        "Holy Mountain 5 (To The Vault) Shop Item 1": LocationData(111020),
+        "Holy Mountain 5 (To The Vault) Shop Item 2": LocationData(111021),
+        "Holy Mountain 5 (To The Vault) Shop Item 3": LocationData(111022),
+        "Holy Mountain 5 (To The Vault) Shop Item 4": LocationData(111023),
+        "Holy Mountain 5 (To The Vault) Shop Item 5": LocationData(111024),
     },
     "Holy Mountain 6 (To Temple of the Art)": {
-        "Holy Mountain 6 (To Temple of the Art) Shop Item 1": 111025,
-        "Holy Mountain 6 (To Temple of the Art) Shop Item 2": 111026,
-        "Holy Mountain 6 (To Temple of the Art) Shop Item 3": 111027,
-        "Holy Mountain 6 (To Temple of the Art) Shop Item 4": 111028,
-        "Holy Mountain 6 (To Temple of the Art) Shop Item 5": 111029,
-    },
-    "Temple of the Art": {
-        "Gate Guardian": 110660,
+        "Holy Mountain 6 (To Temple of the Art) Shop Item 1": LocationData(111025),
+        "Holy Mountain 6 (To Temple of the Art) Shop Item 2": LocationData(111026),
+        "Holy Mountain 6 (To Temple of the Art) Shop Item 3": LocationData(111027),
+        "Holy Mountain 6 (To Temple of the Art) Shop Item 4": LocationData(111028),
+        "Holy Mountain 6 (To Temple of the Art) Shop Item 5": LocationData(111029),
     },
     "Holy Mountain 7 (To The Laboratory)": {
-        "Holy Mountain 7 (To The Laboratory) Shop Item 1": 111030,
-        "Holy Mountain 7 (To The Laboratory) Shop Item 2": 111031,
-        "Holy Mountain 7 (To The Laboratory) Shop Item 3": 111032,
-        "Holy Mountain 7 (To The Laboratory) Shop Item 4": 111033,
-        "Holy Mountain 7 (To The Laboratory) Shop Item 5": 111034,
+        "Holy Mountain 7 (To The Laboratory) Shop Item 1": LocationData(111030),
+        "Holy Mountain 7 (To The Laboratory) Shop Item 2": LocationData(111031),
+        "Holy Mountain 7 (To The Laboratory) Shop Item 3": LocationData(111032),
+        "Holy Mountain 7 (To The Laboratory) Shop Item 4": LocationData(111033),
+        "Holy Mountain 7 (To The Laboratory) Shop Item 5": LocationData(111034),
     },
-    "The Laboratory": {
-        "Kolmisilma": 110600,
+    "Floating Island": {
+        "Floating Island Orb": LocationData(110501, "orb", Orbs.main_path),
+    },
+    "Pyramid": {
+        "Kolmisilman Koipi": LocationData(110630, "boss", Bosses.main_world),
+        "Pyramid Orb": LocationData(110502, "orb", Orbs.main_world),
+        "Sandcave Orb": LocationData(110505, "orb", Orbs.main_world),
+    },
+    "Lake": {
+        "Syvaolento": LocationData(110650, "boss", Bosses.main_world),
     },
     "Frozen Vault": {
-        "Frozen Vault Orb": 110503,
+        "Frozen Vault Orb": LocationData(110503, "orb", Orbs.main_world),
     },
-    "Magical Tample": {
-        "Magical Temple Orb": 110506,
+    "Ancient Laboratory": {
+        "Ylialkemisti": LocationData(110700, "boss", Bosses.main_path),
     },
-    "The Work (Hell)": {
-        "The Work (Hell) Orb": 110509,
+    "Abyss Orb Room": {
+        "Sauvojen Tuntija": LocationData(110640, "boss", Bosses.main_path),
+        "Abyss Orb": LocationData(110508, "orb", Orbs.main_path),
+    },
+    "Below Lava Lake": {
+        "Lava Lake Orb": LocationData(110504, "orb", Orbs.main_path),
+    },
+    "Magical Temple": {
+        "Magical Temple Orb": LocationData(110506, "orb", Orbs.main_path),
+    },
+    "Underground Jungle": {
+        "Suomuhauki": LocationData(110620, "boss", Bosses.main_path),
+    },
+    "Lukki Lair": {
+        "Lukki Lair Orb": LocationData(110507, "orb", Orbs.main_path),
+    },
+    "Temple of the Art": {
+        "Gate Guardian": LocationData(110660, "boss", Bosses.main_path),
+    },
+    "The Laboratory": {
+        "Kolmisilma": LocationData(110600, "boss", Bosses.main_path),
     },
     "Snow Chasm": {
-        "Snow Chasm Orb": 110510,
-        "Unohdettu": 110670,
+        "Unohdettu": LocationData(110670, "boss", Bosses.main_world),
+        "Snow Chasm Orb": LocationData(110510, "orb", Orbs.main_world),
     },
     "Wizard's Den": {
-        "Wizard's Den Orb": 110511,
-        "Mestarien mestari": 110700,
+        "Mestarien mestari": LocationData(110700, "boss", Bosses.main_world),
+        "Wizard's Den Orb": LocationData(110511, "orb", Orbs.main_world),
     },
     "Powerplant": {
-        "Kolmisilman silma": 110710,
+        "Kolmisilman silma": LocationData(110710, "boss", Bosses.main_world),
     },
     "Deep Underground": {
-        "Limatoukka": 110610,
+        "Limatoukka": LocationData(110610, "boss", Bosses.main_world),
     },
     "Friend Cave": {
-        "Toveri": 110680,
+        "Toveri": LocationData(110680, "boss", Bosses.main_world),
     },
-    "Orbs": {
-        # This is just a list of the orbs, don't turn this into a region
-        "Pyramid Orb": 110501,
-        "Floating Island Orb": 110502,
-        "Frozen Vault Orb": 110503,
-        "Lava Lake Orb": 110504,
-        "Sandcave Orb": 110505,
-        "Magical Temple Orb": 110506,
-        "Lukki Lair Orb": 110507,
-        "Abyss Orb": 110508,  # this is the orb room to the right of the lava lake, rename probably
-        "The Work (Hell) Orb": 110509,
-        "Snow Chasm Orb": 110510,
-        "Wizard's Den Orb": 110511,
-        "West Pyramid Orb": 110512,
-        "West Floating Island Orb": 110513,
-        "West Frozen Vault Orb": 110514,
-        "West Lava Lake Orb": 110515,  # does not spawn in new game not plus
-        "West Sandcave Orb": 110516,
-        "West Magical Temple Orb": 110517,
-        "West Lukki Lair Orb": 110518,
-        "West Abyss Orb": 110519,
-        "West The Work (Hell) Orb": 110520,
-        "West Snow Chasm Orb": 110521,
-        "West Wizard's Den Orb": 110522,
-        "East Pyramid Orb": 110523,
-        "East Floating Island Orb": 110524,
-        "East Frozen Vault Orb": 110525,
-        "East Lava Lake Orb": 110526,  # does not spawn in new game not plus
-        "East Sandcave Orb": 110527,
-        "East Magical Temple Orb": 110528,
-        "East Lukki Lair Orb": 110529,
-        "East Abyss Orb": 110530,
-        "East The Work (Hell) Orb": 110531,
-        "East Snow Chasm Orb": 110532,
-        "East Wizard's Den Orb": 110533,
-    },
-    "Bosses": {
-        # TODO: place the bosses at their spots, hook it into the noita mod
-        # This is just a list of bosses, don't turn it into a region
-        "Kolmisilma": 110600,  # the final boss
-        "Limatoukka": 110610,  # the underground slime maggot
-        "Suomuhauki": 110620,  # the dragon, the thing in the egg
-        "Kolmisilman Koipi": 110630,  # the green eye thing in the pyramid
-        "Sauvojen Tuntija": 110640,  # squidward, the guy to the right of the lava lake
-        "Syvaolento": 110650,  # the lake boss
-        "Gate Guardian": 110660,  # the triangle that you have to throw eggs at
-        "Unohdettu": 110670,  # the skull at the bottom of the icy place that you need paha silma for
-        "Toveri": 110680,  # one of our best friends in the world why would you kill him you monster
-        "Mestarien mestari": 110690,  # the dark souls lookin' dude
-        "Ylialkemisi": 110700,  # the alchemist to the left of the dark cave
-        "Kolmisilman silma": 110710  # mecha kolmi
+    "The Work (Hell)": {
+        "The Work (Hell) Orb": LocationData(110509, "orb", Orbs.main_world),
     },
 }
 
-num_static_locations = sum([len(locs) for locs in location_region_mapping.values()]) - TotalLocations.range_end
+# todo: find a way to get these location counts without manually reading through, or remove the need for them
+num_static_locations = sum([len(locs) for locs in location_region_mapping.values()]) - TotalLocations.range_end  # 58
+total_locations_generated = sum([len(locs) for locs in location_region_mapping.values()]) - num_static_locations  # 500
+orb_mp_locations = 5
+orb_mw_locations = 6
+boss_mp_locations = 5
+boss_mw_locations = 7
+shop_locations = 35
 
+# length of 558 entries
 location_name_to_id: Dict[str, int] = {}
 for location_group in location_region_mapping.values():
-    location_name_to_id.update(location_group)
+    for locname, locinfo in location_group.items():
+        location_name_to_id.update({locname: locinfo.id})
