@@ -19,8 +19,7 @@ def create_region(world: MultiWorld, player: int, region_name: str) -> Region:
             location_id = 110000+i
 
             location = Locations.NoitaLocation(player, location_name, location_id, new_region)
-            location.progress_type = LocationProgressType.DEFAULT
-            # having this as EXCLUDED caused lots of issues with generation, and I don't know why
+            location.progress_type = LocationProgressType.EXCLUDED
 
             new_region.locations.append(location)
     else:
@@ -31,7 +30,7 @@ def create_region(world: MultiWorld, player: int, region_name: str) -> Region:
             opt_bosses = world.bosses_as_checks[player].value
             ltype = location_data.ltype
             flag = location_data.flag
-            if flag == 0 or ltype == "orb" and flag >= opt_orbs or ltype == "boss" and flag >= opt_bosses:
+            if flag == 0 or ltype == "orb" and flag <= opt_orbs or ltype == "boss" and flag <= opt_bosses:
                 new_region.locations.append(location)
 
     return new_region
@@ -62,9 +61,8 @@ def create_all_regions_and_connections(world: MultiWorld, player: int) -> None:
 
     world.regions += created_regions.values()
 
-# todo: find a graceful way to insert the bosses and orbs in their correct regions
 noita_connections: Dict[str, Set[str]] = {
-    "Menu": {"Forest", "Bosses Main Path", "Bosses The Rest", "Orbs Main Path", "Orbs The Rest", "Orbs Parallel Worlds",},
+    "Menu": {"Forest",},
     "Forest": {"Mines", "Floating Island", "Desert", "Snowy Wasteland"},
     "Snowy Wasteland": {"Frozen Vault", "Lake", "Forest"},
     "Lake": {"Snowy Wasteland", "Desert"},

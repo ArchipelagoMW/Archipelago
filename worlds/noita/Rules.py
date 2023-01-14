@@ -48,3 +48,8 @@ def create_all_rules(world: MultiWorld, player: int) -> None:
         locations_in_region = Locations.location_region_mapping[region_name].keys()
         for location_name in locations_in_region:
             forbid_items_at_location(world, location_name, wands_to_forbid, player)
+    #
+    # # Prevent the Map perk from being on Toveri
+    # for location_name in Locations.location_name_to_id.keys():
+    #     if "Friend Cave" in location_name: continue
+    #     forbid_items_at_location(world, location_name, {"Perk (Spatial Awareness)"}, player)

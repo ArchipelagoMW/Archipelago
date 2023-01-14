@@ -40,6 +40,17 @@ class NoitaWorld(World):
     data_version = 1
     web = NoitaWeb()
 
+    def fill_slot_data(self):
+        return {
+            "seed": "".join(self.world.slot_seeds[self.player].choices(string.digits, k=16)),
+            "totalLocations": self.world.total_locations[self.player].value,
+            "badEffects": self.world.bad_effects[self.player].value,
+            "deathLink": self.world.death_link[self.player].value,
+            "victoryCondition": self.world.victory_condition[self.player].value,
+            "orbsAsChecks": self.world.orbs_as_checks[self.player].value,
+            "bossesAsChecks": self.world.bosses_as_checks[self.player].value,
+        }
+
     def create_regions(self) -> None:
         Regions.create_all_regions_and_connections(self.world, self.player)
 
@@ -57,13 +68,4 @@ class NoitaWorld(World):
         return self.world.random.choice(Items.filler_items)
 
     # Things here will be sent to the client.
-    def fill_slot_data(self):
-        return {
-            "seed": "".join(self.world.slot_seeds[self.player].choices(string.digits, k=16)),
-            "totalLocations": self.world.total_locations[self.player].value,
-            "badEffects": self.world.bad_effects[self.player].value,
-            "deathLink": self.world.death_link[self.player].value,
-            "victoryCondition": self.world.victory_condition[self.player].value,
-            "orbsAsChecks": self.world.orbs_as_checks[self.player].value,
-            "bossesAsChecks": self.world.bosses_as_checks[self.player].value,
-        }
+

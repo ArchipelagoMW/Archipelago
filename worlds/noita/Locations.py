@@ -16,6 +16,7 @@ class LocationData(NamedTuple):
     flag: int = 0
 
 
+# todo: something's wrong here, when it generates it doesn't generate anything on the main path for some reason??
 class Orbs(IntEnum):
     main_path = 1
     main_world = 2
@@ -87,23 +88,38 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Holy Mountain 7 (To The Laboratory) Shop Item 4": LocationData(111033),
         "Holy Mountain 7 (To The Laboratory) Shop Item 5": LocationData(111034),
     },
-    "Lake": {
-        "Syvaolento": LocationData(110650, "boss", Bosses.main_world),
+    "Floating Island": {
+        "Floating Island Orb": LocationData(110501, "orb", Orbs.main_path),
     },
     "Pyramid": {
         "Kolmisilman Koipi": LocationData(110630, "boss", Bosses.main_world),
-        "Pyramid Orb": LocationData(110501, "orb", Orbs.main_world),
-        "Sandcave Orb": LocationData(110504, "orb", Orbs.main_world),
+        "Pyramid Orb": LocationData(110502, "orb", Orbs.main_world),
+        "Sandcave Orb": LocationData(110505, "orb", Orbs.main_world),
+    },
+    "Lake": {
+        "Syvaolento": LocationData(110650, "boss", Bosses.main_world),
+    },
+    "Frozen Vault": {
+        "Frozen Vault Orb": LocationData(110503, "orb", Orbs.main_world),
+    },
+    "Ancient Laboratory": {
+        "Ylialkemisti": LocationData(110700, "boss", Bosses.main_path),
     },
     "Abyss Orb Room": {
         "Sauvojen Tuntija": LocationData(110640, "boss", Bosses.main_path),
         "Abyss Orb": LocationData(110508, "orb", Orbs.main_path),
     },
-    "Ancient Laboratory": {
-        "Ylialkemisti": LocationData(110700, "boss", Bosses.main_path),
+    "Below Lava Lake": {
+        "Lava Lake Orb": LocationData(110504, "orb", Orbs.main_path),
+    },
+    "Magical Temple": {
+        "Magical Temple Orb": LocationData(110506, "orb", Orbs.main_path),
     },
     "Underground Jungle": {
         "Suomuhauki": LocationData(110620, "boss", Bosses.main_path),
+    },
+    "Lukki Lair": {
+        "Lukki Lair Orb": LocationData(110507, "orb", Orbs.main_path),
     },
     "Temple of the Art": {
         "Gate Guardian": LocationData(110660, "boss", Bosses.main_path),
@@ -113,7 +129,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     },
     "Snow Chasm": {
         "Unohdettu": LocationData(110670, "boss", Bosses.main_world),
-        "Snow Chasm Orb": LocationData(110510, "orb", 2),
+        "Snow Chasm Orb": LocationData(110510, "orb", Orbs.main_world),
     },
     "Wizard's Den": {
         "Mestarien mestari": LocationData(110700, "boss", Bosses.main_world),
@@ -128,29 +144,21 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     "Friend Cave": {
         "Toveri": LocationData(110680, "boss", Bosses.main_world),
     },
-    "Floating Island": {
-        "Floating Island Orb": LocationData(110502, "orb", Orbs.main_path),
-    },
-    "Below Lava Lake": {
-        "Lava Lake Orb": LocationData(110504, "orb", Orbs.main_path),
-    },
-    "Magical Temple": {
-        "Magical Temple Orb": LocationData(110506, "orb", Orbs.main_path),
-    },
-    "Lukki Lair": {
-        "Lukki Lair Orb": LocationData(110507, "orb", Orbs.main_path),
-    },
-    "Frozen Vault": {
-        "Frozen Vault Orb": LocationData(110503, "orb", Orbs.main_world),
-    },
     "The Work (Hell)": {
         "The Work (Hell) Orb": LocationData(110509, "orb", Orbs.main_world),
     },
 }
-# todo: fix this so that it takes into account the reformatted stuff
-num_static_locations = sum([len(locs) for locs in location_region_mapping.values()]) - TotalLocations.range_end
-total_locations_generated = sum([len(locs) for locs in location_region_mapping.values()]) - num_static_locations
 
+# todo: find a way to get these location counts without manually reading through, or remove the need for them
+num_static_locations = sum([len(locs) for locs in location_region_mapping.values()]) - TotalLocations.range_end  # 58
+total_locations_generated = sum([len(locs) for locs in location_region_mapping.values()]) - num_static_locations  # 500
+orb_mp_locations = 5
+orb_mw_locations = 6
+boss_mp_locations = 5
+boss_mw_locations = 7
+shop_locations = 35
+
+# length of 558 entries
 location_name_to_id: Dict[str, int] = {}
 for location_group in location_region_mapping.values():
     for locname, locinfo in location_group.items():
