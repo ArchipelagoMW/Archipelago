@@ -38,7 +38,7 @@ class AdditionalSongs(Range):
 class MinimumSongDifficulty(Range):
     """All chosen songs will have at least 1 difficulty which is this value or higher."""
     display_name = "Minimum Song Difficulty"
-    range_start = 0
+    range_start = 1
     range_end = 12
     default = 3
 
@@ -46,7 +46,7 @@ class MinimumSongDifficulty(Range):
 class MaximumSongDifficulty(Range):
     """All chosen songs will have at least 1 difficulty which is this value or lower."""
     display_name = "Maximum Song Difficulty"
-    range_start = 0
+    range_start = 1
     range_end = 12
     default = 7
 

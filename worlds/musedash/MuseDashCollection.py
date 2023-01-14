@@ -59,29 +59,29 @@ class MuseDashCollections:
         """Returns all song keys that fit the settings provided."""
         songList = list()
 
-        for songKey, songData in self.SongItems:
+        for songKey, songData in self.SongItems.items():
             if (dlcSongs and not songData.default_song):
                 continue
 
             if (streamerModeActive and not songData.streamer_mode):
                 continue
 
-            if (songData.easy is not None and lowerDiffThreshold < songData.easy < higherDiffThreshold):
+            if (songData.easy is not None and lowerDiffThreshold <= songData.easy <= higherDiffThreshold):
                 songList.append(songKey)
                 continue
 
-            if (songData.hard is not None and lowerDiffThreshold < songData.hard < higherDiffThreshold):
+            if (songData.hard is not None and lowerDiffThreshold <= songData.hard <= higherDiffThreshold):
                 songList.append(songKey)
                 continue
 
-            if (songData.master is not None and lowerDiffThreshold < songData.master < higherDiffThreshold):
+            if (songData.master is not None and lowerDiffThreshold <= songData.master <= higherDiffThreshold):
                 songList.append(songKey)
                 continue
 
         return songList
 
-    def parse_song_difficulty(difficulty : str) -> Optional[int]:
-        if (len(difficulty) <= 0 or difficulty == "?"):
+    def parse_song_difficulty(self, difficulty : str) -> Optional[int]:
+        if (len(difficulty) <= 0 or difficulty == "?" or difficulty == "¿"):
             return None
         return int(difficulty)
 

@@ -57,8 +57,8 @@ class MuseDashWorld(World):
     def generate_early(self):
         dlc_songs = self.multiworld.allow_just_as_planned_dlc_songs[self.player]
         streamer_mode = self.multiworld.streamer_mode_enabled[self.player]
-        lower_diff_threshold = min(self.multiworld.minimum_song_difficulty[self.player], self.multiworld.maximum_song_difficulty[self.player])
-        higher_diff_threshold = max(self.multiworld.minimum_song_difficulty[self.player], self.multiworld.maximum_song_difficulty[self.player])
+        lower_diff_threshold = min(self.multiworld.minimum_song_difficulty[self.player].value, self.multiworld.maximum_song_difficulty[self.player].value)
+        higher_diff_threshold = max(self.multiworld.minimum_song_difficulty[self.player].value, self.multiworld.maximum_song_difficulty[self.player].value)
 
         available_song_keys = self.museDashCollection.get_all_songs_with_settings(dlc_songs, streamer_mode, lower_diff_threshold, higher_diff_threshold)
 
