@@ -48,6 +48,7 @@ class TerrariaWorld(World):
         for item in precollected:
             items_to_create.remove(item)
         items_to_create.remove("Victory")
+        items_to_create.remove("Nothing")
         for _ in range(len(precollected)):
             items_to_create.append("Nothing")
         for item in map(self.create_item, items_to_create):
