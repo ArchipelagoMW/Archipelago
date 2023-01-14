@@ -12,5 +12,5 @@ class Goal(Choice):
     default = 3
 
 options: typing.Dict[str, type(Option)] = {
-    "goal": Goal,
+    # "goal": Goal,
 }
