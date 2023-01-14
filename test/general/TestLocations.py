@@ -11,6 +11,6 @@ class TestBase(unittest.TestCase):
                 continue
             multiworld = setup_default_world(world_type)
             locations = Counter([location for location in multiworld.get_locations()])
-            if len(locations) >= 1:
+            if locations:
                 self.assertLessEqual(locations.most_common(1)[0][1], 1,
                                      f"{world_type.game} has duplicate of location {locations.most_common(1)}")
