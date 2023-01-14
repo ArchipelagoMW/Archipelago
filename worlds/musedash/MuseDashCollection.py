@@ -2,14 +2,13 @@ import os
 
 from BaseClasses import ItemClassification
 from .Items import MuseDashFixedItem, SongData, AlbumData
-from typing import Dict
+from typing import Dict, Optional
 
 class MuseDashCollections:
+    """Contains all the data of Muse Dash, loaded from MuseDashData.txt."""
+
     AlbumItems: Dict[str, AlbumData] = {}
     AlbumLocations: Dict[str, int] = {}
-
-    BaseSongItems: Dict[str, SongData] = {}
-    BaseSongLocations: Dict[str, int] = {}
 
     SongItems: Dict[str, SongData] = {}
     SongLocations: Dict[str, int] = {}
@@ -18,51 +17,77 @@ class MuseDashCollections:
         currentItemId = startItemID
         currentLocationID = startItemID
 
-        albumPath = os.path.join(os.path.dirname(__file__), "Albums.txt")
-        with open(albumPath, "r", encoding="utf-8") as file:
+        dataPath = os.path.join(os.path.dirname(__file__), "MuseDashData.txt")
+        with open(dataPath, "r", encoding="utf-8") as file:
             for line in file.readlines():
                 line = line.strip()
-                self.AlbumItems[line] = AlbumData(currentItemId)
+                sections = line.split("|")
+
+                if (sections[1] not in self.AlbumItems):
+                    self.AlbumItems[sections[1]] = AlbumData(currentItemId)
+                    currentItemId += 1
+
+                # Data is 'Song|Album|StreamerMode|EasyDiff|HardDiff|MasterDiff|SecretDiff'
+                itemName = "%s[%s]" % (sections[0], sections[1])
+                song_is_default = sections[1] == "Default Music" # All DLC songs have a different album
+                steamer_mode = sections[2] == "True"
+
+                easyDiff = self.parse_song_difficulty(sections[3])
+                hardDiff = self.parse_song_difficulty(sections[4])
+                masterDiff = self.parse_song_difficulty(sections[5])
+
+                self.SongItems[itemName] = SongData(currentItemId, song_is_default, steamer_mode, easyDiff, hardDiff, masterDiff)
                 currentItemId += 1
 
-        for i in range(0, itemsPerLocation):
-            for name in self.AlbumItems.keys():
+        for name in self.AlbumItems.keys():
+            for i in range(0, itemsPerLocation):
                 newName = "%s-%i" % (name, i)
                 self.AlbumLocations[newName] = currentLocationID
                 currentLocationID += 1
 
-        songPath = os.path.join(os.path.dirname(__file__), "Songs.txt")
-        with open(songPath, "r", encoding="utf-8") as file:
-            for line in file.readlines():
-                line = line.strip()
-                sections = line.split("|")
-                self.SongItems[sections[0]] = SongData(currentItemId, sections[1], sections[2], sections[3], sections[4])
-                currentItemId += 1
-
-        for i in range(0, itemsPerLocation):
-            for name in self.SongItems.keys():
+        for name in self.SongItems.keys():
+            for i in range(0, itemsPerLocation):
                 newName = "%s-%i" % (name, i)
                 self.SongLocations[newName] = currentLocationID
                 currentLocationID += 1
 
-        #Prepare information for songs outside the Just as Planned DLC
-        songPath = os.path.join(os.path.dirname(__file__), "BaseSongs.txt")
-        with open(songPath, "r", encoding="utf-8") as file:
-            for line in file.readlines():
-                line = line.strip()
-                sections = line.split("|")
-                self.BaseSongItems[sections[0]] = self.SongItems[sections[0]]
-
-        for i in range(0, itemsPerLocation):
-            for name in self.BaseSongItems.keys():
-                newName = "%s-%i" % (name, i)
-                self.BaseSongLocations[newName] = self.SongLocations[newName]
-
         self.VictoryItemID = currentItemId
         self.EmptyItemID = currentItemId + 1
 
+
+    def get_all_songs_with_settings(self, dlcSongs: bool, streamerModeActive: bool, lowerDiffThreshold : int, higherDiffThreshold : int) -> list[str]:
+        """Returns all song keys that fit the settings provided."""
+        songList = list()
+
+        for songKey, songData in self.SongItems:
+            if (dlcSongs and not songData.default_song):
+                continue
+
+            if (streamerModeActive and not songData.streamer_mode):
+                continue
+
+            if (songData.easy is not None and lowerDiffThreshold < songData.easy < higherDiffThreshold):
+                songList.append(songKey)
+                continue
+
+            if (songData.hard is not None and lowerDiffThreshold < songData.hard < higherDiffThreshold):
+                songList.append(songKey)
+                continue
+
+            if (songData.master is not None and lowerDiffThreshold < songData.master < higherDiffThreshold):
+                songList.append(songKey)
+                continue
+
+        return songList
+
+    def parse_song_difficulty(difficulty : str) -> Optional[int]:
+        if (len(difficulty) <= 0 or difficulty == "?"):
+            return None
+        return int(difficulty)
+
     def create_empty_item(self, player) -> MuseDashFixedItem:
         return MuseDashFixedItem("Nothing", ItemClassification.filler, player, self.EmptyItemID)
+
 
     def create_victory_item(self, player) -> MuseDashFixedItem:
         return MuseDashFixedItem("Victory", ItemClassification.progression, player, self.VictoryItemID)

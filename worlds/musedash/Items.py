@@ -7,10 +7,12 @@ Note: -1 means difficulty missing. -2 means "?" difficulty
 """
 class SongData(NamedTuple):
     code: Optional[int]
-    easy: str = ""
-    hard: int = ""
-    expert: int = ""
-    secret: int = "" #Note: Secret diffs can be Harder, but it can also just be "different". (See Heracles and Super Battleworm Insomniac for "different")
+    default_song: bool
+    streamer_mode: bool
+    easy: str = Optional[int]
+    hard: int = Optional[int]
+    master: int = Optional[int]
+    secret: int = Optional[int] #Note: Secret diffs can be Harder, but it can also just be "different". (See Heracles and Super Battleworm Insomniac for "different")
 
 """
 The data for each album.

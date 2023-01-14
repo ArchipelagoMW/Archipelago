@@ -8,6 +8,10 @@ class AllowJustAsPlannedDLCSongs(Toggle):
     Note: The newest DLC songs will most likely not be included in any randomisation."""
     display_name = "Allow Just As Planned DLC Songs"
 
+class StreamerModeEnabled(Toggle):
+    """Whether or not the randomisation will take into account Streamer Mode. If enabled, only songs available in Streamer Mode will be randomised."""
+    display_name = "Streamer Mode Only Songs"
+
 class StartingSongs(Range):
     """The number of songs that will be automatically unlocked at the start of a run."""
     display_name = "Starting Amout of Songs"
@@ -29,6 +33,22 @@ class AdditionalSongs(Range):
     range_end = 400  # Todo: Add song count here
     default = 40
     display_name = "Additional Song Count"
+
+
+class MinimumSongDifficulty(Range):
+    """All chosen songs will have at least 1 difficulty which is this value or higher."""
+    display_name = "Minimum Song Difficulty"
+    range_start = 0
+    range_end = 12
+    default = 3
+
+
+class MaximumSongDifficulty(Range):
+    """All chosen songs will have at least 1 difficulty which is this value or lower."""
+    display_name = "Maximum Song Difficulty"
+    range_start = 0
+    range_end = 12
+    default = 7
 
 
 class AdditionalItemsAreSongs(DefaultOnToggle):
@@ -95,8 +115,11 @@ class SongThreshold(Range):
 
 musedash_options: Dict[str, type(Option)] = {
     "allow_just_as_planned_dlc_songs": AllowJustAsPlannedDLCSongs,
+    "streamer_mode_enabled": StreamerModeEnabled,
     "starting_song_count": StartingSongs,
     "additional_song_count": AdditionalSongs,
+    "minimum_song_difficulty": MinimumSongDifficulty,
+    "maximum_song_difficulty": MaximumSongDifficulty,
     "extra_items_are_songs": AdditionalItemsAreSongs,
     "extra_goal_song_items": ExtraItemsGoalSong,
 }

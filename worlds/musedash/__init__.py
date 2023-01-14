@@ -55,13 +55,12 @@ class MuseDashWorld(World):
     included_songs: list[str]
 
     def generate_early(self):
-        available_song_keys = list()
-        if (self.multiworld.allow_just_as_planned_dlc_songs[self.player]):
-            available_song_keys.extend(self.museDashCollection.SongItems.keys())
-        else:
-            available_song_keys.extend(self.museDashCollection.BaseSongItems.keys())
+        dlc_songs = self.multiworld.allow_just_as_planned_dlc_songs[self.player]
+        streamer_mode = self.multiworld.streamer_mode_enabled[self.player]
+        lower_diff_threshold = min(self.multiworld.minimum_song_difficulty[self.player], self.multiworld.maximum_song_difficulty[self.player])
+        higher_diff_threshold = max(self.multiworld.minimum_song_difficulty[self.player], self.multiworld.maximum_song_difficulty[self.player])
 
-        #Todo: See what songs Streamer Mode removes
+        available_song_keys = self.museDashCollection.get_all_songs_with_settings(dlc_songs, streamer_mode, lower_diff_threshold, higher_diff_threshold)
 
         self.included_songs = list()
         self.starting_songs = list()
