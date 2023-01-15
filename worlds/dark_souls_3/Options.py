@@ -44,6 +44,7 @@ class RandomizeWeaponsLevelOption(Choice):
 
 class RandomizeWeaponsLevelPercentageOption(Range):
     """The percentage of weapons in the pool to be upgraded if randomize weapons level is toggled"""
+    display_name = "Percentage of randomized weapons"
     range_start = 1
     range_end = 100
     default = 33

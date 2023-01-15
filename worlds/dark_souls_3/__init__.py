@@ -178,7 +178,7 @@ class DarkSouls3World(World):
             dreg_heap_region.exits.append(Entrance(self.player, "Goto Ringed City", dreg_heap_region))
             self.multiworld.get_entrance("Goto Ringed City", self.player).connect(ringed_city_region)
 
-    # For each region, add the associated locations retrieved from the corresponding =
+    # For each region, add the associated locations retrieved from the corresponding location_table
     def create_region(self, region_name, location_table) -> Region:
         new_region = Region(region_name, RegionType.Generic, region_name, self.player, self.multiworld)
         if location_table:
