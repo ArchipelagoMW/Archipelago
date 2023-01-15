@@ -1,6 +1,4 @@
-from BaseClasses import MultiWorld, CollectionState
-
-from ..generic.Rules import set_rule
+from BaseClasses import CollectionState, MultiWorld
 
 
 def get_upgrade_total(multiworld: MultiWorld, player: int) -> int:
@@ -22,7 +20,7 @@ def has_upgrade_amount(state: CollectionState, player: int, amount: int) -> bool
 
 
 def has_upgrades_percentage(state: CollectionState, player: int, percentage: float) -> bool:
-    return has_upgrade_amount(state, player, get_upgrade_total(state.multiworld, player) * (round(percentage) // 100))
+    return has_upgrade_amount(state, player, round(get_upgrade_total(state.multiworld, player) * (percentage / 100)))
 
 
 def has_movement_rune(state: CollectionState, player: int) -> bool:
@@ -52,8 +50,8 @@ def has_defeated_dungeon(state: CollectionState, player: int) -> bool:
 def set_rules(multiworld: MultiWorld, player: int):
     # If 'vendors' are 'normal', then expect it to show up in the first half(ish) of the spheres.
     if multiworld.vendors[player] == "normal":
-        set_rule(multiworld.get_location("Forest Abkhazia Boss Reward", player),
-            lambda state: has_vendors(state, player))
+        multiworld.get_location("Forest Abkhazia Boss Reward", player).access_rule = \
+            lambda state: has_vendors(state, player)
 
     # Gate each manor location so everything isn't dumped into sphere 1.
     manor_rules = {
@@ -92,11 +90,11 @@ def set_rules(multiworld: MultiWorld, player: int):
     # Set rules for manor locations.
     for event, locations in manor_rules.items():
         for location in locations:
-            set_rule(multiworld.get_location(location, player), lambda state: state.has(event, player))
+            multiworld.get_location(location, player).access_rule = lambda state: state.has(event, player)
 
     # Set rules for fairy chests to decrease headache of expectation to find non-movement fairy chests.
     for fairy_location in [location for location in multiworld.get_locations(player) if "Fairy" in location.name]:
-        set_rule(fairy_location, lambda state: has_fairy_progression(state, player))
+        fairy_location.access_rule = lambda state: has_fairy_progression(state, player)
 
     # Region rules.
     multiworld.get_entrance("Forest Abkhazia", player).access_rule = \

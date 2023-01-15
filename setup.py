@@ -1,23 +1,26 @@
+import base64
+import datetime
 import os
+import platform
 import shutil
 import sys
 import sysconfig
-import platform
-import zipfile
-from pathlib import Path
-from hashlib import sha3_512
-import base64
-import datetime
-from Utils import version_tuple, is_windows, is_linux
-from collections.abc import Iterable
 import typing
+import zipfile
+from collections.abc import Iterable
+from hashlib import sha3_512
+from pathlib import Path
+
 import setuptools
+
 from Launcher import components, icon_paths
+from Utils import version_tuple, is_windows, is_linux
 
-
+# On  Python < 3.10 LogicMixin is not currently supported.
 apworlds: set = {
     "Subnautica",
     "Factorio",
+    "Rogue Legacy",
 }
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it

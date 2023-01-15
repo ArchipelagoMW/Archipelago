@@ -604,6 +604,8 @@ def set_mission_upgrade_rules_standard(world: MultiWorld, player: int):
     if world.whistlesanity[player].value == 2 or world.whistlesanity[player].value == 3:
         add_rule(world.get_location(LocationName.mission_street_hidden_3, player),
                  lambda state: state.has(ItemName.tails_booster, player))
+        add_rule(world.get_location(LocationName.mission_street_hidden_4, player),
+                 lambda state: state.has(ItemName.tails_booster, player))
         add_rule(world.get_location(LocationName.death_chamber_hidden_1, player),
                  lambda state: state.has(ItemName.knuckles_shovel_claws, player) and
                                state.has(ItemName.knuckles_hammer_gloves, player))
@@ -1043,6 +1045,8 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
     # Hidden Whistle Upgrade Requirements
     if world.whistlesanity[player].value == 2 or world.whistlesanity[player].value == 3:
         add_rule(world.get_location(LocationName.mission_street_hidden_3, player),
+                 lambda state: state.has(ItemName.tails_booster, player))
+        add_rule(world.get_location(LocationName.mission_street_hidden_4, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(world.get_location(LocationName.death_chamber_hidden_1, player),
                  lambda state: state.has(ItemName.knuckles_shovel_claws, player) and

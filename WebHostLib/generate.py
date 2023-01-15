@@ -33,7 +33,7 @@ def get_meta(options_source: dict) -> dict:
 
     server_options = {
         "hint_cost": int(options_source.get("hint_cost", 10)),
-        "forfeit_mode": options_source.get("forfeit_mode", "goal"),
+        "release_mode": options_source.get("release_mode", "goal"),
         "remaining_mode": options_source.get("remaining_mode", "disabled"),
         "collect_mode": options_source.get("collect_mode", "disabled"),
         "item_cheat": bool(int(options_source.get("item_cheat", 1))),
@@ -114,7 +114,7 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
         erargs = parse_arguments(['--multi', str(playercount)])
         erargs.seed = seed
         erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
-        erargs.spoiler = 0 if race else 2
+        erargs.spoiler = 0 if race else 3
         erargs.race = race
         erargs.outputname = seedname
         erargs.outputpath = target.name

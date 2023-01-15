@@ -269,6 +269,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.mission_street_hidden_1,
         LocationName.mission_street_hidden_2,
         LocationName.mission_street_hidden_3,
+        LocationName.mission_street_hidden_4,
         LocationName.mission_street_beetle,
         LocationName.mission_street_upgrade,
     ]
@@ -872,7 +873,7 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
 
     gates_len = len(gates)
     if gates_len >= 2:
-        connect(world, player, names, 'Menu', LocationName.gate_1_boss_region,
+        connect(world, player, names, LocationName.gate_0_region, LocationName.gate_1_boss_region,
                 lambda state: (state.has(ItemName.emblem, player, gates[1].gate_emblem_count)))
 
         if gate_bosses[1] == all_gate_bosses_table[king_boom_boo]:
@@ -885,7 +886,7 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
             connect(world, player, names, LocationName.gate_1_region, shuffleable_regions[gates[1].gate_levels[i]])
 
     if gates_len >= 3:
-        connect(world, player, names, 'Menu', LocationName.gate_2_boss_region,
+        connect(world, player, names, LocationName.gate_1_region, LocationName.gate_2_boss_region,
                 lambda state: (state.has(ItemName.emblem, player, gates[2].gate_emblem_count)))
 
         if gate_bosses[2] == all_gate_bosses_table[king_boom_boo]:
@@ -898,7 +899,7 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
             connect(world, player, names, LocationName.gate_2_region, shuffleable_regions[gates[2].gate_levels[i]])
 
     if gates_len >= 4:
-        connect(world, player, names, 'Menu', LocationName.gate_3_boss_region,
+        connect(world, player, names, LocationName.gate_2_region, LocationName.gate_3_boss_region,
                 lambda state: (state.has(ItemName.emblem, player, gates[3].gate_emblem_count)))
 
         if gate_bosses[3] == all_gate_bosses_table[king_boom_boo]:
@@ -911,7 +912,7 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
             connect(world, player, names, LocationName.gate_3_region, shuffleable_regions[gates[3].gate_levels[i]])
 
     if gates_len >= 5:
-        connect(world, player, names, 'Menu', LocationName.gate_4_boss_region,
+        connect(world, player, names, LocationName.gate_3_region, LocationName.gate_4_boss_region,
                 lambda state: (state.has(ItemName.emblem, player, gates[4].gate_emblem_count)))
 
         if gate_bosses[4] == all_gate_bosses_table[king_boom_boo]:
@@ -924,7 +925,7 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
             connect(world, player, names, LocationName.gate_4_region, shuffleable_regions[gates[4].gate_levels[i]])
 
     if gates_len >= 6:
-        connect(world, player, names, 'Menu', LocationName.gate_5_boss_region,
+        connect(world, player, names, LocationName.gate_4_region, LocationName.gate_5_boss_region,
                 lambda state: (state.has(ItemName.emblem, player, gates[5].gate_emblem_count)))
 
         if gate_bosses[5] == all_gate_bosses_table[king_boom_boo]:
