@@ -409,6 +409,8 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
                              f"Please fix your triggers.") from e
     if isinstance(weights["game"], dict):
         for game in weights["game"]:
+            if game == "A Link to the Past":  # TODO remove when LTTP doesn't have to be coded around
+                continue
             game_weights = weights[game]
             for option_key in game_weights:
                 if option_key not in ChainMap(Options.common_options, Options.per_game_common_options,
@@ -418,11 +420,12 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
                     pass
     else:
         game = weights["game"]
-        for option_key in weights[game]:
-            if option_key not in ChainMap(Options.common_options, Options.per_game_common_options,
-                                          AutoWorldRegister.world_types[game].option_definitions)\
-                    and option_key not in {*valid_keys, "plando_connections", "plando_items", "plando_texts", "triggers"}:
-                raise ValueError(f"{option_key} not a valid option name for {game} and not present in triggers")
+        if game != "A Link to the Past":  # TODO remove when LTTP doesn't have to be coded around
+            for option_key in weights[game]:
+                if option_key not in ChainMap(Options.common_options, Options.per_game_common_options,
+                                              AutoWorldRegister.world_types[game].option_definitions)\
+                        and option_key not in {*valid_keys, "plando_connections", "plando_items", "plando_texts", "triggers"}:
+                    raise ValueError(f"{option_key} not a valid option name for {game} and not present in triggers")
     return weights
 
 
