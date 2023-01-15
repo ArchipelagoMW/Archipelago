@@ -11,6 +11,7 @@ from collections import Counter, ChainMap
 from typing import Dict, Tuple, Callable, Any, Union
 
 import ModuleUpdate
+import worlds.AutoWorld
 
 ModuleUpdate.update()
 
@@ -381,6 +382,7 @@ def roll_linked_options(weights: dict) -> dict:
 def roll_triggers(weights: dict, triggers: list) -> dict:
     weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
+    valid_keys = set()
     for i, option_set in enumerate(triggers):
         try:
             currently_targeted_weights = weights
@@ -401,10 +403,26 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
                     if category_name:
                         currently_targeted_weights = currently_targeted_weights[category_name]
                     update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
-
+            valid_keys.add(key)
         except Exception as e:
             raise ValueError(f"Your trigger number {i + 1} is destroyed. "
                              f"Please fix your triggers.") from e
+    if isinstance(weights["game"], dict):
+        for game in weights["game"]:
+            game_weights = weights[game]
+            for option_key in game_weights:
+                if option_key not in ChainMap(Options.common_options, Options.per_game_common_options,
+                                              AutoWorldRegister.world_types[game].option_definitions)\
+                        and option_key not in {*valid_keys, "plando_connections", "plando_items", "plando_texts", "triggers"}:
+                    raise ValueError(f"{option_key} not a valid option name for {game} and not present in triggers")
+                    pass
+    else:
+        game = weights["game"]
+        for option_key in weights[game]:
+            if option_key not in ChainMap(Options.common_options, Options.per_game_common_options,
+                                          AutoWorldRegister.world_types[game].option_definitions)\
+                    and option_key not in {*valid_keys, "plando_connections", "plando_items", "plando_texts", "triggers"}:
+                raise ValueError(f"{option_key} not a valid option name for {game} and not present in triggers")
     return weights
 
 
@@ -487,11 +505,6 @@ def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings
                             get_choice("exit", placement),
                             get_choice("direction", placement)
                         ))
-            for option_key in game_weights:
-                if option_key not in ChainMap(Options.common_options, Options.per_game_common_options,
-                                              world_type.option_definitions)\
-                        and option_key not in {"plando_connections", "plando_items", "plando_texts"}:
-                    raise Exception(f"Unsupported option {option_key} for game {ret.game}")
     else:
         raise Exception(f"Unsupported game {ret.game}")
 
