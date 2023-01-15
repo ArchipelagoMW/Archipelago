@@ -28,11 +28,11 @@ LttPCreditsText = {
                                     "Variable conversion rate",
                                     "Stonks",
                                     "Catchy ad jingle"),
-    "Task Skip": BumpStikLttPText("hall pass",
-                                  "Faker kid skips again",
-                                  "I know a way around it",
-                                  "Money can fix it",
-                                  "Quick! A distraction"),
+    "Task Advance": BumpStikLttPText("hall pass",
+                                     "Faker kid skips again",
+                                     "I know a way around it",
+                                     "Money can fix it",
+                                     "Quick! A distraction"),
     "Starting Turner": BumpStikLttPText("fidget spinner",
                                         "Spinning kid turns heads",
                                         "This turns things around",
@@ -97,7 +97,7 @@ class BumpStikItem(Item):
         elif name in ["Booster Bumper", "Treasure Bumper"]:
             self.type = "Special"
             self.classification = ItemClassification.progression
-        elif name in ["Starting Turner", "Starting Paint Can", "Task Skip"]:
+        elif name in ["Starting Turner", "Starting Paint Can", "Task Advance"]:
             self.type = "Utility"
             self.classification = ItemClassification.useful
         else:
