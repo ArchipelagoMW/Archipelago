@@ -110,6 +110,7 @@ environment_non_orderedstages_table = environment_vanilla_hidden_realm_table | e
 environment_orderedstages_table = collapse_dict_list_vertical(environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table)
 environment_ALL_table = environment_vanilla_table | environment_sotv_table
 
+
 def shift_by_offset(dictionary: Dict[str, int], offset:int) -> Dict[str, int]:
     """Shift all indexes in a dictionary by an offset"""
     return {name:index+offset for name,index in dictionary.items()}
