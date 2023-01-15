@@ -473,7 +473,9 @@ def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings
                 handle_option(ret, game_weights, option_key, option, plando_options)
         if PlandoSettings.items in plando_options:
             ret.plando_items = game_weights.get("plando_items", [])
-        if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
+        if ret.game == "A Link to the Past":
+            roll_alttp_settings(ret, game_weights, plando_options)
+        else:
             # bad hardcoded behavior to make this work for now
             ret.plando_connections = []
             if PlandoSettings.connections in plando_options:
@@ -485,8 +487,11 @@ def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings
                             get_choice("exit", placement),
                             get_choice("direction", placement)
                         ))
-        elif ret.game == "A Link to the Past":
-            roll_alttp_settings(ret, game_weights, plando_options)
+            for option_key in game_weights:
+                if option_key not in ChainMap(Options.common_options, Options.per_game_common_options,
+                                              world_type.option_definitions)\
+                        and option_key not in {"plando_connections", "plando_items", "plando_texts"}:
+                    raise Exception(f"Unsupported option {option_key} for game {ret.game}")
     else:
         raise Exception(f"Unsupported game {ret.game}")
 
