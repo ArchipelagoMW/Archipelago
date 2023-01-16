@@ -1,6 +1,6 @@
 from typing import Dict, List, TypeVar
 
-# TODO turn into a Regions.py
+# TODO probably move to Locations
 
 environment_vanilla_orderedstage_1_table: Dict[str, int] = {
     "Distant Roost":                            7, # blackbeach

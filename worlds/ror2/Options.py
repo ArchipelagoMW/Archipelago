@@ -60,7 +60,7 @@ class AltarsPerEnvironment(Range):
     default = 2
 
 class TotalRevivals(Range):
-    """Total Amount of `Dio's Best Friend` item put in the item pool."""
+    """Total Percentage of `Dio's Best Friend` item put in the item pool."""
     display_name = "Total Revives"
     range_start = 0
     range_end = 10
@@ -88,7 +88,7 @@ class ShrineUseStep(Range):
     display_name = "Shrine use Step"
     range_start = 0
     range_end = 5
-    default = 1
+    default = 0
 
 
 class AllowLunarItems(DefaultOnToggle):
