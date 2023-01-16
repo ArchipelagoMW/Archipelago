@@ -31,142 +31,127 @@ def check_location(state, environment: str, player: int, item_number: int, item_
 
 # unlock event to next set of stages
 def get_stage_event(multiworld: MultiWorld, player: int, stage_number: int):
-    # for environment_name, _ in environment_vanilla_orderedstages_table[stage_number].items():
-    #     multiworld.get_location(stage, player).access_rule = lambda state: get_one_of_the_stages(state, environment_name, player)
     if not multiworld.dlc_sotv[player]:
         environment_name = multiworld.random.choices(list(environment_vanilla_orderedstages_table[stage_number].keys()), k=1)
     else:
         environment_name = multiworld.random.choices(list(environment_orderedstages_table[stage_number].keys()), k=1)
-
-    print(environment_name)
     multiworld.get_location(f"Stage_{stage_number+1}", player).access_rule = \
         lambda state: get_one_of_the_stages(state, environment_name[0], player)
-
-
-def get_dlc_stage_event(multiworld: MultiWorld, stage: str, stage_number, player: int, chests: int):
-    for environment_name, _ in environment_sotv_orderedstages_table[stage_number].items():
-        multiworld.get_location(stage, player).access_rule = lambda state: get_one_of_the_stages(state, environment_name, player)
-    # unlock = multiworld.random.choices(len(environment_sotv_orderedstages_table[stage_number]))
-    # print(unlock)
-    # unlock = self.multiworld.random.choices(list(environment_available_orderedstages_table[i].keys()), k=1)
 
 
 def get_one_of_the_stages(state: CollectionState, stage: str, player: int):
     return state.has(stage, player)
 
 
-def set_rules(world: MultiWorld, player: int) -> None:
+def set_rules(multiworld: MultiWorld, player: int) -> None:
 
-    if world.goal[player] == "classic":
+    if multiworld.goal[player] == "classic":
         # classic mode
-        total_locations = world.total_locations[player].value  # total locations for current player
+        total_locations = multiworld.total_locations[player].value  # total locations for current player
     else:
         # explore mode
         total_locations = len(
             orderedstage_location.get_locations(
-                chests=world.chests_per_stage[player].value,
-                shrines=world.shrines_per_stage[player].value,
-                scavengers=world.scavengers_per_stage[player].value,
-                scanners=world.scanner_per_stage[player].value,
-                altars=world.altars_per_stage[player].value,
-                dlc_sotv=world.dlc_sotv[player].value
+                chests=multiworld.chests_per_stage[player].value,
+                shrines=multiworld.shrines_per_stage[player].value,
+                scavengers=multiworld.scavengers_per_stage[player].value,
+                scanners=multiworld.scanner_per_stage[player].value,
+                altars=multiworld.altars_per_stage[player].value,
+                dlc_sotv=multiworld.dlc_sotv[player].value
             )
         )
 
     event_location_step = 25  # set an event location at these locations for "spheres"
     divisions = total_locations // event_location_step
-    total_revivals = world.worlds[player].total_revivals  # pulling this info we calculated in generate_basic
+    total_revivals = multiworld.worlds[player].total_revivals  # pulling this info we calculated in generate_basic
 
-    if world.goal[player] == "classic":
+    if multiworld.goal[player] == "classic":
         # classic mode
         if divisions:
             for i in range(1, divisions):  # since divisions is the floor of total_locations / 25
-                event_loc = world.get_location(f"Pickup{i * event_location_step}", player)
+                event_loc = multiworld.get_location(f"Pickup{i * event_location_step}", player)
                 set_rule(event_loc,
                         lambda state, i=i: state.can_reach(f"ItemPickup{i * event_location_step - 1}", "Location", player))
                 for n in range(i * event_location_step, (i + 1) * event_location_step):  # we want to create a rule for each of the 25 locations per division
                     if n == i * event_location_step:
-                        set_rule(world.get_location(f"ItemPickup{n}", player),
+                        set_rule(multiworld.get_location(f"ItemPickup{n}", player),
                                 lambda state, event_item=event_loc.item.name: state.has(event_item, player))
                     else:
-                        set_rule(world.get_location(f"ItemPickup{n}", player),
+                        set_rule(multiworld.get_location(f"ItemPickup{n}", player),
                                 lambda state, n=n: state.can_reach(f"ItemPickup{n - 1}", "Location", player))
             for i in range(divisions * event_location_step, total_locations+1):
-                set_rule(world.get_location(f"ItemPickup{i}", player),
+                set_rule(multiworld.get_location(f"ItemPickup{i}", player),
                         lambda state, i=i: state.can_reach(f"ItemPickup{i - 1}", "Location", player))
-        set_rule(world.get_location("Victory", player),
+        set_rule(multiworld.get_location("Victory", player),
                 lambda state: state.can_reach(f"ItemPickup{total_locations}", "Location", player))
-        if total_revivals or world.start_with_revive[player].value:
-            add_rule(world.get_location("Victory", player),
+        if total_revivals or multiworld.start_with_revive[player].value:
+            add_rule(multiworld.get_location("Victory", player),
                     lambda state: state.has("Dio's Best Friend", player,
-                                            total_revivals + world.start_with_revive[player]))
+                                            total_revivals + multiworld.start_with_revive[player]))
 
-    elif world.environments_as_items[player]:
+    elif multiworld.environments_as_items[player]:
         # When explore_mode and environments_as_items are used,
         #   scavengers need to be locked till after a full loop since that is when they are capable of spawning.
         # (While technically the requirement is just beating 5 stages, this will ensure that the player will have
         #   a long enough run to have enough director credits for scavengers and help prevent being stuck in the same stages until that point.)
 
-        for location in world.get_locations():
+        for location in multiworld.get_locations():
             if location.player != player: continue # ignore all checks that don't belong to this player
             if "Scavenger" in location.name:
                 add_rule(location, lambda state: state.has("Stage_5", player))
     # Regions
-        chests = world.chests_per_stage[player]
-        shrines = world.shrines_per_stage[player]
-        newts = world.altars_per_stage[player]
-        scavengers = world.scavengers_per_stage[player]
-        scanners = world.scanner_per_stage[player]
+        chests = multiworld.chests_per_stage[player]
+        shrines = multiworld.shrines_per_stage[player]
+        newts = multiworld.altars_per_stage[player]
+        scavengers = multiworld.scavengers_per_stage[player]
+        scanners = multiworld.scanner_per_stage[player]
         for i in range(len(environment_vanilla_orderedstages_table)):
             for environment_name, _ in environment_vanilla_orderedstages_table[i].items():
                 # Make sure to go through each location
                 if scavengers == 1:
-                    has_location_access_rule(world, environment_name, player, scavengers, "Scavenger")
+                    has_location_access_rule(multiworld, environment_name, player, scavengers, "Scavenger")
                 if scanners == 1:
-                    has_location_access_rule(world, environment_name, player, scanners, "Radio Scanner")
+                    has_location_access_rule(multiworld, environment_name, player, scanners, "Radio Scanner")
                 for chest in range(1, chests + 1):
-                    has_location_access_rule(world, environment_name, player, chest, "Chest")
+                    has_location_access_rule(multiworld, environment_name, player, chest, "Chest")
                 for shrine in range(1, shrines + 1):
-                    has_location_access_rule(world, environment_name, player, shrine, "Shrine")
+                    has_location_access_rule(multiworld, environment_name, player, shrine, "Shrine")
                 if newts > 0:
                     for newt in range(1, newts + 1):
-                        has_location_access_rule(world, environment_name, player, newt, "Newt Altar")
+                        has_location_access_rule(multiworld, environment_name, player, newt, "Newt Altar")
                 if i > 0:
-                    has_entrance_access_rule(world, f"Stage_{i}", environment_name, player)
-            # get_stage_event(world, f"Stage_{i + 1}", (i), player, chests)
-            get_stage_event(world, player, i)
+                    has_entrance_access_rule(multiworld, f"Stage_{i}", environment_name, player)
+            get_stage_event(multiworld, player, i)
 
 
-        if world.dlc_sotv[player]:
+        if multiworld.dlc_sotv[player]:
             for i in range(len(environment_sotv_orderedstages_table)):
                 for environment_name, _ in environment_sotv_orderedstages_table[i].items():
                     # Make sure to go through each location
                     if scavengers == 1:
-                        has_location_access_rule(world, environment_name, player, scavengers, "Scavenger")
+                        has_location_access_rule(multiworld, environment_name, player, scavengers, "Scavenger")
                     if scanners == 1:
-                        has_location_access_rule(world, environment_name, player, scanners, "Radio Scanner")
+                        has_location_access_rule(multiworld, environment_name, player, scanners, "Radio Scanner")
                     for chest in range(1, chests + 1):
-                        has_location_access_rule(world, environment_name, player, chest, "Chest")
+                        has_location_access_rule(multiworld, environment_name, player, chest, "Chest")
                     for shrine in range(1, shrines + 1):
-                        has_location_access_rule(world, environment_name, player, shrine, "Shrine")
+                        has_location_access_rule(multiworld, environment_name, player, shrine, "Shrine")
                     if newts > 0:
                         for newt in range(1, newts + 1):
-                            has_location_access_rule(world, environment_name, player, newt, "Newt Altar")
+                            has_location_access_rule(multiworld, environment_name, player, newt, "Newt Altar")
                     if i > 0:
-                        has_entrance_access_rule(world, f"Stage_{i}", environment_name, player)
+                        has_entrance_access_rule(multiworld, f"Stage_{i}", environment_name, player)
             # Place Stage event on last Chest of Stage, should probably reduce it to half
-            #     if i <= 2:
-            #         get_dlc_stage_event(world, f"Stage_{i + 1}", i, player, chests)
-        has_entrance_access_rule(world, f"Sky Meadow", "Hidden Realm: Bulwark's Ambry", player)
-        has_entrance_access_rule(world, f"Hidden Realm: A Moment, Fractured", "Hidden Realm: A Moment, Whole", player)
-        has_entrance_access_rule(world, f"Stage_1", "Hidden Realm: Gilded Coast", player)
-        has_entrance_access_rule(world, f"Stage_1", "Hidden Realm: Bazaar Between Time", player)
-        # has_entrance_access_rule(world, f"Stage_4", "Sky Meadow", player)
-        has_entrance_access_rule(world, f"Hidden Realm: Bulwark's Ambry", "Void Fields", player)
-        has_entrance_access_rule(world, f"Stage_5", "Commencement", player)
-        has_entrance_access_rule(world, f"Stage_5", "Hidden Realm: A Moment, Fractured", player)
-        if world.dlc_sotv[player]:
-            has_entrance_access_rule(world, f"Stage_5", "Void Locus", player)
-            has_entrance_access_rule(world, f"Void Locus", "The Planetarium", player)
+        has_entrance_access_rule(multiworld, f"Sky Meadow", "Hidden Realm: Bulwark's Ambry", player)
+        has_entrance_access_rule(multiworld, f"Hidden Realm: A Moment, Fractured", "Hidden Realm: A Moment, Whole", player)
+        has_entrance_access_rule(multiworld, f"Stage_1", "Hidden Realm: Gilded Coast", player)
+        has_entrance_access_rule(multiworld, f"Stage_1", "Hidden Realm: Bazaar Between Time", player)
+        # has_entrance_access_rule(multiworld, f"Stage_4", "Sky Meadow", player)
+        has_entrance_access_rule(multiworld, f"Hidden Realm: Bulwark's Ambry", "Void Fields", player)
+        has_entrance_access_rule(multiworld, f"Stage_5", "Commencement", player)
+        has_entrance_access_rule(multiworld, f"Stage_5", "Hidden Realm: A Moment, Fractured", player)
+        if multiworld.dlc_sotv[player]:
+            has_entrance_access_rule(multiworld, f"Stage_5", "Void Locus", player)
+            has_entrance_access_rule(multiworld, f"Void Locus", "The Planetarium", player)
     # Win Condition
-    world.completion_condition[player] = lambda state: state.has("Victory", player)
+    multiworld.completion_condition[player] = lambda state: state.has("Victory", player)

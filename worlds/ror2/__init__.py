@@ -274,31 +274,5 @@ def create_events(world: MultiWorld, player: int) -> None:
 def create_region(world: MultiWorld, player: int, name: str, locations: Dict[str,int] = {}) -> Region:
     ret = Region(name, RegionType.Generic, name, player, world)
     for location_name,location_id in locations.items():
-        ret.locations.append( RiskOfRainLocation(player, location_name, location_id, ret) )
+        ret.locations.append( RiskOfRainLocation(player, location_name, location_id, ret))
     return ret
-
-def create_regions_all_orderedstage(world: MultiWorld, player: int) -> list[Region]:
-    """
-    Creates all regions for all ordered stages (accounting for world.dlc_sotv)
-    """
-    rets: List[Region] = []
-    orderedstages = compress_dict_list_horizontal(environment_vanilla_orderedstages_table)
-    if(world.dlc_sotv[player].value): orderedstages|= compress_dict_list_horizontal(environment_sotv_orderedstages_table)
-
-    rets = create_region_orderedstage(world, player, orderedstages)
-
-    return rets
-
-def create_region_orderedstage(world: MultiWorld, player: int, environments: Dict[str,int]) -> Region:
-    rets: List[Region] = []
-    for environment_name, environment_index in environments.items():
-        environment_locations = orderedstage_location.get_environment_locations(
-            chests=world.chests_per_stage[player].value,
-            shrines=world.shrines_per_stage[player].value,
-            scavengers=world.scavengers_per_stage[player].value,
-            scanners=world.scanner_per_stage[player].value,
-            altars=world.altars_per_stage[player].value,
-            environment=(environment_name, environment_index)
-        )
-        rets.append(create_region(world, player, environment_name, environment_locations))
-    return rets
