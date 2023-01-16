@@ -111,7 +111,7 @@ class KH2World(World):
         # there is no such thing as lvl 1 but there needs to be a "location" for mod writing reasons
         for lvl in {LocationName.Valorlvl1, LocationName.Wisdomlvl1, LocationName.Limitlvl1, LocationName.Masterlvl1,
                     LocationName.Finallvl1}:
-            self.multiworld.get_location(lvl, self.player).place_locked_item(self.create_item(ItemName.Victory))
+            self.multiworld.get_location(lvl, self.player).place_locked_item(self.create_item(ItemName.LuckyEmblem))
             self.totallocations -= 1
             
 

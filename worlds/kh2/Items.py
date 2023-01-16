@@ -25,19 +25,19 @@ class ItemData(typing.NamedTuple):
 
 
 Reports_Table = {
-    ItemName.SecretAnsemsReport1:  		ItemData(0x1320004,  226, 0x36C4 ,0x40),
-    ItemName.SecretAnsemsReport2:  		ItemData(0x1320005,  227, 0x36C4 ,0x80),
-    ItemName.SecretAnsemsReport3:  		ItemData(0x1320006,  228, 0x36C5 ,0x1),
-    ItemName.SecretAnsemsReport4:  		ItemData(0x1320007,  229, 0x36C5 ,0x2),
-    ItemName.SecretAnsemsReport5:  		ItemData(0x1320008,  230, 0x36C5 ,0x4),
-    ItemName.SecretAnsemsReport6:  		ItemData(0x1320009,  231, 0x36C5 ,0x8),
-    ItemName.SecretAnsemsReport7:  		ItemData(0x132000A,  232, 0x36C5 ,0x10),
-    ItemName.SecretAnsemsReport8:  		ItemData(0x132000B,  233, 0x36C5 ,0x20),
-    ItemName.SecretAnsemsReport9:  		ItemData(0x132000C,  234, 0x36C5 ,0x40),
-    ItemName.SecretAnsemsReport10: 		ItemData(0x132000D,  235,0x36C5 ,0x80),
-    ItemName.SecretAnsemsReport11: 		ItemData(0x132000E,  236, 0x36C6 ,0x1),
-    ItemName.SecretAnsemsReport12: 		ItemData(0x132000F,  237, 0x36C6 ,0x2),
-    ItemName.SecretAnsemsReport13: 		ItemData(0x1320010,  238, 0x36C6 ,0x4),
+    ItemName.SecretAnsemsReport1:  		ItemData(0x1320004,  226, 0x36C4 ,6),
+    ItemName.SecretAnsemsReport2:  		ItemData(0x1320005,  227, 0x36C4 ,7),
+    ItemName.SecretAnsemsReport3:  		ItemData(0x1320006,  228, 0x36C5 ,1),
+    ItemName.SecretAnsemsReport4:  		ItemData(0x1320007,  229, 0x36C5 ,2),
+    ItemName.SecretAnsemsReport5:  		ItemData(0x1320008,  230, 0x36C5 ,4),
+    ItemName.SecretAnsemsReport6:  		ItemData(0x1320009,  231, 0x36C5 ,3),
+    ItemName.SecretAnsemsReport7:  		ItemData(0x132000A,  232, 0x36C5 ,4),
+    ItemName.SecretAnsemsReport8:  		ItemData(0x132000B,  233, 0x36C5 ,5),
+    ItemName.SecretAnsemsReport9:  		ItemData(0x132000C,  234, 0x36C5 ,6),
+    ItemName.SecretAnsemsReport10: 		ItemData(0x132000D,  235,0x36C5  ,7),
+    ItemName.SecretAnsemsReport11: 		ItemData(0x132000E,  236, 0x36C6 ,0),
+    ItemName.SecretAnsemsReport12: 		ItemData(0x132000F,  237, 0x36C6 ,1),
+    ItemName.SecretAnsemsReport13: 		ItemData(0x1320010,  238, 0x36C6 ,2),
 }
 
 Progression_Table = {
@@ -68,7 +68,7 @@ Progression_Table = {
 Forms_Table = {
     ItemName.ValorForm: 				ItemData(0x1320025,  26, 0x36C0,1),
     ItemName.WisdomForm: 				ItemData(0x1320026,  27, 0x36C0,2),
-    ItemName.LimitForm: 				ItemData(0x1320027,  563,0x36CA,8),
+    ItemName.LimitForm: 				ItemData(0x1320027,  563,0x36CA,3),
     ItemName.MasterForm: 				ItemData(0x1320028,  31, 0x36C0,6),
     ItemName.FinalForm: 				ItemData(0x1320029,  29, 0x36C0,4),
 }
