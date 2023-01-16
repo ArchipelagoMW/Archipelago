@@ -3,20 +3,10 @@ from typing import Dict
 from worlds.generic.Rules import set_rule, add_rule
 from .Locations import orderedstage_location
 from .RoR2Environments import environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table, \
-    environment_vanilla_hidden_realm_table, environment_vanilla_special_table, collapse_dict_list_vertical
-
-
-# Does the entrance have the environment?
-def has_item_access_rule(multiworld: MultiWorld, entrance, environment: str, player: int):
-    player_name = multiworld.player_name[player]
-    multiworld.get_entrance(environment, player).access_rule = \
-        lambda state: state.has(environment, player)
-    # multiworld.get_entrance(f"{entrance} to {environment}", player).access_rule = \
-    #     lambda state: state.has(environment, player)
+    environment_orderedstages_table
 
 
 # Rule to see if it has access to the previous stage
-# Doesn't work with multiple yamls
 def has_entrance_access_rule(multiworld: MultiWorld, stage: str, entrance: str, player: int):
     multiworld.get_entrance(entrance, player).access_rule = \
         lambda state: state.has(entrance, player) and state.has(stage, player)
@@ -40,14 +30,25 @@ def check_location(state, environment: str, player: int, item_number: int, item_
 
 
 # unlock event to next set of stages
-def get_stage_event(multiworld: MultiWorld, stage: str, stage_number, player: int, chests: int):
-    for environment_name, _ in environment_vanilla_orderedstages_table[stage_number].items():
-        multiworld.get_location(stage, player).access_rule = lambda state: get_one_of_the_stages(state, environment_name, player)
+def get_stage_event(multiworld: MultiWorld, player: int, stage_number: int):
+    # for environment_name, _ in environment_vanilla_orderedstages_table[stage_number].items():
+    #     multiworld.get_location(stage, player).access_rule = lambda state: get_one_of_the_stages(state, environment_name, player)
+    if not multiworld.dlc_sotv[player]:
+        environment_name = multiworld.random.choices(list(environment_vanilla_orderedstages_table[stage_number].keys()), k=1)
+    else:
+        environment_name = multiworld.random.choices(list(environment_orderedstages_table[stage_number].keys()), k=1)
+
+    print(environment_name)
+    multiworld.get_location(f"Stage_{stage_number+1}", player).access_rule = \
+        lambda state: get_one_of_the_stages(state, environment_name[0], player)
 
 
 def get_dlc_stage_event(multiworld: MultiWorld, stage: str, stage_number, player: int, chests: int):
     for environment_name, _ in environment_sotv_orderedstages_table[stage_number].items():
         multiworld.get_location(stage, player).access_rule = lambda state: get_one_of_the_stages(state, environment_name, player)
+    # unlock = multiworld.random.choices(len(environment_sotv_orderedstages_table[stage_number]))
+    # print(unlock)
+    # unlock = self.multiworld.random.choices(list(environment_available_orderedstages_table[i].keys()), k=1)
 
 
 def get_one_of_the_stages(state: CollectionState, stage: str, player: int):
@@ -132,7 +133,9 @@ def set_rules(world: MultiWorld, player: int) -> None:
                         has_location_access_rule(world, environment_name, player, newt, "Newt Altar")
                 if i > 0:
                     has_entrance_access_rule(world, f"Stage_{i}", environment_name, player)
-            get_stage_event(world, f"Stage_{i + 1}", (i), player, chests)
+            # get_stage_event(world, f"Stage_{i + 1}", (i), player, chests)
+            get_stage_event(world, player, i)
+
 
         if world.dlc_sotv[player]:
             for i in range(len(environment_sotv_orderedstages_table)):
@@ -149,10 +152,11 @@ def set_rules(world: MultiWorld, player: int) -> None:
                     if newts > 0:
                         for newt in range(1, newts + 1):
                             has_location_access_rule(world, environment_name, player, newt, "Newt Altar")
-                if i > 0:
-                    has_entrance_access_rule(world, f"Stage_{i}", environment_name, player)
-            # Place Stage event on Chest 10 of Stage
-            get_dlc_stage_event(world, f"Stage_{i + 1}", i, player, chests)
+                    if i > 0:
+                        has_entrance_access_rule(world, f"Stage_{i}", environment_name, player)
+            # Place Stage event on last Chest of Stage, should probably reduce it to half
+            #     if i <= 2:
+            #         get_dlc_stage_event(world, f"Stage_{i + 1}", i, player, chests)
         has_entrance_access_rule(world, f"Sky Meadow", "Hidden Realm: Bulwark's Ambry", player)
         has_entrance_access_rule(world, f"Hidden Realm: A Moment, Fractured", "Hidden Realm: A Moment, Whole", player)
         has_entrance_access_rule(world, f"Stage_1", "Hidden Realm: Gilded Coast", player)
