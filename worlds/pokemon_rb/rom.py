@@ -332,8 +332,8 @@ def process_pokemon_data(self):
                 if ((mon in poke_data.evolves_from.keys() and mon_data["type1"] ==
                      local_poke_data[poke_data.evolves_from[mon]]["type1"] and mon_data["type2"] ==
                      local_poke_data[poke_data.evolves_from[mon]]["type2"]) and (
-                        (flag < 50 and self.multiworld.tm_compatibility[self.player].value == 1) or (
-                        flag >= 51 and self.multiworld.hm_compatibility[self.player].value == 1))):
+                        (flag < 50 and self.multiworld.tm_compatibility[self.player].value in [1, 2]) or (
+                        flag >= 51 and self.multiworld.hm_compatibility[self.player].value in [1, 2]))):
                     bit = 1 if local_poke_data[poke_data.evolves_from[mon]]["tms"][int(flag / 8)] & 1 << (flag % 8) else 0
                 elif (flag < 50 and self.multiworld.tm_compatibility[self.player].value == 1) or (flag >= 50 and self.multiworld.hm_compatibility[self.player].value == 1):
                     type_match = poke_data.moves[tm_move]["type"] in [mon_data["type1"], mon_data["type2"]]
