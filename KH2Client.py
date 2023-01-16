@@ -9,9 +9,9 @@ import ModuleUpdate
 ModuleUpdate.update()
 from worlds.kh2 import all_locations, item_dictionary_table
 import Utils
-import subprocess
+from worlds.kh2 import WorldLocations
 import typing
-import time
+
 
 if __name__ == "__main__":
     Utils.init_logging("KH2Client", exception_logger="Client")
@@ -42,52 +42,17 @@ class KH2CommandProcessor(ClientCommandProcessor):
 
     def _cmd_autotrack(self):
             """Start Autotracking"""
-            # first get pid, see the 32-bit solution
-            try:          
+            #hooking into the game
+            try:    
                 self.ctx.kh2=pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
+                logger.info("You are now autotracking")
             except:
-                print("Game is not opened/autotrackable")
+                logger.info("Game is not opened/autotrackable")
                 return
 
             self.ctx.kh2connected=True
             
-#def process_exists(process_name):
-    
-           #try:
-           #   
-           #except:
-           #    self.output("Game is not Open")
-        #Save = 0x09A70B0
-        ##pid = None
-        ##
-        ##
-        ##for proc in psutil.process_iter():
-        ##    if PROCNAME in proc.name():
-        ##       pid = proc.pid
-        ##       base=int(proc.memory_maps(False)[0].addr,0)
-        ##
-        #kh2=pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
-        #
-        #yourmom=kh2.base_address + Save+0x23DF
-        ##if kh2.read_bytes(yourmom,1)&0x04:
-        ##	print("your mom")
-        ##else:
-        ##	print("")
-        #
-        #chestvalue=int.from_bytes(kh2.read_bytes(yourmom,1), "big")
-        ##check if chest is already opened 
-        ##chestvalue is total amount of chests opened. 
-        #print(kh2.write_bytes(yourmom,(chestvalue|0x1<<2).to_bytes(1,'big'),1))
-        #
-        #
-        #
-        ##opens the chest at value 2 and keeps all the other chests the same
-        #kh2.write_bytes(yourmom,(chestvalue|0x1<<2).to_bytes(1,'big'),1)
 
-    #def _cmd_gb(self):
-    #    """Check Gameboy Connection State"""
-    #    if isinstance(self.ctx, KH2Context):
-    #        logger.info("debussy")
 
 class KH2Context(CommonContext):
     command_processor: int = KH2CommandProcessor
@@ -106,12 +71,13 @@ class KH2Context(CommonContext):
                                             data.code}
         self.lookup_id_to_Location: typing.Dict[int, str] = {data.code: item_name for item_name, data in all_locations.items() if
                                                 data.code}
-        #self.KH2_status = CONNECTION_INITIAL_STATUS
+        self.KH2_status = CONNECTION_INITIAL_STATUS
         #self.awaiting_rom = False
         self.location_table = {}
         self.collectible_table = {}
         self.collectible_override_flags_address = 0
         self.collectible_offsets = {}
+        self.sending = []
         #self.deathlink_enabled = False
         #self.deathlink_pending = False
         #self.deathlink_sent_this_death = False
@@ -121,25 +87,39 @@ class KH2Context(CommonContext):
         self.ItemIsSafe = False
         self.game_connected = False
         self.worldid={
-	        1 : "GoA",
-	        2 : "TwilightTown" ,
-	        3 : "DestinyIsland",
-	        4 : "HollowBastion",
-	        5 : "BeastsCastle" ,
-	        6 : "OlympusColiseum",
-	        7 : "Agrabah" ,
-	        8 : "LandofDragons",
-	        9 : "HundredAcreWood",
-	        10 : "PrideLands" ,
-	        11 : "Atlantica" ,
-	        12 : "DisneyCastle", 
-	        13 : "TimelessRiver", 
-	        14 : "HalloweenTown",
-	        16 : "PortRoyal" ,
-	        17 : "SpaceParanoids",
-	        18 : "TWTNW" ,
-	        255: "GoA"
+	        1 : WorldLocations.HB_Checks,#goa
+	        2 : WorldLocations.TT_Checks,
+	        3 : WorldLocations.TT_Checks,#destiny island doesnt have checks to ima put tt checks here
+	        4 : WorldLocations.HB_Checks,
+	        5 : WorldLocations.BC_Checks ,
+	        6 : WorldLocations.Oc_Checks,
+	        7 : WorldLocations.AG_Checks,#Agrabah world id
+	        8 : WorldLocations.LoD_Checks,
+	        9 : WorldLocations.HundredAcreChecks,
+	        10 : WorldLocations.PL_Checks,
+	        11 : WorldLocations.DC_Checks ,#atlantica isnt a supported world. if you go in atlantica it will check dc
+	        12 : WorldLocations.DC_Checks, 
+	        13 : WorldLocations.TR_Checks, 
+	        14 : WorldLocations.HT_Checks,
+            15 : WorldLocations.HB_Checks,#goa maybe
+	        16 : WorldLocations.PR_Checks ,
+	        17 : WorldLocations.SP_Checks,
+	        18 : WorldLocations.TWTNW_Checks ,
+	        255: WorldLocations.HB_Checks,#goa
 	        }
+
+        #these locations have world ids for twtnw
+        #LocationName.XigbarDataDefenseBoost:                0x64,
+        #LocationName.RoxasDataMagicBoost:                   0x63,
+        #LocationName.SaixDataDefenseBoost:                  0x6D,
+        #LocationName.LuxordDataAPBoost:                     0x65,
+        #these locations have world ids for hb
+        #LocationName.MarluxiaDataLostIllusion:      0x96,
+        #LocationName.ZexionDataLostIllusion:                      0x98,
+        #LocationName.LarxeneDataLostIllusion:            0x94,
+        #LocationName.LexaeusDataLostIllusion:           0x93,
+        #LocationName.VexenDataLostIllusion:           0x92,
+        #if every data is in their normal world
 
         #kh2.base_address+variable
                 #the back of sora's inventory
@@ -158,7 +138,13 @@ class KH2Context(CommonContext):
         self.Bt10 = 0x2A74880
         self.BtlEnd = 0x2A0D3E0
         self.Slot1 = 0x2A20C98
-
+        self.SoraLevel=0
+        self.ValorLevel=0
+        self.WisdomLevel=0
+        self.LimitLevel=0
+        self.MasterLevel=0
+        self.FinalLevel=0
+        #self.SoraLevel=0
         #short for ability byte for items
 
     async def server_auth(self, password_requested: bool = False):
@@ -168,11 +154,7 @@ class KH2Context(CommonContext):
         await self.send_connect()
 
     async def connection_closed(self):
-        await super(KH2Context, self).connection_closed()
-        for root, dirs, files in os.walk(self.game_communication_path):
-            for file in files:
-                if file.find("obtain") <= -1:
-                    os.remove(root + "/" + file)
+        print("ya")
 
     @property
     def endpoints(self):
@@ -194,12 +176,18 @@ class KH2Context(CommonContext):
 #figure out if the room and the going into the room is the same address. I.E. the little platform going into xigbar fight
 #look into wait functions to wait for address changes
     def give_item(self,itemcode):
+        itemMemory=0
         if itemcode.ability:
             self.kh2.write_short(self.kh2.base_address + self.Save+self.backofinventory, itemcode.memaddr)
+            self.backofinventory-=2
         elif itemcode.bitmask>0:
-            itemmemory=int.from_bytes( self.kh2.read_bytes( self.kh2.base_address+self.Save+itemmemory,1), "big")
+            #yourmomkh2.base_address + Save+0x36C0
+            #formlmao=int.from_bytes(kh2.read_bytes(yourmom,1), "big")
+            #kh2.write_bytes(yourmom,(formlmao|0x1<<0).to_bytes(1,'big'),1)
+
+            itemMemory=int.from_bytes(self.kh2.read_bytes( self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
             #write item into the address of that item. then turn on the bitmask of the item.
-            self.kh2.write_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,(itemmemory|itemcode.bitmask).to_bytes(1,'big'),1)
+            self.kh2.write_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,(itemMemory|0x01<<itemcode.bitmask).to_bytes(1,'big'),1)
         else:
             #Increasing the memory for item by 1 byte
             amount=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
@@ -207,19 +195,19 @@ class KH2Context(CommonContext):
 
     async def ItemSafe(self,args,svestate):          
         await self.roomSave(args,svestate)
-        print("Your Item Is now Safe")
+        #print("Your Item Is now Safe")
 
 
     async def roomSave(self,args,svestate):
         while svestate==self.kh2.read_short(self.kh2.base_address+self.sveroom):
            deathstate=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.onDeath,2), "big")
            if deathstate==1024 or deathstate==1280:
-               print("you have died")
+               #print("you have died")
                #cannot give item on death screen so waits untill they are not dead
                while deathstate==1024 or deathstate==1280:
                    deathstate=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.onDeath,2), "big")
                    await asyncio.sleep(1)
-               print("You have been sent you items again")
+               #print("You have been sent you items again")
                #give item because they have not room saved and are dead
                for item in args['items']:
                    itemname=self.lookup_id_to_item[item.item]
@@ -240,8 +228,8 @@ class KH2Context(CommonContext):
         #        with open(os.path.join(self.game_communication_path, filename), 'w') as f:
         #            f.close()
         if cmd in {"ReceivedItems"}:
-            #start_index = args["index"]
-            #if start_index != len(self.items_received):
+            start_index = args["index"]
+            if start_index != len(self.items_received):
                 for item in args['items']:
                     itemname=self.lookup_id_to_item[item.item]
                     itemcode=self.item_name_to_data[itemname]
@@ -266,51 +254,86 @@ class KH2Context(CommonContext):
 
         self.ui = KH2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
-    
-#async def parse_payload(payload: dict, ctx: KH2Context, force: bool):
-#
-#    # Refuse to do anything if ROM is detected as changed
-#    if ctx.auth and payload['playerName'] != ctx.auth:
-#        logger.warning("ROM change detected. Disconnecting and reconnecting...")
-#        ctx.deathlink_enabled = False
-#        ctx.deathlink_client_override = False
-#        ctx.finished_game = False
-#        ctx.location_table = {}
-#        ctx.collectible_table = {}
-#        ctx.deathlink_pending = False
-#        ctx.deathlink_sent_this_death = False
-#        ctx.auth = payload['playerName']
-#        await ctx.send_connect()
-#        return
-#
-#    # Turn on deathlink if it is on, and if the client hasn't overriden it
-#    if payload['deathlinkActive'] and not ctx.deathlink_enabled and not ctx.deathlink_client_override:
-#        await ctx.update_death_link(True)
-#        ctx.deathlink_enabled = True
-#
-#    # Game completion handling
-#    if payload['gameComplete'] and not ctx.finished_game:
-#        await ctx.send_msgs([{
-#            "cmd": "StatusUpdate",
-#            "status": 30
-#        }])
-#        ctx.finished_game = True
-#
-#    # Locations handling
-#    locations = payload['locations']
-#    collectibles = payload['collectibles']
-#
-#    if ctx.location_table != locations or ctx.collectible_table != collectibles:
-#        ctx.location_table = locations
-#        ctx.collectible_table = collectibles
-#        locs1 = [oot_loc_name_to_id[loc] for loc, b in ctx.location_table.items() if b]
-#        locs2 = [int(loc) for loc, b in ctx.collectible_table.items() if b]
-#        await ctx.send_msgs([{
-#            "cmd": "LocationChecks",
-#            "locations": locs1 + locs2
-#        }])
-#
-#    # Deathlink handling
+
+    async def checkWorldLocations(self):
+        try:
+            curworldid=(self.worldid[int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x0714DB8,1), "big")])
+        except:
+            logger.debug("Connection Lost, Please /autotrack")
+            self.connected = False
+            return
+        for location,data in curworldid.items():
+            if location not in self.locations_checked:
+                try:
+                    if(int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save+data.addrObtained,1), "big") & 0x1<<data.bitIndex)>0:
+                        self.locations_checked.add(location)
+                        #message = [{"cmd": 'LocationChecks', "locations": boobies[location]}]
+                        self.sending = self.sending+[(int(boobies[location]))]
+                        #message = [{"cmd": 'LocationChecks', "locations": sending}]
+                        
+                except:
+                    logger.debug("Connection Lost, Please /autotrack")
+                    self.connected = False
+                    return
+        #print(WorldLocations.SoraLevels.items())
+        
+    async def checkLevels(self):
+        for location,data in WorldLocations.SoraLevels.items():
+            if location not in self.locations_checked:
+                try:
+                    if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + 0x24FF,1), "big")>self.SoraLevel:
+                        self.locations_checked.add(location)
+                        #message = [{"cmd": 'LocationChecks', "locations": boobies[location]}]
+                        self.SoraLevel+=1
+                        self.sending = self.sending+[(int(boobies[location]))]
+                        #message = [{"cmd": 'LocationChecks', "locations": sending}]
+                    else:
+                         break
+                except:
+                    logger.debug("Connection Lost, Please /autotrack")
+                    self.connected = False
+                    return
+        i=1
+        formDict = {1: WorldLocations.ValorLevels, 2:  WorldLocations.WisdomLevels, 3:  WorldLocations.LimitLevels, 4:  WorldLocations.MasterLevels, 5:  WorldLocations.FinalLevels}
+        for location,data in formDict[i].items():
+            if location not in self.locations_checked:
+                try:
+                    if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + data.addrObtained,1), "big")>=data.bitIndex:
+                        self.locations_checked.add(location)
+                        self.sending = self.sending+[(int(boobies[location]))]
+                    else:
+                        i+=1
+                        if i>5:
+                            return
+                except:
+                    logger.debug("Connection Lost, Please /autotrack")
+                    self.connected = False
+                    return
+    #checks for items that has checks on their item slot
+    async def checkSlots(self):
+        for location,data in WorldLocations.weaponSlots.items():
+           if location not in self.locations_checked:
+                try:
+                    if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + data.addrObtained,1), "big")>0:
+                        self.locations_checked.add(location)
+                        self.sending = self.sending+[(int(boobies[location]))]
+                except:
+                    logger.debug("Connection Lost, Please /autotrack")
+                    self.connected = False
+                    return
+        for location,data in WorldLocations.formSlots.items():
+            if location not in self.locations_checked:
+                try:
+                    if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save+data.addrObtained,1), "big") & 0x1<<data.bitIndex>0:
+                        self.locations_checked.add(location)
+                        self.sending = self.sending+[(int(boobies[location]))]
+                except:
+                    logger.debug("Connection Lost, Please /autotrack")
+                    self.connected = False
+                    return
+  
+  
+
 
 
 #for loop to dictate what world you are in
@@ -326,48 +349,34 @@ class KH2Context(CommonContext):
 async def kh2_watcher(ctx: KH2Context):
     #from worlds.KH2.Locations import lookup_id_to_name
     logger.info("Please use /autotrack")
-   #while not ctx.exit_event.is_set():
-   #    if "KINGDOM HEARTS II" in str(subprocess.check_output('tasklist')):
-   #        pass
+    while not ctx.exit_event.is_set():
+        if ctx.kh2connected:     
+           #msg = get_payload(ctx).encode()
+           #writer.write(msg)
+           #writer.write(b'\n')
+            try:
+                ctx.KH2_status=CONNECTION_CONNECTED_STATUS
+                #await asyncio.wait(timeout=1.5)
+                try:
+                    ctx.sending = []
+                    await asyncio.create_task(ctx.checkWorldLocations())
+                    await asyncio.create_task(ctx.checkLevels())
+                    #ctx.locations_checked = ctx.sending
+                    message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
+                    await ctx.send_msgs(message)
+                except:
+                    logger.debug("Read failed due to Connection Lost,Please /autotrack")
+                    ctx.KH2_status = CONNECTION_RESET_STATUS
+                    ctx.kh2connected = False
+            except:
+                logger.debug("Connection Lost, Please /autotrack")
+                ctx.KH2_status = CONNECTION_RESET_STATUS
+                ctx.kh2connected = False
             
+        else:
+            await asyncio.sleep(1) 
+      
             
-        #print(ctx.kh2.propertyprocess_base)
-        
-        #if ctx.kh2.propertyprocess_base>0:
-        #    sync_msg = [{'cmd': 'Sync'}]
-        #    #if ctx.locations_checked:
-        #    #    sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
-        #    #await ctx.send_msgs(sync_msg)
-        #    #ctx.syncing = False
-        #else:
-        #    try:
-        #        logger.debug("Attempting to connect to N64")
-        #        ctx.n64_streams = await asyncio.wait_for(asyncio.open_connection("localhost", 28921), timeout=10)
-        #        ctx.n64_status = CONNECTION_TENTATIVE_STATUS
-        #    except TimeoutError:
-        #        logger.debug("Connection Timed Out, Trying Again")
-        #        ctx.n64_status = CONNECTION_TIMING_OUT_STATUS
-        #        continue
-        #    except ConnectionRefusedError:
-        #        logger.debug("Connection Refused, Trying Again")
-        #        ctx.n64_status = CONNECTION_REFUSED_STATUS
-        #        continue        
-       #sending = []
-       #victory = False
-       #for root, dirs, files in os.walk(ctx.game_communication_path):
-       #    for file in files:
-       #        if file.find("send") > -1:
-       #            st = file.split("send", -1)[1]
-       #            sending = sending+[(int(st))]
-       #        if file.find("victory") > -1:
-       #            victory = True
-       #ctx.locations_checked = sending
-       #message = [{"cmd": 'LocationChecks', "locations": sending}]
-       #await ctx.send_msgs(message)
-       #if not ctx.finished_game and victory:
-       #    await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-       #    ctx.finished_game = True
-       #await asyncio.sleep(0.1)
 
 
 if __name__ == '__main__':

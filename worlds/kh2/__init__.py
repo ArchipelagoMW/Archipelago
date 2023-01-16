@@ -16,11 +16,11 @@ from .OpenKH import patch_kh2
 class KingdomHearts2Web(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to playing Pokemon Red and Blue with Archipelago.",
+        "A guide to playing Kingdom Hearts 2 Final Mix with Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
-        ["Alchav"]
+        ["JaredWeakStrike"]
     )]
 
 
@@ -35,7 +35,7 @@ class KH2World(World):
     remote_start_inventory: bool = False
     item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
     location_name_to_id = {item_name: data.code for item_name, data in all_locations.items() if data.code}
-    totallocations=len(all_locations.items())-2
+    totallocations=len(all_locations.items())-78
 
     #multiworld locations that are checked in the client using the save anchor
     kh2multiworld_locations= list()
@@ -111,7 +111,7 @@ class KH2World(World):
         # there is no such thing as lvl 1 but there needs to be a "location" for mod writing reasons
         for lvl in {LocationName.Valorlvl1, LocationName.Wisdomlvl1, LocationName.Limitlvl1, LocationName.Masterlvl1,
                     LocationName.Finallvl1}:
-            self.multiworld.get_location(lvl, self.player).place_locked_item(self.create_item(ItemName.Nothing))
+            self.multiworld.get_location(lvl, self.player).place_locked_item(self.create_item(ItemName.Victory))
             self.totallocations -= 1
             
 
@@ -144,15 +144,15 @@ class KH2World(World):
 
 
         # if option to have level checks up to level 50 place nothing on checks past 50
-        if self.multiworld.Level_Depth[self.player].value == 1:
-            exclustiontbl = exclusion_table["Level50"]
-        else:
-            exclustiontbl = exclusion_table["Level99"]
-
-        for name in Locations.SoraLevels:
-            if name not in exclustiontbl:
-                self.multiworld.get_location(name, self.player).place_locked_item(self.create_item(ItemName.Nothing))
-                self.totallocations -= 1
+        #if self.multiworld.Level_Depth[self.player].value == 1:
+        #    exclustiontbl = exclusion_table["Level50"]
+        #else:
+        #    exclustiontbl = exclusion_table["Level99"]
+        #
+        #for name in Locations.SoraLevels:
+        #    if name not in exclustiontbl:
+        #        self.multiworld.get_location(name, self.player).place_locked_item(self.create_item(ItemName.Nothing))
+        #        self.totallocations -= 1
 
 
         # Creating the progression/ stat increases

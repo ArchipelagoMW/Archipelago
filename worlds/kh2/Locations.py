@@ -368,7 +368,7 @@ PR2_Checks = {
     LocationName.LuxordDataAPBoost:             LocationData(0x130117, 0x157FE, 0x66  , 0x70, 557, "Chest"),
 }
 HB_Checks = {
-    LocationName.MarketplaceMap:                LocationData(0x130118, 0x1538A, 0x3DA9, 7, 362, "Chest"),
+    LocationName.MarketplaceMap:                LocationData(0x130118, 0x1538A, 0x1D17, 4, 362, "Chest"),
     LocationName.BoroughDriveRecovery:          LocationData(0x130119, 0x14C3A, 0x23C6, 1, 194, "Chest"),
     LocationName.BoroughAPBoost:                LocationData(0x13011A, 0x14C46, 0x23C6, 2, 195, "Chest"),
     LocationName.BoroughHiPotion:               LocationData(0x13011B, 0x14C52, 0x23C6, 3, 196, "Chest"),
@@ -377,8 +377,8 @@ HB_Checks = {
     LocationName.MerlinsHouseMembershipCard:    LocationData(0x13011E, 0x15396, 0x1D10, 6, 256, "Chest"),
     LocationName.MerlinsHouseBlizzardElement:   LocationData(0x13011F, 0x153A2, 0x1D10, 6, 292, "Chest"),
     LocationName.Bailey:                        LocationData(0x130120, 0x2B118, 0x3709, 7, 47, "Get Bonus"),
-    LocationName.BaileySecretAnsemReport7:      LocationData(0x130121, 0x156EA, 0x1D18, 3, 531, "Chest"),
-    LocationName.BaseballCharm:                 LocationData(0x130122, 0x15402, 0x3DAA, 4, 258, "Chest"),
+    LocationName.BaileySecretAnsemReport7:      LocationData(0x130121, 0x156EA, 0x3709, 7, 531, "Chest"),
+    LocationName.BaseballCharm:                 LocationData(0x130122, 0x15402, 0x3709, 7, 258, "Chest"),
 }
 HB2_Checks = {
     LocationName.PosternCastlePerimeterMap:                   LocationData(0x130123, 0x14C76, 0x23C9, 4, 310, "Chest"),             
@@ -787,6 +787,7 @@ Keyblade_Slots = {
     LocationName.FenrirSlot:          LocationData(0x130290, 0xFFFFF, 0xFFFFF, 1, 142, "Keyblade"),
     LocationName.UltimaWeaponSlot:    LocationData(0x130291, 0xFFFFF, 0xFFFFF, 1, 143, "Keyblade"),
     LocationName.WinnersProofSlot:    LocationData(0x130292, 0xFFFFF, 0xFFFFF, 1, 149, "Keyblade"),
+    LocationName.PurebloodSlot:       LocationData(0x1302DA, 0xFFFFF, 0xFFFFF, 1,  85,"Keyblade"),
 }
 #will give these checks to the client oninit()
 Critical_Checks = {
@@ -812,7 +813,7 @@ Donald_Checks = {
     LocationName.DonaldScar:             LocationData(0x1302A0, 0xFFFFF, 0xFFFFF, 1, 29, "Get Bonus", "Donald", 2),
     LocationName.DonaldSolarSailer:      LocationData(0x1302A1, 0xFFFFF, 0xFFFFF, 1, 61, "Get Bonus", "Donald", 2),
     LocationName.DonaldExperiment:       LocationData(0x1302A2, 0xFFFFF, 0xFFFFF, 1, 20, "Get Bonus", "Donald", 2),
-    LocationName.DonaldBoatFight:        LocationData(0x1302A3, 0xFFFFF, 0xFFFFF, 1, 62, "Get Bonus", "Donald", 2),
+    #LocationName.DonaldBoatFight:        LocationData(0x1302A3, 0xFFFFF, 0xFFFFF, 1, 62, "Get Bonus", "Donald", 2),
     LocationName.DonaldMansionNobodies:  LocationData(0x1302A4, 0xFFFFF, 0xFFFFF, 1, 56, "Get Bonus", "Donald", 2),
     LocationName.DonaldThresholder:      LocationData(0x1302A5, 0xFFFFF, 0xFFFFF, 1, 2, "Get Bonus", "Donald", 2),
     LocationName.DonaldXaldinGetBonus:   LocationData(0x1302A6, 0xFFFFF, 0xFFFFF, 1, 4, "Get Bonus", "Donald", 2),
@@ -927,8 +928,8 @@ exclusion_table = {
     },
     # these are the levels that SHOULD have checks if lvl 50 is false
     "Level99": {
-        LocationName.Lvl7,
-        LocationName.Lvl9,
+        LocationName.Lvl7 ,
+        LocationName.Lvl9 ,
         LocationName.Lvl12,
         LocationName.Lvl15,
         LocationName.Lvl17,

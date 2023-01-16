@@ -439,7 +439,7 @@ GoofyProtega        ="Goofy Protega"
 
 
 Victory                   ="Victory"
-Nothing                   ="Nothing"
+LuckyEmblem               ="Lucky Emblem"
 
 #Keyblade Slots
 FAKESlot                  ="FAKE (Slot)"

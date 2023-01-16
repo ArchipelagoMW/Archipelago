@@ -103,11 +103,21 @@ class SuperBosses(Toggle):
 #    default = {}
 
 
-class Level_Depth(Toggle):
-    """Levels capped at 50 or 99 (true 50 false 99)"""
+#class Level_Depth(Choice):
+#    """Levels capped at 50 or 99"""
+#    display_name = "Level Depth"
+#    option_level50 = 0
+#    option_level99 = 1
+#    #option_everylevel = 2
+#    default = 0
+class LevelDepth(Choice):
+    # What is locked being on
+    # if 0 then no visit locking  if 1 then second visits if 2 then first and second visits with one item
     display_name = "Level Depth"
-    default = True
-
+    option_level50 = 0
+    option_level99 = 1
+    option_levelsanity= 2
+    default = 0
 
 class Max_Logic(Toggle):
     """Forms on forms and torn pages in cor/ag"""
@@ -139,7 +149,7 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "Visit_locking": Visitlocking,
     "Super_Bosses": SuperBosses,
    # "Starting_Items": KH2StartItems,
-    "Level_Depth": Level_Depth,
+    "Level_Depth": LevelDepth,
     "Max_Logic": Max_Logic,
     "Critical_Mode": Critical_Mode,
     "Promise_Charm": Promise_Charm,

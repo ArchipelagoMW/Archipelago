@@ -1,4 +1,6 @@
+import zipfile
 
+from typing import ClassVar, Dict, Tuple, Any, Optional, Union, BinaryIO
 import yaml
 import os
 import shutil
@@ -7,14 +9,30 @@ import json
 import os
 import shutil
 import Utils
+import zipfile
 from .Items import item_dictionary_table
-from .Locations import all_locations
+from .Locations import all_locations,SoraLevels
 from .XPValues import lvlStats, formExp, soraExp
-
-
-
-
+import Utils
+from .Names import LocationName
+import worlds.Files
+#class KH2ModFile(worlds.Files.APContainer):
+#    game = "Factorio"
+#    compression_method = zipfile.ZIP_DEFLATED  # Factorio can't load LZMA archives
+#
+#    def write_contents(self, opened_zipfile: zipfile.ZipFile):
+#        # directory containing Factorio mod has to come first, or Factorio won't recognize this file as a mod.
+#        mod_dir = self.path[:-4]  # cut off .zip
+#        for root, dirs, files in os.walk(mod_dir):
+#            for file in files:
+#                opened_zipfile.write(os.path.join(root, file),
+#                                     os.path.relpath(os.path.join(root, file),
+#                                                     os.path.join(mod_dir, '..')))
+#        # now we can add extras.
+#        super(KH2ModFile, self).write_contents(opened_zipfile)
 def patch_kh2(self, output_directory):
+
+
 
 
     def increaseStat(i):
@@ -25,7 +43,7 @@ def patch_kh2(self, output_directory):
         if lvlStats[i] == "def":
             self.defense += 1
         if lvlStats[i] == "ap":
-            self.ap += 2
+            self.ap += 3
 
     self.formattedTrsr = {}
     self.formattedBons = []
@@ -42,13 +60,13 @@ def patch_kh2(self, output_directory):
     goofyStartingItems = []
     donaldStartingItems = []
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
-
-
+    
+    print(self.multiworld.get_locations(self.player))
     for location in self.multiworld.get_filled_locations(self.player):
         data = all_locations[location.name]
-        if location.item.game == "Kingdom Hearts 2":
+        if location.native_item:
             
-            itemcode = item_dictionary_table[location.item.name]
+            itemcode = item_dictionary_table[location.item.name].kh2id
         else:
             #filling in lists for how to check if a chest is opened
             self.kh2multiworld_locations.append(location.name)
@@ -82,27 +100,6 @@ def patch_kh2(self, output_directory):
             }
             # putting dbl bonus at 0 again so we dont have the same item placed multiple time
             dblbonus = 0
-
-
-        elif data.yml == "Levels":
-            increaseStat(random.randint(0, 3))
-            # this means if Item Nothing or potion
-            if itemcode == 1:
-                itemcode = 0
-                increaseStat(random.randint(0, 3))
-            self.formattedLvup["Sora"][data.locid] = {
-                "Exp": int(soraExp[data.locid] / self.multiworld.Sora_Level_EXP[self.player].value),
-                "Strength": self.strength,
-                "Magic": self.magic,
-                "Defense": self.defense,
-                "Ap": self.ap,
-                "SwordAbility": itemcode,
-                "ShieldAbility": itemcode,
-                "StaffAbility": itemcode,
-                "Padding": 0,
-                "Character": "Sora",
-                "Level": data.locid
-            }
 
 
         elif data.yml == "Keyblade":
@@ -219,7 +216,30 @@ def patch_kh2(self, output_directory):
             "FormLevel": x,
             "GrowthAbilityLevel": 0,
         })
-
+    #levels done down here because of optinal settings that can take locations out of the pool. Might be able to refactor all the code to do somthing like this
+    self.i=1
+    for location in SoraLevels:
+        increaseStat(random.randint(0, 3))
+        try:
+            data=self.multiworld.get_location(location,self.player)
+            itemcode=item_dictionary_table[data.item.name].kh2id
+        except:
+            increaseStat(random.randint(0, 3))
+            itemcode=0
+        self.formattedLvup["Sora"][self.i] = {
+            "Exp": int(soraExp[self.i] / self.multiworld.Sora_Level_EXP[self.player].value),
+            "Strength": self.strength,
+            "Magic": self.magic,
+            "Defense": self.defense,
+            "Ap": self.ap,
+            "SwordAbility": itemcode,
+            "ShieldAbility": itemcode,
+            "StaffAbility": itemcode,
+            "Padding": 0,
+            "Character": "Sora",
+            "Level": self.i
+            }
+        self.i+=1
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__, )
     os.makedirs(mod_dir, exist_ok=False)
     with open(os.path.join(mod_dir, "Trsrlist.yml"), "wt") as f:
@@ -239,3 +259,9 @@ def patch_kh2(self, output_directory):
     shutil.copytree(os.path.join(os.path.dirname(__file__), "mod_template"),mod_dir,dirs_exist_ok=True)
     shutil.make_archive(mod_dir,'zip',mod_dir)
     shutil.rmtree(mod_dir)
+
+            
+    #try:
+    #    self.multiworld.get_location(LocationName.Lvl59, self.player).place_locked_item(self.create_item("Potion"))
+    #except:
+    #    print()
