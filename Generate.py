@@ -8,6 +8,7 @@ import string
 import urllib.parse
 import urllib.request
 from collections import Counter, ChainMap
+from itertools import chain
 from typing import Dict, Tuple, Callable, Any, Union
 
 import ModuleUpdate
@@ -413,18 +414,19 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
                 continue
             game_weights = weights[game]
             for option_key in game_weights:
-                if option_key not in ChainMap(Options.common_options, Options.per_game_common_options,
-                                              AutoWorldRegister.world_types[game].option_definitions)\
-                        and option_key not in {*valid_keys, "plando_connections", "plando_items", "plando_texts", "triggers"}:
+                if option_key not in chain(Options.common_options, Options.per_game_common_options,
+                                              AutoWorldRegister.world_types[game].option_definitions,
+                                           {*valid_keys, "plando_connections", "plando_items", "plando_texts", "triggers"}):
                     raise ValueError(f"{option_key} not a valid option name for {game} and not present in triggers")
                     pass
     else:
         game = weights["game"]
         if game != "A Link to the Past":  # TODO remove when LTTP doesn't have to be coded around
             for option_key in weights[game]:
-                if option_key not in ChainMap(Options.common_options, Options.per_game_common_options,
-                                              AutoWorldRegister.world_types[game].option_definitions)\
-                        and option_key not in {*valid_keys, "plando_connections", "plando_items", "plando_texts", "triggers"}:
+                if option_key not in chain(Options.common_options, Options.per_game_common_options,
+                                           AutoWorldRegister.world_types[game].option_definitions,
+                                           {*valid_keys, "plando_connections", "plando_items", "plando_texts",
+                                            "triggers"}):
                     raise ValueError(f"{option_key} not a valid option name for {game} and not present in triggers")
     return weights
 
