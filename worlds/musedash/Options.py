@@ -51,11 +51,6 @@ class MaximumSongDifficulty(Range):
     default = 7
 
 
-class AdditionalItemsAreSongs(DefaultOnToggle):
-    """2 Extra items are added to the pool per Song that is unlocked at the start. Turning this one means these items will be songs."""
-    display_name = "Additional Items Are Songs"
-
-
 class ExtraItemsGoalSong(Range):
     """The amount of extra items that lead to the goal.
     The game will randomise 2 + x items into the seed that lead to the goal.
@@ -67,7 +62,6 @@ class ExtraItemsGoalSong(Range):
     display_name = "Extra Goal Items"
 
 # Options Beyond this point are not Implemented
-
 
 class RandomisationMode(Choice):
     """The way that MuseDash will be randomised:
@@ -112,6 +106,5 @@ musedash_options: Dict[str, type(Option)] = {
     "additional_song_count": AdditionalSongs,
     "minimum_song_difficulty": MinimumSongDifficulty,
     "maximum_song_difficulty": MaximumSongDifficulty,
-    "extra_items_are_songs": AdditionalItemsAreSongs,
     "extra_goal_song_items": ExtraItemsGoalSong,
 }

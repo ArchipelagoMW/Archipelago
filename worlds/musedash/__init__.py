@@ -127,15 +127,11 @@ class MuseDashWorld(World):
         for _ in range(0, extra_goal_songs):
             self.multiworld.itempool.append(self.create_item(self.victory_song_name))
 
-        # Determine if the leftover songs are empty items or random songs.
-        extra_items_are_songs = self.multiworld.extra_items_are_songs[self.player]
+        # Fill all leftover spaces with extra songs
         for _ in range(0, excludedItemCount - extra_goal_songs):
-            if (extra_items_are_songs):
-                songKey = self.multiworld.random.choice(all_song_item_keys)
-                self.multiworld.itempool.append(self.create_item(songKey))
-                all_song_item_keys.remove(songKey)
-            else:
-                self.multiworld.itempool.append(self.museDashCollection.create_empty_item(self.player))
+            songKey = self.multiworld.random.choice(all_song_item_keys)
+            self.multiworld.itempool.append(self.create_item(songKey))
+            all_song_item_keys.remove(songKey)
 
 
     def create_regions(self) -> None:
