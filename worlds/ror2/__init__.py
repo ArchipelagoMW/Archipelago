@@ -66,7 +66,7 @@ class RiskOfRainWorld(World):
         if self.multiworld.start_with_revive[self.player].value:
             self.total_revivals -= 1
 
-    def generate_basic(self) -> None:
+    def create_items(self) -> None:
         # shortcut for starting_inventory... The start_with_revive option lets you start with a Dio's Best Friend
         if self.multiworld.start_with_revive[self.player]:
             self.multiworld.push_precollected(self.multiworld.create_item("Dio's Best Friend", self.player))
