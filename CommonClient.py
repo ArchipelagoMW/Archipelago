@@ -341,6 +341,11 @@ class CommonContext:
             return self.slot in self.slot_info[slot].group_members
         return False
 
+    def is_echoed_chat(self, print_json_packet: dict) -> bool:
+        return print_json_packet.get("type", "") == "Chat" \
+            and print_json_packet.get("team", None) == self.team \
+            and print_json_packet.get("slot", None) == self.slot
+
     def is_uninteresting_item_send(self, print_json_packet: dict) -> bool:
         """Helper function for filtering out ItemSend prints that do not concern the local player."""
         return print_json_packet.get("type", "") == "ItemSend" \
