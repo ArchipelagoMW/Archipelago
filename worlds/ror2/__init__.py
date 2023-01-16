@@ -336,11 +336,17 @@ def create_events(world: MultiWorld, player: int) -> None:
             world_region.locations.append(event_loc)
     elif world.environments_as_items[player].value:
         # only enforce extra events for explore_mode and environments_as_items
+        environment_available_orderedstages_table = environment_vanilla_orderedstages_table
+        if world.dlc_sotv[player]:
+            environment_available_orderedstages_table = collapse_dict_list_vertical(
+                environment_available_orderedstages_table, environment_sotv_orderedstages_table)
+
         for n in range(1,6):
+
             event_region = world.get_region(f"OrderedStage_{n}", player)
-            event_loc = RiskOfRainLocation(player, f"OrderedStage_{n}", None, event_region)
-            event_loc.place_locked_item(RiskOfRainItem(f"OrderedStage_{n}", ItemClassification.progression, None, player))
-            world_region.locations.append(event_loc)
+            event_loc = RiskOfRainLocation(player, f"Stage_{n}", None, event_region)
+            event_loc.place_locked_item(RiskOfRainItem(f"Stage_{n}", ItemClassification.progression, None, player))
+            event_region.locations.append(event_loc)
 
     victory_region = world.get_region("Victory", player)
     victory_event = RiskOfRainLocation(player, "Victory", None, victory_region)

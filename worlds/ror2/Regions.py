@@ -28,9 +28,9 @@ def create_regions(multiworld: MultiWorld, player: int):
     }
     # SOTV Regions
     dlc_regions: Dict[str, RoRRegionData] = {
-        "Siphoned Forest":                      RoRRegionData([], ["Abandoned Aqueduct", "Wetland Aspect", "Aphelian Sanctuary"]),
-        "Aphelian Sanctuary":                   RoRRegionData([], ["Rallypoint Delta", "Scorched Acres", "Sulfur Pools"]),
-        "Sulfur Pools":                         RoRRegionData([], ["Abyssal Depths", "Siren's Call", "Sundered Grove"])
+        "Siphoned Forest":                      RoRRegionData([], ["OrderedStage_1"]),
+        "Aphelian Sanctuary":                   RoRRegionData([], ["OrderedStage_2"]),
+        "Sulfur Pools":                         RoRRegionData([], ["OrderedStage_3"])
     }
     other_regions: Dict[str, RoRRegionData] = {
         "Commencement":                         RoRRegionData(None, ["Victory"]),
@@ -59,64 +59,63 @@ def create_regions(multiworld: MultiWorld, player: int):
     scavengers = int(multiworld.scavengers_per_stage[player])
     scanners = int(multiworld.scanner_per_stage[player])
     newt = int(multiworld.altars_per_stage[player])
-    for key in non_dlc_regions:
+    all_location_regions = {**non_dlc_regions}
+    if multiworld.dlc_sotv[player]:
+        all_location_regions = {**non_dlc_regions, **dlc_regions}
+    for key in all_location_regions:
         if key == "Menu":
             continue
         # Chests
         for i in range(0, chests):
-            non_dlc_regions[key].locations.append(f"{key}: Chest {i + 1}")
+            all_location_regions[key].locations.append(f"{key}: Chest {i + 1}")
         # Shrines
         for i in range(0, shrines):
-            non_dlc_regions[key].locations.append(f"{key}: Shrine {i + 1}")
+            all_location_regions[key].locations.append(f"{key}: Shrine {i + 1}")
         # Scavengers
         if scavengers > 0:
             for i in range(0, scavengers):
-                non_dlc_regions[key].locations.append(f"{key}: Scavenger {i + 1}")
+                all_location_regions[key].locations.append(f"{key}: Scavenger {i + 1}")
         # Radio Scanners
         if scanners > 0:
             for i in range(0, scanners):
-                non_dlc_regions[key].locations.append(f"{key}: Radio Scanner {i + 1}")
+                all_location_regions[key].locations.append(f"{key}: Radio Scanner {i + 1}")
         # Newt Altars
         if newt > 0:
             for i in range(0, newt):
-                non_dlc_regions[key].locations.append(f"{key}: Newt Altar {i + 1}")
-    regions_pool: Dict = {**non_dlc_regions, **other_regions}
+                all_location_regions[key].locations.append(f"{key}: Newt Altar {i + 1}")
+    regions_pool: Dict = {**all_location_regions, **other_regions}
     # DLC Locations
     if multiworld.dlc_sotv[player]:
         non_dlc_regions["Menu"].region_exits.append("Siphoned Forest")
-        non_dlc_regions["Distant Roost"].region_exits.append("Aphelian Sanctuary")
-        non_dlc_regions["Distant Roost (2)"].region_exits.append("Aphelian Sanctuary")
-        non_dlc_regions["Titanic Plains"].region_exits.append("Aphelian Sanctuary")
-        non_dlc_regions["Titanic Plains (2)"].region_exits.append("Aphelian Sanctuary")
-        non_dlc_regions["Abandoned Aqueduct"].region_exits.append("Sulfur Pools")
-        non_dlc_regions["Wetland Aspect"].region_exits.append("Sulfur Pools")
-        # other_regions["OrderedStage_2"].region_exits.append("Aphelian Sanctuary")
-        # other_regions["OrderedStage_3"].region_exits.append("Sulfur Pools")
+        other_regions["OrderedStage_2"].region_exits.append("Aphelian Sanctuary")
+        other_regions["OrderedStage_3"].region_exits.append("Sulfur Pools")
         other_regions["Commencement"].region_exits.append("The Planetarium")
         other_regions["Void Fields"].region_exits.append("Void Locus")
-        # other_regions["OrderedStage_5"].region_exits.append("Void Locus")
-        for key in dlc_regions:
-            # DLC Chests
-            for i in range(0, chests):
-                dlc_regions[key].locations.append(f"{key}: Chest {i + 1}")
-            # DLC Shrines
-            for i in range(0, shrines):
-                dlc_regions[key].locations.append(f"{key}: Shrine {i + 1}")
-            # DLC Scavengers
-            if scavengers > 0:
-                for i in range(0, scavengers):
-                    dlc_regions[key].locations.append(f"{key}: Scavenger {i + 1}")
-            # DLC Radio Scanners
-            if scanners > 0:
-                for i in range(0, scanners):
-                    dlc_regions[key].locations.append(f"{key}: Radio Scanner {i + 1}")
-            # DLC Newt Altars
-            if newt > 0:
-                for i in range(0, newt):
-                    dlc_regions[key].locations.append(f"{key}: Newt Altar {i + 1}")
-            regions_pool: Dict = {**non_dlc_regions, **dlc_regions, **other_regions, **dlc_other_regions}
+        # for key in dlc_regions:
+        #     # DLC Chests
+        #     for i in range(0, chests):
+        #         dlc_regions[key].locations.append(f"{key}: Chest {i + 1}")
+        #     # DLC Shrines
+        #     for i in range(0, shrines):
+        #         dlc_regions[key].locations.append(f"{key}: Shrine {i + 1}")
+        #     # DLC Scavengers
+        #     if scavengers > 0:
+        #         for i in range(0, scavengers):
+        #             dlc_regions[key].locations.append(f"{key}: Scavenger {i + 1}")
+        #     # DLC Radio Scanners
+        #     if scanners > 0:
+        #         for i in range(0, scanners):
+        #             dlc_regions[key].locations.append(f"{key}: Radio Scanner {i + 1}")
+        #     # DLC Newt Altars
+        #     if newt > 0:
+        #         for i in range(0, newt):
+        #             dlc_regions[key].locations.append(f"{key}: Newt Altar {i + 1}")
+        if multiworld.dlc_sotv[player]:
+            regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_other_regions}
+    # Create all the regions
     for name, data in regions_pool.items():
         multiworld.regions.append(create_region(multiworld, player, name, data))
+    # Connect all the regions to their exits
     for name, data in regions_pool.items():
         create_connections_in_regions(multiworld, player, name, data)
     # multiworld.get_entrance("Distant Roost", player).connect(multiworld.get_region("Distant Roost", player))
@@ -135,7 +134,6 @@ def create_regions(multiworld: MultiWorld, player: int):
     #     multiworld.get_entrance("Siphoned Forest", player).connect(multiworld.get_region("Siphoned Forest", player))
     #     multiworld.get_entrance("Aphelian Sanctuary", player).connect(multiworld.get_region("Aphelian Sanctuary", player))
     #     multiworld.get_entrance("Sulfur Pools", player).connect(multiworld.get_region("Sulfur Pools", player))
-    print("test")
 
 
 def create_region(multiworld: MultiWorld, player: int, name: str, data: RoRRegionData):
@@ -163,9 +161,8 @@ def create_connections_in_regions(multiworld: MultiWorld, player: int, name: str
             # Distant Roost Entrance
             # has_item(player, r_exit, name)
             # Menu -> Distant Roost
-            r_exit_stage = Entrance(player, f"{entrance} to {region_exit}", region)
+            r_exit_stage = Entrance(player, region_exit, region)
             # Distant Roost Region
-            has_item(player, r_exit_stage, region_exit)
             exit_region = multiworld.get_region(region_exit, player)
             r_exit_stage.connect(exit_region)
             # entrance.connect(region, r_exit_stage, player)
@@ -174,13 +171,6 @@ def create_connections_in_regions(multiworld: MultiWorld, player: int, name: str
             # else:
             #     r_exit.connect(region)
             region.exits.append(r_exit_stage)
-
-
-def has_item(player: int, entrance: Entrance, item: str):
-    entrance.access_rule = \
-        lambda state: check_item(state, player, item)
-def check_item(state: CollectionState, player: int, item: str):
-    return state.has(item, player)
 # create regions in a for loop
 # use created regions to add connections
 # Menu will search for all regions in its exit and connect them
