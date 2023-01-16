@@ -260,18 +260,17 @@ def process_pokemon_data(self):
             mon_data["spd"] = stats[3]
             mon_data["spc"] = stats[4]
         elif self.multiworld.randomize_pokemon_stats[self.player].value == 2:
-            old_stats = mon_data["hp"] + mon_data["atk"] + mon_data["def"] + mon_data["spd"] + mon_data["spc"] - 5
-            stats = [1, 1, 1, 1, 1]
-            while old_stats > 0:
-                stat = self.multiworld.random.randint(0, 4)
-                if stats[stat] < 255:
-                    old_stats -= 1
-                    stats[stat] += 1
-            mon_data["hp"] = stats[0]
-            mon_data["atk"] = stats[1]
-            mon_data["def"] = stats[2]
-            mon_data["spd"] = stats[3]
-            mon_data["spc"] = stats[4]
+            total_stats = mon_data["hp"] + mon_data["atk"] + mon_data["def"] + mon_data["spd"] + mon_data["spc"] - 60
+            dist = [self.multiworld.random.randint(1, 101) / 100, self.multiworld.random.randint(1, 101) / 100,
+                    self.multiworld.random.randint(1, 101) / 100, self.multiworld.random.randint(1, 101) / 100,
+                    self.multiworld.random.randint(1, 101) / 100]
+            total_dist = sum(dist)
+
+            mon_data["hp"] = int(round(dist[0] / total_dist * total_stats) + 20)
+            mon_data["atk"] = int(round(dist[1] / total_dist * total_stats) + 10)
+            mon_data["def"] = int(round(dist[2] / total_dist * total_stats) + 10)
+            mon_data["spd"] = int(round(dist[3] / total_dist * total_stats) + 10)
+            mon_data["spc"] = int(round(dist[4] / total_dist * total_stats) + 10)
         if self.multiworld.randomize_pokemon_types[self.player].value:
             if self.multiworld.randomize_pokemon_types[self.player].value == 1 and mon in poke_data.evolves_from:
                 type1 = local_poke_data[poke_data.evolves_from[mon]]["type1"]
