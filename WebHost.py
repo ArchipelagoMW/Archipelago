@@ -29,7 +29,7 @@ if not os.path.exists(configpath):  # fall back to config.yaml in home
 def get_app():
     register()
     app = raw_app
-    if os.path.exists(configpath):
+    if os.path.exists(configpath) and not app.config["TESTING"]:
         import yaml
         app.config.from_file(configpath, yaml.safe_load)
         logging.info(f"Updated config from {configpath}")

@@ -1,12 +1,12 @@
 import string
 
-from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification, RegionType
-from .Items import item_table, item_pool, event_item_pairs
+from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, RegionType, Tutorial
+from .Items import event_item_pairs, item_pool, item_table
 from .Locations import location_table
+from .Options import spire_options
 from .Regions import create_regions
 from .Rules import set_rules
-from ..AutoWorld import World, WebWorld
-from .Options import spire_options
+from ..AutoWorld import WebWorld, World
 
 
 class SpireWeb(WebWorld):
@@ -35,8 +35,6 @@ class SpireWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
-
-    forced_auto_forfeit = True
 
     def _get_slot_data(self):
         return {

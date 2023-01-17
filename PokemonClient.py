@@ -15,6 +15,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandP
     get_base_parser
 
 from worlds.pokemon_rb.locations import location_data
+from worlds.pokemon_rb.rom import RedDeltaPatch, BlueDeltaPatch
 
 location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}, "list": {}}
 location_bytes_bits = {}
@@ -265,8 +266,16 @@ async def run_game(romfile):
 async def patch_and_run_game(game_version, patch_file, ctx):
     base_name = os.path.splitext(patch_file)[0]
     comp_path = base_name + '.gb'
-    with open(Utils.local_path(Utils.get_options()["pokemon_rb_options"][f"{game_version}_rom_file"]), "rb") as stream:
-        base_rom = bytes(stream.read())
+    if game_version == "blue":
+        delta_patch = BlueDeltaPatch
+    else:
+        delta_patch = RedDeltaPatch
+
+    try:
+        base_rom = delta_patch.get_source_data()
+    except Exception as msg:
+        logger.info(msg, extra={'compact_gui': True})
+        ctx.gui_error('Error', msg)
 
     with zipfile.ZipFile(patch_file, 'r') as patch_archive:
         with patch_archive.open('delta.bsdiff4', 'r') as stream:
