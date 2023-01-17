@@ -257,7 +257,6 @@ main_location_table = {
     LocationName.ck_cube: 0xC640A5,
     LocationName.ck_flame_l: 0xC640DA,
     LocationName.ck_flame_r: 0xC640DB,
-    LocationName.the_end: 0xC64000
 }
 
 carrie_only_location_table = {
@@ -274,65 +273,45 @@ cc_lizard_generator_table = {
     LocationName.ccff_lizard_coffin_fr: 0xC640CC,
 }
 
-boss_table = {
-    LocationName.forest_boss_one: 0xC640DC,
-    LocationName.forest_boss_two: 0xC640DE,
-    LocationName.forest_boss_three: 0xC640DF,
-    LocationName.cw_boss: 0xC640E0,
-    LocationName.villa_boss_one: 0xC640E1,
-    LocationName.villa_boss_two: 0xC640E2,
-    LocationName.uw_boss: 0xC640E3,
-    LocationName.cc_boss_one: 0xC640E4,
-    LocationName.cc_boss_two: 0xC640E5,
-    LocationName.dt_boss_one: 0xC640E6,
-    LocationName.dt_boss_two: 0xC640E7,
-    LocationName.dt_boss_three: 0xC640E8,
-    LocationName.dt_boss_four: 0xC640E9,
-    LocationName.roc_boss: 0xC640EA,
-}
-
-renon_table = {
-    LocationName.ck_boss_one: 0xC640EB,
-}
-
-vincent_table = {
-    LocationName.ck_boss_two: 0xC640EC,
-}
-
-crystal_table = {
-    LocationName.cc_behind_the_seal: 0xC640ED
+event_location_table = {
+    LocationName.forest_boss_one: None,
+    LocationName.forest_boss_two: None,
+    LocationName.forest_boss_three: None,
+    LocationName.cw_boss: None,
+    LocationName.villa_boss_one: None,
+    LocationName.villa_boss_two: None,
+    LocationName.uw_boss: None,
+    LocationName.cc_boss_one: None,
+    LocationName.cc_boss_two: None,
+    LocationName.dt_boss_one: None,
+    LocationName.dt_boss_two: None,
+    LocationName.dt_boss_three: None,
+    LocationName.dt_boss_four: None,
+    LocationName.roc_boss: None,
+    LocationName.ck_boss_one: None,
+    LocationName.ck_boss_two: None,
+    LocationName.cc_behind_the_seal: None,
+    LocationName.the_end: None
 }
 
 all_locations = {
     **main_location_table,
     **carrie_only_location_table,
     **cc_lizard_generator_table,
-    **boss_table,
-    **renon_table,
-    **vincent_table,
-    **crystal_table
 }
 
 location_table = {}
 
 
 def setup_locations(world, player: int):
-    location_table = {**main_location_table}
+    location_table = {**main_location_table,
+                      **event_location_table}
 
     if world.carrie_logic[player].value:
         location_table.update({**carrie_only_location_table})
 
     if world.lizard_generator_items[player].value:
         location_table.update({**cc_lizard_generator_table})
-
-    if world.draculas_condition[player].value == 1:
-        location_table.update({**crystal_table})
-    elif world.draculas_condition[player].value == 2:
-        location_table.update({**boss_table})
-        if world.fight_renon[player].value != 0:
-            location_table.update({**renon_table})
-        if world.fight_vincent[player].value != 0:
-            location_table.update({**vincent_table})
 
     return location_table
 

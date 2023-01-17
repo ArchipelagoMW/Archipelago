@@ -467,9 +467,9 @@ def create_regions(world, player: int, active_locations):
         LocationName.ck_cube,
     ]
     if world.draculas_condition[player].value == 2:
-        if world.fight_vincent[player].value != 0:
+        if world.vincent_fight_condition[player].value != 0:
             ck_region_locations.insert(0, LocationName.ck_boss_two)
-        if world.fight_renon[player].value != 0:
+        if world.renon_fight_condition[player].value != 0:
             ck_region_locations.insert(0, LocationName.ck_boss_one)
     ck_region = create_region(world, player, active_locations, LocationName.castle_keep,
                               ck_region_locations, None)
@@ -683,19 +683,18 @@ def create_region(world: MultiWorld, player: int, active_locations, name: str, l
     if locations:
         for location in locations:
             loc_id = active_locations.get(location, 0)
-            if loc_id:
-                location = CV64Location(player, location, loc_id, ret)
-                if loc_id != 0xC64000 and loc_id < 0xC640DC:
-                    location.rom_offset = rom_loc_offsets[loc_id]
-                    if location.address in npc_items:
-                        location.loc_type = "npc"
-                    elif location.address in invis_items:
-                        location.loc_type = "invisible"
-                    elif location.address in event_items:
-                        location.loc_type = "event"
-                    else:
-                        location.loc_type = "normal"
-                ret.locations.append(location)
+            location = CV64Location(player, location, loc_id, ret)
+            if loc_id in rom_loc_offsets:
+                location.rom_offset = rom_loc_offsets[loc_id]
+                if location.address in npc_items:
+                    location.loc_type = "npc"
+                elif location.address in invis_items:
+                    location.loc_type = "invisible"
+                elif location.address in event_items:
+                    location.loc_type = "event"
+                else:
+                    location.loc_type = "normal"
+            ret.locations.append(location)
     if exits:
         for exit in exits:
             ret.exits.append(Entrance(player, exit, ret))

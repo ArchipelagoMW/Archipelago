@@ -7,8 +7,6 @@ from .Names import ItemName
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     progression: bool
-    quantity: int = 1
-    event: bool = False
 
 
 class CV64Item(Item):
@@ -55,7 +53,7 @@ main_table = {
 }
 
 event_table = {
-    ItemName.victory:          ItemData(0xC64000, True),
+    ItemName.victory:          ItemData(None, True),
 }
 
 # Complete item table.

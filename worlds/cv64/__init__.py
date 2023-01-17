@@ -39,7 +39,7 @@ class CV64World(World):
     """
     game: str = "Castlevania 64"
     option_definitions = cv64_options
-    topology_present = False
+    topology_present = True
     data_version = 0
     # hint_blacklist = {}
     remote_items = False
@@ -53,7 +53,7 @@ class CV64World(World):
     sub_weapon_dict: typing.Dict[int, int]
     # music_dict: typing.Dict[int, int]
     # TODO: Make a list of every instance of the music changing for music rando.
-    required_special2s = 0
+    required_s2s = 0
     web = CV64Web()
 
     def __init__(self, world: MultiWorld, player: int):
@@ -73,6 +73,43 @@ class CV64World(World):
             "active_warps": self.active_warp_list,
         }
 
+    def generate_early(self):
+        self.active_level_list = level_list.copy()
+        self.active_warp_list = self.multiworld.random.sample(self.active_level_list, 7)
+        self.sub_weapon_dict = rom_sub_weapon_offsets.copy()
+
+        if self.multiworld.stage_shuffle[self.player]:
+            self.active_level_list.remove(LocationName.villa)
+            self.active_level_list.remove(LocationName.castle_center)
+            self.active_level_list.remove(LocationName.castle_keep)
+            self.multiworld.random.shuffle(self.active_level_list)
+            self.villa_cc_ids = self.multiworld.random.sample(range(0, 6), 2)
+            if self.villa_cc_ids[0] < self.villa_cc_ids[1]:
+                self.active_level_list.insert(self.villa_cc_ids[0], LocationName.villa)
+                self.active_level_list.insert(self.villa_cc_ids[1] + 2, LocationName.castle_center)
+            else:
+                self.active_level_list.insert(self.villa_cc_ids[1], LocationName.castle_center)
+                self.active_level_list.insert(self.villa_cc_ids[0] + 4, LocationName.villa)
+            self.active_level_list.append(LocationName.castle_keep)
+            # Prevent Clock Tower from being Stage 1 if more than 4 S1s are needed to warp.
+            if self.multiworld.special1s_per_warp[self.player].value > 4 and self.active_level_list[0] == LocationName.clock_tower:
+                self.active_level_list.remove(LocationName.clock_tower)
+                new_ct_slot = self.multiworld.random.randint(1, 11)
+                self.active_level_list.insert(new_ct_slot, LocationName.clock_tower)
+
+        if self.multiworld.warp_shuffle[self.player].value == 0:
+            new_list = self.active_level_list.copy()
+            for warp in self.active_level_list:
+                if warp not in self.active_warp_list:
+                    new_list.remove(warp)
+            self.active_warp_list = new_list
+        elif self.multiworld.warp_shuffle[self.player].value == 2:
+            new_list = level_list.copy()
+            for warp in level_list:
+                if warp not in self.active_warp_list:
+                    new_list.remove(warp)
+            self.active_warp_list = new_list
+
     def create_regions(self):
         location_table = setup_locations(self.multiworld, self.player)
         create_regions(self.multiworld, self.player, location_table)
@@ -90,6 +127,8 @@ class CV64World(World):
             classification = ItemClassification.filler
 
         created_item = CV64Item(name, classification, data.code, self.player)
+        if self.multiworld.draculas_condition[self.player].value != 3 and created_item.name == ItemName.special_two:
+            created_item.code = None
         if name in rom_item_bytes:
             created_item.item_byte = rom_item_bytes[name]
 
@@ -106,16 +145,22 @@ class CV64World(World):
 
         self.multiworld.get_location(LocationName.the_end, self.player).place_locked_item(self.create_item(ItemName.victory))
 
-        number_of_special1s = self.multiworld.total_special1s[self.player].value
-        number_of_special2s = self.multiworld.total_special2s[self.player].value
+        number_of_s1s = self.multiworld.total_special1s[self.player].value
+        number_of_s2s = self.multiworld.total_special2s[self.player].value
         total_available_bosses = 14
 
+        required_s1s = self.multiworld.special1s_per_warp[self.player].value*7
+
+        if required_s1s > number_of_s1s:
+            raise Exception(f"Not enough Special1 jewels for player {self.multiworld.get_player_name(self.player)} "
+                            f"to use the whole warp menu. Need {required_s1s - number_of_s1s} more.")
+
         if self.multiworld.draculas_condition[self.player].value == 1:
-            self.required_special2s = 1
+            self.required_s2s = 1
             self.multiworld.get_location(LocationName.cc_behind_the_seal, self.player) \
                 .place_locked_item(self.create_item(ItemName.special_two))
         elif self.multiworld.draculas_condition[self.player].value == 2:
-            self.required_special2s = self.multiworld.bosses_required[self.player].value
+            self.required_s2s = self.multiworld.bosses_required[self.player].value
             self.multiworld.get_location(LocationName.forest_boss_one, self.player) \
                 .place_locked_item(self.create_item(ItemName.special_two))
             self.multiworld.get_location(LocationName.forest_boss_two, self.player) \
@@ -144,19 +189,23 @@ class CV64World(World):
                 .place_locked_item(self.create_item(ItemName.special_two))
             self.multiworld.get_location(LocationName.roc_boss, self.player) \
                 .place_locked_item(self.create_item(ItemName.special_two))
-            if self.multiworld.fight_renon[self.player].value != 0:
+            if self.multiworld.renon_fight_condition[self.player].value != 0:
                 self.multiworld.get_location(LocationName.ck_boss_one, self.player) \
                     .place_locked_item(self.create_item(ItemName.special_two))
                 total_available_bosses += 1
-            if self.multiworld.fight_vincent[self.player].value != 0:
+            if self.multiworld.vincent_fight_condition[self.player].value != 0:
                 self.multiworld.get_location(LocationName.ck_boss_two, self.player) \
                     .place_locked_item(self.create_item(ItemName.special_two))
                 total_available_bosses += 1
-            if self.required_special2s > total_available_bosses:
-                self.required_special2s = total_available_bosses
+            if self.required_s2s > total_available_bosses:
+                raise Exception(f"More bosses required than there are for player {self.multiworld.get_player_name(self.player)}. "
+                                f"Need {self.required_s2s - total_available_bosses} more enabled.")
         elif self.multiworld.draculas_condition[self.player].value == 3:
-            itempool += [self.create_item(ItemName.special_two) for _ in range(number_of_special2s)]
-            self.required_special2s = self.multiworld.special2s_required[self.player].value
+            itempool += [self.create_item(ItemName.special_two) for _ in range(number_of_s2s)]
+            self.required_s2s = self.multiworld.special2s_required[self.player].value
+            if self.required_s2s > number_of_s2s:
+                raise Exception(f"More Special2 jewels required than there are for player {self.multiworld.get_player_name(self.player)}. "
+                                f"Need {self.required_s2s - number_of_s2s} more.")
 
         extra_keys_dict = {ItemName.left_tower_key: 0, ItemName.storeroom_key: 0, ItemName.archives_key: 0,
                            ItemName.garden_key: 0, ItemName.copper_key: 0, ItemName.chamber_key: 0,
@@ -173,7 +222,7 @@ class CV64World(World):
                 extra_count = self.multiworld.random.randint(0, 1)
                 extra_keys_dict[item] = extra_count
 
-        itempool += [self.create_item(ItemName.special_one) for _ in range(number_of_special1s)]
+        itempool += [self.create_item(ItemName.special_one) for _ in range(number_of_s1s)]
         itempool += [self.create_item(ItemName.roast_chicken) for _ in range(21)]
         itempool += [self.create_item(ItemName.roast_beef) for _ in range(24)]
         itempool += [self.create_item(ItemName.healing_kit) for _ in range(4)]
@@ -211,48 +260,13 @@ class CV64World(World):
         total_junk_count = total_required_locations - len(itempool)
 
         junk_pool = []
-        for i in range(total_junk_count):
-            item_name = ItemName.five_hundred_gold
-            gold_or_random = self.multiworld.random.randint(1, 5)
-            if gold_or_random > 1:
-                item_name = self.multiworld.random.choice(list(junk_table.keys()))
-            junk_pool += [self.create_item(item_name)]
+        for item_name in self.multiworld.random.choices(list(junk_table.keys()), k=total_junk_count):
+            junk_pool.append(self.create_item(item_name))
 
         itempool += junk_pool
 
-        self.active_level_list = level_list.copy()
-        self.active_warp_list = self.multiworld.random.sample(self.active_level_list, 7)
-        self.sub_weapon_dict = rom_sub_weapon_offsets.copy()
-
-        if self.multiworld.stage_shuffle[self.player]:
-            self.active_level_list.remove(LocationName.villa)
-            self.active_level_list.remove(LocationName.castle_center)
-            self.active_level_list.remove(LocationName.castle_keep)
-            self.multiworld.random.shuffle(self.active_level_list)
-            self.villa_cc_ids = self.multiworld.random.sample(range(0, 6), 2)
-            if self.villa_cc_ids[0] < self.villa_cc_ids[1]:
-                self.active_level_list.insert(self.villa_cc_ids[0], LocationName.villa)
-                self.active_level_list.insert(self.villa_cc_ids[1] + 2, LocationName.castle_center)
-            else:
-                self.active_level_list.insert(self.villa_cc_ids[1], LocationName.castle_center)
-                self.active_level_list.insert(self.villa_cc_ids[0] + 4, LocationName.villa)
-            self.active_level_list.append(LocationName.castle_keep)
-
-        if self.multiworld.warp_shuffle[self.player].value == 0:
-            new_list = self.active_level_list.copy()
-            for warp in self.active_level_list:
-                if warp not in self.active_warp_list:
-                    new_list.remove(warp)
-            self.active_warp_list = new_list
-        elif self.multiworld.warp_shuffle[self.player].value == 2:
-            new_list = level_list.copy()
-            for warp in level_list:
-                if warp not in self.active_warp_list:
-                    new_list.remove(warp)
-            self.active_warp_list = new_list
-
         connect_regions(self.multiworld, self.player, self.active_level_list, self.active_warp_list,
-                        self.required_special2s)
+                        self.required_s2s)
 
         self.multiworld.itempool += itempool
 
@@ -260,6 +274,14 @@ class CV64World(World):
             sub_bytes = list(self.sub_weapon_dict.values())
             self.multiworld.random.shuffle(sub_bytes)
             self.sub_weapon_dict = dict(zip(self.sub_weapon_dict, sub_bytes))
+
+    def pre_fill(self):
+        if self.active_level_list[0] == LocationName.tower_of_science:
+            if self.multiworld.special1s_per_warp[self.player].value > 3:
+                self.multiworld.local_early_items[self.player][ItemName.science_key_two] = 1
+        elif self.active_level_list[0] == LocationName.clock_tower:
+            if self.multiworld.special1s_per_warp[self.player].value > 2:
+                self.multiworld.local_early_items[self.player][ItemName.clocktower_key_one] = 1
 
     def generate_output(self, output_directory: str):
         try:
@@ -269,24 +291,6 @@ class CV64World(World):
             rom = LocalRom(get_base_rom_path())
 
             active_locations = self.location_name_to_id.copy()
-            del active_locations[LocationName.cc_behind_the_seal]
-            del active_locations[LocationName.forest_boss_one]
-            del active_locations[LocationName.forest_boss_two]
-            del active_locations[LocationName.forest_boss_three]
-            del active_locations[LocationName.cw_boss]
-            del active_locations[LocationName.villa_boss_one]
-            del active_locations[LocationName.villa_boss_two]
-            del active_locations[LocationName.uw_boss]
-            del active_locations[LocationName.cc_boss_one]
-            del active_locations[LocationName.cc_boss_two]
-            del active_locations[LocationName.dt_boss_one]
-            del active_locations[LocationName.dt_boss_two]
-            del active_locations[LocationName.dt_boss_three]
-            del active_locations[LocationName.dt_boss_four]
-            del active_locations[LocationName.roc_boss]
-            del active_locations[LocationName.ck_boss_one]
-            del active_locations[LocationName.ck_boss_two]
-            del active_locations[LocationName.the_end]
 
             if not self.multiworld.carrie_logic[self.player]:
                 del active_locations[LocationName.uw_carrie1]
@@ -318,7 +322,7 @@ class CV64World(World):
                             offsets_to_ids[loc.rom_offset] = 0x12
 
             patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.active_level_list, self.active_warp_list,
-                      self.sub_weapon_dict, self.required_special2s)
+                      self.sub_weapon_dict, self.required_s2s)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \

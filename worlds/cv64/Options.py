@@ -106,24 +106,24 @@ class LizardGeneratorItems(Toggle):
     display_name = "Lizard-man Generator Items"
 
 
-class FightRenon(Choice):
+class RenonFightCondition(Choice):
     """Sets the condition on which the Renon fight will trigger.
     Vanilla = after spending more than 30,000 gold in his shop."""
-    display_name = "Fight Renon"
+    display_name = "Renon Fight Condition"
     option_never = 0
-    option_vanilla = 1
+    option_spend_30k = 1
     option_always = 2
-    default = 1
+    default = 0
 
 
-class FightVincent(Choice):
+class VincentFightCondition(Choice):
     """Sets the condition on which the vampire Vincent fight will trigger.
     Vanilla = after 16 or more in-game days pass."""
-    display_name = "Fight Vincent"
+    display_name = "Vincent Fight Condition"
     option_never = 0
-    option_vanilla = 1
+    option_wait_16_days = 1
     option_always = 2
-    default = 1
+    default = 0
 
 
 class BadEndingCondition(Choice):
@@ -131,9 +131,9 @@ class BadEndingCondition(Choice):
     Vanilla = after defeating vampire Vincent."""
     display_name = "Bad Ending Condition"
     option_never = 0
-    option_vanilla = 1
+    option_defeat_vincent = 1
     option_always = 2
-    default = 1
+    default = 0
 
 
 class IncreaseItemLimit(DefaultOnToggle):
@@ -173,8 +173,8 @@ cv64_options: Dict[str, Option] = {
     "carrie_logic": CarrieLogic,
     "hard_logic": HardLogic,
     "lizard_generator_items": LizardGeneratorItems,
-    "fight_renon": FightRenon,
-    "fight_vincent": FightVincent,
+    "renon_fight_condition": RenonFightCondition,
+    "vincent_fight_condition": VincentFightCondition,
     "bad_ending_condition": BadEndingCondition,
     "increase_item_limit": IncreaseItemLimit,
     # "reveal_invisible_items": RevealInvisibleItems,

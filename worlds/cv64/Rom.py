@@ -427,7 +427,7 @@ class LocalRom(object):
             self.buffer = bytearray(stream.read())
 
 
-def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, sub_weapon_dict, required_special2s):
+def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, sub_weapon_dict, required_s2s):
     # local_random = world.slot_seeds[player]
 
     w1 = str(world.special1s_per_warp[player]).zfill(2)
@@ -531,16 +531,16 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
     rom.write_bytes(0xBFC2E0, PatchName.boss_save_stopper)
 
     # Disable or guarantee vampire Vincent's fight
-    if world.fight_vincent[player] == "never":
+    if world.vincent_fight_condition[player] == "never":
         rom.write_bytes(0xAACC0, [0x24, 0x01, 0x00, 0x01])  # ADDIU AT, R0, 0x0001
-    elif world.fight_vincent[player] == "always":
+    elif world.vincent_fight_condition[player] == "always":
         rom.write_bytes(0xAACE0, [0x24, 0x18, 0x00, 0x10])  # ADDIU	T8, R0, 0x0010
     else:
         rom.write_bytes(0xAACE0, [0x24, 0x18, 0x00, 0x00])  # ADDIU	T8, R0, 0x0000
 
     # Disable or guarantee Renon's fight
     rom.write_bytes(0xAACB4, [0x08, 0x0F, 0xF1, 0xA4])  # J 0x803FC690
-    if world.fight_renon[player] == "never":
+    if world.renon_fight_condition[player] == "never":
         rom.write_byte(0xB804F0, 0x00)
         rom.write_byte(0xB80632, 0x00)
         rom.write_byte(0xB807E3, 0x00)
@@ -548,7 +548,7 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
         rom.write_byte(0xB816BD, 0xB8)
         rom.write_byte(0xB817CF, 0x00)
         rom.write_bytes(0xBFC690, PatchName.renon_cutscene_checker_jr)
-    elif world.fight_renon[player] == "always":
+    elif world.renon_fight_condition[player] == "always":
         rom.write_byte(0xB804F0, 0x0C)
         rom.write_byte(0xB80632, 0x0C)
         rom.write_byte(0xB807E3, 0x0C)
@@ -705,13 +705,13 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
         rom.write_byte(0xADE8F, world.bosses_required[player].value)
         rom.write_bytes(0xBFCC62, cv64_text_converter(f"It won't budge!\n"
                                                       f"You'll need to defeat\n"
-                                                      f"{required_special2s} powerful monsters\n"
+                                                      f"{required_s2s} powerful monsters\n"
                                                       f"to undo the seal.", True))
     elif world.draculas_condition[player] == 3:
         rom.write_byte(0xADE8F, world.special2s_required[player].value)
         rom.write_bytes(0xBFCC62, cv64_text_converter(f"It won't budge!\n"
                                                       f"You'll need to find\n"
-                                                      f"{required_special2s} Special2 jewels\n"
+                                                      f"{required_s2s} Special2 jewels\n"
                                                       f"to undo the seal.", True))
     else:
         rom.write_byte(0xADE8F, 0x00)
@@ -814,6 +814,8 @@ def patch_rom(world, rom, player, offsets_to_ids, active_level_list, warp_list, 
                 if i - 1 < 0:
                     rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset,
                                    level_dict[active_level_list[i]].startSceneID)
+                    rom.write_byte(level_dict[active_level_list[i]].startzoneSpawnOffset,
+                                   level_dict[active_level_list[i]].startSpawnID)
                 elif active_level_list[i - 2] == LocationName.villa:
                     rom.write_byte(level_dict[active_level_list[i]].startzoneSceneOffset, 0x1A)
                     rom.write_byte(level_dict[active_level_list[i]].startzoneSpawnOffset, 0x03)
@@ -876,7 +878,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 def get_base_rom_path(file_name: str = "") -> str:
     options = Utils.get_options()
     if not file_name:
-        file_name = options["cv64_options"]["rom_file"]
+        # file_name = options["cv64_options"]["rom_file"]
+        file_name = "Castlevania (USA).z64"
     if not os.path.exists(file_name):
         file_name = Utils.local_path(file_name)
     return file_name
