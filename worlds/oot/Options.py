@@ -899,11 +899,11 @@ class HintDistribution(Choice):
     display_name = "Hint Distribution"
     option_balanced = 0
     option_ddr = 1
-    option_league = 2
-    option_mw3 = 3
+    # option_league = 2
+    # option_mw3 = 3
     option_scrubs = 4
     option_strong = 5
-    option_tournament = 6
+    # option_tournament = 6
     option_useless = 7
     option_very_strong = 8
     option_async = 9
