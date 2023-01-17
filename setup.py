@@ -13,6 +13,10 @@ from pathlib import Path
 
 import setuptools
 
+if __name__ == "__main__":
+    import ModuleUpdate
+    ModuleUpdate.update()
+
 from Launcher import components, icon_paths
 from Utils import version_tuple, is_windows, is_linux
 
