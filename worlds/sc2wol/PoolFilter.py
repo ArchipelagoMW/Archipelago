@@ -126,7 +126,8 @@ class ValidInventory:
         if units_always_have_upgrades:
             existing_items = self.existing_items[:]
             while existing_items:
-                items_to_lock = self.cascade_removal_map[existing_items.pop()]
+                existing_item = existing_items.pop()
+                items_to_lock = self.cascade_removal_map.get(existing_item, [existing_item])
                 for item in items_to_lock:
                     if item in inventory:
                         inventory.remove(item)
