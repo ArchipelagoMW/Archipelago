@@ -133,10 +133,10 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         raise NotImplementedError
 
     if typing.TYPE_CHECKING:
-        from Generate import PlandoSettings
+        from Generate import PlandoOptions
         from worlds.AutoWorld import World
 
-        def verify(self, world: World, player_name: str, plando_options: PlandoSettings) -> None:
+        def verify(self, world: World, player_name: str, plando_options: PlandoOptions) -> None:
             pass
     else:
         def verify(self, *args, **kwargs) -> None:
@@ -578,8 +578,8 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
     def verify(self, world, player_name: str, plando_options) -> None:
         if isinstance(self.value, int):
             return
-        from Generate import PlandoSettings
-        if not(PlandoSettings.bosses & plando_options):
+        from Generate import PlandoOptions
+        if not(PlandoOptions.bosses & plando_options):
             import logging
             # plando is disabled but plando options were given so pull the option and change it to an int
             option = self.value.split(";")[-1]
