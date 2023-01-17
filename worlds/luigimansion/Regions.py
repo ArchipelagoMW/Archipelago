@@ -78,6 +78,7 @@ def create_regions(world: MultiWorld, player: int, locations: LMLocation[Locatio
 
     names: Dict[str, int] = {}
 
+    connect(world, player, names, 'Menu', 'Foyer')
     connect(world, player, names, 'Foyer', 'Parlor', lambda state: state.has("Parlor Key", player))
     connect(world, player, names, 'Parlor', 'Anteroom', lambda state: state.has("Anteroom Key", player))
     connect(world, player, names, 'Anteroom', 'Wardrobe', lambda state: state.has("Wardrobe Key", player))
