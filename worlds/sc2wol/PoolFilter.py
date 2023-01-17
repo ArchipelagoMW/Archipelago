@@ -36,10 +36,11 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
         Difficulties.EASY: easy_regions_list[:],
         Difficulties.MEDIUM: medium_regions_list[:],
         Difficulties.HARD: hard_regions_list[:],
-        Difficulties.FINAL: ["All-In"]
+        Difficulties.FINAL: []
     }
     # Vanilla and Vanilla Shuffled use the entire mission pool
     if mission_count == 28:
+        mission_pools[Difficulties.FINAL] = ['All-In']
         return mission_pools
 
     # Omitting No-Build missions if not shuffling no-build
