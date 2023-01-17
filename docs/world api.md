@@ -102,13 +102,17 @@ Locations are places where items can be located in your game. This may be chests
 or boss drops for RPG-like games but could also be progress in a research tree.
 
 Each location has a `name` and an `id` (a.k.a. "code" or "address"), is placed
-in a Region and has access rules.
+in a Region, has access rules and a classification.
 The name needs to be unique in each game and must not be numeric (has to
 contain least 1 letter or symbol). The ID needs to be unique across all games
 and is best in the same range as the item IDs.
 World-specific IDs are 1 to 2<sup>53</sup>-1, IDs ≤ 0 are global and reserved.
 
 Special locations with ID `None` can hold events.
+
+Classification is one of `LocationProgressType.DEFAULT`, `PRIORITY` or `EXCLUDED`.
+The Fill algorithm will fill priority first, giving higher chance of it being
+required, and not place progression or useful items in excluded locations.
 
 ### Items
 
@@ -339,18 +343,6 @@ class MyGameWorld(World):
     option_definitions = mygame_options  # assign the options dict to the world
     #...
 ```
-    
-### Local or Remote
-
-A world with `remote_items` set to `True` gets all items items from the server
-and no item from the local game. So for an RPG opening a chest would not add
-any item to your inventory, instead the server will send you what was in that
-chest. The advantage is that a generic mod can be used that does not need to
-know anything about the seed.
-
-A world with `remote_items` set to `False` will locally reward its local items.
-For console games this can remove delay and make script/animation/dialog flow
-more natural. These games typically have been edited to 'bake in' the items.
 
 ### A World Class Skeleton
 
@@ -375,8 +367,6 @@ class MyGameWorld(World):
     game: str = "My Game"  # name of the game/world
     option_definitions = mygame_options  # options the player can set
     topology_present: bool = True  # show path to required location checks in spoiler
-    remote_items: bool = False  # True if all items come from the server
-    remote_start_inventory: bool = False  # True if start inventory comes from the server
 
     # data_version is used to signal that items, locations or their names
     # changed. Set this to 0 during development so other games' clients do not
@@ -411,17 +401,13 @@ The world has to provide the following things for generation
 * additions to the item pool
 * additions to the regions list: at least one called "Menu"
 * locations placed inside those regions
-* a `def create_item(self, item: str) -> MyGameItem` for plando/manual placing
-* applying `self.world.precollected_items` for plando/start inventory
-  if not using a `remote_start_inventory`
+* a `def create_item(self, item: str) -> MyGameItem` to create any item on demand
+* applying `self.world.push_precollected` for start inventory
 * a `def generate_output(self, output_directory: str)` that creates the output
-  if there is output to be generated. If only items are randomized and
-  `remote_items = True` it is possible to have a generic mod and output
-  generation can be skipped. In all other cases this is required. When this is
-  called, `self.world.get_locations()` has all locations for all players, with
-  properties `item` pointing to the item and `player` identifying the player.
-  `self.world.get_filled_locations(self.player)` will filter for this world.
-  `item.player` can be used to see if it's a local item.
+  files if there is output to be generated. When this is
+  called, `self.world.get_locations(self.player)` has all locations for the player, with
+  attribute `item` pointing to the item.
+  `location.item.player` can be used to see if it's a local item.
 
 In addition, the following methods can be implemented and attributes can be set
 
@@ -429,12 +415,13 @@ In addition, the following methods can be implemented and attributes can be set
   called per player before any items or locations are created. You can set
   properties on your world here. Already has access to player options and RNG.
 * `def create_regions(self)`
-  called to place player's regions into the MultiWorld's regions list. If it's
+  called to place player's regions and their locations into the MultiWorld's regions list. If it's
   hard to separate, this can be done during `generate_early` or `basic` as well.
 * `def create_items(self)`
   called to place player's items into the MultiWorld's itempool.
 * `def set_rules(self)`
-  called to set access and item rules on locations and entrances.
+  called to set access and item rules on locations and entrances. 
+  Locations have to be defined before this, or rule application can miss them.
 * `def generate_basic(self)`
   called after the previous steps. Some placement and player specific
   randomizations can be done here. After this step all regions and items have
@@ -455,7 +442,7 @@ In addition, the following methods can be implemented and attributes can be set
 ```python
 def generate_early(self) -> None:
     # read player settings to world instance
-    self.final_boss_hp = self.world.final_boss_hp[self.player].value
+    self.final_boss_hp = self.multiworld.final_boss_hp[self.player].value
 ```
 
 #### create_item
@@ -490,19 +477,19 @@ def create_items(self) -> None:
     # If an item can't have duplicates it has to be excluded manually.
 
     # List of items to exclude, as a copy since it will be destroyed below
-    exclude = [item for item in self.world.precollected_items[self.player]]
+    exclude = [item for item in self.multiworld.precollected_items[self.player]]
 
     for item in map(self.create_item, mygame_items):
         if item in exclude:
             exclude.remove(item)  # this is destructive. create unique list above
-            self.world.itempool.append(self.create_item("nothing"))
+            self.multiworld.itempool.append(self.create_item("nothing"))
         else:
-            self.world.itempool.append(item)
+            self.multiworld.itempool.append(item)
 
     # itempool and number of locations should match up.
     # If this is not the case we want to fill the itempool with junk.
     junk = 0  # calculate this based on player settings
-    self.world.itempool += [self.create_item("nothing") for _ in range(junk)]
+    self.multiworld.itempool += [self.create_item("nothing") for _ in range(junk)]
 ```
 
 #### create_regions
@@ -511,30 +498,30 @@ def create_items(self) -> None:
 def create_regions(self) -> None:
     # Add regions to the multiworld. "Menu" is the required starting point.
     # Arguments to Region() are name, type, human_readable_name, player, world
-    r = Region("Menu", RegionType.Generic, "Menu", self.player, self.world)
+    r = Region("Menu", RegionType.Generic, "Menu", self.player, self.multiworld)
     # Set Region.exits to a list of entrances that are reachable from region
     r.exits = [Entrance(self.player, "New game", r)]  # or use r.exits.append
     # Append region to MultiWorld's regions
-    self.world.regions.append(r)  # or use += [r...]
+    self.multiworld.regions.append(r)  # or use += [r...]
     
-    r = Region("Main Area", RegionType.Generic, "Main Area", self.player, self.world)
+    r = Region("Main Area", RegionType.Generic, "Main Area", self.player, self.multiworld)
     # Add main area's locations to main area (all but final boss)
     r.locations = [MyGameLocation(self.player, location.name,
                    self.location_name_to_id[location.name], r)]
     r.exits = [Entrance(self.player, "Boss Door", r)]
-    self.world.regions.append(r)
+    self.multiworld.regions.append(r)
     
-    r = Region("Boss Room", RegionType.Generic, "Boss Room", self.player, self.world)
+    r = Region("Boss Room", RegionType.Generic, "Boss Room", self.player, self.multiworld)
     # add event to Boss Room
     r.locations = [MyGameLocation(self.player, "Final Boss", None, r)]
-    self.world.regions.append(r)
+    self.multiworld.regions.append(r)
     
     # If entrances are not randomized, they should be connected here, otherwise
     # they can also be connected at a later stage.
-    self.world.get_entrance("New Game", self.player)\
-        .connect(self.world.get_region("Main Area", self.player))
-    self.world.get_entrance("Boss Door", self.player)\
-        .connect(self.world.get_region("Boss Room", self.player))
+    self.multiworld.get_entrance("New Game", self.player)
+        .connect(self.multiworld.get_region("Main Area", self.player))
+    self.multiworld.get_entrance("Boss Door", self.player)
+        .connect(self.multiworld.get_region("Boss Room", self.player))
     
     # If setting location access rules from data is easier here, set_rules can
     # possibly omitted.
@@ -545,14 +532,14 @@ def create_regions(self) -> None:
 ```python
 def generate_basic(self) -> None:
     # place "Victory" at "Final Boss" and set collection as win condition
-    self.world.get_location("Final Boss", self.player)\
+    self.multiworld.get_location("Final Boss", self.player)
         .place_locked_item(self.create_event("Victory"))
-    self.world.completion_condition[self.player] = \
+    self.multiworld.completion_condition[self.player] =
         lambda state: state.has("Victory", self.player)
 
     # place item Herb into location Chest1 for some reason
     item = self.create_item("Herb")
-    self.world.get_location("Chest1", self.player).place_locked_item(item)
+    self.multiworld.get_location("Chest1", self.player).place_locked_item(item)
     # in most cases it's better to do this at the same time the itempool is
     # filled to avoid accidental duplicates:
     # manually placed and still in the itempool
@@ -564,41 +551,42 @@ def generate_basic(self) -> None:
 from worlds.generic.Rules import add_rule, set_rule, forbid_item
 from Items import get_item_type
 
+
 def set_rules(self) -> None:
     # For some worlds this step can be omitted if either a Logic mixin 
     # (see below) is used, it's easier to apply the rules from data during
     # location generation or everything is in generate_basic
 
     # set a simple rule for an region
-    set_rule(self.world.get_entrance("Boss Door", self.player),
+    set_rule(self.multiworld.get_entrance("Boss Door", self.player),
              lambda state: state.has("Boss Key", self.player))
     # combine rules to require two items
-    add_rule(self.world.get_location("Chest2", self.player),
+    add_rule(self.multiworld.get_location("Chest2", self.player),
              lambda state: state.has("Sword", self.player))
-    add_rule(self.world.get_location("Chest2", self.player),
+    add_rule(self.multiworld.get_location("Chest2", self.player),
              lambda state: state.has("Shield", self.player))
     # or simply combine yourself
-    set_rule(self.world.get_location("Chest2", self.player),
+    set_rule(self.multiworld.get_location("Chest2", self.player),
              lambda state: state.has("Sword", self.player) and
                            state.has("Shield", self.player))
     # require two of an item
-    set_rule(self.world.get_location("Chest3", self.player),
+    set_rule(self.multiworld.get_location("Chest3", self.player),
              lambda state: state.has("Key", self.player, 2))
     # require one item from an item group
-    add_rule(self.world.get_location("Chest3", self.player),
+    add_rule(self.multiworld.get_location("Chest3", self.player),
              lambda state: state.has_group("weapons", self.player))
     # state also has .item_count() for items, .has_any() and.has_all() for sets
     # and .count_group() for groups
     # set_rule is likely to be a bit faster than add_rule
 
     # disallow placing a specific local item at a specific location
-    forbid_item(self.world.get_location("Chest4", self.player), "Sword")
+    forbid_item(self.multiworld.get_location("Chest4", self.player), "Sword")
     # disallow placing items with a specific property
-    add_item_rule(self.world.get_location("Chest5", self.player),
+    add_item_rule(self.multiworld.get_location("Chest5", self.player),
                   lambda item: get_item_type(item) == "weapon")
     # get_item_type needs to take player/world into account
     # if MyGameItem has a type property, a more direct implementation would be
-    add_item_rule(self.world.get_location("Chest5", self.player),
+    add_item_rule(self.multiworld.get_location("Chest5", self.player),
                   lambda item: item.player != self.player or\
                                item.my_type == "weapon")
     # location.item_rule = ... is likely to be a bit faster
@@ -659,32 +647,34 @@ class MyGameWorld(World):
 ```python
 from .Mod import generate_mod
 
+
 def generate_output(self, output_directory: str):
     # How to generate the mod or ROM highly depends on the game
     # if the mod is written in Lua, Jinja can be used to fill a template
     # if the mod reads a json file, `json.dump()` can be used to generate that
     # code below is a dummy
     data = {
-        "seed": self.world.seed_name,  # to verify the server's multiworld
-        "slot": self.world.player_name[self.player],  # to connect to server
+        "seed": self.multiworld.seed_name,  # to verify the server's multiworld
+        "slot": self.multiworld.player_name[self.player],  # to connect to server
         "items": {location.name: location.item.name
                   if location.item.player == self.player else "Remote"
-                  for location in self.world.get_filled_locations(self.player)},
+                  for location in self.multiworld.get_filled_locations(self.player)},
         # store start_inventory from player's .yaml
+        # make sure to mark as not remote_start_inventory when connecting if stored in rom/mod
         "starter_items": [item.name for item
-                          in self.world.precollected_items[self.player]],
+                          in self.multiworld.precollected_items[self.player]],
         "final_boss_hp": self.final_boss_hp,
         # store option name "easy", "normal" or "hard" for difficuly
-        "difficulty": self.world.difficulty[self.player].current_key,
+        "difficulty": self.multiworld.difficulty[self.player].current_key,
         # store option value True or False for fixing a glitch
-        "fix_xyz_glitch": self.world.fix_xyz_glitch[self.player].value
+        "fix_xyz_glitch": self.multiworld.fix_xyz_glitch[self.player].value
     }
     # point to a ROM specified by the installation
     src = Utils.get_options()["mygame_options"]["rom_file"]
     # or point to worlds/mygame/data/mod_template
     src = os.path.join(os.path.dirname(__file__), "data", "mod_template")
     # generate output path
-    mod_name = f"AP-{self.world.seed_name}-P{self.player}-{self.world.player_name[self.player]}"
+    mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.player_name[self.player]}"
     out_file = os.path.join(output_directory, mod_name + ".zip")
     # generate the file
     generate_mod(src, out_file, data)

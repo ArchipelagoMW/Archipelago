@@ -2,14 +2,13 @@ from __future__ import annotations
 
 import argparse
 import logging
-import random
-import urllib.request
-import urllib.parse
-from typing import Set, Dict, Tuple, Callable, Any, Union
 import os
-from collections import Counter, ChainMap
+import random
 import string
-import enum
+import urllib.parse
+import urllib.request
+from collections import Counter, ChainMap
+from typing import Dict, Tuple, Callable, Any, Union
 
 import ModuleUpdate
 
@@ -18,52 +17,17 @@ ModuleUpdate.update()
 import Utils
 from worlds.alttp import Options as LttPOptions
 from worlds.generic import PlandoConnection
-from Utils import parse_yamls, version_tuple, __version__, tuplize_version, get_options, local_path, user_path
+from Utils import parse_yamls, version_tuple, __version__, tuplize_version, get_options, user_path
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
-from BaseClasses import seeddigits, get_seed
+from BaseClasses import seeddigits, get_seed, PlandoSettings
 import Options
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
 import copy
 
 
-class PlandoSettings(enum.IntFlag):
-    items = 0b0001
-    connections = 0b0010
-    texts = 0b0100
-    bosses = 0b1000
 
-    @classmethod
-    def from_option_string(cls, option_string: str) -> PlandoSettings:
-        result = cls(0)
-        for part in option_string.split(","):
-            part = part.strip().lower()
-            if part:
-                result = cls._handle_part(part, result)
-        return result
-
-    @classmethod
-    def from_set(cls, option_set: Set[str]) -> PlandoSettings:
-        result = cls(0)
-        for part in option_set:
-            result = cls._handle_part(part, result)
-        return result
-
-    @classmethod
-    def _handle_part(cls, part: str, base: PlandoSettings) -> PlandoSettings:
-        try:
-            part = cls[part]
-        except Exception as e:
-            raise KeyError(f"{part} is not a recognized name for a plando module. "
-                           f"Known options: {', '.join(flag.name for flag in cls)}") from e
-        else:
-            return base | part
-
-    def __str__(self) -> str:
-        if self.value:
-            return ", ".join(flag.name for flag in PlandoSettings if self.value & flag.value)
-        return "Off"
 
 
 def mystery_argparse():
@@ -154,11 +118,12 @@ def main(args=None, callback=ERmain):
     # sort dict for consistent results across platforms:
     weights_cache = {key: value for key, value in sorted(weights_cache.items())}
     for filename, yaml_data in weights_cache.items():
-        for yaml in yaml_data:
-            print(f"P{player_id} Weights: {filename} >> "
-                  f"{get_choice('description', yaml, 'No description specified')}")
-            player_files[player_id] = filename
-            player_id += 1
+        if filename not in {args.meta_file_path, args.weights_file_path}:
+            for yaml in yaml_data:
+                print(f"P{player_id} Weights: {filename} >> "
+                      f"{get_choice('description', yaml, 'No description specified')}")
+                player_files[player_id] = filename
+                player_id += 1
 
     args.multi = max(player_id - 1, args.multi)
     print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed} with plando: "
@@ -169,6 +134,7 @@ def main(args=None, callback=ERmain):
                         f"A mix is also permitted.")
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
+    erargs.plando_settings = args.plando
     erargs.glitch_triforce = options["generator"]["glitch_triforce_room"]
     erargs.spoiler = args.spoiler
     erargs.race = args.race
@@ -225,15 +191,15 @@ def main(args=None, callback=ERmain):
                     elif not erargs.name[player]:  # if name was not specified, generate it from filename
                         erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
                     erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
-                    
+
                     player += 1
             except Exception as e:
                 raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
         else:
             raise RuntimeError(f'No weights specified for player {player}')
 
-    if len(set(erargs.name.values())) != len(erargs.name):
-        raise Exception(f"Names have to be unique. Names: {Counter(erargs.name.values())}")
+    if len(set(name.lower() for name in erargs.name.values())) != len(erargs.name):
+        raise Exception(f"Names have to be unique. Names: {Counter(name.lower() for name in erargs.name.values())}")
 
     if args.yaml_output:
         import yaml
@@ -316,11 +282,11 @@ class SafeDict(dict):
 
 
 def handle_name(name: str, player: int, name_counter: Counter):
-    name_counter[name] += 1
+    name_counter[name.lower()] += 1
+    number = name_counter[name.lower()]
     new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
-    new_name = string.Formatter().vformat(new_name, (), SafeDict(number=name_counter[name],
-                                                                 NUMBER=(name_counter[name] if name_counter[
-                                                                                                   name] > 1 else ''),
+    new_name = string.Formatter().vformat(new_name, (), SafeDict(number=number,
+                                                                 NUMBER=(number if number > 1 else ''),
                                                                  player=player,
                                                                  PLAYER=(player if player > 1 else '')))
     new_name = new_name.strip()[:16]
@@ -502,7 +468,8 @@ def roll_settings(weights: dict, plando_options: PlandoSettings = PlandoSettings
             handle_option(ret, game_weights, option_key, option, plando_options)
         for option_key, option in Options.per_game_common_options.items():
             # skip setting this option if already set from common_options, defaulting to root option
-            if not (option_key in Options.common_options and option_key not in game_weights):
+            if option_key not in world_type.option_definitions and \
+                    (option_key not in Options.common_options or option_key in game_weights):
                 handle_option(ret, game_weights, option_key, option, plando_options)
         if PlandoSettings.items in plando_options:
             ret.plando_items = game_weights.get("plando_items", [])

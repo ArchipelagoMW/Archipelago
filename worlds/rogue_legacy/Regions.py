@@ -1,72 +1,111 @@
-import typing
+from typing import Dict, List, NamedTuple, Optional
 
-from BaseClasses import MultiWorld, Region, RegionType, Entrance, ItemClassification
-from .Items import LegacyItem
-from .Locations import LegacyLocation, diary_location_table, location_table, base_location_table
-from .Names import LocationName, ItemName
-
-prog = ItemClassification.progression
+from BaseClasses import MultiWorld, Region, RegionType, Entrance
+from .Locations import RLLocation, location_table, get_locations_by_category
 
 
-def create_regions(world, player: int):
+class RLRegionData(NamedTuple):
+    locations: Optional[List[str]]
+    region_exits: Optional[List[str]]
 
-    locations: typing.List[str] = []
 
-    # Add required locations.
-    locations += [location for location in base_location_table]
-    locations += [location for location in diary_location_table]
+def create_regions(multiworld: MultiWorld, player: int):
+    regions: Dict[str, RLRegionData] = {
+        "Menu":              RLRegionData(None, ["Castle Hamson"]),
+        "The Manor":         RLRegionData([],   []),
+        "Castle Hamson":     RLRegionData([],   ["Forest Abkhazia", "The Maya", "Land of Darkness",
+                                                 "The Fountain Room", "The Manor"]),
+        "Forest Abkhazia":   RLRegionData([],   []),
+        "The Maya":          RLRegionData([],   []),
+        "Land of Darkness":  RLRegionData([],   []),
+        "The Fountain Room": RLRegionData([],   None),
+    }
 
-    # Add chests per settings.
-    if world.universal_fairy_chests[player]:
-        fairies = int(world.fairy_chests_per_zone[player]) * 4
-        for i in range(0, fairies):
-            locations += [f"Fairy Chest {i + 1}"]
-    else:
-        fairies = int(world.fairy_chests_per_zone[player])
-        for i in range(0, fairies):
-            locations += [f"{LocationName.castle} - Fairy Chest {i + 1}"]
-            locations += [f"{LocationName.garden} - Fairy Chest {i + 1}"]
-            locations += [f"{LocationName.tower} - Fairy Chest {i + 1}"]
-            locations += [f"{LocationName.dungeon} - Fairy Chest {i + 1}"]
+    # Artificially stagger diary spheres for progression.
+    for diary in range(0, 25):
+        region: str
+        if 0 <= diary < 6:
+            region = "Castle Hamson"
+        elif 6 <= diary < 12:
+            region = "Forest Abkhazia"
+        elif 12 <= diary < 18:
+            region = "The Maya"
+        elif 18 <= diary < 24:
+            region = "Land of Darkness"
+        else:
+            region = "The Fountain Room"
+        regions[region].locations.append(f"Diary {diary + 1}")
 
-    if world.universal_chests[player]:
-        chests = int(world.chests_per_zone[player]) * 4
-        for i in range(0, chests):
-            locations += [f"Chest {i + 1}"]
-    else:
-        chests = int(world.chests_per_zone[player])
-        for i in range(0, chests):
-            locations += [f"{LocationName.castle} - Chest {i + 1}"]
-            locations += [f"{LocationName.garden} - Chest {i + 1}"]
-            locations += [f"{LocationName.tower} - Chest {i + 1}"]
-            locations += [f"{LocationName.dungeon} - Chest {i + 1}"]
+    # Manor & Special
+    for manor in get_locations_by_category("Manor").keys():
+        regions["The Manor"].locations.append(manor)
+    for special in get_locations_by_category("Special").keys():
+        regions["Castle Hamson"].locations.append(special)
+
+    # Boss Rewards
+    regions["Castle Hamson"].locations.append("Castle Hamson Boss Reward")
+    regions["Forest Abkhazia"].locations.append("Forest Abkhazia Boss Reward")
+    regions["The Maya"].locations.append("The Maya Boss Reward")
+    regions["Land of Darkness"].locations.append("Land of Darkness Boss Reward")
+
+    # Events
+    regions["Castle Hamson"].locations.append("Castle Hamson Boss Room")
+    regions["Forest Abkhazia"].locations.append("Forest Abkhazia Boss Room")
+    regions["The Maya"].locations.append("The Maya Boss Room")
+    regions["Land of Darkness"].locations.append("Land of Darkness Boss Room")
+    regions["The Fountain Room"].locations.append("Fountain Room")
+
+    # Chests
+    chests = int(multiworld.chests_per_zone[player])
+    for i in range(0, chests):
+        if multiworld.universal_chests[player]:
+            regions["Castle Hamson"].locations.append(f"Chest {i + 1}")
+            regions["Forest Abkhazia"].locations.append(f"Chest {i + 1 + chests}")
+            regions["The Maya"].locations.append(f"Chest {i + 1 + (chests * 2)}")
+            regions["Land of Darkness"].locations.append(f"Chest {i + 1 + (chests * 3)}")
+        else:
+            regions["Castle Hamson"].locations.append(f"Castle Hamson - Chest {i + 1}")
+            regions["Forest Abkhazia"].locations.append(f"Forest Abkhazia - Chest {i + 1}")
+            regions["The Maya"].locations.append(f"The Maya - Chest {i + 1}")
+            regions["Land of Darkness"].locations.append(f"Land of Darkness - Chest {i + 1}")
+
+    # Fairy Chests
+    chests = int(multiworld.fairy_chests_per_zone[player])
+    for i in range(0, chests):
+        if multiworld.universal_fairy_chests[player]:
+            regions["Castle Hamson"].locations.append(f"Fairy Chest {i + 1}")
+            regions["Forest Abkhazia"].locations.append(f"Fairy Chest {i + 1 + chests}")
+            regions["The Maya"].locations.append(f"Fairy Chest {i + 1 + (chests * 2)}")
+            regions["Land of Darkness"].locations.append(f"Fairy Chest {i + 1 + (chests * 3)}")
+        else:
+            regions["Castle Hamson"].locations.append(f"Castle Hamson - Fairy Chest {i + 1}")
+            regions["Forest Abkhazia"].locations.append(f"Forest Abkhazia - Fairy Chest {i + 1}")
+            regions["The Maya"].locations.append(f"The Maya - Fairy Chest {i + 1}")
+            regions["Land of Darkness"].locations.append(f"Land of Darkness - Fairy Chest {i + 1}")
 
     # Set up the regions correctly.
-    world.regions += [
-        create_region(world, player, "Menu", None, [LocationName.outside]),
-        create_region(world, player, LocationName.castle, locations),
-    ]
+    for name, data in regions.items():
+        multiworld.regions.append(create_region(multiworld, player, name, data))
 
-    # Connect entrances and set up events.
-    world.get_entrance(LocationName.outside, player).connect(world.get_region(LocationName.castle, player))
-    world.get_location(LocationName.castle, player).place_locked_item(LegacyItem(ItemName.boss_castle, prog, None, player))
-    world.get_location(LocationName.garden, player).place_locked_item(LegacyItem(ItemName.boss_forest, prog, None, player))
-    world.get_location(LocationName.tower, player).place_locked_item(LegacyItem(ItemName.boss_tower, prog, None, player))
-    world.get_location(LocationName.dungeon, player).place_locked_item(LegacyItem(ItemName.boss_dungeon, prog, None, player))
-    world.get_location(LocationName.fountain, player).place_locked_item(LegacyItem(ItemName.boss_fountain, prog, None, player))
+    multiworld.get_entrance("Castle Hamson", player).connect(multiworld.get_region("Castle Hamson", player))
+    multiworld.get_entrance("The Manor", player).connect(multiworld.get_region("The Manor", player))
+    multiworld.get_entrance("Forest Abkhazia", player).connect(multiworld.get_region("Forest Abkhazia", player))
+    multiworld.get_entrance("The Maya", player).connect(multiworld.get_region("The Maya", player))
+    multiworld.get_entrance("Land of Darkness", player).connect(multiworld.get_region("Land of Darkness", player))
+    multiworld.get_entrance("The Fountain Room", player).connect(multiworld.get_region("The Fountain Room", player))
 
 
-def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    # Shamelessly stolen from the ROR2 definition, lol
-    ret = Region(name, RegionType.Generic, name, player)
-    ret.world = world
-    if locations:
-        for location in locations:
-            loc_id = location_table.get(location, 0)
-            location = LegacyLocation(player, location, loc_id, ret)
-            ret.locations.append(location)
-    if exits:
-        for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
+def create_region(multiworld: MultiWorld, player: int, name: str, data: RLRegionData):
+    region = Region(name, RegionType.Generic, name, player, multiworld)
+    if data.locations:
+        for loc_name in data.locations:
+            loc_data = location_table.get(loc_name)
+            location = RLLocation(player, loc_name, loc_data.code if loc_data else None, region)
+            region.locations.append(location)
 
-    return ret
+    if data.region_exits:
+        for exit in data.region_exits:
+            entrance = Entrance(player, exit, region)
+            region.exits.append(entrance)
+
+    return region

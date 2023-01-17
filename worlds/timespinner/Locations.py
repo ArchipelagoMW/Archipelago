@@ -186,12 +186,12 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LocationData('Royal towers (upper)', 'Royal Towers: Aelana\'s pedestal',  1337155),
 
         # Ancient pyramid locations
-        LocationData('Ancient Pyramid (left)', 'Ancient Pyramid: Why not it\'s right there',  1337246),
+        LocationData('Ancient Pyramid (entrance)', 'Ancient Pyramid: Why not it\'s right there',  1337246),
         LocationData('Ancient Pyramid (left)', 'Ancient Pyramid: Conviction guarded room',  1337247),
         LocationData('Ancient Pyramid (left)', 'Ancient Pyramid: Pit secret room',  1337248, lambda state: state._timespinner_can_break_walls(world, player)),
         LocationData('Ancient Pyramid (left)', 'Ancient Pyramid: Regret chest',  1337249, lambda state: state._timespinner_can_break_walls(world, player)),
         LocationData('Ancient Pyramid (right)', 'Ancient Pyramid: Nightmare Door chest',  1337236),
-        LocationData('Ancient Pyramid (right)', 'Killed Nightmare',  EventId)
+        LocationData('Ancient Pyramid (right)', 'Killed Nightmare', EventId, lambda state: state.has_all({'Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'}, player))
     ]
 
     # 1337156 - 1337170 Downloads

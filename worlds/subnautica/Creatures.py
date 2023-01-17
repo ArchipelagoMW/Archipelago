@@ -118,8 +118,8 @@ class Definitions:
         return [name for name in self.all_creatures_presorted if name not in aggressive or name in hatchable]
 
     @functools.cached_property
-    def all_creatures_presorted_without_aggressive(self) -> List[str]:
-        return [name for name in self.all_creatures_presorted if name not in aggressive]
+    def all_creatures_presorted_without_aggressive_and_containment(self) -> List[str]:
+        return [name for name in self.all_creatures_presorted if name not in aggressive and name not in containment]
 
 # only singleton needed
 Definitions: Definitions = Definitions()

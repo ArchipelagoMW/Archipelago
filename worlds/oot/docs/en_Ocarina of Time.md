@@ -9,7 +9,8 @@ config file.
 
 Items which the player would normally acquire throughout the game have been moved around. Logic remains, so the game is
 always able to be completed, but because of the item shuffle the player may need to access certain areas before they
-would in the vanilla game.
+would in the vanilla game. A list of perhaps non-obvious pieces of logic can be found
+[here](https://wiki.ootrandomizer.com/index.php?title=Logic).
 
 ## What items and locations get shuffled?
 
