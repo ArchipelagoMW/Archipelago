@@ -13,7 +13,7 @@ from .data.locations_data import location_dictionary, fire_link_shrine_table, \
     farron_keep_table, catacombs_of_carthus_table, smouldering_lake_table, irithyll_of_the_boreal_valley_table, \
     irithyll_dungeon_table, profaned_capital_table, anor_londo_table, lothric_castle_table, grand_archives_table, \
     untended_graves_table, archdragon_peak_table, firelink_shrine_bell_tower_table, progressive_locations, \
-    progressive_locations_2, progressive_locations_3, painted_world_table, dreg_heap_table, ringed_city_table
+    progressive_locations_2, progressive_locations_3, painted_world_table, dreg_heap_table, ringed_city_table, dlc_progressive_locations
 from ..AutoWorld import World, WebWorld
 from ..generic.Rules import set_rule, add_item_rule
 
@@ -78,7 +78,10 @@ class DarkSouls3World(World):
 
     def create_regions(self):
 
-        if self.multiworld.enable_progressive_locations[self.player].value:
+        if self.multiworld.enable_progressive_locations[self.player].value and self.multiworld.enable_dlc[self.player].value:
+            menu_region = self.create_region("Menu", {**progressive_locations, **progressive_locations_2,
+                                                      **progressive_locations_3, **dlc_progressive_locations})
+        elif self.multiworld.enable_progressive_locations[self.player].value:
             menu_region = self.create_region("Menu", {**progressive_locations, **progressive_locations_2,
                                                       **progressive_locations_3})
         else:
@@ -198,6 +201,9 @@ class DarkSouls3World(World):
             # Do not add DLC items if the option is disabled
             if (not self.multiworld.enable_dlc[self.player]) and DarkSouls3Item.is_dlc_item(name):
                 continue
+            # Do not add DLC Progressives if both options are disabled
+            if ((not self.multiworld.enable_progressive_locations[self.player]) or (not self.multiworld.enable_dlc[self.player])) and DarkSouls3Item.is_dlc_progressive(name):
+                continue
             self.multiworld.itempool += [self.create_item(name)]
 
     def generate_early(self):
@@ -278,27 +284,37 @@ class DarkSouls3World(World):
 
         # Depending on the specified option, modify items hexadecimal value to add an upgrade level
         item_dictionary_copy = item_dictionary.copy()
-        if self.multiworld.randomize_weapons_level[self.player]:
+        if self.multiworld.randomize_weapons_level[self.player] > 0:
+            # if the user made an error and set a min higher than the max we default to the max
+            max_5 = self.multiworld.max_levels_in_5[self.player]
+            min_5 = min(self.multiworld.min_levels_in_5[self.player], max_5)
+            max_10 = self.multiworld.max_levels_in_10[self.player]
+            min_10 = min(self.multiworld.min_levels_in_10[self.player], max_10)
+            weapons_percentage = self.multiworld.randomize_weapons_percentage[self.player]
+
             # Randomize some weapons upgrades
-            for name in weapons_upgrade_5_table.keys():
-                if self.multiworld.random.randint(0, 100) < 33:
-                    value = self.multiworld.random.randint(1, 5)
-                    item_dictionary_copy[name] += value
-
-            for name in weapons_upgrade_10_table.keys():
-                if self.multiworld.random.randint(0, 100) < 33:
-                    value = self.multiworld.random.randint(1, 10)
-                    item_dictionary_copy[name] += value
-
-            if self.multiworld.enable_dlc[self.player]:
-                for name in dlc_weapons_upgrade_5_table.keys():
-                    if self.multiworld.random.randint(0, 100) < 33:
-                        value = self.multiworld.random.randint(1, 5)
+            if self.multiworld.randomize_weapons_level[self.player] in [1, 3]:  # Options are either all or +5
+                for name in weapons_upgrade_5_table.keys():
+                    if self.multiworld.random.randint(1, 100) < weapons_percentage:
+                        value = self.multiworld.random.randint(min_5, max_5)
                         item_dictionary_copy[name] += value
 
+            if self.multiworld.randomize_weapons_level[self.player] in [1, 2]:  # Options are either all or +10
+                for name in weapons_upgrade_10_table.keys():
+                    if self.multiworld.random.randint(1, 100) < weapons_percentage:
+                        value = self.multiworld.random.randint(min_10, max_10)
+                        item_dictionary_copy[name] += value
+
+            if self.multiworld.randomize_weapons_level[self.player] in [1, 3]:
+                for name in dlc_weapons_upgrade_5_table.keys():
+                    if self.multiworld.random.randint(1, 100) < weapons_percentage:
+                        value = self.multiworld.random.randint(min_5, max_5)
+                        item_dictionary_copy[name] += value
+
+            if self.multiworld.randomize_weapons_level[self.player] in [1, 2]:
                 for name in dlc_weapons_upgrade_10_table.keys():
-                    if self.multiworld.random.randint(0, 100) < 33:
-                        value = self.multiworld.random.randint(1, 10)
+                    if self.multiworld.random.randint(1, 100) < weapons_percentage:
+                        value = self.multiworld.random.randint(min_10, max_10)
                         item_dictionary_copy[name] += value
 
         # Create the mandatory lists to generate the player's output file
