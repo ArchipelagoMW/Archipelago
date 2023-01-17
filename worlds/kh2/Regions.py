@@ -704,7 +704,7 @@ def create_regions(world, player: int, active_locations):
                                   Twtnw2_Region_locations, None)
 
     Valor_Region_locations = {
-        LocationName.Valorlvl1: [0],
+        #LocationName.Valorlvl1: [0],
         LocationName.Valorlvl2: [1],
         LocationName.Valorlvl3: [2],
         LocationName.Valorlvl4: [3],
@@ -715,7 +715,7 @@ def create_regions(world, player: int, active_locations):
     Valor_Region = create_region(world, player, active_locations, LocationName.ValorForm,
                                  Valor_Region_locations, None)
     Wisdom_Region_locations = {
-        LocationName.Wisdomlvl1: [0],
+        #LocationName.Wisdomlvl1: [0],
         LocationName.Wisdomlvl2: [7],
         LocationName.Wisdomlvl3: [8],
         LocationName.Wisdomlvl4: [9],
@@ -726,7 +726,7 @@ def create_regions(world, player: int, active_locations):
     Wisdom_Region = create_region(world, player, active_locations, LocationName.WisdomForm,
                                   Wisdom_Region_locations, None)
     Limit_Region_locations = {
-        LocationName.Limitlvl1: [0],
+        #LocationName.Limitlvl1: [0],
         LocationName.Limitlvl2: [13],
         LocationName.Limitlvl3: [14],
         LocationName.Limitlvl4: [15],
@@ -737,7 +737,7 @@ def create_regions(world, player: int, active_locations):
     Limit_Region = create_region(world, player, active_locations, LocationName.LimitForm,
                                  Limit_Region_locations, None)
     Master_Region_locations = {
-        LocationName.Masterlvl1: [0],
+        #LocationName.Masterlvl1: [0],
         LocationName.Masterlvl2: [19],
         LocationName.Masterlvl3: [20],
         LocationName.Masterlvl4: [21],
@@ -748,7 +748,7 @@ def create_regions(world, player: int, active_locations):
     Master_Region = create_region(world, player, active_locations, LocationName.MasterForm,
                                   Master_Region_locations, None)
     Final_Region_locations = {
-        LocationName.Finallvl1: [25],
+        #LocationName.Finallvl1: [25],
         LocationName.Finallvl2: [25],
         LocationName.Finallvl3: [26],
         LocationName.Finallvl4: [27],

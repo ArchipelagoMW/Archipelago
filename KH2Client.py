@@ -29,17 +29,10 @@ CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 
-boobies=network_data_package["games"]["Kingdom Hearts 2"]["location_name_to_id"]
+kh2_loc_name_to_id=network_data_package["games"]["Kingdom Hearts 2"]["location_name_to_id"]
 
 
 class KH2CommandProcessor(ClientCommandProcessor):
-    def _cmd_resync(self):
-        """Manually trigger a resync."""
-        self.output(f"Syncing items.")
-        self.ctx.syncing = True
-        for locationdata in all_locations:
-            print(all_locations[locationdata].addrCheck)
-
     def _cmd_autotrack(self):
             """Start Autotracking"""
             #hooking into the game
@@ -144,6 +137,7 @@ class KH2Context(CommonContext):
         self.LimitLevel=0
         self.MasterLevel=0
         self.FinalLevel=0
+        self.growthlevel=0
         #self.SoraLevel=0
         #short for ability byte for items
 
@@ -170,6 +164,29 @@ class KH2Context(CommonContext):
                 if file.find("obtain") <= -1:
                     os.remove(root+"/"+file)
 
+
+    def give_growth(self,itemcode):
+        #growth is added onto the current growth. Save+0x25CE... is the spots in inventory where they are kept
+        #high jump
+        if itemcode.memaddr==0x05E:
+            self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25CE)
+            self.kh2.write_short(self.kh2.base_address + self.Save+0x25CE, self.growthlevel+1)
+            #quick run
+        elif itemcode.memaddr==0x062:
+            self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D0)
+            self.kh2.write_short(self.kh2.base_address + self.Save+0x25D0, self.growthlevel+1)
+            #aerial dodge
+        elif itemcode.memaddr==0x066:
+            self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D4)
+            self.kh2.write_short(self.kh2.base_address + self.Save+0x25D4, self.growthlevel+1)
+            #dodge roll
+        elif itemcode.memaddr==0x234:
+            self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D2)
+            self.kh2.write_short(self.kh2.base_address + self.Save+0x25D2, self.growthlevel+1)
+            #glide
+        else:
+            self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D6)
+            self.kh2.write_short(self.kh2.base_address + self.Save+0x25D6, self.growthlevel+1)
 #while loop to NOT give item while on death screen
 #need to figure out how to tell room address
 #initialize the room before the while loop. Probably at the start of a package
@@ -178,6 +195,10 @@ class KH2Context(CommonContext):
     def give_item(self,itemcode):
         itemMemory=0
         if itemcode.ability:
+            #forms are handled in the goa so they are put in the back of inventory no matter what
+            if itemcode.memaddr in {0x05E,0x062,0x066,0x06A,0x234}:
+                self.give_growth(itemcode)
+                return
             self.kh2.write_short(self.kh2.base_address + self.Save+self.backofinventory, itemcode.memaddr)
             self.backofinventory-=2
         elif itemcode.bitmask>0:
@@ -187,6 +208,9 @@ class KH2Context(CommonContext):
 
             itemMemory=int.from_bytes(self.kh2.read_bytes( self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
             #write item into the address of that item. then turn on the bitmask of the item.
+            #player has final form
+            if itemMemory>0:
+                return
             self.kh2.write_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,(itemMemory|0x01<<itemcode.bitmask).to_bytes(1,'big'),1)
         else:
             #Increasing the memory for item by 1 byte
@@ -268,7 +292,7 @@ class KH2Context(CommonContext):
                     if(int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save+data.addrObtained,1), "big") & 0x1<<data.bitIndex)>0:
                         self.locations_checked.add(location)
                         #message = [{"cmd": 'LocationChecks', "locations": boobies[location]}]
-                        self.sending = self.sending+[(int(boobies[location]))]
+                        self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
                         #message = [{"cmd": 'LocationChecks', "locations": sending}]
                         
                 except:
@@ -285,7 +309,7 @@ class KH2Context(CommonContext):
                         self.locations_checked.add(location)
                         #message = [{"cmd": 'LocationChecks', "locations": boobies[location]}]
                         self.SoraLevel+=1
-                        self.sending = self.sending+[(int(boobies[location]))]
+                        self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
                         #message = [{"cmd": 'LocationChecks', "locations": sending}]
                     else:
                          break
@@ -293,22 +317,21 @@ class KH2Context(CommonContext):
                     logger.debug("Connection Lost, Please /autotrack")
                     self.connected = False
                     return
-        i=1
-        formDict = {1: WorldLocations.ValorLevels, 2:  WorldLocations.WisdomLevels, 3:  WorldLocations.LimitLevels, 4:  WorldLocations.MasterLevels, 5:  WorldLocations.FinalLevels}
-        for location,data in formDict[i].items():
-            if location not in self.locations_checked:
-                try:
-                    if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + data.addrObtained,1), "big")>=data.bitIndex:
-                        self.locations_checked.add(location)
-                        self.sending = self.sending+[(int(boobies[location]))]
-                    else:
-                        i+=1
-                        if i>5:
-                            return
-                except:
-                    logger.debug("Connection Lost, Please /autotrack")
-                    self.connected = False
-                    return
+        #i=1
+        formDict = {0: WorldLocations.ValorLevels, 1:  WorldLocations.WisdomLevels, 2:  WorldLocations.LimitLevels, 3:  WorldLocations.MasterLevels, 4:  WorldLocations.FinalLevels}
+        for i in range(4):
+            for location,data in formDict[i].items():
+                if location not in self.locations_checked:
+                    try:
+                        if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + data.addrObtained,1), "big")>=data.bitIndex:
+                            self.locations_checked.add(location)
+                            self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
+                    except:
+                        logger.debug("Connection Lost, Please /autotrack")
+                        self.connected = False
+                        return
+
+
     #checks for items that has checks on their item slot
     async def checkSlots(self):
         for location,data in WorldLocations.weaponSlots.items():
@@ -316,7 +339,7 @@ class KH2Context(CommonContext):
                 try:
                     if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + data.addrObtained,1), "big")>0:
                         self.locations_checked.add(location)
-                        self.sending = self.sending+[(int(boobies[location]))]
+                        self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
                 except:
                     logger.debug("Connection Lost, Please /autotrack")
                     self.connected = False
@@ -326,7 +349,7 @@ class KH2Context(CommonContext):
                 try:
                     if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save+data.addrObtained,1), "big") & 0x1<<data.bitIndex>0:
                         self.locations_checked.add(location)
-                        self.sending = self.sending+[(int(boobies[location]))]
+                        self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
                 except:
                     logger.debug("Connection Lost, Please /autotrack")
                     self.connected = False
@@ -361,6 +384,7 @@ async def kh2_watcher(ctx: KH2Context):
                     ctx.sending = []
                     await asyncio.create_task(ctx.checkWorldLocations())
                     await asyncio.create_task(ctx.checkLevels())
+                    await asyncio.create_task(ctx.checkSlots())
                     #ctx.locations_checked = ctx.sending
                     message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                     await ctx.send_msgs(message)

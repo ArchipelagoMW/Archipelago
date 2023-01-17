@@ -90,30 +90,30 @@ Movement_Table = {
     #        const int ADDRESS_END = 0x25CC;
     #kh2.write_short(kh2.base_address + Save+ADDRESS_END, 0x05E)
     #For each abilit sent to sora -2 from address_end
-    ItemName.HighJump: 				    ItemData(0x1320034,  94,0x05E,True),
-    ItemName.HighJump2: 				ItemData(0x1320035,  95,0x05E,True),
-    ItemName.HighJump3: 				ItemData(0x1320036,  96,0x05E,True),
-    ItemName.HighJump4: 				ItemData(0x1320037,  97,0x05E,True),
-
-    ItemName.QuickRun: 				    ItemData(0x1320038,   98, 0x062,True),
-    ItemName.QuickRun2: 				ItemData(0x1320039,  99, 0x062,True),
-    ItemName.QuickRun3: 				ItemData(0x132003A,  100,0x062,True),
-    ItemName.QuickRun4: 				ItemData(0x132003B,  101,0x062,True),
-
-    ItemName.AerialDodge: 				ItemData(0x132003C,  102,  0x066,True),
-    ItemName.AerialDodge2: 				ItemData(0x132003D,  103, 0x066,True),
-    ItemName.AerialDodge3: 				ItemData(0x132003E,  104, 0x066,True),
-    ItemName.AerialDodge4: 				ItemData(0x132003F,  105, 0x066,True),
-
-    ItemName.Glide: 				    ItemData(0x1320040,  106,  0x06A,True),
-    ItemName.Glide2: 				    ItemData(0x1320041,  107, 0x06A,True),
-    ItemName.Glide3: 				    ItemData(0x1320042,  108, 0x06A,True),
-    ItemName.Glide4: 				    ItemData(0x1320043,  109, 0x06A,True),
-
-    ItemName.DodgeRoll: 				ItemData(0x1320044,  564,  0x234,True ),
-    ItemName.DodgeRoll2: 				ItemData(0x1320045,  565, 0x234,True ),
-    ItemName.DodgeRoll3: 				ItemData(0x1320046,  566, 0x234,True ),
-    ItemName.DodgeRoll4: 				ItemData(0x1320047,  567, 0x234,True ),
+    ItemName.HighJump: 				    ItemData(0x1320034,  94,  0x05E,0,1,True),
+    ItemName.HighJump2: 				ItemData(0x1320035,  95,  0x05E,0,1,True),
+    ItemName.HighJump3: 				ItemData(0x1320036,  96,  0x05E,0,1,True),
+    ItemName.HighJump4: 				ItemData(0x1320037,  97,  0x05E,0,1,True),
+                                                                        
+    ItemName.QuickRun: 				    ItemData(0x1320038,  98,  0x062,0,1,True),
+    ItemName.QuickRun2: 				ItemData(0x1320039,  99,  0x062,0,1,True),
+    ItemName.QuickRun3: 				ItemData(0x132003A,  100, 0x062,0,1,True),
+    ItemName.QuickRun4: 				ItemData(0x132003B,  101, 0x062,0,1,True),
+                                                                        
+    ItemName.AerialDodge: 				ItemData(0x132003C,  102, 0x066,0,1,True),
+    ItemName.AerialDodge2: 				ItemData(0x132003D,  103, 0x066,0,1,True),
+    ItemName.AerialDodge3: 				ItemData(0x132003E,  104, 0x066,0,1,True),
+    ItemName.AerialDodge4: 				ItemData(0x132003F,  105, 0x066,0,1,True),
+                                                                        
+    ItemName.Glide: 				    ItemData(0x1320040,  106, 0x06A,0,1,True),
+    ItemName.Glide2: 				    ItemData(0x1320041,  107, 0x06A,0,1,True),
+    ItemName.Glide3: 				    ItemData(0x1320042,  108, 0x06A,0,1,True),
+    ItemName.Glide4: 				    ItemData(0x1320043,  109, 0x06A,0,1,True),
+                                                                        
+    ItemName.DodgeRoll: 				ItemData(0x1320044,  564, 0x234,0,1,True ),
+    ItemName.DodgeRoll2: 				ItemData(0x1320045,  565, 0x234,0,1,True ),
+    ItemName.DodgeRoll3: 				ItemData(0x1320046,  566, 0x234,0,1,True ),
+    ItemName.DodgeRoll4: 				ItemData(0x1320047,  567, 0x234,0,1,True ),
 }
 
 Keyblade_Table = {

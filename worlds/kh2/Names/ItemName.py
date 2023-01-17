@@ -395,7 +395,7 @@ DonaldMPHaste            ="Donald MP Haste"
 DonaldMPHastera          ="Donald MP Hastera" 
 DonaldMPHastega          ="Donald MP Hastega" 
 DonaldMPHaste            ="Donald MP Haste" 
-DonaldDamageControl      ="Donald Donald Damage Control"
+DonaldDamageControl      ="Donald Damage Control"
 DonaldMPHastera          ="Donald MP Hastera" 
 DonaldDraw               ="Donald Draw"
     

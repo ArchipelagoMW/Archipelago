@@ -61,7 +61,6 @@ def patch_kh2(self, output_directory):
     donaldStartingItems = []
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
     
-    print(self.multiworld.get_locations(self.player))
     for location in self.multiworld.get_filled_locations(self.player):
         data = all_locations[location.name]
         if location.native_item:
@@ -125,7 +124,7 @@ def patch_kh2(self, output_directory):
         elif data.yml == "Forms":
             # loc id is form lvl
             # char name is the form name number :)
-            if (data.locid == 1):
+            if (data.locid == 2):
                 formDict = {1: "Valor", 2: "Wisdom", 3: "Limit", 4: "Master", 5: "Final"}
                 formDictExp = {1: self.multiworld.Valor_Form_EXP[self.player].value,
                                2: self.multiworld.Wisdom_Form_EXP[self.player].value
@@ -135,8 +134,14 @@ def patch_kh2(self, output_directory):
                 formexp = formDictExp[data.charName]
                 formName = formDict[data.charName]
                 self.formattedFmlv[formName] = []
+                self.formattedFmlv[formName].append({
+                            "Ability": 1,
+                            "Experience": int(formExp[data.charName][data.locid] / formexp),
+                            "FormId": data.charName,
+                            "FormLevel": 1,
+                            "GrowthAbilityLevel": 0,
+                        })
             # row is form column is lvl
-
             self.formattedFmlv[formName].append({
                 "Ability": itemcode,
                 "Experience": int(formExp[data.charName][data.locid] / formexp),
