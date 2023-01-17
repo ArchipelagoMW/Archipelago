@@ -206,11 +206,11 @@ class KH2Context(CommonContext):
             #formlmao=int.from_bytes(kh2.read_bytes(yourmom,1), "big")
             #kh2.write_bytes(yourmom,(formlmao|0x1<<0).to_bytes(1,'big'),1)
 
-            itemMemory=int.from_bytes(self.kh2.read_bytes( self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
+            itemMemory=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
             #write item into the address of that item. then turn on the bitmask of the item.
             #player has final form
-            if itemMemory>0:
-                return
+            #if itemMemory>0:
+            #    return
             self.kh2.write_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,(itemMemory|0x01<<itemcode.bitmask).to_bytes(1,'big'),1)
         else:
             #Increasing the memory for item by 1 byte
