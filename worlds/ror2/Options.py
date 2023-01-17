@@ -36,7 +36,7 @@ class ShrinesPerEnvironment(Range):
     display_name = "Shrines per Environment"
     range_start = 2
     range_end = 20
-    default = 10
+    default = 5
 
 class ScavengersPerEnvironment(Range):
     """Explore Mode: The number of scavenger locations per environment."""
@@ -87,7 +87,7 @@ class ShrineUseStep(Range):
     """
     display_name = "Shrine use Step"
     range_start = 0
-    range_end = 5
+    range_end = 3
     default = 0
 
 

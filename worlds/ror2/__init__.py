@@ -221,8 +221,11 @@ class RiskOfRainWorld(World):
         item_id = item_table[name]
         classification = ItemClassification.filler
         if name == "Dio's Best Friend":
-            classification = ItemClassification.progression
-        elif name in {"Equipment", "Legendary Item"}:
+            if self.multiworld.dlc_sotv[self.player]:
+                classification = ItemClassification.useful
+            else:
+                classification = ItemClassification.progression
+        elif name in {"Legendary Item", "Boss Item"}:
             classification = ItemClassification.useful
 
         # Only check for an item to be a environment unlock if those are known to be in the pool.
