@@ -18,7 +18,7 @@ item_table: Dict[str, ItemData] = {
     'Parlor Key':           ItemData('Door Key',   8504, progression=True),
     'Anteroom Key':         ItemData('Door Key',   8505, progression=True),
     'Wardrobe Key':         ItemData('Door Key',   8506, progression=True),
-    'Study Key':            ItemData('Door Key',   8507, progression=True),
+    'Front Hallway Key':    ItemData('Door Key',   8507, progression=True),
     'Master Bedroom Key':   ItemData('Door Key',   8508, progression=True),
     'Nursery Key':          ItemData('Door Key',   8509, progression=True),
     'Twins Bedroom Key':    ItemData('Door Key',   8510, progression=True),
@@ -26,14 +26,14 @@ item_table: Dict[str, ItemData] = {
     'Storage Room Key':     ItemData('Door Key',   8512, progression=True),
     'Fortune Teller Key':   ItemData('Door Key',   8513, progression=True),
     'Laundry Key':          ItemData('Door Key',   8514, progression=True),
-    'Butler Key':           ItemData('Door Key',   8515, progression=True),
+    #'Butler Key':              ItemData('Door Key',   8515, progression=True),
     'Conservatory Key':     ItemData('Door Key',   8516, progression=True),
     'Dining Room Key':      ItemData('Door Key',   8517, progression=True),
     'Rec Room Key':         ItemData('Door Key',   8518, progression=True),
     'Billiards Key':        ItemData('Door Key',   8519, progression=True),
     'Safari Key':           ItemData('Door Key',   8520, progression=True),
     'Balcony Key':          ItemData('Door Key',   8521, progression=True),
-    'Breaker Key':          ItemData('Door Key',   8522, progression=True),
+    #'Breaker Key':              ItemData('Door Key',   8522, progression=True),
     'Cellar Key':           ItemData('Door Key',   8523, progression=True),
     'Clockwork Key':        ItemData('Door Key',   8524, progression=True),
     'Armory Key':           ItemData('Door Key',   8525, progression=True),
@@ -49,7 +49,8 @@ item_table: Dict[str, ItemData] = {
     'Mario\'s Letter':      ItemData('Mario Item', 8535, progression=True),
     'Mario\'s Star':        ItemData('Mario Item', 8536, progression=True),
     'Mario\'s Shoe':        ItemData('Mario Item', 8537, progression=True),
-    'Poltergust 4000':      ItemData('Upgrade',    8538, useful=True),
-    'Treasure Bundle':      ItemData('Treasure',   8539)
+    'Boo Radar':            ItemData('Boo Radar',  8538, progression=True),
+    'Poltergust 4000':      ItemData('Upgrade',    8539, useful=True),
+    'Treasure Bundle':      ItemData('Treasure',   8540)
 }
 

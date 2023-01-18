@@ -92,7 +92,7 @@ class LuigiMansionWorld(World):
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
 
-        for option_name in timespinner_options:
+        for option_name in luigimansion_options:
             slot_data[option_name] = get_option_value(self.multiworld, self.player, option_name)
 
         slot_data["StinkyMaw"] = True
@@ -106,7 +106,7 @@ class LuigiMansionWorld(World):
         spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % (self.pyramid_keys_unlock))
 
 
-def get_excluded_items(self: TimespinnerWorld, world: MultiWorld, player: int) -> Set[str]:
+def get_excluded_items(self: LuigiMansionWorld, world: MultiWorld, player: int) -> Set[str]:
     excluded_items: Set[str] = set()
 
     if is_option_enabled(world, player, "StartWithJewelryBox"):
@@ -170,7 +170,7 @@ def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> L
     return pool
 
 
-def fill_item_pool_with_dummy_items(self: TimespinnerWorld, world: MultiWorld, player: int, locked_locations: List[str],
+def fill_item_pool_with_dummy_items(self: LuigiMansionWorld, world: MultiWorld, player: int, locked_locations: List[str],
                                     location_cache: List[Location], pool: List[Item]):
     for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
         item = create_item_with_correct_settings(world, player, self.get_filler_item_name())
