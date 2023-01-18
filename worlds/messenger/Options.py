@@ -1,4 +1,9 @@
-from Options import Toggle, DefaultOnToggle, DeathLink, Range
+from Options import DefaultOnToggle, DeathLink, Range, Accessibility
+
+
+class MessengerAccessibility(Accessibility):
+    default = 0
+    # defaulting to locations accessibility since items makes certain items self-locking
 
 
 class Logic(DefaultOnToggle):
@@ -6,7 +11,7 @@ class Logic(DefaultOnToggle):
     display_name = "Use Logic"
 
 
-class PowerSeals(Toggle):
+class PowerSeals(DefaultOnToggle):
     """Whether power seal locations should be randomized."""
     display_name = "Shuffle Seals"
 
@@ -20,6 +25,7 @@ class NotesNeeded(Range):
 
 
 messenger_options = {
+    "accessibility": MessengerAccessibility,
     "enable_logic": Logic,
     "shuffle_seals": PowerSeals,
     "notes_needed": NotesNeeded,
