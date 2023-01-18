@@ -15,77 +15,58 @@ class StartHiddenMansion(Toggle):
     display_name = "Hidden Mansion"
 
 
-class EyeSpy(Toggle):
-    "Requires Oculus Ring in inventory to be able to break hidden walls."
-    display_name = "Eye Spy"
+class MoneyGhosts(Toggle):
+    "Adds Blue Ghosts and Gold Mice to location pool"
+    display_name = "Money Ghosts"
 
 
-class StartWithMeyef(Toggle):
-    "Start with Meyef, ideal for when you want to play multiplayer."
-    display_name = "Start with Meyef"
-
-
-class QuickSeed(Toggle):
+class StartWithBooRadar(Toggle):
+    "Start with Boo Radar"
+    display_name = "Boo Radar"
     "Start with Talaria Attachment, Nyoom!"
     display_name = "Quick seed"
 
 
-class SpecificKeycards(Toggle):
-    "Keycards can only open corresponding doors"
-    display_name = "Specific Keycards"
+#class GenericKeys(Toggle):
+#    "Keys can open any non-suite doors"
+#    display_name = "Generic Keys"
+# Will Require extra logic to make availabel
 
+class Toadsanity(Toggle):
+    "Adds Toads to location pool"
+    display_name = "Toadsanity"
 
-class Inverted(Toggle):
-    "Start in the past"
-    display_name = "Inverted"
+class Plants(Toggle):
+    "Adds all plants to location pool"
+    display_name = "Plantsanity"
 
+class Interactables(Toggle):
+    "Adds every interactable, such a dressers and light fixtures, to the location pool"
+    display_name = "Interactables"
 
-class GyreArchives(Toggle):
-    "Gyre locations are in logic. New warps are gated by Merchant Crow and Kobo"
-    display_name = "Gyre Archives"
+class MarioItems(Range):
+    "How many Mario Items it takes to capture the Fortune-Teller. 0 = Starts Capturable"
+    display_name = "Fortune-Teller"
+    range_start = 0
+    range_end = 5
+    default = 5
 
+class WashroomBooCount(Range):
+    "Set the number of Boos required to reach the 1F Washroom. 0 = Starts Open"
+    display_name = "Washroom Boo Count"
+    range_start = 0
+    range_end = 50
+    default = 5
 
-class Cantoran(Toggle):
-    "Cantoran's fight and check are available upon revisiting his room"
-    display_name = "Cantoran"
-
-
-class LoreChecks(Toggle):
-    "Memories and journal entries contain items."
-    display_name = "Lore Checks"
-
-
-class BossRando(Toggle):
-    "Shuffles the positions of all bosses."
-    display_name = "Boss Randomization"
-
-
-class BossScaling(DefaultOnToggle):
-    "When Boss Rando is enabled, scales the bosses' HP, XP, and ATK to the stats of the location they replace (Reccomended)"
-    display_name = "Scale Random Boss Stats"
-
-
-class DamageRando(Choice):
-    "Randomly nerfs and buffs some orbs and their associated spells as well as some associated rings."
-    display_name = "Damage Rando"
-    option_off = 0
-    option_allnerfs = 1
-    option_mostlynerfs = 2
-    option_balanced = 3
-    option_mostlybuffs = 4
-    option_allbuffs = 5
-    option_manual = 6
-    alias_true = 2
-
-
-class HpCap(Range):
-    "Sets the number that Lunais's HP maxes out at."
-    display_name = "HP Cap"
+class FinalBooCount(Range):
+    "Set the number of Boos required to reach the Secret Altar. 0 = Starts Open"
+    display_name = "Altar Boo Count"
     range_start = 1
-    range_end = 999
-    default = 999
+    range_end = 50
+    default = 40
 
 
+# Old Timespinner Options
 class BossHealing(DefaultOnToggle):
     "Enables/disables healing after boss fights. NOTE: Currently only applicable when Boss Rando is enabled."
     display_name = "Heal After Bosses"
@@ -189,7 +170,7 @@ luigimansion_options: Dict[str, Option] = {
     "LoreChecks": LoreChecks,
     "BossRando": BossRando,
     "BossScaling": BossScaling,
-    "HpCap": HpCap,
+    "FinalBooCount": FinalBooCount,
     "BossHealing": BossHealing,
     "ShopFill": ShopFill,
     "ShopWarpShards": ShopWarpShards,
