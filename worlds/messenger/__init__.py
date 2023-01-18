@@ -77,7 +77,7 @@ class MessengerWorld(World):
                 self.multiworld.push_precollected(self.create_item(note))
         itempool = []
         for item in self.item_name_to_id:
-            if item not in {"Power Seal", "Time Shard", *notes}:  # if we create this with power seal shuffling off we'll have too many items
+            if item not in {"Power Seal", "Time Shard", *self.multiworld.precollected_items}:  # if we create this with power seal shuffling off we'll have too many items
                 itempool.append(self.create_item(item))
         while len(itempool) < len(self.multiworld.get_unfilled_locations(self.player)):
             itempool.append(self.create_filler())
