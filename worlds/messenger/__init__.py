@@ -67,20 +67,20 @@ class MessengerWorld(World):
             region.add_exits(exits)
 
     def create_items(self) -> None:
-        precollected_amount = NotesNeeded.range_end - self.multiworld.notes_needed[self.player].value
-        notes = []
-        if precollected_amount:
+        precollected_notes_amount = NotesNeeded.range_end - self.multiworld.notes_needed[self.player].value
+        if precollected_notes_amount:
             notes = NOTES.copy()
             self.multiworld.random.shuffle(notes)
-            notes = notes[:precollected_amount]
+            notes = notes[:precollected_notes_amount]
             for note in notes:
                 self.multiworld.push_precollected(self.create_item(note))
+
         itempool = []
-        for item in self.item_name_to_id:
-            if item not in {"Power Seal", "Time Shard", *self.multiworld.precollected_items}:  # if we create this with power seal shuffling off we'll have too many items
-                itempool.append(self.create_item(item))
-        while len(itempool) < len(self.multiworld.get_unfilled_locations(self.player)):
-            itempool.append(self.create_filler())
+        itempool += [self.create_item(item)
+                     for item in self.item_name_to_id
+                     if item not in {"Power Seal", "Time Shard", *self.multiworld.precollected_items}]
+        itempool += [self.create_filler()
+                     for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool))]
 
         self.multiworld.itempool += itempool
 
