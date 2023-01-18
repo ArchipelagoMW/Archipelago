@@ -4,7 +4,7 @@ from BaseClasses import Tutorial
 from Options import Accessibility
 from worlds.AutoWorld import World, WebWorld
 from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS, JUNK, ALWAYS_LOCATIONS, SEALS, ALL_ITEMS
-from .Options import messenger_options
+from .Options import messenger_options, NotesNeeded
 from .Regions import REGIONS, REGION_CONNECTIONS
 from .Rules import MessengerRules, set_self_locking_items
 from .SubClasses import MessengerRegion, MessengerItem
@@ -67,9 +67,17 @@ class MessengerWorld(World):
             region.add_exits(exits)
 
     def create_items(self) -> None:
+        precollected_amount = NotesNeeded.range_end - self.multiworld.notes_needed[self.player].value
+        notes = []
+        if precollected_amount:
+            notes = NOTES.copy()
+            self.multiworld.random.shuffle(notes)
+            notes = notes[:precollected_amount]
+            for note in notes:
+                self.multiworld.push_precollected(self.create_item(note))
         itempool = []
         for item in self.item_name_to_id:
-            if item not in {"Power Seal", "Time Shard"}:  # if we create this with power seal shuffling off we'll have too many items
+            if item not in {"Power Seal", "Time Shard", *notes}:  # if we create this with power seal shuffling off we'll have too many items
                 itempool.append(self.create_item(item))
         while len(itempool) < len(self.multiworld.get_unfilled_locations(self.player)):
             itempool.append(self.create_filler())
