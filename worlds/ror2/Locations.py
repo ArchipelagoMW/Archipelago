@@ -67,32 +67,33 @@ class orderedstage_location:
         # TODO perhaps a hashing algorithm could be used to compress this range and save "wasted" ids
         environment_start_id = environment_index * orderedstage_location.allocation + ror2_locations_start_orderedstage
         for n in range(chests):
-            locations|= {f"{environment_name}: Chest {n+1}":            n + orderedstage_location.offset_ChestsPerEnvironment       + environment_start_id}
+            locations = {**locations, **{f"{environment_name}: Chest {n+1}":            n + orderedstage_location.offset_ChestsPerEnvironment       + environment_start_id}}
         for n in range(shrines):
-            locations|= {f"{environment_name}: Shrine {n+1}":           n + orderedstage_location.offset_ShrinesPerEnvironment      + environment_start_id}
+            locations = {**locations, **{f"{environment_name}: Shrine {n+1}":           n + orderedstage_location.offset_ShrinesPerEnvironment      + environment_start_id}}
         for n in range(scavengers):
-            locations|= {f"{environment_name}: Scavenger {n+1}":        n + orderedstage_location.offset_ScavengersPerEnvironment   + environment_start_id}
+            locations = {**locations, **{f"{environment_name}: Scavenger {n+1}":        n + orderedstage_location.offset_ScavengersPerEnvironment   + environment_start_id}}
         for n in range(scanners):
-            locations|= {f"{environment_name}: Radio Scanner {n+1}":    n + orderedstage_location.offset_ScannersPerEnvironment     + environment_start_id}
+            locations = {**locations, **{f"{environment_name}: Radio Scanner {n+1}":    n + orderedstage_location.offset_ScannersPerEnvironment     + environment_start_id}}
         for n in range(altars):
-            locations|= {f"{environment_name}: Newt Altar {n+1}":       n + orderedstage_location.offset_AltarsPerEnvironment       + environment_start_id}
+            locations = {**locations, **{f"{environment_name}: Newt Altar {n+1}":       n + orderedstage_location.offset_AltarsPerEnvironment       + environment_start_id}}
         return locations
 
     def get_locations(chests:int, shrines:int, scavengers:int, scanners:int, altars:int, dlc_sotv:bool) -> Dict[str, int]:
         """Get a dictionary of locations for the ordedstage environments with the locations from the parameters."""
         locations = {}
         orderedstages = compress_dict_list_horizontal(environment_vanilla_orderedstages_table)
-        if(dlc_sotv): orderedstages|= compress_dict_list_horizontal(environment_sotv_orderedstages_table)
+        if(dlc_sotv): orderedstages = {**orderedstages, **compress_dict_list_horizontal(environment_sotv_orderedstages_table)}
         # for every environment, generate the respective locations
         for environment_name, environment_index in orderedstages.items():
-            locations = locations | orderedstage_location.get_environment_locations(
+            # locations = locations | orderedstage_location.get_environment_locations(
+            locations = {**locations, **orderedstage_location.get_environment_locations(
                 chests=chests,
                 shrines=shrines,
                 scavengers=scavengers,
                 scanners=scanners,
                 altars=altars,
                 environment=(environment_name, environment_index)
-            )
+            )}
         return locations
 
     def getall_locations(dlc_sotv:bool=True) -> Dict[str, int]:
@@ -112,7 +113,7 @@ class orderedstage_location:
 
 
 ror2_location_post_orderedstage = ror2_locations_start_orderedstage + highest_orderedstage*orderedstage_location.allocation
-location_table = location_table | orderedstage_location.getall_locations()
+location_table = {**location_table, **orderedstage_location.getall_locations()}
 # use the sotv dlc in the lookup table so that all ids can be looked up regardless of use
 
 lookup_id_to_name: Dict[int, str] = {id: name for name, id in location_table.items()}

@@ -31,7 +31,8 @@ item_table: Dict[str, int] = {
 environment_offest = 37700
 
 # add ALL environments into the item table
-item_table|= shift_by_offset(environment_ALL_table, environment_offest)
+environment_offset_table = shift_by_offset(environment_ALL_table, environment_offest)
+item_table = {**item_table, **environment_offset_table}
 # use the sotv dlc in the item table so that all names can be looked up regardless of use
 
 # end of environments

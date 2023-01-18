@@ -83,7 +83,8 @@ class RiskOfRainWorld(World):
             environments_pool = shift_by_offset(environment_vanilla_table, environment_offest)
 
             if self.multiworld.dlc_sotv[self.player]:
-                environments_pool |= shift_by_offset(environment_sotv_table, environment_offest)
+                environment_offset_table = shift_by_offset(environment_sotv_table, environment_offest)
+                environments_pool = {**environments_pool, **environment_offset_table}
                 # self.multiworld.push_precollected(self.create_item("The Simulacrum (Titanic Plains)"))
                 if not self.multiworld.dlc_sotv_simulacrum[self.player]:
                     environments_pool.pop("The Simulacrum (Titanic Plains)")

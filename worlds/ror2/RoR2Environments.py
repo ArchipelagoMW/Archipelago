@@ -71,7 +71,7 @@ Y = TypeVar("Y")
 def compress_dict_list_horizontal(list_of_dict: List[Dict[X, Y]]) -> Dict[X, Y]:
     """Combine all dictionaries in a list together into one dictionary."""
     compressed: Dict[X,Y] = {}
-    for individual in list_of_dict: compressed = compressed | individual
+    for individual in list_of_dict: compressed = {**compressed, **individual}
     return compressed
 
 def collapse_dict_list_vertical(list_of_dict1: List[Dict[X, Y]], *args: List[Dict[X, Y]]) -> List[Dict[X, Y]]:
@@ -88,27 +88,27 @@ def collapse_dict_list_vertical(list_of_dict1: List[Dict[X, Y]], *args: List[Dic
 
     # merge contents from list_of_dict1
     for i in range(len(list_of_dict1)):
-        collapsed[i] = collapsed[i] | list_of_dict1[i]
+        collapsed[i] = {**collapsed[i],  **list_of_dict1[i]}
 
     # merge contents of remaining lists_of_dicts
     for list_of_dictN in args:
         for i in range(len(list_of_dictN)):
-            collapsed[i] = collapsed[i] | list_of_dictN[i]
+            collapsed[i] = {**collapsed[i], **list_of_dictN[i]}
 
     return collapsed
 
 # TODO potentially these should only be created when they are directly referenced (unsure of the space/time cost of creating these initially)
 
 environment_vanilla_orderedstages_table = [ environment_vanilla_orderedstage_1_table, environment_vanilla_orderedstage_2_table, environment_vanilla_orderedstage_3_table, environment_vanilla_orderedstage_4_table, environment_vanilla_orderedstage_5_table ]
-environment_vanilla_table = compress_dict_list_horizontal(environment_vanilla_orderedstages_table) | environment_vanilla_hidden_realm_table | environment_vanilla_special_table
+environment_vanilla_table = {**compress_dict_list_horizontal(environment_vanilla_orderedstages_table), **environment_vanilla_hidden_realm_table, **environment_vanilla_special_table}
 
 environment_sotv_orderedstages_table = [ environment_sotv_orderedstage_1_table, environment_sotv_orderedstage_2_table, environment_sotv_orderedstage_3_table, environment_sotv_orderedstage_4_table, environment_sotv_orderedstage_5_table ]
-environment_sotv_non_simulacrum_table = compress_dict_list_horizontal(environment_sotv_orderedstages_table) | environment_sotv_special_table
-environment_sotv_table = environment_sotv_non_simulacrum_table | environment_sotv_simulacrum_table
+environment_sotv_non_simulacrum_table = {**compress_dict_list_horizontal(environment_sotv_orderedstages_table), **environment_sotv_special_table}
+environment_sotv_table = {**environment_sotv_non_simulacrum_table, **environment_sotv_simulacrum_table}
 
-environment_non_orderedstages_table = environment_vanilla_hidden_realm_table | environment_vanilla_special_table | environment_sotv_simulacrum_table | environment_sotv_special_table
+environment_non_orderedstages_table = {**environment_vanilla_hidden_realm_table, **environment_vanilla_special_table, **environment_sotv_simulacrum_table, **environment_sotv_special_table}
 environment_orderedstages_table = collapse_dict_list_vertical(environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table)
-environment_ALL_table = environment_vanilla_table | environment_sotv_table
+environment_ALL_table = {**environment_vanilla_table,  **environment_sotv_table}
 
 
 def shift_by_offset(dictionary: Dict[str, int], offset:int) -> Dict[str, int]:
