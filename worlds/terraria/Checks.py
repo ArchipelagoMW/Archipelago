@@ -198,7 +198,7 @@ achievements = [
     "Lucky Break",
     "Throwing Lines",
     "Dye Hard",
-    "The Cavalry"
+    "The Cavalry",
     "Completely Awesome",
     "Til Death...",
     "Watch Your Step!",
