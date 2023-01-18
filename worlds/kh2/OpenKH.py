@@ -228,7 +228,15 @@ def patch_kh2(self, output_directory):
         increaseStat(random.randint(0, 3))
         try:
             data=self.multiworld.get_location(location,self.player)
-            itemcode=item_dictionary_table[data.item.name].kh2id
+            if data.item.player==self.player: 
+                itemcode=item_dictionary_table[data.item.name].kh2id
+            else:
+                itemcode=461
+            #    itemcode = item_dictionary_table[location.item.name].kh2id
+            #else:
+            #    #filling in lists for how to check if a chest is opened
+            #    self.kh2multiworld_locations.append(location.name)
+            #    itemcode = 461
         except:
             increaseStat(random.randint(0, 3))
             itemcode=0

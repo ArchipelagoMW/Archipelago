@@ -17,7 +17,7 @@ def set_rules(world: MultiWorld, player: int):
     for location in STT_Checks:
         forbid_items(world.get_location(location, player), exclusionItem_table["StatUps"])
 
-    # Santa's house also breaks with abilities
+    # Santa's house also breaks with stat ups
     forbid_items(world.get_location(LocationName.SantasHouseChristmasTownMap, player), exclusionItem_table["StatUps"])
     forbid_items(world.get_location(LocationName.SantasHouseAPBoost, player), exclusionItem_table["StatUps"])
 
