@@ -28,8 +28,6 @@ You can find items wherever items can be picked up in the original game. This
 includes:
 * Shopkeeper dialog where the player originally gains movement items
 * Quest Item pickups
-  * Astral seed and astral tea leaves are currently excluded as they don't get
-added to the players' inventory
 * Music Box notes
 * Phobekins
 * Power seals
@@ -51,11 +49,10 @@ for it. The groups you can use for The Messenger are:
 
 * The player can return to the Tower of Time HQ at any point by selecting the
 button from the options menu
-  * This can cause issues if used at specific times. Current known:
-    * During Boss fights
-    * During Cutscenes
-    * After Courage Note collection (Corrupted Future chase)
-      * This is currently an expected action in logic. If you do need to teleport
+    * This can cause issues if used at specific times. Current known:
+        * During Boss fights
+          * After Courage Note collection (Corrupted Future chase)
+              * This is currently an expected action in logic. If you do need to teleport
 during this chase sequence, it is recommended to quit to title and reload the save
 * After reaching ninja village a teleport option is added to the menu to reach it
 * Toggle Windmill Shuriken button is added to option menu once the item is received
