@@ -71,7 +71,7 @@ Y = TypeVar("Y")
 def compress_dict_list_horizontal(list_of_dict: List[Dict[X, Y]]) -> Dict[X, Y]:
     """Combine all dictionaries in a list together into one dictionary."""
     compressed: Dict[X,Y] = {}
-    for individual in list_of_dict: compressed|= individual
+    for individual in list_of_dict: compressed = compressed | individual
     return compressed
 
 def collapse_dict_list_vertical(list_of_dict1: List[Dict[X, Y]], *args: List[Dict[X, Y]]) -> List[Dict[X, Y]]:

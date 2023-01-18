@@ -85,7 +85,7 @@ class orderedstage_location:
         if(dlc_sotv): orderedstages|= compress_dict_list_horizontal(environment_sotv_orderedstages_table)
         # for every environment, generate the respective locations
         for environment_name, environment_index in orderedstages.items():
-            locations |= orderedstage_location.get_environment_locations(
+            locations = locations | orderedstage_location.get_environment_locations(
                 chests=chests,
                 shrines=shrines,
                 scavengers=scavengers,
@@ -112,7 +112,7 @@ class orderedstage_location:
 
 
 ror2_location_post_orderedstage = ror2_locations_start_orderedstage + highest_orderedstage*orderedstage_location.allocation
-location_table |= orderedstage_location.getall_locations()
+location_table = location_table | orderedstage_location.getall_locations()
 # use the sotv dlc in the lookup table so that all ids can be looked up regardless of use
 
 lookup_id_to_name: Dict[int, str] = {id: name for name, id in location_table.items()}

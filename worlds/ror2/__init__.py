@@ -221,10 +221,7 @@ class RiskOfRainWorld(World):
         item_id = item_table[name]
         classification = ItemClassification.filler
         if name == "Dio's Best Friend":
-            if self.multiworld.dlc_sotv[self.player]:
-                classification = ItemClassification.useful
-            else:
-                classification = ItemClassification.progression
+            classification = ItemClassification.progression
         elif name in {"Legendary Item", "Boss Item"}:
             classification = ItemClassification.useful
 
