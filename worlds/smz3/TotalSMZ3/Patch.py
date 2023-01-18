@@ -4,7 +4,7 @@ from typing import Any, Callable, List, Sequence
 import random
 import typing
 from BaseClasses import Location
-from worlds.smz3.TotalSMZ3.Item import Item, ItemType
+from worlds.smz3.TotalSMZ3.Item import Item, ItemType, lookup_id_to_name
 from worlds.smz3.TotalSMZ3.Location import LocationType
 from worlds.smz3.TotalSMZ3.Region import IReward, RewardType, SMRegion, Z3Region
 from worlds.smz3.TotalSMZ3.Regions.Zelda.EasternPalace import EasternPalace
@@ -352,7 +352,10 @@ class Patch:
             
             return value.value
         elif (location.APLocation.item.game == "A Link to the Past"):
-            return location.APLocation.item.code
+            if location.APLocation.item.code + 84000 in lookup_id_to_name:
+                return location.APLocation.item.code
+            else:
+                return ItemType.Something.value
         elif (location.APLocation.item.game == "Super Metroid"):
             SMNameToSMZ3Code = {
                 "Energy Tank": ItemType.ETank, "Missile": ItemType.Missile, "Super Missile": ItemType.Super,
