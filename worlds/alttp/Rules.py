@@ -1,9 +1,12 @@
 import collections
 import logging
+from typing import Iterator, Set
+
 from worlds.alttp import OverworldGlitchRules
 from BaseClasses import RegionType, MultiWorld, Entrance
-from worlds.alttp.Items import ItemFactory, progression_items, item_name_groups
+from worlds.alttp.Items import ItemFactory, progression_items, item_name_groups, item_table
 from worlds.alttp.OverworldGlitchRules import overworld_glitches_rules, no_logic_rules
+from worlds.alttp.Regions import location_table
 from worlds.alttp.UnderworldGlitchRules import underworld_glitches_rules
 from worlds.alttp.Bosses import GanonDefeatRule
 from worlds.generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations, \
@@ -176,6 +179,14 @@ def dungeon_boss_rules(world, player):
 def global_rules(world, player):
     # ganon can only carry triforce
     add_item_rule(world.get_location('Ganon', player), lambda item: item.name == 'Triforce' and item.player == player)
+    # dungeon prizes can only be crystals/pendants
+    crystals_and_pendants: Set[str] = \
+        {item for item, item_data in item_table.items() if item_data.type == "Crystal"}
+    prize_locations: Iterator[str] = \
+        (locations for locations, location_data in location_table.items() if location_data[2] == True)
+    for prize_location in prize_locations:
+        add_item_rule(world.get_location(prize_location, player),
+                      lambda item: item.name in crystals_and_pendants and item.player == player)
     # determines which S&Q locations are available - hide from paths since it isn't an in-game location
     world.get_region('Menu', player).can_reach_private = lambda state: True
     for exit in world.get_region('Menu', player).exits:
