@@ -1,18 +1,19 @@
 from BaseClasses import Location, Item
 
-next_id = 0x7E0000
-
 items = [
-    "Nothing",
     "Torch God's Favor",
     "Post-Goblin Army",
     "Post-King Slime",
     "Post-Eye of Cthulhu",
     "Post-Eater of Worlds or Brain of Cthulhu",
     "Post-Old One's Army Tier 1",
-    "Post-Queen Been",
+    "Post-Queen Bee",
     "Post-Skeletron",
     "Post-Deerclops",
+]
+
+misc_items = [
+    "Nothing",
     "Victory",
 ]
 
@@ -26,9 +27,6 @@ post_wall_of_flesh_items = [
     "Post-Old One's Army Tier 2",
     "Post-Duke Fishron",
 ]
-
-for item in post_wall_of_flesh_items:
-    items.append(item)
 
 post_plantera_items = [
     "Post-Frost Legion",
@@ -46,15 +44,9 @@ post_plantera_items = [
     "Post-Lunar Events",
 ]
 
-for item in post_plantera_items:
-    items.append(item)
-
 post_moon_lord_items = [
     "Post-Moon Lord"
 ]
-
-for item in post_moon_lord_items:
-    items.append(item)
 
 item_items = [
     "Hermes Boots",
@@ -132,8 +124,8 @@ item_items = [
     "Lucky Coin",
 ]
 
-# for item in item_items:
-#     items.append(item)
+# Debugging utility
+precollected = []
 
 locations = [
     "Torch God",
@@ -159,9 +151,6 @@ post_wall_of_flesh_locations = [
     "Duke Fishron",
 ]
 
-for location in post_wall_of_flesh_locations:
-    locations.append(location)
-
 post_plantera_locations = [
     "Frost Legion",
     "Golem",
@@ -178,32 +167,196 @@ post_plantera_locations = [
     "Moon Lord",
 ]
 
-for location in post_plantera_locations:
-    locations.append(location)
-
 post_moon_lord_locations = [
-    "Zenith"
+    "Zenith",
 ]
 
-for location in post_moon_lord_locations:
-    locations.append(location)
+achievements = [
+    "Timber!!",
+    "No Hobo",
+    "Stop! Hammer Time!",
+    "Ooo! Shiny!",
+    "Heart Breaker",
+    "Heavy Metal",
+    "I Am Loot!",
+    "Star Power",
+    "Hold on Tight!",
+    "Smashing, Poppet!",
+    "Where's My Honey?",
+    "Dungeon Heist",
+    "It's Getting Hot in Here",
+    "Miner for Fire",
+    "Like a Boss",
+    "Bloodbath",
+    "Not the Bees!",
+    "Jeepers Creepers",
+    "Funkytown",
+    "Into Orbit",
+    "Rock Bottom",
+    "Fashion Statement",
+    "Vehicular Manslaughter",
+    "Lucky Break",
+    "Throwing Lines",
+    "Dye Hard",
+    "The Cavalry"
+    "Completely Awesome",
+    "Til Death...",
+    "Watch Your Step!",
+    "You Can Do It!",
+    "Matching Attire",
+    "Benched",
+    "Quiet Neighborhood",
+    "Hot Reels!",
+    "Leading Landlord",
+    "Feeling Petty",
+    "Dead Men Tell No Tales",
+]
 
-# Debugging utility
-precollected = []
+grindy_achievements = [
+    "Sticky Situation",
+    "There are Some Who Call Him...",
+    "Deceiver of Fools",
+    "Archaeologist",
+    "Pretty in Pink",
+    "Boots of the Hero",
+    "A Rather Blustery Day",
+    "Heliophobia",
+    "Jolly Jamboree",
+]
+
+fishing_achievements = [
+    "Glorious Golden Pole",
+    "Servant-in-Training",
+    "10 Fishing Quests", # This achievement was intentionally renamed
+    "Trout Monkey",
+    "Fast and Fishious",
+    "Supreme Helper Minion!",
+]
+
+achievements_that_are_fishing_if_goal_is_wof = [
+    "Head in the Clouds",
+]
+
+post_wall_of_flesh_achievements = [
+    "Begone, Evil!",
+    "Extra Shiny!",
+    "Drax Attax",
+    "Photosynthesis",
+    "Get a Life",
+    "Kill the Sun",
+    "Mecha Mayhem",
+    "Prismancer",
+    "It Can Talk?!",
+]
+
+grindy_post_wall_of_flesh_achievements = [
+    "Gelatin World Tour",
+    "Topped Off",
+    "Don't Dread on Me",
+]
+
+post_plantera_achievements = [
+    "Temple Raider",
+    "Robbing the Grave",
+    "Baleful Harvest",
+    "Ice Scream",
+    "Sword of the Hero",
+]
+
+grindy_post_plantera_achievements = [
+    "Big Booty",
+    "Real Estate Agent",
+    "Rainbows and Unicorns",
+]
+
+post_moon_lord_achievements = [
+    "Sick Throw",
+    "You and What Army?",
+]
+
+next_id = 0x7E0000
 
 item_name_to_id: dict[str, int] = {}
 location_name_to_id: dict[str, int] = {}
 
-for item in items:
-    item_name_to_id[item] = next_id
-    next_id += 1
+def register(names, isItem):
+    global next_id
+    for name in names:
+        if isItem:
+            item_name_to_id[name] = next_id
+        else:
+            location_name_to_id[name] = next_id
+        next_id += 1
 
-for location in locations:
-    location_name_to_id[location] = next_id
-    next_id += 1
+register(items, True)
+register(misc_items, True)
+register(post_wall_of_flesh_items, True)
+register(post_plantera_items, True)
+register(post_moon_lord_items, True)
+register(item_items, True)
+
+register(locations, False)
+register(post_wall_of_flesh_locations, False)
+register(post_plantera_locations, False)
+register(post_moon_lord_locations, False)
+register(achievements, False)
+register(grindy_achievements, False)
+register(fishing_achievements, False)
+register(achievements_that_are_fishing_if_goal_is_wof, False)
+register(post_wall_of_flesh_achievements, False)
+register(grindy_post_wall_of_flesh_achievements, False)
+register(post_plantera_achievements, False)
+register(grindy_post_plantera_achievements, False)
+register(post_moon_lord_achievements, False)
 
 class TerrariaItem(Item):
     game = "Terraria"
 
 class TerrariaLocation(Location):
     game = "Terraria"
+
+def get_items_locations(goal, achievements_opt, extra_checks):
+    world_items = items.copy()
+    if goal > 0:
+        world_items += post_wall_of_flesh_items
+    if goal > 1:
+        world_items += post_plantera_items
+    if goal > 2:
+        world_items += post_moon_lord_items
+
+    world_locations = locations.copy()
+    if goal > 0:
+        world_locations += post_wall_of_flesh_locations
+    if goal > 1:
+        world_locations += post_plantera_locations
+    if goal > 2:
+        world_locations += post_moon_lord_locations
+    if achievements_opt > 0:
+        world_locations += achievements
+    if achievements_opt > 1:
+        world_locations += grindy_achievements
+    if achievements_opt > 2:
+        world_locations += fishing_achievements
+    if goal > 0 or achievements_opt > 2:
+        world_locations += achievements_that_are_fishing_if_goal_is_wof
+    if goal > 0 and achievements_opt > 0:
+        world_locations += post_wall_of_flesh_achievements
+    if goal > 0 and achievements_opt > 1:
+        world_locations += grindy_post_wall_of_flesh_achievements
+    if goal > 1 and achievements_opt > 0:
+        world_locations += post_plantera_achievements
+    if goal > 1 and achievements_opt > 1:
+        world_locations += grindy_post_plantera_achievements
+    if goal > 2 and achievements_opt > 0:
+        world_locations += post_moon_lord_achievements
+
+    if extra_checks == 1 and len(world_items) < len(world_locations):
+        if len(world_locations) - len(world_items) < len(item_items):
+            world_items += item_items[:len(world_locations) - len(world_items)]
+        else:
+            world_items += item_items
+
+    if len(world_items) < len(world_locations):
+        world_items += ["Nothing"] * (len(world_locations) - len(world_items))
+
+    return world_items, world_locations

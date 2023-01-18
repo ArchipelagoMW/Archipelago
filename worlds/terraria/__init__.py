@@ -1,7 +1,7 @@
 from worlds.AutoWorld import World
 from worlds.generic.Rules import add_rule
 from BaseClasses import Region, RegionType, ItemClassification
-from .Checks import item_name_to_id, location_name_to_id, TerrariaItem, locations, TerrariaLocation, items, precollected, post_wall_of_flesh_items, post_wall_of_flesh_locations, post_plantera_items, post_plantera_locations, post_moon_lord_items, post_moon_lord_locations
+from .Checks import item_name_to_id, location_name_to_id, TerrariaItem, TerrariaLocation, precollected, get_items_locations
 from .Options import options
 
 class TerrariaWorld(World):
@@ -17,13 +17,18 @@ class TerrariaWorld(World):
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
 
+    def generate_early(self) -> None:
+        self.ter_items, self.ter_locations = get_items_locations(self.multiworld.goal[self.player].value, self.multiworld.achievements[self.player].value, self.multiworld.fill_extra_checks_with[self.player].value)
+
     def create_item(self, name: str) -> TerrariaItem:
         classification = ItemClassification.useful
         if name in {
-            "Post-Eye of Cthulhu",
+            "Post-Goblin Army",
             "Post-Eater of Worlds or Brain of Cthulhu",
+            "Post-Queen Bee",
             "Post-Skeletron",
             "Hardmode",
+            "Post-Pirate Invasion",
             "Post-The Twins",
             "Post-The Destroyer",
             "Post-Skeletron Prime",
@@ -38,87 +43,78 @@ class TerrariaWorld(World):
 
     def create_regions(self) -> None:
         menu = Region("Menu", RegionType.Generic, "Menu", self.player, self.multiworld)
-        locations_to_create = locations.copy()
 
-        goal = self.multiworld.goal[self.player].value
-
-        if goal < 1:
-            for item in post_wall_of_flesh_locations:
-                locations_to_create.remove(item)
-
-        if goal < 2:
-            for item in post_plantera_locations:
-                locations_to_create.remove(item)
-
-        if goal < 3:
-            for item in post_moon_lord_locations:
-                locations_to_create.remove(item)
-
-        for location in locations_to_create:
+        for location in self.ter_locations:
             menu.locations.append(TerrariaLocation(self.player, location, location_name_to_id[location], menu))
         self.multiworld.regions.append(menu)
 
     def create_items(self) -> None:
-        items_to_create = items.copy()
+        items_to_create = self.ter_items.copy()
         for item in precollected:
             items_to_create.remove(item)
-        items_to_create.remove("Victory")
-        items_to_create.remove("Nothing")
-
-        goal = self.multiworld.goal[self.player].value
-
-        if goal < 1:
-            for item in post_wall_of_flesh_items:
-                items_to_create.remove(item)
-
-        if goal < 2:
-            for item in post_plantera_items:
-                items_to_create.remove(item)
-
-        if goal < 3:
-            for item in post_moon_lord_items:
-                items_to_create.remove(item)
-
         for _ in range(len(precollected)):
             items_to_create.append("Nothing")
+        
         for item in map(self.create_item, items_to_create):
             self.multiworld.itempool.append(item)
 
     def set_rules(self) -> None:
-        add_rule(self.multiworld.get_location("Old One's Army Tier 1", self.player), lambda state: state.has("Post-Eater of Worlds or Brain of Cthulhu", self.player))
+        fishing = self.multiworld.achievements[self.player].value == 3
 
-        goal = self.multiworld.goal[self.player].value
+        for location in self.ter_locations:
+            rule = None
+            match location:
+                case "Old One's Army Tier 1": rule = lambda state: state.has("Post-Eater of Worlds or Brain of Cthulhu", self.player)
+                case "Pirate Invasion": rule = lambda state: state.has("Hardmode", self.player)
+                case "Queen Slime": rule = lambda state: state.has("Hardmode", self.player)
+                case "The Twins": rule = lambda state: state.has("Hardmode", self.player)
+                case "The Destroyer": rule = lambda state: state.has("Hardmode", self.player)
+                case "Skeletron Prime": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode"}, self.player)
+                case "Old One's Army Tier 2": rule = lambda state: state.has_any({"Post-The Twins", "Post-The Destroyer", "Post-Skeletron Prime", "Post-Golem"}, self.player) and state.has_all({"Post-Eater of Worlds or Brain of Cthulhu", "Hardmode"}, self.player)
+                case "Plantera": rule = lambda state: state.has_all({"Hardmode", "Post-The Twins", "Post-The Destroyer", "Post-Skeletron Prime"}, self.player)
+                case "Duke Fishron": rule = lambda state: state.has("Hardmode", self.player)
+                case "Frost Legion": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player)
+                case "Golem": rule = lambda state: (state.has_all({"Post-The Twins", "Post-The Destroyer", "Post-Skeletron Prime"}, self.player) or state.has("Post-Golem", self.player)) and state.has_all({"Hardmode", "Post-Plantera"}, self.player)
+                case "Old One's Army Tier 3": rule = lambda state: state.has_all({"Post-Eater of Worlds or Brain of Cthulhu", "Hardmode", "Post-Golem"}, self.player)
+                case "Martian Madness": rule = lambda state: state.has_all({"Hardmode", "Post-Golem"}, self.player)
+                case "Mourning Wood": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player)
+                case "Pumpking": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player)
+                case "Everscream": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player)
+                case "Santa-NK1": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player)
+                case "Ice Queen": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player)
+                case "Empress of Light": rule = lambda state: state.has_all({"Hardmode", "Post-Plantera"}, self.player)
+                case "Lunatic Cultist": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Golem"}, self.player)
+                case "Lunar Events": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Golem"}, self.player)
+                case "Moon Lord": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Golem"}, self.player)
+                case "Zenith": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-The Twins", "Post-The Destroyer", "Post-Skeletron Prime", "Post-Plantera", "Post-Golem"}, self.player)
+                case "Dungeon Heist": rule = lambda state: state.has("Post-Skeletron", self.player)
+                case "Boots of the Hero": rule = lambda state: state.has("Post-Goblin Army", self.player)
+                case "Head in the Clouds": rule = lambda state: fishing or state.has("Hardmode", self.player)
+                case "Begone, Evil!": rule = lambda state: state.has("Hardmode", self.player)
+                case "Extra Shiny!": rule = lambda state: state.has("Hardmode", self.player)
+                case "Drax Attax": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode"}, self.player)
+                case "Photosynthesis": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode"}, self.player)
+                case "Get a Life": rule = lambda state: state.has("Hardmode", self.player)
+                case "Kill the Sun": rule = lambda state: state.has("Hardmode", self.player)
+                case "Mecha Mayhem": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode"}, self.player)
+                case "Prismancer": rule = lambda state: state.has("Hardmode", self.player)
+                case "It Can Talk?!": rule = lambda state: state.has("Hardmode", self.player)
+                case "Gelatin World Tour": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode"}, self.player)
+                case "Topped Off": rule = lambda state: state.has("Hardmode", self.player)
+                case "Don't Dread on Me": rule = lambda state: state.has("Hardmode", self.player)
+                case "Temple Raider": rule = lambda state: state.has_all({"Hardmode", "Post-The Twins", "Post-The Destroyer", "Post-Skeletron Prime"}, self.player)
+                case "Robbing the Grave": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player)
+                case "Baleful Harvest": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player)
+                case "Ice Scream": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player)
+                case "Sword of the Hero": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player)
+                case "Big Booty": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player)
+                case "Real Estate Agent": rule = lambda state: state.has_all({"Post-Goblin Army", "Post-Eater of Worlds or Brain of Cthulhu", "Post-Queen Bee", "Post-Skeletron", "Hardmode", "Post-Pirate Invasion", "Post-Plantera"}, self.player) and state.has_any({"Post-The Twins", "Post-The Destroyer", "Post-Skeletron Prime"}, self.player)
+                case "Rainbows and Unicorns": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player)
+                case "Sick Throw": rule = lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Golem"}, self.player)
+                case "You and What Army?": rule = lambda state: state.has_any({"Post-Queen Bee", "Post-Plantera"}, self.player) and state.has_all({"Post-Skeletron", "Hardmode", "Post-Golem"}, self.player)
 
-        if goal >= 1:
-            add_rule(self.multiworld.get_location("Pirate Invasion", self.player), lambda state: state.has("Hardmode", self.player))
-            add_rule(self.multiworld.get_location("Queen Slime", self.player), lambda state: state.has("Hardmode", self.player))
-            add_rule(self.multiworld.get_location("The Twins", self.player), lambda state: state.has("Hardmode", self.player))
-            add_rule(self.multiworld.get_location("The Destroyer", self.player), lambda state: state.has("Hardmode", self.player))
-            add_rule(self.multiworld.get_location("Skeletron Prime", self.player), lambda state: state.has_all({"Post-Skeletron", "Hardmode"}, self.player))
-            add_rule(self.multiworld.get_location("Old One's Army Tier 2", self.player), lambda state: state.has_any({"Post-The Twins", "Post-The Destroyer", "Post-Skeletron Prime", "Post-Golem"}, self.player) and state.has_all({"Post-Eater of Worlds or Brain of Cthulhu", "Hardmode"}, self.player))
-            add_rule(self.multiworld.get_location("Plantera", self.player), lambda state: state.has_all({"Hardmode", "Post-The Twins", "Post-The Destroyer", "Post-Skeletron Prime"}, self.player))
-            add_rule(self.multiworld.get_location("Duke Fishron", self.player), lambda state: state.has("Hardmode", self.player))
-
-        if goal >= 2:
-            add_rule(self.multiworld.get_location("Frost Legion", self.player), lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player))
-            # Golem can be accessed with HOIKing, which could be relevant to settings
-            add_rule(self.multiworld.get_location("Golem", self.player), lambda state: (state.has_all({"Post-The Twins", "Post-The Destroyer", "Post-Skeletron Prime"}, self.player) or state.has("Post-Golem", self.player)) and state.has_all({"Hardmode", "Post-Plantera"}, self.player))
-            add_rule(self.multiworld.get_location("Old One's Army Tier 3", self.player), lambda state: state.has_all({"Post-Eater of Worlds or Brain of Cthulhu", "Hardmode", "Post-Golem"}, self.player))
-            add_rule(self.multiworld.get_location("Martian Madness", self.player), lambda state: state.has_all({"Hardmode", "Post-Golem"}, self.player))
-
-            for boss in ["Mourning Wood", "Pumpking"]:
-                add_rule(self.multiworld.get_location(boss, self.player), lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player) and state.has_any({"Post-Eye of Cthulhu", "Post-Eater of Worlds or Brain of Cthulhu", "Post-Skeletron"}, self.player))
-
-            for boss in ["Everscream", "Santa-NK1", "Ice Queen"]:
-                add_rule(self.multiworld.get_location(boss, self.player), lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Plantera"}, self.player))
-
-            add_rule(self.multiworld.get_location("Empress of Light", self.player), lambda state: state.has_all({"Hardmode", "Post-Plantera"}, self.player))
-            add_rule(self.multiworld.get_location("Lunatic Cultist", self.player), lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Golem"}, self.player))
-            add_rule(self.multiworld.get_location("Lunar Events", self.player), lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Golem"}, self.player))
-            add_rule(self.multiworld.get_location("Moon Lord", self.player), lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-Golem"}, self.player))
-
-        if goal == 3:
-            add_rule(self.multiworld.get_location("Zenith", self.player), lambda state: state.has_all({"Post-Skeletron", "Hardmode", "Post-The Twins", "Post-The Destroyer", "Post-Skeletron Prime", "Post-Plantera", "Post-Golem"}, self.player))
+            if rule != None:
+                add_rule(self.multiworld.get_location(location, self.player), rule)
 
     def generate_basic(self) -> None:
         for item in precollected:
