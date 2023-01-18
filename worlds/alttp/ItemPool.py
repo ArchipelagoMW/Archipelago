@@ -488,7 +488,7 @@ def set_up_take_anys(world, player):
         world.itempool.append(ItemFactory('Rupees (20)', player))
         old_man_take_any.shop.add_inventory(0, sword.name, 0, 0, create_location=True)
     else:
-        old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0)
+        old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0, create_location=True)
 
     for num in range(4):
         take_any = Region("Take-Any #{}".format(num+1), RegionType.Cave, 'a cave of choice', player)
