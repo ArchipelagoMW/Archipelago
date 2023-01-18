@@ -22,14 +22,14 @@ server_options:
   # Relative point cost to receive a hint via !hint for players
   # so for example hint_cost: 20 would mean that for every 20% of available checks, you get the ability to hint, for a total of 5
   hint_cost: 10 # Set to 0 if you want free hints
-  # Forfeit modes
-  # A Forfeit sends out the remaining items *from* a world that forfeits
-  # "disabled" -> clients can't forfeit,
-  # "enabled" -> clients can always forfeit
-  # "auto" -> automatic forfeit on goal completion
-  # "auto-enabled" -> automatic forfeit on goal completion and manual forfeit is also enabled
-  # "goal" -> forfeit is allowed after goal completion
-  forfeit_mode: "goal"
+  # Release modes
+  # A Release sends out the remaining items *from* a world that releases
+  # "disabled" -> clients can't release,
+  # "enabled" -> clients can always release
+  # "auto" -> automatic release on goal completion
+  # "auto-enabled" -> automatic release on goal completion and manual release is also enabled
+  # "goal" -> release is allowed after goal completion
+  release_mode: "goal"
   # Collect modes
   # A Collect sends the remaining items *to* a world that collects
   # "disabled" -> clients can't collect,
@@ -68,9 +68,10 @@ generator:
   meta_file_path: "meta.yaml"
   # Create a spoiler file
   # 0 -> None
-  # 1 -> Spoiler without playthrough
-  # 2 -> Full spoiler
-  spoiler: 2
+  # 1 -> Spoiler without playthrough or paths to playthrough required items
+  # 2 -> Spoiler with playthrough (viable solution to goals)
+  # 3 -> Spoiler with playthrough and traversal paths towards items
+  spoiler: 3
   # Glitch to Triforce room from Ganon
   # When disabled, you have to have a weapon that can hurt ganon (master sword or swordless/easy item functionality + hammer)
   # and have completed the goal required for killing ganon to be able to access the triforce room.
@@ -92,6 +93,9 @@ sni_options:
 lttp_options:
   # File name of the v1.0 J rom
   rom_file: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
+lufia2ac_options:
+  # File name of the US rom
+  rom_file: "Lufia II - Rise of the Sinistrals (USA).sfc"
 sm_options:
   # File name of the v1.0 J rom
   rom_file: "Super Metroid (JU).sfc"

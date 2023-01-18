@@ -11,10 +11,11 @@ class TestDocs(unittest.TestCase):
             "filename": ":memory:",
             "create_db": True,
         }
-        app = get_app()
-        app.config.update({
+        raw_app.config.update({
             "TESTING": True,
         })
+        app = get_app()
+
         cls.client = app.test_client()
 
     def testCorrectErrorEmptyRequest(self):
