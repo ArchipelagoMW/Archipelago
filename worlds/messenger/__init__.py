@@ -83,7 +83,14 @@ class MessengerWorld(World):
         itempool = []
         itempool += [self.create_item(item)
                      for item in self.item_name_to_id
-                     if item not in {"Power Seal", "Time Shard", *self.multiworld.precollected_items}]
+                     if item not in
+                     {
+                         "Power Seal", "Time Shard",
+                         *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]}
+                         # this is a set and currently won't create items for anything that appears in here at all
+                         # if we get in a position where this can have duplicates of items that aren't Power Seals
+                         # or Time shards, this will need to be redone.
+                      }]
         itempool += [self.create_filler()
                      for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool))]
 
