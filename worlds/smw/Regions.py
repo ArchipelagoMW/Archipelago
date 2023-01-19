@@ -808,7 +808,7 @@ def create_regions(world, player: int, active_locations):
                                                (state.has(ItemName.yellow_switch_palace, player) or state.has(ItemName.red_switch_palace, player)))))
         add_location_to_region(world, player, active_locations, LocationName.chocolate_island_3_region, LocationName.chocolate_island_3_dragon)
         add_location_to_region(world, player, active_locations, LocationName.chocolate_island_4_region, LocationName.chocolate_island_4_dragon,
-                               lambda state: (state.has(ItemName.mario_run, player) and
+                               lambda state: (state.has(ItemName.p_switch, player) and
                                               state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(world, player, active_locations, LocationName.chocolate_island_5_region, LocationName.chocolate_island_5_dragon,
                                lambda state: (state.has(ItemName.mario_swim, player) or
