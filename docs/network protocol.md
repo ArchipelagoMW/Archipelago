@@ -180,6 +180,7 @@ Sent to clients purely to display a message to the player. This packet differs f
 | found | bool | Hint | Whether the location hinted for was checked |
 | team | int | Join, Part, Chat, TagsChanged, Goal, Release, Collect, ItemCheat | Team of the triggering player |
 | slot | int | Join, Part, Chat, TagsChanged, Goal, Release, Collect | Slot of the triggering player |
+| message | str | Chat, ServerChat | Original chat message without sender prefix |
 | tags | list\[str\] | Join, TagsChanged | Tags of the triggering player |
 | countdown | int | Countdown | Amount of seconds remaining on the countdown |
 

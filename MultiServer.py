@@ -1152,7 +1152,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def __call__(self, raw: str) -> typing.Optional[bool]:
         if not raw.startswith("!admin"):
             self.ctx.notify_all(self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + raw,
-                                {"type": "Chat", "team": self.client.team, "slot": self.client.slot})
+                                {"type": "Chat", "team": self.client.team, "slot": self.client.slot, "message": raw})
         return super(ClientMessageProcessor, self).__call__(raw)
 
     def output(self, text: str):
@@ -1183,7 +1183,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 "!admin /option server_password"):
             output = f"!admin /option server_password {('*' * random.randint(4, 16))}"
         self.ctx.notify_all(self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + output,
-                            {"type": "Chat", "team": self.client.team, "slot": self.client.slot})
+                            {"type": "Chat", "team": self.client.team, "slot": self.client.slot, "message": output})
 
         if not self.ctx.server_password:
             self.output("Sorry, Remote administration is disabled")
@@ -1785,7 +1785,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         super(ServerCommandProcessor, self).output(text)
 
     def default(self, raw: str):
-        self.ctx.notify_all('[Server]: ' + raw, {"type": "ServerChat"})
+        self.ctx.notify_all('[Server]: ' + raw, {"type": "ServerChat", "message": raw})
 
     def _cmd_save(self) -> bool:
         """Save current state to multidata"""
