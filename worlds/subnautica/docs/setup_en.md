@@ -38,6 +38,7 @@ The mod adds the following console commands:
  - `say` sends the text following it to Archipelago as a chat message.
    - `!` is not an allowed character, use `/` in its place. For example, to use the [`!hint` command](/tutorial/Archipelago/commands/en#remote-commands), type `say /hint`.
  - `silent` toggles Archipelago messages appearing.
+ - `tracker` rotates through the possible settings for the in-game tracker that displays the closest uncollected location.
  - `deathlink` toggles death link.
 
 To enable the console in Subnautica, press `Shift+Enter`.
