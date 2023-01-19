@@ -32,7 +32,7 @@ environment_offest = 37700
 
 # add ALL environments into the item table
 environment_offset_table = shift_by_offset(environment_ALL_table, environment_offest)
-item_table = {**item_table, **environment_offset_table}
+item_table.update(shift_by_offset(environment_ALL_table, environment_offest))
 # use the sotv dlc in the item table so that all names can be looked up regardless of use
 
 # end of environments

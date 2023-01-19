@@ -68,10 +68,12 @@ environment_sotv_special_table: Dict[str, int] = {
 
 X = TypeVar("X")
 Y = TypeVar("Y")
+
+
 def compress_dict_list_horizontal(list_of_dict: List[Dict[X, Y]]) -> Dict[X, Y]:
     """Combine all dictionaries in a list together into one dictionary."""
     compressed: Dict[X,Y] = {}
-    for individual in list_of_dict: compressed = {**compressed, **individual}
+    for individual in list_of_dict: compressed.update(individual)
     return compressed
 
 def collapse_dict_list_vertical(list_of_dict1: List[Dict[X, Y]], *args: List[Dict[X, Y]]) -> List[Dict[X, Y]]:
@@ -113,4 +115,4 @@ environment_ALL_table = {**environment_vanilla_table,  **environment_sotv_table}
 
 def shift_by_offset(dictionary: Dict[str, int], offset:int) -> Dict[str, int]:
     """Shift all indexes in a dictionary by an offset"""
-    return {name:index+offset for name,index in dictionary.items()}
+    return {name:index+offset for name, index in dictionary.items()}

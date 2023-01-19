@@ -40,7 +40,7 @@ class RiskOfRainWorld(World):
     location_name_to_id = item_pickups
 
     # Change this for PR
-    data_version = 6
+    data_version = 0
     # forced_auto_forfeit = True
     web = RiskOfWeb()
     total_revivals: int
