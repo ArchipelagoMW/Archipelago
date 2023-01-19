@@ -279,9 +279,9 @@ class Context:
         endpoints = (endpoint for endpoint in self.endpoints if endpoint.auth)
         async_start(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
-    def broadcast_text_all(ctx: Context, text: str, additional_arguments: dict = {}):
+    def broadcast_text_all(self, text: str, additional_arguments: dict = {}):
         logging.info("Notice (all): %s" % text)
-        ctx.broadcast_all([{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
+        self.broadcast_all([{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
 
     def broadcast_team(self, team: int, msgs: typing.List[dict]):
         msgs = self.dumper(msgs)
@@ -768,7 +768,7 @@ async def countdown(ctx: Context, timer: int):
                 {"type": "Countdown", "countdown": ctx.countdown_timer})
             ctx.countdown_timer -= 1
             await asyncio.sleep(1)
-        ctx.broadcast_text_all(0, f"[Server]: GO", {"type": "Countdown", "countdown": 0})
+        ctx.broadcast_text_all(f"[Server]: GO", {"type": "Countdown", "countdown": 0})
         ctx.countdown_timer = 0
 
 

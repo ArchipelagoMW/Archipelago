@@ -9,7 +9,7 @@ These steps should be followed in order to establish a gameplay connection with 
 5. Client sends [Connect](#Connect) packet in order to authenticate with the server.
 6. Server validates the client's packet and responds with [Connected](#Connected) or [ConnectionRefused](#ConnectionRefused).
 7. Server may send [ReceivedItems](#ReceivedItems) to the client, in the case that the client is missing items that are queued up for it.
-8. Server sends [Print](#Print) to all players to notify them of the new client connection.
+8. Server sends [PrintJSON](#PrintJSON) to all players to notify them of updates.
 
 In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
 
