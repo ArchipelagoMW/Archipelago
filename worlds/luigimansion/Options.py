@@ -9,7 +9,7 @@ class StartWithBetterVacuum(Toggle):
     "Start with Poltergust 4000"
     display_name = "Better Vacuum"
 
-
+# These might end up being the same
 class StartHiddenMansion(Toggle):
     "Begin in the Hidden Mansion"
     display_name = "Hidden Mansion"
@@ -46,7 +46,7 @@ class Interactables(Toggle):
 
 class MarioItems(Range):
     "How many Mario Items it takes to capture the Fortune-Teller. 0 = Starts Capturable"
-    display_name = "Fortune-Teller"
+    display_name = "Fortune-Teller Requirements"
     range_start = 0
     range_end = 5
     default = 5
@@ -65,26 +65,15 @@ class FinalBooCount(Range):
     range_end = 50
     default = 40
 
+class Boosanity(Toggle):
+    "Turns Boos into Items and Locations"
+    display_name = "Boosanity"
+
+class PortraitGhosts(Toggle):
+    "Turn Portrait Ghosts into checks in addition to their clear chests"
+    display_name = "Portrait Ghosts"
 
 # Old Timespinner Options
-class BossHealing(DefaultOnToggle):
-    "Enables/disables healing after boss fights. NOTE: Currently only applicable when Boss Rando is enabled."
-    display_name = "Heal After Bosses"
-
-
-class ShopFill(Choice):
-    """Sets the items for sale in Merchant Crow's shops.
-    Default: No sunglasses or trendy jacket, but sand vials for sale.
-    Randomized: Up to 4 random items in each shop.
-    Vanilla: Keep shops the same as the base game.
-    Empty: Sell no items at the shop."""
-    display_name = "Shop Inventory"
-    option_default = 0
-    option_randomized = 1
-    option_vanilla = 2
-    option_empty = 3
-
-
 class ShopWarpShards(DefaultOnToggle):
     "Shops always sell warp shards (when keys possessed), ignoring inventory setting."
     display_name = "Always Sell Warp Shards"
