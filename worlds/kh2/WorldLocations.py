@@ -195,8 +195,8 @@ Oc_Checks = {
     LocationName.SerenityGemPainandPanicCup:     WorldLocationData(0x1D57, 6),
     LocationName.RisingDragonCerberusCup:        WorldLocationData(0x1D58, 0),
     LocationName.SerenityCrystalCerberusCup:     WorldLocationData(0x1D58, 0),
-    LocationName.GenjiShieldTitanCup:            WorldLocationData(0x1D58, 1),
-    LocationName.SkillfulRingTitanCup:           WorldLocationData(0x1D58, 2),
+    LocationName.GenjiShieldTitanCup:            WorldLocationData(0x1D58, 0),
+    LocationName.SkillfulRingTitanCup:           WorldLocationData(0x1D58, 1),
     LocationName.FatalCrestGoddessofFateCup:     WorldLocationData(0x1D58, 4),
     LocationName.OrichalcumPlusGoddessofFateCup: WorldLocationData(0x1D58, 4),
     LocationName.HadesCupTrophyParadoxCups:      WorldLocationData(0x1D5A, 1),
@@ -354,9 +354,10 @@ HB_Checks = {
     LocationName.CorridorsMythrilCrystal:                     WorldLocationData(0x23C7, 0),
     LocationName.CorridorsDarkCrystal:                        WorldLocationData(0x23C7, 1),
     LocationName.CorridorsAPBoost:                            WorldLocationData(0x23C9, 1),
-    LocationName.AnsemsStudyMasterForm:                       WorldLocationData(0x23C4, 7),
-    LocationName.AnsemsStudySleepingLion:                     WorldLocationData(0x1D1D, 4),
-    LocationName.AnsemsStudySkillRecipe:                      WorldLocationData(0x1D12, 6),
+    #this is probably gonna be wrong
+    LocationName.AnsemsStudyMasterForm:                       WorldLocationData(0x1D12, 6),
+    LocationName.AnsemsStudySleepingLion:                     WorldLocationData(0x1D12, 6),
+    LocationName.AnsemsStudySkillRecipe:                      WorldLocationData(0x23C4, 7),
     LocationName.AnsemsStudyUkuleleCharm:                     WorldLocationData(0x23C4, 6),
     LocationName.RestorationSiteMoonRecipe:                   WorldLocationData(0x23C9, 3),
     LocationName.RestorationSiteAPBoost:                      WorldLocationData(0x23DB, 2),
@@ -537,8 +538,8 @@ TT_Checks = {
     LocationName.Oathkeeper:                            WorldLocationData(0x1CE6, 7),
     LocationName.LimitForm:                             WorldLocationData(0x1CE6, 7),
     LocationName.UndergroundConcourseMythrilGem:        WorldLocationData(0x23D8, 0),
-    LocationName.UndergroundConcourseAPBoost:           WorldLocationData(0x23D8, 1),
-    LocationName.UndergroundConcourseOrichalcum:        WorldLocationData(0x23D8, 2),
+    LocationName.UndergroundConcourseAPBoost:           WorldLocationData(0x23D8, 2),
+    LocationName.UndergroundConcourseOrichalcum:        WorldLocationData(0x23D8, 1),
     LocationName.UndergroundConcourseMythrilCrystal:    WorldLocationData(0x23D8, 3),
     LocationName.TunnelwayOrichalcum:                   WorldLocationData(0x23D7, 6),
     LocationName.TunnelwayMythrilCrystal:               WorldLocationData(0x23D7, 7),
@@ -555,7 +556,7 @@ TT_Checks = {
     LocationName.MansionDiningRoomMythrilStone:         WorldLocationData(0x23D5, 3),
     LocationName.MansionLibraryOrichalcum:              WorldLocationData(0x23D5, 5),
     LocationName.BeamSecretAnsemReport10:               WorldLocationData(0x1CE8, 3),
-    LocationName.MansionBasementCorridorUltimateRecipe: WorldLocationData(0x23D6, 0),
+    LocationName.MansionBasementCorridorUltimateRecipe: WorldLocationData(0x23D6, 1),
     LocationName.BetwixtandBetween:                     WorldLocationData(0x370B, 7),
     LocationName.BetwixtandBetweenBondofFlame:          WorldLocationData(0x1CE9, 1),
     LocationName.AxelDataMagicBoost:                    WorldLocationData(0xD5,   1),
@@ -602,11 +603,11 @@ TWTNW_Checks = {
     LocationName.XemnasDataPowerBoost:                  WorldLocationData(0x62,   1),
     LocationName.XigbarDataDefenseBoost:                WorldLocationData(0x64,   1),
     LocationName.SaixDataDefenseBoost:                  WorldLocationData(0x66,   1),
-    LocationName.LuxordDataAPBoost:                     WorldLocationData(0x66  , 1),
+    LocationName.LuxordDataAPBoost:                     WorldLocationData(0x66,   1),
     LocationName.RoxasDataMagicBoost:                   WorldLocationData(0x63,   1),
 }
 SoraLevels={
-    LocationName.Lvl1:  WorldLocationData(0xFFFF,1),
+    #LocationName.Lvl1:  WorldLocationData(0xFFFF,1),
     LocationName.Lvl2:  WorldLocationData(0xFFFF,2),
     LocationName.Lvl3:  WorldLocationData(0xFFFF,3),
     LocationName.Lvl4:  WorldLocationData(0xFFFF,4),
@@ -718,7 +719,7 @@ ValorLevels={
 }
 
 WisdomLevels={
-   LocationName.Wisdomlvl1: WorldLocationData(0x332E, 1),
+   #LocationName.Wisdomlvl1: WorldLocationData(0x332E, 1),
    LocationName.Wisdomlvl2: WorldLocationData(0x332E, 2),
    LocationName.Wisdomlvl3: WorldLocationData(0x332E, 3),
    LocationName.Wisdomlvl4: WorldLocationData(0x332E, 4),
@@ -728,7 +729,7 @@ WisdomLevels={
 }
 
 LimitLevels={
-    LocationName.Limitlvl1:  WorldLocationData(0x3366, 1),
+    #LocationName.Limitlvl1:  WorldLocationData(0x3366, 1),
     LocationName.Limitlvl2:  WorldLocationData(0x3366, 2),
     LocationName.Limitlvl3:  WorldLocationData(0x3366, 3),
     LocationName.Limitlvl4:  WorldLocationData(0x3366, 4),
@@ -737,7 +738,7 @@ LimitLevels={
     LocationName.Limitlvl7:  WorldLocationData(0x3366, 7),
 }
 MasterLevels={
-    LocationName.Masterlvl1: WorldLocationData(0x339E, 1),
+    #LocationName.Masterlvl1: WorldLocationData(0x339E, 1),
     LocationName.Masterlvl2: WorldLocationData(0x339E, 2),
     LocationName.Masterlvl3: WorldLocationData(0x339E, 3),
     LocationName.Masterlvl4: WorldLocationData(0x339E, 4),
@@ -746,13 +747,14 @@ MasterLevels={
     LocationName.Masterlvl7: WorldLocationData(0x339E, 7),
 }
 FinalLevels={
-    LocationName.Finallvl1:  WorldLocationData(0x33D6,1),
+    #LocationName.Finallvl1:  WorldLocationData(0x33D6,1),
     LocationName.Finallvl2:  WorldLocationData(0x33D6,2),
     LocationName.Finallvl3:  WorldLocationData(0x33D6,3),
     LocationName.Finallvl4:  WorldLocationData(0x33D6,4),
     LocationName.Finallvl5:  WorldLocationData(0x33D6,5),
     LocationName.Finallvl6:  WorldLocationData(0x33D6,6),
     LocationName.Finallvl7:  WorldLocationData(0x33D6,7),
+
 }
 weaponSlots={
 LocationName.AdamantShield:           WorldLocationData(0x35E6,1),

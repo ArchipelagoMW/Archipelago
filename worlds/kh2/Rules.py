@@ -30,6 +30,33 @@ def set_rules(world: MultiWorld, player: int):
     state.kh_HighJump_level(player, 3)
     and state.kh_AerialDodge_level(player, 3)
     and state.kh_Glide_level(player, 3))
+        
+
+
+    for location in {LocationName.FatalCrestGoddessofFateCup,LocationName.OrichalcumPlusGoddessofFateCup,LocationName.HadesCupTrophyParadoxCups}:
+        add_rule(world.get_location(location,player),lambda state:
+        state.kh_ag_unlocked(player) 
+        and state.kh_ht_unlocked(player) 
+        and state.kh_pl_unlocked(player)
+        and state.kh_oc_unlocked(player)
+        and state.kh_dc_unlocked(player)
+        and state.kh_twtnw_unlocked(player))
+    
+    for location in {LocationName.ProtectBeltPainandPanicCup,LocationName.SerenityGemPainandPanicCup}:
+        add_rule(world.get_location(location,player),lambda state:
+        state.kh_dc_unlocked(player))
+            
+    for location in {LocationName.RisingDragonCerberusCup,LocationName.SerenityCrystalCerberusCup}:
+        add_rule(world.get_location(location,player),lambda state:
+            state.kh_ag_unlocked(player) 
+            and state.kh_ht_unlocked(player) 
+            and state.kh_pl_unlocked(player))    
+
+    for location in {LocationName.GenjiShieldTitanCup,LocationName.SkillfulRingTitanCup}:
+        add_rule(world.get_location(location,player),lambda state:
+        state.kh_oc_unlocked(player))
+
+
 
     for formlvl2 in {LocationName.Valorlvl2, LocationName.Wisdomlvl2, LocationName.Limitlvl2, LocationName.Masterlvl2,
                      LocationName.Finallvl2}:

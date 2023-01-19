@@ -116,7 +116,8 @@ class LevelDepth(Choice):
     display_name = "Level Depth"
     option_level50 = 0
     option_level99 = 1
-    option_levelsanity= 2
+    option_level99sanity=2
+    option_level50sanity=3
     default = 0
 
 class Max_Logic(Toggle):
