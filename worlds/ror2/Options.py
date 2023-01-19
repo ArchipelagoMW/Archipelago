@@ -259,7 +259,7 @@ class ItemWeights(Choice):
     - No Scraps removes all scrap items from the item pool.
     - Even generates the item pool with every item having an even weight.
     - Scraps Only will be only scrap items in the item pool.
-    - Void makes evertying a void item."""
+    - Void makes everything a void item."""
     display_name = "Item Weights"
     option_default = 0
     option_new = 1
