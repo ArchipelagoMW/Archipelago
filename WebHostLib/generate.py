@@ -12,7 +12,7 @@ from flask import request, flash, redirect, url_for, session, render_template
 from pony.orm import commit, db_session
 
 from BaseClasses import seeddigits, get_seed
-from Generate import handle_name, PlandoSettings
+from Generate import handle_name, PlandoOptions
 from Main import main as ERmain
 from Utils import __version__
 from WebHostLib import app
@@ -33,7 +33,7 @@ def get_meta(options_source: dict) -> dict:
 
     server_options = {
         "hint_cost": int(options_source.get("hint_cost", 10)),
-        "forfeit_mode": options_source.get("forfeit_mode", "goal"),
+        "release_mode": options_source.get("release_mode", "goal"),
         "remaining_mode": options_source.get("remaining_mode", "disabled"),
         "collect_mode": options_source.get("collect_mode", "disabled"),
         "item_cheat": bool(int(options_source.get("item_cheat", 1))),
@@ -119,7 +119,7 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
         erargs.outputname = seedname
         erargs.outputpath = target.name
         erargs.teams = 1
-        erargs.plando_options = PlandoSettings.from_set(meta.setdefault("plando_options",
+        erargs.plando_options = PlandoOptions.from_set(meta.setdefault("plando_options",
                                                                         {"bosses", "items", "connections", "texts"}))
 
         name_counter = Counter()
