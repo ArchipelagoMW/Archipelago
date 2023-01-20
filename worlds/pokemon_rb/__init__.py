@@ -190,9 +190,9 @@ class PokemonRedBlueWorld(World):
                 item = self.create_filler()
             else:
                 item = self.create_item(location.original_item)
-                combinedtraps = self.multiworld.poison_trap_weight[self.player].value + self.multiworld.fire_trap_weight[self.player].value + self.multiworld.paralyze_trap_weight[self.player].value + self.multiworld.ice_trap_weight[self.player].value
+                combined_traps = self.multiworld.poison_trap_weight[self.player].value + self.multiworld.fire_trap_weight[self.player].value + self.multiworld.paralyze_trap_weight[self.player].value + self.multiworld.ice_trap_weight[self.player].value
                 if (item.classification == ItemClassification.filler and self.multiworld.random.randint(1, 100)
-                        <= self.multiworld.trap_percentage[self.player].value and combinedtraps != 0):
+                        <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
                     item = self.create_item(self.select_trap())
             if location.event:
                 self.multiworld.get_location(location.name, self.player).place_locked_item(item)
