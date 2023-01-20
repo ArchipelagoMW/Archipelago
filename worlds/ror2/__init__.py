@@ -10,9 +10,6 @@ from .Options import ror2_options, ItemWeights
 from worlds.AutoWorld import World, WebWorld
 from .Regions import create_regions
 
-# TODO update required client version
-client_version = 1
-
 
 class RiskOfWeb(WebWorld):
     tutorials = [Tutorial(
@@ -38,8 +35,8 @@ class RiskOfRainWorld(World):
     item_name_to_id = item_table
     location_name_to_id = item_pickups
 
-    # Change this for PR
     data_version = 6
+    required_client_version = (0, 3, 7)
     web = RiskOfWeb()
     total_revivals: int
 
