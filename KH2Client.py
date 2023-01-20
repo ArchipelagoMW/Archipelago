@@ -117,7 +117,7 @@ class KH2Context(CommonContext):
         #kh2.base_address+variable
                 #the back of sora's inventory
         #subtract 2 everytime sora gets a ability from ap
-        self.backofinventory = 0x25CA
+        self.backofinventory = 0x25CC
         #0x0x2A09C00+0x40 is the sve anchor. +1 is the last saved room
         self.sveroom = 0x2A09C00+0x41
         #0 not in battle 1 in yellow battle 2 red battle #short
