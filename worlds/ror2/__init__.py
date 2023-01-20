@@ -83,16 +83,6 @@ class RiskOfRainWorld(World):
             if self.multiworld.dlc_sotv[self.player]:
                 environment_offset_table = shift_by_offset(environment_sotv_table, environment_offest)
                 environments_pool = {**environments_pool, **environment_offset_table}
-                # self.multiworld.push_precollected(self.create_item("The Simulacrum (Titanic Plains)"))
-                if not self.multiworld.dlc_sotv_simulacrum[self.player]:
-                    environments_pool.pop("The Simulacrum (Titanic Plains)")
-                    environments_pool.pop("The Simulacrum (Aphelian Sanctuary)")
-                    environments_pool.pop("The Simulacrum (Abyssal Depths)")
-                    environments_pool.pop("The Simulacrum (Rallypoint Delta)")
-                    environments_pool.pop("The Simulacrum (Abandoned Aqueduct)")
-                    environments_pool.pop("The Simulacrum (Commencement)")
-                    environments_pool.pop("The Simulacrum (Sky Meadow)")
-
             environments_to_precollect = 5 if self.multiworld.begin_with_loop[self.player].value else 1
             # percollect environments for each stage (or just stage 1)
             for i in range(environments_to_precollect):

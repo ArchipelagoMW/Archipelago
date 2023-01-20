@@ -128,13 +128,6 @@ class DLC_SOTV(Toggle):
     display_name = "Enable DLC - SOTV"
 
 
-class DLC_SOTV_Simulacrum(Toggle):
-    """
-    Enable if you want to add the simulacrum environments to the pool of items.
-    Only has an effect with EnvironmentsAsItems
-    """
-    display_name = "Simulacrum Environments"
-
 
 class GreenScrap(Range):
     """Weight of Green Scraps in the item pool.
@@ -306,7 +299,6 @@ ror2_options: Dict[str, type(Option)] = {
     "final_stage_death":        FinalStageDeath,
     "begin_with_loop":          BeginWithLoop,
     "dlc_sotv":                 DLC_SOTV,
-    "dlc_sotv_simulacrum":      DLC_SOTV_Simulacrum,
     "death_link":               DeathLink,
     "item_pickup_step":         ItemPickupStep,
     "shrine_use_step":          ShrineUseStep,
