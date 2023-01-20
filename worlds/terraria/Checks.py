@@ -209,7 +209,6 @@ achievements = [
     "Hot Reels!",
     "Leading Landlord",
     "Feeling Petty",
-    "Dead Men Tell No Tales",
 ]
 
 grindy_achievements = [
@@ -222,6 +221,7 @@ grindy_achievements = [
     "A Rather Blustery Day",
     "Heliophobia",
     "Jolly Jamboree",
+    "Dead Men Tell No Tales",
 ]
 
 fishing_achievements = [
