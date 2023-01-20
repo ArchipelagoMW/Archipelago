@@ -325,16 +325,20 @@ def process_pokemon_data(self):
         else:
             mon_data["catch rate"] = max(self.multiworld.minimum_catch_rate[self.player], mon_data["catch rate"])
 
-        if mon in poke_data.evolves_from.keys() and mon_data["type1"] == local_poke_data[poke_data.evolves_from[mon]]["type1"] and mon_data["type2"] == local_poke_data[poke_data.evolves_from[mon]]["type2"]:
-            mon_data["tms"] = local_poke_data[poke_data.evolves_from[mon]]["tms"]
-        elif mon != "Mew":
+        if mon != "Mew":
             tms_hms = poke_data.tm_moves + poke_data.hm_moves
             for flag, tm_move in enumerate(tms_hms):
-                if (flag < 50 and self.multiworld.tm_compatibility[self.player].value == 1) or (flag >= 50 and self.multiworld.hm_compatibility[self.player].value == 1):
+                if ((mon in poke_data.evolves_from.keys() and mon_data["type1"] ==
+                     local_poke_data[poke_data.evolves_from[mon]]["type1"] and mon_data["type2"] ==
+                     local_poke_data[poke_data.evolves_from[mon]]["type2"]) and (
+                        (flag < 50 and self.multiworld.tm_compatibility[self.player].value in [1, 2]) or (
+                        flag >= 51 and self.multiworld.hm_compatibility[self.player].value in [1, 2]))):
+                    bit = 1 if local_poke_data[poke_data.evolves_from[mon]]["tms"][int(flag / 8)] & 1 << (flag % 8) else 0
+                elif (flag < 50 and self.multiworld.tm_compatibility[self.player].value == 1) or (flag >= 50 and self.multiworld.hm_compatibility[self.player].value == 1):
                     type_match = poke_data.moves[tm_move]["type"] in [mon_data["type1"], mon_data["type2"]]
                     bit = int(self.multiworld.random.randint(1, 100) < [[90, 50, 25], [100, 75, 25]][flag >= 50][0 if type_match else 1 if poke_data.moves[tm_move]["type"] == "Normal" else 2])
                 elif (flag < 50 and self.multiworld.tm_compatibility[self.player].value == 2) or (flag >= 50 and self.multiworld.hm_compatibility[self.player].value == 2):
-                    bit = [0, 1][self.multiworld.random.randint(0, 1)]
+                    bit = self.multiworld.random.randint(0, 1)
                 elif (flag < 50 and self.multiworld.tm_compatibility[self.player].value == 3) or (flag >= 50 and self.multiworld.hm_compatibility[self.player].value == 3):
                     bit = 1
                 else:

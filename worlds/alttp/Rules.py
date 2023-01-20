@@ -526,7 +526,7 @@ def default_rules(world, player):
     set_rule(world.get_entrance('Floating Island Mirror Spot', player), lambda state: state.has('Magic Mirror', player))
     set_rule(world.get_entrance('Turtle Rock', player), lambda state: state.has('Moon Pearl', player) and state.has_sword(player) and state.has_turtle_rock_medallion(player) and state.can_reach('Turtle Rock (Top)', 'Region', player))  # sword required to cast magic (!)
 
-    set_rule(world.get_entrance('Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid[player])
+    set_rule(world.get_entrance('Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid[player].to_bool(world, player))
 
     if world.swordless[player]:
         swordless_rules(world, player)
