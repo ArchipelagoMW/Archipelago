@@ -89,11 +89,12 @@ def set_rules(multiworld: MultiWorld, player: int) -> None:
                     lambda state: state.has("Dio's Best Friend", player,
                                             total_revivals + multiworld.start_with_revive[player]))
 
-    elif multiworld.environments_as_items[player]:
-        # When explore_mode and environments_as_items are used,
+    elif multiworld.goal[player] == "explore":
+        # When explore_mode is used,
         #   scavengers need to be locked till after a full loop since that is when they are capable of spawning.
         # (While technically the requirement is just beating 5 stages, this will ensure that the player will have
-        #   a long enough run to have enough director credits for scavengers and help prevent being stuck in the same stages until that point.)
+        #   a long enough run to have enough director credits for scavengers and
+        #   help prevent being stuck in the same stages until that point.)
 
         for location in multiworld.get_locations():
             if location.player != player: continue # ignore all checks that don't belong to this player
@@ -123,7 +124,6 @@ def set_rules(multiworld: MultiWorld, player: int) -> None:
                     has_entrance_access_rule(multiworld, f"Stage_{i}", environment_name, player)
             get_stage_event(multiworld, player, i)
 
-
         if multiworld.dlc_sotv[player]:
             for i in range(len(environment_sotv_orderedstages_table)):
                 for environment_name, _ in environment_sotv_orderedstages_table[i].items():
@@ -141,13 +141,11 @@ def set_rules(multiworld: MultiWorld, player: int) -> None:
                             has_location_access_rule(multiworld, environment_name, player, newt, "Newt Altar")
                     if i > 0:
                         has_entrance_access_rule(multiworld, f"Stage_{i}", environment_name, player)
-            # Place Stage event on last Chest of Stage, should probably reduce it to half
         has_entrance_access_rule(multiworld, f"Sky Meadow", "Hidden Realm: Bulwark's Ambry", player)
         has_entrance_access_rule(multiworld, f"Hidden Realm: A Moment, Fractured", "Hidden Realm: A Moment, Whole", player)
         has_entrance_access_rule(multiworld, f"Stage_1", "Hidden Realm: Gilded Coast", player)
         has_entrance_access_rule(multiworld, f"Stage_1", "Hidden Realm: Bazaar Between Time", player)
-        # has_entrance_access_rule(multiworld, f"Stage_4", "Sky Meadow", player)
-        has_entrance_access_rule(multiworld, f"Hidden Realm: Bulwark's Ambry", "Void Fields", player)
+        has_entrance_access_rule(multiworld, f"Hidden Realm: Bazaar Between Time", "Void Fields", player)
         has_entrance_access_rule(multiworld, f"Stage_5", "Commencement", player)
         has_entrance_access_rule(multiworld, f"Stage_5", "Hidden Realm: A Moment, Fractured", player)
         if multiworld.dlc_sotv[player]:

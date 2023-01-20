@@ -10,12 +10,14 @@ class Goal(Choice):
     """
     Classic Mode: Every Item pickup increases fills a progress bar which gives location checks.
 
-    Explore Mode: Location checks are distributed across environments.
+    Explore Mode: Each environment will have location checks within each environment.
+    environments will be locked in the item pool until received.
     """
     display_name = "Game Mode"
     option_classic = 0
     option_explore = 1
     default = 0
+
 
 class TotalLocations(Range):
     """Classic Mode: Number of location checks which are added to the Risk of Rain playthrough."""
@@ -24,6 +26,7 @@ class TotalLocations(Range):
     range_end = 250
     default = 40
 
+
 class ChestsPerEnvironment(Range):
     """Explore Mode: The number of chest locations per environment."""
     display_name = "Chests per Environment"
@@ -31,12 +34,14 @@ class ChestsPerEnvironment(Range):
     range_end = 20
     default = 10
 
+
 class ShrinesPerEnvironment(Range):
     """Explore Mode: The number of shrine locations per environment."""
     display_name = "Shrines per Environment"
     range_start = 2
     range_end = 20
     default = 5
+
 
 class ScavengersPerEnvironment(Range):
     """Explore Mode: The number of scavenger locations per environment."""
@@ -57,7 +62,7 @@ class AltarsPerEnvironment(Range):
     display_name = "Newts Per Environment"
     range_start = 0
     range_end = 2
-    default = 2
+    default = 1
 
 class TotalRevivals(Range):
     """Total Percentage of `Dio's Best Friend` item put in the item pool."""
@@ -105,9 +110,6 @@ class FinalStageDeath(Toggle):
     """Death on the final boss stage counts as a win."""
     display_name = "Final Stage Death is Win"
 
-class EnvironmentsAsItems(Toggle):
-    """Enable to add environments into the archipelago item pool."""
-    display_name = "Environments as items"
 
 class BeginWithLoop(Toggle):
     """
@@ -115,6 +117,7 @@ class BeginWithLoop(Toggle):
     Only has an effect with EnvironmentsAsItems
     """
     display_name = "Begin With Loop"
+
 
 class DLC_SOTV(Toggle):
     """
@@ -124,12 +127,14 @@ class DLC_SOTV(Toggle):
      """
     display_name = "Enable DLC - SOTV"
 
+
 class DLC_SOTV_Simulacrum(Toggle):
     """
     Enable if you want to add the simulacrum environments to the pool of items.
     Only has an effect with EnvironmentsAsItems
     """
     display_name = "Simulacrum Environments"
+
 
 class GreenScrap(Range):
     """Weight of Green Scraps in the item pool.
@@ -299,7 +304,6 @@ ror2_options: Dict[str, type(Option)] = {
     "total_revivals":           TotalRevivals,
     "start_with_revive":        StartWithRevive,
     "final_stage_death":        FinalStageDeath,
-    "environments_as_items":    EnvironmentsAsItems,
     "begin_with_loop":          BeginWithLoop,
     "dlc_sotv":                 DLC_SOTV,
     "dlc_sotv_simulacrum":      DLC_SOTV_Simulacrum,

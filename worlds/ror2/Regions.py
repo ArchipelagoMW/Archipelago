@@ -40,13 +40,13 @@ def create_regions(multiworld: MultiWorld, player: int):
         "OrderedStage_2":                       RoRRegionData(None, ["Rallypoint Delta", "Scorched Acres"]),
         "OrderedStage_3":                       RoRRegionData(None, ["Abyssal Depths", "Siren's Call", "Sundered Grove"]),
         "OrderedStage_4":                       RoRRegionData(None, ["Sky Meadow"]),
-        "Hidden Realm: A Moment, Fractured":    RoRRegionData(None, ["Hidden Realm: A Moment, Whole", "Victory"]),
+        "Hidden Realm: A Moment, Fractured":    RoRRegionData(None, ["Hidden Realm: A Moment, Whole"]),
         "Hidden Realm: A Moment, Whole":        RoRRegionData(None, ["Victory"]),
         "Void Fields":                          RoRRegionData(None, []),
         "Victory":                              RoRRegionData(None, None),
         "Petrichor V":                          RoRRegionData(None, ["Victory"]),
-        "Hidden Realm: Bulwark's Ambry":        RoRRegionData(None, ["Void Fields"]),
-        "Hidden Realm: Bazaar Between Time":    RoRRegionData(None, None),
+        "Hidden Realm: Bulwark's Ambry":        RoRRegionData(None, None),
+        "Hidden Realm: Bazaar Between Time":    RoRRegionData(None, ["Void Fields"]),
         "Hidden Realm: Gilded Coast":           RoRRegionData(None, None)
     }
     dlc_other_regions: Dict[str, RoRRegionData] = {

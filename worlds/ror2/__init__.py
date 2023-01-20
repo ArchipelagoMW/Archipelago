@@ -1,5 +1,4 @@
 import string
-from typing import Dict, List, Tuple
 
 from .Items import RiskOfRainItem, item_table, item_pool_weights, environment_offest
 from .Locations import RiskOfRainLocation, get_classic_item_pickups, item_pickups, orderedstage_location
@@ -40,8 +39,7 @@ class RiskOfRainWorld(World):
     location_name_to_id = item_pickups
 
     # Change this for PR
-    data_version = 0
-    # forced_auto_forfeit = True
+    data_version = 6
     web = RiskOfWeb()
     total_revivals: int
 
@@ -61,7 +59,7 @@ class RiskOfRainWorld(World):
                 )
             )
         self.total_revivals = int(self.multiworld.total_revivals[self.player].value / 100 *
-                                 total_locations)
+                                  total_locations)
         # self.total_revivals = self.multiworld.total_revivals[self.player].value
         if self.multiworld.start_with_revive[self.player].value:
             self.total_revivals -= 1
@@ -73,7 +71,7 @@ class RiskOfRainWorld(World):
 
         environments_pool = {}
         # only mess with the environments if they are set as items
-        if self.multiworld.environments_as_items[self.player]:
+        if self.multiworld.goal[self.player] == "explore":
 
             # figure out all available ordered stages for each tier
             environment_available_orderedstages_table = environment_vanilla_orderedstages_table
@@ -139,7 +137,7 @@ class RiskOfRainWorld(World):
         # Add revive items for the player
         itempool += ["Dio's Best Friend"] * self.total_revivals
 
-        for env_name,_ in environments_pool.items():
+        for env_name, _ in environments_pool.items():
             itempool += [env_name]
 
         # precollected environments are popped from the pool so counting like this is valid
@@ -162,7 +160,7 @@ class RiskOfRainWorld(World):
         junk_item_count = total_locations - nonjunk_item_count
         # Fill remaining items with randomly generated junk
         itempool += self.multiworld.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
-                                              k=junk_item_count)
+                                                   k=junk_item_count)
 
         # Convert itempool into real items
         itempool = list(map(lambda name: self.create_item(name), itempool))
@@ -182,7 +180,7 @@ class RiskOfRainWorld(World):
             victory_region = create_region(self.multiworld, self.player, "Victory")
             self.multiworld.regions.append(victory_region)
             petrichor = create_region(self.multiworld, self.player, "Petrichor V",
-                                        get_classic_item_pickups(self.multiworld.total_locations[self.player].value))
+                                      get_classic_item_pickups(self.multiworld.total_locations[self.player].value))
             self.multiworld.regions.append(petrichor)
 
             # classic mode can get to victory from the beginning of the game
@@ -214,7 +212,6 @@ class RiskOfRainWorld(World):
             "totalRevivals": self.multiworld.total_revivals[self.player].value,
             "startWithDio": self.multiworld.start_with_revive[self.player].value,
             "finalStageDeath": self.multiworld.final_stage_death[self.player].value,
-            "environmentsAsItems": self.multiworld.environments_as_items[self.player].value,
             "deathLink": self.multiworld.death_link[self.player].value,
         }
 
@@ -225,15 +222,19 @@ class RiskOfRainWorld(World):
             classification = ItemClassification.progression
         elif name in {"Legendary Item", "Boss Item"}:
             classification = ItemClassification.useful
+        elif name == "Lunar Item":
+            classification = ItemClassification.trap
 
         # Only check for an item to be a environment unlock if those are known to be in the pool.
         # This should shave down comparions.
 
         elif name in environment_ALL_table.keys():
+            if name in {"Void Fields", "Hidden Realm: Bazaar Between Time", "Hidden Realm: Bulwark's Ambry",
+                        "Hidden Realm: Gilded Coast,"}:
+                classification = ItemClassification.useful
+            else:
+                classification = ItemClassification.progression
 
-            classification = ItemClassification.progression
-
-        # TODO should lunar items be marked as traps?
         item = RiskOfRainItem(name, classification, item_id, self.player)
         return item
 
@@ -249,16 +250,11 @@ def create_events(world: MultiWorld, player: int) -> None:
         for i in range(num_of_events):
             event_loc = RiskOfRainLocation(player, f"Pickup{(i + 1) * 25}", None, world_region)
             event_loc.place_locked_item(RiskOfRainItem(f"Pickup{(i + 1) * 25}", ItemClassification.progression, None, player))
-            event_loc.access_rule = lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", "Location", player)
+            event_loc.access_rule = \
+                lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", "Location", player)
             world_region.locations.append(event_loc)
-    elif world.environments_as_items[player].value:
-        # only enforce extra events for explore_mode and environments_as_items
-        environment_available_orderedstages_table = environment_vanilla_orderedstages_table
-        if world.dlc_sotv[player]:
-            environment_available_orderedstages_table = collapse_dict_list_vertical(
-                environment_available_orderedstages_table, environment_sotv_orderedstages_table)
-
-        for n in range(1,6):
+    elif world.goal[player] == "explore":
+        for n in range(1, 6):
 
             event_region = world.get_region(f"OrderedStage_{n}", player)
             event_loc = RiskOfRainLocation(player, f"Stage_{n}", None, event_region)
@@ -272,8 +268,8 @@ def create_events(world: MultiWorld, player: int) -> None:
     world_region.locations.append(victory_event)
 
 
-def create_region(world: MultiWorld, player: int, name: str, locations: Dict[str,int] = {}) -> Region:
+def create_region(world: MultiWorld, player: int, name: str, locations: Dict[str, int] = {}) -> Region:
     ret = Region(name, RegionType.Generic, name, player, world)
-    for location_name,location_id in locations.items():
-        ret.locations.append( RiskOfRainLocation(player, location_name, location_id, ret))
+    for location_name, location_id in locations.items():
+        ret.locations.append(RiskOfRainLocation(player, location_name, location_id, ret))
     return ret
