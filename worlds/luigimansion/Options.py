@@ -2,7 +2,7 @@ from typing import Dict, Union
 from BaseClasses import MultiWorld
 from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict
 
-# Basically untouched. Will look into feasability of options later.
+# Will look into feasability of options later.
 
 
 class StartWithBetterVacuum(Toggle):
@@ -23,14 +23,11 @@ class MoneyGhosts(Toggle):
 class StartWithBooRadar(Toggle):
     "Start with Boo Radar"
     display_name = "Boo Radar"
-    "Start with Talaria Attachment, Nyoom!"
-    display_name = "Quick seed"
 
-
-#class GenericKeys(Toggle):
-#    "Keys can open any non-suite doors"
-#    display_name = "Generic Keys"
-# Will Require extra logic to make availabel
+#class DoorRando(Toggle):
+#   "Keys wil open different doors than normal, and doors may require elements instead of keys"
+#   display_name = "Door Randomization"
+# Heavy logic editing required
 
 class Toadsanity(Toggle):
     "Adds Toads to location pool"
