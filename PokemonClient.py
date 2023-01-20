@@ -40,7 +40,7 @@ CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 
 DISPLAY_MSGS = True
 
-SCRIPT_VERSION = 1
+SCRIPT_VERSION = 2
 
 
 class GBCommandProcessor(ClientCommandProcessor):
@@ -70,6 +70,8 @@ class GBContext(CommonContext):
         self.set_deathlink = False
         self.client_compatibility_mode = 0
         self.items_handling = 0b001
+        self.sent_release = False
+        self.sent_collect = False
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -124,7 +126,8 @@ def get_payload(ctx: GBContext):
             "items": [item.item for item in ctx.items_received],
             "messages": {f'{key[0]}:{key[1]}': value for key, value in ctx.messages.items()
                          if key[0] > current_time - 10},
-            "deathlink": ctx.deathlink_pending
+            "deathlink": ctx.deathlink_pending,
+            "options": ((ctx.permissions['release'] in ('goal', 'enabled')) * 2) + (ctx.permissions['collect'] in ('goal', 'enabled'))
         }
     )
     ctx.deathlink_pending = False
@@ -207,6 +210,16 @@ async def gb_sync_task(ctx: GBContext):
                         async_start(parse_locations(data_decoded['locations'], ctx))
                     if 'deathLink' in data_decoded and data_decoded['deathLink'] and 'DeathLink' in ctx.tags:
                         await ctx.send_death(ctx.auth + " is out of usable Pokémon! " + ctx.auth + " blacked out!")
+                    if 'options' in data_decoded:
+                        msgs = []
+                        if options & 4 and not ctx.sent_release:
+                            ctx.sent_release = True
+                            msgs.append({"cmd": "Say", "text": "!release"})
+                        if options & 8 and not ctx.sent_collect:
+                            ctx.sent_collect = True
+                            msgs.append({"cmd": "Say", "text": "!collect"})
+                        if msgs:
+                            await ctx.send_msgs(msgs)
                     if ctx.set_deathlink:
                         await ctx.update_death_link(True)
                 except asyncio.TimeoutError:
