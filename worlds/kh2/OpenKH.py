@@ -158,8 +158,8 @@ def patch_kh2(self, output_directory):
                 goofyStartingItems.append(itemcode)
             else:
                 donaldStartingItems.append(itemcode)
-    if self.multiworld.Schmovement[self.player].value == 1:
-        soraStartingItems += 94, 98, 564, 102, 106
+    #if self.multiworld.Schmovement[self.player].value == 1:
+    #    soraStartingItems += 94, 98, 564, 102, 106
 
     if self.multiworld.Critical_Mode[self.player].value == 1:
         self.formattedPlrp.append({

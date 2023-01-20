@@ -1,5 +1,5 @@
 --ROM Version
---Last Update: JP shop assembly code
+--Last Update: JP shop assembly code & battle level rework
 --Todo: Maybe item-based progress flags
 
 LUAGUI_NAME = 'GoA ROM Randomizer Build'
@@ -7,12 +7,11 @@ LUAGUI_AUTH = 'SonicShadowSilver2 (Ported by Num)'
 LUAGUI_DESC = 'A GoA build for use with the Randomizer. Requires ROM patching.'
 
 function _OnInit()
-local VersionNum = 'GoA Version 1.53.3'
+print('GoA v1.53.4')
 if (GAME_ID == 0xF266B00B or GAME_ID == 0xFAF99301) and ENGINE_TYPE == "ENGINE" then --PCSX2
 	if ENGINE_VERSION < 3.0 then
 		print('LuaEngine is Outdated. Things might not work properly.')
 	end
-	print(VersionNum)
 	OnPC = false
 	Now = 0x032BAE0 --Current Location
 	Sve = 0x1D5A970 --Saved Location
@@ -53,7 +52,6 @@ elseif GAME_ID == 0x431219CC and ENGINE_TYPE == 'BACKEND' then --PC
 	if ENGINE_VERSION < 5.0 then
 		ConsolePrint('LuaBackend is Outdated. Things might not work properly.',2)
 	end
-	ConsolePrint(VersionNum,0)
 	OnPC = true
 	Now = 0x0714DB8 - 0x56454E
 	Sve = 0x2A09C00 - 0x56450E
@@ -270,15 +268,6 @@ if Place == 0x1A04 then
 	if ReadByte(Save+0x1D2E) > 0 then --Hollow Bastion Cleared
 		Spawn('Short',0x05,0x25C,0x779) --Radiant Garden
 	end
-	if ReadByte(Save+0x23DF)&0x08 > 0 then
-		print('Proof of nonis')
-	end	
-	if ReadByte(Save+0x23DF)&0x04 > 0 then
-		print('PRoof on left')
-	end	
-	if ReadByte(Save+0x23DF)&0x02 > 0 then
-		print('PRoof on right')
-	end	
 end
 --World Map -> Garden of Assemblage
 if Place == 0x000F then
@@ -375,94 +364,124 @@ else --Remove the item requirements
 end
 --Battle Level
 if true then
-	local Bitmask, Visit = false
+	local Bitmask = 0x00001
+	local Visit
+	--Bitmask 0x00001 for all Lv  1
+	--Bitmask 0x00002 for all Lv 50
+	--Bitmask 0x00004 for all Lv 80
+	--Bitmask 0x00008 for all Lv 99
 	if World == 0x02 then --Twilight Town & Simulated Twilight Town
 		Visit = ReadByte(Save+0x3FF5)
 		if Visit == 1 or Visit == 2 or Visit == 3 then
-			Bitmask = 0x040001
+			Bitmask = 0x00010
 		elseif Visit == 4 or Visit == 5 then
-			Bitmask = 0x140001
+			Bitmask = 0x00020
 		elseif Visit == 6 then
-			Bitmask = 0x140401
+			Bitmask = 0x00040
 		elseif Visit == 7 or Visit == 8 then
-			Bitmask = 0x141C01
+			Bitmask = 0x00100
 		elseif Visit == 9 then
-			Bitmask = 0x143D01
+			Bitmask = 0x00200
 		elseif Visit == 10 then
-			Bitmask = 0x157D79
+			Bitmask = 0x00800
 		end
+		--0x00080 actual TT7
+		--0x00400 post-HB4
+		--Lv 1, 2, 3, 6, 7, 28, 34, 47
 	elseif World == 0x04 then --Hollow Bastion
 		Visit = ReadByte(Save+0x3FFD)
 		if Visit == 1 or Visit == 2 or Visit == 3 then
-			Bitmask = 0x141C01
+			Bitmask = 0x00010
 		elseif Visit == 4 then
-			Bitmask = 0x147D09
+			Bitmask = 0x00080
 		elseif Visit == 5 then
-			Bitmask = 0x15FD79
+			Bitmask = 0x00200
 		end
+		--0x00020 actual HB2 & HB3
+		--0x00040 HB4 pre-SP1
+		--0x00100 post-HB4
+		--Lv 8, 15, 28, 30, 34, 45
 	elseif World == 0x05 then --Beast's Castle
 		Visit = ReadByte(Save+0x4001)
 		if Visit == 1 then
-			Bitmask = 0x141C01
+			Bitmask = 0x00010
 		elseif Visit == 2 then
-			Bitmask = 0x147D19
+			Bitmask = 0x00020
 		end
+		--Lv 13, 36
 	elseif World == 0x06 then --Olympus Coliseum
 		Visit = ReadByte(Save+0x4005)
 		if Visit == 1 then
-			Bitmask = 0x141C01
+			Bitmask = 0x00010
 		elseif Visit == 2 then
-			Bitmask = 0x147D19
+			Bitmask = 0x00020
 		end
+		--Lv 16, 39
 	elseif World == 0x07 then --Agrabah
 		Visit = ReadByte(Save+0x4009)
 		if Visit == 1 then
-			Bitmask = 0x141D01
+			Bitmask = 0x00010
 		elseif Visit == 2 then
-			Bitmask = 0x147D19
+			Bitmask = 0x00040
 		end
+		--0x00020 AG1 post HB4
+		--Lv 22, 38, 40
 	elseif World == 0x08 then --The Land of Dragons
 		Visit = ReadByte(Save+0x400D)
 		if Visit == 1 then
-			Bitmask = 0x141C01
+			Bitmask = 0x00010
 		elseif Visit == 2 then
-			Bitmask = 0x147D19
+			Bitmask = 0x00020
 		end
+		--Lv 10, 35
+	elseif World == 0x09 then --100 Acre Wood
+		Bitmask = 0x00010
+		--Lv 1
 	elseif World == 0x0A then --Pride Lands
 		Visit = ReadByte(Save+0x4015)
 		if Visit == 1 then
-			Bitmask = 0x141D01
+			Bitmask = 0x00010
 		elseif Visit == 2 then
-			Bitmask = 0x15FDF9
+			Bitmask = 0x00040
 		end
+		--0x00020 PL1 post HB4
+		--Lv 26, 41, 43
 	elseif World == 0x0C or World == 0x0D then --Disney Castle & Timeless River
-		Bitmask = 0x141D01
+		Bitmask = 0x00010
+		if ReadByte(Save+0x1E1E) > 0 then --Post-HB4
+			Bitmask = 0x00020
+		end
+		--Lv 18, 34 for DC
+		--Lv 19, 34 for TR
 	elseif World == 0x0E then --Halloween Town
 		Visit = ReadByte(Save+0x4025)
 		if Visit == 1 then
-			Bitmask = 0x141D01
+			Bitmask = 0x00010
 		elseif Visit == 2 then
-			Bitmask = 0x147D19
+			Bitmask = 0x00040
 		end
+		--0x00020 HT1 post HB4
+		--Lv 24, 39, 41
 	elseif World == 0x10 then --Port Royal
 		Visit = ReadByte(Save+0x402D)
 		if Visit == 1 then
-			Bitmask = 0x141C01
+			Bitmask = 0x00010
 		elseif Visit == 2 then
-			Bitmask = 0x147D19
+			Bitmask = 0x00020
 		end
+		--Lv 20, 37
 	elseif World == 0x11 then --Space Paranoids
 		Visit = ReadByte(Save+0x4031)
 		if Visit == 1 then
-			Bitmask = 0x147D01
+			Bitmask = 0x00010
 		elseif Visit == 2 then
-			Bitmask = 0x15FD79
+			Bitmask = 0x00040
 		end
+		--0x00020 post HB4
+		--Lv 28, 34, 45
 	elseif World == 0x12 then --The World that Never Was
-		Bitmask = 0x157D79
-	end
-	if not Bitmask then --Safeguard if all above are false
-		Bitmask = 0x040000
+		Bitmask = 0x00010
+		--Lv 50
 	end
 	WriteInt(Save+0x3724,Bitmask)
 end
@@ -493,7 +512,7 @@ else --Gameplay
 	WriteByte(Slot1+0x1AE,100)
 end
 --Progressive Growth Abilities & Fixed Trinity Limit Slot
-for Slot = 0,68 do
+for Slot = 0,69 do
 	local Current = Save + 0x2544 + 2*Slot
 	local Ability = ReadShort(Current) & 0x0FFF
 	local Initial = ReadShort(Current) & 0xF000
@@ -716,9 +735,9 @@ end
 --Show all items in shops (ASSEMBLY edit)
 if not OnPC then
 	WriteInt(0x264250,0)
-elseif ReadArray(0x2F9302-0x56454E,8) == {0x41,0x85,0xD6,0x74,0x0D,0x0F,0xB7,0x43} then --Global
+elseif ReadLong(0x2F9302-0x56454E) == 0x43B70F0D74D68541 then --Global
 	WriteByte(0x2F9306 - 0x56454E,0)
-elseif ReadArray(0x2F9142-0x56454E,8) == {0x41,0x85,0xD6,0x74,0x0D,0x0F,0xB7,0x43} then --JP
+elseif ReadLong(0x2F9142-0x56454E) == 0x43B70F0D74D68541 then --JP
 	WriteByte(0x2F9146 - 0x56454E,0)
 end
 --Alternate Party Models (adding new UCM using MEMT causes problems when shopping)
@@ -1061,12 +1080,6 @@ if ReadByte(Save+0x1E5E) > 0 then
 	elseif PrevPlace == 0x080E then --Santa's House
 		WriteByte(Save+0x1E5E,3)
 	end
-end
---Fast Oogie
-if Place == 0x090E and Events(0x37,0x37,0x37) then
-	WriteInt(Slot2+8,0)
-	WriteInt(Slot3+8,0)
-	WriteInt(Slot4+8,0)
 end
 end
 
@@ -2270,6 +2283,12 @@ if ReadByte(Save+0x1CFF) == 13 then --STT Removals
 		WriteShort(Sys3+0x01FE6,0x00) --Reflera
 		WriteShort(Sys3+0x02016,0x00) --Reflega
 		WriteShort(Sys3+0x07056,0x00) --Trinity (Solo)
+	else --Better STT enabled
+		if Events(0x5B,0x5B,0x5B) or Events(0xC0,0xC0,0xC0) then --Mail Delivery softlock fix
+			WriteString(Obj0+0x15030,'F_TT010_ROXAS.mset\0')
+		else --Let Limit Form use skateboard
+			WriteString(Obj0+0x15030,'F_TT010.mset\0')
+		end
 	end
 	local Equip = ReadShort(Save+0x24F0) --Currently equipped Keyblade
 	local Store = ReadShort(Save+0x1CF9) --Last equipped Keyblade

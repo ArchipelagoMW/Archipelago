@@ -50,7 +50,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
 class KH2Context(CommonContext):
     command_processor: int = KH2CommandProcessor
     game = "Kingdom Hearts 2"
-    items_handling = 0b001  # Indicates you get items sent from other worlds.
+    items_handling = 0b101  # Indicates you get items sent from other worlds.
 
     def __init__(self, server_address, password):
         super(KH2Context, self).__init__(server_address, password)
@@ -117,7 +117,7 @@ class KH2Context(CommonContext):
         #kh2.base_address+variable
                 #the back of sora's inventory
         #subtract 2 everytime sora gets a ability from ap
-        self.backofinventory = 0x25CC
+        self.backofinventory = 0x25CA
         #0x0x2A09C00+0x40 is the sve anchor. +1 is the last saved room
         self.sveroom = 0x2A09C00+0x41
         #0 not in battle 1 in yellow battle 2 red battle #short
@@ -137,7 +137,11 @@ class KH2Context(CommonContext):
         self.LimitLevel=0
         self.MasterLevel=0
         self.FinalLevel=0
-        self.growthlevel=0
+        self.highjumplevel=0
+        self.quickrunlevel=0
+        self.dodgerolllevel=0
+        self.aerialdodgelevel=0
+        self.glidelevel=0
         #self.SoraLevel=0
         #short for ability byte for items
 
@@ -165,53 +169,69 @@ class KH2Context(CommonContext):
                     os.remove(root+"/"+file)
 
 
+
+
     def give_growth(self,itemcode):
         #growth is added onto the current growth. Save+0x25CE... is the spots in inventory where they are kept
         #high jump
         if itemcode.memaddr==0x05E:
             self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25CE)
-            
-            if self.growthlevel>=0x05E and self.growthlevel<=0x061:
+            #max growth. Fix this l8r
+            if self.growthlevel==97 or self.growthlevel==-32671:
+                return
+            if self.highjumplevel in {1,2,3}:
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25CE, self.growthlevel+1)
-            elif self.growthlevel<0x061:
+            elif self.highjumplevel==0:
                 #giving level one of the ability
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25CE, 0x05E)
-                
+            self.highjumplevel+=1
             #quick run
         elif itemcode.memaddr==0x062:
+            
             self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D0)
-            if self.growthlevel>=0x062 and self.growthlevel<=0x065:
+            if self.growthlevel==101 or self.growthlevel==-32667:
+                return
+            if self.quickrunlevel in {1,2,3}:
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D0, self.growthlevel+1)
-            elif self.growthlevel<0x065:
+            elif self.quickrunlevel==0:
                 #giving level one of the ability
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D0, 0x062)
-            
+            self.quickrunlevel+=1
             #dodge roll
         elif itemcode.memaddr==0x234:
             self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D2)
-            if self.growthlevel>=0x234 and self.growthlevel<=0x237:
+            if self.growthlevel==567 or self.growthlevel==-32201:
+                return
+            if self.dodgerolllevel in {1,2,3}:
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D2, self.growthlevel+1)
-            elif self.growthlevel<0x234:
+            elif self.dodgerolllevel==0:
                 #giving level one of the ability
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D2, 0x234)
+            self.dodgerolllevel+=1
             #aerial dodge
 
         elif itemcode.memaddr==0x066:
             self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D4)
-            if self.growthlevel>=0x066 and self.growthlevel<=0x069:
+            if self.growthlevel==105 or self.growthlevel==-32663:
+                return
+            if self.aerialdodgelevel in {1,2,3}:
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D4, self.growthlevel+1)
-            elif self.growthlevel<0x066:
+            elif self.aerialdodgelevel==0:
                 #giving level one of the ability
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D4, 0x066)
-
+            self.aerialdodgelevel+=1
             #glide
         else:
             self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D6)
-            if self.growthlevel>=0x06A and self.growthlevel<=0x06D:
+            if self.growthlevel==109 or self.growthlevel==-32659:
+                return
+            if self.glidelevel in {1,2,3}:
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D6, self.growthlevel+1)
-            elif self.growthlevel<0x06A:
+            elif self.growthlevel==0:
                 #giving level one of the ability
-                self.kh2.write_short(self.kh2.base_address + self.Save+0x25D6, 0x066)
+                self.kh2.write_short(self.kh2.base_address + self.Save+0x25D6, 0x06A)
+            self.glidelevel+=1
+        
 #while loop to NOT give item while on death screen
 #need to figure out how to tell room address
 #initialize the room before the while loop. Probably at the start of a package
@@ -223,14 +243,11 @@ class KH2Context(CommonContext):
             #forms are handled in the goa so they are put in the back of inventory no matter what
             if itemcode.memaddr in {0x05E,0x062,0x066,0x06A,0x234}:
                 self.give_growth(itemcode)
-                return
-            self.kh2.write_short(self.kh2.base_address + self.Save+self.backofinventory, itemcode.memaddr)
-            self.backofinventory-=2
+                #return
+            else:
+                self.kh2.write_short(self.kh2.base_address + self.Save+self.backofinventory, itemcode.memaddr)
+                self.backofinventory-=2
         elif itemcode.bitmask>0:
-            #yourmomkh2.base_address + Save+0x36C0
-            #formlmao=int.from_bytes(kh2.read_bytes(yourmom,1), "big")
-            #kh2.write_bytes(yourmom,(formlmao|0x1<<0).to_bytes(1,'big'),1)
-
             itemMemory=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
             #write item into the address of that item. then turn on the bitmask of the item.
             #player has final form
@@ -240,7 +257,9 @@ class KH2Context(CommonContext):
             amount=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
             self.kh2.write_bytes(self.kh2.base_address + self.Save+itemcode.memaddr,(amount+1).to_bytes(1,'big'),1)
 
-    async def ItemSafe(self,args,svestate):          
+    async def ItemSafe(self,args,svestate):
+        while self.worldid[int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x0714DB8,1), "big")]==9:
+            await asyncio.sleep(1) 
         await self.roomSave(args,svestate)
         #print("Your Item Is now Safe")
 
@@ -267,13 +286,14 @@ class KH2Context(CommonContext):
       
 
     def on_package(self, cmd: str, args: dict):
-        #if cmd in {"Connected"}:
-        #    if not os.path.exists(self.game_communication_path):
-        #        os.makedirs(self.game_communication_path)
-        #    for ss in self.checked_locations:
-        #        filename = f"send{ss}"
-        #        with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-        #            f.close()
+        if cmd in {"Connected"}:
+                slot_data=args['slot_data']
+                #if slot_data['Schmovement']==1:
+                #    for item in {ItemName.Highjumplevel1}
+                #        itemname=self.lookup_id_to_item[item.item]
+                #        itemcode=self.item_name_to_data[itemname]
+                #        #default false
+                #        self.give_item(itemcode)
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
             if start_index != len(self.items_received):
@@ -345,9 +365,9 @@ class KH2Context(CommonContext):
         for i in range(5):
             for location,data in formDict[i].items():
                 if location not in self.locations_checked:
-                    print(location)
+                    #print(location)
                     try:
-                        if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + data.addrObtained,1), "big")>=data.bitIndex:
+                        if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + data.addrObtained,1), "big")-1>=data.bitIndex:
                             self.locations_checked.add(location)
                             self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
                     except:

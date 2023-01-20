@@ -35,7 +35,7 @@ class KH2World(World):
     remote_start_inventory: bool = False
     item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
     location_name_to_id = {item_name: data.code for item_name, data in all_locations.items() if data.code}
-    totallocations=len(all_locations.items())-1
+    totallocations=len(all_locations.items())
 
     #multiworld locations that are checked in the client using the save anchor
     kh2multiworld_locations= list()
@@ -54,7 +54,7 @@ class KH2World(World):
         return slot_data
 
 
-    def create_item(self, name: str, ) -> Item:
+    def create_item(self, name: str,) -> Item:
         data = item_dictionary_table[name]
         if name in Items.Progression_Table or name in Items.Movement_Table or name in Items.Forms_Table or name in Items.Magic_Table or name == ItemName.Victory:
             item_classification = ItemClassification.progression
@@ -123,11 +123,14 @@ class KH2World(World):
 
         # Option to turn off all superbosses. Can do this individually but its like 20+ checks
         if self.multiworld.Super_Bosses[self.player].value == 0:
-            for superboss in exclusion_table["SuperBosses"] and exclusion_table["Datas"]:
+            for superboss in exclusion_table["Datas"]:
                 self.multiworld.get_location(superboss, self.player).place_locked_item(
                     self.create_item(random.choice(fillerItems)))
                 self.totallocations -= 1
-
+            for superboss in exclusion_table["SuperBosses"]:
+                self.multiworld.get_location(superboss, self.player).place_locked_item(
+                    self.create_item(random.choice(fillerItems)))
+                self.totallocations -= 1
         # These checks are missable
         self.multiworld.get_location(LocationName.JunkChampionBelt, self.player).place_locked_item(
             self.create_item(random.choice(fillerItems)))

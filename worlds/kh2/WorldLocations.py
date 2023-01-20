@@ -121,7 +121,7 @@ TR_Checks = {
     LocationName.FuturePeteGetBonus:            WorldLocationData(0x3706, 1),
     LocationName.GoofyFuturePete:               WorldLocationData(0x3706, 1),
     LocationName.Monochrome:                    WorldLocationData(0x1E33, 2), 
-    LocationName.WisdomForm:                    WorldLocationData(0x1E11, 7),           
+    LocationName.WisdomForm:                    WorldLocationData(0x1E33, 2),           
     LocationName.LingeringWillBonus:            WorldLocationData(0x370C, 6),              
     LocationName.LingeringWillProofofConnection:WorldLocationData(0x1E14, 2),               
     LocationName.LingeringWillManifestIllusion: WorldLocationData(0x1E14, 2),              
@@ -709,7 +709,7 @@ SoraLevels={
 }
 
 ValorLevels={
-    LocationName.Valorlvl1:  WorldLocationData(0x32F6, 1),
+    #LocationName.Valorlvl1:  WorldLocationData(0x32F6, 1),
     LocationName.Valorlvl2:  WorldLocationData(0x32F6, 2),
     LocationName.Valorlvl3:  WorldLocationData(0x32F6, 3),
     LocationName.Valorlvl4:  WorldLocationData(0x32F6, 4),
