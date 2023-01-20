@@ -1,20 +1,23 @@
 from __future__ import annotations
 
+import asyncio
+import collections
+import datetime
 import functools
 import logging
-import websockets
-import asyncio
+import pickle
+import random
 import socket
 import threading
 import time
-import random
-import pickle
+
+import websockets
+from pony.orm import commit, db_session, select
 
 import Utils
-from .models import *
-
-from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor
-from Utils import get_public_ipv4, get_public_ipv6, restricted_loads
+from MultiServer import ClientMessageProcessor, Context, ServerCommandProcessor, auto_shutdown, server
+from Utils import cache_argsless, get_public_ipv4, get_public_ipv6, restricted_loads
+from .models import Command, Room, db
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
@@ -39,7 +42,7 @@ class CustomClientMessageProcessor(ClientMessageProcessor):
 import MultiServer
 
 MultiServer.client_message_processor = CustomClientMessageProcessor
-del (MultiServer)
+del MultiServer
 
 
 class DBCommandProcessor(ServerCommandProcessor):
@@ -48,11 +51,22 @@ class DBCommandProcessor(ServerCommandProcessor):
 
 
 class WebHostContext(Context):
-    def __init__(self):
+    room_id: int
+
+    def __init__(self, static_server_data: dict):
+        # static server data is used during _load_game_data to load required data,
+        # without needing to import worlds system, which takes quite a bit of memory
+        self.static_server_data = static_server_data
         super(WebHostContext, self).__init__("", 0, "", "", 1, 40, True, "enabled", "enabled", "enabled", 0, 2)
+        del self.static_server_data
         self.main_loop = asyncio.get_running_loop()
         self.video = {}
         self.tags = ["AP", "WebHost"]
+
+    def _load_game_data(self):
+        for key, value in self.static_server_data.items():
+            setattr(self, key, value)
+        self.non_hintable_names = collections.defaultdict(frozenset, self.non_hintable_names)
 
     def listen_to_db_commands(self):
         cmdprocessor = DBCommandProcessor(self)
@@ -94,7 +108,7 @@ class WebHostContext(Context):
         room.multisave = pickle.dumps(self.get_save())
         # saving only occurs on activity, so we can "abuse" this information to mark this as last_activity
         if not exit_save:  # we don't want to count a shutdown as activity, which would restart the server again
-            room.last_activity = datetime.utcnow()
+            room.last_activity = datetime.datetime.utcnow()
         return True
 
     def get_save(self) -> dict:
@@ -107,14 +121,30 @@ def get_random_port():
     return random.randint(49152, 65535)
 
 
-def run_server_process(room_id, ponyconfig: dict):
+@cache_argsless
+def get_static_server_data() -> dict:
+    import worlds
+    data = {
+        "non_hintable_names": {},
+        "gamespackage": worlds.network_data_package["games"],
+        "item_name_groups": {world_name: world.item_name_groups for world_name, world in
+                             worlds.AutoWorldRegister.world_types.items()},
+    }
+
+    for world_name, world in worlds.AutoWorldRegister.world_types.items():
+        data["non_hintable_names"][world_name] = world.hint_blacklist
+
+    return data
+
+
+def run_server_process(room_id, ponyconfig: dict, static_server_data: dict):
     # establish DB connection for multidata and multisave
     db.bind(**ponyconfig)
     db.generate_mapping(check_tables=False)
 
     async def main():
         Utils.init_logging(str(room_id), write_mode="a")
-        ctx = WebHostContext()
+        ctx = WebHostContext(static_server_data)
         ctx.load(room_id)
         ctx.init_save()
 
@@ -128,15 +158,21 @@ def run_server_process(room_id, ponyconfig: dict):
                                           ping_interval=None)
 
             await ctx.server
+        port = 0
         for wssocket in ctx.server.ws_server.sockets:
             socketname = wssocket.getsockname()
             if wssocket.family == socket.AF_INET6:
                 logging.info(f'Hosting game at [{get_public_ipv6()}]:{socketname[1]}')
-                with db_session:
-                    room = Room.get(id=ctx.room_id)
-                    room.last_port = socketname[1]
+                # Prefer IPv4, as most users seem to not have working ipv6 support
+                if not port:
+                    port = socketname[1]
             elif wssocket.family == socket.AF_INET:
                 logging.info(f'Hosting game at {get_public_ipv4()}:{socketname[1]}')
+                port = socketname[1]
+        if port:
+            with db_session:
+                room = Room.get(id=ctx.room_id)
+                room.last_port = port
         with db_session:
             ctx.auto_shutdown = Room.get(id=room_id).timeout
         ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
@@ -145,7 +181,12 @@ def run_server_process(room_id, ponyconfig: dict):
 
     from .autolauncher import Locker
     with Locker(room_id):
-        asyncio.run(main())
-
-
-from WebHostLib import LOGS_FOLDER
+        try:
+            asyncio.run(main())
+        except:
+            with db_session:
+                room = Room.get(id=room_id)
+                room.last_port = -1
+                # ensure the Room does not spin up again on its own, minute of safety buffer
+                room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
+            raise

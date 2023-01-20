@@ -7,7 +7,7 @@ class Kraid(SMRegion, IReward):
     Name = "Brinstar Kraid"
     Area = "Brinstar"
 
-    Reward = RewardType.GoldenFourBoss
+    Reward = RewardType.Null
 
     def __init__(self, world, config: Config):
         super().__init__(world, config)

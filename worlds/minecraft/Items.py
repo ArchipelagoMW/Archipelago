@@ -40,13 +40,13 @@ item_table = {
     "16 Iron Ore": ItemData(45025, False),
     "500 XP": ItemData(45026, False),
     "100 XP": ItemData(45027, False),
-    "50 XP": ItemData(45028, False), 
+    "50 XP": ItemData(45028, False),
     "3 Ender Pearls": ItemData(45029, True),
-    "4 Lapis Lazuli": ItemData(45030, False), 
-    "16 Porkchops": ItemData(45031, False), 
-    "8 Gold Ore": ItemData(45032, False), 
-    "Rotten Flesh": ItemData(45033, False), 
-    "Single Arrow": ItemData(45034, False), 
+    "4 Lapis Lazuli": ItemData(45030, False),
+    "16 Porkchops": ItemData(45031, False),
+    "8 Gold Ore": ItemData(45032, False),
+    "Rotten Flesh": ItemData(45033, False),
+    "Single Arrow": ItemData(45034, False),
     "32 Arrows": ItemData(45035, False),
     "Saddle": ItemData(45036, True),
     "Structure Compass (Village)": ItemData(45037, True),
@@ -57,8 +57,9 @@ item_table = {
     "Shulker Box": ItemData(45042, False),
     "Dragon Egg Shard": ItemData(45043, True),
     "Spyglass": ItemData(45044, True),
-    "Bee Trap": ItemData(45100, False),
+    "Lead": ItemData(45045, True),
 
+    "Bee Trap": ItemData(45100, False),
     "Blaze Rods": ItemData(None, True),
     "Defeat Ender Dragon": ItemData(None, True),
     "Defeat Wither": ItemData(None, True),
@@ -90,6 +91,7 @@ required_items = {
     "3 Ender Pearls": 4,
     "Saddle": 1,
     "Spyglass": 1,
+    "Lead": 1,
 }
 
 junk_weights = {

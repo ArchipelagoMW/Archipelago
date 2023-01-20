@@ -1,7 +1,9 @@
 from BaseClasses import Item
 
+
 class SM64Item(Item):
     game: str = "Super Mario 64"
+
 
 generic_item_table = {
     "Power Star": 3626000,

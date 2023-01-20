@@ -1,35 +1,50 @@
+import json
 import logging
 import os
-from Utils import __version__
-from jinja2 import Template
+import typing
+
 import yaml
-import json
+from jinja2 import Template
 
-from worlds.AutoWorld import AutoWorldRegister
 import Options
-
-target_folder = os.path.join("WebHostLib", "static", "generated")
+from Utils import __version__, local_path
+from worlds.AutoWorld import AutoWorldRegister
 
 handled_in_js = {"start_inventory", "local_items", "non_local_items", "start_hints", "start_location_hints",
                  "exclude_locations"}
 
 
 def create():
-    os.makedirs(os.path.join(target_folder, 'configs'), exist_ok=True)
+    target_folder = local_path("WebHostLib", "static", "generated")
+    yaml_folder = os.path.join(target_folder, "configs")
+    os.makedirs(yaml_folder, exist_ok=True)
 
-    def dictify_range(option):
-        data = {option.range_start: 0, option.range_end: 0, "random": 0, "random-low": 0, "random-high": 0,
-                option.default: 50}
-        notes = {
-            option.range_start: "minimum value",
-            option.range_end: "maximum value"
-        }
+    for file in os.listdir(yaml_folder):
+        full_path: str = os.path.join(yaml_folder, file)
+        if os.path.isfile(full_path):
+            os.unlink(full_path)
+
+    def dictify_range(option: typing.Union[Options.Range, Options.SpecialRange]):
+        data = {option.default: 50}
+        for sub_option in ["random", "random-low", "random-high"]:
+            if sub_option != option.default:
+                data[sub_option] = 0
+
+        notes = {}
+        for name, number in getattr(option, "special_range_names", {}).items():
+            notes[name] = f"equivalent to {number}"
+            if number in data:
+                data[name] = data[number]
+                del data[number]
+            else:
+                data[name] = 0
+
         return data, notes
 
-    def default_converter(default_value):
-        if isinstance(default_value, (set, frozenset)):
-            return list(default_value)
-        return default_value
+    def get_html_doc(option_type: type(Options.Option)) -> str:
+        if not option_type.__doc__:
+            return "Please document me!"
+        return "\n".join(line.strip() for line in option_type.__doc__.split("\n")).strip()
 
     weighted_settings = {
         "baseOptions": {
@@ -42,14 +57,21 @@ def create():
 
     for game_name, world in AutoWorldRegister.world_types.items():
 
-        all_options = {**world.options, **Options.per_game_common_options}
-        res = Template(open(os.path.join("WebHostLib", "templates", "options.yaml")).read()).render(
+        all_options: typing.Dict[str, Options.AssembleOptions] = {
+            **Options.per_game_common_options,
+            **world.option_definitions
+        }
+        with open(local_path("WebHostLib", "templates", "options.yaml")) as f:
+            file_data = f.read()
+        res = Template(file_data).render(
             options=all_options,
             __version__=__version__, game=game_name, yaml_dump=yaml.dump,
-            dictify_range=dictify_range, default_converter=default_converter,
+            dictify_range=dictify_range,
         )
 
-        with open(os.path.join(target_folder, 'configs', game_name + ".yaml"), "w") as f:
+        del file_data
+
+        with open(os.path.join(target_folder, "configs", game_name + ".yaml"), "w", encoding="utf-8") as f:
             f.write(res)
 
         # Generate JSON files for player-settings pages
@@ -70,7 +92,7 @@ def create():
                 game_options[option_name] = this_option = {
                     "type": "select",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
-                    "description": option.__doc__ if option.__doc__ else "Please document me!",
+                    "description": get_html_doc(option),
                     "defaultValue": None,
                     "options": []
                 }
@@ -84,41 +106,46 @@ def create():
                     if sub_option_id == option.default:
                         this_option["defaultValue"] = sub_option_name
 
-                this_option["options"].append({
-                    "name": "Random",
-                    "value": "random",
-                })
+                if option.default == "random":
+                    this_option["defaultValue"] = "random"
 
-            elif hasattr(option, "range_start") and hasattr(option, "range_end"):
+            elif issubclass(option, Options.Range):
                 game_options[option_name] = {
                     "type": "range",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
-                    "description": option.__doc__ if option.__doc__ else "Please document me!",
-                    "defaultValue": option.default if hasattr(option, "default") else option.range_start,
+                    "description": get_html_doc(option),
+                    "defaultValue": option.default if hasattr(
+                        option, "default") and option.default != "random" else option.range_start,
                     "min": option.range_start,
                     "max": option.range_end,
                 }
+
+                if issubclass(option, Options.SpecialRange):
+                    game_options[option_name]["type"] = 'special_range'
+                    game_options[option_name]["value_names"] = {}
+                    for key, val in option.special_range_names.items():
+                        game_options[option_name]["value_names"][key] = val
 
             elif getattr(option, "verify_item_name", False):
                 game_options[option_name] = {
                     "type": "items-list",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
-                    "description": option.__doc__ if option.__doc__ else "Please document me!",
+                    "description": get_html_doc(option),
                 }
 
             elif getattr(option, "verify_location_name", False):
                 game_options[option_name] = {
                     "type": "locations-list",
                     "displayName": option.display_name if hasattr(option, "display_name") else option_name,
-                    "description": option.__doc__ if option.__doc__ else "Please document me!",
+                    "description": get_html_doc(option),
                 }
 
-            elif hasattr(option, "valid_keys"):
+            elif issubclass(option, Options.OptionList) or issubclass(option, Options.OptionSet):
                 if option.valid_keys:
                     game_options[option_name] = {
                         "type": "custom-list",
                         "displayName": option.display_name if hasattr(option, "display_name") else option_name,
-                        "description": option.__doc__ if option.__doc__ else "Please document me!",
+                        "description": get_html_doc(option),
                         "options": list(option.valid_keys),
                     }
 

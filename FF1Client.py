@@ -1,4 +1,5 @@
 import asyncio
+import copy
 import json
 import time
 from asyncio import StreamReader, StreamWriter
@@ -6,7 +7,8 @@ from typing import List
 
 
 import Utils
-from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, ClientCommandProcessor, logger, \
+from Utils import async_start
+from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
 
 SYSTEM_MESSAGE_ID = 0
@@ -39,6 +41,7 @@ class FF1CommandProcessor(ClientCommandProcessor):
 
 class FF1Context(CommonContext):
     command_processor = FF1CommandProcessor
+    game = 'Final Fantasy'
     items_handling = 0b111  # full remote
 
     def __init__(self, server_address, password):
@@ -48,7 +51,6 @@ class FF1Context(CommonContext):
         self.messages = {}
         self.locations_array = None
         self.nes_status = CONNECTION_INITIAL_STATUS
-        self.game = 'Final Fantasy'
         self.awaiting_rom = False
         self.display_msgs = True
 
@@ -64,42 +66,37 @@ class FF1Context(CommonContext):
 
     def _set_message(self, msg: str, msg_id: int):
         if DISPLAY_MSGS:
-            self.messages[(time.time(), msg_id)] = msg
+            self.messages[time.time(), msg_id] = msg
 
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
-            self.game = self.games.get(self.slot, None)
-            asyncio.create_task(parse_locations(self.locations_array, self, True))
+            async_start(parse_locations(self.locations_array, self, True))
         elif cmd == 'Print':
             msg = args['text']
             if ': !' not in msg:
                 self._set_message(msg, SYSTEM_MESSAGE_ID)
-        elif cmd == "ReceivedItems":
-            msg = f"Received {', '.join([self.item_name_getter(item.item) for item in args['items']])}"
-            self._set_message(msg, SYSTEM_MESSAGE_ID)
-        elif cmd == 'PrintJSON':
-            print_type = args['type']
-            item = args['item']
-            receiving_player_id = args['receiving']
-            receiving_player_name = self.player_names[receiving_player_id]
-            sending_player_id = item.player
-            sending_player_name = self.player_names[item.player]
-            if print_type == 'Hint':
-                msg = f"Hint: Your {self.item_name_getter(item.item)} is at" \
-                      f" {self.player_names[item.player]}'s {self.location_name_getter(item.location)}"
-                self._set_message(msg, item.item)
-            elif print_type == 'ItemSend' and receiving_player_id != self.slot:
-                if sending_player_id == self.slot:
-                    if receiving_player_id == self.slot:
-                        msg = f"You found your own {self.item_name_getter(item.item)}"
-                    else:
-                        msg = f"You sent {self.item_name_getter(item.item)} to {receiving_player_name}"
-                else:
-                    if receiving_player_id == sending_player_id:
-                        msg = f"{sending_player_name} found their {self.item_name_getter(item.item)}"
-                    else:
-                        msg = f"{sending_player_name} sent {self.item_name_getter(item.item)} to " \
-                              f"{receiving_player_name}"
+
+    def on_print_json(self, args: dict):
+        if self.ui:
+            self.ui.print_json(copy.deepcopy(args["data"]))
+        else:
+            text = self.jsontotextparser(copy.deepcopy(args["data"]))
+            logger.info(text)
+        relevant = args.get("type", None) in {"Hint", "ItemSend"}
+        if relevant:
+            item = args["item"]
+            # goes to this world
+            if self.slot_concerns_self(args["receiving"]):
+                relevant = True
+            # found in this world
+            elif self.slot_concerns_self(item.player):
+                relevant = True
+            # not related
+            else:
+                relevant = False
+            if relevant:
+                item = args["item"]
+                msg = self.raw_text_parser(copy.deepcopy(args["data"]))
                 self._set_message(msg, item.item)
 
     def run_gui(self):
@@ -151,13 +148,13 @@ async def parse_locations(locations_array: List[int], ctx: FF1Context, force: bo
                 index -= 0x200
                 flag = 0x02
 
-            # print(f"Location: {ctx.location_name_getter(location)}")
+            # print(f"Location: {ctx.location_names[location]}")
             # print(f"Index: {str(hex(index))}")
             # print(f"value: {locations_array[index] & flag != 0}")
             if locations_array[index] & flag != 0:
                 locations_checked.append(location)
         if locations_checked:
-            # print([ctx.location_name_getter(location) for location in locations_checked])
+            # print([ctx.location_names[location] for location in locations_checked])
             await ctx.send_msgs([
                 {"cmd": "LocationChecks",
                  "locations": locations_checked}
@@ -184,7 +181,7 @@ async def nes_sync_task(ctx: FF1Context):
                     # print(data_decoded)
                     if ctx.game is not None and 'locations' in data_decoded:
                         # Not just a keep alive ping, parse
-                        asyncio.create_task(parse_locations(data_decoded['locations'], ctx, False))
+                        async_start(parse_locations(data_decoded['locations'], ctx, False))
                     if not ctx.auth:
                         ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
                         if ctx.auth == '':

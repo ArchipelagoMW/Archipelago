@@ -26,10 +26,14 @@
         - Example: `Trinexx`
         - Takes a particular boss and places that boss in any remaining slots in which this boss can function.
         - In this example, it would fill Desert Palace, but not Tower of Hera.
+        - If no other options are provided this will follow normal singularity rules with that boss.
     - Boss Shuffle:
-        - Example: `simple`
+        - Example: `basic`
             - Runs a particular boss shuffle mode to finish construction instead of vanilla placement, typically used as
               a last instruction.
+            - Supports `random` which will choose a random option from the normal choices.
+            - If one is not supplied any remaining locations will be unshuffled unless a single specific boss is
+              supplied in which case it will use singularity as noted above.
 - [Available Bosses](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Bosses.py#L135)
 - [Available Arenas](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Bosses.py#L150)
 

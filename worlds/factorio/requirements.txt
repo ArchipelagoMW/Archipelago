@@ -1,1 +1,1 @@
-factorio-rcon-py>=1.2.1
+factorio-rcon-py>=2.0.1

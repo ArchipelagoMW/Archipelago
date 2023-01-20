@@ -9,12 +9,13 @@ class WreckedShip(SMRegion, IReward):
 
     def __init__(self, world, config: Config):
         super().__init__(world, config)
-        self.Reward = RewardType.GoldenFourBoss
+        self.Weight = 4
+        self.Reward = RewardType.Null
         self.Locations = [
             Location(self, 128, 0x8FC265, LocationType.Visible, "Missile (Wrecked Ship middle)", 
                 lambda items: items.CanPassBombPassages()),
             Location(self, 129, 0x8FC2E9, LocationType.Chozo, "Reserve Tank, Wrecked Ship",
-                lambda items: self.CanUnlockShip(items) and items.CardWreckedShipL1 and items.SpeedBooster and items.CanUsePowerBombs() and
+                lambda items: self.CanUnlockShip(items) and items.CardWreckedShipL1 and items.CanUsePowerBombs() and items.SpeedBooster and
                     (items.Grapple or items.SpaceJump or items.Varia and items.HasEnergyReserves(2) or items.HasEnergyReserves(3)) if self.Logic == SMLogic.Normal else \
                 lambda items: self.CanUnlockShip(items) and items.CardWreckedShipL1 and items.CanUsePowerBombs() and items.SpeedBooster and
                     (items.Varia or items.HasEnergyReserves(2))),
@@ -27,7 +28,7 @@ class WreckedShip(SMRegion, IReward):
             Location(self, 132, 0x8FC337, LocationType.Visible, "Energy Tank, Wrecked Ship",
                 lambda items: self.CanUnlockShip(items) and
                     (items.HiJump or items.SpaceJump or items.SpeedBooster or items.Gravity) if self.Logic == SMLogic.Normal else \
-                lambda items: self.CanUnlockShip(items) and (items.Bombs or items.PowerBomb or items.CanSpringBallJump() or
+                lambda items: self.CanUnlockShip(items) and (items.Morph and (items.Bombs or items.PowerBomb) or items.CanSpringBallJump() or
                     items.HiJump or items.SpaceJump or items.SpeedBooster or items.Gravity)),
             Location(self, 133, 0x8FC357, LocationType.Visible, "Super Missile (Wrecked Ship left)",
                 lambda items: self.CanUnlockShip(items)),

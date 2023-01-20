@@ -1,23 +1,24 @@
-import os
-import tempfile
-import random
 import json
+import os
+import pickle
+import random
+import tempfile
 import zipfile
+import concurrent.futures
 from collections import Counter
-from typing import Dict, Optional as TypeOptional
-from Utils import __version__
+from typing import Dict, Optional, Any
 
 from flask import request, flash, redirect, url_for, session, render_template
+from pony.orm import commit, db_session
 
-from worlds.alttp.EntranceRandomizer import parse_arguments
-from Main import main as ERmain
 from BaseClasses import seeddigits, get_seed
-from Generate import handle_name
-import pickle
-
-from .models import *
+from Generate import handle_name, PlandoOptions
+from Main import main as ERmain
+from Utils import __version__
 from WebHostLib import app
+from worlds.alttp.EntranceRandomizer import parse_arguments
 from .check import get_yaml_data, roll_options
+from .models import Generation, STATE_ERROR, STATE_QUEUED, Seed, UUID
 from .upload import upload_zip_to_db
 
 
@@ -30,16 +31,15 @@ def get_meta(options_source: dict) -> dict:
     }
     plando_options -= {""}
 
-    meta = {
+    server_options = {
         "hint_cost": int(options_source.get("hint_cost", 10)),
-        "forfeit_mode": options_source.get("forfeit_mode", "goal"),
+        "release_mode": options_source.get("release_mode", "goal"),
         "remaining_mode": options_source.get("remaining_mode", "disabled"),
         "collect_mode": options_source.get("collect_mode", "disabled"),
         "item_cheat": bool(int(options_source.get("item_cheat", 1))),
         "server_password": options_source.get("server_password", None),
-        "plando_options": list(plando_options)
     }
-    return meta
+    return {"server_options": server_options, "plando_options": list(plando_options)}
 
 
 @app.route('/generate', methods=['GET', 'POST'])
@@ -52,7 +52,7 @@ def generate(race=False):
         else:
             file = request.files['file']
             options = get_yaml_data(file)
-            if type(options) == str:
+            if isinstance(options, str):
                 flash(options)
             else:
                 meta = get_meta(request.form)
@@ -60,13 +60,13 @@ def generate(race=False):
                 results, gen_options = roll_options(options, meta["plando_options"])
 
                 if race:
-                    meta["item_cheat"] = False
-                    meta["remaining_mode"] = "disabled"
+                    meta["server_options"]["item_cheat"] = False
+                    meta["server_options"]["remaining_mode"] = "disabled"
 
                 if any(type(result) == str for result in results.values()):
                     return render_template("checkResult.html", results=results)
                 elif len(gen_options) > app.config["MAX_ROLL"]:
-                    flash(f"Sorry, generating of multiworlds is limited to {app.config['MAX_ROLL']} players for now. "
+                    flash(f"Sorry, generating of multiworlds is limited to {app.config['MAX_ROLL']} players. "
                           f"If you have a larger group, please generate it yourself and upload it.")
                 elif len(gen_options) >= app.config["JOB_THRESHOLD"]:
                     gen = Generation(
@@ -92,35 +92,35 @@ def generate(race=False):
     return render_template("generate.html", race=race, version=__version__)
 
 
-def gen_game(gen_options, meta: TypeOptional[Dict[str, object]] = None, owner=None, sid=None):
+def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=None, sid=None):
     if not meta:
-        meta: Dict[str, object] = {}
+        meta: Dict[str, Any] = {}
 
-    meta.setdefault("hint_cost", 10)
-    race = meta.get("race", False)
-    del (meta["race"])
-    plando_options = meta.get("plando", {"bosses", "items", "connections", "texts"})
-    del (meta["plando_options"])
-    try:
+    meta.setdefault("server_options", {}).setdefault("hint_cost", 10)
+    race = meta.setdefault("race", False)
+
+    def task():
         target = tempfile.TemporaryDirectory()
         playercount = len(gen_options)
         seed = get_seed()
-        random.seed(seed)
 
         if race:
-            random.seed()  # reset to time-based random source
+            random.seed()  # use time-based random source
+        else:
+            random.seed(seed)
 
         seedname = "W" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
 
         erargs = parse_arguments(['--multi', str(playercount)])
         erargs.seed = seed
-        erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwrittin in mystery
-        erargs.spoiler = 0 if race else 2
+        erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
+        erargs.spoiler = 0 if race else 3
         erargs.race = race
         erargs.outputname = seedname
         erargs.outputpath = target.name
         erargs.teams = 1
-        erargs.plando_options = ", ".join(plando_options)
+        erargs.plando_options = PlandoOptions.from_set(meta.setdefault("plando_options",
+                                                                        {"bosses", "items", "connections", "texts"}))
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):
@@ -136,9 +136,26 @@ def gen_game(gen_options, meta: TypeOptional[Dict[str, object]] = None, owner=No
             erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
         if len(set(erargs.name.values())) != len(erargs.name):
             raise Exception(f"Names have to be unique. Names: {Counter(erargs.name.values())}")
-        ERmain(erargs, seed, baked_server_options=meta)
+        ERmain(erargs, seed, baked_server_options=meta["server_options"])
 
         return upload_to_db(target.name, sid, owner, race)
+    thread_pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+    thread = thread_pool.submit(task)
+
+    try:
+        return thread.result(app.config["JOB_TIME"])
+    except concurrent.futures.TimeoutError as e:
+        if sid:
+            with db_session:
+                gen = Generation.get(id=sid)
+                if gen is not None:
+                    gen.state = STATE_ERROR
+                    meta = json.loads(gen.meta)
+                    meta["error"] = (
+                            "Allowed time for Generation exceeded, please consider generating locally instead. " +
+                            e.__class__.__name__ + ": " + str(e))
+                    gen.meta = json.dumps(meta)
+                    commit()
     except BaseException as e:
         if sid:
             with db_session:
@@ -148,7 +165,6 @@ def gen_game(gen_options, meta: TypeOptional[Dict[str, object]] = None, owner=No
                     meta = json.loads(gen.meta)
                     meta["error"] = (e.__class__.__name__ + ": " + str(e))
                     gen.meta = json.dumps(meta)
-
                     commit()
         raise
 

@@ -26,18 +26,63 @@ name: YourName{number} # Your name in-game. Spaces will be replaced with undersc
 game: # Pick a game to play
   A Link to the Past: 1
 requires:
-  version: 0.2.3 # Version of Archipelago required for this yaml to work as expected.
-# Shared Options supported by all games:
-accessibility:
-  items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations
-  locations: 50 # Guarantees you will be able to access all locations, and therefore all items
-  none: 0 # Guarantees only that the game is beatable. You may not be able to access all locations or acquire all items
-progression_balancing: # A system to reduce BK, as in times during which you can't do anything, by moving your items into an earlier access sphere
-  0: 0 # Choose a lower number if you don't mind a longer multiworld, or can glitch/sequence break around missing items.
-  25: 0
-  50: 50 # Make it likely you have stuff to do.
-  99: 0 # Get important items early, and stay at the front of the progression.
+  version: 0.3.3 # Version of Archipelago required for this yaml to work as expected.
 A Link to the Past:
+  progression_balancing:
+    # A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
+    # A lower setting means more getting stuck. A higher setting means less getting stuck.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 99
+    random: 0
+    random-low: 0
+    random-high: 0
+    disabled: 0 # equivalent to 0
+    normal: 50 # equivalent to 50
+    extreme: 0 # equivalent to 99
+
+  accessibility:
+    # Set rules for reachability of your items/locations.
+    # Locations: ensure everything can be reached and acquired.
+    # Items: ensure all logically relevant items can be acquired.
+    # Minimal: ensure what is needed to reach your goal can be acquired.
+    locations: 0
+    items: 50
+    minimal: 0
+
+  local_items:
+    # Forces these items to be in their native world.
+    [ ]
+
+  non_local_items:
+    # Forces these items to be outside their native world.
+    [ ]
+
+  start_inventory:
+    # Start with these items.
+    { }
+
+  start_hints:
+    # Start with these item's locations prefilled into the !hint command.
+    [ ]
+
+  start_location_hints:
+    # Start with these locations and their item prefilled into the !hint command
+    [ ]
+
+  exclude_locations:
+    # Prevent these locations from having an important item
+    [ ]
+
+  priority_locations:
+    # Prevent these locations from having an unimportant item
+    [ ]
+
+  item_links:
+    # Share part of your item pool with other players.
+    [ ]
+
   ### Logic Section ###
   glitches_required: # Determine the logic required to complete the seed
     none: 50 # No glitches required
@@ -120,8 +165,8 @@ A Link to the Past:
   open_pyramid:
     goal: 50 # Opens the pyramid if the goal requires you to kill Ganon, unless the goal is Slow Ganon or All Dungeons
     auto: 0 # Same as Goal, but also is closed if holes are shuffled and ganon is part of the shuffle pool
-    yes: 0 # Pyramid hole is always open. Ganon's vulnerable condition is still required before he can he hurt
-    no: 0 # Pyramid hole is always closed until you defeat Agahnim atop Ganon's Tower
+    open: 0 # Pyramid hole is always open. Ganon's vulnerable condition is still required before he can he hurt
+    closed: 0 # Pyramid hole is always closed until you defeat Agahnim atop Ganon's Tower
   triforce_pieces_mode: #Determine how to calculate the extra available triforce pieces.
     extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
     percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required
@@ -169,15 +214,21 @@ A Link to the Past:
     standard: 0 # Begin the game by rescuing Zelda from her cell and escorting her to the Sanctuary
     open: 50 # Begin the game from your choice of Link's House or the Sanctuary
     inverted: 0 # Begin in the Dark World. The Moon Pearl is required to avoid bunny-state in Light World, and the Light World game map is altered
-  retro:
-    on: 0 # you must buy a quiver to use the bow, take-any caves and an old-man cave are added to the world. You may need to find your sword from the old man's cave
+  retro_bow:
+    on: 0 # Zelda-1 like mode. You have to purchase a quiver to shoot arrows using rupees.
     off: 50
-  hints: # Vendors: King Zora and Bottle Merchant say what they're selling.
-  #    On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints.
+  retro_caves:
+    on: 0 # Zelda-1 like mode. There are randomly placed take-any caves that contain one Sword and choices of Heart Container/Blue Potion.
+    off: 50
+  hints: # On/Full: Put item and entrance placement hints on telepathic tiles and some NPCs, Full removes joke hints.
     'on': 50
-    vendors: 0
     'off': 0
     full: 0
+  scams: # If on, these Merchants will no longer tell you what they're selling.
+    'off': 50
+    'king_zora': 0
+    'bottle_merchant': 0
+    'all': 0
   swordless:
     on: 0 # Your swords are replaced by rupees. Gameplay changes have been made to accommodate this change
     off: 1
@@ -270,6 +321,7 @@ A Link to the Past:
     p: 0 # Randomize the prices of the items in shop inventories
     u: 0 # Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
     w: 0 # Consider witch's hut like any other shop and shuffle/randomize it too
+    P: 0 # Prices of the items in shop inventories cost hearts, arrow, or bombs instead of rupees
     ip: 0 # Shuffle inventories and randomize prices
     fpu: 0 # Generate new inventories, randomize prices and shuffle capacity upgrades into item pool
     uip: 0 # Shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
@@ -446,7 +498,7 @@ A Link to the Past:
   death_link:
     false: 50
     true: 0
-    
+
   allow_collect: # Allows for !collect / co-op to auto-open chests containing items for other players.
     #    Off by default, because it currently crashes on real hardware.
     false: 50

@@ -2,11 +2,12 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-from typing import Dict, NamedTuple, Optional
+from collections import defaultdict
+from typing import Dict, NamedTuple, Optional, Set
 
 from BaseClasses import Item, MultiWorld
 from . import StaticWitnessLogic, WitnessPlayerLocations, WitnessPlayerLogic
-from .Options import get_option_value, is_option_enabled
+from .Options import get_option_value, is_option_enabled, the_witness_options
 from fractions import Fraction
 
 
@@ -18,6 +19,7 @@ class ItemData(NamedTuple):
     progression: bool
     event: bool = False
     trap: bool = False
+    never_exclude: bool = False
 
 
 class WitnessItem(Item):
@@ -33,6 +35,8 @@ class StaticWitnessItems:
     """
 
     ALL_ITEM_TABLE: Dict[str, ItemData] = {}
+
+    ITEM_NAME_GROUPS: Dict[str, Set[str]] = dict()
 
     # These should always add up to 1!!!
     BONUS_WEIGHTS = {
@@ -50,11 +54,22 @@ class StaticWitnessItems:
     def __init__(self):
         item_tab = dict()
 
-        for item in StaticWitnessLogic.ALL_ITEMS:
+        for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS:
             if item[0] == "11 Lasers" or item == "7 Lasers":
                 continue
 
             item_tab[item[0]] = ItemData(158000 + item[1], True, False)
+
+            self.ITEM_NAME_GROUPS.setdefault("Symbols", set()).add(item[0])
+
+        for item in StaticWitnessLogic.ALL_DOOR_ITEMS:
+            item_tab[item[0]] = ItemData(158000 + item[1], True, False)
+
+            # 1500 - 1510 are the laser items, which are handled like doors but should be their own separate group.
+            if item[1] in range(1500, 1511):
+                self.ITEM_NAME_GROUPS.setdefault("Lasers", set()).add(item[0])
+            else:
+                self.ITEM_NAME_GROUPS.setdefault("Doors", set()).add(item[0])
 
         for item in StaticWitnessLogic.ALL_TRAPS:
             item_tab[item[0]] = ItemData(
@@ -63,6 +78,9 @@ class StaticWitnessItems:
 
         for item in StaticWitnessLogic.ALL_BOOSTS:
             item_tab[item[0]] = ItemData(158000 + item[1], False, False)
+
+        for item in StaticWitnessLogic.ALL_USEFULS:
+            item_tab[item[0]] = ItemData(158000 + item[1], False, False, False, item[2])
 
         item_tab = dict(sorted(
             item_tab.items(),
@@ -79,20 +97,79 @@ class WitnessPlayerItems:
     Class that defines Items for a single world
     """
 
+    @staticmethod
+    def code(item_name: str):
+        return StaticWitnessItems.ALL_ITEM_TABLE[item_name].code
+
     def __init__(self, locat: WitnessPlayerLocations, world: MultiWorld, player: int, player_logic: WitnessPlayerLogic):
         """Adds event items after logic changes due to options"""
         self.EVENT_ITEM_TABLE = dict()
         self.ITEM_TABLE = copy.copy(StaticWitnessItems.ALL_ITEM_TABLE)
+        self.PROGRESSION_TABLE = dict()
 
-        self.GOOD_ITEMS = [
-            "Dots", "Black/White Squares", "Stars",
-            "Shapers", "Symmetry"
-        ]
+        self.ITEM_ID_TO_DOOR_HEX = dict()
+        self.DOORS = set()
 
-        if is_option_enabled(world, player, "shuffle_discarded_panels"):
-            self.GOOD_ITEMS.append("Triangles")
-        if not is_option_enabled(world, player, "disable_non_randomized_puzzles"):
-            self.GOOD_ITEMS.append("Colored Squares")
+        self.PROG_ITEM_AMOUNTS = defaultdict(lambda: 1)
+
+        self.SYMBOLS_NOT_IN_THE_GAME = set()
+
+        self.EXTRA_AMOUNTS = {
+            "Functioning Brain": 1,
+            "Puzzle Skip": get_option_value(world, player, "puzzle_skip_amount")
+        }
+
+        for item in StaticWitnessLogic.ALL_SYMBOL_ITEMS.union(StaticWitnessLogic.ALL_DOOR_ITEMS):
+            if item[0] not in player_logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME:
+                del self.ITEM_TABLE[item[0]]
+                if item in StaticWitnessLogic.ALL_SYMBOL_ITEMS:
+                    self.SYMBOLS_NOT_IN_THE_GAME.add(StaticWitnessItems.ALL_ITEM_TABLE[item[0]].code)
+            else:
+                if item[0] in StaticWitnessLogic.PROGRESSIVE_TO_ITEMS:
+                    self.PROG_ITEM_AMOUNTS[item[0]] = len(player_logic.MULTI_LISTS[item[0]])
+
+                self.PROGRESSION_TABLE[item[0]] = self.ITEM_TABLE[item[0]]
+
+        self.MULTI_LISTS_BY_CODE = dict()
+
+        for item in self.PROG_ITEM_AMOUNTS:
+            multi_list = player_logic.MULTI_LISTS[item]
+            self.MULTI_LISTS_BY_CODE[self.code(item)] = [self.code(single_item) for single_item in multi_list]
+
+        for entity_hex, items in player_logic.DOOR_ITEMS_BY_ID.items():
+            entity_hex_int = int(entity_hex, 16)
+
+            self.DOORS.add(entity_hex_int)
+
+            for item in items:
+                item_id = StaticWitnessItems.ALL_ITEM_TABLE[item].code
+                self.ITEM_ID_TO_DOOR_HEX.setdefault(item_id, set()).add(entity_hex_int)
+
+        symbols = is_option_enabled(world, player, "shuffle_symbols")
+
+        if "shuffle_symbols" not in the_witness_options.keys():
+            symbols = True
+
+        doors = get_option_value(world, player, "shuffle_doors")
+
+        if doors and symbols:
+            self.GOOD_ITEMS = [
+                "Progressive Dots", "Black/White Squares", "Symmetry"
+            ]
+        elif symbols:
+            self.GOOD_ITEMS = [
+                "Progressive Dots", "Black/White Squares", "Progressive Stars",
+                "Shapers", "Symmetry"
+            ]
+
+            if is_option_enabled(world, player, "shuffle_discarded_panels"):
+                self.GOOD_ITEMS.append("Triangles")
+            if not is_option_enabled(world, player, "disable_non_randomized_puzzles"):
+                self.GOOD_ITEMS.append("Colored Squares")
+
+            self.GOOD_ITEMS = [
+                StaticWitnessLogic.ITEMS_TO_PROGRESSIVE.get(item, item) for item in self.GOOD_ITEMS
+            ]
 
         for event_location in locat.EVENT_LOCATION_TABLE:
             location = player_logic.EVENT_ITEM_PAIRS[event_location]

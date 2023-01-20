@@ -8,7 +8,11 @@ os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
 os.environ["KIVY_LOG_ENABLE"] = "0"
 
-from kivy.base import Config
+import Utils
+if Utils.is_frozen():
+    os.environ["KIVY_DATA_DIR"] = Utils.local_path("data")
+
+from kivy.config import Config
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set('kivy', 'exit_on_escape', '0')
@@ -18,11 +22,13 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
 from kivy.core.text.markup import MarkupLabel
-from kivy.base import ExceptionHandler, ExceptionManager, Clock
+from kivy.base import ExceptionHandler, ExceptionManager
+from kivy.clock import Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.layout import Layout
 from kivy.uix.textinput import TextInput
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
@@ -37,11 +43,13 @@ from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.animation import Animation
+from kivy.uix.popup import Popup
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-import Utils
+
 from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
+from Utils import async_start
 
 if typing.TYPE_CHECKING:
     import CommonClient
@@ -267,12 +275,34 @@ class ConnectBarTextInput(TextInput):
         return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
 
 
+class MessageBox(Popup):
+    class MessageBoxLabel(Label):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            self._label.refresh()
+            self.size = self._label.texture.size
+            if self.width + 50 > Window.width:
+                self.text_size[0] = Window.width - 50
+                self._label.refresh()
+                self.size = self._label.texture.size
+
+    def __init__(self, title, text, error=False, **kwargs):
+        label = MessageBox.MessageBoxLabel(text=text)
+        separator_color = [217 / 255, 129 / 255, 122 / 255, 1.] if error else [47 / 255., 167 / 255., 212 / 255, 1.]
+        super().__init__(title=title, content=label, size_hint=(None, None), width=max(100, int(label.width)+40),
+                         separator_color=separator_color, **kwargs)
+        self.height += max(0, label.height - 18)
+
+
 class GameManager(App):
     logging_pairs = [
         ("Client", "Archipelago"),
     ]
     base_title: str = "Archipelago Client"
     last_autofillable_command: str
+
+    main_area_container: GridLayout
+    """ subclasses can add more columns beside the tabs """
 
     def __init__(self, ctx: context_type):
         self.title = self.base_title
@@ -300,7 +330,7 @@ class GameManager(App):
 
         super(GameManager, self).__init__()
 
-    def build(self):
+    def build(self) -> Layout:
         self.container = ContainerLayout()
 
         self.grid = MainLayout()
@@ -309,9 +339,12 @@ class GameManager(App):
         # top part
         server_label = ServerLabel()
         self.connect_layout.add_widget(server_label)
-        self.server_connect_bar = ConnectBarTextInput(text="archipelago.gg", size_hint_y=None, height=30, multiline=False,
-                                                      write_tab=False)
-        self.server_connect_bar.bind(on_text_validate=self.connect_button_action)
+        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:", size_hint_y=None,
+                                                      height=30, multiline=False, write_tab=False)
+        def connect_bar_validate(sender):
+            if not self.ctx.server:
+                self.connect_button_action(sender)
+        self.server_connect_bar.bind(on_text_validate=connect_bar_validate)
         self.connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
         self.server_connect_button.bind(on_press=self.connect_button_action)
@@ -333,7 +366,10 @@ class GameManager(App):
             self.log_panels[display_name] = panel.content = UILog(bridge_logger)
             self.tabs.add_widget(panel)
 
-        self.grid.add_widget(self.tabs)
+        self.main_area_container = GridLayout(size_hint_y=1, rows=1)
+        self.main_area_container.add_widget(self.tabs)
+
+        self.grid.add_widget(self.main_area_container)
 
         if len(self.logging_pairs) == 1:
             # Hide Tab selection if only one tab
@@ -349,17 +385,19 @@ class GameManager(App):
         bottom_layout.add_widget(info_button)
         self.textinput = TextInput(size_hint_y=None, height=30, multiline=False, write_tab=False)
         self.textinput.bind(on_text_validate=self.on_message)
-
-        def text_focus(event):
-            """Needs to be set via delay, as unfocusing happens after on_message"""
-            self.textinput.focus = True
-
-        self.textinput.text_focus = text_focus
+        self.textinput.text_validate_unfocus = False
         bottom_layout.add_widget(self.textinput)
         self.grid.add_widget(bottom_layout)
         self.commandprocessor("/help")
         Clock.schedule_interval(self.update_texts, 1 / 30)
         self.container.add_widget(self.grid)
+
+        self.server_connect_bar.focus = True
+        self.server_connect_bar.select_text(
+            self.server_connect_bar.text.find(":") + 1,
+            len(self.server_connect_bar.text)
+        )
+
         return self.container
 
     def update_texts(self, dt):
@@ -370,10 +408,12 @@ class GameManager(App):
                          f" | Connected to: {self.ctx.server_address} " \
                          f"{'.'.join(str(e) for e in self.ctx.server_version)}"
             self.server_connect_button.text = "Disconnect"
+            self.server_connect_bar.readonly = True
             self.progressbar.max = len(self.ctx.checked_locations) + len(self.ctx.missing_locations)
             self.progressbar.value = len(self.ctx.checked_locations)
         else:
             self.server_connect_button.text = "Connect"
+            self.server_connect_bar.readonly = False
             self.title = self.base_title + " " + Utils.__version__
             self.progressbar.value = 0
 
@@ -386,10 +426,10 @@ class GameManager(App):
 
     def connect_button_action(self, button):
         if self.ctx.server:
-            self.ctx.server_address = None
-            asyncio.create_task(self.ctx.disconnect())
+            self.ctx.username = None
+            async_start(self.ctx.disconnect())
         else:
-            asyncio.create_task(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
+            async_start(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
 
     def on_stop(self):
         # "kill" input tasks
@@ -410,8 +450,6 @@ class GameManager(App):
             elif input_text:
                 self.commandprocessor(input_text)
 
-            Clock.schedule_once(textinput.text_focus)
-
         except Exception as e:
             logging.getLogger("Client").exception(e)
 
@@ -419,6 +457,16 @@ class GameManager(App):
         text = self.json_to_kivy_parser(data)
         self.log_panels["Archipelago"].on_message_markup(text)
         self.log_panels["All"].on_message_markup(text)
+
+    def focus_textinput(self):
+        if hasattr(self, "textinput"):
+            self.textinput.focus = True
+
+    def update_address_bar(self, text: str):
+        if hasattr(self, "server_connect_bar"):
+            self.server_connect_bar.text = text
+        else:
+            logging.getLogger("Client").info("Could not update address bar as the GUI is not yet initialized.")
 
     def enable_energy_link(self):
         if not hasattr(self, "energy_link_label"):
@@ -431,27 +479,24 @@ class GameManager(App):
             self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
 
 
-class ChecksFinderManager(GameManager):
-    logging_pairs = [
-        ("Client", "Archipelago")
-    ]
-    base_title = "Archipelago ChecksFinder Client"
-
-
-class FFPSManager(GameManager):
-    logging_pairs = [
-        ("Client", "Archipelago")
-    ]
-    base_title = "Archipelago FFPS Client"
-
-
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
         super(LogtoUI, self).__init__(logging.INFO)
         self.on_log = on_log
 
+    @staticmethod
+    def format_compact(record: logging.LogRecord) -> str:
+        if isinstance(record.msg, Exception):
+            return str(record.msg)
+        return (f'{record.exc_info[1]}\n' if record.exc_info else '') + str(record.msg).split("\n")[0]
+
     def handle(self, record: logging.LogRecord) -> None:
-        self.on_log(self.format(record))
+        if getattr(record, 'skip_gui', False):
+            pass  # skip output
+        elif getattr(record, 'compact_gui', False):
+            self.on_log(self.format_compact(record))
+        else:
+            self.on_log(self.format(record))
 
 
 class UILog(RecycleView):
@@ -493,7 +538,7 @@ class KivyJSONtoTextParser(JSONtoTextParser):
         flags = node.get("flags", 0)
         if flags & 0b001:  # advancement
             itemtype = "progression"
-        elif flags & 0b010:  # never_exclude
+        elif flags & 0b010:  # useful
             itemtype = "useful"
         elif flags & 0b100:  # trap
             itemtype = "trap"
