@@ -172,65 +172,48 @@ class KH2Context(CommonContext):
 
 
     def give_growth(self,itemcode):
+        #Credit to num for the goa and RedBuddha for porting it to python
         #growth is added onto the current growth. Save+0x25CE... is the spots in inventory where they are kept
         #high jump
         if itemcode.memaddr==0x05E:
             self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25CE)
             #max growth. Fix this l8r
-            if self.growthlevel==97 or self.growthlevel==-32671:
-                return
-            if self.highjumplevel in {1,2,3}:
-                self.kh2.write_short(self.kh2.base_address + self.Save+0x25CE, self.growthlevel+1)
-            elif self.highjumplevel==0:
-                #giving level one of the ability
+            if self.growthlevel | 0x8000 < 0x805E:
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25CE, 0x05E)
-            self.highjumplevel+=1
+            elif self.growthlevel | 0x8000 < 0x8061:
+                self.kh2.write_short(self.kh2.base_address + self.Save+0x25CE, self.growthlevel+1)
             #quick run
         elif itemcode.memaddr==0x062:
-            
             self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D0)
-            if self.growthlevel==101 or self.growthlevel==-32667:
-                return
-            if self.quickrunlevel in {1,2,3}:
-                self.kh2.write_short(self.kh2.base_address + self.Save+0x25D0, self.growthlevel+1)
-            elif self.quickrunlevel==0:
+            if self.growthlevel | 0x8000 < 0x8062:
                 #giving level one of the ability
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D0, 0x062)
-            self.quickrunlevel+=1
+            elif self.growthlevel | 0x8000 < 0x8065:
+                self.kh2.write_short(self.kh2.base_address + self.Save+0x25D0, self.growthlevel+1)
             #dodge roll
         elif itemcode.memaddr==0x234:
             self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D2)
-            if self.growthlevel==567 or self.growthlevel==-32201:
-                return
-            if self.dodgerolllevel in {1,2,3}:
-                self.kh2.write_short(self.kh2.base_address + self.Save+0x25D2, self.growthlevel+1)
-            elif self.dodgerolllevel==0:
+            if self.growthlevel | 0x8000 < 0x8234:
                 #giving level one of the ability
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D2, 0x234)
-            self.dodgerolllevel+=1
+            elif self.growthlevel | 0x8000 < 0x8237:
+                self.kh2.write_short(self.kh2.base_address + self.Save+0x25D2, self.growthlevel+1)
             #aerial dodge
-
         elif itemcode.memaddr==0x066:
             self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D4)
-            if self.growthlevel==105 or self.growthlevel==-32663:
-                return
-            if self.aerialdodgelevel in {1,2,3}:
-                self.kh2.write_short(self.kh2.base_address + self.Save+0x25D4, self.growthlevel+1)
-            elif self.aerialdodgelevel==0:
+            if self.growthlevel | 0x8000 < 0x8066:
                 #giving level one of the ability
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D4, 0x066)
-            self.aerialdodgelevel+=1
+            elif self.growthlevel | 0x8000 < 0x8069:
+                self.kh2.write_short(self.kh2.base_address + self.Save+0x25D4, self.growthlevel+1)
             #glide
         else:
             self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D6)
-            if self.growthlevel==109 or self.growthlevel==-32659:
-                return
-            if self.glidelevel in {1,2,3}:
-                self.kh2.write_short(self.kh2.base_address + self.Save+0x25D6, self.growthlevel+1)
-            elif self.growthlevel==0:
+            if self.growthlevel | 0x8000 < 0x806A:
                 #giving level one of the ability
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D6, 0x06A)
-            self.glidelevel+=1
+            elif self.growthlevel | 0x8000 < 0x806D:
+                self.kh2.write_short(self.kh2.base_address + self.Save+0x25D6, self.growthlevel+1)
         
 #while loop to NOT give item while on death screen
 #need to figure out how to tell room address
@@ -348,7 +331,7 @@ class KH2Context(CommonContext):
         for location,data in WorldLocations.SoraLevels.items():
             if location not in self.locations_checked:
                 try:
-                    if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + 0x24FF,1), "big")>self.SoraLevel:
+                    if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + 0x24FF,1), "big")-1>self.SoraLevel:
                         self.locations_checked.add(location)
                         #message = [{"cmd": 'LocationChecks', "locations": boobies[location]}]
                         self.SoraLevel+=1
@@ -367,7 +350,7 @@ class KH2Context(CommonContext):
                 if location not in self.locations_checked:
                     #print(location)
                     try:
-                        if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + data.addrObtained,1), "big")-1>=data.bitIndex:
+                        if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + data.addrObtained,1), "big")>=data.bitIndex:
                             self.locations_checked.add(location)
                             self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
                     except:
