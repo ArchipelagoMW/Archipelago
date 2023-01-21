@@ -8,9 +8,11 @@ class AllowJustAsPlannedDLCSongs(Toggle):
     Note: The newest DLC songs will most likely not be included in any randomisation."""
     display_name = "Allow Just As Planned DLC Songs"
 
+
 class StreamerModeEnabled(Toggle):
     """Whether or not the randomisation will take into account Streamer Mode. If enabled, only songs available in Streamer Mode will be randomised."""
     display_name = "Streamer Mode Only Songs"
+
 
 class StartingSongs(Range):
     """The number of songs that will be automatically unlocked at the start of a run."""
@@ -23,43 +25,44 @@ class StartingSongs(Range):
 
 class AdditionalSongs(Range):
     """The total number of songs that will be placed in the randomisation pool.
-    Does not count any starting songs or the final goal.
-    //Todo: Correct length suggestions
-    Game Length Suggestions:
-    - Short (1-2 hours): 30
-    - Long (4 hours): 80
+    - Does not count any starting songs or the final goal.
+    - Final count may be lower due to other settings.
     """
-    range_start = 20
+    range_start = 15
     range_end = 400  # Todo: Add song count here
-    default = 40
+    default = 31
     display_name = "Additional Song Count"
 
 
-class MinimumSongDifficulty(Range):
-    """All chosen songs will have at least 1 difficulty which is this value or higher."""
-    display_name = "Minimum Song Difficulty"
+#Todo: Get feedback on these ranges.
+class DifficultyMode(Choice):
+    """Filters songs based:
+    - Easy: At least 1 difficulty between 1-5
+    - Medium: At least 1 difficulty between 5-8
+    - Hard: At least 1 difficulty between 8+
+    - Any: All songs are available"""
+    display_name = "Song Difficulty"
+    option_Any = 0
+    option_Easy = 1
+    option_Medium = 2
+    option_Hard = 3
+
+
+class MusicSheetCount(Range):
+    """The amount of Music Sheets spread around this seed. Music Sheets are required to unlock the final song."""
     range_start = 1
-    range_end = 11
-    default = 3
+    range_end = 12
+    default = 6
+    display_name = "Music Sheet Count"
 
 
-class MaximumSongDifficulty(Range):
-    """All chosen songs will have at least 1 difficulty which is this value or lower."""
-    display_name = "Maximum Song Difficulty"
+class MusicSheetWinCount(Range):
+    """The number of Music Sheets needed to unlock the winning song."""
     range_start = 1
-    range_end = 11
-    default = 7
+    range_end = 12
+    default = 4
+    display_name = "Music Sheets Needed to Win"
 
-
-class ExtraItemsGoalSong(Range):
-    """The amount of extra items that lead to the goal.
-    The game will randomise 2 + x items into the seed that lead to the goal.
-    Enabled Regardless of 'Additional Items Are Songs'.
-    """
-    range_start = 0
-    range_end = 5  # Todo: Add song count here
-    default = 1
-    display_name = "Extra Goal Items"
 
 # Options Beyond this point are not Implemented
 
@@ -104,7 +107,7 @@ musedash_options: Dict[str, type(Option)] = {
     "streamer_mode_enabled": StreamerModeEnabled,
     "starting_song_count": StartingSongs,
     "additional_song_count": AdditionalSongs,
-    "minimum_song_difficulty": MinimumSongDifficulty,
-    "maximum_song_difficulty": MaximumSongDifficulty,
-    "extra_goal_song_items": ExtraItemsGoalSong,
+    "song_difficulty_mode": DifficultyMode,
+    "music_sheet_count": MusicSheetCount,
+    "music_sheet_win_count": MusicSheetWinCount
 }

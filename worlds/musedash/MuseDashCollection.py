@@ -13,6 +13,8 @@ class MuseDashCollections:
     SongItems: Dict[str, SongData] = {}
     SongLocations: Dict[str, int] = {}
 
+    MusicSheetID: int
+
     def __init__(self, startItemID: int, itemsPerLocation: int):
         currentItemId = startItemID
         currentLocationID = startItemID
@@ -51,8 +53,7 @@ class MuseDashCollections:
                 self.SongLocations[newName] = currentLocationID
                 currentLocationID += 1
 
-        self.VictoryItemID = currentItemId
-        self.EmptyItemID = currentItemId + 1
+        self.MusicSheetID = currentItemId
 
 
     def get_all_songs_with_settings(self, dlcSongs: bool, streamerModeActive: bool, lowerDiffThreshold : int, higherDiffThreshold : int) -> list[str]:
@@ -80,14 +81,8 @@ class MuseDashCollections:
 
         return songList
 
+
     def parse_song_difficulty(self, difficulty : str) -> Optional[int]:
         if (len(difficulty) <= 0 or difficulty == "?" or difficulty == "¿"):
             return None
         return int(difficulty)
-
-    def create_empty_item(self, player) -> MuseDashFixedItem:
-        return MuseDashFixedItem("Nothing", ItemClassification.filler, player, self.EmptyItemID)
-
-
-    def create_victory_item(self, player) -> MuseDashFixedItem:
-        return MuseDashFixedItem("Victory", ItemClassification.progression, player, self.VictoryItemID)
