@@ -54,22 +54,13 @@ class FFPSContext(CommonContext):
         self.recieved_speakers = 0
         self.game = 'FFPS'
 
-    async def connection_closed(self):
-        await super().connection_closed()
-        self.recieved_stages = 0
-        self.recieved_cups = 0
-        self.recieved_speakers = 0
-
     def on_package(self, cmd: str, args: dict):
         asyncio.create_task(process_ffps_cmd(self, cmd, args))
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
-            await super(FFPSContext, self).server_auth(password_requested)
-        if not self.auth:
-            logger.info('Enter slot name:')
-            self.auth = await self.console_input()
-
+            await super().server_auth(password_requested)
+        await self.get_username()
         await self.send_connect()
 
 
@@ -150,6 +141,9 @@ async def process_ffps_cmd(ctx: FFPSContext, cmd: str, args: dict):
             await ctx.send_msgs(sync_msg)
         if start_index == len(ctx.items_received):
             if os.path.exists(os.path.expandvars("%appdata%/MMFApplications/FNAF6")):
+                ctx.recieved_stages = 0
+                ctx.recieved_speakers = 0
+                ctx.recieved_cups = 0
                 for item in args['items']:
                     while True:
                         try:
@@ -220,7 +214,7 @@ async def process_ffps_cmd(ctx: FFPSContext, cmd: str, args: dict):
                     for itm in ctx.items_received:
                         if item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m2" or item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m3" or item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m4" or item_table[FFPSWorld.item_id_to_name[itm.item]].setId == "m5":
                             anim_count += 1
-                    if anim_count >= 4:
+                    if anim_count >= 4 and lines_to_simplify.count("canWin=1") <= 0:
                         temp_lines.append("canWin=1\n")
                     lines_to_simplify = temp_lines
                     while True:
@@ -246,54 +240,55 @@ async def game_watcher(ctx: FFPSContext):
         path = os.path.expandvars("%appdata%/MMFApplications/FNAF6BOUGHT")
         sending = []
         victory = False
-        while True:
-            try:
-                with open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), 'r+') as f:
-                    lines = f.read()
-                    if not lines.__contains__("stage="):
-                        f.write("stage=0\n")
-                    if not lines.__contains__("cups="):
-                        f.write("cups=0\n")
-                    if not lines.__contains__("speakers="):
-                        f.write("speakers=0\n")
-                    if not lines.__contains__("money="):
-                        f.write("money=100\n")
-                    if not lines.__contains__("first="):
-                        f.write("first=1\n")
-                    if not lines.__contains__("night="):
-                        f.write("night=1\n")
-                    if not lines.__contains__("phase="):
-                        f.write("phase=1\n")
-                    f.close()
-                break
-            except PermissionError:
-                continue
-        while True:
-            try:
-                with open(path, 'r') as f:
-                    filesread = f.read()
-                    for name, data in advancement_table.items():
-                        if data.setId == "stage" or data.setId == "cups" or data.setId == "speakers":
-                            for i in range(int([int(s) for s in name.split() if s.isdigit()][0]), 10):
-                                if data.setId+"="+str(i) in filesread and not str(data.id)+"=sent" in filesread:
-                                    sending = sending+[(int(data.id))]
-                                    break
-                        elif data.setId in filesread and data.setId != "" and not str(data.id)+"=sent" in filesread:
-                            sending = sending+[(int(data.id))]
-                    f.close()
-                break
-            except PermissionError:
-                continue
-        while True:
-            try:
-                with open(path, 'r+') as f:
-                    f.read()
-                    for itm in sending:
-                        f.write(str(itm)+"=sent\n")
-                    f.close()
-                break
-            except PermissionError:
-                continue
+        if os.path.exists(path):
+            while True:
+                try:
+                    with open(os.path.expandvars("%appdata%/MMFApplications/FNAF6"), 'r+') as f:
+                        lines = f.read()
+                        if not lines.__contains__("stage="):
+                            f.write("stage=0\n")
+                        if not lines.__contains__("cups="):
+                            f.write("cups=0\n")
+                        if not lines.__contains__("speakers="):
+                            f.write("speakers=0\n")
+                        if not lines.__contains__("money="):
+                            f.write("money=100\n")
+                        if not lines.__contains__("first="):
+                            f.write("first=1\n")
+                        if not lines.__contains__("night="):
+                            f.write("night=1\n")
+                        if not lines.__contains__("phase="):
+                            f.write("phase=1\n")
+                        f.close()
+                    break
+                except PermissionError:
+                    continue
+            while True:
+                try:
+                    with open(path, 'r') as f:
+                        filesread = f.read()
+                        for name, data in advancement_table.items():
+                            if data.setId == "stage" or data.setId == "cups" or data.setId == "speakers":
+                                for i in range(int([int(s) for s in name.split() if s.isdigit()][0]), 10):
+                                    if data.setId+"="+str(i) in filesread and not str(data.id)+"=sent" in filesread:
+                                        sending = sending+[(int(data.id))]
+                                        break
+                            elif data.setId in filesread and data.setId != "" and not str(data.id)+"=sent" in filesread:
+                                sending = sending+[(int(data.id))]
+                        f.close()
+                    break
+                except PermissionError:
+                    continue
+            while True:
+                try:
+                    with open(path, 'r+') as f:
+                        f.read()
+                        for itm in sending:
+                            f.write(str(itm)+"=sent\n")
+                        f.close()
+                    break
+                except PermissionError:
+                    continue
         path = os.path.expandvars("%appdata%/MMFApplications/VICTORYFFPS")
         if os.path.exists(path):
             while True:
