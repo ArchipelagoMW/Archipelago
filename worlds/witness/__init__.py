@@ -156,8 +156,6 @@ class WitnessWorld(World):
         # Put good item on first check if there are any of the designated "good items" in the pool
         good_items_in_the_game = []
 
-        self.items.GOOD_ITEMS = ["Black/White Squares"]
-
         for symbol in self.items.GOOD_ITEMS:
             item = self.items_by_name[symbol]
             if item in self.multiworld.itempool: # Only do this if the item is still in item pool (e.g. after plando)
