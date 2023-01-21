@@ -1,5 +1,7 @@
 from typing import TypedDict
-from Options import DefaultOnToggle, Range, Choice
+from Options import DefaultOnToggle, Range, Choice, OptionSet
+
+from .Overcooked2Levels import Overcooked2Dlc
 
 
 class OC2OnToggle(DefaultOnToggle):
@@ -29,6 +31,13 @@ class DisplayLeaderboardScores(OC2OnToggle):
 class ShuffleLevelOrder(OC2OnToggle):
     """Shuffles the order of kitchens on the overworld map. Also draws from DLC maps."""
     display_name = "Shuffle Level Order"
+
+
+class DLCOptionSet(OptionSet):
+    """Which DLCs should be included in when 'Shuffle Level Order' is enabled?'"""
+    display_name = "DLCOptionSet"
+    default = {"Story"}
+    valid_keys = {dlc.name for dlc in Overcooked2Dlc}
 
 
 class IncludeHordeLevels(OC2OnToggle):
@@ -107,6 +116,7 @@ class StarThresholdScale(Range):
 overcooked_options = {
     # randomization options
     "shuffle_level_order": ShuffleLevelOrder,
+    "include_dlcs": DLCOptionSet,
     "include_horde_levels": IncludeHordeLevels,
     "prep_levels": PrepLevels,
     "kevin_levels": KevinLevels,
