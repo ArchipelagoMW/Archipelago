@@ -61,7 +61,7 @@ class MuseDashCollections:
         songList = list()
 
         for songKey, songData in self.SongItems.items():
-            if (dlcSongs and not songData.default_song):
+            if (not dlcSongs and not songData.default_song):
                 continue
 
             if (streamerModeActive and not songData.streamer_mode):
