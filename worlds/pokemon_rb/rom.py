@@ -75,6 +75,41 @@ def randomize_pokemon(self, mon, mons_list, randomize_type):
     return mon
 
 
+def set_mon_pallets(self, random, data):
+    if self.multiworld.randomize_pokemon_pallets[self.player] == "vanilla":
+        return
+    pallet_map = {
+        "Poison": 0x0F,
+        "Normal": 0x10,
+        "Ice": 0x11,
+        "Fire": 0x12,
+        "Water": 0x13,
+        "Ghost": 0x14,
+        "Ground": 0x15,
+        "Grass": 0x16,
+        "Psychic": 0x17,
+        "Electric": 0x18,
+        "Rock": 0x19,
+        "Dragon": 0x1F,
+        "Flying": 0x20,
+        "Fighting": 0x21,
+        "Bug": 0x22
+    }
+    pallets = []
+    for mon in poke_data.pokemon_data:
+        if self.multiworld.randomize_pokemon_pallets[self.player] == "primary_type":
+            pallet = pallet_map[self.local_poke_data[mon]["type1"]]
+        elif (self.multiworld.randomize_pokemon_pallets[self.player] == "follow_evolutions" and mon in
+              poke_data.evolves_from and poke_data.evolves_from[mon] != "Eevee"):
+            pallet = pallets[-1]
+        else:  # completely_random or follow_evolutions and it is not an evolved form (except eeveelutions)
+            pallet = random.choice(pallet_map.values())
+        pallets.append(pallet)
+    address = rom_addresses["Mon_Pallets"]
+    for pallet in pallets:
+        data[address] = pallet
+        address += 1
+
 def process_trainer_data(self, data):
     mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
                  or self.multiworld.trainer_legendaries[self.player].value]
@@ -526,6 +561,7 @@ def generate_output(self, output_directory: str):
         if data[rom_addresses["Start_Inventory"] + item.code - 172000000] < 255:
             data[rom_addresses["Start_Inventory"] + item.code - 172000000] += 1
 
+    set_mon_pallets(self, random, data)
     process_trainer_data(self, data)
 
     mons = [mon["id"] for mon in poke_data.pokemon_data.values()]

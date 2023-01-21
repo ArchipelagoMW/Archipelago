@@ -513,7 +513,7 @@ class SMZ3World(World):
                         item.item.Progression = False
                         item.location.event = False
                         self.unreachable.append(item.location)
-        self.JunkFillGT(0.5)
+        #self.JunkFillGT(0.5)
 
     def get_pre_fill_items(self):
         if (not self.smz3World.Config.Keysanity):

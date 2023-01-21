@@ -155,6 +155,12 @@ class RandomizeHiddenItems(Choice):
     default = 0
 
 
+class PrizeSanity(Toggle):
+    """Shuffles the TM prizes at the Celadon Prize Corner into the item pool."""
+    display_name = "Prizesanity"
+    default = 0
+
+
 class TrainerSanity(Toggle):
     """Add a location check to every trainer in the game, which can be obtained by talking to a trainer after defeating
     them. Does not affect gym leaders and some scripted event battles (including all Rival, Giovanni, and
@@ -543,6 +549,17 @@ class IceTrapWeight(TrapWeight):
     default = 0
 
 
+class RandomizePokemonPallets(Choice):
+    """Modify pallets of Pokemon. Primary Type will set Pokemons' pallets based on their primary type, Follow
+    Evolutions will randomize pallets but pallets will remain the same through evolutions (except Eeveelutions),
+    Completely Random will randomize all Pokemons' pallets individually"""
+    display_name = "Randomize Pokemon Pallets"
+    option_vanilla = 0
+    option_primary_type = 1
+    option_follow_evolutions = 2
+    option_completely_random = 3
+
+
 pokemon_rb_options = {
     "game_version": GameVersion,
     "trainer_name": TrainerName,
@@ -561,6 +578,7 @@ pokemon_rb_options = {
     "extra_strength_boulders": ExtraStrengthBoulders,
     "require_item_finder": RequireItemFinder,
     "randomize_hidden_items": RandomizeHiddenItems,
+    "prizesanity": PrizeSanity,
     "trainersanity": TrainerSanity,
     "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
     "free_fly_location": FreeFlyLocation,
@@ -604,5 +622,6 @@ pokemon_rb_options = {
     "fire_trap_weight": FireTrapWeight,
     "paralyze_trap_weight": ParalyzeTrapWeight,
     "ice_trap_weight": IceTrapWeight,
+    "randomize_pokemon_pallets": RandomizePokemonPallets,
     "death_link": DeathLink
 }
