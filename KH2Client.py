@@ -161,12 +161,12 @@ class KH2Context(CommonContext):
         else:
             return []
 
-    async def shutdown(self):
-        await super(KH2Context, self).shutdown()
-        for root, dirs, files in os.walk(self.game_communication_path):
-            for file in files:
-                if file.find("obtain") <= -1:
-                    os.remove(root+"/"+file)
+    #async def shutdown(self):
+    #    await super(KH2Context, self).shutdown()
+    #    for root, dirs, files in os.walk(self.game_communication_path):
+    #        for file in files:
+    #            if file.find("obtain") <= -1:
+    #                os.remove(root+"/"+file)
 
 
 
@@ -241,9 +241,16 @@ class KH2Context(CommonContext):
             self.kh2.write_bytes(self.kh2.base_address + self.Save+itemcode.memaddr,(amount+1).to_bytes(1,'big'),1)
 
     async def ItemSafe(self,args,svestate):
-        while self.worldid[int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x0714DB8,1), "big")]==9:
-            await asyncio.sleep(1) 
-        await self.roomSave(args,svestate)
+        try:
+            while self.worldid[int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x0714DB8,1), "big")]==9:
+                await asyncio.sleep(1) 
+            await self.roomSave(args,svestate)
+        except:
+            if self.kh2connected:
+                logger.info("Connection Lost, Please /autotrack")
+                self.kh2connected = False
+                return
+
         #print("Your Item Is now Safe")
 
 
@@ -309,9 +316,10 @@ class KH2Context(CommonContext):
         try:
             curworldid=(self.worldid[int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x0714DB8,1), "big")])
         except:
-            logger.debug("Connection Lost, Please /autotrack")
-            self.connected = False
-            return
+            if self.kh2connected:
+                logger.info("Connection Lost, Please /autotrack")
+                self.kh2connected = False
+                return
         for location,data in curworldid.items():
             if location not in self.locations_checked:
                 try:
@@ -322,9 +330,10 @@ class KH2Context(CommonContext):
                         #message = [{"cmd": 'LocationChecks', "locations": sending}]
                         
                 except:
-                    logger.debug("Connection Lost, Please /autotrack")
-                    self.connected = False
-                    return
+                    if self.kh2connected:
+                        logger.info("Connection Lost, Please /autotrack")
+                        self.kh2connected = False
+                        return
         #print(WorldLocations.SoraLevels.items())
         
     async def checkLevels(self):
@@ -340,9 +349,10 @@ class KH2Context(CommonContext):
                     else:
                          break
                 except:
-                    logger.debug("Connection Lost, Please /autotrack")
-                    self.connected = False
-                    return
+                    if self.kh2connected:
+                        logger.info("Connection Lost, Please /autotrack")
+                        self.kh2connected = False
+                        return
         #i=1
         formDict = {0: WorldLocations.ValorLevels, 1:  WorldLocations.WisdomLevels, 2:  WorldLocations.LimitLevels, 3:  WorldLocations.MasterLevels, 4:  WorldLocations.FinalLevels}
         for i in range(5):
@@ -354,9 +364,10 @@ class KH2Context(CommonContext):
                             self.locations_checked.add(location)
                             self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
                     except:
-                        logger.debug("Connection Lost, Please /autotrack")
-                        self.connected = False
-                        return
+                        if self.kh2connected:
+                            logger.info("Connection Lost, Please /autotrack")
+                            self.kh2connected = False
+                            return
 
 
     #checks for items that has checks on their item slot
@@ -368,8 +379,9 @@ class KH2Context(CommonContext):
                         self.locations_checked.add(location)
                         self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
                 except:
-                    logger.debug("Connection Lost, Please /autotrack")
-                    self.connected = False
+                    if self.kh2connected:
+                        logger.info("Connection Lost, Please /autotrack")
+                        self.kh2connected = False
                     return
         for location,data in WorldLocations.formSlots.items():
             if location not in self.locations_checked:
@@ -378,9 +390,10 @@ class KH2Context(CommonContext):
                         self.locations_checked.add(location)
                         self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
                 except:
-                    logger.debug("Connection Lost, Please /autotrack")
-                    self.connected = False
-                    return
+                    if self.kh2connected:
+                        logger.info("Connection Lost, Please /autotrack")
+                        self.kh2connected = False
+                        return
   
   
 
@@ -420,7 +433,7 @@ async def kh2_watcher(ctx: KH2Context):
                     ctx.KH2_status = CONNECTION_RESET_STATUS
                     ctx.kh2connected = False
             except:
-                logger.debug("Connection Lost, Please /autotrack")
+                logger.info("Connection Lost, Please /autotrack")
                 ctx.KH2_status = CONNECTION_RESET_STATUS
                 ctx.kh2connected = False
             
