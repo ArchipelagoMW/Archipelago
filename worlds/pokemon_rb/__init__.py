@@ -190,8 +190,9 @@ class PokemonRedBlueWorld(World):
                 item = self.create_filler()
             else:
                 item = self.create_item(location.original_item)
+                combined_traps = self.multiworld.poison_trap_weight[self.player].value + self.multiworld.fire_trap_weight[self.player].value + self.multiworld.paralyze_trap_weight[self.player].value + self.multiworld.ice_trap_weight[self.player].value
                 if (item.classification == ItemClassification.filler and self.multiworld.random.randint(1, 100)
-                        <= self.multiworld.trap_percentage[self.player].value):
+                        <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
                     item = self.create_item(self.select_trap())
             if location.event:
                 self.multiworld.get_location(location.name, self.player).place_locked_item(item)
@@ -349,6 +350,7 @@ class PokemonRedBlueWorld(World):
             "elite_four_condition": self.multiworld.elite_four_condition[self.player].value,
             "victory_road_condition": self.multiworld.victory_road_condition[self.player].value,
             "viridian_gym_condition": self.multiworld.viridian_gym_condition[self.player].value,
+            "cerulean_cave_condition": self.multiworld.cerulean_cave_condition[self.player].value,
             "free_fly_map": self.fly_map_code,
             "extra_badges": self.extra_badges,
             "type_chart": self.type_chart,
