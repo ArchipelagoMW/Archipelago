@@ -119,8 +119,15 @@ class KH2World(World):
         # Option to turn off Promise Charm Item
         if self.multiworld.Promise_Charm[self.player].value == 0:
             self.exclude.add(ItemName.PromiseCharm)
+   
 
         
+        if self.multiworld.Visit_locking[self.player]==0:
+            for item in {ItemName.BattlefieldsofWar ,ItemName.SwordoftheAncestor,ItemName.BeastsClaw,ItemName.BoneFist,ItemName.ProudFang,
+                         ItemName.SkillandCrossbones,ItemName.Scimitar,ItemName.MembershipCard,ItemName.IceCream,ItemName.Picture,ItemName.WaytotheDawn,
+                         ItemName.IdentityDisk, ItemName.Poster,ItemName.NamineSketches}:
+                self.exclude.add(item)
+                self.multiworld.push_precollected(self.create_item(item))
 
         # Option to turn off all superbosses. Can do this individually but its like 20+ checks
         if self.multiworld.Super_Bosses[self.player].value == 0:

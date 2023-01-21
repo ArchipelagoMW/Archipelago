@@ -315,25 +315,24 @@ class KH2Context(CommonContext):
     async def checkWorldLocations(self):
         try:
             curworldid=(self.worldid[int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x0714DB8,1), "big")])
+            for location,data in curworldid.items():
+                if location not in self.locations_checked:
+                        if(int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save+data.addrObtained,1), "big") & 0x1<<data.bitIndex)>0:
+                            self.locations_checked.add(location)
+                            #message = [{"cmd": 'LocationChecks', "locations": boobies[location]}]
+                            self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
+                            #message = [{"cmd": 'LocationChecks', "locations": sending}]    
+                        elif data.addrObtained<1000:
+                        #    #checking a data check
+                            while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x714DB8+1,1), "big")==data.addrObtained:
+                                if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A0DC00,1), "big")==data.bitIndex:
+                                    self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
+                                await asyncio.sleep(1)
         except:
             if self.kh2connected:
                 logger.info("Connection Lost, Please /autotrack")
                 self.kh2connected = False
                 return
-        for location,data in curworldid.items():
-            if location not in self.locations_checked:
-                try:
-                    if(int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save+data.addrObtained,1), "big") & 0x1<<data.bitIndex)>0:
-                        self.locations_checked.add(location)
-                        #message = [{"cmd": 'LocationChecks', "locations": boobies[location]}]
-                        self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
-                        #message = [{"cmd": 'LocationChecks', "locations": sending}]
-                        
-                except:
-                    if self.kh2connected:
-                        logger.info("Connection Lost, Please /autotrack")
-                        self.kh2connected = False
-                        return
         #print(WorldLocations.SoraLevels.items())
         
     async def checkLevels(self):
