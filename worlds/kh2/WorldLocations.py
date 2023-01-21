@@ -31,8 +31,8 @@ LoD_Checks = {
     LocationName.MountainTrailEther:         WorldLocationData(0x23AD, 5),
     LocationName.MountainTrailMythrilShard:  WorldLocationData(0x23AD, 6),
     LocationName.VillageCaveAreaMap:         WorldLocationData(0x1D96, 6),
-    LocationName.VillageCaveAPBoost:         WorldLocationData(0x23AD, 0),
-    LocationName.VillageCaveDarkShard:       WorldLocationData(0x23AE, 7),
+    LocationName.VillageCaveAPBoost:         WorldLocationData(0x23AD, 7),
+    LocationName.VillageCaveDarkShard:       WorldLocationData(0x23AE, 0),
     LocationName.VillageCaveBonus:           WorldLocationData(0x3709, 3),
     LocationName.RidgeFrostShard:            WorldLocationData(0x23AE, 1),
     LocationName.RidgeAPBoost:               WorldLocationData(0x23AE, 2),
@@ -598,8 +598,8 @@ TWTNW_Checks = {
     LocationName.Xemnas1:                               WorldLocationData(0x3707, 2),
     LocationName.Xemnas1GetBonus:                       WorldLocationData(0x3707, 2),
     LocationName.Xemnas1SecretAnsemReport13:            WorldLocationData(0x1ED4, 5),
-
-    LocationName.FinalXemnas:                           WorldLocationData(0xFFFF, 4),
+    #this is probably not the right room value for final xemnas
+    LocationName.FinalXemnas:                           WorldLocationData(0x61,   1),
     LocationName.XemnasDataPowerBoost:                  WorldLocationData(0x62,   1),
     LocationName.XigbarDataDefenseBoost:                WorldLocationData(0x64,   1),
     LocationName.SaixDataDefenseBoost:                  WorldLocationData(0x66,   1),
