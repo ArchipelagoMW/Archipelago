@@ -176,43 +176,47 @@ class KH2Context(CommonContext):
         #growth is added onto the current growth. Save+0x25CE... is the spots in inventory where they are kept
         #high jump
         if itemcode.memaddr==0x05E:
-            self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25CE)
-            #max growth. Fix this l8r
-            if self.growthlevel | 0x8000 < 0x805E:
-                self.kh2.write_short(self.kh2.base_address + self.Save+0x25CE, 0x05E)
-            elif self.growthlevel | 0x8000 < 0x8061:
-                self.kh2.write_short(self.kh2.base_address + self.Save+0x25CE, self.growthlevel+1)
+           self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25CE)
+           self.ability = self.growthlevel & 0x0FFF
+           if self.ability | 0x8000 < 0x805E:
+               self.kh2.write_short(self.kh2.base_address + self.Save+0x25CE, 0x05E)
+           elif self.ability | 0x8000 < 0x8061:
+               self.kh2.write_short(self.kh2.base_address + self.Save+0x25CE, self.growthlevel+1)
             #quick run
         elif itemcode.memaddr==0x062:
             self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D0)
-            if self.growthlevel | 0x8000 < 0x8062:
+            self.ability = self.growthlevel & 0x0FFF
+            if self.ability | 0x8000 < 0x8062:
                 #giving level one of the ability
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D0, 0x062)
-            elif self.growthlevel | 0x8000 < 0x8065:
+            elif self.ability | 0x8000 < 0x8065:
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D0, self.growthlevel+1)
             #dodge roll
         elif itemcode.memaddr==0x234:
             self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D2)
-            if self.growthlevel | 0x8000 < 0x8234:
+            self.ability = self.growthlevel & 0x0FFF
+            if self.ability | 0x8000 < 0x8234:
                 #giving level one of the ability
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D2, 0x234)
-            elif self.growthlevel | 0x8000 < 0x8237:
+            elif self.ability | 0x8000 < 0x8237:
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D2, self.growthlevel+1)
             #aerial dodge
         elif itemcode.memaddr==0x066:
             self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D4)
-            if self.growthlevel | 0x8000 < 0x8066:
+            self.ability = self.growthlevel & 0x0FFF
+            if self.ability | 0x8000 < 0x8066:
                 #giving level one of the ability
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D4, 0x066)
-            elif self.growthlevel | 0x8000 < 0x8069:
+            elif self.ability | 0x8000 < 0x8069:
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D4, self.growthlevel+1)
             #glide
         else:
             self.growthlevel=self.kh2.read_short(self.kh2.base_address + self.Save+0x25D6)
-            if self.growthlevel | 0x8000 < 0x806A:
+            self.ability = self.growthlevel & 0x0FFF
+            if self.ability | 0x8000 < 0x806A:
                 #giving level one of the ability
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D6, 0x06A)
-            elif self.growthlevel | 0x8000 < 0x806D:
+            elif self.ability | 0x8000 < 0x806D:
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D6, self.growthlevel+1)
         
 #while loop to NOT give item while on death screen
