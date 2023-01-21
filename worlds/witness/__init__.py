@@ -71,6 +71,8 @@ class WitnessWorld(World):
         }
 
     def generate_early(self):
+        self.items_by_name = dict()
+
         if not (is_option_enabled(self.multiworld, self.player, "shuffle_symbols")
                 or get_option_value(self.multiworld, self.player, "shuffle_doors")
                 or is_option_enabled(self.multiworld, self.player, "shuffle_lasers")):
@@ -108,44 +110,25 @@ class WitnessWorld(World):
 
         # Generate item pool
         pool = []
-        items_by_name = dict()
         for item in self.items.ITEM_TABLE:
             for i in range(0, self.items.PROG_ITEM_AMOUNTS[item]):
                 if item in self.items.PROGRESSION_TABLE:
                     witness_item = self.create_item(item)
                     pool.append(witness_item)
-                    items_by_name[item] = witness_item
+                    self.items_by_name[item] = witness_item
 
         less_junk = 0
 
         for precol_item in self.multiworld.precollected_items[self.player]:
-            if precol_item.name in items_by_name:  # if item is in the pool, remove 1 instance.
-                item_obj = items_by_name[precol_item.name]
+            if precol_item.name in self.items_by_name:  # if item is in the pool, remove 1 instance.
+                item_obj = self.items_by_name[precol_item.name]
 
                 if item_obj in pool:
                     pool.remove(item_obj) # remove one instance of this pre-collected item if it exists
 
-        # Put good item on first check if there are any of the designated "good items" in the pool
-        good_items_in_the_game = []
-
-        for symbol in self.items.GOOD_ITEMS:
-            if items_by_name[symbol] in pool:
-                good_items_in_the_game.append(symbol)
-
-        if good_items_in_the_game:
-            random_good_item = self.multiworld.random.choice(good_items_in_the_game)
-
-            first_check = self.multiworld.get_location(
-                "Tutorial Gate Open", self.player
-            )
-            first_check.place_locked_item(items_by_name[random_good_item])
-            pool.remove(items_by_name[random_good_item])
-
-            less_junk = 1
-
         for item in self.player_logic.STARTING_INVENTORY:
-            self.multiworld.push_precollected(items_by_name[item])
-            pool.remove(items_by_name[item])
+            self.multiworld.push_precollected(self.items_by_name[item])
+            pool.remove(self.items_by_name[item])
 
         for item in self.items.EXTRA_AMOUNTS:
             for i in range(0, self.items.EXTRA_AMOUNTS[item]):
@@ -168,6 +151,28 @@ class WitnessWorld(World):
             location_obj.place_locked_item(item_obj)
 
         self.multiworld.itempool += pool
+
+    def pre_fill(self):
+        # Put good item on first check if there are any of the designated "good items" in the pool
+        good_items_in_the_game = []
+
+        self.items.GOOD_ITEMS = ["Black/White Squares"]
+
+        for symbol in self.items.GOOD_ITEMS:
+            item = self.items_by_name[symbol]
+            if item in self.multiworld.itempool: # Only do this if the item is still in item pool (e.g. after plando)
+                good_items_in_the_game.append(symbol)
+
+        if good_items_in_the_game:
+            random_good_item = self.multiworld.random.choice(good_items_in_the_game)
+
+            first_check = self.multiworld.get_location(
+                "Tutorial Gate Open", self.player
+            )
+            item = self.items_by_name[random_good_item]
+
+            first_check.place_locked_item(item)
+            self.multiworld.itempool.remove(item)
 
     def set_rules(self):
         set_rules(self.multiworld, self.player, self.player_logic, self.locat)
