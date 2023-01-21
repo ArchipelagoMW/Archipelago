@@ -147,6 +147,7 @@ class KH2Context(CommonContext):
         await self.send_connect()
 
     async def connection_closed(self):
+        self.kh2connected=False
         await super(KH2Context, self).connection_closed()
 
     @property
