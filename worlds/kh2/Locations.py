@@ -243,10 +243,10 @@ BC_Checks = {
     #These checks might be messed up with how the tracker douments them
     #Might not be in the right order so be sure to test that fuuture me
     LocationName.TheWestHallHiPotion:                    LocationData(0x1300AD, 0x14946,  0x23BC, 1, 41, "Chest"),           
-    LocationName.TheWestHallPowerShard:                  LocationData(0x1300AE, 0x14952,  0x23BC, 2, 207, "Chest"),          
-    LocationName.TheWestHallAPBoost:                     LocationData(0x1300AF, 0x1495E,  0x23BC, 3, 158, "Chest"),          
-    LocationName.TheWestHallBrightStone:                 LocationData(0x1300B0, 0x1496A,  0x23BC, 4, 159, "Chest"),          
-    LocationName.TheWestHallMythrilShard:                LocationData(0x1300B1, 0x14976,  0x23BB, 5, 206, "Chest"),          
+    LocationName.TheWestHallPowerShard   :               LocationData(0x1300AE, 0x14952,  0x23BC, 2, 207, "Chest"),          
+    LocationName.TheWestHallMythrilShard2:               LocationData(0x1300AF, 0x1495E,  0x23BC, 3, 158, "Chest"),          
+    LocationName.TheWestHallBrightStone  :               LocationData(0x1300B0, 0x1496A,  0x23BC, 4, 159, "Chest"),          
+    LocationName.TheWestHallMythrilShard :               LocationData(0x1300B1, 0x14976,  0x23BB, 5, 206, "Chest"),          
     LocationName.Thresholder:                            LocationData(0x1300B2, 0x2A9D8,  0x3704, 2, 2, "Get Bonus"),        
     LocationName.DungeonBasementMap:                     LocationData(0x1300B3, 0x1498E,  0x23BD, 0, 239, "Chest"),          
     LocationName.DungeonAPBoost:                         LocationData(0x1300B4, 0x1499A,  0x23BD, 1, 43, "Chest"),           

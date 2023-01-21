@@ -131,17 +131,12 @@ class KH2Context(CommonContext):
         self.Bt10 = 0x2A74880
         self.BtlEnd = 0x2A0D3E0
         self.Slot1 = 0x2A20C98
-        self.SoraLevel=0
+        #self.SoraLevel=0
         self.ValorLevel=0
         self.WisdomLevel=0
         self.LimitLevel=0
         self.MasterLevel=0
         self.FinalLevel=0
-        self.highjumplevel=0
-        self.quickrunlevel=0
-        self.dodgerolllevel=0
-        self.aerialdodgelevel=0
-        self.glidelevel=0
         #self.SoraLevel=0
         #short for ability byte for items
 
@@ -152,7 +147,7 @@ class KH2Context(CommonContext):
         await self.send_connect()
 
     async def connection_closed(self):
-        print("ya")
+        await super(KH2Context, self).connection_closed()
 
     @property
     def endpoints(self):
@@ -161,12 +156,8 @@ class KH2Context(CommonContext):
         else:
             return []
 
-    #async def shutdown(self):
-    #    await super(KH2Context, self).shutdown()
-    #    for root, dirs, files in os.walk(self.game_communication_path):
-    #        for file in files:
-    #            if file.find("obtain") <= -1:
-    #                os.remove(root+"/"+file)
+    async def shutdown(self):
+        await super(KH2Context, self).shutdown()
 
 
 
@@ -224,26 +215,34 @@ class KH2Context(CommonContext):
 #initialize the room before the while loop. Probably at the start of a package
 #figure out if the room and the going into the room is the same address. I.E. the little platform going into xigbar fight
 #look into wait functions to wait for address changes
-    def give_item(self,itemcode):
+    async def give_item(self,itemcode):
         itemMemory=0
-        if itemcode.ability:
-            #forms are handled in the goa so they are put in the back of inventory no matter what
-            if itemcode.memaddr in {0x05E,0x062,0x066,0x06A,0x234}:
-                self.give_growth(itemcode)
-                #return
+        try:
+            while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x0714DB8,1), "big")==255:
+                await asyncio.sleep(1)
+        
+            if itemcode.ability:
+                #forms are handled in the goa so they are put in the back of inventory no matter what
+                if itemcode.memaddr in {0x05E,0x062,0x066,0x06A,0x234}:
+                    self.give_growth(itemcode)
+                    #return
+                else:
+                    self.kh2.write_short(self.kh2.base_address + self.Save+self.backofinventory, itemcode.memaddr)
+                    self.backofinventory-=2
+            elif itemcode.bitmask>0:
+                itemMemory=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
+                #write item into the address of that item. then turn on the bitmask of the item.
+                #player has final form
+                self.kh2.write_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,(itemMemory|0x01<<itemcode.bitmask).to_bytes(1,'big'),1)
             else:
-                self.kh2.write_short(self.kh2.base_address + self.Save+self.backofinventory, itemcode.memaddr)
-                self.backofinventory-=2
-        elif itemcode.bitmask>0:
-            itemMemory=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
-            #write item into the address of that item. then turn on the bitmask of the item.
-            #player has final form
-            self.kh2.write_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,(itemMemory|0x01<<itemcode.bitmask).to_bytes(1,'big'),1)
-        else:
-            #Increasing the memory for item by 1 byte
-            amount=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
-            self.kh2.write_bytes(self.kh2.base_address + self.Save+itemcode.memaddr,(amount+1).to_bytes(1,'big'),1)
-
+                #Increasing the memory for item by 1 byte
+                amount=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
+                self.kh2.write_bytes(self.kh2.base_address + self.Save+itemcode.memaddr,(amount+1).to_bytes(1,'big'),1)
+        except:
+            if self.kh2connected:
+                logger.info("Connection Lost, Please /autotrack")
+                self.kh2connected = False
+                return
     async def ItemSafe(self,args,svestate):
         try:
             while self.worldid[int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x0714DB8,1), "big")]==9:
@@ -295,9 +294,15 @@ class KH2Context(CommonContext):
                     itemname=self.lookup_id_to_item[item.item]
                     itemcode=self.item_name_to_data[itemname]
                     #default false
-                    self.give_item(itemcode)
-                svestate=self.kh2.read_short(self.kh2.base_address+self.sveroom)  
-                asyncio.create_task(self.ItemSafe(args,svestate))
+                    asyncio.create_task(self.give_item(itemcode))
+                try:
+                    svestate=self.kh2.read_short(self.kh2.base_address+self.sveroom)  
+                    asyncio.create_task(self.ItemSafe(args,svestate))
+                except:
+                    if self.kh2connected:
+                        logger.info("Connection Lost, Please /autotrack")
+                        self.kh2connected = False
+                        return
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:
                 new_locations = set(args["checked_locations"])
@@ -343,10 +348,11 @@ class KH2Context(CommonContext):
         for location,data in WorldLocations.SoraLevels.items():
             if location not in self.locations_checked:
                 try:
-                    if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + 0x24FF,1), "big")-1>self.SoraLevel:
+                    print(int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + 0x24FF,1), "big"))
+                    if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + 0x24FF,1), "big")>=data.bitIndex:
                         self.locations_checked.add(location)
                         #message = [{"cmd": 'LocationChecks', "locations": boobies[location]}]
-                        self.SoraLevel+=1
+                        #self.SoraLevel+=1
                         self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
                         #message = [{"cmd": 'LocationChecks', "locations": sending}]
                     else:
@@ -363,6 +369,7 @@ class KH2Context(CommonContext):
                 if location not in self.locations_checked:
                     #print(location)
                     try:
+                        
                         if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + data.addrObtained,1), "big")>=data.bitIndex:
                             self.locations_checked.add(location)
                             self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
@@ -439,10 +446,7 @@ async def kh2_watcher(ctx: KH2Context):
                 logger.info("Connection Lost, Please /autotrack")
                 ctx.KH2_status = CONNECTION_RESET_STATUS
                 ctx.kh2connected = False
-            
-        else:
-            await asyncio.sleep(1) 
-      
+        await asyncio.sleep(1)   
             
 
 
