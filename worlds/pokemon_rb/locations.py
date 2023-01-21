@@ -28,6 +28,9 @@ def always_on(multiworld, player):
     return True
 
 
+def gamecornersanity(multiworld, player):
+    return True
+
 
 class LocationData:
 
@@ -712,6 +715,10 @@ location_data = [
     LocationData("Indigo Plateau", "Bruno", None, rom_addresses["Trainersanity_EVENT_BEAT_BRUNOS_ROOM_TRAINER_0_ITEM"], EventFlag(20), inclusion=trainersanity),
     LocationData("Indigo Plateau", "Agatha", None, rom_addresses["Trainersanity_EVENT_BEAT_AGATHAS_ROOM_TRAINER_0_ITEM"], EventFlag(19), inclusion=trainersanity),
     LocationData("Indigo Plateau", "Lance", None, rom_addresses["Trainersanity_EVENT_BEAT_LANCES_ROOM_TRAINER_0_ITEM"], EventFlag(18), inclusion=trainersanity),
+
+    LocationData("Celadon Prize Corner", "Item Prize 1", "TM23 Dragon Rage", rom_addresses["Prize_Item_A"], EventFlag(0x69a), inclusion=gamecornersanity),
+    LocationData("Celadon Prize Corner", "Item Prize 2", "TM15 Hyper Beam", rom_addresses["Prize_Item_B"], EventFlag(0x69B), inclusion=gamecornersanity),
+    LocationData("Celadon Prize Corner", "Item Prize 3", "TM50 Substitute", rom_addresses["Prize_Item_C"], EventFlag(0x69C), inclusion=gamecornersanity),
 
     LocationData("Indigo Plateau", "Become Champion", "Become Champion", event=True),
     LocationData("Pokemon Tower 7F", "Fuji Saved", "Fuji Saved", event=True),
