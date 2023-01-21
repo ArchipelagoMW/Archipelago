@@ -72,47 +72,47 @@ class AutoLogicRegister(type):
         return new_class
 
 
-def call_single(world: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
-    method = getattr(world.worlds[player], method_name)
+def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
+    method = getattr(multiworld.worlds[player], method_name)
     return method(*args)
 
 
-def call_all(world: "MultiWorld", method_name: str, *args: Any) -> None:
+def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
     world_types: Set[AutoWorldRegister] = set()
-    for player in world.player_ids:
-        prev_item_count = len(world.itempool)
-        world_types.add(world.worlds[player].__class__)
-        call_single(world, method_name, player, *args)
+    for player in multiworld.player_ids:
+        prev_item_count = len(multiworld.itempool)
+        world_types.add(multiworld.worlds[player].__class__)
+        call_single(multiworld, method_name, player, *args)
         if __debug__:
-            new_items = world.itempool[prev_item_count:]
+            new_items = multiworld.itempool[prev_item_count:]
             for i, item in enumerate(new_items):
                 for other in new_items[i+1:]:
                     assert item is not other, (
-                        f"Duplicate item reference of \"{item.name}\" in \"{world.worlds[player].game}\" "
-                        f"of player \"{world.player_name[player]}\". Please make a copy instead.")
+                        f"Duplicate item reference of \"{item.name}\" in \"{multiworld.worlds[player].game}\" "
+                        f"of player \"{multiworld.player_name[player]}\". Please make a copy instead.")
 
     # TODO: investigate: Iterating through a set is not a deterministic order.
     # If any random is used, this could make unreproducible seed.
     for world_type in world_types:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
-            stage_callable(world, *args)
+            stage_callable(multiworld, *args)
 
 
-def call_stage(world: "MultiWorld", method_name: str, *args: Any) -> None:
-    world_types = {world.worlds[player].__class__ for player in world.player_ids}
+def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
+    world_types = {multiworld.worlds[player].__class__ for player in multiworld.player_ids}
     for world_type in world_types:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
-            stage_callable(world, *args)
+            stage_callable(multiworld, *args)
 
 
 class WebWorld:
     """Webhost integration"""
-    
+
     settings_page: Union[bool, str] = True
     """display a settings page. Can be a link to a specific page or external tool."""
-    
+
     game_info_languages: List[str] = ['en']
     """docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'"""
 
@@ -160,22 +160,6 @@ class World(metaclass=AutoWorldRegister):
 
     hint_blacklist: ClassVar[FrozenSet[str]] = frozenset()  # any names that should not be hintable
 
-    # NOTE: remote_items and remote_start_inventory are now available in the network protocol for the client to set.
-    # These values will be removed.
-    # if a world is set to remote_items, then it just needs to send location checks to the server and the server
-    # sends back the items
-    # if a world is set to remote_items = False, then the server never sends an item where receiver == finder,
-    # the client finds its own items in its own world.
-    remote_items: bool = True
-
-    # If remote_start_inventory is true, the start_inventory/world.precollected_items is sent on connection,
-    # otherwise the world implementation is in charge of writing the items to their output data.
-    remote_start_inventory: bool = True
-
-    # For games where after a victory it is impossible to go back in and get additional/remaining Locations checked.
-    # this forces forfeit:  auto for those games.
-    forced_auto_forfeit: bool = False
-
     # Hide World Type from various views. Does not remove functionality.
     hidden: ClassVar[bool] = False
 
@@ -196,8 +180,8 @@ class World(metaclass=AutoWorldRegister):
     zip_path: ClassVar[Optional[pathlib.Path]] = None  # If loaded from a .apworld, this is the Path to it.
     __file__: ClassVar[str]  # path it was loaded from
 
-    def __init__(self, world: "MultiWorld", player: int):
-        self.multiworld = world
+    def __init__(self, multiworld: "MultiWorld", player: int):
+        self.multiworld = multiworld
         self.player = player
 
     # overridable methods that get called by Main.py, sorted by execution order
@@ -251,7 +235,10 @@ class World(metaclass=AutoWorldRegister):
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
         """Fill in the `slot_data` field in the `Connected` network package.
         This is a way the generator can give custom data to the client.
-        The client will receive this as JSON in the `Connected` response."""
+        The client will receive this as JSON in the `Connected` response.
+
+        The generation does not wait for `generate_output` to complete before calling this.
+        `threading.Event` can be used if you need to wait for something from `generate_output`."""
         return {}
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):

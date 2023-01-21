@@ -32,6 +32,7 @@ fossil scientist. This may require reviving a number of fossils, depending on yo
 * Much of the dialogue throughout the game has been removed or shortened.
 * If the Old Man is blocking your way through Viridian City, you do not have Oak's Parcel in your inventory, and you've
 exhausted your money and Poké Balls, you can get a free Poké Ball from your mom.
+* HM moves can be overwritten if you have the HM for it in your bag.
 
 ## What items and locations get shuffled?
 

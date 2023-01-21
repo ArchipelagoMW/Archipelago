@@ -21,14 +21,14 @@ STARPORT_UNITS = {"Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "He
 PROTOSS_REGIONS = {"A Sinister Turn", "Echoes of the Future", "In Utter Darkness"}
 
 
-def filter_missions(world: MultiWorld, player: int) -> Dict[str, List[str]]:
+def filter_missions(multiworld: MultiWorld, player: int) -> Dict[str, List[str]]:
     """
     Returns a semi-randomly pruned tuple of no-build, easy, medium, and hard mission sets
     """
 
-    mission_order_type = get_option_value(world, player, "mission_order")
-    shuffle_protoss = get_option_value(world, player, "shuffle_protoss")
-    excluded_missions = set(get_option_set_value(world, player, "excluded_missions"))
+    mission_order_type = get_option_value(multiworld, player, "mission_order")
+    shuffle_protoss = get_option_value(multiworld, player, "shuffle_protoss")
+    excluded_missions = set(get_option_set_value(multiworld, player, "excluded_missions"))
     invalid_mission_names = excluded_missions.difference(vanilla_mission_req_table.keys())
     if invalid_mission_names:
         raise Exception("Error in locked_missions - the following are not valid mission names: " + ", ".join(invalid_mission_names))
@@ -54,17 +54,17 @@ def filter_missions(world: MultiWorld, player: int) -> Dict[str, List[str]]:
         excluded_missions = excluded_missions.union(PROTOSS_REGIONS)
     # Replacing All-In on low mission counts
     if mission_count < 14:
-        final_mission = world.random.choice([mission for mission in alt_final_mission_locations.keys() if mission not in excluded_missions])
+        final_mission = multiworld.random.choice([mission for mission in alt_final_mission_locations.keys() if mission not in excluded_missions])
         excluded_missions.add(final_mission)
     else:
         final_mission = 'All-In'
     # Yaml settings determine which missions can be placed in the first slot
-    mission_pools[0] = [mission for mission in get_starting_mission_locations(world, player).keys() if mission not in excluded_missions]
+    mission_pools[0] = [mission for mission in get_starting_mission_locations(multiworld, player).keys() if mission not in excluded_missions]
     # Removing the new no-build missions from their original sets
     for i in range(1, len(mission_pools)):
         mission_pools[i] = [mission for mission in mission_pools[i] if mission not in excluded_missions.union(mission_pools[0])]
     # If the first mission is a build mission, there may not be enough locations to reach Outbreak as a second mission
-    if not get_option_value(world, player, 'shuffle_no_build'):
+    if not get_option_value(multiworld, player, 'shuffle_no_build'):
         # Swapping Outbreak and The Great Train Robbery
         if "Outbreak" in mission_pools[1]:
             mission_pools[1].remove("Outbreak")
@@ -87,7 +87,7 @@ def filter_missions(world: MultiWorld, player: int) -> Dict[str, List[str]]:
             if all(len(mission_pool) <= 1 for mission_pool in mission_pools):
                 raise Exception("Not enough missions available to fill the campaign on current settings.  Please exclude fewer missions.")
         else:
-            mission_pool.remove(world.random.choice(mission_pool))
+            mission_pool.remove(multiworld.random.choice(mission_pool))
             current_count -= 1
         set_cycle += 1
 
@@ -134,7 +134,7 @@ class ValidInventory:
         }
         requirements = mission_requirements
         cascade_keys = self.cascade_removal_map.keys()
-        units_always_have_upgrades = get_option_value(self.world, self.player, "units_always_have_upgrades")
+        units_always_have_upgrades = get_option_value(self.multiworld, self.player, "units_always_have_upgrades")
         if self.min_units_per_structure > 0:
             requirements.append(lambda state: state.has_units_per_structure())
 
@@ -155,7 +155,7 @@ class ValidInventory:
             if len(inventory) == 0:
                 raise Exception("Reduced item pool generation failed - not enough locations available to place items.")
             # Select random item from removable items
-            item = self.world.random.choice(inventory)
+            item = self.multiworld.random.choice(inventory)
             # Cascade removals to associated items
             if item in cascade_keys:
                 items_to_remove = self.cascade_removal_map[item]
@@ -206,10 +206,10 @@ class ValidInventory:
         self._sc2wol_has_mm_upgrade = lambda world, player: SC2WoLLogic._sc2wol_has_mm_upgrade(self, world, player)
         self._sc2wol_final_mission_requirements = lambda world, player: SC2WoLLogic._sc2wol_final_mission_requirements(self, world, player)
 
-    def __init__(self, world: MultiWorld, player: int,
+    def __init__(self, multiworld: MultiWorld, player: int,
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],
                  has_protoss: bool):
-        self.world = world
+        self.multiworld = multiworld
         self.player = player
         self.logical_inventory = set()
         self.locked_items = locked_items[:]
@@ -219,7 +219,7 @@ class ValidInventory:
         self.item_pool = []
         item_quantities: dict[str, int] = dict()
         # Inventory restrictiveness based on number of missions with checks
-        mission_order_type = get_option_value(self.world, self.player, "mission_order")
+        mission_order_type = get_option_value(self.multiworld, self.player, "mission_order")
         mission_count = len(mission_orders[mission_order_type]) - 1
         self.min_units_per_structure = int(mission_count / 7)
         min_upgrades = 1 if mission_count < 10 else 2
@@ -244,12 +244,12 @@ class ValidInventory:
                 upgrades = get_item_upgrades(self.item_pool, item)
                 associated_items = [*upgrades, item]
                 self.cascade_removal_map[item] = associated_items
-                if get_option_value(world, player, "units_always_have_upgrades"):
+                if get_option_value(multiworld, player, "units_always_have_upgrades"):
                     for upgrade in upgrades:
                         self.cascade_removal_map[upgrade] = associated_items
 
 
-def filter_items(world: MultiWorld, player: int, mission_req_table: Dict[str, MissionInfo], location_cache: List[Location],
+def filter_items(multiworld: MultiWorld, player: int, mission_req_table: Dict[str, MissionInfo], location_cache: List[Location],
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item]) -> List[Item]:
     """
     Returns a semi-randomly pruned set of items based on number of available locations.
@@ -259,7 +259,7 @@ def filter_items(world: MultiWorld, player: int, mission_req_table: Dict[str, Mi
     inventory_size = len(open_locations)
     has_protoss = bool(PROTOSS_REGIONS.intersection(mission_req_table.keys()))
     mission_requirements = [location.access_rule for location in location_cache]
-    valid_inventory = ValidInventory(world, player, item_pool, existing_items, locked_items, has_protoss)
+    valid_inventory = ValidInventory(multiworld, player, item_pool, existing_items, locked_items, has_protoss)
 
     valid_items = valid_inventory.generate_reduced_inventory(inventory_size, mission_requirements)
     return valid_items

@@ -1,6 +1,6 @@
 import typing
 import random
-from Options import Option, DefaultOnToggle, Toggle, Range, OptionList, DeathLink
+from Options import Option, DefaultOnToggle, Toggle, Range, OptionList, OptionSet, DeathLink
 from .LogicTricks import normalized_name_tricks
 from .ColorSFXOptions import *
 
@@ -92,6 +92,7 @@ class Bridge(Choice):
     option_medallions = 3
     option_dungeons = 4
     option_tokens = 5
+    option_hearts = 6
     default = 3
 
 
@@ -135,9 +136,21 @@ class GrottoEntrances(Toggle):
     display_name = "Shuffle Grotto/Grave Entrances"
 
 
-class DungeonEntrances(Toggle):
-    """Shuffles dungeon entrances, excluding Ganon's Castle. Opens Deku, Fire and BotW to both ages."""
+class DungeonEntrances(Choice):
+    """Shuffles dungeon entrances. Opens Deku, Fire and BotW to both ages. "All" includes Ganon's Castle."""
     display_name = "Shuffle Dungeon Entrances"
+    option_off = 0
+    option_simple = 1
+    option_all = 2
+    alias_true = 1
+
+
+class BossEntrances(Choice):
+    """Shuffles boss entrances. "Limited" prevents age-mixing of bosses."""
+    display_name = "Shuffle Boss Entrances"
+    option_off = 0
+    option_limited = 1
+    option_full = 2
 
 
 class OverworldEntrances(Toggle):
@@ -155,9 +168,14 @@ class WarpSongs(Toggle):
     display_name = "Randomize Warp Songs"
 
 
-class SpawnPositions(Toggle):
+class SpawnPositions(Choice):
     """Randomizes the starting position on loading a save. Consistent between savewarps."""
     display_name = "Randomize Spawn Positions"
+    option_off = 0
+    option_child = 1
+    option_adult = 2
+    option_both = 3
+    alias_true = 3
 
 
 class MixEntrancePools(Choice):
@@ -203,12 +221,94 @@ class LogicalChus(Toggle):
     display_name = "Bombchus Considered in Logic"
 
 
-class MQDungeons(TrackRandomRange):
-    """Number of MQ dungeons. The dungeons to replace are randomly selected."""
-    display_name = "Number of MQ Dungeons"
+class DungeonShortcuts(Choice):
+    """Shortcuts to dungeon bosses are available without any requirements."""
+    display_name = "Dungeon Boss Shortcuts Mode"
+    option_off = 0
+    option_choice = 1
+    option_all = 2
+    option_random_dungeons = 3
+
+
+class DungeonShortcutsList(OptionSet):
+    """Chosen dungeons to have shortcuts."""
+    display_name = "Shortcut Dungeons"
+    valid_keys = {
+        "Deku Tree",
+        "Dodongo's Cavern",
+        "Jabu Jabu's Belly",
+        "Forest Temple",
+        "Fire Temple",
+        "Water Temple",
+        "Shadow Temple",
+        "Spirit Temple",
+    }
+
+
+class MQDungeons(Choice):
+    """Choose between vanilla and Master Quest dungeon layouts."""
+    display_name = "MQ Dungeon Mode"
+    option_vanilla = 0
+    option_mq = 1
+    option_specific = 2
+    option_count = 3
+
+
+class MQDungeonList(OptionSet):
+    """Chosen dungeons to be MQ layout."""
+    display_name = "MQ Dungeon List"
+    valid_keys = {
+        "Deku Tree",
+        "Dodongo's Cavern",
+        "Jabu Jabu's Belly",
+        "Forest Temple",
+        "Fire Temple",
+        "Water Temple",
+        "Shadow Temple",
+        "Spirit Temple",
+        "Bottom of the Well",
+        "Ice Cavern",
+        "Gerudo Training Ground",
+        "Ganon's Castle",
+    }
+
+
+class MQDungeonCount(TrackRandomRange):
+    """Number of MQ dungeons, chosen randomly."""
+    display_name = "MQ Dungeon Count"
     range_start = 0
     range_end = 12
     default = 0
+
+
+class EmptyDungeons(Choice):
+    """Pre-completed dungeons are barren and rewards are given for free."""
+    display_name = "Pre-completed Dungeons Mode"
+    option_none = 0
+    option_specific = 1
+    option_count = 2
+
+
+class EmptyDungeonList(OptionSet):
+    """Chosen dungeons to be pre-completed."""
+    display_name = "Pre-completed Dungeon List"
+    valid_keys = {
+        "Deku Tree",
+        "Dodongo's Cavern",
+        "Jabu Jabu's Belly",
+        "Forest Temple",
+        "Fire Temple",
+        "Water Temple",
+        "Shadow Temple",
+        "Spirit Temple",
+    }
+
+
+class EmptyDungeonCount(Range):
+    display_name = "Pre-completed Dungeon Count"
+    range_start = 1
+    range_end = 8
+    default = 2
 
 
 world_options: typing.Dict[str, type(Option)] = {
@@ -220,65 +320,76 @@ world_options: typing.Dict[str, type(Option)] = {
     "owl_drops": OwlDrops,
     "warp_songs": WarpSongs,
     "spawn_positions": SpawnPositions,
+    "shuffle_bosses": BossEntrances,
     # "mix_entrance_pools": MixEntrancePools,
     # "decouple_entrances": DecoupleEntrances,
     "triforce_hunt": TriforceHunt, 
     "triforce_goal": TriforceGoal,
     "extra_triforce_percentage": ExtraTriforces,
     "bombchus_in_logic": LogicalChus,
-    "mq_dungeons": MQDungeons,
+
+    "dungeon_shortcuts": DungeonShortcuts,
+    "dungeon_shortcuts_list": DungeonShortcutsList,
+
+    "mq_dungeons_mode": MQDungeons,
+    "mq_dungeons_list": MQDungeonList,
+    "mq_dungeons_count": MQDungeonCount,
+
+    # "empty_dungeons_mode": EmptyDungeons,
+    # "empty_dungeons_list": EmptyDungeonList,
+    # "empty_dungeon_count": EmptyDungeonCount,
 }
 
 
-class LacsCondition(Choice): 
-    """Set the requirements for the Light Arrow Cutscene in the Temple of Time."""
-    display_name = "Light Arrow Cutscene Requirement"
-    option_vanilla = 0
-    option_stones = 1
-    option_medallions = 2
-    option_dungeons = 3
-    option_tokens = 4
+# class LacsCondition(Choice): 
+#     """Set the requirements for the Light Arrow Cutscene in the Temple of Time."""
+#     display_name = "Light Arrow Cutscene Requirement"
+#     option_vanilla = 0
+#     option_stones = 1
+#     option_medallions = 2
+#     option_dungeons = 3
+#     option_tokens = 4
 
 
-class LacsStones(Range):
-    """Set the number of Spiritual Stones required for LACS."""
-    display_name = "Spiritual Stones Required for LACS"
-    range_start = 0
-    range_end = 3
-    default = 3
+# class LacsStones(Range):
+#     """Set the number of Spiritual Stones required for LACS."""
+#     display_name = "Spiritual Stones Required for LACS"
+#     range_start = 0
+#     range_end = 3
+#     default = 3
 
 
-class LacsMedallions(Range):
-    """Set the number of medallions required for LACS."""
-    display_name = "Medallions Required for LACS"
-    range_start = 0
-    range_end = 6
-    default = 6
+# class LacsMedallions(Range):
+#     """Set the number of medallions required for LACS."""
+#     display_name = "Medallions Required for LACS"
+#     range_start = 0
+#     range_end = 6
+#     default = 6
 
 
-class LacsRewards(Range):
-    """Set the number of dungeon rewards required for LACS."""
-    display_name = "Dungeon Rewards Required for LACS"
-    range_start = 0
-    range_end = 9
-    default = 9
+# class LacsRewards(Range):
+#     """Set the number of dungeon rewards required for LACS."""
+#     display_name = "Dungeon Rewards Required for LACS"
+#     range_start = 0
+#     range_end = 9
+#     default = 9
 
 
-class LacsTokens(Range):
-    """Set the number of Gold Skulltula Tokens required for LACS."""
-    display_name = "Tokens Required for LACS"
-    range_start = 0
-    range_end = 100
-    default = 40
+# class LacsTokens(Range):
+#     """Set the number of Gold Skulltula Tokens required for LACS."""
+#     display_name = "Tokens Required for LACS"
+#     range_start = 0
+#     range_end = 100
+#     default = 40
 
 
-lacs_options: typing.Dict[str, type(Option)] = {
-    "lacs_condition": LacsCondition,
-    "lacs_stones": LacsStones, 
-    "lacs_medallions": LacsMedallions, 
-    "lacs_rewards": LacsRewards, 
-    "lacs_tokens": LacsTokens,
-}
+# lacs_options: typing.Dict[str, type(Option)] = {
+#     "lacs_condition": LacsCondition,
+#     "lacs_stones": LacsStones, 
+#     "lacs_medallions": LacsMedallions, 
+#     "lacs_rewards": LacsRewards, 
+#     "lacs_tokens": LacsTokens,
+# }
 
 
 class BridgeStones(Range):
@@ -313,11 +424,20 @@ class BridgeTokens(Range):
     default = 40
 
 
+class BridgeHearts(Range):
+    """Set the number of hearts required for the rainbow bridge."""
+    display_name = "Hearts Required for Bridge"
+    range_start = 4
+    range_end = 20
+    default = 20
+
+
 bridge_options: typing.Dict[str, type(Option)] = {
     "bridge_stones": BridgeStones,
     "bridge_medallions": BridgeMedallions,
     "bridge_rewards": BridgeRewards, 
     "bridge_tokens": BridgeTokens,
+    "bridge_hearts": BridgeHearts,
 }
 
 
@@ -344,6 +464,17 @@ class ShopSlots(Range):
     display_name = "Shuffled Shop Slots"
     range_start = 0
     range_end = 4
+
+
+class ShopPrices(Choice):
+    """Controls prices of shop items. "Normal" is a distribution from 0 to 300. "X Wallet" requires that wallet at max. "Affordable" is always 10 rupees."""
+    display_name = "Shopsanity Prices"
+    option_normal = 0
+    option_affordable = 1
+    option_starting_wallet = 2
+    option_adults_wallet = 3
+    option_giants_wallet = 4
+    option_tycoons_wallet = 5
 
 
 class TokenShuffle(Choice): 
@@ -381,9 +512,14 @@ class ShuffleOcarinas(Toggle):
     display_name = "Shuffle Ocarinas"
 
 
-class ShuffleEgg(Toggle):
-    """Shuffle the Weird Egg from Malon at Hyrule Castle."""
-    display_name = "Shuffle Weird Egg"
+class ShuffleChildTrade(Choice):
+    """Controls the behavior of the start of the child trade quest."""
+    display_name = "Shuffle Child Trade Item"
+    option_vanilla = 0
+    option_shuffle = 1
+    option_skip_child_zelda = 2
+    alias_false = 0
+    alias_true = 1
 
 
 class ShuffleCard(Toggle):
@@ -401,19 +537,62 @@ class ShuffleMedigoronCarpet(Toggle):
     display_name = "Shuffle Medigoron & Carpet Salesman"
 
 
+class ShuffleFreestanding(Choice):
+    """Shuffles freestanding rupees, recovery hearts, Shadow Temple Spinning Pots, and Goron Pot."""
+    display_name = "Shuffle Rupees & Hearts"
+    option_off = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+
+
+class ShufflePots(Choice):
+    """Shuffles pots and flying pots which normally contain an item."""
+    display_name = "Shuffle Pots"
+    option_off = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+
+
+class ShuffleCrates(Choice):
+    """Shuffles large and small crates containing an item."""
+    display_name = "Shuffle Crates"
+    option_off = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+
+
+class ShuffleBeehives(Toggle):
+    """Beehives drop an item when destroyed by an explosion, the Hookshot, or the Boomerang."""
+    display_name = "Shuffle Beehives"
+
+
+class ShuffleFrogRupees(Toggle):
+    """Shuffles the purple rupees received from the Zora's River frogs."""
+    display_name = "Shuffle Frog Song Rupees"
+
+
 shuffle_options: typing.Dict[str, type(Option)] = {
     "shuffle_song_items": SongShuffle,
-    "shopsanity": ShopShuffle, 
+    "shopsanity": ShopShuffle,
     "shop_slots": ShopSlots,
-    "tokensanity": TokenShuffle, 
+    "shopsanity_prices": ShopPrices,
+    "tokensanity": TokenShuffle,
     "shuffle_scrubs": ScrubShuffle,
-    "shuffle_cows": ShuffleCows, 
+    "shuffle_child_trade": ShuffleChildTrade,
+    "shuffle_freestanding_items": ShuffleFreestanding,
+    "shuffle_pots": ShufflePots,
+    "shuffle_crates": ShuffleCrates,
+    "shuffle_cows": ShuffleCows,
+    "shuffle_beehives": ShuffleBeehives,
     "shuffle_kokiri_sword": ShuffleSword,
     "shuffle_ocarinas": ShuffleOcarinas,
-    "shuffle_weird_egg": ShuffleEgg,
     "shuffle_gerudo_card": ShuffleCard,
-    "shuffle_beans": ShuffleBeans, 
+    "shuffle_beans": ShuffleBeans,
     "shuffle_medigoron_carpet_salesman": ShuffleMedigoronCarpet,
+    "shuffle_frog_song_rupees": ShuffleFrogRupees,
 }
 
 
@@ -427,6 +606,7 @@ class ShuffleMapCompass(Choice):
     option_overworld = 4
     option_any_dungeon = 5
     option_keysanity = 6
+    option_regional = 7
     default = 1
     alias_anywhere = 6
 
@@ -440,6 +620,7 @@ class ShuffleKeys(Choice):
     option_overworld = 4
     option_any_dungeon = 5
     option_keysanity = 6
+    option_regional = 7
     default = 3
     alias_keysy = 0
     alias_anywhere = 6
@@ -452,6 +633,7 @@ class ShuffleGerudoKeys(Choice):
     option_overworld = 1
     option_any_dungeon = 2
     option_keysanity = 3
+    option_regional = 4
     alias_anywhere = 3
 
 
@@ -464,13 +646,14 @@ class ShuffleBossKeys(Choice):
     option_overworld = 4
     option_any_dungeon = 5
     option_keysanity = 6
+    option_regional = 7
     default = 3
     alias_keysy = 0
     alias_anywhere = 6
 
 
 class ShuffleGanonBK(Choice):
-    """Control where to shuffle the Ganon's Castle Boss Key."""
+    """Control how to shuffle the Ganon's Castle Boss Key."""
     display_name = "Ganon's Boss Key"
     option_remove = 0
     option_vanilla = 2
@@ -479,6 +662,12 @@ class ShuffleGanonBK(Choice):
     option_any_dungeon = 5
     option_keysanity = 6
     option_on_lacs = 7
+    option_regional = 8
+    option_stones = 9
+    option_medallions = 10
+    option_dungeons = 11
+    option_tokens = 12
+    option_hearts = 13
     default = 0
     alias_keysy = 0
     alias_anywhere = 6
@@ -489,19 +678,86 @@ class EnhanceMC(Toggle):
     display_name = "Maps and Compasses Give Information"
 
 
+class GanonBKMedallions(Range):
+    """Set how many medallions are required to receive Ganon BK."""
+    display_name = "Medallions Required for Ganon's BK"
+    range_start = 1
+    range_end = 6
+    default = 6
+
+
+class GanonBKStones(Range):
+    """Set how many Spiritual Stones are required to receive Ganon BK."""
+    display_name = "Spiritual Stones Required for Ganon's BK"
+    range_start = 1
+    range_end = 3
+    default = 3
+
+
+class GanonBKRewards(Range):
+    """Set how many dungeon rewards are required to receive Ganon BK."""
+    display_name = "Dungeon Rewards Required for Ganon's BK"
+    range_start = 1
+    range_end = 9
+    default = 9
+
+
+class GanonBKTokens(Range):
+    """Set how many Gold Skulltula Tokens are required to receive Ganon BK."""
+    display_name = "Tokens Required for Ganon's BK"
+    range_start = 1
+    range_end = 100
+    default = 40
+
+
+class GanonBKHearts(Range):
+    """Set how many hearts are required to receive Ganon BK."""
+    display_name = "Hearts Required for Ganon's BK"
+    range_start = 4
+    range_end = 20
+    default = 20
+
+
+class KeyRings(Choice):
+    """Dungeons have all small keys found at once, rather than individually."""
+    display_name = "Key Rings Mode"
+    option_off = 0
+    option_choose = 1
+    option_all = 2
+    option_random_dungeons = 3
+
+
+class KeyRingList(OptionSet):
+    """Select areas with keyrings rather than individual small keys."""
+    display_name = "Key Ring Areas"
+    valid_keys = {
+        "Thieves' Hideout",
+        "Forest Temple",
+        "Fire Temple",
+        "Water Temple",
+        "Shadow Temple",
+        "Spirit Temple",
+        "Bottom of the Well",
+        "Gerudo Training Ground",
+        "Ganon's Castle"
+    }
+
+
 dungeon_items_options: typing.Dict[str, type(Option)] = {
     "shuffle_mapcompass": ShuffleMapCompass, 
     "shuffle_smallkeys": ShuffleKeys, 
-    "shuffle_fortresskeys": ShuffleGerudoKeys, 
+    "shuffle_hideoutkeys": ShuffleGerudoKeys,
     "shuffle_bosskeys": ShuffleBossKeys,
-    "shuffle_ganon_bosskey": ShuffleGanonBK,
     "enhance_map_compass": EnhanceMC,
+    "shuffle_ganon_bosskey": ShuffleGanonBK,
+    "ganon_bosskey_medallions": GanonBKMedallions,
+    "ganon_bosskey_stones": GanonBKStones,
+    "ganon_bosskey_rewards": GanonBKRewards,
+    "ganon_bosskey_tokens": GanonBKTokens,
+    "ganon_bosskey_hearts": GanonBKHearts,
+    "key_rings": KeyRings,
+    "key_rings_list": KeyRingList,
 }
-
-
-class SkipChildZelda(Toggle):
-    """Game starts with Zelda's Letter, the item at Zelda's Lullaby, and the relevant events already completed."""
-    display_name = "Skip Child Zelda"
 
 
 class SkipEscape(DefaultOnToggle):
@@ -550,6 +806,11 @@ class FastBunny(Toggle):
     display_name = "Fast Bunny Hood"
 
 
+class PlantBeans(Toggle):
+    """Pre-plants all 10 magic beans in the soft soil spots."""
+    display_name = "Plant Magic Beans"
+
+
 class ChickenCount(Range):
     """Controls the number of Cuccos for Anju to give an item as child."""
     display_name = "Cucco Count"
@@ -566,8 +827,15 @@ class BigPoeCount(Range):
     default = 1
 
 
+class FAETorchCount(Range):
+    """Number of lit torches required to open Shadow Temple."""
+    display_name = "Fire Arrow Entry Torch Count"
+    range_start = 1
+    range_end = 24
+    default = 24
+
+
 timesavers_options: typing.Dict[str, type(Option)] = {
-    "skip_child_zelda": SkipChildZelda, 
     "no_escape_sequence": SkipEscape, 
     "no_guard_stealth": SkipStealth, 
     "no_epona_race": SkipEponaRace, 
@@ -577,14 +845,38 @@ timesavers_options: typing.Dict[str, type(Option)] = {
     "fast_chests": FastChests, 
     "free_scarecrow": FreeScarecrow, 
     "fast_bunny_hood": FastBunny,
+    "plant_beans": PlantBeans,
     "chicken_count": ChickenCount,
     "big_poe_count": BigPoeCount,
+    "fae_torch_count": FAETorchCount,
 }
 
 
-class CSMC(Toggle):
-    """Changes chests containing progression into large chests, and nonprogression into small chests."""
-    display_name = "Chest Size Matches Contents"
+class CorrectChestAppearance(Choice):
+    """Changes chest textures and/or sizes to match their contents. "Classic" is the old behavior of CSMC."""
+    display_name = "Chest Appearance Matches Contents"
+    option_off = 0
+    option_textures = 1
+    option_both = 2
+    option_classic = 3
+
+
+class MinorInMajor(Toggle):
+    """Hylian Shield, Deku Shield, and Bombchus appear in big/gold chests."""
+    display_name = "Minor Items in Big/Gold Chests"
+
+
+class InvisibleChests(Toggle):
+    """Chests visible only with Lens of Truth. Logic is not changed."""
+    display_name = "Invisible Chests"
+
+
+class CorrectPotCrateAppearance(Choice):
+    """Unchecked pots and crates have a different texture; unchecked beehives will wiggle. With textures_content, pots and crates have an appearance based on their contents; with textures_unchecked, all unchecked pots/crates have the same appearance."""
+    display_name = "Pot, Crate, and Beehive Appearance"
+    option_off = 0
+    option_textures_content = 1
+    option_textures_unchecked = 2
 
 
 class Hints(Choice): 
@@ -598,7 +890,7 @@ class Hints(Choice):
 
 
 class MiscHints(DefaultOnToggle):
-    """Controls whether the Temple of Time altar gives dungeon prize info and whether Ganondorf hints the Light Arrows."""
+    """The Temple of Time altar hints dungeon rewards, bridge info, and Ganon BK info; Ganondorf hints the Light Arrows; Dampe's diary hints a local Hookshot if one exists; Skulltula House locations hint their item."""
     display_name = "Misc Hints"
 
 
@@ -607,11 +899,11 @@ class HintDistribution(Choice):
     display_name = "Hint Distribution"
     option_balanced = 0
     option_ddr = 1
-    option_league = 2
-    option_mw2 = 3
+    # option_league = 2
+    # option_mw3 = 3
     option_scrubs = 4
     option_strong = 5
-    option_tournament = 6
+    # option_tournament = 6
     option_useless = 7
     option_very_strong = 8
     option_async = 9
@@ -637,6 +929,17 @@ class DamageMultiplier(Choice):
     default = 1
 
 
+class DeadlyBonks(Choice):
+    """Bonking on a wall or object will hurt Link. "Normal" is a half heart of damage."""
+    display_name = "Bonks Do Damage"
+    option_none = 0
+    option_half = 1
+    option_normal = 2
+    option_double = 3
+    option_quadruple = 4
+    option_ohko = 5
+
+
 class HeroMode(Toggle):
     """Hearts will not drop from enemies or objects."""
     display_name = "Hero Mode"
@@ -656,6 +959,16 @@ class StartingToD(Choice):
     option_witching_hour = 8
 
 
+class BlueFireArrows(Toggle):
+    """Ice arrows can melt red ice and break the mud walls in Dodongo's Cavern."""
+    display_name = "Blue Fire Arrows"
+
+
+class FixBrokenDrops(Toggle):
+    """Fixes two broken vanilla drops: deku shield in child Spirit Temple, and magic drop on GTG eye statue."""
+    display_name = "Fix Broken Drops"
+
+
 class ConsumableStart(Toggle):
     """Start the game with full Deku Sticks and Deku Nuts."""
     display_name = "Start with Consumables"
@@ -667,14 +980,20 @@ class RupeeStart(Toggle):
 
 
 misc_options: typing.Dict[str, type(Option)] = {
-    "correct_chest_sizes": CSMC,
+    "correct_chest_appearances": CorrectChestAppearance,
+    "minor_items_as_major_chest": MinorInMajor,
+    "invisible_chests": InvisibleChests,
+    "correct_potcrate_appearances": CorrectPotCrateAppearance,
     "hints": Hints,
     "misc_hints": MiscHints,
     "hint_dist": HintDistribution,
     "text_shuffle": TextShuffle,
     "damage_multiplier": DamageMultiplier,
+    "deadly_bonks": DeadlyBonks,
     "no_collectible_hearts": HeroMode,
     "starting_tod": StartingToD,
+    "blue_fire_arrows": BlueFireArrows,
+    "fix_broken_drops": FixBrokenDrops,
     "start_with_consumables": ConsumableStart, 
     "start_with_rupees": RupeeStart,
 }
@@ -709,37 +1028,29 @@ class IceTrapVisual(Choice):
     option_anything = 2
 
 
-class AdultTradeItem(Choice): 
-    option_pocket_egg = 0
-    option_pocket_cucco = 1
-    option_cojiro = 2
-    option_odd_mushroom = 3
-    option_poachers_saw = 4
-    option_broken_sword = 5
-    option_prescription = 6
-    option_eyeball_frog = 7
-    option_eyedrops = 8
-    option_claim_check = 9
-
-
-class EarlyTradeItem(AdultTradeItem):
-    """Earliest item that can appear in the adult trade sequence."""
-    display_name = "Adult Trade Sequence Earliest Item"
-    default = 6
-
-
-class LateTradeItem(AdultTradeItem):
-    """Latest item that can appear in the adult trade sequence."""
-    display_name = "Adult Trade Sequence Latest Item"
-    default = 9
+class AdultTradeStart(OptionSet):
+    """Choose the items that can appear to start the adult trade sequence. By default it is Claim Check only."""
+    display_name = "Adult Trade Sequence Items"
+    default = {"Claim Check"}
+    valid_keys = {
+        "Pocket Egg",
+        "Pocket Cucco",
+        "Cojiro",
+        "Odd Mushroom",
+        "Poacher's Saw",
+        "Broken Sword",
+        "Prescription",
+        "Eyeball Frog",
+        "Eyedrops",
+        "Claim Check",
+    }
 
 
 itempool_options: typing.Dict[str, type(Option)] = {
     "item_pool_value": ItemPoolValue, 
     "junk_ice_traps": IceTraps,
     "ice_trap_appearance": IceTrapVisual, 
-    "logic_earliest_adult_trade": EarlyTradeItem, 
-    "logic_latest_adult_trade": LateTradeItem,
+    "adult_trade_start": AdultTradeStart,
 }
 
 # Start of cosmetic options
@@ -754,6 +1065,11 @@ class Targeting(Choice):
 class DisplayDpad(DefaultOnToggle):
     """Show dpad icon on HUD for quick actions (ocarina, hover boots, iron boots)."""
     display_name = "Display D-Pad HUD"
+
+
+class DpadDungeonMenu(DefaultOnToggle):
+    """Show separated menus on the pause screen for dungeon keys, rewards, and Vanilla/MQ info."""
+    display_name = "Display D-Pad Dungeon Info"
 
 
 class CorrectColors(DefaultOnToggle):
@@ -793,6 +1109,7 @@ class SwordTrailDuration(Range):
 cosmetic_options: typing.Dict[str, type(Option)] = {
     "default_targeting": Targeting,
     "display_dpad": DisplayDpad,
+    "dpad_dungeon_menu": DpadDungeonMenu,
     "correct_model_colors": CorrectColors,
     "background_music": BackgroundMusic,
     "fanfares": Fanfares,
@@ -869,7 +1186,7 @@ oot_options: typing.Dict[str, type(Option)] = {
     **world_options, 
     **bridge_options,
     **dungeon_items_options,
-    **lacs_options,
+    # **lacs_options,
     **shuffle_options,
     **timesavers_options,
     **misc_options, 
