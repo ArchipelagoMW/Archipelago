@@ -84,10 +84,9 @@ class PreCalculatedWeights:
         if not world or not is_option_enabled(world, player, "RisingTides"):
             return False
 
-        if not key in weights:
-            weights[key] = { "Dry": 67, "Flooded": 33 }
+        weights = weights[key] if key in weights else { "Dry": 67, "Flooded": 33 }
 
-        result: str = world.random.choices(list(weights[key].keys()), weights=list(map(int, weights[key].values())))[0]
+        result: str = world.random.choices(list(weights.keys()), weights=list(map(int, weights.values())))[0]
 
         return result == "Flooded"
 
@@ -98,11 +97,10 @@ class PreCalculatedWeights:
         if not world or not is_option_enabled(world, player, "RisingTides"):
             return (False, False)
 
-        if not key in weights:
-            weights[key] = { "Dry": 66, "Flooded": 17, "FloodedWithSavePointAvailable": 17 }
+        weights = weights[key] if key in weights else { "Dry": 66, "Flooded": 17, "FloodedWithSavePointAvailable": 17 }
 
-        result: str = world.random.choices(list(weights[key].keys()), weights=list(map(int, weights[key].values()), 1))[0]
-
+        result: str = world.random.choices(list(weights.keys()), weights=list(map(int, weights.values())))[0]
+        
         if (result == "Dry"):
             return (False, False)
         elif (result == "Flooded"):
