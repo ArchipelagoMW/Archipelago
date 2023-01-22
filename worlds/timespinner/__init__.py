@@ -4,7 +4,6 @@ from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, \
     starter_progression_items, filler_items
 from .Locations import get_locations, starter_progression_locations, EventId
-from .LogicMixin import TimespinnerLogic
 from .Options import is_option_enabled, get_option_value, timespinner_options
 from .PreCalculatedWeights import PreCalculatedWeights
 from .Regions import create_regions
@@ -47,7 +46,7 @@ class TimespinnerWorld(World):
     web = TimespinnerWebWorld()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
+    location_name_to_id = {location.name: location.code for location in get_locations(None, None, None)}
     item_name_groups = get_item_names_per_category()
 
     locked_locations: List[str]
@@ -71,8 +70,8 @@ class TimespinnerWorld(World):
             self.multiworld.StartWithJewelryBox[self.player].value = self.multiworld.StartWithJewelryBox[self.player].option_true
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player),
-                       self.location_cache, self.precalculated_weights)
+        locations = get_locations(self.multiworld, self.player, self.precalculated_weights)
+        create_regions(self.multiworld, self.player, locations, self.location_cache, self.precalculated_weights)
 
     def create_item(self, name: str) -> Item:
         return create_item_with_correct_settings(self.multiworld, self.player, name)
@@ -127,7 +126,7 @@ class TimespinnerWorld(World):
         return slot_data
 
     def write_spoiler_header(self, spoiler_handle: TextIO):
-        spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % (self.pyramid_keys_unlock))
+        spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % (self.precalculated_weights.pyramid_keys_unlock))
        
         flooded_areas: list[str] = []
 
@@ -143,7 +142,7 @@ class TimespinnerWorld(World):
         if (self.precalculated_weights.flood_pyramid_shaft):
             flooded_areas.append("Ancient Pyramid Shaft")
         if (self.precalculated_weights.flood_pyramid_back):
-            flooded_areas.append("Sandman\Nightmare (boss)")
+            flooded_areas.append("Sandman\\Nightmare (boss)")
         if (self.precalculated_weights.flood_moat):
             flooded_areas.append("Castle Ramparts Moat")
         if (self.precalculated_weights.flood_courtyard):

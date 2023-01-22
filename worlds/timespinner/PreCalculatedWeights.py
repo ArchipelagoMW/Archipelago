@@ -20,7 +20,7 @@ class PreCalculatedWeights:
         weights_overrrides: Dict[str, Dict[str, int]] = self.get_flood_weights_overrides(world, player)
 
         self.flood_basement, self.flood_basement_high = \
-            self.roll_flood_setting_with_available_save(world, player, "CastleBasement")
+            self.roll_flood_setting_with_available_save(world, player, weights_overrrides, "CastleBasement")
         self.flood_xarion = self.roll_flood_setting(world, player, weights_overrrides, "Xarion")
         self.flood_maw = self.roll_flood_setting(world, player, weights_overrrides, "Maw")
         self.flood_pyramid_shaft = self.roll_flood_setting(world, player, weights_overrrides, "AncientPyramidShaft")
@@ -33,7 +33,7 @@ class PreCalculatedWeights:
         self.pyramid_keys_unlock = self.get_pyramid_keys_unlock(world, player, self.flood_maw)
 
 
-    def get_pyramid_keys_unlock(world: MultiWorld, player: int, is_maw_flooded: bool) -> str:
+    def get_pyramid_keys_unlock(self, world: MultiWorld, player: int, is_maw_flooded: bool) -> str:
         present_teleportation_gates: Tuple[str, ...] = (
             "GateKittyBoss",
             "GateLeftLibrary",
