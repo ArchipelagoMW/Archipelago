@@ -330,6 +330,12 @@ class GameManager(App):
 
         super(GameManager, self).__init__()
 
+    @property
+    def tab_count(self):
+        if hasattr(self, "tabs"):
+            return max(1, len(self.tabs.tab_list))
+        return 1
+
     def build(self) -> Layout:
         self.container = ContainerLayout()
 
