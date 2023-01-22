@@ -123,8 +123,8 @@ TR_Checks = {
     LocationName.Monochrome:                    WorldLocationData(0x1E33, 2), 
     LocationName.WisdomForm:                    WorldLocationData(0x1E33, 2),           
     LocationName.LingeringWillBonus:            WorldLocationData(0x370C, 6),              
-    LocationName.LingeringWillProofofConnection:WorldLocationData(0x1E14, 2),               
-    LocationName.LingeringWillManifestIllusion: WorldLocationData(0x1E14, 2),              
+    LocationName.LingeringWillProofofConnection:WorldLocationData(0x370C, 6),               
+    LocationName.LingeringWillManifestIllusion: WorldLocationData(0x370C, 6),              
 
 }
 #the mismatch might be here

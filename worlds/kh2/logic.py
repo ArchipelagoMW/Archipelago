@@ -39,10 +39,10 @@ class KH2Logic(LogicMixin):
         return self.has(ItemName.Poster, player)
 
     def kh_tt2_unlocked(self, player):
-        return self.has(ItemName.IceCream, player)
+        return self.has(ItemName.Picture, player)
 
     def kh_tt3_unlocked(self, player):
-        return self.has(ItemName.Picture, player)
+        return self.has(ItemName.IceCream, player)
 
     def kh_pr_unlocked(self, player):
         return self.has(ItemName.SkillandCrossbones, player)
