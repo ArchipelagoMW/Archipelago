@@ -379,7 +379,7 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "min_tech_cost": MinTechCost,
     "max_tech_cost": MaxTechCost,
     "tech_cost_mix": TechCostMix,
-    "ramping_tech_cost": RampingTechCosts,
+    "ramping_tech_costs": RampingTechCosts,
     "silo": Silo,
     "satellite": Satellite,
     "free_samples": FreeSamples,
