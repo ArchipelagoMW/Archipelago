@@ -5,6 +5,10 @@ from .Options import is_option_enabled, get_option_value
 
 class PreCalculatedWeights:
     pyramid_keys_unlock: str
+    present_key_unlock: str
+    past_key_unlock: str
+    time_key_unlock: str
+
     flood_basement: bool
     flood_basement_high: bool
     flood_xarion: bool
@@ -30,10 +34,11 @@ class PreCalculatedWeights:
         self.flood_lake_desolation = self.roll_flood_setting(world, player, weights_overrrides, "LakeDesolation")
         self.dry_lake_serene = self.roll_flood_setting(world, player, weights_overrrides, "LakeSerene")
 
-        self.pyramid_keys_unlock = self.get_pyramid_keys_unlock(world, player, self.flood_maw)
+        self.pyramid_keys_unlock, self.present_key_unlock, self.past_key_unlock, self.time_key_unlock = \
+            self.get_pyramid_keys_unlock(world, player, self.flood_maw)
 
 
-    def get_pyramid_keys_unlock(self, world: MultiWorld, player: int, is_maw_flooded: bool) -> str:
+    def get_pyramid_keys_unlock(self, world: MultiWorld, player: int, is_maw_flooded: bool) -> Tuple[str, str, str, str]:
         present_teleportation_gates: Tuple[str, ...] = (
             "GateKittyBoss",
             "GateLeftLibrary",
@@ -52,23 +57,34 @@ class PreCalculatedWeights:
             "GateCavesOfBanishment"
         )
 
-        past_water_locked_teleportation_gates: Tuple[str, ...] = (
-            "GateMaw",
+        ancient_pyramid_teleportation_gates: Tuple[str, ...] = (
+            "GateGyre",
+            "GateLeftPyramid",
+            "GateRightPyramid"
         )
 
-        if is_option_enabled(world, player, "Inverted"):
-            gates = present_teleportation_gates
-        else:
-            if is_maw_flooded:
-                gates = (*past_teleportation_gates, *present_teleportation_gates)
-            else:
-                gates = (*past_teleportation_gates, *present_teleportation_gates, *past_water_locked_teleportation_gates)
-
         if not world:
-            return gates[0]
+            return (
+                present_teleportation_gates[0], 
+                present_teleportation_gates[0], 
+                past_teleportation_gates[0], 
+                ancient_pyramid_teleportation_gates[0]
+            )
 
-        return world.random.choice(gates)
+        if is_maw_flooded:
+            past_teleportation_gates = (*past_teleportation_gates, *("GateMaw"))
 
+        if is_option_enabled(world, player, "Inverted"):
+            all_gates: Tuple[str, ...] = present_teleportation_gates
+        else:
+            all_gates: Tuple[str, ...] = (*past_teleportation_gates, *present_teleportation_gates)
+
+        return (
+            world.random.choice(all_gates),
+            world.random.choice(present_teleportation_gates),
+            world.random.choice(past_teleportation_gates),
+            world.random.choice(ancient_pyramid_teleportation_gates)
+        )
 
     def get_flood_weights_overrides(self, world: MultiWorld, player: int) -> Dict[str, int]:
         weights_overrrides_option: Union[int, Dict[str, Dict[str, int]]] = \

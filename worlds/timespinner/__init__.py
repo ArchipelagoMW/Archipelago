@@ -1,5 +1,4 @@
 from typing import Dict, List, Set, Tuple, TextIO
-
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, \
     starter_progression_items, filler_items
@@ -91,7 +90,9 @@ class TimespinnerWorld(World):
 
         assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations)
 
-        if not is_option_enabled(self.multiworld, self.player, "QuickSeed") and not is_option_enabled(self.multiworld, self.player, "Inverted"):
+        if not is_option_enabled(self.multiworld, self.player, "QuickSeed") \
+                and not is_option_enabled(self.multiworld, self.player, "Inverted") \
+                and not self.precalculated_weights.flood_lake_desolation:
             place_first_progression_item(self.multiworld, self.player, excluded_items, self.locked_locations)
 
         pool = get_item_pool(self.multiworld, self.player, excluded_items)
@@ -112,6 +113,9 @@ class TimespinnerWorld(World):
         slot_data["ProgressiveKeycards"] = False
         slot_data["PersonalItems"] = get_personal_items(self.player, self.location_cache)
         slot_data["PyramidKeysGate"] = self.precalculated_weights.pyramid_keys_unlock
+        slot_data["PresentGate"] = self.precalculated_weights.present_key_unlock
+        slot_data["PastGate"] = self.precalculated_weights.past_key_unlock
+        slot_data["TimeGate"] = self.precalculated_weights.time_key_unlock
         slot_data["Basement"] = int(self.precalculated_weights.flood_basement) + \
                                 int(self.precalculated_weights.flood_basement_high)
         slot_data["Xarion"] = self.precalculated_weights.flood_xarion
@@ -126,38 +130,50 @@ class TimespinnerWorld(World):
         return slot_data
 
     def write_spoiler_header(self, spoiler_handle: TextIO):
-        spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % (self.precalculated_weights.pyramid_keys_unlock))
-       
-        flooded_areas: list[str] = []
+        if is_option_enabled(self.multiworld, self.player, "UnchainedKeys"):
+            spoiler_handle.write('Modern Warp Beacon unlock:        %s\n' % 
+                (self.precalculated_weights.present_key_unlock))
+            spoiler_handle.write('Timeworn Warp Beacon unlock:        %s\n' % 
+                (self.precalculated_weights.past_key_unlock))
 
-        if(self.precalculated_weights.flood_basement):
-            if (self.precalculated_weights.flood_basement_high):
-                flooded_areas.append("Castle Basement")
-            else:
-                flooded_areas.append("Castle Basement (Savepoint available)")
-        if (self.precalculated_weights.flood_xarion):
-            flooded_areas.append("Xarion (boss)")
-        if (self.precalculated_weights.flood_maw):
-            flooded_areas.append("Maw (caves + boss)")
-        if (self.precalculated_weights.flood_pyramid_shaft):
-            flooded_areas.append("Ancient Pyramid Shaft")
-        if (self.precalculated_weights.flood_pyramid_back):
-            flooded_areas.append("Sandman\\Nightmare (boss)")
-        if (self.precalculated_weights.flood_moat):
-            flooded_areas.append("Castle Ramparts Moat")
-        if (self.precalculated_weights.flood_courtyard):
-            flooded_areas.append("Castle Courtyard")
-        if (self.precalculated_weights.flood_lake_desolation):
-            flooded_areas.append("Lake Desolation")
-        if (self.precalculated_weights.dry_lake_serene):
-            flooded_areas.append("Dry Lake Serene")
-
-        if (len(flooded_areas) == 0):
-            flooded_areas_string: str = "None"
+            if is_option_enabled(self.multiworld, self.player, "EnterSandman"):
+                spoiler_handle.write('Mysterious Warp Beacon unlock:        %s\n' % 
+                    (self.precalculated_weights.time_key_unlock))
         else:
-            flooded_areas_string: str = ", ".join(flooded_areas)
+            spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % 
+                (self.precalculated_weights.pyramid_keys_unlock))
+       
+        if is_option_enabled(self.multiworld, self.player, "RisingTides"):
+            flooded_areas: list[str] = []
 
-        spoiler_handle.write('Flooded Areas:                   %s\n' % (flooded_areas_string))
+            if(self.precalculated_weights.flood_basement):
+                if (self.precalculated_weights.flood_basement_high):
+                    flooded_areas.append("Castle Basement")
+                else:
+                    flooded_areas.append("Castle Basement (Savepoint available)")
+            if (self.precalculated_weights.flood_xarion):
+                flooded_areas.append("Xarion (boss)")
+            if (self.precalculated_weights.flood_maw):
+                flooded_areas.append("Maw (caves + boss)")
+            if (self.precalculated_weights.flood_pyramid_shaft):
+                flooded_areas.append("Ancient Pyramid Shaft")
+            if (self.precalculated_weights.flood_pyramid_back):
+                flooded_areas.append("Sandman\\Nightmare (boss)")
+            if (self.precalculated_weights.flood_moat):
+                flooded_areas.append("Castle Ramparts Moat")
+            if (self.precalculated_weights.flood_courtyard):
+                flooded_areas.append("Castle Courtyard")
+            if (self.precalculated_weights.flood_lake_desolation):
+                flooded_areas.append("Lake Desolation")
+            if (self.precalculated_weights.dry_lake_serene):
+                flooded_areas.append("Dry Lake Serene")
+
+            if (len(flooded_areas) == 0):
+                flooded_areas_string: str = "None"
+            else:
+                flooded_areas_string: str = ", ".join(flooded_areas)
+
+            spoiler_handle.write('Flooded Areas:                   %s\n' % (flooded_areas_string))
 
 
 def get_excluded_items(self: TimespinnerWorld, world: MultiWorld, player: int) -> Set[str]:
@@ -221,6 +237,13 @@ def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> L
                 item = create_item_with_correct_settings(world, player, name)
                 pool.append(item)
 
+    if is_option_enabled(world, player, "UnchainedKeys"):
+        pool.append(create_item_with_correct_settings(world, player, "Timeworn Warp Beacon"))
+        pool.append(create_item_with_correct_settings(world, player, "Modern Warp Beacon"))
+
+        if is_option_enabled(world, player, "EnterSandman"):
+            pool.append(create_item_with_correct_settings(world, player, "Mysterious Warp Beacon"))
+
     return pool
 
 
@@ -273,6 +296,9 @@ def create_item_with_correct_settings(world: MultiWorld, player: int, name: str)
     elif name == 'Oculus Ring' and not is_option_enabled(world, player, "EyeSpy"):
         item.classification = ItemClassification.filler
     elif (name == 'Kobo' or name == 'Merchant Crow') and not is_option_enabled(world, player, "GyreArchives"):
+        item.classification = ItemClassification.filler
+    elif (name == 'MapReveal 0' or name == 'MapReveal 1' or name == 'MapReveal 2') \
+            and not is_option_enabled(world, player, "UnchainedKeys"):
         item.classification = ItemClassification.filler
 
     return item

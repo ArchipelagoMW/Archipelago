@@ -347,6 +347,10 @@ class RisingTidesOverrides(OptionDict):
         "LakeSerene": { "Dry": 67, "Flooded": 33 },
     }
 
+class UnchainedKeys(Toggle):
+    "Random area's are flooded or drained, can be further specified with RisingTidesOverrides"
+    display_name = "Rising Tides"
+
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Option] = {
     "StartWithJewelryBox": StartWithJewelryBox,
@@ -378,6 +382,7 @@ timespinner_options: Dict[str, Option] = {
     "DadPercent": DadPercent,
     "RisingTides": RisingTides,
     "RisingTidesOverrides": RisingTidesOverrides,
+    "UnchainedKeys": UnchainedKeys,
     "DeathLink": DeathLink,
 }
 
