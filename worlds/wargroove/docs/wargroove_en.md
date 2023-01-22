@@ -78,5 +78,4 @@ This is caused by not deleting campaign progress before updating the mod and cam
 `playerProgress` and `playerProgress.bak` with your previously backed up files.
 
 ### Mod is out of date when trying to run the Archipelago campaign
-This happens when mod is updated to a new version.
-To fix this go to `Custom Content->Create->Campaign->Archipelago->Edit` and click the `Update` button
+Please follow the above steps in `Wargroove crashes when trying to run the Archipelago campaign`
