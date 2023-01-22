@@ -99,7 +99,13 @@ class Factorio(World):
                           for loc_name in location_names]
         rand_values = sorted(random.randint(self.multiworld.min_tech_cost[self.player],
                                             self.multiworld.max_tech_cost[self.player]) for _ in self.locations)
-        for i, location in enumerate(sorted(self.locations, key=lambda loc: loc.rel_cost)):
+        if self.multiworld.ramping_tech_costs[self.player]:
+            def sorter(loc: FactorioScienceLocation):
+                return loc.complexity, loc.rel_cost
+        else:
+            def sorter(loc: FactorioScienceLocation):
+                return loc.rel_cost
+        for i, location in enumerate(sorted(self.locations, key=sorter)):
             location.count = rand_values[i]
         del rand_values
         nauvis.locations.extend(self.locations)
