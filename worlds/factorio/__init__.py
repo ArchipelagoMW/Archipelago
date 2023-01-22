@@ -198,6 +198,10 @@ class Factorio(World):
                     self.multiworld.itempool.append(tech_item)
                 else:
                     loc = cost_sorted_locations[index]
+                    if index >= 0:
+                        # beginning techs - limit cost to 10
+                        # as automation is not achievable yet and hand-crafting for hours is not fun gameplay
+                        loc.count = min(loc.count, 10)
                     loc.place_locked_item(tech_item)
                     loc.revealed = True
 
