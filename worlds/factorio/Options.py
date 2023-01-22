@@ -74,6 +74,7 @@ class RampingTechCosts(Toggle):
     For example:
     off: Automation (red)/Logistics (green) sciences can range from 1 to 1000 Science Packs,
     on: Automation (red) ranges to ~500 packs and Logistics (green) from ~500 to 1000 Science Packs"""
+    display_name = "Ramping Tech Costs"
 
 
 class Silo(Choice):
