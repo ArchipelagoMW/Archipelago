@@ -2061,9 +2061,10 @@ for i, location in enumerate(location_data):
 class PokemonRBLocation(Location):
     game = "Pokemon Red and Blue"
 
-    def __init__(self, player, name, address, rom_address):
+    def __init__(self, player, name, address, rom_address, type):
         super(PokemonRBLocation, self).__init__(
             player, name,
             address
         )
         self.rom_address = rom_address
+        self.type = type

@@ -23,7 +23,7 @@ def create_regions(multiworld: MultiWorld, player: int):
         locations_per_region.setdefault(location.region, [])
         if location.inclusion(multiworld, player):
             locations_per_region[location.region].append(PokemonRBLocation(player, location.name, location.address,
-                                                                       location.rom_address))
+                                                                           location.rom_address, location.type))
     regions = [
         create_region(multiworld, player, "Menu", locations_per_region),
         create_region(multiworld, player, "Anywhere", locations_per_region),

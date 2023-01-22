@@ -362,30 +362,54 @@ class SameTypeAttackBonus(Toggle):
     default = 1
 
 
-class TMCompatibility(Choice):
-    """Randomize which Pokemon can learn each TM. prefer_types: 90% chance if Pokemon's type matches the move,
-    50% chance if move is Normal type and the Pokemon is not, and 25% chance otherwise. Pokemon will retain the same
-    TM compatibility when they evolve if the evolved form has the same type(s). Mew will always be able to learn
-    every TM."""
-    display_name = "TM Compatibility"
-    default = 0
-    option_vanilla = 0
-    option_prefer_types = 1
-    option_completely_random = 2
-    option_full_compatibility = 3
+class TMHMCompatibility(SpecialRange):
+    range_start = -1
+    range_end = 100
+    special_range_names = {
+        "vanilla": -1
+    }
+    default = -1
 
 
-class HMCompatibility(Choice):
-    """Randomize which Pokemon can learn each HM. prefer_types: 100% chance if Pokemon's type matches the move,
-    75% chance if move is Normal type and the Pokemon is not, and 25% chance otherwise. Pokemon will retain the same
-    HM compatibility when they evolve if the evolved form has the same type(s). Mew will always be able to learn
-    every HM."""
-    display_name = "HM Compatibility"
-    default = 0
-    option_vanilla = 0
-    option_prefer_types = 1
-    option_completely_random = 2
-    option_full_compatibility = 3
+class TMSameTypeCompatibility(TMHMCompatibility):
+    """Chance of each TM being usable on each Pokemon whose type matches the move."""
+    display_name = "TM Same-Type Compatibility"
+
+
+class TMNormalTypeCompatibility(TMHMCompatibility):
+    """Chance of each TM being usable on each Pokemon if the move is Normal type and the Pokemon is not."""
+    display_name = "TM Normal-Type Compatibility"
+
+
+class TMOtherTypeCompatibility(TMHMCompatibility):
+    """Chance of each TM being usable on each Pokemon if the move a type other than Normal or one of the Pokemon's types."""
+    display_name = "TM Other-Type Compatibility"
+
+
+class HMSameTypeCompatibility(TMHMCompatibility):
+    """Chance of each HM being usable on each Pokemon whose type matches the move.
+    At least one Pokemon will always be able to learn the moves needed to meet your accessibility requirements."""
+    display_name = "HM Same-Type Compatibility"
+
+
+class HMNormalTypeCompatibility(TMHMCompatibility):
+    """Chance of each HM being usable on each Pokemon if the move is Normal type and the Pokemon is not.
+    At least one Pokemon will always be able to learn the moves needed to meet your accessibility requirements."""
+    display_name = "HM Normal-Type Compatibility"
+
+
+class HMOtherTypeCompatibility(TMHMCompatibility):
+    """Chance of each HM being usable on each Pokemon if the move a type other than Normal or one of the Pokemon's types.
+    At least one Pokemon will always be able to learn the moves needed to meet your accessibility requirements."""
+    display_name = "HM Other-Type Compatibility"
+
+
+class InheritTMHMCompatibility(Toggle):
+    """If on, evolved Pokemon will inherit their pre-evolved form's TM and HM compatibilities.
+    They will then roll the above set chances again at a 50% lower rate for all TMs and HMs their predecessor could not
+    learn, unless the evolved form has additional or different types, then moves of those new types will be rolled
+    at the full set chance."""
+    display_name = "Inherit TM/HM Compatibility"
 
 
 class RandomizePokemonTypes(Choice):
@@ -601,8 +625,13 @@ pokemon_rb_options = {
     "randomize_pokemon_movesets": RandomizePokemonMovesets,
     "start_with_four_moves": StartWithFourMoves,
     "same_type_attack_bonus": SameTypeAttackBonus,
-    "tm_compatibility": TMCompatibility,
-    "hm_compatibility": HMCompatibility,
+    "tm_same_type_compatibility": TMSameTypeCompatibility,
+    "tm_normal_type_compatibility": TMNormalTypeCompatibility,
+    "tm_other_type_compatibility": TMOtherTypeCompatibility,
+    "hm_same_type_compatibility": HMSameTypeCompatibility,
+    "hm_normal_type_compatibility": HMNormalTypeCompatibility,
+    "hm_other_type_compatibility": HMOtherTypeCompatibility,
+    "inherit_tm_hm_compatibility": InheritTMHMCompatibility,
     "randomize_pokemon_types": RandomizePokemonTypes,
     "secondary_type_chance": SecondaryTypeChance,
     "randomize_type_chart": RandomizeTypeChart,

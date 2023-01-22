@@ -207,6 +207,34 @@ class PokemonRedBlueWorld(World):
         process_wild_pokemon(self)
         process_static_pokemon(self)
 
+        intervene = []
+        test_state = self.multiworld.get_all_state(False)
+        if not test_state.pokemon_rb_can_surf(self.player):
+            intervene.append("Surf")
+        if not test_state.pokemon_rb_can_strength(self.player):
+            intervene.append("Strength")
+        if self.multiworld.accessibility[self.player].current_key != "minimal":
+            if not test_state.pokemon_rb_can_cut(self.player):
+                intervene.append("Cut")
+            if not test_state.pokemon_rb_can_flash(self.player):
+                intervene.append("Flash")
+        for move in intervene:
+            accessible_slots = [loc for loc in self.multiworld.get_reachable_locations(test_state, self.player) if loc.type == "Wild Encounter"]
+            move_bit = pow(2, poke_data.hm_moves.index(move) + 2)
+            viable_mons = [mon for mon in self.local_poke_data if self.local_poke_data[mon]["tms"][6] & move_bit]
+            placed_mons = [slot.item.name for slot in accessible_slots]
+            self.multiworld.random.shuffle(placed_mons)
+            # make sure the mon we're replacing exists elsewhere so that we don't cut Pokémon out of the game entirely
+            # in the interest of efficiency we'll just only look at the accessible_slots list we already have
+            # even with no HM-compatible Pokémon available this list should have 162 slots so it should be impossible
+            # for no duplicates to exist
+            for placed_mon in placed_mons:
+                if placed_mons.count(placed_mon) > 1:
+                    break
+            replace_slot = self.multiworld.random.choice([slot for slot in accessible_slots if slot.item.name == placed_mon])
+            replace_mon = self.multiworld.random.choice(viable_mons)
+            replace_slot.item = self.create_item(replace_mon)
+
         if self.multiworld.old_man[self.player].value == 1:
             self.multiworld.local_early_items[self.player]["Oak's Parcel"] = 1
 
@@ -260,20 +288,7 @@ class PokemonRedBlueWorld(World):
                         unplaced_items.append(item)
             self.multiworld.itempool += unplaced_items
 
-        intervene = False
-        test_state = self.multiworld.get_all_state(False)
-        if not test_state.pokemon_rb_can_surf(self.player) or not test_state.pokemon_rb_can_strength(self.player):
-            intervene = True
-        elif self.multiworld.accessibility[self.player].current_key != "minimal":
-            if not test_state.pokemon_rb_can_cut(self.player) or not test_state.pokemon_rb_can_flash(self.player):
-                intervene = True
-        if intervene:
-            # the way this is handled will be improved significantly in the future when I add options to
-            # let you choose the exact weights for HM compatibility
-            logging.warning(
-                f"HM-compatible Pokémon possibly missing, placing Mew on Route 1 for player {self.player}")
-            loc = self.multiworld.get_location("Route 1 - Wild Pokemon - 1", self.player)
-            loc.item = self.create_item("Mew")
+
 
     def create_regions(self):
         if self.multiworld.free_fly_location[self.player].value:
