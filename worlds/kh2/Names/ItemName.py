@@ -80,27 +80,27 @@ ChickenLittle  ="Chicken Little"
 
 
 #mvoement
-HighJump   = "High Jump lvl 1"
+HighJump   = "High Jump"
 HighJump2   ="High Jump lvl 2"
 HighJump3   ="High Jump lvl 3"
 HighJump4   ="High Jump lvl 4"
            
-QuickRun   = "Quick Run lvl 1"
+QuickRun   = "Quick Run"
 QuickRun2   ="Quick Run lvl 2"
 QuickRun3   ="Quick Run lvl 3"
 QuickRun4   ="Quick Run lvl 4"
            
-AerialDodge= "Aerial Dodge lvl 1"
+AerialDodge= "Aerial Dodge"
 AerialDodge2="Aerial Dodge lvl 2"
 AerialDodge3="Aerial Dodge lvl 3"
 AerialDodge4="Aerial Dodge lvl 4"
            
-Glide      = "Glide lvl 1"
+Glide      = "Glide"
 Glide2      ="Glide lvl 2"
 Glide3      ="Glide lvl 3"
 Glide4      ="Glide lvl 4"
            
-DodgeRoll  = "Dodge Roll lvl 1"
+DodgeRoll  = "Dodge Roll"
 DodgeRoll2  ="Dodge Roll lvl 2"
 DodgeRoll3  ="Dodge Roll lvl 3"
 DodgeRoll4  ="Dodge Roll lvl 4"

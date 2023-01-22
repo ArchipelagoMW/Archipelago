@@ -23,13 +23,13 @@ def set_rules(world: MultiWorld, player: int):
 
     # Final checks of cor requires more locks than other checks in cor
     add_rule(world.get_location(LocationName.CoRMineshaftUpperLevelAPBoost, player), lambda state:
-    state.kh_HighJump_level(player, 3)
-    and state.kh_AerialDodge_level(player, 3)
-    and state.kh_Glide_level(player, 3))
+    state.has(ItemName.HighJump,player,3)
+    and state.has(ItemName.AerialDodge,player,3)
+    and state.has(ItemName.Glide,player,3))
     add_rule(world.get_location(LocationName.TransporttoRemembrance, player), lambda state:
-    state.kh_HighJump_level(player, 3)
-    and state.kh_AerialDodge_level(player, 3)
-    and state.kh_Glide_level(player, 3))
+    state.has(ItemName.HighJump,player,3)
+    and state.has(ItemName.AerialDodge,player,3)
+    and state.has(ItemName.Glide,player,3))
         
 
 

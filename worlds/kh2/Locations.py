@@ -493,7 +493,7 @@ STT_Checks = {
     LocationName.NaminesSketches:                   LocationData(0x13018F, 289, "Chest"),                 
     LocationName.MansionMap:                        LocationData(0x130190, 483, "Chest"),                 
     LocationName.MansionLibraryHiPotion:            LocationData(0x130191, 459, "Chest"),                 
-    LocationName.Axel2:                             LocationData(0x130192, 34, "Get Bonus", "Roxas"),     
+    LocationName.Axel2:                             LocationData(0x130192, 34, "Get Bonus", "Roxas",14),     
     LocationName.MansionBasementCorridorHiPotion:   LocationData(0x130193, 463, "Chest"),                 
     LocationName.RoxasDataMagicBoost:               LocationData(0x130194, 558, "Chest"),                              
 

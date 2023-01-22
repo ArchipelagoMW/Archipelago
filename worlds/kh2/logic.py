@@ -73,39 +73,39 @@ class KH2Logic(LogicMixin):
         return self.has(ItemName.BeastsClaw, player)
 
     # Movement logic for cor
-    def kh_HighJump_level(self, player, amount):
-        level = 0
-        for highjump in {ItemName.HighJump, ItemName.HighJump2, ItemName.HighJump3, ItemName.HighJump4}:
-            if self.has(highjump, player):
-                level += 1
-        return level >= amount
-
-    def kh_QuickRun_level(self, player, amount):
-        level = 0
-        for quickrun in {ItemName.QuickRun, ItemName.QuickRun2, ItemName.QuickRun3, ItemName.QuickRun4}:
-            if self.has(quickrun, player):
-                level += 1
-        return level >= amount
-
-    def kh_DodgeRoll_level(self, player, amount):
-        level = 0
-        for dgeroll in {ItemName.DodgeRoll, ItemName.DodgeRol2, ItemName.DodgeRol3, ItemName.DodgeRol4}:
-            if self.has(dgeroll, player):
-                level += 1
-        return level >= amount
-
-    def kh_AerialDodge_level(self, player, amount):
-        level = 0
-        for aerialdge in {ItemName.AerialDodge, ItemName.AerialDodge2, ItemName.AerialDodge3, ItemName.AerialDodge4}:
-            if self.has(aerialdge, player):
-                level += 1
-        return level >= amount
-
-    def kh_Glide_level(self, player, amount):
-        level = 0
-        for glide in {ItemName.Glide, ItemName.Glide2, ItemName.Glide3, ItemName.Glide4}:
-            if self.has(glide, player):
-                level += 1
+    #def kh_HighJump_level(self, player, amount):
+    #    level = 0
+    #    for highjump in {ItemName.HighJump, ItemName.HighJump2, ItemName.HighJump3, ItemName.HighJump4}:
+    #        if self.has(highjump, player):
+    #            level += 1
+    #    return level >= amount
+    #
+    #def kh_QuickRun_level(self, player, amount):
+    #    level = 0
+    #    for quickrun in {ItemName.QuickRun, ItemName.QuickRun2, ItemName.QuickRun3, ItemName.QuickRun4}:
+    #        if self.has(quickrun, player):
+    #            level += 1
+    #    return level >= amount
+    #
+    #def kh_DodgeRoll_level(self, player, amount):
+    #    level = 0
+    #    for dgeroll in {ItemName.DodgeRoll, ItemName.DodgeRol2, ItemName.DodgeRol3, ItemName.DodgeRol4}:
+    #        if self.has(dgeroll, player):
+    #            level += 1
+    #    return level >= amount
+    #
+    #def kh_AerialDodge_level(self, player, amount):
+    #    level = 0
+    #    for aerialdge in {ItemName.AerialDodge, ItemName.AerialDodge2, ItemName.AerialDodge3, ItemName.AerialDodge4}:
+    #        if self.has(aerialdge, player):
+    #            level += 1
+    #    return level >= amount
+    #
+    #def kh_Glide_level(self, player, amount):
+    #    level = 0
+    #    for glide in {ItemName.Glide, ItemName.Glide2, ItemName.Glide3, ItemName.Glide4}:
+    #        if self.has(glide, player):
+    #            level += 1
         return level >= amount
 
     def kh_FormLevel_unlocked(self, player, amount):

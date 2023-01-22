@@ -15,10 +15,7 @@ class ItemData(typing.NamedTuple):
     #Save+ mem addr
     memaddr: int=0
     #some items have bitmasks. if bitmask>0 bitor to give item else 
-    #if kh2id is > than everything before it and < everything after than use write short
-    #OR include a boolean
     bitmask: int = 0
-    quantity: int = 1
     #if ability then 
     ability: bool = False
     event: bool = False
@@ -221,12 +218,12 @@ Usefull_Table = {
     ItemName.HadesCupTrophy: 			ItemData(0x13200A4,  1,537, 0x3696 ),
     ItemName.UnknownDisk: 				ItemData(0x13200A5,  1,462, 0x365F ),
     ItemName.OlympusStone: 				ItemData(0x13200A6,  1,370, 0x3644 ),
-    ItemName.MaxHPUp: 				    ItemData(0x13200A7,  1,470, 0x3671 ),
-    ItemName.MaxMPUp: 				    ItemData(0x13200A8,  1,471, 0x3672 ),
-    ItemName.DriveGaugeUp: 				ItemData(0x13200A9,  1,472, 0x3673 ),
-    ItemName.ArmorSlotUp: 				ItemData(0x13200AA,  1,473, 0x3674 ),
-    ItemName.AccessorySlotUp: 			ItemData(0x13200AB,  1,474, 0x3675 ),
-    ItemName.ItemSlotUp: 				ItemData(0x13200AC,  1,463, 0x3660 ),
+    ItemName.MaxHPUp: 				    ItemData(0x13200A7,  20,470, 0x3671 ),
+    ItemName.MaxMPUp: 				    ItemData(0x13200A8,  4,471, 0x3672 ),
+    ItemName.DriveGaugeUp: 				ItemData(0x13200A9,  6,472, 0x3673 ),
+    ItemName.ArmorSlotUp: 				ItemData(0x13200AA,  3,473, 0x3674 ),
+    ItemName.AccessorySlotUp: 			ItemData(0x13200AB,  3,474, 0x3675 ),
+    ItemName.ItemSlotUp: 				ItemData(0x13200AC,  5,463, 0x3660 ),
 }                                                
 SupportAbility_Table = {
     ItemName.Scan: 				        ItemData(0x13200AD,  2,138, 0x08A ,0,1,True),
@@ -364,8 +361,8 @@ GoofyAbility_Table = {
 }
 
 Misc_Table = {
-    ItemName.LuckyEmblem: 				ItemData(0x1320125,  1,0x111 ),
-    ItemName.Victory: 				    ItemData(0x1320126,  1, True,0x111 ),
+    ItemName.LuckyEmblem: 				ItemData(0x1320125,  1,1,0x111 ),
+    ItemName.Victory: 				    ItemData(0x1320126,  1,1,0x111 ),
 }   #itemname luckey emblem (0x1320172)    will be unused map
 
 exclusionItem_table = {
