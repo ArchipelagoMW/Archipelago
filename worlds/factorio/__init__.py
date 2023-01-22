@@ -452,7 +452,7 @@ class FactorioScienceLocation(FactorioLocation):
 
     # Factorio technology properties:
     ingredients: typing.Dict[str, int]
-    count: int
+    count: int = 0
 
     def __init__(self, player: int, name: str, address: int, parent: Region):
         super(FactorioScienceLocation, self).__init__(player, name, address, parent)
@@ -464,8 +464,6 @@ class FactorioScienceLocation(FactorioLocation):
         for complexity in range(self.complexity):
             if parent.multiworld.tech_cost_mix[self.player] > parent.multiworld.random.randint(0, 99):
                 self.ingredients[Factorio.ordered_science_packs[complexity]] = 1
-        self.count = parent.multiworld.random.randint(parent.multiworld.min_tech_cost[self.player],
-                                                      parent.multiworld.max_tech_cost[self.player])
 
     @property
     def factorio_ingredients(self) -> typing.List[typing.Tuple[str, int]]:
