@@ -48,8 +48,8 @@ class NoitaWorld(World):
             "seed": self.world.seed_name,
         }
 
-        for option_name in option_definitions:
-            slot_data[option_name] = get_option(option_name)
+        for option_name in self.option_definitions:
+            slot_data[option_name] = self.get_option(option_name)
 
         return slot_data
 
