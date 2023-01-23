@@ -1,7 +1,7 @@
 from BaseClasses import Location, Item
 
 misc_items = [
-    "Nothing",
+    "50 Silver",
     "Victory",
 ]
 
@@ -274,40 +274,46 @@ post_moon_lord_achievements = [
     "You and What Army?",
 ]
 
-next_id = 0x7E0000
-
-item_name_to_id: dict[str, int] = {}
-location_name_to_id: dict[str, int] = {}
-
-def register(names, isItem):
-    global next_id
+def register(names, name_to_id, next_id):
     for name in names:
-        if isItem:
-            item_name_to_id[name] = next_id
-        else:
-            location_name_to_id[name] = next_id
+        name_to_id[name] = next_id
         next_id += 1
+    return next_id
 
-register(misc_items, True)
-register(prehardmode_items, True)
-register(post_wall_of_flesh_items, True)
-register(post_plantera_items, True)
-register(post_moon_lord_items, True)
-register(item_items, True)
+def assign_ids():
+    next_id = 0x7E0000
 
-register(prehardmode_locations, False)
-register(post_wall_of_flesh_locations, False)
-register(post_plantera_locations, False)
-register(post_moon_lord_locations, False)
-register(prehardmode_achievements, False)
-register(grindy_prehardmode_achievements, False)
-register(fishing_prehardmode_achievements, False)
-register(achievements_that_are_fishing_if_prehardmode, False)
-register(post_wall_of_flesh_achievements, False)
-register(grindy_post_wall_of_flesh_achievements, False)
-register(post_plantera_achievements, False)
-register(grindy_post_plantera_achievements, False)
-register(post_moon_lord_achievements, False)
+    item_name_to_id: dict[str, int] = {}
+    location_name_to_id: dict[str, int] = {}
+
+    next_id = register(misc_items, item_name_to_id, next_id)
+    next_id = register(prehardmode_items, item_name_to_id, next_id)
+    next_id = register(post_wall_of_flesh_items, item_name_to_id, next_id)
+    next_id = register(post_plantera_items, item_name_to_id, next_id)
+    next_id = register(post_moon_lord_items, item_name_to_id, next_id)
+    next_id = register(item_items, item_name_to_id, next_id)
+
+    next_id = register(prehardmode_locations, location_name_to_id, next_id)
+    next_id = register(post_wall_of_flesh_locations, location_name_to_id, next_id)
+    next_id = register(post_plantera_locations, location_name_to_id, next_id)
+    next_id = register(post_moon_lord_locations, location_name_to_id, next_id)
+    next_id = register(prehardmode_achievements, location_name_to_id, next_id)
+    next_id = register(grindy_prehardmode_achievements, location_name_to_id, next_id)
+    next_id = register(fishing_prehardmode_achievements, location_name_to_id, next_id)
+    next_id = register(achievements_that_are_fishing_if_prehardmode, location_name_to_id, next_id)
+    next_id = register(post_wall_of_flesh_achievements, location_name_to_id, next_id)
+    next_id = register(grindy_post_wall_of_flesh_achievements, location_name_to_id, next_id)
+    next_id = register(post_plantera_achievements, location_name_to_id, next_id)
+    next_id = register(grindy_post_plantera_achievements, location_name_to_id, next_id)
+    next_id = register(post_moon_lord_achievements, location_name_to_id, next_id)
+
+    from pprint import pprint
+    pprint(item_name_to_id)
+    pprint(location_name_to_id)
+
+    return item_name_to_id, location_name_to_id
+
+item_name_to_id, location_name_to_id = assign_ids()
 
 class TerrariaItem(Item):
     game = "Terraria"
@@ -358,6 +364,6 @@ def get_items_locations(goal, achievements_opt, extra_checks):
             items += item_items
 
     if len(items) < len(locations) - 1:
-        items += ["Nothing"] * (len(locations) - len(items) - 1)
+        items += ["50 Silver"] * (len(locations) - len(items) - 1)
 
     return items, locations

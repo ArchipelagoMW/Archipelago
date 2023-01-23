@@ -27,7 +27,7 @@ class TerrariaWorld(World):
     # data_version is used to signal that items, locations or their names
     # changed. Set this to 0 during development so other games' clients do not
     # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 1
+    data_version = 2
 
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
@@ -52,7 +52,7 @@ class TerrariaWorld(World):
             "Victory",
         }:
             classification = ItemClassification.progression
-        if name == "Nothing":
+        if name == "50 Silver":
             classification = ItemClassification.filler
         return TerrariaItem(name, classification, item_name_to_id[name], self.player)
 
@@ -68,7 +68,7 @@ class TerrariaWorld(World):
         for item in precollected:
             items_to_create.remove(item)
         for _ in range(len(precollected)):
-            items_to_create.append("Nothing")
+            items_to_create.append("50 Silver")
         
         for item in map(self.create_item, items_to_create):
             self.multiworld.itempool.append(item)

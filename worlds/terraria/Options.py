@@ -28,7 +28,7 @@ class FillExtraChecksWith(Choice):
     Items are rewarded to all players in your Terraria world.
     """
     display_name = "Fill Extra Checks With"
-    option_nothing = 0
+    option_filler_items = 0
     option_useful_items = 1
     default = 1
 
