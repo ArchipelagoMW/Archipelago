@@ -4,6 +4,10 @@ from BaseClasses import ItemClassification
 from .Items import MuseDashFixedItem, SongData, AlbumData
 from typing import Dict, Optional
 
+def load_text_file(name: str) -> str:
+    import pkgutil
+    return pkgutil.get_data(__name__, "MuseDashData.txt").decode()
+
 class MuseDashCollections:
     """Contains all the data of Muse Dash, loaded from MuseDashData.txt."""
 
@@ -19,27 +23,27 @@ class MuseDashCollections:
         currentItemId = startItemID
         currentLocationID = startItemID
 
-        dataPath = os.path.join(os.path.dirname(__file__), "MuseDashData.txt")
-        with open(dataPath, "r", encoding="utf-8") as file:
-            for line in file.readlines():
-                line = line.strip()
-                sections = line.split("|")
+        full_file = load_text_file("MuseDashData.txt")
 
-                if (sections[1] not in self.AlbumItems):
-                    self.AlbumItems[sections[1]] = AlbumData(currentItemId)
-                    currentItemId += 1
+        for line in full_file.splitlines():
+            line = line.strip()
+            sections = line.split("|")
 
-                # Data is 'Song|Album|StreamerMode|EasyDiff|HardDiff|MasterDiff|SecretDiff'
-                itemName = "%s[%s]" % (sections[0], sections[1])
-                song_is_default = sections[1] == "Default Music" # All DLC songs have a different album
-                steamer_mode = sections[2] == "True"
-
-                easyDiff = self.parse_song_difficulty(sections[3])
-                hardDiff = self.parse_song_difficulty(sections[4])
-                masterDiff = self.parse_song_difficulty(sections[5])
-
-                self.SongItems[itemName] = SongData(currentItemId, song_is_default, steamer_mode, easyDiff, hardDiff, masterDiff)
+            if (sections[1] not in self.AlbumItems):
+                self.AlbumItems[sections[1]] = AlbumData(currentItemId)
                 currentItemId += 1
+
+            # Data is 'Song|Album|StreamerMode|EasyDiff|HardDiff|MasterDiff|SecretDiff'
+            itemName = "%s[%s]" % (sections[0], sections[1])
+            song_is_default = sections[1] == "Default Music" # All DLC songs have a different album
+            steamer_mode = sections[2] == "True"
+
+            easyDiff = self.parse_song_difficulty(sections[3])
+            hardDiff = self.parse_song_difficulty(sections[4])
+            masterDiff = self.parse_song_difficulty(sections[5])
+
+            self.SongItems[itemName] = SongData(currentItemId, song_is_default, steamer_mode, easyDiff, hardDiff, masterDiff)
+            currentItemId += 1
 
         for name in self.AlbumItems.keys():
             for i in range(0, itemsPerLocation):
