@@ -10,28 +10,32 @@ from . import Locations, Items
 def create_region(world: MultiWorld, player: int, region_name: str) -> Region:
     new_region = Region(region_name, RegionType.Generic, region_name, player, world)
 
-    # Chests hack, don't add more locations than we requested
-    if region_name == "Forest":
-        total_locations = world.total_locations[player].value - Locations.num_static_locations
-
-        for i in range(total_locations):
-            location_name = f"Chest{i+1}"
-            location_id = 110000+i
-
-            location = Locations.NoitaLocation(player, location_name, location_id, new_region)
-            location.progress_type = LocationProgressType.EXCLUDED
-
+    # Here we create and assign locations to the region
+    for location_name, location_data in Locations.location_region_mapping.get(region_name, {}).items():
+        location = Locations.NoitaLocation(player, location_name, location_data.id, new_region)
+        opt_orbs = world.orbs_as_checks[player].value
+        opt_bosses = world.bosses_as_checks[player].value
+        ltype = location_data.ltype
+        flag = location_data.flag
+        if flag == 0 or ltype == "orb" and flag <= opt_orbs or ltype == "boss" and flag <= opt_bosses:
             new_region.locations.append(location)
-    else:
-        # Here we create and assign locations to the region
-        for location_name, location_data in Locations.location_region_mapping.get(region_name, {}).items():
-            location = Locations.NoitaLocation(player, location_name, location_data.id, new_region)
-            opt_orbs = world.orbs_as_checks[player].value
-            opt_bosses = world.bosses_as_checks[player].value
-            ltype = location_data.ltype
-            flag = location_data.flag
-            if flag == 0 or ltype == "orb" and flag <= opt_orbs or ltype == "boss" and flag <= opt_bosses:
-                new_region.locations.append(location)
+
+    return new_region
+
+
+# Creates chest locations in the Forest region (HACK), making sure not to generate more locations than requested
+def create_chests(world: MultiWorld, player: int, num_locations: int) -> Region:
+    new_region = Region("Forest", RegionType.Generic, "Forest", player, world)
+    total_locations = world.total_locations[player].value - num_locations
+
+    for i in range(total_locations):
+        location_name = f"Chest{i+1}"
+        location_id = 110000+i
+
+        location = Locations.NoitaLocation(player, location_name, location_id, new_region)
+        location.progress_type = LocationProgressType.EXCLUDED
+
+        new_region.locations.append(location)
 
     return new_region
 
@@ -51,7 +55,13 @@ def create_connections(player: int, regions: Dict[str, Region]) -> None:
 
 
 def create_regions(world: MultiWorld, player: int) -> Dict[str, Region]:
-    return {name: create_region(world, player, name) for name in noita_regions}
+    # NOTE: Forest hack is for chests
+    regions = { name: create_region(world, player, name) for name in noita_regions if name != "Forest" }
+
+    num_locations = sum(len(region.locations) for region in regions.values())
+    regions.update({ "Forest": create_chests(world, player, num_locations) })
+
+    return regions
 
 
 # Creates all regions and connections. Called from NoitaWorld.
@@ -60,6 +70,7 @@ def create_all_regions_and_connections(world: MultiWorld, player: int) -> None:
     create_connections(player, created_regions)
 
     world.regions += created_regions.values()
+
 
 noita_connections: Dict[str, Set[str]] = {
     "Menu": {"Forest",},
@@ -122,7 +133,6 @@ noita_connections: Dict[str, Set[str]] = {
     "The Work": {},
     "The Work (Hell)": {},
     ###
-
 }
 
 noita_regions: Set[str] = set(noita_connections.keys()).union(*noita_connections.values())
