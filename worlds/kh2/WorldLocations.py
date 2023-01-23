@@ -103,7 +103,9 @@ DC_Checks = {
     LocationName.DisneyCastleMap:           WorldLocationData(0x1E10, 4),
     LocationName.MinnieEscort:              WorldLocationData(0x3708, 6),
     LocationName.MinnieEscortGetBonus:      WorldLocationData(0x3708, 6),
-
+    LocationName.LingeringWillBonus:            WorldLocationData(0x370C, 6),              
+    LocationName.LingeringWillProofofConnection:WorldLocationData(0x370C, 6),               
+    LocationName.LingeringWillManifestIllusion: WorldLocationData(0x370C, 6),
 }
 TR_Checks = {
     LocationName.CornerstoneHillMap:            WorldLocationData(0x23B2, 0), 
@@ -122,12 +124,8 @@ TR_Checks = {
     LocationName.GoofyFuturePete:               WorldLocationData(0x3706, 1),
     LocationName.Monochrome:                    WorldLocationData(0x1E33, 2), 
     LocationName.WisdomForm:                    WorldLocationData(0x1E33, 2),           
-    LocationName.LingeringWillBonus:            WorldLocationData(0x370C, 6),              
-    LocationName.LingeringWillProofofConnection:WorldLocationData(0x370C, 6),               
-    LocationName.LingeringWillManifestIllusion: WorldLocationData(0x370C, 6),              
-
 }
-#the mismatch might be here
+
 HundredAcreChecks={
     LocationName.PoohsHouse100AcreWoodMap:      WorldLocationData(0x23C9, 7),
     LocationName.PoohsHouseAPBoost:             WorldLocationData(0x23B5, 4),
@@ -237,7 +235,7 @@ BC_Checks = {
     LocationName.XaldinGetBonus:                         WorldLocationData(0x3704, 4),
     LocationName.DonaldXaldinGetBonus:                   WorldLocationData(0x3704, 4),
     LocationName.SecretAnsemReport4:                     WorldLocationData(0x1D31, 2),
-    LocationName.XaldinDataDefenseBoost:                 WorldLocationData(0x61,   1),
+    LocationName.XaldinDataDefenseBoost:                 WorldLocationData(0x1D34, 7),
 }
 SP_Checks = {
     LocationName.PitCellAreaMap:                     WorldLocationData(0x23CA, 2),
@@ -380,8 +378,7 @@ HB_Checks = {
     LocationName.SephirothFenrir:                             WorldLocationData(0x1D1F, 7),
     LocationName.WinnersProof:                                WorldLocationData(0x1D27, 5),
     LocationName.ProofofPeace:                                WorldLocationData(0x1D27, 5),
-    
-    #No denotion for which depths chest is which. Might have to test it                  
+                      
     LocationName.CoRDepthsAPBoost:                            WorldLocationData(0x23DC, 2),
     LocationName.CoRDepthsPowerCrystal:                       WorldLocationData(0x23DC, 3),
     LocationName.CoRDepthsFrostCrystal:                       WorldLocationData(0x23DC, 4),
@@ -404,23 +401,24 @@ HB_Checks = {
     LocationName.CoRMineshaftUpperLevelMagicBoost:            WorldLocationData(0x23DE, 6),
     LocationName.CoRMineshaftUpperLevelAPBoost:               WorldLocationData(0x23DE, 3),
     LocationName.TransporttoRemembrance:                      WorldLocationData(0x370D, 0),
+
     LocationName.LexaeusBonus:                                WorldLocationData(0x370C, 1),
     LocationName.LexaeusASStrengthBeyondStrength:             WorldLocationData(0x370C, 1),
-    LocationName.LexaeusDataLostIllusion:                     WorldLocationData(0x93,   1),
+    LocationName.LexaeusDataLostIllusion:                     WorldLocationData(0x1D26, 1),#
     LocationName.MarluxiaGetBonus:                            WorldLocationData(0x370C, 3),              
     LocationName.MarluxiaASEternalBlossom:                    WorldLocationData(0x370C, 3),              
-    LocationName.MarluxiaDataLostIllusion:                    WorldLocationData(0x96,   1),
+    LocationName.MarluxiaDataLostIllusion:                    WorldLocationData(0x1D26, 7),#
     LocationName.ZexionBonus:                                 WorldLocationData(0x370C, 2),
     LocationName.GoofyZexion:                                 WorldLocationData(0x370C, 2),
     LocationName.ZexionASBookofShadows:                       WorldLocationData(0x370C, 2),
-    LocationName.ZexionDataLostIllusion:                      WorldLocationData(0x98,   1),
+    LocationName.ZexionDataLostIllusion:                      WorldLocationData(0x1D26, 2),#
     LocationName.LarxeneBonus:                                WorldLocationData(0x370C, 4),
     LocationName.LarxeneASCloakedThunder:                     WorldLocationData(0x370C, 4),
-    LocationName.LarxeneDataLostIllusion:                     WorldLocationData(0x94,   1),
+    LocationName.LarxeneDataLostIllusion:                     WorldLocationData(0x1D27, 0),#
     LocationName.VexenBonus:                                  WorldLocationData(0x370C, 0),
     LocationName.VexenASRoadtoDiscovery:                      WorldLocationData(0x370C, 0),
-    LocationName.VexenDataLostIllusion:                       WorldLocationData(0x92,   1),
-    LocationName.DemyxDataAPBoost:                            WorldLocationData(0x72,   1),
+    LocationName.VexenDataLostIllusion:                       WorldLocationData(0x1D26, 0),#
+    LocationName.DemyxDataAPBoost:                            WorldLocationData(0x1D26, 5),
     LocationName.GardenofAssemblageMap:                       WorldLocationData(0x23DF, 1),
     LocationName.GoALostIllusion:                             WorldLocationData(0x23DF, 2),
     LocationName.ProofofNonexistence:                         WorldLocationData(0x23DF, 3),
@@ -520,9 +518,9 @@ TT_Checks = {
     LocationName.TramCommonPotion1:                     WorldLocationData(0x23D1, 1),
     LocationName.TramCommonMythrilShard2:               WorldLocationData(0x23D1, 2),
     LocationName.TramCommonPotion2:                     WorldLocationData(0x23D8, 5),
-    LocationName.StationPlazaSecretAnsemReport2:        WorldLocationData(0x1CE3, 7),
-    LocationName.MunnyPouchMickey:                      WorldLocationData(0x1CE3, 7),
-    LocationName.CrystalOrb:                            WorldLocationData(0x1CE3, 7),
+    LocationName.StationPlazaSecretAnsemReport2:        WorldLocationData(0x1CE3, 3),
+    LocationName.MunnyPouchMickey:                      WorldLocationData(0x1CE3, 3),
+    LocationName.CrystalOrb:                            WorldLocationData(0x1CE3, 3),
     LocationName.CentralStationTent:                    WorldLocationData(0x23D2, 0),
     LocationName.TTCentralStationHiPotion:              WorldLocationData(0x23D2, 1),
     LocationName.CentralStationMythrilShard:            WorldLocationData(0x23D2, 2),
@@ -560,7 +558,7 @@ TT_Checks = {
     LocationName.MansionBasementCorridorUltimateRecipe: WorldLocationData(0x23D6, 1),
     LocationName.BetwixtandBetween:                     WorldLocationData(0x370B, 7),
     LocationName.BetwixtandBetweenBondofFlame:          WorldLocationData(0x1CE9, 1),
-    LocationName.AxelDataMagicBoost:                    WorldLocationData(0xD5,   1),
+    LocationName.AxelDataMagicBoost:                    WorldLocationData(0x1CEB,   5),
 }
 TWTNW_Checks = {
     LocationName.FragmentCrossingMythrilStone:          WorldLocationData(0x23CB, 4),
@@ -600,12 +598,12 @@ TWTNW_Checks = {
     LocationName.Xemnas1GetBonus:                       WorldLocationData(0x3707, 2),
     LocationName.Xemnas1SecretAnsemReport13:            WorldLocationData(0x1ED4, 5),
     #this is probably not the right room value for final xemnas
-    LocationName.FinalXemnas:                           WorldLocationData(0x61,   1),
-    LocationName.XemnasDataPowerBoost:                  WorldLocationData(0x62,   1),
-    LocationName.XigbarDataDefenseBoost:                WorldLocationData(0x64,   1),
-    LocationName.SaixDataDefenseBoost:                  WorldLocationData(0x66,   1),
-    LocationName.LuxordDataAPBoost:                     WorldLocationData(0x66,   1),
-    LocationName.RoxasDataMagicBoost:                   WorldLocationData(0x63,   1),
+    LocationName.FinalXemnas:                           WorldLocationData(0x1ED9, 0),
+    LocationName.XemnasDataPowerBoost:                  WorldLocationData(0x1EDA, 2),
+    LocationName.XigbarDataDefenseBoost:                WorldLocationData(0x1ED9, 7),
+    LocationName.SaixDataDefenseBoost:                  WorldLocationData(0x1EDA, 0),
+    LocationName.LuxordDataAPBoost:                     WorldLocationData(0x1EDA, 1),
+    LocationName.RoxasDataMagicBoost:                   WorldLocationData(0x1ED9, 6),
 }
 SoraLevels={
     #LocationName.Lvl1:  WorldLocationData(0xFFFF,1),

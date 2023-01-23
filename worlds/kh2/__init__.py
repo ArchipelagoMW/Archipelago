@@ -3,8 +3,7 @@ import random
 import typing
 from ..AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, ItemClassification
-from .Items import  KH2Item, item_dictionary_table, \
- donaldAbility, goofyAbility
+from .Items import  KH2Item, item_dictionary_table
 from .Locations import all_locations, setup_locations, exclusion_table,Donald_Checks,Goofy_Checks,Keyblade_Slots
 from .Rules import set_rules
 from .logic import KH2Logic
