@@ -131,23 +131,29 @@ class MuseDashWorld(World):
     def create_items(self) -> None:
         song_keys_in_pool = list(self.included_songs)
 
+        created_item_count = self.multiworld.music_sheet_count[self.player].value # Note: this does not count anything from Plando
+
         # First add all goal song tokens
-        for _ in range(0, self.multiworld.music_sheet_count[self.player]):
+        for _ in range(0, created_item_count):
             self.multiworld.itempool.append(self.create_item(self.music_sheet_name))
 
         # Next fill all remaining slots with song items
         needed_item_count = (len(song_keys_in_pool) + len(self.starting_songs)) * 2
-        while (len(self.multiworld.itempool) < needed_item_count):
+        while (created_item_count < needed_item_count):
             # If we have more items needed than keys, just iterate the list and add them all
-            if (len(song_keys_in_pool) <= needed_item_count - len(self.multiworld.itempool)):
+            if (len(song_keys_in_pool) <= needed_item_count - created_item_count):
                 for key in song_keys_in_pool:
                     self.multiworld.itempool.append(self.create_item(key))
+
+                created_item_count += len(song_keys_in_pool)
                 continue
 
             # Otherwise add a random assortment of songs
             self.multiworld.random.shuffle(song_keys_in_pool)
-            for i in range(0, needed_item_count - len(self.multiworld.itempool)):
+            for i in range(0, needed_item_count - created_item_count):
                 self.multiworld.itempool.append(self.create_item(song_keys_in_pool[i]))
+
+            created_item_count = needed_item_count
 
 
     def create_regions(self) -> None:
