@@ -63,7 +63,14 @@ games you want settings for.
   using this to detail the intention of the file.
 
 * `name` is the player name you would like to use and is used for your slot data to connect with most games. This can
-  also be filled with multiple names each having a weight to it.
+  also be filled with multiple names each having a weight to it. Names can also contain certain keywords, surrounded by
+  curly-braces, which will be replaced on generation with a number:
+  
+  * `{player}` will be replaced with the player's slot number.
+  * `{PLAYER}` will be replaced with the player's slot number if that slot number is greater than 1, otherwise blank.
+  * `{number}` will be replaced with the counter value of the name.
+  * `{NUMBER}` will be replaced with the counter value of the name if the counter value is greater than 1, otherwise 
+  blank.
 
 * `game` is where either your chosen game goes or if you would like can be filled with multiple games each with
   different weights.
@@ -184,6 +191,7 @@ A Link to the Past:
         - Fire Rod
         - Ice Rod
       replacement_item: "Rupee (1)"
+      link_replacement: true
 triggers:
   - option_category: A Link to the Past
     option_name: smallkey_shuffle
@@ -241,7 +249,7 @@ Timespinner:
 * `exclude_locations` forces a not important item to be placed on the `Cave 45` location.
 * `item_links` 
   * For `A Link to the Past` all players in the `rods` item link group will share their fire and ice rods and the player
-    items will be replaced with single rupees.
+    items will be replaced with single rupees. The rupee will also be shared among those players.
   * For `Timespinner` all players in the `TSAll` item link group will share their entire item pool and the `Twin Pyramid 
     Key` and `Timespinner Wheel` will be forced among the worlds of those in the group. The `null` replacement item will, 
     instead of forcing a specific chosen item, allow the generator to randomly pick a filler item to replace the player items.

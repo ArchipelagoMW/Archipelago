@@ -19,7 +19,7 @@ As we are using Bizhawk, this guide is only applicable to Windows and Linux syst
 Once Bizhawk has been installed, open Bizhawk and change the following settings:
 
 - Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
-  "Lua+LuaInterface". This is required for the Lua script to function correctly.
+  "Lua+LuaInterface". Then restart Bizhawk. This is required for the Lua script to function correctly.
   **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
   **of newer versions of Bizhawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
   **"NLua+KopiLua" until this step is done.**
@@ -176,7 +176,7 @@ Ocarina of Time:
     overworld: 0
     any_dungeon: 0
     keysanity: 0
-  shuffle_fortresskeys: # Control where to shuffle the Gerudo Fortress small keys.
+  shuffle_hideoutkeys: # Control where to shuffle the Gerudo Fortress small keys.
     vanilla: 50
     overworld: 0
     any_dungeon: 0
