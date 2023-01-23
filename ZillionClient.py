@@ -48,6 +48,9 @@ class ZillionContext(CommonContext):
     command_processor: Type[ClientCommandProcessor] = ZillionCommandProcessor
     items_handling = 1  # receive items from other players
 
+    known_name: Optional[str]
+    """ This is almost the same as `auth` except `auth` is reset to `None` when server disconnects, and this isn't. """
+
     from_game: "asyncio.Queue[events.EventFromGame]"
     to_game: "asyncio.Queue[events.EventToGame]"
     ap_local_count: int
@@ -82,6 +85,7 @@ class ZillionContext(CommonContext):
                  server_address: str,
                  password: str) -> None:
         super().__init__(server_address, password)
+        self.known_name = None
         self.from_game = asyncio.Queue()
         self.to_game = asyncio.Queue()
         self.got_room_info = asyncio.Event()
@@ -396,7 +400,8 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
             game_id = memory.get_rom_to_ram_data(ram)
             name, seed_end = name_seed_from_ram(game_id)
             if len(name):
-                if name == ctx.auth:
+                if name == ctx.known_name:
+                    ctx.auth = name
                     # this is the name we know
                     if ctx.server and ctx.server.socket:  # type: ignore
                         if ctx.got_room_info.is_set():
@@ -439,6 +444,7 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
                     memory.reset_game_state()
 
                     ctx.auth = name
+                    ctx.known_name = name
                     async_start(ctx.connect())
                     await asyncio.wait((
                         ctx.got_room_info.wait(),
