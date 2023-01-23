@@ -558,7 +558,7 @@ TT_Checks = {
     LocationName.MansionBasementCorridorUltimateRecipe: WorldLocationData(0x23D6, 1),
     LocationName.BetwixtandBetween:                     WorldLocationData(0x370B, 7),
     LocationName.BetwixtandBetweenBondofFlame:          WorldLocationData(0x1CE9, 1),
-    LocationName.AxelDataMagicBoost:                    WorldLocationData(0x1CEB,   5),
+    LocationName.AxelDataMagicBoost:                    WorldLocationData(0x1CEB, 4),
 }
 TWTNW_Checks = {
     LocationName.FragmentCrossingMythrilStone:          WorldLocationData(0x23CB, 4),
