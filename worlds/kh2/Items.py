@@ -361,7 +361,7 @@ GoofyAbility_Table = {
 }
 
 Misc_Table = {
-    ItemName.LuckyEmblem: 				ItemData(0x1320125,  1,1,0x111 ),
+    ItemName.LuckyEmblem: 				ItemData(0x1320125,  0,1,0x111 ),
     ItemName.Victory: 				    ItemData(0x1320126,  1,1,0x111 ),
 }   #itemname luckey emblem (0x1320172)    will be unused map
 

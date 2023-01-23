@@ -234,7 +234,7 @@ Ribbon          ="Ribbon"
 GrandRibbon     ="Grand Ribbon" 
 
 #usefull and stat incre
-MickyMunnyPouch ="Micky Munny Pouch"
+MickyMunnyPouch ="Mickey Munny Pouch"
 OletteMunnyPouch="Olette Munny Pouch"
 HadesCupTrophy  ="Hades Cup Trophy"
 UnknownDisk     ="Unknown Disk"

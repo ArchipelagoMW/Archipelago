@@ -62,10 +62,7 @@ def patch_kh2(self, output_directory):
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
     
     for location in self.multiworld.get_filled_locations(self.player):
-        #if location.player==self.player:
-        #    continue
-        if location.name==LocationName.StationDusks:
-            print()
+
         data = all_locations[location.name]
         if location.item.player==self.player:
             itemcode = item_dictionary_table[location.item.name].kh2id
