@@ -256,7 +256,7 @@ def connectStartingRegion(world: MultiWorld, player: int):
 
 
 def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: str, target: str, 
-        rule: Optional[Callable[[CollectionState]]] = None):
+        rule: Optional[Callable[[CollectionState], bool]] = None):
     sourceRegion = world.get_region(source, player)
     targetRegion = world.get_region(target, player)
 

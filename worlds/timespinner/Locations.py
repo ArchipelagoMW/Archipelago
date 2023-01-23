@@ -11,7 +11,7 @@ class LocationData(NamedTuple):
     region: str
     name: str
     code: Optional[int]
-    rule: Callable[[CollectionState]] = lambda state: True
+    rule: Callable[[CollectionState], bool] = lambda state: True
 
 
 def get_locations(world: Optional[MultiWorld], player: Optional[int], flooded: PreCalculatedWeights) -> Tuple[LocationData, ...]:
