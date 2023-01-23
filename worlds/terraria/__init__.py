@@ -1,13 +1,27 @@
-from worlds.AutoWorld import World
+from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_rule
-from BaseClasses import Region, RegionType, ItemClassification
+from BaseClasses import Region, RegionType, ItemClassification, Tutorial
 from .Checks import item_name_to_id, location_name_to_id, TerrariaItem, TerrariaLocation, precollected, get_items_locations
 from .Options import options
 from .Rules import get_rules
 
+class TerrariaWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Terraria randomizer connected to an Archipelago Multiworld",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Seldom"]
+    )]
+
 class TerrariaWorld(World):
-    """Terraria is a 2D sandbox video game."""
+    """
+    Terraria is a 2D multiplayer sandbox game featuring mining, building, exploration, and combat.
+    Features 18 bosses and 4 classes.
+    """
     game: str = "Terraria"
+    web = TerrariaWeb()
     option_definitions = options
 
     # data_version is used to signal that items, locations or their names
