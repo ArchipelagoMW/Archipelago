@@ -40,16 +40,18 @@ class NoitaWorld(World):
     data_version = 1
     web = NoitaWeb()
 
+    def get_option(self, name):
+        return getattr(self.world, name)[self.player].value
+
     def fill_slot_data(self):
-        return {
-            "seed": "".join(self.world.slot_seeds[self.player].choices(string.digits, k=16)),
-            "totalLocations": self.world.total_locations[self.player].value,
-            "badEffects": self.world.bad_effects[self.player].value,
-            "deathLink": self.world.death_link[self.player].value,
-            "victoryCondition": self.world.victory_condition[self.player].value,
-            "orbsAsChecks": self.world.orbs_as_checks[self.player].value,
-            "bossesAsChecks": self.world.bosses_as_checks[self.player].value,
+        slot_data = {
+            "seed": self.world.seed_name,
         }
+
+        for option_name in option_definitions:
+            slot_data[option_name] = get_option(option_name)
+
+        return slot_data
 
     def create_regions(self) -> None:
         Regions.create_all_regions_and_connections(self.world, self.player)
