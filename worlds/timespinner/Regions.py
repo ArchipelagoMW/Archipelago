@@ -1,5 +1,5 @@
 from typing import List, Set, Dict, Tuple, Optional, Callable
-from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
+from BaseClasses import CollectionState, MultiWorld, Region, Entrance, Location, RegionType
 from .Options import is_option_enabled
 from .Locations import LocationData
 from .PreCalculatedWeights import PreCalculatedWeights
@@ -19,7 +19,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, 'Eastern lake desolation'),
         create_region(world, player, locations_per_region, location_cache, 'Library'),
         create_region(world, player, locations_per_region, location_cache, 'Library top'),
-        create_region(world, player, locations_per_region, location_cache, 'Ifrit\'s Lair'),
         create_region(world, player, locations_per_region, location_cache, 'Varndagroth tower left'),
         create_region(world, player, locations_per_region, location_cache, 'Varndagroth tower right (upper)'),
         create_region(world, player, locations_per_region, location_cache, 'Varndagroth tower right (lower)'),
@@ -30,7 +29,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, 'The lab'),
         create_region(world, player, locations_per_region, location_cache, 'The lab (power off)'),
         create_region(world, player, locations_per_region, location_cache, 'The lab (upper)'),
-        create_region(world, player, locations_per_region, location_cache, 'Ravenlord\'s Lair'),
         create_region(world, player, locations_per_region, location_cache, 'Emperors tower'),
         create_region(world, player, locations_per_region, location_cache, 'Skeleton Shaft'),
         create_region(world, player, locations_per_region, location_cache, 'Sealed Caves (upper)'),
@@ -54,6 +52,12 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, 'Ancient Pyramid (right)'),
         create_region(world, player, locations_per_region, location_cache, 'Space time continuum')
     ]
+
+    if is_option_enabled(world, player, "GyreArchives"):
+        regions.extend([
+            create_region(world, player, locations_per_region, location_cache, 'Ravenlord\'s Lair'),
+            create_region(world, player, locations_per_region, location_cache, 'Ifrit\'s Lair'),
+        ])
 
     if __debug__:
         throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region.keys())
@@ -92,8 +96,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Library', 'Varndagroth tower left', lambda state: logic.has_keycard_D(state))
     connect(world, player, names, 'Library', 'Space time continuum', lambda state: state.has('Twin Pyramid Key', player))
     connect(world, player, names, 'Library top', 'Library')
-    connect(world, player, names, 'Library top', 'Ifrit\'s Lair', lambda state: state.has('Kobo', player) and state.can_reach('Refugee Camp', 'Region', player))
-    connect(world, player, names, 'Ifrit\'s Lair', 'Library top')
     connect(world, player, names, 'Varndagroth tower left', 'Library')
     connect(world, player, names, 'Varndagroth tower left', 'Varndagroth tower right (upper)', lambda state: logic.has_keycard_C(state))
     connect(world, player, names, 'Varndagroth tower left', 'Varndagroth tower right (lower)', lambda state: logic.has_keycard_B(state))
@@ -122,10 +124,8 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'The lab (power off)', 'The lab')
     connect(world, player, names, 'The lab (power off)', 'The lab (upper)', lambda state: logic.has_forwarddash_doublejump(state))
     connect(world, player, names, 'The lab (upper)', 'The lab (power off)')
-    connect(world, player, names, 'The lab (upper)', 'Ravenlord\'s Lair', lambda state: state.has('Merchant Crow', player))
     connect(world, player, names, 'The lab (upper)', 'Emperors tower', lambda state: logic.has_forwarddash_doublejump(state))
     connect(world, player, names, 'The lab (upper)', 'Ancient Pyramid (entrance)', lambda state: state.has_all({'Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'}, player))
-    connect(world, player, names, 'Ravenlord\'s Lair', 'The lab (upper)')
     connect(world, player, names, 'Emperors tower', 'The lab (upper)')
     connect(world, player, names, 'Skeleton Shaft', 'Lake desolation')
     connect(world, player, names, 'Skeleton Shaft', 'Sealed Caves (upper)', lambda state: logic.has_keycard_A(state))
@@ -191,6 +191,12 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Space time continuum', 'Ancient Pyramid (left)', lambda state: time_keys_unlock == "GateLeftPyramid")
     connect(world, player, names, 'Space time continuum', 'Ancient Pyramid (right)', lambda state: time_keys_unlock == "GateRightPyramid")
 
+    if is_option_enabled(world, player, "GyreArchives"):
+        connect(world, player, names, 'The lab (upper)', 'Ravenlord\'s Lair', lambda state: state.has('Merchant Crow', player))
+        connect(world, player, names, 'Ravenlord\'s Lair', 'The lab (upper)')
+        connect(world, player, names, 'Library top', 'Ifrit\'s Lair', lambda state: state.has('Kobo', player) and state.can_reach('Refugee Camp', 'Region', player))
+        connect(world, player, names, 'Ifrit\'s Lair', 'Library top')
+
 def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionNames: Set[str]):
     existingRegions = set()
 
@@ -249,7 +255,8 @@ def connectStartingRegion(world: MultiWorld, player: int):
     space_time_continuum.exits.append(teleport_back_to_start)
 
 
-def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: str, target: str, rule: Optional[Callable] = None):
+def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: str, target: str, 
+        rule: Optional[Callable[[CollectionState]]] = None):
     sourceRegion = world.get_region(source, player)
     targetRegion = world.get_region(target, player)
 

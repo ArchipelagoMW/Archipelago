@@ -1,5 +1,5 @@
 from typing import List, Tuple, Optional, Callable, NamedTuple
-from BaseClasses import MultiWorld
+from BaseClasses import MultiWorld, CollectionState
 from .Options import is_option_enabled
 from .PreCalculatedWeights import PreCalculatedWeights
 from .LogicExtensions import TimespinnerLogic
@@ -11,7 +11,7 @@ class LocationData(NamedTuple):
     region: str
     name: str
     code: Optional[int]
-    rule: Callable = lambda state: True
+    rule: Callable[[CollectionState]] = lambda state: True
 
 
 def get_locations(world: Optional[MultiWorld], player: Optional[int], flooded: PreCalculatedWeights) -> Tuple[LocationData, ...]:

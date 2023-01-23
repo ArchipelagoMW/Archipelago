@@ -6,8 +6,7 @@ from .Locations import get_locations, starter_progression_locations, EventId
 from .Options import is_option_enabled, get_option_value, timespinner_options
 from .PreCalculatedWeights import PreCalculatedWeights
 from .Regions import create_regions
-from ..AutoWorld import World, WebWorld
-
+from worlds.AutoWorld import World, WebWorld
 
 class TimespinnerWebWorld(WebWorld):
     theme = "ice"
@@ -43,6 +42,7 @@ class TimespinnerWorld(World):
     topology_present = True
     data_version = 11
     web = TimespinnerWebWorld()
+    required_client_version = (0, 3, 7)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None, None)}
@@ -185,6 +185,12 @@ def get_excluded_items(self: TimespinnerWorld, world: MultiWorld, player: int) -
         excluded_items.add('Meyef')
     if is_option_enabled(world, player, "QuickSeed"):
         excluded_items.add('Talaria Attachment')
+    if is_option_enabled(world, player, "UnchainedKeys"):
+        excluded_items.add('Twin Pyramid Key')
+    else:
+        excluded_items.add('Timeworn Warp Beacon')
+        excluded_items.add('Modern Warp Beacon')
+        excluded_items.add('Mysterious Warp Beacon')
 
     for item in world.precollected_items[player]:
         if item.name not in self.item_name_groups['UseItem']:
