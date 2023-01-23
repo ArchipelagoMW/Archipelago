@@ -79,7 +79,7 @@ def create_regions(world: MultiWorld, player: int, locations: LMLocation[Locatio
     names: Dict[str, int] = {}
 
     connect(world, player, names, 'Menu', 'Foyer')
-    connect(world, player, names, 'Foyer', 'Parlor', lambda state: state.has("Parlor Key", player))
+    connect(world, player, names, 'Foyer', 'Parlor')
     connect(world, player, names, 'Parlor', 'Anteroom', lambda state: state.has("Anteroom Key", player))
     connect(world, player, names, 'Anteroom', 'Wardrobe', lambda state: state.has("Wardrobe Key", player))
     connect(world, player, names, 'Wardrobe', 'Wardrobe Balcony')
@@ -109,12 +109,12 @@ def create_regions(world: MultiWorld, player: int, locations: LMLocation[Locatio
     connect(world, player, names, 'Billiards Room', 'Projection Room')
     connect(world, player, names, 'Fortune-Teller\'s Room', 'Mirror Room')
     connect(world, player, names, 'Laundry Room', 'Butler\'s Room')
-    connect(world, player, names, 'Butler\'s Room', 'Hidden Room') # Need to catch Butler first?
+    connect(world, player, names, 'Butler\'s Room', 'Hidden Room')
     connect(world, player, names, 'Courtyard', 'The Well')
     connect(world, player, names, 'Rec Room', '2F Stairwell')
     connect(world, player, names, '2F Stairwell', 'Tea Room', lambda state: state.has("Water Element Medal", player))
     connect(world, player, names, '2F Stairwell', 'Rec Room')
-    connect(world, player, names, '2F Stairwell', '2F Rear Hallway', lambda state: state.has("Ice Element Medal", player)) # Test - may not need Ice Element
+    connect(world, player, names, '2F Stairwell', '2F Rear Hallway')
     connect(world, player, names, '2F Rear Hallway', '2F Bathroom')
     connect(world, player, names, '2F Rear Hallway', '2F Washroom')
     connect(world, player, names, '2F Rear Hallway', 'Nana\'s Room')
