@@ -156,7 +156,7 @@ class Context:
         self.player_names: typing.Dict[team_slot, str] = {}
         self.player_name_lookup: typing.Dict[str, team_slot] = {}
         self.connect_names = {}  # names of slots clients can connect to
-        self.allow_forfeits = {}
+        self.allow_releases = {}
         #                          player          location_id     item_id  target_player_id
         self.locations = {}
         self.host = host
@@ -1230,7 +1230,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     def _cmd_release(self) -> bool:
         """Sends remaining items in your world to their recipients."""
-        if self.ctx.allow_forfeits.get((self.client.team, self.client.slot), False):
+        if self.ctx.allow_releases.get((self.client.team, self.client.slot), False):
             release_player(self.ctx, self.client.team, self.client.slot)
             return True
         if "enabled" in self.ctx.release_mode:
@@ -1886,7 +1886,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         player = self.resolve_player(player_name)
         if player:
             team, slot, name = player
-            self.ctx.allow_forfeits[(team, slot)] = True
+            self.ctx.allow_releases[(team, slot)] = True
             self.output(f"Player {name} is now allowed to use the !release command at any time.")
             return True
 
@@ -1899,7 +1899,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         player = self.resolve_player(player_name)
         if player:
             team, slot, name = player
-            self.ctx.allow_forfeits[(team, slot)] = False
+            self.ctx.allow_releases[(team, slot)] = False
             self.output(f"Player {name} has to follow the server restrictions on use of the !release command.")
             return True
 
