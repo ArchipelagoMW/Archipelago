@@ -392,11 +392,13 @@ class GameManager(App):
         Clock.schedule_interval(self.update_texts, 1 / 30)
         self.container.add_widget(self.grid)
 
+        # If the address contains a port, select it; otherwise, select the host.
+        s = self.server_connect_bar.text
+        host_start = s.find("@") + 1
+        ipv6_end = s.find("]", host_start) + 1
+        port_start = s.find(":", ipv6_end if ipv6_end > 0 else host_start) + 1
         self.server_connect_bar.focus = True
-        self.server_connect_bar.select_text(
-            self.server_connect_bar.text.find(":") + 1,
-            len(self.server_connect_bar.text)
-        )
+        self.server_connect_bar.select_text(port_start if port_start > 0 else host_start, len(s))
 
         return self.container
 
