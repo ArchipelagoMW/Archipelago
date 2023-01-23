@@ -2304,11 +2304,11 @@ def write_strings(rom, world, player):
                                                                 'dungeonscrossed'] else 8
             hint_count = min(hint_count, len(items_to_hint), len(hint_locations))
             if hint_count:
+                player_groups = world.get_player_groups(player)
                 locations = [location for location in world.get_locations()
                              if location.item and location.item.name in items_to_hint and
-                             player not in world.groups.get(location.player, {}).get("players", []) and
-                             (location.item.player == player or
-                              player in world.groups.get(location.item.player, {}).get("players", []))]
+                             location.player not in player_groups and
+                             (location.item.player == player or location.item.player in player_groups)]
                 local_random.shuffle(locations)
                 for x in range(min(hint_count, len(locations))):
                     this_location = locations.pop()
