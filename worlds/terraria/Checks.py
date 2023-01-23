@@ -337,7 +337,7 @@ def get_items_locations(goal, achievements_opt, extra_checks):
         world_locations += grindy_achievements
     if achievements_opt > 2:
         world_locations += fishing_achievements
-    if goal > 0 or achievements_opt > 2:
+    if (goal > 0 and achievements_opt > 0) or achievements_opt > 2:
         world_locations += achievements_that_are_fishing_if_goal_is_wof
     if goal > 0 and achievements_opt > 0:
         world_locations += post_wall_of_flesh_achievements
@@ -350,13 +350,14 @@ def get_items_locations(goal, achievements_opt, extra_checks):
     if goal > 2 and achievements_opt > 0:
         world_locations += post_moon_lord_achievements
 
-    if extra_checks == 1 and len(world_items) < len(world_locations):
-        if len(world_locations) - len(world_items) < len(item_items):
-            world_items += item_items[:len(world_locations) - len(world_items)]
+    # Subtract one from location counts, since the goal does not need an associated item
+    if extra_checks == 1 and len(world_items) < len(world_locations) - 1:
+        if len(world_locations) - len(world_items) - 1 < len(item_items):
+            world_items += item_items[:len(world_locations) - len(world_items) - 1]
         else:
             world_items += item_items
 
-    if len(world_items) < len(world_locations):
-        world_items += ["Nothing"] * (len(world_locations) - len(world_items))
+    if len(world_items) < len(world_locations) - 1:
+        world_items += ["Nothing"] * (len(world_locations) - len(world_items) - 1)
 
     return world_items, world_locations
