@@ -9,6 +9,10 @@ and [TModLoader](https://store.steampowered.com/app/1281930/tModLoader/) on Stea
 
 Subscribe to [the mod](https://steamcommunity.com/sharedfiles/filedetails/?id=2922217554) on Steam.
 
+This mod might not work with mods that significantly alter progression, and is very unlikely to work
+with mods that significantly modify vanilla features. Feel free to use your preferred utility mods
+to speed up gameplay.
+
 ## Configuring your YAML File
 
 ### What is a YAML and why do I need one?
@@ -30,9 +34,9 @@ on the Archipelago website to generate a YAML using a graphical interface.
     digit number.
     * If you're not hosting your game on the Archipelago website, change "Address" to the server's
     URL or IP address
-3. Create a new Character and World as normal (or use an existing one if you prefer).
+3. Create a new character and world as normal (or use an existing one if you prefer).
 4. Open the world in single player or multiplayer
-5. When your ready, open chat, and send "/apstart" to start the game
+5. When you're ready, open chat, and send "/apstart" to start the game
    
 ## Commands
 

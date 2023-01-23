@@ -1,6 +1,11 @@
 from BaseClasses import Location, Item
 
-items = [
+misc_items = [
+    "Nothing",
+    "Victory",
+]
+
+prehardmode_items = [
     "Torch God's Favor",
     "Post-Goblin Army",
     "Post-King Slime",
@@ -10,11 +15,6 @@ items = [
     "Post-Queen Bee",
     "Post-Skeletron",
     "Post-Deerclops",
-]
-
-misc_items = [
-    "Nothing",
-    "Victory",
 ]
 
 post_wall_of_flesh_items = [
@@ -127,7 +127,7 @@ item_items = [
 # Debugging utility
 precollected = []
 
-locations = [
+prehardmode_locations = [
     "Torch God",
     "Goblin Army",
     "King Slime",
@@ -171,7 +171,7 @@ post_moon_lord_locations = [
     "Zenith",
 ]
 
-achievements = [
+prehardmode_achievements = [
     "Timber!!",
     "No Hobo",
     "Stop! Hammer Time!",
@@ -211,7 +211,7 @@ achievements = [
     "Feeling Petty",
 ]
 
-grindy_achievements = [
+grindy_prehardmode_achievements = [
     "Sticky Situation",
     "There are Some Who Call Him...",
     "Deceiver of Fools",
@@ -224,7 +224,7 @@ grindy_achievements = [
     "Dead Men Tell No Tales",
 ]
 
-fishing_achievements = [
+fishing_prehardmode_achievements = [
     "Glorious Golden Pole",
     "Servant-in-Training",
     "10 Fishing Quests", # This achievement was intentionally renamed
@@ -233,7 +233,7 @@ fishing_achievements = [
     "Supreme Helper Minion!",
 ]
 
-achievements_that_are_fishing_if_goal_is_wof = [
+achievements_that_are_fishing_if_prehardmode = [
     "Head in the Clouds",
 ]
 
@@ -288,21 +288,21 @@ def register(names, isItem):
             location_name_to_id[name] = next_id
         next_id += 1
 
-register(items, True)
 register(misc_items, True)
+register(prehardmode_items, True)
 register(post_wall_of_flesh_items, True)
 register(post_plantera_items, True)
 register(post_moon_lord_items, True)
 register(item_items, True)
 
-register(locations, False)
+register(prehardmode_locations, False)
 register(post_wall_of_flesh_locations, False)
 register(post_plantera_locations, False)
 register(post_moon_lord_locations, False)
-register(achievements, False)
-register(grindy_achievements, False)
-register(fishing_achievements, False)
-register(achievements_that_are_fishing_if_goal_is_wof, False)
+register(prehardmode_achievements, False)
+register(grindy_prehardmode_achievements, False)
+register(fishing_prehardmode_achievements, False)
+register(achievements_that_are_fishing_if_prehardmode, False)
 register(post_wall_of_flesh_achievements, False)
 register(grindy_post_wall_of_flesh_achievements, False)
 register(post_plantera_achievements, False)
@@ -316,48 +316,48 @@ class TerrariaLocation(Location):
     game = "Terraria"
 
 def get_items_locations(goal, achievements_opt, extra_checks):
-    world_items = items.copy()
+    items = prehardmode_items.copy()
     if goal > 0:
-        world_items += post_wall_of_flesh_items
+        items += post_wall_of_flesh_items
     if goal > 1:
-        world_items += post_plantera_items
+        items += post_plantera_items
     if goal > 2:
-        world_items += post_moon_lord_items
+        items += post_moon_lord_items
 
-    world_locations = locations.copy()
+    locations = prehardmode_locations.copy()
     if goal > 0:
-        world_locations += post_wall_of_flesh_locations
+        locations += post_wall_of_flesh_locations
     if goal > 1:
-        world_locations += post_plantera_locations
+        locations += post_plantera_locations
     if goal > 2:
-        world_locations += post_moon_lord_locations
+        locations += post_moon_lord_locations
     if achievements_opt > 0:
-        world_locations += achievements
+        locations += prehardmode_achievements
     if achievements_opt > 1:
-        world_locations += grindy_achievements
+        locations += grindy_prehardmode_achievements
     if achievements_opt > 2:
-        world_locations += fishing_achievements
+        locations += fishing_prehardmode_achievements
     if (goal > 0 and achievements_opt > 0) or achievements_opt > 2:
-        world_locations += achievements_that_are_fishing_if_goal_is_wof
+        locations += achievements_that_are_fishing_if_prehardmode
     if goal > 0 and achievements_opt > 0:
-        world_locations += post_wall_of_flesh_achievements
+        locations += post_wall_of_flesh_achievements
     if goal > 0 and achievements_opt > 1:
-        world_locations += grindy_post_wall_of_flesh_achievements
+        locations += grindy_post_wall_of_flesh_achievements
     if goal > 1 and achievements_opt > 0:
-        world_locations += post_plantera_achievements
+        locations += post_plantera_achievements
     if goal > 1 and achievements_opt > 1:
-        world_locations += grindy_post_plantera_achievements
+        locations += grindy_post_plantera_achievements
     if goal > 2 and achievements_opt > 0:
-        world_locations += post_moon_lord_achievements
+        locations += post_moon_lord_achievements
 
     # Subtract one from location counts, since the goal does not need an associated item
-    if extra_checks == 1 and len(world_items) < len(world_locations) - 1:
-        if len(world_locations) - len(world_items) - 1 < len(item_items):
-            world_items += item_items[:len(world_locations) - len(world_items) - 1]
+    if extra_checks == 1 and len(items) < len(locations) - 1:
+        if len(locations) - len(items) - 1 < len(item_items):
+            items += item_items[:len(locations) - len(items) - 1]
         else:
-            world_items += item_items
+            items += item_items
 
-    if len(world_items) < len(world_locations) - 1:
-        world_items += ["Nothing"] * (len(world_locations) - len(world_items) - 1)
+    if len(items) < len(locations) - 1:
+        items += ["Nothing"] * (len(locations) - len(items) - 1)
 
-    return world_items, world_locations
+    return items, locations
