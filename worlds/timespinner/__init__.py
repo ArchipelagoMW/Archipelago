@@ -81,9 +81,13 @@ class TimespinnerWorld(World):
     def set_rules(self):
         setup_events(self.player, self.locked_locations, self.location_cache)
 
-        self.multiworld.completion_condition[self.player] = lambda state: \
-            state.has('Killed Nightmare', self.player) if not is_option_enabled(self.multiworld, self.player, "DadPercent") \
-            else state.has('Killed Emperor', self.player)
+        final_boss: str
+        if is_option_enabled(self.multiworld, self.player, "DadPercent"):
+            final_boss = "Killed Emperor"
+        else:
+            final_boss = "Killed Nightmare"
+
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(final_boss, self.player) 
 
     def generate_basic(self):
         excluded_items = get_excluded_items(self, self.multiworld, self.player)
@@ -131,13 +135,13 @@ class TimespinnerWorld(World):
 
     def write_spoiler_header(self, spoiler_handle: TextIO):
         if is_option_enabled(self.multiworld, self.player, "UnchainedKeys"):
-            spoiler_handle.write('Modern Warp Beacon unlock:        %s\n' % 
+            spoiler_handle.write('Modern Warp Beacon unlock:       %s\n' % 
                 (self.precalculated_weights.present_key_unlock))
-            spoiler_handle.write('Timeworn Warp Beacon unlock:        %s\n' % 
+            spoiler_handle.write('Timeworn Warp Beacon unlock:     %s\n' % 
                 (self.precalculated_weights.past_key_unlock))
 
             if is_option_enabled(self.multiworld, self.player, "EnterSandman"):
-                spoiler_handle.write('Mysterious Warp Beacon unlock:        %s\n' % 
+                spoiler_handle.write('Mysterious Warp Beacon unlock:   %s\n' % 
                     (self.precalculated_weights.time_key_unlock))
         else:
             spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % 
