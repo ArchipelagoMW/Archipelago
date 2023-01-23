@@ -307,10 +307,6 @@ def assign_ids():
     next_id = register(grindy_post_plantera_achievements, location_name_to_id, next_id)
     next_id = register(post_moon_lord_achievements, location_name_to_id, next_id)
 
-    from pprint import pprint
-    pprint(item_name_to_id)
-    pprint(location_name_to_id)
-
     return item_name_to_id, location_name_to_id
 
 item_name_to_id, location_name_to_id = assign_ids()
