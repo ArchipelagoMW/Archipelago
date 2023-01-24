@@ -3,11 +3,10 @@ from Options import TextChoice, Option, Range, Toggle
 
 
 class Character(TextChoice):
-    """Enter the Title of the character you wish to play as, for custom characters this should match exactly the full
-     title that shows up when choosing them in the vanilla character select screen.
+    """Enter the internal ID of the character to use.
 
-      if you don't know the exact name to enter with the mod installed go to
-     `Mods -> Archipelago Multi-world -> config` to view a list of installed modded character titles.
+      if you don't know the exact ID to enter with the mod installed go to
+     `Mods -> Archipelago Multi-world -> config` to view a list of installed modded character IDs.
 
      the downfall characters will only work if you have downfall installed.
 
