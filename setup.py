@@ -30,7 +30,7 @@ apworlds: set = {
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 import subprocess
 import pkg_resources
-requirement = 'cx-Freeze>=6.13.1'
+requirement = 'cx-Freeze>=6.14.0'
 try:
     pkg_resources.require(requirement)
     import cx_Freeze
@@ -452,7 +452,7 @@ cx_Freeze.setup(
             "zip_exclude_packages": ["worlds", "sc2"],
             "include_files": find_libs("libssl.so", "libcrypto.so") if is_linux else [],
             "include_msvcr": False,
-            "replace_paths": [("*", "")],
+            "replace_paths": ["*."],
             "optimize": 1,
             "build_exe": buildfolder,
             "extra_data": extra_data,
