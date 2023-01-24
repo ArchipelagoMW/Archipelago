@@ -1,23 +1,23 @@
-Magical Wonderland (More colorful mix)|Default Music|True|1|3|0|
+Magical Wonderland|Default Music|True|1|3|0|
 Iyaiya|Default Music|True|1|4|0|
 Wonderful Pain|Default Music|False|1|3|0|
 Breaking Dawn|Default Music|True|2|4|0|
-单向地铁 Feat.karin|Default Music|True|1|4|0|
+One-Way Subway|Default Music|True|1|4|0|
 Frost Land|Default Music|False|1|3|6|
 Heart-Pounding Flight|Default Music|True|2|5|0|
 Pancake is Love|Default Music|True|2|4|7|
-时光涂鸦|Default Music|True|2|5|0|
+Shiguang Tuya|Default Music|True|2|5|0|
 Evolution|Default Music|False|2|4|7|
-海豚与广播 feat.Uranyan|Default Music|True|2|5|0|
+Dolphin and Broadcast|Default Music|True|2|5|0|
 Yuki no Shizuku Ame no Oto|Default Music|True|2|4|6|
 Best One feat.tooko|Default Music|False|3|5|0|
-糖果色恋爱学|Default Music|False|2|4|6|
-Night Wander (cnsouka Remix)|Default Music|False|3|5|7|
+Candy-coloured Love Theory|Default Music|False|2|4|6|
+Night Wander|Default Music|False|3|5|7|
 Dohna Dohna no Uta|Default Music|False|2|4|6|
 Spring Carnival|Default Music|False|2|4|7|
 DISCO NIGHT|Default Music|True|2|4|7|
 Koi no Moonlight|Default Music|False|2|5|8|
-恋爱语音导航 feat.yousa|Default Music|True|3|5|7|
+Lian Ai Audio Navigation|Default Music|True|3|5|7|
 Lights of Muse|Default Music|True|4|6|8|10
 midstream jam|Default Music|False|2|5|8|
 Nihao|Default Music|False|3|5|7|
@@ -33,7 +33,7 @@ irregulyze|Default Music|True|3|6|8|
 I don't care about Christmas though|Default Music|False|4|6|8|
 Imaginary World|Default Music|True|4|6|8|
 Dysthymia|Default Music|True|4|7|9|
-新世界より|Default Music|False|2|5|7|
+From the New World|Default Music|False|2|5|7|
 NISEGAO|Default Music|True|4|7|9|
 Say! Fanfare!|Default Music|False|4|6|9|
 Star Driver|Default Music|True|5|7|9|
@@ -45,62 +45,70 @@ Latitude|Default Music|True|3|6|9|
 Aqua Stars|Default Music|False|5|7|10|
 Funkotsu Saishin Casino|Default Music|False|5|7|10|
 Clock Room & Spiritual World|Default Music|True|4|6|9|
-INTERNET OVERDOSE（Aiobahn feat.KOTOKO）|Default Music|False|3|6|9|
-徒 花|Default Music|True|4|7|9|
-Mujinku-Vacuum Track#ADD8E6-|Default Music|False|5|7|11|
+INTERNET OVERDOSE|Default Music|False|3|6|9|
+Tu Hua|Default Music|True|4|7|9|
+Mujinku-Vacuum|Default Music|False|5|7|11|
 MilK|Default Music|False|5|7|9|
 umpopoff|Default Music|False|0|?|0|
 Mopemope|Default Music|False|4|7|9|11
 The Happycore Idol|[ Just as Planned ] Plus|True|2|5|7|
 Amatsumikaboshi|[ Just as Planned ] Plus|True|4|6|8|10
 ARIGA THESIS|[ Just as Planned ] Plus|True|3|6|10|
-ナイト・オブ・ナイツ|[ Just as Planned ] Plus|False|4|7|10|
+Night of Nights|[ Just as Planned ] Plus|False|4|7|10|
 #Psychedelic_Meguro_River|[ Just as Planned ] Plus|False|3|6|8|
 can you feel it|[ Just as Planned ] Plus|False|4|6|8|9
 Midnight O'clock|[ Just as Planned ] Plus|True|3|6|8|
 Rin|[ Just as Planned ] Plus|True|5|7|10|
 Smile-mileS|[ Just as Planned ] Plus|False|6|8|10|
 Believing and Being|[ Just as Planned ] Plus|True|4|6|9|
-カタリスト|[ Just as Planned ] Plus|False|5|7|9|
-don't！stop！eroero！|[ Just as Planned ] Plus|True|5|7|9|
+Catalyst|[ Just as Planned ] Plus|False|5|7|9|
+don't!stop!eroero!|[ Just as Planned ] Plus|True|5|7|9|
 pa pi pu pi pu pi pa|[ Just as Planned ] Plus|False|6|8|10|
 Sand Maze|[ Just as Planned ] Plus|True|6|8|10|11
 Diffraction|[ Just as Planned ] Plus|True|5|8|10|
-AKUMU / feat.tug|[ Just as Planned ] Plus|False|4|6|8|
+AKUMU /|[ Just as Planned ] Plus|False|4|6|8|
 Queen Aluett|[ Just as Planned ] Plus|True|7|9|11|
-DROPS (feat. Such)|[ Just as Planned ] Plus|False|2|5|8|
-物凄い狂っとるフランちゃんが物凄いうた|[ Just as Planned ] Plus|False|5|7|10|
+DROPS|[ Just as Planned ] Plus|False|2|5|8|
+Frightfully-insane Flan-chan's frightful song|[ Just as Planned ] Plus|False|5|7|10|
 snooze|[ Just as Planned ] Plus|False|5|7|10|
 Kuishinbo Hacker feat.Kuishinbo Akachan|[ Just as Planned ] Plus|True|5|7|9|
 Inu no outa|[ Just as Planned ] Plus|True|3|5|7|
+Boiling Blood|MSR Anthology|True|5|8|10|
+ManiFesto:|MSR Anthology|True|4|6|9|
+Operation Blade|MSR Anthology|True|3|5|7|
+Radiant|MSR Anthology|True|3|5|8|
+Renegade|MSR Anthology|True|3|5|8|
+Speed of Light|MSR Anthology|True|1|4|7|
+Dossoles Holiday|MSR Anthology|True|5|7|9|
+Autumn Moods|MSR Anthology|True|3|5|7|
 People People|Nanahira Paradise|True|5|7|9|11
 Endless Error Loop|Nanahira Paradise|True|4|7|9|
 Forbidden Pizza!|Nanahira Paradise|True|5|7|9|
-ボーカルに無茶させんな|Nanahira Paradise|True|5|8|9|
-Tokimeki★Meteostrike|Happy Otaku Pack Vol.16|True|3|6|8|
+Don't Make the Vocalist do Anything Insane|Nanahira Paradise|True|5|8|9|
+Tokimeki*Meteostrike|Happy Otaku Pack Vol.16|True|3|6|8|
 Down Low|Happy Otaku Pack Vol.16|True|4|6|8|
 LOUDER MACHINE|Happy Otaku Pack Vol.16|True|5|7|9|
-それはもうらぶちゅ|Happy Otaku Pack Vol.16|True|5|7|10|
+Sorewa mo Lovechu|Happy Otaku Pack Vol.16|True|5|7|10|
 Rave_Tech|Happy Otaku Pack Vol.16|True|5|8|10|
-Brilliant & Shining! (Game Edit.)|Happy Otaku Pack Vol.16|True|5|8|10|
+Brilliant & Shining!|Happy Otaku Pack Vol.16|True|5|8|10|
 Psyched Fevereiro|Give Up TREATMENT Vol.11|True|5|8|10|
 Inferno City|Give Up TREATMENT Vol.11|False|6|8|10|
 Paradigm Shift|Give Up TREATMENT Vol.11|False|4|7|10|
 Snapdragon|Give Up TREATMENT Vol.11|False|5|7|10|
 Prestige and Vestige|Give Up TREATMENT Vol.11|True|6|8|11|
 Tiny Fate|Give Up TREATMENT Vol.11|False|7|9|11|
-月に叢雲華に風|Touhou Mugakudan -Ⅱ-|False|3|5|7|
+Tsuki ni Murakumo Hana ni Kaze|Touhou Mugakudan -Ⅱ-|False|3|5|7|
 Patchouli's - Best Hit GSK|Touhou Mugakudan -Ⅱ-|False|3|5|8|
-物凄いスペースシャトルでこいしが物凄いうた|Touhou Mugakudan -Ⅱ-|False|3|5|7|
-囲い無き世は一期の月影|Touhou Mugakudan -Ⅱ-|False|3|6|8|
+Monosugoi Space Shuttle de Koishi ga Monosugoi uta|Touhou Mugakudan -Ⅱ-|False|3|5|7|
+Kakoinaki Yo wa Ichigo no Tsukikage|Touhou Mugakudan -Ⅱ-|False|3|6|8|
 Psychedelic Kizakura Doumei|Touhou Mugakudan -Ⅱ-|False|4|7|10|
 Mischievous Sensation|Touhou Mugakudan -Ⅱ-|False|5|7|9|
-White Canvas (feat. 藍月なくる)|MEGAREX THE FUTURE|False|3|6|8|
-Gloomy Flash (feat. Mami)|MEGAREX THE FUTURE|False|5|8|10|
-今月のおすすめプレイリストを検索します|MEGAREX THE FUTURE|False|?|?|¿|
-Sunday Night (feat. Kanata.N)|MEGAREX THE FUTURE|False|3|6|9|
-Goodbye Goodnight (feat. Shully)|MEGAREX THE FUTURE|False|4|6|9|
-ENDLESS CIDER (feat. Such)|MEGAREX THE FUTURE|False|4|6|8|
+White Canvas|MEGAREX THE FUTURE|False|3|6|8|
+Gloomy Flash|MEGAREX THE FUTURE|False|5|8|10|
+Find this Month's Featured Playlist|MEGAREX THE FUTURE|False|?|?|¿|
+Sunday Night|MEGAREX THE FUTURE|False|3|6|9|
+Goodbye Goodnight|MEGAREX THE FUTURE|False|4|6|9|
+ENDLESS CIDER|MEGAREX THE FUTURE|False|4|6|8|
 On And On!!|Happy Otaku Pack Vol.15|True|4|7|9|11
 Trip!|Happy Otaku Pack Vol.15|True|3|5|7|
 Hoshi no otoshimono|Happy Otaku Pack Vol.15|False|5|7|9|
@@ -109,22 +117,22 @@ Fantasia Sonata Destiny|Happy Otaku Pack Vol.15|True|3|7|10|
 Run through|Happy Otaku Pack Vol.15|False|5|8|10|
 marooned night|MUSE RADIO FM103|False|2|4|6|
 daydream girl|MUSE RADIO FM103|False|3|6|8|
-Ornamentじゃない(Muse Dash Mix)|MUSE RADIO FM103|True|3|5|8|
-Baby Pink (w/ YUC'e)|MUSE RADIO FM103|False|3|5|8|
+Not Ornament|MUSE RADIO FM103|True|3|5|8|
+Baby Pink|MUSE RADIO FM103|False|3|5|8|
 I'm Here|MUSE RADIO FM103|False|4|6|8|
-假面日记|Virtual Idol Production|True|2|5|8|
+Masquerade Diary|Virtual Idol Production|True|2|5|8|
 Reminiscence|Virtual Idol Production|True|5|7|9|
 DarakuDatenshi|Virtual Idol Production|True|3|6|9|
 D.I.Y.|Virtual Idol Production|False|4|6|9|
-男子in☆バーチャランド|Virtual Idol Production|False|4|7|9|
-kuí|Virtual Idol Production|True|5|7|9|11
+Boys in Virtual Land|Virtual Idol Production|False|4|7|9|
+kui|Virtual Idol Production|True|5|7|9|11
 Nyan Cat|Nyanya Universe!|False|4|7|9|
 PeroPero in the Universe|Nyanya Universe!|True|?|?|¿|
 In-kya Yo-kya Onmyoji|Nyanya Universe!|False|6|8|10|
 KABOOOOOM!!!!|Nyanya Universe!|True|4|6|8|
 Doppelganger|Nyanya Universe!|True|5|7|9|12
 Pray a LOVE|DokiDoki! Valentine!|False|2|5|8|
-恋愛回避依存症|DokiDoki! Valentine!|False|3|5|7|
+Love-Avoidance Addiction|DokiDoki! Valentine!|False|3|5|7|
 Daisuki Dayo feat.Wotoha|DokiDoki! Valentine!|False|5|7|10|
 glory day|DJMAX Reflect|False|2|5|7|
 Bright Dream|DJMAX Reflect|False|2|4|7|
@@ -136,7 +144,7 @@ U.A.D|DJMAX Reflect|False|4|6|8|10
 Jealousy|DJMAX Reflect|False|3|5|7|
 Memory of Beach|DJMAX Reflect|False|3|6|8|
 Don't Die|DJMAX Reflect|False|6|8|10|
-Y (CE Ver.)|DJMAX Reflect|False|4|6|9|
+Y CE Ver.|DJMAX Reflect|False|4|6|9|
 Fancy Night|DJMAX Reflect|False|4|6|8|
 Can We Talk|DJMAX Reflect|False|4|6|8|
 Give Me 5|DJMAX Reflect|False|2|6|8|
@@ -146,7 +154,7 @@ GIMME DA BLOOD|Arcaea|False|3|6|9|
 Libertas|Arcaea|False|4|7|10|
 Cyaegha|Arcaea|False|5|7|9|11
 Bang!!|Happy Otaku Pack Vol.14|False|4|6|8|
-Paradise Ⅱ|Happy Otaku Pack Vol.14|False|4|6|8|
+Paradise 2|Happy Otaku Pack Vol.14|False|4|6|8|
 Symbol|Happy Otaku Pack Vol.14|False|5|7|9|
 Nekojarashi|Happy Otaku Pack Vol.14|False|5|8|10|11
 A Philosophical Wanderer|Happy Otaku Pack Vol.14|False|4|6|10|
@@ -157,13 +165,13 @@ Chariot|WACCA Horizon|False|3|6|9|
 GASHATT|WACCA Horizon|False|5|7|10|
 LIN NE KRO NE feat. lasah|WACCA Horizon|False|6|8|10|
 ANGEL HALO|WACCA Horizon|False|5|8|11|
-Party in the HOLLOWood feat. ななひら|Happy Otaku Pack Vol.13|False|3|6|8|
-嘤嘤大作战|Happy Otaku Pack Vol.13|True|5|7|9|
+Party in the HOLLOWood|Happy Otaku Pack Vol.13|False|3|6|8|
+Ying Ying da Zuozhan|Happy Otaku Pack Vol.13|True|5|7|9|
 Howlin' Pumpkin|Happy Otaku Pack Vol.13|True|4|6|8|
 Bad Apple!! feat. Nomico|Touhou Mugakudan -Ⅰ-|False|1|3|6|8
-色は匂へど散りぬるを|Touhou Mugakudan -Ⅰ-|False|2|4|7|
-Cirno's Perfect Math Class|Touhou Mugakudan -Ⅰ-|False|4|7|9|
-緋色月下、狂咲ノ絶|Touhou Mugakudan -Ⅰ-|False|4|6|8|
+Iro wa Nioedo, Chirinuru wo|Touhou Mugakudan -Ⅰ-|False|2|4|7|
+Cirno's Perfect Math Class|Touhou Mugakudan -Ⅰ-|False|4|7|9|
+Hiiro Gekka Kyousai no Zetsu|Touhou Mugakudan -Ⅰ-|False|4|6|8|
 Flowery Moonlit Night|Touhou Mugakudan -Ⅰ-|False|3|6|8|
 Unconscious Requiem|Touhou Mugakudan -Ⅰ-|False|3|6|8|
 Super Battleworn Insomniac|7th Beat Games|True|4|7|9|?
@@ -178,23 +186,23 @@ Yosari Tsukibotaru Suminoborite|Happy Otaku Pack Vol.12|False|5|7|9|
 JUMP! HardCandy|Happy Otaku Pack Vol.12|False|3|6|8|
 Hibari|Happy Otaku Pack Vol.12|False|3|5|8|
 OCCHOCO-REST-LESS|Happy Otaku Pack Vol.12|True|4|7|9|
-去剪海的日子|MUSE RADIO FM102|True|1|3|6|
+See-Saw Day|MUSE RADIO FM102|True|1|3|6|
 happy hour|MUSE RADIO FM102|True|2|4|7|
 Seikimatsu no Natsu|MUSE RADIO FM102|True|4|6|8|
 twinkle night|MUSE RADIO FM102|False|3|6|8|
 ARUYA HARERUYA|MUSE RADIO FM102|False|2|5|7|
-Blush (feat. MYLK)|MUSE RADIO FM102|False|2|4|7|
-裸のSummer|MUSE RADIO FM102|True|4|6|8|
-BLESS ME(Samplingsource)|MUSE RADIO FM102|True|2|5|7|
+Blush|MUSE RADIO FM102|False|2|4|7|
+Naked Summer|MUSE RADIO FM102|True|4|6|8|
+BLESS ME|MUSE RADIO FM102|True|2|5|7|
 FM 17314 SUGAR RADIO|MUSE RADIO FM102|True|?|?|?|
 NO ONE YES MAN|Phigros|False|5|7|9|
-雪降り、メリクリ （MD edit）|Phigros|False|5|8|10|
+Snowfall, Merry Christmas|Phigros|False|5|8|10|
 Igallta|Phigros|False|6|8|10|11
-琉璃色前奏曲|Cute Is Everything Vol.7|False|1|4|7|
+Colored Glass|Cute Is Everything Vol.7|False|1|4|7|
 Neonlights|Cute Is Everything Vol.7|False|4|7|9|
 Hope for the flowers|Cute Is Everything Vol.7|False|4|7|9|
 Seaside Cycling on May 30|Cute Is Everything Vol.7|False|3|6|8|
-SKY↑HIGH|Cute Is Everything Vol.7|False|2|4|6|
+SKY HIGH|Cute Is Everything Vol.7|False|2|4|6|
 Mousou Chu!!|Cute Is Everything Vol.7|False|4|7|8|
 NightTheater|Give Up TREATMENT Vol.10|True|6|8|11|
 Cutter|Give Up TREATMENT Vol.10|False|4|7|10|
@@ -202,19 +210,19 @@ bamboo|Give Up TREATMENT Vol.10|False|6|8|10|11
 enchanted love|Give Up TREATMENT Vol.10|False|2|6|9|
 c.s.q.n.|Give Up TREATMENT Vol.10|False|5|8|11|
 Booouncing!!|Give Up TREATMENT Vol.10|False|5|7|10|
-MuseDashを作っているPeroPeroGamesさんが倒産しちゃったよ～|Happy Otaku Pack SP|True|6|8|10|
+PeroPeroGames goes Bankrupt|Happy Otaku Pack SP|True|6|8|10|
 MARENOL|Happy Otaku Pack SP|False|4|7|10|
-僕の和風本当上手|Happy Otaku Pack SP|True|6|8|10|
+I am really good at Japanese style|Happy Otaku Pack SP|True|6|8|10|
 Rush B|Happy Otaku Pack SP|True|4|7|9|
 DataErr0r|Happy Otaku Pack SP|False|5|7|9|?
 Burn|Happy Otaku Pack SP|True|4|7|9|
 ALiVE|HARDCORE TANO*C|False|5|7|10|
 BATTLE NO.1|HARDCORE TANO*C|False|5|8|10|11
 Cthugha|HARDCORE TANO*C|False|6|8|10|11
-TWINKLE★MAGIC|HARDCORE TANO*C|False|4|7|10|11
+TWINKLE*MAGIC|HARDCORE TANO*C|False|4|7|10|11
 Comet Coaster|HARDCORE TANO*C|False|6|8|10|11
 XODUS|HARDCORE TANO*C|False|7|9|11|12
-Fireflies (Funk Fiction remix)|cyTus|True|1|4|7|
+Fireflies|cyTus|True|1|4|7|
 Light up my love!!|cyTus|True|3|5|7|
 Happiness Breeze|cyTus|True|4|6|8|9
 Chrome VOX|cyTus|True|6|8|10|11
@@ -226,7 +234,7 @@ Amenemhat|cyTus|True|6|8|10|
 Santouka|cyTus|True|2|5|8|
 HEXENNACHTROCK-katashihaya-|cyTus|True|4|8|10|
 Blah!!|cyTus|True|5|8|11|
-CHAOS (Glitch)|cyTus|True|0|?|0|
+CHAOS Glitch|cyTus|True|0|?|0|
 Preparara|Let's Do Bad Things Together|False|1|4|6|
 Whatcha;Whatcha Doin'|Let's Do Bad Things Together|False|3|6|9|
 Madara|Let's Do Bad Things Together|False|4|6|9|
@@ -237,65 +245,65 @@ The 90's Decision|Happy Otaku Pack Vol.11|True|5|7|9|
 Medusa|Happy Otaku Pack Vol.11|False|4|6|8|10
 Final Step!|Happy Otaku Pack Vol.11|False|5|7|10|
 MAGENTA POTION|Happy Otaku Pack Vol.11|False|4|7|9|
-Cross†Ray (feat. 月下Lia)|Happy Otaku Pack Vol.11|False|3|6|9|
+Cross Ray|Happy Otaku Pack Vol.11|False|3|6|9|
 Square Lake|Happy Otaku Pack Vol.11|True|6|8|9|11
 Girly Cupid|Cute Is Everything Vol.6|False|3|6|8|
 sheep in the light|Cute Is Everything Vol.6|False|2|5|8|
 Breaker city|Cute Is Everything Vol.6|False|4|6|9|
 heterodoxy|Cute Is Everything Vol.6|False|4|6|8|
 Computer Music Girl|Cute Is Everything Vol.6|False|3|5|7|
-焦点 feat.早木旋子|Cute Is Everything Vol.6|True|2|5|7|
+Focus Point|Cute Is Everything Vol.6|True|2|5|7|
 Groove Prayer|Let' s GROOVE！|True|3|5|7|
 FUJIN Rumble|Let' s GROOVE！|True|5|7|10|11
 Marry me, Nightmare|Let' s GROOVE！|False|6|8|11|
-HG魔改造ポリビニル少年|Let' s GROOVE！|True|4|7|9|10
-聖者の息吹|Let' s GROOVE！|True|6|8|10|
+HG Makaizou Polyvinyl Shounen|Let' s GROOVE！|True|4|7|9|10
+Seizya no Ibuki|Let' s GROOVE！|True|6|8|10|
 ouroboros -twin stroke of the end-|Let' s GROOVE！|True|4|6|9|12
 Heisha Onsha|Happy Otaku Pack Vol.10|False|4|6|8|
 Ginevra|Happy Otaku Pack Vol.10|True|5|7|10|10
 Paracelestia|Happy Otaku Pack Vol.10|False|5|8|10|
 un secret|Happy Otaku Pack Vol.10|False|2|4|6|
 Good Life|Happy Otaku Pack Vol.10|False|4|6|8|
-ニニ-nini-|Happy Otaku Pack Vol.10|False|4|7|9|
+nini-nini-|Happy Otaku Pack Vol.10|False|4|7|9|
 Can I friend you on Bassbook? lol|Nanahira Festival|False|3|6|8|
-Gaming☆Everything|Nanahira Festival|False|5|8|11|
-Renji de haochi☆Denshi choriki shiyou chuka ryori 4000nen rekishi shunkan chori kanryo butouteki ryoricho☆|Nanahira Festival|False|5|7|9|
+Gaming*Everything|Nanahira Festival|False|5|8|11|
+Renji de haochi|Nanahira Festival|False|5|7|9|
 You Make My Life 1UP|Nanahira Festival|False|4|6|8|
-Newbies take 3 years, geeks 8 years, and internets are forever|Nanahira Festival|False|6|8|10|
+Newbies, Geeks, Internets|Nanahira Festival|False|6|8|10|
 Onegai!Kon kon Oinarisama|Nanahira Festival|False|3|6|9|
 Legend of Eastern Rabbit -SKY DEFENDER-|Give Up TREATMENT Vol.9|False|4|6|9|
 ENERGY SYNERGY MATRIX|Give Up TREATMENT Vol.9|False|6|8|10|
-Punai Punai Genso ~Punai Punai in Wonderland~|Give Up TREATMENT Vol.9|False|2|7|11|
+Punai Punai Genso|Give Up TREATMENT Vol.9|False|2|7|11|
 Better Graphic Animation|Give Up TREATMENT Vol.9|False|5|8|11|
 Variant Cross|Give Up TREATMENT Vol.9|False|4|7|10|
 Ultra Happy Miracle Bazoooooka!!|Give Up TREATMENT Vol.9|False|7|9|11|
 tape/stop/night|MUSE RADIO FM101|True|3|5|7|
 Pixel Galaxy|MUSE RADIO FM101|False|2|5|8|
 Notice|MUSE RADIO FM101|False|4|7|10|
-<b>sᴛʀᴀᴡʙᴇʀʀʏ ɢᴏᴅᴢɪʟʟᴀ</b>|MUSE RADIO FM101|True|2|5|7|
+Strawberry Godzilla|MUSE RADIO FM101|True|2|5|7|
 OKIMOCHI EXPRESSION|MUSE RADIO FM101|False|4|6|10|
-君とpool disco|MUSE RADIO FM101|False|4|6|8|
+Kimi to pool disco|MUSE RADIO FM101|False|4|6|8|
 The Last Page|Happy Otaku Pack Vol.9|False|3|5|7|
 IKAROS|Happy Otaku Pack Vol.9|False|4|7|10|
 Tsukuyomi|Happy Otaku Pack Vol.9|False|3|6|9|
 Future Stream|Happy Otaku Pack Vol.9|False|4|6|8|
 FULi AUTO SHOOTER|Happy Otaku Pack Vol.9|True|4|7|9|
 GOODFORTUNE|Happy Otaku Pack Vol.9|False|5|7|9|
-雨后甜点|Cute Is Everything Vol.5|True|2|4|6|
-告白应援方程式|Cute Is Everything Vol.5|False|3|5|7|
-Omatsuri feat.兔子ST|Cute Is Everything Vol.5|False|1|3|6|
+The Dessert After Rain|Cute Is Everything Vol.5|True|2|4|6|
+Confession Support Formula|Cute Is Everything Vol.5|False|3|5|7|
+Omatsuri|Cute Is Everything Vol.5|False|1|3|6|
 FUTUREPOP|Cute Is Everything Vol.5|True|2|5|7|
 The Breeze|Cute Is Everything Vol.5|False|1|4|6|
 I LOVE LETTUCE FRIED RICE!!|Cute Is Everything Vol.5|False|3|7|9|
 The NightScape|Give Up TREATMENT Vol.8|False|4|7|9|
-FREEDOM DiVE↓|Give Up TREATMENT Vol.8|False|6|8|10|12
-Φ|Give Up TREATMENT Vol.8|False|5|8|10|
+FREEDOM DiVE|Give Up TREATMENT Vol.8|False|6|8|10|12
+Phi|Give Up TREATMENT Vol.8|False|5|8|10|
 Lueur de la nuit|Give Up TREATMENT Vol.8|False|6|8|11|
 Creamy Sugary OVERDRIVE!!!|Give Up TREATMENT Vol.8|True|4|7|10|
-Disorder (feat.YURI)|Give Up TREATMENT Vol.8|False|5|7|11|
-Glimmer feat.祈Inory|Budget Is Burning: Nano Core|False|2|5|8|
-EXIST feat.米雅|Budget Is Burning: Nano Core|False|3|5|8|
-Irreplaceable feat.夏铜子|Budget Is Burning: Nano Core|False|4|6|8|
+Disorder|Give Up TREATMENT Vol.8|False|5|7|11|
+Glimmer|Budget Is Burning: Nano Core|False|2|5|8|
+EXIST|Budget Is Burning: Nano Core|False|3|5|8|
+Irreplaceable|Budget Is Burning: Nano Core|False|4|6|8|
 Moonlight Banquet|Happy Otaku Pack Vol.8|True|2|5|8|
 Flashdance|Happy Otaku Pack Vol.8|False|3|6|9|
 INFiNiTE ENERZY -Overdoze-|Happy Otaku Pack Vol.8|False|4|7|9|10
@@ -309,28 +317,28 @@ YInMn Blue|Give Up TREATMENT Vol.7|False|6|8|10|
 Plumage|Give Up TREATMENT Vol.7|False|4|7|10|
 Dr.Techro|Give Up TREATMENT Vol.7|False|7|9|11|
 SWEETSWEETSWEET|Cute Is Everything Vol.4|True|2|5|7|
-深蓝与夜的呼吸|Cute Is Everything Vol.4|True|2|4|6|
+Deep Blue and the Breaths of the Night|Cute Is Everything Vol.4|True|2|4|6|
 Joy Connection|Cute Is Everything Vol.4|False|3|6|8|
 Self Willed Girl Ver.B|Cute Is Everything Vol.4|True|4|6|8|
-就是不听话|Cute Is Everything Vol.4|True|3|6|8|
-Holy Shit Grass Snake|Cute Is Everything Vol.4|False|2|6|9|
+Just Disobedient|Cute Is Everything Vol.4|True|3|6|8|
+Holy Sh*t Grass Snake|Cute Is Everything Vol.4|False|2|6|9|
 Cotton Candy Wonderland|Happy Otaku Pack Vol.7|False|2|5|8|
 Punai Punai Taiso|Happy Otaku Pack Vol.7|False|2|7|10|
-Fly↑High|Happy Otaku Pack Vol.7|False|3|5|7|
+Fly High|Happy Otaku Pack Vol.7|False|3|5|7|
 prejudice|Happy Otaku Pack Vol.7|True|4|6|9|
 The 89's Momentum|Happy Otaku Pack Vol.7|True|5|7|9|
-energy night(DASH mix)|Happy Otaku Pack Vol.7|True|5|7|10|
+energy night|Happy Otaku Pack Vol.7|True|5|7|10|
 Future Dive|Give Up TREATMENT Vol.6|True|4|6|9|
-Re：End of a Dream|Give Up TREATMENT Vol.6|False|5|8|11|
+Re:End of a Dream|Give Up TREATMENT Vol.6|False|5|8|11|
 Etude -Storm-|Give Up TREATMENT Vol.6|True|6|8|10|
 Unlimited Katharsis|Give Up TREATMENT Vol.6|False|4|6|10|
 Magic Knight Girl|Give Up TREATMENT Vol.6|False|4|7|9|
 Eeliaas|Give Up TREATMENT Vol.6|True|6|9|11|
-魔咒 feat.早木旋子|Cute Is Everything Vol.3|True|2|5|7|
-斑斓星，彩绘，旅行诗|Cute Is Everything Vol.3|False|3|4|6|
+Magic Spell|Cute Is Everything Vol.3|True|2|5|7|
+Colorful Star, Colored Drawing, Travel Poem|Cute Is Everything Vol.3|False|3|4|6|
 Satell Knight|Cute Is Everything Vol.3|True|3|6|8|
 Black River Feat.Mes|Cute Is Everything Vol.3|True|1|4|6|
-生而为人，我很抱歉|Cute Is Everything Vol.3|False|2|5|8|
+I am sorry for my existence|Cute Is Everything Vol.3|False|2|5|8|
 Ueta Tori Tachi|Cute Is Everything Vol.3|False|3|6|8|
 Elysion's Old Mans|Happy Otaku Pack Vol.6|False|3|5|8|
 AXION|Happy Otaku Pack Vol.6|False|4|5|8|
@@ -338,18 +346,18 @@ Amnesia|Happy Otaku Pack Vol.6|True|3|6|9|
 Onsen Dai Sakusen|Happy Otaku Pack Vol.6|True|4|6|8|
 Gleam stone|Happy Otaku Pack Vol.6|False|4|7|9|
 GOODWORLD|Happy Otaku Pack Vol.6|False|4|7|10|
-速溶霓虹 feat.kumako|Cute Is Everything Vol.2|True|2|4|7|
-星球上的追溯诗|Cute Is Everything Vol.2|True|3|5|7|
-我要买买买|Cute Is Everything Vol.2|True|4|6|8|
-约会宣言|Cute Is Everything Vol.2|True|2|4|6|
-初雪|Cute Is Everything Vol.2|True|2|3|6|
-心上华海|Cute Is Everything Vol.2|False|3|6|8|
+Instant Soluble Neon|Cute Is Everything Vol.2|True|2|4|7|
+Retrospective Peom on the Planet|Cute Is Everything Vol.2|True|3|5|7|
+I'm Gonna Buy! Buy! Buy!|Cute Is Everything Vol.2|True|4|6|8|
+Dating Manifesto|Cute Is Everything Vol.2|True|2|4|6|
+First Snow|Cute Is Everything Vol.2|True|2|3|6|
+Xin Shang Huahai|Cute Is Everything Vol.2|False|3|6|8|
 Gaikan Chrysalis|Give Up TREATMENT Vol.5|False|4|6|8|
 Sterelogue|Give Up TREATMENT Vol.5|True|5|7|10|
 Cheshire's Dance|Give Up TREATMENT Vol.5|True|4|7|10|
 Skrik|Give Up TREATMENT Vol.5|True|5|7|11|
 Soda Pop Canva5!|Give Up TREATMENT Vol.5|False|5|8|10|
-ЯUBY:LINTe|Give Up TREATMENT Vol.5|False|5|8|11|
+RUBY:LINTe|Give Up TREATMENT Vol.5|False|5|8|11|
 Brave My Heart|Happy Otaku Pack Vol.5|True|3|5|7|
 Sakura Fubuki|Happy Otaku Pack Vol.5|False|4|7|10|
 8bit Adventurer|Happy Otaku Pack Vol.5|False|6|8|10|
@@ -357,7 +365,7 @@ Suffering of screw|Happy Otaku Pack Vol.5|False|3|5|8|
 tiny lady|Happy Otaku Pack Vol.5|True|4|6|9|
 Power Attack|Happy Otaku Pack Vol.5|False|5|7|10|
 Destr0yer|Give Up TREATMENT Vol.4|False|4|7|9|
-Noël|Give Up TREATMENT Vol.4|False|5|8|10|
+Noel|Give Up TREATMENT Vol.4|False|5|8|10|
 Kyoukiranbu|Give Up TREATMENT Vol.4|False|7|9|11|
 Two Phace|Give Up TREATMENT Vol.4|True|4|7|10|
 Fly Again|Give Up TREATMENT Vol.4|False|5|7|10|
@@ -379,7 +387,7 @@ Halcyon|Give Up TREATMENT Vol.2|False|4|7|10|
 Crimson Nightingle|Give Up TREATMENT Vol.2|True|4|7|10|
 Invader|Give Up TREATMENT Vol.2|True|3|7|11|
 Lyrith|Give Up TREATMENT Vol.2|False|5|7|10|
-GOODBOUNCE (Groove Edit)|Give Up TREATMENT Vol.2|False|4|6|9|
+GOODBOUNCE|Give Up TREATMENT Vol.2|False|4|6|9|
 Out of Sense|Budget Is Burning Vol.1|False|3|5|8|
 My Life Is For You|Budget Is Burning Vol.1|False|2|4|7|
 Etude -Sunset-|Budget Is Burning Vol.1|True|5|7|9|
@@ -397,10 +405,10 @@ Imprinting|Happy Otaku Pack Vol.2|False|3|6|9|0
 Skyward|Happy Otaku Pack Vol.2|True|4|7|10|0
 La nuit de vif|Happy Otaku Pack Vol.2|True|2|5|8|0
 Bit-alize|Happy Otaku Pack Vol.2|False|3|6|8|0
-GOODTEK(Hyper Edit)|Happy Otaku Pack Vol.2|False|4|6|9|?
+GOODTEK|Happy Otaku Pack Vol.2|False|4|6|9|?
 Maharajah|Happy Otaku Pack Vol.1|False|1|3|6|
 keep on running|Happy Otaku Pack Vol.1|False|5|7|9|
-Käfig|Happy Otaku Pack Vol.1|True|4|6|8|
+Kafig|Happy Otaku Pack Vol.1|True|4|6|8|
 -+|Happy Otaku Pack Vol.1|True|4|6|8|
 Tenri Kaku Jou|Happy Otaku Pack Vol.1|True|3|6|9|
 Adjudicatorz-DanZai-|Happy Otaku Pack Vol.1|False|3|7|10|
