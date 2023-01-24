@@ -63,6 +63,13 @@ class MusicSheetWinCount(Range):
     default = 4
     display_name = "Music Sheets Needed to Win"
 
+class AdditionalItemPercentage(Range):
+    """What percentage of songs will have 2 items instead of 1. Starting Songs are always first in line to have extra locations.
+    If there are not enough locations to place Music Sheets, extra locations will be added."""
+    display_name = "Additional Item %"
+    range_start = 0
+    default = 33
+    range_end = 100
 
 # Options Beyond this point are not Implemented
 
@@ -107,6 +114,7 @@ musedash_options: Dict[str, type(Option)] = {
     "streamer_mode_enabled": StreamerModeEnabled,
     "starting_song_count": StartingSongs,
     "additional_song_count": AdditionalSongs,
+    "additional_item_percentage": AdditionalItemPercentage,
     "song_difficulty_mode": DifficultyMode,
     "music_sheet_count": MusicSheetCount,
     "music_sheet_win_count": MusicSheetWinCount

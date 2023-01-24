@@ -2,6 +2,8 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule
 from BaseClasses import Region, RegionType, Item, ItemClassification, MultiWorld, Entrance, Tutorial
 
+from math import floor
+
 from .Options import musedash_options
 from .Items import MuseDashItem, MuseDashFixedItem
 from .Locations import MuseDashLocation
@@ -55,6 +57,7 @@ class MuseDashWorld(World):
     starting_songs: list[str]
     included_songs: list[str]
     needed_token_count: int
+    location_count: int
 
     def generate_early(self):
         #Todo: Support Plando stuff? i.e. Starting Items, Goal Item etc
@@ -104,6 +107,14 @@ class MuseDashWorld(World):
 
             self.included_songs.append(self.get_random_item_and_remove(available_song_keys))
 
+        self.location_count = len(self.starting_songs) + len(self.included_songs)
+        location_multiplier = 1 + (self.multiworld.additional_item_percentage[self.player] / 100.0)
+        self.location_count = floor(self.location_count * location_multiplier)
+
+        minimum_location_count = len(self.included_songs) + self.multiworld.music_sheet_count[self.player].value
+        if (self.location_count < minimum_location_count):
+            self.location_count = minimum_location_count
+
 
     def get_random_item_and_remove(self, list: list[str]) -> str:
         index = self.multiworld.random.randrange(0, len(list))
@@ -138,7 +149,7 @@ class MuseDashWorld(World):
             self.multiworld.itempool.append(self.create_item(self.music_sheet_name))
 
         # Next fill all remaining slots with song items
-        needed_item_count = (len(song_keys_in_pool) + len(self.starting_songs)) * 2
+        needed_item_count = self.location_count
         while (created_item_count < needed_item_count):
             # If we have more items needed than keys, just iterate the list and add them all
             if (len(song_keys_in_pool) <= needed_item_count - created_item_count):
@@ -171,23 +182,32 @@ class MuseDashWorld(World):
 
         # Make a collection of all songs available for this rando
         # Final Song is excluded as it doesn't matter
-        all_selected_locations = list(self.included_songs)
-        all_selected_locations.extend(self.starting_songs)
+        all_selected_locations = list(self.starting_songs)
+        included_song_copy = list(self.included_songs)
 
-        # Make a region per song/album, then adds 2 item locations to them
-        for name in all_selected_locations:
+        self.multiworld.random.shuffle(included_song_copy)
+        all_selected_locations.extend(included_song_copy)
+
+        two_item_location_count = self.location_count - len(all_selected_locations)
+
+        # Make a region per song/album, then adds 1-2 item locations to them
+        for i in range(0, len(all_selected_locations)):
+            name = all_selected_locations[i]
             region = Region(name, RegionType.Generic, name, self.player, self.multiworld)
 
             # 2 Locations are defined per song
             location_name = name + "-0"
             region.locations.append(MuseDashLocation(self.player, location_name, self.museDashCollection.SongLocations[location_name], region))
-            location_name = name + "-1"
-            region.locations.append(MuseDashLocation(self.player, location_name, self.museDashCollection.SongLocations[location_name], region))
+
+            if (i < two_item_location_count):
+                location_name = name + "-1"
+                region.locations.append(MuseDashLocation(self.player, location_name, self.museDashCollection.SongLocations[location_name], region))
 
             regionExit = Entrance(self.player, name, songSelect)
             songSelect.exits.append(regionExit)
             regionExit.connect(region)
             self.multiworld.regions.append(region)
+
 
     def get_number_of_music_sheets_to_win(self) -> int:
         return min(self.multiworld.music_sheet_win_count[self.player].value, self.multiworld.music_sheet_count[self.player].value)
