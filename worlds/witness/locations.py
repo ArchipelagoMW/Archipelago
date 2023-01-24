@@ -136,6 +136,7 @@ class StaticWitnessLocations:
         "Theater Mountain Video",
         "Town RGB Room Left",
         "Town RGB Room Right",
+        "Town Sound Room Right",
         "Swamp Purple Underwater",
 
         "First Hallway EP",
