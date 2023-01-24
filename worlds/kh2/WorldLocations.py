@@ -598,7 +598,7 @@ TWTNW_Checks = {
     LocationName.Xemnas1GetBonus:                       WorldLocationData(0x3707, 2),
     LocationName.Xemnas1SecretAnsemReport13:            WorldLocationData(0x1ED4, 5),
     #this is probably not the right room value for final xemnas
-    LocationName.FinalXemnas:                           WorldLocationData(0x1ED9, 0),
+    LocationName.FinalXemnas:                           WorldLocationData(0x1ED8, 1),
     LocationName.XemnasDataPowerBoost:                  WorldLocationData(0x1EDA, 2),
     LocationName.XigbarDataDefenseBoost:                WorldLocationData(0x1ED9, 7),
     LocationName.SaixDataDefenseBoost:                  WorldLocationData(0x1EDA, 0),

@@ -274,7 +274,7 @@ class KH2Context(CommonContext):
                    itemname=self.lookup_id_to_item[item.item]
                    itemcode=self.item_name_to_data[itemname]
                    #default false
-                   self.give_item(itemcode)
+                   asyncio.create_task(self.give_item(itemcode))
            await asyncio.sleep(0.5)        
     
 
