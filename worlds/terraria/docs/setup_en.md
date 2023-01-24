@@ -1,4 +1,4 @@
-# Hollow Knight for Archipelago Setup Guide
+# Terraria for Archipelago Setup Guide
 
 ## Required Software
 
