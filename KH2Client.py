@@ -80,7 +80,7 @@ class KH2Context(CommonContext):
         self.ItemIsSafe = False
         self.game_connected = False
         self.worldid={
-	        1 : WorldLocations.HB_Checks,#goa
+	        1 : WorldLocations.TWTNW_Checks,#world of darkness (story cutscenes)
 	        2 : WorldLocations.TT_Checks,
 	        3 : WorldLocations.TT_Checks,#destiny island doesnt have checks to ima put tt checks here
 	        4 : WorldLocations.HB_Checks,
@@ -98,7 +98,7 @@ class KH2Context(CommonContext):
 	        16 : WorldLocations.PR_Checks ,
 	        17 : WorldLocations.SP_Checks,
 	        18 : WorldLocations.TWTNW_Checks ,
-	        255: WorldLocations.HB_Checks,#goa
+	        255: WorldLocations.HB_Checks,#starting screen
 	        }
 
         #these locations have world ids for twtnw
@@ -220,7 +220,7 @@ class KH2Context(CommonContext):
         itemMemory=0
         try:
             while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x0714DB8,1), "big")==255:
-                await asyncio.sleep(1)
+                await asyncio.sleep(0.5)
         
             if itemcode.ability:
                 #forms are handled in the goa so they are put in the back of inventory no matter what
@@ -228,6 +228,9 @@ class KH2Context(CommonContext):
                     self.give_growth(itemcode)
                     #return
                 else:
+                    #cannot give stuff past this point or the game will crash
+                    if self.backofinventory==0x2544:
+                        return
                     self.kh2.write_short(self.kh2.base_address + self.Save+self.backofinventory, itemcode.memaddr)
                     self.backofinventory-=2
             elif itemcode.bitmask>0:
@@ -245,9 +248,7 @@ class KH2Context(CommonContext):
                 self.kh2connected = False
                 return
     async def ItemSafe(self,args,svestate):
-        try:
-            while self.worldid[int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x0714DB8,1), "big")]==9:
-                await asyncio.sleep(1) 
+        try: 
             await self.roomSave(args,svestate)
         except:
             if self.kh2connected:
@@ -266,7 +267,7 @@ class KH2Context(CommonContext):
                #cannot give item on death screen so waits untill they are not dead
                while deathstate==1024 or deathstate==1280:
                    deathstate=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.onDeath,2), "big")
-                   await asyncio.sleep(1)
+                   await asyncio.sleep(0.5)
                #print("You have been sent you items again")
                #give item because they have not room saved and are dead
                for item in args['items']:
@@ -274,7 +275,7 @@ class KH2Context(CommonContext):
                    itemcode=self.item_name_to_data[itemname]
                    #default false
                    self.give_item(itemcode)
-           await asyncio.sleep(1)        
+           await asyncio.sleep(0.5)        
     
 
       
@@ -337,7 +338,7 @@ class KH2Context(CommonContext):
                             while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x714DB8+1,1), "big")==data.addrObtained:
                                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x2A0DC00,1), "big")==data.bitIndex:
                                     self.sending = self.sending+[(int(kh2_loc_name_to_id[location]))]
-                                await asyncio.sleep(1)
+                                await asyncio.sleep(0.5)
         except:
             if self.kh2connected:
                 logger.info("Connection Lost, Please /autotrack")
@@ -349,7 +350,6 @@ class KH2Context(CommonContext):
         for location,data in WorldLocations.SoraLevels.items():
             if location not in self.locations_checked:
                 try:
-                    print(int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + 0x24FF,1), "big"))
                     if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+ self.Save + 0x24FF,1), "big")>=data.bitIndex:
                         self.locations_checked.add(location)
                         #message = [{"cmd": 'LocationChecks', "locations": boobies[location]}]
@@ -447,7 +447,7 @@ async def kh2_watcher(ctx: KH2Context):
                 logger.info("Connection Lost, Please /autotrack")
                 ctx.KH2_status = CONNECTION_RESET_STATUS
                 ctx.kh2connected = False
-        await asyncio.sleep(1)   
+        await asyncio.sleep(0.5)   
             
 
 
