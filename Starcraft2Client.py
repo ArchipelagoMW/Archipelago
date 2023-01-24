@@ -10,6 +10,8 @@ import re
 import sys
 import typing
 import queue
+import zipfile
+import io
 from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
@@ -137,7 +139,6 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
         if tempzip != '':
             try:
-                import zipfile
                 zipfile.ZipFile(tempzip).extractall(path=os.environ["SC2PATH"])
                 sc2_logger.info(f"Download complete. Version {version} installed.")
                 with open(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt", "w") as f:
@@ -1008,7 +1009,7 @@ def download_latest_release_zip(owner: str, repo: str, current_version: str = No
     download_url = r1.json()["assets"][0]["browser_download_url"]
 
     r2 = requests.get(download_url, headers=headers)
-    if r2.status_code == 200:
+    if r2.status_code == 200 and zipfile.is_zipfile(io.BytesIO(r2.content)):
         with open(f"{repo}.zip", "wb") as fh:
             fh.write(r2.content)
         sc2_logger.info(f"Successfully downloaded {repo}.zip.")
