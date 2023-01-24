@@ -182,17 +182,17 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
             print(f"copying {src} -> {self.buildfolder / dst}")
             shutil.copyfile(src, self.buildfolder / dst, follow_symlinks=False)
 
+        # now that include_files is completely broken, run find_libs here
+        for src, dst in find_libs(*self.extra_libs):
+            print(f"copying {src} -> {self.buildfolder / dst}")
+            shutil.copyfile(src, self.buildfolder / dst, follow_symlinks=False)
+
         # post build steps
         if is_windows:  # kivy_deps is win32 only, linux picks them up automatically
             from kivy_deps import sdl2, glew
             for folder in sdl2.dep_bins + glew.dep_bins:
                 shutil.copytree(folder, self.libfolder, dirs_exist_ok=True)
                 print(f"copying {folder} -> {self.libfolder}")
-        elif is_linux:
-            # now that include_files is completely broken, run find_libs here
-            for src, dst in find_libs(*self.extra_libs):
-                print(f"copying {src} -> {self.buildfolder / dst}")
-                shutil.copyfile(src, self.buildfolder / dst, follow_symlinks=False)
 
         for data in self.extra_data:
             self.installfile(Path(data))
@@ -393,6 +393,9 @@ $APPDIR/$exe "$@"
 
 def find_libs(*args: str) -> typing.Sequence[typing.Tuple[str, str]]:
     """Try to find system libraries to be included."""
+    if not args:
+        return []
+
     arch = build_arch.replace('_', '-')
     libc = 'libc6'  # we currently don't support musl
 
