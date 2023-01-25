@@ -777,7 +777,7 @@ Keyblade_Slots = {
     LocationName.FenrirSlot:          LocationData(0x130290, 142, "Keyblade"),
     LocationName.UltimaWeaponSlot:    LocationData(0x130291, 143, "Keyblade"),
     LocationName.WinnersProofSlot:    LocationData(0x130292, 149, "Keyblade"),
-    LocationName.PurebloodSlot:       LocationData(0x1302DA,  85,"Keyblade"),
+    LocationName.PurebloodSlot:       LocationData(0x1302DB,  85,"Keyblade"),
 }
 #will give these checks to the client oninit()
 Critical_Checks = {

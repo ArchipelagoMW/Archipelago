@@ -1,3 +1,4 @@
+from telnetlib import theNULL
 from .Options import KH2_Options
 import random
 import typing
@@ -39,7 +40,7 @@ class KH2World(World):
 
     #multiworld locations that are checked in the client using the save anchor
     kh2multiworld_locations= list()
-      
+     
     def _get_slot_data(self):
         return {
             "kh2multiworld_locations":self.kh2multiworld_locations,
@@ -53,16 +54,15 @@ class KH2World(World):
             slot_data[option_name] = option.value
         return slot_data
     
-    #def _create_items(self, name: str):
-    #    data = item_dictionary_table[name]
-    #    for x in range(data.quantity):
-    #        return self.create_item(name)
+
 
 
     def create_item(self, name: str,) -> Item:
         data = item_dictionary_table[name]
         if name in Items.Progression_Table or name in Items.Movement_Table or name in Items.Forms_Table or name in Items.Magic_Table or name == ItemName.Victory:
             item_classification = ItemClassification.progression
+        elif name in Items.SupportAbility_Table or name in Items.ActionAbility_Table:
+            item_classification = ItemClassification.useful
         else:
             item_classification = ItemClassification.filler
 
@@ -74,20 +74,51 @@ class KH2World(World):
 
     def generate_basic(self):
         itempool: typing.List[KH2Item] = []
+        self.exclude = {"Victory", "Nothing"}
+        self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(
+            self.create_item(ItemName.Victory))
+        self.totallocations -= 1
+
+
 
         fillerItems = [ItemName.Potion, ItemName.HiPotion, ItemName.Ether, ItemName.Elixir, 
                        ItemName.Megalixir, ItemName.Tent, ItemName.DriveRecovery,
                        ItemName.HighDriveRecovery, ItemName.PowerBoost,
                        ItemName.MagicBoost, ItemName.DefenseBoost, ItemName.APBoost]
-        ItemListCopy=item_dictionary_table.copy()
         ItemQuantityDict={}
-        for item,data in ItemListCopy.items():
-            ItemQuantityDict.update({item:data.quantity})     
+        donaldItemPool=list()
+        goofyItemPool=list()
+        SoraKeybladeAbilityPool=list()
+        if self.multiworld.Keyblade_Abilities[self.player].value==0:
+            SoraKeybladeAbilityPool.extend(Items.SupportAbility_Table.keys())
+        elif self.multiworld.Keyblade_Abilities[self.player].value==1:
+            SoraKeybladeAbilityPool.extend(Items.ActionAbility_Table.keys())
+        else:
+            SoraKeybladeAbilityPool.extend(Items.ActionAbility_Table.keys())
+            SoraKeybladeAbilityPool.extend(Items.SupportAbility_Table.keys())
 
-        self.exclude = {"Victory", "Nothing"}
-        self.multiworld.get_location(LocationName.FinalXemnas, self.player).place_locked_item(
-            self.create_item(ItemName.Victory))
-        self.totallocations -= 1
+        for item,data in Items.item_dictionary_table.items():
+            ItemQuantityDict.update({item:data.quantity})     
+        
+        for item in self.multiworld.start_inventory[self.player].value:
+            data=item_dictionary_table[item]
+            ItemQuantityDict.update({item:Items.item_dictionary_table[item].quantity-1})
+
+        for item in Items.DonaldAbility_Table.keys():
+            data=ItemQuantityDict[item]
+            for x in range(data):
+                donaldItemPool.append(item)
+            self.exclude.add(item)
+        while len(donaldItemPool)<len(Locations.Donald_Checks.keys()):
+            donaldItemPool.append(self.multiworld.random.choice(donaldItemPool))
+
+        for item in Items.GoofyAbility_Table.keys():
+            data=ItemQuantityDict[item]
+            for x in range(data):
+                goofyItemPool.append(item)
+            self.exclude.add(item)
+        while len(goofyItemPool)<len(Items.GoofyAbility_Table.keys()):
+            donaldItemPool.append(self.multiworld.random.choice(donaldItemPool))
 
         #probably could add these into generate early but its fine here currently
         #creats a copy of the lists so the tests are okay with running them twice even though they would never be ran twice 
@@ -96,40 +127,24 @@ class KH2World(World):
         for keyblade in KeyBladeSlotCopy:
             randomAbility = self.multiworld.random.choice(soraabilitycopy)
             self.multiworld.get_location(keyblade, self.player).place_locked_item(self.create_item(randomAbility))
-            ItemQuantityDict.update({randomAbility:ItemListCopy[randomAbility].quantity-1})
+            ItemQuantityDict.update({randomAbility:Items.item_dictionary_table[randomAbility].quantity-1})
             soraabilitycopy.remove(randomAbility)
             self.totallocations -= 1
 
 
-         #Placing Donald Abilities on donald locations
-        donaldLocationsCopy=list(Locations.Donald_Checks.keys())
-        donaldabilitycopy=Items.DonaldAbility_Table
-        for donaldability,data in donaldabilitycopy.items():
-            for x in range(data.quantity):
-                randomLocation = self.multiworld.random.choice(donaldLocationsCopy)
-                self.multiworld.get_location(randomLocation, self.player).place_locked_item(self.create_item(donaldability))
-                donaldLocationsCopy.remove(randomLocation)
-                self.totallocations -= 1 
-            self.exclude.add(donaldability)
+        #Placing Donald Abilities on donald locations
+        for donaldlocation in Locations.Donald_Checks.keys():
+            randomAbility = self.multiworld.random.choice(donaldItemPool)
+            self.multiworld.get_location(donaldlocation, self.player).place_locked_item(self.create_item(randomAbility))
+            self.totallocations -= 1 
 
-        #for DonaldLoc in Donald_Checks:
-        #    randomAbility = self.multiworld.random.choice(donaldabilitycopy)
-        #    self.multiworld.get_location(DonaldLoc, self.player).place_locked_item(self._create_items(randomAbility))
-        #    self.exclude.add(randomAbility)
-        #    donaldabilitycopy.remove(randomAbility)
-        #    self.totallocations -= 1
+
 
         # Placing Goofy Abilites on goofy locaitons
-        #goofy only has 1 or 2 amount of items so no need to do it like donald
-        goofyLocationsCopy=list(Locations.Goofy_Checks.keys())
-        goofyabilitycopy=Items.GoofyAbility_Table
-        for Goofyability,data in goofyabilitycopy.items():
-            for x in range(data.quantity):
-                randomLocation = self.multiworld.random.choice(goofyLocationsCopy)
-                self.multiworld.get_location(randomLocation, self.player).place_locked_item(self.create_item(Goofyability))
-                goofyLocationsCopy.remove(randomLocation)
-                self.totallocations -= 1 
-            self.exclude.add(Goofyability)
+        for goofyLocation in Locations.Goofy_Checks.keys():
+            randomAbility = self.multiworld.random.choice(goofyItemPool)
+            self.multiworld.get_location(goofyLocation, self.player).place_locked_item(self.create_item(randomAbility))
+            self.totallocations -= 1 
 
             
 
@@ -162,13 +177,30 @@ class KH2World(World):
         self.multiworld.get_location(LocationName.JunkMedal, self.player).place_locked_item(
             self.create_item(random.choice(fillerItems)))
         self.totallocations -= 2
+        #Makeing a copy of the total growth pool
+        GrowthList=list()
+        for x in range(4):
+            GrowthList.extend(Items.Movement_Table.keys())
 
-        # starting with level 1 of all growth in the starting
-        if self.multiworld.Schmovement[self.player].value == 1:
-            for name in {ItemName.HighJump, ItemName.QuickRun, ItemName.DodgeRoll, ItemName.AerialDodge,
-                         ItemName.Glide}:
-                ItemQuantityDict.update({name:ItemListCopy[name].quantity-1})
-                self.multiworld.push_precollected(self.create_item(name))
+        if self.multiworld.Schmovement[self.player].value !=0:
+               for x in range(self.multiworld.Schmovement[self.player].value+1):
+                    for name in {ItemName.HighJump,ItemName.QuickRun,ItemName.DodgeRoll,ItemName.AerialDodge,ItemName.Glide}:
+                        ItemQuantityDict.update({name:Items.item_dictionary_table[name].quantity-1})
+                        GrowthList.remove(name)
+                        self.multiworld.push_precollected(self.create_item(name))
+        if self.multiworld.RandomGrowth[self.player].value!=0:
+           for x in range(self.multiworld.RandomGrowth[self.player].value):
+               #try catch in the instance of the user having max movement and wants too much growth
+               try:
+                   randomGrowth=self.multiworld.random.choice(GrowthList)
+                   ItemQuantityDict.update({name:Items.item_dictionary_table[name].quantity-1})
+                   GrowthList.remove(randomGrowth)
+                   self.multiworld.push_precollected(self.create_item(name))
+               except:
+                   break
+
+        
+
 
 
         #there are levels but level 1 is there to keep code clean
@@ -178,6 +210,9 @@ class KH2World(World):
         elif self.multiworld.Level_Depth[self.player].value == 3:
             #level 50 sanity
             self.totallocations-=50
+        elif self.multiworld.Level_Depth[self.player].value == 4:
+            #level 1. No checks on levels
+            self.totallocations-=99
         else:
             #level 50/99 since they contain the same amount of levels
             self.totallocations-=76
@@ -188,7 +223,7 @@ class KH2World(World):
                 data=ItemQuantityDict[item]
                 for x in range(data):
                     itempool.append(self.create_item(item))
-                    ItemQuantityDict.update({item:ItemListCopy[item].quantity-1})
+                    ItemQuantityDict.update({item:Items.item_dictionary_table[item].quantity-1})
 
         # Creating filler for unfilled locations
         while len(itempool) < self.totallocations:
