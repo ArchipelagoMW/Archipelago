@@ -16,7 +16,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
     # 1337246 - 1337249 Ancient Pyramid
     location_table: List[LMLocation] = [
         # Present item locations
-        LMLocation(parent_region='Tutorial', name='Tutorial: Yo Momma 1',  address=1337000),
+        LMLocation(parent_region='', name='Tutorial: Yo Momma 1',  address=1337000),
         LMLocation('Tutorial', 'Tutorial: Yo Momma 2',  1337001),
         LMLocation('Lake desolation', 'Lake Desolation: Starter chest 2',  1337002),
         LMLocation('Lake desolation', 'Lake Desolation: Starter chest 3',  1337003),
@@ -192,7 +192,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
         LMLocation('Ancient Pyramid (right)', 'Killed Nightmare', EventId, lambda state: state.has_all({'Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'}, player))
     ]
 
-    # 1337156 - 1337170 Downloads
+    # Adds all waterable plants as locations
     if not world or is_option_enabled(world, player, "Plants"):
         location_table += ( 
             LMLocation('Library', 'Library: Terminal 2 (Lachiem)',  1337156, lambda state: state.has('Tablet', player)),
@@ -212,14 +212,25 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
             LMLocation('The lab (power off)', 'Lab: Right terminal (Experiment #11)',  1337170, lambda state: state.has('Tablet', player))
         )
 
-    # 1337176 - 1337176 Cantoran
-    if not world or is_option_enabled(world, player, "Furniture"):
+    # Adds the myriad shackable objects as locations
+    if not world or is_option_enabled(world, player, "Interactables"):
+        location_table += (
+            LMLocation('Left Side forest Caves', 'Lake Serene: Cantoran',  1337176),
+        )
+    # Adds Toads as locations
+    if not world or is_option_enabled(world, player, "Toadsanity"):
         location_table += (
             LMLocation('Left Side forest Caves', 'Lake Serene: Cantoran',  1337176),
         )
 
-    # 1337177 - 1337198 Lore Checks
-    if not world or is_option_enabled(world, player, "Light Fixtures"):
+    # Adds Portrait Ghosts as locations
+    if not world or is_option_enabled(world, player, "Portrait Ghosts"):
+        location_table += (
+            LMLocation('Left Side forest Caves', 'Lake Serene: Cantoran',  1337176),
+        )
+
+    # Adds Blue Ghosts and Gold Mice as locations
+    if not world or is_option_enabled(world, player, "Money Ghosts"):
         location_table += (
             LMLocation('Lower lake desolation', 'Lake Desolation: Memory - Coyote Jump (Time Messenger)',  1337177),
             LMLocation('Library', 'Library: Memory - Waterway (A Message)',  1337178),
@@ -247,8 +258,8 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
 
     # 1337199 - 1337236 Reserved for future use
 
-    # 1337237 - 1337245 GyreArchives
-    if not world or is_option_enabled(world, player, "GyreArchives"):
+    # Turns Boos into check locations and adds Boos as items
+    if not world or is_option_enabled(world, player, "Boosanity"):
         location_table += (
             LMLocation('Ravenlord\'s Lair', 'Ravenlord: Post fight (pedestal)',  1337237),
             LMLocation('Ifrit\'s Lair', 'Ifrit: Post fight (pedestal)',  1337238),
@@ -261,7 +272,15 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int]) -> Tuple[L
             LMLocation('Ifrit\'s Lair', 'Ifrit: Post fight (chest)', 1337245),
         )
  
+    # Room Clear Chests Affected by Random Ghost types
+    # if not world or is_option_enabled(world, player, "Enemizer"):
+    #     location_table += (
+    #         LMLocation('Left Side forest Caves', 'Lake Serene: Cantoran',  1337176),
+    #     )
+    
+
     return tuple(location_table)
+
         
 
 starter_progression_locations: Tuple[str, ...] = (

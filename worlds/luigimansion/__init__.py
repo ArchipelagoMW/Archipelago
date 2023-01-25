@@ -242,3 +242,14 @@ def get_personal_items(player: int, locations: List[Location]) -> Dict[int, int]
             personal_items[location.address] = location.item.code
 
     return personal_items
+
+class LMItem(Item):
+    game = "Luigi\'s Mansion"
+
+    def __init__(self, name, player: int = None):
+        item_data = item_table[name]
+        super(LMItem, self).__init__(
+            name,
+            item_data.classification,
+            item_data.code, player
+        )

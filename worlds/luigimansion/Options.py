@@ -55,10 +55,17 @@ class WashroomBooCount(Range):
     range_end = 50
     default = 5
 
+class BalconyBooCount(Range):
+    "Set the number of Boos required to reach the Balcony. 0 = Starts Open"
+    display_name = "Washroom Boo Count"
+    range_start = 0
+    range_end = 50
+    default = 20
+
 class FinalBooCount(Range):
     "Set the number of Boos required to reach the Secret Altar. 0 = Starts Open"
     display_name = "Altar Boo Count"
-    range_start = 1
+    range_start = 0
     range_end = 50
     default = 40
 
@@ -71,9 +78,9 @@ class PortraitGhosts(Toggle):
     display_name = "Portrait Ghosts"
 
 # Old Timespinner Options
-class ShopWarpShards(DefaultOnToggle):
-    "Shops always sell warp shards (when keys possessed), ignoring inventory setting."
-    display_name = "Always Sell Warp Shards"
+class Enemizer(Toggle):
+    "Ghosts in room encounters have random elements."
+    display_name = "Enemizer"
 
 
 class ShopMultiplier(Range):

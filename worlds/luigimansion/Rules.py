@@ -8,7 +8,7 @@ from .Options import is_option_enabled
 
 
 class LuigiMansionLogic(LogicMixin):
-    def _luigimansion_has_firemedal(self, world: MultiWorld, player: int) -> bool:
+    def _luigimansion_boo_count(self, world: MultiWorld, player: int) -> bool:
         return self.has('Fire Element Medal', player)
 
     def _luigimansion_has_icemedal(self, world: MultiWorld, player: int) -> bool:
@@ -18,7 +18,7 @@ class LuigiMansionLogic(LogicMixin):
         return self.has('Water Element Medal', player)
 
     def _timespinner_has_doublejump_of_npc(self, world: MultiWorld, player: int) -> bool:
-        return self._timespinner_has_upwarddash(world, player) or (self.has('Timespinner Wheel', player) and self._timespinner_has_doublejump(world, player))
+        return self._timespinner_has_upwarddash(world, player) or (self.has('Timespinner Wheel', player))
 
     def _timespinner_has_fastjump_on_npc(self, world: MultiWorld, player: int) -> bool:
         return self.has_all({'Timespinner Wheel', 'Talaria Attachment'}, player)

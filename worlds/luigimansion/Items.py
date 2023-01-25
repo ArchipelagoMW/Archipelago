@@ -1,56 +1,57 @@
 from typing import Dict, Set, Tuple, NamedTuple
+from BaseClasses import ItemClassification
 
 class ItemData(NamedTuple):
-    category: str
+    group: str
     code: int
+    classification: ItemClassification = 0b0001
     count: int = 1
-    progression: bool = False
-    useful: bool = False
 
-
-
-# Treasures are a form of junk item for the purposes of the randomizer
 item_table: Dict[str, ItemData] = {
-    'Heart Key':            ItemData('Suite Key',  8500, progression=True),
-    'Club Key':             ItemData('Suite Key',  8501, progression=True),
-    'Diamond Key':          ItemData('Suite Key',  8502, progression=True),
-    'Spade Key':            ItemData('Suite Key',  8503, progression=True),
-    'Parlor Key':           ItemData('Door Key',   8504, progression=True),
-    'Anteroom Key':         ItemData('Door Key',   8505, progression=True),
-    'Wardrobe Key':         ItemData('Door Key',   8506, progression=True),
-    'Front Hallway Key':    ItemData('Door Key',   8507, progression=True),
-    'Master Bedroom Key':   ItemData('Door Key',   8508, progression=True),
-    'Nursery Key':          ItemData('Door Key',   8509, progression=True),
-    'Twins Bedroom Key':    ItemData('Door Key',   8510, progression=True),
-    'Ballroom Key':         ItemData('Door Key',   8511, progression=True),
-    'Storage Room Key':     ItemData('Door Key',   8512, progression=True),
-    'Fortune Teller Key':   ItemData('Door Key',   8513, progression=True),
-    'Laundry Key':          ItemData('Door Key',   8514, progression=True),
-    #'Butler Key':              ItemData('Door Key',   8515, progression=True),
-    'Conservatory Key':     ItemData('Door Key',   8516, progression=True),
-    'Dining Room Key':      ItemData('Door Key',   8517, progression=True),
-    'Rec Room Key':         ItemData('Door Key',   8518, progression=True),
-    'Billiards Key':        ItemData('Door Key',   8519, progression=True),
-    'Safari Key':           ItemData('Door Key',   8520, progression=True),
-    'Balcony Key':          ItemData('Door Key',   8521, progression=True),
-    #'Breaker Key':              ItemData('Door Key',   8522, progression=True),
-    'Cellar Key':           ItemData('Door Key',   8523, progression=True),
-    'Clockwork Key':        ItemData('Door Key',   8524, progression=True),
-    'Armory Key':           ItemData('Door Key',   8525, progression=True),
-    'Sitting Room Key':     ItemData('Door Key',   8526, progression=True),
-    'Pipe Room Key':        ItemData('Door Key',   8527, progression=True),
-    'Cold Storage Key':     ItemData('Door Key',   8528, progression=True),
-    'Art Studio Key':       ItemData('Door Key',   8529, progression=True),
-    'Fire Element Medal':   ItemData('Medal',      8530, progression=True),
-    'Water Element Medal':  ItemData('Medal',      8531, progression=True),
-    'Ice Element Medal':    ItemData('Medal',      8532, progression=True),
-    'Mario\'s Glove':       ItemData('Mario Item', 8533, progression=True),
-    'Mario\'s Hat':         ItemData('Mario Item', 8534, progression=True),
-    'Mario\'s Letter':      ItemData('Mario Item', 8535, progression=True),
-    'Mario\'s Star':        ItemData('Mario Item', 8536, progression=True),
-    'Mario\'s Shoe':        ItemData('Mario Item', 8537, progression=True),
-    'Boo Radar':            ItemData('Boo Radar',  8538, progression=True),
-    'Poltergust 4000':      ItemData('Upgrade',    8539, useful=True),
-    'Treasure Bundle':      ItemData('Treasure',   8540)
+    'Heart Key':            ItemData('Suite Key',  8500),
+    'Club Key':             ItemData('Suite Key',  8501),
+    'Diamond Key':          ItemData('Suite Key',  8502),
+    'Spade Key':            ItemData('Suite Key',  8503),
+    #'Parlor Key':           ItemData('Door Key',   8504,), Left here in case I can play with starting location
+    'Anteroom Key':         ItemData('Door Key',   8505),
+    #'Wardrobe Key':         ItemData('Door Key',   8506), does not actually exist
+    'Front Hallway Key':    ItemData('Door Key',   8507),
+    'Master Bedroom Key':   ItemData('Door Key',   8508),
+    'Nursery Key':          ItemData('Door Key',   8509),
+    'Twins Bedroom Key':    ItemData('Door Key',   8510),
+    'Ballroom Key':         ItemData('Door Key',   8511),
+    'Storage Room Key':     ItemData('Door Key',   8512),
+    'Fortune Teller Key':   ItemData('Door Key',   8513),
+    'Laundry Key':          ItemData('Door Key',   8514),
+    '2F Stairwell Key':     ItemData('Door Key',   8515),
+    'Conservatory Key':     ItemData('Door Key',   8516),
+    'Dining Room Key':      ItemData('Door Key',   8517),
+    'Rec Room Key':         ItemData('Door Key',   8518),
+    'Billiards Key':        ItemData('Door Key',   8519),
+    'Safari Key':           ItemData('Door Key',   8520),
+    'Balcony Key':          ItemData('Door Key',   8521),
+    #'Breaker Key':              ItemData('Door Key',   8522,), Special logic needed
+    'Cellar Key':           ItemData('Door Key',   8523),
+    'Clockwork Key':        ItemData('Door Key',   8524),
+    'Armory Key':           ItemData('Door Key',   8525),
+    'Sitting Room Key':     ItemData('Door Key',   8526),
+    'Pipe Room Key':        ItemData('Door Key',   8527),
+    'Cold Storage Key':     ItemData('Door Key',   8528),
+    'Art Studio Key':       ItemData('Door Key',   8529),
+    'Fire Element Medal':   ItemData('Medal',      8530),
+    'Water Element Medal':  ItemData('Medal',      8531),
+    'Ice Element Medal':    ItemData('Medal',      8532),
+    'Mario\'s Glove':       ItemData('Mario Item', 8533),
+    'Mario\'s Hat':         ItemData('Mario Item', 8534),
+    'Mario\'s Letter':      ItemData('Mario Item', 8535),
+    'Mario\'s Star':        ItemData('Mario Item', 8536),
+    'Mario\'s Shoe':        ItemData('Mario Item', 8537),
+    'Boo':                  ItemData('Boo',        8538, Count=50),
+    'Boo Radar':            ItemData('Upgrade',    8539),
+    'Poltergust 4000':      ItemData('Upgrade',    8540, 0b0010),
+    'Treasure Bundle':      ItemData('Filler',     8541, 0b0000),
+    'Poison Mushroom':      ItemData('Trap',       8542, 0b0100),
+    'Ghost':                ItemData('Trap',       8543, 0b0100),
+    'Nothing':              ItemData('FIller',     8544, 0b0000)
 }
 
