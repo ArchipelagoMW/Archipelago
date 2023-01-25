@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import copy
 import functools
 import logging
 import zlib
@@ -43,6 +44,28 @@ min_client_version = Version(0, 1, 6)
 print_command_compatability_threshold = Version(0, 3, 5) # Remove backwards compatibility around 0.3.7
 colorama.init()
 
+
+def remove_from_list(container, value):
+    try:
+        container.remove(value)
+    except ValueError:
+        pass
+    return container
+
+
+def pop_from_container(container, value):
+    try:
+        container.pop(value)
+    except ValueError:
+        pass
+    return container
+
+
+def update_dict(dictionary, entries):
+    dictionary.update(entries)
+    return dictionary
+
+
 # functions callable on storable data on the server by clients
 modify_functions = {
     "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
@@ -59,6 +82,10 @@ modify_functions = {
     "and": operator.and_,
     "left_shift": operator.lshift,
     "right_shift": operator.rshift,
+    # lists/dicts
+    "remove": remove_from_list,
+    "pop": pop_from_container,
+    "update": update_dict,
 }
 
 
@@ -1739,7 +1766,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 return
             args["cmd"] = "SetReply"
             value = ctx.stored_data.get(args["key"], args.get("default", 0))
-            args["original_value"] = value
+            args["original_value"] = copy.copy(value)
             for operation in args["operations"]:
                 func = modify_functions[operation["operation"]]
                 value = func(value, operation["value"])
