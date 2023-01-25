@@ -143,10 +143,11 @@ class Keyblade_Abilities(Choice):
     option_action = 1
     option_both = 2
     default=2
+
 class BlacklistKeyblade(OptionSet):
     """Black List these Abilities on Keyblades"""
     display_name = "BlackList Keyblade Abilities"
-    verify_location_name = True
+    verify_item_name = True
 
 KH2_Options: typing.Dict[str, type(Option)] = {
     "Sora_Level_EXP": SoraEXP,

@@ -96,7 +96,9 @@ class KH2World(World):
         else:
             SoraKeybladeAbilityPool.extend(Items.ActionAbility_Table.keys())
             SoraKeybladeAbilityPool.extend(Items.SupportAbility_Table.keys())
-
+        for ability in self.multiworld.BlacklistKeyblade[self.player].value:
+            if ability in SoraKeybladeAbilityPool:
+                SoraKeybladeAbilityPool.remove(ability)
         for item,data in Items.item_dictionary_table.items():
             ItemQuantityDict.update({item:data.quantity})     
         
@@ -122,13 +124,12 @@ class KH2World(World):
 
         #probably could add these into generate early but its fine here currently
         #creats a copy of the lists so the tests are okay with running them twice even though they would never be ran twice 
-        soraabilitycopy=list(Items.SupportAbility_Table.keys())
         KeyBladeSlotCopy=list(Locations.Keyblade_Slots.keys())
         for keyblade in KeyBladeSlotCopy:
-            randomAbility = self.multiworld.random.choice(soraabilitycopy)
+            randomAbility = self.multiworld.random.choice(SoraKeybladeAbilityPool)
             self.multiworld.get_location(keyblade, self.player).place_locked_item(self.create_item(randomAbility))
             ItemQuantityDict.update({randomAbility:Items.item_dictionary_table[randomAbility].quantity-1})
-            soraabilitycopy.remove(randomAbility)
+            SoraKeybladeAbilityPool.remove(randomAbility)
             self.totallocations -= 1
 
 
