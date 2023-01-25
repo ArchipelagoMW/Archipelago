@@ -13,6 +13,10 @@ This mod might not work with mods that significantly alter progression, and is v
 with mods that significantly modify vanilla features. Feel free to use your preferred utility mods
 to speed up gameplay.
 
+Mods known to be incompatible:
+
+* Boss Checklist
+
 ## Configuring your YAML File
 
 ### What is a YAML and why do I need one?
