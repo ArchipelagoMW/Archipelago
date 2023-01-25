@@ -7,6 +7,7 @@ from pymem.process import *
 from pymem import memory
 import ModuleUpdate
 ModuleUpdate.update()
+from worlds.kh2.Items import DonaldAbility_Table,GoofyAbility_Table
 from worlds.kh2 import all_locations, item_dictionary_table
 import Utils
 from worlds.kh2 import WorldLocations
@@ -118,6 +119,10 @@ class KH2Context(CommonContext):
                 #the back of sora's inventory
         #subtract 2 everytime sora gets a ability from ap
         self.backofinventory = 0x25CC
+        self.donaldbackofinventory=0x2678
+        self.goofybackofinventory=0x278E
+        #string for determining who the item is for in the party
+        self.character="Sora"
         #0x0x2A09C00+0x40 is the sve anchor. +1 is the last saved room
         self.sveroom = 0x2A09C00+0x41
         #0 not in battle 1 in yellow battle 2 red battle #short
@@ -211,35 +216,37 @@ class KH2Context(CommonContext):
             elif self.ability | 0x8000 < 0x806D:
                 self.kh2.write_short(self.kh2.base_address + self.Save+0x25D6, self.growthlevel+1)
         
-#while loop to NOT give item while on death screen
-#need to figure out how to tell room address
-#initialize the room before the while loop. Probably at the start of a package
-#figure out if the room and the going into the room is the same address. I.E. the little platform going into xigbar fight
-#look into wait functions to wait for address changes
-    async def give_item(self,itemcode):
+    async def give_item(self,itemcode,char):
+        while self.kh2connected==False:
+            await asyncio.sleep(1)
         itemMemory=0
         try:
             while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x0714DB8,1), "big")==255:
                 await asyncio.sleep(0.5)
-        
+            while int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0x8E9DA3,1), "big")>0 or int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+0xAB8BC7,1), "big")>0:
+                await asyncio.sleep(0.5)
             if itemcode.ability:
-                #forms are handled in the goa so they are put in the back of inventory no matter what
-                if itemcode.memaddr in {0x05E,0x062,0x066,0x06A,0x234}:
-                    self.give_growth(itemcode)
-                    #return
+                if char=="Donald":
+                    self.kh2.write_short(self.kh2.base_address + self.Save+self.donaldbackofinventory, itemcode.memaddr)
+                    self.donaldbackofinventory-=2
+                elif char=="Goofy":
+                    self.kh2.write_short(self.kh2.base_address + self.Save+self.goofybackofinventory, itemcode.memaddr)
+                    self.goofybackofinventory-=2
                 else:
-                    #cannot give stuff past this point or the game will crash
-                    if self.backofinventory==0x2544:
-                        return
-                    self.kh2.write_short(self.kh2.base_address + self.Save+self.backofinventory, itemcode.memaddr)
-                    self.backofinventory-=2
+                    if itemcode.memaddr in {0x05E,0x062,0x066,0x06A,0x234}:
+                        self.give_growth(itemcode)
+                    else:
+                        #cannot give stuff past this point or the game will crash
+                        if self.backofinventory==0x2544:
+                            return
+                        self.kh2.write_short(self.kh2.base_address + self.Save+self.backofinventory, itemcode.memaddr)
+                        self.backofinventory-=2
             elif itemcode.bitmask>0:
                 itemMemory=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
-                #write item into the address of that item. then turn on the bitmask of the item.
-                #player has final form
+
                 self.kh2.write_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,(itemMemory|0x01<<itemcode.bitmask).to_bytes(1,'big'),1)
             else:
-                #Increasing the memory for item by 1 byte
+
                 amount=int.from_bytes(self.kh2.read_bytes(self.kh2.base_address+self.Save+itemcode.memaddr,1), "big")
                 self.kh2.write_bytes(self.kh2.base_address + self.Save+itemcode.memaddr,(amount+1).to_bytes(1,'big'),1)
         except:
@@ -274,7 +281,13 @@ class KH2Context(CommonContext):
                    itemname=self.lookup_id_to_item[item.item]
                    itemcode=self.item_name_to_data[itemname]
                    #default false
-                   asyncio.create_task(self.give_item(itemcode))
+                   if itemname in DonaldAbility_Table.keys():
+                       self.character="Donald"
+                       asyncio.create_task(self.give_item(itemcode,"Donald"))
+                   elif itemname in GoofyAbility_Table.keys():
+                    asyncio.create_task(self.give_item(itemcode,"Goofy"))
+                   else:
+                       asyncio.create_task(self.give_item(itemcode,"Sora"))
            await asyncio.sleep(0.5)        
     
 
@@ -283,20 +296,32 @@ class KH2Context(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
                 slot_data=args['slot_data']
-                #if slot_data['Schmovement']==1:
-                #    for item in {ItemName.Highjumplevel1}
-                #        itemname=self.lookup_id_to_item[item.item]
-                #        itemcode=self.item_name_to_data[itemname]
-                #        #default false
-                #        self.give_item(itemcode)
+                for item in slot_data["StationOfCalling_locations"]:
+                    if item in self.item_name_to_data:
+                        itemcode=self.item_name_to_data[item]
+                    else:
+                        itemcode=461
+                    if item in DonaldAbility_Table.keys():
+                       self.character="Donald"
+                       asyncio.create_task(self.give_item(itemcode,"Donald"))
+                    elif item in GoofyAbility_Table.keys():
+                        asyncio.create_task(self.give_item(itemcode,"Goofy"))
+                    else:
+                        asyncio.create_task(self.give_item(itemcode,"Sora"))
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
             if start_index != len(self.items_received):
                 for item in args['items']:
                     itemname=self.lookup_id_to_item[item.item]
                     itemcode=self.item_name_to_data[itemname]
-                    #default false
-                    asyncio.create_task(self.give_item(itemcode))
+                    if itemname in DonaldAbility_Table.keys():
+                       self.character="Donald"
+                       asyncio.create_task(self.give_item(itemcode,"Donald"))
+                    elif itemname in GoofyAbility_Table.keys():
+                        asyncio.create_task(self.give_item(itemcode,"Goofy"))
+                    else:
+                           asyncio.create_task(self.give_item(itemcode,"Sora"))
+
                 try:
                     svestate=self.kh2.read_short(self.kh2.base_address+self.sveroom)  
                     asyncio.create_task(self.ItemSafe(args,svestate))

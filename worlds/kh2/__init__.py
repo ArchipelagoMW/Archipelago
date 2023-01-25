@@ -1,4 +1,3 @@
-from telnetlib import theNULL
 from .Options import KH2_Options
 import random
 import typing
@@ -35,16 +34,14 @@ class KH2World(World):
     remote_start_inventory: bool = False
     item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
     location_name_to_id = {item_name: data.code for item_name, data in all_locations.items() if data.code}
-    #-1 for level 1 because it cannot hold a check but makes cleaner code
     totallocations=len(all_locations.items())
 
     #multiworld locations that are checked in the client using the save anchor
-    kh2multiworld_locations= list()
+    StationOfCalling_locations= list()
      
     def _get_slot_data(self):
         return {
-            "kh2multiworld_locations":self.kh2multiworld_locations,
-            #todo: add starting invo 
+            "StationOfCalling_locations":self.StationOfCalling_locations,
         }
 
     def fill_slot_data(self) -> dict:
@@ -86,9 +83,13 @@ class KH2World(World):
                        ItemName.HighDriveRecovery, ItemName.PowerBoost,
                        ItemName.MagicBoost, ItemName.DefenseBoost, ItemName.APBoost]
         ItemQuantityDict={}
+
+
         donaldItemPool=list()
         goofyItemPool=list()
         SoraKeybladeAbilityPool=list()
+
+
         if self.multiworld.Keyblade_Abilities[self.player].value==0:
             SoraKeybladeAbilityPool.extend(Items.SupportAbility_Table.keys())
         elif self.multiworld.Keyblade_Abilities[self.player].value==1:
@@ -101,7 +102,7 @@ class KH2World(World):
                 SoraKeybladeAbilityPool.remove(ability)
         for item,data in Items.item_dictionary_table.items():
             ItemQuantityDict.update({item:data.quantity})     
-        
+        #add level balanceing
         for item in self.multiworld.start_inventory[self.player].value:
             data=item_dictionary_table[item]
             ItemQuantityDict.update({item:Items.item_dictionary_table[item].quantity-1})
@@ -123,8 +124,11 @@ class KH2World(World):
             donaldItemPool.append(self.multiworld.random.choice(donaldItemPool))
 
         #probably could add these into generate early but its fine here currently
-        #creats a copy of the lists so the tests are okay with running them twice even though they would never be ran twice 
+        #creats a copy of the lists so the tests are okay with running them twice even though they would never be ran twice
+         
         KeyBladeSlotCopy=list(Locations.Keyblade_Slots.keys())
+        while len(SoraKeybladeAbilityPool)<len(KeyBladeSlotCopy):
+            SoraKeybladeAbilityPool.append(self.multiworld.random.choice(list(Items.SupportAbility_Table.keys())))
         for keyblade in KeyBladeSlotCopy:
             randomAbility = self.multiworld.random.choice(SoraKeybladeAbilityPool)
             self.multiworld.get_location(keyblade, self.player).place_locked_item(self.create_item(randomAbility))
@@ -147,7 +151,10 @@ class KH2World(World):
             self.multiworld.get_location(goofyLocation, self.player).place_locked_item(self.create_item(randomAbility))
             self.totallocations -= 1 
 
-            
+        if self.multiworld.Level_Depth[self.player].value == 4:
+            ItemQuantityDict.update({ItemName.NoExperience:Items.item_dictionary_table[ItemName.NoExperience].quantity-1})
+            self.multiworld.push_precollected(self.create_item(ItemName.NoExperience))
+
 
         # Option to turn off Promise Charm Item
         if self.multiworld.Promise_Charm[self.player].value == 0:

@@ -151,12 +151,13 @@ def patch_kh2(self, output_directory):
             })
 
         elif data.yml == "Critical":
-            if data.charName == "Sora":
-                soraStartingItems.append(itemcode)
-            elif data.charName == "Goofy":
-                goofyStartingItems.append(itemcode)
-            else:
-                donaldStartingItems.append(itemcode)
+            self.StationOfCalling_locations.append(location.item.name)
+            #if data.charName == "Sora":
+            #    soraStartingItems.append(itemcode)
+            #elif data.charName == "Goofy":
+            #    goofyStartingItems.append(itemcode)
+            #else:
+            #    donaldStartingItems.append(itemcode)
     #if self.multiworld.Schmovement[self.player].value == 1:
     #    soraStartingItems += 94, 98, 564, 102, 106
 
