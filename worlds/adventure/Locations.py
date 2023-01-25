@@ -17,8 +17,10 @@ class LocationData:
         if location_id is None:
             location_id = room_id
         if location_id is not None:
+            self.short_location_id = location_id
             self.location_id = location_id + 118000000
         else:
+            self.short_location_id = None
             self.location_id = None
         self.room_x = room_x
         self.room_y = room_y
@@ -26,9 +28,8 @@ class LocationData:
 
     def get_position(self, random):
         if self.room_x is None or self.room_y is None:
-            return random.choice(standard_positions)
-        else:
-            return self.room_x, self.room_y
+            self.room_x, self.room_y = random.choice(standard_positions)
+        return self.room_x, self.room_y
 
 
 standard_positions = [

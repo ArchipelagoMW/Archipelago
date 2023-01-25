@@ -335,6 +335,8 @@ def get_default_options() -> OptionsType:
         },
         "adventure_options": {
             "rom_file": "ADVNTURE.BIN",
+            "display_msgs": True,
+            "rom_start": True,
         },
     }
     return options

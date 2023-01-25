@@ -25,6 +25,9 @@ def connect(world: MultiWorld, player: int, source: str, target: str, rule: call
 
 
 def create_regions(multiworld: MultiWorld, player: int) -> None:
+    for name, locdata in location_table.items():
+        locdata.get_position(multiworld.random)
+
     menu = Region("Menu", RegionType.Generic, "Menu", player, multiworld)
 
     menu.exits.append(Entrance(player, "GameStart", menu))

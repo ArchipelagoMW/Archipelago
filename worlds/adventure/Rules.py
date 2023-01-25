@@ -32,7 +32,9 @@ def set_rules(self) -> None:
              lambda state: state.has("Magnet", self.player))
 
     # bridge literally does not fit in this space, I think
+    # and if the magnet is in there, you're not getting it with the bridge!
     forbid_item(world.get_location("DungeonVault", self.player), "Bridge", self.player)
+    forbid_item(world.get_location("DungeonVault", self.player), "Magnet", self.player)
     overworld = world.get_region("Overworld", self.player)
     white_castle_region = world.get_region("WhiteCastle", self.player)
     black_castle_region = world.get_region("WhiteCastle", self.player)
@@ -61,6 +63,8 @@ def set_rules(self) -> None:
         world.get_location("RedMaze2", self.player).progress_type = LocationProgressType.PRIORITY
     else:
         world.get_location("RedMaze0a", self.player).progress_type = LocationProgressType.PRIORITY
+
+    world.random.choice(overworld.locations).progress_type = LocationProgressType.PRIORITY
 
     # TODO: Add events for dragon_slay_check and trap_bat_check.  Here?  Elsewhere?
     # if self.dragon_slay_check == 1:

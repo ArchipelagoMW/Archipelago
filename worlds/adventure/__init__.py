@@ -4,7 +4,8 @@ import os
 from enum import IntFlag
 from typing import Any, ClassVar, Dict, List, Optional, Set, Tuple
 
-from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, RegionType, Tutorial
+from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, RegionType, Tutorial, \
+    LocationProgressType
 from Main import __version__
 from Options import AssembleOptions
 from worlds.AutoWorld import WebWorld, World
@@ -79,6 +80,8 @@ class AdventureWorld(World):
 
         if self.dragon_slay_check == 0:
             item_table["Sword"].classification = ItemClassification.useful
+        else:
+            item_table["Sword"].classification = ItemClassification.progression
 
     def create_items(self) -> None:
         for event in map(self.create_item, event_table):
@@ -90,7 +93,7 @@ class AdventureWorld(World):
                 self.multiworld.itempool.append(self.create_item("nothing"))
             else:
                 self.multiworld.itempool.append(item)
-        num_locations = len(location_table)
+        num_locations = len(location_table) - 1  # subtract out the chalice location
         extra_filler_count = num_locations - len(item_table)
         self.multiworld.itempool += [self.create_item("nothing") for _ in range(extra_filler_count)]
 
@@ -118,13 +121,13 @@ class AdventureWorld(World):
         overworld = self.multiworld.get_region("Overworld", self.player)
         locations_copy = overworld.locations.copy()
         for loc in overworld.locations:
-            if loc.item is not None:
+            if loc.item is not None or loc.progress_type != LocationProgressType.DEFAULT:
                 locations_copy.remove(loc)
 
         unfilled_locations = len(locations_copy)
         filled_locations = len(overworld.locations) - unfilled_locations
         # TODO - move range into options
-        force_empty_overworld_count = self.multiworld.random.randint(3, 8)
+        force_empty_overworld_count = self.multiworld.random.randint(3, 4)
         nothing_items = list(filter(lambda i: i.name == "nothing", self.multiworld.itempool))
         while force_empty_overworld_count > 0 and len(locations_copy) > 0 and len(nothing_items) > 0:
             force_empty_overworld_count -= 1
@@ -136,7 +139,7 @@ class AdventureWorld(World):
 
     def generate_output(self, output_directory: str) -> None:
         rom_path: str = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.bin")
-
+        foreign_item_locations = []
         try:
             rom_bytearray = bytearray(apply_basepatch(get_base_rom_bytes()))
             # start and stop indices are offsets in the ROM file, not Adventure ROM addresses (which start at f000)
@@ -153,7 +156,7 @@ class AdventureWorld(World):
                         location.item.code is not None:
                     static_item = static_item_data_location + \
                                   item_table[location.item.name].table_index * static_item_element_size
-                    print("placing item: " + location.item.name + " " + hex(static_item))
+                    print("placing item: " + location.item.name + " " + hex(static_item) + " " + location.name)
                     item_ram_address = rom_bytearray[static_item]
                     item_position_data_start = item_position_table + item_ram_address - items_ram_start
                     location_data = location_table[location.name]
@@ -165,6 +168,10 @@ class AdventureWorld(World):
                         room_x.to_bytes(1, "little")
                     rom_bytearray[item_position_data_start + 2: item_position_data_start + 3] = \
                         room_y.to_bytes(1, "little")
+                elif location.item.player != self.player and location.item.code is not None:
+                    location_data = location_table[location.name]
+                    foreign_item_locations.append(location_data)
+
 
             # TODO - for all remote items in traditional mode, write that out into a file
             # TODO - for the client to read. It will be in charge of placing the Arch objects in
@@ -182,7 +189,7 @@ class AdventureWorld(World):
         else:
             patch = AdventureDeltaPatch(os.path.splitext(rom_path)[0] + AdventureDeltaPatch.patch_file_ending,
                                         player=self.player, player_name=self.multiworld.player_name[self.player],
-                                        patched_path=rom_path)
+                                        patched_path=rom_path, locations=foreign_item_locations)
             patch.write()
         finally:
             if os.path.exists(rom_path):
