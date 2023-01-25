@@ -1,5 +1,5 @@
 from typing import List, Set, Dict, Tuple, Optional, Callable
-from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType
+from BaseClasses import MultiWorld, Region, Entrance, Location, RegionType 
 from .Options import is_option_enabled
 from .Locations import LMLocation
 
@@ -26,7 +26,7 @@ def create_regions(world: MultiWorld, player: int, locations: LMLocation[Locatio
         create_region(world, player, locations_per_region, location_cache, 'Fortune-Teller\'s Room'),
         create_region(world, player, locations_per_region, location_cache, 'Mirror Room'),
         create_region(world, player, locations_per_region, location_cache, 'Ballroom'),
-        create_region(world, player, locations_per_region, location_cache, 'Storage Room    '),
+        create_region(world, player, locations_per_region, location_cache, 'Storage Room'),
         create_region(world, player, locations_per_region, location_cache, 'Dining Room'),
         create_region(world, player, locations_per_region, location_cache, 'Kitchen'),
         create_region(world, player, locations_per_region, location_cache, 'Boneyard'),
@@ -81,7 +81,7 @@ def create_regions(world: MultiWorld, player: int, locations: LMLocation[Locatio
     connect(world, player, names, 'Menu', 'Foyer')
     connect(world, player, names, 'Foyer', 'Parlor')
     connect(world, player, names, 'Parlor', 'Anteroom', lambda state: state.has("Anteroom Key", player))
-    connect(world, player, names, 'Anteroom', 'Wardrobe', lambda state: state.has("Wardrobe Key", player))
+    connect(world, player, names, 'Anteroom', 'Wardrobe')
     connect(world, player, names, 'Wardrobe', 'Wardrobe Balcony')
     connect(world, player, names, 'Foyer', '2F Front Hallway', lambda state: state.has("Front Hallway Key", player))
     connect(world, player, names, '2F Front Hallway', 'Study')
@@ -95,7 +95,7 @@ def create_regions(world: MultiWorld, player: int, locations: LMLocation[Locatio
     connect(world, player, names, '1F Hallway', '1F Bathroom') 
     connect(world, player, names, '1F Hallway', 'Conservatory', lambda state: state.has("Conservatory Key", player))
     connect(world, player, names, '1F Hallway', 'Billiards Room', lambda state: state.has("Billiards Key", player))
-    connect(world, player, names, '1F Hallway', '1F Washroom', lambda state: state.has(boo_count))
+    connect(world, player, names, '1F Hallway', '1F Washroom', lambda state: state.count("Boo", player))
     connect(world, player, names, '1F Hallway', 'Ballroom', lambda state: state.has("Ballroom Key", player))
     connect(world, player, names, '1F Hallway', 'Dining Room', lambda state: state.has("Dining Room Key", player))
     connect(world, player, names, '1F Hallway', 'Laundry Room', lambda state: state.has("Laundry Key", player))
@@ -125,7 +125,7 @@ def create_regions(world: MultiWorld, player: int, locations: LMLocation[Locatio
     connect(world, player, names, 'Sitting Room', 'Guest Room')
     connect(world, player, names, 'Safari Room', '3F Right Hallway')
     connect(world, player, names, '3F Right Hallway', 'Artist\'s Studio', lambda state: state.has("Art Studio Key", player))
-    connect(world, player, names, '3F Right Hallway', 'Balcony', lambda state: state.has("Balcony Key", player))
+    connect(world, player, names, '3F Right Hallway', 'Balcony', lambda state: state.has("Balcony Key", player) and state.count("Boo", player))
     connect(world, player, names, 'Balcony', '3F Left Hallway', lambda state: state.has("Diamond Key", player))
     connect(world, player, names, '3F Left Hallway', 'Armory', lambda state: state.has("Armory Key", player))
     connect(world, player, names, '3F Left Hallway', 'Telephone Room')
@@ -138,7 +138,7 @@ def create_regions(world: MultiWorld, player: int, locations: LMLocation[Locatio
     connect(world, player, names, 'Cellar', 'Basement Hallway')
     connect(world, player, names, 'Basement Hallway', 'Cold Storage', lambda state: state.has("Cold Storage Key", player))
     connect(world, player, names, 'Basement Hallway', 'Pipe Room', lambda state: state.has("Pipe Room Key", player))
-    connect(world, player, names, 'Basement Hallway', 'Secret Altar', lambda state: state.has("Spade Key", player) and state.has(boo_count))
+    connect(world, player, names, 'Basement Hallway', 'Secret Altar', lambda state: state.has("Spade Key", player) and state.count("Boo", player))
     
     
 
