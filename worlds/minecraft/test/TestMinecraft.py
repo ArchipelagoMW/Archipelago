@@ -1,31 +1,10 @@
 from test.TestBase import TestBase
-from BaseClasses import MultiWorld, ItemClassification
+from BaseClasses import MultiWorld
 from worlds import AutoWorld
 from worlds.minecraft import MinecraftWorld
 from Options import Toggle
 from worlds.minecraft.Options import AdvancementGoal, EggShardsRequired, EggShardsAvailable, BossGoal, BeeTraps, \
     ShuffleStructures, CombatDifficulty
-
-
-# Converts the name of an item into an item object
-def MCItemFactory(items, player: int):
-    ret = []
-    singleton = False
-    if isinstance(items, str):
-        items = [items]
-        singleton = True
-    for item in items:
-        if item in item_table:
-            ret.append(MinecraftItem(
-                item, ItemClassification.progression if item_table[item].progression else ItemClassification.filler,
-                item_table[item].code, player
-            ))
-        else:
-            raise Exception(f"Unknown item {item}")
-
-    if singleton:
-        return ret[0]
-    return ret
 
 
 class TestMinecraft(TestBase):
@@ -47,7 +26,7 @@ class TestMinecraft(TestBase):
         setattr(self.multiworld, "structure_compasses", {1: Toggle(False)})
         setattr(self.multiworld, "death_link", {1: Toggle(False)})
         AutoWorld.call_single(self.multiworld, "create_regions", 1)
-        AutoWorld.call_single(self.multiworld, "generate_basic", 1)
+        AutoWorld.call_single(self.multiworld, "create_items", 1)
         AutoWorld.call_single(self.multiworld, "set_rules", 1)
 
     def _create_items(self, items, player):
@@ -63,8 +42,7 @@ class TestMinecraft(TestBase):
     def _get_items(self, item_pool, all_except):
         if all_except and len(all_except) > 0:
             items = self.multiworld.itempool[:]
-            items = [item for item in items if
-                     item.name not in all_except and not ("Bottle" in item.name and "AnyBottle" in all_except)]
+            items = [item for item in items if item.name not in all_except]
             items.extend(self._create_items(item_pool[0], 1))
         else:
             items = self._create_items(item_pool[0], 1)
