@@ -1,0 +1,341 @@
+import asyncio
+import json
+import time
+import os
+import bsdiff4
+import subprocess
+import zipfile
+from asyncio import StreamReader, StreamWriter
+from typing import List
+
+
+import Utils
+from Utils import async_start
+from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
+    get_base_parser
+from worlds.adventure import AdventureDeltaPatch
+
+from worlds.adventure.Locations import location_table
+from worlds.adventure.Rom import AdventureForeignItemInfo
+from worlds.adventure.Items import base_adventure_item_id
+from worlds.adventure.Offsets import static_item_data_location, static_item_element_size, rom_address_space_start
+
+SYSTEM_MESSAGE_ID = 0
+
+CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart pkmn_rb.lua"
+CONNECTION_REFUSED_STATUS = "Connection Refused. Please start your emulator and make sure pkmn_rb.lua is running"
+CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator, then restart pkmn_rb.lua"
+CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
+CONNECTION_CONNECTED_STATUS = "Connected"
+CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
+
+DISPLAY_MSGS = True
+
+SCRIPT_VERSION = 1
+
+
+class AdventureCommandProcessor(ClientCommandProcessor):
+    def __init__(self, ctx: CommonContext):
+        super().__init__(ctx)
+
+    def _cmd_2600(self):
+        """Check 2600 Connection State"""
+        if isinstance(self.ctx, AdventureContext):
+            logger.info(f"2600 Status: {self.ctx.atari_status}")
+
+
+class AdventureContext(CommonContext):
+    command_processor = AdventureCommandProcessor
+    game = 'Adventure'
+    foreign_items: [AdventureForeignItemInfo] = []
+
+    def __init__(self, server_address, password):
+        super().__init__(server_address, password)
+        self.atari_streams: (StreamReader, StreamWriter) = None
+        self.atari_sync_task = None
+        self.messages = {}
+        self.locations_array = None
+        self.atari_status = CONNECTION_INITIAL_STATUS
+        self.awaiting_rom = False
+        self.display_msgs = True
+        self.deathlink_pending = False
+        self.set_deathlink = False
+        self.client_compatibility_mode = 0
+        self.items_handling = 0b111
+
+    async def server_auth(self, password_requested: bool = False):
+        if password_requested and not self.password:
+            await super(AdventureContext, self).server_auth(password_requested)
+        if not self.auth:
+            self.awaiting_rom = True
+            logger.info('Awaiting connection to Bizhawk to get Player information')
+            return
+
+        await self.send_connect()
+
+    def _set_message(self, msg: str, msg_id: int):
+        if DISPLAY_MSGS:
+            self.messages[(time.time(), msg_id)] = msg
+
+    def on_package(self, cmd: str, args: dict):
+        if cmd == 'Connected':
+            self.locations_array = None
+            if 'death_link' in args['slot_data'] and args['slot_data']['death_link']:
+                self.set_deathlink = True
+        elif cmd == "RoomInfo":
+            self.seed_name = args['seed_name']
+        elif cmd == 'Print':
+            msg = args['text']
+            if ': !' not in msg:
+                self._set_message(msg, SYSTEM_MESSAGE_ID)
+        elif cmd == "ReceivedItems":
+            msg = f"Received {', '.join([self.item_names[item.item] for item in args['items']])}"
+            self._set_message(msg, SYSTEM_MESSAGE_ID)
+
+    def on_deathlink(self, data: dict):
+        self.deathlink_pending = True
+        super().on_deathlink(data)
+
+    def run_gui(self):
+        from kvui import GameManager
+
+        class AdventureManager(GameManager):
+            logging_pairs = [
+                ("Client", "Archipelago")
+            ]
+            base_title = "Archipelago Adventure Client"
+
+        self.ui = AdventureManager(self)
+        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+
+
+def convert_item_id(ap_item_id: int):
+    static_item_index = ap_item_id - base_adventure_item_id
+    return static_item_index
+
+
+def get_payload(ctx: AdventureContext):
+    current_time = time.time()
+    ret = json.dumps(
+        {
+            # TODO - send down the item table offset to the connector, which can look up its ram location
+            # TODO - or use it directly.  The connector will need to
+            # TODO - keep track of what's in the 'inventory' and place items into player when requested
+            "items": [convert_item_id(item.item) for item in ctx.items_received],
+            "messages": {f'{key[0]}:{key[1]}': value for key, value in ctx.messages.items()
+                         if key[0] > current_time - 10},
+            "deathlink": ctx.deathlink_pending
+        }
+    )
+    ctx.deathlink_pending = False
+    return ret
+
+
+# TODO - Pretty sure this comes from the connector...
+async def parse_locations(data: List, ctx: AdventureContext):
+    locations = []
+
+    # for loc_name, loc_data in location_table.items():
+
+    # if flags["EventFlag"][280] & 1 and not ctx.finished_game:
+    #    await ctx.send_msgs([
+    #                {"cmd": "StatusUpdate",
+    #                 "status": 30}
+    #            ])
+    #    ctx.finished_game = True
+    if locations == ctx.locations_array:
+        return
+    ctx.locations_array = locations
+    if locations is not None:
+        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations}])
+
+
+def send_ap_foreign_items(adventure_context):
+    foreign_item_json_list = []
+    for fi in adventure_context.foreign_items:
+        foreign_item_json_list.append(fi.get_dict())
+    payload = json.dumps(
+        {
+            "foreign_items": foreign_item_json_list,
+        }
+    )
+    print("sending foreign items")
+    msg = payload.encode()
+    print(msg)
+    (reader, writer) = adventure_context.atari_streams
+    writer.write(msg)
+    writer.write(b'\n')
+
+
+async def atari_sync_task(ctx: AdventureContext):
+    logger.info("Starting Atari 2600 connector. Use /2600 for status information")
+    while not ctx.exit_event.is_set():
+        error_status = None
+        if ctx.atari_streams:
+            (reader, writer) = ctx.atari_streams
+            msg = get_payload(ctx).encode()
+            print(msg)
+            writer.write(msg)
+            writer.write(b'\n')
+            try:
+                await asyncio.wait_for(writer.drain(), timeout=1.5)
+                try:
+                    # Data will return a dict with 1+ fields
+                    # 1. A keepalive response of the Players Name (always)
+                    # 2. An array of the Atari RAM (128 bytes)
+                    # 3+. I might need some other things that don't get stored in RAM over multiple frames to be
+                    # captured in a periodic snapshot (rooms player entered for visible item checks, player eaten by,
+                    # AP items touched)
+                    data = await asyncio.wait_for(reader.readline(), timeout=5)
+                    data_decoded = json.loads(data.decode())
+                    print("Data_decoded")
+                    print(data_decoded)
+                    if 'scriptVersion' not in data_decoded or data_decoded['scriptVersion'] != SCRIPT_VERSION:
+                        msg = "You are connecting with an incompatible Lua script version. Ensure your connector Lua " \
+                            "and AdventureClient are from the same Archipelago installation."
+                        logger.info(msg, extra={'compact_gui': True})
+                        ctx.gui_error('Error', msg)
+                        error_status = CONNECTION_RESET_STATUS
+                    if ctx.seed_name and ctx.seed_name != ctx.seed_name_from_data:
+                        msg = "The server is running a different multiworld than your client is. (invalid seed_name)"
+                        logger.info(msg, extra={'compact_gui': True})
+                        ctx.gui_error('Error', msg)
+                        error_status = CONNECTION_RESET_STATUS
+                    if 'romhash' in data_decoded:
+                        if ctx.rom_hash.decode().upper() != data_decoded['romhash'].upper():
+                            msg = "The rom hash does not match the client rom hash data"
+                            print("got " + data_decoded['romhash'])
+                            print("expected " + str(ctx.rom_hash))
+                            logger.info(msg, extra={'compact_gui': True})
+                            ctx.gui_error('Error', msg)
+                            error_status = CONNECTION_RESET_STATUS
+                        if ctx.awaiting_rom:
+                            await ctx.server_auth(False)
+                    if 'locations' in data_decoded and ctx.game and ctx.atari_status == CONNECTION_CONNECTED_STATUS \
+                            and not error_status and ctx.auth:
+                        # Not just a keep alive ping, parse
+                        async_start(parse_locations(data_decoded['locations'], ctx))
+                    if 'deathLink' in data_decoded and data_decoded['deathLink'] and 'DeathLink' in ctx.tags:
+                        await ctx.send_death(ctx.auth + " has been eaten by " + data_decoded['deathLink'])
+                        # TODO - also if player reincarnates with a dragon onscreen ' dies to avoid being eaten by '
+                    if ctx.set_deathlink:
+                        await ctx.update_death_link(True)
+                except asyncio.TimeoutError:
+                    logger.debug("Read Timed Out, Reconnecting")
+                    error_status = CONNECTION_TIMING_OUT_STATUS
+                    writer.close()
+                    ctx.atari_streams = None
+                except ConnectionResetError as e:
+                    logger.debug("Read failed due to Connection Lost, Reconnecting")
+                    error_status = CONNECTION_RESET_STATUS
+                    writer.close()
+                    ctx.atari_streams = None
+            except TimeoutError:
+                logger.debug("Connection Timed Out, Reconnecting")
+                error_status = CONNECTION_TIMING_OUT_STATUS
+                writer.close()
+                ctx.atari_streams = None
+            except ConnectionResetError:
+                logger.debug("Connection Lost, Reconnecting")
+                error_status = CONNECTION_RESET_STATUS
+                writer.close()
+                ctx.atari_streams = None
+            if ctx.atari_status == CONNECTION_TENTATIVE_STATUS:
+                if not error_status:
+                    logger.info("Successfully Connected to 2600")
+                    ctx.atari_status = CONNECTION_CONNECTED_STATUS
+                    await send_ap_foreign_items(ctx)
+                else:
+                    ctx.atari_status = f"Was tentatively connected but error occurred: {error_status}"
+            elif error_status:
+                ctx.atari_status = error_status
+                logger.info("Lost connection to 2600 and attempting to reconnect. Use /2600 for status updates")
+        else:
+            try:
+                logger.debug("Attempting to connect to 2600")
+                ctx.atari_streams = await asyncio.wait_for(asyncio.open_connection("localhost", 17242), timeout=10)
+                ctx.atari_status = CONNECTION_TENTATIVE_STATUS
+            except TimeoutError:
+                logger.debug("Connection Timed Out, Trying Again")
+                ctx.atari_status = CONNECTION_TIMING_OUT_STATUS
+                continue
+            except ConnectionRefusedError:
+                logger.debug("Connection Refused, Trying Again")
+                ctx.atari_status = CONNECTION_REFUSED_STATUS
+                continue
+
+
+async def run_game(romfile):
+    auto_start = Utils.get_options()["adventure_options"].get("rom_start", True)
+    if auto_start is True:
+        print("auto_start true not supported.  Supply a path.")
+    elif os.path.isfile(auto_start):
+        subprocess.Popen([auto_start, romfile],
+                         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+async def patch_and_run_game(patch_file, ctx):
+    base_name = os.path.splitext(patch_file)[0]
+    comp_path = base_name + '.BIN'
+    try:
+        base_rom = AdventureDeltaPatch.get_source_data()
+    except Exception as msg:
+        logger.info(msg, extra={'compact_gui': True})
+        ctx.gui_error('Error', msg)
+
+    with zipfile.ZipFile(patch_file, 'r') as patch_archive:
+        with patch_archive.open('delta.bsdiff4', 'r') as stream:
+            patch = stream.read()
+        ctx.foreign_items = AdventureDeltaPatch.read_foreign_items(patch_archive)
+        ctx.rom_hash, ctx.seed_name_from_data, ctx.player_name = AdventureDeltaPatch.read_rom_info(patch_archive)
+        ctx.auth = ctx.player_name
+    patched_rom_data = bsdiff4.patch(base_rom, patch)
+
+    with open(comp_path, "wb") as patched_rom_file:
+        patched_rom_file.write(patched_rom_data)
+
+    async_start(run_game(comp_path))
+
+
+if __name__ == '__main__':
+
+    Utils.init_logging("AdventureClient")
+
+    options = Utils.get_options()
+
+    async def main():
+        parser = get_base_parser()
+        parser.add_argument('patch_file', default="", type=str, nargs="?",
+                            help='Path to an ADVNTURE.BIN rom file')
+        args = parser.parse_args()
+
+        ctx = AdventureContext(args.connect, args.password)
+        ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
+        if gui_enabled:
+            ctx.run_gui()
+        ctx.run_cli()
+        ctx.atari_sync_task = asyncio.create_task(atari_sync_task(ctx), name="Adventure Sync")
+
+        if args.patch_file:
+            ext = args.patch_file.split(".")[len(args.patch_file.split(".")) - 1].lower()
+            if ext == "apadvn":
+                logger.info("apadvn file supplied, beginning patching process...")
+                async_start(patch_and_run_game(args.patch_file, ctx))
+            else:
+                logger.warning(f"Unknown patch file extension {ext}")
+
+        await ctx.exit_event.wait()
+        ctx.server_address = None
+
+        await ctx.shutdown()
+
+        if ctx.atari_sync_task:
+            await ctx.atari_sync_task
+
+
+    import colorama
+
+    colorama.init()
+
+    asyncio.run(main())
+    colorama.deinit()
