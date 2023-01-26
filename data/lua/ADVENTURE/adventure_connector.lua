@@ -19,13 +19,16 @@ local WinAddr = 0xDE -- if not 0 (I think if 0xff specifically), we won (and sho
 
 local DragonState = {0xA8, 0xAD, 0xB2}
 local carryAddress = 0x9D
+local last_carry_item = 0xAB
+local frames_with_no_item = 0
 
-local nullObjectId = 0xAD
+local nullObjectId = 0xAB
 local ItemsReceived = nil
 local sha256hash = nil
 -- TODO: See how best to handle storage of collected foreign items, and resetting that after a restart/reload/whatever
 local foreign_items = nil
 local foreign_items_by_room = {}
+local autocollect_items = {}
 
 local prev_player_room = 0
 local prev_ap_room_index = nil
@@ -108,8 +111,35 @@ function processBlock(block)
             end
             table.insert(foreign_items_by_room[foreign_item.room_id], foreign_item)
         end
-        print("foreign item table")
-        print(foreign_items_by_room)
+   end
+   local autocollectItems = block["autocollect_items"]
+   if autocollectItems ~= nil then
+        block_identified = 1
+        print("got autocollect items block")
+        autocollect_items = {}
+        for _, acitem in ipairs(autocollectItems) do
+            if autocollect_items[acitem.room_id] == nil then
+                autocollect_items[acitem.room_id] = {}
+            end
+            table.insert(autocollect_items[acitem.room_id], acitem)
+        end
+   end
+   local checkedLocationsBlock = block["checked_locations"]
+   if checkedLocationsBlock ~= nil then
+        block_identified = 1
+        print "Received checked locations"
+        for room_id, foreign_item_list in pairs(foreign_items_by_room) do
+            for i, foreign_item in pairs(foreign_item_list) do
+                short_id = foreign_item.short_location_id
+                for j, checked_id in pairs(checkedLocationsBlock) do
+                    print(tostring(checked_id).." ==? "..tostring(short_id))
+                    if checked_id == short_id then
+                        table.remove(foreign_item_list, i)
+                    end
+                end
+
+            end
+        end
    end
    deathlink_rec = block["deathlink"]
    if( block_identified == 0 ) then
@@ -191,8 +221,11 @@ function receive()
     local retTable = {}
     retTable["scriptVersion"] = SCRIPT_VERSION
     retTable["romhash"] = sha256hash
-    if alive_mode() then
+    if (alive_mode()) then
         retTable["locations"] = generateLocationsChecked()
+    end
+    if (u8(WinAddr) ~= 0x00) then
+        retTable["victory"] = 1
     end
     retTable["deathLink"] = deathlink_send
     deathlink_send = false
@@ -208,6 +241,15 @@ function receive()
     end
 end
 
+function AutocollectFromRoom()
+    if autocollect_items ~= nil and autocollect_items[prev_player_room] ~= nil then
+        for _, item in pairs(autocollect_items[prev_player_room]) do
+            pending_foreign_items_collected[item.short_location_id] = item
+        end
+        table.remove(autocollect_items, prev_player_room)
+    end
+end
+
 function main()
     memory.usememorydomain("System Bus")
     if (is23Or24Or25 or is26To28) == false then
@@ -215,7 +257,9 @@ function main()
         return
     end
     server, error = socket.bind('localhost', 17242)
-
+    if( error ~= nil ) then
+        print(error)
+    end
     while true do
         frame = frame + 1
         if not (curstate == prevstate) then
@@ -225,22 +269,30 @@ function main()
         if (alive_mode()) then
             local current_player_room = u8(PlayerRoomAddr)
             if (current_player_room ~= prev_player_room) then
-                print("Room change "..current_player_room)
                 memory.write_u8(APItemRam, 0xFF, "System Bus")
                 prev_ap_room_index = 0
                 prev_player_room = current_player_room
+                AutocollectFromRoom()
             end
             local carry_item = memory.read_u8(carryAddress, "System Bus")
             if (next_inventory_item ~= nil) then
-                if ( carry_item == nullObjectId ) then
-                    local input_value = memory.read_u8(input_button_address, "System Bus")
-                    if( input_value >= 64 and input_value < 128 ) then -- high bit clear, second highest bit set
-                        memory.write_u8(carryAddress, next_inventory_item)
+                if ( carry_item == nullObjectId and last_carry_item == nullObjectId ) then
+                    frames_with_no_item = frames_with_no_item + 1
+                    if (frames_with_no_item > 10) then
+                        frames_with_no_item = 10
+                        local input_value = memory.read_u8(input_button_address, "System Bus")
+                        if( input_value >= 64 and input_value < 128 ) then -- high bit clear, second highest bit set
+                            memory.write_u8(carryAddress, next_inventory_item)
+                            ItemIndex = ItemIndex + 1
+                            next_inventory_item = nil
+                        end
                     end
+                else
+                    frames_with_no_item = 0
                 end
             end
+            last_carry_item = carry_item
             if( carry_item == APItemValue and rendering_foreign_item ~= nil ) then
-                print("detected carry item")
                 memory.write_u8(carryAddress, nullObjectId, "System Bus")
                 memory.write_u8(APItemRam, 0xFF, "System Bus")
                 pending_foreign_items_collected[rendering_foreign_item.short_location_id] = rendering_foreign_item
@@ -250,6 +302,7 @@ function main()
                         break
                     end
                 end
+                prev_ap_room_index = 0
             end
 
             rendering_foreign_item = nil
@@ -282,8 +335,8 @@ function main()
                     --    wU8(APDeathLinkAddress, 0)
                     --    deathlink_send = true
                     --end
-                    if ItemsReceived[ItemIndex + 1] ~= nil then
-                        local static_id = ItemsReceived[ItemIndex + 1] - 118000000
+                    if ItemsReceived ~= nil and ItemsReceived[ItemIndex + 1] ~= nil then
+                        local static_id = ItemsReceived[ItemIndex + 1]
                         inventory[static_id] = 1
                         if next_inventory_item == nil then
                             next_inventory_item = static_id
@@ -301,6 +354,7 @@ function main()
                 print("Attempting to connect")
                 local client, timeout = server:accept()
                 if timeout == nil then
+                    print("Initial connection made")
                     curstate = STATE_INITIAL_CONNECTION_MADE
                     atariSocket = client
                     atariSocket:settimeout(0)

@@ -13,7 +13,8 @@ from Fill import fill_restrictive
 from worlds.generic.Rules import add_rule, set_rule
 # from .Client import L2ACSNIClient  # noqa: F401
 from .Options import adventure_option_definitions
-from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch
+from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, \
+    AdventureAutoCollectLocation
 from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem
 from .Locations import location_table
 from .Offsets import static_item_data_location, items_ram_start, static_item_element_size, item_position_table
@@ -84,6 +85,8 @@ class AdventureWorld(World):
             item_table["Sword"].classification = ItemClassification.progression
 
     def create_items(self) -> None:
+        self.item_name_to_id["nothing"] = nothing_item_id
+        self.item_id_to_name[nothing_item_id] = "nothing"
         for event in map(self.create_item, event_table):
             self.multiworld.itempool.append(event)
         exclude = [item for item in self.multiworld.precollected_items[self.player]]
@@ -140,6 +143,7 @@ class AdventureWorld(World):
     def generate_output(self, output_directory: str) -> None:
         rom_path: str = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.bin")
         foreign_item_locations = []
+        auto_collect_locations = []
         try:
             rom_bytearray = bytearray(apply_basepatch(get_base_rom_bytes()))
             # start and stop indices are offsets in the ROM file, not Adventure ROM addresses (which start at f000)
@@ -172,9 +176,14 @@ class AdventureWorld(World):
                     rom_bytearray[item_position_data_start + 2: item_position_data_start + 3] = \
                         room_y.to_bytes(1, "little")
                 elif location.item.player != self.player and location.item.code is not None:
-                    print("placing foreign item " + location.item.name + " " + location.name)
-                    location_data = location_table[location.name]
-                    foreign_item_locations.append(location_data)
+                    if location.item.code != nothing_item_id:
+                        print("placing foreign item " + location.item.name + " " + location.name)
+                        location_data = location_table[location.name]
+                        foreign_item_locations.append(location_data)
+                    else:
+                        location_data = location_table[location.name]
+                        auto_collect_locations.append(AdventureAutoCollectLocation(location_data.short_location_id,
+                                                                                   location_data.room_id))
 
             for unplaced_item_name, unplaced_item in unplaced_local_items.items():
                 static_item = static_item_data_location + \
@@ -201,12 +210,12 @@ class AdventureWorld(World):
             patch = AdventureDeltaPatch(os.path.splitext(rom_path)[0] + AdventureDeltaPatch.patch_file_ending,
                                         player=self.player, player_name=self.multiworld.player_name[self.player],
                                         patched_path=rom_path, locations=foreign_item_locations,
+                                        autocollect=auto_collect_locations,
                                         seed_name=bytes(self.multiworld.seed_name, encoding='ascii'))
             patch.write()
         finally:
             if os.path.exists(rom_path):
-                print("TODO - Unlink rom file!  Leaving it here pending client implementation.")
-                # os.unlink(rom_path)
+                os.unlink(rom_path)
 
     # end of ordered Main.py calls
 

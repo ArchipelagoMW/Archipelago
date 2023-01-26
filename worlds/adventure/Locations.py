@@ -1,5 +1,7 @@
 from BaseClasses import Location
 
+base_location_id = 118000000
+
 
 class AdventureLocation(Location):
     game: str = "Adventure"
@@ -18,7 +20,7 @@ class LocationData:
             location_id = room_id
         if location_id is not None:
             self.short_location_id = location_id
-            self.location_id = location_id + 118000000
+            self.location_id = location_id + base_location_id
         else:
             self.short_location_id = None
             self.location_id = None

@@ -16,7 +16,7 @@ class ItemData:
         self.table_index = id
 
 
-nothing_item_id = 0
+nothing_item_id = base_adventure_item_id
 
 # base IDs are the index in the static item data table, which is
 # not the same order as the items in RAM (but offsets 0-1 is the 16-bit
