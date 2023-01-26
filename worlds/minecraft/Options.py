@@ -35,6 +35,14 @@ class BossGoal(Choice):
     option_both = 3
     default = 1
 
+    @property
+    def dragon(self):
+        return self.value % 2 == 1
+
+    @property
+    def wither(self):
+        return self.value > 1
+
 
 class ShuffleStructures(DefaultOnToggle):
     """Enables shuffling of villages, outposts, fortresses, bastions, and end cities."""
@@ -94,14 +102,16 @@ minecraft_options: typing.Dict[str, type(Option)] = {
     "egg_shards_required":                  EggShardsRequired,
     "egg_shards_available":                 EggShardsAvailable,
     "required_bosses":                      BossGoal,
+
     "shuffle_structures":                   ShuffleStructures,
     "structure_compasses":                  StructureCompasses,
-    "bee_traps":                            BeeTraps,
+
     "combat_difficulty":                    CombatDifficulty,
     "include_hard_advancements":            HardAdvancements,
     "include_unreasonable_advancements":    UnreasonableAdvancements,
     "include_postgame_advancements":        PostgameAdvancements,
+    "bee_traps":                            BeeTraps,
     "send_defeated_mobs":                   SendDefeatedMobs,
-    "starting_items":                       StartingItems,
     "death_link":                           DeathLink,
+    "starting_items":                       StartingItems,
 }

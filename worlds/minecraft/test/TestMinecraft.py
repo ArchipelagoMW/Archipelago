@@ -2,7 +2,6 @@ from test.TestBase import TestBase
 from BaseClasses import MultiWorld, ItemClassification
 from worlds import AutoWorld
 from worlds.minecraft import MinecraftWorld
-from worlds.minecraft.Items import MinecraftItem, item_table
 from Options import Toggle
 from worlds.minecraft.Options import AdvancementGoal, EggShardsRequired, EggShardsAvailable, BossGoal, BeeTraps, \
     ShuffleStructures, CombatDifficulty
@@ -51,18 +50,28 @@ class TestMinecraft(TestBase):
         AutoWorld.call_single(self.multiworld, "generate_basic", 1)
         AutoWorld.call_single(self.multiworld, "set_rules", 1)
 
+    def _create_items(self, items, player):
+        singleton = False
+        if isinstance(items, str):
+            items = [items]
+            singleton = True
+        ret = [self.multiworld.worlds[player].create_item(item) for item in items]
+        if singleton:
+            return ret[0]
+        return ret
+
     def _get_items(self, item_pool, all_except):
         if all_except and len(all_except) > 0:
             items = self.multiworld.itempool[:]
             items = [item for item in items if
                      item.name not in all_except and not ("Bottle" in item.name and "AnyBottle" in all_except)]
-            items.extend(MCItemFactory(item_pool[0], 1))
+            items.extend(self._create_items(item_pool[0], 1))
         else:
-            items = MCItemFactory(item_pool[0], 1)
+            items = self._create_items(item_pool[0], 1)
         return self.get_state(items)
 
     def _get_items_partial(self, item_pool, missing_item):
         new_items = item_pool[0].copy()
         new_items.remove(missing_item)
-        items = MCItemFactory(new_items, 1)
+        items = self._create_items(new_items, 1)
         return self.get_state(items)
