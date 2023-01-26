@@ -175,6 +175,15 @@ class AccessGraph(object):
         if both is True:
             self.addTransition(dstName, srcName, False)
 
+    # remove transitions whose source or dest matches apName
+    def removeTransitions(self, apName):
+        toRemove = [t for t in self.InterAreaTransitions if t[0].Name == apName or t[1].Name == apName]
+        for t in toRemove:
+            src, dst = t
+            self.InterAreaTransitions.remove(t)
+            src.disconnect()
+            dst.disconnect()
+
     # availNodes: all already available nodes
     # nodesToCheck: nodes we have to check transitions for
     # smbm: smbm to test logic on. if None, discard logic check, assume we can reach everything
