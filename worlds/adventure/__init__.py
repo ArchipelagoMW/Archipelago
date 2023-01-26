@@ -150,6 +150,7 @@ class AdventureWorld(World):
             # TODO - Might have to place them in some other dummy room - somewhere the player and bat can't reach
             # TODO - but also isn't visible in the start screen
             # This places the local items (I still need to make it easy to inject the offset data)
+            unplaced_local_items = item_table.copy()
             for location in self.multiworld.get_locations(self.player):
                 if location.item.player == self.player and \
                         location.item.name != "nothing" and \
@@ -162,6 +163,8 @@ class AdventureWorld(World):
                     location_data = location_table[location.name]
                     room_x, room_y = location_data.get_position(self.multiworld.random)
 
+                    del unplaced_local_items[location.item.name]
+
                     rom_bytearray[item_position_data_start:item_position_data_start + 1] = \
                         location_data.room_id.to_bytes(1, "little")
                     rom_bytearray[item_position_data_start + 1: item_position_data_start + 2] = \
@@ -169,9 +172,17 @@ class AdventureWorld(World):
                     rom_bytearray[item_position_data_start + 2: item_position_data_start + 3] = \
                         room_y.to_bytes(1, "little")
                 elif location.item.player != self.player and location.item.code is not None:
+                    print("placing foreign item " + location.item.name + " " + location.name)
                     location_data = location_table[location.name]
                     foreign_item_locations.append(location_data)
 
+            for unplaced_item_name, unplaced_item in unplaced_local_items.items():
+                static_item = static_item_data_location + \
+                              unplaced_item.table_index * static_item_element_size
+                print("clearing item: " + unplaced_item_name + " " + hex(static_item))
+                item_ram_address = rom_bytearray[static_item]
+                item_position_data_start = item_position_table + item_ram_address - items_ram_start
+                rom_bytearray[item_position_data_start:item_position_data_start + 1] = 0xff.to_bytes(1, "little")
 
             # TODO - for all remote items in traditional mode, write that out into a file
             # TODO - for the client to read. It will be in charge of placing the Arch objects in
@@ -189,7 +200,8 @@ class AdventureWorld(World):
         else:
             patch = AdventureDeltaPatch(os.path.splitext(rom_path)[0] + AdventureDeltaPatch.patch_file_ending,
                                         player=self.player, player_name=self.multiworld.player_name[self.player],
-                                        patched_path=rom_path, locations=foreign_item_locations)
+                                        patched_path=rom_path, locations=foreign_item_locations,
+                                        seed_name=bytes(self.multiworld.seed_name, encoding='ascii'))
             patch.write()
         finally:
             if os.path.exists(rom_path):

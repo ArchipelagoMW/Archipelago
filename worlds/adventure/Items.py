@@ -1,6 +1,8 @@
 from typing import Optional
 from BaseClasses import ItemClassification, Item
 
+base_adventure_item_id = 118000000
+
 
 class AdventureItem(Item):
     def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int):
@@ -10,7 +12,7 @@ class AdventureItem(Item):
 class ItemData:
     def __init__(self, id, classification):
         self.classification = classification
-        self.id = None if id is None else id + 118000000
+        self.id = None if id is None else id + base_adventure_item_id
         self.table_index = id
 
 

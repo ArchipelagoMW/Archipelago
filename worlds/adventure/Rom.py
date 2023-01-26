@@ -26,17 +26,34 @@ class AdventureForeignItemInfo:
         self.room_x = room_x
         self.room_y = room_y
 
+    def get_dict(self):
+        return {
+            "short_location_id": self.short_location_id,
+            "room_id": self.room_id,
+            "room_x": self.room_x,
+            "room_y": self.room_y,
+        }
+
 
 class AdventureDeltaPatch(APDeltaPatch):
     hash = ADVENTUREHASH
     game = "Adventure"
     patch_file_ending = ".apadvn"
     foreign_items: [AdventureForeignItemInfo] = None
+    patched_rom_sha256: str = None
+    seedName: bytes = None
 
-    def __init__(self, *args: Any, locations: [], **kwargs: Any) -> None:
+    def __init__(self, *args: Any, locations: [], seed_name: bytes, **kwargs: Any) -> None:
         self.foreign_items = [AdventureForeignItemInfo(loc.short_location_id, loc.room_id, loc.room_x, loc.room_y)
                               for loc in locations]
+
+        self.seedName = seed_name
         super(AdventureDeltaPatch, self).__init__(*args, **kwargs)
+        with open(self.patched_path, "rb") as file:
+            patched_rom_bytes = bytes(file.read())
+            patchedsha256 = hashlib.sha256()
+            patchedsha256.update(patched_rom_bytes)
+            self.patched_rom_sha256 = patchedsha256.hexdigest()
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile):
         super(AdventureDeltaPatch, self).write_contents(opened_zipfile)
@@ -51,6 +68,18 @@ class AdventureDeltaPatch(APDeltaPatch):
             opened_zipfile.writestr("adventure_locations",
                                     bytes(loc_bytes),
                                     compress_type=zipfile.ZIP_LZMA)
+        if self.patched_rom_sha256 is not None:
+            opened_zipfile.writestr("hash",
+                                    bytes(self.patched_rom_sha256, encoding='ascii'),
+                                    compress_type=zipfile.ZIP_STORED)
+        if self.player_name is not None:
+            opened_zipfile.writestr("player",
+                                    self.player_name,  # UTF-8
+                                    compress_type=zipfile.ZIP_STORED)
+        if self.seedName is not None:
+            opened_zipfile.writestr("seedName",
+                                    self.seedName,
+                                    compress_type=zipfile.ZIP_STORED)
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile):
         super(AdventureDeltaPatch, self).read_contents(opened_zipfile)
@@ -60,6 +89,15 @@ class AdventureDeltaPatch(APDeltaPatch):
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
+
+    @classmethod
+    def read_rom_info(cls, opened_zipfile: zipfile.ZipFile) -> (bytes, bytes, str):
+        hashbytes: bytes = opened_zipfile.read("hash")
+        seedbytes: bytes = opened_zipfile.read("seedName")
+        namebytes: bytes = opened_zipfile.read("player")
+        namestr: str = namebytes.decode("utf-8")
+        return hashbytes, seedbytes, namestr
+
 
     @classmethod
     def read_foreign_items(cls, opened_zipfile: zipfile.ZipFile) -> [AdventureForeignItemInfo]:
@@ -72,6 +110,8 @@ class AdventureDeltaPatch(APDeltaPatch):
                                                           bytelist[offset + 1],
                                                           bytelist[offset + 2],
                                                           bytelist[offset + 3]))
+        return foreign_items
+
 
 def apply_basepatch(base_rom_bytes: bytes) -> bytes:
     with open(os.path.join(os.path.dirname(__file__), "adventure_basepatch.bsdiff4"), "rb") as basepatch:
